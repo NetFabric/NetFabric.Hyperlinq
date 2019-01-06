@@ -9,6 +9,9 @@ namespace NetFabric.Hyperlinq
         public static SelectEnumerable<TSource, TResult> Select<TEnumerable, TSource, TResult>(this TEnumerable source, Func<TSource, TResult> selector) where TEnumerable : IEnumerable<TSource> =>
             new SelectEnumerable<TSource, TResult>(source, selector);
 
+        public static IndexSelectEnumerable<TSource, TResult> Select<TEnumerable, TSource, TResult>(this TEnumerable source, Func<TSource, int, TResult> selector) where TEnumerable : IEnumerable<TSource> =>
+            new IndexSelectEnumerable<TSource, TResult>(source, selector);
+
         public struct SelectEnumerable<TSource, TResult> : IEnumerable<TResult>
         {
             readonly IEnumerable<TSource> source;
@@ -39,6 +42,49 @@ namespace NetFabric.Hyperlinq
                 object IEnumerator.Current => selector(enumerator.Current);
 
                 public bool MoveNext() => enumerator.MoveNext();
+
+                public void Reset() => throw new NotSupportedException();
+
+                public void Dispose() => enumerator.Dispose();
+            }
+        }
+
+        public struct IndexSelectEnumerable<TSource, TResult> : IEnumerable<TResult>
+        {
+            readonly IEnumerable<TSource> source;
+            readonly Func<TSource, int, TResult> selector;
+
+            public IndexSelectEnumerable(IEnumerable<TSource> source, Func<TSource, int, TResult> selector)
+            {
+                this.source = source;
+                this.selector = selector;
+            }
+
+            public Enumerator GetEnumerator() => new Enumerator(ref this);
+            IEnumerator<TResult> IEnumerable<TResult>.GetEnumerator() => new Enumerator(ref this);
+            IEnumerator IEnumerable.GetEnumerator() => new Enumerator(ref this);
+
+            public struct Enumerator : IEnumerator<TResult>
+            {
+                readonly IEnumerator<TSource> enumerator;
+                readonly Func<TSource, int, TResult> selector;
+                int index;
+
+                public Enumerator(ref IndexSelectEnumerable<TSource, TResult> enumerable)
+                {
+                    enumerator = enumerable.source.GetEnumerator();
+                    selector = enumerable.selector;
+                    index = -1;
+                }
+
+                public TResult Current => selector(enumerator.Current, index);
+                object IEnumerator.Current => selector(enumerator.Current, index);
+
+                public bool MoveNext()
+                {
+                    index++;
+                    return enumerator.MoveNext();
+                }
 
                 public void Reset() => throw new NotSupportedException();
 
