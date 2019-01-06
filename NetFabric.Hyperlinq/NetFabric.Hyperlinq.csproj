@@ -1,0 +1,32 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <PackageId>NetFabric.Hyperlinq</PackageId>
+    <Title>NetFabric.Hyperlinq</Title>
+    <Description>An alternative to System.Linq.</Description>
+    <Version>1.0.0</Version>
+    <Authors>Antao Almada</Authors>
+    <Copyright>Copyright 2019 Antao Almada</Copyright>
+    <RepositoryUrl>https://github.com/NetFabric/NetFabric.Hyperlinq</RepositoryUrl>
+    <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
+    <PackageIconUrl>https://user-images.githubusercontent.com/534533/49182105-390f3a80-f351-11e8-8e84-c785cddd2995.png</PackageIconUrl>
+    <PackageTags>linq</PackageTags>
+    <LangVersion>latest</LangVersion>
+    <Features>strict</Features>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\Licenses\LICENSE.txt" Pack="true" PackagePath=""/>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-*" PrivateAssets="All" />
+    <PackageReference Include="SonarAnalyzer.CSharp" Version="7.9.1.7622">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+  
+</Project>
