@@ -12,7 +12,7 @@ namespace NetFabric.Hyperlinq
 
             using (var enumerator = source.GetEnumerator())
             {
-                var counter = 0;
+                var counter = 0L;
                 while (enumerator.MoveNext())
                     counter++;
 

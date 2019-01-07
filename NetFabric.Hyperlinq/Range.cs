@@ -9,7 +9,7 @@ namespace NetFabric.Hyperlinq
         public static RangeEnumerable Range(int start, int count) =>
             new RangeEnumerable(start, count);
 
-        public struct RangeEnumerable : IEnumerable<int>
+        public readonly struct RangeEnumerable : IEnumerable<int>
         {
             readonly int start;
             readonly int count;
@@ -20,16 +20,16 @@ namespace NetFabric.Hyperlinq
                 this.count = count;
             }
 
-            public Enumerator GetEnumerator() => new Enumerator(ref this);
-            IEnumerator<int> IEnumerable<int>.GetEnumerator() => new Enumerator(ref this);
-            IEnumerator IEnumerable.GetEnumerator() => new Enumerator(ref this);
+            public Enumerator GetEnumerator() => new Enumerator(in this);
+            IEnumerator<int> IEnumerable<int>.GetEnumerator() => new Enumerator(in this);
+            IEnumerator IEnumerable.GetEnumerator() => new Enumerator(in this);
 
             public struct Enumerator : IEnumerator<int>
             {
                 int current;
                 readonly int end;
 
-                public Enumerator(ref RangeEnumerable enumerable)
+                public Enumerator(in RangeEnumerable enumerable)
                 {
                     current = enumerable.start - 1;
                     end = enumerable.start + enumerable.count;

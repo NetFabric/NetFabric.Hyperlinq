@@ -12,7 +12,7 @@ namespace NetFabric.Hyperlinq
         public static IndexSelectEnumerable<TSource, TResult> Select<TEnumerable, TSource, TResult>(this TEnumerable source, Func<TSource, int, TResult> selector) where TEnumerable : IEnumerable<TSource> =>
             new IndexSelectEnumerable<TSource, TResult>(source, selector);
 
-        public struct SelectEnumerable<TSource, TResult> : IEnumerable<TResult>
+        public readonly struct SelectEnumerable<TSource, TResult> : IEnumerable<TResult>
         {
             readonly IEnumerable<TSource> source;
             readonly Func<TSource, TResult> selector;
@@ -23,16 +23,16 @@ namespace NetFabric.Hyperlinq
                 this.selector = selector;
             }
 
-            public Enumerator GetEnumerator() => new Enumerator(ref this);
-            IEnumerator<TResult> IEnumerable<TResult>.GetEnumerator() => new Enumerator(ref this);
-            IEnumerator IEnumerable.GetEnumerator() => new Enumerator(ref this);
+            public Enumerator GetEnumerator() => new Enumerator(in this);
+            IEnumerator<TResult> IEnumerable<TResult>.GetEnumerator() => new Enumerator(in this);
+            IEnumerator IEnumerable.GetEnumerator() => new Enumerator(in this);
 
             public struct Enumerator : IEnumerator<TResult>
             {
                 readonly IEnumerator<TSource> enumerator;
                 readonly Func<TSource, TResult> selector;
 
-                public Enumerator(ref SelectEnumerable<TSource, TResult> enumerable)
+                public Enumerator(in SelectEnumerable<TSource, TResult> enumerable)
                 {
                     enumerator = enumerable.source.GetEnumerator();
                     selector = enumerable.selector;
@@ -49,7 +49,7 @@ namespace NetFabric.Hyperlinq
             }
         }
 
-        public struct IndexSelectEnumerable<TSource, TResult> : IEnumerable<TResult>
+        public readonly struct IndexSelectEnumerable<TSource, TResult> : IEnumerable<TResult>
         {
             readonly IEnumerable<TSource> source;
             readonly Func<TSource, int, TResult> selector;
@@ -60,9 +60,9 @@ namespace NetFabric.Hyperlinq
                 this.selector = selector;
             }
 
-            public Enumerator GetEnumerator() => new Enumerator(ref this);
-            IEnumerator<TResult> IEnumerable<TResult>.GetEnumerator() => new Enumerator(ref this);
-            IEnumerator IEnumerable.GetEnumerator() => new Enumerator(ref this);
+            public Enumerator GetEnumerator() => new Enumerator(in this);
+            IEnumerator<TResult> IEnumerable<TResult>.GetEnumerator() => new Enumerator(in this);
+            IEnumerator IEnumerable.GetEnumerator() => new Enumerator(in this);
 
             public struct Enumerator : IEnumerator<TResult>
             {
@@ -70,7 +70,7 @@ namespace NetFabric.Hyperlinq
                 readonly Func<TSource, int, TResult> selector;
                 int index;
 
-                public Enumerator(ref IndexSelectEnumerable<TSource, TResult> enumerable)
+                public Enumerator(in IndexSelectEnumerable<TSource, TResult> enumerable)
                 {
                     enumerator = enumerable.source.GetEnumerator();
                     selector = enumerable.selector;
