@@ -1,0 +1,4 @@
+namespace NetFabric.Hyperlinq.UnitTests
+{
+    
+}
