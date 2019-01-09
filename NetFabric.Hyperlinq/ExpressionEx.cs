@@ -7,16 +7,12 @@ namespace NetFabric.Hyperlinq
     {
         public static Expression Using(ParameterExpression variable, Expression body) 
         {
-            if(IsDisposable(variable.Type))
-            {
-                return Expression.TryFinally(
-                    body,
-                    Expression.Call(variable, typeof(IDisposable).GetMethod("Dispose")));
-            }
-            else
-            {
+            if(!IsDisposable(variable.Type))
                 return body;
-            }
+
+            return Expression.TryFinally(
+                body,
+                Expression.Call(variable, typeof(IDisposable).GetMethod("Dispose")));
         }
 
         public static LoopExpression While(Expression test, Expression body) 
@@ -31,6 +27,6 @@ namespace NetFabric.Hyperlinq
         }
 
         static bool IsDisposable(Type type) => 
-            type.GetInterface("IDisposable") != null;
+            !(type.GetInterface("IDisposable") is null);
     }
 }
