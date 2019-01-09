@@ -6,15 +6,20 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class Enumerable
     {
-        public static RangeEnumerable Range(int start, int count) =>
-            new RangeEnumerable(start, count);
+        public static RangeEnumerable Range(int start, int count) 
+        {
+            if(count < 0)
+                throw new ArgumentOutOfRangeException(nameof(count));
 
-        public readonly struct RangeEnumerable : IReadOnlyCollection<int>
+            return new RangeEnumerable(start, count);
+        }
+
+        public readonly struct RangeEnumerable : IReadOnlyList<int>
         {
             readonly int start;
             readonly int count;
 
-            public RangeEnumerable(int start, int count)
+            internal RangeEnumerable(int start, int count)
             {
                 this.start = start;
                 this.count = count;
@@ -26,15 +31,25 @@ namespace NetFabric.Hyperlinq
 
             public int Count => count;
 
+            public int this[int index]
+            {
+                get
+                {
+                    if(index < 0 || index >= count)
+                        throw new IndexOutOfRangeException();
+                    return index + start;
+                }
+            }
+
             public struct Enumerator : IEnumerator<int>
             {
                 int current;
                 readonly int end;
 
-                public Enumerator(in RangeEnumerable enumerable)
+                internal Enumerator(in RangeEnumerable enumerable)
                 {
                     current = enumerable.start - 1;
-                    end = enumerable.start + enumerable.count;
+                    end = current + enumerable.count;
                 }
 
                 public int Current => current;
