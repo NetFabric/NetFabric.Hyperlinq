@@ -6,18 +6,36 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class Enumerable
     {
-        public static WhereEnumerable<TSource> Where<TEnumerable, TSource>(this TEnumerable source, Func<TSource, bool> predicate) where TEnumerable : IEnumerable<TSource> =>
-            new WhereEnumerable<TSource>(source, predicate);
+        public static WhereEnumerable<TSource> Where<TEnumerable, TSource>(this TEnumerable source, Func<TSource, bool> predicate) 
+            where TEnumerable : IEnumerable<TSource> 
+        {
+            if(source == null)
+                throw new ArgumentNullException(nameof(source));
 
-        public static IndexWhereEnumerable<TSource> Where<TEnumerable, TSource>(this TEnumerable source, Func<TSource, int, bool> predicate) where TEnumerable : IEnumerable<TSource> =>
-            new IndexWhereEnumerable<TSource>(source, predicate);
+            if(predicate == null)
+                throw new ArgumentNullException(nameof(predicate));
+
+            return new WhereEnumerable<TSource>(source, predicate);
+        }
+
+        public static IndexWhereEnumerable<TSource> Where<TEnumerable, TSource>(this TEnumerable source, Func<TSource, int, bool> predicate) 
+            where TEnumerable : IEnumerable<TSource>
+        {
+            if(source == null)
+                throw new ArgumentNullException(nameof(source));
+
+            if(predicate == null)
+                throw new ArgumentNullException(nameof(predicate));
+
+            return new IndexWhereEnumerable<TSource>(source, predicate);
+        }
 
         public readonly struct WhereEnumerable<TSource> : IEnumerable<TSource>
         {
             readonly IEnumerable<TSource> source;
             readonly Func<TSource, bool> predicate;
 
-            public WhereEnumerable(IEnumerable<TSource> source, Func<TSource, bool> predicate)
+            internal WhereEnumerable(IEnumerable<TSource> source, Func<TSource, bool> predicate)
             {
                 this.source = source;
                 this.predicate = predicate;
@@ -27,14 +45,14 @@ namespace NetFabric.Hyperlinq
             IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new Enumerator(in this);
             IEnumerator IEnumerable.GetEnumerator() => new Enumerator(in this);
 
-            public struct Enumerator : IEnumerator<TSource>
+            public readonly struct Enumerator : IEnumerator<TSource>
             {
                 readonly IEnumerator<TSource> enumerator;
                 readonly Func<TSource, bool> predicate;
 
-                public Enumerator(in WhereEnumerable<TSource> enumerable)
+                internal Enumerator(in WhereEnumerable<TSource> enumerable)
                 {
-                    enumerator = enumerable.GetEnumerator();
+                    enumerator = enumerable.source.GetEnumerator();
                     predicate = enumerable.predicate;
                 }
 
@@ -62,7 +80,7 @@ namespace NetFabric.Hyperlinq
             readonly IEnumerable<TSource> source;
             readonly Func<TSource, int, bool> predicate;
 
-            public IndexWhereEnumerable(IEnumerable<TSource> source, Func<TSource, int, bool> predicate)
+            internal IndexWhereEnumerable(IEnumerable<TSource> source, Func<TSource, int, bool> predicate)
             {
                 this.source = source;
                 this.predicate = predicate;
@@ -78,9 +96,9 @@ namespace NetFabric.Hyperlinq
                 readonly Func<TSource, int, bool> predicate;
                 int index;
 
-                public Enumerator(in IndexWhereEnumerable<TSource> enumerable)
+                internal Enumerator(in IndexWhereEnumerable<TSource> enumerable)
                 {
-                    enumerator = enumerable.GetEnumerator();
+                    enumerator = enumerable.source.GetEnumerator();
                     predicate = enumerable.predicate;
                     index = -1;
                 }

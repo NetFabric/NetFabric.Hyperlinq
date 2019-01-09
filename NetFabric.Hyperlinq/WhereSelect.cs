@@ -6,18 +6,36 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class Enumerable
     {
-        public static WhereSelectEnumerable<TSource, TResult> WhereSelect<TEnumerable, TSource, TResult>(this TEnumerable source, Func<TSource, ValueTuple<bool, TResult>> predicateSelector) where TEnumerable : IEnumerable<TSource> =>
-            new WhereSelectEnumerable<TSource, TResult>(source, predicateSelector);
+        public static WhereSelectEnumerable<TSource, TResult> WhereSelect<TEnumerable, TSource, TResult>(this TEnumerable source, Func<TSource, ValueTuple<bool, TResult>> predicateSelector) 
+            where TEnumerable : IEnumerable<TSource> 
+        {
+            if(source == null)
+                throw new ArgumentNullException(nameof(source));
 
-        public static IndexWhereSelectEnumerable<TSource, TResult> WhereSelect<TEnumerable, TSource, TResult>(this TEnumerable source, Func<TSource, int, ValueTuple<bool, TResult>> predicateSelector) where TEnumerable : IEnumerable<TSource> =>
-            new IndexWhereSelectEnumerable<TSource, TResult>(source, predicateSelector);
+            if(predicateSelector == null)
+                throw new ArgumentNullException(nameof(predicateSelector));
+
+            return new WhereSelectEnumerable<TSource, TResult>(source, predicateSelector);
+        }
+
+        public static IndexWhereSelectEnumerable<TSource, TResult> WhereSelect<TEnumerable, TSource, TResult>(this TEnumerable source, Func<TSource, int, ValueTuple<bool, TResult>> predicateSelector) 
+            where TEnumerable : IEnumerable<TSource> 
+        {
+            if(source == null)
+                throw new ArgumentNullException(nameof(source));
+
+            if(predicateSelector == null)
+                throw new ArgumentNullException(nameof(predicateSelector));
+
+            return new IndexWhereSelectEnumerable<TSource, TResult>(source, predicateSelector);
+        }
 
         public readonly struct WhereSelectEnumerable<TSource, TResult> : IEnumerable<TResult>
         {
             readonly IEnumerable<TSource> source;
             readonly Func<TSource, ValueTuple<bool, TResult>> predicateSelector;
 
-            public WhereSelectEnumerable(IEnumerable<TSource> source, Func<TSource, ValueTuple<bool, TResult>> predicateSelector)
+            internal WhereSelectEnumerable(IEnumerable<TSource> source, Func<TSource, ValueTuple<bool, TResult>> predicateSelector)
             {
                 this.source = source;
                 this.predicateSelector = predicateSelector;
@@ -33,7 +51,7 @@ namespace NetFabric.Hyperlinq
                 readonly Func<TSource, ValueTuple<bool, TResult>> predicateSelector;
                 TResult current;
 
-                public Enumerator(in WhereSelectEnumerable<TSource, TResult> enumerable)
+                internal Enumerator(in WhereSelectEnumerable<TSource, TResult> enumerable)
                 {
                     enumerator = enumerable.source.GetEnumerator();
                     predicateSelector = enumerable.predicateSelector;
@@ -70,7 +88,7 @@ namespace NetFabric.Hyperlinq
             readonly IEnumerable<TSource> source;
             readonly Func<TSource, int, ValueTuple<bool, TResult>> predicateSelector;
 
-            public IndexWhereSelectEnumerable(IEnumerable<TSource> source, Func<TSource, int, ValueTuple<bool, TResult>> predicateSelector)
+            internal IndexWhereSelectEnumerable(IEnumerable<TSource> source, Func<TSource, int, ValueTuple<bool, TResult>> predicateSelector)
             {
                 this.source = source;
                 this.predicateSelector = predicateSelector;
@@ -87,7 +105,7 @@ namespace NetFabric.Hyperlinq
                 TResult current;
                 int index;
 
-                public Enumerator(in IndexWhereSelectEnumerable<TSource, TResult> enumerable)
+                internal Enumerator(in IndexWhereSelectEnumerable<TSource, TResult> enumerable)
                 {
                     enumerator = enumerable.source.GetEnumerator();
                     predicateSelector = enumerable.predicateSelector;
