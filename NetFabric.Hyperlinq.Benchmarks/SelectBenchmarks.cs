@@ -8,11 +8,6 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [Params(100, 1_000, 10_000)]
         public int Count { get; set; }
 
-        [GlobalSetup]
-        public void GlobalSetup()
-        {
-        }
-
         [Benchmark(Baseline = true)]
         public int Linq_Select()
         {

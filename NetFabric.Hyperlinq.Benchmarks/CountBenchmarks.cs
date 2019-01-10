@@ -18,27 +18,45 @@ namespace NetFabric.Hyperlinq.Benchmarks
         }
 
         [Benchmark(Baseline = true)]
-        public int Linq_Array_Count() => System.Linq.Enumerable.Count(array);
+        public int Linq_Array() => 
+            System.Linq.Enumerable.Count(array);
 
         [Benchmark]
-        public int Linq_Range_Count() => System.Linq.Enumerable.Count(System.Linq.Enumerable.Range(0, Count));
+        public int Linq_Range() => 
+            System.Linq.Enumerable.Count(
+                System.Linq.Enumerable.Range(0, Count));
 
         [Benchmark]
-        public int Linq_MyEnumerable_Count() => System.Linq.Enumerable.Count(MyEnumerable(Count));
+        public int Linq_Range_Select() => 
+            System.Linq.Enumerable.Count(
+                System.Linq.Enumerable.Select(
+                    System.Linq.Enumerable.Range(0, Count), value => value));
 
         [Benchmark]
-        public long Hyperlinq_Array_Count() => array.Count<IEnumerable<int>, int>();
+        public int Linq_Range_Where() => 
+            System.Linq.Enumerable.Count(
+                System.Linq.Enumerable.Where(
+                    System.Linq.Enumerable.Range(0, Count), _ => true));
 
         [Benchmark]
-        public long Hyperlinq_Range_Count() => Enumerable.Range(0, Count).Count<Enumerable.RangeEnumerable, int>();
+        public int Hyperlinq_Array() => 
+            array.Count();
 
         [Benchmark]
-        public long Hyperlinq_MyEnumerable_Count() => MyEnumerable(Count).Count<IEnumerable<int>, int>();
+        public int Hyperlinq_Range() => 
+            Enumerable.Range(0, Count)
+            .Count<Enumerable.RangeEnumerable, int>();
 
-        static IEnumerable<int> MyEnumerable(int count)
-        {
-            for(var value = 0; value < count; value++)
-                yield return value;
-        }
+        [Benchmark]
+        public int Hyperlinq_Range_Select() => 
+            Enumerable.Range(0, Count)
+            .Select<Enumerable.RangeEnumerable, int, int>(value => value)
+            .Count<Enumerable.SelectEnumerable<int, int>, int>();
+
+        [Benchmark]
+        public int Hyperlinq_Range_Where() => 
+            Enumerable.Range(0, Count)
+            .Where<Enumerable.RangeEnumerable, int>(_ => true)
+            .Count<Enumerable.WhereEnumerable<int>, int>();
     }
 }

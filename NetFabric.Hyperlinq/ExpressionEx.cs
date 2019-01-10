@@ -7,7 +7,7 @@ namespace NetFabric.Hyperlinq
     {
         public static Expression Using(ParameterExpression variable, Expression body) 
         {
-            if(!IsDisposable(variable.Type))
+            if(!typeof(IDisposable).IsAssignableFrom(variable.Type))
                 return body;
 
             return Expression.TryFinally(
@@ -25,8 +25,5 @@ namespace NetFabric.Hyperlinq
                     Expression.Break(label)),
                 label);
         }
-
-        static bool IsDisposable(Type type) => 
-            !(type.GetInterface("IDisposable") is null);
     }
 }
