@@ -8,7 +8,8 @@ namespace NetFabric.Hyperlinq
     {
         public static RangeEnumerable Range(int start, int count) 
         {
-            if(count < 0)
+            var max = ((long)start) + count - 1;
+            if(count < 0 || max > int.MaxValue)
                 throw new ArgumentOutOfRangeException(nameof(count));
 
             return new RangeEnumerable(start, count);
@@ -36,7 +37,7 @@ namespace NetFabric.Hyperlinq
                 get
                 {
                     if(index < 0 || index >= count)
-                        throw new IndexOutOfRangeException();
+                        throw new IndexOutOfRangeException(nameof(index));
                     return index + start;
                 }
             }
@@ -49,7 +50,7 @@ namespace NetFabric.Hyperlinq
                 internal Enumerator(in RangeEnumerable enumerable)
                 {
                     current = enumerable.start - 1;
-                    end = current + enumerable.count;
+                    end = checked(current + enumerable.count);
                 }
 
                 public int Current => current;
