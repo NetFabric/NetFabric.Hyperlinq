@@ -21,7 +21,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Hyperlinq_Select()
         {
             var sum = 0;
-            foreach(var item in Enumerable.Range(0, Count).Select<Enumerable.RangeEnumerable, int, int>(v => v * 2))
+            foreach(var item in Enumerable.Range(0, Count).Select(v => v * 2))
                 sum += item;
             return sum;
         }   

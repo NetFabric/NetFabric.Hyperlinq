@@ -68,10 +68,10 @@ namespace NetFabric.Hyperlinq.UnitTests
         {
             // Arrange
             var select = Enumerable.Range(0, expected)
-                .Select<Enumerable.RangeEnumerable, int, int>(value => value);
+                .Select<int, int>(value => value);
 
             // Act
-            var result = select.Count<Enumerable.SelectEnumerable<int, int>, int>();
+            var result = select.Count();
 
             // Assert
             result.Should().Be(expected);

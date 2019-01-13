@@ -50,8 +50,8 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [Benchmark]
         public int Hyperlinq_Range_Select() => 
             Enumerable.Range(0, Count)
-            .Select<Enumerable.RangeEnumerable, int, int>(value => value)
-            .Count<Enumerable.SelectEnumerable<int, int>, int>();
+            .Select(value => value)
+            .Count<Enumerable.SelectList<int, int>, int>();
 
         [Benchmark]
         public int Hyperlinq_Range_Where() => 
