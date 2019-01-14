@@ -1,0 +1,135 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using BenchmarkDotNet.Attributes;
+using BenchmarkDotNet.Configs;
+
+namespace NetFabric.Hyperlinq.Benchmarks
+{
+    [GroupBenchmarksBy(BenchmarkLogicalGroupRule.ByCategory)]
+    [CategoriesColumn]
+    [MemoryDiagnoser]
+    public class SourceOperatorsBenchmarks
+    {
+        [Params(0, 100, 10_000)]
+        public int Count { get; set; }
+
+        [BenchmarkCategory("Range")]
+        [Benchmark(Baseline = true)]
+        public int Linq_Range() 
+        {
+            var sum = 0;
+            foreach(var item in System.Linq.Enumerable.Range(0, Count))
+                sum += item;
+            return sum;
+        }
+
+        [BenchmarkCategory("Create")]
+        [Benchmark(Baseline = true)]
+        public int Ix_Create() 
+        {
+            var sum = 0;
+            foreach(var item in System.Linq.EnumerableEx.Create(CreateEnumerator))
+                sum += item;
+            return sum;
+
+            IEnumerator<int> CreateEnumerator() => new Enumerator(1, Count);
+        } 
+
+        [BenchmarkCategory("RepeatCount")]
+        [Benchmark(Baseline = true)]
+        public int Ix_RepeatCount() 
+        {
+            var sum = 0;
+            foreach(var item in System.Linq.EnumerableEx.Repeat(1, Count))
+                sum += item;
+            return sum;
+        }    
+
+        [BenchmarkCategory("Repeat")]
+        [Benchmark(Baseline = true)]
+        public int Ix_Repeat() 
+        {
+            var sum = 0;
+            using(var enumerator = System.Linq.EnumerableEx.Repeat(1).GetEnumerator())
+            {
+                for(var counter = Count; counter != 0; counter--)
+                {
+                    enumerator.MoveNext();
+                    sum += enumerator.Current;
+                }
+            }
+            return sum;
+        } 
+
+        [BenchmarkCategory("Range")]
+        [Benchmark]
+        public int Hyperlinq_Range() 
+        {
+            var sum = 0;
+            foreach(var item in Enumerable.Range(0, Count))
+                sum += item;
+            return sum;
+        }    
+
+        [BenchmarkCategory("Create")]
+        [Benchmark]
+        public int Hyperlinq_Create() 
+        {
+            var sum = 0;
+            foreach(var item in Enumerable.Create<Enumerator, int>(CreateEnumerator))
+                sum += item;
+            return sum;
+
+            Enumerator CreateEnumerator() => new Enumerator(1, Count);
+        } 
+
+        [BenchmarkCategory("RepeatCount")]
+        [Benchmark]
+        public int Hyperlinq_RepeatCount() 
+        {
+            var sum = 0;
+            foreach(var item in Enumerable.Repeat(1, Count))
+                sum += item;
+            return sum;
+        }    
+
+        [BenchmarkCategory("Repeat")]
+        [Benchmark]
+        public int Hyperlinq_Repeat() 
+        {
+            var sum = 0;
+            using(var enumerator = Enumerable.Repeat(1).GetEnumerator())
+            {
+                for(var counter = Count; counter != 0; counter--)
+                {
+                    enumerator.MoveNext();
+                    sum += enumerator.Current;
+                }
+            }
+            return sum;
+        }    
+
+        struct Enumerator : IEnumerator<int>
+        {
+            readonly int value;
+            int counter;
+
+            public Enumerator(int value, int count)
+            {
+                this.value = value;
+                this.counter = count;
+            }
+
+            public int Current => value;
+            object IEnumerator.Current => value;
+
+            public bool MoveNext() => counter-- > 0;
+
+            public void Reset() => throw new NotSupportedException();
+
+            public void Dispose() { }
+        }
+
+    }
+}

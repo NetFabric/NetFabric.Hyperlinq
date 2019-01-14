@@ -9,7 +9,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         static void Main(string[] args)
         {
             var switcher = new BenchmarkSwitcher(new[] {
-                    typeof(RangeBenchmarks),
+                    typeof(SourceOperatorsBenchmarks),
                     typeof(CountBenchmarks),
                     typeof(SelectBenchmarks),
                 });

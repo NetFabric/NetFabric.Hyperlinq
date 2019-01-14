@@ -35,7 +35,7 @@ namespace NetFabric.Hyperlinq
                 get => value;
             }
 
-            public struct Enumerator : IEnumerator<TResult>
+            public readonly struct Enumerator : IEnumerator<TResult>
             {
                 readonly TResult value;
 
@@ -90,13 +90,13 @@ namespace NetFabric.Hyperlinq
                 internal Enumerator(in RepeatCountEnumerable<TResult> enumerable)
                 {
                     value = enumerable.value;
-                    counter = enumerable.count;
+                    counter = enumerable.count + 1;
                 }
 
                 public TResult Current => value;
                 object IEnumerator.Current => value;
 
-                public bool MoveNext() => counter-- != 0;
+                public bool MoveNext() => --counter > 0;
 
                 public void Reset() => throw new NotSupportedException();
 

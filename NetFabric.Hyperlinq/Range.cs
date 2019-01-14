@@ -50,13 +50,13 @@ namespace NetFabric.Hyperlinq
                 internal Enumerator(in RangeEnumerable enumerable)
                 {
                     current = enumerable.start - 1;
-                    end = checked(current + enumerable.count);
+                    end = checked(enumerable.start + enumerable.count);
                 }
 
                 public int Current => current;
                 object IEnumerator.Current => current;
 
-                public bool MoveNext() => current++ < end;
+                public bool MoveNext() => ++current < end;
 
                 public void Reset() => throw new NotSupportedException();
 
