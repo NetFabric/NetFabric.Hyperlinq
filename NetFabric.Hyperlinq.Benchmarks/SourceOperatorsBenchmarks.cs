@@ -24,29 +24,17 @@ namespace NetFabric.Hyperlinq.Benchmarks
             return sum;
         }
 
-        [BenchmarkCategory("Create")]
+        [BenchmarkCategory("Repeat")]
         [Benchmark(Baseline = true)]
-        public int Ix_Create() 
+        public int Linq_Repeat() 
         {
             var sum = 0;
-            foreach(var item in System.Linq.EnumerableEx.Create(CreateEnumerator))
-                sum += item;
-            return sum;
-
-            IEnumerator<int> CreateEnumerator() => new Enumerator(1, Count);
-        } 
-
-        [BenchmarkCategory("RepeatCount")]
-        [Benchmark(Baseline = true)]
-        public int Ix_RepeatCount() 
-        {
-            var sum = 0;
-            foreach(var item in System.Linq.EnumerableEx.Repeat(1, Count))
+            foreach(var item in System.Linq.Enumerable.Repeat(1, Count))
                 sum += item;
             return sum;
         }    
 
-        [BenchmarkCategory("Repeat")]
+        [BenchmarkCategory("RepeatInfinitely")]
         [Benchmark(Baseline = true)]
         public int Ix_Repeat() 
         {
@@ -62,9 +50,21 @@ namespace NetFabric.Hyperlinq.Benchmarks
             return sum;
         } 
 
+        [BenchmarkCategory("Create")]
+        [Benchmark(Baseline = true)]
+        public int Ix_Create() 
+        {
+            var sum = 0;
+            foreach(var item in System.Linq.EnumerableEx.Create(CreateEnumerator))
+                sum += item;
+            return sum;
+
+            IEnumerator<int> CreateEnumerator() => new Enumerator(1, Count);
+        } 
+
         [BenchmarkCategory("Range")]
         [Benchmark]
-        public int Hyperlinq_Range() 
+        public int Hyperlinq_Range_ForEach() 
         {
             var sum = 0;
             foreach(var item in Enumerable.Range(0, Count))
@@ -72,21 +72,9 @@ namespace NetFabric.Hyperlinq.Benchmarks
             return sum;
         }    
 
-        [BenchmarkCategory("Create")]
+        [BenchmarkCategory("Repeat")]
         [Benchmark]
-        public int Hyperlinq_Create() 
-        {
-            var sum = 0;
-            foreach(var item in Enumerable.Create<Enumerator, int>(CreateEnumerator))
-                sum += item;
-            return sum;
-
-            Enumerator CreateEnumerator() => new Enumerator(1, Count);
-        } 
-
-        [BenchmarkCategory("RepeatCount")]
-        [Benchmark]
-        public int Hyperlinq_RepeatCount() 
+        public int Hyperlinq_Repeat_ForEach() 
         {
             var sum = 0;
             foreach(var item in Enumerable.Repeat(1, Count))
@@ -94,9 +82,9 @@ namespace NetFabric.Hyperlinq.Benchmarks
             return sum;
         }    
 
-        [BenchmarkCategory("Repeat")]
+        [BenchmarkCategory("RepeatInfinitely")]
         [Benchmark]
-        public int Hyperlinq_Repeat() 
+        public int Hyperlinq_RepeatInfinitely_ForEach() 
         {
             var sum = 0;
             using(var enumerator = Enumerable.Repeat(1).GetEnumerator())
@@ -107,6 +95,51 @@ namespace NetFabric.Hyperlinq.Benchmarks
                     sum += enumerator.Current;
                 }
             }
+            return sum;
+        }    
+
+        [BenchmarkCategory("Create")]
+        [Benchmark]
+        public int Hyperlinq_Create_ForEach() 
+        {
+            var sum = 0;
+            foreach(var item in Enumerable.Create<Enumerator, int>(CreateEnumerator))
+                sum += item;
+            return sum;
+
+            Enumerator CreateEnumerator() => new Enumerator(1, Count);
+        } 
+
+        [BenchmarkCategory("Range")]
+        [Benchmark]
+        public int Hyperlinq_Range_For() 
+        {
+            var enumerable = Enumerable.Range(0, Count);
+            var sum = 0;
+            for(var index = 0; index < enumerable.Count; index++)
+                sum += enumerable[index];
+            return sum;
+        }    
+
+        [BenchmarkCategory("Repeat")]
+        [Benchmark]
+        public int Hyperlinq_Repeat_For() 
+        {
+            var enumerable = Enumerable.Repeat(1, Count);
+            var sum = 0;
+            for(var index = 0; index < enumerable.Count; index++)
+                sum += enumerable[index];
+            return sum;
+        }    
+
+        [BenchmarkCategory("RepeatInfinitely")]
+        [Benchmark]
+        public int Hyperlinq_RepeatInfinitely_For() 
+        {
+            var enumerable = Enumerable.Repeat(1);
+            var sum = 0;
+            for(var index = 0; index < Count; index++)
+                sum += enumerable[index];
             return sum;
         }    
 
