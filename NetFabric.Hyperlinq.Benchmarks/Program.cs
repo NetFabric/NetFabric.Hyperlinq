@@ -12,6 +12,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
                     typeof(SourceOperatorsBenchmarks),
                     typeof(CountBenchmarks),
                     typeof(SelectBenchmarks),
+                    typeof(CachingBenchmarks),
                 });
             switcher.Run(args);        
         }
