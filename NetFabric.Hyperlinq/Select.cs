@@ -9,46 +9,58 @@ namespace NetFabric.Hyperlinq
         public static SelectEnumerable<TSource, TResult> Select<TSource, TResult>(this IEnumerable<TSource> source, Func<TSource, TResult> selector) 
         {
             if(source == null)
-                throw new ArgumentNullException(nameof(source));
+                ThrowSourceNull();
 
             if(selector == null)
-                throw new ArgumentNullException(nameof(selector));
+                ThrowSelectorNull();
 
             return new SelectEnumerable<TSource, TResult>(source, selector);
+
+            void ThrowSourceNull() => throw new ArgumentNullException(nameof(source));
+            void ThrowSelectorNull() => throw new ArgumentNullException(nameof(selector));
         }
 
         public static SelectCollection<TSource, TResult> Select<TSource, TResult>(this IReadOnlyCollection<TSource> source, Func<TSource, TResult> selector) 
         {
             if(source == null)
-                throw new ArgumentNullException(nameof(source));
+                ThrowSourceNull();
 
             if(selector == null)
-                throw new ArgumentNullException(nameof(selector));
+                ThrowSelectorNull();
 
             return new SelectCollection<TSource, TResult>(source, selector);
+
+            void ThrowSourceNull() => throw new ArgumentNullException(nameof(source));
+            void ThrowSelectorNull() => throw new ArgumentNullException(nameof(selector));
         }
 
         public static SelectList<TSource, TResult> Select<TSource, TResult>(this IReadOnlyList<TSource> source, Func<TSource, TResult> selector) 
         {
             if(source == null)
-                throw new ArgumentNullException(nameof(source));
+                ThrowSourceNull();
 
             if(selector == null)
-                throw new ArgumentNullException(nameof(selector));
+                ThrowSelectorNull();
 
             return new SelectList<TSource, TResult>(source, selector);
+
+            void ThrowSourceNull() => throw new ArgumentNullException(nameof(source));
+            void ThrowSelectorNull() => throw new ArgumentNullException(nameof(selector));
         }
 
         public static IndexSelectEnumerable<TSource, TResult> Select<TEnumerable, TSource, TResult>(this TEnumerable source, Func<TSource, int, TResult> selector) 
             where TEnumerable : IEnumerable<TSource> 
         {
             if(source == null)
-                throw new ArgumentNullException(nameof(source));
+                ThrowSourceNull();
 
             if(selector == null)
-                throw new ArgumentNullException(nameof(selector));
+                ThrowSelectorNull();
 
             return new IndexSelectEnumerable<TSource, TResult>(source, selector);
+
+            void ThrowSourceNull() => throw new ArgumentNullException(nameof(source));
+            void ThrowSelectorNull() => throw new ArgumentNullException(nameof(selector));
         }
 
         public readonly struct SelectEnumerable<TSource, TResult> : IEnumerable<TResult>
@@ -146,7 +158,15 @@ namespace NetFabric.Hyperlinq
 
             public TResult this[int index]
             {
-                get => selector(source[index]);
+                get 
+                {
+                    if(index < 0 || index >= source.Count)
+                        ThrowIndexOutOfRange();
+
+                    return selector(source[index]);
+
+                    void ThrowIndexOutOfRange() => throw new IndexOutOfRangeException(nameof(index));
+                }
             }
 
             public readonly struct Enumerator : IEnumerator<TResult>

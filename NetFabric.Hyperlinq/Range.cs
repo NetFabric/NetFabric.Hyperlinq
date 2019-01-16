@@ -10,9 +10,11 @@ namespace NetFabric.Hyperlinq
         {
             var max = ((long)start) + count - 1;
             if(count < 0 || max > int.MaxValue)
-                throw new ArgumentOutOfRangeException(nameof(count));
+                ThrowCountOutOfRange();
 
             return new RangeEnumerable(start, count);
+
+            void ThrowCountOutOfRange() => throw new ArgumentOutOfRangeException(nameof(count));
         }
 
         public readonly struct RangeEnumerable : IReadOnlyList<int>
@@ -37,8 +39,10 @@ namespace NetFabric.Hyperlinq
                 get
                 {
                     if(index < 0 || index >= count)
-                        throw new IndexOutOfRangeException(nameof(index));
+                        ThrowIndexOutOfRange();
                     return index + start;
+
+                    void ThrowIndexOutOfRange() => throw new IndexOutOfRangeException(nameof(index));
                 }
             }
 

@@ -12,9 +12,11 @@ namespace NetFabric.Hyperlinq
         public static RepeatCountEnumerable<TResult> Repeat<TResult>(TResult value, int count) 
         {
             if(count < 0)
-                throw new ArgumentOutOfRangeException(nameof(count));
+                ThrowCountOutOfRange();
 
             return new RepeatCountEnumerable<TResult>(value, count);
+
+            void ThrowCountOutOfRange() => throw new ArgumentOutOfRangeException(nameof(count));
         }
 
         public readonly struct RepeatEnumerable<TResult> : IEnumerable<TResult>
@@ -77,8 +79,10 @@ namespace NetFabric.Hyperlinq
                 get
                 {
                     if(index < 0 || index >= count)
-                        throw new IndexOutOfRangeException(nameof(index));
+                        ThrowIndexOutOfRange();
                     return value;
+
+                    void ThrowIndexOutOfRange() => throw new IndexOutOfRangeException(nameof(index));
                 }
             }
 

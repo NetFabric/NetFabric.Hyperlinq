@@ -13,7 +13,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             // Arrange
 
             // Act
-            Action action = () => Enumerable.Count<IEnumerable<int>, int>(null);
+            Action action = () => Enumerable.Count<IEnumerable<int>, IEnumerator<int>, int>(null);
 
             // Assert
             action.Should()
@@ -38,7 +38,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             // Arrange
 
             // Act
-            var result = Enumerable.Count<IEnumerable<int>, int>(source);
+            var result = Enumerable.Count<IEnumerable<int>, IEnumerator<int>, int>(source);
 
             // Assert
             result.Should().Be(source.Count);
@@ -54,7 +54,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var range = Enumerable.Range(0, expected);
 
             // Act
-            var result = Enumerable.Count<Enumerable.RangeEnumerable, int>(range);
+            var result = Enumerable.Count<Enumerable.RangeEnumerable, Enumerable.RangeEnumerable.Enumerator, int>(range);
 
             // Assert
             result.Should().Be(expected);
@@ -88,7 +88,7 @@ namespace NetFabric.Hyperlinq.UnitTests
                 .Where<Enumerable.RangeEnumerable, int>(_ => true);
 
             // Act
-            var result = where.Count<Enumerable.WhereEnumerable<int>, int>();
+            var result = where.Count<Enumerable.WhereEnumerable<int>, Enumerable.WhereEnumerable<int>.Enumerator, int>();
 
             // Assert
             result.Should().Be(expected);

@@ -10,15 +10,18 @@ namespace NetFabric.Hyperlinq
             using(var enumerator = source.GetEnumerator())
             {
                 if(!enumerator.MoveNext())
-                    throw new InvalidOperationException("Sequence contains no elements");
+                    ThrowEmptySequence();
 
                 var first = enumerator.Current;
 
                 if(enumerator.MoveNext())
-                throw new InvalidOperationException("Sequence contains more than one element");
+                    ThrowNotSingleSequence();
 
                 return first;
             }
+
+            void ThrowEmptySequence() => throw new InvalidOperationException("Sequence contains no elements");
+            void ThrowNotSingleSequence() => throw new InvalidOperationException("Sequence contains more than one element");
         }
 
         public static TSource Single<TEnumerable, TSource>(this TEnumerable enumerable, Func<TSource, bool> predicate) where TEnumerable : IEnumerable<TSource>
@@ -34,13 +37,17 @@ namespace NetFabric.Hyperlinq
                         while(enumerator.MoveNext())
                         {
                             if(predicate(enumerator.Current))
-                                throw new InvalidOperationException("Sequence contains more than one element");
+                                ThrowNotSingleSequence();
                         }
                         return current;
                     }
                 }
-                throw new InvalidOperationException("Sequence contains no elements");
+                ThrowEmptySequence();
+                return default;
             }
+
+            void ThrowEmptySequence() => throw new InvalidOperationException("Sequence contains no elements");
+            void ThrowNotSingleSequence() => throw new InvalidOperationException("Sequence contains more than one element");
         }
     }
 }

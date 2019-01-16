@@ -10,10 +10,12 @@ namespace NetFabric.Hyperlinq
             using(var enumerator = source.GetEnumerator())
             {
                 if(!enumerator.MoveNext())
-                    throw new InvalidOperationException("Sequence contains no elements");
+                    ThrowEmptySequence();
 
                 return enumerator.Current;
             }
+
+            void ThrowEmptySequence() => throw new InvalidOperationException("Sequence contains no elements");
         }
 
         public static TSource First<TEnumerable, TSource>(this TEnumerable source, Func<TSource, bool> predicate) where TEnumerable : IEnumerable<TSource>
@@ -26,8 +28,11 @@ namespace NetFabric.Hyperlinq
                     if(predicate(current))
                         return current;
                 }
-                throw new InvalidOperationException("Sequence contains no elements");
+                ThrowEmptySequence();
+                return default;
             }
+
+            void ThrowEmptySequence() => throw new InvalidOperationException("Sequence contains no elements");
         }
     }
 }

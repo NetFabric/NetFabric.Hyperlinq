@@ -15,10 +15,12 @@ namespace NetFabric.Hyperlinq
                 var first = enumerator.Current;
 
                 if(enumerator.MoveNext())
-                    throw new InvalidOperationException("Sequence contains more than one element");
+                    ThrowNotSingleSequence();
 
                 return first;
             }
+
+            void ThrowNotSingleSequence() => throw new InvalidOperationException("Sequence contains more than one element");
         }
 
         public static TSource SingleOrDefault<TEnumerable, TSource>(this TEnumerable enumerable, Func<TSource, bool> predicate) where TEnumerable : IEnumerable<TSource>
@@ -34,13 +36,15 @@ namespace NetFabric.Hyperlinq
                         while(enumerator.MoveNext())
                         {
                             if(predicate(enumerator.Current))
-                                throw new InvalidOperationException("Sequence contains more than one element");
+                                ThrowNotSingleSequence();
                         }
                         return current;
                     }
                 }
                 return default;
             }
+
+            void ThrowNotSingleSequence() => throw new InvalidOperationException("Sequence contains more than one element");
         }    
     }
 }
