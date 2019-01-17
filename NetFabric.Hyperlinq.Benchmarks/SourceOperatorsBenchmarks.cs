@@ -57,7 +57,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Ix_Create() 
         {
             var sum = 0;
-            foreach(var item in System.Linq.EnumerableEx.Create(CreateEnumerator))
+            foreach(var item in System.Linq.EnumerableEx.Create(GetIEnumerator))
                 sum += item;
             return sum;
 
@@ -105,11 +105,9 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Hyperlinq_Create_ForEach() 
         {
             var sum = 0;
-            foreach(var item in Enumerable.Create<Enumerator, int>(CreateEnumerator))
+            foreach(var item in Enumerable.Create<Enumerator, int>(GetEnumerator))
                 sum += item;
             return sum;
-
-            Enumerator CreateEnumerator() => new Enumerator(1, Count);
         } 
 
         [BenchmarkCategory("Range")]
@@ -144,6 +142,21 @@ namespace NetFabric.Hyperlinq.Benchmarks
                 sum += enumerable[index];
             return sum;
         }    
+
+        [BenchmarkCategory("Create")]
+        [Benchmark]
+        public int Hyperlinq_Create_For() 
+        {
+            var enumerable = Enumerable.Create(GetEnumerator, Count, GetItem);
+            var sum = 0;
+            for(var index = 0; index < enumerable.Count; index++)
+                sum += enumerable[index];
+            return sum;
+        }    
+
+        IEnumerator<int> GetIEnumerator() => new Enumerator(1, Count);
+        Enumerator GetEnumerator() => new Enumerator(1, Count);
+        int GetItem(int index) => 1;
 
         struct Enumerator : IEnumerator<int>
         {
