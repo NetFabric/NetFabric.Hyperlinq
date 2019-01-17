@@ -165,7 +165,7 @@ namespace NetFabric.Hyperlinq
 
                     return selector(source[index]);
 
-                    void ThrowIndexOutOfRange() => throw new IndexOutOfRangeException(nameof(index));
+                    void ThrowIndexOutOfRange() => throw new IndexOutOfRangeException();
                 }
             }
 

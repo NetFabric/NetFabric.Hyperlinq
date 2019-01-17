@@ -42,7 +42,7 @@ namespace NetFabric.Hyperlinq
                         ThrowIndexOutOfRange();
                     return index + start;
 
-                    void ThrowIndexOutOfRange() => throw new IndexOutOfRangeException(nameof(index));
+                    void ThrowIndexOutOfRange() => throw new IndexOutOfRangeException();
                 }
             }
 
