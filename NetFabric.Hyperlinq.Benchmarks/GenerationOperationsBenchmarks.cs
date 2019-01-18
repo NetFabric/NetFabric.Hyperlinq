@@ -10,7 +10,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
     [CategoriesColumn]
     [MemoryDiagnoser]
     [MarkdownExporterAttribute.GitHub]
-    public class SourceOperatorsBenchmarks
+    public class GenerationOperationsBenchmarks
     {
         [Params(0, 100, 10_000)]
         //[Params(100)]
