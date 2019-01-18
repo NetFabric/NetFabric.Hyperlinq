@@ -9,11 +9,18 @@ namespace NetFabric.Hyperlinq
         public static EmptyEnumerable<TSource> Empty<TSource>() =>
             new EmptyEnumerable<TSource>();
 
-        public readonly struct EmptyEnumerable<TSource> : IEnumerable<TSource>
+        public readonly struct EmptyEnumerable<TSource> : IReadOnlyList<TSource>
         {
             public Enumerator GetEnumerator() => new Enumerator();
             IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new Enumerator();
             IEnumerator IEnumerable.GetEnumerator() => new Enumerator();
+
+            public int Count => 0;
+
+            public TSource this[int index]
+            {
+                get => throw new IndexOutOfRangeException();
+            }
 
             public readonly struct Enumerator : IEnumerator<TSource>
             {
