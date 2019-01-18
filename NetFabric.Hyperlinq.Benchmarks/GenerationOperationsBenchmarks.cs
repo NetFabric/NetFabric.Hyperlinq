@@ -60,8 +60,6 @@ namespace NetFabric.Hyperlinq.Benchmarks
             foreach(var item in System.Linq.EnumerableEx.Create(GetIEnumerator))
                 sum += item;
             return sum;
-
-            IEnumerator<int> CreateEnumerator() => new Enumerator(1, Count);
         } 
 
         [BenchmarkCategory("Range")]
