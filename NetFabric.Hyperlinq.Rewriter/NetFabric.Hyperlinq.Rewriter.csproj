@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <PackageId>NetFabric.Hyperlinq.Rewriter</PackageId>
+    <Title>NetFabric.Hyperlinq.Rewriter</Title>
+    <Description>A Conan plugin that optimizes LINQ performance at compile time.</Description>
+    <Version>1.0.0-alpha1</Version>
+    <Authors>Antao Almada</Authors>
+    <Copyright>Copyright 2019 Antao Almada</Copyright>
+    <RepositoryUrl>https://github.com/NetFabric/NetFabric.Hyperlinq</RepositoryUrl>
+    <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
+    <PackageIconUrl>https://user-images.githubusercontent.com/534533/49182105-390f3a80-f351-11e8-8e84-c785cddd2995.png</PackageIconUrl>
+    <PackageTags>linq</PackageTags>
+    <LangVersion>latest</LangVersion>
+    <Features>strict</Features>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\Licenses\LICENSE.txt" Pack="true" PackagePath="" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="Conan.CodeAnalysis" Version="2.8.2-alpha5" />
+    <PackageReference Include="AnalyzerPack" Version="1.*" PrivateAssets="all" />
+  </ItemGroup>
+
+</Project>
