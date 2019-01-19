@@ -18,12 +18,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="..\Licenses\LICENSE.txt" Pack="true" PackagePath=""/>
+    <None Include="..\Licenses\LICENSE.txt" Pack="true" PackagePath="" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-*" PrivateAssets="All" />
-    <PackageReference Include="SonarAnalyzer.CSharp" Version="7.9.1.7622">
+    <PackageReference Include="SonarAnalyzer.CSharp" Version="7.10.0.7896">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
