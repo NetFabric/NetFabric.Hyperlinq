@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.168
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetFabric.Hyperlinq", "NetFabric.Hyperlinq\NetFabric.Hyperlinq.csproj", "{EEEAA31B-434E-4849-A3E5-FA9664F5CE9B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetFabric.Hyperlinq", "NetFabric.Hyperlinq\NetFabric.Hyperlinq.csproj", "{EEEAA31B-434E-4849-A3E5-FA9664F5CE9B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetFabric.Hyperlinq.UnitTests", "NetFabric.Hyperlinq.UnitTests\NetFabric.Hyperlinq.UnitTests.csproj", "{FE0CFD9E-7685-4595-8691-5364228722E9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetFabric.Hyperlinq.UnitTests", "NetFabric.Hyperlinq.UnitTests\NetFabric.Hyperlinq.UnitTests.csproj", "{FE0CFD9E-7685-4595-8691-5364228722E9}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetFabric.Hyperlinq.Benchmarks", "NetFabric.Hyperlinq.Benchmarks\NetFabric.Hyperlinq.Benchmarks.csproj", "{B2231C1C-CB99-4A6B-AE09-7B105BF02E9A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{FE0CFD9E-7685-4595-8691-5364228722E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FE0CFD9E-7685-4595-8691-5364228722E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FE0CFD9E-7685-4595-8691-5364228722E9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B2231C1C-CB99-4A6B-AE09-7B105BF02E9A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B2231C1C-CB99-4A6B-AE09-7B105BF02E9A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B2231C1C-CB99-4A6B-AE09-7B105BF02E9A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B2231C1C-CB99-4A6B-AE09-7B105BF02E9A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
