@@ -16,7 +16,7 @@ namespace NetFabric.Hyperlinq.Analyzer
 
         static readonly string Title = "Assigment to interface causes boxing of enumerator";
         static readonly string MessageFormat = "Assigment to interface causes boxing of enumerator for '{0}'";
-        static readonly string Description = "Enumeration performs better when enumerator is not boxed.";
+        static readonly string Description = "This collection has a value type enumerator. Assigning it to an interface cause it to be boxed and method calls to be virtual, affecting peformance.";
         const string Category = "Performance";
      
         static DiagnosticDescriptor Rule = 
@@ -29,7 +29,7 @@ namespace NetFabric.Hyperlinq.Analyzer
 
         public override void Initialize(AnalysisContext context)
         {
-            context.RegisterSyntaxNodeAction(AnalyzeSimpleAssignment, SyntaxKind.SimpleAssignmentExpression);
+            // context.RegisterSyntaxNodeAction(AnalyzeSimpleAssignment, SyntaxKind.SimpleAssignmentExpression);
         }
 
         static void AnalyzeSimpleAssignment(SyntaxNodeAnalysisContext context)

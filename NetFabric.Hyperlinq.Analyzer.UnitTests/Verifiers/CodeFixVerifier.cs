@@ -3,6 +3,7 @@ using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.CodeAnalysis.Formatting;
+using NetFabric.Hyperlinq.Analyzer;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -16,6 +17,9 @@ namespace TestHelper
     /// </summary>
     public abstract partial class CodeFixVerifier : DiagnosticVerifier
     {
+        protected override DiagnosticAnalyzer GetCSharpDiagnosticAnalyzer() =>
+            new LocalVariableBoxingAnalyzer();
+
         /// <summary>
         /// Returns the codefix being tested (C#) - to be implemented in non-abstract class
         /// </summary>
