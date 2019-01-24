@@ -1,19 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.168
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28516.95
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetFabric.Hyperlinq", "NetFabric.Hyperlinq\NetFabric.Hyperlinq.csproj", "{EEEAA31B-434E-4849-A3E5-FA9664F5CE9B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetFabric.Hyperlinq.UnitTests", "NetFabric.Hyperlinq.UnitTests\NetFabric.Hyperlinq.UnitTests.csproj", "{FE0CFD9E-7685-4595-8691-5364228722E9}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetFabric.Hyperlinq.Benchmarks", "NetFabric.Hyperlinq.Benchmarks\NetFabric.Hyperlinq.Benchmarks.csproj", "{B2231C1C-CB99-4A6B-AE09-7B105BF02E9A}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetFabric.Hyperlinq.Analyzer", "NetFabric.Hyperlinq.Analyzer\NetFabric.Hyperlinq.Analyzer\NetFabric.Hyperlinq.Analyzer.csproj", "{C7E77FFE-BB2D-485C-8F0E-AB37DDB3DA43}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetFabric.Hyperlinq.Analyzer.Test", "NetFabric.Hyperlinq.Analyzer\NetFabric.Hyperlinq.Analyzer.Test\NetFabric.Hyperlinq.Analyzer.Test.csproj", "{3FE9F53B-C3BC-40E4-9FBD-3B15454273D7}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetFabric.Hyperlinq.Analyzer.Vsix", "NetFabric.Hyperlinq.Analyzer\NetFabric.Hyperlinq.Analyzer.Vsix\NetFabric.Hyperlinq.Analyzer.Vsix.csproj", "{3B74358F-11BB-418E-A5F8-425ADE18AB3D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetFabric.Hyperlinq.Rewriter", "NetFabric.Hyperlinq.Rewriter\NetFabric.Hyperlinq.Rewriter.csproj", "{2689870A-DB78-4B23-9987-B7685B2AB3ED}"
 EndProject
@@ -23,6 +17,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution", "Solution", "{2C
 	ProjectSection(SolutionItems) = preProject
 		Licenses\LICENSE.txt = Licenses\LICENSE.txt
 	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetFabric.Hyperlinq.Analyzer", "NetFabric.Hyperlinq.Analyzer\NetFabric.Hyperlinq.Analyzer.csproj", "{9502A444-23B5-4D8D-A0A4-22B6FD8F7B27}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetFabric.Hyperlinq.Analyzer.UnitTests", "NetFabric.Hyperlinq.Analyzer.UnitTests\NetFabric.Hyperlinq.Analyzer.UnitTests.csproj", "{F16FCAAB-9A72-464A-85F1-65E72DA662F7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetFabric.Hyperlinq.Analyzer.Vsix", "NetFabric.Hyperlinq.Analyzer.Vsix\NetFabric.Hyperlinq.Analyzer.Vsix.csproj", "{3B74358F-11BB-418E-A5F8-425ADE18AB3D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -42,18 +42,6 @@ Global
 		{B2231C1C-CB99-4A6B-AE09-7B105BF02E9A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B2231C1C-CB99-4A6B-AE09-7B105BF02E9A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B2231C1C-CB99-4A6B-AE09-7B105BF02E9A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C7E77FFE-BB2D-485C-8F0E-AB37DDB3DA43}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C7E77FFE-BB2D-485C-8F0E-AB37DDB3DA43}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C7E77FFE-BB2D-485C-8F0E-AB37DDB3DA43}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C7E77FFE-BB2D-485C-8F0E-AB37DDB3DA43}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3FE9F53B-C3BC-40E4-9FBD-3B15454273D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3FE9F53B-C3BC-40E4-9FBD-3B15454273D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3FE9F53B-C3BC-40E4-9FBD-3B15454273D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3FE9F53B-C3BC-40E4-9FBD-3B15454273D7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3B74358F-11BB-418E-A5F8-425ADE18AB3D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3B74358F-11BB-418E-A5F8-425ADE18AB3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3B74358F-11BB-418E-A5F8-425ADE18AB3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3B74358F-11BB-418E-A5F8-425ADE18AB3D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2689870A-DB78-4B23-9987-B7685B2AB3ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2689870A-DB78-4B23-9987-B7685B2AB3ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2689870A-DB78-4B23-9987-B7685B2AB3ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -62,6 +50,18 @@ Global
 		{1901DB6B-93C6-43F9-A605-7F60CBA06825}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1901DB6B-93C6-43F9-A605-7F60CBA06825}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1901DB6B-93C6-43F9-A605-7F60CBA06825}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9502A444-23B5-4D8D-A0A4-22B6FD8F7B27}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9502A444-23B5-4D8D-A0A4-22B6FD8F7B27}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9502A444-23B5-4D8D-A0A4-22B6FD8F7B27}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9502A444-23B5-4D8D-A0A4-22B6FD8F7B27}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F16FCAAB-9A72-464A-85F1-65E72DA662F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F16FCAAB-9A72-464A-85F1-65E72DA662F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F16FCAAB-9A72-464A-85F1-65E72DA662F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F16FCAAB-9A72-464A-85F1-65E72DA662F7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3B74358F-11BB-418E-A5F8-425ADE18AB3D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3B74358F-11BB-418E-A5F8-425ADE18AB3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3B74358F-11BB-418E-A5F8-425ADE18AB3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3B74358F-11BB-418E-A5F8-425ADE18AB3D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
