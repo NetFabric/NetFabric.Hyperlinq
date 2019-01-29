@@ -8,7 +8,7 @@ using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace NetFabric.Hyperlinq.Analyzer.UnitTests
 {
-    public class LocalVariableBoxingTests : CodeFixVerifier
+    public class AssignmentBoxingTests : CodeFixVerifier
     {
         [Fact]
         public void Empty_Should_Succeeds()

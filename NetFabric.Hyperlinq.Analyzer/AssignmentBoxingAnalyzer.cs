@@ -9,7 +9,7 @@ using System.Linq;
 namespace NetFabric.Hyperlinq.Analyzer
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class LocalVariableBoxingAnalyzer : DiagnosticAnalyzer
+    public sealed class AssignmentBoxingAnalyzer : DiagnosticAnalyzer
     {
         const string DiagnosticId = DiagnosticIds.LocalVariableBoxingId;
 

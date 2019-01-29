@@ -18,7 +18,7 @@ namespace TestHelper
     public abstract partial class CodeFixVerifier : DiagnosticVerifier
     {
         protected override DiagnosticAnalyzer GetCSharpDiagnosticAnalyzer() =>
-            new LocalVariableBoxingAnalyzer();
+            new AssignmentBoxingAnalyzer();
 
         /// <summary>
         /// Returns the codefix being tested (C#) - to be implemented in non-abstract class
