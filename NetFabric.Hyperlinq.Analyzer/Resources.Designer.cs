@@ -71,7 +71,7 @@ namespace NetFabric.Hyperlinq.Analyzer {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; has a value type enumerator. Assigning &apos;{0}&apos; to an interface causes boxing of the enumerator..
+        ///   Looks up a localized string similar to &apos;{0}&apos; has a value type enumerator. Assigning it to &apos;{1}&apos; causes boxing of the enumerator..
         /// </summary>
         internal static string LocalVariableBoxing_MessageFormat {
             get {

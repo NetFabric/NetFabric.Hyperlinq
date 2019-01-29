@@ -13,51 +13,119 @@ namespace NetFabric.Hyperlinq.Analyzer
     {
         const string DiagnosticId = DiagnosticIds.LocalVariableBoxingId;
 
-        static readonly LocalizableString Title = 
+        static readonly LocalizableString Title =
             new LocalizableResourceString(nameof(Resources.LocalVariableBoxing_Title), Resources.ResourceManager, typeof(Resources));
-        static readonly LocalizableString MessageFormat = 
+        static readonly LocalizableString MessageFormat =
             new LocalizableResourceString(nameof(Resources.LocalVariableBoxing_MessageFormat), Resources.ResourceManager, typeof(Resources));
-        static readonly LocalizableString Description = 
+        static readonly LocalizableString Description =
             new LocalizableResourceString(nameof(Resources.LocalVariableBoxing_Description), Resources.ResourceManager, typeof(Resources));
         const string Category = "Performance";
 
-        static readonly DiagnosticDescriptor rule = 
+        static readonly DiagnosticDescriptor rule =
             new DiagnosticDescriptor(DiagnosticId, Title, MessageFormat, Category, DiagnosticSeverity.Warning, isEnabledByDefault: true, description: Description);
 
-        public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => 
-            ImmutableArray.Create(rule); 
+        public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics =>
+            ImmutableArray.Create(rule);
 
         public override void Initialize(AnalysisContext context)
         {
-            //context.RegisterSyntaxNodeAction(AnalyzeFieldDeclaration, SyntaxKind.FieldDeclaration);
             context.RegisterSyntaxNodeAction(AnalyzeSimpleAssignment, SyntaxKind.SimpleAssignmentExpression);
-        } 
+            context.RegisterSyntaxNodeAction(AnalyzeEqualsValueClause, SyntaxKind.EqualsValueClause);
+        }
 
         static void AnalyzeSimpleAssignment(SyntaxNodeAnalysisContext context)
         {
-            if(!(context.Node is AssignmentExpressionSyntax assignmentExpression))
+            if (!(context.Node is AssignmentExpressionSyntax assignmentExpression))
                 return;
 
             var semanticModel = context.SemanticModel;
 
-            var leftTypeInfo = semanticModel.GetTypeInfo(assignmentExpression.Left);
-            if (leftTypeInfo.Type.TypeKind != TypeKind.Interface)
+            var rightTypeSymbol = semanticModel.GetTypeInfo(assignmentExpression.Right).Type;
+            if (!rightTypeSymbol.IsEnumerableValueType())
                 return;
 
-            var rightTypeInfo = semanticModel.GetTypeInfo(assignmentExpression.Right).Type as INamedTypeSymbol;
-            var methods = rightTypeInfo.GetMembers().OfType<IMethodSymbol>();
-            var publicGetEnumeratorMethod = methods
-                .FirstOrDefault(method =>
-                    method.DeclaredAccessibility == Accessibility.Public &&
-                    method.Name == "GetEnumerator");
-            if (publicGetEnumeratorMethod is null)
+            var leftTypeSymbol = semanticModel.GetTypeInfo(assignmentExpression.Left).Type;
+            if (!leftTypeSymbol.BoxesEnumerator())
                 return;
 
-            var returnType = publicGetEnumeratorMethod.ReturnType;
-            if (returnType.IsReferenceType)
+            var diagnostic = Diagnostic.Create(rule, assignmentExpression.GetLocation(), rightTypeSymbol.Name);
+            context.ReportDiagnostic(diagnostic);
+        }
+
+        static void AnalyzeEqualsValueClause(SyntaxNodeAnalysisContext context)
+        {
+            if (!(context.Node is EqualsValueClauseSyntax equalsValueClauseSyntax))
                 return;
 
-            var diagnostic = Diagnostic.Create(rule, assignmentExpression.GetLocation(), rightTypeInfo.Name);
+            var semanticModel = context.SemanticModel;
+
+            var typeSymbol = semanticModel.GetTypeInfo(equalsValueClauseSyntax.Value).Type;
+            if (!typeSymbol.IsEnumerableValueType())
+                return;
+
+            if (equalsValueClauseSyntax.Parent is PropertyDeclarationSyntax propertyDeclarationSyntax)
+            {
+                AnalyzePropertyDeclaration(context, propertyDeclarationSyntax, typeSymbol);
+                return;
+            }
+
+            if (!(equalsValueClauseSyntax.Parent is VariableDeclaratorSyntax variableDeclaratorSyntax))
+                return;
+
+            if (!(variableDeclaratorSyntax.Parent is VariableDeclarationSyntax variableDeclarationSyntax))
+                return;
+
+            switch (variableDeclarationSyntax.Parent)
+            {
+                case LocalDeclarationStatementSyntax localDeclarationStatementSyntax:
+                    AnalyzeLocalDeclaration(context, localDeclarationStatementSyntax, typeSymbol);
+                    break;
+
+                case FieldDeclarationSyntax fieldDeclarationSyntax:
+                    AnalyzeFieldDeclaration(context, fieldDeclarationSyntax, typeSymbol);
+                    break;
+            }
+        }
+
+        static void AnalyzePropertyDeclaration(SyntaxNodeAnalysisContext context, PropertyDeclarationSyntax propertyDeclarationSyntax, ITypeSymbol enumerableTypeSymbol)
+        {
+            if (propertyDeclarationSyntax.Modifiers.Any(token => token.Text == "public"))
+                return;
+
+            var semanticModel = context.SemanticModel;
+
+            var typeSymbol = semanticModel.GetDeclaredSymbol(propertyDeclarationSyntax).Type;
+            if (!typeSymbol.BoxesEnumerator())
+                return;
+
+            var diagnostic = Diagnostic.Create(rule, propertyDeclarationSyntax.GetLocation(), enumerableTypeSymbol.Name, typeSymbol.Name);
+            context.ReportDiagnostic(diagnostic);
+        }
+
+        static void AnalyzeLocalDeclaration(SyntaxNodeAnalysisContext context, LocalDeclarationStatementSyntax localDeclarationStatementSyntax, ITypeSymbol enumerableTypeSymbol)
+        {
+            var genericNameSyntax = (GenericNameSyntax)localDeclarationStatementSyntax.Declaration.Type;
+            var semanticModel = context.SemanticModel;
+            var typeSymbol = semanticModel.GetTypeInfo(genericNameSyntax).Type;
+            if (!typeSymbol.BoxesEnumerator())
+                return;
+
+            var diagnostic = Diagnostic.Create(rule, localDeclarationStatementSyntax.GetLocation(), enumerableTypeSymbol.Name, typeSymbol.Name);
+            context.ReportDiagnostic(diagnostic);
+        }
+
+        static void AnalyzeFieldDeclaration(SyntaxNodeAnalysisContext context, FieldDeclarationSyntax fieldDeclarationSyntax, ITypeSymbol enumerableTypeSymbol)
+        {
+            if (fieldDeclarationSyntax.Modifiers.Any(token => token.Text == "public"))
+                return;
+
+            var genericNameSyntax = (GenericNameSyntax)fieldDeclarationSyntax.Declaration.Type;
+            var semanticModel = context.SemanticModel;
+            var typeSymbol = semanticModel.GetTypeInfo(genericNameSyntax).Type;
+            if (!typeSymbol.BoxesEnumerator())
+                return;
+
+            var diagnostic = Diagnostic.Create(rule, fieldDeclarationSyntax.GetLocation(), enumerableTypeSymbol.Name, typeSymbol.Name);
             context.ReportDiagnostic(diagnostic);
         }
     }

@@ -10,6 +10,6 @@
     <PackageReference Include="BenchmarkDotNet" Version="0.11.3" />
     <PackageReference Include="Conan.Net.Compilers" Version="2.8.2-alpha5" />
     <ProjectReference Include="..\NetFabric.Hyperlinq\NetFabric.Hyperlinq.csproj" />
-    <Analyzer Include="..\NetFabric.Hyperlinq.Rewriter\bin\$(Configuration)\netstandard2.0\NetFabric.Hyperlinq.Rewriter.dll" />
+    <Analyzer Include="..\NetFabric.Hyperlinq.Rewriter\bin\$(Configuration)\netstandard1.3\NetFabric.Hyperlinq.Rewriter.dll" />
   </ItemGroup>
 </Project>
