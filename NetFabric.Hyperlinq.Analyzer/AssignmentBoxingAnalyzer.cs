@@ -44,6 +44,19 @@ namespace NetFabric.Hyperlinq.Analyzer
             if (!rightTypeSymbol.IsEnumerableValueType())
                 return;
 
+            var leftSymbol = semanticModel.GetSymbolInfo(assignmentExpression.Left).Symbol;
+            switch (leftSymbol)
+            {
+                case IFieldSymbol fieldSymbol:
+                    if (fieldSymbol.DeclaredAccessibility == Accessibility.Public)
+                        return;
+                    break;
+                case IPropertySymbol propertySymbol:
+                    if (propertySymbol.DeclaredAccessibility == Accessibility.Public)
+                        return;
+                    break;
+            }
+
             var leftTypeSymbol = semanticModel.GetTypeInfo(assignmentExpression.Left).Type;
             if (!leftTypeSymbol.BoxesEnumerator())
                 return;
