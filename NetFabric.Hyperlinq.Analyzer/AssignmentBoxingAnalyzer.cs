@@ -132,9 +132,9 @@ namespace NetFabric.Hyperlinq.Analyzer
             if (fieldDeclarationSyntax.Modifiers.Any(token => token.Text == "public"))
                 return;
 
-            var genericNameSyntax = (GenericNameSyntax)fieldDeclarationSyntax.Declaration.Type;
+            var typeSyntax = fieldDeclarationSyntax.Declaration.Type;
             var semanticModel = context.SemanticModel;
-            var typeSymbol = semanticModel.GetTypeInfo(genericNameSyntax).Type;
+            var typeSymbol = semanticModel.GetTypeInfo(typeSyntax).Type;
             if (typeSymbol is null || !typeSymbol.BoxesEnumerator())
                 return;
 

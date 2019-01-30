@@ -10,76 +10,54 @@ namespace NetFabric.Hyperlinq.Analyzer.UnitTests
 {
     public class AssignmentBoxingTests : CodeFixVerifier
     {
-        [Fact]
-        public void FieldInitialization_Private_Should_Succeed()
-        {
-            var test = @"
-                class C
-                {
-                    readonly List<T> field = new List<T>();
-                }
-            ";
-
-            VerifyCSharpDiagnostic(test);
-        }
+        protected override DiagnosticAnalyzer GetCSharpDiagnosticAnalyzer() =>
+            new AssignmentBoxingAnalyzer();
 
         [Fact]
-        public void FieldInitialization_Private_With_Boxing_Should_ReturnDiagnostic()
+        public void FieldInitialization()
         {
             var test = @"
-                class C
-                {
-                    readonly IList<T> field = new List<T>();
-                }
+using NetFabric.Hyperlinq.Analyzer.UnitTests;
+using System.Collections.Generic;
+using System.Linq;
+
+class C
+{
+    List<int> field00 = new List<int>();
+    IList<int> field01 = new List<int>(); // boxes enumerator
+    IEnumerable<int> field02 = Enumerable.Range(0, 10); 
+    MyEnumerable.MyRangeEnumerable field03 = MyEnumerable.Range(0, 10);
+    IMyEnumerable<int> field04 = MyEnumerable.Range(0, 10); // boxes enumerator
+
+    public List<int> field10 = new List<int>();
+    public IList<int> field11 = new List<int>(); // boxes enumerator but public
+    public IEnumerable<int> field12 = Enumerable.Range(0, 10);
+    public MyEnumerable.MyRangeEnumerable field13 = MyEnumerable.Range(0, 10);
+    public IMyEnumerable<int> field14 = MyEnumerable.Range(0, 10); // boxes enumerator but public
+}
             ";
 
-            var expected = new DiagnosticResult
+            var field01 = new DiagnosticResult
             {
                 Id = "HLQ001",
-                Message = "'MyRangeEnumerable' has a value type enumerator. Assigning it to 'IMyReadOnlyList' causes boxing of the enumerator.",
+                Message = "'List' has a value type enumerator. Assigning it to 'IList' causes boxing of the enumerator.",
                 Severity = DiagnosticSeverity.Warning,
                 Locations = new[] {
-                    new DiagnosticResultLocation("Test0.cs", 11, 15)
+                    new DiagnosticResultLocation("Test0.cs", 9, 5)
                 },
             };
 
-            VerifyCSharpDiagnostic(test, expected);
-        }
-
-        [Fact]
-        public void FieldInitialization_Private__With_MethodCall_Should_Succeed()
-        {
-            var test = @"
-                class C
-                {
-                    readonly MyRangeEnumerable field = MyEnumerable.RangeValueType(0, 10);
-                }
-            ";
-
-            VerifyCSharpDiagnostic(test);
-        }
-
-        [Fact]
-        public void FieldInitialization_Private_With_MethodCall_And_Boxing_Should_ReturnDiagnostic()
-        {
-            var test = @"
-                class C
-                {
-                    readonly IMyReadOnlyList field = MyEnumerable.RangeValueType(0, 10);
-                }
-            ";
-
-            var expected = new DiagnosticResult
+            var field04 = new DiagnosticResult
             {
                 Id = "HLQ001",
-                Message = "'MyRangeEnumerable' has a value type enumerator. Assigning it to 'IMyReadOnlyList' causes boxing of the enumerator.",
+                Message = "'Range' has a value type enumerator. Assigning it to 'IMyEnumerable' causes boxing of the enumerator.",
                 Severity = DiagnosticSeverity.Warning,
                 Locations = new[] {
-                    new DiagnosticResultLocation("Test0.cs", 11, 15)
+                    new DiagnosticResultLocation("Test0.cs", 0, 0)
                 },
             };
 
-            VerifyCSharpDiagnostic(test, expected);
+            VerifyCSharpDiagnostic(test, field01, field04);
         }
     }
 }

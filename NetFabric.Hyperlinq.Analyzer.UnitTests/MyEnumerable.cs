@@ -26,25 +26,13 @@ namespace NetFabric.Hyperlinq.Analyzer.UnitTests
 
     public static class MyEnumerable
     {
-        public static MyRangeEnumerable RangeValueType(int start, int count)
+        public static MyRangeEnumerable Range(int start, int count)
         {
             var max = ((long)start) + count - 1;
             if (count < 0 || max > int.MaxValue)
                 ThrowCountOutOfRange();
 
             return new MyRangeEnumerable(start, count);
-
-            void ThrowCountOutOfRange() => throw new ArgumentOutOfRangeException(nameof(count));
-        }
-
-        public static IEnumerable<int> RangeReferenceType(int start, int count)
-        {
-            var max = ((long)start) + count - 1;
-            if (count < 0 || max > int.MaxValue)
-                ThrowCountOutOfRange();
-
-            for (var value = start; value < max; value++)
-                yield return value;
 
             void ThrowCountOutOfRange() => throw new ArgumentOutOfRangeException(nameof(count));
         }
