@@ -1,6 +1,7 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.Diagnostics;
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
@@ -143,6 +144,23 @@ namespace NetFabric.Hyperlinq.Analyzer
                     if (set.Add(i))
                         i.GetAllInterfaces();
                 }
+            }
+        }
+
+        public static ITypeSymbol GetTypeOrReturnType(this ExpressionSyntax expression, SyntaxNodeAnalysisContext context)
+        {
+            var semanticModel = context.SemanticModel;
+            switch (expression)
+            {
+                case InvocationExpressionSyntax invocationExpressionSyntax:
+                    var symbol = semanticModel.GetSymbolInfo(invocationExpressionSyntax).Symbol;
+                    return ((IMethodSymbol)symbol).ReturnType;
+
+                case ObjectCreationExpressionSyntax objectCreationExpressionSyntax:
+                    return semanticModel.GetTypeInfo(objectCreationExpressionSyntax).Type;
+
+                default:
+                    return semanticModel.GetTypeInfo(expression).Type;
             }
         }
 

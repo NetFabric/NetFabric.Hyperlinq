@@ -11,23 +11,12 @@ namespace NetFabric.Hyperlinq.Analyzer.UnitTests
     public class AssignmentBoxingTests : CodeFixVerifier
     {
         [Fact]
-        public void Empty_Should_Succeeds()
-        {
-            var test = @"";
-
-            VerifyCSharpDiagnostic(test);
-        }
-
-        [Fact]
-        public void AssignConstructorToExplicitType_Should_Succeed()
+        public void FieldInitialization_Private_Should_Succeed()
         {
             var test = @"
                 class C
                 {
-                    void M()
-                    {
-                        List<int> list = new List<int>();
-                    }
+                    readonly List<T> field = new List<T>();
                 }
             ";
 
@@ -35,172 +24,19 @@ namespace NetFabric.Hyperlinq.Analyzer.UnitTests
         }
 
         [Fact]
-        public void AssignMethodToExplicitType_Should_Succeed()
+        public void FieldInitialization_Private_With_Boxing_Should_ReturnDiagnostic()
         {
             var test = @"
                 class C
                 {
-                    void M()
-                    {
-                        List<int> list = GetList();
-                    }
-
-                    static List<int> GetList() => new List<int>();
-                }
-            ";
-
-            VerifyCSharpDiagnostic(test);
-        }
-
-        [Fact]
-        public void AssignParameterToExplicitType_Should_Succeed()
-        {
-            var test = @"
-                class C
-                {
-                    void M(List<int> a)
-                    {
-                        List<int> list = a;
-                    }
-                }
-            ";
-
-            VerifyCSharpDiagnostic(test);
-        }
-
-
-        [Fact]
-        public void AssignContructorToVar_Should_Succeed()
-        {
-            var test = @"
-                class C
-                {
-                    void M()
-                    {
-                        var list = new List<int>();
-                    }
-                }
-            ";
-
-            VerifyCSharpDiagnostic(test);
-        }
-
-        [Fact]
-        public void AssignMethodToVar_Should_Succeed()
-        {
-            var test = @"
-                class C
-                {
-                    void M()
-                    {
-                        var list = GetList();
-                    }
-
-                    static List<int> GetList() => new List<int>();
-                }
-            ";
-
-            VerifyCSharpDiagnostic(test);
-        }
-
-        [Fact]
-        public void AssignParameterToVar_Should_Succeed()
-        {
-            var test = @"
-                class C
-                {
-                    void M(List<int> a)
-                    {
-                        var list = a;
-                    }
-                }
-            ";
-
-            VerifyCSharpDiagnostic(test);
-        }
-
-        [Fact]
-        public void AssignEnumerableMethodToEnumerable_Should_Succeed()
-        {
-            var test = @"
-                class C
-                {
-                    void M()
-                    {
-                        IEnumerable enumerable = GetEnumerable();
-                    }
-
-                    static IEnumerable<int> GetEnumerable() => yield break;
-                }
-            ";
-
-            VerifyCSharpDiagnostic(test);
-        }    
-
-        [Fact]
-        public void AssignEnumerableMethodToEnumerableOfT_Should_Succeed()
-        {
-            var test = @"
-                class C
-                {
-                    void M()
-                    {
-                        IEnumerable<int> enumerable = GetEnumerable();
-                    }
-
-                    static IEnumerable<int> GetEnumerable() => yield break;
-                }
-            ";
-
-            VerifyCSharpDiagnostic(test);
-        }
-
-        [Fact]
-        public void AssignConstructorToEnumerable_Should_ReturnDiagnostic()
-        {
-            var test = @"
-                class C
-                {
-                    void M()
-                    {
-                        IEnumerable list = new List<int>();
-                    }
+                    readonly IList<T> field = new List<T>();
                 }
             ";
 
             var expected = new DiagnosticResult
             {
-                Id = "HLQ01",
-                Message = "Assigment to interface causes boxing of enumerator for 'List<>'",
-                Severity = DiagnosticSeverity.Warning,
-                Locations = new[] {
-                    new DiagnosticResultLocation("Test0.cs", 11, 15)
-                },
-            };
-
-            VerifyCSharpDiagnostic(test, expected);
-        }    
-
-        [Fact]
-        public void AssignMethodToEnumerable_Should_ReturnDiagnostic()
-        {
-            var test = @"
-                class C
-                {
-                    void M()
-                    {
-                        IEnumerable list = GetList();
-                    }
-
-                    static List<int> GetList() => new List<int>();
-                }
-            ";
-
-
-            var expected = new DiagnosticResult
-            {
-                Id = "HLQ01",
-                Message = "Assigment to interface causes boxing of enumerator for 'List<>'",
+                Id = "HLQ001",
+                Message = "'MyRangeEnumerable' has a value type enumerator. Assigning it to 'IMyReadOnlyList' causes boxing of the enumerator.",
                 Severity = DiagnosticSeverity.Warning,
                 Locations = new[] {
                     new DiagnosticResultLocation("Test0.cs", 11, 15)
@@ -211,103 +47,32 @@ namespace NetFabric.Hyperlinq.Analyzer.UnitTests
         }
 
         [Fact]
-        public void AssignParameterToEnumerable_Should_ReturnDiagnostic()
+        public void FieldInitialization_Private__With_MethodCall_Should_Succeed()
         {
             var test = @"
                 class C
                 {
-                    void M(List<int> a)
-                    {
-                        IEnumerable list = a;
-                    }
+                    readonly MyRangeEnumerable field = MyEnumerable.RangeValueType(0, 10);
                 }
             ";
 
-            var expected = new DiagnosticResult
-            {
-                Id = "HLQ01",
-                Message = "Assigment to interface causes boxing of enumerator for 'List<>'",
-                Severity = DiagnosticSeverity.Warning,
-                Locations = new[] {
-                    new DiagnosticResultLocation("Test0.cs", 11, 15)
-                },
-            };
-
-            VerifyCSharpDiagnostic(test, expected);
-        }
-
-
-        [Fact]
-        public void AssignConstructorToEnumerableOfT_Should_ReturnDiagnostic()
-        {
-            var test = @"
-                class C
-                {
-                    void M()
-                    {
-                        IEnumerable<int> list = new List<int>();
-                    }
-                }
-            ";
-
-            var expected = new DiagnosticResult
-            {
-                Id = "HLQ01",
-                Message = "Assigment to interface causes boxing of enumerator for 'List<>'",
-                Severity = DiagnosticSeverity.Warning,
-                Locations = new[] {
-                    new DiagnosticResultLocation("Test0.cs", 11, 15)
-                },
-            };
-
-            VerifyCSharpDiagnostic(test, expected);
-        }    
-
-        [Fact]
-        public void AssignMethodToEnumerableOfT_Should_ReturnDiagnostic()
-        {
-            var test = @"
-                class C
-                {
-                    void M()
-                    {
-                        IEnumerable<int> list = GetList();
-                    }
-
-                    static List<int> GetList() => new List<int>();
-                }
-            ";
-
-            var expected = new DiagnosticResult
-            {
-                Id = "HLQ01",
-                Message = "Assigment to interface causes boxing of enumerator for 'List<>'",
-                Severity = DiagnosticSeverity.Warning,
-                Locations = new[] {
-                    new DiagnosticResultLocation("Test0.cs", 11, 15)
-                },
-            };
-
-            VerifyCSharpDiagnostic(test, expected);
+            VerifyCSharpDiagnostic(test);
         }
 
         [Fact]
-        public void AssignParameterToEnumerableOfT_Should_ReturnDiagnostic()
+        public void FieldInitialization_Private_With_MethodCall_And_Boxing_Should_ReturnDiagnostic()
         {
             var test = @"
                 class C
                 {
-                    void M(List<int> a)
-                    {
-                        IEnumerable<int> list = a;
-                    }
+                    readonly IMyReadOnlyList field = MyEnumerable.RangeValueType(0, 10);
                 }
             ";
 
             var expected = new DiagnosticResult
             {
-                Id = "HLQ01",
-                Message = "Assigment to interface causes boxing of enumerator for 'List<>'",
+                Id = "HLQ001",
+                Message = "'MyRangeEnumerable' has a value type enumerator. Assigning it to 'IMyReadOnlyList' causes boxing of the enumerator.",
                 Severity = DiagnosticSeverity.Warning,
                 Locations = new[] {
                     new DiagnosticResultLocation("Test0.cs", 11, 15)

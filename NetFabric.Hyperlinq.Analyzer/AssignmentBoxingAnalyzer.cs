@@ -40,7 +40,7 @@ namespace NetFabric.Hyperlinq.Analyzer
 
             var semanticModel = context.SemanticModel;
 
-            var rightTypeSymbol = semanticModel.GetTypeInfo(assignmentExpression.Right).Type;
+            var rightTypeSymbol = assignmentExpression.Right.GetTypeOrReturnType(context);
             if (!rightTypeSymbol.IsEnumerableValueType())
                 return;
 
@@ -70,9 +70,7 @@ namespace NetFabric.Hyperlinq.Analyzer
             if (!(context.Node is EqualsValueClauseSyntax equalsValueClauseSyntax))
                 return;
 
-            var semanticModel = context.SemanticModel;
-
-            var typeSymbol = semanticModel.GetTypeInfo(equalsValueClauseSyntax.Value).Type;
+            var typeSymbol = equalsValueClauseSyntax.Value.GetTypeOrReturnType(context);
             if (!typeSymbol.IsEnumerableValueType())
                 return;
 
