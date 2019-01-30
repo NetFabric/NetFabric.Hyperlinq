@@ -41,10 +41,12 @@ namespace NetFabric.Hyperlinq.Analyzer
             var semanticModel = context.SemanticModel;
 
             var rightTypeSymbol = assignmentExpression.Right.GetTypeOrReturnType(context);
-            if (!rightTypeSymbol.IsEnumerableValueType())
+            if (rightTypeSymbol is null || !rightTypeSymbol.IsEnumerableValueType())
                 return;
 
             var leftSymbol = semanticModel.GetSymbolInfo(assignmentExpression.Left).Symbol;
+            if (leftSymbol is null)
+                return;
             switch (leftSymbol)
             {
                 case IFieldSymbol fieldSymbol:
@@ -58,7 +60,7 @@ namespace NetFabric.Hyperlinq.Analyzer
             }
 
             var leftTypeSymbol = semanticModel.GetTypeInfo(assignmentExpression.Left).Type;
-            if (!leftTypeSymbol.BoxesEnumerator())
+            if (leftTypeSymbol is null || !leftTypeSymbol.BoxesEnumerator())
                 return;
 
             var diagnostic = Diagnostic.Create(rule, assignmentExpression.GetLocation(), rightTypeSymbol.Name);
@@ -71,7 +73,7 @@ namespace NetFabric.Hyperlinq.Analyzer
                 return;
 
             var typeSymbol = equalsValueClauseSyntax.Value.GetTypeOrReturnType(context);
-            if (!typeSymbol.IsEnumerableValueType())
+            if (typeSymbol is null || !typeSymbol.IsEnumerableValueType())
                 return;
 
             if (equalsValueClauseSyntax.Parent is PropertyDeclarationSyntax propertyDeclarationSyntax)
@@ -106,7 +108,7 @@ namespace NetFabric.Hyperlinq.Analyzer
             var semanticModel = context.SemanticModel;
 
             var typeSymbol = semanticModel.GetDeclaredSymbol(propertyDeclarationSyntax).Type;
-            if (!typeSymbol.BoxesEnumerator())
+            if (typeSymbol is null || !typeSymbol.BoxesEnumerator())
                 return;
 
             var diagnostic = Diagnostic.Create(rule, propertyDeclarationSyntax.GetLocation(), enumerableTypeSymbol.Name, typeSymbol.Name);
@@ -118,7 +120,7 @@ namespace NetFabric.Hyperlinq.Analyzer
             var genericNameSyntax = (GenericNameSyntax)localDeclarationStatementSyntax.Declaration.Type;
             var semanticModel = context.SemanticModel;
             var typeSymbol = semanticModel.GetTypeInfo(genericNameSyntax).Type;
-            if (!typeSymbol.BoxesEnumerator())
+            if (typeSymbol is null || !typeSymbol.BoxesEnumerator())
                 return;
 
             var diagnostic = Diagnostic.Create(rule, localDeclarationStatementSyntax.GetLocation(), enumerableTypeSymbol.Name, typeSymbol.Name);
@@ -133,7 +135,7 @@ namespace NetFabric.Hyperlinq.Analyzer
             var genericNameSyntax = (GenericNameSyntax)fieldDeclarationSyntax.Declaration.Type;
             var semanticModel = context.SemanticModel;
             var typeSymbol = semanticModel.GetTypeInfo(genericNameSyntax).Type;
-            if (!typeSymbol.BoxesEnumerator())
+            if (typeSymbol is null || !typeSymbol.BoxesEnumerator())
                 return;
 
             var diagnostic = Diagnostic.Create(rule, fieldDeclarationSyntax.GetLocation(), enumerableTypeSymbol.Name, typeSymbol.Name);

@@ -154,7 +154,7 @@ namespace NetFabric.Hyperlinq.Analyzer
             {
                 case InvocationExpressionSyntax invocationExpressionSyntax:
                     var symbol = semanticModel.GetSymbolInfo(invocationExpressionSyntax).Symbol;
-                    return ((IMethodSymbol)symbol).ReturnType;
+                    return ((IMethodSymbol)symbol)?.ReturnType;
 
                 case ObjectCreationExpressionSyntax objectCreationExpressionSyntax:
                     return semanticModel.GetTypeInfo(objectCreationExpressionSyntax).Type;
