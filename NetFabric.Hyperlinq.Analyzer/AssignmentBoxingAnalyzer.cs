@@ -40,7 +40,7 @@ namespace NetFabric.Hyperlinq.Analyzer
 
             var semanticModel = context.SemanticModel;
 
-            var rightTypeSymbol = assignmentExpression.Right.GetTypeOrReturnType(context);
+            var rightTypeSymbol = semanticModel.GetTypeInfo(assignmentExpression.Right).Type;
             if (rightTypeSymbol is null || !rightTypeSymbol.IsEnumerableValueType())
                 return;
 
@@ -63,7 +63,7 @@ namespace NetFabric.Hyperlinq.Analyzer
             if (leftTypeSymbol is null || !leftTypeSymbol.BoxesEnumerator())
                 return;
 
-            var diagnostic = Diagnostic.Create(rule, assignmentExpression.GetLocation(), rightTypeSymbol.Name);
+            var diagnostic = Diagnostic.Create(rule, assignmentExpression.GetLocation(), rightTypeSymbol.Name, leftTypeSymbol.Name);
             context.ReportDiagnostic(diagnostic);
         }
 
@@ -72,7 +72,9 @@ namespace NetFabric.Hyperlinq.Analyzer
             if (!(context.Node is EqualsValueClauseSyntax equalsValueClauseSyntax))
                 return;
 
-            var typeSymbol = equalsValueClauseSyntax.Value.GetTypeOrReturnType(context);
+            var semanticModel = context.SemanticModel;
+
+            var typeSymbol = semanticModel.GetTypeInfo(equalsValueClauseSyntax.Value).Type; 
             if (typeSymbol is null || !typeSymbol.IsEnumerableValueType())
                 return;
 
@@ -117,9 +119,9 @@ namespace NetFabric.Hyperlinq.Analyzer
 
         static void AnalyzeLocalDeclaration(SyntaxNodeAnalysisContext context, LocalDeclarationStatementSyntax localDeclarationStatementSyntax, ITypeSymbol enumerableTypeSymbol)
         {
-            var genericNameSyntax = (GenericNameSyntax)localDeclarationStatementSyntax.Declaration.Type;
+            var typeSyntax = localDeclarationStatementSyntax.Declaration.Type;
             var semanticModel = context.SemanticModel;
-            var typeSymbol = semanticModel.GetTypeInfo(genericNameSyntax).Type;
+            var typeSymbol = semanticModel.GetTypeInfo(typeSyntax).Type;
             if (typeSymbol is null || !typeSymbol.BoxesEnumerator())
                 return;
 
