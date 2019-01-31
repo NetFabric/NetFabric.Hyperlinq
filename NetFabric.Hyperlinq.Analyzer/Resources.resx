@@ -117,13 +117,13 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="LocalVariableBoxing_Description" xml:space="preserve">
+  <data name="AssignmentBoxing_Description" xml:space="preserve">
     <value>This collection has a value type enumerator. Assigning it to an interface cause it to be boxed and method calls to be virtual, affecting peformance.</value>
   </data>
-  <data name="LocalVariableBoxing_MessageFormat" xml:space="preserve">
+  <data name="AssignmentBoxing_MessageFormat" xml:space="preserve">
     <value>'{0}' has a value type enumerator. Assigning it to '{1}' causes boxing of the enumerator.</value>
   </data>
-  <data name="LocalVariableBoxing_Title" xml:space="preserve">
+  <data name="AssignmentBoxing_Title" xml:space="preserve">
     <value>Assigment to interface causes boxing of enumerator</value>
   </data>
   <data name="NullEnumerable_Description" xml:space="preserve">

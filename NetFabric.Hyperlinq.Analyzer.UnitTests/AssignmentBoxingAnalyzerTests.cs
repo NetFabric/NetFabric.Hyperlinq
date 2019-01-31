@@ -14,7 +14,7 @@ namespace NetFabric.Hyperlinq.Analyzer.UnitTests
             new AssignmentBoxingAnalyzer();
 
         [Fact]
-        public void FieldInitialization()
+        public void VerifyFieldInitialization()
         {
             var test = @"
 using System.Collections.Generic;
@@ -91,7 +91,7 @@ class C
         }
 
         [Fact]
-        public void PropertyInitialization()
+        public void VerifyPropertyInitialization()
         {
             var test = @"
 using System.Collections.Generic;
@@ -168,7 +168,7 @@ class C
         }
 
         [Fact]
-        public void LocalVariableInitialization()
+        public void VerifyLocalVariableInitialization()
         {
             var test = @"
 using System.Collections.Generic;

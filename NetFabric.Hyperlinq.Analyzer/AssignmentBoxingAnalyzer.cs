@@ -11,14 +11,14 @@ namespace NetFabric.Hyperlinq.Analyzer
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public sealed class AssignmentBoxingAnalyzer : DiagnosticAnalyzer
     {
-        const string DiagnosticId = DiagnosticIds.LocalVariableBoxingId;
+        const string DiagnosticId = DiagnosticIds.AssignmentBoxingId;
 
         static readonly LocalizableString Title =
-            new LocalizableResourceString(nameof(Resources.LocalVariableBoxing_Title), Resources.ResourceManager, typeof(Resources));
+            new LocalizableResourceString(nameof(Resources.AssignmentBoxing_Title), Resources.ResourceManager, typeof(Resources));
         static readonly LocalizableString MessageFormat =
-            new LocalizableResourceString(nameof(Resources.LocalVariableBoxing_MessageFormat), Resources.ResourceManager, typeof(Resources));
+            new LocalizableResourceString(nameof(Resources.AssignmentBoxing_MessageFormat), Resources.ResourceManager, typeof(Resources));
         static readonly LocalizableString Description =
-            new LocalizableResourceString(nameof(Resources.LocalVariableBoxing_Description), Resources.ResourceManager, typeof(Resources));
+            new LocalizableResourceString(nameof(Resources.AssignmentBoxing_Description), Resources.ResourceManager, typeof(Resources));
         const string Category = "Performance";
 
         static readonly DiagnosticDescriptor rule =

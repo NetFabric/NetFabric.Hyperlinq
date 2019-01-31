@@ -64,27 +64,27 @@ namespace NetFabric.Hyperlinq.Analyzer {
         /// <summary>
         ///   Looks up a localized string similar to This collection has a value type enumerator. Assigning it to an interface cause it to be boxed and method calls to be virtual, affecting peformance..
         /// </summary>
-        internal static string LocalVariableBoxing_Description {
+        internal static string AssignmentBoxing_Description {
             get {
-                return ResourceManager.GetString("LocalVariableBoxing_Description", resourceCulture);
+                return ResourceManager.GetString("AssignmentBoxing_Description", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to &apos;{0}&apos; has a value type enumerator. Assigning it to &apos;{1}&apos; causes boxing of the enumerator..
         /// </summary>
-        internal static string LocalVariableBoxing_MessageFormat {
+        internal static string AssignmentBoxing_MessageFormat {
             get {
-                return ResourceManager.GetString("LocalVariableBoxing_MessageFormat", resourceCulture);
+                return ResourceManager.GetString("AssignmentBoxing_MessageFormat", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Assigment to interface causes boxing of enumerator.
         /// </summary>
-        internal static string LocalVariableBoxing_Title {
+        internal static string AssignmentBoxing_Title {
             get {
-                return ResourceManager.GetString("LocalVariableBoxing_Title", resourceCulture);
+                return ResourceManager.GetString("AssignmentBoxing_Title", resourceCulture);
             }
         }
         
