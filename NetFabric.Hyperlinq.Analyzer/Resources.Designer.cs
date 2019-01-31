@@ -87,5 +87,32 @@ namespace NetFabric.Hyperlinq.Analyzer {
                 return ResourceManager.GetString("LocalVariableBoxing_Title", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enumerable can be empty but not null. &apos;foreach&apos; does not check for null..
+        /// </summary>
+        internal static string NullEnumerable_Description {
+            get {
+                return ResourceManager.GetString("NullEnumerable_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enumerable cannot be null..
+        /// </summary>
+        internal static string NullEnumerable_MessageFormat {
+            get {
+                return ResourceManager.GetString("NullEnumerable_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enumerable cannot be null..
+        /// </summary>
+        internal static string NullEnumerable_Title {
+            get {
+                return ResourceManager.GetString("NullEnumerable_Title", resourceCulture);
+            }
+        }
     }
 }

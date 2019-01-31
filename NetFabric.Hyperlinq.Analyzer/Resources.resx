@@ -126,4 +126,13 @@
   <data name="LocalVariableBoxing_Title" xml:space="preserve">
     <value>Assigment to interface causes boxing of enumerator</value>
   </data>
+  <data name="NullEnumerable_Description" xml:space="preserve">
+    <value>Enumerable can be empty but not null. 'foreach' does not check for null.</value>
+  </data>
+  <data name="NullEnumerable_MessageFormat" xml:space="preserve">
+    <value>Enumerable cannot be null.</value>
+  </data>
+  <data name="NullEnumerable_Title" xml:space="preserve">
+    <value>Enumerable cannot be null.</value>
+  </data>
 </root>

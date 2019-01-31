@@ -107,7 +107,22 @@ namespace NetFabric.Hyperlinq.Analyzer
             }
         }
 
-        static bool IsEnumeratorInterface(this ITypeSymbol typeSymbol)
+        public static bool IsEnumerableInterface(this ITypeSymbol typeSymbol)
+        {
+            if (typeSymbol.TypeKind != TypeKind.Interface)
+                return false;
+
+            foreach (var i in typeSymbol.GetAllInterfaces())
+            {
+                var getEnumerator = typeSymbol.GetFirstPublicMethod("GetEnumerator");
+                if (!(getEnumerator is null) && getEnumerator.ReturnType.IsEnumeratorInterface())
+                    return true;
+            }
+            return false;
+
+        }
+
+        public static bool IsEnumeratorInterface(this ITypeSymbol typeSymbol)
         {
             if (typeSymbol.TypeKind != TypeKind.Interface)
                 return false;
