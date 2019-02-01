@@ -22,9 +22,9 @@ namespace NetFabric.Hyperlinq.Analyzer
         const string Category = "Performance";
 
         static readonly DiagnosticDescriptor rule =
-            new DiagnosticDescriptor(DiagnosticId, Title, MessageFormat, Category, DiagnosticSeverity.Error, 
+            new DiagnosticDescriptor(DiagnosticId, Title, MessageFormat, Category, DiagnosticSeverity.Warning, 
                 isEnabledByDefault: true, description: Description, 
-                helpLinkUri: "https://github.com/NetFabric/NetFabric.Hyperlinq/tree/master/NetFabric.Hyperlinq.Analyzer/docs/reference/HLQ002_NullEumerable.md");
+                helpLinkUri: "https://github.com/NetFabric/NetFabric.Hyperlinq/tree/master/NetFabric.Hyperlinq.Analyzer/docs/reference/HLQ002_NullEnumerable.md");
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics =>
             ImmutableArray.Create(rule);

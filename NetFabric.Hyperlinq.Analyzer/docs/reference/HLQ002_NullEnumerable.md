@@ -1,12 +1,63 @@
-﻿# HLQ002: Enumerable cannot be null
+﻿# HLQ002: Enumerable methods should not return null
 
 ## Cause
 
+A method that returns an enumerable type is returning `null`.
+
 ## Rule description
+
+Returning `null`, in the context of enumerables, is not the same as an empty enumerable. It's an invalid state.
+
+The following `foreach` loop: 
+
+```csharp
+foreach (var item in GetEnumerable())
+    Console.WriteLine(item);
+```
+
+is interpreted by the compiler as:
+
+```csharp
+IEnumerator<int> enumerator = GetEnumerable().GetEnumerator();
+try
+{
+    while (enumerator.MoveNext())
+    {
+        int current = enumerator.Current;
+        Console.WriteLine(current);
+    }
+}
+finally
+{
+    if (enumerator != null)
+    {
+        enumerator.Dispose();
+    }
+}
+```
+
+Notice that, if `GetEnumerable()` returns `null`, [a `NullReferenceException` will be thrown](https://sharplab.io/#v2:C4LgTgrgdgNAJiA1AHwAIAYAEqCMBuAWACgNscAWQo41AZjIDZsAmMgdk2IG9jM/t6uJqnKYAsgEMAllAAUASk5F+mHspX8AZgHswAUwkBjABaZZANwlhMU4HoC2NqJgDie4AFEoEe3rASAIwAbPQV5Xg1I3ABOWVsHeSoVAF8IvjTGMloAHhlgAD5Xdy8fP0CQhUwAXkLvIKCqZKA==).
+
+The enumerable should instead make the enumerator `MoNext()` return `false` to stop the enumeration loop.
+
 
 ## How to fix violations
 
+You can return an empty instance of an array or `List<T>`, or one of the following implementations of an empty enumerable:
+
+[`System.Linq.Enumerable.Empty<TResult>()`](https://docs.microsoft.com/en-us/dotnet/api/system.linq.enumerable.empty), if method returns any of the following: 
+- `IEnumerable` 
+- `IEnumerable<TResult>`
+
+`NetFabric.Hyperlinq.Enumerable.Empty<TResult>()`, if method returns any of the following: 
+- `IEnumerable` 
+- `IEnumerable<TResult>`
+- `IReadOnlyCollection<TResult>`
+- `IReadOnlyList<TResult>`
+
 ## When to suppress warnings
+
+Supress warning only if you really don't want to return an empty enumerable.
 
 ## Example of a violation
 
@@ -14,18 +65,51 @@
 
 ### Code
 
-```
+```csharp
+IEnumerable<int> Method(bool condition)
+{
+    if (condition)
+        return null;
+
+    ...
+}
 ```
 
 ## Example of how to fix
 
-### Description
+Using an empty array:
 
-### Code
+```csharp
+IEnumerable<int> Method1(bool condition)
+{
+    if (condition)
+        return new int[0];
 
+    ...
+}
 ```
+
+Using an empty `List<T>`:
+
+```csharp
+IEnumerable<int> Method1(bool condition)
+{
+    if (condition)
+        return new List<int>();
+
+    ...
+}
 ```
 
-## Related rules
+Using `Enumerable.Empty<int>()`:
 
-[RULEID: Friendly related rule name](https://github.com/your-account/your-repo/blob/master/docs/reference/RULEID_FriendlyRelatedRuleName.md)
+```csharp
+IEnumerable<int> Method1(bool condition)
+{
+    if (condition)
+        return Enumerable.Empty<int>();
+
+    ...
+}
+```
+
