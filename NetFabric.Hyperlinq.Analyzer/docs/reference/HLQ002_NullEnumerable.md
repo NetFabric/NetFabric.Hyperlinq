@@ -38,8 +38,7 @@ finally
 
 Notice that, if `GetEnumerable()` returns `null`, [a `NullReferenceException` will be thrown](https://sharplab.io/#v2:C4LgTgrgdgNAJiA1AHwAIAYAEqCMBuAWACgNscAWQo41AZjIDZsAmMgdk2IG9jM/t6uJqnKYAsgEMAllAAUASk5F+mHspX8AZgHswAUwkBjABaZZANwlhMU4HoC2NqJgDie4AFEoEe3rASAIwAbPQV5Xg1I3ABOWVsHeSoVAF8IvjTGMloAHhlgAD5Xdy8fP0CQhUwAXkLvIKCqZKA==).
 
-The enumerable should instead make the enumerator `MoNext()` return `false` to stop the enumeration loop.
-
+The enumerable should instead make the enumerator `MoveNext()` return `false` to stop the enumeration loop.
 
 ## How to fix violations
 
