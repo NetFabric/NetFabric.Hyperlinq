@@ -89,6 +89,33 @@ namespace NetFabric.Hyperlinq.Analyzer {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Public methods should return highest admissible level interface..
+        /// </summary>
+        internal static string HighestLevelInterface_Description {
+            get {
+                return ResourceManager.GetString("HighestLevelInterface_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Consider returning &apos;{0}&apos; instead..
+        /// </summary>
+        internal static string HighestLevelInterface_MessageFormat {
+            get {
+                return ResourceManager.GetString("HighestLevelInterface_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Public methods should return highest admissible level interface..
+        /// </summary>
+        internal static string HighestLevelInterface_Title {
+            get {
+                return ResourceManager.GetString("HighestLevelInterface_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enumerable can be empty but not null. &apos;foreach&apos; does not check for null..
         /// </summary>
         internal static string NullEnumerable_Description {

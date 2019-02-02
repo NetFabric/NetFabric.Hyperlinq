@@ -143,6 +143,9 @@ namespace NetFabric.Hyperlinq.Analyzer
             return false;
         }
 
+        public static bool ImplementsInterface(this ITypeSymbol typeSymbol, SpecialType interfaceType)
+            => typeSymbol.GetAllInterfaces().Select(value => value.OriginalDefinition.SpecialType).Contains(interfaceType);
+
         static IEnumerable<ITypeSymbol> GetAllInterfaces(this ITypeSymbol typeSymbol)
         {
             var set = new HashSet<ITypeSymbol>
