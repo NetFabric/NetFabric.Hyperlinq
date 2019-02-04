@@ -10,8 +10,7 @@ namespace NetFabric.Hyperlinq
             Func<TEnumerator> getEnumerator) 
             where TEnumerator : IEnumerator<TResult>
         {
-            if(getEnumerator is null)
-                ThrowGetEnumeratorNull();
+            if(getEnumerator is null) ThrowGetEnumeratorNull();
 
             return new CreateEnumerable<TEnumerator, TResult>(getEnumerator);
 
@@ -23,11 +22,8 @@ namespace NetFabric.Hyperlinq
             int count) 
             where TEnumerator : IEnumerator<TResult>
         {
-            if(getEnumerator is null)
-                ThrowGetEnumeratorNull();
-
-            if(count < 0)
-                ThrowCountOutOfRange();
+            if(getEnumerator is null) ThrowGetEnumeratorNull();
+            if(count < 0) ThrowCountOutOfRange();
 
             return new CreateReadonlyCollection<TEnumerator, TResult>(getEnumerator, count);
 
@@ -41,11 +37,8 @@ namespace NetFabric.Hyperlinq
             Func<int, TResult> getItem) 
             where TEnumerator : IEnumerator<TResult>
         {
-            if(getEnumerator is null)
-                ThrowGetEnumeratorNull();
-
-            if(count < 0)
-                ThrowCountOutOfRange();
+            if(getEnumerator is null) ThrowGetEnumeratorNull();
+            if(count < 0) ThrowCountOutOfRange();
 
             if(getItem is null)
                 ThrowGetItemNull();
@@ -111,8 +104,7 @@ namespace NetFabric.Hyperlinq
             {
                 get
                 {
-                    if(index < 0 || index >= Count)
-                        ThrowIndexOutOfRange();
+                    if(index < 0 || index >= Count) ThrowIndexOutOfRange();
 
                     return getItem(index);
                     

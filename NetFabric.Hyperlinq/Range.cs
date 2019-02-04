@@ -9,8 +9,7 @@ namespace NetFabric.Hyperlinq
         public static RangeEnumerable Range(int start, int count) 
         {
             var max = ((long)start) + count - 1;
-            if(count < 0 || max > int.MaxValue)
-                ThrowCountOutOfRange();
+            if(count < 0 || max > int.MaxValue) ThrowCountOutOfRange();
 
             return new RangeEnumerable(start, count);
 
@@ -38,8 +37,8 @@ namespace NetFabric.Hyperlinq
             {
                 get
                 {
-                    if(index < 0 || index >= count)
-                        ThrowIndexOutOfRange();
+                    if(index < 0 || index >= count) ThrowIndexOutOfRange();
+
                     return index + start;
 
                     void ThrowIndexOutOfRange() => throw new IndexOutOfRangeException();

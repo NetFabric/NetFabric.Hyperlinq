@@ -11,8 +11,7 @@ namespace NetFabric.Hyperlinq
 
         public static RepeatCountEnumerable<TResult> Repeat<TResult>(TResult value, int count) 
         {
-            if(count < 0)
-                ThrowCountOutOfRange();
+            if(count < 0) ThrowCountOutOfRange();
 
             return new RepeatCountEnumerable<TResult>(value, count);
 
@@ -32,10 +31,7 @@ namespace NetFabric.Hyperlinq
             IEnumerator<TResult> IEnumerable<TResult>.GetEnumerator() => new Enumerator(in this);
             IEnumerator IEnumerable.GetEnumerator() => new Enumerator(in this);
 
-            public TResult this[int index]
-            {
-                get => value;
-            }
+            public TResult this[int index] => value;
 
             public readonly struct Enumerator : IEnumerator<TResult>
             {
@@ -51,7 +47,7 @@ namespace NetFabric.Hyperlinq
 
                 public bool MoveNext() => true;
 
-                public void Reset() => throw new NotSupportedException();
+                public void Reset() { }
 
                 public void Dispose() { }
             }

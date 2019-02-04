@@ -17,10 +17,7 @@ namespace NetFabric.Hyperlinq
 
             public int Count => 0;
 
-            public TSource this[int index]
-            {
-                get => throw new IndexOutOfRangeException();
-            }
+            public TSource this[int index] => throw new IndexOutOfRangeException();
 
             public readonly struct Enumerator : IEnumerator<TSource>
             {
@@ -29,7 +26,7 @@ namespace NetFabric.Hyperlinq
 
                 public bool MoveNext() => false;
 
-                public void Reset() => throw new NotSupportedException();
+                public void Reset() { }
 
                 public void Dispose() { }
             }
