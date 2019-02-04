@@ -11,7 +11,8 @@ namespace NetFabric.Hyperlinq.Benchmarks
             var switcher = new BenchmarkSwitcher(new[] {
                     typeof(GenerationOperationsBenchmarks),
                     typeof(CountBenchmarks),
-                    typeof(SelectBenchmarks),
+                    typeof(SelectForEachBenchmarks),
+                    typeof(SelectCountBenchmarks),
                     typeof(CachingBenchmarks),
                 });
             switcher.Run(args);        

@@ -51,7 +51,39 @@ namespace NetFabric.Hyperlinq.UnitTests
 
         [Theory]
         [MemberData(nameof(IEnumerableData))]
-        public void Select_With_ValidEnumeration_Should_Succeed(IReadOnlyList<int> source, Func<int, int> selector, IReadOnlyList<int> expected)
+        public void Select_With_ValidEnumerable_Should_Succeed(IEnumerable<int> source, Func<int, int> selector, IEnumerable<int> expected)
+        {
+            // Arrange
+
+            // Act
+            var result = source.Select(selector);
+
+            // Assert
+            // result.Count.Should().Be(expected.Count);
+            result.Should().Equal(expected);
+            // for(var index = 0; index < result.Count; index++)
+            //     result[index].Should().Be(selector(expected[index]));
+        }  
+
+        [Theory]
+        [MemberData(nameof(IEnumerableData))]
+        public void Select_With_ValidReadOnlyCollection_Should_Succeed(IReadOnlyCollection<int> source, Func<int, int> selector, IReadOnlyCollection<int> expected)
+        {
+            // Arrange
+
+            // Act
+            var result = source.Select(selector);
+
+            // Assert
+            // result.Count.Should().Be(expected.Count);
+            result.Should().Equal(expected);
+            // for(var index = 0; index < result.Count; index++)
+            //     result[index].Should().Be(selector(expected[index]));
+        }      
+
+        [Theory]
+        [MemberData(nameof(IEnumerableData))]
+        public void Select_With_ValidReadOnlyList_Should_Succeed(IReadOnlyList<int> source, Func<int, int> selector, IReadOnlyList<int> expected)
         {
             // Arrange
 
