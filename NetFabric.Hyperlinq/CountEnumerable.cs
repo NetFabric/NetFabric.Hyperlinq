@@ -11,6 +11,11 @@ namespace NetFabric.Hyperlinq
         public static int Count<T>(this IEnumerable<T> source) =>
             Count<IEnumerable<T>, IEnumerator<T>, T>(source);
 
+        public static int Count<TEnumerable, TEnumerator, TSource, TResult>(this SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult> source) 
+            where TEnumerable : IEnumerable<TSource> 
+            where TEnumerator : IEnumerator<TSource> =>
+                Count<SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>, SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>.Enumerator, TResult>(source);
+
         public static int Count<TEnumerable, TEnumerator, TSource>(this TEnumerable source)
             where TEnumerable : IEnumerable<TSource>
             where TEnumerator : IEnumerator<TSource>
