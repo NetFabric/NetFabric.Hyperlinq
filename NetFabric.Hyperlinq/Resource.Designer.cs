@@ -72,9 +72,9 @@ namespace NetFabric.Hyperlinq {
         /// <summary>
         ///   Looks up a localized string similar to Sequence contains more than one element.
         /// </summary>
-        internal static string MoreThanOneElementSequence {
+        internal static string NotSingleSequence {
             get {
-                return ResourceManager.GetString("MoreThanOneElementSequence", resourceCulture);
+                return ResourceManager.GetString("NotSingleSequence", resourceCulture);
             }
         }
     }

@@ -120,7 +120,7 @@
   <data name="EmptySequence" xml:space="preserve">
     <value>Sequence contains no elements</value>
   </data>
-  <data name="MoreThanOneElementSequence" xml:space="preserve">
+  <data name="NotSingleSequence" xml:space="preserve">
     <value>Sequence contains more than one element</value>
   </data>
 </root>
