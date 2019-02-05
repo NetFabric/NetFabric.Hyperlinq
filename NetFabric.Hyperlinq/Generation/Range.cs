@@ -6,22 +6,25 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class Enumerable
     {
-        public static RangeEnumerable Range(int start, int count) 
+        public static ReadOnlyList.RangeReadOnlyList Range(int start, int count)
         {
             var max = ((long)start) + count - 1;
-            if(count < 0 || max > int.MaxValue) ThrowCountOutOfRange();
+            if (count < 0 || max > int.MaxValue) ThrowCountOutOfRange();
 
-            return new RangeEnumerable(start, count);
+            return new ReadOnlyList.RangeReadOnlyList(start, count);
 
             void ThrowCountOutOfRange() => throw new ArgumentOutOfRangeException(nameof(count));
         }
+    }
 
-        public readonly struct RangeEnumerable : IReadOnlyList<int>
+    public static partial class ReadOnlyList
+    {
+        public readonly struct RangeReadOnlyList : IReadOnlyList<int>
         {
             readonly int start;
             readonly int count;
 
-            internal RangeEnumerable(int start, int count)
+            internal RangeReadOnlyList(int start, int count)
             {
                 this.start = start;
                 this.count = count;
@@ -30,6 +33,8 @@ namespace NetFabric.Hyperlinq
             public Enumerator GetEnumerator() => new Enumerator(in this);
             IEnumerator<int> IEnumerable<int>.GetEnumerator() => new Enumerator(in this);
             IEnumerator IEnumerable.GetEnumerator() => new Enumerator(in this);
+
+            public int Start => start;
 
             public int Count => count;
 
@@ -47,10 +52,10 @@ namespace NetFabric.Hyperlinq
 
             public struct Enumerator : IEnumerator<int>
             {
-                int current;
                 readonly int end;
+                int current;
 
-                internal Enumerator(in RangeEnumerable enumerable)
+                internal Enumerator(in RangeReadOnlyList enumerable)
                 {
                     current = enumerable.start - 1;
                     end = checked(enumerable.start + enumerable.count);
@@ -65,6 +70,21 @@ namespace NetFabric.Hyperlinq
 
                 public void Dispose() { }
             }
+
+            public SelectReadOnlyList<RangeReadOnlyList, Enumerator, int, TResult> Select<TResult>(Func<int, TResult> selector) =>
+                Select<RangeReadOnlyList, Enumerator, int, TResult>(this, selector);
+
+            public int First() => First<RangeReadOnlyList, int>(this);
+            public int First(Func<int, bool> predicate) => First<RangeReadOnlyList, int>(this, predicate);
+
+            public int FirstOrDefault() => FirstOrDefault<RangeReadOnlyList, int>(this);
+            public int FirstOrDefault(Func<int, bool> predicate) => FirstOrDefault<RangeReadOnlyList, int>(this, predicate);
+
+            public int Single() => Single<RangeReadOnlyList, int>(this);
+            public int Single(Func<int, bool> predicate) => Single<RangeReadOnlyList, int>(this, predicate);
+
+            public int SingleOrDefault() => SingleOrDefault<RangeReadOnlyList, int>(this);
+            public int SingleOrDefault(Func<int, bool> predicate) => SingleOrDefault<RangeReadOnlyList, int>(this, predicate);
         }
     }
 }

@@ -141,20 +141,8 @@ namespace NetFabric.Hyperlinq.Benchmarks
             return sum;
         }    
 
-        [BenchmarkCategory("Create")]
-        [Benchmark]
-        public int Hyperlinq_Create_For() 
-        {
-            var enumerable = Enumerable.Create(GetEnumerator, Count, GetItem);
-            var sum = 0;
-            for(var index = 0; index < enumerable.Count; index++)
-                sum += enumerable[index];
-            return sum;
-        }    
-
         IEnumerator<int> GetIEnumerator() => new Enumerator(1, Count);
         Enumerator GetEnumerator() => new Enumerator(1, Count);
-        int GetItem(int index) => 1;
 
         struct Enumerator : IEnumerator<int>
         {

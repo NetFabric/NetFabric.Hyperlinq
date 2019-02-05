@@ -8,12 +8,6 @@ namespace NetFabric.Hyperlinq
         public static TSource Single<TSource>(this IEnumerable<TSource> source) =>
             Single<IEnumerable<TSource>, IEnumerator<TSource>, TSource>(source);
 
-        public static TResult Single<TEnumerable, TEnumerator, TSource, TResult>(
-            this SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult> source)
-                where TEnumerable : IEnumerable<TSource>
-                where TEnumerator : IEnumerator<TSource> =>
-                    Single<SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>, SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>.Enumerator, TResult>(source);
-
         public static TSource Single<TEnumerable, TEnumerator, TSource>(this TEnumerable source) 
             where TEnumerable : IEnumerable<TSource>
             where TEnumerator : IEnumerator<TSource>
@@ -22,10 +16,15 @@ namespace NetFabric.Hyperlinq
 
             using (var enumerator = (TEnumerator)source.GetEnumerator())
             {
-                if(!enumerator.MoveNext())
+                if (!enumerator.MoveNext())
                     ThrowEmptySequence();
 
-                return enumerator.Current;
+                var first = enumerator.Current;
+
+                if (enumerator.MoveNext())
+                    ThrowNotSingleSequence();
+
+                return first;
             }
 
             void ThrowSourceNull() => throw new ArgumentNullException(nameof(source));
@@ -36,13 +35,6 @@ namespace NetFabric.Hyperlinq
         public static TSource Single<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate) =>
             Single<IEnumerable<TSource>, IEnumerator<TSource>, TSource>(source, predicate);
 
-        public static TResult Single<TEnumerable, TEnumerator, TSource, TResult>(
-            this SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult> source,
-            Func<TResult, bool> predicate)
-                where TEnumerable : IEnumerable<TSource>
-                where TEnumerator : IEnumerator<TSource> =>
-                    Single<SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>, SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>.Enumerator, TResult>(source, predicate);
-
         public static TSource Single<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, bool> predicate) 
             where TEnumerable : IEnumerable<TSource>
             where TEnumerator : IEnumerator<TSource>
@@ -51,11 +43,19 @@ namespace NetFabric.Hyperlinq
 
             using (var enumerator = (TEnumerator)source.GetEnumerator())
             {
-                while(enumerator.MoveNext())
+                while (enumerator.MoveNext())
                 {
                     var current = enumerator.Current;
-                    if(predicate(current))
+                    if (predicate(current))
+                    {
+                        // found first, keep going until end or find second
+                        while (enumerator.MoveNext())
+                        {
+                            if (predicate(enumerator.Current))
+                                ThrowNotSingleSequence();
+                        }
                         return current;
+                    }
                 }
                 ThrowEmptySequence();
                 return default;

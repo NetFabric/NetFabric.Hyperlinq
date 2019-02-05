@@ -64,6 +64,29 @@ namespace NetFabric.Hyperlinq
 
                 public void Dispose() => enumerator.Dispose();
             }
+
+            public SelectEnumerable<SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>, Enumerator, TResult, TSelectorResult> Select<TSelectorResult>(Func<TResult, TSelectorResult> selector) =>
+                Select<SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>, Enumerator, TResult, TSelectorResult>(this, selector);
+
+            public TResult First() => 
+                First<SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>, Enumerator, TResult>(this);
+            public TResult First(Func<TResult, bool> predicate) =>
+                First<SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>, Enumerator, TResult>(this, predicate);
+
+            public TResult FirstOrDefault() =>
+                FirstOrDefault<SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>, Enumerator, TResult>(this);
+            public TResult FirstOrDefault(Func<TResult, bool> predicate) =>
+                FirstOrDefault<SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>, Enumerator, TResult>(this, predicate);
+
+            public TResult Single() =>
+                Enumerable.Single<SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>, Enumerator, TResult>(this);
+            public TResult Single(Func<TResult, bool> predicate) =>
+                Single<SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>, Enumerator, TResult>(this, predicate);
+
+            public TResult SingleOrDefault() =>
+                Enumerable.SingleOrDefault<SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>, Enumerator, TResult>(this);
+            public TResult SingleOrDefault(Func<TResult, bool> predicate) =>
+                SingleOrDefault<SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>, Enumerator, TResult>(this, predicate);
         }
     }
 }

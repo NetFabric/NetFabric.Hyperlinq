@@ -12,7 +12,7 @@ namespace NetFabric.Hyperlinq
                 Select<IReadOnlyList<TSource>, IEnumerator<TSource>, TSource, TResult>(source, selector);
 
         public static SelectReadOnlyList<List<TSource>, List<TSource>.Enumerator, TSource, TResult> Select<TSource, TResult>(
-            this List<TSource> source, 
+            this List<TSource> source,
             Func<TSource, TResult> selector) =>
                 Select<List<TSource>, List<TSource>.Enumerator, TSource, TResult>(source, selector);
 
@@ -75,6 +75,21 @@ namespace NetFabric.Hyperlinq
 
                 public void Dispose() {}
             }
+
+            public SelectReadOnlyList<SelectReadOnlyList<TEnumerable, TEnumerator, TSource, TResult>, Enumerator, TResult, TSelectorResult> Select<TSelectorResult>(Func<TResult, TSelectorResult> selector) =>
+                Select<SelectReadOnlyList<TEnumerable, TEnumerator, TSource, TResult>, Enumerator, TResult, TSelectorResult>(this, selector);
+
+            public TResult First() => First<TResult>(this);
+            public TResult First(Func<TResult, bool> predicate) => First<TResult>(this, predicate);
+
+            public TResult FirstOrDefault() => FirstOrDefault<TResult>(this);
+            public TResult FirstOrDefault(Func<TResult, bool> predicate) => FirstOrDefault<TResult>(this, predicate);
+
+            public TResult Single() => Single<TResult>(this);
+            public TResult Single(Func<TResult, bool> predicate) => Single<TResult>(this, predicate);
+
+            public TResult SingleOrDefault() => SingleOrDefault<TResult>(this);
+            public TResult SingleOrDefault(Func<TResult, bool> predicate) => SingleOrDefault<TResult>(this, predicate);
         }
     }
 }
