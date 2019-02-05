@@ -8,8 +8,8 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class Enumerable
     {
-        public static int Count<T>(this IEnumerable<T> source) =>
-            Count<IEnumerable<T>, IEnumerator<T>, T>(source);
+        public static int Count<TSource>(this IEnumerable<TSource> source) =>
+            Count<IEnumerable<TSource>, IEnumerator<TSource>, TSource>(source);
 
         public static int Count<TEnumerable, TEnumerator, TSource, TResult>(this SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult> source) 
             where TEnumerable : IEnumerable<TSource> 
@@ -20,10 +20,10 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IEnumerable<TSource>
             where TEnumerator : IEnumerator<TSource>
         {
-            if(source == null) ThrowSourceNull();
+            if (source == null) ThrowSourceNull();
 
             var count = 0;
-            using(TEnumerator enumerator = (TEnumerator)source.GetEnumerator())
+            using(var enumerator = (TEnumerator)source.GetEnumerator())
             {
                 while (enumerator.MoveNext())
                     count++;
