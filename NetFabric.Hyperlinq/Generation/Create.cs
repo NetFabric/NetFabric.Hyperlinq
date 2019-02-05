@@ -33,6 +33,9 @@ namespace NetFabric.Hyperlinq
             public SelectEnumerable<CreateEnumerable<TEnumerator, TSource>, TEnumerator, TSource, TResult> Select<TResult>(Func<TSource, TResult> selector) =>
                 Select<CreateEnumerable<TEnumerator, TSource>, TEnumerator, TSource, TResult>(this, selector);
 
+            public WhereEnumerable<CreateEnumerable<TEnumerator, TSource>, TEnumerator, TSource> Where(Func<TSource, bool> predicate) =>
+                Where<CreateEnumerable<TEnumerator, TSource>, TEnumerator, TSource>(this, predicate);
+
             public TSource First() =>
                 First<CreateEnumerable<TEnumerator, TSource>, TEnumerator, TSource>(this); 
             public TSource First(Func<TSource, bool> predicate) =>

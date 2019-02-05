@@ -13,7 +13,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             // Arrange
 
             // Act
-            Action action = () => Enumerable.Where<IEnumerable<int>, int>(null, _ => true);
+            Action action = () => Enumerable.Where<int>(null, _ => true);
 
             // Assert
             action.Should()
@@ -30,7 +30,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var enumerable = Enumerable.Empty<int>();
 
             // Act
-            Action action = () => Enumerable.Where<IEnumerable<int>, int>(enumerable, (Func<int, bool>)null);
+            Action action = () => Enumerable.Where(enumerable, (Func<int, bool>)null);
 
             // Assert
             action.Should()

@@ -6,35 +6,33 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class ReadOnlyList
     {
-        public static SelectReadOnlyList<IReadOnlyList<TSource>, IEnumerator<TSource>, TSource, TResult> Select<TSource, TResult>(
+        public static SelectReadOnlyList<IReadOnlyList<TSource>, TSource, TResult> Select<TSource, TResult>(
             this IReadOnlyList<TSource> source, 
             Func<TSource, TResult> selector) =>
-                Select<IReadOnlyList<TSource>, IEnumerator<TSource>, TSource, TResult>(source, selector);
+                Select<IReadOnlyList<TSource>, TSource, TResult>(source, selector);
 
-        public static SelectReadOnlyList<List<TSource>, List<TSource>.Enumerator, TSource, TResult> Select<TSource, TResult>(
+        public static SelectReadOnlyList<List<TSource>, TSource, TResult> Select<TSource, TResult>(
             this List<TSource> source,
             Func<TSource, TResult> selector) =>
-                Select<List<TSource>, List<TSource>.Enumerator, TSource, TResult>(source, selector);
+                Select<List<TSource>, TSource, TResult>(source, selector);
 
-        public static SelectReadOnlyList<TEnumerable, TEnumerator, TSource, TResult> Select<TEnumerable, TEnumerator, TSource, TResult>(
+        public static SelectReadOnlyList<TEnumerable, TSource, TResult> Select<TEnumerable, TSource, TResult>(
             this TEnumerable source, 
             Func<TSource, TResult> selector)
             where TEnumerable : IReadOnlyList<TSource> 
-            where TEnumerator : IEnumerator<TSource> 
         {
             if(source == null) ThrowSourceNull();
             if(selector is null) ThrowSelectorNull();
 
-            return new SelectReadOnlyList<TEnumerable, TEnumerator, TSource, TResult>(in source, selector);
+            return new SelectReadOnlyList<TEnumerable, TSource, TResult>(in source, selector);
 
             void ThrowSourceNull() => throw new ArgumentNullException(nameof(source));
             void ThrowSelectorNull() => throw new ArgumentNullException(nameof(selector));
         }
 
-        public readonly struct SelectReadOnlyList<TEnumerable, TEnumerator, TSource, TResult> 
+        public readonly struct SelectReadOnlyList<TEnumerable, TSource, TResult> 
             : IReadOnlyList<TResult>
             where TEnumerable : IReadOnlyList<TSource> 
-            where TEnumerator : IEnumerator<TSource> 
         {
             readonly TEnumerable source;
             readonly Func<TSource, TResult> selector;
@@ -55,11 +53,11 @@ namespace NetFabric.Hyperlinq
 
             public struct Enumerator : IEnumerator<TResult>
             {
-                SelectReadOnlyList<TEnumerable, TEnumerator, TSource, TResult> enumerable;
+                SelectReadOnlyList<TEnumerable, TSource, TResult> enumerable;
                 readonly int count;
                 int index;
 
-                internal Enumerator(in SelectReadOnlyList<TEnumerable, TEnumerator, TSource, TResult> enumerable)
+                internal Enumerator(in SelectReadOnlyList<TEnumerable, TSource, TResult> enumerable)
                 {
                     this.enumerable = enumerable;
                     count = enumerable.Count;
@@ -76,8 +74,8 @@ namespace NetFabric.Hyperlinq
                 public void Dispose() {}
             }
 
-            public SelectReadOnlyList<SelectReadOnlyList<TEnumerable, TEnumerator, TSource, TResult>, Enumerator, TResult, TSelectorResult> Select<TSelectorResult>(Func<TResult, TSelectorResult> selector) =>
-                Select<SelectReadOnlyList<TEnumerable, TEnumerator, TSource, TResult>, Enumerator, TResult, TSelectorResult>(this, selector);
+            public SelectReadOnlyList<SelectReadOnlyList<TEnumerable, TSource, TResult>, TResult, TSelectorResult> Select<TSelectorResult>(Func<TResult, TSelectorResult> selector) =>
+                Select<SelectReadOnlyList<TEnumerable, TSource, TResult>, TResult, TSelectorResult>(this, selector);
 
             public TResult First() => First<TResult>(this);
             public TResult First(Func<TResult, bool> predicate) => First<TResult>(this, predicate);

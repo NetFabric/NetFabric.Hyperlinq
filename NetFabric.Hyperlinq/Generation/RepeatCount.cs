@@ -68,8 +68,11 @@ namespace NetFabric.Hyperlinq
                 public void Dispose() { }
             }
 
-            public SelectReadOnlyList<RepeatCountReadOnlyList<TSource>, Enumerator, TSource, TResult> Select<TResult>(Func<TSource, TResult> selector) =>
-                Select<RepeatCountReadOnlyList<TSource>, Enumerator, TSource, TResult>(this, selector);
+            public SelectReadOnlyList<RepeatCountReadOnlyList<TSource>, TSource, TResult> Select<TResult>(Func<TSource, TResult> selector) =>
+                Select<RepeatCountReadOnlyList<TSource>, TSource, TResult>(this, selector);
+
+            public WhereReadOnlyList<RepeatCountReadOnlyList<TSource>, TSource> Where(Func<TSource, bool> predicate) =>
+                Where<RepeatCountReadOnlyList<TSource>, TSource>(this, predicate);
 
             public TSource First() => ReadOnlyList.First<TSource>(this);
             public TSource First(Func<TSource, bool> predicate) => First<TSource>(this, predicate);

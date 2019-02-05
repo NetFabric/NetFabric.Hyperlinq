@@ -68,6 +68,9 @@ namespace NetFabric.Hyperlinq
             public SelectEnumerable<ReturnEnumerable<TSource>, Enumerator, TSource, TResult> Select<TResult>(Func<TSource, TResult> selector) =>
                 Select<ReturnEnumerable<TSource>, Enumerator, TSource, TResult>(this, selector);
 
+            public WhereEnumerable<ReturnEnumerable<TSource>, Enumerator, TSource> Where(Func<TSource, bool> predicate) =>
+                Where<ReturnEnumerable<TSource>, Enumerator, TSource>(this, predicate);
+
             public TSource First() => ReadOnlyList.First<TSource>(this);
             public TSource First(Func<TSource, bool> predicate) => First<TSource>(this, predicate);
 

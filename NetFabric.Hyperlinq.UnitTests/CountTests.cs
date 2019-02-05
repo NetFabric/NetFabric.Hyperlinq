@@ -85,7 +85,7 @@ namespace NetFabric.Hyperlinq.UnitTests
         {
             // Arrange
             var where = Enumerable.Range(0, expected)
-                .Where<ReadOnlyList.RangeReadOnlyList, int>(_ => true);
+                .Where(_ => true);
 
             // Act
             var result = where.Count();

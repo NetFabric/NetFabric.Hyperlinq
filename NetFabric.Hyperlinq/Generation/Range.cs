@@ -71,8 +71,11 @@ namespace NetFabric.Hyperlinq
                 public void Dispose() { }
             }
 
-            public SelectReadOnlyList<RangeReadOnlyList, Enumerator, int, TResult> Select<TResult>(Func<int, TResult> selector) =>
-                Select<RangeReadOnlyList, Enumerator, int, TResult>(this, selector);
+            public SelectReadOnlyList<RangeReadOnlyList, int, TResult> Select<TResult>(Func<int, TResult> selector) =>
+                Select<RangeReadOnlyList, int, TResult>(this, selector);
+
+            public WhereReadOnlyList<RangeReadOnlyList, int> Where(Func<int, bool> predicate) =>
+                Where<RangeReadOnlyList, int>(this, predicate);
 
             public int First() => First<RangeReadOnlyList, int>(this);
             public int First(Func<int, bool> predicate) => First<RangeReadOnlyList, int>(this, predicate);

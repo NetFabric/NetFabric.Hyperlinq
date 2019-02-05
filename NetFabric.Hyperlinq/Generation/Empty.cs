@@ -36,6 +36,8 @@ namespace NetFabric.Hyperlinq
 
             public EmptyReadOnlyList<TSource> Select<TResult>(Func<TSource, TResult> _) => this;
 
+            public EmptyReadOnlyList<TSource> Where<TResult>(Func<TSource, bool> _) => this;
+
             public TSource First() => throw new InvalidOperationException(Resource.EmptySequence);
             public TSource First(Func<TSource, bool> _) => throw new InvalidOperationException(Resource.EmptySequence);
 
