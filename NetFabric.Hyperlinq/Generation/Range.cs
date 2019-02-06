@@ -86,6 +86,8 @@ namespace NetFabric.Hyperlinq
             public int SingleOrDefault() => ReadOnlyList.SingleOrDefault<RangeReadOnlyList, int>(this);
             public int SingleOrDefault(Func<int, bool> predicate) => ReadOnlyList.SingleOrDefault<RangeReadOnlyList, int>(this, predicate);
         }
+
+        public static int Count(this RangeReadOnlyList source) => source.Count;
     }
 }
 

@@ -5,6 +5,9 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class ReadOnlyCollection
     {
+        public static int Count<TKey, TValue>(this Dictionary<TKey, TValue>.ValueCollection source)
+            => source.Count;
+
         public static SelectReadOnlyCollection<Dictionary<TKey, TValue>.ValueCollection, Dictionary<TKey, TValue>.ValueCollection.Enumerator, TValue, TResult> Select<TKey, TValue, TResult>(
             this Dictionary<TKey, TValue>.ValueCollection source,
             Func<TValue, TResult> selector) 

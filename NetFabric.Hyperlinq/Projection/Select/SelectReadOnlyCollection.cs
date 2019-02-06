@@ -86,6 +86,11 @@ namespace NetFabric.Hyperlinq
             public TResult SingleOrDefault(Func<TResult, bool> predicate) =>
                 Enumerable.SingleOrDefault<SelectReadOnlyCollection<TEnumerable, TEnumerator, TSource, TResult>, Enumerator, TResult>(this, predicate);
         }
+
+        public static int Count<TEnumerable, TEnumerator, TSource, TResult>(this SelectReadOnlyCollection<TEnumerable, TEnumerator, TSource, TResult> source)
+            where TEnumerable : IReadOnlyCollection<TSource>
+            where TEnumerator : IEnumerator<TSource>
+            => source.Count;
     }
 }
 

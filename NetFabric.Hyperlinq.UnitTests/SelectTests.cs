@@ -40,8 +40,8 @@ namespace NetFabric.Hyperlinq.UnitTests
                     .Be("selector");
         }
 
-        public static TheoryData<IReadOnlyList<int>, Func<int, int>, IReadOnlyList<int>> IEnumerableData =>
-            new TheoryData<IReadOnlyList<int>, Func<int, int>, IReadOnlyList<int>> 
+        public static TheoryData<int[], Func<int, int>, int[]> IEnumerableData =>
+            new TheoryData<int[], Func<int, int>, int[]> 
             {
                 { new int[] {}, new Func<int, int>(value => value), new int[] {} },
                 { new int[] { 1 }, new Func<int, int>(value => value), new int[] { 1 } },
@@ -95,6 +95,22 @@ namespace NetFabric.Hyperlinq.UnitTests
             result.Should().Equal(expected);
             // for(var index = 0; index < result.Count; index++)
             //     result[index].Should().Be(selector(expected[index]));
-        }      
+        }
+
+        [Theory]
+        [MemberData(nameof(IEnumerableData))]
+        public void Select_With_ValidArray_Should_Succeed(int[] source, Func<int, int> selector, int[] expected)
+        {
+            // Arrange
+
+            // Act
+            var result = source.Select(selector);
+
+            // Assert
+            // result.Count.Should().Be(expected.Count);
+            result.Should().Equal(expected);
+            // for(var index = 0; index < result.Count; index++)
+            //     result[index].Should().Be(selector(expected[index]));
+        }
     }
 }

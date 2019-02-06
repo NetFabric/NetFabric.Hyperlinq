@@ -40,8 +40,8 @@ namespace NetFabric.Hyperlinq.UnitTests
                     .Be("predicate");
         }
 
-        public static TheoryData<IReadOnlyList<int>, Func<int, bool>, IReadOnlyList<int>> IEnumerableData =>
-            new TheoryData<IReadOnlyList<int>, Func<int, bool>, IReadOnlyList<int>> 
+        public static TheoryData<int[], Func<int, bool>, int[]> IEnumerableData =>
+            new TheoryData<int[], Func<int, bool>, int[]> 
             {
                 { new int[] {}, new Func<int, bool>(_ => true), new int[] {} },
                 { new int[] { 1 }, new Func<int, bool>(_ => true), new int[] { 1 } },
@@ -51,7 +51,7 @@ namespace NetFabric.Hyperlinq.UnitTests
 
         [Theory]
         [MemberData(nameof(IEnumerableData))]
-        public void Where_With_ValidEnumeration_Should_Succeed(IReadOnlyList<int> source, Func<int, bool> predicate, IReadOnlyList<int> expected)
+        public void Where_With_Array_Should_Succeed(int[] source, Func<int, bool> predicate, int[] expected)
         {
             // Arrange
 
@@ -60,6 +60,45 @@ namespace NetFabric.Hyperlinq.UnitTests
 
             // Assert
             result.Should().Equal(expected);
-        }      
+        }
+
+        [Theory]
+        [MemberData(nameof(IEnumerableData))]
+        public void Where_With_ReadOnlyList_Should_Succeed(IReadOnlyList<int> source, Func<int, bool> predicate, IReadOnlyList<int> expected)
+        {
+            // Arrange
+
+            // Act
+            var result = source.Where(predicate);
+
+            // Assert
+            result.Should().Equal(expected);
+        }
+
+        [Theory]
+        [MemberData(nameof(IEnumerableData))]
+        public void Where_With_ReadOnlyCollection_Should_Succeed(IReadOnlyCollection<int> source, Func<int, bool> predicate, IReadOnlyCollection<int> expected)
+        {
+            // Arrange
+
+            // Act
+            var result = source.Where(predicate);
+
+            // Assert
+            result.Should().Equal(expected);
+        }
+
+        [Theory]
+        [MemberData(nameof(IEnumerableData))]
+        public void Where_With_Enumerable_Should_Succeed(IEnumerable<int> source, Func<int, bool> predicate, IEnumerable<int> expected)
+        {
+            // Arrange
+
+            // Act
+            var result = source.Where(predicate);
+
+            // Assert
+            result.Should().Equal(expected);
+        }
     }
 }

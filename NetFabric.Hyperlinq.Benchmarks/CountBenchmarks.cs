@@ -14,9 +14,6 @@ namespace NetFabric.Hyperlinq.Benchmarks
         int[] array;
         List<int> list;
         Enumerable.RangeReadOnlyList range;
-        IEnumerable<int> arrayAsEnumerable;
-        IEnumerable<int> listAsEnumerable;
-        IEnumerable<int> rangeAsEnumerable;
         IEnumerable<int> enumerable;
 
         static IEnumerable<int> MyEnumerable(int count)
@@ -32,13 +29,8 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public void GlobalSetup()
         {
             range = Enumerable.Range(0, Count);
-            rangeAsEnumerable = range;
-
             array = System.Linq.Enumerable.ToArray(range);
-            arrayAsEnumerable = array;
-
             list = System.Linq.Enumerable.ToList(range);
-            listAsEnumerable = list;
 
             enumerable = MyEnumerable(Count);
         }
@@ -65,21 +57,6 @@ namespace NetFabric.Hyperlinq.Benchmarks
 
         [BenchmarkCategory("Array")]
         [Benchmark]
-        public int Linq_Array_AsEnumerable() => 
-            System.Linq.Enumerable.Count(arrayAsEnumerable);
-
-        [BenchmarkCategory("List")]
-        [Benchmark]
-        public int Linq_List_AsEnumerable() => 
-            System.Linq.Enumerable.Count(listAsEnumerable);
-
-        [BenchmarkCategory("Range")]
-        [Benchmark]
-        public int Linq_Range_AsEnumerable() => 
-            System.Linq.Enumerable.Count(rangeAsEnumerable);
-
-        [BenchmarkCategory("Array")]
-        [Benchmark]
         public int Hyperlinq_Array() => 
             array.Count();
 
@@ -97,20 +74,5 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [Benchmark]
         public int Hyperlinq_Enumerable() => 
             enumerable.Count();
-
-        [BenchmarkCategory("Array")]
-        [Benchmark]
-        public int Hyperlinq_Array_AsEnumerable() => 
-            arrayAsEnumerable.Count();
-
-        [BenchmarkCategory("List")]
-        [Benchmark]
-        public int Hyperlinq_List_AsEnumerable() => 
-            listAsEnumerable.Count();
-
-        [BenchmarkCategory("Range")]
-        [Benchmark]
-        public int Hyperlinq_Range_AsEnumerable() => 
-            rangeAsEnumerable.Count();
     }
 }

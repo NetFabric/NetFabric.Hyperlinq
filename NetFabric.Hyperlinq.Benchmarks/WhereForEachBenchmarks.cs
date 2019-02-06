@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Configs;
@@ -9,7 +8,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
     [GroupBenchmarksBy(BenchmarkLogicalGroupRule.ByCategory)]
     [CategoriesColumn]
     [MemoryDiagnoser]
-    public class SelectCountBenchmarks
+    public class WhereForEachBenchmarks
     {
         int[] array;
         List<int> list;
@@ -39,41 +38,81 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [BenchmarkCategory("Array")]
         [Benchmark(Baseline = true)]
         public int Linq_Array() 
-            => System.Linq.Enumerable.Count(System.Linq.Enumerable.Select(array, item => item));
+        { 
+            var count = 0;
+            foreach(var item in System.Linq.Enumerable.Where(array, _ => true))
+                count++;
+            return count;
+        }
 
         [BenchmarkCategory("List")]
         [Benchmark(Baseline = true)]
         public int Linq_List() 
-            => System.Linq.Enumerable.Count(System.Linq.Enumerable.Select(list, item => item));
+        { 
+            var count = 0;
+            foreach(var item in System.Linq.Enumerable.Where(list, _ => true))
+                count++;
+            return count;
+        }
 
         [BenchmarkCategory("Range")]
         [Benchmark(Baseline = true)]
         public int Linq_Range() 
-            => System.Linq.Enumerable.Count(System.Linq.Enumerable.Select(linqRange, item => item));
+        { 
+            var count = 0;
+            foreach(var item in System.Linq.Enumerable.Where(linqRange, _ => true))
+                count++;
+            return count;
+        }
 
         [BenchmarkCategory("Enumerable")]
         [Benchmark(Baseline = true)]
         public int Linq_Enumerable() 
-            => System.Linq.Enumerable.Count(System.Linq.Enumerable.Select(enumerable, item => item));
+        { 
+            var count = 0;
+            foreach(var item in System.Linq.Enumerable.Where(enumerable, _ => true))
+                count++;
+            return count;
+        }
 
         [BenchmarkCategory("Array")]
         [Benchmark]
         public int Hyperlinq_Array() 
-            => array.Select(item => item).Count();
+        { 
+            var count = 0;
+            foreach(var item in array.Where(_ => true))
+                count++;
+            return count;
+        }
 
         [BenchmarkCategory("List")]
         [Benchmark]
         public int Hyperlinq_List() 
-            => list.Select(item => item).Count();
+        { 
+            var count = 0;
+            foreach(var item in list.Where(_ => true))
+                count++;
+            return count;
+        }
 
         [BenchmarkCategory("Range")]
         [Benchmark]
         public int Hyperlinq_Range() 
-            => hyperlinqRange.Select(item => item).Count();
+        { 
+            var count = 0;
+            foreach(var item in hyperlinqRange.Where(_ => true))
+                count++;
+            return count;
+        }
 
         [BenchmarkCategory("Enumerable")]
         [Benchmark]
-        public int Hyperlinq_Enumerable() 
-            => enumerable.Select(item => item).Count();
+        public int Hyperlinq_Enumerable()
+        { 
+            var count = 0;
+            foreach(var item in enumerable.Where(_ => true))
+                count++;
+            return count;
+        }
     }
 }

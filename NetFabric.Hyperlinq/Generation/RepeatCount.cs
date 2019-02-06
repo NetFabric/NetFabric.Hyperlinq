@@ -83,6 +83,8 @@ namespace NetFabric.Hyperlinq
             public TSource SingleOrDefault() => ReadOnlyList.SingleOrDefault<TSource>(this);
             public TSource SingleOrDefault(Func<TSource, bool> predicate) => ReadOnlyList.SingleOrDefault<TSource>(this, predicate);
         }
+
+        public static int Count<TSource>(this RepeatCountReadOnlyList<TSource> source) => source.Count;
     }
 }
 

@@ -5,6 +5,9 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class ReadOnlyList
     {
+        public static int Count<TSource>(this List<TSource> source)
+            => source.Count;
+
         public static SelectReadOnlyList<List<TSource>, TSource, TResult> Select<TSource, TResult>(
             this List<TSource> source,
             Func<TSource, TResult> selector) 
