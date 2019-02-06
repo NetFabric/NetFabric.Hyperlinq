@@ -8,9 +8,6 @@ namespace NetFabric.Hyperlinq
         public static TSource FirstOrDefault<TSource>(this IReadOnlyList<TSource> source) =>
             FirstOrDefault<IReadOnlyList<TSource>, TSource>(source);
 
-        public static TSource FirstOrDefault<TSource>(this List<TSource> source) =>
-            FirstOrDefault<List<TSource>, TSource>(source);
-
         public static TSource FirstOrDefault<TEnumerable, TSource>(this TEnumerable source) 
             where TEnumerable : IReadOnlyList<TSource>
         {

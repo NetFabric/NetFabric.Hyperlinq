@@ -11,61 +11,6 @@ namespace NetFabric.Hyperlinq
             Func<TSource, TResult> selector) =>
                 Select<IReadOnlyCollection<TSource>, IEnumerator<TSource>, TSource, TResult>(source, selector);
 
-        public static SelectReadOnlyCollection<Dictionary<TKey, TValue>, Dictionary<TKey, TValue>.Enumerator, KeyValuePair<TKey, TValue>, TResult> Select<TKey, TValue, TResult>(
-            this Dictionary<TKey, TValue> source,
-            Func<KeyValuePair<TKey, TValue>, TResult> selector) =>
-                Select<Dictionary<TKey, TValue>, Dictionary<TKey, TValue>.Enumerator, KeyValuePair<TKey, TValue>, TResult>(source, selector);
-
-        public static SelectReadOnlyCollection<Dictionary<TKey, TValue>.KeyCollection, Dictionary<TKey, TValue>.KeyCollection.Enumerator, TKey, TResult> Select<TKey, TValue, TResult>(
-            this Dictionary<TKey, TValue>.KeyCollection source,
-            Func<TKey, TResult> selector) =>
-                Select<Dictionary<TKey, TValue>.KeyCollection, Dictionary<TKey, TValue>.KeyCollection.Enumerator, TKey, TResult>(source, selector);
-
-        public static SelectReadOnlyCollection<Dictionary<TKey, TValue>.ValueCollection, Dictionary<TKey, TValue>.ValueCollection.Enumerator, TValue, TResult> Select<TKey, TValue, TResult>(
-            this Dictionary<TKey, TValue>.ValueCollection source,
-            Func<TValue, TResult> selector) =>
-                Select<Dictionary<TKey, TValue>.ValueCollection, Dictionary<TKey, TValue>.ValueCollection.Enumerator, TValue, TResult>(source, selector);
-
-        public static SelectReadOnlyCollection<HashSet<TSource>, HashSet<TSource>.Enumerator, TSource, TResult> Select<TSource, TResult>(
-            this HashSet<TSource> source,
-            Func<TSource, TResult> selector) =>
-                Select<HashSet<TSource>, HashSet<TSource>.Enumerator, TSource, TResult>(source, selector);
-
-        public static SelectReadOnlyCollection<LinkedList<TSource>, LinkedList<TSource>.Enumerator, TSource, TResult> Select<TSource, TResult>(
-            this LinkedList<TSource> source,
-            Func<TSource, TResult> selector) =>
-                Select<LinkedList<TSource>, LinkedList<TSource>.Enumerator, TSource, TResult>(source, selector);
-
-        public static SelectReadOnlyCollection<Queue<TSource>, Queue<TSource>.Enumerator, TSource, TResult> Select<TSource, TResult>(
-            this Queue<TSource> source,
-            Func<TSource, TResult> selector) =>
-                Select<Queue<TSource>, Queue<TSource>.Enumerator, TSource, TResult>(source, selector);
-
-        public static SelectReadOnlyCollection<SortedDictionary<TKey, TValue>, SortedDictionary<TKey, TValue>.Enumerator, KeyValuePair<TKey, TValue>, TResult> Select<TKey, TValue, TResult>(
-            this SortedDictionary<TKey, TValue> source,
-            Func<KeyValuePair<TKey, TValue>, TResult> selector) =>
-                Select<SortedDictionary<TKey, TValue>, SortedDictionary<TKey, TValue>.Enumerator, KeyValuePair<TKey, TValue>, TResult>(source, selector);
-
-        public static SelectReadOnlyCollection<SortedDictionary<TKey, TValue>.KeyCollection, SortedDictionary<TKey, TValue>.KeyCollection.Enumerator, TKey, TResult> Select<TKey, TValue, TResult>(
-            this SortedDictionary<TKey, TValue>.KeyCollection source,
-            Func<TKey, TResult> selector) =>
-                Select<SortedDictionary<TKey, TValue>.KeyCollection, SortedDictionary<TKey, TValue>.KeyCollection.Enumerator, TKey, TResult>(source, selector);
-
-        public static SelectReadOnlyCollection<SortedDictionary<TKey, TValue>.ValueCollection, SortedDictionary<TKey, TValue>.ValueCollection.Enumerator, TValue, TResult> Select<TKey, TValue, TResult>(
-            this SortedDictionary<TKey, TValue>.ValueCollection source,
-            Func<TValue, TResult> selector) =>
-                Select<SortedDictionary<TKey, TValue>.ValueCollection, SortedDictionary<TKey, TValue>.ValueCollection.Enumerator, TValue, TResult>(source, selector);
-
-        public static SelectReadOnlyCollection<SortedSet<TSource>, SortedSet<TSource>.Enumerator, TSource, TResult> Select<TSource, TResult>(
-            this SortedSet<TSource> source,
-            Func<TSource, TResult> selector) =>
-                Select<SortedSet<TSource>, SortedSet<TSource>.Enumerator, TSource, TResult>(source, selector);
-
-        public static SelectReadOnlyCollection<Stack<TSource>, Stack<TSource>.Enumerator, TSource, TResult> Select<TSource, TResult>(
-            this Stack<TSource> source,
-            Func<TSource, TResult> selector) =>
-                Select<Stack<TSource>, Stack<TSource>.Enumerator, TSource, TResult>(source, selector);
-
         public static SelectReadOnlyCollection<TEnumerable, TEnumerator, TSource, TResult> Select<TEnumerable, TEnumerator, TSource, TResult>(
             this TEnumerable source, 
             Func<TSource, TResult> selector)

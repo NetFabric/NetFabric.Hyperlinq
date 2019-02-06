@@ -11,11 +11,6 @@ namespace NetFabric.Hyperlinq
             Func<TSource, bool> predicate) =>
                 Where<IReadOnlyList<TSource>, TSource>(source, predicate);
 
-        public static WhereReadOnlyList<List<TSource>, TSource> Where<TSource>(
-            this List<TSource> source,
-            Func<TSource, bool> predicate) =>
-                Where<List<TSource>, TSource>(source, predicate);
-
         public static WhereReadOnlyList<TEnumerable, TSource> Where<TEnumerable, TSource>(this TEnumerable source, Func<TSource, bool> predicate) 
             where TEnumerable : IReadOnlyList<TSource>
         {

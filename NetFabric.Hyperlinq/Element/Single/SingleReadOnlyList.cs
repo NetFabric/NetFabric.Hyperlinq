@@ -5,29 +5,27 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class ReadOnlyList
     {
-        public static TSource SingleOrDefault<TSource>(this IReadOnlyList<TSource> source) =>
-            SingleOrDefault<IReadOnlyList<TSource>, TSource>(source);
+        public static TSource Single<TSource>(this IReadOnlyList<TSource> source) =>
+            Single<IReadOnlyList<TSource>, TSource>(source);
 
-        public static TSource SingleOrDefault<TSource>(this List<TSource> source) =>
-            SingleOrDefault<List<TSource>, TSource>(source);
-
-        public static TSource SingleOrDefault<TEnumerable, TSource>(this TEnumerable source) 
+        public static TSource Single<TEnumerable, TSource>(this TEnumerable source) 
             where TEnumerable : IReadOnlyList<TSource>
         {
             if (source == null) ThrowSourceNull();
-            if (source.Count == 0) return default;
+            if (source.Count == 0) ThrowEmptySequence();
             if (source.Count > 1) ThrowNotSingleSequence();
 
             return source[0];
 
             void ThrowSourceNull() => throw new ArgumentNullException(nameof(source));
+            void ThrowEmptySequence() => throw new InvalidOperationException(Resource.EmptySequence);
             void ThrowNotSingleSequence() => throw new InvalidOperationException(Resource.NotSingleSequence);
         }
 
-        public static TSource SingleOrDefault<TSource>(this IReadOnlyList<TSource> source, Func<TSource, bool> predicate) =>
-            SingleOrDefault<IReadOnlyList<TSource>, TSource>(source, predicate);
+        public static TSource Single<TSource>(this IReadOnlyList<TSource> source, Func<TSource, bool> predicate) =>
+            Single<IReadOnlyList<TSource>, TSource>(source, predicate);
 
-        public static TSource SingleOrDefault<TEnumerable, TSource>(this TEnumerable source, Func<TSource, bool> predicate) 
+        public static TSource Single<TEnumerable, TSource>(this TEnumerable source, Func<TSource, bool> predicate) 
             where TEnumerable : IReadOnlyList<TSource>
         {
             if (source == null) ThrowSourceNull();
@@ -52,9 +50,11 @@ namespace NetFabric.Hyperlinq
                 }
                 index++;
             }
+            ThrowEmptySequence();
             return default;
 
             void ThrowSourceNull() => throw new ArgumentNullException(nameof(source));
+            void ThrowEmptySequence() => throw new InvalidOperationException(Resource.EmptySequence);
             void ThrowNotSingleSequence() => throw new InvalidOperationException(Resource.NotSingleSequence);
         }
     }

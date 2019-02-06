@@ -14,7 +14,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         int[] array;
         List<int> list;
         IEnumerable<int> linqRange;
-        ReadOnlyList.RangeReadOnlyList hyperlinqRange;
+        Enumerable.RangeReadOnlyList hyperlinqRange;
         IEnumerable<int> enumerable;
 
         static IEnumerable<int> MyEnumerable(int count)

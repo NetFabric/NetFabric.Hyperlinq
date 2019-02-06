@@ -6,12 +6,9 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class Enumerable
     {
-        public static ReadOnlyList.EmptyReadOnlyList<TSource> Empty<TSource>() =>
-            new ReadOnlyList.EmptyReadOnlyList<TSource>();
-    }
+        public static EmptyReadOnlyList<TSource> Empty<TSource>() =>
+            new EmptyReadOnlyList<TSource>();
 
-    public static partial class ReadOnlyList
-    {
         public readonly struct EmptyReadOnlyList<TSource> : IReadOnlyList<TSource>
         {
             public Enumerator GetEnumerator() => new Enumerator();

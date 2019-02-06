@@ -11,11 +11,6 @@ namespace NetFabric.Hyperlinq
             Func<TSource, TResult> selector) =>
                 Select<IReadOnlyList<TSource>, TSource, TResult>(source, selector);
 
-        public static SelectReadOnlyList<List<TSource>, TSource, TResult> Select<TSource, TResult>(
-            this List<TSource> source,
-            Func<TSource, TResult> selector) =>
-                Select<List<TSource>, TSource, TResult>(source, selector);
-
         public static SelectReadOnlyList<TEnumerable, TSource, TResult> Select<TEnumerable, TSource, TResult>(
             this TEnumerable source, 
             Func<TSource, TResult> selector)
@@ -74,20 +69,20 @@ namespace NetFabric.Hyperlinq
                 public void Dispose() {}
             }
 
-            public SelectReadOnlyList<SelectReadOnlyList<TEnumerable, TSource, TResult>, TResult, TSelectorResult> Select<TSelectorResult>(Func<TResult, TSelectorResult> selector) =>
-                Select<SelectReadOnlyList<TEnumerable, TSource, TResult>, TResult, TSelectorResult>(this, selector);
+            //public SelectReadOnlyList<SelectReadOnlyList<TEnumerable, TSource, TResult>, TResult, TSelectorResult> Select<TSelectorResult>(Func<TResult, TSelectorResult> selector) =>
+            //    Select<SelectReadOnlyList<TEnumerable, TSource, TResult>, TResult, TSelectorResult>(this, selector);
 
-            public TResult First() => First<TResult>(this);
-            public TResult First(Func<TResult, bool> predicate) => First<TResult>(this, predicate);
+            //public TResult First() => First<TResult>(this);
+            //public TResult First(Func<TResult, bool> predicate) => First<TResult>(this, predicate);
 
-            public TResult FirstOrDefault() => FirstOrDefault<TResult>(this);
-            public TResult FirstOrDefault(Func<TResult, bool> predicate) => FirstOrDefault<TResult>(this, predicate);
+            //public TResult FirstOrDefault() => FirstOrDefault<TResult>(this);
+            //public TResult FirstOrDefault(Func<TResult, bool> predicate) => FirstOrDefault<TResult>(this, predicate);
 
-            public TResult Single() => Single<TResult>(this);
-            public TResult Single(Func<TResult, bool> predicate) => Single<TResult>(this, predicate);
+            //public TResult Single() => Single<TResult>(this);
+            //public TResult Single(Func<TResult, bool> predicate) => Single<TResult>(this, predicate);
 
-            public TResult SingleOrDefault() => SingleOrDefault<TResult>(this);
-            public TResult SingleOrDefault(Func<TResult, bool> predicate) => SingleOrDefault<TResult>(this, predicate);
+            //public TResult SingleOrDefault() => SingleOrDefault<TResult>(this);
+            //public TResult SingleOrDefault(Func<TResult, bool> predicate) => SingleOrDefault<TResult>(this, predicate);
         }
     }
 }

@@ -6,18 +6,15 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class Enumerable
     {
-        public static ReadOnlyList.RepeatCountReadOnlyList<TSource> Repeat<TSource>(TSource value, int count)
+        public static RepeatCountReadOnlyList<TSource> Repeat<TSource>(TSource value, int count)
         {
             if (count < 0) ThrowCountOutOfRange();
 
-            return new ReadOnlyList.RepeatCountReadOnlyList<TSource>(value, count);
+            return new RepeatCountReadOnlyList<TSource>(value, count);
 
             void ThrowCountOutOfRange() => throw new ArgumentOutOfRangeException(nameof(count));
         }
-    }
 
-    public static partial class ReadOnlyList
-    {
         public readonly struct RepeatCountReadOnlyList<TSource> : IReadOnlyList<TSource>
         {
             readonly TSource value;
@@ -68,23 +65,23 @@ namespace NetFabric.Hyperlinq
                 public void Dispose() { }
             }
 
-            public SelectReadOnlyList<RepeatCountReadOnlyList<TSource>, TSource, TResult> Select<TResult>(Func<TSource, TResult> selector) =>
-                Select<RepeatCountReadOnlyList<TSource>, TSource, TResult>(this, selector);
+            public ReadOnlyList.SelectReadOnlyList<RepeatCountReadOnlyList<TSource>, TSource, TResult> Select<TResult>(Func<TSource, TResult> selector) =>
+                ReadOnlyList.Select<RepeatCountReadOnlyList<TSource>, TSource, TResult>(this, selector);
 
-            public WhereReadOnlyList<RepeatCountReadOnlyList<TSource>, TSource> Where(Func<TSource, bool> predicate) =>
-                Where<RepeatCountReadOnlyList<TSource>, TSource>(this, predicate);
+            public ReadOnlyList.WhereReadOnlyList<RepeatCountReadOnlyList<TSource>, TSource> Where(Func<TSource, bool> predicate) =>
+                ReadOnlyList.Where<RepeatCountReadOnlyList<TSource>, TSource>(this, predicate);
 
             public TSource First() => ReadOnlyList.First<TSource>(this);
-            public TSource First(Func<TSource, bool> predicate) => First<TSource>(this, predicate);
+            public TSource First(Func<TSource, bool> predicate) => ReadOnlyList.First<TSource>(this, predicate);
 
-            public TSource FirstOrDefault() => FirstOrDefault<TSource>(this);
-            public TSource FirstOrDefault(Func<TSource, bool> predicate) => FirstOrDefault<TSource>(this, predicate);
+            public TSource FirstOrDefault() => ReadOnlyList.FirstOrDefault<TSource>(this);
+            public TSource FirstOrDefault(Func<TSource, bool> predicate) => ReadOnlyList.FirstOrDefault<TSource>(this, predicate);
 
-            public TSource Single() => Single<TSource>(this);
-            public TSource Single(Func<TSource, bool> predicate) => Single<TSource>(this, predicate);
+            public TSource Single() => ReadOnlyList.Single<TSource>(this);
+            public TSource Single(Func<TSource, bool> predicate) => ReadOnlyList.Single<TSource>(this, predicate);
 
-            public TSource SingleOrDefault() => SingleOrDefault<TSource>(this);
-            public TSource SingleOrDefault(Func<TSource, bool> predicate) => SingleOrDefault<TSource>(this, predicate);
+            public TSource SingleOrDefault() => ReadOnlyList.SingleOrDefault<TSource>(this);
+            public TSource SingleOrDefault(Func<TSource, bool> predicate) => ReadOnlyList.SingleOrDefault<TSource>(this, predicate);
         }
     }
 }

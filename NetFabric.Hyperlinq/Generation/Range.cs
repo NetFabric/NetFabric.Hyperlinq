@@ -6,19 +6,16 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class Enumerable
     {
-        public static ReadOnlyList.RangeReadOnlyList Range(int start, int count)
+        public static RangeReadOnlyList Range(int start, int count)
         {
             var max = ((long)start) + count - 1;
             if (count < 0 || max > int.MaxValue) ThrowCountOutOfRange();
 
-            return new ReadOnlyList.RangeReadOnlyList(start, count);
+            return new RangeReadOnlyList(start, count);
 
             void ThrowCountOutOfRange() => throw new ArgumentOutOfRangeException(nameof(count));
         }
-    }
 
-    public static partial class ReadOnlyList
-    {
         public readonly struct RangeReadOnlyList : IReadOnlyList<int>
         {
             readonly int start;
@@ -71,23 +68,23 @@ namespace NetFabric.Hyperlinq
                 public void Dispose() { }
             }
 
-            public SelectReadOnlyList<RangeReadOnlyList, int, TResult> Select<TResult>(Func<int, TResult> selector) =>
-                Select<RangeReadOnlyList, int, TResult>(this, selector);
+            public ReadOnlyList.SelectReadOnlyList<RangeReadOnlyList, int, TResult> Select<TResult>(Func<int, TResult> selector) =>
+                ReadOnlyList.Select<RangeReadOnlyList, int, TResult>(this, selector);
 
-            public WhereReadOnlyList<RangeReadOnlyList, int> Where(Func<int, bool> predicate) =>
-                Where<RangeReadOnlyList, int>(this, predicate);
+            public ReadOnlyList.WhereReadOnlyList<RangeReadOnlyList, int> Where(Func<int, bool> predicate) =>
+                ReadOnlyList.Where<RangeReadOnlyList, int>(this, predicate);
 
-            public int First() => First<RangeReadOnlyList, int>(this);
-            public int First(Func<int, bool> predicate) => First<RangeReadOnlyList, int>(this, predicate);
+            public int First() => ReadOnlyList.First<RangeReadOnlyList, int>(this);
+            public int First(Func<int, bool> predicate) => ReadOnlyList.First<RangeReadOnlyList, int>(this, predicate);
 
-            public int FirstOrDefault() => FirstOrDefault<RangeReadOnlyList, int>(this);
-            public int FirstOrDefault(Func<int, bool> predicate) => FirstOrDefault<RangeReadOnlyList, int>(this, predicate);
+            public int FirstOrDefault() => ReadOnlyList.FirstOrDefault<RangeReadOnlyList, int>(this);
+            public int FirstOrDefault(Func<int, bool> predicate) => ReadOnlyList.FirstOrDefault<RangeReadOnlyList, int>(this, predicate);
 
-            public int Single() => Single<RangeReadOnlyList, int>(this);
-            public int Single(Func<int, bool> predicate) => Single<RangeReadOnlyList, int>(this, predicate);
+            public int Single() => ReadOnlyList.Single<RangeReadOnlyList, int>(this);
+            public int Single(Func<int, bool> predicate) => ReadOnlyList.Single<RangeReadOnlyList, int>(this, predicate);
 
-            public int SingleOrDefault() => SingleOrDefault<RangeReadOnlyList, int>(this);
-            public int SingleOrDefault(Func<int, bool> predicate) => SingleOrDefault<RangeReadOnlyList, int>(this, predicate);
+            public int SingleOrDefault() => ReadOnlyList.SingleOrDefault<RangeReadOnlyList, int>(this);
+            public int SingleOrDefault(Func<int, bool> predicate) => ReadOnlyList.SingleOrDefault<RangeReadOnlyList, int>(this, predicate);
         }
     }
 }
