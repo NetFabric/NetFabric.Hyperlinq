@@ -62,5 +62,11 @@ namespace NetFabric.Hyperlinq
             public TSource SingleOrDefault(Func<TSource, bool> predicate) => SingleOrDefault<RepeatEnumerable<TSource>, Enumerator, TSource>(this, predicate);
         }
     }
+
+    static class RepeatEnumerableExtensions
+    {
+        public static int Count<TSource>(this Enumerable.RepeatEnumerable<TSource> source)
+            => Enumerable.Count<Enumerable.RepeatEnumerable<TSource>, Enumerable.RepeatEnumerable<TSource>.Enumerator, TSource>(source);
+    }
 }
 

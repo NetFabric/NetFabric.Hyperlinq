@@ -69,7 +69,39 @@ namespace NetFabric.Hyperlinq
 
                 public void Dispose() { }
             }
+
+            public Enumerable.SelectEnumerable<WhereArray<TSource>, Enumerator, TSource, TResult> Select<TResult>(Func<TSource, TResult> selector) =>
+                Enumerable.Select<WhereArray<TSource>, Enumerator, TSource, TResult>(this, selector);
+
+            public Enumerable.WhereEnumerable<WhereArray<TSource>, Enumerator, TSource> Where(Func<TSource, bool> predicate) =>
+                Enumerable.Where<WhereArray<TSource>, Enumerator, TSource>(this, predicate);
+
+            public TSource First() 
+                => Enumerable.First<WhereArray<TSource>, Enumerator, TSource>(this);
+            public TSource First(Func<TSource, bool> predicate) 
+                => Enumerable.First<WhereArray<TSource>, Enumerator, TSource>(this, predicate);
+
+            public TSource FirstOrDefault() 
+                => Enumerable.FirstOrDefault<WhereArray<TSource>, Enumerator, TSource>(this);
+            public TSource FirstOrDefault(Func<TSource, bool> predicate) 
+                => Enumerable.FirstOrDefault<WhereArray<TSource>, Enumerator, TSource>(this, predicate);
+
+            public TSource Single() 
+                => Enumerable.Single<WhereArray<TSource>, Enumerator, TSource>(this);
+            public TSource Single(Func<TSource, bool> predicate) 
+                => Enumerable.Single<WhereArray<TSource>, Enumerator, TSource>(this, predicate);
+
+            public TSource SingleOrDefault() 
+                => Enumerable.SingleOrDefault<WhereArray<TSource>, Enumerator, TSource>(this);
+            public TSource SingleOrDefault(Func<TSource, bool> predicate) 
+                => Enumerable.SingleOrDefault<WhereArray<TSource>, Enumerator, TSource>(this, predicate);
         }
+    }
+
+    static class WhereArrayExtensions
+    {
+        public static int Count<TSource>(this Array.WhereArray<TSource> source)
+            => Enumerable.Count<Array.WhereArray<TSource>, Array.WhereArray<TSource>.Enumerator, TSource>(source);
     }
 }
 

@@ -5,9 +5,6 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class Enumerable
     {
-        public static TSource First<TSource>(this IEnumerable<TSource> source) =>
-            First<IEnumerable<TSource>, IEnumerator<TSource>, TSource>(source);
-
         public static TSource First<TEnumerable, TEnumerator, TSource>(this TEnumerable source) 
             where TEnumerable : IEnumerable<TSource>
             where TEnumerator : IEnumerator<TSource>
@@ -25,9 +22,6 @@ namespace NetFabric.Hyperlinq
             void ThrowSourceNull() => throw new ArgumentNullException(nameof(source));
             void ThrowEmptySequence() => throw new InvalidOperationException(Resource.EmptySequence);
         }
-
-        public static TSource First<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate) =>
-            First<IEnumerable<TSource>, IEnumerator<TSource>, TSource>(source, predicate);
 
         public static TSource First<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, bool> predicate) 
             where TEnumerable : IEnumerable<TSource>

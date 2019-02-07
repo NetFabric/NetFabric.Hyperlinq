@@ -6,11 +6,6 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class Enumerable
     {
-        public static SelectEnumerable<IEnumerable<TSource>, IEnumerator<TSource>, TSource, TResult> Select<TSource, TResult>(
-            this IEnumerable<TSource> source, 
-            Func<TSource, TResult> selector) =>
-                Select<IEnumerable<TSource>, IEnumerator<TSource>, TSource, TResult>(source, selector);
-
         public static SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult> Select<TEnumerable, TEnumerator, TSource, TResult>(
             this TEnumerable source, 
             Func<TSource, TResult> selector)
@@ -65,8 +60,11 @@ namespace NetFabric.Hyperlinq
                 public void Dispose() => enumerator.Dispose();
             }
 
-            public SelectEnumerable<SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>, Enumerator, TResult, TSelectorResult> Select<TSelectorResult>(Func<TResult, TSelectorResult> selector) =>
-                Select<SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>, Enumerator, TResult, TSelectorResult>(this, selector);
+            public SelectEnumerable<SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>, Enumerator, TResult, TSelectorResult> Select<TSelectorResult>(Func<TResult, TSelectorResult> selector) 
+                => Select<SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>, Enumerator, TResult, TSelectorResult>(this, selector);
+
+            public WhereEnumerable<SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>, Enumerator, TResult> Where(Func<TResult, bool> predicate) 
+                => Where<SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>, Enumerator, TResult>(this, predicate);
 
             public TResult First() => 
                 First<SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>, Enumerator, TResult>(this);
@@ -88,6 +86,14 @@ namespace NetFabric.Hyperlinq
             public TResult SingleOrDefault(Func<TResult, bool> predicate) =>
                 SingleOrDefault<SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>, Enumerator, TResult>(this, predicate);
         }
+    }
+
+    static class SelectEnumerableExtensions
+    {
+        public static int Count<TEnumerable, TEnumerator, TSource, TResult>(this Enumerable.SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult> source)
+            where TEnumerable : IEnumerable<TSource>
+            where TEnumerator : IEnumerator<TSource>
+            => Enumerable.Count<Enumerable.SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>, Enumerable.SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>.Enumerator, TResult>(source);
     }
 }
 

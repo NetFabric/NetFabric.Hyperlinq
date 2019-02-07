@@ -30,31 +30,34 @@ namespace NetFabric.Hyperlinq
             IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => getEnumerator();
             IEnumerator IEnumerable.GetEnumerator() => getEnumerator();
 
-            public SelectEnumerable<CreateEnumerable<TEnumerator, TSource>, TEnumerator, TSource, TResult> Select<TResult>(Func<TSource, TResult> selector) =>
-                Select<CreateEnumerable<TEnumerator, TSource>, TEnumerator, TSource, TResult>(this, selector);
+            public int Count()
+                => Count<CreateEnumerable<TEnumerator, TSource>, TEnumerator, TSource>(this);
 
-            public WhereEnumerable<CreateEnumerable<TEnumerator, TSource>, TEnumerator, TSource> Where(Func<TSource, bool> predicate) =>
-                Where<CreateEnumerable<TEnumerator, TSource>, TEnumerator, TSource>(this, predicate);
+            public SelectEnumerable<CreateEnumerable<TEnumerator, TSource>, TEnumerator, TSource, TResult> Select<TResult>(Func<TSource, TResult> selector) 
+                => Select<CreateEnumerable<TEnumerator, TSource>, TEnumerator, TSource, TResult>(this, selector);
 
-            public TSource First() =>
-                First<CreateEnumerable<TEnumerator, TSource>, TEnumerator, TSource>(this); 
-            public TSource First(Func<TSource, bool> predicate) =>
-                First<CreateEnumerable<TEnumerator, TSource>, TEnumerator, TSource>(this, predicate);
+            public WhereEnumerable<CreateEnumerable<TEnumerator, TSource>, TEnumerator, TSource> Where(Func<TSource, bool> predicate) 
+                => Where<CreateEnumerable<TEnumerator, TSource>, TEnumerator, TSource>(this, predicate);
 
-            public TSource FirstOrDefault() =>
-                FirstOrDefault<CreateEnumerable<TEnumerator, TSource>, TEnumerator, TSource>(this);
-            public TSource FirstOrDefault(Func<TSource, bool> predicate) =>
-                FirstOrDefault<CreateEnumerable<TEnumerator, TSource>, TEnumerator, TSource>(this, predicate);
+            public TSource First() 
+                => First<CreateEnumerable<TEnumerator, TSource>, TEnumerator, TSource>(this); 
+            public TSource First(Func<TSource, bool> predicate) 
+                => First<CreateEnumerable<TEnumerator, TSource>, TEnumerator, TSource>(this, predicate);
 
-            public TSource Single() =>
-                Single<CreateEnumerable<TEnumerator, TSource>, TEnumerator, TSource>(this);
-            public TSource Single(Func<TSource, bool> predicate) =>
-                Single<CreateEnumerable<TEnumerator, TSource>, TEnumerator, TSource>(this, predicate);
+            public TSource FirstOrDefault() 
+                => FirstOrDefault<CreateEnumerable<TEnumerator, TSource>, TEnumerator, TSource>(this);
+            public TSource FirstOrDefault(Func<TSource, bool> predicate) 
+                => FirstOrDefault<CreateEnumerable<TEnumerator, TSource>, TEnumerator, TSource>(this, predicate);
 
-            public TSource SingleOrDefault() =>
-                SingleOrDefault<CreateEnumerable<TEnumerator, TSource>, TEnumerator, TSource>(this);
-            public TSource SingleOrDefault(Func<TSource, bool> predicate) =>
-                SingleOrDefault<CreateEnumerable<TEnumerator, TSource>, TEnumerator, TSource>(this, predicate);
+            public TSource Single() 
+                => Single<CreateEnumerable<TEnumerator, TSource>, TEnumerator, TSource>(this);
+            public TSource Single(Func<TSource, bool> predicate) 
+                => Single<CreateEnumerable<TEnumerator, TSource>, TEnumerator, TSource>(this, predicate);
+
+            public TSource SingleOrDefault() 
+                => SingleOrDefault<CreateEnumerable<TEnumerator, TSource>, TEnumerator, TSource>(this);
+            public TSource SingleOrDefault(Func<TSource, bool> predicate) 
+                => SingleOrDefault<CreateEnumerable<TEnumerator, TSource>, TEnumerator, TSource>(this, predicate);
         }
     }
 }

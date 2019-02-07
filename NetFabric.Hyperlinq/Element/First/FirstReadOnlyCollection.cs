@@ -5,9 +5,6 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class ReadOnlyCollection
     {
-        public static TSource First<TSource>(this IReadOnlyCollection<TSource> source) =>
-            First<IReadOnlyCollection<TSource>, IEnumerator<TSource>, TSource>(source);
-
         public static TSource First<TReadOnlyCollection, TEnumerator, TSource>(this TReadOnlyCollection source) 
             where TReadOnlyCollection : IReadOnlyCollection<TSource>
             where TEnumerator : IEnumerator<TSource>

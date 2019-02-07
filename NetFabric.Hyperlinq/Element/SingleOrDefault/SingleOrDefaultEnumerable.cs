@@ -5,9 +5,6 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class Enumerable
     {
-        public static TSource SingleOrDefault<TSource>(this IEnumerable<TSource> source) =>
-            SingleOrDefault<IEnumerable<TSource>, IEnumerator<TSource>, TSource>(source);
-
         public static TSource SingleOrDefault<TEnumerable, TEnumerator, TSource>(this TEnumerable source)
             where TEnumerable : IEnumerable<TSource>
             where TEnumerator : IEnumerator<TSource>
@@ -30,9 +27,6 @@ namespace NetFabric.Hyperlinq
             void ThrowSourceNull() => throw new ArgumentNullException(nameof(source));
             void ThrowNotSingleSequence() => throw new InvalidOperationException(Resource.NotSingleSequence);
         }
-
-        public static TSource SingleOrDefault<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate) =>
-            SingleOrDefault<IEnumerable<TSource>, IEnumerator<TSource>, TSource>(source, predicate);
 
         public static TSource SingleOrDefault<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, bool> predicate)
             where TEnumerable : IEnumerable<TSource>

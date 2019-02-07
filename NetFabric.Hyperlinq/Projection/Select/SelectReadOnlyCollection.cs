@@ -6,11 +6,6 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class ReadOnlyCollection
     {
-        public static SelectReadOnlyCollection<IReadOnlyCollection<TSource>, IEnumerator<TSource>, TSource, TResult> Select<TSource, TResult>(
-            this IReadOnlyCollection<TSource> source, 
-            Func<TSource, TResult> selector) =>
-                Select<IReadOnlyCollection<TSource>, IEnumerator<TSource>, TSource, TResult>(source, selector);
-
         public static SelectReadOnlyCollection<TEnumerable, TEnumerator, TSource, TResult> Select<TEnumerable, TEnumerator, TSource, TResult>(
             this TEnumerable source, 
             Func<TSource, TResult> selector)
@@ -67,27 +62,37 @@ namespace NetFabric.Hyperlinq
                 public void Dispose() => enumerator.Dispose();
             }
 
-            public SelectReadOnlyCollection<SelectReadOnlyCollection<TEnumerable, TEnumerator, TSource, TResult>, Enumerator, TResult, TSelectorResult> Select<TSelectorResult>(Func<TResult, TSelectorResult> selector) =>
-                Select<SelectReadOnlyCollection<TEnumerable, TEnumerator, TSource, TResult>, Enumerator, TResult, TSelectorResult>(this, selector);
+            public SelectReadOnlyCollection<SelectReadOnlyCollection<TEnumerable, TEnumerator, TSource, TResult>, Enumerator, TResult, TSelectorResult> Select<TSelectorResult>(Func<TResult, TSelectorResult> selector) 
+                => Select<SelectReadOnlyCollection<TEnumerable, TEnumerator, TSource, TResult>, Enumerator, TResult, TSelectorResult>(this, selector);
 
-            public TResult First() => First<TResult>(this);
-            public TResult First(Func<TResult, bool> predicate) => 
-                Enumerable.First<SelectReadOnlyCollection<TEnumerable, TEnumerator, TSource, TResult>, Enumerator, TResult>(this, predicate);
+            public Enumerable.WhereEnumerable<SelectReadOnlyCollection<TEnumerable, TEnumerator, TSource, TResult>, Enumerator, TResult> Where(Func<TResult, bool> predicate) 
+                => Enumerable.Where<SelectReadOnlyCollection<TEnumerable, TEnumerator, TSource, TResult>, Enumerator, TResult>(this, predicate);
 
-            public TResult FirstOrDefault() => FirstOrDefault<TResult>(this);
-            public TResult FirstOrDefault(Func<TResult, bool> predicate) =>
-                Enumerable.FirstOrDefault<SelectReadOnlyCollection<TEnumerable, TEnumerator, TSource, TResult>, Enumerator, TResult>(this, predicate);
+            public TResult First() 
+                => First<SelectReadOnlyCollection<TEnumerable, TEnumerator, TSource, TResult>, Enumerator, TResult>(this);
+            public TResult First(Func<TResult, bool> predicate) 
+                => Enumerable.First<SelectReadOnlyCollection<TEnumerable, TEnumerator, TSource, TResult>, Enumerator, TResult>(this, predicate);
 
-            public TResult Single() => Single<TResult>(this);
-            public TResult Single(Func<TResult, bool> predicate) =>
-                Enumerable.Single<SelectReadOnlyCollection<TEnumerable, TEnumerator, TSource, TResult>, Enumerator, TResult>(this, predicate);
+            public TResult FirstOrDefault() 
+                => FirstOrDefault<SelectReadOnlyCollection<TEnumerable, TEnumerator, TSource, TResult>, Enumerator, TResult>(this);
+            public TResult FirstOrDefault(Func<TResult, bool> predicate) 
+                => Enumerable.FirstOrDefault<SelectReadOnlyCollection<TEnumerable, TEnumerator, TSource, TResult>, Enumerator, TResult>(this, predicate);
 
-            public TResult SingleOrDefault() => SingleOrDefault<TResult>(this);
-            public TResult SingleOrDefault(Func<TResult, bool> predicate) =>
-                Enumerable.SingleOrDefault<SelectReadOnlyCollection<TEnumerable, TEnumerator, TSource, TResult>, Enumerator, TResult>(this, predicate);
+            public TResult Single() 
+                => Single<SelectReadOnlyCollection<TEnumerable, TEnumerator, TSource, TResult>, Enumerator, TResult>(this);
+            public TResult Single(Func<TResult, bool> predicate) 
+                => Enumerable.Single<SelectReadOnlyCollection<TEnumerable, TEnumerator, TSource, TResult>, Enumerator, TResult>(this, predicate);
+
+            public TResult SingleOrDefault() 
+                => SingleOrDefault<SelectReadOnlyCollection<TEnumerable, TEnumerator, TSource, TResult>, Enumerator, TResult>(this);
+            public TResult SingleOrDefault(Func<TResult, bool> predicate) 
+                => Enumerable.SingleOrDefault<SelectReadOnlyCollection<TEnumerable, TEnumerator, TSource, TResult>, Enumerator, TResult>(this, predicate);
         }
+    }
 
-        public static int Count<TEnumerable, TEnumerator, TSource, TResult>(this SelectReadOnlyCollection<TEnumerable, TEnumerator, TSource, TResult> source)
+    static class SelectReadOnlyCollectionExtensions
+    {
+        public static int Count<TEnumerable, TEnumerator, TSource, TResult>(this ReadOnlyCollection.SelectReadOnlyCollection<TEnumerable, TEnumerator, TSource, TResult> source)
             where TEnumerable : IReadOnlyCollection<TSource>
             where TEnumerator : IEnumerator<TSource>
             => source.Count;

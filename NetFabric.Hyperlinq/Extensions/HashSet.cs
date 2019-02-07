@@ -3,15 +3,15 @@ using System.Collections.Generic;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class ReadOnlyCollection
+    public static partial class HashSetExtensions
     {
         public static int Count<TSource>(this HashSet<TSource> source)
             => source.Count;
 
-        public static SelectReadOnlyCollection<HashSet<TSource>, HashSet<TSource>.Enumerator, TSource, TResult> Select<TSource, TResult>(
+        public static ReadOnlyCollection.SelectReadOnlyCollection<HashSet<TSource>, HashSet<TSource>.Enumerator, TSource, TResult> Select<TSource, TResult>(
             this HashSet<TSource> source,
             Func<TSource, TResult> selector) 
-            => Select<HashSet<TSource>, HashSet<TSource>.Enumerator, TSource, TResult>(source, selector);
+            => ReadOnlyCollection.Select<HashSet<TSource>, HashSet<TSource>.Enumerator, TSource, TResult>(source, selector);
 
         public static Enumerable.WhereEnumerable<HashSet<TSource>, HashSet<TSource>.Enumerator, TSource> Where<TSource>(
             this HashSet<TSource> source,
@@ -19,15 +19,15 @@ namespace NetFabric.Hyperlinq
             => Enumerable.Where<HashSet<TSource>, HashSet<TSource>.Enumerator, TSource>(source, predicate);
 
         public static TSource First<TSource>(this HashSet<TSource> source) 
-            => First<HashSet<TSource>, HashSet<TSource>.Enumerator, TSource>(source);
+            => ReadOnlyCollection.First<HashSet<TSource>, HashSet<TSource>.Enumerator, TSource>(source);
 
         public static TSource FirstOrDefault<TSource>(this HashSet<TSource> source)
-            => FirstOrDefault<HashSet<TSource>, HashSet<TSource>.Enumerator, TSource>(source);
+            => ReadOnlyCollection.FirstOrDefault<HashSet<TSource>, HashSet<TSource>.Enumerator, TSource>(source);
 
         public static TSource Single<TSource>(this HashSet<TSource> source)
-            => Single<HashSet<TSource>, HashSet<TSource>.Enumerator, TSource>(source);
+            => ReadOnlyCollection.Single<HashSet<TSource>, HashSet<TSource>.Enumerator, TSource>(source);
 
         public static TSource SingleOrDefault<TSource>(this HashSet<TSource> source)
-            => SingleOrDefault<HashSet<TSource>, HashSet<TSource>.Enumerator, TSource>(source);
+            => ReadOnlyCollection.SingleOrDefault<HashSet<TSource>, HashSet<TSource>.Enumerator, TSource>(source);
     }
 }

@@ -13,7 +13,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             // Arrange
 
             // Act
-            Action action = () => Enumerable.Select<int, int>(null, value => value);
+            Action action = () => Enumerable.Select<IEnumerable<int>, IEnumerator<int>, int, int>(null, value => value);
 
             // Assert
             action.Should()

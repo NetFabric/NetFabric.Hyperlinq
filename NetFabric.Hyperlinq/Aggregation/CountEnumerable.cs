@@ -1,16 +1,10 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq.Expressions;
-using System.Reflection;
 
 namespace NetFabric.Hyperlinq
 {
     public static partial class Enumerable
     {
-        public static int Count<TSource>(this IEnumerable<TSource> source) =>
-            Count<IEnumerable<TSource>, IEnumerator<TSource>, TSource>(source);
-
         public static int Count<TEnumerable, TEnumerator, TSource>(this TEnumerable source)
             where TEnumerable : IEnumerable<TSource>
             where TEnumerator : IEnumerator<TSource>

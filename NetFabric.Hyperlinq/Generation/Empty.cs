@@ -48,7 +48,11 @@ namespace NetFabric.Hyperlinq
             public TSource SingleOrDefault(Func<TSource, bool> _) => default;
         }
 
-        public static int Count<TSource>(this EmptyReadOnlyList<TSource> source) => 0;
+    }
+    static class EmptyReadOnlyListExtensions
+    {
+        public static int Count<TSource>(this Enumerable.EmptyReadOnlyList<TSource> _) 
+            => 0;
     }
 }
 

@@ -15,7 +15,6 @@ namespace NetFabric.Hyperlinq.Benchmarks
                     typeof(SelectCountBenchmarks),
                     typeof(WhereForEachBenchmarks),
                     typeof(WhereSelectCountBenchmarks),
-                    typeof(CachingBenchmarks),
                 });
             switcher.Run(args);        
         }

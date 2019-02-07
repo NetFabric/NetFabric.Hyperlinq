@@ -5,9 +5,6 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class ReadOnlyList
     {
-        public static TSource First<TSource>(this IReadOnlyList<TSource> source) =>
-            First<IReadOnlyList<TSource>, TSource>(source);
-
         public static TSource First<TEnumerable, TSource>(this TEnumerable source) 
             where TEnumerable : IReadOnlyList<TSource>
         {
@@ -19,9 +16,6 @@ namespace NetFabric.Hyperlinq
             void ThrowSourceNull() => throw new ArgumentNullException(nameof(source));
             void ThrowEmptySequence() => throw new InvalidOperationException(Resource.EmptySequence);
         }
-
-        public static TSource First<TSource>(this IReadOnlyList<TSource> source, Func<TSource, bool> predicate) =>
-            First<IReadOnlyList<TSource>, TSource>(source, predicate);
 
         public static TSource First<TEnumerable, TSource>(this TEnumerable source, Func<TSource, bool> predicate) 
             where TEnumerable : IReadOnlyList<TSource>

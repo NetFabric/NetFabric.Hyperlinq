@@ -6,11 +6,6 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class ReadOnlyList
     {
-        public static WhereReadOnlyList<IReadOnlyList<TSource>, TSource> Where<TSource>(
-            this IReadOnlyList<TSource> source,
-            Func<TSource, bool> predicate) =>
-                Where<IReadOnlyList<TSource>, TSource>(source, predicate);
-
         public static WhereReadOnlyList<TEnumerable, TSource> Where<TEnumerable, TSource>(this TEnumerable source, Func<TSource, bool> predicate) 
             where TEnumerable : IReadOnlyList<TSource>
         {
@@ -81,7 +76,40 @@ namespace NetFabric.Hyperlinq
 
                 public void Dispose() { }
             }
+
+            public Enumerable.SelectEnumerable<WhereReadOnlyList<TEnumerable, TSource>, Enumerator, TSource, TResult> Select<TResult>(Func<TSource, TResult> selector) =>
+                Enumerable.Select<WhereReadOnlyList<TEnumerable, TSource>, Enumerator, TSource, TResult>(this, selector);
+
+            public Enumerable.WhereEnumerable<WhereReadOnlyList<TEnumerable, TSource>, Enumerator, TSource> Where(Func<TSource, bool> predicate) =>
+                Enumerable.Where<WhereReadOnlyList<TEnumerable, TSource>, Enumerator, TSource>(this, predicate);
+
+            public TSource First() 
+                => Enumerable.First<WhereReadOnlyList<TEnumerable, TSource>, Enumerator, TSource>(this);
+            public TSource First(Func<TSource, bool> predicate) 
+                => Enumerable.First<WhereReadOnlyList<TEnumerable, TSource>, Enumerator, TSource>(this, predicate);
+
+            public TSource FirstOrDefault() 
+                => Enumerable.FirstOrDefault<WhereReadOnlyList<TEnumerable, TSource>, Enumerator, TSource>(this);
+            public TSource FirstOrDefault(Func<TSource, bool> predicate) 
+                => Enumerable.FirstOrDefault<WhereReadOnlyList<TEnumerable, TSource>, Enumerator, TSource>(this, predicate);
+
+            public TSource Single() 
+                => Enumerable.Single<WhereReadOnlyList<TEnumerable, TSource>, Enumerator, TSource>(this);
+            public TSource Single(Func<TSource, bool> predicate) 
+                => Enumerable.Single<WhereReadOnlyList<TEnumerable, TSource>, Enumerator, TSource>(this, predicate);
+
+            public TSource SingleOrDefault() 
+                => Enumerable.SingleOrDefault<WhereReadOnlyList<TEnumerable, TSource>, Enumerator, TSource>(this);
+            public TSource SingleOrDefault(Func<TSource, bool> predicate) 
+                => Enumerable.SingleOrDefault<WhereReadOnlyList<TEnumerable, TSource>, Enumerator, TSource>(this, predicate);
         }
+    }
+
+    static class WhereReadOnlyListExtensions
+    {
+        public static int Count<TEnumerable, TSource>(this ReadOnlyList.WhereReadOnlyList<TEnumerable, TSource> source)
+            where TEnumerable : IReadOnlyList<TSource>
+            => Enumerable.Count<ReadOnlyList.WhereReadOnlyList<TEnumerable, TSource>, ReadOnlyList.WhereReadOnlyList<TEnumerable, TSource>.Enumerator, TSource>(source);
     }
 }
 

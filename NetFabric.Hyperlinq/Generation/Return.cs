@@ -71,20 +71,32 @@ namespace NetFabric.Hyperlinq
             public ReadOnlyList.WhereReadOnlyList<ReturnEnumerable<TSource>, TSource> Where(Func<TSource, bool> predicate) 
                 => ReadOnlyList.Where<ReturnEnumerable<TSource>, TSource>(this, predicate);
 
-            public TSource First() => ReadOnlyList.First<TSource>(this);
-            public TSource First(Func<TSource, bool> predicate) => ReadOnlyList.First<TSource>(this, predicate);
+            public TSource First() 
+                => ReadOnlyList.First<ReturnEnumerable<TSource>, TSource>(this);
+            public TSource First(Func<TSource, bool> predicate) 
+                => ReadOnlyList.First<ReturnEnumerable<TSource>, TSource>(this, predicate);
 
-            public TSource FirstOrDefault() => FirstOrDefault<TSource>(this);
-            public TSource FirstOrDefault(Func<TSource, bool> predicate) => ReadOnlyList.FirstOrDefault<TSource>(this, predicate);
+            public TSource FirstOrDefault() 
+                => ReadOnlyList.FirstOrDefault<ReturnEnumerable<TSource>, TSource>(this);
+            public TSource FirstOrDefault(Func<TSource, bool> predicate)
+                => ReadOnlyList.FirstOrDefault<ReturnEnumerable<TSource>, TSource>(this, predicate);
 
-            public TSource Single() => Single<TSource>(this);
-            public TSource Single(Func<TSource, bool> predicate) => ReadOnlyList.Single<TSource>(this, predicate);
+            public TSource Single() 
+                => ReadOnlyList.Single<ReturnEnumerable<TSource>, TSource>(this);
+            public TSource Single(Func<TSource, bool> predicate) 
+                => ReadOnlyList.Single<ReturnEnumerable<TSource>, TSource>(this, predicate);
 
-            public TSource SingleOrDefault() => SingleOrDefault<TSource>(this);
-            public TSource SingleOrDefault(Func<TSource, bool> predicate) => ReadOnlyList.SingleOrDefault<TSource>(this, predicate);
+            public TSource SingleOrDefault() 
+                => ReadOnlyList.SingleOrDefault<ReturnEnumerable<TSource>, TSource>(this);
+            public TSource SingleOrDefault(Func<TSource, bool> predicate) 
+                => ReadOnlyList.SingleOrDefault<ReturnEnumerable<TSource>, TSource>(this, predicate);
         }
+    }
 
-        public static int Count<TSource>(this ReturnEnumerable<TSource> source) => source.Count;
+    static class ReturnEnumerableExtensions
+    {
+        public static int Count<TSource>(this Enumerable.ReturnEnumerable<TSource> source)
+            => Enumerable.Count<Enumerable.ReturnEnumerable<TSource>, Enumerable.ReturnEnumerable<TSource>.Enumerator, TSource>(source);
     }
 }
 
