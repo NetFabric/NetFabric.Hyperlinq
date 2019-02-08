@@ -11,14 +11,16 @@ Returning `null`, in the context of enumerables, is not the same as an empty enu
 The following `foreach` loop: 
 
 ```csharp
-foreach (var item in GetEnumerable())
+foreach (var item in DoSomething())
     Console.WriteLine(item);
+
+IEnumerable<int> DoSomething() => null;
 ```
 
 is interpreted by the compiler as:
 
 ```csharp
-IEnumerator<int> enumerator = GetEnumerable().GetEnumerator();
+IEnumerator<int> enumerator = DoSomething().GetEnumerator();
 try
 {
     while (enumerator.MoveNext())
@@ -36,7 +38,7 @@ finally
 }
 ```
 
-Notice that, if `GetEnumerable()` returns `null`, [a `NullReferenceException` will be thrown](https://sharplab.io/#v2:C4LgTgrgdgNAJiA1AHwAIAYAEqCMBuAWACgNscAWQo41AZjIDZsAmMgdk2IG9jM/t6uJqnKYAsgEMAllAAUASk5F+mHspX8AZgHswAUwkBjABaZZANwlhMU4HoC2NqJgDie4AFEoEe3rASAIwAbPQV5Xg1I3ABOWVsHeSoVAF8IvjTGMloAHhlgAD5Xdy8fP0CQhUwAXkLvIKCqZKA==).
+Notice that, because `DoSomething()` returns `null`, [a `NullReferenceException` will be thrown](https://sharplab.io/#v2:C4LgTgrgdgNAJiA1AHwAIAYAEqCMBuAWACgNscAWQo41AZjIDZsAmMgdk2IG9jM/t6uJqnKYAsgEMAllAAUASk5F+mHspX8AZgHswAUwkBjABaZZANwlhMU4HoC2NqJgDie4AFEoEe3rASAIwAbPQV5Xg1I3ABOWVsHeSoVAF8IvjTGMloAHhlgAD5Xdy8fP0CQhUwAXkLvIKCqZKA==) when calling `GetEnumerator()`.
 
 The enumerable should instead make the enumerator `MoveNext()` return `false` to stop the enumeration loop.
 
