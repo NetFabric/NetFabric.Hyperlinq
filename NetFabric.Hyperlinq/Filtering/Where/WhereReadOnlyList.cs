@@ -102,6 +102,24 @@ namespace NetFabric.Hyperlinq
                 => Enumerable.SingleOrDefault<WhereReadOnlyList<TEnumerable, TSource>, Enumerator, TSource>(this);
             public TSource SingleOrDefault(Func<TSource, bool> predicate) 
                 => Enumerable.SingleOrDefault<WhereReadOnlyList<TEnumerable, TSource>, Enumerator, TSource>(this, predicate);
+
+            public IEnumerable<TSource> ToEnumerable()
+                => this;
+
+            public TSource[] ToArray()
+                => Enumerable.ToArray<WhereReadOnlyList<TEnumerable, TSource>, Enumerator, TSource>(this);
+
+            public List<TSource> ToList()
+            {
+                var count = source.Count;
+                var list = new List<TSource>(count);
+                for (var index = 0; index < count; index++)
+                {
+                    if (predicate(source[index]))
+                        list.Add(source[index]);
+                }
+                return list;
+            }
         }
     }
 

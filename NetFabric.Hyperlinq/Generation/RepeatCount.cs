@@ -90,6 +90,15 @@ namespace NetFabric.Hyperlinq
                 => ReadOnlyList.SingleOrDefault<RepeatCountReadOnlyList<TSource>, TSource>(this);
             public TSource SingleOrDefault(Func<TSource, bool> predicate) 
                 => ReadOnlyList.SingleOrDefault<RepeatCountReadOnlyList<TSource>, TSource>(this, predicate);
+
+            public IEnumerable<TSource> ToEnumerable()
+                => this;
+
+            public TSource[] ToArray()
+                => ReadOnlyList.ToArray<RepeatCountReadOnlyList<TSource>, TSource>(this);
+
+            public List<TSource> ToList()
+                => ReadOnlyCollection.ToList<RepeatCountReadOnlyList<TSource>, TSource>(this);
         }
     }
     static class RepeatCountReadOnlyListExtensions

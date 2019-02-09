@@ -80,7 +80,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Hyperlinq_Array() 
         { 
             var count = 0;
-            foreach(var item in array.Where(_ => true))
+            foreach(ref readonly var item in array.Where(_ => true))
                 count++;
             return count;
         }

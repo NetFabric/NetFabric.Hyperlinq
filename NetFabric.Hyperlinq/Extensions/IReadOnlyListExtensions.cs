@@ -39,5 +39,7 @@ namespace NetFabric.Hyperlinq
         public static TSource SingleOrDefault<TSource>(this IReadOnlyList<TSource> source, Func<TSource, bool> predicate) 
             => ReadOnlyList.SingleOrDefault<IReadOnlyList<TSource>, TSource>(source, predicate);
 
+        public static TSource[] ToArray<TSource>(this IReadOnlyList<TSource> source)
+            => ReadOnlyList.ToArray<IReadOnlyList<TSource>, TSource>(source);
     }
 }

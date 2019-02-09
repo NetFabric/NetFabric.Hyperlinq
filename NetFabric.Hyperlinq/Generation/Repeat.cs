@@ -43,23 +43,40 @@ namespace NetFabric.Hyperlinq
                 public void Dispose() { }
             }
 
-            public SelectEnumerable<RepeatEnumerable<TSource>, Enumerator, TSource, TResult> Select<TResult>(Func<TSource, TResult> selector) =>
-                Select<RepeatEnumerable<TSource>, Enumerator, TSource, TResult>(this, selector);
+            public SelectEnumerable<RepeatEnumerable<TSource>, Enumerator, TSource, TResult> Select<TResult>(Func<TSource, TResult> selector) 
+                => Select<RepeatEnumerable<TSource>, Enumerator, TSource, TResult>(this, selector);
 
-            public WhereEnumerable<RepeatEnumerable<TSource>, Enumerator, TSource> Where(Func<TSource, bool> predicate) =>
-                Where<RepeatEnumerable<TSource>, Enumerator, TSource>(this, predicate);
+            public WhereEnumerable<RepeatEnumerable<TSource>, Enumerator, TSource> Where(Func<TSource, bool> predicate) 
+                => Where<RepeatEnumerable<TSource>, Enumerator, TSource>(this, predicate);
 
-            public TSource First() => First<RepeatEnumerable<TSource>, Enumerator, TSource>(this);
-            public TSource First(Func<TSource, bool> predicate) => First<RepeatEnumerable<TSource>, Enumerator, TSource>(this, predicate);
+            public TSource First() 
+                => First<RepeatEnumerable<TSource>, Enumerator, TSource>(this);
+            public TSource First(Func<TSource, bool> predicate) 
+                => First<RepeatEnumerable<TSource>, Enumerator, TSource>(this, predicate);
 
-            public TSource FirstOrDefault() => FirstOrDefault<RepeatEnumerable<TSource>, Enumerator, TSource>(this);
-            public TSource FirstOrDefault(Func<TSource, bool> predicate) => FirstOrDefault<RepeatEnumerable<TSource>, Enumerator, TSource>(this, predicate);
+            public TSource FirstOrDefault() 
+                => FirstOrDefault<RepeatEnumerable<TSource>, Enumerator, TSource>(this);
+            public TSource FirstOrDefault(Func<TSource, bool> predicate) 
+                => FirstOrDefault<RepeatEnumerable<TSource>, Enumerator, TSource>(this, predicate);
 
-            public TSource Single() => Single<RepeatEnumerable<TSource>, Enumerator, TSource>(this);
-            public TSource Single(Func<TSource, bool> predicate) => Single<RepeatEnumerable<TSource>, Enumerator, TSource>(this, predicate);
+            public TSource Single() 
+                => Single<RepeatEnumerable<TSource>, Enumerator, TSource>(this);
+            public TSource Single(Func<TSource, bool> predicate) 
+                => Single<RepeatEnumerable<TSource>, Enumerator, TSource>(this, predicate);
 
-            public TSource SingleOrDefault() => SingleOrDefault<RepeatEnumerable<TSource>, Enumerator, TSource>(this);
-            public TSource SingleOrDefault(Func<TSource, bool> predicate) => SingleOrDefault<RepeatEnumerable<TSource>, Enumerator, TSource>(this, predicate);
+            public TSource SingleOrDefault() 
+                => SingleOrDefault<RepeatEnumerable<TSource>, Enumerator, TSource>(this);
+            public TSource SingleOrDefault(Func<TSource, bool> predicate) 
+                => SingleOrDefault<RepeatEnumerable<TSource>, Enumerator, TSource>(this, predicate);
+
+            public IEnumerable<TSource> ToEnumerable()
+                => this;
+
+            public List<TSource> ToArray()
+                => throw new NotSupportedException();
+
+            public List<TSource> ToList()
+                => throw new NotSupportedException();
         }
     }
 

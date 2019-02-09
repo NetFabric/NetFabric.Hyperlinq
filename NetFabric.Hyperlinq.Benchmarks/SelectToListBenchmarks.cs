@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Configs;
@@ -8,7 +9,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
     [GroupBenchmarksBy(BenchmarkLogicalGroupRule.ByCategory)]
     [CategoriesColumn]
     [MemoryDiagnoser]
-    public class WhereSelectCountBenchmarks
+    public class SelectToListBenchmarks
     {
         int[] array;
         List<int> list;
@@ -37,42 +38,42 @@ namespace NetFabric.Hyperlinq.Benchmarks
 
         [BenchmarkCategory("Array")]
         [Benchmark(Baseline = true)]
-        public int Linq_Array_Where_Select() 
-            => System.Linq.Enumerable.Count(System.Linq.Enumerable.Select(System.Linq.Enumerable.Select(array, _ => true), item => item));
+        public List<int> Linq_Array() 
+            => System.Linq.Enumerable.ToList(System.Linq.Enumerable.Select(array, item => item));
 
         [BenchmarkCategory("List")]
         [Benchmark(Baseline = true)]
-        public int Linq_List_Where_Select() 
-            => System.Linq.Enumerable.Count(System.Linq.Enumerable.Select(System.Linq.Enumerable.Select(list, _ => true), item => item));
+        public List<int> Linq_List() 
+            => System.Linq.Enumerable.ToList(System.Linq.Enumerable.Select(list, item => item));
 
         [BenchmarkCategory("Range")]
         [Benchmark(Baseline = true)]
-        public int Linq_Range_Where_Select() 
-            => System.Linq.Enumerable.Count(System.Linq.Enumerable.Select(System.Linq.Enumerable.Select(linqRange, _ => true), item => item));
+        public List<int> Linq_Range() 
+            => System.Linq.Enumerable.ToList(System.Linq.Enumerable.Select(linqRange, item => item));
 
         [BenchmarkCategory("Enumerable")]
         [Benchmark(Baseline = true)]
-        public int Linq_Enumerable_Where_Select() 
-            => System.Linq.Enumerable.Count(System.Linq.Enumerable.Select(System.Linq.Enumerable.Select(enumerable, _ => true), item => item));
+        public List<int> Linq_Enumerable() 
+            => System.Linq.Enumerable.ToList(System.Linq.Enumerable.Select(enumerable, item => item));
 
         [BenchmarkCategory("Array")]
         [Benchmark]
-        public int Hyperlinq_Array_Where_Select() 
-            => array.Where(_ => true).Select(item => item).Count();
+        public List<int> Hyperlinq_Array() 
+            => array.Select(item => item).ToList();
 
         [BenchmarkCategory("List")]
         [Benchmark]
-        public int Hyperlinq_List_Where_Select() 
-            => list.Where(_ => true).Select(item => item).Count();
+        public List<int> Hyperlinq_List() 
+            => list.Select(item => item).ToList();
 
         [BenchmarkCategory("Range")]
         [Benchmark]
-        public int Hyperlinq_Range_Where_Select() 
-            => hyperlinqRange.Where(_ => true).Select(item => item).Count();
+        public List<int> Hyperlinq_Range() 
+            => hyperlinqRange.Select(item => item).ToList();
 
         [BenchmarkCategory("Enumerable")]
         [Benchmark]
-        public int Hyperlinq_Enumerable_Where_Select() 
-            => enumerable.Where(_ => true).Select(item => item).Count();
+        public List<int> Hyperlinq_Enumerable() 
+            => enumerable.Select(item => item).ToList();
     }
 }

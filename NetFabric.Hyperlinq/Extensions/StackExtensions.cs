@@ -29,5 +29,8 @@ namespace NetFabric.Hyperlinq
 
         public static TSource SingleOrDefault<TSource>(this Stack<TSource> source)
             => ReadOnlyCollection.SingleOrDefault<Stack<TSource>, Stack<TSource>.Enumerator, TSource>(source);
+
+        public static List<TSource> ToList<TSource>(this Stack<TSource> source)
+            => ReadOnlyCollection.ToList<Stack<TSource>, TSource>(source);
     }
 }

@@ -90,6 +90,15 @@ namespace NetFabric.Hyperlinq
                 => ReadOnlyList.SingleOrDefault<ReturnEnumerable<TSource>, TSource>(this);
             public TSource SingleOrDefault(Func<TSource, bool> predicate) 
                 => ReadOnlyList.SingleOrDefault<ReturnEnumerable<TSource>, TSource>(this, predicate);
+
+            public IEnumerable<TSource> ToEnumerable()
+                => this;
+
+            public TSource[] ToArray()
+                => new TSource[1] { value };
+
+            public List<TSource> ToList()
+                => new List<TSource>() { value };
         }
     }
 

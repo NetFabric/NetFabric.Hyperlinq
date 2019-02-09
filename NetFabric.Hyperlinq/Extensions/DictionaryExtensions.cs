@@ -29,5 +29,8 @@ namespace NetFabric.Hyperlinq
 
         public static KeyValuePair<TKey, TValue> SingleOrDefault<TKey, TValue>(this Dictionary<TKey, TValue> source)
             => ReadOnlyCollection.SingleOrDefault<Dictionary<TKey, TValue>, Dictionary<TKey, TValue>.Enumerator, KeyValuePair<TKey, TValue>>(source);
+
+        public static List<KeyValuePair<TKey, TValue>> ToList<TKey, TValue>(this Dictionary<TKey, TValue> source)
+            => ReadOnlyCollection.ToList<Dictionary<TKey, TValue>, KeyValuePair<TKey, TValue>>(source);
     }
 }

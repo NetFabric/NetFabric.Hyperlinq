@@ -5,8 +5,21 @@ namespace NetFabric.Hyperlinq
 {
     public static class IEnumerableExtensions
     {
-        public static int Count<TSource>(this IEnumerable<TSource> source) 
-            => Enumerable.Count<IEnumerable<TSource>, IEnumerator<TSource>, TSource>(source);
+        public static int Count<TSource>(this IEnumerable<TSource> source)
+        //            => Enumerable.Count<IEnumerable<TSource>, IEnumerator<TSource>, TSource>(source);
+        {
+            if (source == null) ThrowSourceNull();
+
+            var count = 0;
+            using (var enumerator = source.GetEnumerator())
+            {
+                while (enumerator.MoveNext())
+                    count++;
+            }
+            return count;
+
+            void ThrowSourceNull() => throw new ArgumentNullException(nameof(source));
+        }
 
         public static Enumerable.SelectEnumerable<IEnumerable<TSource>, IEnumerator<TSource>, TSource, TResult> Select<TSource, TResult>(
             this IEnumerable<TSource> source,
@@ -42,5 +55,13 @@ namespace NetFabric.Hyperlinq
         public static TSource SingleOrDefault<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate) 
             => Enumerable.SingleOrDefault<IEnumerable<TSource>, IEnumerator<TSource>, TSource>(source, predicate);
 
+        public static IEnumerable<TSource> ToEnumerable<TSource>(this IEnumerable<TSource> source) 
+            => source;
+
+        public static TSource[] ToArray<TSource>(this IEnumerable<TSource> source)
+            => System.Linq.Enumerable.ToArray(source);
+
+        public static List<TSource> ToList<TSource>(this IEnumerable<TSource> source)
+            => new List<TSource>(source);
     }
 }

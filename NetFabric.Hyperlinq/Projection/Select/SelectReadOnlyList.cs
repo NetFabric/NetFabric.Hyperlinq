@@ -89,6 +89,29 @@ namespace NetFabric.Hyperlinq
                 => SingleOrDefault<SelectReadOnlyList<TEnumerable, TSource, TResult>, TResult>(this);
             public TResult SingleOrDefault(Func<TResult, bool> predicate) 
                 => SingleOrDefault<SelectReadOnlyList<TEnumerable, TSource, TResult>, TResult>(this, predicate);
+
+            public IEnumerable<TResult> ToEnumerable()
+                => this;
+
+            public TResult[] ToArray()
+            {
+                var count = source.Count;
+                var array = new TResult[count];
+                for (var index = 0; index < count; index++)
+                    array[index] = selector(source[index]);
+
+                return array;
+            }
+
+            public List<TResult> ToList()
+            {
+                var count = source.Count;
+                var list = new List<TResult>(count);
+                for (var index = 0; index < count; index++)
+                    list.Add(selector(source[index]));
+
+                return list;
+            }
         }
     }
 
