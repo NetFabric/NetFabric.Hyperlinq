@@ -1,24 +1,21 @@
 using System;
-using System.Collections.Generic;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class Enumerable
+    public static partial class ValueEnumerable
     {
         public static TSource SingleOrDefault<TEnumerable, TEnumerator, TSource>(this TEnumerable source)
-            where TEnumerable : IEnumerable<TSource>
-            where TEnumerator : IEnumerator<TSource>
+            where TEnumerable : IValueEnumerable<TSource, TEnumerator>
+            where TEnumerator : struct, IValueEnumerator<TSource>
         {
             if (source == null) ThrowSourceNull();
 
-            using (var enumerator = (TEnumerator)source.GetEnumerator())
+            using (var enumerator = source.GetValueEnumerator())
             {
-                if (!enumerator.MoveNext())
+                if (!enumerator.TryMoveNext(out var first))
                     return default;
 
-                var first = enumerator.Current;
-
-                if (enumerator.MoveNext())
+                if (enumerator.TryMoveNext())
                     ThrowNotSingleSequence();
 
                 return first;
@@ -29,27 +26,27 @@ namespace NetFabric.Hyperlinq
         }
 
         public static TSource SingleOrDefault<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, bool> predicate)
-            where TEnumerable : IEnumerable<TSource>
-            where TEnumerator : IEnumerator<TSource>
+            where TEnumerable : IValueEnumerable<TSource, TEnumerator>
+            where TEnumerator : struct, IValueEnumerator<TSource>
         {
             if (source == null) ThrowSourceNull();
 
-            using (var enumerator = (TEnumerator)source.GetEnumerator())
+            using (var enumerator = source.GetValueEnumerator())
             {
-                while (enumerator.MoveNext())
+                while (enumerator.TryMoveNext(out var first))
                 {
-                    var first = enumerator.Current;
                     if (predicate(first))
                     {
                         // found first, keep going until end or find second
-                        while (enumerator.MoveNext())
+                        while (enumerator.TryMoveNext(out var current))
                         {
-                            if (predicate(enumerator.Current))
+                            if (predicate(current))
                                 ThrowNotSingleSequence();
                         }
                         return first;
                     }
                 }
+
                 return default;
             }
 

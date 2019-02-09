@@ -1,31 +1,31 @@
 using System;
-using System.Collections.Generic;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class ReadOnlyList
+    public static partial class ValueReadOnlyList
     {
-        public static TSource Single<TEnumerable, TSource>(this TEnumerable source) 
-            where TEnumerable : IReadOnlyList<TSource>
+        public static TSource SingleOrDefault<TEnumerable, TEnumerator, TSource>(this TEnumerable source)
+            where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
+            where TEnumerator : struct, IValueEnumerator<TSource>
         {
             if (source == null) ThrowSourceNull();
-            if (source.Count == 0) ThrowEmptySequence();
-            if (source.Count > 1) ThrowNotSingleSequence();
+            if (source.Count() == 0) return default;
+            if (source.Count() > 1) ThrowNotSingleSequence();
 
             return source[0];
 
             void ThrowSourceNull() => throw new ArgumentNullException(nameof(source));
-            void ThrowEmptySequence() => throw new InvalidOperationException(Resource.EmptySequence);
             void ThrowNotSingleSequence() => throw new InvalidOperationException(Resource.NotSingleSequence);
         }
 
-        public static TSource Single<TEnumerable, TSource>(this TEnumerable source, Func<TSource, bool> predicate) 
-            where TEnumerable : IReadOnlyList<TSource>
+        public static TSource SingleOrDefault<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, bool> predicate)
+            where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
+            where TEnumerator : struct, IValueEnumerator<TSource>
         {
             if (source == null) ThrowSourceNull();
 
             var index = 0;
-            var count = source.Count;
+            var count = source.Count();
             while (index < count)
             {
                 var first = source[index];
@@ -44,11 +44,10 @@ namespace NetFabric.Hyperlinq
                 }
                 index++;
             }
-            ThrowEmptySequence();
+
             return default;
 
             void ThrowSourceNull() => throw new ArgumentNullException(nameof(source));
-            void ThrowEmptySequence() => throw new InvalidOperationException(Resource.EmptySequence);
             void ThrowNotSingleSequence() => throw new InvalidOperationException(Resource.NotSingleSequence);
         }
     }

@@ -6,7 +6,6 @@ namespace NetFabric.Hyperlinq
     public static class IEnumerableExtensions
     {
         public static int Count<TSource>(this IEnumerable<TSource> source)
-        //            => Enumerable.Count<IEnumerable<TSource>, IEnumerator<TSource>, TSource>(source);
         {
             if (source == null) ThrowSourceNull();
 

@@ -34,7 +34,7 @@ namespace NetFabric.Hyperlinq
                 while(enumerator.MoveNext())
                 {
                     var current = enumerator.Current;
-                    if(predicate(current))
+                    if (predicate(current))
                         return current;
                 }
                 ThrowEmptySequence();
