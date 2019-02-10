@@ -59,8 +59,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var result = source.Select(selector);
 
             // Assert
-            // result.Count.Should().Be(expected.Count);
-            result.Should().Equal(expected);
+            result.AsEnumerable().Should().Equal(expected);
             // for(var index = 0; index < result.Count; index++)
             //     result[index].Should().Be(selector(expected[index]));
         }  
@@ -75,8 +74,8 @@ namespace NetFabric.Hyperlinq.UnitTests
             var result = source.Select(selector);
 
             // Assert
-            // result.Count.Should().Be(expected.Count);
-            result.Should().Equal(expected);
+            result.Count().Should().Be(expected.Count);
+            result.AsEnumerable().Should().Equal(expected);
             // for(var index = 0; index < result.Count; index++)
             //     result[index].Should().Be(selector(expected[index]));
         }      
@@ -91,15 +90,15 @@ namespace NetFabric.Hyperlinq.UnitTests
             var result = source.Select(selector);
 
             // Assert
-            // result.Count.Should().Be(expected.Count);
-            result.Should().Equal(expected);
+            result.Count().Should().Be(expected.Count);
+            result.AsEnumerable().Should().Equal(expected);
             // for(var index = 0; index < result.Count; index++)
             //     result[index].Should().Be(selector(expected[index]));
         }
 
         [Theory]
         [MemberData(nameof(IEnumerableData))]
-        public void Select_With_ValidArray_Should_Succeed(int[] source, Func<int, int> selector, int[] expected)
+        public void Select_With_ValidArray_Should_Succeed(int[] source, Func<int, int> selector, IReadOnlyList<int> expected)
         {
             // Arrange
 
@@ -107,8 +106,8 @@ namespace NetFabric.Hyperlinq.UnitTests
             var result = source.Select(selector);
 
             // Assert
-            // result.Count.Should().Be(expected.Count);
-            result.Should().Equal(expected);
+            result.Count().Should().Be(expected.Count);
+            result.AsEnumerable().Should().Equal(expected);
             // for(var index = 0; index < result.Count; index++)
             //     result[index].Should().Be(selector(expected[index]));
         }

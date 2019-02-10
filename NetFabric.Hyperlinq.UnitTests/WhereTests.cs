@@ -51,7 +51,7 @@ namespace NetFabric.Hyperlinq.UnitTests
 
         [Theory]
         [MemberData(nameof(IEnumerableData))]
-        public void Where_With_Array_Should_Succeed(int[] source, Func<int, bool> predicate, int[] expected)
+        public void Where_With_Array_Should_Succeed(int[] source, Func<int, bool> predicate, IEnumerable<int> expected)
         {
             // Arrange
 
@@ -59,7 +59,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var result = source.Where(predicate);
 
             // Assert
-            result.Should().Equal(expected);
+            result.AsEnumerable().Should().Equal(expected);
         }
 
         [Theory]
@@ -72,7 +72,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var result = source.Where(predicate);
 
             // Assert
-            result.Should().Equal(expected);
+            result.AsEnumerable().Should().Equal(expected);
         }
 
         [Theory]
@@ -85,7 +85,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var result = source.Where(predicate);
 
             // Assert
-            result.Should().Equal(expected);
+            result.AsEnumerable().Should().Equal(expected);
         }
 
         [Theory]
@@ -98,7 +98,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var result = source.Where(predicate);
 
             // Assert
-            result.Should().Equal(expected);
+            result.AsEnumerable().Should().Equal(expected);
         }
     }
 }
