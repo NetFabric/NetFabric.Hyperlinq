@@ -114,8 +114,8 @@ namespace NetFabric.Hyperlinq
             public TResult SingleOrDefault(Func<TResult, bool> predicate)
                 => ValueEnumerable.SingleOrDefault<SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>, ValueEnumerator, TResult>(this, predicate);
 
-            public IEnumerable<TResult> ToEnumerable()
-                => ValueEnumerable.ToEnumerable<SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>, ValueEnumerator, TResult>(this);
+            public IEnumerable<TResult> AsEnumerable()
+                => ValueEnumerable.AsEnumerable<SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>, ValueEnumerator, TResult>(this);
 
             public TResult[] ToArray()
                 => ValueEnumerable.ToArray<SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>, ValueEnumerator, TResult>(this);

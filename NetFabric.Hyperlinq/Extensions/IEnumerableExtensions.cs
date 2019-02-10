@@ -54,7 +54,7 @@ namespace NetFabric.Hyperlinq
         public static TSource SingleOrDefault<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate) 
             => Enumerable.SingleOrDefault<IEnumerable<TSource>, IEnumerator<TSource>, TSource>(source, predicate);
 
-        public static IEnumerable<TSource> ToEnumerable<TSource>(this IEnumerable<TSource> source) 
+        public static IEnumerable<TSource> AsEnumerable<TSource>(this IEnumerable<TSource> source) 
             => source;
 
         public static TSource[] ToArray<TSource>(this IEnumerable<TSource> source)

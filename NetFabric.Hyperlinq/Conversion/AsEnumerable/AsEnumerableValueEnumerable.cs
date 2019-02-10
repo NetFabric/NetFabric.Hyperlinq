@@ -4,27 +4,27 @@ using System.Collections.Generic;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class ValueReadOnlyCollection
+    public static partial class ValueEnumerable
     {
-        public static IReadOnlyCollection<TSource> ToReadOnlyCollection<TEnumerable, TEnumerator, TSource>(this TEnumerable source)
-            where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
+        public static IEnumerable<TSource> AsEnumerable<TEnumerable, TEnumerator, TSource>(this TEnumerable source)
+            where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IValueEnumerator<TSource>
         {
             if (source == null) ThrowSourceNull();
 
-            return new ToReadOnlyCollectionEnumerable<TEnumerable, TEnumerator, TSource>(source);
+            return new AsEnumerableEnumerable<TEnumerable, TEnumerator, TSource>(source);
 
             void ThrowSourceNull() => throw new ArgumentNullException(nameof(source));
         }
 
-        class ToReadOnlyCollectionEnumerable<TEnumerable, TEnumerator, TSource>
-            : IReadOnlyCollection<TSource>
-            where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
+        class AsEnumerableEnumerable<TEnumerable, TEnumerator, TSource>
+            : IEnumerable<TSource>
+            where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IValueEnumerator<TSource>
         {
             readonly TEnumerable source;
 
-            internal ToReadOnlyCollectionEnumerable(in TEnumerable source)
+            internal AsEnumerableEnumerable(in TEnumerable source)
             {
                 this.source = source;
             }
@@ -32,15 +32,13 @@ namespace NetFabric.Hyperlinq
             public IEnumerator<TSource> GetEnumerator() => new Enumerator(this);
             IEnumerator IEnumerable.GetEnumerator() => new Enumerator(this);
 
-            public int Count => source.Count();
-
             class Enumerator
                 : IEnumerator<TSource>
             {
                 TEnumerator enumerator;
                 TSource current;
 
-                internal Enumerator(ToReadOnlyCollectionEnumerable<TEnumerable, TEnumerator, TSource> enumerable)
+                internal Enumerator(AsEnumerableEnumerable<TEnumerable, TEnumerator, TSource> enumerable)
                 {
                     enumerator = enumerable.source.GetValueEnumerator();
                 }

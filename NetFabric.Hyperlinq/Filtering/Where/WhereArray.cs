@@ -138,8 +138,8 @@ namespace NetFabric.Hyperlinq
             public TSource SingleOrDefault(Func<TSource, bool> predicate)
                 => ValueEnumerable.SingleOrDefault<WhereArray<TSource>, ValueEnumerator, TSource>(this, predicate);
 
-            public IEnumerable<TSource> ToEnumerable()
-                => ValueEnumerable.ToEnumerable<WhereArray<TSource>, ValueEnumerator, TSource>(this);
+            public IEnumerable<TSource> AsEnumerable()
+                => ValueEnumerable.AsEnumerable<WhereArray<TSource>, ValueEnumerator, TSource>(this);
 
             public TSource[] ToArray()
                 => ValueEnumerable.ToArray<WhereArray<TSource>, ValueEnumerator, TSource>(this);

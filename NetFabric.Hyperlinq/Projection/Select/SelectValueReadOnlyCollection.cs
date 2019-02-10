@@ -114,11 +114,11 @@ namespace NetFabric.Hyperlinq
             public TResult SingleOrDefault(Func<TResult, bool> predicate)
                 => ValueEnumerable.SingleOrDefault<SelectValueReadOnlyCollection<TEnumerable, TEnumerator, TSource, TResult>, ValueEnumerator, TResult>(this, predicate);
 
-            public IEnumerable<TResult> ToEnumerable()
-                => ValueEnumerable.ToEnumerable<SelectValueReadOnlyCollection<TEnumerable, TEnumerator, TSource, TResult>, ValueEnumerator, TResult>(this);
+            public IEnumerable<TResult> AsEnumerable()
+                => ValueEnumerable.AsEnumerable<SelectValueReadOnlyCollection<TEnumerable, TEnumerator, TSource, TResult>, ValueEnumerator, TResult>(this);
 
-            public IReadOnlyCollection<TResult> ToReadOnlyCollection()
-                => ValueReadOnlyCollection.ToReadOnlyCollection<SelectValueReadOnlyCollection<TEnumerable, TEnumerator, TSource, TResult>, ValueEnumerator, TResult>(this);
+            public IReadOnlyCollection<TResult> AsReadOnlyCollection()
+                => ValueReadOnlyCollection.AsReadOnlyCollection<SelectValueReadOnlyCollection<TEnumerable, TEnumerator, TSource, TResult>, ValueEnumerator, TResult>(this);
 
             public TResult[] ToArray()
                 => ValueReadOnlyCollection.ToArray<SelectValueReadOnlyCollection<TEnumerable, TEnumerator, TSource, TResult>, ValueEnumerator, TResult>(this);

@@ -91,7 +91,7 @@ namespace NetFabric.Hyperlinq
             public TSource SingleOrDefault(Func<TSource, bool> predicate) 
                 => ReadOnlyList.SingleOrDefault<RepeatCountReadOnlyList<TSource>, TSource>(this, predicate);
 
-            public IEnumerable<TSource> ToEnumerable()
+            public IEnumerable<TSource> AsEnumerable()
                 => this;
 
             public TSource[] ToArray()

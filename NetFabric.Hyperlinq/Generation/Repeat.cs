@@ -69,7 +69,7 @@ namespace NetFabric.Hyperlinq
             public TSource SingleOrDefault(Func<TSource, bool> predicate) 
                 => SingleOrDefault<RepeatEnumerable<TSource>, Enumerator, TSource>(this, predicate);
 
-            public IEnumerable<TSource> ToEnumerable()
+            public IEnumerable<TSource> AsEnumerable()
                 => this;
 
             public List<TSource> ToArray()

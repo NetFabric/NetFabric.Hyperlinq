@@ -7,7 +7,7 @@
             where TEnumerator : struct, IValueEnumerator<TSource>
         {
             // use LINQ's implementation...
-            return System.Linq.Enumerable.ToArray(source.ToEnumerable<TEnumerable, TEnumerator, TSource>());
+            return System.Linq.Enumerable.ToArray(source.AsEnumerable<TEnumerable, TEnumerator, TSource>());
         }
     }
 }

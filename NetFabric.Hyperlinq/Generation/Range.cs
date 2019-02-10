@@ -94,7 +94,7 @@ namespace NetFabric.Hyperlinq
             public int SingleOrDefault(Func<int, bool> predicate) 
                 => ReadOnlyList.SingleOrDefault<RangeReadOnlyList, int>(this, predicate);
 
-            public IEnumerable<int> ToEnumerable()
+            public IEnumerable<int> AsEnumerable()
                 => this;
 
             public int[] ToArray()
