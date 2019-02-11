@@ -10,6 +10,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         {
             var switcher = new BenchmarkSwitcher(new[] {
                     typeof(GenerationOperationsBenchmarks),
+                    typeof(EmptyBenchmarks),
                     typeof(CountBenchmarks),
                     typeof(SelectForEachBenchmarks),
                     typeof(SelectCountBenchmarks),

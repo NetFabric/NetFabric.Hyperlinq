@@ -16,6 +16,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution", "Solution", "{2C452DA5-FE07-451C-BFE1-AD14A57F7B09}"
 	ProjectSection(SolutionItems) = preProject
 		Licenses\LICENSE.txt = Licenses\LICENSE.txt
+		README.md = README.md
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetFabric.Hyperlinq.Analyzer", "NetFabric.Hyperlinq.Analyzer\NetFabric.Hyperlinq.Analyzer.csproj", "{9502A444-23B5-4D8D-A0A4-22B6FD8F7B27}"

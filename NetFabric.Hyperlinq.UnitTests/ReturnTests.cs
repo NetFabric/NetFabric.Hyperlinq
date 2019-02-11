@@ -1,6 +1,5 @@
-using System;
-using System.Collections.Generic;
 using FluentAssertions;
+using System;
 using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests
@@ -19,12 +18,13 @@ namespace NetFabric.Hyperlinq.UnitTests
             var result = Enumerable.Return(value);
 
             // Assert
-            using(var enumerator = result.GetEnumerator())
-            {   
-                enumerator.MoveNext().Should().BeTrue();
-                enumerator.Current.Should().Be(value);
-                enumerator.MoveNext().Should().BeFalse();
+            using (var enumerator = result.GetValueEnumerator())
+            {
+                enumerator.TryMoveNext(out var current).Should().BeTrue();
+                current.Should().Be(value);
+                enumerator.TryMoveNext().Should().BeFalse();
             }
+
             result[0].Should().Be(value);
         } 
 

@@ -83,9 +83,11 @@ namespace NetFabric.Hyperlinq
                     index++;
                     while (index < count)
                     {
-                        current = source[index];
-                        if (predicate(current))
+                        if (predicate(source[index]))
+                        {
+                            current = source[index];
                             return true;
+                        }
 
                         index++;
                     }
@@ -112,8 +114,8 @@ namespace NetFabric.Hyperlinq
             public int Count()
                 => ValueEnumerable.Count<WhereArray<TSource>, ValueEnumerator, TSource>(this);
 
-            public ValueEnumerable.SelectValueEnumerable<WhereArray<TSource>, ValueEnumerator, TSource, TResult> Select<TResult>(Func<TSource, TResult> selector)
-                => ValueEnumerable.Select<WhereArray<TSource>, ValueEnumerator, TSource, TResult>(this, selector);
+            public Array.WhereSelectArray<TSource, TResult> Select<TResult>(Func<TSource, TResult> selector)
+                => Array.WhereSelect<TSource, TResult>(source, predicate, selector);
 
             public ValueEnumerable.WhereValueEnumerable<WhereArray<TSource>, ValueEnumerator, TSource> Where(Func<TSource, bool> predicate)
                 => ValueEnumerable.Where<WhereArray<TSource>, ValueEnumerator, TSource>(this, predicate);

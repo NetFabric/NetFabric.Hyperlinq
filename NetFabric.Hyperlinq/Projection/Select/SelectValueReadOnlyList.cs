@@ -43,7 +43,6 @@ namespace NetFabric.Hyperlinq
             public TResult this[int index] => selector(source[index]);
 
             public struct Enumerator 
-                : IDisposable
             {
                 readonly TEnumerable source;
                 readonly Func<TSource, TResult> selector;
@@ -61,8 +60,6 @@ namespace NetFabric.Hyperlinq
                 public TResult Current => selector(source[index]);
 
                 public bool MoveNext() => ++index < count;
-
-                public void Dispose() {}
             }
 
             public struct ValueEnumerator

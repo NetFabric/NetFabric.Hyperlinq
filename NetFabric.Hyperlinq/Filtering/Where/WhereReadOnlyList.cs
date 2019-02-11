@@ -35,12 +35,10 @@ namespace NetFabric.Hyperlinq
             public ValueEnumerator GetValueEnumerator() => new ValueEnumerator(in this);
 
             public struct Enumerator
-                : IDisposable
             {
                 readonly TEnumerable source;
                 readonly Func<TSource, bool> predicate;
                 readonly int count;
-                TSource current;
                 int index;
 
                 internal Enumerator(in WhereReadOnlyList<TEnumerable, TSource> enumerable)
@@ -48,11 +46,10 @@ namespace NetFabric.Hyperlinq
                     source = enumerable.source;
                     predicate = enumerable.predicate;
                     count = enumerable.source.Count;
-                    current = default;
                     index = -1;
                 }
 
-                public TSource Current => current;
+                public TSource Current => source[index];
 
                 public bool MoveNext()
                 {
@@ -61,17 +58,13 @@ namespace NetFabric.Hyperlinq
                     {
                         if (predicate(source[index]))
                         {
-                            current = source[index];
                             return true;
                         }
 
                         index++;
                     }
-                    current = default;
                     return false;
                 }
-
-                public void Dispose() { }
             }
 
             public struct ValueEnumerator
@@ -128,8 +121,8 @@ namespace NetFabric.Hyperlinq
             public int Count()
                 => ValueEnumerable.Count<WhereReadOnlyList<TEnumerable, TSource>, ValueEnumerator, TSource>(this);
 
-            public ValueEnumerable.SelectValueEnumerable<WhereReadOnlyList<TEnumerable, TSource>, ValueEnumerator, TSource, TResult> Select<TResult>(Func<TSource, TResult> selector)
-                => ValueEnumerable.Select<WhereReadOnlyList<TEnumerable, TSource>, ValueEnumerator, TSource, TResult>(this, selector);
+            public ReadOnlyList.WhereSelectReadOnlyList<TEnumerable, TSource, TResult> Select<TResult>(Func<TSource, TResult> selector)
+                => ReadOnlyList.WhereSelect<TEnumerable, TSource, TResult>(source, predicate, selector);
 
             public ValueEnumerable.WhereValueEnumerable<WhereReadOnlyList<TEnumerable, TSource>, ValueEnumerator, TSource> Where(Func<TSource, bool> predicate)
                 => ValueEnumerable.Where<WhereReadOnlyList<TEnumerable, TSource>, ValueEnumerator, TSource>(this, predicate);

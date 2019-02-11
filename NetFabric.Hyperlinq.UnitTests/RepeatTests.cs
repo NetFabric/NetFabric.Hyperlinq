@@ -36,12 +36,12 @@ namespace NetFabric.Hyperlinq.UnitTests
             var result = Enumerable.Repeat(value);
 
             // Assert
-            using(var enumerator = result.GetEnumerator())
+            using(var enumerator = result.GetValueEnumerator())
             {
                 for(var index = 0; index < 10; index++)
                 {
-                    enumerator.MoveNext().Should().BeTrue();
-                    enumerator.Current.Should().Be(value);
+                    enumerator.TryMoveNext(out var current).Should().BeTrue();
+                    current.Should().Be(value);
                     result[index].Should().Be(value);
                 }
             }
@@ -65,9 +65,9 @@ namespace NetFabric.Hyperlinq.UnitTests
             var result = Enumerable.Repeat(value, count);
 
             // Assert
-            result.Count.Should().Be(expected.Count);
-            result.Should().Equal(expected);
-            for(var index = 0; index < result.Count; index++)
+            result.Count().Should().Be(expected.Count);
+            result.AsEnumerable().Should().Equal(expected);
+            for(var index = 0; index < result.Count(); index++)
                 result[index].Should().Be(expected[index]);
         }      
 

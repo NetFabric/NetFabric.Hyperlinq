@@ -87,12 +87,13 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Hyperlinq_RepeatInfinitely_ForEach() 
         {
             var sum = 0;
-            using(var enumerator = Enumerable.Repeat(1).GetEnumerator())
+            int current;
+            using(var enumerator = Enumerable.Repeat(1).GetValueEnumerator())
             {
                 for(var counter = Count; counter != 0; counter--)
                 {
-                    enumerator.MoveNext();
-                    sum += enumerator.Current;
+                    enumerator.TryMoveNext(out current);
+                    sum += current;
                 }
             }
             return sum;
@@ -125,7 +126,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         {
             var enumerable = Enumerable.Repeat(1, Count);
             var sum = 0;
-            for(var index = 0; index < enumerable.Count; index++)
+            for(var index = 0; index < enumerable.Count(); index++)
                 sum += enumerable[index];
             return sum;
         }    

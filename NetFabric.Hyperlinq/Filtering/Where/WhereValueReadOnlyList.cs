@@ -37,7 +37,6 @@ namespace NetFabric.Hyperlinq
             public ValueEnumerator GetValueEnumerator() => new ValueEnumerator(in this);
 
             public struct Enumerator
-                : IDisposable
             {
                 readonly TEnumerable source;
                 readonly Func<TSource, bool> predicate;
@@ -72,8 +71,6 @@ namespace NetFabric.Hyperlinq
                     current = default;
                     return false;
                 }
-
-                public void Dispose() { }
             }
 
             public struct ValueEnumerator
@@ -130,8 +127,8 @@ namespace NetFabric.Hyperlinq
             public int Count()
                 => ValueEnumerable.Count<WhereValueReadOnlyList<TEnumerable, TEnumerator, TSource>, ValueEnumerator, TSource>(this);
 
-            public ValueEnumerable.SelectValueEnumerable<WhereValueReadOnlyList<TEnumerable, TEnumerator, TSource>, ValueEnumerator, TSource, TResult> Select<TResult>(Func<TSource, TResult> selector)
-                => ValueEnumerable.Select<WhereValueReadOnlyList<TEnumerable, TEnumerator, TSource>, ValueEnumerator, TSource, TResult>(this, selector);
+            public ValueReadOnlyList.WhereSelectValueReadOnlyList<TEnumerable, TEnumerator, TSource, TResult> Select<TResult>(Func<TSource, TResult> selector)
+                => ValueReadOnlyList.WhereSelect<TEnumerable, TEnumerator, TSource, TResult>(source, predicate, selector);
 
             public ValueEnumerable.WhereValueEnumerable<WhereValueReadOnlyList<TEnumerable, TEnumerator, TSource>, ValueEnumerator, TSource> Where(Func<TSource, bool> predicate)
                 => ValueEnumerable.Where<WhereValueReadOnlyList<TEnumerable, TEnumerator, TSource>, ValueEnumerator, TSource>(this, predicate);
