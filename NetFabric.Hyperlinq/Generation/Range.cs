@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 
 namespace NetFabric.Hyperlinq
@@ -16,7 +15,8 @@ namespace NetFabric.Hyperlinq
             void ThrowCountOutOfRange() => throw new ArgumentOutOfRangeException(nameof(count));
         }
 
-        public readonly struct RangeReadOnlyList : IReadOnlyList<int>
+        public readonly struct RangeReadOnlyList
+            : IValueReadOnlyList<int, RangeReadOnlyList.ValueEnumerator>
         {
             readonly int start;
             readonly int count;
@@ -28,12 +28,9 @@ namespace NetFabric.Hyperlinq
             }
 
             public Enumerator GetEnumerator() => new Enumerator(in this);
-            IEnumerator<int> IEnumerable<int>.GetEnumerator() => new Enumerator(in this);
-            IEnumerator IEnumerable.GetEnumerator() => new Enumerator(in this);
+            public ValueEnumerator GetValueEnumerator() => new ValueEnumerator(in this);
 
-            public int Start => start;
-
-            public int Count => count;
+            public int Count() => count;
 
             public int this[int index]
             {
@@ -47,7 +44,7 @@ namespace NetFabric.Hyperlinq
                 }
             }
 
-            public struct Enumerator : IEnumerator<int>
+            public struct Enumerator 
             {
                 readonly int end;
                 int current;
@@ -59,56 +56,79 @@ namespace NetFabric.Hyperlinq
                 }
 
                 public int Current => current;
-                object IEnumerator.Current => current;
 
                 public bool MoveNext() => ++current < end;
+            }
 
-                public void Reset() => throw new NotSupportedException();
+            public struct ValueEnumerator
+                : IValueEnumerator<int>
+            {
+                readonly int end;
+                int current;
+
+                internal ValueEnumerator(in RangeReadOnlyList enumerable)
+                {
+                    current = enumerable.start - 1;
+                    end = checked(enumerable.start + enumerable.count);
+                }
+
+                public bool TryMoveNext(out int current)
+                {
+                    if (++this.current < end)
+                    {
+                        current = this.current;
+                        return true;
+                    }
+                    current = default;
+                    return false;
+                }
+
+                public bool TryMoveNext() => ++current < end;
 
                 public void Dispose() { }
             }
 
-            public ReadOnlyList.SelectReadOnlyList<RangeReadOnlyList, int, TResult> Select<TResult>(Func<int, TResult> selector) 
-                => ReadOnlyList.Select<RangeReadOnlyList, int, TResult>(this, selector);
+            public ValueReadOnlyList.SelectValueReadOnlyList<RangeReadOnlyList, ValueEnumerator, int, TResult> Select<TResult>(Func<int, TResult> selector) 
+                => ValueReadOnlyList.Select<RangeReadOnlyList, ValueEnumerator, int, TResult>(this, selector);
 
-            public ReadOnlyList.WhereReadOnlyList<RangeReadOnlyList, int> Where(Func<int, bool> predicate) 
-                => ReadOnlyList.Where<RangeReadOnlyList, int>(this, predicate);
+            public ValueReadOnlyList.WhereValueReadOnlyList<RangeReadOnlyList, ValueEnumerator, int> Where(Func<int, bool> predicate) 
+                => ValueReadOnlyList.Where<RangeReadOnlyList, ValueEnumerator, int>(this, predicate);
 
             public int First() 
-                => ReadOnlyList.First<RangeReadOnlyList, int>(this);
+                => ValueReadOnlyList.First<RangeReadOnlyList, ValueEnumerator, int>(this);
             public int First(Func<int, bool> predicate) 
-                => ReadOnlyList.First<RangeReadOnlyList, int>(this, predicate);
+                => ValueReadOnlyList.First<RangeReadOnlyList, ValueEnumerator, int>(this, predicate);
 
             public int FirstOrDefault() 
-                => ReadOnlyList.FirstOrDefault<RangeReadOnlyList, int>(this);
+                => ValueReadOnlyList.FirstOrDefault<RangeReadOnlyList, ValueEnumerator, int>(this);
             public int FirstOrDefault(Func<int, bool> predicate) 
-                => ReadOnlyList.FirstOrDefault<RangeReadOnlyList, int>(this, predicate);
+                => ValueReadOnlyList.FirstOrDefault<RangeReadOnlyList, ValueEnumerator, int>(this, predicate);
 
             public int Single() 
-                => ReadOnlyList.Single<RangeReadOnlyList, int>(this);
+                => ValueReadOnlyList.Single<RangeReadOnlyList, ValueEnumerator, int>(this);
             public int Single(Func<int, bool> predicate) 
-                => ReadOnlyList.Single<RangeReadOnlyList, int>(this, predicate);
+                => ValueReadOnlyList.Single<RangeReadOnlyList, ValueEnumerator, int>(this, predicate);
 
             public int SingleOrDefault() 
-                => ReadOnlyList.SingleOrDefault<RangeReadOnlyList, int>(this);
+                => ValueReadOnlyList.SingleOrDefault<RangeReadOnlyList, ValueEnumerator, int>(this);
             public int SingleOrDefault(Func<int, bool> predicate) 
-                => ReadOnlyList.SingleOrDefault<RangeReadOnlyList, int>(this, predicate);
+                => ValueReadOnlyList.SingleOrDefault<RangeReadOnlyList, ValueEnumerator, int>(this, predicate);
 
             public IEnumerable<int> AsEnumerable()
-                => this;
+                => ValueEnumerable.AsEnumerable<RangeReadOnlyList, ValueEnumerator, int>(this);
+
+            public IReadOnlyCollection<int> AsReadOnlyCollection()
+                => ValueReadOnlyCollection.AsReadOnlyCollection<RangeReadOnlyList, ValueEnumerator, int>(this);
+
+            public IReadOnlyList<int> AsReadOnlyList()
+                => ValueReadOnlyList.AsReadOnlyList<RangeReadOnlyList, ValueEnumerator, int>(this);
 
             public int[] ToArray()
-                => ReadOnlyList.ToArray<RangeReadOnlyList, int>(this);
+                => ValueReadOnlyList.ToArray<RangeReadOnlyList, ValueEnumerator, int>(this);
 
             public List<int> ToList()
-                => ReadOnlyCollection.ToList<RangeReadOnlyList, int>(this);
+                => ValueReadOnlyCollection.ToList<RangeReadOnlyList, ValueEnumerator, int>(this);
         }
-    }
-
-    static class RangeReadOnlyListExtensions
-    {
-        public static int Count(this Enumerable.RangeReadOnlyList source) 
-            => source.Count;
     }
 }
 

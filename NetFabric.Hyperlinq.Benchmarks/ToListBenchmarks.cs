@@ -13,7 +13,8 @@ namespace NetFabric.Hyperlinq.Benchmarks
     {
         int[] array;
         List<int> list;
-        Enumerable.RangeReadOnlyList range;
+        IEnumerable<int> linqRange;
+        Enumerable.RangeReadOnlyList hyperlinqRange;
         IEnumerable<int> enumerable;
 
         static IEnumerable<int> MyEnumerable(int count)
@@ -28,9 +29,10 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [GlobalSetup]
         public void GlobalSetup()
         {
-            range = Enumerable.Range(0, Count);
-            array = System.Linq.Enumerable.ToArray(range);
-            list = System.Linq.Enumerable.ToList(range);
+            linqRange = System.Linq.Enumerable.Range(0, Count);
+            hyperlinqRange = Enumerable.Range(0, Count);
+            array = System.Linq.Enumerable.ToArray(linqRange);
+            list = System.Linq.Enumerable.ToList(linqRange);
 
             enumerable = MyEnumerable(Count);
         }
@@ -48,7 +50,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [BenchmarkCategory("Range")]
         [Benchmark(Baseline = true)]
         public List<int> Linq_Range() => 
-            System.Linq.Enumerable.ToList(range);
+            System.Linq.Enumerable.ToList(linqRange);
 
         [BenchmarkCategory("Enumerable")]
         [Benchmark(Baseline = true)]
@@ -67,8 +69,8 @@ namespace NetFabric.Hyperlinq.Benchmarks
 
         [BenchmarkCategory("Range")]
         [Benchmark]
-        public List<int> Hyperlinq_Range() => 
-            range.ToList();
+        public List<int> Hyperlinq_Range() =>
+            hyperlinqRange.ToList();
 
         [BenchmarkCategory("Enumerable")]
         [Benchmark]

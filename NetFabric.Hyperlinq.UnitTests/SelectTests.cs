@@ -30,7 +30,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var enumerable = Enumerable.Empty<int>();
 
             // Act
-            Action action = () => enumerable.Select<int, int>(null);
+            Action action = () => enumerable.Select<int>(null);
 
             // Assert
             action.Should()

@@ -43,9 +43,9 @@ namespace NetFabric.Hyperlinq.UnitTests
             var result = Enumerable.Range(start, count);
 
             // Assert
-            result.Count.Should().Be(expected.Count);
-            result.Should().Equal(expected);
-            for(var index = 0; index < result.Count; index++)
+            result.Count().Should().Be(expected.Count);
+            result.AsEnumerable().Should().Equal(expected);
+            for(var index = 0; index < result.Count(); index++)
                 result[index].Should().Be(expected[index]);
         }      
 

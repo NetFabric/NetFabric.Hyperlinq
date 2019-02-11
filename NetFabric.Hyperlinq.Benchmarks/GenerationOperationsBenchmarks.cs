@@ -114,7 +114,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         {
             var enumerable = Enumerable.Range(0, Count);
             var sum = 0;
-            for(var index = 0; index < enumerable.Count; index++)
+            for(var index = 0; index < enumerable.Count(); index++)
                 sum += enumerable[index];
             return sum;
         }    

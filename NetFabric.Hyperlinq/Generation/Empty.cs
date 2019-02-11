@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 
 namespace NetFabric.Hyperlinq
@@ -9,31 +8,54 @@ namespace NetFabric.Hyperlinq
         public static EmptyReadOnlyList<TSource> Empty<TSource>() =>
             new EmptyReadOnlyList<TSource>();
 
-        public readonly struct EmptyReadOnlyList<TSource> : IReadOnlyList<TSource>
+        public readonly struct EmptyReadOnlyList<TSource>
+            : IValueReadOnlyList<TSource, EmptyReadOnlyList<TSource>.ValueEnumerator>
         {
             public Enumerator GetEnumerator() => new Enumerator();
-            IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new Enumerator();
-            IEnumerator IEnumerable.GetEnumerator() => new Enumerator();
+            public ValueEnumerator GetValueEnumerator() => new ValueEnumerator();
 
-            public int Count => 0;
+            public int Count() => 0;
 
             public TSource this[int index] => throw new IndexOutOfRangeException();
 
-            public readonly struct Enumerator : IEnumerator<TSource>
+            public readonly struct Enumerator 
             {
                 public TSource Current => default;
-                object IEnumerator.Current => default;
 
                 public bool MoveNext() => false;
+            }
 
-                public void Reset() { }
+            public readonly struct ValueEnumerator 
+                : IValueEnumerator<TSource>
+            {
+                public bool TryMoveNext(out TSource current)
+                {
+                    current = default;
+                    return false;
+                }
+
+                public bool TryMoveNext() => false;
 
                 public void Dispose() { }
             }
 
-            public EmptyReadOnlyList<TSource> Select<TResult>(Func<TSource, TResult> _) => this;
+            public EmptyReadOnlyList<TSource> Select<TResult>(Func<TSource, TResult> selector)
+            {
+                if (selector is null) ThrowSelectorNull();
 
-            public EmptyReadOnlyList<TSource> Where<TResult>(Func<TSource, bool> _) => this;
+                return this;
+
+                void ThrowSelectorNull() => throw new ArgumentNullException(nameof(selector));
+            }
+
+            public EmptyReadOnlyList<TSource> Where(Func<TSource, bool> predicate)
+            {
+                if (predicate is null) ThrowPredicateNull();
+
+                return this;
+
+                void ThrowPredicateNull() => throw new ArgumentNullException(nameof(predicate));
+            }
 
             public TSource First() => throw new InvalidOperationException(Resource.EmptySequence);
             public TSource First(Func<TSource, bool> _) => throw new InvalidOperationException(Resource.EmptySequence);
@@ -48,7 +70,13 @@ namespace NetFabric.Hyperlinq
             public TSource SingleOrDefault(Func<TSource, bool> _) => default;
 
             public IEnumerable<TSource> AsEnumerable()
-                => this;
+                => System.Linq.Enumerable.Empty<TSource>();
+
+            public IReadOnlyCollection<TSource> AsReadOnlyCollection()
+                => ValueReadOnlyCollection.AsReadOnlyCollection<EmptyReadOnlyList<TSource>, ValueEnumerator, TSource>(this);
+
+            public IReadOnlyList<TSource> AsReadOnlyList()
+                => ValueReadOnlyList.AsReadOnlyList<EmptyReadOnlyList<TSource>, ValueEnumerator, TSource>(this);
 
             public TSource[] ToArray()
                 => new TSource[0];
@@ -56,12 +84,6 @@ namespace NetFabric.Hyperlinq
             public List<TSource> ToList()
                 => new List<TSource>();
         }
-
-    }
-    static class EmptyReadOnlyListExtensions
-    {
-        public static int Count<TSource>(this Enumerable.EmptyReadOnlyList<TSource> _) 
-            => 0;
     }
 }
 
