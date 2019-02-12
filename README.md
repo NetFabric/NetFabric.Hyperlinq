@@ -4,6 +4,38 @@
 
 This repository contains the results of my exploration on how LINQ performance can be improved by using modern C# features like constrained interfaces, readonly struct, refs, value tuples and so on.
 
+## Supported operations:
+
+- Aggregation
+  - `Count()`
+  - `Count(Func<TSource, bool>)`
+- Conversion
+  - `AsEnumerable()`
+  - `AsReadOnlyCollection()`
+  - `AsReadOnlyList()`
+  - `ToArray()`
+  - `ToList()`
+- Element
+  - `First()`
+  - `First(Func<TSource, bool>)`
+  - `FirstOrDefault()`
+  - `FirstOrDefault(Func<TSource, bool>)`
+  - `Single()`
+  - `Single(Func<TSource, bool>)`
+  - `SingleOrDefault()`
+  - `SingleOrDefault(Func<TSource, bool>)`
+- Filtering
+  - `Where(Func<TSource, bool>)`
+- Generation
+  - `Create(Func<TEnumerator>)`
+  - `Empty()`
+  - `Range(int, int)`
+  - `Repeat(TSource)`
+  - `Repeat(TSource, int)`
+  - `Return(TSource)`
+- Projection
+  - `Select(Func<TSource, TResult>)`
+
 ## Benchmarks
 
 The solution contains a [benchmarks project](https://github.com/NetFabric/NetFabric.Hyperlinq/tree/master/NetFabric.Hyperlinq.Benchmarks) based on [BenchmarkDotNet](https://benchmarkdotnet.org) that compares `NetFabric.Hyperlinq` to `System.Linq` for many of the supported operations.
