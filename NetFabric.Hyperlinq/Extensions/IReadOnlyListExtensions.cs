@@ -10,10 +10,10 @@ namespace NetFabric.Hyperlinq
             Func<TSource, TResult> selector) 
             => ReadOnlyList.Select<IReadOnlyList<TSource>, TSource, TResult>(source, selector);
 
-        public static ReadOnlyList.WhereReadOnlyList<IReadOnlyList<TSource>, TSource> Where<TSource>(
+        public static ReadOnlyList.WhereReadOnlyList<IReadOnlyList<TSource>, IEnumerator<TSource>, TSource> Where<TSource>(
             this IReadOnlyList<TSource> source,
             Func<TSource, bool> predicate) 
-            => ReadOnlyList.Where<IReadOnlyList<TSource>, TSource>(source, predicate);
+            => ReadOnlyList.Where<IReadOnlyList<TSource>, IEnumerator<TSource>, TSource>(source, predicate);
 
         public static TSource First<TSource>(this IReadOnlyList<TSource> source) 
             => ReadOnlyList.First<IReadOnlyList<TSource>, TSource>(source);
