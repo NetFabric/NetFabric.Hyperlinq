@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class DictionaryExtensions
+    public static partial class ArrayExtensions
     {
         public static int Count<TSource>(this TSource[] source)
             => source.Length;
