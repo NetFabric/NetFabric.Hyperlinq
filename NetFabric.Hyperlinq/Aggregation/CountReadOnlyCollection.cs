@@ -8,6 +8,27 @@ namespace NetFabric.Hyperlinq
         public static int Count<TEnumerable, TSource>(this TEnumerable source)
             where TEnumerable : IReadOnlyCollection<TSource>
             => source.Count;
+
+        public static int Count<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, bool> predicate)
+            where TEnumerable : IReadOnlyCollection<TSource>
+            where TEnumerator : IEnumerator<TSource>
+        {
+            if (source == null) ThrowSourceNull();
+            if (source.Count == 0) return 0;
+
+            var count = 0;
+            using (var enumerator = (TEnumerator)source.GetEnumerator())
+            {
+                while (enumerator.MoveNext())
+                {
+                    if (predicate(enumerator.Current))
+                        count++;
+                }
+            }
+            return count;
+
+            void ThrowSourceNull() => throw new ArgumentNullException(nameof(source));
+        }
     }
 }
 

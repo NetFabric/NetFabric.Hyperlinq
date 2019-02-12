@@ -118,10 +118,7 @@ namespace NetFabric.Hyperlinq
             }
 
             public int Count()
-            {
-                var where = Enumerable.Where<TEnumerable, TEnumerator, TSource>(source, predicate);
-                return ValueEnumerable.Count<Enumerable.WhereEnumerable<TEnumerable, TEnumerator, TSource>, Enumerable.WhereEnumerable<TEnumerable, TEnumerator, TSource>.ValueEnumerator, TSource>(where);
-            }
+                => Enumerable.Count<TEnumerable, TEnumerator, TSource>(source, predicate);
 
             public ValueEnumerable.SelectValueEnumerable<WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>, ValueEnumerator, TResult, TSelectorResult> Select<TSelectorResult>(Func<TResult, TSelectorResult> selector)
                 => ValueEnumerable.Select<WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>, ValueEnumerator, TResult, TSelectorResult>(this, selector);

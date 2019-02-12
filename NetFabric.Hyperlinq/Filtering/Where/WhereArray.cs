@@ -112,7 +112,7 @@ namespace NetFabric.Hyperlinq
             }
 
             public int Count()
-                => ValueEnumerable.Count<WhereArray<TSource>, ValueEnumerator, TSource>(this);
+                => ReadOnlyList.Count<IReadOnlyList<TSource>, TSource>(source, predicate);
 
             public Array.WhereSelectArray<TSource, TResult> Select<TResult>(Func<TSource, TResult> selector)
                 => Array.WhereSelect<TSource, TResult>(source, predicate, selector);
@@ -121,22 +121,22 @@ namespace NetFabric.Hyperlinq
                 => ValueEnumerable.Where<WhereArray<TSource>, ValueEnumerator, TSource>(this, predicate);
 
             public TSource First()
-                => ValueEnumerable.First<WhereArray<TSource>, ValueEnumerator, TSource>(this);
+                => ReadOnlyList.First<IReadOnlyList<TSource>, TSource>(source, predicate);
             public TSource First(Func<TSource, bool> predicate)
                 => ValueEnumerable.First<WhereArray<TSource>, ValueEnumerator, TSource>(this, predicate);
 
             public TSource FirstOrDefault()
-                => ValueEnumerable.FirstOrDefault<WhereArray<TSource>, ValueEnumerator, TSource>(this);
+                => ReadOnlyList.FirstOrDefault<IReadOnlyList<TSource>, TSource>(source, predicate);
             public TSource FirstOrDefault(Func<TSource, bool> predicate)
                 => ValueEnumerable.FirstOrDefault<WhereArray<TSource>, ValueEnumerator, TSource>(this, predicate);
 
             public TSource Single()
-                => ValueEnumerable.Single<WhereArray<TSource>, ValueEnumerator, TSource>(this);
+                => ReadOnlyList.Single<IReadOnlyList<TSource>, TSource>(source, predicate);
             public TSource Single(Func<TSource, bool> predicate)
                 => ValueEnumerable.Single<WhereArray<TSource>, ValueEnumerator, TSource>(this, predicate);
 
             public TSource SingleOrDefault()
-                => ValueEnumerable.SingleOrDefault<WhereArray<TSource>, ValueEnumerator, TSource>(this);
+                => ReadOnlyList.SingleOrDefault<IReadOnlyList<TSource>, TSource>(source, predicate);
             public TSource SingleOrDefault(Func<TSource, bool> predicate)
                 => ValueEnumerable.SingleOrDefault<WhereArray<TSource>, ValueEnumerator, TSource>(this, predicate);
 

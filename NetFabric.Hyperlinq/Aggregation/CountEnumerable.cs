@@ -21,5 +21,25 @@ namespace NetFabric.Hyperlinq
 
             void ThrowSourceNull() => throw new ArgumentNullException(nameof(source));
         }
+
+        public static int Count<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, bool> predicate)
+            where TEnumerable : IEnumerable<TSource>
+            where TEnumerator : IEnumerator<TSource>
+        {
+            if (source == null) ThrowSourceNull();
+
+            var count = 0;
+            using (var enumerator = (TEnumerator)source.GetEnumerator())
+            {
+                while (enumerator.MoveNext())
+                {
+                    if (predicate(enumerator.Current))
+                        count++;
+                }
+            }
+            return count;
+
+            void ThrowSourceNull() => throw new ArgumentNullException(nameof(source));
+        }
     }
 }
