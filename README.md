@@ -1,4 +1,9 @@
+![GitHub last commit (master)](https://img.shields.io/github/last-commit/NetFabric/NetFabric.Hyperlinq/master.svg?logo=github&logoColor=lightgray&style=popout-square)
+
 # NetFabric.Hyperlinq
+
+[![NuGet Version](https://img.shields.io/nuget/v/NetFabric.Hyperlinq.svg?style=popout-square&logoColor=lightgray&logo=nuget)](https://www.nuget.org/packages/NetFabric.Hyperlinq/)
+[![NuGet Downloads](https://img.shields.io/nuget/dt/NetFabric.Hyperlinq.svg?style=popout-square&logoColor=lightgray&logo=nuget)](https://www.nuget.org/packages/NetFabric.Hyperlinq/)
 
 **This is work in progress!...**
 
@@ -49,6 +54,9 @@ The solution contains a [benchmarks project](https://github.com/NetFabric/NetFab
 To get the latests benchmarks, clone the project and run it on your machine.
 
 # NetFabric.Hyperlinq.Analyzer
+
+[![NuGet Version](https://img.shields.io/nuget/v/NetFabric.Hyperlinq.Analyzer.svg?style=popout-square&logoColor=lightgray&logo=nuget)](https://www.nuget.org/packages/NetFabric.Hyperlinq.Analyzer/)
+[![NuGet Downloads](https://img.shields.io/nuget/dt/NetFabric.Hyperlinq.Analyzer.svg?style=popout-square&logoColor=lightgray&logo=nuget)](https://www.nuget.org/packages/NetFabric.Hyperlinq.Analyzer/)
 
 The solution contains a [project for a Roslyn Analyzer](https://github.com/NetFabric/NetFabric.Hyperlinq/tree/master/NetFabric.Hyperlinq.Analyzer) that contains several enumeration related rules to help users improve performance.
 
