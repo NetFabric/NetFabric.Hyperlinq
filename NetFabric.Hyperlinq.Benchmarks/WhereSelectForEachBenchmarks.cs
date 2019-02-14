@@ -40,10 +40,20 @@ namespace NetFabric.Hyperlinq.Benchmarks
 
         [BenchmarkCategory("Enumerable")]
         [Benchmark(Baseline = true)]
-        public int Linq_Enumerable() 
+        public int Linq_Enumerable_Reference() 
         { 
             var count = 0;
-            foreach(var item in System.Linq.Enumerable.Select(System.Linq.Enumerable.Where(enumerable, _ => true), item => item))
+            foreach(var item in System.Linq.Enumerable.Select(System.Linq.Enumerable.Where(enumerableReference, _ => true), item => item))
+                count++;
+            return count;
+        }
+
+        [BenchmarkCategory("Enumerable")]
+        [Benchmark(Baseline = true)]
+        public int Linq_Enumerable_Value() 
+        { 
+            var count = 0;
+            foreach(var item in System.Linq.Enumerable.Select(System.Linq.Enumerable.Where(enumerableValue, _ => true), item => item))
                 count++;
             return count;
         }
@@ -80,10 +90,20 @@ namespace NetFabric.Hyperlinq.Benchmarks
 
         [BenchmarkCategory("Enumerable")]
         [Benchmark]
-        public int Hyperlinq_Enumerable()
+        public int Hyperlinq_Enumerable_Reference()
         { 
             var count = 0;
-            foreach(var item in enumerable.Where(_ => true).Select(item => item))
+            foreach(var item in enumerableReference.Where(_ => true).Select(item => item))
+                count++;
+            return count;
+        }
+
+        [BenchmarkCategory("Enumerable")]
+        [Benchmark]
+        public int Hyperlinq_Enumerable_Value()
+        { 
+            var count = 0;
+            foreach(var item in enumerableValue.Where(_ => true).Select(item => item))
                 count++;
             return count;
         }
