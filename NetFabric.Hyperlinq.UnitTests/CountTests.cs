@@ -92,6 +92,38 @@ namespace NetFabric.Hyperlinq.UnitTests
 
             // Assert
             result.Should().Be(expected);
-        }        
+        }
+
+        [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(10)]
+        public void Count_With_ValidEnumerableReferenceType_Should_Succeed(int expected)
+        {
+            // Arrange
+            var enumerable = MyEnumerable.ReferenceType(expected);
+
+            // Act
+            var result = enumerable.Count();
+
+            // Assert
+            result.Should().Be(expected);
+        }
+
+        [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(10)]
+        public void Count_With_ValidEnumerableValueType_Should_Succeed(int expected)
+        {
+            // Arrange
+            var enumerable = MyEnumerable.ValueType(expected);
+
+            // Act
+            var result = enumerable.Count();
+
+            // Assert
+            result.Should().Be(expected);
+        }
     }
 }

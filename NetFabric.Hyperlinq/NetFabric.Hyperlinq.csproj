@@ -17,6 +17,10 @@
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <DefineConstants>EXPRESSION_TREES</DefineConstants>
+  </PropertyGroup>
+
   <ItemGroup>
     <None Include="..\Licenses\LICENSE.txt" Pack="true" PackagePath="" />
   </ItemGroup>

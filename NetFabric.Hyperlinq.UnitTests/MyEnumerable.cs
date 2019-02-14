@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace NetFabric.Hyperlinq.Benchmarks
+namespace NetFabric.Hyperlinq.UnitTests
 {
     public static class MyEnumerable
     {

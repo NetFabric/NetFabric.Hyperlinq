@@ -13,7 +13,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         protected IEnumerable<int> enumerableReference;
         protected MyEnumerable.Enumerable enumerableValue;
 
-        [Params(1_000_000)]//20, 100, 10_000)]
+        [Params(0, 100, 10_000)]
         public int Count { get; set; }
 
         [GlobalSetup]
