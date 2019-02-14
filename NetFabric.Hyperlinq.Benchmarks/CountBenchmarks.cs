@@ -25,8 +25,13 @@ namespace NetFabric.Hyperlinq.Benchmarks
 
         [BenchmarkCategory("Enumerable")]
         [Benchmark(Baseline = true)]
-        public int Linq_Enumerable() => 
-            System.Linq.Enumerable.Count(enumerable);
+        public int Linq_Enumerable_Reference() => 
+            System.Linq.Enumerable.Count(enumerableReference);
+
+        [BenchmarkCategory("Enumerable")]
+        [Benchmark]
+        public int Linq_Enumerable_Value() => 
+            System.Linq.Enumerable.Count(enumerableValue);
 
         [BenchmarkCategory("Array")]
         [Benchmark]
@@ -45,7 +50,12 @@ namespace NetFabric.Hyperlinq.Benchmarks
 
         [BenchmarkCategory("Enumerable")]
         [Benchmark]
-        public int Hyperlinq_Enumerable() => 
-            enumerable.Count();
+        public int Hyperlinq_Enumerable_Reference() => 
+            enumerableReference.Count();
+
+        [BenchmarkCategory("Enumerable")]
+        [Benchmark]
+        public int Hyperlinq_Enumerable_Value() => 
+            enumerableValue.Count();
     }
 }

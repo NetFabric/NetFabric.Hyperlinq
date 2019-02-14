@@ -10,9 +10,10 @@ namespace NetFabric.Hyperlinq.Benchmarks
         protected List<int> list;
         protected IEnumerable<int> linqRange;
         protected Enumerable.RangeReadOnlyList hyperlinqRange;
-        protected IEnumerable<int> enumerable;
+        protected IEnumerable<int> enumerableReference;
+        protected MyEnumerable.Enumerable enumerableValue;
 
-        [Params(0, 100, 10_000)]
+        [Params(1_000_000)]//20, 100, 10_000)]
         public int Count { get; set; }
 
         [GlobalSetup]
@@ -27,13 +28,8 @@ namespace NetFabric.Hyperlinq.Benchmarks
             hyperlinqRange = Enumerable.Range(0, count);
             array = hyperlinqRange.ToArray();
             list = hyperlinqRange.ToList();
-            enumerable = MyEnumerable();
-
-            IEnumerable<int> MyEnumerable()
-            {
-                for (var value = 0; value < count; value++)
-                    yield return value;
-            }
+            enumerableReference = MyEnumerable.ReferenceType(count);
+            enumerableValue = MyEnumerable.ValueType(count);
         }
     }
 }
