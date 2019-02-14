@@ -77,7 +77,6 @@ namespace NetFabric.Hyperlinq
                         current = selector(enumerator.Current);
                         return true;
                     }
-
                     current = default;
                     return false;
                 }

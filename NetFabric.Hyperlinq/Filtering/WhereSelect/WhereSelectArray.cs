@@ -45,7 +45,6 @@ namespace NetFabric.Hyperlinq
                 readonly Func<TSource, TResult> selector;
                 readonly int count;
                 int index;
-                TResult current;
 
                 internal Enumerator(in WhereSelectArray<TSource, TResult> enumerable)
                 {
@@ -54,10 +53,9 @@ namespace NetFabric.Hyperlinq
                     selector = enumerable.selector;
                     count = enumerable.source.Length;
                     index = -1;
-                    current = default;
                 }
 
-                public TResult Current => current;
+                public TResult Current => selector(source[index]);
 
                 public bool MoveNext()
                 {
@@ -65,10 +63,7 @@ namespace NetFabric.Hyperlinq
                     while (index < count)
                     {
                         if (predicate(source[index]))
-                        {
-                            current = selector(source[index]);
                             return true;
-                        }
 
                         index++;
                     }

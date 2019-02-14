@@ -78,11 +78,9 @@ namespace NetFabric.Hyperlinq
                 {
                     while (enumerator.MoveNext())
                     {
-                        if (predicate(enumerator.Current))
-                        {
-                            current = enumerator.Current;
+                        current = enumerator.Current;
+                        if (predicate(current))
                             return true;
-                        }
                     }
                     current = default;
                     return false;

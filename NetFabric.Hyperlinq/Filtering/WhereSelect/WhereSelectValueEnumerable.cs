@@ -48,7 +48,7 @@ namespace NetFabric.Hyperlinq
                 TEnumerator enumerator;
                 readonly Func<TSource, bool> predicate;
                 readonly Func<TSource, TResult> selector;
-                TResult current;
+                TSource current;
 
                 internal Enumerator(in WhereSelectValueEnumerable<TEnumerable, TEnumerator, TSource, TResult> enumerable)
                 {
@@ -58,17 +58,14 @@ namespace NetFabric.Hyperlinq
                     current = default;
                 }
 
-                public TResult Current => current;
+                public TResult Current => selector(current);
 
                 public bool MoveNext()
                 {
-                    while (enumerator.TryMoveNext(out var temp))
+                    while (enumerator.TryMoveNext(out var current))
                     {
-                        if (predicate(temp))
-                        {
-                            current = selector(temp);
+                        if (predicate(current))
                             return true;
-                        }
                     }
                     return false;
                 }

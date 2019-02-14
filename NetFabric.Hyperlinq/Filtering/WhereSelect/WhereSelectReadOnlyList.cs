@@ -66,9 +66,7 @@ namespace NetFabric.Hyperlinq
                     while (index < count)
                     {
                         if (predicate(source[index]))
-                        {
                             return true;
-                        }
 
                         index++;
                     }

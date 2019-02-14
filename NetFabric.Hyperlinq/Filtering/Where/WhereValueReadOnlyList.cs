@@ -41,7 +41,6 @@ namespace NetFabric.Hyperlinq
                 readonly TEnumerable source;
                 readonly Func<TSource, bool> predicate;
                 readonly int count;
-                TSource current;
                 int index;
 
                 internal Enumerator(in WhereValueReadOnlyList<TEnumerable, TEnumerator, TSource> enumerable)
@@ -49,11 +48,10 @@ namespace NetFabric.Hyperlinq
                     source = enumerable.source;
                     predicate = enumerable.predicate;
                     count = enumerable.source.Count();
-                    current = default;
                     index = -1;
                 }
 
-                public TSource Current => current;
+                public TSource Current => source[index];
 
                 public bool MoveNext()
                 {
@@ -61,14 +59,10 @@ namespace NetFabric.Hyperlinq
                     while (index < count)
                     {
                         if (predicate(source[index]))
-                        {
-                            current = source[index];
                             return true;
-                        }
 
                         index++;
                     }
-                    current = default;
                     return false;
                 }
             }
@@ -94,11 +88,9 @@ namespace NetFabric.Hyperlinq
                     index++;
                     while (index < count)
                     {
-                        if (predicate(source[index]))
-                        {
-                            current = source[index];
+                        current = source[index];
+                        if (predicate(current))
                             return true;
-                        }
 
                         index++;
                     }
@@ -112,9 +104,7 @@ namespace NetFabric.Hyperlinq
                     while (index < count)
                     {
                         if (predicate(source[index]))
-                        {
                             return true;
-                        }
 
                         index++;
                     }

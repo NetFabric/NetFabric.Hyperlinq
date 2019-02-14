@@ -84,7 +84,6 @@ namespace NetFabric.Hyperlinq
                         current = selector(source[index]);
                         return true;
                     }
-
                     current = default;
                     return false;
                 }

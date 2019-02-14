@@ -59,9 +59,7 @@ namespace NetFabric.Hyperlinq
                     while (index < count)
                     {
                         if (predicate(source[index]))
-                        {
                             return true;
-                        }
 
                         index++;
                     }
@@ -90,11 +88,9 @@ namespace NetFabric.Hyperlinq
                     index++;
                     while (index < count)
                     {
-                        if (predicate(source[index]))
-                        {
-                            current = source[index];
+                        current = source[index];
+                        if (predicate(current))
                             return true;
-                        }
 
                         index++;
                     }
@@ -108,9 +104,7 @@ namespace NetFabric.Hyperlinq
                     while (index < count)
                     {
                         if (predicate(source[index]))
-                        {
                             return true;
-                        }
 
                         index++;
                     }
