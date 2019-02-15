@@ -103,7 +103,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Hyperlinq_Enumerable_Value()
         { 
             var count = 0;
-            foreach(var item in enumerableValue.Where(_ => true))
+            foreach(var item in enumerableValue.Where<MyEnumerable.Enumerable, MyEnumerable.Enumerable.Enumerator, int>(_ => true))
                 count++;
             return count;
         }
