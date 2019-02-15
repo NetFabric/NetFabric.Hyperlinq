@@ -38,9 +38,9 @@ namespace NetFabric.Hyperlinq
                 var enumerable = Expression.Parameter(typeof(TEnumerable), "enumerable");
                 var count = Expression.Variable(typeof(int), "count");
 
-                var body = Expression.Block(new[] { enumerable, count },
+                var body = Expression.Block(new[] { count },
                     Expression.Assign(count, Expression.Constant(0)),
-                    ExpressionEx.ForEach(enumerable, 
+                    ExpressionEx.ForEach(enumerable,
                         Expression.Assign(count, Expression.Increment(count))),
                     count);
 
@@ -83,7 +83,7 @@ namespace NetFabric.Hyperlinq
                 var count = Expression.Variable(typeof(int), "count");
                 var current = Expression.Variable(typeof(TSource), "current");
 
-                var body = Expression.Block(new[] { enumerable, predicate, count, current },
+                var body = Expression.Block(new ParameterExpression[] { count },
                     Expression.Assign(count, Expression.Constant(0)),
                     ExpressionEx.ForEach(enumerable, current,
                         Expression.IfThen(
@@ -91,7 +91,7 @@ namespace NetFabric.Hyperlinq
                             Expression.Assign(count, Expression.Increment(count)))),
                     count);
 
-                return Expression.Lambda<Func<TEnumerable, Func<TSource, bool>, int>>(body, enumerable).Compile();        
+                return Expression.Lambda<Func<TEnumerable, Func<TSource, bool>, int>>(body, enumerable, predicate).Compile();        
             }
         }
     }

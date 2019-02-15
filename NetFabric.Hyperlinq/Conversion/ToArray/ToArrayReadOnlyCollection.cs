@@ -1,16 +1,13 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq.Expressions;
-using System.Reflection;
 
 namespace NetFabric.Hyperlinq
 {
     public static partial class ReadOnlyCollection
     {
-        public static TSource[] ToArray<TEnumerable, TEnumerator, TSource>(this TEnumerable source)
+        public static TSource[] ToArray<TEnumerable, TSource>(this TEnumerable source)
             where TEnumerable : IReadOnlyCollection<TSource>
-            where TEnumerator : IEnumerator<TSource>
         {
             if (source == null) ThrowSourceNull();
 
@@ -51,7 +48,7 @@ namespace NetFabric.Hyperlinq
                     Expression.Assign(count, Expression.Property(enumerable, "Count")),
                     Expression.Assign(array, Expression.NewArrayBounds(typeof(TSource), count)),
                     Expression.Assign(index, Expression.Constant(0)),
-                    ExpressionEx.ForEach(enumerable, current,
+                    ExpressionEx.ForEach( enumerable, current,
                         Expression.Block(new[] { index, current }, 
                             Expression.Assign(Expression.ArrayIndex(array, index), current),
                             Expression.Assign(index, Expression.Increment(index)))),

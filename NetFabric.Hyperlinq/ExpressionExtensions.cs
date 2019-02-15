@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Reflection;
 
@@ -7,29 +8,29 @@ namespace NetFabric.Hyperlinq
 {
     static class ExpressionEx
     {
-        public static Expression ForEach(Expression enumerable, Expression loopContent)
+        public static Expression ForEach(ParameterExpression enumerable, Expression loopContent)
         {
             var enumerableType = enumerable.Type;
-            var getEnumeratorMethod = enumerableType.GetMethod("GetEnumerator");
-            var enumeratorType = getEnumeratorMethod.ReturnType;
+            var getEnumerator = enumerableType.GetMethod("GetEnumerator");
+            var enumeratorType = getEnumerator.ReturnType;
             var enumerator = Expression.Variable(enumeratorType, "enumerator");
 
             return Expression.Block(new[] { enumerator },
-                Expression.Assign(enumerator, Expression.Call(enumerable, getEnumeratorMethod)),
+                Expression.Assign(enumerator, Expression.Call(enumerable, getEnumerator)),
                 EnumerationLoop(enumerator, loopContent));
         }
 
-        public static Expression ForEach(Expression enumerable, ParameterExpression loopVar, Expression loopContent)
+        public static Expression ForEach(ParameterExpression enumerable, ParameterExpression loopVar, Expression loopContent)
         {
             var enumerableType = enumerable.Type;
-            var getEnumeratorMethod = enumerableType.GetMethod("GetEnumerator");
-            var enumeratorType = getEnumeratorMethod.ReturnType;
+            var getEnumerator = enumerableType.GetMethod("GetEnumerator");
+            var enumeratorType = getEnumerator.ReturnType;
             var enumerator = Expression.Variable(enumeratorType, "enumerator");
 
-            return Expression.Block(new[] { enumerator, loopVar },
-                Expression.Assign(enumerator, Expression.Call(enumerable, getEnumeratorMethod)),
+            return Expression.Block(new[] { enumerator },
+                Expression.Assign(enumerator, Expression.Call(enumerable, getEnumerator)),
                 EnumerationLoop(enumerator,
-                    Expression.Block(new[] { enumerator, loopVar },
+                    Expression.Block(new[] { loopVar },
                         Expression.Assign(loopVar, Expression.Property(enumerator, "Current")),
                         loopContent)));
         }
@@ -53,7 +54,7 @@ namespace NetFabric.Hyperlinq
                 {
                     loop = Expression.TryFinally(
                        loop,
-                       Expression.Call(Expression.TypeAs(enumerator, typeof(IDisposable)), typeof(IDisposable).GetMethod("Dispose")));
+                       Expression.Call(Expression.Convert(enumerator, typeof(IDisposable)), typeof(IDisposable).GetMethod("Dispose")));
                 }
             }
             else

@@ -120,7 +120,39 @@ namespace NetFabric.Hyperlinq.UnitTests
             var enumerable = MyEnumerable.ValueType(expected);
 
             // Act
-            var result = enumerable.Count();
+            var result = enumerable.Count<MyEnumerable.Enumerable, int>();
+
+            // Assert
+            result.Should().Be(expected);
+        }
+
+        [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(10)]
+        public void CountPredicate_With_ValidEnumerableReferenceType_Should_Succeed(int expected)
+        {
+            // Arrange
+            var enumerable = MyEnumerable.ReferenceType(expected);
+
+            // Act
+            var result = enumerable.Count(_ => true);
+
+            // Assert
+            result.Should().Be(expected);
+        }
+
+        [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(10)]
+        public void CountPredicate_With_ValidEnumerableValueType_Should_Succeed(int expected)
+        {
+            // Arrange
+            var enumerable = MyEnumerable.ValueType(expected);
+
+            // Act
+            var result = enumerable.Count<MyEnumerable.Enumerable, int>(_ => true);
 
             // Assert
             result.Should().Be(expected);
