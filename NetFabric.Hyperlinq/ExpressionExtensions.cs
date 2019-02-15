@@ -7,7 +7,34 @@ namespace NetFabric.Hyperlinq
 {
     static class ExpressionEx
     {
-        public static Expression EnumerationLoop(ParameterExpression enumerable, ParameterExpression enumerator, Expression body)
+        public static Expression ForEach(Expression enumerable, Expression loopContent)
+        {
+            var enumerableType = enumerable.Type;
+            var getEnumeratorMethod = enumerableType.GetMethod("GetEnumerator");
+            var enumeratorType = getEnumeratorMethod.ReturnType;
+            var enumerator = Expression.Variable(enumeratorType, "enumerator");
+
+            return Expression.Block(new[] { enumerator },
+                Expression.Assign(enumerator, Expression.Call(enumerable, getEnumeratorMethod)),
+                EnumerationLoop(enumerator, loopContent));
+        }
+
+        public static Expression ForEach(Expression enumerable, ParameterExpression loopVar, Expression loopContent)
+        {
+            var enumerableType = enumerable.Type;
+            var getEnumeratorMethod = enumerableType.GetMethod("GetEnumerator");
+            var enumeratorType = getEnumeratorMethod.ReturnType;
+            var enumerator = Expression.Variable(enumeratorType, "enumerator");
+
+            return Expression.Block(new[] { enumerator, loopVar },
+                Expression.Assign(enumerator, Expression.Call(enumerable, getEnumeratorMethod)),
+                EnumerationLoop(enumerator,
+                    Expression.Block(new[] { enumerator, loopVar },
+                        Expression.Assign(loopVar, Expression.Property(enumerator, "Current")),
+                        loopContent)));
+        }
+
+        static Expression EnumerationLoop(ParameterExpression enumerator, Expression loopContent)
         {
             var enumeratorType = enumerator.Type;
 
@@ -15,7 +42,7 @@ namespace NetFabric.Hyperlinq
             Expression loop = Expression.Loop(
                     Expression.IfThenElse(
                         Expression.Call(enumerator, typeof(IEnumerator).GetMethod("MoveNext")),
-                        body,
+                        loopContent,
                         Expression.Break(breakLabel)),
                     breakLabel);
 

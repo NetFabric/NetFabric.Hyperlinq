@@ -41,25 +41,21 @@ namespace NetFabric.Hyperlinq
 
             public static Func<TEnumerable, TSource[]> Create()
             {
-                var enumerableType = typeof(TEnumerable);
-
-                var getEnumeratorMethod = enumerableType.GetMethod("GetEnumerator");
-                var enumeratorType = getEnumeratorMethod.ReturnType;
-
-                var enumerable = Expression.Parameter(enumerableType, "enumerable");
-                var enumerator = Expression.Variable(enumeratorType, "enumerator");
+                var enumerable = Expression.Parameter(typeof(TEnumerable), "enumerable");
                 var count = Expression.Variable(typeof(int), "count");
                 var array = Expression.Variable(typeof(TSource[]), "array");
                 var index = Expression.Variable(typeof(int), "index");
+                var current = Expression.Variable(typeof(TSource), "current");
 
-                var body = Expression.Block(new[] { enumerator, count },
-                    Expression.Assign(count, Expression.Constant(0)),
-                    Expression.Assign(enumerator, Expression.Call(enumerable, getEnumeratorMethod)),
-                    ExpressionEx.EnumerationLoop(enumerable, enumerator,
-                        Expression.Block(new[] { enumerator, index },
-                            Expression.Assign(Expression.ArrayIndex(array, index), Expression.Property(enumerator, "Current")),
+                var body = Expression.Block(new[] { enumerable, count, array, index, current },
+                    Expression.Assign(count, Expression.Property(enumerable, "Count")),
+                    Expression.Assign(array, Expression.NewArrayBounds(typeof(TSource), count)),
+                    Expression.Assign(index, Expression.Constant(0)),
+                    ExpressionEx.ForEach(enumerable, current,
+                        Expression.Block(new[] { index, current }, 
+                            Expression.Assign(Expression.ArrayIndex(array, index), current),
                             Expression.Assign(index, Expression.Increment(index)))),
-                    count);
+                    array);
 
                 return Expression.Lambda<Func<TEnumerable, TSource[]>>(body, enumerable).Compile();        
             }

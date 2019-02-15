@@ -35,19 +35,12 @@ namespace NetFabric.Hyperlinq
 
             public static Func<TEnumerable, int> Create()
             {
-                var enumerableType = typeof(TEnumerable);
-
-                var getEnumeratorMethod = enumerableType.GetMethod("GetEnumerator");
-                var enumeratorType = getEnumeratorMethod.ReturnType;
-
-                var enumerable = Expression.Parameter(enumerableType, "enumerable");
-                var enumerator = Expression.Variable(enumeratorType, "enumerator");
+                var enumerable = Expression.Parameter(typeof(TEnumerable), "enumerable");
                 var count = Expression.Variable(typeof(int), "count");
 
-                var body = Expression.Block(new[] { enumerator, count },
+                var body = Expression.Block(new[] { enumerable, count },
                     Expression.Assign(count, Expression.Constant(0)),
-                    Expression.Assign(enumerator, Expression.Call(enumerable, getEnumeratorMethod)),
-                    ExpressionEx.EnumerationLoop(enumerable, enumerator,
+                    ExpressionEx.ForEach(enumerable, 
                         Expression.Assign(count, Expression.Increment(count))),
                     count);
 
@@ -85,23 +78,16 @@ namespace NetFabric.Hyperlinq
 
             public static Func<TEnumerable, Func<TSource, bool>, int> Create()
             {
-                var elementType = typeof(TSource);
-                var enumerableType = typeof(TEnumerable);
-
-                var getEnumeratorMethod = enumerableType.GetMethod("GetEnumerator");
-                var enumeratorType = getEnumeratorMethod.ReturnType;
-
-                var enumerable = Expression.Parameter(enumerableType, "enumerable");
-                var predicate = Expression.Parameter(typeof(Func<,>).MakeGenericType(elementType, typeof(bool)), "predicate");
-                var enumerator = Expression.Variable(enumeratorType, "enumerator");
+                var enumerable = Expression.Parameter(typeof(TEnumerable), "enumerable");
+                var predicate = Expression.Parameter(typeof(Func<,>).MakeGenericType(typeof(TSource), typeof(bool)), "predicate");
                 var count = Expression.Variable(typeof(int), "count");
+                var current = Expression.Variable(typeof(TSource), "current");
 
-                var body = Expression.Block(new[] { enumerator, count },
+                var body = Expression.Block(new[] { enumerable, predicate, count, current },
                     Expression.Assign(count, Expression.Constant(0)),
-                    Expression.Assign(enumerator, Expression.Call(enumerable, getEnumeratorMethod)),
-                    ExpressionEx.EnumerationLoop(enumerable, enumerator,
+                    ExpressionEx.ForEach(enumerable, current,
                         Expression.IfThen(
-                            Expression.Invoke(predicate, Expression.Property(enumerator, "Current")),
+                            Expression.Invoke(predicate, current),
                             Expression.Assign(count, Expression.Increment(count)))),
                     count);
 
