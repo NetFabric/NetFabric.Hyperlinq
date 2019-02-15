@@ -40,42 +40,18 @@ namespace NetFabric.Hyperlinq
                 var getEnumeratorMethod = enumerableType.GetMethod("GetEnumerator");
                 var enumeratorType = getEnumeratorMethod.ReturnType;
 
-                var enumerableParameter = Expression.Parameter(enumerableType, "enumerable");
-                var enumeratorVariable = Expression.Variable(enumeratorType, "enumerator");
-                var countVariable = Expression.Variable(typeof(int), "count");
-                var breakLabel = Expression.Label("LoopBreak");
+                var enumerable = Expression.Parameter(enumerableType, "enumerable");
+                var enumerator = Expression.Variable(enumeratorType, "enumerator");
+                var count = Expression.Variable(typeof(int), "count");
 
-                Expression loop = Expression.Loop(
-                    Expression.IfThenElse(
-                        Expression.Call(enumeratorVariable, typeof(IEnumerator).GetMethod("MoveNext")),
-                        Expression.Assign(countVariable, Expression.Increment(countVariable)),
-                        Expression.Break(breakLabel)),
-                    breakLabel);
+                var body = Expression.Block(new[] { enumerator, count },
+                    Expression.Assign(count, Expression.Constant(0)),
+                    Expression.Assign(enumerator, Expression.Call(enumerable, getEnumeratorMethod)),
+                    ExpressionEx.EnumerationLoop(enumerable, enumerator,
+                        Expression.Assign(count, Expression.Increment(count))),
+                    count);
 
-                var disposeMethod = enumeratorType.GetMethod("Dispose", BindingFlags.Public | BindingFlags.Instance, Type.DefaultBinder, Type.EmptyTypes, new ParameterModifier[] { });
-                if (disposeMethod is null)
-                {
-                    if (typeof(IDisposable).IsAssignableFrom(enumeratorType))
-                    {
-                        loop = Expression.TryFinally(
-                           loop,
-                           Expression.Call(Expression.TypeAs(enumeratorVariable, typeof(IDisposable)), typeof(IDisposable).GetMethod("Dispose")));
-                    }
-                }
-                else
-                {
-                    loop = Expression.TryFinally(
-                       loop,
-                       Expression.Call(enumeratorVariable, disposeMethod));
-                }
-
-                var body = Expression.Block(new[] { enumeratorVariable, countVariable },
-                    Expression.Assign(countVariable, Expression.Constant(0)),
-                    Expression.Assign(enumeratorVariable, Expression.Call(enumerableParameter, getEnumeratorMethod)),
-                    loop,
-                    countVariable);
-
-                return Expression.Lambda<Func<TEnumerable, int>>(body, enumerableParameter).Compile();        
+                return Expression.Lambda<Func<TEnumerable, int>>(body, enumerable).Compile();        
             }
         }
 
@@ -85,7 +61,7 @@ namespace NetFabric.Hyperlinq
             if (source == null) ThrowSourceNull();
 
 #if EXPRESSION_TREES
-            return CountMethod<TEnumerable, TSource>.Invoke(source);
+            return CountPredicateMethod<TEnumerable, TSource>.Invoke(source, predicate);
 #else
             var count = 0;
             using (var enumerator = source.GetEnumerator())
@@ -115,47 +91,22 @@ namespace NetFabric.Hyperlinq
                 var getEnumeratorMethod = enumerableType.GetMethod("GetEnumerator");
                 var enumeratorType = getEnumeratorMethod.ReturnType;
 
-                var enumerableParameter = Expression.Parameter(enumerableType, "enumerable");
-                var predicateParameter = Expression.Parameter(typeof(Func<,>).MakeGenericType(elementType, typeof(bool)), "predicate");
-                var enumeratorVariable = Expression.Variable(enumeratorType, "enumerator");
-                var countVariable = Expression.Variable(typeof(int), "count");
-                var breakLabel = Expression.Label("LoopBreak");
+                var enumerable = Expression.Parameter(enumerableType, "enumerable");
+                var predicate = Expression.Parameter(typeof(Func<,>).MakeGenericType(elementType, typeof(bool)), "predicate");
+                var enumerator = Expression.Variable(enumeratorType, "enumerator");
+                var count = Expression.Variable(typeof(int), "count");
 
-                Expression loop = Expression.Loop(
-                    Expression.IfThenElse(
-                        Expression.Call(enumeratorVariable, typeof(IEnumerator).GetMethod("MoveNext")),
+                var body = Expression.Block(new[] { enumerator, count },
+                    Expression.Assign(count, Expression.Constant(0)),
+                    Expression.Assign(enumerator, Expression.Call(enumerable, getEnumeratorMethod)),
+                    ExpressionEx.EnumerationLoop(enumerable, enumerator,
                         Expression.IfThen(
-                            Expression.Invoke(predicateParameter, Expression.Property(enumeratorVariable, "Current")),
-                            Expression.Assign(countVariable, Expression.Increment(countVariable))),
-                        Expression.Break(breakLabel)),
-                    breakLabel);
+                            Expression.Invoke(predicate, Expression.Property(enumerator, "Current")),
+                            Expression.Assign(count, Expression.Increment(count)))),
+                    count);
 
-                var disposeMethod = enumeratorType.GetMethod("Dispose", BindingFlags.Public | BindingFlags.Instance, Type.DefaultBinder, Type.EmptyTypes, new ParameterModifier[] { });
-                if (disposeMethod is null)
-                {
-                    if (typeof(IDisposable).IsAssignableFrom(enumeratorType))
-                    {
-                        loop = Expression.TryFinally(
-                           loop,
-                           Expression.Call(Expression.TypeAs(enumeratorVariable, typeof(IDisposable)), typeof(IDisposable).GetMethod("Dispose")));
-                    }
-                }
-                else
-                {
-                    loop = Expression.TryFinally(
-                       loop,
-                       Expression.Call(enumeratorVariable, disposeMethod));
-                }
-
-                var body = Expression.Block(new[] { enumeratorVariable, countVariable },
-                    Expression.Assign(countVariable, Expression.Constant(0)),
-                    Expression.Assign(enumeratorVariable, Expression.Call(enumerableParameter, getEnumeratorMethod)),
-                    loop,
-                    countVariable);
-
-                return Expression.Lambda<Func<TEnumerable, Func<TSource, bool>, int>>(body, enumerableParameter).Compile();        
+                return Expression.Lambda<Func<TEnumerable, Func<TSource, bool>, int>>(body, enumerable).Compile();        
             }
         }
-
     }
 }
