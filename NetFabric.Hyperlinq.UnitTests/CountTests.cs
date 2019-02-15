@@ -13,7 +13,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             // Arrange
 
             // Act
-            Action action = () => Enumerable.Count<IEnumerable<int>, IEnumerator<int>, int>(null);
+            Action action = () => Enumerable.Count<IEnumerable<int>, int>(null);
 
             // Assert
             action.Should()
