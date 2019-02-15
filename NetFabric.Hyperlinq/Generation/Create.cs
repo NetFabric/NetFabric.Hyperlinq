@@ -31,7 +31,7 @@ namespace NetFabric.Hyperlinq
             IEnumerator IEnumerable.GetEnumerator() => getEnumerator();
 
             public int Count()
-                => Count<CreateEnumerable<TEnumerator, TSource>, TEnumerator, TSource>(this);
+                => Count<CreateEnumerable<TEnumerator, TSource>, TSource>(this);
 
             public SelectEnumerable<CreateEnumerable<TEnumerator, TSource>, TEnumerator, TSource, TResult> Select<TResult>(Func<TSource, TResult> selector) 
                 => Select<CreateEnumerable<TEnumerator, TSource>, TEnumerator, TSource, TResult>(this, selector);
@@ -63,7 +63,7 @@ namespace NetFabric.Hyperlinq
                 => this;
 
             public TSource[] ToArray()
-                => ToArray<CreateEnumerable<TEnumerator, TSource>, TEnumerator, TSource>(this);
+                => ToArray<CreateEnumerable<TEnumerator, TSource>, TSource>(this);
 
             public List<TSource> ToList()
                 => ToList<CreateEnumerable<TEnumerator, TSource>, TEnumerator, TSource>(this);
