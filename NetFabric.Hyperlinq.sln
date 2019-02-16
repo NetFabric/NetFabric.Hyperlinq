@@ -21,6 +21,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetFabric.Hyperlinq.Analyze
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetFabric.Hyperlinq.Analyzer.Vsix", "NetFabric.Hyperlinq.Analyzer.Vsix\NetFabric.Hyperlinq.Analyzer.Vsix.csproj", "{3B74358F-11BB-418E-A5F8-425ADE18AB3D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetFabric.Hyperlinq.TestCollections", "NetFabric.Hyperlinq.TestCollections\NetFabric.Hyperlinq.TestCollections.csproj", "{40F15C4F-CD81-4F98-95FF-538185E4006C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{3B74358F-11BB-418E-A5F8-425ADE18AB3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3B74358F-11BB-418E-A5F8-425ADE18AB3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3B74358F-11BB-418E-A5F8-425ADE18AB3D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{40F15C4F-CD81-4F98-95FF-538185E4006C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{40F15C4F-CD81-4F98-95FF-538185E4006C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{40F15C4F-CD81-4F98-95FF-538185E4006C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{40F15C4F-CD81-4F98-95FF-538185E4006C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

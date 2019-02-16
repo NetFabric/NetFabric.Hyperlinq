@@ -2,9 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace NetFabric.Hyperlinq.UnitTests
+namespace NetFabric.Hyperlinq
 {
-    public static class MyEnumerable
+    public static class TestEnumerable
     {
         public static IEnumerable<int> ReferenceType(int count)
         {
