@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq.Expressions;
-using System.Reflection;
 
 namespace NetFabric.Hyperlinq
 {
@@ -45,21 +45,44 @@ namespace NetFabric.Hyperlinq
                     breakLabel);
 
             var enumeratorType = enumerator.Type;
-            var disposeMethod = enumeratorType.GetMethod("Dispose", BindingFlags.Public | BindingFlags.Instance, Type.DefaultBinder, Type.EmptyTypes, new ParameterModifier[] { });
-            if (disposeMethod is null)
+            if (enumeratorType.IsGenericType && enumeratorType.GetGenericTypeDefinition() == typeof(IEnumerator<>))
+            {
+                loop = Expression.TryFinally(
+                    loop,
+                    Expression.IfThen(
+                        Expression.NotEqual(enumerator, Expression.Constant(null)),
+                        Expression.Call(enumerator, typeof(IDisposable).GetMethod("Dispose"))));
+            }
+            else if (enumeratorType.IsValueType)
             {
                 if (typeof(IDisposable).IsAssignableFrom(enumeratorType))
                 {
                     loop = Expression.TryFinally(
-                       loop,
-                       Expression.Call(Expression.Convert(enumerator, typeof(IDisposable)), typeof(IDisposable).GetMethod("Dispose")));
+                        loop,
+                        Expression.Call(Expression.Convert(enumerator, typeof(IDisposable)), typeof(IDisposable).GetMethod("Dispose")));
                 }
             }
             else
             {
-                loop = Expression.TryFinally(
-                   loop,
-                   Expression.Call(enumerator, disposeMethod));
+                if (typeof(IDisposable).IsAssignableFrom(enumeratorType))
+                {
+                    loop = Expression.TryFinally(
+                        loop,
+                        Expression.IfThen(
+                            Expression.NotEqual(enumerator, Expression.Constant(null)),
+                            Expression.Call(Expression.Convert(enumerator, typeof(IDisposable)), typeof(IDisposable).GetMethod("Dispose"))));
+                }
+                else
+                {
+                    var disposable = Expression.Variable(typeof(IDisposable), "disposable");
+                    loop = Expression.TryFinally(
+                        loop,
+                        Expression.Block(new[] { disposable },
+                            Expression.Assign(disposable, Expression.TypeAs(enumerator, typeof(IDisposable))),
+                            Expression.IfThen(
+                                Expression.NotEqual(disposable, Expression.Constant(null)),
+                                Expression.Call(disposable, typeof(IDisposable).GetMethod("Dispose")))));
+                }
             }
             return loop;
         }
