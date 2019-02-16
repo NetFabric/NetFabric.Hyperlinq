@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Reflection;
 
@@ -8,7 +7,7 @@ namespace NetFabric.Hyperlinq
 {
     static class ExpressionEx
     {
-        public static Expression ForEach(ParameterExpression enumerable, Expression loopContent)
+        public static Expression ForEach(Expression enumerable, Expression loopContent)
         {
             var enumerableType = enumerable.Type;
             var getEnumerator = enumerableType.GetMethod("GetEnumerator");
@@ -20,7 +19,7 @@ namespace NetFabric.Hyperlinq
                 EnumerationLoop(enumerator, loopContent));
         }
 
-        public static Expression ForEach(ParameterExpression enumerable, ParameterExpression loopVar, Expression loopContent)
+        public static Expression ForEach(Expression enumerable, ParameterExpression loopVar, Expression loopContent)
         {
             var enumerableType = enumerable.Type;
             var getEnumerator = enumerableType.GetMethod("GetEnumerator");
@@ -37,8 +36,6 @@ namespace NetFabric.Hyperlinq
 
         static Expression EnumerationLoop(ParameterExpression enumerator, Expression loopContent)
         {
-            var enumeratorType = enumerator.Type;
-
             var breakLabel = Expression.Label("EnumerationBreak");
             Expression loop = Expression.Loop(
                     Expression.IfThenElse(
@@ -47,6 +44,7 @@ namespace NetFabric.Hyperlinq
                         Expression.Break(breakLabel)),
                     breakLabel);
 
+            var enumeratorType = enumerator.Type;
             var disposeMethod = enumeratorType.GetMethod("Dispose", BindingFlags.Public | BindingFlags.Instance, Type.DefaultBinder, Type.EmptyTypes, new ParameterModifier[] { });
             if (disposeMethod is null)
             {
