@@ -127,7 +127,7 @@ namespace NetFabric.Hyperlinq
                 => ValueReadOnlyList.ToArray<RangeReadOnlyList, ValueEnumerator, int>(this);
 
             public List<int> ToList()
-                => ValueReadOnlyCollection.ToList<RangeReadOnlyList, ValueEnumerator, int>(this);
+                => ValueReadOnlyList.ToList<RangeReadOnlyList, ValueEnumerator, int>(this);
         }
     }
 }

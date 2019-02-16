@@ -37,7 +37,7 @@ namespace NetFabric.Hyperlinq
             class Enumerator
                 : IEnumerator<TSource>
             {
-                TEnumerator enumerator;
+                readonly TEnumerator enumerator;
                 TSource current;
 
                 internal Enumerator(AsReadOnlyCollectionEnumerable<TEnumerable, TEnumerator, TSource> enumerable)
