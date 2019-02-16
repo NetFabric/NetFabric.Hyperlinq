@@ -16,6 +16,9 @@ namespace NetFabric.Hyperlinq
             if (source == null) ThrowSourceNull();
             if (source.Count == 0) return 0;
 
+#if EXPRESSION_TREES
+            return Enumerable.CountPredicateMethod<TEnumerable, TSource>.Invoke(source, predicate);
+#else
             var count = 0;
             using (var enumerator = (TEnumerator)source.GetEnumerator())
             {
@@ -26,6 +29,7 @@ namespace NetFabric.Hyperlinq
                 }
             }
             return count;
+#endif
 
             void ThrowSourceNull() => throw new ArgumentNullException(nameof(source));
         }

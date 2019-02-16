@@ -71,7 +71,7 @@ namespace NetFabric.Hyperlinq
             void ThrowSourceNull() => throw new ArgumentNullException(nameof(source));
         }
 
-        static class CountPredicateMethod<TEnumerable, TSource>
+        internal static class CountPredicateMethod<TEnumerable, TSource>
             where TEnumerable : IEnumerable<TSource>
         {
             public static Func<TEnumerable, Func<TSource, bool>, int> Invoke { get; } = Create();
