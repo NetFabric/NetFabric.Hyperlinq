@@ -24,7 +24,7 @@ namespace NetFabric.Hyperlinq.UnitTests
         }
 
         [Fact]
-        public void First_With_EmptyIEnumerable_Should_Succeed()
+        public void First_With_EmptyIEnumerable_Should_Throw()
         {
             // Arrange
             var empty = TestEnumerable.ValueType(0);
