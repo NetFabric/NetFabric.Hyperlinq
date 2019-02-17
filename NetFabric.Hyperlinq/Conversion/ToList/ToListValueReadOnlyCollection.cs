@@ -13,7 +13,8 @@ namespace NetFabric.Hyperlinq
 
             var count = source.Count();
             var list = new List<TSource>(count);
-            list.AddRange(source.AsEnumerable<TEnumerable, TEnumerator, TSource>());
+            if(count != 0)
+                list.AddRange(source.AsEnumerable<TEnumerable, TEnumerator, TSource>());
             return list;
 
             void ThrowSourceNull() => throw new ArgumentNullException(nameof(source));
