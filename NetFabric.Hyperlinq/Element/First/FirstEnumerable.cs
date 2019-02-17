@@ -34,24 +34,10 @@ namespace NetFabric.Hyperlinq
             public static Func<TEnumerable, TSource> Create()
             {
                 var elementType = typeof(TSource);
-                var enumerableType = typeof(TEnumerable);
-                var enumerable = Expression.Parameter(enumerableType, "enumerable");
-                var getEnumerator = enumerableType.GetMethod("GetEnumerator");
-                if (getEnumerator is null)
-                    getEnumerator = typeof(IEnumerable<>).MakeGenericType(elementType).GetMethod("GetEnumerator");
-                var enumeratorType = getEnumerator.ReturnType;
-                var enumerator = Expression.Variable(enumeratorType, "enumerator");
-                var returnTarget = Expression.Label(elementType);
+                var enumerable = Expression.Parameter(typeof(TEnumerable), "enumerable");
 
-                var body = Expression.Block(elementType, new[] { enumerator },
-                    Expression.Assign(enumerator, Expression.Call(enumerable, getEnumerator)),
-                    ExpressionEx.Using(enumerator,
-                        Expression.Block(new ParameterExpression[] { },
-                            Expression.IfThen(
-                                Expression.Not(Expression.Call(enumerator, typeof(IEnumerator).GetMethod("MoveNext"))),
-                                Expression.Call(typeof(ThrowHelper), "ThrowEmptySequence", new[] { elementType })),
-                            Expression.Return(returnTarget, Expression.Property(enumerator, "Current")))),
-                    Expression.Label(returnTarget, Expression.Default(elementType)));
+                var body = ExpressionEx.First<TEnumerable, TSource>(enumerable, 
+                    Expression.Call(typeof(ThrowHelper), "ThrowEmptySequence", new[] { elementType }));
 
                 return Expression.Lambda<Func<TEnumerable, TSource>>(body, enumerable).Compile();
             }
@@ -89,15 +75,9 @@ namespace NetFabric.Hyperlinq
                 var elementType = typeof(TSource);
                 var enumerable = Expression.Parameter(typeof(TEnumerable), "enumerable");
                 var predicate = Expression.Parameter(typeof(Func<,>).MakeGenericType(elementType, typeof(bool)), "predicate");
-                var current = Expression.Variable(elementType, "current");
-                var returnTarget = Expression.Label(elementType);
 
-                var body = Expression.Block(elementType, new ParameterExpression[] { },
-                    ExpressionEx.ForEach<TSource>(enumerable, current,
-                        Expression.IfThen(
-                            Expression.Invoke(predicate, current),
-                            Expression.Return(returnTarget, current))),
-                    Expression.Label(returnTarget, Expression.Call(typeof(ThrowHelper), "ThrowEmptySequence", new[] { elementType })));
+                var body = ExpressionEx.First<TEnumerable, TSource>(enumerable, predicate, 
+                    Expression.Call(typeof(ThrowHelper), "ThrowEmptySequence", new[] { elementType }));
 
                 return Expression.Lambda<Func<TEnumerable, Func<TSource, bool>, TSource>>(body, enumerable, predicate).Compile();
             }

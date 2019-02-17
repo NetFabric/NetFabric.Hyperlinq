@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 
 namespace NetFabric.Hyperlinq
 {
-    static class ExpressionEx
+    static partial class ExpressionEx
     {
         public static Expression ForEach<TSource>(Expression enumerable, Expression loopContent)
         {
