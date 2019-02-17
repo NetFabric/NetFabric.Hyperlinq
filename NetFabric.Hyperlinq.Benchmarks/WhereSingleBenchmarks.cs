@@ -11,51 +11,51 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [BenchmarkCategory("Array")]
         [Benchmark(Baseline = true)]
         public int Linq_Array()
-            => System.Linq.Enumerable.Where(array, _ => true).Single();
+            => System.Linq.Enumerable.Where(array, value => value == 0).Single();
 
         [BenchmarkCategory("List")]
         [Benchmark(Baseline = true)]
         public int Linq_List()
-            => System.Linq.Enumerable.Where(list, _ => true).Single();
+            => System.Linq.Enumerable.Where(list, value => value == 0).Single();
 
         [BenchmarkCategory("Range")]
         [Benchmark(Baseline = true)]
         public int Linq_Range()
-            => System.Linq.Enumerable.Where(linqRange, _ => true).Single();
+            => System.Linq.Enumerable.Where(linqRange, value => value == 0).Single();
 
         [BenchmarkCategory("Enumerable")]
         [Benchmark(Baseline = true)]
         public int Linq_Enumerable_Reference()
-            => System.Linq.Enumerable.Where(enumerableReference, _ => true).Single();
+            => System.Linq.Enumerable.Where(enumerableReference, value => value == 0).Single();
 
         [BenchmarkCategory("Enumerable")]
         [Benchmark]
         public int Linq_Enumerable_Value()
-            => System.Linq.Enumerable.Where(enumerableValue, _ => true).Single();
+            => System.Linq.Enumerable.Where(enumerableValue, value => value == 0).Single();
 
         [BenchmarkCategory("Array")]
         [Benchmark]
         public int Hyperlinq_Array()
-            => array.Where(_ => true).Single();
+            => array.Where(value => value == 0).Single();
 
         [BenchmarkCategory("List")]
         [Benchmark]
         public int Hyperlinq_List()
-            => list.Where(_ => true).Single();
+            => list.Where(value => value == 0).Single();
 
         [BenchmarkCategory("Range")]
         [Benchmark]
         public int Hyperlinq_Range()
-            => hyperlinqRange.Where(_ => true).Single();
+            => hyperlinqRange.Where(value => value == 0).Single();
 
         [BenchmarkCategory("Enumerable")]
         [Benchmark]
         public int Hyperlinq_Enumerable_Reference()
-            => enumerableReference.Where(_ => true).Single();
+            => enumerableReference.Where(value => value == 0).Single();
 
         [BenchmarkCategory("Enumerable")]
         [Benchmark]
         public int Hyperlinq_Enumerable_Value()
-            => enumerableValue.Where<TestEnumerable.Enumerable, TestEnumerable.Enumerable.Enumerator, int>(_ => true).Single();
+            => enumerableValue.Where<TestEnumerable.Enumerable, TestEnumerable.Enumerable.Enumerator, int>(value => value == 0).Single();
     }
 }

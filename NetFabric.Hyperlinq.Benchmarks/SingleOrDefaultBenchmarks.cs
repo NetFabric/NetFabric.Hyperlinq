@@ -1,13 +1,32 @@
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Configs;
+using System.Collections.Generic;
 
 namespace NetFabric.Hyperlinq.Benchmarks
 {
     [GroupBenchmarksBy(BenchmarkLogicalGroupRule.ByCategory)]
     [CategoriesColumn]
     [MemoryDiagnoser]
-    public class SingleOrDefaultBenchmarks : BenchmarksBase
+    public class SingleOrDefaultBenchmarks
     {
+        int[] array;
+        List<int> list;
+        IEnumerable<int> linqRange;
+        Enumerable.RangeReadOnlyList hyperlinqRange;
+        IEnumerable<int> enumerableReference;
+        TestEnumerable.Enumerable enumerableValue;
+
+        [GlobalSetup]
+        public void GlobalSetup()
+        {
+            linqRange = System.Linq.Enumerable.Range(0, 1);
+            hyperlinqRange = Enumerable.Range(0, 1);
+            array = hyperlinqRange.ToArray();
+            list = hyperlinqRange.ToList();
+            enumerableReference = TestEnumerable.ReferenceType(1);
+            enumerableValue = TestEnumerable.ValueType(1);
+        }
+
         [BenchmarkCategory("Array")]
         [Benchmark(Baseline = true)]
         public int Linq_Array() => 
