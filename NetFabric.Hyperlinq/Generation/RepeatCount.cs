@@ -7,11 +7,9 @@ namespace NetFabric.Hyperlinq
     {
         public static RepeatCountValueReadOnlyList<TSource> Repeat<TSource>(TSource value, int count)
         {
-            if (count < 0) ThrowCountOutOfRange();
+            if (count < 0) ThrowHelper.ThrowArgumentOutOfRangeException(nameof(count));
 
             return new RepeatCountValueReadOnlyList<TSource>(value, count);
-
-            void ThrowCountOutOfRange() => throw new ArgumentOutOfRangeException(nameof(count));
         }
 
         public readonly struct RepeatCountValueReadOnlyList<TSource>
@@ -35,11 +33,9 @@ namespace NetFabric.Hyperlinq
             {
                 get
                 {
-                    if(index < 0 || index >= count)
-                        ThrowIndexOutOfRange();
-                    return value;
+                    if (index < 0 || index >= count) ThrowHelper.ThrowIndexOutOfRangeException();
 
-                    void ThrowIndexOutOfRange() => throw new IndexOutOfRangeException();
+                    return value;
                 }
             }
 

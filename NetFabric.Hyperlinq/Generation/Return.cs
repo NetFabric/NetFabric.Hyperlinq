@@ -27,11 +27,9 @@ namespace NetFabric.Hyperlinq
             {
                 get
                 {
-                    if(index != 0) ThrowIndexOutOfRange();
+                    if(index != 0) ThrowHelper.ThrowIndexOutOfRangeException();
                     
                     return value;
-
-                    void ThrowIndexOutOfRange() => throw new IndexOutOfRangeException();
                 }
             }
 

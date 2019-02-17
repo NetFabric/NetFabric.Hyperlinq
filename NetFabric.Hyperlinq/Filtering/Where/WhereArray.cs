@@ -7,13 +7,10 @@ namespace NetFabric.Hyperlinq
     {
         public static WhereArray<TSource> Where<TSource>(this TSource[] source, Func<TSource, bool> predicate) 
         {
-            if (source == null) ThrowSourceNull();
-            if (predicate is null) ThrowPredicateNull();
+            if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
+            if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
 
             return new WhereArray<TSource>(source, predicate);
-
-            void ThrowSourceNull() => throw new ArgumentNullException(nameof(source));
-            void ThrowPredicateNull() => throw new ArgumentNullException(nameof(predicate));
         }
 
         public readonly struct WhereArray<TSource>

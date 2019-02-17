@@ -10,13 +10,10 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
             where TEnumerator : struct, IValueEnumerator<TSource>
         {
-            if (source == null) ThrowSourceNull();
-            if (predicate is null) ThrowPredicateNull();
+            if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
+            if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
 
             return new WhereValueReadOnlyList<TEnumerable, TEnumerator, TSource>(in source, predicate);
-
-            void ThrowSourceNull() => throw new ArgumentNullException(nameof(source));
-            void ThrowPredicateNull() => throw new ArgumentNullException(nameof(predicate));
         }
 
         public readonly struct WhereValueReadOnlyList<TEnumerable, TEnumerator, TSource>

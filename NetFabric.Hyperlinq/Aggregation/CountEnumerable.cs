@@ -11,7 +11,7 @@ namespace NetFabric.Hyperlinq
         public static int Count<TEnumerable, TSource>(this TEnumerable source)
             where TEnumerable : IEnumerable<TSource>
         {
-            if (source == null) ThrowSourceNull();
+            if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
 
 #if EXPRESSION_TREES
             return CountMethod<TEnumerable, TSource>.Invoke(source);
@@ -24,8 +24,6 @@ namespace NetFabric.Hyperlinq
             }
             return count;
 #endif
-
-            void ThrowSourceNull() => throw new ArgumentNullException(nameof(source));
         }
 
         static class CountMethod<TEnumerable, TSource>
@@ -51,7 +49,7 @@ namespace NetFabric.Hyperlinq
         public static int Count<TEnumerable, TSource>(this TEnumerable source, Func<TSource, bool> predicate)
             where TEnumerable : IEnumerable<TSource>
         {
-            if (source == null) ThrowSourceNull();
+            if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
 
 #if EXPRESSION_TREES
             return CountPredicateMethod<TEnumerable, TSource>.Invoke(source, predicate);
@@ -67,8 +65,6 @@ namespace NetFabric.Hyperlinq
             }
             return count;
 #endif
-
-            void ThrowSourceNull() => throw new ArgumentNullException(nameof(source));
         }
 
         internal static class CountPredicateMethod<TEnumerable, TSource>

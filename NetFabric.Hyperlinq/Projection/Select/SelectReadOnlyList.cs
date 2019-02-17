@@ -11,13 +11,10 @@ namespace NetFabric.Hyperlinq
             Func<TSource, TResult> selector)
             where TEnumerable : IReadOnlyList<TSource> 
         {
-            if(source == null) ThrowSourceNull();
-            if(selector is null) ThrowSelectorNull();
+            if(source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
+            if(selector is null) ThrowHelper.ThrowArgumentNullException(nameof(selector));
 
             return new SelectReadOnlyList<TEnumerable, TSource, TResult>(in source, selector);
-
-            void ThrowSourceNull() => throw new ArgumentNullException(nameof(source));
-            void ThrowSelectorNull() => throw new ArgumentNullException(nameof(selector));
         }
 
         public readonly struct SelectReadOnlyList<TEnumerable, TSource, TResult>

@@ -8,22 +8,18 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
             where TEnumerator : struct, IValueEnumerator<TSource>
         {
-            if (source == null) ThrowSourceNull();
-            if (source.Count() == 0) ThrowEmptySequence();
-            if (source.Count() > 1) ThrowNotSingleSequence();
+            if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
+            if (source.Count() == 0) ThrowHelper.ThrowEmptySequence();
+            if (source.Count() > 1) ThrowHelper.ThrowNotSingleSequence();
 
             return source[0];
-
-            void ThrowSourceNull() => throw new ArgumentNullException(nameof(source));
-            void ThrowEmptySequence() => throw new InvalidOperationException(Resource.EmptySequence);
-            void ThrowNotSingleSequence() => throw new InvalidOperationException(Resource.NotSingleSequence);
         }
 
         public static TSource Single<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, bool> predicate)
             where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
             where TEnumerator : struct, IValueEnumerator<TSource>
         {
-            if (source == null) ThrowSourceNull();
+            if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
 
             var index = 0;
             var count = source.Count();
@@ -37,7 +33,7 @@ namespace NetFabric.Hyperlinq
                     while (index < count)
                     {
                         if (predicate(source[index]))
-                            ThrowNotSingleSequence();
+                            ThrowHelper.ThrowNotSingleSequence();
 
                         index++;
                     }
@@ -45,12 +41,8 @@ namespace NetFabric.Hyperlinq
                 }
                 index++;
             }
-            ThrowEmptySequence();
+            ThrowHelper.ThrowEmptySequence();
             return default;
-
-            void ThrowSourceNull() => throw new ArgumentNullException(nameof(source));
-            void ThrowEmptySequence() => throw new InvalidOperationException(Resource.EmptySequence);
-            void ThrowNotSingleSequence() => throw new InvalidOperationException(Resource.NotSingleSequence);
         }
     }
 }

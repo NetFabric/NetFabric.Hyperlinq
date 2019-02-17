@@ -8,7 +8,7 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IValueEnumerable<TEnumerator>
             where TEnumerator : struct, IValueEnumerator
         {
-            if (source == null) ThrowSourceNull();
+            if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
 
             var count = 0;
             using (var enumerator = source.GetValueEnumerator())
@@ -17,15 +17,13 @@ namespace NetFabric.Hyperlinq
                     count++;
             }
             return count;
-
-            void ThrowSourceNull() => throw new ArgumentNullException(nameof(source));
         }
 
         public static int Count<TEnumerable, TEnumerator, TSource>(this TEnumerable source)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IValueEnumerator<TSource>
         {
-            if (source == null) ThrowSourceNull();
+            if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
 
             var count = 0;
             using (var enumerator = source.GetValueEnumerator())
@@ -34,15 +32,13 @@ namespace NetFabric.Hyperlinq
                     count++;
             }
             return count;
-
-            void ThrowSourceNull() => throw new ArgumentNullException(nameof(source));
         }
 
         public static int Count<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, bool> predicate)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IValueEnumerator<TSource>
         {
-            if (source == null) ThrowSourceNull();
+            if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
 
             var count = 0;
             using (var enumerator = source.GetValueEnumerator())
@@ -54,8 +50,6 @@ namespace NetFabric.Hyperlinq
                 }
             }
             return count;
-
-            void ThrowSourceNull() => throw new ArgumentNullException(nameof(source));
         }
     }
 }

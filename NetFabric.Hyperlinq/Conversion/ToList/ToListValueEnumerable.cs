@@ -9,7 +9,7 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IValueEnumerator<TSource>
         {
-            if (source == null) ThrowSourceNull();
+            if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
 
             var list = new List<TSource>();
             using (var enumerator = source.GetValueEnumerator())
@@ -18,8 +18,6 @@ namespace NetFabric.Hyperlinq
                     list.Add(current);
             }
             return list;
-
-            void ThrowSourceNull() => throw new ArgumentNullException(nameof(source));
         }
     }
 }

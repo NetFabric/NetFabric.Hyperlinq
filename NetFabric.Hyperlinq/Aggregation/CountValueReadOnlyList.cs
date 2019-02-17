@@ -13,7 +13,7 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
             where TEnumerator : struct, IValueEnumerator<TSource>
         {
-            if (source == null) ThrowSourceNull();
+            if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
             if (source.Count() == 0) return 0;
 
             var sourceCount = source.Count();
@@ -24,8 +24,6 @@ namespace NetFabric.Hyperlinq
                     count++;
             }
             return count;
-
-            void ThrowSourceNull() => throw new ArgumentNullException(nameof(source));
         }
     }
 }

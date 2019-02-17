@@ -22,8 +22,6 @@ namespace NetFabric.Hyperlinq
 
                 return enumerator.Current;
             }
-
-            void ThrowEmptySequence() => throw new InvalidOperationException(Resource.EmptySequence);
 #endif
         }
 
@@ -55,7 +53,7 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IEnumerable<TSource>
             where TEnumerator : IEnumerator<TSource>
         {
-            if (source == null) ThrowSourceNull();
+            if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
 
             using (var enumerator = (TEnumerator)source.GetEnumerator())
             {
@@ -65,12 +63,9 @@ namespace NetFabric.Hyperlinq
                     if (predicate(current))
                         return current;
                 }
-                ThrowEmptySequence();
+                ThrowHelper.ThrowEmptySequence();
                 return default;
             }
-
-            void ThrowSourceNull() => throw new ArgumentNullException(nameof(source));
-            void ThrowEmptySequence() => throw new InvalidOperationException(Resource.EmptySequence);
         }
     }
 }

@@ -16,16 +16,16 @@ namespace NetFabric.Hyperlinq
 
             public int Count() => 0;
 
-            public TSource this[int index] => throw new IndexOutOfRangeException();
+            public TSource this[int index] { get { ThrowHelper.ThrowIndexOutOfRangeException(); return default; } }
 
-            public readonly struct Enumerator 
+            public readonly struct Enumerator
             {
                 public TSource Current => default;
 
                 public bool MoveNext() => false;
             }
 
-            public readonly struct ValueEnumerator 
+            public readonly struct ValueEnumerator
                 : IValueEnumerator<TSource>
             {
                 public bool TryMoveNext(out TSource current)
@@ -41,30 +41,26 @@ namespace NetFabric.Hyperlinq
 
             public EmptyReadOnlyList<TSource> Select<TResult>(Func<TSource, TResult> selector)
             {
-                if (selector is null) ThrowSelectorNull();
+                if (selector is null) ThrowHelper.ThrowArgumentNullException(nameof(selector));
 
                 return this;
-
-                void ThrowSelectorNull() => throw new ArgumentNullException(nameof(selector));
             }
 
             public EmptyReadOnlyList<TSource> Where(Func<TSource, bool> predicate)
             {
-                if (predicate is null) ThrowPredicateNull();
+                if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
 
                 return this;
-
-                void ThrowPredicateNull() => throw new ArgumentNullException(nameof(predicate));
             }
 
-            public TSource First() => throw new InvalidOperationException(Resource.EmptySequence);
-            public TSource First(Func<TSource, bool> _) => throw new InvalidOperationException(Resource.EmptySequence);
+            public TSource First() { ThrowHelper.ThrowEmptySequence(); return default; }
+            public TSource First(Func<TSource, bool> _) { ThrowHelper.ThrowEmptySequence(); return default; }
 
             public TSource FirstOrDefault() => default;
             public TSource FirstOrDefault(Func<TSource, bool> _) => default;
 
-            public TSource Single() => throw new InvalidOperationException(Resource.EmptySequence);
-            public TSource Single(Func<TSource, bool> _) => throw new InvalidOperationException(Resource.EmptySequence);
+            public TSource Single() { ThrowHelper.ThrowEmptySequence(); return default; }
+            public TSource Single(Func<TSource, bool> _) { ThrowHelper.ThrowEmptySequence(); return default; }
 
             public TSource SingleOrDefault() => default;
             public TSource SingleOrDefault(Func<TSource, bool> _) => default;

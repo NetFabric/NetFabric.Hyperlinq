@@ -8,18 +8,15 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IValueEnumerator<TSource>
         {
-            if (source == null) ThrowSourceNull();
+            if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
             if (source.Count() == 0) return default;
-            if (source.Count() > 1) ThrowNotSingleSequence();
+            if (source.Count() > 1) ThrowHelper.ThrowNotSingleSequence();
 
             using (var enumerator = source.GetValueEnumerator())
             {
                 enumerator.TryMoveNext(out var current);
                 return current;
             }
-
-            void ThrowSourceNull() => throw new ArgumentNullException(nameof(source));
-            void ThrowNotSingleSequence() => throw new InvalidOperationException(Resource.NotSingleSequence);
         }
     }
 }

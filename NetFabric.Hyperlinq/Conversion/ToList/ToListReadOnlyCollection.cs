@@ -8,14 +8,12 @@ namespace NetFabric.Hyperlinq
         public static List<TSource> ToList<TEnumerable, TSource>(this TEnumerable source)
             where TEnumerable : IReadOnlyCollection<TSource>
         {
-            if (source == null) ThrowSourceNull();
+            if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
 
             var count = source.Count;
             var list = new List<TSource>(count);
             list.AddRange(source);
             return list;
-
-            void ThrowSourceNull() => throw new ArgumentNullException(nameof(source));
         }
     }
 }

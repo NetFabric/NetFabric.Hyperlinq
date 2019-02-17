@@ -9,7 +9,7 @@ namespace NetFabric.Hyperlinq
         public static List<TSource> ToList<TEnumerable, TSource>(this TEnumerable source)
             where TEnumerable : IEnumerable<TSource>
         {
-            if (source == null) ThrowSourceNull();
+            if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
 
 #if EXPRESSION_TREES
             return ToListMethod<TEnumerable, TSource>.Invoke(source);
@@ -22,8 +22,6 @@ namespace NetFabric.Hyperlinq
             }
             return list;
 #endif
-
-            void ThrowSourceNull() => throw new ArgumentNullException(nameof(source));
         }
 
         internal static class ToListMethod<TEnumerable, TSource>

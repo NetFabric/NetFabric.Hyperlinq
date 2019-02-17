@@ -8,11 +8,9 @@ namespace NetFabric.Hyperlinq
         public static RangeReadOnlyList Range(int start, int count)
         {
             var max = ((long)start) + count - 1;
-            if (count < 0 || max > int.MaxValue) ThrowCountOutOfRange();
+            if (count < 0 || max > int.MaxValue) ThrowHelper.ThrowArgumentOutOfRangeException(nameof(count));
 
             return new RangeReadOnlyList(start, count);
-
-            void ThrowCountOutOfRange() => throw new ArgumentOutOfRangeException(nameof(count));
         }
 
         public readonly struct RangeReadOnlyList
@@ -36,11 +34,9 @@ namespace NetFabric.Hyperlinq
             {
                 get
                 {
-                    if(index < 0 || index >= count) ThrowIndexOutOfRange();
+                    if (index < 0 || index >= count) ThrowHelper.ThrowIndexOutOfRangeException();
 
                     return index + start;
-
-                    void ThrowIndexOutOfRange() => throw new IndexOutOfRangeException();
                 }
             }
 

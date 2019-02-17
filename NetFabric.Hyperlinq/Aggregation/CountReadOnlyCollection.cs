@@ -13,7 +13,7 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IReadOnlyCollection<TSource>
             where TEnumerator : IEnumerator<TSource>
         {
-            if (source == null) ThrowSourceNull();
+            if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
             if (source.Count == 0) return 0;
 
 #if EXPRESSION_TREES
@@ -30,8 +30,6 @@ namespace NetFabric.Hyperlinq
             }
             return count;
 #endif
-
-            void ThrowSourceNull() => throw new ArgumentNullException(nameof(source));
         }
     }
 }

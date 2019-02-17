@@ -7,6 +7,12 @@ namespace NetFabric.Hyperlinq
         public static void ThrowArgumentNullException(string paramName)
             => throw new ArgumentNullException(paramName);
 
+        public static void ThrowArgumentOutOfRangeException(string paramName)
+            => throw new ArgumentOutOfRangeException(paramName);
+
+        public static void ThrowIndexOutOfRangeException()
+            => throw new IndexOutOfRangeException();
+
         public static void ThrowEmptySequence()
             => throw new InvalidOperationException(Resource.EmptySequence);
 

@@ -10,11 +10,9 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IValueEnumerator<TSource>
         {
-            if (source == null) ThrowSourceNull();
+            if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
 
             return new AsEnumerableEnumerable<TEnumerable, TEnumerator, TSource>(source);
-
-            void ThrowSourceNull() => throw new ArgumentNullException(nameof(source));
         }
 
         class AsEnumerableEnumerable<TEnumerable, TEnumerator, TSource>

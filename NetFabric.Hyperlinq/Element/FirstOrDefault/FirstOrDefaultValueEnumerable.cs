@@ -8,7 +8,7 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IValueEnumerator<TSource>
         {
-            if (source == null) ThrowSourceNull();
+            if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
 
             using (var enumerator = source.GetValueEnumerator())
             {
@@ -17,15 +17,13 @@ namespace NetFabric.Hyperlinq
 
                 return default;
             }
-
-            void ThrowSourceNull() => throw new ArgumentNullException(nameof(source));
         }
 
         public static TSource FirstOrDefault<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, bool> predicate)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IValueEnumerator<TSource>
         {
-            if (source == null) ThrowSourceNull();
+            if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
 
             using (var enumerator = source.GetValueEnumerator())
             {
@@ -37,8 +35,6 @@ namespace NetFabric.Hyperlinq
 
                 return default;
             }
-
-            void ThrowSourceNull() => throw new ArgumentNullException(nameof(source));
         }
     }
 }

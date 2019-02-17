@@ -9,7 +9,7 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IEnumerable<TSource>
             where TEnumerator : IEnumerator<TSource>
         {
-            if (source == null) ThrowSourceNull();
+            if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
 
             using (var enumerator = (TEnumerator)source.GetEnumerator())
             {
@@ -19,20 +19,17 @@ namespace NetFabric.Hyperlinq
                 var first = enumerator.Current;
 
                 if (enumerator.MoveNext())
-                    ThrowNotSingleSequence();
+                    ThrowHelper.ThrowNotSingleSequence();
 
                 return first;
             }
-
-            void ThrowSourceNull() => throw new ArgumentNullException(nameof(source));
-            void ThrowNotSingleSequence() => throw new InvalidOperationException(Resource.NotSingleSequence);
         }
 
         public static TSource SingleOrDefault<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, bool> predicate)
             where TEnumerable : IEnumerable<TSource>
             where TEnumerator : IEnumerator<TSource>
         {
-            if (source == null) ThrowSourceNull();
+            if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
 
             using (var enumerator = (TEnumerator)source.GetEnumerator())
             {
@@ -45,16 +42,13 @@ namespace NetFabric.Hyperlinq
                         while (enumerator.MoveNext())
                         {
                             if (predicate(enumerator.Current))
-                                ThrowNotSingleSequence();
+                                ThrowHelper.ThrowNotSingleSequence();
                         }
                         return first;
                     }
                 }
                 return default;
             }
-
-            void ThrowSourceNull() => throw new ArgumentNullException(nameof(source));
-            void ThrowNotSingleSequence() => throw new InvalidOperationException(Resource.NotSingleSequence);
         }
     }
 }

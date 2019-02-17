@@ -9,44 +9,36 @@ namespace NetFabric.Hyperlinq
 
         public static ref readonly TSource First<TSource>(this TSource[] source)
         {
-            if (source == null) ThrowSourceNull();
-            if (source.Length == 0) ThrowEmptySequence();
+            if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
+            if (source.Length == 0) ThrowHelper.ThrowEmptySequence();
 
             return ref source[0];
-
-            void ThrowSourceNull() => throw new ArgumentNullException(nameof(source));
-            void ThrowEmptySequence() => throw new InvalidOperationException(Resource.EmptySequence);
         }
 
         public static ref readonly TSource FirstOrDefault<TSource>(this TSource[] source)
         {
-            if (source == null) ThrowSourceNull();
+            if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
             if (source.Length == 0) return ref Default<TSource>.Value;
 
             return ref source[0];
-
-            void ThrowSourceNull() => throw new ArgumentNullException(nameof(source));
         }
 
         public static ref readonly TSource First<TSource>(this TSource[] source, Func<TSource, bool> predicate)
         {
-            if (source == null) ThrowSourceNull();
+            if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
 
             for (var index = 0; index < source.Length; index++)
             {
                 if (predicate(source[index]))
                     return ref source[index];
             }
-            ThrowEmptySequence();
+            ThrowHelper.ThrowEmptySequence();
             return ref source[0];
-
-            void ThrowSourceNull() => throw new ArgumentNullException(nameof(source));
-            void ThrowEmptySequence() => throw new InvalidOperationException(Resource.EmptySequence);
         }
 
         public static ref readonly TSource FirstOrDefault<TSource>(this TSource[] source, Func<TSource, bool> predicate)
         {
-            if (source == null) ThrowSourceNull();
+            if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
 
             for (var index = 0; index < source.Length; index++)
             {
@@ -54,57 +46,44 @@ namespace NetFabric.Hyperlinq
                     return ref source[index];
             }
             return ref Default<TSource>.Value;
-
-            void ThrowSourceNull() => throw new ArgumentNullException(nameof(source));
         }
 
         public static ref readonly TSource Single<TSource>(this TSource[] source)
         {
-            if (source == null) ThrowSourceNull();
-            if (source.Length == 0) ThrowEmptySequence();
-            if (source.Length > 1) ThrowNotSingleSequence();
+            if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
+            if (source.Length == 0) ThrowHelper.ThrowEmptySequence();
+            if (source.Length > 1) ThrowHelper.ThrowNotSingleSequence();
 
             return ref source[0];
-
-            void ThrowSourceNull() => throw new ArgumentNullException(nameof(source));
-            void ThrowEmptySequence() => throw new InvalidOperationException(Resource.EmptySequence);
-            void ThrowNotSingleSequence() => throw new InvalidOperationException(Resource.NotSingleSequence);
         }
 
         public static ref readonly TSource SingleOrDefault<TSource>(this TSource[] source)
         {
-            if (source == null) ThrowSourceNull();
+            if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
             if (source.Length == 0) return ref Default<TSource>.Value;
-            if (source.Length > 1) ThrowNotSingleSequence();
+            if (source.Length > 1) ThrowHelper.ThrowNotSingleSequence();
 
             return ref source[0];
-
-            void ThrowSourceNull() => throw new ArgumentNullException(nameof(source));
-            void ThrowNotSingleSequence() => throw new InvalidOperationException(Resource.NotSingleSequence);
         }
 
         public static ref readonly TSource Single<TSource>(this TSource[] source, Func<TSource, bool> predicate)
         {
-            if (source == null) ThrowSourceNull();
-            if (source.Length > 1) ThrowNotSingleSequence();
+            if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
+            if (source.Length > 1) ThrowHelper.ThrowNotSingleSequence();
 
             for (var index = 0; index < source.Length; index++)
             {
                 if (predicate(source[index]))
                     return ref source[index];
             }
-            ThrowEmptySequence();
+            ThrowHelper.ThrowEmptySequence();
             return ref source[0];
-
-            void ThrowSourceNull() => throw new ArgumentNullException(nameof(source));
-            void ThrowEmptySequence() => throw new InvalidOperationException(Resource.EmptySequence);
-            void ThrowNotSingleSequence() => throw new InvalidOperationException(Resource.NotSingleSequence);
         }
 
         public static ref readonly TSource SingleOrDefault<TSource>(this TSource[] source, Func<TSource, bool> predicate)
         {
-            if (source == null) ThrowSourceNull();
-            if (source.Length > 1) ThrowNotSingleSequence();
+            if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
+            if (source.Length > 1) ThrowHelper.ThrowNotSingleSequence();
 
             for (var index = 0; index < source.Length; index++)
             {
@@ -112,9 +91,6 @@ namespace NetFabric.Hyperlinq
                     return ref source[index];
             }
             return ref Default<TSource>.Value;
-
-            void ThrowSourceNull() => throw new ArgumentNullException(nameof(source));
-            void ThrowNotSingleSequence() => throw new InvalidOperationException(Resource.NotSingleSequence);
         }
 
         public static TSource[] ToArray<TSource>(this TSource[] source) 

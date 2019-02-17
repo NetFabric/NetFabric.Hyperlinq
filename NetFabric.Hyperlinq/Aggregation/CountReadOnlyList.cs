@@ -12,7 +12,7 @@ namespace NetFabric.Hyperlinq
         public static int Count<TEnumerable, TSource>(this TEnumerable source, Func<TSource, bool> predicate)
             where TEnumerable : IReadOnlyList<TSource>
         {
-            if (source == null) ThrowSourceNull();
+            if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
 
             var sourceCount = source.Count;
             var count = 0;
@@ -22,8 +22,6 @@ namespace NetFabric.Hyperlinq
                     count++;
             }
             return count;
-
-            void ThrowSourceNull() => throw new ArgumentNullException(nameof(source));
         }
     }
 }

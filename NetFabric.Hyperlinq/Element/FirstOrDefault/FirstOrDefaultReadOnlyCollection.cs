@@ -9,7 +9,7 @@ namespace NetFabric.Hyperlinq
             where TReadOnlyCollection : IReadOnlyCollection<TSource>
             where TEnumerator : IEnumerator<TSource>
         {
-            if (source == null) ThrowSourceNull();
+            if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
             if (source.Count == 0) return default;
 
             using (var enumerator = (TEnumerator)source.GetEnumerator())
@@ -17,8 +17,6 @@ namespace NetFabric.Hyperlinq
                 enumerator.MoveNext();
                 return enumerator.Current;
             }
-
-            void ThrowSourceNull() => throw new ArgumentNullException(nameof(source));
         }
     }
 }

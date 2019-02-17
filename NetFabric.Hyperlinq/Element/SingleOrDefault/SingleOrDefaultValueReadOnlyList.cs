@@ -8,21 +8,18 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
             where TEnumerator : struct, IValueEnumerator<TSource>
         {
-            if (source == null) ThrowSourceNull();
+            if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
             if (source.Count() == 0) return default;
-            if (source.Count() > 1) ThrowNotSingleSequence();
+            if (source.Count() > 1) ThrowHelper.ThrowNotSingleSequence();
 
             return source[0];
-
-            void ThrowSourceNull() => throw new ArgumentNullException(nameof(source));
-            void ThrowNotSingleSequence() => throw new InvalidOperationException(Resource.NotSingleSequence);
         }
 
         public static TSource SingleOrDefault<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, bool> predicate)
             where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
             where TEnumerator : struct, IValueEnumerator<TSource>
         {
-            if (source == null) ThrowSourceNull();
+            if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
 
             var index = 0;
             var count = source.Count();
@@ -36,7 +33,7 @@ namespace NetFabric.Hyperlinq
                     while (index < count)
                     {
                         if (predicate(source[index]))
-                            ThrowNotSingleSequence();
+                            ThrowHelper.ThrowNotSingleSequence();
 
                         index++;
                     }
@@ -46,9 +43,6 @@ namespace NetFabric.Hyperlinq
             }
 
             return default;
-
-            void ThrowSourceNull() => throw new ArgumentNullException(nameof(source));
-            void ThrowNotSingleSequence() => throw new InvalidOperationException(Resource.NotSingleSequence);
         }
     }
 }

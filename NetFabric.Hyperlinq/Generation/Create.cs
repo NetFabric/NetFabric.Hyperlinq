@@ -9,11 +9,9 @@ namespace NetFabric.Hyperlinq
         public static CreateEnumerable<TEnumerator, TSource> Create<TEnumerator, TSource>(Func<TEnumerator> getEnumerator) 
             where TEnumerator : IEnumerator<TSource>
         {
-            if(getEnumerator is null) ThrowGetEnumeratorNull();
+            if(getEnumerator is null) ThrowHelper.ThrowArgumentNullException(nameof(getEnumerator));
 
             return new CreateEnumerable<TEnumerator, TSource>(getEnumerator);
-
-            void ThrowGetEnumeratorNull() => throw new ArgumentNullException(nameof(getEnumerator));
         }
 
         public readonly struct CreateEnumerable<TEnumerator, TSource> : IEnumerable<TSource>

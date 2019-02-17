@@ -9,7 +9,7 @@ namespace NetFabric.Hyperlinq
         public static TSource[] ToArray<TEnumerable, TSource>(this TEnumerable source)
             where TEnumerable : IReadOnlyCollection<TSource>
         {
-            if (source == null) ThrowSourceNull();
+            if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
 
 #if EXPRESSION_TREES
             return ToArrayMethod<TEnumerable, TSource>.Invoke(source);
@@ -27,8 +27,6 @@ namespace NetFabric.Hyperlinq
             }
             return array;
 #endif
-
-            void ThrowSourceNull() => throw new ArgumentNullException(nameof(source));
         }
 
         static class ToArrayMethod<TEnumerable, TSource>
