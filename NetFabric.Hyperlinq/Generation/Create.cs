@@ -40,7 +40,7 @@ namespace NetFabric.Hyperlinq
                 => Where<CreateEnumerable<TEnumerator, TSource>, TEnumerator, TSource>(this, predicate);
 
             public TSource First() 
-                => First<CreateEnumerable<TEnumerator, TSource>, TEnumerator, TSource>(this); 
+                => First<CreateEnumerable<TEnumerator, TSource>, TSource>(this); 
             public TSource First(Func<TSource, bool> predicate) 
                 => First<CreateEnumerable<TEnumerator, TSource>, TEnumerator, TSource>(this, predicate);
 

@@ -34,7 +34,7 @@ namespace NetFabric.Hyperlinq
                         loopContent)));
         }
 
-        static Expression EnumerationLoop(ParameterExpression enumerator, Expression loopContent)
+        public static Expression EnumerationLoop(ParameterExpression enumerator, Expression loopContent)
         {
             var breakLabel = Expression.Label("EnumerationBreak");
             Expression loop = Expression.Loop(

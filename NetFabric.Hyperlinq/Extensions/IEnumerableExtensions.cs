@@ -22,7 +22,7 @@ namespace NetFabric.Hyperlinq
             => Enumerable.Where<IEnumerable<TSource>, IEnumerator<TSource>, TSource>(source, predicate);
 
         public static TSource First<TSource>(this IEnumerable<TSource> source) 
-            => Enumerable.First<IEnumerable<TSource>, IEnumerator<TSource>, TSource>(source);
+            => Enumerable.First<IEnumerable<TSource>, TSource>(source);
 
         public static TSource First<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate) 
             => Enumerable.First<IEnumerable<TSource>, IEnumerator<TSource>, TSource>(source, predicate);
