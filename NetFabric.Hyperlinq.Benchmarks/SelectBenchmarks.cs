@@ -6,7 +6,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
     [GroupBenchmarksBy(BenchmarkLogicalGroupRule.ByCategory)]
     [CategoriesColumn]
     [MemoryDiagnoser]
-    public class SelectForEachBenchmarks : BenchmarksBase
+    public class SelectBenchmarks : BenchmarksBase
     {
         [BenchmarkCategory("Array")]
         [Benchmark(Baseline = true)]
