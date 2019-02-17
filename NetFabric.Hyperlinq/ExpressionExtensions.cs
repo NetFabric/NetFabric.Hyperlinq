@@ -40,13 +40,9 @@ namespace NetFabric.Hyperlinq
 
         static Expression EnumerationLoop(ParameterExpression enumerator, Expression loopContent)
         {
-            var breakLabel = Expression.Label("EnumerationBreak");
-            Expression loop = Expression.Loop(
-                    Expression.IfThenElse(
-                        Expression.Call(enumerator, typeof(IEnumerator).GetMethod("MoveNext")),
-                        loopContent,
-                        Expression.Break(breakLabel)),
-                    breakLabel);
+            var loop = While(
+                Expression.Call(enumerator, typeof(IEnumerator).GetMethod("MoveNext")),
+                loopContent);
 
             var enumeratorType = enumerator.Type;
             if (typeof(IDisposable).IsAssignableFrom(enumeratorType))
@@ -97,6 +93,17 @@ namespace NetFabric.Hyperlinq
                 Expression.IfThen(
                     Expression.NotEqual(variable, Expression.Constant(null)),
                     Expression.Call(Expression.Convert(variable, typeof(IDisposable)), getMethod)));
+        }
+
+        public static Expression While(Expression loopCondition, Expression loopContent)
+        {
+            var breakLabel = Expression.Label();
+            return Expression.Loop(
+                Expression.IfThenElse(
+                    loopCondition,
+                    loopContent,
+                    Expression.Break(breakLabel)),
+                breakLabel);
         }
     }
 }
