@@ -39,7 +39,7 @@ namespace NetFabric.Hyperlinq
 
                 var body = Expression.Block(new[] { count },
                     Expression.Assign(count, Expression.Constant(0)),
-                    ExpressionEx.ForEach(enumerable,
+                    ExpressionEx.ForEach<TSource>(enumerable,
                         Expression.Assign(count, Expression.Increment(count))),
                     count);
 
@@ -83,7 +83,7 @@ namespace NetFabric.Hyperlinq
 
                 var body = Expression.Block(new ParameterExpression[] { count },
                     Expression.Assign(count, Expression.Constant(0)),
-                    ExpressionEx.ForEach(enumerable, current,
+                    ExpressionEx.ForEach<TSource>(enumerable, current,
                         Expression.IfThen(
                             Expression.Invoke(predicate, current),
                             Expression.Assign(count, Expression.Increment(count)))),

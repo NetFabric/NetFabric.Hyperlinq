@@ -47,7 +47,7 @@ namespace NetFabric.Hyperlinq
                     Expression.Assign(count, Expression.Property(enumerable, "Count")),
                     Expression.Assign(array, Expression.NewArrayBounds(typeof(TSource), count)),
                     Expression.Assign(index, Expression.Constant(0)),
-                    ExpressionEx.ForEach( enumerable, current,
+                    ExpressionEx.ForEach<TSource>( enumerable, current,
                         Expression.Block(new[] { index, current }, 
                             Expression.Assign(Expression.ArrayIndex(array, index), current),
                             Expression.Assign(index, Expression.Increment(index)))),

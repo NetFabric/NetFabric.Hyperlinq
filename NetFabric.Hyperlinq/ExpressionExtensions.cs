@@ -7,10 +7,12 @@ namespace NetFabric.Hyperlinq
 {
     static class ExpressionEx
     {
-        public static Expression ForEach(Expression enumerable, Expression loopContent)
+        public static Expression ForEach<TSource>(Expression enumerable, Expression loopContent)
         {
             var enumerableType = enumerable.Type;
             var getEnumerator = enumerableType.GetMethod("GetEnumerator");
+            if (getEnumerator is null)
+                getEnumerator = typeof(IEnumerable<>).MakeGenericType(typeof(TSource)).GetMethod("GetEnumerator");
             var enumeratorType = getEnumerator.ReturnType;
             var enumerator = Expression.Variable(enumeratorType, "enumerator");
 
@@ -19,10 +21,12 @@ namespace NetFabric.Hyperlinq
                 EnumerationLoop(enumerator, loopContent));
         }
 
-        public static Expression ForEach(Expression enumerable, ParameterExpression loopVar, Expression loopContent)
+        public static Expression ForEach<TSource>(Expression enumerable, ParameterExpression loopVar, Expression loopContent)
         {
             var enumerableType = enumerable.Type;
             var getEnumerator = enumerableType.GetMethod("GetEnumerator");
+            if (getEnumerator is null)
+                getEnumerator = typeof(IEnumerable<>).MakeGenericType(typeof(TSource)).GetMethod("GetEnumerator");
             var enumeratorType = getEnumerator.ReturnType;
             var enumerator = Expression.Variable(enumeratorType, "enumerator");
 

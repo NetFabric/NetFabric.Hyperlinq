@@ -26,7 +26,7 @@ namespace NetFabric.Hyperlinq
 #endif
         }
 
-        static class FirstMethod<TEnumerable, TSource>
+        internal static class FirstMethod<TEnumerable, TSource>
             where TEnumerable : IEnumerable<TSource>
         {
             public static Func<TEnumerable, TSource> Invoke { get; } = Create();
@@ -37,6 +37,8 @@ namespace NetFabric.Hyperlinq
                 var enumerableType = typeof(TEnumerable);
                 var enumerable = Expression.Parameter(enumerableType, "enumerable");
                 var getEnumerator = enumerableType.GetMethod("GetEnumerator");
+                if (getEnumerator is null)
+                    getEnumerator = typeof(IEnumerable<>).MakeGenericType(elementType).GetMethod("GetEnumerator");
                 var enumeratorType = getEnumerator.ReturnType;
                 var enumerator = Expression.Variable(enumeratorType, "enumerator");
                 var returnTarget = Expression.Label(elementType);
@@ -91,7 +93,7 @@ namespace NetFabric.Hyperlinq
                 var returnTarget = Expression.Label(elementType);
 
                 var body = Expression.Block(elementType, new ParameterExpression[] { },
-                    ExpressionEx.ForEach(enumerable, current,
+                    ExpressionEx.ForEach<TSource>(enumerable, current,
                         Expression.IfThen(
                             Expression.Invoke(predicate, current),
                             Expression.Return(returnTarget, current))),

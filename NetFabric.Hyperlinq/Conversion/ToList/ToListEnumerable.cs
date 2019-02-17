@@ -39,7 +39,7 @@ namespace NetFabric.Hyperlinq
 
                 var body = Expression.Block(new ParameterExpression[] { list },
                     Expression.Assign(list, Expression.New(listType)),
-                    ExpressionEx.ForEach(enumerable, current,
+                    ExpressionEx.ForEach<TSource>(enumerable, current,
                         Expression.Call(list, listType.GetMethod("Add"), current)),
                     list);
 
