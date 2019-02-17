@@ -9,7 +9,7 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IReadOnlyList<TSource>
         {
             if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
-            if (source.Count == 0) ThrowHelper.ThrowEmptySequence();
+            if (source.Count == 0) ThrowHelper.ThrowEmptySequence<TSource>();
 
             return source[0];
         }
@@ -24,7 +24,7 @@ namespace NetFabric.Hyperlinq
                 if (predicate(source[index]))
                     return source[index];
             }
-            ThrowHelper.ThrowEmptySequence();
+            ThrowHelper.ThrowEmptySequence<TSource>();
             return default;
         }
     }

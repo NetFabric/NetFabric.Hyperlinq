@@ -13,10 +13,10 @@ namespace NetFabric.Hyperlinq
             using (var enumerator = source.GetValueEnumerator())
             {
                 if (!enumerator.TryMoveNext(out var first))
-                    ThrowHelper.ThrowEmptySequence();
+                    ThrowHelper.ThrowEmptySequence<TSource>();
 
                 if (enumerator.TryMoveNext())
-                    ThrowHelper.ThrowNotSingleSequence();
+                    ThrowHelper.ThrowNotSingleSequence<TSource>();
 
                 return first;
             }
@@ -38,13 +38,12 @@ namespace NetFabric.Hyperlinq
                         while (enumerator.TryMoveNext(out var current))
                         {
                             if (predicate(current))
-                                ThrowHelper.ThrowNotSingleSequence();
+                                ThrowHelper.ThrowNotSingleSequence<TSource>();
                         }
                         return first;
                     }
                 }
-                ThrowHelper.ThrowEmptySequence();
-                return default;
+                return ThrowHelper.ThrowEmptySequence<TSource>();
             }
         }
     }

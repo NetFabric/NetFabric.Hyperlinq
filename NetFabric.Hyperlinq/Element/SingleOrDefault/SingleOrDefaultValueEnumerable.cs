@@ -16,7 +16,7 @@ namespace NetFabric.Hyperlinq
                     return default;
 
                 if (enumerator.TryMoveNext())
-                    ThrowHelper.ThrowNotSingleSequence();
+                    ThrowHelper.ThrowNotSingleSequence<TSource>();
 
                 return first;
             }
@@ -38,7 +38,7 @@ namespace NetFabric.Hyperlinq
                         while (enumerator.TryMoveNext(out var current))
                         {
                             if (predicate(current))
-                                ThrowHelper.ThrowNotSingleSequence();
+                                ThrowHelper.ThrowNotSingleSequence<TSource>();
                         }
                         return first;
                     }

@@ -11,7 +11,7 @@ namespace NetFabric.Hyperlinq
         {
             if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
             if (source.Count == 0) return default;
-            if (source.Count > 1) ThrowHelper.ThrowNotSingleSequence();
+            if (source.Count > 1) ThrowHelper.ThrowNotSingleSequence<TSource>();
 
             using (var enumerator = (TEnumerator)source.GetEnumerator())
             {

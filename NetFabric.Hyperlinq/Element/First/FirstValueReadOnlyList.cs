@@ -9,7 +9,7 @@ namespace NetFabric.Hyperlinq
             where TEnumerator : struct, IValueEnumerator<TSource>
         {
             if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
-            if (source.Count() == 0) ThrowHelper.ThrowEmptySequence();
+            if (source.Count() == 0) ThrowHelper.ThrowEmptySequence<TSource>();
 
             return source[0];
         }
@@ -25,8 +25,7 @@ namespace NetFabric.Hyperlinq
                 if (predicate(source[index]))
                     return source[index];
             }
-            ThrowHelper.ThrowEmptySequence();
-            return default;
+            return ThrowHelper.ThrowEmptySequence<TSource>();
         }
     }
 }

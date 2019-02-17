@@ -15,7 +15,7 @@ namespace NetFabric.Hyperlinq
             return ToListMethod<TEnumerable, TSource>.Invoke(source);
 #else
             var list = new List<TSource>();
-            using (var enumerator = (TEnumerator)source.GetEnumerator())
+            using (var enumerator = source.GetEnumerator())
             {
                 while (enumerator.MoveNext())
                     list.Add(enumerator.Current);

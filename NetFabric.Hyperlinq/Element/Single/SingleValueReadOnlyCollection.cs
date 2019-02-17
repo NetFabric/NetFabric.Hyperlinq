@@ -9,8 +9,8 @@ namespace NetFabric.Hyperlinq
             where TEnumerator : struct, IValueEnumerator<TSource>
         {
             if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
-            if (source.Count() == 0) ThrowHelper.ThrowEmptySequence();
-            if (source.Count() > 1) ThrowHelper.ThrowNotSingleSequence();
+            if (source.Count() == 0) ThrowHelper.ThrowEmptySequence<TSource>();
+            if (source.Count() > 1) ThrowHelper.ThrowNotSingleSequence<TSource>();
 
             using (var enumerator = source.GetValueEnumerator())
             {

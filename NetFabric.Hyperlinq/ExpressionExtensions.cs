@@ -34,7 +34,7 @@ namespace NetFabric.Hyperlinq
                         loopContent)));
         }
 
-        public static Expression EnumerationLoop(ParameterExpression enumerator, Expression loopContent)
+        static Expression EnumerationLoop(ParameterExpression enumerator, Expression loopContent)
         {
             var breakLabel = Expression.Label("EnumerationBreak");
             Expression loop = Expression.Loop(
@@ -45,46 +45,54 @@ namespace NetFabric.Hyperlinq
                     breakLabel);
 
             var enumeratorType = enumerator.Type;
-            if (enumeratorType.IsGenericType && enumeratorType.GetGenericTypeDefinition() == typeof(IEnumerator<>))
+            if (typeof(IDisposable).IsAssignableFrom(enumeratorType))
+                return Using(enumerator, loop);
+
+            if (!enumeratorType.IsValueType)
             {
-                loop = Expression.TryFinally(
+                var disposable = Expression.Variable(typeof(IDisposable), "disposable");
+                return Expression.TryFinally(
                     loop,
-                    Expression.IfThen(
-                        Expression.NotEqual(enumerator, Expression.Constant(null)),
-                        Expression.Call(enumerator, typeof(IDisposable).GetMethod("Dispose"))));
-            }
-            else if (enumeratorType.IsValueType)
-            {
-                if (typeof(IDisposable).IsAssignableFrom(enumeratorType))
-                {
-                    loop = Expression.TryFinally(
-                        loop,
-                        Expression.Call(Expression.Convert(enumerator, typeof(IDisposable)), typeof(IDisposable).GetMethod("Dispose")));
-                }
-            }
-            else
-            {
-                if (typeof(IDisposable).IsAssignableFrom(enumeratorType))
-                {
-                    loop = Expression.TryFinally(
-                        loop,
+                    Expression.Block(new[] { disposable },
+                        Expression.Assign(disposable, Expression.TypeAs(enumerator, typeof(IDisposable))),
                         Expression.IfThen(
-                            Expression.NotEqual(enumerator, Expression.Constant(null)),
-                            Expression.Call(Expression.Convert(enumerator, typeof(IDisposable)), typeof(IDisposable).GetMethod("Dispose"))));
-                }
-                else
-                {
-                    var disposable = Expression.Variable(typeof(IDisposable), "disposable");
-                    loop = Expression.TryFinally(
-                        loop,
-                        Expression.Block(new[] { disposable },
-                            Expression.Assign(disposable, Expression.TypeAs(enumerator, typeof(IDisposable))),
-                            Expression.IfThen(
-                                Expression.NotEqual(disposable, Expression.Constant(null)),
-                                Expression.Call(disposable, typeof(IDisposable).GetMethod("Dispose")))));
-                }
+                            Expression.NotEqual(disposable, Expression.Constant(null)),
+                            Expression.Call(disposable, typeof(IDisposable).GetMethod("Dispose")))));
             }
+
             return loop;
+        }
+
+        public static Expression Using(ParameterExpression variable, Expression content)
+        {
+            var variableType = variable.Type;
+
+            if (!typeof(IDisposable).IsAssignableFrom(variableType))
+                throw new Exception($"'{variableType.FullName}': type used in a using statement must be implicitly convertible to 'System.IDisposable'");
+
+            var getMethod = typeof(IDisposable).GetMethod("Dispose");
+
+            if (variableType.IsValueType)
+            {
+                return Expression.TryFinally(
+                    content,
+                    Expression.Call(Expression.Convert(variable, typeof(IDisposable)), getMethod));
+            }
+
+            if (variableType.IsInterface)
+            {
+                return Expression.TryFinally(
+                    content,
+                    Expression.IfThen(
+                        Expression.NotEqual(variable, Expression.Constant(null)),
+                        Expression.Call(variable, getMethod)));
+            }
+
+            return Expression.TryFinally(
+                content,
+                Expression.IfThen(
+                    Expression.NotEqual(variable, Expression.Constant(null)),
+                    Expression.Call(Expression.Convert(variable, typeof(IDisposable)), getMethod)));
         }
     }
 }

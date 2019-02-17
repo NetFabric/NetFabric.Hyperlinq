@@ -10,7 +10,7 @@ namespace NetFabric.Hyperlinq
             where TEnumerator : IEnumerator<TSource>
         {
             if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
-            if (source.Count == 0) ThrowHelper.ThrowEmptySequence();
+            if (source.Count == 0) ThrowHelper.ThrowEmptySequence<TSource>();
 
             using (var enumerator = (TEnumerator)source.GetEnumerator())
             {

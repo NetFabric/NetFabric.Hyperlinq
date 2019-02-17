@@ -106,7 +106,7 @@ namespace NetFabric.Hyperlinq
                 => ValueEnumerable.Where<WhereEnumerable<TEnumerable, TEnumerator, TSource>, ValueEnumerator, TSource>(this, predicate);
 
             public TSource First()
-                => Enumerable.First<TEnumerable, TEnumerator, TSource>(source, predicate);
+                => Enumerable.First<TEnumerable, TSource>(source, predicate);
             public TSource First(Func<TSource, bool> predicate)
                 => ValueEnumerable.First<WhereEnumerable<TEnumerable, TEnumerator, TSource>, ValueEnumerator, TSource>(this, predicate);
 

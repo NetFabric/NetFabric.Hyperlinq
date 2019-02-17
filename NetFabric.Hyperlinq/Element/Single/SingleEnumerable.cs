@@ -14,12 +14,12 @@ namespace NetFabric.Hyperlinq
             using (var enumerator = (TEnumerator)source.GetEnumerator())
             {
                 if (!enumerator.MoveNext())
-                    ThrowHelper.ThrowEmptySequence();
+                    ThrowHelper.ThrowEmptySequence<TSource>();
 
                 var first = enumerator.Current;
 
                 if (enumerator.MoveNext())
-                    ThrowHelper.ThrowNotSingleSequence();
+                    ThrowHelper.ThrowNotSingleSequence<TSource>();
 
                 return first;
             }
@@ -42,13 +42,12 @@ namespace NetFabric.Hyperlinq
                         while (enumerator.MoveNext())
                         {
                             if (predicate(enumerator.Current))
-                                ThrowHelper.ThrowNotSingleSequence();
+                                ThrowHelper.ThrowNotSingleSequence<TSource>();
                         }
                         return first;
                     }
                 }
-                ThrowHelper.ThrowEmptySequence();
-                return default;
+                return ThrowHelper.ThrowEmptySequence<TSource>();
             }
         }
     }

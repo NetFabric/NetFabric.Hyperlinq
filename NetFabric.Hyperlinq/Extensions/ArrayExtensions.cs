@@ -10,7 +10,7 @@ namespace NetFabric.Hyperlinq
         public static ref readonly TSource First<TSource>(this TSource[] source)
         {
             if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
-            if (source.Length == 0) ThrowHelper.ThrowEmptySequence();
+            if (source.Length == 0) ThrowHelper.ThrowEmptySequence<TSource>();
 
             return ref source[0];
         }
@@ -32,7 +32,7 @@ namespace NetFabric.Hyperlinq
                 if (predicate(source[index]))
                     return ref source[index];
             }
-            ThrowHelper.ThrowEmptySequence();
+            ThrowHelper.ThrowEmptySequence<TSource>();
             return ref source[0];
         }
 
@@ -51,8 +51,8 @@ namespace NetFabric.Hyperlinq
         public static ref readonly TSource Single<TSource>(this TSource[] source)
         {
             if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
-            if (source.Length == 0) ThrowHelper.ThrowEmptySequence();
-            if (source.Length > 1) ThrowHelper.ThrowNotSingleSequence();
+            if (source.Length == 0) ThrowHelper.ThrowEmptySequence<TSource>();
+            if (source.Length > 1) ThrowHelper.ThrowNotSingleSequence<TSource>();
 
             return ref source[0];
         }
@@ -61,7 +61,7 @@ namespace NetFabric.Hyperlinq
         {
             if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
             if (source.Length == 0) return ref Default<TSource>.Value;
-            if (source.Length > 1) ThrowHelper.ThrowNotSingleSequence();
+            if (source.Length > 1) ThrowHelper.ThrowNotSingleSequence<TSource>();
 
             return ref source[0];
         }
@@ -69,21 +69,21 @@ namespace NetFabric.Hyperlinq
         public static ref readonly TSource Single<TSource>(this TSource[] source, Func<TSource, bool> predicate)
         {
             if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
-            if (source.Length > 1) ThrowHelper.ThrowNotSingleSequence();
+            if (source.Length > 1) ThrowHelper.ThrowNotSingleSequence<TSource>();
 
             for (var index = 0; index < source.Length; index++)
             {
                 if (predicate(source[index]))
                     return ref source[index];
             }
-            ThrowHelper.ThrowEmptySequence();
+            ThrowHelper.ThrowEmptySequence<TSource>();
             return ref source[0];
         }
 
         public static ref readonly TSource SingleOrDefault<TSource>(this TSource[] source, Func<TSource, bool> predicate)
         {
             if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
-            if (source.Length > 1) ThrowHelper.ThrowNotSingleSequence();
+            if (source.Length > 1) ThrowHelper.ThrowNotSingleSequence<TSource>();
 
             for (var index = 0; index < source.Length; index++)
             {

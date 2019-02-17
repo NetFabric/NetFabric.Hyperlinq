@@ -13,10 +13,10 @@ namespace NetFabric.Hyperlinq
         public static void ThrowIndexOutOfRangeException()
             => throw new IndexOutOfRangeException();
 
-        public static void ThrowEmptySequence()
+        public static T ThrowEmptySequence<T>()
             => throw new InvalidOperationException(Resource.EmptySequence);
 
-        public static void ThrowNotSingleSequence()
+        public static T ThrowNotSingleSequence<T>()
             => throw new InvalidOperationException(Resource.NotSingleSequence);
     }
 }

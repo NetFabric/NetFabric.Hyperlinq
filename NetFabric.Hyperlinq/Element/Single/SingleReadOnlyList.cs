@@ -9,8 +9,8 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IReadOnlyList<TSource>
         {
             if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
-            if (source.Count == 0) ThrowHelper.ThrowEmptySequence();
-            if (source.Count > 1) ThrowHelper.ThrowNotSingleSequence();
+            if (source.Count == 0) ThrowHelper.ThrowEmptySequence<TSource>();
+            if (source.Count > 1) ThrowHelper.ThrowNotSingleSequence<TSource>();
 
             return source[0];
         }
@@ -32,7 +32,7 @@ namespace NetFabric.Hyperlinq
                     while (index < count)
                     {
                         if (predicate(source[index]))
-                            ThrowHelper.ThrowNotSingleSequence();
+                            ThrowHelper.ThrowNotSingleSequence<TSource>();
 
                         index++;
                     }
@@ -40,8 +40,7 @@ namespace NetFabric.Hyperlinq
                 }
                 index++;
             }
-            ThrowHelper.ThrowEmptySequence();
-            return default;
+            return ThrowHelper.ThrowEmptySequence<TSource>();
         }
     }
 }

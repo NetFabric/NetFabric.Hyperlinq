@@ -15,7 +15,7 @@ namespace NetFabric.Hyperlinq
                 if (enumerator.TryMoveNext(out var current))
                  return current; 
 
-                ThrowHelper.ThrowEmptySequence();
+                ThrowHelper.ThrowEmptySequence<TSource>();
                 return default;
             }
         }
@@ -33,7 +33,7 @@ namespace NetFabric.Hyperlinq
                     if (predicate(current))
                         return current;
                 }
-                ThrowHelper.ThrowEmptySequence();
+                ThrowHelper.ThrowEmptySequence<TSource>();
                 return default;
             }
         }

@@ -53,14 +53,14 @@ namespace NetFabric.Hyperlinq
                 return this;
             }
 
-            public TSource First() { ThrowHelper.ThrowEmptySequence(); return default; }
-            public TSource First(Func<TSource, bool> _) { ThrowHelper.ThrowEmptySequence(); return default; }
+            public TSource First() => ThrowHelper.ThrowEmptySequence<TSource>();
+            public TSource First(Func<TSource, bool> _) => ThrowHelper.ThrowEmptySequence<TSource>();
 
             public TSource FirstOrDefault() => default;
             public TSource FirstOrDefault(Func<TSource, bool> _) => default;
 
-            public TSource Single() { ThrowHelper.ThrowEmptySequence(); return default; }
-            public TSource Single(Func<TSource, bool> _) { ThrowHelper.ThrowEmptySequence(); return default; }
+            public TSource Single() => ThrowHelper.ThrowEmptySequence<TSource>();
+            public TSource Single(Func<TSource, bool> _) => ThrowHelper.ThrowEmptySequence<TSource>();
 
             public TSource SingleOrDefault() => default;
             public TSource SingleOrDefault(Func<TSource, bool> _) => default;
