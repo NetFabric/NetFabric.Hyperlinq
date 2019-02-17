@@ -31,6 +31,6 @@ namespace NetFabric.Hyperlinq
             => ReadOnlyCollection.SingleOrDefault<SortedDictionary<TKey, TValue>.KeyCollection, SortedDictionary<TKey, TValue>.KeyCollection.Enumerator, TKey>(source);
 
         public static List<TKey> ToList<TKey, TValue>(this SortedDictionary<TKey, TValue>.KeyCollection source)
-            => ReadOnlyCollection.ToList<SortedDictionary<TKey, TValue>.KeyCollection, TKey>(source);
+            => ReadOnlyCollection.ToList<SortedDictionary<TKey, TValue>.KeyCollection, SortedDictionary<TKey, TValue>.KeyCollection.Enumerator, TKey>(source);
     }
 }

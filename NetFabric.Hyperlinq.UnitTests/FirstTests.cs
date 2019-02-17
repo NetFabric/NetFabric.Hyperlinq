@@ -13,7 +13,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             // Arrange
 
             // Act
-            Action action = () => Enumerable.First<IEnumerable<int>, int>(null);
+            Action action = () => Enumerable.First<IEnumerable<int>, IEnumerator<int>, int>(null);
 
             // Assert
             action.Should()
@@ -41,8 +41,8 @@ namespace NetFabric.Hyperlinq.UnitTests
         public static TheoryData<int[], int> FirstData =>
             new TheoryData<int[], int> 
             {
-                { new int[] { 0 }, 0 }, 
-                { new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 }, 0 },
+                { new int[] { 1 }, 1 }, 
+                { new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 }, 1 },
             };
 
         [Theory]
@@ -87,9 +87,9 @@ namespace NetFabric.Hyperlinq.UnitTests
         public static TheoryData<int[], Func<int, bool>, int> FirstPredicateData =>
             new TheoryData<int[], Func<int, bool>, int>
             {
-                { new int[] { 0 }, _ => true, 0 },
-                { new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 }, _ => true, 0 },
-                { new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 }, value => value > 5, 6 },
+                { new int[] { 1 }, _ => true, 1 },
+                { new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 }, _ => true, 1 },
+                { new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 }, value => value > 5, 6 },
             };
 
 

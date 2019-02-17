@@ -31,6 +31,6 @@ namespace NetFabric.Hyperlinq
             => ReadOnlyCollection.SingleOrDefault<SortedSet<TSource>, SortedSet<TSource>.Enumerator, TSource>(source);
 
         public static List<TSource> ToList<TSource>(this SortedSet<TSource> source)
-            => ReadOnlyCollection.ToList<SortedSet<TSource>, TSource>(source);
+            => ReadOnlyCollection.ToList<SortedSet<TSource>, SortedSet<TSource>.Enumerator, TSource>(source);
     }
 }

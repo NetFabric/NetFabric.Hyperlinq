@@ -26,6 +26,6 @@ namespace NetFabric.Hyperlinq
             => ReadOnlyCollection.SingleOrDefault<IReadOnlyCollection<TSource>, IEnumerator<TSource>, TSource>(source);
 
         public static List<TSource> ToList<TSource>(this IReadOnlyCollection<TSource> source)
-            => ReadOnlyCollection.ToList<IReadOnlyCollection<TSource>, TSource>(source);
+            => ReadOnlyCollection.ToList<IReadOnlyCollection<TSource>, IEnumerator<TSource>, TSource>(source);
     }
 }

@@ -112,7 +112,7 @@ namespace NetFabric.Hyperlinq
             }
 
             public int Count()
-                => Enumerable.Count<TEnumerable, TSource>(source, predicate);
+                => Enumerable.Count<TEnumerable, TEnumerator, TSource>(source, predicate);
 
             public ReadOnlyList.WhereSelectReadOnlyList<TEnumerable, TEnumerator, TSource, TResult> Select<TResult>(Func<TSource, TResult> selector)
                 => ReadOnlyList.WhereSelect<TEnumerable, TEnumerator, TSource, TResult>(source, predicate, selector);
@@ -121,7 +121,7 @@ namespace NetFabric.Hyperlinq
                 => ValueEnumerable.Where<WhereReadOnlyList<TEnumerable, TEnumerator, TSource>, ValueEnumerator, TSource>(this, predicate);
 
             public TSource First()
-                => Enumerable.First<TEnumerable, TSource>(source, predicate);
+                => Enumerable.First<TEnumerable, TEnumerator, TSource>(source, predicate);
             public TSource First(Func<TSource, bool> predicate)
                 => ValueEnumerable.First<WhereReadOnlyList<TEnumerable, TEnumerator, TSource>, ValueEnumerator, TSource>(this, predicate);
 

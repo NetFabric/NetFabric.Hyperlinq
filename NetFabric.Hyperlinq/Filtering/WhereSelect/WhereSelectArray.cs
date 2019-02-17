@@ -119,7 +119,7 @@ namespace NetFabric.Hyperlinq
             }
 
             public int Count()
-                => ReadOnlyList.Count<IReadOnlyList<TSource>, TSource>(source, predicate);
+                => ReadOnlyList.Count<IReadOnlyList<TSource>, IEnumerator<TSource>, TSource>(source, predicate);
 
             public ValueEnumerable.SelectValueEnumerable<WhereSelectArray<TSource, TResult>, ValueEnumerator, TResult, TSelectorResult> Select<TSelectorResult>(Func<TResult, TSelectorResult> selector)
                 => ValueEnumerable.Select<WhereSelectArray<TSource, TResult>, ValueEnumerator, TResult, TSelectorResult>(this, selector);

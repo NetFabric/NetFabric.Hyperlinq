@@ -5,8 +5,9 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class ReadOnlyCollection
     {
-        public static int Count<TEnumerable, TSource>(this TEnumerable source)
+        public static int Count<TEnumerable, TEnumerator, TSource>(this TEnumerable source)
             where TEnumerable : IReadOnlyCollection<TSource>
+            where TEnumerator : IEnumerator<TSource>
             => source.Count;
 
         public static int Count<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, bool> predicate)

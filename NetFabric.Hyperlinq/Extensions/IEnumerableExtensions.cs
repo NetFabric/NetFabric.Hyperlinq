@@ -6,10 +6,10 @@ namespace NetFabric.Hyperlinq
     public static class IEnumerableExtensions
     {
         public static int Count<TSource>(this IEnumerable<TSource> source)
-            => Enumerable.Count<IEnumerable<TSource>, TSource>(source);
+            => Enumerable.Count<IEnumerable<TSource>, IEnumerator<TSource>, TSource>(source);
 
         public static int Count<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate)
-            => Enumerable.Count<IEnumerable<TSource>, TSource>(source, predicate);
+            => Enumerable.Count<IEnumerable<TSource>, IEnumerator<TSource>, TSource>(source, predicate);
 
         public static Enumerable.SelectEnumerable<IEnumerable<TSource>, IEnumerator<TSource>, TSource, TResult> Select<TSource, TResult>(
             this IEnumerable<TSource> source,
@@ -22,10 +22,10 @@ namespace NetFabric.Hyperlinq
             => Enumerable.Where<IEnumerable<TSource>, IEnumerator<TSource>, TSource>(source, predicate);
 
         public static TSource First<TSource>(this IEnumerable<TSource> source) 
-            => Enumerable.First<IEnumerable<TSource>, TSource>(source);
+            => Enumerable.First<IEnumerable<TSource>, IEnumerator<TSource>, TSource>(source);
 
         public static TSource First<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate) 
-            => Enumerable.First<IEnumerable<TSource>, TSource>(source, predicate);
+            => Enumerable.First<IEnumerable<TSource>, IEnumerator<TSource>, TSource>(source, predicate);
 
         public static TSource FirstOrDefault<TSource>(this IEnumerable<TSource> source) 
             => Enumerable.FirstOrDefault<IEnumerable<TSource>, IEnumerator<TSource>, TSource>(source);

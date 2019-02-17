@@ -57,6 +57,6 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [BenchmarkCategory("Enumerable")]
         [Benchmark]
         public List<int> Hyperlinq_Enumerable_Value()
-            => enumerableValue.ToList<TestEnumerable.Enumerable, int>();
+            => enumerableValue.ToList<TestEnumerable.Enumerable, TestEnumerable.Enumerable.Enumerator, int>();
     }
 }

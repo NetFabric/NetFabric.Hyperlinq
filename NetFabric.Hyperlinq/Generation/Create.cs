@@ -29,7 +29,7 @@ namespace NetFabric.Hyperlinq
             IEnumerator IEnumerable.GetEnumerator() => getEnumerator();
 
             public int Count()
-                => Count<CreateEnumerable<TEnumerator, TSource>, TSource>(this);
+                => Count<CreateEnumerable<TEnumerator, TSource>, TEnumerator, TSource>(this);
 
             public SelectEnumerable<CreateEnumerable<TEnumerator, TSource>, TEnumerator, TSource, TResult> Select<TResult>(Func<TSource, TResult> selector) 
                 => Select<CreateEnumerable<TEnumerator, TSource>, TEnumerator, TSource, TResult>(this, selector);
@@ -38,9 +38,9 @@ namespace NetFabric.Hyperlinq
                 => Where<CreateEnumerable<TEnumerator, TSource>, TEnumerator, TSource>(this, predicate);
 
             public TSource First() 
-                => First<CreateEnumerable<TEnumerator, TSource>, TSource>(this); 
+                => First<CreateEnumerable<TEnumerator, TSource>, TEnumerator, TSource>(this); 
             public TSource First(Func<TSource, bool> predicate) 
-                => First<CreateEnumerable<TEnumerator, TSource>, TSource>(this, predicate);
+                => First<CreateEnumerable<TEnumerator, TSource>, TEnumerator, TSource>(this, predicate);
 
             public TSource FirstOrDefault() 
                 => FirstOrDefault<CreateEnumerable<TEnumerator, TSource>, TEnumerator, TSource>(this);
@@ -61,10 +61,10 @@ namespace NetFabric.Hyperlinq
                 => this;
 
             public TSource[] ToArray()
-                => ToArray<CreateEnumerable<TEnumerator, TSource>, TSource>(this);
+                => ToArray<CreateEnumerable<TEnumerator, TSource>, TEnumerator, TSource>(this);
 
             public List<TSource> ToList()
-                => ToList<CreateEnumerable<TEnumerator, TSource>, TSource>(this);
+                => ToList<CreateEnumerable<TEnumerator, TSource>, TEnumerator, TSource>(this);
         }
     }
 }

@@ -6,8 +6,9 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class Enumerable
     {
-        public static List<TSource> ToList<TEnumerable, TSource>(this TEnumerable source)
+        public static List<TSource> ToList<TEnumerable, TEnumerator, TSource>(this TEnumerable source)
             where TEnumerable : IEnumerable<TSource>
+            where TEnumerator : IEnumerator<TSource>
         {
             if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
 
