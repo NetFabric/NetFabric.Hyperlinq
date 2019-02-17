@@ -66,7 +66,7 @@ namespace NetFabric.Hyperlinq
                 => ToArray<CreateEnumerable<TEnumerator, TSource>, TSource>(this);
 
             public List<TSource> ToList()
-                => ToList<CreateEnumerable<TEnumerator, TSource>, TEnumerator, TSource>(this);
+                => ToList<CreateEnumerable<TEnumerator, TSource>, TSource>(this);
         }
     }
 }
