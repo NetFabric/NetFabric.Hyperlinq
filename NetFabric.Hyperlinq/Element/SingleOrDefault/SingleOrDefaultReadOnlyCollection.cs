@@ -13,15 +13,11 @@ namespace NetFabric.Hyperlinq
             if (source.Count == 0) return default;
             if (source.Count > 1) ThrowHelper.ThrowNotSingleSequence<TSource>();
 
-#if EXPRESSION_TREES
-            return Enumerable.SingleOrDefaultMethod<TEnumerable, TSource>.Invoke(source);
-#else
-            using (var enumerator = (TEnumerator)source.GetEnumerator())
+            using (var enumerator = Enumerable.GetEnumerator<TEnumerable, TEnumerator, TSource>.Invoke(source))
             {
                 enumerator.MoveNext();
                 return enumerator.Current;
             }
-#endif
         }
     }
 }

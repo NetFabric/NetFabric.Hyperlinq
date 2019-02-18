@@ -42,7 +42,7 @@ namespace NetFabric.Hyperlinq
 
                 internal Enumerator(in SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult> enumerable)
                 {
-                    enumerator = (TEnumerator)enumerable.source.GetEnumerator();
+                    enumerator = Enumerable.GetEnumerator<TEnumerable, TEnumerator, TSource>.Invoke(enumerable.source);
                     selector = enumerable.selector;
                 }
 
@@ -61,7 +61,7 @@ namespace NetFabric.Hyperlinq
 
                 internal ValueEnumerator(in SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult> enumerable)
                 {
-                    enumerator = (TEnumerator)enumerable.source.GetEnumerator();
+                    enumerator = Enumerable.GetEnumerator<TEnumerable, TEnumerator, TSource>.Invoke(enumerable.source);
                     selector = enumerable.selector;
                 }
 

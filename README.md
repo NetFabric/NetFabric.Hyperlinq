@@ -5,9 +5,7 @@
 [![NuGet Version](https://img.shields.io/nuget/v/NetFabric.Hyperlinq.svg?style=popout-square&logoColor=lightgray&logo=nuget)](https://www.nuget.org/packages/NetFabric.Hyperlinq/)
 [![NuGet Downloads](https://img.shields.io/nuget/dt/NetFabric.Hyperlinq.svg?style=popout-square&logoColor=lightgray&logo=nuget)](https://www.nuget.org/packages/NetFabric.Hyperlinq/)
 
-**This is work in progress!...**
-
-This repository contains the results of my exploration on how LINQ performance can be improved by using modern C# features like constrained interfaces, readonly struct, refs, value tuples and so on.
+This is a re-implementation of LINQ with improved performance, mainly by not boxing value-type enumerator and by using [`IReadOnlyCollection<T>`](https://docs.microsoft.com/en-us/dotnet/api/system.collections.generic.ireadonlycollection-1) and [`IReadOnlyList<T>`](https://docs.microsoft.com/en-us/dotnet/api/system.collections.generic.ireadonlylist-1) interfaces.
 
 ## Documentation
 
@@ -66,8 +64,8 @@ Check the documentation for the implemented rules at https://github.com/NetFabri
 
 # References
 
-- [Enumeration in .NET](https://blog.usejournal.com/enumeration-in-net-d5674921512e)
-- [Performance of value-type vs reference-type enumerators](https://medium.com/@antao.almada/performance-of-value-type-vs-reference-type-enumerators-820ab1acc291)
-- [Performance Tuning for .NET Core](https://reubenbond.github.io/posts/dotnet-perf-tuning)
-- [benaadams/ValueLinqBenchmarks.cs](https://gist.github.com/benaadams/294cbd41ec1179638cb4b5495a15accf)
-
+- [Enumeration in .NET](https://blog.usejournal.com/enumeration-in-net-d5674921512e) by Antão Almada
+- [Performance of value-type vs reference-type enumerators](https://medium.com/@antao.almada/performance-of-value-type-vs-reference-type-enumerators-820ab1acc291) by Antão Almada
+- [Performance Tuning for .NET Core](https://reubenbond.github.io/posts/dotnet-perf-tuning) by Reuben Bond
+- [ValueLinqBenchmarks](https://gist.github.com/benaadams/294cbd41ec1179638cb4b5495a15accf) by Ben Adams
+- [C# - How method calling works](http://www.levibotelho.com/development/how-method-calling-works/) by Levi Botelho
