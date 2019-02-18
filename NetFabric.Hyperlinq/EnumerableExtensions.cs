@@ -6,7 +6,7 @@ using System.Reflection;
 
 namespace NetFabric.Hyperlinq
 {
-    static partial class Enumerable
+    public static partial class Enumerable
     {
         internal static class GetEnumerator<TEnumerable, TEnumerator, TSource>
             where TEnumerable : IEnumerable<TSource>
@@ -19,10 +19,10 @@ namespace NetFabric.Hyperlinq
                 var enumerableType = typeof(TEnumerable);
                 var getEnumerator = GetEnumeratorMethod(enumerableType);
                 if (getEnumerator is null)
-                    throw new Exception($"'{enumerableType.FullName}': type used in a foreach statement must be implicitly convertible to 'System.Collections.IEnumerable'");
+                    throw new Exception($"'{enumerableType.FullName}': type must be implicitly convertible to 'System.Collections.IEnumerable'");
                 var enumeratorType = getEnumerator.ReturnType;
                 if (!typeof(TEnumerator).IsAssignableFrom(enumeratorType))
-                    throw new Exception($"'{enumerableType.FullName}': type is not convertible implicitly to '{typeof(TEnumerable).FullName}'");
+                    throw new Exception($"'{enumerableType.FullName}': type must be implicitly convertible to '{typeof(TEnumerable).FullName}'");
 
                 var enumerable = Expression.Parameter(enumerableType, "enumerable");
 
