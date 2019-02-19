@@ -21,28 +21,24 @@ namespace NetFabric.Hyperlinq
         {
             if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
 
-            var index = 0;
             var count = source.Count();
-            while (index < count)
+            if (count == 0) ThrowHelper.ThrowEmptySequence<TSource>();
+
+            for (var index = 0; index < count; index++)
             {
                 var first = source[index];
                 if (predicate(first))
                 {
                     // found first, keep going until end or find second
-                    index++;
-                    while (index < count)
+                    for(var index2 = index + 1; index2 < count; index2++)
                     {
-                        if (predicate(source[index]))
-                            ThrowHelper.ThrowNotSingleSequence<TSource>();
-
-                        index++;
+                        if (predicate(source[index2]))
+                            ThrowHelper.ThrowNotSingleSequence<TSource>();      
                     }
                     return first;
                 }
-                index++;
             }
-            ThrowHelper.ThrowEmptySequence<TSource>();
-            return default;
+            return ThrowHelper.ThrowEmptySequence<TSource>();
         }
     }
 }

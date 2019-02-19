@@ -9,8 +9,10 @@ namespace NetFabric.Hyperlinq
             where TEnumerator : struct, IValueEnumerator<TSource>
         {
             if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
-            if (source.Count() == 0) return default;
-            if (source.Count() > 1) ThrowHelper.ThrowNotSingleSequence<TSource>();
+
+            var count = source.Count();
+            if (count == 0) return default;
+            if (count > 1) ThrowHelper.ThrowNotSingleSequence<TSource>();
 
             return source[0];
         }
@@ -21,27 +23,23 @@ namespace NetFabric.Hyperlinq
         {
             if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
 
-            var index = 0;
             var count = source.Count();
-            while (index < count)
+            if (count == 0) return default;
+
+            for (var index = 0; index < count; index++)
             {
                 var first = source[index];
                 if (predicate(first))
                 {
                     // found first, keep going until end or find second
-                    index++;
-                    while (index < count)
+                    for(var index2 = index + 1; index2 < count; index2++)
                     {
-                        if (predicate(source[index]))
-                            ThrowHelper.ThrowNotSingleSequence<TSource>();
-
-                        index++;
+                        if (predicate(source[index2]))
+                            ThrowHelper.ThrowNotSingleSequence<TSource>();      
                     }
                     return first;
                 }
-                index++;
             }
-
             return default;
         }
     }

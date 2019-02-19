@@ -10,6 +10,7 @@ namespace NetFabric.Hyperlinq
             where TEnumerator : struct, IValueEnumerator<TSource>
         {
             if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
+            
             if (source.Count() == 0) return default;
 
             using (var enumerator = source.GetValueEnumerator())

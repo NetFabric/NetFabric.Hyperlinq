@@ -20,7 +20,10 @@ namespace NetFabric.Hyperlinq
         {
             if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
 
-            for (var index = 0; index < source.Count(); index++)
+            var count = source.Count();
+            if (count == 0) ThrowHelper.ThrowEmptySequence<TSource>();
+            
+            for (var index = 0; index < count; index++)
             {
                 if (predicate(source[index]))
                     return source[index];
