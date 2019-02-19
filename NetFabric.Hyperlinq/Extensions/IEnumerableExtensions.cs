@@ -48,6 +48,9 @@ namespace NetFabric.Hyperlinq
         public static IEnumerable<TSource> AsEnumerable<TSource>(this IEnumerable<TSource> source) 
             => source;
 
+        public static Enumerable.AsValueEnumerableEnumerable<IEnumerable<TSource>, IEnumerator<TSource>, TSource> AsValueEnumerable<TSource>(this IEnumerable<TSource> source)
+            => Enumerable.AsValueEnumerable<IEnumerable<TSource>, IEnumerator<TSource>, TSource>(source);
+
         public static TSource[] ToArray<TSource>(this IEnumerable<TSource> source)
             => System.Linq.Enumerable.ToArray(source);
 

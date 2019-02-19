@@ -5,7 +5,7 @@
 [![NuGet Version](https://img.shields.io/nuget/v/NetFabric.Hyperlinq.svg?style=popout-square&logoColor=lightgray&logo=nuget)](https://www.nuget.org/packages/NetFabric.Hyperlinq/)
 [![NuGet Downloads](https://img.shields.io/nuget/dt/NetFabric.Hyperlinq.svg?style=popout-square&logoColor=lightgray&logo=nuget)](https://www.nuget.org/packages/NetFabric.Hyperlinq/)
 
-This is a re-implementation of LINQ with improved performance, mainly by not boxing value-type enumerator and by using [`IReadOnlyCollection<T>`](https://docs.microsoft.com/en-us/dotnet/api/system.collections.generic.ireadonlycollection-1) and [`IReadOnlyList<T>`](https://docs.microsoft.com/en-us/dotnet/api/system.collections.generic.ireadonlylist-1) interfaces.
+This is a re-implementation of LINQ with improved performance, mainly by not boxing value-type enumerators and by using overloads for [`IReadOnlyCollection<T>`](https://docs.microsoft.com/en-us/dotnet/api/system.collections.generic.ireadonlycollection-1) and [`IReadOnlyList<T>`](https://docs.microsoft.com/en-us/dotnet/api/system.collections.generic.ireadonlylist-1) interfaces.
 
 ## Documentation
 
@@ -22,6 +22,9 @@ This is a re-implementation of LINQ with improved performance, mainly by not box
   - `AsEnumerable()`
   - `AsReadOnlyCollection()`
   - `AsReadOnlyList()`
+  - `AsValueEnumerable()`
+  - `AsValueReadOnlyCollection()`
+  - `AsValueReadOnlyList()`
   - `ToArray()`
   - `ToList()`
 - Element
@@ -49,7 +52,7 @@ This is a re-implementation of LINQ with improved performance, mainly by not box
 
 The solution contains a [benchmarks project](https://github.com/NetFabric/NetFabric.Hyperlinq/tree/master/NetFabric.Hyperlinq.Benchmarks) based on [BenchmarkDotNet](https://benchmarkdotnet.org) that compares `NetFabric.Hyperlinq` to `System.Linq` for many of the supported operations and its combinations.
 
-To get the latests benchmarks, clone the project and run it on your machine.
+Feel free to clone the project and run it on your machine. Feedback is welcome!
 
 # NetFabric.Hyperlinq.Analyzer
 
@@ -58,7 +61,7 @@ To get the latests benchmarks, clone the project and run it on your machine.
 
 The solution contains a [project for a Roslyn Analyzer](https://github.com/NetFabric/NetFabric.Hyperlinq/tree/master/NetFabric.Hyperlinq.Analyzer) that contains several enumeration related rules to help users improve performance.
 
-The analyzer is independent of NetFabric.Hyperlinq. The rules are useful even if you only use `IEnumerable<T>` or `System.Linq`.
+The analyzer is independent of `NetFabric.Hyperlinq`. The rules are useful even if you only use `IEnumerable<T>` or `System.Linq`.
 
 Check the documentation for the implemented rules at https://github.com/NetFabric/NetFabric.Hyperlinq/tree/master/NetFabric.Hyperlinq.Analyzer/docs/reference
 
