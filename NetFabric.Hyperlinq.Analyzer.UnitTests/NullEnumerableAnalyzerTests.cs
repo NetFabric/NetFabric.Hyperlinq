@@ -41,7 +41,7 @@ class C
             {
                 Id = "HLQ002",
                 Message = "Enumerable cannot be null.",
-                Severity = DiagnosticSeverity.Error,
+                Severity = DiagnosticSeverity.Warning,
                 Locations = new[] {
                     new DiagnosticResultLocation("Test0.cs", 8, 9)
                 },
@@ -51,7 +51,7 @@ class C
             {
                 Id = "HLQ002",
                 Message = "Enumerable cannot be null.",
-                Severity = DiagnosticSeverity.Error,
+                Severity = DiagnosticSeverity.Warning,
                 Locations = new[] {
                     new DiagnosticResultLocation("Test0.cs", 11, 33)
                 },
@@ -61,7 +61,7 @@ class C
             {
                 Id = "HLQ002",
                 Message = "Enumerable cannot be null.",
-                Severity = DiagnosticSeverity.Error,
+                Severity = DiagnosticSeverity.Warning,
                 Locations = new[] {
                     new DiagnosticResultLocation("Test0.cs", 17, 9)
                 },
