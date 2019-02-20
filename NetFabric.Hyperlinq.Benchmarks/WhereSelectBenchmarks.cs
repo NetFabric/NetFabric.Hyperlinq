@@ -6,6 +6,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
     [GroupBenchmarksBy(BenchmarkLogicalGroupRule.ByCategory)]
     [CategoriesColumn]
     [MemoryDiagnoser]
+    [MarkdownExporterAttribute.GitHub]
     public class WhereSelectBenchmarks : BenchmarksBase
     {
         [BenchmarkCategory("Array")]
@@ -49,7 +50,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         }
 
         [BenchmarkCategory("Enumerable")]
-        [Benchmark(Baseline = true)]
+        [Benchmark()]
         public int Linq_Enumerable_Value() 
         { 
             var count = 0;

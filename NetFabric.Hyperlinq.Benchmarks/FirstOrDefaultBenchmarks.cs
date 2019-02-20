@@ -6,6 +6,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
     [GroupBenchmarksBy(BenchmarkLogicalGroupRule.ByCategory)]
     [CategoriesColumn]
     [MemoryDiagnoser]
+    [MarkdownExporterAttribute.GitHub]
     public class FirstOrDefaultBenchmarks : BenchmarksBase
     {
         [BenchmarkCategory("Array")]
