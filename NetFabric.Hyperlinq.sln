@@ -15,13 +15,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution", "Solution", "{2C
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetFabric.Hyperlinq.Analyzer", "NetFabric.Hyperlinq.Analyzer\NetFabric.Hyperlinq.Analyzer.csproj", "{9502A444-23B5-4D8D-A0A4-22B6FD8F7B27}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetFabric.Hyperlinq.Analyzer.UnitTests", "NetFabric.Hyperlinq.Analyzer.UnitTests\NetFabric.Hyperlinq.Analyzer.UnitTests.csproj", "{F16FCAAB-9A72-464A-85F1-65E72DA662F7}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetFabric.Hyperlinq.Analyzer.Vsix", "NetFabric.Hyperlinq.Analyzer.Vsix\NetFabric.Hyperlinq.Analyzer.Vsix.csproj", "{3B74358F-11BB-418E-A5F8-425ADE18AB3D}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetFabric.Hyperlinq.TestCollections", "NetFabric.Hyperlinq.TestCollections\NetFabric.Hyperlinq.TestCollections.csproj", "{40F15C4F-CD81-4F98-95FF-538185E4006C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetFabric.Hyperlinq.TestCollections", "NetFabric.Hyperlinq.TestCollections\NetFabric.Hyperlinq.TestCollections.csproj", "{C4E41595-DD25-4A3F-BC83-26CBF5807D08}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,22 +35,10 @@ Global
 		{B2231C1C-CB99-4A6B-AE09-7B105BF02E9A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B2231C1C-CB99-4A6B-AE09-7B105BF02E9A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B2231C1C-CB99-4A6B-AE09-7B105BF02E9A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9502A444-23B5-4D8D-A0A4-22B6FD8F7B27}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9502A444-23B5-4D8D-A0A4-22B6FD8F7B27}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9502A444-23B5-4D8D-A0A4-22B6FD8F7B27}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9502A444-23B5-4D8D-A0A4-22B6FD8F7B27}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F16FCAAB-9A72-464A-85F1-65E72DA662F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F16FCAAB-9A72-464A-85F1-65E72DA662F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F16FCAAB-9A72-464A-85F1-65E72DA662F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F16FCAAB-9A72-464A-85F1-65E72DA662F7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3B74358F-11BB-418E-A5F8-425ADE18AB3D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3B74358F-11BB-418E-A5F8-425ADE18AB3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3B74358F-11BB-418E-A5F8-425ADE18AB3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3B74358F-11BB-418E-A5F8-425ADE18AB3D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{40F15C4F-CD81-4F98-95FF-538185E4006C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{40F15C4F-CD81-4F98-95FF-538185E4006C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{40F15C4F-CD81-4F98-95FF-538185E4006C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{40F15C4F-CD81-4F98-95FF-538185E4006C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C4E41595-DD25-4A3F-BC83-26CBF5807D08}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C4E41595-DD25-4A3F-BC83-26CBF5807D08}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C4E41595-DD25-4A3F-BC83-26CBF5807D08}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C4E41595-DD25-4A3F-BC83-26CBF5807D08}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
