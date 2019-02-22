@@ -94,6 +94,9 @@ namespace NetFabric.Hyperlinq
                 public void Dispose() { }
             }
 
+            public int Count(Func<TSource, bool> predicate)
+                => ValueReadOnlyList.Count<ReturnValueReadOnlyList<TSource>, ValueEnumerator, TSource>(this, predicate);
+
             public ValueReadOnlyList.SelectValueReadOnlyList<ReturnValueReadOnlyList<TSource>, ValueEnumerator, TSource, TResult> Select<TResult>(Func<TSource, TResult> selector) 
                 => ValueReadOnlyList.Select<ReturnValueReadOnlyList<TSource>, ValueEnumerator, TSource, TResult>(this, selector);
 

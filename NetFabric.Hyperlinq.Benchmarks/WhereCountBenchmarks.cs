@@ -38,26 +38,6 @@ namespace NetFabric.Hyperlinq.Benchmarks
 
         [BenchmarkCategory("Array")]
         [Benchmark]
-        public int LinqFaster_Array() =>
-            array.CountF(_ => true);
-
-        [BenchmarkCategory("List")]
-        [Benchmark]
-        public int LinqFaster_List() =>
-            list.CountF(_ => true);
-
-        [BenchmarkCategory("Array")]
-        [Benchmark]
-        public int LinqFaster_Parallel_Array() =>
-            array.CountP(_ => true);
-
-        [BenchmarkCategory("List")]
-        [Benchmark]
-        public int LinqFaster_Parallel_List() =>
-            list.CountP(_ => true);
-
-        [BenchmarkCategory("Array")]
-        [Benchmark]
         public int Hyperlinq_Array()
             => array.Where(_ => true).Count();
 

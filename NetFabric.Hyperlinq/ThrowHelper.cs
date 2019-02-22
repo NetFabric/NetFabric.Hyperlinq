@@ -18,5 +18,8 @@ namespace NetFabric.Hyperlinq
 
         public static T ThrowNotSingleSequence<T>()
             => throw new InvalidOperationException(Resource.NotSingleSequence);
+
+        public static void ThrowInvalidOperationException()
+            => throw new InvalidOperationException();
     }
 }

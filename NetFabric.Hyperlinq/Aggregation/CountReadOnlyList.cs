@@ -17,6 +17,8 @@ namespace NetFabric.Hyperlinq
             if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
 
             var sourceCount = source.Count;
+            if (sourceCount == 0) return 0;
+
             var count = 0;
             for (var index = 0; index < sourceCount; index++)
             {

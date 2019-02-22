@@ -58,6 +58,9 @@ namespace NetFabric.Hyperlinq
                 public void Dispose() { }
             }
 
+            public int Count(Func<TSource, bool> predicate)
+                => ValueEnumerable.Count<RepeatValueEnumerable<TSource>, ValueEnumerator, TSource>(this, predicate);
+
             public ValueEnumerable.SelectValueEnumerable<RepeatValueEnumerable<TSource>, ValueEnumerator, TSource, TResult> Select<TResult>(Func<TSource, TResult> selector) 
                 => ValueEnumerable.Select<RepeatValueEnumerable<TSource>, ValueEnumerator, TSource, TResult>(this, selector);
 

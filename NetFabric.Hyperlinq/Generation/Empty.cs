@@ -39,6 +39,9 @@ namespace NetFabric.Hyperlinq
                 public void Dispose() { }
             }
 
+            public int Count(Func<TSource, bool> _)
+                => 0;
+
             public EmptyReadOnlyList<TSource> Select<TResult>(Func<TSource, TResult> selector)
             {
                 if (selector is null) ThrowHelper.ThrowArgumentNullException(nameof(selector));

@@ -7,6 +7,38 @@ namespace NetFabric.Hyperlinq
         public static int Count<TSource>(this TSource[] source)
             => source.Length;
 
+        public static int Count<TSource>(this TSource[] source, Func<TSource, bool> predicate)
+        {
+            if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
+
+            var length = source.Length;
+            if (length == 0) return 0;
+
+            var count = 0;
+            for (var index = 0; index < length; index++)
+            {
+                if (predicate(source[index]))
+                    count++;
+            }
+            return count;
+        }
+
+        public static int Count<TSource>(this TSource[] source, Predicate<TSource> predicate)
+        {
+            if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
+
+            var length = source.Length;
+            if (length == 0) return 0;
+
+            var count = 0;
+            for (var index = 0; index < length; index++)
+            {
+                if (predicate(in source[index]))
+                    count++;
+            }
+            return count;
+        }
+
         public static ref readonly TSource First<TSource>(this TSource[] source)
         {
             if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));

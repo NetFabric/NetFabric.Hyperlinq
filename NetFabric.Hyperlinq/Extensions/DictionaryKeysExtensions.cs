@@ -8,6 +8,9 @@ namespace NetFabric.Hyperlinq
         public static int Count<TKey, TValue>(this Dictionary<TKey, TValue>.KeyCollection source)
             => source.Count;
 
+        public static int Count<TKey, TValue>(this Dictionary<TKey, TValue>.KeyCollection source, Func<TKey, bool> predicate)
+            => ReadOnlyCollection.Count<Dictionary<TKey, TValue>.KeyCollection, Dictionary<TKey, TValue>.KeyCollection.Enumerator, TKey>(source, predicate);
+
         public static ReadOnlyCollection.SelectReadOnlyCollection<Dictionary<TKey, TValue>.KeyCollection, Dictionary<TKey, TValue>.KeyCollection.Enumerator, TKey, TResult> Select<TKey, TValue, TResult>(
             this Dictionary<TKey, TValue>.KeyCollection source,
             Func<TKey, TResult> selector) 
