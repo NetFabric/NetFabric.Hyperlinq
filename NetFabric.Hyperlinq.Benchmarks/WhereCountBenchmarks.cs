@@ -1,5 +1,7 @@
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Configs;
+using JM.LinqFaster;
+using JM.LinqFaster.Parallel;
 
 namespace NetFabric.Hyperlinq.Benchmarks
 {
@@ -33,6 +35,26 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [Benchmark]
         public int Linq_Enumerable_Value()
             => System.Linq.Enumerable.Where(enumerableValue, _ => true).Count();
+
+        [BenchmarkCategory("Array")]
+        [Benchmark]
+        public int LinqFaster_Array() =>
+            array.CountF(_ => true);
+
+        [BenchmarkCategory("List")]
+        [Benchmark]
+        public int LinqFaster_List() =>
+            list.CountF(_ => true);
+
+        [BenchmarkCategory("Array")]
+        [Benchmark]
+        public int LinqFaster_Parallel_Array() =>
+            array.CountP(_ => true);
+
+        [BenchmarkCategory("List")]
+        [Benchmark]
+        public int LinqFaster_Parallel_List() =>
+            list.CountP(_ => true);
 
         [BenchmarkCategory("Array")]
         [Benchmark]
