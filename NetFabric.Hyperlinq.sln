@@ -9,8 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetFabric.Hyperlinq.UnitTes
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetFabric.Hyperlinq.Benchmarks", "NetFabric.Hyperlinq.Benchmarks\NetFabric.Hyperlinq.Benchmarks.csproj", "{B2231C1C-CB99-4A6B-AE09-7B105BF02E9A}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution", "Solution", "{2C452DA5-FE07-451C-BFE1-AD14A57F7B09}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{2C452DA5-FE07-451C-BFE1-AD14A57F7B09}"
 	ProjectSection(SolutionItems) = preProject
+		Directory.Build.props = Directory.Build.props
 		Licenses\LICENSE.txt = Licenses\LICENSE.txt
 		README.md = README.md
 	EndProjectSection

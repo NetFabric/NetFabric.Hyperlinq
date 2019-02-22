@@ -3,8 +3,6 @@
   <PropertyGroup>
     <TargetFrameworks>netcoreapp2.1</TargetFrameworks>
     <IsPackable>false</IsPackable>
-    <LangVersion>latest</LangVersion>
-    <Features>strict</Features>
   </PropertyGroup>
 
   <ItemGroup>

@@ -11,9 +11,7 @@
     <RepositoryUrl>https://github.com/NetFabric/NetFabric.Hyperlinq</RepositoryUrl>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <PackageIconUrl>https://user-images.githubusercontent.com/534533/49182105-390f3a80-f351-11e8-8e84-c785cddd2995.png</PackageIconUrl>
-    <PackageTags>linq</PackageTags>
-    <LangVersion>latest</LangVersion>
-    <Features>strict</Features>
+    <PackageTags>hyperlinq, linq, performance</PackageTags>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
   </PropertyGroup>
 
