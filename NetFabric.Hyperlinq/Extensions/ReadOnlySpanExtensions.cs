@@ -10,7 +10,7 @@ namespace NetFabric.Hyperlinq
 
         public static int Count<TSource>(this ReadOnlySpan<TSource> source, Func<TSource, bool> predicate)
         {
-            if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
+            if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
 
             var length = source.Length;
             if (length == 0) return 0;
@@ -26,7 +26,7 @@ namespace NetFabric.Hyperlinq
 
         public static bool All<TSource>(this ReadOnlySpan<TSource> source, Func<TSource, bool> predicate)
         {
-            if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
+            if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
 
             var length = source.Length;
             if (length == 0) return false;
@@ -44,7 +44,7 @@ namespace NetFabric.Hyperlinq
 
         public static bool Any<TSource>(this ReadOnlySpan<TSource> source, Func<TSource, bool> predicate)
         {
-            if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
+            if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
 
             var length = source.Length;
             if (length == 0) return false;
@@ -65,7 +65,6 @@ namespace NetFabric.Hyperlinq
 
         public static ref readonly TSource First<TSource>(this ReadOnlySpan<TSource> source)
         {
-            if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
             if (source.Length == 0) ThrowHelper.ThrowEmptySequence<TSource>();
 
             return ref source[0];
@@ -73,7 +72,6 @@ namespace NetFabric.Hyperlinq
 
         public static ref readonly TSource FirstOrDefault<TSource>(this ReadOnlySpan<TSource> source)
         {
-            if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
             if (source.Length == 0) return ref Default<TSource>.Value;
 
             return ref source[0];
@@ -81,9 +79,10 @@ namespace NetFabric.Hyperlinq
 
         public static ref readonly TSource First<TSource>(this ReadOnlySpan<TSource> source, Func<TSource, bool> predicate)
         {
-            if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
+            if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
 
-            for (var index = 0; index < source.Length; index++)
+            var length = source.Length;
+            for (var index = 0; index < length; index++)
             {
                 if (predicate(source[index]))
                     return ref source[index];
@@ -94,9 +93,10 @@ namespace NetFabric.Hyperlinq
 
         public static ref readonly TSource FirstOrDefault<TSource>(this ReadOnlySpan<TSource> source, Func<TSource, bool> predicate)
         {
-            if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
+            if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
 
-            for (var index = 0; index < source.Length; index++)
+            var length = source.Length;
+            for (var index = 0; index < length; index++)
             {
                 if (predicate(source[index]))
                     return ref source[index];
@@ -106,28 +106,30 @@ namespace NetFabric.Hyperlinq
 
         public static ref readonly TSource Single<TSource>(this ReadOnlySpan<TSource> source)
         {
-            if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
-            if (source.Length == 0) ThrowHelper.ThrowEmptySequence<TSource>();
-            if (source.Length > 1) ThrowHelper.ThrowNotSingleSequence<TSource>();
+            var length = source.Length;
+            if (length == 0) ThrowHelper.ThrowEmptySequence<TSource>();
+            if (length > 1) ThrowHelper.ThrowNotSingleSequence<TSource>();
 
             return ref source[0];
         }
 
         public static ref readonly TSource SingleOrDefault<TSource>(this ReadOnlySpan<TSource> source)
         {
-            if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
-            if (source.Length == 0) return ref Default<TSource>.Value;
-            if (source.Length > 1) ThrowHelper.ThrowNotSingleSequence<TSource>();
+            var length = source.Length;
+            if (length == 0) return ref Default<TSource>.Value;
+            if (length > 1) ThrowHelper.ThrowNotSingleSequence<TSource>();
 
             return ref source[0];
         }
 
         public static ref readonly TSource Single<TSource>(this ReadOnlySpan<TSource> source, Func<TSource, bool> predicate)
         {
-            if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
-            if (source.Length > 1) ThrowHelper.ThrowNotSingleSequence<TSource>();
+            if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
 
-            for (var index = 0; index < source.Length; index++)
+            var length = source.Length;
+            if (length > 1) ThrowHelper.ThrowNotSingleSequence<TSource>();
+
+            for (var index = 0; index < length; index++)
             {
                 if (predicate(source[index]))
                     return ref source[index];
@@ -138,10 +140,12 @@ namespace NetFabric.Hyperlinq
 
         public static ref readonly TSource SingleOrDefault<TSource>(this ReadOnlySpan<TSource> source, Func<TSource, bool> predicate)
         {
-            if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
-            if (source.Length > 1) ThrowHelper.ThrowNotSingleSequence<TSource>();
+            if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
 
-            for (var index = 0; index < source.Length; index++)
+            var length = source.Length;
+            if (length > 1) ThrowHelper.ThrowNotSingleSequence<TSource>();
+
+            for (var index = 0; index < length; index++)
             {
                 if (predicate(source[index]))
                     return ref source[index];
