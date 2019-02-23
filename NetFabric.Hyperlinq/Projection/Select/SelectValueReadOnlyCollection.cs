@@ -117,6 +117,12 @@ namespace NetFabric.Hyperlinq
             public IReadOnlyCollection<TResult> AsReadOnlyCollection()
                 => ValueReadOnlyCollection.AsReadOnlyCollection<SelectValueReadOnlyCollection<TEnumerable, TEnumerator, TSource, TResult>, ValueEnumerator, TResult>(this);
 
+            public SelectValueReadOnlyCollection<TEnumerable, TEnumerator, TSource, TResult> AsValueEnumerable()
+                => this;
+
+            public SelectValueReadOnlyCollection<TEnumerable, TEnumerator, TSource, TResult> AsValueReadOnlyCollection()
+                => this;
+
             public TResult[] ToArray()
                 => ValueReadOnlyCollection.ToArray<SelectValueReadOnlyCollection<TEnumerable, TEnumerator, TSource, TResult>, ValueEnumerator, TResult>(this);
 

@@ -33,7 +33,22 @@ namespace NetFabric.Hyperlinq
         public static TKey SingleOrDefault<TKey, TValue>(this SortedDictionary<TKey, TValue>.KeyCollection source)
             => ReadOnlyCollection.SingleOrDefault<SortedDictionary<TKey, TValue>.KeyCollection, SortedDictionary<TKey, TValue>.KeyCollection.Enumerator, TKey>(source);
 
-        public static List<TKey> ToList<TKey, TValue>(this SortedDictionary<TKey, TValue>.KeyCollection source)
-            => ReadOnlyCollection.ToList<SortedDictionary<TKey, TValue>.KeyCollection, SortedDictionary<TKey, TValue>.KeyCollection.Enumerator, TKey>(source);
+        public static IEnumerable<TValue> AsEnumerable<TKey, TValue>(this SortedDictionary<TKey, TValue> source)
+            => source.Values;
+
+        public static IReadOnlyCollection<TValue> AsReadOnlyCollection<TKey, TValue>(this SortedDictionary<TKey, TValue> source)
+            => source.Values;
+
+        public static Enumerable.AsValueEnumerableEnumerable<SortedDictionary<TKey, TValue>.ValueCollection, SortedDictionary<TKey, TValue>.ValueCollection.Enumerator, TValue> AsValueEnumerable<TKey, TValue>(this SortedDictionary<TKey, TValue> source)
+            => Enumerable.AsValueEnumerable<SortedDictionary<TKey, TValue>.ValueCollection, SortedDictionary<TKey, TValue>.ValueCollection.Enumerator, TValue>(source.Values);
+
+        public static ReadOnlyCollection.AsValueReadOnlyCollectionEnumerable<SortedDictionary<TKey, TValue>.ValueCollection, SortedDictionary<TKey, TValue>.ValueCollection.Enumerator, TValue> AsValueReadOnlyCollection<TKey, TValue>(this SortedDictionary<TKey, TValue> source)
+            => ReadOnlyCollection.AsValueReadOnlyCollection<SortedDictionary<TKey, TValue>.ValueCollection, SortedDictionary<TKey, TValue>.ValueCollection.Enumerator, TValue>(source.Values);
+
+        public static TValue[] ToArray<TKey, TValue>(this SortedDictionary<TKey, TValue> source)
+            => ReadOnlyCollection.ToArray<SortedDictionary<TKey, TValue>.ValueCollection, SortedDictionary<TKey, TValue>.ValueCollection.Enumerator, TValue>(source.Values);
+
+        public static List<TValue> ToList<TKey, TValue>(this SortedDictionary<TKey, TValue> source)
+            => ReadOnlyCollection.ToList<SortedDictionary<TKey, TValue>.ValueCollection, SortedDictionary<TKey, TValue>.ValueCollection.Enumerator, TValue>(source.Values);
     }
 }

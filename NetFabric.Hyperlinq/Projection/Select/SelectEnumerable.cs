@@ -113,6 +113,9 @@ namespace NetFabric.Hyperlinq
             public IEnumerable<TResult> AsEnumerable()
                 => ValueEnumerable.AsEnumerable<SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>, ValueEnumerator, TResult>(this);
 
+            public SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult> AsValueEnumerable()
+                => this;
+
             public TResult[] ToArray()
                 => ValueEnumerable.ToArray<SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>, ValueEnumerator, TResult>(this);
 

@@ -33,6 +33,27 @@ namespace NetFabric.Hyperlinq
         public static TSource SingleOrDefault<TSource>(this List<TSource> source) 
             => ReadOnlyList.SingleOrDefault<List<TSource>, List<TSource>.Enumerator, TSource>(source);
 
+        public static IEnumerable<TSource> AsEnumerable<TSource>(this List<TSource> source)
+            => source;
+
+        public static IReadOnlyCollection<TSource> AsReadOnlyCollection<TSource>(this List<TSource> source)
+            => source;
+
+        public static IReadOnlyList<TSource> AsReadOnlyList<TSource>(this List<TSource> source)
+            => source;
+
+        public static Enumerable.AsValueEnumerableEnumerable<List<TSource>, List<TSource>.Enumerator, TSource> AsValueEnumerable<TSource>(this List<TSource> source)
+            => Enumerable.AsValueEnumerable<List<TSource>, List<TSource>.Enumerator, TSource>(source);
+
+        public static ReadOnlyCollection.AsValueReadOnlyCollectionEnumerable<List<TSource>, List<TSource>.Enumerator, TSource> AsValueReadOnlyCollection<TSource>(this List<TSource> source)
+            => ReadOnlyCollection.AsValueReadOnlyCollection<List<TSource>, List<TSource>.Enumerator, TSource>(source);
+
+        public static ReadOnlyList.AsValueReadOnlyListEnumerable<List<TSource>, List<TSource>.Enumerator, TSource> AsValueReadOnlyList<TSource>(this List<TSource> source)
+            => ReadOnlyList.AsValueReadOnlyList<List<TSource>, List<TSource>.Enumerator, TSource>(source);
+
+        public static TSource[] ToArray<TSource>(this List<TSource> source)
+            => ReadOnlyList.ToArray<List<TSource>, List<TSource>.Enumerator, TSource>(source);
+
         public static List<TSource> ToList<TSource>(this List<TSource> source)
             => source;
     }

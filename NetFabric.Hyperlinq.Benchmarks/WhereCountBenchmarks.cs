@@ -1,7 +1,5 @@
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Configs;
-using JM.LinqFaster;
-using JM.LinqFaster.Parallel;
 
 namespace NetFabric.Hyperlinq.Benchmarks
 {

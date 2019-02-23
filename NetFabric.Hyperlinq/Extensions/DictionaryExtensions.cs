@@ -33,6 +33,21 @@ namespace NetFabric.Hyperlinq
         public static KeyValuePair<TKey, TValue> SingleOrDefault<TKey, TValue>(this Dictionary<TKey, TValue> source)
             => ReadOnlyCollection.SingleOrDefault<Dictionary<TKey, TValue>, Dictionary<TKey, TValue>.Enumerator, KeyValuePair<TKey, TValue>>(source);
 
+        public static IEnumerable<KeyValuePair<TKey, TValue>> AsEnumerable<TKey, TValue>(this Dictionary<TKey, TValue> source)
+            => source;
+
+        public static IReadOnlyCollection<KeyValuePair<TKey, TValue>> AsReadOnlyCollection<TKey, TValue>(this Dictionary<TKey, TValue> source)
+            => source;
+
+        public static Enumerable.AsValueEnumerableEnumerable<Dictionary<TKey, TValue>, Dictionary<TKey, TValue>.Enumerator, KeyValuePair<TKey, TValue>> AsValueEnumerable<TKey, TValue>(this Dictionary<TKey, TValue> source)
+            => Enumerable.AsValueEnumerable<Dictionary<TKey, TValue>, Dictionary<TKey, TValue>.Enumerator, KeyValuePair<TKey, TValue>>(source);
+
+        public static ReadOnlyCollection.AsValueReadOnlyCollectionEnumerable<Dictionary<TKey, TValue>, Dictionary<TKey, TValue>.Enumerator, KeyValuePair<TKey, TValue>> AsValueReadOnlyCollection<TKey, TValue>(this Dictionary<TKey, TValue> source)
+            => ReadOnlyCollection.AsValueReadOnlyCollection<Dictionary<TKey, TValue>, Dictionary<TKey, TValue>.Enumerator, KeyValuePair<TKey, TValue>>(source);
+
+        public static KeyValuePair<TKey, TValue>[] ToArray<TKey, TValue>(this Dictionary<TKey, TValue> source)
+            => ReadOnlyCollection.ToArray<Dictionary<TKey, TValue>, Dictionary<TKey, TValue>.Enumerator, KeyValuePair<TKey, TValue>>(source);
+
         public static List<KeyValuePair<TKey, TValue>> ToList<TKey, TValue>(this Dictionary<TKey, TValue> source)
             => ReadOnlyCollection.ToList<Dictionary<TKey, TValue>, Dictionary<TKey, TValue>.Enumerator, KeyValuePair<TKey, TValue>>(source);
     }

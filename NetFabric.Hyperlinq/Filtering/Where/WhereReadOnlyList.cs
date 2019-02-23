@@ -143,6 +143,9 @@ namespace NetFabric.Hyperlinq
             public IEnumerable<TSource> AsEnumerable()
                 => ValueEnumerable.AsEnumerable<WhereReadOnlyList<TEnumerable, TEnumerator, TSource>, ValueEnumerator, TSource>(this);
 
+            public WhereReadOnlyList<TEnumerable, TEnumerator, TSource> AsValueEnumerable()
+                => this;
+
             public TSource[] ToArray()
                 => ValueEnumerable.ToArray<WhereReadOnlyList<TEnumerable, TEnumerator, TSource>, ValueEnumerator, TSource>(this);
 

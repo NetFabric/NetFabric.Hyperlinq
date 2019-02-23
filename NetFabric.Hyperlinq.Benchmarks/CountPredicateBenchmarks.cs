@@ -11,9 +11,6 @@ namespace NetFabric.Hyperlinq.Benchmarks
     [MarkdownExporterAttribute.GitHub]
     public class CountPredicateBenchmarks : BenchmarksBase
     {
-        static bool Predicate(in int _)
-            => true;
-
         [BenchmarkCategory("Array")]
         [Benchmark(Baseline = true)]
         public int Linq_Array() => 

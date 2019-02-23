@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace NetFabric.Hyperlinq
 {
@@ -18,22 +19,6 @@ namespace NetFabric.Hyperlinq
             for (var index = 0; index < length; index++)
             {
                 if (predicate(source[index]))
-                    count++;
-            }
-            return count;
-        }
-
-        public static int Count<TSource>(this TSource[] source, Predicate<TSource> predicate)
-        {
-            if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
-
-            var length = source.Length;
-            if (length == 0) return 0;
-
-            var count = 0;
-            for (var index = 0; index < length; index++)
-            {
-                if (predicate(in source[index]))
                     count++;
             }
             return count;
@@ -125,8 +110,29 @@ namespace NetFabric.Hyperlinq
             return ref Default<TSource>.Value;
         }
 
-        public static TSource[] ToArray<TSource>(this TSource[] source) 
+        public static IEnumerable<TSource> AsEnumerable<TSource>(this TSource[] source)
             => source;
+
+        public static IReadOnlyCollection<TSource> AsReadOnlyCollection<TSource>(this TSource[] source)
+            => source;
+
+        public static IReadOnlyList<TSource> AsReadOnlyList<TSource>(this TSource[] source)
+            => source;
+
+        public static Enumerable.AsValueEnumerableEnumerable<IEnumerable<TSource>, IEnumerator<TSource>, TSource> AsValueEnumerable<TSource>(this TSource[] source)
+            => Enumerable.AsValueEnumerable<IEnumerable<TSource>, IEnumerator<TSource>, TSource>(source);
+
+        public static ReadOnlyCollection.AsValueReadOnlyCollectionEnumerable<IReadOnlyCollection<TSource>, IEnumerator<TSource>, TSource> AsValueReadOnlyCollection<TSource>(this TSource[] source)
+            => ReadOnlyCollection.AsValueReadOnlyCollection<IReadOnlyCollection<TSource>, IEnumerator<TSource>, TSource>(source);
+
+        public static ReadOnlyList.AsValueReadOnlyListEnumerable<IReadOnlyList<TSource>, IEnumerator<TSource>, TSource> AsValueReadOnlyList<TSource>(this TSource[] source)
+            => ReadOnlyList.AsValueReadOnlyList<IReadOnlyList<TSource>, IEnumerator<TSource>, TSource>(source);
+
+        public static TSource[] ToArray<TSource>(this TSource[] source)
+            => source;
+
+        public static List<TSource> ToList<TSource>(this TSource[] source)
+            => new List<TSource>(source);
 
         static class Default<T>
         {

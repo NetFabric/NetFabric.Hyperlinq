@@ -33,7 +33,22 @@ namespace NetFabric.Hyperlinq
         public static TValue SingleOrDefault<TKey, TValue>(this Dictionary<TKey, TValue>.ValueCollection source)
             => ReadOnlyCollection.SingleOrDefault<Dictionary<TKey, TValue>.ValueCollection, Dictionary<TKey, TValue>.ValueCollection.Enumerator, TValue>(source);
 
-        public static List<TValue> ToList<TKey, TValue>(this Dictionary<TKey, TValue>.ValueCollection source)
-            => ReadOnlyCollection.ToList<Dictionary<TKey, TValue>.ValueCollection, Dictionary<TKey, TValue>.ValueCollection.Enumerator, TValue>(source);
+        public static IEnumerable<TKey> AsEnumerable<TKey, TValue>(this Dictionary<TKey, TValue> source)
+            => source.Keys;
+
+        public static IReadOnlyCollection<TKey> AsReadOnlyCollection<TKey, TValue>(this Dictionary<TKey, TValue> source)
+            => source.Keys;
+
+        public static Enumerable.AsValueEnumerableEnumerable<Dictionary<TKey, TValue>.KeyCollection, Dictionary<TKey, TValue>.KeyCollection.Enumerator, TKey> AsValueEnumerable<TKey, TValue>(this Dictionary<TKey, TValue> source)
+            => Enumerable.AsValueEnumerable<Dictionary<TKey, TValue>.KeyCollection, Dictionary<TKey, TValue>.KeyCollection.Enumerator, TKey>(source.Keys);
+
+        public static ReadOnlyCollection.AsValueReadOnlyCollectionEnumerable<Dictionary<TKey, TValue>.KeyCollection, Dictionary<TKey, TValue>.KeyCollection.Enumerator, TKey> AsValueReadOnlyCollection<TKey, TValue>(this Dictionary<TKey, TValue> source)
+            => ReadOnlyCollection.AsValueReadOnlyCollection<Dictionary<TKey, TValue>.KeyCollection, Dictionary<TKey, TValue>.KeyCollection.Enumerator, TKey>(source.Keys);
+
+        public static TKey[] ToArray<TKey, TValue>(this Dictionary<TKey, TValue> source)
+            => ReadOnlyCollection.ToArray<Dictionary<TKey, TValue>.KeyCollection, Dictionary<TKey, TValue>.KeyCollection.Enumerator, TKey>(source.Keys);
+
+        public static List<TKey> ToList<TKey, TValue>(this Dictionary<TKey, TValue> source)
+            => ReadOnlyCollection.ToList<Dictionary<TKey, TValue>.KeyCollection, Dictionary<TKey, TValue>.KeyCollection.Enumerator, TKey>(source.Keys);
     }
 }

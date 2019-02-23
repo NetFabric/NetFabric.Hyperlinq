@@ -33,6 +33,21 @@ namespace NetFabric.Hyperlinq
         public static TSource SingleOrDefault<TSource>(this HashSet<TSource> source)
             => ReadOnlyCollection.SingleOrDefault<HashSet<TSource>, HashSet<TSource>.Enumerator, TSource>(source);
 
+        public static IEnumerable<TSource> AsEnumerable<TSource>(this HashSet<TSource> source)
+            => source;
+
+        public static IReadOnlyCollection<TSource> AsReadOnlyCollection<TSource>(this HashSet<TSource> source)
+            => source;
+
+        public static Enumerable.AsValueEnumerableEnumerable<HashSet<TSource>, HashSet<TSource>.Enumerator, TSource> AsValueEnumerable<TSource>(this HashSet<TSource> source)
+            => Enumerable.AsValueEnumerable<HashSet<TSource>, HashSet<TSource>.Enumerator, TSource>(source);
+
+        public static ReadOnlyCollection.AsValueReadOnlyCollectionEnumerable<HashSet<TSource>, HashSet<TSource>.Enumerator, TSource> AsValueReadOnlyCollection<TSource>(this HashSet<TSource> source)
+            => ReadOnlyCollection.AsValueReadOnlyCollection<HashSet<TSource>, HashSet<TSource>.Enumerator, TSource>(source);
+
+        public static TSource[] ToArray<TSource>(this HashSet<TSource> source)
+            => ReadOnlyCollection.ToArray<HashSet<TSource>, HashSet<TSource>.Enumerator, TSource>(source);
+
         public static List<TSource> ToList<TSource>(this HashSet<TSource> source)
             => ReadOnlyCollection.ToList<HashSet<TSource>, HashSet<TSource>.Enumerator, TSource>(source);
     }
