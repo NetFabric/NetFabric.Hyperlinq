@@ -5,15 +5,15 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class Enumerable
     {
-        public static ReturnValueReadOnlyList<TSource> Return<TSource>(TSource value) =>
-            new ReturnValueReadOnlyList<TSource>(value);
+        public static ReturnEnumerable<TSource> Return<TSource>(TSource value) =>
+            new ReturnEnumerable<TSource>(value);
 
-        public readonly struct ReturnValueReadOnlyList<TSource>
-            : IValueReadOnlyList<TSource, ReturnValueReadOnlyList<TSource>.ValueEnumerator>
+        public readonly struct ReturnEnumerable<TSource>
+            : IValueReadOnlyList<TSource, ReturnEnumerable<TSource>.ValueEnumerator>
         {
             readonly TSource value;
 
-            internal ReturnValueReadOnlyList(TSource value)
+            internal ReturnEnumerable(TSource value)
             {
                 this.value = value;
             }
@@ -38,7 +38,7 @@ namespace NetFabric.Hyperlinq
                 readonly TSource value;
                 bool moveNext;
 
-                internal Enumerator(in ReturnValueReadOnlyList<TSource> enumerable)
+                internal Enumerator(in ReturnEnumerable<TSource> enumerable)
                 {
                     value = enumerable.value;
                     moveNext = true;
@@ -63,7 +63,7 @@ namespace NetFabric.Hyperlinq
                 readonly TSource value;
                 bool moveNext;
 
-                internal ValueEnumerator(in ReturnValueReadOnlyList<TSource> enumerable)
+                internal ValueEnumerator(in ReturnEnumerable<TSource> enumerable)
                 {
                     value = enumerable.value;
                     moveNext = true;
@@ -95,48 +95,48 @@ namespace NetFabric.Hyperlinq
             }
 
             public int Count(Func<TSource, bool> predicate)
-                => ValueReadOnlyList.Count<ReturnValueReadOnlyList<TSource>, ValueEnumerator, TSource>(this, predicate);
+                => ValueReadOnlyList.Count<ReturnEnumerable<TSource>, ValueEnumerator, TSource>(this, predicate);
 
-            public ValueReadOnlyList.SelectValueReadOnlyList<ReturnValueReadOnlyList<TSource>, ValueEnumerator, TSource, TResult> Select<TResult>(Func<TSource, TResult> selector) 
-                => ValueReadOnlyList.Select<ReturnValueReadOnlyList<TSource>, ValueEnumerator, TSource, TResult>(this, selector);
+            public ValueReadOnlyList.SelectEnumerable<ReturnEnumerable<TSource>, ValueEnumerator, TSource, TResult> Select<TResult>(Func<TSource, TResult> selector) 
+                => ValueReadOnlyList.Select<ReturnEnumerable<TSource>, ValueEnumerator, TSource, TResult>(this, selector);
 
-            public ValueReadOnlyList.WhereValueReadOnlyList<ReturnValueReadOnlyList<TSource>, ValueEnumerator, TSource> Where(Func<TSource, bool> predicate) 
-                => ValueReadOnlyList.Where<ReturnValueReadOnlyList<TSource>, ValueEnumerator, TSource>(this, predicate);
+            public ValueReadOnlyList.WhereEnumerable<ReturnEnumerable<TSource>, ValueEnumerator, TSource> Where(Func<TSource, bool> predicate) 
+                => ValueReadOnlyList.Where<ReturnEnumerable<TSource>, ValueEnumerator, TSource>(this, predicate);
 
             public TSource First() 
-                => ValueReadOnlyList.First<ReturnValueReadOnlyList<TSource>, ValueEnumerator, TSource>(this);
+                => ValueReadOnlyList.First<ReturnEnumerable<TSource>, ValueEnumerator, TSource>(this);
             public TSource First(Func<TSource, bool> predicate) 
-                => ValueReadOnlyList.First<ReturnValueReadOnlyList<TSource>, ValueEnumerator, TSource>(this, predicate);
+                => ValueReadOnlyList.First<ReturnEnumerable<TSource>, ValueEnumerator, TSource>(this, predicate);
 
             public TSource FirstOrDefault() 
-                => ValueReadOnlyList.FirstOrDefault<ReturnValueReadOnlyList<TSource>, ValueEnumerator, TSource>(this);
+                => ValueReadOnlyList.FirstOrDefault<ReturnEnumerable<TSource>, ValueEnumerator, TSource>(this);
             public TSource FirstOrDefault(Func<TSource, bool> predicate)
-                => ValueReadOnlyList.FirstOrDefault<ReturnValueReadOnlyList<TSource>, ValueEnumerator, TSource>(this, predicate);
+                => ValueReadOnlyList.FirstOrDefault<ReturnEnumerable<TSource>, ValueEnumerator, TSource>(this, predicate);
 
             public TSource Single() 
-                => ValueReadOnlyList.Single<ReturnValueReadOnlyList<TSource>, ValueEnumerator, TSource>(this);
+                => ValueReadOnlyList.Single<ReturnEnumerable<TSource>, ValueEnumerator, TSource>(this);
             public TSource Single(Func<TSource, bool> predicate) 
-                => ValueReadOnlyList.Single<ReturnValueReadOnlyList<TSource>, ValueEnumerator, TSource>(this, predicate);
+                => ValueReadOnlyList.Single<ReturnEnumerable<TSource>, ValueEnumerator, TSource>(this, predicate);
 
             public TSource SingleOrDefault() 
-                => ValueReadOnlyList.SingleOrDefault<ReturnValueReadOnlyList<TSource>, ValueEnumerator, TSource>(this);
+                => ValueReadOnlyList.SingleOrDefault<ReturnEnumerable<TSource>, ValueEnumerator, TSource>(this);
             public TSource SingleOrDefault(Func<TSource, bool> predicate) 
-                => ValueReadOnlyList.SingleOrDefault<ReturnValueReadOnlyList<TSource>, ValueEnumerator, TSource>(this, predicate);
+                => ValueReadOnlyList.SingleOrDefault<ReturnEnumerable<TSource>, ValueEnumerator, TSource>(this, predicate);
 
             public IEnumerable<TSource> AsEnumerable()
-                => ValueEnumerable.AsEnumerable<ReturnValueReadOnlyList<TSource>, ValueEnumerator, TSource>(this);
+                => ValueEnumerable.AsEnumerable<ReturnEnumerable<TSource>, ValueEnumerator, TSource>(this);
 
             public IReadOnlyCollection<TSource> AsReadOnlyCollection()
-                => ValueReadOnlyCollection.AsReadOnlyCollection<ReturnValueReadOnlyList<TSource>, ValueEnumerator, TSource>(this);
+                => ValueReadOnlyCollection.AsReadOnlyCollection<ReturnEnumerable<TSource>, ValueEnumerator, TSource>(this);
 
             public IReadOnlyList<TSource> AsReadOnlyList()
-                => ValueReadOnlyList.AsReadOnlyList<ReturnValueReadOnlyList<TSource>, ValueEnumerator, TSource>(this);
+                => ValueReadOnlyList.AsReadOnlyList<ReturnEnumerable<TSource>, ValueEnumerator, TSource>(this);
 
             public TSource[] ToArray()
-                => ValueReadOnlyList.ToArray<ReturnValueReadOnlyList<TSource>, ValueEnumerator, TSource>(this);
+                => ValueReadOnlyList.ToArray<ReturnEnumerable<TSource>, ValueEnumerator, TSource>(this);
 
             public List<TSource> ToList()
-                => ValueReadOnlyCollection.ToList<ReturnValueReadOnlyList<TSource>, ValueEnumerator, TSource>(this);
+                => ValueReadOnlyCollection.ToList<ReturnEnumerable<TSource>, ValueEnumerator, TSource>(this);
         }
     }
 }

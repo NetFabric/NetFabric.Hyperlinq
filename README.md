@@ -41,7 +41,6 @@ This is a re-implementation of LINQ with improved performance, mainly by not box
   - `Create(Func<TEnumerator>)`
   - `Empty()`
   - `Range(int, int)`
-  - `Repeat(TSource)`
   - `Repeat(TSource, int)`
   - `Return(TSource)`
 - Projection

@@ -5,11 +5,11 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class Enumerable
     {
-        public static EmptyReadOnlyList<TSource> Empty<TSource>() =>
-            new EmptyReadOnlyList<TSource>();
+        public static EmptyEnumerable<TSource> Empty<TSource>() =>
+            new EmptyEnumerable<TSource>();
 
-        public readonly struct EmptyReadOnlyList<TSource>
-            : IValueReadOnlyList<TSource, EmptyReadOnlyList<TSource>.ValueEnumerator>
+        public readonly struct EmptyEnumerable<TSource>
+            : IValueReadOnlyList<TSource, EmptyEnumerable<TSource>.ValueEnumerator>
         {
             public Enumerator GetEnumerator() => new Enumerator();
             public ValueEnumerator GetValueEnumerator() => new ValueEnumerator();
@@ -42,14 +42,14 @@ namespace NetFabric.Hyperlinq
             public int Count(Func<TSource, bool> _)
                 => 0;
 
-            public EmptyReadOnlyList<TSource> Select<TResult>(Func<TSource, TResult> selector)
+            public EmptyEnumerable<TSource> Select<TResult>(Func<TSource, TResult> selector)
             {
                 if (selector is null) ThrowHelper.ThrowArgumentNullException(nameof(selector));
 
                 return this;
             }
 
-            public EmptyReadOnlyList<TSource> Where(Func<TSource, bool> predicate)
+            public EmptyEnumerable<TSource> Where(Func<TSource, bool> predicate)
             {
                 if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
 
@@ -72,10 +72,10 @@ namespace NetFabric.Hyperlinq
                 => System.Linq.Enumerable.Empty<TSource>();
 
             public IReadOnlyCollection<TSource> AsReadOnlyCollection()
-                => ValueReadOnlyCollection.AsReadOnlyCollection<EmptyReadOnlyList<TSource>, ValueEnumerator, TSource>(this);
+                => ValueReadOnlyCollection.AsReadOnlyCollection<EmptyEnumerable<TSource>, ValueEnumerator, TSource>(this);
 
             public IReadOnlyList<TSource> AsReadOnlyList()
-                => ValueReadOnlyList.AsReadOnlyList<EmptyReadOnlyList<TSource>, ValueEnumerator, TSource>(this);
+                => ValueReadOnlyList.AsReadOnlyList<EmptyEnumerable<TSource>, ValueEnumerator, TSource>(this);
 
             public TSource[] ToArray()
                 => new TSource[0];

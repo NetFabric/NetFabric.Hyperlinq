@@ -24,28 +24,6 @@ namespace NetFabric.Hyperlinq.UnitTests
                     .Be("count");
         }
 
-        [Theory]
-        [InlineData(-1)]
-        [InlineData(0)]
-        [InlineData(1)]
-        public void Repeat_With_Value_Should_Succeed(int value)
-        {
-            // Arrange
-
-            // Act
-            var result = Enumerable.Repeat(value);
-
-            // Assert
-            using(var enumerator = result.GetValueEnumerator())
-            {
-                for(var index = 0; index < 10; index++)
-                {
-                    enumerator.TryMoveNext(out var current).Should().BeTrue();
-                    current.Should().Be(value);
-                    result[index].Should().Be(value);
-                }
-            }
-        } 
         public static TheoryData<int, int, IReadOnlyList<int>> RepeatCountData =>
             new TheoryData<int, int, IReadOnlyList<int>> 
             {

@@ -80,24 +80,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
             foreach(var item in Enumerable.Repeat(1, Count))
                 sum += item;
             return sum;
-        }    
-
-        [BenchmarkCategory("RepeatInfinitely")]
-        [Benchmark]
-        public int Hyperlinq_RepeatInfinitely_ForEach() 
-        {
-            var sum = 0;
-            int current;
-            using(var enumerator = Enumerable.Repeat(1).GetValueEnumerator())
-            {
-                for(var counter = Count; counter != 0; counter--)
-                {
-                    enumerator.TryMoveNext(out current);
-                    sum += current;
-                }
-            }
-            return sum;
-        }    
+        }        
 
         [BenchmarkCategory("Create")]
         [Benchmark]
@@ -127,17 +110,6 @@ namespace NetFabric.Hyperlinq.Benchmarks
             var enumerable = Enumerable.Repeat(1, Count);
             var sum = 0;
             for(var index = 0; index < enumerable.Count(); index++)
-                sum += enumerable[index];
-            return sum;
-        }    
-
-        [BenchmarkCategory("RepeatInfinitely")]
-        [Benchmark]
-        public int Hyperlinq_RepeatInfinitely_For() 
-        {
-            var enumerable = Enumerable.Repeat(1);
-            var sum = 0;
-            for(var index = 0; index < Count; index++)
                 sum += enumerable[index];
             return sum;
         }    

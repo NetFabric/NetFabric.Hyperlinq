@@ -13,7 +13,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         int[] array;
         List<int> list;
         IEnumerable<int> linqRange;
-        Enumerable.RangeReadOnlyList hyperlinqRange;
+        Enumerable.RangeEnumerable hyperlinqRange;
         IEnumerable<int> enumerableReference;
         TestEnumerable.Enumerable enumerableValue;
 

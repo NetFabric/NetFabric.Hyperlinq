@@ -5,97 +5,125 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class Enumerable
     {
-        public static RepeatValueEnumerable<TSource> Repeat<TSource>(TSource value) =>
-            new RepeatValueEnumerable<TSource>(value);
+        public static RepeatEnumerable<TSource> Repeat<TSource>(TSource value, int count)
+        {
+            if (count < 0) ThrowHelper.ThrowArgumentOutOfRangeException(nameof(count));
 
-        public readonly struct RepeatValueEnumerable<TSource>
-            : IValueEnumerable<TSource, RepeatValueEnumerable<TSource>.ValueEnumerator>
+            return new RepeatEnumerable<TSource>(value, count);
+        }
+
+        public readonly struct RepeatEnumerable<TSource>
+            : IValueReadOnlyList<TSource, RepeatEnumerable<TSource>.ValueEnumerator>
         {
             readonly TSource value;
+            readonly int count;
 
-            internal RepeatValueEnumerable(TSource value)
+            internal RepeatEnumerable(TSource value, int count)
             {
                 this.value = value;
+                this.count = count;
             }
 
             public Enumerator GetEnumerator() => new Enumerator(in this);
             public ValueEnumerator GetValueEnumerator() => new ValueEnumerator(in this);
 
-            public TSource this[int index] => value;
+            public int Count() => count;
 
-            public readonly struct Enumerator 
+            public TSource this[int index]
+            {
+                get
+                {
+                    if (index < 0 || index >= count) ThrowHelper.ThrowIndexOutOfRangeException();
+
+                    return value;
+                }
+            }
+
+            public struct Enumerator 
             {
                 readonly TSource value;
+                int counter;
 
-                internal Enumerator(in RepeatValueEnumerable<TSource> enumerable)
+                internal Enumerator(in RepeatEnumerable<TSource> enumerable)
                 {
                     value = enumerable.value;
+                    counter = enumerable.count;
                 }
 
                 public TSource Current => value;
 
-                public bool MoveNext() => true;
+                public bool MoveNext() => counter-- > 0;
             }
 
-            public readonly struct ValueEnumerator
+            public struct ValueEnumerator
                 : IValueEnumerator<TSource>
             {
                 readonly TSource value;
+                int counter;
 
-                internal ValueEnumerator(in RepeatValueEnumerable<TSource> enumerable)
+                internal ValueEnumerator(in RepeatEnumerable<TSource> enumerable)
                 {
                     value = enumerable.value;
+                    counter = enumerable.count;
                 }
 
                 public bool TryMoveNext(out TSource current)
                 {
-                    current = value;
-                    return true;
+                    if (counter-- > 0)
+                    {
+                        current = value;
+                        return true;
+                    }
+                    current = default;
+                    return false;
                 }
 
-                public bool TryMoveNext() => true;
+                public bool TryMoveNext() => counter-- > 0;
 
                 public void Dispose() { }
             }
 
-            public int Count(Func<TSource, bool> predicate)
-                => ValueEnumerable.Count<RepeatValueEnumerable<TSource>, ValueEnumerator, TSource>(this, predicate);
+            public ValueReadOnlyList.SelectEnumerable<RepeatEnumerable<TSource>, ValueEnumerator, TSource, TResult> Select<TResult>(Func<TSource, TResult> selector) 
+                => ValueReadOnlyList.Select<RepeatEnumerable<TSource>, ValueEnumerator, TSource, TResult>(this, selector);
 
-            public ValueEnumerable.SelectValueEnumerable<RepeatValueEnumerable<TSource>, ValueEnumerator, TSource, TResult> Select<TResult>(Func<TSource, TResult> selector) 
-                => ValueEnumerable.Select<RepeatValueEnumerable<TSource>, ValueEnumerator, TSource, TResult>(this, selector);
-
-            public ValueEnumerable.WhereValueEnumerable<RepeatValueEnumerable<TSource>, ValueEnumerator, TSource> Where(Func<TSource, bool> predicate) 
-                => ValueEnumerable.Where<RepeatValueEnumerable<TSource>, ValueEnumerator, TSource>(this, predicate);
+            public ValueReadOnlyList.WhereEnumerable<RepeatEnumerable<TSource>, ValueEnumerator, TSource> Where(Func<TSource, bool> predicate) 
+                => ValueReadOnlyList.Where<RepeatEnumerable<TSource>, ValueEnumerator, TSource>(this, predicate);
 
             public TSource First() 
-                => ValueEnumerable.First<RepeatValueEnumerable<TSource>, ValueEnumerator, TSource>(this);
+                => ValueReadOnlyList.First<RepeatEnumerable<TSource>, ValueEnumerator, TSource>(this);
             public TSource First(Func<TSource, bool> predicate) 
-                => ValueEnumerable.First<RepeatValueEnumerable<TSource>, ValueEnumerator, TSource>(this, predicate);
+                => ValueReadOnlyList.First<RepeatEnumerable<TSource>, ValueEnumerator, TSource>(this, predicate);
 
             public TSource FirstOrDefault() 
-                => ValueEnumerable.FirstOrDefault<RepeatValueEnumerable<TSource>, ValueEnumerator, TSource>(this);
+                => ValueReadOnlyList.FirstOrDefault<RepeatEnumerable<TSource>, ValueEnumerator, TSource>(this);
             public TSource FirstOrDefault(Func<TSource, bool> predicate) 
-                => ValueEnumerable.FirstOrDefault<RepeatValueEnumerable<TSource>, ValueEnumerator, TSource>(this, predicate);
+                => ValueReadOnlyList.FirstOrDefault<RepeatEnumerable<TSource>, ValueEnumerator, TSource>(this, predicate);
 
             public TSource Single() 
-                => ValueEnumerable.Single<RepeatValueEnumerable<TSource>, ValueEnumerator, TSource>(this);
+                => ValueReadOnlyList.Single<RepeatEnumerable<TSource>, ValueEnumerator, TSource>(this);
             public TSource Single(Func<TSource, bool> predicate) 
-                => ValueEnumerable.Single<RepeatValueEnumerable<TSource>, ValueEnumerator, TSource>(this, predicate);
+                => ValueReadOnlyList.Single<RepeatEnumerable<TSource>, ValueEnumerator, TSource>(this, predicate);
 
             public TSource SingleOrDefault() 
-                => ValueEnumerable.SingleOrDefault<RepeatValueEnumerable<TSource>, ValueEnumerator, TSource>(this);
+                => ValueReadOnlyList.SingleOrDefault<RepeatEnumerable<TSource>, ValueEnumerator, TSource>(this);
             public TSource SingleOrDefault(Func<TSource, bool> predicate) 
-                => ValueEnumerable.SingleOrDefault<RepeatValueEnumerable<TSource>, ValueEnumerator, TSource>(this, predicate);
+                => ValueReadOnlyList.SingleOrDefault<RepeatEnumerable<TSource>, ValueEnumerator, TSource>(this, predicate);
 
             public IEnumerable<TSource> AsEnumerable()
-                => ValueEnumerable.AsEnumerable<RepeatValueEnumerable<TSource>, ValueEnumerator, TSource>(this);
+                => ValueEnumerable.AsEnumerable<RepeatEnumerable<TSource>, ValueEnumerator, TSource>(this);
 
-            public List<TSource> ToArray()
-                => throw new NotSupportedException();
+            public IReadOnlyCollection<TSource> AsReadOnlyCollection()
+                => ValueReadOnlyCollection.AsReadOnlyCollection<RepeatEnumerable<TSource>, ValueEnumerator, TSource>(this);
+
+            public IReadOnlyList<TSource> AsReadOnlyList()
+                => ValueReadOnlyList.AsReadOnlyList<RepeatEnumerable<TSource>, ValueEnumerator, TSource>(this);
+
+            public TSource[] ToArray()
+                => ValueReadOnlyList.ToArray<RepeatEnumerable<TSource>, ValueEnumerator, TSource>(this);
 
             public List<TSource> ToList()
-                => throw new NotSupportedException();
+                => ValueReadOnlyCollection.ToList<RepeatEnumerable<TSource>, ValueEnumerator, TSource>(this);
         }
     }
-}
+ }
 

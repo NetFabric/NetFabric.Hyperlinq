@@ -11,7 +11,7 @@ namespace NetFabric.Hyperlinq
         public static int Count<TKey, TValue>(this SortedDictionary<TKey, TValue>.KeyCollection source, Func<TKey, bool> predicate)
             => ReadOnlyCollection.Count<SortedDictionary<TKey, TValue>.KeyCollection, SortedDictionary<TKey, TValue>.KeyCollection.Enumerator, TKey>(source, predicate);
 
-        public static ReadOnlyCollection.SelectReadOnlyCollection<SortedDictionary<TKey, TValue>.KeyCollection, SortedDictionary<TKey, TValue>.KeyCollection.Enumerator, TKey, TResult> Select<TKey, TValue, TResult>(
+        public static ReadOnlyCollection.SelectEnumerable<SortedDictionary<TKey, TValue>.KeyCollection, SortedDictionary<TKey, TValue>.KeyCollection.Enumerator, TKey, TResult> Select<TKey, TValue, TResult>(
             this SortedDictionary<TKey, TValue>.KeyCollection source,
             Func<TKey, TResult> selector) 
             => ReadOnlyCollection.Select<SortedDictionary<TKey, TValue>.KeyCollection, SortedDictionary<TKey, TValue>.KeyCollection.Enumerator, TKey, TResult>(source, selector);

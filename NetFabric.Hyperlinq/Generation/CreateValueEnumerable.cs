@@ -33,10 +33,10 @@ namespace NetFabric.Hyperlinq
             public int Count(Func<TSource, bool> predicate)
                 => Count<CreateValueEnumerable<TEnumerator, TSource>, TEnumerator, TSource>(this, predicate);
 
-            public SelectValueEnumerable<CreateValueEnumerable<TEnumerator, TSource>, TEnumerator, TSource, TResult> Select<TResult>(Func<TSource, TResult> selector) 
+            public SelectEnumerable<CreateValueEnumerable<TEnumerator, TSource>, TEnumerator, TSource, TResult> Select<TResult>(Func<TSource, TResult> selector) 
                 => Select<CreateValueEnumerable<TEnumerator, TSource>, TEnumerator, TSource, TResult>(this, selector);
 
-            public WhereValueEnumerable<CreateValueEnumerable<TEnumerator, TSource>, TEnumerator, TSource> Where(Func<TSource, bool> predicate) 
+            public WhereEnumerable<CreateValueEnumerable<TEnumerator, TSource>, TEnumerator, TSource> Where(Func<TSource, bool> predicate) 
                 => Where<CreateValueEnumerable<TEnumerator, TSource>, TEnumerator, TSource>(this, predicate);
 
             public TSource First() 

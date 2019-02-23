@@ -9,7 +9,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         protected int[] array;
         protected List<int> list;
         protected IEnumerable<int> linqRange;
-        protected Enumerable.RangeReadOnlyList hyperlinqRange;
+        protected Enumerable.RangeEnumerable hyperlinqRange;
         protected IEnumerable<int> enumerableReference;
         protected TestEnumerable.Enumerable enumerableValue;
 

@@ -11,7 +11,7 @@ namespace NetFabric.Hyperlinq
         public static int Count<TSource>(this LinkedList<TSource> source, Func<TSource, bool> predicate)
             => ReadOnlyCollection.Count<LinkedList<TSource>, LinkedList<TSource>.Enumerator, TSource>(source, predicate);
 
-        public static ReadOnlyCollection.SelectReadOnlyCollection<LinkedList<TSource>, LinkedList<TSource>.Enumerator, TSource, TResult> Select<TSource, TResult>(
+        public static ReadOnlyCollection.SelectEnumerable<LinkedList<TSource>, LinkedList<TSource>.Enumerator, TSource, TResult> Select<TSource, TResult>(
             this LinkedList<TSource> source,
             Func<TSource, TResult> selector) 
             => ReadOnlyCollection.Select<LinkedList<TSource>, LinkedList<TSource>.Enumerator, TSource, TResult>(source, selector);
