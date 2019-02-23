@@ -4,27 +4,26 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class ValueReadOnlyList
     {
-        public static int Count<TEnumerable, TEnumerator, TSource>(this TEnumerable source)
+        public static bool Any<TEnumerable, TEnumerator, TSource>(this TEnumerable source)
             where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
             where TEnumerator : struct, IValueEnumerator<TSource>
-            => source.Count();
+            => source.Count() != 0;
 
-        public static int Count<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, bool> predicate)
+        public static bool Any<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, bool> predicate)
             where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
             where TEnumerator : struct, IValueEnumerator<TSource>
         {
             if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
 
-            var sourceCount = source.Count();
-            if (sourceCount == 0) return 0;
+            var count = source.Count();
+            if (count == 0) return false;
 
-            var count = 0;
-            for (var index = 0; index < sourceCount; index++)
+            for (var index = 0; index < count; index++)
             {
                 if (predicate(source[index]))
-                    count++;
+                    return true;
             }
-            return count;
+            return false;
         }
     }
 }
