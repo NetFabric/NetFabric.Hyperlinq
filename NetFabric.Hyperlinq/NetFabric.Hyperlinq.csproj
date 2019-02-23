@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFrameworks>netstandard2.0;netcoreapp2.1</TargetFrameworks>
     <PackageId>NetFabric.Hyperlinq</PackageId>
     <Title>NetFabric.Hyperlinq</Title>
     <Description>An alternative to System.Linq.</Description>
@@ -14,6 +14,13 @@
     <PackageTags>hyperlinq, linq, performance</PackageTags>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
   </PropertyGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)'=='netstandard2.0'">
+    <Compile Remove="Extensions\ReadOnlySpanExtensions.cs" />
+    <Compile Remove="Filtering\Where\WhereReadOnlySpan.cs" />
+    <Compile Remove="Filtering\WhereSelect\WhereSelectReadOnlySpan.cs" />
+    <Compile Remove="Projection\Select\SelectReadOnlySpan.cs" />
+  </ItemGroup>
 
   <ItemGroup>
     <None Include="..\Licenses\LICENSE.txt" Pack="true" PackagePath="" />
