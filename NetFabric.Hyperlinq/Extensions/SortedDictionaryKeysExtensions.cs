@@ -11,6 +11,21 @@ namespace NetFabric.Hyperlinq
         public static int Count<TKey, TValue>(this SortedDictionary<TKey, TValue>.KeyCollection source, Func<TKey, bool> predicate)
             => ReadOnlyCollection.Count<SortedDictionary<TKey, TValue>.KeyCollection, SortedDictionary<TKey, TValue>.KeyCollection.Enumerator, TKey>(source, predicate);
 
+        public static bool All<TKey, TValue>(this SortedDictionary<TKey, TValue>.KeyCollection source, Func<TKey, bool> predicate)
+            => ReadOnlyCollection.All<SortedDictionary<TKey, TValue>.KeyCollection, SortedDictionary<TKey, TValue>.KeyCollection.Enumerator, TKey>(source, predicate);
+
+        public static bool Any<TKey, TValue>(this SortedDictionary<TKey, TValue>.KeyCollection source)
+            => source.Count != 0;
+
+        public static bool Any<TKey, TValue>(this SortedDictionary<TKey, TValue>.KeyCollection source, Func<TKey, bool> predicate)
+            => ReadOnlyCollection.Any<SortedDictionary<TKey, TValue>.KeyCollection, SortedDictionary<TKey, TValue>.KeyCollection.Enumerator, TKey>(source, predicate);
+
+        public static bool Contains<TKey, TValue>(this SortedDictionary<TKey, TValue>.KeyCollection source, KeyValuePair<TKey, TValue> value)
+            => source.Contains(value);
+
+        public static bool Contains<TKey, TValue>(this SortedDictionary<TKey, TValue>.KeyCollection source, KeyValuePair<TKey, TValue> value, IEqualityComparer<TKey> comparer)
+            => source.Contains(value, comparer);
+
         public static ReadOnlyCollection.SelectEnumerable<SortedDictionary<TKey, TValue>.KeyCollection, SortedDictionary<TKey, TValue>.KeyCollection.Enumerator, TKey, TResult> Select<TKey, TValue, TResult>(
             this SortedDictionary<TKey, TValue>.KeyCollection source,
             Func<TKey, TResult> selector) 

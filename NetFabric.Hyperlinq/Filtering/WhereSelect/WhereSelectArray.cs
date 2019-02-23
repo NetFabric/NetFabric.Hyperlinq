@@ -119,7 +119,25 @@ namespace NetFabric.Hyperlinq
             }
 
             public int Count()
-                => ReadOnlyList.Count<IReadOnlyList<TSource>, IEnumerator<TSource>, TSource>(source, predicate);
+                => source.Count(predicate);
+
+            public int Count(Func<TResult, bool> predicate)
+                => ValueEnumerable.Count<WhereSelectEnumerable<TSource, TResult>, ValueEnumerator, TResult>(this, predicate);
+
+            public bool All(Func<TResult, bool> predicate)
+                => ValueEnumerable.All<WhereSelectEnumerable<TSource, TResult>, ValueEnumerator, TResult>(this, predicate);
+
+            public bool Any()
+                => source.Any(predicate);
+
+            public bool Any(Func<TResult, bool> predicate)
+                => ValueEnumerable.Any<WhereSelectEnumerable<TSource, TResult>, ValueEnumerator, TResult>(this, predicate);
+
+            public bool Contains(TResult value)
+                => ValueEnumerable.Contains<WhereSelectEnumerable<TSource, TResult>, ValueEnumerator, TResult>(this, value);
+
+            public bool Contains(TResult value, IEqualityComparer<TResult> comparer)
+                => ValueEnumerable.Contains<WhereSelectEnumerable<TSource, TResult>, ValueEnumerator, TResult>(this, value, comparer);
 
             public ValueEnumerable.SelectEnumerable<WhereSelectEnumerable<TSource, TResult>, ValueEnumerator, TResult, TSelectorResult> Select<TSelectorResult>(Func<TResult, TSelectorResult> selector)
                 => ValueEnumerable.Select<WhereSelectEnumerable<TSource, TResult>, ValueEnumerator, TResult, TSelectorResult>(this, selector);

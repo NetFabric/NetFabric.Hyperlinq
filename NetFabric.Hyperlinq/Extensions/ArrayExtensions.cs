@@ -24,6 +24,45 @@ namespace NetFabric.Hyperlinq
             return count;
         }
 
+        public static bool All<TSource>(this TSource[] source, Func<TSource, bool> predicate)
+        {
+            if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
+
+            var length = source.Length;
+            if (length == 0) return false;
+
+            for (var index = 0; index < length; index++)
+            {
+                if (!predicate(source[index]))
+                    return false;
+            }
+            return true;
+        }
+
+        public static bool Any<TSource>(this TSource[] source)
+            => source.Length != 0;
+
+        public static bool Any<TSource>(this TSource[] source, Func<TSource, bool> predicate)
+        {
+            if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
+
+            var length = source.Length;
+            if (length == 0) return false;
+
+            for (var index = 0; index < length; index++)
+            {
+                if (predicate(source[index]))
+                    return true;
+            }
+            return false;
+        }
+
+        public static bool Contains<TSource>(this TSource[] source, TSource value)
+            => source.Contains(value);
+
+        public static bool Contains<TSource>(this TSource[] source, TSource value, IEqualityComparer<TSource> comparer)
+            => source.Contains(value, comparer);
+
         public static ref readonly TSource First<TSource>(this TSource[] source)
         {
             if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));

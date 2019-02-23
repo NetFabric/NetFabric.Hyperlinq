@@ -11,6 +11,21 @@ namespace NetFabric.Hyperlinq
         public static int Count<TSource>(this SortedSet<TSource> source, Func<TSource, bool> predicate)
             => ReadOnlyCollection.Count<SortedSet<TSource>, SortedSet<TSource>.Enumerator, TSource>(source, predicate);
 
+        public static bool All<TSource>(this SortedSet<TSource> source, Func<TSource, bool> predicate)
+            => ReadOnlyCollection.All<SortedSet<TSource>, SortedSet<TSource>.Enumerator, TSource>(source, predicate);
+
+        public static bool Any<TSource>(this SortedSet<TSource> source)
+            => source.Count != 0;
+
+        public static bool Any<TSource>(this SortedSet<TSource> source, Func<TSource, bool> predicate)
+            => ReadOnlyCollection.Any<SortedSet<TSource>, SortedSet<TSource>.Enumerator, TSource>(source, predicate);
+
+        public static bool Contains<TSource>(this SortedSet<TSource> source, TSource value)
+            => source.Contains(value);
+
+        public static bool Contains<TSource>(this SortedSet<TSource> source, TSource value, IEqualityComparer<TSource> comparer)
+            => source.Contains(value, comparer);
+
         public static ReadOnlyCollection.SelectEnumerable<SortedSet<TSource>, SortedSet<TSource>.Enumerator, TSource, TResult> Select<TSource, TResult>(
             this SortedSet<TSource> source,
             Func<TSource, TResult> selector) 

@@ -11,6 +11,21 @@ namespace NetFabric.Hyperlinq
         public static int Count<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate)
             => Enumerable.Count<IEnumerable<TSource>, IEnumerator<TSource>, TSource>(source, predicate);
 
+        public static bool All<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate)
+            => Enumerable.All<IEnumerable<TSource>, IEnumerator<TSource>, TSource>(source, predicate);
+
+        public static bool Any<TSource>(this IEnumerable<TSource> source)
+            => Enumerable.Any<IEnumerable<TSource>, IEnumerator<TSource>, TSource>(source);
+
+        public static bool Any<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate)
+            => Enumerable.Any<IEnumerable<TSource>, IEnumerator<TSource>, TSource>(source, predicate);
+
+        public static bool Contains<TSource>(this IEnumerable<TSource> source, TSource value)
+            => Enumerable.Contains<IEnumerable<TSource>, IEnumerator<TSource>, TSource>(source, value);
+
+        public static bool Contains<TSource>(this IEnumerable<TSource> source, TSource value, IEqualityComparer<TSource> comparer)
+            => Enumerable.Contains<IEnumerable<TSource>, IEnumerator<TSource>, TSource>(source, value, comparer);
+
         public static Enumerable.SelectEnumerable<IEnumerable<TSource>, IEnumerator<TSource>, TSource, TResult> Select<TSource, TResult>(
             this IEnumerable<TSource> source,
             Func<TSource, TResult> selector) 

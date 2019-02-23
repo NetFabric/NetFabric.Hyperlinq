@@ -8,6 +8,21 @@ namespace NetFabric.Hyperlinq
         public static int Count<TSource>(this IReadOnlyList<TSource> source, Func<TSource, bool> predicate)
             => ReadOnlyList.Count<IReadOnlyList<TSource>, IEnumerator<TSource>, TSource>(source, predicate);
 
+        public static bool All<TSource>(this IReadOnlyList<TSource> source, Func<TSource, bool> predicate)
+            => ReadOnlyList.All<IReadOnlyList<TSource>, IEnumerator<TSource>, TSource>(source, predicate);
+
+        public static bool Any<TSource>(this IReadOnlyList<TSource> source)
+            => ReadOnlyList.Any<IReadOnlyList<TSource>, IEnumerator<TSource>, TSource>(source);
+
+        public static bool Any<TSource>(this IReadOnlyList<TSource> source, Func<TSource, bool> predicate)
+            => ReadOnlyList.Any<IReadOnlyList<TSource>, IEnumerator<TSource>, TSource>(source, predicate);
+
+        public static bool Contains<TSource>(this IReadOnlyList<TSource> source, TSource value)
+            => ReadOnlyList.Contains<IReadOnlyList<TSource>, IEnumerator<TSource>, TSource>(source, value);
+
+        public static bool Contains<TSource>(this IReadOnlyList<TSource> source, TSource value, IEqualityComparer<TSource> comparer)
+            => ReadOnlyList.Contains<IReadOnlyList<TSource>, IEnumerator<TSource>, TSource>(source, value, comparer);
+
         public static ReadOnlyList.SelectEnumerable<IReadOnlyList<TSource>, IEnumerator<TSource>, TSource, TResult> Select<TSource, TResult>(
             this IReadOnlyList<TSource> source,
             Func<TSource, TResult> selector) 

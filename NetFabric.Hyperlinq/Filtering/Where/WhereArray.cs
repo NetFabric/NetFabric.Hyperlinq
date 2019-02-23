@@ -107,7 +107,25 @@ namespace NetFabric.Hyperlinq
             }
 
             public int Count()
-                => ReadOnlyList.Count<IReadOnlyList<TSource>, IEnumerator<TSource>, TSource>(source, predicate);
+                => source.Count(predicate);
+
+            public int Count(Func<TSource, bool> predicate)
+                => ValueEnumerable.Count<WhereEnumerable<TSource>, ValueEnumerator, TSource>(this, predicate);
+
+            public bool All(Func<TSource, bool> predicate)
+                => ValueEnumerable.All<WhereEnumerable<TSource>, ValueEnumerator, TSource>(this, predicate);
+
+            public bool Any()
+                => source.Any(predicate);
+
+            public bool Any(Func<TSource, bool> predicate)
+                => ValueEnumerable.Any<WhereEnumerable<TSource>, ValueEnumerator, TSource>(this, predicate);
+
+            public bool Contains(TSource value)
+                => ValueEnumerable.Contains<WhereEnumerable<TSource>, ValueEnumerator, TSource>(this, value);
+
+            public bool Contains(TSource value, IEqualityComparer<TSource> comparer)
+                => ValueEnumerable.Contains<WhereEnumerable<TSource>, ValueEnumerator, TSource>(this, value, comparer);
 
             public Array.WhereSelectEnumerable<TSource, TResult> Select<TResult>(Func<TSource, TResult> selector)
                 => Array.WhereSelect<TSource, TResult>(source, predicate, selector);
