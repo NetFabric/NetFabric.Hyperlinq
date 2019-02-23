@@ -3,10 +3,10 @@ using System.Collections.Generic;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class ReadOnlySpanExtensions
+    public static partial class SpanExtensions
     {
         internal static WhereSelectEnumerable<TSource, TResult> WhereSelect<TSource, TResult>(
-            this ReadOnlySpan<TSource> source, 
+            this Span<TSource> source, 
             Func<TSource, bool> predicate, 
             Func<TSource, TResult> selector) 
         {
@@ -19,11 +19,11 @@ namespace NetFabric.Hyperlinq
 
         public readonly ref struct WhereSelectEnumerable<TSource, TResult>
         {
-            readonly ReadOnlySpan<TSource> source;
+            readonly Span<TSource> source;
             readonly Func<TSource, bool> predicate;
             readonly Func<TSource, TResult> selector;
 
-            internal WhereSelectEnumerable(ReadOnlySpan<TSource> source, Func<TSource, bool> predicate, Func<TSource, TResult> selector)
+            internal WhereSelectEnumerable(Span<TSource> source, Func<TSource, bool> predicate, Func<TSource, TResult> selector)
             {
                 this.source = source;
                 this.predicate = predicate;
@@ -34,7 +34,7 @@ namespace NetFabric.Hyperlinq
 
             public ref struct Enumerator
             {
-                readonly ReadOnlySpan<TSource> source;
+                readonly Span<TSource> source;
                 readonly Func<TSource, bool> predicate;
                 readonly Func<TSource, TResult> selector;
                 readonly int count;

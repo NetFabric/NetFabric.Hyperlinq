@@ -2,10 +2,10 @@
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class ReadOnlySpanExtensions
+    public static partial class SpanExtensions
     {
         public static SelectEnumerable<TSource, TResult> Select<TSource, TResult>(
-            this ReadOnlySpan<TSource> source, 
+            this Span<TSource> source, 
             Func<TSource, TResult> selector)
         {
             if (selector is null) ThrowHelper.ThrowArgumentNullException(nameof(selector));
@@ -15,10 +15,10 @@ namespace NetFabric.Hyperlinq
 
         public readonly ref struct SelectEnumerable<TSource, TResult>
         {
-            readonly ReadOnlySpan<TSource> source;
+            readonly Span<TSource> source;
             readonly Func<TSource, TResult> selector;
 
-            internal SelectEnumerable(in ReadOnlySpan<TSource> source, Func<TSource, TResult> selector)
+            internal SelectEnumerable(in Span<TSource> source, Func<TSource, TResult> selector)
             {
                 this.source = source;
                 this.selector = selector;
@@ -28,7 +28,7 @@ namespace NetFabric.Hyperlinq
 
             public ref struct Enumerator
             {
-                ReadOnlySpan<TSource> source;
+                Span<TSource> source;
                 readonly Func<TSource, TResult> selector;
                 readonly int count;
                 int index;

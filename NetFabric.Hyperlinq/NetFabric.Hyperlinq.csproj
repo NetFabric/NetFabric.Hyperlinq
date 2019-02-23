@@ -20,6 +20,10 @@
     <Compile Remove="Filtering\Where\WhereReadOnlySpan.cs" />
     <Compile Remove="Filtering\WhereSelect\WhereSelectReadOnlySpan.cs" />
     <Compile Remove="Projection\Select\SelectReadOnlySpan.cs" />
+    <Compile Remove="Extensions\SpanExtensions.cs" />
+    <Compile Remove="Filtering\Where\WhereSpan.cs" />
+    <Compile Remove="Filtering\WhereSelect\WhereSelectSpan.cs" />
+    <Compile Remove="Projection\Select\SelectSpan.cs" />
   </ItemGroup>
 
   <ItemGroup>

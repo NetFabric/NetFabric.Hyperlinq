@@ -2,9 +2,9 @@
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class ReadOnlySpanExtensions
+    public static partial class SpanExtensions
     {
-        public static WhereEnumerable<TSource> Where<TSource>(this System.ReadOnlySpan<TSource> source, Func<TSource, bool> predicate) 
+        public static WhereEnumerable<TSource> Where<TSource>(this System.Span<TSource> source, Func<TSource, bool> predicate) 
         {
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
 
@@ -13,10 +13,10 @@ namespace NetFabric.Hyperlinq
 
         public readonly ref struct WhereEnumerable<TSource>
         {
-            readonly ReadOnlySpan<TSource> source;
+            readonly Span<TSource> source;
             readonly Func<TSource, bool> predicate;
 
-            internal WhereEnumerable(in ReadOnlySpan<TSource> source, Func<TSource, bool> predicate)
+            internal WhereEnumerable(in Span<TSource> source, Func<TSource, bool> predicate)
             {
                 this.source = source;
                 this.predicate = predicate;
@@ -26,7 +26,7 @@ namespace NetFabric.Hyperlinq
 
             public ref struct Enumerator 
             {
-                readonly ReadOnlySpan<TSource> source;
+                readonly Span<TSource> source;
                 readonly Func<TSource, bool> predicate;
                 readonly int count;
                 int index;
