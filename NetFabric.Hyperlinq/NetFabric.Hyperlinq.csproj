@@ -5,7 +5,7 @@
     <PackageId>NetFabric.Hyperlinq</PackageId>
     <Title>NetFabric.Hyperlinq</Title>
     <Description>An alternative to System.Linq.</Description>
-    <Version>2.0.0</Version>
+    <Version>2.1.0</Version>
     <Authors>Antao Almada</Authors>
     <Copyright>Copyright 2019 Antao Almada</Copyright>
     <RepositoryUrl>https://github.com/NetFabric/NetFabric.Hyperlinq</RepositoryUrl>
