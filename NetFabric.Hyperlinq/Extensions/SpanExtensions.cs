@@ -24,6 +24,28 @@ namespace NetFabric.Hyperlinq
             return count;
         }
 
+        public static Span<TSource> Skip<TSource>(this Span<TSource> source, int count)
+        {
+            if (count <= 0)
+                return source;
+
+            var length = source.Length;
+            var start = count < length ? count : length;
+            var newCount = length - count;
+            if (newCount < 0)
+                newCount = 0;
+            return source.Slice(start, newCount);
+        }
+
+        public static Span<TSource> Take<TSource>(this Span<TSource> source, int count)
+        {
+            if (count <= 0)
+                return source.Slice(0, 0);
+
+            var length = source.Length;
+            return source.Slice(0, (count < length) ? count : length);
+        }
+
         public static bool All<TSource>(this Span<TSource> source, Func<TSource, bool> predicate)
         {
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
