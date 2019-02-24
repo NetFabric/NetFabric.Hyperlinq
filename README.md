@@ -43,6 +43,12 @@ This is a re-implementation of LINQ with improved performance, mainly by not box
   - `Range(int, int)`
   - `Repeat(TSource, int)`
   - `Return(TSource)`
+- Quantifier
+  - `All(Func<TSource, bool>)`
+  - `Any()`
+  - `Any(Func<TSource, bool>)`
+  - `Contains(TSource)`
+  - `Contains(TSource, IEqualityComparer<TSource>)`
 - Projection
   - `Select(Func<TSource, TResult>)`
 
