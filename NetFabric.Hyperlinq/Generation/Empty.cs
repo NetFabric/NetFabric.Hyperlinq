@@ -83,6 +83,30 @@ namespace NetFabric.Hyperlinq
             public List<TSource> ToList()
                 => new List<TSource>();
         }
+
+        public static TSource? FirstOrNull<TSource>(this EmptyEnumerable<TSource> _)
+            where TSource : struct
+            => null;
+
+        public static TSource? FirstOrNull<TSource>(this EmptyEnumerable<TSource> _, Func<TSource, bool> predicate)
+            where TSource : struct
+        {
+            if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
+
+            return null;
+        }
+
+        public static TSource? SingleOrNull<TSource>(this EmptyEnumerable<TSource> _)
+            where TSource : struct
+            => null;
+
+        public static TSource? SingleOrNull<TSource>(this EmptyEnumerable<TSource> _, Func<TSource, bool> predicate)
+            where TSource : struct
+        {
+            if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
+
+            return null;
+        }
     }
 }
 

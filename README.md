@@ -31,10 +31,14 @@ This is a re-implementation of LINQ with improved performance, mainly by not box
   - `First(Func<TSource, bool>)`
   - `FirstOrDefault()`
   - `FirstOrDefault(Func<TSource, bool>)`
+  - `FirstOrNull() where TSource : struct`
+  - `FirstOrNull(Func<TSource, bool>) where TSource : struct`
   - `Single()`
   - `Single(Func<TSource, bool>)`
   - `SingleOrDefault()`
   - `SingleOrDefault(Func<TSource, bool>)`
+  - `SingleOrNull() where TSource : struct`
+  - `SingleOrNull(Func<TSource, bool>) where TSource : struct` 
 - Filtering
   - `Where(Func<TSource, bool>)`
 - Generation

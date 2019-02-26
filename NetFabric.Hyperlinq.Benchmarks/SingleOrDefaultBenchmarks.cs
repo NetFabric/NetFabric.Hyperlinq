@@ -30,53 +30,79 @@ namespace NetFabric.Hyperlinq.Benchmarks
 
         [BenchmarkCategory("Array")]
         [Benchmark(Baseline = true)]
-        public int Linq_Array() => 
+        public int Linq_Array_SingleOrDefault() => 
             System.Linq.Enumerable.SingleOrDefault(array);
 
         [BenchmarkCategory("List")]
         [Benchmark(Baseline = true)]
-        public int Linq_List() => 
+        public int Linq_List_SingleOrDefault() => 
             System.Linq.Enumerable.SingleOrDefault(list);
 
         [BenchmarkCategory("Range")]
         [Benchmark(Baseline = true)]
-        public int Linq_Range() => 
+        public int Linq_Range_SingleOrDefault() => 
             System.Linq.Enumerable.SingleOrDefault(linqRange);
 
         [BenchmarkCategory("Enumerable")]
         [Benchmark(Baseline = true)]
-        public int Linq_Enumerable_Reference() => 
+        public int Linq_Enumerable_Reference_SingleOrDefault() => 
             System.Linq.Enumerable.SingleOrDefault(enumerableReference);
 
         [BenchmarkCategory("Enumerable")]
         [Benchmark]
-        public int Linq_Enumerable_Value() => 
+        public int Linq_Enumerable_Value_SingleOrDefault() => 
             System.Linq.Enumerable.SingleOrDefault(enumerableValue);
 
         [BenchmarkCategory("Array")]
         [Benchmark]
-        public int Hyperlinq_Array() => 
+        public int Hyperlinq_Array_SingleOrDefault() => 
             array.SingleOrDefault();
+
+        [BenchmarkCategory("Array")]
+        [Benchmark]
+        public int? Hyperlinq_Array_SingleOrNull() =>
+            array.SingleOrNull();
 
         [BenchmarkCategory("List")]
         [Benchmark]
-        public int Hyperlinq_List() => 
+        public int Hyperlinq_List_SingleOrDefault() => 
             list.SingleOrDefault();
+
+        [BenchmarkCategory("List")]
+        [Benchmark]
+        public int? Hyperlinq_List_SingleOrNull() =>
+            list.SingleOrNull();
 
         [BenchmarkCategory("Range")]
         [Benchmark]
 
-        public int Hyperlinq_Range() =>
+        public int Hyperlinq_Range_SingleOrDefault() =>
             hyperlinqRange.SingleOrDefault();
+
+        [BenchmarkCategory("Range")]
+        [Benchmark]
+
+        public int? Hyperlinq_Range_SingleOrNull() =>
+            hyperlinqRange.SingleOrNull();
 
         [BenchmarkCategory("Enumerable")]
         [Benchmark]
-        public int Hyperlinq_Enumerable_Reference() => 
+        public int Hyperlinq_Enumerable_Reference_SingleOrDefault() => 
             enumerableReference.SingleOrDefault();
 
         [BenchmarkCategory("Enumerable")]
         [Benchmark]
-        public int Hyperlinq_Enumerable_Value() => 
+        public int? Hyperlinq_Enumerable_Reference_SingleOrNull() =>
+            enumerableReference.SingleOrNull();
+
+        [BenchmarkCategory("Enumerable")]
+        [Benchmark]
+        public int Hyperlinq_Enumerable_Value_SingleOrDefault() => 
             enumerableValue.SingleOrDefault<TestEnumerable.Enumerable, TestEnumerable.Enumerable.Enumerator, int>();
+
+        [BenchmarkCategory("Enumerable")]
+        [Benchmark]
+        public int? Hyperlinq_Enumerable_Value_SingleOrNull() =>
+            enumerableValue.SingleOrNull<TestEnumerable.Enumerable, TestEnumerable.Enumerable.Enumerator, int>();
     }
 }

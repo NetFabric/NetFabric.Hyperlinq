@@ -94,24 +94,34 @@ namespace NetFabric.Hyperlinq
                 => ValueReadOnlyList.Where<RangeEnumerable, ValueEnumerator, int>(this, predicate);
 
             public int First() 
-                => ValueReadOnlyList.First<RangeEnumerable, ValueEnumerator, int>(this);
+                => (count > 0) ? start : ThrowHelper.ThrowEmptySequence<int>();
             public int First(Func<int, bool> predicate) 
                 => ValueReadOnlyList.First<RangeEnumerable, ValueEnumerator, int>(this, predicate);
 
-            public int FirstOrDefault() 
-                => ValueReadOnlyList.FirstOrDefault<RangeEnumerable, ValueEnumerator, int>(this);
+            public int FirstOrDefault()
+                => (count > 0) ? start : default;
             public int FirstOrDefault(Func<int, bool> predicate) 
                 => ValueReadOnlyList.FirstOrDefault<RangeEnumerable, ValueEnumerator, int>(this, predicate);
 
-            public int Single() 
-                => ValueReadOnlyList.Single<RangeEnumerable, ValueEnumerator, int>(this);
+            public int? FirstOrNull()
+                => (count > 0) ? start : (int?)null;
+            public int? FirstOrNull(Func<int, bool> predicate)
+                => ValueReadOnlyList.FirstOrNull<RangeEnumerable, ValueEnumerator, int>(this, predicate);
+
+            public int Single()
+                => (count == 0) ? ThrowHelper.ThrowEmptySequence<int>() : ((count == 1) ? start : ThrowHelper.ThrowNotSingleSequence<int>());
             public int Single(Func<int, bool> predicate) 
                 => ValueReadOnlyList.Single<RangeEnumerable, ValueEnumerator, int>(this, predicate);
 
-            public int SingleOrDefault() 
-                => ValueReadOnlyList.SingleOrDefault<RangeEnumerable, ValueEnumerator, int>(this);
+            public int SingleOrDefault()
+                => (count == 0) ? default : ((count == 1) ? start : ThrowHelper.ThrowNotSingleSequence<int>());
             public int SingleOrDefault(Func<int, bool> predicate) 
                 => ValueReadOnlyList.SingleOrDefault<RangeEnumerable, ValueEnumerator, int>(this, predicate);
+
+            public int? SingleOrNull()
+                => (count == 0) ? null : ((count == 1) ? start : ThrowHelper.ThrowNotSingleSequence<int?>());
+            public int? SingleOrNull(Func<int, bool> predicate)
+                => ValueReadOnlyList.SingleOrNull<RangeEnumerable, ValueEnumerator, int>(this, predicate);
 
             public IEnumerable<int> AsEnumerable()
                 => ValueEnumerable.AsEnumerable<RangeEnumerable, ValueEnumerator, int>(this);

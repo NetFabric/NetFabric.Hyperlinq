@@ -36,17 +36,45 @@ namespace NetFabric.Hyperlinq
             Func<TValue, bool> predicate) 
             => Enumerable.Where<Dictionary<TKey, TValue>.ValueCollection, Dictionary<TKey, TValue>.ValueCollection.Enumerator, TValue>(source, predicate);
 
-        public static TValue First<TKey, TValue>(this Dictionary<TKey, TValue>.ValueCollection source) 
+        public static TValue First<TKey, TValue>(this Dictionary<TKey, TValue>.ValueCollection source)
             => ReadOnlyCollection.First<Dictionary<TKey, TValue>.ValueCollection, Dictionary<TKey, TValue>.ValueCollection.Enumerator, TValue>(source);
+
+        public static TValue First<TKey, TValue>(this Dictionary<TKey, TValue>.ValueCollection source, Func<TValue, bool> predicate)
+            => Enumerable.First<Dictionary<TKey, TValue>.ValueCollection, Dictionary<TKey, TValue>.ValueCollection.Enumerator, TValue>(source, predicate);
 
         public static TValue FirstOrDefault<TKey, TValue>(this Dictionary<TKey, TValue>.ValueCollection source)
             => ReadOnlyCollection.FirstOrDefault<Dictionary<TKey, TValue>.ValueCollection, Dictionary<TKey, TValue>.ValueCollection.Enumerator, TValue>(source);
 
+        public static TValue FirstOrDefault<TKey, TValue>(this Dictionary<TKey, TValue>.ValueCollection source, Func<TValue, bool> predicate)
+            => Enumerable.FirstOrDefault<Dictionary<TKey, TValue>.ValueCollection, Dictionary<TKey, TValue>.ValueCollection.Enumerator, TValue>(source, predicate);
+
+        public static TValue? FirstOrNull<TKey, TValue>(this Dictionary<TKey, TValue>.ValueCollection source)
+            where TValue : struct
+            => ReadOnlyCollection.FirstOrNull<Dictionary<TKey, TValue>.ValueCollection, Dictionary<TKey, TValue>.ValueCollection.Enumerator, TValue>(source);
+
+        public static TValue? FirstOrNull<TKey, TValue>(this Dictionary<TKey, TValue>.ValueCollection source, Func<TValue, bool> predicate)
+            where TValue : struct
+            => Enumerable.FirstOrNull<Dictionary<TKey, TValue>.ValueCollection, Dictionary<TKey, TValue>.ValueCollection.Enumerator, TValue>(source, predicate);
+
         public static TValue Single<TKey, TValue>(this Dictionary<TKey, TValue>.ValueCollection source)
             => ReadOnlyCollection.Single<Dictionary<TKey, TValue>.ValueCollection, Dictionary<TKey, TValue>.ValueCollection.Enumerator, TValue>(source);
 
+        public static TValue Single<TKey, TValue>(this Dictionary<TKey, TValue>.ValueCollection source, Func<TValue, bool> predicate)
+            => Enumerable.Single<Dictionary<TKey, TValue>.ValueCollection, Dictionary<TKey, TValue>.ValueCollection.Enumerator, TValue>(source, predicate);
+
         public static TValue SingleOrDefault<TKey, TValue>(this Dictionary<TKey, TValue>.ValueCollection source)
             => ReadOnlyCollection.SingleOrDefault<Dictionary<TKey, TValue>.ValueCollection, Dictionary<TKey, TValue>.ValueCollection.Enumerator, TValue>(source);
+
+        public static TValue SingleOrDefault<TKey, TValue>(this Dictionary<TKey, TValue>.ValueCollection source, Func<TValue, bool> predicate)
+            => Enumerable.SingleOrDefault<Dictionary<TKey, TValue>.ValueCollection, Dictionary<TKey, TValue>.ValueCollection.Enumerator, TValue>(source, predicate);
+
+        public static TValue? SingleOrNull<TKey, TValue>(this Dictionary<TKey, TValue>.ValueCollection source)
+            where TValue : struct
+            => ReadOnlyCollection.SingleOrNull<Dictionary<TKey, TValue>.ValueCollection, Dictionary<TKey, TValue>.ValueCollection.Enumerator, TValue>(source);
+
+        public static TValue? SingleOrNull<TKey, TValue>(this Dictionary<TKey, TValue>.ValueCollection source, Func<TValue, bool> predicate)
+            where TValue : struct
+            => Enumerable.SingleOrNull<Dictionary<TKey, TValue>.ValueCollection, Dictionary<TKey, TValue>.ValueCollection.Enumerator, TValue>(source, predicate);
 
         public static IEnumerable<TKey> AsEnumerable<TKey, TValue>(this Dictionary<TKey, TValue> source)
             => source.Keys;

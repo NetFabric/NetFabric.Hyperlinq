@@ -11,7 +11,7 @@ namespace NetFabric.Hyperlinq
         public readonly struct ReturnEnumerable<TSource>
             : IValueReadOnlyList<TSource, ReturnEnumerable<TSource>.ValueEnumerator>
         {
-            readonly TSource value;
+            internal readonly TSource value;
 
             internal ReturnEnumerable(TSource value)
             {
@@ -104,22 +104,22 @@ namespace NetFabric.Hyperlinq
                 => ValueReadOnlyList.Where<ReturnEnumerable<TSource>, ValueEnumerator, TSource>(this, predicate);
 
             public TSource First() 
-                => ValueReadOnlyList.First<ReturnEnumerable<TSource>, ValueEnumerator, TSource>(this);
+                => value;
             public TSource First(Func<TSource, bool> predicate) 
                 => ValueReadOnlyList.First<ReturnEnumerable<TSource>, ValueEnumerator, TSource>(this, predicate);
 
             public TSource FirstOrDefault() 
-                => ValueReadOnlyList.FirstOrDefault<ReturnEnumerable<TSource>, ValueEnumerator, TSource>(this);
+                => value;
             public TSource FirstOrDefault(Func<TSource, bool> predicate)
                 => ValueReadOnlyList.FirstOrDefault<ReturnEnumerable<TSource>, ValueEnumerator, TSource>(this, predicate);
 
             public TSource Single() 
-                => ValueReadOnlyList.Single<ReturnEnumerable<TSource>, ValueEnumerator, TSource>(this);
+                => value;
             public TSource Single(Func<TSource, bool> predicate) 
                 => ValueReadOnlyList.Single<ReturnEnumerable<TSource>, ValueEnumerator, TSource>(this, predicate);
 
             public TSource SingleOrDefault() 
-                => ValueReadOnlyList.SingleOrDefault<ReturnEnumerable<TSource>, ValueEnumerator, TSource>(this);
+                => value;
             public TSource SingleOrDefault(Func<TSource, bool> predicate) 
                 => ValueReadOnlyList.SingleOrDefault<ReturnEnumerable<TSource>, ValueEnumerator, TSource>(this, predicate);
 
@@ -138,6 +138,22 @@ namespace NetFabric.Hyperlinq
             public List<TSource> ToList()
                 => ValueReadOnlyCollection.ToList<ReturnEnumerable<TSource>, ValueEnumerator, TSource>(this);
         }
+
+        public static TSource? FirstOrNull<TSource>(this ReturnEnumerable<TSource> source)
+            where TSource : struct
+                => source.value;
+
+        public static TSource? FirstOrNull<TSource>(this ReturnEnumerable<TSource> source, Func<TSource, bool> predicate)
+            where TSource : struct
+                => source.value;
+
+        public static TSource? SingleOrNull<TSource>(this ReturnEnumerable<TSource> source)
+            where TSource : struct
+                => source.value;
+
+        public static TSource? SingleOrNull<TSource>(this ReturnEnumerable<TSource> source, Func<TSource, bool> predicate)
+            where TSource : struct
+                => source.value;
     }
 }
 

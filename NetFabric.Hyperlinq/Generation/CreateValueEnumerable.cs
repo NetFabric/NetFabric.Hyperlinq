@@ -65,5 +65,25 @@ namespace NetFabric.Hyperlinq
             public List<TSource> ToList()
                 => ToList<CreateValueEnumerable<TEnumerator, TSource>, TEnumerator, TSource>(this);
         }
+
+        public static TSource? FirstOrNull<TEnumerator, TSource>(this CreateValueEnumerable<TEnumerator, TSource> source)
+            where TEnumerator : struct, IValueEnumerator<TSource>
+            where TSource : struct
+            => ValueEnumerable.FirstOrNull<CreateValueEnumerable<TEnumerator, TSource>, TEnumerator, TSource>(source);
+
+        public static TSource? FirstOrNull<TEnumerator, TSource>(this CreateValueEnumerable<TEnumerator, TSource> source, Func<TSource, bool> predicate)
+            where TEnumerator : struct, IValueEnumerator<TSource>
+            where TSource : struct
+            => ValueEnumerable.FirstOrNull<CreateValueEnumerable<TEnumerator, TSource>, TEnumerator, TSource>(source, predicate);
+
+        public static TSource? SingleOrNull<TEnumerator, TSource>(this CreateValueEnumerable<TEnumerator, TSource> source)
+            where TEnumerator : struct, IValueEnumerator<TSource>
+            where TSource : struct
+            => ValueEnumerable.SingleOrNull<CreateValueEnumerable<TEnumerator, TSource>, TEnumerator, TSource>(source);
+
+        public static TSource? SingleOrNull<TEnumerator, TSource>(this CreateValueEnumerable<TEnumerator, TSource> source, Func<TSource, bool> predicate)
+            where TEnumerator : struct, IValueEnumerator<TSource>
+            where TSource : struct
+            => ValueEnumerable.SingleOrNull<CreateValueEnumerable<TEnumerator, TSource>, TEnumerator, TSource>(source, predicate);
     }
 }

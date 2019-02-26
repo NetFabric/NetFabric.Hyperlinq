@@ -37,11 +37,19 @@ namespace NetFabric.Hyperlinq
         public static TSource FirstOrDefault<TSource>(this IReadOnlyCollection<TSource> source) 
             => ReadOnlyCollection.FirstOrDefault<IReadOnlyCollection<TSource>, IEnumerator<TSource>, TSource>(source);
 
-        public static TSource Single<TSource>(this IReadOnlyCollection<TSource> source) 
+        public static TSource? FirstOrNull<TSource>(this IReadOnlyCollection<TSource> source)
+            where TSource : struct
+            => ReadOnlyCollection.FirstOrNull<IReadOnlyCollection<TSource>, IEnumerator<TSource>, TSource>(source);
+
+        public static TSource Single<TSource>(this IReadOnlyCollection<TSource> source)
             => ReadOnlyCollection.Single<IReadOnlyCollection<TSource>, IEnumerator<TSource>, TSource>(source);
 
-        public static TSource SingleOrDefault<TSource>(this IReadOnlyCollection<TSource> source) 
+        public static TSource SingleOrDefault<TSource>(this IReadOnlyCollection<TSource> source)
             => ReadOnlyCollection.SingleOrDefault<IReadOnlyCollection<TSource>, IEnumerator<TSource>, TSource>(source);
+
+        public static TSource? SingleOrNull<TSource>(this IReadOnlyCollection<TSource> source)
+            where TSource : struct
+            => ReadOnlyCollection.SingleOrNull<IReadOnlyCollection<TSource>, IEnumerator<TSource>, TSource>(source);
 
         public static ReadOnlyCollection.AsValueReadOnlyCollectionEnumerable<IReadOnlyCollection<TSource>, IEnumerator<TSource>, TSource> AsValueReadOnlyCollection<TSource>(this IReadOnlyCollection<TSource> source)
             => ReadOnlyCollection.AsValueReadOnlyCollection<IReadOnlyCollection<TSource>, IEnumerator<TSource>, TSource>(source);

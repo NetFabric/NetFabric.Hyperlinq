@@ -15,8 +15,8 @@ namespace NetFabric.Hyperlinq
 
         public readonly ref struct SelectEnumerable<TSource, TResult>
         {
-            readonly Span<TSource> source;
-            readonly Func<TSource, TResult> selector;
+            internal readonly Span<TSource> source;
+            internal readonly Func<TSource, TResult> selector;
 
             internal SelectEnumerable(in Span<TSource> source, Func<TSource, TResult> selector)
             {
@@ -60,6 +60,26 @@ namespace NetFabric.Hyperlinq
 
             public TResult SingleOrDefault()
                 => selector(source.SingleOrDefault());
+        }
+
+        public static TResult? FirstOrNull<TSource, TResult>(this SelectEnumerable<TSource, TResult> source)
+            where TResult : struct
+        {
+            var span = source.source;
+            if (span.Length == 0) return null;
+
+            return source.selector(span[0]);
+        }
+
+        public static TResult? SingleOrNull<TSource, TResult>(this SelectEnumerable<TSource, TResult> source)
+            where TResult : struct
+        {
+            var span = source.source;
+            var length = span.Length;
+            if (length == 0) return null;
+            if (length > 1) ThrowHelper.ThrowNotSingleSequence<TSource>();
+
+            return source.selector(span[0]);
         }
     }
 }

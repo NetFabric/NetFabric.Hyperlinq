@@ -36,17 +36,45 @@ namespace NetFabric.Hyperlinq
             Func<TSource, bool> predicate) 
             => ReadOnlyList.Where<List<TSource>, List<TSource>.Enumerator, TSource>(source, predicate);
 
-        public static TSource First<TSource>(this List<TSource> source) 
-            => ReadOnlyList.First<List<TSource>, List<TSource>.Enumerator, TSource>(source);
+        public static TSource First<TSource, TValue>(this List<TSource> source)
+            => ReadOnlyCollection.First<List<TSource>, List<TSource>.Enumerator, TSource>(source);
 
-        public static TSource FirstOrDefault<TSource>(this List<TSource> source) 
-            => ReadOnlyList.FirstOrDefault<List<TSource>, List<TSource>.Enumerator, TSource>(source);
+        public static TSource First<TSource, TValue>(this List<TSource> source, Func<TSource, bool> predicate)
+            => Enumerable.First<List<TSource>, List<TSource>.Enumerator, TSource>(source, predicate);
 
-        public static TSource Single<TSource>(this List<TSource> source) 
-            => ReadOnlyList.Single<List<TSource>, List<TSource>.Enumerator, TSource>(source);
+        public static TSource FirstOrDefault<TSource, TValue>(this List<TSource> source)
+            => ReadOnlyCollection.FirstOrDefault<List<TSource>, List<TSource>.Enumerator, TSource>(source);
 
-        public static TSource SingleOrDefault<TSource>(this List<TSource> source) 
-            => ReadOnlyList.SingleOrDefault<List<TSource>, List<TSource>.Enumerator, TSource>(source);
+        public static TSource FirstOrDefault<TSource, TValue>(this List<TSource> source, Func<TSource, bool> predicate)
+            => Enumerable.FirstOrDefault<List<TSource>, List<TSource>.Enumerator, TSource>(source, predicate);
+
+        public static TSource? FirstOrNull<TSource, TValue>(this List<TSource> source)
+            where TSource : struct
+            => ReadOnlyCollection.FirstOrNull<List<TSource>, List<TSource>.Enumerator, TSource>(source);
+
+        public static TSource? FirstOrNull<TSource, TValue>(this List<TSource> source, Func<TSource, bool> predicate)
+            where TSource : struct
+            => Enumerable.FirstOrNull<List<TSource>, List<TSource>.Enumerator, TSource>(source, predicate);
+
+        public static TSource Single<TSource, TValue>(this List<TSource> source)
+            => ReadOnlyCollection.Single<List<TSource>, List<TSource>.Enumerator, TSource>(source);
+
+        public static TSource Single<TSource, TValue>(this List<TSource> source, Func<TSource, bool> predicate)
+            => Enumerable.Single<List<TSource>, List<TSource>.Enumerator, TSource>(source, predicate);
+
+        public static TSource SingleOrDefault<TSource, TValue>(this List<TSource> source)
+            => ReadOnlyCollection.SingleOrDefault<List<TSource>, List<TSource>.Enumerator, TSource>(source);
+
+        public static TSource SingleOrDefault<TSource, TValue>(this List<TSource> source, Func<TSource, bool> predicate)
+            => Enumerable.SingleOrDefault<List<TSource>, List<TSource>.Enumerator, TSource>(source, predicate);
+
+        public static TSource? SingleOrNull<TSource, TValue>(this List<TSource> source)
+            where TSource : struct
+            => ReadOnlyCollection.SingleOrNull<List<TSource>, List<TSource>.Enumerator, TSource>(source);
+
+        public static TSource? SingleOrNull<TSource, TValue>(this List<TSource> source, Func<TSource, bool> predicate)
+            where TSource : struct
+            => Enumerable.SingleOrNull<List<TSource>, List<TSource>.Enumerator, TSource>(source, predicate);
 
         public static IEnumerable<TSource> AsEnumerable<TSource>(this List<TSource> source)
             => source;

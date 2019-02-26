@@ -13,8 +13,8 @@ namespace NetFabric.Hyperlinq
 
         public readonly ref struct WhereEnumerable<TSource>
         {
-            readonly Span<TSource> source;
-            readonly Func<TSource, bool> predicate;
+            internal readonly Span<TSource> source;
+            internal readonly Func<TSource, bool> predicate;
 
             internal WhereEnumerable(in Span<TSource> source, Func<TSource, bool> predicate)
             {
@@ -73,6 +73,14 @@ namespace NetFabric.Hyperlinq
             public TSource SingleOrDefault()
                 => source.SingleOrDefault(predicate);
         }
+
+        public static TSource? FirstOrNull<TSource>(this WhereEnumerable<TSource> source)
+            where TSource : struct
+            => ReadOnlySpanExtensions.FirstOrNull(source.source, source.predicate);
+
+        public static TSource? SingleOrNull<TSource>(this WhereEnumerable<TSource> source)
+            where TSource : struct
+            => ReadOnlySpanExtensions.SingleOrNull(source.source, source.predicate);
     }
 }
 

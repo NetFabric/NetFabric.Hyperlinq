@@ -48,6 +48,19 @@ namespace NetFabric.Hyperlinq.UnitTests
 
         [Theory]
         [MemberData(nameof(SingleOrDefaultData))]
+        public void SingleOrDefault_With_ValidArray_Should_Succeed(int[] source, int expected)
+        {
+            // Arrange
+
+            // Act
+            var result = source.SingleOrDefault();
+
+            // Assert
+            result.Should().Be(expected);
+        }
+
+        [Theory]
+        [MemberData(nameof(SingleOrDefaultData))]
         public void SingleOrDefault_With_ValidIEnumerable_Should_Succeed(IEnumerable<int> source, int expected)
         {
             // Arrange

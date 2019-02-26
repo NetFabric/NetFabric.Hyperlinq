@@ -66,5 +66,25 @@ namespace NetFabric.Hyperlinq
             public List<TSource> ToList()
                 => ToList<CreateEnumerable<TEnumerator, TSource>, TEnumerator, TSource>(this);
         }
+
+        public static TSource? FirstOrNull<TEnumerator, TSource>(this CreateEnumerable<TEnumerator, TSource> source)
+            where TEnumerator : IEnumerator<TSource>
+            where TSource : struct
+            => Enumerable.FirstOrNull<CreateEnumerable<TEnumerator, TSource>, TEnumerator, TSource>(source);
+
+        public static TSource? FirstOrNull<TEnumerator, TSource>(this CreateEnumerable<TEnumerator, TSource> source, Func<TSource, bool> predicate)
+            where TEnumerator : IEnumerator<TSource>
+            where TSource : struct
+            => Enumerable.FirstOrNull<CreateEnumerable<TEnumerator, TSource>, TEnumerator, TSource>(source, predicate);
+
+        public static TSource? SingleOrNull<TEnumerator, TSource>(this CreateEnumerable<TEnumerator, TSource> source)
+            where TEnumerator : IEnumerator<TSource>
+            where TSource : struct
+            => Enumerable.SingleOrNull<CreateEnumerable<TEnumerator, TSource>, TEnumerator, TSource>(source);
+
+        public static TSource? SingleOrNull<TEnumerator, TSource>(this CreateEnumerable<TEnumerator, TSource> source, Func<TSource, bool> predicate)
+            where TEnumerator : IEnumerator<TSource>
+            where TSource : struct
+            => Enumerable.SingleOrNull<CreateEnumerable<TEnumerator, TSource>, TEnumerator, TSource>(source, predicate);
     }
 }

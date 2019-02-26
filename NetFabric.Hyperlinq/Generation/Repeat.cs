@@ -15,8 +15,8 @@ namespace NetFabric.Hyperlinq
         public readonly struct RepeatEnumerable<TSource>
             : IValueReadOnlyList<TSource, RepeatEnumerable<TSource>.ValueEnumerator>
         {
-            readonly TSource value;
-            readonly int count;
+            internal readonly TSource value;
+            internal readonly int count;
 
             internal RepeatEnumerable(TSource value, int count)
             {
@@ -89,23 +89,23 @@ namespace NetFabric.Hyperlinq
             public ValueReadOnlyList.WhereEnumerable<RepeatEnumerable<TSource>, ValueEnumerator, TSource> Where(Func<TSource, bool> predicate) 
                 => ValueReadOnlyList.Where<RepeatEnumerable<TSource>, ValueEnumerator, TSource>(this, predicate);
 
-            public TSource First() 
-                => ValueReadOnlyList.First<RepeatEnumerable<TSource>, ValueEnumerator, TSource>(this);
+            public TSource First()
+                => (count > 0) ? value : ThrowHelper.ThrowEmptySequence<TSource>();
             public TSource First(Func<TSource, bool> predicate) 
                 => ValueReadOnlyList.First<RepeatEnumerable<TSource>, ValueEnumerator, TSource>(this, predicate);
 
-            public TSource FirstOrDefault() 
-                => ValueReadOnlyList.FirstOrDefault<RepeatEnumerable<TSource>, ValueEnumerator, TSource>(this);
+            public TSource FirstOrDefault()
+                => (count > 0) ? value : default;
             public TSource FirstOrDefault(Func<TSource, bool> predicate) 
                 => ValueReadOnlyList.FirstOrDefault<RepeatEnumerable<TSource>, ValueEnumerator, TSource>(this, predicate);
 
-            public TSource Single() 
-                => ValueReadOnlyList.Single<RepeatEnumerable<TSource>, ValueEnumerator, TSource>(this);
+            public TSource Single()
+                => (count == 0) ? ThrowHelper.ThrowEmptySequence<TSource>() : ((count == 1) ? value : ThrowHelper.ThrowNotSingleSequence<TSource>());
             public TSource Single(Func<TSource, bool> predicate) 
                 => ValueReadOnlyList.Single<RepeatEnumerable<TSource>, ValueEnumerator, TSource>(this, predicate);
 
-            public TSource SingleOrDefault() 
-                => ValueReadOnlyList.SingleOrDefault<RepeatEnumerable<TSource>, ValueEnumerator, TSource>(this);
+            public TSource SingleOrDefault()
+                => (count == 0) ? default : ((count == 1) ? value : ThrowHelper.ThrowNotSingleSequence<TSource>());
             public TSource SingleOrDefault(Func<TSource, bool> predicate) 
                 => ValueReadOnlyList.SingleOrDefault<RepeatEnumerable<TSource>, ValueEnumerator, TSource>(this, predicate);
 
@@ -124,6 +124,22 @@ namespace NetFabric.Hyperlinq
             public List<TSource> ToList()
                 => ValueReadOnlyCollection.ToList<RepeatEnumerable<TSource>, ValueEnumerator, TSource>(this);
         }
+
+        public static TSource? FirstOrNull<TSource>(this RepeatEnumerable<TSource> source)
+            where TSource : struct
+                => (source.count > 0) ? source.value : (TSource?)null;
+
+        public static TSource? FirstOrNull<TSource>(this RepeatEnumerable<TSource> source, Func<TSource, bool> predicate)
+            where TSource : struct
+                => ValueReadOnlyList.FirstOrNull<RepeatEnumerable<TSource>, RepeatEnumerable<TSource>.ValueEnumerator, TSource>(source, predicate);
+
+        public static TSource? SingleOrNull<TSource>(this RepeatEnumerable<TSource> source)
+            where TSource : struct
+                => (source.count == 0) ? null : ((source.count == 1) ? source.value : ThrowHelper.ThrowNotSingleSequence<TSource?>());
+
+        public static TSource? SingleOrNull<TSource>(this RepeatEnumerable<TSource> source, Func<TSource, bool> predicate)
+            where TSource : struct
+                => ValueReadOnlyList.SingleOrNull<RepeatEnumerable<TSource>, RepeatEnumerable<TSource>.ValueEnumerator, TSource>(source, predicate);
     }
- }
+}
 

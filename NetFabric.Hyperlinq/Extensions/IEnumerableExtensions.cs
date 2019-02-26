@@ -48,17 +48,33 @@ namespace NetFabric.Hyperlinq
         public static TSource FirstOrDefault<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate) 
             => Enumerable.FirstOrDefault<IEnumerable<TSource>, IEnumerator<TSource>, TSource>(source, predicate);
 
-        public static TSource Single<TSource>(this IEnumerable<TSource> source) 
+        public static TSource? FirstOrNull<TSource>(this IEnumerable<TSource> source)
+            where TSource : struct
+            => Enumerable.FirstOrNull<IEnumerable<TSource>, IEnumerator<TSource>, TSource>(source);
+
+        public static TSource? FirstOrNull<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate)
+            where TSource : struct
+            => Enumerable.FirstOrNull<IEnumerable<TSource>, IEnumerator<TSource>, TSource>(source, predicate);
+
+        public static TSource Single<TSource>(this IEnumerable<TSource> source)
             => Enumerable.Single<IEnumerable<TSource>, IEnumerator<TSource>, TSource>(source);
 
-        public static TSource Single<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate) 
+        public static TSource Single<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate)
             => Enumerable.Single<IEnumerable<TSource>, IEnumerator<TSource>, TSource>(source, predicate);
 
-        public static TSource SingleOrDefault<TSource>(this IEnumerable<TSource> source) 
+        public static TSource SingleOrDefault<TSource>(this IEnumerable<TSource> source)
             => Enumerable.SingleOrDefault<IEnumerable<TSource>, IEnumerator<TSource>, TSource>(source);
 
-        public static TSource SingleOrDefault<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate) 
+        public static TSource SingleOrDefault<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate)
             => Enumerable.SingleOrDefault<IEnumerable<TSource>, IEnumerator<TSource>, TSource>(source, predicate);
+
+        public static TSource? SingleOrNull<TSource>(this IEnumerable<TSource> source)
+            where TSource : struct
+            => Enumerable.SingleOrNull<IEnumerable<TSource>, IEnumerator<TSource>, TSource>(source);
+
+        public static TSource? SingleOrNull<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate)
+            where TSource : struct
+            => Enumerable.SingleOrNull<IEnumerable<TSource>, IEnumerator<TSource>, TSource>(source, predicate);
 
         public static IEnumerable<TSource> AsEnumerable<TSource>(this IEnumerable<TSource> source) 
             => source;
