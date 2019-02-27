@@ -26,12 +26,12 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Linq_Range() => 
             System.Linq.Enumerable.Count(linqRange, _ => true);
 
-        [BenchmarkCategory("Enumerable")]
+        [BenchmarkCategory("Enumerable_Reference")]
         [Benchmark(Baseline = true)]
         public int Linq_Enumerable_Reference() => 
             System.Linq.Enumerable.Count(enumerableReference, _ => true);
 
-        [BenchmarkCategory("Enumerable")]
+        [BenchmarkCategory("Enumerable_Value")]
         [Benchmark]
         public int Linq_Enumerable_Value() => 
             System.Linq.Enumerable.Count(enumerableValue, _ => true);
@@ -72,12 +72,12 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Hyperlinq_Range() =>
             hyperlinqRange.Count(_ => true);
 
-        [BenchmarkCategory("Enumerable")]
+        [BenchmarkCategory("Enumerable_Reference")]
         [Benchmark]
         public int Hyperlinq_Enumerable_Reference() => 
             enumerableReference.Count(_ => true);
 
-        [BenchmarkCategory("Enumerable")]
+        [BenchmarkCategory("Enumerable_Value")]
         [Benchmark]
         public int Hyperlinq_Enumerable_Value() => 
             enumerableValue.Count<TestEnumerable.Enumerable, TestEnumerable.Enumerable.Enumerator, int>(_ => true);

@@ -24,12 +24,12 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Linq_Range_FirstOrDefault()
             => System.Linq.Enumerable.Where(linqRange, _ => true).FirstOrDefault();
 
-        [BenchmarkCategory("Enumerable")]
+        [BenchmarkCategory("Enumerable_Reference")]
         [Benchmark(Baseline = true)]
         public int Linq_Enumerable_Reference_FirstOrDefault()
             => System.Linq.Enumerable.Where(enumerableReference, _ => true).FirstOrDefault();
 
-        [BenchmarkCategory("Enumerable")]
+        [BenchmarkCategory("Enumerable_Value")]
         [Benchmark]
         public int Linq_Enumerable_Value_FirstOrDefault()
             => System.Linq.Enumerable.Where(enumerableValue, _ => true).FirstOrDefault();
@@ -64,22 +64,22 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int? Hyperlinq_Range_FirstOrNull()
             => hyperlinqRange.Where(_ => true).FirstOrNull();
 
-        [BenchmarkCategory("Enumerable")]
+        [BenchmarkCategory("Enumerable_Reference")]
         [Benchmark]
         public int Hyperlinq_Enumerable_Reference_FirstOrDefault()
             => enumerableReference.Where(_ => true).FirstOrDefault();
 
-        [BenchmarkCategory("Enumerable")]
+        [BenchmarkCategory("Enumerable_Reference")]
         [Benchmark]
         public int? Hyperlinq_Enumerable_Reference_FirstOrNull()
             => enumerableReference.Where(_ => true).FirstOrNull();
 
-        [BenchmarkCategory("Enumerable")]
+        [BenchmarkCategory("Enumerable_Value")]
         [Benchmark]
         public int Hyperlinq_Enumerable_Value_FirstOrDefault()
             => enumerableValue.Where<TestEnumerable.Enumerable, TestEnumerable.Enumerable.Enumerator, int>(_ => true).FirstOrDefault();
 
-        [BenchmarkCategory("Enumerable")]
+        [BenchmarkCategory("Enumerable_Value")]
         [Benchmark]
         public int? Hyperlinq_Enumerable_Value_FirstOrNull()
             => enumerableValue.Where<TestEnumerable.Enumerable, TestEnumerable.Enumerable.Enumerator, int>(_ => true).FirstOrNull();

@@ -2,6 +2,7 @@ using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Configs;
 using JM.LinqFaster;
 using JM.LinqFaster.Parallel;
+using System;
 
 namespace NetFabric.Hyperlinq.Benchmarks
 {
@@ -26,19 +27,19 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Linq_Range() => 
             System.Linq.Enumerable.Count(linqRange);
 
-        [BenchmarkCategory("Enumerable")]
+        [BenchmarkCategory("Enumerable_Reference")]
         [Benchmark(Baseline = true)]
         public int Linq_Enumerable_Reference() => 
             System.Linq.Enumerable.Count(enumerableReference);
 
-        [BenchmarkCategory("Enumerable")]
+        [BenchmarkCategory("Enumerable_Value")]
         [Benchmark]
         public int Linq_Enumerable_Value() => 
             System.Linq.Enumerable.Count(enumerableValue);
 
         [BenchmarkCategory("Array")]
         [Benchmark]
-        public int Hyperlinq_Array() => 
+        public int Hyperlinq_Array() =>
             array.Count();
 
         [BenchmarkCategory("List")]
@@ -52,12 +53,12 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Hyperlinq_Range() =>
             hyperlinqRange.Count();
 
-        [BenchmarkCategory("Enumerable")]
+        [BenchmarkCategory("Enumerable_Reference")]
         [Benchmark]
         public int Hyperlinq_Enumerable_Reference() => 
             enumerableReference.Count();
 
-        [BenchmarkCategory("Enumerable")]
+        [BenchmarkCategory("Enumerable_Value")]
         [Benchmark]
         public int Hyperlinq_Enumerable_Value() => 
             enumerableValue.Count<TestEnumerable.Enumerable, TestEnumerable.Enumerable.Enumerator, int>();

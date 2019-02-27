@@ -24,12 +24,12 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Linq_Range_FirstOrDefault() => 
             System.Linq.Enumerable.FirstOrDefault(linqRange);
 
-        [BenchmarkCategory("Enumerable")]
+        [BenchmarkCategory("Enumerable_Reference")]
         [Benchmark(Baseline = true)]
         public int Linq_Enumerable_Reference_FirstOrDefault() => 
             System.Linq.Enumerable.FirstOrDefault(enumerableReference);
 
-        [BenchmarkCategory("Enumerable")]
+        [BenchmarkCategory("Enumerable_Value")]
         [Benchmark]
         public int Linq_Enumerable_Value_FirstOrDefault() => 
             System.Linq.Enumerable.FirstOrDefault(enumerableValue);
@@ -64,22 +64,22 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int? Hyperlinq_Range_FirstOrNull() =>
             hyperlinqRange.FirstOrNull();
 
-        [BenchmarkCategory("Enumerable")]
+        [BenchmarkCategory("Enumerable_Reference")]
         [Benchmark]
         public int Hyperlinq_Enumerable_Reference_FirstOrDefault() => 
             enumerableReference.FirstOrDefault();
 
-        [BenchmarkCategory("Enumerable")]
+        [BenchmarkCategory("Enumerable_Reference")]
         [Benchmark]
         public int? Hyperlinq_Enumerable_Reference_FirstOrNull() =>
             enumerableReference.FirstOrNull();
 
-        [BenchmarkCategory("Enumerable")]
+        [BenchmarkCategory("Enumerable_Value")]
         [Benchmark]
         public int Hyperlinq_Enumerable_Value_FirstOrDefault() => 
             enumerableValue.FirstOrDefault<TestEnumerable.Enumerable, TestEnumerable.Enumerable.Enumerator, int>();
 
-        [BenchmarkCategory("Enumerable")]
+        [BenchmarkCategory("Enumerable_Value")]
         [Benchmark]
         public int? Hyperlinq_Enumerable_Value_FirstOrNull() =>
             enumerableValue.FirstOrNull<TestEnumerable.Enumerable, TestEnumerable.Enumerable.Enumerator, int>();

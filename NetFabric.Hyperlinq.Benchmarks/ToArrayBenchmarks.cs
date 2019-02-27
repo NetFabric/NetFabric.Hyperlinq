@@ -24,12 +24,12 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int[] Linq_Range() => 
             System.Linq.Enumerable.ToArray(linqRange);
 
-        [BenchmarkCategory("Enumerable")]
+        [BenchmarkCategory("Enumerable_Reference")]
         [Benchmark(Baseline = true)]
         public int[] Linq_Enumerable_Reference() => 
             System.Linq.Enumerable.ToArray(enumerableReference);
 
-        [BenchmarkCategory("Enumerable")]
+        [BenchmarkCategory("Enumerable_Value")]
         [Benchmark]
         public int[] Linq_Enumerable_Value() => 
             System.Linq.Enumerable.ToArray(enumerableValue);
@@ -49,12 +49,12 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int[] Hyperlinq_Range() =>
             hyperlinqRange.ToArray();
 
-        [BenchmarkCategory("Enumerable")]
+        [BenchmarkCategory("Enumerable_Reference")]
         [Benchmark]
         public int[] Hyperlinq_Enumerable_Reference() =>
             enumerableReference.ToArray();
 
-        [BenchmarkCategory("Enumerable")]
+        [BenchmarkCategory("Enumerable_Value")]
         [Benchmark]
         public int[] Hyperlinq_Enumerable_Value() =>
             enumerableValue.ToArray<TestEnumerable.Enumerable, TestEnumerable.Enumerable.Enumerator, int>();
