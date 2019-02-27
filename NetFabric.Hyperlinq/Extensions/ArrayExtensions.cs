@@ -175,12 +175,20 @@ namespace NetFabric.Hyperlinq
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
 
             var length = source.Length;
-            if (length > 1) ThrowHelper.ThrowNotSingleSequence<TSource>();
-
             for (var index = 0; index < length; index++)
             {
                 if (predicate(source[index]))
-                    return ref source[index];
+                {
+                    ref readonly TSource first = ref source[index];
+
+                    for (index++; index < length; index++)
+                    {
+                        if (predicate(source[index]))
+                            ThrowHelper.ThrowNotSingleSequence<TSource>();
+                    }
+
+                    return ref first;
+                }
             }
             ThrowHelper.ThrowEmptySequence<TSource>();
             return ref source[0];
@@ -192,12 +200,20 @@ namespace NetFabric.Hyperlinq
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
 
             var length = source.Length;
-            if (length > 1) ThrowHelper.ThrowNotSingleSequence<TSource>();
-
             for (var index = 0; index < length; index++)
             {
                 if (predicate(source[index]))
-                    return ref source[index];
+                {
+                    ref readonly TSource first = ref source[index];
+
+                    for (index ++; index < length; index++)
+                    {
+                        if (predicate(source[index]))
+                            ThrowHelper.ThrowNotSingleSequence<TSource>();
+                    }
+
+                    return ref first;
+                }
             }
             return ref Default<TSource>.Value;
         }
@@ -209,12 +225,20 @@ namespace NetFabric.Hyperlinq
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
 
             var length = source.Length;
-            if (length > 1) ThrowHelper.ThrowNotSingleSequence<TSource>();
-
             for (var index = 0; index < length; index++)
             {
                 if (predicate(source[index]))
-                    return source[index];
+                {
+                    var first = source[index];
+
+                    for (index++; index < length; index++)
+                    {
+                        if (predicate(source[index]))
+                            ThrowHelper.ThrowNotSingleSequence<TSource>();
+                    }
+
+                    return first;
+                }
             }
             return null;
         }

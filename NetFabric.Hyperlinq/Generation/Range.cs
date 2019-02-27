@@ -133,10 +133,21 @@ namespace NetFabric.Hyperlinq
                 => ValueReadOnlyList.AsReadOnlyList<RangeEnumerable, ValueEnumerator, int>(this);
 
             public int[] ToArray()
-                => ValueReadOnlyList.ToArray<RangeEnumerable, ValueEnumerator, int>(this);
+            {
+                var array = new int[count];
+                for (int index = 0, value = start; index < count; index++, value++)
+                    array[index] = value;
+                return array;
+            }
 
             public List<int> ToList()
-                => ValueReadOnlyList.ToList<RangeEnumerable, ValueEnumerator, int>(this);
+            {
+                var list = new List<int>(count);
+                var end = start + count;
+                for (var value = start; value < end; value++)
+                    list.Add(value);
+                return list;
+            }
         }
     }
 }

@@ -31,15 +31,16 @@ namespace NetFabric.Hyperlinq
 
             for (var index = 0; index < count; index++)
             {
-                var first = source[index];
-                if (predicate(first))
+                if (predicate(source[index]))
                 {
-                    // found first, keep going until end or find second
-                    for(var index2 = index + 1; index2 < count; index2++)
+                    var first = source[index];
+
+                    for (index++; index < count; index++)
                     {
-                        if (predicate(source[index2]))
-                            ThrowHelper.ThrowNotSingleSequence<TSource>();      
+                        if (predicate(source[index]))
+                            ThrowHelper.ThrowNotSingleSequence<TSource>();
                     }
+
                     return first;
                 }
             }
