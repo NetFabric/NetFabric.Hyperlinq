@@ -12,6 +12,12 @@ namespace NetFabric.Hyperlinq.Benchmarks
         protected Enumerable.RangeEnumerable hyperlinqRange;
         protected IEnumerable<int> enumerableReference;
         protected TestEnumerable.Enumerable enumerableValue;
+        protected IEnumerable<int> arrayAsEnumerable;
+        protected IReadOnlyCollection<int> arrayAsReadOnlyCollection;
+        protected IReadOnlyList<int> arrayAsReadOnlyList;
+        protected IEnumerable<int> listAsEnumerable;
+        protected IReadOnlyCollection<int> listAsReadOnlyCollection;
+        protected IReadOnlyList<int> listAsReadOnlyList;
 
         [Params(0, 100, 10_000)]
         public int Count { get; set; }
@@ -30,6 +36,12 @@ namespace NetFabric.Hyperlinq.Benchmarks
             list = hyperlinqRange.ToList();
             enumerableReference = TestEnumerable.ReferenceType(count);
             enumerableValue = TestEnumerable.ValueType(count);
+            arrayAsEnumerable = array;
+            arrayAsReadOnlyCollection = array;
+            arrayAsReadOnlyList = array;
+            listAsEnumerable = list;
+            listAsReadOnlyCollection = list;
+            listAsReadOnlyList = list;
         }
     }
 }
