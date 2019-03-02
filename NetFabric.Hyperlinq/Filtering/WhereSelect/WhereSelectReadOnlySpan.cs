@@ -37,6 +37,7 @@ namespace NetFabric.Hyperlinq
                 readonly Func<TSource, bool> predicate;
                 readonly Func<TSource, TResult> selector;
                 readonly int count;
+                TSource current;
                 int index;
 
                 internal Enumerator(in WhereSelectEnumerable<TSource, TResult> enumerable)
@@ -45,17 +46,19 @@ namespace NetFabric.Hyperlinq
                     predicate = enumerable.predicate;
                     selector = enumerable.selector;
                     count = enumerable.source.Length;
+                    current = default;
                     index = -1;
                 }
 
-                public TResult Current => selector(source[index]);
+                public TResult Current => selector(current);
 
                 public bool MoveNext()
                 {
                     index++;
                     while (index < count)
                     {
-                        if (predicate(source[index]))
+                        current = source[index];
+                        if (predicate(current))
                             return true;
 
                         index++;
