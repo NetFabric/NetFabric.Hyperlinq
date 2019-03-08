@@ -83,6 +83,24 @@ namespace NetFabric.Hyperlinq
                 public void Dispose() { }
             }
 
+            public int Count(Func<TSource, bool> predicate)
+                => (count != 0 && predicate(value)) ? count : 0;
+
+            public bool All(Func<TSource, bool> predicate)
+                => count != 0 && predicate(value);
+
+            public bool Any()
+                => count != 0;
+
+            public bool Any(Func<TSource, bool> predicate)
+                => count != 0 && predicate(value);
+
+            public bool Contains(TSource value)
+                => count != 0 && this.value.Equals(value);
+
+            public bool Contains(TSource value, IEqualityComparer<TSource> comparer)
+                => count != 0 && comparer.Equals(this.value, value);
+
             public ValueReadOnlyList.SelectEnumerable<RepeatEnumerable<TSource>, ValueEnumerator, TSource, TResult> Select<TResult>(Func<TSource, TResult> selector) 
                 => ValueReadOnlyList.Select<RepeatEnumerable<TSource>, ValueEnumerator, TSource, TResult>(this, selector);
 

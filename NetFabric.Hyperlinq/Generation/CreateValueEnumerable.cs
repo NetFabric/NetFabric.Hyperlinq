@@ -33,6 +33,21 @@ namespace NetFabric.Hyperlinq
             public int Count(Func<TSource, bool> predicate)
                 => Count<CreateValueEnumerable<TEnumerator, TSource>, TEnumerator, TSource>(this, predicate);
 
+            public bool All(Func<TSource, bool> predicate)
+                => All<CreateValueEnumerable<TEnumerator, TSource>, TEnumerator, TSource>(this, predicate);
+
+            public bool Any()
+                => Any<CreateValueEnumerable<TEnumerator, TSource>, TEnumerator, TSource>(this);
+
+            public bool Any(Func<TSource, bool> predicate)
+                => Any<CreateValueEnumerable<TEnumerator, TSource>, TEnumerator, TSource>(this, predicate);
+
+            public bool Contains(TSource value)
+                => Contains<CreateValueEnumerable<TEnumerator, TSource>, TEnumerator, TSource>(this, value);
+
+            public bool Contains(TSource value, IEqualityComparer<TSource> comparer)
+                => Contains<CreateValueEnumerable<TEnumerator, TSource>, TEnumerator, TSource>(this, value, comparer);
+
             public SelectEnumerable<CreateValueEnumerable<TEnumerator, TSource>, TEnumerator, TSource, TResult> Select<TResult>(Func<TSource, TResult> selector) 
                 => Select<CreateValueEnumerable<TEnumerator, TSource>, TEnumerator, TSource, TResult>(this, selector);
 

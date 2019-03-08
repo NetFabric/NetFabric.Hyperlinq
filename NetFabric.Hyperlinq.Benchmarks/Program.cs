@@ -14,6 +14,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
                     typeof(CountBenchmarks),
                     typeof(CountPredicateBenchmarks),
                     typeof(AllBenchmarks),
+                    typeof(AllBenchmarks),
                     typeof(FirstBenchmarks),
                     typeof(FirstOrDefaultBenchmarks),
                     typeof(SingleBenchmarks),

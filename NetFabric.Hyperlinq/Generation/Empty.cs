@@ -42,6 +42,21 @@ namespace NetFabric.Hyperlinq
             public int Count(Func<TSource, bool> _)
                 => 0;
 
+            public bool All(Func<TSource, bool> predicate)
+                => false;
+
+            public bool Any()
+                => false;
+
+            public bool Any(Func<TSource, bool> predicate)
+                => false;
+
+            public bool Contains(TSource value)
+                => false;
+
+            public bool Contains(TSource value, IEqualityComparer<TSource> comparer)
+                => false;
+
             public EmptyEnumerable<TSource> Select<TResult>(Func<TSource, TResult> selector)
             {
                 if (selector is null) ThrowHelper.ThrowArgumentNullException(nameof(selector));
