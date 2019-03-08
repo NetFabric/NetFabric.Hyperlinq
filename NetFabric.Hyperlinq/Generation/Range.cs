@@ -87,6 +87,21 @@ namespace NetFabric.Hyperlinq
             public int Count(Func<int, bool> predicate)
                 => ValueReadOnlyList.Count<RangeEnumerable, ValueEnumerator, int>(this, predicate);
 
+            public bool All(Func<int, bool> predicate)
+                => ValueEnumerable.All<RangeEnumerable, ValueEnumerator, int>(this, predicate);
+
+            public bool Any()
+                => count != 0;
+
+            public bool Any(Func<int, bool> predicate)
+                => ValueEnumerable.Any<RangeEnumerable, ValueEnumerator, int>(this, predicate);
+
+            public bool Contains(int value)
+                => value >= start && value < start + count;
+
+            public bool Contains(int value, IEqualityComparer<int> comparer)
+                => ValueEnumerable.Contains<RangeEnumerable, ValueEnumerator, int>(this, value, comparer);
+
             public ValueReadOnlyList.SelectEnumerable<RangeEnumerable, ValueEnumerator, int, TResult> Select<TResult>(Func<int, TResult> selector) 
                 => ValueReadOnlyList.Select<RangeEnumerable, ValueEnumerator, int, TResult>(this, selector);
 

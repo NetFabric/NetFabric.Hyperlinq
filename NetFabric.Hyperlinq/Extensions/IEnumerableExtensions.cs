@@ -36,8 +36,8 @@ namespace NetFabric.Hyperlinq
                 case IReadOnlyCollection<TSource> collection:
                     return ReadOnlyCollection.All<IReadOnlyCollection<TSource>, IEnumerator<TSource>, TSource>(collection, predicate);
                 default:
-                    return Enumerable.All<IEnumerable<TSource>, IEnumerator<TSource>, TSource>(source, predicate);
-            }
+                    return AllDowncasted<TSource>.All(source, predicate);
+             }
         }
 
         public static bool Any<TSource>(this IEnumerable<TSource> source)
