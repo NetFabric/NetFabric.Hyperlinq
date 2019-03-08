@@ -67,7 +67,7 @@ namespace NetFabric.Hyperlinq
 
                 internal ValueEnumerator(in WhereEnumerable<TEnumerable, TEnumerator, TSource> enumerable)
                 {
-                    enumerator = Enumerable.GetEnumerator<TEnumerable, TEnumerator, TSource>.Invoke(enumerable.source);
+                    enumerator = Dynamic.GetEnumerator<TEnumerable, TEnumerator, TSource>.Invoke(enumerable.source);
                     predicate = enumerable.predicate;
                 }
 

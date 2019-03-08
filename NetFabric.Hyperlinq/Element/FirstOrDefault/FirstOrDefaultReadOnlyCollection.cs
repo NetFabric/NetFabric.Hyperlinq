@@ -13,7 +13,7 @@ namespace NetFabric.Hyperlinq
             
             if (source.Count == 0) return default;
 
-            using (var enumerator = Enumerable.GetEnumerator<TEnumerable, TEnumerator, TSource>.Invoke(source))
+            using (var enumerator = Dynamic.GetEnumerator<TEnumerable, TEnumerator, TSource>.Invoke(source))
             {
                 enumerator.MoveNext();
                 return enumerator.Current;

@@ -1,37 +1,29 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq.Expressions;
+using System.Reflection;
 
 namespace NetFabric.Hyperlinq
 {
     public static class IEnumerableExtensions
     {
         public static int Count<TSource>(this IEnumerable<TSource> source)
-        {
-            switch(source)
+        { 
+            switch (source)
             {
                 case TSource[] array:
                     return array.Length;
                 case IReadOnlyCollection<TSource> collection:
                     return collection.Count;
                 default:
-                    return Enumerable.Count<IEnumerable<TSource>, IEnumerator<TSource>, TSource>(source);
+                    return CountDowncasted<TSource>.Count(source);
             }
         }
 
         public static int Count<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate)
-        {
-            switch (source)
-            {
-                case TSource[] array:
-                    return ArrayExtensions.Count<TSource>(array, predicate);
-                case IReadOnlyList<TSource> list:
-                    return ReadOnlyList.Count<IReadOnlyList<TSource>, IEnumerator<TSource>, TSource>(list, predicate);
-                case IReadOnlyCollection<TSource> collection:
-                    return ReadOnlyCollection.Count<IReadOnlyCollection<TSource>, IEnumerator<TSource>, TSource>(collection, predicate);
-                default:
-                    return Enumerable.Count<IEnumerable<TSource>, IEnumerator<TSource>, TSource>(source, predicate);
-            }
-        }
+            => CountDowncasted<TSource>.Count(source, predicate);
 
         public static bool All<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate)
         {

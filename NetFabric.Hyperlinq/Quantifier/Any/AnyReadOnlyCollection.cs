@@ -17,7 +17,7 @@ namespace NetFabric.Hyperlinq
             if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
             if (source.Count == 0) return false;
 
-            using (var enumerator = Enumerable.GetEnumerator<TEnumerable, TEnumerator, TSource>.Invoke(source))
+            using (var enumerator = Dynamic.GetEnumerator<TEnumerable, TEnumerator, TSource>.Invoke(source))
             {
                 while (enumerator.MoveNext())
                 {

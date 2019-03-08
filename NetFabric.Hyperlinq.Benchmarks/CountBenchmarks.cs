@@ -79,7 +79,6 @@ namespace NetFabric.Hyperlinq.Benchmarks
 
         [BenchmarkCategory("Range")]
         [Benchmark]
-
         public int Hyperlinq_Range() =>
             hyperlinqRange.Count();
 

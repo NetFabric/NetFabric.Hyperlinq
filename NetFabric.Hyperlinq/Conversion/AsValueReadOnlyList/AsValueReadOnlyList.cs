@@ -39,7 +39,7 @@ namespace NetFabric.Hyperlinq
 
                 internal Enumerator(AsValueReadOnlyListEnumerable<TEnumerable, TEnumerator, TSource> enumerable)
                 {
-                    enumerator = Enumerable.GetEnumerator<TEnumerable, TEnumerator, TSource>.Invoke(enumerable.source);
+                    enumerator = Dynamic.GetEnumerator<TEnumerable, TEnumerator, TSource>.Invoke(enumerable.source);
                 }
 
                 public bool TryMoveNext(out TSource current)

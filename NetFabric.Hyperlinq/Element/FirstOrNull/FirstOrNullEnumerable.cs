@@ -12,7 +12,7 @@ namespace NetFabric.Hyperlinq
         {
             if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
 
-            using (var enumerator = Enumerable.GetEnumerator<TEnumerable, TEnumerator, TSource>.Invoke(source))
+            using (var enumerator = Dynamic.GetEnumerator<TEnumerable, TEnumerator, TSource>.Invoke(source))
             {
                 if(!enumerator.MoveNext())
                     return null;
@@ -28,7 +28,7 @@ namespace NetFabric.Hyperlinq
         {
             if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
 
-            using (var enumerator = Enumerable.GetEnumerator<TEnumerable, TEnumerator, TSource>.Invoke(source))
+            using (var enumerator = Dynamic.GetEnumerator<TEnumerable, TEnumerator, TSource>.Invoke(source))
             {
                 while(enumerator.MoveNext())
                 {

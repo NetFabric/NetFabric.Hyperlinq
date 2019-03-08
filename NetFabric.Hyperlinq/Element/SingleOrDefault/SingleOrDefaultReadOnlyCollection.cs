@@ -15,7 +15,7 @@ namespace NetFabric.Hyperlinq
             if (count == 0) return default;
             if (count > 1) ThrowHelper.ThrowNotSingleSequence<TSource>();
 
-            using (var enumerator = Enumerable.GetEnumerator<TEnumerable, TEnumerator, TSource>.Invoke(source))
+            using (var enumerator = Dynamic.GetEnumerator<TEnumerable, TEnumerator, TSource>.Invoke(source))
             {
                 enumerator.MoveNext();
                 return enumerator.Current;

@@ -9,17 +9,7 @@ namespace NetFabric.Hyperlinq
             => source.Count;
 
         public static int Count<TSource>(this IReadOnlyCollection<TSource> source, Func<TSource, bool> predicate)
-        {
-            switch (source)
-            {
-                case TSource[] array:
-                    return ArrayExtensions.Count<TSource>(array, predicate);
-                case IReadOnlyList<TSource> list:
-                    return ReadOnlyList.Count<IReadOnlyList<TSource>, IEnumerator<TSource>, TSource>(list, predicate);
-                default:
-                    return ReadOnlyCollection.Count<IReadOnlyCollection<TSource>, IEnumerator<TSource>, TSource>(source, predicate);
-            }
-        }
+            => CountDowncasted<TSource>.Count(source, predicate);
 
         public static bool All<TSource>(this IReadOnlyCollection<TSource> source, Func<TSource, bool> predicate)
         {
