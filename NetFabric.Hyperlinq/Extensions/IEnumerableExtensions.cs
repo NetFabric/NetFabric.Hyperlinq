@@ -26,49 +26,23 @@ namespace NetFabric.Hyperlinq
             => CountDowncasted<TSource>.Count(source, predicate);
 
         public static bool All<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate)
-        {
-            switch (source)
-            {
-                case TSource[] array:
-                    return ArrayExtensions.All<TSource>(array, predicate);
-                case IReadOnlyList<TSource> list:
-                    return ReadOnlyList.All<IReadOnlyList<TSource>, IEnumerator<TSource>, TSource>(list, predicate);
-                case IReadOnlyCollection<TSource> collection:
-                    return ReadOnlyCollection.All<IReadOnlyCollection<TSource>, IEnumerator<TSource>, TSource>(collection, predicate);
-                default:
-                    return AllDowncasted<TSource>.All(source, predicate);
-             }
-        }
+            => AllDowncasted<TSource>.All(source, predicate);
 
         public static bool Any<TSource>(this IEnumerable<TSource> source)
-        {
+        { 
             switch (source)
             {
                 case TSource[] array:
-                    return ArrayExtensions.Any<TSource>(array);
-                case IReadOnlyList<TSource> list:
-                    return ReadOnlyList.Any<IReadOnlyList<TSource>, IEnumerator<TSource>, TSource>(list);
+                    return array.Length != 0;
                 case IReadOnlyCollection<TSource> collection:
-                    return ReadOnlyCollection.Any<IReadOnlyCollection<TSource>, IEnumerator<TSource>, TSource>(collection);
+                    return collection.Count != 0;
                 default:
-                    return Enumerable.Any<IEnumerable<TSource>, IEnumerator<TSource>, TSource>(source);
+                    return AnyDowncasted<TSource>.Any(source);
             }
         }
 
         public static bool Any<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate)
-        {
-            switch (source)
-            {
-                case TSource[] array:
-                    return ArrayExtensions.Any<TSource>(array, predicate);
-                case IReadOnlyList<TSource> list:
-                    return ReadOnlyList.Any<IReadOnlyList<TSource>, IEnumerator<TSource>, TSource>(list, predicate);
-                case IReadOnlyCollection<TSource> collection:
-                    return ReadOnlyCollection.Any<IReadOnlyCollection<TSource>, IEnumerator<TSource>, TSource>(collection, predicate);
-                default:
-                    return Enumerable.Any<IEnumerable<TSource>, IEnumerator<TSource>, TSource>(source, predicate);
-            }
-        }
+            => AnyDowncasted<TSource>.Any(source, predicate);
 
         public static bool Contains<TSource>(this IEnumerable<TSource> source, TSource value)
         {

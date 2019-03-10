@@ -12,7 +12,7 @@ namespace NetFabric.Hyperlinq
 
         static readonly TypeDictionary<Func<IEnumerable<TSource>, Func<TSource, bool>, int>> countPredicate = 
             new TypeDictionary<Func<IEnumerable<TSource>, Func<TSource, bool>, int>>(
-                enumerableType => Dynamic.GetEnumerablePredicateHandler<TSource, int>("Count", enumerableType));
+                enumerableType => Dynamic.GetEnumerableHandler<TSource, Func<TSource, bool>, int>("Count", enumerableType));
 
         public static int Count<TEnumerable>(TEnumerable source)
             where TEnumerable : IEnumerable<TSource>

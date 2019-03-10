@@ -8,48 +8,6 @@ namespace NetFabric.Hyperlinq
         public static int Count<TSource>(this IReadOnlyCollection<TSource> source)
             => source.Count;
 
-        public static int Count<TSource>(this IReadOnlyCollection<TSource> source, Func<TSource, bool> predicate)
-            => CountDowncasted<TSource>.Count(source, predicate);
-
-        public static bool All<TSource>(this IReadOnlyCollection<TSource> source, Func<TSource, bool> predicate)
-        {
-            switch (source)
-            {
-                case TSource[] array:
-                    return ArrayExtensions.All<TSource>(array, predicate);
-                case IReadOnlyList<TSource> list:
-                    return ReadOnlyList.All<IReadOnlyList<TSource>, IEnumerator<TSource>, TSource>(list, predicate);
-                default:
-                    return ReadOnlyCollection.All<IReadOnlyCollection<TSource>, IEnumerator<TSource>, TSource>(source, predicate);
-            }
-        }
-
-        public static bool Any<TSource>(this IReadOnlyCollection<TSource> source)
-        {
-            switch (source)
-            {
-                case TSource[] array:
-                    return ArrayExtensions.Any<TSource>(array);
-                case IReadOnlyList<TSource> list:
-                    return ReadOnlyList.Any<IReadOnlyList<TSource>, IEnumerator<TSource>, TSource>(list);
-                default:
-                    return ReadOnlyCollection.Any<IReadOnlyCollection<TSource>, IEnumerator<TSource>, TSource>(source);
-            }
-        }
-
-        public static bool Any<TSource>(this IReadOnlyCollection<TSource> source, Func<TSource, bool> predicate)
-        {
-            switch (source)
-            {
-                case TSource[] array:
-                    return ArrayExtensions.Any<TSource>(array, predicate);
-                case IReadOnlyList<TSource> list:
-                    return ReadOnlyList.Any<IReadOnlyList<TSource>, IEnumerator<TSource>, TSource>(list, predicate);
-                default:
-                    return ReadOnlyCollection.Any<IReadOnlyCollection<TSource>, IEnumerator<TSource>, TSource>(source, predicate);
-            }
-        }
-
         public static bool Contains<TSource>(this IReadOnlyCollection<TSource> source, TSource value)
         {
             switch (source)
