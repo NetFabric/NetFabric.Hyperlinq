@@ -13,19 +13,6 @@ namespace NetFabric.Hyperlinq
             Func<TSource, TResult> selector) 
             => ReadOnlyCollection.Select<IReadOnlyCollection<TSource>, IEnumerator<TSource>, TSource, TResult>(source, selector);
 
-        public static TSource First<TSource>(this IReadOnlyCollection<TSource> source)
-        {
-            switch (source)
-            {
-                case TSource[] array:
-                    return ArrayExtensions.First<TSource>(array);
-                case IReadOnlyList<TSource> list:
-                    return ReadOnlyList.First<IReadOnlyList<TSource>, IEnumerator<TSource>, TSource>(list);
-                default:
-                    return ReadOnlyCollection.First<IReadOnlyCollection<TSource>, IEnumerator<TSource>, TSource>(source);
-            }
-        }
-
         public static TSource FirstOrDefault<TSource>(this IReadOnlyCollection<TSource> source)
         {
             switch (source)

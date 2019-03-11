@@ -66,12 +66,8 @@ namespace NetFabric.Hyperlinq
             {
                 case TSource[] array:
                     return ArrayExtensions.First<TSource>(array);
-                case IReadOnlyList<TSource> list:
-                    return ReadOnlyList.First<IReadOnlyList<TSource>, IEnumerator<TSource>, TSource>(list);
-                case IReadOnlyCollection<TSource> collection:
-                    return ReadOnlyCollection.First<IReadOnlyCollection<TSource>, IEnumerator<TSource>, TSource>(collection);
                 default:
-                    return Enumerable.First<IEnumerable<TSource>, IEnumerator<TSource>, TSource>(source);
+                    return FirstDowncasted<IEnumerable<TSource>, TSource>.First(source);
             }
         }
 
@@ -81,10 +77,8 @@ namespace NetFabric.Hyperlinq
             {
                 case TSource[] array:
                     return ArrayExtensions.First<TSource>(array, predicate);
-                case IReadOnlyList<TSource> list:
-                    return ReadOnlyList.First<IReadOnlyList<TSource>, IEnumerator<TSource>, TSource>(list, predicate);
                 default:
-                    return Enumerable.First<IEnumerable<TSource>, IEnumerator<TSource>, TSource>(source, predicate);
+                    return FirstDowncasted<IEnumerable<TSource>, TSource>.First(source);
             }
         }
 
