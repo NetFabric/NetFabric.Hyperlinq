@@ -1,17 +1,18 @@
 using System;
 using System.Collections.Generic;
-using System.Linq.Expressions;
 
 namespace NetFabric.Hyperlinq
 {
-    static partial class AllDowncasted<TSource>
+    static class AllDowncasted<TEnumerable, TSource>
+        where TEnumerable : IEnumerable<TSource>
     {
-        static readonly TypeDictionary<Func<IEnumerable<TSource>, Func<TSource, bool>, bool>> all = 
-            new TypeDictionary<Func<IEnumerable<TSource>, Func<TSource, bool>, bool>>(
-                enumerableType => Dynamic.GetEnumerableHandler<TSource, Func<TSource, bool>, bool>("All", enumerableType));
+        const string methodName = "All";
 
-        public static bool All<TEnumerable>(TEnumerable source, Func<TSource, bool> predicate)
-            where TEnumerable : IEnumerable<TSource>
+        static readonly TypeDictionary<Func<TEnumerable, Func<TSource, bool>, bool>> all = 
+            new TypeDictionary<Func<TEnumerable, Func<TSource, bool>, bool>>(
+                enumerableType => Dynamic.GetEnumerableHandler<TEnumerable, TSource, Func<TSource, bool>, bool>(methodName, enumerableType));
+
+        public static bool All(TEnumerable source, Func<TSource, bool> predicate)
             => all.GetOrAdd(source.GetType())(source, predicate);
     }
 }

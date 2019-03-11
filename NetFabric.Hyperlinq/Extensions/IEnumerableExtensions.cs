@@ -18,15 +18,15 @@ namespace NetFabric.Hyperlinq
                 case IReadOnlyCollection<TSource> collection:
                     return collection.Count;
                 default:
-                    return CountDowncasted<TSource>.Count(source);
+                    return CountDowncasted<IEnumerable<TSource>, TSource>.Count(source);
             }
         }
 
         public static int Count<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate)
-            => CountDowncasted<TSource>.Count(source, predicate);
+            => CountDowncasted<IEnumerable<TSource>, TSource>.Count(source, predicate);
 
         public static bool All<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate)
-            => AllDowncasted<TSource>.All(source, predicate);
+            => AllDowncasted<IEnumerable<TSource>, TSource>.All(source, predicate);
 
         public static bool Any<TSource>(this IEnumerable<TSource> source)
         { 
@@ -37,12 +37,12 @@ namespace NetFabric.Hyperlinq
                 case IReadOnlyCollection<TSource> collection:
                     return collection.Count != 0;
                 default:
-                    return AnyDowncasted<TSource>.Any(source);
+                    return AnyDowncasted<IEnumerable<TSource>, TSource>.Any(source);
             }
         }
 
         public static bool Any<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate)
-            => AnyDowncasted<TSource>.Any(source, predicate);
+            => AnyDowncasted<IEnumerable<TSource>, TSource>.Any(source, predicate);
 
         public static bool Contains<TSource>(this IEnumerable<TSource> source, TSource value)
         {

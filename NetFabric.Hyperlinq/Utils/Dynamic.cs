@@ -7,7 +7,7 @@ using System.Reflection;
 
 namespace NetFabric.Hyperlinq
 {
-    static partial class Dynamic
+    static class Dynamic
     {
         public static class GetEnumerator<TEnumerable, TEnumerator, TSource>
             where TEnumerable : IEnumerable<TSource>
@@ -15,7 +15,7 @@ namespace NetFabric.Hyperlinq
         {
             public static Func<TEnumerable, TEnumerator> Invoke { get; } = Create();
 
-            public static Func<TEnumerable, TEnumerator> Create()
+            static Func<TEnumerable, TEnumerator> Create()
             {
                 var enumerableType = typeof(TEnumerable);
                 var getEnumerator = enumerableType.GetEnumeratorMethod<TSource>();
@@ -29,50 +29,54 @@ namespace NetFabric.Hyperlinq
             }
         }
 
-        public static MethodInfo GetEnumeratorMethod<TSource>(this Type enumerableType)
+        static MethodInfo GetEnumeratorMethod<TSource>(this Type enumerableType)
         {
             const string MethodName = "GetEnumerator";
 
-            var getEnumerator = enumerableType.GetMethod(MethodName);
-            if (!(getEnumerator is null))
-                return getEnumerator;
+            var method = enumerableType.GetMethod(MethodName, BindingFlags.Public | BindingFlags.Instance);
+            if (!(method is null))
+                return method;
 
-            var enumerableSourceType = typeof(IEnumerable<>).MakeGenericType(typeof(TSource));
-            if (enumerableSourceType.IsAssignableFrom(enumerableType))
-                return enumerableSourceType.GetMethod(MethodName);
+            var type = typeof(IEnumerable<>).MakeGenericType(typeof(TSource));
+            if (type.IsAssignableFrom(enumerableType))
+                return type.GetMethod(MethodName);
 
-            if (typeof(IEnumerable).IsAssignableFrom(enumerableType))
-                return typeof(IEnumerable).GetMethod(MethodName);
+            type = typeof(IEnumerable);
+            if (type.IsAssignableFrom(enumerableType))
+                return type.GetMethod(MethodName);
 
             throw new Exception($"'{enumerableType.FullName}': type must be implicitly convertible to 'System.Collections.IEnumerable'");
         } 
 
-        public static Func<IEnumerable<TSource>, TResult> GetEnumerableHandler<TSource, TResult>(string name, Type enumerableType)
+        public static Func<TEnumerable, TResult> GetEnumerableHandler<TEnumerable, TSource, TResult>(string name, Type enumerableType)
+            where TEnumerable : IEnumerable<TSource>
         {
-            var enumerableParameter = Expression.Parameter(typeof(IEnumerable<>).MakeGenericType(typeof(TSource)), "source");
+            var enumerableParameter = Expression.Parameter(typeof(TEnumerable), "source");
 
             var source = Expression.Convert(enumerableParameter, enumerableType);
             var method = GetMethod<TSource>(name, enumerableType);
 
             var body = Expression.Call(method, source);
-            return Expression.Lambda<Func<IEnumerable<TSource>, TResult>>(body, enumerableParameter).Compile();        
+            return Expression.Lambda<Func<TEnumerable, TResult>>(body, enumerableParameter).Compile();        
         }
 
-        public static Func<IEnumerable<TSource>, TArg, TResult> GetEnumerableHandler<TSource, TArg, TResult>(string name, Type enumerableType)
+        public static Func<TEnumerable, TArg, TResult> GetEnumerableHandler<TEnumerable, TSource, TArg, TResult>(string name, Type enumerableType)
+            where TEnumerable : IEnumerable<TSource>
         {
-            var enumerableParameter = Expression.Parameter(typeof(IEnumerable<>).MakeGenericType(typeof(TSource)), "source");
+            var enumerableParameter = Expression.Parameter(typeof(TEnumerable), "source");
             var argParameter = Expression.Parameter(typeof(TArg), "arg");
 
             var source = Expression.Convert(enumerableParameter, enumerableType);
             var method = GetMethod<TSource>(name, enumerableType, typeof(TArg));
             
             var body = Expression.Call(method, source, argParameter);
-            return Expression.Lambda<Func<IEnumerable<TSource>, TArg, TResult>>(body, enumerableParameter, argParameter).Compile();        
+            return Expression.Lambda<Func<TEnumerable, TArg, TResult>>(body, enumerableParameter, argParameter).Compile();        
         }
 
-        public static Func<IEnumerable<TSource>, TArg0, TArg1, TResult> GetEnumerableHandler<TSource, TArg0, TArg1, TResult>(string name, Type enumerableType)
+        public static Func<TEnumerable, TArg0, TArg1, TResult> GetEnumerableHandler<TEnumerable, TSource, TArg0, TArg1, TResult>(string name, Type enumerableType)
+            where TEnumerable : IEnumerable<TSource>
         {
-            var enumerableParameter = Expression.Parameter(typeof(IEnumerable<>).MakeGenericType(typeof(TSource)), "source");
+            var enumerableParameter = Expression.Parameter(typeof(TEnumerable), "source");
             var arg0Parameter = Expression.Parameter(typeof(TArg0), "arg0");
             var arg1Parameter = Expression.Parameter(typeof(TArg1), "arg1");
 
@@ -80,17 +84,18 @@ namespace NetFabric.Hyperlinq
             var method = GetMethod<TSource>(name, enumerableType, typeof(TArg0), typeof(TArg1));
 
             var body = Expression.Call(method, source, arg0Parameter, arg1Parameter);
-            return Expression.Lambda<Func<IEnumerable<TSource>, TArg0, TArg1, TResult>>(body, enumerableParameter, arg0Parameter, arg1Parameter).Compile();        
+            return Expression.Lambda<Func<TEnumerable, TArg0, TArg1, TResult>>(body, enumerableParameter, arg0Parameter, arg1Parameter).Compile();        
         }
 
-        static MethodInfo GetMethod<TSource>(string name, Type enumerableType, params Type[] types)
+        static MethodInfo GetMethod<TSource>(string name, Type enumerableType, params Type[] args)
         {
             var elementType = typeof(TSource);
 
             // TSource[]
-            if (typeof(TSource[]).IsAssignableFrom(enumerableType)) 
+            var type = typeof(TSource[]);
+            if (type.IsAssignableFrom(enumerableType)) 
             {
-                var method = GetMethod(typeof(ArrayExtensions), name, typeof(TSource[]), types);
+                var method = GetMethod(typeof(ArrayExtensions), name, type, args);
                 
                 if (!(method is null))
                     return method.MakeGenericMethod(new[] { elementType });
@@ -98,12 +103,12 @@ namespace NetFabric.Hyperlinq
 
             var getEnumerator = enumerableType.GetEnumeratorMethod<TSource>();
             var enumeratorType = getEnumerator.ReturnType;
-
+             
             // IReadOnlyList<TSource>
-            var type = typeof(IReadOnlyList<>).MakeGenericType(elementType);
+            type = typeof(IReadOnlyList<>).MakeGenericType(elementType);
             if (type.IsAssignableFrom(enumerableType)) 
             {
-                var method = GetMethod(typeof(ReadOnlyList), name, type, types);
+                var method = GetMethod(typeof(ReadOnlyList), name, type, args);
                 
                 if (!(method is null))
                     return method.MakeGenericMethod(new[] { enumerableType, enumeratorType, elementType });
@@ -113,7 +118,7 @@ namespace NetFabric.Hyperlinq
             type = typeof(IReadOnlyCollection<>).MakeGenericType(elementType);
             if (type.IsAssignableFrom(enumerableType)) 
             {
-                var method = GetMethod(typeof(ReadOnlyCollection), name, type, types);
+                var method = GetMethod(typeof(ReadOnlyCollection), name, type, args);
                 
                 if (!(method is null))
                     return method.MakeGenericMethod(new[] { enumerableType, enumeratorType, elementType });
@@ -123,7 +128,7 @@ namespace NetFabric.Hyperlinq
             type = typeof(IEnumerable<>).MakeGenericType(elementType);
             if (enumerableType.IsAssignableFrom(enumerableType)) 
             {
-                var method = GetMethod(typeof(Enumerable), name, type, types);
+                var method = GetMethod(typeof(Enumerable), name, type, args);
                 
                 if (!(method is null))
                     return method.MakeGenericMethod(new[] { enumerableType, enumeratorType, elementType });
@@ -132,12 +137,12 @@ namespace NetFabric.Hyperlinq
             throw new Exception($"No method '{name}' handler was found for type '{enumerableType}'");
         }
 
-        static MethodInfo GetMethod(Type type, string name, Type collectionType, params Type[] parameters)
+        static MethodInfo GetMethod(Type type, string name, Type collectionType, Type[] args)
         {
             return type.GetMethods(BindingFlags.Static | BindingFlags.Public)
                 .Where(method => 
                     method.Name == name && 
-                    method.GetParameters().Length == 1 + parameters.Length)
+                    method.GetParameters().Length == 1 + args.Length)
                 .FirstOrDefault();
         }
     }
