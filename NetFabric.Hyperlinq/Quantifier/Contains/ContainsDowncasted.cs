@@ -8,11 +8,11 @@ namespace NetFabric.Hyperlinq
     {
         const string methodName = "Contains";
 
-        static readonly TypeDictionary<Func<TEnumerable, TSource, IEqualityComparer<TSource>, bool>> containsComparer =
+        static readonly TypeDictionary<Func<TEnumerable, TSource, IEqualityComparer<TSource>, bool>> methods =
             new TypeDictionary<Func<TEnumerable, TSource, IEqualityComparer<TSource>, bool>>(
                 enumerableType => Dynamic.GetEnumerableHandler<TEnumerable, TSource, TSource, IEqualityComparer<TSource>, bool>(methodName, enumerableType));
 
         public static bool Contains(TEnumerable source, TSource value, IEqualityComparer<TSource> comparer = null)
-            => containsComparer.GetOrAdd(source.GetType())(source, value, comparer);
+            => methods.GetOrAdd(source.GetType())(source, value, comparer);
     }
 }
