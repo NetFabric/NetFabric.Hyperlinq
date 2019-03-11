@@ -21,7 +21,12 @@ namespace NetFabric.Hyperlinq
             if (dictionary.TryGetValue(type, out var value))
                 return value;
 
-            value = valueFactory(type);
+            return Add(type);
+        }
+
+        TValue Add(Type type)
+        {
+            var value = valueFactory(type);
             dictionary[type] = value;
             return value;
         }
