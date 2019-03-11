@@ -8,18 +8,18 @@ namespace NetFabric.Hyperlinq
     {
         const string methodName = "First";
 
-        static readonly TypeDictionary<Func<TEnumerable, TSource>> count = 
+        static readonly TypeDictionary<Func<TEnumerable, TSource>> first = 
             new TypeDictionary<Func<TEnumerable, TSource>>(
                 enumerableType => Dynamic.GetEnumerableHandler<TEnumerable, TSource, TSource>(methodName, enumerableType));
 
-        static readonly TypeDictionary<Func<TEnumerable, Func<TSource, bool>, TSource>> countPredicate = 
+        static readonly TypeDictionary<Func<TEnumerable, Func<TSource, bool>, TSource>> firstPredicate = 
             new TypeDictionary<Func<TEnumerable, Func<TSource, bool>, TSource>>(
                 enumerableType => Dynamic.GetEnumerableHandler<TEnumerable, TSource, Func<TSource, bool>, TSource>(methodName, enumerableType));
 
         public static TSource First(TEnumerable source)
-            => count.GetOrAdd(source.GetType())(source);
+            => first.GetOrAdd(source.GetType())(source);
 
         public static TSource First(TEnumerable source, Func<TSource, bool> predicate)
-            => countPredicate.GetOrAdd(source.GetType())(source, predicate);
+            => firstPredicate.GetOrAdd(source.GetType())(source, predicate);
     }
 }
