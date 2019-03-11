@@ -5,26 +5,36 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class ReadOnlyCollection
     {
-        public static bool Contains<TEnumerable, TEnumerator, TSource>(this TEnumerable source, TSource value)
-            where TEnumerable : IReadOnlyCollection<TSource>
-            where TEnumerator : IEnumerator<TSource>
-            => Contains<TEnumerable, TEnumerator, TSource>(source, value, EqualityComparer<TSource>.Default);
-
-        public static bool Contains<TEnumerable, TEnumerator, TSource>(this TEnumerable source, TSource value, IEqualityComparer<TSource> comparer)
+        public static bool Contains<TEnumerable, TEnumerator, TSource>(this TEnumerable source, TSource value, IEqualityComparer<TSource> comparer = null)
             where TEnumerable : IReadOnlyCollection<TSource>
             where TEnumerator : IEnumerator<TSource>
         {
             if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
             if (source.Count == 0) return false;
 
-            using (var enumerator = Dynamic.GetEnumerator<TEnumerable, TEnumerator, TSource>.Invoke(source))
+            if (comparer is null)
             {
-                while (enumerator.MoveNext())
+                using (var enumerator = Dynamic.GetEnumerator<TEnumerable, TEnumerator, TSource>.Invoke(source))
                 {
-                    if (comparer.Equals(enumerator.Current, value))
-                        return true;
+                    while (enumerator.MoveNext())
+                    {
+                        if (EqualityComparer<TSource>.Default.Equals(enumerator.Current, value))
+                            return true;
+                    }
                 }
             }
+            else
+            {
+                using (var enumerator = Dynamic.GetEnumerator<TEnumerable, TEnumerator, TSource>.Invoke(source))
+                {
+                    while (enumerator.MoveNext())
+                    {
+                        if (comparer.Equals(enumerator.Current, value))
+                            return true;
+                    }
+                }
+            }
+
             return false;
         }
     }

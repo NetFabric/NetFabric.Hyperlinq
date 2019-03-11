@@ -45,34 +45,10 @@ namespace NetFabric.Hyperlinq
             => AnyDowncasted<IEnumerable<TSource>, TSource>.Any(source, predicate);
 
         public static bool Contains<TSource>(this IEnumerable<TSource> source, TSource value)
-        {
-            switch (source)
-            {
-                case TSource[] array:
-                    return ArrayExtensions.Contains<TSource>(array, value);
-                case IReadOnlyList<TSource> list:
-                    return ReadOnlyList.Contains<IReadOnlyList<TSource>, IEnumerator<TSource>, TSource>(list, value);
-                case IReadOnlyCollection<TSource> collection:
-                    return ReadOnlyCollection.Contains<IReadOnlyCollection<TSource>, IEnumerator<TSource>, TSource>(collection, value);
-                default:
-                    return Enumerable.Contains<IEnumerable<TSource>, IEnumerator<TSource>, TSource>(source, value);
-            }
-        }
+            => ContainsDowncasted<IEnumerable<TSource>, TSource>.Contains(source, value);
 
         public static bool Contains<TSource>(this IEnumerable<TSource> source, TSource value, IEqualityComparer<TSource> comparer)
-        {
-            switch (source)
-            {
-                case TSource[] array:
-                    return ArrayExtensions.Contains<TSource>(array, value, comparer);
-                case IReadOnlyList<TSource> list:
-                    return ReadOnlyList.Contains<IReadOnlyList<TSource>, IEnumerator<TSource>, TSource>(list, value, comparer);
-                case IReadOnlyCollection<TSource> collection:
-                    return ReadOnlyCollection.Contains<IReadOnlyCollection<TSource>, IEnumerator<TSource>, TSource>(collection, value, comparer);
-                default:
-                    return Enumerable.Contains<IEnumerable<TSource>, IEnumerator<TSource>, TSource>(source, value, comparer);
-            }
-        }
+            => ContainsDowncasted<IEnumerable<TSource>, TSource>.Contains(source, value, comparer);
 
         public static Enumerable.SelectEnumerable<IEnumerable<TSource>, IEnumerator<TSource>, TSource, TResult> Select<TSource, TResult>(
             this IEnumerable<TSource> source,

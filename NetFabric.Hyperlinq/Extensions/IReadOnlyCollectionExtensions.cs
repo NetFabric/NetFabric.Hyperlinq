@@ -8,30 +8,6 @@ namespace NetFabric.Hyperlinq
         public static int Count<TSource>(this IReadOnlyCollection<TSource> source)
             => source.Count;
 
-        public static bool Contains<TSource>(this IReadOnlyCollection<TSource> source, TSource value)
-        {
-            switch (source)
-            {
-                case TSource[] array:
-                    return ArrayExtensions.Contains<TSource>(array, value);
-                default:
-                    return ReadOnlyCollection.Contains<IReadOnlyCollection<TSource>, IEnumerator<TSource>, TSource>(source, value);
-            }
-        }
-
-        public static bool Contains<TSource>(this IReadOnlyCollection<TSource> source, TSource value, IEqualityComparer<TSource> comparer)
-        {
-            switch (source)
-            {
-                case TSource[] array:
-                    return ArrayExtensions.Contains<TSource>(array, value, comparer);
-                case IReadOnlyList<TSource> list:
-                    return ReadOnlyList.Contains<IReadOnlyList<TSource>, IEnumerator<TSource>, TSource>(list, value, comparer);
-                default:
-                    return ReadOnlyCollection.Contains<IReadOnlyCollection<TSource>, IEnumerator<TSource>, TSource>(source, value, comparer);
-            }
-        }
-
         public static ReadOnlyCollection.SelectEnumerable<IReadOnlyCollection<TSource>, IEnumerator<TSource>, TSource, TResult> Select<TSource, TResult>(
             this IReadOnlyCollection<TSource> source,
             Func<TSource, TResult> selector) 

@@ -60,11 +60,32 @@ namespace NetFabric.Hyperlinq
             return false;
         }
 
-        public static bool Contains<TSource>(this TSource[] source, TSource value)
-            => source.Contains(value);
+        public static bool Contains<TSource>(this TSource[] source, TSource value, IEqualityComparer<TSource> comparer = null)
+        {
+            if (source is null) ThrowHelper.ThrowArgumentNullException(nameof(source));
 
-        public static bool Contains<TSource>(this TSource[] source, TSource value, IEqualityComparer<TSource> comparer)
-            => source.Contains(value, comparer);
+            var length = source.Length;
+            if (length == 0) return false;
+
+            if(comparer is null)
+            {
+                for (var index = 0; index < length; index++)
+                {
+                    if (EqualityComparer<TSource>.Default.Equals(value, source[index]))
+                        return true;
+                }
+            }
+            else
+            {
+                for (var index = 0; index < length; index++)
+                {
+                    if (comparer.Equals(value, source[index]))
+                        return true;
+                }
+            }
+
+            return false;
+        }
 
         public static ref readonly TSource First<TSource>(this TSource[] source)
         {
