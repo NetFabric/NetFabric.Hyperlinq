@@ -32,7 +32,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
             System.Linq.Enumerable.Contains(enumerableReference, Count - 1);
 
         [BenchmarkCategory("Enumerable_Value")]
-        [Benchmark]
+        [Benchmark(Baseline = true)]
         public bool Linq_Enumerable_Value() => 
             System.Linq.Enumerable.Contains(enumerableValue, Count - 1);
 

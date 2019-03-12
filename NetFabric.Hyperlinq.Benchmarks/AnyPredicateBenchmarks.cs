@@ -32,7 +32,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
             System.Linq.Enumerable.Any(enumerableReference, _ => true);
 
         [BenchmarkCategory("Enumerable_Value")]
-        [Benchmark]
+        [Benchmark(Baseline = true)]
         public bool Linq_Enumerable_Value() => 
             System.Linq.Enumerable.Any(enumerableValue, _ => true);
 

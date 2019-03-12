@@ -30,7 +30,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
             System.Linq.Enumerable.ToArray(enumerableReference);
 
         [BenchmarkCategory("Enumerable_Value")]
-        [Benchmark]
+        [Benchmark(Baseline = true)]
         public int[] Linq_Enumerable_Value() => 
             System.Linq.Enumerable.ToArray(enumerableValue);
 

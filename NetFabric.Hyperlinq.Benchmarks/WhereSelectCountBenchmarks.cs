@@ -30,7 +30,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
             => System.Linq.Enumerable.Count(System.Linq.Enumerable.Select(System.Linq.Enumerable.Where(enumerableReference, _ => true), item => item));
 
         [BenchmarkCategory("Enumerable_Value")]
-        [Benchmark]
+        [Benchmark(Baseline = true)]
         public int Linq_Enumerable_Value() 
             => System.Linq.Enumerable.Count(System.Linq.Enumerable.Select(System.Linq.Enumerable.Where(enumerableValue, _ => true), item => item));
 

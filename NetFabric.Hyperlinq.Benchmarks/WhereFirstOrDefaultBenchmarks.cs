@@ -30,7 +30,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
             => System.Linq.Enumerable.Where(enumerableReference, _ => true).FirstOrDefault();
 
         [BenchmarkCategory("Enumerable_Value")]
-        [Benchmark]
+        [Benchmark(Baseline = true)]
         public int Linq_Enumerable_Value_FirstOrDefault()
             => System.Linq.Enumerable.Where(enumerableValue, _ => true).FirstOrDefault();
 

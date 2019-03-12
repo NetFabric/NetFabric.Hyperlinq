@@ -31,7 +31,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
             => System.Linq.Enumerable.Where(enumerableReference, _ => true).ToList();
 
         [BenchmarkCategory("Enumerable_Value")]
-        [Benchmark]
+        [Benchmark(Baseline = true)]
         public List<int> Linq_Enumerable_Value()
             => System.Linq.Enumerable.Where(enumerableValue, _ => true).ToList();
 

@@ -50,7 +50,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         }
 
         [BenchmarkCategory("Enumerable_Value")]
-        [Benchmark()]
+        [Benchmark(Baseline = true)]
         public int Linq_Enumerable_Value() 
         { 
             var count = 0;

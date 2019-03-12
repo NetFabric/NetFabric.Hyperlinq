@@ -31,7 +31,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
             => System.Linq.Enumerable.ToList(System.Linq.Enumerable.Select(enumerableReference, item => item));
 
         [BenchmarkCategory("Enumerable_Value")]
-        [Benchmark]
+        [Benchmark(Baseline = true)]
         public List<int> Linq_Enumerable_Value() 
             => System.Linq.Enumerable.ToList(System.Linq.Enumerable.Select(enumerableValue, item => item));
 

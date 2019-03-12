@@ -32,7 +32,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
             System.Linq.Enumerable.Count(enumerableReference, _ => true);
 
         [BenchmarkCategory("Enumerable_Value")]
-        [Benchmark]
+        [Benchmark(Baseline = true)]
         public int Linq_Enumerable_Value() => 
             System.Linq.Enumerable.Count(enumerableValue, _ => true);
 
