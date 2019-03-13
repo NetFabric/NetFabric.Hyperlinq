@@ -95,7 +95,7 @@ namespace NetFabric.Hyperlinq
             var type = typeof(TSource[]);
             if (type.IsAssignableFrom(enumerableType)) 
             {
-                var method = GetMethod(typeof(ArrayExtensions), name, type, args);
+                var method = GetMethod(typeof(Array), name, type, args);
                 
                 if (!(method is null))
                     return method.MakeGenericMethod(new[] { elementType });

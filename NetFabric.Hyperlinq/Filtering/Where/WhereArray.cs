@@ -134,22 +134,22 @@ namespace NetFabric.Hyperlinq
                 => ValueEnumerable.Where<WhereEnumerable<TSource>, ValueEnumerator, TSource>(this, predicate);
 
             public ref readonly TSource First()
-                => ref ArrayExtensions.First<TSource>(source, predicate);
+                => ref Array.First<TSource>(source, predicate);
             public TSource First(Func<TSource, bool> predicate)
                 => ValueEnumerable.First<WhereEnumerable<TSource>, ValueEnumerator, TSource>(this, predicate);
 
             public ref readonly TSource FirstOrDefault()
-                => ref ArrayExtensions.FirstOrDefault<TSource>(source, predicate);
+                => ref Array.FirstOrDefault<TSource>(source, predicate);
             public TSource FirstOrDefault(Func<TSource, bool> predicate)
                 => ValueEnumerable.FirstOrDefault<WhereEnumerable<TSource>, ValueEnumerator, TSource>(this, predicate);
 
             public ref readonly TSource Single()
-                => ref ArrayExtensions.Single<TSource>(source, predicate);
+                => ref Array.Single<TSource>(source, predicate);
             public TSource Single(Func<TSource, bool> predicate)
                 => ValueEnumerable.Single<WhereEnumerable<TSource>, ValueEnumerator, TSource>(this, predicate);
 
             public ref readonly TSource SingleOrDefault()
-                => ref ArrayExtensions.SingleOrDefault<TSource>(source, predicate);
+                => ref Array.SingleOrDefault<TSource>(source, predicate);
             public TSource SingleOrDefault(Func<TSource, bool> predicate)
                 => ValueEnumerable.SingleOrDefault<WhereEnumerable<TSource>, ValueEnumerator, TSource>(this, predicate);
 
@@ -168,7 +168,7 @@ namespace NetFabric.Hyperlinq
 
         public static TSource? FirstOrNull<TSource>(this WhereEnumerable<TSource> source)
             where TSource : struct
-            => ArrayExtensions.FirstOrNull<TSource>(source.source, source.predicate);
+            => Array.FirstOrNull<TSource>(source.source, source.predicate);
 
         public static TSource? FirstOrNull<TSource>(this WhereEnumerable<TSource> source, Func<TSource, bool> predicate)
             where TSource : struct
@@ -176,7 +176,7 @@ namespace NetFabric.Hyperlinq
 
         public static TSource? SingleOrNull<TSource>(this WhereEnumerable<TSource> source)
             where TSource : struct
-            => ArrayExtensions.SingleOrNull<TSource>(source.source, source.predicate);
+            => Array.SingleOrNull<TSource>(source.source, source.predicate);
 
         public static TSource? SingleOrNull<TSource>(this WhereEnumerable<TSource> source, Func<TSource, bool> predicate)
             where TSource : struct

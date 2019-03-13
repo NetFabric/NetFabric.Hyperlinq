@@ -76,11 +76,11 @@ namespace NetFabric.Hyperlinq
 
         public static TSource? FirstOrNull<TSource>(this WhereEnumerable<TSource> source)
             where TSource : struct
-            => ReadOnlySpanExtensions.FirstOrNull(source.source, source.predicate);
+            => SpanExtensions.FirstOrNull(source.source, source.predicate);
 
         public static TSource? SingleOrNull<TSource>(this WhereEnumerable<TSource> source)
             where TSource : struct
-            => ReadOnlySpanExtensions.SingleOrNull(source.source, source.predicate);
+            => SpanExtensions.SingleOrNull(source.source, source.predicate);
     }
 }
 

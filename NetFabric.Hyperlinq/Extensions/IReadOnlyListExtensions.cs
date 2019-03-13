@@ -10,7 +10,7 @@ namespace NetFabric.Hyperlinq
             switch (source)
             {
                 case TSource[] array:
-                    return ArrayExtensions.Count<TSource>(array, predicate);
+                    return Array.Count<TSource>(array, predicate);
                 default:
                     return ReadOnlyList.Count<IReadOnlyList<TSource>, IEnumerator<TSource>, TSource>(source, predicate);
             }
@@ -21,7 +21,7 @@ namespace NetFabric.Hyperlinq
             switch (source)
             {
                 case TSource[] array:
-                    return ArrayExtensions.All<TSource>(array, predicate);
+                    return Array.All<TSource>(array, predicate);
                 default:
                     return ReadOnlyList.All<IReadOnlyList<TSource>, IEnumerator<TSource>, TSource>(source, predicate);
             }
@@ -32,7 +32,7 @@ namespace NetFabric.Hyperlinq
             switch (source)
             {
                 case TSource[] array:
-                    return ArrayExtensions.Any<TSource>(array);
+                    return Array.Any<TSource>(array);
                 default:
                     return ReadOnlyList.Any<IReadOnlyList<TSource>, IEnumerator<TSource>, TSource>(source);
             }
@@ -43,7 +43,7 @@ namespace NetFabric.Hyperlinq
             switch (source)
             {
                 case TSource[] array:
-                    return ArrayExtensions.Any<TSource>(array, predicate);
+                    return Array.Any<TSource>(array, predicate);
                 default:
                     return ReadOnlyList.Any<IReadOnlyList<TSource>, IEnumerator<TSource>, TSource>(source, predicate);
             }
@@ -54,7 +54,7 @@ namespace NetFabric.Hyperlinq
             switch (source)
             {
                 case TSource[] array:
-                    return ArrayExtensions.Contains<TSource>(array, value);
+                    return Array.Contains<TSource>(array, value);
                 default:
                     return ReadOnlyList.Contains<IReadOnlyList<TSource>, IEnumerator<TSource>, TSource>(source, value);
             }
@@ -65,7 +65,7 @@ namespace NetFabric.Hyperlinq
             switch (source)
             {
                 case TSource[] array:
-                    return ArrayExtensions.Contains<TSource>(array, value, comparer);
+                    return Array.Contains<TSource>(array, value, comparer);
                 default:
                     return ReadOnlyList.Contains<IReadOnlyList<TSource>, IEnumerator<TSource>, TSource>(source, value, comparer);
             }
@@ -86,7 +86,7 @@ namespace NetFabric.Hyperlinq
             switch (source)
             {
                 case TSource[] array:
-                    return ArrayExtensions.First<TSource>(array);
+                    return Array.First<TSource>(array);
                 default:
                     return ReadOnlyList.First<IReadOnlyList<TSource>, IEnumerator<TSource>, TSource>(source);
             }
@@ -97,7 +97,7 @@ namespace NetFabric.Hyperlinq
             switch (source)
             {
                 case TSource[] array:
-                    return ArrayExtensions.First<TSource>(array, predicate);
+                    return Array.First<TSource>(array, predicate);
                 default:
                     return ReadOnlyList.First<IReadOnlyList<TSource>, IEnumerator<TSource>, TSource>(source, predicate);
             }
@@ -108,7 +108,7 @@ namespace NetFabric.Hyperlinq
             switch (source)
             {
                 case TSource[] array:
-                    return ArrayExtensions.FirstOrDefault<TSource>(array);
+                    return Array.FirstOrDefault<TSource>(array);
                 default:
                     return ReadOnlyList.FirstOrDefault<IReadOnlyList<TSource>, IEnumerator<TSource>, TSource>(source);
             }
@@ -119,7 +119,7 @@ namespace NetFabric.Hyperlinq
             switch (source)
             {
                 case TSource[] array:
-                    return ArrayExtensions.FirstOrDefault<TSource>(array, predicate);
+                    return Array.FirstOrDefault<TSource>(array, predicate);
                 default:
                     return ReadOnlyList.FirstOrDefault<IReadOnlyList<TSource>, IEnumerator<TSource>, TSource>(source, predicate);
             }
@@ -131,7 +131,7 @@ namespace NetFabric.Hyperlinq
             switch (source)
             {
                 case TSource[] array:
-                    return ArrayExtensions.FirstOrNull<TSource>(array);
+                    return Array.FirstOrNull<TSource>(array);
                 default:
                     return ReadOnlyList.FirstOrNull<IReadOnlyList<TSource>, IEnumerator<TSource>, TSource>(source);
             }
@@ -143,7 +143,7 @@ namespace NetFabric.Hyperlinq
             switch (source)
             {
                 case TSource[] array:
-                    return ArrayExtensions.FirstOrNull<TSource>(array, predicate);
+                    return Array.FirstOrNull<TSource>(array, predicate);
                 default:
                     return ReadOnlyList.FirstOrNull<IReadOnlyList<TSource>, IEnumerator<TSource>, TSource>(source, predicate);
             }
@@ -154,7 +154,7 @@ namespace NetFabric.Hyperlinq
             switch (source)
             {
                 case TSource[] array:
-                    return ArrayExtensions.Single<TSource>(array);
+                    return Array.Single<TSource>(array);
                 default:
                     return ReadOnlyList.Single<IReadOnlyList<TSource>, IEnumerator<TSource>, TSource>(source);
             }
@@ -165,7 +165,7 @@ namespace NetFabric.Hyperlinq
             switch (source)
             {
                 case TSource[] array:
-                    return ArrayExtensions.Single<TSource>(array, predicate);
+                    return Array.Single<TSource>(array, predicate);
                 default:
                     return ReadOnlyList.Single<IReadOnlyList<TSource>, IEnumerator<TSource>, TSource>(source, predicate);
             }
@@ -176,7 +176,7 @@ namespace NetFabric.Hyperlinq
             switch (source)
             {
                 case TSource[] array:
-                    return ArrayExtensions.SingleOrDefault<TSource>(array);
+                    return Array.SingleOrDefault<TSource>(array);
                 default:
                     return ReadOnlyList.SingleOrDefault<IReadOnlyList<TSource>, IEnumerator<TSource>, TSource>(source);
             }
@@ -187,7 +187,7 @@ namespace NetFabric.Hyperlinq
             switch (source)
             {
                 case TSource[] array:
-                    return ArrayExtensions.SingleOrDefault<TSource>(array, predicate);
+                    return Array.SingleOrDefault<TSource>(array, predicate);
                 default:
                     return ReadOnlyList.SingleOrDefault<IReadOnlyList<TSource>, IEnumerator<TSource>, TSource>(source, predicate);
             }
@@ -199,7 +199,7 @@ namespace NetFabric.Hyperlinq
             switch (source)
             {
                 case TSource[] array:
-                    return ArrayExtensions.SingleOrNull<TSource>(array);
+                    return Array.SingleOrNull<TSource>(array);
                 default:
                     return ReadOnlyList.SingleOrNull<IReadOnlyList<TSource>, IEnumerator<TSource>, TSource>(source);
             }
@@ -211,7 +211,7 @@ namespace NetFabric.Hyperlinq
             switch (source)
             {
                 case TSource[] array:
-                    return ArrayExtensions.SingleOrNull<TSource>(array, predicate);
+                    return Array.SingleOrNull<TSource>(array, predicate);
                 default:
                     return ReadOnlyList.SingleOrNull<IReadOnlyList<TSource>, IEnumerator<TSource>, TSource>(source, predicate);
             }

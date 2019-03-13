@@ -65,7 +65,7 @@ namespace NetFabric.Hyperlinq
             switch (source)
             {
                 case TSource[] array:
-                    return ArrayExtensions.First<TSource>(array);
+                    return Array.First<TSource>(array);
                 default:
                     return FirstDowncasted<IEnumerable<TSource>, TSource>.First(source);
             }
@@ -76,7 +76,7 @@ namespace NetFabric.Hyperlinq
             switch (source)
             {
                 case TSource[] array:
-                    return ArrayExtensions.First<TSource>(array, predicate);
+                    return Array.First<TSource>(array, predicate);
                 default:
                     return FirstDowncasted<IEnumerable<TSource>, TSource>.First(source);
             }
@@ -87,7 +87,7 @@ namespace NetFabric.Hyperlinq
             switch (source)
             {
                 case TSource[] array:
-                    return ArrayExtensions.FirstOrDefault<TSource>(array);
+                    return Array.FirstOrDefault<TSource>(array);
                 default:
                     return FirstOrDefaultDowncasted<IEnumerable<TSource>, TSource>.FirstOrDefault(source);
             }
@@ -98,7 +98,7 @@ namespace NetFabric.Hyperlinq
             switch (source)
             {
                 case TSource[] array:
-                    return ArrayExtensions.FirstOrDefault<TSource>(array, predicate);
+                    return Array.FirstOrDefault<TSource>(array, predicate);
                 default:
                     return FirstOrDefaultDowncasted<IEnumerable<TSource>, TSource>.FirstOrDefault(source);
             }
@@ -110,7 +110,7 @@ namespace NetFabric.Hyperlinq
             switch (source)
             {
                 case TSource[] array:
-                    return ArrayExtensions.FirstOrNull<TSource>(array);
+                    return Array.FirstOrNull<TSource>(array);
                 default:
                     return FirstOrNullDowncasted<IEnumerable<TSource>, TSource>.FirstOrNull(source);
             }
@@ -122,7 +122,7 @@ namespace NetFabric.Hyperlinq
             switch (source)
             {
                 case TSource[] array:
-                    return ArrayExtensions.FirstOrNull<TSource>(array, predicate);
+                    return Array.FirstOrNull<TSource>(array, predicate);
                 default:
                     return FirstOrNullDowncasted<IEnumerable<TSource>, TSource>.FirstOrNull(source);
             }
@@ -133,7 +133,7 @@ namespace NetFabric.Hyperlinq
             switch (source)
             {
                 case TSource[] array:
-                    return ArrayExtensions.Single<TSource>(array);
+                    return Array.Single<TSource>(array);
                 default:
                     return SingleDowncasted<IEnumerable<TSource>, TSource>.Single(source);
             }
@@ -144,7 +144,7 @@ namespace NetFabric.Hyperlinq
             switch (source)
             {
                 case TSource[] array:
-                    return ArrayExtensions.Single<TSource>(array, predicate);
+                    return Array.Single<TSource>(array, predicate);
                 default:
                     return SingleDowncasted<IEnumerable<TSource>, TSource>.Single(source);
             }
@@ -155,7 +155,7 @@ namespace NetFabric.Hyperlinq
             switch (source)
             {
                 case TSource[] array:
-                    return ArrayExtensions.SingleOrDefault<TSource>(array);
+                    return Array.SingleOrDefault<TSource>(array);
                 default:
                     return SingleOrDefaultDowncasted<IEnumerable<TSource>, TSource>.SingleOrDefault(source);
             }
@@ -166,7 +166,7 @@ namespace NetFabric.Hyperlinq
             switch (source)
             {
                 case TSource[] array:
-                    return ArrayExtensions.SingleOrDefault<TSource>(array, predicate);
+                    return Array.SingleOrDefault<TSource>(array, predicate);
                 default:
                     return SingleOrDefaultDowncasted<IEnumerable<TSource>, TSource>.SingleOrDefault(source);
             }
@@ -178,7 +178,7 @@ namespace NetFabric.Hyperlinq
             switch (source)
             {
                 case TSource[] array:
-                    return ArrayExtensions.SingleOrNull<TSource>(array);
+                    return Array.SingleOrNull<TSource>(array);
                 default:
                     return SingleOrNullDowncasted<IEnumerable<TSource>, TSource>.SingleOrNull(source);
             }
@@ -190,7 +190,7 @@ namespace NetFabric.Hyperlinq
             switch (source)
             {
                 case TSource[] array:
-                    return ArrayExtensions.SingleOrNull<TSource>(array, predicate);
+                    return Array.SingleOrNull<TSource>(array, predicate);
                 default:
                     return SingleOrNullDowncasted<IEnumerable<TSource>, TSource>.SingleOrNull(source);
             }
@@ -222,7 +222,7 @@ namespace NetFabric.Hyperlinq
             switch (source)
             {
                 case TSource[] array:
-                    return ArrayExtensions.ToList<TSource>(array);
+                    return Array.ToList<TSource>(array);
                 case IReadOnlyCollection<TSource> collection:
                     return ReadOnlyCollection.ToList<IReadOnlyCollection<TSource>, IEnumerator<TSource>, TSource>(collection);
                 default:
