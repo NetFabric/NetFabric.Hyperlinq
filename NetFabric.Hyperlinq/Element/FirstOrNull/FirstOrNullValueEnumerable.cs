@@ -26,6 +26,7 @@ namespace NetFabric.Hyperlinq
             where TSource : struct
         {
             if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
+            if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
 
             using (var enumerator = source.GetValueEnumerator())
             {
