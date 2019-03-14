@@ -4,7 +4,7 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class SpanExtensions
     {
-        public static WhereEnumerable<TSource> Where<TSource>(this System.Span<TSource> source, Func<TSource, bool> predicate) 
+        public static WhereEnumerable<TSource> Where<TSource>(this Span<TSource> source, Func<TSource, bool> predicate) 
         {
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
 
