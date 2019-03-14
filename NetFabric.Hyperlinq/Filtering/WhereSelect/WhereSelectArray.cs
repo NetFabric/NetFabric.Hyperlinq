@@ -10,7 +10,7 @@ namespace NetFabric.Hyperlinq
             Func<TSource, bool> predicate, 
             Func<TSource, TResult> selector) 
         {
-            if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
+            if (source is null) ThrowHelper.ThrowArgumentNullException(nameof(source));
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
             if (selector is null) ThrowHelper.ThrowArgumentNullException(nameof(selector));
 

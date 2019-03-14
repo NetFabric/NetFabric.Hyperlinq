@@ -15,7 +15,7 @@ namespace NetFabric.Hyperlinq
 
         public static ref readonly TSource FirstOrDefault<TSource>(this TSource[] source, Func<TSource, bool> predicate) 
         {
-            if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
+            if (source is null) ThrowHelper.ThrowArgumentNullException(nameof(source));
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
 
             var count = source.Length;

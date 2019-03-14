@@ -4,7 +4,7 @@
     {
         public static AsValueReadOnlyListEnumerable<TSource> AsValueReadOnlyList<TSource>(this TSource[] source)
         {
-            if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
+            if (source is null) ThrowHelper.ThrowArgumentNullException(nameof(source));
 
             return new AsValueReadOnlyListEnumerable<TSource>(source);
         }
