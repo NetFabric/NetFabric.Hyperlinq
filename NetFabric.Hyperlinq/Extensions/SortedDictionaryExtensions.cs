@@ -24,7 +24,7 @@ namespace NetFabric.Hyperlinq
             => source.Contains(value);
 
         public static bool Contains<TKey, TValue>(this SortedDictionary<TKey, TValue> source, KeyValuePair<TKey, TValue> value, IEqualityComparer<KeyValuePair<TKey, TValue>> comparer)
-            => source.Contains(value, comparer);
+            => ReadOnlyCollection.Contains<SortedDictionary<TKey, TValue>, SortedDictionary<TKey, TValue>.Enumerator, KeyValuePair<TKey, TValue>>(source, value, comparer);
 
         public static ReadOnlyCollection.SelectEnumerable<SortedDictionary<TKey, TValue>, SortedDictionary<TKey, TValue>.Enumerator, KeyValuePair<TKey, TValue>, TResult> Select<TKey, TValue, TResult>(
             this SortedDictionary<TKey, TValue> source,

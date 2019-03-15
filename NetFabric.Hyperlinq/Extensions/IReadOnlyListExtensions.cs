@@ -55,6 +55,8 @@ namespace NetFabric.Hyperlinq
             {
                 case TSource[] array:
                     return Array.Contains<TSource>(array, value);
+                case ICollection<TSource> collection:
+                    return collection.Contains(value);
                 default:
                     return ReadOnlyList.Contains<IReadOnlyList<TSource>, IEnumerator<TSource>, TSource>(source, value);
             }

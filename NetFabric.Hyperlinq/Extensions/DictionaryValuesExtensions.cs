@@ -20,11 +20,11 @@ namespace NetFabric.Hyperlinq
         public static bool Any<TKey, TValue>(this Dictionary<TKey, TValue>.ValueCollection source, Func<TValue, bool> predicate)
             => ReadOnlyCollection.Any<Dictionary<TKey, TValue>.ValueCollection, Dictionary<TKey, TValue>.ValueCollection.Enumerator, TValue>(source, predicate);
 
-        public static bool Contains<TKey, TValue>(this Dictionary<TKey, TValue>.ValueCollection source, KeyValuePair<TKey, TValue> value)
+        public static bool Contains<TKey, TValue>(this Dictionary<TKey, TValue>.ValueCollection source, TValue value)
             => source.Contains(value);
 
-        public static bool Contains<TKey, TValue>(this Dictionary<TKey, TValue>.ValueCollection source, KeyValuePair<TKey, TValue> value, IEqualityComparer<TValue> comparer)
-            => source.Contains(value, comparer);
+        public static bool Contains<TKey, TValue>(this Dictionary<TKey, TValue>.ValueCollection source, TValue value, IEqualityComparer<TValue> comparer)
+            => ReadOnlyCollection.Contains<Dictionary<TKey, TValue>.ValueCollection, Dictionary<TKey, TValue>.ValueCollection.Enumerator, TValue>(source, value, comparer);
 
         public static ReadOnlyCollection.SelectEnumerable<Dictionary<TKey, TValue>.ValueCollection, Dictionary<TKey, TValue>.ValueCollection.Enumerator, TValue, TResult> Select<TKey, TValue, TResult>(
             this Dictionary<TKey, TValue>.ValueCollection source,

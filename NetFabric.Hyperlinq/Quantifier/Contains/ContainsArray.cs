@@ -5,7 +5,10 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class Array
     {
-        public static bool Contains<TSource>(this TSource[] source, TSource value, IEqualityComparer<TSource> comparer = null)
+        public static bool Contains<TSource>(this TSource[] source, TSource value)
+            => System.Array.IndexOf<TSource>(source, value) >= 0;
+
+        public static bool Contains<TSource>(this TSource[] source, TSource value, IEqualityComparer<TSource> comparer)
         {
             if (source is null) ThrowHelper.ThrowArgumentNullException(nameof(source));
 

@@ -45,10 +45,28 @@ namespace NetFabric.Hyperlinq
             => AnyDowncasted<IEnumerable<TSource>, TSource>.Any(source, predicate);
 
         public static bool Contains<TSource>(this IEnumerable<TSource> source, TSource value)
-            => ContainsDowncasted<IEnumerable<TSource>, TSource>.Contains(source, value);
+        {
+            switch (source)
+            {
+                case TSource[] array:
+                    return Array.Contains<TSource>(array, value);
+                case ICollection<TSource> collection:
+                    return collection.Contains(value);
+                default:
+                    return ContainsDowncasted<IEnumerable<TSource>, TSource>.Contains(source, value);
+            }
+        }
 
         public static bool Contains<TSource>(this IEnumerable<TSource> source, TSource value, IEqualityComparer<TSource> comparer)
-            => ContainsDowncasted<IEnumerable<TSource>, TSource>.Contains(source, value, comparer);
+        {
+            switch (source) 
+            {
+                case TSource[] array:
+                    return array.Contains(value, comparer);
+                default:
+                    return ContainsDowncasted<IEnumerable<TSource>, TSource>.Contains(source, value, comparer);
+            }
+        }
 
         public static Enumerable.SelectEnumerable<IEnumerable<TSource>, IEnumerator<TSource>, TSource, TResult> Select<TSource, TResult>(
             this IEnumerable<TSource> source,

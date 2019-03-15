@@ -24,7 +24,7 @@ namespace NetFabric.Hyperlinq
             => source.Contains(value);
 
         public static bool Contains<TSource>(this SortedSet<TSource> source, TSource value, IEqualityComparer<TSource> comparer)
-            => source.Contains(value, comparer);
+            => ReadOnlyCollection.Contains<SortedSet<TSource>, SortedSet<TSource>.Enumerator, TSource>(source, value, comparer);
 
         public static ReadOnlyCollection.SelectEnumerable<SortedSet<TSource>, SortedSet<TSource>.Enumerator, TSource, TResult> Select<TSource, TResult>(
             this SortedSet<TSource> source,

@@ -20,11 +20,11 @@ namespace NetFabric.Hyperlinq
         public static bool Any<TKey, TValue>(this SortedDictionary<TKey, TValue>.KeyCollection source, Func<TKey, bool> predicate)
             => ReadOnlyCollection.Any<SortedDictionary<TKey, TValue>.KeyCollection, SortedDictionary<TKey, TValue>.KeyCollection.Enumerator, TKey>(source, predicate);
 
-        public static bool Contains<TKey, TValue>(this SortedDictionary<TKey, TValue>.KeyCollection source, KeyValuePair<TKey, TValue> value)
+        public static bool Contains<TKey, TValue>(this SortedDictionary<TKey, TValue>.KeyCollection source, TKey value)
             => source.Contains(value);
 
-        public static bool Contains<TKey, TValue>(this SortedDictionary<TKey, TValue>.KeyCollection source, KeyValuePair<TKey, TValue> value, IEqualityComparer<TKey> comparer)
-            => source.Contains(value, comparer);
+        public static bool Contains<TKey, TValue>(this SortedDictionary<TKey, TValue>.KeyCollection source, TKey value, IEqualityComparer<TKey> comparer)
+            => ReadOnlyCollection.Contains<SortedDictionary<TKey, TValue>.KeyCollection, SortedDictionary<TKey, TValue>.KeyCollection.Enumerator, TKey>(source, value, comparer);
 
         public static ReadOnlyCollection.SelectEnumerable<SortedDictionary<TKey, TValue>.KeyCollection, SortedDictionary<TKey, TValue>.KeyCollection.Enumerator, TKey, TResult> Select<TKey, TValue, TResult>(
             this SortedDictionary<TKey, TValue>.KeyCollection source,
