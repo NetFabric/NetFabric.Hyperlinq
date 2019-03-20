@@ -17,7 +17,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [GlobalSetup]
         public void GlobalSetup()
         {
-            source = new RangeEnumerable(0, Count);
+            source = new RangeEnumerable(Count);
         }
 
         [Benchmark(Baseline = true)]
@@ -48,7 +48,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
             return count;
         }        
 
-        public static int CountValueEnumerable<TEnumerable, TEnumerator, TSource>(TEnumerable source, Func<TSource, bool> predicate)
+        static int CountValueEnumerable<TEnumerable, TEnumerator, TSource>(TEnumerable source, Func<TSource, bool> predicate)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IValueEnumerator<TSource>
         {
@@ -64,7 +64,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
             return count;
         }
 
-        public static int CountBenValueEnumerable<TEnumerable, TEnumerator, TSource>(TEnumerable source, Func<TSource, bool> predicate)
+        static int CountBenValueEnumerable<TEnumerable, TEnumerator, TSource>(TEnumerable source, Func<TSource, bool> predicate)
             where TEnumerable : IBenValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IBenValueEnumerator<TSource>
         {
@@ -110,12 +110,10 @@ namespace NetFabric.Hyperlinq.Benchmarks
             , IValueEnumerable<int, RangeEnumerable.ValueEnumerator>
             , IBenValueEnumerable<int, RangeEnumerable.BenValueEnumerator>
         {
-            readonly int start;
             readonly int count;
 
-            internal RangeEnumerable(int start, int count)
+            internal RangeEnumerable(int count)
             {
-                this.start = start;
                 this.count = count;
             }
 
@@ -127,19 +125,19 @@ namespace NetFabric.Hyperlinq.Benchmarks
 
             public struct Enumerator : IEnumerator<int>
             {
-                readonly int end;
+                readonly int count;
                 int current;
 
                 internal Enumerator(in RangeEnumerable enumerable)
                 {
-                    current = enumerable.start - 1;
-                    end = checked(enumerable.start + enumerable.count);
+                    count = enumerable.count;
+                    current = -1;
                 }
 
                 public int Current => current;
                 object IEnumerator.Current => current;
 
-                public bool MoveNext() => ++current < end;
+                public bool MoveNext() => ++current < count;
 
                 public void Reset() => throw new NotSupportedException();
 
@@ -149,22 +147,22 @@ namespace NetFabric.Hyperlinq.Benchmarks
             public struct ValueEnumerator
                 : IValueEnumerator<int>
             {
-                readonly int end;
+                readonly int count;
                 int current;
 
                 internal ValueEnumerator(in RangeEnumerable enumerable)
                 {
-                    current = enumerable.start - 1;
-                    end = checked(enumerable.start + enumerable.count);
+                    count = enumerable.count;
+                    current = -1;
                 }
 
                 public bool TryMoveNext(out int current)
                 {
                     current = this.current++;
-                    return current < end;
+                    return current < count;
                 }
 
-                public bool TryMoveNext() => ++current < end;
+                public bool TryMoveNext() => ++current < count;
 
                 public void Dispose() { }
             }
@@ -172,22 +170,22 @@ namespace NetFabric.Hyperlinq.Benchmarks
             public struct BenValueEnumerator
                 : IBenValueEnumerator<int>
             {
-                readonly int end;
+                readonly int count;
                 int current;
 
                 internal BenValueEnumerator(in RangeEnumerable enumerable)
                 {
-                    current = enumerable.start - 1;
-                    end = checked(enumerable.start + enumerable.count);
+                    count = enumerable.count;
+                    current = -1;
                 }
 
                 public int TryMoveNext(out bool success)
                 {
-                    success = ++current < end;
+                    success = ++current < count;
                     return current;
                 }
 
-                public bool TryMoveNext() => ++current < end;
+                public bool TryMoveNext() => ++current < count;
 
                 public void Dispose() { }
             }
