@@ -118,5 +118,18 @@ namespace NetFabric.Hyperlinq.UnitTests
             // Assert
             result.Should().Be(expected);
         }
+
+        [Fact]
+        public void Test()
+        {
+            // Arrange
+            IEnumerable<int> source = new List<int>(new[] { 0, 1, 2, 3, 4, 5 });
+
+            // Act
+            var result = source.Count();
+
+            // Assert
+            result.Should().Be(6);
+        }
     }
 }
