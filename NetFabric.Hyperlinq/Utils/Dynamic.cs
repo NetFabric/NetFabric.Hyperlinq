@@ -19,9 +19,8 @@ namespace NetFabric.Hyperlinq
             {
                 var enumerableType = typeof(TEnumerable);
                 var getEnumerator = enumerableType.GetEnumeratorMethod<TSource>();
-                var enumeratorType = getEnumerator.ReturnType;
-                if (!typeof(TEnumerator).IsAssignableFrom(enumeratorType))
-                    throw new Exception($"'{enumerableType.FullName}': type must be implicitly convertible to '{typeof(TEnumerable).FullName}'");
+                if (getEnumerator is null || !typeof(TEnumerator).IsAssignableFrom(getEnumerator.ReturnType))
+                    throw new Exception($"'{getEnumerator.ReturnType.FullName}': type must be implicitly convertible to '{typeof(TEnumerable).FullName}'");
 
                 var enumerable = Expression.Parameter(enumerableType, "enumerable");
                 var body = Expression.Call(enumerable, getEnumerator);
@@ -45,7 +44,7 @@ namespace NetFabric.Hyperlinq
             if (type.IsAssignableFrom(enumerableType))
                 return type.GetMethod(MethodName);
 
-            throw new Exception($"'{enumerableType.FullName}': type must be implicitly convertible to 'System.Collections.IEnumerable'");
+            return null;
         } 
 
         public static Func<TEnumerable, TResult> GetEnumerableHandler<TEnumerable, TSource, TResult>(string name, Type enumerableType)
@@ -102,6 +101,8 @@ namespace NetFabric.Hyperlinq
             }
 
             var getEnumerator = enumerableType.GetEnumeratorMethod<TSource>();
+            if (getEnumerator is null)
+                throw new Exception($"'{enumerableType.FullName}': type must be implicitly convertible to 'System.Collections.IEnumerable'");
             var enumeratorType = getEnumerator.ReturnType;
              
             // IReadOnlyList<TSource>
