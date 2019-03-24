@@ -5,14 +5,12 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class ReadOnlyList
     {
-        public static bool Any<TEnumerable, TEnumerator, TSource>(this TEnumerable source)
+        public static bool Any<TEnumerable, TSource>(this TEnumerable source)
             where TEnumerable : IReadOnlyList<TSource>
-            where TEnumerator : IEnumerator<TSource>
             => source.Count != 0;
 
-        public static bool Any<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, bool> predicate)
+        public static bool Any<TEnumerable, TSource>(this TEnumerable source, Func<TSource, bool> predicate)
             where TEnumerable : IReadOnlyList<TSource>
-            where TEnumerator : IEnumerator<TSource>
         {
             if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
 

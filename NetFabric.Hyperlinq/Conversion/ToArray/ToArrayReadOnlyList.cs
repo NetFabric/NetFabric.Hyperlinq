@@ -5,9 +5,8 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class ReadOnlyList
     {
-        public static TSource[] ToArray<TEnumerable, TEnumerator, TSource>(this TEnumerable source)
+        public static TSource[] ToArray<TEnumerable, TSource>(this TEnumerable source)
             where TEnumerable : IReadOnlyList<TSource>
-            where TEnumerator : IEnumerator<TSource>
         {
             if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
 

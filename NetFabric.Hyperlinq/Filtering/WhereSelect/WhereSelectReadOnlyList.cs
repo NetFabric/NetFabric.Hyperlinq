@@ -5,23 +5,21 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class ReadOnlyList
     {
-        internal static WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult> WhereSelect<TEnumerable, TEnumerator, TSource, TResult>(
+        internal static WhereSelectEnumerable<TEnumerable, TSource, TResult> WhereSelect<TEnumerable, TSource, TResult>(
             this TEnumerable source, Func<TSource, bool> predicate,
             Func<TSource, TResult> selector) 
             where TEnumerable : IReadOnlyList<TSource>
-            where TEnumerator : IEnumerator<TSource>
         {
             if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
             if (selector is null) ThrowHelper.ThrowArgumentNullException(nameof(selector));
 
-            return new WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>(in source, predicate, selector);
+            return new WhereSelectEnumerable<TEnumerable, TSource, TResult>(in source, predicate, selector);
         }
 
-        public readonly struct WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>
-            : IValueEnumerable<TResult, WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>.ValueEnumerator>
+        public readonly struct WhereSelectEnumerable<TEnumerable, TSource, TResult>
+            : IValueEnumerable<TResult, WhereSelectEnumerable<TEnumerable, TSource, TResult>.ValueEnumerator>
             where TEnumerable : IReadOnlyList<TSource>
-            where TEnumerator : IEnumerator<TSource>
         {
             readonly TEnumerable source;
             readonly Func<TSource, bool> predicate;
@@ -46,7 +44,7 @@ namespace NetFabric.Hyperlinq
                 TSource current;
                 int index;
 
-                internal Enumerator(in WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult> enumerable)
+                internal Enumerator(in WhereSelectEnumerable<TEnumerable, TSource, TResult> enumerable)
                 {
                     source = enumerable.source;
                     predicate = enumerable.predicate;
@@ -82,7 +80,7 @@ namespace NetFabric.Hyperlinq
                 readonly int count;
                 int index;
 
-                internal ValueEnumerator(in WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult> enumerable)
+                internal ValueEnumerator(in WhereSelectEnumerable<TEnumerable, TSource, TResult> enumerable)
                 {
                     source = enumerable.source;
                     predicate = enumerable.predicate;
@@ -125,85 +123,81 @@ namespace NetFabric.Hyperlinq
             }
 
             public int Count()
-                => ReadOnlyList.Count<TEnumerable, TEnumerator, TSource>(source, predicate);
+                => ReadOnlyList.Count<TEnumerable, TSource>(source, predicate);
 
             public int Count(Func<TResult, bool> predicate)
-                => ValueEnumerable.Count<WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>, ValueEnumerator, TResult>(this, predicate);
+                => ValueEnumerable.Count<WhereSelectEnumerable<TEnumerable, TSource, TResult>, ValueEnumerator, TResult>(this, predicate);
 
             public bool All(Func<TResult, bool> predicate)
-                => ValueEnumerable.All<WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>, ValueEnumerator, TResult>(this, predicate);
+                => ValueEnumerable.All<WhereSelectEnumerable<TEnumerable, TSource, TResult>, ValueEnumerator, TResult>(this, predicate);
 
             public bool Any()
-                => ReadOnlyList.Any<TEnumerable, TEnumerator, TSource>(source, predicate);
+                => ReadOnlyList.Any<TEnumerable, TSource>(source, predicate);
 
             public bool Any(Func<TResult, bool> predicate)
-                => ValueEnumerable.Any<WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>, ValueEnumerator, TResult>(this, predicate);
+                => ValueEnumerable.Any<WhereSelectEnumerable<TEnumerable, TSource, TResult>, ValueEnumerator, TResult>(this, predicate);
 
             public bool Contains(TResult value)
-                => ValueEnumerable.Contains<WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>, ValueEnumerator, TResult>(this, value);
+                => ValueEnumerable.Contains<WhereSelectEnumerable<TEnumerable, TSource, TResult>, ValueEnumerator, TResult>(this, value);
 
             public bool Contains(TResult value, IEqualityComparer<TResult> comparer)
-                => ValueEnumerable.Contains<WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>, ValueEnumerator, TResult>(this, value, comparer);
+                => ValueEnumerable.Contains<WhereSelectEnumerable<TEnumerable, TSource, TResult>, ValueEnumerator, TResult>(this, value, comparer);
 
-            public ValueEnumerable.SelectEnumerable<WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>, ValueEnumerator, TResult, TSelectorResult> Select<TSelectorResult>(Func<TResult, TSelectorResult> selector)
-                => ValueEnumerable.Select<WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>, ValueEnumerator, TResult, TSelectorResult>(this, selector);
+            public ValueEnumerable.SelectEnumerable<WhereSelectEnumerable<TEnumerable, TSource, TResult>, ValueEnumerator, TResult, TSelectorResult> Select<TSelectorResult>(Func<TResult, TSelectorResult> selector)
+                => ValueEnumerable.Select<WhereSelectEnumerable<TEnumerable, TSource, TResult>, ValueEnumerator, TResult, TSelectorResult>(this, selector);
 
-            public ValueEnumerable.WhereEnumerable<WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>, ValueEnumerator, TResult> Where(Func<TResult, bool> predicate)
-                => ValueEnumerable.Where<WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>, ValueEnumerator, TResult>(this, predicate);
+            public ValueEnumerable.WhereEnumerable<WhereSelectEnumerable<TEnumerable, TSource, TResult>, ValueEnumerator, TResult> Where(Func<TResult, bool> predicate)
+                => ValueEnumerable.Where<WhereSelectEnumerable<TEnumerable, TSource, TResult>, ValueEnumerator, TResult>(this, predicate);
 
             public TResult First()
-                => ValueEnumerable.First<WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>, ValueEnumerator, TResult>(this);
+                => ValueEnumerable.First<WhereSelectEnumerable<TEnumerable, TSource, TResult>, ValueEnumerator, TResult>(this);
             public TResult First(Func<TResult, bool> predicate)
-                => ValueEnumerable.First<WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>, ValueEnumerator, TResult>(this, predicate);
+                => ValueEnumerable.First<WhereSelectEnumerable<TEnumerable, TSource, TResult>, ValueEnumerator, TResult>(this, predicate);
 
             public TResult FirstOrDefault()
-                => ValueEnumerable.FirstOrDefault<WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>, ValueEnumerator, TResult>(this);
+                => ValueEnumerable.FirstOrDefault<WhereSelectEnumerable<TEnumerable, TSource, TResult>, ValueEnumerator, TResult>(this);
             public TResult FirstOrDefault(Func<TResult, bool> predicate)
-                => ValueEnumerable.FirstOrDefault<WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>, ValueEnumerator, TResult>(this, predicate);
+                => ValueEnumerable.FirstOrDefault<WhereSelectEnumerable<TEnumerable, TSource, TResult>, ValueEnumerator, TResult>(this, predicate);
 
             public TResult Single()
-                => ValueEnumerable.Single<WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>, ValueEnumerator, TResult>(this);
+                => ValueEnumerable.Single<WhereSelectEnumerable<TEnumerable, TSource, TResult>, ValueEnumerator, TResult>(this);
             public TResult Single(Func<TResult, bool> predicate)
-                => ValueEnumerable.Single<WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>, ValueEnumerator, TResult>(this, predicate);
+                => ValueEnumerable.Single<WhereSelectEnumerable<TEnumerable, TSource, TResult>, ValueEnumerator, TResult>(this, predicate);
 
             public TResult SingleOrDefault()
-                => ValueEnumerable.SingleOrDefault<WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>, ValueEnumerator, TResult>(this);
+                => ValueEnumerable.SingleOrDefault<WhereSelectEnumerable<TEnumerable, TSource, TResult>, ValueEnumerator, TResult>(this);
             public TResult SingleOrDefault(Func<TResult, bool> predicate)
-                => ValueEnumerable.SingleOrDefault<WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>, ValueEnumerator, TResult>(this, predicate);
+                => ValueEnumerable.SingleOrDefault<WhereSelectEnumerable<TEnumerable, TSource, TResult>, ValueEnumerator, TResult>(this, predicate);
 
             public IEnumerable<TResult> AsEnumerable()
-                => ValueEnumerable.AsEnumerable<WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>, ValueEnumerator, TResult>(this);
+                => ValueEnumerable.AsEnumerable<WhereSelectEnumerable<TEnumerable, TSource, TResult>, ValueEnumerator, TResult>(this);
 
             public TResult[] ToArray()
-                => ValueEnumerable.ToArray<WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>, ValueEnumerator, TResult>(this);
+                => ValueEnumerable.ToArray<WhereSelectEnumerable<TEnumerable, TSource, TResult>, ValueEnumerator, TResult>(this);
 
             public List<TResult> ToList()
-                => ValueEnumerable.ToList<WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>, ValueEnumerator, TResult>(this);
+                => ValueEnumerable.ToList<WhereSelectEnumerable<TEnumerable, TSource, TResult>, ValueEnumerator, TResult>(this);
         }
 
-        public static TResult? FirstOrNull<TEnumerable, TEnumerator, TSource, TResult>(this WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult> source)
+        public static TResult? FirstOrNull<TEnumerable, TSource, TResult>(this WhereSelectEnumerable<TEnumerable, TSource, TResult> source)
             where TEnumerable : IReadOnlyList<TSource>
-            where TEnumerator : IEnumerator<TSource>
             where TResult : struct
-            => ValueEnumerable.FirstOrNull<WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>, WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>.ValueEnumerator, TResult>(source);
+            => ValueEnumerable.FirstOrNull<WhereSelectEnumerable<TEnumerable, TSource, TResult>, WhereSelectEnumerable<TEnumerable, TSource, TResult>.ValueEnumerator, TResult>(source);
 
-        public static TResult? FirstOrNull<TEnumerable, TEnumerator, TSource, TResult>(this WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult> source, Func<TResult, bool> predicate)
+        public static TResult? FirstOrNull<TEnumerable, TSource, TResult>(this WhereSelectEnumerable<TEnumerable, TSource, TResult> source, Func<TResult, bool> predicate)
             where TEnumerable : IReadOnlyList<TSource>
-            where TEnumerator : IEnumerator<TSource>
             where TResult : struct
-            => ValueEnumerable.FirstOrNull<WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>, WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>.ValueEnumerator, TResult>(source, predicate);
+            => ValueEnumerable.FirstOrNull<WhereSelectEnumerable<TEnumerable, TSource, TResult>, WhereSelectEnumerable<TEnumerable, TSource, TResult>.ValueEnumerator, TResult>(source, predicate);
 
-        public static TResult? SingleOrNull<TEnumerable, TEnumerator, TSource, TResult>(this WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult> source)
+        public static TResult? SingleOrNull<TEnumerable, TSource, TResult>(this WhereSelectEnumerable<TEnumerable, TSource, TResult> source)
             where TEnumerable : IReadOnlyList<TSource>
-            where TEnumerator : IEnumerator<TSource>
             where TResult : struct
-            => ValueEnumerable.SingleOrNull<WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>, WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>.ValueEnumerator, TResult>(source);
+            => ValueEnumerable.SingleOrNull<WhereSelectEnumerable<TEnumerable, TSource, TResult>, WhereSelectEnumerable<TEnumerable, TSource, TResult>.ValueEnumerator, TResult>(source);
 
-        public static TResult? SingleOrNull<TEnumerable, TEnumerator, TSource, TResult>(this WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult> source, Func<TResult, bool> predicate)
+        public static TResult? SingleOrNull<TEnumerable, TSource, TResult>(this WhereSelectEnumerable<TEnumerable, TSource, TResult> source, Func<TResult, bool> predicate)
             where TEnumerable : IReadOnlyList<TSource>
-            where TEnumerator : IEnumerator<TSource>
             where TResult : struct
-            => ValueEnumerable.SingleOrNull<WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>, WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>.ValueEnumerator, TResult>(source, predicate);
+            => ValueEnumerable.SingleOrNull<WhereSelectEnumerable<TEnumerable, TSource, TResult>, WhereSelectEnumerable<TEnumerable, TSource, TResult>.ValueEnumerator, TResult>(source, predicate);
     }
 }
 

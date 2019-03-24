@@ -112,7 +112,7 @@ namespace NetFabric.Hyperlinq
                 var method = GetMethod(typeof(ReadOnlyList), name, type, args);
                 
                 if (!(method is null))
-                    return method.MakeGenericMethod(new[] { enumerableType, enumeratorType, elementType });
+                    return method.MakeGenericMethod(new[] { enumerableType, elementType });
             }      
             
             // IReadOnlyCollection<TSource>

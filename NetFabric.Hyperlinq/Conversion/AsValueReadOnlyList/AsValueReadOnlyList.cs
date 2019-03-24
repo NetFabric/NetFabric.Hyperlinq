@@ -5,19 +5,17 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class ReadOnlyList
     {
-        public static AsValueReadOnlyListEnumerable<TEnumerable, TEnumerator, TSource> AsValueReadOnlyList<TEnumerable, TEnumerator, TSource>(this TEnumerable source)
+        public static AsValueReadOnlyListEnumerable<TEnumerable, TSource> AsValueReadOnlyList<TEnumerable, TSource>(this TEnumerable source)
             where TEnumerable : IReadOnlyList<TSource>
-            where TEnumerator : IEnumerator<TSource>
         {
             if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
 
-            return new AsValueReadOnlyListEnumerable<TEnumerable, TEnumerator, TSource>(source);
+            return new AsValueReadOnlyListEnumerable<TEnumerable, TSource>(source);
         }
 
-        public readonly struct AsValueReadOnlyListEnumerable<TEnumerable, TEnumerator, TSource>
-            : IValueReadOnlyList<TSource, AsValueReadOnlyListEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator>
+        public readonly struct AsValueReadOnlyListEnumerable<TEnumerable, TSource>
+            : IValueReadOnlyList<TSource, AsValueReadOnlyListEnumerable<TEnumerable, TSource>.Enumerator>
             where TEnumerable : IReadOnlyList<TSource>
-            where TEnumerator : IEnumerator<TSource>
         {
             readonly TEnumerable source;
 
@@ -35,27 +33,31 @@ namespace NetFabric.Hyperlinq
             public struct Enumerator
                 : IValueEnumerator<TSource>
             {
-                TEnumerator enumerator;
+                readonly TEnumerable source;
+                readonly int count;
+                int current;
 
-                internal Enumerator(AsValueReadOnlyListEnumerable<TEnumerable, TEnumerator, TSource> enumerable)
+                internal Enumerator(in AsValueReadOnlyListEnumerable<TEnumerable, TSource> enumerable)
                 {
-                    enumerator = Dynamic.GetEnumerator<TEnumerable, TEnumerator, TSource>.Invoke(enumerable.source);
+                    source = enumerable.source;
+                    count = source.Count;
+                    current = -1;
                 }
 
                 public bool TryMoveNext(out TSource current)
                 {
-                    if (enumerator.MoveNext())
+                    if (++this.current < count)
                     {
-                        current = enumerator.Current;
+                        current = source[this.current];
                         return true;
                     }
                     current = default;
                     return false;
                 }
 
-                public bool TryMoveNext() => enumerator.MoveNext();
+                public bool TryMoveNext() => ++current < count;
 
-                public void Dispose() => enumerator.Dispose();
+                public void Dispose() { }
             }
         }
     }

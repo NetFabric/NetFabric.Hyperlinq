@@ -5,9 +5,8 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class ReadOnlyList
     {
-        public static TSource? FirstOrNull<TEnumerable, TEnumerator, TSource>(this TEnumerable source) 
+        public static TSource? FirstOrNull<TEnumerable, TSource>(this TEnumerable source) 
             where TEnumerable : IReadOnlyList<TSource>
-            where TEnumerator : IEnumerator<TSource>
             where TSource : struct
         {
             if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
@@ -17,9 +16,8 @@ namespace NetFabric.Hyperlinq
             return source[0];
         }
 
-        public static TSource? FirstOrNull<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, bool> predicate) 
+        public static TSource? FirstOrNull<TEnumerable, TSource>(this TEnumerable source, Func<TSource, bool> predicate) 
             where TEnumerable : IReadOnlyList<TSource>
-            where TEnumerator : IEnumerator<TSource>
             where TSource : struct
         {
             if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));

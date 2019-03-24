@@ -227,7 +227,7 @@ namespace NetFabric.Hyperlinq
                 case TSource[] array:
                     return array;
                 case IReadOnlyList<TSource> list:
-                    return ReadOnlyList.ToArray<IReadOnlyList<TSource>, IEnumerator<TSource>, TSource>(list);
+                    return ReadOnlyList.ToArray<IReadOnlyList<TSource>, TSource>(list);
                 case IReadOnlyCollection<TSource> collection:
                     return ReadOnlyCollection.ToArray<IReadOnlyCollection<TSource>, IEnumerator<TSource>, TSource>(collection);
                 default:

@@ -9,7 +9,7 @@ namespace NetFabric.Hyperlinq
             => source.Count;
 
         public static int Count<TSource>(this List<TSource> source, Func<TSource, bool> predicate)
-            => ReadOnlyList.Count<List<TSource>, List<TSource>.Enumerator, TSource>(source, predicate);
+            => ReadOnlyList.Count<List<TSource>, TSource>(source, predicate);
 
         public static bool All<TSource>(this List<TSource> source, Func<TSource, bool> predicate)
             => ReadOnlyCollection.All<List<TSource>, List<TSource>.Enumerator, TSource>(source, predicate);
@@ -24,17 +24,17 @@ namespace NetFabric.Hyperlinq
             => source.Contains(value);
 
         public static bool Contains<TSource>(this List<TSource> source, TSource value, IEqualityComparer<TSource> comparer)
-            => ReadOnlyList.Contains<List<TSource>, List<TSource>.Enumerator, TSource>(source, value, comparer);
+            => ReadOnlyList.Contains<List<TSource>, TSource>(source, value, comparer);
 
-        public static ReadOnlyList.SelectEnumerable<List<TSource>, List<TSource>.Enumerator, TSource, TResult> Select<TSource, TResult>(
+        public static ReadOnlyList.SelectEnumerable<List<TSource>,  TSource, TResult> Select<TSource, TResult>(
             this List<TSource> source,
             Func<TSource, TResult> selector) 
-            => ReadOnlyList.Select<List<TSource>, List<TSource>.Enumerator, TSource, TResult>(source, selector);
+            => ReadOnlyList.Select<List<TSource>, TSource, TResult>(source, selector);
 
-        public static ReadOnlyList.WhereEnumerable<List<TSource>, List<TSource>.Enumerator, TSource> Where<TSource>(
+        public static ReadOnlyList.WhereEnumerable<List<TSource>, TSource> Where<TSource>(
             this List<TSource> source, 
             Func<TSource, bool> predicate) 
-            => ReadOnlyList.Where<List<TSource>, List<TSource>.Enumerator, TSource>(source, predicate);
+            => ReadOnlyList.Where<List<TSource>, TSource>(source, predicate);
 
         public static TSource First<TSource, TValue>(this List<TSource> source)
             => ReadOnlyCollection.First<List<TSource>, List<TSource>.Enumerator, TSource>(source);
@@ -91,11 +91,11 @@ namespace NetFabric.Hyperlinq
         public static ReadOnlyCollection.AsValueReadOnlyCollectionEnumerable<List<TSource>, List<TSource>.Enumerator, TSource> AsValueReadOnlyCollection<TSource>(this List<TSource> source)
             => ReadOnlyCollection.AsValueReadOnlyCollection<List<TSource>, List<TSource>.Enumerator, TSource>(source);
 
-        public static ReadOnlyList.AsValueReadOnlyListEnumerable<List<TSource>, List<TSource>.Enumerator, TSource> AsValueReadOnlyList<TSource>(this List<TSource> source)
-            => ReadOnlyList.AsValueReadOnlyList<List<TSource>, List<TSource>.Enumerator, TSource>(source);
+        public static ReadOnlyList.AsValueReadOnlyListEnumerable<List<TSource>, TSource> AsValueReadOnlyList<TSource>(this List<TSource> source)
+            => ReadOnlyList.AsValueReadOnlyList<List<TSource>, TSource>(source);
 
         public static TSource[] ToArray<TSource>(this List<TSource> source)
-            => ReadOnlyList.ToArray<List<TSource>, List<TSource>.Enumerator, TSource>(source);
+            => ReadOnlyList.ToArray<List<TSource>, TSource>(source);
 
         public static List<TSource> ToList<TSource>(this List<TSource> source)
             => source;
