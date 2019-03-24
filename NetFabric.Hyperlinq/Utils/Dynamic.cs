@@ -47,35 +47,32 @@ namespace NetFabric.Hyperlinq
             return null;
         } 
 
-        public static Func<TEnumerable, TResult> GetEnumerableHandler<TEnumerable, TSource, TResult>(string name, Type enumerableType)
-            where TEnumerable : IEnumerable<TSource>
+        public static Func<IEnumerable<TSource>, TResult> GetEnumerableHandler<TSource, TResult>(string name, Type enumerableType)
         {
-            var enumerableParameter = Expression.Parameter(typeof(TEnumerable), "source");
+            var enumerableParameter = Expression.Parameter(typeof(IEnumerable<>).MakeGenericType(typeof(TSource)), "source");
 
             var source = Expression.Convert(enumerableParameter, enumerableType);
             var method = GetMethod<TSource>(name, enumerableType);
 
             var body = Expression.Call(method, source);
-            return Expression.Lambda<Func<TEnumerable, TResult>>(body, enumerableParameter).Compile();        
+            return Expression.Lambda<Func<IEnumerable<TSource>, TResult>>(body, enumerableParameter).Compile();        
         }
 
-        public static Func<TEnumerable, TArg, TResult> GetEnumerableHandler<TEnumerable, TSource, TArg, TResult>(string name, Type enumerableType)
-            where TEnumerable : IEnumerable<TSource>
+        public static Func<IEnumerable<TSource>, TArg, TResult> GetEnumerableHandler<TSource, TArg, TResult>(string name, Type enumerableType)
         {
-            var enumerableParameter = Expression.Parameter(typeof(TEnumerable), "source");
+            var enumerableParameter = Expression.Parameter(typeof(IEnumerable<>).MakeGenericType(typeof(TSource)), "source");
             var argParameter = Expression.Parameter(typeof(TArg), "arg");
 
             var source = Expression.Convert(enumerableParameter, enumerableType);
             var method = GetMethod<TSource>(name, enumerableType, typeof(TArg));
             
             var body = Expression.Call(method, source, argParameter);
-            return Expression.Lambda<Func<TEnumerable, TArg, TResult>>(body, enumerableParameter, argParameter).Compile();        
+            return Expression.Lambda<Func<IEnumerable<TSource>, TArg, TResult>>(body, enumerableParameter, argParameter).Compile();        
         }
 
-        public static Func<TEnumerable, TArg0, TArg1, TResult> GetEnumerableHandler<TEnumerable, TSource, TArg0, TArg1, TResult>(string name, Type enumerableType)
-            where TEnumerable : IEnumerable<TSource>
+        public static Func<IEnumerable<TSource>, TArg0, TArg1, TResult> GetEnumerableHandler<TSource, TArg0, TArg1, TResult>(string name, Type enumerableType)
         {
-            var enumerableParameter = Expression.Parameter(typeof(TEnumerable), "source");
+            var enumerableParameter = Expression.Parameter(typeof(IEnumerable<>).MakeGenericType(typeof(TSource)), "source");
             var arg0Parameter = Expression.Parameter(typeof(TArg0), "arg0");
             var arg1Parameter = Expression.Parameter(typeof(TArg1), "arg1");
 
@@ -83,7 +80,7 @@ namespace NetFabric.Hyperlinq
             var method = GetMethod<TSource>(name, enumerableType, typeof(TArg0), typeof(TArg1));
 
             var body = Expression.Call(method, source, arg0Parameter, arg1Parameter);
-            return Expression.Lambda<Func<TEnumerable, TArg0, TArg1, TResult>>(body, enumerableParameter, arg0Parameter, arg1Parameter).Compile();        
+            return Expression.Lambda<Func<IEnumerable<TSource>, TArg0, TArg1, TResult>>(body, enumerableParameter, arg0Parameter, arg1Parameter).Compile();        
         }
 
         static MethodInfo GetMethod<TSource>(string name, Type enumerableType, params Type[] args)
@@ -99,11 +96,6 @@ namespace NetFabric.Hyperlinq
                 if (!(method is null))
                     return method.MakeGenericMethod(new[] { elementType });
             }
-
-            var getEnumerator = enumerableType.GetEnumeratorMethod<TSource>();
-            if (getEnumerator is null)
-                throw new Exception($"'{enumerableType.FullName}': type must be implicitly convertible to 'System.Collections.IEnumerable'");
-            var enumeratorType = getEnumerator.ReturnType;
              
             // IReadOnlyList<TSource>
             type = typeof(IReadOnlyList<>).MakeGenericType(elementType);
@@ -114,6 +106,11 @@ namespace NetFabric.Hyperlinq
                 if (!(method is null))
                     return method.MakeGenericMethod(new[] { enumerableType, elementType });
             }      
+
+            var getEnumerator = enumerableType.GetEnumeratorMethod<TSource>();
+            if (getEnumerator is null)
+                throw new Exception($"'{enumerableType.FullName}': type must be implicitly convertible to 'System.Collections.IEnumerable'");
+            var enumeratorType = getEnumerator.ReturnType;
             
             // IReadOnlyCollection<TSource>
             type = typeof(IReadOnlyCollection<>).MakeGenericType(elementType);

@@ -18,12 +18,12 @@ namespace NetFabric.Hyperlinq
                 case IReadOnlyCollection<TSource> collection:
                     return collection.Count;
                 default:
-                    return CountDowncasted<IEnumerable<TSource>, TSource>.Count(source);
+                    return CountDowncasted<TSource>.Count(source);
             }
         }
 
         public static int Count<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate)
-            => CountDowncasted<IEnumerable<TSource>, TSource>.Count(source, predicate);
+            => CountDowncasted<TSource>.Count(source, predicate);
 
         public static bool All<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate)
             => AllDowncasted<IEnumerable<TSource>, TSource>.All(source, predicate);

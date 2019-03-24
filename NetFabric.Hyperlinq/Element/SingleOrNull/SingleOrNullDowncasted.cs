@@ -8,13 +8,13 @@ namespace NetFabric.Hyperlinq
     {
         const string methodName = "SingleOrNull";
 
-        static readonly TypeDictionary<Func<TEnumerable, TSource>> methods = 
-            new TypeDictionary<Func<TEnumerable, TSource>>(
-                enumerableType => Dynamic.GetEnumerableHandler<TEnumerable, TSource, TSource>(methodName, enumerableType));
+        static readonly TypeDictionary<Func<IEnumerable<TSource>, TSource>> methods = 
+            new TypeDictionary<Func<IEnumerable<TSource>, TSource>>(
+                enumerableType => Dynamic.GetEnumerableHandler<TSource, TSource>(methodName, enumerableType));
 
-        static readonly TypeDictionary<Func<TEnumerable, Func<TSource, bool>, TSource>> predicateMethods = 
-            new TypeDictionary<Func<TEnumerable, Func<TSource, bool>, TSource>>(
-                enumerableType => Dynamic.GetEnumerableHandler<TEnumerable, TSource, Func<TSource, bool>, TSource>(methodName, enumerableType));
+        static readonly TypeDictionary<Func<IEnumerable<TSource>, Func<TSource, bool>, TSource>> predicateMethods = 
+            new TypeDictionary<Func<IEnumerable<TSource>, Func<TSource, bool>, TSource>>(
+                enumerableType => Dynamic.GetEnumerableHandler<TSource, Func<TSource, bool>, TSource>(methodName, enumerableType));
 
         public static TSource SingleOrNull(TEnumerable source)
             => methods.GetOrAdd(source.GetType())(source);
