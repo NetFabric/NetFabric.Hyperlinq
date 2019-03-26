@@ -10,18 +10,8 @@ namespace NetFabric.Hyperlinq
         {
             if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
 
-            var count = source.Count;
-            var array = new TSource[count];
-            var index = 0;
-            using (var enumerator = Dynamic.GetEnumerator<TEnumerable, TEnumerator, TSource>.Invoke(source))
-            {
-                while (enumerator.MoveNext())
-                {
-                    array[index] = enumerator.Current;
-                    index++;
-                }
-            }
-            return array;
+            // use LINQ's implementation...
+            return System.Linq.Enumerable.ToArray(source);
         }
     }
 }

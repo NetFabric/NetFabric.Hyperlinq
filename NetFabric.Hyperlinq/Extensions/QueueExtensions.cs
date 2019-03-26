@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class QueueExtensions
+    public static class QueueExtensions
     {
         public static int Count<TSource>(this Queue<TSource> source)
             => source.Count;

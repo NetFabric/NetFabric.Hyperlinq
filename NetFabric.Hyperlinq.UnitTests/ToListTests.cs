@@ -28,5 +28,36 @@ namespace NetFabric.Hyperlinq.UnitTests
             // Assert
             result.Should().Equal(expected);
         }
+
+        [Fact]
+        public void ToList_With_List_Should_ReturnSame()
+        {
+            // Arrange
+            var list = new List<int>(new[] { 0, 1, 2, 3, 4, 5 });
+            IEnumerable<int> source = list;
+
+            // Act
+            var result = source.ToList();
+
+            // Assert
+            result.Should().BeSameAs(list);
+        }
+
+
+        [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(10)]
+        public void Count_With_ReadOnlyList_ReferenceType(int expected)
+        {
+            // Arrange
+            IEnumerable<int> source = TestReadOnlyList.ReferenceType(expected);
+
+            // Act
+            var result = source.ToList();
+
+            // Assert
+            result.Should().Equal(System.Linq.Enumerable.ToList<int>(source));
+        }
     }
 }

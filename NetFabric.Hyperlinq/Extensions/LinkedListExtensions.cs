@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class LinkedListExtensions
+    public static class LinkedListExtensions
     {
         public static int Count<TSource>(this LinkedList<TSource> source)
             => source.Count;

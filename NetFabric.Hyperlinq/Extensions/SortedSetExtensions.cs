@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class SortedSetExtensions
+    public static class SortedSetExtensions
     {
         public static int Count<TSource>(this SortedSet<TSource> source)
             => source.Count;

@@ -11,8 +11,8 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IReadOnlyCollection<TSource> 
             where TEnumerator : IEnumerator<TSource> 
         {
-            if(source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
-            if(selector is null) ThrowHelper.ThrowArgumentNullException(nameof(selector));
+            if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
+            if (selector is null) ThrowHelper.ThrowArgumentNullException(nameof(selector));
 
             return new SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>(in source, selector);
         }

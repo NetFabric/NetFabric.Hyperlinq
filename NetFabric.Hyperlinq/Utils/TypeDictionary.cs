@@ -9,6 +9,7 @@ namespace NetFabric.Hyperlinq
         readonly Dictionary<Type, TValue> dictionary = new Dictionary<Type, TValue>();
 
         readonly Func<Type, TValue> valueFactory;
+        readonly object syncObject = new object();
 
         public TypeDictionary(Func<Type, TValue> valueFactory)
         {
@@ -27,7 +28,10 @@ namespace NetFabric.Hyperlinq
         TValue Add(Type type)
         {
             var value = valueFactory(type);
-            dictionary[type] = value;
+            lock(syncObject)
+            {
+                dictionary[type] = value;
+            }
             return value;
         }
     }

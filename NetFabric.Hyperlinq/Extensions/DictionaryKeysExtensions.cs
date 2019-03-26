@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class DictionaryKeysExtensions
+    public static class DictionaryKeysExtensions
     {
         public static int Count<TKey, TValue>(this Dictionary<TKey, TValue>.KeyCollection source)
             => source.Count;

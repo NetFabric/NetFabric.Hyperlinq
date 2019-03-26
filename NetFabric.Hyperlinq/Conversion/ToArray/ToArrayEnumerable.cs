@@ -9,6 +9,8 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IEnumerable<TSource>
             where TEnumerator : IEnumerator<TSource>
         {
+            if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
+
             // use LINQ's implementation...
             return System.Linq.Enumerable.ToArray(source);
         }

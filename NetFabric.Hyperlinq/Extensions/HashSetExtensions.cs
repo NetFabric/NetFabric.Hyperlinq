@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class HashSetExtensions
+    public static class HashSetExtensions
     {
         public static int Count<TSource>(this HashSet<TSource> source)
             => source.Count;

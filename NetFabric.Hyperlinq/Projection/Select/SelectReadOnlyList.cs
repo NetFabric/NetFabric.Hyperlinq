@@ -12,7 +12,7 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IReadOnlyList<TSource>
         {
             if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
-            if(selector is null) ThrowHelper.ThrowArgumentNullException(nameof(selector));
+            if (selector is null) ThrowHelper.ThrowArgumentNullException(nameof(selector));
 
             return new SelectEnumerable<TEnumerable, TSource, TResult>(in source, selector);
         }
