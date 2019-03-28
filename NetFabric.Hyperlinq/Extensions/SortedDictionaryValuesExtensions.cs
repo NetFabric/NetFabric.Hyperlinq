@@ -31,6 +31,13 @@ namespace NetFabric.Hyperlinq
             Func<TValue, TResult> selector) 
             => ReadOnlyCollection.Select<SortedDictionary<TKey, TValue>.ValueCollection, SortedDictionary<TKey, TValue>.ValueCollection.Enumerator, TValue, TResult>(source, selector);
 
+        public static Enumerable.SelectManyEnumerable<SortedDictionary<TKey, TValue>.ValueCollection,  SortedDictionary<TKey, TValue>.ValueCollection.Enumerator, TValue, TSubEnumerable, TSubEnumerator, TResult> SelectMany<TKey, TValue, TSubEnumerable, TSubEnumerator, TResult>(
+            this SortedDictionary<TKey, TValue>.ValueCollection source,
+            Func<TValue, TSubEnumerable> selector) 
+            where TSubEnumerable : IValueEnumerable<TResult, TSubEnumerator>
+            where TSubEnumerator : struct, IValueEnumerator<TResult>
+            => Enumerable.SelectMany<SortedDictionary<TKey, TValue>.ValueCollection,  SortedDictionary<TKey, TValue>.ValueCollection.Enumerator, TValue, TSubEnumerable, TSubEnumerator, TResult>(source, selector);
+
         public static Enumerable.WhereEnumerable<SortedDictionary<TKey, TValue>.ValueCollection, SortedDictionary<TKey, TValue>.ValueCollection.Enumerator, TValue> Where<TKey, TValue>(
             this SortedDictionary<TKey, TValue>.ValueCollection source,
             Func<TValue, bool> predicate) 

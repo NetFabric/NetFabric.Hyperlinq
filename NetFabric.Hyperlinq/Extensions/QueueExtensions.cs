@@ -31,6 +31,13 @@ namespace NetFabric.Hyperlinq
             Func<TSource, TResult> selector) 
             => ReadOnlyCollection.Select<Queue<TSource>, Queue<TSource>.Enumerator, TSource, TResult>(source, selector);
 
+        public static Enumerable.SelectManyEnumerable<Queue<TSource>,  Queue<TSource>.Enumerator,  TSource, TSubEnumerable, TSubEnumerator, TResult> SelectMany<TSource, TSubEnumerable, TSubEnumerator, TResult>(
+            this Queue<TSource> source,
+            Func<TSource, TSubEnumerable> selector) 
+            where TSubEnumerable : IValueEnumerable<TResult, TSubEnumerator>
+            where TSubEnumerator : struct, IValueEnumerator<TResult>
+            => Enumerable.SelectMany<Queue<TSource>,  Queue<TSource>.Enumerator, TSource, TSubEnumerable, TSubEnumerator, TResult>(source, selector);
+
         public static Enumerable.WhereEnumerable<Queue<TSource>, Queue<TSource>.Enumerator, TSource> Where<TSource>(
             this Queue<TSource> source,
             Func<TSource, bool> predicate) 

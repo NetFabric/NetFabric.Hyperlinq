@@ -95,7 +95,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Hyperlinq_Enumerable_Reference()
         { 
             var count = 0;
-            foreach(var item in enumerableReference.SelectMany<IEnumerable<int>, IEnumerator<int>, int, Enumerable.ReturnEnumerable<int>, Enumerable.ReturnEnumerable<int>.ValueEnumerator, int>(item => Enumerable.Return(item)))
+            foreach(var item in enumerableReference.SelectMany<int, Enumerable.ReturnEnumerable<int>, Enumerable.ReturnEnumerable<int>.ValueEnumerator, int>(item => Enumerable.Return(item)))
                 count++;
             return count;
         }

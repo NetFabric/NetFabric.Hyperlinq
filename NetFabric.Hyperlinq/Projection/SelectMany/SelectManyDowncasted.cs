@@ -12,11 +12,11 @@ namespace NetFabric.Hyperlinq
             where TSubEnumerator : struct, IValueEnumerator<TResult>
             => Enumerable.SelectMany<IEnumerable<TSource>, IEnumerator<TSource>, TSource, TSubEnumerable, TSubEnumerator, TResult>(source, selector);
 
-        public static ReadOnlyList.SelectManyEnumerable<IReadOnlyList<TSource>, IEnumerator<TSource>, TSource, TSubEnumerable, TSubEnumerator, TResult> SelectMany<TSource, TSubEnumerable, TSubEnumerator, TResult>(
+        public static ReadOnlyList.SelectManyEnumerable<IReadOnlyList<TSource>, TSource, TSubEnumerable, TSubEnumerator, TResult> SelectMany<TSource, TSubEnumerable, TSubEnumerator, TResult>(
             this IReadOnlyList<TSource> source,
             Func<TSource, TSubEnumerable> selector) 
             where TSubEnumerable : IValueEnumerable<TResult, TSubEnumerator>
             where TSubEnumerator : struct, IValueEnumerator<TResult>
-            => ReadOnlyList.SelectMany<IReadOnlyList<TSource>, IEnumerator<TSource>, TSource, TSubEnumerable, TSubEnumerator, TResult>(source, selector);
+            => ReadOnlyList.SelectMany<IReadOnlyList<TSource>, TSource, TSubEnumerable, TSubEnumerator, TResult>(source, selector);
     }
 }
