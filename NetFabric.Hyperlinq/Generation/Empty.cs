@@ -64,6 +64,13 @@ namespace NetFabric.Hyperlinq
                 return this;
             }
 
+            public EmptyEnumerable<TSource> SelectMany<TResult>(Func<TSource, IEnumerable<TResult>> selector)
+            {
+                if (selector is null) ThrowHelper.ThrowArgumentNullException(nameof(selector));
+
+                return this;
+            }
+
             public EmptyEnumerable<TSource> Where(Func<TSource, bool> predicate)
             {
                 if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));

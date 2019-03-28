@@ -115,6 +115,11 @@ namespace NetFabric.Hyperlinq
             public ValueReadOnlyList.SelectEnumerable<ReturnEnumerable<TSource>, ValueEnumerator, TSource, TResult> Select<TResult>(Func<TSource, TResult> selector) 
                 => ValueReadOnlyList.Select<ReturnEnumerable<TSource>, ValueEnumerator, TSource, TResult>(this, selector);
 
+            public ValueReadOnlyList.SelectManyEnumerable<ReturnEnumerable<TSource>, ValueEnumerator, TSource, TSubEnumerable, TSubEnumerator, TResult> SelectMany<TSubEnumerable, TSubEnumerator, TResult>(Func<TSource, TSubEnumerable> selector) 
+                where TSubEnumerable : IValueEnumerable<TResult, TSubEnumerator>
+                where TSubEnumerator : struct, IValueEnumerator<TResult>
+                => ValueReadOnlyList.SelectMany<ReturnEnumerable<TSource>, ValueEnumerator, TSource, TSubEnumerable, TSubEnumerator, TResult>(this, selector);
+
             public ValueReadOnlyList.WhereEnumerable<ReturnEnumerable<TSource>, ValueEnumerator, TSource> Where(Func<TSource, bool> predicate) 
                 => ValueReadOnlyList.Where<ReturnEnumerable<TSource>, ValueEnumerator, TSource>(this, predicate);
 

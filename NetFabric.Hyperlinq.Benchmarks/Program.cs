@@ -27,6 +27,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
                 typeof(ToArrayBenchmarks),
                 typeof(ToListBenchmarks),
                 typeof(SelectBenchmarks),
+                typeof(SelectManyBenchmarks),
                 typeof(SelectCountBenchmarks),
                 typeof(SelectToArrayBenchmarks),
                 typeof(SelectToListBenchmarks),
