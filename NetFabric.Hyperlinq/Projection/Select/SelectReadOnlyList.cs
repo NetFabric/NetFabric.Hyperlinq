@@ -114,22 +114,22 @@ namespace NetFabric.Hyperlinq
                 => ValueReadOnlyList.Where<SelectEnumerable<TEnumerable, TSource, TResult>, ValueEnumerator, TResult>(this, predicate);
 
             public TResult First()
-                => ValueReadOnlyList.First<SelectEnumerable<TEnumerable, TSource, TResult>, ValueEnumerator, TResult>(this);
+                => selector(ReadOnlyList.First<TEnumerable, TSource>(source));
             public TResult First(Func<TResult, bool> predicate)
                 => ValueReadOnlyList.First<SelectEnumerable<TEnumerable, TSource, TResult>, ValueEnumerator, TResult>(this, predicate);
 
             public TResult FirstOrDefault()
-                => ValueReadOnlyList.FirstOrDefault<SelectEnumerable<TEnumerable, TSource, TResult>, ValueEnumerator, TResult>(this);
+                => selector(ReadOnlyList.FirstOrDefault<TEnumerable, TSource>(source));
             public TResult FirstOrDefault(Func<TResult, bool> predicate)
                 => ValueReadOnlyList.FirstOrDefault<SelectEnumerable<TEnumerable, TSource, TResult>, ValueEnumerator, TResult>(this, predicate);
 
             public TResult Single()
-                => ValueReadOnlyList.Single<SelectEnumerable<TEnumerable, TSource, TResult>, ValueEnumerator, TResult>(this);
+                => selector(ReadOnlyList.Single<TEnumerable, TSource>(source));
             public TResult Single(Func<TResult, bool> predicate)
                 => ValueReadOnlyList.Single<SelectEnumerable<TEnumerable, TSource, TResult>, ValueEnumerator, TResult>(this, predicate);
 
             public TResult SingleOrDefault()
-                => ValueReadOnlyList.SingleOrDefault<SelectEnumerable<TEnumerable, TSource, TResult>, ValueEnumerator, TResult>(this);
+                => selector(ReadOnlyList.SingleOrDefault<TEnumerable, TSource>(source));
             public TResult SingleOrDefault(Func<TResult, bool> predicate)
                 => ValueReadOnlyList.SingleOrDefault<SelectEnumerable<TEnumerable, TSource, TResult>, ValueEnumerator, TResult>(this, predicate);
 

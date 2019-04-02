@@ -113,22 +113,22 @@ namespace NetFabric.Hyperlinq
                 => ValueReadOnlyList.Where<SelectEnumerable<TSource, TResult>, ValueEnumerator, TResult>(this, predicate);
 
             public TResult First()
-                => ValueReadOnlyList.First<SelectEnumerable<TSource, TResult>, ValueEnumerator, TResult>(this);
+                => selector(Array.First<TSource>(source));
             public TResult First(Func<TResult, bool> predicate)
                 => ValueReadOnlyList.First<SelectEnumerable<TSource, TResult>, ValueEnumerator, TResult>(this, predicate);
 
             public TResult FirstOrDefault()
-                => ValueReadOnlyList.FirstOrDefault<SelectEnumerable<TSource, TResult>, ValueEnumerator, TResult>(this);
+                => selector(Array.FirstOrDefault<TSource>(source));
             public TResult FirstOrDefault(Func<TResult, bool> predicate)
                 => ValueReadOnlyList.FirstOrDefault<SelectEnumerable<TSource, TResult>, ValueEnumerator, TResult>(this, predicate);
 
             public TResult Single()
-                => ValueReadOnlyList.Single<SelectEnumerable<TSource, TResult>, ValueEnumerator, TResult>(this);
+                => selector(Array.Single<TSource>(source));
             public TResult Single(Func<TResult, bool> predicate)
                 => ValueReadOnlyList.Single<SelectEnumerable<TSource, TResult>, ValueEnumerator, TResult>(this, predicate);
 
             public TResult SingleOrDefault()
-                => ValueReadOnlyList.SingleOrDefault<SelectEnumerable<TSource, TResult>, ValueEnumerator, TResult>(this);
+                => selector(Array.SingleOrDefault<TSource>(source));
             public TResult SingleOrDefault(Func<TResult, bool> predicate)
                 => ValueReadOnlyList.SingleOrDefault<SelectEnumerable<TSource, TResult>, ValueEnumerator, TResult>(this, predicate);
 

@@ -108,22 +108,22 @@ namespace NetFabric.Hyperlinq
                 => ValueEnumerable.Where<SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>, ValueEnumerator, TResult>(this, predicate);
 
             public TResult First()
-                => ValueEnumerable.First<SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>, ValueEnumerator, TResult>(this);
+                => selector(Enumerable.First<TEnumerable, TEnumerator, TSource>(source));
             public TResult First(Func<TResult, bool> predicate)
                 => ValueEnumerable.First<SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>, ValueEnumerator, TResult>(this, predicate);
 
             public TResult FirstOrDefault()
-                => ValueEnumerable.FirstOrDefault<SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>, ValueEnumerator, TResult>(this);
+                => selector(Enumerable.FirstOrDefault<TEnumerable, TEnumerator, TSource>(source));
             public TResult FirstOrDefault(Func<TResult, bool> predicate)
                 => ValueEnumerable.FirstOrDefault<SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>, ValueEnumerator, TResult>(this, predicate);
 
             public TResult Single()
-                => ValueEnumerable.Single<SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>, ValueEnumerator, TResult>(this);
+                => selector(Enumerable.Single<TEnumerable, TEnumerator, TSource>(source));
             public TResult Single(Func<TResult, bool> predicate)
                 => ValueEnumerable.Single<SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>, ValueEnumerator, TResult>(this, predicate);
 
             public TResult SingleOrDefault()
-                => ValueEnumerable.SingleOrDefault<SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>, ValueEnumerator, TResult>(this);
+                => selector(Enumerable.SingleOrDefault<TEnumerable, TEnumerator, TSource>(source));
             public TResult SingleOrDefault(Func<TResult, bool> predicate)
                 => ValueEnumerable.SingleOrDefault<SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>, ValueEnumerator, TResult>(this, predicate);
 

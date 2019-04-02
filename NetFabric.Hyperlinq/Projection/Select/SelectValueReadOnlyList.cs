@@ -117,22 +117,22 @@ namespace NetFabric.Hyperlinq
                 => ValueReadOnlyList.Where<SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>, ValueEnumerator, TResult>(this, predicate);
 
             public TResult First()
-                => ValueReadOnlyList.First<SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>, ValueEnumerator, TResult>(this);
+                => selector(ValueReadOnlyList.First<TEnumerable, TEnumerator, TSource>(source));
             public TResult First(Func<TResult, bool> predicate)
                 => ValueReadOnlyList.First<SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>, ValueEnumerator, TResult>(this, predicate);
 
             public TResult FirstOrDefault()
-                => ValueReadOnlyList.FirstOrDefault<SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>, ValueEnumerator, TResult>(this);
+                => selector(ValueReadOnlyList.FirstOrDefault<TEnumerable, TEnumerator, TSource>(source));
             public TResult FirstOrDefault(Func<TResult, bool> predicate)
                 => ValueReadOnlyList.FirstOrDefault<SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>, ValueEnumerator, TResult>(this, predicate);
 
             public TResult Single()
-                => ValueReadOnlyList.Single<SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>, ValueEnumerator, TResult>(this);
+                => selector(ValueReadOnlyList.Single<TEnumerable, TEnumerator, TSource>(source));
             public TResult Single(Func<TResult, bool> predicate)
                 => ValueReadOnlyList.Single<SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>, ValueEnumerator, TResult>(this, predicate);
 
             public TResult SingleOrDefault()
-                => ValueReadOnlyList.SingleOrDefault<SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>, ValueEnumerator, TResult>(this);
+                => selector(ValueReadOnlyList.SingleOrDefault<TEnumerable, TEnumerator, TSource>(source));
             public TResult SingleOrDefault(Func<TResult, bool> predicate)
                 => ValueReadOnlyList.SingleOrDefault<SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>, ValueEnumerator, TResult>(this, predicate);
 
