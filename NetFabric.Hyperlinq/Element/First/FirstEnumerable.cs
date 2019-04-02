@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
@@ -11,13 +12,35 @@ namespace NetFabric.Hyperlinq
         {
             if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
 
-            using (var enumerator = Dynamic.GetEnumerator<TEnumerable, TEnumerator, TSource>.Invoke(source))
-            {
-                if(!enumerator.MoveNext())
-                    ThrowHelper.ThrowEmptySequence<TSource>();
+            if (source.TryFirst<TEnumerable, TEnumerator, TSource>(out var value))
+                return value;
+                
+            return ThrowHelper.ThrowEmptySequence<TSource>();
+        }
 
-                return enumerator.Current;
-            }
+        public static TSource FirstOrDefault<TEnumerable, TEnumerator, TSource>(this TEnumerable source) 
+            where TEnumerable : IEnumerable<TSource>
+            where TEnumerator : IEnumerator<TSource>
+        {
+            if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
+
+            if (source.TryFirst<TEnumerable, TEnumerator, TSource>(out var value))
+                return value;
+                
+            return default;
+        }
+
+        public static TSource? FirstOrNull<TEnumerable, TEnumerator, TSource>(this TEnumerable source) 
+            where TEnumerable : IEnumerable<TSource>
+            where TEnumerator : IEnumerator<TSource>
+            where TSource : struct
+        {
+            if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
+
+            if (source.TryFirst<TEnumerable, TEnumerator, TSource>(out var value))
+                return value;
+                
+            return null;
         }
 
         public static TSource First<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, bool> predicate) 
@@ -27,15 +50,70 @@ namespace NetFabric.Hyperlinq
             if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
 
+            if (source.TryFirst<TEnumerable, TEnumerator, TSource>(predicate, out var value))
+                return value;
+                
+            return ThrowHelper.ThrowEmptySequence<TSource>();
+        }
+
+        public static TSource FirstOrDefault<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, bool> predicate) 
+            where TEnumerable : IEnumerable<TSource>
+            where TEnumerator : IEnumerator<TSource>
+        {
+            if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
+            if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
+
+            if (source.TryFirst<TEnumerable, TEnumerator, TSource>(predicate, out var value))
+                return value;
+                
+            return default;
+        }
+
+        public static TSource? FirstOrNull<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, bool> predicate) 
+            where TEnumerable : IEnumerable<TSource>
+            where TEnumerator : IEnumerator<TSource>
+            where TSource : struct
+        {
+            if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
+            if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
+
+            if (source.TryFirst<TEnumerable, TEnumerator, TSource>(predicate, out var value))
+                return value;
+                
+            return null;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        static bool TryFirst<TEnumerable, TEnumerator, TSource>(this TEnumerable source, out TSource value) 
+            where TEnumerable : IEnumerable<TSource>
+            where TEnumerator : IEnumerator<TSource>
+        {
             using (var enumerator = Dynamic.GetEnumerator<TEnumerable, TEnumerator, TSource>.Invoke(source))
             {
-                while(enumerator.MoveNext())
+                value = enumerator.Current;
+                return enumerator.MoveNext();
+            }        
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        static bool TryFirst<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, bool> predicate, out TSource value) 
+            where TEnumerable : IEnumerable<TSource>
+            where TEnumerator : IEnumerator<TSource>
+        {
+            using (var enumerator = Dynamic.GetEnumerator<TEnumerable, TEnumerator, TSource>.Invoke(source))
+            {
+                while (enumerator.MoveNext())
                 {
                     if (predicate(enumerator.Current))
-                        return enumerator.Current;
+                    {
+                        value = enumerator.Current;
+                        return true;
+                    }
                 }
-                return ThrowHelper.ThrowEmptySequence<TSource>();
-            }
+            }        
+
+            value = default;
+            return false;
         }
     }
 }

@@ -26,12 +26,12 @@ namespace NetFabric.Hyperlinq
         public static bool Contains<TSource>(this List<TSource> source, TSource value, IEqualityComparer<TSource> comparer)
             => ReadOnlyList.Contains<List<TSource>, TSource>(source, value, comparer);
 
-        public static ReadOnlyList.SelectEnumerable<List<TSource>,  TSource, TResult> Select<TSource, TResult>(
+        public static ReadOnlyList.SelectEnumerable<List<TSource>, TSource, TResult> Select<TSource, TResult>(
             this List<TSource> source,
             Func<TSource, TResult> selector) 
             => ReadOnlyList.Select<List<TSource>, TSource, TResult>(source, selector);
 
-        public static ReadOnlyList.SelectManyEnumerable<List<TSource>,  TSource, TSubEnumerable, TSubEnumerator, TResult> SelectMany<TSource, TSubEnumerable, TSubEnumerator, TResult>(
+        public static ReadOnlyList.SelectManyEnumerable<List<TSource>, TSource, TSubEnumerable, TSubEnumerator, TResult> SelectMany<TSource, TSubEnumerable, TSubEnumerator, TResult>(
             this List<TSource> source,
             Func<TSource, TSubEnumerable> selector) 
             where TSubEnumerable : IValueEnumerable<TResult, TSubEnumerator>

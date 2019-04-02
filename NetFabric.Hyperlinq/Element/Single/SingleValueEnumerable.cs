@@ -1,51 +1,132 @@
 using System;
+using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
     public static partial class ValueEnumerable
     {
-        public static TSource Single<TEnumerable, TEnumerator, TSource>(this TEnumerable source)
+        public static TSource Single<TEnumerable, TEnumerator, TSource>(this TEnumerable source) 
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IValueEnumerator<TSource>
         {
             if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
 
-            using (var enumerator = source.GetValueEnumerator())
-            {
-                if (!enumerator.TryMoveNext(out var first))
-                    ThrowHelper.ThrowEmptySequence<TSource>();
-
-                if (enumerator.TryMoveNext())
-                    ThrowHelper.ThrowNotSingleSequence<TSource>();
-
-                return first;
-            }
+            if (source.TrySingle<TEnumerable, TEnumerator, TSource>(out var value))
+                return value;
+                
+            return ThrowHelper.ThrowEmptySequence<TSource>();
         }
 
-        public static TSource Single<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, bool> predicate)
+        public static TSource SingleOrDefault<TEnumerable, TEnumerator, TSource>(this TEnumerable source) 
+            where TEnumerable : IValueEnumerable<TSource, TEnumerator>
+            where TEnumerator : struct, IValueEnumerator<TSource>
+        {
+            if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
+
+            if (source.TrySingle<TEnumerable, TEnumerator, TSource>(out var value))
+                return value;
+                
+            return default;
+        }
+
+        public static TSource? SingleOrNull<TEnumerable, TEnumerator, TSource>(this TEnumerable source) 
+            where TEnumerable : IValueEnumerable<TSource, TEnumerator>
+            where TEnumerator : struct, IValueEnumerator<TSource>
+            where TSource : struct
+        {
+            if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
+
+            if (source.TrySingle<TEnumerable, TEnumerator, TSource>(out var value))
+                return value;
+                
+            return null;
+        }
+
+        public static TSource Single<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, bool> predicate) 
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IValueEnumerator<TSource>
         {
             if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
 
+            if (source.TrySingle<TEnumerable, TEnumerator, TSource>(predicate, out var value))
+                return value;
+                
+            return ThrowHelper.ThrowEmptySequence<TSource>();
+        }
+
+        public static TSource SingleOrDefault<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, bool> predicate) 
+            where TEnumerable : IValueEnumerable<TSource, TEnumerator>
+            where TEnumerator : struct, IValueEnumerator<TSource>
+        {
+            if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
+            if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
+
+            if (source.TrySingle<TEnumerable, TEnumerator, TSource>(predicate, out var value))
+                return value;
+                
+            return default;
+        }
+
+        public static TSource? SingleOrNull<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, bool> predicate) 
+            where TEnumerable : IValueEnumerable<TSource, TEnumerator>
+            where TEnumerator : struct, IValueEnumerator<TSource>
+            where TSource : struct
+        {
+            if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
+            if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
+
+            if (source.TrySingle<TEnumerable, TEnumerator, TSource>(predicate, out var value))
+                return value;
+                
+            return null;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        static bool TrySingle<TEnumerable, TEnumerator, TSource>(this TEnumerable source, out TSource value) 
+            where TEnumerable : IValueEnumerable<TSource, TEnumerator>
+            where TEnumerator : struct, IValueEnumerator<TSource>
+        {
             using (var enumerator = source.GetValueEnumerator())
             {
-                while (enumerator.TryMoveNext(out var first))
+                if (enumerator.TryMoveNext(out value))
                 {
-                    if (predicate(first))
+                    if (enumerator.TryMoveNext())
+                        ThrowHelper.ThrowNotSingleSequence<TSource>();
+
+                    return true;
+                }
+            }
+
+            value = default;
+            return false;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        static bool TrySingle<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, bool> predicate, out TSource value) 
+            where TEnumerable : IValueEnumerable<TSource, TEnumerator>
+            where TEnumerator : struct, IValueEnumerator<TSource>
+        {
+            using (var enumerator = source.GetValueEnumerator())
+            {
+                while (enumerator.TryMoveNext(out value))
+                {
+                    if (predicate(value))
                     {
                         // found first, keep going until end or find second
-                        while (enumerator.TryMoveNext(out var current))
+                        TSource other;
+                        while (enumerator.TryMoveNext(out other))
                         {
-                            if (predicate(current))
+                            if (predicate(other))
                                 ThrowHelper.ThrowNotSingleSequence<TSource>();
                         }
-                        return first;
+                        return true;
                     }
                 }
-                return ThrowHelper.ThrowEmptySequence<TSource>();
-            }
+            }      
+
+            value = default;
+            return false;
         }
     }
 }
