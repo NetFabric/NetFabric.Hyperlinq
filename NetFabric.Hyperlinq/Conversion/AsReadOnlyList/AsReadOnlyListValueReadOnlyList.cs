@@ -9,11 +9,7 @@ namespace NetFabric.Hyperlinq
         public static IReadOnlyList<TSource> AsReadOnlyList<TEnumerable, TEnumerator, TSource>(this TEnumerable source)
             where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
             where TEnumerator : struct, IValueEnumerator<TSource>
-        {
-            if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
-
-            return new AsReadOnlyListEnumerable<TEnumerable, TEnumerator, TSource>(source);
-        }
+            => new AsReadOnlyListEnumerable<TEnumerable, TEnumerator, TSource>(source);
 
         class AsReadOnlyListEnumerable<TEnumerable, TEnumerator, TSource>
             : IReadOnlyList<TSource>

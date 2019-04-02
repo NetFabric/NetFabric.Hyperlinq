@@ -8,22 +8,6 @@ namespace NetFabric.Hyperlinq.UnitTests
     public class SelectTests
     {
         [Fact]
-        public void Select_With_NullSource_Should_Throw()
-        {
-            // Arrange
-
-            // Act
-            Action action = () => Enumerable.Select<IEnumerable<int>, IEnumerator<int>, int, int>(null, value => value);
-
-            // Assert
-            action.Should()
-                .ThrowExactly<ArgumentNullException>()
-                .And
-                .ParamName.Should()
-                    .Be("source");
-        }
-
-        [Fact]
         public void Select_With_NullSelector_Should_Throw()
         {
             // Arrange

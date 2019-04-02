@@ -7,22 +7,6 @@ namespace NetFabric.Hyperlinq.UnitTests
 {
     public class CountTests
     {
-        [Fact]
-        public void Count_With_NullSource_Should_Throw()
-        {
-            // Arrange
-
-            // Act
-            Action action = () => Enumerable.Count<IEnumerable<int>, IEnumerator<int>, int>(null);
-
-            // Assert
-            action.Should()
-                .ThrowExactly<ArgumentNullException>()
-                .And
-                .ParamName.Should()
-                    .Be("source");
-        }
-
         [Theory]
         [InlineData(0)]
         [InlineData(1)]

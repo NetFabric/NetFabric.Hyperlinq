@@ -8,8 +8,6 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IEnumerable<TSource>
             where TEnumerator : IEnumerator<TSource>
         {
-            if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
-
             var list = new List<TSource>();
             using (var enumerator = Dynamic.GetEnumerator<TEnumerable, TEnumerator, TSource>.Invoke(source))
             {

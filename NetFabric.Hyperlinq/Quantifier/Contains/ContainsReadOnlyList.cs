@@ -8,8 +8,6 @@ namespace NetFabric.Hyperlinq
         public static bool Contains<TEnumerable, TSource>(this TEnumerable source, TSource value, IEqualityComparer<TSource> comparer = null)
             where TEnumerable : IReadOnlyList<TSource>
         {
-            if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
-
             var sourceCount = source.Count;
             if (sourceCount == 0) return false;
 

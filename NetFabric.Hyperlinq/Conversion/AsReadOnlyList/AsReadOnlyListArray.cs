@@ -7,11 +7,7 @@ namespace NetFabric.Hyperlinq
     public static partial class Array
     {
         public static IReadOnlyList<TSource> AsReadOnlyList<TSource>(this TSource[] source)
-        {
-            if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
-
-            return new AsReadOnlyListEnumerable<TSource>(source);
-        }
+            => new AsReadOnlyListEnumerable<TSource>(source);
 
         class AsReadOnlyListEnumerable<TSource>
             : IReadOnlyList<TSource>

@@ -8,11 +8,7 @@ namespace NetFabric.Hyperlinq
         public static AsValueReadOnlyCollectionEnumerable<TEnumerable, TEnumerator, TSource> AsValueReadOnlyCollection<TEnumerable, TEnumerator, TSource>(this TEnumerable source)
             where TEnumerable : IReadOnlyCollection<TSource>
             where TEnumerator : IEnumerator<TSource>
-        {
-            if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
-
-            return new AsValueReadOnlyCollectionEnumerable<TEnumerable, TEnumerator, TSource>(source);
-        }
+            => new AsValueReadOnlyCollectionEnumerable<TEnumerable, TEnumerator, TSource>(source);
 
         public readonly struct AsValueReadOnlyCollectionEnumerable<TEnumerable, TEnumerator, TSource>
             : IValueReadOnlyCollection<TSource, AsValueReadOnlyCollectionEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator>

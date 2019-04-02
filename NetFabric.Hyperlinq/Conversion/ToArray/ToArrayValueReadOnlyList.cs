@@ -8,8 +8,6 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
             where TEnumerator : struct, IValueEnumerator<TSource>
         {
-            if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
-
             var count = source.Count();
             var array = new TSource[count];
             for (var index = 0; index < count; index++)

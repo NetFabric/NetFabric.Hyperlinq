@@ -11,7 +11,6 @@ namespace NetFabric.Hyperlinq
             where TSubEnumerable : IValueEnumerable<TResult, TSubEnumerator>
             where TSubEnumerator : struct, IValueEnumerator<TResult>
         {
-            if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
             if (selector is null) ThrowHelper.ThrowArgumentNullException(nameof(selector));
 
             return new SelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, TResult>(source, selector);

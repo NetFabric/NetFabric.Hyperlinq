@@ -9,8 +9,7 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IReadOnlyCollection<TSource>
             where TEnumerator : IEnumerator<TSource>
         {
-            if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
-            if (source.Count == 0) return false;
+           if (source.Count == 0) return false;
 
             using (var enumerator = Dynamic.GetEnumerator<TEnumerable, TEnumerator, TSource>.Invoke(source))
             {

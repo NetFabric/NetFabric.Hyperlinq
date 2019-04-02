@@ -8,22 +8,6 @@ namespace NetFabric.Hyperlinq.UnitTests
     public class SingleTests
     {
         [Fact]
-        public void Single_With_NullSource_Should_Throw()
-        {
-            // Arrange
-
-            // Act
-            Action action = () => Enumerable.Single<IEnumerable<int>, IEnumerator<int>, int>(null);
-
-            // Assert
-            action.Should()
-                .ThrowExactly<ArgumentNullException>()
-                .And
-                .ParamName.Should()
-                    .Be("source");
-        }
-
-        [Fact]
         public void Single_With_EmptyIEnumerable_Should_Throw()
         {
             // Arrange

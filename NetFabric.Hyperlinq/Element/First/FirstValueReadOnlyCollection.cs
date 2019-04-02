@@ -9,8 +9,6 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IValueEnumerator<TSource>
         {
-            if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
-
             if (source.TryFirst<TEnumerable, TEnumerator, TSource>(out var value))
                 return value;
                 
@@ -21,8 +19,6 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IValueEnumerator<TSource>
         {
-            if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
-
             if (source.TryFirst<TEnumerable, TEnumerator, TSource>(out var value))
                 return value;
                 
@@ -34,8 +30,6 @@ namespace NetFabric.Hyperlinq
             where TEnumerator : struct, IValueEnumerator<TSource>
             where TSource : struct
         {
-            if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
-
             if (source.TryFirst<TEnumerable, TEnumerator, TSource>(out var value))
                 return value;
                 

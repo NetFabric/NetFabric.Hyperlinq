@@ -7,22 +7,6 @@ namespace NetFabric.Hyperlinq.UnitTests
 {
     public class FirstOrDefaultTests
     {
-        [Fact]
-        public void FirstOrDefault_With_NullSource_Should_Throw()
-        {
-            // Arrange
-
-            // Act
-            Action action = () => Enumerable.FirstOrDefault<IEnumerable<int>, IEnumerator<int>, int>(null);
-
-            // Assert
-            action.Should()
-                .ThrowExactly<ArgumentNullException>()
-                .And
-                .ParamName.Should()
-                    .Be("source");
-        }
-
         public static TheoryData<int[], int> FirstOrDefaultData =>
             new TheoryData<int[], int>
             {

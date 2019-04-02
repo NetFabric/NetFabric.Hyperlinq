@@ -10,8 +10,6 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IReadOnlyCollection<TSource>
             where TEnumerator : IEnumerator<TSource>
         {
-            if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
-
             if (source.TryFirst<TEnumerable, TEnumerator, TSource>(out var value))
                 return value;
                 
@@ -22,8 +20,6 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IReadOnlyCollection<TSource>
             where TEnumerator : IEnumerator<TSource>
         {
-            if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
-
             if (source.TryFirst<TEnumerable, TEnumerator, TSource>(out var value))
                 return value;
                 
@@ -35,8 +31,6 @@ namespace NetFabric.Hyperlinq
             where TEnumerator : IEnumerator<TSource>
             where TSource : struct
         {
-            if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
-
             if (source.TryFirst<TEnumerable, TEnumerator, TSource>(out var value))
                 return value;
                 
@@ -47,7 +41,6 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IReadOnlyCollection<TSource>
             where TEnumerator : IEnumerator<TSource>
         {
-            if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
 
             if (source.TryFirst<TEnumerable, TEnumerator, TSource>(predicate, out var value))
@@ -60,7 +53,6 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IReadOnlyCollection<TSource>
             where TEnumerator : IEnumerator<TSource>
         {
-            if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
 
             if (source.TryFirst<TEnumerable, TEnumerator, TSource>(predicate, out var value))
@@ -74,7 +66,6 @@ namespace NetFabric.Hyperlinq
             where TEnumerator : IEnumerator<TSource>
             where TSource : struct
         {
-            if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
 
             if (source.TryFirst<TEnumerable, TEnumerator, TSource>(predicate, out var value))

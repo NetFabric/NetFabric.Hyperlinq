@@ -8,8 +8,6 @@ namespace NetFabric.Hyperlinq
         public static TSource[] ToArray<TEnumerable, TSource>(this TEnumerable source)
             where TEnumerable : IReadOnlyList<TSource>
         {
-            if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
-
             var count = source.Count;
             var array = new TSource[count];
             for (var index = 0; index < count; index++)

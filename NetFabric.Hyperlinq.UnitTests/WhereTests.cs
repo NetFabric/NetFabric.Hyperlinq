@@ -8,22 +8,6 @@ namespace NetFabric.Hyperlinq.UnitTests
     public class WhereTests
     {
         [Fact]
-        public void Where_With_NullSource_Should_Throw()
-        {
-            // Arrange
-
-            // Act
-            Action action = () => Enumerable.Where<IEnumerable<int>, IEnumerator<int>, int>(null, _ => true);
-
-            // Assert
-            action.Should()
-                .ThrowExactly<ArgumentNullException>()
-                .And
-                .ParamName.Should()
-                    .Be("source");
-        }
-
-        [Fact]
         public void Where_With_NullPredicate_Should_Throw()
         {
             // Arrange

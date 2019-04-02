@@ -8,9 +8,7 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IValueEnumerable<TEnumerator>
             where TEnumerator : struct, IValueEnumerator
         {
-            if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
-
-            using (var enumerator = source.GetValueEnumerator())
+           using (var enumerator = source.GetValueEnumerator())
             {
                 return enumerator.TryMoveNext();
             }
@@ -20,8 +18,6 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IValueEnumerator<TSource>
         {
-            if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
-
             using (var enumerator = source.GetValueEnumerator())
             {
                 return enumerator.TryMoveNext();
@@ -32,8 +28,6 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IValueEnumerator<TSource>
         {
-            if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
-
             using (var enumerator = source.GetValueEnumerator())
             {
                 while (enumerator.TryMoveNext(out var current))

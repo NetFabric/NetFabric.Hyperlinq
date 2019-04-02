@@ -7,22 +7,6 @@ namespace NetFabric.Hyperlinq.UnitTests
 {
     public class ContainsTests
     {
-        [Fact]
-        public void Contains_With_NullSource_Should_Throw()
-        {
-            // Arrange
-
-            // Act
-            Action action = () => Enumerable.Contains<IEnumerable<int>, IEnumerator<int>, int>(null, 0);
-
-            // Assert
-            action.Should()
-                .ThrowExactly<ArgumentNullException>()
-                .And
-                .ParamName.Should()
-                    .Be("source");
-        }
-
         public static TheoryData<int[], int, bool> ContainsData =>
             new TheoryData<int[], int, bool>
             {

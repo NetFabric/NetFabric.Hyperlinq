@@ -14,16 +14,16 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IReadOnlyCollection<TSource>
             where TEnumerator : IEnumerator<TSource>
         {
-            if (source == null) ThrowHelper.ThrowArgumentNullException(nameof(source));
-            if (source.Count == 0) return 0;
-
             var count = 0;
-            using (var enumerator = Dynamic.GetEnumerator<TEnumerable, TEnumerator, TSource>.Invoke(source))
+            if (source.Count != 0)
             {
-                while (enumerator.MoveNext())
+                using (var enumerator = Dynamic.GetEnumerator<TEnumerable, TEnumerator, TSource>.Invoke(source))
                 {
-                    if (predicate(enumerator.Current))
-                        count++;
+                    while (enumerator.MoveNext())
+                    {
+                        if (predicate(enumerator.Current))
+                            count++;
+                    }
                 }
             }
             return count;
