@@ -40,26 +40,6 @@ namespace NetFabric.Hyperlinq.Benchmarks
             return count;
         }
 
-        [BenchmarkCategory("Enumerable_Reference")]
-        [Benchmark(Baseline = true)]
-        public int Linq_Enumerable_Reference() 
-        { 
-            var count = 0;
-            foreach(var item in System.Linq.Enumerable.SelectMany(enumerableReference, item => System.Linq.EnumerableEx.Return(item)))
-                count++;
-            return count;
-        }
-
-        [BenchmarkCategory("Enumerable_Value")]
-        [Benchmark(Baseline = true)]
-        public int Linq_Enumerable_Value() 
-        { 
-            var count = 0;
-            foreach(var item in System.Linq.Enumerable.SelectMany(enumerableValue, item => System.Linq.EnumerableEx.Return(item)))
-                count++;
-            return count;
-        }
-
         [BenchmarkCategory("Array")]
         [Benchmark]
         public int Hyperlinq_Array() 
@@ -86,26 +66,6 @@ namespace NetFabric.Hyperlinq.Benchmarks
         { 
             var count = 0;
             foreach(var item in hyperlinqRange.SelectMany<Enumerable.ReturnEnumerable<int>, Enumerable.ReturnEnumerable<int>.ValueEnumerator, int>(item => Enumerable.Return(item)))
-                count++;
-            return count;
-        }
-
-        [BenchmarkCategory("Enumerable_Reference")]
-        [Benchmark]
-        public int Hyperlinq_Enumerable_Reference()
-        { 
-            var count = 0;
-            foreach(var item in enumerableReference.SelectMany<int, Enumerable.ReturnEnumerable<int>, Enumerable.ReturnEnumerable<int>.ValueEnumerator, int>(item => Enumerable.Return(item)))
-                count++;
-            return count;
-        }
-
-        [BenchmarkCategory("Enumerable_Value")]
-        [Benchmark]
-        public int Hyperlinq_Enumerable_Value()
-        { 
-            var count = 0;
-            foreach(var item in enumerableValue.SelectMany<TestEnumerable.Enumerable, TestEnumerable.Enumerable.Enumerator, int, Enumerable.ReturnEnumerable<int>, Enumerable.ReturnEnumerable<int>.ValueEnumerator, int>(item => Enumerable.Return(item)))
                 count++;
             return count;
         }

@@ -32,30 +32,30 @@ namespace NetFabric.Hyperlinq.UnitTests
                 { new int[] { 1, 2, 3 }, new Func<int, Enumerable.RangeEnumerable>(value => Enumerable.Range(0, value)), new int[] { 0, 0, 1, 0, 1, 2 } },
             };
 
-        [Theory]
-        [MemberData(nameof(IEnumerableData))]
-        public void SelectMany_With_ValidEnumerable_Should_Succeed(IEnumerable<int> source, Func<int, Enumerable.RangeEnumerable> selector, IEnumerable<int> expected)
-        {
-            // Arrange
+        // [Theory]
+        // [MemberData(nameof(IEnumerableData))]
+        // public void SelectMany_With_ValidEnumerable_Should_Succeed(IEnumerable<int> source, Func<int, Enumerable.RangeEnumerable> selector, IEnumerable<int> expected)
+        // {
+        //     // Arrange
 
-            // Act
-            var result = source.SelectMany<int, Enumerable.RangeEnumerable, Enumerable.RangeEnumerable.ValueEnumerator, int>(selector);
+        //     // Act
+        //     var result = source.SelectMany<int, Enumerable.RangeEnumerable, Enumerable.RangeEnumerable.ValueEnumerator, int>(selector);
 
-            // Assert
-            result.AsEnumerable().Should().Equal(expected);
-        }  
+        //     // Assert
+        //     result.AsEnumerable().Should().Equal(expected);
+        // }  
 
-        [Theory]
-        [MemberData(nameof(IEnumerableData))]
-        public void SelectMany_With_ValidReadOnlyList_Should_Succeed(IReadOnlyList<int> source, Func<int, Enumerable.RangeEnumerable> selector, IEnumerable<int> expected)
-        {
-            // Arrange
+        // [Theory]
+        // [MemberData(nameof(IEnumerableData))]
+        // public void SelectMany_With_ValidReadOnlyList_Should_Succeed(IReadOnlyList<int> source, Func<int, Enumerable.RangeEnumerable> selector, IEnumerable<int> expected)
+        // {
+        //     // Arrange
 
-            // Act
-            var result = source.SelectMany<int, Enumerable.RangeEnumerable, Enumerable.RangeEnumerable.ValueEnumerator, int>(selector);
+        //     // Act
+        //     var result = source.SelectMany<int, Enumerable.RangeEnumerable, Enumerable.RangeEnumerable.ValueEnumerator, int>(selector);
 
-            // Assert
-            result.AsEnumerable().Should().Equal(expected);
-        } 
+        //     // Assert
+        //     result.AsEnumerable().Should().Equal(expected);
+        // } 
     }
 }

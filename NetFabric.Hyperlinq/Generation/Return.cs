@@ -21,7 +21,7 @@ namespace NetFabric.Hyperlinq
             public Enumerator GetEnumerator() => new Enumerator(in this);
             public ValueEnumerator GetValueEnumerator() => new ValueEnumerator(in this);
 
-            public int Count() => 1;
+            public int Count => 1;
 
             public TSource this[int index]
             {
@@ -94,9 +94,6 @@ namespace NetFabric.Hyperlinq
                 public void Dispose() { }
             }
 
-            public int Count(Func<TSource, bool> predicate)
-                => predicate(value) ? 1 : 0;
-
             public bool All(Func<TSource, bool> predicate)
                 => predicate(value);
 
@@ -158,6 +155,12 @@ namespace NetFabric.Hyperlinq
             public List<TSource> ToList()
                 => ValueReadOnlyCollection.ToList<ReturnEnumerable<TSource>, ValueEnumerator, TSource>(this);
         }
+
+        public static int Count<TSource>(this ReturnEnumerable<TSource> source)
+            => 1;
+
+        public static int Count<TSource>(this ReturnEnumerable<TSource> source, Func<TSource, bool> predicate)
+            => predicate(source.value) ? 1 : 0;
 
         public static TSource? FirstOrNull<TSource>(this ReturnEnumerable<TSource> source)
             where TSource : struct

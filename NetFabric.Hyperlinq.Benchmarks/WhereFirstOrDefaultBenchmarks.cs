@@ -12,27 +12,17 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [BenchmarkCategory("Array")]
         [Benchmark(Baseline = true)]
         public int Linq_Array_FirstOrDefault()
-            => System.Linq.Enumerable.Where(array, _ => true).FirstOrDefault();
+            => System.Linq.Enumerable.FirstOrDefault(System.Linq.Enumerable.Where(array, _ => true));
 
         [BenchmarkCategory("List")]
         [Benchmark(Baseline = true)]
         public int Linq_List_FirstOrDefault()
-            => System.Linq.Enumerable.Where(list, _ => true).FirstOrDefault();
+            => System.Linq.Enumerable.FirstOrDefault(System.Linq.Enumerable.Where(list, _ => true));
 
         [BenchmarkCategory("Range")]
         [Benchmark(Baseline = true)]
         public int Linq_Range_FirstOrDefault()
-            => System.Linq.Enumerable.Where(linqRange, _ => true).FirstOrDefault();
-
-        [BenchmarkCategory("Enumerable_Reference")]
-        [Benchmark(Baseline = true)]
-        public int Linq_Enumerable_Reference_FirstOrDefault()
-            => System.Linq.Enumerable.Where(enumerableReference, _ => true).FirstOrDefault();
-
-        [BenchmarkCategory("Enumerable_Value")]
-        [Benchmark(Baseline = true)]
-        public int Linq_Enumerable_Value_FirstOrDefault()
-            => System.Linq.Enumerable.Where(enumerableValue, _ => true).FirstOrDefault();
+            => System.Linq.Enumerable.FirstOrDefault(System.Linq.Enumerable.Where(linqRange, _ => true));
 
         [BenchmarkCategory("Array")]
         [Benchmark]
@@ -63,25 +53,5 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [Benchmark]
         public int? Hyperlinq_Range_FirstOrNull()
             => hyperlinqRange.Where(_ => true).FirstOrNull();
-
-        [BenchmarkCategory("Enumerable_Reference")]
-        [Benchmark]
-        public int Hyperlinq_Enumerable_Reference_FirstOrDefault()
-            => enumerableReference.Where(_ => true).FirstOrDefault();
-
-        [BenchmarkCategory("Enumerable_Reference")]
-        [Benchmark]
-        public int? Hyperlinq_Enumerable_Reference_FirstOrNull()
-            => enumerableReference.Where(_ => true).FirstOrNull();
-
-        [BenchmarkCategory("Enumerable_Value")]
-        [Benchmark]
-        public int Hyperlinq_Enumerable_Value_FirstOrDefault()
-            => enumerableValue.Where<TestEnumerable.Enumerable, TestEnumerable.Enumerable.Enumerator, int>(_ => true).FirstOrDefault();
-
-        [BenchmarkCategory("Enumerable_Value")]
-        [Benchmark]
-        public int? Hyperlinq_Enumerable_Value_FirstOrNull()
-            => enumerableValue.Where<TestEnumerable.Enumerable, TestEnumerable.Enumerable.Enumerator, int>(_ => true).FirstOrNull();
     }
 }

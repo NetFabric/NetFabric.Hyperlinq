@@ -1,7 +1,6 @@
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Configs;
 using JM.LinqFaster;
-using JM.LinqFaster.Parallel;
 using System;
 
 namespace NetFabric.Hyperlinq.Benchmarks
@@ -27,45 +26,15 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Linq_Range() =>
             System.Linq.Enumerable.First(linqRange);
 
-        [BenchmarkCategory("Enumerable_Reference")]
-        [Benchmark(Baseline = true)]
-        public int Linq_Enumerable_Reference() =>
-            System.Linq.Enumerable.First(enumerableReference);
+        [BenchmarkCategory("Array")]
+        [Benchmark]
+        public int LinqFaster_Array() =>
+            array.FirstF(_ => true);
 
-        [BenchmarkCategory("Enumerable_Value")]
-        [Benchmark(Baseline = true)]
-        public int Linq_Enumerable_Value() =>
-            System.Linq.Enumerable.First(enumerableValue);
-
-        [BenchmarkCategory("Array_As_IEnumerable")]
-        [Benchmark(Baseline = true)]
-        public int Linq_Array_AsEnumerable() =>
-            System.Linq.Enumerable.First(arrayAsEnumerable);
-
-        [BenchmarkCategory("Array_As_IReadOnlyCollection")]
-        [Benchmark(Baseline = true)]
-        public int Linq_Array_AsReadOnlyCollection() =>
-            System.Linq.Enumerable.First(arrayAsReadOnlyCollection);
-
-        [BenchmarkCategory("Array_As_IReadOnlyList")]
-        [Benchmark(Baseline = true)]
-        public int Linq_Array_AsReadOnlyList() =>
-            System.Linq.Enumerable.First(arrayAsReadOnlyList);
-
-        [BenchmarkCategory("List_As_IEnumerable")]
-        [Benchmark(Baseline = true)]
-        public int Linq_List_AsEnumerable() =>
-            System.Linq.Enumerable.First(listAsEnumerable);
-
-        [BenchmarkCategory("List_As_IReadOnlyCollection")]
-        [Benchmark(Baseline = true)]
-        public int Linq_List_AsReadOnlyCollection() =>
-            System.Linq.Enumerable.First(listAsReadOnlyCollection);
-
-        [BenchmarkCategory("List_As_IReadOnlyList")]
-        [Benchmark(Baseline = true)]
-        public int Linq_List_AsReadOnlyList() =>
-            System.Linq.Enumerable.First(listAsReadOnlyList);
+        [BenchmarkCategory("List")]
+        [Benchmark]
+        public int LinqFaster_List() =>
+            list.FirstF(_ => true);
 
         [BenchmarkCategory("Array")]
         [Benchmark]
@@ -81,45 +50,5 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [Benchmark]
         public int Hyperlinq_Range() =>
             hyperlinqRange.First();
-
-        [BenchmarkCategory("Enumerable_Reference")]
-        [Benchmark]
-        public int Hyperlinq_Enumerable_Reference() =>
-            enumerableReference.First();
-
-        [BenchmarkCategory("Enumerable_Value")]
-        [Benchmark]
-        public int Hyperlinq_Enumerable_Value() =>
-            enumerableValue.First<TestEnumerable.Enumerable, TestEnumerable.Enumerable.Enumerator, int>();
-
-        [BenchmarkCategory("Array_As_IEnumerable")]
-        [Benchmark]
-        public int Hyperlinq_Array_AsEnumerable() =>
-            arrayAsEnumerable.First();
-
-        [BenchmarkCategory("Array_As_IReadOnlyCollection")]
-        [Benchmark]
-        public int Hyperlinq_Array_AsReadOnlyCollection() =>
-            arrayAsReadOnlyCollection.First();
-
-        [BenchmarkCategory("Array_As_IReadOnlyList")]
-        [Benchmark]
-        public int Hyperlinq_Array_AsReadOnlyList() =>
-            arrayAsReadOnlyList.First();
-
-        [BenchmarkCategory("List_As_IEnumerable")]
-        [Benchmark]
-        public int Hyperlinq_List_AsEnumerable() =>
-            listAsEnumerable.First();
-
-        [BenchmarkCategory("List_As_IReadOnlyCollection")]
-        [Benchmark]
-        public int Hyperlinq_List_AsReadOnlyCollection() =>
-            listAsReadOnlyCollection.First();
-
-        [BenchmarkCategory("List_As_IReadOnlyList")]
-        [Benchmark]
-        public int Hyperlinq_List_AsReadOnlyList() =>
-            listAsReadOnlyList.First();
     }
 }

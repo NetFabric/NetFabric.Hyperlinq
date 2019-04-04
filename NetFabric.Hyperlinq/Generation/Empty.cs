@@ -14,7 +14,7 @@ namespace NetFabric.Hyperlinq
             public Enumerator GetEnumerator() => new Enumerator();
             public ValueEnumerator GetValueEnumerator() => new ValueEnumerator();
 
-            public int Count() => 0;
+            public int Count => 0;
 
             public TSource this[int index] { get { ThrowHelper.ThrowIndexOutOfRangeException(); return default; } }
 
@@ -38,9 +38,6 @@ namespace NetFabric.Hyperlinq
 
                 public void Dispose() { }
             }
-
-            public int Count(Func<TSource, bool> _)
-                => 0;
 
             public bool All(Func<TSource, bool> predicate)
                 => false;
@@ -104,6 +101,16 @@ namespace NetFabric.Hyperlinq
 
             public List<TSource> ToList()
                 => new List<TSource>();
+        }
+
+        public static int Count<TSource>(this EmptyEnumerable<TSource> _)
+            => 0;
+
+        public static int Count<TSource>(this EmptyEnumerable<TSource> _, Func<TSource, bool> predicate)
+        {
+            if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
+
+            return 0;
         }
 
         public static TSource? FirstOrNull<TSource>(this EmptyEnumerable<TSource> _)

@@ -7,7 +7,6 @@
   <ItemGroup>
     <PackageReference Include="BenchmarkDotNet" Version="0.11.4" />
     <PackageReference Include="LinqFaster" Version="1.0.0" />
-    <PackageReference Include="LinqFaster.Parallel" Version="1.0.1" />
     <PackageReference Include="System.Interactive" Version="3.2.0" />
     <ProjectReference Include="..\NetFabric.Hyperlinq.TestCollections\NetFabric.Hyperlinq.TestCollections.csproj" />
     <ProjectReference Include="..\NetFabric.Hyperlinq\NetFabric.Hyperlinq.csproj" />

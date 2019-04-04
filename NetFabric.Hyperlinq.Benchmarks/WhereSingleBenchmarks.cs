@@ -24,16 +24,6 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Linq_Range()
             => System.Linq.Enumerable.Where(linqRange, value => value == 0).Single();
 
-        [BenchmarkCategory("Enumerable_Reference")]
-        [Benchmark(Baseline = true)]
-        public int Linq_Enumerable_Reference()
-            => System.Linq.Enumerable.Where(enumerableReference, value => value == 0).Single();
-
-        [BenchmarkCategory("Enumerable_Value")]
-        [Benchmark(Baseline = true)]
-        public int Linq_Enumerable_Value()
-            => System.Linq.Enumerable.Where(enumerableValue, value => value == 0).Single();
-
         [BenchmarkCategory("Array")]
         [Benchmark]
         public int Hyperlinq_Array()
@@ -48,15 +38,5 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [Benchmark]
         public int Hyperlinq_Range()
             => hyperlinqRange.Where(value => value == 0).Single();
-
-        [BenchmarkCategory("Enumerable_Reference")]
-        [Benchmark]
-        public int Hyperlinq_Enumerable_Reference()
-            => enumerableReference.Where(value => value == 0).Single();
-
-        [BenchmarkCategory("Enumerable_Value")]
-        [Benchmark]
-        public int Hyperlinq_Enumerable_Value()
-            => enumerableValue.Where<TestEnumerable.Enumerable, TestEnumerable.Enumerable.Enumerator, int>(value => value == 0).Single();
     }
 }

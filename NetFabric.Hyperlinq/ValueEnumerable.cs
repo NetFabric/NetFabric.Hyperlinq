@@ -1,10 +1,10 @@
-﻿using System;
+﻿// Based on implementation by Ben Adams
+// https://gist.github.com/benaadams/294cbd41ec1179638cb4b5495a15accf
+
+using System;
 
 namespace NetFabric.Hyperlinq
 {
-    // Based on implementation by Ben Adams
-    // https://gist.github.com/benaadams/294cbd41ec1179638cb4b5495a15accf
-
     public interface IValueEnumerator : IDisposable
     {
         bool TryMoveNext();
@@ -30,13 +30,13 @@ namespace NetFabric.Hyperlinq
     public interface IValueReadOnlyCollection<TEnumerator> : IValueEnumerable<TEnumerator>
         where TEnumerator : struct, IValueEnumerator
     {
-        int Count();
+        int Count { get; }
     }
 
     public interface IValueReadOnlyCollection<T, TEnumerator> : IValueEnumerable<T, TEnumerator>
         where TEnumerator : struct, IValueEnumerator<T>
     {
-        int Count();
+        int Count { get; }
     }
 
     public interface IValueReadOnlyList<T, TEnumerator> : IValueReadOnlyCollection<T, TEnumerator>

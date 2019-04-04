@@ -28,7 +28,7 @@ namespace NetFabric.Hyperlinq
             public Enumerator GetEnumerator() => new Enumerator(in this);
             public ValueEnumerator GetValueEnumerator() => new ValueEnumerator(in this);
 
-            public int Count() => count;
+            public int Count => count;
 
             public int this[int index]
             {
@@ -83,9 +83,6 @@ namespace NetFabric.Hyperlinq
 
                 public void Dispose() { }
             }
-
-            public int Count(Func<int, bool> predicate)
-                => ValueReadOnlyList.Count<RangeEnumerable, ValueEnumerator, int>(this, predicate);
 
             public bool All(Func<int, bool> predicate)
                 => ValueEnumerable.All<RangeEnumerable, ValueEnumerator, int>(this, predicate);
@@ -169,6 +166,23 @@ namespace NetFabric.Hyperlinq
                 return list;
             }
         }
+
+        public static int Count(this RangeEnumerable source)
+            => source.Count;
+
+        public static int Count(this RangeEnumerable source, Func<int, bool> predicate)
+            => ValueReadOnlyList.Count<RangeEnumerable, RangeEnumerable.ValueEnumerator, int>(source, predicate);
+
+        public static int? FirstOrNull(this RangeEnumerable source)
+            => ValueReadOnlyList.FirstOrNull<RangeEnumerable, RangeEnumerable.ValueEnumerator, int>(source);
+
+        public static int? FirstOrNull(this RangeEnumerable source, Func<int, bool> predicate)
+            => ValueReadOnlyList.FirstOrNull<RangeEnumerable, RangeEnumerable.ValueEnumerator, int>(source, predicate);
+        public static int? SingleOrNull(this RangeEnumerable source)
+            => ValueReadOnlyList.SingleOrNull<RangeEnumerable, RangeEnumerable.ValueEnumerator, int>(source);
+
+        public static int? SingleOrNull(this RangeEnumerable source, Func<int, bool> predicate)
+            => ValueReadOnlyList.SingleOrNull<RangeEnumerable, RangeEnumerable.ValueEnumerator, int>(source, predicate);
     }
 }
 

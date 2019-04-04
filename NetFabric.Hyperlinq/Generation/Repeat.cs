@@ -27,7 +27,7 @@ namespace NetFabric.Hyperlinq
             public Enumerator GetEnumerator() => new Enumerator(in this);
             public ValueEnumerator GetValueEnumerator() => new ValueEnumerator(in this);
 
-            public int Count() => count;
+            public int Count => count;
 
             public TSource this[int index]
             {
@@ -82,9 +82,6 @@ namespace NetFabric.Hyperlinq
 
                 public void Dispose() { }
             }
-
-            public int Count(Func<TSource, bool> predicate)
-                => (count != 0 && predicate(value)) ? count : 0;
 
             public bool All(Func<TSource, bool> predicate)
                 => count != 0 && predicate(value);
@@ -148,21 +145,27 @@ namespace NetFabric.Hyperlinq
                 => ValueReadOnlyCollection.ToList<RepeatEnumerable<TSource>, ValueEnumerator, TSource>(this);
         }
 
+        public static int Count<TSource>(this RepeatEnumerable<TSource> source)
+            => source.Count;
+
+        public static int Count<TSource>(this RepeatEnumerable<TSource> source, Func<TSource, bool> predicate)
+            => (source.count != 0 && predicate(source.value)) ? source.count : 0;
+
         public static TSource? FirstOrNull<TSource>(this RepeatEnumerable<TSource> source)
             where TSource : struct
-                => (source.count > 0) ? source.value : (TSource?)null;
+            => (source.count > 0) ? source.value : (TSource?)null;
 
         public static TSource? FirstOrNull<TSource>(this RepeatEnumerable<TSource> source, Func<TSource, bool> predicate)
             where TSource : struct
-                => ValueReadOnlyList.FirstOrNull<RepeatEnumerable<TSource>, RepeatEnumerable<TSource>.ValueEnumerator, TSource>(source, predicate);
+            => ValueReadOnlyList.FirstOrNull<RepeatEnumerable<TSource>, RepeatEnumerable<TSource>.ValueEnumerator, TSource>(source, predicate);
 
         public static TSource? SingleOrNull<TSource>(this RepeatEnumerable<TSource> source)
             where TSource : struct
-                => (source.count == 0) ? null : ((source.count == 1) ? source.value : ThrowHelper.ThrowNotSingleSequence<TSource?>());
+            => (source.count == 0) ? null : ((source.count == 1) ? source.value : ThrowHelper.ThrowNotSingleSequence<TSource?>());
 
         public static TSource? SingleOrNull<TSource>(this RepeatEnumerable<TSource> source, Func<TSource, bool> predicate)
             where TSource : struct
-                => ValueReadOnlyList.SingleOrNull<RepeatEnumerable<TSource>, RepeatEnumerable<TSource>.ValueEnumerator, TSource>(source, predicate);
+            => ValueReadOnlyList.SingleOrNull<RepeatEnumerable<TSource>, RepeatEnumerable<TSource>.ValueEnumerator, TSource>(source, predicate);
     }
 }
 

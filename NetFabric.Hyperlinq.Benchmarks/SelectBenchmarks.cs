@@ -39,26 +39,6 @@ namespace NetFabric.Hyperlinq.Benchmarks
             return count;
         }
 
-        [BenchmarkCategory("Enumerable_Reference")]
-        [Benchmark(Baseline = true)]
-        public int Linq_Enumerable_Reference() 
-        { 
-            var count = 0;
-            foreach(var item in System.Linq.Enumerable.Select(enumerableReference, item => item))
-                count++;
-            return count;
-        }
-
-        [BenchmarkCategory("Enumerable_Value")]
-        [Benchmark(Baseline = true)]
-        public int Linq_Enumerable_Value() 
-        { 
-            var count = 0;
-            foreach(var item in System.Linq.Enumerable.Select(enumerableValue, item => item))
-                count++;
-            return count;
-        }
-
         [BenchmarkCategory("Array")]
         [Benchmark]
         public int Hyperlinq_Array() 
@@ -85,26 +65,6 @@ namespace NetFabric.Hyperlinq.Benchmarks
         { 
             var count = 0;
             foreach(var item in hyperlinqRange.Select(item => item))
-                count++;
-            return count;
-        }
-
-        [BenchmarkCategory("Enumerable_Reference")]
-        [Benchmark]
-        public int Hyperlinq_Enumerable_Reference()
-        { 
-            var count = 0;
-            foreach(var item in enumerableReference.Select(item => item))
-                count++;
-            return count;
-        }
-
-        [BenchmarkCategory("Enumerable_Value")]
-        [Benchmark]
-        public int Hyperlinq_Enumerable_Value()
-        { 
-            var count = 0;
-            foreach(var item in enumerableValue.Select<TestEnumerable.Enumerable, TestEnumerable.Enumerable.Enumerator, int, int>(item => item))
                 count++;
             return count;
         }
