@@ -22,7 +22,7 @@ namespace NetFabric.Hyperlinq
             => ReadOnlyList.Any<IReadOnlyList<TSource>, TSource>(source, predicate);
 
         public static bool Contains<TSource>(this IReadOnlyList<TSource> source, TSource value)
-            => source.Contains(value);
+            => ReadOnlyList.Contains<IReadOnlyList<TSource>, TSource>(source, value);
 
         public static bool Contains<TSource>(this IReadOnlyList<TSource> source, TSource value, IEqualityComparer<TSource> comparer)
             => ReadOnlyList.Contains<IReadOnlyList<TSource>, TSource>(source, value, comparer);
