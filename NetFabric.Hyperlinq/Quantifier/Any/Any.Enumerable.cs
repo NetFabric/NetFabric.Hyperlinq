@@ -7,7 +7,7 @@ namespace NetFabric.Hyperlinq
     {
         public static bool Any<TEnumerable, TEnumerator, TSource>(this TEnumerable source)
             where TEnumerable : IEnumerable<TSource>
-            where TEnumerator: IEnumerator<TSource>
+            where TEnumerator : IEnumerator<TSource>
         {
             using(var enumerator = (TEnumerator)source.GetEnumerator())
             {

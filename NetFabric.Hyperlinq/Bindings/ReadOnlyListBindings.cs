@@ -7,7 +7,7 @@ namespace NetFabric.Hyperlinq
     public static class ReadOnlyListBindings
     {
         public static int Count<TSource>(this IReadOnlyList<TSource> source)
-            => ReadOnlyList.Count<IReadOnlyList<TSource>, TSource>(source);
+            => source.Count;
 
         public static int Count<TSource>(this IReadOnlyList<TSource> source, Func<TSource, bool> predicate)
             => ReadOnlyList.Count<IReadOnlyList<TSource>, TSource>(source, predicate);
@@ -16,7 +16,7 @@ namespace NetFabric.Hyperlinq
             => ReadOnlyList.All<IReadOnlyList<TSource>, TSource>(source, predicate);
 
         public static bool Any<TSource>(this IReadOnlyList<TSource> source)
-            => ReadOnlyList.Any<IReadOnlyList<TSource>, TSource>(source);
+            => source.Count != 0;
 
         public static bool Any<TSource>(this IReadOnlyList<TSource> source, Func<TSource, bool> predicate)
             => ReadOnlyList.Any<IReadOnlyList<TSource>, TSource>(source, predicate);

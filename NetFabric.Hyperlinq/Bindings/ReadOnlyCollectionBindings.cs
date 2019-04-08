@@ -32,15 +32,7 @@ namespace NetFabric.Hyperlinq
         }
 
         public static bool Any<TSource>(this IReadOnlyCollection<TSource> source)
-        {
-            switch(source)
-            {
-                case IReadOnlyList<TSource> list:
-                    return ReadOnlyList.Any<IReadOnlyList<TSource>, TSource>(list);
-                default:
-                    return ReadOnlyCollection.Any<IReadOnlyCollection<TSource>, IEnumerator<TSource>, TSource>(source);
-            }
-        }
+            => source.Count != 0;
 
         public static bool Any<TSource>(this IReadOnlyCollection<TSource> source, Func<TSource, bool> predicate)
         {

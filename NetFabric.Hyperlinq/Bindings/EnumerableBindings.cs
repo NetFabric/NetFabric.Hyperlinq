@@ -47,10 +47,8 @@ namespace NetFabric.Hyperlinq
         {
             switch(source)
             {
-                case IReadOnlyList<TSource> list:
-                    return ReadOnlyList.Any<IReadOnlyList<TSource>, TSource>(list);
                 case IReadOnlyCollection<TSource> collection:
-                    return ReadOnlyCollection.Any<IReadOnlyCollection<TSource>, IEnumerator<TSource>, TSource>(collection);
+                    return collection.Count != 0;
                 default:
                     return Enumerable.Any<IEnumerable<TSource>, IEnumerator<TSource>, TSource>(source);
             }

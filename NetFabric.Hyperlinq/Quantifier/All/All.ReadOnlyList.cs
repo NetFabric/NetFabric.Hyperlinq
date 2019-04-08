@@ -11,8 +11,6 @@ namespace NetFabric.Hyperlinq
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
 
             var sourceCount = source.Count;
-            if (sourceCount == 0) return false;
-
             for (var index = 0; index < sourceCount; index++)
             {
                 if (!predicate(source[index]))
