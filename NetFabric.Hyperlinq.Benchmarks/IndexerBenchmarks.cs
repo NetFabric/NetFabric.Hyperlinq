@@ -16,43 +16,40 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [GlobalSetup]
         public void GlobalSetup()
         {
-            list = new List<int>(Count);
+            list = Enumerable.Range(0, Count).ToList();
         }
 
         [Benchmark(Baseline = true)]
-        public int Enumerator() => 
-            CountEnumerable<List<int>, List<int>.Enumerator, int>(list, _ => true);
+        public bool Enumerator() => 
+            AllEnumerable(list, _ => true);
 
         [Benchmark]
-        public int Indexer() => 
-            CountList<List<int>, int>(list, _ => true);
+        public bool Indexer() => 
+            AllIndexer(list, _ => true);
 
-        static int CountEnumerable<TEnumerable, TEnumerator, TSource>(List<int> source, Func<int, bool> predicate)
+        [Benchmark]
+        public bool Hyperlinq() => 
+            list.All(_ => true);
+
+        static bool AllEnumerable<TSource>(List<TSource> source, Func<TSource, bool> predicate)
         {
-            var count = 0;
-            using(var enumerator = source.GetEnumerator())
+            foreach(var item in source)
             {
-                while (enumerator.MoveNext())
-                {
-                    if (predicate(enumerator.Current))
-                        count++;
-                }
+                if (!predicate(item))
+                    return false;
             }
-            return count;
+            return true;
         }        
 
-        public static int CountList<TEnumerable, TSource>(List<int> source, Func<int, bool> predicate)
+        static bool AllIndexer<TSource>(List<TSource> source, Func<TSource, bool> predicate)
         {
             var sourceCount = source.Count;
-            if (sourceCount == 0) return 0;
-
-            var count = 0;
             for (var index = 0; index < sourceCount; index++)
             {
-                if (predicate(source[index]))
-                    count++;
+                if (!predicate(source[index]))
+                    return false;
             }
-            return count;
+            return true;
         }
     }
 }
