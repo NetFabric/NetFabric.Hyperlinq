@@ -48,13 +48,13 @@ namespace NetFabric.Hyperlinq
             => ReadOnlyCollection.First<ValueWrapper<TSource>, LinkedList<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source));
 
         public static TSource First<TSource, TValue>(this LinkedList<TSource> source, Func<TSource, bool> predicate)
-            => Enumerable.First<ValueWrapper<TSource>, LinkedList<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
+            => ReadOnlyCollection.First<ValueWrapper<TSource>, LinkedList<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
 
         public static TSource FirstOrDefault<TSource, TValue>(this LinkedList<TSource> source)
             => ReadOnlyCollection.FirstOrDefault<ValueWrapper<TSource>, LinkedList<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source));
 
         public static TSource FirstOrDefault<TSource, TValue>(this LinkedList<TSource> source, Func<TSource, bool> predicate)
-            => Enumerable.FirstOrDefault<ValueWrapper<TSource>, LinkedList<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
+            => ReadOnlyCollection.FirstOrDefault<ValueWrapper<TSource>, LinkedList<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
 
         public static TSource? FirstOrNull<TSource, TValue>(this LinkedList<TSource> source)
             where TSource : struct
@@ -62,19 +62,19 @@ namespace NetFabric.Hyperlinq
 
         public static TSource? FirstOrNull<TSource, TValue>(this LinkedList<TSource> source, Func<TSource, bool> predicate)
             where TSource : struct
-            => Enumerable.FirstOrNull<ValueWrapper<TSource>, LinkedList<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
+            => ReadOnlyCollection.FirstOrNull<ValueWrapper<TSource>, LinkedList<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
 
         public static TSource Single<TSource, TValue>(this LinkedList<TSource> source)
             => ReadOnlyCollection.Single<ValueWrapper<TSource>, LinkedList<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source));
 
         public static TSource Single<TSource, TValue>(this LinkedList<TSource> source, Func<TSource, bool> predicate)
-            => Enumerable.Single<ValueWrapper<TSource>, LinkedList<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
+            => ReadOnlyCollection.Single<ValueWrapper<TSource>, LinkedList<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
 
         public static TSource SingleOrDefault<TSource, TValue>(this LinkedList<TSource> source)
             => ReadOnlyCollection.SingleOrDefault<ValueWrapper<TSource>, LinkedList<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source));
 
         public static TSource SingleOrDefault<TSource, TValue>(this LinkedList<TSource> source, Func<TSource, bool> predicate)
-            => Enumerable.SingleOrDefault<ValueWrapper<TSource>, LinkedList<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
+            => ReadOnlyCollection.SingleOrDefault<ValueWrapper<TSource>, LinkedList<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
 
         public static TSource? SingleOrNull<TSource, TValue>(this LinkedList<TSource> source)
             where TSource : struct
@@ -82,7 +82,7 @@ namespace NetFabric.Hyperlinq
 
         public static TSource? SingleOrNull<TSource, TValue>(this LinkedList<TSource> source, Func<TSource, bool> predicate)
             where TSource : struct
-            => Enumerable.SingleOrNull<ValueWrapper<TSource>, LinkedList<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
+            => ReadOnlyCollection.SingleOrNull<ValueWrapper<TSource>, LinkedList<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
 
         public static IEnumerable<TSource> AsEnumerable<TSource>(this LinkedList<TSource> source)
             => source;

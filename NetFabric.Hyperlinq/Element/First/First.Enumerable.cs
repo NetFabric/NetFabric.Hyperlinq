@@ -81,9 +81,15 @@ namespace NetFabric.Hyperlinq
         {
             using (var enumerator = (TEnumerator)source.GetEnumerator())
             {
-                value = enumerator.Current;
-                return enumerator.MoveNext();
+                if (enumerator.MoveNext())
+                {
+                    value = enumerator.Current;
+                    return true;
+                }
             }        
+
+            value = default;
+            return false;            
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
