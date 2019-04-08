@@ -27,12 +27,10 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Indexer() => 
             CountList<List<int>, int>(list, _ => true);
 
-        static int CountEnumerable<TEnumerable, TEnumerator, TSource>(TEnumerable source, Func<TSource, bool> predicate)
-            where TEnumerable : IEnumerable<TSource>
-            where TEnumerator: IEnumerator<TSource>
+        static int CountEnumerable<TEnumerable, TEnumerator, TSource>(List<int> source, Func<int, bool> predicate)
         {
             var count = 0;
-            using(var enumerator = (TEnumerator)source.GetEnumerator())
+            using(var enumerator = source.GetEnumerator())
             {
                 while (enumerator.MoveNext())
                 {
@@ -43,8 +41,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
             return count;
         }        
 
-        public static int CountList<TEnumerable, TSource>(TEnumerable source, Func<TSource, bool> predicate)
-            where TEnumerable : IReadOnlyList<TSource>
+        public static int CountList<TEnumerable, TSource>(List<int> source, Func<int, bool> predicate)
         {
             var sourceCount = source.Count;
             if (sourceCount == 0) return 0;
