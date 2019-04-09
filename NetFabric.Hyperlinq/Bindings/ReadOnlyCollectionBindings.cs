@@ -243,7 +243,15 @@ namespace NetFabric.Hyperlinq
             }
         }
 
-        public static IReadOnlyCollection<TSource> ToList<TSource>(this IReadOnlyCollection<TSource> source)
-            => source;
+        public static List<TSource> ToList<TSource>(this IReadOnlyCollection<TSource> source)
+        {
+            switch(source)
+            {
+                case IReadOnlyList<TSource> list:
+                    return ReadOnlyList.ToList<IReadOnlyList<TSource>, TSource>(list);
+                default:
+                    return ReadOnlyCollection.ToList<IReadOnlyCollection<TSource>, IEnumerator<TSource>, TSource>(source);
+            }
+        }
     }
 }

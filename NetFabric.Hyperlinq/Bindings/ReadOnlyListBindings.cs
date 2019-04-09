@@ -105,7 +105,7 @@ namespace NetFabric.Hyperlinq
         public static TSource[] ToArray<TSource>(this IReadOnlyList<TSource> source)
             => ReadOnlyList.ToArray<IReadOnlyList<TSource>, TSource>(source);
 
-        public static IReadOnlyList<TSource> ToList<TSource>(this IReadOnlyList<TSource> source)
-            => source;
+        public static List<TSource> ToList<TSource>(this IReadOnlyList<TSource> source)
+            => ReadOnlyList.ToList<IReadOnlyList<TSource>, TSource>(source);
     }
 }
