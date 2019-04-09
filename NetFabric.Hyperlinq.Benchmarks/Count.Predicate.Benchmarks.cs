@@ -10,6 +10,16 @@ namespace NetFabric.Hyperlinq.Benchmarks
     [MarkdownExporterAttribute.GitHub]
     public class CountPredicateBenchmarks : BenchmarksBase
     {
+        [BenchmarkCategory("Range")]
+        [Benchmark(Baseline = true)]
+        public int Linq_Range() => 
+            System.Linq.Enumerable.Count(linqRange, _ => true);
+
+        [BenchmarkCategory("Queue")]
+        [Benchmark(Baseline = true)]
+        public int Linq_Queue() => 
+            System.Linq.Enumerable.Count(queue, _ => true);
+
         [BenchmarkCategory("Array")]
         [Benchmark(Baseline = true)]
         public int Linq_Array() => 
@@ -19,16 +29,6 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [Benchmark(Baseline = true)]
         public int Linq_List() => 
             System.Linq.Enumerable.Count(list, _ => true);
-
-        [BenchmarkCategory("Queue")]
-        [Benchmark(Baseline = true)]
-        public int Linq_Queue() => 
-            System.Linq.Enumerable.Count(queue, _ => true);
-
-        [BenchmarkCategory("Range")]
-        [Benchmark(Baseline = true)]
-        public int Linq_Range() => 
-            System.Linq.Enumerable.Count(linqRange, _ => true);
 
         [BenchmarkCategory("Enumerable_Reference")]
         [Benchmark(Baseline = true)]
@@ -50,6 +50,16 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int LinqFaster_List() =>
             list.CountF(_ => true);
 
+        [BenchmarkCategory("Range")]
+        [Benchmark]
+        public int Hyperlinq_Range() =>
+            hyperlinqRange.Count(_ => true);
+
+        [BenchmarkCategory("Queue")]
+        [Benchmark]
+        public int Hyperlinq_Queue() => 
+            queue.Count(_ => true);
+
         [BenchmarkCategory("Array")]
         [Benchmark]
         public int Hyperlinq_Array() => 
@@ -59,17 +69,6 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [Benchmark]
         public int Hyperlinq_List() => 
             list.Count(_ => true);
-
-        [BenchmarkCategory("Queue")]
-        [Benchmark]
-        public int Hyperlinq_Queue() => 
-            queue.Count(_ => true);
-
-        [BenchmarkCategory("Range")]
-        [Benchmark]
-
-        public int Hyperlinq_Range() =>
-            hyperlinqRange.Count(_ => true);
 
         [BenchmarkCategory("Enumerable_Reference")]
         [Benchmark]

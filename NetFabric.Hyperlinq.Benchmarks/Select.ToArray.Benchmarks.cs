@@ -9,6 +9,16 @@ namespace NetFabric.Hyperlinq.Benchmarks
     [MarkdownExporterAttribute.GitHub]
     public class SelectToArrayBenchmarks : BenchmarksBase
     {
+        [BenchmarkCategory("Range")]
+        [Benchmark(Baseline = true)]
+        public int[] Linq_Range() 
+            => System.Linq.Enumerable.ToArray(System.Linq.Enumerable.Select(linqRange, item => item));
+
+        [BenchmarkCategory("Queue")]
+        [Benchmark(Baseline = true)]
+        public int[] Linq_Queue() 
+            => System.Linq.Enumerable.ToArray(System.Linq.Enumerable.Select(queue, item => item));
+
         [BenchmarkCategory("Array")]
         [Benchmark(Baseline = true)]
         public int[] Linq_Array() 
@@ -20,9 +30,14 @@ namespace NetFabric.Hyperlinq.Benchmarks
             => System.Linq.Enumerable.ToArray(System.Linq.Enumerable.Select(list, item => item));
 
         [BenchmarkCategory("Range")]
-        [Benchmark(Baseline = true)]
-        public int[] Linq_Range() 
-            => System.Linq.Enumerable.ToArray(System.Linq.Enumerable.Select(linqRange, item => item));
+        [Benchmark]
+        public int[] Hyperlinq_Range() 
+            => hyperlinqRange.Select(item => item).ToArray();
+
+        [BenchmarkCategory("Queue")]
+        [Benchmark]
+        public int[] Hyperlinq_Queue() 
+            => queue.Select(item => item).ToArray();
 
         [BenchmarkCategory("Array")]
         [Benchmark]
@@ -34,9 +49,14 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int[] Hyperlinq_List() 
             => list.Select(item => item).ToArray();
 
-        [BenchmarkCategory("Range")]
+        [BenchmarkCategory("Enumerable_Reference")]
         [Benchmark]
-        public int[] Hyperlinq_Range() 
-            => hyperlinqRange.Select(item => item).ToArray();
+        public int[] Hyperlinq_Enumerable_Reference()
+            => enumerableReference.Select(item => item).ToArray();
+
+        [BenchmarkCategory("Enumerable_Value")]
+        [Benchmark]
+        public int[] Hyperlinq_Enumerable_Value()        
+            => enumerableValue.Select(item => item).ToArray();
     }
 }

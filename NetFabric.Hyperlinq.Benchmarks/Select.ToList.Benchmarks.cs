@@ -1,6 +1,6 @@
+using System.Collections.Generic;
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Configs;
-using System.Collections.Generic;
 
 namespace NetFabric.Hyperlinq.Benchmarks
 {
@@ -10,6 +10,16 @@ namespace NetFabric.Hyperlinq.Benchmarks
     [MarkdownExporterAttribute.GitHub]
     public class SelectToListBenchmarks : BenchmarksBase
     {
+        [BenchmarkCategory("Range")]
+        [Benchmark(Baseline = true)]
+        public List<int> Linq_Range() 
+            => System.Linq.Enumerable.ToList(System.Linq.Enumerable.Select(linqRange, item => item));
+
+        [BenchmarkCategory("Queue")]
+        [Benchmark(Baseline = true)]
+        public List<int> Linq_Queue() 
+            => System.Linq.Enumerable.ToList(System.Linq.Enumerable.Select(queue, item => item));
+
         [BenchmarkCategory("Array")]
         [Benchmark(Baseline = true)]
         public List<int> Linq_Array() 
@@ -21,9 +31,14 @@ namespace NetFabric.Hyperlinq.Benchmarks
             => System.Linq.Enumerable.ToList(System.Linq.Enumerable.Select(list, item => item));
 
         [BenchmarkCategory("Range")]
-        [Benchmark(Baseline = true)]
-        public List<int> Linq_Range() 
-            => System.Linq.Enumerable.ToList(System.Linq.Enumerable.Select(linqRange, item => item));
+        [Benchmark]
+        public List<int> Hyperlinq_Range() 
+            => hyperlinqRange.Select(item => item).ToList();
+
+        [BenchmarkCategory("Queue")]
+        [Benchmark]
+        public List<int> Hyperlinq_Queue() 
+            => queue.Select(item => item).ToList();
 
         [BenchmarkCategory("Array")]
         [Benchmark]
@@ -35,9 +50,14 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public List<int> Hyperlinq_List() 
             => list.Select(item => item).ToList();
 
-        [BenchmarkCategory("Range")]
+        [BenchmarkCategory("Enumerable_Reference")]
         [Benchmark]
-        public List<int> Hyperlinq_Range() 
-            => hyperlinqRange.Select(item => item).ToList();
+        public List<int> Hyperlinq_Enumerable_Reference()
+            => enumerableReference.Select(item => item).ToList();
+
+        [BenchmarkCategory("Enumerable_Value")]
+        [Benchmark]
+        public List<int> Hyperlinq_Enumerable_Value()        
+            => enumerableValue.Select(item => item).ToList();
     }
 }

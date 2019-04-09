@@ -9,76 +9,76 @@ namespace NetFabric.Hyperlinq.Benchmarks
     [CategoriesColumn]
     [MemoryDiagnoser]
     [MarkdownExporterAttribute.GitHub]
-    public class AllBenchmarks : BenchmarksBase
+    public class AnyBenchmarks : BenchmarksBase
     {
-        [BenchmarkCategory("Array")]
+        [BenchmarkCategory("Range")]
         [Benchmark(Baseline = true)]
-        public bool Linq_Array() => 
-            System.Linq.Enumerable.All(array, _ => true);
-
-        [BenchmarkCategory("List")]
-        [Benchmark(Baseline = true)]
-        public bool Linq_List() => 
-            System.Linq.Enumerable.All(list, _ => true);
+        public bool Linq_Range() => 
+            System.Linq.Enumerable.Any(linqRange, _ => true);
 
         [BenchmarkCategory("Queue")]
         [Benchmark(Baseline = true)]
         public bool Linq_Queue() => 
-            System.Linq.Enumerable.All(queue, _ => true);
+            System.Linq.Enumerable.Any(queue, _ => true);
 
-        [BenchmarkCategory("Range")]
+        [BenchmarkCategory("Array")]
         [Benchmark(Baseline = true)]
-        public bool Linq_Range() => 
-            System.Linq.Enumerable.All(linqRange, _ => true);
+        public bool Linq_Array() => 
+            System.Linq.Enumerable.Any(array, _ => true);
+
+        [BenchmarkCategory("List")]
+        [Benchmark(Baseline = true)]
+        public bool Linq_List() => 
+            System.Linq.Enumerable.Any(list, _ => true);
 
         [BenchmarkCategory("Enumerable_Reference")]
         [Benchmark(Baseline = true)]
         public bool Linq_Enumerable_Reference() => 
-            System.Linq.Enumerable.All(enumerableReference, _ => true);
+            System.Linq.Enumerable.Any(enumerableReference, _ => true);
 
         [BenchmarkCategory("Enumerable_Value")]
         [Benchmark(Baseline = true)]
         public bool Linq_Enumerable_Value() => 
-            System.Linq.Enumerable.All(enumerableValue, _ => true);
+            System.Linq.Enumerable.Any(enumerableValue, _ => true);
 
         [BenchmarkCategory("Array")]
         [Benchmark]
         public bool LinqFaster_Array() =>
-            array.AllF(_ => true);
+            array.AnyF(_ => true);
 
         [BenchmarkCategory("List")]
         [Benchmark]
         public bool LinqFaster_List() =>
-            list.AllF(_ => true);
-
-        [BenchmarkCategory("Array")]
-        [Benchmark]
-        public bool Hyperlinq_Array() =>
-            array.All(_ => true);
-
-        [BenchmarkCategory("List")]
-        [Benchmark]
-        public bool Hyperlinq_List() => 
-            list.All(_ => true);
-
-        [BenchmarkCategory("Queue")]
-        [Benchmark]
-        public bool Hyperlinq_Queue() => 
-            queue.All(_ => true);
+            list.AnyF(_ => true);
 
         [BenchmarkCategory("Range")]
         [Benchmark]
         public bool Hyperlinq_Range() =>
-            hyperlinqRange.All(_ => true);
+            hyperlinqRange.Any(_ => true);
+
+        [BenchmarkCategory("Queue")]
+        [Benchmark]
+        public bool Hyperlinq_Queue() => 
+            queue.Any(_ => true);
+
+        [BenchmarkCategory("Array")]
+        [Benchmark]
+        public bool Hyperlinq_Array() =>
+            array.Any(_ => true);
+
+        [BenchmarkCategory("List")]
+        [Benchmark]
+        public bool Hyperlinq_List() => 
+            list.Any(_ => true);
 
         [BenchmarkCategory("Enumerable_Reference")]
         [Benchmark]
         public bool Hyperlinq_Enumerable_Reference() => 
-            enumerableReference.All(_ => true);
+            enumerableReference.Any(_ => true);
 
         [BenchmarkCategory("Enumerable_Value")]
         [Benchmark]
         public bool Hyperlinq_Enumerable_Value() => 
-            enumerableValue.All<TestEnumerable.Enumerable, TestEnumerable.Enumerable.Enumerator, int>(_ => true);
+            enumerableValue.Any<TestEnumerable.Enumerable, TestEnumerable.Enumerable.Enumerator, int>(_ => true);
     }
 }
