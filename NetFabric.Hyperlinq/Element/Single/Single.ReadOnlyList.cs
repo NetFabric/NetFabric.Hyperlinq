@@ -97,7 +97,7 @@ namespace NetFabric.Hyperlinq
 
                     for (index++; index < count; index++)
                     {
-                        if (predicate(value))
+                        if (predicate(source[index]))
                             ThrowHelper.ThrowNotSingleSequence<TSource>();
                     }
 
