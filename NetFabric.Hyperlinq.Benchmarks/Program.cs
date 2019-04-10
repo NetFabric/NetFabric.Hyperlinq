@@ -12,6 +12,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
                 typeof(IndexerBenchmarks),
                 typeof(VirtualCallBenchmarks),
                 typeof(ValueEnumerableBenchmarks),
+                typeof(CastBenchmarks),
                 typeof(GenerationOperationsBenchmarks),
                 typeof(EmptyBenchmarks),
                 typeof(CountBenchmarks),
