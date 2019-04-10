@@ -33,14 +33,13 @@ namespace NetFabric.Hyperlinq.UnitTests
         public void ToList_With_List_Should_ReturnSame()
         {
             // Arrange
-            var list = new List<int>(new[] { 0, 1, 2, 3, 4, 5 });
-            IEnumerable<int> source = list;
+            var source = new List<int>(new[] { 0, 1, 2, 3, 4, 5 });
 
             // Act
             var result = source.ToList();
 
             // Assert
-            result.Should().BeSameAs(list);
+            result.Should().BeSameAs(source);
         }
 
 
