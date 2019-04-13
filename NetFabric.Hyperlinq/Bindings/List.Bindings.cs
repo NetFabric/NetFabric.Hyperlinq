@@ -12,6 +12,12 @@ namespace NetFabric.Hyperlinq
         public static int Count<TSource>(this List<TSource> source, Func<TSource, bool> predicate)
             => ReadOnlyList.Count<ValueWrapper<TSource>, TSource>(new ValueWrapper<TSource>(source), predicate);
 
+        public static ReadOnlyList.SkipTakeEnumerable<ValueWrapper<TSource>, TSource> Skip<TSource>(this List<TSource> source, int count)
+            => ReadOnlyList.Skip<ValueWrapper<TSource>, TSource>(new ValueWrapper<TSource>(source), count);
+
+        public static ReadOnlyList.SkipTakeEnumerable<ValueWrapper<TSource>, TSource> Take<TSource>(this List<TSource> source, int count)
+            => ReadOnlyList.Take<ValueWrapper<TSource>, TSource>(new ValueWrapper<TSource>(source), count);
+
         public static bool All<TSource>(this List<TSource> source, Func<TSource, bool> predicate)
             => ReadOnlyList.All<ValueWrapper<TSource>, TSource>(new ValueWrapper<TSource>(source), predicate);
 

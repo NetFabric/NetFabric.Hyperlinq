@@ -87,6 +87,12 @@ namespace NetFabric.Hyperlinq
                 public void Dispose() { }
             }
 
+            public ValueReadOnlyList.SkipTakeEnumerable<SelectEnumerable<TSource, TResult>, ValueEnumerator, TResult> Skip(int count)
+                => ValueReadOnlyList.Skip<SelectEnumerable<TSource, TResult>, ValueEnumerator, TResult>(this, count);
+
+            public ValueReadOnlyList.SkipTakeEnumerable<SelectEnumerable<TSource, TResult>, ValueEnumerator, TResult> Take(int count)
+                => ValueReadOnlyList.Take<SelectEnumerable<TSource, TResult>, ValueEnumerator, TResult>(this, count);
+
             public bool All(Func<TResult, bool> predicate)
                 => ValueReadOnlyList.All<SelectEnumerable<TSource, TResult>, ValueEnumerator, TResult>(this, predicate);
 

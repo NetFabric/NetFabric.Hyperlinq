@@ -30,6 +30,16 @@ namespace NetFabric.Hyperlinq
             }
         }
 
+        public static Enumerable.SkipEnumerable<IEnumerable<TSource>, IEnumerator<TSource>, TSource> Skip<TSource>(
+            this IEnumerable<TSource> source,
+            int count) 
+            => Enumerable.Skip<IEnumerable<TSource>, IEnumerator<TSource>, TSource>(source, count);
+
+        public static Enumerable.TakeEnumerable<IEnumerable<TSource>, IEnumerator<TSource>, TSource> Take<TSource>(
+            this IEnumerable<TSource> source,
+            int count) 
+            => Enumerable.Take<IEnumerable<TSource>, IEnumerator<TSource>, TSource>(source, count);
+
         public static bool All<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate)
         {
             switch(source)

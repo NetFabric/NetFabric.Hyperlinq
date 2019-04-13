@@ -197,6 +197,12 @@ namespace NetFabric.Hyperlinq
             public int Count(Func<TResult, bool> predicate)
                 => ValueEnumerable.Count<SelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, TResult>, ValueEnumerator, TResult>(this, predicate);
 
+            public ValueEnumerable.SkipEnumerable<SelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, TResult>, ValueEnumerator, TResult> Skip(int count)
+                => ValueEnumerable.Skip<SelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, TResult>, ValueEnumerator, TResult>(this, count);
+
+            public ValueEnumerable.TakeEnumerable<SelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, TResult>, ValueEnumerator, TResult> Take(int count)
+                => ValueEnumerable.Take<SelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, TResult>, ValueEnumerator, TResult>(this, count);
+
             public bool All(Func<TResult, bool> predicate)
                 => ValueEnumerable.All<SelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, TResult>, ValueEnumerator, TResult>(this, predicate);
 

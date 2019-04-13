@@ -197,11 +197,11 @@ namespace NetFabric.Hyperlinq
                 public void Dispose() => enumerator?.Dispose();
             }
 
-            // public ValueReadOnlyCollection.SkipTakeEnumerable<SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>, ValueEnumerator, TSource> SkipTake(int count)
-            //     => ValueReadOnlyCollection.SkipTake<SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>, ValueEnumerator, TSource>(this, count);
+            public ValueReadOnlyCollection.SkipTakeEnumerable<SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>, ValueEnumerator, TSource> Skip(int count)
+                => ValueReadOnlyCollection.Skip<SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>, ValueEnumerator, TSource>(this, count);
 
-            // public SkipTakeEnumerable<TEnumerable, TEnumerator, TSource> SkipTake(int count)
-            //     => ReadOnlyCollection.SkipTake<TEnumerable, TEnumerator, TSource>(source, Math.Min(this.Count, count));
+            public ValueReadOnlyCollection.SkipTakeEnumerable<SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>, ValueEnumerator, TSource> Take(int count)
+                => ValueReadOnlyCollection.Take<SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>, ValueEnumerator, TSource>(this, count);
 
             public bool All(Func<TSource, bool> predicate)
                 => ValueReadOnlyCollection.All<SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>, ValueEnumerator, TSource>(this, predicate);

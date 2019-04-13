@@ -115,6 +115,12 @@ namespace NetFabric.Hyperlinq
             public int Count()
                 => ReadOnlyList.Count<TEnumerable, TSource>(source, predicate);
 
+            public ValueEnumerable.SkipEnumerable<WhereEnumerable<TEnumerable, TSource>, ValueEnumerator, TSource> Skip(int count)
+                => ValueEnumerable.Skip<WhereEnumerable<TEnumerable, TSource>, ValueEnumerator, TSource>(this, count);
+
+            public ValueEnumerable.TakeEnumerable<WhereEnumerable<TEnumerable, TSource>, ValueEnumerator, TSource> Take(int count)
+                => ValueEnumerable.Take<WhereEnumerable<TEnumerable,  TSource>, ValueEnumerator, TSource>(this, count);
+
             public int Count(Func<TSource, bool> predicate)
                 => ValueEnumerable.Count<WhereEnumerable<TEnumerable, TSource>, ValueEnumerator, TSource>(this, predicate);
 

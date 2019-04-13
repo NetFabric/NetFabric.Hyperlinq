@@ -39,6 +39,12 @@ namespace NetFabric.Hyperlinq
                 public void Dispose() { }
             }
 
+            public EmptyEnumerable<TSource> Skip(int count)
+                => this;
+
+            public EmptyEnumerable<TSource> Take(int count)
+                => this;
+
             public bool All(Func<TSource, bool> predicate)
                 => false;
 

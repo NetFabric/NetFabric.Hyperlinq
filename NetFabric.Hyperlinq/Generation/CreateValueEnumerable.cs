@@ -33,6 +33,12 @@ namespace NetFabric.Hyperlinq
             public int Count(Func<TSource, bool> predicate)
                 => Count<CreateValueEnumerable<TEnumerator, TSource>, TEnumerator, TSource>(this, predicate);
 
+            public ValueEnumerable.SkipEnumerable<CreateValueEnumerable<TEnumerator, TSource>, TEnumerator, TSource> Skip(int count)
+                => ValueEnumerable.Skip<CreateValueEnumerable<TEnumerator, TSource>, TEnumerator, TSource>(this, count);
+
+            public ValueEnumerable.TakeEnumerable<CreateValueEnumerable<TEnumerator, TSource>, TEnumerator, TSource> Take(int count)
+                => ValueEnumerable.Take<CreateValueEnumerable<TEnumerator, TSource>, TEnumerator, TSource>(this, count);
+
             public bool All(Func<TSource, bool> predicate)
                 => All<CreateValueEnumerable<TEnumerator, TSource>, TEnumerator, TSource>(this, predicate);
 

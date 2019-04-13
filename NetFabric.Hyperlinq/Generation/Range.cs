@@ -84,6 +84,12 @@ namespace NetFabric.Hyperlinq
                 public void Dispose() { }
             }
 
+            public ValueEnumerable.SkipEnumerable<RangeEnumerable, ValueEnumerator, int> Skip(int count)
+                => ValueEnumerable.Skip<RangeEnumerable, ValueEnumerator, int>(this, count);
+
+            public ValueEnumerable.TakeEnumerable<RangeEnumerable, ValueEnumerator, int> Take(int count)
+                => ValueEnumerable.Take<RangeEnumerable, ValueEnumerator, int>(this, count);
+
             public bool All(Func<int, bool> predicate)
                 => ValueEnumerable.All<RangeEnumerable, ValueEnumerator, int>(this, predicate);
 

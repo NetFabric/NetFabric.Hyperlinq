@@ -20,6 +20,16 @@ namespace NetFabric.Hyperlinq
             }
         }
 
+        public static ReadOnlyCollection.SkipTakeEnumerable<IReadOnlyCollection<TSource>, IEnumerator<TSource>, TSource> Skip<TSource>(
+            this IReadOnlyCollection<TSource> source,
+            int count) 
+            => ReadOnlyCollection.Skip<IReadOnlyCollection<TSource>, IEnumerator<TSource>, TSource>(source, count);
+
+        public static ReadOnlyCollection.SkipTakeEnumerable<IReadOnlyCollection<TSource>, IEnumerator<TSource>, TSource> Take<TSource>(
+            this IReadOnlyCollection<TSource> source,
+            int count) 
+            => ReadOnlyCollection.Take<IReadOnlyCollection<TSource>, IEnumerator<TSource>, TSource>(source, count);
+
         public static bool All<TSource>(this IReadOnlyCollection<TSource> source, Func<TSource, bool> predicate)
         {
             switch(source)
