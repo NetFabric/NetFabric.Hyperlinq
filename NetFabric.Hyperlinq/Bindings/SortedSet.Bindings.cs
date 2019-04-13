@@ -87,11 +87,8 @@ namespace NetFabric.Hyperlinq
         public static IReadOnlyCollection<TSource> AsEnumerable<TSource>(this SortedSet<TSource> source)
             => source;
 
-        public static Enumerable.AsValueEnumerableEnumerable<ValueWrapper<TSource>, SortedSet<TSource>.Enumerator, TSource> AsValueEnumerable<TSource>(this SortedSet<TSource> source)
-            => Enumerable.AsValueEnumerable<ValueWrapper<TSource>, SortedSet<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source));
-
-        public static ReadOnlyCollection.AsValueReadOnlyCollectionEnumerable<ValueWrapper<TSource>, SortedSet<TSource>.Enumerator, TSource> AsValueReadOnlyCollection<TSource>(this SortedSet<TSource> source)
-            => ReadOnlyCollection.AsValueReadOnlyCollection<ValueWrapper<TSource>, SortedSet<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source));
+        public static ReadOnlyCollection.AsValueEnumerableEnumerable<ValueWrapper<TSource>, SortedSet<TSource>.Enumerator, TSource> AsValueEnumerable<TSource>(this SortedSet<TSource> source)
+            => ReadOnlyCollection.AsValueEnumerable<ValueWrapper<TSource>, SortedSet<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source));
 
         public static TSource[] ToArray<TSource>(this SortedSet<TSource> source)
             => ReadOnlyCollection.ToArray<ValueWrapper<TSource>, SortedSet<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source));

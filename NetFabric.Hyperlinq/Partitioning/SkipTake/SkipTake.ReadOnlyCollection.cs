@@ -253,9 +253,6 @@ namespace NetFabric.Hyperlinq
             public SkipTakeEnumerable<TEnumerable, TEnumerator, TSource> AsValueEnumerable()
                 => this;
 
-            public SkipTakeEnumerable<TEnumerable, TEnumerator, TSource> AsValueReadOnlyCollection()
-                => this;
-
             public TSource[] ToArray()
                 => ValueReadOnlyCollection.ToArray<SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>, ValueEnumerator, TSource>(this);
 

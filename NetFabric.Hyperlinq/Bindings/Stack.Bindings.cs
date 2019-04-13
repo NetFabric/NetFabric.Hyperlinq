@@ -87,11 +87,8 @@ namespace NetFabric.Hyperlinq
         public static IReadOnlyCollection<TSource> AsEnumerable<TSource>(this Stack<TSource> source)
             => source;
 
-        public static Enumerable.AsValueEnumerableEnumerable<ValueWrapper<TSource>, Stack<TSource>.Enumerator, TSource> AsValueEnumerable<TSource>(this Stack<TSource> source)
-            => Enumerable.AsValueEnumerable<ValueWrapper<TSource>, Stack<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source));
-
-        public static ReadOnlyCollection.AsValueReadOnlyCollectionEnumerable<ValueWrapper<TSource>, Stack<TSource>.Enumerator, TSource> AsValueReadOnlyCollection<TSource>(this Stack<TSource> source)
-            => ReadOnlyCollection.AsValueReadOnlyCollection<ValueWrapper<TSource>, Stack<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source));
+        public static ReadOnlyCollection.AsValueEnumerableEnumerable<ValueWrapper<TSource>, Stack<TSource>.Enumerator, TSource> AsValueEnumerable<TSource>(this Stack<TSource> source)
+            => ReadOnlyCollection.AsValueEnumerable<ValueWrapper<TSource>, Stack<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source));
 
         public static TSource[] ToArray<TSource>(this Stack<TSource> source)
             => ReadOnlyCollection.ToArray<ValueWrapper<TSource>, Stack<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source));
