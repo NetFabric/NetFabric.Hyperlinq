@@ -7,10 +7,8 @@ namespace NetFabric.Hyperlinq
     {
         public static SkipEnumerable<TEnumerable, TEnumerator, TSource> Skip<TEnumerable, TEnumerator, TSource>(this TEnumerable source, int count)
             where TEnumerable : IEnumerable<TSource>
-            where TEnumerator: IEnumerator<TSource>
-        {
-            return new SkipEnumerable<TEnumerable, TEnumerator, TSource>(in source, count);
-        }
+            where TEnumerator : IEnumerator<TSource>
+            => new SkipEnumerable<TEnumerable, TEnumerator, TSource>(in source, count);
 
         public readonly struct SkipEnumerable<TEnumerable, TEnumerator, TSource>
             : IValueEnumerable<TSource, SkipEnumerable<TEnumerable, TEnumerator, TSource>.ValueEnumerator>
