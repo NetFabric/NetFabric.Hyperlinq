@@ -47,7 +47,7 @@ namespace NetFabric.Hyperlinq
                 {
                     if (counter > 0)
                     {
-                        if (enumerator.TryMoveNext())
+                        if (enumerator.TryMoveNext(out current))
                         {
                             counter--;
                             return true;
