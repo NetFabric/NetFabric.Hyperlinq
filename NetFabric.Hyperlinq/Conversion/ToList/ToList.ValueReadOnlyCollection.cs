@@ -12,7 +12,7 @@ namespace NetFabric.Hyperlinq
             var count = source.Count;
             var list = new List<TSource>(count);
             if(count != 0)
-                list.AddRange(source.AsEnumerable<TEnumerable, TEnumerator, TSource>());
+                list.AddRange(ValueReadOnlyCollection.AsEnumerable<TEnumerable, TEnumerator, TSource>(source));
             return list;
         }
     }
