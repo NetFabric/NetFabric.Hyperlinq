@@ -132,6 +132,9 @@ namespace NetFabric.Hyperlinq
             public IReadOnlyList<TSource> AsEnumerable()
                 => ValueReadOnlyList.AsEnumerable<RepeatEnumerable<TSource>, ValueEnumerator, TSource>(this);
 
+            public RepeatEnumerable<TSource> AsValueEnumerable()
+                => this;
+
             public TSource[] ToArray()
                 => ValueReadOnlyList.ToArray<RepeatEnumerable<TSource>, ValueEnumerator, TSource>(this);
 

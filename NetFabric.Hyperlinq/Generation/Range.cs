@@ -143,6 +143,9 @@ namespace NetFabric.Hyperlinq
             public IReadOnlyList<int> AsEnumerable()
                 => ValueReadOnlyList.AsEnumerable<RangeEnumerable, ValueEnumerator, int>(this);
 
+            public RangeEnumerable AsValueEnumerable()
+                => this;
+                
             public int[] ToArray()
             {
                 var array = new int[count];
