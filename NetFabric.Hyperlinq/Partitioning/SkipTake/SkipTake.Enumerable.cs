@@ -5,7 +5,7 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class Enumerable
     {
-        static SkipTakeEnumerable<TEnumerable, TEnumerator, TSource> SkipTake<TEnumerable, TEnumerator, TSource>(this TEnumerable source, int skipCount, int takeCount)
+        public static SkipTakeEnumerable<TEnumerable, TEnumerator, TSource> SkipTake<TEnumerable, TEnumerator, TSource>(this TEnumerable source, int skipCount, int takeCount)
             where TEnumerable : IEnumerable<TSource>
             where TEnumerator: IEnumerator<TSource>
         {

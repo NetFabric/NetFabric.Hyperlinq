@@ -24,8 +24,7 @@ namespace NetFabric.Hyperlinq
             internal SkipTakeEnumerable(in TEnumerable source, int skipCount, int takeCount)
             {
                 this.source = source;
-                this.skipCount = Math.Min(source.Count, Math.Max(0, skipCount));
-                this.takeCount = Math.Min(source.Count - this.skipCount, Math.Max(0, takeCount));
+                (this.skipCount, this.takeCount) = Utils.SkipTake(source.Count, skipCount, takeCount);
             }
 
             public int Count => takeCount;

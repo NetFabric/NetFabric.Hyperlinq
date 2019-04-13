@@ -9,12 +9,8 @@ namespace NetFabric.Hyperlinq
             if (count <= 0)
                 return source;
 
-            var length = source.Length;
-            var start = count < length ? count : length;
-            var newCount = length - count;
-            if (newCount < 0)
-                newCount = 0;
-            return source.Slice(start, newCount);
+            (var skipCount, var takeCount) = Utils.Skip(source.Length, count);
+            return source.Slice(skipCount, takeCount);
         }
 
         public static ReadOnlySpan<TSource> Skip<TSource>(this ReadOnlySpan<TSource> source, int count)
@@ -22,12 +18,8 @@ namespace NetFabric.Hyperlinq
             if (count <= 0)
                 return source;
 
-            var length = source.Length;
-            var start = count < length ? count : length;
-            var newCount = length - count;
-            if (newCount < 0)
-                newCount = 0;
-            return source.Slice(start, newCount);
+            (var skipCount, var takeCount) = Utils.Skip(source.Length, count);
+            return source.Slice(skipCount, takeCount);
         }
     }
 }
