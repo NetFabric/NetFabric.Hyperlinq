@@ -6,19 +6,19 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class ValueReadOnlyCollection
     {
-        public static IReadOnlyCollection<TSource> AsReadOnlyCollection<TEnumerable, TEnumerator, TSource>(this TEnumerable source)
+        public static IReadOnlyCollection<TSource> AsEnumerable<TEnumerable, TEnumerator, TSource>(this TEnumerable source)
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IValueEnumerator<TSource>
-            => new AsReadOnlyCollectionEnumerable<TEnumerable, TEnumerator, TSource>(source);
+            => new AsEnumerableEnumerable<TEnumerable, TEnumerator, TSource>(source);
 
-        class AsReadOnlyCollectionEnumerable<TEnumerable, TEnumerator, TSource>
+        class AsEnumerableEnumerable<TEnumerable, TEnumerator, TSource>
             : IReadOnlyCollection<TSource>
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IValueEnumerator<TSource>
         {
             readonly TEnumerable source;
 
-            internal AsReadOnlyCollectionEnumerable(in TEnumerable source)
+            internal AsEnumerableEnumerable(in TEnumerable source)
             {
                 this.source = source;
             }
@@ -34,7 +34,7 @@ namespace NetFabric.Hyperlinq
                 readonly TEnumerator enumerator;
                 TSource current;
 
-                internal Enumerator(AsReadOnlyCollectionEnumerable<TEnumerable, TEnumerator, TSource> enumerable)
+                internal Enumerator(AsEnumerableEnumerable<TEnumerable, TEnumerator, TSource> enumerable)
                 {
                     enumerator = enumerable.source.GetValueEnumerator();
                 }

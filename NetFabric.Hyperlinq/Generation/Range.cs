@@ -140,14 +140,8 @@ namespace NetFabric.Hyperlinq
             public int? SingleOrNull(Func<int, bool> predicate)
                 => ValueReadOnlyList.SingleOrNull<RangeEnumerable, ValueEnumerator, int>(this, predicate);
 
-            public IEnumerable<int> AsEnumerable()
-                => ValueEnumerable.AsEnumerable<RangeEnumerable, ValueEnumerator, int>(this);
-
-            public IReadOnlyCollection<int> AsReadOnlyCollection()
-                => ValueReadOnlyCollection.AsReadOnlyCollection<RangeEnumerable, ValueEnumerator, int>(this);
-
-            public IReadOnlyList<int> AsReadOnlyList()
-                => ValueReadOnlyList.AsReadOnlyList<RangeEnumerable, ValueEnumerator, int>(this);
+            public IReadOnlyList<int> AsEnumerable()
+                => ValueReadOnlyList.AsEnumerable<RangeEnumerable, ValueEnumerator, int>(this);
 
             public int[] ToArray()
             {

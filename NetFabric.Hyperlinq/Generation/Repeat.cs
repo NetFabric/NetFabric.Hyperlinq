@@ -129,14 +129,8 @@ namespace NetFabric.Hyperlinq
             public TSource SingleOrDefault(Func<TSource, bool> predicate) 
                 => ValueReadOnlyList.SingleOrDefault<RepeatEnumerable<TSource>, ValueEnumerator, TSource>(this, predicate);
 
-            public IEnumerable<TSource> AsEnumerable()
-                => ValueEnumerable.AsEnumerable<RepeatEnumerable<TSource>, ValueEnumerator, TSource>(this);
-
-            public IReadOnlyCollection<TSource> AsReadOnlyCollection()
-                => ValueReadOnlyCollection.AsReadOnlyCollection<RepeatEnumerable<TSource>, ValueEnumerator, TSource>(this);
-
-            public IReadOnlyList<TSource> AsReadOnlyList()
-                => ValueReadOnlyList.AsReadOnlyList<RepeatEnumerable<TSource>, ValueEnumerator, TSource>(this);
+            public IReadOnlyList<TSource> AsEnumerable()
+                => ValueReadOnlyList.AsEnumerable<RepeatEnumerable<TSource>, ValueEnumerator, TSource>(this);
 
             public TSource[] ToArray()
                 => ValueReadOnlyList.ToArray<RepeatEnumerable<TSource>, ValueEnumerator, TSource>(this);

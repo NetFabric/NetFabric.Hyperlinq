@@ -84,10 +84,7 @@ namespace NetFabric.Hyperlinq
             where TKey : struct
             => ReadOnlyCollection.SingleOrNull<ValueWrapper<TKey, TValue>, Dictionary<TKey, TValue>.KeyCollection.Enumerator, TKey>(new ValueWrapper<TKey, TValue>(source), predicate);
 
-        public static IEnumerable<TValue> AsEnumerable<TKey, TValue>(this Dictionary<TKey, TValue> source)
-            => source.Values;
-
-        public static IReadOnlyCollection<TValue> AsReadOnlyCollection<TKey, TValue>(this Dictionary<TKey, TValue> source)
+        public static IReadOnlyCollection<TValue> AsEnumerable<TKey, TValue>(this Dictionary<TKey, TValue> source)
             => source.Values;
 
         public static Enumerable.AsValueEnumerableEnumerable<ValueWrapper<TKey, TValue>, Dictionary<TKey, TValue>.KeyCollection.Enumerator, TKey> AsValueEnumerable<TKey, TValue>(this Dictionary<TKey, TValue>.KeyCollection source)

@@ -84,13 +84,7 @@ namespace NetFabric.Hyperlinq
             where TSource : struct
             => ReadOnlyList.SingleOrNull<IReadOnlyList<TSource>, TSource>(source, predicate);
 
-        public static IEnumerable<TSource> AsEnumerable<TSource>(this IReadOnlyList<TSource> source)
-            => source;
-
-        public static IReadOnlyCollection<TSource> AsReadOnlyCollection<TSource>(this IReadOnlyCollection<TSource> source)
-            => source;
-
-        public static IReadOnlyList<TSource> AsReadOnlyList<TSource>(this IReadOnlyList<TSource> source)
+        public static IReadOnlyList<TSource> AsEnumerable<TSource>(this IReadOnlyList<TSource> source)
             => source;
 
         public static Enumerable.AsValueEnumerableEnumerable<IReadOnlyList<TSource>, IEnumerator<TSource>,  TSource> AsValueEnumerable<TSource>(this IReadOnlyList<TSource> source)

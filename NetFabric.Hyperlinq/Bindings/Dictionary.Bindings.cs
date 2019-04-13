@@ -80,10 +80,7 @@ namespace NetFabric.Hyperlinq
         public static KeyValuePair<TKey, TValue>? SingleOrNull<TKey, TValue>(this Dictionary<TKey, TValue> source, Func<KeyValuePair<TKey, TValue>, bool> predicate)
             => ReadOnlyCollection.SingleOrNull<ValueWrapper<TKey, TValue>, Dictionary<TKey, TValue>.Enumerator, KeyValuePair<TKey, TValue>>(new ValueWrapper<TKey, TValue>(source), predicate);
 
-        public static IEnumerable<KeyValuePair<TKey, TValue>> AsEnumerable<TKey, TValue>(this Dictionary<TKey, TValue> source)
-            => source;
-
-        public static IReadOnlyCollection<KeyValuePair<TKey, TValue>> AsReadOnlyCollection<TKey, TValue>(this Dictionary<TKey, TValue> source)
+        public static IReadOnlyCollection<KeyValuePair<TKey, TValue>> AsEnumerable<TKey, TValue>(this Dictionary<TKey, TValue> source)
             => source;
 
         public static Enumerable.AsValueEnumerableEnumerable<ValueWrapper<TKey, TValue>, Dictionary<TKey, TValue>.Enumerator, KeyValuePair<TKey, TValue>> AsValueEnumerable<TKey, TValue>(this Dictionary<TKey, TValue> source)

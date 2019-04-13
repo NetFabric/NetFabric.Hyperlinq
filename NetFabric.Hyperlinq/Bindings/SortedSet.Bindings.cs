@@ -84,10 +84,7 @@ namespace NetFabric.Hyperlinq
             where TSource : struct
             => ReadOnlyCollection.SingleOrNull<ValueWrapper<TSource>, SortedSet<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
 
-        public static IEnumerable<TSource> AsEnumerable<TSource>(this SortedSet<TSource> source)
-            => source;
-
-        public static IReadOnlyCollection<TSource> AsReadOnlyCollection<TSource>(this SortedSet<TSource> source)
+        public static IReadOnlyCollection<TSource> AsEnumerable<TSource>(this SortedSet<TSource> source)
             => source;
 
         public static Enumerable.AsValueEnumerableEnumerable<ValueWrapper<TSource>, SortedSet<TSource>.Enumerator, TSource> AsValueEnumerable<TSource>(this SortedSet<TSource> source)
