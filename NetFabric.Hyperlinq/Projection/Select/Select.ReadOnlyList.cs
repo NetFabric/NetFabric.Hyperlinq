@@ -13,7 +13,7 @@ namespace NetFabric.Hyperlinq
         {
             if (selector is null) ThrowHelper.ThrowArgumentNullException(nameof(selector));
 
-            return new SelectEnumerable<TEnumerable, TSource, TResult>(source, selector);
+            return new SelectEnumerable<TEnumerable, TSource, TResult>(source, selector, 0, source.Count);
         }
 
         public readonly struct SelectEnumerable<TEnumerable, TSource, TResult>
@@ -22,37 +22,50 @@ namespace NetFabric.Hyperlinq
         {
             readonly TEnumerable source;
             readonly Func<TSource, TResult> selector;
+            readonly int skipCount;
+            readonly int takeCount;
 
-            internal SelectEnumerable(in TEnumerable source, Func<TSource, TResult> selector)
+            internal SelectEnumerable(in TEnumerable source, Func<TSource, TResult> selector, int skipCount, int takeCount)
             {
                 this.source = source;
                 this.selector = selector;
+                (this.skipCount, this.takeCount) = Utils.SkipTake(source.Count, skipCount, takeCount);
             }
 
             public Enumerator GetEnumerator() => new Enumerator(in this);
             public ValueEnumerator GetValueEnumerator() => new ValueEnumerator(in this);
 
-            public int Count => source.Count;
-            public TResult this[int index] => selector(source[index]);
+            public int Count => takeCount;
+
+            public TResult this[int index]
+            {
+                get
+                {
+                    if (index < 0 || index >= takeCount) 
+                        ThrowHelper.ThrowArgumentOutOfRangeException(nameof(index));
+
+                    return selector(source[index + skipCount]);
+                }
+            }
 
             public struct Enumerator 
             {
                 readonly TEnumerable source;
                 readonly Func<TSource, TResult> selector;
-                readonly int count;
+                readonly int end;
                 int index;
 
                 internal Enumerator(in SelectEnumerable<TEnumerable, TSource, TResult> enumerable)
                 {
                     source = enumerable.source;
                     selector = enumerable.selector;
-                    count = enumerable.source.Count;
-                    index = -1;
+                    end = enumerable.skipCount + enumerable.takeCount;
+                    index = enumerable.skipCount - 1;
                 }
 
                 public TResult Current => selector(source[index]);
 
-                public bool MoveNext() => ++index < count;
+                public bool MoveNext() => ++index < end;
             }
 
             public struct ValueEnumerator
@@ -60,21 +73,21 @@ namespace NetFabric.Hyperlinq
             {
                 readonly TEnumerable source;
                 readonly Func<TSource, TResult> selector;
-                readonly int count;
+                readonly int end;
                 int index;
 
                 internal ValueEnumerator(in SelectEnumerable<TEnumerable, TSource, TResult> enumerable)
                 {
                     source = enumerable.source;
                     selector = enumerable.selector;
-                    count = enumerable.source.Count;
-                    index = -1;
+                    end = enumerable.skipCount + enumerable.takeCount;
+                    index = enumerable.skipCount - 1;
                 }
 
                 public bool TryMoveNext(out TResult current)
                 {
                     index++;
-                    if (index < count)
+                    if (index < end)
                     {
                         current = selector(source[index]);
                         return true;
@@ -83,16 +96,16 @@ namespace NetFabric.Hyperlinq
                     return false;
                 }
 
-                public bool TryMoveNext() => ++index < count;
+                public bool TryMoveNext() => ++index < end;
 
                 public void Dispose() { }
             }
 
-            public ValueReadOnlyList.SkipTakeEnumerable<SelectEnumerable<TEnumerable, TSource, TResult>, ValueEnumerator, TResult> Skip(int count)
-                => ValueReadOnlyList.Skip<SelectEnumerable<TEnumerable, TSource, TResult>, ValueEnumerator, TResult>(this, count);
+            public SelectEnumerable<TEnumerable, TSource, TResult> Skip(int count)
+                => new SelectEnumerable<TEnumerable, TSource, TResult>(source, selector, skipCount + count, takeCount);
 
-            public ValueReadOnlyList.SkipTakeEnumerable<SelectEnumerable<TEnumerable, TSource, TResult>, ValueEnumerator, TResult> Take(int count)
-                => ValueReadOnlyList.Take<SelectEnumerable<TEnumerable, TSource, TResult>, ValueEnumerator, TResult>(this, count);
+            public SelectEnumerable<TEnumerable, TSource, TResult> Take(int count)
+                => new SelectEnumerable<TEnumerable, TSource, TResult>(source, selector, skipCount, takeCount + count);
 
             public bool All(Func<TResult, bool> predicate)
                 => ValueReadOnlyList.All<SelectEnumerable<TEnumerable, TSource, TResult>, ValueEnumerator, TResult>(this, predicate);

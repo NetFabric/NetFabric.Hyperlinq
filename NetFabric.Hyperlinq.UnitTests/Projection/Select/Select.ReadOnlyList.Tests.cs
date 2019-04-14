@@ -58,5 +58,44 @@ namespace NetFabric.Hyperlinq.UnitTests
                 }
             }
         }
+  
+        [Theory]
+        [MemberData(nameof(TestData.SelectSkip), MemberType = typeof(TestData))]
+        public void Select_With_Skip_Should_Succeed(IReadOnlyList<int> source, Func<int, int> selector, int skipCount, IReadOnlyList<int> expected)
+        {
+            // Arrange
+
+            // Act
+            var result = ReadOnlyList.Select(source, selector).Skip(skipCount);
+
+            // Assert
+            result.AsEnumerable().Should().Equal(expected);
+        }
+  
+        [Theory]
+        [MemberData(nameof(TestData.SelectTake), MemberType = typeof(TestData))]
+        public void Select_With_Take_Should_Succeed(IReadOnlyList<int> source, Func<int, int> selector, int takeCount, IReadOnlyList<int> expected)
+        {
+            // Arrange
+
+            // Act
+            var result = ReadOnlyList.Select(source, selector).Take(takeCount);
+
+            // Assert
+            result.AsEnumerable().Should().Equal(expected);
+        }
+  
+        [Theory]
+        [MemberData(nameof(TestData.SelectSkipTake), MemberType = typeof(TestData))]
+        public void Select_With_SkipTake_Should_Succeed(IReadOnlyList<int> source, Func<int, int> selector, int skipCount, int takeCount, IReadOnlyList<int> expected)
+        {
+            // Arrange
+
+            // Act
+            var result = ReadOnlyList.Select(source, selector).Skip(skipCount).Take(takeCount);
+
+            // Assert
+            result.AsEnumerable().Should().Equal(expected);
+        }
     }
 }
