@@ -4,7 +4,7 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class SpanExtensions
     {
-        public static WhereEnumerable<TSource> Where<TSource>(this Span<TSource> source, Func<TSource, bool> predicate) 
+        public static WhereEnumerable<TSource> Where<TSource>(this Span<TSource> source, Func<TSource, int, bool> predicate) 
         {
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
 
@@ -14,9 +14,9 @@ namespace NetFabric.Hyperlinq
         public readonly ref struct WhereEnumerable<TSource>
         {
             internal readonly Span<TSource> source;
-            internal readonly Func<TSource, bool> predicate;
+            internal readonly Func<TSource, int, bool> predicate;
 
-            internal WhereEnumerable(in Span<TSource> source, Func<TSource, bool> predicate)
+            internal WhereEnumerable(in Span<TSource> source, Func<TSource, int, bool> predicate)
             {
                 this.source = source;
                 this.predicate = predicate;
@@ -27,7 +27,7 @@ namespace NetFabric.Hyperlinq
             public ref struct Enumerator 
             {
                 readonly Span<TSource> source;
-                readonly Func<TSource, bool> predicate;
+                readonly Func<TSource, int, bool> predicate;
                 readonly int count;
                 int index;
 
@@ -43,13 +43,16 @@ namespace NetFabric.Hyperlinq
 
                 public bool MoveNext()
                 {
-                    index++;
-                    while (index < count)
+                    unchecked // always less than count
                     {
-                        if (predicate(source[index]))
-                            return true;
-
                         index++;
+                        while (index < count)
+                        {
+                            if (predicate(source[index], index))
+                                return true;
+
+                            index++;
+                        }
                     }
                     return false;
                 }
@@ -58,7 +61,7 @@ namespace NetFabric.Hyperlinq
             public int Count()
                 => source.Count(predicate);
 
-            public WhereSelectEnumerable<TSource, TResult> Select<TResult>(Func<TSource, TResult> selector)
+            public WhereSelectEnumerable<TSource, TResult> Select<TResult>(Func<TSource, int, TResult> selector)
                 => WhereSelect<TSource, TResult>(source, predicate, selector);
 
             public TSource First()

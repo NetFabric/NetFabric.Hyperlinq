@@ -26,7 +26,7 @@ namespace NetFabric.Hyperlinq.UnitTests
 
         [Theory]
         [MemberData(nameof(TestData.Select), MemberType = typeof(TestData))]
-        public void Select_With_ValidData_Should_Succeed(IEnumerable<int> source, Func<int, string> selector, IEnumerable<string> expected)
+        public void Select_With_ValidData_Should_Succeed(IEnumerable<int> source, Func<int, int, string> selector, IEnumerable<string> expected)
         {
             // Arrange
 

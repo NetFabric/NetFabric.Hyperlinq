@@ -5,6 +5,7 @@ using System.Collections.Generic;
 
 namespace NetFabric.Hyperlinq.Benchmarks
 {
+    [MemoryDiagnoser]
     [MarkdownExporterAttribute.GitHub]
     public class LambdaBenchmarks
     {
@@ -18,10 +19,10 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [Benchmark]
         public bool Local() 
         {
-            return Method(1, CombinePredicates());
+            return Method(1, CombinePredicates);
 
-            Func<int, bool> CombinePredicates() 
-                => item => predicate0(item) && predicate1(item);
+            bool CombinePredicates(int item) 
+                => predicate0(item) && predicate1(item);
         }
 
         static bool Method(int value, Func<int, bool> predicate)

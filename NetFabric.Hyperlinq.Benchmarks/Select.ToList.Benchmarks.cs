@@ -33,31 +33,31 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [BenchmarkCategory("Range")]
         [Benchmark]
         public List<int> Hyperlinq_Range() 
-            => hyperlinqRange.Select(item => item).ToList();
+            => hyperlinqRange.Select((item, _) => item).ToList();
 
         [BenchmarkCategory("Queue")]
         [Benchmark]
         public List<int> Hyperlinq_Queue() 
-            => queue.Select(item => item).ToList();
+            => queue.Select((item, _) => item).ToList();
 
         [BenchmarkCategory("Array")]
         [Benchmark]
         public List<int> Hyperlinq_Array() 
-            => array.Select(item => item).ToList();
+            => array.Select((item, _) => item).ToList();
 
         [BenchmarkCategory("List")]
         [Benchmark]
         public List<int> Hyperlinq_List() 
-            => list.Select(item => item).ToList();
+            => list.Select((item, _) => item).ToList();
 
         [BenchmarkCategory("Enumerable_Reference")]
         [Benchmark]
         public List<int> Hyperlinq_Enumerable_Reference()
-            => enumerableReference.Select(item => item).ToList();
+            => enumerableReference.Select((item, _) => item).ToList();
 
         [BenchmarkCategory("Enumerable_Value")]
         [Benchmark]
         public List<int> Hyperlinq_Enumerable_Value()        
-            => enumerableValue.Select(item => item).ToList();
+            => enumerableValue.Select((item, _) => item).ToList();
     }
 }

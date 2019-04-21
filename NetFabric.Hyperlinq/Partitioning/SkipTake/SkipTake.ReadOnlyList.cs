@@ -94,13 +94,13 @@ namespace NetFabric.Hyperlinq
             public ValueReadOnlyList.SkipTakeEnumerable<SkipTakeEnumerable<TEnumerable, TSource>, ValueEnumerator, TSource> Take(int count)
                 => ValueReadOnlyList.Take<SkipTakeEnumerable<TEnumerable, TSource>, ValueEnumerator, TSource>(this, count);
 
-            public bool All(Func<TSource, bool> predicate)
+            public bool All(Func<TSource, int, bool> predicate)
                 => ValueReadOnlyList.All<SkipTakeEnumerable<TEnumerable, TSource>, ValueEnumerator, TSource>(this, predicate);
 
             public bool Any()
                 => ValueReadOnlyList.Any<SkipTakeEnumerable<TEnumerable, TSource>, ValueEnumerator, TSource>(this);
 
-            public bool Any(Func<TSource, bool> predicate)
+            public bool Any(Func<TSource, int, bool> predicate)
                 => ValueReadOnlyList.Any<SkipTakeEnumerable<TEnumerable, TSource>, ValueEnumerator, TSource>(this, predicate);
 
             public bool Contains(TSource value)
@@ -109,30 +109,30 @@ namespace NetFabric.Hyperlinq
             public bool Contains(TSource value, IEqualityComparer<TSource> comparer)
                 => ValueReadOnlyList.Contains<SkipTakeEnumerable<TEnumerable, TSource>, ValueEnumerator, TSource>(this, value, comparer);
 
-            public ValueReadOnlyList.SelectEnumerable<SkipTakeEnumerable<TEnumerable, TSource>, ValueEnumerator, TSource, TResult> Select<TResult>(Func<TSource, TResult> selector)
+            public ValueReadOnlyList.SelectEnumerable<SkipTakeEnumerable<TEnumerable, TSource>, ValueEnumerator, TSource, TResult> Select<TResult>(Func<TSource, int, TResult> selector)
                  => ValueReadOnlyList.Select<SkipTakeEnumerable<TEnumerable, TSource>, ValueEnumerator, TSource, TResult>(this, selector);
 
-            public ValueEnumerable.WhereEnumerable<SkipTakeEnumerable<TEnumerable, TSource>, ValueEnumerator, TSource> Where(Func<TSource, bool> predicate)
+            public ValueEnumerable.WhereEnumerable<SkipTakeEnumerable<TEnumerable, TSource>, ValueEnumerator, TSource> Where(Func<TSource, int, bool> predicate)
                 => ValueEnumerable.Where<SkipTakeEnumerable<TEnumerable, TSource>, ValueEnumerator, TSource>(this, predicate);
 
             public TSource First()
                 => ValueReadOnlyList.First<SkipTakeEnumerable<TEnumerable, TSource>, ValueEnumerator, TSource>(this);
-            public TSource First(Func<TSource, bool> predicate)
+            public TSource First(Func<TSource, int, bool> predicate)
                 => ValueEnumerable.First<SkipTakeEnumerable<TEnumerable, TSource>, ValueEnumerator, TSource>(this, predicate);
 
             public TSource FirstOrDefault()
                 => ValueReadOnlyList.FirstOrDefault<SkipTakeEnumerable<TEnumerable, TSource>, ValueEnumerator, TSource>(this);
-            public TSource FirstOrDefault(Func<TSource, bool> predicate)
+            public TSource FirstOrDefault(Func<TSource, int, bool> predicate)
                 => ValueEnumerable.FirstOrDefault<SkipTakeEnumerable<TEnumerable, TSource>, ValueEnumerator, TSource>(this, predicate);
 
             public TSource Single()
                 => ValueReadOnlyList.Single<SkipTakeEnumerable<TEnumerable, TSource>, ValueEnumerator, TSource>(this);
-            public TSource Single(Func<TSource, bool> predicate)
+            public TSource Single(Func<TSource, int, bool> predicate)
                 => ValueReadOnlyList.Single<SkipTakeEnumerable<TEnumerable, TSource>, ValueEnumerator, TSource>(this, predicate);
 
             public TSource SingleOrDefault()
                 => ValueReadOnlyList.SingleOrDefault<SkipTakeEnumerable<TEnumerable, TSource>, ValueEnumerator, TSource>(this);
-            public TSource SingleOrDefault(Func<TSource, bool> predicate)
+            public TSource SingleOrDefault(Func<TSource, int, bool> predicate)
                 => ValueReadOnlyList.SingleOrDefault<SkipTakeEnumerable<TEnumerable, TSource>, ValueEnumerator, TSource>(this, predicate);
 
             public IReadOnlyList<TSource> AsEnumerable()
@@ -155,7 +155,7 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IReadOnlyList<TSource>
             => source.Count;
 
-        public static int Count<TEnumerable, TSource>(this SkipTakeEnumerable<TEnumerable, TSource> source, Func<TSource, bool> predicate)
+        public static int Count<TEnumerable, TSource>(this SkipTakeEnumerable<TEnumerable, TSource> source, Func<TSource, int, bool> predicate)
             where TEnumerable : IReadOnlyList<TSource>
             => ValueReadOnlyList.Count<SkipTakeEnumerable<TEnumerable, TSource>, SkipTakeEnumerable<TEnumerable, TSource>.ValueEnumerator, TSource>(source, predicate);
 
@@ -164,7 +164,7 @@ namespace NetFabric.Hyperlinq
             where TSource : struct
             => ValueReadOnlyList.FirstOrNull<SkipTakeEnumerable<TEnumerable, TSource>, SkipTakeEnumerable<TEnumerable, TSource>.ValueEnumerator, TSource>(source);
 
-        public static TSource? FirstOrNull<TEnumerable, TSource>(this SkipTakeEnumerable<TEnumerable, TSource> source, Func<TSource, bool> predicate)
+        public static TSource? FirstOrNull<TEnumerable, TSource>(this SkipTakeEnumerable<TEnumerable, TSource> source, Func<TSource, int, bool> predicate)
             where TEnumerable : IReadOnlyList<TSource>
             where TSource : struct
             => ValueEnumerable.FirstOrNull<SkipTakeEnumerable<TEnumerable, TSource>, SkipTakeEnumerable<TEnumerable, TSource>.ValueEnumerator, TSource>(source, predicate);
@@ -174,7 +174,7 @@ namespace NetFabric.Hyperlinq
             where TSource : struct
             => ValueReadOnlyList.SingleOrNull<SkipTakeEnumerable<TEnumerable, TSource>, SkipTakeEnumerable<TEnumerable, TSource>.ValueEnumerator, TSource>(source);
 
-        public static TSource? SingleOrNull<TEnumerable, TSource>(this SkipTakeEnumerable<TEnumerable, TSource> source, Func<TSource, bool> predicate)
+        public static TSource? SingleOrNull<TEnumerable, TSource>(this SkipTakeEnumerable<TEnumerable, TSource> source, Func<TSource, int, bool> predicate)
             where TEnumerable : IReadOnlyList<TSource>
             where TSource : struct
             => ValueReadOnlyList.SingleOrNull<SkipTakeEnumerable<TEnumerable, TSource>, SkipTakeEnumerable<TEnumerable, TSource>.ValueEnumerator, TSource>(source, predicate);

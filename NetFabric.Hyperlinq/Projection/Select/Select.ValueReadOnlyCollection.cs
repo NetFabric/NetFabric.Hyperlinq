@@ -7,7 +7,7 @@ namespace NetFabric.Hyperlinq
     {
         public static SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult> Select<TEnumerable, TEnumerator, TSource, TResult>(
             this TEnumerable source, 
-            Func<TSource, TResult> selector)
+            Func<TSource, int, TResult> selector)
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IValueEnumerator<TSource>
         {
@@ -22,9 +22,9 @@ namespace NetFabric.Hyperlinq
             where TEnumerator : struct, IValueEnumerator<TSource>
         {
             readonly TEnumerable source;
-            readonly Func<TSource, TResult> selector;
+            readonly Func<TSource, int, TResult> selector;
 
-            internal SelectEnumerable(in TEnumerable source, Func<TSource, TResult> selector)
+            internal SelectEnumerable(in TEnumerable source, Func<TSource, int, TResult> selector)
             {
                 this.source = source;
                 this.selector = selector;
@@ -39,19 +39,31 @@ namespace NetFabric.Hyperlinq
                 : IDisposable
             {
                 TEnumerator enumerator;
-                readonly Func<TSource, TResult> selector;
+                readonly Func<TSource, int, TResult> selector;
                 TSource current;
+                int index;
 
                 internal Enumerator(in SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult> enumerable)
                 {
                     enumerator = enumerable.source.GetValueEnumerator();
                     selector = enumerable.selector;
                     current = default;
+                    index = -1;
                 }
 
-                public TResult Current => selector(current);
+                public TResult Current => selector(current, index);
 
-                public bool MoveNext() => enumerator.TryMoveNext(out current);
+                public bool MoveNext()
+                {
+                    if (enumerator.TryMoveNext(out current))
+                    {
+                        checked { index++; }
+                        return true;
+                    }
+
+                    index = -1;
+                    return false;
+                }                
 
                 public void Dispose() => enumerator.Dispose();
             }
@@ -60,26 +72,40 @@ namespace NetFabric.Hyperlinq
                 : IValueEnumerator<TResult>
             {
                 TEnumerator enumerator;
-                readonly Func<TSource, TResult> selector;
+                readonly Func<TSource, int, TResult> selector;
+                int index;
 
                 internal ValueEnumerator(in SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult> enumerable)
                 {
                     enumerator = enumerable.source.GetValueEnumerator();
                     selector = enumerable.selector;
+                    index = -1;
                 }
 
                 public bool TryMoveNext(out TResult current)
                 {
                     if (enumerator.TryMoveNext(out var temp))
                     {
-                        current = selector(temp);
+                        checked { index++; }
+                        current = selector(temp, index);
                         return true;
                     }
                     current = default;
+                    index = -1;
                     return false;
-                }
+                }             
 
-                public bool TryMoveNext() => enumerator.TryMoveNext();
+                public bool TryMoveNext()
+                {
+                    if (enumerator.TryMoveNext())
+                    {
+                        checked { index++; }
+                        return true;
+                    }
+
+                    index = -1;
+                    return false;
+                }                
 
                 public void Dispose() => enumerator.Dispose();
             }
@@ -90,13 +116,13 @@ namespace NetFabric.Hyperlinq
             public ValueReadOnlyCollection.SkipTakeEnumerable<SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>, ValueEnumerator, TResult> Take(int count)
                 => ValueReadOnlyCollection.Take<SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>, ValueEnumerator, TResult>(this, count);
 
-            public bool All(Func<TResult, bool> predicate)
+            public bool All(Func<TResult, int, bool> predicate)
                 => ValueReadOnlyCollection.All<SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>, ValueEnumerator, TResult>(this, predicate);
 
             public bool Any()
                 => source.Count != 0;
 
-            public bool Any(Func<TResult, bool> predicate)
+            public bool Any(Func<TResult, int, bool> predicate)
                 => ValueReadOnlyCollection.Any<SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>, ValueEnumerator, TResult>(this, predicate);
 
             public bool Contains(TResult value)
@@ -105,36 +131,36 @@ namespace NetFabric.Hyperlinq
             public bool Contains(TResult value, IEqualityComparer<TResult> comparer)
                 => ValueReadOnlyCollection.Contains<SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>, ValueEnumerator, TResult>(this, value, comparer);
 
-            public ValueReadOnlyCollection.SelectEnumerable<TEnumerable, TEnumerator, TSource, TSelectorResult> Select<TSelectorResult>(Func<TResult, TSelectorResult> selector)
+            public ValueReadOnlyCollection.SelectEnumerable<TEnumerable, TEnumerator, TSource, TSelectorResult> Select<TSelectorResult>(Func<TResult, int, TSelectorResult> selector)
             {
                 var currentSelector = this.selector;
-                return ValueReadOnlyCollection.Select<TEnumerable, TEnumerator, TSource, TSelectorResult>(source, CombineSelectors());
+                return ValueReadOnlyCollection.Select<TEnumerable, TEnumerator, TSource, TSelectorResult>(source, CombinedSelectors);
 
-                Func<TSource, TSelectorResult> CombineSelectors() 
-                    => item => selector(currentSelector(item));
+                TSelectorResult CombinedSelectors(TSource item, int index) 
+                    => selector(currentSelector(item, index), index);
             }
 
-            public ValueEnumerable.WhereEnumerable<SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>, ValueEnumerator, TResult> Where(Func<TResult, bool> predicate)
+            public ValueEnumerable.WhereEnumerable<SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>, ValueEnumerator, TResult> Where(Func<TResult, int, bool> predicate)
                 => ValueEnumerable.Where<SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>, ValueEnumerator, TResult>(this, predicate);
 
             public TResult First()
-                => selector(ValueReadOnlyCollection.First<TEnumerable, TEnumerator, TSource>(source));
-            public TResult First(Func<TResult, bool> predicate)
+                => selector(ValueReadOnlyCollection.First<TEnumerable, TEnumerator, TSource>(source), 0);
+            public TResult First(Func<TResult, int, bool> predicate)
                 => ValueEnumerable.First<SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>, ValueEnumerator, TResult>(this, predicate);
 
             public TResult FirstOrDefault()
-                => selector(ValueReadOnlyCollection.FirstOrDefault<TEnumerable, TEnumerator, TSource>(source));
-            public TResult FirstOrDefault(Func<TResult, bool> predicate)
+                => selector(ValueReadOnlyCollection.FirstOrDefault<TEnumerable, TEnumerator, TSource>(source), 0);
+            public TResult FirstOrDefault(Func<TResult, int, bool> predicate)
                 => ValueEnumerable.FirstOrDefault<SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>, ValueEnumerator, TResult>(this, predicate);
 
             public TResult Single()
-                => selector(ValueReadOnlyCollection.Single<TEnumerable, TEnumerator, TSource>(source));
-            public TResult Single(Func<TResult, bool> predicate)
+                => selector(ValueReadOnlyCollection.Single<TEnumerable, TEnumerator, TSource>(source), 0);
+            public TResult Single(Func<TResult, int, bool> predicate)
                 => ValueEnumerable.Single<SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>, ValueEnumerator, TResult>(this, predicate);
 
             public TResult SingleOrDefault()
-                => selector(ValueReadOnlyCollection.SingleOrDefault<TEnumerable, TEnumerator, TSource>(source));
-            public TResult SingleOrDefault(Func<TResult, bool> predicate)
+                => selector(ValueReadOnlyCollection.SingleOrDefault<TEnumerable, TEnumerator, TSource>(source), 0);
+            public TResult SingleOrDefault(Func<TResult, int, bool> predicate)
                 => ValueEnumerable.SingleOrDefault<SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>, ValueEnumerator, TResult>(this, predicate);
 
             public IReadOnlyCollection<TResult> AsEnumerable()
@@ -155,7 +181,7 @@ namespace NetFabric.Hyperlinq
             where TEnumerator : struct, IValueEnumerator<TSource>
             => source.Count;
 
-        public static int Count<TEnumerable, TEnumerator, TSource, TResult>(this SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult> source, Func<TResult, bool> predicate)
+        public static int Count<TEnumerable, TEnumerator, TSource, TResult>(this SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult> source, Func<TResult, int, bool> predicate)
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IValueEnumerator<TSource>
             => ValueReadOnlyCollection.Count<SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>, SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>.ValueEnumerator, TResult>(source, predicate);
@@ -166,11 +192,11 @@ namespace NetFabric.Hyperlinq
             where TResult : struct
             => ValueReadOnlyCollection.FirstOrNull<SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>, SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>.ValueEnumerator, TResult>(source);
 
-        public static TResult? FirstOrNull<TEnumerable, TEnumerator, TSource, TResult>(this SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult> source, Func<TResult, bool> predicate)
+        public static TResult? FirstOrNull<TEnumerable, TEnumerator, TSource, TResult>(this SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult> source, Func<TResult, int, bool> predicate)
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IValueEnumerator<TSource>
             where TResult : struct
-            => ValueEnumerable.FirstOrNull<SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>, SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>.ValueEnumerator, TResult>(source, predicate);
+            => ValueReadOnlyCollection.FirstOrNull<SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>, SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>.ValueEnumerator, TResult>(source, predicate);
 
         public static TResult? SingleOrNull<TEnumerable, TEnumerator, TSource, TResult>(this SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult> source)
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
@@ -178,11 +204,11 @@ namespace NetFabric.Hyperlinq
             where TResult : struct
             => ValueReadOnlyCollection.SingleOrNull<SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>, SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>.ValueEnumerator, TResult>(source);
 
-        public static TResult? SingleOrNull<TEnumerable, TEnumerator, TSource, TResult>(this SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult> source, Func<TResult, bool> predicate)
+        public static TResult? SingleOrNull<TEnumerable, TEnumerator, TSource, TResult>(this SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult> source, Func<TResult, int, bool> predicate)
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IValueEnumerator<TSource>
             where TResult : struct
-            => ValueEnumerable.SingleOrNull<SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>, SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>.ValueEnumerator, TResult>(source, predicate);
+            => ValueReadOnlyCollection.SingleOrNull<SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>, SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>.ValueEnumerator, TResult>(source, predicate);
     }
 }
 

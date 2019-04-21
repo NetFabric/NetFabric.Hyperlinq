@@ -2,12 +2,12 @@ using System;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class Array
+    public static partial class SpanExtensions
     {
-        public static int Count<TSource>(this TSource[] source)
+        public static int Count<TSource>(this ReadOnlySpan<TSource> source)
             => source.Length;
 
-        public static int Count<TSource>(this TSource[] source, Func<TSource, int, bool> predicate)
+        public static int Count<TSource>(this ReadOnlySpan<TSource> source, Func<TSource, int, bool> predicate)
         {
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
 
@@ -16,7 +16,7 @@ namespace NetFabric.Hyperlinq
             for (var index = 0; index < length; index++)
             {
                 unchecked // always less than source.Length
-                {    
+                {                
                     if (predicate(source[index], index))
                         count++;
                 }

@@ -42,31 +42,31 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [BenchmarkCategory("Range")]
         [Benchmark]
         public int Hyperlinq_Range() 
-            => hyperlinqRange.Where(_ => true).Select(item => item).Count();
+            => hyperlinqRange.Where((_, __) => true).Select((item, _) => item).Count();
 
         [BenchmarkCategory("Queue")]
         [Benchmark]
         public int Hyperlinq_Queue() 
-            => queue.Where(_ => true).Select(item => item).Count();
+            => queue.Where((_, __) => true).Select((item, _) => item).Count();
 
         [BenchmarkCategory("Array")]
         [Benchmark]
         public int Hyperlinq_Array() 
-            => array.Where(_ => true).Select(item => item).Count();
+            => array.Where((_, __) => true).Select((item, _) => item).Count();
 
         [BenchmarkCategory("List")]
         [Benchmark]
         public int Hyperlinq_List() 
-            => list.Where(_ => true).Select(item => item).Count();
+            => list.Where((_, __) => true).Select((item, _) => item).Count();
 
         [BenchmarkCategory("Enumerable_Reference")]
         [Benchmark]
         public int Hyperlinq_Enumerable_Reference()
-            => enumerableReference.Where(_ => true).Select(item => item).Count();
+            => enumerableReference.Where((_, __) => true).Select((item, _) => item).Count();
 
         [BenchmarkCategory("Enumerable_Value")]
         [Benchmark]
         public int Hyperlinq_Enumerable_Value()
-            => enumerableValue.Where(_ => true).Select(item => item).Count();
+            => enumerableValue.Where((_, __) => true).Select((item, _) => item).Count();
     }
 }

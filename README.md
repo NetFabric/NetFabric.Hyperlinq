@@ -17,7 +17,7 @@ This is a re-implementation of LINQ with improved performance, mainly by not box
 
 - Aggregation
   - `Count()`
-  - `Count(Func<TSource, bool>)`
+  - `Count(Func<TSource, int, bool>)`
 - Conversion
   - `AsEnumerable()`
   - `AsValueEnumerable()`
@@ -25,19 +25,19 @@ This is a re-implementation of LINQ with improved performance, mainly by not box
   - `ToList()`
 - Element
   - `First()`
-  - `First(Func<TSource, bool>)`
+  - `First(Func<TSource, int, bool>)`
   - `FirstOrDefault()`
-  - `FirstOrDefault(Func<TSource, bool>)`
+  - `FirstOrDefault(Func<TSource, int, bool>)`
   - `FirstOrNull() where TSource : struct`
-  - `FirstOrNull(Func<TSource, bool>) where TSource : struct`
+  - `FirstOrNull(Func<TSource, int, bool>) where TSource : struct`
   - `Single()`
-  - `Single(Func<TSource, bool>)`
+  - `Single(Func<TSource, int, bool>)`
   - `SingleOrDefault()`
-  - `SingleOrDefault(Func<TSource, bool>)`
+  - `SingleOrDefault(Func<TSource, int, bool>)`
   - `SingleOrNull() where TSource : struct`
-  - `SingleOrNull(Func<TSource, bool>) where TSource : struct` 
+  - `SingleOrNull(Func<TSource, int, bool>) where TSource : struct` 
 - Filtering
-  - `Where(Func<TSource, bool>)`
+  - `Where(Func<TSource, int, bool>)`
 - Generation
   - `Create(Func<TEnumerator>)`
   - `Empty()`
@@ -45,15 +45,15 @@ This is a re-implementation of LINQ with improved performance, mainly by not box
   - `Repeat(TSource, int)`
   - `Return(TSource)`
 - Projection
-  - `Select(Func<TSource, TResult>)`
+  - `Select(Func<TSource, int, TResult>)`
   - `SelectMany(IValueEnumerable<TSource>)`
 - Partitioning
   - `Take(int)`
   - `Skip(int)`
 - Quantifier
-  - `All(Func<TSource, bool>)`
+  - `All(Func<TSource, int, bool>)`
   - `Any()`
-  - `Any(Func<TSource, bool>)`
+  - `Any(Func<TSource, int, bool>)`
   - `Contains(TSource)`
   - `Contains(TSource, IEqualityComparer<TSource>)`
 

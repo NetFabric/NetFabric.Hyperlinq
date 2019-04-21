@@ -4,7 +4,7 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class Array
     {
-        public static bool All<TSource>(this TSource[] source, Func<TSource, bool> predicate)
+        public static bool All<TSource>(this TSource[] source, Func<TSource, int, bool> predicate)
         {
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
 
@@ -13,7 +13,7 @@ namespace NetFabric.Hyperlinq
 
             for (var index = 0; index < length; index++)
             {
-                if (!predicate(source[index]))
+                if (!predicate(source[index], index))
                     return false;
             }
             return true;

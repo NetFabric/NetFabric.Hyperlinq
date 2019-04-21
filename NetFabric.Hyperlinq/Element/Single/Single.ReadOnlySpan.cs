@@ -6,7 +6,7 @@ namespace NetFabric.Hyperlinq
     public static partial class SpanExtensions
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ref TSource Single<TSource>(this Span<TSource> source)
+        public static ref readonly TSource Single<TSource>(this ReadOnlySpan<TSource> source)
         {
             var length = source.Length;
             if (length == 0) ThrowHelper.ThrowEmptySequence<TSource>();
@@ -15,7 +15,7 @@ namespace NetFabric.Hyperlinq
             return ref source[0];
         }
 
-        public static ref TSource Single<TSource>(this Span<TSource> source, Func<TSource, int, bool> predicate)
+        public static ref readonly TSource Single<TSource>(this ReadOnlySpan<TSource> source, Func<TSource, int, bool> predicate)
         {
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
 
@@ -24,7 +24,7 @@ namespace NetFabric.Hyperlinq
             {
                 if (predicate(source[index], index))
                 {
-                    ref var first = ref source[index];
+                    ref readonly var first = ref source[index];
 
                     for (index++; index < length; index++)
                     {
@@ -39,7 +39,7 @@ namespace NetFabric.Hyperlinq
             return ref source[0];
         }
 
-        public static ref TSource Single<TSource>(this Span<TSource> source, Func<TSource, int, bool> predicate, out int index)
+        public static ref readonly TSource Single<TSource>(this ReadOnlySpan<TSource> source, Func<TSource, int, bool> predicate, out int index)
         {
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
 
@@ -48,7 +48,7 @@ namespace NetFabric.Hyperlinq
             {
                 if (predicate(source[index], index))
                 {
-                    ref var first = ref source[index];
+                    ref readonly var first = ref source[index];
 
                     for (index++; index < length; index++)
                     {
@@ -64,7 +64,7 @@ namespace NetFabric.Hyperlinq
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ref readonly TSource SingleOrDefault<TSource>(this Span<TSource> source)
+        public static ref readonly TSource SingleOrDefault<TSource>(this ReadOnlySpan<TSource> source)
         {
             var length = source.Length;
             if (length == 0) return ref Default<TSource>.Value;
@@ -73,7 +73,7 @@ namespace NetFabric.Hyperlinq
             return ref source[0];
         }
 
-        public static ref readonly TSource SingleOrDefault<TSource>(this Span<TSource> source, Func<TSource, int, bool> predicate)
+        public static ref readonly TSource SingleOrDefault<TSource>(this ReadOnlySpan<TSource> source, Func<TSource, int, bool> predicate)
         {
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
 
@@ -96,7 +96,7 @@ namespace NetFabric.Hyperlinq
             return ref Default<TSource>.Value;
         }
 
-        public static ref readonly TSource SingleOrDefault<TSource>(this Span<TSource> source, Func<TSource, int, bool> predicate, out int index)
+        public static ref readonly TSource SingleOrDefault<TSource>(this ReadOnlySpan<TSource> source, Func<TSource, int, bool> predicate, out int index)
         {
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
 
@@ -121,7 +121,7 @@ namespace NetFabric.Hyperlinq
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static TSource? SingleOrNull<TSource>(this Span<TSource> source)
+        public static TSource? SingleOrNull<TSource>(this ReadOnlySpan<TSource> source)
             where TSource : struct
         {
             var length = source.Length;
@@ -132,11 +132,11 @@ namespace NetFabric.Hyperlinq
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static TSource? SingleOrNull<TSource>(this Span<TSource> source, Func<TSource, int, bool> predicate)
+        public static TSource? SingleOrNull<TSource>(this ReadOnlySpan<TSource> source, Func<TSource, int, bool> predicate)
             where TSource : struct
             => SingleOrNull<TSource>(source, predicate, out var _);
 
-        public static TSource? SingleOrNull<TSource>(this Span<TSource> source, Func<TSource, int, bool> predicate, out int index)
+        public static TSource? SingleOrNull<TSource>(this ReadOnlySpan<TSource> source, Func<TSource, int, bool> predicate, out int index)
             where TSource : struct
         {
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));

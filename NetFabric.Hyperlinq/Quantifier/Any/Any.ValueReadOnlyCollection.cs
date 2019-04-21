@@ -14,7 +14,7 @@ namespace NetFabric.Hyperlinq
             where TEnumerator : struct, IValueEnumerator<TSource>
             => source.Count != 0;
 
-        public static bool Any<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, bool> predicate)
+        public static bool Any<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, int, bool> predicate)
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IValueEnumerator<TSource>
         {
@@ -24,10 +24,16 @@ namespace NetFabric.Hyperlinq
 
             using (var enumerator = source.GetValueEnumerator())
             {
+                var index = 0;
                 while (enumerator.TryMoveNext(out var current))
                 {
-                    if (predicate(current))
-                        return true;
+                    unchecked // always less than source.Count
+                    {
+                        if (predicate(current, index))
+                            return true;
+
+                        index++;
+                    }
                 }
             }
             return false;

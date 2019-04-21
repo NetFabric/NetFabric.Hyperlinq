@@ -9,7 +9,7 @@ namespace NetFabric.Hyperlinq
         public static int Count<TSource>(this SortedSet<TSource> source)
             => source.Count;
 
-        public static int Count<TSource>(this SortedSet<TSource> source, Func<TSource, bool> predicate)
+        public static int Count<TSource>(this SortedSet<TSource> source, Func<TSource, int, bool> predicate)
             => ReadOnlyCollection.Count<ValueWrapper<TSource>, SortedSet<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
 
         public static ReadOnlyCollection.SkipTakeEnumerable<ValueWrapper<TSource>, SortedSet<TSource>.Enumerator, TSource> Skip<TSource>(this SortedSet<TSource> source, int count)
@@ -18,13 +18,13 @@ namespace NetFabric.Hyperlinq
         public static ReadOnlyCollection.SkipTakeEnumerable<ValueWrapper<TSource>, SortedSet<TSource>.Enumerator, TSource> Take<TSource>(this SortedSet<TSource> source, int count)
             => ReadOnlyCollection.Take<ValueWrapper<TSource>, SortedSet<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), count);
 
-        public static bool All<TSource>(this SortedSet<TSource> source, Func<TSource, bool> predicate)
+        public static bool All<TSource>(this SortedSet<TSource> source, Func<TSource, int, bool> predicate)
             => ReadOnlyCollection.All<ValueWrapper<TSource>, SortedSet<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
 
         public static bool Any<TSource>(this SortedSet<TSource> source)
             => source.Count != 0;
 
-        public static bool Any<TSource>(this SortedSet<TSource> source, Func<TSource, bool> predicate)
+        public static bool Any<TSource>(this SortedSet<TSource> source, Func<TSource, int, bool> predicate)
             => ReadOnlyCollection.Any<ValueWrapper<TSource>, SortedSet<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
 
         public static bool Contains<TSource>(this SortedSet<TSource> source, TSource value)
@@ -35,7 +35,7 @@ namespace NetFabric.Hyperlinq
 
         public static ReadOnlyCollection.SelectEnumerable<ValueWrapper<TSource>, SortedSet<TSource>.Enumerator, TSource, TResult> Select<TSource, TResult>(
             this SortedSet<TSource> source,
-            Func<TSource, TResult> selector) 
+            Func<TSource, int, TResult> selector) 
             => ReadOnlyCollection.Select<ValueWrapper<TSource>, SortedSet<TSource>.Enumerator, TSource, TResult>(new ValueWrapper<TSource>(source), selector);
 
         public static Enumerable.SelectManyEnumerable<ValueWrapper<TSource>,  SortedSet<TSource>.Enumerator,  TSource, TSubEnumerable, TSubEnumerator, TResult> SelectMany<TSource, TSubEnumerable, TSubEnumerator, TResult>(
@@ -47,46 +47,46 @@ namespace NetFabric.Hyperlinq
 
         public static Enumerable.WhereEnumerable<ValueWrapper<TSource>, SortedSet<TSource>.Enumerator, TSource> Where<TSource>(
             this SortedSet<TSource> source,
-            Func<TSource, bool> predicate) 
+            Func<TSource, int, bool> predicate) 
             => Enumerable.Where<ValueWrapper<TSource>, SortedSet<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
 
         public static TSource First<TSource, TValue>(this SortedSet<TSource> source)
             => ReadOnlyCollection.First<ValueWrapper<TSource>, SortedSet<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source));
 
-        public static TSource First<TSource, TValue>(this SortedSet<TSource> source, Func<TSource, bool> predicate)
+        public static TSource First<TSource, TValue>(this SortedSet<TSource> source, Func<TSource, int, bool> predicate)
             => ReadOnlyCollection.First<ValueWrapper<TSource>, SortedSet<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
 
         public static TSource FirstOrDefault<TSource, TValue>(this SortedSet<TSource> source)
             => ReadOnlyCollection.FirstOrDefault<ValueWrapper<TSource>, SortedSet<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source));
 
-        public static TSource FirstOrDefault<TSource, TValue>(this SortedSet<TSource> source, Func<TSource, bool> predicate)
+        public static TSource FirstOrDefault<TSource, TValue>(this SortedSet<TSource> source, Func<TSource, int, bool> predicate)
             => ReadOnlyCollection.FirstOrDefault<ValueWrapper<TSource>, SortedSet<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
 
         public static TSource? FirstOrNull<TSource, TValue>(this SortedSet<TSource> source)
             where TSource : struct
             => ReadOnlyCollection.FirstOrNull<ValueWrapper<TSource>, SortedSet<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source));
 
-        public static TSource? FirstOrNull<TSource, TValue>(this SortedSet<TSource> source, Func<TSource, bool> predicate)
+        public static TSource? FirstOrNull<TSource, TValue>(this SortedSet<TSource> source, Func<TSource, int, bool> predicate)
             where TSource : struct
             => ReadOnlyCollection.FirstOrNull<ValueWrapper<TSource>, SortedSet<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
 
         public static TSource Single<TSource, TValue>(this SortedSet<TSource> source)
             => ReadOnlyCollection.Single<ValueWrapper<TSource>, SortedSet<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source));
 
-        public static TSource Single<TSource, TValue>(this SortedSet<TSource> source, Func<TSource, bool> predicate)
+        public static TSource Single<TSource, TValue>(this SortedSet<TSource> source, Func<TSource, int, bool> predicate)
             => ReadOnlyCollection.Single<ValueWrapper<TSource>, SortedSet<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
 
         public static TSource SingleOrDefault<TSource, TValue>(this SortedSet<TSource> source)
             => ReadOnlyCollection.SingleOrDefault<ValueWrapper<TSource>, SortedSet<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source));
 
-        public static TSource SingleOrDefault<TSource, TValue>(this SortedSet<TSource> source, Func<TSource, bool> predicate)
+        public static TSource SingleOrDefault<TSource, TValue>(this SortedSet<TSource> source, Func<TSource, int, bool> predicate)
             => ReadOnlyCollection.SingleOrDefault<ValueWrapper<TSource>, SortedSet<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
 
         public static TSource? SingleOrNull<TSource, TValue>(this SortedSet<TSource> source)
             where TSource : struct
             => ReadOnlyCollection.SingleOrNull<ValueWrapper<TSource>, SortedSet<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source));
 
-        public static TSource? SingleOrNull<TSource, TValue>(this SortedSet<TSource> source, Func<TSource, bool> predicate)
+        public static TSource? SingleOrNull<TSource, TValue>(this SortedSet<TSource> source, Func<TSource, int, bool> predicate)
             where TSource : struct
             => ReadOnlyCollection.SingleOrNull<ValueWrapper<TSource>, SortedSet<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
 

@@ -27,9 +27,9 @@ namespace NetFabric.Hyperlinq.UnitTests
         public static TheoryData<int[], Func<int, Enumerable.RangeEnumerable>, int[]> IEnumerableData =>
             new TheoryData<int[], Func<int, Enumerable.RangeEnumerable>, int[]> 
             {
-                { new int[] {}, new Func<int, Enumerable.RangeEnumerable>(value => Enumerable.Range(0, value)), new int[] {} },
-                { new int[] { 1 }, new Func<int, Enumerable.RangeEnumerable>(value => Enumerable.Range(0, value)), new int[] { 0 } },
-                { new int[] { 1, 2, 3 }, new Func<int, Enumerable.RangeEnumerable>(value => Enumerable.Range(0, value)), new int[] { 0, 0, 1, 0, 1, 2 } },
+                { new int[] {}, value => Enumerable.Range(0, value), new int[] {} },
+                { new int[] { 1 }, value => Enumerable.Range(0, value), new int[] { 0 } },
+                { new int[] { 1, 2, 3 }, value => Enumerable.Range(0, value), new int[] { 0, 0, 1, 0, 1, 2 } },
             };
 
         // [Theory]

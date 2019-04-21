@@ -14,21 +14,27 @@ namespace NetFabric.Hyperlinq
             where TEnumerator : struct, IValueEnumerator<TSource>
             => source.Count;
 
-        public static int Count<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, bool> predicate)
+        public static int Count<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, int, bool> predicate)
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IValueEnumerator<TSource>
         {
             if (source.Count == 0) return 0;
 
             var count = 0;
-            using (var enumerator = source.GetValueEnumerator())
+            if (source.Count != 0)
             {
-                while (enumerator.TryMoveNext(out var current))
+                var index = 0;
+                using (var enumerator = source.GetValueEnumerator())
                 {
-                    checked
+                    while (enumerator.TryMoveNext(out var current))
                     {
-                        if (predicate(current))
-                            count++;
+                        unchecked // always less than source.Count
+                        {
+                            if (predicate(current, index))
+                                count++;
+                            
+                            index++;
+                        }
                     }
                 }
             }

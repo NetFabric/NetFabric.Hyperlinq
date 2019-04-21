@@ -9,7 +9,7 @@ namespace NetFabric.Hyperlinq
         public static int Count<TSource>(this IReadOnlyList<TSource> source)
             => source.Count;
 
-        public static int Count<TSource>(this IReadOnlyList<TSource> source, Func<TSource, bool> predicate)
+        public static int Count<TSource>(this IReadOnlyList<TSource> source, Func<TSource, int, bool> predicate)
             => ReadOnlyList.Count<IReadOnlyList<TSource>, TSource>(source, predicate);
 
         public static ReadOnlyList.SkipTakeEnumerable<IReadOnlyList<TSource>, TSource> Skip<TSource>(
@@ -22,13 +22,13 @@ namespace NetFabric.Hyperlinq
             int count) 
             => ReadOnlyList.Take<IReadOnlyList<TSource>, TSource>(source, count);
 
-        public static bool All<TSource>(this IReadOnlyList<TSource> source, Func<TSource, bool> predicate)
+        public static bool All<TSource>(this IReadOnlyList<TSource> source, Func<TSource, int, bool> predicate)
             => ReadOnlyList.All<IReadOnlyList<TSource>, TSource>(source, predicate);
 
         public static bool Any<TSource>(this IReadOnlyList<TSource> source)
             => source.Count != 0;
 
-        public static bool Any<TSource>(this IReadOnlyList<TSource> source, Func<TSource, bool> predicate)
+        public static bool Any<TSource>(this IReadOnlyList<TSource> source, Func<TSource, int, bool> predicate)
             => ReadOnlyList.Any<IReadOnlyList<TSource>, TSource>(source, predicate);
 
         public static bool Contains<TSource>(this IReadOnlyList<TSource> source, TSource value)
@@ -39,7 +39,7 @@ namespace NetFabric.Hyperlinq
 
         public static ReadOnlyList.SelectEnumerable<IReadOnlyList<TSource>, TSource, TResult> Select<TSource, TResult>(
             this IReadOnlyList<TSource> source,
-            Func<TSource, TResult> selector) 
+            Func<TSource, int, TResult> selector) 
             => ReadOnlyList.Select<IReadOnlyList<TSource>, TSource, TResult>(source, selector);
 
         public static ReadOnlyList.SelectManyEnumerable<IReadOnlyList<TSource>, TSource, TSubEnumerable, TSubEnumerator, TResult> SelectMany<TSource, TSubEnumerable, TSubEnumerator, TResult>(
@@ -51,46 +51,46 @@ namespace NetFabric.Hyperlinq
 
         public static ReadOnlyList.WhereEnumerable<IReadOnlyList<TSource>, TSource> Where<TSource>(
             this IReadOnlyList<TSource> source, 
-            Func<TSource, bool> predicate) 
+            Func<TSource, int, bool> predicate) 
             => ReadOnlyList.Where<IReadOnlyList<TSource>, TSource>(source, predicate);
 
         public static TSource First<TSource>(this IReadOnlyList<TSource> source)
             => ReadOnlyList.First<IReadOnlyList<TSource>, TSource>(source);
 
-        public static TSource First<TSource>(this IReadOnlyList<TSource> source, Func<TSource, bool> predicate)
+        public static TSource First<TSource>(this IReadOnlyList<TSource> source, Func<TSource, int, bool> predicate)
             => ReadOnlyList.First<IReadOnlyList<TSource>, TSource>(source, predicate);
 
         public static TSource FirstOrDefault<TSource>(this IReadOnlyList<TSource> source)
             => ReadOnlyList.FirstOrDefault<IReadOnlyList<TSource>, TSource>(source);
 
-        public static TSource FirstOrDefault<TSource>(this IReadOnlyList<TSource> source, Func<TSource, bool> predicate)
+        public static TSource FirstOrDefault<TSource>(this IReadOnlyList<TSource> source, Func<TSource, int, bool> predicate)
             => ReadOnlyList.FirstOrDefault<IReadOnlyList<TSource>, TSource>(source, predicate);
 
         public static TSource? FirstOrNull<TSource>(this IReadOnlyList<TSource> source)
             where TSource : struct
             => ReadOnlyList.FirstOrNull<IReadOnlyList<TSource>, TSource>(source);
 
-        public static TSource? FirstOrNull<TSource>(this IReadOnlyList<TSource> source, Func<TSource, bool> predicate)
+        public static TSource? FirstOrNull<TSource>(this IReadOnlyList<TSource> source, Func<TSource, int, bool> predicate)
             where TSource : struct
             => ReadOnlyList.FirstOrNull<IReadOnlyList<TSource>, TSource>(source, predicate);
 
         public static TSource Single<TSource>(this IReadOnlyList<TSource> source)
             => ReadOnlyList.Single<IReadOnlyList<TSource>, TSource>(source);
 
-        public static TSource Single<TSource>(this IReadOnlyList<TSource> source, Func<TSource, bool> predicate)
+        public static TSource Single<TSource>(this IReadOnlyList<TSource> source, Func<TSource, int, bool> predicate)
             => ReadOnlyList.Single<IReadOnlyList<TSource>, TSource>(source, predicate);
 
         public static TSource SingleOrDefault<TSource>(this IReadOnlyList<TSource> source)
             => ReadOnlyList.SingleOrDefault<IReadOnlyList<TSource>, TSource>(source);
 
-        public static TSource SingleOrDefault<TSource>(this IReadOnlyList<TSource> source, Func<TSource, bool> predicate)
+        public static TSource SingleOrDefault<TSource>(this IReadOnlyList<TSource> source, Func<TSource, int, bool> predicate)
             => ReadOnlyList.SingleOrDefault<IReadOnlyList<TSource>, TSource>(source, predicate);
 
         public static TSource? SingleOrNull<TSource>(this IReadOnlyList<TSource> source)
             where TSource : struct
             => ReadOnlyList.SingleOrNull<IReadOnlyList<TSource>, TSource>(source);
 
-        public static TSource? SingleOrNull<TSource>(this IReadOnlyList<TSource> source, Func<TSource, bool> predicate)
+        public static TSource? SingleOrNull<TSource>(this IReadOnlyList<TSource> source, Func<TSource, int, bool> predicate)
             where TSource : struct
             => ReadOnlyList.SingleOrNull<IReadOnlyList<TSource>, TSource>(source, predicate);
 

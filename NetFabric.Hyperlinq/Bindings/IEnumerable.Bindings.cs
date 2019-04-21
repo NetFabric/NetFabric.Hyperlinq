@@ -17,7 +17,7 @@ namespace NetFabric.Hyperlinq
             }
         }
 
-        public static int Count<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate)
+        public static int Count<TSource>(this IEnumerable<TSource> source, Func<TSource, int, bool> predicate)
         {
             switch(source)
             {
@@ -40,7 +40,7 @@ namespace NetFabric.Hyperlinq
             int count) 
             => Enumerable.Take<IEnumerable<TSource>, IEnumerator<TSource>, TSource>(source, count);
 
-        public static bool All<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate)
+        public static bool All<TSource>(this IEnumerable<TSource> source, Func<TSource, int, bool> predicate)
         {
             switch(source)
             {
@@ -64,7 +64,7 @@ namespace NetFabric.Hyperlinq
             }
         }
 
-        public static bool Any<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate)
+        public static bool Any<TSource>(this IEnumerable<TSource> source, Func<TSource, int, bool> predicate)
         {
             switch(source)
             {
@@ -105,7 +105,7 @@ namespace NetFabric.Hyperlinq
 
         public static Enumerable.SelectEnumerable<IEnumerable<TSource>, IEnumerator<TSource>, TSource, TResult> Select<TSource, TResult>(
             this IEnumerable<TSource> source,
-            Func<TSource, TResult> selector) 
+            Func<TSource, int, TResult> selector) 
             => Enumerable.Select<IEnumerable<TSource>, IEnumerator<TSource>, TSource, TResult>(source, selector);
 
         public static Enumerable.SelectManyEnumerable<IEnumerable<TSource>, IEnumerator<TSource>, TSource, TSubEnumerable, TSubEnumerator, TResult> SelectMany<TSource, TSubEnumerable, TSubEnumerator, TResult>(
@@ -117,7 +117,7 @@ namespace NetFabric.Hyperlinq
 
         public static Enumerable.WhereEnumerable<IEnumerable<TSource>, IEnumerator<TSource>, TSource> Where<TSource>(
             this IEnumerable<TSource> source, 
-            Func<TSource, bool> predicate) 
+            Func<TSource, int, bool> predicate) 
             => Enumerable.Where<IEnumerable<TSource>, IEnumerator<TSource>, TSource>(source, predicate);
 
         public static TSource First<TSource>(this IEnumerable<TSource> source)
@@ -133,7 +133,7 @@ namespace NetFabric.Hyperlinq
             }
         }
 
-        public static TSource First<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate)
+        public static TSource First<TSource>(this IEnumerable<TSource> source, Func<TSource, int, bool> predicate)
         {
             switch(source)
             {
@@ -159,7 +159,7 @@ namespace NetFabric.Hyperlinq
             }
         }
 
-        public static TSource FirstOrDefault<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate)
+        public static TSource FirstOrDefault<TSource>(this IEnumerable<TSource> source, Func<TSource, int, bool> predicate)
         {
             switch(source)
             {
@@ -186,7 +186,7 @@ namespace NetFabric.Hyperlinq
             }
         }
 
-        public static TSource? FirstOrNull<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate)
+        public static TSource? FirstOrNull<TSource>(this IEnumerable<TSource> source, Func<TSource, int, bool> predicate)
             where TSource : struct
         {
             switch(source)
@@ -213,7 +213,7 @@ namespace NetFabric.Hyperlinq
             }
         }
 
-        public static TSource Single<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate)
+        public static TSource Single<TSource>(this IEnumerable<TSource> source, Func<TSource, int, bool> predicate)
         {
             switch(source)
             {
@@ -239,7 +239,7 @@ namespace NetFabric.Hyperlinq
             }
         }
 
-        public static TSource SingleOrDefault<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate)
+        public static TSource SingleOrDefault<TSource>(this IEnumerable<TSource> source, Func<TSource, int, bool> predicate)
         {
             switch(source)
             {
@@ -266,7 +266,7 @@ namespace NetFabric.Hyperlinq
             }
         }
 
-        public static TSource? SingleOrNull<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate)
+        public static TSource? SingleOrNull<TSource>(this IEnumerable<TSource> source, Func<TSource, int, bool> predicate)
             where TSource : struct
         {
             switch(source)

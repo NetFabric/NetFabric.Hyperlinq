@@ -17,6 +17,7 @@
 
   <ItemGroup Condition="'$(TargetFramework)'=='netstandard2.0'">
     <Compile Remove="**\*.Span.cs" />
+    <Compile Remove="**\*.ReadOnlySpan.cs" />
   </ItemGroup>
 
   <ItemGroup>

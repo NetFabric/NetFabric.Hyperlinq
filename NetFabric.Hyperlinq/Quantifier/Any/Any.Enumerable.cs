@@ -9,13 +9,13 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IEnumerable<TSource>
             where TEnumerator : IEnumerator<TSource>
         {
-            using(var enumerator = (TEnumerator)source.GetEnumerator())
+            using (var enumerator = (TEnumerator)source.GetEnumerator())
             {
                 return enumerator.MoveNext();
             }
         }
 
-        public static bool Any<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, bool> predicate)
+        public static bool Any<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, int, bool> predicate)
             where TEnumerable : IEnumerable<TSource>
             where TEnumerator : IEnumerator<TSource>
         {
@@ -23,10 +23,16 @@ namespace NetFabric.Hyperlinq
 
             using (var enumerator = (TEnumerator)source.GetEnumerator())
             {
+                var index = 0;
                 while (enumerator.MoveNext())
                 {
-                    if (predicate(enumerator.Current))
-                        return true;
+                    checked
+                    {
+                        if (predicate(enumerator.Current, index))
+                            return true;
+
+                        index++;
+                    }
                 }
             }
             return false;

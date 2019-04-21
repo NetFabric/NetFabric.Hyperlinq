@@ -65,7 +65,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Hyperlinq_Empty_Select_ForEach()
         {
             var sum = 0;
-            foreach (var item in Enumerable.Empty<int>().Select(item => item))
+            foreach (var item in Enumerable.Empty<int>().Select((item, _) => item))
                 sum += item;
             return sum;
         }
@@ -74,7 +74,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [Benchmark]
         public int Hyperlinq_Empty_Select_For()
         {
-            var source = Enumerable.Empty<int>().Select(item => item);
+            var source = Enumerable.Empty<int>().Select((item, _) => item);
             var sum = 0;
             for (var index = 0; index < source.Count(); index++)
                 sum += source[index];
@@ -86,7 +86,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Linq_Empty_Where_ForEach()
         {
             var sum = 0;
-            foreach (var item in System.Linq.Enumerable.Where(System.Linq.Enumerable.Empty<int>(), _ => true))
+            foreach (var item in System.Linq.Enumerable.Where(System.Linq.Enumerable.Empty<int>(), (_, __) => true))
                 sum += item;
             return sum;
         }
@@ -96,7 +96,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Hyperlinq_Empty_Where_ForEach()
         {
             var sum = 0;
-            foreach (var item in Enumerable.Empty<int>().Where(_ => true))
+            foreach (var item in Enumerable.Empty<int>().Where((_, __) => true))
                 sum += item;
             return sum;
         }
@@ -106,7 +106,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Linq_Empty_Where_Select_ForEach()
         {
             var sum = 0;
-            foreach (var item in System.Linq.Enumerable.Select(System.Linq.Enumerable.Where(System.Linq.Enumerable.Empty<int>(), _ => true), item => item))
+            foreach (var item in System.Linq.Enumerable.Select(System.Linq.Enumerable.Where(System.Linq.Enumerable.Empty<int>(), (_, __) => true), (item, _) => item))
                 sum += item;
             return sum;
         }
@@ -116,7 +116,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Hyperlinq_Empty_Where_Select_ForEach()
         {
             var sum = 0;
-            foreach (var item in Enumerable.Empty<int>().Where(_ => true).Select(item => item))
+            foreach (var item in Enumerable.Empty<int>().Where((_, __) => true).Select((item, _) => item))
                 sum += item;
             return sum;
         }

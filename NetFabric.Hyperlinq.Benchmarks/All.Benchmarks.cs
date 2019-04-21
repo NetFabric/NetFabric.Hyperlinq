@@ -54,31 +54,31 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [BenchmarkCategory("Range")]
         [Benchmark]
         public bool Hyperlinq_Range() =>
-            hyperlinqRange.All(_ => true);
+            hyperlinqRange.All((_, __) => true);
 
         [BenchmarkCategory("Queue")]
         [Benchmark]
         public bool Hyperlinq_Queue() => 
-            queue.All(_ => true);
+            queue.All((_, __) => true);
 
         [BenchmarkCategory("Array")]
         [Benchmark]
         public bool Hyperlinq_Array() =>
-            array.All(_ => true);
+            array.All((_, __) => true);
 
         [BenchmarkCategory("List")]
         [Benchmark]
         public bool Hyperlinq_List() => 
-            list.All(_ => true);
+            list.All((_, __) => true);
 
         [BenchmarkCategory("Enumerable_Reference")]
         [Benchmark]
         public bool Hyperlinq_Enumerable_Reference() => 
-            enumerableReference.All(_ => true);
+            enumerableReference.All((_, __) => true);
 
         [BenchmarkCategory("Enumerable_Value")]
         [Benchmark]
         public bool Hyperlinq_Enumerable_Value() => 
-            enumerableValue.All<TestEnumerable.Enumerable, TestEnumerable.Enumerable.Enumerator, int>(_ => true);
+            enumerableValue.All<TestEnumerable.Enumerable, TestEnumerable.Enumerable.Enumerator, int>((_, __) => true);
     }
 }

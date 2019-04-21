@@ -6,7 +6,7 @@ namespace NetFabric.Hyperlinq
     {
         public static SelectEnumerable<TSource, TResult> Select<TSource, TResult>(
             this Span<TSource> source, 
-            Func<TSource, TResult> selector)
+            Func<TSource, int, TResult> selector)
         {
             if (selector is null) ThrowHelper.ThrowArgumentNullException(nameof(selector));
 
@@ -16,9 +16,9 @@ namespace NetFabric.Hyperlinq
         public readonly ref struct SelectEnumerable<TSource, TResult>
         {
             internal readonly Span<TSource> source;
-            internal readonly Func<TSource, TResult> selector;
+            internal readonly Func<TSource, int, TResult> selector;
 
-            internal SelectEnumerable(in Span<TSource> source, Func<TSource, TResult> selector)
+            internal SelectEnumerable(in Span<TSource> source, Func<TSource, int, TResult> selector)
             {
                 this.source = source;
                 this.selector = selector;
@@ -29,7 +29,7 @@ namespace NetFabric.Hyperlinq
             public ref struct Enumerator
             {
                 Span<TSource> source;
-                readonly Func<TSource, TResult> selector;
+                readonly Func<TSource, int, TResult> selector;
                 readonly int count;
                 int index;
 
@@ -41,7 +41,7 @@ namespace NetFabric.Hyperlinq
                     index = -1;
                 }
 
-                public TResult Current => selector(source[index]);
+                public TResult Current => selector(source[index], index);
 
                 public bool MoveNext() => ++index < count;
             }
@@ -50,16 +50,16 @@ namespace NetFabric.Hyperlinq
                 => source.Length;
 
             public TResult First()
-                => selector(source.First());
+                => selector(source.First(), 0);
 
             public TResult FirstOrDefault()
-                => selector(source.FirstOrDefault());
+                => selector(source.FirstOrDefault(), 0);
 
             public TResult Single()
-                => selector(source.Single());
+                => selector(source.Single(), 0);
 
             public TResult SingleOrDefault()
-                => selector(source.SingleOrDefault());
+                => selector(source.SingleOrDefault(), 0);
         }
 
         public static TResult? FirstOrNull<TSource, TResult>(this SelectEnumerable<TSource, TResult> source)
@@ -68,7 +68,7 @@ namespace NetFabric.Hyperlinq
             var span = source.source;
             if (span.Length == 0) return null;
 
-            return source.selector(span[0]);
+            return source.selector(span[0], 0);
         }
 
         public static TResult? SingleOrNull<TSource, TResult>(this SelectEnumerable<TSource, TResult> source)
@@ -79,7 +79,7 @@ namespace NetFabric.Hyperlinq
             if (length == 0) return null;
             if (length > 1) ThrowHelper.ThrowNotSingleSequence<TSource>();
 
-            return source.selector(span[0]);
+            return source.selector(span[0], 0);
         }
     }
 }

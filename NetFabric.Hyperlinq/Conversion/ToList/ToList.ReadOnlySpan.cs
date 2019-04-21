@@ -5,7 +5,7 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class SpanExtensions
     {
-        public static List<TSource> ToList<TSource>(this Span<TSource> source)
+        public static List<TSource> ToList<TSource>(this ReadOnlySpan<TSource> source)
         {
             var length = source.Length;
             var list = new List<TSource>(length);

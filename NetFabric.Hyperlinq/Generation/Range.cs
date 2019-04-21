@@ -7,7 +7,7 @@ namespace NetFabric.Hyperlinq
     {
         public static RangeEnumerable Range(int start, int count)
         {
-            var max = ((long)start) + count - 1;
+            var max = ((int)start) + count - 1;
             if (count < 0 || max > int.MaxValue) ThrowHelper.ThrowArgumentOutOfRangeException(nameof(count));
 
             return new RangeEnumerable(start, count);
@@ -93,13 +93,13 @@ namespace NetFabric.Hyperlinq
             public RangeEnumerable Take(int count)
                 => Range(start, Utils.Take(this.count, count));
 
-            public bool All(Func<int, bool> predicate)
+            public bool All(Func<int, int, bool> predicate)
                 => ValueEnumerable.All<RangeEnumerable, ValueEnumerator, int>(this, predicate);
 
             public bool Any()
                 => count != 0;
 
-            public bool Any(Func<int, bool> predicate)
+            public bool Any(Func<int, int, bool> predicate)
                 => ValueEnumerable.Any<RangeEnumerable, ValueEnumerator, int>(this, predicate);
 
             public bool Contains(int value)
@@ -108,7 +108,7 @@ namespace NetFabric.Hyperlinq
             public bool Contains(int value, IEqualityComparer<int> comparer)
                 => ValueEnumerable.Contains<RangeEnumerable, ValueEnumerator, int>(this, value, comparer);
 
-            public ValueReadOnlyList.SelectEnumerable<RangeEnumerable, ValueEnumerator, int, TResult> Select<TResult>(Func<int, TResult> selector) 
+            public ValueReadOnlyList.SelectEnumerable<RangeEnumerable, ValueEnumerator, int, TResult> Select<TResult>(Func<int, int, TResult> selector) 
                 => ValueReadOnlyList.Select<RangeEnumerable, ValueEnumerator, int, TResult>(this, selector);
 
             public ValueReadOnlyList.SelectManyEnumerable<RangeEnumerable, ValueEnumerator, int, TSubEnumerable, TSubEnumerator, TResult> SelectMany<TSubEnumerable, TSubEnumerator, TResult>(Func<int, TSubEnumerable> selector) 
@@ -116,37 +116,37 @@ namespace NetFabric.Hyperlinq
                 where TSubEnumerator : struct, IValueEnumerator<TResult>
                 => ValueReadOnlyList.SelectMany<RangeEnumerable, ValueEnumerator, int, TSubEnumerable, TSubEnumerator, TResult>(this, selector);
 
-            public ValueReadOnlyList.WhereEnumerable<RangeEnumerable, ValueEnumerator, int> Where(Func<int, bool> predicate) 
+            public ValueReadOnlyList.WhereEnumerable<RangeEnumerable, ValueEnumerator, int> Where(Func<int, int, bool> predicate) 
                 => ValueReadOnlyList.Where<RangeEnumerable, ValueEnumerator, int>(this, predicate);
 
             public int First() 
                 => (count > 0) ? start : ThrowHelper.ThrowEmptySequence<int>();
-            public int First(Func<int, bool> predicate) 
+            public int First(Func<int, int, bool> predicate) 
                 => ValueReadOnlyList.First<RangeEnumerable, ValueEnumerator, int>(this, predicate);
 
             public int FirstOrDefault()
                 => (count > 0) ? start : default;
-            public int FirstOrDefault(Func<int, bool> predicate) 
+            public int FirstOrDefault(Func<int, int, bool> predicate) 
                 => ValueReadOnlyList.FirstOrDefault<RangeEnumerable, ValueEnumerator, int>(this, predicate);
 
             public int? FirstOrNull()
                 => (count > 0) ? start : (int?)null;
-            public int? FirstOrNull(Func<int, bool> predicate)
+            public int? FirstOrNull(Func<int, int, bool> predicate)
                 => ValueReadOnlyList.FirstOrNull<RangeEnumerable, ValueEnumerator, int>(this, predicate);
 
             public int Single()
                 => (count == 0) ? ThrowHelper.ThrowEmptySequence<int>() : ((count == 1) ? start : ThrowHelper.ThrowNotSingleSequence<int>());
-            public int Single(Func<int, bool> predicate) 
+            public int Single(Func<int, int, bool> predicate) 
                 => ValueReadOnlyList.Single<RangeEnumerable, ValueEnumerator, int>(this, predicate);
 
             public int SingleOrDefault()
                 => (count == 0) ? default : ((count == 1) ? start : ThrowHelper.ThrowNotSingleSequence<int>());
-            public int SingleOrDefault(Func<int, bool> predicate) 
+            public int SingleOrDefault(Func<int, int, bool> predicate) 
                 => ValueReadOnlyList.SingleOrDefault<RangeEnumerable, ValueEnumerator, int>(this, predicate);
 
             public int? SingleOrNull()
                 => (count == 0) ? null : ((count == 1) ? start : ThrowHelper.ThrowNotSingleSequence<int?>());
-            public int? SingleOrNull(Func<int, bool> predicate)
+            public int? SingleOrNull(Func<int, int, bool> predicate)
                 => ValueReadOnlyList.SingleOrNull<RangeEnumerable, ValueEnumerator, int>(this, predicate);
 
             public IReadOnlyList<int> AsEnumerable()
@@ -176,18 +176,18 @@ namespace NetFabric.Hyperlinq
         public static int Count(this RangeEnumerable source)
             => source.Count;
 
-        public static int Count(this RangeEnumerable source, Func<int, bool> predicate)
+        public static int Count(this RangeEnumerable source, Func<int, int, bool> predicate)
             => ValueReadOnlyList.Count<RangeEnumerable, RangeEnumerable.ValueEnumerator, int>(source, predicate);
 
         public static int? FirstOrNull(this RangeEnumerable source)
             => ValueReadOnlyList.FirstOrNull<RangeEnumerable, RangeEnumerable.ValueEnumerator, int>(source);
 
-        public static int? FirstOrNull(this RangeEnumerable source, Func<int, bool> predicate)
+        public static int? FirstOrNull(this RangeEnumerable source, Func<int, int, bool> predicate)
             => ValueReadOnlyList.FirstOrNull<RangeEnumerable, RangeEnumerable.ValueEnumerator, int>(source, predicate);
         public static int? SingleOrNull(this RangeEnumerable source)
             => ValueReadOnlyList.SingleOrNull<RangeEnumerable, RangeEnumerable.ValueEnumerator, int>(source);
 
-        public static int? SingleOrNull(this RangeEnumerable source, Func<int, bool> predicate)
+        public static int? SingleOrNull(this RangeEnumerable source, Func<int, int, bool> predicate)
             => ValueReadOnlyList.SingleOrNull<RangeEnumerable, RangeEnumerable.ValueEnumerator, int>(source, predicate);
     }
 }

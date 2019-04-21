@@ -10,19 +10,25 @@ namespace NetFabric.Hyperlinq
             where TEnumerator : IEnumerator<TSource>
             => source.Count;
 
-        public static int Count<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, bool> predicate)
+        public static int Count<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, int, bool> predicate)
             where TEnumerable : IReadOnlyCollection<TSource>
             where TEnumerator : IEnumerator<TSource>
         {
             var count = 0;
             if (source.Count != 0)
             {
+                var index = 0;
                 using (var enumerator = (TEnumerator)source.GetEnumerator())
                 {
                     while (enumerator.MoveNext())
                     {
-                        if (predicate(enumerator.Current))
-                            count++;
+                        unchecked // always less than source.Count
+                        {
+                            if (predicate(enumerator.Current, index))
+                                count++;
+
+                            index++;
+                        }
                     }
                 }
             }

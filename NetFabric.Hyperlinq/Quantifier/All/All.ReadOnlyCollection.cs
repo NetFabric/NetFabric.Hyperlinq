@@ -5,7 +5,7 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class ReadOnlyCollection
     {
-        public static bool All<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, bool> predicate)
+        public static bool All<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, int, bool> predicate)
             where TEnumerable : IReadOnlyCollection<TSource>
             where TEnumerator : IEnumerator<TSource>
         {
@@ -15,10 +15,16 @@ namespace NetFabric.Hyperlinq
 
             using (var enumerator = (TEnumerator)source.GetEnumerator())
             {
+                var index = 0;
                 while (enumerator.MoveNext())
                 {
-                    if (!predicate(enumerator.Current))
-                        return false;
+                    unchecked // always less than source.Count
+                    {
+                        if (!predicate(enumerator.Current, index))
+                            return false;
+
+                        index++;
+                    }
                 }
             }
             return true;

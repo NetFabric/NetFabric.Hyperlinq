@@ -68,18 +68,18 @@ namespace NetFabric.Hyperlinq.UnitTests
             result.Should().Be(expected);
         }
 
-        public static TheoryData<int[], Func<int, bool>, int> FirstPredicateData =>
-            new TheoryData<int[], Func<int, bool>, int>
+        public static TheoryData<int[], Func<int, int, bool>, int> FirstPredicateData =>
+            new TheoryData<int[], Func<int, int, bool>, int>
             {
-                { new int[] { 1 }, _ => true, 1 },
-                { new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 }, _ => true, 1 },
-                { new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 }, value => value > 5, 6 },
+                { new int[] { 1 }, (_, __) => true, 1 },
+                { new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 }, (_, __) => true, 1 },
+                { new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 }, (value, _) => value > 5, 6 },
             };
 
 
         [Theory]
         [MemberData(nameof(FirstPredicateData))]
-        public void FirstPredicate_With_ValidIEnumerable_Should_Succeed(IEnumerable<int> source, Func<int, bool> predicate, int expected)
+        public void FirstPredicate_With_ValidIEnumerable_Should_Succeed(IEnumerable<int> source, Func<int, int, bool> predicate, int expected)
         {
             // Arrange
 
@@ -92,7 +92,7 @@ namespace NetFabric.Hyperlinq.UnitTests
 
         [Theory]
         [MemberData(nameof(FirstPredicateData))]
-        public void FirstPredicate_With_ValidIReadOnlyCollection_Should_Succeed(IReadOnlyCollection<int> source, Func<int, bool> predicate, int expected)
+        public void FirstPredicate_With_ValidIReadOnlyCollection_Should_Succeed(IReadOnlyCollection<int> source, Func<int, int, bool> predicate, int expected)
         {
             // Arrange
 
@@ -105,7 +105,7 @@ namespace NetFabric.Hyperlinq.UnitTests
 
         [Theory]
         [MemberData(nameof(FirstPredicateData))]
-        public void FirstPredicate_With_ValidIReadOnlyList_Should_Succeed(IReadOnlyList<int> source, Func<int, bool> predicate, int expected)
+        public void FirstPredicate_With_ValidIReadOnlyList_Should_Succeed(IReadOnlyList<int> source, Func<int, int, bool> predicate, int expected)
         {
             // Arrange
 

@@ -26,7 +26,7 @@ namespace NetFabric.Hyperlinq.UnitTests
 
         [Theory]
         [MemberData(nameof(TestData.Select), MemberType = typeof(TestData))]
-        public void Select_With_ValidData_Should_Succeed(IReadOnlyList<int> source, Func<int, string> selector, IReadOnlyList<string> expected)
+        public void Select_With_ValidData_Should_Succeed(IReadOnlyList<int> source, Func<int, int, string> selector, IReadOnlyList<string> expected)
         {
             // Arrange
 
@@ -61,7 +61,7 @@ namespace NetFabric.Hyperlinq.UnitTests
   
         [Theory]
         [MemberData(nameof(TestData.SelectSkip), MemberType = typeof(TestData))]
-        public void Select_With_Skip_Should_Succeed(IReadOnlyList<int> source, Func<int, int> selector, int skipCount, IReadOnlyList<int> expected)
+        public void Select_With_Skip_Should_Succeed(IReadOnlyList<int> source, Func<int, int, int> selector, int skipCount, IReadOnlyList<int> expected)
         {
             // Arrange
 
@@ -74,7 +74,7 @@ namespace NetFabric.Hyperlinq.UnitTests
   
         [Theory]
         [MemberData(nameof(TestData.SelectTake), MemberType = typeof(TestData))]
-        public void Select_With_Take_Should_Succeed(IReadOnlyList<int> source, Func<int, int> selector, int takeCount, IReadOnlyList<int> expected)
+        public void Select_With_Take_Should_Succeed(IReadOnlyList<int> source, Func<int, int, int> selector, int takeCount, IReadOnlyList<int> expected)
         {
             // Arrange
 
@@ -87,7 +87,7 @@ namespace NetFabric.Hyperlinq.UnitTests
   
         [Theory]
         [MemberData(nameof(TestData.SelectSkipTake), MemberType = typeof(TestData))]
-        public void Select_With_SkipTake_Should_Succeed(IReadOnlyList<int> source, Func<int, int> selector, int skipCount, int takeCount, IReadOnlyList<int> expected)
+        public void Select_With_SkipTake_Should_Succeed(IReadOnlyList<int> source, Func<int, int, int> selector, int skipCount, int takeCount, IReadOnlyList<int> expected)
         {
             // Arrange
 

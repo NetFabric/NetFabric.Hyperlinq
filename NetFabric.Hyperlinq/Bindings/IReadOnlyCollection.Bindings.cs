@@ -9,7 +9,7 @@ namespace NetFabric.Hyperlinq
         public static int Count<TSource>(this IReadOnlyCollection<TSource> source)
             => source.Count;
 
-        public static int Count<TSource>(this IReadOnlyCollection<TSource> source, Func<TSource, bool> predicate)
+        public static int Count<TSource>(this IReadOnlyCollection<TSource> source, Func<TSource, int, bool> predicate)
         {
             switch(source)
             {
@@ -30,7 +30,7 @@ namespace NetFabric.Hyperlinq
             int count) 
             => ReadOnlyCollection.Take<IReadOnlyCollection<TSource>, IEnumerator<TSource>, TSource>(source, count);
 
-        public static bool All<TSource>(this IReadOnlyCollection<TSource> source, Func<TSource, bool> predicate)
+        public static bool All<TSource>(this IReadOnlyCollection<TSource> source, Func<TSource, int, bool> predicate)
         {
             switch(source)
             {
@@ -44,7 +44,7 @@ namespace NetFabric.Hyperlinq
         public static bool Any<TSource>(this IReadOnlyCollection<TSource> source)
             => source.Count != 0;
 
-        public static bool Any<TSource>(this IReadOnlyCollection<TSource> source, Func<TSource, bool> predicate)
+        public static bool Any<TSource>(this IReadOnlyCollection<TSource> source, Func<TSource, int, bool> predicate)
         {
             switch(source)
             {
@@ -79,7 +79,7 @@ namespace NetFabric.Hyperlinq
 
         public static ReadOnlyCollection.SelectEnumerable<IReadOnlyCollection<TSource>, IEnumerator<TSource>, TSource, TResult> Select<TSource, TResult>(
             this IReadOnlyCollection<TSource> source,
-            Func<TSource, TResult> selector) 
+            Func<TSource, int, TResult> selector) 
             => ReadOnlyCollection.Select<IReadOnlyCollection<TSource>, IEnumerator<TSource>, TSource, TResult>(source, selector);
 
         public static Enumerable.SelectManyEnumerable<IReadOnlyCollection<TSource>, IEnumerator<TSource>, TSource, TSubEnumerable, TSubEnumerator, TResult> SelectMany<TSource, TSubEnumerable, TSubEnumerator, TResult>(
@@ -91,7 +91,7 @@ namespace NetFabric.Hyperlinq
 
         public static Enumerable.WhereEnumerable<IReadOnlyCollection<TSource>, IEnumerator<TSource>, TSource> Where<TSource>(
             this IReadOnlyCollection<TSource> source, 
-            Func<TSource, bool> predicate) 
+            Func<TSource, int, bool> predicate) 
             => Enumerable.Where<IReadOnlyCollection<TSource>, IEnumerator<TSource>, TSource>(source, predicate);
 
         public static TSource First<TSource>(this IReadOnlyCollection<TSource> source)
@@ -105,7 +105,7 @@ namespace NetFabric.Hyperlinq
             }
         }
 
-        public static TSource First<TSource>(this IReadOnlyCollection<TSource> source, Func<TSource, bool> predicate)
+        public static TSource First<TSource>(this IReadOnlyCollection<TSource> source, Func<TSource, int, bool> predicate)
         {
             switch(source)
             {
@@ -127,7 +127,7 @@ namespace NetFabric.Hyperlinq
             }
         }
 
-        public static TSource FirstOrDefault<TSource>(this IReadOnlyCollection<TSource> source, Func<TSource, bool> predicate)
+        public static TSource FirstOrDefault<TSource>(this IReadOnlyCollection<TSource> source, Func<TSource, int, bool> predicate)
         {
             switch(source)
             {
@@ -150,7 +150,7 @@ namespace NetFabric.Hyperlinq
             }
         }
 
-        public static TSource? FirstOrNull<TSource>(this IReadOnlyCollection<TSource> source, Func<TSource, bool> predicate)
+        public static TSource? FirstOrNull<TSource>(this IReadOnlyCollection<TSource> source, Func<TSource, int, bool> predicate)
             where TSource : struct
         {
             switch(source)
@@ -173,7 +173,7 @@ namespace NetFabric.Hyperlinq
             }
         }
 
-        public static TSource Single<TSource>(this IReadOnlyCollection<TSource> source, Func<TSource, bool> predicate)
+        public static TSource Single<TSource>(this IReadOnlyCollection<TSource> source, Func<TSource, int, bool> predicate)
         {
             switch(source)
             {
@@ -195,7 +195,7 @@ namespace NetFabric.Hyperlinq
             }
         }
 
-        public static TSource SingleOrDefault<TSource>(this IReadOnlyCollection<TSource> source, Func<TSource, bool> predicate)
+        public static TSource SingleOrDefault<TSource>(this IReadOnlyCollection<TSource> source, Func<TSource, int, bool> predicate)
         {
             switch(source)
             {
@@ -218,7 +218,7 @@ namespace NetFabric.Hyperlinq
             }
         }
 
-        public static TSource? SingleOrNull<TSource>(this IReadOnlyCollection<TSource> source, Func<TSource, bool> predicate)
+        public static TSource? SingleOrNull<TSource>(this IReadOnlyCollection<TSource> source, Func<TSource, int, bool> predicate)
             where TSource : struct
         {
             switch(source)

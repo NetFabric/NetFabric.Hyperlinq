@@ -7,7 +7,8 @@ namespace NetFabric.Hyperlinq
         public static int Count<TSource>(this Span<TSource> source)
             => source.Length;
 
-        public static int Count<TSource>(this Span<TSource> source, Func<TSource, bool> predicate)
+
+        public static int Count<TSource>(this Span<TSource> source, Func<TSource, int, bool> predicate)
         {
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
 
@@ -15,34 +16,14 @@ namespace NetFabric.Hyperlinq
             var length = source.Length;
             for (var index = 0; index < length; index++)
             {
-                checked
+                unchecked // always less than source.Length
                 {                
-                    if (predicate(source[index]))
+                    if (predicate(source[index], index))
                         count++;
                 }
             }
             return count;
         }
-
-        public static int Count<TSource>(this ReadOnlySpan<TSource> source)
-            => source.Length;
-
-        public static int Count<TSource>(this ReadOnlySpan<TSource> source, Func<TSource, bool> predicate)
-        {
-            if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
-
-            var count = 0;
-            for (var index = 0; index < source.Length; index++)
-            {
-                checked
-                {                
-                    if (predicate(source[index]))
-                        count++;
-                }
-            }
-            return count;
-        }
-
     }
 }
 

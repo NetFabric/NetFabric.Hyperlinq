@@ -29,7 +29,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
 
         [Benchmark]
         public bool Hyperlinq() => 
-            list.All(_ => true);
+            list.All((_, __) => true);
 
         static bool AllEnumerable<TSource>(List<TSource> source, Func<TSource, bool> predicate)
         {
