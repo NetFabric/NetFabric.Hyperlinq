@@ -109,7 +109,13 @@ namespace NetFabric.Hyperlinq
                 => ValueReadOnlyList.Contains<SelectEnumerable<TSource, TResult>, ValueEnumerator, TResult>(this, value, comparer);
 
             public Array.SelectEnumerable<TSource, TSelectorResult> Select<TSelectorResult>(Func<TResult, TSelectorResult> selector)
-                 => Array.Select<TSource, TSelectorResult>(source, Utils.CombineSelectors(this.selector, selector));
+            {
+                var currentSelector = this.selector;
+                return Array.Select<TSource, TSelectorResult>(source, CombineSelectors());
+
+                Func<TSource, TSelectorResult> CombineSelectors() 
+                    => item => selector(currentSelector(item));
+            }
 
             public ValueReadOnlyList.WhereEnumerable<SelectEnumerable<TSource, TResult>, ValueEnumerator, TResult> Where(Func<TResult, bool> predicate)
                 => ValueReadOnlyList.Where<SelectEnumerable<TSource, TResult>, ValueEnumerator, TResult>(this, predicate);

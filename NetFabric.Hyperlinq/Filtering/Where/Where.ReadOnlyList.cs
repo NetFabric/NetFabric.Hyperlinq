@@ -148,7 +148,13 @@ namespace NetFabric.Hyperlinq
                 => ValueEnumerable.SelectMany<WhereEnumerable<TEnumerable, TSource>, ValueEnumerator, TSource, TSubEnumerable, TSubEnumerator, TResult>(this, selector);
 
             public ReadOnlyList.WhereEnumerable<TEnumerable, TSource> Where(Func<TSource, bool> predicate)
-                => ReadOnlyList.Where<TEnumerable, TSource>(source, Utils.CombinePredicates(this.predicate, predicate));
+            {
+                var currentPredicate = this.predicate;
+                return ReadOnlyList.Where<TEnumerable, TSource>(source, CombinedPredicates());
+
+                Func<TSource, bool> CombinedPredicates() 
+                    => item => currentPredicate(item) && predicate(item);
+            }
 
             public TSource First()
                 => ReadOnlyList.First<TEnumerable, TSource>(source, predicate);
