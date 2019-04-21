@@ -46,20 +46,20 @@ namespace NetFabric.Hyperlinq.UnitTests
 
             if (Subject.Count != expectation.Count)
             {
-                assertion.FailWith("Expected Count to be equal to {0}, but found {1}.", expectation.Count, Subject.Count);
+                assertion.FailWith("Expected to be equal to {0}, but found {1}, when using Count.", expectation.Count, Subject.Count);
             }
 
             var index = ((IValueEnumerable<TSource, TEnumerator>)Subject).IndexOfFirstDifferenceWith<TEnumerator, TSource, TSource>(expectation, equalityComparison);
             if(index >= 0)
-                assertion.FailWith("Expected {context:collection} to be equal to {0}{reason}, but typed enumerable {0} differs at index {1}.", expectation, index);
+                assertion.FailWith("Expected {context:collection} to be equal to {0}{reason}, but {0} differs at index {1}, when using TryMoveNext(out value).", expectation, index);
 
             index = Subject.IndexOfFirstDifferenceWith<TEnumerator, TSource, TSource>(expectation);
             if(index >= 0)
-                assertion.FailWith("Expected {context:collection} to be equal to {0}{reason}, but enumerable {0} differs at index {1}.", expectation, index);
+                assertion.FailWith("Expected {context:collection} to be equal to {0}{reason}, but enumerable {0} differs at index {1}, when using TryMoveNext().", expectation, index);
 
             index = Subject.IndexOfFirstDifferenceWith<TEnumerator, TSource, TSource>(expectation, equalityComparison);
             if(index >= 0)
-                assertion.FailWith("Expected {context:collection} to be equal to {0}{reason}, but indexer {0} differs at index {1}.", expectation, index);
+                assertion.FailWith("Expected {context:collection} to be equal to {0}{reason}, but indexer {0} differs at index {1}, when using indexer.", expectation, index);
         }
     }
 }

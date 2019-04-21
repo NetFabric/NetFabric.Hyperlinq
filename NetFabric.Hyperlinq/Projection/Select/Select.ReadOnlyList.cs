@@ -105,7 +105,7 @@ namespace NetFabric.Hyperlinq
                 => new SelectEnumerable<TEnumerable, TSource, TResult>(source, selector, skipCount + count, takeCount);
 
             public SelectEnumerable<TEnumerable, TSource, TResult> Take(int count)
-                => new SelectEnumerable<TEnumerable, TSource, TResult>(source, selector, skipCount, takeCount + count);
+                => new SelectEnumerable<TEnumerable, TSource, TResult>(source, selector, skipCount, Math.Min(takeCount, count));
 
             public bool All(Func<TResult, bool> predicate)
                 => ValueReadOnlyList.All<SelectEnumerable<TEnumerable, TSource, TResult>, ValueEnumerator, TResult>(this, predicate);
