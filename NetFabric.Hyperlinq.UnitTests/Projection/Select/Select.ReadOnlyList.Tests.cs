@@ -1,6 +1,6 @@
+using FluentAssertions;
 using System;
 using System.Collections.Generic;
-using FluentAssertions;
 using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests
@@ -26,19 +26,21 @@ namespace NetFabric.Hyperlinq.UnitTests
 
         [Theory]
         [MemberData(nameof(TestData.Select), MemberType = typeof(TestData))]
-        public void Select_With_ValidData_Should_Succeed(IReadOnlyList<int> source, Func<int, int, string> selector, IReadOnlyList<string> expected)
+        public void Select_With_ValidData_Should_Succeed(IReadOnlyList<int> source, Func<int, long, string> selector, IReadOnlyList<string> expected)
         {
             // Arrange
+            string Selector(int value, int i)
+                => selector(value, i);
 
             // Act
-            var result = ReadOnlyList.Select<IReadOnlyList<int>, int, string>(source, selector);
+            var result = ReadOnlyList.Select<IReadOnlyList<int>, int, string>(source, Selector);
 
             // Assert
             result.Should().Generate(expected);
 
             var index = 0;
             var resultEnumerator = result.GetEnumerator();
-            using(var expectedEnumerator = expected.GetEnumerator())
+            using (var expectedEnumerator = expected.GetEnumerator())
             {
                 while (true)
                 {
@@ -51,48 +53,54 @@ namespace NetFabric.Hyperlinq.UnitTests
                     if (isResultCompleted ^ isExpectedCompleted)
                         throw new Exception($"foreach enumeration expected complete {isExpectedCompleted} but found {isResultCompleted} at index {index}.");
 
-                    if(!resultEnumerator.Current.Equals(expectedEnumerator.Current))
+                    if (!resultEnumerator.Current.Equals(expectedEnumerator.Current))
                         throw new Exception($"foreach enumeration expected value {expectedEnumerator.Current} but found {resultEnumerator.Current} at index {index}.");
 
                     index++;
                 }
             }
         }
-  
+
         [Theory]
         [MemberData(nameof(TestData.SelectSkip), MemberType = typeof(TestData))]
-        public void Select_With_Skip_Should_Succeed(IReadOnlyList<int> source, Func<int, int, int> selector, int skipCount, IReadOnlyList<int> expected)
+        public void Select_With_Skip_Should_Succeed(IReadOnlyList<int> source, Func<int, long, int> selector, int skipCount, IReadOnlyList<int> expected)
         {
             // Arrange
+            int Selector(int value, int i)
+                => selector(value, i);
 
             // Act
-            var result = ReadOnlyList.Select(source, selector).Skip(skipCount);
+            var result = ReadOnlyList.Select<IReadOnlyList<int>, int, int>(source, Selector).Skip(skipCount);
 
             // Assert
             result.AsEnumerable().Should().Equal(expected);
         }
-  
+
         [Theory]
         [MemberData(nameof(TestData.SelectTake), MemberType = typeof(TestData))]
-        public void Select_With_Take_Should_Succeed(IReadOnlyList<int> source, Func<int, int, int> selector, int takeCount, IReadOnlyList<int> expected)
+        public void Select_With_Take_Should_Succeed(IReadOnlyList<int> source, Func<int, long, int> selector, int takeCount, IReadOnlyList<int> expected)
         {
             // Arrange
+            int Selector(int value, int i)
+                => selector(value, i);
 
             // Act
-            var result = ReadOnlyList.Select(source, selector).Take(takeCount);
+            var result = ReadOnlyList.Select<IReadOnlyList<int>, int, int>(source, Selector).Take(takeCount);
 
             // Assert
             result.AsEnumerable().Should().Equal(expected);
         }
-  
+
         [Theory]
         [MemberData(nameof(TestData.SelectSkipTake), MemberType = typeof(TestData))]
-        public void Select_With_SkipTake_Should_Succeed(IReadOnlyList<int> source, Func<int, int, int> selector, int skipCount, int takeCount, IReadOnlyList<int> expected)
+        public void Select_With_SkipTake_Should_Succeed(IReadOnlyList<int> source, Func<int, long, int> selector, int skipCount, int takeCount, IReadOnlyList<int> expected)
         {
             // Arrange
+            int Selector(int value, int i)
+                => selector(value, i);
 
             // Act
-            var result = ReadOnlyList.Select(source, selector).Skip(skipCount).Take(takeCount);
+            var result = ReadOnlyList.Select<IReadOnlyList<int>, int, int>(source, Selector).Skip(skipCount).Take(takeCount);
 
             // Assert
             result.AsEnumerable().Should().Equal(expected);

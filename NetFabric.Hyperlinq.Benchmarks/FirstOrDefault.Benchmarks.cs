@@ -31,17 +31,17 @@ namespace NetFabric.Hyperlinq.Benchmarks
 
         [BenchmarkCategory("Enumerable_Reference")]
         [Benchmark(Baseline = true)]
-        public int Linq_Enumerable_Reference() => 
+        public long Linq_Enumerable_Reference() => 
             System.Linq.Enumerable.FirstOrDefault(enumerableReference);
 
         [BenchmarkCategory("Enumerable_Value")]
         [Benchmark(Baseline = true)]
-        public int Linq_Enumerable_Value() => 
+        public long Linq_Enumerable_Value() => 
             System.Linq.Enumerable.FirstOrDefault(enumerableValue);
 
         [BenchmarkCategory("Range")]
         [Benchmark]
-        public int Hyperlinq_Range() =>
+        public long Hyperlinq_Range() =>
             hyperlinqRange.FirstOrDefault();
 
         [BenchmarkCategory("Queue")]
@@ -61,12 +61,12 @@ namespace NetFabric.Hyperlinq.Benchmarks
 
         [BenchmarkCategory("Enumerable_Reference")]
         [Benchmark]
-        public int Hyperlinq_Enumerable_Reference() => 
+        public long Hyperlinq_Enumerable_Reference() => 
             enumerableReference.FirstOrDefault();
 
         [BenchmarkCategory("Enumerable_Value")]
         [Benchmark]
-        public int Hyperlinq_Enumerable_Value() => 
-            enumerableValue.FirstOrDefault<TestEnumerable.Enumerable, TestEnumerable.Enumerable.Enumerator, int>();
+        public long Hyperlinq_Enumerable_Value() => 
+            enumerableValue.FirstOrDefault<TestEnumerable.Enumerable, TestEnumerable.Enumerable.Enumerator, long>();
     }
 }

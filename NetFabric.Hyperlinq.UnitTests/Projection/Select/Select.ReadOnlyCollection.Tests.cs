@@ -26,12 +26,12 @@ namespace NetFabric.Hyperlinq.UnitTests
 
         [Theory]
         [MemberData(nameof(TestData.Select), MemberType = typeof(TestData))]
-        public void Select_With_ValidData_Should_Succeed(IReadOnlyCollection<int> source, Func<int, int, string> selector, IReadOnlyCollection<string> expected)
+        public void Select_With_ValidData_Should_Succeed(IReadOnlyCollection<int> source, Func<int, long, string> selector, IReadOnlyCollection<string> expected)
         {
             // Arrange
 
             // Act
-            var result = ReadOnlyCollection.Select<IReadOnlyCollection<int>, IEnumerator<int>, int, string>(source, selector);
+            var result = ReadOnlyCollection.Select<IReadOnlyCollection<int>, IEnumerator<int>, int, string>(source, Selector);
 
             // Assert
             result.Should().Generate(expected);
@@ -57,6 +57,8 @@ namespace NetFabric.Hyperlinq.UnitTests
                     index++;
                 }
             }
+
+            string Selector(int value, int i) => selector(value, i);
         }
     }
 }

@@ -15,7 +15,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         List<int> list;
         IEnumerable<int> linqRange;
         Enumerable.RangeEnumerable hyperlinqRange;
-        IEnumerable<int> enumerableReference;
+        IEnumerable<long> enumerableReference;
         TestEnumerable.Enumerable enumerableValue;
 
         [GlobalSetup]
@@ -24,8 +24,8 @@ namespace NetFabric.Hyperlinq.Benchmarks
             linqRange = System.Linq.Enumerable.Range(0, 1);
             hyperlinqRange = Enumerable.Range(0, 1);
             queue = new Queue<int>(linqRange);
-            array = hyperlinqRange.ToArray();
-            list = hyperlinqRange.ToList();
+            array = linqRange.ToArray();
+            list = linqRange.ToList();
             enumerableReference = TestEnumerable.ReferenceType(1);
             enumerableValue = TestEnumerable.ValueType(1);
         }
@@ -52,17 +52,17 @@ namespace NetFabric.Hyperlinq.Benchmarks
 
         [BenchmarkCategory("Enumerable_Reference")]
         [Benchmark(Baseline = true)]
-        public int Linq_Enumerable_Reference() => 
+        public long Linq_Enumerable_Reference() => 
             System.Linq.Enumerable.SingleOrDefault(enumerableReference);
 
         [BenchmarkCategory("Enumerable_Value")]
         [Benchmark(Baseline = true)]
-        public int Linq_Enumerable_Value() => 
+        public long Linq_Enumerable_Value() => 
             System.Linq.Enumerable.SingleOrDefault(enumerableValue);
 
         [BenchmarkCategory("Range")]
         [Benchmark]
-        public int Hyperlinq_Range() =>
+        public long Hyperlinq_Range() =>
             hyperlinqRange.SingleOrDefault();
 
         [BenchmarkCategory("Queue")]
@@ -82,12 +82,12 @@ namespace NetFabric.Hyperlinq.Benchmarks
 
         [BenchmarkCategory("Enumerable_Reference")]
         [Benchmark]
-        public int Hyperlinq_Enumerable_Reference() => 
+        public long Hyperlinq_Enumerable_Reference() => 
             enumerableReference.SingleOrDefault();
 
         [BenchmarkCategory("Enumerable_Value")]
         [Benchmark]
-        public int Hyperlinq_Enumerable_Value() => 
+        public long Hyperlinq_Enumerable_Value() => 
             enumerableValue.SingleOrDefault();
     }
 }

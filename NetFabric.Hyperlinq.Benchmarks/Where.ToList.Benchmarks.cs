@@ -32,17 +32,17 @@ namespace NetFabric.Hyperlinq.Benchmarks
 
         [BenchmarkCategory("Enumerable_Reference")]
         [Benchmark(Baseline = true)]
-        public List<int> Linq_Enumerable_Reference() 
+        public List<long> Linq_Enumerable_Reference() 
             => System.Linq.Enumerable.Where(enumerableReference, (_, __) => true).ToList();
 
         [BenchmarkCategory("Enumerable_Value")]
         [Benchmark(Baseline = true)]
-        public List<int> Linq_Enumerable_Value()
+        public List<long> Linq_Enumerable_Value()
             => System.Linq.Enumerable.Where(enumerableValue, (_, __) => true).ToList();
 
         [BenchmarkCategory("Range")]
         [Benchmark]
-        public List<int> Hyperlinq_Range()
+        public List<long> Hyperlinq_Range()
             => hyperlinqRange.Where((_, __) => true).ToList();
 
         [BenchmarkCategory("Queue")]
@@ -62,12 +62,12 @@ namespace NetFabric.Hyperlinq.Benchmarks
 
         [BenchmarkCategory("Enumerable_Reference")]
         [Benchmark]
-        public List<int> Hyperlinq_Enumerable_Reference()
+        public List<long> Hyperlinq_Enumerable_Reference()
             => enumerableReference.Where((_, __) => true).ToList();
 
         [BenchmarkCategory("Enumerable_Value")]
         [Benchmark]
-        public List<int> Hyperlinq_Enumerable_Value()
+        public List<long> Hyperlinq_Enumerable_Value()
             => enumerableValue.Where((_, __) => true).ToList();
     }
 }

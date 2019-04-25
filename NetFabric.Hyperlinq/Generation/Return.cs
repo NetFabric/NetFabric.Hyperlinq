@@ -21,9 +21,9 @@ namespace NetFabric.Hyperlinq
             public Enumerator GetEnumerator() => new Enumerator(in this);
             public ValueEnumerator GetValueEnumerator() => new ValueEnumerator(in this);
 
-            public int Count => 1;
+            public long Count => 1;
 
-            public TSource this[int index]
+            public TSource this[long index]
             {
                 get
                 {
@@ -100,13 +100,13 @@ namespace NetFabric.Hyperlinq
             public ValueReadOnlyList.SkipTakeEnumerable<ReturnEnumerable<TSource>, ValueEnumerator, TSource> Take(int count)
                 => ValueReadOnlyList.Take<ReturnEnumerable<TSource>, ValueEnumerator, TSource>(this, count);
 
-            public bool All(Func<TSource, int, bool> predicate)
+            public bool All(Func<TSource, long, bool> predicate)
                 => ValueReadOnlyList.All<ReturnEnumerable<TSource>, ValueEnumerator, TSource>(this, predicate);
 
             public bool Any()
                 => true;
 
-            public bool Any(Func<TSource, int, bool> predicate)
+            public bool Any(Func<TSource, long, bool> predicate)
                 => ValueReadOnlyList.Any<ReturnEnumerable<TSource>, ValueEnumerator, TSource>(this, predicate);
 
             public bool Contains(TSource value)
@@ -115,7 +115,7 @@ namespace NetFabric.Hyperlinq
             public bool Contains(TSource value, IEqualityComparer<TSource> comparer)
                 => comparer.Equals(this.value, value);
 
-            public ValueReadOnlyList.SelectEnumerable<ReturnEnumerable<TSource>, ValueEnumerator, TSource, TResult> Select<TResult>(Func<TSource, int, TResult> selector) 
+            public ValueReadOnlyList.SelectEnumerable<ReturnEnumerable<TSource>, ValueEnumerator, TSource, TResult> Select<TResult>(Func<TSource, long, TResult> selector) 
                 => ValueReadOnlyList.Select<ReturnEnumerable<TSource>, ValueEnumerator, TSource, TResult>(this, selector);
 
             public ValueReadOnlyList.SelectManyEnumerable<ReturnEnumerable<TSource>, ValueEnumerator, TSource, TSubEnumerable, TSubEnumerator, TResult> SelectMany<TSubEnumerable, TSubEnumerator, TResult>(Func<TSource, TSubEnumerable> selector) 
@@ -123,27 +123,27 @@ namespace NetFabric.Hyperlinq
                 where TSubEnumerator : struct, IValueEnumerator<TResult>
                 => ValueReadOnlyList.SelectMany<ReturnEnumerable<TSource>, ValueEnumerator, TSource, TSubEnumerable, TSubEnumerator, TResult>(this, selector);
 
-            public ValueReadOnlyList.WhereEnumerable<ReturnEnumerable<TSource>, ValueEnumerator, TSource> Where(Func<TSource, int, bool> predicate) 
+            public ValueReadOnlyList.WhereEnumerable<ReturnEnumerable<TSource>, ValueEnumerator, TSource> Where(Func<TSource, long, bool> predicate) 
                 => ValueReadOnlyList.Where<ReturnEnumerable<TSource>, ValueEnumerator, TSource>(this, predicate);
 
             public TSource First() 
                 => value;
-            public TSource First(Func<TSource, int, bool> predicate) 
+            public TSource First(Func<TSource, long, bool> predicate) 
                 => ValueReadOnlyList.First<ReturnEnumerable<TSource>, ValueEnumerator, TSource>(this, predicate);
 
             public TSource FirstOrDefault() 
                 => value;
-            public TSource FirstOrDefault(Func<TSource, int, bool> predicate)
+            public TSource FirstOrDefault(Func<TSource, long, bool> predicate)
                 => ValueReadOnlyList.FirstOrDefault<ReturnEnumerable<TSource>, ValueEnumerator, TSource>(this, predicate);
 
             public TSource Single() 
                 => value;
-            public TSource Single(Func<TSource, int, bool> predicate) 
+            public TSource Single(Func<TSource, long, bool> predicate) 
                 => ValueReadOnlyList.Single<ReturnEnumerable<TSource>, ValueEnumerator, TSource>(this, predicate);
 
             public TSource SingleOrDefault() 
                 => value;
-            public TSource SingleOrDefault(Func<TSource, int, bool> predicate) 
+            public TSource SingleOrDefault(Func<TSource, long, bool> predicate) 
                 => ValueReadOnlyList.SingleOrDefault<ReturnEnumerable<TSource>, ValueEnumerator, TSource>(this, predicate);
 
             public IReadOnlyList<TSource> AsEnumerable()
@@ -159,17 +159,17 @@ namespace NetFabric.Hyperlinq
                 => ValueReadOnlyCollection.ToList<ReturnEnumerable<TSource>, ValueEnumerator, TSource>(this);
         }
 
-        public static int Count<TSource>(this ReturnEnumerable<TSource> source)
+        public static long Count<TSource>(this ReturnEnumerable<TSource> source)
             => 1;
 
-        public static int Count<TSource>(this ReturnEnumerable<TSource> source, Func<TSource, int, bool> predicate)
+        public static long Count<TSource>(this ReturnEnumerable<TSource> source, Func<TSource, long, bool> predicate)
             => ValueReadOnlyList.Count<ReturnEnumerable<TSource>, ReturnEnumerable<TSource>.ValueEnumerator, TSource>(source, predicate);
 
         public static TSource? FirstOrNull<TSource>(this ReturnEnumerable<TSource> source)
             where TSource : struct
                 => source.value;
 
-        public static TSource? FirstOrNull<TSource>(this ReturnEnumerable<TSource> source, Func<TSource, int, bool> predicate)
+        public static TSource? FirstOrNull<TSource>(this ReturnEnumerable<TSource> source, Func<TSource, long, bool> predicate)
             where TSource : struct
                 => source.value;
 
@@ -177,7 +177,7 @@ namespace NetFabric.Hyperlinq
             where TSource : struct
                 => source.value;
 
-        public static TSource? SingleOrNull<TSource>(this ReturnEnumerable<TSource> source, Func<TSource, int, bool> predicate)
+        public static TSource? SingleOrNull<TSource>(this ReturnEnumerable<TSource> source, Func<TSource, long, bool> predicate)
             where TSource : struct
                 => source.value;
     }

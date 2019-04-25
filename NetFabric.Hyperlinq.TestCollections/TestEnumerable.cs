@@ -6,40 +6,40 @@ namespace NetFabric.Hyperlinq
 {
     public static class TestEnumerable
     {
-        public static IEnumerable<int> ReferenceType(int count)
+        public static IEnumerable<long> ReferenceType(long count)
         {
             for (var value = 0; value < count; value++)
                 yield return value;            
         }
 
-        public static Enumerable ValueType(int count) 
+        public static Enumerable ValueType(long count) 
             => new Enumerable(count);
 
-        public readonly struct Enumerable : IEnumerable<int>
+        public readonly struct Enumerable : IEnumerable<long>
         {
-            readonly int count;
+            readonly long count;
 
-            public Enumerable(int count)
+            public Enumerable(long count)
             {
                 this.count = count;
             }
 
             public Enumerator GetEnumerator() => new Enumerator(count);
-            IEnumerator<int> IEnumerable<int>.GetEnumerator() => new Enumerator(count);
+            IEnumerator<long> IEnumerable<long>.GetEnumerator() => new Enumerator(count);
             IEnumerator IEnumerable.GetEnumerator() => new Enumerator(count);
 
-            public struct Enumerator : IEnumerator<int>
+            public struct Enumerator : IEnumerator<long>
             {
-                readonly int count;
-                int current;
+                readonly long count;
+                long current;
 
-                public Enumerator(int count)
+                public Enumerator(long count)
                 {
                     this.count = count;
                     current = -1;
                 }
 
-                public int Current => current;
+                public long Current => current;
                 object IEnumerator.Current => current;
 
                 public bool MoveNext() => ++current < count;

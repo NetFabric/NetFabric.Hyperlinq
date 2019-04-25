@@ -10,7 +10,10 @@ namespace NetFabric.Hyperlinq
             where TEnumerator : struct, IValueEnumerator<TSource>
         {
             var count = source.Count;
-            var list = new List<TSource>(count);
+            if (count > int.MaxValue) 
+                ThrowHelper.ThrowArgumentTooLargeException(nameof(source), count);
+                
+            var list = new List<TSource>((int)count);
             if (count != 0)
                 list.AddRange(source.AsList<TEnumerable, TEnumerator, TSource>());
             return list;

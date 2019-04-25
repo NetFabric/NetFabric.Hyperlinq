@@ -10,8 +10,8 @@ namespace NetFabric.Hyperlinq
     [MarkdownExporterAttribute.GitHub]
     public class CastBenchmarks
     {
-        IEnumerable<int> enumerable;
-        IReadOnlyList<int> list;
+        IEnumerable<long> enumerable;
+        IReadOnlyList<long> list;
 
         [GlobalSetup]
         public void GlobalSetup()

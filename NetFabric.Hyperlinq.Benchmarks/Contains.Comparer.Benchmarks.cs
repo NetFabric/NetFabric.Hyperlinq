@@ -9,7 +9,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
     [CategoriesColumn]
     [MemoryDiagnoser]
     [MarkdownExporterAttribute.GitHub]
-    public class ContainsComparerBenchmarks : BenchmarksBase, IEqualityComparer<int>
+    public class ContainsComparerBenchmarks : BenchmarksBase, IEqualityComparer<int>, IEqualityComparer<long>
     {
         [BenchmarkCategory("Range")]
         [Benchmark(Baseline = true)]
@@ -84,12 +84,18 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [BenchmarkCategory("Enumerable_Value")]
         [Benchmark]
         public bool Hyperlinq_Enumerable_Value() => 
-            enumerableValue.Contains<TestEnumerable.Enumerable, TestEnumerable.Enumerable.Enumerator, int>(Count - 1, this);
+            enumerableValue.Contains<TestEnumerable.Enumerable, TestEnumerable.Enumerable.Enumerator, long>(Count - 1, this);
 
         public bool Equals(int x, int y) 
             => x.Equals(y);
 
+        public bool Equals(long x, long y)
+            => x.Equals(y);
+
         public int GetHashCode(int obj)
+            => obj.GetHashCode();
+
+        public int GetHashCode(long obj)
             => obj.GetHashCode();
     }
 }

@@ -29,7 +29,7 @@ namespace NetFabric.Hyperlinq.UnitTests
 
         [Theory]
         [MemberData(nameof(TestData.Select), MemberType = typeof(TestData))]
-        public void Select_With_ValidData_Should_Succeed(IReadOnlyCollection<int> source, Func<int, int, string> selector, IReadOnlyCollection<string> expected)
+        public void Select_With_ValidData_Should_Succeed(IReadOnlyCollection<int> source, Func<int, long, string> selector, IReadOnlyCollection<string> expected)
         {
             // Arrange
 

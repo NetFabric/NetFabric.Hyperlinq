@@ -14,9 +14,9 @@ namespace NetFabric.Hyperlinq
             public Enumerator GetEnumerator() => new Enumerator();
             public ValueEnumerator GetValueEnumerator() => new ValueEnumerator();
 
-            public int Count => 0;
+            public long Count => 0;
 
-            public TSource this[int index] { get { ThrowHelper.ThrowIndexOutOfRangeException(); return default; } }
+            public TSource this[long index] { get { ThrowHelper.ThrowIndexOutOfRangeException(); return default; } }
 
             public readonly struct Enumerator
             {

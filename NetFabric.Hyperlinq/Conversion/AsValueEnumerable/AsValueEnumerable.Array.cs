@@ -20,10 +20,10 @@ namespace NetFabric.Hyperlinq
             public Enumerator GetEnumerator() => new Enumerator(source);
             public ValueEnumerator GetValueEnumerator() => new ValueEnumerator(source);
 
-            public int Count => source.Length;
+            public long Count => source.Length;
 
-            public ref TSource this[int index] => ref source[index];
-            TSource IValueReadOnlyList<TSource, AsValueEnumerableEnumerable<TSource>.ValueEnumerator>.this[int index] => source[index];
+            public ref TSource this[long index] => ref source[index];
+            TSource IValueReadOnlyList<TSource, AsValueEnumerableEnumerable<TSource>.ValueEnumerator>.this[long index] => source[index];
             
             public struct Enumerator 
             {

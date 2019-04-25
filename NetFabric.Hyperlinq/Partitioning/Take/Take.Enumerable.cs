@@ -112,10 +112,10 @@ namespace NetFabric.Hyperlinq
             }
 
             public int Count()
-                => ValueEnumerable.Count<TakeEnumerable<TEnumerable, TEnumerator, TSource>, ValueEnumerator, TSource>(this);
+                => (int)ValueEnumerable.Count<TakeEnumerable<TEnumerable, TEnumerator, TSource>, ValueEnumerator, TSource>(this);
 
-            public int Count(Func<TSource, int, bool> predicate)
-                => ValueEnumerable.Count<TakeEnumerable<TEnumerable, TEnumerator, TSource>, ValueEnumerator, TSource>(this, predicate);
+            public int Count(Func<TSource, long, bool> predicate)
+                => (int)ValueEnumerable.Count<TakeEnumerable<TEnumerable, TEnumerator, TSource>, ValueEnumerator, TSource>(this, predicate);
 
             public ValueEnumerable.SkipEnumerable<TakeEnumerable<TEnumerable, TEnumerator, TSource>, ValueEnumerator, TSource> Skip(int count)
                 => ValueEnumerable.Skip<TakeEnumerable<TEnumerable, TEnumerator, TSource>, ValueEnumerator, TSource>(this, count);
@@ -123,13 +123,13 @@ namespace NetFabric.Hyperlinq
             public TakeEnumerable<TEnumerable, TEnumerator, TSource> Take(int count)
                 => Enumerable.Take<TEnumerable, TEnumerator, TSource>(source, Math.Min(this.count, count));
 
-            public bool All(Func<TSource, int, bool> predicate)
+            public bool All(Func<TSource, long, bool> predicate)
                 => ValueEnumerable.All<TakeEnumerable<TEnumerable, TEnumerator, TSource>, ValueEnumerator, TSource>(this, predicate);
 
             public bool Any()
                 => ValueEnumerable.Any<TakeEnumerable<TEnumerable, TEnumerator, TSource>, ValueEnumerator, TSource>(this);
 
-            public bool Any(Func<TSource, int, bool> predicate)
+            public bool Any(Func<TSource, long, bool> predicate)
                 => ValueEnumerable.Any<TakeEnumerable<TEnumerable, TEnumerator, TSource>, ValueEnumerator, TSource>(this, predicate);
 
             public bool Contains(TSource value)
@@ -138,30 +138,30 @@ namespace NetFabric.Hyperlinq
             public bool Contains(TSource value, IEqualityComparer<TSource> comparer)
                 => ValueEnumerable.Contains<TakeEnumerable<TEnumerable, TEnumerator, TSource>, ValueEnumerator, TSource>(this, value, comparer);
 
-            public ValueEnumerable.SelectEnumerable<TakeEnumerable<TEnumerable, TEnumerator, TSource>, ValueEnumerator, TSource, TResult> Select<TResult>(Func<TSource, int, TResult> selector)
+            public ValueEnumerable.SelectEnumerable<TakeEnumerable<TEnumerable, TEnumerator, TSource>, ValueEnumerator, TSource, TResult> Select<TResult>(Func<TSource, long, TResult> selector)
                  => ValueEnumerable.Select<TakeEnumerable<TEnumerable, TEnumerator, TSource>, ValueEnumerator, TSource, TResult>(this, selector);
 
-            public ValueEnumerable.WhereEnumerable<TakeEnumerable<TEnumerable, TEnumerator, TSource>, ValueEnumerator, TSource> Where(Func<TSource, int, bool> predicate)
+            public ValueEnumerable.WhereEnumerable<TakeEnumerable<TEnumerable, TEnumerator, TSource>, ValueEnumerator, TSource> Where(Func<TSource, long, bool> predicate)
                 => ValueEnumerable.Where<TakeEnumerable<TEnumerable, TEnumerator, TSource>, ValueEnumerator, TSource>(this, predicate);
 
             public TSource First()
                 => ValueEnumerable.First<TakeEnumerable<TEnumerable, TEnumerator, TSource>, ValueEnumerator, TSource>(this);
-            public TSource First(Func<TSource, int, bool> predicate)
+            public TSource First(Func<TSource, long, bool> predicate)
                 => ValueEnumerable.First<TakeEnumerable<TEnumerable, TEnumerator, TSource>, ValueEnumerator, TSource>(this, predicate);
 
             public TSource FirstOrDefault()
                 => ValueEnumerable.FirstOrDefault<TakeEnumerable<TEnumerable, TEnumerator, TSource>, ValueEnumerator, TSource>(this);
-            public TSource FirstOrDefault(Func<TSource, int, bool> predicate)
+            public TSource FirstOrDefault(Func<TSource, long, bool> predicate)
                 => ValueEnumerable.FirstOrDefault<TakeEnumerable<TEnumerable, TEnumerator, TSource>, ValueEnumerator, TSource>(this, predicate);
 
             public TSource Single()
                 => ValueEnumerable.Single<TakeEnumerable<TEnumerable, TEnumerator, TSource>, ValueEnumerator, TSource>(this);
-            public TSource Single(Func<TSource, int, bool> predicate)
+            public TSource Single(Func<TSource, long, bool> predicate)
                 => ValueEnumerable.Single<TakeEnumerable<TEnumerable, TEnumerator, TSource>, ValueEnumerator, TSource>(this, predicate);
 
             public TSource SingleOrDefault()
                 => ValueEnumerable.SingleOrDefault<TakeEnumerable<TEnumerable, TEnumerator, TSource>, ValueEnumerator, TSource>(this);
-            public TSource SingleOrDefault(Func<TSource, int, bool> predicate)
+            public TSource SingleOrDefault(Func<TSource, long, bool> predicate)
                 => ValueEnumerable.SingleOrDefault<TakeEnumerable<TEnumerable, TEnumerator, TSource>, ValueEnumerator, TSource>(this, predicate);
 
             public IEnumerable<TSource> AsEnumerable()
@@ -183,7 +183,7 @@ namespace NetFabric.Hyperlinq
             where TSource : struct
             => ValueEnumerable.FirstOrNull<TakeEnumerable<TEnumerable, TEnumerator, TSource>, TakeEnumerable<TEnumerable, TEnumerator, TSource>.ValueEnumerator, TSource>(source);
 
-        public static TSource? FirstOrNull<TEnumerable, TEnumerator, TSource>(this TakeEnumerable<TEnumerable, TEnumerator, TSource> source, Func<TSource, int, bool> predicate)
+        public static TSource? FirstOrNull<TEnumerable, TEnumerator, TSource>(this TakeEnumerable<TEnumerable, TEnumerator, TSource> source, Func<TSource, long, bool> predicate)
             where TEnumerable : IEnumerable<TSource>
             where TEnumerator : IEnumerator<TSource>
             where TSource : struct
@@ -195,7 +195,7 @@ namespace NetFabric.Hyperlinq
             where TSource : struct
             => ValueEnumerable.SingleOrNull<TakeEnumerable<TEnumerable, TEnumerator, TSource>, TakeEnumerable<TEnumerable, TEnumerator, TSource>.ValueEnumerator, TSource>(source);
 
-        public static TSource? SingleOrNull<TEnumerable, TEnumerator, TSource>(this TakeEnumerable<TEnumerable, TEnumerator, TSource> source, Func<TSource, int, bool> predicate)
+        public static TSource? SingleOrNull<TEnumerable, TEnumerator, TSource>(this TakeEnumerable<TEnumerable, TEnumerator, TSource> source, Func<TSource, long, bool> predicate)
             where TEnumerable : IEnumerable<TSource>
             where TEnumerator : IEnumerator<TSource>
             where TSource : struct

@@ -9,7 +9,11 @@ namespace NetFabric.Hyperlinq
         public static IReadOnlyCollection<TSource> AsEnumerable<TEnumerable, TEnumerator, TSource>(this TEnumerable source)
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IValueEnumerator<TSource>
-            => new AsEnumerableEnumerable<TEnumerable, TEnumerator, TSource>(source);
+        {
+            if (source.Count > int.MaxValue) ThrowHelper.ThrowArgumentTooLargeException(nameof(source), source.Count);
+            
+            return new AsEnumerableEnumerable<TEnumerable, TEnumerator, TSource>(source);
+        }
 
         class AsEnumerableEnumerable<TEnumerable, TEnumerator, TSource>
             : IReadOnlyCollection<TSource>
@@ -26,7 +30,7 @@ namespace NetFabric.Hyperlinq
             public IEnumerator<TSource> GetEnumerator() => new Enumerator(this);
             IEnumerator IEnumerable.GetEnumerator() => new Enumerator(this);
 
-            public int Count => source.Count;
+            public int Count => (int)source.Count;
 
             class Enumerator
                 : IEnumerator<TSource>

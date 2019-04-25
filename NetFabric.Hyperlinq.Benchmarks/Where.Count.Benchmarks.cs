@@ -41,7 +41,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
 
         [BenchmarkCategory("Range")]
         [Benchmark]
-        public int Hyperlinq_Range()
+        public long Hyperlinq_Range()
             => hyperlinqRange.Where((_, __) => true).Count();
 
         [BenchmarkCategory("Queue")]

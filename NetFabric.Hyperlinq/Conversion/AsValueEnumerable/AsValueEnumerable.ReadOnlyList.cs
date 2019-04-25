@@ -25,9 +25,17 @@ namespace NetFabric.Hyperlinq
             public Enumerator GetEnumerator() => new Enumerator(source);
             public ValueEnumerator GetValueEnumerator() => new ValueEnumerator(source);
 
-            public int Count => source.Count;
+            public long Count => source.Count;
 
-            public TSource this[int index] => source[index];
+            public TSource this[long index]
+            {
+                get
+                {
+                    if (index < 0 || index > source.Count) ThrowHelper.ThrowIndexOutOfRangeException();                    
+                    
+                    return source[(int)index];
+                }
+            }
             
             public struct Enumerator 
                 : IDisposable

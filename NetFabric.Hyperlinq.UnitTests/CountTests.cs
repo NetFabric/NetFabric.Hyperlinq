@@ -14,7 +14,7 @@ namespace NetFabric.Hyperlinq.UnitTests
         public void Count_With_Enumerable_ValueType(int expected)
         {
             // Arrange
-            IEnumerable<int> source = TestEnumerable.ValueType(expected);
+            IEnumerable<long> source = TestEnumerable.ValueType(expected);
 
             // Act
             var result = source.Count();
@@ -30,7 +30,7 @@ namespace NetFabric.Hyperlinq.UnitTests
         public void Count_With_Enumerable_ReferenceType(int expected)
         {
             // Arrange
-            IEnumerable<int> source = TestEnumerable.ReferenceType(expected);
+            IEnumerable<long> source = TestEnumerable.ReferenceType(expected);
 
             // Act
             var result = source.Count();

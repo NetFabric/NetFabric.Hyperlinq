@@ -9,7 +9,11 @@ namespace NetFabric.Hyperlinq
         static IList<TSource> AsList<TEnumerable, TEnumerator, TSource>(this TEnumerable source)
             where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
             where TEnumerator : struct, IValueEnumerator<TSource>
-            => new AsListEnumerable<TEnumerable, TEnumerator, TSource>(source);
+        {
+            if (source.Count > int.MaxValue) ThrowHelper.ThrowArgumentTooLargeException(nameof(source), source.Count);
+            
+            return new AsListEnumerable<TEnumerable, TEnumerator, TSource>(source);
+        }
 
         class AsListEnumerable<TEnumerable, TEnumerator, TSource>
             : IList<TSource>
@@ -48,7 +52,7 @@ namespace NetFabric.Hyperlinq
 
             public void RemoveAt(int index) => throw new NotImplementedException();
 
-            public int Count => source.Count;
+            public int Count => (int)source.Count;
 
             public bool IsReadOnly => true;
 
@@ -62,8 +66,8 @@ namespace NetFabric.Hyperlinq
                 : IEnumerator<TSource>
             {
                 readonly TEnumerable source;
-                readonly int count;
-                int index;
+                readonly long count;
+                long index;
 
                 internal Enumerator(AsListEnumerable<TEnumerable, TEnumerator, TSource> enumerable)
                 {

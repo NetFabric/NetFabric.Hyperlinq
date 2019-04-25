@@ -8,7 +8,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
     [MarkdownExporterAttribute.GitHub]
     public class IndexerBenchmarks
     {
-        List<int> list;
+        List<long> list;
 
         [Params(0, 100, 10_000)]
         public int Count { get; set; }

@@ -11,7 +11,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         protected Queue<int> queue;
         protected IEnumerable<int> linqRange;
         protected Enumerable.RangeEnumerable hyperlinqRange;
-        protected IEnumerable<int> enumerableReference;
+        protected IEnumerable<long> enumerableReference;
         protected TestEnumerable.Enumerable enumerableValue;
 
         [Params(0, 100, 10_000)]
@@ -28,7 +28,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
             linqRange = System.Linq.Enumerable.Range(0, count);
             hyperlinqRange = Enumerable.Range(0, count);
             queue = new Queue<int>(linqRange);
-            array = hyperlinqRange.ToArray();
+            array = linqRange.ToArray();
             list = new List<int>(linqRange);
             enumerableReference = TestEnumerable.ReferenceType(count);
             enumerableValue = TestEnumerable.ValueType(count);

@@ -30,18 +30,18 @@ namespace NetFabric.Hyperlinq
     public interface IValueReadOnlyCollection<TEnumerator> : IValueEnumerable<TEnumerator>
         where TEnumerator : struct, IValueEnumerator
     {
-        int Count { get; }
+        long Count { get; }
     }
 
     public interface IValueReadOnlyCollection<T, TEnumerator> : IValueEnumerable<T, TEnumerator>
         where TEnumerator : struct, IValueEnumerator<T>
     {
-        int Count { get; }
+        long Count { get; }
     }
 
     public interface IValueReadOnlyList<T, TEnumerator> : IValueReadOnlyCollection<T, TEnumerator>
         where TEnumerator : struct, IValueEnumerator<T>
     {
-        T this[int index] { get; }
+        T this[long index] { get; }
     }
 }

@@ -75,7 +75,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Hyperlinq_Range() 
         { 
             var count = 0;
-            foreach(var item in hyperlinqRange.SelectMany<Enumerable.ReturnEnumerable<int>, Enumerable.ReturnEnumerable<int>.ValueEnumerator, int>(item => Enumerable.Return(item)))
+            foreach(var item in hyperlinqRange.SelectMany<Enumerable.ReturnEnumerable<long>, Enumerable.ReturnEnumerable<long>.ValueEnumerator, long>(item => Enumerable.Return(item)))
                 count++;
             return count;
         }
@@ -115,7 +115,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Hyperlinq_Enumerable_Reference()
         { 
             var count = 0;
-            foreach(var item in enumerableReference.SelectMany<int, Enumerable.ReturnEnumerable<int>, Enumerable.ReturnEnumerable<int>.ValueEnumerator, int>(item => Enumerable.Return(item)))
+            foreach(var item in enumerableReference.SelectMany<long, Enumerable.ReturnEnumerable<long>, Enumerable.ReturnEnumerable<long>.ValueEnumerator, long>(item => Enumerable.Return(item)))
                 count++;
             return count;
         }
@@ -125,7 +125,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Hyperlinq_Enumerable_Value()        
         { 
             var count = 0;
-            foreach(var item in enumerableValue.SelectMany<int, Enumerable.ReturnEnumerable<int>, Enumerable.ReturnEnumerable<int>.ValueEnumerator, int>(item => Enumerable.Return(item)))
+            foreach(var item in enumerableValue.SelectMany<long, Enumerable.ReturnEnumerable<long>, Enumerable.ReturnEnumerable<long>.ValueEnumerator, long>(item => Enumerable.Return(item)))
                 count++;
             return count;
         }

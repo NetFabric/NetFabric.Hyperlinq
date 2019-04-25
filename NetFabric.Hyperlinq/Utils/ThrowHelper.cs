@@ -10,6 +10,12 @@ namespace NetFabric.Hyperlinq
         public static void ThrowArgumentOutOfRangeException(string paramName)
             => throw new ArgumentOutOfRangeException(paramName);
 
+        public static void ThrowArgumentTooLargeException(long count)
+            => throw new ArgumentOutOfRangeException($"Collection with count {count} exceeds allowed size.");
+
+        public static void ThrowArgumentTooLargeException(string paramName, long count)
+            => throw new ArgumentOutOfRangeException(paramName, $"Collection with count {count} exceeds allowed size.");
+
         public static void ThrowIndexOutOfRangeException()
             => throw new IndexOutOfRangeException();
 

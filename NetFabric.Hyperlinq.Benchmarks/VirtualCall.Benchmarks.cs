@@ -12,8 +12,8 @@ namespace NetFabric.Hyperlinq
     [MarkdownExporterAttribute.GitHub]
     public class VirtualCallBenchmarks
     {
-        int[] array;
-        List<int> list;
+        long[] array;
+        List<long> list;
 
         [Params(10_000)]
         public int Size { get; set; }

@@ -191,10 +191,10 @@ namespace NetFabric.Hyperlinq
                 }
             }
 
-            public int Count()
+            public long Count()
                 => ValueEnumerable.Count<SelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, TResult>, ValueEnumerator, TResult>(this);
 
-            public int Count(Func<TResult, int, bool> predicate)
+            public long Count(Func<TResult, long, bool> predicate)
                 => ValueEnumerable.Count<SelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, TResult>, ValueEnumerator, TResult>(this, predicate);
 
             public ValueEnumerable.SkipEnumerable<SelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, TResult>, ValueEnumerator, TResult> Skip(int count)
@@ -203,13 +203,13 @@ namespace NetFabric.Hyperlinq
             public ValueEnumerable.TakeEnumerable<SelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, TResult>, ValueEnumerator, TResult> Take(int count)
                 => ValueEnumerable.Take<SelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, TResult>, ValueEnumerator, TResult>(this, count);
 
-            public bool All(Func<TResult, int, bool> predicate)
+            public bool All(Func<TResult, long, bool> predicate)
                 => ValueEnumerable.All<SelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, TResult>, ValueEnumerator, TResult>(this, predicate);
 
             public bool Any()
                 => ValueEnumerable.Any<SelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, TResult>, ValueEnumerator, TResult>(this);
 
-            public bool Any(Func<TResult, int, bool> predicate)
+            public bool Any(Func<TResult, long, bool> predicate)
                 => ValueEnumerable.Any<SelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, TResult>, ValueEnumerator, TResult>(this, predicate);
 
             public bool Contains(TResult value)
@@ -218,30 +218,30 @@ namespace NetFabric.Hyperlinq
             public bool Contains(TResult value, IEqualityComparer<TResult> comparer)
                 => ValueEnumerable.Contains<SelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, TResult>, ValueEnumerator, TResult>(this, value, comparer);
 
-            public ValueEnumerable.SelectEnumerable<SelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, TResult>, ValueEnumerator, TResult, TSelectorResult> Select<TSelectorResult>(Func<TResult, int, TSelectorResult> selector)
+            public ValueEnumerable.SelectEnumerable<SelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, TResult>, ValueEnumerator, TResult, TSelectorResult> Select<TSelectorResult>(Func<TResult, long, TSelectorResult> selector)
                  => ValueEnumerable.Select<SelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, TResult>, ValueEnumerator, TResult, TSelectorResult>(this, selector);
 
-            public ValueEnumerable.WhereEnumerable<SelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, TResult>, ValueEnumerator, TResult> Where(Func<TResult, int, bool> predicate)
+            public ValueEnumerable.WhereEnumerable<SelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, TResult>, ValueEnumerator, TResult> Where(Func<TResult, long, bool> predicate)
                 => ValueEnumerable.Where<SelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, TResult>, ValueEnumerator, TResult>(this, predicate);
 
             public TResult First()
                 => ValueEnumerable.First<SelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, TResult>, ValueEnumerator, TResult>(this);
-            public TResult First(Func<TResult, int, bool> predicate)
+            public TResult First(Func<TResult, long, bool> predicate)
                 => ValueEnumerable.First<SelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, TResult>, ValueEnumerator, TResult>(this, predicate);
 
             public TResult FirstOrDefault()
                 => ValueEnumerable.FirstOrDefault<SelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, TResult>, ValueEnumerator, TResult>(this);
-            public TResult FirstOrDefault(Func<TResult, int, bool> predicate)
+            public TResult FirstOrDefault(Func<TResult, long, bool> predicate)
                 => ValueEnumerable.FirstOrDefault<SelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, TResult>, ValueEnumerator, TResult>(this, predicate);
 
             public TResult Single()
                 => ValueEnumerable.Single<SelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, TResult>, ValueEnumerator, TResult>(this);
-            public TResult Single(Func<TResult, int, bool> predicate)
+            public TResult Single(Func<TResult, long, bool> predicate)
                 => ValueEnumerable.Single<SelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, TResult>, ValueEnumerator, TResult>(this, predicate);
 
             public TResult SingleOrDefault()
                 => ValueEnumerable.SingleOrDefault<SelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, TResult>, ValueEnumerator, TResult>(this);
-            public TResult SingleOrDefault(Func<TResult, int, bool> predicate)
+            public TResult SingleOrDefault(Func<TResult, long, bool> predicate)
                 => ValueEnumerable.SingleOrDefault<SelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, TResult>, ValueEnumerator, TResult>(this, predicate);
 
             public IEnumerable<TResult> AsEnumerable()
@@ -263,7 +263,7 @@ namespace NetFabric.Hyperlinq
             where TResult : struct
             => ValueEnumerable.FirstOrNull<SelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, TResult>, SelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, TResult>.ValueEnumerator, TResult>(source);
 
-        public static TResult? FirstOrNull<TSource, TSubEnumerable, TSubEnumerator, TResult>(this SelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, TResult> source, Func<TResult, int, bool> predicate)
+        public static TResult? FirstOrNull<TSource, TSubEnumerable, TSubEnumerator, TResult>(this SelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, TResult> source, Func<TResult, long, bool> predicate)
             where TSubEnumerable : IValueEnumerable<TResult, TSubEnumerator>
             where TSubEnumerator : struct, IValueEnumerator<TResult>
             where TResult : struct
@@ -275,7 +275,7 @@ namespace NetFabric.Hyperlinq
             where TResult : struct
             => ValueEnumerable.SingleOrNull<SelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, TResult>, SelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, TResult>.ValueEnumerator, TResult>(source);
 
-        public static TResult? SingleOrNull<TSource, TSubEnumerable, TSubEnumerator, TResult>(this SelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, TResult> source, Func<TResult, int, bool> predicate)
+        public static TResult? SingleOrNull<TSource, TSubEnumerable, TSubEnumerator, TResult>(this SelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, TResult> source, Func<TResult, long, bool> predicate)
             where TSubEnumerable : IValueEnumerable<TResult, TSubEnumerator>
             where TSubEnumerator : struct, IValueEnumerator<TResult>
             where TResult : struct

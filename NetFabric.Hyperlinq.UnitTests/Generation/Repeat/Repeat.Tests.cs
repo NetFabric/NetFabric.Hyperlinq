@@ -78,7 +78,7 @@ namespace NetFabric.Hyperlinq.UnitTests
   
         [Theory]
         [MemberData(nameof(TestData.RangeSkip), MemberType = typeof(TestData))]
-        public void Range_With_Skip_Should_Succeed(int value, int count, int skipCount, IReadOnlyList<int> expected)
+        public void Range_With_Skip_Should_Succeed(long value, long count, long skipCount, IReadOnlyList<long> expected)
         {
             // Arrange
 
@@ -91,7 +91,7 @@ namespace NetFabric.Hyperlinq.UnitTests
   
         [Theory]
         [MemberData(nameof(TestData.RangeTake), MemberType = typeof(TestData))]
-        public void Range_With_Take_Should_Succeed(int value, int count, int takeCount, IReadOnlyList<int> expected)
+        public void Range_With_Take_Should_Succeed(long value, long count, long takeCount, IReadOnlyList<long> expected)
         {
             // Arrange
 
@@ -104,7 +104,7 @@ namespace NetFabric.Hyperlinq.UnitTests
   
         [Theory]
         [MemberData(nameof(TestData.RangeSkipTake), MemberType = typeof(TestData))]
-        public void Range_With_SkipTake_Should_Succeed(int value, int count, int skipCount, int takeCount, IReadOnlyList<int> expected)
+        public void Range_With_SkipTake_Should_Succeed(long value, long count, long skipCount, long takeCount, IReadOnlyList<long> expected)
         {
             // Arrange
 

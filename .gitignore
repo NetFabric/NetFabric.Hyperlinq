@@ -263,3 +263,6 @@ __pycache__/
 
 # BenchmarkDotNet
 *.Artifacts/
+
+# macOS
+*.DS_Store
