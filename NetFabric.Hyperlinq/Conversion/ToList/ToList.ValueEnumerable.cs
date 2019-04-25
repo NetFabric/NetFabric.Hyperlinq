@@ -8,14 +8,6 @@ namespace NetFabric.Hyperlinq
         public static List<TSource> ToList<TEnumerable, TEnumerator, TSource>(this TEnumerable source)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IValueEnumerator<TSource>
-        {
-            var list = new List<TSource>();
-            using (var enumerator = source.GetValueEnumerator())
-            {
-                while (enumerator.TryMoveNext(out var current))
-                    list.Add(current);
-            }
-            return list;
-        }
+            => new List<TSource>(source.AsEnumerable<TEnumerable, TEnumerator, TSource>());
     }
 }

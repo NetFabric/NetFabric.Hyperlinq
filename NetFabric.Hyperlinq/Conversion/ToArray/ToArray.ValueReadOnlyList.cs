@@ -10,7 +10,7 @@ namespace NetFabric.Hyperlinq
         {
             var count = source.Count;
             var array = new TSource[count];
-            for (var index = 0; index < count; index++)
+            for (var index = 0L; index < count; index++)
                 array[index] = source[index];
             return array;
         }

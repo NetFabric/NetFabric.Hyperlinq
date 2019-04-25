@@ -24,8 +24,8 @@ namespace NetFabric.Hyperlinq.UnitTests
                     .Be("predicate");
         }
 
-        public static TheoryData<int[], Func<int, int, bool>, int[]> IEnumerableData =>
-            new TheoryData<int[], Func<int, int, bool>, int[]> 
+        public static TheoryData<int[], Func<int, long, bool>, int[]> IEnumerableData =>
+            new TheoryData<int[], Func<int, long, bool>, int[]> 
             {
                 { new int[] {}, (_, __) => true, new int[] {} },
                 { new int[] { 1 }, (_, __) => true, new int[] { 1 } },
@@ -35,7 +35,7 @@ namespace NetFabric.Hyperlinq.UnitTests
 
         [Theory]
         [MemberData(nameof(IEnumerableData))]
-        public void Where_With_Array_Should_Succeed(int[] source, Func<int, int, bool> predicate, IEnumerable<int> expected)
+        public void Where_With_Array_Should_Succeed(int[] source, Func<int, long, bool> predicate, IEnumerable<int> expected)
         {
             // Arrange
 
@@ -48,7 +48,7 @@ namespace NetFabric.Hyperlinq.UnitTests
 
         [Theory]
         [MemberData(nameof(IEnumerableData))]
-        public void Where_With_ReadOnlyList_Should_Succeed(IReadOnlyList<int> source, Func<int, int, bool> predicate, IReadOnlyList<int> expected)
+        public void Where_With_ReadOnlyList_Should_Succeed(IReadOnlyList<int> source, Func<int, long, bool> predicate, IReadOnlyList<int> expected)
         {
             // Arrange
 
@@ -61,7 +61,7 @@ namespace NetFabric.Hyperlinq.UnitTests
 
         [Theory]
         [MemberData(nameof(IEnumerableData))]
-        public void Where_With_ReadOnlyCollection_Should_Succeed(IReadOnlyCollection<int> source, Func<int, int, bool> predicate, IReadOnlyCollection<int> expected)
+        public void Where_With_ReadOnlyCollection_Should_Succeed(IReadOnlyCollection<int> source, Func<int, long, bool> predicate, IReadOnlyCollection<int> expected)
         {
             // Arrange
 
@@ -74,7 +74,7 @@ namespace NetFabric.Hyperlinq.UnitTests
 
         [Theory]
         [MemberData(nameof(IEnumerableData))]
-        public void Where_With_Enumerable_Should_Succeed(IEnumerable<int> source, Func<int, int, bool> predicate, IEnumerable<int> expected)
+        public void Where_With_Enumerable_Should_Succeed(IEnumerable<int> source, Func<int, long, bool> predicate, IEnumerable<int> expected)
         {
             // Arrange
 

@@ -38,12 +38,12 @@ namespace NetFabric.Hyperlinq
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static TSource First<TEnumerable, TSource>(this TEnumerable source, Func<TSource, int, bool> predicate) 
+        public static TSource First<TEnumerable, TSource>(this TEnumerable source, Func<TSource, long, bool> predicate) 
             where TEnumerable : IReadOnlyList<TSource>
             => First<TEnumerable, TSource>(source, predicate, out var _);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static TSource First<TEnumerable, TSource>(this TEnumerable source, Func<TSource, int, bool> predicate, out int index) 
+        public static TSource First<TEnumerable, TSource>(this TEnumerable source, Func<TSource, long, bool> predicate, out int index) 
             where TEnumerable : IReadOnlyList<TSource>
         {
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
@@ -55,12 +55,12 @@ namespace NetFabric.Hyperlinq
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static TSource FirstOrDefault<TEnumerable, TSource>(this TEnumerable source, Func<TSource, int, bool> predicate) 
+        public static TSource FirstOrDefault<TEnumerable, TSource>(this TEnumerable source, Func<TSource, long, bool> predicate) 
             where TEnumerable : IReadOnlyList<TSource>
             => FirstOrDefault<TEnumerable, TSource>(source, predicate, out var _);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static TSource FirstOrDefault<TEnumerable, TSource>(this TEnumerable source, Func<TSource, int, bool> predicate, out int index) 
+        public static TSource FirstOrDefault<TEnumerable, TSource>(this TEnumerable source, Func<TSource, long, bool> predicate, out int index) 
             where TEnumerable : IReadOnlyList<TSource>
         {
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
@@ -72,13 +72,13 @@ namespace NetFabric.Hyperlinq
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static TSource? FirstOrNull<TEnumerable, TSource>(this TEnumerable source, Func<TSource, int, bool> predicate) 
+        public static TSource? FirstOrNull<TEnumerable, TSource>(this TEnumerable source, Func<TSource, long, bool> predicate) 
             where TEnumerable : IReadOnlyList<TSource>
             where TSource : struct
             => FirstOrNull<TEnumerable, TSource>(source, predicate, out var _);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static TSource? FirstOrNull<TEnumerable, TSource>(this TEnumerable source, Func<TSource, int, bool> predicate, out int index) 
+        public static TSource? FirstOrNull<TEnumerable, TSource>(this TEnumerable source, Func<TSource, long, bool> predicate, out int index) 
             where TEnumerable : IReadOnlyList<TSource>
             where TSource : struct
         {
@@ -104,7 +104,7 @@ namespace NetFabric.Hyperlinq
             return false;
         }
 
-        static bool TryFirst<TEnumerable, TSource>(this TEnumerable source, Func<TSource, int, bool> predicate, out TSource value, out int index) 
+        static bool TryFirst<TEnumerable, TSource>(this TEnumerable source, Func<TSource, long, bool> predicate, out TSource value, out int index) 
             where TEnumerable : IReadOnlyList<TSource>
         {
             var count = source.Count;

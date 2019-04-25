@@ -9,7 +9,7 @@ namespace NetFabric.Hyperlinq
         public static int Count<TSource>(this Stack<TSource> source)
             => source.Count;
 
-        public static int Count<TSource>(this Stack<TSource> source, Func<TSource, int, bool> predicate)
+        public static int Count<TSource>(this Stack<TSource> source, Func<TSource, long, bool> predicate)
             => ReadOnlyCollection.Count<ValueWrapper<TSource>, Stack<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
 
         public static ReadOnlyCollection.SkipTakeEnumerable<ValueWrapper<TSource>, Stack<TSource>.Enumerator, TSource> Skip<TSource>(this Stack<TSource> source, int count)
@@ -18,13 +18,13 @@ namespace NetFabric.Hyperlinq
         public static ReadOnlyCollection.SkipTakeEnumerable<ValueWrapper<TSource>, Stack<TSource>.Enumerator, TSource> Take<TSource>(this Stack<TSource> source, int count)
             => ReadOnlyCollection.Take<ValueWrapper<TSource>, Stack<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), count);
 
-        public static bool All<TSource>(this Stack<TSource> source, Func<TSource, int, bool> predicate)
+        public static bool All<TSource>(this Stack<TSource> source, Func<TSource, long, bool> predicate)
             => ReadOnlyCollection.All<ValueWrapper<TSource>, Stack<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
 
         public static bool Any<TSource>(this Stack<TSource> source)
             => source.Count != 0;
 
-        public static bool Any<TSource>(this Stack<TSource> source, Func<TSource, int, bool> predicate)
+        public static bool Any<TSource>(this Stack<TSource> source, Func<TSource, long, bool> predicate)
             => ReadOnlyCollection.Any<ValueWrapper<TSource>, Stack<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
 
         public static bool Contains<TSource>(this Stack<TSource> source, TSource value)
@@ -35,7 +35,7 @@ namespace NetFabric.Hyperlinq
 
         public static ReadOnlyCollection.SelectEnumerable<ValueWrapper<TSource>, Stack<TSource>.Enumerator, TSource, TResult> Select<TSource, TResult>(
             this Stack<TSource> source,
-            Func<TSource, int, TResult> selector) 
+            Func<TSource, long, TResult> selector) 
             => ReadOnlyCollection.Select<ValueWrapper<TSource>, Stack<TSource>.Enumerator, TSource, TResult>(new ValueWrapper<TSource>(source), selector);
 
         public static Enumerable.SelectManyEnumerable<ValueWrapper<TSource>,  Stack<TSource>.Enumerator,  TSource, TSubEnumerable, TSubEnumerator, TResult> SelectMany<TSource, TSubEnumerable, TSubEnumerator, TResult>(
@@ -47,46 +47,46 @@ namespace NetFabric.Hyperlinq
 
         public static Enumerable.WhereEnumerable<ValueWrapper<TSource>, Stack<TSource>.Enumerator, TSource> Where<TSource>(
             this Stack<TSource> source,
-            Func<TSource, int, bool> predicate) 
+            Func<TSource, long, bool> predicate) 
             => Enumerable.Where<ValueWrapper<TSource>, Stack<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
 
         public static TSource First<TSource, TValue>(this Stack<TSource> source)
             => ReadOnlyCollection.First<ValueWrapper<TSource>, Stack<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source));
 
-        public static TSource First<TSource, TValue>(this Stack<TSource> source, Func<TSource, int, bool> predicate)
+        public static TSource First<TSource, TValue>(this Stack<TSource> source, Func<TSource, long, bool> predicate)
             => ReadOnlyCollection.First<ValueWrapper<TSource>, Stack<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
 
         public static TSource FirstOrDefault<TSource, TValue>(this Stack<TSource> source)
             => ReadOnlyCollection.FirstOrDefault<ValueWrapper<TSource>, Stack<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source));
 
-        public static TSource FirstOrDefault<TSource, TValue>(this Stack<TSource> source, Func<TSource, int, bool> predicate)
+        public static TSource FirstOrDefault<TSource, TValue>(this Stack<TSource> source, Func<TSource, long, bool> predicate)
             => ReadOnlyCollection.FirstOrDefault<ValueWrapper<TSource>, Stack<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
 
         public static TSource? FirstOrNull<TSource, TValue>(this Stack<TSource> source)
             where TSource : struct
             => ReadOnlyCollection.FirstOrNull<ValueWrapper<TSource>, Stack<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source));
 
-        public static TSource? FirstOrNull<TSource, TValue>(this Stack<TSource> source, Func<TSource, int, bool> predicate)
+        public static TSource? FirstOrNull<TSource, TValue>(this Stack<TSource> source, Func<TSource, long, bool> predicate)
             where TSource : struct
             => ReadOnlyCollection.FirstOrNull<ValueWrapper<TSource>, Stack<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
 
         public static TSource Single<TSource, TValue>(this Stack<TSource> source)
             => ReadOnlyCollection.Single<ValueWrapper<TSource>, Stack<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source));
 
-        public static TSource Single<TSource, TValue>(this Stack<TSource> source, Func<TSource, int, bool> predicate)
+        public static TSource Single<TSource, TValue>(this Stack<TSource> source, Func<TSource, long, bool> predicate)
             => ReadOnlyCollection.Single<ValueWrapper<TSource>, Stack<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
 
         public static TSource SingleOrDefault<TSource, TValue>(this Stack<TSource> source)
             => ReadOnlyCollection.SingleOrDefault<ValueWrapper<TSource>, Stack<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source));
 
-        public static TSource SingleOrDefault<TSource, TValue>(this Stack<TSource> source, Func<TSource, int, bool> predicate)
+        public static TSource SingleOrDefault<TSource, TValue>(this Stack<TSource> source, Func<TSource, long, bool> predicate)
             => ReadOnlyCollection.SingleOrDefault<ValueWrapper<TSource>, Stack<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
 
         public static TSource? SingleOrNull<TSource, TValue>(this Stack<TSource> source)
             where TSource : struct
             => ReadOnlyCollection.SingleOrNull<ValueWrapper<TSource>, Stack<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source));
 
-        public static TSource? SingleOrNull<TSource, TValue>(this Stack<TSource> source, Func<TSource, int, bool> predicate)
+        public static TSource? SingleOrNull<TSource, TValue>(this Stack<TSource> source, Func<TSource, long, bool> predicate)
             where TSource : struct
             => ReadOnlyCollection.SingleOrNull<ValueWrapper<TSource>, Stack<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
 

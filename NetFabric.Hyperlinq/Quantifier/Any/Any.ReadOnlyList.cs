@@ -9,7 +9,7 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IReadOnlyList<TSource>
             => source.Count != 0;
 
-        public static bool Any<TEnumerable, TSource>(this TEnumerable source, Func<TSource, int, bool> predicate)
+        public static bool Any<TEnumerable, TSource>(this TEnumerable source, Func<TSource, long, bool> predicate)
             where TEnumerable : IReadOnlyList<TSource>
         {
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));

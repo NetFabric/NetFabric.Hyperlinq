@@ -16,7 +16,7 @@ namespace NetFabric.Hyperlinq
         }
 
         class AsEnumerableEnumerable<TEnumerable, TEnumerator, TSource>
-            : IReadOnlyList<TSource>
+            : IReadOnlyList<TSource>, IList<TSource>
             where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
             where TEnumerator : struct, IValueEnumerator<TSource>
         {
@@ -32,14 +32,47 @@ namespace NetFabric.Hyperlinq
 
             public int Count => (int)source.Count;
 
-            public TSource this[int index] => source[index];
+            public bool IsReadOnly => true;
+
+            public TSource this[int index] 
+            {
+                get => source[index];
+                set => throw new NotSupportedException();
+            }
+
+            public bool Contains(TSource item) 
+                => ValueReadOnlyCollection.Contains<TEnumerable, TEnumerator, TSource>(source, item);
+
+            public void CopyTo(TSource[] array, int arrayIndex)
+            {
+                var count = (int)source.Count;
+                for (var index = arrayIndex; index < count; count++)
+                    array[index] = source[index];
+            }
+
+            public int IndexOf(TSource item)
+            {
+                var count = (int)source.Count;
+                for (var index = 0; index < count; count++)
+                {
+                    if (item.Equals(source[index]))
+                        return index;
+                }
+                return -1;
+            }
+
+            void ICollection<TSource>.Add(TSource item) => throw new NotSupportedException();
+            bool ICollection<TSource>.Remove(TSource item) => throw new NotSupportedException();
+            void ICollection<TSource>.Clear() => throw new NotSupportedException();
+            void IList<TSource>.Insert(int index, TSource item) => throw new NotSupportedException();
+            void IList<TSource>.RemoveAt(int index) => throw new NotSupportedException();
 
             class Enumerator
                 : IEnumerator<TSource>
             {
                 TEnumerable source;
                 readonly long count;
-                long index;
+                int index;
 
                 internal Enumerator(AsEnumerableEnumerable<TEnumerable, TEnumerator, TSource> enumerable)
                 {

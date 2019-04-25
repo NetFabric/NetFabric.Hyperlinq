@@ -29,11 +29,9 @@ namespace NetFabric.Hyperlinq.UnitTests
         public void Select_With_ValidData_Should_Succeed(IReadOnlyList<int> source, Func<int, long, string> selector, IReadOnlyList<string> expected)
         {
             // Arrange
-            string Selector(int value, int i)
-                => selector(value, i);
 
             // Act
-            var result = ReadOnlyList.Select<IReadOnlyList<int>, int, string>(source, Selector);
+            var result = ReadOnlyList.Select<IReadOnlyList<int>, int, string>(source, selector);
 
             // Assert
             result.Should().Generate(expected);
@@ -66,11 +64,9 @@ namespace NetFabric.Hyperlinq.UnitTests
         public void Select_With_Skip_Should_Succeed(IReadOnlyList<int> source, Func<int, long, int> selector, int skipCount, IReadOnlyList<int> expected)
         {
             // Arrange
-            int Selector(int value, int i)
-                => selector(value, i);
 
             // Act
-            var result = ReadOnlyList.Select<IReadOnlyList<int>, int, int>(source, Selector).Skip(skipCount);
+            var result = ReadOnlyList.Select<IReadOnlyList<int>, int, int>(source, selector).Skip(skipCount);
 
             // Assert
             result.AsEnumerable().Should().Equal(expected);
@@ -81,11 +77,9 @@ namespace NetFabric.Hyperlinq.UnitTests
         public void Select_With_Take_Should_Succeed(IReadOnlyList<int> source, Func<int, long, int> selector, int takeCount, IReadOnlyList<int> expected)
         {
             // Arrange
-            int Selector(int value, int i)
-                => selector(value, i);
 
             // Act
-            var result = ReadOnlyList.Select<IReadOnlyList<int>, int, int>(source, Selector).Take(takeCount);
+            var result = ReadOnlyList.Select<IReadOnlyList<int>, int, int>(source, selector).Take(takeCount);
 
             // Assert
             result.AsEnumerable().Should().Equal(expected);
@@ -96,11 +90,9 @@ namespace NetFabric.Hyperlinq.UnitTests
         public void Select_With_SkipTake_Should_Succeed(IReadOnlyList<int> source, Func<int, long, int> selector, int skipCount, int takeCount, IReadOnlyList<int> expected)
         {
             // Arrange
-            int Selector(int value, int i)
-                => selector(value, i);
 
             // Act
-            var result = ReadOnlyList.Select<IReadOnlyList<int>, int, int>(source, Selector).Skip(skipCount).Take(takeCount);
+            var result = ReadOnlyList.Select<IReadOnlyList<int>, int, int>(source, selector).Skip(skipCount).Take(takeCount);
 
             // Assert
             result.AsEnumerable().Should().Equal(expected);

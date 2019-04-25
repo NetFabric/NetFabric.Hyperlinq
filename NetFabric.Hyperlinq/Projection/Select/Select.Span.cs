@@ -6,7 +6,7 @@ namespace NetFabric.Hyperlinq
     {
         public static SelectEnumerable<TSource, TResult> Select<TSource, TResult>(
             this Span<TSource> source, 
-            Func<TSource, int, TResult> selector)
+            Func<TSource, long, TResult> selector)
         {
             if (selector is null) ThrowHelper.ThrowArgumentNullException(nameof(selector));
 
@@ -16,9 +16,9 @@ namespace NetFabric.Hyperlinq
         public readonly ref struct SelectEnumerable<TSource, TResult>
         {
             internal readonly Span<TSource> source;
-            internal readonly Func<TSource, int, TResult> selector;
+            internal readonly Func<TSource, long, TResult> selector;
 
-            internal SelectEnumerable(in Span<TSource> source, Func<TSource, int, TResult> selector)
+            internal SelectEnumerable(in Span<TSource> source, Func<TSource, long, TResult> selector)
             {
                 this.source = source;
                 this.selector = selector;
@@ -29,7 +29,7 @@ namespace NetFabric.Hyperlinq
             public ref struct Enumerator
             {
                 Span<TSource> source;
-                readonly Func<TSource, int, TResult> selector;
+                readonly Func<TSource, long, TResult> selector;
                 readonly int count;
                 int index;
 

@@ -83,8 +83,8 @@ namespace NetFabric.Hyperlinq.UnitTests
             result.Should().Be(expected);
         }
 
-        public static TheoryData<int[], Func<int, int, bool>, int> SinglePredicateData =>
-            new TheoryData<int[], Func<int, int, bool>, int>
+        public static TheoryData<int[], Func<int, long, bool>, int> SinglePredicateData =>
+            new TheoryData<int[], Func<int, long, bool>, int>
             {
                 { new int[] { 1 }, (_, __) => true, 1 },
                 { new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 }, (value, _) => value == 5, 5 },
@@ -93,7 +93,7 @@ namespace NetFabric.Hyperlinq.UnitTests
 
         [Theory]
         [MemberData(nameof(SinglePredicateData))]
-        public void SinglePredicate_With_ValidIEnumerable_Should_Succeed(IEnumerable<int> source, Func<int, int, bool> predicate, int expected)
+        public void SinglePredicate_With_ValidIEnumerable_Should_Succeed(IEnumerable<int> source, Func<int, long, bool> predicate, int expected)
         {
             // Arrange
 
@@ -106,7 +106,7 @@ namespace NetFabric.Hyperlinq.UnitTests
 
         [Theory]
         [MemberData(nameof(SinglePredicateData))]
-        public void SinglePredicate_With_ValidIReadOnlyCollection_Should_Succeed(IReadOnlyCollection<int> source, Func<int, int, bool> predicate, int expected)
+        public void SinglePredicate_With_ValidIReadOnlyCollection_Should_Succeed(IReadOnlyCollection<int> source, Func<int, long, bool> predicate, int expected)
         {
             // Arrange
 
@@ -119,7 +119,7 @@ namespace NetFabric.Hyperlinq.UnitTests
 
         [Theory]
         [MemberData(nameof(SinglePredicateData))]
-        public void SinglePredicate_With_ValidIReadOnlyList_Should_Succeed(IReadOnlyList<int> source, Func<int, int, bool> predicate, int expected)
+        public void SinglePredicate_With_ValidIReadOnlyList_Should_Succeed(IReadOnlyList<int> source, Func<int, long, bool> predicate, int expected)
         {
             // Arrange
 

@@ -9,14 +9,10 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IValueEnumerator<TSource>
         {
-            var count = source.Count;
-            if (count > int.MaxValue) 
-                ThrowHelper.ThrowArgumentTooLargeException(nameof(source), count);
+            if (source.Count > int.MaxValue) 
+                ThrowHelper.ThrowArgumentTooLargeException(nameof(source), source.Count);
                 
-            var list = new List<TSource>((int)count);
-            if (count != 0)
-                list.AddRange(ValueReadOnlyCollection.AsEnumerable<TEnumerable, TEnumerator, TSource>(source));
-            return list;
+            return new List<TSource>(ValueReadOnlyCollection.AsEnumerable<TEnumerable, TEnumerator, TSource>(source));
         }
     }
 }

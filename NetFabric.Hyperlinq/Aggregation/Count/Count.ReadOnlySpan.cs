@@ -7,7 +7,7 @@ namespace NetFabric.Hyperlinq
         public static int Count<TSource>(this ReadOnlySpan<TSource> source)
             => source.Length;
 
-        public static int Count<TSource>(this ReadOnlySpan<TSource> source, Func<TSource, int, bool> predicate)
+        public static int Count<TSource>(this ReadOnlySpan<TSource> source, Func<TSource, long, bool> predicate)
         {
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
 

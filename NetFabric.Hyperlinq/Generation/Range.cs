@@ -167,25 +167,10 @@ namespace NetFabric.Hyperlinq
                 => this;
                 
             public long[] ToArray()
-            {
-                if (count > int.MaxValue) ThrowHelper.ThrowArgumentTooLargeException(count);
-
-                var array = new long[count];
-                for (var index = 0; index < count; index++)
-                    array[index] = start + index;
-                return array;
-            }
+                => ValueReadOnlyList.ToArray<RangeEnumerable, ValueEnumerator, long>(this);
 
             public List<long> ToList()
-            {
-                if (count > int.MaxValue) ThrowHelper.ThrowArgumentTooLargeException(count);
-
-                var list = new List<long>();
-                var end = start + count;
-                for (var value = start; value < end; value++)
-                    list.Add(value);
-                return list;
-            }
+                => ValueReadOnlyList.ToList<RangeEnumerable, ValueEnumerator, long>(this);
         }
 
         public static long Count(this RangeEnumerable source)

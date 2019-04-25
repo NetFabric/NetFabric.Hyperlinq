@@ -46,7 +46,7 @@ namespace NetFabric.Hyperlinq.UnitTests
         public void Count_With_ReadOnlyCollection_ValueType(int expected)
         {
             // Arrange
-            IEnumerable<int> source = TestReadOnlyCollection.ValueType(expected);
+            IEnumerable<long> source = TestReadOnlyCollection.ValueType(expected);
 
             // Act
             var result = source.Count();
@@ -62,7 +62,7 @@ namespace NetFabric.Hyperlinq.UnitTests
         public void Count_With_ReadOnlyCollection_ReferenceType(int expected)
         {
             // Arrange
-            IEnumerable<int> source = TestReadOnlyCollection.ReferenceType(expected);
+            IEnumerable<long> source = TestReadOnlyCollection.ReferenceType(expected);
 
             // Act
             var result = source.Count();
@@ -78,7 +78,7 @@ namespace NetFabric.Hyperlinq.UnitTests
         public void Count_With_ReadOnlyList_ValueType(int expected)
         {
             // Arrange
-            IEnumerable<int> source = TestReadOnlyList.ValueType(expected);
+            IEnumerable<long> source = TestReadOnlyList.ValueType(expected);
 
             // Act
             var result = source.Count();
@@ -94,7 +94,7 @@ namespace NetFabric.Hyperlinq.UnitTests
         public void Count_With_ReadOnlyList_ReferenceType(int expected)
         {
             // Arrange
-            IEnumerable<int> source = TestReadOnlyList.ReferenceType(expected);
+            IEnumerable<long> source = TestReadOnlyList.ReferenceType(expected);
 
             // Act
             var result = source.Count();

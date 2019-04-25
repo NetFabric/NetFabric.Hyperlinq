@@ -5,7 +5,7 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class Enumerable
     {
-        public static TakeEnumerable<TEnumerable, TEnumerator, TSource> Take<TEnumerable, TEnumerator, TSource>(this TEnumerable source, int count)
+        public static TakeEnumerable<TEnumerable, TEnumerator, TSource> Take<TEnumerable, TEnumerator, TSource>(this TEnumerable source, long count)
             where TEnumerable : IEnumerable<TSource>
             where TEnumerator: IEnumerator<TSource>
         {
@@ -18,9 +18,9 @@ namespace NetFabric.Hyperlinq
             where TEnumerator : IEnumerator<TSource>
         {
             readonly TEnumerable source;
-            readonly int count;
+            readonly long count;
 
-            internal TakeEnumerable(in TEnumerable source, int count)
+            internal TakeEnumerable(in TEnumerable source, long count)
             {
                 this.source = source;
                 this.count = count;
@@ -33,7 +33,7 @@ namespace NetFabric.Hyperlinq
                 : IDisposable
             {
                 TEnumerator enumerator;
-                int counter;
+                long counter;
 
                 internal Enumerator(in TakeEnumerable<TEnumerable, TEnumerator, TSource> enumerable)
                 {
@@ -66,7 +66,7 @@ namespace NetFabric.Hyperlinq
                 : IValueEnumerator<TSource>
             {
                 TEnumerator enumerator;
-                int counter;
+                long counter;
 
                 internal ValueEnumerator(in TakeEnumerable<TEnumerable, TEnumerator, TSource> enumerable)
                 {
@@ -111,16 +111,16 @@ namespace NetFabric.Hyperlinq
                 public void Dispose() => enumerator.Dispose();
             }
 
-            public int Count()
-                => (int)ValueEnumerable.Count<TakeEnumerable<TEnumerable, TEnumerator, TSource>, ValueEnumerator, TSource>(this);
+            public long Count()
+                => ValueEnumerable.Count<TakeEnumerable<TEnumerable, TEnumerator, TSource>, ValueEnumerator, TSource>(this);
 
-            public int Count(Func<TSource, long, bool> predicate)
-                => (int)ValueEnumerable.Count<TakeEnumerable<TEnumerable, TEnumerator, TSource>, ValueEnumerator, TSource>(this, predicate);
+            public long Count(Func<TSource, long, bool> predicate)
+                => ValueEnumerable.Count<TakeEnumerable<TEnumerable, TEnumerator, TSource>, ValueEnumerator, TSource>(this, predicate);
 
-            public ValueEnumerable.SkipEnumerable<TakeEnumerable<TEnumerable, TEnumerator, TSource>, ValueEnumerator, TSource> Skip(int count)
+            public ValueEnumerable.SkipEnumerable<TakeEnumerable<TEnumerable, TEnumerator, TSource>, ValueEnumerator, TSource> Skip(long count)
                 => ValueEnumerable.Skip<TakeEnumerable<TEnumerable, TEnumerator, TSource>, ValueEnumerator, TSource>(this, count);
 
-            public TakeEnumerable<TEnumerable, TEnumerator, TSource> Take(int count)
+            public TakeEnumerable<TEnumerable, TEnumerator, TSource> Take(long count)
                 => Enumerable.Take<TEnumerable, TEnumerator, TSource>(source, Math.Min(this.count, count));
 
             public bool All(Func<TSource, long, bool> predicate)

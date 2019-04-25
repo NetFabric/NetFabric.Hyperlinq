@@ -67,8 +67,8 @@ namespace NetFabric.Hyperlinq.UnitTests
             result.Should().Be(expected);
         }
 
-        public static TheoryData<int[], Func<int, int, bool>, int> FirstOrDefaultPredicateData =>
-            new TheoryData<int[], Func<int, int, bool>, int>
+        public static TheoryData<int[], Func<int, long, bool>, int> FirstOrDefaultPredicateData =>
+            new TheoryData<int[], Func<int, long, bool>, int>
             {
                 { new int[] { }, (_, __) => true, 0 },
                 { new int[] { 1 }, (_, __) => true, 1 },
@@ -79,7 +79,7 @@ namespace NetFabric.Hyperlinq.UnitTests
 
         [Theory]
         [MemberData(nameof(FirstOrDefaultPredicateData))]
-        public void FirstOrDefaultPredicate_With_ValidIEnumerable_Should_Succeed(IEnumerable<int> source, Func<int, int, bool> predicate, int expected)
+        public void FirstOrDefaultPredicate_With_ValidIEnumerable_Should_Succeed(IEnumerable<int> source, Func<int, long, bool> predicate, int expected)
         {
             // Arrange
 
@@ -92,7 +92,7 @@ namespace NetFabric.Hyperlinq.UnitTests
 
         [Theory]
         [MemberData(nameof(FirstOrDefaultPredicateData))]
-        public void FirstOrDefaultPredicate_With_ValidIReadOnlyCollection_Should_Succeed(IReadOnlyCollection<int> source, Func<int, int, bool> predicate, int expected)
+        public void FirstOrDefaultPredicate_With_ValidIReadOnlyCollection_Should_Succeed(IReadOnlyCollection<int> source, Func<int, long, bool> predicate, int expected)
         {
             // Arrange
 
@@ -105,7 +105,7 @@ namespace NetFabric.Hyperlinq.UnitTests
 
         [Theory]
         [MemberData(nameof(FirstOrDefaultPredicateData))]
-        public void FirstOrDefaultPredicate_With_ValidIReadOnlyList_Should_Succeed(IReadOnlyList<int> source, Func<int, int, bool> predicate, int expected)
+        public void FirstOrDefaultPredicate_With_ValidIReadOnlyList_Should_Succeed(IReadOnlyList<int> source, Func<int, long, bool> predicate, int expected)
         {
             // Arrange
 

@@ -7,7 +7,7 @@ namespace NetFabric.Hyperlinq
         public static bool Any<TSource>(this TSource[] source)
             => source.Length != 0;
 
-        public static bool Any<TSource>(this TSource[] source, Func<TSource, int, bool> predicate)
+        public static bool Any<TSource>(this TSource[] source, Func<TSource, long, bool> predicate)
         {
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
 

@@ -67,6 +67,6 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [BenchmarkCategory("Enumerable_Value")]
         [Benchmark]
         public long[] Hyperlinq_Enumerable_Value() => 
-            enumerableValue.ToArray();
+            enumerableValue.ToArray<TestEnumerable.Enumerable, TestEnumerable.Enumerable.Enumerator, long>();
     }
 }

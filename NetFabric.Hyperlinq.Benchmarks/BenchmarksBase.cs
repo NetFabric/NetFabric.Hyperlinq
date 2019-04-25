@@ -9,10 +9,18 @@ namespace NetFabric.Hyperlinq.Benchmarks
         protected int[] array;
         protected List<int> list;
         protected Queue<int> queue;
+
         protected IEnumerable<int> linqRange;
         protected Enumerable.RangeEnumerable hyperlinqRange;
+
         protected IEnumerable<long> enumerableReference;
         protected TestEnumerable.Enumerable enumerableValue;
+
+        protected IReadOnlyCollection<long> collectionReference;
+        protected TestReadOnlyCollection.EnumerableValueType collectionValue;
+
+        protected IReadOnlyList<long> listReference;
+        protected TestReadOnlyList.EnumerableValueType listValue;
 
         [Params(0, 100, 10_000)]
         public int Count { get; set; }
@@ -27,11 +35,19 @@ namespace NetFabric.Hyperlinq.Benchmarks
         {
             linqRange = System.Linq.Enumerable.Range(0, count);
             hyperlinqRange = Enumerable.Range(0, count);
+
             queue = new Queue<int>(linqRange);
             array = linqRange.ToArray();
             list = new List<int>(linqRange);
+
             enumerableReference = TestEnumerable.ReferenceType(count);
             enumerableValue = TestEnumerable.ValueType(count);
+
+            collectionReference = TestReadOnlyCollection.ReferenceType(count);
+            collectionValue = TestReadOnlyCollection.ValueType(count);
+
+            listReference = TestReadOnlyList.ReferenceType(count);
+            listValue = TestReadOnlyList.ValueType(count);
         }
     }
 }

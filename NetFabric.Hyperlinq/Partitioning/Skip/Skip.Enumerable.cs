@@ -5,7 +5,7 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class Enumerable
     {
-        public static SkipEnumerable<TEnumerable, TEnumerator, TSource> Skip<TEnumerable, TEnumerator, TSource>(this TEnumerable source, int count)
+        public static SkipEnumerable<TEnumerable, TEnumerator, TSource> Skip<TEnumerable, TEnumerator, TSource>(this TEnumerable source, long count)
             where TEnumerable : IEnumerable<TSource>
             where TEnumerator : IEnumerator<TSource>
             => new SkipEnumerable<TEnumerable, TEnumerator, TSource>(in source, count);
@@ -16,9 +16,9 @@ namespace NetFabric.Hyperlinq
             where TEnumerator : IEnumerator<TSource>
         {
             readonly TEnumerable source;
-            readonly int count;
+            readonly long count;
 
-            internal SkipEnumerable(in TEnumerable source, int count)
+            internal SkipEnumerable(in TEnumerable source, long count)
             {
                 this.source = source;
                 this.count = count;
@@ -31,7 +31,7 @@ namespace NetFabric.Hyperlinq
                 : IDisposable
             {
                 TEnumerator enumerator;
-                int counter;
+                long counter;
 
                 internal Enumerator(in SkipEnumerable<TEnumerable, TEnumerator, TSource> enumerable)
                 {
@@ -64,7 +64,7 @@ namespace NetFabric.Hyperlinq
                 : IValueEnumerator<TSource>
             {
                 TEnumerator enumerator;
-                int counter;
+                long counter;
 
                 internal ValueEnumerator(in SkipEnumerable<TEnumerable, TEnumerator, TSource> enumerable)
                 {
@@ -115,16 +115,16 @@ namespace NetFabric.Hyperlinq
                 public void Dispose() => enumerator.Dispose();
             }
 
-            public int Count()
-                => (int)ValueEnumerable.Count<SkipEnumerable<TEnumerable, TEnumerator, TSource>, ValueEnumerator, TSource>(this);
+            public long Count()
+                => ValueEnumerable.Count<SkipEnumerable<TEnumerable, TEnumerator, TSource>, ValueEnumerator, TSource>(this);
 
-            public int Count(Func<TSource, long, bool> predicate)
-                => (int)ValueEnumerable.Count<SkipEnumerable<TEnumerable, TEnumerator, TSource>, ValueEnumerator, TSource>(this, predicate);
+            public long Count(Func<TSource, long, bool> predicate)
+                => ValueEnumerable.Count<SkipEnumerable<TEnumerable, TEnumerator, TSource>, ValueEnumerator, TSource>(this, predicate);
 
-            public SkipEnumerable<TEnumerable, TEnumerator, TSource> Skip(int count)
+            public SkipEnumerable<TEnumerable, TEnumerator, TSource> Skip(long count)
                 => Enumerable.Skip<TEnumerable, TEnumerator, TSource>(source, this.count + count);
 
-            public SkipTakeEnumerable<TEnumerable, TEnumerator, TSource> Take(int count)
+            public SkipTakeEnumerable<TEnumerable, TEnumerator, TSource> Take(long count)
                 => Enumerable.SkipTake<TEnumerable, TEnumerator, TSource>(source, this.count, count);
 
             public bool All(Func<TSource, long, bool> predicate)

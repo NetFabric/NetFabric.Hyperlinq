@@ -45,13 +45,13 @@ namespace NetFabric.Hyperlinq
             public EmptyEnumerable<TSource> Take(int count)
                 => this;
 
-            public bool All(Func<TSource, int, bool> predicate)
+            public bool All(Func<TSource, long, bool> predicate)
                 => false;
 
             public bool Any()
                 => false;
 
-            public bool Any(Func<TSource, int, bool> predicate)
+            public bool Any(Func<TSource, long, bool> predicate)
                 => false;
 
             public bool Contains(TSource value)
@@ -60,7 +60,7 @@ namespace NetFabric.Hyperlinq
             public bool Contains(TSource value, IEqualityComparer<TSource> comparer)
                 => false;
 
-            public EmptyEnumerable<TSource> Select<TResult>(Func<TSource, int, TResult> selector)
+            public EmptyEnumerable<TSource> Select<TResult>(Func<TSource, long, TResult> selector)
             {
                 if (selector is null) ThrowHelper.ThrowArgumentNullException(nameof(selector));
 
@@ -74,7 +74,7 @@ namespace NetFabric.Hyperlinq
                 return this;
             }
 
-            public EmptyEnumerable<TSource> Where(Func<TSource, int, bool> predicate)
+            public EmptyEnumerable<TSource> Where(Func<TSource, long, bool> predicate)
             {
                 if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
 
@@ -82,16 +82,16 @@ namespace NetFabric.Hyperlinq
             }
 
             public TSource First() => ThrowHelper.ThrowEmptySequence<TSource>();
-            public TSource First(Func<TSource, int, bool> _) => ThrowHelper.ThrowEmptySequence<TSource>();
+            public TSource First(Func<TSource, long, bool> _) => ThrowHelper.ThrowEmptySequence<TSource>();
 
             public TSource FirstOrDefault() => default;
-            public TSource FirstOrDefault(Func<TSource, int, bool> _) => default;
+            public TSource FirstOrDefault(Func<TSource, long, bool> _) => default;
 
             public TSource Single() => ThrowHelper.ThrowEmptySequence<TSource>();
-            public TSource Single(Func<TSource, int, bool> _) => ThrowHelper.ThrowEmptySequence<TSource>();
+            public TSource Single(Func<TSource, long, bool> _) => ThrowHelper.ThrowEmptySequence<TSource>();
 
             public TSource SingleOrDefault() => default;
-            public TSource SingleOrDefault(Func<TSource, int, bool> _) => default;
+            public TSource SingleOrDefault(Func<TSource, long, bool> _) => default;
 
             public IReadOnlyList<TSource> AsEnumerable()
                 => ValueReadOnlyList.AsEnumerable<EmptyEnumerable<TSource>, ValueEnumerator, TSource>(this);
@@ -109,7 +109,7 @@ namespace NetFabric.Hyperlinq
         public static int Count<TSource>(this EmptyEnumerable<TSource> _)
             => 0;
 
-        public static int Count<TSource>(this EmptyEnumerable<TSource> _, Func<TSource, int, bool> predicate)
+        public static int Count<TSource>(this EmptyEnumerable<TSource> _, Func<TSource, long, bool> predicate)
         {
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
 
@@ -120,7 +120,7 @@ namespace NetFabric.Hyperlinq
             where TSource : struct
             => null;
 
-        public static TSource? FirstOrNull<TSource>(this EmptyEnumerable<TSource> _, Func<TSource, int, bool> predicate)
+        public static TSource? FirstOrNull<TSource>(this EmptyEnumerable<TSource> _, Func<TSource, long, bool> predicate)
             where TSource : struct
         {
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
@@ -132,7 +132,7 @@ namespace NetFabric.Hyperlinq
             where TSource : struct
             => null;
 
-        public static TSource? SingleOrNull<TSource>(this EmptyEnumerable<TSource> _, Func<TSource, int, bool> predicate)
+        public static TSource? SingleOrNull<TSource>(this EmptyEnumerable<TSource> _, Func<TSource, long, bool> predicate)
             where TSource : struct
         {
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));

@@ -9,13 +9,19 @@ namespace NetFabric.Hyperlinq
             where TEnumerator : struct, IValueEnumerator<TSource>
         {
             var array = new TSource[source.Count];
-            var index = 0;
-            using (var enumerator = source.GetValueEnumerator())
+            if (source.Count != 0)
             {
-                while (enumerator.TryMoveNext(out var current))
+                var index = 0L;
+                using (var enumerator = source.GetValueEnumerator())
                 {
-                    array[index] = current;
-                    index++;
+                    if (source.Count != 0)
+                    {
+                        while (enumerator.TryMoveNext(out var current))
+                        {
+                            array[index] = current;
+                            index++;
+                        }
+                    }
                 }
             }
             return array;

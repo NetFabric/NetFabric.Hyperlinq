@@ -31,7 +31,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             // Arrange
 
             // Act
-            var result = Enumerable.Select<IEnumerable<int>, IEnumerator<int>, int, string>(source, Selector);
+            var result = Enumerable.Select<IEnumerable<int>, IEnumerator<int>, int, string>(source, selector);
 
             // Assert
             result.Should().Generate(expected);
@@ -57,8 +57,6 @@ namespace NetFabric.Hyperlinq.UnitTests
                     index++;
                 }
             }
-
-            string Selector(int value, int i) => selector(value, i);
         }
     }
 }

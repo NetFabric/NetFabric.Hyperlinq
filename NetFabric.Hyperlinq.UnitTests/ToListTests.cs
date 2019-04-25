@@ -50,13 +50,13 @@ namespace NetFabric.Hyperlinq.UnitTests
         public void Count_With_ReadOnlyList_ReferenceType(int expected)
         {
             // Arrange
-            IEnumerable<int> source = TestReadOnlyList.ReferenceType(expected);
+            IEnumerable<long> source = TestReadOnlyList.ReferenceType(expected);
 
             // Act
             var result = source.ToList();
 
             // Assert
-            result.Should().Equal(System.Linq.Enumerable.ToList<int>(source));
+            result.Should().Equal(System.Linq.Enumerable.ToList<long>(source));
         }
     }
 }

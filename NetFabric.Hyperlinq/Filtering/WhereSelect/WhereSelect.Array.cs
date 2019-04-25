@@ -7,8 +7,8 @@ namespace NetFabric.Hyperlinq
     {
         internal static WhereSelectEnumerable<TSource, TResult> WhereSelect<TSource, TResult>(
             this TSource[] source, 
-            Func<TSource, int, bool> predicate, 
-            Func<TSource, int, TResult> selector) 
+            Func<TSource, long, bool> predicate, 
+            Func<TSource, long, TResult> selector) 
         {
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
             if (selector is null) ThrowHelper.ThrowArgumentNullException(nameof(selector));
@@ -20,10 +20,10 @@ namespace NetFabric.Hyperlinq
             : IValueEnumerable<TResult, WhereSelectEnumerable<TSource, TResult>.ValueEnumerator>
         {
             internal readonly TSource[] source;
-            internal readonly Func<TSource, int, bool> predicate;
-            readonly Func<TSource, int, TResult> selector;
+            internal readonly Func<TSource, long, bool> predicate;
+            readonly Func<TSource, long, TResult> selector;
 
-            internal WhereSelectEnumerable(TSource[] source, Func<TSource, int, bool> predicate, Func<TSource, int, TResult> selector)
+            internal WhereSelectEnumerable(TSource[] source, Func<TSource, long, bool> predicate, Func<TSource, long, TResult> selector)
             {
                 this.source = source;
                 this.predicate = predicate;
@@ -36,8 +36,8 @@ namespace NetFabric.Hyperlinq
             public struct Enumerator
             {
                 readonly TSource[] source;
-                readonly Func<TSource, int, bool> predicate;
-                readonly Func<TSource, int, TResult> selector;
+                readonly Func<TSource, long, bool> predicate;
+                readonly Func<TSource, long, TResult> selector;
                 readonly int count;
                 int index;
 
@@ -70,8 +70,8 @@ namespace NetFabric.Hyperlinq
                 : IValueEnumerator<TResult>
             {
                 readonly TSource[] source;
-                readonly Func<TSource, int, bool> predicate;
-                readonly Func<TSource, int, TResult> selector;
+                readonly Func<TSource, long, bool> predicate;
+                readonly Func<TSource, long, TResult> selector;
                 readonly int count;
                 int index;
 
@@ -117,11 +117,11 @@ namespace NetFabric.Hyperlinq
                 public void Dispose() { }
             }
 
-            public int Count()
+            public long Count()
                 => source.Count(predicate);
 
-            public int Count(Func<TResult, long, bool> predicate)
-                => (int)ValueEnumerable.Count<WhereSelectEnumerable<TSource, TResult>, ValueEnumerator, TResult>(this, predicate);
+            public long Count(Func<TResult, long, bool> predicate)
+                => ValueEnumerable.Count<WhereSelectEnumerable<TSource, TResult>, ValueEnumerator, TResult>(this, predicate);
 
             public ValueEnumerable.SkipEnumerable<WhereSelectEnumerable<TSource, TResult>, ValueEnumerator, TResult> Skip(int count)
                 => ValueEnumerable.Skip<WhereSelectEnumerable<TSource, TResult>, ValueEnumerator, TResult>(this, count);

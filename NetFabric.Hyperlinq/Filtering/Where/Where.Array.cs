@@ -5,7 +5,7 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class Array
     {
-        public static WhereEnumerable<TSource> Where<TSource>(this TSource[] source, Func<TSource, int, bool> predicate) 
+        public static WhereEnumerable<TSource> Where<TSource>(this TSource[] source, Func<TSource, long, bool> predicate) 
         {
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
 
@@ -16,9 +16,9 @@ namespace NetFabric.Hyperlinq
             : IValueEnumerable<TSource, WhereEnumerable<TSource>.ValueEnumerator>
         {
             internal readonly TSource[] source;
-            internal readonly Func<TSource, int, bool> predicate;
+            internal readonly Func<TSource, long, bool> predicate;
 
-            internal WhereEnumerable(TSource[] source, Func<TSource, int, bool> predicate)
+            internal WhereEnumerable(TSource[] source, Func<TSource, long, bool> predicate)
             {
                 this.source = source;
                 this.predicate = predicate;
@@ -30,7 +30,7 @@ namespace NetFabric.Hyperlinq
             public struct Enumerator 
             {
                 readonly TSource[] source;
-                readonly Func<TSource, int, bool> predicate;
+                readonly Func<TSource, long, bool> predicate;
                 readonly int count;
                 int index;
 
@@ -62,7 +62,7 @@ namespace NetFabric.Hyperlinq
                 : IValueEnumerator<TSource>
             {
                 readonly TSource[] source;
-                readonly Func<TSource, int, bool> predicate;
+                readonly Func<TSource, long, bool> predicate;
                 readonly int count;
                 int index;
 
@@ -105,11 +105,11 @@ namespace NetFabric.Hyperlinq
                 public void Dispose() { }
             }
 
-            public int Count()
+            public long Count()
                 => source.Count(predicate);
 
-            public int Count(Func<TSource, long, bool> predicate)
-                => (int)ValueEnumerable.Count<WhereEnumerable<TSource>, ValueEnumerator, TSource>(this, predicate);
+            public long Count(Func<TSource, long, bool> predicate)
+                => ValueEnumerable.Count<WhereEnumerable<TSource>, ValueEnumerator, TSource>(this, predicate);
 
             public ValueEnumerable.SkipEnumerable<WhereEnumerable<TSource>, ValueEnumerator, TSource> Skip(int count)
                 => ValueEnumerable.Skip<WhereEnumerable<TSource>, ValueEnumerator, TSource>(this, count);
@@ -132,7 +132,7 @@ namespace NetFabric.Hyperlinq
             public bool Contains(TSource value, IEqualityComparer<TSource> comparer)
                 => ValueEnumerable.Contains<WhereEnumerable<TSource>, ValueEnumerator, TSource>(this, value, comparer);
 
-            public Array.WhereSelectEnumerable<TSource, TResult> Select<TResult>(Func<TSource, int, TResult> selector)
+            public Array.WhereSelectEnumerable<TSource, TResult> Select<TResult>(Func<TSource, long, TResult> selector)
                 => Array.WhereSelect<TSource, TResult>(source, predicate, selector);
 
             public ValueEnumerable.SelectManyEnumerable<WhereEnumerable<TSource>, ValueEnumerator, TSource, TSubEnumerable, TSubEnumerator, TResult> SelectMany<TSubEnumerable, TSubEnumerator, TResult>(Func<TSource, TSubEnumerable> selector) 
@@ -140,12 +140,12 @@ namespace NetFabric.Hyperlinq
                 where TSubEnumerator : struct, IValueEnumerator<TResult>
                 => ValueEnumerable.SelectMany<WhereEnumerable<TSource>, ValueEnumerator, TSource, TSubEnumerable, TSubEnumerator, TResult>(this, selector);
 
-            public Array.WhereEnumerable<TSource> Where(Func<TSource, int, bool> predicate)
+            public Array.WhereEnumerable<TSource> Where(Func<TSource, long, bool> predicate)
             {
                 var currentPredicate = this.predicate;
                 return Array.Where<TSource>(source, CombinedPredicates());
 
-                Func<TSource, int, bool> CombinedPredicates() 
+                Func<TSource, long, bool> CombinedPredicates() 
                     => (item, index) => currentPredicate(item, index) && predicate(item, index);
             }
 

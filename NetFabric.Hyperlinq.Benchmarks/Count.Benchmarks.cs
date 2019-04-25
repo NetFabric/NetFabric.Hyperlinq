@@ -62,12 +62,12 @@ namespace NetFabric.Hyperlinq.Benchmarks
 
         [BenchmarkCategory("Enumerable_Reference")]
         [Benchmark]
-        public int Hyperlinq_Enumerable_Reference() => 
+        public long Hyperlinq_Enumerable_Reference() => 
             enumerableReference.Count();
 
         [BenchmarkCategory("Enumerable_Value")]
         [Benchmark]
-        public int Hyperlinq_Enumerable_Value() => 
+        public long Hyperlinq_Enumerable_Value() => 
             enumerableValue.Count<TestEnumerable.Enumerable, TestEnumerable.Enumerable.Enumerator, long>();
     }
 }

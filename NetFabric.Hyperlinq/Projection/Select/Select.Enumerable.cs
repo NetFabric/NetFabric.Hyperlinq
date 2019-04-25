@@ -7,7 +7,7 @@ namespace NetFabric.Hyperlinq
     {
         public static SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult> Select<TEnumerable, TEnumerator, TSource, TResult>(
             this TEnumerable source, 
-            Func<TSource, int, TResult> selector)
+            Func<TSource, long, TResult> selector)
             where TEnumerable : IEnumerable<TSource> 
             where TEnumerator : IEnumerator<TSource> 
         {
@@ -22,9 +22,9 @@ namespace NetFabric.Hyperlinq
             where TEnumerator : IEnumerator<TSource>
         {
             readonly TEnumerable source;
-            readonly Func<TSource, int, TResult> selector;
+            readonly Func<TSource, long, TResult> selector;
 
-            internal SelectEnumerable(in TEnumerable source, Func<TSource, int, TResult> selector)
+            internal SelectEnumerable(in TEnumerable source, Func<TSource, long, TResult> selector)
             {
                 this.source = source;
                 this.selector = selector;
@@ -37,8 +37,8 @@ namespace NetFabric.Hyperlinq
                 : IDisposable
             {
                 TEnumerator enumerator;
-                readonly Func<TSource, int, TResult> selector;
-                int index;
+                readonly Func<TSource, long, TResult> selector;
+                long index;
 
                 internal Enumerator(in SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult> enumerable)
                 {
@@ -67,8 +67,8 @@ namespace NetFabric.Hyperlinq
                 : IValueEnumerator<TResult>
             {
                 TEnumerator enumerator;
-                readonly Func<TSource, int, TResult> selector;
-                int index;
+                readonly Func<TSource, long, TResult> selector;
+                long index;
 
                 internal ValueEnumerator(in SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult> enumerable)
                 {
@@ -104,16 +104,16 @@ namespace NetFabric.Hyperlinq
                 public void Dispose() => enumerator.Dispose();
             }
 
-            public int Count()
+            public long Count()
                 => Enumerable.Count<TEnumerable, TEnumerator, TSource>(source);
 
-            public int Count(Func<TResult, long, bool> predicate)
-                => (int)ValueEnumerable.Count<SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>, ValueEnumerator, TResult>(this, predicate);
+            public long Count(Func<TResult, long, bool> predicate)
+                => ValueEnumerable.Count<SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>, ValueEnumerator, TResult>(this, predicate);
 
-            public ValueEnumerable.SkipEnumerable<SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>, ValueEnumerator, TResult> Skip(int count)
+            public ValueEnumerable.SkipEnumerable<SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>, ValueEnumerator, TResult> Skip(long count)
                 => ValueEnumerable.Skip<SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>, ValueEnumerator, TResult>(this, count);
 
-            public ValueEnumerable.TakeEnumerable<SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>, ValueEnumerator, TResult> Take(int count)
+            public ValueEnumerable.TakeEnumerable<SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>, ValueEnumerator, TResult> Take(long count)
                 => ValueEnumerable.Take<SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>, ValueEnumerator, TResult>(this, count);
 
             public bool All(Func<TResult, long, bool> predicate)
@@ -131,12 +131,12 @@ namespace NetFabric.Hyperlinq
             public bool Contains(TResult value, IEqualityComparer<TResult> comparer)
                 => ValueEnumerable.Contains<SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>, ValueEnumerator, TResult>(this, value, comparer);
 
-            public Enumerable.SelectEnumerable<TEnumerable, TEnumerator, TSource, TSelectorResult> Select<TSelectorResult>(Func<TResult, int, TSelectorResult> selector)
+            public Enumerable.SelectEnumerable<TEnumerable, TEnumerator, TSource, TSelectorResult> Select<TSelectorResult>(Func<TResult, long, TSelectorResult> selector)
             {
                 var currentSelector = this.selector;
                 return Enumerable.Select<TEnumerable, TEnumerator, TSource, TSelectorResult>(source, CombinedSelectors);
 
-                TSelectorResult CombinedSelectors(TSource item, int index) 
+                TSelectorResult CombinedSelectors(TSource item, long index) 
                     => selector(currentSelector(item, index), index);
             }
 

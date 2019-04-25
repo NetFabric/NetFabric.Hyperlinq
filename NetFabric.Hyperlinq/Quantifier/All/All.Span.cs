@@ -4,7 +4,7 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class SpanExtensions
     {
-        public static bool All<TSource>(this Span<TSource> source, Func<TSource, int, bool> predicate)
+        public static bool All<TSource>(this Span<TSource> source, Func<TSource, long, bool> predicate)
         {
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
 

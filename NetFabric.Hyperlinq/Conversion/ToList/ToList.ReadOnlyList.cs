@@ -7,11 +7,6 @@ namespace NetFabric.Hyperlinq
     {
         public static List<TSource> ToList<TEnumerable, TSource>(this TEnumerable source)
             where TEnumerable : IReadOnlyList<TSource>
-        {
-            var count = source.Count;
-            var list = new List<TSource>(count);
-            list.AddRange(source);
-            return list;
-        }
+            => new List<TSource>(source);
     }
 }

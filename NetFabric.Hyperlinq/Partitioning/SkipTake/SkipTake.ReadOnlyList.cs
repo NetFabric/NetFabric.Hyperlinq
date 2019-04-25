@@ -163,13 +163,13 @@ namespace NetFabric.Hyperlinq
                 => ValueEnumerable.ToList<SkipTakeEnumerable<TEnumerable, TSource>, ValueEnumerator, TSource>(this);
         }
 
-        public static int Count<TEnumerable, TSource>(this SkipTakeEnumerable<TEnumerable, TSource> source)
+        public static long Count<TEnumerable, TSource>(this SkipTakeEnumerable<TEnumerable, TSource> source)
             where TEnumerable : IReadOnlyList<TSource>
-            => (int)source.Count;
+            => source.Count;
 
-        public static int Count<TEnumerable, TSource>(this SkipTakeEnumerable<TEnumerable, TSource> source, Func<TSource, long, bool> predicate)
+        public static long Count<TEnumerable, TSource>(this SkipTakeEnumerable<TEnumerable, TSource> source, Func<TSource, long, bool> predicate)
             where TEnumerable : IReadOnlyList<TSource>
-            => (int)ValueReadOnlyList.Count<SkipTakeEnumerable<TEnumerable, TSource>, SkipTakeEnumerable<TEnumerable, TSource>.ValueEnumerator, TSource>(source, predicate);
+            => ValueReadOnlyList.Count<SkipTakeEnumerable<TEnumerable, TSource>, SkipTakeEnumerable<TEnumerable, TSource>.ValueEnumerator, TSource>(source, predicate);
 
         public static TSource? FirstOrNull<TEnumerable, TSource>(this SkipTakeEnumerable<TEnumerable, TSource> source)
             where TEnumerable : IReadOnlyList<TSource>
