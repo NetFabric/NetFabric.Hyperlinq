@@ -153,10 +153,18 @@ namespace NetFabric.Hyperlinq
                 => this;
 
             public TSource[] ToArray()
-                => ValueReadOnlyList.ToArray<ReturnEnumerable<TSource>, ValueEnumerator, TSource>(this);
+            {
+                var array = new TSource[1];
+                array[0] = value;
+                return array;
+            }
 
             public List<TSource> ToList()
-                => ValueReadOnlyCollection.ToList<ReturnEnumerable<TSource>, ValueEnumerator, TSource>(this);
+            {
+                var list = new List<TSource>();
+                list.Add(value);
+                return list;
+            }
         }
 
         public static long Count<TSource>(this ReturnEnumerable<TSource> source)

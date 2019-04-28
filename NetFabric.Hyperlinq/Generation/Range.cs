@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace NetFabric.Hyperlinq
@@ -167,10 +168,51 @@ namespace NetFabric.Hyperlinq
                 => this;
                 
             public long[] ToArray()
-                => ValueReadOnlyList.ToArray<RangeEnumerable, ValueEnumerator, long>(this);
+            {
+                var array = new long[count];
+                unchecked
+                {
+                    for(long index = 0L, value = start; index < count; index++, value++)
+                        array[index] = start + index;
+                }
+                return array;
+            }
 
             public List<long> ToList()
-                => ValueReadOnlyList.ToList<RangeEnumerable, ValueEnumerator, long>(this);
+                => new List<long>(new ToListCollection(this));
+
+            class ToListCollection
+                : ICollection<long>
+            {
+                readonly long start;
+                readonly long count;
+
+                internal ToListCollection(in RangeEnumerable source)
+                {
+                    this.start = source.start;
+                    this.count = source.count;
+                }
+
+                public int Count => (int)count;
+
+                public bool IsReadOnly => true;
+
+                public void CopyTo(long[] array, int _)
+                {
+                    unchecked
+                    {
+                        for(int index = 0; index < count; index++)
+                            array[index] = start + index;
+                    }
+                }
+
+                IEnumerator<long> IEnumerable<long>.GetEnumerator() => throw new NotSupportedException();
+                IEnumerator IEnumerable.GetEnumerator() => throw new NotSupportedException();
+                void ICollection<long>.Add(long item) => throw new NotSupportedException();
+                bool ICollection<long>.Remove(long item) => throw new NotSupportedException();
+                void ICollection<long>.Clear() => throw new NotSupportedException();
+                bool ICollection<long>.Contains(long item) => throw new NotSupportedException();
+            }
         }
 
         public static long Count(this RangeEnumerable source)

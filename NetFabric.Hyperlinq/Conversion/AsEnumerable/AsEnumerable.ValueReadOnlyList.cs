@@ -16,7 +16,8 @@ namespace NetFabric.Hyperlinq
         }
 
         class AsEnumerableEnumerable<TEnumerable, TEnumerator, TSource>
-            : IReadOnlyList<TSource>, IList<TSource>
+            : IReadOnlyList<TSource>
+            , IList<TSource>
             where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
             where TEnumerator : struct, IValueEnumerator<TSource>
         {
@@ -45,18 +46,26 @@ namespace NetFabric.Hyperlinq
 
             public void CopyTo(TSource[] array, int arrayIndex)
             {
+                if (arrayIndex < 0) ThrowHelper.ThrowArgumentOutOfRangeException(nameof(arrayIndex));
+
                 var count = (int)source.Count;
-                for (var index = arrayIndex; index < count; count++)
-                    array[index] = source[index];
+                unchecked
+                {
+                    for (var index = 0; index < count; count++)
+                        array[index + arrayIndex] = source[index];
+                }
             }
 
             public int IndexOf(TSource item)
             {
                 var count = (int)source.Count;
-                for (var index = 0; index < count; count++)
+                unchecked
                 {
-                    if (item.Equals(source[index]))
-                        return index;
+                    for (var index = 0; index < count; count++)
+                    {
+                        if (item.Equals(source[index]))
+                            return index;
+                    }
                 }
                 return -1;
             }

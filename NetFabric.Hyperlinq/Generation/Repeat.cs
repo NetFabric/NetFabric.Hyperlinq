@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace NetFabric.Hyperlinq
@@ -145,10 +146,47 @@ namespace NetFabric.Hyperlinq
                 => this;
 
             public TSource[] ToArray()
-                => ValueReadOnlyList.ToArray<RepeatEnumerable<TSource>, ValueEnumerator, TSource>(this);
+            {
+                var array = new TSource[count];
+                System.Array.Fill(array, value);
+                return array;
+            }
 
             public List<TSource> ToList()
-                => ValueReadOnlyCollection.ToList<RepeatEnumerable<TSource>, ValueEnumerator, TSource>(this);
+                => new List<TSource>(new ToListCollection(this));
+
+            class ToListCollection
+                : ICollection<TSource>
+            {
+                readonly TSource value;
+                readonly long count;
+
+                internal ToListCollection(in RepeatEnumerable<TSource> source)
+                {
+                    this.value = source.value;
+                    this.count = source.count;
+                }
+
+                public int Count => (int)count;
+
+                public bool IsReadOnly => true;
+
+                public void CopyTo(TSource[] array, int _)
+                {
+                    unchecked
+                    {
+                        for(int index = 0; index < count; index++)
+                            array[index] = value;
+                    }
+                }
+
+                IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => throw new NotSupportedException();
+                IEnumerator IEnumerable.GetEnumerator() => throw new NotSupportedException();
+                void ICollection<TSource>.Add(TSource item) => throw new NotSupportedException();
+                bool ICollection<TSource>.Remove(TSource item) => throw new NotSupportedException();
+                void ICollection<TSource>.Clear() => throw new NotSupportedException();
+                bool ICollection<TSource>.Contains(TSource item) => throw new NotSupportedException();
+            }
         }
 
         public static long Count<TSource>(this RepeatEnumerable<TSource> source)
