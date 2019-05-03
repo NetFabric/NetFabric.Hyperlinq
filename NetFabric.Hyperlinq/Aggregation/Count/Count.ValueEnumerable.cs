@@ -44,14 +44,14 @@ namespace NetFabric.Hyperlinq
             var index = 0L;
             using (var enumerator = source.GetValueEnumerator())
             {
-                while (enumerator.TryMoveNext(out var current))
+                checked
                 {
-                    checked
+                    while (enumerator.TryMoveNext(out var current))
                     {
-                        if (predicate(current, index))
-                            count++;
+                            if (predicate(current, index))
+                                count++;
 
-                        index++;
+                            index++;
                     }
                 }
             }

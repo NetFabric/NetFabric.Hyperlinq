@@ -49,9 +49,9 @@ namespace NetFabric.Hyperlinq
 
                 public bool MoveNext()
                 {
-                    while (enumerator.MoveNext())
+                    checked
                     {
-                        checked
+                        while (enumerator.MoveNext())
                         {
                             if (predicate(enumerator.Current, index))
                                 return true;
@@ -81,9 +81,9 @@ namespace NetFabric.Hyperlinq
 
                 public bool TryMoveNext(out TSource current)
                 {
-                    while (enumerator.MoveNext())
+                    checked
                     {
-                        checked
+                        while (enumerator.MoveNext())
                         {
                             current = enumerator.Current;
                             if (predicate(current, index))
@@ -98,9 +98,9 @@ namespace NetFabric.Hyperlinq
 
                 public bool TryMoveNext()
                 {
-                    while (enumerator.MoveNext())
+                    checked
                     {
-                        checked
+                        while (enumerator.MoveNext())
                         {
                             if (predicate(enumerator.Current, index))
                                 return true;

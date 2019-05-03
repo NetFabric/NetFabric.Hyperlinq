@@ -123,17 +123,17 @@ namespace NetFabric.Hyperlinq
             index = 0;
             using (var enumerator = (TEnumerator)source.GetEnumerator())
             {
-                while (enumerator.MoveNext())
+                checked
                 {
-                    checked
+                    while (enumerator.MoveNext())
                     {
-                        if (predicate(enumerator.Current, index))
-                        {
-                            value = enumerator.Current;
-                            return true;
-                        }
+                            if (predicate(enumerator.Current, index))
+                            {
+                                value = enumerator.Current;
+                                return true;
+                            }
 
-                        index++;
+                            index++;
                     }
                 }
             }        

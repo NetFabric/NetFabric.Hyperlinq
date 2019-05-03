@@ -33,9 +33,9 @@ namespace NetFabric.Hyperlinq
             using (var enumerator = source.GetValueEnumerator())
             {
                 var index = 0;
-                while (enumerator.TryMoveNext(out var current))
+                checked
                 {
-                    checked
+                    while (enumerator.TryMoveNext(out var current))
                     {
                         if (predicate(current, index))
                             return true;

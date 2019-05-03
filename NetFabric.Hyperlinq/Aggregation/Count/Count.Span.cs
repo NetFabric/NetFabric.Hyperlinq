@@ -16,11 +16,8 @@ namespace NetFabric.Hyperlinq
             var length = source.Length;
             for (var index = 0; index < length; index++)
             {
-                unchecked // always less than source.Length
-                {                
-                    if (predicate(source[index], index))
-                        count++;
-                }
+                if (predicate(source[index], index))
+                    count++;
             }
             return count;
         }

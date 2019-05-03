@@ -135,24 +135,21 @@ namespace NetFabric.Hyperlinq
                     index = 0;
                     while (enumerator.MoveNext())
                     {
-                        unchecked // always less than source.Count
+                        value = enumerator.Current;
+                        if (predicate(value, index))
                         {
-                            value = enumerator.Current;
-                            if (predicate(value, index))
+                            // found first, keep going until end or find second
+                            while (enumerator.MoveNext())
                             {
-                                // found first, keep going until end or find second
-                                while (enumerator.MoveNext())
-                                {
-                                    if (predicate(enumerator.Current, index))
-                                        ThrowHelper.ThrowNotSingleSequence<TSource>();
+                                if (predicate(enumerator.Current, index))
+                                    ThrowHelper.ThrowNotSingleSequence<TSource>();
 
-                                    index++;
-                                }
-                                return true;
+                                index++;
                             }
-
-                            index++;
+                            return true;
                         }
+
+                        index++;
                     }
                 }  
             }    

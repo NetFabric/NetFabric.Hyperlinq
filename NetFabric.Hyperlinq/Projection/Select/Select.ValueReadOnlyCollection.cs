@@ -57,7 +57,7 @@ namespace NetFabric.Hyperlinq
                 {
                     if (enumerator.TryMoveNext(out current))
                     {
-                        unchecked { index++; } // always less than source.Count
+                        index++; 
                         return true;
                     }
 
@@ -86,7 +86,7 @@ namespace NetFabric.Hyperlinq
                 {
                     if (enumerator.TryMoveNext(out var temp))
                     {
-                        unchecked { index++; } // always less than source.Count
+                        index++; 
                         current = selector(temp, index);
                         return true;
                     }

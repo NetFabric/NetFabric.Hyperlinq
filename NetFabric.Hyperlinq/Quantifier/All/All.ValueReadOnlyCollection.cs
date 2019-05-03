@@ -17,13 +17,10 @@ namespace NetFabric.Hyperlinq
                 var index = 0;
                 while (enumerator.TryMoveNext(out var current))
                 {
-                    unchecked // always less than source.Count
-                    {
-                        if (!predicate(current, index))
-                            return false;
-                            
-                        index++;
-                    }
+                    if (!predicate(current, index))
+                        return false;
+                        
+                    index++;
                 }
             }
             return true;

@@ -43,16 +43,10 @@ namespace NetFabric.Hyperlinq
 
                 public bool MoveNext()
                 {
-                    unchecked // always less than count
+                    while (++index < count)
                     {
-                        index++;
-                        while (index < count)
-                        {
-                            if (predicate(source[index], index))
-                                return true;
-
-                            index++;
-                        }
+                        if (predicate(source[index], index))
+                            return true;
                     }
                     return false;
                 }

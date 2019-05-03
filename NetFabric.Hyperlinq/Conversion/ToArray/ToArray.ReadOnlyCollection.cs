@@ -14,13 +14,10 @@ namespace NetFabric.Hyperlinq
                 var index = 0;
                 using (var enumerator = source.GetEnumerator())
                 {
-                    unchecked // always less than source.Count
+                    while (enumerator.MoveNext())
                     {
-                        while (enumerator.MoveNext())
-                        {
-                            array[index] = enumerator.Current;
-                            index++;
-                        }
+                        array[index] = enumerator.Current;
+                        index++;
                     }
                 }
             }

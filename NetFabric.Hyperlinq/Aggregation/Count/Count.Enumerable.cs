@@ -29,14 +29,14 @@ namespace NetFabric.Hyperlinq
             var index = 0L;
             using (var enumerator = (TEnumerator)source.GetEnumerator())
             {
-                while (enumerator.MoveNext())
+                checked
                 {
-                    checked
+                    while (enumerator.MoveNext())
                     {
-                        if (predicate(enumerator.Current, index))
-                            count++;
+                            if (predicate(enumerator.Current, index))
+                                count++;
 
-                        index++;
+                            index++;
                     }
                 }
             }

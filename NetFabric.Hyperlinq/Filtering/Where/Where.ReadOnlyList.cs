@@ -51,17 +51,14 @@ namespace NetFabric.Hyperlinq
 
                 public bool MoveNext()
                 {
-                    unchecked // always less than count
+                    index++;
+                    while (index < count)
                     {
-                        index++;
-                        while (index < count)
-                        {
-                            current = source[index];
-                            if (predicate(current, index))
-                                return true;
+                        current = source[index];
+                        if (predicate(current, index))
+                            return true;
 
-                            index++;
-                        }
+                        index++;
                     }
                     current = default;
                     return false;
@@ -86,17 +83,14 @@ namespace NetFabric.Hyperlinq
 
                 public bool TryMoveNext(out TSource current)
                 {
-                    unchecked
+                    index++;
+                    while (index < count)
                     {
-                        index++;
-                        while (index < count)
-                        {
-                            current = source[index];
-                            if (predicate(current, index))
-                                return true;
+                        current = source[index];
+                        if (predicate(current, index))
+                            return true;
 
-                            index++;
-                        }
+                        index++;
                     }
                     current = default;
                     return false;
@@ -104,16 +98,10 @@ namespace NetFabric.Hyperlinq
 
                 public bool TryMoveNext()
                 {
-                    unchecked
+                    while (++index < count)
                     {
-                        index++;
-                        while (index < count)
-                        {
-                            if (predicate(source[index], index))
-                                return true;
-
-                            index++;
-                        }
+                        if (predicate(source[index], index))
+                            return true;
                     }
                     return false;
                 }

@@ -115,9 +115,9 @@ namespace NetFabric.Hyperlinq
             using (var enumerator = source.GetValueEnumerator())
             {
                 index = 0;
-                while (enumerator.TryMoveNext(out value))
+                checked
                 {
-                    checked
+                    while (enumerator.TryMoveNext(out value))
                     {
                         if (predicate(value, index))
                             return true;

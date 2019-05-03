@@ -170,11 +170,8 @@ namespace NetFabric.Hyperlinq
             public long[] ToArray()
             {
                 var array = new long[count];
-                unchecked
-                {
-                    for(long index = 0L, value = start; index < count; index++, value++)
-                        array[index] = start + index;
-                }
+                for(long index = 0L, value = start; index < count; index++, value++)
+                    array[index] = start + index;
                 return array;
             }
 
@@ -199,11 +196,8 @@ namespace NetFabric.Hyperlinq
 
                 public void CopyTo(long[] array, int _)
                 {
-                    unchecked
-                    {
-                        for(int index = 0; index < count; index++)
-                            array[index] = start + index;
-                    }
+                    for(int index = 0; index < count; index++)
+                        array[index] = start + index;
                 }
 
                 IEnumerator IEnumerable.GetEnumerator() => throw new NotSupportedException();

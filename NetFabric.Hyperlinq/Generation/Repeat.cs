@@ -184,11 +184,8 @@ namespace NetFabric.Hyperlinq
                     if (value == null)
                         return;
                         
-                    unchecked
-                    {
-                        for(int index = 0; index < count; index++)
-                            array[index] = value;
-                    }
+                    for(int index = 0; index < count; index++)
+                        array[index] = value;
                 }
 
                 IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => throw new NotSupportedException();

@@ -14,9 +14,9 @@ namespace NetFabric.Hyperlinq
             using (var enumerator = (TEnumerator)source.GetEnumerator())
             {
                 var index = 0L;
-                while (enumerator.MoveNext())
+                checked
                 {
-                    checked
+                    while (enumerator.MoveNext())
                     {
                         if (!predicate(enumerator.Current, index))
                             return false;

@@ -130,16 +130,13 @@ namespace NetFabric.Hyperlinq
                 {
                     while (enumerator.MoveNext())
                     {
-                        unchecked // always less than source.Count
+                        if (predicate(enumerator.Current, index))
                         {
-                            if (predicate(enumerator.Current, index))
-                            {
-                                value = enumerator.Current;
-                                return true;
-                            }
-
-                            index++;
+                            value = enumerator.Current;
+                            return true;
                         }
+
+                        index++;
                     }
                 }
             }        

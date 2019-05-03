@@ -53,23 +53,17 @@ namespace NetFabric.Hyperlinq
                 if (arrayIndex < 0) ThrowHelper.ThrowArgumentOutOfRangeException(nameof(arrayIndex));
 
                 var count = (int)source.Count;
-                unchecked
-                {
-                    for (var index = 0; index < count; count++)
-                        array[index + arrayIndex] = source[index];
-                }
+                for (var index = 0; index < count; count++)
+                    array[index + arrayIndex] = source[index];
             }
 
             public int IndexOf(TSource item)
             {
                 var count = (int)source.Count;
-                unchecked
+                for (var index = 0; index < count; count++)
                 {
-                    for (var index = 0; index < count; count++)
-                    {
-                        if (item.Equals(source[index]))
-                            return index;
-                    }
+                    if (item.Equals(source[index]))
+                        return index;
                 }
                 return -1;
             }

@@ -50,7 +50,7 @@ namespace NetFabric.Hyperlinq
                     while (enumerator.TryMoveNext(out var current))
                     {
                         array[index] = current;
-                        unchecked { index++; }
+                        index++;
                     }                   
                 }
             }
