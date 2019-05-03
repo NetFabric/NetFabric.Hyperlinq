@@ -12,24 +12,28 @@ namespace NetFabric.Hyperlinq
         {
             if (source.Count > int.MaxValue) ThrowHelper.ThrowArgumentTooLargeException(nameof(source), source.Count);
             
-            return new AsEnumerableEnumerable<TEnumerable, TEnumerator, TSource>(source);
+            return new AsEnumerableIterator<TEnumerable, TEnumerator, TSource>(source);
         }
 
-        class AsEnumerableEnumerable<TEnumerable, TEnumerator, TSource>
-            : IReadOnlyList<TSource>
+        class AsEnumerableIterator<TEnumerable, TEnumerator, TSource>
+            : Iterator<TSource>
+            , IReadOnlyList<TSource>
             , IList<TSource>
             where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
             where TEnumerator : struct, IValueEnumerator<TSource>
         {
             readonly TEnumerable source;
+            TEnumerator enumerator;
+            int count;
+            int index;
 
-            internal AsEnumerableEnumerable(in TEnumerable source)
+            internal AsEnumerableIterator(in TEnumerable source)
             {
                 this.source = source;
             }
 
-            public IEnumerator<TSource> GetEnumerator() => new Enumerator(this);
-            IEnumerator IEnumerable.GetEnumerator() => new Enumerator(this);
+            protected override Iterator<TSource> Clone()
+                => new AsEnumerableIterator<TEnumerable, TEnumerator, TSource>(source);
 
             public int Count => (int)source.Count;
 
@@ -76,28 +80,29 @@ namespace NetFabric.Hyperlinq
             void IList<TSource>.Insert(int index, TSource item) => throw new NotSupportedException();
             void IList<TSource>.RemoveAt(int index) => throw new NotSupportedException();
 
-            class Enumerator
-                : IEnumerator<TSource>
+            public override bool MoveNext()
             {
-                TEnumerable source;
-                readonly long count;
-                int index;
-
-                internal Enumerator(AsEnumerableEnumerable<TEnumerable, TEnumerator, TSource> enumerable)
+                switch (state)
                 {
-                    source = enumerable.source;
-                    count = source.Count;
-                    index = -1;
+                    case 1:
+                        enumerator = source.GetValueEnumerator();
+                        count = (int)source.Count;
+                        index = -1;
+                        state = 2;
+                        goto case 2;
+
+                    case 2:
+                        if (++index < count)
+                        {
+                            current = source[index];
+                            return true;
+                        }
+
+                        Dispose();
+                        break;
                 }
 
-                public TSource Current => source[index];
-                object IEnumerator.Current => source[index];
-
-                public bool MoveNext() => ++index < count;
-
-                public void Reset() => index = -1;
-
-                public void Dispose() { }
+                return false;
             }
         }
     }

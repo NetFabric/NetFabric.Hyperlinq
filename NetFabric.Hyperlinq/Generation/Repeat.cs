@@ -148,7 +148,15 @@ namespace NetFabric.Hyperlinq
             public TSource[] ToArray()
             {
                 var array = new TSource[count];
-                System.Array.Fill(array, value);
+                if (value is object)
+                {
+#if NETCORE    
+                    System.Array.Fill<TSource>(array, value);
+#else                
+                    for (var index = 0; index < count; index++)
+                        array[index] = value;
+#endif
+                }
                 return array;
             }
 
@@ -161,7 +169,7 @@ namespace NetFabric.Hyperlinq
                 readonly TSource value;
                 readonly long count;
 
-                internal ToListCollection(in RepeatEnumerable<TSource> source)
+                public ToListCollection(in RepeatEnumerable<TSource> source)
                 {
                     this.value = source.value;
                     this.count = source.count;
@@ -173,6 +181,9 @@ namespace NetFabric.Hyperlinq
 
                 public void CopyTo(TSource[] array, int _)
                 {
+                    if (value == null)
+                        return;
+                        
                     unchecked
                     {
                         for(int index = 0; index < count; index++)

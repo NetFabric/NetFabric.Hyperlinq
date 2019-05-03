@@ -113,5 +113,31 @@ namespace NetFabric.Hyperlinq.UnitTests
             // Assert
             result.AsEnumerable().Should().Equal(expected);
         }
+  
+        [Theory]
+        [MemberData(nameof(TestData.Range), MemberType = typeof(TestData))]
+        public void Range_With_ToArray_Should_Succeed(long start, long count, IReadOnlyList<long> expected)
+        {
+            // Arrange
+
+            // Act
+            var result = Enumerable.Range(start, count).ToArray();
+
+            // Assert
+            result.AsEnumerable().Should().Equal(expected as long[]);
+        }
+  
+        [Theory]
+        [MemberData(nameof(TestData.Range), MemberType = typeof(TestData))]
+        public void Range_With_ToList_Should_Succeed(long start, long count, IReadOnlyList<long> expected)
+        {
+            // Arrange
+
+            // Act
+            var result = Enumerable.Range(start, count).ToList();
+
+            // Assert
+            result.AsEnumerable().Should().Equal(new List<long>(expected));
+        }
     }
 }

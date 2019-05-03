@@ -12,24 +12,26 @@ namespace NetFabric.Hyperlinq
         {
             if (source.Count > int.MaxValue) ThrowHelper.ThrowArgumentTooLargeException(nameof(source), source.Count);
             
-            return new AsEnumerableEnumerable<TEnumerable, TEnumerator, TSource>(source);
+            return new AsEnumerableIterator<TEnumerable, TEnumerator, TSource>(source);
         }
 
-        class AsEnumerableEnumerable<TEnumerable, TEnumerator, TSource>
-            : IReadOnlyCollection<TSource>
+        class AsEnumerableIterator<TEnumerable, TEnumerator, TSource>
+            : Iterator<TSource>
+            , IReadOnlyCollection<TSource>
             , ICollection<TSource>
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IValueEnumerator<TSource>
         {
             readonly TEnumerable source;
+            TEnumerator enumerator;
 
-            internal AsEnumerableEnumerable(in TEnumerable source)
+            internal AsEnumerableIterator(in TEnumerable source)
             {
                 this.source = source;
             }
 
-            public IEnumerator<TSource> GetEnumerator() => new Enumerator(this);
-            IEnumerator IEnumerable.GetEnumerator() => new Enumerator(this);
+            protected override Iterator<TSource> Clone()
+                => new AsEnumerableIterator<TEnumerable, TEnumerator, TSource>(source);
 
             public int Count => (int)source.Count;
 
@@ -57,26 +59,34 @@ namespace NetFabric.Hyperlinq
             bool ICollection<TSource>.Remove(TSource item) => throw new NotSupportedException();
             void ICollection<TSource>.Clear() => throw new NotSupportedException();
 
-            class Enumerator
-                : IEnumerator<TSource>
+            public override bool MoveNext()
             {
-                TEnumerator enumerator;
-                TSource current;
-
-                internal Enumerator(AsEnumerableEnumerable<TEnumerable, TEnumerator, TSource> enumerable)
+                switch (state)
                 {
-                    enumerator = enumerable.source.GetValueEnumerator();
-                    current = default;
+                    case 1:
+                        enumerator = source.GetValueEnumerator();
+                        state = 2;
+                        goto case 2;
+
+                    case 2:
+                        if (enumerator.TryMoveNext(out current))
+                            return true;
+
+                        Dispose();
+                        break;
                 }
 
-                public TSource Current => current;
-                object IEnumerator.Current => current;
+                return false;
+            }
 
-                public bool MoveNext() => enumerator.TryMoveNext(out current);
+            public override void Dispose()
+            {
+                if (state > 0)
+                {
+                    enumerator.Dispose();
+                }
 
-                public void Reset() => throw new NotSupportedException();
-
-                public void Dispose() => enumerator.Dispose();
+                base.Dispose();
             }
         }
     }

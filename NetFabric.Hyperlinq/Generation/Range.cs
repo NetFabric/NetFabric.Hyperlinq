@@ -187,7 +187,7 @@ namespace NetFabric.Hyperlinq
                 readonly long start;
                 readonly long count;
 
-                internal ToListCollection(in RangeEnumerable source)
+                public ToListCollection(in RangeEnumerable source)
                 {
                     this.start = source.start;
                     this.count = source.count;
@@ -206,8 +206,8 @@ namespace NetFabric.Hyperlinq
                     }
                 }
 
-                IEnumerator<long> IEnumerable<long>.GetEnumerator() => throw new NotSupportedException();
                 IEnumerator IEnumerable.GetEnumerator() => throw new NotSupportedException();
+                IEnumerator<long> IEnumerable<long>.GetEnumerator() => throw new NotSupportedException();
                 void ICollection<long>.Add(long item) => throw new NotSupportedException();
                 bool ICollection<long>.Remove(long item) => throw new NotSupportedException();
                 void ICollection<long>.Clear() => throw new NotSupportedException();

@@ -27,5 +27,8 @@ namespace NetFabric.Hyperlinq
 
         public static void ThrowInvalidOperationException()
             => throw new InvalidOperationException();
+
+        public static void ThrowNotSupportedException()
+            => throw new NotSupportedException();
     }
 }
