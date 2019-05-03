@@ -4,7 +4,14 @@
 
 # NetFabric.Hyperlinq
 
-This is a re-implementation of LINQ with improved performance, mainly by not boxing value-type enumerators and by using overloads for the [`IReadOnlyCollection<T>`](https://docs.microsoft.com/en-us/dotnet/api/system.collections.generic.ireadonlycollection-1) and [`IReadOnlyList<T>`](https://docs.microsoft.com/en-us/dotnet/api/system.collections.generic.ireadonlylist-1) interfaces.
+A re-implementation of LINQ operations with improved performance by using:
+
+- Method call devirtualization.
+- Interface constraints to avoid boxing.
+- Value type enumerators.
+- An enumerable interface that takes the enumerator type as generics parameter.
+- Overloads for the [`IReadOnlyCollection<T>`](https://docs.microsoft.com/en-us/dotnet/api/system.collections.generic.ireadonlycollection-1) and [`IReadOnlyList<T>`](https://docs.microsoft.com/en-us/dotnet/api/system.collections.generic.ireadonlylist-1) interfaces instead of runtime casts.
+- Support for operations on arrays, `Span<T>` and `ReadOnlySpan<T>` that return references to items.
 
 ## Documentation
 
