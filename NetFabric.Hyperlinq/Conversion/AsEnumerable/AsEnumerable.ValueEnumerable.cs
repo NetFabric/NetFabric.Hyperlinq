@@ -11,7 +11,7 @@ namespace NetFabric.Hyperlinq
             where TEnumerator : struct, IValueEnumerator<TSource>
             => new AsEnumerableIterator<TEnumerable, TEnumerator, TSource>(source);
 
-        class AsEnumerableIterator<TEnumerable, TEnumerator, TSource>
+        sealed class AsEnumerableIterator<TEnumerable, TEnumerator, TSource>
             : Iterator<TSource>
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IValueEnumerator<TSource>

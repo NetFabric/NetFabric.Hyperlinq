@@ -9,7 +9,7 @@ namespace NetFabric.Hyperlinq
         , IEnumerator<TSource>
     {
         readonly int threadId = Environment.CurrentManagedThreadId;
-        protected int state;
+        protected int state = 0;
         protected TSource current;
 
         public TSource Current => current;
