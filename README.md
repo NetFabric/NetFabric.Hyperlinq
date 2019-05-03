@@ -6,12 +6,12 @@
 
 A re-implementation of LINQ operations with improved performance by using:
 
-- Method call devirtualization.
-- Interface constraints to avoid boxing.
 - Value type enumerators.
-- An enumerable interface that takes the enumerator type as generics parameter.
+- Interface constraints to avoid boxing.
+- Method call devirtualization.
+- Enumerable interface that takes the enumerator type as generics parameter.
 - Overloads for the [`IReadOnlyCollection<T>`](https://docs.microsoft.com/en-us/dotnet/api/system.collections.generic.ireadonlycollection-1) and [`IReadOnlyList<T>`](https://docs.microsoft.com/en-us/dotnet/api/system.collections.generic.ireadonlylist-1) interfaces instead of runtime casts.
-- Support for operations on arrays, `Span<T>` and `ReadOnlySpan<T>` that return references to items.
+- Operations on arrays, `Span<T>` and `ReadOnlySpan<T>` that return references to items.
 
 ## Documentation
 
@@ -48,8 +48,8 @@ A re-implementation of LINQ operations with improved performance by using:
 - Generation
   - `Create(Func<TEnumerator>)`
   - `Empty()`
-  - `Range(int, int)`
-  - `Repeat(TSource, int)`
+  - `Range(long, long)`
+  - `Repeat(TSource, long)`
   - `Return(TSource)`
 - Projection
   - `Select(Func<TSource, long, TResult>)`
