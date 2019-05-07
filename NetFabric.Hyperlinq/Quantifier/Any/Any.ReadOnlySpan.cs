@@ -2,7 +2,7 @@ using System;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class SpanExtensions
+    public static partial class ReadOnlySpanExtensions
     {
         public static bool Any<TSource>(this ReadOnlySpan<TSource> source)
             => source.Length != 0;

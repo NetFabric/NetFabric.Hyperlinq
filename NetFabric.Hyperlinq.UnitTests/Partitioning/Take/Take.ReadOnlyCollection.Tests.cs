@@ -10,19 +10,20 @@ namespace NetFabric.Hyperlinq.UnitTests
     {
         [Theory]
         [MemberData(nameof(TestData.Take), MemberType = typeof(TestData))]
-        public void Take_With_ValidData_Should_Succeed(IReadOnlyCollection<int> source, int count, IReadOnlyCollection<int> expected)
+        public void Take_With_ValidData_Should_Succeed(int[] source, int count, int[] expected)
         {
             // Arrange
+            var collection = Wrap.AsReadOnlyCollection(source);
 
             // Act
-            var result = ReadOnlyCollection.Take<IReadOnlyCollection<int>, IEnumerator<int>, int>(source, count);
+            var result = ReadOnlyCollection.Take<Wrap.ReadOnlyCollection<int>, Wrap.ReadOnlyCollection<int>.Enumerator, int>(collection, count);
 
             // Assert
             result.Should().Generate(expected);
 
             var index = 0;
+            var expectedEnumerator = expected.GetEnumerator();
             using(var resultEnumerator = result.GetEnumerator())
-            using(var expectedEnumerator = expected.GetEnumerator())
             {
                 while (true)
                 {

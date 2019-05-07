@@ -9,8 +9,6 @@ namespace NetFabric.Hyperlinq
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
 
             var length = source.Length;
-            if (length == 0) return false;
-
             for (var index = 0; index < length; index++)
             {
                 if (!predicate(source[index], index))

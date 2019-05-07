@@ -11,13 +11,10 @@ namespace NetFabric.Hyperlinq.UnitTests
         public void Select_With_NullSelector_Should_Throw()
         {
             // Arrange
-            var source = Enumerable.Empty<int>();
+            var list = Wrap.AsValueReadOnlyList(new int[0]);
 
             // Act
-            Action action = () => ValueReadOnlyList.Select<
-                Enumerable.EmptyEnumerable<int>, 
-                Enumerable.EmptyEnumerable<int>.ValueEnumerator,
-                int, string>(source.AsValueEnumerable(), null);
+            Action action = () => ValueReadOnlyList.Select<Wrap.ValueReadOnlyList<int>, Wrap.ValueReadOnlyList<int>.Enumerator, int, string>(list, null);
 
             // Assert
             action.Should()
@@ -29,22 +26,20 @@ namespace NetFabric.Hyperlinq.UnitTests
 
         [Theory]
         [MemberData(nameof(TestData.Select), MemberType = typeof(TestData))]
-        public void Select_With_ValidData_Should_Succeed(IReadOnlyList<int> source, Func<int, long, string> selector, IReadOnlyList<string> expected)
+        public void Select_With_ValidData_Should_Succeed(int[] source, Func<int, long, string> selector, string[] expected)
         {
             // Arrange
+            var list = Wrap.AsValueReadOnlyList(source);
 
             // Act
-            var result = ValueReadOnlyList.Select<
-                ReadOnlyList.AsValueEnumerableEnumerable<IReadOnlyList<int>, IEnumerator<int>, int>, 
-                ReadOnlyList.AsValueEnumerableEnumerable<IReadOnlyList<int>, IEnumerator<int>, int>.ValueEnumerator, 
-                int, string>(source.AsValueEnumerable(), selector);
+            var result = ValueReadOnlyList.Select<Wrap.ValueReadOnlyList<int>, Wrap.ValueReadOnlyList<int>.Enumerator, int, string>(list, selector);
 
             // Assert
             result.Should().Generate(expected);
 
             var index = 0;
+            var expectedEnumerator = expected.GetEnumerator();
             var resultEnumerator = result.GetEnumerator();
-            using(var expectedEnumerator = expected.GetEnumerator())
             {
                 while (true)
                 {

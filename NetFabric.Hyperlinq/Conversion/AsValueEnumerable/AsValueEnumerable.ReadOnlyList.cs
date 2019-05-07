@@ -10,12 +10,12 @@ namespace NetFabric.Hyperlinq
             where TEnumerator : IEnumerator<TSource>
             => new AsValueEnumerableEnumerable<TEnumerable, TEnumerator, TSource>(source);
 
-        public readonly struct AsValueEnumerableEnumerable<TEnumerable, TEnumerator, TSource>
+        public struct AsValueEnumerableEnumerable<TEnumerable, TEnumerator, TSource>
             : IValueReadOnlyList<TSource, AsValueEnumerableEnumerable<TEnumerable, TEnumerator, TSource>.ValueEnumerator>
             where TEnumerable : IReadOnlyList<TSource>
             where TEnumerator : IEnumerator<TSource>
         {
-            readonly TEnumerable source;
+            TEnumerable source;
 
             internal AsValueEnumerableEnumerable(in TEnumerable source)
             {

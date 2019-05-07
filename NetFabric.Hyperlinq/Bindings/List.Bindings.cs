@@ -100,7 +100,7 @@ namespace NetFabric.Hyperlinq
             => ReadOnlyList.ToArray<ValueWrapper<TSource>, TSource>(new ValueWrapper<TSource>(source));
 
         public static List<TSource> ToList<TSource>(this List<TSource> source)
-            => source;
+            => new List<TSource>(source);
 
         public readonly struct ValueWrapper<TSource> : IReadOnlyList<TSource>
         {

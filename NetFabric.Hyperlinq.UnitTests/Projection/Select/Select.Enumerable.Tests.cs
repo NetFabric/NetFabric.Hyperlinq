@@ -11,10 +11,10 @@ namespace NetFabric.Hyperlinq.UnitTests
         public void Select_With_NullSelector_Should_Throw()
         {
             // Arrange
-            var source = Enumerable.Empty<int>().AsEnumerable();
+            var enumerable = Wrap.AsEnumerable(new int[0]);
 
             // Act
-            Action action = () => Enumerable.Select<IEnumerable<int>, IEnumerator<int>, int, string>(source, null);
+            Action action = () => Enumerable.Select<Wrap.Enumerable<int>, Wrap.Enumerable<int>.Enumerator, int, string>(enumerable, null);
 
             // Assert
             action.Should()
@@ -26,19 +26,20 @@ namespace NetFabric.Hyperlinq.UnitTests
 
         [Theory]
         [MemberData(nameof(TestData.Select), MemberType = typeof(TestData))]
-        public void Select_With_ValidData_Should_Succeed(IEnumerable<int> source, Func<int, long, string> selector, IEnumerable<string> expected)
+        public void Select_With_ValidData_Should_Succeed(int[] source, Func<int, long, string> selector, string[] expected)
         {
             // Arrange
+            var enumerable = Wrap.AsEnumerable(source);
 
             // Act
-            var result = Enumerable.Select<IEnumerable<int>, IEnumerator<int>, int, string>(source, selector);
+            var result = Enumerable.Select<Wrap.Enumerable<int>, Wrap.Enumerable<int>.Enumerator, int, string>(enumerable, selector);
 
             // Assert
             result.Should().Generate(expected);
 
             var index = 0;
+            var expectedEnumerator = expected.GetEnumerator();
             using(var resultEnumerator = result.GetEnumerator())
-            using(var expectedEnumerator = expected.GetEnumerator())
             {
                 while (true)
                 {

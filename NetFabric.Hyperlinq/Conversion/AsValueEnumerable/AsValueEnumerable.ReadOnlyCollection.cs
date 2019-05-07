@@ -47,7 +47,7 @@ namespace NetFabric.Hyperlinq
             public struct ValueEnumerator
                 : IValueEnumerator<TSource>
             {
-                readonly TEnumerator enumerator;
+                TEnumerator enumerator;
 
                 internal ValueEnumerator(in TEnumerable enumerable)
                 {

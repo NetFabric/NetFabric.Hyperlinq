@@ -11,7 +11,7 @@ namespace NetFabric.Hyperlinq
         {
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
 
-            if (source.Count == 0) return false;
+            if (source.Count == 0) return true;
 
             using (var enumerator = (TEnumerator)source.GetEnumerator())
             {

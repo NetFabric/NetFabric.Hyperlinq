@@ -11,10 +11,10 @@ namespace NetFabric.Hyperlinq.UnitTests
         public void Select_With_NullSelector_Should_Throw()
         {
             // Arrange
-            var source = Enumerable.Empty<int>().AsEnumerable();
+            var collection = Wrap.AsReadOnlyCollection(new int[0]);
 
             // Act
-            Action action = () => ReadOnlyCollection.Select<IReadOnlyCollection<int>, IEnumerator<int>, int, string>(source, null);
+            Action action = () => ReadOnlyCollection.Select<Wrap.ReadOnlyCollection<int>, Wrap.ReadOnlyCollection<int>.Enumerator, int, string>(collection, null);
 
             // Assert
             action.Should()
@@ -26,19 +26,20 @@ namespace NetFabric.Hyperlinq.UnitTests
 
         [Theory]
         [MemberData(nameof(TestData.Select), MemberType = typeof(TestData))]
-        public void Select_With_ValidData_Should_Succeed(IReadOnlyCollection<int> source, Func<int, long, string> selector, IReadOnlyCollection<string> expected)
+        public void Select_With_ValidData_Should_Succeed(int[] source, Func<int, long, string> selector, string[] expected)
         {
             // Arrange
+            var collection = Wrap.AsReadOnlyCollection(source);
 
             // Act
-            var result = ReadOnlyCollection.Select<IReadOnlyCollection<int>, IEnumerator<int>, int, string>(source, selector);
+            var result = ReadOnlyCollection.Select<Wrap.ReadOnlyCollection<int>, Wrap.ReadOnlyCollection<int>.Enumerator, int, string>(collection, selector);
 
             // Assert
             result.Should().Generate(expected);
 
             var index = 0;
+            var expectedEnumerator = expected.GetEnumerator();
             using(var resultEnumerator = result.GetEnumerator())
-            using(var expectedEnumerator = expected.GetEnumerator())
             {
                 while (true)
                 {

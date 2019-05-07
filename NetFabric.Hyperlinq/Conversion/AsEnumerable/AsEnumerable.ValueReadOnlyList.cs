@@ -23,7 +23,6 @@ namespace NetFabric.Hyperlinq
             where TEnumerator : struct, IValueEnumerator<TSource>
         {
             readonly TEnumerable source;
-            TEnumerator enumerator;
             int count;
             int index;
 
@@ -45,15 +44,23 @@ namespace NetFabric.Hyperlinq
                 set => throw new NotSupportedException();
             }
 
-            public bool Contains(TSource item) 
-                => ValueReadOnlyCollection.Contains<TEnumerable, TEnumerator, TSource>(source, item);
+            public bool Contains(TSource item)
+            {
+                var count = (int)source.Count;
+                for (var index = 0; index < count; count++)
+                {
+                    if (EqualityComparer<TSource>.Default.Equals(item, source[index]))
+                        return true;
+                }
+                return false;
+            }
 
             public void CopyTo(TSource[] array, int arrayIndex)
             {
                 if (arrayIndex < 0) ThrowHelper.ThrowArgumentOutOfRangeException(nameof(arrayIndex));
 
                 var count = (int)source.Count;
-                for (var index = 0; index < count; count++)
+                for (var index = 0; index < count; index++)
                     array[index + arrayIndex] = source[index];
             }
 
@@ -62,7 +69,7 @@ namespace NetFabric.Hyperlinq
                 var count = (int)source.Count;
                 for (var index = 0; index < count; count++)
                 {
-                    if (item.Equals(source[index]))
+                    if (EqualityComparer<TSource>.Default.Equals(item, source[index]))
                         return index;
                 }
                 return -1;
@@ -79,7 +86,6 @@ namespace NetFabric.Hyperlinq
                 switch (state)
                 {
                     case 1:
-                        enumerator = source.GetValueEnumerator();
                         count = (int)source.Count;
                         index = -1;
                         state = 2;

@@ -32,7 +32,7 @@ namespace NetFabric.Hyperlinq
 
             using (var enumerator = source.GetValueEnumerator())
             {
-                var index = 0;
+                var index = 0L;
                 checked
                 {
                     while (enumerator.TryMoveNext(out var current))

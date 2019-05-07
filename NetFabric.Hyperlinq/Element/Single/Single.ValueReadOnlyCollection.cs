@@ -128,24 +128,19 @@ namespace NetFabric.Hyperlinq
             {
                 using (var enumerator = source.GetValueEnumerator())
                 {
-                    index = 0;
-                    while (enumerator.TryMoveNext(out value))
+                    for (index = 0; enumerator.TryMoveNext(out value); index++)
                     {
                         if (predicate(value, index))
                         {
                             // found first, keep going until end or find second
                             TSource other;
-                            while (enumerator.TryMoveNext(out other))
+                            for (index++; enumerator.TryMoveNext(out other); index++)
                             {
                                 if (predicate(other, index))
                                     ThrowHelper.ThrowNotSingleSequence<TSource>();
-
-                                index++;
                             }
                             return true;
                         }
-
-                        index++;
                     }
                 }     
             } 

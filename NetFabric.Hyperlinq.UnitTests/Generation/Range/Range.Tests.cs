@@ -42,7 +42,7 @@ namespace NetFabric.Hyperlinq.UnitTests
   
         [Theory]
         [MemberData(nameof(TestData.Range), MemberType = typeof(TestData))]
-        public void Range_With_ValidData_Should_Succeed(long start, long count, IReadOnlyList<long> expected)
+        public void Range_With_ValidData_Should_Succeed(long start, long count, long[] expected)
         {
             // Arrange
 
@@ -53,8 +53,8 @@ namespace NetFabric.Hyperlinq.UnitTests
             result.Should().Generate(expected);
 
             var index = 0;
+            var expectedEnumerator = expected.GetEnumerator();
             var resultEnumerator = result.GetEnumerator();
-            using(var expectedEnumerator = expected.GetEnumerator())
             {
                 while (true)
                 {
@@ -77,7 +77,7 @@ namespace NetFabric.Hyperlinq.UnitTests
   
         [Theory]
         [MemberData(nameof(TestData.RangeSkip), MemberType = typeof(TestData))]
-        public void Range_With_Skip_Should_Succeed(long start, long count, long skipCount, IReadOnlyList<long> expected)
+        public void Range_With_Skip_Should_Succeed(long start, long count, long skipCount, long[] expected)
         {
             // Arrange
 
@@ -90,7 +90,7 @@ namespace NetFabric.Hyperlinq.UnitTests
   
         [Theory]
         [MemberData(nameof(TestData.RangeTake), MemberType = typeof(TestData))]
-        public void Range_With_Take_Should_Succeed(long start, long count, long takeCount, IReadOnlyList<long> expected)
+        public void Range_With_Take_Should_Succeed(long start, long count, long takeCount, long[] expected)
         {
             // Arrange
 
@@ -103,7 +103,7 @@ namespace NetFabric.Hyperlinq.UnitTests
   
         [Theory]
         [MemberData(nameof(TestData.RangeSkipTake), MemberType = typeof(TestData))]
-        public void Range_With_SkipTake_Should_Succeed(long start, long count, long skipCount, long takeCount, IReadOnlyList<long> expected)
+        public void Range_With_SkipTake_Should_Succeed(long start, long count, long skipCount, long takeCount, long[] expected)
         {
             // Arrange
 
@@ -116,7 +116,7 @@ namespace NetFabric.Hyperlinq.UnitTests
   
         [Theory]
         [MemberData(nameof(TestData.Range), MemberType = typeof(TestData))]
-        public void Range_With_ToArray_Should_Succeed(long start, long count, IReadOnlyList<long> expected)
+        public void Range_With_ToArray_Should_Succeed(long start, long count, long[] expected)
         {
             // Arrange
 
@@ -129,7 +129,7 @@ namespace NetFabric.Hyperlinq.UnitTests
   
         [Theory]
         [MemberData(nameof(TestData.Range), MemberType = typeof(TestData))]
-        public void Range_With_ToList_Should_Succeed(long start, long count, IReadOnlyList<long> expected)
+        public void Range_With_ToList_Should_Succeed(long start, long count, long[] expected)
         {
             // Arrange
 

@@ -11,13 +11,10 @@ namespace NetFabric.Hyperlinq.UnitTests
         public void Select_With_NullSelector_Should_Throw()
         {
             // Arrange
-            var source = Enumerable.Empty<int>();
+            var enumerable = Wrap.AsValueEnumerable(new int[0]);
 
             // Act
-            Action action = () => ValueEnumerable.Select<
-                Enumerable.EmptyEnumerable<int>, 
-                Enumerable.EmptyEnumerable<int>.ValueEnumerator,
-                int, string>(source, null);
+            Action action = () => ValueEnumerable.Select<Wrap.ValueEnumerable<int>, Wrap.ValueEnumerable<int>.Enumerator, int, string>(enumerable, null);
 
             // Assert
             action.Should()
@@ -29,22 +26,20 @@ namespace NetFabric.Hyperlinq.UnitTests
 
         [Theory]
         [MemberData(nameof(TestData.Select), MemberType = typeof(TestData))]
-        public void Select_With_ValidData_Should_Succeed(IEnumerable<int> source, Func<int, long, string> selector, IReadOnlyCollection<string> expected)
+        public void Select_With_ValidData_Should_Succeed(int[] source, Func<int, long, string> selector, string[] expected)
         {
             // Arrange
+            var enumerable = Wrap.AsValueEnumerable(source);
 
             // Act
-            var result = ValueEnumerable.Select<
-                Enumerable.AsValueEnumerableEnumerable<IEnumerable<int>, IEnumerator<int>, int>, 
-                Enumerable.AsValueEnumerableEnumerable<IEnumerable<int>, IEnumerator<int>, int>.ValueEnumerator, 
-                int, string>(source.AsValueEnumerable(), selector);
+            var result = ValueEnumerable.Select<Wrap.ValueEnumerable<int>, Wrap.ValueEnumerable<int>.Enumerator, int, string>(enumerable, selector);
 
             // Assert
             result.Should().Generate(expected);
 
             var index = 0;
+            var expectedEnumerator = expected.GetEnumerator();
             using(var resultEnumerator = result.GetEnumerator())
-            using(var expectedEnumerator = expected.GetEnumerator())
             {
                 while (true)
                 {

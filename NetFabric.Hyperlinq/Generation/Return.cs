@@ -110,7 +110,7 @@ namespace NetFabric.Hyperlinq
                 => ValueReadOnlyList.Any<ReturnEnumerable<TSource>, ValueEnumerator, TSource>(this, predicate);
 
             public bool Contains(TSource value)
-                => this.value.Equals(value);
+                => EqualityComparer<TSource>.Default.Equals(this.value, value);
 
             public bool Contains(TSource value, IEqualityComparer<TSource> comparer)
                 => comparer.Equals(this.value, value);

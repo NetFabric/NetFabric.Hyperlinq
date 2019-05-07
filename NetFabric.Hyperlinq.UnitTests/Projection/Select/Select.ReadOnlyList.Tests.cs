@@ -11,10 +11,10 @@ namespace NetFabric.Hyperlinq.UnitTests
         public void Select_With_NullSelector_Should_Throw()
         {
             // Arrange
-            var source = Enumerable.Empty<int>().AsEnumerable();
+            var list = Wrap.AsReadOnlyList(new int[0]);
 
             // Act
-            Action action = () => ReadOnlyList.Select<IReadOnlyList<int>, int, string>(source, null);
+            Action action = () => ReadOnlyList.Select<Wrap.ReadOnlyList<int>, int, string>(list, null);
 
             // Assert
             action.Should()
@@ -26,19 +26,20 @@ namespace NetFabric.Hyperlinq.UnitTests
 
         [Theory]
         [MemberData(nameof(TestData.Select), MemberType = typeof(TestData))]
-        public void Select_With_ValidData_Should_Succeed(IReadOnlyList<int> source, Func<int, long, string> selector, IReadOnlyList<string> expected)
+        public void Select_With_ValidData_Should_Succeed(int[] source, Func<int, long, string> selector, string[] expected)
         {
             // Arrange
+            var list = Wrap.AsReadOnlyList(source);
 
             // Act
-            var result = ReadOnlyList.Select<IReadOnlyList<int>, int, string>(source, selector);
+            var result = ReadOnlyList.Select<IReadOnlyList<int>, int, string>(list, selector);
 
             // Assert
             result.Should().Generate(expected);
 
             var index = 0;
+            var expectedEnumerator = expected.GetEnumerator();
             var resultEnumerator = result.GetEnumerator();
-            using (var expectedEnumerator = expected.GetEnumerator())
             {
                 while (true)
                 {

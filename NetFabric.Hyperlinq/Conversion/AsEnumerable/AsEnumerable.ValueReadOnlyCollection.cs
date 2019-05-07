@@ -44,14 +44,12 @@ namespace NetFabric.Hyperlinq
             {
                 if (arrayIndex < 0) ThrowHelper.ThrowArgumentOutOfRangeException(nameof(arrayIndex));
                 
-                var index = arrayIndex;
+                if (source.Count == 0) return;
+
                 using (var enumerator = source.GetValueEnumerator())
                 {
-                    while (enumerator.TryMoveNext(out var current))
-                    {
+                    for (var index = arrayIndex; enumerator.TryMoveNext(out var current); index++)
                         array[index] = current;
-                        index++;
-                    }                   
                 }
             }
 

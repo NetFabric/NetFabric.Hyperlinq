@@ -10,19 +10,20 @@ namespace NetFabric.Hyperlinq.UnitTests
     {
         [Theory]
         [MemberData(nameof(TestData.SkipTake), MemberType = typeof(TestData))]
-        public void SkipTake_With_ValidData_Should_Succeed(IReadOnlyList<int> source, int skipCount, int takeCount, IReadOnlyList<int> expected)
+        public void SkipTake_With_ValidData_Should_Succeed(int[] source, int skipCount, int takeCount, int[] expected)
         {
             // Arrange
+            var list = Wrap.AsReadOnlyList(source);
 
             // Act
-            var result = ReadOnlyList.SkipTake<IReadOnlyList<int>, int>(source, skipCount, takeCount);
+            var result = ReadOnlyList.SkipTake<Wrap.ReadOnlyList<int>, int>(list, skipCount, takeCount);
 
             // Assert
             result.Should().Generate(expected);
 
             var index = 0;
+            var expectedEnumerator = expected.GetEnumerator();
             var resultEnumerator = result.GetEnumerator();
-            using(var expectedEnumerator = expected.GetEnumerator())
             {
                 while (true)
                 {

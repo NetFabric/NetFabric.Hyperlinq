@@ -14,20 +14,12 @@ namespace NetFabric.Hyperlinq
             if (length == 0) return false;
 
             if (comparer is null)
+                return System.Array.IndexOf<TSource>(source, value) >= 0;
+
+            for (var index = 0; index < length; index++)
             {
-                for (var index = 0; index < length; index++)
-                {
-                    if (EqualityComparer<TSource>.Default.Equals(value, source[index]))
-                        return true;
-                }
-            }
-            else
-            {
-                for (var index = 0; index < length; index++)
-                {
-                    if (comparer.Equals(value, source[index]))
-                        return true;
-                }
+                if (comparer.Equals(value, source[index]))
+                    return true;
             }
 
             return false;

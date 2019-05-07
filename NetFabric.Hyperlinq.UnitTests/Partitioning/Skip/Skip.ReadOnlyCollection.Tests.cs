@@ -10,19 +10,20 @@ namespace NetFabric.Hyperlinq.UnitTests
     {
         [Theory]
         [MemberData(nameof(TestData.Skip), MemberType = typeof(TestData))]
-        public void Skip_With_ValidData_Should_Succeed(IReadOnlyCollection<int> source, int count, IReadOnlyCollection<int> expected)
+        public void Skip_With_ValidData_Should_Succeed(int[] source, int count, int[] expected)
         {
             // Arrange
+            var collection = Wrap.AsReadOnlyCollection(source);
 
             // Act
-            var result = ReadOnlyCollection.Skip<IReadOnlyCollection<int>, IEnumerator<int>, int>(source, count);
+            var result = ReadOnlyCollection.Skip<Wrap.ReadOnlyCollection<int>, Wrap.ReadOnlyCollection<int>.Enumerator, int>(collection, count);
 
             // Assert
             result.Should().Generate(expected);
 
             var index = 0;
+            var expectedEnumerator = expected.GetEnumerator();
             using(var resultEnumerator = result.GetEnumerator())
-            using(var expectedEnumerator = expected.GetEnumerator())
             {
                 while (true)
                 {

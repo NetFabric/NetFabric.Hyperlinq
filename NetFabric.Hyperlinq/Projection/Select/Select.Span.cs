@@ -28,7 +28,7 @@ namespace NetFabric.Hyperlinq
 
             public ref struct Enumerator
             {
-                Span<TSource> source;
+                readonly Span<TSource> source;
                 readonly Func<TSource, long, TResult> selector;
                 readonly int count;
                 int index;

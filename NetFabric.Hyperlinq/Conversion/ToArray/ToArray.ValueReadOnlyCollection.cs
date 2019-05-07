@@ -11,17 +11,10 @@ namespace NetFabric.Hyperlinq
             var array = new TSource[source.Count];
             if (source.Count != 0)
             {
-                var index = 0L;
                 using (var enumerator = source.GetValueEnumerator())
                 {
-                    if (source.Count != 0)
-                    {
-                        while (enumerator.TryMoveNext(out var current))
-                        {
-                            array[index] = current;
-                            index++;
-                        }
-                    }
+                    for (var index = 0L; enumerator.TryMoveNext(out var current); index++)
+                        array[index] = current;
                 }
             }
             return array;
