@@ -126,7 +126,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
             var count = 0;
             foreach(var item in enumerableValue
                 .Where<TestEnumerable.Enumerable, TestEnumerable.Enumerable.Enumerator, long>((_, __) => true)
-                .Where<Enumerable.WhereEnumerable<TestEnumerable.Enumerable, TestEnumerable.Enumerable.Enumerator, long>, Enumerable.WhereEnumerable<TestEnumerable.Enumerable, TestEnumerable.Enumerable.Enumerator, long>.ValueEnumerator, long>((_, __) => true))
+                .Where<Enumerable.WhereEnumerable<TestEnumerable.Enumerable, TestEnumerable.Enumerable.Enumerator, long>, Enumerable.WhereEnumerable<TestEnumerable.Enumerable, TestEnumerable.Enumerable.Enumerator, long>.Enumerator, long>((_, __) => true))
                 count++;
             return count;
         }

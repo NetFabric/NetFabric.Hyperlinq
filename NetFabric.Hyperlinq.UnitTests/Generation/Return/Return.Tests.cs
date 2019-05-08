@@ -17,21 +17,6 @@ namespace NetFabric.Hyperlinq.UnitTests
 
             // Assert
             result.Should().Generate(expected);
-
-            var expectedEnumerator = expected.GetEnumerator();
-            var resultEnumerator = result.GetEnumerator();
-            {
-                if (!resultEnumerator.MoveNext())
-                    throw new Exception($"foreach enumeration found an empty result.");
-
-                expectedEnumerator.MoveNext();
-
-                if(!resultEnumerator.Current.Equals(expectedEnumerator.Current))
-                    throw new Exception($"foreach enumeration expected value {expectedEnumerator.Current} but found {resultEnumerator.Current}.");
-
-                if (resultEnumerator.MoveNext())
-                    throw new Exception($"foreach enumeration found more than one item.");
-            }
         } 
 
         [Theory]

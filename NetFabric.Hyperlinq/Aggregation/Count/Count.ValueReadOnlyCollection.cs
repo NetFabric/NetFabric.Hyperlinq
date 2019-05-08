@@ -4,11 +4,6 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class ValueReadOnlyCollection
     {
-        public static long Count<TEnumerable, TEnumerator>(this TEnumerable source)
-            where TEnumerable : IValueReadOnlyCollection<TEnumerator>
-            where TEnumerator : struct, IValueEnumerator
-            => source.Count;
-
         public static long Count<TEnumerable, TEnumerator, TSource>(this TEnumerable source)
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IValueEnumerator<TSource>
@@ -22,11 +17,11 @@ namespace NetFabric.Hyperlinq
             if (source.Count != 0)
             {
                 var index = 0L;
-                using (var enumerator = source.GetValueEnumerator())
+                using (var enumerator = source.GetEnumerator())
                 {
-                    while (enumerator.TryMoveNext(out var current))
+                    while (enumerator.MoveNext())
                     {
-                        if (predicate(current, index))
+                        if (predicate(enumerator.Current, index))
                             count++;
                         
                         index++;

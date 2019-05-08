@@ -12,12 +12,12 @@ namespace NetFabric.Hyperlinq
 
             if (source.Count == 0) return true;
 
-            using (var enumerator = source.GetValueEnumerator())
+            using (var enumerator = source.GetEnumerator())
             {
                 var index = 0;
-                while (enumerator.TryMoveNext(out var current))
+                while (enumerator.MoveNext())
                 {
-                    if (!predicate(current, index))
+                    if (!predicate(enumerator.Current, index))
                         return false;
                         
                     index++;

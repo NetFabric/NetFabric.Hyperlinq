@@ -11,7 +11,7 @@ namespace NetFabric.Hyperlinq
             => new AsValueEnumerableEnumerable<TEnumerable, TEnumerator, TSource>(source);
 
         public readonly struct AsValueEnumerableEnumerable<TEnumerable, TEnumerator, TSource>
-            : IValueReadOnlyCollection<TSource, AsValueEnumerableEnumerable<TEnumerable, TEnumerator, TSource>.ValueEnumerator>
+            : IValueReadOnlyCollection<TSource, AsValueEnumerableEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator>
             where TEnumerable : IReadOnlyCollection<TSource>
             where TEnumerator : IEnumerator<TSource>
         {
@@ -23,12 +23,11 @@ namespace NetFabric.Hyperlinq
             }
 
             public Enumerator GetEnumerator() => new Enumerator(in source);
-            public ValueEnumerator GetValueEnumerator() => new ValueEnumerator(in source);
 
             public long Count => source.Count;
             
             public struct Enumerator 
-                : IDisposable
+                : IValueEnumerator<TSource>
             {
                 TEnumerator enumerator;
 
@@ -42,33 +41,6 @@ namespace NetFabric.Hyperlinq
                 public bool MoveNext() => enumerator.MoveNext();
 
                 public void Dispose() => enumerator.Dispose();
-            }
-
-            public struct ValueEnumerator
-                : IValueEnumerator<TSource>
-            {
-                TEnumerator enumerator;
-
-                internal ValueEnumerator(in TEnumerable enumerable)
-                {
-                    enumerator = (TEnumerator)enumerable.GetEnumerator();
-                }
-
-                public bool TryMoveNext(out TSource current)
-                {
-                    if (enumerator.MoveNext())
-                    {
-                        current = enumerator.Current;
-                        return true;
-                    }
-
-                    current = default;
-                    return false;
-                }
-
-                public bool TryMoveNext() => enumerator.MoveNext();
-
-                public void Dispose() { }
             }
         }
     }

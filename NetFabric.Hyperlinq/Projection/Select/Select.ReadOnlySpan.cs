@@ -41,9 +41,11 @@ namespace NetFabric.Hyperlinq
                     index = -1;
                 }
 
-                public TResult Current => selector(source[index], index);
+                public TResult Current 
+                    => selector(source[index], index);
 
-                public bool MoveNext() => ++index < count;
+                public bool MoveNext() 
+                    => ++index < count;
             }
 
             public int Count()

@@ -8,7 +8,7 @@ namespace NetFabric.Hyperlinq
             => new AsValueEnumerableEnumerable<TSource>(source);
 
         public readonly struct AsValueEnumerableEnumerable<TSource>
-            : IValueReadOnlyList<TSource, AsValueEnumerableEnumerable<TSource>.ValueEnumerator>
+            : IValueReadOnlyList<TSource, AsValueEnumerableEnumerable<TSource>.Enumerator>
         {
             readonly TSource[] source;
 
@@ -18,14 +18,14 @@ namespace NetFabric.Hyperlinq
             }
 
             public Enumerator GetEnumerator() => new Enumerator(source);
-            public ValueEnumerator GetValueEnumerator() => new ValueEnumerator(source);
 
             public long Count => source.Length;
 
             public ref TSource this[long index] => ref source[index];
-            TSource IValueReadOnlyList<TSource, AsValueEnumerableEnumerable<TSource>.ValueEnumerator>.this[long index] => source[index];
+            TSource IValueReadOnlyList<TSource, AsValueEnumerableEnumerable<TSource>.Enumerator>.this[long index] => source[index];
             
             public struct Enumerator 
+                : IValueEnumerator<TSource>
             {
                 readonly TSource[] source;
                 readonly int count;
@@ -39,37 +39,9 @@ namespace NetFabric.Hyperlinq
                 }
 
                 public ref TSource Current => ref source[index];
+                TSource IValueEnumerator<TSource>.Current => source[index];
 
                 public bool MoveNext() => ++index < count;
-            }
-
-            public struct ValueEnumerator
-                : IValueEnumerator<TSource>
-            {
-                readonly TSource[] source;
-                readonly int count;
-                int index;
-
-                internal ValueEnumerator(TSource[] source)
-                {
-                    this.source = source;
-                    count = source.Length;
-                    index = -1;
-                }
-
-                public bool TryMoveNext(out TSource current)
-                {
-                    if (++index < count)
-                    {
-                        current = source[index];
-                        return true;
-                    }
-                    
-                    current = default;
-                    return false;
-                }
-
-                public bool TryMoveNext() => ++index < count;
 
                 public void Dispose() { }
             }

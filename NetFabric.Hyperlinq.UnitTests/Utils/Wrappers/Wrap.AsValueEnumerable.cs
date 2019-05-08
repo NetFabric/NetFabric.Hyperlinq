@@ -19,7 +19,7 @@ namespace NetFabric.Hyperlinq
                 this.source = source;
             }
 
-            public Enumerator GetValueEnumerator() => new Enumerator(source);
+            public Enumerator GetEnumerator() => new Enumerator(source);
 
             public struct Enumerator 
                 : IValueEnumerator<T>
@@ -33,19 +33,11 @@ namespace NetFabric.Hyperlinq
                     index = -1;
                 }
 
-                public bool TryMoveNext(out T current)
-                {
-                    if (++index < source.Length)
-                    {
-                        current = source[index];
-                        return true;
-                    }
-                    
-                    current = default;
-                    return false;
-                }
+                public T Current
+                    => source[index];
 
-                public bool TryMoveNext() => ++index < source.Length;
+                public bool MoveNext()
+                    => ++index < source.Length;
 
                 public void Dispose() { }
             }

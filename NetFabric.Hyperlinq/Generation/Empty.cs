@@ -9,32 +9,22 @@ namespace NetFabric.Hyperlinq
             new EmptyEnumerable<TSource>();
 
         public readonly struct EmptyEnumerable<TSource>
-            : IValueReadOnlyList<TSource, EmptyEnumerable<TSource>.ValueEnumerator>
+            : IValueReadOnlyList<TSource, EmptyEnumerable<TSource>.Enumerator>
         {
             public Enumerator GetEnumerator() => new Enumerator();
-            public ValueEnumerator GetValueEnumerator() => new ValueEnumerator();
 
             public long Count => 0;
 
             public TSource this[long index] { get { ThrowHelper.ThrowIndexOutOfRangeException(); return default; } }
 
             public readonly struct Enumerator
-            {
-                public TSource Current => default;
-
-                public bool MoveNext() => false;
-            }
-
-            public readonly struct ValueEnumerator
                 : IValueEnumerator<TSource>
             {
-                public bool TryMoveNext(out TSource current)
-                {
-                    current = default;
-                    return false;
-                }
+                public TSource Current
+                    => default;
 
-                public bool TryMoveNext() => false;
+                public bool MoveNext()
+                    => false;
 
                 public void Dispose() { }
             }
@@ -94,7 +84,7 @@ namespace NetFabric.Hyperlinq
             public TSource SingleOrDefault(Func<TSource, long, bool> _) => default;
 
             public IReadOnlyList<TSource> AsEnumerable()
-                => ValueReadOnlyList.AsEnumerable<EmptyEnumerable<TSource>, ValueEnumerator, TSource>(this);
+                => ValueReadOnlyList.AsEnumerable<EmptyEnumerable<TSource>, Enumerator, TSource>(this);
 
             public EmptyEnumerable<TSource> AsValueEnumerable()
                 => this;

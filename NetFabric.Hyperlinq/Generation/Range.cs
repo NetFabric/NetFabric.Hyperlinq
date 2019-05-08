@@ -24,7 +24,7 @@ namespace NetFabric.Hyperlinq
         }
 
         public readonly struct RangeEnumerable
-            : IValueReadOnlyList<long, RangeEnumerable.ValueEnumerator>
+            : IValueReadOnlyList<long, RangeEnumerable.Enumerator>
         {
             readonly long start;
             readonly long count;
@@ -38,7 +38,6 @@ namespace NetFabric.Hyperlinq
             }
 
             public Enumerator GetEnumerator() => new Enumerator(in this);
-            public ValueEnumerator GetValueEnumerator() => new ValueEnumerator(in this);
 
             public long Count => count;
 
@@ -52,7 +51,8 @@ namespace NetFabric.Hyperlinq
                 }
             }
 
-            public struct Enumerator 
+            public struct Enumerator
+                : IValueEnumerator<long>
             {
                 readonly long end;
                 long current;
@@ -63,35 +63,11 @@ namespace NetFabric.Hyperlinq
                     end = enumerable.end;
                 }
 
-                public long Current => current;
+                public long Current
+                    => current;
 
-                public bool MoveNext() => ++current < end;
-            }
-
-            public struct ValueEnumerator
-                : IValueEnumerator<long>
-            {
-                readonly long end;
-                long current;
-
-                internal ValueEnumerator(in RangeEnumerable enumerable)
-                {
-                    current = enumerable.start - 1;
-                    end = enumerable.end;
-                }
-
-                public bool TryMoveNext(out long current)
-                {
-                    if (++this.current < end)
-                    {
-                        current = this.current;
-                        return true;
-                    }
-                    current = default;
-                    return false;
-                }
-
-                public bool TryMoveNext() => ++current < end;
+                public bool MoveNext()
+                    => ++this.current < end;
 
                 public void Dispose() { }
             }
@@ -106,63 +82,63 @@ namespace NetFabric.Hyperlinq
                 => Range(start, Utils.Take(this.count, count));
 
             public bool All(Func<long, long, bool> predicate)
-                => ValueEnumerable.All<RangeEnumerable, ValueEnumerator, long>(this, predicate);
+                => ValueEnumerable.All<RangeEnumerable, Enumerator, long>(this, predicate);
 
             public bool Any()
                 => count != 0;
 
             public bool Any(Func<long, long, bool> predicate)
-                => ValueEnumerable.Any<RangeEnumerable, ValueEnumerator, long>(this, predicate);
+                => ValueEnumerable.Any<RangeEnumerable, Enumerator, long>(this, predicate);
 
             public bool Contains(long value)
                 => value >= start && value < start + count;
 
             public bool Contains(long value, IEqualityComparer<long> comparer)
-                => ValueEnumerable.Contains<RangeEnumerable, ValueEnumerator, long>(this, value, comparer);
+                => ValueEnumerable.Contains<RangeEnumerable, Enumerator, long>(this, value, comparer);
 
-            public ValueReadOnlyList.SelectEnumerable<RangeEnumerable, ValueEnumerator, long, TResult> Select<TResult>(Func<long, long, TResult> selector) 
-                => ValueReadOnlyList.Select<RangeEnumerable, ValueEnumerator, long, TResult>(this, selector);
+            public ValueReadOnlyList.SelectEnumerable<RangeEnumerable, Enumerator, long, TResult> Select<TResult>(Func<long, long, TResult> selector) 
+                => ValueReadOnlyList.Select<RangeEnumerable, Enumerator, long, TResult>(this, selector);
 
-            public ValueReadOnlyList.SelectManyEnumerable<RangeEnumerable, ValueEnumerator, long, TSubEnumerable, TSubEnumerator, TResult> SelectMany<TSubEnumerable, TSubEnumerator, TResult>(Func<long, TSubEnumerable> selector) 
+            public ValueReadOnlyList.SelectManyEnumerable<RangeEnumerable, Enumerator, long, TSubEnumerable, TSubEnumerator, TResult> SelectMany<TSubEnumerable, TSubEnumerator, TResult>(Func<long, TSubEnumerable> selector) 
                 where TSubEnumerable : IValueEnumerable<TResult, TSubEnumerator>
                 where TSubEnumerator : struct, IValueEnumerator<TResult>
-                => ValueReadOnlyList.SelectMany<RangeEnumerable, ValueEnumerator, long, TSubEnumerable, TSubEnumerator, TResult>(this, selector);
+                => ValueReadOnlyList.SelectMany<RangeEnumerable, Enumerator, long, TSubEnumerable, TSubEnumerator, TResult>(this, selector);
 
-            public ValueReadOnlyList.WhereEnumerable<RangeEnumerable, ValueEnumerator, long> Where(Func<long, long, bool> predicate) 
-                => ValueReadOnlyList.Where<RangeEnumerable, ValueEnumerator, long>(this, predicate);
+            public ValueReadOnlyList.WhereEnumerable<RangeEnumerable, Enumerator, long> Where(Func<long, long, bool> predicate) 
+                => ValueReadOnlyList.Where<RangeEnumerable, Enumerator, long>(this, predicate);
 
             public long First() 
                 => (count > 0) ? start : ThrowHelper.ThrowEmptySequence<int>();
             public long First(Func<long, long, bool> predicate) 
-                => ValueReadOnlyList.First<RangeEnumerable, ValueEnumerator, long>(this, predicate);
+                => ValueReadOnlyList.First<RangeEnumerable, Enumerator, long>(this, predicate);
 
             public long FirstOrDefault()
                 => (count > 0) ? start : default;
             public long FirstOrDefault(Func<long, long, bool> predicate) 
-                => ValueReadOnlyList.FirstOrDefault<RangeEnumerable, ValueEnumerator, long>(this, predicate);
+                => ValueReadOnlyList.FirstOrDefault<RangeEnumerable, Enumerator, long>(this, predicate);
 
             public long? FirstOrNull()
                 => (count > 0) ? start : (long?)null;
             public long? FirstOrNull(Func<long, long, bool> predicate)
-                => ValueReadOnlyList.FirstOrNull<RangeEnumerable, ValueEnumerator, long>(this, predicate);
+                => ValueReadOnlyList.FirstOrNull<RangeEnumerable, Enumerator, long>(this, predicate);
 
             public long Single()
                 => (count == 0) ? ThrowHelper.ThrowEmptySequence<long>() : ((count == 1) ? start : ThrowHelper.ThrowNotSingleSequence<long>());
             public long Single(Func<long, long, bool> predicate) 
-                => ValueReadOnlyList.Single<RangeEnumerable, ValueEnumerator, long>(this, predicate);
+                => ValueReadOnlyList.Single<RangeEnumerable, Enumerator, long>(this, predicate);
 
             public long SingleOrDefault()
                 => (count == 0) ? default : ((count == 1) ? start : ThrowHelper.ThrowNotSingleSequence<long>());
             public long SingleOrDefault(Func<long, long, bool> predicate) 
-                => ValueReadOnlyList.SingleOrDefault<RangeEnumerable, ValueEnumerator, long>(this, predicate);
+                => ValueReadOnlyList.SingleOrDefault<RangeEnumerable, Enumerator, long>(this, predicate);
 
             public long? SingleOrNull()
                 => (count == 0) ? null : ((count == 1) ? start : ThrowHelper.ThrowNotSingleSequence<long?>());
             public long? SingleOrNull(Func<long, long, bool> predicate)
-                => ValueReadOnlyList.SingleOrNull<RangeEnumerable, ValueEnumerator, long>(this, predicate);
+                => ValueReadOnlyList.SingleOrNull<RangeEnumerable, Enumerator, long>(this, predicate);
 
             public IReadOnlyList<long> AsEnumerable()
-                => ValueReadOnlyList.AsEnumerable<RangeEnumerable, ValueEnumerator, long>(this);
+                => ValueReadOnlyList.AsEnumerable<RangeEnumerable, Enumerator, long>(this);
 
             public RangeEnumerable AsValueEnumerable()
                 => this;
@@ -213,18 +189,18 @@ namespace NetFabric.Hyperlinq
             => source.Count;
 
         public static long Count(this RangeEnumerable source, Func<long, long, bool> predicate)
-            => ValueReadOnlyList.Count<RangeEnumerable, RangeEnumerable.ValueEnumerator, long>(source, predicate);
+            => ValueReadOnlyList.Count<RangeEnumerable, RangeEnumerable.Enumerator, long>(source, predicate);
 
         public static long? FirstOrNull(this RangeEnumerable source)
-            => ValueReadOnlyList.FirstOrNull<RangeEnumerable, RangeEnumerable.ValueEnumerator, long>(source);
+            => ValueReadOnlyList.FirstOrNull<RangeEnumerable, RangeEnumerable.Enumerator, long>(source);
 
         public static long? FirstOrNull(this RangeEnumerable source, Func<long, long, bool> predicate)
-            => ValueReadOnlyList.FirstOrNull<RangeEnumerable, RangeEnumerable.ValueEnumerator, long>(source, predicate);
+            => ValueReadOnlyList.FirstOrNull<RangeEnumerable, RangeEnumerable.Enumerator, long>(source, predicate);
         public static long? SingleOrNull(this RangeEnumerable source)
-            => ValueReadOnlyList.SingleOrNull<RangeEnumerable, RangeEnumerable.ValueEnumerator, long>(source);
+            => ValueReadOnlyList.SingleOrNull<RangeEnumerable, RangeEnumerable.Enumerator, long>(source);
 
         public static long? SingleOrNull(this RangeEnumerable source, Func<long, long, bool> predicate)
-            => ValueReadOnlyList.SingleOrNull<RangeEnumerable, RangeEnumerable.ValueEnumerator, long>(source, predicate);
+            => ValueReadOnlyList.SingleOrNull<RangeEnumerable, RangeEnumerable.Enumerator, long>(source, predicate);
     }
 }
 

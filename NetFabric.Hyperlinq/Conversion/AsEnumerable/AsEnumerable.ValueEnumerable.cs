@@ -32,13 +32,16 @@ namespace NetFabric.Hyperlinq
                 switch (state)
                 {
                     case 1:
-                        enumerator = source.GetValueEnumerator();
+                        enumerator = source.GetEnumerator();
                         state = 2;
                         goto case 2;
 
                     case 2:
-                        if (enumerator.TryMoveNext(out current))
+                        if (enumerator.MoveNext())
+                        {
+                            current = enumerator.Current;
                             return true;
+                        }
 
                         Dispose();
                         break;

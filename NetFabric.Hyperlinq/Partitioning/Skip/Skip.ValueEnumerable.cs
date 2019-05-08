@@ -11,7 +11,7 @@ namespace NetFabric.Hyperlinq
             => new SkipEnumerable<TEnumerable, TEnumerator, TSource>(in source, count);
 
         public readonly struct SkipEnumerable<TEnumerable, TEnumerator, TSource>
-            : IValueEnumerable<TSource, SkipEnumerable<TEnumerable, TEnumerator, TSource>.ValueEnumerator>
+            : IValueEnumerable<TSource, SkipEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator>
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IValueEnumerator<TSource>
         {
@@ -25,77 +25,27 @@ namespace NetFabric.Hyperlinq
             }
 
             public Enumerator GetEnumerator() => new Enumerator(in this);
-            public ValueEnumerator GetValueEnumerator() => new ValueEnumerator(in this);
 
             public struct Enumerator
-                : IDisposable
-            {
-                TEnumerator enumerator;
-                long counter;
-                TSource current;
-
-                internal Enumerator(in SkipEnumerable<TEnumerable, TEnumerator, TSource> enumerable)
-                {
-                    enumerator = (TEnumerator)enumerable.source.GetValueEnumerator();
-                    counter = enumerable.count;
-                    current = default;
-                }
-
-                public TSource Current => current;
-
-                public bool MoveNext()
-                {
-                    while (counter > 0)
-                    {
-                        if (!enumerator.TryMoveNext())
-                        {
-                            counter = 0;
-                            return false;
-                        }
-
-                        counter--;
-                    }
-
-                    return enumerator.TryMoveNext(out current);  
-                }
-
-                public void Dispose() => enumerator.Dispose();
-            }
-
-            public struct ValueEnumerator
                 : IValueEnumerator<TSource>
             {
                 TEnumerator enumerator;
                 long counter;
 
-                internal ValueEnumerator(in SkipEnumerable<TEnumerable, TEnumerator, TSource> enumerable)
+                internal Enumerator(in SkipEnumerable<TEnumerable, TEnumerator, TSource> enumerable)
                 {
-                    enumerator = (TEnumerator)enumerable.source.GetValueEnumerator();
+                    enumerator = (TEnumerator)enumerable.source.GetEnumerator();
                     counter = enumerable.count;
                 }
 
-                public bool TryMoveNext(out TSource current)
+                public TSource Current
+                    => enumerator.Current;
+
+                public bool MoveNext()
                 {
                     while (counter > 0)
                     {
-                        if(!enumerator.TryMoveNext())
-                        {
-                            counter = 0;
-                            current = default;
-                            return false;
-                        }
-
-                        counter--;
-                    }
-
-                    return enumerator.TryMoveNext(out current);                    
-                }
-
-                public bool TryMoveNext() 
-                {
-                    while (counter > 0)
-                    {
-                        if(!enumerator.TryMoveNext())
+                        if(!enumerator.MoveNext())
                         {
                             counter = 0;
                             return false;
@@ -104,17 +54,17 @@ namespace NetFabric.Hyperlinq
                         counter--;
                     }
 
-                    return enumerator.TryMoveNext();                    
+                    return enumerator.MoveNext();                    
                 }
 
                 public void Dispose() => enumerator.Dispose();
             }
 
             public long Count()
-                => ValueEnumerable.Count<SkipEnumerable<TEnumerable, TEnumerator, TSource>, ValueEnumerator, TSource>(this);
+                => ValueEnumerable.Count<SkipEnumerable<TEnumerable, TEnumerator, TSource>, Enumerator, TSource>(this);
 
             public long Count(Func<TSource, long, bool> predicate)
-                => ValueEnumerable.Count<SkipEnumerable<TEnumerable, TEnumerator, TSource>, ValueEnumerator, TSource>(this, predicate);
+                => ValueEnumerable.Count<SkipEnumerable<TEnumerable, TEnumerator, TSource>, Enumerator, TSource>(this, predicate);
 
             public SkipEnumerable<TEnumerable, TEnumerator, TSource> Skip(long count)
                 => ValueEnumerable.Skip<TEnumerable, TEnumerator, TSource>(source, this.count + count);
@@ -123,81 +73,81 @@ namespace NetFabric.Hyperlinq
                 => ValueEnumerable.SkipTake<TEnumerable, TEnumerator, TSource>(source, this.count, count);
 
             public bool All(Func<TSource, long, bool> predicate)
-                => ValueEnumerable.All<SkipEnumerable<TEnumerable, TEnumerator, TSource>, ValueEnumerator, TSource>(this, predicate);
+                => ValueEnumerable.All<SkipEnumerable<TEnumerable, TEnumerator, TSource>, Enumerator, TSource>(this, predicate);
 
             public bool Any()
-                => ValueEnumerable.Any<SkipEnumerable<TEnumerable, TEnumerator, TSource>, ValueEnumerator, TSource>(this);
+                => ValueEnumerable.Any<SkipEnumerable<TEnumerable, TEnumerator, TSource>, Enumerator, TSource>(this);
 
             public bool Any(Func<TSource, long, bool> predicate)
-                => ValueEnumerable.Any<SkipEnumerable<TEnumerable, TEnumerator, TSource>, ValueEnumerator, TSource>(this, predicate);
+                => ValueEnumerable.Any<SkipEnumerable<TEnumerable, TEnumerator, TSource>, Enumerator, TSource>(this, predicate);
 
             public bool Contains(TSource value)
-                => ValueEnumerable.Contains<SkipEnumerable<TEnumerable, TEnumerator, TSource>, ValueEnumerator, TSource>(this, value);
+                => ValueEnumerable.Contains<SkipEnumerable<TEnumerable, TEnumerator, TSource>, Enumerator, TSource>(this, value);
 
             public bool Contains(TSource value, IEqualityComparer<TSource> comparer)
-                => ValueEnumerable.Contains<SkipEnumerable<TEnumerable, TEnumerator, TSource>, ValueEnumerator, TSource>(this, value, comparer);
+                => ValueEnumerable.Contains<SkipEnumerable<TEnumerable, TEnumerator, TSource>, Enumerator, TSource>(this, value, comparer);
 
-            public ValueEnumerable.SelectEnumerable<SkipEnumerable<TEnumerable, TEnumerator, TSource>, ValueEnumerator, TSource, TResult> Select<TResult>(Func<TSource, long, TResult> selector)
-                 => ValueEnumerable.Select<SkipEnumerable<TEnumerable, TEnumerator, TSource>, ValueEnumerator, TSource, TResult>(this, selector);
+            public ValueEnumerable.SelectEnumerable<SkipEnumerable<TEnumerable, TEnumerator, TSource>, Enumerator, TSource, TResult> Select<TResult>(Func<TSource, long, TResult> selector)
+                 => ValueEnumerable.Select<SkipEnumerable<TEnumerable, TEnumerator, TSource>, Enumerator, TSource, TResult>(this, selector);
 
-            public ValueEnumerable.WhereEnumerable<SkipEnumerable<TEnumerable, TEnumerator, TSource>, ValueEnumerator, TSource> Where(Func<TSource, long, bool> predicate)
-                => ValueEnumerable.Where<SkipEnumerable<TEnumerable, TEnumerator, TSource>, ValueEnumerator, TSource>(this, predicate);
+            public ValueEnumerable.WhereEnumerable<SkipEnumerable<TEnumerable, TEnumerator, TSource>, Enumerator, TSource> Where(Func<TSource, long, bool> predicate)
+                => ValueEnumerable.Where<SkipEnumerable<TEnumerable, TEnumerator, TSource>, Enumerator, TSource>(this, predicate);
 
             public TSource First()
-                => ValueEnumerable.First<SkipEnumerable<TEnumerable, TEnumerator, TSource>, ValueEnumerator, TSource>(this);
+                => ValueEnumerable.First<SkipEnumerable<TEnumerable, TEnumerator, TSource>, Enumerator, TSource>(this);
             public TSource First(Func<TSource, long, bool> predicate)
-                => ValueEnumerable.First<SkipEnumerable<TEnumerable, TEnumerator, TSource>, ValueEnumerator, TSource>(this, predicate);
+                => ValueEnumerable.First<SkipEnumerable<TEnumerable, TEnumerator, TSource>, Enumerator, TSource>(this, predicate);
 
             public TSource FirstOrDefault()
-                => ValueEnumerable.FirstOrDefault<SkipEnumerable<TEnumerable, TEnumerator, TSource>, ValueEnumerator, TSource>(this);
+                => ValueEnumerable.FirstOrDefault<SkipEnumerable<TEnumerable, TEnumerator, TSource>, Enumerator, TSource>(this);
             public TSource FirstOrDefault(Func<TSource, long, bool> predicate)
-                => ValueEnumerable.FirstOrDefault<SkipEnumerable<TEnumerable, TEnumerator, TSource>, ValueEnumerator, TSource>(this, predicate);
+                => ValueEnumerable.FirstOrDefault<SkipEnumerable<TEnumerable, TEnumerator, TSource>, Enumerator, TSource>(this, predicate);
 
             public TSource Single()
-                => ValueEnumerable.Single<SkipEnumerable<TEnumerable, TEnumerator, TSource>, ValueEnumerator, TSource>(this);
+                => ValueEnumerable.Single<SkipEnumerable<TEnumerable, TEnumerator, TSource>, Enumerator, TSource>(this);
             public TSource Single(Func<TSource, long, bool> predicate)
-                => ValueEnumerable.Single<SkipEnumerable<TEnumerable, TEnumerator, TSource>, ValueEnumerator, TSource>(this, predicate);
+                => ValueEnumerable.Single<SkipEnumerable<TEnumerable, TEnumerator, TSource>, Enumerator, TSource>(this, predicate);
 
             public TSource SingleOrDefault()
-                => ValueEnumerable.SingleOrDefault<SkipEnumerable<TEnumerable, TEnumerator, TSource>, ValueEnumerator, TSource>(this);
+                => ValueEnumerable.SingleOrDefault<SkipEnumerable<TEnumerable, TEnumerator, TSource>, Enumerator, TSource>(this);
             public TSource SingleOrDefault(Func<TSource, long, bool> predicate)
-                => ValueEnumerable.SingleOrDefault<SkipEnumerable<TEnumerable, TEnumerator, TSource>, ValueEnumerator, TSource>(this, predicate);
+                => ValueEnumerable.SingleOrDefault<SkipEnumerable<TEnumerable, TEnumerator, TSource>, Enumerator, TSource>(this, predicate);
 
             public IEnumerable<TSource> AsEnumerable()
-                => ValueEnumerable.AsEnumerable<SkipEnumerable<TEnumerable, TEnumerator, TSource>, ValueEnumerator, TSource>(this);
+                => ValueEnumerable.AsEnumerable<SkipEnumerable<TEnumerable, TEnumerator, TSource>, Enumerator, TSource>(this);
 
             public SkipEnumerable<TEnumerable, TEnumerator, TSource> AsValueEnumerable()
                 => this;
 
             public TSource[] ToArray()
-                => ValueEnumerable.ToArray<SkipEnumerable<TEnumerable, TEnumerator, TSource>, ValueEnumerator, TSource>(this);
+                => ValueEnumerable.ToArray<SkipEnumerable<TEnumerable, TEnumerator, TSource>, Enumerator, TSource>(this);
 
             public List<TSource> ToList()
-                => ValueEnumerable.ToList<SkipEnumerable<TEnumerable, TEnumerator, TSource>, ValueEnumerator, TSource>(this);
+                => ValueEnumerable.ToList<SkipEnumerable<TEnumerable, TEnumerator, TSource>, Enumerator, TSource>(this);
         }
 
         public static TSource? FirstOrNull<TEnumerable, TEnumerator, TSource>(this SkipEnumerable<TEnumerable, TEnumerator, TSource> source)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IValueEnumerator<TSource>
             where TSource : struct
-            => ValueEnumerable.FirstOrNull<SkipEnumerable<TEnumerable, TEnumerator, TSource>, SkipEnumerable<TEnumerable, TEnumerator, TSource>.ValueEnumerator, TSource>(source);
+            => ValueEnumerable.FirstOrNull<SkipEnumerable<TEnumerable, TEnumerator, TSource>, SkipEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator, TSource>(source);
 
         public static TSource? FirstOrNull<TEnumerable, TEnumerator, TSource>(this SkipEnumerable<TEnumerable, TEnumerator, TSource> source, Func<TSource, long, bool> predicate)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IValueEnumerator<TSource>
             where TSource : struct
-            => ValueEnumerable.FirstOrNull<SkipEnumerable<TEnumerable, TEnumerator, TSource>, SkipEnumerable<TEnumerable, TEnumerator, TSource>.ValueEnumerator, TSource>(source, predicate);
+            => ValueEnumerable.FirstOrNull<SkipEnumerable<TEnumerable, TEnumerator, TSource>, SkipEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator, TSource>(source, predicate);
 
         public static TSource? SingleOrNull<TEnumerable, TEnumerator, TSource>(this SkipEnumerable<TEnumerable, TEnumerator, TSource> source)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IValueEnumerator<TSource>
             where TSource : struct
-            => ValueEnumerable.SingleOrNull<SkipEnumerable<TEnumerable, TEnumerator, TSource>, SkipEnumerable<TEnumerable, TEnumerator, TSource>.ValueEnumerator, TSource>(source);
+            => ValueEnumerable.SingleOrNull<SkipEnumerable<TEnumerable, TEnumerator, TSource>, SkipEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator, TSource>(source);
 
         public static TSource? SingleOrNull<TEnumerable, TEnumerator, TSource>(this SkipEnumerable<TEnumerable, TEnumerator, TSource> source, Func<TSource, long, bool> predicate)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IValueEnumerator<TSource>
             where TSource : struct
-            => ValueEnumerable.SingleOrNull<SkipEnumerable<TEnumerable, TEnumerator, TSource>, SkipEnumerable<TEnumerable, TEnumerator, TSource>.ValueEnumerator, TSource>(source, predicate);
+            => ValueEnumerable.SingleOrNull<SkipEnumerable<TEnumerable, TEnumerator, TSource>, SkipEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator, TSource>(source, predicate);
     }
 }

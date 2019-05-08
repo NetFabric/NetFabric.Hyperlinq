@@ -48,7 +48,8 @@ namespace NetFabric.Hyperlinq
                     index = -1;
                 }
 
-                public TResult Current => selector(source[index], index);
+                public TResult Current 
+                    => selector(source[index], index);
 
                 public bool MoveNext()
                 {

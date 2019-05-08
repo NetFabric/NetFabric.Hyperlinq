@@ -11,7 +11,7 @@ namespace NetFabric.Hyperlinq
             => new AsValueEnumerableEnumerable<TEnumerable, TEnumerator, TSource>(source);
 
         public readonly struct AsValueEnumerableEnumerable<TEnumerable, TEnumerator, TSource>
-            : IValueEnumerable<TSource, AsValueEnumerableEnumerable<TEnumerable, TEnumerator, TSource>.ValueEnumerator>
+            : IValueEnumerable<TSource, AsValueEnumerableEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator>
             where TEnumerable : IEnumerable<TSource>
             where TEnumerator : IEnumerator<TSource>
     {
@@ -23,10 +23,9 @@ namespace NetFabric.Hyperlinq
             }
 
             public Enumerator GetEnumerator() => new Enumerator(source);
-            public ValueEnumerator GetValueEnumerator() => new ValueEnumerator(source);
             
             public struct Enumerator 
-                : IDisposable
+                : IValueEnumerator<TSource>
             {
                 TEnumerator enumerator;
 
@@ -40,33 +39,6 @@ namespace NetFabric.Hyperlinq
                 public bool MoveNext() => enumerator.MoveNext();
 
                 public void Dispose() => enumerator.Dispose();
-            }
-
-            public struct ValueEnumerator
-                : IValueEnumerator<TSource>
-            {
-                TEnumerator enumerator;
-
-                internal ValueEnumerator(in TEnumerable enumerable)
-                {
-                    enumerator = (TEnumerator)enumerable.GetEnumerator();
-                }
-
-                public bool TryMoveNext(out TSource current)
-                {
-                    if (enumerator.MoveNext())
-                    {
-                        current = enumerator.Current;
-                        return true;
-                    }
-
-                    current = default;
-                    return false;
-                }
-
-                public bool TryMoveNext() => enumerator.MoveNext();
-
-                public void Dispose() { }
             }
         }
     }

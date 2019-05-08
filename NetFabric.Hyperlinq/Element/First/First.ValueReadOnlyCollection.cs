@@ -105,10 +105,13 @@ namespace NetFabric.Hyperlinq
         {
             if (source.Count != 0) 
             {
-                using (var enumerator = (TEnumerator)source.GetValueEnumerator())
+                using (var enumerator = (TEnumerator)source.GetEnumerator())
                 {
-                    if (enumerator.TryMoveNext(out value))
+                    if (enumerator.MoveNext())
+                    {
+                        value = enumerator.Current;
                         return true;
+                    }
                 }    
             } 
 
@@ -123,10 +126,11 @@ namespace NetFabric.Hyperlinq
             if (source.Count != 0) 
             {
                 index = 0;
-                using (var enumerator = (TEnumerator)source.GetValueEnumerator())
+                using (var enumerator = (TEnumerator)source.GetEnumerator())
                 {
-                    while (enumerator.TryMoveNext(out value))
+                    while (enumerator.MoveNext())
                     {
+                        value = enumerator.Current;
                         if (predicate(value, index))
                             return true;
 

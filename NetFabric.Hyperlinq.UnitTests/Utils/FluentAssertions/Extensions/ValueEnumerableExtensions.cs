@@ -7,42 +7,17 @@ namespace NetFabric.Hyperlinq.UnitTests
     {
         public static int IndexOfFirstDifferenceWith<TEnumeratorFirst, TFirst, TSecond>(
             this IValueEnumerable<TFirst, TEnumeratorFirst> first, 
-            IEnumerable<TSecond> second)
-            where TEnumeratorFirst : struct, IValueEnumerator<TFirst>
-        {
-            using (var firstEnumerator = first.GetValueEnumerator())
-            using (var secondEnumerator = second.GetEnumerator())  
-            {
-                var index = 0;
-                while (true)
-                {
-                    var isFirstCompleted = !firstEnumerator.TryMoveNext();
-                    var isSecondCompleted = !secondEnumerator.MoveNext();
-
-                    if (isFirstCompleted && isSecondCompleted)
-                        return -1;
-
-                    if (isFirstCompleted ^ isSecondCompleted)
-                        return index;
-
-                    index++;
-                }
-            }
-        }
-
-        public static int IndexOfFirstDifferenceWith<TEnumeratorFirst, TFirst, TSecond>(
-            this IValueEnumerable<TFirst, TEnumeratorFirst> first, 
             IEnumerable<TSecond> second, 
             Func<TFirst, TSecond, bool> equalityComparison)
             where TEnumeratorFirst : struct, IValueEnumerator<TFirst>
         {
-            using (var firstEnumerator = first.GetValueEnumerator())
+            using (var firstEnumerator = first.GetEnumerator())
             using (var secondEnumerator = second.GetEnumerator())  
             {
                 var index = 0;
                 while (true)
                 {
-                    var isFirstCompleted = !firstEnumerator.TryMoveNext(out var firstCurrent);
+                    var isFirstCompleted = !firstEnumerator.MoveNext();
                     var isSecondCompleted = !secondEnumerator.MoveNext();
 
                     if (isFirstCompleted && isSecondCompleted)
@@ -51,7 +26,7 @@ namespace NetFabric.Hyperlinq.UnitTests
                     if (isFirstCompleted ^ isSecondCompleted)
                         return index;
 
-                    if (!equalityComparison(firstCurrent, secondEnumerator.Current))
+                    if (!equalityComparison(firstEnumerator.Current, secondEnumerator.Current))
                         return index;
 
                     index++;

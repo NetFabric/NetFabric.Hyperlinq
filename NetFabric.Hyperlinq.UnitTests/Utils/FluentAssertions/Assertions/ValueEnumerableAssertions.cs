@@ -46,11 +46,7 @@ namespace NetFabric.Hyperlinq.UnitTests
 
             var index = Subject.IndexOfFirstDifferenceWith<TEnumerator, TSource, TSource>(expectation, equalityComparison);
             if(index >= 0)
-                assertion.FailWith("Expected {context:collection} to be equal to {0}{reason}, but {0} differs at index {1}, when using TryMoveNext(out value).", expectation, index);
-
-            index = Subject.IndexOfFirstDifferenceWith<TEnumerator, TSource, TSource>(expectation);
-            if(index >= 0)
-                assertion.FailWith("Expected {context:collection} to be equal to {0}{reason}, but {0} differs at index {1}, when using TryMoveNext().", expectation, index);
+                assertion.FailWith("Expected {context:collection} to be equal to {0}{reason}, but {0} differs at index {1}.", expectation, index);
          }
     }
 }

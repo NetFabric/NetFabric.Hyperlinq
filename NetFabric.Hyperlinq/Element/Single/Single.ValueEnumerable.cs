@@ -102,11 +102,13 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IValueEnumerator<TSource>
         {
-            using (var enumerator = source.GetValueEnumerator())
+            using (var enumerator = source.GetEnumerator())
             {
-                if (enumerator.TryMoveNext(out value))
+                if (enumerator.MoveNext())
                 {
-                    if (enumerator.TryMoveNext())
+                    value = enumerator.Current;
+
+                    if (enumerator.MoveNext())
                         ThrowHelper.ThrowNotSingleSequence<TSource>();
 
                     return true;
@@ -121,19 +123,19 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IValueEnumerator<TSource>
         {
-            using (var enumerator = source.GetValueEnumerator())
+            using (var enumerator = source.GetEnumerator())
             {
                 checked
                 {
-                    for (index = 0; enumerator.TryMoveNext(out value); index++)
+                    for (index = 0; enumerator.MoveNext(); index++)
                     {
+                        value = enumerator.Current;
                         if (predicate(value, index))
                         {
                             // found first, keep going until end or find second
-                            TSource other;
-                            for (index++; enumerator.TryMoveNext(out other); index++)
+                            for (index++; enumerator.MoveNext(); index++)
                             {
-                                if (predicate(other, index))
+                                if (predicate(enumerator.Current, index))
                                     ThrowHelper.ThrowNotSingleSequence<TSource>();
                             }
                             return true;

@@ -11,22 +11,22 @@ namespace NetFabric.Hyperlinq
         {
             if (comparer is null)
             {
-                using (var enumerator = source.GetValueEnumerator())
+                using (var enumerator = source.GetEnumerator())
                 {
-                    while (enumerator.TryMoveNext(out var current))
+                    while (enumerator.MoveNext())
                     {
-                        if (EqualityComparer<TSource>.Default.Equals(current, value))
+                        if (EqualityComparer<TSource>.Default.Equals(enumerator.Current, value))
                             return true;
                     }
                 }
             }
             else
             {
-                using (var enumerator = source.GetValueEnumerator())
+                using (var enumerator = source.GetEnumerator())
                 {
-                    while (enumerator.TryMoveNext(out var current))
+                    while (enumerator.MoveNext())
                     {
-                        if (comparer.Equals(current, value))
+                        if (comparer.Equals(enumerator.Current, value))
                             return true;
                     }
                 }

@@ -1,45 +1,29 @@
-﻿// Based on implementation by Ben Adams
-// https://gist.github.com/benaadams/294cbd41ec1179638cb4b5495a15accf
-
-using System;
+﻿using System;
 
 namespace NetFabric.Hyperlinq
 {
-    public interface IValueEnumerator : IDisposable
+    public interface IValueEnumerator<out T>
+        : IDisposable
     {
-        bool TryMoveNext();
+        T Current { get; }
+        bool MoveNext();
     }
 
-    public interface IValueEnumerator<T> : IValueEnumerator
-    {
-        bool TryMoveNext(out T current);
-    }
-
-    public interface IValueEnumerable<TEnumerator>
-        where TEnumerator : struct, IValueEnumerator
-    {
-        TEnumerator GetValueEnumerator();
-    }
-
-    public interface IValueEnumerable<T, TEnumerator>
+    public interface IValueEnumerable<out T, TEnumerator>
         where TEnumerator : struct, IValueEnumerator<T>
     {
-        TEnumerator GetValueEnumerator();
+        TEnumerator GetEnumerator();
     }
 
-    public interface IValueReadOnlyCollection<TEnumerator> : IValueEnumerable<TEnumerator>
-        where TEnumerator : struct, IValueEnumerator
-    {
-        long Count { get; }
-    }
-
-    public interface IValueReadOnlyCollection<T, TEnumerator> : IValueEnumerable<T, TEnumerator>
+    public interface IValueReadOnlyCollection<out T, TEnumerator> 
+        : IValueEnumerable<T, TEnumerator>
         where TEnumerator : struct, IValueEnumerator<T>
     {
         long Count { get; }
     }
 
-    public interface IValueReadOnlyList<T, TEnumerator> : IValueReadOnlyCollection<T, TEnumerator>
+    public interface IValueReadOnlyList<out T, TEnumerator> 
+        : IValueReadOnlyCollection<T, TEnumerator>
         where TEnumerator : struct, IValueEnumerator<T>
     {
         T this[long index] { get; }

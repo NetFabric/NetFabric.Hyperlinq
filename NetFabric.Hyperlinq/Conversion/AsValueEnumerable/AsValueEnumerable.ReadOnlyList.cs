@@ -11,7 +11,7 @@ namespace NetFabric.Hyperlinq
             => new AsValueEnumerableEnumerable<TEnumerable, TEnumerator, TSource>(source);
 
         public struct AsValueEnumerableEnumerable<TEnumerable, TEnumerator, TSource>
-            : IValueReadOnlyList<TSource, AsValueEnumerableEnumerable<TEnumerable, TEnumerator, TSource>.ValueEnumerator>
+            : IValueReadOnlyList<TSource, AsValueEnumerableEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator>
             where TEnumerable : IReadOnlyList<TSource>
             where TEnumerator : IEnumerator<TSource>
         {
@@ -23,7 +23,6 @@ namespace NetFabric.Hyperlinq
             }
 
             public Enumerator GetEnumerator() => new Enumerator(source);
-            public ValueEnumerator GetValueEnumerator() => new ValueEnumerator(source);
 
             public long Count => source.Count;
 
@@ -38,7 +37,7 @@ namespace NetFabric.Hyperlinq
             }
             
             public struct Enumerator 
-                : IDisposable
+                : IValueEnumerator<TSource>
             {
                 TEnumerator enumerator;
 
@@ -52,33 +51,6 @@ namespace NetFabric.Hyperlinq
                 public bool MoveNext() => enumerator.MoveNext();
 
                 public void Dispose() => enumerator.Dispose();
-            }
-
-            public struct ValueEnumerator
-                : IValueEnumerator<TSource>
-            {
-                readonly IEnumerator<TSource> enumerator;
-
-                internal ValueEnumerator(IReadOnlyList<TSource> enumerable)
-                {
-                    enumerator = enumerable.GetEnumerator();
-                }
-
-                public bool TryMoveNext(out TSource current)
-                {
-                    if (enumerator.MoveNext())
-                    {
-                        current = enumerator.Current;
-                        return true;
-                    }
-
-                    current = default;
-                    return false;
-                }
-
-                public bool TryMoveNext() => enumerator.MoveNext();
-
-                public void Dispose() { }
             }
         }
     }

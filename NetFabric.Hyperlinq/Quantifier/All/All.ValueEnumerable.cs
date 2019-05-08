@@ -10,14 +10,14 @@ namespace NetFabric.Hyperlinq
         {
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
 
-            using (var enumerator = source.GetValueEnumerator())
+            using (var enumerator = source.GetEnumerator())
             {
                 var index = 0;
                 checked
                 {
-                    while (enumerator.TryMoveNext(out var current))
+                    while (enumerator.MoveNext())
                     {
-                        if (!predicate(current, index))
+                        if (!predicate(enumerator.Current, index))
                             return false;
 
                         index++;

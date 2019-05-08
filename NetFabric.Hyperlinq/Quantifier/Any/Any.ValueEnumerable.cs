@@ -4,23 +4,13 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class ValueEnumerable
     {
-        public static bool Any<TEnumerable, TEnumerator>(this TEnumerable source)
-            where TEnumerable : IValueEnumerable<TEnumerator>
-            where TEnumerator : struct, IValueEnumerator
-        {
-            using (var enumerator = source.GetValueEnumerator())
-            {
-                return enumerator.TryMoveNext();
-            }
-        }
-
         public static bool Any<TEnumerable, TEnumerator, TSource>(this TEnumerable source)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IValueEnumerator<TSource>
         {
-            using (var enumerator = source.GetValueEnumerator())
+            using (var enumerator = source.GetEnumerator())
             {
-                return enumerator.TryMoveNext();
+                return enumerator.MoveNext();
             }
         }
 
@@ -30,14 +20,14 @@ namespace NetFabric.Hyperlinq
         {
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
 
-            using (var enumerator = source.GetValueEnumerator())
+            using (var enumerator = source.GetEnumerator())
             {
                 var index = 0L;
                 checked
                 {
-                    while (enumerator.TryMoveNext(out var current))
+                    while (enumerator.MoveNext())
                     {
-                        if (predicate(current, index))
+                        if (predicate(enumerator.Current, index))
                             return true;
 
                         index++;

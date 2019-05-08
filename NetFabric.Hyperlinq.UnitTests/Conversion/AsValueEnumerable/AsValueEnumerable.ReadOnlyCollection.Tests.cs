@@ -20,28 +20,6 @@ namespace NetFabric.Hyperlinq.UnitTests
 
             // Assert
             result.Should().Generate(source);
-
-            var index = 0;
-            var expectedEnumerator = source.GetEnumerator();
-            var resultEnumerator = result.GetEnumerator();
-            {
-                while (true)
-                {
-                    var isResultCompleted = !resultEnumerator.MoveNext();
-                    var isExpectedCompleted = !expectedEnumerator.MoveNext();
-
-                    if (isResultCompleted && isExpectedCompleted)
-                        break;
-
-                    if (isResultCompleted ^ isExpectedCompleted)
-                        throw new Exception($"foreach enumeration expected complete {isExpectedCompleted} but found {isResultCompleted} at index {index}.");
-
-                    if(!resultEnumerator.Current.Equals(expectedEnumerator.Current))
-                        throw new Exception($"foreach enumeration expected value {expectedEnumerator.Current} but found {resultEnumerator.Current} at index {index}.");
-
-                    index++;
-                }
-            }
         }
     }
 }

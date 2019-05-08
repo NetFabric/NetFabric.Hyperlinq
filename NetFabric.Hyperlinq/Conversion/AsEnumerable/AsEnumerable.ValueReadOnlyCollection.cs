@@ -46,10 +46,10 @@ namespace NetFabric.Hyperlinq
                 
                 if (source.Count == 0) return;
 
-                using (var enumerator = source.GetValueEnumerator())
+                using (var enumerator = source.GetEnumerator())
                 {
-                    for (var index = arrayIndex; enumerator.TryMoveNext(out var current); index++)
-                        array[index] = current;
+                    for (var index = arrayIndex; enumerator.MoveNext(); index++)
+                        array[index] = enumerator.Current;
                 }
             }
 
@@ -62,13 +62,16 @@ namespace NetFabric.Hyperlinq
                 switch (state)
                 {
                     case 1:
-                        enumerator = source.GetValueEnumerator();
+                        enumerator = source.GetEnumerator();
                         state = 2;
                         goto case 2;
 
                     case 2:
-                        if (enumerator.TryMoveNext(out current))
+                        if (enumerator.MoveNext())
+                        {
+                            current = enumerator.Current;
                             return true;
+                        }
 
                         Dispose();
                         break;

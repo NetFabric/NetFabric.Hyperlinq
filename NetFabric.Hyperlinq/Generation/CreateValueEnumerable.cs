@@ -25,7 +25,7 @@ namespace NetFabric.Hyperlinq
                 this.getEnumerator = getEnumerator;
             }
 
-            public TEnumerator GetValueEnumerator() => getEnumerator();
+            public TEnumerator GetEnumerator() => getEnumerator();
 
             public long Count()
                 => Count<CreateValueEnumerable<TEnumerator, TSource>, TEnumerator, TSource>(this);
