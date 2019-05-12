@@ -45,10 +45,10 @@ namespace NetFabric.Hyperlinq
             where TSubEnumerator : struct, IValueEnumerator<TResult>
             => ReadOnlyCollection.SelectMany<ValueWrapper<TKey, TValue>,  Dictionary<TKey, TValue>.ValueCollection.Enumerator, TValue, TSubEnumerable, TSubEnumerator, TResult>(new ValueWrapper<TKey, TValue>(source), selector);
 
-        public static ReadOnlyCollection.WhereEnumerable<ValueWrapper<TKey, TValue>, Dictionary<TKey, TValue>.ValueCollection.Enumerator, TValue> Where<TKey, TValue>(
+        public static Enumerable.WhereEnumerable<ValueWrapper<TKey, TValue>, Dictionary<TKey, TValue>.ValueCollection.Enumerator, TValue> Where<TKey, TValue>(
             this Dictionary<TKey, TValue>.ValueCollection source,
             Func<TValue, long, bool> predicate) 
-            => ReadOnlyCollection.Where<ValueWrapper<TKey, TValue>, Dictionary<TKey, TValue>.ValueCollection.Enumerator, TValue>(new ValueWrapper<TKey, TValue>(source), predicate);
+            => Enumerable.Where<ValueWrapper<TKey, TValue>, Dictionary<TKey, TValue>.ValueCollection.Enumerator, TValue>(new ValueWrapper<TKey, TValue>(source), predicate);
 
         public static TValue First<TKey, TValue>(this Dictionary<TKey, TValue>.ValueCollection source)
             => ReadOnlyCollection.First<ValueWrapper<TKey, TValue>, Dictionary<TKey, TValue>.ValueCollection.Enumerator, TValue>(new ValueWrapper<TKey, TValue>(source));

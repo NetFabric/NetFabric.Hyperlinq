@@ -53,13 +53,10 @@ namespace NetFabric.Hyperlinq
 
                 public bool MoveNext()
                 {
-                    index++;
-                    while (index < count)
+                    while (++index < count)
                     {
                         if (predicate(source[index], index))
                             return true;
-
-                        index++;
                     }
                     return false;
                 }

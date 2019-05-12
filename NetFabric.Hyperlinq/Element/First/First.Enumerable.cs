@@ -127,13 +127,13 @@ namespace NetFabric.Hyperlinq
                 {
                     while (enumerator.MoveNext())
                     {
-                            if (predicate(enumerator.Current, index))
-                            {
-                                value = enumerator.Current;
-                                return true;
-                            }
+                        if (predicate(enumerator.Current, index))
+                        {
+                            value = enumerator.Current;
+                            return true;
+                        }
 
-                            index++;
+                        index++;
                     }
                 }
             }        

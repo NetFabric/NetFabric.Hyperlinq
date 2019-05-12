@@ -40,14 +40,10 @@ namespace NetFabric.Hyperlinq.UnitTests
 
             var assertion = Execute.Assertion.BecauseOf(because, becauseArgs);
             if (subjectIsNull)
-            {
                 assertion.FailWith("Expected {context:collection} to be equal to {0}{reason}, but found <null>.", expectation);
-            }
 
             if (Subject.Count != expectation.Count)
-            {
                 assertion.FailWith("Expected to be equal to {0}, but found {1}, when using Count.", expectation.Count, Subject.Count);
-            }
 
             var index = ((IValueEnumerable<TSource, TEnumerator>)Subject).IndexOfFirstDifferenceWith<TEnumerator, TSource, TSource>(expectation, equalityComparison);
             if(index >= 0)

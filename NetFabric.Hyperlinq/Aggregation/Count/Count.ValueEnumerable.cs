@@ -32,10 +32,10 @@ namespace NetFabric.Hyperlinq
                 {
                     while (enumerator.MoveNext())
                     {
-                            if (predicate(enumerator.Current, index))
-                                count++;
+                        if (predicate(enumerator.Current, index))
+                            count++;
 
-                            index++;
+                        index++;
                     }
                 }
             }
