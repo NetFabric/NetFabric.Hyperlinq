@@ -187,7 +187,8 @@ namespace NetFabric.Hyperlinq
 
         public static long Count(this RangeEnumerable source)
             => source.Count;
-
+        public static long Count(this RangeEnumerable source, Func<long, bool> predicate)
+            => ValueReadOnlyList.Count<RangeEnumerable, RangeEnumerable.Enumerator, long>(source, predicate);
         public static long Count(this RangeEnumerable source, Func<long, long, bool> predicate)
             => ValueReadOnlyList.Count<RangeEnumerable, RangeEnumerable.Enumerator, long>(source, predicate);
 

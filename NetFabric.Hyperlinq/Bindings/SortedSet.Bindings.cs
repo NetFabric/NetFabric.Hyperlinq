@@ -8,7 +8,8 @@ namespace NetFabric.Hyperlinq
     {
         public static int Count<TSource>(this SortedSet<TSource> source)
             => source.Count;
-
+        public static int Count<TSource>(this SortedSet<TSource> source, Func<TSource, bool> predicate)
+            => ReadOnlyCollection.Count<ValueWrapper<TSource>, SortedSet<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
         public static int Count<TSource>(this SortedSet<TSource> source, Func<TSource, long, bool> predicate)
             => ReadOnlyCollection.Count<ValueWrapper<TSource>, SortedSet<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
 

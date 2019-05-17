@@ -149,7 +149,9 @@ namespace NetFabric.Hyperlinq
         public static long Count<TSource, TResult>(this SelectEnumerable<TSource, TResult> source)
             where TResult : struct
             => ValueReadOnlyList.Count<SelectEnumerable<TSource, TResult>, SelectEnumerable<TSource, TResult>.Enumerator, TResult>(source);
-
+        public static long Count<TSource, TResult>(this SelectEnumerable<TSource, TResult> source, Func<TResult, bool> predicate)
+            where TResult : struct
+            => ValueReadOnlyList.Count<SelectEnumerable<TSource, TResult>, SelectEnumerable<TSource, TResult>.Enumerator, TResult>(source, predicate);
         public static long Count<TSource, TResult>(this SelectEnumerable<TSource, TResult> source, Func<TResult, long, bool> predicate)
             where TResult : struct
             => ValueReadOnlyList.Count<SelectEnumerable<TSource, TResult>, SelectEnumerable<TSource, TResult>.Enumerator, TResult>(source, predicate);

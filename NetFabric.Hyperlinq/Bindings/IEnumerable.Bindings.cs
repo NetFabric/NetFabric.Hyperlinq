@@ -8,7 +8,8 @@ namespace NetFabric.Hyperlinq
     {
         public static long Count<TSource>(this IEnumerable<TSource> source)
             => Enumerable.Count<IEnumerable<TSource>, IEnumerator<TSource>, TSource>(source);
-
+        public static long Count<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate)
+            => Enumerable.Count<IEnumerable<TSource>, IEnumerator<TSource>, TSource>(source, predicate);
         public static long Count<TSource>(this IEnumerable<TSource> source, Func<TSource, long, bool> predicate)
             => Enumerable.Count<IEnumerable<TSource>, IEnumerator<TSource>, TSource>(source, predicate);
 

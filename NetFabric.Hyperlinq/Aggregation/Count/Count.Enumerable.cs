@@ -21,6 +21,25 @@ namespace NetFabric.Hyperlinq
             return count;
         }
 
+        public static long Count<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, bool> predicate)
+            where TEnumerable : IEnumerable<TSource>
+            where TEnumerator : IEnumerator<TSource>
+        {
+            var count = 0L;
+            using (var enumerator = (TEnumerator)source.GetEnumerator())
+            {
+                checked
+                {
+                    while (enumerator.MoveNext())
+                    {
+                        if (predicate(enumerator.Current))
+                            count++;
+                    }
+                }
+            }
+            return count;
+        }
+
         public static long Count<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, long, bool> predicate)
             where TEnumerable : IEnumerable<TSource>
             where TEnumerator : IEnumerator<TSource>

@@ -96,7 +96,8 @@ namespace NetFabric.Hyperlinq
 
             public long Count()
                 => ValueEnumerable.Count<SelectManyEnumerable<TEnumerable, TSource, TSubEnumerable, TSubEnumerator, TResult>, Enumerator, TResult>(this);
-
+            public long Count(Func<TResult, bool> predicate)
+                => ValueEnumerable.Count<SelectManyEnumerable<TEnumerable, TSource, TSubEnumerable, TSubEnumerator, TResult>, Enumerator, TResult>(this, predicate);
             public long Count(Func<TResult, long, bool> predicate)
                 => ValueEnumerable.Count<SelectManyEnumerable<TEnumerable, TSource, TSubEnumerable, TSubEnumerator, TResult>, Enumerator, TResult>(this, predicate);
 

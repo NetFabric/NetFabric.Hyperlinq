@@ -175,7 +175,8 @@ namespace NetFabric.Hyperlinq
 
         public static long Count<TSource>(this RepeatEnumerable<TSource> source)
             => source.Count;
-
+        public static long Count<TSource>(this RepeatEnumerable<TSource> source, Func<TSource, bool> predicate)
+            => ValueReadOnlyList.Count<RepeatEnumerable<TSource>, RepeatEnumerable<TSource>.Enumerator, TSource>(source, predicate);
         public static long Count<TSource>(this RepeatEnumerable<TSource> source, Func<TSource, long, bool> predicate)
             => ValueReadOnlyList.Count<RepeatEnumerable<TSource>, RepeatEnumerable<TSource>.Enumerator, TSource>(source, predicate);
 

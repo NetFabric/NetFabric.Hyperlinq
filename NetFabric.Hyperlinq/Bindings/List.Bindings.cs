@@ -8,7 +8,8 @@ namespace NetFabric.Hyperlinq
     {
         public static int Count<TSource>(this List<TSource> source)
             => source.Count;
-
+        public static int Count<TSource>(this List<TSource> source, Func<TSource, bool> predicate)
+            => ReadOnlyList.Count<ValueWrapper<TSource>, TSource>(new ValueWrapper<TSource>(source), predicate);
         public static int Count<TSource>(this List<TSource> source, Func<TSource, long, bool> predicate)
             => ReadOnlyList.Count<ValueWrapper<TSource>, TSource>(new ValueWrapper<TSource>(source), predicate);
 

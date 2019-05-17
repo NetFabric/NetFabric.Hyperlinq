@@ -67,7 +67,8 @@ namespace NetFabric.Hyperlinq
 
             public long Count()
                 => ValueEnumerable.Count<TEnumerable, TEnumerator, TSource>(source, predicate);
-
+            public long Count(Func<TSource, bool> predicate)
+                => ValueEnumerable.Count<WhereEnumerable<TEnumerable, TEnumerator, TSource>, Enumerator, TSource>(this, predicate);
             public long Count(Func<TSource, long, bool> predicate)
                 => ValueEnumerable.Count<WhereEnumerable<TEnumerable, TEnumerator, TSource>, Enumerator, TSource>(this, predicate);
 

@@ -98,7 +98,12 @@ namespace NetFabric.Hyperlinq
 
         public static int Count<TSource>(this EmptyEnumerable<TSource> _)
             => 0;
+        public static int Count<TSource>(this EmptyEnumerable<TSource> _, Func<TSource, bool> predicate)
+        {
+            if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
 
+            return 0;
+        }
         public static int Count<TSource>(this EmptyEnumerable<TSource> _, Func<TSource, long, bool> predicate)
         {
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
