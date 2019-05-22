@@ -9,127 +9,65 @@ namespace NetFabric.Hyperlinq
         public static TSource First<TEnumerable, TEnumerator, TSource>(this TEnumerable source) 
             where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
             where TEnumerator : struct, IValueEnumerator<TSource>
-        {
-            if (source.TryFirst<TEnumerable, TEnumerator, TSource>(out var value))
-                return value;
-                
-            return ThrowHelper.ThrowEmptySequence<TSource>();
-        }
+            => TryFirst<TEnumerable, TEnumerator, TSource>(source).ThrowOnEmpty();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static TSource FirstOrDefault<TEnumerable, TEnumerator, TSource>(this TEnumerable source) 
             where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
             where TEnumerator : struct, IValueEnumerator<TSource>
-        {
-            if (source.TryFirst<TEnumerable, TEnumerator, TSource>(out var value))
-                return value;
-                
-            return default;
-        }
+            => TryFirst<TEnumerable, TEnumerator, TSource>(source).DefaultOnEmpty();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static TSource? FirstOrNull<TEnumerable, TEnumerator, TSource>(this TEnumerable source) 
+        public static TSource First<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, bool> predicate) 
             where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
             where TEnumerator : struct, IValueEnumerator<TSource>
-            where TSource : struct
-        {
-            if (source.TryFirst<TEnumerable, TEnumerator, TSource>(out var value))
-                return value;
-                
-            return null;
-        }
+            => TryFirst<TEnumerable, TEnumerator, TSource>(source, predicate).ThrowOnEmpty();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static TSource First<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, long, bool> predicate) 
+        public static TSource FirstOrDefault<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, bool> predicate) 
             where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
             where TEnumerator : struct, IValueEnumerator<TSource>
-            => First<TEnumerable, TEnumerator, TSource>(source, predicate, out var _);
+            => TryFirst<TEnumerable, TEnumerator, TSource>(source, predicate).DefaultOnEmpty();
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static TSource First<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, long, bool> predicate, out long index) 
+        public static (ElementResult Success, TSource Value) TryFirst<TEnumerable, TEnumerator, TSource>(this TEnumerable source) 
             where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
             where TEnumerator : struct, IValueEnumerator<TSource>
         {
-            if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
-
-            if (source.TryFirst<TEnumerable, TEnumerator, TSource>(predicate, out var value, out index))
-                return value;
-                
-            return ThrowHelper.ThrowEmptySequence<TSource>();
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static TSource FirstOrDefault<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, long, bool> predicate) 
-            where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
-            where TEnumerator : struct, IValueEnumerator<TSource>
-            => FirstOrDefault<TEnumerable, TEnumerator, TSource>(source, predicate, out var _);
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static TSource FirstOrDefault<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, long, bool> predicate, out long index) 
-            where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
-            where TEnumerator : struct, IValueEnumerator<TSource>
-        {
-            if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
-
-            if (source.TryFirst<TEnumerable, TEnumerator, TSource>(predicate, out var value, out index))
-                return value;
-                
-            return default;
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static TSource? FirstOrNull<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, long, bool> predicate) 
-            where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
-            where TEnumerator : struct, IValueEnumerator<TSource>
-            where TSource : struct
-            => FirstOrNull<TEnumerable, TEnumerator, TSource>(source, predicate, out var _);
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static TSource? FirstOrNull<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, long, bool> predicate, out long index) 
-            where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
-            where TEnumerator : struct, IValueEnumerator<TSource>
-            where TSource : struct
-        {
-            if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
-
-            if (source.TryFirst<TEnumerable, TEnumerator, TSource>(predicate, out var value, out index))
-                return value;
-                
-            return null;
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static bool TryFirst<TEnumerable, TEnumerator, TSource>(this TEnumerable source, out TSource value) 
-            where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
-            where TEnumerator : struct, IValueEnumerator<TSource>
-        {
-            if (source.Count == 0) 
+            switch (source.Count)
             {
-                value = default;
-                return false;
+                case 0:
+                    return (ElementResult.Empty, default);
+                default:
+                    return (ElementResult.Success, source[0]);
             }
-
-            value = source[0];       
-            return true;
         }
 
-        static bool TryFirst<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, long, bool> predicate, out TSource value, out long index) 
+        public static (ElementResult Success, TSource Value) TryFirst<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, bool> predicate) 
             where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
             where TEnumerator : struct, IValueEnumerator<TSource>
         {
             var count = source.Count;
-            for (index = 0; index < count; index++)
+            for (var index = 0; index < count; index++)
             {
-                if (predicate(source[index], index))
-                {
-                    value = source[index];
-                    return true;
-                }
+                if (predicate(source[index]))
+                    return (ElementResult.Success, source[index]);
             }
 
-            value = default;
-            index = -1;
-            return false;
+            return (ElementResult.Empty, default);
+        }
+
+        public static (long Index, TSource Value) TryFirst<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, long, bool> predicate) 
+            where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
+            where TEnumerator : struct, IValueEnumerator<TSource>
+        {
+            var count = source.Count;
+            for (var index = 0L; index < count; index++)
+            {
+                if (predicate(source[index], index))
+                    return (index, source[index]);
+            }
+
+            return ((long)ElementResult.Empty,  default);
         }
     }
 }

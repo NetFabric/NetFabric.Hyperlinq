@@ -23,6 +23,9 @@ namespace NetFabric.Hyperlinq
             return new RangeEnumerable(start, count, end);
         }
 
+        [GenericsTypeMapping("TEnumerable", typeof(RangeEnumerable))]
+        [GenericsTypeMapping("TEnumerator", typeof(RangeEnumerable.Enumerator))]
+        [GenericsTypeMapping("TSource", typeof(long))]
         public readonly struct RangeEnumerable
             : IValueReadOnlyList<long, RangeEnumerable.Enumerator>
         {
@@ -81,72 +84,16 @@ namespace NetFabric.Hyperlinq
             public RangeEnumerable Take(long count)
                 => Range(start, Utils.Take(this.count, count));
 
-            public bool All(Func<long, long, bool> predicate)
-                => ValueEnumerable.All<RangeEnumerable, Enumerator, long>(this, predicate);
-
             public bool Any()
                 => count != 0;
 
-            public bool Any(Func<long, long, bool> predicate)
-                => ValueEnumerable.Any<RangeEnumerable, Enumerator, long>(this, predicate);
-
             public bool Contains(long value)
                 => value >= start && value < start + count;
-
-            public bool Contains(long value, IEqualityComparer<long> comparer)
-                => ValueEnumerable.Contains<RangeEnumerable, Enumerator, long>(this, value, comparer);
-
-            public ValueReadOnlyList.SelectEnumerable<RangeEnumerable, Enumerator, long, TResult> Select<TResult>(Func<long, long, TResult> selector) 
-                => ValueReadOnlyList.Select<RangeEnumerable, Enumerator, long, TResult>(this, selector);
-
-            public ValueReadOnlyList.SelectManyEnumerable<RangeEnumerable, Enumerator, long, TSubEnumerable, TSubEnumerator, TResult> SelectMany<TSubEnumerable, TSubEnumerator, TResult>(Func<long, TSubEnumerable> selector) 
-                where TSubEnumerable : IValueEnumerable<TResult, TSubEnumerator>
-                where TSubEnumerator : struct, IValueEnumerator<TResult>
-                => ValueReadOnlyList.SelectMany<RangeEnumerable, Enumerator, long, TSubEnumerable, TSubEnumerator, TResult>(this, selector);
-
-            public ValueReadOnlyList.WhereEnumerable<RangeEnumerable, Enumerator, long> Where(Func<long, long, bool> predicate) 
-                => ValueReadOnlyList.Where<RangeEnumerable, Enumerator, long>(this, predicate);
-
-            public long First() 
-                => (count > 0) ? start : ThrowHelper.ThrowEmptySequence<int>();
-            public long First(Func<long, long, bool> predicate) 
-                => ValueReadOnlyList.First<RangeEnumerable, Enumerator, long>(this, predicate);
-
-            public long FirstOrDefault()
-                => (count > 0) ? start : default;
-            public long FirstOrDefault(Func<long, long, bool> predicate) 
-                => ValueReadOnlyList.FirstOrDefault<RangeEnumerable, Enumerator, long>(this, predicate);
-
-            public long? FirstOrNull()
-                => (count > 0) ? start : (long?)null;
-            public long? FirstOrNull(Func<long, long, bool> predicate)
-                => ValueReadOnlyList.FirstOrNull<RangeEnumerable, Enumerator, long>(this, predicate);
-
-            public long Single()
-                => (count == 0) ? ThrowHelper.ThrowEmptySequence<long>() : ((count == 1) ? start : ThrowHelper.ThrowNotSingleSequence<long>());
-            public long Single(Func<long, long, bool> predicate) 
-                => ValueReadOnlyList.Single<RangeEnumerable, Enumerator, long>(this, predicate);
-
-            public long SingleOrDefault()
-                => (count == 0) ? default : ((count == 1) ? start : ThrowHelper.ThrowNotSingleSequence<long>());
-            public long SingleOrDefault(Func<long, long, bool> predicate) 
-                => ValueReadOnlyList.SingleOrDefault<RangeEnumerable, Enumerator, long>(this, predicate);
-
-            public long? SingleOrNull()
-                => (count == 0) ? null : ((count == 1) ? start : ThrowHelper.ThrowNotSingleSequence<long?>());
-            public long? SingleOrNull(Func<long, long, bool> predicate)
-                => ValueReadOnlyList.SingleOrNull<RangeEnumerable, Enumerator, long>(this, predicate);
-
-            public IReadOnlyList<long> AsEnumerable()
-                => ValueReadOnlyList.AsEnumerable<RangeEnumerable, Enumerator, long>(this);
-
-            public RangeEnumerable AsValueEnumerable()
-                => this;
                 
             public long[] ToArray()
             {
                 var array = new long[count];
-                for(long index = 0L, value = start; index < count; index++, value++)
+                for(var index = 0L; index < count; index++)
                     array[index] = start + index;
                 return array;
             }
@@ -154,7 +101,8 @@ namespace NetFabric.Hyperlinq
             public List<long> ToList()
                 => new List<long>(new ToListCollection(this));
 
-            class ToListCollection
+            // helper implementation of ICollection<> so that CopyTo() is used to convert to List<>
+            struct ToListCollection
                 : ICollection<long>
             {
                 readonly long start;
@@ -172,7 +120,7 @@ namespace NetFabric.Hyperlinq
 
                 public void CopyTo(long[] array, int _)
                 {
-                    for(int index = 0; index < count; index++)
+                    for(var index = 0L; index < count; index++)
                         array[index] = start + index;
                 }
 
@@ -184,24 +132,6 @@ namespace NetFabric.Hyperlinq
                 bool ICollection<long>.Contains(long item) => throw new NotSupportedException();
             }
         }
-
-        public static long Count(this RangeEnumerable source)
-            => source.Count;
-        public static long Count(this RangeEnumerable source, Func<long, bool> predicate)
-            => ValueReadOnlyList.Count<RangeEnumerable, RangeEnumerable.Enumerator, long>(source, predicate);
-        public static long Count(this RangeEnumerable source, Func<long, long, bool> predicate)
-            => ValueReadOnlyList.Count<RangeEnumerable, RangeEnumerable.Enumerator, long>(source, predicate);
-
-        public static long? FirstOrNull(this RangeEnumerable source)
-            => ValueReadOnlyList.FirstOrNull<RangeEnumerable, RangeEnumerable.Enumerator, long>(source);
-
-        public static long? FirstOrNull(this RangeEnumerable source, Func<long, long, bool> predicate)
-            => ValueReadOnlyList.FirstOrNull<RangeEnumerable, RangeEnumerable.Enumerator, long>(source, predicate);
-        public static long? SingleOrNull(this RangeEnumerable source)
-            => ValueReadOnlyList.SingleOrNull<RangeEnumerable, RangeEnumerable.Enumerator, long>(source);
-
-        public static long? SingleOrNull(this RangeEnumerable source, Func<long, long, bool> predicate)
-            => ValueReadOnlyList.SingleOrNull<RangeEnumerable, RangeEnumerable.Enumerator, long>(source, predicate);
     }
 }
 

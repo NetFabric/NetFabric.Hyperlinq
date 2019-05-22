@@ -24,7 +24,7 @@ namespace NetFabric.Hyperlinq.UnitTests
 
         [Theory]
         [MemberData(nameof(TestData.CountPredicate), MemberType = typeof(TestData))]
-        public void CountPredicate_With_ValidData_Should_Succeed(int[] source, Func<int, long, bool> predicate, int expected)
+        public void CountPredicate_With_ValidData_Should_Succeed(int[] source, Func<int, bool> predicate, int expected)
         {
             // Arrange
             var wrapped = Wrap.AsEnumerable(source);

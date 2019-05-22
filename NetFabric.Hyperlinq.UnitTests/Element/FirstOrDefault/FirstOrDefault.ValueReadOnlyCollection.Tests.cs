@@ -24,7 +24,7 @@ namespace NetFabric.Hyperlinq.UnitTests
 
         [Theory]
         [MemberData(nameof(TestData.SinglePredicateEmpty), MemberType = typeof(TestData))]
-        public void FirstOrDefaultPredicate_With_Empty_Return_Default(int[] source, Func<int, long, bool> predicate)
+        public void FirstOrDefaultPredicate_With_Empty_Return_Default(int[] source, Func<int, bool> predicate)
         {
             // Arrange
             var wrapped = Wrap.AsValueReadOnlyCollection(source);
@@ -54,7 +54,7 @@ namespace NetFabric.Hyperlinq.UnitTests
         [Theory]
         [MemberData(nameof(TestData.SinglePredicateSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SinglePredicateMultiple), MemberType = typeof(TestData))]
-        public void FirstOrDefaultPredicate_With_ValidData_Should_Succeed(int[] source, Func<int, long, bool> predicate, int expected)
+        public void FirstOrDefaultPredicate_With_ValidData_Should_Succeed(int[] source, Func<int, bool> predicate, int expected)
         {
             // Arrange
             var wrapped = Wrap.AsValueReadOnlyCollection(source);

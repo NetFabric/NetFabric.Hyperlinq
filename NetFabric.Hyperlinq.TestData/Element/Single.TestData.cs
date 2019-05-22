@@ -12,20 +12,17 @@ namespace NetFabric.Hyperlinq
                 { new int[] { } },
             };
 
-        public static TheoryData<int[], Func<int, long, bool>> SinglePredicateEmpty =>
-            new TheoryData<int[], Func<int, long, bool>> 
+        public static TheoryData<int[], Func<int, bool>> SinglePredicateEmpty =>
+            new TheoryData<int[], Func<int, bool>> 
             {
-                { new int[] { }, (_, __) => true },
+                { new int[] { }, _ => true },
 
-                { new int[] { }, (_, __) => false },
-                { new int[] { 1 }, (_, __) => false },
-                { new int[] { 1, 2, 3, 4, 5 }, (_, __) => false },
+                { new int[] { }, _ => false },
+                { new int[] { 1 }, _ => false },
+                { new int[] { 1, 2, 3, 4, 5 }, _ => false },
 
-                { new int[] { }, (item, _) => item == 1 },
-                { new int[] { 1, 2, 3, 4, 5 }, (item, _) => item > 5 },
-
-                { new int[] { }, (_, index) => index == 0 },
-                { new int[] { 1, 2, 3, 4, 5 }, (_, index) => index > 4 },
+                { new int[] { }, item => item == 1 },
+                { new int[] { 1, 2, 3, 4, 5 }, item => item > 5 },
             };
 
         public static TheoryData<int[], int> SingleSingle =>
@@ -34,16 +31,13 @@ namespace NetFabric.Hyperlinq
                 { new int[] { 1 }, 1 },
             };
 
-        public static TheoryData<int[], Func<int, long, bool>, int> SinglePredicateSingle =>
-            new TheoryData<int[], Func<int, long, bool>, int> 
+        public static TheoryData<int[], Func<int, bool>, int> SinglePredicateSingle =>
+            new TheoryData<int[], Func<int, bool>, int> 
             {
-                { new int[] { 1 }, (_, __) => true, 1 },
+                { new int[] { 1 }, _ => true, 1 },
 
-                { new int[] { 1, 2, 3, 4, 5 }, (item, _) => item == 2, 2 },
-                { new int[] { 1, 2, 3, 4, 5 }, (item, _) => item > 4, 5 },
-
-                { new int[] { 1, 2, 3, 4, 5 }, (_, index) => index == 2, 3 },
-                { new int[] { 1, 2, 3, 4, 5 }, (_, index) => index > 3, 5 },
+                { new int[] { 1, 2, 3, 4, 5 }, item => item == 2, 2 },
+                { new int[] { 1, 2, 3, 4, 5 }, item => item > 4, 5 },
             };
 
         public static TheoryData<int[], int> SingleMultiple =>
@@ -52,16 +46,13 @@ namespace NetFabric.Hyperlinq
                 { new int[] { 1, 2 }, 1 },
             };
 
-        public static TheoryData<int[], Func<int, long, bool>, int> SinglePredicateMultiple =>
-            new TheoryData<int[], Func<int, long, bool>, int> 
+        public static TheoryData<int[], Func<int, bool>, int> SinglePredicateMultiple =>
+            new TheoryData<int[], Func<int, bool>, int> 
             {
-                { new int[] { 1, 2, 3, 4, 5 }, (_, __) => true, 1 },
+                { new int[] { 1, 2, 3, 4, 5 }, _ => true, 1 },
 
-                { new int[] { 1, 2, 3, 4, 5 }, (item, _) => item > 0, 1 },
-                { new int[] { 1, 2, 3, 4, 5 }, (item, _) => item > 2, 3 },
-
-                { new int[] { 1, 2, 3, 4, 5 }, (_, index) => index > -1, 1 },
-                { new int[] { 1, 2, 3, 4, 5 }, (_, index) => index > 2, 4 },
+                { new int[] { 1, 2, 3, 4, 5 }, item => item > 0, 1 },
+                { new int[] { 1, 2, 3, 4, 5 }, item => item > 2, 3 },
             };
     }
 }

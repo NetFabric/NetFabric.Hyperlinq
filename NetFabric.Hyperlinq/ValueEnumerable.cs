@@ -15,14 +15,14 @@ namespace NetFabric.Hyperlinq
         TEnumerator GetEnumerator();
     }
 
-    public interface IValueReadOnlyCollection<out T, TEnumerator> 
+    public interface IValueReadOnlyCollection<out T, TEnumerator>
         : IValueEnumerable<T, TEnumerator>
         where TEnumerator : struct, IValueEnumerator<T>
     {
         long Count { get; }
     }
 
-    public interface IValueReadOnlyList<out T, TEnumerator> 
+    public interface IValueReadOnlyList<out T, TEnumerator>
         : IValueReadOnlyCollection<T, TEnumerator>
         where TEnumerator : struct, IValueEnumerator<T>
     {

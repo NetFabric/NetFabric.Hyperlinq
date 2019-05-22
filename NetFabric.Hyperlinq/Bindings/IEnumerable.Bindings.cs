@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 
 namespace NetFabric.Hyperlinq
@@ -40,7 +39,11 @@ namespace NetFabric.Hyperlinq
 
         public static Enumerable.SelectEnumerable<IEnumerable<TSource>, IEnumerator<TSource>, TSource, TResult> Select<TSource, TResult>(
             this IEnumerable<TSource> source,
-            Func<TSource, long, TResult> selector) 
+            Func<TSource, TResult> selector) 
+            => Enumerable.Select<IEnumerable<TSource>, IEnumerator<TSource>, TSource, TResult>(source, selector);
+        public static Enumerable.SelectIndexEnumerable<IEnumerable<TSource>, IEnumerator<TSource>, TSource, TResult> Select<TSource, TResult>(
+            this IEnumerable<TSource> source,
+            Func<TSource, long, TResult> selector)
             => Enumerable.Select<IEnumerable<TSource>, IEnumerator<TSource>, TSource, TResult>(source, selector);
 
         public static Enumerable.SelectManyEnumerable<IEnumerable<TSource>, IEnumerator<TSource>, TSource, TSubEnumerable, TSubEnumerator, TResult> SelectMany<TSource, TSubEnumerable, TSubEnumerator, TResult>(
@@ -52,48 +55,42 @@ namespace NetFabric.Hyperlinq
 
         public static Enumerable.WhereEnumerable<IEnumerable<TSource>, IEnumerator<TSource>, TSource> Where<TSource>(
             this IEnumerable<TSource> source, 
-            Func<TSource, long, bool> predicate) 
+            Func<TSource, bool> predicate) 
+            => Enumerable.Where<IEnumerable<TSource>, IEnumerator<TSource>, TSource>(source, predicate);
+        public static Enumerable.WhereIndexEnumerable<IEnumerable<TSource>, IEnumerator<TSource>, TSource> Where<TSource>(
+            this IEnumerable<TSource> source,
+            Func<TSource, long, bool> predicate)
             => Enumerable.Where<IEnumerable<TSource>, IEnumerator<TSource>, TSource>(source, predicate);
 
-        public static TSource First<TSource>(this IEnumerable<TSource> source)
+        public static TSource First<TSource>(this IEnumerable<TSource> source) 
             => Enumerable.First<IEnumerable<TSource>, IEnumerator<TSource>, TSource>(source);
-
-        public static TSource First<TSource>(this IEnumerable<TSource> source, Func<TSource, long, bool> predicate)
+        public static TSource First<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate)
             => Enumerable.First<IEnumerable<TSource>, IEnumerator<TSource>, TSource>(source, predicate);
-
         public static TSource FirstOrDefault<TSource>(this IEnumerable<TSource> source)
             => Enumerable.FirstOrDefault<IEnumerable<TSource>, IEnumerator<TSource>, TSource>(source);
-
-        public static TSource FirstOrDefault<TSource>(this IEnumerable<TSource> source, Func<TSource, long, bool> predicate)
+        public static TSource FirstOrDefault<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate)
             => Enumerable.FirstOrDefault<IEnumerable<TSource>, IEnumerator<TSource>, TSource>(source, predicate);
+        public static (ElementResult Success, TSource Value) TryFirst<TSource>(this IEnumerable<TSource> source)
+            => Enumerable.TryFirst<IEnumerable<TSource>, IEnumerator<TSource>, TSource>(source);
+        public static (ElementResult Success, TSource Value) TryFirst<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate)
+            => Enumerable.TryFirst<IEnumerable<TSource>, IEnumerator<TSource>, TSource>(source, predicate);
+        public static (long Index, TSource Value) TryFirst<TSource>(this IEnumerable<TSource> source, Func<TSource, long, bool> predicate)
+            => Enumerable.TryFirst<IEnumerable<TSource>, IEnumerator<TSource>, TSource>(source, predicate);
 
-        public static TSource? FirstOrNull<TSource>(this IEnumerable<TSource> source)
-            where TSource : struct
-            => Enumerable.FirstOrNull<IEnumerable<TSource>, IEnumerator<TSource>, TSource>(source);
-
-        public static TSource? FirstOrNull<TSource>(this IEnumerable<TSource> source, Func<TSource, long, bool> predicate)
-            where TSource : struct
-            => Enumerable.FirstOrNull<IEnumerable<TSource>, IEnumerator<TSource>, TSource>(source, predicate);
-
-        public static TSource Single<TSource>(this IEnumerable<TSource> source)
+        public static TSource Single<TSource>(this IEnumerable<TSource> source) 
             => Enumerable.Single<IEnumerable<TSource>, IEnumerator<TSource>, TSource>(source);
-
-        public static TSource Single<TSource>(this IEnumerable<TSource> source, Func<TSource, long, bool> predicate)
+        public static TSource Single<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate)
             => Enumerable.Single<IEnumerable<TSource>, IEnumerator<TSource>, TSource>(source, predicate);
-
         public static TSource SingleOrDefault<TSource>(this IEnumerable<TSource> source)
             => Enumerable.SingleOrDefault<IEnumerable<TSource>, IEnumerator<TSource>, TSource>(source);
-
-        public static TSource SingleOrDefault<TSource>(this IEnumerable<TSource> source, Func<TSource, long, bool> predicate)
+        public static TSource SingleOrDefault<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate)
             => Enumerable.SingleOrDefault<IEnumerable<TSource>, IEnumerator<TSource>, TSource>(source, predicate);
-
-        public static TSource? SingleOrNull<TSource>(this IEnumerable<TSource> source)
-            where TSource : struct
-            => Enumerable.SingleOrNull<IEnumerable<TSource>, IEnumerator<TSource>, TSource>(source);
-
-        public static TSource? SingleOrNull<TSource>(this IEnumerable<TSource> source, Func<TSource, long, bool> predicate)
-            where TSource : struct
-            => Enumerable.SingleOrNull<IEnumerable<TSource>, IEnumerator<TSource>, TSource>(source, predicate);
+        public static (ElementResult Success, TSource Value) TrySingle<TSource>(this IEnumerable<TSource> source)
+            => Enumerable.TrySingle<IEnumerable<TSource>, IEnumerator<TSource>, TSource>(source);
+        public static (ElementResult Success, TSource Value) TrySingle<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate)
+            => Enumerable.TrySingle<IEnumerable<TSource>, IEnumerator<TSource>, TSource>(source, predicate);
+        public static (long Index, TSource Value) TrySingle<TSource>(this IEnumerable<TSource> source, Func<TSource, long, bool> predicate)
+            => Enumerable.TrySingle<IEnumerable<TSource>, IEnumerator<TSource>, TSource>(source, predicate);
 
         public static IEnumerable<TSource> AsEnumerable<TSource>(this IEnumerable<TSource> source)
             => source;

@@ -14,23 +14,20 @@ namespace NetFabric.Hyperlinq
                 { new int[] { 1, 2, 3, 4, 5}, 5 },
             };
 
-        public static TheoryData<int[], Func<int, long, bool>, int> CountPredicate =>
-            new TheoryData<int[], Func<int, long, bool>, int> 
+        public static TheoryData<int[], Func<int, bool>, int> CountPredicate =>
+            new TheoryData<int[], Func<int, bool>, int> 
             {
-                { new int[] { }, (_, __) => true, 0 },
-                { new int[] { 1 }, (_, __) => true, 1 },
-                { new int[] { 1, 2, 3, 4, 5 }, (_, __) => true, 5 },
+                { new int[] { }, _ => true, 0 },
+                { new int[] { 1 }, _ => true, 1 },
+                { new int[] { 1, 2, 3, 4, 5 }, _ => true, 5 },
 
-                { new int[] { }, (_, __) => false, 0 },
-                { new int[] { 1 }, (_, __) => false, 0 },
-                { new int[] { 1, 2, 3, 4, 5 }, (_, __) => false, 0 },
+                { new int[] { }, _ => false, 0 },
+                { new int[] { 1 }, _ => false, 0 },
+                { new int[] { 1, 2, 3, 4, 5 }, _ => false, 0 },
 
-                { new int[] { }, (item, _) => item > 2, 0 },
-                { new int[] { 1 }, (item, _) => item > 2, 0 },
-                { new int[] { 1, 2, 3, 4, 5 }, (item, _) => item > 2, 3 },
-
-                { new int[] { 1, 2, 3, 4, 5 }, (item, index) => item == index, 0 },
-                { new int[] { 1, 2, 3, 4, 5 }, (item, index) => item == index + 1, 5 },
+                { new int[] { }, item => item > 2, 0 },
+                { new int[] { 1 }, item => item > 2, 0 },
+                { new int[] { 1, 2, 3, 4, 5 }, item => item > 2, 3 },
             };
     }
 }

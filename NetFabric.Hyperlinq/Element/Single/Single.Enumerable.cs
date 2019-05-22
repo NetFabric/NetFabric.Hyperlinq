@@ -10,96 +10,27 @@ namespace NetFabric.Hyperlinq
         public static TSource Single<TEnumerable, TEnumerator, TSource>(this TEnumerable source) 
             where TEnumerable : IEnumerable<TSource>
             where TEnumerator : IEnumerator<TSource>
-        {
-            if (source.TrySingle<TEnumerable, TEnumerator, TSource>(out var value))
-                return value;
-                
-            return ThrowHelper.ThrowEmptySequence<TSource>();
-        }
+            => TrySingle<TEnumerable, TEnumerator, TSource>(source).ThrowOnEmpty();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static TSource SingleOrDefault<TEnumerable, TEnumerator, TSource>(this TEnumerable source) 
             where TEnumerable : IEnumerable<TSource>
             where TEnumerator : IEnumerator<TSource>
-        {
-            if (source.TrySingle<TEnumerable, TEnumerator, TSource>(out var value))
-                return value;
-                
-            return default;
-        }
+            => TrySingle<TEnumerable, TEnumerator, TSource>(source).DefaultOnEmpty();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static TSource? SingleOrNull<TEnumerable, TEnumerator, TSource>(this TEnumerable source) 
+        public static TSource Single<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, bool> predicate) 
             where TEnumerable : IEnumerable<TSource>
             where TEnumerator : IEnumerator<TSource>
-            where TSource : struct
-        {
-            if (source.TrySingle<TEnumerable, TEnumerator, TSource>(out var value))
-                return value;
-                
-            return null;
-        }
+            => TrySingle<TEnumerable, TEnumerator, TSource>(source, predicate).ThrowOnEmpty();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static TSource Single<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, long, bool> predicate) 
+        public static TSource SingleOrDefault<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, bool> predicate) 
             where TEnumerable : IEnumerable<TSource>
             where TEnumerator : IEnumerator<TSource>
-            => Single<TEnumerable, TEnumerator, TSource>(source, predicate, out var _); 
+            => TrySingle<TEnumerable, TEnumerator, TSource>(source, predicate).DefaultOnEmpty();
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static TSource Single<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, long, bool> predicate, out long index) 
-            where TEnumerable : IEnumerable<TSource>
-            where TEnumerator : IEnumerator<TSource>
-        {
-            if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
-
-            if (source.TrySingle<TEnumerable, TEnumerator, TSource>(predicate, out var value, out index))
-                return value;
-                
-            return ThrowHelper.ThrowEmptySequence<TSource>();
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static TSource SingleOrDefault<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, long, bool> predicate) 
-            where TEnumerable : IEnumerable<TSource>
-            where TEnumerator : IEnumerator<TSource>
-            => SingleOrDefault<TEnumerable, TEnumerator, TSource>(source, predicate, out var _);
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static TSource SingleOrDefault<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, long, bool> predicate, out long index) 
-            where TEnumerable : IEnumerable<TSource>
-            where TEnumerator : IEnumerator<TSource>
-        {
-            if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
-
-            if (source.TrySingle<TEnumerable, TEnumerator, TSource>(predicate, out var value, out index))
-                return value;
-                
-            return default;
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static TSource? SingleOrNull<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, long, bool> predicate) 
-            where TEnumerable : IEnumerable<TSource>
-            where TEnumerator : IEnumerator<TSource>
-            where TSource : struct
-            => SingleOrNull<TEnumerable, TEnumerator, TSource>(source, predicate, out var _);
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static TSource? SingleOrNull<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, long, bool> predicate, out long index) 
-            where TEnumerable : IEnumerable<TSource>
-            where TEnumerator : IEnumerator<TSource>
-            where TSource : struct
-        {
-            if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
-
-            if (source.TrySingle<TEnumerable, TEnumerator, TSource>(predicate, out var value, out index))
-                return value;
-                
-            return null;
-        }
-        
-        static bool TrySingle<TEnumerable, TEnumerator, TSource>(this TEnumerable source, out TSource value) 
+        public static (ElementResult Success, TSource Value) TrySingle<TEnumerable, TEnumerator, TSource>(this TEnumerable source) 
             where TEnumerable : IEnumerable<TSource>
             where TEnumerator : IEnumerator<TSource>
         {
@@ -107,20 +38,46 @@ namespace NetFabric.Hyperlinq
             {
                 if (enumerator.MoveNext())
                 {
-                    value = enumerator.Current;
+                    var value = enumerator.Current;
 
                     if (enumerator.MoveNext())
-                        ThrowHelper.ThrowNotSingleSequence<TSource>();
+                        return (ElementResult.NotSingle, default);
 
-                    return true;
+                    return (ElementResult.Success, value);
                 }
             }
 
-            value = default;
-            return false;
+            return (ElementResult.Empty, default);
         }
 
-        static bool TrySingle<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, long, bool> predicate, out TSource value, out long index) 
+        public static (ElementResult Success, TSource Value) TrySingle<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, bool> predicate) 
+            where TEnumerable : IEnumerable<TSource>
+            where TEnumerator : IEnumerator<TSource>
+        {
+            using (var enumerator = (TEnumerator)source.GetEnumerator())
+            {
+                while (enumerator.MoveNext())
+                {
+                    if (predicate(enumerator.Current))
+                    {
+                        var value = enumerator.Current;
+                        
+                        // found first, keep going until end or find second
+                        while (enumerator.MoveNext())
+                        {
+                            if (predicate(enumerator.Current))
+                                return (ElementResult.NotSingle, default);
+                        }
+
+                        return (ElementResult.Success, value);
+                    }
+                }
+            }      
+
+            return (ElementResult.Empty, default);
+        }
+
+        public static (long Index, TSource Value) TrySingle<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, long, bool> predicate) 
             where TEnumerable : IEnumerable<TSource>
             where TEnumerator : IEnumerator<TSource>
         {
@@ -128,26 +85,26 @@ namespace NetFabric.Hyperlinq
             {
                 checked
                 {
-                    for (index = 0; enumerator.MoveNext(); index++)
+                    for (var index = 0L; enumerator.MoveNext(); index++)
                     {
-                        value = enumerator.Current;
-                        if (predicate(value, index))
+                        if (predicate(enumerator.Current, index))
                         {
+                            var value = (index, enumerator.Current);
+
                             // found first, keep going until end or find second
                             for (index++; enumerator.MoveNext(); index++)
                             {
                                 if (predicate(enumerator.Current, index))
-                                    ThrowHelper.ThrowNotSingleSequence<TSource>();
+                                    return ((long)ElementResult.NotSingle, default);
                             }
-                            return true;
+
+                            return value;
                         }
                     }
                 }
             }      
 
-            value = default;
-            index = -1;
-            return false;
+            return ((long)ElementResult.Empty, default);
         }
     }
 }

@@ -4,17 +4,30 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class Array
     {
+        public static bool All<TSource>(this TSource[] source, Func<TSource, bool> predicate)
+        {
+            if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
+
+            var index = 0;
+            var length = source.Length;
+            while (index < length && predicate(source[index]))
+            {
+                index++;
+            }
+            return index == length;
+        }
+
         public static bool All<TSource>(this TSource[] source, Func<TSource, long, bool> predicate)
         {
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
 
+            var index = 0;
             var length = source.Length;
-            for (var index = 0; index < length; index++)
+            while (index < length && predicate(source[index], index))
             {
-                if (!predicate(source[index], index))
-                    return false;
+                index++;
             }
-            return true;
+            return index == length;
         }
     }
 }

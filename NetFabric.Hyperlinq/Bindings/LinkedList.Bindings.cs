@@ -36,7 +36,11 @@ namespace NetFabric.Hyperlinq
 
         public static ReadOnlyCollection.SelectEnumerable<ValueWrapper<TSource>, LinkedList<TSource>.Enumerator, TSource, TResult> Select<TSource, TResult>(
             this LinkedList<TSource> source,
-            Func<TSource, long, TResult> selector) 
+            Func<TSource, TResult> selector) 
+            => ReadOnlyCollection.Select<ValueWrapper<TSource>, LinkedList<TSource>.Enumerator, TSource, TResult>(new ValueWrapper<TSource>(source), selector);
+        public static ReadOnlyCollection.SelectIndexEnumerable<ValueWrapper<TSource>, LinkedList<TSource>.Enumerator, TSource, TResult> Select<TSource, TResult>(
+            this LinkedList<TSource> source,
+            Func<TSource, long, TResult> selector)
             => ReadOnlyCollection.Select<ValueWrapper<TSource>, LinkedList<TSource>.Enumerator, TSource, TResult>(new ValueWrapper<TSource>(source), selector);
 
         public static Enumerable.SelectManyEnumerable<ValueWrapper<TSource>,  LinkedList<TSource>.Enumerator,  TSource, TSubEnumerable, TSubEnumerator, TResult> SelectMany<TSource, TSubEnumerable, TSubEnumerator, TResult>(
@@ -48,48 +52,42 @@ namespace NetFabric.Hyperlinq
 
         public static Enumerable.WhereEnumerable<ValueWrapper<TSource>, LinkedList<TSource>.Enumerator, TSource> Where<TSource>(
             this LinkedList<TSource> source,
-            Func<TSource, long, bool> predicate) 
+            Func<TSource, bool> predicate) 
+            => Enumerable.Where<ValueWrapper<TSource>, LinkedList<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
+        public static Enumerable.WhereIndexEnumerable<ValueWrapper<TSource>, LinkedList<TSource>.Enumerator, TSource> Where<TSource>(
+            this LinkedList<TSource> source,
+            Func<TSource, long, bool> predicate)
             => Enumerable.Where<ValueWrapper<TSource>, LinkedList<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
 
-        public static TSource First<TSource, TValue>(this LinkedList<TSource> source)
+        public static TSource First<TSource>(this LinkedList<TSource> source) 
             => ReadOnlyCollection.First<ValueWrapper<TSource>, LinkedList<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source));
-
-        public static TSource First<TSource, TValue>(this LinkedList<TSource> source, Func<TSource, long, bool> predicate)
+        public static TSource First<TSource>(this LinkedList<TSource> source, Func<TSource, bool> predicate)
             => ReadOnlyCollection.First<ValueWrapper<TSource>, LinkedList<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
-
-        public static TSource FirstOrDefault<TSource, TValue>(this LinkedList<TSource> source)
+        public static TSource FirstOrDefault<TSource>(this LinkedList<TSource> source)
             => ReadOnlyCollection.FirstOrDefault<ValueWrapper<TSource>, LinkedList<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source));
-
-        public static TSource FirstOrDefault<TSource, TValue>(this LinkedList<TSource> source, Func<TSource, long, bool> predicate)
+        public static TSource FirstOrDefault<TSource>(this LinkedList<TSource> source, Func<TSource, bool> predicate)
             => ReadOnlyCollection.FirstOrDefault<ValueWrapper<TSource>, LinkedList<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
+        public static (ElementResult Success, TSource Value) TryFirst<TSource>(this LinkedList<TSource> source)
+            => ReadOnlyCollection.TryFirst<ValueWrapper<TSource>, LinkedList<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source));
+        public static (ElementResult Success, TSource Value) TryFirst<TSource>(this LinkedList<TSource> source, Func<TSource, bool> predicate)
+            => ReadOnlyCollection.TryFirst<ValueWrapper<TSource>, LinkedList<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
+        public static (int Index, TSource Value) TryFirst<TSource>(this LinkedList<TSource> source, Func<TSource, long, bool> predicate)
+            => ReadOnlyCollection.TryFirst<ValueWrapper<TSource>, LinkedList<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
 
-        public static TSource? FirstOrNull<TSource, TValue>(this LinkedList<TSource> source)
-            where TSource : struct
-            => ReadOnlyCollection.FirstOrNull<ValueWrapper<TSource>, LinkedList<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source));
-
-        public static TSource? FirstOrNull<TSource, TValue>(this LinkedList<TSource> source, Func<TSource, long, bool> predicate)
-            where TSource : struct
-            => ReadOnlyCollection.FirstOrNull<ValueWrapper<TSource>, LinkedList<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
-
-        public static TSource Single<TSource, TValue>(this LinkedList<TSource> source)
+        public static TSource Single<TSource>(this LinkedList<TSource> source) 
             => ReadOnlyCollection.Single<ValueWrapper<TSource>, LinkedList<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source));
-
-        public static TSource Single<TSource, TValue>(this LinkedList<TSource> source, Func<TSource, long, bool> predicate)
+        public static TSource Single<TSource>(this LinkedList<TSource> source, Func<TSource, bool> predicate)
             => ReadOnlyCollection.Single<ValueWrapper<TSource>, LinkedList<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
-
-        public static TSource SingleOrDefault<TSource, TValue>(this LinkedList<TSource> source)
+        public static TSource SingleOrDefault<TSource>(this LinkedList<TSource> source)
             => ReadOnlyCollection.SingleOrDefault<ValueWrapper<TSource>, LinkedList<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source));
-
-        public static TSource SingleOrDefault<TSource, TValue>(this LinkedList<TSource> source, Func<TSource, long, bool> predicate)
+        public static TSource SingleOrDefault<TSource>(this LinkedList<TSource> source, Func<TSource, bool> predicate)
             => ReadOnlyCollection.SingleOrDefault<ValueWrapper<TSource>, LinkedList<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
-
-        public static TSource? SingleOrNull<TSource, TValue>(this LinkedList<TSource> source)
-            where TSource : struct
-            => ReadOnlyCollection.SingleOrNull<ValueWrapper<TSource>, LinkedList<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source));
-
-        public static TSource? SingleOrNull<TSource, TValue>(this LinkedList<TSource> source, Func<TSource, long, bool> predicate)
-            where TSource : struct
-            => ReadOnlyCollection.SingleOrNull<ValueWrapper<TSource>, LinkedList<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
+        public static (ElementResult Success, TSource Value) TrySingle<TSource>(this LinkedList<TSource> source)
+            => ReadOnlyCollection.TrySingle<ValueWrapper<TSource>, LinkedList<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source));
+        public static (ElementResult Success, TSource Value) TrySingle<TSource>(this LinkedList<TSource> source, Func<TSource, bool> predicate)
+            => ReadOnlyCollection.TrySingle<ValueWrapper<TSource>, LinkedList<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
+        public static (int Index, TSource Value) TrySingle<TSource>(this LinkedList<TSource> source, Func<TSource, long, bool> predicate)
+            => ReadOnlyCollection.TrySingle<ValueWrapper<TSource>, LinkedList<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
 
         public static IReadOnlyCollection<TSource> AsEnumerable<TSource>(this LinkedList<TSource> source)
             => source;

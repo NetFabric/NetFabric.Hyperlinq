@@ -9,126 +9,81 @@ namespace NetFabric.Hyperlinq
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static TSource Single<TEnumerable, TSource>(this TEnumerable source) 
             where TEnumerable : IReadOnlyList<TSource>
-        {
-            if (source.TrySingle<TEnumerable, TSource>(out var value))
-                return value;
-                
-            return ThrowHelper.ThrowEmptySequence<TSource>();
-        }
+            => TrySingle<TEnumerable, TSource>(source).ThrowOnEmpty();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static TSource SingleOrDefault<TEnumerable, TSource>(this TEnumerable source) 
             where TEnumerable : IReadOnlyList<TSource>
-        {
-            if (source.TrySingle<TEnumerable, TSource>(out var value))
-                return value;
-                
-            return default;
-        }
+            => TrySingle<TEnumerable, TSource>(source).DefaultOnEmpty();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static TSource? SingleOrNull<TEnumerable, TSource>(this TEnumerable source) 
+        public static TSource Single<TEnumerable, TSource>(this TEnumerable source, Func<TSource, bool> predicate) 
             where TEnumerable : IReadOnlyList<TSource>
-            where TSource : struct
-        {
-            if (source.TrySingle<TEnumerable, TSource>(out var value))
-                return value;
-                
-            return null;
-        }
+            => TrySingle<TEnumerable, TSource>(source, predicate).ThrowOnEmpty();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static TSource Single<TEnumerable, TSource>(this TEnumerable source, Func<TSource, long, bool> predicate) 
+        public static TSource SingleOrDefault<TEnumerable, TSource>(this TEnumerable source, Func<TSource, bool> predicate) 
             where TEnumerable : IReadOnlyList<TSource>
-            => Single<TEnumerable, TSource>(source, predicate, out var _);
+            => TrySingle<TEnumerable, TSource>(source, predicate).DefaultOnEmpty();
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static TSource Single<TEnumerable, TSource>(this TEnumerable source, Func<TSource, long, bool> predicate, out int index) 
+        public static (ElementResult Success, TSource Value) TrySingle<TEnumerable, TSource>(this TEnumerable source) 
             where TEnumerable : IReadOnlyList<TSource>
         {
-            if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
-
-            if (source.TrySingle<TEnumerable, TSource>(predicate, out var value, out index))
-                return value;
-                
-            return ThrowHelper.ThrowEmptySequence<TSource>();
+            switch(source.Count)
+            {
+                case 0:
+                    return (ElementResult.Empty, default);
+                case 1:
+                    return (ElementResult.Success, source[0]);
+                default:
+                    return (ElementResult.NotSingle, default);
+            }
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static TSource SingleOrDefault<TEnumerable, TSource>(this TEnumerable source, Func<TSource, long, bool> predicate) 
-            where TEnumerable : IReadOnlyList<TSource>
-            => SingleOrDefault<TEnumerable, TSource>(source, predicate, out var _);
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static TSource SingleOrDefault<TEnumerable, TSource>(this TEnumerable source, Func<TSource, long, bool> predicate, out int index) 
-            where TEnumerable : IReadOnlyList<TSource>
-        {
-            if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
-
-            if (source.TrySingle<TEnumerable, TSource>(predicate, out var value, out index))
-                return value;
-                
-            return default;
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static TSource? SingleOrNull<TEnumerable, TSource>(this TEnumerable source, Func<TSource, long, bool> predicate) 
-            where TEnumerable : IReadOnlyList<TSource>
-            where TSource : struct
-            => SingleOrNull<TEnumerable, TSource>(source, predicate, out var _);
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static TSource? SingleOrNull<TEnumerable, TSource>(this TEnumerable source, Func<TSource, long, bool> predicate, out int index) 
-            where TEnumerable : IReadOnlyList<TSource>
-            where TSource : struct
-        {
-            if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
-
-            if (source.TrySingle<TEnumerable, TSource>(predicate, out var value, out index))
-                return value;
-                
-            return null;
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static bool TrySingle<TEnumerable, TSource>(this TEnumerable source, out TSource value) 
+        public static (ElementResult Success, TSource Value) TrySingle<TEnumerable, TSource>(this TEnumerable source, Func<TSource, bool> predicate) 
             where TEnumerable : IReadOnlyList<TSource>
         {
             var count = source.Count;
-            if (count > 1) ThrowHelper.ThrowNotSingleSequence<TSource>();
-            if (count != 0) 
+            for (var index = 0; index < count; index++)
             {
-                value = source[0];       
-                return true;
+                if (predicate(source[index]))
+                {
+                    var value = source[index];
+
+                    for (index++; index < count; index++)
+                    {
+                        if (predicate(source[index]))
+                            return (ElementResult.NotSingle, default);
+                    }
+
+                    return (ElementResult.Success, value);
+                }
             }
 
-            value = default;
-            return false;
-        }
+            return (ElementResult.Empty, default);
+        }    
 
-        static bool TrySingle<TEnumerable, TSource>(this TEnumerable source, Func<TSource, long, bool> predicate, out TSource value, out int index) 
+        public static (int Index, TSource Value) TrySingle<TEnumerable, TSource>(this TEnumerable source, Func<TSource, long, bool> predicate) 
             where TEnumerable : IReadOnlyList<TSource>
         {
             var count = source.Count;
-            for (index = 0; index < count; index++)
+            for (var index = 0; index < count; index++)
             {
                 if (predicate(source[index], index))
                 {
-                    value = source[index];
+                    var value = (index, source[index]);
 
                     for (index++; index < count; index++)
                     {
                         if (predicate(source[index], index))
-                            ThrowHelper.ThrowNotSingleSequence<TSource>();
+                            return ((int)ElementResult.NotSingle, default);
                     }
 
-                    return true;
+                    return value;
                 }
             }
 
-            value = default;
-            index = -1;
-            return false;
+            return ((int)ElementResult.Empty, default);
         }    
     }
 }

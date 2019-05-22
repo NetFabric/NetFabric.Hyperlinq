@@ -15,6 +15,30 @@ namespace NetFabric.Hyperlinq
             return ref source[0];
         }
 
+        public static ref TSource Single<TSource>(this Span<TSource> source, Func<TSource, bool> predicate)
+        {
+            if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
+
+            var length = source.Length;
+            for (var index = 0; index < length; index++)
+            {
+                if (predicate(source[index]))
+                {
+                    ref var first = ref source[index];
+
+                    for (index++; index < length; index++)
+                    {
+                        if (predicate(source[index]))
+                            ThrowHelper.ThrowNotSingleSequence<TSource>();
+                    }
+
+                    return ref first;
+                }
+            }
+            ThrowHelper.ThrowEmptySequence<TSource>();
+            return ref source[0];
+        }
+
         public static ref TSource Single<TSource>(this Span<TSource> source, Func<TSource, long, bool> predicate)
         {
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
@@ -71,6 +95,29 @@ namespace NetFabric.Hyperlinq
             if (length > 1) ThrowHelper.ThrowNotSingleSequence<TSource>();
 
             return ref source[0];
+        }
+
+        public static ref readonly TSource SingleOrDefault<TSource>(this Span<TSource> source, Func<TSource, bool> predicate)
+        {
+            if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
+
+            var length = source.Length;
+            for (var index = 0; index < length; index++)
+            {
+                if (predicate(source[index]))
+                {
+                    ref readonly var first = ref source[index];
+
+                    for (index++; index < length; index++)
+                    {
+                        if (predicate(source[index]))
+                            ThrowHelper.ThrowNotSingleSequence<TSource>();
+                    }
+
+                    return ref first;
+                }
+            }
+            return ref Default<TSource>.Value;
         }
 
         public static ref readonly TSource SingleOrDefault<TSource>(this Span<TSource> source, Func<TSource, long, bool> predicate)

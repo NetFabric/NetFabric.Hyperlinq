@@ -12,9 +12,10 @@ namespace NetFabric.Hyperlinq.UnitTests
         {
             // Arrange
             var collection = Wrap.AsValueReadOnlyCollection(new int[0]);
+            var selector = (Func<int, string>)null;
 
             // Act
-            Action action = () => ValueReadOnlyCollection.Select<Wrap.ValueReadOnlyCollection<int>, Wrap.ValueReadOnlyCollection<int>.Enumerator, int, string>(collection, null);
+            Action action = () => ValueReadOnlyCollection.Select<Wrap.ValueReadOnlyCollection<int>, Wrap.ValueReadOnlyCollection<int>.Enumerator, int, string>(collection, selector);
 
             // Assert
             action.Should()
@@ -26,7 +27,7 @@ namespace NetFabric.Hyperlinq.UnitTests
 
         [Theory]
         [MemberData(nameof(TestData.Select), MemberType = typeof(TestData))]
-        public void Select_With_ValidData_Should_Succeed(int[] source, Func<int, long, string> selector, string[] expected)
+        public void Select_With_ValidData_Should_Succeed(int[] source, Func<int, string> selector, string[] expected)
         {
             // Arrange
             var collection = Wrap.AsValueReadOnlyCollection(source);
