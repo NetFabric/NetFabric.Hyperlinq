@@ -10,6 +10,8 @@ namespace NetFabric.Hyperlinq
             where TEnumerator : IEnumerator<TSource>
             => new AsValueEnumerableEnumerable<TEnumerable, TEnumerator, TSource>(source);
 
+        [GenericsTypeMapping("TEnumerable", typeof(AsValueEnumerableEnumerable<,,>))]
+        [GenericsTypeMapping("TEnumerator", typeof(AsValueEnumerableEnumerable<,,>.Enumerator))]
         public struct AsValueEnumerableEnumerable<TEnumerable, TEnumerator, TSource>
             : IValueReadOnlyList<TSource, AsValueEnumerableEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator>
             where TEnumerable : IReadOnlyList<TSource>

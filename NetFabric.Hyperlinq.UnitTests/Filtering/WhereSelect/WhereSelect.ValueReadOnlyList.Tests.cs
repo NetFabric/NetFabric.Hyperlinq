@@ -14,7 +14,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var list = Wrap.AsValueReadOnlyList(new int[0]);
 
             // Act
-            Action action = () => ValueReadOnlyList.WhereSelect<Wrap.ValueReadOnlyList<int>, Wrap.ValueReadOnlyList<int>.Enumerator, int, int>(list, null, (item, _) => item);
+            Action action = () => ValueReadOnlyList.WhereSelect<Wrap.ValueReadOnlyList<int>, Wrap.ValueReadOnlyList<int>.Enumerator, int, int>(list, null, item => item);
 
             // Assert
             action.Should()
@@ -31,7 +31,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var list = Wrap.AsValueReadOnlyList(new int[0]);
 
             // Act
-            Action action = () => ValueReadOnlyList.WhereSelect<Wrap.ValueReadOnlyList<int>, Wrap.ValueReadOnlyList<int>.Enumerator, int, int>(list, (_, __) => true, null);
+            Action action = () => ValueReadOnlyList.WhereSelect<Wrap.ValueReadOnlyList<int>, Wrap.ValueReadOnlyList<int>.Enumerator, int, int>(list, _ => true, null);
 
             // Assert
             action.Should()
@@ -43,7 +43,7 @@ namespace NetFabric.Hyperlinq.UnitTests
 
         [Theory]
         [MemberData(nameof(TestData.WhereSelect), MemberType = typeof(TestData))]
-        public void WhereSelect_With_ValidData_Should_Succeed(int[] source, Func<int, long, bool> predicate, Func<int, long, string> selector, string[] expected)
+        public void WhereSelect_With_ValidData_Should_Succeed(int[] source, Func<int, bool> predicate, Func<int, string> selector, string[] expected)
         {
             // Arrange
             var list = Wrap.AsValueReadOnlyList(source);

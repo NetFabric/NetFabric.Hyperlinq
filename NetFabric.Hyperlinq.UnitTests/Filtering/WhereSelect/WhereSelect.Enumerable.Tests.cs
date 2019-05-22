@@ -14,7 +14,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var enumerable = Wrap.AsEnumerable(new int[0]);
 
             // Act
-            Action action = () => Enumerable.WhereSelect<Wrap.Enumerable<int>, Wrap.Enumerable<int>.Enumerator, int, int>(enumerable, null, (item, _) => item);
+            Action action = () => Enumerable.WhereSelect<Wrap.Enumerable<int>, Wrap.Enumerable<int>.Enumerator, int, int>(enumerable, null, item => item);
 
             // Assert
             action.Should()
@@ -31,7 +31,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var enumerable = Wrap.AsEnumerable(new int[0]);
 
             // Act
-            Action action = () => Enumerable.WhereSelect<Wrap.Enumerable<int>, Wrap.Enumerable<int>.Enumerator, int, int>(enumerable, (_, __) => true, null);
+            Action action = () => Enumerable.WhereSelect<Wrap.Enumerable<int>, Wrap.Enumerable<int>.Enumerator, int, int>(enumerable, _ => true, null);
 
             // Assert
             action.Should()
@@ -43,7 +43,7 @@ namespace NetFabric.Hyperlinq.UnitTests
 
         [Theory]
         [MemberData(nameof(TestData.WhereSelect), MemberType = typeof(TestData))]
-        public void WhereSelect_With_ValidData_Should_Succeed(int[] source, Func<int, long, bool> predicate, Func<int, long, string> selector, string[] expected)
+        public void WhereSelect_With_ValidData_Should_Succeed(int[] source, Func<int, bool> predicate, Func<int, string> selector, string[] expected)
         {
             // Arrange
             var enumerable = Wrap.AsEnumerable(source);

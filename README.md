@@ -83,3 +83,13 @@ Feel free to clone the repository and run the benchmarks on your machine. Feedba
 - [Performance Tuning for .NET Core](https://reubenbond.github.io/posts/dotnet-perf-tuning) by Reuben Bond
 - [ValueLinqBenchmarks](https://gist.github.com/benaadams/294cbd41ec1179638cb4b5495a15accf) by Ben Adams
 - [C# - How method calling works](http://www.levibotelho.com/development/how-method-calling-works/) by Levi Botelho
+
+# Credits
+
+The following tools are used to build and test this project:
+
+- [BenchmarkDotNet](https://benchmarkdotnet.org/)
+- [Fluent Assertions](https://fluentassertions.com/)
+- [Fody](https://github.com/Fody/Home)
+- [Mono.Cecil](https://www.mono-project.com/docs/tools+libraries/libraries/Mono.Cecil/)
+- [xUnit.net](https://xunit.net/)

@@ -21,6 +21,22 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Bindings\**" />
+    <EmbeddedResource Remove="Bindings\**" />
+    <None Remove="Bindings\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="FodyWeavers.xsd" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <WeaverFiles Include="..\NetFabric.Hyperlinq.Build.Fody\bin\$(Configuration)\netstandard2.0\NetFabric.Hyperlinq.Build.Fody.dll" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\NetFabric.Hyperlinq.Build\NetFabric.Hyperlinq.Build.csproj" />
+    <PackageReference Include="Fody" Version="5.0.6" PrivateAssets="All" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-*" PrivateAssets="All" />
   </ItemGroup>
 

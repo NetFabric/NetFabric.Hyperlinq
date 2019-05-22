@@ -26,7 +26,7 @@ namespace NetFabric.Hyperlinq.UnitTests
 
         [Theory]
         [MemberData(nameof(TestData.SinglePredicateEmpty), MemberType = typeof(TestData))]
-        public void SinglePredicate_With_Empty_Should_Throw(int[] source, Func<int, long, bool> predicate)
+        public void SinglePredicate_With_Empty_Should_Throw(int[] source, Func<int, bool> predicate)
         {
             // Arrange
             var wrapped = Wrap.AsValueReadOnlyList(source);
@@ -56,7 +56,7 @@ namespace NetFabric.Hyperlinq.UnitTests
 
         [Theory]
         [MemberData(nameof(TestData.SinglePredicateSingle), MemberType = typeof(TestData))]
-        public void SinglePredicate_With_ValidData_Should_Succeed(int[] source, Func<int, long, bool> predicate, int expected)
+        public void SinglePredicate_With_ValidData_Should_Succeed(int[] source, Func<int, bool> predicate, int expected)
         {
             // Arrange
             var wrapped = Wrap.AsValueReadOnlyList(source);
@@ -86,7 +86,7 @@ namespace NetFabric.Hyperlinq.UnitTests
 
         [Theory]
         [MemberData(nameof(TestData.SinglePredicateMultiple), MemberType = typeof(TestData))]
-        public void SinglePredicate_With_Multiple_Should_Throw(int[] source, Func<int, long, bool> predicate, int _)
+        public void SinglePredicate_With_Multiple_Should_Throw(int[] source, Func<int, bool> predicate, int _)
         {
             // Arrange
             var wrapped = Wrap.AsValueReadOnlyList(source);

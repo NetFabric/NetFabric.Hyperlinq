@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 16.0.28516.95
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetFabric.Hyperlinq", "NetFabric.Hyperlinq\NetFabric.Hyperlinq.csproj", "{EEEAA31B-434E-4849-A3E5-FA9664F5CE9B}"
+	ProjectSection(ProjectDependencies) = postProject
+		{730FFE3B-54C6-4F97-A80E-C0C5136F9955} = {730FFE3B-54C6-4F97-A80E-C0C5136F9955}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetFabric.Hyperlinq.UnitTests", "NetFabric.Hyperlinq.UnitTests\NetFabric.Hyperlinq.UnitTests.csproj", "{FE0CFD9E-7685-4595-8691-5364228722E9}"
 EndProject
@@ -11,6 +14,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetFabric.Hyperlinq.Benchma
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{2C452DA5-FE07-451C-BFE1-AD14A57F7B09}"
 	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
 		.gitattributes = .gitattributes
 		.gitignore = .gitignore
 		Directory.Build.props = Directory.Build.props
@@ -20,6 +24,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetFabric.Hyperlinq.TestCollections", "NetFabric.Hyperlinq.TestCollections\NetFabric.Hyperlinq.TestCollections.csproj", "{C4E41595-DD25-4A3F-BC83-26CBF5807D08}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetFabric.Hyperlinq.TestData", "NetFabric.Hyperlinq.TestData\NetFabric.Hyperlinq.TestData.csproj", "{8BC768FC-CACD-440E-92FD-905D774C07DC}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetFabric.Hyperlinq.Build", "NetFabric.Hyperlinq.Build\NetFabric.Hyperlinq.Build.csproj", "{60D7B296-323E-4899-AE69-810BF02EF107}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetFabric.Hyperlinq.Build.Fody", "NetFabric.Hyperlinq.Build.Fody\NetFabric.Hyperlinq.Build.Fody.csproj", "{730FFE3B-54C6-4F97-A80E-C0C5136F9955}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -43,6 +53,18 @@ Global
 		{C4E41595-DD25-4A3F-BC83-26CBF5807D08}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C4E41595-DD25-4A3F-BC83-26CBF5807D08}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C4E41595-DD25-4A3F-BC83-26CBF5807D08}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8BC768FC-CACD-440E-92FD-905D774C07DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8BC768FC-CACD-440E-92FD-905D774C07DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8BC768FC-CACD-440E-92FD-905D774C07DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8BC768FC-CACD-440E-92FD-905D774C07DC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{60D7B296-323E-4899-AE69-810BF02EF107}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{60D7B296-323E-4899-AE69-810BF02EF107}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{60D7B296-323E-4899-AE69-810BF02EF107}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{60D7B296-323E-4899-AE69-810BF02EF107}.Release|Any CPU.Build.0 = Release|Any CPU
+		{730FFE3B-54C6-4F97-A80E-C0C5136F9955}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{730FFE3B-54C6-4F97-A80E-C0C5136F9955}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{730FFE3B-54C6-4F97-A80E-C0C5136F9955}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{730FFE3B-54C6-4F97-A80E-C0C5136F9955}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

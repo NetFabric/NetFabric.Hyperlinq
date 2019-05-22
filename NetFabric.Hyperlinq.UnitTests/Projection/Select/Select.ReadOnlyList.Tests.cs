@@ -12,9 +12,10 @@ namespace NetFabric.Hyperlinq.UnitTests
         {
             // Arrange
             var list = Wrap.AsReadOnlyList(new int[0]);
+            var selector = (Func<int, string>)null;
 
             // Act
-            Action action = () => ReadOnlyList.Select<Wrap.ReadOnlyList<int>, int, string>(list, null);
+            Action action = () => ReadOnlyList.Select<Wrap.ReadOnlyList<int>, int, string>(list, selector);
 
             // Assert
             action.Should()
@@ -26,7 +27,7 @@ namespace NetFabric.Hyperlinq.UnitTests
 
         [Theory]
         [MemberData(nameof(TestData.Select), MemberType = typeof(TestData))]
-        public void Select_With_ValidData_Should_Succeed(int[] source, Func<int, long, string> selector, string[] expected)
+        public void Select_With_ValidData_Should_Succeed(int[] source, Func<int, string> selector, string[] expected)
         {
             // Arrange
             var list = Wrap.AsReadOnlyList(source);
@@ -40,7 +41,7 @@ namespace NetFabric.Hyperlinq.UnitTests
 
         [Theory]
         [MemberData(nameof(TestData.SelectSkip), MemberType = typeof(TestData))]
-        public void Select_With_Skip_Should_Succeed(IReadOnlyList<int> source, Func<int, long, int> selector, int skipCount, IReadOnlyList<int> expected)
+        public void Select_With_Skip_Should_Succeed(IReadOnlyList<int> source, Func<int, int> selector, int skipCount, IReadOnlyList<int> expected)
         {
             // Arrange
 
@@ -53,7 +54,7 @@ namespace NetFabric.Hyperlinq.UnitTests
 
         [Theory]
         [MemberData(nameof(TestData.SelectTake), MemberType = typeof(TestData))]
-        public void Select_With_Take_Should_Succeed(IReadOnlyList<int> source, Func<int, long, int> selector, int takeCount, IReadOnlyList<int> expected)
+        public void Select_With_Take_Should_Succeed(IReadOnlyList<int> source, Func<int, int> selector, int takeCount, IReadOnlyList<int> expected)
         {
             // Arrange
 
@@ -66,7 +67,7 @@ namespace NetFabric.Hyperlinq.UnitTests
 
         [Theory]
         [MemberData(nameof(TestData.SelectSkipTake), MemberType = typeof(TestData))]
-        public void Select_With_SkipTake_Should_Succeed(IReadOnlyList<int> source, Func<int, long, int> selector, int skipCount, int takeCount, IReadOnlyList<int> expected)
+        public void Select_With_SkipTake_Should_Succeed(IReadOnlyList<int> source, Func<int, int> selector, int skipCount, int takeCount, IReadOnlyList<int> expected)
         {
             // Arrange
 

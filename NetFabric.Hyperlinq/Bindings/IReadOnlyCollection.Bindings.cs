@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 
 namespace NetFabric.Hyperlinq
@@ -40,7 +39,11 @@ namespace NetFabric.Hyperlinq
 
         public static ReadOnlyCollection.SelectEnumerable<IReadOnlyCollection<TSource>, IEnumerator<TSource>, TSource, TResult> Select<TSource, TResult>(
             this IReadOnlyCollection<TSource> source,
-            Func<TSource, long, TResult> selector) 
+            Func<TSource, TResult> selector) 
+            => ReadOnlyCollection.Select<IReadOnlyCollection<TSource>, IEnumerator<TSource>, TSource, TResult>(source, selector);
+        public static ReadOnlyCollection.SelectIndexEnumerable<IReadOnlyCollection<TSource>, IEnumerator<TSource>, TSource, TResult> Select<TSource, TResult>(
+            this IReadOnlyCollection<TSource> source,
+            Func<TSource, long, TResult> selector)
             => ReadOnlyCollection.Select<IReadOnlyCollection<TSource>, IEnumerator<TSource>, TSource, TResult>(source, selector);
 
         public static Enumerable.SelectManyEnumerable<IReadOnlyCollection<TSource>, IEnumerator<TSource>, TSource, TSubEnumerable, TSubEnumerator, TResult> SelectMany<TSource, TSubEnumerable, TSubEnumerator, TResult>(
@@ -52,48 +55,42 @@ namespace NetFabric.Hyperlinq
 
         public static Enumerable.WhereEnumerable<IReadOnlyCollection<TSource>, IEnumerator<TSource>, TSource> Where<TSource>(
             this IReadOnlyCollection<TSource> source, 
-            Func<TSource, long, bool> predicate) 
+            Func<TSource, bool> predicate) 
+            => Enumerable.Where<IReadOnlyCollection<TSource>, IEnumerator<TSource>, TSource>(source, predicate);
+        public static Enumerable.WhereIndexEnumerable<IReadOnlyCollection<TSource>, IEnumerator<TSource>, TSource> Where<TSource>(
+            this IReadOnlyCollection<TSource> source,
+            Func<TSource, long, bool> predicate)
             => Enumerable.Where<IReadOnlyCollection<TSource>, IEnumerator<TSource>, TSource>(source, predicate);
 
-        public static TSource First<TSource>(this IReadOnlyCollection<TSource> source)
+        public static TSource First<TSource>(this IReadOnlyCollection<TSource> source) 
             => ReadOnlyCollection.First<IReadOnlyCollection<TSource>, IEnumerator<TSource>, TSource>(source);
-
-        public static TSource First<TSource>(this IReadOnlyCollection<TSource> source, Func<TSource, long, bool> predicate)
+        public static TSource First<TSource>(this IReadOnlyCollection<TSource> source, Func<TSource, bool> predicate)
             => ReadOnlyCollection.First<IReadOnlyCollection<TSource>, IEnumerator<TSource>, TSource>(source, predicate);
-
         public static TSource FirstOrDefault<TSource>(this IReadOnlyCollection<TSource> source)
             => ReadOnlyCollection.FirstOrDefault<IReadOnlyCollection<TSource>, IEnumerator<TSource>, TSource>(source);
-
-        public static TSource FirstOrDefault<TSource>(this IReadOnlyCollection<TSource> source, Func<TSource, long, bool> predicate)
+        public static TSource FirstOrDefault<TSource>(this IReadOnlyCollection<TSource> source, Func<TSource, bool> predicate)
             => ReadOnlyCollection.FirstOrDefault<IReadOnlyCollection<TSource>, IEnumerator<TSource>, TSource>(source, predicate);
+        public static (ElementResult Success, TSource Value) TryFirst<TSource>(this IReadOnlyCollection<TSource> source)
+            => ReadOnlyCollection.TryFirst<IReadOnlyCollection<TSource>, IEnumerator<TSource>, TSource>(source);
+        public static (ElementResult Success, TSource Value) TryFirst<TSource>(this IReadOnlyCollection<TSource> source, Func<TSource, bool> predicate)
+            => ReadOnlyCollection.TryFirst<IReadOnlyCollection<TSource>, IEnumerator<TSource>, TSource>(source, predicate);
+        public static (int Index, TSource Value) TryFirst<TSource>(this IReadOnlyCollection<TSource> source, Func<TSource, long, bool> predicate)
+            => ReadOnlyCollection.TryFirst<IReadOnlyCollection<TSource>, IEnumerator<TSource>, TSource>(source, predicate);
 
-        public static TSource? FirstOrNull<TSource>(this IReadOnlyCollection<TSource> source)
-            where TSource : struct
-            => ReadOnlyCollection.FirstOrNull<IReadOnlyCollection<TSource>, IEnumerator<TSource>, TSource>(source);
-
-        public static TSource? FirstOrNull<TSource>(this IReadOnlyCollection<TSource> source, Func<TSource, long, bool> predicate)
-            where TSource : struct
-            => ReadOnlyCollection.FirstOrNull<IReadOnlyCollection<TSource>, IEnumerator<TSource>, TSource>(source, predicate);
-
-        public static TSource Single<TSource>(this IReadOnlyCollection<TSource> source)
+        public static TSource Single<TSource>(this IReadOnlyCollection<TSource> source) 
             => ReadOnlyCollection.Single<IReadOnlyCollection<TSource>, IEnumerator<TSource>, TSource>(source);
-
-        public static TSource Single<TSource>(this IReadOnlyCollection<TSource> source, Func<TSource, long, bool> predicate)
+        public static TSource Single<TSource>(this IReadOnlyCollection<TSource> source, Func<TSource, bool> predicate)
             => ReadOnlyCollection.Single<IReadOnlyCollection<TSource>, IEnumerator<TSource>, TSource>(source, predicate);
-
         public static TSource SingleOrDefault<TSource>(this IReadOnlyCollection<TSource> source)
             => ReadOnlyCollection.SingleOrDefault<IReadOnlyCollection<TSource>, IEnumerator<TSource>, TSource>(source);
-
-        public static TSource SingleOrDefault<TSource>(this IReadOnlyCollection<TSource> source, Func<TSource, long, bool> predicate)
+        public static TSource SingleOrDefault<TSource>(this IReadOnlyCollection<TSource> source, Func<TSource, bool> predicate)
             => ReadOnlyCollection.SingleOrDefault<IReadOnlyCollection<TSource>, IEnumerator<TSource>, TSource>(source, predicate);
-
-        public static TSource? SingleOrNull<TSource>(this IReadOnlyCollection<TSource> source)
-            where TSource : struct
-            => ReadOnlyCollection.SingleOrNull<IReadOnlyCollection<TSource>, IEnumerator<TSource>, TSource>(source);
-
-        public static TSource? SingleOrNull<TSource>(this IReadOnlyCollection<TSource> source, Func<TSource, long, bool> predicate)
-            where TSource : struct
-            => ReadOnlyCollection.SingleOrNull<IReadOnlyCollection<TSource>, IEnumerator<TSource>, TSource>(source, predicate);
+        public static (ElementResult Success, TSource Value) TrySingle<TSource>(this IReadOnlyCollection<TSource> source)
+            => ReadOnlyCollection.TrySingle<IReadOnlyCollection<TSource>, IEnumerator<TSource>, TSource>(source);
+        public static (ElementResult Success, TSource Value) TrySingle<TSource>(this IReadOnlyCollection<TSource> source, Func<TSource, bool> predicate)
+            => ReadOnlyCollection.TrySingle<IReadOnlyCollection<TSource>, IEnumerator<TSource>, TSource>(source, predicate);
+        public static (int Index, TSource Value) TrySingle<TSource>(this IReadOnlyCollection<TSource> source, Func<TSource, long, bool> predicate)
+            => ReadOnlyCollection.TrySingle<IReadOnlyCollection<TSource>, IEnumerator<TSource>, TSource>(source, predicate);
 
         public static IReadOnlyCollection<TSource> AsEnumerable<TSource>(this IReadOnlyCollection<TSource> source)
             => source;

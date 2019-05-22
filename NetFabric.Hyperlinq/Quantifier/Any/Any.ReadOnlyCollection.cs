@@ -10,6 +10,25 @@ namespace NetFabric.Hyperlinq
             where TEnumerator : IEnumerator<TSource>
             => source.Count != 0;
 
+        public static bool Any<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, bool> predicate)
+            where TEnumerable : IReadOnlyCollection<TSource>
+            where TEnumerator : IEnumerator<TSource>
+        {
+            if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
+
+            if (source.Count == 0) return false;
+
+            using (var enumerator = (TEnumerator)source.GetEnumerator())
+            {
+                while (enumerator.MoveNext())
+                {
+                    if (predicate(enumerator.Current))
+                        return true;
+                }
+            }
+            return false;
+        }
+
         public static bool Any<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, long, bool> predicate)
             where TEnumerable : IReadOnlyCollection<TSource>
             where TEnumerator : IEnumerator<TSource>
