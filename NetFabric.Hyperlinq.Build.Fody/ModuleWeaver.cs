@@ -60,21 +60,11 @@ public partial class ModuleWeaver
             type.FullName == "NetFabric.Hyperlinq.Enumerable/SelectEnumerable`4" ||
             type.FullName == "NetFabric.Hyperlinq.ValueReadOnlyList/SelectEnumerable`4"))
         {
-            if (!type.IsInterface)
+            if (!type.IsInterface && type.HasInterfaces && !type.ShouldBeIgnored())
             {
-                if (type.ShouldBeIgnored())
-                {
-                    LogWarning($"* Ignoring type: {type.FullName}");
-                }
-                else
-                {
-                    if (type.HasInterfaces)
-                    {
-                        // add the extension methods for each implemented interface
-                        foreach (var interf in type.Interfaces)
-                            AddMethods(type, interf);
-                    }
-                }
+                // add the extension methods for each implemented interface
+                foreach (var interf in type.Interfaces)
+                    AddMethods(type, interf);
             }
 
             // remove the attributes so that the dependency can be removed
@@ -135,18 +125,12 @@ public partial class ModuleWeaver
         // set the generics arguments
         var genericType = new GenericInstanceType(type);
         var genericMethod = new GenericInstanceMethod(method);
-        LogWarning($"========================================================================================");
-        LogWarning($"Method: {genericMethod.FullName}");
         if (type.HasGenericParameters)
         {
             foreach (var parameter in type.GenericParameters)
             {
                 genericType.GenericArguments.Add(parameter);
-                var p = Utils.ResolveGenericType(parameter, type, genericsMapping, genericsTypeMapping);
-                LogWarning($"  Method: {p.FullName}");
-                foreach (var i in p.GenericParameters)
-                    LogWarning($"    Method: {i.FullName}");
-                genericMethod.GenericArguments.Add(p);
+                genericMethod.GenericArguments.Add(Utils.ResolveGenericType(parameter, type, genericsMapping, genericsTypeMapping));
             }
         }
 
@@ -182,6 +166,7 @@ public partial class ModuleWeaver
         var extensionType = new GenericInstanceType(type);
         if (type.HasGenericParameters)
         {
+            // set the generic parameters for the new method
             foreach (var param in type.GenericParameters)
             {
                 var newParameter = new GenericParameter(param.Name, newMethod)
@@ -191,7 +176,31 @@ public partial class ModuleWeaver
                     HasReferenceTypeConstraint = param.HasReferenceTypeConstraint,
                 };
                 newMethod.GenericParameters.Add(newParameter);
-                extensionType.GenericArguments.Add(newParameter);
+            }
+
+            // set the contraints for the new method and set the generic parameters for the type of first parameter
+            // this can only be performed after all generic parameters for the new method are set
+            for (var index = 0; index < newMethod.GenericParameters.Count; index++)
+            {
+                var param = type.GenericParameters[index];
+                var newParam = newMethod.GenericParameters[index];
+                if (param.HasConstraints)
+                {
+                    foreach (var constraint in param.Constraints)
+                    {
+                        switch (constraint.Name)
+                        {
+                            case "ValueType": // HasReferenceTypeConstraint is true
+                                // ignore
+                                break;
+                            default:
+                                newParam.Constraints.Add(Utils.ResolveGenericType(constraint, newMethod));
+                                break;
+                        }
+                    }
+                }
+
+                extensionType.GenericArguments.Add(newParam);
             }
         }
 
@@ -207,8 +216,6 @@ public partial class ModuleWeaver
             }
         }
 
-        LogWarning($"{extensionType.FullName}");
-
         var u = declaringType.Methods.FirstOrDefault(m =>
              m.Name == method.Name &&
              m.IsExtensionMethod() &&
@@ -217,32 +224,6 @@ public partial class ModuleWeaver
         // check if method already exists
         if (declaringType.Methods.Any(m => m.IsSame(newMethod))) // && m.IsExtensionMethod()))
             return;
-
-        // copy constraints
-        using (var origParamsEnumerator = type.GenericParameters.GetEnumerator())
-        using (var newParamsEnumerator = newMethod.GenericParameters.GetEnumerator())
-        {
-            while (origParamsEnumerator.MoveNext() && newParamsEnumerator.MoveNext())
-            {
-                var origParam = origParamsEnumerator.Current;
-                if (origParam.HasConstraints)
-                {
-                    var newParam = newParamsEnumerator.Current;
-                    foreach (var constraint in origParam.Constraints)
-                    {
-                        switch (constraint.Name)
-                        {
-                            case "ValueType": // HasReferenceTypeConstraint is true
-                                // ignore
-                                break;
-                            default:
-                                newParam.Constraints.Add(Utils.ResolveGenericType(constraint, newMethod));
-                                break;
-                        }
-                    }
-                }
-            }
-        }
 
 /*
                 // create the body
