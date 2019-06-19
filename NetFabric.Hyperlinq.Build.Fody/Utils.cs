@@ -161,13 +161,18 @@ static class Utils
         if (!definition.HasCustomAttributes)
             return;
 
-        CustomAttribute attribute;
         var customAttributes = definition.CustomAttributes;
-        foreach (var buildCustomAttribute in BuildCustomAttributeNames) 
+        var index = 0;
+        while (index < customAttributes.Count)
         {
-            while((attribute = customAttributes.FirstOrDefault(attr => attr.AttributeType.FullName == buildCustomAttribute)) is object)
+            var attribute = customAttributes[index];
+            if (BuildCustomAttributeNames.Contains(attribute.AttributeType.FullName))
             {
-                customAttributes.Remove(attribute);
+                customAttributes.RemoveAt(index);
+            }
+            else
+            {
+                index++;
             }
         }
     }
