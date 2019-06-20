@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
@@ -63,6 +64,7 @@ namespace NetFabric.Hyperlinq
                 public void Dispose() => enumerator.Dispose();
             }
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TakeEnumerable<TEnumerable, TEnumerator, TSource> Take(long count)
                 => Enumerable.Take<TEnumerable, TEnumerator, TSource>(source, Math.Min(this.count, count));
         }

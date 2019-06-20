@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
@@ -63,28 +64,38 @@ namespace NetFabric.Hyperlinq
                 public void Dispose() { }
             }
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Any()
                 => source.Count != 0;
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public ValueReadOnlyList.SelectEnumerable<TEnumerable, TEnumerator, TSource, TSelectorResult> Select<TSelectorResult>(Func<TResult, TSelectorResult> selector)
                 => ValueReadOnlyList.Select<TEnumerable, TEnumerator, TSource, TSelectorResult>(source, Utils.Combine(this.selector, selector));
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TResult First()
                 => selector(ValueReadOnlyList.First<TEnumerable, TEnumerator, TSource>(source));
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TResult FirstOrDefault()
                 => selector(ValueReadOnlyList.FirstOrDefault<TEnumerable, TEnumerator, TSource>(source));
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TResult Single()
                 => selector(ValueReadOnlyList.Single<TEnumerable, TEnumerator, TSource>(source));
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TResult SingleOrDefault()
                 => selector(ValueReadOnlyList.SingleOrDefault<TEnumerable, TEnumerator, TSource>(source));
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static long Count<TEnumerable, TEnumerator, TSource, TResult>(this SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult> source)
             where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
             where TEnumerator : struct, IValueEnumerator<TSource>
             => source.Count;
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static long Count<TEnumerable, TEnumerator, TSource, TResult>(this SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult> source, Func<TResult, bool> predicate)
             where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
             where TEnumerator : struct, IValueEnumerator<TSource>

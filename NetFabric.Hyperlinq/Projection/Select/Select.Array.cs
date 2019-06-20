@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
@@ -81,19 +82,27 @@ namespace NetFabric.Hyperlinq
                 public void Dispose() { }
             }
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Any()
                 => source.Length != 0;
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Array.SelectEnumerable<TSource, TSelectorResult> Select<TSelectorResult>(Func<TResult, TSelectorResult> selector)
                 => Array.Select<TSource, TSelectorResult>(source, Utils.Combine(this.selector, selector));
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TResult First()
                 => selector(Array.First<TSource>(source));
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TResult FirstOrDefault()
                 => selector(Array.FirstOrDefault<TSource>(source));
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TResult Single()
                 => selector(Array.Single<TSource>(source));
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TResult SingleOrDefault()
                 => selector(Array.SingleOrDefault<TSource>(source));
         }

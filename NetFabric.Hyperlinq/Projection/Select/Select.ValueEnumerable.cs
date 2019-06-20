@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
@@ -54,22 +55,31 @@ namespace NetFabric.Hyperlinq
                 public void Dispose() => enumerator.Dispose();
             }
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public long Count()
                 => ValueEnumerable.Count<TEnumerable, TEnumerator, TSource>(source);
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Any()
                 => ValueEnumerable.Any<TEnumerable, TEnumerator, TSource>(source);
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public ValueEnumerable.SelectEnumerable<TEnumerable, TEnumerator, TSource, TSelectorResult> Select<TSelectorResult>(Func<TResult, TSelectorResult> selector)
                 => ValueEnumerable.Select<TEnumerable, TEnumerator, TSource, TSelectorResult>(source, Utils.Combine(this.selector, selector));
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TResult First()
                 => selector(ValueEnumerable.First<TEnumerable, TEnumerator, TSource>(source));
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TResult FirstOrDefault()
                 => selector(ValueEnumerable.FirstOrDefault<TEnumerable, TEnumerator, TSource>(source));
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TResult Single()
                 => selector(ValueEnumerable.Single<TEnumerable, TEnumerator, TSource>(source));
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TResult SingleOrDefault()
                 => selector(ValueEnumerable.SingleOrDefault<TEnumerable, TEnumerator, TSource>(source));
         }

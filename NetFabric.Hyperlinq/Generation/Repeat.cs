@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
@@ -62,27 +63,34 @@ namespace NetFabric.Hyperlinq
                 public void Dispose() { }
             }
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public RepeatEnumerable<TSource> Skip(long count)
             {
                 (_, var takeCount) = Utils.Skip(this.count, count);
                 return Repeat(value, takeCount);
             }
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public RepeatEnumerable<TSource> Take(long count)
                 => Repeat(value, Utils.Take(this.count, count));
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool All(Func<TSource, bool> predicate)
                 => count == 0 ? true : predicate(value);
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Any()
                 => count != 0;
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Contains(TSource value)
                 => count != 0 && this.value.Equals(value);
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Contains(TSource value, IEqualityComparer<TSource> comparer)
                 => count != 0 && comparer.Equals(this.value, value);
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public RepeatEnumerable<TResult> Select<TResult>(Func<TSource, TResult> selector) 
                 => new RepeatEnumerable<TResult>(selector(value), count);
 
@@ -101,6 +109,7 @@ namespace NetFabric.Hyperlinq
                 return array;
             }
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public List<TSource> ToList()
                 => new List<TSource>(new ToListCollection(this));
 

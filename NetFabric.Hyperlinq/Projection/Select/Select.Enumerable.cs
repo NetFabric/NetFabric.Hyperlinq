@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
@@ -55,24 +56,35 @@ namespace NetFabric.Hyperlinq
                 public void Dispose() => enumerator.Dispose();
             }
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public long Count()
                 => Enumerable.Count<TEnumerable, TEnumerator, TSource>(source);
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public long Count(Func<TResult, bool> predicate)
                 => ValueEnumerable.Count<SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>, Enumerator, TResult>(this, predicate);
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Any()
                 => Enumerable.Any<TEnumerable, TEnumerator, TSource>(source);
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Enumerable.SelectEnumerable<TEnumerable, TEnumerator, TSource, TSelectorResult> Select<TSelectorResult>(Func<TResult, TSelectorResult> selector)
                 => Enumerable.Select<TEnumerable, TEnumerator, TSource, TSelectorResult>(source, Utils.Combine(this.selector, selector));
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TResult First()
                 => selector(Enumerable.First<TEnumerable, TEnumerator, TSource>(source));
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TResult FirstOrDefault()
                 => selector(Enumerable.FirstOrDefault<TEnumerable, TEnumerator, TSource>(source));
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TResult Single()
                 => selector(Enumerable.Single<TEnumerable, TEnumerator, TSource>(source));
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TResult SingleOrDefault()
                 => selector(Enumerable.SingleOrDefault<TEnumerable, TEnumerator, TSource>(source));
         }
