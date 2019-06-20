@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
@@ -75,10 +76,12 @@ namespace NetFabric.Hyperlinq
                 public void Dispose() { }
             }
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public SkipTakeEnumerable<TEnumerable, TSource> Take(long count)
                 => ReadOnlyList.SkipTake<TEnumerable, TSource>(source, skipCount, (int)Math.Min(takeCount, count));
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static long Count<TEnumerable, TSource>(this SkipTakeEnumerable<TEnumerable, TSource> source)
             where TEnumerable : IReadOnlyList<TSource>
             => source.Count;

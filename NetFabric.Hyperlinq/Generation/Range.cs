@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
@@ -75,18 +76,22 @@ namespace NetFabric.Hyperlinq
                 public void Dispose() { }
             }
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public RangeEnumerable Skip(long count)
             {
                 (var skipCount, var takeCount) = Utils.Skip(this.count, count);
                 return Range(start + skipCount, takeCount);
             }
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public RangeEnumerable Take(long count)
                 => Range(start, Utils.Take(this.count, count));
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Any()
                 => count != 0;
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Contains(long value)
                 => value >= start && value < start + count;
                 
@@ -98,6 +103,7 @@ namespace NetFabric.Hyperlinq
                 return array;
             }
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public List<long> ToList()
                 => new List<long>(new ToListCollection(this));
 

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
@@ -88,29 +89,40 @@ namespace NetFabric.Hyperlinq
                 public void Dispose() { }
             }
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public SelectEnumerable<TEnumerable, TSource, TResult> Skip(int count)
                 => new SelectEnumerable<TEnumerable, TSource, TResult>(source, selector, skipCount + count, takeCount);
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public SelectEnumerable<TEnumerable, TSource, TResult> Take(int count)
                 => new SelectEnumerable<TEnumerable, TSource, TResult>(source, selector, skipCount, Math.Min(takeCount, count));
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Any()
                 => source.Count != 0;
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public ReadOnlyList.SelectEnumerable<TEnumerable, TSource, TSelectorResult> Select<TSelectorResult>(Func<TResult, TSelectorResult> selector)
                 => ReadOnlyList.Select<TEnumerable, TSource, TSelectorResult>(source, Utils.Combine(this.selector, selector));
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TResult First()
                 => selector(ReadOnlyList.First<TEnumerable, TSource>(source));
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TResult FirstOrDefault()
                 => selector(ReadOnlyList.FirstOrDefault<TEnumerable, TSource>(source));
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TResult Single()
                 => selector(ReadOnlyList.Single<TEnumerable, TSource>(source));
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TResult SingleOrDefault()
                 => selector(ReadOnlyList.SingleOrDefault<TEnumerable, TSource>(source));
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static long Count<TEnumerable, TSource, TResult>(this SelectEnumerable<TEnumerable, TSource, TResult> source)
             where TEnumerable : IReadOnlyList<TSource>
             => source.Count;
