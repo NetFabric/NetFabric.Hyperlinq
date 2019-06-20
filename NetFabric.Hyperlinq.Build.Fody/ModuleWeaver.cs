@@ -4,20 +4,17 @@ using Mono.Cecil.Cil;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
+using System.Threading;
 
 public partial class ModuleWeaver
     : BaseModuleWeaver
 {
-    static readonly Lazy<string> assemblyName =
-        new Lazy<string>(() => typeof(ModuleWeaver).Assembly.GetName().Name);
-    static readonly Lazy<string> assemblyVersion =
-        new Lazy<string>(() => typeof(ModuleWeaver).Assembly.GetCustomAttribute<System.Reflection.AssemblyFileVersionAttribute>()?.Version ?? string.Empty);
-
     readonly DictionarySet<string, MethodDefinition> methods = new DictionarySet<string, MethodDefinition>();
 
     public override IEnumerable<string> GetAssembliesForScanning()
-        => Enumerable.Empty<string>();
+    {
+        yield return "netstandard";
+    }
 
     public override bool ShouldCleanReference
         => true;
@@ -236,16 +233,37 @@ public partial class ModuleWeaver
         LogInfo($"Added extension method. Type: '{type.FullName}' Method: '{newMethod.FullName}'");
     }
 
+    static CustomAttribute extensionAttribute;
+
     CustomAttribute ExtensionAttribute()
-        => new CustomAttribute(ModuleDefinition.ImportReference(typeof(ExtensionAttribute).GetConstructor(Type.EmptyTypes)));
+        => LazyInitializer.EnsureInitialized(ref extensionAttribute, () =>
+        {
+            var type = FindType(typeof(System.Runtime.CompilerServices.ExtensionAttribute).FullName);
+            var constructor = type.Methods.First(method => 
+                method.IsConstructor && 
+                !method.HasParameters);
+            return new CustomAttribute(ModuleDefinition.ImportReference(constructor));
+        });
+
+    static CustomAttribute generatedCodeAttribute;
 
     CustomAttribute GeneratedCodeAttribute()
-        => new CustomAttribute(ModuleDefinition.ImportReference(typeof(System.CodeDom.Compiler.GeneratedCodeAttribute).GetConstructor(new[] { typeof(string), typeof(string) })))
+        => LazyInitializer.EnsureInitialized(ref generatedCodeAttribute, () =>
         {
-            ConstructorArguments =
+            var type = FindType(typeof(System.CodeDom.Compiler.GeneratedCodeAttribute).FullName);
+            var constructor = type.Methods.First(method => 
+                method.IsConstructor && 
+                method.Parameters.Count == 2 &&
+                method.Parameters[0].ParameterType.FullName == "System.String" &&
+                method.Parameters[1].ParameterType.FullName == "System.String");
+            var assemblyName = GetType().Assembly.GetName().Name;
+            var assemblyVersion = ((System.Reflection.AssemblyFileVersionAttribute)Attribute.GetCustomAttribute(GetType().Assembly, typeof(System.Reflection.AssemblyFileVersionAttribute), false))?.Version ?? string.Empty;
+            return new CustomAttribute(ModuleDefinition.ImportReference(constructor))
                 {
-                    new CustomAttributeArgument(ModuleDefinition.TypeSystem.String, assemblyName.Value),
-                    new CustomAttributeArgument(ModuleDefinition.TypeSystem.String, assemblyVersion.Value),
-                },
-        };
+                    ConstructorArguments = {
+                        new CustomAttributeArgument(ModuleDefinition.TypeSystem.String, assemblyName),
+                        new CustomAttributeArgument(ModuleDefinition.TypeSystem.String, assemblyVersion),
+                    }
+                };
+        });
 }

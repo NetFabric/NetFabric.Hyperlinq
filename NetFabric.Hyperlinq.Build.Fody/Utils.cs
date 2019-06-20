@@ -194,7 +194,7 @@ static class Utils
             var rightParameter = right[index];
 
             if (leftParameter.ParameterType.FullName != rightParameter.ParameterType.FullName ||
-                leftParameter.IsOut != rightParameter.IsOut)
+                leftParameter.Attributes != rightParameter.Attributes)
                 return false;
         }
 
