@@ -1,0 +1,40 @@
+# ASP.NET Core
+# Build and test ASP.NET Core projects targeting .NET Core.
+# Add steps that run tests, create a NuGet package, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
+
+trigger:
+- master
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  buildConfiguration: 'Release'
+
+steps:
+- task: NuGetToolInstaller@1
+  inputs:
+    versionSpec: '4.3.0'
+    checkLatest: true
+- task: DotNetCoreCLI@2
+  displayName: Build
+  inputs:
+    command: 'build'
+    projects: '**/*.csproj'
+    arguments: '--configuration $(buildConfiguration)'
+- task: DotNetCoreCLI@2
+  displayName: Test and Coverage
+  inputs:
+    command: 'test'
+    projects: 'NetFabric.Hyperlinq.UnitTests/NetFabric.Hyperlinq.UnitTests.csproj'    
+    arguments: '/p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=$(Build.SourcesDirectory)/TestResults/Coverage/'
+    workingDirectory: 'NetFabric.Hyperlinq.UnitTests'
+- task: DotNetCoreCLI@2
+  displayName: Report Generator
+  inputs:
+    command: 'custom'
+    projects: 'NetFabric.Hyperlinq.UnitTests/NetFabric.Hyperlinq.UnitTests.csproj'
+    custom: 'reportgenerator'
+    arguments: '-reports:$(Build.SourcesDirectory)/TestResults/Coverage/coverage.cobertura.xml -targetdir:$(Build.SourcesDirectory)/TestResults/Coverage/Reports -tag:$(Build.BuildNumber) -reportTypes:htmlInline'
+    workingDirectory: 'NetFabric.Hyperlinq.UnitTests'
