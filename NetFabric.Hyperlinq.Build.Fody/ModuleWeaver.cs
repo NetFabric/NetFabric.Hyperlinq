@@ -50,12 +50,10 @@ public partial class ModuleWeaver
     {
         LogInfo("Adding methods that call the collected extension methods!");
 
-        //foreach (var type in ModuleDefinition.GetTypes().Where(type => type.FullName == "NetFabric.Hyperlinq.Enumerable/SelectEnumerable`4"))
-        //foreach (var type in ModuleDefinition.GetTypes().Where(type => type.FullName == "NetFabric.Hyperlinq.ValueReadOnlyList/SelectEnumerable`4"))
-        //foreach (var type in ModuleDefinition.GetTypes())
-        foreach (var type in ModuleDefinition.GetTypes().Where(type => 
-            type.FullName == "NetFabric.Hyperlinq.Enumerable/SelectEnumerable`4" ||
-            type.FullName == "NetFabric.Hyperlinq.ValueReadOnlyList/SelectEnumerable`4"))
+        foreach (var type in ModuleDefinition.GetTypes())
+        //foreach (var type in ModuleDefinition.GetTypes().Where(type => 
+        //    type.FullName == "NetFabric.Hyperlinq.Enumerable/SelectEnumerable`4" ||
+        //    type.FullName == "NetFabric.Hyperlinq.ValueReadOnlyList/SelectEnumerable`4"))
         {
             if (!type.IsInterface && type.HasInterfaces && !type.ShouldBeIgnored())
             {
@@ -161,6 +159,7 @@ public partial class ModuleWeaver
         };
 
         var extensionType = new GenericInstanceType(type);
+        var calledMethod = new GenericInstanceMethod(method);
         if (type.HasGenericParameters)
         {
             // set the generic parameters for the new method
@@ -198,6 +197,7 @@ public partial class ModuleWeaver
                 }
 
                 extensionType.GenericArguments.Add(newParam);
+                calledMethod.GenericArguments.Add(Utils.ResolveGenericType(param, type, genericsMapping, genericsTypeMapping));
             }
         }
 
@@ -222,13 +222,13 @@ public partial class ModuleWeaver
         if (declaringType.Methods.Any(m => m.IsSame(newMethod))) // && m.IsExtensionMethod()))
             return;
 
-/*
-                // create the body
-                var processor = newMethod.Body.GetILProcessor();
-                processor.Emit(OpCodes.Ldarga_S, newMethod.Parameters[0]);
-                processor.Emit(OpCodes.Constrained, extensionType);
-                processor.Emit(OpCodes.Ret);
-        */
+        // create the body
+        var processor = newMethod.Body.GetILProcessor();
+        for (var index = 0; index < newMethod.Parameters.Count; index++)
+            Utils.LoadArg(processor, index);
+        processor.Emit(OpCodes.Call, calledMethod);
+        processor.Emit(OpCodes.Ret);
+
         declaringType.Methods.Add(newMethod);
         LogInfo($"Added extension method. Type: '{type.FullName}' Method: '{newMethod.FullName}'");
     }

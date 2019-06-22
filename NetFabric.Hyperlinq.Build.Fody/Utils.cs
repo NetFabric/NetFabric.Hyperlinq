@@ -4,6 +4,7 @@ using Mono.Collections.Generic;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 
 static class Utils
 {
@@ -18,54 +19,61 @@ static class Utils
         GenericsTypeMappingAttributeName,
     };
 
-    public static T GetCustomAttribute<T>(this System.Reflection.Assembly assembly) where T : Attribute
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static T GetCustomAttribute<T>(this System.Reflection.Assembly assembly) 
+        where T : Attribute
         => Attribute.GetCustomAttribute(assembly, typeof(T), false) as T;
 
-    public static CustomAttribute GetCustomAttribute(this ICustomAttributeProvider attributeProvider, string attributeFullName)
+    public static bool TryGetCustomAttribute(this ICustomAttributeProvider attributeProvider, string attributeFullName, out CustomAttribute customAttribute)
     {
-        if (!attributeProvider.HasCustomAttributes)
-            return null;
-
-        foreach (var attribute in attributeProvider.CustomAttributes) // avoids enumerator boxing
+        if (attributeProvider.HasCustomAttributes)
         {
-            if (attribute.AttributeType.FullName == attributeFullName)
-                return attribute;
+            var count = attributeProvider.CustomAttributes.Count;
+            for (var index = 0; index < count; index++)
+            {
+                var attribute = attributeProvider.CustomAttributes[index];
+                if (attribute.AttributeType.FullName == attributeFullName)
+                {
+                    customAttribute = attribute;
+                    return true;
+                }
+            }
         }
 
-        return null;
+        customAttribute = default;
+        return false;
     }
 
-    public static void ForEachCustomAttribute(this ICustomAttributeProvider attributeProvider, string attributeFullName, Action<CustomAttribute> action)
-    {
-        if (!attributeProvider.HasCustomAttributes)
-            return;
-
-        foreach (var attribute in attributeProvider.CustomAttributes) // avoids enumerator boxing
-        {
-            if (attribute.AttributeType.FullName == attributeFullName)
-                action(attribute);
-        }
-    }
-
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool IsExtensionMethod(this MethodDefinition method)
-        => method.HasParameters && method.GetCustomAttribute(ExtensionAttributeName) is object;
+        => method.HasParameters && method.TryGetCustomAttribute(ExtensionAttributeName, out var _);
 
     public static bool ShouldBeIgnored(this TypeDefinition type)
     {
-        var attribute = type.GetCustomAttribute(IgnoreAttributeName);
-        if (attribute is null)
-            return false;
-        return (bool)attribute.ConstructorArguments[0].Value;
+        if (type.TryGetCustomAttribute(IgnoreAttributeName, out var attribute))
+            return (bool)attribute.ConstructorArguments[0].Value;
+
+        return false;
     }
 
     public static IReadOnlyDictionary<string, string> GenericsMapping(TypeDefinition type)
     {
         var mappings = new Dictionary<string, string>();
 
-        type.ForEachCustomAttribute(GenericsMappingAttributeName, 
-            attribute => mappings.Add(
-                (string)attribute.ConstructorArguments[0].Value, 
-                (string)attribute.ConstructorArguments[1].Value));
+        if (type.HasCustomAttributes)
+        {
+            var count = type.CustomAttributes.Count;
+            for (var index = 0; index < count; index++)
+            {
+                var attribute = type.CustomAttributes[index];
+                if (attribute.AttributeType.FullName == GenericsMappingAttributeName)
+                {
+                    mappings.Add(
+                        (string)attribute.ConstructorArguments[0].Value,
+                        (string)attribute.ConstructorArguments[1].Value);
+                }
+            }
+        }
 
         return mappings;
     }
@@ -74,10 +82,20 @@ static class Utils
     {
         var mappings = new Dictionary<string, TypeReference>();
 
-        type.ForEachCustomAttribute(GenericsTypeMappingAttributeName,
-            attribute => mappings.Add(
-                (string)attribute.ConstructorArguments[0].Value,
-                (TypeReference)attribute.ConstructorArguments[1].Value));
+        if (type.HasCustomAttributes)
+        {
+            var count = type.CustomAttributes.Count;
+            for (var index = 0; index < count; index++)
+            {
+                var attribute = type.CustomAttributes[index];
+                if (attribute.AttributeType.FullName == GenericsTypeMappingAttributeName)
+                {
+                    mappings.Add(
+                        (string)attribute.ConstructorArguments[0].Value,
+                        (TypeReference)attribute.ConstructorArguments[1].Value);
+                }
+            }
+        }
 
         return mappings;
     }
@@ -177,6 +195,7 @@ static class Utils
         }
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool IsSame(this MethodDefinition left, MethodDefinition right)
         => left.Name == right.Name &&
             left.HasParameters == right.HasParameters &&
