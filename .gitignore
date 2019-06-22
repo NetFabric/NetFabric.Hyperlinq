@@ -266,3 +266,6 @@ __pycache__/
 
 # macOS
 *.DS_Store
+
+# Coverlet
+coverage.json
