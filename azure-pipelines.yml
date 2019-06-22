@@ -38,3 +38,8 @@ steps:
     custom: 'reportgenerator'
     arguments: '-reports:$(Build.SourcesDirectory)/TestResults/Coverage/coverage.cobertura.xml -targetdir:$(Build.SourcesDirectory)/TestResults/Coverage/Reports -tag:$(Build.BuildNumber) -reportTypes:htmlInline'
     workingDirectory: 'NetFabric.Hyperlinq.UnitTests'
+- task: PublishCodeCoverageResults@1
+  inputs:
+    codeCoverageTool: 'cobertura' 
+    summaryFileLocation: $(Build.SourcesDirectory)/TestResults/Coverage/**/coverage.cobertura.xml
+    reportDirectory: $(Build.SourcesDirectory)/TestResults/Coverage/Reports
