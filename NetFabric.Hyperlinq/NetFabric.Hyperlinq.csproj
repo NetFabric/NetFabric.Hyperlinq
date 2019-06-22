@@ -4,7 +4,7 @@
     <TargetFrameworks>netstandard2.0;netcoreapp2.1</TargetFrameworks>
     <PackageId>NetFabric.Hyperlinq</PackageId>
     <Title>NetFabric.Hyperlinq</Title>
-    <Description>A LINQ library with devirtualized method calls, ref returns and minimized heap allocations.</Description>
+    <Description>A LINQ library with devirtualized method calls, ref returns and minimal heap allocations.</Description>
     <Version>3.0.0</Version>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageTags>hyperlinq, linq, performance</PackageTags>
@@ -35,7 +35,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\NetFabric.Hyperlinq.Build\NetFabric.Hyperlinq.Build.csproj" />
+    <ProjectReference Include="..\NetFabric.Hyperlinq.Build\NetFabric.Hyperlinq.Build.csproj" PrivateAssets="All" />
     <PackageReference Include="Fody" Version="5.0.6" PrivateAssets="All" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-*" PrivateAssets="All" />
   </ItemGroup>
