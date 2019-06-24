@@ -5,6 +5,6 @@
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\NetFabric.Hyperlinq.Build\NetFabric.Hyperlinq.Build.csproj" />
-    <PackageReference Include="FodyHelpers" Version="5.0.6" />
+    <PackageReference Include="FodyHelpers" Version="5.1.0" />
   </ItemGroup>
 </Project>
