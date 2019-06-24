@@ -36,18 +36,15 @@ A re-implementation of LINQ operations with improved performance by using:
   - `ToList()`
 - Element
   - `First()`
-  - `First(Func<TSource, long, bool>)`
+  - `First(Func<TSource, bool>)`
   - `FirstOrDefault()`
-  - `FirstOrDefault(Func<TSource, long, bool>)`
-  - `FirstOrNull() where TSource : struct`
-  - `FirstOrNull(Func<TSource, long, bool>) where TSource : struct`
+  - `FirstOrDefault(Func<TSource, bool>)`
   - `Single()`
-  - `Single(Func<TSource, long, bool>)`
+  - `Single(Func<TSource, bool>)`
   - `SingleOrDefault()`
-  - `SingleOrDefault(Func<TSource, long, bool>)`
-  - `SingleOrNull() where TSource : struct`
-  - `SingleOrNull(Func<TSource, long, bool>) where TSource : struct` 
+  - `SingleOrDefault(Func<TSource, bool>)`
 - Filtering
+  - `Where(Func<TSource, bool>)`
   - `Where(Func<TSource, long, bool>)`
 - Generation
   - `Create(Func<TEnumerator>)`
@@ -56,15 +53,16 @@ A re-implementation of LINQ operations with improved performance by using:
   - `Repeat(TSource, long)`
   - `Return(TSource)`
 - Projection
+  - `Select(Func<TSource, TResult>)`
   - `Select(Func<TSource, long, TResult>)`
   - `SelectMany(IValueEnumerable<TSource>)`
 - Partitioning
   - `Take(int)`
   - `Skip(int)`
 - Quantifier
-  - `All(Func<TSource, long, bool>)`
+  - `All(Func<TSource, bool>)`
   - `Any()`
-  - `Any(Func<TSource, long, bool>)`
+  - `Any(Func<TSource, bool>)`
   - `Contains(TSource)`
   - `Contains(TSource, IEqualityComparer<TSource>)`
 
@@ -86,9 +84,11 @@ Feel free to clone the repository and run the benchmarks on your machine. Feedba
 
 # Credits
 
-The following tools are used to build and test this project:
+The following open-source projects are used to build and test this project:
 
+- [.NET](https://github.com/dotnet)
 - [BenchmarkDotNet](https://benchmarkdotnet.org/)
+- [coverlet](https://github.com/tonerdo/coverlet)
 - [Fluent Assertions](https://fluentassertions.com/)
 - [Fody](https://github.com/Fody/Home)
 - [Mono.Cecil](https://www.mono-project.com/docs/tools+libraries/libraries/Mono.Cecil/)
