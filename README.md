@@ -74,7 +74,7 @@ For the latest benchmarks, visit our [wiki](https://github.com/NetFabric/NetFabr
 
 Feel free to clone the repository and run the benchmarks on your machine. Feedback and contributions are welcome!
 
-# References
+## References
 
 - [Enumeration in .NET](https://blog.usejournal.com/enumeration-in-net-d5674921512e) by Antão Almada
 - [Performance of value-type vs reference-type enumerators](https://medium.com/@antao.almada/performance-of-value-type-vs-reference-type-enumerators-820ab1acc291) by Antão Almada
@@ -82,14 +82,21 @@ Feel free to clone the repository and run the benchmarks on your machine. Feedba
 - [ValueLinqBenchmarks](https://gist.github.com/benaadams/294cbd41ec1179638cb4b5495a15accf) by Ben Adams
 - [C# - How method calling works](http://www.levibotelho.com/development/how-method-calling-works/) by Levi Botelho
 
-# Credits
+## Credits
 
 The following open-source projects are used to build and test this project:
 
 - [.NET](https://github.com/dotnet)
 - [BenchmarkDotNet](https://benchmarkdotnet.org/)
 - [coverlet](https://github.com/tonerdo/coverlet)
+- [dnSpy](https://github.com/0xd4d/dnSpy)
 - [Fluent Assertions](https://fluentassertions.com/)
 - [Fody](https://github.com/Fody/Home)
 - [Mono.Cecil](https://www.mono-project.com/docs/tools+libraries/libraries/Mono.Cecil/)
 - [xUnit.net](https://xunit.net/)
+
+Continuous-integration is hosted by [Azure DevOps](https://dev.azure.com/aalmada/NetFabric.Hyperlinq)
+
+## License
+
+This project is licensed under the MIT license. See the [LICENSE](LICENSE.txt) file for more info.
