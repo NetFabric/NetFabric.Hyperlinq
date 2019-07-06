@@ -17,6 +17,15 @@ A re-implementation of LINQ operations with improved performance by using:
 - Overloads for the [`IReadOnlyCollection<T>`](https://docs.microsoft.com/en-us/dotnet/api/system.collections.generic.ireadonlycollection-1) and [`IReadOnlyList<T>`](https://docs.microsoft.com/en-us/dotnet/api/system.collections.generic.ireadonlylist-1) interfaces instead of runtime casts.
 - Operations on arrays, `Span<T>` and `ReadOnlySpan<T>` that return references to items.
 
+## Advantages over LINQ
+
+Hyperlinq performs much better that LINQ in multiple scenarios:
+- When the collection implements `IReadOnlyList`, it uses the indexer operator instead of `IEnumerator` and `for` loops instead of `foreach` loops. That's the case for `List<T>`.
+- When collections implement `IEnumerator` using a value type, it doesn't box the enumerator, avoiding an heap allocation and virtual function calls. That's the case for `Dictionary<TKey, TValue>`, `Dictionary<TKey, TValue>.KeyCollection`, `Dictionary<TKey, TValue>.ValueCollection`, `HashSet<T>`, `LinkedList<T>`, `Queue<T>`, `SortedDictionary<TKey, TValue>`, `SortedDictionary<TKey, TValue>.KeyCollection`, `SortedDictionary<TKey, TValue>.ValueCollection`, `SortedSet<T>`, `Stack<T>`, etc.
+- When using arrays, `Span<T>` or `ReadOnlySpan<T>`, it uses the indexer operator, `for` loops and returns references to the items.
+- Optimizes several more composition scenarios, reducing considerably the number of enumerators used and calls to its methods.
+- Operators that don't change the number and order of the items, like `Select<TSource, TResult>`, implement `IReadOnlyCollection` and `IReadOnlyList`. This allows the use of `Count` property and indexer operator directly on them.
+
 ## Documentation
 
 - [Optimizing LINQ](https://medium.com/@antao.almada/netfabric-hyperlinq-optimizing-linq-348e02566cef)
