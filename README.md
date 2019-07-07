@@ -25,6 +25,7 @@ Hyperlinq performs much better that LINQ in multiple scenarios:
 - When using arrays, `Span<T>` or `ReadOnlySpan<T>`, it uses the indexer operator, `for` loops and returns references to the items.
 - Optimizes several more composition scenarios, reducing considerably the number of enumerators used and calls to its methods.
 - Operators that don't change the number and order of the items, like `Select<TSource, TResult>`, implement `IReadOnlyCollection` and `IReadOnlyList`. This allows the use of `Count` property and indexer operator directly on them.
+- `ToList()` uses custom implementations of `ICollection<T>`. It sacrifices a bit the performance on small collection by allocating an instance on the heap, but gains a lot of perfomance on larger collections by not validating each item added to the `List<T>`.
 
 ## Documentation
 

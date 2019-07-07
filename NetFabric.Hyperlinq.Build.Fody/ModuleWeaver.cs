@@ -50,10 +50,10 @@ public partial class ModuleWeaver
     {
         LogInfo("Adding methods that call the collected extension methods!");
 
-        foreach (var type in ModuleDefinition.GetTypes())
-        //foreach (var type in ModuleDefinition.GetTypes().Where(type => 
-        //    type.FullName == "NetFabric.Hyperlinq.Enumerable/SelectEnumerable`4" ||
-        //    type.FullName == "NetFabric.Hyperlinq.ValueReadOnlyList/SelectEnumerable`4"))
+        //foreach (var type in ModuleDefinition.GetTypes())
+        foreach (var type in ModuleDefinition.GetTypes().Where(type =>
+            type.FullName == "NetFabric.Hyperlinq.Enumerable/SelectEnumerable`4" ||
+            type.FullName == "NetFabric.Hyperlinq.ValueReadOnlyList/SelectEnumerable`4"))
         {
             if (!type.IsInterface && type.HasInterfaces && !type.ShouldBeIgnored())
             {
@@ -124,8 +124,12 @@ public partial class ModuleWeaver
         {
             foreach (var parameter in type.GenericParameters)
             {
+                LogWarning($"########");
+                var resolvedParameter = Utils.ResolveGenericType(parameter, type, genericsMapping, genericsTypeMapping, this);
+                LogWarning($"######## {resolvedParameter.FullName}: {resolvedParameter.GetType().FullName}");
+
                 genericType.GenericArguments.Add(parameter);
-                genericMethod.GenericArguments.Add(Utils.ResolveGenericType(parameter, type, genericsMapping, genericsTypeMapping));
+                genericMethod.GenericArguments.Add(resolvedParameter);
             }
         }
 

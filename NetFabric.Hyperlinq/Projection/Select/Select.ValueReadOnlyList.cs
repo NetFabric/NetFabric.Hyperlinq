@@ -15,7 +15,7 @@ namespace NetFabric.Hyperlinq
         {
             if(selector is null) ThrowHelper.ThrowArgumentNullException(nameof(selector));
 
-            return new SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>(in source, selector);
+            return new SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>(in source, selector, 0, source.Count);
         }
 
         [GenericsTypeMapping("TEnumerable", typeof(SelectEnumerable<,,,>))]
@@ -28,41 +28,63 @@ namespace NetFabric.Hyperlinq
         {
             readonly TEnumerable source;
             readonly Func<TSource, TResult> selector;
+            readonly long skipCount;
+            readonly long takeCount;
 
-            internal SelectEnumerable(in TEnumerable source, Func<TSource, TResult> selector)
+            internal SelectEnumerable(in TEnumerable source, Func<TSource, TResult> selector, long skipCount, long takeCount)
             {
                 this.source = source;
                 this.selector = selector;
+                (this.skipCount, this.takeCount) = Utils.SkipTake(source.Count, skipCount, takeCount);
             }
 
             public Enumerator GetEnumerator() => new Enumerator(in this);
 
-            public long Count => source.Count;
+            public long Count => takeCount;
 
-            public TResult this[long index] => selector(source[index]);
+            public TResult this[long index]
+            {
+                get
+                {
+                    if (index < 0 || index >= takeCount)
+                        ThrowHelper.ThrowArgumentOutOfRangeException(nameof(index));
+
+                    return selector(source[index + skipCount]);
+                }
+            }
 
             public struct Enumerator
                 : IValueEnumerator<TResult>
             {
                 readonly TEnumerable source;
                 readonly Func<TSource, TResult> selector;
-                readonly long count;
+                readonly long end;
                 long index;
 
                 internal Enumerator(in SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult> enumerable)
                 {
                     source = enumerable.source;
                     selector = enumerable.selector;
-                    count = enumerable.source.Count;
-                    index = -1;
+                    end = enumerable.skipCount + enumerable.takeCount;
+                    index = enumerable.skipCount - 1;
                 }
 
-                public TResult Current => selector(source[index]);
+                public TResult Current 
+                    => selector(source[index]);
 
-                public bool MoveNext() => ++index < count;
+                public bool MoveNext() 
+                    => ++index < end;
 
                 public void Dispose() { }
             }
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public ValueReadOnlyList.SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult> Skip(int count)
+                => new ValueReadOnlyList.SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>(source, selector, skipCount + count, takeCount);
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public ValueReadOnlyList.SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult> Take(int count)
+                => new ValueReadOnlyList.SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>(source, selector, skipCount, Math.Min(takeCount, count));
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Any()
@@ -87,6 +109,56 @@ namespace NetFabric.Hyperlinq
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TResult SingleOrDefault()
                 => selector(ValueReadOnlyList.SingleOrDefault<TEnumerable, TEnumerator, TSource>(source));
+
+            public TResult[] ToArray()
+            {
+                var array = new TResult[takeCount];
+
+                var end = skipCount + takeCount;
+                for (var index = skipCount; index < end; index++)
+                    array[index] = selector(source[index]);
+
+                return array;
+            }
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public List<TResult> ToList()
+                => new List<TResult>(new ToListCollection(this));
+
+            // helper implementation of ICollection<> so that CopyTo() is used to convert to List<>
+            class ToListCollection
+                : ICollection<TResult>
+            {
+                readonly TEnumerable source;
+                readonly Func<TSource, TResult> selector;
+                readonly long skipCount;
+                readonly long takeCount;
+
+                public ToListCollection(in SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult> source)
+                {
+                    this.source = source.source;
+                    this.selector = source.selector;
+                    this.skipCount = source.skipCount;
+                    this.takeCount = source.takeCount;
+                }
+
+                public int Count => (int)takeCount;
+
+                public bool IsReadOnly => true;
+
+                public void CopyTo(TResult[] array, int _)
+                {
+                    for (var index = 0L; index < takeCount; index++)
+                        array[index] = selector(source[index + skipCount]);
+                }
+
+                IEnumerator<TResult> IEnumerable<TResult>.GetEnumerator() => throw new NotSupportedException();
+                IEnumerator IEnumerable.GetEnumerator() => throw new NotSupportedException();
+                void ICollection<TResult>.Add(TResult item) => throw new NotSupportedException();
+                bool ICollection<TResult>.Remove(TResult item) => throw new NotSupportedException();
+                void ICollection<TResult>.Clear() => throw new NotSupportedException();
+                bool ICollection<TResult>.Contains(TResult item) => throw new NotSupportedException();
+            }
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace NetFabric.Hyperlinq
 {
@@ -11,10 +12,19 @@ namespace NetFabric.Hyperlinq
             var array = new TSource[source.Count];
             if (source.Count != 0)
             {
-                using (var enumerator = source.GetEnumerator())
+                switch (source)
                 {
-                    for (var index = 0L; enumerator.MoveNext(); index++)
-                        array[index] = enumerator.Current;
+                    case ICollection<TSource> collection:
+                        collection.CopyTo(array, 0);
+                        break;
+
+                    default:
+                        using (var enumerator = source.GetEnumerator())
+                        {
+                            for (var index = 0L; enumerator.MoveNext(); index++)
+                                array[index] = enumerator.Current;
+                        }
+                        break;
                 }
             }
             return array;
