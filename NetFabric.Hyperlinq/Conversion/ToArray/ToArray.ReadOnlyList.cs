@@ -10,15 +10,8 @@ namespace NetFabric.Hyperlinq
         {
             var count = source.Count;
             var array = new TSource[count];
-            if (source is ICollection<TSource> collection)
-            {
-                collection.CopyTo(array, 0);
-            }
-            else
-            {
-                for (var index = 0; index < count; index++)
-                    array[index] = source[index];
-            }
+            for (var index = 0; index < count; index++)
+                array[index] = source[index];
             return array;
         }
     }

@@ -48,8 +48,7 @@ namespace NetFabric.Hyperlinq
                     if (index < 0 || index >= takeCount)
                         ThrowHelper.ThrowArgumentOutOfRangeException(nameof(index));
 
-                    var currentIndex = index + skipCount;
-                    return selector(source[currentIndex]);
+                    return selector(source[index + skipCount]);
                 }
             }
 
@@ -57,10 +56,13 @@ namespace NetFabric.Hyperlinq
             {
                 get
                 {
-                    if (index > int.MaxValue)
+                    if (index < 0 || index >= takeCount)
                         ThrowHelper.ThrowArgumentOutOfRangeException(nameof(index));
 
-                    return this[(int)index];
+                    if (index + skipCount > int.MaxValue)
+                        ThrowHelper.ThrowArgumentOutOfRangeException(nameof(index));
+
+                    return selector(source[(int)(index + skipCount)]);
                 }
             }
             
@@ -120,6 +122,56 @@ namespace NetFabric.Hyperlinq
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TResult SingleOrDefault()
                 => selector(ReadOnlyList.SingleOrDefault<TEnumerable, TSource>(source));
+
+            public TResult[] ToArray()
+            {
+                var array = new TResult[takeCount];
+
+                var end = skipCount + takeCount;
+                for (var index = skipCount; index < end; index++)
+                    array[index] = selector(source[index]);
+
+                return array;
+            }
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public List<TResult> ToList()
+                => new List<TResult>(new ToListCollection(this));
+
+            // helper implementation of ICollection<> so that CopyTo() is used to convert to List<>
+            class ToListCollection
+                : ICollection<TResult>
+            {
+                readonly TEnumerable source;
+                readonly Func<TSource, TResult> selector;
+                readonly int skipCount;
+                readonly int takeCount;
+
+                public ToListCollection(in SelectEnumerable<TEnumerable, TSource, TResult> source)
+                {
+                    this.source = source.source;
+                    this.selector = source.selector;
+                    this.skipCount = source.skipCount;
+                    this.takeCount = source.takeCount;
+                }
+
+                public int Count => takeCount;
+
+                public bool IsReadOnly => true;
+
+                public void CopyTo(TResult[] array, int _)
+                {
+                    for (var index = 0; index < takeCount; index++)
+                        array[index] = selector(source[index + skipCount]);
+                }
+
+                IEnumerator<TResult> IEnumerable<TResult>.GetEnumerator() => throw new NotSupportedException();
+                IEnumerator IEnumerable.GetEnumerator() => throw new NotSupportedException();
+                void ICollection<TResult>.Add(TResult item) => throw new NotSupportedException();
+                bool ICollection<TResult>.Remove(TResult item) => throw new NotSupportedException();
+                void ICollection<TResult>.Clear() => throw new NotSupportedException();
+                bool ICollection<TResult>.Contains(TResult item) => throw new NotSupportedException();
+            }
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

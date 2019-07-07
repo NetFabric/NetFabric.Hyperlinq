@@ -11,17 +11,19 @@ namespace NetFabric.Hyperlinq
             var array = new TSource[source.Count];
             if (source.Count != 0)
             {
-                if (source is ICollection<TSource> collection)
+                switch (source)
                 {
-                    collection.CopyTo(array, 0);
-                }
-                else
-                {
-                    using (var enumerator = source.GetEnumerator())
-                    {
-                        for (var index = 0; enumerator.MoveNext(); index++)
-                            array[index] = enumerator.Current;
-                    }
+                    case ICollection<TSource> collection:
+                        collection.CopyTo(array, 0);
+                        break;
+
+                    default:
+                        using (var enumerator = (TEnumerator)source.GetEnumerator())
+                        {
+                            for (var index = 0; enumerator.MoveNext(); index++)
+                                array[index] = enumerator.Current;
+                        }
+                        break;
                 }
             }
             return array;

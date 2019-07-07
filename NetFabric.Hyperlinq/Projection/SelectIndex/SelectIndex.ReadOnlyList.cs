@@ -120,6 +120,56 @@ namespace NetFabric.Hyperlinq
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TResult SingleOrDefault()
                 => selector(ReadOnlyList.SingleOrDefault<TEnumerable, TSource>(source), 0);
+
+            public TResult[] ToArray()
+            {
+                var array = new TResult[takeCount];
+
+                var end = skipCount + takeCount;
+                for (var index = skipCount; index < end; index++)
+                    array[index] = selector(source[index], index);
+
+                return array;
+            }
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public List<TResult> ToList()
+                => new List<TResult>(new ToListCollection(this));
+
+            // helper implementation of ICollection<> so that CopyTo() is used to convert to List<>
+            class ToListCollection
+                : ICollection<TResult>
+            {
+                readonly TEnumerable source;
+                readonly Func<TSource, long, TResult> selector;
+                readonly int skipCount;
+                readonly int takeCount;
+
+                public ToListCollection(in SelectIndexEnumerable<TEnumerable, TSource, TResult> source)
+                {
+                    this.source = source.source;
+                    this.selector = source.selector;
+                    this.skipCount = source.skipCount;
+                    this.takeCount = source.takeCount;
+                }
+
+                public int Count => takeCount;
+
+                public bool IsReadOnly => true;
+
+                public void CopyTo(TResult[] array, int _)
+                {
+                    for (var index = 0; index < takeCount; index++)
+                        array[index] = selector(source[index + skipCount], index);
+                }
+
+                IEnumerator<TResult> IEnumerable<TResult>.GetEnumerator() => throw new NotSupportedException();
+                IEnumerator IEnumerable.GetEnumerator() => throw new NotSupportedException();
+                void ICollection<TResult>.Add(TResult item) => throw new NotSupportedException();
+                bool ICollection<TResult>.Remove(TResult item) => throw new NotSupportedException();
+                void ICollection<TResult>.Clear() => throw new NotSupportedException();
+                bool ICollection<TResult>.Contains(TResult item) => throw new NotSupportedException();
+            }
         }
     }
 }
