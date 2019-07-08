@@ -39,7 +39,7 @@ namespace NetFabric.Hyperlinq
                 case 0:
                     return (ElementResult.Empty, default);
                 default:
-                    using (var enumerator = (TEnumerator)source.GetEnumerator())
+                    using (var enumerator = source.GetEnumerator())
                     {
                         enumerator.MoveNext();
                         return (ElementResult.Success, enumerator.Current);
@@ -53,7 +53,7 @@ namespace NetFabric.Hyperlinq
         {
             if (source.Count != 0) 
             {
-                using (var enumerator = (TEnumerator)source.GetEnumerator())
+                using (var enumerator = source.GetEnumerator())
                 {
                     while (enumerator.MoveNext())
                     {
@@ -72,7 +72,7 @@ namespace NetFabric.Hyperlinq
         {
             if (source.Count != 0) 
             {
-                using (var enumerator = (TEnumerator)source.GetEnumerator())
+                using (var enumerator = source.GetEnumerator())
                 {
                     for (var index = 0L; enumerator.MoveNext(); index++)
                     {

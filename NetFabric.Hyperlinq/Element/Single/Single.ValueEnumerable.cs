@@ -33,7 +33,7 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IValueEnumerator<TSource>
         {
-            using (var enumerator = (TEnumerator)source.GetEnumerator())
+            using (var enumerator = source.GetEnumerator())
             {
                 if (enumerator.MoveNext())
                 {
@@ -53,7 +53,7 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IValueEnumerator<TSource>
         {
-            using (var enumerator = (TEnumerator)source.GetEnumerator())
+            using (var enumerator = source.GetEnumerator())
             {
                 while (enumerator.MoveNext())
                 {
@@ -80,7 +80,7 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IValueEnumerator<TSource>
         {
-            using (var enumerator = (TEnumerator)source.GetEnumerator())
+            using (var enumerator = source.GetEnumerator())
             {
                 checked
                 {
