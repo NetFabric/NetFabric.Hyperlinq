@@ -26,31 +26,54 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IReadOnlyList<TSource>
             => TrySingle<TEnumerable, TSource>(source, predicate).DefaultOnEmpty();
 
-        public static (ElementResult Success, TSource Value) TrySingle<TEnumerable, TSource>(this TEnumerable source) 
+        public static (ElementResult Success, TSource Value) TrySingle<TEnumerable, TSource>(this TEnumerable source)
+            where TEnumerable : IReadOnlyList<TSource>
+            => TrySingle<TEnumerable, TSource>(source, 0, source.Count);
+
+        public static (ElementResult Success, TSource Value) TrySingle<TEnumerable, TSource>(this TEnumerable source, Func<TSource, bool> predicate)
             where TEnumerable : IReadOnlyList<TSource>
         {
-            switch(source.Count)
+            if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
+
+            return TrySingle<TEnumerable, TSource>(source, predicate, 0, source.Count);
+        }
+
+        public static (int Index, TSource Value) TrySingle<TEnumerable, TSource>(this TEnumerable source, Func<TSource, long, bool> predicate)
+            where TEnumerable : IReadOnlyList<TSource>
+        {
+            if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
+
+            return TrySingle<TEnumerable, TSource>(source, predicate, 0, source.Count);
+        }
+
+        static (ElementResult Success, TSource Value) TrySingle<TEnumerable, TSource>(this TEnumerable source, int skipCount, int takeCount)
+            where TEnumerable : IReadOnlyList<TSource>
+        {
+            if (takeCount < 1)
+                return (ElementResult.Empty, default);
+
+            switch (source.Count)
             {
                 case 0:
                     return (ElementResult.Empty, default);
                 case 1:
-                    return (ElementResult.Success, source[0]);
+                    return (ElementResult.Success, source[skipCount]);
                 default:
                     return (ElementResult.NotSingle, default);
             }
         }
 
-        public static (ElementResult Success, TSource Value) TrySingle<TEnumerable, TSource>(this TEnumerable source, Func<TSource, bool> predicate) 
+        static (ElementResult Success, TSource Value) TrySingle<TEnumerable, TSource>(this TEnumerable source, Func<TSource, bool> predicate, int skipCount, int takeCount)
             where TEnumerable : IReadOnlyList<TSource>
         {
-            var count = source.Count;
-            for (var index = 0; index < count; index++)
+            var end = skipCount + takeCount;
+            for (var index = skipCount; index < end; index++)
             {
                 if (predicate(source[index]))
                 {
                     var value = source[index];
 
-                    for (index++; index < count; index++)
+                    for (index++; index < end; index++)
                     {
                         if (predicate(source[index]))
                             return (ElementResult.NotSingle, default);
@@ -61,19 +84,19 @@ namespace NetFabric.Hyperlinq
             }
 
             return (ElementResult.Empty, default);
-        }    
+        }
 
-        public static (int Index, TSource Value) TrySingle<TEnumerable, TSource>(this TEnumerable source, Func<TSource, long, bool> predicate) 
+        static (int Index, TSource Value) TrySingle<TEnumerable, TSource>(this TEnumerable source, Func<TSource, long, bool> predicate, int skipCount, int takeCount)
             where TEnumerable : IReadOnlyList<TSource>
         {
-            var count = source.Count;
-            for (var index = 0; index < count; index++)
+            var end = skipCount + takeCount;
+            for (var index = 0; index < end; index++)
             {
                 if (predicate(source[index], index))
                 {
                     var value = (index, source[index]);
 
-                    for (index++; index < count; index++)
+                    for (index++; index < end; index++)
                     {
                         if (predicate(source[index], index))
                             return ((int)ElementResult.NotSingle, default);
@@ -84,6 +107,6 @@ namespace NetFabric.Hyperlinq
             }
 
             return ((int)ElementResult.Empty, default);
-        }    
+        }
     }
 }

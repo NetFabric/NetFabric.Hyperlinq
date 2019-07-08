@@ -11,8 +11,12 @@ namespace NetFabric.Hyperlinq
         {
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
 
-            return new WhereIndexEnumerable<TEnumerable, TSource>(in source, predicate);
+            return new WhereIndexEnumerable<TEnumerable, TSource>(in source, predicate, 0, source.Count);
         }
+
+        static WhereIndexEnumerable<TEnumerable, TSource> Where<TEnumerable, TSource>(this TEnumerable source, Func<TSource, long, bool> predicate, int skipCount, int takeCount)
+            where TEnumerable : IReadOnlyList<TSource>
+            => new WhereIndexEnumerable<TEnumerable, TSource>(in source, predicate, skipCount, takeCount);
 
         [GenericsTypeMapping("TEnumerable", typeof(WhereIndexEnumerable<,>))]
         [GenericsTypeMapping("TEnumerator", typeof(WhereIndexEnumerable<,>.Enumerator))]
@@ -20,13 +24,16 @@ namespace NetFabric.Hyperlinq
             : IValueEnumerable<TSource, WhereIndexEnumerable<TEnumerable, TSource>.Enumerator>
             where TEnumerable : IReadOnlyList<TSource>
         {
-            internal readonly TEnumerable source;
-            internal readonly Func<TSource, long, bool> predicate;
+            readonly TEnumerable source;
+            readonly Func<TSource, long, bool> predicate;
+            readonly int skipCount;
+            readonly int takeCount;
 
-            internal WhereIndexEnumerable(in TEnumerable source, Func<TSource, long, bool> predicate)
+            internal WhereIndexEnumerable(in TEnumerable source, Func<TSource, long, bool> predicate, int skipCount, int takeCount)
             {
                 this.source = source;
                 this.predicate = predicate;
+                (this.skipCount, this.takeCount) = Utils.SkipTake(source.Count, skipCount, takeCount);
             }
 
             public Enumerator GetEnumerator() => new Enumerator(in this);
@@ -36,15 +43,15 @@ namespace NetFabric.Hyperlinq
             {
                 readonly TEnumerable source;
                 readonly Func<TSource, long, bool> predicate;
-                readonly int count;
+                readonly int end;
                 int index;
 
                 internal Enumerator(in WhereIndexEnumerable<TEnumerable, TSource> enumerable)
                 {
                     source = enumerable.source;
                     predicate = enumerable.predicate;
-                    count = enumerable.source.Count;
-                    index = -1;
+                    end = enumerable.skipCount + enumerable.takeCount;
+                    index = enumerable.skipCount - 1;
                 }
 
                 public TSource Current
@@ -52,7 +59,7 @@ namespace NetFabric.Hyperlinq
 
                 public bool MoveNext()
                 {
-                    while (++index < count)
+                    while (++index < end)
                     {
                         if (predicate(source[index], index))
                             return true;
@@ -64,11 +71,11 @@ namespace NetFabric.Hyperlinq
             }
 
             public long Count()
-                => ReadOnlyList.Count<TEnumerable, TSource>(source, predicate);
+                => ReadOnlyList.Count<TEnumerable, TSource>(source, predicate, skipCount, takeCount);
             public long Count(Func<TSource, bool> predicate)
-                => ReadOnlyList.Count<TEnumerable, TSource>(source, Utils.Combine(this.predicate, predicate));
+                => ReadOnlyList.Count<TEnumerable, TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount);
             public long Count(Func<TSource, long, bool> predicate)
-                => ReadOnlyList.Count<TEnumerable, TSource>(source, Utils.Combine(this.predicate, predicate));
+                => ReadOnlyList.Count<TEnumerable, TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount);
 
             public bool All()
                 => ReadOnlyList.All<TEnumerable, TSource>(source, predicate);
@@ -116,6 +123,9 @@ namespace NetFabric.Hyperlinq
                 => ReadOnlyList.TrySingle<TEnumerable, TSource>(source, Utils.Combine(this.predicate, predicate));
             public (long Index, TSource Value) TrySingle(Func<TSource, long, bool> predicate)
                 => ReadOnlyList.TrySingle<TEnumerable, TSource>(source, Utils.Combine(this.predicate, predicate));
+
+            public List<TSource> ToList()
+                => ReadOnlyList.ToList<TEnumerable, TSource>(source, predicate, skipCount, takeCount);
         }
     }
 }

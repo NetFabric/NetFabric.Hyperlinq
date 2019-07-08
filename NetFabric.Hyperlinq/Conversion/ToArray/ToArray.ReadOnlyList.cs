@@ -14,5 +14,14 @@ namespace NetFabric.Hyperlinq
                 array[index] = source[index];
             return array;
         }
+
+        static TSource[] ToArray<TEnumerable, TSource>(this TEnumerable source, int skipCount, int takeCount)
+            where TEnumerable : IReadOnlyList<TSource>
+        {
+            var array = new TSource[takeCount];
+            for (var index = 0; index < takeCount; index++)
+                array[index] = source[index + skipCount];
+            return array;
+        }
     }
 }

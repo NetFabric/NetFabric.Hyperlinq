@@ -77,6 +77,20 @@ namespace NetFabric.Hyperlinq
 
             public bool Any()
                 => ValueReadOnlyList.Any<TEnumerable, TEnumerator, TSource>(source, predicate);
+
+            public List<TResult> ToList()
+            {
+                var list = new List<TResult>();
+
+                var count = source.Count;
+                for (var index = 0L; index < count; index++)
+                {
+                    if (predicate(source[index]))
+                        list.Add(selector(source[index]));
+                }
+
+                return list;
+            }
         }
     }
 }

@@ -106,6 +106,9 @@ namespace NetFabric.Hyperlinq
                 => ValueEnumerable.TrySingle<TEnumerable, TEnumerator, TSource>(source, predicate);
             public (ElementResult Success, TSource Value) TrySingle(Func<TSource, bool> predicate)
                 => ValueEnumerable.TrySingle<TEnumerable, TEnumerator, TSource>(source, Utils.Combine(this.predicate, predicate));
+
+            public List<TSource> ToList()
+                => ValueEnumerable.ToList<TEnumerable, TEnumerator, TSource>(source, predicate);
         }
     }
 }

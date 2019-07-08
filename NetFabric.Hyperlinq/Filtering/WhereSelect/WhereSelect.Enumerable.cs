@@ -73,6 +73,22 @@ namespace NetFabric.Hyperlinq
 
             public bool Any()
                 => Enumerable.Any<TEnumerable, TEnumerator, TSource>(source, predicate);
+
+            public List<TResult> ToList()
+            {
+                var list = new List<TResult>();
+
+                using (var enumerator = source.GetEnumerator())
+                {
+                    while (enumerator.MoveNext())
+                    {
+                        if (predicate(enumerator.Current))
+                            list.Add(selector(enumerator.Current));
+                    }
+                }
+
+                return list;
+            }
         }
     }
 }
