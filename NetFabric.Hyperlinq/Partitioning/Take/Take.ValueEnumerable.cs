@@ -37,7 +37,7 @@ namespace NetFabric.Hyperlinq
 
                 internal Enumerator(in TakeEnumerable<TEnumerable, TEnumerator, TSource> enumerable)
                 {
-                    enumerator = (TEnumerator)enumerable.source.GetEnumerator();
+                    enumerator = enumerable.source.GetEnumerator();
                     counter = enumerable.count;
                 }
 

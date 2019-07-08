@@ -58,7 +58,7 @@ namespace NetFabric.Hyperlinq
                     switch (state)
                     {
                         case EnumeratorState.Uninitialized:
-                            enumerator = (TEnumerator)source.GetEnumerator();
+                            enumerator = source.GetEnumerator();
                             while (skipCounter > 0)
                             {
                                 if (enumerator.MoveNext())
