@@ -16,9 +16,9 @@ namespace NetFabric.Hyperlinq
             : IValueReadOnlyList<TSource, SkipTakeEnumerable<TEnumerable, TSource>.Enumerator>
             where TEnumerable : IReadOnlyList<TSource>
         {
-            readonly TEnumerable source;
-            readonly int skipCount;
-            readonly int takeCount;
+            internal readonly TEnumerable source;
+            internal readonly int skipCount;
+            internal readonly int takeCount;
 
             internal SkipTakeEnumerable(in TEnumerable source, int skipCount, int takeCount)
             {
@@ -79,11 +79,79 @@ namespace NetFabric.Hyperlinq
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public SkipTakeEnumerable<TEnumerable, TSource> Take(long count)
                 => ReadOnlyList.SkipTake<TEnumerable, TSource>(source, skipCount, (int)Math.Min(takeCount, count));
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public ReadOnlyList.WhereEnumerable<TEnumerable, TSource> Where(Func<TSource, bool> predicate)
+                => ReadOnlyList.Where<TEnumerable, TSource>(source, predicate, skipCount, takeCount);
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public ReadOnlyList.WhereIndexEnumerable<TEnumerable, TSource> Where(Func<TSource, long, bool> predicate)
+                => ReadOnlyList.Where<TEnumerable, TSource>(source, predicate, skipCount, takeCount);
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public ReadOnlyList.SelectEnumerable<TEnumerable, TSource, TResult> Select<TResult>(Func<TSource, TResult> selector)
+                => ReadOnlyList.Select<TEnumerable, TSource, TResult>(source, selector, skipCount, takeCount);
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public ReadOnlyList.SelectIndexEnumerable<TEnumerable, TSource, TResult> Select<TResult>(Func<TSource, long, TResult> selector)
+                => ReadOnlyList.Select<TEnumerable, TSource, TResult>(source, selector, skipCount, takeCount);
+
+            public TSource First()
+                => ReadOnlyList.TryFirst<TEnumerable, TSource>(source, skipCount, takeCount).ThrowOnEmpty();
+            public TSource First(Func<TSource, bool> predicate)
+                => ReadOnlyList.TryFirst<TEnumerable, TSource>(source, predicate, skipCount, takeCount).ThrowOnEmpty();
+            public TSource FirstOrDefault()
+                => ReadOnlyList.TryFirst<TEnumerable, TSource>(source, skipCount, takeCount).DefaultOnEmpty();
+            public TSource FirstOrDefault(Func<TSource, bool> predicate)
+                => ReadOnlyList.TryFirst<TEnumerable, TSource>(source, predicate, skipCount, takeCount).DefaultOnEmpty();
+            public (ElementResult Success, TSource Value) TryFirst()
+                => ReadOnlyList.TryFirst<TEnumerable, TSource>(source, skipCount, takeCount);
+            public (ElementResult Success, TSource Value) TryFirst(Func<TSource, bool> predicate)
+                => ReadOnlyList.TryFirst<TEnumerable, TSource>(source, predicate, skipCount, takeCount);
+
+            public TSource Single()
+                => ReadOnlyList.TrySingle<TEnumerable, TSource>(source, skipCount, takeCount).ThrowOnEmpty();
+            public TSource Single(Func<TSource, bool> predicate)
+                => ReadOnlyList.TrySingle<TEnumerable, TSource>(source, predicate, skipCount, takeCount).ThrowOnEmpty();
+            public TSource SingleOrDefault()
+                => ReadOnlyList.TrySingle<TEnumerable, TSource>(source, skipCount, takeCount).DefaultOnEmpty();
+            public TSource SingleOrDefault(Func<TSource, bool> predicate)
+                => ReadOnlyList.TrySingle<TEnumerable, TSource>(source, predicate, skipCount, takeCount).DefaultOnEmpty();
+            public (ElementResult Success, TSource Value) TrySingle()
+                => ReadOnlyList.TrySingle<TEnumerable, TSource>(source, skipCount, takeCount);
+            public (ElementResult Success, TSource Value) TrySingle(Func<TSource, bool> predicate)
+                => ReadOnlyList.TrySingle<TEnumerable, TSource>(source, predicate, skipCount, takeCount);
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public TSource[] ToArray()
+                => ReadOnlyList.ToArray<TEnumerable, TSource>(source, skipCount, takeCount);
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public List<TSource> ToList()
+                => ReadOnlyList.ToList<TEnumerable, TSource>(source, skipCount, takeCount);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static long Count<TEnumerable, TSource>(this SkipTakeEnumerable<TEnumerable, TSource> source)
             where TEnumerable : IReadOnlyList<TSource>
             => source.Count;
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static long Count<TEnumerable, TSource>(this SkipTakeEnumerable<TEnumerable, TSource> source, Func<TSource, bool> predicate)
+            where TEnumerable : IReadOnlyList<TSource>
+        {
+            if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
+
+            return ReadOnlyList.Count<TEnumerable, TSource>(source.source, predicate, source.skipCount, source.takeCount);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static long Count<TEnumerable, TSource>(this SkipTakeEnumerable<TEnumerable, TSource> source, Func<TSource, long, bool> predicate)
+            where TEnumerable : IReadOnlyList<TSource>
+        {
+            if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
+
+            return ReadOnlyList.Count<TEnumerable, TSource>(source.source, predicate, source.skipCount, source.takeCount);
+        }
     }
 }

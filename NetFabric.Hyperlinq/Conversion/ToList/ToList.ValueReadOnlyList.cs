@@ -20,10 +20,42 @@ namespace NetFabric.Hyperlinq
             }
         }
 
-        static List<TSource> ToList<TEnumerable, TEnumerator, TSource>(this TEnumerable source, int skipCount, int takeCount)
+        static List<TSource> ToList<TEnumerable, TEnumerator, TSource>(this TEnumerable source, long skipCount, long takeCount)
             where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
             where TEnumerator : struct, IValueEnumerator<TSource>
             => new List<TSource>(new ToListCollection<TEnumerable, TEnumerator, TSource>(source, skipCount, takeCount));
+
+        static List<TSource> ToList<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, bool> predicate, long skipCount, long takeCount)
+            where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
+            where TEnumerator : struct, IValueEnumerator<TSource>
+        {
+            var list = new List<TSource>();
+
+            var end = skipCount + takeCount;
+            for (var index = skipCount; index < end; index++)
+            {
+                if (predicate(source[index]))
+                    list.Add(source[index]);
+            }
+
+            return list;
+        }
+
+        static List<TSource> ToList<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, long, bool> predicate, long skipCount, long takeCount)
+            where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
+            where TEnumerator : struct, IValueEnumerator<TSource>
+        {
+            var list = new List<TSource>();
+
+            var end = skipCount + takeCount;
+            for (var index = skipCount; index < end; index++)
+            {
+                if (predicate(source[index], index))
+                    list.Add(source[index]);
+            }
+
+            return list;
+        }
 
         // helper implementation of ICollection<> so that CopyTo() is used to convert to List<>
         class ToListCollection<TEnumerable, TEnumerator, TSource>

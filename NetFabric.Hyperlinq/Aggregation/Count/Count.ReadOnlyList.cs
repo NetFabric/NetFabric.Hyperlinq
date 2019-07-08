@@ -14,9 +14,15 @@ namespace NetFabric.Hyperlinq
         {
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
             
+            return Count<TEnumerable, TSource>(source, predicate, 0, source.Count);
+        }
+
+        static int Count<TEnumerable, TSource>(this TEnumerable source, Func<TSource, bool> predicate, int skipCount, int takeCount)
+            where TEnumerable : IReadOnlyList<TSource>
+        {
             var count = 0;
-            var length = source.Count;
-            for (var index = 0; index < length; index++)
+            var end = skipCount + takeCount;
+            for (var index = skipCount; index < end; index++)
             {
                 if (predicate(source[index]))
                     count++;
@@ -29,9 +35,15 @@ namespace NetFabric.Hyperlinq
         {
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
             
+            return Count<TEnumerable, TSource>(source, predicate, 0, source.Count);
+        }
+
+        static int Count<TEnumerable, TSource>(this TEnumerable source, Func<TSource, long, bool> predicate, int skipCount, int takeCount)
+            where TEnumerable : IReadOnlyList<TSource>
+        {
             var count = 0;
-            var length = source.Count;
-            for (var index = 0; index < length; index++)
+            var end = skipCount + takeCount;
+            for (var index = skipCount; index < end; index++)
             {
                 if (predicate(source[index], index))
                     count++;

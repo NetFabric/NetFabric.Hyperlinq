@@ -71,6 +71,20 @@ namespace NetFabric.Hyperlinq
 
             public bool Any()
                 => Array.Any<TSource>(source, predicate);
+
+            public List<TResult> ToList()
+            {
+                var list = new List<TResult>();
+
+                var count = source.Length;
+                for (var index = 0; index < count; index++)
+                {
+                    if (predicate(source[index]))
+                        list.Add(selector(source[index]));
+                }
+
+                return list;
+            }
         }
     }
 }

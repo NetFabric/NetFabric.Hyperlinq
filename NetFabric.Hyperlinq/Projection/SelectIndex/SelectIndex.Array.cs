@@ -16,6 +16,12 @@ namespace NetFabric.Hyperlinq
             return new SelectIndexEnumerable<TSource, TResult>(source, selector, 0, source.Length);
         }
 
+        static SelectIndexEnumerable<TSource, TResult> Select<TSource, TResult>(
+            this TSource[] source,
+            Func<TSource, long, TResult> selector,
+            int skipCount, int takeCount)
+            => new SelectIndexEnumerable<TSource, TResult>(source, selector, skipCount, takeCount);
+
         [GenericsTypeMapping("TEnumerable", typeof(SelectIndexEnumerable<,>))]
         [GenericsTypeMapping("TEnumerator", typeof(SelectIndexEnumerable<,>.Enumerator))]
         public readonly struct SelectIndexEnumerable<TSource, TResult>
@@ -121,9 +127,8 @@ namespace NetFabric.Hyperlinq
             {
                 var array = new TResult[takeCount];
 
-                var end = skipCount + takeCount;
-                for (var index = skipCount; index < end; index++)
-                    array[index] = selector(source[index], index);
+                for (var index = 0; index < takeCount; index++)
+                    array[index] = selector(source[index + skipCount], index);
 
                 return array;
             }

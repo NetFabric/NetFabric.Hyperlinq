@@ -29,25 +29,45 @@ namespace NetFabric.Hyperlinq
             where TEnumerator : struct, IValueEnumerator<TSource>
             => TryFirst<TEnumerable, TEnumerator, TSource>(source, predicate).DefaultOnEmpty();
 
-        public static (ElementResult Success, TSource Value) TryFirst<TEnumerable, TEnumerator, TSource>(this TEnumerable source) 
+        public static (ElementResult Success, TSource Value) TryFirst<TEnumerable, TEnumerator, TSource>(this TEnumerable source)
+            where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
+            where TEnumerator : struct, IValueEnumerator<TSource>
+            => TryFirst<TEnumerable, TEnumerator, TSource>(source, 0, source.Count);
+
+        public static (ElementResult Success, TSource Value) TryFirst<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, bool> predicate)
             where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
             where TEnumerator : struct, IValueEnumerator<TSource>
         {
-            switch (source.Count)
-            {
-                case 0:
-                    return (ElementResult.Empty, default);
-                default:
-                    return (ElementResult.Success, source[0]);
-            }
+            if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
+
+            return TryFirst<TEnumerable, TEnumerator, TSource>(source, predicate, 0, source.Count);
         }
 
-        public static (ElementResult Success, TSource Value) TryFirst<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, bool> predicate) 
+        public static (long Index, TSource Value) TryFirst<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, long, bool> predicate)
             where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
             where TEnumerator : struct, IValueEnumerator<TSource>
         {
-            var count = source.Count;
-            for (var index = 0; index < count; index++)
+            if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
+
+            return TryFirst<TEnumerable, TEnumerator, TSource>(source, predicate, 0, source.Count);
+        }
+
+        static (ElementResult Success, TSource Value) TryFirst<TEnumerable, TEnumerator, TSource>(this TEnumerable source, long skipCount, long takeCount)
+            where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
+            where TEnumerator : struct, IValueEnumerator<TSource>
+        {
+            if (source.Count == 0 || takeCount < 1)
+                return (ElementResult.Empty, default);
+
+            return (ElementResult.Success, source[skipCount]);
+        }
+
+        static (ElementResult Success, TSource Value) TryFirst<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, bool> predicate, long skipCount, long takeCount)
+            where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
+            where TEnumerator : struct, IValueEnumerator<TSource>
+        {
+            var end = skipCount + takeCount;
+            for (var index = skipCount; index < end; index++)
             {
                 if (predicate(source[index]))
                     return (ElementResult.Success, source[index]);
@@ -56,18 +76,18 @@ namespace NetFabric.Hyperlinq
             return (ElementResult.Empty, default);
         }
 
-        public static (long Index, TSource Value) TryFirst<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, long, bool> predicate) 
+        static (long Index, TSource Value) TryFirst<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, long, bool> predicate, long skipCount, long takeCount)
             where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
             where TEnumerator : struct, IValueEnumerator<TSource>
         {
-            var count = source.Count;
-            for (var index = 0L; index < count; index++)
+            var end = skipCount + takeCount;
+            for (var index = skipCount; index < end; index++)
             {
                 if (predicate(source[index], index))
                     return (index, source[index]);
             }
 
-            return ((long)ElementResult.Empty,  default);
+            return ((long)ElementResult.Empty, default);
         }
     }
 }

@@ -23,6 +23,36 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IReadOnlyList<TSource>
             => new List<TSource>(new ToListCollection<TEnumerable, TSource>(source, skipCount, takeCount));
 
+        static List<TSource> ToList<TEnumerable, TSource>(this TEnumerable source, Func<TSource, bool> predicate, int skipCount, int takeCount)
+            where TEnumerable : IReadOnlyList<TSource>
+        {
+                var list = new List<TSource>();
+
+            var end = skipCount + takeCount;
+            for (var index = skipCount; index < end; index++)
+                {
+                    if (predicate(source[index]))
+                        list.Add(source[index]);
+                }
+
+                return list;
+        }
+
+        static List<TSource> ToList<TEnumerable, TSource>(this TEnumerable source, Func<TSource, long, bool> predicate, int skipCount, int takeCount)
+            where TEnumerable : IReadOnlyList<TSource>
+        {
+                var list = new List<TSource>();
+
+            var end = skipCount + takeCount;
+            for (var index = skipCount; index < end; index++)
+                {
+                    if (predicate(source[index], index))
+                        list.Add(source[index]);
+                }
+
+                return list;
+        }
+
         // helper implementation of ICollection<> so that CopyTo() is used to convert to List<>
         class ToListCollection<TEnumerable, TSource>
             : ICollection<TSource>

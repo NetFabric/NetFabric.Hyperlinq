@@ -104,7 +104,7 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public List<TSource> ToList()
-                => new List<TSource> { value };
+                => new List<TSource>(1) { value };
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

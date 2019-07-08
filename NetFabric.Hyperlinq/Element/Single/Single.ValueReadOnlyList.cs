@@ -28,34 +28,60 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
             where TEnumerator : struct, IValueEnumerator<TSource>
             => TrySingle<TEnumerable, TEnumerator, TSource>(source, predicate).DefaultOnEmpty();
-            
-        public static (ElementResult Success, TSource Value) TrySingle<TEnumerable, TEnumerator, TSource>(this TEnumerable source) 
+
+        public static (ElementResult Success, TSource Value) TrySingle<TEnumerable, TEnumerator, TSource>(this TEnumerable source)
+            where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
+            where TEnumerator : struct, IValueEnumerator<TSource>
+            => TrySingle<TEnumerable, TEnumerator, TSource>(source, 0, source.Count);
+
+        public static (ElementResult Success, TSource Value) TrySingle<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, bool> predicate)
             where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
             where TEnumerator : struct, IValueEnumerator<TSource>
         {
-            switch(source.Count)
+            if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
+
+            return TrySingle<TEnumerable, TEnumerator, TSource>(source, predicate, 0, source.Count);
+        }
+
+        public static (long Index, TSource Value) TrySingle<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, long, bool> predicate)
+            where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
+            where TEnumerator : struct, IValueEnumerator<TSource>
+        {
+            if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
+
+            return TrySingle<TEnumerable, TEnumerator, TSource>(source, predicate, 0, source.Count);
+        }
+
+        static (ElementResult Success, TSource Value) TrySingle<TEnumerable, TEnumerator, TSource>(this TEnumerable source, long skipCount, long takeCount)
+            where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
+            where TEnumerator : struct, IValueEnumerator<TSource>
+        {
+            if (takeCount < 1)
+                return (ElementResult.Empty, default);
+
+            switch (source.Count)
             {
                 case 0:
                     return (ElementResult.Empty, default);
                 case 1:
-                    return (ElementResult.Success, source[0]);
+                    return (ElementResult.Success, source[skipCount]);
                 default:
                     return (ElementResult.NotSingle, default);
             }
         }
 
-        public static (ElementResult Success, TSource Value) TrySingle<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, bool> predicate) 
+        static (ElementResult Success, TSource Value) TrySingle<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, bool> predicate, long skipCount, long takeCount)
             where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
             where TEnumerator : struct, IValueEnumerator<TSource>
         {
-            var count = source.Count;
-            for (var index = 0L; index < count; index++)
+            var end = skipCount + takeCount;
+            for (var index = skipCount; index < end; index++)
             {
                 if (predicate(source[index]))
                 {
                     var value = source[index];
 
-                    for (index++; index < count; index++)
+                    for (index++; index < end; index++)
                     {
                         if (predicate(source[index]))
                             return (ElementResult.NotSingle, default);
@@ -66,23 +92,23 @@ namespace NetFabric.Hyperlinq
             }
 
             return (ElementResult.Empty, default);
-        }    
+        }
 
-        public static (long Index, TSource Value) TrySingle<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, long, bool> predicate) 
+        static (long Index, TSource Value) TrySingle<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, long, bool> predicate, long skipCount, long takeCount)
             where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
             where TEnumerator : struct, IValueEnumerator<TSource>
         {
-            var count = source.Count;
-            for (var index = 0L; index < count; index++)
+            var end = skipCount + takeCount;
+            for (var index = 0; index < end; index++)
             {
                 if (predicate(source[index], index))
                 {
                     var value = (index, source[index]);
 
-                    for (index++; index < count; index++)
+                    for (index++; index < end; index++)
                     {
                         if (predicate(source[index], index))
-                            return ((long)ElementResult.NotSingle, default);
+                            return ((int)ElementResult.NotSingle, default);
                     }
 
                     return value;
@@ -90,6 +116,6 @@ namespace NetFabric.Hyperlinq
             }
 
             return ((long)ElementResult.Empty, default);
-        }    
+        }
     }
 }
