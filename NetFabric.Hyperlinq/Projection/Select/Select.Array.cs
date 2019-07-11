@@ -40,9 +40,10 @@ namespace NetFabric.Hyperlinq
             }
 
             public Enumerator GetEnumerator() => new Enumerator(in this);
+            IEnumerator<TResult> IEnumerable<TResult>.GetEnumerator() => new Enumerator(in this);
+            IEnumerator IEnumerable.GetEnumerator() => new Enumerator(in this);
 
             public int Count => takeCount;
-            long IValueReadOnlyCollection<TResult, Enumerator>.Count => takeCount;
 
             public TResult this[int index]
             {
@@ -55,19 +56,8 @@ namespace NetFabric.Hyperlinq
                 }
             }
 
-            TResult IValueReadOnlyList<TResult, Enumerator>.this[long index]
-            {
-                get
-                {
-                    if (index < 0 || index >= takeCount)
-                        ThrowHelper.ThrowArgumentOutOfRangeException(nameof(index));
-
-                    return selector(source[index + skipCount]);
-                }
-            }
-
             public struct Enumerator
-                : IValueEnumerator<TResult>
+                : IEnumerator<TResult>
             {
                 readonly TSource[] source;
                 readonly Func<TSource, TResult> selector;
@@ -84,9 +74,14 @@ namespace NetFabric.Hyperlinq
 
                 public TResult Current
                     => selector(source[index]);
+                object IEnumerator.Current
+                    => selector(source[index]);
 
                 public bool MoveNext()
                     => ++index < end;
+
+                void IEnumerator.Reset()
+                    => throw new NotSupportedException();
 
                 public void Dispose() { }
             }

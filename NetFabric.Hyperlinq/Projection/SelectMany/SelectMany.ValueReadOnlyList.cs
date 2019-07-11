@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace NetFabric.Hyperlinq
@@ -9,9 +10,9 @@ namespace NetFabric.Hyperlinq
             this TEnumerable source, 
             Func<TSource, TSubEnumerable> selector)
             where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
-            where TEnumerator : struct, IValueEnumerator<TSource>
+            where TEnumerator : struct, IEnumerator<TSource>
             where TSubEnumerable : IValueEnumerable<TResult, TSubEnumerator>
-            where TSubEnumerator : struct, IValueEnumerator<TResult>
+            where TSubEnumerator : struct, IEnumerator<TResult>
         {
             if (selector is null) ThrowHelper.ThrowArgumentNullException(nameof(selector));
 
@@ -23,9 +24,9 @@ namespace NetFabric.Hyperlinq
         public readonly struct SelectManyEnumerable<TEnumerable, TEnumerator, TSource, TSubEnumerable, TSubEnumerator, TResult>
             : IValueEnumerable<TResult, SelectManyEnumerable<TEnumerable, TEnumerator, TSource, TSubEnumerable, TSubEnumerator, TResult>.Enumerator>
             where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
-            where TEnumerator : struct, IValueEnumerator<TSource>
+            where TEnumerator : struct, IEnumerator<TSource>
             where TSubEnumerable : IValueEnumerable<TResult, TSubEnumerator>
-            where TSubEnumerator : struct, IValueEnumerator<TResult>
+            where TSubEnumerator : struct, IEnumerator<TResult>
         {
             readonly TEnumerable source;
             readonly Func<TSource, TSubEnumerable> selector;
@@ -37,14 +38,16 @@ namespace NetFabric.Hyperlinq
             }
 
             public Enumerator GetEnumerator() => new Enumerator(in this);
+            IEnumerator<TResult> IEnumerable<TResult>.GetEnumerator() => new Enumerator(in this);
+            IEnumerator IEnumerable.GetEnumerator() => new Enumerator(in this);
 
             public struct Enumerator
-                : IValueEnumerator<TResult>
+                : IEnumerator<TResult>
             {
                 readonly TEnumerable source;
                 readonly Func<TSource, TSubEnumerable> selector;
-                readonly long sourceCount;
-                long sourceIndex;
+                readonly int sourceCount;
+                int sourceIndex;
                 TSubEnumerator subEnumerator;
                 int state;
 
@@ -59,6 +62,8 @@ namespace NetFabric.Hyperlinq
                 }
 
                 public TResult Current
+                    => subEnumerator.Current;
+                object IEnumerator.Current
                     => subEnumerator.Current;
 
                 public bool MoveNext()
@@ -90,6 +95,9 @@ namespace NetFabric.Hyperlinq
                     }
                     return false;
                 }
+
+                void IEnumerator.Reset()
+                    => throw new NotSupportedException();
 
                 public void Dispose()
                 {

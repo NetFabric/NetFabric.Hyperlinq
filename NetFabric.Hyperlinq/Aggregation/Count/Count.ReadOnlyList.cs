@@ -30,7 +30,7 @@ namespace NetFabric.Hyperlinq
             return count;
         }
 
-        public static int Count<TEnumerable, TSource>(this TEnumerable source, Func<TSource, long, bool> predicate)
+        public static int Count<TEnumerable, TSource>(this TEnumerable source, Func<TSource, int, bool> predicate)
             where TEnumerable : IReadOnlyList<TSource>
         {
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
@@ -38,7 +38,7 @@ namespace NetFabric.Hyperlinq
             return Count<TEnumerable, TSource>(source, predicate, 0, source.Count);
         }
 
-        static int Count<TEnumerable, TSource>(this TEnumerable source, Func<TSource, long, bool> predicate, int skipCount, int takeCount)
+        static int Count<TEnumerable, TSource>(this TEnumerable source, Func<TSource, int, bool> predicate, int skipCount, int takeCount)
             where TEnumerable : IReadOnlyList<TSource>
         {
             var count = 0;

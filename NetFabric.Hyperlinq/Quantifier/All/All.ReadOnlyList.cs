@@ -19,7 +19,7 @@ namespace NetFabric.Hyperlinq
             return index == count;
         }
 
-        public static bool All<TEnumerable, TSource>(this TEnumerable source, Func<TSource, long, bool> predicate)
+        public static bool All<TEnumerable, TSource>(this TEnumerable source, Func<TSource, int, bool> predicate)
             where TEnumerable : IReadOnlyList<TSource>
         {
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));

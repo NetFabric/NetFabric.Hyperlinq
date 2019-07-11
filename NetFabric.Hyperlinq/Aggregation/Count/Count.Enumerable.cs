@@ -5,11 +5,11 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class Enumerable
     {
-        public static long Count<TEnumerable, TEnumerator, TSource>(this TEnumerable source)
+        public static int Count<TEnumerable, TEnumerator, TSource>(this TEnumerable source)
             where TEnumerable : IEnumerable<TSource>
             where TEnumerator : IEnumerator<TSource>
         {
-            var count = 0L;
+            var count = 0;
             using(var enumerator = (TEnumerator)source.GetEnumerator())
             {
                 checked
@@ -21,11 +21,11 @@ namespace NetFabric.Hyperlinq
             return count;
         }
 
-        public static long Count<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, bool> predicate)
+        public static int Count<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, bool> predicate)
             where TEnumerable : IEnumerable<TSource>
             where TEnumerator : IEnumerator<TSource>
         {
-            var count = 0L;
+            var count = 0;
             using (var enumerator = (TEnumerator)source.GetEnumerator())
             {
                 checked
@@ -40,12 +40,12 @@ namespace NetFabric.Hyperlinq
             return count;
         }
 
-        public static long Count<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, long, bool> predicate)
+        public static int Count<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, int, bool> predicate)
             where TEnumerable : IEnumerable<TSource>
             where TEnumerator : IEnumerator<TSource>
         {
-            var count = 0L;
-            var index = 0L;
+            var count = 0;
+            var index = 0;
             using (var enumerator = (TEnumerator)source.GetEnumerator())
             {
                 checked

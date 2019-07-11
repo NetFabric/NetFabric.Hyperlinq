@@ -8,7 +8,7 @@ namespace NetFabric.Hyperlinq
     {
         public static List<TSource> ToList<TEnumerable, TEnumerator, TSource>(this TEnumerable source)
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
-            where TEnumerator : struct, IValueEnumerator<TSource>
+            where TEnumerator : struct, IEnumerator<TSource>
         {
             switch (source)
             {
@@ -24,7 +24,7 @@ namespace NetFabric.Hyperlinq
         class ToListCollection<TEnumerable, TEnumerator, TSource>
             : ICollection<TSource>
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
-            where TEnumerator : struct, IValueEnumerator<TSource>
+            where TEnumerator : struct, IEnumerator<TSource>
         {
             readonly TEnumerable source;
 
@@ -33,7 +33,7 @@ namespace NetFabric.Hyperlinq
                 this.source = source;
             }
 
-            public int Count => (int)source.Count;
+            public int Count => source.Count;
 
             public bool IsReadOnly => true;
 
@@ -41,7 +41,7 @@ namespace NetFabric.Hyperlinq
             {
                 using (var enumerator = source.GetEnumerator())
                 {
-                    for (var index = 0L; enumerator.MoveNext(); index++)
+                    for (var index = 0; enumerator.MoveNext(); index++)
                         array[index] = enumerator.Current;
                 }
             }

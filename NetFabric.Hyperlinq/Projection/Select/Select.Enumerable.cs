@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
@@ -35,9 +36,11 @@ namespace NetFabric.Hyperlinq
             }
 
             public Enumerator GetEnumerator() => new Enumerator(in this);
+            IEnumerator<TResult> IEnumerable<TResult>.GetEnumerator() => new Enumerator(in this);
+            IEnumerator IEnumerable.GetEnumerator() => new Enumerator(in this);
 
             public struct Enumerator
-                : IValueEnumerator<TResult>
+                : IEnumerator<TResult>
             {
                 TEnumerator enumerator;
                 readonly Func<TSource, TResult> selector;
@@ -50,18 +53,22 @@ namespace NetFabric.Hyperlinq
 
                 public TResult Current
                     => selector(enumerator.Current);
+                object IEnumerator.Current
+                    => selector(enumerator.Current);
 
                 public bool MoveNext() => enumerator.MoveNext();
+
+                void IEnumerator.Reset() => throw new NotSupportedException();
 
                 public void Dispose() => enumerator.Dispose();
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public long Count()
+            public int Count()
                 => Enumerable.Count<TEnumerable, TEnumerator, TSource>(source);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public long Count(Func<TResult, bool> predicate)
+            public int Count(Func<TResult, bool> predicate)
                 => ValueEnumerable.Count<SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>, Enumerator, TResult>(this, predicate);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]

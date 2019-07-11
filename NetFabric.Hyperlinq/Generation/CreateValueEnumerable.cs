@@ -7,7 +7,7 @@ namespace NetFabric.Hyperlinq
     public static partial class ValueEnumerable
 {
         public static CreateValueEnumerable<TEnumerator, TSource> Create<TEnumerator, TSource>(Func<TEnumerator> getEnumerator) 
-            where TEnumerator : struct, IValueEnumerator<TSource>
+            where TEnumerator : struct, IEnumerator<TSource>
         {
             if(getEnumerator is null) ThrowHelper.ThrowArgumentNullException(nameof(getEnumerator));
 
@@ -17,7 +17,7 @@ namespace NetFabric.Hyperlinq
         [GenericsTypeMapping("TEnumerable", typeof(CreateValueEnumerable<,>))]
         public readonly struct CreateValueEnumerable<TEnumerator, TSource> 
             : IValueEnumerable<TSource, TEnumerator>
-            where TEnumerator : struct, IValueEnumerator<TSource>
+            where TEnumerator : struct, IEnumerator<TSource>
         {
             readonly Func<TEnumerator> getEnumerator;
 
@@ -27,6 +27,8 @@ namespace NetFabric.Hyperlinq
             }
 
             public TEnumerator GetEnumerator() => getEnumerator();
+            IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => getEnumerator();
+            IEnumerator IEnumerable.GetEnumerator() => getEnumerator();
         }
     }
 }

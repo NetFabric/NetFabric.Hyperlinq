@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
@@ -15,19 +16,26 @@ namespace NetFabric.Hyperlinq
             : IValueReadOnlyList<TSource, EmptyEnumerable<TSource>.Enumerator>
         {
             public Enumerator GetEnumerator() => new Enumerator();
+            IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new Enumerator();
+            IEnumerator IEnumerable.GetEnumerator() => new Enumerator();
 
-            public long Count => 0;
+            public int Count => 0;
 
-            public TSource this[long index] { get { ThrowHelper.ThrowIndexOutOfRangeException(); return default; } }
+            public TSource this[int index] => ThrowHelper.ThrowIndexOutOfRangeException<TSource>(); 
 
             public readonly struct Enumerator
-                : IValueEnumerator<TSource>
+                : IEnumerator<TSource>
             {
                 public TSource Current
+                    => default;
+                object IEnumerator.Current
                     => default;
 
                 public bool MoveNext()
                     => false;
+
+                void IEnumerator.Reset() 
+                    => throw new NotSupportedException();
 
                 public void Dispose() { }
             }
@@ -42,7 +50,7 @@ namespace NetFabric.Hyperlinq
             public bool All(Func<TSource, bool> predicate) => false;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public bool All(Func<TSource, long, bool> predicate) => false;
+            public bool All(Func<TSource, int, bool> predicate) => false;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Any() => false;
@@ -51,7 +59,7 @@ namespace NetFabric.Hyperlinq
             public bool Any(Func<TSource, bool> predicate) => false;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public bool Any(Func<TSource, long, bool> predicate) => false;
+            public bool Any(Func<TSource, int, bool> predicate) => false;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Contains(TSource value) => false;
@@ -60,7 +68,7 @@ namespace NetFabric.Hyperlinq
             public bool Contains(TSource value, IEqualityComparer<TSource> comparer) => false;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public EmptyEnumerable<TSource> Select<TResult>(Func<TSource, long, TResult> selector)
+            public EmptyEnumerable<TSource> Select<TResult>(Func<TSource, int, TResult> selector)
                 => selector is null ? ThrowHelper.ThrowArgumentNullException<EmptyEnumerable<TSource>>(nameof(selector)) : this;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -68,7 +76,7 @@ namespace NetFabric.Hyperlinq
                 => selector is null ? ThrowHelper.ThrowArgumentNullException<EmptyEnumerable<TSource>>(nameof(selector)) : this;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public EmptyEnumerable<TSource> Where(Func<TSource, long, bool> predicate)
+            public EmptyEnumerable<TSource> Where(Func<TSource, int, bool> predicate)
                 => predicate is null ? ThrowHelper.ThrowArgumentNullException<EmptyEnumerable<TSource>>(nameof(predicate)) : this;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -91,20 +99,20 @@ namespace NetFabric.Hyperlinq
                 => predicate is null ? ThrowHelper.ThrowArgumentNullException<ValueTuple<bool, TSource>>(nameof(predicate)) : (false, default);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public (long Index, TSource Value) TryFirst(Func<TSource, long, bool> predicate)
-                => predicate is null ? ThrowHelper.ThrowArgumentNullException<ValueTuple<long, TSource>>(nameof(predicate)) : (-1L, default);
+            public (int Index, TSource Value) TryFirst(Func<TSource, int, bool> predicate)
+                => predicate is null ? ThrowHelper.ThrowArgumentNullException<ValueTuple<int, TSource>>(nameof(predicate)) : (-1, default);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TSource Single() => ThrowHelper.ThrowEmptySequence<TSource>();
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public TSource Single(Func<TSource, long, bool> predicate) => ThrowHelper.ThrowEmptySequence<TSource>();
+            public TSource Single(Func<TSource, int, bool> predicate) => ThrowHelper.ThrowEmptySequence<TSource>();
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TSource SingleOrDefault() => default;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public TSource SingleOrDefault(Func<TSource, long, bool> predicate) => default;
+            public TSource SingleOrDefault(Func<TSource, int, bool> predicate) => default;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public (bool Success, TSource Value) TrySingle() => (false, default);
@@ -114,8 +122,8 @@ namespace NetFabric.Hyperlinq
                 => predicate is null ? ThrowHelper.ThrowArgumentNullException<ValueTuple<bool, TSource>>(nameof(predicate)) : (false, default);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public (long Index, TSource Value) TrySingle(Func<TSource, long, bool> predicate)
-                => predicate is null ? ThrowHelper.ThrowArgumentNullException<ValueTuple<long, TSource>>(nameof(predicate)) : (-1L, default);
+            public (int Index, TSource Value) TrySingle(Func<TSource, int, bool> predicate)
+                => predicate is null ? ThrowHelper.ThrowArgumentNullException<ValueTuple<int, TSource>>(nameof(predicate)) : (-1, default);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TSource[] ToArray() => new TSource[0];
@@ -133,7 +141,7 @@ namespace NetFabric.Hyperlinq
             => predicate is null ? ThrowHelper.ThrowArgumentNullException<int>(nameof(predicate)) : 0;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int Count<TSource>(this EmptyEnumerable<TSource> source, Func<TSource, long, bool> predicate)
+        public static int Count<TSource>(this EmptyEnumerable<TSource> source, Func<TSource, int, bool> predicate)
             => predicate is null ? ThrowHelper.ThrowArgumentNullException<int>(nameof(predicate)) : 0;
     }
 }

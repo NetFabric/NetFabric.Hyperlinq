@@ -77,7 +77,7 @@ namespace NetFabric.Hyperlinq
             return (ElementResult.Empty, default);
         }
 
-        public static (long Index, TSource Value) TrySingle<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, long, bool> predicate) 
+        public static (int Index, TSource Value) TrySingle<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, int, bool> predicate) 
             where TEnumerable : IEnumerable<TSource>
             where TEnumerator : IEnumerator<TSource>
         {
@@ -85,7 +85,7 @@ namespace NetFabric.Hyperlinq
             {
                 checked
                 {
-                    for (var index = 0L; enumerator.MoveNext(); index++)
+                    for (var index = 0; enumerator.MoveNext(); index++)
                     {
                         if (predicate(enumerator.Current, index))
                         {
@@ -95,7 +95,7 @@ namespace NetFabric.Hyperlinq
                             for (index++; enumerator.MoveNext(); index++)
                             {
                                 if (predicate(enumerator.Current, index))
-                                    return ((long)ElementResult.NotSingle, default);
+                                    return ((int)ElementResult.NotSingle, default);
                             }
 
                             return value;
@@ -104,7 +104,7 @@ namespace NetFabric.Hyperlinq
                 }
             }      
 
-            return ((long)ElementResult.Empty, default);
+            return ((int)ElementResult.Empty, default);
         }
     }
 }

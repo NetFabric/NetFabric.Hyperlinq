@@ -36,11 +36,13 @@ namespace NetFabric.Hyperlinq
             }
 
             public Enumerator GetEnumerator() => new Enumerator(in this);
+            IEnumerator<TResult> IEnumerable<TResult>.GetEnumerator() => new Enumerator(in this);
+            IEnumerator IEnumerable.GetEnumerator() => new Enumerator(in this);
 
-            public long Count => source.Count;
+            public int Count => source.Count;
 
             public struct Enumerator
-                : IValueEnumerator<TResult>
+                : IEnumerator<TResult>
             {
                 TEnumerator enumerator;
                 readonly Func<TSource, TResult> selector;
@@ -53,8 +55,12 @@ namespace NetFabric.Hyperlinq
 
                 public TResult Current
                     => selector(enumerator.Current);
+                object IEnumerator.Current
+                    => selector(enumerator.Current);
 
                 public bool MoveNext() => enumerator.MoveNext();
+
+                void IEnumerator.Reset() => throw new NotSupportedException();
 
                 public void Dispose() => enumerator.Dispose();
             }
@@ -122,7 +128,7 @@ namespace NetFabric.Hyperlinq
                 {
                     using (var enumerator = (TEnumerator)source.GetEnumerator())
                     {
-                        for (var index = 0L; enumerator.MoveNext(); index++)
+                        for (var index = 0; enumerator.MoveNext(); index++)
                             array[index] = selector(enumerator.Current);
                     }
                 }

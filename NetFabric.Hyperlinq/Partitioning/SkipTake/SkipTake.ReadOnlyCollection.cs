@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
@@ -29,12 +30,13 @@ namespace NetFabric.Hyperlinq
             }
 
             public int Count => takeCount;
-            long IValueReadOnlyCollection<TSource, SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator>.Count => takeCount;
 
             public Enumerator GetEnumerator() => new Enumerator(in this);
+            IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new Enumerator(in this);
+            IEnumerator IEnumerable.GetEnumerator() => new Enumerator(in this);
 
             public struct Enumerator
-                : IValueEnumerator<TSource>
+                : IEnumerator<TSource>
             {
                 readonly TEnumerable source;
                 EnumeratorState state;
@@ -52,6 +54,8 @@ namespace NetFabric.Hyperlinq
                 }
 
                 public TSource Current
+                    => enumerator.Current;
+                object IEnumerator.Current
                     => enumerator.Current;
 
                 public bool MoveNext()
@@ -93,16 +97,19 @@ namespace NetFabric.Hyperlinq
                     }
                 }
 
+                void IEnumerator.Reset()
+                    => throw new NotSupportedException();
+
                 public void Dispose() => enumerator?.Dispose();
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public SkipTakeEnumerable<TEnumerable, TEnumerator, TSource> Take(long count)
+            public SkipTakeEnumerable<TEnumerable, TEnumerator, TSource> Take(int count)
                 => ReadOnlyCollection.SkipTake<TEnumerable, TEnumerator, TSource>(source, skipCount, (int)Math.Min(takeCount, count));
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static long Count<TEnumerable, TEnumerator, TSource>(this SkipTakeEnumerable<TEnumerable, TEnumerator, TSource> source)
+        public static int Count<TEnumerable, TEnumerator, TSource>(this SkipTakeEnumerable<TEnumerable, TEnumerator, TSource> source)
             where TEnumerable : IReadOnlyCollection<TSource>
             where TEnumerator : IEnumerator<TSource>
             => source.Count;

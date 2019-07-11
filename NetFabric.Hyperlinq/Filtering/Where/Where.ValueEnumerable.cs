@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace NetFabric.Hyperlinq
@@ -7,7 +8,7 @@ namespace NetFabric.Hyperlinq
     {
         public static WhereEnumerable<TEnumerable, TEnumerator, TSource> Where<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, bool> predicate)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
-            where TEnumerator : struct, IValueEnumerator<TSource>
+            where TEnumerator : struct, IEnumerator<TSource>
         {
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
 
@@ -19,7 +20,7 @@ namespace NetFabric.Hyperlinq
         public readonly struct WhereEnumerable<TEnumerable, TEnumerator, TSource> 
             : IValueEnumerable<TSource, WhereEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator>
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
-            where TEnumerator : struct, IValueEnumerator<TSource>
+            where TEnumerator : struct, IEnumerator<TSource>
         {
             internal readonly TEnumerable source;
             internal readonly Func<TSource, bool> predicate;
@@ -31,9 +32,11 @@ namespace NetFabric.Hyperlinq
             }
 
             public Enumerator GetEnumerator() => new Enumerator(in this);
-            
+            IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new Enumerator(in this);
+            IEnumerator IEnumerable.GetEnumerator() => new Enumerator(in this);
+
             public struct Enumerator
-                : IValueEnumerator<TSource>
+                : IEnumerator<TSource>
             {
                 TEnumerator enumerator;
                 readonly Func<TSource, bool> predicate;
@@ -46,6 +49,8 @@ namespace NetFabric.Hyperlinq
 
                 public TSource Current
                     => enumerator.Current;
+                object IEnumerator.Current
+                    => enumerator.Current;
 
                 public bool MoveNext()
                 {
@@ -57,12 +62,15 @@ namespace NetFabric.Hyperlinq
                     return false;
                 }
 
+                void IEnumerator.Reset()
+                    => throw new NotSupportedException();
+
                 public void Dispose() => enumerator.Dispose();
             }
 
-            public long Count()
+            public int Count()
                 => ValueEnumerable.Count<TEnumerable, TEnumerator, TSource>(source, predicate);
-            public long Count(Func<TSource, bool> predicate)
+            public int Count(Func<TSource, bool> predicate)
                 => ValueEnumerable.Count<TEnumerable, TEnumerator, TSource>(source, Utils.Combine(this.predicate, predicate));
 
             public bool All()

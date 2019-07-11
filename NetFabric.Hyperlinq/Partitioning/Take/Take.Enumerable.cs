@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
@@ -6,7 +7,7 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class Enumerable
     {
-        public static TakeEnumerable<TEnumerable, TEnumerator, TSource> Take<TEnumerable, TEnumerator, TSource>(this TEnumerable source, long count)
+        public static TakeEnumerable<TEnumerable, TEnumerator, TSource> Take<TEnumerable, TEnumerator, TSource>(this TEnumerable source, int count)
             where TEnumerable : IEnumerable<TSource>
             where TEnumerator: IEnumerator<TSource>
         {
@@ -21,21 +22,23 @@ namespace NetFabric.Hyperlinq
             where TEnumerator : IEnumerator<TSource>
         {
             readonly TEnumerable source;
-            readonly long count;
+            readonly int count;
 
-            internal TakeEnumerable(in TEnumerable source, long count)
+            internal TakeEnumerable(in TEnumerable source, int count)
             {
                 this.source = source;
                 this.count = count;
             }
 
             public Enumerator GetEnumerator() => new Enumerator(in this);
+            IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new Enumerator(in this);
+            IEnumerator IEnumerable.GetEnumerator() => new Enumerator(in this);
 
             public struct Enumerator
-                : IValueEnumerator<TSource>
+                : IEnumerator<TSource>
             {
                 TEnumerator enumerator;
-                long counter;
+                int counter;
 
                 internal Enumerator(in TakeEnumerable<TEnumerable, TEnumerator, TSource> enumerable)
                 {
@@ -44,6 +47,8 @@ namespace NetFabric.Hyperlinq
                 }
 
                 public TSource Current
+                    => enumerator.Current;
+                object IEnumerator.Current
                     => enumerator.Current;
 
                 public bool MoveNext()
@@ -61,11 +66,14 @@ namespace NetFabric.Hyperlinq
                     return false; 
                 }
 
+                void IEnumerator.Reset()
+                    => throw new NotSupportedException();
+
                 public void Dispose() => enumerator.Dispose();
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public TakeEnumerable<TEnumerable, TEnumerator, TSource> Take(long count)
+            public TakeEnumerable<TEnumerable, TEnumerator, TSource> Take(int count)
                 => Enumerable.Take<TEnumerable, TEnumerator, TSource>(source, Math.Min(this.count, count));
         }
     }

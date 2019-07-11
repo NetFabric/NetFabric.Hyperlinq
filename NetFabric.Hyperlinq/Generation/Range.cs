@@ -7,11 +7,11 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class Enumerable
     {
-        public static RangeEnumerable Range(long start, long count)
+        public static RangeEnumerable Range(int start, int count)
         {
             if (count < 0) ThrowHelper.ThrowArgumentOutOfRangeException(nameof(count));
 
-            var end = 0L;
+            var end = 0;
             try
             {
                 end = checked(start + count);
@@ -26,15 +26,15 @@ namespace NetFabric.Hyperlinq
 
         [GenericsTypeMapping("TEnumerable", typeof(RangeEnumerable))]
         [GenericsTypeMapping("TEnumerator", typeof(RangeEnumerable.Enumerator))]
-        [GenericsTypeMapping("TSource", typeof(long))]
+        [GenericsTypeMapping("TSource", typeof(int))]
         public readonly struct RangeEnumerable
-            : IValueReadOnlyList<long, RangeEnumerable.Enumerator>
+            : IValueReadOnlyList<int, RangeEnumerable.Enumerator>
         {
-            readonly long start;
-            readonly long count;
-            readonly long end;
+            readonly int start;
+            readonly int count;
+            readonly int end;
 
-            internal RangeEnumerable(long start, long count, long end)
+            internal RangeEnumerable(int start, int count, int end)
             {
                 this.start = start;
                 this.count = count;
@@ -42,10 +42,12 @@ namespace NetFabric.Hyperlinq
             }
 
             public Enumerator GetEnumerator() => new Enumerator(in this);
+            IEnumerator<int> IEnumerable<int>.GetEnumerator() => new Enumerator(in this);
+            IEnumerator IEnumerable.GetEnumerator() => new Enumerator(in this);
 
-            public long Count => count;
+            public int Count => count;
 
-            public long this[long index]
+            public int this[int index]
             {
                 get
                 {
@@ -56,10 +58,10 @@ namespace NetFabric.Hyperlinq
             }
 
             public struct Enumerator
-                : IValueEnumerator<long>
+                : IEnumerator<int>
             {
-                readonly long end;
-                long current;
+                readonly int end;
+                int current;
 
                 internal Enumerator(in RangeEnumerable enumerable)
                 {
@@ -67,24 +69,29 @@ namespace NetFabric.Hyperlinq
                     end = enumerable.end;
                 }
 
-                public long Current
+                public int Current
+                    => current;
+                object IEnumerator.Current
                     => current;
 
                 public bool MoveNext()
                     => ++this.current < end;
 
+                void IEnumerator.Reset()
+                    => throw new NotSupportedException();
+
                 public void Dispose() { }
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public RangeEnumerable Skip(long count)
+            public RangeEnumerable Skip(int count)
             {
                 (var skipCount, var takeCount) = Utils.Skip(this.count, count);
                 return Range(start + skipCount, takeCount);
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public RangeEnumerable Take(long count)
+            public RangeEnumerable Take(int count)
                 => Range(start, Utils.Take(this.count, count));
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -92,27 +99,27 @@ namespace NetFabric.Hyperlinq
                 => count != 0;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public bool Contains(long value)
+            public bool Contains(int value)
                 => value >= start && value < start + count;
                 
-            public long[] ToArray()
+            public int[] ToArray()
             {
-                var array = new long[count];
-                for(var index = 0L; index < count; index++)
+                var array = new int[count];
+                for(var index = 0; index < count; index++)
                     array[index] = start + index;
                 return array;
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public List<long> ToList()
-                => new List<long>(new ToListCollection(this));
+            public List<int> ToList()
+                => new List<int>(new ToListCollection(this));
 
             // helper implementation of ICollection<> so that CopyTo() is used to convert to List<>
             class ToListCollection
-                : ICollection<long>
+                : ICollection<int>
             {
-                readonly long start;
-                readonly long count;
+                readonly int start;
+                readonly int count;
 
                 public ToListCollection(in RangeEnumerable source)
                 {
@@ -120,22 +127,22 @@ namespace NetFabric.Hyperlinq
                     this.count = source.count;
                 }
 
-                public int Count => (int)count;
+                public int Count => count;
 
                 public bool IsReadOnly => true;
 
-                public void CopyTo(long[] array, int _)
+                public void CopyTo(int[] array, int _)
                 {
-                    for(var index = 0L; index < count; index++)
+                    for(var index = 0; index < count; index++)
                         array[index] = start + index;
                 }
 
                 IEnumerator IEnumerable.GetEnumerator() => throw new NotSupportedException();
-                IEnumerator<long> IEnumerable<long>.GetEnumerator() => throw new NotSupportedException();
-                void ICollection<long>.Add(long item) => throw new NotSupportedException();
-                bool ICollection<long>.Remove(long item) => throw new NotSupportedException();
-                void ICollection<long>.Clear() => throw new NotSupportedException();
-                bool ICollection<long>.Contains(long item) => throw new NotSupportedException();
+                IEnumerator<int> IEnumerable<int>.GetEnumerator() => throw new NotSupportedException();
+                void ICollection<int>.Add(int item) => throw new NotSupportedException();
+                bool ICollection<int>.Remove(int item) => throw new NotSupportedException();
+                void ICollection<int>.Clear() => throw new NotSupportedException();
+                bool ICollection<int>.Contains(int item) => throw new NotSupportedException();
             }
         }
     }

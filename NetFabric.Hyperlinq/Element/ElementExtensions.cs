@@ -42,20 +42,6 @@ namespace NetFabric.Hyperlinq
             }
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static TValue ThrowOnEmpty<TValue>(this (long Index, TValue Value) item)
-        {
-            switch (item.Index)
-            {
-                case (long)ElementResult.Empty:
-                    return ThrowHelper.ThrowEmptySequence<TValue>();
-                case (long)ElementResult.NotSingle:
-                    return ThrowHelper.ThrowNotSingleSequence<TValue>();
-                default:
-                    return item.Value;
-            }
-        }
-
         /////////////////////////////////////////////////////
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -80,20 +66,6 @@ namespace NetFabric.Hyperlinq
                 case (int)ElementResult.Empty:
                     return default;
                 case (int)ElementResult.NotSingle:
-                    return ThrowHelper.ThrowNotSingleSequence<TValue>();
-                default:
-                    return item.Value;
-            }
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static TValue DefaultOnEmpty<TValue>(this (long Index, TValue Value) item)
-        {
-            switch (item.Index)
-            {
-                case (long)ElementResult.Empty:
-                    return default;
-                case (long)ElementResult.NotSingle:
                     return ThrowHelper.ThrowNotSingleSequence<TValue>();
                 default:
                     return item.Value;
@@ -126,21 +98,6 @@ namespace NetFabric.Hyperlinq
                 case (int)ElementResult.Empty:
                     return null;
                 case (int)ElementResult.NotSingle:
-                    return ThrowHelper.ThrowNotSingleSequence<TValue>();
-                default:
-                    return item.Value;
-            }
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static TValue? NullOnEmpty<TValue>(this (long Index, TValue Value) item) 
-            where TValue : struct
-        {
-            switch (item.Index)
-            {
-                case (long)ElementResult.Empty:
-                    return null;
-                case (long)ElementResult.NotSingle:
                     return ThrowHelper.ThrowNotSingleSequence<TValue>();
                 default:
                     return item.Value;

@@ -32,7 +32,7 @@ namespace NetFabric.Hyperlinq
             return false;
         }
 
-        public static bool Any<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, long, bool> predicate)
+        public static bool Any<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, int, bool> predicate)
             where TEnumerable : IEnumerable<TSource>
             where TEnumerator : IEnumerator<TSource>
         {
@@ -40,7 +40,7 @@ namespace NetFabric.Hyperlinq
 
             using (var enumerator = (TEnumerator)source.GetEnumerator())
             {
-                var index = 0L;
+                var index = 0;
                 checked
                 {
                     while (enumerator.MoveNext())

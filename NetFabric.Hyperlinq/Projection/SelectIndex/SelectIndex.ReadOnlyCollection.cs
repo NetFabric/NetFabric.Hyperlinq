@@ -9,7 +9,7 @@ namespace NetFabric.Hyperlinq
     {
         public static SelectIndexEnumerable<TEnumerable, TEnumerator, TSource, TResult> Select<TEnumerable, TEnumerator, TSource, TResult>(
             this TEnumerable source, 
-            Func<TSource, long, TResult> selector)
+            Func<TSource, int, TResult> selector)
             where TEnumerable : IReadOnlyCollection<TSource> 
             where TEnumerator : IEnumerator<TSource> 
         {
@@ -27,23 +27,25 @@ namespace NetFabric.Hyperlinq
             where TEnumerator : IEnumerator<TSource>
         {
             readonly TEnumerable source;
-            readonly Func<TSource, long, TResult> selector;
+            readonly Func<TSource, int, TResult> selector;
 
-            internal SelectIndexEnumerable(in TEnumerable source, Func<TSource, long, TResult> selector)
+            internal SelectIndexEnumerable(in TEnumerable source, Func<TSource, int, TResult> selector)
             {
                 this.source = source;
                 this.selector = selector;
             }
 
             public Enumerator GetEnumerator() => new Enumerator(in this);
+            IEnumerator<TResult> IEnumerable<TResult>.GetEnumerator() => new Enumerator(in this);
+            IEnumerator IEnumerable.GetEnumerator() => new Enumerator(in this);
 
-            public long Count => source.Count;
+            public int Count => source.Count;
 
             public struct Enumerator
-                : IValueEnumerator<TResult>
+                : IEnumerator<TResult>
             {
                 TEnumerator enumerator;
-                readonly Func<TSource, long, TResult> selector;
+                readonly Func<TSource, int, TResult> selector;
                 int index;
 
                 internal Enumerator(in SelectIndexEnumerable<TEnumerable, TEnumerator, TSource, TResult> enumerable)
@@ -54,6 +56,8 @@ namespace NetFabric.Hyperlinq
                 }
 
                 public TResult Current
+                    => selector(enumerator.Current, index);
+                object IEnumerator.Current
                     => selector(enumerator.Current, index);
 
                 public bool MoveNext()
@@ -67,6 +71,9 @@ namespace NetFabric.Hyperlinq
                     return false;
                 }
 
+                void IEnumerator.Reset()
+                    => throw new NotSupportedException();
+
                 public void Dispose() => enumerator.Dispose();
             }
 
@@ -75,7 +82,7 @@ namespace NetFabric.Hyperlinq
                 => source.Count != 0;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public ReadOnlyCollection.SelectIndexEnumerable<TEnumerable, TEnumerator, TSource, TSelectorResult> Select<TSelectorResult>(Func<TResult, long, TSelectorResult> selector)
+            public ReadOnlyCollection.SelectIndexEnumerable<TEnumerable, TEnumerator, TSource, TSelectorResult> Select<TSelectorResult>(Func<TResult, int, TSelectorResult> selector)
                 => ReadOnlyCollection.Select<TEnumerable, TEnumerator, TSource, TSelectorResult>(source, Utils.Combine(this.selector, selector));
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -116,7 +123,7 @@ namespace NetFabric.Hyperlinq
                 : ICollection<TResult>
             {
                 readonly TEnumerable source;
-                readonly Func<TSource, long, TResult> selector;
+                readonly Func<TSource, int, TResult> selector;
 
                 public ToListCollection(in SelectIndexEnumerable<TEnumerable, TEnumerator, TSource, TResult> source)
                 {
@@ -132,7 +139,7 @@ namespace NetFabric.Hyperlinq
                 {
                     using (var enumerator = (TEnumerator)source.GetEnumerator())
                     {
-                        for (var index = 0L; enumerator.MoveNext(); index++)
+                        for (var index = 0; enumerator.MoveNext(); index++)
                             array[index] = selector(enumerator.Current, index);
                     }
                 }
