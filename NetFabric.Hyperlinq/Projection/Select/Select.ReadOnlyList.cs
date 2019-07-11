@@ -44,9 +44,10 @@ namespace NetFabric.Hyperlinq
             }
 
             public Enumerator GetEnumerator() => new Enumerator(in this);
+            IEnumerator<TResult> IEnumerable<TResult>.GetEnumerator() => new Enumerator(in this);
+            IEnumerator IEnumerable.GetEnumerator() => new Enumerator(in this);
 
             public int Count => takeCount;
-            long IValueReadOnlyCollection<TResult, Enumerator>.Count => takeCount;
 
             public TResult this[int index]
             {
@@ -58,23 +59,9 @@ namespace NetFabric.Hyperlinq
                     return selector(source[index + skipCount]);
                 }
             }
-
-            TResult IValueReadOnlyList<TResult, Enumerator>.this[long index]
-            {
-                get
-                {
-                    if (index < 0 || index >= takeCount)
-                        ThrowHelper.ThrowArgumentOutOfRangeException(nameof(index));
-
-                    if (index + skipCount > int.MaxValue)
-                        ThrowHelper.ThrowArgumentOutOfRangeException(nameof(index));
-
-                    return selector(source[(int)(index + skipCount)]);
-                }
-            }
             
             public struct Enumerator
-                : IValueEnumerator<TResult>
+                : IEnumerator<TResult>
             {
                 readonly TEnumerable source;
                 readonly Func<TSource, TResult> selector;
@@ -92,8 +79,14 @@ namespace NetFabric.Hyperlinq
                 public TResult Current
                     => selector(source[index]);
 
+                object IEnumerator.Current
+                    => source[index];
+
                 public bool MoveNext()
                     => ++index < end;
+
+                void IEnumerator.Reset()
+                    => throw new NotSupportedException();
 
                 public void Dispose() { }
             }
@@ -181,7 +174,7 @@ namespace NetFabric.Hyperlinq
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static long Count<TEnumerable, TSource, TResult>(this SelectEnumerable<TEnumerable, TSource, TResult> source)
+        public static int Count<TEnumerable, TSource, TResult>(this SelectEnumerable<TEnumerable, TSource, TResult> source)
             where TEnumerable : IReadOnlyList<TSource>
             => source.Count;
     }

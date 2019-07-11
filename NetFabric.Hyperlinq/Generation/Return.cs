@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
@@ -22,10 +23,12 @@ namespace NetFabric.Hyperlinq
             }
 
             public Enumerator GetEnumerator() => new Enumerator(in this);
+            IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new Enumerator(in this);
+            IEnumerator IEnumerable.GetEnumerator() => new Enumerator(in this);
 
-            public long Count => 1;
+            public int Count => 1;
 
-            public TSource this[long index]
+            public TSource this[int index]
             {
                 get
                 {
@@ -36,7 +39,7 @@ namespace NetFabric.Hyperlinq
             }
 
             public struct Enumerator
-                : IValueEnumerator<TSource>
+                : IEnumerator<TSource>
             {
                 readonly TSource value;
                 bool moveNext;
@@ -49,6 +52,8 @@ namespace NetFabric.Hyperlinq
 
                 public TSource Current
                     => value;
+                object IEnumerator.Current
+                    => value;
 
                 public bool MoveNext()
                 {
@@ -59,6 +64,9 @@ namespace NetFabric.Hyperlinq
                     }
                     return false;
                 }
+
+                void IEnumerator.Reset()
+                    => throw new NotSupportedException();
 
                 public void Dispose() { }
             }
@@ -108,7 +116,7 @@ namespace NetFabric.Hyperlinq
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static long Count<TSource>(this ReturnEnumerable<TSource> source)
+        public static int Count<TSource>(this ReturnEnumerable<TSource> source)
             => 1;
     }
 }

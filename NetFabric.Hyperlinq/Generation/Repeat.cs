@@ -7,7 +7,7 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class Enumerable
     {
-        public static RepeatEnumerable<TSource> Repeat<TSource>(TSource value, long count)
+        public static RepeatEnumerable<TSource> Repeat<TSource>(TSource value, int count)
         {
             if (count < 0) ThrowHelper.ThrowArgumentOutOfRangeException(nameof(count));
 
@@ -20,19 +20,21 @@ namespace NetFabric.Hyperlinq
             : IValueReadOnlyList<TSource, RepeatEnumerable<TSource>.Enumerator>
         {
             internal readonly TSource value;
-            internal readonly long count;
+            internal readonly int count;
 
-            internal RepeatEnumerable(TSource value, long count)
+            internal RepeatEnumerable(TSource value, int count)
             {
                 this.value = value;
                 this.count = count;
             }
 
             public Enumerator GetEnumerator() => new Enumerator(in this);
+            IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new Enumerator(in this);
+            IEnumerator IEnumerable.GetEnumerator() => new Enumerator(in this);
 
-            public long Count => count;
+            public int Count => count;
 
-            public TSource this[long index]
+            public TSource this[int index]
             {
                 get
                 {
@@ -43,10 +45,10 @@ namespace NetFabric.Hyperlinq
             }
 
             public struct Enumerator
-                : IValueEnumerator<TSource>
+                : IEnumerator<TSource>
             {
                 readonly TSource value;
-                long counter;
+                int counter;
 
                 internal Enumerator(in RepeatEnumerable<TSource> enumerable)
                 {
@@ -56,22 +58,27 @@ namespace NetFabric.Hyperlinq
 
                 public TSource Current
                     => value;
+                object IEnumerator.Current
+                    => value;
 
                 public bool MoveNext()
                     => counter-- > 0;
+
+                void IEnumerator.Reset()
+                    => throw new NotSupportedException();
 
                 public void Dispose() { }
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public RepeatEnumerable<TSource> Skip(long count)
+            public RepeatEnumerable<TSource> Skip(int count)
             {
                 (_, var takeCount) = Utils.Skip(this.count, count);
                 return Repeat(value, takeCount);
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public RepeatEnumerable<TSource> Take(long count)
+            public RepeatEnumerable<TSource> Take(int count)
                 => Repeat(value, Utils.Take(this.count, count));
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -118,7 +125,7 @@ namespace NetFabric.Hyperlinq
                 : ICollection<TSource>
             {
                 readonly TSource value;
-                readonly long count;
+                readonly int count;
 
                 public ToListCollection(in RepeatEnumerable<TSource> source)
                 {
@@ -126,7 +133,7 @@ namespace NetFabric.Hyperlinq
                     this.count = source.count;
                 }
 
-                public int Count => (int)count;
+                public int Count => count;
 
                 public bool IsReadOnly => true;
 
@@ -135,7 +142,7 @@ namespace NetFabric.Hyperlinq
                     if (value == null)
                         return; // no need to initialize
                         
-                    for(var index = 0L; index < count; index++)
+                    for(var index = 0; index < count; index++)
                         array[index] = value;
                 }
 

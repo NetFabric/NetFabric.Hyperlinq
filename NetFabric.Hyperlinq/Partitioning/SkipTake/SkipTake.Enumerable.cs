@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
@@ -6,7 +7,7 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class Enumerable
     {
-        public static SkipTakeEnumerable<TEnumerable, TEnumerator, TSource> SkipTake<TEnumerable, TEnumerator, TSource>(this TEnumerable source, long skipCount, long takeCount)
+        public static SkipTakeEnumerable<TEnumerable, TEnumerator, TSource> SkipTake<TEnumerable, TEnumerator, TSource>(this TEnumerable source, int skipCount, int takeCount)
             where TEnumerable : IEnumerable<TSource>
             where TEnumerator : IEnumerator<TSource>
             => new SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>(in source, skipCount, takeCount);
@@ -19,10 +20,10 @@ namespace NetFabric.Hyperlinq
             where TEnumerator : IEnumerator<TSource>
         {
             readonly TEnumerable source;
-            readonly long skipCount;
-            readonly long takeCount;
+            readonly int skipCount;
+            readonly int takeCount;
 
-            internal SkipTakeEnumerable(in TEnumerable source, long skipCount, long takeCount)
+            internal SkipTakeEnumerable(in TEnumerable source, int skipCount, int takeCount)
             {
                 this.source = source;
                 this.skipCount = skipCount;
@@ -30,13 +31,15 @@ namespace NetFabric.Hyperlinq
             }
 
             public Enumerator GetEnumerator() => new Enumerator(in this);
+            IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new Enumerator(in this);
+            IEnumerator IEnumerable.GetEnumerator() => new Enumerator(in this);
 
             public struct Enumerator
-                : IValueEnumerator<TSource>
+                : IEnumerator<TSource>
             {
                 TEnumerator enumerator;
-                long skipCounter;
-                long takeCounter;
+                int skipCounter;
+                int takeCounter;
 
                 internal Enumerator(in SkipTakeEnumerable<TEnumerable, TEnumerator, TSource> enumerable)
                 {
@@ -46,6 +49,8 @@ namespace NetFabric.Hyperlinq
                 }
 
                 public TSource Current
+                    => enumerator.Current;
+                object IEnumerator.Current
                     => enumerator.Current;
 
                 public bool MoveNext()
@@ -75,11 +80,14 @@ namespace NetFabric.Hyperlinq
                     return false;                    
                 }
 
+                void IEnumerator.Reset()
+                    => throw new NotSupportedException();
+
                 public void Dispose() => enumerator.Dispose();
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public SkipTakeEnumerable<TEnumerable, TEnumerator, TSource> Take(long count)
+            public SkipTakeEnumerable<TEnumerable, TEnumerator, TSource> Take(int count)
                 => Enumerable.SkipTake<TEnumerable, TEnumerator, TSource>(source, skipCount, Math.Min(takeCount, count));
         }
     }

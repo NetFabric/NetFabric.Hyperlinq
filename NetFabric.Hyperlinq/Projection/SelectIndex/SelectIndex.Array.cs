@@ -9,7 +9,7 @@ namespace NetFabric.Hyperlinq
     {
         public static SelectIndexEnumerable<TSource, TResult> Select<TSource, TResult>(
             this TSource[] source, 
-            Func<TSource, long, TResult> selector)
+            Func<TSource, int, TResult> selector)
         {
             if (selector is null) ThrowHelper.ThrowArgumentNullException(nameof(selector));
 
@@ -18,7 +18,7 @@ namespace NetFabric.Hyperlinq
 
         static SelectIndexEnumerable<TSource, TResult> Select<TSource, TResult>(
             this TSource[] source,
-            Func<TSource, long, TResult> selector,
+            Func<TSource, int, TResult> selector,
             int skipCount, int takeCount)
             => new SelectIndexEnumerable<TSource, TResult>(source, selector, skipCount, takeCount);
 
@@ -28,11 +28,11 @@ namespace NetFabric.Hyperlinq
             : IValueReadOnlyList<TResult, SelectIndexEnumerable<TSource, TResult>.Enumerator>
         {
             readonly TSource[] source;
-            readonly Func<TSource, long, TResult> selector;
+            readonly Func<TSource, int, TResult> selector;
             readonly int skipCount;
             readonly int takeCount;
 
-            internal SelectIndexEnumerable(TSource[] source, Func<TSource, long, TResult> selector, int skipCount, int takeCount)
+            internal SelectIndexEnumerable(TSource[] source, Func<TSource, int, TResult> selector, int skipCount, int takeCount)
             {
                 this.source = source;
                 this.selector = selector;
@@ -40,9 +40,10 @@ namespace NetFabric.Hyperlinq
             }
 
             public Enumerator GetEnumerator() => new Enumerator(in this);
+            IEnumerator<TResult> IEnumerable<TResult>.GetEnumerator() => new Enumerator(in this);
+            IEnumerator IEnumerable.GetEnumerator() => new Enumerator(in this);
 
             public int Count => takeCount;
-            long IValueReadOnlyCollection<TResult, Enumerator>.Count => takeCount;
 
             public TResult this[int index]
             {
@@ -55,22 +56,11 @@ namespace NetFabric.Hyperlinq
                 }
             }
 
-            TResult IValueReadOnlyList<TResult, Enumerator>.this[long index]
-            {
-                get
-                {
-                    if (index < 0 || index >= takeCount)
-                        ThrowHelper.ThrowArgumentOutOfRangeException(nameof(index));
-
-                    return selector(source[index + skipCount], index);
-                }
-            }
-
             public struct Enumerator
-                : IValueEnumerator<TResult>
+                : IEnumerator<TResult>
             {
                 readonly TSource[] source;
-                readonly Func<TSource, long, TResult> selector;
+                readonly Func<TSource, int, TResult> selector;
                 readonly int end;
                 int index;
 
@@ -84,9 +74,14 @@ namespace NetFabric.Hyperlinq
 
                 public TResult Current
                     => selector(source[index], index);
+                object IEnumerator.Current
+                    => selector(source[index], index);
 
                 public bool MoveNext()
                     => ++index < end;
+
+                void IEnumerator.Reset()
+                    => throw new NotSupportedException();
 
                 public void Dispose() { }
             }
@@ -104,7 +99,7 @@ namespace NetFabric.Hyperlinq
                 => source.Length != 0;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public Array.SelectIndexEnumerable<TSource, TSelectorResult> Select<TSelectorResult>(Func<TResult, long, TSelectorResult> selector)
+            public Array.SelectIndexEnumerable<TSource, TSelectorResult> Select<TSelectorResult>(Func<TResult, int, TSelectorResult> selector)
                 => Array.Select<TSource, TSelectorResult>(source, Utils.Combine(this.selector, selector));
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -142,9 +137,9 @@ namespace NetFabric.Hyperlinq
                 : ICollection<TResult>
             {
                 readonly TSource[] source;
-                readonly Func<TSource, long, TResult> selector;
-                readonly long skipCount;
-                readonly long takeCount;
+                readonly Func<TSource, int, TResult> selector;
+                readonly int skipCount;
+                readonly int takeCount;
 
                 public ToListCollection(in SelectIndexEnumerable<TSource, TResult> source)
                 {
@@ -154,7 +149,7 @@ namespace NetFabric.Hyperlinq
                     this.takeCount = source.takeCount;
                 }
 
-                public int Count => (int)takeCount;
+                public int Count => takeCount;
 
                 public bool IsReadOnly => true;
 

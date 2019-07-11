@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace NetFabric.Hyperlinq
@@ -35,9 +36,11 @@ namespace NetFabric.Hyperlinq
             }
 
             public Enumerator GetEnumerator() => new Enumerator(in this);
+            IEnumerator<TResult> IEnumerable<TResult>.GetEnumerator() => new Enumerator(in this);
+            IEnumerator IEnumerable.GetEnumerator() => new Enumerator(in this);
 
             public struct Enumerator
-                : IValueEnumerator<TResult>
+                : IEnumerator<TResult>
             {
                 readonly TEnumerable source;
                 readonly Func<TSource, bool> predicate;
@@ -56,6 +59,8 @@ namespace NetFabric.Hyperlinq
 
                 public TResult Current
                     => selector(source[index]);
+                object IEnumerator.Current
+                    => source[index];
 
                 public bool MoveNext()
                 {
@@ -67,10 +72,13 @@ namespace NetFabric.Hyperlinq
                     return false;
                 }
 
+                void IEnumerator.Reset()
+                    => throw new NotSupportedException();
+
                 public void Dispose() { }
             }
 
-            public long Count()
+            public int Count()
                 => ReadOnlyList.Count<TEnumerable, TSource>(source, predicate);
 
             public bool Any()

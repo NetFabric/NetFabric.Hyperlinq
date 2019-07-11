@@ -1,18 +1,19 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace NetFabric.Hyperlinq
 {
     public static partial class Array
     {
-        public static WhereIndexEnumerable<TSource> Where<TSource>(this TSource[] source, Func<TSource, long, bool> predicate) 
+        public static WhereIndexEnumerable<TSource> Where<TSource>(this TSource[] source, Func<TSource, int, bool> predicate) 
         {
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
 
             return new WhereIndexEnumerable<TSource>(source, predicate, 0, source.Length);
         }
 
-        static WhereIndexEnumerable<TSource> Where<TSource>(this TSource[] source, Func<TSource, long, bool> predicate, int skipCount, int takeCount)
+        static WhereIndexEnumerable<TSource> Where<TSource>(this TSource[] source, Func<TSource, int, bool> predicate, int skipCount, int takeCount)
             => new WhereIndexEnumerable<TSource>(source, predicate, skipCount, takeCount);
 
         [GenericsTypeMapping("TEnumerable", typeof(WhereEnumerable<>))]
@@ -21,11 +22,11 @@ namespace NetFabric.Hyperlinq
             : IValueEnumerable<TSource, WhereIndexEnumerable<TSource>.Enumerator>
         {
             readonly TSource[] source;
-            readonly Func<TSource, long, bool> predicate;
+            readonly Func<TSource, int, bool> predicate;
             readonly int skipCount;
             readonly int takeCount;
 
-            internal WhereIndexEnumerable(TSource[] source, Func<TSource, long, bool> predicate, int skipCount, int takeCount)
+            internal WhereIndexEnumerable(TSource[] source, Func<TSource, int, bool> predicate, int skipCount, int takeCount)
             {
                 this.source = source;
                 this.predicate = predicate;
@@ -33,12 +34,14 @@ namespace NetFabric.Hyperlinq
             }
 
             public Enumerator GetEnumerator() => new Enumerator(in this);
+            IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new Enumerator(in this);
+            IEnumerator IEnumerable.GetEnumerator() => new Enumerator(in this);
 
             public struct Enumerator 
-                : IValueEnumerator<TSource>
+                : IEnumerator<TSource>
             {
                 readonly TSource[] source;
-                readonly Func<TSource, long, bool> predicate;
+                readonly Func<TSource, int, bool> predicate;
                 readonly int end;
                 int index;
 
@@ -51,7 +54,8 @@ namespace NetFabric.Hyperlinq
                 }
 
                 public ref TSource Current => ref source[index];
-                TSource IValueEnumerator<TSource>.Current => source[index];
+                TSource IEnumerator<TSource>.Current => source[index];
+                object IEnumerator.Current => source[index];
 
                 public bool MoveNext()
                 {
@@ -63,16 +67,18 @@ namespace NetFabric.Hyperlinq
                     return false;
                 }
 
+                void IEnumerator.Reset() => throw new NotSupportedException();
+
                 public void Dispose() { }
             }
 
-            public long Count()
+            public int Count()
                 => source.Count(predicate, skipCount, takeCount);
 
             public bool Any()
                 => source.Any<TSource>(predicate);
 
-            public Array.WhereIndexEnumerable<TSource> Where(Func<TSource, long, bool> predicate)
+            public Array.WhereIndexEnumerable<TSource> Where(Func<TSource, int, bool> predicate)
                 => Array.Where<TSource>(source, Utils.Combine(this.predicate, predicate));
 
             public ref TSource First()

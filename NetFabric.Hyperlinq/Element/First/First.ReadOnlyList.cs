@@ -38,7 +38,7 @@ namespace NetFabric.Hyperlinq
             return TryFirst<TEnumerable, TSource>(source, predicate, 0, source.Count);
         }
 
-        public static (long Index, TSource Value) TryFirst<TEnumerable, TSource>(this TEnumerable source, Func<TSource, long, bool> predicate)
+        public static (int Index, TSource Value) TryFirst<TEnumerable, TSource>(this TEnumerable source, Func<TSource, int, bool> predicate)
             where TEnumerable : IReadOnlyList<TSource>
         {
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
@@ -74,7 +74,7 @@ namespace NetFabric.Hyperlinq
             return (ElementResult.Empty, default);
         }
 
-        static (long Index, TSource Value) TryFirst<TEnumerable, TSource>(this TEnumerable source, Func<TSource, long, bool> predicate, int skipCount, int takeCount)
+        static (int Index, TSource Value) TryFirst<TEnumerable, TSource>(this TEnumerable source, Func<TSource, int, bool> predicate, int skipCount, int takeCount)
             where TEnumerable : IReadOnlyList<TSource>
         {
             var end = skipCount + takeCount;
@@ -84,7 +84,7 @@ namespace NetFabric.Hyperlinq
                     return (index, source[index]);
             }
 
-            return ((long)ElementResult.Empty, default);
+            return ((int)ElementResult.Empty, default);
         }
     }
 }

@@ -23,7 +23,7 @@ namespace NetFabric.Hyperlinq
             return false;
         }
 
-        public static bool Any<TEnumerable, TSource>(this TEnumerable source, Func<TSource, long, bool> predicate)
+        public static bool Any<TEnumerable, TSource>(this TEnumerable source, Func<TSource, int, bool> predicate)
             where TEnumerable : IReadOnlyList<TSource>
         {
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));

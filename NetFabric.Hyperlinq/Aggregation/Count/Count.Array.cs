@@ -26,14 +26,14 @@ namespace NetFabric.Hyperlinq
             return count;
         }
 
-        public static int Count<TSource>(this TSource[] source, Func<TSource, long, bool> predicate)
+        public static int Count<TSource>(this TSource[] source, Func<TSource, int, bool> predicate)
         {
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
 
             return Count<TSource>(source, predicate, 0, source.Length);
         }
 
-        static int Count<TSource>(this TSource[] source, Func<TSource, long, bool> predicate, int skipCount, int takeCount)
+        static int Count<TSource>(this TSource[] source, Func<TSource, int, bool> predicate, int skipCount, int takeCount)
         {
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
 

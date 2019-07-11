@@ -7,25 +7,25 @@ namespace NetFabric.Hyperlinq
         public static Func<TSource, bool> Combine<TSource>(Func<TSource, bool> first, Func<TSource, bool> second) => 
             item => first(item) && second(item);
 
-        public static Func<TSource, long, bool> Combine<TSource>(Func<TSource, long, bool> first, Func<TSource, bool> second) => 
+        public static Func<TSource, int, bool> Combine<TSource>(Func<TSource, int, bool> first, Func<TSource, bool> second) => 
             (item, index) => first(item, index) && second(item);
 
-        public static Func<TSource, long, bool> Combine<TSource>(Func<TSource, bool> first, Func<TSource, long, bool> second) => 
+        public static Func<TSource, int, bool> Combine<TSource>(Func<TSource, bool> first, Func<TSource, int, bool> second) => 
             (item, index) => first(item) && second(item, index);
 
-        public static Func<TSource, long, bool> Combine<TSource>(Func<TSource, long, bool> first, Func<TSource, long, bool> second) => 
+        public static Func<TSource, int, bool> Combine<TSource>(Func<TSource, int, bool> first, Func<TSource, int, bool> second) => 
             (item, index) => first(item, index) && second(item, index);
 
         public static Func<TSource, TTarget> Combine<TSource, TMiddle, TTarget>(Func<TSource, TMiddle> first, Func<TMiddle, TTarget> second) => 
             item => second(first(item));
 
-        public static Func<TSource, long, TTarget> Combine<TSource, TMiddle, TTarget>(Func<TSource, long, TMiddle> first, Func<TMiddle, TTarget> second) => 
+        public static Func<TSource, int, TTarget> Combine<TSource, TMiddle, TTarget>(Func<TSource, int, TMiddle> first, Func<TMiddle, TTarget> second) => 
             (item, index) => second(first(item, index));
 
-        public static Func<TSource, long, TTarget> Combine<TSource, TMiddle, TTarget>(Func<TSource, TMiddle> first, Func<TMiddle, long, TTarget> second) => 
+        public static Func<TSource, int, TTarget> Combine<TSource, TMiddle, TTarget>(Func<TSource, TMiddle> first, Func<TMiddle, int, TTarget> second) => 
             (item, index) => second(first(item), index);
 
-        public static Func<TSource, long, TTarget> Combine<TSource, TMiddle, TTarget>(Func<TSource, long, TMiddle> first, Func<TMiddle, long, TTarget> second) => 
+        public static Func<TSource, int, TTarget> Combine<TSource, TMiddle, TTarget>(Func<TSource, int, TMiddle> first, Func<TMiddle, int, TTarget> second) => 
             (item, index) => second(first(item, index), index);
     }
 }

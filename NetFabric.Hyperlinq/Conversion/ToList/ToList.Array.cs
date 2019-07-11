@@ -26,7 +26,7 @@ namespace NetFabric.Hyperlinq
             return list;
         }
 
-        static List<TSource> ToList<TSource>(this TSource[] source, Func<TSource, long, bool> predicate, int skipCount, int takeCount)
+        static List<TSource> ToList<TSource>(this TSource[] source, Func<TSource, int, bool> predicate, int skipCount, int takeCount)
         {
             var list = new List<TSource>();
 

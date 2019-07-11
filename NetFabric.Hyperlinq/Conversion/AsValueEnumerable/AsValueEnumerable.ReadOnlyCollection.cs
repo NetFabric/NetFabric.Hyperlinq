@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace NetFabric.Hyperlinq
@@ -25,11 +26,13 @@ namespace NetFabric.Hyperlinq
             }
 
             public Enumerator GetEnumerator() => new Enumerator(in source);
+            IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new Enumerator(in source);
+            IEnumerator IEnumerable.GetEnumerator() => new Enumerator(in source);
 
-            public long Count => source.Count;
+            public int Count => source.Count;
             
             public struct Enumerator 
-                : IValueEnumerator<TSource>
+                : IEnumerator<TSource>
             {
                 TEnumerator enumerator;
 
@@ -39,8 +42,11 @@ namespace NetFabric.Hyperlinq
                 }
 
                 public TSource Current => enumerator.Current;
+                object IEnumerator.Current => enumerator.Current;
 
                 public bool MoveNext() => enumerator.MoveNext();
+
+                void IEnumerator.Reset() => throw new NotSupportedException();
 
                 public void Dispose() => enumerator.Dispose();
             }

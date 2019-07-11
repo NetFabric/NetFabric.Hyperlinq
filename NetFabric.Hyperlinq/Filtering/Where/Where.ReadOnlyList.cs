@@ -37,9 +37,11 @@ namespace NetFabric.Hyperlinq
             }
 
             public Enumerator GetEnumerator() => new Enumerator(in this);
+            IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new Enumerator(in this);
+            IEnumerator IEnumerable.GetEnumerator() => new Enumerator(in this);
 
             public struct Enumerator
-                : IValueEnumerator<TSource>
+                : IEnumerator<TSource>
             {
                 readonly TEnumerable source;
                 readonly Func<TSource, bool> predicate;
@@ -57,6 +59,9 @@ namespace NetFabric.Hyperlinq
                 public TSource Current
                     => source[index];
 
+                object IEnumerator.Current
+                    => source[index];
+
                 public bool MoveNext()
                 {
                     while (++index < end)
@@ -67,12 +72,15 @@ namespace NetFabric.Hyperlinq
                     return false;
                 }
 
+                void IEnumerator.Reset()
+                    => throw new NotSupportedException();
+
                 public void Dispose() { }
             }
 
-            public long Count()
+            public int Count()
                 => ReadOnlyList.Count<TEnumerable, TSource>(source, predicate, skipCount, takeCount);
-            public long Count(Func<TSource, bool> predicate)
+            public int Count(Func<TSource, bool> predicate)
                 => ReadOnlyList.Count<TEnumerable, TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount);
 
             public bool All()
