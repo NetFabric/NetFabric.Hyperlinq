@@ -20,12 +20,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Remove="Bindings\**" />
-    <EmbeddedResource Remove="Bindings\**" />
-    <None Remove="Bindings\**" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Include="..\LICENSE.txt" Pack="true" PackagePath="" />
     <None Include="FodyWeavers.xsd" />
   </ItemGroup>
