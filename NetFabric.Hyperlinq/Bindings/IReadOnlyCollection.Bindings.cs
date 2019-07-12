@@ -9,7 +9,7 @@ namespace NetFabric.Hyperlinq
             => source.Count;
         public static int Count<TSource>(this IReadOnlyCollection<TSource> source, Func<TSource, bool> predicate)
             => ReadOnlyCollection.Count<IReadOnlyCollection<TSource>, IEnumerator<TSource>, TSource>(source, predicate);
-        public static int Count<TSource>(this IReadOnlyCollection<TSource> source, Func<TSource, long, bool> predicate)
+        public static int Count<TSource>(this IReadOnlyCollection<TSource> source, Func<TSource, int, bool> predicate)
             => ReadOnlyCollection.Count<IReadOnlyCollection<TSource>, IEnumerator<TSource>, TSource>(source, predicate);
 
         public static ReadOnlyCollection.SkipTakeEnumerable<IReadOnlyCollection<TSource>, IEnumerator<TSource>, TSource> Skip<TSource>(
@@ -22,13 +22,13 @@ namespace NetFabric.Hyperlinq
             int count) 
             => ReadOnlyCollection.Take<IReadOnlyCollection<TSource>, IEnumerator<TSource>, TSource>(source, count);
 
-        public static bool All<TSource>(this IReadOnlyCollection<TSource> source, Func<TSource, long, bool> predicate)
+        public static bool All<TSource>(this IReadOnlyCollection<TSource> source, Func<TSource, int, bool> predicate)
             => ReadOnlyCollection.All<IReadOnlyCollection<TSource>, IEnumerator<TSource>, TSource>(source, predicate);
 
         public static bool Any<TSource>(this IReadOnlyCollection<TSource> source)
             => source.Count != 0;
 
-        public static bool Any<TSource>(this IReadOnlyCollection<TSource> source, Func<TSource, long, bool> predicate)
+        public static bool Any<TSource>(this IReadOnlyCollection<TSource> source, Func<TSource, int, bool> predicate)
             => ReadOnlyCollection.Any<IReadOnlyCollection<TSource>, IEnumerator<TSource>, TSource>(source, predicate);
 
         public static bool Contains<TSource>(this IReadOnlyCollection<TSource> source, TSource value)
@@ -43,14 +43,14 @@ namespace NetFabric.Hyperlinq
             => ReadOnlyCollection.Select<IReadOnlyCollection<TSource>, IEnumerator<TSource>, TSource, TResult>(source, selector);
         public static ReadOnlyCollection.SelectIndexEnumerable<IReadOnlyCollection<TSource>, IEnumerator<TSource>, TSource, TResult> Select<TSource, TResult>(
             this IReadOnlyCollection<TSource> source,
-            Func<TSource, long, TResult> selector)
+            Func<TSource, int, TResult> selector)
             => ReadOnlyCollection.Select<IReadOnlyCollection<TSource>, IEnumerator<TSource>, TSource, TResult>(source, selector);
 
         public static Enumerable.SelectManyEnumerable<IReadOnlyCollection<TSource>, IEnumerator<TSource>, TSource, TSubEnumerable, TSubEnumerator, TResult> SelectMany<TSource, TSubEnumerable, TSubEnumerator, TResult>(
             this IReadOnlyCollection<TSource> source,
             Func<TSource, TSubEnumerable> selector) 
             where TSubEnumerable : IValueReadOnlyCollection<TResult, TSubEnumerator>
-            where TSubEnumerator : struct, IValueEnumerator<TResult>
+            where TSubEnumerator : struct, IEnumerator<TResult>
             => Enumerable.SelectMany<IReadOnlyCollection<TSource>, IEnumerator<TSource>, TSource, TSubEnumerable, TSubEnumerator, TResult>(source, selector);
 
         public static Enumerable.WhereEnumerable<IReadOnlyCollection<TSource>, IEnumerator<TSource>, TSource> Where<TSource>(
@@ -59,7 +59,7 @@ namespace NetFabric.Hyperlinq
             => Enumerable.Where<IReadOnlyCollection<TSource>, IEnumerator<TSource>, TSource>(source, predicate);
         public static Enumerable.WhereIndexEnumerable<IReadOnlyCollection<TSource>, IEnumerator<TSource>, TSource> Where<TSource>(
             this IReadOnlyCollection<TSource> source,
-            Func<TSource, long, bool> predicate)
+            Func<TSource, int, bool> predicate)
             => Enumerable.Where<IReadOnlyCollection<TSource>, IEnumerator<TSource>, TSource>(source, predicate);
 
         public static TSource First<TSource>(this IReadOnlyCollection<TSource> source) 
@@ -74,7 +74,7 @@ namespace NetFabric.Hyperlinq
             => ReadOnlyCollection.TryFirst<IReadOnlyCollection<TSource>, IEnumerator<TSource>, TSource>(source);
         public static (ElementResult Success, TSource Value) TryFirst<TSource>(this IReadOnlyCollection<TSource> source, Func<TSource, bool> predicate)
             => ReadOnlyCollection.TryFirst<IReadOnlyCollection<TSource>, IEnumerator<TSource>, TSource>(source, predicate);
-        public static (int Index, TSource Value) TryFirst<TSource>(this IReadOnlyCollection<TSource> source, Func<TSource, long, bool> predicate)
+        public static (int Index, TSource Value) TryFirst<TSource>(this IReadOnlyCollection<TSource> source, Func<TSource, int, bool> predicate)
             => ReadOnlyCollection.TryFirst<IReadOnlyCollection<TSource>, IEnumerator<TSource>, TSource>(source, predicate);
 
         public static TSource Single<TSource>(this IReadOnlyCollection<TSource> source) 
@@ -89,7 +89,7 @@ namespace NetFabric.Hyperlinq
             => ReadOnlyCollection.TrySingle<IReadOnlyCollection<TSource>, IEnumerator<TSource>, TSource>(source);
         public static (ElementResult Success, TSource Value) TrySingle<TSource>(this IReadOnlyCollection<TSource> source, Func<TSource, bool> predicate)
             => ReadOnlyCollection.TrySingle<IReadOnlyCollection<TSource>, IEnumerator<TSource>, TSource>(source, predicate);
-        public static (int Index, TSource Value) TrySingle<TSource>(this IReadOnlyCollection<TSource> source, Func<TSource, long, bool> predicate)
+        public static (int Index, TSource Value) TrySingle<TSource>(this IReadOnlyCollection<TSource> source, Func<TSource, int, bool> predicate)
             => ReadOnlyCollection.TrySingle<IReadOnlyCollection<TSource>, IEnumerator<TSource>, TSource>(source, predicate);
 
         public static IReadOnlyCollection<TSource> AsEnumerable<TSource>(this IReadOnlyCollection<TSource> source)
