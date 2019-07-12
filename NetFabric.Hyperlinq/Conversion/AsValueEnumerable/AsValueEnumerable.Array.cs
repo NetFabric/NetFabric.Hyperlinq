@@ -27,7 +27,7 @@ namespace NetFabric.Hyperlinq
 
             public int Count => source.Length;
 
-            public ref TSource this[int index] => ref source[index];
+            public ref readonly TSource this[int index] => ref source[index];
             TSource IReadOnlyList<TSource>.this[int index] => source[index];
 
             public struct Enumerator 
@@ -44,14 +44,13 @@ namespace NetFabric.Hyperlinq
                     index = -1;
                 }
 
-                public ref TSource Current => ref source[index];
+                public ref readonly TSource Current => ref source[index];
                 TSource IEnumerator<TSource>.Current => source[index];
                 object IEnumerator.Current => source[index];
 
                 public bool MoveNext() => ++index < count;
 
-                void IEnumerator.Reset()
-                    => throw new NotSupportedException();
+                void IEnumerator.Reset() => throw new NotSupportedException();
 
                 public void Dispose() { }
             }

@@ -11,8 +11,7 @@ namespace NetFabric.Hyperlinq
         static TSource[] ToArray<TSource>(this TSource[] source, int skipCount, int takeCount)
         {
             var array = new TSource[takeCount];
-            for (var index = 0; index < takeCount; index++)
-                array[index] = source[index + skipCount];
+            System.Array.Copy(source, skipCount, array, 0, takeCount);
             return array;
         }
     }

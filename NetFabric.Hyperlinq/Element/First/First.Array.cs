@@ -5,54 +5,73 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class Array
     {
-        public static ref TSource First<TSource>(this TSource[] source)
+        public static ref readonly TSource First<TSource>(this TSource[] source)
         {
             if (source.Length == 0) ThrowHelper.ThrowEmptySequence<TSource>();
 
             return ref source[0];
         }
 
-        public static ref TSource First<TSource>(this TSource[] source, Func<TSource, bool> predicate) 
+        static ref readonly TSource First<TSource>(this TSource[] source, int skipCount, int takeCount)
+        {
+            if (takeCount == 0) ThrowHelper.ThrowEmptySequence<TSource>();
+
+            return ref source[skipCount];
+        }
+
+        public static ref readonly TSource First<TSource>(this TSource[] source, Func<TSource, bool> predicate) 
         {
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
 
-            var count = source.Length;
-            for (var index = 0; index < count; index++)
+            return ref First<TSource>(source, predicate, 0, source.Length);
+        }
+
+        static ref readonly TSource First<TSource>(this TSource[] source, Func<TSource, bool> predicate, int skipCount, int takeCount)
+        {
+            var end = skipCount + takeCount;
+            for (var index = skipCount; index < end; index++)
             {
                 if (predicate(source[index]))
                     return ref source[index];
             }
-            ThrowHelper.ThrowEmptySequence<TSource>();
-            return ref source[0];
+            return ref ThrowHelper.ThrowEmptySequenceRef<TSource>();
         }
 
-        public static ref TSource First<TSource>(this TSource[] source, Func<TSource, int, bool> predicate)
+        public static ref readonly TSource First<TSource>(this TSource[] source, Func<TSource, int, bool> predicate)
         {
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
 
-            var count = source.Length;
-            for (var index = 0; index < count; index++)
+            return ref First<TSource>(source, predicate, 0, source.Length);
+        }
+
+        static ref readonly TSource First<TSource>(this TSource[] source, Func<TSource, int, bool> predicate, int skipCount, int takeCount)
+        {
+            var end = skipCount + takeCount;
+            for (var index = skipCount; index < end; index++)
             {
                 if (predicate(source[index], index))
                     return ref source[index];
             }
-            ThrowHelper.ThrowEmptySequence<TSource>();
-            return ref source[0];
+            return ref ThrowHelper.ThrowEmptySequenceRef<TSource>();
         }
 
-        public static ref TSource First<TSource>(this TSource[] source, Func<TSource, int, bool> predicate, out int index) 
+        public static ref readonly TSource First<TSource>(this TSource[] source, Func<TSource, int, bool> predicate, out int index) 
         {
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
 
-            var count = source.Length;
-            for (index = 0; index < count; index++)
+            return ref First<TSource>(source, predicate, out index, 0, source.Length);
+        }
+
+        static ref readonly TSource First<TSource>(this TSource[] source, Func<TSource, int, bool> predicate, out int index, int skipCount, int takeCount)
+        {
+            var end = skipCount + takeCount;
+            for (index = skipCount; index < end; index++)
             {
                 if (predicate(source[index], index))
                     return ref source[index];
             }
-            ThrowHelper.ThrowEmptySequence<TSource>();
             index = -1;
-            return ref source[0];
+            return ref ThrowHelper.ThrowEmptySequenceRef<TSource>();
         }
 
         public static ref readonly TSource FirstOrDefault<TSource>(this TSource[] source)
@@ -62,12 +81,24 @@ namespace NetFabric.Hyperlinq
             return ref source[0];
         }
 
+        static ref readonly TSource FirstOrDefault<TSource>(this TSource[] source, int skipCount, int takeCount)
+        {
+            if (takeCount == 0) return ref Default<TSource>.Value;
+
+            return ref source[skipCount];
+        }
+
         public static ref readonly TSource FirstOrDefault<TSource>(this TSource[] source, Func<TSource, bool> predicate) 
         {
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
 
-            var count = source.Length;
-            for (var index = 0; index < count; index++)
+            return ref FirstOrDefault<TSource>(source, predicate, 0, source.Length);
+        }
+
+        static ref readonly TSource FirstOrDefault<TSource>(this TSource[] source, Func<TSource, bool> predicate, int skipCount, int takeCount)
+        {
+            var end = skipCount + takeCount;
+            for (var index = skipCount; index < end; index++)
             {
                 if (predicate(source[index]))
                     return ref source[index];
@@ -79,8 +110,13 @@ namespace NetFabric.Hyperlinq
         {
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
 
-            var count = source.Length;
-            for (var index = 0; index < count; index++)
+            return ref FirstOrDefault<TSource>(source, predicate, 0, source.Length);
+        }
+
+        static ref readonly TSource FirstOrDefault<TSource>(this TSource[] source, Func<TSource, int, bool> predicate, int skipCount, int takeCount)
+        {
+            var end = skipCount + takeCount;
+            for (var index = skipCount; index < end; index++)
             {
                 if (predicate(source[index], index))
                     return ref source[index];
@@ -92,8 +128,13 @@ namespace NetFabric.Hyperlinq
         {
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
 
-            var count = source.Length;
-            for (index = 0; index < count; index++)
+            return ref FirstOrDefault<TSource>(source, predicate, out index, 0, source.Length);
+        }
+
+        static ref readonly TSource FirstOrDefault<TSource>(this TSource[] source, Func<TSource, int, bool> predicate, out int index, int skipCount, int takeCount)
+        {
+            var end = skipCount + takeCount;
+            for (index = skipCount; index < end; index++)
             {
                 if (predicate(source[index], index))
                     return ref source[index];

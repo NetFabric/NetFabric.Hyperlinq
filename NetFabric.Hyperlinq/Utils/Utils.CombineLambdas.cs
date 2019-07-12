@@ -2,7 +2,7 @@ using System;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class Utils
+    static partial class Utils
     {
         public static Func<TSource, bool> Combine<TSource>(Func<TSource, bool> first, Func<TSource, bool> second) => 
             item => first(item) && second(item);

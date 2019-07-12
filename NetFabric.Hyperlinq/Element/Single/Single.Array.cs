@@ -6,27 +6,39 @@ namespace NetFabric.Hyperlinq
     public static partial class Array
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ref TSource Single<TSource>(this TSource[] source)
-        {
-            var length = source.Length;
-            if (length == 0) ThrowHelper.ThrowEmptySequence<TSource>();
-            if (length > 1) ThrowHelper.ThrowNotSingleSequence<TSource>();
+        public static ref readonly TSource Single<TSource>(this TSource[] source)
+            => ref Single<TSource>(source, 0, source.Length);
 
-            return ref source[0];
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        static ref readonly TSource Single<TSource>(this TSource[] source, int skipCount, int takeCount)
+        {
+            switch (takeCount)
+            {
+                case 0:
+                    return ref ThrowHelper.ThrowEmptySequenceRef<TSource>();
+                case 1:
+                    return ref source[skipCount];
+                default:
+                    return ref ThrowHelper.ThrowNotSingleSequenceRef<TSource>();
+            }
         }
 
-        public static ref TSource Single<TSource>(this TSource[] source, Func<TSource, int, bool> predicate)
+        public static ref readonly TSource Single<TSource>(this TSource[] source, Func<TSource, int, bool> predicate)
         {
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
 
-            var length = source.Length;
-            for (var index = 0; index < length; index++)
+            return ref Single<TSource>(source, predicate, 0, source.Length);
+        }
+        static ref readonly TSource Single<TSource>(this TSource[] source, Func<TSource, int, bool> predicate, int skipCount, int takeCount)
+        {
+            var end = skipCount + takeCount;
+            for (var index = skipCount; index < end; index++)
             {
                 if (predicate(source[index], index))
                 {
                     ref var first = ref source[index];
 
-                    for (index++; index < length; index++)
+                    for (index++; index < end; index++)
                     {
                         if (predicate(source[index], index))
                             ThrowHelper.ThrowNotSingleSequence<TSource>();
@@ -35,22 +47,26 @@ namespace NetFabric.Hyperlinq
                     return ref first;
                 }
             }
-            ThrowHelper.ThrowEmptySequence<TSource>();
-            return ref source[0];
+            return ref ThrowHelper.ThrowEmptySequenceRef<TSource>();
         }
 
-        public static ref TSource Single<TSource>(this TSource[] source, Func<TSource, bool> predicate)
+        public static ref readonly TSource Single<TSource>(this TSource[] source, Func<TSource, bool> predicate)
         {
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
 
-            var length = source.Length;
-            for (var index = 0; index < length; index++)
+            return ref Single<TSource>(source, predicate, 0, source.Length);
+        }
+
+        static ref readonly TSource Single<TSource>(this TSource[] source, Func<TSource, bool> predicate, int skipCount, int takeCount)
+        {
+            var end = skipCount + takeCount;
+            for (var index = skipCount; index < end; index++)
             {
                 if (predicate(source[index]))
                 {
                     ref var first = ref source[index];
 
-                    for (index++; index < length; index++)
+                    for (index++; index < end; index++)
                     {
                         if (predicate(source[index]))
                             ThrowHelper.ThrowNotSingleSequence<TSource>();
@@ -59,22 +75,26 @@ namespace NetFabric.Hyperlinq
                     return ref first;
                 }
             }
-            ThrowHelper.ThrowEmptySequence<TSource>();
-            return ref source[0];
+            return ref ThrowHelper.ThrowEmptySequenceRef<TSource>();
         }
 
-        public static ref TSource Single<TSource>(this TSource[] source, Func<TSource, int, bool> predicate, out int index)
+        public static ref readonly TSource Single<TSource>(this TSource[] source, Func<TSource, int, bool> predicate, out int index)
         {
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
 
-            var length = source.Length;
-            for (index = 0; index < length; index++)
+            return ref Single<TSource>(source, predicate, out index, 0, source.Length);
+        }
+
+        static ref readonly TSource Single<TSource>(this TSource[] source, Func<TSource, int, bool> predicate, out int index, int skipCount, int takeCount)
+        {
+            var end = skipCount + takeCount;
+            for (index = skipCount; index < end; index++)
             {
                 if (predicate(source[index], index))
                 {
                     ref var first = ref source[index];
 
-                    for (index++; index < length; index++)
+                    for (index++; index < end; index++)
                     {
                         if (predicate(source[index], index))
                             ThrowHelper.ThrowNotSingleSequence<TSource>();
@@ -83,32 +103,44 @@ namespace NetFabric.Hyperlinq
                     return ref first;
                 }
             }
-            ThrowHelper.ThrowEmptySequence<TSource>();
-            return ref source[0];
+            return ref ThrowHelper.ThrowEmptySequenceRef<TSource>();
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ref readonly TSource SingleOrDefault<TSource>(this TSource[] source)
-        {
-            var length = source.Length;
-            if (length == 0) return ref Default<TSource>.Value;
-            if (length > 1) ThrowHelper.ThrowNotSingleSequence<TSource>();
+            => ref SingleOrDefault<TSource>(source, 0, source.Length);
 
-            return ref source[0];
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        static ref readonly TSource SingleOrDefault<TSource>(this TSource[] source, int skipCount, int takeCount)
+        {
+            switch (takeCount)
+            {
+                case 0:
+                    return ref Default<TSource>.Value;
+                case 1:
+                    return ref source[skipCount];
+                default:
+                    return ref ThrowHelper.ThrowNotSingleSequenceRef<TSource>();
+            }
         }
 
         public static ref readonly TSource SingleOrDefault<TSource>(this TSource[] source, Func<TSource, bool> predicate)
         {
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
 
-            var length = source.Length;
-            for (var index = 0; index < length; index++)
+            return ref SingleOrDefault<TSource>(source, predicate, 0, source.Length);
+        }
+
+        static ref readonly TSource SingleOrDefault<TSource>(this TSource[] source, Func<TSource, bool> predicate, int skipCount, int takeCount)
+        {
+            var end = skipCount + takeCount;
+            for (var index = skipCount; index < end; index++)
             {
                 if (predicate(source[index]))
                 {
                     ref readonly var first = ref source[index];
 
-                    for (index++; index < length; index++)
+                    for (index++; index < end; index++)
                     {
                         if (predicate(source[index]))
                             ThrowHelper.ThrowNotSingleSequence<TSource>();
@@ -124,14 +156,19 @@ namespace NetFabric.Hyperlinq
         {
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
 
-            var length = source.Length;
-            for (var index = 0; index < length; index++)
+            return ref SingleOrDefault<TSource>(source, predicate, 0, source.Length);
+        }
+
+        static ref readonly TSource SingleOrDefault<TSource>(this TSource[] source, Func<TSource, int, bool> predicate, int skipCount, int takeCount)
+        {
+            var end = skipCount + takeCount;
+            for (var index = skipCount; index < end; index++)
             {
                 if (predicate(source[index], index))
                 {
                     ref readonly var first = ref source[index];
 
-                    for (index++; index < length; index++)
+                    for (index++; index < end; index++)
                     {
                         if (predicate(source[index], index))
                             ThrowHelper.ThrowNotSingleSequence<TSource>();
@@ -147,14 +184,19 @@ namespace NetFabric.Hyperlinq
         {
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
 
-            var length = source.Length;
-            for (index = 0; index < length; index++)
+            return ref SingleOrDefault<TSource>(source, predicate, out index, 0, source.Length);
+        }
+
+        static ref readonly TSource SingleOrDefault<TSource>(this TSource[] source, Func<TSource, int, bool> predicate, out int index, int skipCount, int takeCount)
+        {
+            var end = skipCount + takeCount;
+            for (index = skipCount; index < end; index++)
             {
                 if (predicate(source[index], index))
                 {
                     ref readonly var first = ref source[index];
 
-                    for (index++; index < length; index++)
+                    for (index++; index < end; index++)
                     {
                         if (predicate(source[index], index))
                             ThrowHelper.ThrowNotSingleSequence<TSource>();
@@ -170,32 +212,47 @@ namespace NetFabric.Hyperlinq
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static TSource? SingleOrNull<TSource>(this TSource[] source)
             where TSource : struct
-        {
-            var length = source.Length;
-            if (length == 0) return null;
-            if (length > 1) ThrowHelper.ThrowNotSingleSequence<TSource>();
+            => SingleOrNull<TSource>(source, 0, source.Length);
 
-            return source[0];
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        static TSource? SingleOrNull<TSource>(this TSource[] source, int skipCount, int takeCount)
+            where TSource : struct
+        {
+            switch (takeCount)
+            {
+                case 0:
+                    return null;
+                case 1:
+                    return source[skipCount];
+                default:
+                    return ThrowHelper.ThrowNotSingleSequenceRef<TSource>();
+            }
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static TSource? SingleOrNull<TSource>(this TSource[] source, Func<TSource, int, bool> predicate)
             where TSource : struct
-            => SingleOrNull<TSource>(source, predicate, out var _);
+            => SingleOrNull<TSource>(source, predicate, out var _, 0, source.Length);
 
         public static TSource? SingleOrNull<TSource>(this TSource[] source, Func<TSource, int, bool> predicate, out int index)
             where TSource : struct
         {
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
 
-            var length = source.Length;
-            for (index = 0; index < length; index++)
+            return SingleOrNull<TSource>(source, predicate, out index, 0, source.Length);
+        }
+
+        static TSource? SingleOrNull<TSource>(this TSource[] source, Func<TSource, int, bool> predicate, out int index, int skipCount, int takeCount)
+            where TSource : struct
+        {
+            var end = skipCount + takeCount;
+            for (index = skipCount; index < end; index++)
             {
                 if (predicate(source[index], index))
                 {
                     var first = source[index];
 
-                    for (index++; index < length; index++)
+                    for (index++; index < end; index++)
                     {
                         if (predicate(source[index], index))
                             ThrowHelper.ThrowNotSingleSequence<TSource>();

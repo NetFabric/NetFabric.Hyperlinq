@@ -40,10 +40,16 @@ namespace NetFabric.Hyperlinq
         public static T ThrowEmptySequence<T>()
             => throw new InvalidOperationException(Resource.EmptySequence);
 
+        public static ref readonly T ThrowEmptySequenceRef<T>()
+            => throw new InvalidOperationException(Resource.EmptySequence);
+
         public static void ThrowNotSingleSequence()
             => throw new InvalidOperationException(Resource.NotSingleSequence);
 
         public static T ThrowNotSingleSequence<T>()
+            => throw new InvalidOperationException(Resource.NotSingleSequence);
+
+        public static ref readonly T ThrowNotSingleSequenceRef<T>()
             => throw new InvalidOperationException(Resource.NotSingleSequence);
 
         public static void ThrowInvalidOperationException()

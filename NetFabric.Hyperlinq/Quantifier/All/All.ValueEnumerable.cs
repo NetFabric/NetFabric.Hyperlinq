@@ -28,18 +28,15 @@ namespace NetFabric.Hyperlinq
         {
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
 
+            var index = 0;
             using (var enumerator = source.GetEnumerator())
             {
-                var index = 0;
-                checked
+                while (enumerator.MoveNext())
                 {
-                    while (enumerator.MoveNext())
-                    {
-                        if (!predicate(enumerator.Current, index))
-                            return false;
+                    if (!predicate(enumerator.Current, index))
+                        return false;
 
-                        index++;
-                    }
+                    checked { index++; }
                 }
             }
             return true;

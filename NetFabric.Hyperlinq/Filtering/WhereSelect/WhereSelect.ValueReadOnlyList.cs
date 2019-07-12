@@ -6,7 +6,7 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class ValueReadOnlyList
     {
-        internal static WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult> WhereSelect<TEnumerable, TEnumerator, TSource, TResult>(
+        static WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult> WhereSelect<TEnumerable, TEnumerator, TSource, TResult>(
             this TEnumerable source, 
             Func<TSource, bool> predicate,
             Func<TSource, TResult> selector)
@@ -16,8 +16,17 @@ namespace NetFabric.Hyperlinq
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
             if (selector is null) ThrowHelper.ThrowArgumentNullException(nameof(selector));
 
-            return new WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>(in source, predicate, selector);
+            return new WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>(in source, predicate, selector, 0, source.Count);
         }
+
+        static WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult> WhereSelect<TEnumerable, TEnumerator, TSource, TResult>(
+            this TEnumerable source,
+            Func<TSource, bool> predicate,
+            Func<TSource, TResult> selector, 
+            int skipCount, int takeCount)
+            where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
+            where TEnumerator : struct, IEnumerator<TSource>
+            => new WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>(in source, predicate, selector, skipCount, takeCount);
 
         [GenericsTypeMapping("TEnumerable", typeof(WhereSelectEnumerable<,,,>))]
         [GenericsTypeMapping("TEnumerator", typeof(WhereSelectEnumerable<,,,>.Enumerator))]
@@ -29,12 +38,15 @@ namespace NetFabric.Hyperlinq
             readonly TEnumerable source;
             readonly Func<TSource, bool> predicate;
             readonly Func<TSource, TResult> selector;
+            readonly int skipCount;
+            readonly int takeCount;
 
-            internal WhereSelectEnumerable(in TEnumerable source, Func<TSource, bool> predicate, Func<TSource, TResult> selector)
+            internal WhereSelectEnumerable(in TEnumerable source, Func<TSource, bool> predicate, Func<TSource, TResult> selector, int skipCount, int takeCount)
             {
                 this.source = source;
                 this.predicate = predicate;
                 this.selector = selector;
+                (this.skipCount, this.takeCount) = Utils.SkipTake(source.Count, skipCount, takeCount);
             }
 
             public Enumerator GetEnumerator() => new Enumerator(in this);
@@ -47,7 +59,7 @@ namespace NetFabric.Hyperlinq
                 readonly TEnumerable source;
                 readonly Func<TSource, bool> predicate;
                 readonly Func<TSource, TResult> selector;
-                readonly int count;
+                readonly int end;
                 int index;
 
                 internal Enumerator(in WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult> enumerable)
@@ -55,8 +67,8 @@ namespace NetFabric.Hyperlinq
                     source = enumerable.source;
                     predicate = enumerable.predicate;
                     selector = enumerable.selector;
-                    count = enumerable.source.Count;
-                    index = -1;
+                    end = enumerable.skipCount + enumerable.takeCount;
+                    index = enumerable.skipCount - 1;
                 }
 
                 public TResult Current
@@ -66,7 +78,7 @@ namespace NetFabric.Hyperlinq
 
                 public bool MoveNext()
                 {
-                    while (++index < count)
+                    while (++index < end)
                     {
                         if (predicate(source[index]))
                             return true;
@@ -81,17 +93,17 @@ namespace NetFabric.Hyperlinq
             }
 
             public int Count()
-                => ValueReadOnlyList.Count<TEnumerable, TEnumerator, TSource>(source, predicate);
+                => ValueReadOnlyList.Count<TEnumerable, TEnumerator, TSource>(source, predicate, skipCount, takeCount);
 
             public bool Any()
-                => ValueReadOnlyList.Any<TEnumerable, TEnumerator, TSource>(source, predicate);
+                => ValueReadOnlyList.Any<TEnumerable, TEnumerator, TSource>(source, predicate, skipCount, takeCount);
 
             public List<TResult> ToList()
             {
                 var list = new List<TResult>();
 
-                var count = source.Count;
-                for (var index = 0; index < count; index++)
+                var end = skipCount + takeCount;
+                for (var index = skipCount; index < end; index++)
                 {
                     if (predicate(source[index]))
                         list.Add(selector(source[index]));

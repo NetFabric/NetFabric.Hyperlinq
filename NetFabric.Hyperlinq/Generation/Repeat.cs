@@ -91,7 +91,7 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Contains(TSource value)
-                => count != 0 && this.value.Equals(value);
+                => count != 0 && EqualityComparer<TSource>.Default.Equals(this.value, value);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Contains(TSource value, IEqualityComparer<TSource> comparer)

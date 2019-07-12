@@ -31,7 +31,6 @@ namespace NetFabric.Hyperlinq
                     }
                 }
             }
-
             return false;
         }
     }
