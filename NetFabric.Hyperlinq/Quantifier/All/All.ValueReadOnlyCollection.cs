@@ -11,17 +11,15 @@ namespace NetFabric.Hyperlinq
         {
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
 
-            if (source.Count == 0) return true;
-
-            using (var enumerator = source.GetEnumerator())
+            if (source.Count != 0)
             {
-                var index = 0;
-                while (enumerator.MoveNext())
+                using (var enumerator = source.GetEnumerator())
                 {
-                    if (!predicate(enumerator.Current))
-                        return false;
-                        
-                    index++;
+                    while (enumerator.MoveNext())
+                    {
+                        if (!predicate(enumerator.Current))
+                            return false;
+                    }
                 }
             }
             return true;
@@ -33,17 +31,18 @@ namespace NetFabric.Hyperlinq
         {
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
 
-            if (source.Count == 0) return true;
-
-            using (var enumerator = source.GetEnumerator())
+            if (source.Count != 0)
             {
                 var index = 0;
-                while (enumerator.MoveNext())
+                using (var enumerator = source.GetEnumerator())
                 {
-                    if (!predicate(enumerator.Current, index))
-                        return false;
-                        
-                    index++;
+                    while (enumerator.MoveNext())
+                    {
+                        if (!predicate(enumerator.Current, index))
+                            return false;
+
+                        index++;
+                    }
                 }
             }
             return true;

@@ -9,7 +9,7 @@ namespace NetFabric.Hyperlinq
         public static List<TSource> ToList<TSource>(this TSource[] source)
             => new List<TSource>(source);
 
-        public static List<TSource> ToList<TSource>(this TSource[] source, int skipCount, int takeCount)
+        static List<TSource> ToList<TSource>(this TSource[] source, int skipCount, int takeCount)
             => new List<TSource>(new ToListCollection<TSource>(source, skipCount, takeCount));
 
         static List<TSource> ToList<TSource>(this TSource[] source, Func<TSource, bool> predicate, int skipCount, int takeCount)

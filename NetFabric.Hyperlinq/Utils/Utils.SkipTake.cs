@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class Utils
+    static partial class Utils
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static (int SkipCount, int TakeCount) Skip(int sourceCount, int skipCount)

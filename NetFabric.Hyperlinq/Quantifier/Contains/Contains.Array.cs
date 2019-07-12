@@ -8,20 +8,26 @@ namespace NetFabric.Hyperlinq
         public static bool Contains<TSource>(this TSource[] source, TSource value)
             => System.Array.IndexOf<TSource>(source, value) >= 0;
 
+        static bool Contains<TSource>(this TSource[] source, TSource value, int skipCount, int takeCount)
+            => System.Array.IndexOf<TSource>(source, value, skipCount, takeCount) >= 0;
+
         public static bool Contains<TSource>(this TSource[] source, TSource value, IEqualityComparer<TSource> comparer)
+            => Contains<TSource>(source, value, comparer, 0, source.Length);
+
+        static bool Contains<TSource>(this TSource[] source, TSource value, IEqualityComparer<TSource> comparer, int skipCount, int takeCount)
         {
-            var length = source.Length;
-            if (length == 0) return false;
-
-            if (comparer is null)
-                return System.Array.IndexOf<TSource>(source, value) >= 0;
-
-            for (var index = 0; index < length; index++)
+            if (takeCount != 0)
             {
-                if (comparer.Equals(value, source[index]))
-                    return true;
-            }
+                if (comparer is null)
+                    return System.Array.IndexOf<TSource>(source, value, skipCount, takeCount) >= 0;
 
+                var end = skipCount + takeCount;
+                for (var index = skipCount; index < end; index++)
+                {
+                    if (comparer.Equals(value, source[index]))
+                        return true;
+                }
+            }
             return false;
         }
     }

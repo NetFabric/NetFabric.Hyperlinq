@@ -8,26 +8,36 @@ namespace NetFabric.Hyperlinq
         {
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
 
-            var index = 0;
-            var length = source.Length;
-            while (index < length && predicate(source[index]))
+            return All<TSource>(source, predicate, 0, source.Length);
+        }
+
+        static bool All<TSource>(this TSource[] source, Func<TSource, bool> predicate, int skipCount, int takeCount)
+        {
+            var end = skipCount + takeCount;
+            for (var index = skipCount; index < end; index++)
             {
-                index++;
+                if (!predicate(source[index]))
+                    return false;
             }
-            return index == length;
+            return true;
         }
 
         public static bool All<TSource>(this TSource[] source, Func<TSource, int, bool> predicate)
         {
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
 
-            var index = 0;
-            var length = source.Length;
-            while (index < length && predicate(source[index], index))
+            return All<TSource>(source, predicate, 0, source.Length);
+        }
+
+        static bool All<TSource>(this TSource[] source, Func<TSource, int, bool> predicate, int skipCount, int takeCount)
+        {
+            var end = skipCount + takeCount;
+            for (var index = skipCount; index < end; index++)
             {
-                index++;
+                if (!predicate(source[index], index))
+                    return false;
             }
-            return index == length;
+            return true;
         }
     }
 }

@@ -77,20 +77,20 @@ namespace NetFabric.Hyperlinq
                 => source.Count(predicate, skipCount, takeCount);
 
             public bool Any()
-                => source.Any<TSource>(predicate);
+                => Array.Any<TSource>(source, predicate, skipCount, takeCount);
 
             public Array.WhereEnumerable<TSource> Where(Func<TSource, bool> predicate)
-                => Array.Where<TSource>(source, Utils.Combine(this.predicate, predicate));
+                => Array.Where<TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount);
 
-            public ref TSource First()
-                => ref Array.First<TSource>(source, predicate);
+            public ref readonly TSource First()
+                => ref Array.First<TSource>(source, predicate, skipCount, takeCount);
             public ref readonly TSource FirstOrDefault()
-                => ref Array.FirstOrDefault<TSource>(source, predicate);
+                => ref Array.FirstOrDefault<TSource>(source, predicate, skipCount, takeCount);
 
-            public ref TSource Single()
-                => ref Array.Single<TSource>(source, predicate);
+            public ref readonly TSource Single()
+                => ref Array.Single<TSource>(source, predicate, skipCount, takeCount);
             public ref readonly TSource SingleOrDefault()
-                => ref Array.SingleOrDefault<TSource>(source, predicate);
+                => ref Array.SingleOrDefault<TSource>(source, predicate, skipCount, takeCount);
 
             public List<TSource> ToList()
                 => Array.ToList<TSource>(source, predicate, skipCount, takeCount);

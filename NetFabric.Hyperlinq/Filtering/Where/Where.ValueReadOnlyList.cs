@@ -84,48 +84,40 @@ namespace NetFabric.Hyperlinq
                 => ValueReadOnlyList.Count<TEnumerable, TEnumerator, TSource>(source, predicate, skipCount, takeCount);
             public int Count(Func<TSource, bool> predicate)
                 => ValueReadOnlyList.Count<TEnumerable, TEnumerator, TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount);
-
-            public bool All()
-                => ValueReadOnlyList.All<TEnumerable, TEnumerator, TSource>(source, predicate);
-            public bool All(Func<TSource, bool> predicate)
-                => ValueReadOnlyList.All<TEnumerable, TEnumerator, TSource>(source, Utils.Combine(this.predicate, predicate));
-
             public bool Any()
-                => ValueReadOnlyList.Any<TEnumerable, TEnumerator, TSource>(source, predicate);
-            public bool Any(Func<TSource, bool> predicate)
-                => ValueReadOnlyList.Any<TEnumerable, TEnumerator, TSource>(source, Utils.Combine(this.predicate, predicate));
+                => ValueReadOnlyList.Any<TEnumerable, TEnumerator, TSource>(source, predicate, skipCount, takeCount);
 
             public ValueReadOnlyList.WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult> Select<TResult>(Func<TSource, TResult> selector)
-                => ValueReadOnlyList.WhereSelect<TEnumerable, TEnumerator, TSource, TResult>(source, predicate, selector);
+                => ValueReadOnlyList.WhereSelect<TEnumerable, TEnumerator, TSource, TResult>(source, predicate, selector, skipCount, takeCount);
 
             public ValueReadOnlyList.WhereEnumerable<TEnumerable, TEnumerator, TSource> Where(Func<TSource, bool> predicate)
-                => ValueReadOnlyList.Where<TEnumerable, TEnumerator, TSource>(source, Utils.Combine(this.predicate, predicate));
+                => ValueReadOnlyList.Where<TEnumerable, TEnumerator, TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount);
 
             public TSource First()
-                => ValueReadOnlyList.TryFirst<TEnumerable, TEnumerator, TSource>(source, predicate).ThrowOnEmpty();
+                => ValueReadOnlyList.TryFirst<TEnumerable, TEnumerator, TSource>(source, predicate, skipCount, takeCount).ThrowOnEmpty();
             public TSource First(Func<TSource, bool> predicate)
-                => ValueReadOnlyList.TryFirst<TEnumerable, TEnumerator, TSource>(source, Utils.Combine(this.predicate, predicate)).ThrowOnEmpty();
+                => ValueReadOnlyList.TryFirst<TEnumerable, TEnumerator, TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount).ThrowOnEmpty();
             public TSource FirstOrDefault()
-                => ValueReadOnlyList.TryFirst<TEnumerable, TEnumerator, TSource>(source, predicate).DefaultOnEmpty();
+                => ValueReadOnlyList.TryFirst<TEnumerable, TEnumerator, TSource>(source, predicate, skipCount, takeCount).DefaultOnEmpty();
             public TSource FirstOrDefault(Func<TSource, bool> predicate)
-                => ValueReadOnlyList.TryFirst<TEnumerable, TEnumerator, TSource>(source, Utils.Combine(this.predicate, predicate)).DefaultOnEmpty();
+                => ValueReadOnlyList.TryFirst<TEnumerable, TEnumerator, TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount).DefaultOnEmpty();
             public (ElementResult Success, TSource Value) TryFirst()
-                => ValueReadOnlyList.TryFirst<TEnumerable, TEnumerator, TSource>(source, predicate);
+                => ValueReadOnlyList.TryFirst<TEnumerable, TEnumerator, TSource>(source, predicate, skipCount, takeCount);
             public (ElementResult Success, TSource Value) TryFirst(Func<TSource, bool> predicate)
-                => ValueReadOnlyList.TryFirst<TEnumerable, TEnumerator, TSource>(source, Utils.Combine(this.predicate, predicate));
+                => ValueReadOnlyList.TryFirst<TEnumerable, TEnumerator, TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount);
 
             public TSource Single()
-                => ValueReadOnlyList.TrySingle<TEnumerable, TEnumerator, TSource>(source, predicate).ThrowOnEmpty();
+                => ValueReadOnlyList.TrySingle<TEnumerable, TEnumerator, TSource>(source, predicate, skipCount, takeCount).ThrowOnEmpty();
             public TSource Single(Func<TSource, bool> predicate)
-                => ValueReadOnlyList.TrySingle<TEnumerable, TEnumerator, TSource>(source, Utils.Combine(this.predicate, predicate)).ThrowOnEmpty();
+                => ValueReadOnlyList.TrySingle<TEnumerable, TEnumerator, TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount).ThrowOnEmpty();
             public TSource SingleOrDefault()
-                => ValueReadOnlyList.TrySingle<TEnumerable, TEnumerator, TSource>(source, predicate).DefaultOnEmpty();
+                => ValueReadOnlyList.TrySingle<TEnumerable, TEnumerator, TSource>(source, predicate, skipCount, takeCount).DefaultOnEmpty();
             public TSource SingleOrDefault(Func<TSource, bool> predicate)
-                => ValueReadOnlyList.TrySingle<TEnumerable, TEnumerator, TSource>(source, Utils.Combine(this.predicate, predicate)).DefaultOnEmpty();
+                => ValueReadOnlyList.TrySingle<TEnumerable, TEnumerator, TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount).DefaultOnEmpty();
             public (ElementResult Success, TSource Value) TrySingle()
-                => ValueReadOnlyList.TrySingle<TEnumerable, TEnumerator, TSource>(source, predicate);
+                => ValueReadOnlyList.TrySingle<TEnumerable, TEnumerator, TSource>(source, predicate, skipCount, takeCount);
             public (ElementResult Success, TSource Value) TrySingle(Func<TSource, bool> predicate)
-                => ValueReadOnlyList.TrySingle<TEnumerable, TEnumerator, TSource>(source, Utils.Combine(this.predicate, predicate));
+                => ValueReadOnlyList.TrySingle<TEnumerable, TEnumerator, TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount);
 
             public List<TSource> ToList()
                 => ValueReadOnlyList.ToList<TEnumerable, TEnumerator, TSource>(source, predicate, skipCount, takeCount);

@@ -8,27 +8,31 @@ namespace NetFabric.Hyperlinq
         public static bool Contains<TEnumerable, TEnumerator, TSource>(this TEnumerable source, TSource value, IEqualityComparer<TSource> comparer = null)
             where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
+            => Contains<TEnumerable, TEnumerator, TSource>(source, value, comparer);
+
+        static bool Contains<TEnumerable, TEnumerator, TSource>(this TEnumerable source, TSource value, IEqualityComparer<TSource> comparer, int skipCount, int takeCount)
+            where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
+            where TEnumerator : struct, IEnumerator<TSource>
         {
-            var count = source.Count;
-            if (count == 0) return false;
-
-            if (comparer is null)
+            if (takeCount != 0)
             {
-                for (var index = 0; index < count; index++)
+                if (comparer is null)
                 {
-                    if (EqualityComparer<TSource>.Default.Equals(source[index], value))
-                        return true;
+                    for (var index = skipCount; index < takeCount; index++)
+                    {
+                        if (EqualityComparer<TSource>.Default.Equals(source[index], value))
+                            return true;
+                    }
+                }
+                else
+                {
+                    for (var index = skipCount; index < takeCount; index++)
+                    {
+                        if (comparer.Equals(source[index], value))
+                            return true;
+                    }
                 }
             }
-            else
-            {
-                for (var index = 0; index < count; index++)
-                {
-                    if (comparer.Equals(source[index], value))
-                        return true;
-                }
-            }
-
             return false;
         }
     }

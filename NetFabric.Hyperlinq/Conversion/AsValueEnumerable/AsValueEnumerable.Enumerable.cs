@@ -6,6 +6,9 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class Enumerable
     {
+        public static AsValueEnumerableEnumerable<IEnumerable<TSource>, IEnumerator<TSource>, TSource> AsValueEnumerable<TSource>(this IEnumerable<TSource> source)
+            => new AsValueEnumerableEnumerable<IEnumerable<TSource>, IEnumerator<TSource>, TSource>(source);
+
         public static AsValueEnumerableEnumerable<TEnumerable, TEnumerator, TSource> AsValueEnumerable<TEnumerable, TEnumerator, TSource>(this TEnumerable source)
             where TEnumerable : IEnumerable<TSource>
             where TEnumerator : IEnumerator<TSource>
