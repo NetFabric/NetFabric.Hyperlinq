@@ -32,7 +32,7 @@ namespace NetFabric.Hyperlinq
             {
                 get
                 {
-                    if(index != 0) ThrowHelper.ThrowIndexOutOfRangeException();
+                    if (index != 0) ThrowHelper.ThrowIndexOutOfRangeException();
                     
                     return value;
                 }
