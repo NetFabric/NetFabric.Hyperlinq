@@ -33,15 +33,7 @@ namespace NetFabric.Hyperlinq
 
             public int Count => source.Count;
 
-            public TSource this[int index]
-            {
-                get
-                {
-                    if (index < 0 || index > source.Count) ThrowHelper.ThrowIndexOutOfRangeException();                    
-                    
-                    return source[index];
-                }
-            }
+            public TSource this[int index] => source[index];
             
             public struct Enumerator 
                 : IEnumerator<TSource>
