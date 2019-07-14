@@ -8,24 +8,60 @@
 
 # NetFabric.Hyperlinq
 
-A re-implementation of LINQ operations with improved performance by using:
+*Hyperlinq* outperfoms *LINQ* when enumerating collections that implement `IReadOnlyList<T>` (E.g. arrays and `List<T>`) and collections that have value-type enumerators (E.g. collections in the `System.Collections.Generic` namespace). For any other collection, it also outforms *LINQ* when multiple operations are composed.
 
-- Value type enumerators.
-- Interface constraints to avoid boxing.
-- Method call devirtualization.
-- Enumerable interface that takes the enumerator type as generics parameter.
-- Overloads for the [`IReadOnlyCollection<T>`](https://docs.microsoft.com/en-us/dotnet/api/system.collections.generic.ireadonlycollection-1) and [`IReadOnlyList<T>`](https://docs.microsoft.com/en-us/dotnet/api/system.collections.generic.ireadonlylist-1) interfaces instead of runtime casts.
-- Operations on arrays, `Span<T>` and `ReadOnlySpan<T>` that return references to items.
+## Usage
 
-## Advantages over LINQ
+1. Add the [**NetFabric.Hyperlinq** NuGet package](https://www.nuget.org/packages/NetFabric.Hyperlinq/) to your project.
+1. Optionally, also add the [**NetFabric.Hyperlinq.Analyzer** NuGet package](https://www.nuget.org/packages/NetFabric.Hyperlinq.Analyzer/) to your project. It's a Roslyn analyzer that suggests performance improvements on your enumeration source code. No dependencies are added to your assemblies.
+1. Add a `using NetFabric.Hyperlinq` directive to all source code files where you want Hyperlinq to be used.
+1. `NetFabric.Hyperlinq` and `System.Linq` namespaces can co-exist side-by-side. 
+   1. `NetFabric.Hyperlinq` implements explicit collection types and higher-order interfaces on the extension methods. These take precedence over the `IEnumerable<T>` extension methods implemented in `System.Linq`.
+   1. In the cases where the above doesn't apply, use the `AsValueEnumerable<TSource>()` extension method. `NetFabric.Hyperlinq` implementations will be used for the following operations. For collections that are value-types and/or return enumerators that are value-types, favor the use of the `AsValueEnumerable<TEnumerable, TEnumerator, TSource>()` overload to avoid boxing.
+   1. `NetFabric.Hyperlinq` does not implement all `System.Linq` operations. The `System.Linq` implementations will be automatically used. You'll have to use `AsValueEnumerable()` again in the composition chain to return to `NetFabric.Hyperlinq` implementations.
 
-Hyperlinq performs much better that LINQ in multiple scenarios:
-- When the collection implements `IReadOnlyList`, it uses the indexer operator instead of `IEnumerator` and `for` loops instead of `foreach` loops. That's the case for `List<T>`.
-- When collections implement `IEnumerator` using a value type, it doesn't box the enumerator, avoiding an heap allocation and virtual function calls. That's the case for `Dictionary<TKey, TValue>`, `Dictionary<TKey, TValue>.KeyCollection`, `Dictionary<TKey, TValue>.ValueCollection`, `HashSet<T>`, `LinkedList<T>`, `Queue<T>`, `SortedDictionary<TKey, TValue>`, `SortedDictionary<TKey, TValue>.KeyCollection`, `SortedDictionary<TKey, TValue>.ValueCollection`, `SortedSet<T>`, `Stack<T>`, etc.
-- When using arrays, `Span<T>` or `ReadOnlySpan<T>`, it uses the indexer operator, `for` loops and returns references to the items.
-- Optimizes several more composition scenarios, reducing considerably the number of enumerators used and calls to its methods.
-- Operators that don't change the number and order of the items, like `Select<TSource, TResult>`, implement `IReadOnlyCollection` and `IReadOnlyList`. This allows the use of `Count` property and indexer operator directly on them.
-- `ToList()` uses custom implementations of `ICollection<T>`. It sacrifices a bit the performance on small collections by allocating an instance on the heap, but gains a lot of perfomance on larger collections by not performing checks on each item added to the `List<T>`.
+```csharp
+using System.Collections.Generic;
+using System.Linq;
+using NetFabric.Hyperlinq; // add this directive
+
+namespace ConsoleApp
+{
+    class Program
+    {
+        static void Main()
+        {
+            var list = new List<int> { 0, 1, 2, 3, 4 };
+
+            // Hyperlinq is used by default on arrays and collections from System.Collections.Generic
+            var a = list
+                .Where(i => i > 0)
+                .Select(i => i * 10);
+            
+            var b = list
+                .OrderByDescending(i => i)
+                .AsValueEnumerable() // required because OrderByDescending() is not yet supported
+                .Where(i => i > 0)
+                .Select(i => i * 10);
+
+            var c = MyEnumerable()
+                .AsValueEnumerable() // required because IEnumerable<T> is not directly supported
+                .Where(i => i > 0)
+                .Count();
+        }
+
+        static IEnumerable<int> MyEnumerable()
+        {
+            yield return 0;
+            yield return 1;
+            yield return 2;
+            yield return 3;
+            yield return 4;
+        }
+    }
+}
+``` 
+
 
 ## Documentation
 
@@ -38,41 +74,54 @@ Hyperlinq performs much better that LINQ in multiple scenarios:
 
 - Aggregation
   - `Count()`
-  - `Count(Func<TSource, long, bool>)`
+  - `Count(Func<TSource, bool>)`
+  - `Count(Func<TSource, int, bool>)`
 - Conversion
   - `AsEnumerable()`
   - `AsValueEnumerable()`
   - `ToArray()`
   - `ToList()`
 - Element
+  - `TryFirst()`
+  - `TryFirst(Func<TSource, bool>)`
+  - `TryFirst(Func<TSource, int, bool>)`
   - `First()`
   - `First(Func<TSource, bool>)`
+  - `First(Func<TSource, int, bool>)`
   - `FirstOrDefault()`
   - `FirstOrDefault(Func<TSource, bool>)`
+  - `FirstOrDefault(Func<TSource, int, bool>)`
+  - `TrySingle()`
+  - `TrySingle(Func<TSource, bool>)`
+  - `TrySingle(Func<TSource, int, bool>)`
   - `Single()`
   - `Single(Func<TSource, bool>)`
+  - `Single(Func<TSource, int, bool>)`
   - `SingleOrDefault()`
   - `SingleOrDefault(Func<TSource, bool>)`
+  - `SingleOrDefault(Func<TSource, int, bool>)`
 - Filtering
   - `Where(Func<TSource, bool>)`
-  - `Where(Func<TSource, long, bool>)`
+  - `Where(Func<TSource, int, bool>)`
 - Generation
   - `Create(Func<TEnumerator>)`
   - `Empty()`
-  - `Range(long, long)`
-  - `Repeat(TSource, long)`
+  - `Range(int, int)`
+  - `Repeat(TSource, int)`
   - `Return(TSource)`
 - Projection
   - `Select(Func<TSource, TResult>)`
-  - `Select(Func<TSource, long, TResult>)`
+  - `Select(Func<TSource, int, TResult>)`
   - `SelectMany(IValueEnumerable<TSource>)`
 - Partitioning
   - `Take(int)`
   - `Skip(int)`
 - Quantifier
   - `All(Func<TSource, bool>)`
+  - `All(Func<TSource, int, bool>)`
   - `Any()`
   - `Any(Func<TSource, bool>)`
+  - `Any(Func<TSource, int, bool>)`
   - `Contains(TSource)`
   - `Contains(TSource, IEqualityComparer<TSource>)`
 
@@ -91,6 +140,7 @@ Feel free to clone the repository and run the benchmarks on your machine. Feedba
 - [Performance Tuning for .NET Core](https://reubenbond.github.io/posts/dotnet-perf-tuning) by Reuben Bond
 - [ValueLinqBenchmarks](https://gist.github.com/benaadams/294cbd41ec1179638cb4b5495a15accf) by Ben Adams
 - [C# - How method calling works](http://www.levibotelho.com/development/how-method-calling-works/) by Levi Botelho
+- [Improving .NET Disruptor performance — Part 2](https://medium.com/@ocoanet/improving-net-disruptor-performance-part-2-5bf456cd595f) by Olivier Coanet
 
 ## Credits
 
@@ -105,7 +155,7 @@ The following open-source projects are used to build and test this project:
 - [Mono.Cecil](https://www.mono-project.com/docs/tools+libraries/libraries/Mono.Cecil/)
 - [xUnit.net](https://xunit.net/)
 
-Continuous-integration is hosted by [Azure DevOps](https://dev.azure.com/aalmada/NetFabric.Hyperlinq)
+Continuous-integration is hosted by [Azure DevOps](https://dev.azure.com/aalmada/NetFabric.Hyperlinq).
 
 ## License
 
