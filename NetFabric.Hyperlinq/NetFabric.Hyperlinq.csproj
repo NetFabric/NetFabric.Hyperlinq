@@ -10,7 +10,7 @@
     <Copyright>Copyright 2019 Antao Almada</Copyright>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <PackageIconUrl>https://user-images.githubusercontent.com/534533/49182105-390f3a80-f351-11e8-8e84-c785cddd2995.png</PackageIconUrl>
-    <PackageTags>hyperlinq, linq, performance</PackageTags>
+    <PackageTags>hyperlinq, linq, collections, performance</PackageTags>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
   </PropertyGroup>
 
@@ -31,7 +31,7 @@
   <ItemGroup>
     <ProjectReference Include="..\NetFabric.Hyperlinq.Build\NetFabric.Hyperlinq.Build.csproj" PrivateAssets="All" />
     <PackageReference Include="Fody" Version="5.1.1" PrivateAssets="All" />
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta2-19270-01" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta2-19351-01" PrivateAssets="All" />
   </ItemGroup>
 
   <ItemGroup>
