@@ -8,6 +8,7 @@ namespace NetFabric.Hyperlinq
     {
         public static AsValueEnumerableEnumerable<IReadOnlyList<TSource>, IEnumerator<TSource>, TSource> AsValueEnumerable<TSource>(this IReadOnlyList<TSource> source)
            => new AsValueEnumerableEnumerable<IReadOnlyList<TSource>, IEnumerator<TSource>, TSource>(source);
+
         public static AsValueEnumerableEnumerable<TEnumerable, TEnumerator, TSource> AsValueEnumerable<TEnumerable, TEnumerator, TSource>(this TEnumerable source)
             where TEnumerable : IReadOnlyList<TSource>
             where TEnumerator : IEnumerator<TSource>
