@@ -10,6 +10,10 @@
 
 *Hyperlinq* outperfoms *LINQ* when enumerating collections that implement `IReadOnlyList<T>` (E.g. arrays and `List<T>`) and collections that have value-type enumerators (E.g. collections in the `System.Collections.Generic` namespace). For any other collection, it also outforms *LINQ* when multiple operations are composed.
 
+This implementation favors performance in detriment of binary size.
+
+No dynamic code generation is used so it's ahead-of-time (AOT) compatible.
+
 ## Usage
 
 1. Add the [**NetFabric.Hyperlinq** NuGet package](https://www.nuget.org/packages/NetFabric.Hyperlinq/) to your project.
