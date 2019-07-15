@@ -96,27 +96,27 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Any()
-                => source.Length != 0;
+                => takeCount != 0;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Array.SelectIndexEnumerable<TSource, TSelectorResult> Select<TSelectorResult>(Func<TResult, int, TSelectorResult> selector)
-                => Array.Select<TSource, TSelectorResult>(source, Utils.Combine(this.selector, selector));
+                => Array.Select<TSource, TSelectorResult>(source, Utils.Combine(this.selector, selector), skipCount, takeCount);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TResult First()
-                => selector(Array.First<TSource>(source), 0);
+                => selector(Array.First<TSource>(source, skipCount, takeCount), skipCount);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TResult FirstOrDefault()
-                => selector(Array.FirstOrDefault<TSource>(source), 0);
+                => selector(Array.FirstOrDefault<TSource>(source, skipCount, takeCount), skipCount);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TResult Single()
-                => selector(Array.Single<TSource>(source), 0);
+                => selector(Array.Single<TSource>(source, skipCount, takeCount), skipCount);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TResult SingleOrDefault()
-                => selector(Array.SingleOrDefault<TSource>(source), 0);
+                => selector(Array.SingleOrDefault<TSource>(source, skipCount, takeCount), skipCount);
 
             public TResult[] ToArray()
             {
@@ -136,10 +136,10 @@ namespace NetFabric.Hyperlinq
             sealed class ToListCollection
                 : ICollection<TResult>
             {
-                readonly TSource[] source;
-                readonly Func<TSource, int, TResult> selector;
-                readonly int skipCount;
-                readonly int takeCount;
+                internal readonly TSource[] source;
+                internal readonly Func<TSource, int, TResult> selector;
+                internal readonly int skipCount;
+                internal readonly int takeCount;
 
                 public ToListCollection(in SelectIndexEnumerable<TSource, TResult> source)
                 {
@@ -167,6 +167,10 @@ namespace NetFabric.Hyperlinq
                 bool ICollection<TResult>.Contains(TResult item) => throw new NotSupportedException();
             }
         }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Count<TSource, TResult>(this SelectIndexEnumerable<TSource, TResult> source)
+            => source.Count;
     }
 }
 

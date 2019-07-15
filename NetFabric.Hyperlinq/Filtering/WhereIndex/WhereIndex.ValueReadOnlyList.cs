@@ -90,7 +90,13 @@ namespace NetFabric.Hyperlinq
 
             public bool Any()
                 => ValueReadOnlyList.Any<TEnumerable, TEnumerator, TSource>(source, predicate, skipCount, takeCount);
+            public bool Any(Func<TSource, bool> predicate)
+                => ValueReadOnlyList.Any<TEnumerable, TEnumerator, TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount);
+            public bool Any(Func<TSource, int, bool> predicate)
+                => ValueReadOnlyList.Any<TEnumerable, TEnumerator, TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount);
 
+            public ValueReadOnlyList.WhereIndexEnumerable<TEnumerable, TEnumerator, TSource> Where(Func<TSource, bool> predicate)
+                => ValueReadOnlyList.Where<TEnumerable, TEnumerator, TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount);
             public ValueReadOnlyList.WhereIndexEnumerable<TEnumerable, TEnumerator, TSource> Where(Func<TSource, int, bool> predicate)
                 => ValueReadOnlyList.Where<TEnumerable, TEnumerator, TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount);
 
@@ -98,10 +104,16 @@ namespace NetFabric.Hyperlinq
                 => ValueReadOnlyList.TryFirst<TEnumerable, TEnumerator, TSource>(source, predicate, skipCount, takeCount).ThrowOnEmpty();
             public TSource First(Func<TSource, bool> predicate)
                 => ValueReadOnlyList.TryFirst<TEnumerable, TEnumerator, TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount).ThrowOnEmpty();
+            public TSource First(Func<TSource, int, bool> predicate)
+                => ValueReadOnlyList.TryFirst<TEnumerable, TEnumerator, TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount).ThrowOnEmpty();
+
             public TSource FirstOrDefault()
                 => ValueReadOnlyList.TryFirst<TEnumerable, TEnumerator, TSource>(source, predicate, skipCount, takeCount).DefaultOnEmpty();
             public TSource FirstOrDefault(Func<TSource, bool> predicate)
                 => ValueReadOnlyList.TryFirst<TEnumerable, TEnumerator, TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount).DefaultOnEmpty();
+            public TSource FirstOrDefault(Func<TSource, int, bool> predicate)
+                => ValueReadOnlyList.TryFirst<TEnumerable, TEnumerator, TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount).DefaultOnEmpty();
+
             public (int Index, TSource Value) TryFirst()
                 => ValueReadOnlyList.TryFirst<TEnumerable, TEnumerator, TSource>(source, predicate, skipCount, takeCount);
             public (int Index, TSource Value) TryFirst(Func<TSource, bool> predicate)
@@ -113,10 +125,16 @@ namespace NetFabric.Hyperlinq
                 => ValueReadOnlyList.TrySingle<TEnumerable, TEnumerator, TSource>(source, predicate, skipCount, takeCount).ThrowOnEmpty();
             public TSource Single(Func<TSource, bool> predicate)
                 => ValueReadOnlyList.TrySingle<TEnumerable, TEnumerator, TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount).ThrowOnEmpty();
+            public TSource Single(Func<TSource, int, bool> predicate)
+                => ValueReadOnlyList.TrySingle<TEnumerable, TEnumerator, TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount).ThrowOnEmpty();
+
             public TSource SingleOrDefault()
                 => ValueReadOnlyList.TrySingle<TEnumerable, TEnumerator, TSource>(source, predicate, skipCount, takeCount).DefaultOnEmpty();
             public TSource SingleOrDefault(Func<TSource, bool> predicate)
                 => ValueReadOnlyList.TrySingle<TEnumerable, TEnumerator, TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount).DefaultOnEmpty();
+            public TSource SingleOrDefault(Func<TSource, int, bool> predicate)
+                => ValueReadOnlyList.TrySingle<TEnumerable, TEnumerator, TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount).DefaultOnEmpty();
+
             public (int Index, TSource Value) TrySingle()
                 => ValueReadOnlyList.TrySingle<TEnumerable, TEnumerator, TSource>(source, predicate, skipCount, takeCount);
             public (int Index, TSource Value) TrySingle(Func<TSource, bool> predicate)

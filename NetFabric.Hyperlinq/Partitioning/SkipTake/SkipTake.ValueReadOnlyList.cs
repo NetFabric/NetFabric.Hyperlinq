@@ -80,6 +80,16 @@ namespace NetFabric.Hyperlinq
                 => ValueReadOnlyList.SkipTake<TEnumerable, TEnumerator, TSource>(source, skipCount, Math.Min(takeCount, count));
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public bool Any()
+                => ValueReadOnlyList.Any<TEnumerable, TEnumerator, TSource>(source, skipCount, takeCount);
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public bool Any(Func<TSource, bool> predicate)
+                => ValueReadOnlyList.Any<TEnumerable, TEnumerator, TSource>(source, predicate, skipCount, takeCount);
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public bool Any(Func<TSource, int, bool> predicate)
+                => ValueReadOnlyList.Any<TEnumerable, TEnumerator, TSource>(source, predicate, skipCount, takeCount);
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public ValueReadOnlyList.WhereEnumerable<TEnumerable, TEnumerator, TSource> Where(Func<TSource, bool> predicate)
                 => ValueReadOnlyList.Where<TEnumerable, TEnumerator, TSource>(source, predicate, skipCount, takeCount);
 

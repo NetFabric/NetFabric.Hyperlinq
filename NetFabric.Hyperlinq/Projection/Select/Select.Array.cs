@@ -27,10 +27,10 @@ namespace NetFabric.Hyperlinq
         public readonly struct SelectEnumerable<TSource, TResult>
             : IValueReadOnlyList<TResult, SelectEnumerable<TSource, TResult>.Enumerator>
         {
-            readonly TSource[] source;
-            readonly Func<TSource, TResult> selector;
-            readonly int skipCount;
-            readonly int takeCount;
+            internal readonly TSource[] source;
+            internal readonly Func<TSource, TResult> selector;
+            internal readonly int skipCount;
+            internal readonly int takeCount;
 
             internal SelectEnumerable(TSource[] source, Func<TSource, TResult> selector, int skipCount, int takeCount)
             {
@@ -94,29 +94,30 @@ namespace NetFabric.Hyperlinq
             public SelectEnumerable<TSource, TResult> Take(int count)
                 => new SelectEnumerable<TSource, TResult>(source, selector, skipCount, Math.Min(takeCount, count));
 
+
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Any()
-                => source.Length != 0;
+                => takeCount != 0;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Array.SelectEnumerable<TSource, TSelectorResult> Select<TSelectorResult>(Func<TResult, TSelectorResult> selector)
-                => Array.Select<TSource, TSelectorResult>(source, Utils.Combine(this.selector, selector));
+                => Array.Select<TSource, TSelectorResult>(source, Utils.Combine(this.selector, selector), skipCount, takeCount);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TResult First()
-                => selector(Array.First<TSource>(source));
+                => selector(Array.First<TSource>(source, skipCount, takeCount));
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TResult FirstOrDefault()
-                => selector(Array.FirstOrDefault<TSource>(source));
+                => selector(Array.FirstOrDefault<TSource>(source, skipCount, takeCount));
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TResult Single()
-                => selector(Array.Single<TSource>(source));
+                => selector(Array.Single<TSource>(source, skipCount, takeCount));
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TResult SingleOrDefault()
-                => selector(Array.SingleOrDefault<TSource>(source));
+                => selector(Array.SingleOrDefault<TSource>(source, skipCount, takeCount));
 
             public TResult[] ToArray()
             {
@@ -167,6 +168,10 @@ namespace NetFabric.Hyperlinq
                 bool ICollection<TResult>.Contains(TResult item) => throw new NotSupportedException();
             }
         }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Count<TSource, TResult>(this SelectEnumerable<TSource, TResult> source)
+            => source.Count;
     }
 }
 

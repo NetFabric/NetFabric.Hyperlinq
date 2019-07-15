@@ -96,27 +96,27 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Any()
-                => source.Count != 0;
+                => takeCount != 0;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public ValueReadOnlyList.SelectIndexEnumerable<TEnumerable, TEnumerator, TSource, TSelectorResult> Select<TSelectorResult>(Func<TResult, int, TSelectorResult> selector)
-                => ValueReadOnlyList.Select<TEnumerable, TEnumerator, TSource, TSelectorResult>(source, Utils.Combine(this.selector, selector));
+                => ValueReadOnlyList.Select<TEnumerable, TEnumerator, TSource, TSelectorResult>(source, Utils.Combine(this.selector, selector), skipCount, takeCount);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TResult First()
-                => selector(ValueReadOnlyList.First<TEnumerable, TEnumerator, TSource>(source), 0);
+                => selector(ValueReadOnlyList.TryFirst<TEnumerable, TEnumerator, TSource>(source, skipCount, takeCount).ThrowOnEmpty(), skipCount);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TResult FirstOrDefault()
-                => selector(ValueReadOnlyList.FirstOrDefault<TEnumerable, TEnumerator, TSource>(source), 0);
+                => selector(ValueReadOnlyList.TryFirst<TEnumerable, TEnumerator, TSource>(source, skipCount, takeCount).DefaultOnEmpty(), skipCount);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TResult Single()
-                => selector(ValueReadOnlyList.Single<TEnumerable, TEnumerator, TSource>(source), 0);
+                => selector(ValueReadOnlyList.TrySingle<TEnumerable, TEnumerator, TSource>(source, skipCount, takeCount).ThrowOnEmpty(), skipCount);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TResult SingleOrDefault()
-                => selector(ValueReadOnlyList.SingleOrDefault<TEnumerable, TEnumerator, TSource>(source), 0);
+                => selector(ValueReadOnlyList.TrySingle<TEnumerable, TEnumerator, TSource>(source, skipCount, takeCount).DefaultOnEmpty(), skipCount);
 
             public TResult[] ToArray()
             {
@@ -133,7 +133,7 @@ namespace NetFabric.Hyperlinq
                 => new List<TResult>(new ToListCollection(this));
 
             // helper implementation of ICollection<> so that CopyTo() is used to convert to List<>
-            class ToListCollection
+            sealed class ToListCollection
                 : ICollection<TResult>
             {
                 readonly TEnumerable source;

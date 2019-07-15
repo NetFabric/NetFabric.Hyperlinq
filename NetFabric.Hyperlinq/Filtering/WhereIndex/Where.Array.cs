@@ -73,23 +73,59 @@ namespace NetFabric.Hyperlinq
             }
 
             public int Count()
-                => source.Count(predicate, skipCount, takeCount);
+                => Array.Count<TSource>(source, predicate, skipCount, takeCount);
+            public int Count(Func<TSource, bool> predicate)
+                => Array.Count<TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount);
+            public int Count(Func<TSource, int, bool> predicate)
+                => Array.Count<TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount);
 
             public bool Any()
-                => source.Any<TSource>(predicate, skipCount, takeCount);
+                => Array.Any<TSource>(source, predicate, skipCount, takeCount);
+            public bool Any(Func<TSource, bool> predicate)
+                => Array.Any<TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount);
+            public bool Any(Func<TSource, int, bool> predicate)
+                => Array.Any<TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount);
 
+            public Array.WhereIndexEnumerable<TSource> Where(Func<TSource, bool> predicate)
+                => Array.Where<TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount);
             public Array.WhereIndexEnumerable<TSource> Where(Func<TSource, int, bool> predicate)
                 => Array.Where<TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount);
 
             public ref readonly TSource First()
                 => ref Array.First<TSource>(source, predicate, skipCount, takeCount);
+            public ref readonly TSource First(out int index)
+                => ref Array.First<TSource>(source, predicate, out index, skipCount, takeCount);
+            public ref readonly TSource First(Func<TSource, bool> predicate)
+                => ref Array.First<TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount);
+            public ref readonly TSource First(Func<TSource, int, bool> predicate)
+                => ref Array.First<TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount);
+
             public ref readonly TSource FirstOrDefault()
                 => ref Array.FirstOrDefault<TSource>(source, predicate, skipCount, takeCount);
+            public ref readonly TSource FirstOrDefault(out int index)
+                => ref Array.FirstOrDefault<TSource>(source, predicate, out index, skipCount, takeCount);
+            public ref readonly TSource FirstOrDefault(Func<TSource, bool> predicate)
+                => ref Array.FirstOrDefault<TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount);
+            public ref readonly TSource FirstOrDefault(Func<TSource, int, bool> predicate)
+                => ref Array.FirstOrDefault<TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount);
 
             public ref readonly TSource Single()
                 => ref Array.Single<TSource>(source, predicate, skipCount, takeCount);
+            public ref readonly TSource Single(out int index)
+                => ref Array.Single<TSource>(source, predicate, out index, skipCount, takeCount);
+            public ref readonly TSource Single(Func<TSource, bool> predicate)
+                => ref Array.Single<TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount);
+            public ref readonly TSource Single(Func<TSource, int, bool> predicate)
+                => ref Array.Single<TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount);
+
             public ref readonly TSource SingleOrDefault()
                 => ref Array.SingleOrDefault<TSource>(source, predicate, skipCount, takeCount);
+            public ref readonly TSource SingleOrDefault(out int index)
+                => ref Array.SingleOrDefault<TSource>(source, predicate, out index, skipCount, takeCount);
+            public ref readonly TSource SingleOrDefault(Func<TSource, bool> predicate)
+                => ref Array.SingleOrDefault<TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount);
+            public ref readonly TSource SingleOrDefault(Func<TSource, int, bool> predicate)
+                => ref Array.SingleOrDefault<TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount);
 
             public List<TSource> ToList()
                 => Array.ToList<TSource>(source, predicate, skipCount, takeCount);

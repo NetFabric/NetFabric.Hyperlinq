@@ -6,16 +6,18 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class Array
     {
-        internal static WhereSelectEnumerable<TSource, TResult> WhereSelect<TSource, TResult>(
+        static WhereSelectEnumerable<TSource, TResult> WhereSelect<TSource, TResult>(
             this TSource[] source, 
             Func<TSource, bool> predicate, 
             Func<TSource, TResult> selector) 
-        {
-            if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
-            if (selector is null) ThrowHelper.ThrowArgumentNullException(nameof(selector));
+            => new WhereSelectEnumerable<TSource, TResult>(source, predicate, selector, 0, source.Length);
 
-            return new WhereSelectEnumerable<TSource, TResult>(source, predicate, selector);
-        }
+        static WhereSelectEnumerable<TSource, TResult> WhereSelect<TSource, TResult>(
+            this TSource[] source,
+            Func<TSource, bool> predicate,
+            Func<TSource, TResult> selector,
+            int skipCount, int takeCount)
+            => new WhereSelectEnumerable<TSource, TResult>(source, predicate, selector, skipCount, takeCount);
 
         public readonly struct WhereSelectEnumerable<TSource, TResult>
             : IValueEnumerable<TResult, WhereSelectEnumerable<TSource, TResult>.Enumerator>
@@ -23,12 +25,15 @@ namespace NetFabric.Hyperlinq
             internal readonly TSource[] source;
             internal readonly Func<TSource, bool> predicate;
             readonly Func<TSource, TResult> selector;
+            readonly int skipCount;
+            readonly int takeCount;
 
-            internal WhereSelectEnumerable(TSource[] source, Func<TSource, bool> predicate, Func<TSource, TResult> selector)
+            internal WhereSelectEnumerable(TSource[] source, Func<TSource, bool> predicate, Func<TSource, TResult> selector, int skipCount, int takeCount)
             {
                 this.source = source;
                 this.predicate = predicate;
                 this.selector = selector;
+                (this.skipCount, this.takeCount) = Utils.SkipTake(source.Length, skipCount, takeCount);
             }
 
             public Enumerator GetEnumerator() => new Enumerator(in this);
@@ -41,7 +46,7 @@ namespace NetFabric.Hyperlinq
                 readonly TSource[] source;
                 readonly Func<TSource, bool> predicate;
                 readonly Func<TSource, TResult> selector;
-                readonly int count;
+                readonly int end;
                 int index;
 
                 internal Enumerator(in WhereSelectEnumerable<TSource, TResult> enumerable)
@@ -49,8 +54,8 @@ namespace NetFabric.Hyperlinq
                     source = enumerable.source;
                     predicate = enumerable.predicate;
                     selector = enumerable.selector;
-                    count = enumerable.source.Length;
-                    index = -1;
+                    end = enumerable.skipCount + enumerable.takeCount;
+                    index = enumerable.skipCount - 1;
                 }
 
                 public TResult Current
@@ -58,10 +63,9 @@ namespace NetFabric.Hyperlinq
                 object IEnumerator.Current
                     => selector(source[index]);
 
-
                 public bool MoveNext()
                 {
-                    while (++index < count)
+                    while (++index < end)
                     {
                         if (predicate(source[index]))
                             return true;
@@ -76,17 +80,25 @@ namespace NetFabric.Hyperlinq
             }
 
             public int Count()
-                => source.Count(predicate);
+                => Array.Count<TSource>(source, predicate, skipCount, takeCount);
+            public int Count(Func<TSource, bool> predicate)
+                => Array.Count<TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount);
+            public int Count(Func<TSource, int, bool> predicate)
+                => Array.Count<TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount);
 
             public bool Any()
-                => Array.Any<TSource>(source, predicate);
+                => Array.Any<TSource>(source, predicate, skipCount, takeCount);
+            public bool Any(Func<TSource, bool> predicate)
+                => Array.Any<TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount);
+            public bool Any(Func<TSource, int, bool> predicate)
+                => Array.Any<TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount);
 
             public List<TResult> ToList()
             {
                 var list = new List<TResult>();
 
-                var count = source.Length;
-                for (var index = 0; index < count; index++)
+                var end = skipCount + takeCount;
+                for (var index = skipCount; index < end; index++)
                 {
                     if (predicate(source[index]))
                         list.Add(selector(source[index]));

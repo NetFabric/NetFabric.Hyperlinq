@@ -152,6 +152,12 @@ namespace NetFabric.Hyperlinq
                 bool ICollection<TResult>.Contains(TResult item) => throw new NotSupportedException();
             }
         }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Count<TEnumerable, TEnumerator, TSource, TResult>(this SelectIndexEnumerable<TEnumerable, TEnumerator, TSource, TResult> source)
+            where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
+            where TEnumerator : struct, IEnumerator<TSource>
+            => source.Count;
     }
 }
 
