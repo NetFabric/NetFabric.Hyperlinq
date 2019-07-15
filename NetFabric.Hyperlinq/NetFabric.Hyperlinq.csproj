@@ -6,11 +6,7 @@
     <Title>NetFabric.Hyperlinq</Title>
     <Description>A LINQ library with devirtualized method calls, ref returns and minimized heap allocations.</Description>
     <Version>3.0.0</Version>
-    <Authors>Antao Almada</Authors>
-    <Copyright>Copyright 2019 Antao Almada</Copyright>
-    <RepositoryUrl>https://github.com/NetFabric/NetFabric.Hyperlinq</RepositoryUrl>
-    <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
-    <PackageIconUrl>https://user-images.githubusercontent.com/534533/49182105-390f3a80-f351-11e8-8e84-c785cddd2995.png</PackageIconUrl>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageTags>hyperlinq, linq, performance</PackageTags>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
   </PropertyGroup>
@@ -21,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="..\Licenses\LICENSE.txt" Pack="true" PackagePath="" />
+    <None Include="..\LICENSE" Pack="true" PackagePath="" />
   </ItemGroup>
 
   <ItemGroup>
