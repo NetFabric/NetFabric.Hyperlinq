@@ -140,7 +140,7 @@ namespace NetFabric.Hyperlinq
                 => new List<TResult>(new ToListCollection(this));
 
             // helper implementation of ICollection<> so that CopyTo() is used to convert to List<>
-            class ToListCollection
+            sealed class ToListCollection
                 : ICollection<TResult>
             {
                 readonly TEnumerable source;

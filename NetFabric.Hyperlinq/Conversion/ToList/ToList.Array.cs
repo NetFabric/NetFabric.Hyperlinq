@@ -42,7 +42,7 @@ namespace NetFabric.Hyperlinq
 
 
         // helper implementation of ICollection<> so that CopyTo() is used to convert to List<>
-        class ToListCollection<TSource>
+        sealed class ToListCollection<TSource>
             : ICollection<TSource>
         {
             readonly TSource[] source;

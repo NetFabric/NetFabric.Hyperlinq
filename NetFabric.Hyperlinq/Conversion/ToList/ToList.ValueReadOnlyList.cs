@@ -58,7 +58,7 @@ namespace NetFabric.Hyperlinq
         }
 
         // helper implementation of ICollection<> so that CopyTo() is used to convert to List<>
-        class ToListCollection<TEnumerable, TEnumerator, TSource>
+        sealed class ToListCollection<TEnumerable, TEnumerator, TSource>
             : ICollection<TSource>
             where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
