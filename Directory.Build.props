@@ -1,6 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project>
   <PropertyGroup>
+    <Authors>Antao Almada</Authors>
+    <Copyright>Copyright 2019 Antao Almada</Copyright>
+    <PackageIconUrl>https://user-images.githubusercontent.com/534533/49182105-390f3a80-f351-11e8-8e84-c785cddd2995.png</PackageIconUrl>
     <LangVersion>latest</LangVersion>
     <Features>strict</Features>
   </PropertyGroup>
