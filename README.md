@@ -31,21 +31,20 @@ namespace ConsoleApp
     {
         static void Main()
         {
-            var list = new List<int> { 0, 1, 2, 3, 4 };
+            var list = new List<int> { 0, 1, 2 };
 
-            // Hyperlinq is used by default on arrays and collections from System.Collections.Generic
-            var a = list
-                .Where(i => i > 0)
+            var a = list // Hyperlinq operations are used by default on List<> from this point on
+                .Where(i => i > 0) 
                 .Select(i => i * 10);
             
-            var b = list
-                .OrderByDescending(i => i)
-                .AsValueEnumerable() // required because OrderByDescending() is not yet supported
-                .Where(i => i > 0)
+            var b = list // Hyperlinq operations are used by default on List<> from this point on
+                .Where(i => i > 0) 
+                .OrderByDescending(i => i) // Hyperlinq does not yet have this operation so LINQ is used
+                .AsValueEnumerable() // Hyperlinq operations are used from this point on
                 .Select(i => i * 10);
 
-            var c = MyEnumerable()
-                .AsValueEnumerable() // required because IEnumerable<T> is not directly supported
+            var c = MyEnumerable() // LINQ operations are used by default on IEnumerable<>
+                .AsValueEnumerable() // Hyperlinq operations are used from this point on
                 .Where(i => i > 0)
                 .Count();
         }
@@ -55,8 +54,6 @@ namespace ConsoleApp
             yield return 0;
             yield return 1;
             yield return 2;
-            yield return 3;
-            yield return 4;
         }
     }
 }
