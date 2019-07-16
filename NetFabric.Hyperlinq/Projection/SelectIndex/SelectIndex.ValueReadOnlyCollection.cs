@@ -150,6 +150,44 @@ namespace NetFabric.Hyperlinq
                 bool ICollection<TResult>.Remove(TResult item) => throw new NotSupportedException();
                 void ICollection<TResult>.Clear() => throw new NotSupportedException();
                 bool ICollection<TResult>.Contains(TResult item) => throw new NotSupportedException();
+
+                public Dictionary<TKey, TResult> ToDictionary<TKey>(Func<TResult, TKey> keySelector)
+                    => ToDictionary<TKey>(keySelector, EqualityComparer<TKey>.Default);
+                public Dictionary<TKey, TResult> ToDictionary<TKey>(Func<TResult, TKey> keySelector, IEqualityComparer<TKey> comparer)
+                {
+                    var dictionary = new Dictionary<TKey, TResult>(source.Count, comparer);
+
+                    using (var enumerator = source.GetEnumerator())
+                    {
+                        TResult item;
+                        for (var index = 0; enumerator.MoveNext(); index++)
+                        {
+                            item = selector(enumerator.Current, index);
+                            dictionary.Add(keySelector(item), item);
+                        }
+                    }
+
+                    return dictionary;
+                }
+
+                public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Func<TResult, TKey> keySelector, Func<TResult, TElement> elementSelector)
+                    => ToDictionary<TKey, TElement>(keySelector, elementSelector, EqualityComparer<TKey>.Default);
+                public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Func<TResult, TKey> keySelector, Func<TResult, TElement> elementSelector, IEqualityComparer<TKey> comparer)
+                {
+                    var dictionary = new Dictionary<TKey, TElement>(source.Count, comparer);
+
+                    using (var enumerator = source.GetEnumerator())
+                    {
+                        TResult item;
+                        for (var index = 0; enumerator.MoveNext(); index++)
+                        {
+                            item = selector(enumerator.Current, index);
+                            dictionary.Add(keySelector(item), elementSelector(item));
+                        }
+                    }
+
+                    return dictionary;
+                }
             }
         }
 

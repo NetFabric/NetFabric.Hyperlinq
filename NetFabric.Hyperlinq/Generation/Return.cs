@@ -33,7 +33,7 @@ namespace NetFabric.Hyperlinq
                 get
                 {
                     if (index != 0) ThrowHelper.ThrowIndexOutOfRangeException();
-                    
+
                     return value;
                 }
             }
@@ -84,23 +84,23 @@ namespace NetFabric.Hyperlinq
                 => comparer.Equals(this.value, value);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public ReturnEnumerable<TResult> Select<TResult>(Func<TSource, TResult> selector) 
+            public ReturnEnumerable<TResult> Select<TResult>(Func<TSource, TResult> selector)
                 => new ReturnEnumerable<TResult>(selector(value));
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public TSource First() 
+            public TSource First()
                 => value;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public TSource FirstOrDefault() 
+            public TSource FirstOrDefault()
                 => value;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public TSource Single() 
+            public TSource Single()
                 => value;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public TSource SingleOrDefault() 
+            public TSource SingleOrDefault()
                 => value;
 
             public TSource[] ToArray()
@@ -112,7 +112,26 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public List<TSource> ToList()
-                => new List<TSource>(1) { value };
+                => new List<TSource>(1)
+                {
+                    value
+                };
+
+            public Dictionary<TKey, TSource> ToDictionary<TKey>(Func<TSource, TKey> keySelector)
+                => ToDictionary<TKey>(keySelector, EqualityComparer<TKey>.Default);
+            public Dictionary<TKey, TSource> ToDictionary<TKey>(Func<TSource, TKey> keySelector, IEqualityComparer<TKey> comparer)
+                => new Dictionary<TKey, TSource>(1, comparer)
+                {
+                    { keySelector(value), value }
+                };
+
+            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector)
+                => ToDictionary<TKey, TElement>(keySelector, elementSelector, EqualityComparer<TKey>.Default);
+            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, IEqualityComparer<TKey> comparer)
+                => new Dictionary<TKey, TElement>(1, comparer)
+                {
+                    { keySelector(value), elementSelector(value) }
+                };
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

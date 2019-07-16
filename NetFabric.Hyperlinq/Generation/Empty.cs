@@ -130,6 +130,19 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public List<TSource> ToList() => new List<TSource>();
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public Dictionary<TKey, TSource> ToDictionary<TKey>(Func<TSource, TKey> keySelector) 
+                => new Dictionary<TKey, TSource>(0);
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public Dictionary<TKey, TSource> ToDictionary<TKey>(Func<TSource, TKey> keySelector, IEqualityComparer<TKey> comparer) 
+                => new Dictionary<TKey, TSource>(0, comparer);
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector) 
+                => new Dictionary<TKey, TElement>(0);
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, IEqualityComparer<TKey> comparer) 
+                => new Dictionary<TKey, TElement>(0, comparer);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

@@ -101,6 +101,15 @@ namespace NetFabric.Hyperlinq
         public static List<TSource> ToList<TSource>(this HashSet<TSource> source)
             => ValueReadOnlyCollection.ToList<ValueWrapper<TSource>, HashSet<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source));
 
+        public static Dictionary<TKey, TSource> ToDictionary<TSource, TKey>(this HashSet<TSource> source, Func<TSource, TKey> keySelector)
+            => ValueReadOnlyCollection.ToDictionary<ValueWrapper<TSource>, HashSet<TSource>.Enumerator, TSource, TKey>(new ValueWrapper<TSource>(source), keySelector);
+        public static Dictionary<TKey, TSource> ToDictionary<TSource, TKey>(this HashSet<TSource> source, Func<TSource, TKey> keySelector, IEqualityComparer<TKey> comparer)
+            => ValueReadOnlyCollection.ToDictionary<ValueWrapper<TSource>, HashSet<TSource>.Enumerator, TSource, TKey>(new ValueWrapper<TSource>(source), keySelector, comparer);
+        public static Dictionary<TKey, TElement> ToDictionary<TSource, TKey, TElement>(this HashSet<TSource> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector)
+            => ValueReadOnlyCollection.ToDictionary<ValueWrapper<TSource>, HashSet<TSource>.Enumerator, TSource, TKey, TElement>(new ValueWrapper<TSource>(source), keySelector, elementSelector);
+        public static Dictionary<TKey, TElement> ToDictionary<TSource, TKey, TElement>(this HashSet<TSource> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, IEqualityComparer<TKey> comparer)
+            => ValueReadOnlyCollection.ToDictionary<ValueWrapper<TSource>, HashSet<TSource>.Enumerator, TSource, TKey, TElement>(new ValueWrapper<TSource>(source), keySelector, elementSelector, comparer);
+
         public readonly struct ValueWrapper<TSource> 
             : IValueReadOnlyCollection<TSource, HashSet<TSource>.Enumerator>
         {

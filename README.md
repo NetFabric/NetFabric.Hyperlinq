@@ -10,7 +10,7 @@
 
 *Hyperlinq* outperfoms *LINQ* when enumerating collections that implement `IReadOnlyList<T>` (E.g. arrays and `List<T>`) and collections that have value-type enumerators (E.g. collections in the `System.Collections.Generic` namespace). For any other collection, it also outforms *LINQ* when multiple operations are composed.
 
-This implementation favors performance in detriment of binary size.
+This implementation favors performance and reduction of heap allocations, in detriment of binary size.
 
 No dynamic code generation is used so it's ahead-of-time (AOT) compatible.
 
@@ -82,6 +82,10 @@ namespace ConsoleApp
   - `AsValueEnumerable()`
   - `ToArray()`
   - `ToList()`
+  - `ToDictionary(Func<TSource, TKey>)`
+  - `ToDictionary(Func<TSource, TKey>, IEqualityComparer<TKey>)`
+  - `ToDictionary(Func<TSource, TKey>, Func<TSource, TElement>)`
+  - `ToDictionary(Func<TSource, TKey>, Func<TSource, TElement>, IEqualityComparer<TKey>)`
 - Element
   - `TryFirst()`
   - `TryFirst(Func<TSource, bool>)`

@@ -88,6 +88,44 @@ namespace NetFabric.Hyperlinq
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TResult SingleOrDefault()
                 => selector(ValueEnumerable.SingleOrDefault<TEnumerable, TEnumerator, TSource>(source));
+
+            public Dictionary<TKey, TResult> ToDictionary<TKey>(Func<TResult, TKey> keySelector)
+                => ToDictionary<TKey>(keySelector, EqualityComparer<TKey>.Default);
+            public Dictionary<TKey, TResult> ToDictionary<TKey>(Func<TResult, TKey> keySelector, IEqualityComparer<TKey> comparer)
+            {
+                var dictionary = new Dictionary<TKey, TResult>(0, comparer);
+
+                using (var enumerator = source.GetEnumerator())
+                {
+                    TResult item;
+                    while (enumerator.MoveNext())
+                    {
+                        item = selector(enumerator.Current);
+                        dictionary.Add(keySelector(item), item);
+                    }
+                }
+
+                return dictionary;
+            }
+
+            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Func<TResult, TKey> keySelector, Func<TResult, TElement> elementSelector)
+                => ToDictionary<TKey, TElement>(keySelector, elementSelector, EqualityComparer<TKey>.Default);
+            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Func<TResult, TKey> keySelector, Func<TResult, TElement> elementSelector, IEqualityComparer<TKey> comparer)
+            {
+                var dictionary = new Dictionary<TKey, TElement>(0, comparer);
+
+                using (var enumerator = source.GetEnumerator())
+                {
+                    TResult item;
+                    while (enumerator.MoveNext())
+                    {
+                        item = selector(enumerator.Current);
+                        dictionary.Add(keySelector(item), elementSelector(item));
+                    }
+                }
+
+                return dictionary;
+            }
         }
     }
 }

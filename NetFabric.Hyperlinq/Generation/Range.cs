@@ -114,6 +114,32 @@ namespace NetFabric.Hyperlinq
             public List<int> ToList()
                 => new List<int>(new ToListCollection(this));
 
+            public Dictionary<TKey, int> ToDictionary<TKey>(Func<int, TKey> keySelector)
+                => ToDictionary<TKey>(keySelector, EqualityComparer<TKey>.Default);
+            public Dictionary<TKey, int> ToDictionary<TKey>(Func<int, TKey> keySelector, IEqualityComparer<TKey> comparer)
+            {
+                var dictionary = new Dictionary<TKey, int>(count, comparer);
+
+                var end = start + count;
+                for (var index = start; index < end; index++)
+                    dictionary.Add(keySelector(index), index);
+
+                return dictionary;
+            }
+
+            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Func<int, TKey> keySelector, Func<int, TElement> elementSelector)
+                => ToDictionary<TKey, TElement>(keySelector, elementSelector, EqualityComparer<TKey>.Default);
+            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Func<int, TKey> keySelector, Func<int, TElement> elementSelector, IEqualityComparer<TKey> comparer)
+            {
+                var dictionary = new Dictionary<TKey, TElement>(count, comparer);
+
+                var end = start + count;
+                for (var index = start; index < end; index++)
+                    dictionary.Add(keySelector(index), elementSelector(index));
+
+                return dictionary;
+            }
+
             // helper implementation of ICollection<> so that CopyTo() is used to convert to List<>
             sealed class ToListCollection
                 : ICollection<int>

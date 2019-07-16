@@ -4,6 +4,9 @@ namespace NetFabric.Hyperlinq
 {
     static class ThrowHelper
     {
+        public static void ThrowArgumentException(string message, string paramName)
+            => throw new ArgumentException(message, paramName);
+
         public static void ThrowArgumentNullException(string paramName)
             => throw new ArgumentNullException(paramName);
 
@@ -15,18 +18,6 @@ namespace NetFabric.Hyperlinq
 
         public static T ThrowArgumentOutOfRangeException<T>(string paramName)
             => throw new ArgumentOutOfRangeException(paramName);
-
-        public static void ThrowArgumentTooLargeException(int count)
-            => throw new ArgumentOutOfRangeException($"Collection with count {count} exceeds allowed size.");
-
-        public static T ThrowArgumentTooLargeException<T>(int count)
-            => throw new ArgumentOutOfRangeException($"Collection with count {count} exceeds allowed size.");
-
-        public static void ThrowArgumentTooLargeException(string paramName, int count)
-            => throw new ArgumentOutOfRangeException(paramName, $"Collection with count {count} exceeds allowed size.");
-
-        public static T ThrowArgumentTooLargeException<T>(string paramName, int count)
-            => throw new ArgumentOutOfRangeException(paramName, $"Collection with count {count} exceeds allowed size.");
 
         public static void ThrowIndexOutOfRangeException()
             => throw new IndexOutOfRangeException();
