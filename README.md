@@ -16,13 +16,13 @@ No dynamic code generation is used so it's ahead-of-time (AOT) compatible.
 
 ## Usage
 
-1. Add the [**NetFabric.Hyperlinq** NuGet package](https://www.nuget.org/packages/NetFabric.Hyperlinq/) to your project.
-1. Optionally, also add the [**NetFabric.Hyperlinq.Analyzer** NuGet package](https://www.nuget.org/packages/NetFabric.Hyperlinq.Analyzer/) to your project. It's a Roslyn analyzer that suggests performance improvements on your enumeration source code. No dependencies are added to your assemblies.
-1. Add a `using NetFabric.Hyperlinq` directive to all source code files where you want Hyperlinq to be used.
-1. `NetFabric.Hyperlinq` and `System.Linq` namespaces can co-exist side-by-side. 
-   1. `NetFabric.Hyperlinq` implements explicit collection types and higher-order interfaces on the extension methods. These take precedence over the `IEnumerable<T>` extension methods implemented in `System.Linq`.
-   1. In the cases where the above doesn't apply, use the `AsValueEnumerable<TSource>()` extension method. `NetFabric.Hyperlinq` implementations will be used for the following operations. For collections that are value-types and/or return enumerators that are value-types, favor the use of the `AsValueEnumerable<TEnumerable, TEnumerator, TSource>()` overload to avoid boxing.
-   1. `NetFabric.Hyperlinq` does not implement all `System.Linq` operations. The `System.Linq` implementations will be automatically used. You'll have to use `AsValueEnumerable()` again in the composition chain to return to `NetFabric.Hyperlinq` implementations.
+1. Add the *NetFabric.Hyperlinq* [NuGet package](https://www.nuget.org/packages/NetFabric.Hyperlinq/) to your project.
+1. Optionally, also add the *NetFabric.Hyperlinq.Analyzer* [NuGet package](https://www.nuget.org/packages/NetFabric.Hyperlinq.Analyzer/) to your project. It's a Roslyn analyzer that suggests performance improvements on your enumeration source code. No dependencies are added to your assemblies.
+1. Add a `using NetFabric.Hyperlinq` directive to all source code files where you want to use *NetFabric.Hyperlinq*.
+1. *NetFabric.Hyperlinq* and *System.Linq* namespaces can co-exist: 
+   1. *NetFabric.Hyperlinq* uses explicit collection types and higher-order interfaces on its extension methods. These take precedence over the `IEnumerable<T>` extension methods implemented in *System.Linq*.
+   1. In the cases where the above doesn't apply, use the `AsValueEnumerable<TSource>()` extension method. *NetFabric.Hyperlinq* implementations will be used for the subsequent operations. For collections that are value-types and/or return enumerators that are value-types, favor the use of the `AsValueEnumerable<TEnumerable, TEnumerator, TSource>()` overload to avoid boxing.
+   1. *NetFabric.Hyperlinq* does not implement all *System.Linq* operations. The `System.Linq` implementations will be automatically used. You'll have to use `AsValueEnumerable()` in the composition chain to return to *NetFabric.Hyperlinq* implementations.
 
 ```csharp
 using System.Collections.Generic;
@@ -37,18 +37,18 @@ namespace ConsoleApp
         {
             var list = new List<int> { 0, 1, 2 };
 
-            var a = list // Hyperlinq operations are used by default on List<> from this point on
+            var a = list // Hyperlinq operations are used by default on List<>
                 .Where(i => i > 0) 
                 .Select(i => i * 10);
             
-            var b = list // Hyperlinq operations are used by default on List<> from this point on
+            var b = list // Hyperlinq operations are used by default on List<>
                 .Where(i => i > 0) 
-                .OrderByDescending(i => i) // Hyperlinq does not yet have this operation so LINQ is used
-                .AsValueEnumerable() // Hyperlinq operations are used from this point on
+                .OrderByDescending(i => i) // Hyperlinq does not yet support this operation so LINQ is used
+                .AsValueEnumerable() // Hyperlinq operations are used on subsequent operations
                 .Select(i => i * 10);
 
             var c = MyEnumerable() // LINQ operations are used by default on IEnumerable<>
-                .AsValueEnumerable() // Hyperlinq operations are used from this point on
+                .AsValueEnumerable() // Hyperlinq operations are used on subsequent operations
                 .Where(i => i > 0)
                 .Count();
         }
@@ -61,7 +61,7 @@ namespace ConsoleApp
         }
     }
 }
-``` 
+```
 
 
 ## Documentation
