@@ -19,18 +19,20 @@ namespace NetFabric.Hyperlinq
         public static ValueReadOnlyList.SkipTakeEnumerable<ValueWrapper<TSource>, List<TSource>.Enumerator, TSource> Take<TSource>(this List<TSource> source, int count)
             => ValueReadOnlyList.Take<ValueWrapper<TSource>, List<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), count);
 
+        public static bool All<TSource>(this List<TSource> source, Func<TSource, bool> predicate)
+            => ValueReadOnlyList.All<ValueWrapper<TSource>, List<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
         public static bool All<TSource>(this List<TSource> source, Func<TSource, int, bool> predicate)
             => ValueReadOnlyList.All<ValueWrapper<TSource>, List<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
 
         public static bool Any<TSource>(this List<TSource> source)
             => source.Count != 0;
-
+        public static bool Any<TSource>(this List<TSource> source, Func<TSource, bool> predicate)
+            => ValueReadOnlyList.Any<ValueWrapper<TSource>, List<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
         public static bool Any<TSource>(this List<TSource> source, Func<TSource, int, bool> predicate)
             => ValueReadOnlyList.Any<ValueWrapper<TSource>, List<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
 
         public static bool Contains<TSource>(this List<TSource> source, TSource value)
             => source.Contains(value);
-
         public static bool Contains<TSource>(this List<TSource> source, TSource value, IEqualityComparer<TSource> comparer)
             => ValueReadOnlyList.Contains<ValueWrapper<TSource>, List<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), value, comparer);
 

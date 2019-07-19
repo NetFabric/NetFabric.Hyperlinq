@@ -19,6 +19,7 @@ No dynamic code generation is used so it's ahead-of-time (AOT) compatible.
 1. Add the *NetFabric.Hyperlinq* [NuGet package](https://www.nuget.org/packages/NetFabric.Hyperlinq/) to your project.
 1. Optionally, also add the *NetFabric.Hyperlinq.Analyzer* [NuGet package](https://www.nuget.org/packages/NetFabric.Hyperlinq.Analyzer/) to your project. It's a Roslyn analyzer that suggests performance improvements on your enumeration source code. No dependencies are added to your assemblies.
 1. Add a `using NetFabric.Hyperlinq` directive to all source code files where you want to use *NetFabric.Hyperlinq*.
+1. Use `ValueEnumerable` static class for generation operations (E.g. `Empty()`, `Range()`, `Repeat()`, etc.)
 1. *NetFabric.Hyperlinq* and *System.Linq* namespaces can co-exist: 
    1. *NetFabric.Hyperlinq* uses explicit collection types and higher-order interfaces on its extension methods. These take precedence over the `IEnumerable<T>` extension methods implemented in *System.Linq*.
    1. In the cases where the above doesn't apply, use the `AsValueEnumerable<TSource>()` extension method. *NetFabric.Hyperlinq* implementations will be used for the subsequent operations. For collections that are value-types and/or return enumerators that are value-types, favor the use of the `AsValueEnumerable<TEnumerable, TEnumerator, TSource>()` overload to avoid boxing.
@@ -35,7 +36,7 @@ namespace ConsoleApp
     {
         static void Main()
         {
-            var list = new List<int> { 0, 1, 2 };
+            var list = ValueEnumerable.Range(0, 3).ToList(); // Hyperlinq operations are used
 
             var a = list // Hyperlinq operations are used by default on List<>
                 .Where(i => i > 0) 

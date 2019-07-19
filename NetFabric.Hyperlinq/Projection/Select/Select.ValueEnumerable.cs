@@ -65,6 +65,11 @@ namespace NetFabric.Hyperlinq
             public int Count()
                 => ValueEnumerable.Count<TEnumerable, TEnumerator, TSource>(source);
 
+#if DEBUG
+            public int Count(Func<TResult, bool> predicate)
+                => ValueEnumerable.Count<SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>, SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>.Enumerator, TResult>(this, predicate);
+#endif
+
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Any()
                 => ValueEnumerable.Any<TEnumerable, TEnumerator, TSource>(source);

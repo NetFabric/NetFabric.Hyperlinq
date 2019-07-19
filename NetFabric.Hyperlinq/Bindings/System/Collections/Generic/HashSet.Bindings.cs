@@ -21,10 +21,13 @@ namespace NetFabric.Hyperlinq
 
         public static bool All<TSource>(this HashSet<TSource> source, Func<TSource, int, bool> predicate)
             => ValueReadOnlyCollection.All<ValueWrapper<TSource>, HashSet<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
+        public static bool All<TSource>(this HashSet<TSource> source, Func<TSource, bool> predicate)
+            => ValueReadOnlyCollection.All<ValueWrapper<TSource>, HashSet<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
 
         public static bool Any<TSource>(this HashSet<TSource> source)
             => source.Count != 0;
-
+        public static bool Any<TSource>(this HashSet<TSource> source, Func<TSource, bool> predicate)
+            => ValueReadOnlyCollection.Any<ValueWrapper<TSource>, HashSet<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
         public static bool Any<TSource>(this HashSet<TSource> source, Func<TSource, int, bool> predicate)
             => ValueReadOnlyCollection.Any<ValueWrapper<TSource>, HashSet<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
 

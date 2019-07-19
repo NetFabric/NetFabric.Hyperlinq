@@ -6,13 +6,13 @@ namespace NetFabric.Hyperlinq
 {
     public static class TestReadOnlyList
     {
-        public static IReadOnlyList<long> ReferenceType(int count)
+        public static IReadOnlyList<int> ReferenceType(int count)
             => new EnumerableReferenceType(count);
 
         public static EnumerableValueType ValueType(int count) 
             => new EnumerableValueType(count);
 
-        public readonly struct EnumerableValueType : IReadOnlyList<long>
+        public readonly struct EnumerableValueType : IReadOnlyList<int>
         {
             readonly int count;
 
@@ -23,16 +23,16 @@ namespace NetFabric.Hyperlinq
 
             public int Count => count;
 
-            public long this[int index] => index;
+            public int this[int index] => index;
 
             public Enumerator GetEnumerator() => new Enumerator(count);
-            IEnumerator<long> IEnumerable<long>.GetEnumerator() => new Enumerator(count);
+            IEnumerator<int> IEnumerable<int>.GetEnumerator() => new Enumerator(count);
             IEnumerator IEnumerable.GetEnumerator() => new Enumerator(count);
 
-            public struct Enumerator : IEnumerator<long>
+            public struct Enumerator : IEnumerator<int>
             {
                 readonly int count;
-                long current;
+                int current;
 
                 public Enumerator(int count)
                 {
@@ -40,7 +40,7 @@ namespace NetFabric.Hyperlinq
                     current = -1;
                 }
 
-                public long Current => current;
+                public int Current => current;
                 object IEnumerator.Current => current;
 
                 public bool MoveNext() => ++current < count;
@@ -51,7 +51,7 @@ namespace NetFabric.Hyperlinq
             }
         }
 
-        public class EnumerableReferenceType : IReadOnlyList<long>
+        public class EnumerableReferenceType : IReadOnlyList<int>
         {
             readonly int count;
 
@@ -62,16 +62,16 @@ namespace NetFabric.Hyperlinq
 
             public int Count => count;
 
-            public long this[int index] => index;
+            public int this[int index] => index;
 
             public Enumerator GetEnumerator() => new Enumerator(count);
-            IEnumerator<long> IEnumerable<long>.GetEnumerator() => new Enumerator(count);
+            IEnumerator<int> IEnumerable<int>.GetEnumerator() => new Enumerator(count);
             IEnumerator IEnumerable.GetEnumerator() => new Enumerator(count);
 
-            public class Enumerator : IEnumerator<long>
+            public class Enumerator : IEnumerator<int>
             {
                 readonly int count;
-                long current;
+                int current;
 
                 public Enumerator(int count)
                 {
@@ -79,7 +79,7 @@ namespace NetFabric.Hyperlinq
                     current = -1;
                 }
 
-                public long Current => current;
+                public int Current => current;
                 object IEnumerator.Current => current;
 
                 public bool MoveNext() => ++current < count;

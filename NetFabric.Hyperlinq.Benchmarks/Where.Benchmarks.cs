@@ -14,7 +14,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Linq_Range() 
         { 
             var count = 0;
-            foreach(var item in System.Linq.Enumerable.Where(linqRange, (_, __) => true))
+            foreach(var item in System.Linq.Enumerable.Where(linqRange, _ => true))
                 count++;
             return count;
         }
@@ -24,7 +24,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Linq_Queue() 
         { 
             var count = 0;
-            foreach(var item in System.Linq.Enumerable.Where(queue, (_, __) => true))
+            foreach(var item in System.Linq.Enumerable.Where(queue, _ => true))
                 count++;
             return count;
         }
@@ -34,7 +34,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Linq_Array() 
         { 
             var count = 0;
-            foreach(var item in System.Linq.Enumerable.Where(array, (_, __) => true))
+            foreach(var item in System.Linq.Enumerable.Where(array, _ => true))
                 count++;
             return count;
         }
@@ -44,7 +44,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Linq_List() 
         { 
             var count = 0;
-            foreach(var item in System.Linq.Enumerable.Where(list, (_, __) => true))
+            foreach(var item in System.Linq.Enumerable.Where(list, _ => true))
                 count++;
             return count;
         }
@@ -54,7 +54,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Linq_Enumerable_Reference() 
         { 
             var count = 0;
-            foreach(var item in System.Linq.Enumerable.Where(enumerableReference, (_, __) => true))
+            foreach(var item in System.Linq.Enumerable.Where(enumerableReference, _ => true))
                 count++;
             return count;
         }
@@ -64,7 +64,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Linq_Enumerable_Value()
         { 
             var count = 0;
-            foreach(var item in System.Linq.Enumerable.Where(enumerableValue, (_, __) => true))
+            foreach(var item in System.Linq.Enumerable.Where(enumerableValue, _ => true))
                 count++;
             return count;
         }
@@ -74,7 +74,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Hyperlinq_Range() 
         { 
             var count = 0;
-            foreach(var item in hyperlinqRange.Where((_, __) => true))
+            foreach(var item in hyperlinqRange.Where(_ => true))
                 count++;
             return count;
         }
@@ -84,7 +84,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Hyperlinq_Queue() 
         { 
             var count = 0;
-            foreach(var item in queue.Where((_, __) => true))
+            foreach(var item in queue.Where(_ => true))
                 count++;
             return count;
         }
@@ -94,7 +94,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Hyperlinq_Array() 
         { 
             var count = 0;
-            foreach(ref readonly var item in array.Where((_, __) => true))
+            foreach(ref readonly var item in array.Where(_ => true))
                 count++;
             return count;
         }
@@ -104,7 +104,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Hyperlinq_List() 
         { 
             var count = 0;
-            foreach(var item in list.Where((_, __) => true))
+            foreach(var item in list.Where(_ => true))
                 count++;
             return count;
         }
@@ -114,7 +114,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Hyperlinq_Enumerable_Reference()
         { 
             var count = 0;
-            foreach(var item in enumerableReference.Where((_, __) => true))
+            foreach(var item in enumerableReference.AsValueEnumerable().Where(_ => true))
                 count++;
             return count;
         }
@@ -124,7 +124,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Hyperlinq_Enumerable_Value()
         { 
             var count = 0;
-            foreach(var item in enumerableValue.Where<TestEnumerable.Enumerable, TestEnumerable.Enumerable.Enumerator, long>((_, __) => true))
+            foreach(var item in enumerableValue.AsValueEnumerable<TestEnumerable.Enumerable, TestEnumerable.Enumerable.Enumerator, int>().Where(_ => true))
                 count++;
             return count;
         }

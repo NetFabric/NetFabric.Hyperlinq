@@ -131,46 +131,60 @@ static class Utils
     }
 
 
-    public static TypeReference ResolveGenericType(TypeReference type, TypeDefinition declaringType, IReadOnlyDictionary<string, string> genericsMapping, IReadOnlyDictionary<string, TypeReference> genericsTypeMapping, Fody.BaseModuleWeaver weaver = null)
+    public static TypeReference ResolveGenericType(TypeReference type, List<GenericParameter> genericParameters, IReadOnlyDictionary<string, string> genericsMapping, IReadOnlyDictionary<string, TypeReference> genericsTypeMapping)
     {
         switch (type)
         {
             case ArrayType arrayType:
-                weaver?.LogWarning("ArrayType");
-                return new ArrayType(ResolveGenericType(arrayType.ElementType, declaringType, genericsMapping, genericsTypeMapping, weaver));
+                return new ArrayType(ResolveGenericType(arrayType.ElementType, genericParameters, genericsMapping, genericsTypeMapping));
 
-            case GenericParameter _:
-                weaver?.LogWarning("GenericParameter");
-                var paramName = type.Name;
-
-                if (genericsTypeMapping.TryGetValue(paramName, out var mappedParamType))
-                    return ResolveGenericType(mappedParamType, declaringType, genericsMapping, genericsTypeMapping, weaver);
-
-                if (genericsMapping.TryGetValue(paramName, out var mappedParamName))
-                    paramName = mappedParamName;
-
-                if (declaringType.HasGenericParameters)
+            case GenericParameter genericParameter:
                 {
-                    foreach (var genericParameter in declaringType.GenericParameters)
-                    {
-                        if (genericParameter.Name == paramName)
-                            return genericParameter;
-                    }
-                }
+                    var paramName = genericParameter.Name;
 
-                return type;
+                    if (genericsTypeMapping is object && genericsTypeMapping.TryGetValue(paramName, out var mappedParamType))
+                        return ResolveGenericType(mappedParamType, genericParameters, genericsMapping, genericsTypeMapping);
+
+                    if (genericsMapping is object && genericsMapping.TryGetValue(paramName, out var mappedParamName))
+                        paramName = mappedParamName;
+
+                    foreach (var declaringGenericParameter in genericParameters)
+                    {
+                        if (declaringGenericParameter.Name == paramName)
+                        {
+                            return declaringGenericParameter;
+                        }
+                    }
+
+                    return type;
+                }
 
             case GenericInstanceType genericInstance:
-                weaver?.LogWarning("GenericInstanceType");
-                var temp = new GenericInstanceType(genericInstance.ElementType);
-                if (genericInstance.HasGenericArguments)
                 {
-                    foreach (var param in genericInstance.GenericArguments)
+                    var temp = new GenericInstanceType(genericInstance.ElementType);
+                    if (genericInstance.HasGenericArguments)
                     {
-                        temp.GenericArguments.Add(ResolveGenericType(param, declaringType, genericsMapping, genericsTypeMapping, weaver));
+                        foreach (var param in genericInstance.GenericArguments)
+                        {
+                            temp.GenericArguments.Add(ResolveGenericType(param, genericParameters, genericsMapping, genericsTypeMapping));
+                        }
                     }
+                    return temp;
                 }
-                return temp;
+
+            case TypeReference typeReference:
+                {
+                    if (typeReference.HasGenericParameters)
+                    {
+                        var temp = new GenericInstanceType(typeReference);
+                        foreach (var param in genericParameters)
+                        {
+                            temp.GenericArguments.Add(ResolveGenericType(param, genericParameters, genericsMapping, null));
+                        }
+                        return temp;
+                    }
+                    return type;
+                }
 
             default:
                 return type;

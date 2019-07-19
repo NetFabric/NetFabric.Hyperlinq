@@ -19,12 +19,14 @@ namespace NetFabric.Hyperlinq
                 this.source = source;
             }
 
-            public long Count => source.Length;
+            public int Count => source.Length;
 
             public Enumerator GetEnumerator() => new Enumerator(source);
+            IEnumerator<T> IEnumerable<T>.GetEnumerator() => new Enumerator(source);
+            IEnumerator IEnumerable.GetEnumerator() => new Enumerator(source);
 
             public struct Enumerator 
-                : IValueEnumerator<T>
+                : IEnumerator<T>
             {
                 readonly T[] source;
                 int index;
@@ -37,9 +39,14 @@ namespace NetFabric.Hyperlinq
 
                 public T Current
                     => source[index];
+                object IEnumerator.Current
+                    => source[index];
 
                 public bool MoveNext()
                     => ++index < source.Length;
+
+                public void Reset()
+                    => throw new NotSupportedException();
 
                 public void Dispose() { }
             }

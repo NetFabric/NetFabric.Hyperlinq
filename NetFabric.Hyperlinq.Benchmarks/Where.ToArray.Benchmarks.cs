@@ -1,5 +1,6 @@
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Configs;
+using System.Linq;
 
 namespace NetFabric.Hyperlinq.Benchmarks
 {
@@ -12,61 +13,61 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [BenchmarkCategory("Range")]
         [Benchmark(Baseline = true)]
         public int[] Linq_Range()
-            => System.Linq.Enumerable.Where(linqRange, (_, __) => true).ToArray();
+            => linqRange.Where(_ => true).ToArray();
 
         [BenchmarkCategory("Queue")]
         [Benchmark(Baseline = true)]
         public int[] Linq_Queue()
-            => System.Linq.Enumerable.Where(queue, (_, __) => true).ToArray();
+            => System.Linq.Enumerable.Where(queue, _ => true).ToArray();
 
         [BenchmarkCategory("Array")]
         [Benchmark(Baseline = true)]
         public int[] Linq_Array()
-            => System.Linq.Enumerable.Where(array, (_, __) => true).ToArray();
+            => System.Linq.Enumerable.Where(array, _ => true).ToArray();
 
         [BenchmarkCategory("List")]
         [Benchmark(Baseline = true)]
         public int[] Linq_List()
-            => System.Linq.Enumerable.Where(list, (_, __) => true).ToArray();
+            => System.Linq.Enumerable.Where(list, _ => true).ToArray();
 
         [BenchmarkCategory("Enumerable_Reference")]
         [Benchmark(Baseline = true)]
-        public long[] Linq_Enumerable_Reference() 
-            => System.Linq.Enumerable.Where(enumerableReference, (_, __) => true).ToArray();
+        public int[] Linq_Enumerable_Reference() 
+            => System.Linq.Enumerable.Where(enumerableReference, _ => true).ToArray();
 
         [BenchmarkCategory("Enumerable_Value")]
         [Benchmark(Baseline = true)]
-        public long[] Linq_Enumerable_Value()
-            => System.Linq.Enumerable.Where(enumerableValue, (_, __) => true).ToArray();
+        public int[] Linq_Enumerable_Value()
+            => System.Linq.Enumerable.Where(enumerableValue, _ => true).ToArray();
 
         [BenchmarkCategory("Range")]
         [Benchmark]
-        public long[] Hyperlinq_Range()
-            => hyperlinqRange.Where((_, __) => true).ToArray();
+        public int[] Hyperlinq_Range()
+            => hyperlinqRange.Where(_ => true).ToArray();
 
         [BenchmarkCategory("Queue")]
         [Benchmark]
         public int[] Hyperlinq_Queue()
-            => queue.Where((_, __) => true).ToArray();
+            => queue.Where(_ => true).ToArray();
 
         [BenchmarkCategory("Array")]
         [Benchmark]
         public int[] Hyperlinq_Array()
-            => array.Where((_, __) => true).ToArray();
+            => array.Where(_ => true).ToArray();
 
         [BenchmarkCategory("List")]
         [Benchmark]
         public int[] Hyperlinq_List()
-            => list.Where((_, __) => true).ToArray();
+            => list.Where(_ => true).ToArray();
 
         [BenchmarkCategory("Enumerable_Reference")]
         [Benchmark]
-        public long[] Hyperlinq_Enumerable_Reference()
-            => enumerableReference.Where((_, __) => true).ToArray();
+        public int[] Hyperlinq_Enumerable_Reference()
+            => enumerableReference.AsValueEnumerable().Where(_ => true).ToArray();
 
         [BenchmarkCategory("Enumerable_Value")]
         [Benchmark]
-        public long[] Hyperlinq_Enumerable_Value()
-            => enumerableValue.Where((_, __) => true).ToArray();
+        public int[] Hyperlinq_Enumerable_Value()
+            => enumerableValue.AsValueEnumerable<TestEnumerable.Enumerable, TestEnumerable.Enumerable.Enumerator, int>().Where(_ => true).ToArray();
     }
 }

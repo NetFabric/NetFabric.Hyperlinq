@@ -16,7 +16,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var wrapped = Wrap.AsReadOnlyCollection(source);
 
             // Act
-            var result = ReadOnlyCollection.AsValueEnumerable<Wrap.ReadOnlyCollection<int>, Wrap.ReadOnlyCollection<int>.Enumerator, int>(wrapped);
+            var result = wrapped.AsValueEnumerable<Wrap.ReadOnlyCollection<int>, Wrap.ReadOnlyCollection<int>.Enumerator, int>();
 
             // Assert
             result.Should().Generate(source);

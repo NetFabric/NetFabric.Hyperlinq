@@ -5,7 +5,7 @@ using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class Enumerable
+    public static partial class ValueEnumerable
     {
         public static ReturnEnumerable<TSource> Return<TSource>(TSource value) =>
             new ReturnEnumerable<TSource>(value);

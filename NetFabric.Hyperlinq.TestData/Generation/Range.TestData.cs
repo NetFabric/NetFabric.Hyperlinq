@@ -5,47 +5,47 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class TestData
     {
-        public static TheoryData<long, long, long[]> Range =>
-            new TheoryData<long, long, long[]> 
+        public static TheoryData<int, int, int[]> Range =>
+            new TheoryData<int, int, int[]> 
             {
-                { -1, 0, new long[] { } },
-                { 0, 0, new long[] { } },
-                { 0, 1, new long[] { 0 } },
+                { -1, 0, new int[] { } },
+                { 0, 0, new int[] { } },
+                { 0, 1, new int[] { 0 } },
 
-                { -1, 1, new long[] { -1 } },
-                { -1, 5, new long[] { -1, 0, 1, 2, 3 } },
-                { 1, 5, new long[] { 1, 2, 3, 4, 5 } },
+                { -1, 1, new int[] { -1 } },
+                { -1, 5, new int[] { -1, 0, 1, 2, 3 } },
+                { 1, 5, new int[] { 1, 2, 3, 4, 5 } },
             };
 
-        public static TheoryData<long, long, long, long[]> RangeSkip =>
-            new TheoryData<long, long, long, long[]> 
+        public static TheoryData<int, int, int, int[]> RangeSkip =>
+            new TheoryData<int, int, int, int[]> 
             {
-                { 1, 5, -1, new long[] { 1, 2, 3, 4, 5 } },
-                { 1, 5, 0, new long[] { 1, 2, 3, 4, 5 } },
-                { 1, 5, 2, new long[] { 3, 4, 5 } },
-                { 1, 5, 10, new long[] { } },
+                { 1, 5, -1, new int[] { 1, 2, 3, 4, 5 } },
+                { 1, 5, 0, new int[] { 1, 2, 3, 4, 5 } },
+                { 1, 5, 2, new int[] { 3, 4, 5 } },
+                { 1, 5, 10, new int[] { } },
             };
 
-        public static TheoryData<long, long, long, long[]> RangeTake =>
-            new TheoryData<long, long, long, long[]> 
+        public static TheoryData<int, int, int, int[]> RangeTake =>
+            new TheoryData<int, int, int, int[]> 
             {
-                { 1, 5, -1, new long[] { } },
-                { 1, 5, 0, new long[] { } },
-                { 1, 5, 2, new long[] { 1, 2 } },
-                { 1, 5, 10, new long[] { 1, 2, 3, 4, 5} },
+                { 1, 5, -1, new int[] { } },
+                { 1, 5, 0, new int[] { } },
+                { 1, 5, 2, new int[] { 1, 2 } },
+                { 1, 5, 10, new int[] { 1, 2, 3, 4, 5} },
             };
 
-        public static TheoryData<long, long, long, long, long[]> RangeSkipTake =>
-            new TheoryData<long, long, long, long, long[]> 
+        public static TheoryData<int, int, int, int, int[]> RangeSkipTake =>
+            new TheoryData<int, int, int, int, int[]> 
             {
-                { 1, 5, 0, 0, new long[] { } },
-                { 1, 5, -1, 0, new long[] { } },
-                { 1, 5, 0, -1, new long[] { } },
-                { 1, 5, -1, -1, new long[] { } },
-                { 1, 5, 0, 2, new long[] { 1, 2 } },
-                { 1, 5, 0, 10, new long[] { 1, 2, 3, 4, 5} },
-                { 1, 5, 2, 2, new long[] { 3, 4 } },
-                { 1, 5, 2, 10, new long[] { 3, 4, 5} },
+                { 1, 5, 0, 0, new int[] { } },
+                { 1, 5, -1, 0, new int[] { } },
+                { 1, 5, 0, -1, new int[] { } },
+                { 1, 5, -1, -1, new int[] { } },
+                { 1, 5, 0, 2, new int[] { 1, 2 } },
+                { 1, 5, 0, 10, new int[] { 1, 2, 3, 4, 5} },
+                { 1, 5, 2, 2, new int[] { 3, 4 } },
+                { 1, 5, 2, 10, new int[] { 3, 4, 5} },
             };
     }
 }

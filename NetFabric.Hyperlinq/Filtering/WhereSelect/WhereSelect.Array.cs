@@ -6,13 +6,13 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class Array
     {
-        static WhereSelectEnumerable<TSource, TResult> WhereSelect<TSource, TResult>(
+        internal static WhereSelectEnumerable<TSource, TResult> WhereSelect<TSource, TResult>(
             this TSource[] source, 
             Func<TSource, bool> predicate, 
             Func<TSource, TResult> selector) 
             => new WhereSelectEnumerable<TSource, TResult>(source, predicate, selector, 0, source.Length);
 
-        static WhereSelectEnumerable<TSource, TResult> WhereSelect<TSource, TResult>(
+        internal static WhereSelectEnumerable<TSource, TResult> WhereSelect<TSource, TResult>(
             this TSource[] source,
             Func<TSource, bool> predicate,
             Func<TSource, TResult> selector,

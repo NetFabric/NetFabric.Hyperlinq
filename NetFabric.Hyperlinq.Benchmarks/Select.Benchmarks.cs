@@ -74,7 +74,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Hyperlinq_Range() 
         { 
             var count = 0;
-            foreach(var item in hyperlinqRange.Select((item, _) => item))
+            foreach(var item in hyperlinqRange.Select(item => item))
                 count++;
             return count;
         }
@@ -84,7 +84,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Hyperlinq_Queue() 
         { 
             var count = 0;
-            foreach(var item in queue.Select((item, _) => item))
+            foreach(var item in queue.Select(item => item))
                 count++;
             return count;
         }
@@ -94,7 +94,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Hyperlinq_Array() 
         { 
             var count = 0;
-            foreach(var item in array.Select((item, _) => item))
+            foreach(var item in array.Select(item => item))
                 count++;
             return count;
         }
@@ -104,7 +104,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Hyperlinq_List() 
         { 
             var count = 0;
-            foreach(var item in list.Select((item, _) => item))
+            foreach(var item in list.Select(item => item))
                 count++;
             return count;
         }
@@ -114,7 +114,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Hyperlinq_Enumerable_Reference()
         { 
             var count = 0;
-            foreach(var item in enumerableReference.Select((item, _) => item))
+            foreach(var item in enumerableReference.AsValueEnumerable().Select(item => item))
                 count++;
             return count;
         }
@@ -124,7 +124,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Hyperlinq_Enumerable_Value()        
         { 
             var count = 0;
-            foreach(var item in enumerableValue.Select((item, _) => item))
+            foreach(var item in enumerableValue.AsValueEnumerable<TestEnumerable.Enumerable, TestEnumerable.Enumerable.Enumerator, int>().Select(item => item))
                 count++;
             return count;
         }

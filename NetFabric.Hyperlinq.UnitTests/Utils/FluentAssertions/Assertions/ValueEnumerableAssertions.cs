@@ -10,7 +10,7 @@ namespace NetFabric.Hyperlinq.UnitTests
     // [DebuggerNonUserCode]
     class ValueEnumerablerAssertions<TEnumerable, TEnumerator, TSource>
         where TEnumerable : IValueEnumerable<TSource, TEnumerator>
-        where TEnumerator : struct, IValueEnumerator<TSource>
+        where TEnumerator : struct, IEnumerator<TSource>
     {
         public ValueEnumerablerAssertions(TEnumerable value)
         {

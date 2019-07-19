@@ -19,12 +19,15 @@ namespace NetFabric.Hyperlinq
         public static ValueReadOnlyCollection.SkipTakeEnumerable<ValueWrapper<TSource>, SortedSet<TSource>.Enumerator, TSource> Take<TSource>(this SortedSet<TSource> source, int count)
             => ValueReadOnlyCollection.Take<ValueWrapper<TSource>, SortedSet<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), count);
 
+        public static bool All<TSource>(this SortedSet<TSource> source, Func<TSource, bool> predicate)
+            => ValueReadOnlyCollection.All<ValueWrapper<TSource>, SortedSet<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
         public static bool All<TSource>(this SortedSet<TSource> source, Func<TSource, int, bool> predicate)
             => ValueReadOnlyCollection.All<ValueWrapper<TSource>, SortedSet<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
 
         public static bool Any<TSource>(this SortedSet<TSource> source)
             => source.Count != 0;
-
+        public static bool Any<TSource>(this SortedSet<TSource> source, Func<TSource, bool> predicate)
+            => ValueReadOnlyCollection.Any<ValueWrapper<TSource>, SortedSet<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
         public static bool Any<TSource>(this SortedSet<TSource> source, Func<TSource, int, bool> predicate)
             => ValueReadOnlyCollection.Any<ValueWrapper<TSource>, SortedSet<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
 

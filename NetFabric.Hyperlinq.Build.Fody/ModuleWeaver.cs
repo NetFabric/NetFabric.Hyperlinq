@@ -32,7 +32,7 @@ public partial class ModuleWeaver
         foreach (var method in ModuleDefinition.GetTypes()
             .Where(type => type.IsPublic && type.IsClass && type.IsSealed && type.IsAbstract) // public static class
             .SelectMany(type => type.Methods)
-            .Where(method => method.IsExtensionMethod()))
+            .Where(method => method.IsPublic && method.IsExtensionMethod()))
         {
             var extensionType = method.Parameters[0].ParameterType;
 
@@ -51,9 +51,7 @@ public partial class ModuleWeaver
         LogInfo("Adding methods that call the collected extension methods!");
 
         //foreach (var type in ModuleDefinition.GetTypes())
-        foreach (var type in ModuleDefinition.GetTypes().Where(type =>
-            type.FullName == "NetFabric.Hyperlinq.Enumerable/SelectEnumerable`4" ||
-            type.FullName == "NetFabric.Hyperlinq.ValueReadOnlyList/SelectEnumerable`4"))
+        foreach (var type in ModuleDefinition.GetTypes())
         {
             if (!type.IsInterface && type.HasInterfaces && !type.ShouldBeIgnored())
             {
@@ -93,8 +91,7 @@ public partial class ModuleWeaver
     void AddMethodInstance(TypeDefinition type, MethodDefinition method, IReadOnlyDictionary<string, string> genericsMapping, IReadOnlyDictionary<string, TypeReference> genericsTypeMapping)
     {
         // create the new method
-        var returnType = Utils.ResolveGenericType(method.ReturnType, type, genericsMapping, genericsTypeMapping);
-        var newMethod = new MethodDefinition(method.Name, MethodAttributes.Public | MethodAttributes.HideBySig, returnType)
+        var newMethod = new MethodDefinition(method.Name, MethodAttributes.Public | MethodAttributes.HideBySig, method.ReturnType)
         {
             AggressiveInlining = true,
             CustomAttributes = {
@@ -103,12 +100,36 @@ public partial class ModuleWeaver
             DeclaringType = type,
         };
 
-        // copy the parameters (ignoring the first one)
+        // collect the generics parameters
+        var genericsParameters = new List<GenericParameter>();
+        // get generics parameters from the type
+        if (type.HasGenericParameters) 
+        {
+            foreach (var parameter in type.GenericParameters)
+                genericsParameters.Add(parameter);
+        }
+        // get the generics parameters from the method that are not from the type
+        if (method.HasGenericParameters) 
+        {
+            foreach (var parameter in method.GenericParameters)
+            {
+                if (!genericsParameters.Any(p => p.Name == parameter.Name) && !genericsTypeMapping.TryGetValue(parameter.Name, out var _))
+                {
+                    var newGenericParameter = new GenericParameter(parameter.Name, newMethod);
+                    genericsParameters.Add(newGenericParameter);
+                    newMethod.GenericParameters.Add(newGenericParameter); // add to the new method
+                }
+            }
+        }
+
+        newMethod.ReturnType = Utils.ResolveGenericType(method.ReturnType, genericsParameters, genericsMapping, genericsTypeMapping);
+
+        // copy the method parameters (ignoring the first one)
         if (method.HasParameters)
         {
             foreach (var param in method.Parameters.Skip(1))
             {
-                var paramType = Utils.ResolveGenericType(param.ParameterType, type, genericsMapping, genericsTypeMapping);
+                var paramType = Utils.ResolveGenericType(param.ParameterType, genericsParameters, genericsMapping, genericsTypeMapping);
                 newMethod.Parameters.Add(new ParameterDefinition(param.Name, param.Attributes, paramType));
             }
         }
@@ -124,9 +145,7 @@ public partial class ModuleWeaver
         {
             foreach (var parameter in type.GenericParameters)
             {
-                LogWarning($"########");
-                var resolvedParameter = Utils.ResolveGenericType(parameter, type, genericsMapping, genericsTypeMapping, this);
-                LogWarning($"######## {resolvedParameter.FullName}: {resolvedParameter.GetType().FullName}");
+                var resolvedParameter = Utils.ResolveGenericType(parameter, genericsParameters, null, null);
 
                 genericType.GenericArguments.Add(parameter);
                 genericMethod.GenericArguments.Add(resolvedParameter);
@@ -149,6 +168,8 @@ public partial class ModuleWeaver
 
     void AddMethodExtension(TypeDefinition type, MethodDefinition method, PropertyDefinition property, IReadOnlyDictionary<string, string> genericsMapping, IReadOnlyDictionary<string, TypeReference> genericsTypeMapping)
     {
+        return; // do nothing for now
+/*
         var declaringType = type.DeclaringType;
 
         // create the extension method
@@ -201,7 +222,7 @@ public partial class ModuleWeaver
                 }
 
                 extensionType.GenericArguments.Add(newParam);
-                calledMethod.GenericArguments.Add(Utils.ResolveGenericType(param, type, genericsMapping, genericsTypeMapping));
+                calledMethod.GenericArguments.Add(Utils.ResolveGenericType(param, type, null, null));
             }
         }
 
@@ -235,6 +256,7 @@ public partial class ModuleWeaver
 
         declaringType.Methods.Add(newMethod);
         LogInfo($"Added extension method. Type: '{type.FullName}' Method: '{newMethod.FullName}'");
+*/
     }
 
     static CustomAttribute extensionAttribute;

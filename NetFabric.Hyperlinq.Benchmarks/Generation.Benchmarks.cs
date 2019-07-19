@@ -63,10 +63,10 @@ namespace NetFabric.Hyperlinq.Benchmarks
 
         [BenchmarkCategory("Range")]
         [Benchmark]
-        public long Hyperlinq_Range_ForEach() 
+        public int Hyperlinq_Range_ForEach() 
         {
-            var sum = 0L;
-            foreach(var item in Enumerable.Range(0, Count))
+            var sum = 0;
+            foreach(var item in ValueEnumerable.Range(0, Count))
                 sum += item;
             return sum;
         }    
@@ -76,17 +76,17 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Hyperlinq_Repeat_ForEach() 
         {
             var sum = 0;
-            foreach(var item in Enumerable.Repeat(1, Count))
+            foreach(var item in ValueEnumerable.Repeat(1, Count))
                 sum += item;
             return sum;
         }        
 
         [BenchmarkCategory("Range")]
         [Benchmark]
-        public long Hyperlinq_Range_For() 
+        public int Hyperlinq_Range_For() 
         {
-            var enumerable = Enumerable.Range(0, Count);
-            var sum = 0L;
+            var enumerable = ValueEnumerable.Range(0, Count);
+            var sum = 0;
             for(var index = 0; index < enumerable.Count; index++)
                 sum += enumerable[index];
             return sum;
@@ -96,7 +96,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [Benchmark]
         public int Hyperlinq_Repeat_For() 
         {
-            var enumerable = Enumerable.Repeat(1, Count);
+            var enumerable = ValueEnumerable.Repeat(1, Count);
             var sum = 0;
             for(var index = 0; index < enumerable.Count; index++)
                 sum += enumerable[index];

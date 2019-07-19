@@ -14,7 +14,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             // Arrange
 
             // Act
-            Action action = () => Enumerable.Repeat(0, count);
+            Action action = () => ValueEnumerable.Repeat(0, count);
 
             // Assert
             action.Should()
@@ -34,7 +34,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             // Arrange
 
             // Act
-            Func<int> action = () => Enumerable.Repeat(0, count)[index];
+            Func<int> action = () => ValueEnumerable.Repeat(0, count)[index];
 
             // Assert
             action.Should().ThrowExactly<IndexOutOfRangeException>();
@@ -48,7 +48,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             // Arrange
 
             // Act
-            var result = Enumerable.Repeat(value, count);
+            var result = ValueEnumerable.Repeat(value, count);
 
             // Assert
             result.Should().Generate(expected);
@@ -56,41 +56,41 @@ namespace NetFabric.Hyperlinq.UnitTests
   
         [Theory]
         [MemberData(nameof(TestData.RangeSkip), MemberType = typeof(TestData))]
-        public void Range_With_Skip_Should_Succeed(long value, long count, long skipCount, IReadOnlyList<long> expected)
+        public void Range_With_Skip_Should_Succeed(int value, int count, int skipCount, IReadOnlyList<int> expected)
         {
             // Arrange
 
             // Act
-            var result = Enumerable.Range(value, count).Skip(skipCount);
+            var result = ValueEnumerable.Range(value, count).Skip(skipCount);
 
             // Assert
-            result.AsEnumerable().Should().Equal(expected);
+            result.Should().Generate(expected);
         }
   
         [Theory]
         [MemberData(nameof(TestData.RangeTake), MemberType = typeof(TestData))]
-        public void Range_With_Take_Should_Succeed(long value, long count, long takeCount, IReadOnlyList<long> expected)
+        public void Range_With_Take_Should_Succeed(int value, int count, int takeCount, IReadOnlyList<int> expected)
         {
             // Arrange
 
             // Act
-            var result = Enumerable.Range(value, count).Take(takeCount);
+            var result = ValueEnumerable.Range(value, count).Take(takeCount);
 
             // Assert
-            result.AsEnumerable().Should().Equal(expected);
+            result.Should().Generate(expected);
         }
   
         [Theory]
         [MemberData(nameof(TestData.RangeSkipTake), MemberType = typeof(TestData))]
-        public void Range_With_SkipTake_Should_Succeed(long value, long count, long skipCount, long takeCount, IReadOnlyList<long> expected)
+        public void Range_With_SkipTake_Should_Succeed(int value, int count, int skipCount, int takeCount, IReadOnlyList<int> expected)
         {
             // Arrange
 
             // Act
-            var result = Enumerable.Range(value, count).Skip(skipCount).Take(takeCount);
+            var result = ValueEnumerable.Range(value, count).Skip(skipCount).Take(takeCount);
 
             // Assert
-            result.AsEnumerable().Should().Equal(expected);
+            result.Should().Generate(expected);
         }
     }
 }

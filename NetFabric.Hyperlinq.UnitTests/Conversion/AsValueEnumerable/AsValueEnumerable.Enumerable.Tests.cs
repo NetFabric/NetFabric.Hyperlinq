@@ -16,7 +16,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var wrapped = Wrap.AsEnumerable(source);
 
             // Act
-            var result = Enumerable.AsValueEnumerable<Wrap.Enumerable<int>, Wrap.Enumerable<int>.Enumerator, int>(wrapped);
+            var result = wrapped.AsValueEnumerable<Wrap.Enumerable<int>, Wrap.Enumerable<int>.Enumerator, int>();
 
             // Assert
             result.Should().Generate(source);

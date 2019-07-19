@@ -13,7 +13,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             // Arrange
 
             // Act
-            var result = Enumerable.Return(value);
+            var result = ValueEnumerable.Return(value);
 
             // Assert
             result.Should().Generate(expected);
@@ -27,7 +27,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             // Arrange
 
             // Act
-            Func<int> action = () => Enumerable.Return(value)[index];
+            Func<int> action = () => ValueEnumerable.Return(value)[index];
 
             // Assert
             action.Should().ThrowExactly<IndexOutOfRangeException>();
