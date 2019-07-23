@@ -113,7 +113,7 @@ public partial class ModuleWeaver
         {
             foreach (var parameter in method.GenericParameters)
             {
-                if (!genericsParameters.Any(p => p.Name == parameter.Name) && !genericsTypeMapping.TryGetValue(parameter.Name, out var _))
+                if (!(genericsTypeMapping.TryGetValue(parameter.Name, out var _) || genericsParameters.Any(p => p.Name == parameter.Name)))
                 {
                     var newGenericParameter = new GenericParameter(parameter.Name, newMethod);
                     genericsParameters.Add(newGenericParameter);
@@ -122,6 +122,7 @@ public partial class ModuleWeaver
             }
         }
 
+        // resolve the return type
         newMethod.ReturnType = Utils.ResolveGenericType(method.ReturnType, genericsParameters, genericsMapping, genericsTypeMapping);
 
         // copy the method parameters (ignoring the first one)
@@ -141,15 +142,10 @@ public partial class ModuleWeaver
         // set the generics arguments
         var genericType = new GenericInstanceType(type);
         var genericMethod = new GenericInstanceMethod(method);
-        if (type.HasGenericParameters)
+        foreach (var parameter in genericsParameters)
         {
-            foreach (var parameter in type.GenericParameters)
-            {
-                var resolvedParameter = Utils.ResolveGenericType(parameter, genericsParameters, null, null);
-
-                genericType.GenericArguments.Add(parameter);
-                genericMethod.GenericArguments.Add(resolvedParameter);
-            }
+            genericType.GenericArguments.Add(parameter);
+            genericMethod.GenericArguments.Add(parameter);
         }
 
         // create the method body
