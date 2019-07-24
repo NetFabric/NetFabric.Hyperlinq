@@ -119,7 +119,13 @@ public partial class ModuleWeaver
 
                 if (!(genericsTypeMapping.TryGetValue(parameterName, out var _) || genericsParameters.Any(p => p.Name == parameterName)))
                 {
-                    var newGenericParameter = new GenericParameter(parameterName, newMethod);
+                    var newGenericParameter = new GenericParameter(parameterName, newMethod)
+                    {
+                        HasDefaultConstructorConstraint = parameter.HasDefaultConstructorConstraint,
+                        HasNotNullableValueTypeConstraint = parameter.HasNotNullableValueTypeConstraint,
+                        HasReferenceTypeConstraint = parameter.HasReferenceTypeConstraint,
+                    };
+
                     genericsParameters.Add(newGenericParameter);
                     newMethod.GenericParameters.Add(newGenericParameter); // add to the new method
                 }
@@ -168,13 +174,8 @@ public partial class ModuleWeaver
 
     void AddMethodExtension(TypeDefinition type, MethodDefinition method, PropertyDefinition property, IReadOnlyDictionary<string, string> genericsMapping, IReadOnlyDictionary<string, TypeReference> genericsTypeMapping)
     {
-        return; // do nothing for now
-/*
-        var declaringType = type.DeclaringType;
-
         // create the extension method
-        var returnType = Utils.ResolveGenericType(property.PropertyType, type, genericsMapping, genericsTypeMapping);
-        var newMethod = new MethodDefinition(method.Name, MethodAttributes.Public | MethodAttributes.HideBySig | MethodAttributes.Static, returnType)
+        var newMethod = new MethodDefinition(method.Name, MethodAttributes.Public | MethodAttributes.HideBySig | MethodAttributes.Static, property.PropertyType)
         {
             AggressiveInlining = true,
             CustomAttributes = {
@@ -183,47 +184,54 @@ public partial class ModuleWeaver
             },
         };
 
-        var extensionType = new GenericInstanceType(type);
-        var calledMethod = new GenericInstanceMethod(method);
+        // collect the generics parameters
+        var genericsParameters = new List<GenericParameter>();
+        // get generics parameters from the type
         if (type.HasGenericParameters)
         {
-            // set the generic parameters for the new method
-            foreach (var param in type.GenericParameters)
+            foreach (var parameter in type.GenericParameters)
             {
-                var newParameter = new GenericParameter(param.Name, newMethod)
+                var newGenericParameter = new GenericParameter(parameter.Name, newMethod)
                 {
-                    HasDefaultConstructorConstraint = param.HasDefaultConstructorConstraint,
-                    HasNotNullableValueTypeConstraint = param.HasNotNullableValueTypeConstraint,
-                    HasReferenceTypeConstraint = param.HasReferenceTypeConstraint,
+                    HasDefaultConstructorConstraint = parameter.HasDefaultConstructorConstraint,
+                    HasNotNullableValueTypeConstraint = parameter.HasNotNullableValueTypeConstraint,
+                    HasReferenceTypeConstraint = parameter.HasReferenceTypeConstraint,
                 };
-                newMethod.GenericParameters.Add(newParameter);
-            }
 
-            // set the contraints for the new method and set the generic parameters for the type of first parameter
-            // this can only be performed after all generic parameters for the new method are set
-            for (var index = 0; index < newMethod.GenericParameters.Count; index++)
+                genericsParameters.Add(newGenericParameter);
+                newMethod.GenericParameters.Add(newGenericParameter);
+            }
+        }
+
+        // resolve the return type
+        newMethod.ReturnType = Utils.ResolveGenericType(property.PropertyType, genericsParameters, genericsMapping, genericsTypeMapping);
+
+        // set the contraints for the new method and set the generic parameters for the type of first parameter
+        // this can only be performed after all generic parameters for the new method are set
+        var extensionType = new GenericInstanceType(type);
+        var calledMethod = new GenericInstanceMethod(method);
+        for (var index = 0; index < newMethod.GenericParameters.Count; index++)
+        {
+            var param = type.GenericParameters[index];
+            var newParam = newMethod.GenericParameters[index];
+            if (param.HasConstraints)
             {
-                var param = type.GenericParameters[index];
-                var newParam = newMethod.GenericParameters[index];
-                if (param.HasConstraints)
+                foreach (var constraint in param.Constraints)
                 {
-                    foreach (var constraint in param.Constraints)
+                    switch (constraint.Name)
                     {
-                        switch (constraint.Name)
-                        {
-                            case "ValueType": // HasReferenceTypeConstraint is true
-                                // ignore
-                                break;
-                            default:
-                                newParam.Constraints.Add(Utils.ResolveGenericType(constraint, newMethod));
-                                break;
-                        }
+                        case "ValueType": // HasReferenceTypeConstraint is true
+                            // ignore
+                            break;
+                        default:
+                            newParam.Constraints.Add(Utils.ResolveGenericType(constraint, newMethod));
+                            break;
                     }
                 }
-
-                extensionType.GenericArguments.Add(newParam);
-                calledMethod.GenericArguments.Add(Utils.ResolveGenericType(param, type, null, null));
             }
+
+            extensionType.GenericArguments.Add(newParam);
+            calledMethod.GenericArguments.Add(Utils.ResolveGenericType(param, genericsParameters, null, null));
         }
 
         newMethod.Parameters.Add(new ParameterDefinition("source", ParameterAttributes.None, extensionType));
@@ -233,10 +241,12 @@ public partial class ModuleWeaver
         {
             foreach (var param in method.Parameters.Skip(1))
             {
-                var paramType = Utils.ResolveGenericType(param.ParameterType, newMethod, genericsMapping);
+                var paramType = Utils.ResolveGenericType(param.ParameterType, genericsParameters, genericsMapping, genericsTypeMapping);
                 newMethod.Parameters.Add(new ParameterDefinition(param.Name, param.Attributes, paramType));
             }
         }
+
+        var declaringType = type.DeclaringType;
 
         var u = declaringType.Methods.FirstOrDefault(m =>
              m.Name == method.Name &&
@@ -256,7 +266,6 @@ public partial class ModuleWeaver
 
         declaringType.Methods.Add(newMethod);
         LogInfo($"Added extension method. Type: '{type.FullName}' Method: '{newMethod.FullName}'");
-*/
     }
 
     static CustomAttribute extensionAttribute;
