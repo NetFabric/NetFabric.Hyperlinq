@@ -113,9 +113,13 @@ public partial class ModuleWeaver
         {
             foreach (var parameter in method.GenericParameters)
             {
-                if (!(genericsTypeMapping.TryGetValue(parameter.Name, out var _) || genericsParameters.Any(p => p.Name == parameter.Name)))
+                var parameterName = parameter.Name;
+                if (genericsMapping.TryGetValue(parameterName, out var mappedParameterName))
+                    parameterName = mappedParameterName;
+
+                if (!(genericsTypeMapping.TryGetValue(parameterName, out var _) || genericsParameters.Any(p => p.Name == parameterName)))
                 {
-                    var newGenericParameter = new GenericParameter(parameter.Name, newMethod);
+                    var newGenericParameter = new GenericParameter(parameterName, newMethod);
                     genericsParameters.Add(newGenericParameter);
                     newMethod.GenericParameters.Add(newGenericParameter); // add to the new method
                 }

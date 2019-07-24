@@ -24,6 +24,8 @@ namespace NetFabric.Hyperlinq
 
         [GenericsTypeMapping("TEnumerable", typeof(SelectEnumerable<,>))]
         [GenericsTypeMapping("TEnumerator", typeof(SelectEnumerable<,>.Enumerator))]
+        [GenericsMapping("TSource", "TResult")]
+        [GenericsMapping("TResult", "TSelectorResult")]
         public readonly struct SelectEnumerable<TSource, TResult>
             : IValueReadOnlyList<TResult, SelectEnumerable<TSource, TResult>.Enumerator>
         {
