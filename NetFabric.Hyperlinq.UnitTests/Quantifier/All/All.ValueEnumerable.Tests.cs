@@ -28,10 +28,11 @@ namespace NetFabric.Hyperlinq.UnitTests
 
         [Theory]
         [MemberData(nameof(TestData.All), MemberType = typeof(TestData))]
-        public void All_With_ValidData_Should_Succeed(int[] source, Func<int, bool> predicate, bool expected)
+        public void All_With_ValidData_Should_Succeed(int[] source, Func<int, bool> predicate)
         {
             // Arrange
             var wrapped = Wrap.AsValueEnumerable(source);
+            var expected = System.Linq.Enumerable.All(wrapped, predicate);
 
             // Act
             var result = ValueEnumerable.All<Wrap.ValueEnumerable<int>, Wrap.ValueEnumerable<int>.Enumerator, int>(wrapped, predicate);

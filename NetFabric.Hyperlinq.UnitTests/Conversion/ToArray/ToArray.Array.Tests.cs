@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using FluentAssertions;
 using Xunit;
 
@@ -13,12 +10,16 @@ namespace NetFabric.Hyperlinq.UnitTests
         public void ToArray_With_ValidData_Should_Succeed(int[] source)
         {
             // Arrange
+            var expected = System.Linq.Enumerable.ToArray(source);
 
             // Act
             var result = Array.ToArray(source);
 
             // Assert
-            result.Should().Equal(source);
+            result.Should()
+                .BeOfType<int[]>().And
+                .NotBeSameAs(source).And
+                .Equal(expected);
         }
     }
 }

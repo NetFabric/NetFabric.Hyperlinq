@@ -10,16 +10,17 @@ namespace NetFabric.Hyperlinq.UnitTests
     {
         [Theory]
         [MemberData(nameof(TestData.Take), MemberType = typeof(TestData))]
-        public void Take_With_ValidData_Should_Succeed(int[] source, int count, int[] expected)
+        public void Take_With_ValidData_Should_Succeed(int[] source, int count)
         {
             // Arrange
-            var list = Wrap.AsValueReadOnlyList(source);
+            var wrapped = Wrap.AsValueReadOnlyList(source);
+            var expected = System.Linq.Enumerable.Take(wrapped, count);
 
             // Act
-            var result = ValueReadOnlyList.Take<Wrap.ValueReadOnlyList<int>, Wrap.ValueReadOnlyList<int>.Enumerator, int>(list, count);
+            var result = ValueReadOnlyList.Take<Wrap.ValueReadOnlyList<int>, Wrap.ValueReadOnlyList<int>.Enumerator, int>(wrapped, count);
 
             // Assert
-            result.Should().Generate(expected);
+            result.Should().Equals(expected);
         }
     }
 }

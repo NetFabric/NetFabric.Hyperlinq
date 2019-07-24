@@ -27,16 +27,17 @@ namespace NetFabric.Hyperlinq.UnitTests
 
         [Theory]
         [MemberData(nameof(TestData.Select), MemberType = typeof(TestData))]
-        public void Select_With_ValidData_Should_Succeed(int[] source, Func<int, string> selector, string[] expected)
+        public void Select_With_ValidData_Should_Succeed(int[] source, Func<int, string> selector)
         {
             // Arrange
-            var list = Wrap.AsValueReadOnlyList(source);
+            var wrapped = Wrap.AsValueReadOnlyList(source);
+            var expected = System.Linq.Enumerable.Select(wrapped, selector);
 
             // Act
-            var result = ValueReadOnlyList.Select<Wrap.ValueReadOnlyList<int>, Wrap.ValueReadOnlyList<int>.Enumerator, int, string>(list, selector);
+            var result = ValueReadOnlyList.Select<Wrap.ValueReadOnlyList<int>, Wrap.ValueReadOnlyList<int>.Enumerator, int, string>(wrapped, selector);
 
             // Assert
-            result.Should().Generate(expected);
+            result.Should().Equals(expected);
         }
     }
 }

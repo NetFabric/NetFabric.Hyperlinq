@@ -1,6 +1,7 @@
+using FluentAssertions;
 using System;
 using System.Collections.Generic;
-using FluentAssertions;
+using System.Linq;
 using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests
@@ -42,80 +43,62 @@ namespace NetFabric.Hyperlinq.UnitTests
   
         [Theory]
         [MemberData(nameof(TestData.Range), MemberType = typeof(TestData))]
-        public void Range_With_ValidData_Should_Succeed(int start, int count, int[] expected)
+        public void Range_With_ValidData_Should_Succeed(int start, int count)
         {
             // Arrange
+            var expected = System.Linq.Enumerable.Range(start, count);
 
             // Act
             var result = ValueEnumerable.Range(start, count);
 
             // Assert
-            result.Should().Generate(expected);
-        }
-  
-        [Theory]
-        [MemberData(nameof(TestData.RangeSkip), MemberType = typeof(TestData))]
-        public void Range_With_Skip_Should_Succeed(int start, int count, int skipCount, int[] expected)
-        {
-            // Arrange
-
-            // Act
-            var result = ValueEnumerable.Range(start, count).Skip(skipCount);
-
-            // Assert
-            result.Should().Generate(expected);
-        }
-  
-        [Theory]
-        [MemberData(nameof(TestData.RangeTake), MemberType = typeof(TestData))]
-        public void Range_With_Take_Should_Succeed(int start, int count, int takeCount, int[] expected)
-        {
-            // Arrange
-
-            // Act
-            var result = ValueEnumerable.Range(start, count).Take(takeCount);
-
-            // Assert
-            result.Should().Generate(expected);
+            result.Should().Equals(expected);
         }
   
         [Theory]
         [MemberData(nameof(TestData.RangeSkipTake), MemberType = typeof(TestData))]
-        public void Range_With_SkipTake_Should_Succeed(int start, int count, int skipCount, int takeCount, int[] expected)
+        public void Range_With_SkipTake_Should_Succeed(int start, int count, int skipCount, int takeCount)
         {
             // Arrange
+            var expected = System.Linq.Enumerable.Range(start, count).Skip(skipCount).Take(takeCount);
 
             // Act
             var result = ValueEnumerable.Range(start, count).Skip(skipCount).Take(takeCount);
 
             // Assert
-            result.Should().Generate(expected);
+            result.Should().Equals(expected);
         }
-  
+
         [Theory]
         [MemberData(nameof(TestData.Range), MemberType = typeof(TestData))]
-        public void Range_With_ToArray_Should_Succeed(int start, int count, int[] expected)
+        public void Range_With_ToArray_Should_Succeed(int start, int count)
         {
             // Arrange
+            var expected = System.Linq.Enumerable.Range(start, count).ToArray();
 
             // Act
             var result = ValueEnumerable.Range(start, count).ToArray();
 
             // Assert
-            result.Should().Equal(expected as int[]);
+            result.Should()
+                .BeOfType<int[]>().And
+                .Equals(expected);
         }
   
         [Theory]
         [MemberData(nameof(TestData.Range), MemberType = typeof(TestData))]
-        public void Range_With_ToList_Should_Succeed(int start, int count, int[] expected)
+        public void Range_With_ToList_Should_Succeed(int start, int count)
         {
             // Arrange
+            var expected = System.Linq.Enumerable.Range(start, count).ToList();
 
             // Act
             var result = ValueEnumerable.Range(start, count).ToList();
 
             // Assert
-            result.Should().Equal(new List<int>(expected));
+            result.Should()
+                .BeOfType<List<int>>().And
+                .Equals(expected);
         }
     }
 }

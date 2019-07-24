@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using FluentAssertions;
 using Xunit;
 
@@ -10,16 +7,17 @@ namespace NetFabric.Hyperlinq.UnitTests
     {
         [Theory]
         [MemberData(nameof(TestData.Skip), MemberType = typeof(TestData))]
-        public void Skip_With_ValidData_Should_Succeed(int[] source, int count, int[] expected)
+        public void Skip_With_ValidData_Should_Succeed(int[] source, int count)
         {
             // Arrange
-            var enumerable = Wrap.AsValueEnumerable(source);
+            var wrapped = Wrap.AsValueEnumerable(source);
+            var expected = System.Linq.Enumerable.Skip(wrapped, count);
 
             // Act
-            var result = ValueEnumerable.Skip<Wrap.ValueEnumerable<int>, Wrap.ValueEnumerable<int>.Enumerator, int>(enumerable, count);
+            var result = ValueEnumerable.Skip<Wrap.ValueEnumerable<int>, Wrap.ValueEnumerable<int>.Enumerator, int>(wrapped, count);
 
             // Assert
-            result.Should().Generate(expected);
+            result.Should().Equals(expected);
         }
     }
 }

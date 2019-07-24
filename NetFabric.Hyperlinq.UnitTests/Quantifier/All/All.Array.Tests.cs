@@ -27,9 +27,10 @@ namespace NetFabric.Hyperlinq.UnitTests
 
         [Theory]
         [MemberData(nameof(TestData.All), MemberType = typeof(TestData))]
-        public void All_With_ValidData_Should_Succeed(int[] source, Func<int, bool> predicate, bool expected)
+        public void All_With_ValidData_Should_Succeed(int[] source, Func<int, bool> predicate)
         {
             // Arrange
+            var expected = System.Linq.Enumerable.All(source, predicate);
 
             // Act
             var result = Array.All<int>(source, predicate);

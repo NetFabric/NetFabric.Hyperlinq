@@ -1,7 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using FluentAssertions;
+using System;
 using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests
@@ -10,36 +8,12 @@ namespace NetFabric.Hyperlinq.UnitTests
     {
         [Theory]
         [MemberData(nameof(TestData.SingleEmpty), MemberType = typeof(TestData))]
-        public void FirstOrDefault_With_Empty_Return_Default(int[] source)
-        {
-            // Arrange
-
-            // Act
-            var result = ReadOnlySpanExtensions.FirstOrDefault<int>(source);
-
-            // Assert
-            result.Should().Be(0);
-        }
-
-        [Theory]
-        [MemberData(nameof(TestData.SinglePredicateEmpty), MemberType = typeof(TestData))]
-        public void FirstOrDefaultPredicate_With_Empty_Return_Default(int[] source, Func<int, bool> predicate)
-        {
-            // Arrange
-
-            // Act
-            var result = ReadOnlySpanExtensions.FirstOrDefault<int>(source, predicate);
-
-            // Assert
-            result.Should().Be(0);
-        }
-
-        [Theory]
         [MemberData(nameof(TestData.SingleSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SingleMultiple), MemberType = typeof(TestData))]
-        public void FirstOrDefault_With_ValidData_Should_Succeed(int[] source, int expected)
+        public void FirstOrDefault_With_ValidData_Should_Succeed(int[] source)
         {
             // Arrange
+            var expected = System.Linq.Enumerable.FirstOrDefault(source);
 
             // Act
             var result = ReadOnlySpanExtensions.FirstOrDefault<int>(source);
@@ -49,11 +23,13 @@ namespace NetFabric.Hyperlinq.UnitTests
         }
 
         [Theory]
+        [MemberData(nameof(TestData.SinglePredicateEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SinglePredicateSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SinglePredicateMultiple), MemberType = typeof(TestData))]
-        public void FirstOrDefaultPredicate_With_ValidData_Should_Succeed(int[] source, Func<int, bool> predicate, int expected)
+        public void FirstOrDefaultPredicate_With_ValidData_Should_Succeed(int[] source, Func<int, bool> predicate)
         {
             // Arrange
+            var expected = System.Linq.Enumerable.FirstOrDefault(source, predicate);
 
             // Act
             var result = ReadOnlySpanExtensions.FirstOrDefault<int>(source, predicate);

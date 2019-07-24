@@ -1,6 +1,6 @@
-using System;
-using System.Collections.Generic;
 using FluentAssertions;
+using System;
+using System.Linq;
 using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests
@@ -43,16 +43,17 @@ namespace NetFabric.Hyperlinq.UnitTests
 
         [Theory]
         [MemberData(nameof(TestData.WhereSelect), MemberType = typeof(TestData))]
-        public void WhereSelect_With_ValidData_Should_Succeed(int[] source, Func<int, bool> predicate, Func<int, string> selector, string[] expected)
+        public void WhereSelect_With_ValidData_Should_Succeed(int[] source, Func<int, bool> predicate, Func<int, string> selector)
         {
             // Arrange
-            var list = Wrap.AsValueReadOnlyList(source);
+            var wrapped = Wrap.AsValueReadOnlyList(source);
+            var expected = System.Linq.Enumerable.Where(wrapped, predicate).Select(selector);
 
             // Act
-            var result = ValueReadOnlyList.WhereSelect<Wrap.ValueReadOnlyList<int>, Wrap.ValueReadOnlyList<int>.Enumerator, int, string>(list, predicate, selector);
+            var result = ValueReadOnlyList.WhereSelect<Wrap.ValueReadOnlyList<int>, Wrap.ValueReadOnlyList<int>.Enumerator, int, string>(wrapped, predicate, selector);
 
             // Assert
-            result.Should().Generate(expected);
+            result.Should().Equals(expected);
         }
     }
 }

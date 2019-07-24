@@ -27,9 +27,10 @@ namespace NetFabric.Hyperlinq.UnitTests
 
         [Theory]
         [MemberData(nameof(TestData.Any), MemberType = typeof(TestData))]
-        public void Any_With_ValidData_Should_Succeed(int[] source, Func<int, bool> predicate, bool expected)
+        public void Any_With_ValidData_Should_Succeed(int[] source, Func<int, bool> predicate)
         {
             // Arrange
+            var expected = System.Linq.Enumerable.Any(source, predicate);
 
             // Act
             var result = ReadOnlySpanExtensions.Any<int>(source, predicate);

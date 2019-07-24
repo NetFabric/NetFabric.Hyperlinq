@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using FluentAssertions;
 using Xunit;
 
@@ -15,10 +12,12 @@ namespace NetFabric.Hyperlinq.UnitTests
             // Arrange
 
             // Act
-            var result = Array.AsValueEnumerable<int>(source);
+            var result = Array.AsValueEnumerable(source);
 
             // Assert
-            result.Should().Generate(source);
+            result.Should()
+                .BeOfType<Array.AsValueEnumerableEnumerable<int>>().And
+                .Equals(source);
         }
     }
 }

@@ -8,15 +8,16 @@ namespace NetFabric.Hyperlinq.UnitTests
     {
         [Theory]
         [MemberData(nameof(TestData.Return), MemberType = typeof(TestData))]
-        public void Return_With_Value_Should_Succeed(int value, int[] expected)
+        public void Return_With_Value_Should_Succeed(int value)
         {
             // Arrange
+            var expected = System.Linq.EnumerableEx.Return(value);
 
             // Act
             var result = ValueEnumerable.Return(value);
 
             // Assert
-            result.Should().Generate(expected);
+            result.Should().Equals(expected);
         } 
 
         [Theory]

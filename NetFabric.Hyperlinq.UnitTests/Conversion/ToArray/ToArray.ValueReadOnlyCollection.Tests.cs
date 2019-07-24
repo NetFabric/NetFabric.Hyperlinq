@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using FluentAssertions;
 using Xunit;
 
@@ -14,12 +11,16 @@ namespace NetFabric.Hyperlinq.UnitTests
         {
             // Arrange
             var wrapped = Wrap.AsValueReadOnlyCollection(source);
+            var expected = System.Linq.Enumerable.ToArray(wrapped);
 
             // Act
             var result = ValueReadOnlyCollection.ToArray<Wrap.ValueReadOnlyCollection<int>, Wrap.ValueReadOnlyCollection<int>.Enumerator, int>(wrapped);
 
             // Assert
-            result.Should().Equal(source);
+            result.Should()
+                .BeOfType<int[]>().And
+                .NotBeSameAs(source).And
+                .Equal(expected);
         }
     }
 }

@@ -6,7 +6,7 @@ namespace NetFabric.Hyperlinq
     public static partial class Array
     {
         public static TSource[] ToArray<TSource>(this TSource[] source)
-            => (TSource[])source.Clone();
+            => source.Clone() as TSource[];
 
         static TSource[] ToArray<TSource>(this TSource[] source, int skipCount, int takeCount)
         {

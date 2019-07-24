@@ -1,7 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using FluentAssertions;
+using System;
 using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests
@@ -40,9 +38,10 @@ namespace NetFabric.Hyperlinq.UnitTests
 
         [Theory]
         [MemberData(nameof(TestData.SingleSingle), MemberType = typeof(TestData))]
-        public void Single_With_ValidData_Should_Succeed(int[] source, int expected)
+        public void Single_With_ValidData_Should_Succeed(int[] source)
         {
             // Arrange
+            var expected = System.Linq.Enumerable.Single(source);
 
             // Act
             var result = SpanExtensions.Single<int>(source);
@@ -53,9 +52,10 @@ namespace NetFabric.Hyperlinq.UnitTests
 
         [Theory]
         [MemberData(nameof(TestData.SinglePredicateSingle), MemberType = typeof(TestData))]
-        public void SinglePredicate_With_ValidData_Should_Succeed(int[] source, Func<int, bool> predicate, int expected)
+        public void SinglePredicate_With_ValidData_Should_Succeed(int[] source, Func<int, bool> predicate)
         {
             // Arrange
+            var expected = System.Linq.Enumerable.Single(source, predicate);
 
             // Act
             var result = SpanExtensions.Single<int>(source, predicate);
@@ -66,7 +66,7 @@ namespace NetFabric.Hyperlinq.UnitTests
 
         [Theory]
         [MemberData(nameof(TestData.SingleMultiple), MemberType = typeof(TestData))]
-        public void Single_With_Multiple_Should_Throw(int[] source, int _)
+        public void Single_With_Multiple_Should_Throw(int[] source)
         {
             // Arrange
 
@@ -81,7 +81,7 @@ namespace NetFabric.Hyperlinq.UnitTests
 
         [Theory]
         [MemberData(nameof(TestData.SinglePredicateMultiple), MemberType = typeof(TestData))]
-        public void SinglePredicate_With_Multiple_Should_Throw(int[] source, Func<int, bool> predicate, int _)
+        public void SinglePredicate_With_Multiple_Should_Throw(int[] source, Func<int, bool> predicate)
         {
             // Arrange
 

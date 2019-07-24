@@ -1,6 +1,6 @@
-using System;
-using System.Collections.Generic;
 using FluentAssertions;
+using System;
+using System.Linq;
 using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests
@@ -43,54 +43,30 @@ namespace NetFabric.Hyperlinq.UnitTests
   
         [Theory]
         [MemberData(nameof(TestData.Repeat), MemberType = typeof(TestData))]
-        public void Repeat_With_ValidData_Should_Succeed(int value, int count, IReadOnlyList<int> expected)
+        public void Repeat_With_ValidData_Should_Succeed(int value, int count)
         {
             // Arrange
+            var expected = System.Linq.Enumerable.Repeat(value, count);
 
             // Act
             var result = ValueEnumerable.Repeat(value, count);
 
             // Assert
-            result.Should().Generate(expected);
+            result.Should().Equals(expected);
         }
-  
+
         [Theory]
-        [MemberData(nameof(TestData.RangeSkip), MemberType = typeof(TestData))]
-        public void Range_With_Skip_Should_Succeed(int value, int count, int skipCount, IReadOnlyList<int> expected)
+        [MemberData(nameof(TestData.RepeatSkipTake), MemberType = typeof(TestData))]
+        public void Repeat_With_SkipTake_Should_Succeed(int value, int count, int skipCount, int takeCount)
         {
             // Arrange
+            var expected = System.Linq.Enumerable.Repeat(value, count).Skip(skipCount).Take(takeCount);
 
             // Act
-            var result = ValueEnumerable.Range(value, count).Skip(skipCount);
+            var result = ValueEnumerable.Repeat(value, count).Skip(skipCount).Take(takeCount);
 
             // Assert
-            result.Should().Generate(expected);
-        }
-  
-        [Theory]
-        [MemberData(nameof(TestData.RangeTake), MemberType = typeof(TestData))]
-        public void Range_With_Take_Should_Succeed(int value, int count, int takeCount, IReadOnlyList<int> expected)
-        {
-            // Arrange
-
-            // Act
-            var result = ValueEnumerable.Range(value, count).Take(takeCount);
-
-            // Assert
-            result.Should().Generate(expected);
-        }
-  
-        [Theory]
-        [MemberData(nameof(TestData.RangeSkipTake), MemberType = typeof(TestData))]
-        public void Range_With_SkipTake_Should_Succeed(int value, int count, int skipCount, int takeCount, IReadOnlyList<int> expected)
-        {
-            // Arrange
-
-            // Act
-            var result = ValueEnumerable.Range(value, count).Skip(skipCount).Take(takeCount);
-
-            // Assert
-            result.Should().Generate(expected);
+            result.Should().Equals(expected);
         }
     }
 }
