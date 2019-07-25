@@ -1,7 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using FluentAssertions;
+using System.Linq;
 using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests
