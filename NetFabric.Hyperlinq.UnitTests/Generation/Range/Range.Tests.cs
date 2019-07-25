@@ -54,16 +54,30 @@ namespace NetFabric.Hyperlinq.UnitTests
             // Assert
             result.Should().Equals(expected);
         }
-  
+
         [Theory]
-        [MemberData(nameof(TestData.RangeSkipTake), MemberType = typeof(TestData))]
-        public void Range_With_SkipTake_Should_Succeed(int start, int count, int skipCount, int takeCount)
+        [MemberData(nameof(TestData.Range_SkipTake), MemberType = typeof(TestData))]
+        public void Range_Skip_With_ValidData_Should_Succeed(int start, int count, int skipCount)
         {
             // Arrange
-            var expected = System.Linq.Enumerable.Range(start, count).Skip(skipCount).Take(takeCount);
+            var expected = System.Linq.Enumerable.Range(start, count).Skip(skipCount);
 
             // Act
-            var result = ValueEnumerable.Range(start, count).Skip(skipCount).Take(takeCount);
+            var result = ValueEnumerable.Range(start, count).Skip(skipCount);
+
+            // Assert
+            result.Should().Equals(expected);
+        }
+
+        [Theory]
+        [MemberData(nameof(TestData.Range_SkipTake), MemberType = typeof(TestData))]
+        public void Range_Take_With_ValidData_Should_Succeed(int start, int count, int takeCount)
+        {
+            // Arrange
+            var expected = System.Linq.Enumerable.Range(start, count).Take(takeCount);
+
+            // Act
+            var result = ValueEnumerable.Range(start, count).Take(takeCount);
 
             // Assert
             result.Should().Equals(expected);
@@ -71,7 +85,35 @@ namespace NetFabric.Hyperlinq.UnitTests
 
         [Theory]
         [MemberData(nameof(TestData.Range), MemberType = typeof(TestData))]
-        public void Range_With_ToArray_Should_Succeed(int start, int count)
+        public void Range_Any_With_ValidData_Should_Succeed(int start, int count)
+        {
+            // Arrange
+            var expected = System.Linq.Enumerable.Range(start, count).Any();
+
+            // Act
+            var result = ValueEnumerable.Range(start, count).Any();
+
+            // Assert
+            result.Should().Equals(expected);
+        }
+
+        [Theory]
+        [MemberData(nameof(TestData.Range_Contains), MemberType = typeof(TestData))]
+        public void Range_Contains_With_ValidData_Should_Succeed(int start, int count, int value)
+        {
+            // Arrange
+            var expected = System.Linq.Enumerable.Range(start, count).Contains(value);
+
+            // Act
+            var result = ValueEnumerable.Range(start, count).Contains(value);
+
+            // Assert
+            result.Should().Be(expected);
+        }
+
+        [Theory]
+        [MemberData(nameof(TestData.Range), MemberType = typeof(TestData))]
+        public void Range_ToArray_With_ValidData_Should_Succeed(int start, int count)
         {
             // Arrange
             var expected = System.Linq.Enumerable.Range(start, count).ToArray();
