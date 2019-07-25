@@ -149,7 +149,7 @@ namespace NetFabric.Hyperlinq
             public TSource[] ToArray() => new TSource[0];
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public List<TSource> ToList() => new List<TSource>();
+            public List<TSource> ToList() => new List<TSource>(0);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Dictionary<TKey, TSource> ToDictionary<TKey>(Func<TSource, TKey> keySelector) 
