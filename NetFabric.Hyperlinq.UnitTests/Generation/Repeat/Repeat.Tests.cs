@@ -56,14 +56,84 @@ namespace NetFabric.Hyperlinq.UnitTests
         }
 
         [Theory]
-        [MemberData(nameof(TestData.RepeatSkipTake), MemberType = typeof(TestData))]
-        public void Repeat_With_SkipTake_Should_Succeed(int value, int count, int skipCount, int takeCount)
+        [MemberData(nameof(TestData.Repeat_SkipTake), MemberType = typeof(TestData))]
+        public void Repeat_Skip_With_ValidData_Should_Succeed(int value, int count, int skipCount)
         {
             // Arrange
-            var expected = System.Linq.Enumerable.Repeat(value, count).Skip(skipCount).Take(takeCount);
+            var expected = System.Linq.Enumerable.Repeat(value, count).Skip(skipCount);
 
             // Act
-            var result = ValueEnumerable.Repeat(value, count).Skip(skipCount).Take(takeCount);
+            var result = ValueEnumerable.Repeat(value, count).Skip(skipCount);
+
+            // Assert
+            result.Should().Equals(expected);
+        }
+
+        [Theory]
+        [MemberData(nameof(TestData.Repeat_SkipTake), MemberType = typeof(TestData))]
+        public void Repeat_Take_With_ValidData_Should_Succeed(int value, int count, int takeCount)
+        {
+            // Arrange
+            var expected = System.Linq.Enumerable.Repeat(value, count).Take(takeCount);
+
+            // Act
+            var result = ValueEnumerable.Repeat(value, count).Take(takeCount);
+
+            // Assert
+            result.Should().Equals(expected);
+        }
+
+        [Theory]
+        [MemberData(nameof(TestData.Repeat), MemberType = typeof(TestData))]
+        public void Repeat_All_With_ValidData_Should_Succeed(int value, int count)
+        {
+            // Arrange
+            var expected = System.Linq.Enumerable.Repeat(value, count).All(item => false);
+
+            // Act
+            var result = ValueEnumerable.Repeat(value, count).All(item => false);
+
+            // Assert
+            result.Should().Equals(expected);
+        }
+
+        [Theory]
+        [MemberData(nameof(TestData.Repeat), MemberType = typeof(TestData))]
+        public void Repeat_Any_With_ValidData_Should_Succeed(int value, int count)
+        {
+            // Arrange
+            var expected = System.Linq.Enumerable.Repeat(value, count).Any();
+
+            // Act
+            var result = ValueEnumerable.Repeat(value, count).Any();
+
+            // Assert
+            result.Should().Equals(expected);
+        }
+
+        [Theory]
+        [MemberData(nameof(TestData.Repeat), MemberType = typeof(TestData))]
+        public void Repeat_ToArray_With_ValidData_Should_Succeed(int value, int count)
+        {
+            // Arrange
+            var expected = System.Linq.Enumerable.Repeat(value, count).ToArray();
+
+            // Act
+            var result = ValueEnumerable.Repeat(value, count).ToArray();
+
+            // Assert
+            result.Should().Equals(expected);
+        }
+
+        [Theory]
+        [MemberData(nameof(TestData.Repeat), MemberType = typeof(TestData))]
+        public void Repeat_ToList_With_ValidData_Should_Succeed(int value, int count)
+        {
+            // Arrange
+            var expected = System.Linq.Enumerable.Repeat(value, count).ToList();
+
+            // Act
+            var result = ValueEnumerable.Repeat(value, count).ToList();
 
             // Assert
             result.Should().Equals(expected);
