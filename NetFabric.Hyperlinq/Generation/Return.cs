@@ -104,34 +104,21 @@ namespace NetFabric.Hyperlinq
                 => value;
 
             public TSource[] ToArray()
-            {
-                var array = new TSource[1];
-                array[0] = value;
-                return array;
-            }
+                => new TSource[] { value };
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public List<TSource> ToList()
-                => new List<TSource>(1)
-                {
-                    value
-                };
+                => new List<TSource>(1) { value };
 
             public Dictionary<TKey, TSource> ToDictionary<TKey>(Func<TSource, TKey> keySelector)
                 => ToDictionary<TKey>(keySelector, EqualityComparer<TKey>.Default);
             public Dictionary<TKey, TSource> ToDictionary<TKey>(Func<TSource, TKey> keySelector, IEqualityComparer<TKey> comparer)
-                => new Dictionary<TKey, TSource>(1, comparer)
-                {
-                    { keySelector(value), value }
-                };
+                => new Dictionary<TKey, TSource>(1, comparer) { { keySelector(value), value } };
 
             public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector)
                 => ToDictionary<TKey, TElement>(keySelector, elementSelector, EqualityComparer<TKey>.Default);
             public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, IEqualityComparer<TKey> comparer)
-                => new Dictionary<TKey, TElement>(1, comparer)
-                {
-                    { keySelector(value), elementSelector(value) }
-                };
+                => new Dictionary<TKey, TElement>(1, comparer) { { keySelector(value), elementSelector(value) } };
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
