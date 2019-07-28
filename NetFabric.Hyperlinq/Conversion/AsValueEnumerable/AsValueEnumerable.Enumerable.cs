@@ -20,7 +20,7 @@ namespace NetFabric.Hyperlinq
             : IValueEnumerable<TSource, AsValueEnumerableEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator>
             where TEnumerable : IEnumerable<TSource>
             where TEnumerator : IEnumerator<TSource>
-    {
+        {
             readonly TEnumerable source;
 
             internal AsValueEnumerableEnumerable(in TEnumerable source)

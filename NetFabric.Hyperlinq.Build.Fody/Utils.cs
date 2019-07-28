@@ -131,7 +131,7 @@ static class Utils
     }
 
 
-    public static TypeReference ResolveGenericType(TypeReference type, List<GenericParameter> genericParameters, IReadOnlyDictionary<string, string> genericsMapping, IReadOnlyDictionary<string, TypeReference> genericsTypeMapping)
+    public static TypeReference ResolveGenericType(TypeReference type, IEnumerable<GenericParameter> genericParameters, IReadOnlyDictionary<string, string> genericsMapping, IReadOnlyDictionary<string, TypeReference> genericsTypeMapping)
     {
         switch (type)
         {

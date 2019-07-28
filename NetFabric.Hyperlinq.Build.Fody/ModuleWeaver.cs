@@ -149,22 +149,36 @@ public partial class ModuleWeaver
         if (type.Methods.Any(m => m.IsSame(newMethod)))
             return;
 
-        // set the generics arguments
-        var genericType = new GenericInstanceType(type);
-        var genericMethod = new GenericInstanceMethod(method);
-        foreach (var parameter in genericsParameters)
+        // create the method body
+        var objectType = type as TypeReference;
+        if (type.HasGenericParameters)
         {
-            genericType.GenericArguments.Add(parameter);
-            genericMethod.GenericArguments.Add(parameter);
+            var genericType = new GenericInstanceType(type);
+            foreach (var parameter in genericsParameters)
+            {
+                var resolvedParameter = Utils.ResolveGenericType(parameter, genericsParameters, genericsMapping, genericsTypeMapping);
+                genericType.GenericArguments.Add(resolvedParameter);
+            }
+            objectType = genericType;
+        }
+        var calledMethod = method as MethodReference;
+        if (method.HasGenericParameters)
+        {
+            var genericMethod = new GenericInstanceMethod(method);
+            foreach (var parameter in method.GenericParameters)
+            {
+                var resolvedParameter = Utils.ResolveGenericType(parameter, genericsParameters, genericsMapping, genericsTypeMapping);
+                genericMethod.GenericArguments.Add(resolvedParameter);
+            }
+            calledMethod = genericMethod;
         }
 
-        // create the method body
         var processor = newMethod.Body.GetILProcessor();
         processor.Emit(OpCodes.Ldarg_0);
-        processor.Emit(OpCodes.Ldobj, genericType);
+        processor.Emit(OpCodes.Ldobj, objectType);
         for (var index = 0; index < newMethod.Parameters.Count; index++)
             Utils.LoadArg(processor, index + 1);
-        processor.Emit(OpCodes.Call, genericMethod);
+        processor.Emit(OpCodes.Call, calledMethod);
         processor.Emit(OpCodes.Ret);
 
         // add the new method to the type
@@ -208,30 +222,52 @@ public partial class ModuleWeaver
 
         // set the contraints for the new method and set the generic parameters for the type of first parameter
         // this can only be performed after all generic parameters for the new method are set
-        var extensionType = new GenericInstanceType(type);
-        var calledMethod = new GenericInstanceMethod(method);
-        for (var index = 0; index < newMethod.GenericParameters.Count; index++)
+        var extensionType = type as TypeReference;
+        if (type.HasGenericParameters)
         {
-            var param = type.GenericParameters[index];
-            var newParam = newMethod.GenericParameters[index];
-            if (param.HasConstraints)
+            var genericType = new GenericInstanceType(type);
+            for (var index = 0; index < newMethod.GenericParameters.Count; index++)
             {
-                foreach (var constraint in param.Constraints)
+                var param = type.GenericParameters[index];
+                var newParam = newMethod.GenericParameters[index];
+                if (param.HasConstraints)
                 {
-                    switch (constraint.Name)
+                    foreach (var constraint in param.Constraints)
                     {
-                        case "ValueType": // HasReferenceTypeConstraint is true
-                            // ignore
-                            break;
-                        default:
-                            newParam.Constraints.Add(Utils.ResolveGenericType(constraint, newMethod));
-                            break;
+                        switch (constraint.Name)
+                        {
+                            case "ValueType": // HasReferenceTypeConstraint is true
+                                              // ignore
+                                break;
+                            default:
+                                newParam.Constraints.Add(Utils.ResolveGenericType(constraint, newMethod));
+                                break;
+                        }
                     }
                 }
+
+                genericType.GenericArguments.Add(newParam);
             }
 
-            extensionType.GenericArguments.Add(newParam);
-            calledMethod.GenericArguments.Add(Utils.ResolveGenericType(param, genericsParameters, null, null));
+            extensionType = genericType;
+        }
+        var calledMethod = method as MethodReference;
+        if (method.HasGenericParameters)
+        {
+            var genericMethod = new GenericInstanceMethod(method);
+            foreach (var parameter in method.GenericParameters)
+            {
+                if (genericsTypeMapping.TryGetValue(parameter.Name, out var parameterTypeMapped))
+                {
+                    genericMethod.GenericArguments.Add(parameterTypeMapped);
+                }
+                else
+                {
+                    var resolvedParameter = Utils.ResolveGenericType(parameter, genericsParameters, genericsMapping, genericsTypeMapping);
+                    genericMethod.GenericArguments.Add(resolvedParameter);
+                }
+            }
+            calledMethod = genericMethod;
         }
 
         newMethod.Parameters.Add(new ParameterDefinition("source", ParameterAttributes.None, extensionType));
