@@ -12,32 +12,32 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [BenchmarkCategory("Range")]
         [Benchmark(Baseline = true)]
         public int Linq_Range()
-            => System.Linq.Enumerable.Where(linqRange, _ => true).First();
+            => System.Linq.Enumerable.First(System.Linq.Enumerable.Where(linqRange, _ => true));
 
         [BenchmarkCategory("Queue")]
         [Benchmark(Baseline = true)]
         public int Linq_Queue()
-            => System.Linq.Enumerable.Where(queue, _ => true).First();
+            => System.Linq.Enumerable.First(System.Linq.Enumerable.Where(queue, _ => true));
 
         [BenchmarkCategory("Array")]
         [Benchmark(Baseline = true)]
         public int Linq_Array()
-            => System.Linq.Enumerable.Where(array, _ => true).First();
+            => System.Linq.Enumerable.First(System.Linq.Enumerable.Where(array, _ => true));
 
         [BenchmarkCategory("List")]
         [Benchmark(Baseline = true)]
         public int Linq_List()
-            => System.Linq.Enumerable.Where(list, _ => true).First();
+            => System.Linq.Enumerable.First(System.Linq.Enumerable.Where(list, _ => true));
 
         [BenchmarkCategory("Enumerable_Reference")]
         [Benchmark(Baseline = true)]
-        public int Linq_Enumerable_Reference() 
-            => System.Linq.Enumerable.Where(enumerableReference, _ => true).First();
+        public int Linq_Enumerable_Reference()
+            => System.Linq.Enumerable.First(System.Linq.Enumerable.Where(enumerableReference, _ => true));
 
         [BenchmarkCategory("Enumerable_Value")]
         [Benchmark(Baseline = true)]
         public int Linq_Enumerable_Value()
-            => System.Linq.Enumerable.Where(enumerableValue, _ => true).First();
+            => System.Linq.Enumerable.First(System.Linq.Enumerable.Where(enumerableValue, _ => true));
 
         [BenchmarkCategory("Range")]
         [Benchmark]

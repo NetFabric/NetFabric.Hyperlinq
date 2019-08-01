@@ -1,6 +1,5 @@
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Configs;
-using System.Linq;
 
 namespace NetFabric.Hyperlinq.Benchmarks
 {
@@ -13,32 +12,32 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [BenchmarkCategory("Range")]
         [Benchmark(Baseline = true)]
         public int Linq_Range()
-            => linqRange.Where(_ => true).SingleOrDefault();
+            => System.Linq.Enumerable.SingleOrDefault(System.Linq.Enumerable.Where(linqRange, _ => true));
 
         [BenchmarkCategory("Queue")]
         [Benchmark(Baseline = true)]
         public int Linq_Queue()
-            => System.Linq.Enumerable.Where(queue, _ => true).SingleOrDefault();
+            => System.Linq.Enumerable.SingleOrDefault(System.Linq.Enumerable.Where(queue, _ => true));
 
         [BenchmarkCategory("Array")]
         [Benchmark(Baseline = true)]
         public int Linq_Array()
-            => System.Linq.Enumerable.Where(array, _ => true).SingleOrDefault();
+            => System.Linq.Enumerable.SingleOrDefault(System.Linq.Enumerable.Where(array, _ => true));
 
         [BenchmarkCategory("List")]
         [Benchmark(Baseline = true)]
         public int Linq_List()
-            => System.Linq.Enumerable.Where(list, _ => true).SingleOrDefault();
+            => System.Linq.Enumerable.SingleOrDefault(System.Linq.Enumerable.Where(list, _ => true));
 
         [BenchmarkCategory("Enumerable_Reference")]
         [Benchmark(Baseline = true)]
-        public int Linq_Enumerable_Reference() 
-            => System.Linq.Enumerable.Where(enumerableReference, _ => true).SingleOrDefault();
+        public int Linq_Enumerable_Reference()
+            => System.Linq.Enumerable.SingleOrDefault(System.Linq.Enumerable.Where(enumerableReference, _ => true));
 
         [BenchmarkCategory("Enumerable_Value")]
         [Benchmark(Baseline = true)]
         public int Linq_Enumerable_Value()
-            => System.Linq.Enumerable.Where(enumerableValue, _ => true).SingleOrDefault();
+            => System.Linq.Enumerable.SingleOrDefault(System.Linq.Enumerable.Where(enumerableValue, _ => true));
 
         [BenchmarkCategory("Range")]
         [Benchmark]

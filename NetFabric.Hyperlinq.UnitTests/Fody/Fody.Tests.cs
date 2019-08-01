@@ -6,6 +6,22 @@ namespace NetFabric.Hyperlinq.UnitTests
     public class FodyTests
     {
         [Fact]
+        public void AddMethodInstance_AsValueEnumerable_Should_Succeed()
+        {
+            // ValueEnumerable.RangeEnumerable type doesn't have generic parameters
+
+            // Arrange
+            var expected = System.Linq.Enumerable.Select(System.Linq.Enumerable.Range(0, 100), item => item);
+
+            // Act
+            var result = System.Linq.Enumerable.Range(0, 100).AsValueEnumerable().Select(item => item);
+
+            // Assert
+            result.Should()
+                .Be(expected);
+        }
+
+        [Fact]
         public void AddMethodInstance_Should_Succeed()
         {
             // ValueEnumerable.RangeEnumerable type doesn't have generic parameters
@@ -37,21 +53,21 @@ namespace NetFabric.Hyperlinq.UnitTests
                 .Be(expected);
         }
 
-        [Fact]
-        public void AddMethodInstance_With_GenericParameter_Should_Succeed()
-        {
-            // The combination of selectors require the second Select() to have a generic parameter
+        //[Fact]
+        //public void AddMethodInstance_With_GenericParameter_Should_Succeed()
+        //{
+        //    // The combination of selectors require the second Select() to have a generic parameter
 
-            // Arrange
-            var expected = System.Linq.Enumerable.Select(System.Linq.Enumerable.Range(0, 100), (item, index) => item.ToString());
+        //    // Arrange
+        //    var expected = System.Linq.Enumerable.SelectMany(System.Linq.Enumerable.Select(System.Linq.Enumerable.Range(0, 10), item => item), item => ValueEnumerable.Range(0, 10));
 
-            // Act
-            var result = ValueEnumerable.Range(0, 100).Select(item => item).Select(item => item.ToString());
+        //    // Act
+        //    var result = ValueEnumerable.Range(0, 10).Select(item => item).SelectMany(item => ValueEnumerable.Range(0, 10));
 
-            // Assert
-            result.Should()
-                .Equals(expected);
-        }
+        //    // Assert
+        //    result.Should()
+        //        .Equals(expected);
+        //}
 
         [Fact]
         public void AddMethodExtension_Should_Succeed()

@@ -5,22 +5,10 @@
     <IsPackable>false</IsPackable>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Remove="Select.Benchmarks.cs" />
     <Compile Remove="Select.Count.Benchmarks.cs" />
     <Compile Remove="Select.ToArray.Benchmarks.cs" />
     <Compile Remove="Select.ToList.Benchmarks.cs" />
     <Compile Remove="SelectMany.Benchmarks.cs" />
-    <Compile Remove="Where.Benchmarks.cs" />
-    <Compile Remove="Where.Count.Benchmarks.cs" />
-    <Compile Remove="Where.First.Benchmarks.cs" />
-    <Compile Remove="Where.FirstOrDefault.Benchmarks.cs" />
-    <Compile Remove="Where.Select.Benchmarks.cs" />
-    <Compile Remove="Where.Select.Count.Benchmarks.cs" />
-    <Compile Remove="Where.Single.Benchmarks.cs" />
-    <Compile Remove="Where.SingleOrDefault.Benchmarks.cs" />
-    <Compile Remove="Where.ToArray.Benchmarks.cs" />
-    <Compile Remove="Where.ToList.Benchmarks.cs" />
-    <Compile Remove="Where.Where.Benchmarks.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="BenchmarkDotNet" Version="0.11.5" />

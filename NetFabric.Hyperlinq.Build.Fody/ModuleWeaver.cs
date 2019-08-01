@@ -152,15 +152,8 @@ public partial class ModuleWeaver
         // create the method body
         var objectType = type as TypeReference;
         if (type.HasGenericParameters)
-        {
-            var genericType = new GenericInstanceType(type);
-            foreach (var parameter in genericsParameters)
-            {
-                var resolvedParameter = Utils.ResolveGenericType(parameter, genericsParameters, genericsMapping, genericsTypeMapping);
-                genericType.GenericArguments.Add(resolvedParameter);
-            }
-            objectType = genericType;
-        }
+            objectType = Utils.ResolveGenericType(type, genericsParameters, null, genericsTypeMapping);
+
         var calledMethod = method as MethodReference;
         if (method.HasGenericParameters)
         {

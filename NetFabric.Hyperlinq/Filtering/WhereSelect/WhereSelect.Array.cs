@@ -82,16 +82,16 @@ namespace NetFabric.Hyperlinq
             public int Count()
                 => Array.Count<TSource>(source, predicate, skipCount, takeCount);
             public int Count(Func<TSource, bool> predicate)
-                => Array.Count<TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount);
+                => Array.Count<TSource>(source, Utils.CombinePredicates(this.predicate, predicate), skipCount, takeCount);
             public int Count(Func<TSource, int, bool> predicate)
-                => Array.Count<TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount);
+                => Array.Count<TSource>(source, Utils.CombinePredicates(this.predicate, predicate), skipCount, takeCount);
 
             public bool Any()
                 => Array.Any<TSource>(source, predicate, skipCount, takeCount);
             public bool Any(Func<TSource, bool> predicate)
-                => Array.Any<TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount);
+                => Array.Any<TSource>(source, Utils.CombinePredicates(this.predicate, predicate), skipCount, takeCount);
             public bool Any(Func<TSource, int, bool> predicate)
-                => Array.Any<TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount);
+                => Array.Any<TSource>(source, Utils.CombinePredicates(this.predicate, predicate), skipCount, takeCount);
 
             public List<TResult> ToList()
             {
