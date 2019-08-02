@@ -17,10 +17,16 @@ steps:
   inputs:
     version: '3.0.100-preview6-012264'
 - task: DotNetCoreCLI@2
-  displayName: Build
+  displayName: Build Fody
   inputs:
     command: 'build'
-    projects: '**/*.csproj'
+    projects: 'NetFabric.Hyperlinq.Build.Fody/NetFabric.Hyperlinq.Build.Fody.csproj'
+    arguments: '--configuration $(buildConfiguration)'
+- task: DotNetCoreCLI@2
+  displayName: Build UnitTests
+  inputs:
+    command: 'build'
+    projects: 'NetFabric.Hyperlinq.UnitTests/NetFabric.Hyperlinq.UnitTests.csproj'
     arguments: '--configuration $(buildConfiguration)'
 - task: DotNetCoreCLI@2
   displayName: Test and Coverage
