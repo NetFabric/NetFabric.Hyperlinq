@@ -177,7 +177,7 @@ static class Utils
                     if (typeReference.HasGenericParameters)
                     {
                         var temp = new GenericInstanceType(typeReference);
-                        foreach (var param in genericParameters)
+                        foreach (var param in typeReference.GenericParameters)
                         {
                             temp.GenericArguments.Add(ResolveGenericType(param, genericParameters, genericsMapping, null));
                         }

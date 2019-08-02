@@ -6,22 +6,6 @@ namespace NetFabric.Hyperlinq.UnitTests
     public class FodyTests
     {
         [Fact]
-        public void AddMethodInstance_AsValueEnumerable_Should_Succeed()
-        {
-            // ValueEnumerable.RangeEnumerable type doesn't have generic parameters
-
-            // Arrange
-            var expected = System.Linq.Enumerable.Select(System.Linq.Enumerable.Range(0, 100), item => item);
-
-            // Act
-            var result = System.Linq.Enumerable.Range(0, 100).AsValueEnumerable().Select(item => item);
-
-            // Assert
-            result.Should()
-                .Be(expected);
-        }
-
-        [Fact]
         public void AddMethodInstance_Should_Succeed()
         {
             // ValueEnumerable.RangeEnumerable type doesn't have generic parameters
@@ -35,6 +19,22 @@ namespace NetFabric.Hyperlinq.UnitTests
             // Assert
             result.Should()
                 .Be(expected);
+        }
+
+        [Fact]
+        public void AddMethodInstance_With_GenericParameter_Should_Succeed()
+        {
+            // AsValueEnumerable().Select<TResult>()
+
+            // Arrange
+            var expected = System.Linq.Enumerable.Select(System.Linq.Enumerable.Range(0, 100), item => item);
+
+            // Act
+            var result = System.Linq.Enumerable.Range(0, 100).AsValueEnumerable().Select(item => item);
+
+            // Assert
+            result.Should()
+                .Equals(expected);
         }
 
         [Fact]
