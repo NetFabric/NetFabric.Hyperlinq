@@ -11,11 +11,11 @@ variables:
 steps:
 - task: NuGetToolInstaller@1
   inputs:
-    versionSpec: '>=4.3.0'
+    versionSpec: '5.2.0'
     checkLatest: true
 - task: DotNetCoreInstaller@0
   inputs:
-    version: '3.0.100-preview6-012264'
+    version: '3.0.100-preview7-012821'
 - task: DotNetCoreCLI@2
   displayName: Build Fody
   inputs:
@@ -39,7 +39,7 @@ steps:
   inputs:
     command: 'test'
     projects: 'NetFabric.Hyperlinq.UnitTests/NetFabric.Hyperlinq.UnitTests.csproj'    
-    arguments: '--no-build /p:CollectCoverage=true /p:Exclude="[xunit.*]*" /p:CoverletOutputFormat=cobertura /p:CoverletOutput=$(Build.SourcesDirectory)/TestResults/Coverage/'
+    arguments: '/p:CollectCoverage=true /p:Exclude="[xunit.*]*" /p:CoverletOutputFormat=cobertura /p:CoverletOutput=$(Build.SourcesDirectory)/TestResults/Coverage/'
     workingDirectory: 'NetFabric.Hyperlinq.UnitTests'
 - task: DotNetCoreCLI@2
   displayName: Report Generator
