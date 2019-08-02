@@ -29,11 +29,17 @@ steps:
     projects: 'NetFabric.Hyperlinq.UnitTests/NetFabric.Hyperlinq.UnitTests.csproj'
     arguments: '--configuration $(buildConfiguration)'
 - task: DotNetCoreCLI@2
+  displayName: Build Benchmarks
+  inputs:
+    command: 'build'
+    projects: 'NetFabric.Hyperlinq.Benchmarks/NetFabric.Hyperlinq.Benchmarks.csproj'
+    arguments: '--configuration $(buildConfiguration)'
+- task: DotNetCoreCLI@2
   displayName: Test and Coverage
   inputs:
     command: 'test'
     projects: 'NetFabric.Hyperlinq.UnitTests/NetFabric.Hyperlinq.UnitTests.csproj'    
-    arguments: '/p:CollectCoverage=true /p:Exclude="[xunit.*]*" /p:CoverletOutputFormat=cobertura /p:CoverletOutput=$(Build.SourcesDirectory)/TestResults/Coverage/'
+    arguments: '--no-build /p:CollectCoverage=true /p:Exclude="[xunit.*]*" /p:CoverletOutputFormat=cobertura /p:CoverletOutput=$(Build.SourcesDirectory)/TestResults/Coverage/'
     workingDirectory: 'NetFabric.Hyperlinq.UnitTests'
 - task: DotNetCoreCLI@2
   displayName: Report Generator
