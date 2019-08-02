@@ -11,8 +11,11 @@ variables:
 steps:
 - task: NuGetToolInstaller@1
   inputs:
-    versionSpec: '4.3.0'
+    versionSpec: '>=4.3.0'
     checkLatest: true
+- task: DotNetCoreInstaller@0
+  inputs:
+    version: '3.0.100-preview6-012264'
 - task: DotNetCoreCLI@2
   displayName: Build
   inputs:
