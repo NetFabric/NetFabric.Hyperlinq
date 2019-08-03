@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace NetFabric.Hyperlinq
 {
@@ -6,15 +7,24 @@ namespace NetFabric.Hyperlinq
     {
         public static TSource[] ToArray<TEnumerable, TEnumerator, TSource>(this TEnumerable source)
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
-            where TEnumerator : struct, IValueEnumerator<TSource>
+            where TEnumerator : struct, IEnumerator<TSource>
         {
             var array = new TSource[source.Count];
             if (source.Count != 0)
             {
-                using (var enumerator = source.GetEnumerator())
+                switch (source)
                 {
-                    for (var index = 0L; enumerator.MoveNext(); index++)
-                        array[index] = enumerator.Current;
+                    case ICollection<TSource> collection:
+                        collection.CopyTo(array, 0);
+                        break;
+
+                    default:
+                        using (var enumerator = source.GetEnumerator())
+                        {
+                            for (var index = 0; enumerator.MoveNext(); index++)
+                                array[index] = enumerator.Current;
+                        }
+                        break;
                 }
             }
             return array;

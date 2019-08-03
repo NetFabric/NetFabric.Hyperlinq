@@ -10,9 +10,10 @@ namespace NetFabric.Hyperlinq.UnitTests
     {
         [Theory]
         [MemberData(nameof(TestData.Contains), MemberType = typeof(TestData))]
-        public void Contains_With_ValidData_Should_Succeed(int[] source, int value, bool expected)
+        public void Contains_With_ValidData_Should_Succeed(int[] source, int value)
         {
             // Arrange
+            var expected = System.Linq.Enumerable.Contains(source, value);
 
             // Act
             var result = Array.Contains<int>(source, value);
@@ -23,9 +24,10 @@ namespace NetFabric.Hyperlinq.UnitTests
 
         [Theory]
         [MemberData(nameof(TestData.Contains), MemberType = typeof(TestData))]
-        public void Contains_With_ValidData_And_Comparer_Should_Succeed(int[] source, int value, bool expected)
+        public void Contains_With_ValidData_And_Comparer_Should_Succeed(int[] source, int value)
         {
             // Arrange
+            var expected = System.Linq.Enumerable.Contains(source, value, EqualityComparer<int>.Default);
 
             // Act
             var result = Array.Contains<int>(source, value, EqualityComparer<int>.Default);
@@ -36,9 +38,10 @@ namespace NetFabric.Hyperlinq.UnitTests
 
         [Theory]
         [MemberData(nameof(TestData.Contains), MemberType = typeof(TestData))]
-        public void Contains_With_ValidData_And_NullComparer_Should_Succeed(int[] source, int value, bool expected)
+        public void Contains_With_ValidData_And_NullComparer_Should_Succeed(int[] source, int value)
         {
             // Arrange
+            var expected = System.Linq.Enumerable.Contains(source, value, null);
 
             // Act
             var result = Array.Contains<int>(source, value, null);

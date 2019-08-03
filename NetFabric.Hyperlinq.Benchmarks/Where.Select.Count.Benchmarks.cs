@@ -41,32 +41,32 @@ namespace NetFabric.Hyperlinq.Benchmarks
 
         [BenchmarkCategory("Range")]
         [Benchmark]
-        public long Hyperlinq_Range() 
-            => hyperlinqRange.Where((_, __) => true).Select((item, _) => item).Count();
+        public int Hyperlinq_Range() 
+            => hyperlinqRange.Where(_ => true).Select(item => item).Count();
 
         [BenchmarkCategory("Queue")]
         [Benchmark]
-        public long Hyperlinq_Queue() 
-            => queue.Where((_, __) => true).Select((item, _) => item).Count();
+        public int Hyperlinq_Queue() 
+            => queue.Where(_ => true).Select(item => item).Count();
 
         [BenchmarkCategory("Array")]
         [Benchmark]
-        public long Hyperlinq_Array() 
-            => array.Where((_, __) => true).Select((item, _) => item).Count();
+        public int Hyperlinq_Array() 
+            => array.Where(_ => true).Select(item => item).Count();
 
         [BenchmarkCategory("List")]
         [Benchmark]
-        public long Hyperlinq_List() 
-            => list.Where((_, __) => true).Select((item, _) => item).Count();
+        public int Hyperlinq_List() 
+            => list.Where(_ => true).Select(item => item).Count();
 
         [BenchmarkCategory("Enumerable_Reference")]
         [Benchmark]
-        public long Hyperlinq_Enumerable_Reference()
-            => enumerableReference.Where((_, __) => true).Select((item, _) => item).Count();
+        public int Hyperlinq_Enumerable_Reference()
+            => enumerableReference.AsValueEnumerable().Where(_ => true).Select(item => item).Count();
 
         [BenchmarkCategory("Enumerable_Value")]
         [Benchmark]
-        public long Hyperlinq_Enumerable_Value()
-            => enumerableValue.Where((_, __) => true).Select((item, _) => item).Count();
+        public int Hyperlinq_Enumerable_Value()
+            => enumerableValue.AsValueEnumerable<TestEnumerable.Enumerable, TestEnumerable.Enumerable.Enumerator, int>().Where(_ => true).Select(item => item).Count();
     }
 }

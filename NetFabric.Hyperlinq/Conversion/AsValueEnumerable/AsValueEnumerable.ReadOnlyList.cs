@@ -1,21 +1,27 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace NetFabric.Hyperlinq
 {
     public static partial class ReadOnlyList
     {
+        public static AsValueEnumerableEnumerable<IReadOnlyList<TSource>, IEnumerator<TSource>, TSource> AsValueEnumerable<TSource>(this IReadOnlyList<TSource> source)
+           => new AsValueEnumerableEnumerable<IReadOnlyList<TSource>, IEnumerator<TSource>, TSource>(source);
+
         public static AsValueEnumerableEnumerable<TEnumerable, TEnumerator, TSource> AsValueEnumerable<TEnumerable, TEnumerator, TSource>(this TEnumerable source)
             where TEnumerable : IReadOnlyList<TSource>
             where TEnumerator : IEnumerator<TSource>
             => new AsValueEnumerableEnumerable<TEnumerable, TEnumerator, TSource>(source);
 
-        public struct AsValueEnumerableEnumerable<TEnumerable, TEnumerator, TSource>
+        [GenericsTypeMapping("TEnumerable", typeof(AsValueEnumerableEnumerable<,,>))]
+        [GenericsTypeMapping("TEnumerator", typeof(AsValueEnumerableEnumerable<,,>.Enumerator))]
+        public readonly struct AsValueEnumerableEnumerable<TEnumerable, TEnumerator, TSource>
             : IValueReadOnlyList<TSource, AsValueEnumerableEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator>
             where TEnumerable : IReadOnlyList<TSource>
             where TEnumerator : IEnumerator<TSource>
         {
-            TEnumerable source;
+            readonly TEnumerable source;
 
             internal AsValueEnumerableEnumerable(in TEnumerable source)
             {
@@ -23,21 +29,15 @@ namespace NetFabric.Hyperlinq
             }
 
             public Enumerator GetEnumerator() => new Enumerator(source);
+            IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new Enumerator(source);
+            IEnumerator IEnumerable.GetEnumerator() => new Enumerator(source);
 
-            public long Count => source.Count;
+            public int Count => source.Count;
 
-            public TSource this[long index]
-            {
-                get
-                {
-                    if (index < 0 || index > source.Count) ThrowHelper.ThrowIndexOutOfRangeException();                    
-                    
-                    return source[(int)index];
-                }
-            }
+            public TSource this[int index] => source[index];
             
             public struct Enumerator 
-                : IValueEnumerator<TSource>
+                : IEnumerator<TSource>
             {
                 TEnumerator enumerator;
 
@@ -47,8 +47,11 @@ namespace NetFabric.Hyperlinq
                 }
 
                 public TSource Current => enumerator.Current;
+                object IEnumerator.Current => enumerator.Current;
 
                 public bool MoveNext() => enumerator.MoveNext();
+
+                void IEnumerator.Reset() => throw new NotSupportedException();
 
                 public void Dispose() => enumerator.Dispose();
             }

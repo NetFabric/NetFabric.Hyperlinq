@@ -1,14 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace NetFabric.Hyperlinq
 {
     public static partial class ValueEnumerable
     {
-        public static long Count<TEnumerable, TEnumerator, TSource>(this TEnumerable source)
+        public static int Count<TEnumerable, TEnumerator, TSource>(this TEnumerable source)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
-            where TEnumerator : struct, IValueEnumerator<TSource>
+            where TEnumerator : struct, IEnumerator<TSource>
         {
-            var count = 0L;
+            var count = 0;
             using (var enumerator = source.GetEnumerator())
             {
                 checked
@@ -20,11 +21,11 @@ namespace NetFabric.Hyperlinq
             return count;
         }
 
-        public static long Count<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, bool> predicate)
+        public static int Count<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, bool> predicate)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
-            where TEnumerator : struct, IValueEnumerator<TSource>
+            where TEnumerator : struct, IEnumerator<TSource>
         {
-            var count = 0L;
+            var count = 0;
             using (var enumerator = source.GetEnumerator())
             {
                 checked
@@ -39,12 +40,12 @@ namespace NetFabric.Hyperlinq
             return count;
         }
 
-        public static long Count<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, long, bool> predicate)
+        public static int Count<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, int, bool> predicate)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
-            where TEnumerator : struct, IValueEnumerator<TSource>
+            where TEnumerator : struct, IEnumerator<TSource>
         {
-            var count = 0L;
-            var index = 0L;
+            var count = 0;
+            var index = 0;
             using (var enumerator = source.GetEnumerator())
             {
                 checked

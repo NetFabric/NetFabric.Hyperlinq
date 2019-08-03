@@ -6,31 +6,28 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class TestData
     {
-        public static TheoryData<int[], int> Count =>
-            new TheoryData<int[], int> 
+        public static TheoryData<int[]> Count =>
+            new TheoryData<int[]> 
             {
-                { new int[] { }, 0 },
-                { new int[] { 1 }, 1 },
-                { new int[] { 1, 2, 3, 4, 5}, 5 },
+                { new int[] { } },
+                { new int[] { 1 } },
+                { new int[] { 1, 2, 3, 4, 5} },
             };
 
-        public static TheoryData<int[], Func<int, long, bool>, int> CountPredicate =>
-            new TheoryData<int[], Func<int, long, bool>, int> 
+        public static TheoryData<int[], Func<int, bool>> CountPredicate =>
+            new TheoryData<int[], Func<int, bool>> 
             {
-                { new int[] { }, (_, __) => true, 0 },
-                { new int[] { 1 }, (_, __) => true, 1 },
-                { new int[] { 1, 2, 3, 4, 5 }, (_, __) => true, 5 },
+                { new int[] { }, _ => true },
+                { new int[] { 1 }, _ => true },
+                { new int[] { 1, 2, 3, 4, 5 }, _ => true },
 
-                { new int[] { }, (_, __) => false, 0 },
-                { new int[] { 1 }, (_, __) => false, 0 },
-                { new int[] { 1, 2, 3, 4, 5 }, (_, __) => false, 0 },
+                { new int[] { }, _ => false },
+                { new int[] { 1 }, _ => false },
+                { new int[] { 1, 2, 3, 4, 5 }, _ => false },
 
-                { new int[] { }, (item, _) => item > 2, 0 },
-                { new int[] { 1 }, (item, _) => item > 2, 0 },
-                { new int[] { 1, 2, 3, 4, 5 }, (item, _) => item > 2, 3 },
-
-                { new int[] { 1, 2, 3, 4, 5 }, (item, index) => item == index, 0 },
-                { new int[] { 1, 2, 3, 4, 5 }, (item, index) => item == index + 1, 5 },
+                { new int[] { }, item => item > 2 },
+                { new int[] { 1 }, item => item > 2 },
+                { new int[] { 1, 2, 3, 4, 5 }, item => item > 2 },
             };
     }
 }

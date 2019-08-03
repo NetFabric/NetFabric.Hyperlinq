@@ -10,7 +10,7 @@ namespace NetFabric.Hyperlinq.UnitTests
     // [DebuggerNonUserCode]
     class ValueReadOnlyListAssertions<TEnumerable, TEnumerator, TSource>
         where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
-        where TEnumerator : struct, IValueEnumerator<TSource>
+        where TEnumerator : struct, IEnumerator<TSource>
     {
         public ValueReadOnlyListAssertions(TEnumerable value)
         {

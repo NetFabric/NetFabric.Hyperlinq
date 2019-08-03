@@ -4,20 +4,20 @@ using System.Collections.Generic;
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Configs;
 
-namespace NetFabric.Hyperlinq
+namespace NetFabric.Hyperlinq.Benchmarks
 {
     [MemoryDiagnoser]
     [MarkdownExporterAttribute.GitHub]
     public class CastBenchmarks
     {
-        IEnumerable<long> enumerable;
-        IReadOnlyList<long> list;
+        IEnumerable<int> enumerable;
+        IReadOnlyList<int> list;
 
         [GlobalSetup]
         public void GlobalSetup()
         {
             enumerable = TestEnumerable.ReferenceType(10);
-            list = Enumerable.Range(0, 10).ToList();
+            list = ValueEnumerable.Range(0, 10).ToList();
         }
 
         [Benchmark(Baseline = true)]

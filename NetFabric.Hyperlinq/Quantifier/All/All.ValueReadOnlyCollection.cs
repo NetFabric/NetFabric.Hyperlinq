@@ -1,26 +1,48 @@
 using System;
+using System.Collections.Generic;
 
 namespace NetFabric.Hyperlinq
 {
     public static partial class ValueReadOnlyCollection
     {
-        public static bool All<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, long, bool> predicate)
+        public static bool All<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, bool> predicate)
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
-            where TEnumerator : struct, IValueEnumerator<TSource>
+            where TEnumerator : struct, IEnumerator<TSource>
         {
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
 
-            if (source.Count == 0) return true;
+            if (source.Count != 0)
+            {
+                using (var enumerator = source.GetEnumerator())
+                {
+                    while (enumerator.MoveNext())
+                    {
+                        if (!predicate(enumerator.Current))
+                            return false;
+                    }
+                }
+            }
+            return true;
+        }
 
-            using (var enumerator = source.GetEnumerator())
+        public static bool All<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, int, bool> predicate)
+            where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
+            where TEnumerator : struct, IEnumerator<TSource>
+        {
+            if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
+
+            if (source.Count != 0)
             {
                 var index = 0;
-                while (enumerator.MoveNext())
+                using (var enumerator = source.GetEnumerator())
                 {
-                    if (!predicate(enumerator.Current, index))
-                        return false;
-                        
-                    index++;
+                    while (enumerator.MoveNext())
+                    {
+                        if (!predicate(enumerator.Current, index))
+                            return false;
+
+                        index++;
+                    }
                 }
             }
             return true;

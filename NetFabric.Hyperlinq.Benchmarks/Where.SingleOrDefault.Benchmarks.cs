@@ -12,61 +12,61 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [BenchmarkCategory("Range")]
         [Benchmark(Baseline = true)]
         public int Linq_Range()
-            => System.Linq.Enumerable.Where(linqRange, (_, __) => true).SingleOrDefault();
+            => System.Linq.Enumerable.SingleOrDefault(System.Linq.Enumerable.Where(linqRange, _ => true));
 
         [BenchmarkCategory("Queue")]
         [Benchmark(Baseline = true)]
         public int Linq_Queue()
-            => System.Linq.Enumerable.Where(queue, (_, __) => true).SingleOrDefault();
+            => System.Linq.Enumerable.SingleOrDefault(System.Linq.Enumerable.Where(queue, _ => true));
 
         [BenchmarkCategory("Array")]
         [Benchmark(Baseline = true)]
         public int Linq_Array()
-            => System.Linq.Enumerable.Where(array, (_, __) => true).SingleOrDefault();
+            => System.Linq.Enumerable.SingleOrDefault(System.Linq.Enumerable.Where(array, _ => true));
 
         [BenchmarkCategory("List")]
         [Benchmark(Baseline = true)]
         public int Linq_List()
-            => System.Linq.Enumerable.Where(list, (_, __) => true).SingleOrDefault();
+            => System.Linq.Enumerable.SingleOrDefault(System.Linq.Enumerable.Where(list, _ => true));
 
         [BenchmarkCategory("Enumerable_Reference")]
         [Benchmark(Baseline = true)]
-        public long Linq_Enumerable_Reference() 
-            => System.Linq.Enumerable.Where(enumerableReference, (_, __) => true).SingleOrDefault();
+        public int Linq_Enumerable_Reference()
+            => System.Linq.Enumerable.SingleOrDefault(System.Linq.Enumerable.Where(enumerableReference, _ => true));
 
         [BenchmarkCategory("Enumerable_Value")]
         [Benchmark(Baseline = true)]
-        public long Linq_Enumerable_Value()
-            => System.Linq.Enumerable.Where(enumerableValue, (_, __) => true).SingleOrDefault();
+        public int Linq_Enumerable_Value()
+            => System.Linq.Enumerable.SingleOrDefault(System.Linq.Enumerable.Where(enumerableValue, _ => true));
 
         [BenchmarkCategory("Range")]
         [Benchmark]
-        public long Hyperlinq_Range()
-            => hyperlinqRange.Where((_, __) => true).SingleOrDefault();
+        public int Hyperlinq_Range()
+            => hyperlinqRange.Where(_ => true).SingleOrDefault();
 
         [BenchmarkCategory("Queue")]
         [Benchmark]
         public int Hyperlinq_Queue()
-            => queue.Where((_, __) => true).SingleOrDefault();
+            => queue.Where(_ => true).SingleOrDefault();
 
         [BenchmarkCategory("Array")]
         [Benchmark]
         public int Hyperlinq_Array()
-            => array.Where((_, __) => true).SingleOrDefault();
+            => array.Where(_ => true).SingleOrDefault();
 
         [BenchmarkCategory("List")]
         [Benchmark]
         public int Hyperlinq_List()
-            => list.Where((_, __) => true).SingleOrDefault();
+            => list.Where(_ => true).SingleOrDefault();
 
         [BenchmarkCategory("Enumerable_Reference")]
         [Benchmark]
-        public long Hyperlinq_Enumerable_Reference()
-            => enumerableReference.Where((_, __) => true).SingleOrDefault();
+        public int Hyperlinq_Enumerable_Reference()
+            => enumerableReference.AsValueEnumerable().Where(_ => true).SingleOrDefault();
 
         [BenchmarkCategory("Enumerable_Value")]
         [Benchmark]
-        public long Hyperlinq_Enumerable_Value()
-            => enumerableValue.Where((_, __) => true).SingleOrDefault();
+        public int Hyperlinq_Enumerable_Value()
+            => enumerableValue.AsValueEnumerable<TestEnumerable.Enumerable, TestEnumerable.Enumerable.Enumerator, int>().Where(_ => true).SingleOrDefault();
     }
 }

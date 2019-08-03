@@ -8,14 +8,62 @@
 
 # NetFabric.Hyperlinq
 
-A re-implementation of LINQ operations with improved performance by using:
+*Hyperlinq* outperfoms *LINQ* when enumerating collections that implement `IReadOnlyList<T>` (E.g. arrays and `List<T>`) and collections that have value-type enumerators (E.g. collections in the `System.Collections.Generic` namespace). For any other collection, it also outforms *LINQ* when multiple operations are composed.
 
-- Value type enumerators.
-- Interface constraints to avoid boxing.
-- Method call devirtualization.
-- Enumerable interface that takes the enumerator type as generics parameter.
-- Overloads for the [`IReadOnlyCollection<T>`](https://docs.microsoft.com/en-us/dotnet/api/system.collections.generic.ireadonlycollection-1) and [`IReadOnlyList<T>`](https://docs.microsoft.com/en-us/dotnet/api/system.collections.generic.ireadonlylist-1) interfaces instead of runtime casts.
-- Operations on arrays, `Span<T>` and `ReadOnlySpan<T>` that return references to items.
+This implementation favors performance and reduction of heap allocations, in detriment of binary size.
+
+No dynamic code generation is used so it's ahead-of-time (AOT) compatible.
+
+## Usage (3.0 and above)
+
+1. Add the *NetFabric.Hyperlinq* [NuGet package](https://www.nuget.org/packages/NetFabric.Hyperlinq/) to your project.
+1. Optionally, also add the *NetFabric.Hyperlinq.Analyzer* [NuGet package](https://www.nuget.org/packages/NetFabric.Hyperlinq.Analyzer/) to your project. It's a Roslyn analyzer that suggests performance improvements on your enumeration source code. No dependencies are added to your assemblies.
+1. Add a `using NetFabric.Hyperlinq` directive to all source code files where you want to use *NetFabric.Hyperlinq*.
+1. Use `ValueEnumerable` static class for generation operations (E.g. `ValueEnumerable.Empty()`, `ValueEnumerable.Range(...)`, `ValueEnumerable.Repeat(...)`, etc.)
+1. *NetFabric.Hyperlinq* and *System.Linq* namespaces can co-exist: 
+   1. *NetFabric.Hyperlinq* uses explicit collection types and higher-order interfaces on its extension methods. These take precedence over the `IEnumerable<T>` extension methods implemented in *System.Linq*.
+   1. In the cases where the above doesn't apply, use the `AsValueEnumerable<TSource>()` extension method. *NetFabric.Hyperlinq* implementations will be used for the subsequent operations. For collections that are value-types and/or return enumerators that are value-types, favor the use of the `AsValueEnumerable<TEnumerable, TEnumerator, TSource>()` overload to avoid boxing.
+   1. *NetFabric.Hyperlinq* does not implement all *System.Linq* operations. The `System.Linq` implementations will be automatically used. You'll have to use `AsValueEnumerable()` in the composition chain to return to *NetFabric.Hyperlinq* implementations.
+
+```csharp
+using System.Collections.Generic;
+using System.Linq;
+using NetFabric.Hyperlinq; // add this directive
+
+namespace ConsoleApp
+{
+    class Program
+    {
+        static void Main()
+        {
+            var list = ValueEnumerable.Range(0, 10).ToList(); // Hyperlinq operations are used
+
+            var a = list // Hyperlinq operations are used by default on List<>
+                .Where(i => i > 0) 
+                .Select(i => i * 10);
+            
+            var b = list // Hyperlinq operations are used by default on List<>
+                .Where(i => i > 0) 
+                .OrderByDescending(i => i) // Hyperlinq does not yet support this operation so LINQ is used
+                .AsValueEnumerable() // Hyperlinq operations are used on subsequent operations
+                .Select(i => i * 10);
+
+            var c = MyRange(0, 10) // LINQ operations are used by default on IEnumerable<>
+                .AsValueEnumerable() // Hyperlinq operations are used on subsequent operations
+                .Where(i => i > 0)
+                .Count();
+        }
+
+        static IEnumerable<int> MyRange(int start, int count)
+        {
+			var end = start + count;
+			for (var value = start; value < end; value++)
+				yield return value;
+        }
+    }
+}
+```
+
 
 ## Documentation
 
@@ -28,43 +76,58 @@ A re-implementation of LINQ operations with improved performance by using:
 
 - Aggregation
   - `Count()`
-  - `Count(Func<TSource, long, bool>)`
+  - `Count(Func<TSource, bool>)`
+  - `Count(Func<TSource, int, bool>)`
 - Conversion
   - `AsEnumerable()`
   - `AsValueEnumerable()`
   - `ToArray()`
   - `ToList()`
+  - `ToDictionary(Func<TSource, TKey>)`
+  - `ToDictionary(Func<TSource, TKey>, IEqualityComparer<TKey>)`
+  - `ToDictionary(Func<TSource, TKey>, Func<TSource, TElement>)`
+  - `ToDictionary(Func<TSource, TKey>, Func<TSource, TElement>, IEqualityComparer<TKey>)`
 - Element
+  - `TryFirst()`
+  - `TryFirst(Func<TSource, bool>)`
+  - `TryFirst(Func<TSource, int, bool>)`
   - `First()`
-  - `First(Func<TSource, long, bool>)`
+  - `First(Func<TSource, bool>)`
+  - `First(Func<TSource, int, bool>)`
   - `FirstOrDefault()`
-  - `FirstOrDefault(Func<TSource, long, bool>)`
-  - `FirstOrNull() where TSource : struct`
-  - `FirstOrNull(Func<TSource, long, bool>) where TSource : struct`
+  - `FirstOrDefault(Func<TSource, bool>)`
+  - `FirstOrDefault(Func<TSource, int, bool>)`
+  - `TrySingle()`
+  - `TrySingle(Func<TSource, bool>)`
+  - `TrySingle(Func<TSource, int, bool>)`
   - `Single()`
-  - `Single(Func<TSource, long, bool>)`
+  - `Single(Func<TSource, bool>)`
+  - `Single(Func<TSource, int, bool>)`
   - `SingleOrDefault()`
-  - `SingleOrDefault(Func<TSource, long, bool>)`
-  - `SingleOrNull() where TSource : struct`
-  - `SingleOrNull(Func<TSource, long, bool>) where TSource : struct` 
+  - `SingleOrDefault(Func<TSource, bool>)`
+  - `SingleOrDefault(Func<TSource, int, bool>)`
 - Filtering
-  - `Where(Func<TSource, long, bool>)`
+  - `Where(Func<TSource, bool>)`
+  - `Where(Func<TSource, int, bool>)`
 - Generation
   - `Create(Func<TEnumerator>)`
   - `Empty()`
-  - `Range(long, long)`
-  - `Repeat(TSource, long)`
+  - `Range(int, int)`
+  - `Repeat(TSource, int)`
   - `Return(TSource)`
 - Projection
-  - `Select(Func<TSource, long, TResult>)`
+  - `Select(Func<TSource, TResult>)`
+  - `Select(Func<TSource, int, TResult>)`
   - `SelectMany(IValueEnumerable<TSource>)`
 - Partitioning
   - `Take(int)`
   - `Skip(int)`
 - Quantifier
-  - `All(Func<TSource, long, bool>)`
+  - `All(Func<TSource, bool>)`
+  - `All(Func<TSource, int, bool>)`
   - `Any()`
-  - `Any(Func<TSource, long, bool>)`
+  - `Any(Func<TSource, bool>)`
+  - `Any(Func<TSource, int, bool>)`
   - `Contains(TSource)`
   - `Contains(TSource, IEqualityComparer<TSource>)`
 
@@ -76,10 +139,30 @@ For the latest benchmarks, visit our [wiki](https://github.com/NetFabric/NetFabr
 
 Feel free to clone the repository and run the benchmarks on your machine. Feedback and contributions are welcome!
 
-# References
+## References
 
 - [Enumeration in .NET](https://blog.usejournal.com/enumeration-in-net-d5674921512e) by Antão Almada
 - [Performance of value-type vs reference-type enumerators](https://medium.com/@antao.almada/performance-of-value-type-vs-reference-type-enumerators-820ab1acc291) by Antão Almada
 - [Performance Tuning for .NET Core](https://reubenbond.github.io/posts/dotnet-perf-tuning) by Reuben Bond
 - [ValueLinqBenchmarks](https://gist.github.com/benaadams/294cbd41ec1179638cb4b5495a15accf) by Ben Adams
 - [C# - How method calling works](http://www.levibotelho.com/development/how-method-calling-works/) by Levi Botelho
+- [Improving .NET Disruptor performance — Part 2](https://medium.com/@ocoanet/improving-net-disruptor-performance-part-2-5bf456cd595f) by Olivier Coanet
+
+## Credits
+
+The following open-source projects are used to build and test this project:
+
+- [.NET](https://github.com/dotnet)
+- [BenchmarkDotNet](https://benchmarkdotnet.org/)
+- [coverlet](https://github.com/tonerdo/coverlet)
+- [dnSpy](https://github.com/0xd4d/dnSpy)
+- [Fluent Assertions](https://fluentassertions.com/)
+- [Fody](https://github.com/Fody/Home)
+- [Mono.Cecil](https://www.mono-project.com/docs/tools+libraries/libraries/Mono.Cecil/)
+- [xUnit.net](https://xunit.net/)
+
+Continuous-integration is hosted by [Azure DevOps](https://dev.azure.com/aalmada/NetFabric.Hyperlinq).
+
+## License
+
+This project is licensed under the MIT license. See the [LICENSE](LICENSE.txt) file for more info.

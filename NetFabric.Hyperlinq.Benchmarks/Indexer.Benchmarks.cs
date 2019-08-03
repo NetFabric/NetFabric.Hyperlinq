@@ -8,7 +8,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
     [MarkdownExporterAttribute.GitHub]
     public class IndexerBenchmarks
     {
-        List<long> list;
+        List<int> list;
 
         [Params(0, 100, 10_000)]
         public int Count { get; set; }
@@ -16,7 +16,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [GlobalSetup]
         public void GlobalSetup()
         {
-            list = Enumerable.Range(0, Count).ToList();
+            list = ValueEnumerable.Range(0, Count).ToList();
         }
 
         [Benchmark(Baseline = true)]
@@ -29,7 +29,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
 
         [Benchmark]
         public bool Hyperlinq() => 
-            list.All((_, __) => true);
+            list.All(_ => true);
 
         static bool AllEnumerable<TSource>(List<TSource> source, Func<TSource, bool> predicate)
         {

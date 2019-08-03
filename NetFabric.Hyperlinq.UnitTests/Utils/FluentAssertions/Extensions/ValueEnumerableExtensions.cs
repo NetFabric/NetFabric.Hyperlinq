@@ -9,7 +9,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             this IValueEnumerable<TFirst, TEnumeratorFirst> first, 
             IEnumerable<TSecond> second, 
             Func<TFirst, TSecond, bool> equalityComparison)
-            where TEnumeratorFirst : struct, IValueEnumerator<TFirst>
+            where TEnumeratorFirst : struct, IEnumerator<TFirst>
         {
             using (var firstEnumerator = first.GetEnumerator())
             using (var secondEnumerator = second.GetEnumerator())  

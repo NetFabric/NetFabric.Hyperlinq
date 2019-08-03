@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using FluentAssertions;
 using Xunit;
 
@@ -10,16 +7,47 @@ namespace NetFabric.Hyperlinq.UnitTests
     {
         [Theory]
         [MemberData(nameof(TestData.SkipTake), MemberType = typeof(TestData))]
-        public void SkipTake_With_ValidData_Should_Succeed(int[] source, int skipCount, int takeCount, int[] expected)
+        public void SkipTake_With_ValidData_Should_Succeed(int[] source, int skipCount, int takeCount)
         {
             // Arrange
-            var collection = Wrap.AsValueReadOnlyCollection(source);
+            var wrapped = Wrap.AsValueReadOnlyCollection(source);
+            var expected = System.Linq.Enumerable.Take(System.Linq.Enumerable.Skip(wrapped, skipCount), takeCount);
 
             // Act
-            var result = ValueReadOnlyCollection.SkipTake<Wrap.ValueReadOnlyCollection<int>, Wrap.ValueReadOnlyCollection<int>.Enumerator, int>(collection, skipCount, takeCount);
+            var result = ValueReadOnlyCollection.SkipTake<Wrap.ValueReadOnlyCollection<int>, Wrap.ValueReadOnlyCollection<int>.Enumerator, int>(wrapped, skipCount, takeCount);
 
             // Assert
-            result.Should().Generate(expected);
+            result.Should().Equals(expected);
+        }
+
+        [Theory]
+        [MemberData(nameof(TestData.SkipTake_Take), MemberType = typeof(TestData))]
+        public void SkipTake_Take_With_ValidData_Should_Succeed(int[] source, int skipCount, int takeCount0, int takeCount1)
+        {
+            // Arrange
+            var wrapped = Wrap.AsValueReadOnlyCollection(source);
+            var expected = System.Linq.Enumerable.Take(System.Linq.Enumerable.Take(System.Linq.Enumerable.Skip(wrapped, skipCount), takeCount0), takeCount1);
+
+            // Act
+            var result = ValueReadOnlyCollection.SkipTake<Wrap.ValueReadOnlyCollection<int>, Wrap.ValueReadOnlyCollection<int>.Enumerator, int>(wrapped, skipCount, takeCount0).Take(takeCount1);
+
+            // Assert
+            result.Should().Equals(expected);
+        }
+
+        [Theory]
+        [MemberData(nameof(TestData.SkipTake), MemberType = typeof(TestData))]
+        public void SkipTake_Count_With_ValidData_Should_Succeed(int[] source, int skipCount, int takeCount)
+        {
+            // Arrange
+            var wrapped = Wrap.AsValueReadOnlyCollection(source);
+            var expected = System.Linq.Enumerable.Count(System.Linq.Enumerable.Take(System.Linq.Enumerable.Skip(wrapped, skipCount), takeCount));
+
+            // Act
+            var result = ValueReadOnlyCollection.SkipTake<Wrap.ValueReadOnlyCollection<int>, Wrap.ValueReadOnlyCollection<int>.Enumerator, int>(wrapped, skipCount, takeCount).Count();
+
+            // Assert
+            result.Should().Be(expected);
         }
     }
 }

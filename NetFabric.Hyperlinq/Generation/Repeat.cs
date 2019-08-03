@@ -1,35 +1,40 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class Enumerable
+    public static partial class ValueEnumerable
     {
-        public static RepeatEnumerable<TSource> Repeat<TSource>(TSource value, long count)
+        public static RepeatEnumerable<TSource> Repeat<TSource>(TSource value, int count)
         {
             if (count < 0) ThrowHelper.ThrowArgumentOutOfRangeException(nameof(count));
 
             return new RepeatEnumerable<TSource>(value, count);
         }
 
+        [GenericsTypeMapping("TEnumerable", typeof(RepeatEnumerable<>))]
+        [GenericsTypeMapping("TEnumerator", typeof(RepeatEnumerable<>.Enumerator))]
         public readonly struct RepeatEnumerable<TSource>
             : IValueReadOnlyList<TSource, RepeatEnumerable<TSource>.Enumerator>
         {
             internal readonly TSource value;
-            internal readonly long count;
+            internal readonly int count;
 
-            internal RepeatEnumerable(TSource value, long count)
+            internal RepeatEnumerable(TSource value, int count)
             {
                 this.value = value;
                 this.count = count;
             }
 
             public Enumerator GetEnumerator() => new Enumerator(in this);
+            IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new Enumerator(in this);
+            IEnumerator IEnumerable.GetEnumerator() => new Enumerator(in this);
 
-            public long Count => count;
+            public int Count => count;
 
-            public TSource this[long index]
+            public TSource this[int index]
             {
                 get
                 {
@@ -40,10 +45,10 @@ namespace NetFabric.Hyperlinq
             }
 
             public struct Enumerator
-                : IValueEnumerator<TSource>
+                : IEnumerator<TSource>
             {
                 readonly TSource value;
-                long counter;
+                int counter;
 
                 internal Enumerator(in RepeatEnumerable<TSource> enumerable)
                 {
@@ -53,73 +58,48 @@ namespace NetFabric.Hyperlinq
 
                 public TSource Current
                     => value;
+                object IEnumerator.Current
+                    => value;
 
                 public bool MoveNext()
                     => counter-- > 0;
 
+                void IEnumerator.Reset()
+                    => throw new NotSupportedException();
+
                 public void Dispose() { }
             }
 
-            public RepeatEnumerable<TSource> Skip(long count)
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public RepeatEnumerable<TSource> Skip(int count)
             {
                 (_, var takeCount) = Utils.Skip(this.count, count);
                 return Repeat(value, takeCount);
             }
 
-            public RepeatEnumerable<TSource> Take(long count)
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public RepeatEnumerable<TSource> Take(int count)
                 => Repeat(value, Utils.Take(this.count, count));
 
-            public bool All(Func<TSource, long, bool> predicate)
-                => ValueReadOnlyList.All<RepeatEnumerable<TSource>, Enumerator, TSource>(this, predicate);
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public bool All(Func<TSource, bool> predicate)
+                => count == 0 ? true : predicate(value);
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Any()
                 => count != 0;
 
-            public bool Any(Func<TSource, long, bool> predicate)
-                => ValueReadOnlyList.Any<RepeatEnumerable<TSource>, Enumerator, TSource>(this, predicate);
-
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Contains(TSource value)
-                => count != 0 && this.value.Equals(value);
+                => count != 0 && EqualityComparer<TSource>.Default.Equals(this.value, value);
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Contains(TSource value, IEqualityComparer<TSource> comparer)
                 => count != 0 && comparer.Equals(this.value, value);
 
-            public ValueReadOnlyList.SelectEnumerable<RepeatEnumerable<TSource>, Enumerator, TSource, TResult> Select<TResult>(Func<TSource, long, TResult> selector) 
-                => ValueReadOnlyList.Select<RepeatEnumerable<TSource>, Enumerator, TSource, TResult>(this, selector);
-
-            public ValueReadOnlyList.SelectManyEnumerable<RepeatEnumerable<TSource>, Enumerator, TSource, TSubEnumerable, TSubEnumerator, TResult> SelectMany<TSubEnumerable, TSubEnumerator, TResult>(Func<TSource, TSubEnumerable> selector) 
-                where TSubEnumerable : IValueEnumerable<TResult, TSubEnumerator>
-                where TSubEnumerator : struct, IValueEnumerator<TResult>
-                => ValueReadOnlyList.SelectMany<RepeatEnumerable<TSource>, Enumerator, TSource, TSubEnumerable, TSubEnumerator, TResult>(this, selector);
-
-            public ValueReadOnlyList.WhereEnumerable<RepeatEnumerable<TSource>, Enumerator, TSource> Where(Func<TSource, long, bool> predicate) 
-                => ValueReadOnlyList.Where<RepeatEnumerable<TSource>, Enumerator, TSource>(this, predicate);
-
-            public TSource First()
-                => (count > 0) ? value : ThrowHelper.ThrowEmptySequence<TSource>();
-            public TSource First(Func<TSource, long, bool> predicate) 
-                => ValueReadOnlyList.First<RepeatEnumerable<TSource>, Enumerator, TSource>(this, predicate);
-
-            public TSource FirstOrDefault()
-                => (count > 0) ? value : default;
-            public TSource FirstOrDefault(Func<TSource, long, bool> predicate) 
-                => ValueReadOnlyList.FirstOrDefault<RepeatEnumerable<TSource>, Enumerator, TSource>(this, predicate);
-
-            public TSource Single()
-                => (count == 0) ? ThrowHelper.ThrowEmptySequence<TSource>() : ((count == 1) ? value : ThrowHelper.ThrowNotSingleSequence<TSource>());
-            public TSource Single(Func<TSource, long, bool> predicate) 
-                => ValueReadOnlyList.Single<RepeatEnumerable<TSource>, Enumerator, TSource>(this, predicate);
-
-            public TSource SingleOrDefault()
-                => (count == 0) ? default : ((count == 1) ? value : ThrowHelper.ThrowNotSingleSequence<TSource>());
-            public TSource SingleOrDefault(Func<TSource, long, bool> predicate) 
-                => ValueReadOnlyList.SingleOrDefault<RepeatEnumerable<TSource>, Enumerator, TSource>(this, predicate);
-
-            public IReadOnlyList<TSource> AsEnumerable()
-                => ValueReadOnlyList.AsEnumerable<RepeatEnumerable<TSource>, Enumerator, TSource>(this);
-
-            public RepeatEnumerable<TSource> AsValueEnumerable()
-                => this;
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public RepeatEnumerable<TResult> Select<TResult>(Func<TSource, TResult> selector) 
+                => new RepeatEnumerable<TResult>(selector(value), count);
 
             public TSource[] ToArray()
             {
@@ -136,14 +116,43 @@ namespace NetFabric.Hyperlinq
                 return array;
             }
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public List<TSource> ToList()
                 => new List<TSource>(new ToListCollection(this));
 
-            class ToListCollection
+            public Dictionary<TKey, TSource> ToDictionary<TKey>(Func<TSource, TKey> keySelector)
+                => ToDictionary<TKey>(keySelector, EqualityComparer<TKey>.Default);
+            public Dictionary<TKey, TSource> ToDictionary<TKey>(Func<TSource, TKey> keySelector, IEqualityComparer<TKey> comparer)
+            {
+                var dictionary = new Dictionary<TKey, TSource>(count, comparer);
+
+                var key = keySelector(value);
+                for (var index = 0; index < count; index++)
+                    dictionary.Add(key, value);
+
+                return dictionary;
+            }
+
+            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector)
+                => ToDictionary<TKey, TElement>(keySelector, elementSelector, EqualityComparer<TKey>.Default);
+            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, IEqualityComparer<TKey> comparer)
+            {
+                var dictionary = new Dictionary<TKey, TElement>(count, comparer);
+
+                var key = keySelector(value);
+                var element = elementSelector(value);
+                for (var index = 0; index < count; index++)
+                    dictionary.Add(key, element);
+
+                return dictionary;
+            }
+
+            // helper implementation of ICollection<> so that CopyTo() is used to convert to List<>
+            sealed class ToListCollection
                 : ICollection<TSource>
             {
                 readonly TSource value;
-                readonly long count;
+                readonly int count;
 
                 public ToListCollection(in RepeatEnumerable<TSource> source)
                 {
@@ -151,16 +160,16 @@ namespace NetFabric.Hyperlinq
                     this.count = source.count;
                 }
 
-                public int Count => (int)count;
+                public int Count => count;
 
                 public bool IsReadOnly => true;
 
                 public void CopyTo(TSource[] array, int _)
                 {
                     if (value == null)
-                        return;
+                        return; // no need to initialize
                         
-                    for(int index = 0; index < count; index++)
+                    for(var index = 0; index < count; index++)
                         array[index] = value;
                 }
 
@@ -172,29 +181,6 @@ namespace NetFabric.Hyperlinq
                 bool ICollection<TSource>.Contains(TSource item) => throw new NotSupportedException();
             }
         }
-
-        public static long Count<TSource>(this RepeatEnumerable<TSource> source)
-            => source.Count;
-        public static long Count<TSource>(this RepeatEnumerable<TSource> source, Func<TSource, bool> predicate)
-            => ValueReadOnlyList.Count<RepeatEnumerable<TSource>, RepeatEnumerable<TSource>.Enumerator, TSource>(source, predicate);
-        public static long Count<TSource>(this RepeatEnumerable<TSource> source, Func<TSource, long, bool> predicate)
-            => ValueReadOnlyList.Count<RepeatEnumerable<TSource>, RepeatEnumerable<TSource>.Enumerator, TSource>(source, predicate);
-
-        public static TSource? FirstOrNull<TSource>(this RepeatEnumerable<TSource> source)
-            where TSource : struct
-            => (source.count > 0) ? source.value : (TSource?)null;
-
-        public static TSource? FirstOrNull<TSource>(this RepeatEnumerable<TSource> source, Func<TSource, long, bool> predicate)
-            where TSource : struct
-            => ValueReadOnlyList.FirstOrNull<RepeatEnumerable<TSource>, RepeatEnumerable<TSource>.Enumerator, TSource>(source, predicate);
-
-        public static TSource? SingleOrNull<TSource>(this RepeatEnumerable<TSource> source)
-            where TSource : struct
-            => (source.count == 0) ? null : ((source.count == 1) ? source.value : ThrowHelper.ThrowNotSingleSequence<TSource?>());
-
-        public static TSource? SingleOrNull<TSource>(this RepeatEnumerable<TSource> source, Func<TSource, long, bool> predicate)
-            where TSource : struct
-            => ValueReadOnlyList.SingleOrNull<RepeatEnumerable<TSource>, RepeatEnumerable<TSource>.Enumerator, TSource>(source, predicate);
     }
 }
 

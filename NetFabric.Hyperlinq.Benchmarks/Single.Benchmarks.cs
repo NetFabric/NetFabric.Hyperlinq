@@ -14,18 +14,18 @@ namespace NetFabric.Hyperlinq.Benchmarks
         int[] array;
         List<int> list;
         IEnumerable<int> linqRange;
-        Enumerable.RangeEnumerable hyperlinqRange;
-        IEnumerable<long> enumerableReference;
+        ValueEnumerable.RangeEnumerable hyperlinqRange;
+        IEnumerable<int> enumerableReference;
         TestEnumerable.Enumerable enumerableValue;
 
         [GlobalSetup]
         public void GlobalSetup()
         {
             linqRange = System.Linq.Enumerable.Range(0, 1);
-            hyperlinqRange = Enumerable.Range(0, 1);
+            hyperlinqRange = ValueEnumerable.Range(0, 1);
             queue = new Queue<int>(linqRange);
-            array = linqRange.ToArray();
-            list = linqRange.ToList();
+            array = hyperlinqRange.ToArray();
+            list = hyperlinqRange.ToList();
             enumerableReference = TestEnumerable.ReferenceType(1);
             enumerableValue = TestEnumerable.ValueType(1);
         }
@@ -52,17 +52,17 @@ namespace NetFabric.Hyperlinq.Benchmarks
 
         [BenchmarkCategory("Enumerable_Reference")]
         [Benchmark(Baseline = true)]
-        public long Linq_Enumerable_Reference() => 
+        public int Linq_Enumerable_Reference() => 
             System.Linq.Enumerable.Single(enumerableReference);
 
         [BenchmarkCategory("Enumerable_Value")]
         [Benchmark(Baseline = true)]
-        public long Linq_Enumerable_Value() => 
+        public int Linq_Enumerable_Value() => 
             System.Linq.Enumerable.Single(enumerableValue);
 
         [BenchmarkCategory("Range")]
         [Benchmark]
-        public long Hyperlinq_Range() =>
+        public int Hyperlinq_Range() =>
             hyperlinqRange.Single();
 
         [BenchmarkCategory("Queue")]
@@ -82,12 +82,12 @@ namespace NetFabric.Hyperlinq.Benchmarks
 
         [BenchmarkCategory("Enumerable_Reference")]
         [Benchmark]
-        public long Hyperlinq_Enumerable_Reference() => 
-            enumerableReference.Single();
+        public int Hyperlinq_Enumerable_Reference() => 
+            enumerableReference.AsValueEnumerable().Single();
 
         [BenchmarkCategory("Enumerable_Value")]
         [Benchmark]
-        public long Hyperlinq_Enumerable_Value() => 
-            enumerableValue.Single();
+        public int Hyperlinq_Enumerable_Value() => 
+            enumerableValue.AsValueEnumerable<TestEnumerable.Enumerable, TestEnumerable.Enumerable.Enumerator, int>().Single();
     }
 }

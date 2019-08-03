@@ -6,22 +6,19 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class TestData
     {
-        public static TheoryData<int[], Func<int, long, bool>, bool> Any =>
-            new TheoryData<int[], Func<int, long, bool>, bool> 
+        public static TheoryData<int[], Func<int, bool>> Any =>
+            new TheoryData<int[], Func<int, bool>> 
             {
-                { new int[] { }, (_, __) => true, false },
+                { new int[] { }, _ => true },
 
-                { new int[] { 1 }, (_, __) => true, true },
-                { new int[] { 1, 2, 3, 4, 5 }, (_, __) => true, true },
+                { new int[] { 1 }, _ => true },
+                { new int[] { 1, 2, 3, 4, 5 }, _ => true },
 
-                { new int[] { 1 }, (_, __) => false, false },
-                { new int[] { 1, 2, 3, 4, 5 }, (_, __) => false, false },
+                { new int[] { 1 }, _ => false },
+                { new int[] { 1, 2, 3, 4, 5 }, _ => false },
 
-                { new int[] { 1 }, (item, _) => item == 5, false },
-                { new int[] { 1, 2, 3, 4, 5 }, (item, _) => item == 5, true },
-
-                { new int[] { 1 }, (_, index) => index == 4, false },
-                { new int[] { 1, 2, 3, 4, 5 }, (_, index) => index == 4, true },
+                { new int[] { 1 }, item => item == 5 },
+                { new int[] { 1, 2, 3, 4, 5 }, item => item == 5 },
             };
     }
 }

@@ -1,13 +1,17 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class Enumerable
+    public static partial class ValueEnumerable
     {
         public static ReturnEnumerable<TSource> Return<TSource>(TSource value) =>
             new ReturnEnumerable<TSource>(value);
 
+        [GenericsTypeMapping("TEnumerable", typeof(ReturnEnumerable<>))]
+        [GenericsTypeMapping("TEnumerator", typeof(ReturnEnumerable<>.Enumerator))]
         public readonly struct ReturnEnumerable<TSource>
             : IValueReadOnlyList<TSource, ReturnEnumerable<TSource>.Enumerator>
         {
@@ -19,21 +23,23 @@ namespace NetFabric.Hyperlinq
             }
 
             public Enumerator GetEnumerator() => new Enumerator(in this);
+            IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new Enumerator(in this);
+            IEnumerator IEnumerable.GetEnumerator() => new Enumerator(in this);
 
-            public long Count => 1;
+            public int Count => 1;
 
-            public TSource this[long index]
+            public TSource this[int index]
             {
                 get
                 {
-                    if(index != 0) ThrowHelper.ThrowIndexOutOfRangeException();
-                    
+                    if (index != 0) ThrowHelper.ThrowIndexOutOfRangeException();
+
                     return value;
                 }
             }
 
             public struct Enumerator
-                : IValueEnumerator<TSource>
+                : IEnumerator<TSource>
             {
                 readonly TSource value;
                 bool moveNext;
@@ -46,6 +52,8 @@ namespace NetFabric.Hyperlinq
 
                 public TSource Current
                     => value;
+                object IEnumerator.Current
+                    => value;
 
                 public bool MoveNext()
                 {
@@ -57,104 +65,65 @@ namespace NetFabric.Hyperlinq
                     return false;
                 }
 
+                void IEnumerator.Reset()
+                    => throw new NotSupportedException();
+
                 public void Dispose() { }
             }
 
-            public ValueReadOnlyList.SkipTakeEnumerable<ReturnEnumerable<TSource>, Enumerator, TSource> Skip(int count)
-                => ValueReadOnlyList.Skip<ReturnEnumerable<TSource>, Enumerator, TSource>(this, count);
-
-            public ValueReadOnlyList.SkipTakeEnumerable<ReturnEnumerable<TSource>, Enumerator, TSource> Take(int count)
-                => ValueReadOnlyList.Take<ReturnEnumerable<TSource>, Enumerator, TSource>(this, count);
-
-            public bool All(Func<TSource, long, bool> predicate)
-                => ValueReadOnlyList.All<ReturnEnumerable<TSource>, Enumerator, TSource>(this, predicate);
-
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Any()
                 => true;
 
-            public bool Any(Func<TSource, long, bool> predicate)
-                => ValueReadOnlyList.Any<ReturnEnumerable<TSource>, Enumerator, TSource>(this, predicate);
-
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Contains(TSource value)
                 => EqualityComparer<TSource>.Default.Equals(this.value, value);
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Contains(TSource value, IEqualityComparer<TSource> comparer)
                 => comparer.Equals(this.value, value);
 
-            public ValueReadOnlyList.SelectEnumerable<ReturnEnumerable<TSource>, Enumerator, TSource, TResult> Select<TResult>(Func<TSource, long, TResult> selector) 
-                => ValueReadOnlyList.Select<ReturnEnumerable<TSource>, Enumerator, TSource, TResult>(this, selector);
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public ReturnEnumerable<TResult> Select<TResult>(Func<TSource, TResult> selector)
+                => new ReturnEnumerable<TResult>(selector(value));
 
-            public ValueReadOnlyList.SelectManyEnumerable<ReturnEnumerable<TSource>, Enumerator, TSource, TSubEnumerable, TSubEnumerator, TResult> SelectMany<TSubEnumerable, TSubEnumerator, TResult>(Func<TSource, TSubEnumerable> selector) 
-                where TSubEnumerable : IValueEnumerable<TResult, TSubEnumerator>
-                where TSubEnumerator : struct, IValueEnumerator<TResult>
-                => ValueReadOnlyList.SelectMany<ReturnEnumerable<TSource>, Enumerator, TSource, TSubEnumerable, TSubEnumerator, TResult>(this, selector);
-
-            public ValueReadOnlyList.WhereEnumerable<ReturnEnumerable<TSource>, Enumerator, TSource> Where(Func<TSource, long, bool> predicate) 
-                => ValueReadOnlyList.Where<ReturnEnumerable<TSource>, Enumerator, TSource>(this, predicate);
-
-            public TSource First() 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public TSource First()
                 => value;
-            public TSource First(Func<TSource, long, bool> predicate) 
-                => ValueReadOnlyList.First<ReturnEnumerable<TSource>, Enumerator, TSource>(this, predicate);
 
-            public TSource FirstOrDefault() 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public TSource FirstOrDefault()
                 => value;
-            public TSource FirstOrDefault(Func<TSource, long, bool> predicate)
-                => ValueReadOnlyList.FirstOrDefault<ReturnEnumerable<TSource>, Enumerator, TSource>(this, predicate);
 
-            public TSource Single() 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public TSource Single()
                 => value;
-            public TSource Single(Func<TSource, long, bool> predicate) 
-                => ValueReadOnlyList.Single<ReturnEnumerable<TSource>, Enumerator, TSource>(this, predicate);
 
-            public TSource SingleOrDefault() 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public TSource SingleOrDefault()
                 => value;
-            public TSource SingleOrDefault(Func<TSource, long, bool> predicate) 
-                => ValueReadOnlyList.SingleOrDefault<ReturnEnumerable<TSource>, Enumerator, TSource>(this, predicate);
-
-            public IReadOnlyList<TSource> AsEnumerable()
-                => ValueReadOnlyList.AsEnumerable<ReturnEnumerable<TSource>, Enumerator, TSource>(this);
-
-            public ReturnEnumerable<TSource> AsValueEnumerable()
-                => this;
 
             public TSource[] ToArray()
-            {
-                var array = new TSource[1];
-                array[0] = value;
-                return array;
-            }
+                => new TSource[] { value };
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public List<TSource> ToList()
-            {
-                var list = new List<TSource>();
-                list.Add(value);
-                return list;
-            }
+                => new List<TSource>(1) { value };
+
+            public Dictionary<TKey, TSource> ToDictionary<TKey>(Func<TSource, TKey> keySelector)
+                => ToDictionary<TKey>(keySelector, EqualityComparer<TKey>.Default);
+            public Dictionary<TKey, TSource> ToDictionary<TKey>(Func<TSource, TKey> keySelector, IEqualityComparer<TKey> comparer)
+                => new Dictionary<TKey, TSource>(1, comparer) { { keySelector(value), value } };
+
+            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector)
+                => ToDictionary<TKey, TElement>(keySelector, elementSelector, EqualityComparer<TKey>.Default);
+            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, IEqualityComparer<TKey> comparer)
+                => new Dictionary<TKey, TElement>(1, comparer) { { keySelector(value), elementSelector(value) } };
         }
 
-        public static long Count<TSource>(this ReturnEnumerable<TSource> source)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Count<TSource>(this ReturnEnumerable<TSource> source)
             => 1;
-        public static long Count<TSource>(this ReturnEnumerable<TSource> source, Func<TSource, bool> predicate)
-            => ValueReadOnlyList.Count<ReturnEnumerable<TSource>, ReturnEnumerable<TSource>.Enumerator, TSource>(source, predicate);
-        public static long Count<TSource>(this ReturnEnumerable<TSource> source, Func<TSource, long, bool> predicate)
-            => ValueReadOnlyList.Count<ReturnEnumerable<TSource>, ReturnEnumerable<TSource>.Enumerator, TSource>(source, predicate);
-
-        public static TSource? FirstOrNull<TSource>(this ReturnEnumerable<TSource> source)
-            where TSource : struct
-                => source.value;
-
-        public static TSource? FirstOrNull<TSource>(this ReturnEnumerable<TSource> source, Func<TSource, long, bool> predicate)
-            where TSource : struct
-                => source.value;
-
-        public static TSource? SingleOrNull<TSource>(this ReturnEnumerable<TSource> source)
-            where TSource : struct
-                => source.value;
-
-        public static TSource? SingleOrNull<TSource>(this ReturnEnumerable<TSource> source, Func<TSource, long, bool> predicate)
-            where TSource : struct
-                => source.value;
     }
 }
 

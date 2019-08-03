@@ -1,31 +1,25 @@
-﻿using System;
+﻿using System.Collections.Generic;
 
 namespace NetFabric.Hyperlinq
 {
-    public interface IValueEnumerator<out T>
-        : IDisposable
-    {
-        T Current { get; }
-        bool MoveNext();
-    }
-
     public interface IValueEnumerable<out T, TEnumerator>
-        where TEnumerator : struct, IValueEnumerator<T>
+        : IEnumerable<T>
+        where TEnumerator : struct, IEnumerator<T>
     {
-        TEnumerator GetEnumerator();
+        new TEnumerator GetEnumerator();
     }
 
-    public interface IValueReadOnlyCollection<out T, TEnumerator> 
-        : IValueEnumerable<T, TEnumerator>
-        where TEnumerator : struct, IValueEnumerator<T>
+    public interface IValueReadOnlyCollection<out T, TEnumerator>
+        : IReadOnlyCollection<T>
+        , IValueEnumerable<T, TEnumerator>
+        where TEnumerator : struct, IEnumerator<T>
     {
-        long Count { get; }
     }
 
-    public interface IValueReadOnlyList<out T, TEnumerator> 
-        : IValueReadOnlyCollection<T, TEnumerator>
-        where TEnumerator : struct, IValueEnumerator<T>
+    public interface IValueReadOnlyList<out T, TEnumerator>
+        : IReadOnlyList<T>
+        , IValueReadOnlyCollection<T, TEnumerator>
+        where TEnumerator : struct, IEnumerator<T>
     {
-        T this[long index] { get; }
     }
 }

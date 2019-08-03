@@ -1,50 +1,40 @@
 using System;
-using System.Collections.Generic;
 using Xunit;
 
 namespace NetFabric.Hyperlinq
 {
     public static partial class TestData
     {
-        public static TheoryData<int[], Func<int, long, bool>, int[]> Where =>
-            new TheoryData<int[], Func<int, long, bool>, int[]> 
+        public static TheoryData<int[], Func<int, bool>> Where =>
+            new TheoryData<int[], Func<int, bool>> 
             {
-                { new int[] { }, (_, __) => false, new int[] { } },
-                { new int[] { 1 }, (_, __) => false, new int[] { } },
-                { new int[] { 1, 2, 3 }, (_, __) => false, new int[] { } },
+                { new int[] { }, _ => false },
+                { new int[] { 1 }, _ => false },
+                { new int[] { 1, 2, 3 }, _ => false },
 
-                { new int[] {}, (_, __) => true, new int[] { } },
-                { new int[] { 1 }, (_, __) => true, new int[] { 1 } },
-                { new int[] { 1, 2, 3 }, (_, __) => true, new int[] { 1, 2, 3 } },
+                { new int[] {}, _ => true },
+                { new int[] { 1 }, _ => true },
+                { new int[] { 1, 2, 3 }, _ => true },
 
-                { new int[] {}, (item, _) => item == 2, new int[] { } },
-                { new int[] { 1 }, (item, _) => item == 2, new int[] { } },
-                { new int[] { 1, 2, 3 }, (item, _) => item == 2, new int[] { 2 } },
-
-                { new int[] {}, (_, index) => index == 2, new int[] { } },
-                { new int[] { 1 }, (_, index) => index == 2, new int[] { } },
-                { new int[] { 1, 2, 3 }, (_, index) => index == 2, new int[] { 3 } },
+                { new int[] {}, item => item == 2 },
+                { new int[] { 1 }, item => item == 2 },
+                { new int[] { 1, 2, 3 }, item => item == 2 },
             };
 
-        public static TheoryData<int[], Func<int, long, bool>, Func<int, long, string>, string[]> WhereSelect =>
-            new TheoryData<int[], Func<int, long, bool>, Func<int, long, string>, string[]> 
+        public static TheoryData<int[], Func<int, bool>, Func<int, string>> WhereSelect =>
+            new TheoryData<int[], Func<int, bool>, Func<int, string>> 
             {
-                { new int[] { }, (_, __) => false, (item, _) => item.ToString(), new string[] { } },
-                { new int[] { 1 }, (_, __) => false, (item, _) => item.ToString(), new string[] { } },
-                { new int[] { 1, 2, 3 }, (_, __) => false, (item, _) => item.ToString(), new string[] { } },
+                { new int[] { }, _ => false, item => item.ToString() },
+                { new int[] { 1 }, _ => false, item => item.ToString() },
+                { new int[] { 1, 2, 3 }, _ => false, item => item.ToString() },
 
-                { new int[] {}, (_, __) => true, (item, _) => item.ToString(), new string[] { } },
-                { new int[] { 1 }, (_, __) => true, (item, _) => item.ToString(), new string[] { "1" } },
-                { new int[] { 1, 2, 3 }, (_, __) => true, (item, _) => item.ToString(), new string[] { "1", "2", "3" } },
+                { new int[] {}, _ => true, item => item.ToString() },
+                { new int[] { 1 }, _ => true, item => item.ToString() },
+                { new int[] { 1, 2, 3 }, _ => true, item => item.ToString() },
 
-                { new int[] {}, (item, _) => item == 2, (item, _) => item.ToString(), new string[] { } },
-                { new int[] { 1 }, (item, _) => item == 2, (item, _) => item.ToString(), new string[] { } },
-                { new int[] { 1, 2, 3 }, (item, _) => item == 2, (item, _) => item.ToString(), new string[] { "2" } },
-                { new int[] { 1, 2, 3 }, (item, _) => item == 2, (_, index) => index.ToString(), new string[] { "1" } },
-
-                { new int[] {}, (_, index) => index == 2, (item, _) => item.ToString(), new string[] { } },
-                { new int[] { 1 }, (_, index) => index == 2, (item, _) => item.ToString(), new string[] { } },
-                { new int[] { 1, 2, 3 }, (_, index) => index == 2, (item, _) => item.ToString(), new string[] { "3" } },
+                { new int[] {}, item => item == 2, item => item.ToString() },
+                { new int[] { 1 }, item => item == 2, item => item.ToString() },
+                { new int[] { 1, 2, 3 }, item => item == 2, item => item.ToString() },
             };
     }
 }

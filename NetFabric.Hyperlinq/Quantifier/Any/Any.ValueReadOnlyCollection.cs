@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace NetFabric.Hyperlinq
 {
@@ -6,26 +7,47 @@ namespace NetFabric.Hyperlinq
     {
         public static bool Any<TEnumerable, TEnumerator, TSource>(this TEnumerable source)
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
-            where TEnumerator : struct, IValueEnumerator<TSource>
+            where TEnumerator : struct, IEnumerator<TSource>
             => source.Count != 0;
 
-        public static bool Any<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, long, bool> predicate)
+        public static bool Any<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, bool> predicate)
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
-            where TEnumerator : struct, IValueEnumerator<TSource>
+            where TEnumerator : struct, IEnumerator<TSource>
         {
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
 
-            if (source.Count == 0) return false;
-
-            using (var enumerator = source.GetEnumerator())
+            if (source.Count != 0)
             {
-                var index = 0;
-                while (enumerator.MoveNext())
+                using (var enumerator = source.GetEnumerator())
                 {
-                    if (predicate(enumerator.Current, index))
-                        return true;
+                    while (enumerator.MoveNext())
+                    {
+                        if (predicate(enumerator.Current))
+                            return true;
+                    }
+                }
+            }
+            return false;
+        }
 
-                    index++;
+        public static bool Any<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, int, bool> predicate)
+            where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
+            where TEnumerator : struct, IEnumerator<TSource>
+        {
+            if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
+
+            if (source.Count != 0)
+            {
+                using (var enumerator = source.GetEnumerator())
+                {
+                    var index = 0;
+                    while (enumerator.MoveNext())
+                    {
+                        if (predicate(enumerator.Current, index))
+                            return true;
+
+                        index++;
+                    }
                 }
             }
             return false;

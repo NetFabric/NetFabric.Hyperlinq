@@ -1,7 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using FluentAssertions;
+using System.Collections.Generic;
 using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests
@@ -13,13 +11,16 @@ namespace NetFabric.Hyperlinq.UnitTests
         public void ToList_With_ValidData_Should_Succeed(int[] source)
         {
             // Arrange
-            var expected = new List<int>(source);
+            var expected = System.Linq.Enumerable.ToList(source);
 
             // Act
             var result = Array.ToList(source);
 
             // Assert
-            result.Should().Equal(expected);
+            result.Should()
+                .BeOfType<List<int>>().And
+                .NotBeSameAs(source).And
+                .Equal(expected);
         }
     }
 }

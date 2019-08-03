@@ -33,12 +33,12 @@ namespace NetFabric.Hyperlinq.Benchmarks
 
         [BenchmarkCategory("Enumerable_Reference")]
         [Benchmark(Baseline = true)]
-        public long Linq_Enumerable_Reference() => 
+        public int Linq_Enumerable_Reference() => 
             System.Linq.Enumerable.First(enumerableReference);
 
         [BenchmarkCategory("Enumerable_Value")]
         [Benchmark(Baseline = true)]
-        public long Linq_Enumerable_Value() => 
+        public int Linq_Enumerable_Value() => 
             System.Linq.Enumerable.First(enumerableValue);
 
         [BenchmarkCategory("Array")]
@@ -53,7 +53,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
 
         [BenchmarkCategory("Range")]
         [Benchmark]
-        public long Hyperlinq_Range() =>
+        public int Hyperlinq_Range() =>
             hyperlinqRange.First();
 
         [BenchmarkCategory("Queue")]
@@ -73,12 +73,12 @@ namespace NetFabric.Hyperlinq.Benchmarks
 
         [BenchmarkCategory("Enumerable_Reference")]
         [Benchmark]
-        public long Hyperlinq_Enumerable_Reference() => 
-            enumerableReference.First();
+        public int Hyperlinq_Enumerable_Reference() => 
+            enumerableReference.AsValueEnumerable().First();
 
         [BenchmarkCategory("Enumerable_Value")]
         [Benchmark]
-        public long Hyperlinq_Enumerable_Value() => 
-            enumerableValue.First<TestEnumerable.Enumerable, TestEnumerable.Enumerable.Enumerator, long>();
+        public int Hyperlinq_Enumerable_Value() => 
+            enumerableValue.AsValueEnumerable<TestEnumerable.Enumerable, TestEnumerable.Enumerable.Enumerator, int>().First();
     }
 }

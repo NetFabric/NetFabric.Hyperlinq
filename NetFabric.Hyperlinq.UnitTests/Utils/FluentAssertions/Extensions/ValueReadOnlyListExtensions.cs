@@ -9,7 +9,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             this IValueReadOnlyList<TFirst, TEnumeratorFirst> first, 
             IReadOnlyList<TSecond> second, 
             Func<TFirst, TSecond, bool> equalityComparison)
-            where TEnumeratorFirst : struct, IValueEnumerator<TFirst>
+            where TEnumeratorFirst : struct, IEnumerator<TFirst>
         {
             if (first.Count != second.Count)
                 return (int)Math.Min(first.Count, second.Count);

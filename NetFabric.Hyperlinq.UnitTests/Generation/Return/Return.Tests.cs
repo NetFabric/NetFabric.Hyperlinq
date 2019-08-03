@@ -8,15 +8,16 @@ namespace NetFabric.Hyperlinq.UnitTests
     {
         [Theory]
         [MemberData(nameof(TestData.Return), MemberType = typeof(TestData))]
-        public void Return_With_Value_Should_Succeed(int value, int[] expected)
+        public void Return_With_Value_Should_Succeed(int value)
         {
             // Arrange
+            var expected = System.Linq.EnumerableEx.Return(value);
 
             // Act
-            var result = Enumerable.Return(value);
+            var result = ValueEnumerable.Return(value);
 
             // Assert
-            result.Should().Generate(expected);
+            result.Should().Equals(expected);
         } 
 
         [Theory]
@@ -27,7 +28,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             // Arrange
 
             // Act
-            Func<int> action = () => Enumerable.Return(value)[index];
+            Func<int> action = () => ValueEnumerable.Return(value)[index];
 
             // Assert
             action.Should().ThrowExactly<IndexOutOfRangeException>();

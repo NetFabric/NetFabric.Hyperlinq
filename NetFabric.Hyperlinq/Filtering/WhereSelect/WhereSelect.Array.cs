@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace NetFabric.Hyperlinq
@@ -7,38 +8,45 @@ namespace NetFabric.Hyperlinq
     {
         internal static WhereSelectEnumerable<TSource, TResult> WhereSelect<TSource, TResult>(
             this TSource[] source, 
-            Func<TSource, long, bool> predicate, 
-            Func<TSource, long, TResult> selector) 
-        {
-            if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
-            if (selector is null) ThrowHelper.ThrowArgumentNullException(nameof(selector));
+            Func<TSource, bool> predicate, 
+            Func<TSource, TResult> selector) 
+            => new WhereSelectEnumerable<TSource, TResult>(source, predicate, selector, 0, source.Length);
 
-            return new WhereSelectEnumerable<TSource, TResult>(source, predicate, selector);
-        }
+        internal static WhereSelectEnumerable<TSource, TResult> WhereSelect<TSource, TResult>(
+            this TSource[] source,
+            Func<TSource, bool> predicate,
+            Func<TSource, TResult> selector,
+            int skipCount, int takeCount)
+            => new WhereSelectEnumerable<TSource, TResult>(source, predicate, selector, skipCount, takeCount);
 
         public readonly struct WhereSelectEnumerable<TSource, TResult>
             : IValueEnumerable<TResult, WhereSelectEnumerable<TSource, TResult>.Enumerator>
         {
             internal readonly TSource[] source;
-            internal readonly Func<TSource, long, bool> predicate;
-            readonly Func<TSource, long, TResult> selector;
+            internal readonly Func<TSource, bool> predicate;
+            readonly Func<TSource, TResult> selector;
+            readonly int skipCount;
+            readonly int takeCount;
 
-            internal WhereSelectEnumerable(TSource[] source, Func<TSource, long, bool> predicate, Func<TSource, long, TResult> selector)
+            internal WhereSelectEnumerable(TSource[] source, Func<TSource, bool> predicate, Func<TSource, TResult> selector, int skipCount, int takeCount)
             {
                 this.source = source;
                 this.predicate = predicate;
                 this.selector = selector;
+                (this.skipCount, this.takeCount) = Utils.SkipTake(source.Length, skipCount, takeCount);
             }
 
             public Enumerator GetEnumerator() => new Enumerator(in this);
+            IEnumerator<TResult> IEnumerable<TResult>.GetEnumerator() => new Enumerator(in this);
+            IEnumerator IEnumerable.GetEnumerator() => new Enumerator(in this);
 
             public struct Enumerator
-                : IValueEnumerator<TResult>
+                : IEnumerator<TResult>
             {
                 readonly TSource[] source;
-                readonly Func<TSource, long, bool> predicate;
-                readonly Func<TSource, long, TResult> selector;
-                readonly int count;
+                readonly Func<TSource, bool> predicate;
+                readonly Func<TSource, TResult> selector;
+                readonly int end;
                 int index;
 
                 internal Enumerator(in WhereSelectEnumerable<TSource, TResult> enumerable)
@@ -46,108 +54,99 @@ namespace NetFabric.Hyperlinq
                     source = enumerable.source;
                     predicate = enumerable.predicate;
                     selector = enumerable.selector;
-                    count = enumerable.source.Length;
-                    index = -1;
+                    end = enumerable.skipCount + enumerable.takeCount;
+                    index = enumerable.skipCount - 1;
                 }
 
                 public TResult Current
-                    => selector(source[index], index);
+                    => selector(source[index]);
+                object IEnumerator.Current
+                    => selector(source[index]);
 
                 public bool MoveNext()
                 {
-                    while (++index < count)
+                    while (++index < end)
                     {
-                        if (predicate(source[index], index))
+                        if (predicate(source[index]))
                             return true;
                     }
                     return false;
                 }
 
+                void IEnumerator.Reset()
+                    => throw new NotSupportedException();
+
                 public void Dispose() { }
             }
 
-            public long Count()
-                => source.Count(predicate);
-            public long Count(Func<TResult, bool> predicate)
-                => ValueEnumerable.Count<WhereSelectEnumerable<TSource, TResult>, Enumerator, TResult>(this, predicate);
-            public long Count(Func<TResult, long, bool> predicate)
-                => ValueEnumerable.Count<WhereSelectEnumerable<TSource, TResult>, Enumerator, TResult>(this, predicate);
-
-            public ValueEnumerable.SkipEnumerable<WhereSelectEnumerable<TSource, TResult>, Enumerator, TResult> Skip(int count)
-                => ValueEnumerable.Skip<WhereSelectEnumerable<TSource, TResult>, Enumerator, TResult>(this, count);
-
-            public ValueEnumerable.TakeEnumerable<WhereSelectEnumerable<TSource, TResult>, Enumerator, TResult> Take(int count)
-                => ValueEnumerable.Take<WhereSelectEnumerable<TSource, TResult>, Enumerator, TResult>(this, count);
-
-            public bool All(Func<TResult, long, bool> predicate)
-                => ValueEnumerable.All<WhereSelectEnumerable<TSource, TResult>, Enumerator, TResult>(this, predicate);
+            public int Count()
+                => Array.Count<TSource>(source, predicate, skipCount, takeCount);
+            public int Count(Func<TSource, bool> predicate)
+                => Array.Count<TSource>(source, Utils.CombinePredicates(this.predicate, predicate), skipCount, takeCount);
+            public int Count(Func<TSource, int, bool> predicate)
+                => Array.Count<TSource>(source, Utils.CombinePredicates(this.predicate, predicate), skipCount, takeCount);
 
             public bool Any()
-                => ValueEnumerable.Any<WhereSelectEnumerable<TSource, TResult>, Enumerator, TResult>(this);
-
-            public bool Any(Func<TResult, long, bool> predicate)
-                => ValueEnumerable.Any<WhereSelectEnumerable<TSource, TResult>, Enumerator, TResult>(this, predicate);
-
-            public bool Contains(TResult value)
-                => ValueEnumerable.Contains<WhereSelectEnumerable<TSource, TResult>, Enumerator, TResult>(this, value);
-
-            public bool Contains(TResult value, IEqualityComparer<TResult> comparer)
-                => ValueEnumerable.Contains<WhereSelectEnumerable<TSource, TResult>, Enumerator, TResult>(this, value, comparer);
-
-            public ValueEnumerable.SelectEnumerable<WhereSelectEnumerable<TSource, TResult>, Enumerator, TResult, TSelectorResult> Select<TSelectorResult>(Func<TResult, long, TSelectorResult> selector)
-                => ValueEnumerable.Select<WhereSelectEnumerable<TSource, TResult>, Enumerator, TResult, TSelectorResult>(this, selector);
-
-            public ValueEnumerable.WhereEnumerable<WhereSelectEnumerable<TSource, TResult>, Enumerator, TResult> Where(Func<TResult, long, bool> predicate)
-                => ValueEnumerable.Where<WhereSelectEnumerable<TSource, TResult>, Enumerator, TResult>(this, predicate);
-
-            public TResult First()
-                => ValueEnumerable.First<WhereSelectEnumerable<TSource, TResult>, Enumerator, TResult>(this);
-            public TResult First(Func<TResult, long, bool> predicate)
-                => ValueEnumerable.First<WhereSelectEnumerable<TSource, TResult>, Enumerator, TResult>(this, predicate);
-
-            public TResult FirstOrDefault()
-                => ValueEnumerable.FirstOrDefault<WhereSelectEnumerable<TSource, TResult>, Enumerator, TResult>(this);
-            public TResult FirstOrDefault(Func<TResult, long, bool> predicate)
-                => ValueEnumerable.FirstOrDefault<WhereSelectEnumerable<TSource, TResult>, Enumerator, TResult>(this, predicate);
-
-            public TResult Single()
-                => ValueEnumerable.Single<WhereSelectEnumerable<TSource, TResult>, Enumerator, TResult>(this);
-            public TResult Single(Func<TResult, long, bool> predicate)
-                => ValueEnumerable.Single<WhereSelectEnumerable<TSource, TResult>, Enumerator, TResult>(this, predicate);
-
-            public TResult SingleOrDefault()
-                => ValueEnumerable.SingleOrDefault<WhereSelectEnumerable<TSource, TResult>, Enumerator, TResult>(this);
-            public TResult SingleOrDefault(Func<TResult, long, bool> predicate)
-                => ValueEnumerable.SingleOrDefault<WhereSelectEnumerable<TSource, TResult>, Enumerator, TResult>(this, predicate);
-
-            public IEnumerable<TResult> AsEnumerable()
-                => ValueEnumerable.AsEnumerable<WhereSelectEnumerable<TSource, TResult>, Enumerator, TResult>(this);
-
-            public WhereSelectEnumerable<TSource, TResult> AsValueEnumerable()
-                => this;
-
-            public TResult[] ToArray()
-                => ValueEnumerable.ToArray<WhereSelectEnumerable<TSource, TResult>, Enumerator, TResult>(this);
+                => Array.Any<TSource>(source, predicate, skipCount, takeCount);
+            public bool Any(Func<TSource, bool> predicate)
+                => Array.Any<TSource>(source, Utils.CombinePredicates(this.predicate, predicate), skipCount, takeCount);
+            public bool Any(Func<TSource, int, bool> predicate)
+                => Array.Any<TSource>(source, Utils.CombinePredicates(this.predicate, predicate), skipCount, takeCount);
 
             public List<TResult> ToList()
-                => ValueEnumerable.ToList<WhereSelectEnumerable<TSource, TResult>, Enumerator, TResult>(this);
+            {
+                var list = new List<TResult>();
+
+                var end = skipCount + takeCount;
+                for (var index = skipCount; index < end; index++)
+                {
+                    if (predicate(source[index]))
+                        list.Add(selector(source[index]));
+                }
+
+                return list;
+            }
+
+            public Dictionary<TKey, TResult> ToDictionary<TKey>(Func<TResult, TKey> keySelector)
+                => ToDictionary<TKey>(keySelector, EqualityComparer<TKey>.Default);
+            public Dictionary<TKey, TResult> ToDictionary<TKey>(Func<TResult, TKey> keySelector, IEqualityComparer<TKey> comparer)
+            {
+                var dictionary = new Dictionary<TKey, TResult>(0, comparer);
+
+                TResult item;
+                var end = skipCount + takeCount;
+                for (var index = skipCount; index < end; index++)
+                {
+                    if (predicate(source[index]))
+                    {
+                        item = selector(source[index]);
+                        dictionary.Add(keySelector(item), item);
+                    }
+                }
+
+                return dictionary;
+            }
+
+            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Func<TResult, TKey> keySelector, Func<TResult, TElement> elementSelector)
+                => ToDictionary<TKey, TElement>(keySelector, elementSelector, EqualityComparer<TKey>.Default);
+            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Func<TResult, TKey> keySelector, Func<TResult, TElement> elementSelector, IEqualityComparer<TKey> comparer)
+            {
+                var dictionary = new Dictionary<TKey, TElement>(0, comparer);
+
+                TResult item;
+                var end = skipCount + takeCount;
+                for (var index = skipCount; index < end; index++)
+                {
+                    if (predicate(source[index]))
+                    {
+                        item = selector(source[index]);
+                        dictionary.Add(keySelector(item), elementSelector(item));
+                    }
+                }
+
+                return dictionary;
+            }
         }
-
-        public static TResult? FirstOrNull<TSource, TResult>(this WhereSelectEnumerable<TSource, TResult> source)
-            where TResult : struct
-            => ValueEnumerable.FirstOrNull<WhereSelectEnumerable<TSource, TResult>, WhereSelectEnumerable<TSource, TResult>.Enumerator, TResult>(source);
-
-        public static TResult? FirstOrNull<TSource, TResult>(this WhereSelectEnumerable<TSource, TResult> source, Func<TResult, long, bool> predicate)
-            where TResult : struct
-            => ValueEnumerable.FirstOrNull<WhereSelectEnumerable<TSource, TResult>, WhereSelectEnumerable<TSource, TResult>.Enumerator, TResult>(source, predicate);
-
-        public static TResult? SingleOrNull<TSource, TResult>(this WhereSelectEnumerable<TSource, TResult> source)
-            where TResult : struct
-            => ValueEnumerable.SingleOrNull<WhereSelectEnumerable<TSource, TResult>, WhereSelectEnumerable<TSource, TResult>.Enumerator, TResult>(source);
-
-        public static TResult? SingleOrNull<TSource, TResult>(this WhereSelectEnumerable<TSource, TResult> source, Func<TResult, long, bool> predicate)
-            where TResult : struct
-            => ValueEnumerable.SingleOrNull<WhereSelectEnumerable<TSource, TResult>, WhereSelectEnumerable<TSource, TResult>.Enumerator, TResult>(source, predicate);
     }
 }
 

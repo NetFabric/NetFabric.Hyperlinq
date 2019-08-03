@@ -32,32 +32,32 @@ namespace NetFabric.Hyperlinq.Benchmarks
 
         [BenchmarkCategory("Range")]
         [Benchmark]
-        public List<long> Hyperlinq_Range() 
-            => hyperlinqRange.Select((item, _) => item).ToList();
+        public List<int> Hyperlinq_Range() 
+            => hyperlinqRange.Select(item => item).ToList();
 
         [BenchmarkCategory("Queue")]
         [Benchmark]
         public List<int> Hyperlinq_Queue() 
-            => queue.Select((item, _) => item).ToList();
+            => queue.Select(item => item).ToList();
 
         [BenchmarkCategory("Array")]
         [Benchmark]
         public List<int> Hyperlinq_Array() 
-            => array.Select((item, _) => item).ToList();
+            => array.Select(item => item).ToList();
 
         [BenchmarkCategory("List")]
         [Benchmark]
         public List<int> Hyperlinq_List() 
-            => list.Select((item, _) => item).ToList();
+            => list.Select(item => item).ToList();
 
         [BenchmarkCategory("Enumerable_Reference")]
         [Benchmark]
-        public List<long> Hyperlinq_Enumerable_Reference()
-            => enumerableReference.Select((item, _) => item).ToList();
+        public List<int> Hyperlinq_Enumerable_Reference()
+            => enumerableReference.AsValueEnumerable().Select(item => item).ToList();
 
         [BenchmarkCategory("Enumerable_Value")]
         [Benchmark]
-        public List<long> Hyperlinq_Enumerable_Value()        
-            => enumerableValue.Select((item, _) => item).ToList();
+        public List<int> Hyperlinq_Enumerable_Value()        
+            => enumerableValue.AsValueEnumerable<TestEnumerable.Enumerable, TestEnumerable.Enumerable.Enumerator, int>().Select(item => item).ToList();
     }
 }

@@ -1,7 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using FluentAssertions;
+using System.Collections.Generic;
 using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests
@@ -14,13 +12,16 @@ namespace NetFabric.Hyperlinq.UnitTests
         {
             // Arrange
             var wrapped = Wrap.AsValueEnumerable(source);
-            var expected = new List<int>(source);
+            var expected = System.Linq.Enumerable.ToList(wrapped);
 
             // Act
             var result = ValueEnumerable.ToList<Wrap.ValueEnumerable<int>, Wrap.ValueEnumerable<int>.Enumerator, int>(wrapped);
 
             // Assert
-            result.Should().Equal(expected);
+            result.Should()
+                .BeOfType<List<int>>().And
+                .NotBeSameAs(source).And
+                .Equal(expected);
         }
     }
 }
