@@ -10,7 +10,7 @@
 
 *Hyperlinq* outperfoms *LINQ* when enumerating collections that implement `IReadOnlyList<T>` (E.g. arrays and `List<T>`) and collections that have value-type enumerators (E.g. collections in the `System.Collections.Generic` namespace). For any other collection, it also outforms *LINQ* when multiple operations are composed.
 
-This implementation favors performance and reduction of heap allocations, in detriment of binary size.
+This implementation favors performance and reduction of heap allocations, in detriment of assembly binary size (lots of overloads).
 
 No dynamic code generation is used so it's ahead-of-time (AOT) compatible.
 
@@ -56,9 +56,9 @@ namespace ConsoleApp
 
         static IEnumerable<int> MyRange(int start, int count)
         {
-			var end = start + count;
-			for (var value = start; value < end; value++)
-				yield return value;
+            var end = start + count;
+            for (var value = start; value < end; value++)
+                yield return value;
         }
     }
 }
@@ -135,9 +135,7 @@ namespace ConsoleApp
 
 The repository contains a [benchmarks project](https://github.com/NetFabric/NetFabric.Hyperlinq/tree/master/NetFabric.Hyperlinq.Benchmarks) based on [BenchmarkDotNet](https://benchmarkdotnet.org) that compares `NetFabric.Hyperlinq` to `System.Linq` for many of the supported operations and its combinations.
 
-For the latest benchmarks, visit our [wiki](https://github.com/NetFabric/NetFabric.Hyperlinq/wiki).
-
-Feel free to clone the repository and run the benchmarks on your machine. Feedback and contributions are welcome!
+Contains benchmarks comparing performance of operations on LINQ, [System.Interactive](https://github.com/dotnet/reactive), [LinqFaster](https://github.com/jackmott/LinqFaster) and [morelinq](https://morelinq.github.io/).
 
 ## References
 
