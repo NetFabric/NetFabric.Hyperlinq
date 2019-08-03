@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
     public static partial class Array
     {
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static AsValueEnumerableEnumerable<TSource> AsValueEnumerable<TSource>(this TSource[] source)
             => new AsValueEnumerableEnumerable<TSource>(source);
 
@@ -21,6 +23,7 @@ namespace NetFabric.Hyperlinq
                 this.source = source;
             }
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Enumerator GetEnumerator() => new Enumerator(source);
             IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new Enumerator(source);
             IEnumerator IEnumerable.GetEnumerator() => new Enumerator(source);
@@ -44,10 +47,15 @@ namespace NetFabric.Hyperlinq
                     index = -1;
                 }
 
-                public ref readonly TSource Current => ref source[index];
+                public ref readonly TSource Current
+                {
+                    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                    get => ref source[index];
+                }
                 TSource IEnumerator<TSource>.Current => source[index];
                 object IEnumerator.Current => source[index];
 
+                [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public bool MoveNext() => ++index < count;
 
                 void IEnumerator.Reset() => throw new NotSupportedException();
