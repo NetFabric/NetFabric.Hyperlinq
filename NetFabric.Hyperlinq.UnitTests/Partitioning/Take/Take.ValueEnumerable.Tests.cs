@@ -1,6 +1,5 @@
 using FluentAssertions;
 using Xunit;
-using System.Linq;
 
 namespace NetFabric.Hyperlinq.UnitTests
 {
@@ -27,7 +26,7 @@ namespace NetFabric.Hyperlinq.UnitTests
         {
             // Arrange
             var wrapped = Wrap.AsValueEnumerable(source);
-            var expected = System.Linq.Enumerable.Take(wrapped, count0).Take(count1);
+            var expected = System.Linq.Enumerable.Take(System.Linq.Enumerable.Take(wrapped, count0), count1);
 
             // Act
             var result = ValueEnumerable.Take<Wrap.ValueEnumerable<int>, Wrap.ValueEnumerable<int>.Enumerator, int>(wrapped, count0).Take(count1);

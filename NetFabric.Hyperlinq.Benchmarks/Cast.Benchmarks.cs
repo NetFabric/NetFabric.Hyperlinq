@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Configs;
 
-namespace NetFabric.Hyperlinq
+namespace NetFabric.Hyperlinq.Benchmarks
 {
     [MemoryDiagnoser]
     [MarkdownExporterAttribute.GitHub]

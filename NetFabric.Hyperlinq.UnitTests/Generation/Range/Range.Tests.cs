@@ -1,7 +1,6 @@
 using FluentAssertions;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests
@@ -60,7 +59,7 @@ namespace NetFabric.Hyperlinq.UnitTests
         public void Range_Skip_With_ValidData_Should_Succeed(int start, int count, int skipCount)
         {
             // Arrange
-            var expected = System.Linq.Enumerable.Range(start, count).Skip(skipCount);
+            var expected = System.Linq.Enumerable.Skip(System.Linq.Enumerable.Range(start, count), skipCount);
 
             // Act
             var result = ValueEnumerable.Range(start, count).Skip(skipCount);
@@ -74,7 +73,7 @@ namespace NetFabric.Hyperlinq.UnitTests
         public void Range_Take_With_ValidData_Should_Succeed(int start, int count, int takeCount)
         {
             // Arrange
-            var expected = System.Linq.Enumerable.Range(start, count).Take(takeCount);
+            var expected = System.Linq.Enumerable.Take(System.Linq.Enumerable.Range(start, count), takeCount);
 
             // Act
             var result = ValueEnumerable.Range(start, count).Take(takeCount);
@@ -88,7 +87,7 @@ namespace NetFabric.Hyperlinq.UnitTests
         public void Range_Any_With_ValidData_Should_Succeed(int start, int count)
         {
             // Arrange
-            var expected = System.Linq.Enumerable.Range(start, count).Any();
+            var expected = System.Linq.Enumerable.Any(System.Linq.Enumerable.Range(start, count));
 
             // Act
             var result = ValueEnumerable.Range(start, count).Any();
@@ -102,7 +101,7 @@ namespace NetFabric.Hyperlinq.UnitTests
         public void Range_Contains_With_ValidData_Should_Succeed(int start, int count, int value)
         {
             // Arrange
-            var expected = System.Linq.Enumerable.Range(start, count).Contains(value);
+            var expected = System.Linq.Enumerable.Contains(System.Linq.Enumerable.Range(start, count), value);
 
             // Act
             var result = ValueEnumerable.Range(start, count).Contains(value);
@@ -116,7 +115,7 @@ namespace NetFabric.Hyperlinq.UnitTests
         public void Range_ToArray_With_ValidData_Should_Succeed(int start, int count)
         {
             // Arrange
-            var expected = System.Linq.Enumerable.Range(start, count).ToArray();
+            var expected = System.Linq.Enumerable.ToArray(System.Linq.Enumerable.Range(start, count));
 
             // Act
             var result = ValueEnumerable.Range(start, count).ToArray();
@@ -132,7 +131,7 @@ namespace NetFabric.Hyperlinq.UnitTests
         public void Range_With_ToList_Should_Succeed(int start, int count)
         {
             // Arrange
-            var expected = System.Linq.Enumerable.Range(start, count).ToList();
+            var expected = System.Linq.Enumerable.ToList(System.Linq.Enumerable.Range(start, count));
 
             // Act
             var result = ValueEnumerable.Range(start, count).ToList();

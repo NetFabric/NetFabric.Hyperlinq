@@ -1,5 +1,4 @@
 using FluentAssertions;
-using System.Linq;
 using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests

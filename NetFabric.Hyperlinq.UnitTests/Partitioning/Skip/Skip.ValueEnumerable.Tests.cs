@@ -1,5 +1,4 @@
 using FluentAssertions;
-using System.Linq;
 using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests
@@ -27,7 +26,7 @@ namespace NetFabric.Hyperlinq.UnitTests
         {
             // Arrange
             var wrapped = Wrap.AsValueEnumerable(source);
-            var expected = System.Linq.Enumerable.Skip(wrapped, count0).Skip(count1);
+            var expected = System.Linq.Enumerable.Skip(System.Linq.Enumerable.Skip(wrapped, count0), count1);
 
             // Act
             var result = ValueEnumerable.Skip<Wrap.ValueEnumerable<int>, Wrap.ValueEnumerable<int>.Enumerator, int>(wrapped, count0).Skip(count1);
@@ -42,7 +41,7 @@ namespace NetFabric.Hyperlinq.UnitTests
         {
             // Arrange
             var wrapped = Wrap.AsValueEnumerable(source);
-            var expected = System.Linq.Enumerable.Skip(wrapped, skipCount).Take(takeCount);
+            var expected = System.Linq.Enumerable.Take(System.Linq.Enumerable.Skip(wrapped, skipCount), takeCount);
 
             // Act
             var result = ValueEnumerable.Skip<Wrap.ValueEnumerable<int>, Wrap.ValueEnumerable<int>.Enumerator, int>(wrapped, skipCount).Take(takeCount);

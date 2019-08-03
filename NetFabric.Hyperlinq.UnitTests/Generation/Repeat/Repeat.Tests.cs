@@ -1,6 +1,5 @@
 using FluentAssertions;
 using System;
-using System.Linq;
 using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests
@@ -60,7 +59,7 @@ namespace NetFabric.Hyperlinq.UnitTests
         public void Repeat_Skip_With_ValidData_Should_Succeed(int value, int count, int skipCount)
         {
             // Arrange
-            var expected = System.Linq.Enumerable.Repeat(value, count).Skip(skipCount);
+            var expected = System.Linq.Enumerable.Skip(System.Linq.Enumerable.Repeat(value, count), skipCount);
 
             // Act
             var result = ValueEnumerable.Repeat(value, count).Skip(skipCount);
@@ -74,7 +73,7 @@ namespace NetFabric.Hyperlinq.UnitTests
         public void Repeat_Take_With_ValidData_Should_Succeed(int value, int count, int takeCount)
         {
             // Arrange
-            var expected = System.Linq.Enumerable.Repeat(value, count).Take(takeCount);
+            var expected = System.Linq.Enumerable.Take(System.Linq.Enumerable.Repeat(value, count), takeCount);
 
             // Act
             var result = ValueEnumerable.Repeat(value, count).Take(takeCount);
@@ -88,7 +87,7 @@ namespace NetFabric.Hyperlinq.UnitTests
         public void Repeat_All_With_ValidData_Should_Succeed(int value, int count)
         {
             // Arrange
-            var expected = System.Linq.Enumerable.Repeat(value, count).All(item => false);
+            var expected = System.Linq.Enumerable.All(System.Linq.Enumerable.Repeat(value, count), item => false);
 
             // Act
             var result = ValueEnumerable.Repeat(value, count).All(item => false);
@@ -102,7 +101,7 @@ namespace NetFabric.Hyperlinq.UnitTests
         public void Repeat_Any_With_ValidData_Should_Succeed(int value, int count)
         {
             // Arrange
-            var expected = System.Linq.Enumerable.Repeat(value, count).Any();
+            var expected = System.Linq.Enumerable.Any(System.Linq.Enumerable.Repeat(value, count));
 
             // Act
             var result = ValueEnumerable.Repeat(value, count).Any();
@@ -116,7 +115,7 @@ namespace NetFabric.Hyperlinq.UnitTests
         public void Repeat_ToArray_With_ValidData_Should_Succeed(int value, int count)
         {
             // Arrange
-            var expected = System.Linq.Enumerable.Repeat(value, count).ToArray();
+            var expected = System.Linq.Enumerable.ToArray(System.Linq.Enumerable.Repeat(value, count));
 
             // Act
             var result = ValueEnumerable.Repeat(value, count).ToArray();
@@ -130,7 +129,7 @@ namespace NetFabric.Hyperlinq.UnitTests
         public void Repeat_ToList_With_ValidData_Should_Succeed(int value, int count)
         {
             // Arrange
-            var expected = System.Linq.Enumerable.Repeat(value, count).ToList();
+            var expected = System.Linq.Enumerable.ToList(System.Linq.Enumerable.Repeat(value, count));
 
             // Act
             var result = ValueEnumerable.Repeat(value, count).ToList();

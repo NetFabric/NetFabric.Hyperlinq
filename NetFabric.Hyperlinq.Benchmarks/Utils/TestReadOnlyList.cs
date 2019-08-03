@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace NetFabric.Hyperlinq
+namespace NetFabric.Hyperlinq.Benchmarks
 {
     public static class TestReadOnlyList
     {

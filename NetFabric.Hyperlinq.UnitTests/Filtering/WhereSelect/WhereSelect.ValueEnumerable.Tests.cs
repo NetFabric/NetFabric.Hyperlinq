@@ -1,6 +1,5 @@
 using FluentAssertions;
 using System;
-using System.Linq;
 using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests
@@ -47,7 +46,7 @@ namespace NetFabric.Hyperlinq.UnitTests
         {
             // Arrange
             var wrapped = Wrap.AsValueEnumerable(source);
-            var expected = System.Linq.Enumerable.Where(wrapped, predicate).Select(selector);
+            var expected = System.Linq.Enumerable.Select(System.Linq.Enumerable.Where(wrapped, predicate), selector);
 
             // Act
             var result = ValueEnumerable.WhereSelect<Wrap.ValueEnumerable<int>, Wrap.ValueEnumerable<int>.Enumerator, int, string>(wrapped, predicate, selector);
