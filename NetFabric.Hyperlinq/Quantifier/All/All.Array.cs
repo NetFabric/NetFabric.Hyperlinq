@@ -5,11 +5,7 @@ namespace NetFabric.Hyperlinq
     public static partial class Array
     {
         public static bool All<TSource>(this TSource[] source, Func<TSource, bool> predicate)
-        {
-            if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
-
-            return All<TSource>(source, predicate, 0, source.Length);
-        }
+            => All<TSource>(source, predicate, 0, source.Length);
 
         static bool All<TSource>(this TSource[] source, Func<TSource, bool> predicate, int skipCount, int takeCount)
         {
@@ -23,11 +19,7 @@ namespace NetFabric.Hyperlinq
         }
 
         public static bool All<TSource>(this TSource[] source, Func<TSource, int, bool> predicate)
-        {
-            if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
-
-            return All<TSource>(source, predicate, 0, source.Length);
-        }
+            => All<TSource>(source, predicate, 0, source.Length);
 
         static bool All<TSource>(this TSource[] source, Func<TSource, int, bool> predicate, int skipCount, int takeCount)
         {

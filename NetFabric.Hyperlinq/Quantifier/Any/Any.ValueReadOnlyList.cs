@@ -18,11 +18,7 @@ namespace NetFabric.Hyperlinq
         public static bool Any<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, bool> predicate)
             where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
-        {
-            if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
-
-            return Any<TEnumerable, TEnumerator, TSource>(source, predicate, 0, source.Count);
-        }
+            => Any<TEnumerable, TEnumerator, TSource>(source, predicate, 0, source.Count);
 
         static bool Any<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, bool> predicate, int skipCount, int takeCount)
             where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
@@ -40,11 +36,7 @@ namespace NetFabric.Hyperlinq
         public static bool Any<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, int, bool> predicate)
             where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
-        {
-            if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
-
-            return Any<TEnumerable, TEnumerator, TSource>(source, predicate, 0, source.Count);
-        }
+            => Any<TEnumerable, TEnumerator, TSource>(source, predicate, 0, source.Count);
 
         static bool Any<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, int, bool> predicate, int skipCount, int takeCount)
             where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>

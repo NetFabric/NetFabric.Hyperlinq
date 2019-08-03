@@ -8,11 +8,7 @@ namespace NetFabric.Hyperlinq
         public static SelectEnumerable<TSource, TResult> Select<TSource, TResult>(
             this ReadOnlySpan<TSource> source, 
             Func<TSource, long, TResult> selector)
-        {
-            if (selector is null) ThrowHelper.ThrowArgumentNullException(nameof(selector));
-
-            return new SelectEnumerable<TSource, TResult>(in source, selector);
-        }
+            => new SelectEnumerable<TSource, TResult>(in source, selector);
 
         public readonly ref struct SelectEnumerable<TSource, TResult>
         {

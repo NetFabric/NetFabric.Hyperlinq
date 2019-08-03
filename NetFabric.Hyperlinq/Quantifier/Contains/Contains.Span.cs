@@ -5,7 +5,7 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class SpanExtensions
     {
-        public static bool Contains<TSource>(this Span<TSource> source, TSource value, IEqualityComparer<TSource> comparer = null)
+        public static bool Contains<TSource>(this Span<TSource> source, TSource value, IEqualityComparer<TSource>? comparer = null)
         {
             var length = source.Length;
             if (length == 0) return false;

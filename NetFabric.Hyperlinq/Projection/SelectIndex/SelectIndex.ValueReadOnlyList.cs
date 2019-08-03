@@ -12,11 +12,7 @@ namespace NetFabric.Hyperlinq
             Func<TSource, int, TResult> selector)
             where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
-        {
-            if(selector is null) ThrowHelper.ThrowArgumentNullException(nameof(selector));
-
-            return new SelectIndexEnumerable<TEnumerable, TEnumerator, TSource, TResult>(in source, selector, 0, source.Count);
-        }
+            => new SelectIndexEnumerable<TEnumerable, TEnumerator, TSource, TResult>(in source, selector, 0, source.Count);
 
         static SelectIndexEnumerable<TEnumerable, TEnumerator, TSource, TResult> Select<TEnumerable, TEnumerator, TSource, TResult>(
             this TEnumerable source,
@@ -173,7 +169,7 @@ namespace NetFabric.Hyperlinq
 
             public Dictionary<TKey, TResult> ToDictionary<TKey>(Func<TResult, TKey> keySelector)
                 => ToDictionary<TKey>(keySelector, EqualityComparer<TKey>.Default);
-            public Dictionary<TKey, TResult> ToDictionary<TKey>(Func<TResult, TKey> keySelector, IEqualityComparer<TKey> comparer)
+            public Dictionary<TKey, TResult> ToDictionary<TKey>(Func<TResult, TKey> keySelector, IEqualityComparer<TKey>? comparer)
             {
                 var dictionary = new Dictionary<TKey, TResult>(source.Count, comparer);
 
@@ -190,7 +186,7 @@ namespace NetFabric.Hyperlinq
 
             public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Func<TResult, TKey> keySelector, Func<TResult, TElement> elementSelector)
                 => ToDictionary<TKey, TElement>(keySelector, elementSelector, EqualityComparer<TKey>.Default);
-            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Func<TResult, TKey> keySelector, Func<TResult, TElement> elementSelector, IEqualityComparer<TKey> comparer)
+            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Func<TResult, TKey> keySelector, Func<TResult, TElement> elementSelector, IEqualityComparer<TKey>? comparer)
             {
                 var dictionary = new Dictionary<TKey, TElement>(source.Count, comparer);
 

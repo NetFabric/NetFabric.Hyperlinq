@@ -69,23 +69,23 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public EmptyEnumerable<TSource> Select<TResult>(Func<TSource, TResult> selector)
-                => selector is null ? ThrowHelper.ThrowArgumentNullException<EmptyEnumerable<TSource>>(nameof(selector)) : this;
+                => this;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public EmptyEnumerable<TSource> Select<TResult>(Func<TSource, int, TResult> selector)
-                => selector is null ? ThrowHelper.ThrowArgumentNullException<EmptyEnumerable<TSource>>(nameof(selector)) : this;
+                => this;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public EmptyEnumerable<TSource> SelectMany<TResult>(Func<TSource, IEnumerable<TResult>> selector)
-                => selector is null ? ThrowHelper.ThrowArgumentNullException<EmptyEnumerable<TSource>>(nameof(selector)) : this;
+                => this;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public EmptyEnumerable<TSource> Where(Func<TSource, bool> predicate)
-                => predicate is null ? ThrowHelper.ThrowArgumentNullException<EmptyEnumerable<TSource>>(nameof(predicate)) : this;
+                => this;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public EmptyEnumerable<TSource> Where(Func<TSource, int, bool> predicate)
-                => predicate is null ? ThrowHelper.ThrowArgumentNullException<EmptyEnumerable<TSource>>(nameof(predicate)) : this;
+                => this;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TSource First() => ThrowHelper.ThrowEmptySequence<TSource>();
@@ -110,11 +110,11 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public (bool Success, TSource Value) TryFirst(Func<TSource, bool> predicate) 
-                => predicate is null ? ThrowHelper.ThrowArgumentNullException<ValueTuple<bool, TSource>>(nameof(predicate)) : (false, default);
+                => (false, default);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public (int Index, TSource Value) TryFirst(Func<TSource, int, bool> predicate)
-                => predicate is null ? ThrowHelper.ThrowArgumentNullException<ValueTuple<int, TSource>>(nameof(predicate)) : (-1, default);
+                => (-1, default);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TSource Single() => ThrowHelper.ThrowEmptySequence<TSource>();
@@ -139,11 +139,11 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public (bool Success, TSource Value) TrySingle(Func<TSource, bool> predicate) 
-                => predicate is null ? ThrowHelper.ThrowArgumentNullException<ValueTuple<bool, TSource>>(nameof(predicate)) : (false, default);
+                => (false, default);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public (int Index, TSource Value) TrySingle(Func<TSource, int, bool> predicate)
-                => predicate is null ? ThrowHelper.ThrowArgumentNullException<ValueTuple<int, TSource>>(nameof(predicate)) : (-1, default);
+                => (-1, default);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TSource[] ToArray() => new TSource[0];
@@ -155,13 +155,13 @@ namespace NetFabric.Hyperlinq
             public Dictionary<TKey, TSource> ToDictionary<TKey>(Func<TSource, TKey> keySelector) 
                 => new Dictionary<TKey, TSource>(0);
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public Dictionary<TKey, TSource> ToDictionary<TKey>(Func<TSource, TKey> keySelector, IEqualityComparer<TKey> comparer) 
+            public Dictionary<TKey, TSource> ToDictionary<TKey>(Func<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer) 
                 => new Dictionary<TKey, TSource>(0, comparer);
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector) 
                 => new Dictionary<TKey, TElement>(0);
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, IEqualityComparer<TKey> comparer) 
+            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer) 
                 => new Dictionary<TKey, TElement>(0, comparer);
         }
 
@@ -171,11 +171,11 @@ namespace NetFabric.Hyperlinq
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int Count<TSource>(this EmptyEnumerable<TSource> source, Func<TSource, bool> predicate)
-            => predicate is null ? ThrowHelper.ThrowArgumentNullException<int>(nameof(predicate)) : 0;
+            => 0;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int Count<TSource>(this EmptyEnumerable<TSource> source, Func<TSource, int, bool> predicate)
-            => predicate is null ? ThrowHelper.ThrowArgumentNullException<int>(nameof(predicate)) : 0;
+            => 0;
     }
 }
 

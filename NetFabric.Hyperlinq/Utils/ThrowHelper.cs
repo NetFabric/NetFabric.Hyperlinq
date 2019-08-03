@@ -7,12 +7,6 @@ namespace NetFabric.Hyperlinq
         public static void ThrowArgumentException(string message, string paramName)
             => throw new ArgumentException(message, paramName);
 
-        public static void ThrowArgumentNullException(string paramName)
-            => throw new ArgumentNullException(paramName);
-
-        public static T ThrowArgumentNullException<T>(string paramName)
-            => throw new ArgumentNullException(paramName);
-
         public static void ThrowArgumentOutOfRangeException(string paramName)
             => throw new ArgumentOutOfRangeException(paramName);
 

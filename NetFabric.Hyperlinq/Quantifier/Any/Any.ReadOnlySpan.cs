@@ -9,8 +9,6 @@ namespace NetFabric.Hyperlinq
 
         public static bool Any<TSource>(this ReadOnlySpan<TSource> source, Func<TSource, bool> predicate)
         {
-            if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
-
             var length = source.Length;
             for (var index = 0; index < length; index++)
             {
@@ -22,8 +20,6 @@ namespace NetFabric.Hyperlinq
 
         public static bool Any<TSource>(this ReadOnlySpan<TSource> source, Func<TSource, long, bool> predicate)
         {
-            if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
-
             var length = source.Length;
             for (var index = 0; index < length; index++)
             {

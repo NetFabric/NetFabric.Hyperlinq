@@ -14,7 +14,7 @@ namespace NetFabric.Hyperlinq
         public static bool Contains<TSource>(this TSource[] source, TSource value, IEqualityComparer<TSource> comparer)
             => Contains<TSource>(source, value, comparer, 0, source.Length);
 
-        static bool Contains<TSource>(this TSource[] source, TSource value, IEqualityComparer<TSource> comparer, int skipCount, int takeCount)
+        static bool Contains<TSource>(this TSource[] source, TSource value, IEqualityComparer<TSource>? comparer, int skipCount, int takeCount)
         {
             if (takeCount != 0)
             {

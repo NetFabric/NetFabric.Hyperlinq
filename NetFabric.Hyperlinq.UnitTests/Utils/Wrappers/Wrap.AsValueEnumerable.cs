@@ -7,11 +7,7 @@ namespace NetFabric.Hyperlinq
     public static partial class Wrap
     {
         public static ValueEnumerable<T> AsValueEnumerable<T>(T[] source)
-        {
-            if (source is null) throw new ArgumentNullException(nameof(source));
-
-            return new ValueEnumerable<T>(source);
-        }
+            => new ValueEnumerable<T>(source);
 
         public struct ValueEnumerable<T> 
             : IValueEnumerable<T, ValueEnumerable<T>.Enumerator>

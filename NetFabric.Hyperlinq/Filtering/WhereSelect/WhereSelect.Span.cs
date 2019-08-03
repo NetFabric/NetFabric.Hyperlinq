@@ -9,12 +9,7 @@ namespace NetFabric.Hyperlinq
             this Span<TSource> source, 
             Func<TSource, long, bool> predicate, 
             Func<TSource, long, TResult> selector) 
-        {
-            if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
-            if (selector is null) ThrowHelper.ThrowArgumentNullException(nameof(selector));
-
-            return new WhereSelectEnumerable<TSource, TResult>(source, predicate, selector);
-        }
+            => new WhereSelectEnumerable<TSource, TResult>(source, predicate, selector);
 
         public readonly ref struct WhereSelectEnumerable<TSource, TResult>
         {

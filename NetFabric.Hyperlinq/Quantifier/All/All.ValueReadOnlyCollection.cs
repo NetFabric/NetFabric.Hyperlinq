@@ -9,8 +9,6 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
-            if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
-
             if (source.Count != 0)
             {
                 using (var enumerator = source.GetEnumerator())
@@ -29,8 +27,6 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
-            if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
-
             if (source.Count != 0)
             {
                 var index = 0;

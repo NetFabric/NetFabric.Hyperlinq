@@ -6,8 +6,6 @@ namespace NetFabric.Hyperlinq
     {
         public static bool All<TSource>(this Span<TSource> source, Func<TSource, bool> predicate)
         {
-            if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
-
             var index = 0;
             var length = source.Length;
             while (index < length && predicate(source[index]))
@@ -19,8 +17,6 @@ namespace NetFabric.Hyperlinq
 
         public static bool All<TSource>(this Span<TSource> source, Func<TSource, long, bool> predicate)
         {
-            if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
-
             var index = 0;
             var length = source.Length;
             while (index < length && predicate(source[index], index))

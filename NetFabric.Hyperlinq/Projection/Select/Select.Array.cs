@@ -10,11 +10,7 @@ namespace NetFabric.Hyperlinq
         public static SelectEnumerable<TSource, TResult> Select<TSource, TResult>(
             this TSource[] source, 
             Func<TSource, TResult> selector)
-        {
-            if (selector is null) ThrowHelper.ThrowArgumentNullException(nameof(selector));
-
-            return new SelectEnumerable<TSource, TResult>(source, selector, 0, source.Length);
-        }
+            => new SelectEnumerable<TSource, TResult>(source, selector, 0, source.Length);
 
         static SelectEnumerable<TSource, TResult> Select<TSource, TResult>(
             this TSource[] source,
@@ -141,7 +137,7 @@ namespace NetFabric.Hyperlinq
 
             public Dictionary<TKey, TResult> ToDictionary<TKey>(Func<TResult, TKey> keySelector)
                 => ToDictionary<TKey>(keySelector, EqualityComparer<TKey>.Default);
-            public Dictionary<TKey, TResult> ToDictionary<TKey>(Func<TResult, TKey> keySelector, IEqualityComparer<TKey> comparer)
+            public Dictionary<TKey, TResult> ToDictionary<TKey>(Func<TResult, TKey> keySelector, IEqualityComparer<TKey>? comparer)
             {
                 var dictionary = new Dictionary<TKey, TResult>(source.Length, comparer);
 
@@ -158,7 +154,7 @@ namespace NetFabric.Hyperlinq
 
             public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Func<TResult, TKey> keySelector, Func<TResult, TElement> elementSelector)
                 => ToDictionary<TKey, TElement>(keySelector, elementSelector, EqualityComparer<TKey>.Default);
-            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Func<TResult, TKey> keySelector, Func<TResult, TElement> elementSelector, IEqualityComparer<TKey> comparer)
+            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Func<TResult, TKey> keySelector, Func<TResult, TElement> elementSelector, IEqualityComparer<TKey>? comparer)
             {
                 var dictionary = new Dictionary<TKey, TElement>(source.Length, comparer);
 

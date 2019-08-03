@@ -24,11 +24,8 @@ namespace NetFabric.Hyperlinq
         }
 
         public static ref readonly TSource Single<TSource>(this TSource[] source, Func<TSource, int, bool> predicate)
-        {
-            if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
+            => ref Single<TSource>(source, predicate, 0, source.Length);
 
-            return ref Single<TSource>(source, predicate, 0, source.Length);
-        }
         static ref readonly TSource Single<TSource>(this TSource[] source, Func<TSource, int, bool> predicate, int skipCount, int takeCount)
         {
             var end = skipCount + takeCount;
@@ -51,11 +48,7 @@ namespace NetFabric.Hyperlinq
         }
 
         public static ref readonly TSource Single<TSource>(this TSource[] source, Func<TSource, bool> predicate)
-        {
-            if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
-
-            return ref Single<TSource>(source, predicate, 0, source.Length);
-        }
+            => ref Single<TSource>(source, predicate, 0, source.Length);
 
         static ref readonly TSource Single<TSource>(this TSource[] source, Func<TSource, bool> predicate, int skipCount, int takeCount)
         {
@@ -79,11 +72,7 @@ namespace NetFabric.Hyperlinq
         }
 
         public static ref readonly TSource Single<TSource>(this TSource[] source, Func<TSource, int, bool> predicate, out int index)
-        {
-            if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
-
-            return ref Single<TSource>(source, predicate, out index, 0, source.Length);
-        }
+            => ref Single<TSource>(source, predicate, out index, 0, source.Length);
 
         static ref readonly TSource Single<TSource>(this TSource[] source, Func<TSource, int, bool> predicate, out int index, int skipCount, int takeCount)
         {
@@ -125,11 +114,7 @@ namespace NetFabric.Hyperlinq
         }
 
         public static ref readonly TSource SingleOrDefault<TSource>(this TSource[] source, Func<TSource, bool> predicate)
-        {
-            if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
-
-            return ref SingleOrDefault<TSource>(source, predicate, 0, source.Length);
-        }
+            => ref SingleOrDefault<TSource>(source, predicate, 0, source.Length);
 
         static ref readonly TSource SingleOrDefault<TSource>(this TSource[] source, Func<TSource, bool> predicate, int skipCount, int takeCount)
         {
@@ -153,11 +138,7 @@ namespace NetFabric.Hyperlinq
         }
 
         public static ref readonly TSource SingleOrDefault<TSource>(this TSource[] source, Func<TSource, int, bool> predicate)
-        {
-            if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
-
-            return ref SingleOrDefault<TSource>(source, predicate, 0, source.Length);
-        }
+            => ref SingleOrDefault<TSource>(source, predicate, 0, source.Length);
 
         static ref readonly TSource SingleOrDefault<TSource>(this TSource[] source, Func<TSource, int, bool> predicate, int skipCount, int takeCount)
         {
@@ -181,11 +162,7 @@ namespace NetFabric.Hyperlinq
         }
 
         public static ref readonly TSource SingleOrDefault<TSource>(this TSource[] source, Func<TSource, int, bool> predicate, out int index)
-        {
-            if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
-
-            return ref SingleOrDefault<TSource>(source, predicate, out index, 0, source.Length);
-        }
+            => ref SingleOrDefault<TSource>(source, predicate, out index, 0, source.Length);
 
         static ref readonly TSource SingleOrDefault<TSource>(this TSource[] source, Func<TSource, int, bool> predicate, out int index, int skipCount, int takeCount)
         {
@@ -236,11 +213,7 @@ namespace NetFabric.Hyperlinq
 
         public static TSource? SingleOrNull<TSource>(this TSource[] source, Func<TSource, int, bool> predicate, out int index)
             where TSource : struct
-        {
-            if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
-
-            return SingleOrNull<TSource>(source, predicate, out index, 0, source.Length);
-        }
+            => SingleOrNull<TSource>(source, predicate, out index, 0, source.Length);
 
         static TSource? SingleOrNull<TSource>(this TSource[] source, Func<TSource, int, bool> predicate, out int index, int skipCount, int takeCount)
             where TSource : struct

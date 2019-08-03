@@ -13,11 +13,7 @@ namespace NetFabric.Hyperlinq
             where TEnumerator : struct, IEnumerator<TSource>
             where TSubEnumerable : IValueEnumerable<TResult, TSubEnumerator>
             where TSubEnumerator : struct, IEnumerator<TResult>
-        {
-            if (selector is null) ThrowHelper.ThrowArgumentNullException(nameof(selector));
-
-            return new SelectManyEnumerable<TEnumerable, TEnumerator, TSource, TSubEnumerable, TSubEnumerator, TResult>(in source, selector);
-        }
+            => new SelectManyEnumerable<TEnumerable, TEnumerator, TSource, TSubEnumerable, TSubEnumerator, TResult>(in source, selector);
 
         [GenericsTypeMapping("TEnumerable", typeof(SelectManyEnumerable<,,,,,>))]
         [GenericsTypeMapping("TEnumerator", typeof(SelectManyEnumerable<,,,,,>.Enumerator))]

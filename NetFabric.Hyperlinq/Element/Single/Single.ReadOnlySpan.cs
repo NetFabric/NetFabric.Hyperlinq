@@ -17,8 +17,6 @@ namespace NetFabric.Hyperlinq
 
         public static ref readonly TSource Single<TSource>(this ReadOnlySpan<TSource> source, Func<TSource, bool> predicate)
         {
-            if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
-
             var length = source.Length;
             for (var index = 0; index < length; index++)
             {
@@ -41,8 +39,6 @@ namespace NetFabric.Hyperlinq
 
         public static ref readonly TSource Single<TSource>(this ReadOnlySpan<TSource> source, Func<TSource, long, bool> predicate)
         {
-            if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
-
             var length = source.Length;
             for (var index = 0; index < length; index++)
             {
@@ -65,8 +61,6 @@ namespace NetFabric.Hyperlinq
 
         public static ref readonly TSource Single<TSource>(this ReadOnlySpan<TSource> source, Func<TSource, long, bool> predicate, out int index)
         {
-            if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
-
             var length = source.Length;
             for (index = 0; index < length; index++)
             {
@@ -99,8 +93,6 @@ namespace NetFabric.Hyperlinq
 
         public static ref readonly TSource SingleOrDefault<TSource>(this ReadOnlySpan<TSource> source, Func<TSource, bool> predicate)
         {
-            if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
-
             var length = source.Length;
             for (var index = 0; index < length; index++)
             {
@@ -122,8 +114,6 @@ namespace NetFabric.Hyperlinq
 
         public static ref readonly TSource SingleOrDefault<TSource>(this ReadOnlySpan<TSource> source, Func<TSource, long, bool> predicate)
         {
-            if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
-
             var length = source.Length;
             for (var index = 0; index < length; index++)
             {
@@ -145,8 +135,6 @@ namespace NetFabric.Hyperlinq
 
         public static ref readonly TSource SingleOrDefault<TSource>(this ReadOnlySpan<TSource> source, Func<TSource, long, bool> predicate, out int index)
         {
-            if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
-
             var length = source.Length;
             for (index = 0; index < length; index++)
             {
@@ -186,8 +174,6 @@ namespace NetFabric.Hyperlinq
         public static TSource? SingleOrNull<TSource>(this ReadOnlySpan<TSource> source, Func<TSource, long, bool> predicate, out int index)
             where TSource : struct
         {
-            if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
-
             var length = source.Length;
             for (index = 0; index < length; index++)
             {

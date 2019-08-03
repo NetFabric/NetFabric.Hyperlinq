@@ -39,20 +39,12 @@ namespace NetFabric.Hyperlinq
         public static (ElementResult Success, TSource Value) TryFirst<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, bool> predicate)
             where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
-        {
-            if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
-
-            return TryFirst<TEnumerable, TEnumerator, TSource>(source, predicate, 0, source.Count);
-        }
+            => TryFirst<TEnumerable, TEnumerator, TSource>(source, predicate, 0, source.Count);
 
         public static (int Index, TSource Value) TryFirst<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, int, bool> predicate)
             where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
-        {
-            if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
-
-            return TryFirst<TEnumerable, TEnumerator, TSource>(source, predicate, 0, source.Count);
-        }
+            => TryFirst<TEnumerable, TEnumerator, TSource>(source, predicate, 0, source.Count);
 
         static (ElementResult Success, TSource Value) TryFirst<TEnumerable, TEnumerator, TSource>(this TEnumerable source, int skipCount, int takeCount)
             where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
