@@ -30,6 +30,16 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public List<int> Linq_List() 
             => System.Linq.Enumerable.ToList(System.Linq.Enumerable.Select(list, item => item));
 
+        [BenchmarkCategory("Enumerable_Reference")]
+        [Benchmark(Baseline = true)]
+        public List<int> Linq_Enumerable_Reference()
+            => System.Linq.Enumerable.ToList(System.Linq.Enumerable.Select(enumerableReference, item => item));
+
+        [BenchmarkCategory("Enumerable_Value")]
+        [Benchmark(Baseline = true)]
+        public List<int> Linq_Enumerable_Value()
+            => System.Linq.Enumerable.ToList(System.Linq.Enumerable.Select(enumerableValue, item => item));
+
         [BenchmarkCategory("Range")]
         [Benchmark]
         public List<int> Hyperlinq_Range() 

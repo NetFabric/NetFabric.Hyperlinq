@@ -99,6 +99,17 @@ namespace NetFabric.Hyperlinq
             public TResult SingleOrDefault()
                 => selector(ValueEnumerable.SingleOrDefault<TEnumerable, TEnumerator, TSource>(source));
 
+            public List<TResult> ToList()
+            {
+                var list = new List<TResult>();
+                using (var enumerator = source.GetEnumerator())
+                {
+                    while (enumerator.MoveNext())
+                        list.Add(selector(enumerator.Current));
+                }
+                return list;
+            }
+
             public Dictionary<TKey, TResult> ToDictionary<TKey>(Func<TResult, TKey> keySelector)
                 => ToDictionary<TKey>(keySelector, EqualityComparer<TKey>.Default);
             public Dictionary<TKey, TResult> ToDictionary<TKey>(Func<TResult, TKey> keySelector, IEqualityComparer<TKey> comparer)
