@@ -5,7 +5,7 @@
     <PackageId>NetFabric.Hyperlinq</PackageId>
     <Title>NetFabric.Hyperlinq</Title>
     <Description>A LINQ library with devirtualized method calls, ref returns and minimal heap allocations.</Description>
-    <Version>3.0.0-beta3</Version>
+    <Version>3.0.0-beta4</Version>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageTags>netfabric, hyperlinq, linq, enumeration, extensions, performance</PackageTags>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
