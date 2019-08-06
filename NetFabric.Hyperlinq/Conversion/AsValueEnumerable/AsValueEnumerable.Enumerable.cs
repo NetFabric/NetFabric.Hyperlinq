@@ -8,21 +8,25 @@ namespace NetFabric.Hyperlinq
     public static partial class Enumerable
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static AsValueEnumerableEnumerable<IEnumerable<TSource>, IEnumerator<TSource>, TSource> AsValueEnumerable<TSource>(this IEnumerable<TSource> source)
-            => new AsValueEnumerableEnumerable<IEnumerable<TSource>, IEnumerator<TSource>, TSource>(source);
+        public static AsValueEnumerableEnumerable<TSource> AsValueEnumerable<TSource>(this IEnumerable<TSource> source)
+            => new AsValueEnumerableEnumerable<TSource>(source);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static AsValueEnumerableEnumerable<IEnumerable<TSource>, TEnumerator, TSource> AsValueEnumerable<TEnumerator, TSource>(this IEnumerable<TSource> source)
+            where TEnumerator : struct, IEnumerator<TSource>
+            => new AsValueEnumerableEnumerable<IEnumerable<TSource>, TEnumerator, TSource>(source);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static AsValueEnumerableEnumerable<TEnumerable, TEnumerator, TSource> AsValueEnumerable<TEnumerable, TEnumerator, TSource>(this TEnumerable source)
             where TEnumerable : IEnumerable<TSource>
-            where TEnumerator : IEnumerator<TSource>
+            where TEnumerator : struct, IEnumerator<TSource>
             => new AsValueEnumerableEnumerable<TEnumerable, TEnumerator, TSource>(source);
 
         [GenericsTypeMapping("TEnumerable", typeof(AsValueEnumerableEnumerable<,,>))]
-        [GenericsTypeMapping("TEnumerator", typeof(AsValueEnumerableEnumerable<,,>.Enumerator))]
         public readonly struct AsValueEnumerableEnumerable<TEnumerable, TEnumerator, TSource>
-            : IValueEnumerable<TSource, AsValueEnumerableEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator>
+            : IValueEnumerable<TSource, TEnumerator>
             where TEnumerable : IEnumerable<TSource>
-            where TEnumerator : IEnumerator<TSource>
+            where TEnumerator : struct, IEnumerator<TSource>
         {
             readonly TEnumerable source;
 
@@ -32,18 +36,36 @@ namespace NetFabric.Hyperlinq
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public TEnumerator GetEnumerator() => (TEnumerator)source.GetEnumerator();
+            IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => source.GetEnumerator();
+            IEnumerator IEnumerable.GetEnumerator() => source.GetEnumerator();
+        }
+
+        [GenericsTypeMapping("TEnumerable", typeof(AsValueEnumerableEnumerable<>))]
+        [GenericsTypeMapping("TEnumerator", typeof(AsValueEnumerableEnumerable<>.Enumerator))]
+        public readonly struct AsValueEnumerableEnumerable<TSource>
+            : IValueEnumerable<TSource, AsValueEnumerableEnumerable<TSource>.Enumerator>
+        {
+            readonly IEnumerable<TSource> source;
+
+            internal AsValueEnumerableEnumerable(IEnumerable<TSource> source)
+            {
+                this.source = source;
+            }
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Enumerator GetEnumerator() => new Enumerator(source);
             IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new Enumerator(source);
             IEnumerator IEnumerable.GetEnumerator() => new Enumerator(source);
 
-            public struct Enumerator 
+            public struct Enumerator
                 : IEnumerator<TSource>
             {
-                TEnumerator enumerator;
+                IEnumerator<TSource> enumerator;
 
-                internal Enumerator(in TEnumerable enumerable)
+                internal Enumerator(IEnumerable<TSource> enumerable)
                 {
-                    enumerator = (TEnumerator)enumerable.GetEnumerator();
+                    enumerator = enumerable.GetEnumerator();
                 }
 
                 public TSource Current
