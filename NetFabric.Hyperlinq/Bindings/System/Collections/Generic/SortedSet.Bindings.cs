@@ -92,6 +92,9 @@ namespace NetFabric.Hyperlinq
         public static (int Index, TSource Value) TrySingle<TSource>(this SortedSet<TSource> source, Func<TSource, int, bool> predicate)
             => ValueReadOnlyCollection.TrySingle<ValueWrapper<TSource>, SortedSet<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
 
+        public static ValueEnumerable.DistinctEnumerable<ValueWrapper<TSource>, SortedSet<TSource>.Enumerator, TSource> Distinct<TSource>(this SortedSet<TSource> source, IEqualityComparer<TSource> comparer = null)
+            => ValueEnumerable.Distinct<ValueWrapper<TSource>, SortedSet<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), comparer);
+
         public static ValueWrapper<TSource> AsEnumerable<TSource>(this SortedSet<TSource> source)
             => new ValueWrapper<TSource>(source);
 
