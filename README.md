@@ -130,6 +130,9 @@ namespace ConsoleApp
   - `Any(Func<TSource, int, bool>)`
   - `Contains(TSource)`
   - `Contains(TSource, IEqualityComparer<TSource>)`
+- Set
+  - `Distinct(TSource)`
+  - `Distinct(TSource, IEqualityComparer<TSource>)`
 
 ## Benchmarks
 
