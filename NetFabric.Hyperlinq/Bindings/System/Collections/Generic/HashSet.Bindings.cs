@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 namespace NetFabric.Hyperlinq
 {
+    [Bindings(typeof(ValueWrapper<>), typeof(HashSet<>.Enumerator), null, "TSource")]
     public static class HashSetBindings
     {
         public static int Count<TSource>(this HashSet<TSource> source)

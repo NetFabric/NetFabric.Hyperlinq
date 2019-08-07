@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 namespace NetFabric.Hyperlinq
 {
+    [Bindings(typeof(ValueWrapper<>), typeof(Queue<>.Enumerator), null, "TSource")]
     public static class QueueBindings
     {
         public static int Count<TSource>(this Queue<TSource> source)

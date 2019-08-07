@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 namespace NetFabric.Hyperlinq
 {
+    [Bindings(typeof(ValueWrapper<,>), typeof(Dictionary<,>.KeyCollection.Enumerator), null, "TKey")]
     public static class DictionaryKeysBindings
     {
         public static int Count<TKey, TValue>(this Dictionary<TKey, TValue>.KeyCollection source)

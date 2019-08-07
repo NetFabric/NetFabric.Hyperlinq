@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 namespace NetFabric.Hyperlinq
 {
+    [Bindings(typeof(ValueWrapper<>), typeof(LinkedList<>.Enumerator), null, "TSource")]
     public static class LinkedListBindings
     {
         public static int Count<TSource>(this LinkedList<TSource> source)
