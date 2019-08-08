@@ -60,8 +60,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
 
             public int Count => count;
 
-            public Enumerator GetEnumerator() => new Enumerator(count);
-            IEnumerator<int> IEnumerable<int>.GetEnumerator() => new Enumerator(count);
+            public IEnumerator<int> GetEnumerator() => new Enumerator(count);
             IEnumerator IEnumerable.GetEnumerator() => new Enumerator(count);
 
             public class Enumerator : IEnumerator<int>

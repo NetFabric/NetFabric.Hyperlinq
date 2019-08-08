@@ -20,12 +20,12 @@ namespace NetFabric.Hyperlinq.Benchmarks
             return count;
         }
 
-        [BenchmarkCategory("Queue")]
+        [BenchmarkCategory("LinkedList")]
         [Benchmark(Baseline = true)]
-        public int Linq_Queue() 
+        public int Linq_LinkedList() 
         { 
             var count = 0;
-            foreach(var item in System.Linq.Enumerable.SelectMany(queue, item => System.Linq.EnumerableEx.Return(item)))
+            foreach(var item in System.Linq.Enumerable.SelectMany(linkedList, item => System.Linq.EnumerableEx.Return(item)))
                 count++;
             return count;
         }
@@ -80,12 +80,12 @@ namespace NetFabric.Hyperlinq.Benchmarks
             return count;
         }
 
-        [BenchmarkCategory("Queue")]
+        [BenchmarkCategory("LinkedList")]
         [Benchmark]
-        public int Hyperlinq_Queue() 
+        public int Hyperlinq_LinkedList() 
         { 
             var count = 0;
-            foreach(var item in queue.SelectMany<int, ValueEnumerable.ReturnEnumerable<int>, ValueEnumerable.ReturnEnumerable<int>.Enumerator, int>(item => ValueEnumerable.Return(item)))
+            foreach(var item in linkedList.SelectMany<int, ValueEnumerable.ReturnEnumerable<int>, ValueEnumerable.ReturnEnumerable<int>.Enumerator, int>(item => ValueEnumerable.Return(item)))
                 count++;
             return count;
         }

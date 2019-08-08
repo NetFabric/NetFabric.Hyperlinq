@@ -14,10 +14,10 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int[] Linq_Range() 
             => System.Linq.Enumerable.ToArray(System.Linq.Enumerable.Select(linqRange, item => item));
 
-        [BenchmarkCategory("Queue")]
+        [BenchmarkCategory("LinkedList")]
         [Benchmark(Baseline = true)]
-        public int[] Linq_Queue() 
-            => System.Linq.Enumerable.ToArray(System.Linq.Enumerable.Select(queue, item => item));
+        public int[] Linq_LinkedList() 
+            => System.Linq.Enumerable.ToArray(System.Linq.Enumerable.Select(linkedList, item => item));
 
         [BenchmarkCategory("Array")]
         [Benchmark(Baseline = true)]
@@ -34,10 +34,10 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int[] Hyperlinq_Range() 
             => hyperlinqRange.Select(item => item).ToArray();
 
-        [BenchmarkCategory("Queue")]
+        [BenchmarkCategory("LinkedList")]
         [Benchmark]
-        public int[] Hyperlinq_Queue() 
-            => queue.Select(item => item).ToArray();
+        public int[] Hyperlinq_LinkedList() 
+            => linkedList.Select(item => item).ToArray();
 
         [BenchmarkCategory("Array")]
         [Benchmark]

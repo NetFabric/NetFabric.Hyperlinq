@@ -14,10 +14,10 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Linq_Range() 
             => System.Linq.Enumerable.Count(System.Linq.Enumerable.Select(System.Linq.Enumerable.Where(linqRange, _ => true), item => item));
 
-        [BenchmarkCategory("Queue")]
+        [BenchmarkCategory("LinkedList")]
         [Benchmark(Baseline = true)]
-        public int Linq_Queue() 
-            => System.Linq.Enumerable.Count(System.Linq.Enumerable.Select(System.Linq.Enumerable.Where(queue, _ => true), item => item));
+        public int Linq_LinkedList() 
+            => System.Linq.Enumerable.Count(System.Linq.Enumerable.Select(System.Linq.Enumerable.Where(linkedList, _ => true), item => item));
 
         [BenchmarkCategory("Array")]
         [Benchmark(Baseline = true)]
@@ -44,10 +44,10 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Hyperlinq_Range() 
             => hyperlinqRange.Where(_ => true).Select(item => item).Count();
 
-        [BenchmarkCategory("Queue")]
+        [BenchmarkCategory("LinkedList")]
         [Benchmark]
-        public int Hyperlinq_Queue() 
-            => queue.Where(_ => true).Select(item => item).Count();
+        public int Hyperlinq_LinkedList() 
+            => linkedList.Where(_ => true).Select(item => item).Count();
 
         [BenchmarkCategory("Array")]
         [Benchmark]

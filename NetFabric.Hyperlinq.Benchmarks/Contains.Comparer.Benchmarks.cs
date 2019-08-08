@@ -16,10 +16,10 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public bool Linq_Range() =>
             System.Linq.Enumerable.Contains(linqRange, Count - 1, this);
 
-        [BenchmarkCategory("Queue")]
+        [BenchmarkCategory("LinkedList")]
         [Benchmark(Baseline = true)]
-        public bool Linq_Queue() => 
-            System.Linq.Enumerable.Contains(queue, Count - 1, this);
+        public bool Linq_LinkedList() => 
+            System.Linq.Enumerable.Contains(linkedList, Count - 1, this);
 
         [BenchmarkCategory("Array")]
         [Benchmark(Baseline = true)]
@@ -61,10 +61,10 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public bool Hyperlinq_Range() =>
             hyperlinqRange.Contains(Count - 1, this);
 
-        [BenchmarkCategory("Queue")]
+        [BenchmarkCategory("LinkedList")]
         [Benchmark]
-        public bool Hyperlinq_Queue() => 
-            queue.Contains(Count - 1, this);
+        public bool Hyperlinq_LinkedList() => 
+            linkedList.Contains(Count - 1, this);
 
         [BenchmarkCategory("Array")]
         [Benchmark]

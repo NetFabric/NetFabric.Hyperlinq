@@ -19,12 +19,12 @@ namespace NetFabric.Hyperlinq.Benchmarks
             return count;
         }
 
-        [BenchmarkCategory("Queue")]
+        [BenchmarkCategory("LinkedList")]
         [Benchmark(Baseline = true)]
-        public int Linq_Queue() 
+        public int Linq_LinkedList() 
         { 
             var count = 0;
-            foreach(var item in System.Linq.Enumerable.Select(queue, item => item))
+            foreach(var item in System.Linq.Enumerable.Select(linkedList, item => item))
                 count++;
             return count;
         }
@@ -79,12 +79,12 @@ namespace NetFabric.Hyperlinq.Benchmarks
             return count;
         }
 
-        [BenchmarkCategory("Queue")]
+        [BenchmarkCategory("LinkedList")]
         [Benchmark]
-        public int Hyperlinq_Queue() 
+        public int Hyperlinq_LinkedList() 
         { 
             var count = 0;
-            foreach(var item in queue.Select(item => item))
+            foreach(var item in linkedList.Select(item => item))
                 count++;
             return count;
         }

@@ -16,10 +16,10 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Linq_Range() =>
             System.Linq.Enumerable.First(linqRange);
 
-        [BenchmarkCategory("Queue")]
+        [BenchmarkCategory("LinkedList")]
         [Benchmark(Baseline = true)]
-        public int Linq_Queue() => 
-            System.Linq.Enumerable.First(queue);
+        public int Linq_LinkedList() => 
+            System.Linq.Enumerable.First(linkedList);
 
         [BenchmarkCategory("Array")]
         [Benchmark(Baseline = true)]
@@ -56,10 +56,10 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Hyperlinq_Range() =>
             hyperlinqRange.First();
 
-        [BenchmarkCategory("Queue")]
+        [BenchmarkCategory("LinkedList")]
         [Benchmark]
-        public int Hyperlinq_Queue() => 
-            queue.First();
+        public int Hyperlinq_LinkedList() => 
+            linkedList.First();
 
         [BenchmarkCategory("Array")]
         [Benchmark]

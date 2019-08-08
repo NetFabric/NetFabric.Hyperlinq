@@ -16,10 +16,10 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public bool Linq_Range() => 
             System.Linq.Enumerable.All(linqRange, _ => true);
 
-        [BenchmarkCategory("Queue")]
+        [BenchmarkCategory("LinkedList")]
         [Benchmark(Baseline = true)]
-        public bool Linq_Queue() => 
-            System.Linq.Enumerable.All(queue, _ => true);
+        public bool Linq_LinkedList() => 
+            System.Linq.Enumerable.All(linkedList, _ => true);
 
         [BenchmarkCategory("Array")]
         [Benchmark(Baseline = true)]
@@ -56,10 +56,10 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public bool Hyperlinq_Range() =>
             hyperlinqRange.All(_ => true);
 
-        [BenchmarkCategory("Queue")]
+        [BenchmarkCategory("LinkedList")]
         [Benchmark]
-        public bool Hyperlinq_Queue() => 
-            queue.All(_ => true);
+        public bool Hyperlinq_LinkedList() => 
+            linkedList.All(_ => true);
 
         [BenchmarkCategory("Array")]
         [Benchmark]

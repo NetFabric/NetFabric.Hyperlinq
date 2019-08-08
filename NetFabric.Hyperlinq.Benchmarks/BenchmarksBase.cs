@@ -8,7 +8,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
     {
         protected int[] array;
         protected List<int> list;
-        protected Queue<int> queue;
+        protected LinkedList<int> linkedList;
 
         protected IEnumerable<int> linqRange;
         protected ValueEnumerable.RangeEnumerable hyperlinqRange;
@@ -22,32 +22,27 @@ namespace NetFabric.Hyperlinq.Benchmarks
         protected IReadOnlyList<int> listReference;
         protected TestReadOnlyList.EnumerableValueType listValue;
 
-        [Params(0, 100, 10_000)]
+        [Params(0, 10, 10_000)]
         public int Count { get; set; }
 
         [GlobalSetup]
         public void GlobalSetup()
         {
-            Setup(Count);
-        }
+            linqRange = System.Linq.Enumerable.Range(0, Count);
+            hyperlinqRange = ValueEnumerable.Range(0, Count);
 
-        void Setup(int count)
-        {
-            linqRange = System.Linq.Enumerable.Range(0, count);
-            hyperlinqRange = ValueEnumerable.Range(0, count);
-
-            queue = new Queue<int>(linqRange);
             array = hyperlinqRange.ToArray();
-            list = new List<int>(linqRange);
+            list = new List<int>(hyperlinqRange);
+            linkedList = new LinkedList<int>(hyperlinqRange);
 
-            enumerableReference = TestEnumerable.ReferenceType(count);
-            enumerableValue = TestEnumerable.ValueType(count);
+            enumerableReference = TestEnumerable.ReferenceType(Count);
+            enumerableValue = TestEnumerable.ValueType(Count);
 
-            collectionReference = TestReadOnlyCollection.ReferenceType(count);
-            collectionValue = TestReadOnlyCollection.ValueType(count);
+            collectionReference = TestReadOnlyCollection.ReferenceType(Count);
+            collectionValue = TestReadOnlyCollection.ValueType(Count);
 
-            listReference = TestReadOnlyList.ReferenceType(count);
-            listValue = TestReadOnlyList.ValueType(count);
+            listReference = TestReadOnlyList.ReferenceType(Count);
+            listValue = TestReadOnlyList.ValueType(Count);
         }
     }
 }

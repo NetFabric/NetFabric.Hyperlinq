@@ -25,8 +25,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
 
             public int this[int index] => index;
 
-            public Enumerator GetEnumerator() => new Enumerator(count);
-            IEnumerator<int> IEnumerable<int>.GetEnumerator() => new Enumerator(count);
+            public IEnumerator<int> GetEnumerator() => new Enumerator(count);
             IEnumerator IEnumerable.GetEnumerator() => new Enumerator(count);
 
             public struct Enumerator : IEnumerator<int>

@@ -10,7 +10,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
     [MarkdownExporterAttribute.GitHub]
     public class SingleOrDefaultBenchmarks
     {
-        Queue<int> queue;
+        LinkedList<int> linkedList;
         int[] array;
         List<int> list;
         IEnumerable<int> linqRange;
@@ -23,9 +23,9 @@ namespace NetFabric.Hyperlinq.Benchmarks
         {
             linqRange = System.Linq.Enumerable.Range(0, 1);
             hyperlinqRange = ValueEnumerable.Range(0, 1);
-            queue = new Queue<int>(linqRange);
             array = hyperlinqRange.ToArray();
             list = hyperlinqRange.ToList();
+            linkedList = new LinkedList<int>(hyperlinqRange);
             enumerableReference = TestEnumerable.ReferenceType(1);
             enumerableValue = TestEnumerable.ValueType(1);
         }
@@ -35,10 +35,10 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Linq_Range() => 
             System.Linq.Enumerable.SingleOrDefault(linqRange);
 
-        [BenchmarkCategory("Queue")]
+        [BenchmarkCategory("LinkedList")]
         [Benchmark(Baseline = true)]
-        public int Linq_Queue() => 
-            System.Linq.Enumerable.SingleOrDefault(queue);
+        public int Linq_LinkedList() => 
+            System.Linq.Enumerable.SingleOrDefault(linkedList);
 
         [BenchmarkCategory("Array")]
         [Benchmark(Baseline = true)]
@@ -65,10 +65,10 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Hyperlinq_Range() =>
             hyperlinqRange.SingleOrDefault();
 
-        [BenchmarkCategory("Queue")]
+        [BenchmarkCategory("LinkedList")]
         [Benchmark]
-        public int Hyperlinq_Queue() =>
-            queue.SingleOrDefault();
+        public int Hyperlinq_LinkedList() =>
+            linkedList.SingleOrDefault();
 
         [BenchmarkCategory("Array")]
         [Benchmark]

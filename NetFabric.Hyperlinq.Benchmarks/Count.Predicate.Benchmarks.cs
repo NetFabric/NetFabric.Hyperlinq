@@ -15,10 +15,10 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Linq_Range() => 
             System.Linq.Enumerable.Count(linqRange, _ => true);
 
-        [BenchmarkCategory("Queue")]
+        [BenchmarkCategory("LinkedList")]
         [Benchmark(Baseline = true)]
-        public int Linq_Queue() => 
-            System.Linq.Enumerable.Count(queue, _ => true);
+        public int Linq_LinkedList() => 
+            System.Linq.Enumerable.Count(linkedList, _ => true);
 
         [BenchmarkCategory("Array")]
         [Benchmark(Baseline = true)]
@@ -55,10 +55,10 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Hyperlinq_Range() =>
             hyperlinqRange.Count(_ => true);
 
-        [BenchmarkCategory("Queue")]
+        [BenchmarkCategory("LinkedList")]
         [Benchmark]
-        public int Hyperlinq_Queue() => 
-            queue.Count(_ => true);
+        public int Hyperlinq_LinkedList() => 
+            linkedList.Count(_ => true);
 
         [BenchmarkCategory("Array")]
         [Benchmark]
