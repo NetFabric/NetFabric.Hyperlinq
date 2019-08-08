@@ -85,7 +85,8 @@ namespace NetFabric.Hyperlinq
                     [MethodImpl(MethodImplOptions.AggressiveInlining)]
                     get => enumerator.Current;
                 }
-                object IEnumerator.Current => enumerator.Current;
+                object IEnumerator.Current 
+                    => enumerator.Current;
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public bool MoveNext() => enumerator.MoveNext();

@@ -80,11 +80,15 @@ namespace NetFabric.Hyperlinq
                     index = enumerable.skipCount - 1;
                 }
 
-                public TResult Current 
-                    => selector(source[index]);
+                public TResult Current
+                {
+                    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                    get => selector(source[index]);
+                }
                 object IEnumerator.Current
                     => selector(source[index]);
 
+                [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public bool MoveNext() 
                     => ++index < end;
 

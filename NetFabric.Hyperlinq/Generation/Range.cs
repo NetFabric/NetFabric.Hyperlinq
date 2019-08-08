@@ -70,7 +70,10 @@ namespace NetFabric.Hyperlinq
                 }
 
                 public int Current
-                    => current;
+                {
+                    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                    get => current;
+                }
                 object IEnumerator.Current
                     => current;
 

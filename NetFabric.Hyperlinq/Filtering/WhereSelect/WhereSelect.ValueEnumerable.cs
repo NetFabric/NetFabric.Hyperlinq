@@ -67,6 +67,7 @@ namespace NetFabric.Hyperlinq
                         if (predicate(enumerator.Current))
                             return true;
                     }
+                    Dispose();
                     return false;
                 }
 
