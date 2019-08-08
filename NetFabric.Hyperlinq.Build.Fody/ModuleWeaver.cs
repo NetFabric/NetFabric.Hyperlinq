@@ -59,6 +59,13 @@ public partial class ModuleWeaver
                 foreach (var interf in type.Interfaces)
                     AddMethods(type, interf);
             }
+            if (type.IsClass && type.IsSealed && type.IsAbstract) // is static
+            {
+                if (Utils.TryGetCustomAttribute(type, "NetFabric.Hyperlinq.BindingsAttribute", out var attribute))
+                {
+                    // handle bindings
+                }
+            }
 
             // remove the attributes so that the dependency can be removed
             type.RemoveBuildAttributes();

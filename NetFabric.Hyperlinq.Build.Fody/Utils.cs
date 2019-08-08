@@ -9,12 +9,14 @@ using System.Runtime.CompilerServices;
 static class Utils
 {
     static readonly string IgnoreAttributeName = "NetFabric.Hyperlinq.IgnoreAttribute";
+    static readonly string BindingsAttributeName = "NetFabric.Hyperlinq.BindingsAttribute";
     static readonly string GenericsMappingAttributeName = "NetFabric.Hyperlinq.GenericsMappingAttribute";
     static readonly string GenericsTypeMappingAttributeName = "NetFabric.Hyperlinq.GenericsTypeMappingAttribute";
     static readonly string ExtensionAttributeName = "System.Runtime.CompilerServices.ExtensionAttribute";
 
     static readonly string[] BuildCustomAttributeNames = new string[] {
         IgnoreAttributeName,
+        BindingsAttributeName,
         GenericsMappingAttributeName,
         GenericsTypeMappingAttributeName,
     };
