@@ -49,7 +49,10 @@ namespace NetFabric.Hyperlinq
                 }
 
                 public TSource Current
-                    => enumerator.Current;
+                {
+                    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                    get => enumerator.Current;
+                }
                 object IEnumerator.Current
                     => enumerator.Current;
 
@@ -59,7 +62,7 @@ namespace NetFabric.Hyperlinq
                     {
                         if(!enumerator.MoveNext())
                         {
-                            skipCounter = 0;
+                            Dispose();
                             return false;
                         }
 

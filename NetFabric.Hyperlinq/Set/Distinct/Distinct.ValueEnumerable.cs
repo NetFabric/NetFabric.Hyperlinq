@@ -37,18 +37,21 @@ namespace NetFabric.Hyperlinq
                 : IEnumerator<TSource>
             {
                 readonly TEnumerator enumerator;
-                readonly IEqualityComparer<TSource> comparer;
                 readonly HashSet<TSource> set;
 
                 internal Enumerator(in DistinctEnumerable<TEnumerable, TEnumerator, TSource> enumerable)
                 {
                     enumerator = enumerable.source.GetEnumerator();
-                    comparer = enumerable.comparer;
                     set = new HashSet<TSource>(enumerable.comparer);
                 }
 
-                public TSource Current => enumerator.Current;
-                object IEnumerator.Current => enumerator.Current;
+                public TSource Current
+                {
+                    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                    get => enumerator.Current;
+                }
+                object IEnumerator.Current 
+                    => enumerator.Current;
 
                 public bool MoveNext()
                 {
@@ -63,7 +66,11 @@ namespace NetFabric.Hyperlinq
 
                 void IEnumerator.Reset() => throw new NotSupportedException();
 
-                public void Dispose() => set.Clear();
+                public void Dispose()
+                {
+                    set.Clear();
+                    enumerator.Dispose();
+                }
             }
 
             // helper function for optimization of non-lazy operations

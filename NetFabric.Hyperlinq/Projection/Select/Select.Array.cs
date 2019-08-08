@@ -75,7 +75,10 @@ namespace NetFabric.Hyperlinq
                 }
 
                 public TResult Current
-                    => selector(source[index]);
+                {
+                    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                    get => selector(source[index]);
+                }
                 object IEnumerator.Current
                     => selector(source[index]);
 

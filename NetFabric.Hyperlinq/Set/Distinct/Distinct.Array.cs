@@ -43,7 +43,6 @@ namespace NetFabric.Hyperlinq
                 : IEnumerator<TSource>
             {
                 readonly TSource[] source;
-                readonly IEqualityComparer<TSource> comparer;
                 readonly HashSet<TSource> set;
                 readonly int end;
                 int index;
@@ -52,7 +51,6 @@ namespace NetFabric.Hyperlinq
                 internal Enumerator(in DistinctEnumerable<TSource> enumerable)
                 {
                     source = enumerable.source;
-                    comparer = enumerable.comparer;
 #if NET461 || NETSTANDARD2_0                   
                     set = new HashSet<TSource>(enumerable.comparer);
 #else
@@ -63,7 +61,11 @@ namespace NetFabric.Hyperlinq
                     current = default;
                 }
 
-                public TSource Current => current;
+                public TSource Current
+                {
+                    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                    get => current;
+                }
                 object IEnumerator.Current => current;
 
                 public bool MoveNext()

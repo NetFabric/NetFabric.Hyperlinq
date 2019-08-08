@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
@@ -50,7 +51,10 @@ namespace NetFabric.Hyperlinq
                 }
 
                 public TSource Current
-                    => enumerator.Current;
+                {
+                    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                    get => enumerator.Current;
+                }
                 object IEnumerator.Current
                     => enumerator.Current;
 
@@ -66,6 +70,7 @@ namespace NetFabric.Hyperlinq
                             index++;
                         }
                     }
+                    Dispose();
                     return false;
                 }
 

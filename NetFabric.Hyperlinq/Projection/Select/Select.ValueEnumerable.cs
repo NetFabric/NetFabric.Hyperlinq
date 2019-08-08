@@ -52,9 +52,14 @@ namespace NetFabric.Hyperlinq
                     selector = enumerable.selector;
                 }
 
-                public TResult Current => selector(enumerator.Current);
+                public TResult Current
+                {
+                    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                    get => selector(enumerator.Current);
+                }
                 object IEnumerator.Current => selector(enumerator.Current);
 
+                [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public bool MoveNext() => enumerator.MoveNext();
 
                 void IEnumerator.Reset() => throw new NotSupportedException();
