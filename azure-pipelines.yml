@@ -17,22 +17,10 @@ steps:
   inputs:
     version: '3.0.100-preview7-012821'
 - task: DotNetCoreCLI@2
-  displayName: Build Fody
+  displayName: Build
   inputs:
     command: 'build'
-    projects: 'NetFabric.Hyperlinq.Build.Fody/NetFabric.Hyperlinq.Build.Fody.csproj'
-    arguments: '--configuration $(buildConfiguration)'
-- task: DotNetCoreCLI@2
-  displayName: Build UnitTests
-  inputs:
-    command: 'build'
-    projects: 'NetFabric.Hyperlinq.UnitTests/NetFabric.Hyperlinq.UnitTests.csproj'
-    arguments: '--configuration $(buildConfiguration)'
-- task: DotNetCoreCLI@2
-  displayName: Build Benchmarks
-  inputs:
-    command: 'build'
-    projects: 'NetFabric.Hyperlinq.Benchmarks/NetFabric.Hyperlinq.Benchmarks.csproj'
+    projects: 'NetFabric.Hyperlinq.sln'
     arguments: '--configuration $(buildConfiguration)'
 - task: DotNetCoreCLI@2
   displayName: Test and Coverage
