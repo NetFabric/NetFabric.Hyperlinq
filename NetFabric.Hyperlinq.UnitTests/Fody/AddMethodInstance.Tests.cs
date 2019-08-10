@@ -4,7 +4,7 @@ using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests
 {
-    public class FodyTests
+    public class FodyAddMethodInstanceTests
     {
         [Fact]
         public void AddMethodInstance_With_NoGenerics_Should_Succeed()
@@ -108,23 +108,6 @@ namespace NetFabric.Hyperlinq.UnitTests
             // Assert
             result.Should()
                 .Equals(expected);
-        }
-
-        [Fact]
-        public void AddMethodExtension_Should_Succeed()
-        {
-            // ValueEnumerable.RangeEnumerable has a Count property so the Count() operation has to be an extension method
-
-            // Arrange
-            var expected = System.Linq.Enumerable.Count(System.Linq.Enumerable.Range(0, 100), item => true);
-
-            // Act
-            var result = ValueEnumerable.Range(0, 100)
-                .Count(item => true);
-
-            // Assert
-            result.Should()
-                .Be(expected);
         }
     }
 }
