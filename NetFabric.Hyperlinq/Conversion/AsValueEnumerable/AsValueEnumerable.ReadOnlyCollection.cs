@@ -12,33 +12,30 @@ namespace NetFabric.Hyperlinq
            => new AsValueEnumerableEnumerable<TSource>(source);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static AsValueEnumerableEnumerable<IReadOnlyCollection<TSource>, TEnumerator, TSource> AsValueEnumerable<TEnumerator, TSource>(this IReadOnlyCollection<TSource> source)
-            where TEnumerator : struct, IEnumerator<TSource>
-            => new AsValueEnumerableEnumerable<IReadOnlyCollection<TSource>, TEnumerator, TSource>(source);
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static AsValueEnumerableEnumerable<TEnumerable, TEnumerator, TSource> AsValueEnumerable<TEnumerable, TEnumerator, TSource>(this TEnumerable source)
+        public static ValueEnumerableWrapper<TEnumerable, TEnumerator, TSource> AsValueEnumerable<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TEnumerable, TEnumerator> getEnumerator)
             where TEnumerable : IReadOnlyCollection<TSource>
             where TEnumerator : struct, IEnumerator<TSource>
-            => new AsValueEnumerableEnumerable<TEnumerable, TEnumerator, TSource>(source);
+            => new ValueEnumerableWrapper<TEnumerable, TEnumerator, TSource>(source, getEnumerator);
 
-        [GenericsTypeMapping("TEnumerable", typeof(AsValueEnumerableEnumerable<,,>))]
-        public readonly struct AsValueEnumerableEnumerable<TEnumerable, TEnumerator, TSource>
+        [GenericsTypeMapping("TEnumerable", typeof(ValueEnumerableWrapper<,,>))]
+        public readonly struct ValueEnumerableWrapper<TEnumerable, TEnumerator, TSource>
             : IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerable : IReadOnlyCollection<TSource>
             where TEnumerator : struct, IEnumerator<TSource>
         {
             readonly TEnumerable source;
+            readonly Func<TEnumerable, TEnumerator> getEnumerator;
 
-            internal AsValueEnumerableEnumerable(in TEnumerable source)
+            internal ValueEnumerableWrapper(in TEnumerable source, Func<TEnumerable, TEnumerator> getEnumerator)
             {
                 this.source = source;
+                this.getEnumerator = getEnumerator;
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public TEnumerator GetEnumerator() => (TEnumerator)source.GetEnumerator();
-            IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => source.GetEnumerator();
-            IEnumerator IEnumerable.GetEnumerator() => source.GetEnumerator();
+            public TEnumerator GetEnumerator() => getEnumerator(source);
+            IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => getEnumerator(source);
+            IEnumerator IEnumerable.GetEnumerator() => getEnumerator(source);
 
             public int Count
             {

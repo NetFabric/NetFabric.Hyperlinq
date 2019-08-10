@@ -79,12 +79,16 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [BenchmarkCategory("Enumerable_Reference")]
         [Benchmark]
         public bool Hyperlinq_Enumerable_Reference() => 
-            enumerableReference.AsValueEnumerable().Contains(Count - 1, this);
+            enumerableReference
+            .AsValueEnumerable()
+            .Contains(Count - 1, this);
 
         [BenchmarkCategory("Enumerable_Value")]
         [Benchmark]
         public bool Hyperlinq_Enumerable_Value() => 
-            enumerableValue.AsValueEnumerable<TestEnumerable.Enumerable, TestEnumerable.Enumerable.Enumerator, int>().Contains(Count - 1, this);
+            enumerableValue
+            .AsValueEnumerable<TestEnumerable.Enumerable, TestEnumerable.Enumerable.Enumerator, int>(enumerable => enumerable.GetEnumerator())
+            .Contains(Count - 1, this);
 
         public bool Equals(int x, int y) 
             => x.Equals(y);

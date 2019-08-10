@@ -73,11 +73,15 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [BenchmarkCategory("Enumerable_Reference")]
         [Benchmark]
         public int Hyperlinq_Enumerable_Reference() => 
-            enumerableReference.AsValueEnumerable().Count(_ => true);
+            enumerableReference
+            .AsValueEnumerable()
+            .Count(_ => true);
 
         [BenchmarkCategory("Enumerable_Value")]
         [Benchmark]
         public int Hyperlinq_Enumerable_Value() => 
-            enumerableValue.AsValueEnumerable<TestEnumerable.Enumerable, TestEnumerable.Enumerable.Enumerator, int>().Count(_ => true);
+            enumerableValue
+            .AsValueEnumerable<TestEnumerable.Enumerable, TestEnumerable.Enumerable.Enumerator, int>(enumerable => enumerable.GetEnumerator())
+            .Count(_ => true);
     }
 }

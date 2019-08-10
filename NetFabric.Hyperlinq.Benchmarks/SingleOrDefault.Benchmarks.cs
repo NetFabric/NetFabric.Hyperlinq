@@ -83,11 +83,15 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [BenchmarkCategory("Enumerable_Reference")]
         [Benchmark]
         public int Hyperlinq_Enumerable_Reference() => 
-            enumerableReference.AsValueEnumerable().SingleOrDefault();
+            enumerableReference
+            .AsValueEnumerable()
+            .SingleOrDefault();
 
         [BenchmarkCategory("Enumerable_Value")]
         [Benchmark]
         public int Hyperlinq_Enumerable_Value() => 
-            enumerableValue.AsValueEnumerable<TestEnumerable.Enumerable, TestEnumerable.Enumerable.Enumerator, int>().SingleOrDefault();
+            enumerableValue
+            .AsValueEnumerable<TestEnumerable.Enumerable, TestEnumerable.Enumerable.Enumerator, int>(enumerable => enumerable.GetEnumerator())
+            .SingleOrDefault();
     }
 }

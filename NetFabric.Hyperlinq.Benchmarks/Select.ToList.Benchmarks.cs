@@ -63,11 +63,17 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [BenchmarkCategory("Enumerable_Reference")]
         [Benchmark]
         public List<int> Hyperlinq_Enumerable_Reference()
-            => enumerableReference.AsValueEnumerable().Select(item => item).ToList();
+            => enumerableReference
+            .AsValueEnumerable()
+            .Select(item => item)
+            .ToList();
 
         [BenchmarkCategory("Enumerable_Value")]
         [Benchmark]
         public List<int> Hyperlinq_Enumerable_Value()        
-            => enumerableValue.AsValueEnumerable<TestEnumerable.Enumerable, TestEnumerable.Enumerable.Enumerator, int>().Select(item => item).ToList();
+            => enumerableValue
+            .AsValueEnumerable<TestEnumerable.Enumerable, TestEnumerable.Enumerable.Enumerator, int>(enumerable => enumerable.GetEnumerator())
+            .Select(item => item)
+            .ToList();
     }
 }

@@ -114,8 +114,10 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Hyperlinq_Enumerable_Reference()
         { 
             var count = 0;
-            foreach(var item in enumerableReference.AsValueEnumerable().Select(item => item))
-                count++;
+            foreach(var item in enumerableReference
+                .AsValueEnumerable()
+                .Select(item => item))
+                    count++;
             return count;
         }
 
@@ -124,8 +126,10 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Hyperlinq_Enumerable_Value()        
         { 
             var count = 0;
-            foreach(var item in enumerableValue.AsValueEnumerable<TestEnumerable.Enumerable, TestEnumerable.Enumerable.Enumerator, int>().Select(item => item))
-                count++;
+            foreach(var item in enumerableValue
+                .AsValueEnumerable<TestEnumerable.Enumerable, TestEnumerable.Enumerable.Enumerator, int>(enumerable => enumerable.GetEnumerator())
+                .Select(item => item))
+                    count++;
             return count;
         }
     }

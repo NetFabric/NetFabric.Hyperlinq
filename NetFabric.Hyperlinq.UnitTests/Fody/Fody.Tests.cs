@@ -85,8 +85,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var expected = System.Linq.Enumerable.All(System.Linq.Enumerable.ToList(System.Linq.Enumerable.Range(0, 100)), item => true);
 
             // Act
-            var result = System.Linq.Enumerable.ToList(System.Linq.Enumerable.Range(0, 100))
-                .AsValueEnumerable<List<int>.Enumerator, int>()
+            var result = ReadOnlyList.AsValueEnumerable<List<int>, List<int>.Enumerator, int>(System.Linq.Enumerable.ToList(System.Linq.Enumerable.Range(0, 100)), enumerable => enumerable.GetEnumerator())
                 .All(item => true);
 
             // Assert
@@ -103,8 +102,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var expected = System.Linq.Enumerable.Select(System.Linq.Enumerable.ToList(System.Linq.Enumerable.Range(0, 100)), item => item);
 
             // Act
-            var result = System.Linq.Enumerable.ToList(System.Linq.Enumerable.Range(0, 100))
-                .AsValueEnumerable<List<int>.Enumerator, int>()
+            var result = ReadOnlyList.AsValueEnumerable<List<int>, List<int>.Enumerator, int>(System.Linq.Enumerable.ToList(System.Linq.Enumerable.Range(0, 100)), enumerable => enumerable.GetEnumerator())
                 .Select(item => item);
 
             // Assert
