@@ -28,7 +28,7 @@ namespace NetFabric.Hyperlinq
                 this.count = count;
             }
 
-            public Enumerator GetEnumerator() => new Enumerator(in this);
+            public readonly Enumerator GetEnumerator() => new Enumerator(in this);
             IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new Enumerator(in this);
             IEnumerator IEnumerable.GetEnumerator() => new Enumerator(in this);
 
@@ -68,7 +68,7 @@ namespace NetFabric.Hyperlinq
                     return enumerator.MoveNext();                    
                 }
 
-                void IEnumerator.Reset()
+                readonly void IEnumerator.Reset()
                     => throw new NotSupportedException();
 
                 public void Dispose() => enumerator.Dispose();

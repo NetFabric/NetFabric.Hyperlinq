@@ -134,7 +134,7 @@ namespace NetFabric.Hyperlinq
 
             public int Count => source.Count;
 
-            public SortedDictionary<TKey, TValue>.Enumerator GetEnumerator() => source.GetEnumerator();
+            public readonly SortedDictionary<TKey, TValue>.Enumerator GetEnumerator() => source.GetEnumerator();
             IEnumerator<KeyValuePair<TKey, TValue>> IEnumerable<KeyValuePair<TKey, TValue>>.GetEnumerator() => source.GetEnumerator();
             IEnumerator IEnumerable.GetEnumerator() => source.GetEnumerator();
         }

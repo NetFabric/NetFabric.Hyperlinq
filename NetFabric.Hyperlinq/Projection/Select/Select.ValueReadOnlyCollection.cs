@@ -36,7 +36,7 @@ namespace NetFabric.Hyperlinq
                 this.selector = selector;
             }
 
-            public Enumerator GetEnumerator() => new Enumerator(in this);
+            public readonly Enumerator GetEnumerator() => new Enumerator(in this);
             IEnumerator<TResult> IEnumerable<TResult>.GetEnumerator() => new Enumerator(in this);
             IEnumerator IEnumerable.GetEnumerator() => new Enumerator(in this);
 
@@ -65,7 +65,7 @@ namespace NetFabric.Hyperlinq
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public bool MoveNext() => enumerator.MoveNext();
 
-                void IEnumerator.Reset() => throw new NotSupportedException();
+                readonly void IEnumerator.Reset() => throw new NotSupportedException();
 
                 public void Dispose() => enumerator.Dispose();
             }

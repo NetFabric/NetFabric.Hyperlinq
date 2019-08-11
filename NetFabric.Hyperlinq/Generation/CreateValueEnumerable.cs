@@ -26,7 +26,7 @@ namespace NetFabric.Hyperlinq
                 this.getEnumerator = getEnumerator;
             }
 
-            public TEnumerator GetEnumerator() => getEnumerator();
+            public readonly TEnumerator GetEnumerator() => getEnumerator();
             IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => getEnumerator();
             IEnumerator IEnumerable.GetEnumerator() => getEnumerator();
         }

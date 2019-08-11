@@ -139,7 +139,7 @@ namespace NetFabric.Hyperlinq
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public List<TSource>.Enumerator GetEnumerator() => source.GetEnumerator();
+            public readonly List<TSource>.Enumerator GetEnumerator() => source.GetEnumerator();
             IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => source.GetEnumerator();
             IEnumerator IEnumerable.GetEnumerator() => source.GetEnumerator();
         }

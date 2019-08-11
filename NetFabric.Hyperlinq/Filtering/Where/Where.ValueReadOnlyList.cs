@@ -39,7 +39,7 @@ namespace NetFabric.Hyperlinq
                 (this.skipCount, this.takeCount) = Utils.SkipTake(source.Count, skipCount, takeCount);
             }
 
-            public Enumerator GetEnumerator() => new Enumerator(in this);
+            public readonly Enumerator GetEnumerator() => new Enumerator(in this);
             IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new Enumerator(in this);
             IEnumerator IEnumerable.GetEnumerator() => new Enumerator(in this);
 
@@ -74,10 +74,10 @@ namespace NetFabric.Hyperlinq
                     return false;
                 }
 
-                void IEnumerator.Reset()
+                readonly void IEnumerator.Reset()
                     => throw new NotSupportedException();
 
-                public void Dispose() { }
+                public readonly void Dispose() { }
             }
 
             public int Count()
