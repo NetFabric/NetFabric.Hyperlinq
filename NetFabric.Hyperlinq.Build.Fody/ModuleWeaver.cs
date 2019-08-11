@@ -13,6 +13,9 @@ public partial class ModuleWeaver
 
     public override IEnumerable<string> GetAssembliesForScanning()
     {
+        yield return "mscorlib";
+        yield return "System.Runtime";
+        yield return "System";
         yield return "netstandard";
     }
 
