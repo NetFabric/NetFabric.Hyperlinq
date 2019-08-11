@@ -26,16 +26,11 @@ namespace NetFabric.Hyperlinq
             readonly TEnumerable source;
             readonly Func<TEnumerable, TEnumerator> getEnumerator;
 
-            internal ValueEnumerableWrapper(in TEnumerable source, Func<TEnumerable, TEnumerator> getEnumerator)
+            internal ValueEnumerableWrapper(TEnumerable source, Func<TEnumerable, TEnumerator> getEnumerator)
             {
                 this.source = source;
                 this.getEnumerator = getEnumerator;
             }
-
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public TEnumerator GetEnumerator() => getEnumerator(source);
-            IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => getEnumerator(source);
-            IEnumerator IEnumerable.GetEnumerator() => getEnumerator(source);
 
             public int Count
             {
@@ -48,6 +43,11 @@ namespace NetFabric.Hyperlinq
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 get => source[index];
             }
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public TEnumerator GetEnumerator() => getEnumerator(source);
+            IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => getEnumerator(source);
+            IEnumerator IEnumerable.GetEnumerator() => getEnumerator(source);
         }
 
         [GenericsTypeMapping("TEnumerable", typeof(AsValueEnumerableEnumerable<>))]
@@ -62,11 +62,6 @@ namespace NetFabric.Hyperlinq
                 this.source = source;
             }
 
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public Enumerator GetEnumerator() => new Enumerator(source);
-            IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new Enumerator(source);
-            IEnumerator IEnumerable.GetEnumerator() => new Enumerator(source);
-
             public int Count
             {
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -78,6 +73,11 @@ namespace NetFabric.Hyperlinq
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 get => source[index];
             }
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public Enumerator GetEnumerator() => new Enumerator(source);
+            IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new Enumerator(source);
+            IEnumerator IEnumerable.GetEnumerator() => new Enumerator(source);
 
             public struct Enumerator
                 : IEnumerator<TSource>

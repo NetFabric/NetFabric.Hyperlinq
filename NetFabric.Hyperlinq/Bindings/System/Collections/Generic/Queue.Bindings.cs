@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
@@ -95,8 +96,9 @@ namespace NetFabric.Hyperlinq
         public static ValueEnumerable.DistinctEnumerable<ValueWrapper<TSource>, Queue<TSource>.Enumerator, TSource> Distinct<TSource>(this Queue<TSource> source, IEqualityComparer<TSource> comparer = null)
             => ValueEnumerable.Distinct<ValueWrapper<TSource>, Queue<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), comparer);
 
-        public static ValueWrapper<TSource> AsEnumerable<TSource>(this Queue<TSource> source)
-            => new ValueWrapper<TSource>(source);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Queue<TSource> AsEnumerable<TSource>(this Queue<TSource> source)
+            => source;
 
         public static ValueWrapper<TSource> AsValueEnumerable<TSource>(this Queue<TSource> source)
             => new ValueWrapper<TSource>(source);

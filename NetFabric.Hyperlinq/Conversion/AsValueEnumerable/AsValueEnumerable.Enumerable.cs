@@ -26,7 +26,7 @@ namespace NetFabric.Hyperlinq
             readonly TEnumerable source;
             readonly Func<TEnumerable, TEnumerator> getEnumerator;
 
-            internal AsValueEnumerableEnumerable(in TEnumerable source, Func<TEnumerable, TEnumerator> getEnumerator)
+            internal AsValueEnumerableEnumerable(TEnumerable source, Func<TEnumerable, TEnumerator> getEnumerator)
             {
                 this.source = source;
                 this.getEnumerator = getEnumerator;

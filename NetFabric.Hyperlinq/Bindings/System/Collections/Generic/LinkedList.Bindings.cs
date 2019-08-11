@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
@@ -95,8 +96,9 @@ namespace NetFabric.Hyperlinq
         public static ValueEnumerable.DistinctEnumerable<ValueWrapper<TSource>, LinkedList<TSource>.Enumerator, TSource> Distinct<TSource>(this LinkedList<TSource> source, IEqualityComparer<TSource> comparer = null)
             => ValueEnumerable.Distinct<ValueWrapper<TSource>, LinkedList<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), comparer);
 
-        public static ValueWrapper<TSource> AsEnumerable<TSource>(this LinkedList<TSource> source)
-            => new ValueWrapper<TSource>(source);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static LinkedList<TSource> AsEnumerable<TSource>(this LinkedList<TSource> source)
+            => source;
 
         public static ValueWrapper<TSource> AsValueEnumerable<TSource>(this LinkedList<TSource> source)
             => new ValueWrapper<TSource>(source);
@@ -126,8 +128,13 @@ namespace NetFabric.Hyperlinq
                 this.source = source;
             }
 
-            public int Count => source.Count;
+            public int Count
+            {
+                [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                get => source.Count;
+            }
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public LinkedList<TSource>.Enumerator GetEnumerator() => source.GetEnumerator();
             IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => source.GetEnumerator();
             IEnumerator IEnumerable.GetEnumerator() => source.GetEnumerator();
