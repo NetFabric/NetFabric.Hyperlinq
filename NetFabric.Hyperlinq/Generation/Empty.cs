@@ -15,7 +15,7 @@ namespace NetFabric.Hyperlinq
         public readonly struct EmptyEnumerable<TSource>
             : IValueReadOnlyList<TSource, EmptyEnumerable<TSource>.Enumerator>
         {
-            public Enumerator GetEnumerator() => new Enumerator();
+            public readonly Enumerator GetEnumerator() => new Enumerator();
             IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new Enumerator();
             IEnumerator IEnumerable.GetEnumerator() => new Enumerator();
 
@@ -34,10 +34,10 @@ namespace NetFabric.Hyperlinq
                 public bool MoveNext()
                     => false;
 
-                void IEnumerator.Reset() 
+                readonly void IEnumerator.Reset() 
                     => throw new NotSupportedException();
 
-                public void Dispose() { }
+                public readonly void Dispose() { }
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]

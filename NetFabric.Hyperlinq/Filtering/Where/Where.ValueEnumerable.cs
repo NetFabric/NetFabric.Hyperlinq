@@ -32,7 +32,7 @@ namespace NetFabric.Hyperlinq
                 this.predicate = predicate;
             }
 
-            public Enumerator GetEnumerator() => new Enumerator(in this);
+            public readonly Enumerator GetEnumerator() => new Enumerator(in this);
             IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new Enumerator(in this);
             IEnumerator IEnumerable.GetEnumerator() => new Enumerator(in this);
 
@@ -67,7 +67,7 @@ namespace NetFabric.Hyperlinq
                     return false;
                 }
 
-                void IEnumerator.Reset()
+                readonly void IEnumerator.Reset()
                     => throw new NotSupportedException();
 
                 public void Dispose() => enumerator.Dispose();

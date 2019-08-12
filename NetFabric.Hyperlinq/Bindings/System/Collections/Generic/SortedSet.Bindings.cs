@@ -130,7 +130,7 @@ namespace NetFabric.Hyperlinq
 
             public int Count => source.Count;
 
-            public SortedSet<TSource>.Enumerator GetEnumerator() => source.GetEnumerator();
+            public readonly SortedSet<TSource>.Enumerator GetEnumerator() => source.GetEnumerator();
             IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => source.GetEnumerator();
             IEnumerator IEnumerable.GetEnumerator() => source.GetEnumerator();
         }      

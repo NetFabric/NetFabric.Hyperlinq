@@ -130,7 +130,7 @@ namespace NetFabric.Hyperlinq
 
             public int Count => source.Count;
 
-            public Dictionary<TKey, TValue>.ValueCollection.Enumerator GetEnumerator() => source.GetEnumerator();
+            public readonly Dictionary<TKey, TValue>.ValueCollection.Enumerator GetEnumerator() => source.GetEnumerator();
             IEnumerator<TValue> IEnumerable<TValue>.GetEnumerator() => source.GetEnumerator();
             IEnumerator IEnumerable.GetEnumerator() => source.GetEnumerator();
         } 
