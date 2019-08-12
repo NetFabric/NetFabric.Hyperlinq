@@ -15,6 +15,7 @@
   <ItemGroup Condition="'$(TargetFramework)'!='netcoreapp2.1'">
     <Compile Remove="**\*.Span.cs" />
     <Compile Remove="**\*.ReadOnlySpan.cs" />
+    <Compile Remove="**\Immutable*.Bindings.cs" />
   </ItemGroup>
 
   <ItemGroup>
