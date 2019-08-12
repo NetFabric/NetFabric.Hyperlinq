@@ -1,17 +1,21 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 
 namespace NetFabric.Hyperlinq
 {
     public static partial class Array
     {
+        [Pure]
         public static List<TSource> ToList<TSource>(this TSource[] source)
             => new List<TSource>(source);
 
+        [Pure]
         static List<TSource> ToList<TSource>(this TSource[] source, int skipCount, int takeCount)
             => new List<TSource>(new ToListCollection<TSource>(source, skipCount, takeCount));
 
+        [Pure]
         static List<TSource> ToList<TSource>(this TSource[] source, Func<TSource, bool> predicate, int skipCount, int takeCount)
         {
             var list = new List<TSource>();
@@ -26,6 +30,7 @@ namespace NetFabric.Hyperlinq
             return list;
         }
 
+        [Pure]
         static List<TSource> ToList<TSource>(this TSource[] source, Func<TSource, int, bool> predicate, int skipCount, int takeCount)
         {
             var list = new List<TSource>();

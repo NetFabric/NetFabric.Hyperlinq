@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Diagnostics.Contracts;
 
 namespace NetFabric.Hyperlinq
 {
     public static partial class SpanExtensions
     {
+        [Pure]
         public static WhereEnumerable<TSource> Where<TSource>(this Span<TSource> source, Func<TSource, long, bool> predicate) 
         {
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));

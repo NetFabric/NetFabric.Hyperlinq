@@ -1,12 +1,14 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
     public static partial class Array
     {
+        [Pure]
         public static SelectEnumerable<TSource, TResult> Select<TSource, TResult>(
             this TSource[] source, 
             Func<TSource, TResult> selector)
@@ -16,6 +18,7 @@ namespace NetFabric.Hyperlinq
             return new SelectEnumerable<TSource, TResult>(source, selector, 0, source.Length);
         }
 
+        [Pure]
         static SelectEnumerable<TSource, TResult> Select<TSource, TResult>(
             this TSource[] source,
             Func<TSource, TResult> selector,

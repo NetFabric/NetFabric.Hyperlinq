@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
     public static partial class ValueEnumerable
     {
+        [Pure]
         public static RangeEnumerable Range(int start, int count)
         {
             if (count < 0) ThrowHelper.ThrowArgumentOutOfRangeException(nameof(count));

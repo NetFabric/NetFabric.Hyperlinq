@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 
 namespace NetFabric.Hyperlinq
 {
     public static partial class Array
     {
+        [Pure]
         public static WhereIndexEnumerable<TSource> Where<TSource>(this TSource[] source, Func<TSource, int, bool> predicate) 
         {
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
@@ -13,6 +15,7 @@ namespace NetFabric.Hyperlinq
             return new WhereIndexEnumerable<TSource>(source, predicate, 0, source.Length);
         }
 
+        [Pure]
         static WhereIndexEnumerable<TSource> Where<TSource>(this TSource[] source, Func<TSource, int, bool> predicate, int skipCount, int takeCount)
             => new WhereIndexEnumerable<TSource>(source, predicate, skipCount, takeCount);
 

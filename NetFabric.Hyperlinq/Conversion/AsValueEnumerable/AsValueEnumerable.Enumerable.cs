@@ -1,16 +1,19 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
     public static partial class Enumerable
     {
+        [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static AsValueEnumerableEnumerable<TSource> AsValueEnumerable<TSource>(this IEnumerable<TSource> source)
             => new AsValueEnumerableEnumerable<TSource>(source);
 
+        [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static AsValueEnumerableEnumerable<TEnumerable, TEnumerator, TSource> AsValueEnumerable<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TEnumerable, TEnumerator> getEnumerator)
             where TEnumerable : IEnumerable<TSource>

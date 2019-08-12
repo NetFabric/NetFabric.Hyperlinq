@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.Contracts;
 using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
@@ -14,6 +15,7 @@ namespace NetFabric.Hyperlinq
 
     public static partial class ElementExtensions
     {
+        [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static TValue ThrowOnEmpty<TValue>(this (ElementResult Result, TValue Value) item)
         {
@@ -28,6 +30,7 @@ namespace NetFabric.Hyperlinq
             }
         }
 
+        [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static TValue ThrowOnEmpty<TValue>(this (int Index, TValue Value) item)
         {
@@ -44,6 +47,7 @@ namespace NetFabric.Hyperlinq
 
         /////////////////////////////////////////////////////
 
+        [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static TValue DefaultOnEmpty<TValue>(this (ElementResult Result, TValue Value) item)
         {
@@ -58,6 +62,7 @@ namespace NetFabric.Hyperlinq
             }
         }
 
+        [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static TValue DefaultOnEmpty<TValue>(this (int Index, TValue Value) item)
         {
@@ -74,6 +79,7 @@ namespace NetFabric.Hyperlinq
 
         /////////////////////////////////////////////////////
 
+        [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static TValue? NullOnEmpty<TValue>(this (ElementResult Result, TValue Value) item)
             where TValue : struct
@@ -89,6 +95,7 @@ namespace NetFabric.Hyperlinq
             }
         }
 
+        [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static TValue? NullOnEmpty<TValue>(this (int Index, TValue Value) item) 
             where TValue : struct

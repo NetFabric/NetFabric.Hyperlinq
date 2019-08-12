@@ -1,10 +1,12 @@
 using System;
+using System.Diagnostics.Contracts;
 using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
     public static partial class Array
     {
+        [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool All<TSource>(this TSource[] source, Func<TSource, bool> predicate)
         {
@@ -13,6 +15,7 @@ namespace NetFabric.Hyperlinq
             return All<TSource>(source, predicate, 0, source.Length);
         }
 
+        [Pure]
         static bool All<TSource>(this TSource[] source, Func<TSource, bool> predicate, int skipCount, int takeCount)
         {
             var end = skipCount + takeCount;
@@ -24,6 +27,7 @@ namespace NetFabric.Hyperlinq
             return true;
         }
 
+        [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool All<TSource>(this TSource[] source, Func<TSource, int, bool> predicate)
         {
@@ -32,6 +36,7 @@ namespace NetFabric.Hyperlinq
             return All<TSource>(source, predicate, 0, source.Length);
         }
 
+        [Pure]
         static bool All<TSource>(this TSource[] source, Func<TSource, int, bool> predicate, int skipCount, int takeCount)
         {
             var end = skipCount + takeCount;

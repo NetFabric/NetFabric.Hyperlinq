@@ -1,14 +1,17 @@
 using System;
+using System.Diagnostics.Contracts;
 using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
     public static partial class Array
     {
+        [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ref readonly TSource Single<TSource>(this TSource[] source)
             => ref Single<TSource>(source, 0, source.Length);
 
+        [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static ref readonly TSource Single<TSource>(this TSource[] source, int skipCount, int takeCount)
         {
@@ -23,12 +26,14 @@ namespace NetFabric.Hyperlinq
             }
         }
 
+        [Pure]
         public static ref readonly TSource Single<TSource>(this TSource[] source, Func<TSource, int, bool> predicate)
         {
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
 
             return ref Single<TSource>(source, predicate, 0, source.Length);
         }
+        [Pure]
         static ref readonly TSource Single<TSource>(this TSource[] source, Func<TSource, int, bool> predicate, int skipCount, int takeCount)
         {
             var end = skipCount + takeCount;
@@ -50,6 +55,7 @@ namespace NetFabric.Hyperlinq
             return ref ThrowHelper.ThrowEmptySequenceRef<TSource>();
         }
 
+        [Pure]
         public static ref readonly TSource Single<TSource>(this TSource[] source, Func<TSource, bool> predicate)
         {
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
@@ -57,6 +63,7 @@ namespace NetFabric.Hyperlinq
             return ref Single<TSource>(source, predicate, 0, source.Length);
         }
 
+        [Pure]
         static ref readonly TSource Single<TSource>(this TSource[] source, Func<TSource, bool> predicate, int skipCount, int takeCount)
         {
             var end = skipCount + takeCount;
@@ -78,6 +85,7 @@ namespace NetFabric.Hyperlinq
             return ref ThrowHelper.ThrowEmptySequenceRef<TSource>();
         }
 
+        [Pure]
         public static ref readonly TSource Single<TSource>(this TSource[] source, Func<TSource, int, bool> predicate, out int index)
         {
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
@@ -85,6 +93,7 @@ namespace NetFabric.Hyperlinq
             return ref Single<TSource>(source, predicate, out index, 0, source.Length);
         }
 
+        [Pure]
         static ref readonly TSource Single<TSource>(this TSource[] source, Func<TSource, int, bool> predicate, out int index, int skipCount, int takeCount)
         {
             var end = skipCount + takeCount;
@@ -106,10 +115,12 @@ namespace NetFabric.Hyperlinq
             return ref ThrowHelper.ThrowEmptySequenceRef<TSource>();
         }
 
+        [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ref readonly TSource SingleOrDefault<TSource>(this TSource[] source)
             => ref SingleOrDefault<TSource>(source, 0, source.Length);
 
+        [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static ref readonly TSource SingleOrDefault<TSource>(this TSource[] source, int skipCount, int takeCount)
         {
@@ -124,6 +135,7 @@ namespace NetFabric.Hyperlinq
             }
         }
 
+        [Pure]
         public static ref readonly TSource SingleOrDefault<TSource>(this TSource[] source, Func<TSource, bool> predicate)
         {
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
@@ -131,6 +143,7 @@ namespace NetFabric.Hyperlinq
             return ref SingleOrDefault<TSource>(source, predicate, 0, source.Length);
         }
 
+        [Pure]
         static ref readonly TSource SingleOrDefault<TSource>(this TSource[] source, Func<TSource, bool> predicate, int skipCount, int takeCount)
         {
             var end = skipCount + takeCount;
@@ -152,6 +165,7 @@ namespace NetFabric.Hyperlinq
             return ref Default<TSource>.Value;
         }
 
+        [Pure]
         public static ref readonly TSource SingleOrDefault<TSource>(this TSource[] source, Func<TSource, int, bool> predicate)
         {
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
@@ -159,6 +173,7 @@ namespace NetFabric.Hyperlinq
             return ref SingleOrDefault<TSource>(source, predicate, 0, source.Length);
         }
 
+        [Pure]
         static ref readonly TSource SingleOrDefault<TSource>(this TSource[] source, Func<TSource, int, bool> predicate, int skipCount, int takeCount)
         {
             var end = skipCount + takeCount;
@@ -180,6 +195,7 @@ namespace NetFabric.Hyperlinq
             return ref Default<TSource>.Value;
         }
 
+        [Pure]
         public static ref readonly TSource SingleOrDefault<TSource>(this TSource[] source, Func<TSource, int, bool> predicate, out int index)
         {
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
@@ -187,6 +203,7 @@ namespace NetFabric.Hyperlinq
             return ref SingleOrDefault<TSource>(source, predicate, out index, 0, source.Length);
         }
 
+        [Pure]
         static ref readonly TSource SingleOrDefault<TSource>(this TSource[] source, Func<TSource, int, bool> predicate, out int index, int skipCount, int takeCount)
         {
             var end = skipCount + takeCount;
@@ -209,11 +226,13 @@ namespace NetFabric.Hyperlinq
             return ref Default<TSource>.Value;
         }
 
+        [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static TSource? SingleOrNull<TSource>(this TSource[] source)
             where TSource : struct
             => SingleOrNull<TSource>(source, 0, source.Length);
 
+        [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static TSource? SingleOrNull<TSource>(this TSource[] source, int skipCount, int takeCount)
             where TSource : struct
@@ -229,11 +248,13 @@ namespace NetFabric.Hyperlinq
             }
         }
 
+        [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static TSource? SingleOrNull<TSource>(this TSource[] source, Func<TSource, int, bool> predicate)
             where TSource : struct
             => SingleOrNull<TSource>(source, predicate, out var _, 0, source.Length);
 
+        [Pure]
         public static TSource? SingleOrNull<TSource>(this TSource[] source, Func<TSource, int, bool> predicate, out int index)
             where TSource : struct
         {
@@ -242,6 +263,7 @@ namespace NetFabric.Hyperlinq
             return SingleOrNull<TSource>(source, predicate, out index, 0, source.Length);
         }
 
+        [Pure]
         static TSource? SingleOrNull<TSource>(this TSource[] source, Func<TSource, int, bool> predicate, out int index, int skipCount, int takeCount)
             where TSource : struct
         {

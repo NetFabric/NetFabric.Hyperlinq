@@ -1,17 +1,20 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 
 namespace NetFabric.Hyperlinq
 {
     public static partial class Array
     {
+        [Pure]
         internal static WhereSelectEnumerable<TSource, TResult> WhereSelect<TSource, TResult>(
             this TSource[] source, 
             Func<TSource, bool> predicate, 
             Func<TSource, TResult> selector) 
             => new WhereSelectEnumerable<TSource, TResult>(source, predicate, selector, 0, source.Length);
 
+        [Pure]
         internal static WhereSelectEnumerable<TSource, TResult> WhereSelect<TSource, TResult>(
             this TSource[] source,
             Func<TSource, bool> predicate,
