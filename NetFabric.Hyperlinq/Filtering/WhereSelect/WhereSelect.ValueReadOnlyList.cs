@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 
 namespace NetFabric.Hyperlinq
 {
     public static partial class ValueReadOnlyList
     {
+        [Pure]
         internal static WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult> WhereSelect<TEnumerable, TEnumerator, TSource, TResult>(
             this TEnumerable source, 
             Func<TSource, bool> predicate,
@@ -19,6 +21,7 @@ namespace NetFabric.Hyperlinq
             return new WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>(in source, predicate, selector, 0, source.Count);
         }
 
+        [Pure]
         internal static WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult> WhereSelect<TEnumerable, TEnumerator, TSource, TResult>(
             this TEnumerable source,
             Func<TSource, bool> predicate,

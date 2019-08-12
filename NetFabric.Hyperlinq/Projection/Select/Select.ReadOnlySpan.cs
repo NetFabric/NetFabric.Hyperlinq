@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Diagnostics.Contracts;
 using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
     public static partial class ReadOnlySpanExtensions
     {
+        [Pure]
         public static SelectEnumerable<TSource, TResult> Select<TSource, TResult>(
             this ReadOnlySpan<TSource> source, 
             Func<TSource, long, TResult> selector)

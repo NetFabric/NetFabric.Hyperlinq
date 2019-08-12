@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 
 namespace NetFabric.Hyperlinq
 {
     public static partial class SpanExtensions
     {
+        [Pure]
         internal static WhereSelectEnumerable<TSource, TResult> WhereSelect<TSource, TResult>(
             this Span<TSource> source, 
             Func<TSource, long, bool> predicate, 

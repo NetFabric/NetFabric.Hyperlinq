@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 
 namespace NetFabric.Hyperlinq
 {
     public static partial class SpanExtensions
     {
+        [Pure]
         public static List<TSource> ToList<TSource>(this Span<TSource> source)
         {
             var count = source.Length;

@@ -1,12 +1,15 @@
 using System;
+using System.Diagnostics.Contracts;
 
 namespace NetFabric.Hyperlinq
 {
     public static partial class Array
     {
+        [Pure]
         public static int Count<TSource>(this TSource[] source)
             => source.Length;
 
+        [Pure]
         public static int Count<TSource>(this TSource[] source, Func<TSource, bool> predicate)
         {
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
@@ -14,6 +17,7 @@ namespace NetFabric.Hyperlinq
             return Count<TSource>(source, predicate, 0, source.Length);
         }
 
+        [Pure]
         static int Count<TSource>(this TSource[] source, Func<TSource, bool> predicate, int skipCount, int takeCount)
         {
             var count = 0;
@@ -26,6 +30,7 @@ namespace NetFabric.Hyperlinq
             return count;
         }
 
+        [Pure]
         public static int Count<TSource>(this TSource[] source, Func<TSource, int, bool> predicate)
         {
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
@@ -33,6 +38,7 @@ namespace NetFabric.Hyperlinq
             return Count<TSource>(source, predicate, 0, source.Length);
         }
 
+        [Pure]
         static int Count<TSource>(this TSource[] source, Func<TSource, int, bool> predicate, int skipCount, int takeCount)
         {
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));

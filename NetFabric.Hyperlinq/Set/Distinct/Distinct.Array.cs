@@ -1,18 +1,21 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
     public static partial class Array
     {
+        [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static DistinctEnumerable<TSource> Distinct<TSource>(
             this TSource[] source, 
             IEqualityComparer<TSource> comparer = null)
             => new DistinctEnumerable<TSource>(source, comparer, 0, source.Length);
 
+        [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static DistinctEnumerable<TSource> Distinct<TSource>(
             this TSource[] source,

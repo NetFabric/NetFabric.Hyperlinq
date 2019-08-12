@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 
 namespace NetFabric.Hyperlinq
 {
     public static partial class SpanExtensions
     {
+        [Pure]
         public static Dictionary<TKey, TSource> ToDictionary<TSource, TKey>(this Span<TSource> source, Func<TSource, TKey> keySelector)
         {
             if (keySelector is null) ThrowHelper.ThrowArgumentNullException(nameof(keySelector));
@@ -12,6 +14,7 @@ namespace NetFabric.Hyperlinq
             return ToDictionary<TSource, TKey>(source, keySelector, EqualityComparer<TKey>.Default, 0, source.Length);
         }
 
+        [Pure]
         public static Dictionary<TKey, TSource> ToDictionary<TSource, TKey>(this Span<TSource> source, Func<TSource, TKey> keySelector, IEqualityComparer<TKey> comparer)
         {
             if (keySelector is null) ThrowHelper.ThrowArgumentNullException(nameof(keySelector));
@@ -19,6 +22,7 @@ namespace NetFabric.Hyperlinq
             return ToDictionary<TSource, TKey>(source, keySelector, comparer, 0, source.Length);
         }
 
+        [Pure]
         static Dictionary<TKey, TSource> ToDictionary<TSource, TKey>(this Span<TSource> source, Func<TSource, TKey> keySelector, IEqualityComparer<TKey> comparer, int skipCount, int takeCount)
         {
             var dictionary = new Dictionary<TKey, TSource>(source.Length, comparer);
@@ -28,6 +32,7 @@ namespace NetFabric.Hyperlinq
             return dictionary;
         }
 
+        [Pure]
         public static Dictionary<TKey, TElement> ToDictionary<TSource, TKey, TElement>(this Span<TSource> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector)
         {
             if (keySelector is null) ThrowHelper.ThrowArgumentNullException(nameof(keySelector));
@@ -36,6 +41,7 @@ namespace NetFabric.Hyperlinq
             return ToDictionary<TSource, TKey, TElement>(source, keySelector, elementSelector, EqualityComparer<TKey>.Default, 0, source.Length);
         }
 
+        [Pure]
         public static Dictionary<TKey, TElement> ToDictionary<TSource, TKey, TElement>(this Span<TSource> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, IEqualityComparer<TKey> comparer)
         {
             if (keySelector is null) ThrowHelper.ThrowArgumentNullException(nameof(keySelector));
@@ -44,6 +50,7 @@ namespace NetFabric.Hyperlinq
             return ToDictionary<TSource, TKey, TElement>(source, keySelector, elementSelector, comparer, 0, source.Length);
         }
 
+        [Pure]
         static Dictionary<TKey, TElement> ToDictionary<TSource, TKey, TElement>(this Span<TSource> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, IEqualityComparer<TKey> comparer, int skipCount, int takeCount)
         {
             var dictionary = new Dictionary<TKey, TElement>(source.Length, comparer);

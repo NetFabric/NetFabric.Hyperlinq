@@ -1,12 +1,15 @@
 using System;
+using System.Diagnostics.Contracts;
 
 namespace NetFabric.Hyperlinq
 {
     public static partial class ReadOnlySpanExtensions
     {
+        [Pure]
         public static bool Any<TSource>(this ReadOnlySpan<TSource> source)
             => source.Length != 0;
 
+        [Pure]
         public static bool Any<TSource>(this ReadOnlySpan<TSource> source, Func<TSource, bool> predicate)
         {
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
@@ -20,6 +23,7 @@ namespace NetFabric.Hyperlinq
             return false;
         }
 
+        [Pure]
         public static bool Any<TSource>(this ReadOnlySpan<TSource> source, Func<TSource, long, bool> predicate)
         {
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));

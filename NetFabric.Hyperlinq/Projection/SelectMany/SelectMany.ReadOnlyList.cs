@@ -1,11 +1,13 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 
 namespace NetFabric.Hyperlinq
 {
     public static partial class ReadOnlyList
     {
+        [Pure]
         public static SelectManyEnumerable<TEnumerable, TSource, TSubEnumerable, TSubEnumerator, TResult> SelectMany<TEnumerable, TSource, TSubEnumerable, TSubEnumerator, TResult>(
             this TEnumerable source, 
             Func<TSource, TSubEnumerable> selector)

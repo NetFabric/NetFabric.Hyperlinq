@@ -9,6 +9,7 @@
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageTags>netfabric, hyperlinq, linq, enumeration, extensions, performance</PackageTags>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <DefineConstants>CONTRACTS_FULL</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup Condition="'$(TargetFramework)'!='netcoreapp2.1'">

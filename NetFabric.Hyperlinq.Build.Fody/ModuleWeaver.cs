@@ -17,6 +17,7 @@ public partial class ModuleWeaver
         yield return "System.Runtime";
         yield return "System";
         yield return "netstandard";
+        yield return "System.Diagnostics.Contracts.dll";
     }
 
     public override bool ShouldCleanReference
@@ -98,6 +99,7 @@ public partial class ModuleWeaver
         {
             AggressiveInlining = true,
             CustomAttributes = {
+                PureAttribute(),
                 GeneratedCodeAttribute(),
             },
             DeclaringType = type,
@@ -189,6 +191,7 @@ public partial class ModuleWeaver
         {
             AggressiveInlining = true,
             CustomAttributes = {
+                PureAttribute(),
                 GeneratedCodeAttribute(),
                 ExtensionAttribute(),
             },
@@ -299,6 +302,18 @@ public partial class ModuleWeaver
         declaringType.Methods.Add(newMethod);
         LogInfo($"Added extension method. Type: '{type.FullName}' Method: '{newMethod.FullName}'");
     }
+
+    static CustomAttribute pureAttribute;
+
+    CustomAttribute PureAttribute()
+        => LazyInitializer.EnsureInitialized(ref pureAttribute, () =>
+        {
+            var type = FindType(typeof(System.Diagnostics.Contracts.PureAttribute).FullName);
+            var constructor = type.Methods.First(method =>
+                method.IsConstructor &&
+                !method.HasParameters);
+            return new CustomAttribute(ModuleDefinition.ImportReference(constructor));
+        });
 
     static CustomAttribute extensionAttribute;
 
