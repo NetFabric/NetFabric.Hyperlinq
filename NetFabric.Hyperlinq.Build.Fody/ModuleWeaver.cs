@@ -308,8 +308,8 @@ public partial class ModuleWeaver
     CustomAttribute PureAttribute()
         => LazyInitializer.EnsureInitialized(ref pureAttribute, () =>
         {
-            var type = FindType(typeof(System.Diagnostics.Contracts.PureAttribute).FullName);
-            var constructor = type.Methods.First(method =>
+            var type = ModuleDefinition.ImportReference(FindType(typeof(System.Diagnostics.Contracts.PureAttribute).FullName));
+            var constructor = type.Resolve().Methods.First(method =>
                 method.IsConstructor &&
                 !method.HasParameters);
             return new CustomAttribute(ModuleDefinition.ImportReference(constructor));
@@ -320,8 +320,8 @@ public partial class ModuleWeaver
     CustomAttribute ExtensionAttribute()
         => LazyInitializer.EnsureInitialized(ref extensionAttribute, () =>
         {
-            var type = FindType(typeof(System.Runtime.CompilerServices.ExtensionAttribute).FullName);
-            var constructor = type.Methods.First(method => 
+            var type = ModuleDefinition.ImportReference(FindType(typeof(System.Runtime.CompilerServices.ExtensionAttribute).FullName));
+            var constructor = type.Resolve().Methods.First(method => 
                 method.IsConstructor && 
                 !method.HasParameters);
             return new CustomAttribute(ModuleDefinition.ImportReference(constructor));
@@ -332,8 +332,8 @@ public partial class ModuleWeaver
     CustomAttribute GeneratedCodeAttribute()
         => LazyInitializer.EnsureInitialized(ref generatedCodeAttribute, () =>
         {
-            var type = FindType(typeof(System.CodeDom.Compiler.GeneratedCodeAttribute).FullName);
-            var constructor = type.Methods.First(method => 
+            var type = ModuleDefinition.ImportReference(FindType(typeof(System.CodeDom.Compiler.GeneratedCodeAttribute).FullName));
+            var constructor = type.Resolve().Methods.First(method => 
                 method.IsConstructor && 
                 method.Parameters.Count == 2 &&
                 method.Parameters[0].ParameterType.FullName == "System.String" &&
