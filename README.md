@@ -8,7 +8,7 @@
 
 # NetFabric.Hyperlinq
 
-*Hyperlinq* outperfoms *LINQ* when enumerating collections that implement `IReadOnlyList<T>` (E.g. arrays and `List<T>`) and collections that have value-type enumerators (E.g. collections in the `System.Collections.Generic` namespace). For any other collection, it also outforms *LINQ* when multiple operations are composed.
+*Hyperlinq* outperfoms *LINQ* when enumerating collections that implement `IReadOnlyList<T>` (E.g. arrays and `List<T>`) and collections that have value-typed enumerators (E.g. collections in the `System.Collections.Generic` and `System.Collections.Immutable` namespaces). For any other collection, it also outforms *LINQ* when multiple operations are composed.
 
 This implementation favors performance and reduction of heap allocations, in detriment of assembly binary size (lots of overloads).
 
