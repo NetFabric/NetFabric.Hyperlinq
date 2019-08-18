@@ -17,7 +17,10 @@ namespace NetFabric.Hyperlinq.UnitTests
             var result = ValueReadOnlyCollection.SkipTake<Wrap.ValueReadOnlyCollection<int>, Wrap.ValueReadOnlyCollection<int>.Enumerator, int>(wrapped, skipCount, takeCount);
 
             // Assert
-            result.Should().Equals(expected);
+            Utils.ValueReadOnlyCollection.ShouldEqual<
+                ValueReadOnlyCollection.SkipTakeEnumerable<Wrap.ValueReadOnlyCollection<int>, Wrap.ValueReadOnlyCollection<int>.Enumerator, int>,
+                ValueReadOnlyCollection.SkipTakeEnumerable<Wrap.ValueReadOnlyCollection<int>, Wrap.ValueReadOnlyCollection<int>.Enumerator, int>.Enumerator,
+                int>(result, expected);
         }
 
         [Theory]
@@ -32,7 +35,10 @@ namespace NetFabric.Hyperlinq.UnitTests
             var result = ValueReadOnlyCollection.SkipTake<Wrap.ValueReadOnlyCollection<int>, Wrap.ValueReadOnlyCollection<int>.Enumerator, int>(wrapped, skipCount, takeCount0).Take(takeCount1);
 
             // Assert
-            result.Should().Equals(expected);
+            Utils.ValueReadOnlyCollection.ShouldEqual<
+                ValueReadOnlyCollection.SkipTakeEnumerable<Wrap.ValueReadOnlyCollection<int>, Wrap.ValueReadOnlyCollection<int>.Enumerator, int>,
+                ValueReadOnlyCollection.SkipTakeEnumerable<Wrap.ValueReadOnlyCollection<int>, Wrap.ValueReadOnlyCollection<int>.Enumerator, int>.Enumerator,
+                int>(result, expected);
         }
 
         [Theory]

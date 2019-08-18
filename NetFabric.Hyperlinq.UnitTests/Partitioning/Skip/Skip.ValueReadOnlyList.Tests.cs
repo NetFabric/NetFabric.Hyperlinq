@@ -17,7 +17,10 @@ namespace NetFabric.Hyperlinq.UnitTests
             var result = ValueReadOnlyList.Skip<Wrap.ValueReadOnlyList<int>, Wrap.ValueReadOnlyList<int>.Enumerator, int>(wrapped, count);
 
             // Assert
-            result.Should().Equals(expected);
+            Utils.ValueReadOnlyList.ShouldEqual<
+                ValueReadOnlyList.SkipTakeEnumerable<Wrap.ValueReadOnlyList<int>, Wrap.ValueReadOnlyList<int>.Enumerator, int>,
+                ValueReadOnlyList.SkipTakeEnumerable<Wrap.ValueReadOnlyList<int>, Wrap.ValueReadOnlyList<int>.Enumerator, int>.Enumerator,
+                int>(result, expected);
         }
     }
 }

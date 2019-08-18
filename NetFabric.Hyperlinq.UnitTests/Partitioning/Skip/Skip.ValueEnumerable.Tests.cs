@@ -17,7 +17,10 @@ namespace NetFabric.Hyperlinq.UnitTests
             var result = ValueEnumerable.Skip<Wrap.ValueEnumerable<int>, Wrap.ValueEnumerable<int>.Enumerator, int>(wrapped, count);
 
             // Assert
-            result.Should().Equals(expected);
+            Utils.ValueEnumerable.ShouldEqual<
+                ValueEnumerable.SkipEnumerable<Wrap.ValueEnumerable<int>, Wrap.ValueEnumerable<int>.Enumerator, int>,
+                ValueEnumerable.SkipEnumerable<Wrap.ValueEnumerable<int>, Wrap.ValueEnumerable<int>.Enumerator, int>.Enumerator,
+                int>(result, expected);
         }
 
         [Theory]
@@ -32,7 +35,10 @@ namespace NetFabric.Hyperlinq.UnitTests
             var result = ValueEnumerable.Skip<Wrap.ValueEnumerable<int>, Wrap.ValueEnumerable<int>.Enumerator, int>(wrapped, count0).Skip(count1);
 
             // Assert
-            result.Should().Equals(expected);
+            Utils.ValueEnumerable.ShouldEqual<
+                ValueEnumerable.SkipEnumerable<Wrap.ValueEnumerable<int>, Wrap.ValueEnumerable<int>.Enumerator, int>,
+                ValueEnumerable.SkipEnumerable<Wrap.ValueEnumerable<int>, Wrap.ValueEnumerable<int>.Enumerator, int>.Enumerator,
+                int>(result, expected);
         }
 
         [Theory]
@@ -47,7 +53,10 @@ namespace NetFabric.Hyperlinq.UnitTests
             var result = ValueEnumerable.Skip<Wrap.ValueEnumerable<int>, Wrap.ValueEnumerable<int>.Enumerator, int>(wrapped, skipCount).Take(takeCount);
 
             // Assert
-            result.Should().Equals(expected);
+            Utils.ValueEnumerable.ShouldEqual<
+                ValueEnumerable.SkipTakeEnumerable<Wrap.ValueEnumerable<int>, Wrap.ValueEnumerable<int>.Enumerator, int>,
+                ValueEnumerable.SkipTakeEnumerable<Wrap.ValueEnumerable<int>, Wrap.ValueEnumerable<int>.Enumerator, int>.Enumerator,
+                int>(result, expected);
         }
     }
 }

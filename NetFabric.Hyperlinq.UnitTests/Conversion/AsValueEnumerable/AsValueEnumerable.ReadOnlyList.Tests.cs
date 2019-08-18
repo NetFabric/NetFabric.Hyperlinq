@@ -17,9 +17,8 @@ namespace NetFabric.Hyperlinq.UnitTests
             var result = ReadOnlyList.AsValueEnumerable(wrapped);
 
             // Assert
-            result.Should()
-                .BeOfType<ReadOnlyList.ValueEnumerableWrapper<int>>().And
-                .Equals(source);
+            result.Should().BeOfType<ReadOnlyList.ValueEnumerableWrapper<int>>();
+            Utils.ValueReadOnlyList.ShouldEqual<ReadOnlyList.ValueEnumerableWrapper<int>, ReadOnlyList.ValueEnumerableWrapper<int>.Enumerator, int>(result, wrapped);
         }
     }
 }

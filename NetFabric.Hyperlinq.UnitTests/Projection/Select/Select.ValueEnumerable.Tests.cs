@@ -37,7 +37,10 @@ namespace NetFabric.Hyperlinq.UnitTests
             var result = ValueEnumerable.Select<Wrap.ValueEnumerable<int>, Wrap.ValueEnumerable<int>.Enumerator, int, string>(wrapped, selector);
 
             // Assert
-            result.Should().Equals(expected);
+            Utils.ValueEnumerable.ShouldEqual<
+                ValueEnumerable.SelectEnumerable<Wrap.ValueEnumerable<int>, Wrap.ValueEnumerable<int>.Enumerator, int, string>,
+                ValueEnumerable.SelectEnumerable<Wrap.ValueEnumerable<int>, Wrap.ValueEnumerable<int>.Enumerator, int, string>.Enumerator,
+                string>(result, expected);
         }
     }
 }
