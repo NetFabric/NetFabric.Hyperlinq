@@ -10,17 +10,17 @@ namespace NetFabric.Hyperlinq
     {
         [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static AsValueEnumerableEnumerable<TSource> AsValueEnumerable<TSource>(this TSource[] source)
-            => new AsValueEnumerableEnumerable<TSource>(source);
+        public static ValueEnumerableWrapper<TSource> AsValueEnumerable<TSource>(this TSource[] source)
+            => new ValueEnumerableWrapper<TSource>(source);
 
-        [GenericsTypeMapping("TEnumerable", typeof(AsValueEnumerableEnumerable<>))]
-        [GenericsTypeMapping("TEnumerator", typeof(AsValueEnumerableEnumerable<>.Enumerator))]
-        public readonly struct AsValueEnumerableEnumerable<TSource>
-            : IValueReadOnlyList<TSource, AsValueEnumerableEnumerable<TSource>.Enumerator>
+        [GenericsTypeMapping("TEnumerable", typeof(ValueEnumerableWrapper<>))]
+        [GenericsTypeMapping("TEnumerator", typeof(ValueEnumerableWrapper<>.Enumerator))]
+        public readonly struct ValueEnumerableWrapper<TSource>
+            : IValueReadOnlyList<TSource, ValueEnumerableWrapper<TSource>.Enumerator>
         {
             readonly TSource[] source;
 
-            internal AsValueEnumerableEnumerable(TSource[] source)
+            internal ValueEnumerableWrapper(TSource[] source)
             {
                 this.source = source;
             }

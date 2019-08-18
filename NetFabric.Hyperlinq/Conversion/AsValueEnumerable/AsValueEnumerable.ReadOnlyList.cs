@@ -10,8 +10,8 @@ namespace NetFabric.Hyperlinq
     {
         [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static AsValueEnumerableEnumerable<TSource> AsValueEnumerable<TSource>(this IReadOnlyList<TSource> source)
-           => new AsValueEnumerableEnumerable<TSource>(source);
+        public static ValueEnumerableWrapper<TSource> AsValueEnumerable<TSource>(this IReadOnlyList<TSource> source)
+           => new ValueEnumerableWrapper<TSource>(source);
 
         [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -53,14 +53,14 @@ namespace NetFabric.Hyperlinq
             IEnumerator IEnumerable.GetEnumerator() => getEnumerator(source);
         }
 
-        [GenericsTypeMapping("TEnumerable", typeof(AsValueEnumerableEnumerable<>))]
-        [GenericsTypeMapping("TEnumerator", typeof(AsValueEnumerableEnumerable<>.Enumerator))]
-        public readonly struct AsValueEnumerableEnumerable<TSource>
-            : IValueReadOnlyList<TSource, AsValueEnumerableEnumerable<TSource>.Enumerator>
+        [GenericsTypeMapping("TEnumerable", typeof(ValueEnumerableWrapper<>))]
+        [GenericsTypeMapping("TEnumerator", typeof(ValueEnumerableWrapper<>.Enumerator))]
+        public readonly struct ValueEnumerableWrapper<TSource>
+            : IValueReadOnlyList<TSource, ValueEnumerableWrapper<TSource>.Enumerator>
         {
             readonly IReadOnlyList<TSource> source;
 
-            internal AsValueEnumerableEnumerable(IReadOnlyList<TSource> source)
+            internal ValueEnumerableWrapper(IReadOnlyList<TSource> source)
             {
                 this.source = source;
             }

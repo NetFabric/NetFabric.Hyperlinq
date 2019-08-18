@@ -18,7 +18,7 @@ namespace NetFabric.Hyperlinq.UnitTests
 
             // Assert
             result.Should()
-                .BeOfType<Enumerable.AsValueEnumerableEnumerable<int>>().And
+                .BeOfType<Enumerable.ValueEnumerableWrapper<int>>().And
                 .Equals(source);
         }
     }
