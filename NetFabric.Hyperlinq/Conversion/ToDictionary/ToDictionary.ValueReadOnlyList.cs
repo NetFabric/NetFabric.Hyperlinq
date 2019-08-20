@@ -9,7 +9,7 @@ namespace NetFabric.Hyperlinq
         [Pure]
         public static Dictionary<TKey, TSource> ToDictionary<TEnumerable, TEnumerator, TSource, TKey>(this TEnumerable source, Func<TSource, TKey> keySelector)
             where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
-            where TEnumerator : struct, IEnumerator<TSource>
+            where TEnumerator : struct, IValueEnumerator<TSource>
         {
             if (keySelector is null) ThrowHelper.ThrowArgumentNullException(nameof(keySelector));
 
@@ -19,7 +19,7 @@ namespace NetFabric.Hyperlinq
         [Pure]
         public static Dictionary<TKey, TSource> ToDictionary<TEnumerable, TEnumerator, TSource, TKey>(this TEnumerable source, Func<TSource, TKey> keySelector, IEqualityComparer<TKey> comparer)
             where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
-            where TEnumerator : struct, IEnumerator<TSource>
+            where TEnumerator : struct, IValueEnumerator<TSource>
         {
             if (keySelector is null) ThrowHelper.ThrowArgumentNullException(nameof(keySelector));
 
@@ -29,7 +29,7 @@ namespace NetFabric.Hyperlinq
         [Pure]
         public static Dictionary<TKey, TElement> ToDictionary<TEnumerable, TEnumerator, TSource, TKey, TElement>(this TEnumerable source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector)
             where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
-            where TEnumerator : struct, IEnumerator<TSource>
+            where TEnumerator : struct, IValueEnumerator<TSource>
         {
             if (keySelector is null) ThrowHelper.ThrowArgumentNullException(nameof(keySelector));
             if (elementSelector is null) ThrowHelper.ThrowArgumentNullException(nameof(elementSelector));
@@ -40,7 +40,7 @@ namespace NetFabric.Hyperlinq
         [Pure]
         public static Dictionary<TKey, TElement> ToDictionary<TEnumerable, TEnumerator, TSource, TKey, TElement>(this TEnumerable source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, IEqualityComparer<TKey> comparer)
             where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
-            where TEnumerator : struct, IEnumerator<TSource>
+            where TEnumerator : struct, IValueEnumerator<TSource>
         {
             if (keySelector is null) ThrowHelper.ThrowArgumentNullException(nameof(keySelector));
             if (elementSelector is null) ThrowHelper.ThrowArgumentNullException(nameof(elementSelector));
@@ -51,7 +51,7 @@ namespace NetFabric.Hyperlinq
         [Pure]
         static Dictionary<TKey, TSource> ToDictionary<TEnumerable, TEnumerator, TSource, TKey>(this TEnumerable source, Func<TSource, TKey> keySelector, IEqualityComparer<TKey> comparer, int skipCount, int takeCount)
             where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
-            where TEnumerator : struct, IEnumerator<TSource>
+            where TEnumerator : struct, IValueEnumerator<TSource>
         {
             var dictionary = new Dictionary<TKey, TSource>(source.Count, comparer);
             var end = skipCount + takeCount;
@@ -63,7 +63,7 @@ namespace NetFabric.Hyperlinq
         [Pure]
         static Dictionary<TKey, TElement> ToDictionary<TEnumerable, TEnumerator, TSource, TKey, TElement>(this TEnumerable source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, IEqualityComparer<TKey> comparer, int skipCount, int takeCount)
             where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
-            where TEnumerator : struct, IEnumerator<TSource>
+            where TEnumerator : struct, IValueEnumerator<TSource>
         {
             var dictionary = new Dictionary<TKey, TElement>(source.Count, comparer);
             var end = skipCount + takeCount;
@@ -75,7 +75,7 @@ namespace NetFabric.Hyperlinq
         [Pure]
         static Dictionary<TKey, TSource> ToDictionary<TEnumerable, TEnumerator, TSource, TKey>(this TEnumerable source, Func<TSource, TKey> keySelector, IEqualityComparer<TKey> comparer, Func<TSource, bool> predicate, int skipCount, int takeCount)
             where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
-            where TEnumerator : struct, IEnumerator<TSource>
+            where TEnumerator : struct, IValueEnumerator<TSource>
         {
             var dictionary = new Dictionary<TKey, TSource>(source.Count, comparer);
             var end = skipCount + takeCount;
@@ -90,7 +90,7 @@ namespace NetFabric.Hyperlinq
         [Pure]
         static Dictionary<TKey, TElement> ToDictionary<TEnumerable, TEnumerator, TSource, TKey, TElement>(this TEnumerable source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, IEqualityComparer<TKey> comparer, Func<TSource, bool> predicate, int skipCount, int takeCount)
             where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
-            where TEnumerator : struct, IEnumerator<TSource>
+            where TEnumerator : struct, IValueEnumerator<TSource>
         {
             var dictionary = new Dictionary<TKey, TElement>(source.Count, comparer);
             var end = skipCount + takeCount;
@@ -105,7 +105,7 @@ namespace NetFabric.Hyperlinq
         [Pure]
         static Dictionary<TKey, TSource> ToDictionary<TEnumerable, TEnumerator, TSource, TKey>(this TEnumerable source, Func<TSource, TKey> keySelector, IEqualityComparer<TKey> comparer, Func<TSource, int, bool> predicate, int skipCount, int takeCount)
             where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
-            where TEnumerator : struct, IEnumerator<TSource>
+            where TEnumerator : struct, IValueEnumerator<TSource>
         {
             var dictionary = new Dictionary<TKey, TSource>(source.Count, comparer);
             var end = skipCount + takeCount;
@@ -120,7 +120,7 @@ namespace NetFabric.Hyperlinq
         [Pure]
         static Dictionary<TKey, TElement> ToDictionary<TEnumerable, TEnumerator, TSource, TKey, TElement>(this TEnumerable source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, IEqualityComparer<TKey> comparer, Func<TSource, int, bool> predicate, int skipCount, int takeCount)
             where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
-            where TEnumerator : struct, IEnumerator<TSource>
+            where TEnumerator : struct, IValueEnumerator<TSource>
         {
             var dictionary = new Dictionary<TKey, TElement>(source.Count, comparer);
             var end = skipCount + takeCount;

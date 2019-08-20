@@ -14,7 +14,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var expected = System.Linq.Enumerable.ToArray(wrapped);
 
             // Act
-            var result = ValueEnumerable.ToArray<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped);
+            var result = ValueEnumerable.ToArray<Wrap.ValueEnumerable<int>, Wrap.ValueEnumerator<int>, int>(wrapped);
 
             // Assert
             result.Should()

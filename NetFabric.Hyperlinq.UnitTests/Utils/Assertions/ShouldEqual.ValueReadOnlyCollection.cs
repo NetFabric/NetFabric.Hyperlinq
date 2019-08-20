@@ -8,7 +8,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Utils
     {
         public static void ShouldEqual<TEnumerable, TEnumerator, TSource>(TEnumerable source, IEnumerable<TSource> expected)
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
-            where TEnumerator : struct, IEnumerator<TSource>
+            where TEnumerator : struct, IValueEnumerator<TSource>
         {
             var sourceEnumerator = source.GetEnumerator();
             var enumerableOfTypeEnumerator = ((IEnumerable<TSource>)source).GetEnumerator();

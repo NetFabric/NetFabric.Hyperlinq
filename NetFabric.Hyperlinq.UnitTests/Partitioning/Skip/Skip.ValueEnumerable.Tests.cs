@@ -14,12 +14,12 @@ namespace NetFabric.Hyperlinq.UnitTests
             var expected = System.Linq.Enumerable.Skip(wrapped, count);
 
             // Act
-            var result = ValueEnumerable.Skip<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, count);
+            var result = ValueEnumerable.Skip<Wrap.ValueEnumerable<int>, Wrap.ValueEnumerator<int>, int>(wrapped, count);
 
             // Assert
             Utils.ValueEnumerable.ShouldEqual<
-                ValueEnumerable.SkipEnumerable<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>,
-                ValueEnumerable.SkipEnumerable<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>.Enumerator,
+                ValueEnumerable.SkipEnumerable<Wrap.ValueEnumerable<int>, Wrap.ValueEnumerator<int>, int>,
+                ValueEnumerable.SkipEnumerable<Wrap.ValueEnumerable<int>, Wrap.ValueEnumerator<int>, int>.Enumerator,
                 int>(result, expected);
         }
 
@@ -32,12 +32,12 @@ namespace NetFabric.Hyperlinq.UnitTests
             var expected = System.Linq.Enumerable.Skip(System.Linq.Enumerable.Skip(wrapped, count0), count1);
 
             // Act
-            var result = ValueEnumerable.Skip<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, count0).Skip(count1);
+            var result = ValueEnumerable.Skip<Wrap.ValueEnumerable<int>, Wrap.ValueEnumerator<int>, int>(wrapped, count0).Skip(count1);
 
             // Assert
             Utils.ValueEnumerable.ShouldEqual<
-                ValueEnumerable.SkipEnumerable<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>,
-                ValueEnumerable.SkipEnumerable<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>.Enumerator,
+                ValueEnumerable.SkipEnumerable<Wrap.ValueEnumerable<int>, Wrap.ValueEnumerator<int>, int>,
+                ValueEnumerable.SkipEnumerable<Wrap.ValueEnumerable<int>, Wrap.ValueEnumerator<int>, int>.Enumerator,
                 int>(result, expected);
         }
 
@@ -50,12 +50,12 @@ namespace NetFabric.Hyperlinq.UnitTests
             var expected = System.Linq.Enumerable.Take(System.Linq.Enumerable.Skip(wrapped, skipCount), takeCount);
 
             // Act
-            var result = ValueEnumerable.Skip<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, skipCount).Take(takeCount);
+            var result = ValueEnumerable.Skip<Wrap.ValueEnumerable<int>, Wrap.ValueEnumerator<int>, int>(wrapped, skipCount).Take(takeCount);
 
             // Assert
             Utils.ValueEnumerable.ShouldEqual<
-                ValueEnumerable.SkipTakeEnumerable<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>,
-                ValueEnumerable.SkipTakeEnumerable<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>.Enumerator,
+                ValueEnumerable.SkipTakeEnumerable<Wrap.ValueEnumerable<int>, Wrap.ValueEnumerator<int>, int>,
+                ValueEnumerable.SkipTakeEnumerable<Wrap.ValueEnumerable<int>, Wrap.ValueEnumerator<int>, int>.Enumerator,
                 int>(result, expected);
         }
     }

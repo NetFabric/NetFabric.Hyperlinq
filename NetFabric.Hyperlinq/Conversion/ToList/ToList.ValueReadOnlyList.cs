@@ -10,28 +10,24 @@ namespace NetFabric.Hyperlinq
         [Pure]
         public static List<TSource> ToList<TEnumerable, TEnumerator, TSource>(this TEnumerable source)
             where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
-            where TEnumerator : struct, IEnumerator<TSource>
-        {
-            switch (source)
+            where TEnumerator : struct, IValueEnumerator<TSource>
+            => source switch
             {
-                case ICollection<TSource> collection:
-                    return new List<TSource>(collection); // no need to allocate helper class
+                ICollection<TSource> collection => new List<TSource>(collection), // no need to allocate helper class
 
-                default:
-                    return new List<TSource>(new ToListCollection<TEnumerable, TEnumerator, TSource>(source, 0, source.Count));
-            }
-        }
+                _ => new List<TSource>(new ToListCollection<TEnumerable, TEnumerator, TSource>(source, 0, source.Count)),
+            };
 
         [Pure]
         static List<TSource> ToList<TEnumerable, TEnumerator, TSource>(this TEnumerable source, int skipCount, int takeCount)
             where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
-            where TEnumerator : struct, IEnumerator<TSource>
+            where TEnumerator : struct, IValueEnumerator<TSource>
             => new List<TSource>(new ToListCollection<TEnumerable, TEnumerator, TSource>(source, skipCount, takeCount));
 
         [Pure]
         static List<TSource> ToList<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, bool> predicate, int skipCount, int takeCount)
             where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
-            where TEnumerator : struct, IEnumerator<TSource>
+            where TEnumerator : struct, IValueEnumerator<TSource>
         {
             var list = new List<TSource>();
 
@@ -48,7 +44,7 @@ namespace NetFabric.Hyperlinq
         [Pure]
         static List<TSource> ToList<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, int, bool> predicate, int skipCount, int takeCount)
             where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
-            where TEnumerator : struct, IEnumerator<TSource>
+            where TEnumerator : struct, IValueEnumerator<TSource>
         {
             var list = new List<TSource>();
 
@@ -66,7 +62,7 @@ namespace NetFabric.Hyperlinq
         sealed class ToListCollection<TEnumerable, TEnumerator, TSource>
             : ICollection<TSource>
             where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
-            where TEnumerator : struct, IEnumerator<TSource>
+            where TEnumerator : struct, IValueEnumerator<TSource>
         {
             readonly TEnumerable source;
             readonly int skipCount;

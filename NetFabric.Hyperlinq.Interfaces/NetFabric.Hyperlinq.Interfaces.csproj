@@ -4,8 +4,8 @@
     <TargetFrameworks>net461;netstandard2.0;netcoreapp2.1</TargetFrameworks>
     <PackageId>NetFabric.Hyperlinq.Interfaces</PackageId>
     <Title>NetFabric.Hyperlinq.Interfaces</Title>
-    <Description>Interfaces for value-type collections without boxing.</Description>
-    <Version>1.0.0</Version>
+    <Description>Base interfaces for high performance enumeration.</Description>
+    <Version>2.0.0-beta1</Version>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageTags>netfabric, hyperlinq, linq, enumeration, performance</PackageTags>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>

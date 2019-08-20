@@ -9,36 +9,24 @@ namespace NetFabric.Hyperlinq
         [Pure]
         public static int Count<TEnumerable, TEnumerator, TSource>(this TEnumerable source)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
-            where TEnumerator : struct, IEnumerator<TSource>
+            where TEnumerator : struct, IValueEnumerator<TSource>
         {
             var count = 0;
-            using (var enumerator = source.GetEnumerator())
-            {
-                checked
-                {
-                    while (enumerator.MoveNext())
-                        count++;
-                }
-            }
+            foreach (var _ in source)
+                checked { count++; }
             return count;
         }
 
         [Pure]
         public static int Count<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, bool> predicate)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
-            where TEnumerator : struct, IEnumerator<TSource>
+            where TEnumerator : struct, IValueEnumerator<TSource>
         {
             var count = 0;
-            using (var enumerator = source.GetEnumerator())
+            foreach (var item in source)
             {
-                checked
-                {
-                    while (enumerator.MoveNext())
-                    {
-                        if (predicate(enumerator.Current))
-                            count++;
-                    }
-                }
+                if (predicate(item))
+                    checked { count++; }
             }
             return count;
         }
@@ -46,22 +34,16 @@ namespace NetFabric.Hyperlinq
         [Pure]
         public static int Count<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, int, bool> predicate)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
-            where TEnumerator : struct, IEnumerator<TSource>
+            where TEnumerator : struct, IValueEnumerator<TSource>
         {
             var count = 0;
             var index = 0;
-            using (var enumerator = source.GetEnumerator())
+            foreach (var item in source)
             {
-                checked
-                {
-                    while (enumerator.MoveNext())
-                    {
-                        if (predicate(enumerator.Current, index))
-                            count++;
+                if (predicate(item, index))
+                    checked { count++; }
 
-                        index++;
-                    }
-                }
+                checked { index++; }
             }
             return count;
         }

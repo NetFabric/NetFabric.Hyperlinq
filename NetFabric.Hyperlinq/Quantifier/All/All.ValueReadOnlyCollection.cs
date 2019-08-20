@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 
 namespace NetFabric.Hyperlinq
@@ -9,45 +8,41 @@ namespace NetFabric.Hyperlinq
         [Pure]
         public static bool All<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, bool> predicate)
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
-            where TEnumerator : struct, IEnumerator<TSource>
+            where TEnumerator : struct, IValueEnumerator<TSource>
         {
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
 
             if (source.Count != 0)
             {
-                using (var enumerator = source.GetEnumerator())
+                foreach (var item in source)
                 {
-                    while (enumerator.MoveNext())
-                    {
-                        if (!predicate(enumerator.Current))
-                            return false;
-                    }
+                    if (!predicate(item))
+                        return false;
                 }
             }
+
             return true;
         }
 
         [Pure]
         public static bool All<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, int, bool> predicate)
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
-            where TEnumerator : struct, IEnumerator<TSource>
+            where TEnumerator : struct, IValueEnumerator<TSource>
         {
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
 
             if (source.Count != 0)
             {
                 var index = 0;
-                using (var enumerator = source.GetEnumerator())
+                foreach (var item in source)
                 {
-                    while (enumerator.MoveNext())
-                    {
-                        if (!predicate(enumerator.Current, index))
-                            return false;
+                    if (!predicate(item, index))
+                        return false;
 
-                        index++;
-                    }
+                    checked { index++; }
                 }
             }
+
             return true;
         }
     }

@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
+using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
@@ -40,11 +41,11 @@ namespace NetFabric.Hyperlinq
             }
 
             public readonly Enumerator GetEnumerator() => new Enumerator(in this);
-            readonly IEnumerator<TResult> IEnumerable<TResult>.GetEnumerator() => new Enumerator(in this);
-            readonly IEnumerator IEnumerable.GetEnumerator() => new Enumerator(in this);
+            readonly IEnumerator<TResult> IEnumerable<TResult>.GetEnumerator() => new DisposableEnumerator<TResult, Enumerator>(new Enumerator(in this));
+            readonly IEnumerator IEnumerable.GetEnumerator() => new DisposableEnumerator<TResult, Enumerator>(new Enumerator(in this));
 
             public struct Enumerator
-                : IEnumerator<TResult>
+                : IValueEnumerator<TResult>
             {
                 readonly TSource[] source;
                 readonly Func<TSource, bool> predicate;
@@ -62,9 +63,10 @@ namespace NetFabric.Hyperlinq
                 }
 
                 public readonly TResult Current
-                    => selector(source[index]);
-                readonly object IEnumerator.Current
-                    => selector(source[index]);
+                {
+                    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                    get => selector(source[index]);
+                }
 
                 public bool MoveNext()
                 {
@@ -75,11 +77,6 @@ namespace NetFabric.Hyperlinq
                     }
                     return false;
                 }
-
-                void IEnumerator.Reset()
-                    => throw new NotSupportedException();
-
-                public void Dispose() { }
             }
 
             public int Count()

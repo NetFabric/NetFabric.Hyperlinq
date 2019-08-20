@@ -16,7 +16,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var expected = System.Linq.Enumerable.SingleOrDefault(wrapped);
 
             // Act
-            var result = ValueReadOnlyList.SingleOrDefault<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int>(wrapped);
+            var result = ValueReadOnlyList.SingleOrDefault<Wrap.ValueReadOnlyList<int>, Wrap.ValueEnumerator<int>, int>(wrapped);
 
             // Assert
             result.Should().Be(expected);
@@ -32,7 +32,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var expected = System.Linq.Enumerable.SingleOrDefault(wrapped, predicate);
 
             // Act
-            var result = ValueReadOnlyList.SingleOrDefault<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
+            var result = ValueReadOnlyList.SingleOrDefault<Wrap.ValueReadOnlyList<int>, Wrap.ValueEnumerator<int>, int>(wrapped, predicate);
 
             // Assert
             result.Should().Be(expected);
@@ -46,7 +46,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var wrapped = Wrap.AsValueReadOnlyList(source);
 
             // Act
-            Action action = () => ValueReadOnlyList.SingleOrDefault<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int>(wrapped);
+            Action action = () => ValueReadOnlyList.SingleOrDefault<Wrap.ValueReadOnlyList<int>, Wrap.ValueEnumerator<int>, int>(wrapped);
 
             // Assert
             action.Should()
@@ -62,7 +62,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var wrapped = Wrap.AsValueReadOnlyList(source);
 
             // Act
-            Action action = () => ValueReadOnlyList.SingleOrDefault<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
+            Action action = () => ValueReadOnlyList.SingleOrDefault<Wrap.ValueReadOnlyList<int>, Wrap.ValueEnumerator<int>, int>(wrapped, predicate);
 
             // Assert
             action.Should()
