@@ -19,12 +19,12 @@ namespace NetFabric.Hyperlinq.UnitTests.Utils
                 var index = 0;
                 while (true)
                 {
-                    bool isSourceCompleted = !sourceEnumerator.MoveNext();
-                    bool isEnumerableOfTypeCompleted = !enumerableOfTypeEnumerator.MoveNext();
-                    bool isEnumerableCompleted = !enumerableEnumerator.MoveNext();
-                    bool isExpectedCompleted = !expectedEnumerator.MoveNext();
+                    var isSourceCompleted = !sourceEnumerator.MoveNext();
+                    var isEnumerableOfTypeCompleted = !enumerableOfTypeEnumerator.MoveNext();
+                    var isEnumerableCompleted = !enumerableEnumerator.MoveNext();
+                    var isExpectedCompleted = !expectedEnumerator.MoveNext();
 
-                    if (isSourceCompleted && isExpectedCompleted && isEnumerableOfTypeCompleted && isExpectedCompleted)
+                    if (isSourceCompleted && isEnumerableOfTypeCompleted && isEnumerableCompleted && isExpectedCompleted)
                         break;
 
                     if (isSourceCompleted ^ isExpectedCompleted)
@@ -52,6 +52,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Utils
             {
                 if (sourceEnumerator is IDisposable disposable)
                     disposable.Dispose();
+                enumerableOfTypeEnumerator.Dispose();
                 expectedEnumerator.Dispose();
             }
         }

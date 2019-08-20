@@ -31,18 +31,18 @@ namespace NetFabric.Hyperlinq
                 (this.skipCount, this.takeCount) = Utils.SkipTake(source.Count, skipCount, takeCount);
             }
 
-            public int Count => takeCount;
+            public readonly int Count => takeCount;
 
             public readonly Enumerator GetEnumerator() => new Enumerator(in this);
-            IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new Enumerator(in this);
-            IEnumerator IEnumerable.GetEnumerator() => new Enumerator(in this);
+            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new Enumerator(in this);
+            readonly IEnumerator IEnumerable.GetEnumerator() => new Enumerator(in this);
 
             public struct Enumerator
                 : IEnumerator<TSource>
             {
                 readonly TEnumerable source;
                 EnumeratorState state;
-                TEnumerator enumerator;
+                TEnumerator enumerator; // do not make readonly
                 int skipCounter;
                 int takeCounter;
 
@@ -55,12 +55,12 @@ namespace NetFabric.Hyperlinq
                     state = takeCounter > 0 ? EnumeratorState.Uninitialized : EnumeratorState.Complete;
                 }
 
-                public TSource Current
+                public readonly TSource Current
                 {
                     [MethodImpl(MethodImplOptions.AggressiveInlining)]
                     get => enumerator.Current;
                 }
-                object IEnumerator.Current
+                readonly object IEnumerator.Current
                     => enumerator.Current;
 
                 public bool MoveNext()
@@ -103,7 +103,7 @@ namespace NetFabric.Hyperlinq
                     }
                 }
 
-                readonly void IEnumerator.Reset()
+                void IEnumerator.Reset()
                     => throw new NotSupportedException();
 
                 public void Dispose() => enumerator.Dispose();

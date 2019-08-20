@@ -39,8 +39,8 @@ namespace NetFabric.Hyperlinq
             }
 
             public readonly Enumerator GetEnumerator() => new Enumerator(in this);
-            IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new Enumerator(in this);
-            IEnumerator IEnumerable.GetEnumerator() => new Enumerator(in this);
+            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new Enumerator(in this);
+            readonly IEnumerator IEnumerable.GetEnumerator() => new Enumerator(in this);
 
             public struct Enumerator
                 : IEnumerator<TSource>
@@ -64,12 +64,12 @@ namespace NetFabric.Hyperlinq
                     current = default;
                 }
 
-                public TSource Current
+                public readonly TSource Current
                 {
                     [MethodImpl(MethodImplOptions.AggressiveInlining)]
                     get => current;
                 }
-                object IEnumerator.Current => current;
+                readonly object IEnumerator.Current => current;
 
                 public bool MoveNext()
                 {
@@ -85,39 +85,39 @@ namespace NetFabric.Hyperlinq
                     return false;
                 }
 
-                readonly void IEnumerator.Reset() => throw new NotSupportedException();
+                void IEnumerator.Reset() => throw new NotSupportedException();
 
                 public void Dispose() => set.Clear();
             }
 
             // helper function for optimization of non-lazy operations
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            HashSet<TSource> FillSet() 
+            readonly HashSet<TSource> FillSet() 
                 => new HashSet<TSource>(source, comparer);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public DistinctEnumerable<TSource> Skip(int count)
+            public readonly DistinctEnumerable<TSource> Skip(int count)
                 => new DistinctEnumerable<TSource>(source, comparer, skipCount + count, takeCount);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public DistinctEnumerable<TSource> Take(int count)
+            public readonly DistinctEnumerable<TSource> Take(int count)
                 => new DistinctEnumerable<TSource>(source, comparer, skipCount, Math.Min(takeCount, count));
 
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public int Count()
+            public readonly int Count()
                 => FillSet().Count;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public bool Any()
+            public readonly bool Any()
                 => FillSet().Count != 0;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public TSource[] ToArray()
+            public readonly TSource[] ToArray()
                 => HashSetBindings.ToArray<TSource>(FillSet());
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public List<TSource> ToList()
+            public readonly List<TSource> ToList()
                 => HashSetBindings.ToList<TSource>(FillSet());
         }
     }

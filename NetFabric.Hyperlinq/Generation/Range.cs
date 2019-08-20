@@ -44,12 +44,12 @@ namespace NetFabric.Hyperlinq
             }
 
             public readonly Enumerator GetEnumerator() => new Enumerator(in this);
-            IEnumerator<int> IEnumerable<int>.GetEnumerator() => new Enumerator(in this);
-            IEnumerator IEnumerable.GetEnumerator() => new Enumerator(in this);
+            readonly IEnumerator<int> IEnumerable<int>.GetEnumerator() => new Enumerator(in this);
+            readonly IEnumerator IEnumerable.GetEnumerator() => new Enumerator(in this);
 
-            public int Count => count;
+            public readonly int Count => count;
 
-            public int this[int index]
+            public readonly int this[int index]
             {
                 get
                 {
@@ -71,21 +71,21 @@ namespace NetFabric.Hyperlinq
                     end = enumerable.end;
                 }
 
-                public int Current
+                public readonly int Current
                 {
                     [MethodImpl(MethodImplOptions.AggressiveInlining)]
                     get => current;
                 }
-                object IEnumerator.Current
+                readonly object IEnumerator.Current
                     => current;
 
                 public bool MoveNext()
                     => ++this.current < end;
 
-                readonly void IEnumerator.Reset()
+                void IEnumerator.Reset()
                     => throw new NotSupportedException();
 
-                public readonly void Dispose() { }
+                public void Dispose() { }
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]

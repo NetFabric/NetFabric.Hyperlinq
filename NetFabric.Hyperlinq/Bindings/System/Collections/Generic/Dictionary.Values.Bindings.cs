@@ -169,11 +169,11 @@ namespace NetFabric.Hyperlinq
                 this.source = source;
             }
 
-            public int Count => source.Count;
+            public readonly int Count => source.Count;
 
             public readonly Dictionary<TKey, TValue>.ValueCollection.Enumerator GetEnumerator() => source.GetEnumerator();
-            IEnumerator<TValue> IEnumerable<TValue>.GetEnumerator() => source.GetEnumerator();
-            IEnumerator IEnumerable.GetEnumerator() => source.GetEnumerator();
+            readonly IEnumerator<TValue> IEnumerable<TValue>.GetEnumerator() => source.GetEnumerator();
+            readonly IEnumerator IEnumerable.GetEnumerator() => source.GetEnumerator();
         } 
     }
 }

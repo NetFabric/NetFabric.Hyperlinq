@@ -175,11 +175,11 @@ namespace NetFabric.Hyperlinq
                 this.source = source;
             }
 
-            public int Count => source.Count;
+            public readonly int Count => source.Count;
 
             public readonly SortedDictionary<TKey, TValue>.Enumerator GetEnumerator() => source.GetEnumerator();
-            IEnumerator<KeyValuePair<TKey, TValue>> IEnumerable<KeyValuePair<TKey, TValue>>.GetEnumerator() => source.GetEnumerator();
-            IEnumerator IEnumerable.GetEnumerator() => source.GetEnumerator();
+            readonly IEnumerator<KeyValuePair<TKey, TValue>> IEnumerable<KeyValuePair<TKey, TValue>>.GetEnumerator() => source.GetEnumerator();
+            readonly IEnumerator IEnumerable.GetEnumerator() => source.GetEnumerator();
         }
     }
 }

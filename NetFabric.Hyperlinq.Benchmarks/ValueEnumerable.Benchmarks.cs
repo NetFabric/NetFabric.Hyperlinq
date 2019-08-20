@@ -251,14 +251,14 @@ namespace NetFabric.Hyperlinq.Benchmarks
                 this.count = count;
             }
 
-            IEnumerator<int> IEnumerable<int>.GetEnumerator() => new Enumerator(count);
-            IEnumerator IEnumerable.GetEnumerator() => new Enumerator(count);
+            readonly IEnumerator<int> IEnumerable<int>.GetEnumerator() => new Enumerator(count);
+            readonly IEnumerator IEnumerable.GetEnumerator() => new Enumerator(count);
 
-            IMyEnumerator<int> IMyEnumerable<int>.GetEnumerator() => new MyEnumerator(count);
+            readonly IMyEnumerator<int> IMyEnumerable<int>.GetEnumerator() => new MyEnumerator(count);
 
-            BenValueEnumerator IBenValueEnumerable<int, RangeEnumerable.BenValueEnumerator>.GetEnumerator() => new BenValueEnumerator(count);
+            readonly BenValueEnumerator IBenValueEnumerable<int, RangeEnumerable.BenValueEnumerator>.GetEnumerator() => new BenValueEnumerator(count);
 
-            MyValueEnumerator IMyValueEnumerable<RangeEnumerable.MyValueEnumerator, int>.GetEnumerator() => new MyValueEnumerator(count);
+            readonly MyValueEnumerator IMyValueEnumerable<RangeEnumerable.MyValueEnumerator, int>.GetEnumerator() => new MyValueEnumerator(count);
 
             public struct Enumerator : IEnumerator<int>
             {
@@ -271,8 +271,8 @@ namespace NetFabric.Hyperlinq.Benchmarks
                     current = -1;
                 }
 
-                public int Current => current;
-                object IEnumerator.Current => current;
+                public readonly int Current => current;
+                readonly object IEnumerator.Current => current;
 
                 public bool MoveNext() => ++current < count;
 

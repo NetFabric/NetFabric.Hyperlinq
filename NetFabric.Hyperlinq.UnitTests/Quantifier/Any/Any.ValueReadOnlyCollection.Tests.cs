@@ -16,7 +16,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var predicate = (Func<int, bool>)null;
 
             // Act
-            Action action = () => ValueReadOnlyCollection.Any<Wrap.ValueReadOnlyCollection<int>, Wrap.ValueReadOnlyCollection<int>.Enumerator, int>(wrapped, predicate);
+            Action action = () => ValueReadOnlyCollection.Any<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
 
             // Assert
             action.Should()
@@ -35,7 +35,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var expected = System.Linq.Enumerable.Any(wrapped, predicate);
 
             // Act
-            var result = ValueReadOnlyCollection.Any<Wrap.ValueReadOnlyCollection<int>, Wrap.ValueReadOnlyCollection<int>.Enumerator, int>(wrapped, predicate);
+            var result = ValueReadOnlyCollection.Any<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
 
             // Assert
             result.Should().Be(expected);

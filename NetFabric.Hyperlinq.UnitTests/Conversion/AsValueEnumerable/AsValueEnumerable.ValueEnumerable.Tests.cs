@@ -13,10 +13,10 @@ namespace NetFabric.Hyperlinq.UnitTests
             var wrapped = Wrap.AsValueEnumerable(source);
 
             // Act
-            var result = ValueEnumerable.AsValueEnumerable<Wrap.ValueEnumerable<int>, Wrap.ValueEnumerable<int>.Enumerator, int>(wrapped);
+            var result = ValueEnumerable.AsValueEnumerable<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped);
 
             // Assert
-            Utils.ValueEnumerable.ShouldEqual<Wrap.ValueEnumerable<int>, Wrap.ValueEnumerable<int>.Enumerator, int>(result, wrapped);
+            Utils.ValueEnumerable.ShouldEqual<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(result, wrapped);
         }
     }
 }

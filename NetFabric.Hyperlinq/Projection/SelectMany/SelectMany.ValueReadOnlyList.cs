@@ -40,8 +40,8 @@ namespace NetFabric.Hyperlinq
             }
 
             public readonly Enumerator GetEnumerator() => new Enumerator(in this);
-            IEnumerator<TResult> IEnumerable<TResult>.GetEnumerator() => new Enumerator(in this);
-            IEnumerator IEnumerable.GetEnumerator() => new Enumerator(in this);
+            readonly IEnumerator<TResult> IEnumerable<TResult>.GetEnumerator() => new Enumerator(in this);
+            readonly IEnumerator IEnumerable.GetEnumerator() => new Enumerator(in this);
 
             public struct Enumerator
                 : IEnumerator<TResult>
@@ -63,9 +63,9 @@ namespace NetFabric.Hyperlinq
                     state = 0;
                 }
 
-                public TResult Current
+                public readonly TResult Current
                     => subEnumerator.Current;
-                object IEnumerator.Current
+                readonly object IEnumerator.Current
                     => subEnumerator.Current;
 
                 public bool MoveNext()
@@ -98,7 +98,7 @@ namespace NetFabric.Hyperlinq
                     return false;
                 }
 
-                readonly void IEnumerator.Reset()
+                void IEnumerator.Reset()
                     => throw new NotSupportedException();
 
                 public void Dispose()

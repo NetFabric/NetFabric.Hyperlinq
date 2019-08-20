@@ -50,12 +50,12 @@ namespace NetFabric.Hyperlinq
             }
 
             public readonly Enumerator GetEnumerator() => new Enumerator(in this);
-            IEnumerator<TResult> IEnumerable<TResult>.GetEnumerator() => new Enumerator(in this);
-            IEnumerator IEnumerable.GetEnumerator() => new Enumerator(in this);
+            readonly IEnumerator<TResult> IEnumerable<TResult>.GetEnumerator() => new Enumerator(in this);
+            readonly IEnumerator IEnumerable.GetEnumerator() => new Enumerator(in this);
 
-            public int Count => takeCount;
+            public readonly int Count => takeCount;
 
-            public TResult this[int index]
+            public readonly TResult this[int index]
             {
                 get
                 {
@@ -82,23 +82,23 @@ namespace NetFabric.Hyperlinq
                     index = enumerable.skipCount - 1;
                 }
 
-                public TResult Current
+                public readonly TResult Current
                 {
                     [MethodImpl(MethodImplOptions.AggressiveInlining)]
                     get => selector(source[index], index);
                 }
 
-                object IEnumerator.Current
+                readonly object IEnumerator.Current
                     => source[index];
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public bool MoveNext()
                     => ++index < end;
 
-                readonly void IEnumerator.Reset()
+                void IEnumerator.Reset()
                     => throw new NotSupportedException();
 
-                public readonly void Dispose() { }
+                public void Dispose() { }
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]

@@ -32,68 +32,97 @@ namespace NetFabric.Hyperlinq
             }
 
             public readonly Enumerator GetEnumerator() => new Enumerator(in this);
-            IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new Enumerator(in this);
-            IEnumerator IEnumerable.GetEnumerator() => new Enumerator(in this);
+            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new Enumerator(in this);
+            readonly IEnumerator IEnumerable.GetEnumerator() => new Enumerator(in this);
 
             public struct Enumerator
                 : IEnumerator<TSource>
             {
-                readonly TEnumerator enumerator;
-                readonly HashSet<TSource> set;
+                TEnumerator enumerator; // do not make readonly
+                readonly IEqualityComparer<TSource> comparer;
+                EnumeratorState state;
+                HashSet<TSource> set;
 
                 internal Enumerator(in DistinctEnumerable<TEnumerable, TEnumerator, TSource> enumerable)
                 {
                     enumerator = enumerable.source.GetEnumerator();
-                    set = new HashSet<TSource>(enumerable.comparer);
+                    comparer = enumerable.comparer;
+                    state = EnumeratorState.Uninitialized;
+                    set = null;
                 }
 
-                public TSource Current
+                public readonly TSource Current
                 {
                     [MethodImpl(MethodImplOptions.AggressiveInlining)]
                     get => enumerator.Current;
                 }
-                object IEnumerator.Current 
+                readonly object IEnumerator.Current  
                     => enumerator.Current;
 
                 public bool MoveNext()
                 {
-                    while (enumerator.MoveNext())
+                    switch (state)
                     {
-                        if (set.Add(enumerator.Current))
+                        case EnumeratorState.Uninitialized:
+                            if (!enumerator.MoveNext())
+                            {
+                                state = EnumeratorState.Complete;
+                                goto case EnumeratorState.Complete;
+                            }
+
+                            set = new HashSet<TSource>(comparer)
+                            {
+                                enumerator.Current
+                            };
+                            state = EnumeratorState.Enumerating;
                             return true;
+
+                        case EnumeratorState.Enumerating:
+                            while (enumerator.MoveNext())
+                            {
+                                if (set.Add(enumerator.Current))
+                                    return true;
+                            }
+                            state = EnumeratorState.Complete;
+                            goto case EnumeratorState.Complete;
+
+                        case EnumeratorState.Complete:
+                        default:
+                            Dispose();
+                            return false;
                     }
-                    Dispose();
-                    return false;
                 }
 
-                readonly void IEnumerator.Reset() => throw new NotSupportedException();
+                void IEnumerator.Reset() 
+                    => throw new NotSupportedException();
 
                 public void Dispose()
                 {
-                    set.Clear();
+                    set?.Clear();
+                    set = null;
                     enumerator.Dispose();
                 }
             }
 
             // helper function for optimization of non-lazy operations
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            HashSet<TSource> FillSet() 
+            readonly HashSet<TSource> FillSet() 
                 => new HashSet<TSource>(source, comparer);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public int Count()
+            public readonly int Count()
                 => FillSet().Count;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public bool Any()
+            public readonly bool Any()
                 => FillSet().Count != 0;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public TSource[] ToArray()
+            public readonly TSource[] ToArray()
                 => HashSetBindings.ToArray<TSource>(FillSet());
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public List<TSource> ToList()
+            public readonly List<TSource> ToList()
                 => HashSetBindings.ToList<TSource>(FillSet());
         }
     }

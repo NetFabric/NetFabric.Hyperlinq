@@ -118,7 +118,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
             }
 
             public int Current => value;
-            object IEnumerator.Current => value;
+            readonly object IEnumerator.Current => value;
 
             public bool MoveNext() => counter-- > 0;
 

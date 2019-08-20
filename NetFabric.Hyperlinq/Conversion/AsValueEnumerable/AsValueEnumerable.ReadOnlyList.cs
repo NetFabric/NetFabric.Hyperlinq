@@ -35,13 +35,13 @@ namespace NetFabric.Hyperlinq
                 this.getEnumerator = getEnumerator;
             }
 
-            public int Count
+            public readonly int Count
             {
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 get => source.Count;
             }
 
-            public TSource this[int index]
+            public readonly TSource this[int index]
             {
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 get => source[index];
@@ -49,8 +49,8 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly TEnumerator GetEnumerator() => getEnumerator(source);
-            IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => getEnumerator(source);
-            IEnumerator IEnumerable.GetEnumerator() => getEnumerator(source);
+            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => getEnumerator(source);
+            readonly IEnumerator IEnumerable.GetEnumerator() => getEnumerator(source);
         }
 
         [GenericsTypeMapping("TEnumerable", typeof(ValueEnumerableWrapper<>))]
@@ -65,13 +65,13 @@ namespace NetFabric.Hyperlinq
                 this.source = source;
             }
 
-            public int Count
+            public readonly int Count
             {
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 get => source.Count;
             }
 
-            public TSource this[int index]
+            public readonly TSource this[int index]
             {
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 get => source[index];
@@ -79,30 +79,30 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly Enumerator GetEnumerator() => new Enumerator(source);
-            IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new Enumerator(source);
-            IEnumerator IEnumerable.GetEnumerator() => new Enumerator(source);
+            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new Enumerator(source);
+            readonly IEnumerator IEnumerable.GetEnumerator() => new Enumerator(source);
 
-            public struct Enumerator
+            public readonly struct Enumerator
                 : IEnumerator<TSource>
             {
-                IEnumerator<TSource> enumerator;
+                readonly IEnumerator<TSource> enumerator;
 
                 internal Enumerator(IReadOnlyList<TSource> enumerable)
                 {
                     enumerator = enumerable.GetEnumerator();
                 }
 
-                public TSource Current
+                public readonly TSource Current
                 {
                     [MethodImpl(MethodImplOptions.AggressiveInlining)]
                     get => enumerator.Current;
                 }
-                object IEnumerator.Current => enumerator.Current;
+                readonly object IEnumerator.Current => enumerator.Current;
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public bool MoveNext() => enumerator.MoveNext();
 
-                readonly void IEnumerator.Reset() => throw new NotSupportedException();
+                void IEnumerator.Reset() => throw new NotSupportedException();
 
                 public void Dispose() => enumerator.Dispose();
             }

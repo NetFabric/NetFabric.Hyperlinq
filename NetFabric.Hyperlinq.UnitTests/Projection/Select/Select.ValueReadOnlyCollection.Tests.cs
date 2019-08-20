@@ -15,7 +15,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var selector = (Func<int, string>)null;
 
             // Act
-            Action action = () => ValueReadOnlyCollection.Select<Wrap.ValueReadOnlyCollection<int>, Wrap.ValueReadOnlyCollection<int>.Enumerator, int, string>(collection, selector);
+            Action action = () => ValueReadOnlyCollection.Select<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int, string>(collection, selector);
 
             // Assert
             action.Should()
@@ -34,12 +34,12 @@ namespace NetFabric.Hyperlinq.UnitTests
             var expected = System.Linq.Enumerable.Select(wrapped, selector);
 
             // Act
-            var result = ValueReadOnlyCollection.Select<Wrap.ValueReadOnlyCollection<int>, Wrap.ValueReadOnlyCollection<int>.Enumerator, int, string>(wrapped, selector);
+            var result = ValueReadOnlyCollection.Select<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int, string>(wrapped, selector);
 
             // Assert
             Utils.ValueReadOnlyCollection.ShouldEqual<
-                ValueReadOnlyCollection.SelectEnumerable<Wrap.ValueReadOnlyCollection<int>, Wrap.ValueReadOnlyCollection<int>.Enumerator, int, string>,
-                ValueReadOnlyCollection.SelectEnumerable<Wrap.ValueReadOnlyCollection<int>, Wrap.ValueReadOnlyCollection<int>.Enumerator, int, string>.Enumerator,
+                ValueReadOnlyCollection.SelectEnumerable<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int, string>,
+                ValueReadOnlyCollection.SelectEnumerable<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int, string>.Enumerator,
                 string>(result, expected);
         }
     }

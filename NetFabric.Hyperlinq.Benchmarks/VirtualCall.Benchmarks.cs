@@ -131,13 +131,13 @@ namespace NetFabric.Hyperlinq
                 this.array = array;
             }
 
-            public int Count => array.Length;
+            public readonly int Count => array.Length;
 
-            public TSource this[int index] => array[index];
+            public readonly TSource this[int index] => array[index];
 
-            public List<TSource>.Enumerator GetEnumerator() => throw new NotSupportedException();
-            IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => throw new NotSupportedException();
-            IEnumerator IEnumerable.GetEnumerator() => throw new NotSupportedException();
+            public readonly List<TSource>.Enumerator GetEnumerator() => throw new NotSupportedException();
+            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => throw new NotSupportedException();
+            readonly IEnumerator IEnumerable.GetEnumerator() => throw new NotSupportedException();
         }
 
         public readonly struct ListWrapper<TSource> : IReadOnlyList<TSource>
@@ -149,13 +149,13 @@ namespace NetFabric.Hyperlinq
                 this.list = list;
             }
 
-            public int Count => list.Count;
+            public readonly int Count => list.Count;
 
-            public TSource this[int index] => list[index];
+            public readonly TSource this[int index] => list[index];
 
-            public List<TSource>.Enumerator GetEnumerator() => list.GetEnumerator();
-            IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => list.GetEnumerator();
-            IEnumerator IEnumerable.GetEnumerator() => list.GetEnumerator();
+            public readonly List<TSource>.Enumerator GetEnumerator() => list.GetEnumerator();
+            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => list.GetEnumerator();
+            readonly IEnumerator IEnumerable.GetEnumerator() => list.GetEnumerator();
         }
     }
 }
