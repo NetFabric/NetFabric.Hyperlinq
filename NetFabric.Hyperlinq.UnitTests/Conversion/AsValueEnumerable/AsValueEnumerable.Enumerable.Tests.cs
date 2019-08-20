@@ -17,9 +17,8 @@ namespace NetFabric.Hyperlinq.UnitTests
             var result = Enumerable.AsValueEnumerable(wrapped);
 
             // Assert
-            result.Should()
-                .BeOfType<Enumerable.AsValueEnumerableEnumerable<int>>().And
-                .Equals(source);
+            result.Should().BeOfType<Enumerable.ValueEnumerableWrapper<int>>();
+            Utils.ValueEnumerable.ShouldEqual<Enumerable.ValueEnumerableWrapper<int>, Enumerable.ValueEnumerableWrapper<int>.Enumerator, int>(result, wrapped);
         }
     }
 }

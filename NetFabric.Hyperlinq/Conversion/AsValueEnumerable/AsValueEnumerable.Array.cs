@@ -10,30 +10,30 @@ namespace NetFabric.Hyperlinq
     {
         [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static AsValueEnumerableEnumerable<TSource> AsValueEnumerable<TSource>(this TSource[] source)
-            => new AsValueEnumerableEnumerable<TSource>(source);
+        public static ValueEnumerableWrapper<TSource> AsValueEnumerable<TSource>(this TSource[] source)
+            => new ValueEnumerableWrapper<TSource>(source);
 
-        [GenericsTypeMapping("TEnumerable", typeof(AsValueEnumerableEnumerable<>))]
-        [GenericsTypeMapping("TEnumerator", typeof(AsValueEnumerableEnumerable<>.Enumerator))]
-        public readonly struct AsValueEnumerableEnumerable<TSource>
-            : IValueReadOnlyList<TSource, AsValueEnumerableEnumerable<TSource>.Enumerator>
+        [GenericsTypeMapping("TEnumerable", typeof(ValueEnumerableWrapper<>))]
+        [GenericsTypeMapping("TEnumerator", typeof(ValueEnumerableWrapper<>.Enumerator))]
+        public readonly struct ValueEnumerableWrapper<TSource>
+            : IValueReadOnlyList<TSource, ValueEnumerableWrapper<TSource>.Enumerator>
         {
             readonly TSource[] source;
 
-            internal AsValueEnumerableEnumerable(TSource[] source)
+            internal ValueEnumerableWrapper(TSource[] source)
             {
                 this.source = source;
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly Enumerator GetEnumerator() => new Enumerator(source);
-            IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new Enumerator(source);
-            IEnumerator IEnumerable.GetEnumerator() => new Enumerator(source);
+            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new Enumerator(source);
+            readonly IEnumerator IEnumerable.GetEnumerator() => new Enumerator(source);
 
-            public int Count => source.Length;
+            public readonly int Count => source.Length;
 
             public readonly ref readonly TSource this[int index] => ref source[index];
-            TSource IReadOnlyList<TSource>.this[int index] => source[index];
+            readonly TSource IReadOnlyList<TSource>.this[int index] => source[index];
 
             public struct Enumerator 
                 : IEnumerator<TSource>
@@ -49,20 +49,20 @@ namespace NetFabric.Hyperlinq
                     index = -1;
                 }
 
-                public ref readonly TSource Current
+                public readonly ref readonly TSource Current
                 {
                     [MethodImpl(MethodImplOptions.AggressiveInlining)]
                     get => ref source[index];
                 }
-                TSource IEnumerator<TSource>.Current => source[index];
-                object IEnumerator.Current => source[index];
+                readonly TSource IEnumerator<TSource>.Current => source[index];
+                readonly object IEnumerator.Current => source[index];
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public bool MoveNext() => ++index < count;
 
-                readonly void IEnumerator.Reset() => throw new NotSupportedException();
+                void IEnumerator.Reset() => throw new NotSupportedException();
 
-                public readonly void Dispose() { }
+                public void Dispose() { }
             }
         }
     }

@@ -14,10 +14,13 @@ namespace NetFabric.Hyperlinq.UnitTests
             var expected = System.Linq.Enumerable.Take(wrapped, count);
 
             // Act
-            var result = ValueEnumerable.Take<Wrap.ValueEnumerable<int>, Wrap.ValueEnumerable<int>.Enumerator, int>(wrapped, count);
+            var result = ValueEnumerable.Take<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, count);
 
             // Assert
-            result.Should().Equals(expected);
+            Utils.ValueEnumerable.ShouldEqual<
+                ValueEnumerable.TakeEnumerable<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>,
+                ValueEnumerable.TakeEnumerable<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>.Enumerator,
+                int>(result, expected);
         }
 
         [Theory]
@@ -29,10 +32,13 @@ namespace NetFabric.Hyperlinq.UnitTests
             var expected = System.Linq.Enumerable.Take(System.Linq.Enumerable.Take(wrapped, count0), count1);
 
             // Act
-            var result = ValueEnumerable.Take<Wrap.ValueEnumerable<int>, Wrap.ValueEnumerable<int>.Enumerator, int>(wrapped, count0).Take(count1);
+            var result = ValueEnumerable.Take<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, count0).Take(count1);
 
             // Assert
-            result.Should().Equals(expected);
+            Utils.ValueEnumerable.ShouldEqual<
+                ValueEnumerable.TakeEnumerable<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>,
+                ValueEnumerable.TakeEnumerable<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>.Enumerator,
+                int>(result, expected);
         }
     }
 }

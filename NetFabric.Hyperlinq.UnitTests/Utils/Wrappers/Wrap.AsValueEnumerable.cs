@@ -13,8 +13,8 @@ namespace NetFabric.Hyperlinq
             return new ValueEnumerable<T>(source);
         }
 
-        public struct ValueEnumerable<T> 
-            : IValueEnumerable<T, ValueEnumerable<T>.Enumerator>
+        public readonly struct ValueEnumerable<T> 
+            : IValueEnumerable<T, Enumerator<T>>
         {
             readonly T[] source;
 
@@ -23,35 +23,9 @@ namespace NetFabric.Hyperlinq
                 this.source = source;
             }
 
-            public Enumerator GetEnumerator() => new Enumerator(source);
-            IEnumerator<T> IEnumerable<T>.GetEnumerator() => new Enumerator(source);
-            IEnumerator IEnumerable.GetEnumerator() => new Enumerator(source);
-
-            public struct Enumerator 
-                : IEnumerator<T>
-            {
-                readonly T[] source;
-                int index;
-
-                internal Enumerator(T[] source)
-                {
-                    this.source = source;
-                    index = -1;
-                }
-
-                public T Current
-                    => source[index];
-                object IEnumerator.Current
-                    => source[index];
-
-                public bool MoveNext()
-                    => ++index < source.Length;
-
-                public void Reset()
-                    => throw new NotSupportedException();
-
-                public void Dispose() { }
-            }
+            public readonly Enumerator<T> GetEnumerator() => new Enumerator<T>(source);
+            readonly IEnumerator<T> IEnumerable<T>.GetEnumerator() => new Enumerator<T>(source);
+            readonly IEnumerator IEnumerable.GetEnumerator() => new Enumerator<T>(source);
         }
     }
 }

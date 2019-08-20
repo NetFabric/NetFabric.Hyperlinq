@@ -16,10 +16,13 @@ namespace NetFabric.Hyperlinq.UnitTests
             var expected = System.Linq.Enumerable.Distinct(wrapped);
 
             // Act
-            var result = ValueReadOnlyList.Distinct<Wrap.ValueReadOnlyList<int>, Wrap.ValueReadOnlyList<int>.Enumerator, int>(wrapped);
+            var result = ValueReadOnlyList.Distinct<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int>(wrapped);
 
             // Assert
-            result.Should().Equals(expected);
+            Utils.ValueEnumerable.ShouldEqual<
+                ValueReadOnlyList.DistinctEnumerable<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int>,
+                ValueReadOnlyList.DistinctEnumerable<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int>.Enumerator,
+                int>(result, expected);
         }
     }
 }

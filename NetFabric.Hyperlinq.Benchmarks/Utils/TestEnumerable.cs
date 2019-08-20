@@ -24,9 +24,9 @@ namespace NetFabric.Hyperlinq.Benchmarks
                 this.count = count;
             }
 
-            public Enumerator GetEnumerator() => new Enumerator(count);
-            IEnumerator<int> IEnumerable<int>.GetEnumerator() => new Enumerator(count);
-            IEnumerator IEnumerable.GetEnumerator() => new Enumerator(count);
+            public readonly Enumerator GetEnumerator() => new Enumerator(count);
+            readonly IEnumerator<int> IEnumerable<int>.GetEnumerator() => new Enumerator(count);
+            readonly IEnumerator IEnumerable.GetEnumerator() => new Enumerator(count);
 
             public struct Enumerator : IEnumerator<int>
             {
@@ -39,8 +39,8 @@ namespace NetFabric.Hyperlinq.Benchmarks
                     current = -1;
                 }
 
-                public int Current => current;
-                object IEnumerator.Current => current;
+                public readonly int Current => current;
+                readonly object IEnumerator.Current => current;
 
                 public bool MoveNext() => ++current < count;
 

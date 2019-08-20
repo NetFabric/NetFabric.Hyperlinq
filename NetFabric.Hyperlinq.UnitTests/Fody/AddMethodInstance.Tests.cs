@@ -43,7 +43,7 @@ namespace NetFabric.Hyperlinq.UnitTests
         [Fact]
         public void AddMethodInstance_With_GenericParamOnType_Should_Succeed()
         {
-            // Enumerable.AsValueEnumerableEnumerable<TSource> type has one generic parameters but the All() method doesn't
+            // Enumerable.ValueEnumerableWrapper<TSource> type has one generic parameters but the All() method doesn't
 
             // Arrange
             var expected = System.Linq.Enumerable.All(System.Linq.Enumerable.Range(0, 100), item => true);
@@ -61,7 +61,7 @@ namespace NetFabric.Hyperlinq.UnitTests
         [Fact]
         public void AddMethodInstance_With_GenericParamOnTypeAndMethod_Should_Succeed()
         {
-            // Enumerable.AsValueEnumerableEnumerable<TSource> type and Select<TResult>() method have one generic parameter
+            // Enumerable.ValueEnumerableWrapper<TSource> type and Select<TResult>() method have one generic parameter
 
             // Arrange
             var expected = System.Linq.Enumerable.Select(System.Linq.Enumerable.Range(0, 100), item => item);
@@ -79,7 +79,7 @@ namespace NetFabric.Hyperlinq.UnitTests
         [Fact]
         public void AddMethodInstance_With_GenericParamsOnType_Should_Succeed()
         {
-            // Enumerable.AsValueEnumerableEnumerable<TEnumerable, TEnumerator, TSource> type has one generic parameters but the All() method doesn't
+            // Enumerable.ValueEnumerableWrapper<TEnumerable, TEnumerator, TSource> type has one generic parameters but the All() method doesn't
 
             // Arrange
             var expected = System.Linq.Enumerable.All(System.Linq.Enumerable.ToList(System.Linq.Enumerable.Range(0, 100)), item => true);
@@ -96,7 +96,7 @@ namespace NetFabric.Hyperlinq.UnitTests
         [Fact]
         public void AddMethodInstance_With_GenericParamsOnTypeAndMethod_Should_Succeed()
         {
-            // Enumerable.AsValueEnumerableEnumerable<TEnumerable, TEnumerator, TSource> type and Select<TResult>() method have one generic parameter
+            // Enumerable.ValueEnumerableWrapper<TEnumerable, TEnumerator, TSource> type and Select<TResult>() method have one generic parameter
 
             // Arrange
             var expected = System.Linq.Enumerable.Select(System.Linq.Enumerable.ToList(System.Linq.Enumerable.Range(0, 100)), item => item);

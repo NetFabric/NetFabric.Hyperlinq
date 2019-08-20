@@ -13,7 +13,7 @@ namespace NetFabric.Hyperlinq
             return new ReadOnlyCollection<T>(source);
         }
 
-        public struct ReadOnlyCollection<T> 
+        public readonly struct ReadOnlyCollection<T> 
             : IReadOnlyCollection<T>
         {
             readonly T[] source;
@@ -23,31 +23,11 @@ namespace NetFabric.Hyperlinq
                 this.source = source;
             }
 
-            public int Count => source.Length;
+            public readonly int Count => source.Length;
 
-            public Enumerator GetEnumerator() => new Enumerator(source);
-            IEnumerator<T> IEnumerable<T>.GetEnumerator() => new Enumerator(source);
-            IEnumerator IEnumerable.GetEnumerator() => new Enumerator(source);
-
-            public struct Enumerator 
-                : IEnumerator<T>
-            {
-                readonly T[] source;
-                int index;
-
-                internal Enumerator(T[] source)
-                {
-                    this.source = source;
-                    index = -1;
-                }
-
-                public T Current => source[index];
-                object IEnumerator.Current => source[index];
-
-                public bool MoveNext() => ++index < source.Length;
-                public void Reset() { index = -1; }
-                public void Dispose() { }
-            }
+            public readonly Enumerator<T> GetEnumerator() => new Enumerator<T>(source);
+            readonly IEnumerator<T> IEnumerable<T>.GetEnumerator() => new Enumerator<T>(source);
+            readonly IEnumerator IEnumerable.GetEnumerator() => new Enumerator<T>(source);
         }  
     }
 }

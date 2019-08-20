@@ -14,10 +14,13 @@ namespace NetFabric.Hyperlinq.UnitTests
             var expected = System.Linq.Enumerable.Take(System.Linq.Enumerable.Skip(wrapped, skipCount), takeCount);
 
             // Act
-            var result = ValueEnumerable.SkipTake<Wrap.ValueEnumerable<int>, Wrap.ValueEnumerable<int>.Enumerator, int>(wrapped, skipCount, takeCount);
+            var result = ValueEnumerable.SkipTake<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, skipCount, takeCount);
 
             // Assert
-            result.Should().Equals(expected);
+            Utils.ValueEnumerable.ShouldEqual<
+                ValueEnumerable.SkipTakeEnumerable<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>,
+                ValueEnumerable.SkipTakeEnumerable<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>.Enumerator,
+                int>(result, expected);
         }
 
         [Theory]
@@ -26,13 +29,16 @@ namespace NetFabric.Hyperlinq.UnitTests
         {
             // Arrange
             var wrapped = Wrap.AsValueEnumerable(source);
-            var expected = System.Linq.Enumerable.Take(System.Linq.Enumerable.Take(System.Linq.Enumerable.Skip(wrapped, skipCount), takeCount1), takeCount1);
+            var expected = System.Linq.Enumerable.Take(System.Linq.Enumerable.Take(System.Linq.Enumerable.Skip(wrapped, skipCount), takeCount0), takeCount1);
 
             // Act
-            var result = ValueEnumerable.SkipTake<Wrap.ValueEnumerable<int>, Wrap.ValueEnumerable<int>.Enumerator, int>(wrapped, skipCount, takeCount0).Take(takeCount1);
+            var result = ValueEnumerable.SkipTake<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, skipCount, takeCount0).Take(takeCount1);
 
             // Assert
-            result.Should().Equals(expected);
+            Utils.ValueEnumerable.ShouldEqual<
+                ValueEnumerable.SkipTakeEnumerable<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>,
+                ValueEnumerable.SkipTakeEnumerable<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>.Enumerator,
+                int>(result, expected);
         }
     }
 }

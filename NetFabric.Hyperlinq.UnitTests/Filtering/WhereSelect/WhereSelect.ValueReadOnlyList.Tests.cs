@@ -13,7 +13,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var list = Wrap.AsValueReadOnlyList(new int[0]);
 
             // Act
-            Action action = () => ValueReadOnlyList.WhereSelect<Wrap.ValueReadOnlyList<int>, Wrap.ValueReadOnlyList<int>.Enumerator, int, int>(list, null, item => item);
+            Action action = () => ValueReadOnlyList.WhereSelect<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int, int>(list, null, item => item);
 
             // Assert
             action.Should()
@@ -30,7 +30,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var list = Wrap.AsValueReadOnlyList(new int[0]);
 
             // Act
-            Action action = () => ValueReadOnlyList.WhereSelect<Wrap.ValueReadOnlyList<int>, Wrap.ValueReadOnlyList<int>.Enumerator, int, int>(list, _ => true, null);
+            Action action = () => ValueReadOnlyList.WhereSelect<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int, int>(list, _ => true, null);
 
             // Assert
             action.Should()
@@ -49,10 +49,13 @@ namespace NetFabric.Hyperlinq.UnitTests
             var expected = System.Linq.Enumerable.Select(System.Linq.Enumerable.Where(wrapped, predicate), selector);
 
             // Act
-            var result = ValueReadOnlyList.WhereSelect<Wrap.ValueReadOnlyList<int>, Wrap.ValueReadOnlyList<int>.Enumerator, int, string>(wrapped, predicate, selector);
+            var result = ValueReadOnlyList.WhereSelect<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int, string>(wrapped, predicate, selector);
 
             // Assert
-            result.Should().Equals(expected);
+            Utils.ValueEnumerable.ShouldEqual<
+                ValueReadOnlyList.WhereSelectEnumerable<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int, string>,
+                ValueReadOnlyList.WhereSelectEnumerable<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int, string>.Enumerator,
+                string>(result, expected);
         }
     }
 }

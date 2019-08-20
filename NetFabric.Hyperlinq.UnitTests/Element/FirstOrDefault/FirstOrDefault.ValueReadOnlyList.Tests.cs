@@ -17,7 +17,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var expected = System.Linq.Enumerable.FirstOrDefault(wrapped);
 
             // Act
-            var result = ValueReadOnlyList.FirstOrDefault<Wrap.ValueReadOnlyList<int>, Wrap.ValueReadOnlyList<int>.Enumerator, int>(wrapped);
+            var result = ValueReadOnlyList.FirstOrDefault<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int>(wrapped);
 
             // Assert
             result.Should().Be(expected);
@@ -34,7 +34,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var expected = System.Linq.Enumerable.FirstOrDefault(wrapped, predicate);
 
             // Act
-            var result = ValueReadOnlyList.FirstOrDefault<Wrap.ValueReadOnlyList<int>, Wrap.ValueReadOnlyList<int>.Enumerator, int>(wrapped, predicate);
+            var result = ValueReadOnlyList.FirstOrDefault<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
 
             // Assert
             result.Should().Be(expected);

@@ -15,7 +15,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var selector = (Func<int, string>)null;
 
             // Act
-            Action action = () => ValueEnumerable.Select<Wrap.ValueEnumerable<int>, Wrap.ValueEnumerable<int>.Enumerator, int, string>(enumerable, selector);
+            Action action = () => ValueEnumerable.Select<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int, string>(enumerable, selector);
 
             // Assert
             action.Should()
@@ -34,10 +34,13 @@ namespace NetFabric.Hyperlinq.UnitTests
             var expected = System.Linq.Enumerable.Select(wrapped, selector);
 
             // Act
-            var result = ValueEnumerable.Select<Wrap.ValueEnumerable<int>, Wrap.ValueEnumerable<int>.Enumerator, int, string>(wrapped, selector);
+            var result = ValueEnumerable.Select<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int, string>(wrapped, selector);
 
             // Assert
-            result.Should().Equals(expected);
+            Utils.ValueEnumerable.ShouldEqual<
+                ValueEnumerable.SelectEnumerable<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int, string>,
+                ValueEnumerable.SelectEnumerable<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int, string>.Enumerator,
+                string>(result, expected);
         }
     }
 }

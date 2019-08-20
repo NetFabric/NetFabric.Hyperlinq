@@ -168,12 +168,12 @@ namespace NetFabric.Hyperlinq
                 this.source = source;
             }
 
-            public int Count
+            public readonly int Count
             {
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 get => source.Count;
             }
-            public TSource this[int index]
+            public readonly TSource this[int index]
             {
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 get => source[index];
@@ -181,8 +181,8 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly List<TSource>.Enumerator GetEnumerator() => source.GetEnumerator();
-            IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => source.GetEnumerator();
-            IEnumerator IEnumerable.GetEnumerator() => source.GetEnumerator();
+            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => source.GetEnumerator();
+            readonly IEnumerator IEnumerable.GetEnumerator() => source.GetEnumerator();
         }
     }
 }

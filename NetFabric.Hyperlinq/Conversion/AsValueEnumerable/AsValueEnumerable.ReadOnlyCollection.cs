@@ -10,8 +10,8 @@ namespace NetFabric.Hyperlinq
     {
         [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static AsValueEnumerableEnumerable<TSource> AsValueEnumerable<TSource>(this IReadOnlyCollection<TSource> source)
-           => new AsValueEnumerableEnumerable<TSource>(source);
+        public static ValueEnumerableWrapper<TSource> AsValueEnumerable<TSource>(this IReadOnlyCollection<TSource> source)
+           => new ValueEnumerableWrapper<TSource>(source);
 
         [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -35,7 +35,7 @@ namespace NetFabric.Hyperlinq
                 this.getEnumerator = getEnumerator;
             }
 
-            public int Count
+            public readonly int Count
             {
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 get => source.Count;
@@ -43,23 +43,23 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly TEnumerator GetEnumerator() => getEnumerator(source);
-            IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => getEnumerator(source);
-            IEnumerator IEnumerable.GetEnumerator() => getEnumerator(source);
+            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => getEnumerator(source);
+            readonly IEnumerator IEnumerable.GetEnumerator() => getEnumerator(source);
         }
 
-        [GenericsTypeMapping("TEnumerable", typeof(AsValueEnumerableEnumerable<>))]
-        [GenericsTypeMapping("TEnumerator", typeof(AsValueEnumerableEnumerable<>.Enumerator))]
-        public readonly struct AsValueEnumerableEnumerable<TSource>
-            : IValueReadOnlyCollection<TSource, AsValueEnumerableEnumerable<TSource>.Enumerator>
+        [GenericsTypeMapping("TEnumerable", typeof(ValueEnumerableWrapper<>))]
+        [GenericsTypeMapping("TEnumerator", typeof(ValueEnumerableWrapper<>.Enumerator))]
+        public readonly struct ValueEnumerableWrapper<TSource>
+            : IValueReadOnlyCollection<TSource, ValueEnumerableWrapper<TSource>.Enumerator>
         {
             readonly IReadOnlyCollection<TSource> source;
 
-            internal AsValueEnumerableEnumerable(IReadOnlyCollection<TSource> source)
+            internal ValueEnumerableWrapper(IReadOnlyCollection<TSource> source)
             {
                 this.source = source;
             }
 
-            public int Count
+            public readonly int Count
             {
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 get => source.Count;
@@ -67,31 +67,31 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly Enumerator GetEnumerator() => new Enumerator(source);
-            IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new Enumerator(source);
-            IEnumerator IEnumerable.GetEnumerator() => new Enumerator(source);
+            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new Enumerator(source);
+            readonly IEnumerator IEnumerable.GetEnumerator() => new Enumerator(source);
 
-            public struct Enumerator
+            public readonly struct Enumerator
                 : IEnumerator<TSource>
             {
-                IEnumerator<TSource> enumerator;
+                readonly IEnumerator<TSource> enumerator;
 
                 internal Enumerator(IReadOnlyCollection<TSource> enumerable)
                 {
                     enumerator = enumerable.GetEnumerator();
                 }
 
-                public TSource Current
+                public readonly TSource Current
                 {
                     [MethodImpl(MethodImplOptions.AggressiveInlining)]
                     get => enumerator.Current;
                 }
-                object IEnumerator.Current 
+                readonly object IEnumerator.Current 
                     => enumerator.Current;
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public bool MoveNext() => enumerator.MoveNext();
 
-                readonly void IEnumerator.Reset() => throw new NotSupportedException();
+                void IEnumerator.Reset() => throw new NotSupportedException();
 
                 public void Dispose() => enumerator.Dispose();
             }

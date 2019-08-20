@@ -17,8 +17,11 @@ namespace NetFabric.Hyperlinq.UnitTests
             var result = ValueEnumerable.Return(value);
 
             // Assert
-            result.Should().Equals(expected);
-        } 
+            Utils.ValueReadOnlyList.ShouldEqual<
+                ValueEnumerable.ReturnEnumerable<int>,
+                ValueEnumerable.ReturnEnumerable<int>.Enumerator,
+                int>(result, expected);
+        }
 
         [Theory]
         [InlineData(0, 1)]
