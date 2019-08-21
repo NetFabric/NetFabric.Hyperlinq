@@ -14,7 +14,7 @@ namespace NetFabric.Hyperlinq
             this TEnumerable source, 
             IEqualityComparer<TSource> comparer = null)
             where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
-            where TEnumerator : struct, IEnumerator<TSource>
+            where TEnumerator : struct, IValueEnumerator<TSource>
             => new DistinctEnumerable<TEnumerable, TEnumerator, TSource>(source, comparer, 0, source.Count);
 
         [Pure]
@@ -24,13 +24,13 @@ namespace NetFabric.Hyperlinq
             IEqualityComparer<TSource> comparer,
             int skipCount, int takeCount)
             where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
-            where TEnumerator : struct, IEnumerator<TSource>
+            where TEnumerator : struct, IValueEnumerator<TSource>
             => new DistinctEnumerable<TEnumerable, TEnumerator, TSource>(source, comparer, skipCount, takeCount);
 
         public readonly struct DistinctEnumerable<TEnumerable, TEnumerator, TSource>
             : IValueEnumerable<TSource, DistinctEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator>
             where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
-            where TEnumerator : struct, IEnumerator<TSource>
+            where TEnumerator : struct, IValueEnumerator<TSource>
         {
             readonly TEnumerable source;
             readonly IEqualityComparer<TSource> comparer;
@@ -45,11 +45,11 @@ namespace NetFabric.Hyperlinq
             }
 
             public readonly Enumerator GetEnumerator() => new Enumerator(in this);
-            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new Enumerator(in this);
-            readonly IEnumerator IEnumerable.GetEnumerator() => new Enumerator(in this);
+            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new DisposableEnumerator<TSource, Enumerator>(new Enumerator(in this));
+            readonly IEnumerator IEnumerable.GetEnumerator() => new DisposableEnumerator<TSource, Enumerator>(new Enumerator(in this));
 
             public struct Enumerator
-                : IEnumerator<TSource>
+                : IValueEnumerator<TSource>
             {
                 readonly TEnumerable source;
                 readonly HashSet<TSource> set;
@@ -75,7 +75,6 @@ namespace NetFabric.Hyperlinq
                     [MethodImpl(MethodImplOptions.AggressiveInlining)]
                     get => current;
                 }
-                readonly object IEnumerator.Current => current;
 
                 public bool MoveNext()
                 {
@@ -87,13 +86,9 @@ namespace NetFabric.Hyperlinq
                             return true;
                         }
                     }
-                    Dispose();
+
                     return false;
                 }
-
-                void IEnumerator.Reset() => throw new NotSupportedException();
-
-                public void Dispose() => set.Clear();
             }
 
             // helper function for optimization of non-lazy operations

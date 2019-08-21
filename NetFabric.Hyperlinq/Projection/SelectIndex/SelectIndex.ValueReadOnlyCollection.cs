@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
 using System.Runtime.CompilerServices;
 
@@ -13,7 +14,7 @@ namespace NetFabric.Hyperlinq
             this TEnumerable source, 
             Func<TSource, int, TResult> selector)
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
-            where TEnumerator : struct, IEnumerator<TSource>
+            where TEnumerator : struct, IValueEnumerator<TSource>
         {
             if(selector is null) ThrowHelper.ThrowArgumentNullException(nameof(selector));
 
@@ -26,7 +27,7 @@ namespace NetFabric.Hyperlinq
         public readonly struct SelectIndexEnumerable<TEnumerable, TEnumerator, TSource, TResult>
             : IValueReadOnlyCollection<TResult, SelectIndexEnumerable<TEnumerable, TEnumerator, TSource, TResult>.Enumerator>
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
-            where TEnumerator : struct, IEnumerator<TSource>
+            where TEnumerator : struct, IValueEnumerator<TSource>
         {
             readonly TEnumerable source;
             readonly Func<TSource, int, TResult> selector;
@@ -38,14 +39,15 @@ namespace NetFabric.Hyperlinq
             }
 
             public readonly Enumerator GetEnumerator() => new Enumerator(in this);
-            readonly IEnumerator<TResult> IEnumerable<TResult>.GetEnumerator() => new Enumerator(in this);
-            readonly IEnumerator IEnumerable.GetEnumerator() => new Enumerator(in this);
+            readonly IEnumerator<TResult> IEnumerable<TResult>.GetEnumerator() => new DisposableEnumerator<TResult, Enumerator>(new Enumerator(in this));
+            readonly IEnumerator IEnumerable.GetEnumerator() => new DisposableEnumerator<TResult, Enumerator>(new Enumerator(in this));
 
             public readonly int Count => source.Count;
 
             public struct Enumerator
-                : IEnumerator<TResult>
+                : IValueEnumerator<TResult>
             {
+                [SuppressMessage("Style", "IDE0044:Add readonly modifier")]
                 TEnumerator enumerator; // do not make readonly
                 readonly Func<TSource, int, TResult> selector;
                 int index;
@@ -62,8 +64,6 @@ namespace NetFabric.Hyperlinq
                     [MethodImpl(MethodImplOptions.AggressiveInlining)]
                     get => selector(enumerator.Current, index);
                 }
-                readonly object IEnumerator.Current
-                    => selector(enumerator.Current, index);
 
                 public bool MoveNext()
                 {
@@ -72,14 +72,9 @@ namespace NetFabric.Hyperlinq
                         index++; 
                         return true;
                     }
-                    Dispose();
+
                     return false;
                 }
-
-                void IEnumerator.Reset()
-                    => throw new NotSupportedException();
-
-                public void Dispose() => enumerator.Dispose();
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -114,10 +109,14 @@ namespace NetFabric.Hyperlinq
             {
                 var array = new TResult[source.Count];
 
-                using (var enumerator = source.GetEnumerator())
+                if (source.Count != 0)
                 {
-                    for (var index = 0; enumerator.MoveNext(); index++)
-                        array[index] = selector(enumerator.Current, index);
+                    var index = 0;
+                    foreach (var item in source)
+                    {
+                        array[index] = selector(item, index);
+                        checked { index++; }
+                    }
                 }
 
                 return array;
@@ -146,10 +145,11 @@ namespace NetFabric.Hyperlinq
 
                 public void CopyTo(TResult[] array, int _)
                 {
-                    using (var enumerator = source.GetEnumerator())
+                    var index = 0;
+                    foreach (var item in source)
                     {
-                        for (var index = 0; enumerator.MoveNext(); index++)
-                            array[index] = selector(enumerator.Current, index);
+                        array[index] = selector(item, index);
+                        checked { index++; }
                     }
                 }
 
@@ -166,13 +166,15 @@ namespace NetFabric.Hyperlinq
                 {
                     var dictionary = new Dictionary<TKey, TResult>(source.Count, comparer);
 
-                    using (var enumerator = source.GetEnumerator())
+                    if (source.Count != 0)
                     {
-                        TResult item;
-                        for (var index = 0; enumerator.MoveNext(); index++)
+                        var index = 0;
+                        TResult result;
+                        foreach (var item in source)
                         {
-                            item = selector(enumerator.Current, index);
-                            dictionary.Add(keySelector(item), item);
+                            result = selector(item, index);
+                            dictionary.Add(keySelector(result), result);
+                            checked { index++; }
                         }
                     }
 
@@ -185,13 +187,15 @@ namespace NetFabric.Hyperlinq
                 {
                     var dictionary = new Dictionary<TKey, TElement>(source.Count, comparer);
 
-                    using (var enumerator = source.GetEnumerator())
+                    if (source.Count != 0)
                     {
-                        TResult item;
-                        for (var index = 0; enumerator.MoveNext(); index++)
+                        var index = 0;
+                        TResult result;
+                        foreach (var item in source)
                         {
-                            item = selector(enumerator.Current, index);
-                            dictionary.Add(keySelector(item), elementSelector(item));
+                            result = selector(item, index);
+                            dictionary.Add(keySelector(result), elementSelector(result));
+                            checked { index++; }
                         }
                     }
 
@@ -203,7 +207,7 @@ namespace NetFabric.Hyperlinq
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int Count<TEnumerable, TEnumerator, TSource, TResult>(this SelectIndexEnumerable<TEnumerable, TEnumerator, TSource, TResult> source)
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
-            where TEnumerator : struct, IEnumerator<TSource>
+            where TEnumerator : struct, IValueEnumerator<TSource>
             => source.Count;
     }
 }

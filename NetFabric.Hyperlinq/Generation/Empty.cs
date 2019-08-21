@@ -18,28 +18,21 @@ namespace NetFabric.Hyperlinq
             : IValueReadOnlyList<TSource, EmptyEnumerable<TSource>.Enumerator>
         {
             public readonly Enumerator GetEnumerator() => new Enumerator();
-            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new Enumerator();
-            readonly IEnumerator IEnumerable.GetEnumerator() => new Enumerator();
+            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new DisposableEnumerator<TSource, Enumerator>(new Enumerator());
+            readonly IEnumerator IEnumerable.GetEnumerator() => new DisposableEnumerator<TSource, Enumerator>(new Enumerator());
 
             public readonly int Count => 0;
 
             public readonly TSource this[int index] => ThrowHelper.ThrowIndexOutOfRangeException<TSource>(); 
 
             public readonly struct Enumerator
-                : IEnumerator<TSource>
+                : IValueEnumerator<TSource>
             {
                 public readonly TSource Current
-                    => default;
-                readonly object IEnumerator.Current
                     => default;
 
                 public bool MoveNext()
                     => false;
-
-                void IEnumerator.Reset() 
-                    => throw new NotSupportedException();
-
-                public void Dispose() { }
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]

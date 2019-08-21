@@ -9,31 +9,25 @@ namespace NetFabric.Hyperlinq
         [Pure]
         public static List<TSource> ToList<TEnumerable, TEnumerator, TSource>(this TEnumerable source)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
-            where TEnumerator : struct, IEnumerator<TSource>
+            where TEnumerator : struct, IValueEnumerator<TSource>
         {
             var list = new List<TSource>();
-            using (var enumerator = source.GetEnumerator())
-            {
-                while (enumerator.MoveNext())
-                    list.Add(enumerator.Current);
-            }
+            foreach (var item in source)
+                list.Add(item);
             return list;
         }
 
         [Pure]
         static List<TSource> ToList<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, bool> predicate)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
-            where TEnumerator : struct, IEnumerator<TSource>
+            where TEnumerator : struct, IValueEnumerator<TSource>
         {
             var list = new List<TSource>();
 
-            using (var enumerator = source.GetEnumerator())
+            foreach (var item in source)
             {
-                while (enumerator.MoveNext())
-                {
-                    if (predicate(enumerator.Current))
-                        list.Add(enumerator.Current);
-                }
+                if (predicate(item))
+                    list.Add(item);
             }
 
             return list;
@@ -42,17 +36,17 @@ namespace NetFabric.Hyperlinq
         [Pure]
         static List<TSource> ToList<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, int, bool> predicate)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
-            where TEnumerator : struct, IEnumerator<TSource>
+            where TEnumerator : struct, IValueEnumerator<TSource>
         {
             var list = new List<TSource>();
 
-            using (var enumerator = source.GetEnumerator())
+            var index = 0;
+            foreach (var item in source)
             {
-                for (var index = 0; enumerator.MoveNext(); index++)
-                {
-                    if (predicate(enumerator.Current, index))
-                        list.Add(enumerator.Current);
-                }
+                if (predicate(item, index))
+                    list.Add(item);
+
+                checked { index++; }
             }
 
             return list;

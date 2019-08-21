@@ -9,25 +9,22 @@ namespace NetFabric.Hyperlinq
         [Pure]
         public static bool Any<TEnumerable, TEnumerator, TSource>(this TEnumerable source)
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
-            where TEnumerator : struct, IEnumerator<TSource>
+            where TEnumerator : struct, IValueEnumerator<TSource>
             => source.Count != 0;
 
         [Pure]
         public static bool Any<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, bool> predicate)
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
-            where TEnumerator : struct, IEnumerator<TSource>
+            where TEnumerator : struct, IValueEnumerator<TSource>
         {
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
 
             if (source.Count != 0)
             {
-                using (var enumerator = source.GetEnumerator())
+                foreach (var item in source)
                 {
-                    while (enumerator.MoveNext())
-                    {
-                        if (predicate(enumerator.Current))
-                            return true;
-                    }
+                    if (predicate(item))
+                        return true;
                 }
             }
             return false;
@@ -36,24 +33,22 @@ namespace NetFabric.Hyperlinq
         [Pure]
         public static bool Any<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, int, bool> predicate)
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
-            where TEnumerator : struct, IEnumerator<TSource>
+            where TEnumerator : struct, IValueEnumerator<TSource>
         {
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
 
             if (source.Count != 0)
             {
-                using (var enumerator = source.GetEnumerator())
+                var index = 0;
+                foreach (var item in source)
                 {
-                    var index = 0;
-                    while (enumerator.MoveNext())
-                    {
-                        if (predicate(enumerator.Current, index))
-                            return true;
+                    if (predicate(item, index))
+                        return true;
 
-                        index++;
-                    }
+                    checked { index++; }
                 }
             }
+
             return false;
         }
     }

@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
+using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
@@ -37,11 +38,11 @@ namespace NetFabric.Hyperlinq
             }
 
             public readonly Enumerator GetEnumerator() => new Enumerator(in this);
-            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new Enumerator(in this);
-            readonly IEnumerator IEnumerable.GetEnumerator() => new Enumerator(in this);
+            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new DisposableEnumerator<TSource, Enumerator>(new Enumerator(in this));
+            readonly IEnumerator IEnumerable.GetEnumerator() => new DisposableEnumerator<TSource, Enumerator>(new Enumerator(in this));
 
             public struct Enumerator 
-                : IEnumerator<TSource>
+                : IValueEnumerator<TSource>
             {
                 readonly TSource[] source;
                 readonly Func<TSource, bool> predicate;
@@ -56,9 +57,12 @@ namespace NetFabric.Hyperlinq
                     index = enumerable.skipCount - 1;
                 }
 
-                public readonly ref readonly TSource Current => ref source[index];
-                readonly TSource IEnumerator<TSource>.Current => source[index];
-                readonly object IEnumerator.Current => source[index];
+                public readonly ref readonly TSource Current
+                {
+                    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                    get => ref source[index];
+                }
+                readonly TSource IValueEnumerator<TSource>.Current => source[index];
 
                 public bool MoveNext()
                 {
@@ -69,11 +73,6 @@ namespace NetFabric.Hyperlinq
                     }
                     return false;
                 }
-
-                void IEnumerator.Reset()
-                    => throw new NotSupportedException();
-
-                public void Dispose() { }
             }
 
             public int Count()

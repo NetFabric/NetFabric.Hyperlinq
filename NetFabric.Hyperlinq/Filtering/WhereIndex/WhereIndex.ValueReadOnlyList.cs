@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
+using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
@@ -10,7 +11,7 @@ namespace NetFabric.Hyperlinq
         [Pure]
         public static WhereIndexEnumerable<TEnumerable, TEnumerator, TSource> Where<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, int, bool> predicate)
             where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
-            where TEnumerator : struct, IEnumerator<TSource>
+            where TEnumerator : struct, IValueEnumerator<TSource>
         {
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
 
@@ -20,7 +21,7 @@ namespace NetFabric.Hyperlinq
         [Pure]
         static WhereIndexEnumerable<TEnumerable, TEnumerator, TSource> Where<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, int, bool> predicate, int skipCount, int takeCount)
             where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
-            where TEnumerator : struct, IEnumerator<TSource>
+            where TEnumerator : struct, IValueEnumerator<TSource>
             => new WhereIndexEnumerable<TEnumerable, TEnumerator, TSource>(in source, predicate, skipCount, takeCount);
 
         [GenericsTypeMapping("TEnumerable", typeof(WhereIndexEnumerable<,,>))]
@@ -28,7 +29,7 @@ namespace NetFabric.Hyperlinq
         public readonly struct WhereIndexEnumerable<TEnumerable, TEnumerator, TSource>
             : IValueEnumerable<TSource, WhereIndexEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator>
             where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
-            where TEnumerator : struct, IEnumerator<TSource>
+            where TEnumerator : struct, IValueEnumerator<TSource>
         {
             readonly TEnumerable source;
             readonly Func<TSource, int, bool> predicate;
@@ -43,11 +44,11 @@ namespace NetFabric.Hyperlinq
             }
 
             public readonly Enumerator GetEnumerator() => new Enumerator(in this);
-            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new Enumerator(in this);
-            readonly IEnumerator IEnumerable.GetEnumerator() => new Enumerator(in this);
+            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new DisposableEnumerator<TSource, Enumerator>(new Enumerator(in this));
+            readonly IEnumerator IEnumerable.GetEnumerator() => new DisposableEnumerator<TSource, Enumerator>(new Enumerator(in this));
 
             public struct Enumerator
-                : IEnumerator<TSource>
+                : IValueEnumerator<TSource>
             {
                 readonly TEnumerable source;
                 readonly Func<TSource, int, bool> predicate;
@@ -63,10 +64,10 @@ namespace NetFabric.Hyperlinq
                 }
 
                 public readonly TSource Current
-                    => source[index];
-
-                readonly object IEnumerator.Current
-                    => source[index];
+                {
+                    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                    get => source[index];
+                }
 
                 public bool MoveNext()
                 {
@@ -77,11 +78,6 @@ namespace NetFabric.Hyperlinq
                     }
                     return false;
                 }
-
-                void IEnumerator.Reset()
-                    => throw new NotSupportedException();
-
-                public void Dispose() { }
             }
 
             public int Count()

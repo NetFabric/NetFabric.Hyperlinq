@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
 using System.Runtime.CompilerServices;
 
@@ -14,13 +15,13 @@ namespace NetFabric.Hyperlinq
             this TEnumerable source, 
             IEqualityComparer<TSource> comparer = null)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
-            where TEnumerator : struct, IEnumerator<TSource>
+            where TEnumerator : struct, IValueEnumerator<TSource>
             => new DistinctEnumerable<TEnumerable, TEnumerator, TSource>(source, comparer);
 
         public readonly struct DistinctEnumerable<TEnumerable, TEnumerator, TSource>
             : IValueEnumerable<TSource, DistinctEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator>
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
-            where TEnumerator : struct, IEnumerator<TSource>
+            where TEnumerator : struct, IValueEnumerator<TSource>
         {
             readonly TEnumerable source;
             readonly IEqualityComparer<TSource> comparer;
@@ -32,12 +33,13 @@ namespace NetFabric.Hyperlinq
             }
 
             public readonly Enumerator GetEnumerator() => new Enumerator(in this);
-            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new Enumerator(in this);
-            readonly IEnumerator IEnumerable.GetEnumerator() => new Enumerator(in this);
+            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new DisposableEnumerator<TSource, Enumerator>(new Enumerator(in this));
+            readonly IEnumerator IEnumerable.GetEnumerator() => new DisposableEnumerator<TSource, Enumerator>(new Enumerator(in this));
 
             public struct Enumerator
-                : IEnumerator<TSource>
+                : IValueEnumerator<TSource>
             {
+                [SuppressMessage("Style", "IDE0044:Add readonly modifier")]
                 TEnumerator enumerator; // do not make readonly
                 readonly IEqualityComparer<TSource> comparer;
                 EnumeratorState state;
@@ -56,8 +58,6 @@ namespace NetFabric.Hyperlinq
                     [MethodImpl(MethodImplOptions.AggressiveInlining)]
                     get => enumerator.Current;
                 }
-                readonly object IEnumerator.Current  
-                    => enumerator.Current;
 
                 public bool MoveNext()
                 {
@@ -83,24 +83,17 @@ namespace NetFabric.Hyperlinq
                                 if (set.Add(enumerator.Current))
                                     return true;
                             }
+
+                            set.Clear();
+                            set = null;
+
                             state = EnumeratorState.Complete;
                             goto case EnumeratorState.Complete;
 
                         case EnumeratorState.Complete:
                         default:
-                            Dispose();
                             return false;
                     }
-                }
-
-                void IEnumerator.Reset() 
-                    => throw new NotSupportedException();
-
-                public void Dispose()
-                {
-                    set?.Clear();
-                    set = null;
-                    enumerator.Dispose();
                 }
             }
 

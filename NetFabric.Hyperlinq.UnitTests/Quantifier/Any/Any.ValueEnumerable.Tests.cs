@@ -16,7 +16,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var predicate = (Func<int, bool>)null;
 
             // Act
-            Action action = () => ValueEnumerable.Any<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
+            Action action = () => ValueEnumerable.Any<Wrap.ValueEnumerable<int>, Wrap.ValueEnumerator<int>, int>(wrapped, predicate);
 
             // Assert
             action.Should()
@@ -35,7 +35,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var expected = System.Linq.Enumerable.Any(wrapped, predicate);
 
             // Act
-            var result = ValueEnumerable.Any<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
+            var result = ValueEnumerable.Any<Wrap.ValueEnumerable<int>, Wrap.ValueEnumerator<int>, int>(wrapped, predicate);
 
             // Assert
             result.Should().Be(expected);

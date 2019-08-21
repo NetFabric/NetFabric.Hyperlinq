@@ -14,7 +14,7 @@ namespace NetFabric.Hyperlinq
         }
 
         public readonly struct ValueReadOnlyList<T> 
-            : IValueReadOnlyList<T, Enumerator<T>>
+            : IValueReadOnlyList<T, ValueEnumerator<T>>
         {
             readonly T[] source;
 
@@ -27,7 +27,7 @@ namespace NetFabric.Hyperlinq
 
             public readonly T this[int index] => source[index];
 
-            public readonly Enumerator<T> GetEnumerator() => new Enumerator<T>(source);
+            public readonly ValueEnumerator<T> GetEnumerator() => new ValueEnumerator<T>(source);
             readonly IEnumerator<T> IEnumerable<T>.GetEnumerator() => new Enumerator<T>(source);
             readonly IEnumerator IEnumerable.GetEnumerator() => new Enumerator<T>(source);
         }

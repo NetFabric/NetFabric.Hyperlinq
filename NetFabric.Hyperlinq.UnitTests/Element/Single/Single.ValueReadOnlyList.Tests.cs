@@ -14,7 +14,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var wrapped = Wrap.AsValueReadOnlyList(source);
 
             // Act
-            Action action = () => ValueReadOnlyList.Single<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int>(wrapped);
+            Action action = () => ValueReadOnlyList.Single<Wrap.ValueReadOnlyList<int>, Wrap.ValueEnumerator<int>, int>(wrapped);
 
             // Assert
             action.Should()
@@ -30,7 +30,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var wrapped = Wrap.AsValueReadOnlyList(source);
 
             // Act
-            Action action = () => ValueReadOnlyList.Single<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
+            Action action = () => ValueReadOnlyList.Single<Wrap.ValueReadOnlyList<int>, Wrap.ValueEnumerator<int>, int>(wrapped, predicate);
 
             // Assert
             action.Should()
@@ -47,7 +47,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var expected = System.Linq.Enumerable.Single(wrapped);
 
             // Act
-            var result = ValueReadOnlyList.Single<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int>(wrapped);
+            var result = ValueReadOnlyList.Single<Wrap.ValueReadOnlyList<int>, Wrap.ValueEnumerator<int>, int>(wrapped);
 
             // Assert
             result.Should().Be(expected);
@@ -62,7 +62,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var expected = System.Linq.Enumerable.Single(wrapped, predicate);
 
             // Act
-            var result = ValueReadOnlyList.Single<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
+            var result = ValueReadOnlyList.Single<Wrap.ValueReadOnlyList<int>, Wrap.ValueEnumerator<int>, int>(wrapped, predicate);
 
             // Assert
             result.Should().Be(expected);
@@ -76,7 +76,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var wrapped = Wrap.AsValueReadOnlyList(source);
 
             // Act
-            Action action = () => ValueReadOnlyList.Single<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int>(wrapped);
+            Action action = () => ValueReadOnlyList.Single<Wrap.ValueReadOnlyList<int>, Wrap.ValueEnumerator<int>, int>(wrapped);
 
             // Assert
             action.Should()
@@ -92,7 +92,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var wrapped = Wrap.AsValueReadOnlyList(source);
 
             // Act
-            Action action = () => ValueReadOnlyList.Single<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
+            Action action = () => ValueReadOnlyList.Single<Wrap.ValueReadOnlyList<int>, Wrap.ValueEnumerator<int>, int>(wrapped, predicate);
 
             // Assert
             action.Should()

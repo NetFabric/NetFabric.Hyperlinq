@@ -13,8 +13,6 @@ namespace NetFabric.Hyperlinq
         public static ValueEnumerableWrapper<TSource> AsValueEnumerable<TSource>(this TSource[] source)
             => new ValueEnumerableWrapper<TSource>(source);
 
-        [GenericsTypeMapping("TEnumerable", typeof(ValueEnumerableWrapper<>))]
-        [GenericsTypeMapping("TEnumerator", typeof(ValueEnumerableWrapper<>.Enumerator))]
         public readonly struct ValueEnumerableWrapper<TSource>
             : IValueReadOnlyList<TSource, ValueEnumerableWrapper<TSource>.Enumerator>
         {
@@ -27,16 +25,16 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly Enumerator GetEnumerator() => new Enumerator(source);
-            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new Enumerator(source);
-            readonly IEnumerator IEnumerable.GetEnumerator() => new Enumerator(source);
+            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new DisposableEnumerator<TSource, Enumerator>(new Enumerator(source));
+            readonly IEnumerator IEnumerable.GetEnumerator() => new DisposableEnumerator<TSource, Enumerator>(new Enumerator(source));
 
             public readonly int Count => source.Length;
 
             public readonly ref readonly TSource this[int index] => ref source[index];
             readonly TSource IReadOnlyList<TSource>.this[int index] => source[index];
 
-            public struct Enumerator 
-                : IEnumerator<TSource>
+            public struct Enumerator
+                : IValueEnumerator<TSource>
             {
                 readonly TSource[] source;
                 readonly int count;
@@ -54,15 +52,10 @@ namespace NetFabric.Hyperlinq
                     [MethodImpl(MethodImplOptions.AggressiveInlining)]
                     get => ref source[index];
                 }
-                readonly TSource IEnumerator<TSource>.Current => source[index];
-                readonly object IEnumerator.Current => source[index];
+                readonly TSource IValueEnumerator<TSource>.Current => source[index];
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public bool MoveNext() => ++index < count;
-
-                void IEnumerator.Reset() => throw new NotSupportedException();
-
-                public void Dispose() { }
             }
         }
     }

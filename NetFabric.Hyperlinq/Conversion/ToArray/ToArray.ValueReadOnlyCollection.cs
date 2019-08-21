@@ -9,7 +9,7 @@ namespace NetFabric.Hyperlinq
         [Pure]
         public static TSource[] ToArray<TEnumerable, TEnumerator, TSource>(this TEnumerable source)
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
-            where TEnumerator : struct, IEnumerator<TSource>
+            where TEnumerator : struct, IValueEnumerator<TSource>
         {
             var array = new TSource[source.Count];
             if (source.Count != 0)
@@ -21,10 +21,12 @@ namespace NetFabric.Hyperlinq
                         break;
 
                     default:
-                        using (var enumerator = source.GetEnumerator())
+                        var index = 0;
+                        foreach (var item in source)
                         {
-                            for (var index = 0; enumerator.MoveNext(); index++)
-                                array[index] = enumerator.Current;
+                            array[index] = item;
+
+                            checked { index++; }
                         }
                         break;
                 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
 using System.Runtime.CompilerServices;
 
@@ -11,7 +12,7 @@ namespace NetFabric.Hyperlinq
         [Pure]
         public static WhereIndexEnumerable<TEnumerable, TEnumerator, TSource> Where<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, int, bool> predicate)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
-            where TEnumerator : struct, IEnumerator<TSource>
+            where TEnumerator : struct, IValueEnumerator<TSource>
         {
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
 
@@ -23,7 +24,7 @@ namespace NetFabric.Hyperlinq
         public readonly struct WhereIndexEnumerable<TEnumerable, TEnumerator, TSource> 
             : IValueEnumerable<TSource, WhereIndexEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator>
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
-            where TEnumerator : struct, IEnumerator<TSource>
+            where TEnumerator : struct, IValueEnumerator<TSource>
         {
             internal readonly TEnumerable source;
             internal readonly Func<TSource, int, bool> predicate;
@@ -35,12 +36,13 @@ namespace NetFabric.Hyperlinq
             }
 
             public readonly Enumerator GetEnumerator() => new Enumerator(in this);
-            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new Enumerator(in this);
-            readonly IEnumerator IEnumerable.GetEnumerator() => new Enumerator(in this);
+            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new DisposableEnumerator<TSource, Enumerator>(new Enumerator(in this));
+            readonly IEnumerator IEnumerable.GetEnumerator() => new DisposableEnumerator<TSource, Enumerator>(new Enumerator(in this));
 
             public struct Enumerator
-                : IEnumerator<TSource>
+                : IValueEnumerator<TSource>
             {
+                [SuppressMessage("Style", "IDE0044:Add readonly modifier")]
                 TEnumerator enumerator; // do not make readonly
                 readonly Func<TSource, int, bool> predicate;
                 int index;
@@ -57,8 +59,6 @@ namespace NetFabric.Hyperlinq
                     [MethodImpl(MethodImplOptions.AggressiveInlining)]
                     get => enumerator.Current;
                 }
-                readonly object IEnumerator.Current
-                    => enumerator.Current;
 
                 public bool MoveNext()
                 {
@@ -72,14 +72,9 @@ namespace NetFabric.Hyperlinq
                             index++;
                         }
                     }
-                    Dispose();
+
                     return false;
                 }
-
-                void IEnumerator.Reset()
-                    => throw new NotSupportedException();
-
-                public void Dispose() => enumerator.Dispose();
             }
 
             public TSource First()

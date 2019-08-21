@@ -13,7 +13,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var enumerable = Wrap.AsValueEnumerable(new int[0]);
 
             // Act
-            Action action = () => ValueEnumerable.WhereSelect<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int, int>(enumerable, null, item => item);
+            Action action = () => ValueEnumerable.WhereSelect<Wrap.ValueEnumerable<int>, Wrap.ValueEnumerator<int>, int, int>(enumerable, null, item => item);
 
             // Assert
             action.Should()
@@ -30,7 +30,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var enumerable = Wrap.AsValueEnumerable(new int[0]);
 
             // Act
-            Action action = () => ValueEnumerable.WhereSelect<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int, int>(enumerable, _ => true, null);
+            Action action = () => ValueEnumerable.WhereSelect<Wrap.ValueEnumerable<int>, Wrap.ValueEnumerator<int>, int, int>(enumerable, _ => true, null);
 
             // Assert
             action.Should()
@@ -49,12 +49,12 @@ namespace NetFabric.Hyperlinq.UnitTests
             var expected = System.Linq.Enumerable.Select(System.Linq.Enumerable.Where(wrapped, predicate), selector);
 
             // Act
-            var result = ValueEnumerable.WhereSelect<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int, string>(wrapped, predicate, selector);
+            var result = ValueEnumerable.WhereSelect<Wrap.ValueEnumerable<int>, Wrap.ValueEnumerator<int>, int, string>(wrapped, predicate, selector);
 
             // Assert
             Utils.ValueEnumerable.ShouldEqual<
-                ValueEnumerable.WhereSelectEnumerable<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int, string>,
-                ValueEnumerable.WhereSelectEnumerable<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int, string>.Enumerator,
+                ValueEnumerable.WhereSelectEnumerable<Wrap.ValueEnumerable<int>, Wrap.ValueEnumerator<int>, int, string>,
+                ValueEnumerable.WhereSelectEnumerable<Wrap.ValueEnumerable<int>, Wrap.ValueEnumerator<int>, int, string>.Enumerator,
                 string>(result, expected);
         }
     }

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
 using System.Runtime.CompilerServices;
 
@@ -68,7 +69,7 @@ namespace NetFabric.Hyperlinq
             this ImmutableQueue<TSource> source,
             Func<TSource, TSubEnumerable> selector)
             where TSubEnumerable : IValueEnumerable<TResult, TSubEnumerator>
-            where TSubEnumerator : struct, IEnumerator<TResult>
+            where TSubEnumerator : struct, IValueEnumerator<TResult>
             => ValueEnumerable.SelectMany<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource, TSubEnumerable, TSubEnumerator, TResult>(new ValueWrapper<TSource>(source), selector);
 
         [Pure]
@@ -172,12 +173,13 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly Enumerator GetEnumerator() => new Enumerator(source);
-            IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new Enumerator(source);
-            IEnumerator IEnumerable.GetEnumerator() => new Enumerator(source);
+            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new DisposableEnumerator<TSource, Enumerator>(new Enumerator(source));
+            readonly IEnumerator IEnumerable.GetEnumerator() => new DisposableEnumerator<TSource, Enumerator>(new Enumerator(source));
 
             public struct Enumerator
-                : IEnumerator<TSource>
+                : IValueEnumerator<TSource>
             {
+                [SuppressMessage("Style", "IDE0044:Add readonly modifier")]
                 ImmutableQueue<TSource>.Enumerator enumerator;
 
                 internal Enumerator(ImmutableQueue<TSource> enumerable)
@@ -190,14 +192,9 @@ namespace NetFabric.Hyperlinq
                     [MethodImpl(MethodImplOptions.AggressiveInlining)]
                     get => enumerator.Current;
                 }
-                object IEnumerator.Current => enumerator.Current;
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public bool MoveNext() => enumerator.MoveNext();
-
-                readonly void IEnumerator.Reset() => throw new NotSupportedException();
-
-                public void Dispose() { }
             }
         }
     }

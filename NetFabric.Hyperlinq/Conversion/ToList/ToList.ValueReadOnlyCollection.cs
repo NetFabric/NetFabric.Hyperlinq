@@ -10,23 +10,19 @@ namespace NetFabric.Hyperlinq
         [Pure]
         public static List<TSource> ToList<TEnumerable, TEnumerator, TSource>(this TEnumerable source)
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
-            where TEnumerator : struct, IEnumerator<TSource>
-        {
-            switch (source)
+            where TEnumerator : struct, IValueEnumerator<TSource>
+            => source switch
             {
-                case ICollection<TSource> collection:
-                    return new List<TSource>(collection); // no need to allocate helper class
+                ICollection<TSource> collection => new List<TSource>(collection), // no need to allocate helper class
 
-                default:
-                    return new List<TSource>(new ToListCollection<TEnumerable, TEnumerator, TSource>(source));
-            }
-        }
+                _ => new List<TSource>(new ToListCollection<TEnumerable, TEnumerator, TSource>(source)),
+            };
 
         // helper implementation of ICollection<> so that CopyTo() is used to convert to List<>
         sealed class ToListCollection<TEnumerable, TEnumerator, TSource>
             : ICollection<TSource>
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
-            where TEnumerator : struct, IEnumerator<TSource>
+            where TEnumerator : struct, IValueEnumerator<TSource>
         {
             readonly TEnumerable source;
 
@@ -41,10 +37,12 @@ namespace NetFabric.Hyperlinq
 
             public void CopyTo(TSource[] array, int _)
             {
-                using (var enumerator = source.GetEnumerator())
+                var index = 0;
+                foreach (var item in source)
                 {
-                    for (var index = 0; enumerator.MoveNext(); index++)
-                        array[index] = enumerator.Current;
+                    array[index] = item;
+
+                    checked { index++; }
                 }
             }
 

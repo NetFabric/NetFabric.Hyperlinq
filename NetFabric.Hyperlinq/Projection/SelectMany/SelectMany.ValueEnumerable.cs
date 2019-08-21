@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
+using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
@@ -12,9 +13,9 @@ namespace NetFabric.Hyperlinq
             this TEnumerable source, 
             Func<TSource, TSubEnumerable> selector)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
-            where TEnumerator : struct, IEnumerator<TSource>
+            where TEnumerator : struct, IValueEnumerator<TSource>
             where TSubEnumerable : IValueEnumerable<TResult, TSubEnumerator>
-            where TSubEnumerator : struct, IEnumerator<TResult>
+            where TSubEnumerator : struct, IValueEnumerator<TResult>
         {
             if (selector is null) ThrowHelper.ThrowArgumentNullException(nameof(selector));
 
@@ -26,9 +27,9 @@ namespace NetFabric.Hyperlinq
         public readonly struct SelectManyEnumerable<TEnumerable, TEnumerator, TSource, TSubEnumerable, TSubEnumerator, TResult>
             : IValueEnumerable<TResult, SelectManyEnumerable<TEnumerable, TEnumerator, TSource, TSubEnumerable, TSubEnumerator, TResult>.Enumerator>
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
-            where TEnumerator : struct, IEnumerator<TSource>
+            where TEnumerator : struct, IValueEnumerator<TSource>
             where TSubEnumerable : IValueEnumerable<TResult, TSubEnumerator>
-            where TSubEnumerator : struct, IEnumerator<TResult>
+            where TSubEnumerator : struct, IValueEnumerator<TResult>
         {
             readonly TEnumerable source;
             readonly Func<TSource, TSubEnumerable> selector;
@@ -40,11 +41,11 @@ namespace NetFabric.Hyperlinq
             }
 
             public readonly Enumerator GetEnumerator() => new Enumerator(in this);
-            readonly IEnumerator<TResult> IEnumerable<TResult>.GetEnumerator() => new Enumerator(in this);
-            readonly IEnumerator IEnumerable.GetEnumerator() => new Enumerator(in this);
+            readonly IEnumerator<TResult> IEnumerable<TResult>.GetEnumerator() => new DisposableEnumerator<TResult, Enumerator>(new Enumerator(in this));
+            readonly IEnumerator IEnumerable.GetEnumerator() => new DisposableEnumerator<TResult, Enumerator>(new Enumerator(in this));
 
             public struct Enumerator
-                : IEnumerator<TResult>
+                : IValueEnumerator<TResult>
             {
                 TEnumerator sourceEnumerator;
                 readonly Func<TSource, TSubEnumerable> selector;
@@ -60,9 +61,10 @@ namespace NetFabric.Hyperlinq
                 }
 
                 public readonly TResult Current
-                    => subEnumerator.Current;
-                readonly object IEnumerator.Current
-                    => subEnumerator.Current;
+                {
+                    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                    get => subEnumerator.Current;
+                }
 
                 public bool MoveNext()
                 {
@@ -85,23 +87,12 @@ namespace NetFabric.Hyperlinq
                         case 2:
                             if (!subEnumerator.MoveNext())
                             {
-                                subEnumerator.Dispose();
                                 state = 1;
                                 goto case 1;
                             }
                             return true;
                     }
                     return false;
-                }
-
-                void IEnumerator.Reset()
-                    => throw new NotSupportedException();
-
-                public void Dispose()
-                {
-                    if (state != 0)
-                        subEnumerator.Dispose();
-                    sourceEnumerator.Dispose();
                 }
             }
         }
