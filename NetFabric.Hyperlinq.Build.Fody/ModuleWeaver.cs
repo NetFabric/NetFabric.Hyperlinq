@@ -43,7 +43,7 @@ public partial class ModuleWeaver
             var generic = method.GenericParameters.FirstOrDefault(genericParameter => genericParameter.HasConstraints && genericParameter.Name == extensionType.Name);
             if (generic is object)
             {
-                var constraint = generic.Constraints[0];
+                var constraint = generic.Constraints[0].ConstraintType;
                 if (methods.TryAdd(constraint.Name, method))
                     LogInfo($"Constraint: {constraint.Name} Method: {method.FullName}");
             }
@@ -233,14 +233,11 @@ public partial class ModuleWeaver
                 {
                     foreach (var constraint in param.Constraints)
                     {
-                        switch (constraint.Name)
+                        var constraintType = constraint.ConstraintType;
+                        if (!constraintType.IsValueType)
                         {
-                            case "ValueType": // HasReferenceTypeConstraint is true
-                                              // ignore
-                                break;
-                            default:
-                                newParam.Constraints.Add(Utils.ResolveGenericType(constraint, newMethod));
-                                break;
+                            var resolvedConstraint = new GenericParameterConstraint(Utils.ResolveGenericType(constraintType, newMethod));
+                            newParam.Constraints.Add(resolvedConstraint);
                         }
                     }
                 }
