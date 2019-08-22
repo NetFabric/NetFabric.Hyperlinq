@@ -18,8 +18,8 @@ namespace NetFabric.Hyperlinq
             : IValueReadOnlyList<TSource, EmptyEnumerable<TSource>.Enumerator>
         {
             public readonly Enumerator GetEnumerator() => new Enumerator();
-            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new DisposableEnumerator<TSource, Enumerator>(new Enumerator());
-            readonly IEnumerator IEnumerable.GetEnumerator() => new DisposableEnumerator<TSource, Enumerator>(new Enumerator());
+            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => ValueEnumerator.ToEnumerator<TSource, Enumerator>(new Enumerator());
+            readonly IEnumerator IEnumerable.GetEnumerator() => ValueEnumerator.ToEnumerator<TSource, Enumerator>(new Enumerator());
 
             public readonly int Count => 0;
 

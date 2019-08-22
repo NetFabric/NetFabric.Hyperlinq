@@ -44,8 +44,8 @@ namespace NetFabric.Hyperlinq
             }
 
             public readonly Enumerator GetEnumerator() => new Enumerator(in this);
-            readonly IEnumerator<int> IEnumerable<int>.GetEnumerator() => new DisposableEnumerator<int, Enumerator>(new Enumerator(in this));
-            readonly IEnumerator IEnumerable.GetEnumerator() => new DisposableEnumerator<int, Enumerator>(new Enumerator(in this));
+            readonly IEnumerator<int> IEnumerable<int>.GetEnumerator() => ValueEnumerator.ToEnumerator<int, Enumerator>(new Enumerator(in this));
+            readonly IEnumerator IEnumerable.GetEnumerator() => ValueEnumerator.ToEnumerator<int, Enumerator>(new Enumerator(in this));
 
             public readonly int Count => count;
 

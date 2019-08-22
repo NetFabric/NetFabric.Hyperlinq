@@ -29,8 +29,8 @@ namespace NetFabric.Hyperlinq
             }
 
             public readonly TEnumerator GetEnumerator() => getEnumerator();
-            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new DisposableEnumerator<TSource, TEnumerator>(getEnumerator());
-            readonly IEnumerator IEnumerable.GetEnumerator() => new DisposableEnumerator<TSource, TEnumerator>(getEnumerator());
+            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => ValueEnumerator.ToEnumerator<TSource, TEnumerator>(getEnumerator());
+            readonly IEnumerator IEnumerable.GetEnumerator() => ValueEnumerator.ToEnumerator<TSource, TEnumerator>(getEnumerator());
         }
     }
 }
