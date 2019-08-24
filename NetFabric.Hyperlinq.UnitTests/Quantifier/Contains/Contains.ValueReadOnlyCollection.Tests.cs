@@ -17,7 +17,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var expected = System.Linq.Enumerable.Contains(wrapped, value);
 
             // Act
-            var result = ValueReadOnlyCollection.Contains<Wrap.ValueReadOnlyCollection<int>, Wrap.ValueEnumerator<int>, int>(wrapped, value);
+            var result = ValueReadOnlyCollection.Contains<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(wrapped, value);
 
             // Assert
             result.Should().Be(expected);
@@ -32,7 +32,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var expected = System.Linq.Enumerable.Contains(wrapped, value, EqualityComparer<int>.Default);
 
             // Act
-            var result = ValueReadOnlyCollection.Contains<Wrap.ValueReadOnlyCollection<int>, Wrap.ValueEnumerator<int>, int>(wrapped, value, EqualityComparer<int>.Default);
+            var result = ValueReadOnlyCollection.Contains<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(wrapped, value, EqualityComparer<int>.Default);
 
             // Assert
             result.Should().Be(expected);
@@ -47,7 +47,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var expected = System.Linq.Enumerable.Contains(wrapped, value, null);
 
             // Act
-            var result = ValueReadOnlyCollection.Contains<Wrap.ValueReadOnlyCollection<int>, Wrap.ValueEnumerator<int>, int>(wrapped, value, null);
+            var result = ValueReadOnlyCollection.Contains<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(wrapped, value, null);
 
             // Assert
             result.Should().Be(expected);

@@ -14,7 +14,7 @@ namespace NetFabric.Hyperlinq
             this TEnumerable source, 
             Func<TSource, int, TResult> selector)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
-            where TEnumerator : struct, IValueEnumerator<TSource>
+            where TEnumerator : struct, IEnumerator<TSource>
         {
             if (selector is null) ThrowHelper.ThrowArgumentNullException(nameof(selector));
 
@@ -27,7 +27,7 @@ namespace NetFabric.Hyperlinq
         public readonly struct SelectIndexEnumerable<TEnumerable, TEnumerator, TSource, TResult> 
             : IValueEnumerable<TResult, SelectIndexEnumerable<TEnumerable, TEnumerator, TSource, TResult>.Enumerator>
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
-            where TEnumerator : struct, IValueEnumerator<TSource>
+            where TEnumerator : struct, IEnumerator<TSource>
         {
             readonly TEnumerable source;
             readonly Func<TSource, int, TResult> selector;
@@ -38,12 +38,14 @@ namespace NetFabric.Hyperlinq
                 this.selector = selector;
             }
 
+            [Pure]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly Enumerator GetEnumerator() => new Enumerator(in this);
-            readonly IEnumerator<TResult> IEnumerable<TResult>.GetEnumerator() => ValueEnumerator.ToEnumerator<TResult, Enumerator>(new Enumerator(in this));
-            readonly IEnumerator IEnumerable.GetEnumerator() => ValueEnumerator.ToEnumerator<TResult, Enumerator>(new Enumerator(in this));
+            readonly IEnumerator<TResult> IEnumerable<TResult>.GetEnumerator() => new Enumerator(in this);
+            readonly IEnumerator IEnumerable.GetEnumerator() => new Enumerator(in this);
 
             public struct Enumerator
-                : IValueEnumerator<TResult>
+                : IEnumerator<TResult>
             {
                 [SuppressMessage("Style", "IDE0044:Add readonly modifier")]
                 TEnumerator enumerator; // do not make readonly
@@ -62,6 +64,7 @@ namespace NetFabric.Hyperlinq
                     [MethodImpl(MethodImplOptions.AggressiveInlining)]
                     get => selector(enumerator.Current, index);
                 }
+                readonly object IEnumerator.Current => selector(enumerator.Current, index);
 
                 public bool MoveNext()
                 {
@@ -70,9 +73,13 @@ namespace NetFabric.Hyperlinq
                         checked { index++; }
                         return true;
                     }
-
+                    Dispose();
                     return false;
                 }
+
+                public readonly void Reset() => throw new NotSupportedException();
+
+                public void Dispose() => enumerator.Dispose();
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]

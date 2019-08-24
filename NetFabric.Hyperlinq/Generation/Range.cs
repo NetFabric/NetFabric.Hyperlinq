@@ -27,10 +27,10 @@ namespace NetFabric.Hyperlinq
         }
 
         [GenericsTypeMapping("TEnumerable", typeof(RangeEnumerable))]
-        [GenericsTypeMapping("TEnumerator", typeof(RangeEnumerable.Enumerator))]
+        [GenericsTypeMapping("TEnumerator", typeof(RangeEnumerable.DisposableEnumerator))]
         [GenericsTypeMapping("TSource", typeof(int))]
         public readonly struct RangeEnumerable
-            : IValueReadOnlyList<int, RangeEnumerable.Enumerator>
+            : IValueReadOnlyList<int, RangeEnumerable.DisposableEnumerator>
         {
             readonly int start;
             readonly int count;
@@ -43,9 +43,12 @@ namespace NetFabric.Hyperlinq
                 this.end = end;
             }
 
+            [Pure]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly Enumerator GetEnumerator() => new Enumerator(in this);
-            readonly IEnumerator<int> IEnumerable<int>.GetEnumerator() => ValueEnumerator.ToEnumerator<int, Enumerator>(new Enumerator(in this));
-            readonly IEnumerator IEnumerable.GetEnumerator() => ValueEnumerator.ToEnumerator<int, Enumerator>(new Enumerator(in this));
+            readonly DisposableEnumerator IValueEnumerable<int, DisposableEnumerator>.GetEnumerator() => new DisposableEnumerator(in this);
+            readonly IEnumerator<int> IEnumerable<int>.GetEnumerator() => new DisposableEnumerator(in this);
+            readonly IEnumerator IEnumerable.GetEnumerator() => new DisposableEnumerator(in this);
 
             public readonly int Count => count;
 
@@ -60,7 +63,6 @@ namespace NetFabric.Hyperlinq
             }
 
             public struct Enumerator
-                : IValueEnumerator<int>
             {
                 readonly int end;
                 int current;
@@ -77,7 +79,35 @@ namespace NetFabric.Hyperlinq
                     get => current;
                 }
 
+                [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public bool MoveNext() => ++this.current < end;
+            }
+
+            public struct DisposableEnumerator
+                : IEnumerator<int>
+            {
+                readonly int end;
+                int current;
+
+                internal DisposableEnumerator(in RangeEnumerable enumerable)
+                {
+                    current = enumerable.start - 1;
+                    end = enumerable.end;
+                }
+
+                public readonly int Current
+                {
+                    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                    get => current;
+                }
+                readonly object IEnumerator.Current => current;
+
+                [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                public bool MoveNext() => ++this.current < end;
+
+                public readonly void Reset() => throw new NotSupportedException();
+
+                public readonly void Dispose() { }
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]

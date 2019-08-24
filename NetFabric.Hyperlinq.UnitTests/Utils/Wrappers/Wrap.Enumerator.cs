@@ -27,29 +27,8 @@ namespace NetFabric.Hyperlinq
             readonly object IEnumerator.Current => source[index];
 
             public bool MoveNext() => ++index < source.Length;
-            public void Reset() => index = -1; 
-            public void Dispose() { }
-        }
-
-        public struct ValueEnumerator<T>
-            : IValueEnumerator<T>
-        {
-            readonly T[] source;
-            int index;
-
-            internal ValueEnumerator(T[] source)
-            {
-                this.source = source;
-                index = -1;
-            }
-
-            public readonly T Current
-            {
-                [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                get => source[index];
-            }
-
-            public bool MoveNext() => ++index < source.Length;
+            public void Reset() => index = -1;
+            public readonly void Dispose() { }
         }
     }
 }

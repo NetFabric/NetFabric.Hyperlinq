@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
+using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
@@ -9,7 +10,7 @@ namespace NetFabric.Hyperlinq
 {
         [Pure]
         public static CreateValueEnumerable<TEnumerator, TSource> Create<TEnumerator, TSource>(Func<TEnumerator> getEnumerator) 
-            where TEnumerator : struct, IValueEnumerator<TSource>
+            where TEnumerator : struct, IEnumerator<TSource>
         {
             if(getEnumerator is null) ThrowHelper.ThrowArgumentNullException(nameof(getEnumerator));
 
@@ -19,7 +20,7 @@ namespace NetFabric.Hyperlinq
         [GenericsTypeMapping("TEnumerable", typeof(CreateValueEnumerable<,>))]
         public readonly struct CreateValueEnumerable<TEnumerator, TSource> 
             : IValueEnumerable<TSource, TEnumerator>
-            where TEnumerator : struct, IValueEnumerator<TSource>
+            where TEnumerator : struct, IEnumerator<TSource>
         {
             readonly Func<TEnumerator> getEnumerator;
 
@@ -28,9 +29,11 @@ namespace NetFabric.Hyperlinq
                 this.getEnumerator = getEnumerator;
             }
 
+            [Pure]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly TEnumerator GetEnumerator() => getEnumerator();
-            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => ValueEnumerator.ToEnumerator<TSource, TEnumerator>(getEnumerator());
-            readonly IEnumerator IEnumerable.GetEnumerator() => ValueEnumerator.ToEnumerator<TSource, TEnumerator>(getEnumerator());
+            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => getEnumerator();
+            readonly IEnumerator IEnumerable.GetEnumerator() => getEnumerator();
         }
     }
 }

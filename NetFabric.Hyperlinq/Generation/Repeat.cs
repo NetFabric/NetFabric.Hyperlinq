@@ -17,9 +17,9 @@ namespace NetFabric.Hyperlinq
         }
 
         [GenericsTypeMapping("TEnumerable", typeof(RepeatEnumerable<>))]
-        [GenericsTypeMapping("TEnumerator", typeof(RepeatEnumerable<>.Enumerator))]
+        [GenericsTypeMapping("TEnumerator", typeof(RepeatEnumerable<>.DisposableEnumerator))]
         public readonly struct RepeatEnumerable<TSource>
-            : IValueReadOnlyList<TSource, RepeatEnumerable<TSource>.Enumerator>
+            : IValueReadOnlyList<TSource, RepeatEnumerable<TSource>.DisposableEnumerator>
         {
             internal readonly TSource value;
             internal readonly int count;
@@ -30,9 +30,12 @@ namespace NetFabric.Hyperlinq
                 this.count = count;
             }
 
+            [Pure]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly Enumerator GetEnumerator() => new Enumerator(in this);
-            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => ValueEnumerator.ToEnumerator<TSource, Enumerator>(new Enumerator(in this));
-            readonly IEnumerator IEnumerable.GetEnumerator() => ValueEnumerator.ToEnumerator<TSource, Enumerator>(new Enumerator(in this));
+            readonly DisposableEnumerator IValueEnumerable<TSource, DisposableEnumerator>.GetEnumerator() => new DisposableEnumerator(in this);
+            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new DisposableEnumerator(in this);
+            readonly IEnumerator IEnumerable.GetEnumerator() => new DisposableEnumerator(in this);
 
             public readonly int Count => count;
 
@@ -47,7 +50,6 @@ namespace NetFabric.Hyperlinq
             }
 
             public struct Enumerator
-                : IValueEnumerator<TSource>
             {
                 readonly TSource value;
                 int counter;
@@ -58,9 +60,41 @@ namespace NetFabric.Hyperlinq
                     counter = enumerable.count;
                 }
 
-                public readonly TSource Current => value;
+                public readonly TSource Current
+                {
+                    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                    get => value;
+                }
 
+                [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public bool MoveNext() => counter-- > 0;
+            }
+
+            public struct DisposableEnumerator
+                : IEnumerator<TSource>
+            {
+                readonly TSource value;
+                int counter;
+
+                internal DisposableEnumerator(in RepeatEnumerable<TSource> enumerable)
+                {
+                    value = enumerable.value;
+                    counter = enumerable.count;
+                }
+
+                public readonly TSource Current
+                {
+                    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                    get => value;
+                }
+                readonly object IEnumerator.Current => value;
+
+                [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                public bool MoveNext() => counter-- > 0;
+
+                public readonly void Reset() => throw new NotSupportedException();
+
+                public readonly void Dispose() { }
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]

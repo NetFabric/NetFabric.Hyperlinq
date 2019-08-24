@@ -75,7 +75,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Hyperlinq_Range() 
         { 
             var count = 0;
-            foreach(var item in hyperlinqRange.SelectMany<ValueEnumerable.ReturnEnumerable<int>, ValueEnumerable.ReturnEnumerable<int>.Enumerator, int>(item => ValueEnumerable.Return(item)))
+            foreach(var item in hyperlinqRange.SelectMany<ValueEnumerable.ReturnEnumerable<int>, ValueEnumerable.ReturnEnumerable<int>.DisposableEnumerator, int>(item => ValueEnumerable.Return(item)))
                 count++;
             return count;
         }
@@ -85,7 +85,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Hyperlinq_LinkedList() 
         { 
             var count = 0;
-            foreach(var item in linkedList.SelectMany<int, ValueEnumerable.ReturnEnumerable<int>, ValueEnumerable.ReturnEnumerable<int>.Enumerator, int>(item => ValueEnumerable.Return(item)))
+            foreach(var item in linkedList.SelectMany<int, ValueEnumerable.ReturnEnumerable<int>, ValueEnumerable.ReturnEnumerable<int>.DisposableEnumerator, int>(item => ValueEnumerable.Return(item)))
                 count++;
             return count;
         }
@@ -95,7 +95,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Hyperlinq_Array() 
         { 
             var count = 0;
-            foreach(var item in array.SelectMany<int, ValueEnumerable.ReturnEnumerable<int>, ValueEnumerable.ReturnEnumerable<int>.Enumerator, int>(item => ValueEnumerable.Return(item)))
+            foreach(var item in array.SelectMany<int, ValueEnumerable.ReturnEnumerable<int>, ValueEnumerable.ReturnEnumerable<int>.DisposableEnumerator, int>(item => ValueEnumerable.Return(item)))
                 count++;
             return count;
         }
@@ -105,7 +105,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Hyperlinq_List() 
         { 
             var count = 0;
-            foreach(var item in list.SelectMany<int, ValueEnumerable.ReturnEnumerable<int>, ValueEnumerable.ReturnEnumerable<int>.Enumerator, int>(item => ValueEnumerable.Return(item)))
+            foreach(var item in list.SelectMany<int, ValueEnumerable.ReturnEnumerable<int>, ValueEnumerable.ReturnEnumerable<int>.DisposableEnumerator, int>(item => ValueEnumerable.Return(item)))
                 count++;
             return count;
         }
@@ -117,7 +117,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
             var count = 0;
             foreach(var item in enumerableReference
                 .AsValueEnumerable()
-                .SelectMany<ValueEnumerable.ReturnEnumerable<int>, ValueEnumerable.ReturnEnumerable<int>.Enumerator, int>(item => ValueEnumerable.Return(item)))
+                .SelectMany<ValueEnumerable.ReturnEnumerable<int>, ValueEnumerable.ReturnEnumerable<int>.DisposableEnumerator, int>(item => ValueEnumerable.Return(item)))
                     count++;
             return count;
         }
@@ -129,7 +129,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
             var count = 0;
             foreach(var item in enumerableValue
                 .AsValueEnumerable<TestEnumerable.Enumerable, TestEnumerable.Enumerable.Enumerator, int>(enumerable => enumerable.GetEnumerator())
-                .SelectMany<ValueEnumerable.ReturnEnumerable<int>, ValueEnumerable.ReturnEnumerable<int>.Enumerator, int>(item => ValueEnumerable.Return(item)))
+                .SelectMany<ValueEnumerable.ReturnEnumerable<int>, ValueEnumerable.ReturnEnumerable<int>.DisposableEnumerator, int>(item => ValueEnumerable.Return(item)))
                     count++;
             return count;
         }

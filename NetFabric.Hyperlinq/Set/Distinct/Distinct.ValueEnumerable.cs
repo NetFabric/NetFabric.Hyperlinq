@@ -15,13 +15,13 @@ namespace NetFabric.Hyperlinq
             this TEnumerable source, 
             IEqualityComparer<TSource> comparer = null)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
-            where TEnumerator : struct, IValueEnumerator<TSource>
+            where TEnumerator : struct, IEnumerator<TSource>
             => new DistinctEnumerable<TEnumerable, TEnumerator, TSource>(source, comparer);
 
         public readonly struct DistinctEnumerable<TEnumerable, TEnumerator, TSource>
             : IValueEnumerable<TSource, DistinctEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator>
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
-            where TEnumerator : struct, IValueEnumerator<TSource>
+            where TEnumerator : struct, IEnumerator<TSource>
         {
             readonly TEnumerable source;
             readonly IEqualityComparer<TSource> comparer;
@@ -32,12 +32,14 @@ namespace NetFabric.Hyperlinq
                 this.comparer = comparer;
             }
 
+            [Pure]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly Enumerator GetEnumerator() => new Enumerator(in this);
-            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => ValueEnumerator.ToEnumerator<TSource, Enumerator>(new Enumerator(in this));
-            readonly IEnumerator IEnumerable.GetEnumerator() => ValueEnumerator.ToEnumerator<TSource, Enumerator>(new Enumerator(in this));
+            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new Enumerator(in this);
+            readonly IEnumerator IEnumerable.GetEnumerator() => new Enumerator(in this);
 
             public struct Enumerator
-                : IValueEnumerator<TSource>
+                : IEnumerator<TSource>
             {
                 [SuppressMessage("Style", "IDE0044:Add readonly modifier")]
                 TEnumerator enumerator; // do not make readonly
@@ -58,6 +60,7 @@ namespace NetFabric.Hyperlinq
                     [MethodImpl(MethodImplOptions.AggressiveInlining)]
                     get => enumerator.Current;
                 }
+                readonly object IEnumerator.Current => enumerator.Current;
 
                 public bool MoveNext()
                 {
@@ -87,6 +90,7 @@ namespace NetFabric.Hyperlinq
                             set.Clear();
                             set = null;
 
+                            Dispose();
                             state = EnumeratorState.Complete;
                             goto case EnumeratorState.Complete;
 
@@ -95,6 +99,10 @@ namespace NetFabric.Hyperlinq
                             return false;
                     }
                 }
+
+                public readonly void Reset() => throw new NotSupportedException();
+
+                public void Dispose() => enumerator.Dispose();
             }
 
             // helper function for optimization of non-lazy operations

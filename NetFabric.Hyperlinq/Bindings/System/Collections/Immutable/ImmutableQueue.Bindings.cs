@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
 using System.Runtime.CompilerServices;
 
@@ -69,7 +68,7 @@ namespace NetFabric.Hyperlinq
             this ImmutableQueue<TSource> source,
             Func<TSource, TSubEnumerable> selector)
             where TSubEnumerable : IValueEnumerable<TResult, TSubEnumerator>
-            where TSubEnumerator : struct, IValueEnumerator<TResult>
+            where TSubEnumerator : struct, IEnumerator<TResult>
             => ValueEnumerable.SelectMany<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource, TSubEnumerable, TSubEnumerator, TResult>(new ValueWrapper<TSource>(source), selector);
 
         [Pure]
@@ -161,7 +160,7 @@ namespace NetFabric.Hyperlinq
         public static Dictionary<TKey, TElement> ToDictionary<TSource, TKey, TElement>(this ImmutableQueue<TSource> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, IEqualityComparer<TKey> comparer)
             => ValueEnumerable.ToDictionary<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource, TKey, TElement>(new ValueWrapper<TSource>(source), keySelector, elementSelector, comparer);
 
-        public readonly struct ValueWrapper<TSource> 
+        public readonly struct ValueWrapper<TSource>
             : IValueEnumerable<TSource, ValueWrapper<TSource>.Enumerator>
         {
             readonly ImmutableQueue<TSource> source;
@@ -173,13 +172,12 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly Enumerator GetEnumerator() => new Enumerator(source);
-            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => ValueEnumerator.ToEnumerator<TSource, Enumerator>(new Enumerator(source));
-            readonly IEnumerator IEnumerable.GetEnumerator() => ValueEnumerator.ToEnumerator<TSource, Enumerator>(new Enumerator(source));
+            IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new Enumerator(source);
+            IEnumerator IEnumerable.GetEnumerator() => new Enumerator(source);
 
             public struct Enumerator
-                : IValueEnumerator<TSource>
+                : IEnumerator<TSource>
             {
-                [SuppressMessage("Style", "IDE0044:Add readonly modifier")]
                 ImmutableQueue<TSource>.Enumerator enumerator;
 
                 internal Enumerator(ImmutableQueue<TSource> enumerable)
@@ -192,9 +190,14 @@ namespace NetFabric.Hyperlinq
                     [MethodImpl(MethodImplOptions.AggressiveInlining)]
                     get => enumerator.Current;
                 }
+                object IEnumerator.Current => enumerator.Current;
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public bool MoveNext() => enumerator.MoveNext();
+
+                readonly void IEnumerator.Reset() => throw new NotSupportedException();
+
+                public void Dispose() { }
             }
         }
     }

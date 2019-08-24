@@ -14,12 +14,12 @@ namespace NetFabric.Hyperlinq.UnitTests
             var expected = System.Linq.Enumerable.Skip(wrapped, count);
 
             // Act
-            var result = ValueReadOnlyList.Skip<Wrap.ValueReadOnlyList<int>, Wrap.ValueEnumerator<int>, int>(wrapped, count);
+            var result = ValueReadOnlyList.Skip<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int>(wrapped, count);
 
             // Assert
             Utils.ValueReadOnlyList.ShouldEqual<
-                ValueReadOnlyList.SkipTakeEnumerable<Wrap.ValueReadOnlyList<int>, Wrap.ValueEnumerator<int>, int>,
-                ValueReadOnlyList.SkipTakeEnumerable<Wrap.ValueReadOnlyList<int>, Wrap.ValueEnumerator<int>, int>.Enumerator,
+                ValueReadOnlyList.SkipTakeEnumerable<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int>,
+                ValueReadOnlyList.SkipTakeEnumerable<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int>.Enumerator,
                 int>(result, expected);
         }
     }

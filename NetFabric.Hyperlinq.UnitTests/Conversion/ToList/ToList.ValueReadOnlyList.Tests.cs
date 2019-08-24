@@ -15,7 +15,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var expected = System.Linq.Enumerable.ToList(wrapped);
 
             // Act
-            var result = ValueReadOnlyList.ToList<Wrap.ValueReadOnlyList<int>, Wrap.ValueEnumerator<int>, int>(wrapped);
+            var result = ValueReadOnlyList.ToList<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int>(wrapped);
 
             // Assert
             result.Should()

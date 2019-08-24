@@ -11,34 +11,34 @@ namespace NetFabric.Hyperlinq
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static TSource First<TEnumerable, TEnumerator, TSource>(this TEnumerable source) 
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
-            where TEnumerator : struct, IValueEnumerator<TSource>
+            where TEnumerator : struct, IEnumerator<TSource>
             => TryFirst<TEnumerable, TEnumerator, TSource>(source).ThrowOnEmpty();
 
         [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static TSource FirstOrDefault<TEnumerable, TEnumerator, TSource>(this TEnumerable source) 
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
-            where TEnumerator : struct, IValueEnumerator<TSource>
+            where TEnumerator : struct, IEnumerator<TSource>
             => TryFirst<TEnumerable, TEnumerator, TSource>(source).DefaultOnEmpty();
 
         [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static TSource First<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, bool> predicate) 
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
-            where TEnumerator : struct, IValueEnumerator<TSource>
+            where TEnumerator : struct, IEnumerator<TSource>
             => TryFirst<TEnumerable, TEnumerator, TSource>(source, predicate).ThrowOnEmpty();
 
         [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static TSource FirstOrDefault<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, bool> predicate) 
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
-            where TEnumerator : struct, IValueEnumerator<TSource>
+            where TEnumerator : struct, IEnumerator<TSource>
             => TryFirst<TEnumerable, TEnumerator, TSource>(source, predicate).DefaultOnEmpty();
 
         [Pure]
         public static (ElementResult Success, TSource Value) TryFirst<TEnumerable, TEnumerator, TSource>(this TEnumerable source) 
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
-            where TEnumerator : struct, IValueEnumerator<TSource>
+            where TEnumerator : struct, IEnumerator<TSource>
         {
             foreach (var item in source)
                 return (ElementResult.Success, item);
@@ -49,7 +49,7 @@ namespace NetFabric.Hyperlinq
         [Pure]
         public static (ElementResult Success, TSource Value) TryFirst<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, bool> predicate) 
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
-            where TEnumerator : struct, IValueEnumerator<TSource>
+            where TEnumerator : struct, IEnumerator<TSource>
         {
             foreach (var item in source)
             {
@@ -63,7 +63,7 @@ namespace NetFabric.Hyperlinq
         [Pure]
         public static (int Index, TSource Value) TryFirst<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, int, bool> predicate) 
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
-            where TEnumerator : struct, IValueEnumerator<TSource>
+            where TEnumerator : struct, IEnumerator<TSource>
         {
             var index = 0;
             foreach (var item in source)

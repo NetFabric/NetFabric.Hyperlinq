@@ -13,8 +13,10 @@ namespace NetFabric.Hyperlinq
         public static ValueEnumerableWrapper<TSource> AsValueEnumerable<TSource>(this TSource[] source)
             => new ValueEnumerableWrapper<TSource>(source);
 
+        [GenericsTypeMapping("TEnumerable", typeof(ValueEnumerableWrapper<>))]
+        [GenericsTypeMapping("TEnumerator", typeof(ValueEnumerableWrapper<>.DisposableEnumerator))]
         public readonly struct ValueEnumerableWrapper<TSource>
-            : IValueReadOnlyList<TSource, ValueEnumerableWrapper<TSource>.Enumerator>
+            : IValueReadOnlyList<TSource, ValueEnumerableWrapper<TSource>.DisposableEnumerator>
         {
             readonly TSource[] source;
 
@@ -23,10 +25,12 @@ namespace NetFabric.Hyperlinq
                 this.source = source;
             }
 
+            [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly Enumerator GetEnumerator() => new Enumerator(source);
-            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => ValueEnumerator.ToEnumerator<TSource, Enumerator>(new Enumerator(source));
-            readonly IEnumerator IEnumerable.GetEnumerator() => ValueEnumerator.ToEnumerator<TSource, Enumerator>(new Enumerator(source));
+            readonly DisposableEnumerator IValueEnumerable<TSource, DisposableEnumerator>.GetEnumerator() => new DisposableEnumerator(source);
+            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new DisposableEnumerator(source);
+            readonly IEnumerator IEnumerable.GetEnumerator() => new DisposableEnumerator(source);
 
             public readonly int Count => source.Length;
 
@@ -34,7 +38,6 @@ namespace NetFabric.Hyperlinq
             readonly TSource IReadOnlyList<TSource>.this[int index] => source[index];
 
             public struct Enumerator
-                : IValueEnumerator<TSource>
             {
                 readonly TSource[] source;
                 readonly int count;
@@ -52,10 +55,39 @@ namespace NetFabric.Hyperlinq
                     [MethodImpl(MethodImplOptions.AggressiveInlining)]
                     get => ref source[index];
                 }
-                readonly TSource IValueEnumerator<TSource>.Current => source[index];
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public bool MoveNext() => ++index < count;
+            }
+
+            public struct DisposableEnumerator
+                : IEnumerator<TSource>
+            {
+                readonly TSource[] source;
+                readonly int count;
+                int index;
+
+                internal DisposableEnumerator(TSource[] source)
+                {
+                    this.source = source;
+                    count = source.Length;
+                    index = -1;
+                }
+
+                public readonly ref readonly TSource Current
+                {
+                    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                    get => ref source[index];
+                }
+                readonly TSource IEnumerator<TSource>.Current => source[index];
+                readonly object IEnumerator.Current => source[index];
+
+                [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                public bool MoveNext() => ++index < count;
+
+                public readonly void Reset() => throw new NotSupportedException();
+
+                public readonly void Dispose() { }
             }
         }
     }

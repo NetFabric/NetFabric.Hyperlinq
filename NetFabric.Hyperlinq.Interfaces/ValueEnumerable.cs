@@ -2,17 +2,11 @@
 
 namespace NetFabric.Hyperlinq
 {
-    public interface IValueEnumerator<out T>
-    {
-        T Current { get; }
-        bool MoveNext();
-    }
-
     public interface IValueEnumerable<out T, TEnumerator>
         : IEnumerable<T>
         where TEnumerator 
         : struct
-        , IValueEnumerator<T>
+        , IEnumerator<T>
     {
         new TEnumerator GetEnumerator();
     }
@@ -22,7 +16,7 @@ namespace NetFabric.Hyperlinq
         , IValueEnumerable<T, TEnumerator>
         where TEnumerator 
         : struct
-        , IValueEnumerator<T>
+        , IEnumerator<T>
     {
     }
 
@@ -31,7 +25,7 @@ namespace NetFabric.Hyperlinq
         , IValueReadOnlyCollection<T, TEnumerator>
         where TEnumerator 
         : struct
-        , IValueEnumerator<T>
+        , IEnumerator<T>
     {
     }
 }

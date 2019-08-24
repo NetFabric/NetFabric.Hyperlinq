@@ -45,9 +45,9 @@ namespace NetFabric.Hyperlinq.Benchmarks
 
                 public bool MoveNext() => ++current < count;
 
-                public void Reset() => throw new NotSupportedException();
+                public readonly void Reset() => throw new NotSupportedException();
 
-                public void Dispose() { }
+                public readonly void Dispose() { }
             }
         }
 

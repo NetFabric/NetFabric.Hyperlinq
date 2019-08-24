@@ -9,7 +9,7 @@ namespace NetFabric.Hyperlinq
         [Pure]
         public static TSource[] ToArray<TEnumerable, TEnumerator, TSource>(this TEnumerable source)
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
-            where TEnumerator : struct, IValueEnumerator<TSource>
+            where TEnumerator : struct, IEnumerator<TSource>
         {
             var array = new TSource[source.Count];
             if (source.Count != 0)

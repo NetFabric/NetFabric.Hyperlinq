@@ -14,7 +14,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var wrapped = Wrap.AsValueEnumerable(source);
 
             // Act
-            Action action = () => ValueEnumerable.First<Wrap.ValueEnumerable<int>, Wrap.ValueEnumerator<int>, int>(wrapped);
+            Action action = () => ValueEnumerable.First<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped);
 
             // Assert
             action.Should()
@@ -30,7 +30,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var wrapped = Wrap.AsValueEnumerable(source);
 
             // Act
-            Action action = () => ValueEnumerable.First<Wrap.ValueEnumerable<int>, Wrap.ValueEnumerator<int>, int>(wrapped, predicate);
+            Action action = () => ValueEnumerable.First<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
 
             // Assert
             action.Should()
@@ -48,7 +48,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var expected = System.Linq.Enumerable.First(wrapped);
 
             // Act
-            var result = ValueEnumerable.First<Wrap.ValueEnumerable<int>, Wrap.ValueEnumerator<int>, int>(wrapped);
+            var result = ValueEnumerable.First<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped);
 
             // Assert
             result.Should().Be(expected);
@@ -64,7 +64,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var expected = System.Linq.Enumerable.First(wrapped, predicate);
 
             // Act
-            var result = ValueEnumerable.First<Wrap.ValueEnumerable<int>, Wrap.ValueEnumerator<int>, int>(wrapped, predicate);
+            var result = ValueEnumerable.First<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
 
             // Assert
             result.Should().Be(expected);

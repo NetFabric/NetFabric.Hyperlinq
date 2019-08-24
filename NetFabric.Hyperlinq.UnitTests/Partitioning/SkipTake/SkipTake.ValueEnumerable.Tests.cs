@@ -14,12 +14,12 @@ namespace NetFabric.Hyperlinq.UnitTests
             var expected = System.Linq.Enumerable.Take(System.Linq.Enumerable.Skip(wrapped, skipCount), takeCount);
 
             // Act
-            var result = ValueEnumerable.SkipTake<Wrap.ValueEnumerable<int>, Wrap.ValueEnumerator<int>, int>(wrapped, skipCount, takeCount);
+            var result = ValueEnumerable.SkipTake<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, skipCount, takeCount);
 
             // Assert
             Utils.ValueEnumerable.ShouldEqual<
-                ValueEnumerable.SkipTakeEnumerable<Wrap.ValueEnumerable<int>, Wrap.ValueEnumerator<int>, int>,
-                ValueEnumerable.SkipTakeEnumerable<Wrap.ValueEnumerable<int>, Wrap.ValueEnumerator<int>, int>.Enumerator,
+                ValueEnumerable.SkipTakeEnumerable<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>,
+                ValueEnumerable.SkipTakeEnumerable<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>.Enumerator,
                 int>(result, expected);
         }
 
@@ -32,12 +32,12 @@ namespace NetFabric.Hyperlinq.UnitTests
             var expected = System.Linq.Enumerable.Take(System.Linq.Enumerable.Take(System.Linq.Enumerable.Skip(wrapped, skipCount), takeCount0), takeCount1);
 
             // Act
-            var result = ValueEnumerable.SkipTake<Wrap.ValueEnumerable<int>, Wrap.ValueEnumerator<int>, int>(wrapped, skipCount, takeCount0).Take(takeCount1);
+            var result = ValueEnumerable.SkipTake<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, skipCount, takeCount0).Take(takeCount1);
 
             // Assert
             Utils.ValueEnumerable.ShouldEqual<
-                ValueEnumerable.SkipTakeEnumerable<Wrap.ValueEnumerable<int>, Wrap.ValueEnumerator<int>, int>,
-                ValueEnumerable.SkipTakeEnumerable<Wrap.ValueEnumerable<int>, Wrap.ValueEnumerator<int>, int>.Enumerator,
+                ValueEnumerable.SkipTakeEnumerable<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>,
+                ValueEnumerable.SkipTakeEnumerable<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>.Enumerator,
                 int>(result, expected);
         }
     }

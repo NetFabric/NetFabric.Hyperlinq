@@ -13,26 +13,50 @@ namespace NetFabric.Hyperlinq
             new EmptyEnumerable<TSource>();
 
         [GenericsTypeMapping("TEnumerable", typeof(EmptyEnumerable<>))]
-        [GenericsTypeMapping("TEnumerator", typeof(EmptyEnumerable<>.Enumerator))]
+        [GenericsTypeMapping("TEnumerator", typeof(EmptyEnumerable<>.DisposableEnumerator))]
         public readonly struct EmptyEnumerable<TSource>
-            : IValueReadOnlyList<TSource, EmptyEnumerable<TSource>.Enumerator>
+            : IValueReadOnlyList<TSource, EmptyEnumerable<TSource>.DisposableEnumerator>
         {
+            [Pure]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly Enumerator GetEnumerator() => new Enumerator();
-            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => ValueEnumerator.ToEnumerator<TSource, Enumerator>(new Enumerator());
-            readonly IEnumerator IEnumerable.GetEnumerator() => ValueEnumerator.ToEnumerator<TSource, Enumerator>(new Enumerator());
+            readonly DisposableEnumerator IValueEnumerable<TSource, DisposableEnumerator>.GetEnumerator() => new DisposableEnumerator();
+            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new DisposableEnumerator();
+            readonly IEnumerator IEnumerable.GetEnumerator() => new DisposableEnumerator();
 
             public readonly int Count => 0;
 
             public readonly TSource this[int index] => ThrowHelper.ThrowIndexOutOfRangeException<TSource>(); 
 
             public readonly struct Enumerator
-                : IValueEnumerator<TSource>
             {
                 public readonly TSource Current
-                    => default;
+                {
+                    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                    get => default;
+                }
 
-                public bool MoveNext()
+                [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                public readonly bool MoveNext() => false;
+            }
+
+            public readonly struct DisposableEnumerator
+                : IEnumerator<TSource>
+            {
+                public readonly TSource Current
+                {
+                    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                    get => default;
+                }
+                readonly object IEnumerator.Current => default;
+
+                [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                public readonly bool MoveNext()
                     => false;
+
+                public readonly void Reset() => throw new NotSupportedException();
+
+                public readonly void Dispose() { }
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]

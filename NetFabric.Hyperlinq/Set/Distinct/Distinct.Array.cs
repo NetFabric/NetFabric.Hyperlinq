@@ -38,12 +38,14 @@ namespace NetFabric.Hyperlinq
                 (this.skipCount, this.takeCount) = Utils.SkipTake(source.Length, skipCount, takeCount);
             }
 
+            [Pure]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly Enumerator GetEnumerator() => new Enumerator(in this);
-            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => ValueEnumerator.ToEnumerator<TSource, Enumerator>(new Enumerator(in this));
-            readonly IEnumerator IEnumerable.GetEnumerator() => ValueEnumerator.ToEnumerator<TSource, Enumerator>(new Enumerator(in this));
+            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new Enumerator(in this);
+            readonly IEnumerator IEnumerable.GetEnumerator() => new Enumerator(in this);
 
             public struct Enumerator
-                : IValueEnumerator<TSource>
+                : IEnumerator<TSource>
             {
                 readonly TSource[] source;
                 readonly HashSet<TSource> set;
@@ -69,6 +71,7 @@ namespace NetFabric.Hyperlinq
                     [MethodImpl(MethodImplOptions.AggressiveInlining)]
                     get => current;
                 }
+                readonly object IEnumerator.Current => current;
 
                 public bool MoveNext()
                 {
@@ -80,9 +83,12 @@ namespace NetFabric.Hyperlinq
                             return true;
                         }
                     }
-
                     return false;
                 }
+
+                public readonly void Reset() => throw new NotSupportedException();
+
+                public readonly void Dispose() { }
             }
 
             // helper function for optimization of non-lazy operations

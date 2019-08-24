@@ -276,9 +276,9 @@ namespace NetFabric.Hyperlinq.Benchmarks
 
                 public bool MoveNext() => ++current < count;
 
-                public void Reset() => throw new NotSupportedException();
+                public readonly void Reset() => throw new NotSupportedException();
 
-                public void Dispose() { }
+                public readonly void Dispose() { }
             }
 
             public struct MyEnumerator : IMyEnumerator<int>
@@ -292,11 +292,11 @@ namespace NetFabric.Hyperlinq.Benchmarks
                     current = -1;
                 }
 
-                public int Current => current;
+                public readonly int Current => current;
 
                 public bool MoveNext() => ++current < count;
 
-                public void Dispose() { }
+                public readonly void Dispose() { }
             }
 
             public struct BenValueEnumerator : IBenValueEnumerator<int>
@@ -321,7 +321,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
                     return default;
                 }
 
-                public void Dispose() { }
+                public readonly void Dispose() { }
             }
 
             public struct MyValueEnumerator : IMyValueEnumerator<int>
@@ -335,11 +335,11 @@ namespace NetFabric.Hyperlinq.Benchmarks
                     current = -1;
                 }
 
-                public int Current => current;
+                public readonly int Current => current;
 
                 public bool MoveNext() => ++current < count;
 
-                public void Dispose() { }
+                public readonly void Dispose() { }
             }
         }
     }

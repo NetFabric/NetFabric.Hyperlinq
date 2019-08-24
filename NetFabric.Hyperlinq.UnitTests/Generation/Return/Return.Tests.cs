@@ -19,7 +19,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             // Assert
             Utils.ValueReadOnlyList.ShouldEqual<
                 ValueEnumerable.ReturnEnumerable<int>,
-                ValueEnumerable.ReturnEnumerable<int>.Enumerator,
+                ValueEnumerable.ReturnEnumerable<int>.DisposableEnumerator,
                 int>(result, expected);
         }
 

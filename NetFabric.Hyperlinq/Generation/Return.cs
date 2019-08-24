@@ -13,9 +13,9 @@ namespace NetFabric.Hyperlinq
             new ReturnEnumerable<TSource>(value);
 
         [GenericsTypeMapping("TEnumerable", typeof(ReturnEnumerable<>))]
-        [GenericsTypeMapping("TEnumerator", typeof(ReturnEnumerable<>.Enumerator))]
+        [GenericsTypeMapping("TEnumerator", typeof(ReturnEnumerable<>.DisposableEnumerator))]
         public readonly struct ReturnEnumerable<TSource>
-            : IValueReadOnlyList<TSource, ReturnEnumerable<TSource>.Enumerator>
+            : IValueReadOnlyList<TSource, ReturnEnumerable<TSource>.DisposableEnumerator>
         {
             internal readonly TSource value;
 
@@ -24,9 +24,12 @@ namespace NetFabric.Hyperlinq
                 this.value = value;
             }
 
+            [Pure]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly Enumerator GetEnumerator() => new Enumerator(in this);
-            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => ValueEnumerator.ToEnumerator<TSource, Enumerator>(new Enumerator(in this));
-            readonly IEnumerator IEnumerable.GetEnumerator() => ValueEnumerator.ToEnumerator<TSource, Enumerator>(new Enumerator(in this));
+            readonly DisposableEnumerator IValueEnumerable<TSource, DisposableEnumerator>.GetEnumerator() => new DisposableEnumerator(in this);
+            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new DisposableEnumerator(in this);
+            readonly IEnumerator IEnumerable.GetEnumerator() => new DisposableEnumerator(in this);
 
             public readonly int Count => 1;
 
@@ -41,7 +44,6 @@ namespace NetFabric.Hyperlinq
             }
 
             public struct Enumerator
-                : IValueEnumerator<TSource>
             {
                 readonly TSource value;
                 bool moveNext;
@@ -52,7 +54,11 @@ namespace NetFabric.Hyperlinq
                     moveNext = true;
                 }
 
-                public readonly TSource Current => value;
+                public readonly TSource Current
+                {
+                    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                    get => value;
+                }
 
                 public bool MoveNext()
                 {
@@ -63,6 +69,40 @@ namespace NetFabric.Hyperlinq
                     }
                     return false;
                 }
+            }
+
+            public struct DisposableEnumerator
+                : IEnumerator<TSource>
+            {
+                readonly TSource value;
+                bool moveNext;
+
+                internal DisposableEnumerator(in ReturnEnumerable<TSource> enumerable)
+                {
+                    value = enumerable.value;
+                    moveNext = true;
+                }
+
+                public readonly TSource Current
+                {
+                    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                    get => value;
+                }
+                readonly object IEnumerator.Current => value;
+
+                public bool MoveNext()
+                {
+                    if (moveNext)
+                    {
+                        moveNext = false;
+                        return true;
+                    }
+                    return false;
+                }
+
+                public readonly void Reset() => throw new NotSupportedException();
+
+                public readonly void Dispose() { }
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]

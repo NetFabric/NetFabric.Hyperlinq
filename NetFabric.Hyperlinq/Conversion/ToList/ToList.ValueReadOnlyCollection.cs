@@ -10,7 +10,7 @@ namespace NetFabric.Hyperlinq
         [Pure]
         public static List<TSource> ToList<TEnumerable, TEnumerator, TSource>(this TEnumerable source)
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
-            where TEnumerator : struct, IValueEnumerator<TSource>
+            where TEnumerator : struct, IEnumerator<TSource>
             => source switch
             {
                 ICollection<TSource> collection => new List<TSource>(collection), // no need to allocate helper class
@@ -22,7 +22,7 @@ namespace NetFabric.Hyperlinq
         sealed class ToListCollection<TEnumerable, TEnumerator, TSource>
             : ICollection<TSource>
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
-            where TEnumerator : struct, IValueEnumerator<TSource>
+            where TEnumerator : struct, IEnumerator<TSource>
         {
             readonly TEnumerable source;
 

@@ -11,7 +11,7 @@ namespace NetFabric.Hyperlinq
         [Pure]
         public static SkipTakeEnumerable<TEnumerable, TEnumerator, TSource> SkipTake<TEnumerable, TEnumerator, TSource>(this TEnumerable source, int skipCount, int takeCount)
             where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
-            where TEnumerator : struct, IValueEnumerator<TSource>
+            where TEnumerator : struct, IEnumerator<TSource>
             => new SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>(in source, skipCount, takeCount);
 
         [GenericsTypeMapping("TEnumerable", typeof(SkipTakeEnumerable<,,>))]
@@ -19,7 +19,7 @@ namespace NetFabric.Hyperlinq
         public readonly struct SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>
             : IValueReadOnlyList<TSource, SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator>
             where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
-            where TEnumerator : struct, IValueEnumerator<TSource>
+            where TEnumerator : struct, IEnumerator<TSource>
         {
             internal readonly TEnumerable source;
             internal readonly int skipCount;
@@ -31,7 +31,11 @@ namespace NetFabric.Hyperlinq
                 (this.skipCount, this.takeCount) = Utils.SkipTake(source.Count, skipCount, takeCount);
             }
 
-            public readonly int Count => takeCount;
+            public readonly int Count
+            {
+                [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                get => takeCount;
+            }
 
             public readonly TSource this[int index]
             {
@@ -44,12 +48,14 @@ namespace NetFabric.Hyperlinq
                 }
             }
 
+            [Pure]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly Enumerator GetEnumerator() => new Enumerator(in this);
-            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => ValueEnumerator.ToEnumerator<TSource, Enumerator>(new Enumerator(in this));
-            readonly IEnumerator IEnumerable.GetEnumerator() => ValueEnumerator.ToEnumerator<TSource, Enumerator>(new Enumerator(in this));
+            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new Enumerator(in this);
+            readonly IEnumerator IEnumerable.GetEnumerator() => new Enumerator(in this);
 
             public struct Enumerator
-                : IValueEnumerator<TSource>
+                : IEnumerator<TSource>
             {
                 readonly TEnumerable source;
                 readonly int end;
@@ -67,9 +73,14 @@ namespace NetFabric.Hyperlinq
                     [MethodImpl(MethodImplOptions.AggressiveInlining)]
                     get => source[index];
                 }
+                readonly object IEnumerator.Current => source[index];
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public bool MoveNext() => ++index < end;
+
+                public readonly void Reset() => throw new NotSupportedException();
+
+                public readonly void Dispose() { }
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -149,13 +160,13 @@ namespace NetFabric.Hyperlinq
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int Count<TEnumerable, TEnumerator, TSource>(this SkipTakeEnumerable<TEnumerable, TEnumerator, TSource> source)
             where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
-            where TEnumerator : struct, IValueEnumerator<TSource>
+            where TEnumerator : struct, IEnumerator<TSource>
             => source.Count;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int Count<TEnumerable, TEnumerator, TSource>(this SkipTakeEnumerable<TEnumerable, TEnumerator, TSource> source, Func<TSource, bool> predicate)
             where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
-            where TEnumerator : struct, IValueEnumerator<TSource>
+            where TEnumerator : struct, IEnumerator<TSource>
         {
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
 
@@ -165,7 +176,7 @@ namespace NetFabric.Hyperlinq
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int Count<TEnumerable, TEnumerator, TSource>(this SkipTakeEnumerable<TEnumerable, TEnumerator, TSource> source, Func<TSource, int, bool> predicate)
             where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
-            where TEnumerator : struct, IValueEnumerator<TSource>
+            where TEnumerator : struct, IEnumerator<TSource>
         {
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
 

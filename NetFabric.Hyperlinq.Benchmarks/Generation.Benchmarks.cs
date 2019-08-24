@@ -117,14 +117,14 @@ namespace NetFabric.Hyperlinq.Benchmarks
                 this.counter = count;
             }
 
-            public int Current => value;
+            public readonly int Current => value;
             readonly object IEnumerator.Current => value;
 
             public bool MoveNext() => counter-- > 0;
 
-            public void Reset() => throw new NotSupportedException();
+            public readonly void Reset() => throw new NotSupportedException();
 
-            public void Dispose() { }
+            public readonly void Dispose() { }
         }
 
     }

@@ -53,7 +53,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             // Assert
             Utils.ValueReadOnlyList.ShouldEqual<
                 ValueEnumerable.RepeatEnumerable<int>,
-                ValueEnumerable.RepeatEnumerable<int>.Enumerator,
+                ValueEnumerable.RepeatEnumerable<int>.DisposableEnumerator,
                 int>(result, expected);
         }
 
@@ -70,7 +70,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             // Assert
             Utils.ValueReadOnlyList.ShouldEqual<
                 ValueEnumerable.RepeatEnumerable<int>,
-                ValueEnumerable.RepeatEnumerable<int>.Enumerator,
+                ValueEnumerable.RepeatEnumerable<int>.DisposableEnumerator,
                 int>(result, expected);
         }
 
@@ -87,7 +87,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             // Assert
             Utils.ValueReadOnlyList.ShouldEqual<
                 ValueEnumerable.RepeatEnumerable<int>,
-                ValueEnumerable.RepeatEnumerable<int>.Enumerator,
+                ValueEnumerable.RepeatEnumerable<int>.DisposableEnumerator,
                 int>(result, expected);
         }
 

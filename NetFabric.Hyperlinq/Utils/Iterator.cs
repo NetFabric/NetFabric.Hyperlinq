@@ -34,7 +34,7 @@ namespace NetFabric.Hyperlinq
 
         public abstract bool MoveNext();
 
-        void IEnumerator.Reset() => ThrowHelper.ThrowNotSupportedException();
+        public void Reset() => ThrowHelper.ThrowNotSupportedException();
 
         public virtual void Dispose()
         {

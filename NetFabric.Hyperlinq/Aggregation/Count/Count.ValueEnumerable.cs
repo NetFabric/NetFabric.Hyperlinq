@@ -9,7 +9,7 @@ namespace NetFabric.Hyperlinq
         [Pure]
         public static int Count<TEnumerable, TEnumerator, TSource>(this TEnumerable source)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
-            where TEnumerator : struct, IValueEnumerator<TSource>
+            where TEnumerator : struct, IEnumerator<TSource>
         {
             var count = 0;
             foreach (var _ in source)
@@ -20,7 +20,7 @@ namespace NetFabric.Hyperlinq
         [Pure]
         public static int Count<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, bool> predicate)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
-            where TEnumerator : struct, IValueEnumerator<TSource>
+            where TEnumerator : struct, IEnumerator<TSource>
         {
             var count = 0;
             foreach (var item in source)
@@ -34,7 +34,7 @@ namespace NetFabric.Hyperlinq
         [Pure]
         public static int Count<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, int, bool> predicate)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
-            where TEnumerator : struct, IValueEnumerator<TSource>
+            where TEnumerator : struct, IEnumerator<TSource>
         {
             var count = 0;
             var index = 0;

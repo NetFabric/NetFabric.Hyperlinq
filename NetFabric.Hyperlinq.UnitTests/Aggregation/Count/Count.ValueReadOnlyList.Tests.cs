@@ -15,7 +15,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var expected = System.Linq.Enumerable.Count(wrapped);
 
             // Act
-            var result = ValueReadOnlyList.Count<Wrap.ValueReadOnlyList<int>, Wrap.ValueEnumerator<int>, int>(wrapped);
+            var result = ValueReadOnlyList.Count<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int>(wrapped);
 
             // Assert
             result.Should().Be(expected);
@@ -30,7 +30,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var expected = System.Linq.Enumerable.Count(wrapped, predicate);
 
             // Act
-            var result = ValueReadOnlyList.Count<Wrap.ValueReadOnlyList<int>, Wrap.ValueEnumerator<int>, int>(wrapped, predicate);
+            var result = ValueReadOnlyList.Count<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
 
             // Assert
             result.Should().Be(expected);
