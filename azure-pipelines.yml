@@ -39,7 +39,7 @@ steps:
   inputs:
     command: 'test'
     projects: 'NetFabric.Hyperlinq.UnitTests/NetFabric.Hyperlinq.UnitTests.csproj'    
-    arguments: '--configuration $(buildConfiguration) /p:CollectCoverage=true /p:Exclude="[xunit.*]*%2c[System.Interactive]*%2c[NetFabric.Hyperlinq.TestData]*" /p:ExcludeByAttribute="Obsolete%2cGeneratedCodeAttribute%2cCompilerGeneratedAttribute" /p:CoverletOutputFormat=cobertura /p:CoverletOutput=$(Build.SourcesDirectory)/TestResults/Coverage/'
+    arguments: '--configuration $(buildConfiguration) /p:CollectCoverage=true /p:Exclude="[xunit.*]*%2c[System.Interactive]*%2c[NetFabric.Hyperlinq.TestData]*%2c[NetFabric.Hyperlinq.Build]*" /p:ExcludeByAttribute="Obsolete%2cGeneratedCodeAttribute%2cCompilerGeneratedAttribute" /p:CoverletOutputFormat=cobertura /p:CoverletOutput=$(Build.SourcesDirectory)/TestResults/Coverage/'
     workingDirectory: 'NetFabric.Hyperlinq.UnitTests'
 - task: DotNetCoreCLI@2
   displayName: Report Generator
