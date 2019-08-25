@@ -193,7 +193,7 @@ namespace NetFabric.Hyperlinq
 
                 public void CopyTo(TSource[] array, int _)
                 {
-                    if (value == null)
+                    if (value is null)
                         return; // no need to initialize
                         
                     for(var index = 0; index < count; index++)
