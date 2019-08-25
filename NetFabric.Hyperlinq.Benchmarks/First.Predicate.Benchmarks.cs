@@ -9,80 +9,80 @@ namespace NetFabric.Hyperlinq.Benchmarks
     [CategoriesColumn]
     [MemoryDiagnoser]
     [MarkdownExporterAttribute.GitHub]
-    public class FirstBenchmarks : BenchmarksBase
+    public class FirstPredicateBenchmarks : BenchmarksBase
     {
         [BenchmarkCategory("Range")]
         [Benchmark(Baseline = true)]
         public int Linq_Range() =>
-            System.Linq.Enumerable.First(linqRange);
+            System.Linq.Enumerable.First(linqRange, _ => true);
 
         [BenchmarkCategory("LinkedList")]
         [Benchmark(Baseline = true)]
         public int Linq_LinkedList() => 
-            System.Linq.Enumerable.First(linkedList);
+            System.Linq.Enumerable.First(linkedList, _ => true);
 
         [BenchmarkCategory("Array")]
         [Benchmark(Baseline = true)]
         public int Linq_Array() =>
-            System.Linq.Enumerable.First(array);
+            System.Linq.Enumerable.First(array, _ => true);
 
         [BenchmarkCategory("List")]
         [Benchmark(Baseline = true)]
         public int Linq_List() =>
-            System.Linq.Enumerable.First(list);
+            System.Linq.Enumerable.First(list, _ => true);
 
         [BenchmarkCategory("Enumerable_Reference")]
         [Benchmark(Baseline = true)]
         public int Linq_Enumerable_Reference() => 
-            System.Linq.Enumerable.First(enumerableReference);
+            System.Linq.Enumerable.First(enumerableReference, _ => true);
 
         [BenchmarkCategory("Enumerable_Value")]
         [Benchmark(Baseline = true)]
         public int Linq_Enumerable_Value() => 
-            System.Linq.Enumerable.First(enumerableValue);
+            System.Linq.Enumerable.First(enumerableValue, _ => true);
 
         [BenchmarkCategory("Array")]
         [Benchmark]
         public int LinqFaster_Array() =>
-            array.FirstF();
+            array.FirstF(_ => true);
 
         [BenchmarkCategory("List")]
         [Benchmark]
         public int LinqFaster_List() =>
-            list.FirstF();
+            list.FirstF(_ => true);
 
         [BenchmarkCategory("Range")]
         [Benchmark]
         public int Hyperlinq_Range() =>
-            hyperlinqRange.First();
+            hyperlinqRange.First(_ => true);
 
         [BenchmarkCategory("LinkedList")]
         [Benchmark]
         public int Hyperlinq_LinkedList() => 
-            linkedList.First();
+            linkedList.First(_ => true);
 
         [BenchmarkCategory("Array")]
         [Benchmark]
         public int Hyperlinq_Array() =>
-            array.First();
+            array.First(_ => true);
 
         [BenchmarkCategory("List")]
         [Benchmark]
         public int Hyperlinq_List() =>
-            list.First();
+            list.First(_ => true);
 
         [BenchmarkCategory("Enumerable_Reference")]
         [Benchmark]
         public int Hyperlinq_Enumerable_Reference() => 
             enumerableReference
             .AsValueEnumerable()
-            .First();
+            .First(_ => true);
 
         [BenchmarkCategory("Enumerable_Value")]
         [Benchmark]
         public int Hyperlinq_Enumerable_Value() => 
             enumerableValue
             .AsValueEnumerable<TestEnumerable.Enumerable, TestEnumerable.Enumerable.Enumerator, int>(enumerable => enumerable.GetEnumerator())
-            .First();
+            .First(_ => true);
     }
 }

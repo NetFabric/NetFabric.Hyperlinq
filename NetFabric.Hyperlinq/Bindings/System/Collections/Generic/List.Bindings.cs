@@ -93,13 +93,13 @@ namespace NetFabric.Hyperlinq
         public static TSource FirstOrDefault<TSource>(this List<TSource> source, Func<TSource, bool> predicate)
             => ValueReadOnlyList.FirstOrDefault<ValueWrapper<TSource>, List<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
         [Pure]
-        public static (ElementResult Success, TSource Value) TryFirst<TSource>(this List<TSource> source)
+        public static Maybe<TSource> TryFirst<TSource>(this List<TSource> source)
             => ValueReadOnlyList.TryFirst<ValueWrapper<TSource>, List<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source));
         [Pure]
-        public static (ElementResult Success, TSource Value) TryFirst<TSource>(this List<TSource> source, Func<TSource, bool> predicate)
+        public static Maybe<TSource> TryFirst<TSource>(this List<TSource> source, Func<TSource, bool> predicate)
             => ValueReadOnlyList.TryFirst<ValueWrapper<TSource>, List<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
         [Pure]
-        public static (int Index, TSource Value) TryFirst<TSource>(this List<TSource> source, Func<TSource, int, bool> predicate)
+        public static MaybeAt<TSource> TryFirst<TSource>(this List<TSource> source, Func<TSource, int, bool> predicate)
             => ValueReadOnlyList.TryFirst<ValueWrapper<TSource>, List<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
 
         [Pure]
@@ -114,15 +114,6 @@ namespace NetFabric.Hyperlinq
         [Pure]
         public static TSource SingleOrDefault<TSource>(this List<TSource> source, Func<TSource, bool> predicate)
             => ValueReadOnlyList.SingleOrDefault<ValueWrapper<TSource>, List<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
-        [Pure]
-        public static (ElementResult Success, TSource Value) TrySingle<TSource>(this List<TSource> source)
-            => ValueReadOnlyList.TrySingle<ValueWrapper<TSource>, List<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source));
-        [Pure]
-        public static (ElementResult Success, TSource Value) TrySingle<TSource>(this List<TSource> source, Func<TSource, bool> predicate)
-            => ValueReadOnlyList.TrySingle<ValueWrapper<TSource>, List<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
-        [Pure]
-        public static (int Index, TSource Value) TrySingle<TSource>(this List<TSource> source, Func<TSource, int, bool> predicate)
-            => ValueReadOnlyList.TrySingle<ValueWrapper<TSource>, List<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
 
         [Pure]
         public static ValueReadOnlyList.DistinctEnumerable<ValueWrapper<TSource>, List<TSource>.Enumerator, TSource> Distinct<TSource>(this List<TSource> source, IEqualityComparer<TSource> comparer = null)

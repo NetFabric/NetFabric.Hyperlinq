@@ -97,9 +97,6 @@ namespace ConsoleApp
   - `FirstOrDefault()`
   - `FirstOrDefault(Func<TSource, bool>)`
   - `FirstOrDefault(Func<TSource, int, bool>)`
-  - `TrySingle()`
-  - `TrySingle(Func<TSource, bool>)`
-  - `TrySingle(Func<TSource, int, bool>)`
   - `Single()`
   - `Single(Func<TSource, bool>)`
   - `Single(Func<TSource, int, bool>)`

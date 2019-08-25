@@ -18,97 +18,59 @@ namespace NetFabric.Hyperlinq
         [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static TValue ThrowOnEmpty<TValue>(this (ElementResult Result, TValue Value) item)
-        {
-            switch (item.Result)
+            => item.Result switch
             {
-                case ElementResult.Empty:
-                    return ThrowHelper.ThrowEmptySequence<TValue>();
-                case ElementResult.NotSingle:
-                    return ThrowHelper.ThrowNotSingleSequence<TValue>();
-                default:
-                    return item.Value;
-            }
-        }
+                ElementResult.Empty => ThrowHelper.ThrowEmptySequence<TValue>(),
+                ElementResult.NotSingle => ThrowHelper.ThrowNotSingleSequence<TValue>(),
+                _ => item.Value,
+            };
 
         [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static TValue ThrowOnEmpty<TValue>(this (int Index, TValue Value) item)
-        {
-            switch (item.Index)
+            => item.Index switch
             {
-                case (int)ElementResult.Empty:
-                    return ThrowHelper.ThrowEmptySequence<TValue>();
-                case (int)ElementResult.NotSingle:
-                    return ThrowHelper.ThrowNotSingleSequence<TValue>();
-                default:
-                    return item.Value;
-            }
-        }
+                (int)ElementResult.Empty => ThrowHelper.ThrowEmptySequence<TValue>(),
+                (int)ElementResult.NotSingle => ThrowHelper.ThrowNotSingleSequence<TValue>(),
+                _ => item.Value,
+            };
 
         /////////////////////////////////////////////////////
 
         [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static TValue DefaultOnEmpty<TValue>(this (ElementResult Result, TValue Value) item)
-        {
-            switch (item.Result)
+            => item.Result switch
             {
-                case ElementResult.Empty:
-                    return default;
-                case ElementResult.NotSingle:
-                    return ThrowHelper.ThrowNotSingleSequence<TValue>();
-                default:
-                    return item.Value;
-            }
-        }
+                ElementResult.Empty => default,
+                ElementResult.NotSingle => ThrowHelper.ThrowNotSingleSequence<TValue>(),
+                _ => item.Value,
+            };
 
         [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static TValue DefaultOnEmpty<TValue>(this (int Index, TValue Value) item)
-        {
-            switch (item.Index)
+            => item.Index switch
             {
-                case (int)ElementResult.Empty:
-                    return default;
-                case (int)ElementResult.NotSingle:
-                    return ThrowHelper.ThrowNotSingleSequence<TValue>();
-                default:
-                    return item.Value;
-            }
-        }
+                (int)ElementResult.Empty => default,
+                (int)ElementResult.NotSingle => ThrowHelper.ThrowNotSingleSequence<TValue>(),
+                _ => item.Value,
+            };
 
         /////////////////////////////////////////////////////
 
         [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static TValue? NullOnEmpty<TValue>(this (ElementResult Result, TValue Value) item)
-            where TValue : struct
-        {
-            switch (item.Result)
+        public static Maybe<TValue> AsMaybe<TValue>(this (ElementResult Result, TValue Value) item)
+            => item.Result switch
             {
-                case ElementResult.Empty:
-                    return null;
-                case ElementResult.NotSingle:
-                    return ThrowHelper.ThrowNotSingleSequence<TValue>();
-                default:
-                    return item.Value;
-            }
-        }
+                ElementResult.Success => new Maybe<TValue>(item.Value),
+                _ => default,
+            };
 
         [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static TValue? NullOnEmpty<TValue>(this (int Index, TValue Value) item) 
-            where TValue : struct
-        {
-            switch (item.Index)
-            {
-                case (int)ElementResult.Empty:
-                    return null;
-                case (int)ElementResult.NotSingle:
-                    return ThrowHelper.ThrowNotSingleSequence<TValue>();
-                default:
-                    return item.Value;
-            }
-        }
+        public static MaybeAt<TValue> AsMaybe<TValue>(this (int Index, TValue Value) item) 
+            => item.Index < 0 ? default : new MaybeAt<TValue>(item.Value, item.Index);
     }
 }

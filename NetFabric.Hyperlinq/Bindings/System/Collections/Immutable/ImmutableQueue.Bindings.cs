@@ -95,13 +95,13 @@ namespace NetFabric.Hyperlinq
         public static TSource FirstOrDefault<TSource>(this ImmutableQueue<TSource> source, Func<TSource, bool> predicate)
             => ValueEnumerable.FirstOrDefault<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
         [Pure]
-        public static (ElementResult Success, TSource Value) TryFirst<TSource>(this ImmutableQueue<TSource> source)
+        public static Maybe<TSource> TryFirst<TSource>(this ImmutableQueue<TSource> source)
             => ValueEnumerable.TryFirst<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source));
         [Pure]
-        public static (ElementResult Success, TSource Value) TryFirst<TSource>(this ImmutableQueue<TSource> source, Func<TSource, bool> predicate)
+        public static Maybe<TSource> TryFirst<TSource>(this ImmutableQueue<TSource> source, Func<TSource, bool> predicate)
             => ValueEnumerable.TryFirst<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
         [Pure]
-        public static (int Index, TSource Value) TryFirst<TSource>(this ImmutableQueue<TSource> source, Func<TSource, int, bool> predicate)
+        public static MaybeAt<TSource> TryFirst<TSource>(this ImmutableQueue<TSource> source, Func<TSource, int, bool> predicate)
             => ValueEnumerable.TryFirst<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
 
         [Pure]
@@ -116,15 +116,6 @@ namespace NetFabric.Hyperlinq
         [Pure]
         public static TSource SingleOrDefault<TSource>(this ImmutableQueue<TSource> source, Func<TSource, bool> predicate)
             => ValueEnumerable.SingleOrDefault<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
-        [Pure]
-        public static (ElementResult Success, TSource Value) TrySingle<TSource>(this ImmutableQueue<TSource> source)
-            => ValueEnumerable.TrySingle<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source));
-        [Pure]
-        public static (ElementResult Success, TSource Value) TrySingle<TSource>(this ImmutableQueue<TSource> source, Func<TSource, bool> predicate)
-            => ValueEnumerable.TrySingle<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
-        [Pure]
-        public static (int Index, TSource Value) TrySingle<TSource>(this ImmutableQueue<TSource> source, Func<TSource, int, bool> predicate)
-            => ValueEnumerable.TrySingle<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
 
         [Pure]
         public static ValueEnumerable.DistinctEnumerable<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource> Distinct<TSource>(this ImmutableQueue<TSource> source, IEqualityComparer<TSource> comparer = null)

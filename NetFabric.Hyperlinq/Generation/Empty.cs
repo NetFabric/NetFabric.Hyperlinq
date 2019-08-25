@@ -154,17 +154,6 @@ namespace NetFabric.Hyperlinq
             public TSource SingleOrDefault(Func<TSource, bool> predicate) => default;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public (bool Success, TSource Value) TrySingle() => (false, default);
-
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public (bool Success, TSource Value) TrySingle(Func<TSource, bool> predicate) 
-                => predicate is null ? ThrowHelper.ThrowArgumentNullException<ValueTuple<bool, TSource>>(nameof(predicate)) : (false, default);
-
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public (int Index, TSource Value) TrySingle(Func<TSource, int, bool> predicate)
-                => predicate is null ? ThrowHelper.ThrowArgumentNullException<ValueTuple<int, TSource>>(nameof(predicate)) : (-1, default);
-
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TSource[] ToArray() => new TSource[0];
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]

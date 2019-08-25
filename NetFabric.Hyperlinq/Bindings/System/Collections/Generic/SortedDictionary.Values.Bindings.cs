@@ -94,13 +94,13 @@ namespace NetFabric.Hyperlinq
         public static TValue FirstOrDefault<TKey, TValue>(this SortedDictionary<TKey, TValue>.ValueCollection source, Func<TValue, bool> predicate)
             => ValueReadOnlyCollection.FirstOrDefault<ValueWrapper<TKey, TValue>, SortedDictionary<TKey, TValue>.ValueCollection.Enumerator, TValue>(new ValueWrapper<TKey, TValue>(source), predicate);
         [Pure]
-        public static (ElementResult Success, TValue Value) TryFirst<TKey, TValue>(this SortedDictionary<TKey, TValue>.ValueCollection source)
+        public static Maybe<TValue> TryFirst<TKey, TValue>(this SortedDictionary<TKey, TValue>.ValueCollection source)
             => ValueReadOnlyCollection.TryFirst<ValueWrapper<TKey, TValue>, SortedDictionary<TKey, TValue>.ValueCollection.Enumerator, TValue>(new ValueWrapper<TKey, TValue>(source));
         [Pure]
-        public static (ElementResult Success, TValue Value) TryFirst<TKey, TValue>(this SortedDictionary<TKey, TValue>.ValueCollection source, Func<TValue, bool> predicate)
+        public static Maybe<TValue> TryFirst<TKey, TValue>(this SortedDictionary<TKey, TValue>.ValueCollection source, Func<TValue, bool> predicate)
             => ValueReadOnlyCollection.TryFirst<ValueWrapper<TKey, TValue>, SortedDictionary<TKey, TValue>.ValueCollection.Enumerator, TValue>(new ValueWrapper<TKey, TValue>(source), predicate);
         [Pure]
-        public static (int Index, TValue Value) TryFirst<TKey, TValue>(this SortedDictionary<TKey, TValue>.ValueCollection source, Func<TValue, int, bool> predicate)
+        public static MaybeAt<TValue> TryFirst<TKey, TValue>(this SortedDictionary<TKey, TValue>.ValueCollection source, Func<TValue, int, bool> predicate)
             => ValueReadOnlyCollection.TryFirst<ValueWrapper<TKey, TValue>, SortedDictionary<TKey, TValue>.ValueCollection.Enumerator, TValue>(new ValueWrapper<TKey, TValue>(source), predicate);
 
         [Pure]
@@ -115,15 +115,6 @@ namespace NetFabric.Hyperlinq
         [Pure]
         public static TValue SingleOrDefault<TKey, TValue>(this SortedDictionary<TKey, TValue>.ValueCollection source, Func<TValue, bool> predicate)
             => ValueReadOnlyCollection.SingleOrDefault<ValueWrapper<TKey, TValue>, SortedDictionary<TKey, TValue>.ValueCollection.Enumerator, TValue>(new ValueWrapper<TKey, TValue>(source), predicate);
-        [Pure]
-        public static (ElementResult Success, TValue Value) TrySingle<TKey, TValue>(this SortedDictionary<TKey, TValue>.ValueCollection source)
-            => ValueReadOnlyCollection.TrySingle<ValueWrapper<TKey, TValue>, SortedDictionary<TKey, TValue>.ValueCollection.Enumerator, TValue>(new ValueWrapper<TKey, TValue>(source));
-        [Pure]
-        public static (ElementResult Success, TValue Value) TrySingle<TKey, TValue>(this SortedDictionary<TKey, TValue>.ValueCollection source, Func<TValue, bool> predicate)
-            => ValueReadOnlyCollection.TrySingle<ValueWrapper<TKey, TValue>, SortedDictionary<TKey, TValue>.ValueCollection.Enumerator, TValue>(new ValueWrapper<TKey, TValue>(source), predicate);
-        [Pure]
-        public static (int Index, TValue Value) TrySingle<TKey, TValue>(this SortedDictionary<TKey, TValue>.ValueCollection source, Func<TValue, int, bool> predicate)
-            => ValueReadOnlyCollection.TrySingle<ValueWrapper<TKey, TValue>, SortedDictionary<TKey, TValue>.ValueCollection.Enumerator, TValue>(new ValueWrapper<TKey, TValue>(source), predicate);
 
         [Pure]
         public static ValueEnumerable.DistinctEnumerable<ValueWrapper<TKey, TValue>, SortedDictionary<TKey, TValue>.ValueCollection.Enumerator, TValue> Distinct<TKey, TValue>(this SortedDictionary<TKey, TValue>.ValueCollection source, IEqualityComparer<TValue> comparer = null)

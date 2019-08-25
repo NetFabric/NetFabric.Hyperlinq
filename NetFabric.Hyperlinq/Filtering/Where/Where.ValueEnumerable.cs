@@ -100,46 +100,39 @@ namespace NetFabric.Hyperlinq
                 => ValueEnumerable.Where<TEnumerable, TEnumerator, TSource>(source, Utils.CombinePredicates(this.predicate, predicate));
 
             public TSource First()
-                => ValueEnumerable.TryFirst<TEnumerable, TEnumerator, TSource>(source, predicate).ThrowOnEmpty();
+                => ValueEnumerable.GetFirst<TEnumerable, TEnumerator, TSource>(source, predicate).ThrowOnEmpty();
             public TSource First(Func<TSource, bool> predicate)
-                => ValueEnumerable.TryFirst<TEnumerable, TEnumerator, TSource>(source, Utils.CombinePredicates(this.predicate, predicate)).ThrowOnEmpty();
+                => ValueEnumerable.GetFirst<TEnumerable, TEnumerator, TSource>(source, Utils.CombinePredicates(this.predicate, predicate)).ThrowOnEmpty();
             public TSource First(Func<TSource, int, bool> predicate)
-                => ValueEnumerable.TryFirst<TEnumerable, TEnumerator, TSource>(source, Utils.CombinePredicates(this.predicate, predicate)).ThrowOnEmpty();
+                => ValueEnumerable.GetFirst<TEnumerable, TEnumerator, TSource>(source, Utils.CombinePredicates(this.predicate, predicate)).ThrowOnEmpty();
 
             public TSource FirstOrDefault()
-                => ValueEnumerable.TryFirst<TEnumerable, TEnumerator, TSource>(source, predicate).DefaultOnEmpty();
+                => ValueEnumerable.GetFirst<TEnumerable, TEnumerator, TSource>(source, predicate).DefaultOnEmpty();
             public TSource FirstOrDefault(Func<TSource, bool> predicate)
-                => ValueEnumerable.TryFirst<TEnumerable, TEnumerator, TSource>(source, Utils.CombinePredicates(this.predicate, predicate)).DefaultOnEmpty();
+                => ValueEnumerable.GetFirst<TEnumerable, TEnumerator, TSource>(source, Utils.CombinePredicates(this.predicate, predicate)).DefaultOnEmpty();
             public TSource FirstOrDefault(Func<TSource, int, bool> predicate)
-                => ValueEnumerable.TryFirst<TEnumerable, TEnumerator, TSource>(source, Utils.CombinePredicates(this.predicate, predicate)).DefaultOnEmpty();
+                => ValueEnumerable.GetFirst<TEnumerable, TEnumerator, TSource>(source, Utils.CombinePredicates(this.predicate, predicate)).DefaultOnEmpty();
 
             public (ElementResult Success, TSource Value) TryFirst()
-                => ValueEnumerable.TryFirst<TEnumerable, TEnumerator, TSource>(source, predicate);
+                => ValueEnumerable.GetFirst<TEnumerable, TEnumerator, TSource>(source, predicate);
             public (ElementResult Success, TSource Value) TryFirst(Func<TSource, bool> predicate)
-                => ValueEnumerable.TryFirst<TEnumerable, TEnumerator, TSource>(source, Utils.CombinePredicates(this.predicate, predicate));
+                => ValueEnumerable.GetFirst<TEnumerable, TEnumerator, TSource>(source, Utils.CombinePredicates(this.predicate, predicate));
             public (int Index, TSource Value) TryFirst(Func<TSource, int, bool> predicate)
-                => ValueEnumerable.TryFirst<TEnumerable, TEnumerator, TSource>(source, Utils.CombinePredicates(this.predicate, predicate));
+                => ValueEnumerable.GetFirst<TEnumerable, TEnumerator, TSource>(source, Utils.CombinePredicates(this.predicate, predicate));
 
             public TSource Single()
-                => ValueEnumerable.TrySingle<TEnumerable, TEnumerator, TSource>(source, predicate).ThrowOnEmpty();
+                => ValueEnumerable.GetSingle<TEnumerable, TEnumerator, TSource>(source, predicate).ThrowOnEmpty();
             public TSource Single(Func<TSource, bool> predicate)
-                => ValueEnumerable.TrySingle<TEnumerable, TEnumerator, TSource>(source, Utils.CombinePredicates(this.predicate, predicate)).ThrowOnEmpty();
+                => ValueEnumerable.GetSingle<TEnumerable, TEnumerator, TSource>(source, Utils.CombinePredicates(this.predicate, predicate)).ThrowOnEmpty();
             public TSource Single(Func<TSource, int, bool> predicate)
-                => ValueEnumerable.TrySingle<TEnumerable, TEnumerator, TSource>(source, Utils.CombinePredicates(this.predicate, predicate)).ThrowOnEmpty();
+                => ValueEnumerable.GetSingle<TEnumerable, TEnumerator, TSource>(source, Utils.CombinePredicates(this.predicate, predicate)).ThrowOnEmpty();
 
             public TSource SingleOrDefault()
-                => ValueEnumerable.TrySingle<TEnumerable, TEnumerator, TSource>(source, predicate).DefaultOnEmpty();
+                => ValueEnumerable.GetSingle<TEnumerable, TEnumerator, TSource>(source, predicate).DefaultOnEmpty();
             public TSource SingleOrDefault(Func<TSource, bool> predicate)
-                => ValueEnumerable.TrySingle<TEnumerable, TEnumerator, TSource>(source, Utils.CombinePredicates(this.predicate, predicate)).DefaultOnEmpty();
+                => ValueEnumerable.GetSingle<TEnumerable, TEnumerator, TSource>(source, Utils.CombinePredicates(this.predicate, predicate)).DefaultOnEmpty();
             public TSource SingleOrDefault(Func<TSource, int, bool> predicate)
-                => ValueEnumerable.TrySingle<TEnumerable, TEnumerator, TSource>(source, Utils.CombinePredicates(this.predicate, predicate)).DefaultOnEmpty();
-
-            public (ElementResult Success, TSource Value) TrySingle()
-                => ValueEnumerable.TrySingle<TEnumerable, TEnumerator, TSource>(source, predicate);
-            public (ElementResult Success, TSource Value) TrySingle(Func<TSource, bool> predicate)
-                => ValueEnumerable.TrySingle<TEnumerable, TEnumerator, TSource>(source, Utils.CombinePredicates(this.predicate, predicate));
-            public (int Index, TSource Value) TrySingle(Func<TSource, int, bool> predicate)
-                => ValueEnumerable.TrySingle<TEnumerable, TEnumerator, TSource>(source, Utils.CombinePredicates(this.predicate, predicate));
+                => ValueEnumerable.GetSingle<TEnumerable, TEnumerator, TSource>(source, Utils.CombinePredicates(this.predicate, predicate)).DefaultOnEmpty();
 
             public List<TSource> ToList()
                 => ValueEnumerable.ToList<TEnumerable, TEnumerator, TSource>(source, predicate);
