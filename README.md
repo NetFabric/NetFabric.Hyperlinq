@@ -88,6 +88,15 @@ namespace ConsoleApp
   - `ToDictionary(Func<TSource, TKey>, Func<TSource, TElement>)`
   - `ToDictionary(Func<TSource, TKey>, Func<TSource, TElement>, IEqualityComparer<TKey>)`
 - Element
+  - `TryElementAt()`
+  - `TryElementAt(Func<TSource, bool>)`
+  - `TryElementAt(Func<TSource, int, bool>)`
+  - `ElementAt()`
+  - `ElementAt(Func<TSource, bool>)`
+  - `ElementAt(Func<TSource, int, bool>)`
+  - `ElementAtOrDefault()`
+  - `ElementAtOrDefault(Func<TSource, bool>)`
+  - `ElementAtOrDefault(Func<TSource, int, bool>)`
   - `TryFirst()`
   - `TryFirst(Func<TSource, bool>)`
   - `TryFirst(Func<TSource, int, bool>)`
