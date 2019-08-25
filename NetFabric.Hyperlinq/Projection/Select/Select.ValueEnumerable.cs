@@ -96,6 +96,19 @@ namespace NetFabric.Hyperlinq
                 => ValueEnumerable.Select<TEnumerable, TEnumerator, TSource, TSelectorResult>(source, Utils.CombineSelectors(this.selector, selector));
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public TResult ElementAt(int index)
+                => selector(ValueEnumerable.ElementAt<TEnumerable, TEnumerator, TSource>(source, index));
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public TResult ElementAtOrDefault(int index)
+                => selector(ValueEnumerable.ElementAtOrDefault<TEnumerable, TEnumerator, TSource>(source, index));
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public Maybe<TResult> TryElementAt(int index)
+            {
+                var item = ValueEnumerable.TryElementAt<TEnumerable, TEnumerator, TSource>(source, index);
+                return item.HasValue ? new Maybe<TResult>(selector(item.Value)) : default;
+            }
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TResult First()
                 => selector(ValueEnumerable.First<TEnumerable, TEnumerator, TSource>(source));
 

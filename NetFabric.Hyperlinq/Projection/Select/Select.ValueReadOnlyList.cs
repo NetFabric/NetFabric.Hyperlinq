@@ -125,6 +125,19 @@ namespace NetFabric.Hyperlinq
                 => ValueReadOnlyList.Select<TEnumerable, TEnumerator, TSource, TSelectorResult>(source, Utils.CombineSelectors(this.selector, selector), skipCount, takeCount);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public TResult ElementAt(int index)
+                => selector(ValueReadOnlyList.ElementAt<TEnumerable, TEnumerator, TSource>(source, index, skipCount, takeCount));
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public TResult ElementAtOrDefault(int index)
+                => selector(ValueReadOnlyList.ElementAtOrDefault<TEnumerable, TEnumerator, TSource>(source, index, skipCount, takeCount));
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public Maybe<TResult> TryElementAt(int index)
+            {
+                var item = ValueReadOnlyList.TryElementAt<TEnumerable, TEnumerator, TSource>(source, index, skipCount, takeCount);
+                return item.HasValue ? new Maybe<TResult>(selector(item.Value)) : default;
+            }
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TResult First()
                 => selector(ValueReadOnlyList.GetFirst<TEnumerable, TEnumerator, TSource>(source, skipCount, takeCount).ThrowOnEmpty());
 
