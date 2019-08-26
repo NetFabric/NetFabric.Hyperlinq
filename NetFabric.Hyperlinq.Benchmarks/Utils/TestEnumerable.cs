@@ -39,14 +39,14 @@ namespace NetFabric.Hyperlinq.Benchmarks
                     current = -1;
                 }
 
-                public readonly int Current => current;
-                readonly object IEnumerator.Current => current;
+                public int Current => current;
+                object IEnumerator.Current => current;
 
                 public bool MoveNext() => ++current < count;
 
-                public readonly void Reset() => throw new NotSupportedException();
+                public void Reset() => throw new NotSupportedException();
 
-                public readonly void Dispose() { }
+                public void Dispose() { }
             }
         }
     }

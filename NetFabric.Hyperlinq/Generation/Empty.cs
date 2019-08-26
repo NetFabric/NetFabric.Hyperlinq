@@ -107,6 +107,15 @@ namespace NetFabric.Hyperlinq
                 => predicate is null ? ThrowHelper.ThrowArgumentNullException<EmptyEnumerable<TSource>>(nameof(predicate)) : this;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public TSource ElementAt(int index) => ThrowHelper.ThrowArgumentOutOfRangeException<TSource>(nameof(index));
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public TSource ElementAtOrDefault(int index) => default;
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public Maybe<TSource> TryElementAt(int index) => default;
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TSource First() => ThrowHelper.ThrowEmptySequence<TSource>();
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]

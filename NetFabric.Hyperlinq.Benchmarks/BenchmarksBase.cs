@@ -16,13 +16,13 @@ namespace NetFabric.Hyperlinq.Benchmarks
         protected IEnumerable<int> enumerableReference;
         protected TestEnumerable.Enumerable enumerableValue;
 
-        protected IReadOnlyCollection<int> collectionReference;
-        protected TestReadOnlyCollection.EnumerableValueType collectionValue;
+        protected TestCollection.EnumerableReferenceType collectionReference;
+        protected TestCollection.EnumerableValueType collectionValue;
 
-        protected IReadOnlyList<int> listReference;
-        protected TestReadOnlyList.EnumerableValueType listValue;
+        protected TestList.EnumerableReferenceType listReference;
+        protected TestList.EnumerableValueType listValue;
 
-        [Params(0, 10, 10_000)]
+        [Params(10_000)]
         public int Count { get; set; }
 
         [GlobalSetup]
@@ -38,11 +38,11 @@ namespace NetFabric.Hyperlinq.Benchmarks
             enumerableReference = TestEnumerable.ReferenceType(Count);
             enumerableValue = TestEnumerable.ValueType(Count);
 
-            collectionReference = TestReadOnlyCollection.ReferenceType(Count);
-            collectionValue = TestReadOnlyCollection.ValueType(Count);
+            collectionReference = TestCollection.ReferenceType(Count);
+            collectionValue = TestCollection.ValueType(Count);
 
-            listReference = TestReadOnlyList.ReferenceType(Count);
-            listValue = TestReadOnlyList.ValueType(Count);
+            listReference = TestList.ReferenceType(Count);
+            listValue = TestList.ValueType(Count);
         }
     }
 }
