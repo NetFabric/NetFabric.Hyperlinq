@@ -11,83 +11,88 @@ namespace NetFabric.Hyperlinq.Benchmarks
     [MarkdownExporterAttribute.GitHub]
     public class ContainsComparerBenchmarks : BenchmarksBase, IEqualityComparer<int>
     {
-        [BenchmarkCategory("Range")]
-        [Benchmark(Baseline = true)]
-        public bool Linq_Range() =>
-            System.Linq.Enumerable.Contains(linqRange, Count - 1, this);
-
-        [BenchmarkCategory("LinkedList")]
-        [Benchmark(Baseline = true)]
-        public bool Linq_LinkedList() => 
-            System.Linq.Enumerable.Contains(linkedList, Count - 1, this);
-
         [BenchmarkCategory("Array")]
         [Benchmark(Baseline = true)]
         public bool Linq_Array() =>
             System.Linq.Enumerable.Contains(array, Count - 1, this);
 
-        [BenchmarkCategory("List")]
+        [BenchmarkCategory("Enumerable_Value")]
         [Benchmark(Baseline = true)]
-        public bool Linq_List() => 
-            System.Linq.Enumerable.Contains(list, Count - 1, this);
+        public bool Linq_Enumerable_Value() =>
+            System.Linq.Enumerable.Contains(enumerableValue, Count - 1, this);
+
+        [BenchmarkCategory("Collection_Value")]
+        [Benchmark(Baseline = true)]
+        public bool Linq_Collection_Value() =>
+            System.Linq.Enumerable.Contains(collectionValue, Count - 1, this);
+
+        [BenchmarkCategory("List_Value")]
+        [Benchmark(Baseline = true)]
+        public bool Linq_List_Value() =>
+            System.Linq.Enumerable.Contains(listValue, Count - 1, this);
 
         [BenchmarkCategory("Enumerable_Reference")]
         [Benchmark(Baseline = true)]
-        public bool Linq_Enumerable_Reference() => 
+        public bool Linq_Enumerable_Reference() =>
             System.Linq.Enumerable.Contains(enumerableReference, Count - 1, this);
 
-        [BenchmarkCategory("Enumerable_Value")]
+        [BenchmarkCategory("Collection_Reference")]
         [Benchmark(Baseline = true)]
-        public bool Linq_Enumerable_Value() => 
-            System.Linq.Enumerable.Contains(enumerableValue, Count - 1, this);
+        public bool Linq_Collection_Reference() =>
+            System.Linq.Enumerable.Contains(collectionReference, Count - 1, this);
+
+        [BenchmarkCategory("List_Reference")]
+        [Benchmark(Baseline = true)]
+        public bool Linq_List_Reference() =>
+            System.Linq.Enumerable.Contains(listReference, Count - 1, this);
 
         [BenchmarkCategory("Array")]
         [Benchmark]
         public bool LinqFaster_Array() =>
             array.ContainsF(Count - 1, this);
 
-        [BenchmarkCategory("List")]
-        [Benchmark]
-        public bool LinqFaster_List() =>
-            list.ContainsF(Count - 1, this);
-
-        [BenchmarkCategory("List")]
-        [Benchmark]
-        public bool System_List() =>
-            list.Contains(Count - 1, this);
-
-        [BenchmarkCategory("Range")]
-        [Benchmark]
-        public bool Hyperlinq_Range() =>
-            hyperlinqRange.Contains(Count - 1, this);
-
-        [BenchmarkCategory("LinkedList")]
-        [Benchmark]
-        public bool Hyperlinq_LinkedList() => 
-            linkedList.Contains(Count - 1, this);
-
         [BenchmarkCategory("Array")]
         [Benchmark]
         public bool Hyperlinq_Array() =>
             array.Contains(Count - 1, this);
 
-        [BenchmarkCategory("List")]
+        [BenchmarkCategory("Enumerable_Value")]
         [Benchmark]
-        public bool Hyperlinq_List() =>
-            list.Contains(Count - 1, this);
+        public bool Hyperlinq_Enumerable_Value() =>
+            Enumerable.AsValueEnumerable<TestEnumerable.Enumerable, TestEnumerable.Enumerable.Enumerator, int>(enumerableValue, enumerable => enumerable.GetEnumerator())
+            .Contains(Count - 1, this);
+
+        [BenchmarkCategory("Collection_Value")]
+        [Benchmark]
+        public bool Hyperlinq_Collection_Value() =>
+            ReadOnlyCollection.AsValueEnumerable<TestCollection.Enumerable, TestCollection.Enumerable.Enumerator, int>(collectionValue, enumerable => enumerable.GetEnumerator())
+            .Contains(Count - 1, this);
+
+        [BenchmarkCategory("List_Value")]
+        [Benchmark]
+        public bool Hyperlinq_List_Value() =>
+            ReadOnlyList.AsValueEnumerable<TestList.Enumerable, TestList.Enumerable.Enumerator, int>(listValue, enumerable => enumerable.GetEnumerator())
+            .Contains(Count - 1, this);
 
         [BenchmarkCategory("Enumerable_Reference")]
         [Benchmark]
-        public bool Hyperlinq_Enumerable_Reference() => 
+        public bool Hyperlinq_Enumerable_Reference() =>
             enumerableReference
             .AsValueEnumerable()
             .Contains(Count - 1, this);
 
-        [BenchmarkCategory("Enumerable_Value")]
+        [BenchmarkCategory("Collection_Reference")]
         [Benchmark]
-        public bool Hyperlinq_Enumerable_Value() => 
-            enumerableValue
-            .AsValueEnumerable<TestEnumerable.Enumerable, TestEnumerable.Enumerable.Enumerator, int>(enumerable => enumerable.GetEnumerator())
+        public bool Hyperlinq_Collection_Reference() =>
+            collectionReference
+            .AsValueEnumerable()
+            .Contains(Count - 1, this);
+
+        [BenchmarkCategory("List_Reference")]
+        [Benchmark]
+        public bool Hyperlinq_List_Reference() =>
+            listReference
+            .AsValueEnumerable()
             .Contains(Count - 1, this);
 
         public bool Equals(int x, int y) 

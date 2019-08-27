@@ -15,7 +15,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
     {
         RangeEnumerable source;
 
-        [Params(0, 1_000, 100_000)]
+        [Params(10_000)]
         public int Count { get; set; }
 
         [GlobalSetup]
@@ -37,12 +37,12 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [BenchmarkCategory("Count")]
         [Benchmark]
         public int MyEnumerator() => 
-            CountMyEnumerable<RangeEnumerable, RangeEnumerable.MyEnumerator, int>(source);
+            CountMyEnumerable<RangeEnumerable, RangeEnumerable.Enumerator, int>(source);
 
         [BenchmarkCategory("Count_Predicate")]
         [Benchmark]
         public int MyEnumerator_Predicate() => 
-            CountMyEnumerable<RangeEnumerable, RangeEnumerable.MyEnumerator, int>(source, _ => true);
+            CountMyEnumerable<RangeEnumerable, RangeEnumerable.Enumerator, int>(source, _ => true);
 
         [BenchmarkCategory("Count")]
         [Benchmark]
@@ -69,65 +69,47 @@ namespace NetFabric.Hyperlinq.Benchmarks
             where TEnumerator : IEnumerator<TSource>
         {
             var count = 0;
-            using(var enumerator = (TEnumerator)source.GetEnumerator())
+            foreach (var item in source)
             {
-                while (enumerator.MoveNext())
-                    count++;
+                count++;
             }
             return count;
-        }        
+        }
 
         static int CountEnumerable<TEnumerable, TEnumerator, TSource>(TEnumerable source, Func<TSource, bool> predicate)
             where TEnumerable : IEnumerable<TSource>
             where TEnumerator : IEnumerator<TSource>
         {
             var count = 0;
-            using(var enumerator = (TEnumerator)source.GetEnumerator())
+            foreach (var item in source)
             {
-                while (enumerator.MoveNext())
-                {
-                    if (predicate(enumerator.Current))
-                        count++;
-                }
+                if (predicate(item))
+                    count++;
             }
             return count;
-        }        
+        }
 
         static int CountMyEnumerable<TEnumerable, TEnumerator, TSource>(TEnumerable source)
             where TEnumerable : IMyEnumerable<TSource>
-            where TEnumerator : IMyEnumerator<TSource>
+            where TEnumerator : IEnumerator<TSource>
         {
             var count = 0;
-            var enumerator = (TEnumerator)source.GetEnumerator();
-            try
+            foreach (var item in source)
             {
-                while (enumerator.MoveNext())
-                    count++;
-            }
-            finally
-            {
-                enumerator.Dispose();
+                count++;
             }
             return count;
-        }        
+        }
 
         static int CountMyEnumerable<TEnumerable, TEnumerator, TSource>(TEnumerable source, Func<TSource, bool> predicate)
             where TEnumerable : IMyEnumerable<TSource>
-            where TEnumerator : IMyEnumerator<TSource>
+            where TEnumerator : IEnumerator<TSource>
         {
             var count = 0;
-            var enumerator = (TEnumerator)source.GetEnumerator();
-            try
+            foreach (var item in source)
             {
-                while (enumerator.MoveNext())
-                {
-                    if (predicate(enumerator.Current))
-                        count++;
-                }
-            }
-            finally
-            {
-                enumerator.Dispose();
+                if (predicate(item))
+                    count++;
             }
             return count;
         }        
@@ -193,15 +175,9 @@ namespace NetFabric.Hyperlinq.Benchmarks
             return count;
         }
 
-        public interface IMyEnumerator<T> : IDisposable
-        {
-            T Current { get; }
-            bool MoveNext();
-        }
-
         public interface IMyEnumerable<T>
         {
-            IMyEnumerator<T> GetEnumerator();
+            IEnumerator<T> GetEnumerator();
         }
 
         public interface IBenValueEnumerator : IDisposable
@@ -254,7 +230,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
             readonly IEnumerator<int> IEnumerable<int>.GetEnumerator() => new Enumerator(count);
             readonly IEnumerator IEnumerable.GetEnumerator() => new Enumerator(count);
 
-            readonly IMyEnumerator<int> IMyEnumerable<int>.GetEnumerator() => new MyEnumerator(count);
+            readonly IEnumerator<int> IMyEnumerable<int>.GetEnumerator() => new Enumerator(count);
 
             readonly BenValueEnumerator IBenValueEnumerable<int, RangeEnumerable.BenValueEnumerator>.GetEnumerator() => new BenValueEnumerator(count);
 
@@ -277,24 +253,6 @@ namespace NetFabric.Hyperlinq.Benchmarks
                 public bool MoveNext() => ++current < count;
 
                 public readonly void Reset() => throw new NotSupportedException();
-
-                public readonly void Dispose() { }
-            }
-
-            public struct MyEnumerator : IMyEnumerator<int>
-            {
-                readonly int count;
-                int current;
-
-                internal MyEnumerator(int count)
-                {
-                    this.count = count;
-                    current = -1;
-                }
-
-                public readonly int Current => current;
-
-                public bool MoveNext() => ++current < count;
 
                 public readonly void Dispose() { }
             }

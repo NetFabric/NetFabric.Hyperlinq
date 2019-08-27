@@ -6,17 +6,17 @@ namespace NetFabric.Hyperlinq.Benchmarks
 {
     public static class TestList
     {
-        public static EnumerableReferenceType ReferenceType(int count)
+        public static IReadOnlyList<int> ReferenceType(int count)
             => new EnumerableReferenceType(count);
 
-        public static EnumerableValueType ValueType(int count) 
-            => new EnumerableValueType(count);
+        public static Enumerable ValueType(int count) 
+            => new Enumerable(count);
 
-        public readonly struct EnumerableValueType : IReadOnlyList<int>, IList<int>
+        public readonly struct Enumerable : IReadOnlyList<int>, IList<int>
         {
             readonly int count;
 
-            public EnumerableValueType(int count)
+            public Enumerable(int count)
             {
                 this.count = count;
             }
@@ -75,7 +75,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
             }
         }
 
-        public class EnumerableReferenceType : IReadOnlyList<int>, IList<int>
+        class EnumerableReferenceType : IReadOnlyList<int>, IList<int>
         {
             readonly int count;
 
@@ -112,11 +112,10 @@ namespace NetFabric.Hyperlinq.Benchmarks
                     array[arrayIndex + item] = item;
             }
 
-            public Enumerator GetEnumerator() => new Enumerator(count);
-            IEnumerator<int> IEnumerable<int>.GetEnumerator() => new Enumerator(count);
+            public IEnumerator<int> GetEnumerator() => new Enumerator(count);
             IEnumerator IEnumerable.GetEnumerator() => new Enumerator(count);
 
-            public class Enumerator : IEnumerator<int>
+            class Enumerator : IEnumerator<int>
             {
                 readonly int count;
                 int current;

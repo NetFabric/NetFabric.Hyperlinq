@@ -9,90 +9,90 @@ namespace NetFabric.Hyperlinq.Benchmarks
     [CategoriesColumn]
     [MemoryDiagnoser]
     [MarkdownExporterAttribute.GitHub]
-    public class AllBenchmarks : BenchmarksBase
+    public class SingleOrDefaultPredicateBenchmarks : BenchmarksBase
     {
         [BenchmarkCategory("Array")]
         [Benchmark(Baseline = true)]
-        public bool Linq_Array() =>
-        System.Linq.Enumerable.All(array, _ => true);
+        public int Linq_Array() =>
+            System.Linq.Enumerable.SingleOrDefault(array, item => item == Count - 1);
 
         [BenchmarkCategory("Enumerable_Value")]
         [Benchmark(Baseline = true)]
-        public bool Linq_Enumerable_Value() =>
-            System.Linq.Enumerable.All(enumerableValue, _ => true);
+        public int Linq_Enumerable_Value() =>
+            System.Linq.Enumerable.SingleOrDefault(enumerableValue, item => item == Count - 1);
 
         [BenchmarkCategory("Collection_Value")]
         [Benchmark(Baseline = true)]
-        public bool Linq_Collection_Value() =>
-            System.Linq.Enumerable.All(collectionValue, _ => true);
+        public int Linq_Collection_Value() =>
+            System.Linq.Enumerable.SingleOrDefault(collectionValue, item => item == Count - 1);
 
         [BenchmarkCategory("List_Value")]
         [Benchmark(Baseline = true)]
-        public bool Linq_List_Value() =>
-            System.Linq.Enumerable.All(listValue, _ => true);
+        public int Linq_List_Value() =>
+            System.Linq.Enumerable.SingleOrDefault(listValue, item => item == Count - 1);
 
         [BenchmarkCategory("Enumerable_Reference")]
         [Benchmark(Baseline = true)]
-        public bool Linq_Enumerable_Reference() =>
-            System.Linq.Enumerable.All(enumerableReference, _ => true);
+        public int Linq_Enumerable_Reference() =>
+            System.Linq.Enumerable.SingleOrDefault(enumerableReference, item => item == Count - 1);
 
         [BenchmarkCategory("Collection_Reference")]
         [Benchmark(Baseline = true)]
-        public bool Linq_Collection_Reference() =>
-            System.Linq.Enumerable.All(collectionReference, _ => true);
+        public int Linq_Collection_Reference() =>
+            System.Linq.Enumerable.SingleOrDefault(collectionReference, item => item == Count - 1);
 
         [BenchmarkCategory("List_Reference")]
         [Benchmark(Baseline = true)]
-        public bool Linq_List_Reference() =>
-            System.Linq.Enumerable.All(listReference, _ => true);
+        public int Linq_List_Reference() =>
+            System.Linq.Enumerable.SingleOrDefault(listReference, item => item == Count - 1);
 
         [BenchmarkCategory("Array")]
         [Benchmark]
-        public bool LinqFaster_Array() =>
-            array.AllF(_ => true);
+        public int LinqFaster_Array() =>
+            array.SingleOrDefaultF(item => item == Count - 1);
 
         [BenchmarkCategory("Array")]
         [Benchmark]
-        public bool Hyperlinq_Array() =>
-            array.All(_ => true);
+        public int Hyperlinq_Array() =>
+            array.SingleOrDefault(item => item == Count - 1);
 
         [BenchmarkCategory("Enumerable_Value")]
         [Benchmark]
-        public bool Hyperlinq_Enumerable_Value() =>
+        public int Hyperlinq_Enumerable_Value() =>
             Enumerable.AsValueEnumerable<TestEnumerable.Enumerable, TestEnumerable.Enumerable.Enumerator, int>(enumerableValue, enumerable => enumerable.GetEnumerator())
-            .All(_ => true);
+            .SingleOrDefault(item => item == Count - 1);
 
         [BenchmarkCategory("Collection_Value")]
         [Benchmark]
-        public bool Hyperlinq_Collection_Value() =>
+        public int Hyperlinq_Collection_Value() =>
             ReadOnlyCollection.AsValueEnumerable<TestCollection.Enumerable, TestCollection.Enumerable.Enumerator, int>(collectionValue, enumerable => enumerable.GetEnumerator())
-            .All(_ => true);
+            .SingleOrDefault(item => item == Count - 1);
 
         [BenchmarkCategory("List_Value")]
         [Benchmark]
-        public bool Hyperlinq_List_Value() =>
+        public int Hyperlinq_List_Value() =>
             ReadOnlyList.AsValueEnumerable<TestList.Enumerable, TestList.Enumerable.Enumerator, int>(listValue, enumerable => enumerable.GetEnumerator())
-            .All(_ => true);
+            .SingleOrDefault(item => item == Count - 1);
 
         [BenchmarkCategory("Enumerable_Reference")]
         [Benchmark]
-        public bool Hyperlinq_Enumerable_Reference() =>
+        public int Hyperlinq_Enumerable_Reference() =>
             enumerableReference
             .AsValueEnumerable()
-            .All(_ => true);
+            .SingleOrDefault(item => item == Count - 1);
 
         [BenchmarkCategory("Collection_Reference")]
         [Benchmark]
-        public bool Hyperlinq_Collection_Reference() =>
+        public int Hyperlinq_Collection_Reference() =>
             collectionReference
             .AsValueEnumerable()
-            .All(_ => true);
+            .SingleOrDefault(item => item == Count - 1);
 
         [BenchmarkCategory("List_Reference")]
         [Benchmark]
-        public bool Hyperlinq_List_Reference() =>
+        public int Hyperlinq_List_Reference() =>
             listReference
             .AsValueEnumerable()
-            .All(_ => true);
+            .SingleOrDefault(item => item == Count - 1);
     }
 }

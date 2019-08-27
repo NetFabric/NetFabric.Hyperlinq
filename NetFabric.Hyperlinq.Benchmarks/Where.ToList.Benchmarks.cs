@@ -1,6 +1,6 @@
+using System.Collections.Generic;
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Configs;
-using System.Collections.Generic;
 
 namespace NetFabric.Hyperlinq.Benchmarks
 {
@@ -10,70 +10,83 @@ namespace NetFabric.Hyperlinq.Benchmarks
     [MarkdownExporterAttribute.GitHub]
     public class WhereToListBenchmarks : BenchmarksBase
     {
-        [BenchmarkCategory("Range")]
-        [Benchmark(Baseline = true)]
-        public List<int> Linq_Range()
-            => System.Linq.Enumerable.ToList(System.Linq.Enumerable.Where(linqRange, _ => true));
-
-        [BenchmarkCategory("LinkedList")]
-        [Benchmark(Baseline = true)]
-        public List<int> Linq_LinkedList()
-            => System.Linq.Enumerable.ToList(System.Linq.Enumerable.Where(linkedList, _ => true));
-
         [BenchmarkCategory("Array")]
         [Benchmark(Baseline = true)]
-        public List<int> Linq_Array()
-            => System.Linq.Enumerable.ToList(System.Linq.Enumerable.Where(array, _ => true));
-
-        [BenchmarkCategory("List")]
-        [Benchmark(Baseline = true)]
-        public List<int> Linq_List()
-            => System.Linq.Enumerable.ToList(System.Linq.Enumerable.Where(list, _ => true));
-
-        [BenchmarkCategory("Enumerable_Reference")]
-        [Benchmark(Baseline = true)]
-        public List<int> Linq_Enumerable_Reference()
-            => System.Linq.Enumerable.ToList(System.Linq.Enumerable.Where(enumerableReference, _ => true));
+        public List<int> Linq_Array() =>
+            System.Linq.Enumerable.ToList(System.Linq.Enumerable.Where(array, _ => true));
 
         [BenchmarkCategory("Enumerable_Value")]
         [Benchmark(Baseline = true)]
-        public List<int> Linq_Enumerable_Value()
-            => System.Linq.Enumerable.ToList(System.Linq.Enumerable.Where(enumerableValue, _ => true));
+        public List<int> Linq_Enumerable_Value() =>
+            System.Linq.Enumerable.ToList(System.Linq.Enumerable.Where(enumerableValue, _ => true));
 
-        [BenchmarkCategory("Range")]
-        [Benchmark]
-        public List<int> Hyperlinq_Range()
-            => hyperlinqRange.Where(_ => true).ToList();
+        [BenchmarkCategory("Collection_Value")]
+        [Benchmark(Baseline = true)]
+        public List<int> Linq_Collection_Value() =>
+            System.Linq.Enumerable.ToList(System.Linq.Enumerable.Where(collectionValue, _ => true));
 
-        [BenchmarkCategory("LinkedList")]
-        [Benchmark]
-        public List<int> Hyperlinq_LinkedList()
-            => linkedList.Where(_ => true).ToList();
+        [BenchmarkCategory("List_Value")]
+        [Benchmark(Baseline = true)]
+        public List<int> Linq_List_Value() =>
+            System.Linq.Enumerable.ToList(System.Linq.Enumerable.Where(listValue, _ => true));
+
+        [BenchmarkCategory("Enumerable_Reference")]
+        [Benchmark(Baseline = true)]
+        public List<int> Linq_Enumerable_Reference() =>
+            System.Linq.Enumerable.ToList(System.Linq.Enumerable.Where(enumerableReference, _ => true));
+
+        [BenchmarkCategory("Collection_Reference")]
+        [Benchmark(Baseline = true)]
+        public List<int> Linq_Collection_Reference() =>
+            System.Linq.Enumerable.ToList(System.Linq.Enumerable.Where(collectionReference, _ => true));
+
+        [BenchmarkCategory("List_Reference")]
+        [Benchmark(Baseline = true)]
+        public List<int> Linq_List_Reference() =>
+            System.Linq.Enumerable.ToList(System.Linq.Enumerable.Where(listReference, _ => true));
 
         [BenchmarkCategory("Array")]
         [Benchmark]
-        public List<int> Hyperlinq_Array()
-            => array.Where(_ => true).ToList();
+        public List<int> Hyperlinq_Array() =>
+            array.Where(_ => true).ToList();
 
-        [BenchmarkCategory("List")]
+        [BenchmarkCategory("Enumerable_Value")]
         [Benchmark]
-        public List<int> Hyperlinq_List()
-            => list.Where(_ => true).ToList();
+        public List<int> Hyperlinq_Enumerable_Value() =>
+            Enumerable.AsValueEnumerable<TestEnumerable.Enumerable, TestEnumerable.Enumerable.Enumerator, int>(enumerableValue, enumerable => enumerable.GetEnumerator())
+            .Where(_ => true).ToList();
+
+        [BenchmarkCategory("Collection_Value")]
+        [Benchmark]
+        public List<int> Hyperlinq_Collection_Value() =>
+            ReadOnlyCollection.AsValueEnumerable<TestCollection.Enumerable, TestCollection.Enumerable.Enumerator, int>(collectionValue, enumerable => enumerable.GetEnumerator())
+            .Where(_ => true).ToList();
+
+        [BenchmarkCategory("List_Value")]
+        [Benchmark]
+        public List<int> Hyperlinq_List_Value() =>
+            ReadOnlyList.AsValueEnumerable<TestList.Enumerable, TestList.Enumerable.Enumerator, int>(listValue, enumerable => enumerable.GetEnumerator())
+            .Where(_ => true).ToList();
 
         [BenchmarkCategory("Enumerable_Reference")]
         [Benchmark]
-        public List<int> Hyperlinq_Enumerable_Reference()
-            => enumerableReference
+        public List<int> Hyperlinq_Enumerable_Reference() =>
+            enumerableReference
             .AsValueEnumerable()
-            .Where(_ => true)
-            .ToList();
+            .Where(_ => true).ToList();
 
-        [BenchmarkCategory("Enumerable_Value")]
+        [BenchmarkCategory("Collection_Reference")]
         [Benchmark]
-        public List<int> Hyperlinq_Enumerable_Value()
-            => enumerableValue
-            .AsValueEnumerable<TestEnumerable.Enumerable, TestEnumerable.Enumerable.Enumerator, int>(enumerable => enumerable.GetEnumerator())
-            .Where(_ => true)
-            .ToList();
+        public List<int> Hyperlinq_Collection_Reference() =>
+            collectionReference
+            .AsValueEnumerable()
+            .Where(_ => true).ToList();
+
+        [BenchmarkCategory("List_Reference")]
+        [Benchmark]
+        public List<int> Hyperlinq_List_Reference() =>
+            listReference
+            .AsValueEnumerable()
+            .Where(_ => true).ToList();
     }
 }

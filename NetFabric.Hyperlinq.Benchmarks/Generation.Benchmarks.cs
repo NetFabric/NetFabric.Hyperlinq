@@ -12,7 +12,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
     [MarkdownExporterAttribute.GitHub]
     public class GenerationOperationsBenchmarks
     {
-        [Params(0, 100, 10_000)]
+        [Params(10_000)]
         public int Count { get; set; }
 
         [BenchmarkCategory("Range")]
@@ -35,8 +35,8 @@ namespace NetFabric.Hyperlinq.Benchmarks
             return sum;
         }    
 
-        [BenchmarkCategory("RepeatInfinitely")]
-        [Benchmark(Baseline = true)]
+        [BenchmarkCategory("Repeat")]
+        [Benchmark]
         public int Ix_Repeat() 
         {
             var sum = 0;
@@ -49,14 +49,24 @@ namespace NetFabric.Hyperlinq.Benchmarks
                 }
             }
             return sum;
-        } 
+        }
+
+        [BenchmarkCategory("Return")]
+        [Benchmark(Baseline = true)]
+        public int Ix_Return()
+        {
+            var sum = 0;
+            foreach (var item in System.Linq.EnumerableEx.Return(1))
+                sum += item;
+            return sum;
+        }
 
         [BenchmarkCategory("Create")]
         [Benchmark(Baseline = true)]
         public int Ix_Create() 
         {
             var sum = 0;
-            foreach(var item in System.Linq.EnumerableEx.Create(GetIEnumerator))
+            foreach(var item in System.Linq.EnumerableEx.Create(() => new Enumerator(1, Count)))
                 sum += item;
             return sum;
         } 
@@ -101,10 +111,27 @@ namespace NetFabric.Hyperlinq.Benchmarks
             for(var index = 0; index < enumerable.Count; index++)
                 sum += enumerable[index];
             return sum;
-        }    
+        }
 
-        IEnumerator<int> GetIEnumerator() => new Enumerator(1, Count);
-        Enumerator GetEnumerator() => new Enumerator(1, Count);
+        [BenchmarkCategory("Return")]
+        [Benchmark]
+        public int Hyperlinq_Return()
+        {
+            var sum = 0;
+            foreach (var item in ValueEnumerable.Return(1))
+                sum += item;
+            return sum;
+        }
+
+        [BenchmarkCategory("Create")]
+        [Benchmark]
+        public int Hyperlinq_Create()
+        {
+            var sum = 0;
+            foreach (var item in ValueEnumerable.Create<Enumerator, int>(() => new Enumerator(1, Count)))
+                sum += item;
+            return sum;
+        }
 
         struct Enumerator : IEnumerator<int>
         {

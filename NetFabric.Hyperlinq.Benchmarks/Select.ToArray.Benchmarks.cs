@@ -9,60 +9,83 @@ namespace NetFabric.Hyperlinq.Benchmarks
     [MarkdownExporterAttribute.GitHub]
     public class SelectToArrayBenchmarks : BenchmarksBase
     {
-        [BenchmarkCategory("Range")]
-        [Benchmark(Baseline = true)]
-        public int[] Linq_Range() 
-            => System.Linq.Enumerable.ToArray(System.Linq.Enumerable.Select(linqRange, item => item));
-
-        [BenchmarkCategory("LinkedList")]
-        [Benchmark(Baseline = true)]
-        public int[] Linq_LinkedList() 
-            => System.Linq.Enumerable.ToArray(System.Linq.Enumerable.Select(linkedList, item => item));
-
         [BenchmarkCategory("Array")]
         [Benchmark(Baseline = true)]
-        public int[] Linq_Array() 
-            => System.Linq.Enumerable.ToArray(System.Linq.Enumerable.Select(array, item => item));
+        public int[] Linq_Array() =>
+            System.Linq.Enumerable.ToArray(System.Linq.Enumerable.Select(array, item => item));
 
-        [BenchmarkCategory("List")]
+        [BenchmarkCategory("Enumerable_Value")]
         [Benchmark(Baseline = true)]
-        public int[] Linq_List() 
-            => System.Linq.Enumerable.ToArray(System.Linq.Enumerable.Select(list, item => item));
+        public int[] Linq_Enumerable_Value() =>
+            System.Linq.Enumerable.ToArray(System.Linq.Enumerable.Select(enumerableValue, item => item));
 
-        [BenchmarkCategory("Range")]
-        [Benchmark]
-        public int[] Hyperlinq_Range() 
-            => hyperlinqRange.Select(item => item).ToArray();
+        [BenchmarkCategory("Collection_Value")]
+        [Benchmark(Baseline = true)]
+        public int[] Linq_Collection_Value() =>
+            System.Linq.Enumerable.ToArray(System.Linq.Enumerable.Select(collectionValue, item => item));
 
-        [BenchmarkCategory("LinkedList")]
-        [Benchmark]
-        public int[] Hyperlinq_LinkedList() 
-            => linkedList.Select(item => item).ToArray();
-
-        [BenchmarkCategory("Array")]
-        [Benchmark]
-        public int[] Hyperlinq_Array() 
-            => array.Select(item => item).ToArray();
-
-        [BenchmarkCategory("List")]
-        [Benchmark]
-        public int[] Hyperlinq_List() 
-            => list.Select(item => item).ToArray();
+        [BenchmarkCategory("List_Value")]
+        [Benchmark(Baseline = true)]
+        public int[] Linq_List_Value() =>
+            System.Linq.Enumerable.ToArray(System.Linq.Enumerable.Select(listValue, item => item));
 
         [BenchmarkCategory("Enumerable_Reference")]
+        [Benchmark(Baseline = true)]
+        public int[] Linq_Enumerable_Reference() =>
+            System.Linq.Enumerable.ToArray(System.Linq.Enumerable.Select(enumerableReference, item => item));
+
+        [BenchmarkCategory("Collection_Reference")]
+        [Benchmark(Baseline = true)]
+        public int[] Linq_Collection_Reference() =>
+            System.Linq.Enumerable.ToArray(System.Linq.Enumerable.Select(collectionReference, item => item));
+
+        [BenchmarkCategory("List_Reference")]
+        [Benchmark(Baseline = true)]
+        public int[] Linq_List_Reference() =>
+            System.Linq.Enumerable.ToArray(System.Linq.Enumerable.Select(listReference, item => item));
+
+        [BenchmarkCategory("Array")]
         [Benchmark]
-        public int[] Hyperlinq_Enumerable_Reference()
-            => enumerableReference
-            .AsValueEnumerable()
-            .Select(item => item)
-            .ToArray();
+        public int[] Hyperlinq_Array() =>
+            array.Select(item => item).ToArray();
 
         [BenchmarkCategory("Enumerable_Value")]
         [Benchmark]
-        public int[] Hyperlinq_Enumerable_Value()        
-            => enumerableValue
-            .AsValueEnumerable<TestEnumerable.Enumerable, TestEnumerable.Enumerable.Enumerator, int>(enumerable => enumerable.GetEnumerator())
-            .Select(item => item)
-            .ToArray();
+        public int[] Hyperlinq_Enumerable_Value() =>
+            Enumerable.AsValueEnumerable<TestEnumerable.Enumerable, TestEnumerable.Enumerable.Enumerator, int>(enumerableValue, enumerable => enumerable.GetEnumerator())
+            .Select(item => item).ToArray();
+
+        [BenchmarkCategory("Collection_Value")]
+        [Benchmark]
+        public int[] Hyperlinq_Collection_Value() =>
+            ReadOnlyCollection.AsValueEnumerable<TestCollection.Enumerable, TestCollection.Enumerable.Enumerator, int>(collectionValue, enumerable => enumerable.GetEnumerator())
+            .Select(item => item).ToArray();
+
+        [BenchmarkCategory("List_Value")]
+        [Benchmark]
+        public int[] Hyperlinq_List_Value() =>
+            ReadOnlyList.AsValueEnumerable<TestList.Enumerable, TestList.Enumerable.Enumerator, int>(listValue, enumerable => enumerable.GetEnumerator())
+            .Select(item => item).ToArray();
+
+        [BenchmarkCategory("Enumerable_Reference")]
+        [Benchmark]
+        public int[] Hyperlinq_Enumerable_Reference() =>
+            enumerableReference
+            .AsValueEnumerable()
+            .Select(item => item).ToArray();
+
+        [BenchmarkCategory("Collection_Reference")]
+        [Benchmark]
+        public int[] Hyperlinq_Collection_Reference() =>
+            collectionReference
+            .AsValueEnumerable()
+            .Select(item => item).ToArray();
+
+        [BenchmarkCategory("List_Reference")]
+        [Benchmark]
+        public int[] Hyperlinq_List_Reference() =>
+            listReference
+            .AsValueEnumerable()
+            .Select(item => item).ToArray();
     }
 }

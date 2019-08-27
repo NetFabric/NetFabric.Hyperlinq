@@ -10,78 +10,88 @@ namespace NetFabric.Hyperlinq.Benchmarks
     [MarkdownExporterAttribute.GitHub]
     public class CountPredicateBenchmarks : BenchmarksBase
     {
-        [BenchmarkCategory("Range")]
-        [Benchmark(Baseline = true)]
-        public int Linq_Range() => 
-            System.Linq.Enumerable.Count(linqRange, _ => true);
-
-        [BenchmarkCategory("LinkedList")]
-        [Benchmark(Baseline = true)]
-        public int Linq_LinkedList() => 
-            System.Linq.Enumerable.Count(linkedList, _ => true);
-
         [BenchmarkCategory("Array")]
         [Benchmark(Baseline = true)]
-        public int Linq_Array() => 
+        public int Linq_Array() =>
             System.Linq.Enumerable.Count(array, _ => true);
-
-        [BenchmarkCategory("List")]
-        [Benchmark(Baseline = true)]
-        public int Linq_List() => 
-            System.Linq.Enumerable.Count(list, _ => true);
-
-        [BenchmarkCategory("Enumerable_Reference")]
-        [Benchmark(Baseline = true)]
-        public int Linq_Enumerable_Reference() => 
-            System.Linq.Enumerable.Count(enumerableReference, _ => true);
 
         [BenchmarkCategory("Enumerable_Value")]
         [Benchmark(Baseline = true)]
-        public int Linq_Enumerable_Value() => 
+        public int Linq_Enumerable_Value() =>
             System.Linq.Enumerable.Count(enumerableValue, _ => true);
+
+        [BenchmarkCategory("Collection_Value")]
+        [Benchmark(Baseline = true)]
+        public int Linq_Collection_Value() =>
+            System.Linq.Enumerable.Count(collectionValue, _ => true);
+
+        [BenchmarkCategory("List_Value")]
+        [Benchmark(Baseline = true)]
+        public int Linq_List_Value() =>
+            System.Linq.Enumerable.Count(listValue, _ => true);
+
+        [BenchmarkCategory("Enumerable_Reference")]
+        [Benchmark(Baseline = true)]
+        public int Linq_Enumerable_Reference() =>
+            System.Linq.Enumerable.Count(enumerableReference, _ => true);
+
+        [BenchmarkCategory("Collection_Reference")]
+        [Benchmark(Baseline = true)]
+        public int Linq_Collection_Reference() =>
+            System.Linq.Enumerable.Count(collectionReference, _ => true);
+
+        [BenchmarkCategory("List_Reference")]
+        [Benchmark(Baseline = true)]
+        public int Linq_List_Reference() =>
+            System.Linq.Enumerable.Count(listReference, _ => true);
 
         [BenchmarkCategory("Array")]
         [Benchmark]
         public int LinqFaster_Array() =>
             array.CountF(_ => true);
 
-        [BenchmarkCategory("List")]
-        [Benchmark]
-        public int LinqFaster_List() =>
-            list.CountF(_ => true);
-
-        [BenchmarkCategory("Range")]
-        [Benchmark]
-        public int Hyperlinq_Range() =>
-            hyperlinqRange.Count(_ => true);
-
-        [BenchmarkCategory("LinkedList")]
-        [Benchmark]
-        public int Hyperlinq_LinkedList() => 
-            linkedList.Count(_ => true);
-
         [BenchmarkCategory("Array")]
         [Benchmark]
-        public int Hyperlinq_Array() => 
+        public int Hyperlinq_Array() =>
             array.Count(_ => true);
 
-        [BenchmarkCategory("List")]
+        [BenchmarkCategory("Enumerable_Value")]
         [Benchmark]
-        public int Hyperlinq_List() => 
-            list.Count(_ => true);
+        public int Hyperlinq_Enumerable_Value() =>
+            Enumerable.AsValueEnumerable<TestEnumerable.Enumerable, TestEnumerable.Enumerable.Enumerator, int>(enumerableValue, enumerable => enumerable.GetEnumerator())
+            .Count(_ => true);
+
+        [BenchmarkCategory("Collection_Value")]
+        [Benchmark]
+        public int Hyperlinq_Collection_Value() =>
+            ReadOnlyCollection.AsValueEnumerable<TestCollection.Enumerable, TestCollection.Enumerable.Enumerator, int>(collectionValue, enumerable => enumerable.GetEnumerator())
+            .Count(_ => true);
+
+        [BenchmarkCategory("List_Value")]
+        [Benchmark]
+        public int Hyperlinq_List_Value() =>
+            ReadOnlyList.AsValueEnumerable<TestList.Enumerable, TestList.Enumerable.Enumerator, int>(listValue, enumerable => enumerable.GetEnumerator())
+            .Count(_ => true);
 
         [BenchmarkCategory("Enumerable_Reference")]
         [Benchmark]
-        public int Hyperlinq_Enumerable_Reference() => 
+        public int Hyperlinq_Enumerable_Reference() =>
             enumerableReference
             .AsValueEnumerable()
             .Count(_ => true);
 
-        [BenchmarkCategory("Enumerable_Value")]
+        [BenchmarkCategory("Collection_Reference")]
         [Benchmark]
-        public int Hyperlinq_Enumerable_Value() => 
-            enumerableValue
-            .AsValueEnumerable<TestEnumerable.Enumerable, TestEnumerable.Enumerable.Enumerator, int>(enumerable => enumerable.GetEnumerator())
+        public int Hyperlinq_Collection_Reference() =>
+            collectionReference
+            .AsValueEnumerable()
+            .Count(_ => true);
+
+        [BenchmarkCategory("List_Reference")]
+        [Benchmark]
+        public int Hyperlinq_List_Reference() =>
+            listReference
+            .AsValueEnumerable()
             .Count(_ => true);
     }
 }

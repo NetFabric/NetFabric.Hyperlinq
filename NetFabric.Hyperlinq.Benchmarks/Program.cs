@@ -9,9 +9,9 @@ namespace NetFabric.Hyperlinq.Benchmarks
         static void Main(string[] args)
         {
             var switcher = new BenchmarkSwitcher(new[] {
+                typeof(ValueEnumerableBenchmarks),
                 typeof(IndexerBenchmarks),
                 typeof(VirtualCallBenchmarks),
-                typeof(ValueEnumerableBenchmarks),
                 typeof(CastBenchmarks),
                 typeof(LambdaBenchmarks),
                 typeof(GenerationOperationsBenchmarks),
@@ -20,6 +20,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
                 typeof(CountPredicateBenchmarks),
                 typeof(AllBenchmarks),
                 typeof(AnyBenchmarks),
+                typeof(AnyPredicateBenchmarks),
                 typeof(ContainsBenchmarks),
                 typeof(ContainsComparerBenchmarks),
                 typeof(DistinctBenchmarks),
@@ -28,7 +29,9 @@ namespace NetFabric.Hyperlinq.Benchmarks
                 typeof(FirstBenchmarks),
                 typeof(FirstPredicateBenchmarks),
                 typeof(FirstOrDefaultBenchmarks),
+                typeof(FirstOrDefaultPredicateBenchmarks),
                 typeof(SingleBenchmarks),
+                typeof(SinglePredicateBenchmarks),
                 typeof(SingleOrDefaultBenchmarks),
                 typeof(ToArrayBenchmarks),
                 typeof(ToListBenchmarks),

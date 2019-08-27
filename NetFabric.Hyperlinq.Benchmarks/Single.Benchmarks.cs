@@ -1,5 +1,6 @@
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Configs;
+using JM.LinqFaster;
 using System.Collections.Generic;
 
 namespace NetFabric.Hyperlinq.Benchmarks
@@ -10,88 +11,114 @@ namespace NetFabric.Hyperlinq.Benchmarks
     [MarkdownExporterAttribute.GitHub]
     public class SingleBenchmarks
     {
-        LinkedList<int> linkedList;
         int[] array;
-        List<int> list;
-        IEnumerable<int> linqRange;
-        ValueEnumerable.RangeEnumerable hyperlinqRange;
+
         IEnumerable<int> enumerableReference;
         TestEnumerable.Enumerable enumerableValue;
+
+        IReadOnlyCollection<int> collectionReference;
+        TestCollection.Enumerable collectionValue;
+
+        IReadOnlyList<int> listReference;
+        TestList.Enumerable listValue;
 
         [GlobalSetup]
         public void GlobalSetup()
         {
-            linqRange = System.Linq.Enumerable.Range(0, 1);
-            hyperlinqRange = ValueEnumerable.Range(0, 1);
-            array = hyperlinqRange.ToArray();
-            list = hyperlinqRange.ToList();
-            linkedList = new LinkedList<int>(hyperlinqRange);
+            array = new int[] { 0 };
+
             enumerableReference = TestEnumerable.ReferenceType(1);
             enumerableValue = TestEnumerable.ValueType(1);
+
+            collectionReference = TestCollection.ReferenceType(1);
+            collectionValue = TestCollection.ValueType(1);
+
+            listReference = TestList.ReferenceType(1);
+            listValue = TestList.ValueType(1);
         }
-
-        [BenchmarkCategory("Range")]
-        [Benchmark(Baseline = true)]
-        public int Linq_Range() => 
-            System.Linq.Enumerable.Single(linqRange);
-
-        [BenchmarkCategory("LinkedList")]
-        [Benchmark(Baseline = true)]
-        public int Linq_LinkedList() => 
-            System.Linq.Enumerable.Single(linkedList);
 
         [BenchmarkCategory("Array")]
         [Benchmark(Baseline = true)]
-        public int Linq_Array() => 
+        public int Linq_Array() =>
             System.Linq.Enumerable.Single(array);
-
-        [BenchmarkCategory("List")]
-        [Benchmark(Baseline = true)]
-        public int Linq_List() => 
-            System.Linq.Enumerable.Single(list);
-
-        [BenchmarkCategory("Enumerable_Reference")]
-        [Benchmark(Baseline = true)]
-        public int Linq_Enumerable_Reference() => 
-            System.Linq.Enumerable.Single(enumerableReference);
 
         [BenchmarkCategory("Enumerable_Value")]
         [Benchmark(Baseline = true)]
-        public int Linq_Enumerable_Value() => 
+        public int Linq_Enumerable_Value() =>
             System.Linq.Enumerable.Single(enumerableValue);
 
-        [BenchmarkCategory("Range")]
-        [Benchmark]
-        public int Hyperlinq_Range() =>
-            hyperlinqRange.Single();
+        [BenchmarkCategory("Collection_Value")]
+        [Benchmark(Baseline = true)]
+        public int Linq_Collection_Value() =>
+            System.Linq.Enumerable.Single(collectionValue);
 
-        [BenchmarkCategory("LinkedList")]
-        [Benchmark]
-        public int Hyperlinq_LinkedList() =>
-            linkedList.Single();
+        [BenchmarkCategory("List_Value")]
+        [Benchmark(Baseline = true)]
+        public int Linq_List_Value() =>
+            System.Linq.Enumerable.Single(listValue);
+
+        [BenchmarkCategory("Enumerable_Reference")]
+        [Benchmark(Baseline = true)]
+        public int Linq_Enumerable_Reference() =>
+            System.Linq.Enumerable.Single(enumerableReference);
+
+        [BenchmarkCategory("Collection_Reference")]
+        [Benchmark(Baseline = true)]
+        public int Linq_Collection_Reference() =>
+            System.Linq.Enumerable.Single(collectionReference);
+
+        [BenchmarkCategory("List_Reference")]
+        [Benchmark(Baseline = true)]
+        public int Linq_List_Reference() =>
+            System.Linq.Enumerable.Single(listReference);
 
         [BenchmarkCategory("Array")]
         [Benchmark]
-        public int Hyperlinq_Array() => 
+        public int LinqFaster_Array() =>
+            array.SingleF();
+
+        [BenchmarkCategory("Array")]
+        [Benchmark]
+        public int Hyperlinq_Array() =>
             array.Single();
 
-        [BenchmarkCategory("List")]
+        [BenchmarkCategory("Enumerable_Value")]
         [Benchmark]
-        public int Hyperlinq_List() => 
-            list.Single();
+        public int Hyperlinq_Enumerable_Value() =>
+            Enumerable.AsValueEnumerable<TestEnumerable.Enumerable, TestEnumerable.Enumerable.Enumerator, int>(enumerableValue, enumerable => enumerable.GetEnumerator())
+            .Single();
+
+        [BenchmarkCategory("Collection_Value")]
+        [Benchmark]
+        public int Hyperlinq_Collection_Value() =>
+            ReadOnlyCollection.AsValueEnumerable<TestCollection.Enumerable, TestCollection.Enumerable.Enumerator, int>(collectionValue, enumerable => enumerable.GetEnumerator())
+            .Single();
+
+        [BenchmarkCategory("List_Value")]
+        [Benchmark]
+        public int Hyperlinq_List_Value() =>
+            ReadOnlyList.AsValueEnumerable<TestList.Enumerable, TestList.Enumerable.Enumerator, int>(listValue, enumerable => enumerable.GetEnumerator())
+            .Single();
 
         [BenchmarkCategory("Enumerable_Reference")]
         [Benchmark]
-        public int Hyperlinq_Enumerable_Reference() => 
+        public int Hyperlinq_Enumerable_Reference() =>
             enumerableReference
             .AsValueEnumerable()
             .Single();
 
-        [BenchmarkCategory("Enumerable_Value")]
+        [BenchmarkCategory("Collection_Reference")]
         [Benchmark]
-        public int Hyperlinq_Enumerable_Value() => 
-            enumerableValue
-            .AsValueEnumerable<TestEnumerable.Enumerable, TestEnumerable.Enumerable.Enumerator, int>(enumerable => enumerable.GetEnumerator())
+        public int Hyperlinq_Collection_Reference() =>
+            collectionReference
+            .AsValueEnumerable()
+            .Single();
+
+        [BenchmarkCategory("List_Reference")]
+        [Benchmark]
+        public int Hyperlinq_List_Reference() =>
+            listReference
+            .AsValueEnumerable()
             .Single();
     }
 }
