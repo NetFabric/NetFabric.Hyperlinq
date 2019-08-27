@@ -116,6 +116,19 @@ namespace NetFabric.Hyperlinq
                 => Array.Select<TSource, TSelectorResult>(source, Utils.CombineSelectors(this.selector, selector), skipCount, takeCount);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public TResult ElementAt(int index)
+                => selector(Array.ElementAt<TSource>(source, index, skipCount, takeCount));
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public TResult ElementAtOrDefault(int index)
+                => selector(Array.ElementAtOrDefault<TSource>(source, index, skipCount, takeCount));
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public Maybe<TResult> TryElementAt(int index)
+            {
+                var item = Array.TryElementAt<TSource>(source, index, skipCount, takeCount);
+                return item.HasValue ? new Maybe<TResult>(selector(item.Value)) : default;
+            }
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TResult First()
                 => selector(Array.First<TSource>(source, skipCount, takeCount));
 

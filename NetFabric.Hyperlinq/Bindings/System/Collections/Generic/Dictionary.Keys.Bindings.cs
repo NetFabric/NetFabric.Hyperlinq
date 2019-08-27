@@ -82,6 +82,16 @@ namespace NetFabric.Hyperlinq
             => ValueEnumerable.Where<ValueWrapper<TKey, TValue>, Dictionary<TKey, TValue>.KeyCollection.Enumerator, TKey>(new ValueWrapper<TKey, TValue>(source), predicate);
 
         [Pure]
+        public static TKey ElementAt<TKey, TValue>(this Dictionary<TKey, TValue>.KeyCollection source, int index)
+            => ValueReadOnlyCollection.ElementAt<ValueWrapper<TKey, TValue>, Dictionary<TKey, TValue>.KeyCollection.Enumerator, TKey>(new ValueWrapper<TKey, TValue>(source), index);
+        [Pure]
+        public static TKey ElementAtOrDefault<TKey, TValue>(this Dictionary<TKey, TValue>.KeyCollection source, int index)
+            => ValueReadOnlyCollection.ElementAtOrDefault<ValueWrapper<TKey, TValue>, Dictionary<TKey, TValue>.KeyCollection.Enumerator, TKey>(new ValueWrapper<TKey, TValue>(source), index);
+        [Pure]
+        public static Maybe<TKey> TryElementAt<TKey, TValue>(this Dictionary<TKey, TValue>.KeyCollection source, int index)
+            => ValueReadOnlyCollection.TryElementAt<ValueWrapper<TKey, TValue>, Dictionary<TKey, TValue>.KeyCollection.Enumerator, TKey>(new ValueWrapper<TKey, TValue>(source), index);
+
+        [Pure]
         public static TKey First<TKey, TValue>(this Dictionary<TKey, TValue>.KeyCollection source)
             => ValueReadOnlyCollection.First<ValueWrapper<TKey, TValue>, Dictionary<TKey, TValue>.KeyCollection.Enumerator, TKey>(new ValueWrapper<TKey, TValue>(source));
         [Pure]

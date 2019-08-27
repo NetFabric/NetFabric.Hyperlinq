@@ -82,6 +82,16 @@ namespace NetFabric.Hyperlinq
             => ValueEnumerable.Where<ValueWrapper<TKey, TValue>, SortedDictionary<TKey, TValue>.ValueCollection.Enumerator, TValue>(new ValueWrapper<TKey, TValue>(source), predicate);
 
         [Pure]
+        public static TValue ElementAt<TKey, TValue>(this SortedDictionary<TKey, TValue>.ValueCollection source, int index)
+            => ValueReadOnlyCollection.ElementAt<ValueWrapper<TKey, TValue>, SortedDictionary<TKey, TValue>.ValueCollection.Enumerator, TValue>(new ValueWrapper<TKey, TValue>(source), index);
+        [Pure]
+        public static TValue ElementAtOrDefault<TKey, TValue>(this SortedDictionary<TKey, TValue>.ValueCollection source, int index)
+            => ValueReadOnlyCollection.ElementAtOrDefault<ValueWrapper<TKey, TValue>, SortedDictionary<TKey, TValue>.ValueCollection.Enumerator, TValue>(new ValueWrapper<TKey, TValue>(source), index);
+        [Pure]
+        public static Maybe<TValue> TryElementAt<TKey, TValue>(this SortedDictionary<TKey, TValue>.ValueCollection source, int index)
+            => ValueReadOnlyCollection.TryElementAt<ValueWrapper<TKey, TValue>, SortedDictionary<TKey, TValue>.ValueCollection.Enumerator, TValue>(new ValueWrapper<TKey, TValue>(source), index);
+
+        [Pure]
         public static TValue First<TKey, TValue>(this SortedDictionary<TKey, TValue>.ValueCollection source)
             => ValueReadOnlyCollection.First<ValueWrapper<TKey, TValue>, SortedDictionary<TKey, TValue>.ValueCollection.Enumerator, TValue>(new ValueWrapper<TKey, TValue>(source));
         [Pure]

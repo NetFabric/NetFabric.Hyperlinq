@@ -113,6 +113,13 @@ namespace NetFabric.Hyperlinq
             public ValueReadOnlyList.SelectIndexEnumerable<TEnumerable, TEnumerator, TSource, TResult> Select<TResult>(Func<TSource, int, TResult> selector)
                 => ValueReadOnlyList.Select<TEnumerable, TEnumerator, TSource, TResult>(source, selector, skipCount, takeCount);
 
+            public TSource ElementAt(int index)
+                => ValueReadOnlyList.ElementAt<TEnumerable, TEnumerator, TSource>(source, index, skipCount, takeCount);
+            public TSource ElementAtOrDefault(int index)
+                => ValueReadOnlyList.ElementAtOrDefault<TEnumerable, TEnumerator, TSource>(source, index, skipCount, takeCount);
+            public Maybe<TSource> TryElementAt(int index)
+                => ValueReadOnlyList.TryElementAt<TEnumerable, TEnumerator, TSource>(source, index, skipCount, takeCount);
+
             public TSource First()
                 => ValueReadOnlyList.GetFirst<TEnumerable, TEnumerator, TSource>(source, skipCount, takeCount).ThrowOnEmpty();
             public TSource First(Func<TSource, bool> predicate)

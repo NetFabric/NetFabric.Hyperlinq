@@ -81,6 +81,16 @@ namespace NetFabric.Hyperlinq
             => ValueReadOnlyList.Where<ValueWrapper<TSource>, List<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
 
         [Pure]
+        public static TSource ElementAt<TSource>(this List<TSource> source, int index)
+            => ValueReadOnlyList.ElementAt<ValueWrapper<TSource>, List<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), index);
+        [Pure]
+        public static TSource ElementAtOrDefault<TSource>(this List<TSource> source, int index)
+            => ValueReadOnlyList.ElementAtOrDefault<ValueWrapper<TSource>, List<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), index);
+        [Pure]
+        public static Maybe<TSource> TryElementAt<TSource>(this List<TSource> source, int index)
+            => ValueReadOnlyList.TryElementAt<ValueWrapper<TSource>, List<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), index);
+
+        [Pure]
         public static TSource First<TSource>(this List<TSource> source)
             => ValueReadOnlyList.First<ValueWrapper<TSource>, List<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source));
         [Pure]

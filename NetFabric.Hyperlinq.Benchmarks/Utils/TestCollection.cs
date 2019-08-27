@@ -4,15 +4,15 @@ using System.Collections.Generic;
 
 namespace NetFabric.Hyperlinq.Benchmarks
 {
-    public static class TestReadOnlyCollection
+    public static class TestCollection
     {
-        public static IReadOnlyCollection<int> ReferenceType(int count)
+        public static EnumerableReferenceType ReferenceType(int count)
             => new EnumerableReferenceType(count);
 
         public static EnumerableValueType ValueType(int count) 
             => new EnumerableValueType(count);
 
-        public readonly struct EnumerableValueType : IReadOnlyCollection<int>
+        public readonly struct EnumerableValueType : IReadOnlyCollection<int>, ICollection<int>
         {
             readonly int count;
 
@@ -22,6 +22,21 @@ namespace NetFabric.Hyperlinq.Benchmarks
             }
 
             public readonly int Count => count;
+
+            public readonly bool IsReadOnly => true;
+
+            public void Add(int item) => throw new NotImplementedException();
+            public bool Remove(int item) => throw new NotImplementedException();
+            public void Clear() => throw new NotImplementedException();
+
+            public readonly bool Contains(int item)
+                => item >= 0 && item < count;
+
+            public readonly void CopyTo(int[] array, int arrayIndex)
+            {
+                for (var item = 0; item < count; item++)
+                    array[arrayIndex + item] = item;
+            }
 
             public readonly Enumerator GetEnumerator() => new Enumerator(count);
             readonly IEnumerator<int> IEnumerable<int>.GetEnumerator() => new Enumerator(count);
@@ -38,18 +53,18 @@ namespace NetFabric.Hyperlinq.Benchmarks
                     current = -1;
                 }
 
-                public readonly int Current => current;
-                readonly object IEnumerator.Current => current;
+                public int Current => current;
+                object IEnumerator.Current => current;
 
                 public bool MoveNext() => ++current < count;
 
-                public readonly void Reset() => throw new NotSupportedException();
+                public void Reset() => throw new NotSupportedException();
 
-                public readonly void Dispose() { }
+                public void Dispose() { }
             }
         }
 
-        public class EnumerableReferenceType : IReadOnlyCollection<int>
+        public class EnumerableReferenceType : IReadOnlyCollection<int>, ICollection<int>
         {
             readonly int count;
 
@@ -59,6 +74,21 @@ namespace NetFabric.Hyperlinq.Benchmarks
             }
 
             public int Count => count;
+
+            public bool IsReadOnly => true;
+
+            public void Add(int item) => throw new NotImplementedException();
+            public bool Remove(int item) => throw new NotImplementedException();
+            public void Clear() => throw new NotImplementedException();
+
+            public bool Contains(int item)
+                => item >= 0 && item < count;
+
+            public void CopyTo(int[] array, int arrayIndex)
+            {
+                for (var item = 0; item < count; item++)
+                    array[arrayIndex + item] = item;
+            }
 
             public IEnumerator<int> GetEnumerator() => new Enumerator(count);
             IEnumerator IEnumerable.GetEnumerator() => new Enumerator(count);
