@@ -20,5 +20,20 @@ namespace NetFabric.Hyperlinq.UnitTests
             result.Should().BeOfType<ReadOnlyCollection.ValueEnumerableWrapper<int>>();
             Utils.ValueReadOnlyCollection.ShouldEqual<ReadOnlyCollection.ValueEnumerableWrapper<int>, ReadOnlyCollection.ValueEnumerableWrapper<int>.Enumerator, int>(result, wrapped);
         }
+
+        [Theory]
+        [MemberData(nameof(TestData.ElementAt), MemberType = typeof(TestData))]
+        public void AsValueEnumerable_With_ElementAt_Should_Succeed(int[] source, int index)
+        {
+            // Arrange
+            var wrapped = Wrap.AsReadOnlyCollection(source);
+            var expected = System.Linq.Enumerable.ElementAt(wrapped, index);
+
+            // Act
+            var result = ReadOnlyCollection.AsValueEnumerable(wrapped).ElementAt(index);
+
+            // Assert
+            result.Should().Be(expected);
+        }
     }
 }

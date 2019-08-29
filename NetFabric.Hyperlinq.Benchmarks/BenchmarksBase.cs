@@ -16,11 +16,11 @@ namespace NetFabric.Hyperlinq.Benchmarks
         protected IEnumerable<int> enumerableReference;
         protected TestEnumerable.Enumerable enumerableValue;
 
-        protected TestCollection.EnumerableReferenceType collectionReference;
-        protected TestCollection.EnumerableValueType collectionValue;
+        protected IReadOnlyCollection<int> collectionReference;
+        protected TestCollection.Enumerable collectionValue;
 
-        protected TestList.EnumerableReferenceType listReference;
-        protected TestList.EnumerableValueType listValue;
+        protected IReadOnlyList<int> listReference;
+        protected TestList.Enumerable listValue;
 
         [Params(10_000)]
         public int Count { get; set; }

@@ -1,5 +1,6 @@
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Configs;
+using JM.LinqFaster;
 
 namespace NetFabric.Hyperlinq.Benchmarks
 {
@@ -9,42 +10,42 @@ namespace NetFabric.Hyperlinq.Benchmarks
     [MarkdownExporterAttribute.GitHub]
     public class SelectBenchmarks : BenchmarksBase
     {
-        [BenchmarkCategory("Range")]
-        [Benchmark(Baseline = true)]
-        public int Linq_Range() 
-        { 
-            var count = 0;
-            foreach(var item in System.Linq.Enumerable.Select(linqRange, item => item))
-                count++;
-            return count;
-        }
-
-        [BenchmarkCategory("LinkedList")]
-        [Benchmark(Baseline = true)]
-        public int Linq_LinkedList() 
-        { 
-            var count = 0;
-            foreach(var item in System.Linq.Enumerable.Select(linkedList, item => item))
-                count++;
-            return count;
-        }
-
         [BenchmarkCategory("Array")]
         [Benchmark(Baseline = true)]
-        public int Linq_Array() 
-        { 
+        public int Linq_Array()
+        {
             var count = 0;
-            foreach(var item in System.Linq.Enumerable.Select(array, item => item))
+            foreach (var item in System.Linq.Enumerable.Select(array, item => item))
                 count++;
             return count;
         }
 
-        [BenchmarkCategory("List")]
+        [BenchmarkCategory("Enumerable_Value")]
         [Benchmark(Baseline = true)]
-        public int Linq_List() 
-        { 
+        public int Linq_Enumerable_Value()
+        {
             var count = 0;
-            foreach(var item in System.Linq.Enumerable.Select(list, item => item))
+            foreach (var item in System.Linq.Enumerable.Select(enumerableValue, item => item))
+                count++;
+            return count;
+        }
+
+        [BenchmarkCategory("Collection_Value")]
+        [Benchmark(Baseline = true)]
+        public int Linq_Collection_Value()
+        {
+            var count = 0;
+            foreach (var item in System.Linq.Enumerable.Select(collectionValue, item => item))
+                count++;
+            return count;
+        }
+
+        [BenchmarkCategory("List_Value")]
+        [Benchmark(Baseline = true)]
+        public int Linq_List_Value()
+        {
+            var count = 0;
+            foreach (var item in System.Linq.Enumerable.Select(listValue, item => item))
                 count++;
             return count;
         }
@@ -52,59 +53,79 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [BenchmarkCategory("Enumerable_Reference")]
         [Benchmark(Baseline = true)]
         public int Linq_Enumerable_Reference()
-        { 
+        {
             var count = 0;
-            foreach(var item in System.Linq.Enumerable.Select(enumerableReference, item => item))
+            foreach (var item in System.Linq.Enumerable.Select(enumerableReference, item => item))
                 count++;
             return count;
         }
 
-        [BenchmarkCategory("Enumerable_Value")]
+        [BenchmarkCategory("Collection_Reference")]
         [Benchmark(Baseline = true)]
-        public int Linq_Enumerable_Value()        
-        { 
+        public int Linq_Collection_Reference()
+        {
             var count = 0;
-            foreach(var item in System.Linq.Enumerable.Select(enumerableValue, item => item))
+            foreach (var item in System.Linq.Enumerable.Select(collectionReference, item => item))
                 count++;
             return count;
         }
 
-        [BenchmarkCategory("Range")]
-        [Benchmark]
-        public int Hyperlinq_Range() 
-        { 
+        [BenchmarkCategory("List_Reference")]
+        [Benchmark(Baseline = true)]
+        public int Linq_List_Reference()
+        {
             var count = 0;
-            foreach(var item in hyperlinqRange.Select(item => item))
-                count++;
-            return count;
-        }
-
-        [BenchmarkCategory("LinkedList")]
-        [Benchmark]
-        public int Hyperlinq_LinkedList() 
-        { 
-            var count = 0;
-            foreach(var item in linkedList.Select(item => item))
+            foreach (var item in System.Linq.Enumerable.Select(listReference, item => item))
                 count++;
             return count;
         }
 
         [BenchmarkCategory("Array")]
         [Benchmark]
-        public int Hyperlinq_Array() 
-        { 
+        public int LinqFaster_Array()
+        {
             var count = 0;
-            foreach(var item in array.Select(item => item))
+            foreach (var item in array.SelectF(item => item))
                 count++;
             return count;
         }
 
-        [BenchmarkCategory("List")]
+        [BenchmarkCategory("Array")]
         [Benchmark]
-        public int Hyperlinq_List() 
-        { 
+        public int Hyperlinq_Array()
+        {
             var count = 0;
-            foreach(var item in list.Select(item => item))
+            foreach (var item in array.Select(item => item))
+                count++;
+            return count;
+        }
+
+        [BenchmarkCategory("Enumerable_Value")]
+        [Benchmark]
+        public int Hyperlinq_Enumerable_Value()
+        {
+            var count = 0;
+            foreach (var item in Enumerable.AsValueEnumerable<TestEnumerable.Enumerable, TestEnumerable.Enumerable.Enumerator, int>(enumerableValue, enumerable => enumerable.GetEnumerator()).Select(item => item))
+                count++;
+            return count;
+        }
+
+        [BenchmarkCategory("Collection_Value")]
+        [Benchmark]
+        public int Hyperlinq_Collection_Value()
+        {
+            var count = 0;
+            foreach (var item in Enumerable.AsValueEnumerable<TestCollection.Enumerable, TestCollection.Enumerable.Enumerator, int>(collectionValue, enumerable => enumerable.GetEnumerator()).Select(item => item))
+                count++;
+            return count;
+        }
+
+        [BenchmarkCategory("List_Value")]
+        [Benchmark]
+        public int Hyperlinq_List_Value()
+        {
+            var count = 0;
+            foreach (var item in Enumerable.AsValueEnumerable<TestList.Enumerable, TestList.Enumerable.Enumerator, int>(listValue, enumerable => enumerable.GetEnumerator()).Select(item => item))
                 count++;
             return count;
         }
@@ -112,24 +133,30 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [BenchmarkCategory("Enumerable_Reference")]
         [Benchmark]
         public int Hyperlinq_Enumerable_Reference()
-        { 
+        {
             var count = 0;
-            foreach(var item in enumerableReference
-                .AsValueEnumerable()
-                .Select(item => item))
-                    count++;
+            foreach (var item in enumerableReference.AsValueEnumerable().Select(item => item))
+                count++;
             return count;
         }
 
-        [BenchmarkCategory("Enumerable_Value")]
+        [BenchmarkCategory("Collection_Reference")]
         [Benchmark]
-        public int Hyperlinq_Enumerable_Value()        
-        { 
+        public int Hyperlinq_Collection_Reference()
+        {
             var count = 0;
-            foreach(var item in enumerableValue
-                .AsValueEnumerable<TestEnumerable.Enumerable, TestEnumerable.Enumerable.Enumerator, int>(enumerable => enumerable.GetEnumerator())
-                .Select(item => item))
-                    count++;
+            foreach (var item in collectionReference.AsValueEnumerable().Select(item => item))
+                count++;
+            return count;
+        }
+
+        [BenchmarkCategory("List_Reference")]
+        [Benchmark]
+        public int Hyperlinq_List_Reference()
+        {
+            var count = 0;
+            foreach (var item in listReference.AsValueEnumerable().Select(item => item))
+                count++;
             return count;
         }
     }

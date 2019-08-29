@@ -7,6 +7,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
     [CategoriesColumn]
     [MemoryDiagnoser]
     [MarkdownExporterAttribute.GitHub]
+    [DisassemblyDiagnoser(printAsm: true, printSource: true)]
     public class ElementAtBenchmarks : BenchmarksBase
     {
         [BenchmarkCategory("Array")]
@@ -58,13 +59,13 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [BenchmarkCategory("Collection_Value")]
         [Benchmark]
         public int Hyperlinq_Collection_Value() =>
-            ReadOnlyCollection.AsValueEnumerable<TestCollection.EnumerableValueType, TestCollection.EnumerableValueType.Enumerator, int>(collectionValue, enumerable => enumerable.GetEnumerator())
+            ReadOnlyCollection.AsValueEnumerable<TestCollection.Enumerable, TestCollection.Enumerable.Enumerator, int>(collectionValue, enumerable => enumerable.GetEnumerator())
             .ElementAt(Count - 1);
 
         [BenchmarkCategory("List_Value")]
         [Benchmark]
         public int Hyperlinq_List_Value() =>
-            ReadOnlyList.AsValueEnumerable<TestList.EnumerableValueType, TestList.EnumerableValueType.Enumerator, int>(listValue, enumerable => enumerable.GetEnumerator())
+            ReadOnlyList.AsValueEnumerable<TestList.Enumerable, TestList.Enumerable.Enumerator, int>(listValue, enumerable => enumerable.GetEnumerator())
             .ElementAt(Count - 1);
 
         [BenchmarkCategory("Enumerable_Reference")]

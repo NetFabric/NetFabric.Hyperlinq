@@ -47,11 +47,66 @@ namespace NetFabric.Hyperlinq
                 get => source[index];
             }
 
-            [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly TEnumerator GetEnumerator() => getEnumerator(source);
             readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => getEnumerator(source);
             readonly IEnumerator IEnumerable.GetEnumerator() => getEnumerator(source);
+
+            public TSource[] ToArray()
+            {
+                var array = new TSource[source.Count];
+                if (source.Count != 0)
+                {
+                    if (source is ICollection<TSource> collection)
+                    {
+                        collection.CopyTo(array, 0);
+                    }
+                    else
+                    {
+                        for (var index = 0; index < source.Count; index++)
+                            array[index] = source[index];
+                    }
+                }
+                return array;
+            }
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public List<TSource> ToList()
+                => source switch
+                {
+                    ICollection<TSource> collection => new List<TSource>(collection), // no need to allocate helper class
+
+                    _ => new List<TSource>(new ToListCollection(source)),
+                };
+
+            // helper implementation of ICollection<> so that CopyTo() is used to convert to List<>
+            sealed class ToListCollection
+                : ICollection<TSource>
+            {
+                readonly TEnumerable source;
+
+                public ToListCollection(TEnumerable source)
+                {
+                    this.source = source;
+                }
+
+                public int Count => source.Count;
+
+                public bool IsReadOnly => true;
+
+                public void CopyTo(TSource[] array, int _)
+                {
+                    for (var index = 0; index < source.Count; index++)
+                        array[index] = source[index];
+                }
+
+                IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => throw new NotSupportedException();
+                IEnumerator IEnumerable.GetEnumerator() => throw new NotSupportedException();
+                void ICollection<TSource>.Add(TSource item) => throw new NotSupportedException();
+                bool ICollection<TSource>.Remove(TSource item) => throw new NotSupportedException();
+                void ICollection<TSource>.Clear() => throw new NotSupportedException();
+                bool ICollection<TSource>.Contains(TSource item) => throw new NotSupportedException();
+            }
         }
 
         [GenericsTypeMapping("TEnumerable", typeof(ValueEnumerableWrapper<>))]
@@ -78,7 +133,6 @@ namespace NetFabric.Hyperlinq
                 get => source[index];
             }
 
-            [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly Enumerator GetEnumerator() => new Enumerator(source);
             readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new Enumerator(source);
@@ -101,19 +155,37 @@ namespace NetFabric.Hyperlinq
                 }
                 readonly object IEnumerator.Current => enumerator.Current;
 
-                public bool MoveNext()
-                {
-                    if (enumerator.MoveNext())
-                        return true;
+                [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                public readonly bool MoveNext() => enumerator.MoveNext();
 
-                    Dispose();
-                    return false;
-                }
+                [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                public readonly void Reset() => enumerator.Reset();
 
-                public readonly void Reset() => throw new NotSupportedException();
-
-                public void Dispose() => enumerator.Dispose();
+                [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                public readonly void Dispose() => enumerator.Dispose();
             }
+
+            public TSource[] ToArray()
+            {
+                var array = new TSource[source.Count];
+                if (source.Count != 0)
+                {
+                    if (source is ICollection<TSource> collection)
+                    {
+                        collection.CopyTo(array, 0);
+                    }
+                    else
+                    {
+                        for (var index = 0; index < source.Count; index++)
+                            array[index] = source[index];
+                    }
+                }
+                return array;
+            }
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public List<TSource> ToList()
+                => new List<TSource>(source);
         }
     }
 }

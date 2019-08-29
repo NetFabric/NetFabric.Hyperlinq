@@ -162,11 +162,10 @@ namespace NetFabric.Hyperlinq
 
                 public void CopyTo(TResult[] array, int _)
                 {
-                    var enumerator = source.GetEnumerator();
                     var index = 0;
-                    while (enumerator.MoveNext())
+                    foreach (var item in source)
                     {
-                        array[index] = selector(enumerator.Current);
+                        array[index] = selector(item);
                         index++;
                     }
                 }

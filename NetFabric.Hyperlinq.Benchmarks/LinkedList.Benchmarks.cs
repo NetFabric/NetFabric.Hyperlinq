@@ -14,14 +14,13 @@ namespace NetFabric.Hyperlinq.Benchmarks
     {
         LinkedList<int> list;
 
-        [Params(0, 10, 10_000)]
+        [Params(10_000)]
         public int Count { get; set; }
 
         [GlobalSetup]
         public void GlobalSetup()
         {
-            var range = ValueEnumerable.Range(0, Count);
-            list = new LinkedList<int>(range);
+            list = new LinkedList<int>(ValueEnumerable.Range(0, Count));
         }
 
         [BenchmarkCategory("All")]

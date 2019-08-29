@@ -8,7 +8,6 @@ namespace NetFabric.Hyperlinq
     public static partial class ValueEnumerable
     {
         [Pure]
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static TSource ElementAt<TEnumerable, TEnumerator, TSource>(this TEnumerable source, int index) 
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
@@ -28,7 +27,6 @@ namespace NetFabric.Hyperlinq
         }
 
         [Pure]
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static TSource ElementAtOrDefault<TEnumerable, TEnumerator, TSource>(this TEnumerable source, int index) 
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
@@ -48,7 +46,6 @@ namespace NetFabric.Hyperlinq
         }
 
         [Pure]
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Maybe<TSource> TryElementAt<TEnumerable, TEnumerator, TSource>(this TEnumerable source, int index)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>

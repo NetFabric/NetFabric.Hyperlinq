@@ -6,17 +6,17 @@ namespace NetFabric.Hyperlinq.Benchmarks
 {
     public static class TestCollection
     {
-        public static EnumerableReferenceType ReferenceType(int count)
+        public static IReadOnlyCollection<int> ReferenceType(int count)
             => new EnumerableReferenceType(count);
 
-        public static EnumerableValueType ValueType(int count) 
-            => new EnumerableValueType(count);
+        public static Enumerable ValueType(int count) 
+            => new Enumerable(count);
 
-        public readonly struct EnumerableValueType : IReadOnlyCollection<int>, ICollection<int>
+        public readonly struct Enumerable : IReadOnlyCollection<int>, ICollection<int>
         {
             readonly int count;
 
-            public EnumerableValueType(int count)
+            public Enumerable(int count)
             {
                 this.count = count;
             }
@@ -64,7 +64,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
             }
         }
 
-        public class EnumerableReferenceType : IReadOnlyCollection<int>, ICollection<int>
+        class EnumerableReferenceType : IReadOnlyCollection<int>, ICollection<int>
         {
             readonly int count;
 
@@ -93,7 +93,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
             public IEnumerator<int> GetEnumerator() => new Enumerator(count);
             IEnumerator IEnumerable.GetEnumerator() => new Enumerator(count);
 
-            public class Enumerator : IEnumerator<int>
+            class Enumerator : IEnumerator<int>
             {
                 readonly int count;
                 int current;

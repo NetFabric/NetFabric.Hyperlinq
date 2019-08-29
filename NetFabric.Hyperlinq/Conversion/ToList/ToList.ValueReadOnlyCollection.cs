@@ -41,7 +41,6 @@ namespace NetFabric.Hyperlinq
                 foreach (var item in source)
                 {
                     array[index] = item;
-
                     checked { index++; }
                 }
             }

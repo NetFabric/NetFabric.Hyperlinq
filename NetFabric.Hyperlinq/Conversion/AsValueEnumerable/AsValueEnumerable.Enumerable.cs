@@ -35,16 +35,26 @@ namespace NetFabric.Hyperlinq
                 this.getEnumerator = getEnumerator;
             }
 
-            [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly TEnumerator GetEnumerator() => getEnumerator(source);
             readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => getEnumerator(source);
             readonly IEnumerator IEnumerable.GetEnumerator() => getEnumerator(source);
+
+            public TSource[] ToArray()
+                => System.Linq.Enumerable.ToArray(source);
+
+            public List<TSource> ToList()
+            {
+                var list = new List<TSource>();
+                foreach (var item in source)
+                    list.Add(item);
+                return list;
+            }
         }
 
         [GenericsTypeMapping("TEnumerable", typeof(ValueEnumerableWrapper<>))]
         [GenericsTypeMapping("TEnumerator", typeof(ValueEnumerableWrapper<>.Enumerator))]
-        public readonly struct ValueEnumerableWrapper<TSource>
+        public struct ValueEnumerableWrapper<TSource>
             : IValueEnumerable<TSource, ValueEnumerableWrapper<TSource>.Enumerator>
         {
             readonly IEnumerable<TSource> source;
@@ -54,7 +64,6 @@ namespace NetFabric.Hyperlinq
                 this.source = source;
             }
 
-            [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly Enumerator GetEnumerator() => new Enumerator(source);
             readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new Enumerator(source);
@@ -75,21 +84,27 @@ namespace NetFabric.Hyperlinq
                     [MethodImpl(MethodImplOptions.AggressiveInlining)]
                     get => enumerator.Current;
                 }
-                readonly object IEnumerator.Current
-                    => enumerator.Current;
+                readonly object IEnumerator.Current => enumerator.Current;
 
-                public bool MoveNext()
-                {
-                    if (enumerator.MoveNext())
-                        return true;
+                [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                public readonly bool MoveNext() => enumerator.MoveNext();
 
-                    Dispose();
-                    return false;
-                }
+                [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                public readonly void Reset() => enumerator.Reset();
 
-                public readonly void Reset() => throw new NotSupportedException();
+                [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                public readonly void Dispose() => enumerator.Dispose();
+            }
 
-                public void Dispose() => enumerator.Dispose();
+            public TSource[] ToArray()
+                => System.Linq.Enumerable.ToArray(source);
+
+            public List<TSource> ToList()
+            {
+                var list = new List<TSource>();
+                foreach (var item in source)
+                    list.Add(item);
+                return list;
             }
         }
     }

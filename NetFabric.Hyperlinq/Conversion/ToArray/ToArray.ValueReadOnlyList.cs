@@ -19,9 +19,19 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
-            var array = new TSource[takeCount];
-            for (var index = 0; index < takeCount; index++)
-                array[index] = source[index + skipCount];
+            var array = new TSource[source.Count];
+            if (source.Count != 0)
+            {
+                if (skipCount == 0 && takeCount == source.Count && source is ICollection<TSource> collection)
+                {
+                    collection.CopyTo(array, 0);
+                }
+                else
+                {
+                    for (var index = 0; index < takeCount; index++)
+                        array[index] = source[index + skipCount];
+                }
+            }
             return array;
         }
     }
