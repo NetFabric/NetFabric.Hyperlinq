@@ -18,15 +18,18 @@ namespace NetFabric.Hyperlinq
             where TEnumerator : struct, IEnumerator<TSource>
         {
             var count = 0;
-            if (source.Count != 0)
+            checked
             {
-                foreach (var item in source)
+                if (source.Count != 0)
                 {
-                    if (predicate(item))
-                        checked { count++; }
+                    foreach (var item in source)
+                    {
+                        if (predicate(item))
+                            count++;
+                    }
                 }
+                return count;
             }
-            return count;
         }
 
         [Pure]
@@ -35,18 +38,21 @@ namespace NetFabric.Hyperlinq
             where TEnumerator : struct, IEnumerator<TSource>
         {
             var count = 0;
-            if (source.Count != 0)
+            checked
             {
-                var index = 0;
-                foreach (var item in source)
+                if (source.Count != 0)
                 {
-                    if (predicate(item, index))
-                        checked { count++; }
+                    var index = 0;
+                    foreach (var item in source)
+                    {
+                        if (predicate(item, index))
+                            checked { count++; }
 
-                    checked { index++; }
+                        checked { index++; }
+                    }
                 }
+                return count;
             }
-            return count;
         }
     }
 }

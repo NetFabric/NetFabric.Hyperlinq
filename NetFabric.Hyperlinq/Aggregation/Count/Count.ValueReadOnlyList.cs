@@ -7,12 +7,6 @@ namespace NetFabric.Hyperlinq
     public static partial class ValueReadOnlyList
     {
         [Pure]
-        public static int Count<TEnumerable, TEnumerator, TSource>(this TEnumerable source)
-            where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
-            where TEnumerator : struct, IEnumerator<TSource>
-            => source.Count;
-
-        [Pure]
         public static int Count<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, bool> predicate)
             where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
@@ -23,7 +17,7 @@ namespace NetFabric.Hyperlinq
         }
 
         [Pure]
-        static int Count<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, bool> predicate, int skipCount, int takeCount)
+        internal static int Count<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, bool> predicate, int skipCount, int takeCount)
             where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
@@ -48,7 +42,7 @@ namespace NetFabric.Hyperlinq
         }
 
         [Pure]
-        static int Count<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, int, bool> predicate, int skipCount, int takeCount)
+        internal static int Count<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, int, bool> predicate, int skipCount, int takeCount)
             where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {

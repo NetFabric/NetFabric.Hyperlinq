@@ -48,7 +48,7 @@ namespace NetFabric.Hyperlinq
                 const int HashingBase = (int)2166136261;
                 const int HashingMultiplier = 16777619;
 
-                int hash = HashingBase;
+                var hash = HashingBase;
                 hash = (hash * HashingMultiplier) ^ (Value is null ? 0 : EqualityComparer<T>.Default.GetHashCode(Value));
                 hash = (hash * HashingMultiplier) ^ Index.GetHashCode();
                 return hash;

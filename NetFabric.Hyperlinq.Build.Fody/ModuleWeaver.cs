@@ -9,7 +9,8 @@ using System.Threading;
 public partial class ModuleWeaver
     : BaseModuleWeaver
 {
-    readonly DictionarySet<string, MethodDefinition> methods = new DictionarySet<string, MethodDefinition>();
+    readonly Dictionary<TypeDefinitionKey, List<MethodInfo>> extensionMethods = new Dictionary<TypeDefinitionKey, List<MethodInfo>>();
+    readonly Dictionary<TypeDefinitionKey, Dictionary<MethodDefinitionKey, MethodAssignmentInfo>> methodAssignments = new Dictionary<TypeDefinitionKey, Dictionary<MethodDefinitionKey, MethodAssignmentInfo>>();
 
     public override IEnumerable<string> GetAssembliesForScanning()
     {
@@ -25,28 +26,93 @@ public partial class ModuleWeaver
 
     public override void Execute()
     {
-        CollectMethods();
+        CollectExtensionMethods();
+        AssignExtensionMethods();
         AddMethods();
     }
 
-    void CollectMethods()
+    void CollectExtensionMethods()
     {
         LogInfo("Collecting extension methods with interface constraints!");
 
-        foreach (var method in ModuleDefinition.GetTypes()
-            .Where(type => type.IsPublic && type.IsClass && type.IsSealed && type.IsAbstract) // public static class
-            .SelectMany(type => type.Methods)
-            .Where(method => method.IsPublic && method.IsExtensionMethod()))
+        foreach (var type in ModuleDefinition.GetTypes()
+            .Where(type => type.IsPublic && type.IsClass && type.IsSealed && type.IsAbstract)) // public static class
         {
-            var extensionType = method.Parameters[0].ParameterType;
-
-            var generic = method.GenericParameters.FirstOrDefault(genericParameter => genericParameter.HasConstraints && genericParameter.Name == extensionType.Name);
-            if (generic is object)
+            foreach (var method in type.Methods
+                .Where(method => method.IsPublic && method.IsExtensionMethod()))
             {
-                var constraint = generic.Constraints[0].ConstraintType;
-                if (methods.TryAdd(constraint.Name, method))
-                    LogInfo($"Constraint: {constraint.Name} Method: {method.FullName}");
+                var extensionType = method.Parameters[0].ParameterType;
+                var generic = method.GenericParameters.FirstOrDefault(genericParameter => genericParameter.Name == extensionType.Name);
+                if (generic is object && generic.HasConstraints)
+                {
+                    var constraintType = generic.Constraints[0].ConstraintType.Resolve();
+                    if (constraintType.IsInterface)
+                    {
+                        var key = new TypeDefinitionKey(constraintType);
+                        if (!extensionMethods.TryGetValue(key, out var list))
+                        {
+                            list = new List<MethodInfo>();
+                            extensionMethods.Add(key, list);
+                        }
+                        list.Add(new MethodInfo(type, method));
+
+                        LogInfo($"Extension Method - Constraint: {constraintType.FullName} Type: {type.FullName} Method: {method.FullName}");
+                    }
+                }
             }
+        }
+    }
+
+    void AssignExtensionMethods()
+    {
+        LogInfo("Assign methods that call the collected extension methods!");
+
+        foreach (var type in ModuleDefinition.GetTypes()
+            .Where(type => !type.IsInterface && type.HasInterfaces && !type.ShouldBeIgnored()))
+        {
+            var typeAssignments = new Dictionary<MethodDefinitionKey, MethodAssignmentInfo>();
+
+            // assign the extension methods for each implemented interface
+            foreach (var interf in type.Interfaces)
+            {
+                var resolvedInterfaceType = interf.InterfaceType.Resolve();
+
+                // get the extension methods for this interface
+                if (extensionMethods.TryGetValue(new TypeDefinitionKey(resolvedInterfaceType), out var interfaceMethods))
+                {
+                    foreach (var interfaceMethod in interfaceMethods)
+                    {
+                        // assign or update assigment
+                        var methodKey = new MethodDefinitionKey(interfaceMethod.Method);
+                        if (typeAssignments.TryGetValue(methodKey, out var assignment))
+                        {
+                            // check if this new interface implements the assigned interface
+                            if (resolvedInterfaceType.Interfaces
+                                .Select(interf => interf.InterfaceType.Resolve())
+                                .Contains(assignment.Interface.InterfaceType.Resolve())) 
+                            {
+                                // replace the source of the assigned method
+                                typeAssignments.Remove(methodKey);
+                                typeAssignments.Add(methodKey, new MethodAssignmentInfo(interf));
+                            }
+                            else
+                            {
+                                // do nothing
+                            }
+                        }
+                        else
+                        {
+                            typeAssignments.Add(methodKey, new MethodAssignmentInfo(interf));
+                        }
+                    }
+                }
+            }
+
+            if (typeAssignments.Count != 0)
+                methodAssignments.Add(new TypeDefinitionKey(type), typeAssignments);
+
+            // remove the attributes so that the dependency can be removed
+            //type.RemoveBuildAttributes();
         }
     }
 
@@ -54,42 +120,30 @@ public partial class ModuleWeaver
     {
         LogInfo("Adding methods that call the collected extension methods!");
 
-        //foreach (var type in ModuleDefinition.GetTypes())
-        foreach (var type in ModuleDefinition.GetTypes())
+        foreach (var typeDefinition in methodAssignments.Keys)
         {
-            if (!type.IsInterface && type.HasInterfaces && !type.ShouldBeIgnored())
-            {
-                // add the extension methods for each implemented interface
-                foreach (var interf in type.Interfaces)
-                    AddMethods(type, interf);
-            }
+            var assignments = methodAssignments[typeDefinition];
 
-            // remove the attributes so that the dependency can be removed
-            type.RemoveBuildAttributes();
-        }
-    }
-
-    void AddMethods(TypeDefinition type, InterfaceImplementation interf)
-    {
-        // get the extension methods for this interface
-        if (methods.TryGetValue(interf.InterfaceType.Name, out var interfMethods))
-        {
+            var type = typeDefinition.Value;
             var genericsMapping = Utils.GenericsMapping(type);
             var genericsTypeMapping = Utils.GenericsTypeMapping(type, ModuleDefinition);
 
-            foreach (var method in interfMethods)
-                AddMethod(type, interf, method, genericsMapping, genericsTypeMapping);
+            // add all assigned extension methods
+            foreach (var methodDefinition in assignments.Keys)
+            {
+                AddMethod(type, methodDefinition.Value, genericsMapping, genericsTypeMapping);
+            }
         }
     }
 
-    void AddMethod(TypeDefinition type, InterfaceImplementation interf, MethodDefinition method, IReadOnlyDictionary<string, string> genericsMapping, IReadOnlyDictionary<string, TypeReference> genericsTypeMapping)
+    void AddMethod(TypeDefinition type, MethodDefinition method, IReadOnlyDictionary<string, string> genericsMapping, IReadOnlyDictionary<string, TypeReference> genericsTypeMapping)
     {
         // check if there is name clashing with a property
         var property = type.Properties.FirstOrDefault(prop => prop.Name == method.Name);
         if (property is null)
             AddMethodInstance(type, method, genericsMapping, genericsTypeMapping);
         else
-            AddMethodExtension(type, method, property, genericsMapping, genericsTypeMapping);
+            AddMethodExtension(type, method, genericsMapping, genericsTypeMapping);
     }
 
     void AddMethodInstance(TypeDefinition type, MethodDefinition method, IReadOnlyDictionary<string, string> genericsMapping, IReadOnlyDictionary<string, TypeReference> genericsTypeMapping)
@@ -150,7 +204,7 @@ public partial class ModuleWeaver
             }
         }
 
-        // check if method already exists
+        // check if method already exists (optimizations may be manually added)
         if (type.Methods.Any(m => m.IsSame(newMethod)))
             return;
 
@@ -184,10 +238,10 @@ public partial class ModuleWeaver
         LogInfo($"Added instance method. Type: '{type.FullName}' Method: '{newMethod.FullName}'");
     }
 
-    void AddMethodExtension(TypeDefinition type, MethodDefinition method, PropertyDefinition property, IReadOnlyDictionary<string, string> genericsMapping, IReadOnlyDictionary<string, TypeReference> genericsTypeMapping)
+    void AddMethodExtension(TypeDefinition type, MethodDefinition method, IReadOnlyDictionary<string, string> genericsMapping, IReadOnlyDictionary<string, TypeReference> genericsTypeMapping)
     {
         // create the extension method
-        var newMethod = new MethodDefinition(method.Name, MethodAttributes.Public | MethodAttributes.HideBySig | MethodAttributes.Static, property.PropertyType)
+        var newMethod = new MethodDefinition(method.Name, MethodAttributes.Public | MethodAttributes.HideBySig | MethodAttributes.Static, method.ReturnType)
         {
             AggressiveInlining = true,
             CustomAttributes = {
@@ -217,7 +271,7 @@ public partial class ModuleWeaver
         }
 
         // resolve the return type
-        newMethod.ReturnType = Utils.ResolveGenericType(property.PropertyType, genericsParameters, genericsMapping, genericsTypeMapping);
+        newMethod.ReturnType = Utils.ResolveGenericType(method.ReturnType, genericsParameters, genericsMapping, genericsTypeMapping);
 
         // set the contraints for the new method and set the generic parameters for the type of first parameter
         // this can only be performed after all generic parameters for the new method are set
@@ -255,7 +309,8 @@ public partial class ModuleWeaver
             {
                 if (genericsTypeMapping.TryGetValue(parameter.Name, out var parameterTypeMapped))
                 {
-                    genericMethod.GenericArguments.Add(parameterTypeMapped);
+                    var resolvedParameter = Utils.ResolveGenericType(parameterTypeMapped, genericsParameters, genericsMapping, genericsTypeMapping);
+                    genericMethod.GenericArguments.Add(resolvedParameter);
                 }
                 else
                 {
