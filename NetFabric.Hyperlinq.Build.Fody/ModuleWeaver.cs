@@ -67,52 +67,63 @@ public partial class ModuleWeaver
     {
         LogInfo("Assign methods that call the collected extension methods!");
 
-        foreach (var type in ModuleDefinition.GetTypes()
-            .Where(type => !type.IsInterface && type.HasInterfaces && !type.ShouldBeIgnored()))
+        foreach (var type in ModuleDefinition.GetTypes())
         {
-            var typeAssignments = new Dictionary<MethodDefinitionKey, MethodAssignmentInfo>();
-
-            // assign the extension methods for each implemented interface
-            foreach (var interf in type.Interfaces)
+            if (!type.IsInterface && type.HasInterfaces && !type.ShouldBeIgnored())
             {
-                var resolvedInterfaceType = interf.InterfaceType.Resolve();
+                var typeAssignments = new Dictionary<MethodDefinitionKey, MethodAssignmentInfo>();
 
-                // get the extension methods for this interface
-                if (extensionMethods.TryGetValue(new TypeDefinitionKey(resolvedInterfaceType), out var interfaceMethods))
+                // assign the extension methods for each implemented interface
+                foreach (var interf in type.Interfaces)
                 {
-                    foreach (var interfaceMethod in interfaceMethods)
+                    var resolvedInterfaceType = interf.InterfaceType.Resolve();
+
+                    // get the extension methods for this interface
+                    if (extensionMethods.TryGetValue(new TypeDefinitionKey(resolvedInterfaceType), out var interfaceMethods))
                     {
-                        // assign or update assigment
-                        var methodKey = new MethodDefinitionKey(interfaceMethod.Method);
-                        if (typeAssignments.TryGetValue(methodKey, out var assignment))
+                        foreach (var interfaceMethod in interfaceMethods)
                         {
-                            // check if this new interface implements the assigned interface
-                            if (resolvedInterfaceType.Interfaces
-                                .Select(interf => interf.InterfaceType.Resolve())
-                                .Contains(assignment.Interface.InterfaceType.Resolve())) 
+                            // assign or update assigment
+                            var methodKey = new MethodDefinitionKey(interfaceMethod.Method);
+                            if (typeAssignments.TryGetValue(methodKey, out var assignment))
                             {
-                                // replace the source of the assigned method
-                                typeAssignments.Remove(methodKey);
-                                typeAssignments.Add(methodKey, new MethodAssignmentInfo(interf));
+                                // check if this new interface implements the assigned interface
+                                if (resolvedInterfaceType.Interfaces
+                                    .Select(interf => interf.InterfaceType.Resolve())
+                                    .Contains(assignment.Interface.InterfaceType.Resolve()))
+                                {
+                                    // replace the source of the assigned method
+                                    typeAssignments.Remove(methodKey);
+                                    typeAssignments.Add(methodKey, new MethodAssignmentInfo(interf));
+                                }
+                                else
+                                {
+                                    // do nothing
+                                }
                             }
                             else
                             {
-                                // do nothing
+                                typeAssignments.Add(methodKey, new MethodAssignmentInfo(interf));
                             }
-                        }
-                        else
-                        {
-                            typeAssignments.Add(methodKey, new MethodAssignmentInfo(interf));
                         }
                     }
                 }
+
+                if (typeAssignments.Count == 0)
+                {
+                    //remove the attributes so that the dependency can be removed
+                    type.RemoveBuildAttributes();
+                }
+                else
+                {
+                    methodAssignments.Add(new TypeDefinitionKey(type), typeAssignments);
+                }
             }
-
-            if (typeAssignments.Count != 0)
-                methodAssignments.Add(new TypeDefinitionKey(type), typeAssignments);
-
-            // remove the attributes so that the dependency can be removed
-            //type.RemoveBuildAttributes();
+            else
+            {
+                //remove the attributes so that the dependency can be removed
+                type.RemoveBuildAttributes();
+            }
         }
     }
 
@@ -133,6 +144,9 @@ public partial class ModuleWeaver
             {
                 AddMethod(type, methodDefinition.Value, genericsMapping, genericsTypeMapping);
             }
+
+            //remove the attributes so that the dependency can be removed
+            type.RemoveBuildAttributes();
         }
     }
 
