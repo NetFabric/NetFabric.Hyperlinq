@@ -10,6 +10,9 @@
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="Generation.Benchmarks.cs" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="BenchmarkDotNet" Version="0.11.5" />
     <PackageReference Include="LinqFaster" Version="1.0.0" />
     <PackageReference Include="morelinq" Version="3.2.0" />

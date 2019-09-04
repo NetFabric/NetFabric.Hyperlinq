@@ -193,21 +193,23 @@ static class Utils
 
     public static void RemoveBuildAttributes(this ICustomAttributeProvider definition)
     {
-        if (!definition.HasCustomAttributes)
-            return;
-
-        var customAttributes = definition.CustomAttributes;
-        var index = 0;
-        while (index < customAttributes.Count)
+        if (definition.HasCustomAttributes)
         {
-            var attribute = customAttributes[index];
-            if (BuildCustomAttributeNames.Contains(attribute.AttributeType.FullName))
+            var customAttributes = definition.CustomAttributes;
+            var index = 0;
+            var count = customAttributes.Count;
+            while (index < count)
             {
-                customAttributes.RemoveAt(index);
-            }
-            else
-            {
-                index++;
+                var attribute = customAttributes[index];
+                if (BuildCustomAttributeNames.Contains(attribute.AttributeType.FullName))
+                {
+                    customAttributes.RemoveAt(index);
+                    count--;
+                }
+                else
+                {
+                    index++;
+                }
             }
         }
     }
@@ -229,8 +231,7 @@ static class Utils
             var leftParameter = left[index];
             var rightParameter = right[index];
 
-            if (leftParameter.ParameterType.FullName != rightParameter.ParameterType.FullName ||
-                leftParameter.Attributes != rightParameter.Attributes)
+            if (leftParameter.ParameterType.FullName != rightParameter.ParameterType.FullName)
                 return false;
         }
 
