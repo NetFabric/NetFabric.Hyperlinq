@@ -93,6 +93,11 @@ namespace NetFabric.Hyperlinq
             public int Count(Func<TSource, int, bool> predicate)
                 => Array.Count<TSource>(source, Utils.CombinePredicates(this.predicate, predicate), skipCount, takeCount);
 
+            public long LongCount()
+                => Array.LongCount<TSource>(source, predicate);
+            public long LongCount(Func<TSource, bool> predicate)
+                => Array.LongCount<TSource>(source, Utils.CombinePredicates(this.predicate, predicate));
+
             public bool Any()
                 => Array.Any<TSource>(source, predicate, skipCount, takeCount);
             public bool Any(Func<TSource, bool> predicate)

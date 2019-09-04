@@ -94,6 +94,9 @@ namespace NetFabric.Hyperlinq
                 public readonly void Dispose() { }
             }
 
+            public long LongCount()
+                => Array.LongCount<TSource>(source);
+
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public SelectEnumerable<TSource, TResult> Skip(int count)
                 => new SelectEnumerable<TSource, TResult>(source, selector, skipCount + count, takeCount);

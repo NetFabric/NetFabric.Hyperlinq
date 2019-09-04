@@ -84,6 +84,10 @@ namespace NetFabric.Hyperlinq
                 => ValueEnumerable.Count<TEnumerable, TEnumerator, TSource>(source);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public long LongCount()
+                => ValueEnumerable.LongCount<TEnumerable, TEnumerator, TSource>(source);
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Any()
                 => ValueEnumerable.Any<TEnumerable, TEnumerator, TSource>(source);
 
