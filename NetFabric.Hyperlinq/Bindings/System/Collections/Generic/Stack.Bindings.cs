@@ -19,6 +19,13 @@ namespace NetFabric.Hyperlinq
             => ValueReadOnlyCollection.Count<ValueWrapper<TSource>, Stack<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
 
         [Pure]
+        public static long LongCount<TSource>(this Stack<TSource> source)
+            => ValueEnumerable.LongCount<ValueWrapper<TSource>, Stack<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source));
+        [Pure]
+        public static long LongCount<TSource>(this Stack<TSource> source, Func<TSource, bool> predicate)
+            => ValueEnumerable.LongCount<ValueWrapper<TSource>, Stack<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
+
+        [Pure]
         public static ValueReadOnlyCollection.SkipTakeEnumerable<ValueWrapper<TSource>, Stack<TSource>.Enumerator, TSource> Skip<TSource>(this Stack<TSource> source, int count)
             => ValueReadOnlyCollection.Skip<ValueWrapper<TSource>, Stack<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), count);
 

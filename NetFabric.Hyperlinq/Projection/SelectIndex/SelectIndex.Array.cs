@@ -93,6 +93,10 @@ namespace NetFabric.Hyperlinq
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public long LongCount()
+                => source.Length;
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public SelectIndexEnumerable<TSource, TResult> Skip(int count)
                 => new SelectIndexEnumerable<TSource, TResult>(source, selector, skipCount + count, takeCount);
 

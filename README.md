@@ -76,6 +76,8 @@ namespace ConsoleApp
   - `Count()`
   - `Count(Func<TSource, bool>)`
   - `Count(Func<TSource, int, bool>)`
+  - `LongCount()`
+  - `LongCount(Func<TSource, bool>)`
 - Conversion
   - `AsEnumerable()`
   - `AsValueEnumerable()`
