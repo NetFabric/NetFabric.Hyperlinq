@@ -12,8 +12,6 @@
 
 This implementation favors performance and reduction of heap allocations, in detriment of assembly binary size (lots of overloads).
 
-No dynamic code generation is used so it's ahead-of-time (AOT) compatible.
-
 ## Usage (3.0 and above)
 
 1. Add the *NetFabric.Hyperlinq* [NuGet package](https://www.nuget.org/packages/NetFabric.Hyperlinq/) to your project.
