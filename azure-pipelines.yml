@@ -15,7 +15,7 @@ steps:
     checkLatest: true
 - task: DotNetCoreInstaller@0
   inputs:
-    version: '3.0.100-preview8-013656'
+    version: '3.0.100-preview9-014004'
 - task: DotNetCoreCLI@2
   displayName: Build Fody
   inputs:
