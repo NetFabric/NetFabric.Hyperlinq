@@ -11,19 +11,20 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
+            using var enumerator = source.GetEnumerator();
             if (comparer is null)
             {
-                foreach (var item in source)
+                while (enumerator.MoveNext())
                 {
-                    if (EqualityComparer<TSource>.Default.Equals(item, value))
+                    if (EqualityComparer<TSource>.Default.Equals(enumerator.Current, value))
                         return true;
                 }
             }
             else
             {
-                foreach (var item in source)
+                while (enumerator.MoveNext())
                 {
-                    if (comparer.Equals(item, value))
+                    if (comparer.Equals(enumerator.Current, value))
                         return true;
                 }
             }

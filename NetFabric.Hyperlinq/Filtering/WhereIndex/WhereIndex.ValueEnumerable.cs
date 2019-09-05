@@ -65,12 +65,13 @@ namespace NetFabric.Hyperlinq
 
                 public bool MoveNext()
                 {
-                    while (enumerator.MoveNext())
+                    checked
                     {
-                        if (predicate(enumerator.Current, index))
-                            return true;
-
-                        checked { index++; }
+                        for (; enumerator.MoveNext(); index++)
+                        {
+                            if (predicate(enumerator.Current, index))
+                                return true;
+                        }
                     }
                     Dispose();
                     return false;

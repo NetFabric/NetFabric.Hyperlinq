@@ -46,8 +46,9 @@ namespace NetFabric.Hyperlinq
             public List<TSource> ToList()
             {
                 var list = new List<TSource>();
-                foreach (var item in source)
-                    list.Add(item);
+                using var enumerator = source.GetEnumerator();  
+                while (enumerator.MoveNext())
+                    list.Add(enumerator.Current);
                 return list;
             }
         }
@@ -102,8 +103,9 @@ namespace NetFabric.Hyperlinq
             public List<TSource> ToList()
             {
                 var list = new List<TSource>();
-                foreach (var item in source)
-                    list.Add(item);
+                using var enumerator = source.GetEnumerator();
+                while (enumerator.MoveNext())
+                    list.Add(enumerator.Current);
                 return list;
             }
         }

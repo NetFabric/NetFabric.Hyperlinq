@@ -72,7 +72,7 @@ namespace NetFabric.Hyperlinq
                 {
                     if (enumerator.MoveNext())
                     {
-                        index++; 
+                        checked { index++; }
                         return true;
                     }
                     Dispose();
@@ -122,12 +122,9 @@ namespace NetFabric.Hyperlinq
 
                 if (source.Count != 0)
                 {
-                    var index = 0;
-                    foreach (var item in source)
-                    {
-                        array[index] = selector(item, index);
-                        checked { index++; }
-                    }
+                    using var enumerator = source.GetEnumerator();
+                    for (var index = 0; enumerator.MoveNext(); index++)
+                        array[index] = selector(enumerator.Current, index);
                 }
 
                 return array;
@@ -138,6 +135,7 @@ namespace NetFabric.Hyperlinq
                 => new List<TResult>(new ToListCollection(this));
 
             // helper implementation of ICollection<> so that CopyTo() is used to convert to List<>
+            [Ignore]
             sealed class ToListCollection
                 : ICollection<TResult>
             {
@@ -156,12 +154,9 @@ namespace NetFabric.Hyperlinq
 
                 public void CopyTo(TResult[] array, int _)
                 {
-                    var index = 0;
-                    foreach (var item in source)
-                    {
-                        array[index] = selector(item, index);
-                        checked { index++; }
-                    }
+                    using var enumerator = source.GetEnumerator();
+                    for (var index = 0; enumerator.MoveNext(); index++)
+                        array[index] = selector(enumerator.Current, index);
                 }
 
                 IEnumerator<TResult> IEnumerable<TResult>.GetEnumerator() => throw new NotSupportedException();
@@ -179,13 +174,15 @@ namespace NetFabric.Hyperlinq
 
                     if (source.Count != 0)
                     {
-                        var index = 0;
                         TResult result;
-                        foreach (var item in source)
+                        using var enumerator = source.GetEnumerator();
+                        checked
                         {
-                            result = selector(item, index);
-                            dictionary.Add(keySelector(result), result);
-                            checked { index++; }
+                            for (var index = 0; enumerator.MoveNext(); index++)
+                            {
+                                result = selector(enumerator.Current, index);
+                                dictionary.Add(keySelector(result), result);
+                            }
                         }
                     }
 
@@ -200,13 +197,15 @@ namespace NetFabric.Hyperlinq
 
                     if (source.Count != 0)
                     {
-                        var index = 0;
                         TResult result;
-                        foreach (var item in source)
+                        using var enumerator = source.GetEnumerator();
+                        checked
                         {
-                            result = selector(item, index);
-                            dictionary.Add(keySelector(result), elementSelector(result));
-                            checked { index++; }
+                            for (var index = 0; enumerator.MoveNext(); index++)
+                            {
+                                result = selector(enumerator.Current, index);
+                                dictionary.Add(keySelector(result), elementSelector(result));
+                            }
                         }
                     }
 

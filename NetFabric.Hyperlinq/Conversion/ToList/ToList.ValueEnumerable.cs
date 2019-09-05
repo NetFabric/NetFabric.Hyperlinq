@@ -12,8 +12,11 @@ namespace NetFabric.Hyperlinq
             where TEnumerator : struct, IEnumerator<TSource>
         {
             var list = new List<TSource>();
-            foreach (var item in source)
-                list.Add(item);
+
+            using var enumerator = source.GetEnumerator();
+            while (enumerator.MoveNext())
+                list.Add(enumerator.Current);
+
             return list;
         }
 
@@ -24,10 +27,11 @@ namespace NetFabric.Hyperlinq
         {
             var list = new List<TSource>();
 
-            foreach (var item in source)
+            using var enumerator = source.GetEnumerator();
+            while (enumerator.MoveNext())
             {
-                if (predicate(item))
-                    list.Add(item);
+                if (predicate(enumerator.Current))
+                    list.Add(enumerator.Current);
             }
 
             return list;
@@ -40,13 +44,14 @@ namespace NetFabric.Hyperlinq
         {
             var list = new List<TSource>();
 
-            var index = 0;
-            foreach (var item in source)
+            using var enumerator = source.GetEnumerator();
+            checked
             {
-                if (predicate(item, index))
-                    list.Add(item);
-
-                checked { index++; }
+                for (var index = 0; enumerator.MoveNext(); index++)
+                {
+                    if (predicate(enumerator.Current, index))
+                        list.Add(enumerator.Current);
+                }
             }
 
             return list;

@@ -15,13 +15,13 @@ namespace NetFabric.Hyperlinq
 
             if (source.Count != 0)
             {
-                foreach (var item in source)
+                using var enumerator = source.GetEnumerator();
+                while (enumerator.MoveNext())
                 {
-                    if (!predicate(item))
+                    if (!predicate(enumerator.Current))
                         return false;
                 }
             }
-
             return true;
         }
 
@@ -34,16 +34,16 @@ namespace NetFabric.Hyperlinq
 
             if (source.Count != 0)
             {
-                var index = 0;
-                foreach (var item in source)
+                using var enumerator = source.GetEnumerator();
+                checked
                 {
-                    if (!predicate(item, index))
-                        return false;
-
-                    checked { index++; }
+                    for (var index = 0; enumerator.MoveNext(); index++)
+                    {
+                        if (!predicate(enumerator.Current, index))
+                            return false;
+                    }
                 }
             }
-
             return true;
         }
     }

@@ -63,8 +63,9 @@ namespace NetFabric.Hyperlinq
         {
             if (source.Count != 0)
             {
-                foreach (var item in source)
-                    return (ElementResult.Success, item);
+                using var enumerator = source.GetEnumerator();
+                if (enumerator.MoveNext())
+                    return (ElementResult.Success, enumerator.Current);
             }
 
             return (ElementResult.Empty, default);
@@ -77,10 +78,11 @@ namespace NetFabric.Hyperlinq
         {
             if (source.Count != 0)
             {
-                foreach (var item in source)
+                using var enumerator = source.GetEnumerator();
+                while (enumerator.MoveNext())
                 {
-                    if (predicate(item))
-                        return (ElementResult.Success, item);
+                    if (predicate(enumerator.Current))
+                        return (ElementResult.Success, enumerator.Current);
                 }
             }
 
@@ -94,13 +96,14 @@ namespace NetFabric.Hyperlinq
         {
             if (source.Count != 0)
             {
-                var index = 0;
-                foreach (var item in source)
+                using var enumerator = source.GetEnumerator();
+                checked
                 {
-                    if (predicate(item, index))
-                        return (index, item);
-
-                    checked { index++; }
+                    for (var index = 0; enumerator.MoveNext(); index++)
+                    {
+                        if (predicate(enumerator.Current, index))
+                            return (index, enumerator.Current);
+                    }
                 }
             }
 

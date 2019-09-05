@@ -11,10 +11,8 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
-            foreach (var item in source)
-                return true;
-
-            return false;
+            using var enumerator = source.GetEnumerator();
+            return enumerator.MoveNext();
         }
 
         [Pure]
@@ -24,12 +22,12 @@ namespace NetFabric.Hyperlinq
         {
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
 
-            foreach (var item in source)
+            using var enumerator = source.GetEnumerator();
+            while (enumerator.MoveNext())
             {
-                if (predicate(item))
+                if (predicate(enumerator.Current))
                     return true;
             }
-
             return false;
         }
 
@@ -39,15 +37,15 @@ namespace NetFabric.Hyperlinq
         {
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
 
-            var index = 0;
-            foreach (var item in source)
+            using var enumerator = source.GetEnumerator();
+            checked
             {
-                if (predicate(item, index))
-                    return true;
-
-                checked { index++; }
+                for (var index = 0; enumerator.MoveNext(); index++)
+                {
+                    if (predicate(enumerator.Current, index))
+                        return true;
+                }
             }
-
             return false;
         }
     }
