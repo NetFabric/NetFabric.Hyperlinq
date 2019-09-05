@@ -20,8 +20,11 @@ namespace NetFabric.Hyperlinq
             if (keySelector is null) ThrowHelper.ThrowArgumentNullException(nameof(keySelector));
 
             var dictionary = new Dictionary<TKey, TSource>(0, comparer);
-            foreach (var item in source)
-                dictionary.Add(keySelector(item), item);
+
+            using var enumerator = source.GetEnumerator();
+            while (enumerator.MoveNext())
+                dictionary.Add(keySelector(enumerator.Current), enumerator.Current);
+
             return dictionary;
         }
 
@@ -33,11 +36,14 @@ namespace NetFabric.Hyperlinq
             if (keySelector is null) ThrowHelper.ThrowArgumentNullException(nameof(keySelector));
 
             var dictionary = new Dictionary<TKey, TSource>(0, comparer);
-            foreach (var item in source)
+
+            using var enumerator = source.GetEnumerator();
+            while (enumerator.MoveNext())
             {
-                if (predicate(item))
-                    dictionary.Add(keySelector(item), item);
+                if (predicate(enumerator.Current))
+                    dictionary.Add(keySelector(enumerator.Current), enumerator.Current);
             }
+
             return dictionary;
         }
 
@@ -49,14 +55,17 @@ namespace NetFabric.Hyperlinq
             if (keySelector is null) ThrowHelper.ThrowArgumentNullException(nameof(keySelector));
 
             var dictionary = new Dictionary<TKey, TSource>(0, comparer);
-            var index = 0;
-            foreach (var item in source)
-            {
-                if (predicate(item, index))
-                    dictionary.Add(keySelector(item), item);
 
-                checked { index++; }
+            using var enumerator = source.GetEnumerator();
+            checked
+            {
+                for (var index = 0; enumerator.MoveNext(); index++)
+                {
+                    if (predicate(enumerator.Current, index))
+                        dictionary.Add(keySelector(enumerator.Current), enumerator.Current);
+                }
             }
+
             return dictionary;
         }
 
@@ -75,8 +84,11 @@ namespace NetFabric.Hyperlinq
             if (elementSelector is null) ThrowHelper.ThrowArgumentNullException(nameof(elementSelector));
 
             var dictionary = new Dictionary<TKey, TElement>(0, comparer);
-            foreach (var item in source)
-                dictionary.Add(keySelector(item), elementSelector(item));
+
+            using var enumerator = source.GetEnumerator();
+            while (enumerator.MoveNext())
+                dictionary.Add(keySelector(enumerator.Current), elementSelector(enumerator.Current));
+
             return dictionary;
         }
 
@@ -89,11 +101,14 @@ namespace NetFabric.Hyperlinq
             if (elementSelector is null) ThrowHelper.ThrowArgumentNullException(nameof(elementSelector));
 
             var dictionary = new Dictionary<TKey, TElement>(0, comparer);
-            foreach (var item in source)
+
+            using var enumerator = source.GetEnumerator();
+            while (enumerator.MoveNext())
             {
-                if (predicate(item))
-                    dictionary.Add(keySelector(item), elementSelector(item));
+                if (predicate(enumerator.Current))
+                    dictionary.Add(keySelector(enumerator.Current), elementSelector(enumerator.Current));
             }
+
             return dictionary;
         }
 
@@ -106,14 +121,17 @@ namespace NetFabric.Hyperlinq
             if (elementSelector is null) ThrowHelper.ThrowArgumentNullException(nameof(elementSelector));
 
             var dictionary = new Dictionary<TKey, TElement>(0, comparer);
-            var index = 0;
-            foreach (var item in source)
-            {
-                if (predicate(item, index))
-                    dictionary.Add(keySelector(item), elementSelector(item));
 
-                checked { index++; }
+            using var enumerator = source.GetEnumerator();
+            checked
+            {
+                for (var index = 0; enumerator.MoveNext(); index++)
+                {
+                    if (predicate(enumerator.Current, index))
+                        dictionary.Add(keySelector(enumerator.Current), elementSelector(enumerator.Current));
+                }
             }
+
             return dictionary;
         }
     }

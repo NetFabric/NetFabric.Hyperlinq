@@ -122,12 +122,9 @@ namespace NetFabric.Hyperlinq
             {
                 var list = new List<TResult>();
 
-                var index = 0;
-                foreach (var item in source)
-                {
-                    list.Add(selector(item, index));
-                    checked { index++; }
-                }
+                using var enumerator = source.GetEnumerator();
+                for (var index = 0; enumerator.MoveNext(); index++)
+                    list.Add(selector(enumerator.Current, index));
 
                 return list;
             }
@@ -138,13 +135,12 @@ namespace NetFabric.Hyperlinq
             {
                 var dictionary = new Dictionary<TKey, TResult>(0, comparer);
 
-                var index = 0;
                 TResult result;
-                foreach (var item in source)
+                using var enumerator = source.GetEnumerator();
+                for (var index = 0; enumerator.MoveNext(); index++)
                 {
-                    result = selector(item, index);
+                    result = selector(enumerator.Current, index);
                     dictionary.Add(keySelector(result), result);
-                    checked { index++; }
                 }
 
                 return dictionary;
@@ -156,13 +152,15 @@ namespace NetFabric.Hyperlinq
             {
                 var dictionary = new Dictionary<TKey, TElement>(0, comparer);
 
-                var index = 0;
                 TResult result;
-                foreach (var item in source)
+                using var enumerator = source.GetEnumerator();
+                checked
                 {
-                    result = selector(item, index);
-                    dictionary.Add(keySelector(result), elementSelector(result));
-                    checked { index++; }
+                    for (var index = 0; enumerator.MoveNext(); index++)
+                    {
+                        result = selector(enumerator.Current, index);
+                        dictionary.Add(keySelector(result), elementSelector(result));
+                    }
                 }
 
                 return dictionary;

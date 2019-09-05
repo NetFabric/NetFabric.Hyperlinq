@@ -76,37 +76,8 @@ namespace NetFabric.Hyperlinq
                 {
                     ICollection<TSource> collection => new List<TSource>(collection), // no need to allocate helper class
 
-                    _ => new List<TSource>(new ToListCollection(source)),
+                    _ => new List<TSource>(new ToListCollection<TEnumerable, TSource>(source, 0, source.Count)),
                 };
-
-            // helper implementation of ICollection<> so that CopyTo() is used to convert to List<>
-            sealed class ToListCollection
-                : ICollection<TSource>
-            {
-                readonly TEnumerable source;
-
-                public ToListCollection(TEnumerable source)
-                {
-                    this.source = source;
-                }
-
-                public int Count => source.Count;
-
-                public bool IsReadOnly => true;
-
-                public void CopyTo(TSource[] array, int _)
-                {
-                    for (var index = 0; index < source.Count; index++)
-                        array[index] = source[index];
-                }
-
-                IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => throw new NotSupportedException();
-                IEnumerator IEnumerable.GetEnumerator() => throw new NotSupportedException();
-                void ICollection<TSource>.Add(TSource item) => throw new NotSupportedException();
-                bool ICollection<TSource>.Remove(TSource item) => throw new NotSupportedException();
-                void ICollection<TSource>.Clear() => throw new NotSupportedException();
-                bool ICollection<TSource>.Contains(TSource item) => throw new NotSupportedException();
-            }
         }
 
         [GenericsTypeMapping("TEnumerable", typeof(ValueEnumerableWrapper<>))]
@@ -185,7 +156,12 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public List<TSource> ToList()
-                => new List<TSource>(source);
+                => source switch
+                {
+                    ICollection<TSource> collection => new List<TSource>(collection), // no need to allocate helper class
+
+                    _ => new List<TSource>(new ReadOnlyList.ToListCollection<IReadOnlyList<TSource>, TSource>(source, 0, source.Count)),
+                };
         }
     }
 }

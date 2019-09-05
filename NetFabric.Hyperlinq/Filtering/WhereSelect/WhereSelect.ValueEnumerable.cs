@@ -108,10 +108,11 @@ namespace NetFabric.Hyperlinq
             {
                 var list = new List<TResult>();
 
-                foreach (var item in source)
+                using var enumerator = source.GetEnumerator();
+                while (enumerator.MoveNext())
                 {
-                    if (predicate(item))
-                        list.Add(selector(item));
+                    if (predicate(enumerator.Current))
+                        list.Add(selector(enumerator.Current));
                 }
 
                 return list;
@@ -124,11 +125,12 @@ namespace NetFabric.Hyperlinq
                 var dictionary = new Dictionary<TKey, TResult>(0, comparer);
 
                 TResult result;
-                foreach (var item in source)
+                using var enumerator = source.GetEnumerator();
+                while (enumerator.MoveNext())
                 {
-                    if (predicate(item))
+                    if (predicate(enumerator.Current))
                     {
-                        result = selector(item);
+                        result = selector(enumerator.Current);
                         dictionary.Add(keySelector(result), result);
                     }
                 }
@@ -143,11 +145,12 @@ namespace NetFabric.Hyperlinq
                 var dictionary = new Dictionary<TKey, TElement>(0, comparer);
 
                 TResult result;
-                foreach (var item in source)
+                using var enumerator = source.GetEnumerator();
+                while (enumerator.MoveNext())
                 {
-                    if (predicate(item))
+                    if (predicate(enumerator.Current))
                     {
-                        result = selector(item);
+                        result = selector(enumerator.Current);
                         dictionary.Add(keySelector(result), elementSelector(result));
                     }
                 }

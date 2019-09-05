@@ -1,7 +1,5 @@
-using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
-using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
@@ -14,12 +12,11 @@ namespace NetFabric.Hyperlinq
         {
             if (index >= 0 && index < source.Count)
             {
-                foreach (var item in source)
+                using var enumerator = source.GetEnumerator();
+                for (; enumerator.MoveNext(); index--)
                 {
                     if (index == 0)
-                        return item;
-
-                    index--;
+                        return enumerator.Current;
                 }
             }
 
@@ -33,12 +30,11 @@ namespace NetFabric.Hyperlinq
         {
             if (index >= 0 && index < source.Count)
             {
-                foreach (var item in source)
+                using var enumerator = source.GetEnumerator();
+                for (; enumerator.MoveNext(); index--)
                 {
                     if (index == 0)
-                        return item;
-
-                    index--;
+                        return enumerator.Current;
                 }
             }
 
@@ -52,12 +48,11 @@ namespace NetFabric.Hyperlinq
         {
             if (index >= 0 && index < source.Count)
             {
-                foreach (var item in source)
+                using var enumerator = source.GetEnumerator();
+                for (; enumerator.MoveNext(); index--)
                 {
                     if (index == 0)
-                        return new Maybe<TSource>(item);
-
-                    index--;
+                        return new Maybe<TSource>(enumerator.Current);
                 }
             }
 

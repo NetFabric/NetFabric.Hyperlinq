@@ -40,25 +40,18 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
-            var first = true;
-            TSource value = default;
-            foreach (var item in source)
+            using var enumerator = (TEnumerator)source.GetEnumerator();
+            if (enumerator.MoveNext())
             {
-                if (first)
-                {
-                    value = item;
-                    first = false;
-                }
-                else
-                { 
+                var value = enumerator.Current;
+
+                if (enumerator.MoveNext())
                     return (ElementResult.NotSingle, default);
-                }
+
+                return (ElementResult.Success, value);
             }
 
-            if (first)
-                return (ElementResult.Empty, default);
-
-            return (ElementResult.Success, value);
+            return (ElementResult.Empty, default);
         }
 
         [Pure]
@@ -66,29 +59,25 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
-            var first = true;
-            TSource value = default;
-            foreach (var item in source)
+            using var enumerator = source.GetEnumerator();
+            while (enumerator.MoveNext())
             {
-                if (first)
+                if (predicate(enumerator.Current))
                 {
-                    if (predicate(item))
+                    var value = enumerator.Current;
+
+                    // found first, keep going until end or find second
+                    while (enumerator.MoveNext())
                     {
-                        value = item;
-                        first = false;
+                        if (predicate(enumerator.Current))
+                            return (ElementResult.NotSingle, default);
                     }
-                }
-                else
-                {
-                    if (predicate(item))
-                        return (ElementResult.NotSingle, default);
+
+                    return (ElementResult.Success, value);
                 }
             }
 
-            if (first)
-                return (ElementResult.Empty, default);
-
-            return (ElementResult.Success, value);
+            return (ElementResult.Empty, default);
         }
 
         [Pure]
@@ -96,32 +85,28 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
-            var index = 0;
-            var first = true;
-            TSource value = default;
-            foreach (var item in source)
+            var enumerator = (TEnumerator)source.GetEnumerator();
+            checked
             {
-                if (first)
+                for (var index = 0; enumerator.MoveNext(); index++)
                 {
-                    if (predicate(item, index))
+                    if (predicate(enumerator.Current, index))
                     {
-                        value = item;
-                        first = false;
+                        var value = (index, enumerator.Current);
+
+                        // found first, keep going until end or find second
+                        for (index++; enumerator.MoveNext(); index++)
+                        {
+                            if (predicate(enumerator.Current, index))
+                                return ((int)ElementResult.NotSingle, default);
+                        }
+
+                        return value;
                     }
                 }
-                else
-                {
-                    if (predicate(item, index))
-                        return ((int)ElementResult.NotSingle, default);
-                }
-
-                checked { index++; }
             }
 
-            if (first)
-                return ((int)ElementResult.Empty, default);
-
-            return (index, value);
+            return ((int)ElementResult.Empty, default);
         }
     }
 }
