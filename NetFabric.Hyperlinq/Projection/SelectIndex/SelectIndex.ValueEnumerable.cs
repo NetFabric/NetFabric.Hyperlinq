@@ -165,6 +165,25 @@ namespace NetFabric.Hyperlinq
 
                 return dictionary;
             }
+
+            public void ForEach(Action<TResult> action)
+            {
+                using var enumerator = source.GetEnumerator();
+                checked
+                {
+                    for (var index = 0; enumerator.MoveNext(); index++)
+                        action(selector(enumerator.Current, index));
+                }
+            }
+            public void ForEach(Action<TResult, int> action)
+            {
+                using var enumerator = source.GetEnumerator();
+                checked
+                {
+                    for (var index = 0; enumerator.MoveNext(); index++)
+                        action(selector(enumerator.Current, index), index);
+                }
+            }
         }
     }
 }

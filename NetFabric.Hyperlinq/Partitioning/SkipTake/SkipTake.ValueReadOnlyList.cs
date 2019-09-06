@@ -83,81 +83,132 @@ namespace NetFabric.Hyperlinq
                 public readonly void Dispose() { }
             }
 
+            [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public SkipTakeEnumerable<TEnumerable, TEnumerator, TSource> Take(int count)
                 => ValueReadOnlyList.SkipTake<TEnumerable, TEnumerator, TSource>(source, skipCount, Math.Min(takeCount, count));
 
+            [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Any()
                 => ValueReadOnlyList.Any<TEnumerable, TEnumerator, TSource>(source, skipCount, takeCount);
+            [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Any(Func<TSource, bool> predicate)
                 => ValueReadOnlyList.Any<TEnumerable, TEnumerator, TSource>(source, predicate, skipCount, takeCount);
+            [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Any(Func<TSource, int, bool> predicate)
                 => ValueReadOnlyList.Any<TEnumerable, TEnumerator, TSource>(source, predicate, skipCount, takeCount);
 
+            [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public ValueReadOnlyList.WhereEnumerable<TEnumerable, TEnumerator, TSource> Where(Func<TSource, bool> predicate)
                 => ValueReadOnlyList.Where<TEnumerable, TEnumerator, TSource>(source, predicate, skipCount, takeCount);
 
+            [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public ValueReadOnlyList.WhereIndexEnumerable<TEnumerable, TEnumerator, TSource> Where(Func<TSource, int, bool> predicate)
                 => ValueReadOnlyList.Where<TEnumerable, TEnumerator, TSource>(source, predicate, skipCount, takeCount);
 
+            [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public ValueReadOnlyList.SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult> Select<TResult>(Func<TSource, TResult> selector)
                 => ValueReadOnlyList.Select<TEnumerable, TEnumerator, TSource, TResult>(source, selector, skipCount, takeCount);
 
+            [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public ValueReadOnlyList.SelectIndexEnumerable<TEnumerable, TEnumerator, TSource, TResult> Select<TResult>(Func<TSource, int, TResult> selector)
                 => ValueReadOnlyList.Select<TEnumerable, TEnumerator, TSource, TResult>(source, selector, skipCount, takeCount);
 
+            [Pure]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TSource ElementAt(int index)
                 => ValueReadOnlyList.ElementAt<TEnumerable, TEnumerator, TSource>(source, index, skipCount, takeCount);
+            [Pure]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TSource ElementAtOrDefault(int index)
                 => ValueReadOnlyList.ElementAtOrDefault<TEnumerable, TEnumerator, TSource>(source, index, skipCount, takeCount);
+            [Pure]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Maybe<TSource> TryElementAt(int index)
                 => ValueReadOnlyList.TryElementAt<TEnumerable, TEnumerator, TSource>(source, index, skipCount, takeCount);
 
+            [Pure]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TSource First()
                 => ValueReadOnlyList.GetFirst<TEnumerable, TEnumerator, TSource>(source, skipCount, takeCount).ThrowOnEmpty();
+            [Pure]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TSource First(Func<TSource, bool> predicate)
                 => ValueReadOnlyList.GetFirst<TEnumerable, TEnumerator, TSource>(source, predicate, skipCount, takeCount).ThrowOnEmpty();
+            [Pure]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TSource FirstOrDefault()
                 => ValueReadOnlyList.GetFirst<TEnumerable, TEnumerator, TSource>(source, skipCount, takeCount).DefaultOnEmpty();
+            [Pure]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TSource FirstOrDefault(Func<TSource, bool> predicate)
                 => ValueReadOnlyList.GetFirst<TEnumerable, TEnumerator, TSource>(source, predicate, skipCount, takeCount).DefaultOnEmpty();
+            [Pure]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public (ElementResult Success, TSource Value) TryFirst()
                 => ValueReadOnlyList.GetFirst<TEnumerable, TEnumerator, TSource>(source, skipCount, takeCount);
+            [Pure]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public (ElementResult Success, TSource Value) TryFirst(Func<TSource, bool> predicate)
                 => ValueReadOnlyList.GetFirst<TEnumerable, TEnumerator, TSource>(source, predicate, skipCount, takeCount);
 
+            [Pure]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TSource Single()
                 => ValueReadOnlyList.GetSingle<TEnumerable, TEnumerator, TSource>(source, skipCount, takeCount).ThrowOnEmpty();
+            [Pure]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TSource Single(Func<TSource, bool> predicate)
                 => ValueReadOnlyList.GetSingle<TEnumerable, TEnumerator, TSource>(source, predicate, skipCount, takeCount).ThrowOnEmpty();
+            [Pure]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TSource SingleOrDefault()
                 => ValueReadOnlyList.GetSingle<TEnumerable, TEnumerator, TSource>(source, skipCount, takeCount).DefaultOnEmpty();
+            [Pure]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TSource SingleOrDefault(Func<TSource, bool> predicate)
                 => ValueReadOnlyList.GetSingle<TEnumerable, TEnumerator, TSource>(source, predicate, skipCount, takeCount).DefaultOnEmpty();
 
+            [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TSource[] ToArray()
                 => ValueReadOnlyList.ToArray<TEnumerable, TEnumerator, TSource>(source, skipCount, takeCount);
 
+            [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public List<TSource> ToList()
                 => ValueReadOnlyList.ToList<TEnumerable, TEnumerator, TSource>(source, skipCount, takeCount);
 
+            [Pure]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Dictionary<TKey, TSource> ToDictionary<TKey>(Func<TSource, TKey> keySelector)
                 => ValueReadOnlyList.ToDictionary<TEnumerable, TEnumerator, TSource, TKey>(source, keySelector, EqualityComparer<TKey>.Default, skipCount, takeCount);
+            [Pure]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Dictionary<TKey, TSource> ToDictionary<TKey>(Func<TSource, TKey> keySelector, IEqualityComparer<TKey> comparer)
                 => ValueReadOnlyList.ToDictionary<TEnumerable, TEnumerator, TSource, TKey>(source, keySelector, comparer, skipCount, takeCount);
+            [Pure]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector)
                 => ValueReadOnlyList.ToDictionary<TEnumerable, TEnumerator, TSource, TKey, TElement>(source, keySelector, elementSelector, EqualityComparer<TKey>.Default, skipCount, takeCount);
+            [Pure]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, IEqualityComparer<TKey> comparer)
                 => ValueReadOnlyList.ToDictionary<TEnumerable, TEnumerator, TSource, TKey, TElement>(source, keySelector, elementSelector, comparer, skipCount, takeCount);
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public void ForEach(Action<TSource> action)
+                => ValueReadOnlyList.ForEach<TEnumerable, TEnumerator, TSource>(source, action, skipCount, takeCount);
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public void ForEach(Action<TSource, int> action)
+                => ValueReadOnlyList.ForEach<TEnumerable, TEnumerator, TSource>(source, action, skipCount, takeCount);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

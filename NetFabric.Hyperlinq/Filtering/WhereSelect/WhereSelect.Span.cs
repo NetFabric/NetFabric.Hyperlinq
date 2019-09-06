@@ -9,8 +9,8 @@ namespace NetFabric.Hyperlinq
         [Pure]
         internal static WhereSelectEnumerable<TSource, TResult> WhereSelect<TSource, TResult>(
             this Span<TSource> source, 
-            Func<TSource, long, bool> predicate, 
-            Func<TSource, long, TResult> selector) 
+            Func<TSource, bool> predicate, 
+            Func<TSource, TResult> selector) 
         {
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
             if (selector is null) ThrowHelper.ThrowArgumentNullException(nameof(selector));
@@ -21,10 +21,10 @@ namespace NetFabric.Hyperlinq
         public readonly ref struct WhereSelectEnumerable<TSource, TResult>
         {
             internal readonly Span<TSource> source;
-            internal readonly Func<TSource, long, bool> predicate;
-            internal readonly Func<TSource, long, TResult> selector;
+            internal readonly Func<TSource, bool> predicate;
+            internal readonly Func<TSource, TResult> selector;
 
-            internal WhereSelectEnumerable(Span<TSource> source, Func<TSource, long, bool> predicate, Func<TSource, long, TResult> selector)
+            internal WhereSelectEnumerable(Span<TSource> source, Func<TSource, bool> predicate, Func<TSource, TResult> selector)
             {
                 this.source = source;
                 this.predicate = predicate;
@@ -36,8 +36,8 @@ namespace NetFabric.Hyperlinq
             public ref struct Enumerator
             {
                 readonly Span<TSource> source;
-                readonly Func<TSource, long, bool> predicate;
-                readonly Func<TSource, long, TResult> selector;
+                readonly Func<TSource, bool> predicate;
+                readonly Func<TSource, TResult> selector;
                 readonly int count;
                 int index;
 
@@ -51,13 +51,13 @@ namespace NetFabric.Hyperlinq
                 }
 
                 public TResult Current 
-                    => selector(source[index], index);
+                    => selector(source[index]);
 
                 public bool MoveNext()
                 {
                     while (++index < count)
                     {
-                        if (predicate(source[index], index))
+                        if (predicate(source[index]))
                             return true;
                     }
                     return false;
@@ -68,44 +68,16 @@ namespace NetFabric.Hyperlinq
                 => source.Count(predicate);
 
             public TResult First()
-                => selector(source.First(predicate, out var index), index);
+                => selector(source.First(predicate));
 
             public TResult FirstOrDefault()
-                => selector(source.FirstOrDefault(predicate, out var index), index);
+                => selector(source.FirstOrDefault(predicate));
 
             public TResult Single()
-                => selector(source.Single(predicate, out var index), index);
+                => selector(source.Single(predicate));
 
             public TResult SingleOrDefault()
-                => selector(source.SingleOrDefault(predicate, out var index), index);
-        }
-
-        public static TResult? FirstOrNull<TSource, TResult>(this WhereSelectEnumerable<TSource, TResult> source)
-            where TResult : struct
-        {
-            var span = source.source;
-            var length = span.Length;
-            for (var index = 0; index < length; index++)
-            {
-                if (source.predicate(span[index], index))
-                    return source.selector(span[index], index);
-            }
-            return null;
-        }
-
-        public static TResult? SingleOrNull<TSource, TResult>(this WhereSelectEnumerable<TSource, TResult> source)
-            where TResult : struct
-        {
-            var span = source.source;
-            var length = span.Length;
-            if (length > 1) ThrowHelper.ThrowNotSingleSequence<TSource>();
-
-            for (var index = 0; index < length; index++)
-            {
-                if (source.predicate(span[index], index))
-                    return source.selector(span[index], index);
-            }
-            return null;
+                => selector(source.SingleOrDefault(predicate));
         }
     }
 }

@@ -166,6 +166,11 @@ namespace NetFabric.Hyperlinq
         public static Dictionary<TKey, TElement> ToDictionary<TSource, TKey, TElement>(this List<TSource> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, IEqualityComparer<TKey> comparer)
             => ValueReadOnlyList.ToDictionary<ValueWrapper<TSource>, List<TSource>.Enumerator, TSource, TKey, TElement>(new ValueWrapper<TSource>(source), keySelector, elementSelector, comparer);
 
+        public static void ForEach<TSource>(this List<TSource> source, Action<TSource> action)
+            => ValueReadOnlyList.ForEach<ValueWrapper<TSource>, List<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), action);
+        public static void ForEach<TSource>(this List<TSource> source, Action<TSource, int> action)
+            => ValueReadOnlyList.ForEach<ValueWrapper<TSource>, List<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), action);
+
         public readonly struct ValueWrapper<TSource>
             : IValueReadOnlyList<TSource, List<TSource>.Enumerator>
         {

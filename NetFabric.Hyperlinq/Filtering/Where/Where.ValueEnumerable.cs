@@ -150,6 +150,32 @@ namespace NetFabric.Hyperlinq
                 => ValueEnumerable.ToDictionary<TEnumerable, TEnumerator, TSource, TKey, TElement>(source, keySelector, elementSelector, EqualityComparer<TKey>.Default, predicate);
             public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, IEqualityComparer<TKey> comparer)
                 => ValueEnumerable.ToDictionary<TEnumerable, TEnumerator, TSource, TKey, TElement>(source, keySelector, elementSelector, comparer, predicate);
+
+            public void ForEach(Action<TSource> action)
+            {
+                using var enumerator = source.GetEnumerator();
+                checked
+                {
+                    while (enumerator.MoveNext())
+                    {
+                        if (predicate(enumerator.Current))
+                            action(enumerator.Current);
+                    }
+                }
+            }
+            public void ForEach(Action<TSource, int> action)
+            {
+                var actionIndex = 0;
+                using var enumerator = source.GetEnumerator();
+                checked
+                {
+                    while (enumerator.MoveNext())
+                    {
+                        if (predicate(enumerator.Current))
+                            action(enumerator.Current, actionIndex++);
+                    }
+                }
+            }
         }
     }
 }

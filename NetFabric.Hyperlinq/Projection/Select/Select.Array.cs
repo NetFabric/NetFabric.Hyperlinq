@@ -195,6 +195,20 @@ namespace NetFabric.Hyperlinq
                 return dictionary;
             }
 
+            public void ForEach(Action<TResult> action)
+            {
+                var end = skipCount + takeCount;
+                for (var index = skipCount; index < end; index++)
+                    action(selector(source[index]));
+            }
+            public void ForEach(Action<TResult, int> action)
+            {
+                var actionIndex = 0;
+                var end = skipCount + takeCount;
+                for (var index = skipCount; index < end; index++)
+                    action(selector(source[index]), actionIndex++);
+            }
+
             // helper implementation of ICollection<> so that CopyTo() is used to convert to List<>
             [Ignore]
             sealed class ToListCollection
