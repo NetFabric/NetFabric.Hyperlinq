@@ -153,6 +153,13 @@ namespace NetFabric.Hyperlinq
                 => ToDictionary<TKey, TElement>(keySelector, elementSelector, EqualityComparer<TKey>.Default);
             public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, IEqualityComparer<TKey> comparer)
                 => new Dictionary<TKey, TElement>(1, comparer) { { keySelector(value), elementSelector(value) } };
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public void ForEach(Action<TSource> action)
+                => action(value);
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public void ForEach(Action<TSource, int> action)
+                => action(value, 0);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

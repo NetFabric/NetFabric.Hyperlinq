@@ -31,7 +31,7 @@ namespace NetFabric.Hyperlinq
         }
 
         [Pure]
-        public static ref TSource First<TSource>(this Span<TSource> source, Func<TSource, long, bool> predicate)
+        public static ref TSource First<TSource>(this Span<TSource> source, Func<TSource, int, bool> predicate)
         {
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
 
@@ -46,7 +46,7 @@ namespace NetFabric.Hyperlinq
         }
 
         [Pure]
-        public static ref TSource First<TSource>(this Span<TSource> source, Func<TSource, long, bool> predicate, out int index)
+        public static ref TSource First<TSource>(this Span<TSource> source, Func<TSource, int, bool> predicate, out int index)
         {
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
 
@@ -84,7 +84,7 @@ namespace NetFabric.Hyperlinq
         }
 
         [Pure]
-        public static ref readonly TSource FirstOrDefault<TSource>(this Span<TSource> source, Func<TSource, long, bool> predicate)
+        public static ref readonly TSource FirstOrDefault<TSource>(this Span<TSource> source, Func<TSource, int, bool> predicate)
         {
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
 
@@ -98,7 +98,7 @@ namespace NetFabric.Hyperlinq
         }
 
         [Pure]
-        public static ref readonly TSource FirstOrDefault<TSource>(this Span<TSource> source, Func<TSource, long, bool> predicate, out int index)
+        public static ref readonly TSource FirstOrDefault<TSource>(this Span<TSource> source, Func<TSource, int, bool> predicate, out int index)
         {
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
 
@@ -110,38 +110,6 @@ namespace NetFabric.Hyperlinq
             }
             index = -1;
             return ref Default<TSource>.Value;
-        }
-
-        [Pure]
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static TSource? FirstOrNull<TSource>(this Span<TSource> source)
-            where TSource : struct
-        {
-            if (source.Length == 0) return null;
-
-            return source[0];
-        }
-
-        [Pure]
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static TSource? FirstOrNull<TSource>(this Span<TSource> source, Func<TSource, long, bool> predicate)
-            where TSource : struct
-            => FirstOrNull<TSource>(source, predicate, out var _);
-
-        [Pure]
-        public static TSource? FirstOrNull<TSource>(this Span<TSource> source, Func<TSource, long, bool> predicate, out int index)
-            where TSource : struct
-        {
-            if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
-
-            var length = source.Length;
-            for (index = 0; index < length; index++)
-            {
-                if (predicate(source[index], index))
-                    return source[index];
-            }
-            index = -1;
-            return null;
         }
     }
 }

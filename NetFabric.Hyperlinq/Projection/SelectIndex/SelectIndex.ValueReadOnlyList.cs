@@ -214,6 +214,19 @@ namespace NetFabric.Hyperlinq
 
                 return dictionary;
             }
+
+            public void ForEach(Action<TResult> action)
+            {
+                var end = skipCount + takeCount;
+                for (var index = skipCount; index < end; index++)
+                    action(selector(source[index], index));
+            }
+            public void ForEach(Action<TResult, int> action)
+            {
+                var end = skipCount + takeCount;
+                for (var index = skipCount; index < end; index++)
+                    action(selector(source[index], index), index);
+            }
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
