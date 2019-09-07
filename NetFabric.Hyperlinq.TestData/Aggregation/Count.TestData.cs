@@ -6,14 +6,6 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class TestData
     {
-        public static TheoryData<int[]> Count =>
-            new TheoryData<int[]> 
-            {
-                { new int[] { } },
-                { new int[] { 1 } },
-                { new int[] { 1, 2, 3, 4, 5} },
-            };
-
         public static TheoryData<int[], Func<int, bool>> CountPredicate =>
             new TheoryData<int[], Func<int, bool>> 
             {

@@ -7,7 +7,9 @@ namespace NetFabric.Hyperlinq.UnitTests
     public class ForEachArrayTests
     {
         [Theory]
-        [MemberData(nameof(TestData.Count), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
         public void ForEach_With_ValidData_Should_Succeed(int[] source)
         {
             // Arrange
@@ -23,7 +25,9 @@ namespace NetFabric.Hyperlinq.UnitTests
         }
 
         [Theory]
-        [MemberData(nameof(TestData.Count), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
         public void ForEachIndex_With_ValidData_Should_Succeed(int[] source)
         {
             // Arrange
