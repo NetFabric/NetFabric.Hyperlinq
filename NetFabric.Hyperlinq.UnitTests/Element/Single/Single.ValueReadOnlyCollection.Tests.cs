@@ -7,7 +7,7 @@ namespace NetFabric.Hyperlinq.UnitTests
     public class SingleValueReadOnlyCollectionTests
     {
         [Theory]
-        [MemberData(nameof(TestData.SingleEmpty), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
         public void Single_With_Empty_Should_Throw(int[] source)
         {
             // Arrange
@@ -39,7 +39,7 @@ namespace NetFabric.Hyperlinq.UnitTests
         }
 
         [Theory]
-        [MemberData(nameof(TestData.SingleSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
         public void Single_With_ValidData_Should_Succeed(int[] source)
         {
             // Arrange
@@ -69,7 +69,7 @@ namespace NetFabric.Hyperlinq.UnitTests
         }
 
         [Theory]
-        [MemberData(nameof(TestData.SingleMultiple), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
         public void Single_With_Multiple_Should_Throw(int[] source)
         {
             // Arrange

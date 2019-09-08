@@ -62,7 +62,7 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
-            if (source.Count == 0 || takeCount < 1)
+            if (source.Count == 0 || skipCount > source.Count || takeCount < 1)
                 return (ElementResult.Empty, default);
 
             return (ElementResult.Success, source[skipCount]);

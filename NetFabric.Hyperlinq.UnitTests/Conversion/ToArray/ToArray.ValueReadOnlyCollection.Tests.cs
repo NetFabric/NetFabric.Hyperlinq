@@ -6,7 +6,9 @@ namespace NetFabric.Hyperlinq.UnitTests
     public class ToArrayValueReadOnlyCollectionTests
     {
         [Theory]
-        [MemberData(nameof(TestData.Conversion), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
         public void ToArray_With_ValidData_Should_Succeed(int[] source)
         {
             // Arrange

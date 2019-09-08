@@ -6,7 +6,9 @@ namespace NetFabric.Hyperlinq.UnitTests
     public class SkipTakeValueReadOnlyCollectionTests
     {
         [Theory]
-        [MemberData(nameof(TestData.SkipTake), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakeEmpty), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakeSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakeMultiple), MemberType = typeof(TestData))]
         public void SkipTake_With_ValidData_Should_Succeed(int[] source, int skipCount, int takeCount)
         {
             // Arrange
@@ -42,7 +44,9 @@ namespace NetFabric.Hyperlinq.UnitTests
         }
 
         [Theory]
-        [MemberData(nameof(TestData.SkipTake), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakeEmpty), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakeSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakeMultiple), MemberType = typeof(TestData))]
         public void SkipTake_Count_With_ValidData_Should_Succeed(int[] source, int skipCount, int takeCount)
         {
             // Arrange

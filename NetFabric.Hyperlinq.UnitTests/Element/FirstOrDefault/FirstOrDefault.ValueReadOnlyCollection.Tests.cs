@@ -7,9 +7,9 @@ namespace NetFabric.Hyperlinq.UnitTests
     public class FirstOrDefaultValueReadOnlyCollectionTests
     {
         [Theory]
-        [MemberData(nameof(TestData.SingleEmpty), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.SingleSingle), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.SingleMultiple), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
         public void FirstOrDefault_With_ValidData_Should_Succeed(int[] source)
         {
             // Arrange

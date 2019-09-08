@@ -6,7 +6,9 @@ namespace NetFabric.Hyperlinq.UnitTests
     public class TakeValueReadOnlyCollectionTests
     {
         [Theory]
-        [MemberData(nameof(TestData.Take), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.TakeEmpty), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.TakeSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.TakeMultiple), MemberType = typeof(TestData))]
         public void Take_With_ValidData_Should_Succeed(int[] source, int count)
         {
             // Arrange

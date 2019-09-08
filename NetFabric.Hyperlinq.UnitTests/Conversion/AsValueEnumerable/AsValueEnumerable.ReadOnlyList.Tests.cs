@@ -7,7 +7,9 @@ namespace NetFabric.Hyperlinq.UnitTests
     public class AsValueEnumerableReadOnlyListTests
     {
         [Theory]
-        [MemberData(nameof(TestData.Conversion), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
         public void AsValueEnumerable_With_ValidData_Should_Succeed(int[] source)
         {
             // Arrange

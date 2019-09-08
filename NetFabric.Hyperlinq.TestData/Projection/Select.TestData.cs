@@ -6,62 +6,62 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class TestData
     {
-        public static TheoryData<int[], Func<int, string>> Select =>
-            new TheoryData<int[], Func<int, string>> 
+        public static TheoryData<int[]> Select =>
+            new TheoryData<int[]> 
             {
-                { new int[] {}, item => item.ToString() },
-                { new int[] { 1 }, item => item.ToString() },
-                { new int[] { 1, 2, 3 }, item => item.ToString() },
+                { new int[] {} },
+                { new int[] { 1 } },
+                { new int[] { 1, 2, 3 } },
             };
 
-        public static TheoryData<int[], Func<int, int>, int> SelectSkip =>
-            new TheoryData<int[], Func<int, int>, int> 
+        public static TheoryData<int[], int> SelectSkip =>
+            new TheoryData<int[], int> 
             {
-                { new int[] { }, item => item, -1 },
-                { new int[] { }, item => item, 0 },
-                { new int[] { }, item => item, 2},
+                { new int[] { }, -1 },
+                { new int[] { }, 0 },
+                { new int[] { }, 2},
 
-                { new int[] { 1, 2, 3, 4, 5 }, item => item, -1 },
-                { new int[] { 1, 2, 3, 4, 5 }, item => item, 0 },
-                { new int[] { 1, 2, 3, 4, 5 }, item => item, 2 },
-                { new int[] { 1, 2, 3, 4, 5 }, item => item, 10 },
+                { new int[] { 1, 2, 3, 4, 5 }, -1 },
+                { new int[] { 1, 2, 3, 4, 5 }, 0 },
+                { new int[] { 1, 2, 3, 4, 5 }, 2 },
+                { new int[] { 1, 2, 3, 4, 5 }, 10 },
             };
 
-        public static TheoryData<int[], Func<int, int>, int> SelectTake =>
-            new TheoryData<int[], Func<int, int>, int> 
+        public static TheoryData<int[], int> SelectTake =>
+            new TheoryData<int[], int> 
             {
-                { new int[] { }, item => item, -1 },
-                { new int[] { }, item => item, 0 },
-                { new int[] { }, item => item, 2 },
+                { new int[] { }, -1 },
+                { new int[] { }, 0 },
+                { new int[] { }, 2 },
 
-                { new int[] { 1, 2, 3, 4, 5 }, item => item, -1 },
-                { new int[] { 1, 2, 3, 4, 5 }, item => item, 0 },
-                { new int[] { 1, 2, 3, 4, 5 }, item => item, 2 },
-                { new int[] { 1, 2, 3, 4, 5 }, item => item, 10 },
+                { new int[] { 1, 2, 3, 4, 5 }, -1 },
+                { new int[] { 1, 2, 3, 4, 5 }, 0 },
+                { new int[] { 1, 2, 3, 4, 5 }, 2 },
+                { new int[] { 1, 2, 3, 4, 5 }, 10 },
             };
 
-        public static TheoryData<int[], Func<int, int>, int, int> SelectSkipTake =>
-            new TheoryData<int[], Func<int, int>, int, int> 
+        public static TheoryData<int[], int, int> SelectSkipTake =>
+            new TheoryData<int[], int, int> 
             {
-                { new int[] { }, item => item, -1, -1 },
-                { new int[] { }, item => item, 0, -1 },
-                { new int[] { }, item => item, -1, 0 },
-                { new int[] { }, item => item, 0, 0 },
-                { new int[] { }, item => item, 2, 0 },
-                { new int[] { }, item => item, 0, 2 },
-                { new int[] { }, item => item, 2, 2 },
+                { new int[] { }, -1, -1 },
+                { new int[] { }, 0, -1 },
+                { new int[] { }, -1, 0 },
+                { new int[] { }, 0, 0 },
+                { new int[] { }, 2, 0 },
+                { new int[] { }, 0, 2 },
+                { new int[] { }, 2, 2 },
 
-                { new int[] { 1, 2, 3, 4, 5 }, item => item, -1, -1 },
-                { new int[] { 1, 2, 3, 4, 5 }, item => item, 0, -1 },
-                { new int[] { 1, 2, 3, 4, 5 }, item => item, -1, 0 },
-                { new int[] { 1, 2, 3, 4, 5 }, item => item, 0, 0 },
-                { new int[] { 1, 2, 3, 4, 5 }, item => item, 2, 0 },
-                { new int[] { 1, 2, 3, 4, 5 }, item => item, 0, 2 },
-                { new int[] { 1, 2, 3, 4, 5 }, item => item, 2, 2 },
+                { new int[] { 1, 2, 3, 4, 5 }, -1, -1 },
+                { new int[] { 1, 2, 3, 4, 5 }, 0, -1 },
+                { new int[] { 1, 2, 3, 4, 5 }, -1, 0 },
+                { new int[] { 1, 2, 3, 4, 5 }, 0, 0 },
+                { new int[] { 1, 2, 3, 4, 5 }, 2, 0 },
+                { new int[] { 1, 2, 3, 4, 5 }, 0, 2 },
+                { new int[] { 1, 2, 3, 4, 5 }, 2, 2 },
 
-                { new int[] { 1, 2, 3, 4, 5 }, item => item, 10, 0 },
-                { new int[] { 1, 2, 3, 4, 5 }, item => item, 0, 10 },
-                { new int[] { 1, 2, 3, 4, 5 }, item => item, 10, 10 },
+                { new int[] { 1, 2, 3, 4, 5 }, 10, 0 },
+                { new int[] { 1, 2, 3, 4, 5 }, 0, 10 },
+                { new int[] { 1, 2, 3, 4, 5 }, 10, 10 },
             };    
     }
 }

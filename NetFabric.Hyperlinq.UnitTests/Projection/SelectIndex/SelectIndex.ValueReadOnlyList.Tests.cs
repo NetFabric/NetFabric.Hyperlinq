@@ -1,14 +1,13 @@
-using System;
-using System.Collections.Generic;
 using FluentAssertions;
+using System;
 using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests
 {
-    public class SelectValueReadOnlyListTests
+    public class SelectIndexValueReadOnlyListTests
     {
         [Fact]
-        public void Select_With_NullSelector_Should_Throw()
+        public void SelectIndex_With_NullSelector_Should_Throw()
         {
             // Arrange
             var list = Wrap.AsValueReadOnlyList(new int[0]);
@@ -29,19 +28,19 @@ namespace NetFabric.Hyperlinq.UnitTests
         [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
-        public void Select_With_ValidData_Should_Succeed(int[] source)
+        public void SelectIndex_With_ValidData_Should_Succeed(int[] source)
         {
             // Arrange
             var wrapped = Wrap.AsValueReadOnlyList(source);
-            var expected = System.Linq.Enumerable.Select(wrapped, item => item.ToString());
+            var expected = System.Linq.Enumerable.Select(wrapped, (item, index) => (item + index).ToString());
 
             // Act
-            var result = ValueReadOnlyList.Select<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int, string>(wrapped, item => item.ToString());
+            var result = ValueReadOnlyList.Select<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int, string>(wrapped, (item, index) => (item + index).ToString());
 
             // Assert
             Utils.ValueReadOnlyList.ShouldEqual<
-                ValueReadOnlyList.SelectEnumerable<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int, string>,
-                ValueReadOnlyList.SelectEnumerable<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int, string>.Enumerator,
+                ValueReadOnlyList.SelectIndexEnumerable<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int, string>,
+                ValueReadOnlyList.SelectIndexEnumerable<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int, string>.Enumerator,
                 string>(result, expected);
         }
     }

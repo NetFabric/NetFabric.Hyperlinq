@@ -4,10 +4,10 @@ using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests
 {
-    public class SelectValueEnumerableTests
+    public class SelectIndexValueEnumerableTests
     {
         [Fact]
-        public void Select_With_NullSelector_Should_Throw()
+        public void SelectIndex_With_NullSelector_Should_Throw()
         {
             // Arrange
             var enumerable = Wrap.AsValueEnumerable(new int[0]);
@@ -28,19 +28,19 @@ namespace NetFabric.Hyperlinq.UnitTests
         [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
-        public void Select_With_ValidData_Should_Succeed(int[] source)
+        public void SelectIndex_With_ValidData_Should_Succeed(int[] source)
         {
             // Arrange
             var wrapped = Wrap.AsValueEnumerable(source);
-            var expected = System.Linq.Enumerable.Select(wrapped, item => item.ToString());
+            var expected = System.Linq.Enumerable.Select(wrapped, (item, index) => (item + index).ToString());
 
             // Act
-            var result = ValueEnumerable.Select<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int, string>(wrapped, item => item.ToString());
+            var result = ValueEnumerable.Select<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int, string>(wrapped, (item, index) => (item + index).ToString());
 
             // Assert
             Utils.ValueEnumerable.ShouldEqual<
-                ValueEnumerable.SelectEnumerable<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int, string>,
-                ValueEnumerable.SelectEnumerable<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int, string>.Enumerator,
+                ValueEnumerable.SelectIndexEnumerable<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int, string>,
+                ValueEnumerable.SelectIndexEnumerable<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int, string>.Enumerator,
                 string>(result, expected);
         }
     }
