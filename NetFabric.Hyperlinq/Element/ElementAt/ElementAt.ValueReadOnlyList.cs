@@ -60,7 +60,8 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
-            if (index < 0 || index >= takeCount) return default;
+            if (index < 0 || skipCount > source.Count || index >= takeCount)
+                return default;
 
             return new Maybe<TSource>(source[index + skipCount]);
         }

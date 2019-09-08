@@ -39,9 +39,8 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
-            var end = skipCount + takeCount;
-            for (var index = skipCount; index < end; index++)
-                action(source[index], index);
+            for (var index = 0; index < takeCount; index++)
+                action(source[index + skipCount], index);
         }
     }
 }

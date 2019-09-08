@@ -40,18 +40,13 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
-            if (takeCount < 1)
+            if (source.Count == 0 || skipCount > source.Count || takeCount < 1)
                 return (ElementResult.Empty, default);
 
-            switch (source.Count)
-            {
-                case 0:
-                    return (ElementResult.Empty, default);
-                case 1:
-                    return (ElementResult.Success, source[skipCount]);
-                default:
-                    return (ElementResult.NotSingle, default);
-            }
+            if (takeCount > 1 && skipCount < source.Count)
+                return (ElementResult.NotSingle, default);
+
+            return (ElementResult.Success, source[skipCount]);
         }
 
         [Pure]
