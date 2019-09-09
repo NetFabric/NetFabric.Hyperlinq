@@ -53,7 +53,7 @@ namespace NetFabric.Hyperlinq
                 {
                     enumerator = enumerable.source.GetEnumerator();
                     predicate = enumerable.predicate;
-                    index = 0;
+                    index = -1;
                 }
 
                 public readonly TSource Current

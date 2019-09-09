@@ -17,10 +17,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var result = ValueEnumerable.Return(value);
 
             // Assert
-            Utils.ValueReadOnlyList.ShouldEqual<
-                ValueEnumerable.ReturnEnumerable<int>,
-                ValueEnumerable.ReturnEnumerable<int>.DisposableEnumerator,
-                int>(result, expected);
+            result.Must().BeExactlyAs(expected);
         }
 
         [Theory]

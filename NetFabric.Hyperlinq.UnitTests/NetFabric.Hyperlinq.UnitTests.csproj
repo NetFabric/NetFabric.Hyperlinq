@@ -11,12 +11,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Remove="Utils\FluentAssertions\**" />
-    <EmbeddedResource Remove="Utils\FluentAssertions\**" />
-    <None Remove="Utils\FluentAssertions\**" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="FluentAssertions" Version="5.9.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.2.0" />
     <PackageReference Include="morelinq" Version="3.2.0" />
