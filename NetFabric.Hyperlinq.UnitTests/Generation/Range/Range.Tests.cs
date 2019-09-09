@@ -51,10 +51,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var result = ValueEnumerable.Range(start, count);
 
             // Assert
-            Utils.ValueReadOnlyList.ShouldEqual<
-                ValueEnumerable.RangeEnumerable,
-                ValueEnumerable.RangeEnumerable.DisposableEnumerator,
-                int>(result, expected);
+            result.Must().BeExactlyAs(expected);
         }
 
         [Theory]
@@ -68,10 +65,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var result = ValueEnumerable.Range(start, count).Skip(skipCount);
 
             // Assert
-            Utils.ValueReadOnlyList.ShouldEqual<
-                ValueEnumerable.RangeEnumerable,
-                ValueEnumerable.RangeEnumerable.DisposableEnumerator,
-                int>(result, expected);
+            result.Must().BeExactlyAs(expected);
         }
 
         [Theory]
@@ -85,10 +79,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var result = ValueEnumerable.Range(start, count).Take(takeCount);
 
             // Assert
-            Utils.ValueReadOnlyList.ShouldEqual<
-                ValueEnumerable.RangeEnumerable,
-                ValueEnumerable.RangeEnumerable.DisposableEnumerator,
-                int>(result, expected);
+            result.Must().BeExactlyAs(expected);
         }
 
         [Theory]

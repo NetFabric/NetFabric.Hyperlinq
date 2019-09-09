@@ -38,10 +38,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var result = ValueReadOnlyCollection.Select<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int, string>(wrapped, (item, index) => (item + index).ToString());
 
             // Assert
-            Utils.ValueReadOnlyCollection.ShouldEqual<
-                ValueReadOnlyCollection.SelectIndexEnumerable<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int, string>,
-                ValueReadOnlyCollection.SelectIndexEnumerable<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int, string>.Enumerator,
-                string>(result, expected);
+            result.Must().BeExactlyAs(expected);
         }
     }
 }

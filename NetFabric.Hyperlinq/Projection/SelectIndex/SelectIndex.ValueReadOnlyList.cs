@@ -73,26 +73,28 @@ namespace NetFabric.Hyperlinq
             {
                 readonly TEnumerable source;
                 readonly Func<TSource, int, TResult> selector;
-                readonly int end;
+                readonly int skipCount;
+                readonly int takeCount;
                 int index;
 
                 internal Enumerator(in SelectIndexEnumerable<TEnumerable, TEnumerator, TSource, TResult> enumerable)
                 {
                     source = enumerable.source;
                     selector = enumerable.selector;
-                    end = enumerable.skipCount + enumerable.takeCount;
-                    index = enumerable.skipCount - 1;
+                    skipCount = enumerable.skipCount;
+                    takeCount = enumerable.takeCount;
+                    index = -1;
                 }
 
                 public readonly TResult Current
                 {
                     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                    get => selector(source[index], index);
+                    get => selector(source[index + skipCount], index);
                 }
-                readonly object IEnumerator.Current => selector(source[index], index);
+                readonly object IEnumerator.Current => selector(source[index + skipCount], index);
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                public bool MoveNext() => ++index < end;
+                public bool MoveNext() => ++index < takeCount;
 
                 public readonly void Reset() => throw new NotSupportedException();
 

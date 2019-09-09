@@ -36,10 +36,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var result = ValueEnumerable.Where<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
 
             // Assert
-            Utils.ValueEnumerable.ShouldEqual<
-                ValueEnumerable.WhereEnumerable<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>,
-                ValueEnumerable.WhereEnumerable<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>.Enumerator, 
-                int>(result, expected);
+            result.Must().BeExactlyAs(expected);
         }
     }
 }

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using FluentAssertions;
+﻿using FluentAssertions;
 using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests
@@ -21,10 +19,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var result = ValueEnumerable.Distinct<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped);
 
             // Assert
-            Utils.ValueEnumerable.ShouldEqual<
-                ValueEnumerable.DistinctEnumerable<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>,
-                ValueEnumerable.DistinctEnumerable<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>.Enumerator,
-                int>(result, expected);
+            result.Must().BeExactlyAs(expected);
         }
     }
 }
