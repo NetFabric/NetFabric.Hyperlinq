@@ -18,7 +18,7 @@ namespace NetFabric.Hyperlinq.UnitTests
 
             // Assert
             result.Should().BeOfType<Array.ValueEnumerableWrapper<int>>();
-            result.Must().BeExactlyAs(source);
+            result.Must().BeEnumerable(source);
         }
     }
 }

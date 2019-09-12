@@ -38,7 +38,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var result = ValueEnumerable.Select<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int, string>(wrapped, (item, index) => (item + index).ToString());
 
             // Assert
-            result.Must().BeExactlyAs(expected);
+            result.Must().BeEnumerable(expected);
         }
     }
 }

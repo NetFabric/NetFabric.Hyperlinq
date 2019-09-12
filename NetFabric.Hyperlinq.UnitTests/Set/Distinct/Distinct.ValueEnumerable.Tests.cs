@@ -19,7 +19,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var result = ValueEnumerable.Distinct<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped);
 
             // Assert
-            result.Must().BeExactlyAs(expected);
+            result.Must().BeEnumerable(expected);
         }
     }
 }

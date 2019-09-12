@@ -1,20 +1,21 @@
-﻿using FluentAssertions.Execution;
+﻿using FluentAssertions.Common;
+using FluentAssertions.Execution;
 using FluentAssertions.Primitives;
 using System;
 using System.Collections.Generic;
 
 namespace FluentAssertions.Collections
 {
-    public class ReadOnlyCollectionAssertions<T> : ReferenceTypeAssertions<IReadOnlyCollection<T>, ReadOnlyCollectionAssertions<T>>
+    public class GenericEnumerableAssertions<T> : ReferenceTypeAssertions<IEnumerable<T>, GenericEnumerableAssertions<T>>
     {
-        internal ReadOnlyCollectionAssertions(IReadOnlyCollection<T> subject)
+        internal GenericEnumerableAssertions(IEnumerable<T> subject)
         {
             Subject = subject;
         }
 
-        protected override string Identifier => "Hyperlinq.ReadOnlyCollectionAssertions";
+        protected override string Identifier => "Hyperlinq.GenericEnumerableAssertions";
 
-        public AndConstraint<ReadOnlyCollectionAssertions<T>> BeEnumerable(IEnumerable<T> expected, string because = "", params object[] becauseArgs)
+        public AndConstraint<GenericEnumerableAssertions<T>> BeEnumerable(IEnumerable<T> expected, string because = "", params object[] becauseArgs)
         {
             var subjectIsNull = Subject is null;
             var expectationIsNull = expected is null;
@@ -33,18 +34,18 @@ namespace FluentAssertions.Collections
                 ObjectAssertions.AssertIsEnumerable(Subject, because, becauseArgs);
                 ObjectAssertions.AssertEquality(Subject, expected, because, becauseArgs);
                 NonGenericEnumerableAssertions.AssertEquality(Subject, expected, because, becauseArgs);
-                GenericEnumerableAssertions<T>.AssertEquality(Subject, expected, because, becauseArgs);
-                AssertCountIsCorrect(Subject, because, becauseArgs);
+                AssertEquality(Subject, expected, because, becauseArgs);
             }
-            
-            return new AndConstraint<ReadOnlyCollectionAssertions<T>>(this);
+
+            return new AndConstraint<GenericEnumerableAssertions<T>>(this);
         }
 
-        internal static void AssertCountIsCorrect(IReadOnlyCollection<T> subject, string because = "", params object[] becauseArgs)
+        internal static void AssertEquality(IEnumerable<T> subject, IEnumerable<T> expectation, string because = "", params object[] becauseArgs)
             => Execute.Assertion
                 .BecauseOf(because, becauseArgs)
-                .WithExpectation("Expected 'Count' of {context:collection} to return its item count{reason}, ")
+                .WithExpectation("Expected {context:collection} to be equal to {0}{reason}, ", expectation)
                 .Given(() => subject)
-                .AssertCollectionHasCountCorrect();
+                .AssertGenericEnumerablesHaveSameItems(expectation, (a, e) => a.IndexOfFirstDifferenceWith(e));
+
     }
 }

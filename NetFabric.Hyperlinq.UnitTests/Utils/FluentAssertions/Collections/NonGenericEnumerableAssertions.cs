@@ -2,20 +2,20 @@
 using FluentAssertions.Execution;
 using FluentAssertions.Primitives;
 using System;
-using System.Collections.Generic;
+using System.Collections;
 
 namespace FluentAssertions.Collections
 {
-    public class ReadOnlyListAssertions<T> : ReferenceTypeAssertions<IReadOnlyList<T>, ReadOnlyListAssertions<T>>
+    public class NonGenericEnumerableAssertions : ReferenceTypeAssertions<IEnumerable, NonGenericEnumerableAssertions>
     {
-        internal ReadOnlyListAssertions(IReadOnlyList<T> subject)
+        internal NonGenericEnumerableAssertions(IEnumerable subject)
         {
             Subject = subject;
         }
 
-        protected override string Identifier => "Hyperlinq.ReadOnlyListAssertions";
+        protected override string Identifier => "Hyperlinq.NonGenericEnumerableAssertions";
 
-        public AndConstraint<ReadOnlyListAssertions<T>> BeEnumerable(IEnumerable<T> expected, string because = "", params object[] becauseArgs)
+        public AndConstraint<NonGenericEnumerableAssertions> BeEnumerable(IEnumerable expected, string because = "", params object[] becauseArgs)
         {
             var subjectIsNull = Subject is null;
             var expectationIsNull = expected is null;
@@ -33,20 +33,17 @@ namespace FluentAssertions.Collections
 
                 ObjectAssertions.AssertIsEnumerable(Subject, because, becauseArgs);
                 ObjectAssertions.AssertEquality(Subject, expected, because, becauseArgs);
-                NonGenericEnumerableAssertions.AssertEquality(Subject, expected, because, becauseArgs);
-                GenericEnumerableAssertions<T>.AssertEquality(Subject, expected, because, becauseArgs);
-                ReadOnlyCollectionAssertions<T>.AssertCountIsCorrect(Subject, because, becauseArgs);
                 AssertEquality(Subject, expected, because, becauseArgs);
             }
 
-            return new AndConstraint<ReadOnlyListAssertions<T>>(this);
+            return new AndConstraint<NonGenericEnumerableAssertions>(this);
         }
 
-        static void AssertEquality(IReadOnlyList<T> subject, IEnumerable<T> expected, string because = "", params object[] becauseArgs)
+        internal static void AssertEquality(IEnumerable subject, IEnumerable expectation, string because = "", params object[] becauseArgs)
             => Execute.Assertion
                 .BecauseOf(because, becauseArgs)
-                .WithExpectation("Expected {context:collection} to be equal to {0}{reason}, ", expected)
+                .WithExpectation("Expected {context:collection} to be equal to {0}{reason}, ", expectation)
                 .Given(() => subject)
-                .AssertListsHaveSameItems(expected, (a, e) => a.IndexOfFirstDifferenceWith(e));
+                .AssertNonGenericEnumerablesHaveSameItems(expectation, (a, e) => a.IndexOfFirstDifferenceWith(e));
     }
 }
