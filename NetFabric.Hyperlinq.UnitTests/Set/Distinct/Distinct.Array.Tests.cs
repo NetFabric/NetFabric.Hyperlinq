@@ -18,7 +18,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var result = Array.Distinct<int>(source);
 
             // Assert
-            result.Must().BeExactlyAs(expected);
+            result.Must().BeEnumerable(expected);
         }
     }
 }

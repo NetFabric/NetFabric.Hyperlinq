@@ -39,7 +39,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var result = ValueReadOnlyList.Select<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int, string>(wrapped, item => item.ToString());
 
             // Assert
-            result.Must().BeExactlyAs(expected);
+            result.Must().BeEnumerable(expected);
         }
     }
 }

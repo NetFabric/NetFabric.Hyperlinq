@@ -19,7 +19,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var result = ValueReadOnlyCollection.SkipTake<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(wrapped, skipCount, takeCount);
 
             // Assert
-            result.Must().BeExactlyAs(expected);
+            result.Must().BeEnumerable(expected);
         }
 
         [Theory]
@@ -34,7 +34,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var result = ValueReadOnlyCollection.SkipTake<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(wrapped, skipCount, takeCount0).Take(takeCount1);
 
             // Assert
-            result.Must().BeExactlyAs(expected);
+            result.Must().BeEnumerable(expected);
         }
 
         [Theory]

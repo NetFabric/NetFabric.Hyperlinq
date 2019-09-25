@@ -17,7 +17,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var result = ValueEnumerable.Return(value);
 
             // Assert
-            result.Must().BeExactlyAs(expected);
+            result.Must().BeEnumerable(expected);
         }
 
         [Theory]

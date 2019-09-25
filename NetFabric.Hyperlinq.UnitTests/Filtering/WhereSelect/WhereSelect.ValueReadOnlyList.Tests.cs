@@ -52,7 +52,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var result = ValueReadOnlyList.WhereSelect<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int, string>(wrapped, predicate, selector);
 
             // Assert
-            result.Must().BeExactlyAs(expected);
+            result.Must().BeEnumerable(expected);
         }
     }
 }

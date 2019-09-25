@@ -6,118 +6,63 @@ namespace FluentAssertions.Execution
 {
     static class GivenSelectorExtensions
     {
-        public static ContinuationOfGiven<IEnumerable> AssertNonGenericEnumerablesHaveSameItems(
-            this GivenSelector<IEnumerable> givenSelector, IEnumerable expected, Func<IEnumerable, IEnumerable, int> findIndex)
+        public static ContinuationOfGiven<IEnumerable> AssertForEachEnumerablesHaveSameItems(
+            this GivenSelector<object> givenSelector, IEnumerable expected, Func<object, IEnumerable, int> findIndex)
             => givenSelector
-                .Given<IEnumerable>(actual => new EnumerableWithIndex(actual, findIndex(actual, expected)))
-                .ForCondition(diff => diff.As<EnumerableWithIndex>().Index < 0)
-                .FailWith("but {0} differs at index {1} when using IEnumerator.",
-                    diff => diff.As<EnumerableWithIndex>().Items,
-                    diff => diff.As<EnumerableWithIndex>().Index);
+                .Given<IEnumerable>(actual => new ObjectEnumerableWithIndex(actual, findIndex(actual, expected)))
+                .ForCondition(diff => diff.As<ObjectEnumerableWithIndex>().Index < 0)
+                .FailWith("but {0} differs at index {1} when using 'foreach'.",
+                    diff => diff,
+                    diff => diff.As<ObjectEnumerableWithIndex>().Index);
 
-        public static ContinuationOfGiven<IEnumerable<T>> AssertEnumerablesHaveSameItems<T>(this GivenSelector<IEnumerable<T>> givenSelector,
-            IEnumerable<T> expected, Func<IEnumerable<T>, IEnumerable<T>, int> findIndex)
-            => givenSelector
-                .Given<IEnumerable<T>>(actual => new EnumerableWithIndex<T>(actual, findIndex(actual, expected)))
-                .ForCondition(diff => diff.As<EnumerableWithIndex<T>>().Index < 0)
-                .FailWith("but {0} differs at index {1} when using IEnumerator<>.",
-                    diff => diff.As<EnumerableWithIndex<T>>().Items,
-                    diff => diff.As<EnumerableWithIndex<T>>().Index);
-
-        public static ContinuationOfGiven<IReadOnlyCollection<T>> AssertCollectionHasCountCorrect<T>(this GivenSelector<IReadOnlyCollection<T>> givenSelector)
-            => givenSelector
-                .Given<IReadOnlyCollection<T>>(actual => new ReadOnlyCollectionWithEnumerableCount<T>(actual))
-                .ForCondition(diff => diff.As<ReadOnlyCollectionWithEnumerableCount<T>>().EnumerableCount == diff.As<ReadOnlyCollectionWithEnumerableCount<T>>().Count)
-                .FailWith("but it returns {1} when it has {2} items.",
-                    diff => diff.As<ReadOnlyCollectionWithEnumerableCount<T>>().EnumerableCount,
-                    diff => diff.As<ReadOnlyCollectionWithEnumerableCount<T>>().Count);
-
-        public static ContinuationOfGiven<IReadOnlyList<T>> AssertListsHaveSameItems<T>(this GivenSelector<IReadOnlyList<T>> givenSelector,
-            IEnumerable<T> expected, Func<IReadOnlyList<T>, IEnumerable<T>, int> findIndex)
-            => givenSelector
-                .Given<IReadOnlyList<T>>(actual => new ReadOnlyListWithIndex<T>(actual, findIndex(actual, expected)))
-                .ForCondition(diff => diff.As<ReadOnlyListWithIndex<T>>().Index < 0)
-                .FailWith("but {0} differs at index {1} when using the indexer.",
-                    diff => diff.As<ReadOnlyListWithIndex<T>>().Items,
-                    diff => diff.As<ReadOnlyListWithIndex<T>>().Index);
-
-        sealed class EnumerableWithIndex : IEnumerable
+        public static ContinuationOfGiven<ICollection<TActual>> AssertCollectionsHaveSameItems<TActual, TExpected>(this GivenSelector<ICollection<TActual>> givenSelector,
+            ICollection<TExpected> expected, Func<ICollection<TActual>, ICollection<TExpected>, int> findIndex)
         {
-            public IEnumerable Items { get; }
+            return givenSelector
+                .Given<ICollection<TActual>>(actual => new CollectionWithIndex<TActual>(actual, findIndex(actual, expected)))
+                .ForCondition(diff => diff.As<CollectionWithIndex<TActual>>().Index == -1)
+                .FailWith("but {0} differs at index {1}.",
+                    diff => diff.As<CollectionWithIndex<TActual>>().Items,
+                    diff => diff.As<CollectionWithIndex<TActual>>().Index);
+        }
+
+        sealed class ObjectEnumerableWithIndex : Primitives.ObjectAssertions2.ObjectEnumerable
+        {
+            public int Index { get; }
+
+            public ObjectEnumerableWithIndex(object items, int index) : base(items)
+            {
+                Index = index;
+            }
+        }
+
+        sealed class CollectionWithIndex<T> : ICollection<T>
+        {
+            public ICollection<T> Items { get; }
 
             public int Index { get; }
 
-            public EnumerableWithIndex(IEnumerable items, int index)
+            public CollectionWithIndex(ICollection<T> items, int index)
             {
                 Items = items;
                 Index = index;
-            }
-
-            public IEnumerator GetEnumerator() => Items.GetEnumerator();
-        }
-
-        sealed class EnumerableWithIndex<T> : IEnumerable<T>
-        {
-            public IEnumerable<T> Items { get; }
-
-            public int Index { get; }
-
-            public EnumerableWithIndex(IEnumerable<T> items, int index)
-            {
-                Items = items;
-                Index = index;
-            }
-
-            public IEnumerator<T> GetEnumerator() => Items.GetEnumerator();
-
-            IEnumerator IEnumerable.GetEnumerator() => Items.GetEnumerator();
-        }
-
-        sealed class ReadOnlyCollectionWithEnumerableCount<T> : IReadOnlyCollection<T>
-        {
-            public IReadOnlyCollection<T> Items { get; }
-
-            public int EnumerableCount { get; }
-
-            public ReadOnlyCollectionWithEnumerableCount(IReadOnlyCollection<T> items)
-            {
-                Items = items;
-
-                using var enumerator = items.GetEnumerator();
-                var count = 0;
-                checked
-                {
-                    while (enumerator.MoveNext())
-                        count++;
-                }
-
-                EnumerableCount = count;
             }
 
             public int Count => Items.Count;
 
-            public IEnumerator<T> GetEnumerator() => Items.GetEnumerator();
+            public bool IsReadOnly => Items.IsReadOnly;
 
-            IEnumerator IEnumerable.GetEnumerator() => Items.GetEnumerator();
-        }
+            public void Add(T item) => Items.Add(item);
 
-        sealed class ReadOnlyListWithIndex<T> : IReadOnlyList<T>
-        {
-            public IReadOnlyList<T> Items { get; }
+            public void Clear() => Items.Clear();
 
-            public int Index { get; }
+            public bool Contains(T item) => Items.Contains(item);
 
-            public ReadOnlyListWithIndex(IReadOnlyList<T> items, int index)
-            {
-                Items = items;
-                Index = index;
-            }
-
-            public T this[int index] => Items[index];
-
-            public int Count => Items.Count;
+            public void CopyTo(T[] array, int arrayIndex) => Items.CopyTo(array, arrayIndex);
 
             public IEnumerator<T> GetEnumerator() => Items.GetEnumerator();
+
+            public bool Remove(T item) => Items.Remove(item);
 
             IEnumerator IEnumerable.GetEnumerator() => Items.GetEnumerator();
         }

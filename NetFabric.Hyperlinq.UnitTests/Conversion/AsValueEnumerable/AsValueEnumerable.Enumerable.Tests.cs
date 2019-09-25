@@ -20,7 +20,7 @@ namespace NetFabric.Hyperlinq.UnitTests
 
             // Assert
             result.Should().BeOfType<Enumerable.ValueEnumerableWrapper<int>>();
-            result.Must().BeExactlyAs(wrapped);
+            result.Must().BeEnumerable(wrapped);
         }
 
         [Theory]
