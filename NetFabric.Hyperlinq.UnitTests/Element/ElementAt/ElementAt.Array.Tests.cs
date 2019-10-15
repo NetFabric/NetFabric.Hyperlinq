@@ -1,4 +1,4 @@
-using FluentAssertions;
+using NetFabric.Assertive;
 using System;
 using Xunit;
 
@@ -13,11 +13,12 @@ namespace NetFabric.Hyperlinq.UnitTests
             // Arrange
 
             // Act
-            Action action = () => Array.ElementAt<int>(source, index);
+            Action action = () => Array
+                .ElementAt<int>(source, index);
 
             // Assert
-            action.Should()
-                .ThrowExactly<ArgumentOutOfRangeException>();
+            action.Must()
+                .Throw<ArgumentOutOfRangeException>();
         }
 
         [Theory]
@@ -25,13 +26,16 @@ namespace NetFabric.Hyperlinq.UnitTests
         public void ElementAt_With_ValidData_Should_Succeed(int[] source, int index)
         {
             // Arrange
-            var expected = System.Linq.Enumerable.ElementAt(source, index);
+            var expected = 
+                System.Linq.Enumerable.ElementAt(source, index);
 
             // Act
-            var result = Array.ElementAt<int>(source, index);
+            var result = Array
+                .ElementAt<int>(source, index);
 
             // Assert
-            result.Should().Be(expected);
+            result.Must()
+                .BeEqualTo(expected);
         }
     }
 }

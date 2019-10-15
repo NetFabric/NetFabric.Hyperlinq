@@ -1,4 +1,4 @@
-using FluentAssertions;
+using NetFabric.Assertive;
 using System;
 using Xunit;
 
@@ -17,11 +17,9 @@ namespace NetFabric.Hyperlinq.UnitTests
             Action action = () => ValueReadOnlyList.Where<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int>(list, predicate);
 
             // Assert
-            action.Should()
-                .ThrowExactly<ArgumentNullException>()
-                .And
-                .ParamName.Should()
-                    .Be("predicate");
+            action.Must()
+                .Throw<ArgumentNullException>()
+                .EvaluatesTrue(exception => exception.ParamName == "predicate");
         }
 
         [Theory]
@@ -36,7 +34,9 @@ namespace NetFabric.Hyperlinq.UnitTests
             var result = ValueReadOnlyList.Where<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
 
             // Assert
-            result.Must().BeEnumerable(expected);
+            result.Must()
+                .BeEnumerableOf<int>()
+                .BeEqualTo(expected);
         }
     }
 }

@@ -1,4 +1,4 @@
-using FluentAssertions;
+using NetFabric.Assertive;
 using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests
@@ -13,13 +13,17 @@ namespace NetFabric.Hyperlinq.UnitTests
         {
             // Arrange
             var wrapped = Wrap.AsValueReadOnlyCollection(source);
-            var expected = System.Linq.Enumerable.Take(wrapped, count);
+            var expected = 
+                System.Linq.Enumerable.Take(wrapped, count);
 
             // Act
-            var result = ValueReadOnlyCollection.Take<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(wrapped, count);
+            var result = ValueReadOnlyCollection
+                .Take<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(wrapped, count);
 
             // Assert
-            result.Must().BeEnumerable(expected);
+            result.Must()
+                .BeEnumerableOf<int>()
+                .BeEqualTo(expected);
         }
     }
 }

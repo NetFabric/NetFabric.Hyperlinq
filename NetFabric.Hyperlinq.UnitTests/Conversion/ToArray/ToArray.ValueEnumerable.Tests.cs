@@ -1,4 +1,4 @@
-using FluentAssertions;
+using NetFabric.Assertive;
 using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests
@@ -12,17 +12,21 @@ namespace NetFabric.Hyperlinq.UnitTests
         public void ToArray_With_ValidData_Should_Succeed(int[] source)
         {
             // Arrange
-            var wrapped = Wrap.AsValueEnumerable(source);
-            var expected = System.Linq.Enumerable.ToArray(wrapped);
+            var wrapped = Wrap
+                .AsValueEnumerable(source);
+            var expected = 
+                System.Linq.Enumerable.ToArray(wrapped);
 
             // Act
-            var result = ValueEnumerable.ToArray<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped);
+            var result = ValueEnumerable
+                .ToArray<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped);
 
             // Assert
-            result.Should()
-                .BeOfType<int[]>().And
-                .NotBeSameAs(source).And
-                .Equal(expected);
+            result.Must()
+                .BeOfType<int[]>()
+                .BeNotSameAs(source)
+                .BeEnumerableOf<int>()
+                .BeEqualTo(expected);
         }
     }
 }

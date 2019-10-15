@@ -1,4 +1,4 @@
-using FluentAssertions;
+using NetFabric.Assertive;
 using System;
 using Xunit;
 
@@ -11,13 +11,16 @@ namespace NetFabric.Hyperlinq.UnitTests
         public void ElementAtOrDefault_With_OutOfRange_Should_ReturnDefault(int[] source, int index)
         {
             // Arrange
-            var wrapped = Wrap.AsValueReadOnlyCollection(source);
+            var wrapped = Wrap
+                .AsValueReadOnlyCollection(source);
 
             // Act
-            var result = ValueReadOnlyCollection.ElementAtOrDefault<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(wrapped, index);
+            var result = ValueReadOnlyCollection
+                .ElementAtOrDefault<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(wrapped, index);
 
             // Assert
-            result.Should().Be(default);
+            result.Must()
+                .BeEqualTo(default);
         }
 
         [Theory]
@@ -25,14 +28,18 @@ namespace NetFabric.Hyperlinq.UnitTests
         public void ElementAtOrDefault_With_ValidData_Should_Succeed(int[] source, int index)
         {
             // Arrange
-            var wrapped = Wrap.AsValueReadOnlyCollection(source);
-            var expected = System.Linq.Enumerable.ElementAtOrDefault(wrapped, index);
+            var wrapped = Wrap
+                .AsValueReadOnlyCollection(source);
+            var expected = 
+                System.Linq.Enumerable.ElementAtOrDefault(wrapped, index);
 
             // Act
-            var result = ValueReadOnlyCollection.ElementAtOrDefault<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(wrapped, index);
+            var result = ValueReadOnlyCollection
+                .ElementAtOrDefault<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(wrapped, index);
 
             // Assert
-            result.Should().Be(expected);
+            result.Must()
+                .BeEqualTo(expected);
         }
     }
 }

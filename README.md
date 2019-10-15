@@ -163,9 +163,9 @@ The following open-source projects are used to build and test this project:
 - [BenchmarkDotNet](https://benchmarkdotnet.org/)
 - [coverlet](https://github.com/tonerdo/coverlet)
 - [dnSpy](https://github.com/0xd4d/dnSpy)
-- [Fluent Assertions](https://fluentassertions.com/)
 - [Fody](https://github.com/Fody/Home)
 - [Mono.Cecil](https://www.mono-project.com/docs/tools+libraries/libraries/Mono.Cecil/)
+- [NetFabric.Assertive](https://github.com/NetFabric/NetFabric.Assertive)
 - [xUnit.net](https://xunit.net/)
 
 Continuous-integration is hosted by [Azure DevOps](https://dev.azure.com/aalmada/NetFabric.Hyperlinq).

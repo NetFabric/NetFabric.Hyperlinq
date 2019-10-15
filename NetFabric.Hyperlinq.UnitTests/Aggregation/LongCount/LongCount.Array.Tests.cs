@@ -1,4 +1,4 @@
-using FluentAssertions;
+using NetFabric.Assertive;
 using System;
 using Xunit;
 
@@ -13,13 +13,15 @@ namespace NetFabric.Hyperlinq.UnitTests
         public void LongCount_With_ValidData_Should_Succeed(int[] source)
         {
             // Arrange
-            var expected = System.Linq.Enumerable.LongCount(source);
+            var expected = 
+                System.Linq.Enumerable.LongCount(source);
 
             // Act
             var result = Array.LongCount<int>(source);
 
             // Assert
-            result.Should().Be(expected);
+            result.Must()
+                .BeEqualTo(expected);
         }
 
         [Theory]
@@ -27,13 +29,16 @@ namespace NetFabric.Hyperlinq.UnitTests
         public void LongCountPredicate_With_ValidData_Should_Succeed(int[] source, Func<int, bool> predicate)
         {
             // Arrange
-            var expected = System.Linq.Enumerable.LongCount(source, predicate);
+            var expected = 
+                System.Linq.Enumerable.LongCount(source, predicate);
 
             // Act
-            var result = Array.LongCount<int>(source, predicate);
+            var result = Array
+                .LongCount<int>(source, predicate);
 
             // Assert
-            result.Should().Be(expected);
+            result.Must()
+                .BeEqualTo(expected);
         }
     }
 }

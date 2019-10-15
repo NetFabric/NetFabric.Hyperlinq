@@ -1,5 +1,6 @@
-using FluentAssertions;
+using NetFabric.Assertive;
 using System;
+using System.Collections.Generic;
 using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests
@@ -14,13 +15,18 @@ namespace NetFabric.Hyperlinq.UnitTests
         {
             // Arrange
             var wrapped = Wrap.AsValueReadOnlyList(source);
-            var expected = System.Linq.Enumerable.Take(System.Linq.Enumerable.Skip(wrapped, skipCount), takeCount);
+            var expected = 
+                System.Linq.Enumerable.Take(
+                    System.Linq.Enumerable.Skip(wrapped, skipCount), takeCount);
 
             // Act
-            var result = ValueReadOnlyList.SkipTake<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int>(wrapped, skipCount, takeCount);
+            var result = ValueReadOnlyList
+                .SkipTake<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int>(wrapped, skipCount, takeCount);
 
             // Assert
-            result.Must().BeEnumerable(expected);
+            result.Must()
+                .BeEnumerableOf<int>()
+                .BeEqualTo(expected);
         }
 
         [Theory]
@@ -29,13 +35,20 @@ namespace NetFabric.Hyperlinq.UnitTests
         {
             // Arrange
             var wrapped = Wrap.AsValueReadOnlyList(source);
-            var expected = System.Linq.Enumerable.Take(System.Linq.Enumerable.Take(System.Linq.Enumerable.Skip(wrapped, skipCount), takeCount0), takeCount1);
+            var expected = 
+                System.Linq.Enumerable.Take(
+                    System.Linq.Enumerable.Take(
+                        System.Linq.Enumerable.Skip(wrapped, skipCount), takeCount0), takeCount1);
 
             // Act
-            var result = ValueReadOnlyList.SkipTake<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int>(wrapped, skipCount, takeCount0).Take(takeCount1);
+            var result = ValueReadOnlyList
+                .SkipTake<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int>(wrapped, skipCount, takeCount0)
+                .Take(takeCount1);
 
             // Assert
-            result.Must().BeEnumerable(expected);
+            result.Must()
+                .BeEnumerableOf<int>()
+                .BeEqualTo(expected);
         }
 
         [Theory]
@@ -46,13 +59,19 @@ namespace NetFabric.Hyperlinq.UnitTests
         {
             // Arrange
             var wrapped = Wrap.AsValueReadOnlyList(source);
-            var expected = System.Linq.Enumerable.Any(System.Linq.Enumerable.Take(System.Linq.Enumerable.Skip(wrapped, skipCount), takeCount));
+            var expected = 
+                System.Linq.Enumerable.Any(
+                    System.Linq.Enumerable.Take(
+                        System.Linq.Enumerable.Skip(wrapped, skipCount), takeCount));
 
             // Act
-            var result = ValueReadOnlyList.SkipTake<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int>(wrapped, skipCount, takeCount).Any();
+            var result = ValueReadOnlyList
+                .SkipTake<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int>(wrapped, skipCount, takeCount)
+                .Any();
 
             // Assert
-            result.Should().Be(expected);
+            result.Must()
+                .BeEqualTo(expected);
         }
 
         [Theory]
@@ -63,13 +82,19 @@ namespace NetFabric.Hyperlinq.UnitTests
         {
             // Arrange
             var wrapped = Wrap.AsValueReadOnlyList(source);
-            var expected = System.Linq.Enumerable.Any(System.Linq.Enumerable.Take(System.Linq.Enumerable.Skip(wrapped, skipCount), takeCount), _ => true);
+            var expected = 
+                System.Linq.Enumerable.Any(
+                    System.Linq.Enumerable.Take(
+                        System.Linq.Enumerable.Skip(wrapped, skipCount), takeCount), _ => true);
 
             // Act
-            var result = ValueReadOnlyList.SkipTake<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int>(wrapped, skipCount, takeCount).Any(_ => true);
+            var result = ValueReadOnlyList
+                .SkipTake<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int>(wrapped, skipCount, takeCount)
+                .Any(_ => true);
 
             // Assert
-            result.Should().Be(expected);
+            result.Must()
+                .BeEqualTo(expected);
         }
 
         [Theory]
@@ -80,13 +105,20 @@ namespace NetFabric.Hyperlinq.UnitTests
         {
             // Arrange
             var wrapped = Wrap.AsValueReadOnlyList(source);
-            var expected = System.Linq.Enumerable.Select(System.Linq.Enumerable.Take(System.Linq.Enumerable.Skip(wrapped, skipCount), takeCount), item => item.ToString());
+            var expected = 
+                System.Linq.Enumerable.Select(
+                    System.Linq.Enumerable.Take(
+                        System.Linq.Enumerable.Skip(wrapped, skipCount), takeCount), item => item.ToString());
 
             // Act
-            var result = ValueReadOnlyList.SkipTake<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int>(wrapped, skipCount, takeCount).Select(item => item.ToString());
+            var result = ValueReadOnlyList
+                .SkipTake<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int>(wrapped, skipCount, takeCount)
+                .Select(item => item.ToString());
 
             // Assert
-            result.Must().BeEnumerable(expected);
+            result.Must()
+                .BeEnumerableOf<string>()
+                .BeEqualTo(expected);
         }
 
         [Theory]
@@ -97,13 +129,20 @@ namespace NetFabric.Hyperlinq.UnitTests
         {
             // Arrange
             var wrapped = Wrap.AsValueReadOnlyList(source);
-            var expected = System.Linq.Enumerable.Select(System.Linq.Enumerable.Take(System.Linq.Enumerable.Skip(wrapped, skipCount), takeCount), (item, index) => (item + index).ToString());
+            var expected = 
+                System.Linq.Enumerable.Select(
+                    System.Linq.Enumerable.Take(
+                        System.Linq.Enumerable.Skip(wrapped, skipCount), takeCount), (item, index) => (item + index).ToString());
 
             // Act
-            var result = ValueReadOnlyList.SkipTake<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int>(wrapped, skipCount, takeCount).Select((item, index) => (item + index).ToString());
+            var result = ValueReadOnlyList
+                .SkipTake<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int>(wrapped, skipCount, takeCount)
+                .Select((item, index) => (item + index).ToString());
 
             // Assert
-            result.Must().BeEnumerable(expected);
+            result.Must()
+                .BeEnumerableOf<string>()
+                .BeEqualTo(expected);
         }
 
         [Theory]
@@ -114,13 +153,19 @@ namespace NetFabric.Hyperlinq.UnitTests
         {
             // Arrange
             var wrapped = Wrap.AsValueReadOnlyList(source);
-            var expected = System.Linq.Enumerable.Count(System.Linq.Enumerable.Take(System.Linq.Enumerable.Skip(wrapped, skipCount), takeCount));
+            var expected = 
+                System.Linq.Enumerable.Count(
+                    System.Linq.Enumerable.Take(
+                        System.Linq.Enumerable.Skip(wrapped, skipCount), takeCount));
 
             // Act
-            var result = ValueReadOnlyList.SkipTake<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int>(wrapped, skipCount, takeCount).Count();
+            var result = ValueReadOnlyList
+                .SkipTake<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int>(wrapped, skipCount, takeCount)
+                .Count();
 
             // Assert
-            result.Should().Be(expected);
+            result.Must()
+                .BeEqualTo(expected);
         }
 
         [Theory]
@@ -131,12 +176,15 @@ namespace NetFabric.Hyperlinq.UnitTests
             var wrapped = Wrap.AsValueReadOnlyList(source);
 
             // Act
-            Action action = () => ValueReadOnlyList.Skip<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int>(wrapped, skipCount).Take(takeCount).First();
+            Action action = () => ValueReadOnlyList
+                .Skip<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int>(wrapped, skipCount)
+                .Take(takeCount)
+                .First();
 
             // Assert
-            action.Should()
-                .ThrowExactly<InvalidOperationException>()
-                .WithMessage("Sequence contains no elements");
+            action.Must()
+                .Throw<InvalidOperationException>()
+                .EvaluatesTrue(exception => exception.Message == "Sequence contains no elements");
         }
 
         [Theory]
@@ -146,13 +194,20 @@ namespace NetFabric.Hyperlinq.UnitTests
         {
             // Arrange
             var wrapped = Wrap.AsValueReadOnlyList(source);
-            var expected = System.Linq.Enumerable.First(System.Linq.Enumerable.Take(System.Linq.Enumerable.Skip(wrapped, skipCount), takeCount));
+            var expected = 
+                System.Linq.Enumerable.First(
+                    System.Linq.Enumerable.Take(
+                        System.Linq.Enumerable.Skip(wrapped, skipCount), takeCount));
 
             // Act
-            var result = ValueReadOnlyList.Skip<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int>(wrapped, skipCount).Take(takeCount).First();
+            var result = ValueReadOnlyList
+                .Skip<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int>(wrapped, skipCount)
+                .Take(takeCount)
+                .First();
 
             // Assert
-            result.Should().Be(expected);
+            result.Must()
+                .BeEqualTo(expected);
         }
 
         [Theory]
@@ -163,12 +218,15 @@ namespace NetFabric.Hyperlinq.UnitTests
             var wrapped = Wrap.AsValueReadOnlyList(source);
 
             // Act
-            Action action = () => ValueReadOnlyList.Skip<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int>(wrapped, skipCount).Take(takeCount).First(_ => true);
+            Action action = () => ValueReadOnlyList
+                .Skip<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int>(wrapped, skipCount)
+                .Take(takeCount)
+                .First(_ => true);
 
             // Assert
-            action.Should()
-                .ThrowExactly<InvalidOperationException>()
-                .WithMessage("Sequence contains no elements");
+            action.Must()
+                .Throw<InvalidOperationException>()
+                .EvaluatesTrue(exception => exception.Message == "Sequence contains no elements");
         }
 
         [Theory]
@@ -178,13 +236,20 @@ namespace NetFabric.Hyperlinq.UnitTests
         {
             // Arrange
             var wrapped = Wrap.AsValueReadOnlyList(source);
-            var expected = System.Linq.Enumerable.First(System.Linq.Enumerable.Take(System.Linq.Enumerable.Skip(wrapped, skipCount), takeCount), _ => true);
+            var expected = 
+                System.Linq.Enumerable.First(
+                    System.Linq.Enumerable.Take(
+                        System.Linq.Enumerable.Skip(wrapped, skipCount), takeCount), _ => true);
 
             // Act
-            var result = ValueReadOnlyList.Skip<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int>(wrapped, skipCount).Take(takeCount).First(_ => true);
+            var result = ValueReadOnlyList
+                .Skip<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int>(wrapped, skipCount)
+                .Take(takeCount)
+                .First(_ => true);
 
             // Assert
-            result.Should().Be(expected);
+            result.Must()
+                .BeEqualTo(expected);
         }
 
         [Theory]
@@ -195,13 +260,20 @@ namespace NetFabric.Hyperlinq.UnitTests
         {
             // Arrange
             var wrapped = Wrap.AsValueReadOnlyList(source);
-            var expected = System.Linq.Enumerable.FirstOrDefault(System.Linq.Enumerable.Take(System.Linq.Enumerable.Skip(wrapped, skipCount), takeCount));
+            var expected = 
+                System.Linq.Enumerable.FirstOrDefault(
+                    System.Linq.Enumerable.Take(
+                        System.Linq.Enumerable.Skip(wrapped, skipCount), takeCount));
 
             // Act
-            var result = ValueReadOnlyList.Skip<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int>(wrapped, skipCount).Take(takeCount).FirstOrDefault();
+            var result = ValueReadOnlyList
+                .Skip<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int>(wrapped, skipCount)
+                .Take(takeCount)
+                .FirstOrDefault();
 
             // Assert
-            result.Should().Be(expected);
+            result.Must()
+                .BeEqualTo(expected);
         }
 
         [Theory]
@@ -212,13 +284,20 @@ namespace NetFabric.Hyperlinq.UnitTests
         {
             // Arrange
             var wrapped = Wrap.AsValueReadOnlyList(source);
-            var expected = System.Linq.Enumerable.FirstOrDefault(System.Linq.Enumerable.Take(System.Linq.Enumerable.Skip(wrapped, skipCount), takeCount), _ => true);
+            var expected = 
+                System.Linq.Enumerable.FirstOrDefault(
+                    System.Linq.Enumerable.Take(
+                        System.Linq.Enumerable.Skip(wrapped, skipCount), takeCount), _ => true);
 
             // Act
-            var result = ValueReadOnlyList.Skip<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int>(wrapped, skipCount).Take(takeCount).FirstOrDefault(_ => true);
+            var result = ValueReadOnlyList
+                .Skip<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int>(wrapped, skipCount)
+                .Take(takeCount)
+                .FirstOrDefault(_ => true);
 
             // Assert
-            result.Should().Be(expected);
+            result.Must()
+                .BeEqualTo(expected);
         }
 
         [Theory]
@@ -229,12 +308,15 @@ namespace NetFabric.Hyperlinq.UnitTests
             var wrapped = Wrap.AsValueReadOnlyList(source);
 
             // Act
-            Action action = () => ValueReadOnlyList.Skip<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int>(wrapped, skipCount).Take(takeCount).Single();
+            Action action = () => ValueReadOnlyList
+                .Skip<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int>(wrapped, skipCount)
+                .Take(takeCount)
+                .Single();
 
             // Assert
-            action.Should()
-                .ThrowExactly<InvalidOperationException>()
-                .WithMessage("Sequence contains no elements");
+            action.Must()
+                .Throw<InvalidOperationException>()
+                .EvaluatesTrue(exception => exception.Message == "Sequence contains no elements");
         }
 
         [Theory]
@@ -243,13 +325,20 @@ namespace NetFabric.Hyperlinq.UnitTests
         {
             // Arrange
             var wrapped = Wrap.AsValueReadOnlyList(source);
-            var expected = System.Linq.Enumerable.Single(System.Linq.Enumerable.Take(System.Linq.Enumerable.Skip(wrapped, skipCount), takeCount));
+            var expected = 
+                System.Linq.Enumerable.Single(
+                    System.Linq.Enumerable.Take(
+                        System.Linq.Enumerable.Skip(wrapped, skipCount), takeCount));
 
             // Act
-            var result = ValueReadOnlyList.Skip<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int>(wrapped, skipCount).Take(takeCount).Single();
+            var result = ValueReadOnlyList
+                .Skip<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int>(wrapped, skipCount)
+                .Take(takeCount)
+                .Single();
 
             // Assert
-            result.Should().Be(expected);
+            result.Must()
+                .BeEqualTo(expected);
         }
 
         [Theory]
@@ -260,12 +349,15 @@ namespace NetFabric.Hyperlinq.UnitTests
             var wrapped = Wrap.AsValueReadOnlyList(source);
 
             // Act
-            Action action = () => ValueReadOnlyList.Skip<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int>(wrapped, skipCount).Take(takeCount).Single(_ => true);
+            Action action = () => ValueReadOnlyList
+                .Skip<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int>(wrapped, skipCount)
+                .Take(takeCount)
+                .Single(_ => true);
 
             // Assert
-            action.Should()
-                .ThrowExactly<InvalidOperationException>()
-                .WithMessage("Sequence contains no elements");
+            action.Must()
+                .Throw<InvalidOperationException>()
+                .EvaluatesTrue(exception => exception.Message == "Sequence contains no elements");
         }
 
         [Theory]
@@ -274,13 +366,20 @@ namespace NetFabric.Hyperlinq.UnitTests
         {
             // Arrange
             var wrapped = Wrap.AsValueReadOnlyList(source);
-            var expected = System.Linq.Enumerable.Single(System.Linq.Enumerable.Take(System.Linq.Enumerable.Skip(wrapped, skipCount), takeCount), _ => true);
+            var expected = 
+                System.Linq.Enumerable.Single(
+                    System.Linq.Enumerable.Take(
+                        System.Linq.Enumerable.Skip(wrapped, skipCount), takeCount), _ => true);
 
             // Act
-            var result = ValueReadOnlyList.Skip<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int>(wrapped, skipCount).Take(takeCount).Single(_ => true);
+            var result = ValueReadOnlyList
+                .Skip<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int>(wrapped, skipCount)
+                .Take(takeCount)
+                .Single(_ => true);
 
             // Assert
-            result.Should().Be(expected);
+            result.Must()
+                .BeEqualTo(expected);
         }
 
         [Theory]
@@ -290,13 +389,19 @@ namespace NetFabric.Hyperlinq.UnitTests
         {
             // Arrange
             var wrapped = Wrap.AsValueReadOnlyList(source);
-            var expected = System.Linq.Enumerable.SingleOrDefault(System.Linq.Enumerable.Take(System.Linq.Enumerable.Skip(wrapped, skipCount), takeCount));
+            var expected = System.Linq.Enumerable.SingleOrDefault(
+                System.Linq.Enumerable.Take(
+                    System.Linq.Enumerable.Skip(wrapped, skipCount), takeCount));
 
             // Act
-            var result = ValueReadOnlyList.Skip<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int>(wrapped, skipCount).Take(takeCount).SingleOrDefault();
+            var result = ValueReadOnlyList
+                .Skip<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int>(wrapped, skipCount)
+                .Take(takeCount)
+                .SingleOrDefault();
 
             // Assert
-            result.Should().Be(expected);
+            result.Must()
+                .BeEqualTo(expected);
         }
 
         [Theory]
@@ -306,13 +411,20 @@ namespace NetFabric.Hyperlinq.UnitTests
         {
             // Arrange
             var wrapped = Wrap.AsValueReadOnlyList(source);
-            var expected = System.Linq.Enumerable.SingleOrDefault(System.Linq.Enumerable.Take(System.Linq.Enumerable.Skip(wrapped, skipCount), takeCount), _ => true);
+            var expected =
+                System.Linq.Enumerable.SingleOrDefault(
+                    System.Linq.Enumerable.Take(
+                        System.Linq.Enumerable.Skip(wrapped, skipCount), takeCount), _ => true);
 
             // Act
-            var result = ValueReadOnlyList.Skip<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int>(wrapped, skipCount).Take(takeCount).SingleOrDefault(_ => true);
+            var result = ValueReadOnlyList
+                .Skip<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int>(wrapped, skipCount)
+                .Take(takeCount)
+                .SingleOrDefault(_ => true);
 
             // Assert
-            result.Should().Be(expected);
+            result.Must()
+                .BeEqualTo(expected);
         }
 
         [Theory]
@@ -323,13 +435,19 @@ namespace NetFabric.Hyperlinq.UnitTests
         {
             // Arrange
             var wrapped = Wrap.AsValueReadOnlyList(source);
-            var expected = System.Linq.Enumerable.ToArray(System.Linq.Enumerable.Take(System.Linq.Enumerable.Skip(wrapped, skipCount), takeCount));
+            var expected = 
+                System.Linq.Enumerable.ToArray(
+                    System.Linq.Enumerable.Take(
+                        System.Linq.Enumerable.Skip(wrapped, skipCount), takeCount));
 
             // Act
-            var result = ValueReadOnlyList.Skip<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int>(wrapped, skipCount).Take(takeCount).ToArray();
+            var result = ValueReadOnlyList
+                .Skip<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int>(wrapped, skipCount)
+                .Take(takeCount)
+                .ToArray();
 
             // Assert
-            result.Should().Equals(expected);
+            result.Must().BeEqualTo(expected);
         }
 
         [Theory]
@@ -340,13 +458,22 @@ namespace NetFabric.Hyperlinq.UnitTests
         {
             // Arrange
             var wrapped = Wrap.AsValueReadOnlyList(source);
-            var expected = System.Linq.Enumerable.ToList(System.Linq.Enumerable.Take(System.Linq.Enumerable.Skip(wrapped, skipCount), takeCount));
+            var expected = 
+                System.Linq.Enumerable.ToList(
+                    System.Linq.Enumerable.Take(
+                        System.Linq.Enumerable.Skip(wrapped, skipCount), takeCount));
 
             // Act
-            var result = ValueReadOnlyList.Skip<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int>(wrapped, skipCount).Take(takeCount).ToList();
+            var result = ValueReadOnlyList
+                .Skip<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int>(wrapped, skipCount)
+                .Take(takeCount)
+                .ToList();
 
             // Assert
-            result.Should().Equals(expected);
+            result.Must()
+                .BeOfType<List<int>>()
+                .BeEnumerableOf<int>()
+                .BeEqualTo(expected);
         }
 
         [Theory]
@@ -357,13 +484,22 @@ namespace NetFabric.Hyperlinq.UnitTests
         {
             // Arrange
             var wrapped = Wrap.AsValueReadOnlyList(source);
-            var expected = System.Linq.Enumerable.ToDictionary(System.Linq.Enumerable.Take(System.Linq.Enumerable.Skip(wrapped, skipCount), takeCount), item => item);
+            var expected = 
+                System.Linq.Enumerable.ToDictionary(
+                    System.Linq.Enumerable.Take(
+                        System.Linq.Enumerable.Skip(wrapped, skipCount), takeCount), item => item);
 
             // Act
-            var result = ValueReadOnlyList.Skip<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int>(wrapped, skipCount).Take(takeCount).ToDictionary(item => item);
+            var result = ValueReadOnlyList
+                .Skip<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int>(wrapped, skipCount)
+                .Take(takeCount)
+                .ToDictionary(item => item);
 
             // Assert
-            result.Should().Equals(expected);
+            result.Must()
+                .BeOfType<Dictionary<int, int>>()
+                .BeEnumerableOf<KeyValuePair<int, int>>()
+                .BeEqualTo(expected, false);
         }
 
         [Theory]
@@ -375,14 +511,20 @@ namespace NetFabric.Hyperlinq.UnitTests
             // Arrange
             var wrapped = Wrap.AsValueReadOnlyList(source);
             var expected = 0;
-            MoreLinq.Extensions.ForEachExtension.ForEach(System.Linq.Enumerable.Take(System.Linq.Enumerable.Skip(wrapped, skipCount), takeCount), (item, index) => expected += item);
+            MoreLinq.Extensions.ForEachExtension.ForEach(
+                System.Linq.Enumerable.Take(
+                    System.Linq.Enumerable.Skip(wrapped, skipCount), takeCount), (item, index) => expected += item);
 
             // Act
             var result = 0;
-            ValueReadOnlyList.Skip<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int>(wrapped, skipCount).Take(takeCount).ForEach((item, index) => result += item);
+            ValueReadOnlyList
+                .Skip<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int>(wrapped, skipCount)
+                .Take(takeCount)
+                .ForEach((item, index) => result += item);
 
             // Assert
-            result.Should().Be(expected);
+            result.Must()
+                .BeEqualTo(expected);
         }
 
         [Theory]
@@ -394,14 +536,20 @@ namespace NetFabric.Hyperlinq.UnitTests
             // Arrange
             var wrapped = Wrap.AsValueReadOnlyList(source);
             var expected = 0;
-            MoreLinq.Extensions.ForEachExtension.ForEach(System.Linq.Enumerable.Take(System.Linq.Enumerable.Skip(wrapped, skipCount), takeCount), (item, index) => expected += item + index);
+            MoreLinq.Extensions.ForEachExtension.ForEach(
+                System.Linq.Enumerable.Take(
+                    System.Linq.Enumerable.Skip(wrapped, skipCount), takeCount), (item, index) => expected += item + index);
 
             // Act
             var result = 0;
-            ValueReadOnlyList.Skip<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int>(wrapped, skipCount).Take(takeCount).ForEach((item, index) => result += item + index);
+            ValueReadOnlyList
+                .Skip<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int>(wrapped, skipCount)
+                .Take(takeCount)
+                .ForEach((item, index) => result += item + index);
 
             // Assert
-            result.Should().Be(expected);
+            result.Must()
+                .BeEqualTo(expected);
         }
     }
 }

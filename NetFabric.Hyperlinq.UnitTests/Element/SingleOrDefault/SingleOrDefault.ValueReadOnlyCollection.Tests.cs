@@ -1,4 +1,4 @@
-using FluentAssertions;
+using NetFabric.Assertive;
 using System;
 using Xunit;
 
@@ -12,14 +12,18 @@ namespace NetFabric.Hyperlinq.UnitTests
         public void SingleOrDefault_With_ValidData_Should_Succeed(int[] source)
         {
             // Arrange
-            var wrapped = Wrap.AsValueReadOnlyCollection(source);
-            var expected = System.Linq.Enumerable.SingleOrDefault(wrapped);
+            var wrapped = Wrap
+                .AsValueReadOnlyCollection(source);
+            var expected = 
+                System.Linq.Enumerable.SingleOrDefault(wrapped);
 
             // Act
-            var result = ValueReadOnlyCollection.SingleOrDefault<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(wrapped);
+            var result = ValueReadOnlyCollection
+                .SingleOrDefault<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(wrapped);
 
             // Assert
-            result.Should().Be(expected);
+            result.Must()
+                .BeEqualTo(expected);
         }
 
         [Theory]
@@ -28,14 +32,18 @@ namespace NetFabric.Hyperlinq.UnitTests
         public void SingleOrDefaultPredicate_With_ValidData_Should_Succeed(int[] source, Func<int, bool> predicate)
         {
             // Arrange
-            var wrapped = Wrap.AsValueReadOnlyCollection(source);
-            var expected = System.Linq.Enumerable.SingleOrDefault(wrapped, predicate);
+            var wrapped = Wrap
+                .AsValueReadOnlyCollection(source);
+            var expected = 
+                System.Linq.Enumerable.SingleOrDefault(wrapped, predicate);
 
             // Act
-            var result = ValueReadOnlyCollection.SingleOrDefault<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
+            var result = ValueReadOnlyCollection
+                .SingleOrDefault<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
 
             // Assert
-            result.Should().Be(expected);
+            result.Must()
+                .BeEqualTo(expected);
         }
 
         [Theory]
@@ -43,15 +51,17 @@ namespace NetFabric.Hyperlinq.UnitTests
         public void SingleOrDefault_With_Multiple_Should_Throw(int[] source)
         {
             // Arrange
-            var wrapped = Wrap.AsValueReadOnlyCollection(source);
+            var wrapped = Wrap
+                .AsValueReadOnlyCollection(source);
 
             // Act
-            Action action = () => ValueReadOnlyCollection.SingleOrDefault<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(wrapped);
+            Action action = () => ValueReadOnlyCollection
+                .SingleOrDefault<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(wrapped);
 
             // Assert
-            action.Should()
-                .ThrowExactly<InvalidOperationException>()
-                .WithMessage("Sequence contains more than one element");
+            action.Must()
+                .Throw<InvalidOperationException>()
+                .EvaluatesTrue(exception => exception.Message == "Sequence contains more than one element");
         }
 
         [Theory]
@@ -59,15 +69,17 @@ namespace NetFabric.Hyperlinq.UnitTests
         public void SingleOrDefaultPredicate_With_Multiple_Should_Throw(int[] source, Func<int, bool> predicate)
         {
             // Arrange
-            var wrapped = Wrap.AsValueReadOnlyCollection(source);
+            var wrapped = Wrap
+                .AsValueReadOnlyCollection(source);
 
             // Act
-            Action action = () => ValueReadOnlyCollection.SingleOrDefault<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
+            Action action = () => ValueReadOnlyCollection
+                .SingleOrDefault<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
 
             // Assert
-            action.Should()
-                .ThrowExactly<InvalidOperationException>()
-                .WithMessage("Sequence contains more than one element");
+            action.Must()
+                .Throw<InvalidOperationException>()
+                .EvaluatesTrue(exception => exception.Message == "Sequence contains more than one element");
         }         
     }
 }

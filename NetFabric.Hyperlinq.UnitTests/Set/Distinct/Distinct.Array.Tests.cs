@@ -1,4 +1,4 @@
-﻿using FluentAssertions;
+﻿using NetFabric.Assertive;
 using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests
@@ -12,13 +12,17 @@ namespace NetFabric.Hyperlinq.UnitTests
         public void Distinct_With_ValidData_Should_Succeed(int[] source)
         {
             // Arrange
-            var expected = System.Linq.Enumerable.Distinct(source);
+            var expected = 
+                System.Linq.Enumerable.Distinct(source);
 
             // Act
-            var result = Array.Distinct<int>(source);
+            var result = Array
+                .Distinct<int>(source);
 
             // Assert
-            result.Must().BeEnumerable(expected);
+            result.Must()
+                .BeEnumerableOf<int>()
+                .BeEqualTo(expected);
         }
     }
 }

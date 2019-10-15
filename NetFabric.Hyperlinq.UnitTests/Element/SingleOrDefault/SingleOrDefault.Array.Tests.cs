@@ -1,5 +1,5 @@
 
-using FluentAssertions;
+using NetFabric.Assertive;
 using System;
 using Xunit;
 
@@ -13,13 +13,16 @@ namespace NetFabric.Hyperlinq.UnitTests
         public void SingleOrDefault_With_ValidData_Should_Succeed(int[] source)
         {
             // Arrange
-            var expected = System.Linq.Enumerable.SingleOrDefault(source);
+            var expected = 
+                System.Linq.Enumerable.SingleOrDefault(source);
 
             // Act
-            var result = Array.SingleOrDefault<int>(source);
+            var result = Array
+                .SingleOrDefault<int>(source);
 
             // Assert
-            result.Should().Be(expected);
+            result.Must()
+                .BeEqualTo(expected);
         }
 
         [Theory]
@@ -28,13 +31,16 @@ namespace NetFabric.Hyperlinq.UnitTests
         public void SingleOrDefaultPredicate_With_ValidData_Should_Succeed(int[] source, Func<int, bool> predicate)
         {
             // Arrange
-            var expected = System.Linq.Enumerable.SingleOrDefault(source, predicate);
+            var expected = 
+                System.Linq.Enumerable.SingleOrDefault(source, predicate);
 
             // Act
-            var result = Array.SingleOrDefault<int>(source, predicate);
+            var result = Array
+                .SingleOrDefault<int>(source, predicate);
 
             // Assert
-            result.Should().Be(expected);
+            result.Must()
+                .BeEqualTo(expected);
         }
 
         [Theory]
@@ -44,12 +50,13 @@ namespace NetFabric.Hyperlinq.UnitTests
             // Arrange
 
             // Act
-            Action action = () => Array.SingleOrDefault<int>(source);
+            Action action = () => Array
+                .SingleOrDefault<int>(source);
 
             // Assert
-            action.Should()
-                .ThrowExactly<InvalidOperationException>()
-                .WithMessage("Sequence contains more than one element");
+            action.Must()
+                .Throw<InvalidOperationException>()
+                .EvaluatesTrue(exception => exception.Message == "Sequence contains more than one element");
         }
 
         [Theory]
@@ -59,12 +66,13 @@ namespace NetFabric.Hyperlinq.UnitTests
             // Arrange
 
             // Act
-            Action action = () => Array.SingleOrDefault<int>(source, predicate);
+            Action action = () => Array
+                .SingleOrDefault<int>(source, predicate);
 
             // Assert
-            action.Should()
-                .ThrowExactly<InvalidOperationException>()
-                .WithMessage("Sequence contains more than one element");
+            action.Must()
+                .Throw<InvalidOperationException>()
+                .EvaluatesTrue(exception => exception.Message == "Sequence contains more than one element");
         }
     }
 }

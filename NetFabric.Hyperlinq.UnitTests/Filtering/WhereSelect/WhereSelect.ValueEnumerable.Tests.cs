@@ -1,4 +1,4 @@
-using FluentAssertions;
+using NetFabric.Assertive;
 using System;
 using Xunit;
 
@@ -16,11 +16,9 @@ namespace NetFabric.Hyperlinq.UnitTests
             Action action = () => ValueEnumerable.WhereSelect<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int, int>(enumerable, null, item => item);
 
             // Assert
-            action.Should()
-                .ThrowExactly<ArgumentNullException>()
-                .And
-                .ParamName.Should()
-                    .Be("predicate");
+            action.Must()
+                .Throw<ArgumentNullException>()
+                .EvaluatesTrue(exception => exception.ParamName == "predicate");
         }
 
         [Fact]
@@ -33,11 +31,9 @@ namespace NetFabric.Hyperlinq.UnitTests
             Action action = () => ValueEnumerable.WhereSelect<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int, int>(enumerable, _ => true, null);
 
             // Assert
-            action.Should()
-                .ThrowExactly<ArgumentNullException>()
-                .And
-                .ParamName.Should()
-                    .Be("selector");
+            action.Must()
+                .Throw<ArgumentNullException>()
+                .EvaluatesTrue(exception => exception.ParamName == "selector");
         }
 
         [Theory]
@@ -52,7 +48,9 @@ namespace NetFabric.Hyperlinq.UnitTests
             var result = ValueEnumerable.WhereSelect<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int, string>(wrapped, predicate, selector);
 
             // Assert
-            result.Must().BeEnumerable(expected);
+            result.Must()
+                .BeEnumerableOf<string>()
+                .BeEqualTo(expected);
         }
     }
 }

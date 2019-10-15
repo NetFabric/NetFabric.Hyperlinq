@@ -1,5 +1,4 @@
-using FluentAssertions;
-using System.Collections.Generic;
+using NetFabric.Assertive;
 using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests
@@ -13,14 +12,18 @@ namespace NetFabric.Hyperlinq.UnitTests
         public void AsValueEnumerable_With_ValidData_Should_Succeed(int[] source)
         {
             // Arrange
-            var wrapped = Wrap.AsReadOnlyList(source);
+            var wrapped = Wrap
+                .AsReadOnlyList(source);
 
             // Act
-            var result = ReadOnlyList.AsValueEnumerable(wrapped);
+            var result = ReadOnlyList
+                .AsValueEnumerable(wrapped);
 
             // Assert
-            result.Should().BeOfType<ReadOnlyList.ValueEnumerableWrapper<int>>();
-            result.Must().BeEnumerable(wrapped);
+            result.Must()
+                .BeOfType<ReadOnlyList.ValueEnumerableWrapper<int>>()
+                .BeEnumerableOf<int>()
+                .BeEqualTo(wrapped);
         }
 
         [Theory]
@@ -28,14 +31,19 @@ namespace NetFabric.Hyperlinq.UnitTests
         public void AsValueEnumerable_With_ElementAt_Should_Succeed(int[] source, int index)
         {
             // Arrange
-            var wrapped = Wrap.AsReadOnlyList(source);
-            var expected = System.Linq.Enumerable.ElementAt(wrapped, index);
+            var wrapped = Wrap
+                .AsReadOnlyList(source);
+            var expected = 
+                System.Linq.Enumerable.ElementAt(wrapped, index);
 
             // Act
-            var result = ReadOnlyList.AsValueEnumerable(wrapped).ElementAt(index);
+            var result = ReadOnlyList
+                .AsValueEnumerable(wrapped)
+                .ElementAt(index);
 
             // Assert
-            result.Should().Be(expected);
+            result.Must()
+                .BeEqualTo(expected);
         }
     }
 }

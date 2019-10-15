@@ -1,4 +1,4 @@
-﻿using FluentAssertions;
+﻿using NetFabric.Assertive;
 using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests
@@ -15,7 +15,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var result = assembly.GetReferencedAssemblies();
 
             // Assert
-            System.Linq.Enumerable.FirstOrDefault(result, a => a.FullName.StartsWith("NetFabric")).Should().BeNull();
+            System.Linq.Enumerable.FirstOrDefault(result, a => a.FullName.StartsWith("NetFabric")).Must().BeNull();
         }
     }
 }

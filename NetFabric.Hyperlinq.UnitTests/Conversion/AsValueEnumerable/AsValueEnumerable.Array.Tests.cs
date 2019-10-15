@@ -1,4 +1,4 @@
-using FluentAssertions;
+using NetFabric.Assertive;
 using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests
@@ -14,11 +14,14 @@ namespace NetFabric.Hyperlinq.UnitTests
             // Arrange
 
             // Act
-            var result = Array.AsValueEnumerable(source);
+            var result = Array
+                .AsValueEnumerable(source);
 
             // Assert
-            result.Should().BeOfType<Array.ValueEnumerableWrapper<int>>();
-            result.Must().BeEnumerable(source);
+            result.Must()
+                .BeOfType<Array.ValueEnumerableWrapper<int>>()
+                .BeEnumerableOf<int>()
+                .BeEqualTo(source);
         }
     }
 }

@@ -1,5 +1,5 @@
 
-using FluentAssertions;
+using NetFabric.Assertive;
 using System;
 using Xunit;
 
@@ -14,13 +14,16 @@ namespace NetFabric.Hyperlinq.UnitTests
         public void FirstOrDefault_With_ValidData_Should_Succeed(int[] source)
         {
             // Arrange
-            var expected = System.Linq.Enumerable.FirstOrDefault(source);
+            var expected = 
+                System.Linq.Enumerable.FirstOrDefault(source);
 
             // Act
-            var result = Array.FirstOrDefault<int>(source);
+            var result = Array
+                .FirstOrDefault<int>(source);
 
             // Assert
-            result.Should().Be(expected);
+            result.Must()
+                .BeEqualTo(expected);
         }
 
         [Theory]
@@ -30,13 +33,16 @@ namespace NetFabric.Hyperlinq.UnitTests
         public void FirstOrDefaultPredicate_With_ValidData_Should_Succeed(int[] source, Func<int, bool> predicate)
         {
             // Arrange
-            var expected = System.Linq.Enumerable.FirstOrDefault(source, predicate);
+            var expected = 
+                System.Linq.Enumerable.FirstOrDefault(source, predicate);
 
             // Act
-            var result = Array.FirstOrDefault<int>(source, predicate);
+            var result = Array
+                .FirstOrDefault<int>(source, predicate);
 
             // Assert
-            result.Should().Be(expected);
+            result.Must()
+                .BeEqualTo(expected);
         }
     }
 }
