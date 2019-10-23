@@ -1,4 +1,4 @@
-using FluentAssertions;
+using NetFabric.Assertive;
 using System;
 using Xunit;
 
@@ -17,7 +17,9 @@ namespace NetFabric.Hyperlinq.UnitTests
             var result = ValueEnumerable.Return(value);
 
             // Assert
-            result.Must().BeEnumerable(expected);
+            result.Must()
+                .BeEnumerableOf<int>()
+                .BeEqualTo(expected);
         }
 
         [Theory]
@@ -31,7 +33,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             Func<int> action = () => ValueEnumerable.Return(value)[index];
 
             // Assert
-            action.Should().ThrowExactly<IndexOutOfRangeException>();
+            action.Must().Throw<IndexOutOfRangeException>();
         }    
     }
 }

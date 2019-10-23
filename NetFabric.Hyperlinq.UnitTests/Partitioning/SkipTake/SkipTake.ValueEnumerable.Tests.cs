@@ -1,4 +1,4 @@
-using FluentAssertions;
+using NetFabric.Assertive;
 using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests
@@ -13,13 +13,18 @@ namespace NetFabric.Hyperlinq.UnitTests
         {
             // Arrange
             var wrapped = Wrap.AsValueEnumerable(source);
-            var expected = System.Linq.Enumerable.Take(System.Linq.Enumerable.Skip(wrapped, skipCount), takeCount);
+            var expected = System.Linq.Enumerable
+                .Take(System.Linq.Enumerable
+                .Skip(wrapped, skipCount), takeCount);
 
             // Act
-            var result = ValueEnumerable.SkipTake<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, skipCount, takeCount);
+            var result = ValueEnumerable
+                .SkipTake<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, skipCount, takeCount);
 
             // Assert
-            result.Must().BeEnumerable(expected);
+            result.Must()
+                .BeEnumerableOf<int>()
+                .BeEqualTo(expected);
         }
 
         [Theory]
@@ -28,13 +33,20 @@ namespace NetFabric.Hyperlinq.UnitTests
         {
             // Arrange
             var wrapped = Wrap.AsValueEnumerable(source);
-            var expected = System.Linq.Enumerable.Take(System.Linq.Enumerable.Take(System.Linq.Enumerable.Skip(wrapped, skipCount), takeCount0), takeCount1);
+            var expected = System.Linq.Enumerable
+                .Take(System.Linq.Enumerable
+                .Take(System.Linq.Enumerable
+                .Skip(wrapped, skipCount), takeCount0), takeCount1);
 
             // Act
-            var result = ValueEnumerable.SkipTake<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, skipCount, takeCount0).Take(takeCount1);
+            var result = ValueEnumerable
+                .SkipTake<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, skipCount, takeCount0)
+                .Take(takeCount1);
 
             // Assert
-            result.Must().BeEnumerable(expected);
+            result.Must()
+                .BeEnumerableOf<int>()
+                .BeEqualTo(expected);
         }
     }
 }

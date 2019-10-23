@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using FluentAssertions;
+using NetFabric.Assertive;
 using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests
@@ -14,13 +14,16 @@ namespace NetFabric.Hyperlinq.UnitTests
         {
             // Arrange
             var wrapped = Wrap.AsValueReadOnlyCollection(source);
-            var expected = System.Linq.Enumerable.Contains(wrapped, value);
+            var expected = 
+                System.Linq.Enumerable.Contains(wrapped, value);
 
             // Act
-            var result = ValueReadOnlyCollection.Contains<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(wrapped, value);
+            var result = ValueReadOnlyCollection
+                .Contains<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(wrapped, value);
 
             // Assert
-            result.Should().Be(expected);
+            result.Must()
+                .BeEqualTo(expected);
         }
 
         [Theory]
@@ -29,13 +32,16 @@ namespace NetFabric.Hyperlinq.UnitTests
         {
             // Arrange
             var wrapped = Wrap.AsValueReadOnlyCollection(source);
-            var expected = System.Linq.Enumerable.Contains(wrapped, value, EqualityComparer<int>.Default);
+            var expected = 
+                System.Linq.Enumerable.Contains(wrapped, value, EqualityComparer<int>.Default);
 
             // Act
-            var result = ValueReadOnlyCollection.Contains<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(wrapped, value, EqualityComparer<int>.Default);
+            var result = ValueReadOnlyCollection
+                .Contains<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(wrapped, value, EqualityComparer<int>.Default);
 
             // Assert
-            result.Should().Be(expected);
+            result.Must()
+                .BeEqualTo(expected);
         }    
 
         [Theory]
@@ -44,13 +50,16 @@ namespace NetFabric.Hyperlinq.UnitTests
         {
             // Arrange
             var wrapped = Wrap.AsValueReadOnlyCollection(source);
-            var expected = System.Linq.Enumerable.Contains(wrapped, value, null);
+            var expected = 
+                System.Linq.Enumerable.Contains(wrapped, value, null);
 
             // Act
-            var result = ValueReadOnlyCollection.Contains<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(wrapped, value, null);
+            var result = ValueReadOnlyCollection
+                .Contains<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(wrapped, value, null);
 
             // Assert
-            result.Should().Be(expected);
+            result.Must()
+                .BeEqualTo(expected);
         }  
     }
 }

@@ -1,4 +1,4 @@
-using FluentAssertions;
+using NetFabric.Assertive;
 using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests
@@ -13,13 +13,17 @@ namespace NetFabric.Hyperlinq.UnitTests
         {
             // Arrange
             var wrapped = Wrap.AsValueEnumerable(source);
-            var expected = System.Linq.Enumerable.Take(wrapped, count);
+            var expected = 
+                System.Linq.Enumerable.Take(wrapped, count);
 
             // Act
-            var result = ValueEnumerable.Take<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, count);
+            var result = ValueEnumerable
+                .Take<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, count);
 
             // Assert
-            result.Must().BeEnumerable(expected);
+            result.Must()
+                .BeEnumerableOf<int>()
+                .BeEqualTo(expected);
         }
 
         [Theory]
@@ -28,13 +32,19 @@ namespace NetFabric.Hyperlinq.UnitTests
         {
             // Arrange
             var wrapped = Wrap.AsValueEnumerable(source);
-            var expected = System.Linq.Enumerable.Take(System.Linq.Enumerable.Take(wrapped, count0), count1);
+            var expected = 
+                System.Linq.Enumerable.Take(
+                    System.Linq.Enumerable.Take(wrapped, count0), count1);
 
             // Act
-            var result = ValueEnumerable.Take<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, count0).Take(count1);
+            var result = ValueEnumerable
+                .Take<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, count0)
+                .Take(count1);
 
             // Assert
-            result.Must().BeEnumerable(expected);
+            result.Must()
+                .BeEnumerableOf<int>()
+                .BeEqualTo(expected);
         }
     }
 }

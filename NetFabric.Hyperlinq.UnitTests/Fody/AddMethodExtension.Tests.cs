@@ -1,4 +1,4 @@
-using FluentAssertions;
+using NetFabric.Assertive;
 using System.Collections.Generic;
 using Xunit;
 
@@ -19,8 +19,8 @@ namespace NetFabric.Hyperlinq.UnitTests
                 .Count(item => true);
 
             // Assert
-            result.Should()
-                .Be(expected);
+            result.Must()
+                .BeEqualTo(expected);
         }
     }
 }

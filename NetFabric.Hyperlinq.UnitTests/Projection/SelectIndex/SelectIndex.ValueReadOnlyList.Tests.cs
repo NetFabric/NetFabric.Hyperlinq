@@ -1,4 +1,4 @@
-using FluentAssertions;
+using NetFabric.Assertive;
 using System;
 using Xunit;
 
@@ -17,11 +17,9 @@ namespace NetFabric.Hyperlinq.UnitTests
             Action action = () => ValueReadOnlyList.Select<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int, string>(list, selector);
 
             // Assert
-            action.Should()
-                .ThrowExactly<ArgumentNullException>()
-                .And
-                .ParamName.Should()
-                    .Be("selector");
+            action.Must()
+                .Throw<ArgumentNullException>()
+                .EvaluatesTrue(exception => exception.ParamName == "selector");
         }
 
         [Theory]
@@ -32,13 +30,17 @@ namespace NetFabric.Hyperlinq.UnitTests
         {
             // Arrange
             var wrapped = Wrap.AsValueReadOnlyList(source);
-            var expected = System.Linq.Enumerable.Select(wrapped, (item, index) => (item + index).ToString());
+            var expected = 
+                System.Linq.Enumerable.Select(wrapped, (item, index) => (item + index).ToString());
 
             // Act
-            var result = ValueReadOnlyList.Select<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int, string>(wrapped, (item, index) => (item + index).ToString());
+            var result = ValueReadOnlyList
+                .Select<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int, string>(wrapped, (item, index) => (item + index).ToString());
 
             // Assert
-            result.Must().BeEnumerable(expected);
+            result.Must()
+                .BeEnumerableOf<string>()
+                .BeEqualTo(expected);
         }
     }
 }

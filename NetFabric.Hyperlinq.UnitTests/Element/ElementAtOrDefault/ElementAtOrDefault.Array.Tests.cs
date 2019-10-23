@@ -1,4 +1,4 @@
-using FluentAssertions;
+using NetFabric.Assertive;
 using System;
 using Xunit;
 
@@ -13,10 +13,12 @@ namespace NetFabric.Hyperlinq.UnitTests
             // Arrange
 
             // Act
-            var result = Array.ElementAtOrDefault<int>(source, index);
+            var result = Array
+                .ElementAtOrDefault<int>(source, index);
 
             // Assert
-            result.Should().Be(default);
+            result.Must()
+                .BeEqualTo(default);
         }
 
         [Theory]
@@ -24,13 +26,16 @@ namespace NetFabric.Hyperlinq.UnitTests
         public void ElementAtOrDefault_With_ValidData_Should_Succeed(int[] source, int index)
         {
             // Arrange
-            var expected = System.Linq.Enumerable.ElementAtOrDefault(source, index);
+            var expected = 
+                System.Linq.Enumerable.ElementAtOrDefault(source, index);
 
             // Act
-            var result = Array.ElementAtOrDefault<int>(source, index);
+            var result = Array
+                .ElementAtOrDefault<int>(source, index);
 
             // Assert
-            result.Should().Be(expected);
+            result.Must()
+                .BeEqualTo(expected);
         }
     }
 }

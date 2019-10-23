@@ -1,4 +1,4 @@
-using FluentAssertions;
+using NetFabric.Assertive;
 using System;
 using Xunit;
 
@@ -21,7 +21,8 @@ namespace NetFabric.Hyperlinq.UnitTests
             Array.ForEach<int>(source, item => result += item);
 
             // Assert
-            result.Should().Be(expected);
+            result.Must()
+                .BeEqualTo(expected);
         }
 
         [Theory]
@@ -39,7 +40,8 @@ namespace NetFabric.Hyperlinq.UnitTests
             Array.ForEach<int>(source, (item, index) => result += item + index);
 
             // Assert
-            result.Should().Be(expected);
+            result.Must()
+                .BeEqualTo(expected);
         }
     }
 }

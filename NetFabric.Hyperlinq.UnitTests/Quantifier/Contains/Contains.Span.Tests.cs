@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using FluentAssertions;
+using NetFabric.Assertive;
 using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests
@@ -13,13 +13,16 @@ namespace NetFabric.Hyperlinq.UnitTests
         public void Contains_With_ValidData_Should_Succeed(int[] source, int value)
         {
             // Arrange
-            var expected = System.Linq.Enumerable.Contains(source, value);
+            var expected = 
+                System.Linq.Enumerable.Contains(source, value);
 
             // Act
-            var result = SpanExtensions.Contains<int>(source, value);
+            var result = SpanExtensions
+                .Contains<int>(source, value);
 
             // Assert
-            result.Should().Be(expected);
+            result.Must()
+                .BeEqualTo(expected);
         }
 
         [Theory]
@@ -27,13 +30,16 @@ namespace NetFabric.Hyperlinq.UnitTests
         public void Contains_With_ValidData_And_Comparer_Should_Succeed(int[] source, int value)
         {
             // Arrange
-            var expected = System.Linq.Enumerable.Contains(source, value, EqualityComparer<int>.Default);
+            var expected = 
+                System.Linq.Enumerable.Contains(source, value, EqualityComparer<int>.Default);
 
             // Act
-            var result = SpanExtensions.Contains<int>(source, value, EqualityComparer<int>.Default);
+            var result = SpanExtensions
+                .Contains<int>(source, value, EqualityComparer<int>.Default);
 
             // Assert
-            result.Should().Be(expected);
+            result.Must()
+                .BeEqualTo(expected);
         }    
 
         [Theory]
@@ -41,13 +47,16 @@ namespace NetFabric.Hyperlinq.UnitTests
         public void Contains_With_ValidData_And_NullComparer_Should_Succeed(int[] source, int value)
         {
             // Arrange
-            var expected = System.Linq.Enumerable.Contains(source, value, null);
+            var expected = 
+                System.Linq.Enumerable.Contains(source, value, null);
 
             // Act
-            var result = SpanExtensions.Contains<int>(source, value, null);
+            var result = SpanExtensions
+                .Contains<int>(source, value, null);
 
             // Assert
-            result.Should().Be(expected);
+            result.Must()
+                .BeEqualTo(expected);
         }  
     }
 }

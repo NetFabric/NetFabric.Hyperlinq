@@ -1,4 +1,4 @@
-using FluentAssertions;
+using NetFabric.Assertive;
 using System;
 using Xunit;
 
@@ -22,7 +22,8 @@ namespace NetFabric.Hyperlinq.UnitTests
             ValueReadOnlyCollection.ForEach<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(wrapped, item => result += item);
 
             // Assert
-            result.Should().Be(expected);
+            result.Must()
+                .BeEqualTo(expected);
         }
 
         [Theory]
@@ -41,7 +42,8 @@ namespace NetFabric.Hyperlinq.UnitTests
             ValueReadOnlyCollection.ForEach<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(wrapped, (item, index) => result += item + index);
 
             // Assert
-            result.Should().Be(expected);
+            result.Must()
+                .BeEqualTo(expected);
         }
     }
 }

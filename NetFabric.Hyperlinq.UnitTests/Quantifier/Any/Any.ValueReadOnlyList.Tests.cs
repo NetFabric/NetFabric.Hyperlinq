@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using FluentAssertions;
+using NetFabric.Assertive;
 using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests
@@ -16,14 +16,13 @@ namespace NetFabric.Hyperlinq.UnitTests
             var predicate = (Func<int, bool>)null;
 
             // Act
-            Action action = () => ValueReadOnlyList.Any<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
+            Action action = () => ValueReadOnlyList
+                .Any<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
 
             // Assert
-            action.Should()
-                .ThrowExactly<ArgumentNullException>()
-                .And
-                .ParamName.Should()
-                    .Be("predicate");
+            action.Must()
+                .Throw<ArgumentNullException>()
+                .EvaluatesTrue(exception => exception.ParamName == "predicate");
         }
 
         [Theory]
@@ -32,13 +31,16 @@ namespace NetFabric.Hyperlinq.UnitTests
         {
             // Arrange
             var wrapped = Wrap.AsValueReadOnlyList(source);
-            var expected = System.Linq.Enumerable.Any(wrapped, predicate);
+            var expected = 
+                System.Linq.Enumerable.Any(wrapped, predicate);
 
             // Act
-            var result = ValueReadOnlyList.Any<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
+            var result = ValueReadOnlyList
+                .Any<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
 
             // Assert
-            result.Should().Be(expected);
+            result.Must()
+                .BeEqualTo(expected);
         }
     }
 }

@@ -1,4 +1,4 @@
-using FluentAssertions;
+using NetFabric.Assertive;
 using System.Collections.Generic;
 using Xunit;
 
@@ -12,15 +12,18 @@ namespace NetFabric.Hyperlinq.UnitTests
             // ValueEnumerable.RangeEnumerable type and All() method don't have generic parameters
 
             // Arrange
-            var expected = System.Linq.Enumerable.All(System.Linq.Enumerable.Range(0, 100), item => true);
+            var expected = 
+                System.Linq.Enumerable.All(
+                    System.Linq.Enumerable.Range(0, 100), item => true);
 
             // Act
-            var result = ValueEnumerable.Range(0, 100)
+            var result = ValueEnumerable
+                .Range(0, 100)
                 .All(item => true);
 
             // Assert
-            result.Should()
-                .Be(expected);
+            result.Must()
+                .BeEqualTo(expected);
         }
 
         [Fact]
@@ -29,15 +32,19 @@ namespace NetFabric.Hyperlinq.UnitTests
             // ValueEnumerable.RangeEnumerable type doesn't have generic parameters but the Select<TResult>() method does
 
             // Arrange
-            var expected = System.Linq.Enumerable.Select(System.Linq.Enumerable.Range(0, 100), item => item);
+            var expected = 
+                System.Linq.Enumerable.Select(
+                    System.Linq.Enumerable.Range(0, 100), item => item);
 
             // Act
-            var result = ValueEnumerable.Range(0, 100)
+            var result = ValueEnumerable
+                .Range(0, 100)
                 .Select(item => item);
 
             // Assert
-            result.Should()
-                .Equals(expected);
+            result.Must()
+                .BeEnumerableOf<int>()
+                .BeEqualTo(expected);
         }
 
         [Fact]
@@ -46,16 +53,19 @@ namespace NetFabric.Hyperlinq.UnitTests
             // Enumerable.ValueEnumerableWrapper<TSource> type has one generic parameters but the All() method doesn't
 
             // Arrange
-            var expected = System.Linq.Enumerable.All(System.Linq.Enumerable.Range(0, 100), item => true);
+            var expected =
+                System.Linq.Enumerable.All(
+                    System.Linq.Enumerable.Range(0, 100), item => true);
 
             // Act
-            var result = System.Linq.Enumerable.Range(0, 100)
+            var result = 
+                System.Linq.Enumerable.Range(0, 100)
                 .AsValueEnumerable()
                 .All(item => true);
 
             // Assert
-            result.Should()
-                .Be(expected);
+            result.Must()
+                .BeEqualTo(expected);
         }
 
         [Fact]
@@ -64,16 +74,20 @@ namespace NetFabric.Hyperlinq.UnitTests
             // Enumerable.ValueEnumerableWrapper<TSource> type and Select<TResult>() method have one generic parameter
 
             // Arrange
-            var expected = System.Linq.Enumerable.Select(System.Linq.Enumerable.Range(0, 100), item => item);
+            var expected = 
+                System.Linq.Enumerable.Select(
+                    System.Linq.Enumerable.Range(0, 100), item => item);
 
             // Act
-            var result = System.Linq.Enumerable.Range(0, 100)
+            var result = 
+                System.Linq.Enumerable.Range(0, 100)
                 .AsValueEnumerable()
                 .Select(item => item);
 
             // Assert
-            result.Should()
-                .Equals(expected);
+            result.Must()
+                .BeEnumerableOf<int>()
+                .BeEqualTo(expected);
         }
 
         [Fact]
@@ -82,15 +96,19 @@ namespace NetFabric.Hyperlinq.UnitTests
             // Enumerable.ValueEnumerableWrapper<TEnumerable, TEnumerator, TSource> type has one generic parameters but the All() method doesn't
 
             // Arrange
-            var expected = System.Linq.Enumerable.All(System.Linq.Enumerable.ToList(System.Linq.Enumerable.Range(0, 100)), item => true);
+            var expected = 
+                System.Linq.Enumerable.All(
+                    System.Linq.Enumerable.ToList(
+                        System.Linq.Enumerable.Range(0, 100)), item => true);
 
             // Act
-            var result = ReadOnlyList.AsValueEnumerable<List<int>, List<int>.Enumerator, int>(System.Linq.Enumerable.ToList(System.Linq.Enumerable.Range(0, 100)), enumerable => enumerable.GetEnumerator())
+            var result = ReadOnlyList
+                .AsValueEnumerable<List<int>, List<int>.Enumerator, int>(System.Linq.Enumerable.ToList(System.Linq.Enumerable.Range(0, 100)), enumerable => enumerable.GetEnumerator())
                 .All(item => true);
 
             // Assert
-            result.Should()
-                .Be(expected);
+            result.Must()
+                .BeEqualTo(expected);
         }
 
         [Fact]
@@ -99,15 +117,20 @@ namespace NetFabric.Hyperlinq.UnitTests
             // Enumerable.ValueEnumerableWrapper<TEnumerable, TEnumerator, TSource> type and Select<TResult>() method have one generic parameter
 
             // Arrange
-            var expected = System.Linq.Enumerable.Select(System.Linq.Enumerable.ToList(System.Linq.Enumerable.Range(0, 100)), item => item);
+            var expected = 
+                System.Linq.Enumerable.Select(
+                    System.Linq.Enumerable.ToList(
+                        System.Linq.Enumerable.Range(0, 100)), item => item);
 
             // Act
-            var result = ReadOnlyList.AsValueEnumerable<List<int>, List<int>.Enumerator, int>(System.Linq.Enumerable.ToList(System.Linq.Enumerable.Range(0, 100)), enumerable => enumerable.GetEnumerator())
+            var result = ReadOnlyList
+                .AsValueEnumerable<List<int>, List<int>.Enumerator, int>(System.Linq.Enumerable.ToList(System.Linq.Enumerable.Range(0, 100)), enumerable => enumerable.GetEnumerator())
                 .Select(item => item);
 
             // Assert
-            result.Should()
-                .Equals(expected);
+            result.Must()
+                .BeEnumerableOf<int>()
+                .BeEqualTo(expected);
         }
     }
 }

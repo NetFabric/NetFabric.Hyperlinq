@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using FluentAssertions;
+using NetFabric.Assertive;
 using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests
@@ -15,14 +15,13 @@ namespace NetFabric.Hyperlinq.UnitTests
             var predicate = (Func<int, bool>)null;
 
             // Act
-            Action action = () => Array.All<int>(new int[0], predicate);
+            Action action = () => Array
+                .All<int>(new int[0], predicate);
 
             // Assert
-            action.Should()
-                .ThrowExactly<ArgumentNullException>()
-                .And
-                .ParamName.Should()
-                    .Be("predicate");
+            action.Must()
+                .Throw<ArgumentNullException>()
+                .EvaluatesTrue(exception => exception.ParamName == "predicate");
         }
 
         [Theory]
@@ -33,10 +32,12 @@ namespace NetFabric.Hyperlinq.UnitTests
             var expected = System.Linq.Enumerable.All(source, predicate);
 
             // Act
-            var result = Array.All<int>(source, predicate);
+            var result = Array
+                .All<int>(source, predicate);
 
             // Assert
-            result.Should().Be(expected);
+            result.Must()
+                .BeEqualTo(expected);
         }
     }
 }

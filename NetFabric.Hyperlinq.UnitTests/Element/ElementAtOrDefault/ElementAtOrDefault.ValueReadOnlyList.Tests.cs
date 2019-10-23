@@ -1,4 +1,4 @@
-using FluentAssertions;
+using NetFabric.Assertive;
 using System;
 using Xunit;
 
@@ -17,7 +17,8 @@ namespace NetFabric.Hyperlinq.UnitTests
             var result = ValueReadOnlyList.ElementAtOrDefault<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int>(wrapped, index);
 
             // Assert
-            result.Should().Be(default);
+            result.Must()
+                .BeEqualTo(default);
         }
 
         [Theory]
@@ -25,14 +26,18 @@ namespace NetFabric.Hyperlinq.UnitTests
         public void ElementAtOrDefault_With_ValidData_Should_Succeed(int[] source, int index)
         {
             // Arrange
-            var wrapped = Wrap.AsValueReadOnlyList(source);
-            var expected = System.Linq.Enumerable.ElementAtOrDefault(wrapped, index);
+            var wrapped = Wrap
+                .AsValueReadOnlyList(source);
+            var expected = 
+                System.Linq.Enumerable.ElementAtOrDefault(wrapped, index);
 
             // Act
-            var result = ValueReadOnlyList.ElementAtOrDefault<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int>(wrapped, index);
+            var result = ValueReadOnlyList
+                .ElementAtOrDefault<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int>(wrapped, index);
 
             // Assert
-            result.Should().Be(expected);
+            result.Must()
+                .BeEqualTo(expected);
         }
     }
 }

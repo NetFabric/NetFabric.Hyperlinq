@@ -1,4 +1,4 @@
-using FluentAssertions;
+using NetFabric.Assertive;
 using System.Collections.Generic;
 using Xunit;
 
@@ -13,16 +13,18 @@ namespace NetFabric.Hyperlinq.UnitTests
         public void ToList_With_ValidData_Should_Succeed(int[] source)
         {
             // Arrange
-            var expected = System.Linq.Enumerable.ToList(source);
+            var expected = 
+                System.Linq.Enumerable.ToList(source);
 
             // Act
-            var result = Array.ToList(source);
+            var result = Array
+                .ToList(source);
 
             // Assert
-            result.Should()
-                .BeOfType<List<int>>().And
-                .NotBeSameAs(source).And
-                .Equal(expected);
+            result.Must()
+                .BeOfType<List<int>>()
+                .BeEnumerableOf<int>()
+                .BeEqualTo(expected);
         }
     }
 }

@@ -1,4 +1,4 @@
-using FluentAssertions;
+using NetFabric.Assertive;
 using System;
 using Xunit;
 
@@ -13,12 +13,13 @@ namespace NetFabric.Hyperlinq.UnitTests
             // Arrange
 
             // Act
-            Action action = () => SpanExtensions.First<int>(source);
+            Action action = () => SpanExtensions
+                .First<int>(source);
 
             // Assert
-            action.Should()
-                .ThrowExactly<InvalidOperationException>()
-                .WithMessage("Sequence contains no elements");
+            action.Must()
+                .Throw<InvalidOperationException>()
+                .EvaluatesTrue(exception => exception.Message == "Sequence contains no elements");
         }
 
         [Theory]
@@ -28,12 +29,13 @@ namespace NetFabric.Hyperlinq.UnitTests
             // Arrange
 
             // Act
-            Action action = () => SpanExtensions.First<int>(source, predicate);
+            Action action = () => SpanExtensions
+                .First<int>(source, predicate);
 
             // Assert
-            action.Should()
-                .ThrowExactly<InvalidOperationException>()
-                .WithMessage("Sequence contains no elements");
+            action.Must()
+                .Throw<InvalidOperationException>()
+                .EvaluatesTrue(exception => exception.Message == "Sequence contains no elements");
         }
 
         [Theory]
@@ -42,13 +44,16 @@ namespace NetFabric.Hyperlinq.UnitTests
         public void First_With_ValidData_Should_Succeed(int[] source)
         {
             // Arrange
-            var expected = System.Linq.Enumerable.First(source);
+            var expected = 
+                System.Linq.Enumerable.First(source);
 
             // Act
-            var result = SpanExtensions.First<int>(source);
+            var result = SpanExtensions
+                .First<int>(source);
 
             // Assert
-            result.Should().Be(expected);
+            result.Must()
+                .BeEqualTo(expected);
         }
 
         [Theory]
@@ -57,13 +62,16 @@ namespace NetFabric.Hyperlinq.UnitTests
         public void FirstPredicate_With_ValidData_Should_Succeed(int[] source, Func<int, bool> predicate)
         {
             // Arrange
-            var expected = System.Linq.Enumerable.First(source, predicate);
+            var expected = 
+                System.Linq.Enumerable.First(source, predicate);
 
             // Act
-            var result = SpanExtensions.First<int>(source, predicate);
+            var result = SpanExtensions
+                .First<int>(source, predicate);
 
             // Assert
-            result.Should().Be(expected);
+            result.Must()
+                .BeEqualTo(expected);
         }
     }
 }
