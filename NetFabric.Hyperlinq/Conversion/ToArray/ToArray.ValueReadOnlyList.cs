@@ -19,8 +19,8 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
-            var array = new TSource[source.Count];
-            if (source.Count != 0)
+            var array = new TSource[takeCount];
+            if (takeCount != 0)
             {
                 if (skipCount == 0 && takeCount == source.Count && source is ICollection<TSource> collection)
                 {

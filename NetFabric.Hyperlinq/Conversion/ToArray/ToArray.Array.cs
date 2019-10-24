@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Runtime.CompilerServices;
 
@@ -16,7 +15,8 @@ namespace NetFabric.Hyperlinq
         static TSource[] ToArray<TSource>(this TSource[] source, int skipCount, int takeCount)
         {
             var array = new TSource[takeCount];
-            System.Array.Copy(source, skipCount, array, 0, takeCount);
+            if (takeCount != 0)
+                System.Array.Copy(source, skipCount, array, 0, takeCount);
             return array;
         }
     }
