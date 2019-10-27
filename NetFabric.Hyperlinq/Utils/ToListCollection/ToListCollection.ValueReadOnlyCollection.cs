@@ -7,7 +7,6 @@ namespace NetFabric.Hyperlinq
     public static partial class ValueReadOnlyCollection
     {
         // helper implementation of ICollection<> so that CopyTo() is used to convert to List<>
-        [Ignore]
         internal sealed class ToListCollection<TEnumerable, TEnumerator, TSource>
             : ICollection<TSource>
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>

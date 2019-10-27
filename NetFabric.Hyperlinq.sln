@@ -30,7 +30,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetFabric.Hyperlinq.Build",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetFabric.Hyperlinq.Build.Fody", "NetFabric.Hyperlinq.Build.Fody\NetFabric.Hyperlinq.Build.Fody.csproj", "{730FFE3B-54C6-4F97-A80E-C0C5136F9955}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetFabric.Hyperlinq.Interfaces", "NetFabric.Hyperlinq.Interfaces\NetFabric.Hyperlinq.Interfaces.csproj", "{5D186C2C-056C-4146-98AF-137BA449570A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetFabric.Hyperlinq.Interfaces", "NetFabric.Hyperlinq.Interfaces\NetFabric.Hyperlinq.Interfaces.csproj", "{5D186C2C-056C-4146-98AF-137BA449570A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetFabric.Hyperlinq.CodeGen", "NetFabric.Hyperlinq.CodeGen\NetFabric.Hyperlinq.CodeGen.csproj", "{9E083F62-3B2C-428E-A658-C508A1D63C1C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -66,6 +68,10 @@ Global
 		{5D186C2C-056C-4146-98AF-137BA449570A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5D186C2C-056C-4146-98AF-137BA449570A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5D186C2C-056C-4146-98AF-137BA449570A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9E083F62-3B2C-428E-A658-C508A1D63C1C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9E083F62-3B2C-428E-A658-C508A1D63C1C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9E083F62-3B2C-428E-A658-C508A1D63C1C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9E083F62-3B2C-428E-A658-C508A1D63C1C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

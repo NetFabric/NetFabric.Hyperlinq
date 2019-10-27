@@ -8,7 +8,6 @@ using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
-    [Ignore]
     public static class ImmutableArrayBindings
     {
         [Pure]

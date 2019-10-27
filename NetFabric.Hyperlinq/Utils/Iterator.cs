@@ -5,7 +5,6 @@ using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
-    [Ignore]
     abstract class Iterator<TSource> 
         : IEnumerable<TSource>
         , IEnumerator<TSource>

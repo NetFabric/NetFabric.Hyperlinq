@@ -20,8 +20,9 @@ namespace NetFabric.Hyperlinq
             where TEnumerator : struct, IEnumerator<TSource>
             => new ValueEnumerableWrapper<TEnumerable, TEnumerator, TSource>(source, getEnumerator);
 
+        [GenerateExtensions]
         [GenericsTypeMapping("TEnumerable", typeof(ValueEnumerableWrapper<,,>))]
-        public readonly struct ValueEnumerableWrapper<TEnumerable, TEnumerator, TSource>
+        public readonly partial struct ValueEnumerableWrapper<TEnumerable, TEnumerator, TSource>
             : IValueEnumerable<TSource, TEnumerator>
             where TEnumerable : IEnumerable<TSource>
             where TEnumerator : struct, IEnumerator<TSource>
@@ -53,9 +54,10 @@ namespace NetFabric.Hyperlinq
             }
         }
 
+        [GenerateExtensions]
         [GenericsTypeMapping("TEnumerable", typeof(ValueEnumerableWrapper<>))]
         [GenericsTypeMapping("TEnumerator", typeof(ValueEnumerableWrapper<>.Enumerator))]
-        public struct ValueEnumerableWrapper<TSource>
+        public readonly partial struct ValueEnumerableWrapper<TSource>
             : IValueEnumerable<TSource, ValueEnumerableWrapper<TSource>.Enumerator>
         {
             readonly IEnumerable<TSource> source;

@@ -19,9 +19,10 @@ namespace NetFabric.Hyperlinq
             return new WhereEnumerable<TEnumerable, TEnumerator, TSource>(in source, predicate);
         }
 
+        [GenerateExtensions]
         [GenericsTypeMapping("TEnumerable", typeof(WhereEnumerable<,,>))]
         [GenericsTypeMapping("TEnumerator", typeof(WhereEnumerable<,,>.Enumerator))]
-        public readonly struct WhereEnumerable<TEnumerable, TEnumerator, TSource> 
+        public readonly partial struct WhereEnumerable<TEnumerable, TEnumerator, TSource> 
             : IValueEnumerable<TSource, WhereEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator>
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>

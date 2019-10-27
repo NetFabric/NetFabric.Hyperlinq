@@ -26,18 +26,18 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="FodyWeavers.xsd" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <WeaverFiles Include="..\NetFabric.Hyperlinq.Build.Fody\bin\$(Configuration)\netstandard2.0\NetFabric.Hyperlinq.Build.Fody.dll" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\NetFabric.Hyperlinq.Build\NetFabric.Hyperlinq.Build.csproj" PrivateAssets="All" />
+    <ProjectReference Include="..\NetFabric.Hyperlinq.CodeGen\NetFabric.Hyperlinq.CodeGen.csproj" />
     <ProjectReference Include="..\NetFabric.Hyperlinq.Interfaces\NetFabric.Hyperlinq.Interfaces.csproj" />
-    <PackageReference Include="Fody" Version="6.0.5" PrivateAssets="All" />
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta2-19554-01" PrivateAssets="All" />
+    <PackageReference Include="Uno.SourceGenerationTasks" Version="1.31.0" PrivateAssets="All" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)'=='net461'">
+    <PackageReference Include="System.ValueTuple" Version="4.5.0" />
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.0-preview.2" PrivateAssets="All" />
   </ItemGroup>
 
   <ItemGroup>
@@ -54,5 +54,6 @@
       <LastGenOutput>Resource.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
-  
+
+  <Import Project="..\NetFabric.Hyperlinq.CodeGen\build\NetFabric.Hyperlinq.CodeGen.props" />  
 </Project>

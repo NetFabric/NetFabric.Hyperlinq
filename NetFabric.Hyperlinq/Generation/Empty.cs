@@ -12,9 +12,10 @@ namespace NetFabric.Hyperlinq
         public static EmptyEnumerable<TSource> Empty<TSource>() =>
             new EmptyEnumerable<TSource>();
 
+        [GenerateExtensions]
         [GenericsTypeMapping("TEnumerable", typeof(EmptyEnumerable<>))]
         [GenericsTypeMapping("TEnumerator", typeof(EmptyEnumerable<>.DisposableEnumerator))]
-        public readonly struct EmptyEnumerable<TSource>
+        public readonly partial struct EmptyEnumerable<TSource>
             : IValueReadOnlyList<TSource, EmptyEnumerable<TSource>.DisposableEnumerator>
         {
             [Pure]

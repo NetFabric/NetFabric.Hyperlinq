@@ -17,8 +17,9 @@ namespace NetFabric.Hyperlinq
             return new CreateValueEnumerable<TEnumerator, TSource>(getEnumerator);
         }
 
+        [GenerateExtensions]
         [GenericsTypeMapping("TEnumerable", typeof(CreateValueEnumerable<,>))]
-        public readonly struct CreateValueEnumerable<TEnumerator, TSource> 
+        public readonly partial struct CreateValueEnumerable<TEnumerator, TSource> 
             : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {

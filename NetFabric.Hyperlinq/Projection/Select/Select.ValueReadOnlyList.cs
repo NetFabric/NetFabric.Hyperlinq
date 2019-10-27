@@ -28,11 +28,12 @@ namespace NetFabric.Hyperlinq
             where TEnumerator : struct, IEnumerator<TSource>
             => new SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>(source, selector, skipCount, takeCount);
 
+        [GenerateExtensions]
         [GenericsTypeMapping("TEnumerable", typeof(SelectEnumerable<,,,>))]
         [GenericsTypeMapping("TEnumerator", typeof(SelectEnumerable<,,,>.Enumerator))]
         [GenericsMapping("TSource", "TResult")]
         [GenericsMapping("TResult", "TSelectorResult")]
-        public readonly struct SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>
+        public readonly partial struct SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>
             : IValueReadOnlyList<TResult, SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>.Enumerator>
             where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
@@ -172,7 +173,6 @@ namespace NetFabric.Hyperlinq
                 => new List<TResult>(new ToListCollection(this));
 
             // helper implementation of ICollection<> so that CopyTo() is used to convert to List<>
-            [Ignore]
             sealed class ToListCollection
                 : ICollection<TResult>
             {

@@ -26,10 +26,11 @@ namespace NetFabric.Hyperlinq
             return new RangeEnumerable(start, count, end);
         }
 
+        [GenerateExtensions]
         [GenericsTypeMapping("TEnumerable", typeof(RangeEnumerable))]
         [GenericsTypeMapping("TEnumerator", typeof(RangeEnumerable.DisposableEnumerator))]
         [GenericsTypeMapping("TSource", typeof(int))]
-        public readonly struct RangeEnumerable
+        public readonly partial struct RangeEnumerable
             : IValueReadOnlyList<int, RangeEnumerable.DisposableEnumerator>
         {
             readonly int start;
@@ -180,7 +181,6 @@ namespace NetFabric.Hyperlinq
             }
 
             // helper implementation of ICollection<> so that CopyTo() is used to convert to List<>
-            [Ignore]
             sealed class ToListCollection
                 : ICollection<int>
             {

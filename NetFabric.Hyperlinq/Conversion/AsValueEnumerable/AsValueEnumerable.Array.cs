@@ -13,9 +13,10 @@ namespace NetFabric.Hyperlinq
         public static ValueEnumerableWrapper<TSource> AsValueEnumerable<TSource>(this TSource[] source)
             => new ValueEnumerableWrapper<TSource>(source);
 
+        [GenerateExtensions]
         [GenericsTypeMapping("TEnumerable", typeof(ValueEnumerableWrapper<>))]
         [GenericsTypeMapping("TEnumerator", typeof(ValueEnumerableWrapper<>.Enumerator))]
-        public readonly struct ValueEnumerableWrapper<TSource>
+        public readonly partial struct ValueEnumerableWrapper<TSource>
             : IValueReadOnlyList<TSource, ValueEnumerableWrapper<TSource>.Enumerator>
         {
             readonly TSource[] source;

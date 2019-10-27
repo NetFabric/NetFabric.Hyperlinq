@@ -16,9 +16,10 @@ namespace NetFabric.Hyperlinq
             return new RepeatEnumerable<TSource>(value, count);
         }
 
+        [GenerateExtensions]
         [GenericsTypeMapping("TEnumerable", typeof(RepeatEnumerable<>))]
         [GenericsTypeMapping("TEnumerator", typeof(RepeatEnumerable<>.DisposableEnumerator))]
-        public readonly struct RepeatEnumerable<TSource>
+        public readonly partial struct RepeatEnumerable<TSource>
             : IValueReadOnlyList<TSource, RepeatEnumerable<TSource>.DisposableEnumerator>
         {
             internal readonly TSource value;
@@ -186,7 +187,6 @@ namespace NetFabric.Hyperlinq
             }
 
             // helper implementation of ICollection<> so that CopyTo() is used to convert to List<>
-            [Ignore]
             sealed class ToListCollection
                 : ICollection<TSource>
             {

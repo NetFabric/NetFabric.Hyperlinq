@@ -21,10 +21,11 @@ namespace NetFabric.Hyperlinq
             return new SelectIndexEnumerable<TEnumerable, TEnumerator, TSource, TResult>(in source, selector);
         }
 
+        [GenerateExtensions]
         [GenericsTypeMapping("TEnumerable", typeof(SelectIndexEnumerable<,,,>))]
         [GenericsTypeMapping("TEnumerator", typeof(SelectIndexEnumerable<,,,>.Enumerator))]
         [GenericsMapping("TSource", "TResult")]
-        public readonly struct SelectIndexEnumerable<TEnumerable, TEnumerator, TSource, TResult> 
+        public readonly partial struct SelectIndexEnumerable<TEnumerable, TEnumerator, TSource, TResult> 
             : IValueEnumerable<TResult, SelectIndexEnumerable<TEnumerable, TEnumerator, TSource, TResult>.Enumerator>
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>

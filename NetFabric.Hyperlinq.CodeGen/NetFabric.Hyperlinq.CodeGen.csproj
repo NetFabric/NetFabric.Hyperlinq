@@ -1,0 +1,12 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net461</TargetFrameworks>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Uno.RoslynHelpers" Version="1.1.1" />
+    <PackageReference Include="Uno.SourceGeneration" Version="1.31.0" />
+  </ItemGroup>
+
+</Project>

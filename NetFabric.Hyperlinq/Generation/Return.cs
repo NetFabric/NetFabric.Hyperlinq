@@ -12,9 +12,10 @@ namespace NetFabric.Hyperlinq
         public static ReturnEnumerable<TSource> Return<TSource>(TSource value) =>
             new ReturnEnumerable<TSource>(value);
 
+        [GenerateExtensions]
         [GenericsTypeMapping("TEnumerable", typeof(ReturnEnumerable<>))]
         [GenericsTypeMapping("TEnumerator", typeof(ReturnEnumerable<>.DisposableEnumerator))]
-        public readonly struct ReturnEnumerable<TSource>
+        public readonly partial struct ReturnEnumerable<TSource>
             : IValueReadOnlyList<TSource, ReturnEnumerable<TSource>.DisposableEnumerator>
         {
             internal readonly TSource value;

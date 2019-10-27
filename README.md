@@ -163,13 +163,12 @@ The following open-source projects are used to build and test this project:
 - [BenchmarkDotNet](https://benchmarkdotnet.org/)
 - [coverlet](https://github.com/tonerdo/coverlet)
 - [dnSpy](https://github.com/0xd4d/dnSpy)
-- [Fody](https://github.com/Fody/Home)
-- [Mono.Cecil](https://www.mono-project.com/docs/tools+libraries/libraries/Mono.Cecil/)
 - [NetFabric.Assertive](https://github.com/NetFabric/NetFabric.Assertive)
+- [Uno.SourceGeneration](https://github.com/unoplatform/Uno.SourceGeneration)
 - [xUnit.net](https://xunit.net/)
 
 Continuous-integration is hosted by [Azure DevOps](https://dev.azure.com/aalmada/NetFabric.Hyperlinq).
 
 ## License
 
-This project is licensed under the MIT license. See the [LICENSE](LICENSE.txt) file for more info.
+This project is licensed under the MIT license. See the [LICENSE](LICENSE) file for more info.
