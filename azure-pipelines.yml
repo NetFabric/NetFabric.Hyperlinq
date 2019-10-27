@@ -11,11 +11,20 @@ variables:
 steps:
 - task: NuGetToolInstaller@1
   inputs:
-    versionSpec: '5.2.0'
+    versionSpec: '4.3.0'
     checkLatest: true
-- task: DotNetCoreInstaller@0
+- task: UseDotNet@2
+  displayName: 'Use .NET Core 2.1 SDK'
   inputs:
-    version: '3.0.100'
+    packageType: sdk
+    version: 2.1.x
+    installationPath: $(Agent.ToolsDirectory)/dotnet
+- task: UseDotNet@2
+  displayName: 'Use .NET Core 3.0 SDK'
+  inputs:
+    packageType: sdk
+    version: 3.0.x
+    installationPath: $(Agent.ToolsDirectory)/dotnet
 - task: DotNetCoreCLI@2
   displayName: Build Fody
   inputs:
