@@ -11,7 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.3.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.4.0" />
     <PackageReference Include="morelinq" Version="3.2.0" />
     <PackageReference Include="NetFabric.Assertive" Version="1.2.0" />
     <PackageReference Include="System.Interactive" Version="4.0.0" />
