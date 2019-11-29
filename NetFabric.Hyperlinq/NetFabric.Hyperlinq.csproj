@@ -36,7 +36,7 @@
   <ItemGroup>
     <ProjectReference Include="..\NetFabric.Hyperlinq.Build\NetFabric.Hyperlinq.Build.csproj" PrivateAssets="All" />
     <ProjectReference Include="..\NetFabric.Hyperlinq.Interfaces\NetFabric.Hyperlinq.Interfaces.csproj" />
-    <PackageReference Include="Fody" Version="6.0.4" PrivateAssets="All" />
+    <PackageReference Include="Fody" Version="6.0.5" PrivateAssets="All" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
   </ItemGroup>
 
