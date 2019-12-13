@@ -20,10 +20,10 @@ steps:
     version: 2.1.x
     installationPath: $(Agent.ToolsDirectory)/dotnet
 - task: UseDotNet@2
-  displayName: 'Use .NET Core 3.0 SDK'
+  displayName: 'Use .NET Core 3.1 SDK'
   inputs:
     packageType: sdk
-    version: 3.0.x
+    version: 3.1.x
     installationPath: $(Agent.ToolsDirectory)/dotnet
 - task: DotNetCoreCLI@2
   displayName: Build Fody
