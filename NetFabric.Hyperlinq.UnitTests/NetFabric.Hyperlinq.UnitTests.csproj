@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net461;netcoreapp2.1;netcoreapp3.1</TargetFrameworks>
+    <TargetFrameworks>net461;netcoreapp2.1;netcoreapp3.0</TargetFrameworks>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 
@@ -13,6 +13,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.4.0" />
     <PackageReference Include="NetFabric.Assertive" Version="1.6.1" />
+    <PackageReference Include="morelinq" Version="3.3.1" />
     <PackageReference Include="System.Interactive" Version="4.0.0" />
     <PackageReference Include="xunit" Version="2.4.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.1">
