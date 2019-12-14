@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
 
 namespace NetFabric.Hyperlinq
@@ -41,6 +42,7 @@ namespace NetFabric.Hyperlinq
                     index = -1;
                 }
 
+                [MaybeNull]
                 public ref TSource Current => ref source[index];
 
                 public bool MoveNext()
@@ -63,12 +65,14 @@ namespace NetFabric.Hyperlinq
             public TSource First()
                 => source.First(predicate);
 
+            [return: MaybeNull]
             public TSource FirstOrDefault()
                 => source.FirstOrDefault(predicate);
 
             public TSource Single()
                 => source.Single(predicate);
 
+            [return: MaybeNull]
             public TSource SingleOrDefault()
                 => source.SingleOrDefault(predicate);
 

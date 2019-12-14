@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
 using System.Runtime.CompilerServices;
 
@@ -9,7 +10,7 @@ namespace NetFabric.Hyperlinq
         [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static TSource[] ToArray<TSource>(this TSource[] source)
-            => source.Clone() as TSource[];
+            => (TSource[])source.Clone();
 
         [Pure]
         static TSource[] ToArray<TSource>(this TSource[] source, int skipCount, int takeCount)

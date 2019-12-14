@@ -57,12 +57,13 @@ namespace NetFabric.Hyperlinq
                     state = takeCounter > 0 ? EnumeratorState.Uninitialized : EnumeratorState.Complete;
                 }
 
+                [MaybeNull]
                 public readonly TSource Current
                 {
                     [MethodImpl(MethodImplOptions.AggressiveInlining)]
                     get => enumerator.Current;
                 }
-                readonly object IEnumerator.Current => enumerator.Current;
+                readonly object? IEnumerator.Current => enumerator.Current;
 
                 public bool MoveNext()
                 {

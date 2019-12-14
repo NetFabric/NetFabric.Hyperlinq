@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Authors>Antao Almada</Authors>
     <Copyright>Copyright 2019 Antao Almada</Copyright>
-    <LangVersion>preview</LangVersion>
+    <LangVersion>8.0</LangVersion>
     <Features>strict</Features>
   </PropertyGroup>
 

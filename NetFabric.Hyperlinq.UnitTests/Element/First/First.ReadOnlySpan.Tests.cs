@@ -19,7 +19,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             // Assert
             action.Must()
                 .Throw<InvalidOperationException>()
-                .EvaluatesTrue(exception => exception.Message == "Sequence contains no elements");
+                .EvaluateTrue(exception => exception.Message == "Sequence contains no elements");
         }
 
         [Theory]
@@ -35,7 +35,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             // Assert
             action.Must()
                 .Throw<InvalidOperationException>()
-                .EvaluatesTrue(exception => exception.Message == "Sequence contains no elements");
+                .EvaluateTrue(exception => exception.Message == "Sequence contains no elements");
         }
 
         [Theory]

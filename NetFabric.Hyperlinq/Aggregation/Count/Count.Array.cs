@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
 
 namespace NetFabric.Hyperlinq
@@ -41,8 +42,6 @@ namespace NetFabric.Hyperlinq
         [Pure]
         static int Count<TSource>(this TSource[] source, Func<TSource, int, bool> predicate, int skipCount, int takeCount)
         {
-            if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
-
             var count = 0;
             var end = skipCount + takeCount;
             for (var index = skipCount; index < end; index++)

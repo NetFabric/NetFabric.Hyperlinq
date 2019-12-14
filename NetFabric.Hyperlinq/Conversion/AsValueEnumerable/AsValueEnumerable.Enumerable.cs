@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
 using System.Runtime.CompilerServices;
 
@@ -80,12 +81,13 @@ namespace NetFabric.Hyperlinq
                     enumerator = enumerable.GetEnumerator();
                 }
 
+                [MaybeNull]
                 public readonly TSource Current
                 {
                     [MethodImpl(MethodImplOptions.AggressiveInlining)]
                     get => enumerator.Current;
                 }
-                readonly object IEnumerator.Current => enumerator.Current;
+                readonly object? IEnumerator.Current => enumerator.Current;
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public readonly bool MoveNext() => enumerator.MoveNext();

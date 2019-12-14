@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
 
 namespace NetFabric.Hyperlinq
@@ -70,12 +71,14 @@ namespace NetFabric.Hyperlinq
             public TResult First()
                 => selector(source.First(predicate));
 
+            [return: MaybeNull]
             public TResult FirstOrDefault()
                 => selector(source.FirstOrDefault(predicate));
 
             public TResult Single()
                 => selector(source.Single(predicate));
 
+            [return: MaybeNull]
             public TResult SingleOrDefault()
                 => selector(source.SingleOrDefault(predicate));
         }

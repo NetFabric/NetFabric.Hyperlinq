@@ -11,6 +11,8 @@
     <PackageTags>netfabric, hyperlinq, linq, enumeration, extensions, performance</PackageTags>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <DefineConstants>CONTRACTS_FULL</DefineConstants>
+    <Nullable>enable</Nullable> 
+    <!-- <TreatWarningsAsErrors>true</TreatWarningsAsErrors> -->
   </PropertyGroup>
 
   <ItemGroup Condition="'$(TargetFramework)'=='net461' Or '$(TargetFramework)'=='netstandard2.0'">
@@ -41,6 +43,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Nullable" Version="1.1.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Fody" Version="6.0.5">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>

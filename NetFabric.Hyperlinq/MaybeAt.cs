@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
 
 namespace NetFabric.Hyperlinq
@@ -7,7 +8,7 @@ namespace NetFabric.Hyperlinq
     public readonly struct MaybeAt<T> 
         : IEquatable<MaybeAt<T>>
     {
-        public MaybeAt(T value, int index)
+        public MaybeAt([AllowNull] T value, int index)
         {
             HasValue = true;
             Value = value;
@@ -15,7 +16,7 @@ namespace NetFabric.Hyperlinq
         }
 
         public readonly bool HasValue { get; }
-        public readonly T Value { get; }
+        [MaybeNull] public readonly T Value { get; }
         public readonly int Index { get; }
 
         [Pure]

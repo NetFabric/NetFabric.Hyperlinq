@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
 using System.Runtime.CompilerServices;
 
@@ -65,12 +66,13 @@ namespace NetFabric.Hyperlinq
                     index = enumerable.skipCount - 1;
                 }
 
+                [MaybeNull]
                 public readonly TSource Current
                 {
                     [MethodImpl(MethodImplOptions.AggressiveInlining)]
                     get => source[index];
                 }
-                readonly object IEnumerator.Current => source[index];
+                readonly object? IEnumerator.Current => source[index];
 
                 public bool MoveNext()
                 {
@@ -120,10 +122,13 @@ namespace NetFabric.Hyperlinq
             public TSource First(Func<TSource, int, bool> predicate)
                 => ValueReadOnlyList.GetFirst<TEnumerable, TEnumerator, TSource>(source, Utils.CombinePredicates(this.predicate, predicate), skipCount, takeCount).ThrowOnEmpty();
 
+            [return: MaybeNull]
             public TSource FirstOrDefault()
                 => ValueReadOnlyList.GetFirst<TEnumerable, TEnumerator, TSource>(source, predicate, skipCount, takeCount).DefaultOnEmpty();
+            [return: MaybeNull]
             public TSource FirstOrDefault(Func<TSource, bool> predicate)
                 => ValueReadOnlyList.GetFirst<TEnumerable, TEnumerator, TSource>(source, Utils.CombinePredicates(this.predicate, predicate), skipCount, takeCount).DefaultOnEmpty();
+            [return: MaybeNull]
             public TSource FirstOrDefault(Func<TSource, int, bool> predicate)
                 => ValueReadOnlyList.GetFirst<TEnumerable, TEnumerator, TSource>(source, Utils.CombinePredicates(this.predicate, predicate), skipCount, takeCount).DefaultOnEmpty();
 
@@ -141,10 +146,13 @@ namespace NetFabric.Hyperlinq
             public TSource Single(Func<TSource, int, bool> predicate)
                 => ValueReadOnlyList.GetSingle<TEnumerable, TEnumerator, TSource>(source, Utils.CombinePredicates(this.predicate, predicate), skipCount, takeCount).ThrowOnEmpty();
 
+            [return: MaybeNull]
             public TSource SingleOrDefault()
                 => ValueReadOnlyList.GetSingle<TEnumerable, TEnumerator, TSource>(source, predicate, skipCount, takeCount).DefaultOnEmpty();
+            [return: MaybeNull]
             public TSource SingleOrDefault(Func<TSource, bool> predicate)
                 => ValueReadOnlyList.GetSingle<TEnumerable, TEnumerator, TSource>(source, Utils.CombinePredicates(this.predicate, predicate), skipCount, takeCount).DefaultOnEmpty();
+            [return: MaybeNull]
             public TSource SingleOrDefault(Func<TSource, int, bool> predicate)
                 => ValueReadOnlyList.GetSingle<TEnumerable, TEnumerator, TSource>(source, Utils.CombinePredicates(this.predicate, predicate), skipCount, takeCount).DefaultOnEmpty();
 

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
 using System.Runtime.CompilerServices;
 
@@ -12,7 +13,7 @@ namespace NetFabric.Hyperlinq
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static DistinctEnumerable<TEnumerable, TEnumerator, TSource> Distinct<TEnumerable, TEnumerator, TSource>(
             this TEnumerable source, 
-            IEqualityComparer<TSource> comparer = null)
+            IEqualityComparer<TSource>? comparer = null)
             where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
             => new DistinctEnumerable<TEnumerable, TEnumerator, TSource>(source, comparer, 0, source.Count);
@@ -21,7 +22,7 @@ namespace NetFabric.Hyperlinq
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static DistinctEnumerable<TEnumerable, TEnumerator, TSource> Distinct<TEnumerable, TEnumerator, TSource>(
             this TEnumerable source,
-            IEqualityComparer<TSource> comparer,
+            IEqualityComparer<TSource>? comparer,
             int skipCount, int takeCount)
             where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
@@ -33,11 +34,11 @@ namespace NetFabric.Hyperlinq
             where TEnumerator : struct, IEnumerator<TSource>
         {
             readonly TEnumerable source;
-            readonly IEqualityComparer<TSource> comparer;
+            readonly IEqualityComparer<TSource>? comparer;
             internal readonly int skipCount;
             internal readonly int takeCount;
 
-            internal DistinctEnumerable(TEnumerable source, IEqualityComparer<TSource> comparer, int skipCount, int takeCount)
+            internal DistinctEnumerable(TEnumerable source, IEqualityComparer<TSource>? comparer, int skipCount, int takeCount)
             {
                 this.source = source;
                 this.comparer = comparer;
@@ -69,15 +70,16 @@ namespace NetFabric.Hyperlinq
 #endif
                     end = enumerable.skipCount + enumerable.takeCount;
                     index = enumerable.skipCount - 1;
-                    current = default;
+                    current = default!;
                 }
 
+                [MaybeNull]
                 public readonly TSource Current
                 {
                     [MethodImpl(MethodImplOptions.AggressiveInlining)]
                     get => current;
                 }
-                readonly object IEnumerator.Current => current;
+                readonly object? IEnumerator.Current => current;
 
                 public bool MoveNext()
                 {

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
 using System.Runtime.CompilerServices;
 
@@ -12,14 +13,14 @@ namespace NetFabric.Hyperlinq
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static DistinctEnumerable<TSource> Distinct<TSource>(
             this TSource[] source, 
-            IEqualityComparer<TSource> comparer = null)
+            IEqualityComparer<TSource>? comparer = null)
             => new DistinctEnumerable<TSource>(source, comparer, 0, source.Length);
 
         [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static DistinctEnumerable<TSource> Distinct<TSource>(
             this TSource[] source,
-            IEqualityComparer<TSource> comparer,
+            IEqualityComparer<TSource>? comparer,
             int skipCount, int takeCount)
             => new DistinctEnumerable<TSource>(source, comparer, skipCount, takeCount);
 
@@ -27,11 +28,11 @@ namespace NetFabric.Hyperlinq
             : IValueEnumerable<TSource, DistinctEnumerable<TSource>.Enumerator>
         {
             readonly TSource[] source;
-            readonly IEqualityComparer<TSource> comparer;
+            readonly IEqualityComparer<TSource>? comparer;
             internal readonly int skipCount;
             internal readonly int takeCount;
 
-            internal DistinctEnumerable(TSource[] source, IEqualityComparer<TSource> comparer, int skipCount, int takeCount)
+            internal DistinctEnumerable(TSource[] source, IEqualityComparer<TSource>? comparer, int skipCount, int takeCount)
             {
                 this.source = source;
                 this.comparer = comparer;
@@ -63,15 +64,16 @@ namespace NetFabric.Hyperlinq
 #endif
                     end = enumerable.skipCount + enumerable.takeCount;
                     index = enumerable.skipCount - 1;
-                    current = default;
+                    current = default!;
                 }
 
+                [MaybeNull]
                 public readonly TSource Current
                 {
                     [MethodImpl(MethodImplOptions.AggressiveInlining)]
                     get => current;
                 }
-                readonly object IEnumerator.Current => current;
+                readonly object? IEnumerator.Current => current;
 
                 public bool MoveNext()
                 {

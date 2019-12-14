@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
 using System.Runtime.CompilerServices;
 
@@ -26,6 +27,7 @@ namespace NetFabric.Hyperlinq
 
         [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [return: MaybeNull]
         public static ref readonly TSource ElementAtOrDefault<TSource>(this TSource[] source, int index)
         {
 
@@ -36,6 +38,7 @@ namespace NetFabric.Hyperlinq
 
         [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [return: MaybeNull]
         static ref readonly TSource ElementAtOrDefault<TSource>(this TSource[] source, int index, int skipCount, int takeCount)
         {
 

@@ -56,7 +56,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             // Assert
             action.Must()
                 .Throw<InvalidOperationException>()
-                .EvaluatesTrue(exception => exception.Message == "Sequence contains more than one element");
+                .EvaluateTrue(exception => exception.Message == "Sequence contains more than one element");
         }
 
         [Theory]
@@ -72,7 +72,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             // Assert
             action.Must()
                 .Throw<InvalidOperationException>()
-                .EvaluatesTrue(exception => exception.Message == "Sequence contains more than one element");
+                .EvaluateTrue(exception => exception.Message == "Sequence contains more than one element");
         }
     }
 }

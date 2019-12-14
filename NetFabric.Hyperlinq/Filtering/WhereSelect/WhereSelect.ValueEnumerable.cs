@@ -67,7 +67,7 @@ namespace NetFabric.Hyperlinq
                     [MethodImpl(MethodImplOptions.AggressiveInlining)]
                     get => selector(enumerator.Current);
                 }
-                readonly object IEnumerator.Current => selector(enumerator.Current);
+                readonly object? IEnumerator.Current => selector(enumerator.Current);
 
                 public bool MoveNext()
                 {

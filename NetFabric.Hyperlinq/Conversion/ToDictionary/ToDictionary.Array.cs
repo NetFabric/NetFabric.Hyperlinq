@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
 
 namespace NetFabric.Hyperlinq
@@ -41,6 +42,7 @@ namespace NetFabric.Hyperlinq
         }
 
         [Pure]
+        [return:NotNull]
         static Dictionary<TKey, TSource> ToDictionary<TSource, TKey>(this TSource[] source, Func<TSource, TKey> keySelector, IEqualityComparer<TKey> comparer, int skipCount, int takeCount)
         {
             var dictionary = new Dictionary<TKey, TSource>(source.Length, comparer);

@@ -48,7 +48,7 @@ namespace NetFabric.Hyperlinq
         public static bool Contains<TSource>(this ImmutableArray<TSource> source, TSource value)
             => source.Contains(value);
         [Pure]
-        public static bool Contains<TSource>(this ImmutableArray<TSource> source, TSource value, IEqualityComparer<TSource> comparer)
+        public static bool Contains<TSource>(this ImmutableArray<TSource> source, TSource value, IEqualityComparer<TSource>? comparer)
             => ValueReadOnlyList.Contains<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), value, comparer);
 
         [Pure]
@@ -85,6 +85,7 @@ namespace NetFabric.Hyperlinq
         public static TSource ElementAt<TSource>(this ImmutableArray<TSource> source, int index)
             => ValueReadOnlyList.ElementAt<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), index);
         [Pure]
+        [return: MaybeNull]
         public static TSource ElementAtOrDefault<TSource>(this ImmutableArray<TSource> source, int index)
             => ValueReadOnlyList.ElementAtOrDefault<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), index);
         [Pure]
@@ -102,7 +103,7 @@ namespace NetFabric.Hyperlinq
             => ValueReadOnlyList.TryFirst<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
 
         [Pure]
-        public static ValueReadOnlyList.DistinctEnumerable<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource> Distinct<TSource>(this ImmutableArray<TSource> source, IEqualityComparer<TSource> comparer = null)
+        public static ValueReadOnlyList.DistinctEnumerable<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource> Distinct<TSource>(this ImmutableArray<TSource> source, IEqualityComparer<TSource>? comparer = null)
             => ValueReadOnlyList.Distinct<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), comparer);
 
         [Pure]
@@ -156,12 +157,13 @@ namespace NetFabric.Hyperlinq
                     enumerator = enumerable.GetEnumerator();
                 }
 
-                public TSource Current
+                [MaybeNull]
+                public readonly TSource Current
                 {
                     [MethodImpl(MethodImplOptions.AggressiveInlining)]
                     get => enumerator.Current;
                 }
-                object IEnumerator.Current => enumerator.Current;
+                readonly object? IEnumerator.Current => enumerator.Current;
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public readonly bool MoveNext() => enumerator.MoveNext();

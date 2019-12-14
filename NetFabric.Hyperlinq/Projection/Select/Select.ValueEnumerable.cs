@@ -63,7 +63,7 @@ namespace NetFabric.Hyperlinq
                     [MethodImpl(MethodImplOptions.AggressiveInlining)]
                     get => selector(enumerator.Current);
                 }
-                readonly object IEnumerator.Current => selector(enumerator.Current);
+                readonly object? IEnumerator.Current => selector(enumerator.Current);
 
                 public bool MoveNext()
                 {
@@ -103,6 +103,7 @@ namespace NetFabric.Hyperlinq
             public TResult ElementAt(int index)
                 => selector(ValueEnumerable.ElementAt<TEnumerable, TEnumerator, TSource>(source, index));
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            [return: MaybeNull]
             public TResult ElementAtOrDefault(int index)
                 => selector(ValueEnumerable.ElementAtOrDefault<TEnumerable, TEnumerator, TSource>(source, index));
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -117,6 +118,7 @@ namespace NetFabric.Hyperlinq
                 => selector(ValueEnumerable.First<TEnumerable, TEnumerator, TSource>(source));
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            [return: MaybeNull]
             public TResult FirstOrDefault()
                 => selector(ValueEnumerable.FirstOrDefault<TEnumerable, TEnumerator, TSource>(source));
 
@@ -125,6 +127,7 @@ namespace NetFabric.Hyperlinq
                 => selector(ValueEnumerable.Single<TEnumerable, TEnumerator, TSource>(source));
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            [return: MaybeNull]
             public TResult SingleOrDefault()
                 => selector(ValueEnumerable.SingleOrDefault<TEnumerable, TEnumerator, TSource>(source));
 

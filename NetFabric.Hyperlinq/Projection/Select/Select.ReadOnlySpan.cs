@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
 using System.Runtime.CompilerServices;
 
@@ -60,6 +61,7 @@ namespace NetFabric.Hyperlinq
                 => selector(source.First());
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            [return: MaybeNull]
             public TResult FirstOrDefault()
                 => selector(source.FirstOrDefault());
 
@@ -68,6 +70,7 @@ namespace NetFabric.Hyperlinq
                 => selector(source.Single());
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            [return: MaybeNull]
             public TResult SingleOrDefault()
                 => selector(source.SingleOrDefault());
 

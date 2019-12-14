@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
 using System.Runtime.CompilerServices;
 
@@ -39,20 +40,22 @@ namespace NetFabric.Hyperlinq
 
         [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [return:MaybeNull]
         public static TValue DefaultOnEmpty<TValue>(this (ElementResult Result, TValue Value) item)
             => item.Result switch
             {
-                ElementResult.Empty => default,
+                ElementResult.Empty => default!,
                 ElementResult.NotSingle => ThrowHelper.ThrowNotSingleSequence<TValue>(),
                 _ => item.Value,
             };
 
         [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [return:MaybeNull]
         public static TValue DefaultOnEmpty<TValue>(this (int Index, TValue Value) item)
             => item.Index switch
             {
-                (int)ElementResult.Empty => default,
+                (int)ElementResult.Empty => default!,
                 (int)ElementResult.NotSingle => ThrowHelper.ThrowNotSingleSequence<TValue>(),
                 _ => item.Value,
             };

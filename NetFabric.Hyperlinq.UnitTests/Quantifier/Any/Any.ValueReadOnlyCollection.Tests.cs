@@ -22,7 +22,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             // Assert
             action.Must()
                 .Throw<ArgumentNullException>()
-                .EvaluatesTrue(exception => exception.ParamName == "predicate");
+                .EvaluateTrue(exception => exception.ParamName == "predicate");
         }
 
         [Theory]
