@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
 using System.Runtime.CompilerServices;
 
@@ -54,6 +55,7 @@ namespace NetFabric.Hyperlinq
                     moveNext = true;
                 }
 
+                [MaybeNull]
                 public readonly TSource Current
                 {
                     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -83,12 +85,13 @@ namespace NetFabric.Hyperlinq
                     moveNext = true;
                 }
 
+                [MaybeNull]
                 public readonly TSource Current
                 {
                     [MethodImpl(MethodImplOptions.AggressiveInlining)]
                     get => value;
                 }
-                readonly object IEnumerator.Current => value;
+                readonly object? IEnumerator.Current => value;
 
                 public bool MoveNext()
                 {
@@ -126,6 +129,7 @@ namespace NetFabric.Hyperlinq
                 => value;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            [return: MaybeNull]
             public TSource FirstOrDefault()
                 => value;
 
@@ -134,6 +138,7 @@ namespace NetFabric.Hyperlinq
                 => value;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            [return: MaybeNull]
             public TSource SingleOrDefault()
                 => value;
 

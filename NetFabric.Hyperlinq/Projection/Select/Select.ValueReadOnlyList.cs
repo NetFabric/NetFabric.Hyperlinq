@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
 using System.Runtime.CompilerServices;
 
@@ -93,7 +94,7 @@ namespace NetFabric.Hyperlinq
                     [MethodImpl(MethodImplOptions.AggressiveInlining)]
                     get => selector(source[index]);
                 }
-                readonly object IEnumerator.Current => selector(source[index]);
+                readonly object? IEnumerator.Current => selector(source[index]);
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public bool MoveNext() => ++index < end;
@@ -132,6 +133,7 @@ namespace NetFabric.Hyperlinq
             public TResult ElementAt(int index)
                 => selector(ValueReadOnlyList.ElementAt<TEnumerable, TEnumerator, TSource>(source, index, skipCount, takeCount));
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            [return: MaybeNull]
             public TResult ElementAtOrDefault(int index)
                 => selector(ValueReadOnlyList.ElementAtOrDefault<TEnumerable, TEnumerator, TSource>(source, index, skipCount, takeCount));
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -146,6 +148,7 @@ namespace NetFabric.Hyperlinq
                 => selector(ValueReadOnlyList.GetFirst<TEnumerable, TEnumerator, TSource>(source, skipCount, takeCount).ThrowOnEmpty());
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            [return: MaybeNull]
             public TResult FirstOrDefault()
                 => selector(ValueReadOnlyList.GetFirst<TEnumerable, TEnumerator, TSource>(source, skipCount, takeCount).DefaultOnEmpty());
 
@@ -154,6 +157,7 @@ namespace NetFabric.Hyperlinq
                 => selector(ValueReadOnlyList.GetSingle<TEnumerable, TEnumerator, TSource>(source, skipCount, takeCount).ThrowOnEmpty());
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            [return: MaybeNull]
             public TResult SingleOrDefault()
                 => selector(ValueReadOnlyList.GetSingle<TEnumerable, TEnumerator, TSource>(source, skipCount, takeCount).DefaultOnEmpty());
 

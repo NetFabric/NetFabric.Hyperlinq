@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
 using System.Runtime.CompilerServices;
 
@@ -84,7 +85,7 @@ namespace NetFabric.Hyperlinq
                     [MethodImpl(MethodImplOptions.AggressiveInlining)]
                     get => selector(source[index]);
                 }
-                readonly object IEnumerator.Current => selector(source[index]);
+                readonly object? IEnumerator.Current => selector(source[index]);
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public bool MoveNext() => ++index < end;
@@ -122,6 +123,7 @@ namespace NetFabric.Hyperlinq
             public TResult ElementAt(int index)
                 => selector(Array.ElementAt<TSource>(source, index, skipCount, takeCount));
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            [return: MaybeNull]
             public TResult ElementAtOrDefault(int index)
                 => selector(Array.ElementAtOrDefault<TSource>(source, index, skipCount, takeCount));
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -136,6 +138,7 @@ namespace NetFabric.Hyperlinq
                 => selector(Array.First<TSource>(source, skipCount, takeCount));
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            [return: MaybeNull]
             public TResult FirstOrDefault()
                 => selector(Array.FirstOrDefault<TSource>(source, skipCount, takeCount));
 
@@ -144,6 +147,7 @@ namespace NetFabric.Hyperlinq
                 => selector(Array.Single<TSource>(source, skipCount, takeCount));
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            [return: MaybeNull]
             public TResult SingleOrDefault()
                 => selector(Array.SingleOrDefault<TSource>(source, skipCount, takeCount));
 

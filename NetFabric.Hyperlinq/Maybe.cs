@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
 
 namespace NetFabric.Hyperlinq
@@ -7,14 +8,14 @@ namespace NetFabric.Hyperlinq
     public readonly struct Maybe<T> 
         : IEquatable<Maybe<T>>
     {
-        public Maybe(T value)
+        public Maybe([AllowNull]T value)
         {
             HasValue = true;
             Value = value;
         }
 
         public readonly bool HasValue { get; }
-        public readonly T Value { get; }
+        [MaybeNull] public readonly T Value { get; }
 
         [Pure]
         public static bool operator ==(Maybe<T> first, Maybe<T> second)

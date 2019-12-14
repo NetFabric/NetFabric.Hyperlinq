@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
 using System.Runtime.CompilerServices;
@@ -13,7 +14,7 @@ namespace NetFabric.Hyperlinq
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static DistinctEnumerable<TEnumerable, TEnumerator, TSource> Distinct<TEnumerable, TEnumerator, TSource>(
             this TEnumerable source, 
-            IEqualityComparer<TSource> comparer = null)
+            IEqualityComparer<TSource>? comparer = null)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
             => new DistinctEnumerable<TEnumerable, TEnumerator, TSource>(source, comparer);
@@ -24,9 +25,9 @@ namespace NetFabric.Hyperlinq
             where TEnumerator : struct, IEnumerator<TSource>
         {
             readonly TEnumerable source;
-            readonly IEqualityComparer<TSource> comparer;
+            readonly IEqualityComparer<TSource>? comparer;
 
-            internal DistinctEnumerable(TEnumerable source, IEqualityComparer<TSource> comparer)
+            internal DistinctEnumerable(TEnumerable source, IEqualityComparer<TSource>? comparer)
             {
                 this.source = source;
                 this.comparer = comparer;
@@ -43,9 +44,9 @@ namespace NetFabric.Hyperlinq
             {
                 [SuppressMessage("Style", "IDE0044:Add readonly modifier")]
                 TEnumerator enumerator; // do not make readonly
-                readonly IEqualityComparer<TSource> comparer;
+                readonly IEqualityComparer<TSource>? comparer;
                 EnumeratorState state;
-                HashSet<TSource> set;
+                HashSet<TSource>? set;
 
                 internal Enumerator(in DistinctEnumerable<TEnumerable, TEnumerator, TSource> enumerable)
                 {
@@ -55,12 +56,13 @@ namespace NetFabric.Hyperlinq
                     set = null;
                 }
 
+                [MaybeNull]
                 public readonly TSource Current
                 {
                     [MethodImpl(MethodImplOptions.AggressiveInlining)]
                     get => enumerator.Current;
                 }
-                readonly object IEnumerator.Current => enumerator.Current;
+                readonly object? IEnumerator.Current => enumerator.Current;
 
                 public bool MoveNext()
                 {
@@ -81,14 +83,12 @@ namespace NetFabric.Hyperlinq
                             return true;
 
                         case EnumeratorState.Enumerating:
+                            Debug.Assert(set is object);
                             while (enumerator.MoveNext())
                             {
                                 if (set.Add(enumerator.Current))
                                     return true;
                             }
-
-                            set.Clear();
-                            set = null;
 
                             Dispose();
                             state = EnumeratorState.Complete;
@@ -102,7 +102,12 @@ namespace NetFabric.Hyperlinq
 
                 public readonly void Reset() => throw new NotSupportedException();
 
-                public void Dispose() => enumerator.Dispose();
+                public void Dispose()
+                {
+                    enumerator.Dispose();
+                    set?.Clear();
+                    set = null;
+                }
             }
 
             // helper function for optimization of non-lazy operations

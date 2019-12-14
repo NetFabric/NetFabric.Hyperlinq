@@ -15,11 +15,11 @@ namespace NetFabric.Hyperlinq
             => System.Array.IndexOf<TSource>(source, value, skipCount, takeCount) >= 0;
 
         [Pure]
-        public static bool Contains<TSource>(this TSource[] source, TSource value, IEqualityComparer<TSource> comparer)
+        public static bool Contains<TSource>(this TSource[] source, TSource value, IEqualityComparer<TSource>? comparer)
             => Contains<TSource>(source, value, comparer, 0, source.Length);
 
         [Pure]
-        static bool Contains<TSource>(this TSource[] source, TSource value, IEqualityComparer<TSource> comparer, int skipCount, int takeCount)
+        static bool Contains<TSource>(this TSource[] source, TSource value, IEqualityComparer<TSource>? comparer, int skipCount, int takeCount)
         {
             if (takeCount != 0)
             {

@@ -65,7 +65,7 @@ namespace NetFabric.Hyperlinq
                     [MethodImpl(MethodImplOptions.AggressiveInlining)]
                     get => selector(enumerator.Current);
                 }
-                readonly object IEnumerator.Current => selector(enumerator.Current);
+                readonly object? IEnumerator.Current => selector(enumerator.Current);
 
                 public bool MoveNext()
                 {
@@ -101,6 +101,7 @@ namespace NetFabric.Hyperlinq
             public TResult ElementAt(int index)
                 => selector(ValueReadOnlyCollection.ElementAt<TEnumerable, TEnumerator, TSource>(source, index));
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            [return: MaybeNull]
             public TResult ElementAtOrDefault(int index)
                 => selector(ValueReadOnlyCollection.ElementAtOrDefault<TEnumerable, TEnumerator, TSource>(source, index));
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -115,6 +116,7 @@ namespace NetFabric.Hyperlinq
                 => selector(ValueReadOnlyCollection.First<TEnumerable, TEnumerator, TSource>(source));
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            [return: MaybeNull]
             public TResult FirstOrDefault()
                 => selector(ValueReadOnlyCollection.FirstOrDefault<TEnumerable, TEnumerator, TSource>(source));
 
@@ -123,6 +125,7 @@ namespace NetFabric.Hyperlinq
                 => selector(ValueReadOnlyCollection.Single<TEnumerable, TEnumerator, TSource>(source));
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            [return: MaybeNull]
             public TResult SingleOrDefault()
                 => selector(ValueReadOnlyCollection.SingleOrDefault<TEnumerable, TEnumerator, TSource>(source));
 

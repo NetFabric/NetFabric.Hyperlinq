@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
 using System.Runtime.CompilerServices;
 
@@ -62,6 +63,7 @@ namespace NetFabric.Hyperlinq
 
         [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [return: MaybeNull]
         public static ref readonly TSource FirstOrDefault<TSource>(this ReadOnlySpan<TSource> source)
         {
             if (source.Length == 0) return ref Default<TSource>.Value;
@@ -70,6 +72,7 @@ namespace NetFabric.Hyperlinq
         }
 
         [Pure]
+        [return: MaybeNull]
         public static ref readonly TSource FirstOrDefault<TSource>(this ReadOnlySpan<TSource> source, Func<TSource, bool> predicate)
         {
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
@@ -84,6 +87,7 @@ namespace NetFabric.Hyperlinq
         }
 
         [Pure]
+        [return: MaybeNull]
         public static ref readonly TSource FirstOrDefault<TSource>(this ReadOnlySpan<TSource> source, Func<TSource, int, bool> predicate)
         {
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
@@ -98,6 +102,7 @@ namespace NetFabric.Hyperlinq
         }
 
         [Pure]
+        [return: MaybeNull]
         public static ref readonly TSource FirstOrDefault<TSource>(this ReadOnlySpan<TSource> source, Func<TSource, int, bool> predicate, out int index)
         {
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));

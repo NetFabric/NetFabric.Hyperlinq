@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
 using System.Runtime.CompilerServices;
 
@@ -30,10 +31,11 @@ namespace NetFabric.Hyperlinq
 
             public readonly struct Enumerator
             {
+                [MaybeNull]
                 public readonly TSource Current
                 {
                     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                    get => default;
+                    get => default!;
                 }
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -43,12 +45,13 @@ namespace NetFabric.Hyperlinq
             public readonly struct DisposableEnumerator
                 : IEnumerator<TSource>
             {
+                [MaybeNull]
                 public readonly TSource Current
                 {
                     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                    get => default;
+                    get => default!;
                 }
-                readonly object IEnumerator.Current => default;
+                readonly object? IEnumerator.Current => default!;
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public readonly bool MoveNext()
@@ -110,10 +113,11 @@ namespace NetFabric.Hyperlinq
             public TSource ElementAt(int index) => ThrowHelper.ThrowArgumentOutOfRangeException<TSource>(nameof(index));
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public TSource ElementAtOrDefault(int index) => default;
+            [return: MaybeNull]
+            public TSource ElementAtOrDefault(int index) => default!;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public Maybe<TSource> TryElementAt(int index) => default;
+            public Maybe<TSource> TryElementAt(int index) => default!;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TSource First() => ThrowHelper.ThrowEmptySequence<TSource>();
@@ -125,24 +129,27 @@ namespace NetFabric.Hyperlinq
             public TSource First(Func<TSource, int, bool> predicate) => ThrowHelper.ThrowEmptySequence<TSource>();
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public TSource FirstOrDefault() => default;
+            [return: MaybeNull]
+            public TSource FirstOrDefault() => default!;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public TSource FirstOrDefault(Func<TSource, bool> predicate) => default;
+            [return: MaybeNull]
+            public TSource FirstOrDefault(Func<TSource, bool> predicate) => default!;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public TSource FirstOrDefault(Func<TSource, int, bool> predicate) => default;
+            [return: MaybeNull]
+            public TSource FirstOrDefault(Func<TSource, int, bool> predicate) => default!;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public (bool Success, TSource Value) TryFirst() => (false, default);
+            public (bool Success, TSource Value) TryFirst() => (false, default!);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public (bool Success, TSource Value) TryFirst(Func<TSource, bool> predicate) 
-                => predicate is null ? ThrowHelper.ThrowArgumentNullException<ValueTuple<bool, TSource>>(nameof(predicate)) : (false, default);
+                => predicate is null ? ThrowHelper.ThrowArgumentNullException<ValueTuple<bool, TSource>>(nameof(predicate)) : (false, default!);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public (int Index, TSource Value) TryFirst(Func<TSource, int, bool> predicate)
-                => predicate is null ? ThrowHelper.ThrowArgumentNullException<ValueTuple<int, TSource>>(nameof(predicate)) : (-1, default);
+                => predicate is null ? ThrowHelper.ThrowArgumentNullException<ValueTuple<int, TSource>>(nameof(predicate)) : (-1, default!);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TSource Single() => ThrowHelper.ThrowEmptySequence<TSource>();
@@ -154,13 +161,16 @@ namespace NetFabric.Hyperlinq
             public TSource Single(Func<TSource, int, bool> predicate) => ThrowHelper.ThrowEmptySequence<TSource>();
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public TSource SingleOrDefault() => default;
+            [return: MaybeNull]
+            public TSource SingleOrDefault() => default!;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public TSource SingleOrDefault(Func<TSource, int, bool> predicate) => default;
+            [return: MaybeNull]
+            public TSource SingleOrDefault(Func<TSource, int, bool> predicate) => default!;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public TSource SingleOrDefault(Func<TSource, bool> predicate) => default;
+            [return: MaybeNull]
+            public TSource SingleOrDefault(Func<TSource, bool> predicate) => default!;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TSource[] ToArray() => new TSource[0];

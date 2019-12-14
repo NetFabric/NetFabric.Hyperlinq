@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
 using System.Runtime.CompilerServices;
 
@@ -59,13 +60,15 @@ namespace NetFabric.Hyperlinq
                     index = enumerable.skipCount - 1;
                 }
 
+                [MaybeNull]
                 public readonly ref readonly TSource Current
                 {
                     [MethodImpl(MethodImplOptions.AggressiveInlining)]
                     get => ref source[index];
                 }
+                [MaybeNull]
                 readonly TSource IEnumerator<TSource>.Current => source[index];
-                readonly object IEnumerator.Current => source[index];
+                readonly object? IEnumerator.Current => source[index];
 
                 public bool MoveNext()
                 {
@@ -110,12 +113,16 @@ namespace NetFabric.Hyperlinq
             public ref readonly TSource First(Func<TSource, int, bool> predicate)
                 => ref Array.First<TSource>(source, Utils.CombinePredicates(this.predicate, predicate), skipCount, takeCount);
 
+            [return: MaybeNull]
             public ref readonly TSource FirstOrDefault()
                 => ref Array.FirstOrDefault<TSource>(source, predicate, skipCount, takeCount);
+            [return: MaybeNull]
             public ref readonly TSource FirstOrDefault(out int index)
                 => ref Array.FirstOrDefault<TSource>(source, predicate, out index, skipCount, takeCount);
+            [return: MaybeNull]
             public ref readonly TSource FirstOrDefault(Func<TSource, bool> predicate)
                 => ref Array.FirstOrDefault<TSource>(source, Utils.CombinePredicates(this.predicate, predicate), skipCount, takeCount);
+            [return: MaybeNull]
             public ref readonly TSource FirstOrDefault(Func<TSource, int, bool> predicate)
                 => ref Array.FirstOrDefault<TSource>(source, Utils.CombinePredicates(this.predicate, predicate), skipCount, takeCount);
 
@@ -128,12 +135,16 @@ namespace NetFabric.Hyperlinq
             public ref readonly TSource Single(Func<TSource, int, bool> predicate)
                 => ref Array.Single<TSource>(source, Utils.CombinePredicates(this.predicate, predicate), skipCount, takeCount);
 
+            [return: MaybeNull]
             public ref readonly TSource SingleOrDefault()
                 => ref Array.SingleOrDefault<TSource>(source, predicate, skipCount, takeCount);
+            [return: MaybeNull]
             public ref readonly TSource SingleOrDefault(out int index)
                 => ref Array.SingleOrDefault<TSource>(source, predicate, out index, skipCount, takeCount);
+            [return: MaybeNull]
             public ref readonly TSource SingleOrDefault(Func<TSource, bool> predicate)
                 => ref Array.SingleOrDefault<TSource>(source, Utils.CombinePredicates(this.predicate, predicate), skipCount, takeCount);
+            [return: MaybeNull]
             public ref readonly TSource SingleOrDefault(Func<TSource, int, bool> predicate)
                 => ref Array.SingleOrDefault<TSource>(source, Utils.CombinePredicates(this.predicate, predicate), skipCount, takeCount);
 

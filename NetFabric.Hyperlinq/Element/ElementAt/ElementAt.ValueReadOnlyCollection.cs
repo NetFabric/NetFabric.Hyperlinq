@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
 
 namespace NetFabric.Hyperlinq
@@ -24,6 +25,7 @@ namespace NetFabric.Hyperlinq
         }
 
         [Pure]
+        [return: MaybeNull]
         public static TSource ElementAtOrDefault<TEnumerable, TEnumerator, TSource>(this TEnumerable source, int index)
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
@@ -38,7 +40,7 @@ namespace NetFabric.Hyperlinq
                 }
             }
 
-            return default;
+            return default!;
         }
 
         [Pure]

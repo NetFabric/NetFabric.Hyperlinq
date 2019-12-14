@@ -19,7 +19,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             // Assert
             action.Must()
                 .Throw<ArgumentOutOfRangeException>()
-                .EvaluatesTrue(exception => exception.ParamName == "count");
+                .EvaluateTrue(exception => exception.ParamName == "count");
         }
 
         [Theory]

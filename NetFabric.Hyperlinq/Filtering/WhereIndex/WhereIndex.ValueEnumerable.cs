@@ -56,12 +56,13 @@ namespace NetFabric.Hyperlinq
                     index = -1;
                 }
 
+                [MaybeNull]
                 public readonly TSource Current
                 {
                     [MethodImpl(MethodImplOptions.AggressiveInlining)]
                     get => enumerator.Current;
                 }
-                readonly object IEnumerator.Current => enumerator.Current;
+                readonly object? IEnumerator.Current => enumerator.Current;
 
                 public bool MoveNext()
                 {
@@ -89,10 +90,13 @@ namespace NetFabric.Hyperlinq
             public TSource First(Func<TSource, int, bool> predicate)
                 => ValueEnumerable.GetFirst<TEnumerable, TEnumerator, TSource>(source, Utils.CombinePredicates(this.predicate, predicate)).ThrowOnEmpty();
 
+            [return: MaybeNull]
             public TSource FirstOrDefault()
                 => ValueEnumerable.GetFirst<TEnumerable, TEnumerator, TSource>(source, predicate).DefaultOnEmpty();
+            [return: MaybeNull]
             public TSource FirstOrDefault(Func<TSource, bool> predicate)
                 => ValueEnumerable.GetFirst<TEnumerable, TEnumerator, TSource>(source, Utils.CombinePredicates(this.predicate, predicate)).DefaultOnEmpty();
+            [return: MaybeNull]
             public TSource FirstOrDefault(Func<TSource, int, bool> predicate)
                 => ValueEnumerable.GetFirst<TEnumerable, TEnumerator, TSource>(source, Utils.CombinePredicates(this.predicate, predicate)).DefaultOnEmpty();
 
@@ -110,10 +114,13 @@ namespace NetFabric.Hyperlinq
             public TSource Single(Func<TSource, int, bool> predicate)
                 => ValueEnumerable.GetSingle<TEnumerable, TEnumerator, TSource>(source, Utils.CombinePredicates(this.predicate, predicate)).ThrowOnEmpty();
 
+            [return: MaybeNull]
             public TSource SingleOrDefault()
                 => ValueEnumerable.GetSingle<TEnumerable, TEnumerator, TSource>(source, predicate).DefaultOnEmpty();
+            [return: MaybeNull]
             public TSource SingleOrDefault(Func<TSource, bool> predicate)
                 => ValueEnumerable.GetSingle<TEnumerable, TEnumerator, TSource>(source, Utils.CombinePredicates(this.predicate, predicate)).DefaultOnEmpty();
+            [return: MaybeNull]
             public TSource SingleOrDefault(Func<TSource, int, bool> predicate)
                 => ValueEnumerable.GetSingle<TEnumerable, TEnumerator, TSource>(source, Utils.CombinePredicates(this.predicate, predicate)).DefaultOnEmpty();
 
