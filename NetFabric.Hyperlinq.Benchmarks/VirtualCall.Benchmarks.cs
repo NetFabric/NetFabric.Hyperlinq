@@ -65,7 +65,7 @@ namespace NetFabric.Hyperlinq
         public int List_GenericConstraintWrapper() => 
             CountConstraintWrapper(list, _ => true);
 
-        public static int CountInterface<TSource>(IReadOnlyList<TSource> source, Func<TSource, bool> predicate)
+        public static int CountInterface<TSource>(IReadOnlyList<TSource> source, Predicate<TSource> predicate)
         {
             var count = 0;
             for (var index = 0; index < source.Count; index++)
@@ -76,7 +76,7 @@ namespace NetFabric.Hyperlinq
             return count;
         }
 
-        public static int CountArray<TSource>(TSource[] source, Func<TSource, bool> predicate)
+        public static int CountArray<TSource>(TSource[] source, Predicate<TSource> predicate)
         {
             var count = 0;
             for (var index = 0; index < source.Length; index++)
@@ -87,7 +87,7 @@ namespace NetFabric.Hyperlinq
             return count;
         }
 
-        public static int CountList<TSource>(List<TSource> source, Func<TSource, bool> predicate)
+        public static int CountList<TSource>(List<TSource> source, Predicate<TSource> predicate)
         {
             var count = 0;
             for (var index = 0; index < source.Count; index++)
@@ -98,19 +98,19 @@ namespace NetFabric.Hyperlinq
             return count;
         }
 
-        public static int CountConstraint<TSource>(TSource[] source, Func<TSource, bool> predicate)
+        public static int CountConstraint<TSource>(TSource[] source, Predicate<TSource> predicate)
             => Count<TSource[], TSource>(source, predicate);
 
-        public static int CountConstraint<TSource>(List<TSource> source, Func<TSource, bool> predicate)
+        public static int CountConstraint<TSource>(List<TSource> source, Predicate<TSource> predicate)
             => Count<List<TSource>, TSource>(source, predicate);
 
-        public static int CountConstraintWrapper<TSource>(List<TSource> source, Func<TSource, bool> predicate)
+        public static int CountConstraintWrapper<TSource>(List<TSource> source, Predicate<TSource> predicate)
             => Count<ListWrapper<TSource>, TSource>(new ListWrapper<TSource>(source), predicate);
 
-        public static int CountConstraintWrapper<TSource>(TSource[] source, Func<TSource, bool> predicate)
+        public static int CountConstraintWrapper<TSource>(TSource[] source, Predicate<TSource> predicate)
             => Count<ArrayWrapper<TSource>, TSource>(new ArrayWrapper<TSource>(source), predicate);
         
-        public static int Count<TEnumerable, TSource>(TEnumerable source, Func<TSource, bool> predicate)
+        public static int Count<TEnumerable, TSource>(TEnumerable source, Predicate<TSource> predicate)
             where TEnumerable : IReadOnlyList<TSource>
         {
             var count = 0;

@@ -26,11 +26,11 @@ namespace NetFabric.Hyperlinq.UnitTests
 
         [Theory]
         [MemberData(nameof(TestData.CountPredicate), MemberType = typeof(TestData))]
-        public void LongCountPredicate_With_ValidData_Should_Succeed(int[] source, Func<int, bool> predicate)
+        public void LongCountPredicate_With_ValidData_Should_Succeed(int[] source, Predicate<int> predicate)
         {
             // Arrange
             var expected = 
-                System.Linq.Enumerable.LongCount(source, predicate);
+                System.Linq.Enumerable.LongCount(source, predicate.AsFunc());
 
             // Act
             var result = Array

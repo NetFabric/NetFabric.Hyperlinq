@@ -6,7 +6,7 @@ namespace NetFabric.Hyperlinq
     public static partial class ReadOnlySpanExtensions
     {
         [Pure]
-        public static bool All<TSource>(this ReadOnlySpan<TSource> source, Func<TSource, bool> predicate)
+        public static bool All<TSource>(this ReadOnlySpan<TSource> source, Predicate<TSource> predicate)
         {
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
 
@@ -20,7 +20,7 @@ namespace NetFabric.Hyperlinq
         }
 
         [Pure]
-        public static bool All<TSource>(this ReadOnlySpan<TSource> source, Func<TSource, int, bool> predicate)
+        public static bool All<TSource>(this ReadOnlySpan<TSource> source, PredicateAt<TSource> predicate)
         {
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
 

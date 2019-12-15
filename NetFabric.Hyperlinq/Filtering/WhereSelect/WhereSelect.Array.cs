@@ -11,14 +11,14 @@ namespace NetFabric.Hyperlinq
         [Pure]
         internal static WhereSelectEnumerable<TSource, TResult> WhereSelect<TSource, TResult>(
             this TSource[] source, 
-            Func<TSource, bool> predicate, 
+            Predicate<TSource> predicate, 
             Func<TSource, TResult> selector) 
             => new WhereSelectEnumerable<TSource, TResult>(source, predicate, selector, 0, source.Length);
 
         [Pure]
         internal static WhereSelectEnumerable<TSource, TResult> WhereSelect<TSource, TResult>(
             this TSource[] source,
-            Func<TSource, bool> predicate,
+            Predicate<TSource> predicate,
             Func<TSource, TResult> selector,
             int skipCount, int takeCount)
             => new WhereSelectEnumerable<TSource, TResult>(source, predicate, selector, skipCount, takeCount);
@@ -27,12 +27,12 @@ namespace NetFabric.Hyperlinq
             : IValueEnumerable<TResult, WhereSelectEnumerable<TSource, TResult>.Enumerator>
         {
             internal readonly TSource[] source;
-            internal readonly Func<TSource, bool> predicate;
+            internal readonly Predicate<TSource> predicate;
             readonly Func<TSource, TResult> selector;
             readonly int skipCount;
             readonly int takeCount;
 
-            internal WhereSelectEnumerable(TSource[] source, Func<TSource, bool> predicate, Func<TSource, TResult> selector, int skipCount, int takeCount)
+            internal WhereSelectEnumerable(TSource[] source, Predicate<TSource> predicate, Func<TSource, TResult> selector, int skipCount, int takeCount)
             {
                 this.source = source;
                 this.predicate = predicate;
@@ -50,7 +50,7 @@ namespace NetFabric.Hyperlinq
                 : IEnumerator<TResult>
             {
                 readonly TSource[] source;
-                readonly Func<TSource, bool> predicate;
+                readonly Predicate<TSource> predicate;
                 readonly Func<TSource, TResult> selector;
                 readonly int end;
                 int index;
@@ -88,21 +88,21 @@ namespace NetFabric.Hyperlinq
 
             public int Count()
                 => Array.Count<TSource>(source, predicate, skipCount, takeCount);
-            public int Count(Func<TSource, bool> predicate)
+            public int Count(Predicate<TSource> predicate)
                 => Array.Count<TSource>(source, Utils.CombinePredicates(this.predicate, predicate), skipCount, takeCount);
-            public int Count(Func<TSource, int, bool> predicate)
+            public int Count(PredicateAt<TSource> predicate)
                 => Array.Count<TSource>(source, Utils.CombinePredicates(this.predicate, predicate), skipCount, takeCount);
 
             public long LongCount()
                 => Array.LongCount<TSource>(source, predicate);
-            public long LongCount(Func<TSource, bool> predicate)
+            public long LongCount(Predicate<TSource> predicate)
                 => Array.LongCount<TSource>(source, Utils.CombinePredicates(this.predicate, predicate));
 
             public bool Any()
                 => Array.Any<TSource>(source, predicate, skipCount, takeCount);
-            public bool Any(Func<TSource, bool> predicate)
+            public bool Any(Predicate<TSource> predicate)
                 => Array.Any<TSource>(source, Utils.CombinePredicates(this.predicate, predicate), skipCount, takeCount);
-            public bool Any(Func<TSource, int, bool> predicate)
+            public bool Any(PredicateAt<TSource> predicate)
                 => Array.Any<TSource>(source, Utils.CombinePredicates(this.predicate, predicate), skipCount, takeCount);
 
             public List<TResult> ToList()

@@ -14,7 +14,7 @@ namespace NetFabric.Hyperlinq
             => takeCount != 0;
 
         [Pure]
-        public static bool Any<TSource>(this TSource[] source, Func<TSource, bool> predicate)
+        public static bool Any<TSource>(this TSource[] source, Predicate<TSource> predicate)
         {
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
 
@@ -22,7 +22,7 @@ namespace NetFabric.Hyperlinq
         }
 
         [Pure]
-        static bool Any<TSource>(this TSource[] source, Func<TSource, bool> predicate, int skipCount, int takeCount)
+        static bool Any<TSource>(this TSource[] source, Predicate<TSource> predicate, int skipCount, int takeCount)
         {
             var end = skipCount + takeCount;
             for (var index = skipCount; index < end; index++)
@@ -34,7 +34,7 @@ namespace NetFabric.Hyperlinq
         }
 
         [Pure]
-        public static bool Any<TSource>(this TSource[] source, Func<TSource, int, bool> predicate)
+        public static bool Any<TSource>(this TSource[] source, PredicateAt<TSource> predicate)
         {
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
 
@@ -42,7 +42,7 @@ namespace NetFabric.Hyperlinq
         }
 
         [Pure]
-        static bool Any<TSource>(this TSource[] source, Func<TSource, int, bool> predicate, int skipCount, int takeCount)
+        static bool Any<TSource>(this TSource[] source, PredicateAt<TSource> predicate, int skipCount, int takeCount)
         {
             var end = skipCount + takeCount;
             for (var index = skipCount; index < end; index++)

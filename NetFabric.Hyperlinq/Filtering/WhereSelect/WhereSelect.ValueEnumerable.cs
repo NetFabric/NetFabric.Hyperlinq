@@ -12,7 +12,7 @@ namespace NetFabric.Hyperlinq
         [Pure]
         internal static WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult> WhereSelect<TEnumerable, TEnumerator, TSource, TResult>(
             this TEnumerable source, 
-            Func<TSource, bool> predicate,
+            Predicate<TSource> predicate,
             Func<TSource, TResult> selector)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
@@ -31,10 +31,10 @@ namespace NetFabric.Hyperlinq
             where TEnumerator : struct, IEnumerator<TSource>
         {
             readonly TEnumerable source;
-            readonly Func<TSource, bool> predicate;
+            readonly Predicate<TSource> predicate;
             readonly Func<TSource, TResult> selector;
 
-            internal WhereSelectEnumerable(in TEnumerable source, Func<TSource, bool> predicate, Func<TSource, TResult> selector)
+            internal WhereSelectEnumerable(in TEnumerable source, Predicate<TSource> predicate, Func<TSource, TResult> selector)
             {
                 this.source = source;
                 this.predicate = predicate;
@@ -52,7 +52,7 @@ namespace NetFabric.Hyperlinq
             {
                 [SuppressMessage("Style", "IDE0044:Add readonly modifier")]
                 TEnumerator enumerator; // do not make readonly
-                readonly Func<TSource, bool> predicate;
+                readonly Predicate<TSource> predicate;
                 readonly Func<TSource, TResult> selector;
 
                 internal Enumerator(in WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult> enumerable)
@@ -87,21 +87,21 @@ namespace NetFabric.Hyperlinq
 
             public int Count()
                 => ValueEnumerable.Count<TEnumerable, TEnumerator, TSource>(source, predicate);
-            public int Count(Func<TSource, bool> predicate)
+            public int Count(Predicate<TSource> predicate)
                 => ValueEnumerable.Count<TEnumerable, TEnumerator, TSource>(source, Utils.CombinePredicates(this.predicate, predicate));
-            public int Count(Func<TSource, int, bool> predicate)
+            public int Count(PredicateAt<TSource> predicate)
                 => ValueEnumerable.Count<TEnumerable, TEnumerator, TSource>(source, Utils.CombinePredicates(this.predicate, predicate));
 
             public long LongCount()
                 => ValueEnumerable.LongCount<TEnumerable, TEnumerator, TSource>(source, predicate);
-            public long LongCount(Func<TSource, bool> predicate)
+            public long LongCount(Predicate<TSource> predicate)
                 => ValueEnumerable.LongCount<TEnumerable, TEnumerator, TSource>(source, Utils.CombinePredicates(this.predicate, predicate));
 
             public bool Any()
                 => ValueEnumerable.Any<TEnumerable, TEnumerator, TSource>(source, predicate);
-            public bool Any(Func<TSource, bool> predicate)
+            public bool Any(Predicate<TSource> predicate)
                 => ValueEnumerable.Any<TEnumerable, TEnumerator, TSource>(source, Utils.CombinePredicates(this.predicate, predicate));
-            public bool Any(Func<TSource, int, bool> predicate)
+            public bool Any(PredicateAt<TSource> predicate)
                 => ValueEnumerable.Any<TEnumerable, TEnumerator, TSource>(source, Utils.CombinePredicates(this.predicate, predicate));
 
             public List<TResult> ToList()

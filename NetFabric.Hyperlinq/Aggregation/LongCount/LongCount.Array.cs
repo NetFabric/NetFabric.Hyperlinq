@@ -10,7 +10,7 @@ namespace NetFabric.Hyperlinq
             => source.LongLength;
 
         [Pure]
-        public static long LongCount<TSource>(this TSource[] source, Func<TSource, bool> predicate)
+        public static long LongCount<TSource>(this TSource[] source, Predicate<TSource> predicate)
         {
             var count = 0L;
             var end = source.LongLength;

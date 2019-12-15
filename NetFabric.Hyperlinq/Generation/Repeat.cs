@@ -112,7 +112,7 @@ namespace NetFabric.Hyperlinq
                 => Repeat(value, Utils.Take(this.count, count));
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public bool All(Func<TSource, bool> predicate)
+            public bool All(Predicate<TSource> predicate)
                 => count == 0 ? true : predicate(value);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]

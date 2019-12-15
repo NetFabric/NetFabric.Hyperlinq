@@ -74,10 +74,10 @@ namespace ConsoleApp
 
 - Aggregation
   - `Count()`
-  - `Count(Func<TSource, bool>)`
-  - `Count(Func<TSource, int, bool>)`
+  - `Count(Predicate<TSource>)`
+  - `Count(PredicateAt<TSource>)`
   - `LongCount()`
-  - `LongCount(Func<TSource, bool>)`
+  - `LongCount(Predicate<TSource>)`
 - Conversion
   - `AsEnumerable()`
   - `AsValueEnumerable()`
@@ -89,32 +89,32 @@ namespace ConsoleApp
   - `ToDictionary(Func<TSource, TKey>, Func<TSource, TElement>, IEqualityComparer<TKey>)`
 - Element
   - `TryElementAt()`
-  - `TryElementAt(Func<TSource, bool>)`
-  - `TryElementAt(Func<TSource, int, bool>)`
+  - `TryElementAt(Predicate<TSource>)`
+  - `TryElementAt(PredicateAt<TSource>)`
   - `ElementAt()`
-  - `ElementAt(Func<TSource, bool>)`
-  - `ElementAt(Func<TSource, int, bool>)`
+  - `ElementAt(Predicate<TSource>)`
+  - `ElementAt(PredicateAt<TSource>)`
   - `ElementAtOrDefault()`
-  - `ElementAtOrDefault(Func<TSource, bool>)`
-  - `ElementAtOrDefault(Func<TSource, int, bool>)`
+  - `ElementAtOrDefault(Predicate<TSource>)`
+  - `ElementAtOrDefault(PredicateAt<TSource>)`
   - `TryFirst()`
-  - `TryFirst(Func<TSource, bool>)`
-  - `TryFirst(Func<TSource, int, bool>)`
+  - `TryFirst(Predicate<TSource>)`
+  - `TryFirst(PredicateAt<TSource>)`
   - `First()`
-  - `First(Func<TSource, bool>)`
-  - `First(Func<TSource, int, bool>)`
+  - `First(Predicate<TSource>)`
+  - `First(PredicateAt<TSource>)`
   - `FirstOrDefault()`
-  - `FirstOrDefault(Func<TSource, bool>)`
-  - `FirstOrDefault(Func<TSource, int, bool>)`
+  - `FirstOrDefault(Predicate<TSource>)`
+  - `FirstOrDefault(PredicateAt<TSource>)`
   - `Single()`
-  - `Single(Func<TSource, bool>)`
-  - `Single(Func<TSource, int, bool>)`
+  - `Single(Predicate<TSource>)`
+  - `Single(PredicateAt<TSource>)`
   - `SingleOrDefault()`
-  - `SingleOrDefault(Func<TSource, bool>)`
-  - `SingleOrDefault(Func<TSource, int, bool>)`
+  - `SingleOrDefault(Predicate<TSource>)`
+  - `SingleOrDefault(PredicateAt<TSource>)`
 - Filtering
-  - `Where(Func<TSource, bool>)`
-  - `Where(Func<TSource, int, bool>)`
+  - `Where(Predicate<TSource>)`
+  - `Where(PredicateAt<TSource>)`
 - Generation
   - `Create(Func<TEnumerator>)`
   - `Empty()`
@@ -129,11 +129,11 @@ namespace ConsoleApp
   - `Take(int)`
   - `Skip(int)`
 - Quantifier
-  - `All(Func<TSource, bool>)`
-  - `All(Func<TSource, int, bool>)`
+  - `All(Predicate<TSource>)`
+  - `All(PredicateAt<TSource>)`
   - `Any()`
-  - `Any(Func<TSource, bool>)`
-  - `Any(Func<TSource, int, bool>)`
+  - `Any(Predicate<TSource>)`
+  - `Any(PredicateAt<TSource>)`
   - `Contains(TSource)`
   - `Contains(TSource, IEqualityComparer<TSource>)`
 - Set

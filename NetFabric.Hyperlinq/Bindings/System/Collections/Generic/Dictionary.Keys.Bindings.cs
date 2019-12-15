@@ -13,17 +13,17 @@ namespace NetFabric.Hyperlinq
         public static int Count<TKey, TValue>(this Dictionary<TKey, TValue>.KeyCollection source)
             => source.Count;
         [Pure]
-        public static int Count<TKey, TValue>(this Dictionary<TKey, TValue>.KeyCollection source, Func<TKey, bool> predicate)
+        public static int Count<TKey, TValue>(this Dictionary<TKey, TValue>.KeyCollection source, Predicate<TKey> predicate)
             => ValueReadOnlyCollection.Count<ValueWrapper<TKey, TValue>, Dictionary<TKey, TValue>.KeyCollection.Enumerator, TKey>(new ValueWrapper<TKey, TValue>(source), predicate);
         [Pure]
-        public static int Count<TKey, TValue>(this Dictionary<TKey, TValue>.KeyCollection source, Func<TKey, int, bool> predicate)
+        public static int Count<TKey, TValue>(this Dictionary<TKey, TValue>.KeyCollection source, PredicateAt<TKey> predicate)
             => ValueReadOnlyCollection.Count<ValueWrapper<TKey, TValue>, Dictionary<TKey, TValue>.KeyCollection.Enumerator, TKey>(new ValueWrapper<TKey, TValue>(source), predicate);
 
         [Pure]
         public static long LongCount<TKey, TValue>(this Dictionary<TKey, TValue>.KeyCollection source)
             => ValueEnumerable.LongCount<ValueWrapper<TKey, TValue>, Dictionary<TKey, TValue>.KeyCollection.Enumerator, TKey>(new ValueWrapper<TKey, TValue>(source));
         [Pure]
-        public static long LongCount<TKey, TValue>(this Dictionary<TKey, TValue>.KeyCollection source, Func<TKey, bool> predicate)
+        public static long LongCount<TKey, TValue>(this Dictionary<TKey, TValue>.KeyCollection source, Predicate<TKey> predicate)
             => ValueEnumerable.LongCount<ValueWrapper<TKey, TValue>, Dictionary<TKey, TValue>.KeyCollection.Enumerator, TKey>(new ValueWrapper<TKey, TValue>(source), predicate);
 
         [Pure]
@@ -35,20 +35,20 @@ namespace NetFabric.Hyperlinq
             => ValueReadOnlyCollection.Take<ValueWrapper<TKey, TValue>, Dictionary<TKey, TValue>.KeyCollection.Enumerator, TKey>(new ValueWrapper<TKey, TValue>(source), count);
 
         [Pure]
-        public static bool All<TKey, TValue>(this Dictionary<TKey, TValue>.KeyCollection source, Func<TKey, bool> predicate)
+        public static bool All<TKey, TValue>(this Dictionary<TKey, TValue>.KeyCollection source, Predicate<TKey> predicate)
             => ValueReadOnlyCollection.All<ValueWrapper<TKey, TValue>, Dictionary<TKey, TValue>.KeyCollection.Enumerator, TKey>(new ValueWrapper<TKey, TValue>(source), predicate);
         [Pure]
-        public static bool All<TKey, TValue>(this Dictionary<TKey, TValue>.KeyCollection source, Func<TKey, int, bool> predicate)
+        public static bool All<TKey, TValue>(this Dictionary<TKey, TValue>.KeyCollection source, PredicateAt<TKey> predicate)
             => ValueReadOnlyCollection.All<ValueWrapper<TKey, TValue>, Dictionary<TKey, TValue>.KeyCollection.Enumerator, TKey>(new ValueWrapper<TKey, TValue>(source), predicate);
 
         [Pure]
         public static bool Any<TKey, TValue>(this Dictionary<TKey, TValue>.KeyCollection source)
             => source.Count != 0;
         [Pure]
-        public static bool Any<TKey, TValue>(this Dictionary<TKey, TValue>.KeyCollection source, Func<TKey, bool> predicate)
+        public static bool Any<TKey, TValue>(this Dictionary<TKey, TValue>.KeyCollection source, Predicate<TKey> predicate)
             => ValueReadOnlyCollection.Any<ValueWrapper<TKey, TValue>, Dictionary<TKey, TValue>.KeyCollection.Enumerator, TKey>(new ValueWrapper<TKey, TValue>(source), predicate);
         [Pure]
-        public static bool Any<TKey, TValue>(this Dictionary<TKey, TValue>.KeyCollection source, Func<TKey, int, bool> predicate)
+        public static bool Any<TKey, TValue>(this Dictionary<TKey, TValue>.KeyCollection source, PredicateAt<TKey> predicate)
             => ValueReadOnlyCollection.Any<ValueWrapper<TKey, TValue>, Dictionary<TKey, TValue>.KeyCollection.Enumerator, TKey>(new ValueWrapper<TKey, TValue>(source), predicate);
 
         [Pure]
@@ -81,12 +81,12 @@ namespace NetFabric.Hyperlinq
         [Pure]
         public static ValueEnumerable.WhereEnumerable<ValueWrapper<TKey, TValue>, Dictionary<TKey, TValue>.KeyCollection.Enumerator, TKey> Where<TKey, TValue>(
             this Dictionary<TKey, TValue>.KeyCollection source,
-            Func<TKey, bool> predicate)
+            Predicate<TKey> predicate)
             => ValueEnumerable.Where<ValueWrapper<TKey, TValue>, Dictionary<TKey, TValue>.KeyCollection.Enumerator, TKey>(new ValueWrapper<TKey, TValue>(source), predicate);
         [Pure]
         public static ValueEnumerable.WhereIndexEnumerable<ValueWrapper<TKey, TValue>, Dictionary<TKey, TValue>.KeyCollection.Enumerator, TKey> Where<TKey, TValue>(
             this Dictionary<TKey, TValue>.KeyCollection source,
-            Func<TKey, int, bool> predicate)
+            PredicateAt<TKey> predicate)
             => ValueEnumerable.Where<ValueWrapper<TKey, TValue>, Dictionary<TKey, TValue>.KeyCollection.Enumerator, TKey>(new ValueWrapper<TKey, TValue>(source), predicate);
 
         [Pure]
@@ -104,7 +104,7 @@ namespace NetFabric.Hyperlinq
         public static TKey First<TKey, TValue>(this Dictionary<TKey, TValue>.KeyCollection source)
             => ValueReadOnlyCollection.First<ValueWrapper<TKey, TValue>, Dictionary<TKey, TValue>.KeyCollection.Enumerator, TKey>(new ValueWrapper<TKey, TValue>(source));
         [Pure]
-        public static TKey First<TKey, TValue>(this Dictionary<TKey, TValue>.KeyCollection source, Func<TKey, bool> predicate)
+        public static TKey First<TKey, TValue>(this Dictionary<TKey, TValue>.KeyCollection source, Predicate<TKey> predicate)
             => ValueReadOnlyCollection.First<ValueWrapper<TKey, TValue>, Dictionary<TKey, TValue>.KeyCollection.Enumerator, TKey>(new ValueWrapper<TKey, TValue>(source), predicate);
         [Pure]
         [return: MaybeNull]
@@ -112,23 +112,23 @@ namespace NetFabric.Hyperlinq
             => ValueReadOnlyCollection.FirstOrDefault<ValueWrapper<TKey, TValue>, Dictionary<TKey, TValue>.KeyCollection.Enumerator, TKey>(new ValueWrapper<TKey, TValue>(source));
         [Pure]
         [return: MaybeNull]
-        public static TKey FirstOrDefault<TKey, TValue>(this Dictionary<TKey, TValue>.KeyCollection source, Func<TKey, bool> predicate)
+        public static TKey FirstOrDefault<TKey, TValue>(this Dictionary<TKey, TValue>.KeyCollection source, Predicate<TKey> predicate)
             => ValueReadOnlyCollection.FirstOrDefault<ValueWrapper<TKey, TValue>, Dictionary<TKey, TValue>.KeyCollection.Enumerator, TKey>(new ValueWrapper<TKey, TValue>(source), predicate);
         [Pure]
         public static Maybe<TKey> TryFirst<TKey, TValue>(this Dictionary<TKey, TValue>.KeyCollection source)
             => ValueReadOnlyCollection.TryFirst<ValueWrapper<TKey, TValue>, Dictionary<TKey, TValue>.KeyCollection.Enumerator, TKey>(new ValueWrapper<TKey, TValue>(source));
         [Pure]
-        public static Maybe<TKey> TryFirst<TKey, TValue>(this Dictionary<TKey, TValue>.KeyCollection source, Func<TKey, bool> predicate)
+        public static Maybe<TKey> TryFirst<TKey, TValue>(this Dictionary<TKey, TValue>.KeyCollection source, Predicate<TKey> predicate)
             => ValueReadOnlyCollection.TryFirst<ValueWrapper<TKey, TValue>, Dictionary<TKey, TValue>.KeyCollection.Enumerator, TKey>(new ValueWrapper<TKey, TValue>(source), predicate);
         [Pure]
-        public static MaybeAt<TKey> TryFirst<TKey, TValue>(this Dictionary<TKey, TValue>.KeyCollection source, Func<TKey, int, bool> predicate)
+        public static MaybeAt<TKey> TryFirst<TKey, TValue>(this Dictionary<TKey, TValue>.KeyCollection source, PredicateAt<TKey> predicate)
             => ValueReadOnlyCollection.TryFirst<ValueWrapper<TKey, TValue>, Dictionary<TKey, TValue>.KeyCollection.Enumerator, TKey>(new ValueWrapper<TKey, TValue>(source), predicate);
 
         [Pure]
         public static TKey Single<TKey, TValue>(this Dictionary<TKey, TValue>.KeyCollection source)
             => ValueReadOnlyCollection.Single<ValueWrapper<TKey, TValue>, Dictionary<TKey, TValue>.KeyCollection.Enumerator, TKey>(new ValueWrapper<TKey, TValue>(source));
         [Pure]
-        public static TKey Single<TKey, TValue>(this Dictionary<TKey, TValue>.KeyCollection source, Func<TKey, bool> predicate)
+        public static TKey Single<TKey, TValue>(this Dictionary<TKey, TValue>.KeyCollection source, Predicate<TKey> predicate)
             => ValueReadOnlyCollection.Single<ValueWrapper<TKey, TValue>, Dictionary<TKey, TValue>.KeyCollection.Enumerator, TKey>(new ValueWrapper<TKey, TValue>(source), predicate);
         [Pure]
         [return: MaybeNull]
@@ -136,7 +136,7 @@ namespace NetFabric.Hyperlinq
             => ValueReadOnlyCollection.SingleOrDefault<ValueWrapper<TKey, TValue>, Dictionary<TKey, TValue>.KeyCollection.Enumerator, TKey>(new ValueWrapper<TKey, TValue>(source));
         [Pure]
         [return: MaybeNull]
-        public static TKey SingleOrDefault<TKey, TValue>(this Dictionary<TKey, TValue>.KeyCollection source, Func<TKey, bool> predicate)
+        public static TKey SingleOrDefault<TKey, TValue>(this Dictionary<TKey, TValue>.KeyCollection source, Predicate<TKey> predicate)
             => ValueReadOnlyCollection.SingleOrDefault<ValueWrapper<TKey, TValue>, Dictionary<TKey, TValue>.KeyCollection.Enumerator, TKey>(new ValueWrapper<TKey, TValue>(source), predicate);
 
         [Pure]

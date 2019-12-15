@@ -13,7 +13,7 @@ namespace NetFabric.Hyperlinq.UnitTests
         {
             // Arrange
             var wrapped = Wrap.AsValueEnumerable(new int[0]);
-            var predicate = (Func<int, bool>)null;
+            var predicate = (Predicate<int>)null;
 
             // Act
             Action action = () => 
@@ -27,12 +27,12 @@ namespace NetFabric.Hyperlinq.UnitTests
 
         [Theory]
         [MemberData(nameof(TestData.Any), MemberType = typeof(TestData))]
-        public void Any_With_ValidData_Should_Succeed(int[] source, Func<int, bool> predicate)
+        public void Any_With_ValidData_Should_Succeed(int[] source, Predicate<int> predicate)
         {
             // Arrange
             var wrapped = Wrap.AsValueEnumerable(source);
             var expected = 
-                System.Linq.Enumerable.Any(wrapped, predicate);
+                System.Linq.Enumerable.Any(wrapped, predicate.AsFunc());
 
             // Act
             var result = ValueEnumerable

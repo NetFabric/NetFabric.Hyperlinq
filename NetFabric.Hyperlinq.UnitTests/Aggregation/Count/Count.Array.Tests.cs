@@ -27,11 +27,11 @@ namespace NetFabric.Hyperlinq.UnitTests
 
         [Theory]
         [MemberData(nameof(TestData.CountPredicate), MemberType = typeof(TestData))]
-        public void CountPredicate_With_ValidData_Should_Succeed(int[] source, Func<int, bool> predicate)
+        public void CountPredicate_With_ValidData_Should_Succeed(int[] source, Predicate<int> predicate)
         {
             // Arrange
             var expected = 
-                System.Linq.Enumerable.Count(source, predicate);
+                System.Linq.Enumerable.Count(source, predicate.AsFunc());
 
             // Act
             var result = Array

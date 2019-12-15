@@ -10,7 +10,7 @@ namespace NetFabric.Hyperlinq
     public static partial class Array
     {
         [Pure]
-        public static WhereEnumerable<TSource> Where<TSource>(this TSource[] source, Func<TSource, bool> predicate) 
+        public static WhereEnumerable<TSource> Where<TSource>(this TSource[] source, Predicate<TSource> predicate) 
         {
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
 
@@ -18,7 +18,7 @@ namespace NetFabric.Hyperlinq
         }
 
         [Pure]
-        static WhereEnumerable<TSource> Where<TSource>(this TSource[] source, Func<TSource, bool> predicate, int skipCount, int takeCount)
+        static WhereEnumerable<TSource> Where<TSource>(this TSource[] source, Predicate<TSource> predicate, int skipCount, int takeCount)
             => new WhereEnumerable<TSource>(source, predicate, skipCount, takeCount);
 
         [GenericsTypeMapping("TEnumerable", typeof(WhereEnumerable<>))]
@@ -27,11 +27,11 @@ namespace NetFabric.Hyperlinq
             : IValueEnumerable<TSource, WhereEnumerable<TSource>.Enumerator>
         {
             readonly TSource[] source;
-            readonly Func<TSource, bool> predicate;
+            readonly Predicate<TSource> predicate;
             readonly int skipCount;
             readonly int takeCount;
 
-            internal WhereEnumerable(TSource[] source, Func<TSource, bool> predicate, int skipCount, int takeCount)
+            internal WhereEnumerable(TSource[] source, Predicate<TSource> predicate, int skipCount, int takeCount)
             {
                 this.source = source;
                 this.predicate = predicate;
@@ -48,7 +48,7 @@ namespace NetFabric.Hyperlinq
                 : IEnumerator<TSource>
             {
                 readonly TSource[] source;
-                readonly Func<TSource, bool> predicate;
+                readonly Predicate<TSource> predicate;
                 readonly int end;
                 int index;
 
@@ -87,63 +87,63 @@ namespace NetFabric.Hyperlinq
 
             public int Count()
                 => Array.Count<TSource>(source, predicate, skipCount, takeCount);
-            public int Count(Func<TSource, bool> predicate)
+            public int Count(Predicate<TSource> predicate)
                 => Array.Count<TSource>(source, Utils.CombinePredicates(this.predicate, predicate), skipCount, takeCount);
-            public int Count(Func<TSource, int, bool> predicate)
+            public int Count(PredicateAt<TSource> predicate)
                 => Array.Count<TSource>(source, Utils.CombinePredicates(this.predicate, predicate), skipCount, takeCount);
 
             public long LongCount()
                 => Array.LongCount<TSource>(source, predicate);
-            public long LongCount(Func<TSource, bool> predicate)
+            public long LongCount(Predicate<TSource> predicate)
                 => Array.LongCount<TSource>(source, Utils.CombinePredicates(this.predicate, predicate));
 
             public bool Any()
                 => Array.Any<TSource>(source, predicate, skipCount, takeCount);
-            public bool Any(Func<TSource, bool> predicate)
+            public bool Any(Predicate<TSource> predicate)
                 => Array.Any<TSource>(source, Utils.CombinePredicates(this.predicate, predicate), skipCount, takeCount);
-            public bool Any(Func<TSource, int, bool> predicate)
+            public bool Any(PredicateAt<TSource> predicate)
                 => Array.Any<TSource>(source, Utils.CombinePredicates(this.predicate, predicate), skipCount, takeCount);
 
             public Array.WhereSelectEnumerable<TSource, TResult> Select<TResult>(Func<TSource, TResult> selector)
                 => Array.WhereSelect<TSource, TResult>(source, predicate, selector);
 
-            public Array.WhereEnumerable<TSource> Where(Func<TSource, bool> predicate)
+            public Array.WhereEnumerable<TSource> Where(Predicate<TSource> predicate)
                 => Array.Where<TSource>(source, Utils.CombinePredicates(this.predicate, predicate), skipCount, takeCount);
-            public Array.WhereIndexEnumerable<TSource> Where(Func<TSource, int, bool> predicate)
+            public Array.WhereIndexEnumerable<TSource> Where(PredicateAt<TSource> predicate)
                 => Array.Where<TSource>(source, Utils.CombinePredicates(this.predicate, predicate), skipCount, takeCount);
 
             public ref readonly TSource First()
                 => ref Array.First<TSource>(source, predicate, skipCount, takeCount);
-            public ref readonly TSource First(Func<TSource, bool> predicate)
+            public ref readonly TSource First(Predicate<TSource> predicate)
                 => ref Array.First<TSource>(source, Utils.CombinePredicates(this.predicate, predicate), skipCount, takeCount);
-            public ref readonly TSource First(Func<TSource, int, bool> predicate)
+            public ref readonly TSource First(PredicateAt<TSource> predicate)
                 => ref Array.First<TSource>(source, Utils.CombinePredicates(this.predicate, predicate), skipCount, takeCount);
 
             [return: MaybeNull]
             public ref readonly TSource FirstOrDefault()
                 => ref Array.FirstOrDefault<TSource>(source, predicate, skipCount, takeCount);
             [return: MaybeNull]
-            public ref readonly TSource FirstOrDefault(Func<TSource, bool> predicate)
+            public ref readonly TSource FirstOrDefault(Predicate<TSource> predicate)
                 => ref Array.FirstOrDefault<TSource>(source, Utils.CombinePredicates(this.predicate, predicate), skipCount, takeCount);
             [return: MaybeNull]
-            public ref readonly TSource FirstOrDefault(Func<TSource, int, bool> predicate)
+            public ref readonly TSource FirstOrDefault(PredicateAt<TSource> predicate)
                 => ref Array.FirstOrDefault<TSource>(source, Utils.CombinePredicates(this.predicate, predicate), skipCount, takeCount);
 
             public ref readonly TSource Single()
                 => ref Array.Single<TSource>(source, predicate, skipCount, takeCount);
-            public ref readonly TSource Single(Func<TSource, bool> predicate)
+            public ref readonly TSource Single(Predicate<TSource> predicate)
                 => ref Array.Single<TSource>(source, Utils.CombinePredicates(this.predicate, predicate), skipCount, takeCount);
-            public ref readonly TSource Single(Func<TSource, int, bool> predicate)
+            public ref readonly TSource Single(PredicateAt<TSource> predicate)
                 => ref Array.Single<TSource>(source, Utils.CombinePredicates(this.predicate, predicate), skipCount, takeCount);
 
             [return: MaybeNull]
             public ref readonly TSource SingleOrDefault()
                 => ref Array.SingleOrDefault<TSource>(source, predicate, skipCount, takeCount);
             [return: MaybeNull]
-            public ref readonly TSource SingleOrDefault(Func<TSource, bool> predicate)
+            public ref readonly TSource SingleOrDefault(Predicate<TSource> predicate)
                 => ref Array.SingleOrDefault<TSource>(source, Utils.CombinePredicates(this.predicate, predicate), skipCount, takeCount);
             [return: MaybeNull]
-            public ref readonly TSource SingleOrDefault(Func<TSource, int, bool> predicate)
+            public ref readonly TSource SingleOrDefault(PredicateAt<TSource> predicate)
                 => ref Array.SingleOrDefault<TSource>(source, Utils.CombinePredicates(this.predicate, predicate), skipCount, takeCount);
 
             public List<TSource> ToList()

@@ -29,11 +29,11 @@ namespace NetFabric.Hyperlinq.UnitTests
         [MemberData(nameof(TestData.SinglePredicateEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SinglePredicateSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SinglePredicateMultiple), MemberType = typeof(TestData))]
-        public void FirstOrDefaultPredicate_With_ValidData_Should_Succeed(int[] source, Func<int, bool> predicate)
+        public void FirstOrDefaultPredicate_With_ValidData_Should_Succeed(int[] source, Predicate<int> predicate)
         {
             // Arrange
             var expected = 
-                System.Linq.Enumerable.FirstOrDefault(source, predicate);
+                System.Linq.Enumerable.FirstOrDefault(source, predicate.AsFunc());
 
             // Act
             var result = SpanExtensions

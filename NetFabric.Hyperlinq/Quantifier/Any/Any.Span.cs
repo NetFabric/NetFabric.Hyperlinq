@@ -10,7 +10,7 @@ namespace NetFabric.Hyperlinq
             => source.Length != 0;
 
         [Pure]
-        public static bool Any<TSource>(this Span<TSource> source, Func<TSource, bool> predicate)
+        public static bool Any<TSource>(this Span<TSource> source, Predicate<TSource> predicate)
         {
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
 
@@ -24,7 +24,7 @@ namespace NetFabric.Hyperlinq
         }
 
         [Pure]
-        public static bool Any<TSource>(this Span<TSource> source, Func<TSource, long, bool> predicate)
+        public static bool Any<TSource>(this Span<TSource> source, PredicateAt<TSource> predicate)
         {
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
 
