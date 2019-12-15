@@ -61,18 +61,18 @@ namespace NetFabric.Hyperlinq
         [Pure]
         public static ValueReadOnlyList.SelectEnumerable<ValueWrapper<TSource>, List<TSource>.Enumerator, TSource, TResult> Select<TSource, TResult>(
             this List<TSource> source,
-            Func<TSource, TResult> selector)
+            Selector<TSource, TResult> selector)
             => ValueReadOnlyList.Select<ValueWrapper<TSource>, List<TSource>.Enumerator, TSource, TResult>(new ValueWrapper<TSource>(source), selector);
         [Pure]
         public static ValueReadOnlyList.SelectIndexEnumerable<ValueWrapper<TSource>, List<TSource>.Enumerator, TSource, TResult> Select<TSource, TResult>(
             this List<TSource> source,
-            Func<TSource, int, TResult> selector)
+            SelectorAt<TSource, TResult> selector)
             => ValueReadOnlyList.Select<ValueWrapper<TSource>, List<TSource>.Enumerator, TSource, TResult>(new ValueWrapper<TSource>(source), selector);
 
         [Pure]
         public static ValueReadOnlyList.SelectManyEnumerable<ValueWrapper<TSource>, List<TSource>.Enumerator, TSource, TSubEnumerable, TSubEnumerator, TResult> SelectMany<TSource, TSubEnumerable, TSubEnumerator, TResult>(
             this List<TSource> source,
-            Func<TSource, TSubEnumerable> selector)
+            Selector<TSource, TSubEnumerable> selector)
             where TSubEnumerable : IValueEnumerable<TResult, TSubEnumerator>
             where TSubEnumerator : struct, IEnumerator<TResult>
             => ValueReadOnlyList.SelectMany<ValueWrapper<TSource>, List<TSource>.Enumerator, TSource, TSubEnumerable, TSubEnumerator, TResult>(new ValueWrapper<TSource>(source), selector);
@@ -160,16 +160,16 @@ namespace NetFabric.Hyperlinq
             => new List<TSource>(source);
 
         [Pure]
-        public static Dictionary<TKey, TSource> ToDictionary<TSource, TKey>(this List<TSource> source, Func<TSource, TKey> keySelector)
+        public static Dictionary<TKey, TSource> ToDictionary<TSource, TKey>(this List<TSource> source, Selector<TSource, TKey> keySelector)
             => ValueReadOnlyList.ToDictionary<ValueWrapper<TSource>, List<TSource>.Enumerator, TSource, TKey>(new ValueWrapper<TSource>(source), keySelector);
         [Pure]
-        public static Dictionary<TKey, TSource> ToDictionary<TSource, TKey>(this List<TSource> source, Func<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer)
+        public static Dictionary<TKey, TSource> ToDictionary<TSource, TKey>(this List<TSource> source, Selector<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer)
             => ValueReadOnlyList.ToDictionary<ValueWrapper<TSource>, List<TSource>.Enumerator, TSource, TKey>(new ValueWrapper<TSource>(source), keySelector, comparer);
         [Pure]
-        public static Dictionary<TKey, TElement> ToDictionary<TSource, TKey, TElement>(this List<TSource> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector)
+        public static Dictionary<TKey, TElement> ToDictionary<TSource, TKey, TElement>(this List<TSource> source, Selector<TSource, TKey> keySelector, Selector<TSource, TElement> elementSelector)
             => ValueReadOnlyList.ToDictionary<ValueWrapper<TSource>, List<TSource>.Enumerator, TSource, TKey, TElement>(new ValueWrapper<TSource>(source), keySelector, elementSelector);
         [Pure]
-        public static Dictionary<TKey, TElement> ToDictionary<TSource, TKey, TElement>(this List<TSource> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer)
+        public static Dictionary<TKey, TElement> ToDictionary<TSource, TKey, TElement>(this List<TSource> source, Selector<TSource, TKey> keySelector, Selector<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer)
             => ValueReadOnlyList.ToDictionary<ValueWrapper<TSource>, List<TSource>.Enumerator, TSource, TKey, TElement>(new ValueWrapper<TSource>(source), keySelector, elementSelector, comparer);
 
         public static void ForEach<TSource>(this List<TSource> source, Action<TSource> action)

@@ -11,7 +11,7 @@ namespace NetFabric.Hyperlinq.UnitTests
         {
             // Arrange
             var collection = Wrap.AsValueReadOnlyCollection(new int[0]);
-            var selector = (Func<int, string>)null;
+            var selector = (Selector<int, string>)null;
 
             // Act
             Action action = () => ValueReadOnlyCollection.Select<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int, string>(collection, selector);

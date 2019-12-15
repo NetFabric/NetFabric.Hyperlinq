@@ -12,7 +12,7 @@ namespace NetFabric.Hyperlinq
         [Pure]
         public static SelectManyEnumerable<TEnumerable, TEnumerator, TSource, TSubEnumerable, TSubEnumerator, TResult> SelectMany<TEnumerable, TEnumerator, TSource, TSubEnumerable, TSubEnumerator, TResult>(
             this TEnumerable source, 
-            Func<TSource, TSubEnumerable> selector)
+            Selector<TSource, TSubEnumerable> selector)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
             where TSubEnumerable : IValueEnumerable<TResult, TSubEnumerator>
@@ -33,9 +33,9 @@ namespace NetFabric.Hyperlinq
             where TSubEnumerator : struct, IEnumerator<TResult>
         {
             readonly TEnumerable source;
-            readonly Func<TSource, TSubEnumerable> selector;
+            readonly Selector<TSource, TSubEnumerable> selector;
 
-            internal SelectManyEnumerable(in TEnumerable source, Func<TSource, TSubEnumerable> selector)
+            internal SelectManyEnumerable(in TEnumerable source, Selector<TSource, TSubEnumerable> selector)
             {
                 this.source = source;
                 this.selector = selector;
@@ -52,7 +52,7 @@ namespace NetFabric.Hyperlinq
             {
                 [SuppressMessage("Style", "IDE0044:Add readonly modifier")]
                 TEnumerator sourceEnumerator; // do not make readonly
-                readonly Func<TSource, TSubEnumerable> selector;
+                readonly Selector<TSource, TSubEnumerable> selector;
                 [SuppressMessage("Style", "IDE0044:Add readonly modifier")]
                 TSubEnumerator subEnumerator; // do not make readonly
                 int state;
