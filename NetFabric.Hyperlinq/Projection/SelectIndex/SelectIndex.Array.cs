@@ -12,7 +12,7 @@ namespace NetFabric.Hyperlinq
         [Pure]
         public static SelectIndexEnumerable<TSource, TResult> Select<TSource, TResult>(
             this TSource[] source, 
-            Func<TSource, int, TResult> selector)
+            SelectorAt<TSource, TResult> selector)
         {
             if (selector is null) ThrowHelper.ThrowArgumentNullException(nameof(selector));
 
@@ -22,7 +22,7 @@ namespace NetFabric.Hyperlinq
         [Pure]
         static SelectIndexEnumerable<TSource, TResult> Select<TSource, TResult>(
             this TSource[] source,
-            Func<TSource, int, TResult> selector,
+            SelectorAt<TSource, TResult> selector,
             int skipCount, int takeCount)
             => new SelectIndexEnumerable<TSource, TResult>(source, selector, skipCount, takeCount);
 
@@ -32,11 +32,11 @@ namespace NetFabric.Hyperlinq
             : IValueReadOnlyList<TResult, SelectIndexEnumerable<TSource, TResult>.Enumerator>
         {
             readonly TSource[] source;
-            readonly Func<TSource, int, TResult> selector;
+            readonly SelectorAt<TSource, TResult> selector;
             readonly int skipCount;
             readonly int takeCount;
 
-            internal SelectIndexEnumerable(TSource[] source, Func<TSource, int, TResult> selector, int skipCount, int takeCount)
+            internal SelectIndexEnumerable(TSource[] source, SelectorAt<TSource, TResult> selector, int skipCount, int takeCount)
             {
                 this.source = source;
                 this.selector = selector;
@@ -66,7 +66,7 @@ namespace NetFabric.Hyperlinq
                 : IEnumerator<TResult>
             {
                 readonly TSource[] source;
-                readonly Func<TSource, int, TResult> selector;
+                readonly SelectorAt<TSource, TResult> selector;
                 readonly int skipCount;
                 readonly int takeCount;
                 int index;
@@ -112,11 +112,11 @@ namespace NetFabric.Hyperlinq
                 => takeCount != 0;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public Array.SelectIndexEnumerable<TSource, TSelectorResult> Select<TSelectorResult>(Func<TResult, TSelectorResult> selector)
+            public Array.SelectIndexEnumerable<TSource, TSelectorResult> Select<TSelectorResult>(Selector<TResult, TSelectorResult> selector)
                 => Array.Select<TSource, TSelectorResult>(source, Utils.CombineSelectors(this.selector, selector), skipCount, takeCount);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public Array.SelectIndexEnumerable<TSource, TSelectorResult> Select<TSelectorResult>(Func<TResult, int, TSelectorResult> selector)
+            public Array.SelectIndexEnumerable<TSource, TSelectorResult> Select<TSelectorResult>(SelectorAt<TResult, TSelectorResult> selector)
                 => Array.Select<TSource, TSelectorResult>(source, Utils.CombineSelectors(this.selector, selector), skipCount, takeCount);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -151,9 +151,9 @@ namespace NetFabric.Hyperlinq
             public List<TResult> ToList()
                 => new List<TResult>(new ToListCollection(this));
 
-            public Dictionary<TKey, TResult> ToDictionary<TKey>(Func<TResult, TKey> keySelector)
+            public Dictionary<TKey, TResult> ToDictionary<TKey>(Selector<TResult, TKey> keySelector)
                 => ToDictionary<TKey>(keySelector, EqualityComparer<TKey>.Default);
-            public Dictionary<TKey, TResult> ToDictionary<TKey>(Func<TResult, TKey> keySelector, IEqualityComparer<TKey> comparer)
+            public Dictionary<TKey, TResult> ToDictionary<TKey>(Selector<TResult, TKey> keySelector, IEqualityComparer<TKey> comparer)
             {
                 var dictionary = new Dictionary<TKey, TResult>(source.Length, comparer);
 
@@ -168,9 +168,9 @@ namespace NetFabric.Hyperlinq
                 return dictionary;
             }
 
-            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Func<TResult, TKey> keySelector, Func<TResult, TElement> elementSelector)
+            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Selector<TResult, TKey> keySelector, Selector<TResult, TElement> elementSelector)
                 => ToDictionary<TKey, TElement>(keySelector, elementSelector, EqualityComparer<TKey>.Default);
-            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Func<TResult, TKey> keySelector, Func<TResult, TElement> elementSelector, IEqualityComparer<TKey> comparer)
+            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Selector<TResult, TKey> keySelector, Selector<TResult, TElement> elementSelector, IEqualityComparer<TKey> comparer)
             {
                 var dictionary = new Dictionary<TKey, TElement>(source.Length, comparer);
 
@@ -204,7 +204,7 @@ namespace NetFabric.Hyperlinq
                 : ICollection<TResult>
             {
                 internal readonly TSource[] source;
-                internal readonly Func<TSource, int, TResult> selector;
+                internal readonly SelectorAt<TSource, TResult> selector;
                 internal readonly int skipCount;
                 internal readonly int takeCount;
 

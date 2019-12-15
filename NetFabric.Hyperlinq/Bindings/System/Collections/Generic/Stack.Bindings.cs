@@ -62,18 +62,18 @@ namespace NetFabric.Hyperlinq
         [Pure]
         public static ValueReadOnlyCollection.SelectEnumerable<ValueWrapper<TSource>, Stack<TSource>.Enumerator, TSource, TResult> Select<TSource, TResult>(
             this Stack<TSource> source,
-            Func<TSource, TResult> selector)
+            Selector<TSource, TResult> selector)
             => ValueReadOnlyCollection.Select<ValueWrapper<TSource>, Stack<TSource>.Enumerator, TSource, TResult>(new ValueWrapper<TSource>(source), selector);
         [Pure]
         public static ValueReadOnlyCollection.SelectIndexEnumerable<ValueWrapper<TSource>, Stack<TSource>.Enumerator, TSource, TResult> Select<TSource, TResult>(
             this Stack<TSource> source,
-            Func<TSource, int, TResult> selector)
+            SelectorAt<TSource, TResult> selector)
             => ValueReadOnlyCollection.Select<ValueWrapper<TSource>, Stack<TSource>.Enumerator, TSource, TResult>(new ValueWrapper<TSource>(source), selector);
 
         [Pure]
         public static ValueEnumerable.SelectManyEnumerable<ValueWrapper<TSource>, Stack<TSource>.Enumerator, TSource, TSubEnumerable, TSubEnumerator, TResult> SelectMany<TSource, TSubEnumerable, TSubEnumerator, TResult>(
             this Stack<TSource> source,
-            Func<TSource, TSubEnumerable> selector)
+            Selector<TSource, TSubEnumerable> selector)
             where TSubEnumerable : IValueEnumerable<TResult, TSubEnumerator>
             where TSubEnumerator : struct, IEnumerator<TResult>
             => ValueEnumerable.SelectMany<ValueWrapper<TSource>, Stack<TSource>.Enumerator, TSource, TSubEnumerable, TSubEnumerator, TResult>(new ValueWrapper<TSource>(source), selector);
@@ -161,16 +161,16 @@ namespace NetFabric.Hyperlinq
             => ValueReadOnlyCollection.ToList<ValueWrapper<TSource>, Stack<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source));
 
         [Pure]
-        public static Dictionary<TKey, TSource> ToDictionary<TSource, TKey>(this Stack<TSource> source, Func<TSource, TKey> keySelector)
+        public static Dictionary<TKey, TSource> ToDictionary<TSource, TKey>(this Stack<TSource> source, Selector<TSource, TKey> keySelector)
             => ValueReadOnlyCollection.ToDictionary<ValueWrapper<TSource>, Stack<TSource>.Enumerator, TSource, TKey>(new ValueWrapper<TSource>(source), keySelector);
         [Pure]
-        public static Dictionary<TKey, TSource> ToDictionary<TSource, TKey>(this Stack<TSource> source, Func<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer)
+        public static Dictionary<TKey, TSource> ToDictionary<TSource, TKey>(this Stack<TSource> source, Selector<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer)
             => ValueReadOnlyCollection.ToDictionary<ValueWrapper<TSource>, Stack<TSource>.Enumerator, TSource, TKey>(new ValueWrapper<TSource>(source), keySelector, comparer);
         [Pure]
-        public static Dictionary<TKey, TElement> ToDictionary<TSource, TKey, TElement>(this Stack<TSource> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector)
+        public static Dictionary<TKey, TElement> ToDictionary<TSource, TKey, TElement>(this Stack<TSource> source, Selector<TSource, TKey> keySelector, Selector<TSource, TElement> elementSelector)
             => ValueReadOnlyCollection.ToDictionary<ValueWrapper<TSource>, Stack<TSource>.Enumerator, TSource, TKey, TElement>(new ValueWrapper<TSource>(source), keySelector, elementSelector);
         [Pure]
-        public static Dictionary<TKey, TElement> ToDictionary<TSource, TKey, TElement>(this Stack<TSource> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer)
+        public static Dictionary<TKey, TElement> ToDictionary<TSource, TKey, TElement>(this Stack<TSource> source, Selector<TSource, TKey> keySelector, Selector<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer)
             => ValueReadOnlyCollection.ToDictionary<ValueWrapper<TSource>, Stack<TSource>.Enumerator, TSource, TKey, TElement>(new ValueWrapper<TSource>(source), keySelector, elementSelector, comparer);
 
         public static void ForEach<TSource>(this Stack<TSource> source, Action<TSource> action)

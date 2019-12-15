@@ -12,7 +12,7 @@ namespace NetFabric.Hyperlinq.UnitTests
         {
             // Arrange
             var list = Wrap.AsValueReadOnlyList(new int[0]);
-            var selector = (Func<int, string>)null;
+            var selector = (Selector<int, string>)null;
 
             // Act
             Action action = () => ValueReadOnlyList.Select<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int, string>(list, selector);

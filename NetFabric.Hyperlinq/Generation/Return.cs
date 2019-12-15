@@ -121,7 +121,7 @@ namespace NetFabric.Hyperlinq
                 => comparer.Equals(this.value, value);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public ReturnEnumerable<TResult> Select<TResult>(Func<TSource, TResult> selector)
+            public ReturnEnumerable<TResult> Select<TResult>(Selector<TSource, TResult> selector)
                 => new ReturnEnumerable<TResult>(selector(value));
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -149,14 +149,14 @@ namespace NetFabric.Hyperlinq
             public List<TSource> ToList()
                 => new List<TSource>(1) { value };
 
-            public Dictionary<TKey, TSource> ToDictionary<TKey>(Func<TSource, TKey> keySelector)
+            public Dictionary<TKey, TSource> ToDictionary<TKey>(Selector<TSource, TKey> keySelector)
                 => ToDictionary<TKey>(keySelector, EqualityComparer<TKey>.Default);
-            public Dictionary<TKey, TSource> ToDictionary<TKey>(Func<TSource, TKey> keySelector, IEqualityComparer<TKey> comparer)
+            public Dictionary<TKey, TSource> ToDictionary<TKey>(Selector<TSource, TKey> keySelector, IEqualityComparer<TKey> comparer)
                 => new Dictionary<TKey, TSource>(1, comparer) { { keySelector(value), value } };
 
-            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector)
+            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Selector<TSource, TKey> keySelector, Selector<TSource, TElement> elementSelector)
                 => ToDictionary<TKey, TElement>(keySelector, elementSelector, EqualityComparer<TKey>.Default);
-            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, IEqualityComparer<TKey> comparer)
+            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Selector<TSource, TKey> keySelector, Selector<TSource, TElement> elementSelector, IEqualityComparer<TKey> comparer)
                 => new Dictionary<TKey, TElement>(1, comparer) { { keySelector(value), elementSelector(value) } };
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]

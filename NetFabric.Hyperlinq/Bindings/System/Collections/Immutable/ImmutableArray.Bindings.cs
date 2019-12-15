@@ -54,18 +54,18 @@ namespace NetFabric.Hyperlinq
         [Pure]
         public static ValueReadOnlyList.SelectEnumerable<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource, TResult> SelectHyper<TSource, TResult>(
             this ImmutableArray<TSource> source,
-            Func<TSource, TResult> selector)
+            Selector<TSource, TResult> selector)
             => ValueReadOnlyList.Select<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource, TResult>(new ValueWrapper<TSource>(source), selector);
         [Pure]
         public static ValueReadOnlyList.SelectIndexEnumerable<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource, TResult> SelectHyper<TSource, TResult>(
             this ImmutableArray<TSource> source,
-            Func<TSource, int, TResult> selector)
+            SelectorAt<TSource, TResult> selector)
             => ValueReadOnlyList.Select<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource, TResult>(new ValueWrapper<TSource>(source), selector);
 
         [Pure]
         public static ValueReadOnlyList.SelectManyEnumerable<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource, TSubEnumerable, TSubEnumerator, TResult> SelectMany<TSource, TSubEnumerable, TSubEnumerator, TResult>(
             this ImmutableArray<TSource> source,
-            Func<TSource, TSubEnumerable> selector)
+            Selector<TSource, TSubEnumerable> selector)
             where TSubEnumerable : IValueEnumerable<TResult, TSubEnumerator>
             where TSubEnumerator : struct, IEnumerator<TResult>
             => ValueReadOnlyList.SelectMany<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource, TSubEnumerable, TSubEnumerator, TResult>(new ValueWrapper<TSource>(source), selector);

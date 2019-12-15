@@ -128,7 +128,7 @@ namespace NetFabric.Hyperlinq
                 => count != 0 && comparer.Equals(this.value, value);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public RepeatEnumerable<TResult> Select<TResult>(Func<TSource, TResult> selector) 
+            public RepeatEnumerable<TResult> Select<TResult>(Selector<TSource, TResult> selector) 
                 => new RepeatEnumerable<TResult>(selector(value), count);
 
             public TSource[] ToArray()
@@ -150,9 +150,9 @@ namespace NetFabric.Hyperlinq
             public List<TSource> ToList()
                 => new List<TSource>(new ToListCollection(this));
 
-            public Dictionary<TKey, TSource> ToDictionary<TKey>(Func<TSource, TKey> keySelector)
+            public Dictionary<TKey, TSource> ToDictionary<TKey>(Selector<TSource, TKey> keySelector)
                 => ToDictionary<TKey>(keySelector, EqualityComparer<TKey>.Default);
-            public Dictionary<TKey, TSource> ToDictionary<TKey>(Func<TSource, TKey> keySelector, IEqualityComparer<TKey> comparer)
+            public Dictionary<TKey, TSource> ToDictionary<TKey>(Selector<TSource, TKey> keySelector, IEqualityComparer<TKey> comparer)
             {
                 var dictionary = new Dictionary<TKey, TSource>(count, comparer);
 
@@ -163,9 +163,9 @@ namespace NetFabric.Hyperlinq
                 return dictionary;
             }
 
-            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector)
+            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Selector<TSource, TKey> keySelector, Selector<TSource, TElement> elementSelector)
                 => ToDictionary<TKey, TElement>(keySelector, elementSelector, EqualityComparer<TKey>.Default);
-            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, IEqualityComparer<TKey> comparer)
+            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Selector<TSource, TKey> keySelector, Selector<TSource, TElement> elementSelector, IEqualityComparer<TKey> comparer)
             {
                 var dictionary = new Dictionary<TKey, TElement>(count, comparer);
 

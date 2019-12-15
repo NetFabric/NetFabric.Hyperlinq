@@ -12,7 +12,7 @@ namespace NetFabric.Hyperlinq
         [Pure]
         public static SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult> Select<TEnumerable, TEnumerator, TSource, TResult>(
             this TEnumerable source, 
-            Func<TSource, TResult> selector)
+            Selector<TSource, TResult> selector)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
@@ -31,9 +31,9 @@ namespace NetFabric.Hyperlinq
             where TEnumerator : struct, IEnumerator<TSource>
         {
             readonly TEnumerable source;
-            readonly Func<TSource, TResult> selector;
+            readonly Selector<TSource, TResult> selector;
 
-            internal SelectEnumerable(in TEnumerable source, Func<TSource, TResult> selector)
+            internal SelectEnumerable(in TEnumerable source, Selector<TSource, TResult> selector)
             {
                 this.source = source;
                 this.selector = selector;
@@ -50,7 +50,7 @@ namespace NetFabric.Hyperlinq
             {
                 [SuppressMessage("Style", "IDE0044:Add readonly modifier")]
                 TEnumerator enumerator; // do not make readonly
-                readonly Func<TSource, TResult> selector;
+                readonly Selector<TSource, TResult> selector;
 
                 internal Enumerator(in SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult> enumerable)
                 {
@@ -92,11 +92,11 @@ namespace NetFabric.Hyperlinq
                 => ValueEnumerable.Any<TEnumerable, TEnumerator, TSource>(source);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public ValueEnumerable.SelectEnumerable<TEnumerable, TEnumerator, TSource, TSelectorResult> Select<TSelectorResult>(Func<TResult, TSelectorResult> selector)
+            public ValueEnumerable.SelectEnumerable<TEnumerable, TEnumerator, TSource, TSelectorResult> Select<TSelectorResult>(Selector<TResult, TSelectorResult> selector)
                 => ValueEnumerable.Select<TEnumerable, TEnumerator, TSource, TSelectorResult>(source, Utils.CombineSelectors(this.selector, selector));
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public ValueEnumerable.SelectIndexEnumerable<TEnumerable, TEnumerator, TSource, TSelectorResult> Select<TSelectorResult>(Func<TResult, int, TSelectorResult> selector)
+            public ValueEnumerable.SelectIndexEnumerable<TEnumerable, TEnumerator, TSource, TSelectorResult> Select<TSelectorResult>(SelectorAt<TResult, TSelectorResult> selector)
                 => ValueEnumerable.Select<TEnumerable, TEnumerator, TSource, TSelectorResult>(source, Utils.CombineSelectors(this.selector, selector));
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -142,9 +142,9 @@ namespace NetFabric.Hyperlinq
                 return list;
             }
 
-            public Dictionary<TKey, TResult> ToDictionary<TKey>(Func<TResult, TKey> keySelector)
+            public Dictionary<TKey, TResult> ToDictionary<TKey>(Selector<TResult, TKey> keySelector)
                 => ToDictionary<TKey>(keySelector, EqualityComparer<TKey>.Default);
-            public Dictionary<TKey, TResult> ToDictionary<TKey>(Func<TResult, TKey> keySelector, IEqualityComparer<TKey> comparer)
+            public Dictionary<TKey, TResult> ToDictionary<TKey>(Selector<TResult, TKey> keySelector, IEqualityComparer<TKey> comparer)
             {
                 var dictionary = new Dictionary<TKey, TResult>(0, comparer);
 
@@ -159,9 +159,9 @@ namespace NetFabric.Hyperlinq
                 return dictionary;
             }
 
-            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Func<TResult, TKey> keySelector, Func<TResult, TElement> elementSelector)
+            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Selector<TResult, TKey> keySelector, Selector<TResult, TElement> elementSelector)
                 => ToDictionary<TKey, TElement>(keySelector, elementSelector, EqualityComparer<TKey>.Default);
-            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Func<TResult, TKey> keySelector, Func<TResult, TElement> elementSelector, IEqualityComparer<TKey> comparer)
+            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Selector<TResult, TKey> keySelector, Selector<TResult, TElement> elementSelector, IEqualityComparer<TKey> comparer)
             {
                 var dictionary = new Dictionary<TKey, TElement>(0, comparer);
 

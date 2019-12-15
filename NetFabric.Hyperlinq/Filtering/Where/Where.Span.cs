@@ -59,7 +59,7 @@ namespace NetFabric.Hyperlinq
             public int Count()
                 => source.Count(predicate);
 
-            public WhereSelectEnumerable<TSource, TResult> Select<TResult>(Func<TSource, TResult> selector)
+            public WhereSelectEnumerable<TSource, TResult> Select<TResult>(Selector<TSource, TResult> selector)
                 => WhereSelect<TSource, TResult>(source, predicate, selector);
 
             public TSource First()

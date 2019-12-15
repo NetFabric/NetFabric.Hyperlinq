@@ -141,9 +141,9 @@ namespace NetFabric.Hyperlinq
             public List<int> ToList()
                 => new List<int>(new ToListCollection(this));
 
-            public Dictionary<TKey, int> ToDictionary<TKey>(Func<int, TKey> keySelector)
+            public Dictionary<TKey, int> ToDictionary<TKey>(Selector<int, TKey> keySelector)
                 => ToDictionary<TKey>(keySelector, EqualityComparer<TKey>.Default);
-            public Dictionary<TKey, int> ToDictionary<TKey>(Func<int, TKey> keySelector, IEqualityComparer<TKey> comparer)
+            public Dictionary<TKey, int> ToDictionary<TKey>(Selector<int, TKey> keySelector, IEqualityComparer<TKey> comparer)
             {
                 var dictionary = new Dictionary<TKey, int>(count, comparer);
 
@@ -154,9 +154,9 @@ namespace NetFabric.Hyperlinq
                 return dictionary;
             }
 
-            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Func<int, TKey> keySelector, Func<int, TElement> elementSelector)
+            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Selector<int, TKey> keySelector, Selector<int, TElement> elementSelector)
                 => ToDictionary<TKey, TElement>(keySelector, elementSelector, EqualityComparer<TKey>.Default);
-            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Func<int, TKey> keySelector, Func<int, TElement> elementSelector, IEqualityComparer<TKey> comparer)
+            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Selector<int, TKey> keySelector, Selector<int, TElement> elementSelector, IEqualityComparer<TKey> comparer)
             {
                 var dictionary = new Dictionary<TKey, TElement>(count, comparer);
 

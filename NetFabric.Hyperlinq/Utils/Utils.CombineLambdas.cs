@@ -16,16 +16,16 @@ namespace NetFabric.Hyperlinq
         public static PredicateAt<TSource> CombinePredicates<TSource>(PredicateAt<TSource> first, PredicateAt<TSource> second) => 
             (item, index) => first(item, index) && second(item, index);
 
-        public static Func<TSource, TTarget> CombineSelectors<TSource, TMiddle, TTarget>(Func<TSource, TMiddle> first, Func<TMiddle, TTarget> second) => 
+        public static Selector<TSource, TTarget> CombineSelectors<TSource, TMiddle, TTarget>(Selector<TSource, TMiddle> first, Selector<TMiddle, TTarget> second) => 
             item => second(first(item));
 
-        public static Func<TSource, int, TTarget> CombineSelectors<TSource, TMiddle, TTarget>(Func<TSource, int, TMiddle> first, Func<TMiddle, TTarget> second) => 
+        public static SelectorAt<TSource, TTarget> CombineSelectors<TSource, TMiddle, TTarget>(SelectorAt<TSource, TMiddle> first, Selector<TMiddle, TTarget> second) => 
             (item, index) => second(first(item, index));
 
-        public static Func<TSource, int, TTarget> CombineSelectors<TSource, TMiddle, TTarget>(Func<TSource, TMiddle> first, Func<TMiddle, int, TTarget> second) => 
+        public static SelectorAt<TSource, TTarget> CombineSelectors<TSource, TMiddle, TTarget>(Selector<TSource, TMiddle> first, SelectorAt<TMiddle, TTarget> second) => 
             (item, index) => second(first(item), index);
 
-        public static Func<TSource, int, TTarget> CombineSelectors<TSource, TMiddle, TTarget>(Func<TSource, int, TMiddle> first, Func<TMiddle, int, TTarget> second) => 
+        public static SelectorAt<TSource, TTarget> CombineSelectors<TSource, TMiddle, TTarget>(SelectorAt<TSource, TMiddle> first, SelectorAt<TMiddle, TTarget> second) => 
             (item, index) => second(first(item, index), index);
     }
 }

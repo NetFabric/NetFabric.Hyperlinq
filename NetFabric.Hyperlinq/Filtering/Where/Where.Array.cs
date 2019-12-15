@@ -104,7 +104,7 @@ namespace NetFabric.Hyperlinq
             public bool Any(PredicateAt<TSource> predicate)
                 => Array.Any<TSource>(source, Utils.CombinePredicates(this.predicate, predicate), skipCount, takeCount);
 
-            public Array.WhereSelectEnumerable<TSource, TResult> Select<TResult>(Func<TSource, TResult> selector)
+            public Array.WhereSelectEnumerable<TSource, TResult> Select<TResult>(Selector<TSource, TResult> selector)
                 => Array.WhereSelect<TSource, TResult>(source, predicate, selector);
 
             public Array.WhereEnumerable<TSource> Where(Predicate<TSource> predicate)
@@ -149,13 +149,13 @@ namespace NetFabric.Hyperlinq
             public List<TSource> ToList()
                 => Array.ToList<TSource>(source, predicate, skipCount, takeCount);
 
-            public Dictionary<TKey, TSource> ToDictionary<TKey>(Func<TSource, TKey> keySelector)
+            public Dictionary<TKey, TSource> ToDictionary<TKey>(Selector<TSource, TKey> keySelector)
                 => Array.ToDictionary<TSource, TKey>(source, keySelector, EqualityComparer<TKey>.Default, predicate, skipCount, takeCount);
-            public Dictionary<TKey, TSource> ToDictionary<TKey>(Func<TSource, TKey> keySelector, IEqualityComparer<TKey> comparer)
+            public Dictionary<TKey, TSource> ToDictionary<TKey>(Selector<TSource, TKey> keySelector, IEqualityComparer<TKey> comparer)
                 => Array.ToDictionary<TSource, TKey>(source, keySelector, comparer, predicate, skipCount, takeCount);
-            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector)
+            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Selector<TSource, TKey> keySelector, Selector<TSource, TElement> elementSelector)
                 => Array.ToDictionary<TSource, TKey, TElement>(source, keySelector, elementSelector, EqualityComparer<TKey>.Default, predicate, skipCount, takeCount);
-            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, IEqualityComparer<TKey> comparer)
+            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Selector<TSource, TKey> keySelector, Selector<TSource, TElement> elementSelector, IEqualityComparer<TKey> comparer)
                 => Array.ToDictionary<TSource, TKey, TElement>(source, keySelector, elementSelector, comparer, predicate, skipCount, takeCount);
 
             public void ForEach(Action<TSource> action)

@@ -83,10 +83,10 @@ namespace ConsoleApp
   - `AsValueEnumerable()`
   - `ToArray()`
   - `ToList()`
-  - `ToDictionary(Func<TSource, TKey>)`
-  - `ToDictionary(Func<TSource, TKey>, IEqualityComparer<TKey>)`
-  - `ToDictionary(Func<TSource, TKey>, Func<TSource, TElement>)`
-  - `ToDictionary(Func<TSource, TKey>, Func<TSource, TElement>, IEqualityComparer<TKey>)`
+  - `ToDictionary(Selector<TSource, TKey>)`
+  - `ToDictionary(Selector<TSource, TKey>, IEqualityComparer<TKey>)`
+  - `ToDictionary(Selector<TSource, TKey>, Selector<TSource, TElement>)`
+  - `ToDictionary(Selector<TSource, TKey>, Selector<TSource, TElement>, IEqualityComparer<TKey>)`
 - Element
   - `TryElementAt()`
   - `TryElementAt(Predicate<TSource>)`
@@ -122,8 +122,8 @@ namespace ConsoleApp
   - `Repeat(TSource, int)`
   - `Return(TSource)`
 - Projection
-  - `Select(Func<TSource, TResult>)`
-  - `Select(Func<TSource, int, TResult>)`
+  - `Select(Selector<TSource, TResult>)`
+  - `Select(SelectorAt<TSource, TResult>)`
   - `SelectMany(IValueEnumerable<TSource>)`
 - Partitioning
   - `Take(int)`

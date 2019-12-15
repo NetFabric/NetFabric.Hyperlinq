@@ -11,7 +11,7 @@ namespace NetFabric.Hyperlinq.UnitTests
         {
             // Arrange
             var enumerable = Wrap.AsValueEnumerable(new int[0]);
-            var selector = (Func<int, string>)null;
+            var selector = (Selector<int, string>)null;
 
             // Act
             Action action = () => ValueEnumerable.Select<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int, string>(enumerable, selector);

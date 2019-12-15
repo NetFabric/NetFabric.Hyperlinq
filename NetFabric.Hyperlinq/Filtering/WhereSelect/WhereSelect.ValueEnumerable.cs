@@ -13,7 +13,7 @@ namespace NetFabric.Hyperlinq
         internal static WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult> WhereSelect<TEnumerable, TEnumerator, TSource, TResult>(
             this TEnumerable source, 
             Predicate<TSource> predicate,
-            Func<TSource, TResult> selector)
+            Selector<TSource, TResult> selector)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
@@ -32,9 +32,9 @@ namespace NetFabric.Hyperlinq
         {
             readonly TEnumerable source;
             readonly Predicate<TSource> predicate;
-            readonly Func<TSource, TResult> selector;
+            readonly Selector<TSource, TResult> selector;
 
-            internal WhereSelectEnumerable(in TEnumerable source, Predicate<TSource> predicate, Func<TSource, TResult> selector)
+            internal WhereSelectEnumerable(in TEnumerable source, Predicate<TSource> predicate, Selector<TSource, TResult> selector)
             {
                 this.source = source;
                 this.predicate = predicate;
@@ -53,7 +53,7 @@ namespace NetFabric.Hyperlinq
                 [SuppressMessage("Style", "IDE0044:Add readonly modifier")]
                 TEnumerator enumerator; // do not make readonly
                 readonly Predicate<TSource> predicate;
-                readonly Func<TSource, TResult> selector;
+                readonly Selector<TSource, TResult> selector;
 
                 internal Enumerator(in WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult> enumerable)
                 {
@@ -118,9 +118,9 @@ namespace NetFabric.Hyperlinq
                 return list;
             }
 
-            public Dictionary<TKey, TResult> ToDictionary<TKey>(Func<TResult, TKey> keySelector)
+            public Dictionary<TKey, TResult> ToDictionary<TKey>(Selector<TResult, TKey> keySelector)
                 => ToDictionary<TKey>(keySelector, EqualityComparer<TKey>.Default);
-            public Dictionary<TKey, TResult> ToDictionary<TKey>(Func<TResult, TKey> keySelector, IEqualityComparer<TKey> comparer)
+            public Dictionary<TKey, TResult> ToDictionary<TKey>(Selector<TResult, TKey> keySelector, IEqualityComparer<TKey> comparer)
             {
                 var dictionary = new Dictionary<TKey, TResult>(0, comparer);
 
@@ -138,9 +138,9 @@ namespace NetFabric.Hyperlinq
                 return dictionary;
             }
 
-            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Func<TResult, TKey> keySelector, Func<TResult, TElement> elementSelector)
+            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Selector<TResult, TKey> keySelector, Selector<TResult, TElement> elementSelector)
                 => ToDictionary<TKey, TElement>(keySelector, elementSelector, EqualityComparer<TKey>.Default);
-            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Func<TResult, TKey> keySelector, Func<TResult, TElement> elementSelector, IEqualityComparer<TKey> comparer)
+            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Selector<TResult, TKey> keySelector, Selector<TResult, TElement> elementSelector, IEqualityComparer<TKey> comparer)
             {
                 var dictionary = new Dictionary<TKey, TElement>(0, comparer);
 
