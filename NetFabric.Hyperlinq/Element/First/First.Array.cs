@@ -24,7 +24,7 @@ namespace NetFabric.Hyperlinq
         }
 
         [Pure]
-        public static ref readonly TSource First<TSource>(this TSource[] source, Func<TSource, bool> predicate) 
+        public static ref readonly TSource First<TSource>(this TSource[] source, Predicate<TSource> predicate) 
         {
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
 
@@ -32,7 +32,7 @@ namespace NetFabric.Hyperlinq
         }
 
         [Pure]
-        static ref readonly TSource First<TSource>(this TSource[] source, Func<TSource, bool> predicate, int skipCount, int takeCount)
+        static ref readonly TSource First<TSource>(this TSource[] source, Predicate<TSource> predicate, int skipCount, int takeCount)
         {
             var end = skipCount + takeCount;
             for (var index = skipCount; index < end; index++)
@@ -44,7 +44,7 @@ namespace NetFabric.Hyperlinq
         }
 
         [Pure]
-        public static ref readonly TSource First<TSource>(this TSource[] source, Func<TSource, int, bool> predicate)
+        public static ref readonly TSource First<TSource>(this TSource[] source, PredicateAt<TSource> predicate)
         {
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
 
@@ -52,7 +52,7 @@ namespace NetFabric.Hyperlinq
         }
 
         [Pure]
-        static ref readonly TSource First<TSource>(this TSource[] source, Func<TSource, int, bool> predicate, int skipCount, int takeCount)
+        static ref readonly TSource First<TSource>(this TSource[] source, PredicateAt<TSource> predicate, int skipCount, int takeCount)
         {
             var end = skipCount + takeCount;
             for (var index = skipCount; index < end; index++)
@@ -64,7 +64,7 @@ namespace NetFabric.Hyperlinq
         }
 
         [Pure]
-        public static ref readonly TSource First<TSource>(this TSource[] source, Func<TSource, int, bool> predicate, out int index) 
+        public static ref readonly TSource First<TSource>(this TSource[] source, PredicateAt<TSource> predicate, out int index) 
         {
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
 
@@ -72,7 +72,7 @@ namespace NetFabric.Hyperlinq
         }
 
         [Pure]
-        static ref readonly TSource First<TSource>(this TSource[] source, Func<TSource, int, bool> predicate, out int index, int skipCount, int takeCount)
+        static ref readonly TSource First<TSource>(this TSource[] source, PredicateAt<TSource> predicate, out int index, int skipCount, int takeCount)
         {
             var end = skipCount + takeCount;
             for (index = skipCount; index < end; index++)
@@ -104,7 +104,7 @@ namespace NetFabric.Hyperlinq
 
         [Pure]
         [return: MaybeNull]
-        public static ref readonly TSource FirstOrDefault<TSource>(this TSource[] source, Func<TSource, bool> predicate) 
+        public static ref readonly TSource FirstOrDefault<TSource>(this TSource[] source, Predicate<TSource> predicate) 
         {
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
 
@@ -113,7 +113,7 @@ namespace NetFabric.Hyperlinq
 
         [Pure]
         [return: MaybeNull]
-        static ref readonly TSource FirstOrDefault<TSource>(this TSource[] source, Func<TSource, bool> predicate, int skipCount, int takeCount)
+        static ref readonly TSource FirstOrDefault<TSource>(this TSource[] source, Predicate<TSource> predicate, int skipCount, int takeCount)
         {
             var end = skipCount + takeCount;
             for (var index = skipCount; index < end; index++)
@@ -126,7 +126,7 @@ namespace NetFabric.Hyperlinq
 
         [Pure]
         [return: MaybeNull]
-        public static ref readonly TSource FirstOrDefault<TSource>(this TSource[] source, Func<TSource, int, bool> predicate)
+        public static ref readonly TSource FirstOrDefault<TSource>(this TSource[] source, PredicateAt<TSource> predicate)
         {
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
 
@@ -135,7 +135,7 @@ namespace NetFabric.Hyperlinq
 
         [Pure]
         [return: MaybeNull]
-        static ref readonly TSource FirstOrDefault<TSource>(this TSource[] source, Func<TSource, int, bool> predicate, int skipCount, int takeCount)
+        static ref readonly TSource FirstOrDefault<TSource>(this TSource[] source, PredicateAt<TSource> predicate, int skipCount, int takeCount)
         {
             var end = skipCount + takeCount;
             for (var index = skipCount; index < end; index++)
@@ -148,7 +148,7 @@ namespace NetFabric.Hyperlinq
 
         [Pure]
         [return: MaybeNull]
-        public static ref readonly TSource FirstOrDefault<TSource>(this TSource[] source, Func<TSource, int, bool> predicate, out int index) 
+        public static ref readonly TSource FirstOrDefault<TSource>(this TSource[] source, PredicateAt<TSource> predicate, out int index) 
         {
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
 
@@ -157,7 +157,7 @@ namespace NetFabric.Hyperlinq
 
         [Pure]
         [return: MaybeNull]
-        static ref readonly TSource FirstOrDefault<TSource>(this TSource[] source, Func<TSource, int, bool> predicate, out int index, int skipCount, int takeCount)
+        static ref readonly TSource FirstOrDefault<TSource>(this TSource[] source, PredicateAt<TSource> predicate, out int index, int skipCount, int takeCount)
         {
             var end = skipCount + takeCount;
             for (index = skipCount; index < end; index++)

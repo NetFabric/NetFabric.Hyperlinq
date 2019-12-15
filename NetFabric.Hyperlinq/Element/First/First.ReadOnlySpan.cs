@@ -17,7 +17,7 @@ namespace NetFabric.Hyperlinq
         }
 
         [Pure]
-        public static ref readonly TSource First<TSource>(this ReadOnlySpan<TSource> source, Func<TSource, bool> predicate)
+        public static ref readonly TSource First<TSource>(this ReadOnlySpan<TSource> source, Predicate<TSource> predicate)
         {
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
 
@@ -32,7 +32,7 @@ namespace NetFabric.Hyperlinq
         }
 
         [Pure]
-        public static ref readonly TSource First<TSource>(this ReadOnlySpan<TSource> source, Func<TSource, int, bool> predicate)
+        public static ref readonly TSource First<TSource>(this ReadOnlySpan<TSource> source, PredicateAt<TSource> predicate)
         {
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
 
@@ -47,7 +47,7 @@ namespace NetFabric.Hyperlinq
         }
 
         [Pure]
-        public static ref readonly TSource First<TSource>(this ReadOnlySpan<TSource> source, Func<TSource, int, bool> predicate, out int index)
+        public static ref readonly TSource First<TSource>(this ReadOnlySpan<TSource> source, PredicateAt<TSource> predicate, out int index)
         {
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
 
@@ -73,7 +73,7 @@ namespace NetFabric.Hyperlinq
 
         [Pure]
         [return: MaybeNull]
-        public static ref readonly TSource FirstOrDefault<TSource>(this ReadOnlySpan<TSource> source, Func<TSource, bool> predicate)
+        public static ref readonly TSource FirstOrDefault<TSource>(this ReadOnlySpan<TSource> source, Predicate<TSource> predicate)
         {
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
 
@@ -88,7 +88,7 @@ namespace NetFabric.Hyperlinq
 
         [Pure]
         [return: MaybeNull]
-        public static ref readonly TSource FirstOrDefault<TSource>(this ReadOnlySpan<TSource> source, Func<TSource, int, bool> predicate)
+        public static ref readonly TSource FirstOrDefault<TSource>(this ReadOnlySpan<TSource> source, PredicateAt<TSource> predicate)
         {
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
 
@@ -103,7 +103,7 @@ namespace NetFabric.Hyperlinq
 
         [Pure]
         [return: MaybeNull]
-        public static ref readonly TSource FirstOrDefault<TSource>(this ReadOnlySpan<TSource> source, Func<TSource, int, bool> predicate, out int index)
+        public static ref readonly TSource FirstOrDefault<TSource>(this ReadOnlySpan<TSource> source, PredicateAt<TSource> predicate, out int index)
         {
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
 

@@ -7,7 +7,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
     [MarkdownExporterAttribute.GitHub]
     public class LambdaBenchmarks
     {
-        readonly Func<int, bool> predicate = item => item == 0;
+        readonly Predicate<int> predicate = item => item == 0;
 
         [Benchmark(Baseline = true)]
         public bool Lambda() 
@@ -17,7 +17,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public bool Local()
             => MethodLocal(1, item => item == 1);
 
-        bool MethodLocal(int value, Func<int, bool> predicate)
+        bool MethodLocal(int value, Predicate<int> predicate)
         {
             return Method(value, CombinePredicates);
 
@@ -25,13 +25,13 @@ namespace NetFabric.Hyperlinq.Benchmarks
                 => this.predicate(item) && predicate(item);
         }
 
-        bool MethodLambda(int value, Func<int, bool> predicate)
+        bool MethodLambda(int value, Predicate<int> predicate)
             => Method(value, CombinePredicates(this.predicate, predicate));
 
-        static Func<int, bool> CombinePredicates(Func<int, bool> predicate0, Func<int, bool> predicate1)
+        static Predicate<int> CombinePredicates(Predicate<int> predicate0, Predicate<int> predicate1)
                 => item => predicate0(item) && predicate1(item);
 
-        static bool Method(int value, Func<int, bool> predicate)
+        static bool Method(int value, Predicate<int> predicate)
             => predicate(value);
     }
 }

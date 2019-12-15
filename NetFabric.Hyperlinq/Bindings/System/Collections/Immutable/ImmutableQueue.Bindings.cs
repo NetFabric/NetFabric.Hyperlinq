@@ -15,17 +15,17 @@ namespace NetFabric.Hyperlinq
         public static int Count<TSource>(this ImmutableQueue<TSource> source)
             => ValueEnumerable.Count<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source));
         [Pure]
-        public static int Count<TSource>(this ImmutableQueue<TSource> source, Func<TSource, bool> predicate)
+        public static int Count<TSource>(this ImmutableQueue<TSource> source, Predicate<TSource> predicate)
             => ValueEnumerable.Count<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
         [Pure]
-        public static int Count<TSource>(this ImmutableQueue<TSource> source, Func<TSource, int, bool> predicate)
+        public static int Count<TSource>(this ImmutableQueue<TSource> source, PredicateAt<TSource> predicate)
             => ValueEnumerable.Count<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
 
         [Pure]
         public static long LongCount<TSource>(this ImmutableQueue<TSource> source)
             => ValueEnumerable.LongCount<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source));
         [Pure]
-        public static long LongCount<TSource>(this ImmutableQueue<TSource> source, Func<TSource, bool> predicate)
+        public static long LongCount<TSource>(this ImmutableQueue<TSource> source, Predicate<TSource> predicate)
             => ValueEnumerable.LongCount<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
 
         [Pure]
@@ -37,20 +37,20 @@ namespace NetFabric.Hyperlinq
             => ValueEnumerable.Take<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), count);
 
         [Pure]
-        public static bool All<TSource>(this ImmutableQueue<TSource> source, Func<TSource, bool> predicate)
+        public static bool All<TSource>(this ImmutableQueue<TSource> source, Predicate<TSource> predicate)
             => ValueEnumerable.All<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
         [Pure]
-        public static bool All<TSource>(this ImmutableQueue<TSource> source, Func<TSource, int, bool> predicate)
+        public static bool All<TSource>(this ImmutableQueue<TSource> source, PredicateAt<TSource> predicate)
             => ValueEnumerable.All<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
 
         [Pure]
         public static bool Any<TSource>(this ImmutableQueue<TSource> source)
             => ValueEnumerable.Any<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source));
         [Pure]
-        public static bool Any<TSource>(this ImmutableQueue<TSource> source, Func<TSource, bool> predicate)
+        public static bool Any<TSource>(this ImmutableQueue<TSource> source, Predicate<TSource> predicate)
             => ValueEnumerable.Any<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
         [Pure]
-        public static bool Any<TSource>(this ImmutableQueue<TSource> source, Func<TSource, int, bool> predicate)
+        public static bool Any<TSource>(this ImmutableQueue<TSource> source, PredicateAt<TSource> predicate)
             => ValueEnumerable.Any<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
 
         [Pure]
@@ -82,12 +82,12 @@ namespace NetFabric.Hyperlinq
         [Pure]
         public static ValueEnumerable.WhereEnumerable<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource> Where<TSource>(
             this ImmutableQueue<TSource> source,
-            Func<TSource, bool> predicate)
+            Predicate<TSource> predicate)
             => ValueEnumerable.Where<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
         [Pure]
         public static ValueEnumerable.WhereIndexEnumerable<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource> Where<TSource>(
             this ImmutableQueue<TSource> source,
-            Func<TSource, int, bool> predicate)
+            PredicateAt<TSource> predicate)
             => ValueEnumerable.Where<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
 
         [Pure]
@@ -105,7 +105,7 @@ namespace NetFabric.Hyperlinq
         public static TSource First<TSource>(this ImmutableQueue<TSource> source)
             => ValueEnumerable.First<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source));
         [Pure]
-        public static TSource First<TSource>(this ImmutableQueue<TSource> source, Func<TSource, bool> predicate)
+        public static TSource First<TSource>(this ImmutableQueue<TSource> source, Predicate<TSource> predicate)
             => ValueEnumerable.First<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
         [Pure]
         [return: MaybeNull]
@@ -113,23 +113,23 @@ namespace NetFabric.Hyperlinq
             => ValueEnumerable.FirstOrDefault<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source));
         [Pure]
         [return: MaybeNull]
-        public static TSource FirstOrDefault<TSource>(this ImmutableQueue<TSource> source, Func<TSource, bool> predicate)
+        public static TSource FirstOrDefault<TSource>(this ImmutableQueue<TSource> source, Predicate<TSource> predicate)
             => ValueEnumerable.FirstOrDefault<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
         [Pure]
         public static Maybe<TSource> TryFirst<TSource>(this ImmutableQueue<TSource> source)
             => ValueEnumerable.TryFirst<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source));
         [Pure]
-        public static Maybe<TSource> TryFirst<TSource>(this ImmutableQueue<TSource> source, Func<TSource, bool> predicate)
+        public static Maybe<TSource> TryFirst<TSource>(this ImmutableQueue<TSource> source, Predicate<TSource> predicate)
             => ValueEnumerable.TryFirst<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
         [Pure]
-        public static MaybeAt<TSource> TryFirst<TSource>(this ImmutableQueue<TSource> source, Func<TSource, int, bool> predicate)
+        public static MaybeAt<TSource> TryFirst<TSource>(this ImmutableQueue<TSource> source, PredicateAt<TSource> predicate)
             => ValueEnumerable.TryFirst<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
 
         [Pure]
         public static TSource Single<TSource>(this ImmutableQueue<TSource> source)
             => ValueEnumerable.Single<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source));
         [Pure]
-        public static TSource Single<TSource>(this ImmutableQueue<TSource> source, Func<TSource, bool> predicate)
+        public static TSource Single<TSource>(this ImmutableQueue<TSource> source, Predicate<TSource> predicate)
             => ValueEnumerable.Single<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
         [Pure]
         [return: MaybeNull]
@@ -137,7 +137,7 @@ namespace NetFabric.Hyperlinq
             => ValueEnumerable.SingleOrDefault<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source));
         [Pure]
         [return: MaybeNull]
-        public static TSource SingleOrDefault<TSource>(this ImmutableQueue<TSource> source, Func<TSource, bool> predicate)
+        public static TSource SingleOrDefault<TSource>(this ImmutableQueue<TSource> source, Predicate<TSource> predicate)
             => ValueEnumerable.SingleOrDefault<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
 
         [Pure]

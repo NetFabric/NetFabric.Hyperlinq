@@ -11,7 +11,7 @@ namespace NetFabric.Hyperlinq.UnitTests
         {
             // Arrange
             var list = Wrap.AsValueReadOnlyList(new int[0]);
-            var predicate = (Func<int, bool>)null;
+            var predicate = (Predicate<int>)null;
 
             // Act
             Action action = () => ValueReadOnlyList.Where<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int>(list, predicate);
@@ -24,11 +24,11 @@ namespace NetFabric.Hyperlinq.UnitTests
 
         [Theory]
         [MemberData(nameof(TestData.Where), MemberType = typeof(TestData))]
-        public void WhereIndex_With_ValidData_Should_Succeed(int[] source, Func<int, bool> predicate)
+        public void WhereIndex_With_ValidData_Should_Succeed(int[] source, Predicate<int> predicate)
         {
             // Arrange
             var wrapped = Wrap.AsValueReadOnlyList(source);
-            var expected = System.Linq.Enumerable.Where(wrapped, predicate);
+            var expected = System.Linq.Enumerable.Where(wrapped, predicate.AsFunc());
 
             // Act
             var result = ValueReadOnlyList.Where<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);

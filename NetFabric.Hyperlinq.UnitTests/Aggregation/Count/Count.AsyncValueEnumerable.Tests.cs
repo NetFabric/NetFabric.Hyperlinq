@@ -29,17 +29,17 @@ namespace NetFabric.Hyperlinq.UnitTests
 
         [Theory]
         [MemberData(nameof(TestData.CountPredicate), MemberType = typeof(TestData))]
-        public async void CountAsyncPredicate_With_ValidData_Should_Succeed(int[] source, Func<int, bool> predicate)
+        public async void CountAsyncPredicate_With_ValidData_Should_Succeed(int[] source, Predicate<int> predicate)
         {
             // Arrange
             var wrapped = Wrap
                 .AsAsyncValueEnumerable(source);
             var expected = 
-                await System.Linq.AsyncEnumerable.CountAsync(wrapped, predicate);
+                await System.Linq.AsyncEnumerable.CountAsync(wrapped, predicate.AsFunc());
 
             // Act
             var result = await AsyncValueEnumerable
-                .CountAsync<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, predicate);
+                .CountAsync<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, predicate.AsAsync());
 
             // Assert
             result.Must()

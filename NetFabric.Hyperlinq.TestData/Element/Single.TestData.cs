@@ -6,8 +6,8 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class TestData
     {
-        public static TheoryData<int[], Func<int, bool>> SinglePredicateEmpty =>
-            new TheoryData<int[], Func<int, bool>> 
+        public static TheoryData<int[], Predicate<int>> SinglePredicateEmpty =>
+            new TheoryData<int[], Predicate<int>> 
             {
                 { new int[] { }, _ => true },
 
@@ -25,8 +25,8 @@ namespace NetFabric.Hyperlinq
                 { new int[] { 1 } },
             };
 
-        public static TheoryData<int[], Func<int, bool>> SinglePredicateSingle =>
-            new TheoryData<int[], Func<int, bool>> 
+        public static TheoryData<int[], Predicate<int>> SinglePredicateSingle =>
+            new TheoryData<int[], Predicate<int>> 
             {
                 { new int[] { 1 }, _ => true },
 
@@ -34,8 +34,8 @@ namespace NetFabric.Hyperlinq
                 { new int[] { 1, 2, 3, 4, 5 }, item => item > 4 },
             };
 
-        public static TheoryData<int[], Func<int, bool>> SinglePredicateMultiple =>
-            new TheoryData<int[], Func<int, bool>> 
+        public static TheoryData<int[], Predicate<int>> SinglePredicateMultiple =>
+            new TheoryData<int[], Predicate<int>> 
             {
                 { new int[] { 1, 2, 3, 4, 5 }, _ => true },
 

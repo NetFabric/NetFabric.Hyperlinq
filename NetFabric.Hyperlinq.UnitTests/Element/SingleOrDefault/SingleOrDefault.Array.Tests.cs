@@ -28,11 +28,11 @@ namespace NetFabric.Hyperlinq.UnitTests
         [Theory]
         [MemberData(nameof(TestData.SinglePredicateEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SinglePredicateSingle), MemberType = typeof(TestData))]
-        public void SingleOrDefaultPredicate_With_ValidData_Should_Succeed(int[] source, Func<int, bool> predicate)
+        public void SingleOrDefaultPredicate_With_ValidData_Should_Succeed(int[] source, Predicate<int> predicate)
         {
             // Arrange
             var expected = 
-                System.Linq.Enumerable.SingleOrDefault(source, predicate);
+                System.Linq.Enumerable.SingleOrDefault(source, predicate.AsFunc());
 
             // Act
             var result = Array
@@ -61,7 +61,7 @@ namespace NetFabric.Hyperlinq.UnitTests
 
         [Theory]
         [MemberData(nameof(TestData.SinglePredicateMultiple), MemberType = typeof(TestData))]
-        public void SingleOrDefaultPredicate_With_Multiple_Should_Throw(int[] source, Func<int, bool> predicate)
+        public void SingleOrDefaultPredicate_With_Multiple_Should_Throw(int[] source, Predicate<int> predicate)
         {
             // Arrange
 

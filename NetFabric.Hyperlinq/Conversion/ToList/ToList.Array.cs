@@ -15,7 +15,7 @@ namespace NetFabric.Hyperlinq
             => new List<TSource>(new ToListCollection<TSource>(source, skipCount, takeCount));
 
         [Pure]
-        static List<TSource> ToList<TSource>(this TSource[] source, Func<TSource, bool> predicate, int skipCount, int takeCount)
+        static List<TSource> ToList<TSource>(this TSource[] source, Predicate<TSource> predicate, int skipCount, int takeCount)
         {
             var list = new List<TSource>();
 
@@ -30,7 +30,7 @@ namespace NetFabric.Hyperlinq
         }
 
         [Pure]
-        static List<TSource> ToList<TSource>(this TSource[] source, Func<TSource, int, bool> predicate, int skipCount, int takeCount)
+        static List<TSource> ToList<TSource>(this TSource[] source, PredicateAt<TSource> predicate, int skipCount, int takeCount)
         {
             var list = new List<TSource>();
 

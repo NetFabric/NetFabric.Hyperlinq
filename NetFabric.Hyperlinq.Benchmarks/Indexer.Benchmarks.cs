@@ -48,7 +48,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public bool Hyperlinq_Value() =>
             ReadOnlyList.AsValueEnumerable<TestList.Enumerable, TestList.Enumerable.Enumerator, int>(listValue, enumerable => enumerable.GetEnumerator()).All(_ => true);
 
-        static bool AllEnumerable(TestEnumerable.Enumerable source, Func<int, bool> predicate)
+        static bool AllEnumerable(TestEnumerable.Enumerable source, Predicate<int> predicate)
         {
             foreach(var item in source)
             {
@@ -58,7 +58,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
             return true;
         }
 
-        static bool AllEnumerable(IEnumerable<int> source, Func<int, bool> predicate)
+        static bool AllEnumerable(IEnumerable<int> source, Predicate<int> predicate)
         {
             foreach (var item in source)
             {
@@ -68,7 +68,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
             return true;
         }
 
-        static bool AllIndexer(TestList.Enumerable source, Func<int, bool> predicate)
+        static bool AllIndexer(TestList.Enumerable source, Predicate<int> predicate)
         {
             var sourceCount = source.Count;
             for (var index = 0; index < sourceCount; index++)
@@ -79,7 +79,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
             return true;
         }
 
-        static bool AllIndexer(IReadOnlyList<int> source, Func<int, bool> predicate)
+        static bool AllIndexer(IReadOnlyList<int> source, Predicate<int> predicate)
         {
             var sourceCount = source.Count;
             for (var index = 0; index < sourceCount; index++)

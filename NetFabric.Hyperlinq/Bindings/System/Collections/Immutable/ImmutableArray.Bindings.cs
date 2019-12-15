@@ -15,17 +15,17 @@ namespace NetFabric.Hyperlinq
         public static int Count<TSource>(this ImmutableArray<TSource> source)
             => source.Length;
         [Pure]
-        public static int Count<TSource>(this ImmutableArray<TSource> source, Func<TSource, bool> predicate)
+        public static int Count<TSource>(this ImmutableArray<TSource> source, Predicate<TSource> predicate)
             => ValueReadOnlyList.Count<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
         [Pure]
-        public static int Count<TSource>(this ImmutableArray<TSource> source, Func<TSource, int, bool> predicate)
+        public static int Count<TSource>(this ImmutableArray<TSource> source, PredicateAt<TSource> predicate)
             => ValueReadOnlyList.Count<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
 
         [Pure]
         public static long LongCount<TSource>(this ImmutableArray<TSource> source)
             => ValueEnumerable.LongCount<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source));
         [Pure]
-        public static long LongCount<TSource>(this ImmutableArray<TSource> source, Func<TSource, bool> predicate)
+        public static long LongCount<TSource>(this ImmutableArray<TSource> source, Predicate<TSource> predicate)
             => ValueEnumerable.LongCount<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
 
         [Pure]
@@ -37,11 +37,11 @@ namespace NetFabric.Hyperlinq
             => ValueReadOnlyList.Take<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), count);
 
         [Pure]
-        public static bool All<TSource>(this ImmutableArray<TSource> source, Func<TSource, int, bool> predicate)
+        public static bool All<TSource>(this ImmutableArray<TSource> source, PredicateAt<TSource> predicate)
             => ValueReadOnlyList.All<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
 
         [Pure]
-        public static bool Any<TSource>(this ImmutableArray<TSource> source, Func<TSource, int, bool> predicate)
+        public static bool Any<TSource>(this ImmutableArray<TSource> source, PredicateAt<TSource> predicate)
             => ValueReadOnlyList.Any<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
 
         [Pure]
@@ -73,12 +73,12 @@ namespace NetFabric.Hyperlinq
         [Pure]
         public static ValueReadOnlyList.WhereEnumerable<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource> WhereHyper<TSource>(
             this ImmutableArray<TSource> source,
-            Func<TSource, bool> predicate)
+            Predicate<TSource> predicate)
             => ValueReadOnlyList.Where<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
         [Pure]
         public static ValueReadOnlyList.WhereIndexEnumerable<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource> HyperWhere<TSource>(
             this ImmutableArray<TSource> source,
-            Func<TSource, int, bool> predicate)
+            PredicateAt<TSource> predicate)
             => ValueReadOnlyList.Where<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
 
         [Pure]
@@ -96,10 +96,10 @@ namespace NetFabric.Hyperlinq
         public static Maybe<TSource> TryFirst<TSource>(this ImmutableArray<TSource> source)
             => ValueReadOnlyList.TryFirst<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source));
         [Pure]
-        public static Maybe<TSource> TryFirst<TSource>(this ImmutableArray<TSource> source, Func<TSource, bool> predicate)
+        public static Maybe<TSource> TryFirst<TSource>(this ImmutableArray<TSource> source, Predicate<TSource> predicate)
             => ValueReadOnlyList.TryFirst<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
         [Pure]
-        public static MaybeAt<TSource> TryFirst<TSource>(this ImmutableArray<TSource> source, Func<TSource, int, bool> predicate)
+        public static MaybeAt<TSource> TryFirst<TSource>(this ImmutableArray<TSource> source, PredicateAt<TSource> predicate)
             => ValueReadOnlyList.TryFirst<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
 
         [Pure]

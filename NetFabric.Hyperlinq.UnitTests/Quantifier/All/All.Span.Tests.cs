@@ -10,7 +10,7 @@ namespace NetFabric.Hyperlinq.UnitTests
         public void Select_With_NullPredicate_Should_Throw()
         {
             // Arrange
-            var predicate = (Func<int, bool>)null;
+            var predicate = (Predicate<int>)null;
 
             // Act
             Action action = () => SpanExtensions
@@ -24,11 +24,11 @@ namespace NetFabric.Hyperlinq.UnitTests
 
         [Theory]
         [MemberData(nameof(TestData.All), MemberType = typeof(TestData))]
-        public void All_With_ValidData_Should_Succeed(int[] source, Func<int, bool> predicate)
+        public void All_With_ValidData_Should_Succeed(int[] source, Predicate<int> predicate)
         {
             // Arrange
             var expected = 
-                System.Linq.Enumerable.All(source, predicate);
+                System.Linq.Enumerable.All(source, predicate.AsFunc());
 
             // Act
             var result = SpanExtensions

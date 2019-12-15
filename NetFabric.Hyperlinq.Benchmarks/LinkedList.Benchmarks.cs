@@ -38,7 +38,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public bool Custom_All()
             => CustomAll(list, _ => true);
 
-        static bool CustomAll<TSource>(LinkedList<TSource> list, Func<TSource, bool> predicate)
+        static bool CustomAll<TSource>(LinkedList<TSource> list, Predicate<TSource> predicate)
         {
             var current = list.First;
             while (current is object)

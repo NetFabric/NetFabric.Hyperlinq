@@ -10,7 +10,7 @@ namespace NetFabric.Hyperlinq
         [Pure]
         internal static WhereSelectEnumerable<TSource, TResult> WhereSelect<TSource, TResult>(
             this Span<TSource> source, 
-            Func<TSource, bool> predicate, 
+            Predicate<TSource> predicate, 
             Func<TSource, TResult> selector) 
         {
             if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
@@ -22,10 +22,10 @@ namespace NetFabric.Hyperlinq
         public readonly ref struct WhereSelectEnumerable<TSource, TResult>
         {
             internal readonly Span<TSource> source;
-            internal readonly Func<TSource, bool> predicate;
+            internal readonly Predicate<TSource> predicate;
             internal readonly Func<TSource, TResult> selector;
 
-            internal WhereSelectEnumerable(Span<TSource> source, Func<TSource, bool> predicate, Func<TSource, TResult> selector)
+            internal WhereSelectEnumerable(Span<TSource> source, Predicate<TSource> predicate, Func<TSource, TResult> selector)
             {
                 this.source = source;
                 this.predicate = predicate;
@@ -37,7 +37,7 @@ namespace NetFabric.Hyperlinq
             public ref struct Enumerator
             {
                 readonly Span<TSource> source;
-                readonly Func<TSource, bool> predicate;
+                readonly Predicate<TSource> predicate;
                 readonly Func<TSource, TResult> selector;
                 readonly int count;
                 int index;

@@ -76,7 +76,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
             return count;
         }
 
-        static int CountEnumerable<TEnumerable, TEnumerator, TSource>(TEnumerable source, Func<TSource, bool> predicate)
+        static int CountEnumerable<TEnumerable, TEnumerator, TSource>(TEnumerable source, Predicate<TSource> predicate)
             where TEnumerable : IEnumerable<TSource>
             where TEnumerator : IEnumerator<TSource>
         {
@@ -101,7 +101,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
             return count;
         }
 
-        static int CountMyEnumerable<TEnumerable, TEnumerator, TSource>(TEnumerable source, Func<TSource, bool> predicate)
+        static int CountMyEnumerable<TEnumerable, TEnumerator, TSource>(TEnumerable source, Predicate<TSource> predicate)
             where TEnumerable : IMyEnumerable<TSource>
             where TEnumerator : IEnumerator<TSource>
         {
@@ -127,7 +127,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
             return count;
         }
 
-        static int CountBenValueEnumerable<TEnumerable, TEnumerator, TSource>(TEnumerable source, Func<TSource, bool> predicate)
+        static int CountBenValueEnumerable<TEnumerable, TEnumerator, TSource>(TEnumerable source, Predicate<TSource> predicate)
             where TEnumerable : IBenValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IBenValueEnumerator<TSource>
         {
@@ -159,7 +159,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
             return count;
         }
 
-        static int CountMyValueEnumerable<TEnumerable, TEnumerator, TSource>(TEnumerable source, Func<TSource, bool> predicate)
+        static int CountMyValueEnumerable<TEnumerable, TEnumerator, TSource>(TEnumerable source, Predicate<TSource> predicate)
             where TEnumerable : IMyValueEnumerable<TEnumerator, TSource>
             where TEnumerator : struct, IMyValueEnumerator<TSource>
         {
