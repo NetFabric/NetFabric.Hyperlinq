@@ -89,21 +89,21 @@ namespace NetFabric.Hyperlinq
             public int Count()
                 => Array.Count<TSource>(source, predicate, skipCount, takeCount);
             public int Count(Predicate<TSource> predicate)
-                => Array.Count<TSource>(source, Utils.CombinePredicates(this.predicate, predicate), skipCount, takeCount);
+                => Array.Count<TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount);
             public int Count(PredicateAt<TSource> predicate)
-                => Array.Count<TSource>(source, Utils.CombinePredicates(this.predicate, predicate), skipCount, takeCount);
+                => Array.Count<TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount);
 
             public long LongCount()
                 => Array.LongCount<TSource>(source, predicate);
             public long LongCount(Predicate<TSource> predicate)
-                => Array.LongCount<TSource>(source, Utils.CombinePredicates(this.predicate, predicate));
+                => Array.LongCount<TSource>(source, Utils.Combine(this.predicate, predicate));
 
             public bool Any()
                 => Array.Any<TSource>(source, predicate, skipCount, takeCount);
             public bool Any(Predicate<TSource> predicate)
-                => Array.Any<TSource>(source, Utils.CombinePredicates(this.predicate, predicate), skipCount, takeCount);
+                => Array.Any<TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount);
             public bool Any(PredicateAt<TSource> predicate)
-                => Array.Any<TSource>(source, Utils.CombinePredicates(this.predicate, predicate), skipCount, takeCount);
+                => Array.Any<TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount);
 
             public List<TResult> ToList()
             {
