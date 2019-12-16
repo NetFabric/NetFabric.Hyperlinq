@@ -43,17 +43,15 @@ namespace NetFabric.Hyperlinq
             readonly IAsyncEnumerator<TSource> IAsyncEnumerable<TSource>.GetAsyncEnumerator(CancellationToken cancellationToken) 
                 => getAsyncEnumerator(source, cancellationToken);
 
+            [Pure]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TSource[] ToArray()
-                => System.Linq.Enumerable.ToArray(source);
+                => Enumerable.ToArray(source);
 
+            [Pure]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public List<TSource> ToList()
-            {
-                var list = new List<TSource>();
-                using var enumerator = source.GetEnumerator();  
-                while (enumerator.MoveNext())
-                    list.Add(enumerator.Current);
-                return list;
-            }
+                => Enumerable.ToList(source);
         }
 
         [GenericsTypeMapping("TEnumerable", typeof(AsyncValueEnumerableWrapper<>))]
@@ -109,17 +107,15 @@ namespace NetFabric.Hyperlinq
                 }
             }
 
+            [Pure]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TSource[] ToArray()
-                => System.Linq.Enumerable.ToArray(source);
+                => Enumerable.ToArray(source);
 
+            [Pure]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public List<TSource> ToList()
-            {
-                var list = new List<TSource>();
-                using var enumerator = source.GetEnumerator();
-                while (enumerator.MoveNext())
-                    list.Add(enumerator.Current);
-                return list;
-            }
+                => Enumerable.ToList(source);
         }
     }
 }

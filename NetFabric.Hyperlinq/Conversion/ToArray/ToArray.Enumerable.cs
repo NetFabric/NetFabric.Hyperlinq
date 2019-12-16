@@ -1,29 +1,25 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class ValueEnumerable
+    public static partial class Enumerable
     {
         // Based on https://github.com/dotnet/runtime/blob/4359ebfc9943608b34f411366b1e544ac45702b7/src/libraries/Common/src/System/Collections/Generic/EnumerableHelpers.cs
         [Pure]
-        internal static TSource[] ToArray<TEnumerable, TEnumerator, TSource>(TEnumerable source)
-            where TEnumerable : IValueEnumerable<TSource, TEnumerator>
-            where TEnumerator : struct, IEnumerator<TSource>
+        static T[] ToArray<T>(IEnumerable<T> source)
         {
-            var result = ToArrayWithLength<TEnumerable, TEnumerator, TSource>(source);
+            var result = ToArrayWithLength<T>(source);
             System.Array.Resize(ref result.Array, result.Length);
             return result.Array;
         }
 
         [Pure]
-        static ArrayWithLength<TSource> ToArrayWithLength<TEnumerable, TEnumerator, TSource>(TEnumerable source)
-            where TEnumerable : IValueEnumerable<TSource, TEnumerator>
-            where TEnumerator : struct, IEnumerator<TSource>
+        static ArrayWithLength<T> ToArrayWithLength<T>(IEnumerable<T> source)
         {
             int count;
-            if (source is ICollection<TSource> collection)
+            if (source is ICollection<T> collection)
             {
                 count = collection.Count;
                 if (count == 0)
@@ -35,9 +31,9 @@ namespace NetFabric.Hyperlinq
                 // exception from overrunning the array (if the size went up) or we could end up not filling as many 
                 // items as 'count' suggests (if the size went down).  This is only an issue for concurrent collections 
                 // that implement ICollection<T>, which as of .NET 4.6 is just ConcurrentDictionary<TKey, TValue>.
-                var result = new ArrayWithLength<TSource>
+                var result = new ArrayWithLength<T>
                 {
-                    Array = new TSource[count],
+                    Array = new T[count],
                     Length = count,
                 };
                 collection.CopyTo(result.Array, 0);
@@ -49,7 +45,7 @@ namespace NetFabric.Hyperlinq
                 return default; // it's empty
 
             const int DefaultCapacity = 4;
-            var array = new TSource[DefaultCapacity];
+            var array = new T[DefaultCapacity];
             array[0] = enumerator.Current;
             count = 1;
 
@@ -84,7 +80,7 @@ namespace NetFabric.Hyperlinq
                 array[count++] = enumerator.Current;
             }
 
-            return new ArrayWithLength<TSource> 
+            return new ArrayWithLength<T> 
             {
                 Array = array,
                 Length = count,

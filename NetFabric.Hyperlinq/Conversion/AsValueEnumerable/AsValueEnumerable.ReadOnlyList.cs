@@ -53,32 +53,15 @@ namespace NetFabric.Hyperlinq
             readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => getEnumerator(source);
             readonly IEnumerator IEnumerable.GetEnumerator() => getEnumerator(source);
 
+            [Pure]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TSource[] ToArray()
-            {
-                var array = new TSource[source.Count];
-                if (source.Count != 0)
-                {
-                    if (source is ICollection<TSource> collection)
-                    {
-                        collection.CopyTo(array, 0);
-                    }
-                    else
-                    {
-                        for (var index = 0; index < source.Count; index++)
-                            array[index] = source[index];
-                    }
-                }
-                return array;
-            }
+                => ReadOnlyList.ToArray(source);
 
+            [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public List<TSource> ToList()
-                => source switch
-                {
-                    ICollection<TSource> collection => new List<TSource>(collection), // no need to allocate helper class
-
-                    _ => new List<TSource>(new ToListCollection<TEnumerable, TSource>(source, 0, source.Count)),
-                };
+                => ReadOnlyList.ToList(source);
         }
 
         [GenericsTypeMapping("TEnumerable", typeof(ValueEnumerableWrapper<>))]
@@ -138,32 +121,15 @@ namespace NetFabric.Hyperlinq
                 public readonly void Dispose() => enumerator.Dispose();
             }
 
+            [Pure]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TSource[] ToArray()
-            {
-                var array = new TSource[source.Count];
-                if (source.Count != 0)
-                {
-                    if (source is ICollection<TSource> collection)
-                    {
-                        collection.CopyTo(array, 0);
-                    }
-                    else
-                    {
-                        for (var index = 0; index < source.Count; index++)
-                            array[index] = source[index];
-                    }
-                }
-                return array;
-            }
+                => ReadOnlyList.ToArray(source);
 
+            [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public List<TSource> ToList()
-                => source switch
-                {
-                    ICollection<TSource> collection => new List<TSource>(collection), // no need to allocate helper class
-
-                    _ => new List<TSource>(new ReadOnlyList.ToListCollection<IReadOnlyList<TSource>, TSource>(source, 0, source.Count)),
-                };
+                => ReadOnlyList.ToList(source);
         }
     }
 }
