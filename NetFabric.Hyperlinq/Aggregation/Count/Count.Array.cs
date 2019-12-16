@@ -13,7 +13,7 @@ namespace NetFabric.Hyperlinq
         [Pure]
         public static int Count<TSource>(this TSource[] source, Predicate<TSource> predicate)
         {
-            if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
+            if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
 
             return Count<TSource>(source, predicate, 0, source.Length);
         }
@@ -34,7 +34,7 @@ namespace NetFabric.Hyperlinq
         [Pure]
         public static int Count<TSource>(this TSource[] source, PredicateAt<TSource> predicate)
         {
-            if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
+            if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
 
             return Count<TSource>(source, predicate, 0, source.Length);
         }

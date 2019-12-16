@@ -21,7 +21,7 @@ namespace NetFabric.Hyperlinq
                 }
             }
 
-            return ThrowHelper.ThrowArgumentOutOfRangeException<TSource>(nameof(index));
+            return Throw.ArgumentOutOfRangeException<TSource>(nameof(index));
         }
 
         [Pure]

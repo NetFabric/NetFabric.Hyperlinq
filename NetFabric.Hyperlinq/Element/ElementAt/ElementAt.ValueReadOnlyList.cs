@@ -15,7 +15,7 @@ namespace NetFabric.Hyperlinq
             where TEnumerator : struct, IEnumerator<TSource>
         {
             var item = TryElementAt<TEnumerable, TEnumerator, TSource>(source, index, 0, source.Count);
-            return item.HasValue ? item.Value : ThrowHelper.ThrowArgumentOutOfRangeException<TSource>(nameof(index));
+            return item.HasValue ? item.Value : Throw.ArgumentOutOfRangeException<TSource>(nameof(index));
         }
 
         [Pure]
@@ -25,7 +25,7 @@ namespace NetFabric.Hyperlinq
             where TEnumerator : struct, IEnumerator<TSource>
         {
             var item = TryElementAt<TEnumerable, TEnumerator, TSource>(source, index, skipCount, takeCount);
-            return item.HasValue ? item.Value : ThrowHelper.ThrowArgumentOutOfRangeException<TSource>(nameof(index));
+            return item.HasValue ? item.Value : Throw.ArgumentOutOfRangeException<TSource>(nameof(index));
         }
 
         [Pure]

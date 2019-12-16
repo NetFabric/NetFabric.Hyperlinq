@@ -10,7 +10,7 @@ namespace NetFabric.Hyperlinq
         [Pure]
         public static ref readonly TSource First<TSource>(this TSource[] source)
         {
-            if (source.Length == 0) ThrowHelper.ThrowEmptySequence<TSource>();
+            if (source.Length == 0) Throw.EmptySequence<TSource>();
 
             return ref source[0];
         }
@@ -18,7 +18,7 @@ namespace NetFabric.Hyperlinq
         [Pure]
         static ref readonly TSource First<TSource>(this TSource[] source, int skipCount, int takeCount)
         {
-            if (takeCount == 0) ThrowHelper.ThrowEmptySequence<TSource>();
+            if (takeCount == 0) Throw.EmptySequence<TSource>();
 
             return ref source[skipCount];
         }
@@ -26,7 +26,7 @@ namespace NetFabric.Hyperlinq
         [Pure]
         public static ref readonly TSource First<TSource>(this TSource[] source, Predicate<TSource> predicate) 
         {
-            if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
+            if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
 
             return ref First<TSource>(source, predicate, 0, source.Length);
         }
@@ -40,13 +40,13 @@ namespace NetFabric.Hyperlinq
                 if (predicate(source[index]))
                     return ref source[index];
             }
-            return ref ThrowHelper.ThrowEmptySequenceRef<TSource>();
+            return ref Throw.EmptySequenceRef<TSource>();
         }
 
         [Pure]
         public static ref readonly TSource First<TSource>(this TSource[] source, PredicateAt<TSource> predicate)
         {
-            if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
+            if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
 
             return ref First<TSource>(source, predicate, 0, source.Length);
         }
@@ -60,13 +60,13 @@ namespace NetFabric.Hyperlinq
                 if (predicate(source[index], index))
                     return ref source[index];
             }
-            return ref ThrowHelper.ThrowEmptySequenceRef<TSource>();
+            return ref Throw.EmptySequenceRef<TSource>();
         }
 
         [Pure]
         public static ref readonly TSource First<TSource>(this TSource[] source, PredicateAt<TSource> predicate, out int index) 
         {
-            if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
+            if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
 
             return ref First<TSource>(source, predicate, out index, 0, source.Length);
         }
@@ -81,7 +81,7 @@ namespace NetFabric.Hyperlinq
                     return ref source[index];
             }
             index = -1;
-            return ref ThrowHelper.ThrowEmptySequenceRef<TSource>();
+            return ref Throw.EmptySequenceRef<TSource>();
         }
 
         [Pure]
@@ -106,7 +106,7 @@ namespace NetFabric.Hyperlinq
         [return: MaybeNull]
         public static ref readonly TSource FirstOrDefault<TSource>(this TSource[] source, Predicate<TSource> predicate) 
         {
-            if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
+            if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
 
             return ref FirstOrDefault<TSource>(source, predicate, 0, source.Length);
         }
@@ -128,7 +128,7 @@ namespace NetFabric.Hyperlinq
         [return: MaybeNull]
         public static ref readonly TSource FirstOrDefault<TSource>(this TSource[] source, PredicateAt<TSource> predicate)
         {
-            if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
+            if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
 
             return ref FirstOrDefault<TSource>(source, predicate, 0, source.Length);
         }
@@ -150,7 +150,7 @@ namespace NetFabric.Hyperlinq
         [return: MaybeNull]
         public static ref readonly TSource FirstOrDefault<TSource>(this TSource[] source, PredicateAt<TSource> predicate, out int index) 
         {
-            if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
+            if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
 
             return ref FirstOrDefault<TSource>(source, predicate, out index, 0, source.Length);
         }

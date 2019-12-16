@@ -11,7 +11,7 @@ namespace NetFabric.Hyperlinq
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ref readonly TSource ElementAt<TSource>(this TSource[] source, int index)
         {
-            if (index < 0 || index >= source.Length) ThrowHelper.ThrowArgumentOutOfRangeException<TSource>(nameof(index));
+            if (index < 0 || index >= source.Length) Throw.ArgumentOutOfRangeException<TSource>(nameof(index));
 
             return ref source[index];
         }
@@ -20,7 +20,7 @@ namespace NetFabric.Hyperlinq
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static ref readonly TSource ElementAt<TSource>(this TSource[] source, int index, int skipCount, int takeCount)
         {
-            if (index < 0 || index >= takeCount) ThrowHelper.ThrowArgumentOutOfRangeException<TSource>(nameof(index));
+            if (index < 0 || index >= takeCount) Throw.ArgumentOutOfRangeException<TSource>(nameof(index));
 
             return ref source[index + skipCount];
         }

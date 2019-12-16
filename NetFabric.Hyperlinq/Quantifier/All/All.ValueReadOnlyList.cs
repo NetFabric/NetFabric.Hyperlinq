@@ -13,7 +13,7 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
-            if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
+            if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
 
             return All<TEnumerable, TEnumerator, TSource>(source, predicate, 0, source.Count);
         }
@@ -38,7 +38,7 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
-            if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
+            if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
 
             return All<TEnumerable, TEnumerator, TSource>(source, predicate, 0, source.Count);
         }

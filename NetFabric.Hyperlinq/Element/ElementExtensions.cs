@@ -21,8 +21,8 @@ namespace NetFabric.Hyperlinq
         public static TValue ThrowOnEmpty<TValue>(this (ElementResult Result, TValue Value) item)
             => item.Result switch
             {
-                ElementResult.Empty => ThrowHelper.ThrowEmptySequence<TValue>(),
-                ElementResult.NotSingle => ThrowHelper.ThrowNotSingleSequence<TValue>(),
+                ElementResult.Empty => Throw.EmptySequence<TValue>(),
+                ElementResult.NotSingle => Throw.NotSingleSequence<TValue>(),
                 _ => item.Value,
             };
 
@@ -31,8 +31,8 @@ namespace NetFabric.Hyperlinq
         public static TValue ThrowOnEmpty<TValue>(this (int Index, TValue Value) item)
             => item.Index switch
             {
-                (int)ElementResult.Empty => ThrowHelper.ThrowEmptySequence<TValue>(),
-                (int)ElementResult.NotSingle => ThrowHelper.ThrowNotSingleSequence<TValue>(),
+                (int)ElementResult.Empty => Throw.EmptySequence<TValue>(),
+                (int)ElementResult.NotSingle => Throw.NotSingleSequence<TValue>(),
                 _ => item.Value,
             };
 
@@ -45,7 +45,7 @@ namespace NetFabric.Hyperlinq
             => item.Result switch
             {
                 ElementResult.Empty => default!,
-                ElementResult.NotSingle => ThrowHelper.ThrowNotSingleSequence<TValue>(),
+                ElementResult.NotSingle => Throw.NotSingleSequence<TValue>(),
                 _ => item.Value,
             };
 
@@ -56,7 +56,7 @@ namespace NetFabric.Hyperlinq
             => item.Index switch
             {
                 (int)ElementResult.Empty => default!,
-                (int)ElementResult.NotSingle => ThrowHelper.ThrowNotSingleSequence<TValue>(),
+                (int)ElementResult.NotSingle => Throw.NotSingleSequence<TValue>(),
                 _ => item.Value,
             };
 

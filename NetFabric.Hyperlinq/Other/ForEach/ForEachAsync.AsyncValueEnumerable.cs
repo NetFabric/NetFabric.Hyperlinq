@@ -11,7 +11,7 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
-            if (actionAsync is null) ThrowHelper.ThrowArgumentNullException(nameof(actionAsync));
+            if (actionAsync is null) Throw.ArgumentNullException(nameof(actionAsync));
 
             return ExecuteAsync(source, actionAsync, cancellationToken);
 
@@ -30,7 +30,7 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
-            if (actionAsync is null) ThrowHelper.ThrowArgumentNullException(nameof(actionAsync));
+            if (actionAsync is null) Throw.ArgumentNullException(nameof(actionAsync));
 
             return ExecuteAsync(source, actionAsync, cancellationToken);
 

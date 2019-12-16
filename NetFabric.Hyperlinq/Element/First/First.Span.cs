@@ -11,7 +11,7 @@ namespace NetFabric.Hyperlinq
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ref TSource First<TSource>(this Span<TSource> source)
         {
-            if (source.Length == 0) ThrowHelper.ThrowEmptySequence<TSource>();
+            if (source.Length == 0) Throw.EmptySequence<TSource>();
 
             return ref source[0];
         }
@@ -19,7 +19,7 @@ namespace NetFabric.Hyperlinq
         [Pure]
         public static ref TSource First<TSource>(this Span<TSource> source, Predicate<TSource> predicate)
         {
-            if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
+            if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
 
             var length = source.Length;
             for (var index = 0; index < length; index++)
@@ -27,14 +27,14 @@ namespace NetFabric.Hyperlinq
                 if (predicate(source[index]))
                     return ref source[index];
             }
-            ThrowHelper.ThrowEmptySequence<TSource>();
+            Throw.EmptySequence<TSource>();
             return ref source[0];
         }
 
         [Pure]
         public static ref TSource First<TSource>(this Span<TSource> source, PredicateAt<TSource> predicate)
         {
-            if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
+            if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
 
             var length = source.Length;
             for (var index = 0; index < length; index++)
@@ -42,14 +42,14 @@ namespace NetFabric.Hyperlinq
                 if (predicate(source[index], index))
                     return ref source[index];
             }
-            ThrowHelper.ThrowEmptySequence<TSource>();
+            Throw.EmptySequence<TSource>();
             return ref source[0];
         }
 
         [Pure]
         public static ref TSource First<TSource>(this Span<TSource> source, PredicateAt<TSource> predicate, out int index)
         {
-            if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
+            if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
 
             var length = source.Length;
             for (index = 0; index < length; index++)
@@ -57,7 +57,7 @@ namespace NetFabric.Hyperlinq
                 if (predicate(source[index], index))
                     return ref source[index];
             }
-            ThrowHelper.ThrowEmptySequence<TSource>();
+            Throw.EmptySequence<TSource>();
             return ref source[0];
         }
 
@@ -75,7 +75,7 @@ namespace NetFabric.Hyperlinq
         [return: MaybeNull]
         public static ref readonly TSource FirstOrDefault<TSource>(this Span<TSource> source, Predicate<TSource> predicate)
         {
-            if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
+            if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
 
             var length = source.Length;
             for (var index = 0; index < length; index++)
@@ -90,7 +90,7 @@ namespace NetFabric.Hyperlinq
         [return: MaybeNull]
         public static ref readonly TSource FirstOrDefault<TSource>(this Span<TSource> source, PredicateAt<TSource> predicate)
         {
-            if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
+            if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
 
             var length = source.Length;
             for (var index = 0; index < length; index++)
@@ -105,7 +105,7 @@ namespace NetFabric.Hyperlinq
         [return: MaybeNull]
         public static ref readonly TSource FirstOrDefault<TSource>(this Span<TSource> source, PredicateAt<TSource> predicate, out int index)
         {
-            if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
+            if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
 
             var length = source.Length;
             for (index = 0; index < length; index++)

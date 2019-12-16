@@ -12,7 +12,7 @@ namespace NetFabric.Hyperlinq
         [Pure]
         public static RepeatEnumerable<TSource> Repeat<TSource>(TSource value, int count)
         {
-            if (count < 0) ThrowHelper.ThrowArgumentOutOfRangeException(nameof(count));
+            if (count < 0) Throw.ArgumentOutOfRangeException(nameof(count));
 
             return new RepeatEnumerable<TSource>(value, count);
         }
@@ -44,7 +44,7 @@ namespace NetFabric.Hyperlinq
             {
                 get
                 {
-                    if (index < 0 || index >= count) ThrowHelper.ThrowIndexOutOfRangeException();
+                    if (index < 0 || index >= count) Throw.IndexOutOfRangeException();
 
                     return value;
                 }

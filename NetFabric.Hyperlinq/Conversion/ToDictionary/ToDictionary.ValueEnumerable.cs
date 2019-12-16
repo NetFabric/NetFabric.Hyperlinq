@@ -17,7 +17,7 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
-            if (keySelector is null) ThrowHelper.ThrowArgumentNullException(nameof(keySelector));
+            if (keySelector is null) Throw.ArgumentNullException(nameof(keySelector));
 
             var dictionary = new Dictionary<TKey, TSource>(0, comparer);
 
@@ -33,7 +33,7 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
-            if (keySelector is null) ThrowHelper.ThrowArgumentNullException(nameof(keySelector));
+            if (keySelector is null) Throw.ArgumentNullException(nameof(keySelector));
 
             var dictionary = new Dictionary<TKey, TSource>(0, comparer);
 
@@ -52,7 +52,7 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
-            if (keySelector is null) ThrowHelper.ThrowArgumentNullException(nameof(keySelector));
+            if (keySelector is null) Throw.ArgumentNullException(nameof(keySelector));
 
             var dictionary = new Dictionary<TKey, TSource>(0, comparer);
 
@@ -80,8 +80,8 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
-            if (keySelector is null) ThrowHelper.ThrowArgumentNullException(nameof(keySelector));
-            if (elementSelector is null) ThrowHelper.ThrowArgumentNullException(nameof(elementSelector));
+            if (keySelector is null) Throw.ArgumentNullException(nameof(keySelector));
+            if (elementSelector is null) Throw.ArgumentNullException(nameof(elementSelector));
 
             var dictionary = new Dictionary<TKey, TElement>(0, comparer);
 
@@ -97,8 +97,8 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
-            if (keySelector is null) ThrowHelper.ThrowArgumentNullException(nameof(keySelector));
-            if (elementSelector is null) ThrowHelper.ThrowArgumentNullException(nameof(elementSelector));
+            if (keySelector is null) Throw.ArgumentNullException(nameof(keySelector));
+            if (elementSelector is null) Throw.ArgumentNullException(nameof(elementSelector));
 
             var dictionary = new Dictionary<TKey, TElement>(0, comparer);
 
@@ -117,8 +117,8 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
-            if (keySelector is null) ThrowHelper.ThrowArgumentNullException(nameof(keySelector));
-            if (elementSelector is null) ThrowHelper.ThrowArgumentNullException(nameof(elementSelector));
+            if (keySelector is null) Throw.ArgumentNullException(nameof(keySelector));
+            if (elementSelector is null) Throw.ArgumentNullException(nameof(elementSelector));
 
             var dictionary = new Dictionary<TKey, TElement>(0, comparer);
 

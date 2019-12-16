@@ -26,7 +26,7 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
-            if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
+            if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
                 
             var count = 0;
             using var enumerator = source.GetEnumerator();
@@ -46,7 +46,7 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
-            if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
+            if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
                 
             var count = 0;
             using var enumerator = source.GetEnumerator();
