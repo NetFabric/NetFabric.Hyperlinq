@@ -43,20 +43,13 @@ namespace NetFabric.Hyperlinq
             readonly IAsyncEnumerator<TSource> IAsyncEnumerable<TSource>.GetAsyncEnumerator(CancellationToken cancellationToken) 
                 => getAsyncEnumerator(source, cancellationToken);
 
-            // public async ValueTask<TSource[]> ToArrayAsync(CancellationToken cancellationToken = default)
-            //     => System.Linq.Enumerable.ToArray(source);
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public ValueTask<TSource[]> ToArrayAsync(CancellationToken cancellationToken = default)
+                => AsyncEnumerable.ToArrayAsync(source, cancellationToken);
 
-            public async ValueTask<List<TSource>> ToListAsync(CancellationToken cancellationToken = default)
-            {
-                var list = new List<TSource>();
-                var enumerator = source.GetAsyncEnumerator(cancellationToken); 
-                await using (enumerator.ConfigureAwait(false))
-                {
-                    while (await enumerator.MoveNextAsync().ConfigureAwait(false))
-                        list.Add(enumerator.Current);
-                }
-                return list;
-            }
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public ValueTask<List<TSource>> ToListAsync(CancellationToken cancellationToken = default)
+                => AsyncEnumerable.ToListAsync(source, cancellationToken);
         }
 
         [GenericsTypeMapping("TEnumerable", typeof(AsyncValueEnumerableWrapper<>))]
@@ -104,20 +97,13 @@ namespace NetFabric.Hyperlinq
                     => enumerator.DisposeAsync();
             }
 
-            // public async ValueTask<TSource[]> ToArrayAsync(CancellationToken cancellationToken = default)
-            //     => System.Linq.Enumerable.ToArray(source);
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public ValueTask<TSource[]> ToArrayAsync(CancellationToken cancellationToken = default)
+                => AsyncEnumerable.ToArrayAsync(source, cancellationToken);
 
-            public async ValueTask<List<TSource>> ToListAsync(CancellationToken cancellationToken = default)
-            {
-                var list = new List<TSource>();
-                var enumerator = source.GetAsyncEnumerator(cancellationToken); 
-                await using (enumerator.ConfigureAwait(false))
-                {
-                    while (await enumerator.MoveNextAsync().ConfigureAwait(false))
-                        list.Add(enumerator.Current);
-                }
-                return list;
-            }
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public ValueTask<List<TSource>> ToListAsync(CancellationToken cancellationToken = default)
+                => AsyncEnumerable.ToListAsync(source, cancellationToken);
         }
     }
 }

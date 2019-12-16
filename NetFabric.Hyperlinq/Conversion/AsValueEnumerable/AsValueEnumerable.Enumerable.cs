@@ -41,17 +41,15 @@ namespace NetFabric.Hyperlinq
             readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => getEnumerator(source);
             readonly IEnumerator IEnumerable.GetEnumerator() => getEnumerator(source);
 
+            [Pure]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TSource[] ToArray()
-                => System.Linq.Enumerable.ToArray(source);
+                => Enumerable.ToArray(source);
 
+            [Pure]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public List<TSource> ToList()
-            {
-                var list = new List<TSource>();
-                using var enumerator = source.GetEnumerator();  
-                while (enumerator.MoveNext())
-                    list.Add(enumerator.Current);
-                return list;
-            }
+                => Enumerable.ToList(source);
         }
 
         [GenericsTypeMapping("TEnumerable", typeof(ValueEnumerableWrapper<>))]
@@ -99,17 +97,15 @@ namespace NetFabric.Hyperlinq
                 public readonly void Dispose() => enumerator.Dispose();
             }
 
+            [Pure]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TSource[] ToArray()
-                => System.Linq.Enumerable.ToArray(source);
+                => Enumerable.ToArray(source);
 
+            [Pure]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public List<TSource> ToList()
-            {
-                var list = new List<TSource>();
-                using var enumerator = source.GetEnumerator();
-                while (enumerator.MoveNext())
-                    list.Add(enumerator.Current);
-                return list;
-            }
+                => Enumerable.ToList(source);
         }
     }
 }

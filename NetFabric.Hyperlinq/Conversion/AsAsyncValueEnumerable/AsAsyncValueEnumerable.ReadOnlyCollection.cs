@@ -49,38 +49,15 @@ namespace NetFabric.Hyperlinq
             readonly IAsyncEnumerator<TSource> IAsyncEnumerable<TSource>.GetAsyncEnumerator(CancellationToken cancellationToken) 
                 => getAsyncEnumerator(source, cancellationToken);
 
+            [Pure]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TSource[] ToArray()
-            {
-                var array = new TSource[source.Count];
-                if (source.Count != 0)
-                {
-                    if (source is ICollection<TSource> collection)
-                    {
-                        collection.CopyTo(array, 0);
-                    }
-                    else
-                    {
-                        using var enumerator = source.GetEnumerator();
-                        checked
-                        {
-                            for (var index = 0; enumerator.MoveNext(); index++)
-                            {
-                                array[index] = enumerator.Current;
-                            }
-                        }
-                    }
-                }
-                return array;
-            }
+                => ReadOnlyCollection.ToArray(source);
 
+            [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public List<TSource> ToList()
-                => source switch
-                {
-                    ICollection<TSource> collection => new List<TSource>(collection), // no need to allocate helper class
-
-                    _ => new List<TSource>(new ReadOnlyCollection.ToListCollection<TEnumerable, TSource>(source)),
-                };
+                => ReadOnlyCollection.ToList(source);
         }
 
         [GenericsTypeMapping("TEnumerable", typeof(AsyncValueEnumerableWrapper<>))]
@@ -142,39 +119,15 @@ namespace NetFabric.Hyperlinq
                 }
             }
 
-            public TSource[] ToArray()
-            {
-                var array = new TSource[source.Count];
-                if (source.Count != 0)
-                {
-                    if (source is ICollection<TSource> collection)
-                    {
-                        collection.CopyTo(array, 0);
-                    }
-                    else
-                    {
-                        using var enumerator = source.GetEnumerator();
-                        checked
-                        {
-                            for (var index = 0; enumerator.MoveNext(); index++)
-                            {
-                                array[index] = enumerator.Current;
-                            }
-                        }
-                    }
-                }
-                return array;
-            }
-
+            [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public TSource[] ToArray()
+                => ReadOnlyCollection.ToArray(source);
 
+            [Pure]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public List<TSource> ToList()
-                => source switch
-                {
-                    ICollection<TSource> collection => new List<TSource>(collection), // no need to allocate helper class
-
-                    _ => new List<TSource>(new ReadOnlyCollection.ToListCollection<IReadOnlyCollection<TSource>, TSource>(source)),
-                };
+                => ReadOnlyCollection.ToList(source);
         }
     }
 }

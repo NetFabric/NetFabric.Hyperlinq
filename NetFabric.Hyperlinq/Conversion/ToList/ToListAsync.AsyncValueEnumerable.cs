@@ -6,20 +6,24 @@ using System.Threading.Tasks;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class ValueEnumerable
+    public static partial class AsyncValueEnumerable
     {
         [Pure]
         public static async ValueTask<List<TSource>> ToListAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source, CancellationToken cancellationToken = default)
             where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
-            var list = new List<TSource>();
+            cancellationToken.ThrowIfCancellationRequested();
 
+            var list = new List<TSource>();
             var enumerator = source.GetAsyncEnumerator(cancellationToken);
             await using (enumerator.ConfigureAwait(false))
             {
                 while (await enumerator.MoveNextAsync().ConfigureAwait(false))
+                {
+                    cancellationToken.ThrowIfCancellationRequested();
                     list.Add(enumerator.Current);
+                }
             }
 
             return list;
@@ -30,13 +34,15 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
-            var list = new List<TSource>();
+            cancellationToken.ThrowIfCancellationRequested();
 
+            var list = new List<TSource>();
             var enumerator = source.GetAsyncEnumerator(cancellationToken);
             await using (enumerator.ConfigureAwait(false))
             {
                 while (await enumerator.MoveNextAsync().ConfigureAwait(false))
                 {
+                    cancellationToken.ThrowIfCancellationRequested();
                     if (predicate(enumerator.Current))
                         list.Add(enumerator.Current);
                 }
@@ -50,8 +56,9 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
-            var list = new List<TSource>();
+            cancellationToken.ThrowIfCancellationRequested();
 
+            var list = new List<TSource>();
             var enumerator = source.GetAsyncEnumerator(cancellationToken);
             await using (enumerator.ConfigureAwait(false))
             {
@@ -59,6 +66,7 @@ namespace NetFabric.Hyperlinq
                 {
                     for (var index = 0; await enumerator.MoveNextAsync().ConfigureAwait(false); index++)
                     {
+                        cancellationToken.ThrowIfCancellationRequested();
                         if (predicate(enumerator.Current, index))
                             list.Add(enumerator.Current);
                     }
