@@ -8,7 +8,7 @@ namespace NetFabric.Hyperlinq
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void ForEach<TSource>(this TSource[] source, Action<TSource> action)
         {
-            if (action is null) ThrowHelper.ThrowArgumentNullException(nameof(action));
+            if (action is null) Throw.ArgumentNullException(nameof(action));
 
             ForEach<TSource>(source, action, 0, source.Length);
         }
@@ -23,7 +23,7 @@ namespace NetFabric.Hyperlinq
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void ForEach<TSource>(this TSource[] source, Action<TSource, int> action)
         {
-            if (action is null) ThrowHelper.ThrowArgumentNullException(nameof(action));
+            if (action is null) Throw.ArgumentNullException(nameof(action));
 
             ForEach<TSource>(source, action, 0, source.Length);
         }

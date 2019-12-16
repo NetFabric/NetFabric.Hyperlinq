@@ -9,7 +9,7 @@ namespace NetFabric.Hyperlinq
         [Pure]
         public static WhereEnumerable<TSource> Where<TSource>(this Span<TSource> source, Predicate<TSource> predicate) 
         {
-            if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
+            if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
 
             return new WhereEnumerable<TSource>(source, predicate);
         }

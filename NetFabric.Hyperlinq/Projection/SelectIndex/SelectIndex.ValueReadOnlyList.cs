@@ -16,7 +16,7 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
-            if(selector is null) ThrowHelper.ThrowArgumentNullException(nameof(selector));
+            if(selector is null) Throw.ArgumentNullException(nameof(selector));
 
             return new SelectIndexEnumerable<TEnumerable, TEnumerator, TSource, TResult>(in source, selector, 0, source.Count);
         }
@@ -63,7 +63,7 @@ namespace NetFabric.Hyperlinq
                 get
                 {
                     if (index < 0 || index >= takeCount)
-                        ThrowHelper.ThrowArgumentOutOfRangeException(nameof(index));
+                        Throw.ArgumentOutOfRangeException(nameof(index));
 
                     return selector(source[index + skipCount], index);
                 }

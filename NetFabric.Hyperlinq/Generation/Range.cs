@@ -11,7 +11,7 @@ namespace NetFabric.Hyperlinq
         [Pure]
         public static RangeEnumerable Range(int start, int count)
         {
-            if (count < 0) ThrowHelper.ThrowArgumentOutOfRangeException(nameof(count));
+            if (count < 0) Throw.ArgumentOutOfRangeException(nameof(count));
 
             var end = 0;
             try
@@ -20,7 +20,7 @@ namespace NetFabric.Hyperlinq
             }
             catch(OverflowException)
             {
-                ThrowHelper.ThrowArgumentOutOfRangeException(nameof(count));
+                Throw.ArgumentOutOfRangeException(nameof(count));
             }   
 
             return new RangeEnumerable(start, count, end);
@@ -56,7 +56,7 @@ namespace NetFabric.Hyperlinq
             {
                 get
                 {
-                    if (index < 0 || index >= count) ThrowHelper.ThrowIndexOutOfRangeException();
+                    if (index < 0 || index >= count) Throw.IndexOutOfRangeException();
 
                     return index + start;
                 }

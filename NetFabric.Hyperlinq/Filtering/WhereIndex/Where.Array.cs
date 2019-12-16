@@ -12,7 +12,7 @@ namespace NetFabric.Hyperlinq
         [Pure]
         public static WhereIndexEnumerable<TSource> Where<TSource>(this TSource[] source, PredicateAt<TSource> predicate) 
         {
-            if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
+            if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
 
             return new WhereIndexEnumerable<TSource>(source, predicate, 0, source.Length);
         }

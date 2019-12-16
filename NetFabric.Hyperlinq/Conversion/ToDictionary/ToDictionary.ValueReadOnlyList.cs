@@ -11,7 +11,7 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
-            if (keySelector is null) ThrowHelper.ThrowArgumentNullException(nameof(keySelector));
+            if (keySelector is null) Throw.ArgumentNullException(nameof(keySelector));
 
             return ToDictionary<TEnumerable, TEnumerator, TSource, TKey>(source, keySelector, EqualityComparer<TKey>.Default, 0, source.Count);
         }
@@ -21,7 +21,7 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
-            if (keySelector is null) ThrowHelper.ThrowArgumentNullException(nameof(keySelector));
+            if (keySelector is null) Throw.ArgumentNullException(nameof(keySelector));
 
             return ToDictionary<TEnumerable, TEnumerator, TSource, TKey>(source, keySelector, comparer, 0, source.Count);
         }
@@ -31,8 +31,8 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
-            if (keySelector is null) ThrowHelper.ThrowArgumentNullException(nameof(keySelector));
-            if (elementSelector is null) ThrowHelper.ThrowArgumentNullException(nameof(elementSelector));
+            if (keySelector is null) Throw.ArgumentNullException(nameof(keySelector));
+            if (elementSelector is null) Throw.ArgumentNullException(nameof(elementSelector));
 
             return ToDictionary<TEnumerable, TEnumerator, TSource, TKey, TElement>(source, keySelector, elementSelector, EqualityComparer<TKey>.Default, 0, source.Count);
         }
@@ -42,8 +42,8 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
-            if (keySelector is null) ThrowHelper.ThrowArgumentNullException(nameof(keySelector));
-            if (elementSelector is null) ThrowHelper.ThrowArgumentNullException(nameof(elementSelector));
+            if (keySelector is null) Throw.ArgumentNullException(nameof(keySelector));
+            if (elementSelector is null) Throw.ArgumentNullException(nameof(elementSelector));
 
             return ToDictionary<TEnumerable, TEnumerator, TSource, TKey, TElement>(source, keySelector, elementSelector, comparer, 0, source.Count);
         }

@@ -19,18 +19,18 @@ namespace NetFabric.Hyperlinq
             switch (takeCount)
             {
                 case 0:
-                    return ref ThrowHelper.ThrowEmptySequenceRef<TSource>();
+                    return ref Throw.EmptySequenceRef<TSource>();
                 case 1:
                     return ref source[skipCount];
                 default:
-                    return ref ThrowHelper.ThrowNotSingleSequenceRef<TSource>();
+                    return ref Throw.NotSingleSequenceRef<TSource>();
             }
         }
 
         [Pure]
         public static ref readonly TSource Single<TSource>(this TSource[] source, PredicateAt<TSource> predicate)
         {
-            if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
+            if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
 
             return ref Single<TSource>(source, predicate, 0, source.Length);
         }
@@ -47,19 +47,19 @@ namespace NetFabric.Hyperlinq
                     for (index++; index < end; index++)
                     {
                         if (predicate(source[index], index))
-                            ThrowHelper.ThrowNotSingleSequence<TSource>();
+                            Throw.NotSingleSequence<TSource>();
                     }
 
                     return ref first;
                 }
             }
-            return ref ThrowHelper.ThrowEmptySequenceRef<TSource>();
+            return ref Throw.EmptySequenceRef<TSource>();
         }
 
         [Pure]
         public static ref readonly TSource Single<TSource>(this TSource[] source, Predicate<TSource> predicate)
         {
-            if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
+            if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
 
             return ref Single<TSource>(source, predicate, 0, source.Length);
         }
@@ -77,19 +77,19 @@ namespace NetFabric.Hyperlinq
                     for (index++; index < end; index++)
                     {
                         if (predicate(source[index]))
-                            ThrowHelper.ThrowNotSingleSequence<TSource>();
+                            Throw.NotSingleSequence<TSource>();
                     }
 
                     return ref first;
                 }
             }
-            return ref ThrowHelper.ThrowEmptySequenceRef<TSource>();
+            return ref Throw.EmptySequenceRef<TSource>();
         }
 
         [Pure]
         public static ref readonly TSource Single<TSource>(this TSource[] source, PredicateAt<TSource> predicate, out int index)
         {
-            if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
+            if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
 
             return ref Single<TSource>(source, predicate, out index, 0, source.Length);
         }
@@ -107,13 +107,13 @@ namespace NetFabric.Hyperlinq
                     for (index++; index < end; index++)
                     {
                         if (predicate(source[index], index))
-                            ThrowHelper.ThrowNotSingleSequence<TSource>();
+                            Throw.NotSingleSequence<TSource>();
                     }
 
                     return ref first;
                 }
             }
-            return ref ThrowHelper.ThrowEmptySequenceRef<TSource>();
+            return ref Throw.EmptySequenceRef<TSource>();
         }
 
         [Pure]
@@ -134,7 +134,7 @@ namespace NetFabric.Hyperlinq
                 case 1:
                     return ref source[skipCount];
                 default:
-                    return ref ThrowHelper.ThrowNotSingleSequenceRef<TSource>();
+                    return ref Throw.NotSingleSequenceRef<TSource>();
             }
         }
 
@@ -142,7 +142,7 @@ namespace NetFabric.Hyperlinq
         [return: MaybeNull]
         public static ref readonly TSource SingleOrDefault<TSource>(this TSource[] source, Predicate<TSource> predicate)
         {
-            if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
+            if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
 
             return ref SingleOrDefault<TSource>(source, predicate, 0, source.Length);
         }
@@ -161,7 +161,7 @@ namespace NetFabric.Hyperlinq
                     for (index++; index < end; index++)
                     {
                         if (predicate(source[index]))
-                            ThrowHelper.ThrowNotSingleSequence<TSource>();
+                            Throw.NotSingleSequence<TSource>();
                     }
 
                     return ref first;
@@ -174,7 +174,7 @@ namespace NetFabric.Hyperlinq
         [return: MaybeNull]
         public static ref readonly TSource SingleOrDefault<TSource>(this TSource[] source, PredicateAt<TSource> predicate)
         {
-            if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
+            if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
 
             return ref SingleOrDefault<TSource>(source, predicate, 0, source.Length);
         }
@@ -193,7 +193,7 @@ namespace NetFabric.Hyperlinq
                     for (index++; index < end; index++)
                     {
                         if (predicate(source[index], index))
-                            ThrowHelper.ThrowNotSingleSequence<TSource>();
+                            Throw.NotSingleSequence<TSource>();
                     }
 
                     return ref first;
@@ -206,7 +206,7 @@ namespace NetFabric.Hyperlinq
         [return: MaybeNull]
         public static ref readonly TSource SingleOrDefault<TSource>(this TSource[] source, PredicateAt<TSource> predicate, out int index)
         {
-            if (predicate is null) ThrowHelper.ThrowArgumentNullException(nameof(predicate));
+            if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
 
             return ref SingleOrDefault<TSource>(source, predicate, out index, 0, source.Length);
         }
@@ -225,7 +225,7 @@ namespace NetFabric.Hyperlinq
                     for (index++; index < end; index++)
                     {
                         if (predicate(source[index], index))
-                            ThrowHelper.ThrowNotSingleSequence<TSource>();
+                            Throw.NotSingleSequence<TSource>();
                     }
 
                     return ref first;

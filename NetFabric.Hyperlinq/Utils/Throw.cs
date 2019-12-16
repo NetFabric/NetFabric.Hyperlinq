@@ -3,74 +3,74 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace NetFabric.Hyperlinq
 {
-    static class ThrowHelper
+    static class Throw
     {
         [DoesNotReturn]
-        public static void ThrowArgumentException(string message, string paramName)
+        public static void ArgumentException(string message, string paramName)
             => throw new ArgumentException(message, paramName);
 
         [DoesNotReturn]
-        public static void ThrowArgumentNullException(string paramName)
+        public static void ArgumentNullException(string paramName)
             => throw new ArgumentNullException(paramName);
 
         [DoesNotReturn]
-        public static T ThrowArgumentNullException<T>(string paramName)
+        public static T ArgumentNullException<T>(string paramName)
             => throw new ArgumentNullException(paramName);
 
         [DoesNotReturn]
-        public static void ThrowArgumentOutOfRangeException(string paramName)
+        public static void ArgumentOutOfRangeException(string paramName)
             => throw new ArgumentOutOfRangeException(paramName);
 
         [DoesNotReturn]
-        public static T ThrowArgumentOutOfRangeException<T>(string paramName)
+        public static T ArgumentOutOfRangeException<T>(string paramName)
             => throw new ArgumentOutOfRangeException(paramName);
 
         [DoesNotReturn]
-        public static void ThrowIndexOutOfRangeException()
+        public static void IndexOutOfRangeException()
             => throw new IndexOutOfRangeException();
 
         [DoesNotReturn]
-        public static T ThrowIndexOutOfRangeException<T>()
+        public static T IndexOutOfRangeException<T>()
             => throw new IndexOutOfRangeException();
 
         [DoesNotReturn]
-        public static void ThrowEmptySequence()
+        public static void EmptySequence()
             => throw new InvalidOperationException(Resource.EmptySequence);
 
         [DoesNotReturn]
-        public static T ThrowEmptySequence<T>()
+        public static T EmptySequence<T>()
             => throw new InvalidOperationException(Resource.EmptySequence);
 
         [DoesNotReturn]
-        public static ref readonly T ThrowEmptySequenceRef<T>()
+        public static ref readonly T EmptySequenceRef<T>()
             => throw new InvalidOperationException(Resource.EmptySequence);
 
         [DoesNotReturn]
-        public static void ThrowNotSingleSequence()
+        public static void NotSingleSequence()
             => throw new InvalidOperationException(Resource.NotSingleSequence);
 
         [DoesNotReturn]
-        public static T ThrowNotSingleSequence<T>()
+        public static T NotSingleSequence<T>()
             => throw new InvalidOperationException(Resource.NotSingleSequence);
 
         [DoesNotReturn]
-        public static ref readonly T ThrowNotSingleSequenceRef<T>()
+        public static ref readonly T NotSingleSequenceRef<T>()
             => throw new InvalidOperationException(Resource.NotSingleSequence);
 
         [DoesNotReturn]
-        public static void ThrowInvalidOperationException()
+        public static void InvalidOperationException()
             => throw new InvalidOperationException();
 
         [DoesNotReturn]
-        public static T ThrowInvalidOperationException<T>()
+        public static T InvalidOperationException<T>()
             => throw new InvalidOperationException();
 
         [DoesNotReturn]
-        public static void ThrowNotSupportedException()
+        public static void NotSupportedException()
             => throw new NotSupportedException();
 
         [DoesNotReturn]
-        public static T ThrowNotSupportedException<T>()
+        public static T NotSupportedException<T>()
             => throw new NotSupportedException();
     }
 }

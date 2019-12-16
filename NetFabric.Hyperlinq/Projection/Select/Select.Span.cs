@@ -12,7 +12,7 @@ namespace NetFabric.Hyperlinq
             this Span<TSource> source, 
             Selector<TSource, TResult> selector)
         {
-            if (selector is null) ThrowHelper.ThrowArgumentNullException(nameof(selector));
+            if (selector is null) Throw.ArgumentNullException(nameof(selector));
 
             return new SelectEnumerable<TSource, TResult>(in source, selector);
         }

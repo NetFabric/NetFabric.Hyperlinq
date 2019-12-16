@@ -11,7 +11,7 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
-            if (action is null) ThrowHelper.ThrowArgumentNullException(nameof(action));
+            if (action is null) Throw.ArgumentNullException(nameof(action));
 
             ForEach<TEnumerable, TEnumerator, TSource>(source, action, 0, source.Count);
         }
@@ -30,7 +30,7 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
-            if (action is null) ThrowHelper.ThrowArgumentNullException(nameof(action));
+            if (action is null) Throw.ArgumentNullException(nameof(action));
 
             ForEach<TEnumerable, TEnumerator, TSource>(source, action, 0, source.Count);
         }

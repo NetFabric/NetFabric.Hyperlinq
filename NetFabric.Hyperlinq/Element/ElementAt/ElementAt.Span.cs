@@ -10,7 +10,7 @@ namespace NetFabric.Hyperlinq
         [Pure]
         public static ref readonly TSource ElementAt<TSource>(this Span<TSource> source, int index)
         {
-            if (index < 0 || index >= source.Length) ThrowHelper.ThrowArgumentOutOfRangeException<TSource>(nameof(index));
+            if (index < 0 || index >= source.Length) Throw.ArgumentOutOfRangeException<TSource>(nameof(index));
 
             return ref source[index];
         }
@@ -18,7 +18,7 @@ namespace NetFabric.Hyperlinq
         [Pure]
         static ref readonly TSource ElementAt<TSource>(this Span<TSource> source, int index, int skipCount, int takeCount)
         {
-            if (index < 0 || index >= takeCount) ThrowHelper.ThrowArgumentOutOfRangeException<TSource>(nameof(index));
+            if (index < 0 || index >= takeCount) Throw.ArgumentOutOfRangeException<TSource>(nameof(index));
 
             return ref source[index + skipCount];
         }
