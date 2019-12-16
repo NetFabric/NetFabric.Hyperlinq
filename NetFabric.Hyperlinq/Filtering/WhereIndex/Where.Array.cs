@@ -88,30 +88,30 @@ namespace NetFabric.Hyperlinq
             public int Count()
                 => Array.Count<TSource>(source, predicate, skipCount, takeCount);
             public int Count(Predicate<TSource> predicate)
-                => Array.Count<TSource>(source, Utils.CombinePredicates(this.predicate, predicate), skipCount, takeCount);
+                => Array.Count<TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount);
             public int Count(PredicateAt<TSource> predicate)
-                => Array.Count<TSource>(source, Utils.CombinePredicates(this.predicate, predicate), skipCount, takeCount);
+                => Array.Count<TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount);
 
             public bool Any()
                 => Array.Any<TSource>(source, predicate, skipCount, takeCount);
             public bool Any(Predicate<TSource> predicate)
-                => Array.Any<TSource>(source, Utils.CombinePredicates(this.predicate, predicate), skipCount, takeCount);
+                => Array.Any<TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount);
             public bool Any(PredicateAt<TSource> predicate)
-                => Array.Any<TSource>(source, Utils.CombinePredicates(this.predicate, predicate), skipCount, takeCount);
+                => Array.Any<TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount);
 
             public Array.WhereIndexEnumerable<TSource> Where(Predicate<TSource> predicate)
-                => Array.Where<TSource>(source, Utils.CombinePredicates(this.predicate, predicate), skipCount, takeCount);
+                => Array.Where<TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount);
             public Array.WhereIndexEnumerable<TSource> Where(PredicateAt<TSource> predicate)
-                => Array.Where<TSource>(source, Utils.CombinePredicates(this.predicate, predicate), skipCount, takeCount);
+                => Array.Where<TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount);
 
             public ref readonly TSource First()
                 => ref Array.First<TSource>(source, predicate, skipCount, takeCount);
             public ref readonly TSource First(out int index)
                 => ref Array.First<TSource>(source, predicate, out index, skipCount, takeCount);
             public ref readonly TSource First(Predicate<TSource> predicate)
-                => ref Array.First<TSource>(source, Utils.CombinePredicates(this.predicate, predicate), skipCount, takeCount);
+                => ref Array.First<TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount);
             public ref readonly TSource First(PredicateAt<TSource> predicate)
-                => ref Array.First<TSource>(source, Utils.CombinePredicates(this.predicate, predicate), skipCount, takeCount);
+                => ref Array.First<TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount);
 
             [return: MaybeNull]
             public ref readonly TSource FirstOrDefault()
@@ -121,19 +121,19 @@ namespace NetFabric.Hyperlinq
                 => ref Array.FirstOrDefault<TSource>(source, predicate, out index, skipCount, takeCount);
             [return: MaybeNull]
             public ref readonly TSource FirstOrDefault(Predicate<TSource> predicate)
-                => ref Array.FirstOrDefault<TSource>(source, Utils.CombinePredicates(this.predicate, predicate), skipCount, takeCount);
+                => ref Array.FirstOrDefault<TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount);
             [return: MaybeNull]
             public ref readonly TSource FirstOrDefault(PredicateAt<TSource> predicate)
-                => ref Array.FirstOrDefault<TSource>(source, Utils.CombinePredicates(this.predicate, predicate), skipCount, takeCount);
+                => ref Array.FirstOrDefault<TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount);
 
             public ref readonly TSource Single()
                 => ref Array.Single<TSource>(source, predicate, skipCount, takeCount);
             public ref readonly TSource Single(out int index)
                 => ref Array.Single<TSource>(source, predicate, out index, skipCount, takeCount);
             public ref readonly TSource Single(Predicate<TSource> predicate)
-                => ref Array.Single<TSource>(source, Utils.CombinePredicates(this.predicate, predicate), skipCount, takeCount);
+                => ref Array.Single<TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount);
             public ref readonly TSource Single(PredicateAt<TSource> predicate)
-                => ref Array.Single<TSource>(source, Utils.CombinePredicates(this.predicate, predicate), skipCount, takeCount);
+                => ref Array.Single<TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount);
 
             [return: MaybeNull]
             public ref readonly TSource SingleOrDefault()
@@ -143,10 +143,10 @@ namespace NetFabric.Hyperlinq
                 => ref Array.SingleOrDefault<TSource>(source, predicate, out index, skipCount, takeCount);
             [return: MaybeNull]
             public ref readonly TSource SingleOrDefault(Predicate<TSource> predicate)
-                => ref Array.SingleOrDefault<TSource>(source, Utils.CombinePredicates(this.predicate, predicate), skipCount, takeCount);
+                => ref Array.SingleOrDefault<TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount);
             [return: MaybeNull]
             public ref readonly TSource SingleOrDefault(PredicateAt<TSource> predicate)
-                => ref Array.SingleOrDefault<TSource>(source, Utils.CombinePredicates(this.predicate, predicate), skipCount, takeCount);
+                => ref Array.SingleOrDefault<TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount);
 
             public List<TSource> ToList()
                 => Array.ToList<TSource>(source, predicate, skipCount, takeCount);

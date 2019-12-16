@@ -19,16 +19,16 @@ namespace NetFabric.Hyperlinq.Benchmarks
 
         bool MethodLocal(int value, Predicate<int> predicate)
         {
-            return Method(value, CombinePredicates);
+            return Method(value, Combine);
 
-            bool CombinePredicates(int item)
+            bool Combine(int item)
                 => this.predicate(item) && predicate(item);
         }
 
         bool MethodLambda(int value, Predicate<int> predicate)
-            => Method(value, CombinePredicates(this.predicate, predicate));
+            => Method(value, Combine(this.predicate, predicate));
 
-        static Predicate<int> CombinePredicates(Predicate<int> predicate0, Predicate<int> predicate1)
+        static Predicate<int> Combine(Predicate<int> predicate0, Predicate<int> predicate1)
                 => item => predicate0(item) && predicate1(item);
 
         static bool Method(int value, Predicate<int> predicate)
