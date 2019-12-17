@@ -24,8 +24,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetFabric.Hyperlinq.TestData", "NetFabric.Hyperlinq.TestData\NetFabric.Hyperlinq.TestData.csproj", "{8BC768FC-CACD-440E-92FD-905D774C07DC}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetFabric.Hyperlinq.Build", "NetFabric.Hyperlinq.Build\NetFabric.Hyperlinq.Build.csproj", "{60D7B296-323E-4899-AE69-810BF02EF107}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetFabric.Hyperlinq.Build.Fody", "NetFabric.Hyperlinq.Build.Fody\NetFabric.Hyperlinq.Build.Fody.csproj", "{730FFE3B-54C6-4F97-A80E-C0C5136F9955}"
@@ -50,10 +48,6 @@ Global
 		{B2231C1C-CB99-4A6B-AE09-7B105BF02E9A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B2231C1C-CB99-4A6B-AE09-7B105BF02E9A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B2231C1C-CB99-4A6B-AE09-7B105BF02E9A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8BC768FC-CACD-440E-92FD-905D774C07DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8BC768FC-CACD-440E-92FD-905D774C07DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8BC768FC-CACD-440E-92FD-905D774C07DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8BC768FC-CACD-440E-92FD-905D774C07DC}.Release|Any CPU.Build.0 = Release|Any CPU
 		{60D7B296-323E-4899-AE69-810BF02EF107}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{60D7B296-323E-4899-AE69-810BF02EF107}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{60D7B296-323E-4899-AE69-810BF02EF107}.Release|Any CPU.ActiveCfg = Release|Any CPU
