@@ -65,6 +65,8 @@ namespace NetFabric.Hyperlinq
 
             static async ValueTask<int> ExecuteAsync(TEnumerable source, AsyncPredicateAt<TSource> predicate, CancellationToken cancellationToken)
             {
+                cancellationToken.ThrowIfCancellationRequested();
+
                 var count = 0;
                 var enumerator = source.GetAsyncEnumerator(cancellationToken);
                 await using (enumerator.ConfigureAwait(false))
@@ -73,6 +75,7 @@ namespace NetFabric.Hyperlinq
                     {
                         for (var index = 0; await enumerator.MoveNextAsync().ConfigureAwait(false); index++)
                         {
+                            cancellationToken.ThrowIfCancellationRequested();
                             if (await predicate(enumerator.Current, index, cancellationToken))
                                 count++;
                         }

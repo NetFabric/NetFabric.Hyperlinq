@@ -9,15 +9,12 @@ namespace NetFabric.Hyperlinq
     {
         public static async ValueTask<List<TSource>> ToListAsync<TSource>(IAsyncEnumerable<TSource> source, CancellationToken cancellationToken = default)
         {
-            cancellationToken.ThrowIfCancellationRequested();
-
             var list = new List<TSource>();
-            var enumerator = source.GetAsyncEnumerator();
+            var enumerator = source.GetAsyncEnumerator(cancellationToken);
             await using (enumerator.ConfigureAwait(false))
             {
                 while (await enumerator.MoveNextAsync().ConfigureAwait(false))
                 {
-                    cancellationToken.ThrowIfCancellationRequested();
                     list.Add(enumerator.Current);
                 }
             }

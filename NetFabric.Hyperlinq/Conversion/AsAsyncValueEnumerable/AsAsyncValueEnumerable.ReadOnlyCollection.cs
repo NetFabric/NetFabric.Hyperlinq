@@ -82,22 +82,24 @@ namespace NetFabric.Hyperlinq
             public readonly AsyncEnumerator GetAsyncEnumerator(CancellationToken cancellationToken = default) 
             {
                 cancellationToken.ThrowIfCancellationRequested();
-                return new AsyncEnumerator(source);
+                return new AsyncEnumerator(source, cancellationToken);
             }
             readonly IAsyncEnumerator<TSource> IAsyncEnumerable<TSource>.GetAsyncEnumerator(CancellationToken cancellationToken) 
             {
                 cancellationToken.ThrowIfCancellationRequested();
-                return new AsyncEnumerator(source);
+                return new AsyncEnumerator(source, cancellationToken);
             }
 
             public readonly struct AsyncEnumerator
                 : IAsyncEnumerator<TSource>
             {
                 readonly IEnumerator<TSource> enumerator;
+                readonly CancellationToken cancellationToken;
 
-                internal AsyncEnumerator(IReadOnlyCollection<TSource> enumerable)
+                internal AsyncEnumerator(IReadOnlyCollection<TSource> enumerable, CancellationToken cancellationToken)
                 {
                     enumerator = enumerable.GetEnumerator();
+                    this.cancellationToken = cancellationToken;
                 }
 
                 [MaybeNull]
@@ -109,7 +111,10 @@ namespace NetFabric.Hyperlinq
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public ValueTask<bool> MoveNextAsync() 
-                    => new ValueTask<bool>(enumerator.MoveNext());
+                {
+                    cancellationToken.ThrowIfCancellationRequested();
+                    return new ValueTask<bool>(enumerator.MoveNext());
+                }
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public ValueTask DisposeAsync() 

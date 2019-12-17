@@ -62,8 +62,6 @@ namespace NetFabric.Hyperlinq
 
                 while (await enumerator.MoveNextAsync().ConfigureAwait(false))
                 {
-                    cancellationToken.ThrowIfCancellationRequested();
-
                     if (count == array.Length)
                     {
                         // MaxArrayLength is defined in Array.MaxArrayLength and in gchelpers in CoreCLR.
