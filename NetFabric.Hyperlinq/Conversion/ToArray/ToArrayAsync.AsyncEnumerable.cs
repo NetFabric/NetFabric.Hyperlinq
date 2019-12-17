@@ -10,7 +10,7 @@ namespace NetFabric.Hyperlinq
     {
         // Based on https://github.com/dotnet/reactive/blob/34ea00d1b724d4c8d67947f500400876655f6feb/Ix.NET/Source/System.Linq.Async/System/Linq/AsyncEnumerableHelpers.cs
         [Pure]
-        public static async ValueTask<TSource[]> ToArrayAsync<TSource>(IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
+        static async ValueTask<TSource[]> ToArrayAsync<TSource>(IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
         {
             var result = await ToArrayWithLengthAsync(source, cancellationToken).ConfigureAwait(false);
             System.Array.Resize(ref result.Array, result.Length);

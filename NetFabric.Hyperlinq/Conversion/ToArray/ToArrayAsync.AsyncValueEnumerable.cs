@@ -10,7 +10,7 @@ namespace NetFabric.Hyperlinq
     {
         // Based on https://github.com/dotnet/reactive/blob/34ea00d1b724d4c8d67947f500400876655f6feb/Ix.NET/Source/System.Linq.Async/System/Linq/AsyncEnumerableHelpers.cs
         [Pure]
-        public static async ValueTask<TSource[]> ToArrayAsync<TEnumerable, TEnumerator, TSource>(TEnumerable source, CancellationToken cancellationToken)
+        public static async ValueTask<TSource[]> ToArrayAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source, CancellationToken cancellationToken)
             where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
