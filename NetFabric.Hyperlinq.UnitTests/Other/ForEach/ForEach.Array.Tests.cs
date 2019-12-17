@@ -21,7 +21,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             Array.ForEach<int>(source, item => result += item);
 
             // Assert
-            result.Must()
+            _ = result.Must()
                 .BeEqualTo(expected);
         }
 
@@ -40,7 +40,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             Array.ForEach<int>(source, (item, index) => result += item + index);
 
             // Assert
-            result.Must()
+            _ = result.Must()
                 .BeEqualTo(expected);
         }
     }

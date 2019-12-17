@@ -19,7 +19,8 @@ namespace NetFabric.Hyperlinq
             return new SelectEnumerable<TSource, TResult>(in source, selector);
         }
 
-        public readonly struct SelectEnumerable<TSource, TResult>
+        [GeneratorMapping("TSource", "TResult")]
+        public readonly partial struct SelectEnumerable<TSource, TResult>
             : IValueReadOnlyList<TResult, SelectEnumerable<TSource, TResult>.DisposableEnumerator>
         {
             internal readonly ReadOnlyMemory<TSource> source;

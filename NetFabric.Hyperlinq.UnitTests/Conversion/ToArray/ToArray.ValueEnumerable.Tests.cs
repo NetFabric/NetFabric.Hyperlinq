@@ -22,7 +22,7 @@ namespace NetFabric.Hyperlinq.UnitTests
                 .ToArray<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped);
 
             // Assert
-            result.Must()
+            _ = result.Must()
                 .BeOfType<int[]>()
                 .BeNotSameAs(source)
                 .BeEnumerableOf<int>()

@@ -5,7 +5,7 @@ using System.Diagnostics.Contracts;
 
 namespace NetFabric.Hyperlinq
 {
-    public readonly struct MaybeAt<T> 
+    public readonly partial struct MaybeAt<T> 
         : IEquatable<MaybeAt<T>>
     {
         public MaybeAt([AllowNull] T value, int index)

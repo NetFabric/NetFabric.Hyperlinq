@@ -7,7 +7,7 @@ using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
-    public static class DictionaryKeysBindings
+    public static partial class DictionaryKeysBindings
     {
         [Pure]
         public static int Count<TKey, TValue>(this Dictionary<TKey, TValue>.KeyCollection source)
@@ -178,15 +178,14 @@ namespace NetFabric.Hyperlinq
         public static void ForEach<TKey, TValue>(this Dictionary<TKey, TValue>.KeyCollection source, ActionAt<TKey> action)
             => ValueReadOnlyCollection.ForEach<ValueWrapper<TKey, TValue>, Dictionary<TKey, TValue>.KeyCollection.Enumerator, TKey>(new ValueWrapper<TKey, TValue>(source), action);
 
-        public readonly struct ValueWrapper<TKey, TValue>
+        [GeneratorMapping("TSource", "TKey")]
+        public readonly partial struct ValueWrapper<TKey, TValue>
             : IValueReadOnlyCollection<TKey, Dictionary<TKey, TValue>.KeyCollection.Enumerator>
         {
             readonly Dictionary<TKey, TValue>.KeyCollection source;
 
             public ValueWrapper(Dictionary<TKey, TValue>.KeyCollection source)
-            {
-                this.source = source;
-            }
+                => this.source = source;
 
             public readonly int Count
             {
@@ -200,5 +199,8 @@ namespace NetFabric.Hyperlinq
             readonly IEnumerator<TKey> IEnumerable<TKey>.GetEnumerator() => source.GetEnumerator();
             readonly IEnumerator IEnumerable.GetEnumerator() => source.GetEnumerator();
         }
+
+        public static int Count<TKey, TValue>(this ValueWrapper<TKey, TValue> source)
+            => source.Count;
     }
 }

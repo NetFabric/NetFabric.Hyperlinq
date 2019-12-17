@@ -23,7 +23,8 @@ namespace NetFabric.Hyperlinq
             int skipCount, int takeCount)
             => new WhereSelectEnumerable<TSource, TResult>(source, predicate, selector, skipCount, takeCount);
 
-        public readonly struct WhereSelectEnumerable<TSource, TResult>
+        [GeneratorMapping("TSource", "TResult")]
+        public readonly partial struct WhereSelectEnumerable<TSource, TResult>
             : IValueEnumerable<TResult, WhereSelectEnumerable<TSource, TResult>.DisposableEnumerator>
         {
             internal readonly TSource[] source;

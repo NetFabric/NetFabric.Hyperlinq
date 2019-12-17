@@ -2,7 +2,7 @@
 <Project>
   <PropertyGroup>
     <Authors>Antao Almada</Authors>
-    <Copyright>Copyright 2019 Antao Almada</Copyright>
+    <Copyright>Copyright 2019-2020 Antao Almada</Copyright>
     <LangVersion>8.0</LangVersion>
     <Features>strict</Features>
   </PropertyGroup>

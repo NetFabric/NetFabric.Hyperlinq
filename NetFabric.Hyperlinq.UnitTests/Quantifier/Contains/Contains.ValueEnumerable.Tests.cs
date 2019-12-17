@@ -22,7 +22,7 @@ namespace NetFabric.Hyperlinq.UnitTests
                 .Contains<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, value);
 
             // Assert
-            result.Must()
+            _ = result.Must()
                 .BeEqualTo(expected);
         }
 
@@ -40,7 +40,7 @@ namespace NetFabric.Hyperlinq.UnitTests
                 .Contains<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, value, EqualityComparer<int>.Default);
 
             // Assert
-            result.Must()
+            _ = result.Must()
                 .BeEqualTo(expected);
         }    
 
@@ -58,7 +58,7 @@ namespace NetFabric.Hyperlinq.UnitTests
                 .Contains<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, value, null);
 
             // Assert
-            result.Must()
+            _ = result.Must()
                 .BeEqualTo(expected);
         }  
     }

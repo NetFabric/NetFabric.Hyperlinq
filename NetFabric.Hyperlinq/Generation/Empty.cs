@@ -13,9 +13,7 @@ namespace NetFabric.Hyperlinq
         public static EmptyEnumerable<TSource> Empty<TSource>() =>
             new EmptyEnumerable<TSource>();
 
-        [GenericsTypeMapping("TEnumerable", typeof(EmptyEnumerable<>))]
-        [GenericsTypeMapping("TEnumerator", typeof(EmptyEnumerable<>.DisposableEnumerator))]
-        public readonly struct EmptyEnumerable<TSource>
+        public readonly partial struct EmptyEnumerable<TSource>
             : IValueReadOnlyList<TSource, EmptyEnumerable<TSource>.DisposableEnumerator>
         {
             [Pure]
@@ -29,7 +27,7 @@ namespace NetFabric.Hyperlinq
 
             public readonly TSource this[int index] => Throw.IndexOutOfRangeException<TSource>(); 
 
-            public readonly struct Enumerator
+            public readonly partial struct Enumerator
             {
                 [MaybeNull]
                 public readonly TSource Current
@@ -42,7 +40,7 @@ namespace NetFabric.Hyperlinq
                 public readonly bool MoveNext() => false;
             }
 
-            public readonly struct DisposableEnumerator
+            public readonly partial struct DisposableEnumerator
                 : IEnumerator<TSource>
             {
                 [MaybeNull]

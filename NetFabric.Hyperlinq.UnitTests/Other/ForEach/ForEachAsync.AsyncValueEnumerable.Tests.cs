@@ -23,7 +23,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             AsyncValueEnumerable.ForEachAsync<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, (item, _) =>  { result += item; return default; });
 
             // Assert
-            result.Must()
+            _ = result.Must()
                 .BeEqualTo(expected);
         }
 
@@ -45,7 +45,7 @@ namespace NetFabric.Hyperlinq.UnitTests
                 (item, index, _) => { result += item + index; return default; });
 
             // Assert
-            result.Must()
+            _ = result.Must()
                 .BeEqualTo(expected);
         }
     }

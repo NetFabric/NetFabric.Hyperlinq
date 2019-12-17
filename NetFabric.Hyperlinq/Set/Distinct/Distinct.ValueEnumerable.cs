@@ -19,7 +19,7 @@ namespace NetFabric.Hyperlinq
             where TEnumerator : struct, IEnumerator<TSource>
             => new DistinctEnumerable<TEnumerable, TEnumerator, TSource>(source, comparer);
 
-        public readonly struct DistinctEnumerable<TEnumerable, TEnumerator, TSource>
+        public readonly partial struct DistinctEnumerable<TEnumerable, TEnumerator, TSource>
             : IValueEnumerable<TSource, DistinctEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator>
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>

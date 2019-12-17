@@ -20,7 +20,7 @@ namespace NetFabric.Hyperlinq.UnitTests
                 .Contains<int>(value);
 
             // Assert
-            result.Must()
+            _ = result.Must()
                 .BeEqualTo(expected);
         }
 
@@ -37,7 +37,7 @@ namespace NetFabric.Hyperlinq.UnitTests
                 .Contains<int>(value, EqualityComparer<int>.Default);
 
             // Assert
-            result.Must()
+            _ = result.Must()
                 .BeEqualTo(expected);
         }    
 
@@ -54,7 +54,7 @@ namespace NetFabric.Hyperlinq.UnitTests
                 .Contains<int>(value, null);
 
             // Assert
-            result.Must()
+            _ = result.Must()
                 .BeEqualTo(expected);
         }  
     }

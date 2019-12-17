@@ -17,7 +17,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             Action action = () => ValueEnumerable.Repeat(0, count);
 
             // Assert
-            action.Must()
+            _ = action.Must()
                 .Throw<ArgumentOutOfRangeException>()
                 .EvaluateTrue(exception => exception.ParamName == "count");
         }
@@ -35,7 +35,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             Func<int> action = () => ValueEnumerable.Repeat(0, count)[index];
 
             // Assert
-            action.Must().Throw<IndexOutOfRangeException>();
+            _ = action.Must().Throw<IndexOutOfRangeException>();
         }
   
   
@@ -50,7 +50,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var result = ValueEnumerable.Repeat(value, count);
 
             // Assert
-            result.Must()
+            _ = result.Must()
                 .BeEnumerableOf<int>()
                 .BeEqualTo(expected);
         }
@@ -66,7 +66,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var result = ValueEnumerable.Repeat(value, count).Skip(skipCount);
 
             // Assert
-            result.Must()
+            _ = result.Must()
                 .BeEnumerableOf<int>()
                 .BeEqualTo(expected);
         }
@@ -82,7 +82,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var result = ValueEnumerable.Repeat(value, count).Take(takeCount);
 
             // Assert
-            result.Must()
+            _ = result.Must()
                 .BeEnumerableOf<int>()
                 .BeEqualTo(expected);
         }
@@ -98,7 +98,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var result = ValueEnumerable.Repeat(value, count).All(item => false);
 
             // Assert
-            result.Must()
+            _ = result.Must()
                 .BeEqualTo(expected);
         }
 
@@ -113,7 +113,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var result = ValueEnumerable.Repeat(value, count).Any();
 
             // Assert
-            result.Must()
+            _ = result.Must()
                 .BeEqualTo(expected);
         }
 
@@ -128,7 +128,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var result = ValueEnumerable.Repeat(value, count).ToArray();
 
             // Assert
-            result.Must()
+            _ = result.Must()
                 .BeOfType<int[]>()
                 .BeEnumerableOf<int>()
                 .BeEqualTo(expected);
@@ -145,7 +145,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var result = ValueEnumerable.Repeat(value, count).ToList();
 
             // Assert
-            result.Must()
+            _ = result.Must()
                 .BeOfType<List<int>>()
                 .BeEnumerableOf<int>()
                 .BeEqualTo(expected);

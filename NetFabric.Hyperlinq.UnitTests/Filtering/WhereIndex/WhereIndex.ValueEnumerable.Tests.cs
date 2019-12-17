@@ -17,7 +17,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             Action action = () => ValueEnumerable.Where<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(enumerable, predicate);
 
             // Assert
-            action.Must()
+            _ = action.Must()
                 .Throw<ArgumentNullException>()
                 .EvaluateTrue(exception => exception.ParamName == "predicate");
         }
@@ -34,7 +34,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var result = ValueEnumerable.Where<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
 
             // Assert
-            result.Must()
+            _ = result.Must()
                 .BeEnumerableOf<int>()
                 .BeEqualTo(expected);
         }

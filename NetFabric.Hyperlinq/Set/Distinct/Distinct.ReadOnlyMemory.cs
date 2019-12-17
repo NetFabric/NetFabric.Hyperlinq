@@ -16,7 +16,7 @@ namespace NetFabric.Hyperlinq
             IEqualityComparer<TSource>? comparer = null)
             => new DistinctEnumerable<TSource>(source, comparer);
 
-        public readonly struct DistinctEnumerable<TSource>
+        public readonly partial struct DistinctEnumerable<TSource>
             : IValueEnumerable<TSource, DistinctEnumerable<TSource>.DisposableEnumerator>
         {
             readonly ReadOnlyMemory<TSource> source;

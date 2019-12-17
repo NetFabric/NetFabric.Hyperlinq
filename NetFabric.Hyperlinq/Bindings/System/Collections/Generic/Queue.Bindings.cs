@@ -7,7 +7,7 @@ using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
-    public static class QueueBindings
+    public static partial class QueueBindings
     {
         [Pure]
         public static int Count<TSource>(this Queue<TSource> source)
@@ -178,15 +178,13 @@ namespace NetFabric.Hyperlinq
         public static void ForEach<TSource>(this Queue<TSource> source, ActionAt<TSource> action)
             => ValueReadOnlyCollection.ForEach<ValueWrapper<TSource>, Queue<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), action);
 
-        public readonly struct ValueWrapper<TSource>
+        public readonly partial struct ValueWrapper<TSource>
             : IValueReadOnlyCollection<TSource, Queue<TSource>.Enumerator>
         {
             readonly Queue<TSource> source;
 
             public ValueWrapper(Queue<TSource> source)
-            {
-                this.source = source;
-            }
+                => this.source = source;
 
             public readonly int Count
             {
@@ -200,5 +198,8 @@ namespace NetFabric.Hyperlinq
             readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => source.GetEnumerator();
             readonly IEnumerator IEnumerable.GetEnumerator() => source.GetEnumerator();
         }
+
+        public static int Count<TSource>(this ValueWrapper<TSource> source)
+            => source.Count;
     }
 }

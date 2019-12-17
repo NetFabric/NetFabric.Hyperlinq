@@ -15,9 +15,7 @@ namespace NetFabric.Hyperlinq
         public static AsyncValueEnumerableWrapper<TSource> AsAsyncValueEnumerable<TSource>(this TSource[] source)
             => new AsyncValueEnumerableWrapper<TSource>(source);
 
-        [GenericsTypeMapping("TEnumerable", typeof(AsyncValueEnumerableWrapper<>))]
-        [GenericsTypeMapping("TEnumerator", typeof(AsyncValueEnumerableWrapper<>.DisposableAsyncEnumerator))]
-        public readonly struct AsyncValueEnumerableWrapper<TSource>
+        public readonly partial struct AsyncValueEnumerableWrapper<TSource>
             : IAsyncValueEnumerable<TSource, AsyncValueEnumerableWrapper<TSource>.DisposableAsyncEnumerator>
         {
             readonly TSource[] source;
@@ -41,7 +39,8 @@ namespace NetFabric.Hyperlinq
                 return new DisposableAsyncEnumerator(source, cancellationToken);
             }
 
-            public readonly int Count => source.Length;
+            public readonly int Count 
+                => source.Length;
 
             public readonly ref readonly TSource this[int index] => ref source[index];
 

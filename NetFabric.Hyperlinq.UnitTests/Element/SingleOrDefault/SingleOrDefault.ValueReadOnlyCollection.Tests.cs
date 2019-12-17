@@ -22,7 +22,7 @@ namespace NetFabric.Hyperlinq.UnitTests
                 .SingleOrDefault<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(wrapped);
 
             // Assert
-            result.Must()
+            _ = result.Must()
                 .BeEqualTo(expected);
         }
 
@@ -42,7 +42,7 @@ namespace NetFabric.Hyperlinq.UnitTests
                 .SingleOrDefault<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
 
             // Assert
-            result.Must()
+            _ = result.Must()
                 .BeEqualTo(expected);
         }
 
@@ -59,7 +59,7 @@ namespace NetFabric.Hyperlinq.UnitTests
                 .SingleOrDefault<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(wrapped);
 
             // Assert
-            action.Must()
+            _ = action.Must()
                 .Throw<InvalidOperationException>()
                 .EvaluateTrue(exception => exception.Message == "Sequence contains more than one element");
         }
@@ -77,7 +77,7 @@ namespace NetFabric.Hyperlinq.UnitTests
                 .SingleOrDefault<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
 
             // Assert
-            action.Must()
+            _ = action.Must()
                 .Throw<InvalidOperationException>()
                 .EvaluateTrue(exception => exception.Message == "Sequence contains more than one element");
         }         

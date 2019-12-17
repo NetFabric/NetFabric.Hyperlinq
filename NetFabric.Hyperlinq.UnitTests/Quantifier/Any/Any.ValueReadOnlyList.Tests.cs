@@ -20,7 +20,7 @@ namespace NetFabric.Hyperlinq.UnitTests
                 .Any<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
 
             // Assert
-            action.Must()
+            _ = action.Must()
                 .Throw<ArgumentNullException>()
                 .EvaluateTrue(exception => exception.ParamName == "predicate");
         }
@@ -39,7 +39,7 @@ namespace NetFabric.Hyperlinq.UnitTests
                 .Any<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
 
             // Assert
-            result.Must()
+            _ = result.Must()
                 .BeEqualTo(expected);
         }
     }

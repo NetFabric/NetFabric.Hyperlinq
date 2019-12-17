@@ -16,7 +16,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             Action action = () => ValueReadOnlyList.WhereSelect<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int, int>(list, null, item => item);
 
             // Assert
-            action.Must()
+            _ = action.Must()
                 .Throw<ArgumentNullException>()
                 .EvaluateTrue(exception => exception.ParamName == "predicate");
         }
@@ -31,7 +31,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             Action action = () => ValueReadOnlyList.WhereSelect<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int, int>(list, item => (item & 0x01) == 0, null);
 
             // Assert
-            action.Must()
+            _ = action.Must()
                 .Throw<ArgumentNullException>()
                 .EvaluateTrue(exception => exception.ParamName == "selector");
         }
@@ -48,7 +48,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var result = ValueReadOnlyList.WhereSelect<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int, string>(wrapped, predicate, selector);
 
             // Assert
-            result.Must()
+            _ = result.Must()
                 .BeEnumerableOf<string>()
                 .BeEqualTo(expected);
         }

@@ -17,7 +17,7 @@ namespace NetFabric.Hyperlinq.UnitTests
                 .All<int>(predicate);
 
             // Assert
-            action.Must()
+            _ = action.Must()
                 .Throw<ArgumentNullException>()
                 .EvaluateTrue(exception => exception.ParamName == "predicate");
         }
@@ -34,7 +34,7 @@ namespace NetFabric.Hyperlinq.UnitTests
                 .All<int>(predicate);
 
             // Assert
-            result.Must()
+            _ = result.Must()
                 .BeEqualTo(expected);
         }
     }

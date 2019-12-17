@@ -17,7 +17,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             Action action = () => ValueReadOnlyCollection.Select<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int, string>(collection, selector);
 
             // Assert
-            action.Must()
+            _ = action.Must()
                 .Throw<ArgumentNullException>()
                 .EvaluateTrue(exception => exception.ParamName == "selector");
         }
@@ -38,7 +38,7 @@ namespace NetFabric.Hyperlinq.UnitTests
                 .Select<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int, string>(wrapped, (item, index) => (item + index).ToString());
 
             // Assert
-            result.Must()
+            _ = result.Must()
                 .BeEnumerableOf<string>()
                 .BeEqualTo(expected);
         }

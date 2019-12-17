@@ -8,8 +8,8 @@ using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
-    [Ignore]
-    public static class ImmutableStackBindings
+    [GeneratorIgnore]
+    public static partial class ImmutableStackBindings
     {
         [Pure]
         public static int Count<TSource>(this ImmutableStack<TSource> source)
@@ -179,15 +179,13 @@ namespace NetFabric.Hyperlinq
         public static void ForEach<TSource>(this ImmutableStack<TSource> source, ActionAt<TSource> action)
             => ValueEnumerable.ForEach<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), action);
 
-        public readonly struct ValueWrapper<TSource>
+        public readonly partial struct ValueWrapper<TSource>
             : IValueEnumerable<TSource, ValueWrapper<TSource>.Enumerator>
         {
             readonly ImmutableStack<TSource> source;
 
-            public ValueWrapper(ImmutableStack<TSource> source)
-            {
-                this.source = source;
-            }
+            public ValueWrapper(ImmutableStack<TSource> source) 
+                => this.source = source;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly Enumerator GetEnumerator() => new Enumerator(source);
@@ -199,10 +197,8 @@ namespace NetFabric.Hyperlinq
             {
                 ImmutableStack<TSource>.Enumerator enumerator;
 
-                internal Enumerator(ImmutableStack<TSource> enumerable)
-                {
-                    enumerator = enumerable.GetEnumerator();
-                }
+                internal Enumerator(ImmutableStack<TSource> enumerable) 
+                    => enumerator = enumerable.GetEnumerator();
 
                 [MaybeNull]
                 public readonly TSource Current

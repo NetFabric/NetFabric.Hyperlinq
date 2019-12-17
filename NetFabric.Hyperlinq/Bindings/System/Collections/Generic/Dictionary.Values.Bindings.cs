@@ -7,7 +7,7 @@ using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
-    public static class DictionaryValuesBindings
+    public static partial class DictionaryValuesBindings
     {
         [Pure]
         public static int Count<TKey, TValue>(this Dictionary<TKey, TValue>.ValueCollection source)
@@ -178,15 +178,14 @@ namespace NetFabric.Hyperlinq
         public static void ForEach<TKey, TValue>(this Dictionary<TKey, TValue>.ValueCollection source, ActionAt<TValue> action)
             => ValueReadOnlyCollection.ForEach<ValueWrapper<TKey, TValue>, Dictionary<TKey, TValue>.ValueCollection.Enumerator, TValue>(new ValueWrapper<TKey, TValue>(source), action);
 
-        public readonly struct ValueWrapper<TKey, TValue>
+        [GeneratorMapping("TSource", "TValue")]
+        public readonly partial struct ValueWrapper<TKey, TValue>
             : IValueReadOnlyCollection<TValue, Dictionary<TKey, TValue>.ValueCollection.Enumerator>
         {
             readonly Dictionary<TKey, TValue>.ValueCollection source;
 
-            public ValueWrapper(Dictionary<TKey, TValue>.ValueCollection source)
-            {
-                this.source = source;
-            }
+            public ValueWrapper(Dictionary<TKey, TValue>.ValueCollection source) 
+                => this.source = source;
 
             public readonly int Count
             {
@@ -200,5 +199,8 @@ namespace NetFabric.Hyperlinq
             readonly IEnumerator<TValue> IEnumerable<TValue>.GetEnumerator() => source.GetEnumerator();
             readonly IEnumerator IEnumerable.GetEnumerator() => source.GetEnumerator();
         }
+
+        public static int Count<TKey, TValue>(this ValueWrapper<TKey, TValue> source)
+            => source.Count;
     }
 }

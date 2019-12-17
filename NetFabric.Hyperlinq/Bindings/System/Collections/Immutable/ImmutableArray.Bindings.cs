@@ -8,8 +8,8 @@ using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
-    [Ignore]
-    public static class ImmutableArrayBindings
+    [GeneratorIgnore]
+    public static partial class ImmutableArrayBindings
     {
         [Pure]
         public static int Count<TSource>(this ImmutableArray<TSource> source)
@@ -120,15 +120,13 @@ namespace NetFabric.Hyperlinq
         public static void ForEach<TSource>(this ImmutableArray<TSource> source, ActionAt<TSource> action)
             => ValueReadOnlyList.ForEach<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), action);
 
-        public readonly struct ValueWrapper<TSource>
+        public readonly partial struct ValueWrapper<TSource>
             : IValueReadOnlyList<TSource, ValueWrapper<TSource>.Enumerator>
         {
             readonly ImmutableArray<TSource> source;
 
-            public ValueWrapper(ImmutableArray<TSource> source)
-            {
-                this.source = source;
-            }
+            public ValueWrapper(ImmutableArray<TSource> source) 
+                => this.source = source;
 
             public int Count
             {
@@ -152,10 +150,8 @@ namespace NetFabric.Hyperlinq
                 [SuppressMessage("Style", "IDE0044:Add readonly modifier")]
                 ImmutableArray<TSource>.Enumerator enumerator; // do not make readonly
 
-                internal Enumerator(ImmutableArray<TSource> enumerable)
-                {
-                    enumerator = enumerable.GetEnumerator();
-                }
+                internal Enumerator(ImmutableArray<TSource> enumerable) 
+                    => enumerator = enumerable.GetEnumerator();
 
                 [MaybeNull]
                 public readonly TSource Current
@@ -173,5 +169,8 @@ namespace NetFabric.Hyperlinq
                 public readonly void Dispose() { }
             }
         }
+
+        public static int Count<TSource>(this ValueWrapper<TSource> source)
+            => source.Count;
     }
 }

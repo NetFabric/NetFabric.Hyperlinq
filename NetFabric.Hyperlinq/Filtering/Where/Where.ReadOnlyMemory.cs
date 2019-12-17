@@ -18,7 +18,7 @@ namespace NetFabric.Hyperlinq
             return new WhereEnumerable<TSource>(source, predicate);
         }
 
-        public readonly struct WhereEnumerable<TSource>
+        public readonly partial struct WhereEnumerable<TSource>
             : IValueEnumerable<TSource, WhereEnumerable<TSource>.DisposableEnumerator>
         {
             internal readonly ReadOnlyMemory<TSource> source;
