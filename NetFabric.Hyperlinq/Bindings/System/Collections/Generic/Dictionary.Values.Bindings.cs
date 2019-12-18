@@ -107,6 +107,7 @@ namespace NetFabric.Hyperlinq
         public static TValue First<TKey, TValue>(this Dictionary<TKey, TValue>.ValueCollection source, Predicate<TValue> predicate)
             => ValueReadOnlyCollection.First<ValueWrapper<TKey, TValue>, Dictionary<TKey, TValue>.ValueCollection.Enumerator, TValue>(new ValueWrapper<TKey, TValue>(source), predicate);
         [Pure]
+        [return: MaybeNull]
         public static TValue FirstOrDefault<TKey, TValue>(this Dictionary<TKey, TValue>.ValueCollection source)
             => ValueReadOnlyCollection.FirstOrDefault<ValueWrapper<TKey, TValue>, Dictionary<TKey, TValue>.ValueCollection.Enumerator, TValue>(new ValueWrapper<TKey, TValue>(source));
         [Pure]
