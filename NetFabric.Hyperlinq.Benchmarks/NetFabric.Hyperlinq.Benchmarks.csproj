@@ -15,7 +15,7 @@
   <ItemGroup>
     <PackageReference Include="BenchmarkDotNet" Version="0.12.0" />
     <PackageReference Include="LinqFaster" Version="1.0.0" />
-    <PackageReference Include="morelinq" Version="3.3.1" />
+    <PackageReference Include="morelinq" Version="3.3.2" />
     <PackageReference Include="System.Interactive" Version="4.0.0" />
     <ProjectReference Include="..\NetFabric.Hyperlinq\NetFabric.Hyperlinq.csproj" />
   </ItemGroup>
