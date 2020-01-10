@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -45,8 +46,8 @@ namespace NetFabric.Hyperlinq
                     {
                         while (await enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
-                            if (await predicate(enumerator.Current, cancellationToken))
-                                count++;
+                            var result = await predicate(enumerator.Current, cancellationToken);
+                            count += Unsafe.As<bool, byte>(ref result);
                         }
                     }
                 }
@@ -76,8 +77,8 @@ namespace NetFabric.Hyperlinq
                         for (var index = 0; await enumerator.MoveNextAsync().ConfigureAwait(false); index++)
                         {
                             cancellationToken.ThrowIfCancellationRequested();
-                            if (await predicate(enumerator.Current, index, cancellationToken))
-                                count++;
+                            var result = await predicate(enumerator.Current, index, cancellationToken);
+                            count += Unsafe.As<bool, byte>(ref result);
                         }
                     }
                 }

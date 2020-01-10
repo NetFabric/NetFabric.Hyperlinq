@@ -26,27 +26,27 @@ namespace NetFabric.Hyperlinq.Benchmarks
 
         [Benchmark(Baseline = true)]
         public bool Enumerator_Reference() => 
-            AllEnumerable(enumerableReference, _ => true);
+            AllEnumerable(enumerableReference, item => (item & 0x01) == 0);
 
         [Benchmark]
         public bool Enumerator_Value() =>
-            AllEnumerable(enumerableValue, _ => true);
+            AllEnumerable(enumerableValue, item => (item & 0x01) == 0);
 
         [Benchmark]
         public bool Indexer_Reference() => 
-            AllIndexer(listReference, _ => true);
+            AllIndexer(listReference, item => (item & 0x01) == 0);
 
         [Benchmark]
         public bool Indexer_Value() =>
-            AllIndexer(listValue, _ => true);
+            AllIndexer(listValue, item => (item & 0x01) == 0);
 
         [Benchmark]
         public bool Hyperlinq_Reference() =>
-            listReference.AsValueEnumerable().All(_ => true);
+            listReference.AsValueEnumerable().All(item => (item & 0x01) == 0);
 
         [Benchmark]
         public bool Hyperlinq_Value() =>
-            ReadOnlyList.AsValueEnumerable<TestList.Enumerable, TestList.Enumerable.Enumerator, int>(listValue, enumerable => enumerable.GetEnumerator()).All(_ => true);
+            ReadOnlyList.AsValueEnumerable<TestList.Enumerable, TestList.Enumerable.Enumerator, int>(listValue, enumerable => enumerable.GetEnumerator()).All(item => (item & 0x01) == 0);
 
         static bool AllEnumerable(TestEnumerable.Enumerable source, Predicate<int> predicate)
         {

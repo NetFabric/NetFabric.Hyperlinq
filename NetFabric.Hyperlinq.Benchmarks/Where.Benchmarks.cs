@@ -15,7 +15,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Linq_Array()
         {
             var count = 0;
-            foreach (var item in System.Linq.Enumerable.Where(array, _ => true))
+            foreach (var item in System.Linq.Enumerable.Where(array, item => (item & 0x01) == 0))
                 count++;
             return count;
         }
@@ -25,7 +25,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Linq_Enumerable_Value()
         {
             var count = 0;
-            foreach (var item in System.Linq.Enumerable.Where(enumerableValue, _ => true))
+            foreach (var item in System.Linq.Enumerable.Where(enumerableValue, item => (item & 0x01) == 0))
                 count++;
             return count;
         }
@@ -35,7 +35,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Linq_Collection_Value()
         {
             var count = 0;
-            foreach (var item in System.Linq.Enumerable.Where(collectionValue, _ => true))
+            foreach (var item in System.Linq.Enumerable.Where(collectionValue, item => (item & 0x01) == 0))
                 count++;
             return count;
         }
@@ -45,7 +45,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Linq_List_Value()
         {
             var count = 0;
-            foreach (var item in System.Linq.Enumerable.Where(listValue, _ => true))
+            foreach (var item in System.Linq.Enumerable.Where(listValue, item => (item & 0x01) == 0))
                 count++;
             return count;
         }
@@ -55,7 +55,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Linq_Enumerable_Reference()
         {
             var count = 0;
-            foreach (var item in System.Linq.Enumerable.Where(enumerableReference, _ => true))
+            foreach (var item in System.Linq.Enumerable.Where(enumerableReference, item => (item & 0x01) == 0))
                 count++;
             return count;
         }
@@ -65,7 +65,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Linq_Collection_Reference()
         {
             var count = 0;
-            foreach (var item in System.Linq.Enumerable.Where(collectionReference, _ => true))
+            foreach (var item in System.Linq.Enumerable.Where(collectionReference, item => (item & 0x01) == 0))
                 count++;
             return count;
         }
@@ -75,7 +75,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Linq_List_Reference()
         {
             var count = 0;
-            foreach (var item in System.Linq.Enumerable.Where(listReference, _ => true))
+            foreach (var item in System.Linq.Enumerable.Where(listReference, item => (item & 0x01) == 0))
                 count++;
             return count;
         }
@@ -85,7 +85,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int LinqFaster_Array()
         {
             var count = 0;
-            foreach (var item in array.WhereF(_ => true))
+            foreach (var item in array.WhereF(item => (item & 0x01) == 0))
                 count++;
             return count;
         }
@@ -95,7 +95,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Hyperlinq_Array()
         {
             var count = 0;
-            foreach (var item in array.Where(_ => true))
+            foreach (var item in array.Where(item => (item & 0x01) == 0))
                 count++;
             return count;
         }
@@ -105,7 +105,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Hyperlinq_Enumerable_Value()
         {
             var count = 0;
-            foreach (var item in Enumerable.AsValueEnumerable<TestEnumerable.Enumerable, TestEnumerable.Enumerable.Enumerator, int>(enumerableValue, enumerable => enumerable.GetEnumerator()).Where(_ => true))
+            foreach (var item in Enumerable.AsValueEnumerable<TestEnumerable.Enumerable, TestEnumerable.Enumerable.Enumerator, int>(enumerableValue, enumerable => enumerable.GetEnumerator()).Where(item => (item & 0x01) == 0))
                 count++;
             return count;
         }
@@ -115,7 +115,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Hyperlinq_Collection_Value()
         {
             var count = 0;
-            foreach (var item in Enumerable.AsValueEnumerable<TestCollection.Enumerable, TestCollection.Enumerable.Enumerator, int>(collectionValue, enumerable => enumerable.GetEnumerator()).Where(_ => true))
+            foreach (var item in Enumerable.AsValueEnumerable<TestCollection.Enumerable, TestCollection.Enumerable.Enumerator, int>(collectionValue, enumerable => enumerable.GetEnumerator()).Where(item => (item & 0x01) == 0))
                 count++;
             return count;
         }
@@ -125,7 +125,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Hyperlinq_List_Value()
         {
             var count = 0;
-            foreach (var item in Enumerable.AsValueEnumerable<TestList.Enumerable, TestList.Enumerable.Enumerator, int>(listValue, enumerable => enumerable.GetEnumerator()).Where(_ => true))
+            foreach (var item in Enumerable.AsValueEnumerable<TestList.Enumerable, TestList.Enumerable.Enumerator, int>(listValue, enumerable => enumerable.GetEnumerator()).Where(item => (item & 0x01) == 0))
                 count++;
             return count;
         }
@@ -135,7 +135,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Hyperlinq_Enumerable_Reference()
         {
             var count = 0;
-            foreach (var item in enumerableReference.AsValueEnumerable().Where(_ => true))
+            foreach (var item in enumerableReference.AsValueEnumerable().Where(item => (item & 0x01) == 0))
                 count++;
             return count;
         }
@@ -145,7 +145,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Hyperlinq_Collection_Reference()
         {
             var count = 0;
-            foreach (var item in collectionReference.AsValueEnumerable().Where(_ => true))
+            foreach (var item in collectionReference.AsValueEnumerable().Where(item => (item & 0x01) == 0))
                 count++;
             return count;
         }
@@ -155,7 +155,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Hyperlinq_List_Reference()
         {
             var count = 0;
-            foreach (var item in listReference.AsValueEnumerable().Where(_ => true))
+            foreach (var item in listReference.AsValueEnumerable().Where(item => (item & 0x01) == 0))
                 count++;
             return count;
         }

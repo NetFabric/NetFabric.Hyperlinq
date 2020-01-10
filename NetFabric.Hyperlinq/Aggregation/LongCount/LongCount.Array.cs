@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics.Contracts;
+using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
@@ -16,8 +17,8 @@ namespace NetFabric.Hyperlinq
             var end = source.LongLength;
             for (var index = 0L; index < end; index++)
             {
-                if (predicate(source[index]))
-                    count++;
+                var result = predicate(source[index]);
+                count += Unsafe.As<bool, byte>(ref result);
             }
             return count;
         }

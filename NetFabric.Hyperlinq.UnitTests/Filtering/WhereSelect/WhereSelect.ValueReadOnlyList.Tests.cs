@@ -28,7 +28,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var list = Wrap.AsValueReadOnlyList(new int[0]);
 
             // Act
-            Action action = () => ValueReadOnlyList.WhereSelect<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int, int>(list, _ => true, null);
+            Action action = () => ValueReadOnlyList.WhereSelect<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int, int>(list, item => (item & 0x01) == 0, null);
 
             // Assert
             action.Must()
@@ -37,7 +37,7 @@ namespace NetFabric.Hyperlinq.UnitTests
         }
 
         [Theory]
-        [MemberData(nameof(TestData.WhereSelect), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.PredicateSelector), MemberType = typeof(TestData))]
         public void WhereSelect_With_ValidData_Should_Succeed(int[] source, Predicate<int> predicate, Selector<int, string> selector)
         {
             // Arrange

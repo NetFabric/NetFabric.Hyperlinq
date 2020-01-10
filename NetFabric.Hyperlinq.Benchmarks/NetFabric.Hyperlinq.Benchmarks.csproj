@@ -19,4 +19,8 @@
     <PackageReference Include="System.Interactive" Version="4.0.0" />
     <ProjectReference Include="..\NetFabric.Hyperlinq\NetFabric.Hyperlinq.csproj" />
   </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)'!='netstandard2.1'">
+    <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="1.1.0" />
+  </ItemGroup>
 </Project>

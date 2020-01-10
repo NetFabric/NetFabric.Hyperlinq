@@ -29,7 +29,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Where()
         { 
             var count = 0;
-            foreach(var item in System.Linq.ImmutableArrayExtensions.Where(array, _ => true))
+            foreach(var item in System.Linq.ImmutableArrayExtensions.Where(array, item => (item & 0x01) == 0))
                 count++;
             return count;
         }
@@ -49,7 +49,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int WhereHyper()
         {
             var count = 0;
-            foreach (var item in array.WhereHyper( _ => true))
+            foreach (var item in array.WhereHyper( item => (item & 0x01) == 0))
                 count++;
             return count;
         }
@@ -59,7 +59,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int SelectHyper()
         {
             var count = 0;
-            foreach (var item in array.SelectHyper(_ => true))
+            foreach (var item in array.SelectHyper(item => (item & 0x01) == 0))
                 count++;
             return count;
         }

@@ -86,7 +86,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Linq_Empty_Where_ForEach()
         {
             var sum = 0;
-            foreach (var item in System.Linq.Enumerable.Where(System.Linq.Enumerable.Empty<int>(), _ => true))
+            foreach (var item in System.Linq.Enumerable.Where(System.Linq.Enumerable.Empty<int>(), item => (item & 0x01) == 0))
                 sum += item;
             return sum;
         }
@@ -96,7 +96,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Hyperlinq_Empty_Where_ForEach()
         {
             var sum = 0;
-            foreach (var item in ValueEnumerable.Empty<int>().Where(_ => true))
+            foreach (var item in ValueEnumerable.Empty<int>().Where(item => (item & 0x01) == 0))
                 sum += item;
             return sum;
         }
@@ -106,7 +106,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Linq_Empty_Where_Select_ForEach()
         {
             var sum = 0;
-            foreach (var item in System.Linq.Enumerable.Select(System.Linq.Enumerable.Where(System.Linq.Enumerable.Empty<int>(), _ => true), item => item))
+            foreach (var item in System.Linq.Enumerable.Select(System.Linq.Enumerable.Where(System.Linq.Enumerable.Empty<int>(), item => (item & 0x01) == 0), item => item))
                 sum += item;
             return sum;
         }
@@ -116,7 +116,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Hyperlinq_Empty_Where_Select_ForEach()
         {
             var sum = 0;
-            foreach (var item in ValueEnumerable.Empty<int>().Where(_ => true).Select(item => item))
+            foreach (var item in ValueEnumerable.Empty<int>().Where(item => (item & 0x01) == 0).Select(item => item))
                 sum += item;
             return sum;
         }
