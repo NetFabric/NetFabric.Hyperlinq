@@ -26,7 +26,7 @@ namespace NetFabric.Hyperlinq.UnitTests
         }
 
         [Theory]
-        [MemberData(nameof(TestData.Any), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.Predicate), MemberType = typeof(TestData))]
         public void Any_With_ValidData_Should_Succeed(int[] source, Predicate<int> predicate)
         {
             // Arrange

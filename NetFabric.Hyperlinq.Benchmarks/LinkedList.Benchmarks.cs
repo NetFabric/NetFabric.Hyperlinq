@@ -26,17 +26,17 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [BenchmarkCategory("All")]
         [Benchmark(Baseline = true)]
         public bool Linq_All()
-            => System.Linq.Enumerable.All(list, _ => true);
+            => System.Linq.Enumerable.All(list, item => (item & 0x01) == 0);
 
         [BenchmarkCategory("All")]
         [Benchmark]
         public bool Hyperlinq_All()
-            => list.All(_ => true);
+            => list.All(item => (item & 0x01) == 0);
 
         [BenchmarkCategory("All")]
         [Benchmark]
         public bool Custom_All()
-            => CustomAll(list, _ => true);
+            => CustomAll(list, item => (item & 0x01) == 0);
 
         static bool CustomAll<TSource>(LinkedList<TSource> list, Predicate<TSource> predicate)
         {

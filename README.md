@@ -154,6 +154,7 @@ Contains benchmarks comparing performance of operations on LINQ, [System.Interac
 - [ValueLinqBenchmarks](https://gist.github.com/benaadams/294cbd41ec1179638cb4b5495a15accf) by Ben Adams
 - [C# - How method calling works](http://www.levibotelho.com/development/how-method-calling-works/) by Levi Botelho
 - [Improving .NET Disruptor performance — Part 2](https://medium.com/@ocoanet/improving-net-disruptor-performance-part-2-5bf456cd595f) by Olivier Coanet
+- [Optimizing string.Count all the way from LINQ to hardware accelerated vectorized instructions](https://medium.com/@SergioPedri/optimizing-string-count-all-the-way-from-linq-to-hardware-accelerated-vectorized-instructions-186816010ad9) by Sergio Pedri 
 
 ## Credits
 

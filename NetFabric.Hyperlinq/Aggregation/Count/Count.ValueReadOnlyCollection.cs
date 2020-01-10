@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
+using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
@@ -27,8 +28,8 @@ namespace NetFabric.Hyperlinq
                 {
                     while (enumerator.MoveNext())
                     {
-                        if (predicate(enumerator.Current))
-                            count++;
+                        var result = predicate(enumerator.Current);
+                        count += Unsafe.As<bool, byte>(ref result);
                     }
                 }
             }
@@ -50,8 +51,8 @@ namespace NetFabric.Hyperlinq
                 {
                     for (var index = 0; enumerator.MoveNext(); index++)
                     {
-                        if (predicate(enumerator.Current, index))
-                            count++;
+                        var result = predicate(enumerator.Current, index);
+                        count += Unsafe.As<bool, byte>(ref result);
                     }
                 }
             }

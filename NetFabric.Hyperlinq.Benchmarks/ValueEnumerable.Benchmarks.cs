@@ -32,7 +32,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [BenchmarkCategory("Count_Predicate")]
         [Benchmark(Baseline = true)]
         public int Enumerator_Predicate() => 
-            CountEnumerable<RangeEnumerable, RangeEnumerable.Enumerator, int>(source, _ => true);
+            CountEnumerable<RangeEnumerable, RangeEnumerable.Enumerator, int>(source, item => (item & 0x01) == 0);
 
         [BenchmarkCategory("Count")]
         [Benchmark]
@@ -42,7 +42,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [BenchmarkCategory("Count_Predicate")]
         [Benchmark]
         public int MyEnumerator_Predicate() => 
-            CountMyEnumerable<RangeEnumerable, RangeEnumerable.Enumerator, int>(source, _ => true);
+            CountMyEnumerable<RangeEnumerable, RangeEnumerable.Enumerator, int>(source, item => (item & 0x01) == 0);
 
         [BenchmarkCategory("Count")]
         [Benchmark]
@@ -52,7 +52,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [BenchmarkCategory("Count_Predicate")]
         [Benchmark]
         public int BenValueEnumerator_Predicate() => 
-            CountBenValueEnumerable<RangeEnumerable, RangeEnumerable.BenValueEnumerator, int>(source, _ => true);
+            CountBenValueEnumerable<RangeEnumerable, RangeEnumerable.BenValueEnumerator, int>(source, item => (item & 0x01) == 0);
 
         [BenchmarkCategory("Count")]
         [Benchmark]
@@ -62,7 +62,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [BenchmarkCategory("Count_Predicate")]
         [Benchmark]
         public int MyValueEnumerator_Predicate() => 
-            CountMyValueEnumerable<RangeEnumerable, RangeEnumerable.MyValueEnumerator, int>(source, _ => true);
+            CountMyValueEnumerable<RangeEnumerable, RangeEnumerable.MyValueEnumerator, int>(source, item => (item & 0x01) == 0);
 
         static int CountEnumerable<TEnumerable, TEnumerator, TSource>(TEnumerable source)
             where TEnumerable : IEnumerable<TSource>

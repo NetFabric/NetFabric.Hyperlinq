@@ -12,80 +12,80 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [BenchmarkCategory("Array")]
         [Benchmark(Baseline = true)]
         public int Linq_Array() =>
-            System.Linq.Enumerable.Count(System.Linq.Enumerable.Where(array, _ => true));
+            System.Linq.Enumerable.Count(System.Linq.Enumerable.Where(array, item => (item & 0x01) == 0));
 
         [BenchmarkCategory("Enumerable_Value")]
         [Benchmark(Baseline = true)]
         public int Linq_Enumerable_Value() =>
-            System.Linq.Enumerable.Count(System.Linq.Enumerable.Where(enumerableValue, _ => true));
+            System.Linq.Enumerable.Count(System.Linq.Enumerable.Where(enumerableValue, item => (item & 0x01) == 0));
 
         [BenchmarkCategory("Collection_Value")]
         [Benchmark(Baseline = true)]
         public int Linq_Collection_Value() =>
-            System.Linq.Enumerable.Count(System.Linq.Enumerable.Where(collectionValue, _ => true));
+            System.Linq.Enumerable.Count(System.Linq.Enumerable.Where(collectionValue, item => (item & 0x01) == 0));
 
         [BenchmarkCategory("List_Value")]
         [Benchmark(Baseline = true)]
         public int Linq_List_Value() =>
-            System.Linq.Enumerable.Count(System.Linq.Enumerable.Where(listValue, _ => true));
+            System.Linq.Enumerable.Count(System.Linq.Enumerable.Where(listValue, item => (item & 0x01) == 0));
 
         [BenchmarkCategory("Enumerable_Reference")]
         [Benchmark(Baseline = true)]
         public int Linq_Enumerable_Reference() =>
-            System.Linq.Enumerable.Count(System.Linq.Enumerable.Where(enumerableReference, _ => true));
+            System.Linq.Enumerable.Count(System.Linq.Enumerable.Where(enumerableReference, item => (item & 0x01) == 0));
 
         [BenchmarkCategory("Collection_Reference")]
         [Benchmark(Baseline = true)]
         public int Linq_Collection_Reference() =>
-            System.Linq.Enumerable.Count(System.Linq.Enumerable.Where(collectionReference, _ => true));
+            System.Linq.Enumerable.Count(System.Linq.Enumerable.Where(collectionReference, item => (item & 0x01) == 0));
 
         [BenchmarkCategory("List_Reference")]
         [Benchmark(Baseline = true)]
         public int Linq_List_Reference() =>
-            System.Linq.Enumerable.Count(System.Linq.Enumerable.Where(listReference, _ => true));
+            System.Linq.Enumerable.Count(System.Linq.Enumerable.Where(listReference, item => (item & 0x01) == 0));
 
         [BenchmarkCategory("Array")]
         [Benchmark]
         public int Hyperlinq_Array() =>
-            array.Where(_ => true).Count();
+            array.Where(item => (item & 0x01) == 0).Count();
 
         [BenchmarkCategory("Enumerable_Value")]
         [Benchmark]
         public int Hyperlinq_Enumerable_Value() =>
             Enumerable.AsValueEnumerable<TestEnumerable.Enumerable, TestEnumerable.Enumerable.Enumerator, int>(enumerableValue, enumerable => enumerable.GetEnumerator())
-            .Where(_ => true).Count();
+            .Where(item => (item & 0x01) == 0).Count();
 
         [BenchmarkCategory("Collection_Value")]
         [Benchmark]
         public int Hyperlinq_Collection_Value() =>
             ReadOnlyCollection.AsValueEnumerable<TestCollection.Enumerable, TestCollection.Enumerable.Enumerator, int>(collectionValue, enumerable => enumerable.GetEnumerator())
-            .Where(_ => true).Count();
+            .Where(item => (item & 0x01) == 0).Count();
 
         [BenchmarkCategory("List_Value")]
         [Benchmark]
         public int Hyperlinq_List_Value() =>
             ReadOnlyList.AsValueEnumerable<TestList.Enumerable, TestList.Enumerable.Enumerator, int>(listValue, enumerable => enumerable.GetEnumerator())
-            .Where(_ => true).Count();
+            .Where(item => (item & 0x01) == 0).Count();
 
         [BenchmarkCategory("Enumerable_Reference")]
         [Benchmark]
         public int Hyperlinq_Enumerable_Reference() =>
             enumerableReference
             .AsValueEnumerable()
-            .Where(_ => true).Count();
+            .Where(item => (item & 0x01) == 0).Count();
 
         [BenchmarkCategory("Collection_Reference")]
         [Benchmark]
         public int Hyperlinq_Collection_Reference() =>
             collectionReference
             .AsValueEnumerable()
-            .Where(_ => true).Count();
+            .Where(item => (item & 0x01) == 0).Count();
 
         [BenchmarkCategory("List_Reference")]
         [Benchmark]
         public int Hyperlinq_List_Reference() =>
             listReference
             .AsValueEnumerable()
-            .Where(_ => true).Count();
+            .Where(item => (item & 0x01) == 0).Count();
     }
 }

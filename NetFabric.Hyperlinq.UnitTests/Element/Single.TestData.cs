@@ -9,7 +9,7 @@ namespace NetFabric.Hyperlinq
         public static TheoryData<int[], Predicate<int>> SinglePredicateEmpty =>
             new TheoryData<int[], Predicate<int>> 
             {
-                { new int[] { }, _ => true },
+                { new int[] { }, item => (item & 0x01) == 0 },
 
                 { new int[] { }, _ => false },
                 { new int[] { 1 }, _ => false },
@@ -28,8 +28,7 @@ namespace NetFabric.Hyperlinq
         public static TheoryData<int[], Predicate<int>> SinglePredicateSingle =>
             new TheoryData<int[], Predicate<int>> 
             {
-                { new int[] { 1 }, _ => true },
-
+                { new int[] { 2 }, _ => true },
                 { new int[] { 1, 2, 3, 4, 5 }, item => item == 2 },
                 { new int[] { 1, 2, 3, 4, 5 }, item => item > 4 },
             };
@@ -37,7 +36,7 @@ namespace NetFabric.Hyperlinq
         public static TheoryData<int[], Predicate<int>> SinglePredicateMultiple =>
             new TheoryData<int[], Predicate<int>> 
             {
-                { new int[] { 1, 2, 3, 4, 5 }, _ => true },
+                { new int[] { 1, 2, 3, 4, 5 }, item => (item & 0x01) == 0 },
 
                 { new int[] { 1, 2, 3, 4, 5 }, item => item > 0 },
                 { new int[] { 1, 2, 3, 4, 5 }, item => item > 2 },

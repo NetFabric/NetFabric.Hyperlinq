@@ -85,12 +85,12 @@ namespace NetFabric.Hyperlinq.UnitTests
             var expected = 
                 System.Linq.Enumerable.Any(
                     System.Linq.Enumerable.Take(
-                        System.Linq.Enumerable.Skip(wrapped, skipCount), takeCount), _ => true);
+                        System.Linq.Enumerable.Skip(wrapped, skipCount), takeCount), item => (item & 0x01) == 0);
 
             // Act
             var result = ValueReadOnlyList
                 .SkipTake<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int>(wrapped, skipCount, takeCount)
-                .Any(_ => true);
+                .Any(item => (item & 0x01) == 0);
 
             // Assert
             result.Must()
@@ -221,7 +221,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             Action action = () => ValueReadOnlyList
                 .Skip<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int>(wrapped, skipCount)
                 .Take(takeCount)
-                .First(_ => true);
+                .First(item => (item & 0x01) == 0);
 
             // Assert
             action.Must()
@@ -287,13 +287,13 @@ namespace NetFabric.Hyperlinq.UnitTests
             var expected = 
                 System.Linq.Enumerable.FirstOrDefault(
                     System.Linq.Enumerable.Take(
-                        System.Linq.Enumerable.Skip(wrapped, skipCount), takeCount), _ => true);
+                        System.Linq.Enumerable.Skip(wrapped, skipCount), takeCount), item => (item & 0x01) == 0);
 
             // Act
             var result = ValueReadOnlyList
                 .Skip<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int>(wrapped, skipCount)
                 .Take(takeCount)
-                .FirstOrDefault(_ => true);
+                .FirstOrDefault(item => (item & 0x01) == 0);
 
             // Assert
             result.Must()
@@ -352,7 +352,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             Action action = () => ValueReadOnlyList
                 .Skip<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int>(wrapped, skipCount)
                 .Take(takeCount)
-                .Single(_ => true);
+                .Single(item => (item & 0x01) == 0);
 
             // Assert
             action.Must()
@@ -414,13 +414,13 @@ namespace NetFabric.Hyperlinq.UnitTests
             var expected =
                 System.Linq.Enumerable.SingleOrDefault(
                     System.Linq.Enumerable.Take(
-                        System.Linq.Enumerable.Skip(wrapped, skipCount), takeCount), _ => true);
+                        System.Linq.Enumerable.Skip(wrapped, skipCount), takeCount), item => (item & 0x01) == 0);
 
             // Act
             var result = ValueReadOnlyList
                 .Skip<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int>(wrapped, skipCount)
                 .Take(takeCount)
-                .SingleOrDefault(_ => true);
+                .SingleOrDefault(item => (item & 0x01) == 0);
 
             // Assert
             result.Must()

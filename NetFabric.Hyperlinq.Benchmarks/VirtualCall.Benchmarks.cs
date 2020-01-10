@@ -28,42 +28,42 @@ namespace NetFabric.Hyperlinq
         [BenchmarkCategory("Array")]
         [Benchmark(Baseline = true)]
         public int Array_Interface() => 
-            CountInterface(array, _ => true);
+            CountInterface(array, item => (item & 0x01) == 0);
 
         [BenchmarkCategory("Array")]
         [Benchmark]
         public int Array_Class() => 
-            CountArray(array, _ => true);
+            CountArray(array, item => (item & 0x01) == 0);
 
         [BenchmarkCategory("Array")]
         [Benchmark]
         public int Array_GenericConstraint() => 
-            CountConstraint(array, _ => true);
+            CountConstraint(array, item => (item & 0x01) == 0);
 
         [BenchmarkCategory("Array")]
         [Benchmark]
         public int Array_GenericConstraintWrapper() => 
-            CountConstraintWrapper(array, _ => true);
+            CountConstraintWrapper(array, item => (item & 0x01) == 0);
 
         [BenchmarkCategory("List")]
         [Benchmark(Baseline = true)]
         public int List_Interface() => 
-            CountInterface(list, _ => true);
+            CountInterface(list, item => (item & 0x01) == 0);
 
         [BenchmarkCategory("List")]
         [Benchmark]
         public int List_Class() => 
-            CountList(list, _ => true);
+            CountList(list, item => (item & 0x01) == 0);
 
         [BenchmarkCategory("List")]
         [Benchmark]
         public int List_GenericConstraint() => 
-            CountConstraint(list, _ => true);
+            CountConstraint(list, item => (item & 0x01) == 0);
 
         [BenchmarkCategory("List")]
         [Benchmark]
         public int List_GenericConstraintWrapper() => 
-            CountConstraintWrapper(list, _ => true);
+            CountConstraintWrapper(list, item => (item & 0x01) == 0);
 
         public static int CountInterface<TSource>(IReadOnlyList<TSource> source, Predicate<TSource> predicate)
         {

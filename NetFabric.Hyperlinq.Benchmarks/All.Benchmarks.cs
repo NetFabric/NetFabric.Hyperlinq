@@ -14,85 +14,85 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [BenchmarkCategory("Array")]
         [Benchmark(Baseline = true)]
         public bool Linq_Array() =>
-        System.Linq.Enumerable.All(array, _ => true);
+        System.Linq.Enumerable.All(array, item => (item & 0x01) == 0);
 
         [BenchmarkCategory("Enumerable_Value")]
         [Benchmark(Baseline = true)]
         public bool Linq_Enumerable_Value() =>
-            System.Linq.Enumerable.All(enumerableValue, _ => true);
+            System.Linq.Enumerable.All(enumerableValue, item => (item & 0x01) == 0);
 
         [BenchmarkCategory("Collection_Value")]
         [Benchmark(Baseline = true)]
         public bool Linq_Collection_Value() =>
-            System.Linq.Enumerable.All(collectionValue, _ => true);
+            System.Linq.Enumerable.All(collectionValue, item => (item & 0x01) == 0);
 
         [BenchmarkCategory("List_Value")]
         [Benchmark(Baseline = true)]
         public bool Linq_List_Value() =>
-            System.Linq.Enumerable.All(listValue, _ => true);
+            System.Linq.Enumerable.All(listValue, item => (item & 0x01) == 0);
 
         [BenchmarkCategory("Enumerable_Reference")]
         [Benchmark(Baseline = true)]
         public bool Linq_Enumerable_Reference() =>
-            System.Linq.Enumerable.All(enumerableReference, _ => true);
+            System.Linq.Enumerable.All(enumerableReference, item => (item & 0x01) == 0);
 
         [BenchmarkCategory("Collection_Reference")]
         [Benchmark(Baseline = true)]
         public bool Linq_Collection_Reference() =>
-            System.Linq.Enumerable.All(collectionReference, _ => true);
+            System.Linq.Enumerable.All(collectionReference, item => (item & 0x01) == 0);
 
         [BenchmarkCategory("List_Reference")]
         [Benchmark(Baseline = true)]
         public bool Linq_List_Reference() =>
-            System.Linq.Enumerable.All(listReference, _ => true);
+            System.Linq.Enumerable.All(listReference, item => (item & 0x01) == 0);
 
         [BenchmarkCategory("Array")]
         [Benchmark]
         public bool LinqFaster_Array() =>
-            array.AllF(_ => true);
+            array.AllF(item => (item & 0x01) == 0);
 
         [BenchmarkCategory("Array")]
         [Benchmark]
         public bool Hyperlinq_Array() =>
-            array.All(_ => true);
+            array.All(item => (item & 0x01) == 0);
 
         [BenchmarkCategory("Enumerable_Value")]
         [Benchmark]
         public bool Hyperlinq_Enumerable_Value() =>
             Enumerable.AsValueEnumerable<TestEnumerable.Enumerable, TestEnumerable.Enumerable.Enumerator, int>(enumerableValue, enumerable => enumerable.GetEnumerator())
-            .All(_ => true);
+            .All(item => (item & 0x01) == 0);
 
         [BenchmarkCategory("Collection_Value")]
         [Benchmark]
         public bool Hyperlinq_Collection_Value() =>
             ReadOnlyCollection.AsValueEnumerable<TestCollection.Enumerable, TestCollection.Enumerable.Enumerator, int>(collectionValue, enumerable => enumerable.GetEnumerator())
-            .All(_ => true);
+            .All(item => (item & 0x01) == 0);
 
         [BenchmarkCategory("List_Value")]
         [Benchmark]
         public bool Hyperlinq_List_Value() =>
             ReadOnlyList.AsValueEnumerable<TestList.Enumerable, TestList.Enumerable.Enumerator, int>(listValue, enumerable => enumerable.GetEnumerator())
-            .All(_ => true);
+            .All(item => (item & 0x01) == 0);
 
         [BenchmarkCategory("Enumerable_Reference")]
         [Benchmark]
         public bool Hyperlinq_Enumerable_Reference() =>
             enumerableReference
             .AsValueEnumerable()
-            .All(_ => true);
+            .All(item => (item & 0x01) == 0);
 
         [BenchmarkCategory("Collection_Reference")]
         [Benchmark]
         public bool Hyperlinq_Collection_Reference() =>
             collectionReference
             .AsValueEnumerable()
-            .All(_ => true);
+            .All(item => (item & 0x01) == 0);
 
         [BenchmarkCategory("List_Reference")]
         [Benchmark]
         public bool Hyperlinq_List_Reference() =>
             listReference
             .AsValueEnumerable()
-            .All(_ => true);
+            .All(item => (item & 0x01) == 0);
     }
 }

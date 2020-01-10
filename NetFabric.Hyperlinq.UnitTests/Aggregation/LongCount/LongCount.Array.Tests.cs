@@ -25,7 +25,7 @@ namespace NetFabric.Hyperlinq.UnitTests
         }
 
         [Theory]
-        [MemberData(nameof(TestData.CountPredicate), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.Predicate), MemberType = typeof(TestData))]
         public void LongCountPredicate_With_ValidData_Should_Succeed(int[] source, Predicate<int> predicate)
         {
             // Arrange
