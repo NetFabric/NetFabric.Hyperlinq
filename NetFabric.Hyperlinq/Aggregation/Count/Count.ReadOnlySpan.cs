@@ -16,8 +16,7 @@ namespace NetFabric.Hyperlinq
             if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
 
             var count = 0;
-            var length = source.Length;
-            for (var index = 0; index < length; index++)
+            for (var index = 0; index < source.Length; index++)
             {
                 var result = predicate(source[index]);
                 count += Unsafe.As<bool, byte>(ref result);
@@ -31,8 +30,7 @@ namespace NetFabric.Hyperlinq
             if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
 
             var count = 0;
-            var length = source.Length;
-            for (var index = 0; index < length; index++)
+            for (var index = 0; index < source.Length; index++)
             {
                 if (predicate(source[index], index))
                     count++;

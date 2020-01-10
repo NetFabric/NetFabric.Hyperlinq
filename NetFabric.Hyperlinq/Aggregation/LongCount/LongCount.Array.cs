@@ -14,8 +14,7 @@ namespace NetFabric.Hyperlinq
         public static long LongCount<TSource>(this TSource[] source, Predicate<TSource> predicate)
         {
             var count = 0L;
-            var end = source.LongLength;
-            for (var index = 0L; index < end; index++)
+            for (var index = 0L; index < source.LongLength; index++)
             {
                 var result = predicate(source[index]);
                 count += Unsafe.As<bool, byte>(ref result);

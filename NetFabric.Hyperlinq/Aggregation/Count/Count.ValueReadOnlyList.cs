@@ -13,8 +13,14 @@ namespace NetFabric.Hyperlinq
             where TEnumerator : struct, IEnumerator<TSource>
         {
             if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
-            
-            return Count<TEnumerable, TEnumerator, TSource>(source, predicate, 0, source.Count);
+
+            var count = 0;
+            for (var index = 0; index < source.Count; index++)
+            {
+                var result = predicate(source[index]);
+                count += Unsafe.As<bool, byte>(ref result);
+            }
+            return count;
         }
 
         [Pure]
@@ -38,8 +44,14 @@ namespace NetFabric.Hyperlinq
             where TEnumerator : struct, IEnumerator<TSource>
         {
             if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
-            
-            return Count<TEnumerable, TEnumerator, TSource>(source, predicate, 0, source.Count);
+
+            var count = 0;
+            for (var index = 0; index < source.Count; index++)
+            {
+                var result = predicate(source[index], index);
+                count += Unsafe.As<bool, byte>(ref result);
+            }
+            return count;
         }
 
         [Pure]
