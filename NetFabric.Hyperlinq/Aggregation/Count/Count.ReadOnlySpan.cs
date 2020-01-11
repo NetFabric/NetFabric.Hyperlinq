@@ -7,6 +7,7 @@ namespace NetFabric.Hyperlinq
     public static partial class ReadOnlySpanExtensions
     {
         [Pure]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int Count<TSource>(this ReadOnlySpan<TSource> source)
             => source.Length;
 

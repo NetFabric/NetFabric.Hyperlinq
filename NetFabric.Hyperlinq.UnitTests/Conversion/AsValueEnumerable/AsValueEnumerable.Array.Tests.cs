@@ -14,12 +14,11 @@ namespace NetFabric.Hyperlinq.UnitTests
             // Arrange
 
             // Act
-            var result = Array
-                .AsValueEnumerable(source);
+            var result = source
+                .AsValueEnumerable();
 
             // Assert
             result.Must()
-                .BeOfType<Array.ValueEnumerableWrapper<int>>()
                 .BeEnumerableOf<int>()
                 .BeEqualTo(source);
         }

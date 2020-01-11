@@ -16,9 +16,9 @@
   </PropertyGroup>
 
   <ItemGroup Condition="'$(TargetFramework)'=='net461' Or '$(TargetFramework)'=='netstandard2.0'">
-    <Compile Remove="**\*.Span.cs" />
     <Compile Remove="**\*.ReadOnlySpan.cs" />
-  </ItemGroup>
+    <Compile Remove="**\*.ReadOnlyMemory.cs" />
+   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)'!='netcoreapp2.1'">
     <Compile Remove="**\Immutable*.Bindings.cs" />

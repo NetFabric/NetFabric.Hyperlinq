@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using NetFabric.Assertive;
 using Xunit;
 
@@ -15,8 +13,8 @@ namespace NetFabric.Hyperlinq.UnitTests
             var predicate = (Predicate<int>)null;
 
             // Act
-            Action action = () => Array
-                .All<int>(new int[0], predicate);
+            Action action = () => new int[0]
+                .All<int>(predicate);
 
             // Assert
             action.Must()
@@ -32,8 +30,8 @@ namespace NetFabric.Hyperlinq.UnitTests
             var expected = System.Linq.Enumerable.All(source, predicate.AsFunc());
 
             // Act
-            var result = Array
-                .All<int>(source, predicate);
+            var result = source
+                .All<int>(predicate);
 
             // Assert
             result.Must()

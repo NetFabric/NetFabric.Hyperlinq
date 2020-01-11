@@ -113,7 +113,7 @@ namespace NetFabric.Hyperlinq
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public RangeEnumerable Skip(int count)
             {
-                (var skipCount, var takeCount) = Utils.Skip(this.count, count);
+                var (skipCount, takeCount) = Utils.Skip(this.count, count);
                 return Range(start + skipCount, takeCount);
             }
 

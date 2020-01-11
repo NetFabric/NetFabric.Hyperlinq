@@ -17,8 +17,8 @@ namespace NetFabric.Hyperlinq.UnitTests
                 System.Linq.Enumerable.Count(source);
 
             // Act
-            var result = Array
-                .Count<int>(source);
+            var result = source
+                .Count<int>();
 
             // Assert
             result.Must()
@@ -34,8 +34,8 @@ namespace NetFabric.Hyperlinq.UnitTests
                 System.Linq.Enumerable.Count(source, predicate.AsFunc());
 
             // Act
-            var result = Array
-                .Count<int>(source, predicate);
+            var result = source
+                .Count<int>(predicate);
 
             // Assert
             result.Must()

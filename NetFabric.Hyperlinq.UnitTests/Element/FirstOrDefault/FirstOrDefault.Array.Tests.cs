@@ -18,8 +18,8 @@ namespace NetFabric.Hyperlinq.UnitTests
                 System.Linq.Enumerable.FirstOrDefault(source);
 
             // Act
-            var result = Array
-                .FirstOrDefault<int>(source);
+            var result = source
+                .FirstOrDefault<int>();
 
             // Assert
             result.Must()
@@ -37,8 +37,8 @@ namespace NetFabric.Hyperlinq.UnitTests
                 System.Linq.Enumerable.FirstOrDefault(source, predicate.AsFunc());
 
             // Act
-            var result = Array
-                .FirstOrDefault<int>(source, predicate);
+            var result = source
+                .FirstOrDefault<int>(predicate);
 
             // Assert
             result.Must()

@@ -9,12 +9,11 @@ namespace NetFabric.Hyperlinq
         [Pure]
         public static bool Contains<TSource>(this ReadOnlySpan<TSource> source, TSource value, IEqualityComparer<TSource>? comparer = null)
         {
-            var length = source.Length;
-            if (length == 0) return false;
+            if (source.Length == 0) return false;
 
             if (comparer is null)
             {
-                for (var index = 0; index < length; index++)
+                for (var index = 0; index < source.Length; index++)
                 {
                     if (EqualityComparer<TSource>.Default.Equals(value, source[index]))
                         return true;
@@ -22,7 +21,7 @@ namespace NetFabric.Hyperlinq
             }
             else
             {
-                for (var index = 0; index < length; index++)
+                for (var index = 0; index < source.Length; index++)
                 {
                     if (comparer.Equals(value, source[index]))
                         return true;
