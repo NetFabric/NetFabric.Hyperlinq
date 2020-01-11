@@ -14,9 +14,7 @@ namespace NetFabric.Hyperlinq
             await using (enumerator.ConfigureAwait(false))
             {
                 while (await enumerator.MoveNextAsync().ConfigureAwait(false))
-                {
                     list.Add(enumerator.Current);
-                }
             }
             return list;
         }

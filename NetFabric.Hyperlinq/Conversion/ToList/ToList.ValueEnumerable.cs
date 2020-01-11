@@ -39,7 +39,6 @@ namespace NetFabric.Hyperlinq
             where TEnumerator : struct, IEnumerator<TSource>
         {
             var list = new List<TSource>();
-
             using var enumerator = source.GetEnumerator();
             checked
             {
@@ -49,7 +48,6 @@ namespace NetFabric.Hyperlinq
                         list.Add(enumerator.Current);
                 }
             }
-
             return list;
         }
         

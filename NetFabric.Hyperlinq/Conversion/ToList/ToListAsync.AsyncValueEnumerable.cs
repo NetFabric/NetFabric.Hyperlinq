@@ -18,11 +18,8 @@ namespace NetFabric.Hyperlinq
             await using (enumerator.ConfigureAwait(false))
             {
                 while (await enumerator.MoveNextAsync().ConfigureAwait(false))
-                {
                     list.Add(enumerator.Current);
-                }
             }
-
             return list;
         }
 
@@ -41,7 +38,6 @@ namespace NetFabric.Hyperlinq
                         list.Add(enumerator.Current);
                 }
             }
-
             return list;
         }
 
@@ -60,13 +56,11 @@ namespace NetFabric.Hyperlinq
                 {
                     for (var index = 0; await enumerator.MoveNextAsync().ConfigureAwait(false); index++)
                     {
-                        cancellationToken.ThrowIfCancellationRequested();
                         if (predicate(enumerator.Current, index))
                             list.Add(enumerator.Current);
                     }
                 }
             }
-
             return list;
         }
     }

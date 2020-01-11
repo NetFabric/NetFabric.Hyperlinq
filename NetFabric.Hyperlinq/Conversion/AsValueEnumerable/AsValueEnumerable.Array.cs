@@ -21,10 +21,8 @@ namespace NetFabric.Hyperlinq
         {
             readonly TSource[] source;
 
-            internal ValueEnumerableWrapper(TSource[] source)
-            {
-                this.source = source;
-            }
+            internal ValueEnumerableWrapper(TSource[] source) 
+                => this.source = source;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly Enumerator GetEnumerator() => new Enumerator(source);

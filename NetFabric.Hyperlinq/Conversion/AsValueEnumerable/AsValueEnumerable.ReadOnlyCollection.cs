@@ -65,10 +65,8 @@ namespace NetFabric.Hyperlinq
         {
             readonly IReadOnlyCollection<TSource> source;
 
-            internal ValueEnumerableWrapper(IReadOnlyCollection<TSource> source)
-            {
-                this.source = source;
-            }
+            internal ValueEnumerableWrapper(IReadOnlyCollection<TSource> source) 
+                => this.source = source;
 
             public readonly int Count
             {
@@ -86,10 +84,8 @@ namespace NetFabric.Hyperlinq
             {
                 readonly IEnumerator<TSource> enumerator;
 
-                internal Enumerator(IReadOnlyCollection<TSource> enumerable)
-                {
-                    enumerator = enumerable.GetEnumerator();
-                }
+                internal Enumerator(IReadOnlyCollection<TSource> enumerable) 
+                    => enumerator = enumerable.GetEnumerator();
 
                 [MaybeNull]
                 public readonly TSource Current

@@ -10,7 +10,19 @@ namespace NetFabric.Hyperlinq
         [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static TSource[] ToArray<TSource>(IReadOnlyList<TSource> source)
-            => ToArray<TSource>(source, 0, source.Count);
+        {
+            var array = new TSource[source.Count];
+            if (source is ICollection<TSource> collection)
+            {
+                collection.CopyTo(array, 0);
+            }
+            else
+            {
+                for (var index = 0; index < source.Count; index++)
+                    array[index] = source[index];
+            }
+            return array;
+        }
 
         [Pure]
         internal static TSource[] ToArray<TSource>(IReadOnlyList<TSource> source, int skipCount, int takeCount)
