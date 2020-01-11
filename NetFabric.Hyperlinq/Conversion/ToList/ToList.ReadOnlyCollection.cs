@@ -22,10 +22,8 @@ namespace NetFabric.Hyperlinq
             readonly IReadOnlyCollection<TSource> source;
 
             public ToListCollection(IReadOnlyCollection<TSource> source)
-                : base(source.Count)
-            {
-                this.source = source;
-            }
+                : base(source.Count) 
+                => this.source = source;
 
             public override void CopyTo(TSource[] array, int _)
             {

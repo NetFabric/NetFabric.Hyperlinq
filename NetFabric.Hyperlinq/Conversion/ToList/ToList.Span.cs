@@ -9,9 +9,8 @@ namespace NetFabric.Hyperlinq
         [Pure]
         public static List<TSource> ToList<TSource>(this Span<TSource> source)
         {
-            var count = source.Length;
-            var list = new List<TSource>(count);
-            for (var index = 0; index < count; index++)
+            var list = new List<TSource>(source.Length);
+            for (var index = 0; index < source.Length; index++)
             {
                 list.Add(source[index]);
             }

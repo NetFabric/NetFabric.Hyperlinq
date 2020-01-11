@@ -28,10 +28,8 @@ namespace NetFabric.Hyperlinq
             readonly TEnumerable source;
 
             public ToListCollection(TEnumerable source)
-                : base(source.Count)
-            {
-                this.source = source;
-            }
+                : base(source.Count) 
+                => this.source = source;
 
             public override void CopyTo(TSource[] array, int _)
             {

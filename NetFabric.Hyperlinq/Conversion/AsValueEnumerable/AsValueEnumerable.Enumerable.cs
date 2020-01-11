@@ -59,10 +59,8 @@ namespace NetFabric.Hyperlinq
         {
             readonly IEnumerable<TSource> source;
 
-            internal ValueEnumerableWrapper(IEnumerable<TSource> source)
-            {
-                this.source = source;
-            }
+            internal ValueEnumerableWrapper(IEnumerable<TSource> source) 
+                => this.source = source;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly Enumerator GetEnumerator() => new Enumerator(source);
@@ -74,10 +72,8 @@ namespace NetFabric.Hyperlinq
             {
                 readonly IEnumerator<TSource> enumerator;
 
-                internal Enumerator(IEnumerable<TSource> enumerable)
-                {
-                    enumerator = enumerable.GetEnumerator();
-                }
+                internal Enumerator(IEnumerable<TSource> enumerable) 
+                    => enumerator = enumerable.GetEnumerator();
 
                 [MaybeNull]
                 public readonly TSource Current
