@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using NetFabric.Assertive;
 using Xunit;
 
@@ -17,8 +16,8 @@ namespace NetFabric.Hyperlinq.UnitTests
                 System.Linq.Enumerable.Contains(source, value);
 
             // Act
-            var result = Array
-                .Contains<int>(source, value);
+            var result = source
+                .Contains<int>(value);
 
             // Assert
             result.Must()
@@ -34,8 +33,8 @@ namespace NetFabric.Hyperlinq.UnitTests
                 System.Linq.Enumerable.Contains(source, value, EqualityComparer<int>.Default);
 
             // Act
-            var result = Array
-                .Contains<int>(source, value, EqualityComparer<int>.Default);
+            var result = source
+                .Contains<int>(value, EqualityComparer<int>.Default);
 
             // Assert
             result.Must()
@@ -51,8 +50,8 @@ namespace NetFabric.Hyperlinq.UnitTests
                 System.Linq.Enumerable.Contains(source, value, null);
 
             // Act
-            var result = Array
-                .Contains<int>(source, value, null);
+            var result = source
+                .Contains<int>(value, null);
 
             // Assert
             result.Must()

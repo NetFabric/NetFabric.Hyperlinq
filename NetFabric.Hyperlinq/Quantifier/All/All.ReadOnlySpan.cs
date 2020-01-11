@@ -10,13 +10,12 @@ namespace NetFabric.Hyperlinq
         {
             if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
 
-            var index = 0;
-            var length = source.Length;
-            while (index < length && predicate(source[index]))
+            for (var index = 0; index < source.Length; index++)
             {
-                index++;
+                if (!predicate(source[index]))
+                    return false;
             }
-            return index == length;
+            return true;
         }
 
         [Pure]
@@ -24,13 +23,12 @@ namespace NetFabric.Hyperlinq
         {
             if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
 
-            var index = 0;
-            var length = source.Length;
-            while (index < length && predicate(source[index], index))
+            for (var index = 0; index < source.Length; index++)
             {
-                index++;
+                if (!predicate(source[index], index))
+                    return false;
             }
-            return index == length;
+            return true;
         }
     }
 }

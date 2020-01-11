@@ -7,6 +7,7 @@ namespace NetFabric.Hyperlinq
     public static partial class Array
     {
         [Pure]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static long LongCount<TSource>(this TSource[] source)
             => source.LongLength;
 

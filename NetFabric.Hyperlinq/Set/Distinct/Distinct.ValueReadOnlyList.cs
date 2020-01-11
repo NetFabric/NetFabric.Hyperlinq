@@ -63,11 +63,7 @@ namespace NetFabric.Hyperlinq
                 internal Enumerator(in DistinctEnumerable<TEnumerable, TEnumerator, TSource> enumerable)
                 {
                     source = enumerable.source;
-#if NET461 || NETSTANDARD2_0                   
                     set = new HashSet<TSource>(enumerable.comparer);
-#else
-                    set = new HashSet<TSource>(enumerable.takeCount, enumerable.comparer);
-#endif
                     end = enumerable.skipCount + enumerable.takeCount;
                     index = enumerable.skipCount - 1;
                     current = default!;

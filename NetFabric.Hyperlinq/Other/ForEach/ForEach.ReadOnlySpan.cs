@@ -7,23 +7,15 @@ namespace NetFabric.Hyperlinq
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void ForEach<TSource>(this ReadOnlySpan<TSource> source, Action<TSource> action)
-            => ForEach<TSource>(source, action, 0, source.Length);
-
-        static void ForEach<TSource>(this ReadOnlySpan<TSource> source, Action<TSource> action, int skipCount, int takeCount)
         {
-            var end = skipCount + takeCount;
-            for (var index = skipCount; index < end; index++)
+            for (var index = 0; index < source.Length; index++)
                 action(source[index]);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void ForEach<TSource>(this ReadOnlySpan<TSource> source, Action<TSource, int> action)
-            => ForEach<TSource>(source, action, 0, source.Length);
-
-        static void ForEach<TSource>(this ReadOnlySpan<TSource> source, Action<TSource, int> action, int skipCount, int takeCount)
         {
-            var end = skipCount + takeCount;
-            for (var index = skipCount; index < end; index++)
+            for (var index = 0; index < source.Length; index++)
                 action(source[index], index);
         }
     }

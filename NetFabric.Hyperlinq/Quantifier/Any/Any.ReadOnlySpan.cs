@@ -14,8 +14,7 @@ namespace NetFabric.Hyperlinq
         {
             if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
 
-            var length = source.Length;
-            for (var index = 0; index < length; index++)
+            for (var index = 0; index < source.Length; index++)
             {
                 if (predicate(source[index]))
                     return true;
@@ -28,8 +27,7 @@ namespace NetFabric.Hyperlinq
         {
             if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
 
-            var length = source.Length;
-            for (var index = 0; index < length; index++)
+            for (var index = 0; index < source.Length; index++)
             {
                 if (predicate(source[index], index))
                     return true;

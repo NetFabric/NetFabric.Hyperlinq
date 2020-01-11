@@ -103,7 +103,7 @@ namespace NetFabric.Hyperlinq
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public RepeatEnumerable<TSource> Skip(int count)
             {
-                (_, var takeCount) = Utils.Skip(this.count, count);
+                var (_, takeCount) = Utils.Skip(this.count, count);
                 return Repeat(value, takeCount);
             }
 

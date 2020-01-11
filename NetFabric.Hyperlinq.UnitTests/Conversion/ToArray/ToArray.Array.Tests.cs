@@ -16,8 +16,8 @@ namespace NetFabric.Hyperlinq.UnitTests
                 System.Linq.Enumerable.ToArray(source);
 
             // Act
-            var result = Array
-                .ToArray(source);
+            var result = source
+                .ToArray();
 
             // Assert
             result.Must()

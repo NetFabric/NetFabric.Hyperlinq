@@ -13,8 +13,8 @@ namespace NetFabric.Hyperlinq.UnitTests
             // Arrange
 
             // Act
-            Action action = () => Array
-                .First<int>(source);
+            Action action = () => source
+                .First<int>();
 
             // Assert
             action.Must()
@@ -29,8 +29,8 @@ namespace NetFabric.Hyperlinq.UnitTests
             // Arrange
 
             // Act
-            Action action = () => Array
-                .First<int>(source, predicate);
+            Action action = () => source
+                .First<int>(predicate);
 
             // Assert
             action.Must()
@@ -48,8 +48,8 @@ namespace NetFabric.Hyperlinq.UnitTests
                 System.Linq.Enumerable.First(source);
 
             // Act
-            var result = Array
-                .First<int>(source);
+            var result = source
+                .First<int>();
 
             // Assert
             result.Must()

@@ -17,7 +17,7 @@ namespace NetFabric.Hyperlinq.UnitTests
                 System.Linq.Enumerable.LongCount(source);
 
             // Act
-            var result = Array.LongCount<int>(source);
+            var result = source.LongCount<int>();
 
             // Assert
             result.Must()
@@ -33,8 +33,8 @@ namespace NetFabric.Hyperlinq.UnitTests
                 System.Linq.Enumerable.LongCount(source, predicate.AsFunc());
 
             // Act
-            var result = Array
-                .LongCount<int>(source, predicate);
+            var result = source
+                .LongCount<int>(predicate);
 
             // Assert
             result.Must()
