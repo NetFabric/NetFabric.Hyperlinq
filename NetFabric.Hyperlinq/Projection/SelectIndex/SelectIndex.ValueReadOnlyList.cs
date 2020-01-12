@@ -34,7 +34,7 @@ namespace NetFabric.Hyperlinq
         [GenericsTypeMapping("TEnumerator", typeof(SelectIndexEnumerable<,,,>.Enumerator))]
         [GenericsMapping("TSource", "TResult")]
         public readonly struct SelectIndexEnumerable<TEnumerable, TEnumerator, TSource, TResult>
-            : IValueReadOnlyList<TResult, SelectIndexEnumerable<TEnumerable, TEnumerator, TSource, TResult>.Enumerator>
+            : IValueReadOnlyList<TResult, SelectIndexEnumerable<TEnumerable, TEnumerator, TSource, TResult>.DisposableEnumerator>
             where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
@@ -53,8 +53,9 @@ namespace NetFabric.Hyperlinq
             [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly Enumerator GetEnumerator() => new Enumerator(in this);
-            readonly IEnumerator<TResult> IEnumerable<TResult>.GetEnumerator() => new Enumerator(in this);
-            readonly IEnumerator IEnumerable.GetEnumerator() => new Enumerator(in this);
+            readonly DisposableEnumerator IValueEnumerable<TResult, SelectIndexEnumerable<TEnumerable, TEnumerator, TSource, TResult>.DisposableEnumerator>.GetEnumerator() => new DisposableEnumerator(in this);
+            readonly IEnumerator<TResult> IEnumerable<TResult>.GetEnumerator() => new DisposableEnumerator(in this);
+            readonly IEnumerator IEnumerable.GetEnumerator() => new DisposableEnumerator(in this);
 
             public readonly int Count => takeCount;
 
@@ -70,7 +71,6 @@ namespace NetFabric.Hyperlinq
             }
 
             public struct Enumerator
-                : IEnumerator<TResult>
             {
                 readonly TEnumerable source;
                 readonly SelectorAt<TSource, TResult> selector;
@@ -79,6 +79,34 @@ namespace NetFabric.Hyperlinq
                 int index;
 
                 internal Enumerator(in SelectIndexEnumerable<TEnumerable, TEnumerator, TSource, TResult> enumerable)
+                {
+                    source = enumerable.source;
+                    selector = enumerable.selector;
+                    skipCount = enumerable.skipCount;
+                    takeCount = enumerable.takeCount;
+                    index = -1;
+                }
+
+                public readonly TResult Current
+                {
+                    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                    get => selector(source[index + skipCount], index);
+                }
+
+                [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                public bool MoveNext() => ++index < takeCount;
+            }
+
+            public struct DisposableEnumerator
+                : IEnumerator<TResult>
+            {
+                readonly TEnumerable source;
+                readonly SelectorAt<TSource, TResult> selector;
+                readonly int skipCount;
+                readonly int takeCount;
+                int index;
+
+                internal DisposableEnumerator(in SelectIndexEnumerable<TEnumerable, TEnumerator, TSource, TResult> enumerable)
                 {
                     source = enumerable.source;
                     selector = enumerable.selector;

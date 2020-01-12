@@ -10,29 +10,29 @@ namespace NetFabric.Hyperlinq
     public static partial class ReadOnlyMemoryExtensions
     {
         [Pure]
-        public static SelectEnumerable<TSource, TResult> Select<TSource, TResult>(
+        public static SelectIndexEnumerable<TSource, TResult> Select<TSource, TResult>(
             this ReadOnlyMemory<TSource> source, 
-            Selector<TSource, TResult> selector)
+            SelectorAt<TSource, TResult> selector)
         {
             if (selector is null) Throw.ArgumentNullException(nameof(selector));
 
-            return new SelectEnumerable<TSource, TResult>(in source, selector);
+            return new SelectIndexEnumerable<TSource, TResult>(in source, selector);
         }
 
-        public readonly struct SelectEnumerable<TSource, TResult>
-            : IValueReadOnlyList<TResult, SelectEnumerable<TSource, TResult>.DisposableEnumerator>
+        public readonly struct SelectIndexEnumerable<TSource, TResult>
+            : IValueReadOnlyList<TResult, SelectIndexEnumerable<TSource, TResult>.DisposableEnumerator>
         {
             internal readonly ReadOnlyMemory<TSource> source;
-            internal readonly Selector<TSource, TResult> selector;
+            internal readonly SelectorAt<TSource, TResult> selector;
 
-            internal SelectEnumerable(in ReadOnlyMemory<TSource> source, Selector<TSource, TResult> selector)
+            internal SelectIndexEnumerable(in ReadOnlyMemory<TSource> source, SelectorAt<TSource, TResult> selector)
             {
                 this.source = source;
                 this.selector = selector;
             }
 
             public readonly Enumerator GetEnumerator() => new Enumerator(in this);
-            readonly DisposableEnumerator IValueEnumerable<TResult, SelectEnumerable<TSource, TResult>.DisposableEnumerator>.GetEnumerator() => new DisposableEnumerator(in this);
+            readonly DisposableEnumerator IValueEnumerable<TResult, SelectIndexEnumerable<TSource, TResult>.DisposableEnumerator>.GetEnumerator() => new DisposableEnumerator(in this);
             readonly IEnumerator<TResult> IEnumerable<TResult>.GetEnumerator() => new DisposableEnumerator(in this);
             readonly IEnumerator IEnumerable.GetEnumerator() => new DisposableEnumerator(in this);
 
@@ -45,17 +45,17 @@ namespace NetFabric.Hyperlinq
                     if (index < 0 || index >= source.Length)
                         Throw.ArgumentOutOfRangeException(nameof(index));
 
-                    return selector(source.Span[index]);
+                    return selector(source.Span[index], index);
                 }
             }
 
             public ref struct Enumerator
             {
                 readonly ReadOnlySpan<TSource> source;
-                readonly Selector<TSource, TResult> selector;
+                readonly SelectorAt<TSource, TResult> selector;
                 int index;
 
-                internal Enumerator(in SelectEnumerable<TSource, TResult> enumerable)
+                internal Enumerator(in SelectIndexEnumerable<TSource, TResult> enumerable)
                 {
                     source = enumerable.source.Span;
                     selector = enumerable.selector;
@@ -63,7 +63,7 @@ namespace NetFabric.Hyperlinq
                 }
 
                 public readonly TResult Current 
-                    => selector(source[index]);
+                    => selector(source[index], index);
 
                 public bool MoveNext() 
                     => ++index < source.Length;
@@ -73,18 +73,18 @@ namespace NetFabric.Hyperlinq
                 : IEnumerator<TResult>
             {
                 readonly ReadOnlyMemory<TSource> source;
-                readonly Selector<TSource, TResult> selector;
+                readonly SelectorAt<TSource, TResult> selector;
                 int index;
 
-                internal DisposableEnumerator(in SelectEnumerable<TSource, TResult> enumerable)
+                internal DisposableEnumerator(in SelectIndexEnumerable<TSource, TResult> enumerable)
                 {
                     source = enumerable.source;
                     selector = enumerable.selector;
                     index = -1;
                 }
  
-                [MaybeNull] public readonly TResult Current => selector(source.Span[index]);
-                readonly object? IEnumerator.Current => selector(source.Span[index]);
+                [MaybeNull] public readonly TResult Current => selector(source.Span[index], index);
+                readonly object? IEnumerator.Current => selector(source.Span[index], index);
 
                 public bool MoveNext() 
                     => ++index < source.Length;
@@ -97,38 +97,38 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TResult First()
-                => selector(source.Span.First());
+                => selector(source.Span.First(), 0);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             [return: MaybeNull]
             public TResult FirstOrDefault()
-                => selector(source.Span.FirstOrDefault());
+                => selector(source.Span.FirstOrDefault(), 0);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TResult Single()
-                => selector(source.Span.Single());
+                => selector(source.Span.Single(), 0);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             [return: MaybeNull]
             public TResult SingleOrDefault()
-                => selector(source.Span.SingleOrDefault());
+                => selector(source.Span.SingleOrDefault(), 0);
 
             public void ForEach(Action<TResult> action)
             {
                 var span = source.Span;
                 for (var index = 0; index < span.Length; index++)
-                    action(selector(span[index]));
+                    action(selector(span[index], index));
             }
             public void ForEach(Action<TResult, int> action)
             {
                 var span = source.Span;
                 for (var index = 0; index < span.Length; index++)
-                    action(selector(span[index]), index);
+                    action(selector(span[index], index), index);
             }
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int Count<TSource, TResult>(this SelectEnumerable<TSource, TResult> source)
+        public static int Count<TSource, TResult>(this SelectIndexEnumerable<TSource, TResult> source)
             => source.Count;
     }
 }
