@@ -3,7 +3,7 @@ using System.Diagnostics.Contracts;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class ReadOnlyMemoryExtensions
+    public static partial class SpanExtensions
     {
         [Pure]
         public static ReadOnlyMemory<TSource> Skip<TSource>(this ReadOnlyMemory<TSource> source, int count)

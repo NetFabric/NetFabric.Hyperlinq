@@ -5,7 +5,7 @@ using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class ReadOnlySpan
+    public static partial class SpanExtensions
     {
         [Pure]
         public static ref readonly TSource ElementAt<TSource>(this ReadOnlySpan<TSource> source, int index)

@@ -7,7 +7,7 @@ using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class ReadOnlyMemoryExtensions
+    public static partial class SpanExtensions
     {
         [Pure]
         internal static WhereSelectEnumerable<TSource, TResult> WhereSelect<TSource, TResult>(
