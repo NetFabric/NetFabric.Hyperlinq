@@ -33,8 +33,8 @@ namespace NetFabric.Hyperlinq
             var count = 0;
             for (var index = 0; index < source.Length; index++)
             {
-                if (predicate(source[index], index))
-                    count++;
+                var result = predicate(source[index], index);
+                count += Unsafe.As<bool, byte>(ref result);
             }
             return count;
         }
