@@ -26,9 +26,9 @@ namespace NetFabric.Hyperlinq
             => new WhereIndexEnumerable<TEnumerable, TEnumerator, TSource>(in source, predicate, skipCount, takeCount);
 
         [GenericsTypeMapping("TEnumerable", typeof(WhereIndexEnumerable<,,>))]
-        [GenericsTypeMapping("TEnumerator", typeof(WhereIndexEnumerable<,,>.Enumerator))]
+        [GenericsTypeMapping("TEnumerator", typeof(WhereIndexEnumerable<,,>.DisposableEnumerator))]
         public readonly struct WhereIndexEnumerable<TEnumerable, TEnumerator, TSource>
-            : IValueEnumerable<TSource, WhereIndexEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator>
+            : IValueEnumerable<TSource, WhereIndexEnumerable<TEnumerable, TEnumerator, TSource>.DisposableEnumerator>
             where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
@@ -45,13 +45,12 @@ namespace NetFabric.Hyperlinq
             }
 
             [Pure]
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly Enumerator GetEnumerator() => new Enumerator(in this);
-            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new Enumerator(in this);
-            readonly IEnumerator IEnumerable.GetEnumerator() => new Enumerator(in this);
+            readonly DisposableEnumerator IValueEnumerable<TSource, WhereIndexEnumerable<TEnumerable, TEnumerator, TSource>.DisposableEnumerator>.GetEnumerator() => new DisposableEnumerator(in this);
+            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new DisposableEnumerator(in this);
+            readonly IEnumerator IEnumerable.GetEnumerator() => new DisposableEnumerator(in this);
 
             public struct Enumerator
-                : IEnumerator<TSource>
             {
                 readonly TEnumerable source;
                 readonly PredicateAt<TSource> predicate;
@@ -59,6 +58,40 @@ namespace NetFabric.Hyperlinq
                 int index;
 
                 internal Enumerator(in WhereIndexEnumerable<TEnumerable, TEnumerator, TSource> enumerable)
+                {
+                    source = enumerable.source;
+                    predicate = enumerable.predicate;
+                    end = enumerable.skipCount + enumerable.takeCount;
+                    index = enumerable.skipCount - 1;
+                }
+
+                [MaybeNull]
+                public readonly TSource Current
+                {
+                    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                    get => source[index];
+                }
+
+                public bool MoveNext()
+                {
+                    while (++index < end)
+                    {
+                        if (predicate(source[index], index))
+                            return true;
+                    }
+                    return false;
+                }
+            }
+
+            public struct DisposableEnumerator
+                : IEnumerator<TSource>
+            {
+                readonly TEnumerable source;
+                readonly PredicateAt<TSource> predicate;
+                readonly int end;
+                int index;
+
+                internal DisposableEnumerator(in WhereIndexEnumerable<TEnumerable, TEnumerator, TSource> enumerable)
                 {
                     source = enumerable.source;
                     predicate = enumerable.predicate;
