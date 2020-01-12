@@ -29,7 +29,7 @@ namespace NetFabric.Hyperlinq
             => new DistinctEnumerable<TEnumerable, TEnumerator, TSource>(source, comparer, skipCount, takeCount);
 
         public readonly struct DistinctEnumerable<TEnumerable, TEnumerator, TSource>
-            : IValueEnumerable<TSource, DistinctEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator>
+            : IValueEnumerable<TSource, DistinctEnumerable<TEnumerable, TEnumerator, TSource>.DisposableEnumerator>
             where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
@@ -46,13 +46,12 @@ namespace NetFabric.Hyperlinq
             }
 
             [Pure]
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly Enumerator GetEnumerator() => new Enumerator(in this);
-            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new Enumerator(in this);
-            readonly IEnumerator IEnumerable.GetEnumerator() => new Enumerator(in this);
+            readonly DisposableEnumerator IValueEnumerable<TSource, DistinctEnumerable<TEnumerable, TEnumerator, TSource>.DisposableEnumerator>.GetEnumerator() => new DisposableEnumerator(in this);
+            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new DisposableEnumerator(in this);
+            readonly IEnumerator IEnumerable.GetEnumerator() => new DisposableEnumerator(in this);
 
             public struct Enumerator
-                : IEnumerator<TSource>
             {
                 readonly TEnumerable source;
                 readonly HashSet<TSource> set;
@@ -61,6 +60,46 @@ namespace NetFabric.Hyperlinq
                 TSource current;
 
                 internal Enumerator(in DistinctEnumerable<TEnumerable, TEnumerator, TSource> enumerable)
+                {
+                    source = enumerable.source;
+                    set = new HashSet<TSource>(enumerable.comparer);
+                    end = enumerable.skipCount + enumerable.takeCount;
+                    index = enumerable.skipCount - 1;
+                    current = default!;
+                }
+
+                [MaybeNull]
+                public readonly TSource Current
+                {
+                    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                    get => current;
+                }
+
+                public bool MoveNext()
+                {
+                    while (++index < end)
+                    {
+                        if (set.Add(source[index]))
+                        {
+                            current = source[index];
+                            return true;
+                        }
+                    }
+
+                    return false;
+                }
+            }
+
+            public struct DisposableEnumerator
+                : IEnumerator<TSource>
+            {
+                readonly TEnumerable source;
+                readonly HashSet<TSource> set;
+                readonly int end;
+                int index;
+                TSource current;
+
+                internal DisposableEnumerator(in DistinctEnumerable<TEnumerable, TEnumerator, TSource> enumerable)
                 {
                     source = enumerable.source;
                     set = new HashSet<TSource>(enumerable.comparer);
