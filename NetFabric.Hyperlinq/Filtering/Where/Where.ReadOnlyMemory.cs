@@ -7,7 +7,7 @@ using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class ReadOnlyMemoryExtensions
+    public static partial class SpanExtensions
     {
         [Pure]
         public static WhereEnumerable<TSource> Where<TSource>(this ReadOnlyMemory<TSource> source, Predicate<TSource> predicate) 
@@ -118,24 +118,9 @@ namespace NetFabric.Hyperlinq
                 => source.Span.SingleOrDefault(predicate);
 
             public void ForEach(Action<TSource> action)
-            {
-                var span = source.Span;
-                for (var index = 0; index < span.Length; index++)
-                {
-                    if (predicate(span[index]))
-                        action(span[index]);
-                }
-            }
+                => SpanExtensions.ForEach<TSource>(source.Span, action, predicate);
             public void ForEach(Action<TSource, int> action)
-            {
-                var actionIndex = 0;
-                var span = source.Span;
-                for (var index = 0; index < span.Length; index++)
-                {
-                    if (predicate(span[index]))
-                        action(span[index], actionIndex++);
-                }
-            }
+                => SpanExtensions.ForEach<TSource>(source.Span, action, predicate);
         }
     }
 }

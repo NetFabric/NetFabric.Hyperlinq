@@ -150,30 +150,9 @@ namespace NetFabric.Hyperlinq
                 => new List<TResult>(new ToListCollection(this));
 
             public void ForEach(Action<TResult> action)
-            {
-                if (source.Count != 0)
-                {
-                    using var enumerator = source.GetEnumerator();
-                    checked
-                    {
-                        while (enumerator.MoveNext())
-                            action(selector(enumerator.Current));
-                    }
-                }
-            }
+                => ValueReadOnlyCollection.ForEach<TEnumerable, TEnumerator, TSource, TResult>(source, action, selector);
             public void ForEach(Action<TResult, int> action)
-            {
-                if (source.Count != 0)
-                {
-                    var actionIndex = 0;
-                    using var enumerator = source.GetEnumerator();
-                    checked
-                    {
-                        while (enumerator.MoveNext())
-                            action(selector(enumerator.Current), actionIndex++);
-                    }
-                }
-            }
+                => ValueReadOnlyCollection.ForEach<TEnumerable, TEnumerator, TSource, TResult>(source, action, selector);
 
             // helper implementation of ICollection<> so that CopyTo() is used to convert to List<>
             [Ignore]

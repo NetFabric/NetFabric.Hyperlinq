@@ -1,19 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
     public static partial class ValueReadOnlyList
     {
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void ForEach<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Action<TSource> action)
             where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
             if (action is null) Throw.ArgumentNullException(nameof(action));
 
-            ForEach<TEnumerable, TEnumerator, TSource>(source, action, 0, source.Count);
+            for (var index = 0; index < source.Count; index++)
+                action(source[index]);
         }
 
         static void ForEach<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Action<TSource> action, int skipCount, int takeCount)
@@ -25,22 +24,134 @@ namespace NetFabric.Hyperlinq
                 action(source[index]);
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        static void ForEach<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Action<TSource> action, Predicate<TSource> predicate, int skipCount, int takeCount)
+            where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
+            where TEnumerator : struct, IEnumerator<TSource>
+        {
+            var end = skipCount + takeCount;
+            for (var index = skipCount; index < end; index++)
+            {
+                if (predicate(source[index]))
+                    action(source[index]);
+            }
+        }
+
+        static void ForEach<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Action<TSource> action, PredicateAt<TSource> predicate, int skipCount, int takeCount)
+            where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
+            where TEnumerator : struct, IEnumerator<TSource>
+        {
+            var end = skipCount + takeCount;
+            for (var index = skipCount; index < end; index++)
+            {
+                if (predicate(source[index], index - skipCount))
+                    action(source[index]);
+            }
+        }
+
+        static void ForEach<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, Action<TResult> action, Selector<TSource, TResult> selector, int skipCount, int takeCount)
+            where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
+            where TEnumerator : struct, IEnumerator<TSource>
+        {
+            var end = skipCount + takeCount;
+            for (var index = skipCount; index < end; index++)
+                action(selector(source[index]));
+        }
+
+        static void ForEach<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, Action<TResult> action, SelectorAt<TSource, TResult> selector, int skipCount, int takeCount)
+            where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
+            where TEnumerator : struct, IEnumerator<TSource>
+        {
+            var end = skipCount + takeCount;
+            for (var index = skipCount; index < end; index++)
+                action(selector(source[index], index - skipCount));
+        }
+
+        static void ForEach<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, Action<TResult> action, Predicate<TSource> predicate, Selector<TSource, TResult> selector, int skipCount, int takeCount)
+            where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
+            where TEnumerator : struct, IEnumerator<TSource>
+        {
+            var end = skipCount + takeCount;
+            for (var index = skipCount; index < end; index++)
+            {
+                if (predicate(source[index]))
+                    action(selector(source[index]));
+            }
+        }
+
         public static void ForEach<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Action<TSource, int> action)
             where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
             if (action is null) Throw.ArgumentNullException(nameof(action));
 
-            ForEach<TEnumerable, TEnumerator, TSource>(source, action, 0, source.Count);
+            for (var index = 0; index < source.Count; index++)
+                action(source[index], index);
         }
 
         static void ForEach<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Action<TSource, int> action, int skipCount, int takeCount)
             where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
-            for (var index = 0; index < takeCount; index++)
-                action(source[index + skipCount], index);
+            var end = skipCount + takeCount;
+            for (var index = skipCount; index < end; index++)
+                action(source[index], index - skipCount);
+        }
+
+        static void ForEach<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Action<TSource, int> action, Predicate<TSource> predicate, int skipCount, int takeCount)
+            where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
+            where TEnumerator : struct, IEnumerator<TSource>
+        {
+            var end = skipCount + takeCount;
+            for (var index = skipCount; index < end; index++)
+            {
+                if (predicate(source[index]))
+                    action(source[index], index - skipCount);
+            }
+        }
+
+        static void ForEach<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Action<TSource, int> action, PredicateAt<TSource> predicate, int skipCount, int takeCount)
+            where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
+            where TEnumerator : struct, IEnumerator<TSource>
+        {
+            var end = skipCount + takeCount;
+            for (var index = skipCount; index < end; index++)
+            {
+                if (predicate(source[index], index - skipCount))
+                    action(source[index], index - skipCount);
+            }
+        }
+
+        static void ForEach<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, Action<TResult, int> action, Selector<TSource, TResult> selector, int skipCount, int takeCount)
+            where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
+            where TEnumerator : struct, IEnumerator<TSource>
+        {
+            var end = skipCount + takeCount;
+            for (var index = skipCount; index < end; index++)
+                action(selector(source[index]), index - skipCount);
+        }
+
+        static void ForEach<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, Action<TResult, int> action, SelectorAt<TSource, TResult> selector, int skipCount, int takeCount)
+            where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
+            where TEnumerator : struct, IEnumerator<TSource>
+        {
+            var end = skipCount + takeCount;
+            for (var index = skipCount; index < end; index++)
+            {
+                var baseIndex = index - skipCount;
+                action(selector(source[index], baseIndex), baseIndex);
+            }
+        }
+
+        static void ForEach<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, Action<TResult, int> action, Predicate<TSource> predicate, Selector<TSource, TResult> selector, int skipCount, int takeCount)
+            where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
+            where TEnumerator : struct, IEnumerator<TSource>
+        {
+            var end = skipCount + takeCount;
+            for (var index = skipCount; index < end; index++)
+            {
+                if (predicate(source[index]))
+                    action(selector(source[index]), index - skipCount);
+            }
         }
     }
 }

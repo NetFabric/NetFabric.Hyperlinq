@@ -7,7 +7,7 @@ using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class ReadOnlyMemoryExtensions
+    public static partial class SpanExtensions
     {
         [Pure]
         public static SelectIndexEnumerable<TSource, TResult> Select<TSource, TResult>(
@@ -114,17 +114,9 @@ namespace NetFabric.Hyperlinq
                 => selector(source.Span.SingleOrDefault(), 0);
 
             public void ForEach(Action<TResult> action)
-            {
-                var span = source.Span;
-                for (var index = 0; index < span.Length; index++)
-                    action(selector(span[index], index));
-            }
+                => SpanExtensions.ForEach(source.Span, action, selector);
             public void ForEach(Action<TResult, int> action)
-            {
-                var span = source.Span;
-                for (var index = 0; index < span.Length; index++)
-                    action(selector(span[index], index), index);
-            }
+                => SpanExtensions.ForEach(source.Span, action, selector);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

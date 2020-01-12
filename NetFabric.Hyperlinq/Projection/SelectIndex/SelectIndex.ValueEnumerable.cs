@@ -169,23 +169,9 @@ namespace NetFabric.Hyperlinq
             }
 
             public void ForEach(Action<TResult> action)
-            {
-                using var enumerator = source.GetEnumerator();
-                checked
-                {
-                    for (var index = 0; enumerator.MoveNext(); index++)
-                        action(selector(enumerator.Current, index));
-                }
-            }
+                => ValueEnumerable.ForEach<TEnumerable, TEnumerator, TSource, TResult>(source, action, selector);
             public void ForEach(Action<TResult, int> action)
-            {
-                using var enumerator = source.GetEnumerator();
-                checked
-                {
-                    for (var index = 0; enumerator.MoveNext(); index++)
-                        action(selector(enumerator.Current, index), index);
-                }
-            }
+                => ValueEnumerable.ForEach<TEnumerable, TEnumerator, TSource, TResult>(source, action, selector);
         }
     }
 }

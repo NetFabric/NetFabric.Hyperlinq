@@ -195,24 +195,9 @@ namespace NetFabric.Hyperlinq
                 => Array.ToDictionary<TSource, TKey, TElement>(source, keySelector, elementSelector, comparer, predicate, skipCount, takeCount);
 
             public void ForEach(Action<TSource> action)
-            {
-                var end = skipCount + takeCount;
-                for (var index = skipCount; index < end; index++)
-                {
-                    if (predicate(source[index], index))
-                        action(source[index]);
-                }
-            }
+                => Array.ForEach(source, action, predicate, 0, source.Length);
             public void ForEach(Action<TSource, int> action)
-            {
-                var actionIndex = 0;
-                var end = skipCount + takeCount;
-                for (var index = skipCount; index < end; index++)
-                {
-                    if (predicate(source[index], index))
-                        action(source[index], actionIndex++);
-                }
-            }
+                => Array.ForEach(source, action, predicate, skipCount, takeCount);
         }
     }
 }

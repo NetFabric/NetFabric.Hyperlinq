@@ -4,7 +4,7 @@ using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class ReadOnlySpanExtensions
+    public static partial class SpanExtensions
     {
         [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

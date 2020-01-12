@@ -186,17 +186,9 @@ namespace NetFabric.Hyperlinq
             }
 
             public void ForEach(Action<TResult> action)
-            {
-                var end = skipCount + takeCount;
-                for (var index = skipCount; index < end; index++)
-                    action(selector(source[index], index));
-            }
+                => Array.ForEach<TSource, TResult>(source, action, selector, skipCount, takeCount);
             public void ForEach(Action<TResult, int> action)
-            {
-                var end = skipCount + takeCount;
-                for (var index = skipCount; index < end; index++)
-                    action(selector(source[index], index), index);
-            }
+                => Array.ForEach<TSource, TResult>(source, action, selector, skipCount, takeCount);
 
             // helper implementation of ICollection<> so that CopyTo() is used to convert to List<>
             [Ignore]

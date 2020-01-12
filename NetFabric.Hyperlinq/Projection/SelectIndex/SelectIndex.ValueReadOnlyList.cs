@@ -249,17 +249,10 @@ namespace NetFabric.Hyperlinq
             }
 
             public void ForEach(Action<TResult> action)
-            {
-                var end = skipCount + takeCount;
-                for (var index = skipCount; index < end; index++)
-                    action(selector(source[index], index));
-            }
+                => ValueReadOnlyList.ForEach<TEnumerable, TEnumerator, TSource, TResult>(source, action, selector, skipCount, takeCount);
             public void ForEach(Action<TResult, int> action)
-            {
-                var end = skipCount + takeCount;
-                for (var index = skipCount; index < end; index++)
-                    action(selector(source[index], index), index);
-            }
+                => ValueReadOnlyList.ForEach<TEnumerable, TEnumerator, TSource, TResult>(source, action, selector, skipCount, takeCount);
+
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

@@ -170,13 +170,13 @@ namespace NetFabric.Hyperlinq
             public void ForEach(Action<int> action)
             {
                 var end = start + count;
-                for (var index = start; index < end; index++)
-                    action(index);
+                for (var value = start; value < end; value++)
+                    action(value);
             }
             public void ForEach(Action<int, int> action)
             {
-                for (var index = start; index < count; index++)
-                    action(index + start, index);
+                for (var value = start; value < count; value++)
+                    action(value + start, value);
             }
 
             // helper implementation of ICollection<> so that CopyTo() is used to convert to List<>
