@@ -10,16 +10,16 @@ namespace NetFabric.Hyperlinq
         [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ref readonly TSource First<TSource>(this TSource[] source) 
-            => ref source.Length == 0 ? 
-                ref Throw.EmptySequenceRef<TSource>() : 
-                ref source[0];
+            => ref source.Length == 0 
+                ? ref Throw.EmptySequenceRef<TSource>() 
+                : ref source[0];
 
         [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static ref readonly TSource First<TSource>(this TSource[] source, int skipCount, int takeCount) 
-            => ref takeCount == 0 ? 
-                ref Throw.EmptySequenceRef<TSource>() : 
-                ref source[skipCount];
+            => ref takeCount == 0 
+                ? ref Throw.EmptySequenceRef<TSource>() 
+                : ref source[skipCount];
 
         [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -85,17 +85,17 @@ namespace NetFabric.Hyperlinq
         [return: MaybeNull]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ref readonly TSource FirstOrDefault<TSource>(this TSource[] source) 
-            => ref source.Length == 0 ? 
-                ref Default<TSource>.Value : 
-                ref source[0];
+            => ref source.Length == 0 
+                ? ref Default<TSource>.Value 
+                : ref source[0];
 
         [Pure]
         [return: MaybeNull]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static ref readonly TSource FirstOrDefault<TSource>(this TSource[] source, int skipCount, int takeCount) 
-            => ref takeCount == 0 ? 
-                ref Default<TSource>.Value : 
-                ref source[skipCount];
+            => ref takeCount == 0 
+                ? ref Default<TSource>.Value 
+                : ref source[skipCount];
 
         [Pure]
         [return: MaybeNull]

@@ -15,7 +15,9 @@ namespace NetFabric.Hyperlinq
             where TEnumerator : struct, IEnumerator<TSource>
         {
             var item = TryElementAt<TEnumerable, TEnumerator, TSource>(source, index, 0, source.Count);
-            return item.HasValue ? item.Value : Throw.ArgumentOutOfRangeException<TSource>(nameof(index));
+            return item.HasValue 
+                ? item.Value 
+                : Throw.ArgumentOutOfRangeException<TSource>(nameof(index));
         }
 
         [Pure]
@@ -25,7 +27,9 @@ namespace NetFabric.Hyperlinq
             where TEnumerator : struct, IEnumerator<TSource>
         {
             var item = TryElementAt<TEnumerable, TEnumerator, TSource>(source, index, skipCount, takeCount);
-            return item.HasValue ? item.Value : Throw.ArgumentOutOfRangeException<TSource>(nameof(index));
+            return item.HasValue 
+                ? item.Value 
+                : Throw.ArgumentOutOfRangeException<TSource>(nameof(index));
         }
 
         [Pure]
@@ -36,7 +40,9 @@ namespace NetFabric.Hyperlinq
             where TEnumerator : struct, IEnumerator<TSource>
         {
             var item = TryElementAt<TEnumerable, TEnumerator, TSource>(source, index, 0, source.Count);
-            return item.HasValue ? item.Value : default!;
+            return item.HasValue 
+                ? item.Value 
+                : default!;
         }
 
         [Pure]
@@ -47,7 +53,9 @@ namespace NetFabric.Hyperlinq
             where TEnumerator : struct, IEnumerator<TSource>
         {
             var item = TryElementAt<TEnumerable, TEnumerator, TSource>(source, index, skipCount, takeCount);
-            return item.HasValue ? item.Value : default;
+            return item.HasValue 
+                ? item.Value 
+                : default;
         }
 
         [Pure]
@@ -61,12 +69,9 @@ namespace NetFabric.Hyperlinq
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static Maybe<TSource> TryElementAt<TEnumerable, TEnumerator, TSource>(this TEnumerable source, int index, int skipCount, int takeCount)
             where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
-            where TEnumerator : struct, IEnumerator<TSource>
-        {
-            if (index < 0 || skipCount > source.Count || index >= takeCount)
-                return default;
-
-            return new Maybe<TSource>(source[index + skipCount]);
-        }
+            where TEnumerator : struct, IEnumerator<TSource> 
+            => index < 0 || skipCount > source.Count || index >= takeCount 
+                ? default 
+                : new Maybe<TSource>(source[index + skipCount]);
     }
 }

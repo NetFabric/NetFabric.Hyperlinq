@@ -117,7 +117,7 @@ namespace NetFabric.Hyperlinq
 
         public static void ForEach<TSource>(this ImmutableArray<TSource> source, Action<TSource> action)
             => ValueReadOnlyList.ForEach<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), action);
-        public static void ForEach<TSource>(this ImmutableArray<TSource> source, Action<TSource, int> action)
+        public static void ForEach<TSource>(this ImmutableArray<TSource> source, ActionAt<TSource> action)
             => ValueReadOnlyList.ForEach<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), action);
 
         public readonly struct ValueWrapper<TSource>

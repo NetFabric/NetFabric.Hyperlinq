@@ -49,13 +49,13 @@ namespace NetFabric.Hyperlinq
             }
         }
 
-        public static void ForEach<TSource>(this ReadOnlySpan<TSource> source, Action<TSource, int> action)
+        public static void ForEach<TSource>(this ReadOnlySpan<TSource> source, ActionAt<TSource> action)
         {
             for (var index = 0; index < source.Length; index++)
                 action(source[index], index);
         }
 
-        static void ForEach<TSource>(this ReadOnlySpan<TSource> source, Action<TSource, int> action, Predicate<TSource> predicate)
+        static void ForEach<TSource>(this ReadOnlySpan<TSource> source, ActionAt<TSource> action, Predicate<TSource> predicate)
         {
             for (var index = 0; index < source.Length; index++)
             {
@@ -64,7 +64,7 @@ namespace NetFabric.Hyperlinq
             }
         }
 
-        static void ForEach<TSource>(this ReadOnlySpan<TSource> source, Action<TSource, int> action, PredicateAt<TSource> predicate)
+        static void ForEach<TSource>(this ReadOnlySpan<TSource> source, ActionAt<TSource> action, PredicateAt<TSource> predicate)
         {
             for (var index = 0; index < source.Length; index++)
             {
@@ -73,19 +73,19 @@ namespace NetFabric.Hyperlinq
             }
         }
 
-        static void ForEach<TSource, TResult>(this ReadOnlySpan<TSource> source, Action<TResult, int> action, Selector<TSource, TResult> selector)
+        static void ForEach<TSource, TResult>(this ReadOnlySpan<TSource> source, ActionAt<TResult> action, Selector<TSource, TResult> selector)
         {
             for (var index = 0; index < source.Length; index++)
                 action(selector(source[index]), index);
         }
 
-        static void ForEach<TSource, TResult>(this ReadOnlySpan<TSource> source, Action<TResult, int> action, SelectorAt<TSource, TResult> selector)
+        static void ForEach<TSource, TResult>(this ReadOnlySpan<TSource> source, ActionAt<TResult> action, SelectorAt<TSource, TResult> selector)
         {
             for (var index = 0; index < source.Length; index++)
                 action(selector(source[index], index), index);
         }
 
-        static void ForEach<TSource, TResult>(this ReadOnlySpan<TSource> source, Action<TResult, int> action, Predicate<TSource> predicate, Selector<TSource, TResult> selector)
+        static void ForEach<TSource, TResult>(this ReadOnlySpan<TSource> source, ActionAt<TResult> action, Predicate<TSource> predicate, Selector<TSource, TResult> selector)
         {
             for (var index = 0; index < source.Length; index++)
             {

@@ -10,7 +10,7 @@ namespace NetFabric.Hyperlinq
             => ForEach(source.Span, action);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void ForEach<TSource>(this ReadOnlyMemory<TSource> source, Action<TSource, int> action)
+        public static void ForEach<TSource>(this ReadOnlyMemory<TSource> source, ActionAt<TSource> action)
             => ForEach(source.Span, action);
     }
 }

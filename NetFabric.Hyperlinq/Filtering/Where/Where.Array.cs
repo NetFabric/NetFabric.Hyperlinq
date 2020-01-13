@@ -193,7 +193,7 @@ namespace NetFabric.Hyperlinq
 
             public void ForEach(Action<TSource> action)
                 => Array.ForEach(source, action, predicate, 0, source.Length);
-            public void ForEach(Action<TSource, int> action)
+            public void ForEach(ActionAt<TSource> action)
                 => Array.ForEach(source, action, predicate, skipCount, takeCount);
         }
     }

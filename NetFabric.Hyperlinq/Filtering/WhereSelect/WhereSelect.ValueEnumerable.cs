@@ -160,7 +160,7 @@ namespace NetFabric.Hyperlinq
 
             public void ForEach(Action<TResult> action)
                 => ValueEnumerable.ForEach<TEnumerable, TEnumerator, TSource, TResult>(source, action, predicate, selector);
-            public void ForEach(Action<TResult, int> action)
+            public void ForEach(ActionAt<TResult> action)
                 => ValueEnumerable.ForEach<TEnumerable, TEnumerator, TSource, TResult>(source, action, predicate, selector);
         }
     }

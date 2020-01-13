@@ -39,5 +39,23 @@ namespace NetFabric.Hyperlinq
             }
             return count;
         }
+
+        [Pure]
+        public static long LongCount<TEnumerable, TEnumerator, TSource>(this TEnumerable source, PredicateAtLong<TSource> predicate)
+            where TEnumerable : IValueEnumerable<TSource, TEnumerator>
+            where TEnumerator : struct, IEnumerator<TSource>
+        {
+            var count = 0L;
+            using var enumerator = source.GetEnumerator();
+            checked
+            {
+                for (var index = 0L; enumerator.MoveNext(); index++)
+                {
+                    var result = predicate(enumerator.Current, index);
+                    count += Unsafe.As<bool, byte>(ref result);
+                }
+            }
+            return count;
+        }
     }
 }

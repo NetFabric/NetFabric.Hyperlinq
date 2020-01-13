@@ -43,15 +43,14 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
-            using var enumerator = (TEnumerator)source.GetEnumerator();
+            using var enumerator = source.GetEnumerator();
             if (enumerator.MoveNext())
             {
                 var value = enumerator.Current;
 
-                if (enumerator.MoveNext())
-                    return (ElementResult.NotSingle, default);
-
-                return (ElementResult.Success, value);
+                return enumerator.MoveNext() 
+                    ? (ElementResult.NotSingle, default) 
+                    : (ElementResult.Success, value);
             }
 
             return (ElementResult.Empty, default);
@@ -88,7 +87,7 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
-            var enumerator = (TEnumerator)source.GetEnumerator();
+            var enumerator = source.GetEnumerator();
             checked
             {
                 for (var index = 0; enumerator.MoveNext(); index++)

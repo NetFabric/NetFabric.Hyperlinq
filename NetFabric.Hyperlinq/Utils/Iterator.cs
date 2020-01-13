@@ -29,7 +29,9 @@ namespace NetFabric.Hyperlinq
 
         public IEnumerator<TSource> GetEnumerator()
         {
-            var enumerator = state == 0 && threadId == Environment.CurrentManagedThreadId ? this : Clone();
+            var enumerator = state == 0 && threadId == Environment.CurrentManagedThreadId 
+                ? this 
+                : Clone();
             enumerator.state = 1;
             return enumerator;
         }

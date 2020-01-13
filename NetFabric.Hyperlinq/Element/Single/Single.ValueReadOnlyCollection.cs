@@ -49,8 +49,8 @@ namespace NetFabric.Hyperlinq
                     return (ElementResult.Empty, default);
                 case 1:
                     {
-                        using var enumerator = (TEnumerator)source.GetEnumerator();
-                        enumerator.MoveNext();
+                        using var enumerator = source.GetEnumerator();
+                        _ = enumerator.MoveNext();
                         return (ElementResult.Success, enumerator.Current);
                     }
             }

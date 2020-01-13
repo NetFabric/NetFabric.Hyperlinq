@@ -86,7 +86,7 @@ namespace NetFabric.Hyperlinq
                             Debug.Assert(set is object);
                             while (enumerator.MoveNext())
                             {
-                                if (set.Add(enumerator.Current))
+                                if (set!.Add(enumerator.Current))
                                     return true;
                             }
 

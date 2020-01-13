@@ -163,7 +163,7 @@ namespace NetFabric.Hyperlinq
             public void ForEach(Action<TSource> action)
                 => action(value);
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public void ForEach(Action<TSource, int> action)
+            public void ForEach(ActionAt<TSource> action)
                 => action(value, 0);
         }
 

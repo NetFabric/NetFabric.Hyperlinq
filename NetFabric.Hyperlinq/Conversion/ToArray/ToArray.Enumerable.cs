@@ -10,11 +10,11 @@ namespace NetFabric.Hyperlinq
         [Pure]
         static T[] ToArray<T>(IEnumerable<T> source)
         {
-            var (array, length) = ToArrayWithLength<T>(source);
+            var (array, length) = ToArrayWithLength(source);
             System.Array.Resize(ref array, length);
             return array;
 
-            static (T[], int) ToArrayWithLength<T>(IEnumerable<T> source)
+            static (T[], int) ToArrayWithLength(IEnumerable<T> source)
             {
                 int count;
                 if (source is ICollection<T> collection)

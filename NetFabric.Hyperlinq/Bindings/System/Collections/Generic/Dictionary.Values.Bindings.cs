@@ -175,7 +175,7 @@ namespace NetFabric.Hyperlinq
 
         public static void ForEach<TKey, TValue>(this Dictionary<TKey, TValue>.ValueCollection source, Action<TValue> action)
             => ValueReadOnlyCollection.ForEach<ValueWrapper<TKey, TValue>, Dictionary<TKey, TValue>.ValueCollection.Enumerator, TValue>(new ValueWrapper<TKey, TValue>(source), action);
-        public static void ForEach<TKey, TValue>(this Dictionary<TKey, TValue>.ValueCollection source, Action<TValue, int> action)
+        public static void ForEach<TKey, TValue>(this Dictionary<TKey, TValue>.ValueCollection source, ActionAt<TValue> action)
             => ValueReadOnlyCollection.ForEach<ValueWrapper<TKey, TValue>, Dictionary<TKey, TValue>.ValueCollection.Enumerator, TValue>(new ValueWrapper<TKey, TValue>(source), action);
 
         public readonly struct ValueWrapper<TKey, TValue>

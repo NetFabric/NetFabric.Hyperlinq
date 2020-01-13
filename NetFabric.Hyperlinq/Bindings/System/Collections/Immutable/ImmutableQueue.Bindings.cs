@@ -176,7 +176,7 @@ namespace NetFabric.Hyperlinq
 
         public static void ForEach<TSource>(this ImmutableQueue<TSource> source, Action<TSource> action)
             => ValueEnumerable.ForEach<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), action);
-        public static void ForEach<TSource>(this ImmutableQueue<TSource> source, Action<TSource, int> action)
+        public static void ForEach<TSource>(this ImmutableQueue<TSource> source, ActionAt<TSource> action)
             => ValueEnumerable.ForEach<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), action);
 
         public readonly struct ValueWrapper<TSource>

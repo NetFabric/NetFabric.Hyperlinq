@@ -166,7 +166,9 @@ namespace NetFabric.Hyperlinq
             public Maybe<TResult> TryElementAt(int index)
             {
                 var item = ValueReadOnlyList.TryElementAt<TEnumerable, TEnumerator, TSource>(source, index, skipCount, takeCount);
-                return item.HasValue ? new Maybe<TResult>(selector(item.Value)) : default;
+                return item.HasValue 
+                    ? new Maybe<TResult>(selector(item.Value)) 
+                    : default;
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -273,7 +275,7 @@ namespace NetFabric.Hyperlinq
 
             public void ForEach(Action<TResult> action)
                 => ValueReadOnlyList.ForEach<TEnumerable, TEnumerator, TSource, TResult>(source, action, selector, skipCount, takeCount);
-            public void ForEach(Action<TResult, int> action)
+            public void ForEach(ActionAt<TResult> action)
                 => ValueReadOnlyList.ForEach<TEnumerable, TEnumerator, TSource, TResult>(source, action, selector, skipCount, takeCount);
         }
 

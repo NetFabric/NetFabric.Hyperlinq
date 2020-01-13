@@ -9,9 +9,9 @@ namespace NetFabric.Hyperlinq
         [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool All<TSource>(this TSource[] source, Predicate<TSource> predicate) 
-            => predicate is null ? 
-                Throw.ArgumentNullException<bool>(nameof(predicate)) : 
-                All<TSource>(source, predicate, 0, source.Length);
+            => predicate is null 
+                ? Throw.ArgumentNullException<bool>(nameof(predicate)) 
+                : All<TSource>(source, predicate, 0, source.Length);
 
         [Pure]
         static bool All<TSource>(this TSource[] source, Predicate<TSource> predicate, int skipCount, int takeCount)
@@ -28,9 +28,9 @@ namespace NetFabric.Hyperlinq
         [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool All<TSource>(this TSource[] source, PredicateAt<TSource> predicate) 
-            => predicate is null ? 
-                Throw.ArgumentNullException<bool>(nameof(predicate)) : 
-                All<TSource>(source, predicate, 0, source.Length);
+            => predicate is null 
+                ? Throw.ArgumentNullException<bool>(nameof(predicate)) 
+                : All<TSource>(source, predicate, 0, source.Length);
 
         [Pure]
         static bool All<TSource>(this TSource[] source, PredicateAt<TSource> predicate, int skipCount, int takeCount)

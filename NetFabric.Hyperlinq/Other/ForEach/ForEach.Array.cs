@@ -63,7 +63,7 @@ namespace NetFabric.Hyperlinq
             }
         }
 
-        public static void ForEach<TSource>(this TSource[] source, Action<TSource, int> action)
+        public static void ForEach<TSource>(this TSource[] source, ActionAt<TSource> action)
         {
             if (action is null) Throw.ArgumentNullException(nameof(action));
 
@@ -71,14 +71,14 @@ namespace NetFabric.Hyperlinq
                 action(source[index], index);
         }
 
-        static void ForEach<TSource>(this TSource[] source, Action<TSource, int> action, int skipCount, int takeCount)
+        static void ForEach<TSource>(this TSource[] source, ActionAt<TSource> action, int skipCount, int takeCount)
         {
             var end = skipCount + takeCount;
             for (var index = skipCount; index < end; index++)
                 action(source[index], index - skipCount);
         }
 
-        static void ForEach<TSource>(this TSource[] source, Action<TSource, int> action, Predicate<TSource> predicate, int skipCount, int takeCount)
+        static void ForEach<TSource>(this TSource[] source, ActionAt<TSource> action, Predicate<TSource> predicate, int skipCount, int takeCount)
         {
             var end = skipCount + takeCount;
             for (var index = skipCount; index < end; index++)
@@ -88,7 +88,7 @@ namespace NetFabric.Hyperlinq
             }
         }
 
-        static void ForEach<TSource>(this TSource[] source, Action<TSource, int> action, PredicateAt<TSource> predicate, int skipCount, int takeCount)
+        static void ForEach<TSource>(this TSource[] source, ActionAt<TSource> action, PredicateAt<TSource> predicate, int skipCount, int takeCount)
         {
             var end = skipCount + takeCount;
             for (var index = skipCount; index < end; index++)
@@ -98,14 +98,14 @@ namespace NetFabric.Hyperlinq
             }
         }
 
-        static void ForEach<TSource, TResult>(this TSource[] source, Action<TResult, int> action, Selector<TSource, TResult> selector, int skipCount, int takeCount)
+        static void ForEach<TSource, TResult>(this TSource[] source, ActionAt<TResult> action, Selector<TSource, TResult> selector, int skipCount, int takeCount)
         {
             var end = skipCount + takeCount;
             for (var index = skipCount; index < end; index++)
                 action(selector(source[index]), index - skipCount);
         }
 
-        static void ForEach<TSource, TResult>(this TSource[] source, Action<TResult, int> action, SelectorAt<TSource, TResult> selector, int skipCount, int takeCount)
+        static void ForEach<TSource, TResult>(this TSource[] source, ActionAt<TResult> action, SelectorAt<TSource, TResult> selector, int skipCount, int takeCount)
         {
             var end = skipCount + takeCount;
             for (var index = skipCount; index < end; index++)
@@ -115,7 +115,7 @@ namespace NetFabric.Hyperlinq
             }
         }
 
-        static void ForEach<TSource, TResult>(this TSource[] source, Action<TResult, int> action, Predicate<TSource> predicate, Selector<TSource, TResult> selector, int skipCount, int takeCount)
+        static void ForEach<TSource, TResult>(this TSource[] source, ActionAt<TResult> action, Predicate<TSource> predicate, Selector<TSource, TResult> selector, int skipCount, int takeCount)
         {
             var end = skipCount + takeCount;
             for (var index = skipCount; index < end; index++)

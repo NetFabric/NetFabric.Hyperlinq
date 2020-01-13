@@ -74,6 +74,8 @@ namespace NetFabric.Hyperlinq
         [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static MaybeAt<TValue> AsMaybe<TValue>(this (int Index, TValue Value) item) 
-            => item.Index < 0 ? default : new MaybeAt<TValue>(item.Value, item.Index);
+            => item.Index < 0 
+                ? default 
+                : new MaybeAt<TValue>(item.Value, item.Index);
     }
 }

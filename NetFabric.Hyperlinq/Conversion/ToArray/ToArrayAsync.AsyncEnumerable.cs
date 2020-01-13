@@ -12,14 +12,13 @@ namespace NetFabric.Hyperlinq
         [Pure]
         static async ValueTask<TSource[]> ToArrayAsync<TSource>(IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
         {
+            cancellationToken.ThrowIfCancellationRequested();
             var (array, length) = await ToArrayWithLengthAsync(source, cancellationToken).ConfigureAwait(false);
             System.Array.Resize(ref array, length);
             return array;
 
             static async ValueTask<(TSource[], int)> ToArrayWithLengthAsync(IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
             {
-                cancellationToken.ThrowIfCancellationRequested();
-
                 // Check for short circuit optimizations. This one is very unlikely
                 // but could be here as a group
                 if (source is ICollection<TSource> collection)
