@@ -10,6 +10,7 @@ namespace NetFabric.Hyperlinq
     public static partial class SpanExtensions
     {
         [Pure]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static WhereEnumerable<TSource> Where<TSource>(this ReadOnlyMemory<TSource> source, Predicate<TSource> predicate) 
         {
             if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
@@ -30,7 +31,6 @@ namespace NetFabric.Hyperlinq
             }
 
             [Pure]
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly Enumerator GetEnumerator() => new Enumerator(in this);
             readonly DisposableEnumerator IValueEnumerable<TSource, WhereEnumerable<TSource>.DisposableEnumerator>.GetEnumerator() => new DisposableEnumerator(in this);
             readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new DisposableEnumerator(in this);

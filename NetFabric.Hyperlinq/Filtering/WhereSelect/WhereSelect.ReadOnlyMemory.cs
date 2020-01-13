@@ -122,6 +122,11 @@ namespace NetFabric.Hyperlinq
             [return: MaybeNull]
             public TResult SingleOrDefault()
                 => selector(source.Span.SingleOrDefault(predicate));
+
+            public void ForEach(Action<TResult> action)
+                => source.Span.ForEach(action, predicate, selector);
+            public void ForEach(Action<TResult, int> action)
+                => source.Span.ForEach(action, predicate, selector);
         }
     }
 }

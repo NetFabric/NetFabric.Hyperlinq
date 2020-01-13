@@ -18,11 +18,19 @@ namespace NetFabric.Hyperlinq
             => throw new ArgumentNullException(paramName);
 
         [DoesNotReturn]
+        public static ref readonly T ArgumentNullExceptionRef<T>(string paramName)
+            => throw new ArgumentNullException(paramName);
+
+        [DoesNotReturn]
         public static void ArgumentOutOfRangeException(string paramName)
             => throw new ArgumentOutOfRangeException(paramName);
 
         [DoesNotReturn]
         public static T ArgumentOutOfRangeException<T>(string paramName)
+            => throw new ArgumentOutOfRangeException(paramName);
+
+        [DoesNotReturn]
+        public static ref readonly T ArgumentOutOfRangeExceptionRef<T>(string paramName)
             => throw new ArgumentOutOfRangeException(paramName);
 
         [DoesNotReturn]

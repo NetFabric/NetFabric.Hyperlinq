@@ -9,12 +9,10 @@ namespace NetFabric.Hyperlinq
     {
         [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ref readonly TSource First<TSource>(this ReadOnlySpan<TSource> source)
-        {
-            if (source.Length == 0) Throw.EmptySequence<TSource>();
-
-            return ref source[0];
-        }
+        public static ref readonly TSource First<TSource>(this ReadOnlySpan<TSource> source) 
+            => ref source.Length == 0 ? 
+                ref Throw.EmptySequenceRef<TSource>() : 
+                ref source[0];
 
         [Pure]
         public static ref readonly TSource First<TSource>(this ReadOnlySpan<TSource> source, Predicate<TSource> predicate)
@@ -27,8 +25,7 @@ namespace NetFabric.Hyperlinq
                 if (predicate(source[index]))
                     return ref source[index];
             }
-            Throw.EmptySequence<TSource>();
-            return ref source[0];
+            return ref Throw.EmptySequenceRef<TSource>();
         }
 
         [Pure]
@@ -42,8 +39,7 @@ namespace NetFabric.Hyperlinq
                 if (predicate(source[index], index))
                     return ref source[index];
             }
-            Throw.EmptySequence<TSource>();
-            return ref source[0];
+            return ref Throw.EmptySequenceRef<TSource>();
         }
 
         [Pure]
@@ -57,19 +53,16 @@ namespace NetFabric.Hyperlinq
                 if (predicate(source[index], index))
                     return ref source[index];
             }
-            Throw.EmptySequence<TSource>();
-            return ref source[0];
+            return ref Throw.EmptySequenceRef<TSource>();
         }
 
         [Pure]
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         [return: MaybeNull]
-        public static ref readonly TSource FirstOrDefault<TSource>(this ReadOnlySpan<TSource> source)
-        {
-            if (source.Length == 0) return ref Default<TSource>.Value;
-
-            return ref source[0];
-        }
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ref readonly TSource FirstOrDefault<TSource>(this ReadOnlySpan<TSource> source) 
+            => ref source.Length == 0 ? 
+                ref Default<TSource>.Value : 
+                ref source[0];
 
         [Pure]
         [return: MaybeNull]

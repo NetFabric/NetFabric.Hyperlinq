@@ -10,6 +10,7 @@ namespace NetFabric.Hyperlinq
     public static partial class ValueEnumerable
     {
         [Pure]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static SkipEnumerable<TEnumerable, TEnumerator, TSource> Skip<TEnumerable, TEnumerator, TSource>(this TEnumerable source, int count)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>

@@ -28,12 +28,12 @@ namespace NetFabric.Hyperlinq
         }
 
         [Pure]
-        public static ref readonly TSource Single<TSource>(this TSource[] source, PredicateAt<TSource> predicate)
-        {
-            if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ref readonly TSource Single<TSource>(this TSource[] source, PredicateAt<TSource> predicate) 
+            => ref predicate is null
+                ? ref Throw.ArgumentNullExceptionRef<TSource>(nameof(predicate))
+                : ref Single<TSource>(source, predicate, 0, source.Length);
 
-            return ref Single<TSource>(source, predicate, 0, source.Length);
-        }
         [Pure]
         static ref readonly TSource Single<TSource>(this TSource[] source, PredicateAt<TSource> predicate, int skipCount, int takeCount)
         {
@@ -47,7 +47,7 @@ namespace NetFabric.Hyperlinq
                     for (index++; index < end; index++)
                     {
                         if (predicate(source[index], index))
-                            Throw.NotSingleSequence<TSource>();
+                            Throw.NotSingleSequence();
                     }
 
                     return ref first;
@@ -57,12 +57,11 @@ namespace NetFabric.Hyperlinq
         }
 
         [Pure]
-        public static ref readonly TSource Single<TSource>(this TSource[] source, Predicate<TSource> predicate)
-        {
-            if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
-
-            return ref Single<TSource>(source, predicate, 0, source.Length);
-        }
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ref readonly TSource Single<TSource>(this TSource[] source, Predicate<TSource> predicate) 
+            => ref predicate is null
+                ? ref Throw.ArgumentNullExceptionRef<TSource>(nameof(predicate))
+                : ref Single<TSource>(source, predicate, 0, source.Length);
 
         [Pure]
         static ref readonly TSource Single<TSource>(this TSource[] source, Predicate<TSource> predicate, int skipCount, int takeCount)
@@ -77,7 +76,7 @@ namespace NetFabric.Hyperlinq
                     for (index++; index < end; index++)
                     {
                         if (predicate(source[index]))
-                            Throw.NotSingleSequence<TSource>();
+                            Throw.NotSingleSequence();
                     }
 
                     return ref first;
@@ -107,7 +106,7 @@ namespace NetFabric.Hyperlinq
                     for (index++; index < end; index++)
                     {
                         if (predicate(source[index], index))
-                            Throw.NotSingleSequence<TSource>();
+                            Throw.NotSingleSequence();
                     }
 
                     return ref first;
@@ -117,8 +116,8 @@ namespace NetFabric.Hyperlinq
         }
 
         [Pure]
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         [return: MaybeNull]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ref readonly TSource SingleOrDefault<TSource>(this TSource[] source)
             => ref SingleOrDefault<TSource>(source, 0, source.Length);
 
@@ -140,12 +139,11 @@ namespace NetFabric.Hyperlinq
 
         [Pure]
         [return: MaybeNull]
-        public static ref readonly TSource SingleOrDefault<TSource>(this TSource[] source, Predicate<TSource> predicate)
-        {
-            if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
-
-            return ref SingleOrDefault<TSource>(source, predicate, 0, source.Length);
-        }
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ref readonly TSource SingleOrDefault<TSource>(this TSource[] source, Predicate<TSource> predicate) 
+            => ref predicate is null
+                ? ref Throw.ArgumentNullExceptionRef<TSource>(nameof(predicate))
+                : ref SingleOrDefault<TSource>(source, predicate, 0, source.Length);
 
         [Pure]
         [return: MaybeNull]
@@ -161,7 +159,7 @@ namespace NetFabric.Hyperlinq
                     for (index++; index < end; index++)
                     {
                         if (predicate(source[index]))
-                            Throw.NotSingleSequence<TSource>();
+                            Throw.NotSingleSequence();
                     }
 
                     return ref first;
@@ -172,12 +170,11 @@ namespace NetFabric.Hyperlinq
 
         [Pure]
         [return: MaybeNull]
-        public static ref readonly TSource SingleOrDefault<TSource>(this TSource[] source, PredicateAt<TSource> predicate)
-        {
-            if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
-
-            return ref SingleOrDefault<TSource>(source, predicate, 0, source.Length);
-        }
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ref readonly TSource SingleOrDefault<TSource>(this TSource[] source, PredicateAt<TSource> predicate) 
+            => ref predicate is null
+                ? ref Throw.ArgumentNullExceptionRef<TSource>(nameof(predicate))
+                : ref SingleOrDefault<TSource>(source, predicate, 0, source.Length);
 
         [Pure]
         [return: MaybeNull]
@@ -193,7 +190,7 @@ namespace NetFabric.Hyperlinq
                     for (index++; index < end; index++)
                     {
                         if (predicate(source[index], index))
-                            Throw.NotSingleSequence<TSource>();
+                            Throw.NotSingleSequence();
                     }
 
                     return ref first;
@@ -225,7 +222,7 @@ namespace NetFabric.Hyperlinq
                     for (index++; index < end; index++)
                     {
                         if (predicate(source[index], index))
-                            Throw.NotSingleSequence<TSource>();
+                            Throw.NotSingleSequence();
                     }
 
                     return ref first;
