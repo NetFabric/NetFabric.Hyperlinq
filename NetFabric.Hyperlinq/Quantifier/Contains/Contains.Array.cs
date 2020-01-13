@@ -1,20 +1,24 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
+using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
     public static partial class Array
     {
         [Pure]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool Contains<TSource>(this TSource[] source, TSource value)
             => System.Array.IndexOf<TSource>(source, value) >= 0;
 
         [Pure]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static bool Contains<TSource>(this TSource[] source, TSource value, int skipCount, int takeCount)
             => System.Array.IndexOf<TSource>(source, value, skipCount, takeCount) >= 0;
 
         [Pure]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool Contains<TSource>(this TSource[] source, TSource value, IEqualityComparer<TSource>? comparer)
             => Contains<TSource>(source, value, comparer, 0, source.Length);
 

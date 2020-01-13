@@ -8,28 +8,25 @@ namespace NetFabric.Hyperlinq
     public static partial class Array
     {
         [Pure]
-        public static ref readonly TSource First<TSource>(this TSource[] source)
-        {
-            if (source.Length == 0) Throw.EmptySequence<TSource>();
-
-            return ref source[0];
-        }
-
-        [Pure]
-        static ref readonly TSource First<TSource>(this TSource[] source, int skipCount, int takeCount)
-        {
-            if (takeCount == 0) Throw.EmptySequence<TSource>();
-
-            return ref source[skipCount];
-        }
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ref readonly TSource First<TSource>(this TSource[] source) 
+            => ref source.Length == 0 ? 
+                ref Throw.EmptySequenceRef<TSource>() : 
+                ref source[0];
 
         [Pure]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        static ref readonly TSource First<TSource>(this TSource[] source, int skipCount, int takeCount) 
+            => ref takeCount == 0 ? 
+                ref Throw.EmptySequenceRef<TSource>() : 
+                ref source[skipCount];
+
+        [Pure]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ref readonly TSource First<TSource>(this TSource[] source, Predicate<TSource> predicate) 
-        {
-            if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
-
-            return ref First<TSource>(source, predicate, 0, source.Length);
-        }
+            => ref predicate is null
+                ? ref Throw.ArgumentNullExceptionRef<TSource>(nameof(predicate))
+                : ref First<TSource>(source, predicate, 0, source.Length);
 
         [Pure]
         static ref readonly TSource First<TSource>(this TSource[] source, Predicate<TSource> predicate, int skipCount, int takeCount)
@@ -44,12 +41,11 @@ namespace NetFabric.Hyperlinq
         }
 
         [Pure]
-        public static ref readonly TSource First<TSource>(this TSource[] source, PredicateAt<TSource> predicate)
-        {
-            if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
-
-            return ref First<TSource>(source, predicate, 0, source.Length);
-        }
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ref readonly TSource First<TSource>(this TSource[] source, PredicateAt<TSource> predicate) 
+            => ref predicate is null
+                ? ref Throw.ArgumentNullExceptionRef<TSource>(nameof(predicate))
+                : ref First<TSource>(source, predicate, 0, source.Length);
 
         [Pure]
         static ref readonly TSource First<TSource>(this TSource[] source, PredicateAt<TSource> predicate, int skipCount, int takeCount)
@@ -64,6 +60,7 @@ namespace NetFabric.Hyperlinq
         }
 
         [Pure]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ref readonly TSource First<TSource>(this TSource[] source, PredicateAt<TSource> predicate, out int index) 
         {
             if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
@@ -86,30 +83,27 @@ namespace NetFabric.Hyperlinq
 
         [Pure]
         [return: MaybeNull]
-        public static ref readonly TSource FirstOrDefault<TSource>(this TSource[] source)
-        {
-            if (source.Length == 0) return ref Default<TSource>.Value;
-
-            return ref source[0];
-        }
-
-        [Pure]
-        [return: MaybeNull]
-        static ref readonly TSource FirstOrDefault<TSource>(this TSource[] source, int skipCount, int takeCount)
-        {
-            if (takeCount == 0) return ref Default<TSource>.Value;
-
-            return ref source[skipCount];
-        }
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ref readonly TSource FirstOrDefault<TSource>(this TSource[] source) 
+            => ref source.Length == 0 ? 
+                ref Default<TSource>.Value : 
+                ref source[0];
 
         [Pure]
         [return: MaybeNull]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        static ref readonly TSource FirstOrDefault<TSource>(this TSource[] source, int skipCount, int takeCount) 
+            => ref takeCount == 0 ? 
+                ref Default<TSource>.Value : 
+                ref source[skipCount];
+
+        [Pure]
+        [return: MaybeNull]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ref readonly TSource FirstOrDefault<TSource>(this TSource[] source, Predicate<TSource> predicate) 
-        {
-            if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
-
-            return ref FirstOrDefault<TSource>(source, predicate, 0, source.Length);
-        }
+            => ref predicate is null
+                ? ref Throw.ArgumentNullExceptionRef<TSource>(nameof(predicate))
+                : ref FirstOrDefault<TSource>(source, predicate, 0, source.Length);
 
         [Pure]
         [return: MaybeNull]
@@ -126,12 +120,11 @@ namespace NetFabric.Hyperlinq
 
         [Pure]
         [return: MaybeNull]
-        public static ref readonly TSource FirstOrDefault<TSource>(this TSource[] source, PredicateAt<TSource> predicate)
-        {
-            if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
-
-            return ref FirstOrDefault<TSource>(source, predicate, 0, source.Length);
-        }
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ref readonly TSource FirstOrDefault<TSource>(this TSource[] source, PredicateAt<TSource> predicate) 
+            => ref predicate is null
+                ? ref Throw.ArgumentNullExceptionRef<TSource>(nameof(predicate))
+                : ref FirstOrDefault<TSource>(source, predicate, 0, source.Length);
 
         [Pure]
         [return: MaybeNull]
@@ -148,6 +141,7 @@ namespace NetFabric.Hyperlinq
 
         [Pure]
         [return: MaybeNull]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ref readonly TSource FirstOrDefault<TSource>(this TSource[] source, PredicateAt<TSource> predicate, out int index) 
         {
             if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
@@ -157,6 +151,7 @@ namespace NetFabric.Hyperlinq
 
         [Pure]
         [return: MaybeNull]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static ref readonly TSource FirstOrDefault<TSource>(this TSource[] source, PredicateAt<TSource> predicate, out int index, int skipCount, int takeCount)
         {
             var end = skipCount + takeCount;

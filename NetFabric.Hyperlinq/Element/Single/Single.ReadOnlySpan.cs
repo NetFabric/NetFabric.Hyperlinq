@@ -1,21 +1,23 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
-using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
     public static partial class SpanExtensions
     {
         [Pure]
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ref readonly TSource Single<TSource>(this ReadOnlySpan<TSource> source)
         {
-            var length = source.Length;
-            if (length == 0) Throw.EmptySequence<TSource>();
-            if (length > 1) Throw.NotSingleSequence<TSource>();
-
-            return ref source[0];
+            switch (source.Length)
+            {
+                case 0:
+                    return ref Throw.EmptySequenceRef<TSource>();
+                case 1:
+                    return ref source[0];
+                default:
+                    return ref Throw.NotSingleSequenceRef<TSource>();
+            }
         }
 
         [Pure]
@@ -33,14 +35,13 @@ namespace NetFabric.Hyperlinq
                     for (index++; index < length; index++)
                     {
                         if (predicate(source[index]))
-                            Throw.NotSingleSequence<TSource>();
+                            Throw.NotSingleSequence();
                     }
 
                     return ref first;
                 }
             }
-            Throw.EmptySequence<TSource>();
-            return ref source[0];
+            return ref Throw.EmptySequenceRef<TSource>();
         }
 
         [Pure]
@@ -58,14 +59,13 @@ namespace NetFabric.Hyperlinq
                     for (index++; index < length; index++)
                     {
                         if (predicate(source[index], index))
-                            Throw.NotSingleSequence<TSource>();
+                            Throw.NotSingleSequence();
                     }
 
                     return ref first;
                 }
             }
-            Throw.EmptySequence<TSource>();
-            return ref source[0];
+            return ref Throw.EmptySequenceRef<TSource>();
         }
 
         [Pure]
@@ -83,26 +83,28 @@ namespace NetFabric.Hyperlinq
                     for (index++; index < length; index++)
                     {
                         if (predicate(source[index], index))
-                            Throw.NotSingleSequence<TSource>();
+                            Throw.NotSingleSequence();
                     }
 
                     return ref first;
                 }
             }
-            Throw.EmptySequence<TSource>();
-            return ref source[0];
+            return ref Throw.EmptySequenceRef<TSource>();
         }
 
         [Pure]
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         [return: MaybeNull]
         public static ref readonly TSource SingleOrDefault<TSource>(this ReadOnlySpan<TSource> source)
         {
-            var length = source.Length;
-            if (length == 0) return ref Default<TSource>.Value;
-            if (length > 1) Throw.NotSingleSequence<TSource>();
-
-            return ref source[0];
+            switch (source.Length)
+            {
+                case 0:
+                    return ref Default<TSource>.Value;
+                case 1:
+                    return ref source[0];
+                default:
+                    return ref Throw.NotSingleSequenceRef<TSource>();
+            }
         }
 
         [Pure]
@@ -121,7 +123,7 @@ namespace NetFabric.Hyperlinq
                     for (index++; index < length; index++)
                     {
                         if (predicate(source[index]))
-                            Throw.NotSingleSequence<TSource>();
+                            Throw.NotSingleSequence();
                     }
 
                     return ref first;
@@ -146,7 +148,7 @@ namespace NetFabric.Hyperlinq
                     for (index++; index < length; index++)
                     {
                         if (predicate(source[index], index))
-                            Throw.NotSingleSequence<TSource>();
+                            Throw.NotSingleSequence();
                     }
 
                     return ref first;
@@ -171,7 +173,7 @@ namespace NetFabric.Hyperlinq
                     for (index++; index < length; index++)
                     {
                         if (predicate(source[index], index))
-                            Throw.NotSingleSequence<TSource>();
+                            Throw.NotSingleSequence();
                     }
 
                     return ref first;
