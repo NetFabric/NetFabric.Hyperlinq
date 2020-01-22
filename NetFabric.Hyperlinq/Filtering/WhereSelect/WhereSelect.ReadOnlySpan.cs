@@ -85,7 +85,7 @@ namespace NetFabric.Hyperlinq
 
             public void ForEach(Action<TResult> action)
                 => source.ForEach(action, predicate, selector);
-            public void ForEach(Action<TResult, int> action)
+            public void ForEach(ActionAt<TResult> action)
                 => source.ForEach(action, predicate, selector);
         }
     }

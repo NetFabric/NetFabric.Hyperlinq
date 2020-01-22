@@ -101,116 +101,148 @@ namespace NetFabric.Hyperlinq
             [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public EmptyEnumerable<TSource> Select<TResult>(Selector<TSource, TResult> selector)
-                => selector is null ? Throw.ArgumentNullException<EmptyEnumerable<TSource>>(nameof(selector)) : this;
+                => selector is null 
+                    ? Throw.ArgumentNullException<EmptyEnumerable<TSource>>(nameof(selector)) 
+                    : this;
 
             [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public EmptyEnumerable<TSource> Select<TResult>(SelectorAt<TSource, TResult> selector)
-                => selector is null ? Throw.ArgumentNullException<EmptyEnumerable<TSource>>(nameof(selector)) : this;
+                => selector is null 
+                    ? Throw.ArgumentNullException<EmptyEnumerable<TSource>>(nameof(selector)) 
+                    : this;
 
             [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public EmptyEnumerable<TSource> SelectMany<TResult>(Selector<TSource, IEnumerable<TResult>> selector)
-                => selector is null ? Throw.ArgumentNullException<EmptyEnumerable<TSource>>(nameof(selector)) : this;
+                => selector is null 
+                    ? Throw.ArgumentNullException<EmptyEnumerable<TSource>>(nameof(selector)) 
+                    : this;
 
             [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public EmptyEnumerable<TSource> Where(Predicate<TSource> predicate)
-                => predicate is null ? Throw.ArgumentNullException<EmptyEnumerable<TSource>>(nameof(predicate)) : this;
+                => predicate is null 
+                    ? Throw.ArgumentNullException<EmptyEnumerable<TSource>>(nameof(predicate)) 
+                    : this;
 
             [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public EmptyEnumerable<TSource> Where(PredicateAt<TSource> predicate)
-                => predicate is null ? Throw.ArgumentNullException<EmptyEnumerable<TSource>>(nameof(predicate)) : this;
+                => predicate is null 
+                    ? Throw.ArgumentNullException<EmptyEnumerable<TSource>>(nameof(predicate)) 
+                    : this;
 
             [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public TSource ElementAt(int index) => Throw.ArgumentOutOfRangeException<TSource>(nameof(index));
-
-            [Pure]
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            [return: MaybeNull]
-            public TSource ElementAtOrDefault(int index) => default!;
-
-            [Pure]
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public Maybe<TSource> TryElementAt(int index) => default!;
-
-            [Pure]
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public TSource First() => Throw.EmptySequence<TSource>();
-
-            [Pure]
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public TSource First(Predicate<TSource> predicate) => Throw.EmptySequence<TSource>();
-
-            [Pure]
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public TSource First(PredicateAt<TSource> predicate) => Throw.EmptySequence<TSource>();
+            public TSource ElementAt(int index) 
+                => Throw.ArgumentOutOfRangeException<TSource>(nameof(index));
 
             [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             [return: MaybeNull]
-            public TSource FirstOrDefault() => default!;
+            public TSource ElementAtOrDefault(int index) 
+                => default!;
+
+            [Pure]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public Maybe<TSource> TryElementAt(int index) 
+                => default!;
+
+            [Pure]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public TSource First() 
+                => Throw.EmptySequence<TSource>();
+
+            [Pure]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public TSource First(Predicate<TSource> predicate) 
+                => Throw.EmptySequence<TSource>();
+
+            [Pure]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public TSource First(PredicateAt<TSource> predicate) 
+                => Throw.EmptySequence<TSource>();
 
             [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             [return: MaybeNull]
-            public TSource FirstOrDefault(Predicate<TSource> predicate) => default!;
+            public TSource FirstOrDefault() 
+                => default!;
 
             [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             [return: MaybeNull]
-            public TSource FirstOrDefault(PredicateAt<TSource> predicate) => default!;
+            public TSource FirstOrDefault(Predicate<TSource> predicate) 
+                => default!;
 
             [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public (bool Success, TSource Value) TryFirst() => (false, default!);
+            [return: MaybeNull]
+            public TSource FirstOrDefault(PredicateAt<TSource> predicate) 
+                => default!;
+
+            [Pure]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public (bool Success, TSource Value) TryFirst() 
+                => (false, default!);
 
             [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public (bool Success, TSource Value) TryFirst(Predicate<TSource> predicate) 
-                => predicate is null ? Throw.ArgumentNullException<ValueTuple<bool, TSource>>(nameof(predicate)) : (false, default!);
+                => predicate is null 
+                    ? Throw.ArgumentNullException<ValueTuple<bool, TSource>>(nameof(predicate)) 
+                    : (false, default!);
 
             [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public (int Index, TSource Value) TryFirst(PredicateAt<TSource> predicate)
-                => predicate is null ? Throw.ArgumentNullException<ValueTuple<int, TSource>>(nameof(predicate)) : (-1, default!);
+                => predicate is null 
+                    ? Throw.ArgumentNullException<ValueTuple<int, TSource>>(nameof(predicate)) 
+                    : (-1, default!);
 
             [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public TSource Single() => Throw.EmptySequence<TSource>();
+            public TSource Single() 
+                => Throw.EmptySequence<TSource>();
 
             [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public TSource Single(Predicate<TSource> predicate) => Throw.EmptySequence<TSource>();
+            public TSource Single(Predicate<TSource> predicate) 
+                => Throw.EmptySequence<TSource>();
 
             [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public TSource Single(PredicateAt<TSource> predicate) => Throw.EmptySequence<TSource>();
-
-            [Pure]
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            [return: MaybeNull]
-            public TSource SingleOrDefault() => default!;
-
-            [Pure]
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            [return: MaybeNull]
-            public TSource SingleOrDefault(PredicateAt<TSource> predicate) => default!;
+            public TSource Single(PredicateAt<TSource> predicate) 
+                => Throw.EmptySequence<TSource>();
 
             [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             [return: MaybeNull]
-            public TSource SingleOrDefault(Predicate<TSource> predicate) => default!;
+            public TSource SingleOrDefault() 
+                => default!;
 
             [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public TSource[] ToArray() => new TSource[0];
+            [return: MaybeNull]
+            public TSource SingleOrDefault(PredicateAt<TSource> predicate) 
+                => default!;
 
             [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public List<TSource> ToList() => new List<TSource>(0);
+            [return: MaybeNull]
+            public TSource SingleOrDefault(Predicate<TSource> predicate) 
+                => default!;
+
+            [Pure]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public TSource[] ToArray() 
+                => new TSource[0];
+
+            [Pure]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public List<TSource> ToList() 
+                => new List<TSource>(0);
 
             [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -235,7 +267,7 @@ namespace NetFabric.Hyperlinq
                 // do nothing
             }
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public void ForEach(Action<TSource, int> action)
+            public void ForEach(ActionAt<TSource> action)
             {
                 // do nothing
             }
@@ -249,12 +281,16 @@ namespace NetFabric.Hyperlinq
         [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int Count<TSource>(this EmptyEnumerable<TSource> source, Predicate<TSource> predicate)
-            => predicate is null ? Throw.ArgumentNullException<int>(nameof(predicate)) : 0;
+            => predicate is null 
+                ? Throw.ArgumentNullException<int>(nameof(predicate)) 
+                : 0;
 
         [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int Count<TSource>(this EmptyEnumerable<TSource> source, PredicateAt<TSource> predicate)
-            => predicate is null ? Throw.ArgumentNullException<int>(nameof(predicate)) : 0;
+            => predicate is null 
+                ? Throw.ArgumentNullException<int>(nameof(predicate)) 
+                : 0;
     }
 }
 

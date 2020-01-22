@@ -38,9 +38,9 @@ namespace NetFabric.Hyperlinq
         [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool Any<TSource>(this TSource[] source, PredicateAt<TSource> predicate) 
-            => predicate is null ? 
-                Throw.ArgumentNullException<bool>(nameof(predicate)) : 
-                Any<TSource>(source, predicate, 0, source.Length);
+            => predicate is null 
+                ? Throw.ArgumentNullException<bool>(nameof(predicate)) 
+                : Any<TSource>(source, predicate, 0, source.Length);
 
         [Pure]
         static bool Any<TSource>(this TSource[] source, PredicateAt<TSource> predicate, int skipCount, int takeCount)

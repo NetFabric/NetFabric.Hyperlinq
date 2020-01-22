@@ -35,6 +35,8 @@ namespace NetFabric.Hyperlinq
 
         [Pure]
         public readonly override int GetHashCode() 
-            => HasValue ? EqualityComparer<T>.Default.GetHashCode(Value) : 0;
+            => HasValue 
+                ? EqualityComparer<T>.Default.GetHashCode(Value) 
+                : 0;
     }
 }

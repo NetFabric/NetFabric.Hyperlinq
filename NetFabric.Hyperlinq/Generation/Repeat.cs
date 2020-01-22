@@ -113,7 +113,9 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool All(Predicate<TSource> predicate)
-                => count == 0 ? true : predicate(value);
+                => count == 0 
+                    ? true 
+                    : predicate(value);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Any()
@@ -182,7 +184,7 @@ namespace NetFabric.Hyperlinq
                 for (var index = 0; index < count; index++)
                     action(value);
             }
-            public void ForEach(Action<TSource, int> action)
+            public void ForEach(ActionAt<TSource> action)
             {
                 for (var index = 0; index < count; index++)
                     action(value, index);

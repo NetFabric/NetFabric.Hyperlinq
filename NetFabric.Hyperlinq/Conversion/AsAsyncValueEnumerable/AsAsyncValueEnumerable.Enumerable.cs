@@ -61,10 +61,8 @@ namespace NetFabric.Hyperlinq
         {
             readonly IEnumerable<TSource> source;
 
-            internal AsyncValueEnumerableWrapper(IEnumerable<TSource> source)
-            {
-                this.source = source;
-            }
+            internal AsyncValueEnumerableWrapper(IEnumerable<TSource> source) 
+                => this.source = source;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly AsyncEnumerator GetAsyncEnumerator(CancellationToken cancellationToken = default) 

@@ -7,15 +7,16 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class AsyncValueEnumerable
     {
-        public static ValueTask ForEachAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, CancellationToken, ValueTask> actionAsync, CancellationToken cancellationToken = default)
+        public static ValueTask ForEachAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source, AsyncAction<TSource> actionAsync, CancellationToken cancellationToken = default)
             where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
             if (actionAsync is null) Throw.ArgumentNullException(nameof(actionAsync));
 
+            cancellationToken.ThrowIfCancellationRequested();
             return ExecuteAsync(source, actionAsync, cancellationToken);
 
-            static async ValueTask ExecuteAsync(TEnumerable source, Func<TSource, CancellationToken, ValueTask> actionAsync, CancellationToken cancellationToken)
+            static async ValueTask ExecuteAsync(TEnumerable source, AsyncAction<TSource> actionAsync, CancellationToken cancellationToken)
             {
                 var enumerator = source.GetAsyncEnumerator(cancellationToken);
                 await using(enumerator.ConfigureAwait(false))
@@ -26,7 +27,7 @@ namespace NetFabric.Hyperlinq
             }
         }
 
-        static async ValueTask ForEachAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, CancellationToken, ValueTask> actionAsync, Predicate<TSource> predicate, CancellationToken cancellationToken = default)
+        static async ValueTask ForEachAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source, AsyncAction<TSource> actionAsync, AsyncPredicate<TSource> predicate, CancellationToken cancellationToken = default)
             where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
@@ -35,13 +36,13 @@ namespace NetFabric.Hyperlinq
             { 
                 while (await enumerator.MoveNextAsync().ConfigureAwait(false))
                 {
-                    if (predicate(enumerator.Current))
+                    if (await predicate(enumerator.Current, cancellationToken))
                         await actionAsync(enumerator.Current, cancellationToken).ConfigureAwait(false);
                 }
             }
         }
 
-        static async ValueTask ForEachAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, CancellationToken, ValueTask> actionAsync, PredicateAt<TSource> predicate, CancellationToken cancellationToken = default)
+        static async ValueTask ForEachAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source, AsyncAction<TSource> actionAsync, AsyncPredicateAt<TSource> predicate, CancellationToken cancellationToken = default)
             where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
@@ -52,14 +53,14 @@ namespace NetFabric.Hyperlinq
                 {
                     for (var index = 0; await enumerator.MoveNextAsync().ConfigureAwait(false); index++)
                     {
-                        if (predicate(enumerator.Current, index))
+                        if (await predicate(enumerator.Current, index, cancellationToken))
                             await actionAsync(enumerator.Current, cancellationToken).ConfigureAwait(false);
                     }
                 }
             }
         }
 
-        static async ValueTask ForEachAsync<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, Func<TResult, CancellationToken, ValueTask> actionAsync, Selector<TSource, TResult> selector, CancellationToken cancellationToken = default)
+        static async ValueTask ForEachAsync<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, AsyncAction<TResult> actionAsync, AsyncSelector<TSource, TResult> selector, CancellationToken cancellationToken = default)
             where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
@@ -67,11 +68,11 @@ namespace NetFabric.Hyperlinq
             await using(enumerator.ConfigureAwait(false))
             { 
                 while (await enumerator.MoveNextAsync().ConfigureAwait(false))
-                    await actionAsync(selector(enumerator.Current), cancellationToken).ConfigureAwait(false);
+                    await actionAsync(await selector(enumerator.Current, cancellationToken), cancellationToken).ConfigureAwait(false);
             }
         }
 
-        static async ValueTask ForEachAsync<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, Func<TResult, CancellationToken, ValueTask> actionAsync, SelectorAt<TSource, TResult> selector, CancellationToken cancellationToken = default)
+        static async ValueTask ForEachAsync<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, AsyncAction<TResult> actionAsync, AsyncSelectorAt<TSource, TResult> selector, CancellationToken cancellationToken = default)
             where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
@@ -81,12 +82,12 @@ namespace NetFabric.Hyperlinq
                 checked
                 {
                     for (var index = 0; await enumerator.MoveNextAsync().ConfigureAwait(false); index++)
-                        await actionAsync(selector(enumerator.Current, index), cancellationToken).ConfigureAwait(false);
+                        await actionAsync(await selector(enumerator.Current, index, cancellationToken), cancellationToken).ConfigureAwait(false);
                 }
             }
         }
 
-        static async ValueTask ForEachAsync<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, Func<TResult, CancellationToken, ValueTask> actionAsync, Predicate<TSource> predicate, Selector<TSource, TResult> selector, CancellationToken cancellationToken = default)
+        static async ValueTask ForEachAsync<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, AsyncAction<TResult> actionAsync, AsyncPredicate<TSource> predicate, AsyncSelector<TSource, TResult> selector, CancellationToken cancellationToken = default)
             where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
@@ -95,13 +96,13 @@ namespace NetFabric.Hyperlinq
             { 
                 while (await enumerator.MoveNextAsync().ConfigureAwait(false))
                 {
-                    if (predicate(enumerator.Current))
-                        await actionAsync(selector(enumerator.Current), cancellationToken).ConfigureAwait(false);
+                    if (await predicate(enumerator.Current, cancellationToken))
+                        await actionAsync(await selector(enumerator.Current, cancellationToken), cancellationToken).ConfigureAwait(false);
                 }
             }
         }
 
-        public static ValueTask ForEachAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, int, CancellationToken, ValueTask> actionAsync, CancellationToken cancellationToken = default)
+        public static ValueTask ForEachAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source, AsyncActionAt<TSource> actionAsync, CancellationToken cancellationToken = default)
             where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
@@ -109,7 +110,7 @@ namespace NetFabric.Hyperlinq
 
             return ExecuteAsync(source, actionAsync, cancellationToken);
 
-            static async ValueTask ExecuteAsync(TEnumerable source, Func<TSource, int, CancellationToken, ValueTask> actionAsync, CancellationToken cancellationToken1)
+            static async ValueTask ExecuteAsync(TEnumerable source, AsyncActionAt<TSource> actionAsync, CancellationToken cancellationToken1)
             {
                 var enumerator = source.GetAsyncEnumerator();
                 await using (enumerator.ConfigureAwait(false)) 
@@ -121,7 +122,7 @@ namespace NetFabric.Hyperlinq
             }
         }
 
-        static async ValueTask ForEachAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, int, CancellationToken, ValueTask> actionAsync, Predicate<TSource> predicate, CancellationToken cancellationToken = default)
+        static async ValueTask ForEachAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source, AsyncActionAt<TSource> actionAsync, AsyncPredicate<TSource> predicate, CancellationToken cancellationToken = default)
             where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
@@ -132,14 +133,14 @@ namespace NetFabric.Hyperlinq
                 {
                     for (var index = 0; await enumerator.MoveNextAsync().ConfigureAwait(false); index++)
                     {
-                        if (predicate(enumerator.Current))
+                        if (await predicate(enumerator.Current, cancellationToken))
                             await actionAsync(enumerator.Current, index, cancellationToken).ConfigureAwait(false);
                     }
                 }
             }
         }
 
-        static async ValueTask ForEachAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, int, CancellationToken, ValueTask> actionAsync, PredicateAt<TSource> predicate, CancellationToken cancellationToken = default)
+        static async ValueTask ForEachAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source, AsyncActionAt<TSource> actionAsync, AsyncPredicateAt<TSource> predicate, CancellationToken cancellationToken = default)
             where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
@@ -150,14 +151,14 @@ namespace NetFabric.Hyperlinq
                 {
                     for (var index = 0; await enumerator.MoveNextAsync().ConfigureAwait(false); index++)
                     {
-                        if (predicate(enumerator.Current, index))
+                        if (await predicate(enumerator.Current, index, cancellationToken))
                             await actionAsync(enumerator.Current, index, cancellationToken).ConfigureAwait(false);
                     }
                 }
             }
         }
 
-        static async ValueTask ForEachAsync<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, Func<TResult, int, CancellationToken, ValueTask> actionAsync, Selector<TSource, TResult> selector, CancellationToken cancellationToken = default)
+        static async ValueTask ForEachAsync<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, AsyncActionAt<TResult> actionAsync, AsyncSelector<TSource, TResult> selector, CancellationToken cancellationToken = default)
             where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
@@ -167,12 +168,12 @@ namespace NetFabric.Hyperlinq
                 checked
                 {
                     for (var index = 0; await enumerator.MoveNextAsync().ConfigureAwait(false); index++)
-                        await actionAsync(selector(enumerator.Current), index, cancellationToken).ConfigureAwait(false);
+                        await actionAsync(await selector(enumerator.Current, cancellationToken), index, cancellationToken).ConfigureAwait(false);
                 }
             }
         }
 
-        static async ValueTask ForEachAsync<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, Func<TResult, int, CancellationToken, ValueTask> actionAsync, SelectorAt<TSource, TResult> selector, CancellationToken cancellationToken = default)
+        static async ValueTask ForEachAsync<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, AsyncActionAt<TResult> actionAsync, AsyncSelectorAt<TSource, TResult> selector, CancellationToken cancellationToken = default)
             where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
@@ -182,12 +183,12 @@ namespace NetFabric.Hyperlinq
                 checked
                 {
                     for (var index = 0; await enumerator.MoveNextAsync().ConfigureAwait(false); index++)
-                        await actionAsync(selector(enumerator.Current, index), index, cancellationToken).ConfigureAwait(false);
+                        await actionAsync(await selector(enumerator.Current, index, cancellationToken), index, cancellationToken).ConfigureAwait(false);
                 }
             }
         }
 
-        static async ValueTask ForEachAsync<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, Func<TResult, int, CancellationToken, ValueTask> actionAsync, Predicate<TSource> predicate, Selector<TSource, TResult> selector, CancellationToken cancellationToken = default)
+        static async ValueTask ForEachAsync<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, AsyncActionAt<TResult> actionAsync, AsyncPredicate<TSource> predicate, Selector<TSource, TResult> selector, CancellationToken cancellationToken = default)
             where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
@@ -198,7 +199,7 @@ namespace NetFabric.Hyperlinq
                 {
                     for (var index = 0; await enumerator.MoveNextAsync().ConfigureAwait(false); index++)
                     {
-                        if (predicate(enumerator.Current))
+                        if (await predicate(enumerator.Current, cancellationToken))
                             await actionAsync(selector(enumerator.Current), index, cancellationToken).ConfigureAwait(false);
                     }
                 }

@@ -19,12 +19,10 @@ namespace NetFabric.Hyperlinq
         {
             if (keySelector is null) Throw.ArgumentNullException(nameof(keySelector));
 
-            var dictionary = new Dictionary<TKey, TSource>(0, comparer);
-
             using var enumerator = source.GetEnumerator();
+            var dictionary = new Dictionary<TKey, TSource>(0, comparer);
             while (enumerator.MoveNext())
                 dictionary.Add(keySelector(enumerator.Current), enumerator.Current);
-
             return dictionary;
         }
 
@@ -35,15 +33,13 @@ namespace NetFabric.Hyperlinq
         {
             if (keySelector is null) Throw.ArgumentNullException(nameof(keySelector));
 
-            var dictionary = new Dictionary<TKey, TSource>(0, comparer);
-
             using var enumerator = source.GetEnumerator();
+            var dictionary = new Dictionary<TKey, TSource>(0, comparer);
             while (enumerator.MoveNext())
             {
                 if (predicate(enumerator.Current))
                     dictionary.Add(keySelector(enumerator.Current), enumerator.Current);
             }
-
             return dictionary;
         }
 
@@ -54,19 +50,17 @@ namespace NetFabric.Hyperlinq
         {
             if (keySelector is null) Throw.ArgumentNullException(nameof(keySelector));
 
-            var dictionary = new Dictionary<TKey, TSource>(0, comparer);
-
             using var enumerator = source.GetEnumerator();
             checked
             {
+                var dictionary = new Dictionary<TKey, TSource>(0, comparer);
                 for (var index = 0; enumerator.MoveNext(); index++)
                 {
                     if (predicate(enumerator.Current, index))
                         dictionary.Add(keySelector(enumerator.Current), enumerator.Current);
                 }
+                return dictionary;
             }
-
-            return dictionary;
         }
 
         [Pure]
@@ -100,15 +94,13 @@ namespace NetFabric.Hyperlinq
             if (keySelector is null) Throw.ArgumentNullException(nameof(keySelector));
             if (elementSelector is null) Throw.ArgumentNullException(nameof(elementSelector));
 
-            var dictionary = new Dictionary<TKey, TElement>(0, comparer);
-
             using var enumerator = source.GetEnumerator();
+            var dictionary = new Dictionary<TKey, TElement>(0, comparer);
             while (enumerator.MoveNext())
             {
                 if (predicate(enumerator.Current))
                     dictionary.Add(keySelector(enumerator.Current), elementSelector(enumerator.Current));
             }
-
             return dictionary;
         }
 
@@ -120,19 +112,17 @@ namespace NetFabric.Hyperlinq
             if (keySelector is null) Throw.ArgumentNullException(nameof(keySelector));
             if (elementSelector is null) Throw.ArgumentNullException(nameof(elementSelector));
 
-            var dictionary = new Dictionary<TKey, TElement>(0, comparer);
-
             using var enumerator = source.GetEnumerator();
             checked
             {
+                var dictionary = new Dictionary<TKey, TElement>(0, comparer);
                 for (var index = 0; enumerator.MoveNext(); index++)
                 {
                     if (predicate(enumerator.Current, index))
                         dictionary.Add(keySelector(enumerator.Current), elementSelector(enumerator.Current));
                 }
+                return dictionary;
             }
-
-            return dictionary;
         }
     }
 }

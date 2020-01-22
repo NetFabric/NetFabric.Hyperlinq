@@ -17,9 +17,9 @@ namespace NetFabric.Hyperlinq
             => new SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>(in source, skipCount, takeCount);
 
         [GenericsTypeMapping("TEnumerable", typeof(SkipTakeEnumerable<,,>))]
-        [GenericsTypeMapping("TEnumerator", typeof(SkipTakeEnumerable<,,>.Enumerator))]
+        [GenericsTypeMapping("TEnumerator", typeof(SkipTakeEnumerable<,,>.DisposableEnumerator))]
         public readonly struct SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>
-            : IValueEnumerable<TSource, SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator>
+            : IValueEnumerable<TSource, SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>.DisposableEnumerator>
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
@@ -37,11 +37,11 @@ namespace NetFabric.Hyperlinq
             [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly Enumerator GetEnumerator() => new Enumerator(in this);
-            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new Enumerator(in this);
-            readonly IEnumerator IEnumerable.GetEnumerator() => new Enumerator(in this);
+            readonly DisposableEnumerator IValueEnumerable<TSource, SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>.DisposableEnumerator>.GetEnumerator() => new DisposableEnumerator(in this);
+            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new DisposableEnumerator(in this);
+            readonly IEnumerator IEnumerable.GetEnumerator() => new DisposableEnumerator(in this);
 
             public struct Enumerator
-                : IEnumerator<TSource>
             {
                 [SuppressMessage("Style", "IDE0044:Add readonly modifier")]
                 TEnumerator enumerator; // do not make readonly
@@ -61,13 +61,60 @@ namespace NetFabric.Hyperlinq
                     [MethodImpl(MethodImplOptions.AggressiveInlining)]
                     get => enumerator.Current;
                 }
+
+                public bool MoveNext()
+                {
+                    while (skipCounter > 0)
+                    {
+                        if (!enumerator.MoveNext())
+                            return false;
+
+                        skipCounter--;
+                    }
+
+                    if (takeCounter > 0)
+                    {
+                        if (enumerator.MoveNext())
+                        {
+                            takeCounter--;
+                            return true;
+                        }
+
+                        takeCounter = 0;
+                    }
+
+                    return false;
+                }
+            }
+
+            public struct DisposableEnumerator
+                : IEnumerator<TSource>
+            {
+                [SuppressMessage("Style", "IDE0044:Add readonly modifier")]
+                TEnumerator enumerator; // do not make readonly
+                int skipCounter;
+                int takeCounter;
+
+                internal DisposableEnumerator(in SkipTakeEnumerable<TEnumerable, TEnumerator, TSource> enumerable)
+                {
+                    enumerator = enumerable.source.GetEnumerator();
+                    skipCounter = enumerable.skipCount;
+                    takeCounter = enumerable.takeCount;
+                }
+
+                [MaybeNull]
+                public readonly TSource Current
+                {
+                    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                    get => enumerator.Current;
+                }
                 readonly object? IEnumerator.Current => enumerator.Current;
 
                 public bool MoveNext()
                 {
                     while (skipCounter > 0)
                     {
-                        if(!enumerator.MoveNext())
+                        if (!enumerator.MoveNext())
                             return false;
 
                         skipCounter--;
@@ -85,7 +132,7 @@ namespace NetFabric.Hyperlinq
                     }
 
                     Dispose();
-                    return false; 
+                    return false;
                 }
 
                 public readonly void Reset() => throw new NotSupportedException();

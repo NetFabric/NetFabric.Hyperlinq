@@ -215,7 +215,7 @@ namespace NetFabric.Hyperlinq
             public void ForEach(Action<TSource> action)
                 => ValueReadOnlyList.ForEach<TEnumerable, TEnumerator, TSource>(source, action, skipCount, takeCount);
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public void ForEach(Action<TSource, int> action)
+            public void ForEach(ActionAt<TSource> action)
                 => ValueReadOnlyList.ForEach<TEnumerable, TEnumerator, TSource>(source, action, skipCount, takeCount);
         }
 

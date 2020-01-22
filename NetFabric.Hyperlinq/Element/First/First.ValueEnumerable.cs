@@ -65,10 +65,9 @@ namespace NetFabric.Hyperlinq
             where TEnumerator : struct, IEnumerator<TSource>
         {
             using var enumerator = source.GetEnumerator();
-            if (enumerator.MoveNext())
-                return (ElementResult.Success, enumerator.Current);
-
-            return (ElementResult.Empty, default);
+            return enumerator.MoveNext() 
+                ? (ElementResult.Success, enumerator.Current) 
+                : (ElementResult.Empty, default);
         }
 
         [Pure]

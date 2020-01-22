@@ -119,7 +119,7 @@ namespace NetFabric.Hyperlinq
 
             public void ForEach(Action<TSource> action)
                 => SpanExtensions.ForEach<TSource>(source.Span, action, predicate);
-            public void ForEach(Action<TSource, int> action)
+            public void ForEach(ActionAt<TSource> action)
                 => SpanExtensions.ForEach<TSource>(source.Span, action, predicate);
         }
     }

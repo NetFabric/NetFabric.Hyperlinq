@@ -155,7 +155,9 @@ namespace NetFabric.Hyperlinq
             public Maybe<TResult> TryElementAt(int index)
             {
                 var item = Array.TryElementAt<TSource>(source, index, skipCount, takeCount);
-                return item.HasValue ? new Maybe<TResult>(selector(item.Value)) : default;
+                return item.HasValue 
+                    ? new Maybe<TResult>(selector(item.Value)) 
+                    : default;
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -226,7 +228,7 @@ namespace NetFabric.Hyperlinq
 
             public void ForEach(Action<TResult> action)
                 => Array.ForEach<TSource, TResult>(source, action, selector, skipCount, takeCount);
-            public void ForEach(Action<TResult, int> action)
+            public void ForEach(ActionAt<TResult> action)
                 => Array.ForEach<TSource, TResult>(source, action, selector, skipCount, takeCount);
 
             // helper implementation of ICollection<> so that CopyTo() is used to convert to List<>

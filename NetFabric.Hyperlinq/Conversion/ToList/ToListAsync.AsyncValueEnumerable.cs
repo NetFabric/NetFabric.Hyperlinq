@@ -13,55 +13,53 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
-            var list = new List<TSource>();
             var enumerator = source.GetAsyncEnumerator(cancellationToken);
             await using (enumerator.ConfigureAwait(false))
             {
+                var list = new List<TSource>();
                 while (await enumerator.MoveNextAsync().ConfigureAwait(false))
                     list.Add(enumerator.Current);
+                return list;
             }
-            return list;
         }
 
         [Pure]
-        static async ValueTask<List<TSource>> ToListAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Predicate<TSource> predicate, CancellationToken cancellationToken = default)
+        static async ValueTask<List<TSource>> ToListAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source, AsyncPredicate<TSource> predicate, CancellationToken cancellationToken)
             where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
-            var list = new List<TSource>();
             var enumerator = source.GetAsyncEnumerator(cancellationToken);
             await using (enumerator.ConfigureAwait(false))
             {
+                var list = new List<TSource>();
                 while (await enumerator.MoveNextAsync().ConfigureAwait(false))
                 {
-                    if (predicate(enumerator.Current))
+                    if (await predicate(enumerator.Current, cancellationToken))
                         list.Add(enumerator.Current);
                 }
+                return list;
             }
-            return list;
         }
 
         [Pure]
-        static async ValueTask<List<TSource>> ToListAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source, PredicateAt<TSource> predicate, CancellationToken cancellationToken = default)
+        static async ValueTask<List<TSource>> ToListAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source, AsyncPredicateAt<TSource> predicate, CancellationToken cancellationToken)
             where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
-            cancellationToken.ThrowIfCancellationRequested();
-
-            var list = new List<TSource>();
             var enumerator = source.GetAsyncEnumerator(cancellationToken);
             await using (enumerator.ConfigureAwait(false))
             {
                 checked
                 {
+                    var list = new List<TSource>();
                     for (var index = 0; await enumerator.MoveNextAsync().ConfigureAwait(false); index++)
                     {
-                        if (predicate(enumerator.Current, index))
+                        if (await predicate(enumerator.Current, index, cancellationToken))
                             list.Add(enumerator.Current);
                     }
+                    return list;
                 }
             }
-            return list;
         }
     }
 }

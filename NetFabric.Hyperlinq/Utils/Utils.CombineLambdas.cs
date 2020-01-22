@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 
 namespace NetFabric.Hyperlinq
 {
@@ -27,5 +28,17 @@ namespace NetFabric.Hyperlinq
 
         public static SelectorAt<TSource, TTarget> Combine<TSource, TMiddle, TTarget>(SelectorAt<TSource, TMiddle> first, SelectorAt<TMiddle, TTarget> second) => 
             (item, index) => second(first(item, index), index);
+
+        public static AsyncPredicate<TSource> Combine<TSource>(AsyncPredicate<TSource> first, AsyncPredicate<TSource> second) =>
+            async (item, cancellation) => await first(item, cancellation) && await second(item, cancellation);
+
+        public static AsyncPredicateAt<TSource> Combine<TSource>(AsyncPredicateAt<TSource> first, AsyncPredicate<TSource> second) =>
+            async (item, index, cancellation) => await first(item, index, cancellation) && await second(item, cancellation);
+
+        public static AsyncPredicateAt<TSource> Combine<TSource>(AsyncPredicate<TSource> first, AsyncPredicateAt<TSource> second) =>
+            async (item, index, cancellation) => await first(item, cancellation) && await second(item, index, cancellation);
+
+        public static AsyncPredicateAt<TSource> Combine<TSource>(AsyncPredicateAt<TSource> first, AsyncPredicateAt<TSource> second) =>
+            async (item, index, cancellation) => await first(item, index, cancellation) && await second(item, index, cancellation);
     }
 }

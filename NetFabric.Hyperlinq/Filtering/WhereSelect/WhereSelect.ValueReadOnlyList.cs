@@ -209,7 +209,7 @@ namespace NetFabric.Hyperlinq
 
             public void ForEach(Action<TResult> action)
                 => ValueReadOnlyList.ForEach<TEnumerable, TEnumerator, TSource, TResult>(source, action, predicate, selector, skipCount, takeCount);
-            public void ForEach(Action<TResult, int> action)
+            public void ForEach(ActionAt<TResult> action)
                 => ValueReadOnlyList.ForEach<TEnumerable, TEnumerator, TSource, TResult>(source, action, predicate, selector, skipCount, takeCount);
         }
     }

@@ -108,7 +108,9 @@ namespace NetFabric.Hyperlinq
             public Maybe<TResult> TryElementAt(int index)
             {
                 var item = ValueReadOnlyCollection.TryElementAt<TEnumerable, TEnumerator, TSource>(source, index);
-                return item.HasValue ? new Maybe<TResult>(selector(item.Value)) : default;
+                return item.HasValue 
+                    ? new Maybe<TResult>(selector(item.Value)) 
+                    : default;
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -151,7 +153,7 @@ namespace NetFabric.Hyperlinq
 
             public void ForEach(Action<TResult> action)
                 => ValueReadOnlyCollection.ForEach<TEnumerable, TEnumerator, TSource, TResult>(source, action, selector);
-            public void ForEach(Action<TResult, int> action)
+            public void ForEach(ActionAt<TResult> action)
                 => ValueReadOnlyCollection.ForEach<TEnumerable, TEnumerator, TSource, TResult>(source, action, selector);
 
             // helper implementation of ICollection<> so that CopyTo() is used to convert to List<>
