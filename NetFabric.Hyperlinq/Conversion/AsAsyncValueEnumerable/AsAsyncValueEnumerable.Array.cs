@@ -42,7 +42,9 @@ namespace NetFabric.Hyperlinq
             public readonly int Count 
                 => source.Length;
 
-            public readonly ref readonly TSource this[int index] => ref source[index];
+            [MaybeNull]
+            public readonly ref readonly TSource this[int index] 
+                => ref source[index];
 
             public struct AsyncEnumerator
             {
@@ -58,11 +60,8 @@ namespace NetFabric.Hyperlinq
                 }
 
                 [MaybeNull]
-                public readonly ref readonly TSource Current
-                {
-                    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                    get => ref source[index];
-                }
+                public readonly ref readonly TSource Current 
+                    => ref source[index];
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public ValueTask<bool> MoveNextAsync() 
@@ -87,15 +86,12 @@ namespace NetFabric.Hyperlinq
                 }
 
                 [MaybeNull]
-                public readonly ref readonly TSource Current
-                {
-                    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                    get => ref source[index];
-                }
+                public readonly ref readonly TSource Current 
+                    => ref source[index];
                 [MaybeNull]
-                readonly TSource IAsyncEnumerator<TSource>.Current
+                readonly TSource IAsyncEnumerator<TSource>.Current 
                     => source[index];
-
+                    
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public ValueTask<bool> MoveNextAsync()
                 {

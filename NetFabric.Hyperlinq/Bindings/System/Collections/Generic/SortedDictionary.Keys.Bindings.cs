@@ -74,7 +74,7 @@ namespace NetFabric.Hyperlinq
         public static ValueEnumerable.SelectManyEnumerable<ValueWrapper<TKey, TValue>, SortedDictionary<TKey, TValue>.KeyCollection.Enumerator, TKey, TSubEnumerable, TSubEnumerator, TResult> SelectMany<TKey, TValue, TSubEnumerable, TSubEnumerator, TResult>(
             this SortedDictionary<TKey, TValue>.KeyCollection source,
             Selector<TKey, TSubEnumerable> selector)
-            where TSubEnumerable : IValueEnumerable<TResult, TSubEnumerator>
+            where TSubEnumerable : notnull, IValueEnumerable<TResult, TSubEnumerator>
             where TSubEnumerator : struct, IEnumerator<TResult>
             => ValueEnumerable.SelectMany<ValueWrapper<TKey, TValue>, SortedDictionary<TKey, TValue>.KeyCollection.Enumerator, TKey, TSubEnumerable, TSubEnumerator, TResult>(new ValueWrapper<TKey, TValue>(source), selector);
 
@@ -188,10 +188,7 @@ namespace NetFabric.Hyperlinq
                 => this.source = source;
 
             public readonly int Count
-            {
-                [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                get => source.Count;
-            }
+                => source.Count;
 
             [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]

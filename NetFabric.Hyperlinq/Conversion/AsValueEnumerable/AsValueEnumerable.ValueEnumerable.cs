@@ -10,7 +10,7 @@ namespace NetFabric.Hyperlinq
         [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static TEnumerable AsValueEnumerable<TEnumerable, TEnumerator, TSource>(this TEnumerable source)
-            where TEnumerable : IValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
             => source;
     }

@@ -34,6 +34,7 @@ namespace NetFabric.Hyperlinq
 
             public readonly int Count => source.Length;
 
+            [MaybeNull]
             public readonly TResult this[int index]
             {
                 get

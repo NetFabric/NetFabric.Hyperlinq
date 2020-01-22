@@ -9,7 +9,7 @@ namespace NetFabric.Hyperlinq
         // Based on https://github.com/dotnet/runtime/blob/4359ebfc9943608b34f411366b1e544ac45702b7/src/libraries/Common/src/System/Collections/Generic/EnumerableHelpers.cs
         [Pure]
         public static TSource[] ToArray<TEnumerable, TEnumerator, TSource>(this TEnumerable source)
-            where TEnumerable : IValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
             var (array, length) = ToArrayWithLength(source);

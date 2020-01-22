@@ -39,6 +39,7 @@ namespace NetFabric.Hyperlinq
 
             public readonly int Count => source.Length;
 
+            [MaybeNull]
             public readonly TResult this[int index]
             {
                 get
@@ -84,8 +85,11 @@ namespace NetFabric.Hyperlinq
                     index = -1;
                 }
  
-                [MaybeNull] public readonly TResult Current => selector(source.Span[index], index);
-                readonly object? IEnumerator.Current => selector(source.Span[index], index);
+                [MaybeNull] 
+                public readonly TResult Current 
+                    => selector(source.Span[index], index);
+                readonly object? IEnumerator.Current 
+                    => selector(source.Span[index], index);
 
                 public bool MoveNext() 
                     => ++index < source.Length;

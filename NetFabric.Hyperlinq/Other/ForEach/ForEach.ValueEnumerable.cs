@@ -6,7 +6,7 @@ namespace NetFabric.Hyperlinq
     public static partial class ValueEnumerable
     {
         public static void ForEach<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Action<TSource> action)
-            where TEnumerable : IValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
             if (action is null) Throw.ArgumentNullException(nameof(action));
@@ -17,7 +17,7 @@ namespace NetFabric.Hyperlinq
         }
 
         static void ForEach<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Action<TSource> action, Predicate<TSource> predicate)
-            where TEnumerable : IValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
             using var enumerator = source.GetEnumerator();
@@ -29,7 +29,7 @@ namespace NetFabric.Hyperlinq
         }
 
         static void ForEach<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Action<TSource> action, PredicateAt<TSource> predicate)
-            where TEnumerable : IValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
             using var enumerator = source.GetEnumerator();
@@ -44,7 +44,7 @@ namespace NetFabric.Hyperlinq
         }
 
         static void ForEach<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, Action<TResult> action, Selector<TSource, TResult> selector)
-            where TEnumerable : IValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
             using var enumerator = source.GetEnumerator();
@@ -53,7 +53,7 @@ namespace NetFabric.Hyperlinq
         }
 
         static void ForEach<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, Action<TResult> action, SelectorAt<TSource, TResult> selector)
-            where TEnumerable : IValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
             using var enumerator = source.GetEnumerator();
@@ -65,7 +65,7 @@ namespace NetFabric.Hyperlinq
         }
 
         static void ForEach<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, Action<TResult> action, Predicate<TSource> predicate, Selector<TSource, TResult> selector)
-            where TEnumerable : IValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
             using var enumerator = source.GetEnumerator();
@@ -77,7 +77,7 @@ namespace NetFabric.Hyperlinq
         }
 
         public static void ForEach<TEnumerable, TEnumerator, TSource>(this TEnumerable source, ActionAt<TSource> action)
-            where TEnumerable : IValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
             if (action is null) Throw.ArgumentNullException(nameof(action));
@@ -91,7 +91,7 @@ namespace NetFabric.Hyperlinq
         }
 
         static void ForEach<TEnumerable, TEnumerator, TSource>(this TEnumerable source, ActionAt<TSource> action, Predicate<TSource> predicate)
-            where TEnumerable : IValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
             using var enumerator = source.GetEnumerator();
@@ -106,7 +106,7 @@ namespace NetFabric.Hyperlinq
         }
 
         static void ForEach<TEnumerable, TEnumerator, TSource>(this TEnumerable source, ActionAt<TSource> action, PredicateAt<TSource> predicate)
-            where TEnumerable : IValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
             using var enumerator = source.GetEnumerator();
@@ -121,7 +121,7 @@ namespace NetFabric.Hyperlinq
         }
 
         static void ForEach<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, ActionAt<TResult> action, Selector<TSource, TResult> selector)
-            where TEnumerable : IValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
             using var enumerator = source.GetEnumerator();
@@ -133,7 +133,7 @@ namespace NetFabric.Hyperlinq
         }
 
         static void ForEach<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, ActionAt<TResult> action, SelectorAt<TSource, TResult> selector)
-            where TEnumerable : IValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
             using var enumerator = source.GetEnumerator();
@@ -145,7 +145,7 @@ namespace NetFabric.Hyperlinq
         }
 
         static void ForEach<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, ActionAt<TResult> action, Predicate<TSource> predicate, Selector<TSource, TResult> selector)
-            where TEnumerable : IValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
             using var enumerator = source.GetEnumerator();

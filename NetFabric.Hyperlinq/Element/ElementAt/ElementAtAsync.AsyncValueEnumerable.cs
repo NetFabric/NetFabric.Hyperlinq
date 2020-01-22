@@ -10,7 +10,7 @@ namespace NetFabric.Hyperlinq
     {
         [Pure]
         public static async ValueTask<TSource> ElementAtAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source, int index, CancellationToken cancellationToken = default) 
-            where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
             if (index >= 0)
@@ -30,9 +30,8 @@ namespace NetFabric.Hyperlinq
         }
 
         [Pure]
-        [return: MaybeNull]
         public static async ValueTask<TSource> ElementAtOrDefaultAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source, int index, CancellationToken cancellationToken = default) 
-            where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
             if (index >= 0)
@@ -53,7 +52,7 @@ namespace NetFabric.Hyperlinq
 
         [Pure]
         public static async ValueTask<Maybe<TSource>> TryElementAtAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source, int index, CancellationToken cancellationToken = default)
-            where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
             if (index >= 0)

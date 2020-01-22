@@ -238,6 +238,8 @@ namespace NetFabric.Hyperlinq.Generator
                 yield return "class";
             if (parameter.HasValueTypeConstraint)
                 yield return "struct";
+            if (parameter.HasNotNullConstraint)
+                yield return "notnull";
             foreach (var type in parameter.ConstraintTypes)
                 yield return type.ToDisplayString();
         }

@@ -46,10 +46,7 @@ namespace NetFabric.Hyperlinq
 
                 [MaybeNull]
                 public readonly TSource Current
-                {
-                    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                    get => current;
-                }
+                    => current;
 
                 public bool MoveNext()
                 {

@@ -11,7 +11,7 @@ namespace NetFabric.Hyperlinq
     {
         [Pure]
         public static WhereIndexEnumerable<TEnumerable, TEnumerator, TSource> Where<TEnumerable, TEnumerator, TSource>(this TEnumerable source, PredicateAt<TSource> predicate)
-            where TEnumerable : IValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
             if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
@@ -21,7 +21,7 @@ namespace NetFabric.Hyperlinq
 
         public readonly partial struct WhereIndexEnumerable<TEnumerable, TEnumerator, TSource> 
             : IValueEnumerable<TSource, WhereIndexEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator>
-            where TEnumerable : IValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
             internal readonly TEnumerable source;
@@ -56,11 +56,9 @@ namespace NetFabric.Hyperlinq
 
                 [MaybeNull]
                 public readonly TSource Current
-                {
-                    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                    get => enumerator.Current;
-                }
-                readonly object? IEnumerator.Current => enumerator.Current;
+                    => enumerator.Current;
+                readonly object? IEnumerator.Current 
+                    => enumerator.Current;
 
                 public bool MoveNext()
                 {

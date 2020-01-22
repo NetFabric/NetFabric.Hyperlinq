@@ -6,7 +6,7 @@ namespace NetFabric.Hyperlinq
     public static partial class ValueReadOnlyList
     {
         public static void ForEach<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Action<TSource> action)
-            where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
+            where TEnumerable : notnull, IValueReadOnlyList<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
             if (action is null) Throw.ArgumentNullException(nameof(action));
@@ -16,7 +16,7 @@ namespace NetFabric.Hyperlinq
         }
 
         static void ForEach<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Action<TSource> action, int skipCount, int takeCount)
-            where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
+            where TEnumerable : notnull, IValueReadOnlyList<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
             var end = skipCount + takeCount;
@@ -25,7 +25,7 @@ namespace NetFabric.Hyperlinq
         }
 
         static void ForEach<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Action<TSource> action, Predicate<TSource> predicate, int skipCount, int takeCount)
-            where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
+            where TEnumerable : notnull, IValueReadOnlyList<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
             var end = skipCount + takeCount;
@@ -37,7 +37,7 @@ namespace NetFabric.Hyperlinq
         }
 
         static void ForEach<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Action<TSource> action, PredicateAt<TSource> predicate, int skipCount, int takeCount)
-            where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
+            where TEnumerable : notnull, IValueReadOnlyList<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
             var end = skipCount + takeCount;
@@ -49,7 +49,7 @@ namespace NetFabric.Hyperlinq
         }
 
         static void ForEach<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, Action<TResult> action, Selector<TSource, TResult> selector, int skipCount, int takeCount)
-            where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
+            where TEnumerable : notnull, IValueReadOnlyList<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
             var end = skipCount + takeCount;
@@ -58,7 +58,7 @@ namespace NetFabric.Hyperlinq
         }
 
         static void ForEach<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, Action<TResult> action, SelectorAt<TSource, TResult> selector, int skipCount, int takeCount)
-            where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
+            where TEnumerable : notnull, IValueReadOnlyList<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
             var end = skipCount + takeCount;
@@ -67,7 +67,7 @@ namespace NetFabric.Hyperlinq
         }
 
         static void ForEach<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, Action<TResult> action, Predicate<TSource> predicate, Selector<TSource, TResult> selector, int skipCount, int takeCount)
-            where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
+            where TEnumerable : notnull, IValueReadOnlyList<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
             var end = skipCount + takeCount;
@@ -79,7 +79,7 @@ namespace NetFabric.Hyperlinq
         }
 
         public static void ForEach<TEnumerable, TEnumerator, TSource>(this TEnumerable source, ActionAt<TSource> action)
-            where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
+            where TEnumerable : notnull, IValueReadOnlyList<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
             if (action is null) Throw.ArgumentNullException(nameof(action));
@@ -89,7 +89,7 @@ namespace NetFabric.Hyperlinq
         }
 
         static void ForEach<TEnumerable, TEnumerator, TSource>(this TEnumerable source, ActionAt<TSource> action, int skipCount, int takeCount)
-            where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
+            where TEnumerable : notnull, IValueReadOnlyList<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
             var end = skipCount + takeCount;
@@ -98,7 +98,7 @@ namespace NetFabric.Hyperlinq
         }
 
         static void ForEach<TEnumerable, TEnumerator, TSource>(this TEnumerable source, ActionAt<TSource> action, Predicate<TSource> predicate, int skipCount, int takeCount)
-            where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
+            where TEnumerable : notnull, IValueReadOnlyList<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
             var end = skipCount + takeCount;
@@ -110,7 +110,7 @@ namespace NetFabric.Hyperlinq
         }
 
         static void ForEach<TEnumerable, TEnumerator, TSource>(this TEnumerable source, ActionAt<TSource> action, PredicateAt<TSource> predicate, int skipCount, int takeCount)
-            where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
+            where TEnumerable : notnull, IValueReadOnlyList<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
             var end = skipCount + takeCount;
@@ -122,7 +122,7 @@ namespace NetFabric.Hyperlinq
         }
 
         static void ForEach<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, ActionAt<TResult> action, Selector<TSource, TResult> selector, int skipCount, int takeCount)
-            where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
+            where TEnumerable : notnull, IValueReadOnlyList<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
             var end = skipCount + takeCount;
@@ -131,7 +131,7 @@ namespace NetFabric.Hyperlinq
         }
 
         static void ForEach<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, ActionAt<TResult> action, SelectorAt<TSource, TResult> selector, int skipCount, int takeCount)
-            where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
+            where TEnumerable : notnull, IValueReadOnlyList<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
             var end = skipCount + takeCount;
@@ -143,7 +143,7 @@ namespace NetFabric.Hyperlinq
         }
 
         static void ForEach<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, ActionAt<TResult> action, Predicate<TSource> predicate, Selector<TSource, TResult> selector, int skipCount, int takeCount)
-            where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
+            where TEnumerable : notnull, IValueReadOnlyList<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
             var end = skipCount + takeCount;

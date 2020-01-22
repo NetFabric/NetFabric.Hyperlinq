@@ -9,7 +9,7 @@ namespace NetFabric.Hyperlinq
     {
         [Pure]
         public static long LongCount<TEnumerable, TEnumerator, TSource>(this TEnumerable source)
-            where TEnumerable : IValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
             var count = 0L;
@@ -24,7 +24,7 @@ namespace NetFabric.Hyperlinq
 
         [Pure]
         public static long LongCount<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Predicate<TSource> predicate)
-            where TEnumerable : IValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
             var count = 0L;
@@ -42,7 +42,7 @@ namespace NetFabric.Hyperlinq
 
         [Pure]
         public static long LongCount<TEnumerable, TEnumerator, TSource>(this TEnumerable source, PredicateAtLong<TSource> predicate)
-            where TEnumerable : IValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
             var count = 0L;

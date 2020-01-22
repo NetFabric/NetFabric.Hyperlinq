@@ -23,10 +23,7 @@ namespace NetFabric.Hyperlinq
                 => this.source = source;
 
             public readonly int Count
-            {
-                [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                get => source.Count;
-            }
+                => source.Count;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly Enumerator GetEnumerator() => new Enumerator(source);
@@ -42,21 +39,22 @@ namespace NetFabric.Hyperlinq
                     => enumerator = enumerable.GetEnumerator();
 
                 [MaybeNull]
-                public readonly TSource Current
-                {
-                    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                    get => enumerator.Current;
-                }
-                readonly object? IEnumerator.Current => enumerator.Current;
+                public readonly TSource Current 
+                    => enumerator.Current;
+                readonly object? IEnumerator.Current 
+                    => enumerator.Current;
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                public readonly bool MoveNext() => enumerator.MoveNext();
+                public readonly bool MoveNext() 
+                    => enumerator.MoveNext();
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                public readonly void Reset() => enumerator.Reset();
+                public readonly void Reset() 
+                    => enumerator.Reset();
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                public readonly void Dispose() => enumerator.Dispose();
+                public readonly void Dispose() 
+                    => enumerator.Dispose();
             }
 
             [Pure]

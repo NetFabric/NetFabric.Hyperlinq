@@ -12,7 +12,7 @@ namespace NetFabric.Hyperlinq
         [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static async ValueTask<TSource> SingleAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source, CancellationToken cancellationToken = default) 
-            where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
             var result = await GetSingleAsync<TEnumerable, TEnumerator, TSource>(source, cancellationToken);
@@ -22,7 +22,7 @@ namespace NetFabric.Hyperlinq
         [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static async ValueTask<TSource> SingleAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source, AsyncPredicate<TSource> predicate, CancellationToken cancellationToken = default) 
-            where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
             var result = await GetSingleAsync<TEnumerable, TEnumerator, TSource>(source, predicate, cancellationToken);
@@ -31,9 +31,8 @@ namespace NetFabric.Hyperlinq
 
         [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        //[return: MaybeNull]
         public static async ValueTask<TSource> SingleOrDefaultAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source, CancellationToken cancellationToken = default)
-            where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
             var result = await GetSingleAsync<TEnumerable, TEnumerator, TSource>(source, cancellationToken);
@@ -42,9 +41,8 @@ namespace NetFabric.Hyperlinq
 
         [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        //[return: MaybeNull]
         public static async ValueTask<TSource> SingleOrDefaultAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source, AsyncPredicate<TSource> predicate, CancellationToken cancellationToken = default) 
-            where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
             var result = await GetSingleAsync<TEnumerable, TEnumerator, TSource>(source, predicate, cancellationToken);
@@ -53,7 +51,7 @@ namespace NetFabric.Hyperlinq
 
         [Pure]
         static async ValueTask<(ElementResult Success, TSource Value)> GetSingleAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source, CancellationToken cancellationToken) 
-            where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
             var enumerator = source.GetAsyncEnumerator(cancellationToken);
@@ -69,7 +67,7 @@ namespace NetFabric.Hyperlinq
 
         [Pure]
         static async ValueTask<(ElementResult Success, TSource Value)> GetSingleAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source, AsyncPredicate<TSource> predicate, CancellationToken cancellationToken) 
-            where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
             var enumerator = source.GetAsyncEnumerator(cancellationToken);
@@ -98,7 +96,7 @@ namespace NetFabric.Hyperlinq
 
         [Pure]
         static async ValueTask<(int Index, TSource Value)> GetSingleAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source, AsyncPredicateAt<TSource> predicate, CancellationToken cancellationToken) 
-            where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
             var enumerator = source.GetAsyncEnumerator(cancellationToken);

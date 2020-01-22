@@ -10,7 +10,7 @@ namespace NetFabric.Hyperlinq
     public static partial class ValueEnumerable
     {
         [Pure]
-        public static RepeatEnumerable<TSource> Repeat<TSource>(TSource value, int count)
+        public static RepeatEnumerable<TSource> Repeat<TSource>([AllowNull] TSource value, int count)
         {
             if (count < 0) Throw.ArgumentOutOfRangeException(nameof(count));
 
@@ -23,7 +23,7 @@ namespace NetFabric.Hyperlinq
             internal readonly TSource value;
             internal readonly int count;
 
-            internal RepeatEnumerable(TSource value, int count)
+            internal RepeatEnumerable([AllowNull] TSource value, int count)
             {
                 this.value = value;
                 this.count = count;
@@ -38,6 +38,7 @@ namespace NetFabric.Hyperlinq
 
             public readonly int Count => count;
 
+            [MaybeNull]
             public readonly TSource this[int index]
             {
                 get
@@ -61,13 +62,11 @@ namespace NetFabric.Hyperlinq
 
                 [MaybeNull]
                 public readonly TSource Current
-                {
-                    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                    get => value;
-                }
+                    => value;
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                public bool MoveNext() => counter-- > 0;
+                public bool MoveNext() 
+                    => counter-- > 0;
             }
 
             public struct DisposableEnumerator
@@ -84,11 +83,9 @@ namespace NetFabric.Hyperlinq
 
                 [MaybeNull]
                 public readonly TSource Current
-                {
-                    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                    get => value;
-                }
-                readonly object? IEnumerator.Current => value;
+                    => value;
+                readonly object? IEnumerator.Current 
+                    => value;
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public bool MoveNext() => counter-- > 0;

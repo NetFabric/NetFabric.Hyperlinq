@@ -8,7 +8,7 @@ namespace NetFabric.Hyperlinq
     {
         [Pure]
         public static List<TSource> ToList<TEnumerable, TEnumerator, TSource>(this TEnumerable source)
-            where TEnumerable : IValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
             var list = new List<TSource>();
@@ -20,7 +20,7 @@ namespace NetFabric.Hyperlinq
 
         [Pure]
         static List<TSource> ToList<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Predicate<TSource> predicate)
-            where TEnumerable : IValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
             var list = new List<TSource>();
@@ -35,7 +35,7 @@ namespace NetFabric.Hyperlinq
 
         [Pure]
         static List<TSource> ToList<TEnumerable, TEnumerator, TSource>(this TEnumerable source, PredicateAt<TSource> predicate)
-            where TEnumerable : IValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
             var list = new List<TSource>();

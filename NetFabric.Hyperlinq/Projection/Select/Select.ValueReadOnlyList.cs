@@ -13,7 +13,7 @@ namespace NetFabric.Hyperlinq
         public static SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult> Select<TEnumerable, TEnumerator, TSource, TResult>(
             this TEnumerable source, 
             Selector<TSource, TResult> selector)
-            where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
+            where TEnumerable : notnull, IValueReadOnlyList<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
             if(selector is null) Throw.ArgumentNullException(nameof(selector));
@@ -25,14 +25,14 @@ namespace NetFabric.Hyperlinq
             this TEnumerable source,
             Selector<TSource, TResult> selector,
             int skipCount, int takeCount)
-            where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
+            where TEnumerable : notnull, IValueReadOnlyList<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
             => new SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>(source, selector, skipCount, takeCount);
 
         [GeneratorMapping("TSource", "TResult")]
         public readonly partial struct SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>
             : IValueReadOnlyList<TResult, SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>.DisposableEnumerator>
-            where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
+            where TEnumerable : notnull, IValueReadOnlyList<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
             readonly TEnumerable source;
@@ -55,11 +55,9 @@ namespace NetFabric.Hyperlinq
             readonly IEnumerator IEnumerable.GetEnumerator() => new DisposableEnumerator(in this);
 
             public readonly int Count
-            {
-                [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                get => takeCount;
-            }
+                => takeCount;
 
+            [MaybeNull]
             public readonly TResult this[int index]
             {
                 get
@@ -86,14 +84,13 @@ namespace NetFabric.Hyperlinq
                     index = enumerable.skipCount - 1;
                 }
 
+                [MaybeNull]
                 public readonly TResult Current
-                {
-                    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                    get => selector(source[index]);
-                }
+                    => selector(source[index]);
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                public bool MoveNext() => ++index < end;
+                public bool MoveNext() 
+                    => ++index < end;
             }
 
             public struct DisposableEnumerator
@@ -112,17 +109,18 @@ namespace NetFabric.Hyperlinq
                     index = enumerable.skipCount - 1;
                 }
 
+                [MaybeNull]
                 public readonly TResult Current
-                {
-                    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                    get => selector(source[index]);
-                }
-                readonly object? IEnumerator.Current => selector(source[index]);
+                    => selector(source[index]);
+                readonly object? IEnumerator.Current 
+                    => selector(source[index]);
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                public bool MoveNext() => ++index < end;
+                public bool MoveNext() 
+                    => ++index < end;
 
-                public readonly void Reset() => throw new NotSupportedException();
+                public readonly void Reset() 
+                    => throw new NotSupportedException();
 
                 public readonly void Dispose() { }
             }
@@ -279,7 +277,7 @@ namespace NetFabric.Hyperlinq
         [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int Count<TEnumerable, TEnumerator, TSource, TResult>(this SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult> source)
-            where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
+            where TEnumerable : notnull, IValueReadOnlyList<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
             => source.Count;
     }

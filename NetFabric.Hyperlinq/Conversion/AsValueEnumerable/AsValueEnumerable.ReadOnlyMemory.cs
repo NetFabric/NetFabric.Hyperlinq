@@ -30,8 +30,12 @@ namespace NetFabric.Hyperlinq
 
             public readonly int Count => source.Length;
 
-            public readonly ref readonly TSource this[int index] => ref source.Span[index];
-            readonly TSource IReadOnlyList<TSource>.this[int index] => source.Span[index];
+            [MaybeNull]
+            public readonly ref readonly TSource this[int index] 
+                => ref source.Span[index];
+            [MaybeNull]
+            readonly TSource IReadOnlyList<TSource>.this[int index] 
+                => source.Span[index];
 
             public ref struct Enumerator
             {
@@ -45,14 +49,12 @@ namespace NetFabric.Hyperlinq
                 }
 
                 [MaybeNull]
-                public readonly ref readonly TSource Current
-                {
-                    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                    get => ref source[index];
-                }
+                public readonly ref readonly TSource Current 
+                    => ref source[index];
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                public bool MoveNext() => ++index < source.Length;
+                public bool MoveNext() 
+                    => ++index < source.Length;
             }
 
             public struct DisposableEnumerator
@@ -68,14 +70,13 @@ namespace NetFabric.Hyperlinq
                 }
 
                 [MaybeNull]
-                public readonly ref readonly TSource Current
-                {
-                    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                    get => ref source.Span[index];
-                }
+                public readonly ref readonly TSource Current 
+                    => ref source.Span[index];
                 [MaybeNull]
-                readonly TSource IEnumerator<TSource>.Current => source.Span[index];
-                readonly object? IEnumerator.Current => source.Span[index];
+                readonly TSource IEnumerator<TSource>.Current 
+                    => source.Span[index];
+                readonly object? IEnumerator.Current 
+                    => source.Span[index];
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public bool MoveNext() => ++index < source.Length;

@@ -50,6 +50,7 @@ namespace NetFabric.Hyperlinq
 
             public readonly int Count => takeCount;
 
+            [MaybeNull]
             public readonly TResult this[int index]
             {
                 get
@@ -79,17 +80,18 @@ namespace NetFabric.Hyperlinq
                     index = -1;
                 }
 
+                [MaybeNull]
                 public readonly TResult Current
-                {
-                    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                    get => selector(source[index + skipCount], index);
-                }
-                readonly object? IEnumerator.Current => selector(source[index + skipCount], index);
+                    => selector(source[index + skipCount], index);
+                readonly object? IEnumerator.Current 
+                    => selector(source[index + skipCount], index);
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                public bool MoveNext() => ++index < takeCount;
+                public bool MoveNext() 
+                    => ++index < takeCount;
 
-                public readonly void Reset() => throw new NotSupportedException();
+                public readonly void Reset() 
+                    => throw new NotSupportedException();
 
                 public readonly void Dispose() { }
             }

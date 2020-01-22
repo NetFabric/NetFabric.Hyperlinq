@@ -11,7 +11,7 @@ namespace NetFabric.Hyperlinq
     {
         [Pure]
         public static WhereIndexEnumerable<TEnumerable, TEnumerator, TSource> Where<TEnumerable, TEnumerator, TSource>(this TEnumerable source, PredicateAt<TSource> predicate)
-            where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
+            where TEnumerable : notnull, IValueReadOnlyList<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
             if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
@@ -21,13 +21,13 @@ namespace NetFabric.Hyperlinq
 
         [Pure]
         static WhereIndexEnumerable<TEnumerable, TEnumerator, TSource> Where<TEnumerable, TEnumerator, TSource>(this TEnumerable source, PredicateAt<TSource> predicate, int skipCount, int takeCount)
-            where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
+            where TEnumerable : notnull, IValueReadOnlyList<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
             => new WhereIndexEnumerable<TEnumerable, TEnumerator, TSource>(in source, predicate, skipCount, takeCount);
 
         public readonly partial struct WhereIndexEnumerable<TEnumerable, TEnumerator, TSource>
             : IValueEnumerable<TSource, WhereIndexEnumerable<TEnumerable, TEnumerator, TSource>.DisposableEnumerator>
-            where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
+            where TEnumerable : notnull, IValueReadOnlyList<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
             readonly TEnumerable source;
@@ -65,10 +65,7 @@ namespace NetFabric.Hyperlinq
 
                 [MaybeNull]
                 public readonly TSource Current
-                {
-                    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                    get => source[index];
-                }
+                    => source[index];
 
                 public bool MoveNext()
                 {
@@ -99,11 +96,9 @@ namespace NetFabric.Hyperlinq
 
                 [MaybeNull]
                 public readonly TSource Current
-                {
-                    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                    get => source[index];
-                }
-                readonly object? IEnumerator.Current => source[index];
+                    => source[index];
+                readonly object? IEnumerator.Current 
+                    => source[index];
 
                 public bool MoveNext()
                 {
