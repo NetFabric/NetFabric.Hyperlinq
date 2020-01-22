@@ -23,7 +23,7 @@ namespace NetFabric.Hyperlinq.UnitTests
                 .Count<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(wrapped);
 
             // Assert
-            result.Must()
+            _ = result.Must()
                 .BeEqualTo(expected);
         }
 
@@ -42,7 +42,7 @@ namespace NetFabric.Hyperlinq.UnitTests
                 .Count<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
 
             // Assert
-            result.Must()
+            _ = result.Must()
                 .BeEqualTo(expected);
         }
     }

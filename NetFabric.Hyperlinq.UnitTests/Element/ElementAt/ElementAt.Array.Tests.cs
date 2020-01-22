@@ -17,7 +17,7 @@ namespace NetFabric.Hyperlinq.UnitTests
                 .ElementAt<int>(source, index);
 
             // Assert
-            action.Must()
+            _ = action.Must()
                 .Throw<ArgumentOutOfRangeException>();
         }
 
@@ -34,7 +34,7 @@ namespace NetFabric.Hyperlinq.UnitTests
                 .ElementAt<int>(source, index);
 
             // Assert
-            result.Must()
+            _ = result.Must()
                 .BeEqualTo(expected);
         }
     }

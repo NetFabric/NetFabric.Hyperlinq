@@ -19,7 +19,7 @@ namespace NetFabric.Hyperlinq.UnitTests
                 .ElementAt<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int>(wrapped, index);
 
             // Assert
-            action.Must()
+            _ = action.Must()
                 .Throw<ArgumentOutOfRangeException>();
         }
 
@@ -38,7 +38,7 @@ namespace NetFabric.Hyperlinq.UnitTests
                 .ElementAt<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int>(wrapped, index);
 
             // Assert
-            result.Must()
+            _ = result.Must()
                 .BeEqualTo(expected);
         }
     }

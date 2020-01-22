@@ -17,6 +17,7 @@ namespace NetFabric.Hyperlinq
             return new RefSelectEnumerable<TSource, TResult>(in source, selector);
         }
 
+        [GeneratorMapping("TSource", "TResult")]
         public readonly ref struct RefSelectEnumerable<TSource, TResult>
         {
             internal readonly ReadOnlySpan<TSource> source;

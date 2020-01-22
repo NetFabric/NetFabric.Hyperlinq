@@ -21,7 +21,7 @@ namespace NetFabric.Hyperlinq.UnitTests
                 .Count<int>();
 
             // Assert
-            result.Must()
+            _ = result.Must()
                 .BeEqualTo(expected);
         }
 
@@ -38,7 +38,7 @@ namespace NetFabric.Hyperlinq.UnitTests
                 .Count<int>(predicate);
 
             // Assert
-            result.Must()
+            _ = result.Must()
                 .BeEqualTo(expected);
         }
     }

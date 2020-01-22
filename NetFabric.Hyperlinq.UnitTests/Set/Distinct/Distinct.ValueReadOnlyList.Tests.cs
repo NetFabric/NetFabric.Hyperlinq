@@ -21,7 +21,7 @@ namespace NetFabric.Hyperlinq.UnitTests
                 .Distinct<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int>(wrapped);
 
             // Assert
-            result.Must()
+            _ = result.Must()
                 .BeEnumerableOf<int>()
                 .BeEqualTo(expected);
         }

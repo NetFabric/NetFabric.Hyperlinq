@@ -22,7 +22,7 @@ namespace NetFabric.Hyperlinq.UnitTests
                 .FirstOrDefault<int>();
 
             // Assert
-            result.Must()
+            _ = result.Must()
                 .BeEqualTo(expected);
         }
 
@@ -41,7 +41,7 @@ namespace NetFabric.Hyperlinq.UnitTests
                 .FirstOrDefault<int>(predicate);
 
             // Assert
-            result.Must()
+            _ = result.Must()
                 .BeEqualTo(expected);
         }
     }

@@ -7,7 +7,7 @@ using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
-    public static class SortedDictionaryBindings
+    public static partial class SortedDictionaryBindings
     {
         [Pure]
         public static int Count<TKey, TValue>(this SortedDictionary<TKey, TValue> source)
@@ -184,15 +184,14 @@ namespace NetFabric.Hyperlinq
         public static void ForEach<TKey, TValue>(this SortedDictionary<TKey, TValue> source, ActionAt<KeyValuePair<TKey, TValue>> action)
             => ValueReadOnlyCollection.ForEach<ValueWrapper<TKey, TValue>, SortedDictionary<TKey, TValue>.Enumerator, KeyValuePair<TKey, TValue>>(new ValueWrapper<TKey, TValue>(source), action);
 
-        public readonly struct ValueWrapper<TKey, TValue>
+        [GeneratorMapping("TSource", "System.Collections.Generic.KeyValuePair<TKey, TValue>", true)]
+        public readonly partial struct ValueWrapper<TKey, TValue>
             : IValueReadOnlyCollection<KeyValuePair<TKey, TValue>, SortedDictionary<TKey, TValue>.Enumerator>
         {
             readonly SortedDictionary<TKey, TValue> source;
 
-            public ValueWrapper(SortedDictionary<TKey, TValue> source)
-            {
-                this.source = source;
-            }
+            public ValueWrapper(SortedDictionary<TKey, TValue> source) 
+                => this.source = source;
 
             public readonly int Count
             {
@@ -206,5 +205,8 @@ namespace NetFabric.Hyperlinq
             readonly IEnumerator<KeyValuePair<TKey, TValue>> IEnumerable<KeyValuePair<TKey, TValue>>.GetEnumerator() => source.GetEnumerator();
             readonly IEnumerator IEnumerable.GetEnumerator() => source.GetEnumerator();
         }
+
+        public static int Count<TKey, TValue>(this ValueWrapper<TKey, TValue> source)
+            => source.Count;
     }
 }

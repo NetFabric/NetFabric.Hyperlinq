@@ -24,7 +24,7 @@ namespace NetFabric.Hyperlinq
             int skipCount, int takeCount)
             => new DistinctEnumerable<TSource>(source, comparer, skipCount, takeCount);
 
-        public readonly struct DistinctEnumerable<TSource>
+        public readonly partial struct DistinctEnumerable<TSource>
             : IValueEnumerable<TSource, DistinctEnumerable<TSource>.DisposableEnumerator>
         {
             readonly TSource[] source;

@@ -20,7 +20,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var result = source.LongCount<int>();
 
             // Assert
-            result.Must()
+            _ = result.Must()
                 .BeEqualTo(expected);
         }
 
@@ -37,7 +37,7 @@ namespace NetFabric.Hyperlinq.UnitTests
                 .LongCount<int>(predicate);
 
             // Assert
-            result.Must()
+            _ = result.Must()
                 .BeEqualTo(expected);
         }
     }

@@ -26,9 +26,8 @@ namespace NetFabric.Hyperlinq
             int skipCount, int takeCount)
             => new SelectIndexEnumerable<TSource, TResult>(source, selector, skipCount, takeCount);
 
-        [GenericsTypeMapping("TEnumerable", typeof(SelectIndexEnumerable<,>))]
-        [GenericsTypeMapping("TEnumerator", typeof(SelectIndexEnumerable<,>.Enumerator))]
-        public readonly struct SelectIndexEnumerable<TSource, TResult>
+        [GeneratorMapping("TSource", "TResult")]
+        public readonly partial struct SelectIndexEnumerable<TSource, TResult>
             : IValueReadOnlyList<TResult, SelectIndexEnumerable<TSource, TResult>.Enumerator>
         {
             readonly TSource[] source;
@@ -191,7 +190,7 @@ namespace NetFabric.Hyperlinq
                 => Array.ForEach<TSource, TResult>(source, action, selector, skipCount, takeCount);
 
             // helper implementation of ICollection<> so that CopyTo() is used to convert to List<>
-            [Ignore]
+            [GeneratorIgnore]
             sealed class ToListCollection
                 : ICollection<TResult>
             {

@@ -24,7 +24,7 @@ namespace NetFabric.Hyperlinq.UnitTests
                 .SkipTake<Wrap.ValueReadOnlyList<int>, Wrap.Enumerator<int>, int>(wrapped, skipCount, takeCount);
 
             // Assert
-            result.Must()
+            _ = result.Must()
                 .BeEnumerableOf<int>()
                 .BeEqualTo(expected);
         }
@@ -46,7 +46,7 @@ namespace NetFabric.Hyperlinq.UnitTests
                 .Take(takeCount1);
 
             // Assert
-            result.Must()
+            _ = result.Must()
                 .BeEnumerableOf<int>()
                 .BeEqualTo(expected);
         }
@@ -70,7 +70,7 @@ namespace NetFabric.Hyperlinq.UnitTests
                 .Any();
 
             // Assert
-            result.Must()
+            _ = result.Must()
                 .BeEqualTo(expected);
         }
 
@@ -93,7 +93,7 @@ namespace NetFabric.Hyperlinq.UnitTests
                 .Any(item => (item & 0x01) == 0);
 
             // Assert
-            result.Must()
+            _ = result.Must()
                 .BeEqualTo(expected);
         }
 
@@ -116,7 +116,7 @@ namespace NetFabric.Hyperlinq.UnitTests
                 .Select(item => item.ToString());
 
             // Assert
-            result.Must()
+            _ = result.Must()
                 .BeEnumerableOf<string>()
                 .BeEqualTo(expected);
         }
@@ -140,7 +140,7 @@ namespace NetFabric.Hyperlinq.UnitTests
                 .Select((item, index) => (item + index).ToString());
 
             // Assert
-            result.Must()
+            _ = result.Must()
                 .BeEnumerableOf<string>()
                 .BeEqualTo(expected);
         }
@@ -164,7 +164,7 @@ namespace NetFabric.Hyperlinq.UnitTests
                 .Count();
 
             // Assert
-            result.Must()
+            _ = result.Must()
                 .BeEqualTo(expected);
         }
 
@@ -182,7 +182,7 @@ namespace NetFabric.Hyperlinq.UnitTests
                 .First();
 
             // Assert
-            action.Must()
+            _ = action.Must()
                 .Throw<InvalidOperationException>()
                 .EvaluateTrue(exception => exception.Message == "Sequence contains no elements");
         }
@@ -206,7 +206,7 @@ namespace NetFabric.Hyperlinq.UnitTests
                 .First();
 
             // Assert
-            result.Must()
+            _ = result.Must()
                 .BeEqualTo(expected);
         }
 
@@ -224,7 +224,7 @@ namespace NetFabric.Hyperlinq.UnitTests
                 .First(item => (item & 0x01) == 0);
 
             // Assert
-            action.Must()
+            _ = action.Must()
                 .Throw<InvalidOperationException>()
                 .EvaluateTrue(exception => exception.Message == "Sequence contains no elements");
         }
@@ -248,7 +248,7 @@ namespace NetFabric.Hyperlinq.UnitTests
                 .First(_ => true);
 
             // Assert
-            result.Must()
+            _ = result.Must()
                 .BeEqualTo(expected);
         }
 
@@ -272,7 +272,7 @@ namespace NetFabric.Hyperlinq.UnitTests
                 .FirstOrDefault();
 
             // Assert
-            result.Must()
+            _ = result.Must()
                 .BeEqualTo(expected);
         }
 
@@ -296,7 +296,7 @@ namespace NetFabric.Hyperlinq.UnitTests
                 .FirstOrDefault(item => (item & 0x01) == 0);
 
             // Assert
-            result.Must()
+            _ = result.Must()
                 .BeEqualTo(expected);
         }
 
@@ -314,7 +314,7 @@ namespace NetFabric.Hyperlinq.UnitTests
                 .Single();
 
             // Assert
-            action.Must()
+            _ = action.Must()
                 .Throw<InvalidOperationException>()
                 .EvaluateTrue(exception => exception.Message == "Sequence contains no elements");
         }
@@ -337,7 +337,7 @@ namespace NetFabric.Hyperlinq.UnitTests
                 .Single();
 
             // Assert
-            result.Must()
+            _ = result.Must()
                 .BeEqualTo(expected);
         }
 
@@ -355,7 +355,7 @@ namespace NetFabric.Hyperlinq.UnitTests
                 .Single(item => (item & 0x01) == 0);
 
             // Assert
-            action.Must()
+            _ = action.Must()
                 .Throw<InvalidOperationException>()
                 .EvaluateTrue(exception => exception.Message == "Sequence contains no elements");
         }
@@ -378,7 +378,7 @@ namespace NetFabric.Hyperlinq.UnitTests
                 .Single(_ => true);
 
             // Assert
-            result.Must()
+            _ = result.Must()
                 .BeEqualTo(expected);
         }
 
@@ -400,7 +400,7 @@ namespace NetFabric.Hyperlinq.UnitTests
                 .SingleOrDefault();
 
             // Assert
-            result.Must()
+            _ = result.Must()
                 .BeEqualTo(expected);
         }
 
@@ -423,7 +423,7 @@ namespace NetFabric.Hyperlinq.UnitTests
                 .SingleOrDefault(item => (item & 0x01) == 0);
 
             // Assert
-            result.Must()
+            _ = result.Must()
                 .BeEqualTo(expected);
         }
 
@@ -447,7 +447,7 @@ namespace NetFabric.Hyperlinq.UnitTests
                 .ToArray();
 
             // Assert
-            result.Must().BeEqualTo(expected);
+            _ = result.Must().BeEqualTo(expected);
         }
 
         [Theory]
@@ -470,7 +470,7 @@ namespace NetFabric.Hyperlinq.UnitTests
                 .ToList();
 
             // Assert
-            result.Must()
+            _ = result.Must()
                 .BeOfType<List<int>>()
                 .BeEnumerableOf<int>()
                 .BeEqualTo(expected);
@@ -496,7 +496,7 @@ namespace NetFabric.Hyperlinq.UnitTests
                 .ToDictionary(item => item);
 
             // Assert
-            result.Must()
+            _ = result.Must()
                 .BeOfType<Dictionary<int, int>>()
                 .BeEnumerableOf<KeyValuePair<int, int>>()
                 .BeEqualTo(expected, false);
@@ -523,7 +523,7 @@ namespace NetFabric.Hyperlinq.UnitTests
                 .ForEach((item, index) => result += item);
 
             // Assert
-            result.Must()
+            _ = result.Must()
                 .BeEqualTo(expected);
         }
 
@@ -548,7 +548,7 @@ namespace NetFabric.Hyperlinq.UnitTests
                 .ForEach((item, index) => result += item + index);
 
             // Assert
-            result.Must()
+            _ = result.Must()
                 .BeEqualTo(expected);
         }
     }

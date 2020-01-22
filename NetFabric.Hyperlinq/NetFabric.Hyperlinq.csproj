@@ -32,28 +32,16 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="FodyWeavers.xsd" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <WeaverFiles Include="..\NetFabric.Hyperlinq.Build.Fody\bin\$(Configuration)\netstandard2.0\NetFabric.Hyperlinq.Build.Fody.dll" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\NetFabric.Hyperlinq.Build\NetFabric.Hyperlinq.Build.csproj" PrivateAssets="All" />
     <ProjectReference Include="..\NetFabric.Hyperlinq.Interfaces\NetFabric.Hyperlinq.Interfaces.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="4.7.0" />
+    <PackageReference Include="Uno.SourceGenerationTasks" Version="2.0.0-dev.308" />
     <PackageReference Include="Nullable" Version="1.2.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Fody" Version="6.0.6">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-    </PackageReference>    
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
@@ -75,4 +63,5 @@
     </EmbeddedResource>
   </ItemGroup>
   
+  <Import Project="..\NetFabric.Hyperlinq.Generator\build\NetFabric.Hyperlinq.Generator.props" />
 </Project>

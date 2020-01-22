@@ -5,7 +5,7 @@ using System.Collections.Generic;
 namespace NetFabric.Hyperlinq
 {
     // helper implementation of ICollection<> so that CopyTo() is used to convert to List<>
-    [Ignore]
+    [GeneratorIgnore]
     abstract class ToListCollectionBase<TSource>
         : ICollection<TSource>
     {

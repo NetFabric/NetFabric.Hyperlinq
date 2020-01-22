@@ -17,7 +17,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var result = ValueEnumerable.Return(value);
 
             // Assert
-            result.Must()
+            _ = result.Must()
                 .BeEnumerableOf<int>()
                 .BeEqualTo(expected);
         }
@@ -33,7 +33,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             Func<int> action = () => ValueEnumerable.Return(value)[index];
 
             // Assert
-            action.Must().Throw<IndexOutOfRangeException>();
+            _ = action.Must().Throw<IndexOutOfRangeException>();
         }    
     }
 }

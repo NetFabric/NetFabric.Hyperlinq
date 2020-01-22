@@ -14,9 +14,7 @@ namespace NetFabric.Hyperlinq
         public static ValueEnumerableWrapper<TSource> AsValueEnumerable<TSource>(this ReadOnlyMemory<TSource> source)
             => new ValueEnumerableWrapper<TSource>(source);
 
-        [GenericsTypeMapping("TEnumerable", typeof(ValueEnumerableWrapper<>))]
-        [GenericsTypeMapping("TEnumerator", typeof(ValueEnumerableWrapper<>.DisposableEnumerator))]
-        public readonly struct ValueEnumerableWrapper<TSource>
+        public readonly partial struct ValueEnumerableWrapper<TSource>
             : IValueReadOnlyList<TSource, ValueEnumerableWrapper<TSource>.DisposableEnumerator>
         {
             readonly ReadOnlyMemory<TSource> source;
@@ -87,5 +85,8 @@ namespace NetFabric.Hyperlinq
                 public readonly void Dispose() { }
             }
         }
+
+        public static int Count<TSource>(this ValueEnumerableWrapper<TSource> source)
+            => source.Count;
     }
 }

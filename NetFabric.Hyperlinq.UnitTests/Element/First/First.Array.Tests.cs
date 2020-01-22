@@ -17,7 +17,7 @@ namespace NetFabric.Hyperlinq.UnitTests
                 .First<int>();
 
             // Assert
-            action.Must()
+            _ = action.Must()
                 .Throw<InvalidOperationException>()
                 .EvaluateTrue(exception => exception.Message == "Sequence contains no elements");
         }
@@ -33,7 +33,7 @@ namespace NetFabric.Hyperlinq.UnitTests
                 .First<int>(predicate);
 
             // Assert
-            action.Must()
+            _ = action.Must()
                 .Throw<InvalidOperationException>()
                 .EvaluateTrue(exception => exception.Message == "Sequence contains no elements");
         }
@@ -52,7 +52,7 @@ namespace NetFabric.Hyperlinq.UnitTests
                 .First<int>();
 
             // Assert
-            result.Must()
+            _ = result.Must()
                 .BeEqualTo(expected);
         }
 
@@ -70,7 +70,7 @@ namespace NetFabric.Hyperlinq.UnitTests
                 .First<int>(source, predicate);
 
             // Assert
-            result.Must()
+            _ = result.Must()
                 .BeEqualTo(expected);
         }
     }

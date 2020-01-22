@@ -17,7 +17,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             Action action = () => ValueEnumerable.Select<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int, string>(enumerable, selector);
 
             // Assert
-            action.Must()
+            _ = action.Must()
                 .Throw<ArgumentNullException>()
                 .EvaluateTrue(exception => exception.ParamName == "selector");
         }
@@ -38,7 +38,7 @@ namespace NetFabric.Hyperlinq.UnitTests
                 .Select<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int, string>(wrapped, item => item.ToString());
 
             // Assert
-            result.Must()
+            _ = result.Must()
                 .BeEnumerableOf<string>()
                 .BeEqualTo(expected);
         }

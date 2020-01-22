@@ -21,9 +21,7 @@ namespace NetFabric.Hyperlinq
         static WhereIndexEnumerable<TSource> Where<TSource>(this TSource[] source, PredicateAt<TSource> predicate, int skipCount, int takeCount)
             => new WhereIndexEnumerable<TSource>(source, predicate, skipCount, takeCount);
 
-        [GenericsTypeMapping("TEnumerable", typeof(WhereEnumerable<>))]
-        [GenericsTypeMapping("TEnumerator", typeof(WhereEnumerable<>.DisposableEnumerator))]
-        public readonly struct WhereIndexEnumerable<TSource>
+        public readonly partial struct WhereIndexEnumerable<TSource>
             : IValueEnumerable<TSource, WhereIndexEnumerable<TSource>.DisposableEnumerator>
         {
             readonly TSource[] source;

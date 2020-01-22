@@ -20,7 +20,7 @@ namespace NetFabric.Hyperlinq.UnitTests
                 .AsValueEnumerable(wrapped);
 
             // Assert
-            result.Must()
+            _ = result.Must()
                 .BeOfType<ReadOnlyList.ValueEnumerableWrapper<int>>()
                 .BeEnumerableOf<int>()
                 .BeEqualTo(wrapped);
@@ -42,7 +42,7 @@ namespace NetFabric.Hyperlinq.UnitTests
                 .ElementAt(index);
 
             // Assert
-            result.Must()
+            _ = result.Must()
                 .BeEqualTo(expected);
         }
     }

@@ -19,7 +19,7 @@ namespace NetFabric.Hyperlinq.UnitTests
                 .ElementAtOrDefault<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(wrapped, index);
 
             // Assert
-            result.Must()
+            _ = result.Must()
                 .BeEqualTo(default);
         }
 
@@ -38,7 +38,7 @@ namespace NetFabric.Hyperlinq.UnitTests
                 .ElementAtOrDefault<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(wrapped, index);
 
             // Assert
-            result.Must()
+            _ = result.Must()
                 .BeEqualTo(expected);
         }
     }

@@ -17,7 +17,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             Action action = () => ValueReadOnlyCollection.First<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(wrapped);
 
             // Assert
-            action.Must()
+            _ = action.Must()
                 .Throw<InvalidOperationException>()
                 .EvaluateTrue(exception => exception.Message == "Sequence contains no elements");
         }
@@ -33,7 +33,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             Action action = () => ValueReadOnlyCollection.First<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
 
             // Assert
-            action.Must()
+            _ = action.Must()
                 .Throw<InvalidOperationException>()
                 .EvaluateTrue(exception => exception.Message == "Sequence contains no elements");
         }
@@ -51,7 +51,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var result = ValueReadOnlyCollection.First<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(wrapped);
 
             // Assert
-            result.Must()
+            _ = result.Must()
                 .BeEqualTo(expected);
         }
 
@@ -68,7 +68,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var result = ValueReadOnlyCollection.First<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
 
             // Assert
-            result.Must()
+            _ = result.Must()
                 .BeEqualTo(expected);
         }
     }

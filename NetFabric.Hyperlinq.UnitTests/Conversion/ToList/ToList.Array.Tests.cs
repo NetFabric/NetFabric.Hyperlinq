@@ -21,7 +21,7 @@ namespace NetFabric.Hyperlinq.UnitTests
                 .ToList();
 
             // Assert
-            result.Must()
+            _ = result.Must()
                 .BeOfType<List<int>>()
                 .BeEnumerableOf<int>()
                 .BeEqualTo(expected);

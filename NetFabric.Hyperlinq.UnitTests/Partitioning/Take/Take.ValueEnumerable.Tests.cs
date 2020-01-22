@@ -21,7 +21,7 @@ namespace NetFabric.Hyperlinq.UnitTests
                 .Take<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, count);
 
             // Assert
-            result.Must()
+            _ = result.Must()
                 .BeEnumerableOf<int>()
                 .BeEqualTo(expected);
         }
@@ -42,7 +42,7 @@ namespace NetFabric.Hyperlinq.UnitTests
                 .Take(count1);
 
             // Assert
-            result.Must()
+            _ = result.Must()
                 .BeEnumerableOf<int>()
                 .BeEqualTo(expected);
         }

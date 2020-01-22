@@ -20,7 +20,7 @@ namespace NetFabric.Hyperlinq.UnitTests
                 .Distinct<int>();
 
             // Assert
-            result.Must()
+            _ = result.Must()
                 .BeEnumerableOf<int>()
                 .BeEqualTo(expected);
         }

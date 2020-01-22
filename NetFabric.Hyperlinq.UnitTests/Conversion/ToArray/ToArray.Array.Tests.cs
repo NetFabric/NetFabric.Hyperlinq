@@ -20,7 +20,7 @@ namespace NetFabric.Hyperlinq.UnitTests
                 .ToArray();
 
             // Assert
-            result.Must()
+            _ = result.Must()
                 .BeOfType<int[]>()
                 .BeNotSameAs(source)
                 .BeEnumerableOf<int>()

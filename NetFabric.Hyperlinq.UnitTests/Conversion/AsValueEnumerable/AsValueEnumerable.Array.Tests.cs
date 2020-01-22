@@ -18,7 +18,7 @@ namespace NetFabric.Hyperlinq.UnitTests
                 .AsValueEnumerable();
 
             // Assert
-            result.Must()
+            _ = result.Must()
                 .BeEnumerableOf<int>()
                 .BeEqualTo(source);
         }

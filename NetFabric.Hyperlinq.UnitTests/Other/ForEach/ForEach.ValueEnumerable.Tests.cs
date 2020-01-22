@@ -22,7 +22,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             ValueEnumerable.ForEach<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, item => result += item);
 
             // Assert
-            result.Must()
+            _ = result.Must()
                 .BeEqualTo(expected);
         }
 
@@ -42,7 +42,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             ValueEnumerable.ForEach<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, (item, index) => result += item + index);
 
             // Assert
-            result.Must()
+            _ = result.Must()
                 .BeEqualTo(expected);
         }
     }
