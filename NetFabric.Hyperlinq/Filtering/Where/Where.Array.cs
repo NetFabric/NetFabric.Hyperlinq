@@ -58,12 +58,9 @@ namespace NetFabric.Hyperlinq
                 }
 
                 [MaybeNull]
-                public readonly ref readonly TSource Current
-                {
-                    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                    get => ref source[index];
-                }
-
+                public readonly ref readonly TSource Current 
+                    => ref source[index];
+                
                 public bool MoveNext()
                 {
                     while (++index < end)
@@ -92,14 +89,13 @@ namespace NetFabric.Hyperlinq
                 }
 
                 [MaybeNull]
-                public readonly ref readonly TSource Current
-                {
-                    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                    get => ref source[index];
-                }
+                public readonly ref readonly TSource Current 
+                    => ref source[index];
                 [MaybeNull]
-                readonly TSource IEnumerator<TSource>.Current => source[index];
-                readonly object? IEnumerator.Current => source[index];
+                readonly TSource IEnumerator<TSource>.Current 
+                    => source[index];
+                readonly object? IEnumerator.Current 
+                    => source[index];
 
                 public bool MoveNext()
                 {

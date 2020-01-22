@@ -75,7 +75,7 @@ namespace NetFabric.Hyperlinq
         public static ValueEnumerable.SelectManyEnumerable<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource, TSubEnumerable, TSubEnumerator, TResult> SelectMany<TSource, TSubEnumerable, TSubEnumerator, TResult>(
             this ImmutableQueue<TSource> source,
             Selector<TSource, TSubEnumerable> selector)
-            where TSubEnumerable : IValueEnumerable<TResult, TSubEnumerator>
+            where TSubEnumerable : notnull, IValueEnumerable<TResult, TSubEnumerator>
             where TSubEnumerator : struct, IEnumerator<TResult>
             => ValueEnumerable.SelectMany<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource, TSubEnumerable, TSubEnumerator, TResult>(new ValueWrapper<TSource>(source), selector);
 
@@ -201,17 +201,17 @@ namespace NetFabric.Hyperlinq
                     => enumerator = enumerable.GetEnumerator();
 
                 [MaybeNull]
-                public readonly TSource Current
-                {
-                    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                    get => enumerator.Current;
-                }
-                readonly object? IEnumerator.Current => enumerator.Current;
+                public readonly TSource Current 
+                    => enumerator.Current;
+                readonly object? IEnumerator.Current 
+                    => enumerator.Current;
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                public readonly bool MoveNext() => enumerator.MoveNext();
+                public readonly bool MoveNext() 
+                    => enumerator.MoveNext();
 
-                readonly void IEnumerator.Reset() => throw new NotSupportedException();
+                readonly void IEnumerator.Reset() 
+                    => throw new NotSupportedException();
 
                 public readonly void Dispose() { }
             }

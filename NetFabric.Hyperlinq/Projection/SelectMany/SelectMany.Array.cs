@@ -13,7 +13,7 @@ namespace NetFabric.Hyperlinq
         public static SelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, TResult> SelectMany<TSource, TSubEnumerable, TSubEnumerator, TResult>(
             this TSource[] source, 
             Selector<TSource, TSubEnumerable> selector)
-            where TSubEnumerable : IValueEnumerable<TResult, TSubEnumerator>
+            where TSubEnumerable : notnull, IValueEnumerable<TResult, TSubEnumerator>
             where TSubEnumerator : struct, IEnumerator<TResult>
         {
             if (selector is null) Throw.ArgumentNullException(nameof(selector));
@@ -24,7 +24,7 @@ namespace NetFabric.Hyperlinq
         [GeneratorMapping("TSource", "TResult")]
         public readonly partial struct SelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, TResult>
             : IValueEnumerable<TResult, SelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, TResult>.Enumerator>
-            where TSubEnumerable : IValueEnumerable<TResult, TSubEnumerator>
+            where TSubEnumerable : notnull, IValueEnumerable<TResult, TSubEnumerator>
             where TSubEnumerator : struct, IEnumerator<TResult>
         {
             readonly TSource[] source;
@@ -61,12 +61,11 @@ namespace NetFabric.Hyperlinq
                     state = 0;
                 }
 
+                [MaybeNull]
                 public readonly TResult Current
-                {
-                    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                    get => subEnumerator.Current;
-                }
-                readonly object? IEnumerator.Current => subEnumerator.Current;
+                    => subEnumerator.Current;
+                readonly object? IEnumerator.Current 
+                    => subEnumerator.Current;
 
                 public bool MoveNext()
                 {

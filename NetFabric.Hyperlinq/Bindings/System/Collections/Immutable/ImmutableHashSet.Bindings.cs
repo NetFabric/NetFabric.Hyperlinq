@@ -75,7 +75,7 @@ namespace NetFabric.Hyperlinq
         public static ValueEnumerable.SelectManyEnumerable<ValueWrapper<TSource>, ImmutableHashSet<TSource>.Enumerator, TSource, TSubEnumerable, TSubEnumerator, TResult> SelectMany<TSource, TSubEnumerable, TSubEnumerator, TResult>(
             this ImmutableHashSet<TSource> source,
             Selector<TSource, TSubEnumerable> selector)
-            where TSubEnumerable : IValueEnumerable<TResult, TSubEnumerator>
+            where TSubEnumerable : notnull, IValueEnumerable<TResult, TSubEnumerator>
             where TSubEnumerator : struct, IEnumerator<TResult>
             => ValueEnumerable.SelectMany<ValueWrapper<TSource>, ImmutableHashSet<TSource>.Enumerator, TSource, TSubEnumerable, TSubEnumerator, TResult>(new ValueWrapper<TSource>(source), selector);
 
@@ -187,11 +187,8 @@ namespace NetFabric.Hyperlinq
             public ValueWrapper(ImmutableHashSet<TSource> source) 
                 => this.source = source;
 
-            public int Count
-            {
-                [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                get => source.Count;
-            }
+            public int Count 
+                => source.Count;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly ImmutableHashSet<TSource>.Enumerator GetEnumerator() => source.GetEnumerator();

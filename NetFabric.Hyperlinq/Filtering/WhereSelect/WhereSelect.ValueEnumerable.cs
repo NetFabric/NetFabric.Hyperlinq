@@ -14,7 +14,7 @@ namespace NetFabric.Hyperlinq
             this TEnumerable source, 
             Predicate<TSource> predicate,
             Selector<TSource, TResult> selector)
-            where TEnumerable : IValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
             if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
@@ -26,7 +26,7 @@ namespace NetFabric.Hyperlinq
         [GeneratorMapping("TSource", "TResult")]
         public readonly partial struct WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult> 
             : IValueEnumerable<TResult, WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>.Enumerator>
-            where TEnumerable : IValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
             readonly TEnumerable source;
@@ -61,12 +61,11 @@ namespace NetFabric.Hyperlinq
                     selector = enumerable.selector;
                 }
 
+                [MaybeNull]
                 public readonly TResult Current
-                {
-                    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                    get => selector(enumerator.Current);
-                }
-                readonly object? IEnumerator.Current => selector(enumerator.Current);
+                    => selector(enumerator.Current);
+                readonly object? IEnumerator.Current 
+                    => selector(enumerator.Current);
 
                 public bool MoveNext()
                 {

@@ -8,7 +8,7 @@ namespace NetFabric.Hyperlinq
     {
         [Pure]
         public static TSource ElementAt<TEnumerable, TEnumerator, TSource>(this TEnumerable source, int index)
-            where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
+            where TEnumerable : notnull, IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
             if (index >= 0 && index < source.Count)
@@ -27,7 +27,7 @@ namespace NetFabric.Hyperlinq
         [Pure]
         [return: MaybeNull]
         public static TSource ElementAtOrDefault<TEnumerable, TEnumerator, TSource>(this TEnumerable source, int index)
-            where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
+            where TEnumerable : notnull, IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
             if (index >= 0 && index < source.Count)
@@ -45,7 +45,7 @@ namespace NetFabric.Hyperlinq
 
         [Pure]
         public static Maybe<TSource> TryElementAt<TEnumerable, TEnumerator, TSource>(this TEnumerable source, int index)
-            where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
+            where TEnumerable : notnull, IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
             if (index >= 0 && index < source.Count)

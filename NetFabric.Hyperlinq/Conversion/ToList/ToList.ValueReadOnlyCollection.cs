@@ -9,7 +9,7 @@ namespace NetFabric.Hyperlinq
     {
         [Pure]
         public static List<TSource> ToList<TEnumerable, TEnumerator, TSource>(this TEnumerable source)
-            where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
+            where TEnumerable : notnull, IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
             => source switch
             {
@@ -22,7 +22,7 @@ namespace NetFabric.Hyperlinq
         [GeneratorIgnore]
         internal sealed class ToListCollection<TEnumerable, TEnumerator, TSource>
             : ToListCollectionBase<TSource>
-            where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
+            where TEnumerable : notnull, IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
             readonly TEnumerable source;

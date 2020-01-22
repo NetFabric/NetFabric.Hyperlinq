@@ -30,8 +30,12 @@ namespace NetFabric.Hyperlinq
 
             public readonly int Count => source.Length;
 
-            public readonly ref readonly TSource this[int index] => ref source[index];
-            readonly TSource IReadOnlyList<TSource>.this[int index] => source[index];
+            [MaybeNull]
+            public readonly ref readonly TSource this[int index] 
+                => ref source[index];
+            [MaybeNull]
+            readonly TSource IReadOnlyList<TSource>.this[int index] 
+                => source[index];
 
             public struct Enumerator
             {
@@ -45,11 +49,8 @@ namespace NetFabric.Hyperlinq
                 }
 
                 [MaybeNull]
-                public readonly ref readonly TSource Current
-                {
-                    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                    get => ref source[index];
-                }
+                public readonly ref readonly TSource Current 
+                    => ref source[index];
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public bool MoveNext() => ++index < source.Length;
@@ -68,14 +69,13 @@ namespace NetFabric.Hyperlinq
                 }
 
                 [MaybeNull]
-                public readonly ref readonly TSource Current
-                {
-                    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                    get => ref source[index];
-                }
+                public readonly ref readonly TSource Current 
+                    => ref source[index];
                 [MaybeNull]
-                readonly TSource IEnumerator<TSource>.Current => source[index];
-                readonly object? IEnumerator.Current => source[index];
+                readonly TSource IEnumerator<TSource>.Current 
+                    => source[index];
+                readonly object? IEnumerator.Current 
+                    => source[index];
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public bool MoveNext() => ++index < source.Length;

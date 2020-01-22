@@ -25,19 +25,18 @@ namespace NetFabric.Hyperlinq
 
             public readonly int Count => 0;
 
+            [MaybeNull]
             public readonly TSource this[int index] => Throw.IndexOutOfRangeException<TSource>(); 
 
             public readonly partial struct Enumerator
             {
                 [MaybeNull]
                 public readonly TSource Current
-                {
-                    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                    get => default!;
-                }
+                    => default;
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                public readonly bool MoveNext() => false;
+                public readonly bool MoveNext() 
+                    => false;
             }
 
             public readonly partial struct DisposableEnumerator
@@ -45,11 +44,9 @@ namespace NetFabric.Hyperlinq
             {
                 [MaybeNull]
                 public readonly TSource Current
-                {
-                    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                    get => default!;
-                }
-                readonly object? IEnumerator.Current => default!;
+                    => default;
+                readonly object? IEnumerator.Current 
+                    => default;
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public readonly bool MoveNext()

@@ -10,7 +10,7 @@ namespace NetFabric.Hyperlinq
     {
         [Pure]
         public static async ValueTask<TSource> FirstAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source, CancellationToken cancellationToken = default) 
-            where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
             var result = await GetFirstAsync<TEnumerable, TEnumerator, TSource>(source, cancellationToken);
@@ -19,7 +19,7 @@ namespace NetFabric.Hyperlinq
 
         [Pure]
         public static async ValueTask<TSource> FirstAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source, AsyncPredicate<TSource> predicate, CancellationToken cancellationToken = default)
-            where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
             var result = await GetFirstAsync<TEnumerable, TEnumerator, TSource>(source, predicate, cancellationToken);
@@ -27,9 +27,8 @@ namespace NetFabric.Hyperlinq
         }
 
         [Pure]
-        //[return: MaybeNull]
         public static async ValueTask<TSource> FirstOrDefaultAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source, CancellationToken cancellationToken = default) 
-            where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
             var result = await GetFirstAsync<TEnumerable, TEnumerator, TSource>(source, cancellationToken);
@@ -37,9 +36,8 @@ namespace NetFabric.Hyperlinq
         }
 
         [Pure]
-        //[return: MaybeNull]
         public static async ValueTask<TSource> FirstOrDefaultAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source, AsyncPredicate<TSource> predicate, CancellationToken cancellationToken = default) 
-            where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
             var result = await GetFirstAsync<TEnumerable, TEnumerator, TSource>(source, predicate, cancellationToken);
@@ -48,7 +46,7 @@ namespace NetFabric.Hyperlinq
 
         [Pure]
         public static async ValueTask<Maybe<TSource>> TryFirstAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source, CancellationToken cancellationToken = default)
-            where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
             var result = await GetFirstAsync<TEnumerable, TEnumerator, TSource>(source, cancellationToken);
@@ -57,7 +55,7 @@ namespace NetFabric.Hyperlinq
 
         [Pure]
         public static async ValueTask<Maybe<TSource>> TryFirstAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source, AsyncPredicate<TSource> predicate, CancellationToken cancellationToken = default)
-            where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
             var result = await GetFirstAsync<TEnumerable, TEnumerator, TSource>(source, predicate, cancellationToken);
@@ -66,7 +64,7 @@ namespace NetFabric.Hyperlinq
 
         [Pure]
         public static async ValueTask<MaybeAt<TSource>> TryFirstAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source, AsyncPredicateAt<TSource> predicate, CancellationToken cancellationToken = default)
-            where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
             var result = await GetFirstAsync<TEnumerable, TEnumerator, TSource>(source, predicate, cancellationToken);
@@ -75,7 +73,7 @@ namespace NetFabric.Hyperlinq
 
         [Pure]
         static async ValueTask<(ElementResult Success, TSource Value)> GetFirstAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source, CancellationToken cancellationToken) 
-            where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
             var enumerator = source.GetAsyncEnumerator(cancellationToken);
@@ -89,7 +87,7 @@ namespace NetFabric.Hyperlinq
 
         [Pure]
         static async ValueTask<(ElementResult Success, TSource Value)> GetFirstAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source, AsyncPredicate<TSource> predicate, CancellationToken cancellationToken) 
-            where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
             var enumerator = source.GetAsyncEnumerator(cancellationToken);
@@ -107,7 +105,7 @@ namespace NetFabric.Hyperlinq
 
         [Pure]
         static async ValueTask<(int Index, TSource Value)> GetFirstAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source, AsyncPredicateAt<TSource> predicate, CancellationToken cancellationToken) 
-            where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
             var enumerator = source.GetAsyncEnumerator(cancellationToken);

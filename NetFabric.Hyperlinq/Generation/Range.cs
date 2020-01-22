@@ -72,13 +72,11 @@ namespace NetFabric.Hyperlinq
                 }
 
                 public readonly int Current
-                {
-                    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                    get => current;
-                }
+                    => current;
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                public bool MoveNext() => ++this.current < end;
+                public bool MoveNext() 
+                    => ++this.current < end;
             }
 
             public struct DisposableEnumerator
@@ -94,11 +92,9 @@ namespace NetFabric.Hyperlinq
                 }
 
                 public readonly int Current
-                {
-                    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                    get => current;
-                }
-                readonly object? IEnumerator.Current => current;
+                    => current;
+                readonly object IEnumerator.Current 
+                    => current;
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public bool MoveNext() => ++this.current < end;

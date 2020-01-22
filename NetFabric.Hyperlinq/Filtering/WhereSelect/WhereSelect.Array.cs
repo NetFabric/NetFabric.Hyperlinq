@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
 using System.Runtime.CompilerServices;
 
@@ -65,10 +66,7 @@ namespace NetFabric.Hyperlinq
                 }
 
                 public readonly TResult Current
-                {
-                    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                    get => selector(source[index]);
-                }
+                    => selector(source[index]);
 
                 public bool MoveNext()
                 {
@@ -99,12 +97,11 @@ namespace NetFabric.Hyperlinq
                     index = enumerable.skipCount - 1;
                 }
 
+                [MaybeNull]
                 public readonly TResult Current
-                {
-                    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                    get => selector(source[index]);
-                }
-                readonly object? IEnumerator.Current => selector(source[index]);
+                    => selector(source[index]);
+                readonly object? IEnumerator.Current 
+                    => selector(source[index]);
 
                 public bool MoveNext()
                 {

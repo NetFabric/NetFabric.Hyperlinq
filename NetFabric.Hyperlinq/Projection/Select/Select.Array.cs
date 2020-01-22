@@ -50,6 +50,7 @@ namespace NetFabric.Hyperlinq
 
             public readonly int Count => takeCount;
 
+            [MaybeNull]
             public readonly TResult this[int index]
             {
                 get
@@ -77,13 +78,11 @@ namespace NetFabric.Hyperlinq
                 }
 
                 public readonly TResult Current
-                {
-                    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                    get => selector(source[index]);
-                }
+                    => selector(source[index]);
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                public bool MoveNext() => ++index < end;
+                public bool MoveNext() 
+                    => ++index < end;
             }
 
             public struct DisposableEnumerator
@@ -102,17 +101,18 @@ namespace NetFabric.Hyperlinq
                     index = enumerable.skipCount - 1;
                 }
 
+                [MaybeNull]
                 public readonly TResult Current
-                {
-                    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                    get => selector(source[index]);
-                }
-                readonly object? IEnumerator.Current => selector(source[index]);
+                    => selector(source[index]);
+                readonly object? IEnumerator.Current 
+                    => selector(source[index]);
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                public bool MoveNext() => ++index < end;
+                public bool MoveNext() 
+                    => ++index < end;
 
-                public readonly void Reset() => throw new NotSupportedException();
+                public readonly void Reset() 
+                    => throw new NotSupportedException();
 
                 public readonly void Dispose() { }
             }

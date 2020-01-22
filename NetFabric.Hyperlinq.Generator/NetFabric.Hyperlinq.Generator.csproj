@@ -10,6 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.CodeAnalysis" Version="3.4.0" />
     <PackageReference Include="Uno.SourceGeneration" Version="2.0.0-dev.308" />
     <PackageReference Include="Uno.Roslyn" Version="1.2.0-dev.18" />
   </ItemGroup>

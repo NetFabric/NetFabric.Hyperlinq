@@ -32,6 +32,7 @@ namespace NetFabric.Hyperlinq
 
             public readonly int Count => 1;
 
+            [MaybeNull]
             public readonly TSource this[int index]
             {
                 get
@@ -55,10 +56,7 @@ namespace NetFabric.Hyperlinq
 
                 [MaybeNull]
                 public readonly TSource Current
-                {
-                    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                    get => value;
-                }
+                    => value;
 
                 public bool MoveNext()
                 {
@@ -85,11 +83,9 @@ namespace NetFabric.Hyperlinq
 
                 [MaybeNull]
                 public readonly TSource Current
-                {
-                    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                    get => value;
-                }
-                readonly object? IEnumerator.Current => value;
+                    => value;
+                readonly object? IEnumerator.Current 
+                    => value;
 
                 public bool MoveNext()
                 {

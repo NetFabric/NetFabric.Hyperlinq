@@ -11,7 +11,7 @@ namespace NetFabric.Hyperlinq
     {
         [Pure]
         public static async ValueTask<long> LongCountAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source, CancellationToken cancellationToken = default)
-            where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
             var count = 0L;
@@ -29,7 +29,7 @@ namespace NetFabric.Hyperlinq
 
         [Pure]
         public static ValueTask<long> LongCountAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source, AsyncPredicate<TSource> predicate, CancellationToken cancellationToken = default)
-            where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
             if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
@@ -58,7 +58,7 @@ namespace NetFabric.Hyperlinq
 
         [Pure]
         public static ValueTask<long> LongCountAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source, AsyncPredicateAtLong<TSource> predicate, CancellationToken cancellationToken = default)
-            where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
             if (predicate is null) Throw.ArgumentNullException(nameof(predicate));

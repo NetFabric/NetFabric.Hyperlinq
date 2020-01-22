@@ -64,10 +64,7 @@ namespace NetFabric.Hyperlinq
 
                 [MaybeNull]
                 public readonly TSource Current
-                {
-                    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                    get => current;
-                }
+                    => current;
 
                 public bool MoveNext()
                 {
@@ -102,12 +99,10 @@ namespace NetFabric.Hyperlinq
                 }
 
                 [MaybeNull]
-                public readonly TSource Current
-                {
-                    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                    get => current;
-                }
-                readonly object? IEnumerator.Current => current;
+                public readonly TSource Current 
+                    => current;
+                readonly object? IEnumerator.Current 
+                    => current;
 
                 public bool MoveNext()
                 {
