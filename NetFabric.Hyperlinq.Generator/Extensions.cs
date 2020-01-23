@@ -139,13 +139,13 @@ namespace NetFabric.Hyperlinq.Generator
 		static INamedTypeSymbol ignoreAttributeSymbol;
 		static INamedTypeSymbol mappingAttributeSymbol;
 
-        public static bool ShouldIgnore(this ITypeSymbol type, Compilation compilation)
+        public static bool ShouldIgnore(this ISymbol symbol, Compilation compilation)
         {
-            ignoreAttributeSymbol ??= compilation.GetTypeByMetadataName("NetFabric.Hyperlinq.IgnoreAttribute");
-            var attribute = type.FindAttributeFlattened(ignoreAttributeSymbol);
-            return attribute is null ?
-                false :
-                (bool)attribute.ConstructorArguments[0].Value;
+            ignoreAttributeSymbol ??= compilation.GetTypeByMetadataName("NetFabric.Hyperlinq.GeneratorIgnoreAttribute");
+            var attribute = symbol.FindAttributeFlattened(ignoreAttributeSymbol);
+            return attribute is null 
+                ? false 
+                : (bool)attribute.ConstructorArguments[0].Value;
         }
         
         public static IEnumerable<(string, string, bool)> GetGenericMappings(this ITypeSymbol type, Compilation compilation)

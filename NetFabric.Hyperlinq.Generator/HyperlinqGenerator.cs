@@ -27,11 +27,11 @@ namespace NetFabric.Hyperlinq.Generator
             var compilation = context.Compilation;
             hyperlinqNamespace = compilation.SourceModule.GlobalNamespace.GetNamespace("NetFabric", "Hyperlinq");
 
-            CollectExtensionMethods();
+            CollectExtensionMethods(context);
             GenerateSource(context);
         }
 
-        void CollectExtensionMethods()
+        void CollectExtensionMethods(SourceGeneratorContext context)
         {
             logger.Info("Collecting extension methods with interface constraints!");
 
@@ -43,7 +43,8 @@ namespace NetFabric.Hyperlinq.Generator
                 .Where(method => 
                     method.IsPublic() && 
                     method.IsExtensionMethod && 
-                    method.IsGenericMethod)))
+                    method.IsGenericMethod &&
+                    !method.ShouldIgnore(context.Compilation))))
             {
                 var extensionType = method.Parameters[0].Type;
 

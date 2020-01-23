@@ -32,6 +32,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Filtering\Where\Where.AsyncValueEnumerable.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="..\Icon.png" Pack="true" PackagePath="" />
     <None Include="..\LICENSE" Pack="true" PackagePath="" />
   </ItemGroup>
