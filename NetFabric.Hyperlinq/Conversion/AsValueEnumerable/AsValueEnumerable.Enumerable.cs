@@ -27,7 +27,7 @@ namespace NetFabric.Hyperlinq
             readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new Enumerator(source);
             readonly IEnumerator IEnumerable.GetEnumerator() => new Enumerator(source);
 
-            public readonly partial struct Enumerator
+            public readonly struct Enumerator
                 : IEnumerator<TSource>
             {
                 readonly IEnumerator<TSource> enumerator;
