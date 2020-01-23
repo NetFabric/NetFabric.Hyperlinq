@@ -186,7 +186,8 @@ namespace NetFabric.Hyperlinq.Generator
                                         extendedTypeGenericParameters = parametersDefinition.ToString();
                                     }
 
-                                    using (builder.BlockInvariant($"public readonly partial struct {extendedType.Name}{extendedTypeGenericParameters}"))
+                                    var entity = extendedType.IsValueType ? "readonly partial struct" : "partial class";
+                                    using (builder.BlockInvariant($"public {entity} {extendedType.Name}{extendedTypeGenericParameters}"))
                                     {
                                         foreach(var instanceMethod in instanceMethods)
                                         {
@@ -214,6 +215,7 @@ namespace NetFabric.Hyperlinq.Generator
                 .Where(typeParameter => !extendedType.TypeParameters.Any(t => t.Name == typeParameter.Name))
                 .ToList();
 
+            var methodReadonly = extendedType.IsValueType ? "readonly" : string.Empty;
             var methodReturnType = implementedTypeMethod.ReturnType.ToDisplayString(enumerableType, enumeratorType, genericsMapping);
             if (methodReturnType == "TEnumerable") 
                 methodReturnType = extendedType.ToDisplayString();
@@ -235,7 +237,7 @@ namespace NetFabric.Hyperlinq.Generator
             builder.AppendLineInvariant("[MethodImpl(MethodImplOptions.AggressiveInlining)]");
             if (!implementedTypeMethod.ReturnsVoid)
                 builder.AppendLineInvariant("[Pure]");
-            builder.AppendLineInvariant($"public {methodReturnType} {methodName}{methodGenericParameters}({methodParameters})");
+            builder.AppendLineInvariant($"public {methodReadonly} {methodReturnType} {methodName}{methodGenericParameters}({methodParameters})");
             foreach (var (name, constraints) in typeParameters.Where(typeParameter => typeParameter.Constraints.Any()))
                 builder.AppendLineInvariant($"where {name} : {constraints.ToCommaSeparated()}");
             builder.AppendLineInvariant($"=> {callContainingType}.{callMethod}({callParameters});");
