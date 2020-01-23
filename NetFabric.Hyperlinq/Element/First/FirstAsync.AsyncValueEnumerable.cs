@@ -13,7 +13,7 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
-            var result = await GetFirstAsync<TEnumerable, TEnumerator, TSource>(source, cancellationToken);
+            var result = await GetFirstAsync<TEnumerable, TEnumerator, TSource>(source, cancellationToken).ConfigureAwait(false);
             return result.ThrowOnEmpty();
         }
 
@@ -22,7 +22,7 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
-            var result = await GetFirstAsync<TEnumerable, TEnumerator, TSource>(source, predicate, cancellationToken);
+            var result = await GetFirstAsync<TEnumerable, TEnumerator, TSource>(source, predicate, cancellationToken).ConfigureAwait(false);
             return result.ThrowOnEmpty();
         }
 
@@ -31,7 +31,7 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
-            var result = await GetFirstAsync<TEnumerable, TEnumerator, TSource>(source, cancellationToken);
+            var result = await GetFirstAsync<TEnumerable, TEnumerator, TSource>(source, cancellationToken).ConfigureAwait(false);
             return result.DefaultOnEmpty();
         }
 
@@ -40,7 +40,7 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
-            var result = await GetFirstAsync<TEnumerable, TEnumerator, TSource>(source, predicate, cancellationToken);
+            var result = await GetFirstAsync<TEnumerable, TEnumerator, TSource>(source, predicate, cancellationToken).ConfigureAwait(false);
             return result.DefaultOnEmpty();
         }
 
@@ -49,7 +49,7 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
-            var result = await GetFirstAsync<TEnumerable, TEnumerator, TSource>(source, cancellationToken);
+            var result = await GetFirstAsync<TEnumerable, TEnumerator, TSource>(source, cancellationToken).ConfigureAwait(false);
             return result.AsMaybe();
         }
 
@@ -58,7 +58,7 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
-            var result = await GetFirstAsync<TEnumerable, TEnumerator, TSource>(source, predicate, cancellationToken);
+            var result = await GetFirstAsync<TEnumerable, TEnumerator, TSource>(source, predicate, cancellationToken).ConfigureAwait(false);
             return result.AsMaybe();
         }
 
@@ -67,7 +67,7 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
-            var result = await GetFirstAsync<TEnumerable, TEnumerator, TSource>(source, predicate, cancellationToken);
+            var result = await GetFirstAsync<TEnumerable, TEnumerator, TSource>(source, predicate, cancellationToken).ConfigureAwait(false);
             return result.AsMaybe();
         }
 
@@ -95,7 +95,7 @@ namespace NetFabric.Hyperlinq
             {
                 while (await enumerator.MoveNextAsync().ConfigureAwait(false))
                 {
-                    if (await predicate(enumerator.Current, cancellationToken))
+                    if (await predicate(enumerator.Current, cancellationToken).ConfigureAwait(false))
                         return (ElementResult.Success, enumerator.Current);
                 }   
 
@@ -115,7 +115,7 @@ namespace NetFabric.Hyperlinq
                 {
                     for (var index = 0; await enumerator.MoveNextAsync().ConfigureAwait(false); index++)
                     {
-                        if (await predicate(enumerator.Current, index, cancellationToken))
+                        if (await predicate(enumerator.Current, index, cancellationToken).ConfigureAwait(false))
                             return (index, enumerator.Current);
                     }
                 }   

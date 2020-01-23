@@ -31,7 +31,9 @@ namespace NetFabric.Hyperlinq
                 {
                     var dictionary = new Dictionary<TKey, TSource>(0, comparer);
                     while (await enumerator.MoveNextAsync().ConfigureAwait(false))
-                        dictionary.Add(await keySelector(enumerator.Current, cancellationToken), enumerator.Current);
+                        dictionary.Add(
+                            await keySelector(enumerator.Current, cancellationToken).ConfigureAwait(false), 
+                            enumerator.Current);
                     return dictionary;
                 }
             }
@@ -48,8 +50,10 @@ namespace NetFabric.Hyperlinq
                 var dictionary = new Dictionary<TKey, TSource>(0, comparer);
                 while (await enumerator.MoveNextAsync().ConfigureAwait(false))
                 {
-                    if (await predicate(enumerator.Current, cancellationToken))
-                        dictionary.Add(await keySelector(enumerator.Current, cancellationToken), enumerator.Current);
+                    if (await predicate(enumerator.Current, cancellationToken).ConfigureAwait(false))
+                        dictionary.Add(
+                            await keySelector(enumerator.Current, cancellationToken).ConfigureAwait(false), 
+                            enumerator.Current);
                 }
                 return dictionary;
             }
@@ -69,7 +73,9 @@ namespace NetFabric.Hyperlinq
                     for (var index = 0; await enumerator.MoveNextAsync().ConfigureAwait(false); index++)
                     {
                         if (predicate(enumerator.Current, index))
-                            dictionary.Add(await keySelector(enumerator.Current, cancellationToken), enumerator.Current);
+                            dictionary.Add(
+                                await keySelector(enumerator.Current, cancellationToken).ConfigureAwait(false), 
+                                enumerator.Current);
                     }
                     return dictionary;
                 }
@@ -100,7 +106,9 @@ namespace NetFabric.Hyperlinq
                 {
                     var dictionary = new Dictionary<TKey, TElement>(0, comparer);
                     while (await enumerator.MoveNextAsync().ConfigureAwait(false))
-                        dictionary.Add(await keySelector(enumerator.Current, cancellationToken), await elementSelector(enumerator.Current, cancellationToken));
+                        dictionary.Add(
+                            await keySelector(enumerator.Current, cancellationToken).ConfigureAwait(false), 
+                            await elementSelector(enumerator.Current, cancellationToken).ConfigureAwait(false));
                     return dictionary;
                 }
             }
@@ -117,8 +125,10 @@ namespace NetFabric.Hyperlinq
                 var dictionary = new Dictionary<TKey, TElement>(0, comparer);
                 while (await enumerator.MoveNextAsync().ConfigureAwait(false))
                 {
-                    if (await predicate(enumerator.Current, cancellationToken))
-                        dictionary.Add(await keySelector(enumerator.Current, cancellationToken), await elementSelector(enumerator.Current, cancellationToken));
+                    if (await predicate(enumerator.Current, cancellationToken).ConfigureAwait(false))
+                        dictionary.Add(
+                            await keySelector(enumerator.Current, cancellationToken).ConfigureAwait(false), 
+                            await elementSelector(enumerator.Current, cancellationToken).ConfigureAwait(false));
                 }
                 return dictionary;
             }
@@ -137,8 +147,10 @@ namespace NetFabric.Hyperlinq
                     var dictionary = new Dictionary<TKey, TElement>(0, comparer);
                     for (var index = 0; await enumerator.MoveNextAsync().ConfigureAwait(false); index++)
                     {
-                        if (await predicate(enumerator.Current, index, cancellationToken))
-                            dictionary.Add(await keySelector(enumerator.Current, cancellationToken), await elementSelector(enumerator.Current, cancellationToken));
+                        if (await predicate(enumerator.Current, index, cancellationToken).ConfigureAwait(false))
+                            dictionary.Add(
+                                await keySelector(enumerator.Current, cancellationToken).ConfigureAwait(false), 
+                                await elementSelector(enumerator.Current, cancellationToken).ConfigureAwait(false));
                     }
                     return dictionary;
                 }
