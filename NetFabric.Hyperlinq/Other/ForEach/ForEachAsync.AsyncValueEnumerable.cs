@@ -36,7 +36,7 @@ namespace NetFabric.Hyperlinq
             { 
                 while (await enumerator.MoveNextAsync().ConfigureAwait(false))
                 {
-                    if (await predicate(enumerator.Current, cancellationToken))
+                    if (await predicate(enumerator.Current, cancellationToken).ConfigureAwait(false))
                         await actionAsync(enumerator.Current, cancellationToken).ConfigureAwait(false);
                 }
             }
@@ -53,7 +53,7 @@ namespace NetFabric.Hyperlinq
                 {
                     for (var index = 0; await enumerator.MoveNextAsync().ConfigureAwait(false); index++)
                     {
-                        if (await predicate(enumerator.Current, index, cancellationToken))
+                        if (await predicate(enumerator.Current, index, cancellationToken).ConfigureAwait(false))
                             await actionAsync(enumerator.Current, cancellationToken).ConfigureAwait(false);
                     }
                 }
@@ -96,7 +96,7 @@ namespace NetFabric.Hyperlinq
             { 
                 while (await enumerator.MoveNextAsync().ConfigureAwait(false))
                 {
-                    if (await predicate(enumerator.Current, cancellationToken))
+                    if (await predicate(enumerator.Current, cancellationToken).ConfigureAwait(false))
                         await actionAsync(await selector(enumerator.Current, cancellationToken), cancellationToken).ConfigureAwait(false);
                 }
             }
@@ -117,7 +117,7 @@ namespace NetFabric.Hyperlinq
                 checked
                 {
                     for (var index = 0; await enumerator.MoveNextAsync().ConfigureAwait(false); index++)
-                        await actionAsync(enumerator.Current, index, cancellationToken1);
+                        await actionAsync(enumerator.Current, index, cancellationToken1).ConfigureAwait(false);
                 }
             }
         }
@@ -133,7 +133,7 @@ namespace NetFabric.Hyperlinq
                 {
                     for (var index = 0; await enumerator.MoveNextAsync().ConfigureAwait(false); index++)
                     {
-                        if (await predicate(enumerator.Current, cancellationToken))
+                        if (await predicate(enumerator.Current, cancellationToken).ConfigureAwait(false))
                             await actionAsync(enumerator.Current, index, cancellationToken).ConfigureAwait(false);
                     }
                 }
@@ -151,7 +151,7 @@ namespace NetFabric.Hyperlinq
                 {
                     for (var index = 0; await enumerator.MoveNextAsync().ConfigureAwait(false); index++)
                     {
-                        if (await predicate(enumerator.Current, index, cancellationToken))
+                        if (await predicate(enumerator.Current, index, cancellationToken).ConfigureAwait(false))
                             await actionAsync(enumerator.Current, index, cancellationToken).ConfigureAwait(false);
                     }
                 }
@@ -183,7 +183,11 @@ namespace NetFabric.Hyperlinq
                 checked
                 {
                     for (var index = 0; await enumerator.MoveNextAsync().ConfigureAwait(false); index++)
-                        await actionAsync(await selector(enumerator.Current, index, cancellationToken), index, cancellationToken).ConfigureAwait(false);
+                        await actionAsync(
+                            await selector(enumerator.Current, index, cancellationToken).ConfigureAwait(false), 
+                            index, 
+                            cancellationToken)
+                                .ConfigureAwait(false);
                 }
             }
         }
@@ -199,7 +203,7 @@ namespace NetFabric.Hyperlinq
                 {
                     for (var index = 0; await enumerator.MoveNextAsync().ConfigureAwait(false); index++)
                     {
-                        if (await predicate(enumerator.Current, cancellationToken))
+                        if (await predicate(enumerator.Current, cancellationToken).ConfigureAwait(false))
                             await actionAsync(selector(enumerator.Current), index, cancellationToken).ConfigureAwait(false);
                     }
                 }

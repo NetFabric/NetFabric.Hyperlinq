@@ -62,10 +62,10 @@ namespace NetFabric.Hyperlinq
                 {
                     while (await enumerator.MoveNextAsync().ConfigureAwait(false))
                     {
-                        if (await predicate(enumerator.Current, cancellationToken))
+                        if (await predicate(enumerator.Current, cancellationToken).ConfigureAwait(false))
                             return true;
                     }
-                    await DisposeAsync();
+                    await DisposeAsync().ConfigureAwait(false);
                     return false;
                 }
 
@@ -102,18 +102,24 @@ namespace NetFabric.Hyperlinq
                 => AsyncValueEnumerable.WhereAsync<TEnumerable, TEnumerator, TSource>(source, Utils.Combine(this.predicate, predicate), cancellationToken);
 
             public async ValueTask<TSource> FirstAsync(CancellationToken cancellationToken = default)
-                => (await AsyncValueEnumerable.GetFirstAsync<TEnumerable, TEnumerator, TSource>(source, predicate, cancellationToken)).ThrowOnEmpty();
+                => (await AsyncValueEnumerable.GetFirstAsync<TEnumerable, TEnumerator, TSource>(source, predicate, cancellationToken).ConfigureAwait(false))
+                    .ThrowOnEmpty();
             public async ValueTask<TSource> FirstAsync(AsyncPredicate<TSource> predicate, CancellationToken cancellationToken = default)
-                => (await AsyncValueEnumerable.GetFirstAsync<TEnumerable, TEnumerator, TSource>(source, Utils.Combine(this.predicate, predicate), cancellationToken)).ThrowOnEmpty();
+                => (await AsyncValueEnumerable.GetFirstAsync<TEnumerable, TEnumerator, TSource>(source, Utils.Combine(this.predicate, predicate), cancellationToken).ConfigureAwait(false))
+                    .ThrowOnEmpty();
             public async ValueTask<TSource> FirstAsync(AsyncPredicateAt<TSource> predicate, CancellationToken cancellationToken = default)
-                => (await AsyncValueEnumerable.GetFirstAsync<TEnumerable, TEnumerator, TSource>(source, Utils.Combine(this.predicate, predicate), cancellationToken)).ThrowOnEmpty();
+                => (await AsyncValueEnumerable.GetFirstAsync<TEnumerable, TEnumerator, TSource>(source, Utils.Combine(this.predicate, predicate), cancellationToken).ConfigureAwait(false))
+                    .ThrowOnEmpty();
 
             public async ValueTask<TSource> FirstOrDefaultAsync(CancellationToken cancellationToken = default)
-                => (await AsyncValueEnumerable.GetFirstAsync<TEnumerable, TEnumerator, TSource>(source, predicate, cancellationToken)).DefaultOnEmpty();
+                => (await AsyncValueEnumerable.GetFirstAsync<TEnumerable, TEnumerator, TSource>(source, predicate, cancellationToken).ConfigureAwait(false))
+                    .DefaultOnEmpty();
             public async ValueTask<TSource> FirstOrDefaultAsync(AsyncPredicate<TSource> predicate, CancellationToken cancellationToken = default)
-                => (await AsyncValueEnumerable.GetFirstAsync<TEnumerable, TEnumerator, TSource>(source, Utils.Combine(this.predicate, predicate), cancellationToken)).DefaultOnEmpty();
+                => (await AsyncValueEnumerable.GetFirstAsync<TEnumerable, TEnumerator, TSource>(source, Utils.Combine(this.predicate, predicate), cancellationToken).ConfigureAwait(false))
+                    .DefaultOnEmpty();
             public async ValueTask<TSource> FirstOrDefaultAsync(AsyncPredicateAt<TSource> predicate, CancellationToken cancellationToken = default)
-                => (await AsyncValueEnumerable.GetFirstAsync<TEnumerable, TEnumerator, TSource>(source, Utils.Combine(this.predicate, predicate), cancellationToken)).DefaultOnEmpty();
+                => (await AsyncValueEnumerable.GetFirstAsync<TEnumerable, TEnumerator, TSource>(source, Utils.Combine(this.predicate, predicate), cancellationToken).ConfigureAwait(false))
+                    .DefaultOnEmpty();
 
             public (ElementResult Success, TSource Value) TryFirstAsync()
                 => AsyncValueEnumerable.GetFirstAsync<TEnumerable, TEnumerator, TSource>(source, predicate);
