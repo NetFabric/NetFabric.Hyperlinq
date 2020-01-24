@@ -38,7 +38,7 @@ namespace NetFabric.Hyperlinq
                 [ExcludeFromCodeCoverage]
                 [MaybeNull]                
                 public readonly TSource Current
-                    => default;
+                    => default!;
 
                 public readonly bool MoveNext() 
                     => false;
@@ -50,7 +50,7 @@ namespace NetFabric.Hyperlinq
                 [ExcludeFromCodeCoverage]
                 [MaybeNull]
                 public readonly TSource Current
-                    => default;
+                    => default!;
 
                 [ExcludeFromCodeCoverage]
                 readonly object? IEnumerator.Current 
