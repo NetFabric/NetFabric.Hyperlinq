@@ -9,6 +9,23 @@ namespace NetFabric.Hyperlinq.Generator
 {
     public static class Extensions
     {
+        static INamedTypeSymbol valueEnumerableSymbol;
+        static INamedTypeSymbol asyncValueEnumerableSymbol;
+        static INamedTypeSymbol ignoreAttributeSymbol;
+		static INamedTypeSymbol mappingAttributeSymbol;
+
+        static INamedTypeSymbol GetIValueEnumerableSymbol(Compilation compilation)
+            => valueEnumerableSymbol ??= compilation.GetTypeByMetadataName("NetFabric.Hyperlinq.IValueEnumerable`2");
+
+        static INamedTypeSymbol GetIAsyncValueEnumerableSymbol(Compilation compilation)
+            => asyncValueEnumerableSymbol ??= compilation.GetTypeByMetadataName("NetFabric.Hyperlinq.IAsyncValueEnumerable`2");
+
+        static INamedTypeSymbol GetGeneratorIgnoreAttributeSymbol(Compilation compilation)
+            => ignoreAttributeSymbol ??= compilation.GetTypeByMetadataName("NetFabric.Hyperlinq.GeneratorIgnoreAttribute");
+
+        static INamedTypeSymbol GetGeneratorMappingAttributeSymbol(Compilation compilation)
+            => mappingAttributeSymbol ??= compilation.GetTypeByMetadataName("NetFabric.Hyperlinq.GeneratorMappingAttribute");
+
         public static bool Contains(this ITypeSymbol type, IMethodSymbol method)
             => type
                 .GetMembers()
@@ -104,14 +121,14 @@ namespace NetFabric.Hyperlinq.Generator
                 $"<{result.ToCommaSeparated()}>";
         }
 
-        public static string ToDisplayString(this ITypeSymbol type, ITypeSymbol enumerableType, ITypeSymbol enumeratorType, IEnumerable<(string, string, bool)> genericsMapping)
+        public static string ToDisplayString(this ITypeSymbol type, ITypeSymbol enumerableType, ITypeSymbol enumeratorType, IEnumerable<(string, string, bool)> genericsMapping, Compilation compilation)
         {
             if (type is INamedTypeSymbol namedType && namedType.IsGenericType)
             {
-                var valueEnumerableInterface = namedType.GetAllInterfaces()
-                    .Where(@interface => @interface.Name == "IValueEnumerable" || @interface.Name == "IAsyncValueEnumerable")
-                    .FirstOrDefault();
-                if (valueEnumerableInterface is object)
+                if (namedType.GetAllInterfaces()
+                    .Any(@interface => 
+                        @interface.Equals(GetIValueEnumerableSymbol(compilation)) || 
+                        @interface.Equals(GetIAsyncValueEnumerableSymbol(compilation))))
                 {
                     var displayName = namedType.ToDisplayString();
                     var classDisplayName = displayName.Substring(0, displayName.IndexOf('<'));
@@ -136,13 +153,9 @@ namespace NetFabric.Hyperlinq.Generator
         public static string ToDisplayString(this IMethodSymbol method, ITypeSymbol enumerableType, ITypeSymbol enumeratorType, IEnumerable<(string, string, bool)> genericsMapping)
             => $"{method.Name}{method.TypeArguments.AsTypeArgumentsString(enumerableType, enumeratorType, genericsMapping)}";    
 
-		static INamedTypeSymbol ignoreAttributeSymbol;
-		static INamedTypeSymbol mappingAttributeSymbol;
-
         public static bool ShouldIgnore(this ISymbol symbol, Compilation compilation)
         {
-            ignoreAttributeSymbol ??= compilation.GetTypeByMetadataName("NetFabric.Hyperlinq.GeneratorIgnoreAttribute");
-            var attribute = symbol.FindAttributeFlattened(ignoreAttributeSymbol);
+            var attribute = symbol.FindAttributeFlattened(GetGeneratorIgnoreAttributeSymbol(compilation));
             return attribute is null 
                 ? false 
                 : (bool)attribute.ConstructorArguments[0].Value;
@@ -150,7 +163,7 @@ namespace NetFabric.Hyperlinq.Generator
         
         public static IEnumerable<(string, string, bool)> GetGenericMappings(this ITypeSymbol type, Compilation compilation)
         {
-            mappingAttributeSymbol ??= compilation.GetTypeByMetadataName("NetFabric.Hyperlinq.GeneratorMappingAttribute");
+            var mappingAttributeSymbol = GetGeneratorMappingAttributeSymbol(compilation);
             return type.GetAllAttributes()
                 .Where(attribute => attribute.AttributeClass.Equals(mappingAttributeSymbol))
                 .Select(attribute => (

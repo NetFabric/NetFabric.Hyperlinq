@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 
@@ -13,17 +12,30 @@ namespace NetFabric.Hyperlinq
 
         [Pure]
         static List<TSource> ToList<TSource>(this TSource[] source, int skipCount, int takeCount)
-            => new List<TSource>(new ToListCollection<TSource>(source, skipCount, takeCount));
+            => new List<TSource>(new IntervalToListCollection<TSource>(source, skipCount, takeCount));
 
         [Pure]
         static List<TSource> ToList<TSource>(this TSource[] source, Predicate<TSource> predicate, int skipCount, int takeCount)
         {
             var list = new List<TSource>();
-            var end = skipCount + takeCount;
-            for (var index = skipCount; index < end; index++)
+            if (skipCount == 0 && takeCount == source.Length)
             {
-                if (predicate(source[index]))
-                    list.Add(source[index]);
+                for (var index = 0; index < source.Length; index++)
+                {
+                    var item = source[index];
+                    if (predicate(item))
+                        list.Add(item);
+                }
+            }
+            else
+            {
+                var end = skipCount + takeCount;
+                for (var index = skipCount; index < end; index++)
+                {
+                    var item = source[index];
+                    if (predicate(item))
+                        list.Add(item);
+                }
             }
             return list;
         }
@@ -32,25 +44,38 @@ namespace NetFabric.Hyperlinq
         static List<TSource> ToList<TSource>(this TSource[] source, PredicateAt<TSource> predicate, int skipCount, int takeCount)
         {
             var list = new List<TSource>();
-            var end = skipCount + takeCount;
-            for (var index = skipCount; index < end; index++)
+            if (skipCount == 0 && takeCount == source.Length)
             {
-                if (predicate(source[index], index))
-                    list.Add(source[index]);
+                for (var index = 0; index < source.Length; index++)
+                {
+                    var item = source[index];
+                    if (predicate(item, index))
+                        list.Add(item);
+                }
+            }
+            else
+            {
+                var end = skipCount + takeCount;
+                for (var index = skipCount; index < end; index++)
+                {
+                    var item = source[index];
+                    if (predicate(item, index))
+                        list.Add(item);
+                }
             }
             return list;
         }
 
         // helper implementation of ICollection<> so that CopyTo() is used to convert to List<>
         [GeneratorIgnore]
-        sealed class ToListCollection<TSource>
+        sealed class IntervalToListCollection<TSource>
             : ToListCollectionBase<TSource>
         {
             readonly TSource[] source;
             readonly int skipCount;
             readonly int takeCount;
 
-            public ToListCollection(TSource[] source, int skipCount, int takeCount)
+            public IntervalToListCollection(TSource[] source, int skipCount, int takeCount)
                 : base(takeCount)
             {
                 this.source = source;

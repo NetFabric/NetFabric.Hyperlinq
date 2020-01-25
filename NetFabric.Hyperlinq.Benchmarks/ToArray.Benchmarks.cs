@@ -1,3 +1,4 @@
+using System;
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Configs;
 
@@ -48,6 +49,16 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [Benchmark]
         public int[] Hyperlinq_Array() =>
             array.ToArray();
+
+        [BenchmarkCategory("Array")]
+        [Benchmark]
+        public int[] Hyperlinq_Span() =>
+            array.AsSpan().ToArray();
+
+        [BenchmarkCategory("Array")]
+        [Benchmark]
+        public int[] Hyperlinq_Memory() =>
+            array.AsMemory().ToArray();
 
         [BenchmarkCategory("Enumerable_Value")]
         [Benchmark]
