@@ -105,10 +105,12 @@ namespace NetFabric.Hyperlinq.Generator
                 switch(type.Name)
                 {
                     case "TEnumerable":
+                    case "TList":
                         result.Add(enumerableType.ToDisplayString());
                         break;
                     case "TEnumerator":
-                        result.Add(enumeratorType.ToDisplayString());
+                        if (enumeratorType is object)
+                            result.Add(enumeratorType.ToDisplayString());
                         break;
                     default:
                         result.Add(type.ToDisplayString(genericsMapping));
@@ -121,17 +123,19 @@ namespace NetFabric.Hyperlinq.Generator
                 $"<{result.ToCommaSeparated()}>";
         }
 
-        public static string ToDisplayString(this ITypeSymbol type, ITypeSymbol enumerableType, ITypeSymbol enumeratorType, IEnumerable<(string, string, bool)> genericsMapping, Compilation compilation)
+        public static string ToDisplayString(this ITypeSymbol type, ITypeSymbol enumerableType, ITypeSymbol enumeratorType, IEnumerable<(string, string, bool)> genericsMapping)
         {
             if (type is INamedTypeSymbol namedType && namedType.IsGenericType)
             {
+                var displayName = namedType.ToDisplayString();
+                var classDisplayName = displayName.Substring(0, displayName.IndexOf('<'));
+
                 if (namedType.GetAllInterfaces()
                     .Any(@interface => 
-                        @interface.Equals(GetIValueEnumerableSymbol(compilation)) || 
-                        @interface.Equals(GetIAsyncValueEnumerableSymbol(compilation))))
+                        @interface.Name == "IReadOnlyList" || 
+                        @interface.Name == "IValueEnumerable" || 
+                        @interface.Name == "IAsyncValueEnumerable"))
                 {
-                    var displayName = namedType.ToDisplayString();
-                    var classDisplayName = displayName.Substring(0, displayName.IndexOf('<'));
                     return $"{classDisplayName}{namedType.TypeArguments.AsTypeArgumentsString(enumerableType, enumeratorType, genericsMapping)}";
                 }
             }

@@ -46,7 +46,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
 
         [Benchmark]
         public bool Hyperlinq_Value() =>
-            ReadOnlyList.AsValueEnumerable<TestList.Enumerable, TestList.Enumerable.Enumerator, int>(listValue, enumerable => enumerable.GetEnumerator()).All(item => (item & 0x01) == 0);
+            ReadOnlyList.AsValueEnumerable<TestList.Enumerable, int>(listValue).All(item => (item & 0x01) == 0);
 
         static bool AllEnumerable(TestEnumerable.Enumerable source, Predicate<int> predicate)
         {

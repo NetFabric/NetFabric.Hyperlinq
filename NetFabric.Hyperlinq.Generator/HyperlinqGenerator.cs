@@ -43,20 +43,17 @@ namespace NetFabric.Hyperlinq.Generator
                 .Where(method => 
                     method.IsPublic() && 
                     method.IsExtensionMethod && 
-                    method.IsGenericMethod &&
                     !method.ShouldIgnore(context.Compilation))))
             {
                 var extensionType = method.Parameters[0].Type;
-
                 var generic = method.TypeParameters
                     .FirstOrDefault(parameter => 
                         parameter.Name == extensionType.Name &&
                         parameter.ConstraintTypes.Length != 0);
-
                 if (generic is object)
                 {
-                    var constraintType = generic.ConstraintTypes[0];
-                    var key = constraintType.OriginalDefinition.MetadataName;
+                    var extendedType = generic.ConstraintTypes[0];
+                    var key = extendedType.OriginalDefinition.MetadataName;
                     if (!collectedExtensionMethods.TryGetValue(key, out var list))
                     {
                         list = new List<IMethodSymbol>();
@@ -92,7 +89,6 @@ namespace NetFabric.Hyperlinq.Generator
                 {
                     var valueEnumerableInterface = extendedType.GetAllInterfaces()
                         .FirstOrDefault(@interface => @interface.Name == "IValueEnumerable" || @interface.Name == "IAsyncValueEnumerable");
-
                     if (valueEnumerableInterface is null)
                         continue;
 

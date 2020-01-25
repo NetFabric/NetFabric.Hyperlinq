@@ -10,6 +10,7 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class ValueEnumerable
     {
+        [GeneratorIgnore]
         [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static AsyncValueEnumerableWrapper<TEnumerator, TSource> AsAsyncValueEnumerable<TEnumerator, TSource>(this IValueEnumerable<TSource, TEnumerator> source)

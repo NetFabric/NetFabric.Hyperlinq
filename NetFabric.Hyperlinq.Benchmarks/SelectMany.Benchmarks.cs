@@ -171,9 +171,10 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Hyperlinq_List_Reference()
         {
             var count = 0;
-            foreach (var item in ValueReadOnlyList.SelectMany<
-                    ReadOnlyList.ValueEnumerableWrapper<int>, ReadOnlyList.ValueEnumerableWrapper<int>.Enumerator, int,
-                    ValueEnumerable.ReturnEnumerable<int>, ValueEnumerable.ReturnEnumerable<int>.DisposableEnumerator, int>(listReference.AsValueEnumerable(), item => ValueEnumerable.Return(item)))
+            foreach (var item in ReadOnlyList.SelectMany<
+                    ReadOnlyList.ValueEnumerableWrapper<IReadOnlyList<int>, int>, int, 
+                    ValueEnumerable.ReturnEnumerable<int>, ValueEnumerable.ReturnEnumerable<int>.DisposableEnumerator, int>(
+                        ReadOnlyList.AsValueEnumerable<IReadOnlyList<int>, int>(listReference), item => ValueEnumerable.Return(item)))
                 count++;
             return count;
         }
