@@ -11,60 +11,17 @@ namespace NetFabric.Hyperlinq
     {
         [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ValueEnumerableWrapper<TSource> AsValueEnumerable<TSource>(this IReadOnlyList<TSource> source)
-            => new ValueEnumerableWrapper<TSource>(source);
+        public static ValueEnumerableWrapper<TList, TSource> AsValueEnumerable<TList, TSource>(this TList source)
+            where TList : notnull, IReadOnlyList<TSource>
+            => new ValueEnumerableWrapper<TList, TSource>(source);
 
-        [GeneratorIgnore]
-        [Pure]
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ValueEnumerableWrapper<TEnumerable, TEnumerator, TSource> AsValueEnumerable<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TEnumerable, TEnumerator> getEnumerator)
-            where TEnumerable : notnull, IReadOnlyList<TSource>
-            where TEnumerator : struct, IEnumerator<TSource>
-            => new ValueEnumerableWrapper<TEnumerable, TEnumerator, TSource>(source, getEnumerator);
-
-        public readonly partial struct ValueEnumerableWrapper<TEnumerable, TEnumerator, TSource>
-            : IValueReadOnlyList<TSource, TEnumerator>
-            where TEnumerable : notnull, IReadOnlyList<TSource>
-            where TEnumerator : struct, IEnumerator<TSource>
+        public readonly partial struct ValueEnumerableWrapper<TList, TSource>
+            : IValueReadOnlyList<TSource, ValueEnumerableWrapper<TList, TSource>.Enumerator>
+            where TList : notnull, IReadOnlyList<TSource>
         {
-            readonly TEnumerable source;
-            readonly Func<TEnumerable, TEnumerator> getEnumerator;
+            readonly TList source;
 
-            internal ValueEnumerableWrapper(TEnumerable source, Func<TEnumerable, TEnumerator> getEnumerator)
-            {
-                this.source = source;
-                this.getEnumerator = getEnumerator;
-            }
-
-            public readonly int Count
-                => source.Count;
-
-            public readonly TSource this[int index]
-                => source[index];
-
-            [Pure]
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly TEnumerator GetEnumerator() => getEnumerator(source);
-            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => getEnumerator(source);
-            readonly IEnumerator IEnumerable.GetEnumerator() => getEnumerator(source);
-
-            [Pure]
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public TSource[] ToArray()
-                => ReadOnlyList.ToArray(source);
-
-            [Pure]
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public List<TSource> ToList()
-                => ReadOnlyList.ToList(source);
-        }
-
-        public readonly partial struct ValueEnumerableWrapper<TSource>
-            : IValueReadOnlyList<TSource, ValueEnumerableWrapper<TSource>.Enumerator>
-        {
-            readonly IReadOnlyList<TSource> source;
-
-            internal ValueEnumerableWrapper(IReadOnlyList<TSource> source) 
+            internal ValueEnumerableWrapper(in TList source) 
                 => this.source = source;
 
             public readonly int Count
@@ -80,42 +37,49 @@ namespace NetFabric.Hyperlinq
             readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new Enumerator(source);
             readonly IEnumerator IEnumerable.GetEnumerator() => new Enumerator(source);
 
-            public readonly struct Enumerator
+            public struct Enumerator
                 : IEnumerator<TSource>
             {
-                readonly IEnumerator<TSource> enumerator;
+                readonly TList source;
+                int index;
 
-                internal Enumerator(IReadOnlyList<TSource> enumerable) 
-                    => enumerator = enumerable.GetEnumerator();
+                internal Enumerator(in TList source) 
+                {
+                    this.source = source;
+                    index = -1;
+                }
 
                 [MaybeNull]
                 public readonly TSource Current 
-                    => enumerator.Current;
+                    => source[index];
                 readonly object? IEnumerator.Current 
-                    => enumerator.Current;
+                    => source[index];
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                public readonly bool MoveNext() => enumerator.MoveNext();
+                public bool MoveNext() 
+                    => ++index < source.Count;
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                public readonly void Reset() => enumerator.Reset();
+                public void Reset() 
+                    => index = -1;
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                public readonly void Dispose() => enumerator.Dispose();
+                public readonly void Dispose() { }
             }
 
             [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TSource[] ToArray()
-                => ReadOnlyList.ToArray(source);
+                => ReadOnlyList.ToArray<TList, TSource>(source);
 
             [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public List<TSource> ToList()
-                => ReadOnlyList.ToList(source);
+                => ReadOnlyList.ToList<TList, TSource>(source);
         }
 
-        public static int Count<TSource>(this ValueEnumerableWrapper<TSource> source)
+        public static int Count<TList, TSource>(this ValueEnumerableWrapper<TList, TSource> source)
+            where TList : notnull, IReadOnlyList<TSource>
             => source.Count;
     }
 }

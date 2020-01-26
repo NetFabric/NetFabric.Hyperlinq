@@ -42,7 +42,7 @@ namespace NetFabric.Hyperlinq
                     array[0] = enumerator.Current;
                     count = 1;
 
-                    for (; enumerator.MoveNext(); count++)
+                    while (enumerator.MoveNext())
                     {
                         if (count == array.Length)
                         {
@@ -71,6 +71,7 @@ namespace NetFabric.Hyperlinq
                         }
 
                         array[count] = enumerator.Current;
+                        count++;
                     }
 
                     return (array, count);
