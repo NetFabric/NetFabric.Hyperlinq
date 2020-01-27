@@ -46,7 +46,6 @@ namespace NetFabric.Hyperlinq
         }
 
 
-        // Based on https://github.com/dotnet/runtime/blob/4359ebfc9943608b34f411366b1e544ac45702b7/src/libraries/Common/src/System/Collections/Generic/EnumerableHelpers.cs
         [Pure]
         internal static TSource[] ToArray<TList, TSource>(this TList source, Predicate<TSource> predicate, int skipCount, int takeCount)
             where TList : notnull, IReadOnlyList<TSource>
@@ -57,9 +56,9 @@ namespace NetFabric.Hyperlinq
             System.Array.Resize(ref array, length);
             return array;
 
-            static (TSource[], int) ToArrayWithLength(TList source, Predicate<TSource> predicate)
+            static (TSource[]?, int) ToArrayWithLength(TList source, Predicate<TSource> predicate)
             {
-                TSource[] array = null;
+                TSource[]? array = null;
                 var count = 0;
                 for (var index = 0; index < source.Count; index++)
                 {
@@ -67,21 +66,9 @@ namespace NetFabric.Hyperlinq
                     if (predicate(item))
                     {
                         if (count == 0)
-                        {
-                            const int DefaultCapacity = 4;
-
-                            array = new TSource[DefaultCapacity];
-                        }
-                        else if (count == array.Length)
-                        {
-                            const int MaxArrayLength = 0x7FEFFFFF;
-
-                            var newLength = count << 1;
-                            if ((uint)newLength > MaxArrayLength)
-                                newLength = MaxArrayLength <= count ? count + 1 : MaxArrayLength;
-
-                            System.Array.Resize(ref array, newLength);
-                        }
+                            array = Utils.ToArrayAllocate<TSource>();
+                        else if (count == array!.Length)
+                            Utils.ToArrayResize(ref array, count);
 
                         array[count] = item;
                         count++;
@@ -91,9 +78,9 @@ namespace NetFabric.Hyperlinq
                 return (array, count);
             }
 
-            static (TSource[], int) IntervalToArrayWithLength(TList source, Predicate<TSource> predicate, int skipCount, int takeCount)
+            static (TSource[]?, int) IntervalToArrayWithLength(TList source, Predicate<TSource> predicate, int skipCount, int takeCount)
             {
-                TSource[] array = null;
+                TSource[]? array = null;
                 var count = 0;
                 var end = skipCount + takeCount;
                 for (var index = skipCount; index < end; index++)
@@ -102,21 +89,9 @@ namespace NetFabric.Hyperlinq
                     if (predicate(item))
                     {
                         if (count == 0)
-                        {
-                            const int DefaultCapacity = 4;
-                            
-                            array = new TSource[DefaultCapacity];
-                        }
-                        else if (count == array.Length)
-                        {
-                            const int MaxArrayLength = 0x7FEFFFFF;
-
-                            var newLength = count << 1;
-                            if ((uint)newLength > MaxArrayLength)
-                                newLength = MaxArrayLength <= count ? count + 1 : MaxArrayLength;
-
-                            System.Array.Resize(ref array, newLength);
-                        }
+                            array = Utils.ToArrayAllocate<TSource>();
+                        else if (count == array!.Length)
+                            Utils.ToArrayResize(ref array, count);
 
                         array[count] = item;
                         count++;
