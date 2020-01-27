@@ -86,9 +86,10 @@ namespace NetFabric.Hyperlinq
 
                 public bool MoveNext()
                 {
+                    var span = source.Span;
                     while (++index < source.Length)
                     {
-                        if (predicate(source.Span[index], index))
+                        if (predicate(span[index], index))
                             return true;
                     }
                     return false;

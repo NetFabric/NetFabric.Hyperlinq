@@ -25,8 +25,9 @@ namespace NetFabric.Hyperlinq
 
             public override void CopyTo(TSource[] array, int _)
             {
+                var span = source.Span;
                 for (var index = 0; index < source.Length; index++)
-                    array[index] = source.Span[index];
+                    array[index] = span[index];
             }
         }
     }

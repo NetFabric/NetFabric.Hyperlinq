@@ -91,11 +91,12 @@ namespace NetFabric.Hyperlinq
 
                 public bool MoveNext()
                 {
+                    var span = source.Span;
                     while (++index < source.Length)
                     {
-                        if (set.Add(source.Span[index]))
+                        if (set.Add(span[index]))
                         {
-                            current = source.Span[index];
+                            current = span[index];
                             return true;
                         }
                     }
