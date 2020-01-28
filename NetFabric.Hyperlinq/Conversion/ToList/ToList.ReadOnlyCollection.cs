@@ -6,7 +6,7 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class ReadOnlyCollection
     {
-        public static List<T> ToList<T>(IReadOnlyCollection<T> source)
+        static List<T> ToList<T>(IReadOnlyCollection<T> source)
             => source switch
             {
                 ICollection<T> collection => new List<T>(collection), // no need to allocate helper class

@@ -26,7 +26,7 @@ namespace NetFabric.Hyperlinq
         }
 
         [Pure]
-        internal static TSource[] ToArray<TList, TSource>(this TList source, int skipCount, int takeCount)
+        static TSource[] ToArray<TList, TSource>(this TList source, int skipCount, int takeCount)
             where TList : notnull, IReadOnlyList<TSource>
         {
             var array = new TSource[takeCount];
@@ -47,7 +47,7 @@ namespace NetFabric.Hyperlinq
 
 
         [Pure]
-        internal static TSource[] ToArray<TList, TSource>(this TList source, Predicate<TSource> predicate, int skipCount, int takeCount)
+        static TSource[] ToArray<TList, TSource>(this TList source, Predicate<TSource> predicate, int skipCount, int takeCount)
             where TList : notnull, IReadOnlyList<TSource>
         {
             var (array, length) = (skipCount == 0 && takeCount == source.Count)

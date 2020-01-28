@@ -7,7 +7,7 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class AsyncEnumerable
     {
-        public static async ValueTask<List<TSource>> ToListAsync<TSource>(IAsyncEnumerable<TSource> source, CancellationToken cancellationToken = default)
+        static async ValueTask<List<TSource>> ToListAsync<TSource>(IAsyncEnumerable<TSource> source, CancellationToken cancellationToken = default)
         {
             var list = new List<TSource>();
             var enumerator = source.GetAsyncEnumerator(cancellationToken);
