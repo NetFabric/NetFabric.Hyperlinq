@@ -11,17 +11,15 @@ namespace NetFabric.Hyperlinq
     {
         [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ValueEnumerableWrapper<TList, TSource> AsValueEnumerable<TList, TSource>(this TList source)
-            where TList : notnull, IReadOnlyList<TSource>
-            => new ValueEnumerableWrapper<TList, TSource>(source);
+        public static ValueEnumerableWrapper<TSource> AsValueEnumerable<TSource>(this IReadOnlyList<TSource> source)
+            => new ValueEnumerableWrapper<TSource>(source);
 
-        public readonly partial struct ValueEnumerableWrapper<TList, TSource>
-            : IValueReadOnlyList<TSource, ValueEnumerableWrapper<TList, TSource>.Enumerator>
-            where TList : notnull, IReadOnlyList<TSource>
+        public readonly partial struct ValueEnumerableWrapper<TSource>
+            : IValueReadOnlyList<TSource, ValueEnumerableWrapper<TSource>.Enumerator>
         {
-            readonly TList source;
+            readonly IReadOnlyList<TSource> source;
 
-            internal ValueEnumerableWrapper(in TList source) 
+            internal ValueEnumerableWrapper(IReadOnlyList<TSource> source) 
                 => this.source = source;
 
             public readonly int Count
@@ -40,10 +38,10 @@ namespace NetFabric.Hyperlinq
             public struct Enumerator
                 : IEnumerator<TSource>
             {
-                readonly TList source;
+                readonly IReadOnlyList<TSource> source;
                 int index;
 
-                internal Enumerator(in TList source) 
+                internal Enumerator(IReadOnlyList<TSource> source) 
                 {
                     this.source = source;
                     index = -1;
@@ -70,16 +68,15 @@ namespace NetFabric.Hyperlinq
             [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TSource[] ToArray()
-                => ReadOnlyList.ToArray<TList, TSource>(source);
+                => ReadOnlyList.ToArray<IReadOnlyList<TSource>, TSource>(source);
 
             [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public List<TSource> ToList()
-                => ReadOnlyList.ToList<TList, TSource>(source);
+                => ReadOnlyList.ToList<IReadOnlyList<TSource>, TSource>(source);
         }
 
-        public static int Count<TList, TSource>(this ValueEnumerableWrapper<TList, TSource> source)
-            where TList : notnull, IReadOnlyList<TSource>
+        public static int Count<TSource>(this ValueEnumerableWrapper<TSource> source)
             => source.Count;
     }
 }

@@ -65,7 +65,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [BenchmarkCategory("List_Value")]
         [Benchmark]
         public long Hyperlinq_List_Value() =>
-            ReadOnlyList.AsValueEnumerable<TestList.Enumerable, int>(listValue)
+            ReadOnlyList.AsValueEnumerable<int>(listValue)
             .LongCount();
 
         [BenchmarkCategory("Enumerable_Reference")]

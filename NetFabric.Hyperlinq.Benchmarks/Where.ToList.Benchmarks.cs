@@ -89,7 +89,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [BenchmarkCategory("List_Value")]
         [Benchmark]
         public List<int> Hyperlinq_List_Value() =>
-            ReadOnlyList.AsValueEnumerable<TestList.Enumerable, int>(listValue)
+            ReadOnlyList.AsValueEnumerable<int>(listValue)
             .Where(item => (item & 0x01) == 0)
             .ToList();
 
