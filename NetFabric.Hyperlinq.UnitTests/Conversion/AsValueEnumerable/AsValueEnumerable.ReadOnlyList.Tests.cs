@@ -17,11 +17,11 @@ namespace NetFabric.Hyperlinq.UnitTests
 
             // Act
             var result = ReadOnlyList
-                .AsValueEnumerable<Wrap.ReadOnlyList<int>, int>(wrapped);
+                .AsValueEnumerable(wrapped);
 
             // Assert
             _ = result.Must()
-                .BeOfType<ReadOnlyList.ValueEnumerableWrapper<Wrap.ReadOnlyList<int>, int>>()
+                .BeOfType<ReadOnlyList.ValueEnumerableWrapper<int>>()
                 .BeEnumerableOf<int>()
                 .BeEqualTo(wrapped);
         }
@@ -38,7 +38,7 @@ namespace NetFabric.Hyperlinq.UnitTests
 
             // Act
             var result = ReadOnlyList
-                .AsValueEnumerable<Wrap.ReadOnlyList<int>, int>(wrapped)
+                .AsValueEnumerable(wrapped)
                 .ElementAt(index);
 
             // Assert
