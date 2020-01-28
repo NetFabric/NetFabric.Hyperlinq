@@ -1,5 +1,6 @@
 [![GitHub last commit (master)](https://img.shields.io/github/last-commit/NetFabric/NetFabric.Hyperlinq/master)](https://github.com/NetFabric/NetFabric.Hyperlinq/commits/master)
 [![GitHub Workflow Status (master)](https://img.shields.io/github/workflow/status/NetFabric/NetFabric.Hyperlinq/.NET%20Core/master)](https://github.com/NetFabric/NetFabric.Hyperlinq/actions)
+[![Coverage Status](https://coveralls.io/repos/github/NetFabric/NetFabric.Hyperlinq/badge.svg?branch=master)](https://coveralls.io/github/NetFabric/NetFabric.Hyperlinq?branch=master)
 [![NuGet Version](https://img.shields.io/nuget/v/NetFabric.Hyperlinq.svg)](https://www.nuget.org/packages/NetFabric.Hyperlinq/)
 [![NuGet Downloads](https://img.shields.io/nuget/dt/NetFabric.Hyperlinq.svg)](https://www.nuget.org/packages/NetFabric.Hyperlinq/)
 
@@ -163,6 +164,7 @@ The following open-source projects are used to build and test this project:
 
 - [.NET](https://github.com/dotnet)
 - [BenchmarkDotNet](https://benchmarkdotnet.org/)
+- [coveralls](https://coveralls.io)
 - [coverlet](https://github.com/tonerdo/coverlet)
 - [NetFabric.Assertive](https://github.com/NetFabric/NetFabric.Assertive)
 - [Uno.SourceGeneration](https://github.com/unoplatform/Uno.SourceGeneration)
