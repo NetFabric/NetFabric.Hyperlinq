@@ -3,7 +3,7 @@ using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests
 {
-    public class TakeValueReadOnlyListTests
+    public class TakeArrayTests
     {
         [Theory]
         [MemberData(nameof(TestData.TakeEmpty), MemberType = typeof(TestData))]
@@ -12,13 +12,12 @@ namespace NetFabric.Hyperlinq.UnitTests
         public void Take_With_ValidData_Should_Succeed(int[] source, int count)
         {
             // Arrange
-            var wrapped = Wrap.AsValueReadOnlyList(source);
             var expected = 
-                System.Linq.Enumerable.Take(wrapped, count);
+                System.Linq.Enumerable.Take(source, count);
 
             // Act
-            var result = ReadOnlyList
-                .Take<Wrap.ValueReadOnlyList<int>, int>(wrapped, count);
+            var result = Array
+                .Take(source, count);
 
             // Assert
             _ = result.Must()
