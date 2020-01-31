@@ -188,36 +188,27 @@ namespace NetFabric.Hyperlinq
             // helper implementation of ICollection<> so that CopyTo() is used to convert to List<>
             [GeneratorIgnore]
             sealed class ToListCollection
-                : ICollection<TSource>
+                : ToListCollectionBase<TSource>
             {
                 readonly TSource value;
                 readonly int count;
 
                 public ToListCollection(in RepeatEnumerable<TSource> source)
-                {
-                    this.value = source.value;
-                    this.count = source.count;
-                }
+                    : base(source.count)
+                    => value = source.value;
 
-                public int Count => count;
-
-                public bool IsReadOnly => true;
-
-                public void CopyTo(TSource[] array, int _)
+                public override void CopyTo(TSource[] array, int _)
                 {
                     if (value is null)
                         return; // no need to initialize
                         
+#if NETCORE    
+                    System.Array.Fill<TSource>(array, value);
+#else                
                     for (var index = 0; index < count; index++)
                         array[index] = value;
+#endif
                 }
-
-                IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => throw new NotSupportedException();
-                IEnumerator IEnumerable.GetEnumerator() => throw new NotSupportedException();
-                void ICollection<TSource>.Add(TSource item) => throw new NotSupportedException();
-                bool ICollection<TSource>.Remove(TSource item) => throw new NotSupportedException();
-                void ICollection<TSource>.Clear() => throw new NotSupportedException();
-                bool ICollection<TSource>.Contains(TSource item) => throw new NotSupportedException();
             }
         }
     }
