@@ -30,7 +30,9 @@ namespace NetFabric.Hyperlinq
             (item, index) => second(first(item, index), index);
 
         public static AsyncPredicate<TSource> Combine<TSource>(AsyncPredicate<TSource> first, AsyncPredicate<TSource> second) =>
-            async (item, cancellation) => await first(item, cancellation) && await second(item, cancellation);
+            async (item, cancellation) => 
+                await first(item, cancellation).ConfigureAwait(false) && 
+                await second(item, cancellation).ConfigureAwait(false);
 
         public static AsyncPredicateAt<TSource> Combine<TSource>(AsyncPredicateAt<TSource> first, AsyncPredicate<TSource> second) =>
             async (item, index, cancellation) => 
