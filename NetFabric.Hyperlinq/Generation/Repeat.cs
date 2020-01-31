@@ -191,7 +191,6 @@ namespace NetFabric.Hyperlinq
                 : ToListCollectionBase<TSource>
             {
                 readonly TSource value;
-                readonly int count;
 
                 public ToListCollection(in RepeatEnumerable<TSource> source)
                     : base(source.count)
@@ -199,15 +198,15 @@ namespace NetFabric.Hyperlinq
 
                 public override void CopyTo(TSource[] array, int _)
                 {
-                    if (value is null)
-                        return; // no need to initialize
-                        
+                    if (value is object)
+                    {
 #if NETCORE    
-                    System.Array.Fill<TSource>(array, value);
+                        System.Array.Fill<TSource>(array, value);
 #else                
-                    for (var index = 0; index < count; index++)
-                        array[index] = value;
+                        for (var index = 0; index < Count; index++)
+                            array[index] = value;
 #endif
+                    }
                 }
             }
         }

@@ -15,6 +15,10 @@
     <!-- <TreatWarningsAsErrors>true</TreatWarningsAsErrors> -->
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(TargetFramework)'=='netcoreapp2.1' Or '$(TargetFramework)'=='netstandard2.1'">
+    <DefineConstants>NETCORE</DefineConstants>
+  </PropertyGroup>
+
   <PropertyGroup Condition="'$(TargetFramework)'!='netstandard2.1'">
     <!-- disable nullable warning -->
     <NoWarn>$(NoWarn);8600;8601;8602;8603;8604</NoWarn>
