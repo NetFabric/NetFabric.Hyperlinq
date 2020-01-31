@@ -18,7 +18,8 @@ jobs:
     - name: Build solution
       run: dotnet build
     - name: Tests
-      run: dotnet test ./NetFabric.Hyperlinq.UnitTests/NetFabric.Hyperlinq.UnitTests.csproj -f:netcoreapp3.0
+      run: dotnet test -f:netcoreapp3.0 --collect:"XPlat Code Coverage" --settings coverlet.runsettings
+      working-directory: ./NetFabric.Hyperlinq.UnitTests
           
   windows:
     runs-on: windows-latest
@@ -32,14 +33,13 @@ jobs:
     - name: Build solution
       run: dotnet build
     - name: Tests
-      run: dotnet test ./NetFabric.Hyperlinq.UnitTests/NetFabric.Hyperlinq.UnitTests.csproj
-    - name: Generate coverage report
-      run: dotnet test ./NetFabric.Hyperlinq.UnitTests/NetFabric.Hyperlinq.UnitTests.csproj -f:netcoreapp3.0 -p:CollectCoverage=true -p:CoverletOutputFormat=lcov -p:CoverletOutput=TestResults/ /p:ExcludeByAttribute="GeneratedCodeAttribute" /p:ExcludeByFile="../NetFabric.Hyperlinq.Interfaces/*.cs"
+      run: dotnet test --collect:"XPlat Code Coverage" --settings coverlet.runsettings
+      working-directory: ./NetFabric.Hyperlinq.UnitTests
     - name: Publish coverage report to coveralls.io
       uses: coverallsapp/github-action@master
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
-        path-to-lcov: ./NetFabric.Hyperlinq.UnitTests/TestResults/coverage.info 
+        path-to-lcov: ./NetFabric.Hyperlinq.UnitTests/TestResults/**/coverage.info 
       
 
       

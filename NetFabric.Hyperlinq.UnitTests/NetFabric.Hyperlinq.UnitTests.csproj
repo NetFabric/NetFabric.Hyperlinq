@@ -25,20 +25,11 @@
     </PackageReference>
   </ItemGroup>
 
-	<ItemGroup Condition="'$(TargetFramework)'!='netstandard2.1'">
-		<PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="1.1.0" />
-	</ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\NetFabric.Hyperlinq\NetFabric.Hyperlinq.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <DotNetCliToolReference Include="dotnet-reportgenerator-cli" Version="4.3.8" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Generation\Return\" />
-  </ItemGroup>
-  
+  <ItemGroup Condition="'$(TargetFramework)'!='netstandard2.1'">
+		<PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="1.1.0" />
+	</ItemGroup>  
 </Project>
