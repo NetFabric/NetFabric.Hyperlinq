@@ -61,5 +61,56 @@ namespace NetFabric.Hyperlinq
                 }
             }
         }
+
+        [Pure]
+        static async ValueTask<List<TResult>> ToListAsync<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, AsyncSelector<TSource, TResult> selector, CancellationToken cancellationToken)
+            where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
+            where TEnumerator : struct, IAsyncEnumerator<TSource>
+        {
+            var enumerator = source.GetAsyncEnumerator(cancellationToken);
+            await using (enumerator.ConfigureAwait(false))
+            {
+                var list = new List<TResult>();
+                while (await enumerator.MoveNextAsync().ConfigureAwait(false))
+                    list.Add(await selector(enumerator.Current, cancellationToken).ConfigureAwait(false));
+                return list;
+            }
+        }
+
+        [Pure]
+        static async ValueTask<List<TResult>> ToListAsync<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, AsyncSelectorAt<TSource, TResult> selector, CancellationToken cancellationToken)
+            where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
+            where TEnumerator : struct, IAsyncEnumerator<TSource>
+        {
+            var enumerator = source.GetAsyncEnumerator(cancellationToken);
+            await using (enumerator.ConfigureAwait(false))
+            {
+                checked
+                {
+                    var list = new List<TResult>();
+                    for (var index = 0; await enumerator.MoveNextAsync().ConfigureAwait(false); index++)
+                        list.Add(await selector(enumerator.Current, index, cancellationToken).ConfigureAwait(false));
+                    return list;
+                }
+            }
+        }
+
+        [Pure]
+        static async ValueTask<List<TResult>> ToListAsync<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, AsyncPredicate<TSource> predicate, AsyncSelector<TSource, TResult> selector, CancellationToken cancellationToken)
+            where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
+            where TEnumerator : struct, IAsyncEnumerator<TSource>
+        {
+            var enumerator = source.GetAsyncEnumerator(cancellationToken);
+            await using (enumerator.ConfigureAwait(false))
+            {
+                var list = new List<TResult>();
+                while (await enumerator.MoveNextAsync().ConfigureAwait(false))
+                {
+                    if (await predicate(enumerator.Current, cancellationToken).ConfigureAwait(false))
+                        list.Add(await selector(enumerator.Current, cancellationToken).ConfigureAwait(false));
+                }
+                return list;
+            }
+        }
     }
 }

@@ -51,7 +51,7 @@ namespace NetFabric.Hyperlinq
                 {
                     enumerator = enumerable.source.GetEnumerator();
                     predicate = enumerable.predicate;
-                    index = -1;
+                    index = 0;
                 }
 
                 [MaybeNull]
@@ -74,10 +74,31 @@ namespace NetFabric.Hyperlinq
                     return false;
                 }
 
-                public readonly void Reset() => throw new NotSupportedException();
+                public readonly void Reset() 
+                    => throw new NotSupportedException();
 
-                public void Dispose() => enumerator.Dispose();
+                public void Dispose() 
+                    => enumerator.Dispose();
             }
+
+            public int Count()
+                => ValueEnumerable.Count<TEnumerable, TEnumerator, TSource>(source, predicate);
+            public int Count(Predicate<TSource> predicate)
+                => ValueEnumerable.Count<TEnumerable, TEnumerator, TSource>(source, Utils.Combine(this.predicate, predicate));
+            public int Count(PredicateAt<TSource> predicate)
+                => ValueEnumerable.Count<TEnumerable, TEnumerator, TSource>(source, Utils.Combine(this.predicate, predicate));
+
+            public bool Any()
+                => ValueEnumerable.Any<TEnumerable, TEnumerator, TSource>(source, predicate);
+            public bool Any(Predicate<TSource> predicate)
+                => ValueEnumerable.Any<TEnumerable, TEnumerator, TSource>(source, Utils.Combine(this.predicate, predicate));
+            public bool Any(PredicateAt<TSource> predicate)
+                => ValueEnumerable.Any<TEnumerable, TEnumerator, TSource>(source, Utils.Combine(this.predicate, predicate));
+
+            public ValueEnumerable.WhereIndexEnumerable<TEnumerable, TEnumerator, TSource> Where(Predicate<TSource> predicate)
+                => ValueEnumerable.Where<TEnumerable, TEnumerator, TSource>(source, Utils.Combine(this.predicate, predicate));
+            public ValueEnumerable.WhereIndexEnumerable<TEnumerable, TEnumerator, TSource> Where(PredicateAt<TSource> predicate)
+                => ValueEnumerable.Where<TEnumerable, TEnumerator, TSource>(source, Utils.Combine(this.predicate, predicate));
 
             public TSource First()
                 => ValueEnumerable.GetFirst<TEnumerable, TEnumerator, TSource>(source, predicate).ThrowOnEmpty();

@@ -60,7 +60,7 @@ namespace NetFabric.Hyperlinq
         }
 
         [Pure]
-        static async ValueTask<Dictionary<TKey, TSource>> ToDictionaryAsync<TEnumerable, TEnumerator, TSource, TKey>(this TEnumerable source, AsyncSelector<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer, PredicateAt<TSource> predicate, CancellationToken cancellationToken)
+        static async ValueTask<Dictionary<TKey, TSource>> ToDictionaryAsync<TEnumerable, TEnumerator, TSource, TKey>(this TEnumerable source, AsyncSelector<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer, AsyncPredicateAt<TSource> predicate, CancellationToken cancellationToken)
             where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
@@ -72,7 +72,7 @@ namespace NetFabric.Hyperlinq
                     var dictionary = new Dictionary<TKey, TSource>(0, comparer);
                     for (var index = 0; await enumerator.MoveNextAsync().ConfigureAwait(false); index++)
                     {
-                        if (predicate(enumerator.Current, index))
+                        if (await predicate(enumerator.Current, index, cancellationToken).ConfigureAwait(false))
                             dictionary.Add(
                                 await keySelector(enumerator.Current, cancellationToken).ConfigureAwait(false), 
                                 enumerator.Current);
