@@ -11,24 +11,24 @@ namespace NetFabric.Hyperlinq
     public static partial class AsyncValueEnumerable
     {
         [Pure]
-        public static WhereEnumerable<TEnumerable, TEnumerator, TSource> Where<TEnumerable, TEnumerator, TSource>(this TEnumerable source, AsyncPredicate<TSource> predicate)
+        public static WhereIndexEnumerable<TEnumerable, TEnumerator, TSource> Where<TEnumerable, TEnumerator, TSource>(this TEnumerable source, AsyncPredicateAt<TSource> predicate)
             where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
             if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
 
-            return new WhereEnumerable<TEnumerable, TEnumerator, TSource>(in source, predicate);
+            return new WhereIndexEnumerable<TEnumerable, TEnumerator, TSource>(in source, predicate);
         }
 
-        public readonly partial struct WhereEnumerable<TEnumerable, TEnumerator, TSource> 
-            : IAsyncValueEnumerable<TSource, WhereEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator>
+        public readonly partial struct WhereIndexEnumerable<TEnumerable, TEnumerator, TSource> 
+            : IAsyncValueEnumerable<TSource, WhereIndexEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator>
             where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
             internal readonly TEnumerable source;
-            internal readonly AsyncPredicate<TSource> predicate;
+            internal readonly AsyncPredicateAt<TSource> predicate;
 
-            internal WhereEnumerable(in TEnumerable source, AsyncPredicate<TSource> predicate)
+            internal WhereIndexEnumerable(in TEnumerable source, AsyncPredicateAt<TSource> predicate)
             {
                 this.source = source;
                 this.predicate = predicate;
@@ -44,13 +44,15 @@ namespace NetFabric.Hyperlinq
             {
                 [SuppressMessage("Style", "IDE0044:Add readonly modifier")]
                 TEnumerator enumerator; // do not make readonly
-                readonly AsyncPredicate<TSource> predicate;
+                readonly AsyncPredicateAt<TSource> predicate;
                 readonly CancellationToken cancellationToken;
+                int index;
 
-                internal Enumerator(in WhereEnumerable<TEnumerable, TEnumerator, TSource> enumerable, CancellationToken cancellationToken)
+                internal Enumerator(in WhereIndexEnumerable<TEnumerable, TEnumerator, TSource> enumerable, CancellationToken cancellationToken)
                 {
                     enumerator = enumerable.source.GetAsyncEnumerator();
                     predicate = enumerable.predicate;
+                    index = 0;
                     this.cancellationToken = cancellationToken;
                 }
 
@@ -60,9 +62,9 @@ namespace NetFabric.Hyperlinq
 
                 public async ValueTask<bool> MoveNextAsync()
                 {
-                    while (await enumerator.MoveNextAsync().ConfigureAwait(false))
+                    for (;await enumerator.MoveNextAsync().ConfigureAwait(false); index++)
                     {
-                        if (await predicate(enumerator.Current, cancellationToken).ConfigureAwait(false))
+                        if (await predicate(enumerator.Current, index, cancellationToken).ConfigureAwait(false))
                             return true;
                     }
                     await DisposeAsync().ConfigureAwait(false);
@@ -73,18 +75,6 @@ namespace NetFabric.Hyperlinq
                     => enumerator.DisposeAsync();
             }
 
-            public ValueTask<int> CountAsync(CancellationToken cancellationToken = default)
-                => AsyncValueEnumerable.CountAsync<TEnumerable, TEnumerator, TSource>(source, predicate, cancellationToken);
-            public ValueTask<int> CountAsync(AsyncPredicate<TSource> predicate, CancellationToken cancellationToken = default)
-                => AsyncValueEnumerable.CountAsync<TEnumerable, TEnumerator, TSource>(source, Utils.Combine(this.predicate, predicate), cancellationToken);
-            public ValueTask<int> CountAsync(AsyncPredicateAt<TSource> predicate, CancellationToken cancellationToken = default)
-                => AsyncValueEnumerable.CountAsync<TEnumerable, TEnumerator, TSource>(source, Utils.Combine(this.predicate, predicate), cancellationToken);
-
-            public ValueTask<long> LongCountAsync(CancellationToken cancellationToken = default)
-                => AsyncValueEnumerable.LongCountAsync<TEnumerable, TEnumerator, TSource>(source, predicate, cancellationToken);
-            public ValueTask<long> LongCountAsync(AsyncPredicate<TSource> predicate, CancellationToken cancellationToken = default)
-                => AsyncValueEnumerable.LongCountAsync<TEnumerable, TEnumerator, TSource>(source, Utils.Combine(this.predicate, predicate), cancellationToken);
-
             public ValueTask<bool> AnyAsync(CancellationToken cancellationToken = default)
                 => AsyncValueEnumerable.AnyAsync<TEnumerable, TEnumerator, TSource>(source, predicate, cancellationToken);
             public ValueTask<bool> AnyAsync(AsyncPredicate<TSource> predicate, CancellationToken cancellationToken = default)
@@ -92,10 +82,7 @@ namespace NetFabric.Hyperlinq
             public ValueTask<bool> AnyAsync(AsyncPredicateAt<TSource> predicate, CancellationToken cancellationToken = default)
                 => AsyncValueEnumerable.AnyAsync<TEnumerable, TEnumerator, TSource>(source, Utils.Combine(this.predicate, predicate), cancellationToken);
 
-            public AsyncValueEnumerable.WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult> Select<TResult>(AsyncSelector<TSource, TResult> selector)
-                => AsyncValueEnumerable.WhereSelect<TEnumerable, TEnumerator, TSource, TResult>(source, predicate, selector);
-
-            public AsyncValueEnumerable.WhereEnumerable<TEnumerable, TEnumerator, TSource> Where(AsyncPredicate<TSource> predicate)
+            public AsyncValueEnumerable.WhereIndexEnumerable<TEnumerable, TEnumerator, TSource> Where(AsyncPredicate<TSource> predicate)
                 => AsyncValueEnumerable.Where<TEnumerable, TEnumerator, TSource>(source, Utils.Combine(this.predicate, predicate));
             public AsyncValueEnumerable.WhereIndexEnumerable<TEnumerable, TEnumerator, TSource> Where(AsyncPredicateAt<TSource> predicate)
                 => AsyncValueEnumerable.Where<TEnumerable, TEnumerator, TSource>(source, Utils.Combine(this.predicate, predicate));
@@ -120,9 +107,9 @@ namespace NetFabric.Hyperlinq
                 => (await AsyncValueEnumerable.GetFirstAsync<TEnumerable, TEnumerator, TSource>(source, Utils.Combine(this.predicate, predicate), cancellationToken).ConfigureAwait(false))
                     .DefaultOnEmpty();
 
-            public ValueTask<(ElementResult Success, TSource Value)> TryFirstAsync(CancellationToken cancellationToken = default)
+            public ValueTask<(int Index, TSource Value)> TryFirstAsync(CancellationToken cancellationToken = default)
                 => AsyncValueEnumerable.GetFirstAsync<TEnumerable, TEnumerator, TSource>(source, predicate, cancellationToken);
-            public ValueTask<(ElementResult Success, TSource Value)> TryFirstAsync(AsyncPredicate<TSource> predicate, CancellationToken cancellationToken = default)
+            public ValueTask<(int Index, TSource Value)> TryFirstAsync(AsyncPredicate<TSource> predicate, CancellationToken cancellationToken = default)
                 => AsyncValueEnumerable.GetFirstAsync<TEnumerable, TEnumerator, TSource>(source, Utils.Combine(this.predicate, predicate), cancellationToken);
             public ValueTask<(int Index, TSource Value)> TryFirstAsync(AsyncPredicateAt<TSource> predicate, CancellationToken cancellationToken = default)
                 => AsyncValueEnumerable.GetFirstAsync<TEnumerable, TEnumerator, TSource>(source, Utils.Combine(this.predicate, predicate), cancellationToken);
