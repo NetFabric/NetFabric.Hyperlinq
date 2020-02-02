@@ -118,52 +118,7 @@ namespace NetFabric.Hyperlinq
                 => selector(ValueEnumerable.SingleOrDefault<TEnumerable, TEnumerator, TSource>(source), 0);
 
             public List<TResult> ToList()
-            {
-                var list = new List<TResult>();
-
-                using var enumerator = source.GetEnumerator();
-                for (var index = 0; enumerator.MoveNext(); index++)
-                    list.Add(selector(enumerator.Current, index));
-
-                return list;
-            }
-
-            public Dictionary<TKey, TResult> ToDictionary<TKey>(Selector<TResult, TKey> keySelector)
-                => ToDictionary<TKey>(keySelector, EqualityComparer<TKey>.Default);
-            public Dictionary<TKey, TResult> ToDictionary<TKey>(Selector<TResult, TKey> keySelector, IEqualityComparer<TKey> comparer)
-            {
-                var dictionary = new Dictionary<TKey, TResult>(0, comparer);
-
-                TResult result;
-                using var enumerator = source.GetEnumerator();
-                for (var index = 0; enumerator.MoveNext(); index++)
-                {
-                    result = selector(enumerator.Current, index);
-                    dictionary.Add(keySelector(result), result);
-                }
-
-                return dictionary;
-            }
-
-            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Selector<TResult, TKey> keySelector, Selector<TResult, TElement> elementSelector)
-                => ToDictionary<TKey, TElement>(keySelector, elementSelector, EqualityComparer<TKey>.Default);
-            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Selector<TResult, TKey> keySelector, Selector<TResult, TElement> elementSelector, IEqualityComparer<TKey> comparer)
-            {
-                var dictionary = new Dictionary<TKey, TElement>(0, comparer);
-
-                TResult result;
-                using var enumerator = source.GetEnumerator();
-                checked
-                {
-                    for (var index = 0; enumerator.MoveNext(); index++)
-                    {
-                        result = selector(enumerator.Current, index);
-                        dictionary.Add(keySelector(result), elementSelector(result));
-                    }
-                }
-
-                return dictionary;
-            }
+                => ValueEnumerable.ToList<TEnumerable, TEnumerator, TSource, TResult>(source, selector);
 
             public void ForEach(Action<TResult> action)
                 => ValueEnumerable.ForEach<TEnumerable, TEnumerator, TSource, TResult>(source, action, selector);
