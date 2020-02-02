@@ -10,25 +10,6 @@ namespace NetFabric.Hyperlinq
         [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static List<TSource> ToList<TSource>(this ReadOnlyMemory<TSource> source)
-            => new List<TSource>(new MemoryToListCollection<TSource>(source));
-
-        // helper implementation of ICollection<> so that CopyTo() is used to convert to List<>
-        [GeneratorIgnore]
-        sealed class MemoryToListCollection<TSource>
-            : ToListCollectionBase<TSource>
-        {
-            readonly ReadOnlyMemory<TSource> source;
-
-            public MemoryToListCollection(ReadOnlyMemory<TSource> source)
-                : base(source.Length)
-                => this.source = source;
-
-            public override void CopyTo(TSource[] array, int _)
-            {
-                var span = source.Span;
-                for (var index = 0; index < source.Length; index++)
-                    array[index] = span[index];
-            }
-        }
+            => ToList(source.Span);
     }
 }

@@ -187,7 +187,7 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public List<TResult> ToList()
-                => new List<TResult>(new ToListCollection(this));
+                => Array.ToList<TSource, TResult>(source, selector, skipCount, takeCount);
 
             public Dictionary<TKey, TResult> ToDictionary<TKey>(Selector<TResult, TKey> keySelector)
                 => ToDictionary<TKey>(keySelector, EqualityComparer<TKey>.Default);
@@ -227,42 +227,6 @@ namespace NetFabric.Hyperlinq
                 => Array.ForEach<TSource, TResult>(source, action, selector, skipCount, takeCount);
             public void ForEach(ActionAt<TResult> action)
                 => Array.ForEach<TSource, TResult>(source, action, selector, skipCount, takeCount);
-
-            // helper implementation of ICollection<> so that CopyTo() is used to convert to List<>
-            [GeneratorIgnore]
-            sealed class ToListCollection
-                : ICollection<TResult>
-            {
-                readonly TSource[] source;
-                readonly Selector<TSource, TResult> selector;
-                readonly int skipCount;
-                readonly int takeCount;
-
-                public ToListCollection(in SelectEnumerable<TSource, TResult> source)
-                {
-                    this.source = source.source;
-                    this.selector = source.selector;
-                    this.skipCount = source.skipCount;
-                    this.takeCount = source.takeCount;
-                }
-
-                public int Count => takeCount;
-
-                public bool IsReadOnly => true;
-
-                public void CopyTo(TResult[] array, int _)
-                {
-                    for (var index = 0; index < takeCount; index++)
-                        array[index] = selector(source[index + skipCount]);
-                }
-
-                IEnumerator<TResult> IEnumerable<TResult>.GetEnumerator() => throw new NotSupportedException();
-                IEnumerator IEnumerable.GetEnumerator() => throw new NotSupportedException();
-                void ICollection<TResult>.Add(TResult item) => throw new NotSupportedException();
-                bool ICollection<TResult>.Remove(TResult item) => throw new NotSupportedException();
-                void ICollection<TResult>.Clear() => throw new NotSupportedException();
-                bool ICollection<TResult>.Contains(TResult item) => throw new NotSupportedException();
-            }
         }
 
         [Pure]

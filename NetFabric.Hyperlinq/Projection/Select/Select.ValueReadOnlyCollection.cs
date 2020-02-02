@@ -145,47 +145,12 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public List<TResult> ToList()
-                => new List<TResult>(new ToListCollection(this));
+                => ValueReadOnlyCollection.ToList<TEnumerable, TEnumerator, TSource, TResult>(source, selector);
 
             public void ForEach(Action<TResult> action)
                 => ValueReadOnlyCollection.ForEach<TEnumerable, TEnumerator, TSource, TResult>(source, action, selector);
             public void ForEach(ActionAt<TResult> action)
                 => ValueReadOnlyCollection.ForEach<TEnumerable, TEnumerator, TSource, TResult>(source, action, selector);
-
-            // helper implementation of ICollection<> so that CopyTo() is used to convert to List<>
-            [GeneratorIgnore]
-            sealed class ToListCollection
-                : ICollection<TResult>
-            {
-                readonly TEnumerable source;
-                readonly Selector<TSource, TResult> selector;
-
-                public ToListCollection(in SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult> source)
-                {
-                    this.source = source.source;
-                    this.selector = source.selector;
-                }
-
-                public int Count => source.Count;
-
-                public bool IsReadOnly => true;
-
-                public void CopyTo(TResult[] array, int _)
-                {
-                    using var enumerator = source.GetEnumerator();
-                    for (var index = 0; enumerator.MoveNext(); index++)
-                    {
-                        array[index] = selector(enumerator.Current);
-                    }
-                }
-
-                IEnumerator<TResult> IEnumerable<TResult>.GetEnumerator() => throw new NotSupportedException();
-                IEnumerator IEnumerable.GetEnumerator() => throw new NotSupportedException();
-                void ICollection<TResult>.Add(TResult item) => throw new NotSupportedException();
-                bool ICollection<TResult>.Remove(TResult item) => throw new NotSupportedException();
-                void ICollection<TResult>.Clear() => throw new NotSupportedException();
-                bool ICollection<TResult>.Contains(TResult item) => throw new NotSupportedException();
-            }
 
             public Dictionary<TKey, TResult> ToDictionary<TKey>(Selector<TResult, TKey> keySelector)
                 => ToDictionary<TKey>(keySelector, EqualityComparer<TKey>.Default);

@@ -10,6 +10,6 @@ namespace NetFabric.Hyperlinq
         [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static List<TSource> ToList<TSource>(this Memory<TSource> source)
-            => ToList((ReadOnlyMemory<TSource>)source);
+            => ToList((ReadOnlySpan<TSource>)source.Span);
     }
 }
