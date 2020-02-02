@@ -48,5 +48,21 @@ namespace NetFabric.Hyperlinq
             async (item, index, cancellation) => 
                 await first(item, index, cancellation).ConfigureAwait(false) && 
                 await second(item, index, cancellation).ConfigureAwait(false);
+
+        public static AsyncSelector<TSource, TTarget> Combine<TSource, TMiddle, TTarget>(AsyncSelector<TSource, TMiddle> first, AsyncSelector<TMiddle, TTarget> second) => 
+            async (item, cancellation) => 
+                await second(await first(item, cancellation).ConfigureAwait(false), cancellation).ConfigureAwait(false);
+
+        public static AsyncSelectorAt<TSource, TTarget> Combine<TSource, TMiddle, TTarget>(AsyncSelectorAt<TSource, TMiddle> first, AsyncSelector<TMiddle, TTarget> second) => 
+            async (item, index, cancellation) => 
+                await second(await first(item, index, cancellation).ConfigureAwait(false), cancellation).ConfigureAwait(false);
+
+        public static AsyncSelectorAt<TSource, TTarget> Combine<TSource, TMiddle, TTarget>(AsyncSelector<TSource, TMiddle> first, AsyncSelectorAt<TMiddle, TTarget> second) => 
+            async (item, index, cancellation) => 
+                await second(await first(item, cancellation).ConfigureAwait(false), index, cancellation).ConfigureAwait(false);
+
+        public static AsyncSelectorAt<TSource, TTarget> Combine<TSource, TMiddle, TTarget>(AsyncSelectorAt<TSource, TMiddle> first, AsyncSelectorAt<TMiddle, TTarget> second) => 
+            async (item, index, cancellation) => 
+                await second(await first(item, index, cancellation).ConfigureAwait(false), index, cancellation).ConfigureAwait(false);
     }
 }

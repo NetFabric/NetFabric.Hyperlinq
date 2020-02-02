@@ -103,18 +103,7 @@ namespace NetFabric.Hyperlinq
                 => ValueEnumerable.Any<TEnumerable, TEnumerator, TSource>(source, Utils.Combine(this.predicate, predicate));
 
             public List<TResult> ToList()
-            {
-                var list = new List<TResult>();
-
-                using var enumerator = source.GetEnumerator();
-                while (enumerator.MoveNext())
-                {
-                    if (predicate(enumerator.Current))
-                        list.Add(selector(enumerator.Current));
-                }
-
-                return list;
-            }
+                => ValueEnumerable.ToList<TEnumerable, TEnumerator, TSource, TResult>(source, predicate, selector);
 
             public Dictionary<TKey, TResult> ToDictionary<TKey>(Selector<TResult, TKey> keySelector)
                 => ToDictionary<TKey>(keySelector, EqualityComparer<TKey>.Default);
