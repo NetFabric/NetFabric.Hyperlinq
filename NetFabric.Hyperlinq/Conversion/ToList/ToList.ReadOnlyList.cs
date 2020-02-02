@@ -7,22 +7,22 @@ namespace NetFabric.Hyperlinq
     public static partial class ReadOnlyList
     {
         [Pure]
-        internal static List<TSource> ToList<TList, TSource>(this TList source)
+        public static List<TSource> ToList<TList, TSource>(this TList source)
             where TList : notnull, IReadOnlyList<TSource>
             => source switch
             {
                 ICollection<TSource> collection => new List<TSource>(collection), // no need to allocate helper class
 
-                _ => new List<TSource>(new ToListCollection<TList, TSource>(source)),
+                _ => new List<TSource>(new ToListCollection<TList, TSource>(source, 0, source.Count)),
             };
 
         [Pure]
-        internal static List<TSource> ToList<TList, TSource>(this TList source, int skipCount, int takeCount)
+        static List<TSource> ToList<TList, TSource>(this TList source, int skipCount, int takeCount)
             where TList : notnull, IReadOnlyList<TSource>
-            => new List<TSource>(new IntervalToListCollection<TList, TSource>(source, skipCount, takeCount));
+            => new List<TSource>(new ToListCollection<TList, TSource>(source, skipCount, takeCount));
 
         [Pure]
-        internal static List<TSource> ToList<TList, TSource>(this TList source, Predicate<TSource> predicate, int skipCount, int takeCount)
+        static List<TSource> ToList<TList, TSource>(this TList source, Predicate<TSource> predicate, int skipCount, int takeCount)
             where TList : notnull, IReadOnlyList<TSource>
         {
             var list = new List<TSource>();
@@ -37,7 +37,7 @@ namespace NetFabric.Hyperlinq
         }
 
         [Pure]
-        internal static List<TSource> ToList<TList, TSource>(this TList source, PredicateAt<TSource> predicate, int skipCount, int takeCount)
+        static List<TSource> ToList<TList, TSource>(this TList source, PredicateAt<TSource> predicate, int skipCount, int takeCount)
             where TList : notnull, IReadOnlyList<TSource>
         {
             var list = new List<TSource>();
@@ -51,28 +51,19 @@ namespace NetFabric.Hyperlinq
             return list;
         }
 
-        // helper implementation of ICollection<> so that CopyTo() is used to convert to List<>
-        [GeneratorIgnore]
-        internal sealed class ToListCollection<TList, TSource>
-            : ToListCollectionBase<TSource>
+        [Pure]
+        static List<TResult> ToList<TList, TSource, TResult>(this TList source, Selector<TSource, TResult> selector, int skipCount, int takeCount)
             where TList : notnull, IReadOnlyList<TSource>
-        {
-            readonly TList source;
+            => new List<TResult>(new ToListCollection<TList, TSource, TResult>(source, selector, skipCount, takeCount));
 
-            public ToListCollection(in TList source)
-                : base(source.Count)
-                => this.source = source;
-
-            public override void CopyTo(TSource[] array, int _)
-            {
-                for (var index = 0; index < source.Count; index++)
-                    array[index] = source[index];
-            }
-        }
+        [Pure]
+        static List<TResult> ToList<TList, TSource, TResult>(this TList source, SelectorAt<TSource, TResult> selector, int skipCount, int takeCount)
+            where TList : notnull, IReadOnlyList<TSource>
+            => new List<TResult>(new IndexedToListCollection<TList, TSource, TResult>(source, selector, skipCount, takeCount));
 
         // helper implementation of ICollection<> so that CopyTo() is used to convert to List<>
         [GeneratorIgnore]
-        internal sealed class IntervalToListCollection<TList, TSource>
+        sealed class ToListCollection<TList, TSource>
             : ToListCollectionBase<TSource>
             where TList : notnull, IReadOnlyList<TSource>
         {
@@ -80,7 +71,7 @@ namespace NetFabric.Hyperlinq
             readonly int skipCount;
             readonly int takeCount;
 
-            public IntervalToListCollection(in TList source, int skipCount, int takeCount)
+            public ToListCollection(in TList source, int skipCount, int takeCount)
                 : base(takeCount)
             {
                 this.source = source;
@@ -90,8 +81,86 @@ namespace NetFabric.Hyperlinq
 
             public override void CopyTo(TSource[] array, int _)
             {
-                for (var index = 0; index < takeCount; index++)
-                    array[index] = source[index + skipCount];
+                if (skipCount == 0 && takeCount == source.Count)
+                {
+                    for (var index = 0; index < source.Count; index++)
+                        array[index] = source[index];
+                }
+                else
+                {
+                    for (var index = 0; index < takeCount; index++)
+                        array[index] = source[index + skipCount];
+                }
+            }
+        }
+
+        // helper implementation of ICollection<> so that CopyTo() is used to convert to List<>
+        [GeneratorIgnore]
+        sealed class ToListCollection<TList, TSource, TResult>
+            : ToListCollectionBase<TResult>
+            where TList : notnull, IReadOnlyList<TSource>
+        {
+            readonly TList source;
+            readonly Selector<TSource, TResult> selector;
+            readonly int skipCount;
+            readonly int takeCount;
+
+            public ToListCollection(in TList source, Selector<TSource, TResult> selector, int skipCount, int takeCount)
+                : base(takeCount)
+            {
+                this.source = source;
+                this.selector = selector;
+                this.skipCount = skipCount;
+                this.takeCount = takeCount;
+            }
+
+            public override void CopyTo(TResult[] array, int _)
+            {
+                if (skipCount == 0 && takeCount == source.Count)
+                {
+                    for (var index = 0; index < source.Count; index++)
+                        array[index] = selector(source[index]);
+                }
+                else
+                {
+                    for (var index = 0; index < takeCount; index++)
+                        array[index] = selector(source[index + skipCount]);
+                }
+            }
+        }
+
+        // helper implementation of ICollection<> so that CopyTo() is used to convert to List<>
+        [GeneratorIgnore]
+        sealed class IndexedToListCollection<TList, TSource, TResult>
+            : ToListCollectionBase<TResult>
+            where TList : notnull, IReadOnlyList<TSource>
+        {
+            readonly TList source;
+            readonly SelectorAt<TSource, TResult> selector;
+            readonly int skipCount;
+            readonly int takeCount;
+
+            public IndexedToListCollection(in TList source, SelectorAt<TSource, TResult> selector, int skipCount, int takeCount)
+                : base(takeCount)
+            {
+                this.source = source;
+                this.selector = selector;
+                this.skipCount = skipCount;
+                this.takeCount = takeCount;
+            }
+
+            public override void CopyTo(TResult[] array, int _)
+            {
+                if (skipCount == 0 && takeCount == source.Count)
+                {
+                    for (var index = 0; index < source.Count; index++)
+                        array[index] = selector(source[index], index);
+                }
+                else
+                {
+                    for (var index = 0; index < takeCount; index++)
+                        array[index] = selector(source[index + skipCount], index);
+                }
             }
         }
     }
