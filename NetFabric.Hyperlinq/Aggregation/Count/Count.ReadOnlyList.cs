@@ -13,13 +13,7 @@ namespace NetFabric.Hyperlinq
         {
             if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
 
-            var count = 0;
-            for (var index = 0; index < source.Count; index++)
-            {
-                var result = predicate(source[index]);
-                count += Unsafe.As<bool, byte>(ref result);
-            }
-            return count;
+            return Count<TList, TSource>(source, predicate, 0, source.Count);
         }
 
         [Pure]
@@ -42,17 +36,11 @@ namespace NetFabric.Hyperlinq
         {
             if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
 
-            var count = 0;
-            for (var index = 0; index < source.Count; index++)
-            {
-                var result = predicate(source[index], index);
-                count += Unsafe.As<bool, byte>(ref result);
-            }
-            return count;
+            return Count<TList, TSource>(source, predicate, 0, source.Count);
         }
 
         [Pure]
-        internal static int Count<TList, TSource>(this TList source, PredicateAt<TSource> predicate, int skipCount, int takeCount)
+        static int Count<TList, TSource>(this TList source, PredicateAt<TSource> predicate, int skipCount, int takeCount)
             where TList : notnull, IReadOnlyList<TSource>
         {
             var count = 0;

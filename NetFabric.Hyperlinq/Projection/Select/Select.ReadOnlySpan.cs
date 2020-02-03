@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
 using System.Runtime.CompilerServices;
@@ -83,6 +84,11 @@ namespace NetFabric.Hyperlinq
             [return: MaybeNull]
             public TResult SingleOrDefault()
                 => selector(source.SingleOrDefault());
+
+            [Pure]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public List<TResult> ToList()
+                => ToList<TSource, TResult>(source, selector);
 
             public void ForEach(Action<TResult> action)
                 => source.ForEach(action, selector);

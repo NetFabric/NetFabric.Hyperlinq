@@ -95,8 +95,9 @@ namespace NetFabric.Hyperlinq
             {
                 while (await enumerator.MoveNextAsync().ConfigureAwait(false))
                 {
-                    if (await predicate(enumerator.Current, cancellationToken).ConfigureAwait(false))
-                        return (ElementResult.Success, enumerator.Current);
+                    var item = enumerator.Current;
+                    if (await predicate(item, cancellationToken).ConfigureAwait(false))
+                        return (ElementResult.Success, item);
                 }   
 
                 return (ElementResult.Empty, default);
@@ -115,8 +116,9 @@ namespace NetFabric.Hyperlinq
                 {
                     for (var index = 0; await enumerator.MoveNextAsync().ConfigureAwait(false); index++)
                     {
-                        if (await predicate(enumerator.Current, index, cancellationToken).ConfigureAwait(false))
-                            return (index, enumerator.Current);
+                        var item = enumerator.Current;
+                        if (await predicate(item, index, cancellationToken).ConfigureAwait(false))
+                            return (index, item);
                     }
                 }   
 

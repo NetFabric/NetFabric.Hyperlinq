@@ -175,6 +175,7 @@ namespace NetFabric.Hyperlinq
 
             public TSource[] ToArray()
                 => Array.ToArray<TSource>(source, predicate, skipCount, takeCount);
+
             public List<TSource> ToList()
                 => Array.ToList<TSource>(source, predicate, skipCount, takeCount);
 

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Configs;
@@ -49,6 +50,16 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [Benchmark]
         public List<int> Hyperlinq_Array() =>
             array.Select(item => item).ToList();
+
+        [BenchmarkCategory("Array")]
+        [Benchmark]
+        public List<int> Hyperlinq_Span() =>
+            array.AsSpan().Select(item => item).ToList();
+
+        [BenchmarkCategory("Array")]
+        [Benchmark]
+        public List<int> Hyperlinq_Memory() =>
+            array.AsMemory().Select(item => item).ToList();
 
         [BenchmarkCategory("Enumerable_Value")]
         [Benchmark]

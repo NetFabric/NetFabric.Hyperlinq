@@ -74,5 +74,61 @@ namespace NetFabric.Hyperlinq
                 return (array, count);
             }
         }
+
+
+        [Pure]
+        static TSource[] ToArray<TSource>(this TSource[] source, PredicateAt<TSource> predicate, int skipCount, int takeCount)
+        {
+            var (array, length) = (skipCount == 0 && takeCount == source.Length)
+                ? ToArrayWithLength(source, predicate)
+                : IntervalToArrayWithLength(source, predicate, skipCount, takeCount);
+            System.Array.Resize(ref array, length);
+            return array;
+
+            static (TSource[]?, int) ToArrayWithLength(TSource[] source, PredicateAt<TSource> predicate)
+            {
+                TSource[]? array = null;
+                var count = 0;
+                for (var index = 0; index < source.Length; index++)
+                {
+                    var item = source[index];
+                    if (predicate(item, index))
+                    {
+                        if (count == 0)
+                            array = Utils.ToArrayAllocate<TSource>();
+                        else if (count == array!.Length)
+                            Utils.ToArrayResize(ref array, count);
+
+                        array[count] = item;
+                        count++;
+                    }
+                }
+
+                return (array, count);
+            }
+
+            static (TSource[]?, int) IntervalToArrayWithLength(TSource[] source, PredicateAt<TSource> predicate, int skipCount, int takeCount)
+            {
+                TSource[]? array = null;
+                var count = 0;
+                var end = skipCount + takeCount;
+                for (var index = skipCount; index < end; index++)
+                {
+                    var item = source[index];
+                    if (predicate(item, index))
+                    {
+                        if (count == 0)
+                            array = Utils.ToArrayAllocate<TSource>();
+                        else if (count == array!.Length)
+                            Utils.ToArrayResize(ref array, count);
+
+                        array[count] = item;
+                        count++;
+                    }
+                }
+
+                return (array, count);
+            }
+        }
     }
 }
