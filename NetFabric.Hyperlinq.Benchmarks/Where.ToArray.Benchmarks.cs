@@ -52,6 +52,11 @@ namespace NetFabric.Hyperlinq.Benchmarks
 
         [BenchmarkCategory("Array")]
         [Benchmark]
+        public int[] Hyperlinq_Span() =>
+            array.AsSpan().Where(item => (item & 0x01) == 0).ToArray();
+
+        [BenchmarkCategory("Array")]
+        [Benchmark]
         public int[] Hyperlinq_Memory() =>
             array.AsMemory().Where(item => (item & 0x01) == 0).ToArray();
 

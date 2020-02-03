@@ -185,6 +185,7 @@ namespace NetFabric.Hyperlinq
                 return array;
             }
 
+            [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public List<TResult> ToList()
                 => Array.ToList<TSource, TResult>(source, selector, skipCount, takeCount);

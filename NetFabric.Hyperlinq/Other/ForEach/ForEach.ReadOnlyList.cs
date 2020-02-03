@@ -10,8 +10,7 @@ namespace NetFabric.Hyperlinq
         {
             if (action is null) Throw.ArgumentNullException(nameof(action));
 
-            for (var index = 0; index < source.Count; index++)
-                action(source[index]);
+            ForEach<TList, TSource>(source, action, 0, source.Count);
         }
 
         static void ForEach<TList, TSource>(this TList source, Action<TSource> action, int skipCount, int takeCount)
@@ -76,8 +75,7 @@ namespace NetFabric.Hyperlinq
         {
             if (action is null) Throw.ArgumentNullException(nameof(action));
 
-            for (var index = 0; index < source.Count; index++)
-                action(source[index], index);
+            ForEach<TList, TSource>(source, action, 0, source.Count);
         }
 
         static void ForEach<TList, TSource>(this TList source, ActionAt<TSource> action, int skipCount, int takeCount)

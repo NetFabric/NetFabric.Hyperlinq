@@ -34,8 +34,9 @@ namespace NetFabric.Hyperlinq
                 var list = new List<TSource>();
                 while (await enumerator.MoveNextAsync().ConfigureAwait(false))
                 {
-                    if (await predicate(enumerator.Current, cancellationToken).ConfigureAwait(false))
-                        list.Add(enumerator.Current);
+                    var item = enumerator.Current;
+                    if (await predicate(item, cancellationToken).ConfigureAwait(false))
+                        list.Add(item);
                 }
                 return list;
             }
@@ -54,8 +55,9 @@ namespace NetFabric.Hyperlinq
                     var list = new List<TSource>();
                     for (var index = 0; await enumerator.MoveNextAsync().ConfigureAwait(false); index++)
                     {
-                        if (await predicate(enumerator.Current, index, cancellationToken).ConfigureAwait(false))
-                            list.Add(enumerator.Current);
+                        var item = enumerator.Current;
+                        if (await predicate(item, index, cancellationToken).ConfigureAwait(false))
+                            list.Add(item);
                     }
                     return list;
                 }
@@ -106,8 +108,9 @@ namespace NetFabric.Hyperlinq
                 var list = new List<TResult>();
                 while (await enumerator.MoveNextAsync().ConfigureAwait(false))
                 {
-                    if (await predicate(enumerator.Current, cancellationToken).ConfigureAwait(false))
-                        list.Add(await selector(enumerator.Current, cancellationToken).ConfigureAwait(false));
+                    var item = enumerator.Current;
+                    if (await predicate(item, cancellationToken).ConfigureAwait(false))
+                        list.Add(await selector(item, cancellationToken).ConfigureAwait(false));
                 }
                 return list;
             }

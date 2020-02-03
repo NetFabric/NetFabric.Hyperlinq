@@ -81,9 +81,9 @@ namespace NetFabric.Hyperlinq
 
             public override void CopyTo(TSource[] array, int _)
             {
-                if (skipCount == 0 && takeCount == source.Count)
+                if (skipCount == 0)
                 {
-                    for (var index = 0; index < source.Count; index++)
+                    for (var index = 0; index < takeCount; index++)
                         array[index] = source[index];
                 }
                 else
@@ -116,9 +116,9 @@ namespace NetFabric.Hyperlinq
 
             public override void CopyTo(TResult[] array, int _)
             {
-                if (skipCount == 0 && takeCount == source.Count)
+                if (skipCount == 0)
                 {
-                    for (var index = 0; index < source.Count; index++)
+                    for (var index = 0; index < takeCount; index++)
                         array[index] = selector(source[index]);
                 }
                 else
@@ -151,9 +151,9 @@ namespace NetFabric.Hyperlinq
 
             public override void CopyTo(TResult[] array, int _)
             {
-                if (skipCount == 0 && takeCount == source.Count)
+                if (skipCount == 0)
                 {
-                    for (var index = 0; index < source.Count; index++)
+                    for (var index = 0; index < takeCount; index++)
                         array[index] = selector(source[index], index);
                 }
                 else

@@ -24,7 +24,10 @@ namespace NetFabric.Hyperlinq
             {
                 using var enumerator = source.GetEnumerator();
                 while (enumerator.MoveNext())
-                    dictionary.Add(keySelector(enumerator.Current), enumerator.Current);
+                {
+                    var item = enumerator.Current;
+                    dictionary.Add(keySelector(item), item);
+                }
             }
             return dictionary;
         }
@@ -42,8 +45,9 @@ namespace NetFabric.Hyperlinq
                 using var enumerator = source.GetEnumerator();
                 while (enumerator.MoveNext())
                 {
-                    if (predicate(enumerator.Current))
-                        dictionary.Add(keySelector(enumerator.Current), enumerator.Current);
+                    var item = enumerator.Current;
+                    if (predicate(item))
+                        dictionary.Add(keySelector(item), item);
                 }
             }
             return dictionary;
@@ -64,8 +68,9 @@ namespace NetFabric.Hyperlinq
                 {
                     for (var index = 0; enumerator.MoveNext(); index++)
                     {
-                        if (predicate(enumerator.Current, index))
-                            dictionary.Add(keySelector(enumerator.Current), enumerator.Current);
+                        var item = enumerator.Current;
+                        if (predicate(item, index))
+                            dictionary.Add(keySelector(item), item);
                     }
                 }
             }
@@ -91,7 +96,10 @@ namespace NetFabric.Hyperlinq
             {
                 using var enumerator = source.GetEnumerator();
                 while (enumerator.MoveNext())
-                    dictionary.Add(keySelector(enumerator.Current), elementSelector(enumerator.Current));
+                {
+                    var item = enumerator.Current;
+                    dictionary.Add(keySelector(item), elementSelector(item));
+                }
             }
             return dictionary;
         }
@@ -133,8 +141,9 @@ namespace NetFabric.Hyperlinq
                 {
                     for (var index = 0; enumerator.MoveNext(); index++)
                     {
-                        if (predicate(enumerator.Current, index))
-                            dictionary.Add(keySelector(enumerator.Current), elementSelector(enumerator.Current));
+                        var item = enumerator.Current;
+                        if (predicate(item, index))
+                            dictionary.Add(keySelector(item), elementSelector(item));
                     }
                 }
             }

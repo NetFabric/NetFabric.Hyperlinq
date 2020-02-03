@@ -115,9 +115,10 @@ namespace NetFabric.Hyperlinq
                 using var enumerator = source.GetEnumerator();
                 while (enumerator.MoveNext())
                 {
-                    if (predicate(enumerator.Current))
+                    var item = enumerator.Current;
+                    if (predicate(item))
                     {
-                        result = selector(enumerator.Current);
+                        result = selector(item);
                         dictionary.Add(keySelector(result), result);
                     }
                 }
@@ -135,9 +136,10 @@ namespace NetFabric.Hyperlinq
                 using var enumerator = source.GetEnumerator();
                 while (enumerator.MoveNext())
                 {
-                    if (predicate(enumerator.Current))
+                    var item = enumerator.Current;
+                    if (predicate(item))
                     {
-                        result = selector(enumerator.Current);
+                        result = selector(item);
                         dictionary.Add(keySelector(result), elementSelector(result));
                     }
                 }

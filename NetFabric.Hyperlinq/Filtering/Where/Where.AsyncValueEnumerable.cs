@@ -150,6 +150,9 @@ namespace NetFabric.Hyperlinq
                 => (await AsyncValueEnumerable.GetSingleAsync<TEnumerable, TEnumerator, TSource>(source, Utils.Combine(this.predicate, predicate), cancellationToken))
                     .DefaultOnEmpty();
 
+            public ValueTask<TSource[]> ToArrayAsync(CancellationToken cancellationToken = default)
+                => AsyncValueEnumerable.ToArrayAsync<TEnumerable, TEnumerator, TSource>(source, predicate, cancellationToken);
+
             public ValueTask<List<TSource>> ToListAsync(CancellationToken cancellationToken = default)
                 => AsyncValueEnumerable.ToListAsync<TEnumerable, TEnumerator, TSource>(source, predicate, cancellationToken);
 

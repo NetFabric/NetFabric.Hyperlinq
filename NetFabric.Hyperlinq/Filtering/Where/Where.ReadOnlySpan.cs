@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
 using System.Runtime.CompilerServices;
@@ -77,6 +78,12 @@ namespace NetFabric.Hyperlinq
             [return: MaybeNull]
             public TSource SingleOrDefault()
                 => source.SingleOrDefault(predicate);
+
+            public TSource[] ToArray()
+                => source.ToArray(predicate);
+
+            public List<TSource> ToList()
+                => source.ToList(predicate);
 
             public void ForEach(Action<TSource> action)
                 => source.ForEach(action, predicate);

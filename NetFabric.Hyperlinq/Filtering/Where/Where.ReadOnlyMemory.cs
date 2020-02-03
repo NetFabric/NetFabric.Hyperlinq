@@ -121,6 +121,12 @@ namespace NetFabric.Hyperlinq
             public TSource SingleOrDefault()
                 => source.Span.SingleOrDefault(predicate);
 
+            public TSource[] ToArray()
+                => SpanExtensions.ToArray<TSource>(source.Span, predicate);
+
+            public List<TSource> ToList()
+                => SpanExtensions.ToList<TSource>(source, predicate);
+
             public void ForEach(Action<TSource> action)
                 => SpanExtensions.ForEach<TSource>(source.Span, action, predicate);
             public void ForEach(ActionAt<TSource> action)

@@ -172,6 +172,9 @@ namespace NetFabric.Hyperlinq
             public TSource SingleOrDefault(PredicateAt<TSource> predicate)
                 => ReadOnlyList.GetSingle<TList, TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount).DefaultOnEmpty();
 
+            public TSource[] ToArray()
+                => ReadOnlyList.ToArray<TList, TSource>(source, predicate, skipCount, takeCount);
+
             public List<TSource> ToList()
                 => ReadOnlyList.ToList<TList, TSource>(source, predicate, skipCount, takeCount);
 

@@ -142,6 +142,9 @@ namespace NetFabric.Hyperlinq
             public TSource SingleOrDefault(PredicateAt<TSource> predicate)
                 => ValueEnumerable.GetSingle<TEnumerable, TEnumerator, TSource>(source, Utils.Combine(this.predicate, predicate)).DefaultOnEmpty();
 
+            public TSource[] ToArray()
+                => ValueEnumerable.ToArray<TEnumerable, TEnumerator, TSource>(source, predicate);
+
             public List<TSource> ToList()
                 => ValueEnumerable.ToList<TEnumerable, TEnumerator, TSource>(source, predicate);
 

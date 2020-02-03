@@ -36,8 +36,9 @@ namespace NetFabric.Hyperlinq
             { 
                 while (await enumerator.MoveNextAsync().ConfigureAwait(false))
                 {
-                    if (await predicate(enumerator.Current, cancellationToken).ConfigureAwait(false))
-                        await actionAsync(enumerator.Current, cancellationToken).ConfigureAwait(false);
+                    var item = enumerator.Current;
+                    if (await predicate(item, cancellationToken).ConfigureAwait(false))
+                        await actionAsync(item, cancellationToken).ConfigureAwait(false);
                 }
             }
         }
@@ -53,8 +54,9 @@ namespace NetFabric.Hyperlinq
                 {
                     for (var index = 0; await enumerator.MoveNextAsync().ConfigureAwait(false); index++)
                     {
-                        if (await predicate(enumerator.Current, index, cancellationToken).ConfigureAwait(false))
-                            await actionAsync(enumerator.Current, cancellationToken).ConfigureAwait(false);
+                        var item = enumerator.Current;
+                        if (await predicate(item, index, cancellationToken).ConfigureAwait(false))
+                            await actionAsync(item, cancellationToken).ConfigureAwait(false);
                     }
                 }
             }
@@ -96,8 +98,9 @@ namespace NetFabric.Hyperlinq
             { 
                 while (await enumerator.MoveNextAsync().ConfigureAwait(false))
                 {
-                    if (await predicate(enumerator.Current, cancellationToken).ConfigureAwait(false))
-                        await actionAsync(await selector(enumerator.Current, cancellationToken), cancellationToken).ConfigureAwait(false);
+                    var item = enumerator.Current;
+                    if (await predicate(item, cancellationToken).ConfigureAwait(false))
+                        await actionAsync(await selector(item, cancellationToken), cancellationToken).ConfigureAwait(false);
                 }
             }
         }
@@ -133,8 +136,9 @@ namespace NetFabric.Hyperlinq
                 {
                     for (var index = 0; await enumerator.MoveNextAsync().ConfigureAwait(false); index++)
                     {
-                        if (await predicate(enumerator.Current, cancellationToken).ConfigureAwait(false))
-                            await actionAsync(enumerator.Current, index, cancellationToken).ConfigureAwait(false);
+                        var item = enumerator.Current;
+                        if (await predicate(item, cancellationToken).ConfigureAwait(false))
+                            await actionAsync(item, index, cancellationToken).ConfigureAwait(false);
                     }
                 }
             }
@@ -151,8 +155,9 @@ namespace NetFabric.Hyperlinq
                 {
                     for (var index = 0; await enumerator.MoveNextAsync().ConfigureAwait(false); index++)
                     {
-                        if (await predicate(enumerator.Current, index, cancellationToken).ConfigureAwait(false))
-                            await actionAsync(enumerator.Current, index, cancellationToken).ConfigureAwait(false);
+                        var item = enumerator.Current;
+                        if (await predicate(item, index, cancellationToken).ConfigureAwait(false))
+                            await actionAsync(item, index, cancellationToken).ConfigureAwait(false);
                     }
                 }
             }
@@ -203,10 +208,11 @@ namespace NetFabric.Hyperlinq
                 {
                     for (var index = 0; await enumerator.MoveNextAsync().ConfigureAwait(false); index++)
                     {
-                        if (await predicate(enumerator.Current, cancellationToken).ConfigureAwait(false))
+                        var item = enumerator.Current;
+                        if (await predicate(item, cancellationToken).ConfigureAwait(false))
                         {
-                            var item = await selector(enumerator.Current, cancellationToken).ConfigureAwait(false);
-                            await actionAsync(item, index, cancellationToken).ConfigureAwait(false);
+                            var projectedItem = await selector(item, cancellationToken).ConfigureAwait(false);
+                            await actionAsync(projectedItem, index, cancellationToken).ConfigureAwait(false);
                         }
                     }
                 }
