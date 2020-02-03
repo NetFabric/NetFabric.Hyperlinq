@@ -72,7 +72,7 @@ namespace NetFabric.Hyperlinq
 
         [Pure]
         static List<TResult> ToList<TSource, TResult>(this TSource[] source, SelectorAt<TSource, TResult> selector, int skipCount, int takeCount)
-            => new List<TResult>(new IndexToListCollection<TSource, TResult>(source, selector, skipCount, takeCount));
+            => new List<TResult>(new IndexedToListCollection<TSource, TResult>(source, selector, skipCount, takeCount));
 
         [Pure]
         static List<TResult> ToList<TSource, TResult>(this TSource[] source, Predicate<TSource> predicate, Selector<TSource, TResult> selector, int skipCount, int takeCount)
@@ -182,7 +182,7 @@ namespace NetFabric.Hyperlinq
         }
 
         [GeneratorIgnore]
-        sealed class IndexToListCollection<TSource, TResult>
+        sealed class IndexedToListCollection<TSource, TResult>
             : ToListCollectionBase<TResult>
         {
             readonly TSource[] source;
@@ -190,7 +190,7 @@ namespace NetFabric.Hyperlinq
             readonly int skipCount;
             readonly int takeCount;
 
-            public IndexToListCollection(TSource[] source, SelectorAt<TSource, TResult> selector, int skipCount, int takeCount)
+            public IndexedToListCollection(TSource[] source, SelectorAt<TSource, TResult> selector, int skipCount, int takeCount)
                 : base(takeCount)
             {
                 this.source = source;
