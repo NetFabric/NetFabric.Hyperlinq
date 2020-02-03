@@ -23,8 +23,7 @@ namespace NetFabric.Hyperlinq.UnitTests
 
             // Assert
             _ = result.Must()
-                .BeOfType<int[]>()
-                .BeEnumerableOf<int>()
+                .BeArrayOf<int>()
                 .BeEqualTo(expected);
         }
 
@@ -48,8 +47,7 @@ namespace NetFabric.Hyperlinq.UnitTests
 
             // Assert
             _ = result.Must()
-                .BeOfType<int[]>()
-                .BeEnumerableOf<int>()
+                .BeArrayOf<int>()
                 .BeEqualTo(expected);
         }
     }

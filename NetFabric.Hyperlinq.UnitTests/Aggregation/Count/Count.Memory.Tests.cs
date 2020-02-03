@@ -4,7 +4,7 @@ using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests
 {
-    public class CountValueReadOnlyCollectionTests
+    public class MemoryArrayTests
     {
         [Theory]
         [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
@@ -13,14 +13,12 @@ namespace NetFabric.Hyperlinq.UnitTests
         public void Count_With_ValidData_Should_Succeed(int[] source)
         {
             // Arrange
-            var wrapped = Wrap
-                .AsValueReadOnlyCollection(source);
             var expected = 
-                System.Linq.Enumerable.Count(wrapped);
+                System.Linq.Enumerable.Count(source);
 
             // Act
-            var result = ValueReadOnlyCollection
-                .Count<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(wrapped);
+            var result = source.AsMemory()
+                .Count<int>();
 
             // Assert
             _ = result.Must()
@@ -32,36 +30,30 @@ namespace NetFabric.Hyperlinq.UnitTests
         public void Count_Predicate_With_ValidData_Should_Succeed(int[] source, Predicate<int> predicate)
         {
             // Arrange
-            var wrapped = Wrap
-                .AsValueReadOnlyCollection(source);
             var expected = 
-                System.Linq.Enumerable.Count(
-                    System.Linq.Enumerable.Where(wrapped, predicate.AsFunc()));
+                System.Linq.Enumerable.Count(source, predicate.AsFunc());
 
             // Act
-            var result = ValueReadOnlyCollection
-                .Count<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
+            var result = source.AsMemory()
+                .Count<int>(predicate);
 
             // Assert
             _ = result.Must()
                 .BeEqualTo(expected);
         }
 
-
         [Theory]
         [MemberData(nameof(TestData.PredicateAt), MemberType = typeof(TestData))]
         public void Count_PredicateAt_With_ValidData_Should_Succeed(int[] source, PredicateAt<int> predicate)
         {
             // Arrange
-            var wrapped = Wrap
-                .AsValueReadOnlyCollection(source);
             var expected = 
                 System.Linq.Enumerable.Count(
-                    System.Linq.Enumerable.Where(wrapped, predicate.AsFunc()));
+                    System.Linq.Enumerable.Where(source, predicate.AsFunc()));
 
             // Act
-            var result = ValueReadOnlyCollection
-                .Count<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
+            var result = source.AsMemory()
+                .Count<int>(predicate);
 
             // Assert
             _ = result.Must()
