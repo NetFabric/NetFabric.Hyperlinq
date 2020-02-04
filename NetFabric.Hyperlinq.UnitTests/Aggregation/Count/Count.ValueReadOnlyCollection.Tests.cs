@@ -27,6 +27,24 @@ namespace NetFabric.Hyperlinq.UnitTests
                 .BeEqualTo(expected);
         }
 
+        [Fact]
+        public void Count_Predicate_With_Null_Should_Throw()
+        {
+            // Arrange
+            var wrapped = Wrap
+                .AsValueReadOnlyCollection(new int[0]);
+            var predicate = (Predicate<int>)null;
+
+            // Act
+            Action action = () => ValueReadOnlyCollection
+                .Count<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
+
+            // Assert
+            _ = action.Must()
+                .Throw<ArgumentNullException>()
+                .EvaluateTrue(exception => exception.ParamName == "predicate");
+        }
+
         [Theory]
         [MemberData(nameof(TestData.Predicate), MemberType = typeof(TestData))]
         public void Count_Predicate_With_ValidData_Should_Succeed(int[] source, Predicate<int> predicate)
@@ -47,6 +65,23 @@ namespace NetFabric.Hyperlinq.UnitTests
                 .BeEqualTo(expected);
         }
 
+        [Fact]
+        public void Count_PredicateAt_With_Null_Should_Throw()
+        {
+            // Arrange
+            var wrapped = Wrap
+                .AsValueReadOnlyCollection(new int[0]);
+             var predicate = (PredicateAt<int>)null;
+
+            // Act
+            Action action = () => ValueReadOnlyCollection
+                .Count<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
+
+            // Assert
+            _ = action.Must()
+                .Throw<ArgumentNullException>()
+                .EvaluateTrue(exception => exception.ParamName == "predicate");
+        }
 
         [Theory]
         [MemberData(nameof(TestData.PredicateAt), MemberType = typeof(TestData))]

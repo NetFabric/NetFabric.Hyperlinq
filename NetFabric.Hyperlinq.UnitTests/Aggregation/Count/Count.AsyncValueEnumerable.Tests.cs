@@ -27,6 +27,24 @@ namespace NetFabric.Hyperlinq.UnitTests
                 .BeEqualTo(expected);
         }
 
+        [Fact]
+        public void Count_Predicate_With_Null_Should_Throw()
+        {
+            // Arrange
+            var wrapped = Wrap
+                .AsAsyncValueEnumerable(new int[0]);
+            var predicate = (AsyncPredicate<int>)null;
+
+            // Act
+            Action action = () => AsyncValueEnumerable
+                .CountAsync<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, predicate);
+
+            // Assert
+            _ = action.Must()
+                .Throw<ArgumentNullException>()
+                .EvaluateTrue(exception => exception.ParamName == "predicate");
+        }
+
         [Theory]
         [MemberData(nameof(TestData.Predicate), MemberType = typeof(TestData))]
         public async void CountAsync_Predicate_With_ValidData_Should_Succeed(int[] source, Predicate<int> predicate)
@@ -44,6 +62,24 @@ namespace NetFabric.Hyperlinq.UnitTests
             // Assert
             _ = result.Must()
                 .BeEqualTo(expected);
+        }
+
+        [Fact]
+        public void Count_PredicateAt_With_Null_Should_Throw()
+        {
+            // Arrange
+            var wrapped = Wrap
+                .AsAsyncValueEnumerable(new int[0]);
+            var predicate = (AsyncPredicateAt<int>)null;
+
+            // Act
+            Action action = () => AsyncValueEnumerable
+                .CountAsync<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, predicate);
+
+            // Assert
+            _ = action.Must()
+                .Throw<ArgumentNullException>()
+                .EvaluateTrue(exception => exception.ParamName == "predicate");
         }
 
         [Theory]

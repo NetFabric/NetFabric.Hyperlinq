@@ -11,6 +11,9 @@ namespace NetFabric.Hyperlinq
         public static Func<T, int, bool> AsFunc<T>(this PredicateAt<T> predicate)
             => new Func<T, int, bool>(predicate);
 
+        public static Func<T, int, bool> AsFunc<T>(this PredicateAtLong<T> predicate)
+            => (item , index) => predicate(item, index);
+
         public static AsyncPredicate<T> AsAsync<T>(this Predicate<T> predicate)
             => new AsyncPredicate<T>((item, _) => new ValueTask<bool>(predicate(item)));
             

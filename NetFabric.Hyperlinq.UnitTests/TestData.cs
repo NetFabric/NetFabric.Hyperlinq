@@ -55,6 +55,21 @@ namespace NetFabric.Hyperlinq
                 { new int[] { 1, 2, 3, 4, 5 }, (item, index) => (index & 0x01) == 0 },
             };
 
+        public static TheoryData<int[], PredicateAtLong<int>> PredicateAtLong =>
+            new TheoryData<int[], PredicateAtLong<int>>
+            {
+                { new int[] { }, (_, __) => false },
+                { new int[] { }, (_, __) => true },
+
+                { new int[] { 1 }, (_, __) => false },
+                { new int[] { 1 }, (_, __) => true },
+
+                { new int[] { 1, 2, 3, 4, 5 }, (item, index) => index == 0 },
+                { new int[] { 1, 2, 3, 4, 5 }, (item, index) => index == 2 },
+                { new int[] { 1, 2, 3, 4, 5 }, (item, index) => index == 4 },
+                { new int[] { 1, 2, 3, 4, 5 }, (item, index) => (index & 0x01) == 0 },
+            };
+
         public static TheoryData<int[], Selector<int, string>> Selector =>
             new TheoryData<int[], Selector<int, string>>
             {

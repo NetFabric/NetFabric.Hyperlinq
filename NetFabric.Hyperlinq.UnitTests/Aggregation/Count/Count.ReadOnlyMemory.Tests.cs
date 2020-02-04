@@ -4,7 +4,7 @@ using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests
 {
-    public class CountArrayTests
+    public class ReadOnlyMemoryArrayTests
     {
         [Theory]
         [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
@@ -18,7 +18,7 @@ namespace NetFabric.Hyperlinq.UnitTests
 
             // Act
             var result = Array
-                .Count<int>(source);
+                .Count<int>((ReadOnlyMemory<int>)source.AsMemory());
 
             // Assert
             _ = result.Must()
@@ -52,7 +52,7 @@ namespace NetFabric.Hyperlinq.UnitTests
 
             // Act
             var result = Array
-                .Count<int>(source, predicate);
+                .Count<int>((ReadOnlyMemory<int>)source.AsMemory(), predicate);
 
             // Assert
             _ = result.Must()
@@ -87,7 +87,7 @@ namespace NetFabric.Hyperlinq.UnitTests
 
             // Act
             var result = Array
-                .Count<int>(source, predicate);
+                .Count<int>((ReadOnlyMemory<int>)source.AsMemory(), predicate);
 
             // Assert
             _ = result.Must()

@@ -17,12 +17,29 @@ namespace NetFabric.Hyperlinq.UnitTests
                 System.Linq.Enumerable.Count(source);
 
             // Act
-            var result = source.AsMemory()
-                .Count<int>();
+            var result = Array
+                .Count<int>(source.AsMemory());
 
             // Assert
             _ = result.Must()
                 .BeEqualTo(expected);
+        }
+
+        [Fact]
+        public void Count_Predicate_With_Null_Should_Throw()
+        {
+            // Arrange
+            var source = new int[0];
+            var predicate = (Predicate<int>)null;
+
+            // Act
+            Action action = () => Array
+                .Count<int>(source.AsMemory(), predicate);
+
+            // Assert
+            _ = action.Must()
+                .Throw<ArgumentNullException>()
+                .EvaluateTrue(exception => exception.ParamName == "predicate");
         }
 
         [Theory]
@@ -34,12 +51,29 @@ namespace NetFabric.Hyperlinq.UnitTests
                 System.Linq.Enumerable.Count(source, predicate.AsFunc());
 
             // Act
-            var result = source.AsMemory()
-                .Count<int>(predicate);
+            var result = Array
+                .Count<int>(source.AsMemory(), predicate);
 
             // Assert
             _ = result.Must()
                 .BeEqualTo(expected);
+        }
+
+        [Fact]
+        public void Count_PredicateAt_With_Null_Should_Throw()
+        {
+            // Arrange
+            var source = new int[0];
+            var predicate = (PredicateAt<int>)null;
+
+            // Act
+            Action action = () => Array
+                .Count<int>(source.AsMemory(), predicate);
+
+            // Assert
+            _ = action.Must()
+                .Throw<ArgumentNullException>()
+                .EvaluateTrue(exception => exception.ParamName == "predicate");
         }
 
         [Theory]
@@ -52,8 +86,8 @@ namespace NetFabric.Hyperlinq.UnitTests
                     System.Linq.Enumerable.Where(source, predicate.AsFunc()));
 
             // Act
-            var result = source.AsMemory()
-                .Count<int>(predicate);
+            var result = Array
+                .Count<int>(source.AsMemory(), predicate);
 
             // Assert
             _ = result.Must()
