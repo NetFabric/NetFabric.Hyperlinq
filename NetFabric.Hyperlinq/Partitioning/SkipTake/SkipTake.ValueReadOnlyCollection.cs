@@ -102,7 +102,9 @@ namespace NetFabric.Hyperlinq
                     }
                 }
 
-                public readonly void Reset() => throw new NotSupportedException();
+                [ExcludeFromCodeCoverage]
+                public readonly void Reset() 
+                    => throw new NotSupportedException();
 
                 public void Dispose() => enumerator.Dispose();
             }

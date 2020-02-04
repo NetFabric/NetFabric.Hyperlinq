@@ -210,7 +210,8 @@ namespace NetFabric.Hyperlinq
                 public readonly bool MoveNext() 
                     => enumerator.MoveNext();
 
-                readonly void IEnumerator.Reset() 
+                [ExcludeFromCodeCoverage]
+                public readonly void Reset() 
                     => throw new NotSupportedException();
 
                 public readonly void Dispose() { }
