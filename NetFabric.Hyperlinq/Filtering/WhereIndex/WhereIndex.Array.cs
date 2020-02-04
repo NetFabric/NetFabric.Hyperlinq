@@ -10,26 +10,26 @@ namespace NetFabric.Hyperlinq
     public static partial class Array
     {
         [Pure]
-        public static WhereIndexEnumerable<TSource> Where<TSource>(this TSource[] source, PredicateAt<TSource> predicate) 
+        public static ArrayWhereIndexEnumerable<TSource> Where<TSource>(this TSource[] source, PredicateAt<TSource> predicate) 
         {
             if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
 
-            return new WhereIndexEnumerable<TSource>(source, predicate, 0, source.Length);
+            return new ArrayWhereIndexEnumerable<TSource>(source, predicate, 0, source.Length);
         }
 
         [Pure]
-        static WhereIndexEnumerable<TSource> Where<TSource>(this TSource[] source, PredicateAt<TSource> predicate, int skipCount, int takeCount)
-            => new WhereIndexEnumerable<TSource>(source, predicate, skipCount, takeCount);
+        static ArrayWhereIndexEnumerable<TSource> Where<TSource>(this TSource[] source, PredicateAt<TSource> predicate, int skipCount, int takeCount)
+            => new ArrayWhereIndexEnumerable<TSource>(source, predicate, skipCount, takeCount);
 
-        public readonly partial struct WhereIndexEnumerable<TSource>
-            : IValueEnumerable<TSource, WhereIndexEnumerable<TSource>.DisposableEnumerator>
+        public readonly partial struct ArrayWhereIndexEnumerable<TSource>
+            : IValueEnumerable<TSource, ArrayWhereIndexEnumerable<TSource>.DisposableEnumerator>
         {
             readonly TSource[] source;
             readonly PredicateAt<TSource> predicate;
             readonly int skipCount;
             readonly int takeCount;
 
-            internal WhereIndexEnumerable(TSource[] source, PredicateAt<TSource> predicate, int skipCount, int takeCount)
+            internal ArrayWhereIndexEnumerable(TSource[] source, PredicateAt<TSource> predicate, int skipCount, int takeCount)
             {
                 this.source = source;
                 this.predicate = predicate;
@@ -37,10 +37,14 @@ namespace NetFabric.Hyperlinq
             }
 
             [Pure]
-            public readonly Enumerator GetEnumerator() => new Enumerator(in this);
-            readonly DisposableEnumerator IValueEnumerable<TSource, WhereIndexEnumerable<TSource>.DisposableEnumerator>.GetEnumerator() => new DisposableEnumerator(in this);
-            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new DisposableEnumerator(in this);
-            readonly IEnumerator IEnumerable.GetEnumerator() => new DisposableEnumerator(in this);
+            public readonly Enumerator GetEnumerator() 
+                => new Enumerator(in this);
+            readonly DisposableEnumerator IValueEnumerable<TSource, ArrayWhereIndexEnumerable<TSource>.DisposableEnumerator>.GetEnumerator() 
+                => new DisposableEnumerator(in this);
+            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() 
+                => new DisposableEnumerator(in this);
+            readonly IEnumerator IEnumerable.GetEnumerator() 
+                => new DisposableEnumerator(in this);
 
             public struct Enumerator 
             {
@@ -49,7 +53,7 @@ namespace NetFabric.Hyperlinq
                 readonly int end;
                 int index;
 
-                internal Enumerator(in WhereIndexEnumerable<TSource> enumerable)
+                internal Enumerator(in ArrayWhereIndexEnumerable<TSource> enumerable)
                 {
                     source = enumerable.source;
                     predicate = enumerable.predicate;
@@ -80,7 +84,7 @@ namespace NetFabric.Hyperlinq
                 readonly int end;
                 int index;
 
-                internal DisposableEnumerator(in WhereIndexEnumerable<TSource> enumerable)
+                internal DisposableEnumerator(in ArrayWhereIndexEnumerable<TSource> enumerable)
                 {
                     source = enumerable.source;
                     predicate = enumerable.predicate;
@@ -126,9 +130,9 @@ namespace NetFabric.Hyperlinq
             public bool Any(PredicateAt<TSource> predicate)
                 => Array.Any<TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount);
 
-            public Array.WhereIndexEnumerable<TSource> Where(Predicate<TSource> predicate)
+            public Array.ArrayWhereIndexEnumerable<TSource> Where(Predicate<TSource> predicate)
                 => Array.Where<TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount);
-            public Array.WhereIndexEnumerable<TSource> Where(PredicateAt<TSource> predicate)
+            public Array.ArrayWhereIndexEnumerable<TSource> Where(PredicateAt<TSource> predicate)
                 => Array.Where<TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount);
 
             public ref readonly TSource First()

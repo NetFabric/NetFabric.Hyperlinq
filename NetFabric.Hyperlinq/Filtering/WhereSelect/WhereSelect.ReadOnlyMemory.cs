@@ -7,10 +7,10 @@ using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class SpanExtensions
+    public static partial class Array
     {
         [Pure]
-        internal static WhereSelectEnumerable<TSource, TResult> WhereSelect<TSource, TResult>(
+        internal static MemoryWhereSelectEnumerable<TSource, TResult> WhereSelect<TSource, TResult>(
             this ReadOnlyMemory<TSource> source, 
             Predicate<TSource> predicate, 
             Selector<TSource, TResult> selector) 
@@ -18,18 +18,18 @@ namespace NetFabric.Hyperlinq
             if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
             if (selector is null) Throw.ArgumentNullException(nameof(selector));
 
-            return new WhereSelectEnumerable<TSource, TResult>(source, predicate, selector);
+            return new MemoryWhereSelectEnumerable<TSource, TResult>(source, predicate, selector);
         }
 
         [GeneratorMapping("TSource", "TResult")]
-        public readonly partial struct WhereSelectEnumerable<TSource, TResult>
-            : IValueEnumerable<TResult, WhereSelectEnumerable<TSource, TResult>.DisposableEnumerator>
+        public readonly partial struct MemoryWhereSelectEnumerable<TSource, TResult>
+            : IValueEnumerable<TResult, MemoryWhereSelectEnumerable<TSource, TResult>.DisposableEnumerator>
         {
             internal readonly ReadOnlyMemory<TSource> source;
             internal readonly Predicate<TSource> predicate;
             internal readonly Selector<TSource, TResult> selector;
 
-            internal WhereSelectEnumerable(ReadOnlyMemory<TSource> source, Predicate<TSource> predicate, Selector<TSource, TResult> selector)
+            internal MemoryWhereSelectEnumerable(ReadOnlyMemory<TSource> source, Predicate<TSource> predicate, Selector<TSource, TResult> selector)
             {
                 this.source = source;
                 this.predicate = predicate;
@@ -38,10 +38,14 @@ namespace NetFabric.Hyperlinq
 
             [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly Enumerator GetEnumerator() => new Enumerator(in this);
-            readonly DisposableEnumerator IValueEnumerable<TResult, WhereSelectEnumerable<TSource, TResult>.DisposableEnumerator>.GetEnumerator() => new DisposableEnumerator(in this);
-            readonly IEnumerator<TResult> IEnumerable<TResult>.GetEnumerator() => new DisposableEnumerator(in this);
-            readonly IEnumerator IEnumerable.GetEnumerator() => new DisposableEnumerator(in this);
+            public readonly Enumerator GetEnumerator() 
+                => new Enumerator(in this);
+            readonly DisposableEnumerator IValueEnumerable<TResult, MemoryWhereSelectEnumerable<TSource, TResult>.DisposableEnumerator>.GetEnumerator() 
+                => new DisposableEnumerator(in this);
+            readonly IEnumerator<TResult> IEnumerable<TResult>.GetEnumerator() 
+                => new DisposableEnumerator(in this);
+            readonly IEnumerator IEnumerable.GetEnumerator() 
+                => new DisposableEnumerator(in this);
 
             public ref struct Enumerator
             {
@@ -50,7 +54,7 @@ namespace NetFabric.Hyperlinq
                 readonly Selector<TSource, TResult> selector;
                 int index;
 
-                internal Enumerator(in WhereSelectEnumerable<TSource, TResult> enumerable)
+                internal Enumerator(in MemoryWhereSelectEnumerable<TSource, TResult> enumerable)
                 {
                     source = enumerable.source.Span;
                     predicate = enumerable.predicate;
@@ -80,7 +84,7 @@ namespace NetFabric.Hyperlinq
                 readonly Selector<TSource, TResult> selector;
                 int index;
 
-                internal DisposableEnumerator(in WhereSelectEnumerable<TSource, TResult> enumerable)
+                internal DisposableEnumerator(in MemoryWhereSelectEnumerable<TSource, TResult> enumerable)
                 {
                     source = enumerable.source;
                     predicate = enumerable.predicate;

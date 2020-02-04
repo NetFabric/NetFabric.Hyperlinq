@@ -2,7 +2,7 @@
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class SpanExtensions
+    public static partial class Array
     {
         public static void ForEach<TSource>(this ReadOnlySpan<TSource> source, Action<TSource> action)
         {

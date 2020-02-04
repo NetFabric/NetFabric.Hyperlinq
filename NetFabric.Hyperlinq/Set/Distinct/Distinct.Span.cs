@@ -5,11 +5,11 @@ using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class SpanExtensions
+    public static partial class Array
     {
         [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static RefDistinctEnumerable<TSource> Distinct<TSource>(
+        public static SpanDistinctEnumerable<TSource> Distinct<TSource>(
             this Span<TSource> source, 
             IEqualityComparer<TSource>? comparer = null)
             => Distinct((ReadOnlySpan<TSource>)source, comparer);

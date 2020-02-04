@@ -10,7 +10,7 @@ namespace NetFabric.Hyperlinq
     public static partial class Array
     {
         [Pure]
-        public static SelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, TResult> SelectMany<TSource, TSubEnumerable, TSubEnumerator, TResult>(
+        public static ArraySelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, TResult> SelectMany<TSource, TSubEnumerable, TSubEnumerator, TResult>(
             this TSource[] source, 
             Selector<TSource, TSubEnumerable> selector)
             where TSubEnumerable : notnull, IValueEnumerable<TResult, TSubEnumerator>
@@ -18,19 +18,19 @@ namespace NetFabric.Hyperlinq
         {
             if (selector is null) Throw.ArgumentNullException(nameof(selector));
 
-            return new SelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, TResult>(source, selector);
+            return new ArraySelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, TResult>(source, selector);
         }
 
         [GeneratorMapping("TSource", "TResult")]
-        public readonly partial struct SelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, TResult>
-            : IValueEnumerable<TResult, SelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, TResult>.Enumerator>
+        public readonly partial struct ArraySelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, TResult>
+            : IValueEnumerable<TResult, ArraySelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, TResult>.Enumerator>
             where TSubEnumerable : notnull, IValueEnumerable<TResult, TSubEnumerator>
             where TSubEnumerator : struct, IEnumerator<TResult>
         {
             readonly TSource[] source;
             readonly Selector<TSource, TSubEnumerable> selector;
 
-            internal SelectManyEnumerable(TSource[] source, Selector<TSource, TSubEnumerable> selector)
+            internal ArraySelectManyEnumerable(TSource[] source, Selector<TSource, TSubEnumerable> selector)
             {
                 this.source = source;
                 this.selector = selector;
@@ -52,7 +52,7 @@ namespace NetFabric.Hyperlinq
                 TSubEnumerator subEnumerator; // do not make readonly
                 int state;
 
-                internal Enumerator(in SelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, TResult> enumerable)
+                internal Enumerator(in ArraySelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, TResult> enumerable)
                 {
                     source = enumerable.source;
                     selector = enumerable.selector;

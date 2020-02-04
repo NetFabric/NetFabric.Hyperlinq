@@ -10,23 +10,23 @@ namespace NetFabric.Hyperlinq
     public static partial class Array
     {
         [Pure]
-        internal static WhereSelectEnumerable<TSource, TResult> WhereSelect<TSource, TResult>(
+        internal static ArrayWhereSelectEnumerable<TSource, TResult> WhereSelect<TSource, TResult>(
             this TSource[] source, 
             Predicate<TSource> predicate, 
             Selector<TSource, TResult> selector) 
-            => new WhereSelectEnumerable<TSource, TResult>(source, predicate, selector, 0, source.Length);
+            => new ArrayWhereSelectEnumerable<TSource, TResult>(source, predicate, selector, 0, source.Length);
 
         [Pure]
-        internal static WhereSelectEnumerable<TSource, TResult> WhereSelect<TSource, TResult>(
+        internal static ArrayWhereSelectEnumerable<TSource, TResult> WhereSelect<TSource, TResult>(
             this TSource[] source,
             Predicate<TSource> predicate,
             Selector<TSource, TResult> selector,
             int skipCount, int takeCount)
-            => new WhereSelectEnumerable<TSource, TResult>(source, predicate, selector, skipCount, takeCount);
+            => new ArrayWhereSelectEnumerable<TSource, TResult>(source, predicate, selector, skipCount, takeCount);
 
         [GeneratorMapping("TSource", "TResult")]
-        public readonly partial struct WhereSelectEnumerable<TSource, TResult>
-            : IValueEnumerable<TResult, WhereSelectEnumerable<TSource, TResult>.DisposableEnumerator>
+        public readonly partial struct ArrayWhereSelectEnumerable<TSource, TResult>
+            : IValueEnumerable<TResult, ArrayWhereSelectEnumerable<TSource, TResult>.DisposableEnumerator>
         {
             internal readonly TSource[] source;
             internal readonly Predicate<TSource> predicate;
@@ -34,7 +34,7 @@ namespace NetFabric.Hyperlinq
             readonly int skipCount;
             readonly int takeCount;
 
-            internal WhereSelectEnumerable(TSource[] source, Predicate<TSource> predicate, Selector<TSource, TResult> selector, int skipCount, int takeCount)
+            internal ArrayWhereSelectEnumerable(TSource[] source, Predicate<TSource> predicate, Selector<TSource, TResult> selector, int skipCount, int takeCount)
             {
                 this.source = source;
                 this.predicate = predicate;
@@ -43,10 +43,14 @@ namespace NetFabric.Hyperlinq
             }
 
             [Pure]
-            public readonly Enumerator GetEnumerator() => new Enumerator(in this);
-            readonly DisposableEnumerator IValueEnumerable<TResult, WhereSelectEnumerable<TSource, TResult>.DisposableEnumerator>.GetEnumerator() => new DisposableEnumerator(in this);
-            readonly IEnumerator<TResult> IEnumerable<TResult>.GetEnumerator() => new DisposableEnumerator(in this);
-            readonly IEnumerator IEnumerable.GetEnumerator() => new DisposableEnumerator(in this);
+            public readonly Enumerator GetEnumerator() 
+                => new Enumerator(in this);
+            readonly DisposableEnumerator IValueEnumerable<TResult, ArrayWhereSelectEnumerable<TSource, TResult>.DisposableEnumerator>.GetEnumerator() 
+                => new DisposableEnumerator(in this);
+            readonly IEnumerator<TResult> IEnumerable<TResult>.GetEnumerator() 
+                => new DisposableEnumerator(in this);
+            readonly IEnumerator IEnumerable.GetEnumerator() 
+                => new DisposableEnumerator(in this);
 
             public struct Enumerator
             {
@@ -56,7 +60,7 @@ namespace NetFabric.Hyperlinq
                 readonly int end;
                 int index;
 
-                internal Enumerator(in WhereSelectEnumerable<TSource, TResult> enumerable)
+                internal Enumerator(in ArrayWhereSelectEnumerable<TSource, TResult> enumerable)
                 {
                     source = enumerable.source;
                     predicate = enumerable.predicate;
@@ -88,7 +92,7 @@ namespace NetFabric.Hyperlinq
                 readonly int end;
                 int index;
 
-                internal DisposableEnumerator(in WhereSelectEnumerable<TSource, TResult> enumerable)
+                internal DisposableEnumerator(in ArrayWhereSelectEnumerable<TSource, TResult> enumerable)
                 {
                     source = enumerable.source;
                     predicate = enumerable.predicate;

@@ -6,21 +6,21 @@ using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class SpanExtensions
+    public static partial class Array
     {
         [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static RefDistinctEnumerable<TSource> Distinct<TSource>(
+        public static SpanDistinctEnumerable<TSource> Distinct<TSource>(
             this ReadOnlySpan<TSource> source, 
             IEqualityComparer<TSource>? comparer = null)
-            => new RefDistinctEnumerable<TSource>(source, comparer);
+            => new SpanDistinctEnumerable<TSource>(source, comparer);
 
-        public readonly ref struct RefDistinctEnumerable<TSource>
+        public readonly ref struct SpanDistinctEnumerable<TSource>
         {
             readonly ReadOnlySpan<TSource> source;
             readonly IEqualityComparer<TSource>? comparer;
 
-            internal RefDistinctEnumerable(ReadOnlySpan<TSource> source, IEqualityComparer<TSource>? comparer)
+            internal SpanDistinctEnumerable(ReadOnlySpan<TSource> source, IEqualityComparer<TSource>? comparer)
             {
                 this.source = source;
                 this.comparer = comparer;
@@ -36,7 +36,7 @@ namespace NetFabric.Hyperlinq
                 int index;
                 TSource current;
 
-                internal Enumerator(in RefDistinctEnumerable<TSource> enumerable)
+                internal Enumerator(in SpanDistinctEnumerable<TSource> enumerable)
                 {
                     source = enumerable.source;
                     set = new HashSet<TSource>(enumerable.comparer);

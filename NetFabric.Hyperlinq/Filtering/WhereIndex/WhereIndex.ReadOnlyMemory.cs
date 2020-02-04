@@ -7,34 +7,38 @@ using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class SpanExtensions
+    public static partial class Array
     {
         [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static WhereIndexEnumerable<TSource> Where<TSource>(this ReadOnlyMemory<TSource> source, PredicateAt<TSource> predicate) 
+        public static MemoryWhereIndexEnumerable<TSource> Where<TSource>(this ReadOnlyMemory<TSource> source, PredicateAt<TSource> predicate) 
         {
             if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
 
-            return new WhereIndexEnumerable<TSource>(source, predicate);
+            return new MemoryWhereIndexEnumerable<TSource>(source, predicate);
         }
 
-        public readonly partial struct WhereIndexEnumerable<TSource>
-            : IValueEnumerable<TSource, WhereIndexEnumerable<TSource>.DisposableEnumerator>
+        public readonly partial struct MemoryWhereIndexEnumerable<TSource>
+            : IValueEnumerable<TSource, MemoryWhereIndexEnumerable<TSource>.DisposableEnumerator>
         {
             internal readonly ReadOnlyMemory<TSource> source;
             internal readonly PredicateAt<TSource> predicate;
 
-            internal WhereIndexEnumerable(in ReadOnlyMemory<TSource> source, PredicateAt<TSource> predicate)
+            internal MemoryWhereIndexEnumerable(in ReadOnlyMemory<TSource> source, PredicateAt<TSource> predicate)
             {
                 this.source = source;
                 this.predicate = predicate;
             }
 
             [Pure]
-            public readonly Enumerator GetEnumerator() => new Enumerator(in this);
-            readonly DisposableEnumerator IValueEnumerable<TSource, WhereIndexEnumerable<TSource>.DisposableEnumerator>.GetEnumerator() => new DisposableEnumerator(in this);
-            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new DisposableEnumerator(in this);
-            readonly IEnumerator IEnumerable.GetEnumerator() => new DisposableEnumerator(in this);
+            public readonly Enumerator GetEnumerator() 
+                => new Enumerator(in this);
+            readonly DisposableEnumerator IValueEnumerable<TSource, MemoryWhereIndexEnumerable<TSource>.DisposableEnumerator>.GetEnumerator() 
+                => new DisposableEnumerator(in this);
+            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() 
+                => new DisposableEnumerator(in this);
+            readonly IEnumerator IEnumerable.GetEnumerator() 
+                => new DisposableEnumerator(in this);
 
             public ref struct Enumerator 
             {
@@ -42,7 +46,7 @@ namespace NetFabric.Hyperlinq
                 readonly PredicateAt<TSource> predicate;
                 int index;
 
-                internal Enumerator(in WhereIndexEnumerable<TSource> enumerable)
+                internal Enumerator(in MemoryWhereIndexEnumerable<TSource> enumerable)
                 {
                     source = enumerable.source.Span;
                     predicate = enumerable.predicate;
@@ -71,7 +75,7 @@ namespace NetFabric.Hyperlinq
                 readonly PredicateAt<TSource> predicate;
                 int index;
 
-                internal DisposableEnumerator(in WhereIndexEnumerable<TSource> enumerable)
+                internal DisposableEnumerator(in MemoryWhereIndexEnumerable<TSource> enumerable)
                 {
                     source = enumerable.source;
                     predicate = enumerable.predicate;
@@ -119,9 +123,9 @@ namespace NetFabric.Hyperlinq
                 => source.Span.SingleOrDefault(predicate);
 
             public void ForEach(Action<TSource> action)
-                => SpanExtensions.ForEach<TSource>(source.Span, action, predicate);
+                => Array.ForEach<TSource>(source.Span, action, predicate);
             public void ForEach(ActionAt<TSource> action)
-                => SpanExtensions.ForEach<TSource>(source.Span, action, predicate);
+                => Array.ForEach<TSource>(source.Span, action, predicate);
         }
     }
 }

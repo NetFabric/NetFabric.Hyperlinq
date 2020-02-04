@@ -6,23 +6,23 @@ using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class SpanExtensions
+    public static partial class Array
     {
         [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static RefWhereEnumerable<TSource> Where<TSource>(this ReadOnlySpan<TSource> source, Predicate<TSource> predicate) 
+        public static SpanWhereEnumerable<TSource> Where<TSource>(this ReadOnlySpan<TSource> source, Predicate<TSource> predicate) 
         {
             if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
 
-            return new RefWhereEnumerable<TSource>(source, predicate);
+            return new SpanWhereEnumerable<TSource>(source, predicate);
         }
 
-        public readonly ref struct RefWhereEnumerable<TSource>
+        public readonly ref struct SpanWhereEnumerable<TSource>
         {
             internal readonly ReadOnlySpan<TSource> source;
             internal readonly Predicate<TSource> predicate;
 
-            internal RefWhereEnumerable(in ReadOnlySpan<TSource> source, Predicate<TSource> predicate)
+            internal SpanWhereEnumerable(in ReadOnlySpan<TSource> source, Predicate<TSource> predicate)
             {
                 this.source = source;
                 this.predicate = predicate;
@@ -37,7 +37,7 @@ namespace NetFabric.Hyperlinq
                 readonly Predicate<TSource> predicate;
                 int index;
 
-                internal Enumerator(in RefWhereEnumerable<TSource> enumerable)
+                internal Enumerator(in SpanWhereEnumerable<TSource> enumerable)
                 {
                     source = enumerable.source;
                     predicate = enumerable.predicate;
@@ -62,7 +62,7 @@ namespace NetFabric.Hyperlinq
             public int Count()
                 => source.Count(predicate);
 
-            public RefWhereSelectEnumerable<TSource, TResult> Select<TResult>(Selector<TSource, TResult> selector)
+            public SpanWhereSelectEnumerable<TSource, TResult> Select<TResult>(Selector<TSource, TResult> selector)
                 => WhereSelect<TSource, TResult>(source, predicate, selector);
 
             public TSource First()

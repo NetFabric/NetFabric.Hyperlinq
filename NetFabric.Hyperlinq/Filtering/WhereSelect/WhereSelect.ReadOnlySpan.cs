@@ -1,16 +1,13 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
-using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class SpanExtensions
+    public static partial class Array
     {
         [Pure]
-        internal static RefWhereSelectEnumerable<TSource, TResult> WhereSelect<TSource, TResult>(
+        internal static SpanWhereSelectEnumerable<TSource, TResult> WhereSelect<TSource, TResult>(
             this ReadOnlySpan<TSource> source, 
             Predicate<TSource> predicate, 
             Selector<TSource, TResult> selector) 
@@ -18,17 +15,17 @@ namespace NetFabric.Hyperlinq
             if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
             if (selector is null) Throw.ArgumentNullException(nameof(selector));
 
-            return new RefWhereSelectEnumerable<TSource, TResult>(source, predicate, selector);
+            return new SpanWhereSelectEnumerable<TSource, TResult>(source, predicate, selector);
         }
 
         [GeneratorMapping("TSource", "TResult")]
-        public readonly ref struct RefWhereSelectEnumerable<TSource, TResult>
+        public readonly ref struct SpanWhereSelectEnumerable<TSource, TResult>
         {
             internal readonly ReadOnlySpan<TSource> source;
             internal readonly Predicate<TSource> predicate;
             internal readonly Selector<TSource, TResult> selector;
 
-            internal RefWhereSelectEnumerable(ReadOnlySpan<TSource> source, Predicate<TSource> predicate, Selector<TSource, TResult> selector)
+            internal SpanWhereSelectEnumerable(ReadOnlySpan<TSource> source, Predicate<TSource> predicate, Selector<TSource, TResult> selector)
             {
                 this.source = source;
                 this.predicate = predicate;
@@ -45,7 +42,7 @@ namespace NetFabric.Hyperlinq
                 readonly Selector<TSource, TResult> selector;
                 int index;
 
-                internal Enumerator(in RefWhereSelectEnumerable<TSource, TResult> enumerable)
+                internal Enumerator(in SpanWhereSelectEnumerable<TSource, TResult> enumerable)
                 {
                     source = enumerable.source;
                     predicate = enumerable.predicate;

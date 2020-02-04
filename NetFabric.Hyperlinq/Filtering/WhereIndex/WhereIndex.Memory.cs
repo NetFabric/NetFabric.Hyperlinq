@@ -4,11 +4,11 @@ using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class SpanExtensions
+    public static partial class Array
     {
         [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static WhereIndexEnumerable<TSource> Where<TSource>(this Memory<TSource> source, PredicateAt<TSource> predicate)
+        public static MemoryWhereIndexEnumerable<TSource> Where<TSource>(this Memory<TSource> source, PredicateAt<TSource> predicate)
             => Where((ReadOnlyMemory<TSource>)source, predicate);
     }
 }

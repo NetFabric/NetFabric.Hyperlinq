@@ -1,5 +1,6 @@
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Configs;
+using System;
 
 namespace NetFabric.Hyperlinq.Benchmarks
 {
@@ -95,6 +96,26 @@ namespace NetFabric.Hyperlinq.Benchmarks
         { 
             var count = 0;
             foreach(var item in array.Where(item => (item & 0x01) == 0).Select(item => item))
+                count++;
+            return count;
+        }
+
+        [BenchmarkCategory("Array")]
+        [Benchmark]
+        public int Hyperlinq_Span()
+        {
+            var count = 0;
+            foreach (var item in array.AsSpan().Where(item => (item & 0x01) == 0).Select(item => item))
+                count++;
+            return count;
+        }
+
+        [BenchmarkCategory("Array")]
+        [Benchmark]
+        public int Hyperlinq_Memory()
+        {
+            var count = 0;
+            foreach (var item in array.AsMemory().Where(item => (item & 0x01) == 0).Select(item => item))
                 count++;
             return count;
         }
