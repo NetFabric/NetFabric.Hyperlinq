@@ -11,28 +11,28 @@ namespace NetFabric.Hyperlinq
     {
         [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static DistinctEnumerable<TSource> Distinct<TSource>(
+        public static ArrayDistinctEnumerable<TSource> Distinct<TSource>(
             this TSource[] source, 
             IEqualityComparer<TSource>? comparer = null)
-            => new DistinctEnumerable<TSource>(source, comparer, 0, source.Length);
+            => new ArrayDistinctEnumerable<TSource>(source, comparer, 0, source.Length);
 
         [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static DistinctEnumerable<TSource> Distinct<TSource>(
+        static ArrayDistinctEnumerable<TSource> Distinct<TSource>(
             this TSource[] source,
             IEqualityComparer<TSource>? comparer,
             int skipCount, int takeCount)
-            => new DistinctEnumerable<TSource>(source, comparer, skipCount, takeCount);
+            => new ArrayDistinctEnumerable<TSource>(source, comparer, skipCount, takeCount);
 
-        public readonly partial struct DistinctEnumerable<TSource>
-            : IValueEnumerable<TSource, DistinctEnumerable<TSource>.DisposableEnumerator>
+        public readonly partial struct ArrayDistinctEnumerable<TSource>
+            : IValueEnumerable<TSource, ArrayDistinctEnumerable<TSource>.DisposableEnumerator>
         {
             readonly TSource[] source;
             readonly IEqualityComparer<TSource>? comparer;
             internal readonly int skipCount;
             internal readonly int takeCount;
 
-            internal DistinctEnumerable(TSource[] source, IEqualityComparer<TSource>? comparer, int skipCount, int takeCount)
+            internal ArrayDistinctEnumerable(TSource[] source, IEqualityComparer<TSource>? comparer, int skipCount, int takeCount)
             {
                 this.source = source;
                 this.comparer = comparer;
@@ -40,10 +40,14 @@ namespace NetFabric.Hyperlinq
             }
 
             [Pure]
-            public readonly Enumerator GetEnumerator() => new Enumerator(in this);
-            readonly DisposableEnumerator IValueEnumerable<TSource, DistinctEnumerable<TSource>.DisposableEnumerator>.GetEnumerator() => new DisposableEnumerator(in this);
-            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new DisposableEnumerator(in this);
-            readonly IEnumerator IEnumerable.GetEnumerator() => new DisposableEnumerator(in this);
+            public readonly Enumerator GetEnumerator() 
+                => new Enumerator(in this);
+            readonly DisposableEnumerator IValueEnumerable<TSource, ArrayDistinctEnumerable<TSource>.DisposableEnumerator>.GetEnumerator() 
+                => new DisposableEnumerator(in this);
+            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() 
+                => new DisposableEnumerator(in this);
+            readonly IEnumerator IEnumerable.GetEnumerator() 
+                => new DisposableEnumerator(in this);
 
             public struct Enumerator
             {
@@ -53,7 +57,7 @@ namespace NetFabric.Hyperlinq
                 int index;
                 TSource current;
 
-                internal Enumerator(in DistinctEnumerable<TSource> enumerable)
+                internal Enumerator(in ArrayDistinctEnumerable<TSource> enumerable)
                 {
                     source = enumerable.source;
                     set = new HashSet<TSource>(enumerable.comparer);
@@ -89,7 +93,7 @@ namespace NetFabric.Hyperlinq
                 int index;
                 TSource current;
 
-                internal DisposableEnumerator(in DistinctEnumerable<TSource> enumerable)
+                internal DisposableEnumerator(in ArrayDistinctEnumerable<TSource> enumerable)
                 {
                     source = enumerable.source;
                     set = new HashSet<TSource>(enumerable.comparer);
@@ -128,12 +132,12 @@ namespace NetFabric.Hyperlinq
                 => new HashSet<TSource>(source, comparer);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly DistinctEnumerable<TSource> Skip(int count)
-                => new DistinctEnumerable<TSource>(source, comparer, skipCount + count, takeCount);
+            public readonly ArrayDistinctEnumerable<TSource> Skip(int count)
+                => new ArrayDistinctEnumerable<TSource>(source, comparer, skipCount + count, takeCount);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly DistinctEnumerable<TSource> Take(int count)
-                => new DistinctEnumerable<TSource>(source, comparer, skipCount, Math.Min(takeCount, count));
+            public readonly ArrayDistinctEnumerable<TSource> Take(int count)
+                => new ArrayDistinctEnumerable<TSource>(source, comparer, skipCount, Math.Min(takeCount, count));
 
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]

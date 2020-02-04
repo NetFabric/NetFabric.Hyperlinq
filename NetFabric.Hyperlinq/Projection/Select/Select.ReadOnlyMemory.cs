@@ -7,36 +7,40 @@ using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class SpanExtensions
+    public static partial class Array
     {
         [Pure]
-        public static SelectEnumerable<TSource, TResult> Select<TSource, TResult>(
+        public static MemorySelectEnumerable<TSource, TResult> Select<TSource, TResult>(
             this ReadOnlyMemory<TSource> source, 
             Selector<TSource, TResult> selector)
         {
             if (selector is null) Throw.ArgumentNullException(nameof(selector));
 
-            return new SelectEnumerable<TSource, TResult>(in source, selector);
+            return new MemorySelectEnumerable<TSource, TResult>(in source, selector);
         }
 
         [GeneratorMapping("TSource", "TResult")]
-        public readonly partial struct SelectEnumerable<TSource, TResult>
-            : IValueReadOnlyList<TResult, SelectEnumerable<TSource, TResult>.DisposableEnumerator>
+        public readonly partial struct MemorySelectEnumerable<TSource, TResult>
+            : IValueReadOnlyList<TResult, MemorySelectEnumerable<TSource, TResult>.DisposableEnumerator>
         {
             internal readonly ReadOnlyMemory<TSource> source;
             internal readonly Selector<TSource, TResult> selector;
 
-            internal SelectEnumerable(in ReadOnlyMemory<TSource> source, Selector<TSource, TResult> selector)
+            internal MemorySelectEnumerable(in ReadOnlyMemory<TSource> source, Selector<TSource, TResult> selector)
             {
                 this.source = source;
                 this.selector = selector;
             }
 
             [Pure]
-            public readonly Enumerator GetEnumerator() => new Enumerator(in this);
-            readonly DisposableEnumerator IValueEnumerable<TResult, SelectEnumerable<TSource, TResult>.DisposableEnumerator>.GetEnumerator() => new DisposableEnumerator(in this);
-            readonly IEnumerator<TResult> IEnumerable<TResult>.GetEnumerator() => new DisposableEnumerator(in this);
-            readonly IEnumerator IEnumerable.GetEnumerator() => new DisposableEnumerator(in this);
+            public readonly Enumerator GetEnumerator() 
+                => new Enumerator(in this);
+            readonly DisposableEnumerator IValueEnumerable<TResult, MemorySelectEnumerable<TSource, TResult>.DisposableEnumerator>.GetEnumerator() 
+                => new DisposableEnumerator(in this);
+            readonly IEnumerator<TResult> IEnumerable<TResult>.GetEnumerator() 
+                => new DisposableEnumerator(in this);
+            readonly IEnumerator IEnumerable.GetEnumerator() 
+                => new DisposableEnumerator(in this);
 
             public readonly int Count => source.Length;
 
@@ -58,7 +62,7 @@ namespace NetFabric.Hyperlinq
                 readonly Selector<TSource, TResult> selector;
                 int index;
 
-                internal Enumerator(in SelectEnumerable<TSource, TResult> enumerable)
+                internal Enumerator(in MemorySelectEnumerable<TSource, TResult> enumerable)
                 {
                     source = enumerable.source.Span;
                     selector = enumerable.selector;
@@ -79,7 +83,7 @@ namespace NetFabric.Hyperlinq
                 readonly Selector<TSource, TResult> selector;
                 int index;
 
-                internal DisposableEnumerator(in SelectEnumerable<TSource, TResult> enumerable)
+                internal DisposableEnumerator(in MemorySelectEnumerable<TSource, TResult> enumerable)
                 {
                     source = enumerable.source;
                     selector = enumerable.selector;
@@ -125,13 +129,13 @@ namespace NetFabric.Hyperlinq
                 => ToList<TSource, TResult>(source, selector);
 
             public void ForEach(Action<TResult> action)
-                => SpanExtensions.ForEach(source.Span, action, selector);
+                => Array.ForEach(source.Span, action, selector);
             public void ForEach(ActionAt<TResult> action)
-                => SpanExtensions.ForEach(source.Span, action, selector);
+                => Array.ForEach(source.Span, action, selector);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int Count<TSource, TResult>(this SelectEnumerable<TSource, TResult> source)
+        public static int Count<TSource, TResult>(this MemorySelectEnumerable<TSource, TResult> source)
             => source.Count;
     }
 }

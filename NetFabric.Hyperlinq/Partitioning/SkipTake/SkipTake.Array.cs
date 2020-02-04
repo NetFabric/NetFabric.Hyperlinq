@@ -98,22 +98,22 @@ namespace NetFabric.Hyperlinq
 
             [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public Array.WhereEnumerable<TSource> Where(Predicate<TSource> predicate)
+            public Array.ArrayWhereEnumerable<TSource> Where(Predicate<TSource> predicate)
                 => Array.Where<TSource>(source, predicate, skipCount, takeCount);
 
             [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public Array.WhereIndexEnumerable<TSource> Where(PredicateAt<TSource> predicate)
+            public Array.ArrayWhereIndexEnumerable<TSource> Where(PredicateAt<TSource> predicate)
                 => Array.Where<TSource>(source, predicate, skipCount, takeCount);
 
             [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public Array.SelectEnumerable<TSource, TResult> Select<TResult>(Selector<TSource, TResult> selector)
+            public Array.ArraySelectEnumerable<TSource, TResult> Select<TResult>(Selector<TSource, TResult> selector)
                 => Array.Select<TSource, TResult>(source, selector, skipCount, takeCount);
 
             [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public Array.SelectIndexEnumerable<TSource, TResult> Select<TResult>(SelectorAt<TSource, TResult> selector)
+            public Array.ArraySelectIndexEnumerable<TSource, TResult> Select<TResult>(SelectorAt<TSource, TResult> selector)
                 => Array.Select<TSource, TResult>(source, selector, skipCount, takeCount);
 
             [Pure]

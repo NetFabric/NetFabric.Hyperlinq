@@ -7,32 +7,36 @@ using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class SpanExtensions
+    public static partial class Array
     {
         [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static DistinctEnumerable<TSource> Distinct<TSource>(
+        public static MemoryDistinctEnumerable<TSource> Distinct<TSource>(
             this ReadOnlyMemory<TSource> source, 
             IEqualityComparer<TSource>? comparer = null)
-            => new DistinctEnumerable<TSource>(source, comparer);
+            => new MemoryDistinctEnumerable<TSource>(source, comparer);
 
-        public readonly partial struct DistinctEnumerable<TSource>
-            : IValueEnumerable<TSource, DistinctEnumerable<TSource>.DisposableEnumerator>
+        public readonly partial struct MemoryDistinctEnumerable<TSource>
+            : IValueEnumerable<TSource, MemoryDistinctEnumerable<TSource>.DisposableEnumerator>
         {
             readonly ReadOnlyMemory<TSource> source;
             readonly IEqualityComparer<TSource>? comparer;
 
-            internal DistinctEnumerable(ReadOnlyMemory<TSource> source, IEqualityComparer<TSource>? comparer)
+            internal MemoryDistinctEnumerable(ReadOnlyMemory<TSource> source, IEqualityComparer<TSource>? comparer)
             {
                 this.source = source;
                 this.comparer = comparer;
             }
 
             [Pure]
-            public readonly Enumerator GetEnumerator() => new Enumerator(in this);
-            readonly DisposableEnumerator IValueEnumerable<TSource, DistinctEnumerable<TSource>.DisposableEnumerator>.GetEnumerator() => new DisposableEnumerator(in this);
-            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new DisposableEnumerator(in this);
-            readonly IEnumerator IEnumerable.GetEnumerator() => new DisposableEnumerator(in this);
+            public readonly Enumerator GetEnumerator() 
+                => new Enumerator(in this);
+            readonly DisposableEnumerator IValueEnumerable<TSource, MemoryDistinctEnumerable<TSource>.DisposableEnumerator>.GetEnumerator() 
+                => new DisposableEnumerator(in this);
+            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() 
+                => new DisposableEnumerator(in this);
+            readonly IEnumerator IEnumerable.GetEnumerator() 
+                => new DisposableEnumerator(in this);
 
             public ref struct Enumerator
             {
@@ -41,7 +45,7 @@ namespace NetFabric.Hyperlinq
                 int index;
                 TSource current;
 
-                internal Enumerator(in DistinctEnumerable<TSource> enumerable)
+                internal Enumerator(in MemoryDistinctEnumerable<TSource> enumerable)
                 {
                     source = enumerable.source.Span;
                     set = new HashSet<TSource>(enumerable.comparer);
@@ -75,7 +79,7 @@ namespace NetFabric.Hyperlinq
                 int index;
                 TSource current;
 
-                internal DisposableEnumerator(in DistinctEnumerable<TSource> enumerable)
+                internal DisposableEnumerator(in MemoryDistinctEnumerable<TSource> enumerable)
                 {
                     source = enumerable.source;
                     set = new HashSet<TSource>(enumerable.comparer);

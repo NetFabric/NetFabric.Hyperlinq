@@ -10,32 +10,32 @@ namespace NetFabric.Hyperlinq
     public static partial class Array
     {
         [Pure]
-        public static SelectIndexEnumerable<TSource, TResult> Select<TSource, TResult>(
+        public static ArraySelectIndexEnumerable<TSource, TResult> Select<TSource, TResult>(
             this TSource[] source, 
             SelectorAt<TSource, TResult> selector)
         {
             if (selector is null) Throw.ArgumentNullException(nameof(selector));
 
-            return new SelectIndexEnumerable<TSource, TResult>(source, selector, 0, source.Length);
+            return new ArraySelectIndexEnumerable<TSource, TResult>(source, selector, 0, source.Length);
         }
 
         [Pure]
-        static SelectIndexEnumerable<TSource, TResult> Select<TSource, TResult>(
+        static ArraySelectIndexEnumerable<TSource, TResult> Select<TSource, TResult>(
             this TSource[] source,
             SelectorAt<TSource, TResult> selector,
             int skipCount, int takeCount)
-            => new SelectIndexEnumerable<TSource, TResult>(source, selector, skipCount, takeCount);
+            => new ArraySelectIndexEnumerable<TSource, TResult>(source, selector, skipCount, takeCount);
 
         [GeneratorMapping("TSource", "TResult")]
-        public readonly partial struct SelectIndexEnumerable<TSource, TResult>
-            : IValueReadOnlyList<TResult, SelectIndexEnumerable<TSource, TResult>.Enumerator>
+        public readonly partial struct ArraySelectIndexEnumerable<TSource, TResult>
+            : IValueReadOnlyList<TResult, ArraySelectIndexEnumerable<TSource, TResult>.Enumerator>
         {
             readonly TSource[] source;
             readonly SelectorAt<TSource, TResult> selector;
             readonly int skipCount;
             readonly int takeCount;
 
-            internal SelectIndexEnumerable(TSource[] source, SelectorAt<TSource, TResult> selector, int skipCount, int takeCount)
+            internal ArraySelectIndexEnumerable(TSource[] source, SelectorAt<TSource, TResult> selector, int skipCount, int takeCount)
             {
                 this.source = source;
                 this.selector = selector;
@@ -71,7 +71,7 @@ namespace NetFabric.Hyperlinq
                 readonly int takeCount;
                 int index;
 
-                internal Enumerator(in SelectIndexEnumerable<TSource, TResult> enumerable)
+                internal Enumerator(in ArraySelectIndexEnumerable<TSource, TResult> enumerable)
                 {
                     source = enumerable.source;
                     selector = enumerable.selector;
@@ -101,23 +101,23 @@ namespace NetFabric.Hyperlinq
                 => source.Length;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public SelectIndexEnumerable<TSource, TResult> Skip(int count)
-                => new SelectIndexEnumerable<TSource, TResult>(source, selector, skipCount + count, takeCount);
+            public ArraySelectIndexEnumerable<TSource, TResult> Skip(int count)
+                => new ArraySelectIndexEnumerable<TSource, TResult>(source, selector, skipCount + count, takeCount);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public SelectIndexEnumerable<TSource, TResult> Take(int count)
-                => new SelectIndexEnumerable<TSource, TResult>(source, selector, skipCount, Math.Min(takeCount, count));
+            public ArraySelectIndexEnumerable<TSource, TResult> Take(int count)
+                => new ArraySelectIndexEnumerable<TSource, TResult>(source, selector, skipCount, Math.Min(takeCount, count));
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Any()
                 => takeCount != 0;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public Array.SelectIndexEnumerable<TSource, TSelectorResult> Select<TSelectorResult>(Selector<TResult, TSelectorResult> selector)
+            public Array.ArraySelectIndexEnumerable<TSource, TSelectorResult> Select<TSelectorResult>(Selector<TResult, TSelectorResult> selector)
                 => Array.Select<TSource, TSelectorResult>(source, Utils.Combine(this.selector, selector), skipCount, takeCount);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public Array.SelectIndexEnumerable<TSource, TSelectorResult> Select<TSelectorResult>(SelectorAt<TResult, TSelectorResult> selector)
+            public Array.ArraySelectIndexEnumerable<TSource, TSelectorResult> Select<TSelectorResult>(SelectorAt<TResult, TSelectorResult> selector)
                 => Array.Select<TSource, TSelectorResult>(source, Utils.Combine(this.selector, selector), skipCount, takeCount);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -193,7 +193,7 @@ namespace NetFabric.Hyperlinq
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int Count<TSource, TResult>(this SelectIndexEnumerable<TSource, TResult> source)
+        public static int Count<TSource, TResult>(this ArraySelectIndexEnumerable<TSource, TResult> source)
             => source.Count;
     }
 }

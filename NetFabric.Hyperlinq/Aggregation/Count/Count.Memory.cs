@@ -4,7 +4,7 @@ using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class SpanExtensions
+    public static partial class Array
     {
         [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -14,12 +14,12 @@ namespace NetFabric.Hyperlinq
         [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int Count<TSource>(this Memory<TSource> source, Predicate<TSource> predicate)
-            => Count(source.Span, predicate);
+            => Count((ReadOnlySpan<TSource>)source.Span, predicate);
 
         [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int Count<TSource>(this Memory<TSource> source, PredicateAt<TSource> predicate)
-            => Count(source.Span, predicate);
+            => Count((ReadOnlySpan<TSource>)source.Span, predicate);
     }
 }
 

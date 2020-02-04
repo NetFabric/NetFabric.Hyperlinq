@@ -7,26 +7,30 @@ using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class SpanExtensions
+    public static partial class Array
     {
         [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ValueEnumerableWrapper<TSource> AsValueEnumerable<TSource>(this ReadOnlyMemory<TSource> source)
-            => new ValueEnumerableWrapper<TSource>(source);
+        public static MemoryValueEnumerableWrapper<TSource> AsValueEnumerable<TSource>(this ReadOnlyMemory<TSource> source)
+            => new MemoryValueEnumerableWrapper<TSource>(source);
 
-        public readonly partial struct ValueEnumerableWrapper<TSource>
-            : IValueReadOnlyList<TSource, ValueEnumerableWrapper<TSource>.DisposableEnumerator>
+        public readonly partial struct MemoryValueEnumerableWrapper<TSource>
+            : IValueReadOnlyList<TSource, MemoryValueEnumerableWrapper<TSource>.DisposableEnumerator>
         {
             readonly ReadOnlyMemory<TSource> source;
 
-            internal ValueEnumerableWrapper(ReadOnlyMemory<TSource> source) 
+            internal MemoryValueEnumerableWrapper(ReadOnlyMemory<TSource> source) 
                 => this.source = source;
 
             [Pure]
-            public readonly Enumerator GetEnumerator() => new Enumerator(source);
-            readonly DisposableEnumerator IValueEnumerable<TSource, ValueEnumerableWrapper<TSource>.DisposableEnumerator>.GetEnumerator() => new DisposableEnumerator(source);
-            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new DisposableEnumerator(source);
-            readonly IEnumerator IEnumerable.GetEnumerator() => new DisposableEnumerator(source);
+            public readonly Enumerator GetEnumerator() 
+                => new Enumerator(source);
+            readonly DisposableEnumerator IValueEnumerable<TSource, MemoryValueEnumerableWrapper<TSource>.DisposableEnumerator>.GetEnumerator() 
+                => new DisposableEnumerator(source);
+            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() 
+                => new DisposableEnumerator(source);
+            readonly IEnumerator IEnumerable.GetEnumerator() 
+                => new DisposableEnumerator(source);
 
             public readonly int Count => source.Length;
 
@@ -87,7 +91,7 @@ namespace NetFabric.Hyperlinq
             }
         }
 
-        public static int Count<TSource>(this ValueEnumerableWrapper<TSource> source)
+        public static int Count<TSource>(this MemoryValueEnumerableWrapper<TSource> source)
             => source.Count;
     }
 }

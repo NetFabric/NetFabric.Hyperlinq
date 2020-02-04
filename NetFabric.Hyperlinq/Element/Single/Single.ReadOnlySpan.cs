@@ -4,7 +4,7 @@ using System.Diagnostics.Contracts;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class SpanExtensions
+    public static partial class Array
     {
         [Pure]
         public static ref readonly TSource Single<TSource>(this ReadOnlySpan<TSource> source)

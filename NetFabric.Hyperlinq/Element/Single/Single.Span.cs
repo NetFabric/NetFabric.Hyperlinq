@@ -5,12 +5,12 @@ using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class SpanExtensions
+    public static partial class Array
     {
         [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ref readonly TSource Single<TSource>(this Span<TSource> source)
-            => ref Single<TSource>((ReadOnlySpan<TSource>)source);
+            => ref Single((ReadOnlySpan<TSource>)source);
 
         [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -31,7 +31,7 @@ namespace NetFabric.Hyperlinq
         [return: MaybeNull]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ref readonly TSource SingleOrDefault<TSource>(this Span<TSource> source)
-            => ref SingleOrDefault<TSource>((ReadOnlySpan<TSource>)source);
+            => ref SingleOrDefault((ReadOnlySpan<TSource>)source);
 
         [Pure]
         [return: MaybeNull]

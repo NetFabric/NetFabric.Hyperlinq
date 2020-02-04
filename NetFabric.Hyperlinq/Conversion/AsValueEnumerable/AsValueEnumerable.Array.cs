@@ -11,22 +11,26 @@ namespace NetFabric.Hyperlinq
     {
         [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ValueEnumerableWrapper<TSource> AsValueEnumerable<TSource>(this TSource[] source)
-            => new ValueEnumerableWrapper<TSource>(source);
+        public static ArrayValueEnumerableWrapper<TSource> AsValueEnumerable<TSource>(this TSource[] source)
+            => new ArrayValueEnumerableWrapper<TSource>(source);
 
-        public readonly partial struct ValueEnumerableWrapper<TSource>
-            : IValueReadOnlyList<TSource, ValueEnumerableWrapper<TSource>.DisposableEnumerator>
+        public readonly partial struct ArrayValueEnumerableWrapper<TSource>
+            : IValueReadOnlyList<TSource, ArrayValueEnumerableWrapper<TSource>.DisposableEnumerator>
         {
             readonly TSource[] source;
 
-            internal ValueEnumerableWrapper(TSource[] source) 
+            internal ArrayValueEnumerableWrapper(TSource[] source) 
                 => this.source = source;
 
             [Pure]
-            public readonly Enumerator GetEnumerator() => new Enumerator(source);
-            readonly DisposableEnumerator IValueEnumerable<TSource, ValueEnumerableWrapper<TSource>.DisposableEnumerator>.GetEnumerator() => new DisposableEnumerator(source);
-            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new DisposableEnumerator(source);
-            readonly IEnumerator IEnumerable.GetEnumerator() => new DisposableEnumerator(source);
+            public readonly Enumerator GetEnumerator() 
+                => new Enumerator(source);
+            readonly DisposableEnumerator IValueEnumerable<TSource, ArrayValueEnumerableWrapper<TSource>.DisposableEnumerator>.GetEnumerator() 
+                => new DisposableEnumerator(source);
+            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() 
+                => new DisposableEnumerator(source);
+            readonly IEnumerator IEnumerable.GetEnumerator() 
+                => new DisposableEnumerator(source);
 
             public readonly int Count => source.Length;
 
@@ -86,7 +90,7 @@ namespace NetFabric.Hyperlinq
             }
         }
 
-        public static int Count<TSource>(this ValueEnumerableWrapper<TSource> source)
+        public static int Count<TSource>(this ArrayValueEnumerableWrapper<TSource> source)
             => source.Count;
     }
 }

@@ -5,23 +5,23 @@ using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class SpanExtensions
+    public static partial class Array
     {
         [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static RefWhereIndexEnumerable<TSource> Where<TSource>(this ReadOnlySpan<TSource> source, PredicateAt<TSource> predicate) 
+        public static SpanWhereIndexEnumerable<TSource> Where<TSource>(this ReadOnlySpan<TSource> source, PredicateAt<TSource> predicate) 
         {
             if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
 
-            return new RefWhereIndexEnumerable<TSource>(source, predicate);
+            return new SpanWhereIndexEnumerable<TSource>(source, predicate);
         }
 
-        public readonly ref struct RefWhereIndexEnumerable<TSource>
+        public readonly ref struct SpanWhereIndexEnumerable<TSource>
         {
             internal readonly ReadOnlySpan<TSource> source;
             internal readonly PredicateAt<TSource> predicate;
 
-            internal RefWhereIndexEnumerable(in ReadOnlySpan<TSource> source, PredicateAt<TSource> predicate)
+            internal SpanWhereIndexEnumerable(in ReadOnlySpan<TSource> source, PredicateAt<TSource> predicate)
             {
                 this.source = source;
                 this.predicate = predicate;
@@ -36,7 +36,7 @@ namespace NetFabric.Hyperlinq
                 readonly PredicateAt<TSource> predicate;
                 int index;
 
-                internal Enumerator(in RefWhereIndexEnumerable<TSource> enumerable)
+                internal Enumerator(in SpanWhereIndexEnumerable<TSource> enumerable)
                 {
                     source = enumerable.source;
                     predicate = enumerable.predicate;
