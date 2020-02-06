@@ -16,7 +16,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var wrapped = Wrap
                 .AsAsyncValueEnumerable(source);
             var expected = 
-                await System.Linq.AsyncEnumerable.CountAsync(wrapped);
+                System.Linq.Enumerable.Count(source);
 
             // Act
             var result = await AsyncValueEnumerable
@@ -53,7 +53,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var wrapped = Wrap
                 .AsAsyncValueEnumerable(source);
             var expected = 
-                await System.Linq.AsyncEnumerable.CountAsync(wrapped, predicate.AsFunc());
+                System.Linq.Enumerable.Count(source, predicate.AsFunc());
 
             // Act
             var result = await AsyncValueEnumerable
@@ -90,8 +90,8 @@ namespace NetFabric.Hyperlinq.UnitTests
             var wrapped = Wrap
                 .AsAsyncValueEnumerable(source);
             var expected = 
-                await System.Linq.AsyncEnumerable.CountAsync(
-                    System.Linq.AsyncEnumerable.Where(wrapped, predicate.AsFunc()));
+                System.Linq.Enumerable.Count(
+                    System.Linq.Enumerable.Where(source, predicate.AsFunc()));
 
             // Act
             var result = await AsyncValueEnumerable

@@ -14,6 +14,8 @@ namespace NetFabric.Hyperlinq
         [Pure]
         public static long LongCount<TSource>(this TSource[] source, Predicate<TSource> predicate)
         {
+            if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
+
             var count = 0L;
             for (var index = 0L; index < source.LongLength; index++)
             {
@@ -26,6 +28,8 @@ namespace NetFabric.Hyperlinq
         [Pure]
         public static long LongCount<TSource>(this TSource[] source, PredicateAtLong<TSource> predicate)
         {
+            if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
+
             var count = 0L;
             for (var index = 0L; index < source.LongLength; index++)
             {

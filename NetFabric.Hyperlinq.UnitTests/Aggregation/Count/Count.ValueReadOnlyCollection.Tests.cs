@@ -16,7 +16,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var wrapped = Wrap
                 .AsValueReadOnlyCollection(source);
             var expected = 
-                System.Linq.Enumerable.Count(wrapped);
+                System.Linq.Enumerable.Count(source);
 
             // Act
             var result = ValueReadOnlyCollection
@@ -54,7 +54,7 @@ namespace NetFabric.Hyperlinq.UnitTests
                 .AsValueReadOnlyCollection(source);
             var expected = 
                 System.Linq.Enumerable.Count(
-                    System.Linq.Enumerable.Where(wrapped, predicate.AsFunc()));
+                    System.Linq.Enumerable.Where(source, predicate.AsFunc()));
 
             // Act
             var result = ValueReadOnlyCollection
@@ -71,7 +71,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             // Arrange
             var wrapped = Wrap
                 .AsValueReadOnlyCollection(new int[0]);
-             var predicate = (PredicateAt<int>)null;
+            var predicate = (PredicateAt<int>)null;
 
             // Act
             Action action = () => ValueReadOnlyCollection
@@ -92,7 +92,7 @@ namespace NetFabric.Hyperlinq.UnitTests
                 .AsValueReadOnlyCollection(source);
             var expected = 
                 System.Linq.Enumerable.Count(
-                    System.Linq.Enumerable.Where(wrapped, predicate.AsFunc()));
+                    System.Linq.Enumerable.Where(source, predicate.AsFunc()));
 
             // Act
             var result = ValueReadOnlyCollection

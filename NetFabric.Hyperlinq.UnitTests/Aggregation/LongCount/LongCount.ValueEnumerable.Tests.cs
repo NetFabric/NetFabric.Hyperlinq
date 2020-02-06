@@ -16,7 +16,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var wrapped = Wrap
                 .AsValueEnumerable(source);
             var expected = 
-                System.Linq.Enumerable.LongCount(wrapped);
+                System.Linq.Enumerable.LongCount(source);
 
             // Act
             var result = ValueEnumerable
@@ -53,7 +53,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var wrapped = Wrap
                 .AsValueEnumerable(source);
             var expected = 
-                System.Linq.Enumerable.LongCount(wrapped, predicate.AsFunc());
+                System.Linq.Enumerable.LongCount(source, predicate.AsFunc());
 
             // Act
             var result = ValueEnumerable
@@ -91,7 +91,7 @@ namespace NetFabric.Hyperlinq.UnitTests
                 .AsValueEnumerable(source);
             var expected = 
                 System.Linq.Enumerable.LongCount(
-                    System.Linq.Enumerable.Where(wrapped, predicate.AsFunc()));
+                    System.Linq.Enumerable.Where(source, predicate.AsFunc()));
 
             // Act
             var result = ValueEnumerable
