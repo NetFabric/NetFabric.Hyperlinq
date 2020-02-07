@@ -10,13 +10,13 @@
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageTags>netfabric, hyperlinq, linq, enumeration, extensions, performance</PackageTags>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
-    <DefineConstants>CONTRACTS_FULL</DefineConstants>
+    <DefineConstants>$(DefineConstants);CONTRACTS_FULL</DefineConstants>
     <Nullable>enable</Nullable> 
     <!-- <TreatWarningsAsErrors>true</TreatWarningsAsErrors> -->
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(TargetFramework)'=='netcoreapp2.1' Or '$(TargetFramework)'=='netstandard2.1'">
-    <DefineConstants>NETCORE</DefineConstants>
+    <DefineConstants>$(DefineConstants);NETCORE</DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(TargetFramework)'!='netstandard2.1'">

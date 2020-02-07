@@ -99,7 +99,8 @@ namespace NetFabric.Hyperlinq
                 public bool MoveNext() 
                     => ++index < source.Length;
 
-                public void Reset() 
+                [ExcludeFromCodeCoverage]
+                public readonly void Reset() 
                     => throw new NotSupportedException();
 
                 public void Dispose() { }

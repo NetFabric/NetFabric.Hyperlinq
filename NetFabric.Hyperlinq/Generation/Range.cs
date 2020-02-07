@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
 using System.Runtime.CompilerServices;
 
@@ -97,9 +98,12 @@ namespace NetFabric.Hyperlinq
                     => current;
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                public bool MoveNext() => ++this.current < end;
+                public bool MoveNext() 
+                    => ++this.current < end;
 
-                public readonly void Reset() => throw new NotSupportedException();
+                [ExcludeFromCodeCoverage]
+                public readonly void Reset() 
+                    => throw new NotSupportedException();
 
                 public readonly void Dispose() { }
             }

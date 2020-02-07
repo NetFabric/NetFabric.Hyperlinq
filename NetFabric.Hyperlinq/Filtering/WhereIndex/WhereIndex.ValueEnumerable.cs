@@ -74,6 +74,7 @@ namespace NetFabric.Hyperlinq
                     return false;
                 }
 
+                [ExcludeFromCodeCoverage]
                 public readonly void Reset() 
                     => throw new NotSupportedException();
 

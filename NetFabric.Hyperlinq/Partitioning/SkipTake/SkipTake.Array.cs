@@ -72,6 +72,7 @@ namespace NetFabric.Hyperlinq
                 public bool MoveNext() 
                     => ++index < end;
 
+                [ExcludeFromCodeCoverage]
                 public readonly void Reset() 
                     => throw new NotSupportedException();
 

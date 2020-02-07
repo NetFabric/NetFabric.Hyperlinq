@@ -8,6 +8,11 @@ namespace NetFabric.Hyperlinq
     public static partial class ReadOnlyList
     {
         [Pure]
+        public static int Count<TList, TSource>(this TList source)
+            where TList : notnull, IReadOnlyList<TSource>
+            => source.Count;
+
+        [Pure]
         public static int Count<TList, TSource>(this TList source, Predicate<TSource> predicate)
             where TList : notnull, IReadOnlyList<TSource>
         {

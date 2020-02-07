@@ -14,9 +14,6 @@ namespace NetFabric.Hyperlinq
 
         [Pure]
         public static int Count<TSource>(this TSource[] source, Predicate<TSource> predicate)
-#if NETCORE
-            => Count<TSource>(source.AsSpan(), predicate);
-#else
         {
             if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
 
@@ -28,7 +25,6 @@ namespace NetFabric.Hyperlinq
             }
             return count;
         }
-#endif
 
         [Pure]
         static int Count<TSource>(this TSource[] source, Predicate<TSource> predicate, int skipCount, int takeCount)
