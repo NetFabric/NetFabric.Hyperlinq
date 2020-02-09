@@ -46,7 +46,9 @@ namespace NetFabric.Hyperlinq.UnitTests
         }
 
         [Theory]
-        [MemberData(nameof(TestData.Predicate), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.PredicateEmpty), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.PredicateSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.PredicateMultiple), MemberType = typeof(TestData))]
         public async void CountAsync_Predicate_With_ValidData_Should_Succeed(int[] source, Predicate<int> predicate)
         {
             // Arrange
@@ -83,7 +85,9 @@ namespace NetFabric.Hyperlinq.UnitTests
         }
 
         [Theory]
-        [MemberData(nameof(TestData.PredicateAt), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.PredicateAtEmpty), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.PredicateAtSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.PredicateAtMultiple), MemberType = typeof(TestData))]
         public async void CountAsync_PredicateAt_With_ValidData_Should_Succeed(int[] source, PredicateAt<int> predicate)
         {
             // Arrange

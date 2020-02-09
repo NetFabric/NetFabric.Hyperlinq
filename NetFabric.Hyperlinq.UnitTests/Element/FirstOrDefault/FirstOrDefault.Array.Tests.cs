@@ -27,9 +27,9 @@ namespace NetFabric.Hyperlinq.UnitTests
         }
 
         [Theory]
-        [MemberData(nameof(TestData.SinglePredicateEmpty), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.SinglePredicateSingle), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.SinglePredicateMultiple), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.PredicateEmpty), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.PredicateSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.PredicateMultiple), MemberType = typeof(TestData))]
         public void FirstOrDefaultPredicate_With_ValidData_Should_Succeed(int[] source, Predicate<int> predicate)
         {
             // Arrange

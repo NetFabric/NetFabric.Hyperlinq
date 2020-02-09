@@ -42,7 +42,9 @@ namespace NetFabric.Hyperlinq.UnitTests
         }
 
         [Theory]
-        [MemberData(nameof(TestData.Skip_Skip), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakeEmpty), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakeSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakeMultiple), MemberType = typeof(TestData))]
         public void Skip_Take_With_ValidData_Should_Succeed(int[] source, int skipCount, int takeCount)
         {
             // Arrange

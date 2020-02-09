@@ -23,7 +23,7 @@ namespace NetFabric.Hyperlinq.UnitTests
         }
 
         [Theory]
-        [MemberData(nameof(TestData.SinglePredicateEmpty), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.PredicateEmpty), MemberType = typeof(TestData))]
         public void FirstPredicate_With_Empty_Should_Throw(int[] source, Predicate<int> predicate)
         {
             // Arrange
@@ -57,8 +57,8 @@ namespace NetFabric.Hyperlinq.UnitTests
         }
 
         [Theory]
-        [MemberData(nameof(TestData.SinglePredicateSingle), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.SinglePredicateMultiple), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.PredicateSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.PredicateMultiple), MemberType = typeof(TestData))]
         public void FirstPredicate_With_ValidData_Should_Succeed(int[] source, Predicate<int> predicate)
         {
             // Arrange

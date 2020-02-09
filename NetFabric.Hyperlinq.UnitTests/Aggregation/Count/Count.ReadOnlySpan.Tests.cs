@@ -4,7 +4,7 @@ using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests
 {
-    public class CountValueReadOnlyCollectionTests
+    public class ReadOnlySpanArrayTests
     {
         [Theory]
         [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
@@ -13,14 +13,12 @@ namespace NetFabric.Hyperlinq.UnitTests
         public void Count_With_ValidData_Should_Succeed(int[] source)
         {
             // Arrange
-            var wrapped = Wrap
-                .AsValueReadOnlyCollection(source);
             var expected = 
                 System.Linq.Enumerable.Count(source);
 
             // Act
-            var result = ValueReadOnlyCollection
-                .Count<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(wrapped);
+            var result = Array
+                .Count<int>((ReadOnlySpan<int>)source.AsSpan());
 
             // Assert
             _ = result.Must()
@@ -31,13 +29,12 @@ namespace NetFabric.Hyperlinq.UnitTests
         public void Count_Predicate_With_Null_Should_Throw()
         {
             // Arrange
-            var wrapped = Wrap
-                .AsValueReadOnlyCollection(new int[0]);
+            var source = new int[0];
             var predicate = (Predicate<int>)null;
 
             // Act
-            Action action = () => ValueReadOnlyCollection
-                .Count<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
+            Action action = () => Array
+                .Count<int>((ReadOnlySpan<int>)source.AsSpan(), predicate);
 
             // Assert
             _ = action.Must()
@@ -52,15 +49,12 @@ namespace NetFabric.Hyperlinq.UnitTests
         public void Count_Predicate_With_ValidData_Should_Succeed(int[] source, Predicate<int> predicate)
         {
             // Arrange
-            var wrapped = Wrap
-                .AsValueReadOnlyCollection(source);
             var expected = 
-                System.Linq.Enumerable.Count(
-                    System.Linq.Enumerable.Where(source, predicate.AsFunc()));
+                System.Linq.Enumerable.Count(source, predicate.AsFunc());
 
             // Act
-            var result = ValueReadOnlyCollection
-                .Count<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
+            var result = Array
+                .Count<int>((ReadOnlySpan<int>)source.AsSpan(), predicate);
 
             // Assert
             _ = result.Must()
@@ -71,13 +65,12 @@ namespace NetFabric.Hyperlinq.UnitTests
         public void Count_PredicateAt_With_Null_Should_Throw()
         {
             // Arrange
-            var wrapped = Wrap
-                .AsValueReadOnlyCollection(new int[0]);
+            var source = new int[0];
             var predicate = (PredicateAt<int>)null;
 
             // Act
-            Action action = () => ValueReadOnlyCollection
-                .Count<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
+            Action action = () => Array
+                .Count<int>((ReadOnlySpan<int>)source.AsSpan(), predicate);
 
             // Assert
             _ = action.Must()
@@ -92,15 +85,13 @@ namespace NetFabric.Hyperlinq.UnitTests
         public void Count_PredicateAt_With_ValidData_Should_Succeed(int[] source, PredicateAt<int> predicate)
         {
             // Arrange
-            var wrapped = Wrap
-                .AsValueReadOnlyCollection(source);
             var expected = 
                 System.Linq.Enumerable.Count(
                     System.Linq.Enumerable.Where(source, predicate.AsFunc()));
 
             // Act
-            var result = ValueReadOnlyCollection
-                .Count<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
+            var result = Array
+                .Count<int>((ReadOnlySpan<int>)source.AsSpan(), predicate);
 
             // Assert
             _ = result.Must()

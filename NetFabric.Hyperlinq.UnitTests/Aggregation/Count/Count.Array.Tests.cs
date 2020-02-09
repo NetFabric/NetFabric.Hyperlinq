@@ -43,7 +43,9 @@ namespace NetFabric.Hyperlinq.UnitTests
         }
 
         [Theory]
-        [MemberData(nameof(TestData.Predicate), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.PredicateEmpty), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.PredicateSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.PredicateMultiple), MemberType = typeof(TestData))]
         public void Count_Predicate_With_ValidData_Should_Succeed(int[] source, Predicate<int> predicate)
         {
             // Arrange
@@ -53,6 +55,27 @@ namespace NetFabric.Hyperlinq.UnitTests
             // Act
             var result = Array
                 .Count<int>(source, predicate);
+
+            // Assert
+            _ = result.Must()
+                .BeEqualTo(expected);
+        }
+
+        [Theory]
+        [MemberData(nameof(TestData.SkipTakePredicateEmpty), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakePredicateSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakePredicateMultiple), MemberType = typeof(TestData))]
+        public void Count_Skip_Count_Predicate_With_ValidData_Should_Succeed(int[] source, int skipCount, int takeCount, Predicate<int> predicate)
+        {
+            // Arrange
+            var expected = 
+                System.Linq.Enumerable.Count(
+                    System.Linq.Enumerable.Take(
+                        System.Linq.Enumerable.Skip(source, skipCount), takeCount), predicate.AsFunc());
+
+            // Act
+            var result = Array
+                .Count<int>(source.Skip(skipCount).Take(takeCount), predicate);
 
             // Assert
             _ = result.Must()
@@ -77,7 +100,9 @@ namespace NetFabric.Hyperlinq.UnitTests
         }
 
         [Theory]
-        [MemberData(nameof(TestData.PredicateAt), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.PredicateAtEmpty), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.PredicateAtSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.PredicateAtMultiple), MemberType = typeof(TestData))]
         public void Count_PredicateAt_With_ValidData_Should_Succeed(int[] source, PredicateAt<int> predicate)
         {
             // Arrange
@@ -88,6 +113,31 @@ namespace NetFabric.Hyperlinq.UnitTests
             // Act
             var result = Array
                 .Count<int>(source, predicate);
+
+            // Assert
+            _ = result.Must()
+                .BeEqualTo(expected);
+        }
+
+        [Theory]
+        [MemberData(nameof(TestData.SkipTakePredicateAtEmpty), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakePredicateAtSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakePredicateAtMultiple), MemberType = typeof(TestData))]
+        public void Count_Skip_Count_PredicateAt_With_ValidData_Should_Succeed(int[] source, int skipCount, int takeCount, PredicateAt<int> predicate)
+        {
+            // Arrange
+            var expected = 
+                System.Linq.Enumerable.Count(
+                    System.Linq.Enumerable.Where(
+                        System.Linq.Enumerable.Take(
+                            System.Linq.Enumerable.Skip(source, skipCount), takeCount), predicate.AsFunc()));
+
+            // Act
+            var result = source
+                .Skip(skipCount)
+                .Take(takeCount)
+                .Where(predicate)
+                .Count();
 
             // Assert
             _ = result.Must()
