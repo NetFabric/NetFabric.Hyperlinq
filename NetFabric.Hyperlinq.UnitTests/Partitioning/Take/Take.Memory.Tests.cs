@@ -1,9 +1,10 @@
 using NetFabric.Assertive;
+using System;
 using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests
 {
-    public class TakeReadOnlyListTests
+    public class TakeMemoryTests
     {
         [Theory]
         [MemberData(nameof(TestData.TakeEmpty), MemberType = typeof(TestData))]
@@ -12,16 +13,15 @@ namespace NetFabric.Hyperlinq.UnitTests
         public void Take_With_ValidData_Should_Succeed(int[] source, int count)
         {
             // Arrange
-            var wrapped = Wrap.AsValueReadOnlyList(source);
-            var expected = System.Linq.Enumerable.Take(source, count);
+            var expected = 
+                System.Linq.Enumerable.Take(source, count);
 
             // Act
-            var result = ReadOnlyList
-                .Take<Wrap.ValueReadOnlyList<int>, int>(wrapped, count);
+            var result = Array
+                .Take(source.AsMemory(), count);
 
             // Assert
             _ = result.Must()
-                .BeEnumerableOf<int>()
                 .BeEqualTo(expected);
         }
     }

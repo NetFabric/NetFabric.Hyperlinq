@@ -1,9 +1,10 @@
 using NetFabric.Assertive;
+using System;
 using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests
 {
-    public class SkipValueReadOnlyListTests
+    public class SkipReadOnlyMemoryTests
     {
         [Theory]
         [MemberData(nameof(TestData.SkipEmpty), MemberType = typeof(TestData))]
@@ -12,15 +13,13 @@ namespace NetFabric.Hyperlinq.UnitTests
         public void Skip_With_ValidData_Should_Succeed(int[] source, int count)
         {
             // Arrange
-            var wrapped = Wrap.AsValueReadOnlyList(source);
             var expected = System.Linq.Enumerable.Skip(source, count);
 
             // Act
-            var result = ReadOnlyList.Skip<Wrap.ValueReadOnlyList<int>, int>(wrapped, count);
+            var result = Array.Skip((ReadOnlyMemory<int>)source.AsMemory(), count);
 
             // Assert
             _ = result.Must()
-                .BeEnumerableOf<int>()
                 .BeEqualTo(expected);
         }
     }
