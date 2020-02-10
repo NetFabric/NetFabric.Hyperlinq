@@ -7,6 +7,27 @@ namespace NetFabric.Hyperlinq.UnitTests
 {
     public class SkipTakeArrayTests
     {
+
+        [Theory]
+        [InlineData(1, -1)]
+        [InlineData(1, 1)]
+        [InlineData(3, -1)]
+        [InlineData(3, 3)]
+        public void SkipTake_Indexer_With_OutOfRange__Should_Throw(int takeCount, int index)
+        {
+            // Arrange
+            var source = new int[] { 1, 2, 3, 4, 5 };
+
+            // Act
+            Func<int> action = () => Array
+                .SkipTake<int>(source, 0, takeCount)[index];
+
+            // Assert
+            _ = action.Must()
+                .Throw<ArgumentOutOfRangeException>()
+                .EvaluateTrue(exception => exception.ParamName == "index");
+        }
+
         [Theory]
         [MemberData(nameof(TestData.SkipTakeEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakeSingle), MemberType = typeof(TestData))]
