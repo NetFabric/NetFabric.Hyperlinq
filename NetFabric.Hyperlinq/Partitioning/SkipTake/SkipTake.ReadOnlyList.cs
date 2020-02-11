@@ -88,6 +88,15 @@ namespace NetFabric.Hyperlinq
 
             [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public bool All(Predicate<TSource> predicate)
+                => ReadOnlyList.All<TList, TSource>(source, predicate, skipCount, takeCount);
+            [Pure]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public bool All(PredicateAt<TSource> predicate)
+                => ReadOnlyList.All<TList, TSource>(source, predicate, skipCount, takeCount);
+
+            [Pure]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Any()
                 => ReadOnlyList.Any<TList, TSource>(source, skipCount, takeCount);
             [Pure]
@@ -98,6 +107,11 @@ namespace NetFabric.Hyperlinq
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Any(PredicateAt<TSource> predicate)
                 => ReadOnlyList.Any<TList, TSource>(source, predicate, skipCount, takeCount);
+
+            [Pure]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public bool Contains(TSource value, IEqualityComparer<TSource>? comparer = null)
+                => ReadOnlyList.Contains<TList, TSource>(source, value, comparer, skipCount, takeCount);
 
             [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]

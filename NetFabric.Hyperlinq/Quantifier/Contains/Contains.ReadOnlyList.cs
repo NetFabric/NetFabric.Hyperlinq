@@ -17,9 +17,10 @@ namespace NetFabric.Hyperlinq
         {
             if (takeCount != 0)
             {
+                var end = skipCount + takeCount;
                 if (comparer is null)
                 {
-                    for (var index = skipCount; index < takeCount; index++)
+                    for (var index = skipCount; index < end; index++)
                     {
                         if (EqualityComparer<TSource>.Default.Equals(source[index], value))
                             return true;
@@ -27,7 +28,7 @@ namespace NetFabric.Hyperlinq
                 }
                 else
                 {
-                    for (var index = skipCount; index < takeCount; index++)
+                    for (var index = skipCount; index < end; index++)
                     {
                         if (comparer.Equals(source[index], value))
                             return true;

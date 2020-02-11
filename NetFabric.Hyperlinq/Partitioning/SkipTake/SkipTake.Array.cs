@@ -86,6 +86,15 @@ namespace NetFabric.Hyperlinq
 
             [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public bool All(Predicate<TSource> predicate)
+                => Array.All<TSource>(source, predicate, skipCount, takeCount);
+            [Pure]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public bool All(PredicateAt<TSource> predicate)
+                => Array.All<TSource>(source, predicate, skipCount, takeCount);
+
+            [Pure]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Any()
                 => Array.Any<TSource>(source, skipCount, takeCount);
             [Pure]
@@ -96,6 +105,11 @@ namespace NetFabric.Hyperlinq
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Any(PredicateAt<TSource> predicate)
                 => Array.Any<TSource>(source, predicate, skipCount, takeCount);
+
+            [Pure]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public bool Contains(TSource value, IEqualityComparer<TSource>? comparer = null)
+                => Array.Contains<TSource>(source, value, comparer, skipCount, takeCount);
 
             [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]

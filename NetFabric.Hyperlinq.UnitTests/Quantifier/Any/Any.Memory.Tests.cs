@@ -1,13 +1,12 @@
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using NetFabric.Assertive;
+using System;
 using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests
 {
-    public class AnyValueEnumerableTests
+    public class AnyMemoryTests
     {
+
         [Theory]
         [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
@@ -15,13 +14,12 @@ namespace NetFabric.Hyperlinq.UnitTests
         public void Any_With_ValidData_Should_Succeed(int[] source)
         {
             // Arrange
-            var wrapped = Wrap.AsValueEnumerable(source);
             var expected = 
                 System.Linq.Enumerable.Any(source);
 
             // Act
-            var result = ValueEnumerable
-                .Any<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped);
+            var result = Array
+                .Any<int>(source.AsMemory());
 
             // Assert
             _ = result.Must()
@@ -33,12 +31,11 @@ namespace NetFabric.Hyperlinq.UnitTests
         {
             // Arrange
             var source = new int[0];
-            var wrapped = Wrap.AsValueEnumerable(source);
             var predicate = (Predicate<int>)null;
 
             // Act
-            Action action = () => 
-                ValueEnumerable.Any<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
+            Action action = () => Array
+                .Any<int>(source.AsMemory(), predicate);
 
             // Assert
             _ = action.Must()
@@ -53,13 +50,12 @@ namespace NetFabric.Hyperlinq.UnitTests
         public void Any_Predicate_With_ValidData_Should_Succeed(int[] source, Predicate<int> predicate)
         {
             // Arrange
-            var wrapped = Wrap.AsValueEnumerable(source);
             var expected = 
                 System.Linq.Enumerable.Any(source, predicate.AsFunc());
 
             // Act
-            var result = ValueEnumerable
-                .Any<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
+            var result = Array
+                .Any<int>(source.AsMemory(), predicate);
 
             // Assert
             _ = result.Must()
@@ -71,12 +67,11 @@ namespace NetFabric.Hyperlinq.UnitTests
         {
             // Arrange
             var source = new int[0];
-            var wrapped = Wrap.AsValueEnumerable(source);
             var predicate = (PredicateAt<int>)null;
 
             // Act
-            Action action = () => ValueEnumerable
-                .Any<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
+            Action action = () => Array
+                .Any<int>(source.AsMemory(), predicate);
 
             // Assert
             _ = action.Must()
@@ -91,14 +86,13 @@ namespace NetFabric.Hyperlinq.UnitTests
         public void Any_PredicateAt_With_ValidData_Should_Succeed(int[] source, PredicateAt<int> predicate)
         {
             // Arrange
-            var wrapped = Wrap.AsValueEnumerable(source);
             var expected = 
                 System.Linq.Enumerable.Count(
                     System.Linq.Enumerable.Where(source, predicate.AsFunc())) != 0;
 
             // Act
-            var result = ValueEnumerable
-                .Any<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
+            var result = Array
+                .Any<int>(source.AsMemory(), predicate);
 
             // Assert
             _ = result.Must()
