@@ -167,6 +167,8 @@ The following open-source projects are used to build and test this project:
 - [coveralls](https://coveralls.io)
 - [coverlet](https://github.com/tonerdo/coverlet)
 - [NetFabric.Assertive](https://github.com/NetFabric/NetFabric.Assertive)
+- [Nullable](https://github.com/manuelroemer/Nullable)
+- [Source Link](https://github.com/dotnet/sourcelink)
 - [Uno.SourceGeneration](https://github.com/unoplatform/Uno.SourceGeneration)
 - [xUnit.net](https://xunit.net/)
 
