@@ -1,5 +1,6 @@
 using NetFabric.Assertive;
 using System;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests
@@ -10,7 +11,7 @@ namespace NetFabric.Hyperlinq.UnitTests
         [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
-        public async void LongCountAsync_With_ValidData_Should_Succeed(int[] source)
+        public async ValueTask LongCountAsync_With_ValidData_Should_Succeed(int[] source)
         {
             // Arrange
             var wrapped = Wrap
@@ -49,7 +50,7 @@ namespace NetFabric.Hyperlinq.UnitTests
         [MemberData(nameof(TestData.PredicateEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateMultiple), MemberType = typeof(TestData))]
-        public async void LongCountAsync_Predicate_With_ValidData_Should_Succeed(int[] source, Predicate<int> predicate)
+        public async ValueTask LongCountAsync_Predicate_With_ValidData_Should_Succeed(int[] source, Predicate<int> predicate)
         {
             // Arrange
             var wrapped = Wrap
@@ -88,7 +89,7 @@ namespace NetFabric.Hyperlinq.UnitTests
         [MemberData(nameof(TestData.PredicateAtEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateAtSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateAtMultiple), MemberType = typeof(TestData))]
-        public async void LongCountAsync_PredicateAt_With_ValidData_Should_Succeed(int[] source, PredicateAt<int> predicate)
+        public async ValueTask LongCountAsync_PredicateAt_With_ValidData_Should_Succeed(int[] source, PredicateAt<int> predicate)
         {
             // Arrange
             var wrapped = Wrap

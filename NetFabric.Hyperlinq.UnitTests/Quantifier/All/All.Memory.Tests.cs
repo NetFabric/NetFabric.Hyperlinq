@@ -1,21 +1,21 @@
-using NetFabric.Assertive;
 using System;
+using NetFabric.Assertive;
 using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests
 {
-    public class AllValueReadOnlyListTests
+    public class AllMemoryTests
     {
         [Fact]
-        public void All_With_NullPredicate_Should_Throw()
+        public void All_Predicate_With_NullPredicate_Should_Throw()
         {
             // Arrange
-            var wrapped = Wrap.AsValueReadOnlyList(new int[0]);
+            var source = new int[0];
             var predicate = (Predicate<int>)null;
 
             // Act
-            Action action = () => ReadOnlyList
-                .All<Wrap.ValueReadOnlyList<int>, int>(wrapped, predicate);
+            Action action = () => Array
+                .All<int>(source.AsMemory(), predicate);
 
             // Assert
             _ = action.Must()
@@ -27,16 +27,14 @@ namespace NetFabric.Hyperlinq.UnitTests
         [MemberData(nameof(TestData.PredicateEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateMultiple), MemberType = typeof(TestData))]
-        public void All_With_ValidData_Should_Succeed(int[] source, Predicate<int> predicate)
+        public void All_Predicate_With_ValidData_Should_Succeed(int[] source, Predicate<int> predicate)
         {
             // Arrange
-            var wrapped = Wrap.AsValueReadOnlyList(source);
-            var expected = 
-                System.Linq.Enumerable.All(wrapped, predicate.AsFunc());
+            var expected = System.Linq.Enumerable.All(source, predicate.AsFunc());
 
             // Act
-            var result = ReadOnlyList
-                .All<Wrap.ValueReadOnlyList<int>, int>(wrapped, predicate);
+            var result = Array
+                .All<int>(source.AsMemory(), predicate);
 
             // Assert
             _ = result.Must()
@@ -48,12 +46,11 @@ namespace NetFabric.Hyperlinq.UnitTests
         {
             // Arrange
             var source = new int[0];
-            var wrapped = Wrap.AsValueReadOnlyList(source);
             var predicate = (PredicateAt<int>)null;
 
             // Act
-            Action action = () => ReadOnlyList
-                .All<Wrap.ValueReadOnlyList<int>, int>(wrapped, predicate);
+            Action action = () => Array
+                .All<int>(source.AsMemory(), predicate);
 
             // Assert
             _ = action.Must()
@@ -68,14 +65,13 @@ namespace NetFabric.Hyperlinq.UnitTests
         public void All_PredicateAt_With_ValidData_Should_Succeed(int[] source, PredicateAt<int> predicate)
         {
             // Arrange
-            var wrapped = Wrap.AsValueReadOnlyList(source);
             var expected = 
                 System.Linq.Enumerable.Count(
                     System.Linq.Enumerable.Where(source, predicate.AsFunc())) == source.Length;
 
             // Act
-            var result = ReadOnlyList
-                .All<Wrap.ValueReadOnlyList<int>, int>(wrapped, predicate);
+            var result = Array
+                .All<int>(source.AsMemory(), predicate);
 
             // Assert
             _ = result.Must()
