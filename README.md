@@ -7,20 +7,20 @@
 
 # NetFabric.Hyperlinq
 
-*Hyperlinq* outperfoms *LINQ* when enumerating collections that implement `IReadOnlyList<T>` (E.g. arrays and `List<T>`) and collections that have value-typed enumerators (E.g. collections in the `System.Collections.Generic` and `System.Collections.Immutable` namespaces). For any other collection, it also outforms *LINQ* when multiple operations are composed.
+*Hyperlinq* outperforms *LINQ* on collections that implement `IReadOnlyList<T>` (E.g. arrays and `List<T>`) and collections that have value-typed enumerators (E.g. collections in the `System.Collections.Generic` and `System.Collections.Immutable` namespaces). For any other collection, it also outperforms *LINQ* when multiple operations are composed.
 
 This implementation favors performance and reduction of heap allocations, in detriment of assembly binary size (lots of overloads).
 
-## Usage (3.0 and above)
+## Usage
 
 1. Add the *NetFabric.Hyperlinq* [NuGet package](https://www.nuget.org/packages/NetFabric.Hyperlinq/) to your project.
 1. Optionally, also add the *NetFabric.Hyperlinq.Analyzer* [NuGet package](https://www.nuget.org/packages/NetFabric.Hyperlinq.Analyzer/) to your project. It's a Roslyn analyzer that suggests performance improvements on your enumeration source code. No dependencies are added to your assemblies.
-1. Add a `using NetFabric.Hyperlinq` directive to all source code files where you want to use *NetFabric.Hyperlinq*.
-1. Use `ValueEnumerable` static class for generation operations (E.g. `ValueEnumerable.Empty()`, `ValueEnumerable.Range(...)`, `ValueEnumerable.Repeat(...)`, etc.)
-1. *NetFabric.Hyperlinq* and *System.Linq* namespaces can co-exist: 
+1. Add an `using NetFabric.Hyperlinq` directive to all source code files where you want to use *NetFabric.Hyperlinq*.
+1. Use the `ValueEnumerable` static class for generation operations (E.g. `ValueEnumerable.Empty()`, `ValueEnumerable.Range(...)`, `ValueEnumerable.Repeat(...)`, `ValueEnumerable.Return(...)`, etc.)
+1. *NetFabric.Hyperlinq* and *System.Linq* namespaces can co-exist:
    1. *NetFabric.Hyperlinq* uses explicit collection types and higher-order interfaces on its extension methods. These take precedence over the `IEnumerable<T>` extension methods implemented in *System.Linq*.
-   1. In the cases where the above doesn't apply, use the `AsValueEnumerable<TSource>()` extension method. *NetFabric.Hyperlinq* implementations will be used for the subsequent operations. For collections that are value-types and/or return enumerators that are value-types, favor the use of the `AsValueEnumerable<TEnumerable, TEnumerator, TSource>()` overload to avoid boxing.
-   1. *NetFabric.Hyperlinq* does not implement all *System.Linq* operations. The `System.Linq` implementations will be automatically used. You'll have to use `AsValueEnumerable()` in the composition chain to return to *NetFabric.Hyperlinq* implementations.
+   1. In the cases where doesn't automatically apply, use the `AsValueEnumerable<TSource>()` extension method. *NetFabric.Hyperlinq* implementations will then be used for the subsequent operations. For collections that are value-types and/or return enumerators that are value-types, favor the use of the `AsValueEnumerable<TEnumerable, TEnumerator, TSource>()` overload to avoid boxing.
+   1. *NetFabric.Hyperlinq* does not implement all *System.Linq* operations. In these cases, the `System.Linq` implementations will be automatically used. You'll can use `AsValueEnumerable()` on its result to apply *NetFabric.Hyperlinq* implementations from that point on.
 
 ```csharp
 using System.Collections.Generic;
@@ -51,6 +51,7 @@ namespace ConsoleApp
                 .Count();
         }
 
+        // 'yield' generates a reference-type enumerable with a reference-type enumerator
         static IEnumerable<int> MyRange(int start, int count)
         {
             var end = start + count;
@@ -61,7 +62,6 @@ namespace ConsoleApp
 }
 ```
 
-
 ## Documentation
 
 - [Optimizing LINQ](https://medium.com/@antao.almada/netfabric-hyperlinq-optimizing-linq-348e02566cef)
@@ -69,7 +69,7 @@ namespace ConsoleApp
 - [Select Operation](https://medium.com/@antao.almada/netfabric-hyperlinq-select-operation-e4ac2bbfb187)
 - [Zero Allocation](https://medium.com/@antao.almada/netfabric-hyperlinq-zero-allocation-fe5d0dd6b1a6)
 
-## Supported operations:
+## Supported operations
 
 - Aggregation
   - `Count()`
@@ -146,8 +146,6 @@ namespace ConsoleApp
 
 The repository contains a [benchmarks project](https://github.com/NetFabric/NetFabric.Hyperlinq/tree/master/NetFabric.Hyperlinq.Benchmarks) based on [BenchmarkDotNet](https://benchmarkdotnet.org) that compares `NetFabric.Hyperlinq` to `System.Linq` for many of the supported operations and its combinations.
 
-Contains benchmarks comparing performance of operations on LINQ, [System.Interactive](https://github.com/dotnet/reactive), [LinqFaster](https://github.com/jackmott/LinqFaster) and [morelinq](https://morelinq.github.io/).
-
 ## References
 
 - [Enumeration in .NET](https://blog.usejournal.com/enumeration-in-net-d5674921512e) by Antão Almada
@@ -174,4 +172,4 @@ The following open-source projects are used to build and test this project:
 
 ## License
 
-This project is licensed under the MIT license. See the [LICENSE](LICENSE.txt) file for more info.
+This project is licensed under the MIT license. See the [LICENSE](LICENSE) file for more info.
