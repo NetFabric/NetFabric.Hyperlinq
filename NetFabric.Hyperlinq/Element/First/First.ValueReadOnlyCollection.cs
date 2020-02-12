@@ -47,14 +47,12 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : notnull, IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
-            if (source.Count != 0)
-            {
-                using var enumerator = source.GetEnumerator();
-                if (enumerator.MoveNext())
-                    return (ElementResult.Success, enumerator.Current);
-            }
+            if (source.Count == 0)
+                return (ElementResult.Empty, default);
 
-            return (ElementResult.Empty, default);
+            using var enumerator = source.GetEnumerator();
+            _ = enumerator.MoveNext();
+            return (ElementResult.Success, enumerator.Current);
         }
 
         [Pure]
