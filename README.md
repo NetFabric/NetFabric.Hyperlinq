@@ -96,9 +96,6 @@ namespace ConsoleApp
   - `ElementAtOrDefault()`
   - `ElementAtOrDefault(Predicate<TSource>)`
   - `ElementAtOrDefault(PredicateAt<TSource>)`
-  - `TryFirst()`
-  - `TryFirst(Predicate<TSource>)`
-  - `TryFirst(PredicateAt<TSource>)`
   - `First()`
   - `First(Predicate<TSource>)`
   - `First(PredicateAt<TSource>)`

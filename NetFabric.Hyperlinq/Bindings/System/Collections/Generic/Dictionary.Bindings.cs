@@ -111,15 +111,6 @@ namespace NetFabric.Hyperlinq
         [Pure]
         public static KeyValuePair<TKey, TValue> FirstOrDefault<TKey, TValue>(this Dictionary<TKey, TValue> source, Predicate<KeyValuePair<TKey, TValue>> predicate)
             => ValueReadOnlyCollection.FirstOrDefault<ValueWrapper<TKey, TValue>, Dictionary<TKey, TValue>.Enumerator, KeyValuePair<TKey, TValue>>(new ValueWrapper<TKey, TValue>(source), predicate);
-        [Pure]
-        public static Maybe<KeyValuePair<TKey, TValue>> TryFirst<TKey, TValue>(this Dictionary<TKey, TValue> source)
-            => ValueReadOnlyCollection.TryFirst<ValueWrapper<TKey, TValue>, Dictionary<TKey, TValue>.Enumerator, KeyValuePair<TKey, TValue>>(new ValueWrapper<TKey, TValue>(source));
-        [Pure]
-        public static Maybe<KeyValuePair<TKey, TValue>> TryFirst<TKey, TValue>(this Dictionary<TKey, TValue> source, Predicate<KeyValuePair<TKey, TValue>> predicate)
-            => ValueReadOnlyCollection.TryFirst<ValueWrapper<TKey, TValue>, Dictionary<TKey, TValue>.Enumerator, KeyValuePair<TKey, TValue>>(new ValueWrapper<TKey, TValue>(source), predicate);
-        [Pure]
-        public static MaybeAt<KeyValuePair<TKey, TValue>> TryFirst<TKey, TValue>(this Dictionary<TKey, TValue> source, PredicateAt<KeyValuePair<TKey, TValue>> predicate)
-            => ValueReadOnlyCollection.TryFirst<ValueWrapper<TKey, TValue>, Dictionary<TKey, TValue>.Enumerator, KeyValuePair<TKey, TValue>>(new ValueWrapper<TKey, TValue>(source), predicate);
 
         [Pure]
         public static KeyValuePair<TKey, TValue> Single<TKey, TValue>(this Dictionary<TKey, TValue> source)

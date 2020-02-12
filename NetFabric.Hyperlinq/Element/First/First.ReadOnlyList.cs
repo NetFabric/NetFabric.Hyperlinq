@@ -40,28 +40,6 @@ namespace NetFabric.Hyperlinq
 
         [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Maybe<TSource> TryFirst<TList, TSource>(this TList source)
-            where TList : notnull, IReadOnlyList<TSource>
-            => GetFirst<TList, TSource>(source, 0, source.Count).AsMaybe();
-
-        [Pure]
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Maybe<TSource> TryFirst<TList, TSource>(this TList source, Predicate<TSource> predicate)
-            where TList : notnull, IReadOnlyList<TSource>
-            => predicate is null
-                ? Throw.ArgumentNullException<Maybe<TSource>>(nameof(predicate))
-                : GetFirst<TList, TSource>(source, predicate, 0, source.Count).AsMaybe();
-
-        [Pure]
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static MaybeAt<TSource> TryFirst<TList, TSource>(this TList source, PredicateAt<TSource> predicate)
-            where TList : notnull, IReadOnlyList<TSource>
-            => predicate is null
-                ? Throw.ArgumentNullException<MaybeAt<TSource>>(nameof(predicate))
-                : GetFirst<TList, TSource>(source, predicate, 0, source.Count).AsMaybe();
-
-        [Pure]
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static (ElementResult Success, TSource Value) GetFirst<TList, TSource>(this TList source, int skipCount, int takeCount)
             where TList : notnull, IReadOnlyList<TSource>
             => source.Count == 0 || skipCount > source.Count || takeCount < 1

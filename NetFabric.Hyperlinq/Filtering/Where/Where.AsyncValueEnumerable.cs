@@ -120,13 +120,6 @@ namespace NetFabric.Hyperlinq
                 => (await AsyncValueEnumerable.GetFirstAsync<TEnumerable, TEnumerator, TSource>(source, Utils.Combine(this.predicate, predicate), cancellationToken).ConfigureAwait(false))
                     .DefaultOnEmpty();
 
-            public ValueTask<(ElementResult Success, TSource Value)> TryFirstAsync(CancellationToken cancellationToken = default)
-                => AsyncValueEnumerable.GetFirstAsync<TEnumerable, TEnumerator, TSource>(source, predicate, cancellationToken);
-            public ValueTask<(ElementResult Success, TSource Value)> TryFirstAsync(AsyncPredicate<TSource> predicate, CancellationToken cancellationToken = default)
-                => AsyncValueEnumerable.GetFirstAsync<TEnumerable, TEnumerator, TSource>(source, Utils.Combine(this.predicate, predicate), cancellationToken);
-            public ValueTask<(int Index, TSource Value)> TryFirstAsync(AsyncPredicateAt<TSource> predicate, CancellationToken cancellationToken = default)
-                => AsyncValueEnumerable.GetFirstAsync<TEnumerable, TEnumerator, TSource>(source, Utils.Combine(this.predicate, predicate), cancellationToken);
-
             public async ValueTask<TSource> SingleAsync(CancellationToken cancellationToken = default)
                 => (await AsyncValueEnumerable.GetSingleAsync<TEnumerable, TEnumerator, TSource>(source, predicate, cancellationToken))
                     .ThrowOnEmpty();

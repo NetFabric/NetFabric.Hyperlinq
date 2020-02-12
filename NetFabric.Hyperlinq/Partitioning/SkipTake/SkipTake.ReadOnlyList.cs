@@ -174,14 +174,6 @@ namespace NetFabric.Hyperlinq
             [return: MaybeNull]
             public TSource FirstOrDefault(PredicateAt<TSource> predicate)
                 => ReadOnlyList.GetFirst<TList, TSource>(source, predicate, skipCount, takeCount).DefaultOnEmpty();
-            [Pure]
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public (ElementResult Success, TSource Value) TryFirst()
-                => ReadOnlyList.GetFirst<TList, TSource>(source, skipCount, takeCount);
-            [Pure]
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public (ElementResult Success, TSource Value) TryFirst(Predicate<TSource> predicate)
-                => ReadOnlyList.GetFirst<TList, TSource>(source, predicate, skipCount, takeCount);
 
             [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]

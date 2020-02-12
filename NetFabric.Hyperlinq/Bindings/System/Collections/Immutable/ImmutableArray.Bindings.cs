@@ -93,16 +93,6 @@ namespace NetFabric.Hyperlinq
             => ReadOnlyList.TryElementAt<ImmutableArray<TSource>, TSource>(source, index);
 
         [Pure]
-        public static Maybe<TSource> TryFirst<TSource>(this ImmutableArray<TSource> source)
-            => ReadOnlyList.TryFirst<ImmutableArray<TSource>, TSource>(source);
-        [Pure]
-        public static Maybe<TSource> TryFirst<TSource>(this ImmutableArray<TSource> source, Predicate<TSource> predicate)
-            => ReadOnlyList.TryFirst<ImmutableArray<TSource>, TSource>(source, predicate);
-        [Pure]
-        public static MaybeAt<TSource> TryFirst<TSource>(this ImmutableArray<TSource> source, PredicateAt<TSource> predicate)
-            => ReadOnlyList.TryFirst<ImmutableArray<TSource>, TSource>(source, predicate);
-
-        [Pure]
         public static ReadOnlyList.DistinctEnumerable<ImmutableArray<TSource>, TSource> Distinct<TSource>(this ImmutableArray<TSource> source, IEqualityComparer<TSource>? comparer = null)
             => ReadOnlyList.Distinct<ImmutableArray<TSource>, TSource>(source, comparer);
 

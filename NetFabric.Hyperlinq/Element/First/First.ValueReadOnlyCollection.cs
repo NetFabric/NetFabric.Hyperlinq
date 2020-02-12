@@ -43,31 +43,6 @@ namespace NetFabric.Hyperlinq
                 : GetFirst<TEnumerable, TEnumerator, TSource>(source, predicate).DefaultOnEmpty();
 
         [Pure]
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Maybe<TSource> TryFirst<TEnumerable, TEnumerator, TSource>(this TEnumerable source)
-            where TEnumerable : notnull, IValueReadOnlyCollection<TSource, TEnumerator>
-            where TEnumerator : struct, IEnumerator<TSource>
-            => GetFirst<TEnumerable, TEnumerator, TSource>(source).AsMaybe();
-
-        [Pure]
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Maybe<TSource> TryFirst<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Predicate<TSource> predicate)
-            where TEnumerable : notnull, IValueReadOnlyCollection<TSource, TEnumerator>
-            where TEnumerator : struct, IEnumerator<TSource>
-            => predicate is null
-                ? Throw.ArgumentNullException<Maybe<TSource>>(nameof(predicate))
-                : GetFirst<TEnumerable, TEnumerator, TSource>(source, predicate).AsMaybe();
-
-        [Pure]
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static MaybeAt<TSource> TryFirst<TEnumerable, TEnumerator, TSource>(this TEnumerable source, PredicateAt<TSource> predicate)
-            where TEnumerable : notnull, IValueReadOnlyCollection<TSource, TEnumerator>
-            where TEnumerator : struct, IEnumerator<TSource>
-            => predicate is null
-                ? Throw.ArgumentNullException<MaybeAt<TSource>>(nameof(predicate))
-                : GetFirst<TEnumerable, TEnumerator, TSource>(source, predicate).AsMaybe();
-
-        [Pure]
         static (ElementResult Success, TSource Value) GetFirst<TEnumerable, TEnumerator, TSource>(this TEnumerable source) 
             where TEnumerable : notnull, IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
