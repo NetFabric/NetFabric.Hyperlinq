@@ -75,27 +75,5 @@ namespace NetFabric.Hyperlinq
 
             return (ElementResult.Empty, default);
         }
-
-        [Pure]
-        static (int Index, TSource Value) GetFirst<TEnumerable, TEnumerator, TSource>(this TEnumerable source, PredicateAt<TSource> predicate) 
-            where TEnumerable : notnull, IValueReadOnlyCollection<TSource, TEnumerator>
-            where TEnumerator : struct, IEnumerator<TSource>
-        {
-            if (source.Count != 0)
-            {
-                using var enumerator = source.GetEnumerator();
-                checked
-                {
-                    for (var index = 0; enumerator.MoveNext(); index++)
-                    {
-                        var item = enumerator.Current;
-                        if (predicate(item, index))
-                            return (index, item);
-                    }
-                }
-            }
-
-            return ((int)ElementResult.Empty,  default);
-        }    
     }
 }

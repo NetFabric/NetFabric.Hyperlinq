@@ -139,27 +139,5 @@ namespace NetFabric.Hyperlinq.UnitTests
                 .Throw<InvalidOperationException>()
                 .EvaluateTrue(exception => exception.Message == "Sequence contains no elements");
         }
-
-        [Theory]
-        [MemberData(nameof(TestData.PredicateAtSingle), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.PredicateAtMultiple), MemberType = typeof(TestData))]
-        public void First_PredicateAt_With_ValidData_Should_Succeed(int[] source, PredicateAt<int> predicate)
-        {
-            // Arrange
-            var wrapped = Wrap
-                .AsValueReadOnlyCollection(source);
-            var expected = 
-                System.Linq.Enumerable.First(
-                    System.Linq.Enumerable.Where(source, predicate.AsFunc()));
-
-            // Act
-            var result = wrapped
-                .Where<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(predicate)
-                .First();
-
-            // Assert
-            _ = result.Must()
-                .BeEqualTo(expected);
-        }
     }
 }
