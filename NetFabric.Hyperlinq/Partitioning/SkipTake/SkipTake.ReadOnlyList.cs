@@ -157,6 +157,10 @@ namespace NetFabric.Hyperlinq
                 => ReadOnlyList.GetFirst<TList, TSource>(source, predicate, skipCount, takeCount).ThrowOnEmpty();
             [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public TSource First(PredicateAt<TSource> predicate)
+                => ReadOnlyList.GetFirst<TList, TSource>(source, predicate, skipCount, takeCount).ThrowOnEmpty();
+            [Pure]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             [return: MaybeNull]
             public TSource FirstOrDefault()
                 => ReadOnlyList.GetFirst<TList, TSource>(source, skipCount, takeCount).DefaultOnEmpty();
@@ -164,6 +168,11 @@ namespace NetFabric.Hyperlinq
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             [return: MaybeNull]
             public TSource FirstOrDefault(Predicate<TSource> predicate)
+                => ReadOnlyList.GetFirst<TList, TSource>(source, predicate, skipCount, takeCount).DefaultOnEmpty();
+            [Pure]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            [return: MaybeNull]
+            public TSource FirstOrDefault(PredicateAt<TSource> predicate)
                 => ReadOnlyList.GetFirst<TList, TSource>(source, predicate, skipCount, takeCount).DefaultOnEmpty();
             [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]

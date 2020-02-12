@@ -3,6 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace NetFabric.Hyperlinq
 {
+    [ExcludeFromCodeCoverage]
     static class Throw
     {
         [DoesNotReturn]

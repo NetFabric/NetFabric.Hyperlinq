@@ -4,7 +4,7 @@ using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests
 {
-    public class FirstOrDefaultValueReadOnlyCollectionTests
+    public class FirstOrDefaultSpanTests
     {
         [Theory]
         [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
@@ -13,14 +13,12 @@ namespace NetFabric.Hyperlinq.UnitTests
         public void FirstOrDefault_With_ValidData_Should_Succeed(int[] source)
         {
             // Arrange
-            var wrapped = Wrap
-                .AsValueReadOnlyCollection(source);
             var expected = 
                 System.Linq.Enumerable.FirstOrDefault(source);
 
             // Act
-            var result = ValueReadOnlyCollection
-                .FirstOrDefault<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(wrapped);
+            ref readonly var result = ref Array
+                .FirstOrDefault<int>(source.AsSpan());
 
             // Assert
             _ = result.Must()
@@ -32,13 +30,11 @@ namespace NetFabric.Hyperlinq.UnitTests
         {
             // Arrange
             var source = new int[0];
-            var wrapped = Wrap
-                .AsValueReadOnlyCollection(source);
             var predicate = (Predicate<int>)null;
 
             // Act
-            Action action = () => ValueReadOnlyCollection
-                .FirstOrDefault<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
+            Action action = () => Array
+                .FirstOrDefault<int>(source.AsSpan(), predicate);
 
             // Assert
             _ = action.Must()
@@ -53,14 +49,12 @@ namespace NetFabric.Hyperlinq.UnitTests
         public void FirstOrDefault_Predicate_With_ValidData_Should_Succeed(int[] source, Predicate<int> predicate)
         {
             // Arrange
-            var wrapped = Wrap
-                .AsValueReadOnlyCollection(source);
             var expected = 
                 System.Linq.Enumerable.FirstOrDefault(source, predicate.AsFunc());
 
             // Act
-            var result = ValueReadOnlyCollection
-                .FirstOrDefault<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
+            ref readonly var result = ref Array
+                .FirstOrDefault<int>(source.AsSpan(), predicate);
 
             // Assert
             _ = result.Must()
@@ -72,14 +66,11 @@ namespace NetFabric.Hyperlinq.UnitTests
         {
             // Arrange
             var source = new int[0];
-            var wrapped = Wrap
-                .AsValueReadOnlyCollection(source);
             var predicate = (PredicateAt<int>)null;
 
             // Act
-            Action action = () => wrapped
-                .Where<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(predicate)
-                .FirstOrDefault();
+            Action action = () => Array
+                .FirstOrDefault<int>(source.AsSpan(), predicate);
 
             // Assert
             _ = action.Must()
@@ -94,16 +85,13 @@ namespace NetFabric.Hyperlinq.UnitTests
         public void FirstOrDefault_PredicateAt_With_ValidData_Should_Succeed(int[] source, PredicateAt<int> predicate)
         {
             // Arrange
-            var wrapped = Wrap
-                .AsValueReadOnlyCollection(source);
             var expected = 
                 System.Linq.Enumerable.FirstOrDefault(
                     System.Linq.Enumerable.Where(source, predicate.AsFunc()));
 
             // Act
-            var result = wrapped
-                .Where<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(predicate)
-                .FirstOrDefault();
+            ref readonly var result = ref Array
+                .FirstOrDefault<int>(source.AsSpan(), predicate);
 
             // Assert
             _ = result.Must()

@@ -4,19 +4,17 @@ using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests
 {
-    public class FirstValueReadOnlyCollectionTests
+    public class FirstReadOnlyMemoryTests
     {
         [Theory]
         [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
         public void First_With_Empty_Should_Throw(int[] source)
         {
             // Arrange
-            var wrapped = Wrap
-                .AsValueReadOnlyCollection(source);
 
             // Act
-            Action action = () => ValueReadOnlyCollection
-                .First<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(wrapped);
+            Action action = () => Array
+                .First<int>((ReadOnlyMemory<int>)source.AsMemory());
 
             // Assert
             _ = action.Must()
@@ -30,14 +28,12 @@ namespace NetFabric.Hyperlinq.UnitTests
         public void First_With_ValidData_Should_Succeed(int[] source)
         {
             // Arrange
-            var wrapped = Wrap
-                .AsValueReadOnlyCollection(source);
             var expected = 
                 System.Linq.Enumerable.First(source);
 
             // Act
-            var result = ValueReadOnlyCollection
-                .First<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(wrapped);
+            ref readonly var result = ref Array
+                .First<int>((ReadOnlyMemory<int>)source.AsMemory());
 
             // Assert
             _ = result.Must()
@@ -49,13 +45,11 @@ namespace NetFabric.Hyperlinq.UnitTests
         {
             // Arrange
             var source = new int[0];
-            var wrapped = Wrap
-                .AsValueReadOnlyCollection(source);
             var predicate = (Predicate<int>)null;
 
             // Act
-            Action action = () => ValueReadOnlyCollection
-                .First<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
+            Action action = () => Array
+                .First<int>((ReadOnlyMemory<int>)source.AsMemory(), predicate);
 
             // Assert
             _ = action.Must()
@@ -68,12 +62,10 @@ namespace NetFabric.Hyperlinq.UnitTests
         public void First_Predicate_With_Empty_Should_Throw(int[] source, Predicate<int> predicate)
         {
             // Arrange
-            var wrapped = Wrap
-                .AsValueReadOnlyCollection(source);
 
             // Act
-            Action action = () => ValueReadOnlyCollection
-                .First<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
+            Action action = () => Array
+                .First<int>((ReadOnlyMemory<int>)source.AsMemory(), predicate);
 
             // Assert
             _ = action.Must()
@@ -87,14 +79,12 @@ namespace NetFabric.Hyperlinq.UnitTests
         public void First_Predicate_With_ValidData_Should_Succeed(int[] source, Predicate<int> predicate)
         {
             // Arrange
-            var wrapped = Wrap
-                .AsValueReadOnlyCollection(source);
             var expected = 
                 System.Linq.Enumerable.First(source, predicate.AsFunc());
 
             // Act
-            var result = ValueReadOnlyCollection
-                .First<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
+            ref readonly var result = ref Array
+                .First<int>((ReadOnlyMemory<int>)source.AsMemory(), predicate);
 
             // Assert
             _ = result.Must()
@@ -106,14 +96,11 @@ namespace NetFabric.Hyperlinq.UnitTests
         {
             // Arrange
             var source = new int[0];
-            var wrapped = Wrap
-                .AsValueReadOnlyCollection(source);
             var predicate = (PredicateAt<int>)null;
 
             // Act
-            Action action = () => wrapped
-                .Where<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(predicate)
-                .First();
+            Action action = () => Array
+                .First<int>((ReadOnlyMemory<int>)source.AsMemory(), predicate);
 
             // Assert
             _ = action.Must()
@@ -126,13 +113,10 @@ namespace NetFabric.Hyperlinq.UnitTests
         public void First_PredicateAt_With_Empty_Should_Throw(int[] source, PredicateAt<int> predicate)
         {
             // Arrange
-            var wrapped = Wrap
-                .AsValueReadOnlyCollection(source);
 
             // Act
-            Action action = () => wrapped
-                .Where<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(predicate)
-                .First();
+            Action action = () => Array
+                .First<int>((ReadOnlyMemory<int>)source.AsMemory(), predicate);
 
             // Assert
             _ = action.Must()
@@ -146,16 +130,13 @@ namespace NetFabric.Hyperlinq.UnitTests
         public void First_PredicateAt_With_ValidData_Should_Succeed(int[] source, PredicateAt<int> predicate)
         {
             // Arrange
-            var wrapped = Wrap
-                .AsValueReadOnlyCollection(source);
             var expected = 
                 System.Linq.Enumerable.First(
                     System.Linq.Enumerable.Where(source, predicate.AsFunc()));
 
             // Act
-            var result = wrapped
-                .Where<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(predicate)
-                .First();
+            ref readonly var result = ref Array
+                .First<int>((ReadOnlyMemory<int>)source.AsMemory(), predicate);
 
             // Assert
             _ = result.Must()

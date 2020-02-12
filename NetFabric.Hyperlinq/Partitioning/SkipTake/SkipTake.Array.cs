@@ -155,6 +155,10 @@ namespace NetFabric.Hyperlinq
                 => ref Array.First<TSource>(source, predicate, skipCount, takeCount);
             [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public ref readonly TSource First(PredicateAt<TSource> predicate)
+                => ref Array.First<TSource>(source, predicate, skipCount, takeCount);
+            [Pure]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             [return: MaybeNull]
             public ref readonly TSource FirstOrDefault()
                 => ref Array.FirstOrDefault<TSource>(source, skipCount, takeCount);
@@ -162,6 +166,11 @@ namespace NetFabric.Hyperlinq
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             [return: MaybeNull]
             public ref readonly TSource FirstOrDefault(Predicate<TSource> predicate)
+                => ref Array.FirstOrDefault<TSource>(source, predicate, skipCount, takeCount);
+            [Pure]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            [return: MaybeNull]
+            public ref readonly TSource FirstOrDefault(PredicateAt<TSource> predicate)
                 => ref Array.FirstOrDefault<TSource>(source, predicate, skipCount, takeCount);
 
             [Pure]

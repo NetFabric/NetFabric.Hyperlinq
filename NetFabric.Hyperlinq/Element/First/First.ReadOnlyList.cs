@@ -18,7 +18,9 @@ namespace NetFabric.Hyperlinq
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static TSource First<TList, TSource>(this TList source, Predicate<TSource> predicate) 
             where TList : notnull, IReadOnlyList<TSource>
-            => GetFirst<TList, TSource>(source, predicate, 0, source.Count).ThrowOnEmpty();
+            => predicate is null
+                ? Throw.ArgumentNullException<TSource>(nameof(predicate))
+                : GetFirst<TList, TSource>(source, predicate, 0, source.Count).ThrowOnEmpty();
 
         [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -32,7 +34,9 @@ namespace NetFabric.Hyperlinq
         [return: MaybeNull]
         public static TSource FirstOrDefault<TList, TSource>(this TList source, Predicate<TSource> predicate) 
             where TList : notnull, IReadOnlyList<TSource>
-            => GetFirst<TList, TSource>(source, predicate, 0, source.Count).DefaultOnEmpty();
+            => predicate is null
+                ? Throw.ArgumentNullException<TSource>(nameof(predicate))
+                : GetFirst<TList, TSource>(source, predicate, 0, source.Count).DefaultOnEmpty();
 
         [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -44,13 +48,17 @@ namespace NetFabric.Hyperlinq
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Maybe<TSource> TryFirst<TList, TSource>(this TList source, Predicate<TSource> predicate)
             where TList : notnull, IReadOnlyList<TSource>
-            => GetFirst<TList, TSource>(source, predicate, 0, source.Count).AsMaybe();
+            => predicate is null
+                ? Throw.ArgumentNullException<Maybe<TSource>>(nameof(predicate))
+                : GetFirst<TList, TSource>(source, predicate, 0, source.Count).AsMaybe();
 
         [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static MaybeAt<TSource> TryFirst<TList, TSource>(this TList source, PredicateAt<TSource> predicate)
             where TList : notnull, IReadOnlyList<TSource>
-            => GetFirst<TList, TSource>(source, predicate, 0, source.Count).AsMaybe();
+            => predicate is null
+                ? Throw.ArgumentNullException<MaybeAt<TSource>>(nameof(predicate))
+                : GetFirst<TList, TSource>(source, predicate, 0, source.Count).AsMaybe();
 
         [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

@@ -43,20 +43,6 @@ namespace NetFabric.Hyperlinq
         }
 
         [Pure]
-        public static ref readonly TSource First<TSource>(this ReadOnlySpan<TSource> source, PredicateAt<TSource> predicate, out int index)
-        {
-            if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
-
-            var length = source.Length;
-            for (index = 0; index < length; index++)
-            {
-                if (predicate(source[index], index))
-                    return ref source[index];
-            }
-            return ref Throw.EmptySequenceRef<TSource>();
-        }
-
-        [Pure]
         [return: MaybeNull]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ref readonly TSource FirstOrDefault<TSource>(this ReadOnlySpan<TSource> source) 
@@ -91,22 +77,6 @@ namespace NetFabric.Hyperlinq
                 if (predicate(source[index], index))
                     return ref source[index];
             }
-            return ref Default<TSource>.Value;
-        }
-
-        [Pure]
-        [return: MaybeNull]
-        public static ref readonly TSource FirstOrDefault<TSource>(this ReadOnlySpan<TSource> source, PredicateAt<TSource> predicate, out int index)
-        {
-            if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
-
-            var length = source.Length;
-            for (index = 0; index < length; index++)
-            {
-                if (predicate(source[index], index))
-                    return ref source[index];
-            }
-            index = -1;
             return ref Default<TSource>.Value;
         }
     }
