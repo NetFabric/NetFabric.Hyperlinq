@@ -36,7 +36,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var predicate = (Predicate<int>)null;
 
             // Act
-            Action action = () => ReadOnlyList
+            Action action = () => _ = ReadOnlyList
                 .Count<Wrap.ValueReadOnlyList<int>, int>(wrapped, predicate);
 
             // Assert
@@ -75,7 +75,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var predicate = (PredicateAt<int>)null;
 
             // Act
-            Action action = () => ReadOnlyList
+            Action action = () => _ = ReadOnlyList
                 .Count<Wrap.ValueReadOnlyList<int>, int>(wrapped, predicate);
 
             // Assert

@@ -13,7 +13,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             // Arrange
 
             // Act
-            Action action = () => Array
+            Action action = () => _ = Array
                 .First<int>((ReadOnlySpan<int>)source.AsSpan());
 
             // Assert
@@ -48,7 +48,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var predicate = (Predicate<int>)null;
 
             // Act
-            Action action = () => Array
+            Action action = () => _ = Array
                 .First<int>((ReadOnlySpan<int>)source.AsSpan(), predicate);
 
             // Assert
@@ -64,7 +64,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             // Arrange
 
             // Act
-            Action action = () => Array
+            Action action = () => _ = Array
                 .First<int>((ReadOnlySpan<int>)source.AsSpan(), predicate);
 
             // Assert
@@ -99,7 +99,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var predicate = (PredicateAt<int>)null;
 
             // Act
-            Action action = () => Array
+            Action action = () => _ = Array
                 .First<int>((ReadOnlySpan<int>)source.AsSpan(), predicate);
 
             // Assert
@@ -115,7 +115,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             // Arrange
 
             // Act
-            Action action = () => Array
+            Action action = () => _ = Array
                 .First<int>((ReadOnlySpan<int>)source.AsSpan(), predicate);
 
             // Assert

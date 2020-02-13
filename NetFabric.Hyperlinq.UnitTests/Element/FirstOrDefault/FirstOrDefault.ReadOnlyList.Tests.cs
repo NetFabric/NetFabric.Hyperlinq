@@ -42,8 +42,8 @@ namespace NetFabric.Hyperlinq.UnitTests
                         System.Linq.Enumerable.Skip(source, skipCount), takeCount));
 
             // Act
-            var result = wrapped
-                .Skip<Wrap.ValueReadOnlyList<int>, int>(skipCount)
+            var result = ReadOnlyList
+                .Skip<Wrap.ValueReadOnlyList<int>, int>(wrapped, skipCount)
                 .Take(takeCount)
                 .FirstOrDefault();
 
@@ -62,7 +62,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var predicate = (Predicate<int>)null;
 
             // Act
-            Action action = () => ReadOnlyList
+            Action action = () => _ = ReadOnlyList
                 .FirstOrDefault<Wrap.ValueReadOnlyList<int>, int>(wrapped, predicate);
 
             // Assert
@@ -107,8 +107,8 @@ namespace NetFabric.Hyperlinq.UnitTests
                         System.Linq.Enumerable.Skip(source, skipCount), takeCount), predicate.AsFunc());
 
             // Act
-            var result = wrapped
-                .Skip<Wrap.ValueReadOnlyList<int>, int>(skipCount)
+            var result = ReadOnlyList
+                .Skip<Wrap.ValueReadOnlyList<int>, int>(wrapped, skipCount)
                 .Take(takeCount)
                 .FirstOrDefault(predicate);
 
@@ -127,8 +127,8 @@ namespace NetFabric.Hyperlinq.UnitTests
             var predicate = (PredicateAt<int>)null;
 
             // Act
-            Action action = () => wrapped
-                .Where<Wrap.ValueReadOnlyList<int>, int>(predicate)
+            Action action = () => _ = ReadOnlyList
+                .Where<Wrap.ValueReadOnlyList<int>, int>(wrapped, predicate)
                 .FirstOrDefault();
 
             // Assert
@@ -151,8 +151,8 @@ namespace NetFabric.Hyperlinq.UnitTests
                     System.Linq.Enumerable.Where(wrapped, predicate.AsFunc()));
 
             // Act
-            var result = wrapped
-                .Where<Wrap.ValueReadOnlyList<int>, int>(predicate)
+            var result = ReadOnlyList
+                .Where<Wrap.ValueReadOnlyList<int>, int>(wrapped, predicate)
                 .FirstOrDefault();
 
             // Assert
@@ -176,8 +176,8 @@ namespace NetFabric.Hyperlinq.UnitTests
                             System.Linq.Enumerable.Skip(source, skipCount), takeCount), predicate.AsFunc()));
 
             // Act
-            var result = wrapped
-                .Skip<Wrap.ValueReadOnlyList<int>, int>(skipCount)
+            var result = ReadOnlyList
+                .Skip<Wrap.ValueReadOnlyList<int>, int>(wrapped, skipCount)
                 .Take(takeCount)
                 .FirstOrDefault(predicate);
 

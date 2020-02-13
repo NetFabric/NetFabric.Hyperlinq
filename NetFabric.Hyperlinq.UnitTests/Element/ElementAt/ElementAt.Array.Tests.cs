@@ -13,7 +13,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             // Arrange
 
             // Act
-            Action action = () => Array
+            Action action = () => _ = Array
                 .ElementAt<int>(source, index);
 
             // Assert

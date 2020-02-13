@@ -32,7 +32,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var predicate = (Predicate<int>)null;
 
             // Act
-            Action action = () => Array
+            Action action = () => _ = Array
                 .LongCount<int>(source, predicate);
 
             // Assert
@@ -68,7 +68,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var predicate = (PredicateAtLong<int>)null;
 
             // Act
-            Action action = () => Array
+            Action action = () => _ = Array
                 .LongCount<int>(source, predicate);
 
             // Assert

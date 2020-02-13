@@ -14,7 +14,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var predicate = (Predicate<int>)null;
 
             // Act
-            Action action = () => ReadOnlyList.Where(list, predicate);
+            Action action = () => _ = ReadOnlyList.Where(list, predicate);
 
             // Assert
             _ = action.Must()

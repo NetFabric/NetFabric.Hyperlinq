@@ -13,7 +13,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var enumerable = Wrap.AsValueEnumerable(new int[0]);
 
             // Act
-            Action action = () => ValueEnumerable.WhereSelect<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int, int>(enumerable, null, item => item);
+            Action action = () => _ = ValueEnumerable.WhereSelect<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int, int>(enumerable, null, item => item);
 
             // Assert
             _ = action.Must()
@@ -28,7 +28,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var enumerable = Wrap.AsValueEnumerable(new int[0]);
 
             // Act
-            Action action = () => ValueEnumerable.WhereSelect<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int, int>(enumerable, item => (item & 0x01) == 0, null);
+            Action action = () => _ = ValueEnumerable.WhereSelect<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int, int>(enumerable, item => (item & 0x01) == 0, null);
 
             // Assert
             _ = action.Must()

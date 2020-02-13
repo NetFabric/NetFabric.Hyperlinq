@@ -14,7 +14,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var predicate = (Predicate<int>)null;
 
             // Act
-            Action action = () => Array
+            Action action = () => _ = Array
                 .All<int>((ReadOnlyMemory<int>)source.AsMemory(), predicate);
 
             // Assert
@@ -49,7 +49,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var predicate = (PredicateAt<int>)null;
 
             // Act
-            Action action = () => Array
+            Action action = () => _ = Array
                 .All<int>((ReadOnlyMemory<int>)source.AsMemory(), predicate);
 
             // Assert

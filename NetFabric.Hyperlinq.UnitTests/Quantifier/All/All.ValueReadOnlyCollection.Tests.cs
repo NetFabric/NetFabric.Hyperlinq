@@ -16,7 +16,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var predicate = (Predicate<int>)null;
 
             // Act
-            Action action = () => ValueReadOnlyCollection
+            Action action = () => _ = ValueReadOnlyCollection
                 .All<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
 
             // Assert
@@ -54,7 +54,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var predicate = (PredicateAt<int>)null;
 
             // Act
-            Action action = () => ValueReadOnlyCollection
+            Action action = () => _ = ValueReadOnlyCollection
                 .All<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
 
             // Assert

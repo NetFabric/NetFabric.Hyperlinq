@@ -5,23 +5,23 @@ using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests
 {
-    public class LongCountAsyncValueEnumerableTests
+    public class CountAsyncValueEnumerableTests
     {
         [Theory]
         [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
-        public async ValueTask LongCountAsync_With_ValidData_Should_Succeed(int[] source)
+        public async ValueTask CountAsync_With_ValidData_Should_Succeed(int[] source)
         {
             // Arrange
             var wrapped = Wrap
                 .AsAsyncValueEnumerable(source);
             var expected = 
-                System.Linq.Enumerable.LongCount(source);
+                System.Linq.Enumerable.Count(source);
 
             // Act
             var result = await AsyncValueEnumerable
-                .LongCountAsync<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int>(wrapped);
+                .CountAsync<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int>(wrapped);
 
             // Assert
             _ = result.Must()
@@ -29,7 +29,7 @@ namespace NetFabric.Hyperlinq.UnitTests
         }
 
         [Fact]
-        public void LongCount_Predicate_With_Null_Should_Throw()
+        public void CountAsync_Predicate_With_Null_Should_Throw()
         {
             // Arrange
             var wrapped = Wrap
@@ -37,8 +37,8 @@ namespace NetFabric.Hyperlinq.UnitTests
             var predicate = (AsyncPredicate<int>)null;
 
             // Act
-            Action action = () => AsyncValueEnumerable
-                .LongCountAsync<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, predicate);
+            Action action = () => _ = AsyncValueEnumerable
+                .CountAsync<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, predicate);
 
             // Assert
             _ = action.Must()
@@ -50,17 +50,17 @@ namespace NetFabric.Hyperlinq.UnitTests
         [MemberData(nameof(TestData.PredicateEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateMultiple), MemberType = typeof(TestData))]
-        public async ValueTask LongCountAsync_Predicate_With_ValidData_Should_Succeed(int[] source, Predicate<int> predicate)
+        public async ValueTask CountAsync_Predicate_With_ValidData_Should_Succeed(int[] source, Predicate<int> predicate)
         {
             // Arrange
             var wrapped = Wrap
                 .AsAsyncValueEnumerable(source);
             var expected = 
-                System.Linq.Enumerable.LongCount(source, predicate.AsFunc());
+                System.Linq.Enumerable.Count(source, predicate.AsFunc());
 
             // Act
             var result = await AsyncValueEnumerable
-                .LongCountAsync<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, predicate.AsAsync());
+                .CountAsync<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, predicate.AsAsync());
 
             // Assert
             _ = result.Must()
@@ -68,16 +68,16 @@ namespace NetFabric.Hyperlinq.UnitTests
         }
 
         [Fact]
-        public void LongCount_PredicateAt_With_Null_Should_Throw()
+        public void CountAsync_PredicateAt_With_Null_Should_Throw()
         {
             // Arrange
             var wrapped = Wrap
                 .AsAsyncValueEnumerable(new int[0]);
-            var predicate = (AsyncPredicateAtLong<int>)null;
+            var predicate = (AsyncPredicateAt<int>)null;
 
             // Act
-            Action action = () => AsyncValueEnumerable
-                .LongCountAsync<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, predicate);
+            Action action = () => _ = AsyncValueEnumerable
+                .CountAsync<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, predicate);
 
             // Assert
             _ = action.Must()
@@ -89,18 +89,18 @@ namespace NetFabric.Hyperlinq.UnitTests
         [MemberData(nameof(TestData.PredicateAtEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateAtSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateAtMultiple), MemberType = typeof(TestData))]
-        public async ValueTask LongCountAsync_PredicateAt_With_ValidData_Should_Succeed(int[] source, PredicateAt<int> predicate)
+        public async ValueTask CountAsync_PredicateAt_With_ValidData_Should_Succeed(int[] source, PredicateAt<int> predicate)
         {
             // Arrange
             var wrapped = Wrap
                 .AsAsyncValueEnumerable(source);
             var expected = 
-                System.Linq.Enumerable.LongCount(
+                System.Linq.Enumerable.Count(
                     System.Linq.Enumerable.Where(source, predicate.AsFunc()));
 
             // Act
             var result = await AsyncValueEnumerable
-                .LongCountAsync<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, predicate.AsAsyncPredicateAtLong());
+                .CountAsync<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, predicate.AsAsync());
 
             // Assert
             _ = result.Must()

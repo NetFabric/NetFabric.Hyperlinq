@@ -33,7 +33,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var predicate = (Predicate<int>)null;
 
             // Act
-            Action action = () => Array
+            Action action = () => _ = Array
                 .Count<int>(source, predicate);
 
             // Assert
@@ -75,7 +75,9 @@ namespace NetFabric.Hyperlinq.UnitTests
 
             // Act
             var result = Array
-                .Count<int>(source.Skip(skipCount).Take(takeCount), predicate);
+                .Skip<int>(source, skipCount)
+                .Take(takeCount)
+                .Count<int>(predicate);
 
             // Assert
             _ = result.Must()
@@ -90,7 +92,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var predicate = (PredicateAt<int>)null;
 
             // Act
-            Action action = () => Array
+            Action action = () => _ = Array
                 .Count<int>(source, predicate);
 
             // Assert

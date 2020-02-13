@@ -15,7 +15,7 @@ namespace NetFabric.Hyperlinq.UnitTests
                 .AsValueReadOnlyCollection(source);
 
             // Act
-            Action action = () => ValueReadOnlyCollection
+            Action action = () => _ = ValueReadOnlyCollection
                 .ElementAt<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(wrapped, index);
 
             // Assert

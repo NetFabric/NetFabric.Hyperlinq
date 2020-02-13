@@ -37,7 +37,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var predicate = (Predicate<int>)null;
 
             // Act
-            Action action = () => ValueReadOnlyCollection
+            Action action = () => _ = ValueReadOnlyCollection
                 .FirstOrDefault<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
 
             // Assert
@@ -77,9 +77,8 @@ namespace NetFabric.Hyperlinq.UnitTests
             var predicate = (PredicateAt<int>)null;
 
             // Act
-            Action action = () => wrapped
-                .Where<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(predicate)
-                .FirstOrDefault();
+            Action action = () => _ = ValueReadOnlyCollection
+                .FirstOrDefault<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
 
             // Assert
             _ = action.Must()
@@ -101,9 +100,8 @@ namespace NetFabric.Hyperlinq.UnitTests
                     System.Linq.Enumerable.Where(source, predicate.AsFunc()));
 
             // Act
-            var result = wrapped
-                .Where<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(predicate)
-                .FirstOrDefault();
+            var result = ValueReadOnlyCollection
+                .FirstOrDefault<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
 
             // Assert
             _ = result.Must()

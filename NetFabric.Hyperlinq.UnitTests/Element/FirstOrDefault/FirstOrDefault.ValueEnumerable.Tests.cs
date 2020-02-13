@@ -37,7 +37,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var predicate = (Predicate<int>)null;
 
             // Act
-            Action action = () => ValueEnumerable
+            Action action = () => _ = ValueEnumerable
                 .FirstOrDefault<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
 
             // Assert
@@ -77,8 +77,8 @@ namespace NetFabric.Hyperlinq.UnitTests
             var predicate = (PredicateAt<int>)null;
 
             // Act
-            Action action = () => wrapped
-                .Where<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(predicate)
+            Action action = () => _ = ValueEnumerable
+                .Where<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, predicate)
                 .FirstOrDefault();
 
             // Assert
@@ -101,8 +101,8 @@ namespace NetFabric.Hyperlinq.UnitTests
                     System.Linq.Enumerable.Where(source, predicate.AsFunc()));
 
             // Act
-            var result = wrapped
-                .Where<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(predicate)
+            var result = ValueEnumerable
+                .Where<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, predicate)
                 .FirstOrDefault();
 
             // Assert

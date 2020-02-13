@@ -36,7 +36,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var predicate = (Predicate<int>)null;
 
             // Act
-            Action action = () => ValueEnumerable
+            Action action = () => _ = ValueEnumerable
                 .LongCount<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
 
             // Assert
@@ -75,7 +75,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var predicate = (PredicateAtLong<int>)null;
 
             // Act
-            Action action = () => ValueEnumerable
+            Action action = () => _ = ValueEnumerable
                 .LongCount<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
 
             // Assert

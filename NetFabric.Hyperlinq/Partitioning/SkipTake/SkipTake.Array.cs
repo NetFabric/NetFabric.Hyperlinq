@@ -152,11 +152,15 @@ namespace NetFabric.Hyperlinq
             [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public ref readonly TSource First(Predicate<TSource> predicate)
-                => ref Array.First<TSource>(source, predicate, skipCount, takeCount);
-            [Pure]
+                => ref predicate is null
+                    ? ref Throw.ArgumentNullExceptionRef<TSource>(nameof(predicate))
+                    : ref Array.First<TSource>(source, predicate, skipCount, takeCount);
+                [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public ref readonly TSource First(PredicateAt<TSource> predicate)
-                => ref Array.First<TSource>(source, predicate, skipCount, takeCount);
+                => ref predicate is null
+                    ? ref Throw.ArgumentNullExceptionRef<TSource>(nameof(predicate))
+                    : ref Array.First<TSource>(source, predicate, skipCount, takeCount);
             [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             [return: MaybeNull]
@@ -166,31 +170,52 @@ namespace NetFabric.Hyperlinq
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             [return: MaybeNull]
             public ref readonly TSource FirstOrDefault(Predicate<TSource> predicate)
-                => ref Array.FirstOrDefault<TSource>(source, predicate, skipCount, takeCount);
+                => ref predicate is null
+                    ? ref Throw.ArgumentNullExceptionRef<TSource>(nameof(predicate))
+                    : ref Array.FirstOrDefault<TSource>(source, predicate, skipCount, takeCount);
             [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             [return: MaybeNull]
             public ref readonly TSource FirstOrDefault(PredicateAt<TSource> predicate)
-                => ref Array.FirstOrDefault<TSource>(source, predicate, skipCount, takeCount);
+                => ref predicate is null
+                    ? ref Throw.ArgumentNullExceptionRef<TSource>(nameof(predicate))
+                    : ref Array.FirstOrDefault<TSource>(source, predicate, skipCount, takeCount);
 
             [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public TSource Single()
-                => Array.Single<TSource>(source, skipCount, takeCount);
+            public ref readonly TSource Single()
+                => ref Array.Single<TSource>(source, skipCount, takeCount);
             [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public TSource Single(Predicate<TSource> predicate)
-                => Array.Single<TSource>(source, predicate, skipCount, takeCount);
+            public ref readonly TSource Single(Predicate<TSource> predicate)
+                => ref predicate is null
+                    ? ref Throw.ArgumentNullExceptionRef<TSource>(nameof(predicate))
+                    : ref Array.Single<TSource>(source, predicate, skipCount, takeCount);
+            [Pure]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public ref readonly TSource Single(PredicateAt<TSource> predicate)
+                => ref predicate is null
+                    ? ref Throw.ArgumentNullExceptionRef<TSource>(nameof(predicate))
+                    : ref Array.Single<TSource>(source, predicate, skipCount, takeCount);
             [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             [return: MaybeNull]
-            public TSource SingleOrDefault()
-                => Array.SingleOrDefault<TSource>(source, skipCount, takeCount);
+            public ref readonly TSource SingleOrDefault()
+                => ref Array.SingleOrDefault<TSource>(source, skipCount, takeCount);
             [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             [return: MaybeNull]
-            public TSource SingleOrDefault(Predicate<TSource> predicate)
-                => Array.SingleOrDefault<TSource>(source, predicate, skipCount, takeCount);
+            public ref readonly TSource SingleOrDefault(Predicate<TSource> predicate)
+                => ref predicate is null
+                    ? ref Throw.ArgumentNullExceptionRef<TSource>(nameof(predicate))
+                    : ref Array.SingleOrDefault<TSource>(source, predicate, skipCount, takeCount);
+            [Pure]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            [return: MaybeNull]
+            public ref readonly TSource SingleOrDefault(PredicateAt<TSource> predicate)
+                => ref predicate is null
+                    ? ref Throw.ArgumentNullExceptionRef<TSource>(nameof(predicate))
+                    : ref Array.SingleOrDefault<TSource>(source, predicate, skipCount, takeCount);
 
             [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]

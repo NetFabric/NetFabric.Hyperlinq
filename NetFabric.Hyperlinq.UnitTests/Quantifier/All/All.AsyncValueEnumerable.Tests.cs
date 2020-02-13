@@ -15,7 +15,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var predicate = (AsyncPredicate<int>)null;
 
             // Act
-            Action action = () => AsyncValueEnumerable
+            Action action = () => _ = AsyncValueEnumerable
                 .AllAsync<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, predicate);
 
             // Assert
@@ -53,7 +53,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var predicate = (AsyncPredicateAt<int>)null;
 
             // Act
-            Action action = () => AsyncValueEnumerable
+            Action action = () => _ = AsyncValueEnumerable
                 .AllAsync<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, predicate);
 
             // Assert

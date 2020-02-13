@@ -15,7 +15,7 @@ namespace NetFabric.Hyperlinq.UnitTests
                 .AsValueEnumerable(source);
 
             // Act
-            Action action = () => ValueEnumerable
+            Action action = () => _ = ValueEnumerable
                 .First<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped);
 
             // Assert
@@ -54,7 +54,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var predicate = (Predicate<int>)null;
 
             // Act
-            Action action = () => ValueEnumerable
+            Action action = () => _ = ValueEnumerable
                 .First<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
 
             // Assert
@@ -72,7 +72,7 @@ namespace NetFabric.Hyperlinq.UnitTests
                 .AsValueEnumerable(source);
 
             // Act
-            Action action = () => ValueEnumerable
+            Action action = () => _ = ValueEnumerable
                 .First<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
 
             // Assert
@@ -111,8 +111,8 @@ namespace NetFabric.Hyperlinq.UnitTests
             var predicate = (PredicateAt<int>)null;
 
             // Act
-            Action action = () => wrapped
-                .Where<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(predicate)
+            Action action = () => _ = ValueEnumerable
+                .Where<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, predicate)
                 .First();
 
             // Assert
@@ -130,8 +130,8 @@ namespace NetFabric.Hyperlinq.UnitTests
                 .AsValueEnumerable(source);
 
             // Act
-            Action action = () => wrapped
-                .Where<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(predicate)
+            Action action = () => _ = ValueEnumerable
+                .Where<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, predicate)
                 .First();
 
             // Assert
@@ -153,8 +153,8 @@ namespace NetFabric.Hyperlinq.UnitTests
                     System.Linq.Enumerable.Where(source, predicate.AsFunc()));
 
             // Act
-            var result = wrapped
-                .Where<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(predicate)
+            var result = ValueEnumerable
+                .Where<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, predicate)
                 .First();
 
             // Assert

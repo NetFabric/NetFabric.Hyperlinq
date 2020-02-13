@@ -13,7 +13,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var list = Wrap.AsValueReadOnlyList(new int[0]);
 
             // Act
-            Action action = () => ReadOnlyList.WhereSelect<Wrap.ValueReadOnlyList<int>, int, int>(list, null, item => item);
+            Action action = () => _ = ReadOnlyList.WhereSelect<Wrap.ValueReadOnlyList<int>, int, int>(list, null, item => item);
 
             // Assert
             _ = action.Must()
@@ -28,7 +28,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var list = Wrap.AsValueReadOnlyList(new int[0]);
 
             // Act
-            Action action = () => ReadOnlyList.WhereSelect<Wrap.ValueReadOnlyList<int>, int, int>(list, item => (item & 0x01) == 0, null);
+            Action action = () => _ = ReadOnlyList.WhereSelect<Wrap.ValueReadOnlyList<int>, int, int>(list, item => (item & 0x01) == 0, null);
 
             // Assert
             _ = action.Must()

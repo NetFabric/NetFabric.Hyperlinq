@@ -14,7 +14,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var selector = (Selector<int, string>)null;
 
             // Act
-            Action action = () => ReadOnlyList.Select<Wrap.ValueReadOnlyList<int>, int, string>(list, selector);
+            Action action = () => _ = ReadOnlyList.Select<Wrap.ValueReadOnlyList<int>, int, string>(list, selector);
 
             // Assert
             _ = action.Must()

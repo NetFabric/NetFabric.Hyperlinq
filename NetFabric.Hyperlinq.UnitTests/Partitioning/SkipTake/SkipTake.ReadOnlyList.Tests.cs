@@ -198,7 +198,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var wrapped = Wrap.AsValueReadOnlyList(source);
 
             // Act
-            Action action = () => ReadOnlyList
+            Action action = () => _ = ReadOnlyList
                 .Skip<Wrap.ValueReadOnlyList<int>, int>(wrapped, skipCount)
                 .Take(takeCount)
                 .First();
@@ -240,7 +240,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var wrapped = Wrap.AsValueReadOnlyList(source);
 
             // Act
-            Action action = () => ReadOnlyList
+            Action action = () => _ = ReadOnlyList
                 .Skip<Wrap.ValueReadOnlyList<int>, int>(wrapped, skipCount)
                 .Take(takeCount)
                 .First(item => (item & 0x01) == 0);
@@ -330,7 +330,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var wrapped = Wrap.AsValueReadOnlyList(source);
 
             // Act
-            Action action = () => ReadOnlyList
+            Action action = () => _ = ReadOnlyList
                 .Skip<Wrap.ValueReadOnlyList<int>, int>(wrapped, skipCount)
                 .Take(takeCount)
                 .Single();
@@ -371,7 +371,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var wrapped = Wrap.AsValueReadOnlyList(source);
 
             // Act
-            Action action = () => ReadOnlyList
+            Action action = () => _ = ReadOnlyList
                 .Skip<Wrap.ValueReadOnlyList<int>, int>(wrapped, skipCount)
                 .Take(takeCount)
                 .Single(item => (item & 0x01) == 0);

@@ -13,7 +13,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             // Arrange
 
             // Act
-            Action action = () => Array
+            Action action = () => _ = Array
                 .First<int>(source);
 
             // Assert
@@ -47,8 +47,8 @@ namespace NetFabric.Hyperlinq.UnitTests
             // Arrange
 
             // Act
-            Action action = () => source
-                .Skip<int>(skipCount)
+            Action action = () => _ = Array
+                .Skip<int>(source, skipCount)
                 .Take(takeCount)
                 .First();
 
@@ -70,8 +70,8 @@ namespace NetFabric.Hyperlinq.UnitTests
                         System.Linq.Enumerable.Skip(source, skipCount), takeCount));
 
             // Act
-            ref readonly var result = ref source
-                .Skip<int>(skipCount)
+            ref readonly var result = ref Array
+                .Skip<int>(source, skipCount)
                 .Take(takeCount)
                 .First();
 
@@ -88,7 +88,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var predicate = (Predicate<int>)null;
 
             // Act
-            Action action = () => Array
+            Action action = () => _ = Array
                 .First<int>(source, predicate);
 
             // Assert
@@ -104,7 +104,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             // Arrange
 
             // Act
-            Action action = () => Array
+            Action action = () => _ = Array
                 .First<int>(source, predicate);
 
             // Assert
@@ -138,8 +138,8 @@ namespace NetFabric.Hyperlinq.UnitTests
             // Arrange
 
             // Act
-            Action action = () => source
-                .Skip<int>(skipCount)
+            Action action = () => _ = Array
+                .Skip<int>(source, skipCount)
                 .Take(takeCount)
                 .First(predicate);
 
@@ -161,8 +161,8 @@ namespace NetFabric.Hyperlinq.UnitTests
                         System.Linq.Enumerable.Skip(source, skipCount), takeCount), predicate.AsFunc());
 
             // Act
-            ref readonly var result = ref source
-                .Skip<int>(skipCount)
+            ref readonly var result = ref Array
+                .Skip<int>(source, skipCount)
                 .Take(takeCount)
                 .First(predicate);
 
@@ -179,7 +179,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var predicate = (PredicateAt<int>)null;
 
             // Act
-            Action action = () => Array
+            Action action = () => _ = Array
                 .First<int>(source, predicate);
 
             // Assert
@@ -195,7 +195,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             // Arrange
 
             // Act
-            Action action = () => Array
+            Action action = () => _ = Array
                 .First<int>(source, predicate);
 
             // Assert
@@ -231,8 +231,8 @@ namespace NetFabric.Hyperlinq.UnitTests
             // Arrange
 
             // Act
-            Action action = () => source
-                .Skip<int>(skipCount)
+            Action action = () => _ = Array
+                .Skip<int>(source, skipCount)
                 .Take(takeCount)
                 .First(predicate);
 
@@ -255,8 +255,8 @@ namespace NetFabric.Hyperlinq.UnitTests
                             System.Linq.Enumerable.Skip(source, skipCount), takeCount), predicate.AsFunc()));
 
             // Act
-            ref readonly var result = ref source
-                .Skip<int>(skipCount)
+            ref readonly var result = ref Array
+                .Skip<int>(source, skipCount)
                 .Take(takeCount)
                 .First(predicate);
 

@@ -36,8 +36,10 @@ namespace NetFabric.Hyperlinq
 
             [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly Enumerator GetAsyncEnumerator(CancellationToken cancellationToken) => new Enumerator(in this, cancellationToken);
-            readonly IAsyncEnumerator<TSource> IAsyncEnumerable<TSource>.GetAsyncEnumerator(CancellationToken cancellationToken) => new Enumerator(in this, cancellationToken);
+            public readonly Enumerator GetAsyncEnumerator(CancellationToken cancellationToken = default) 
+                => new Enumerator(in this, cancellationToken);
+            readonly IAsyncEnumerator<TSource> IAsyncEnumerable<TSource>.GetAsyncEnumerator(CancellationToken cancellationToken) 
+                => new Enumerator(in this, cancellationToken);
 
             public struct Enumerator
                 : IAsyncEnumerator<TSource>
@@ -49,7 +51,7 @@ namespace NetFabric.Hyperlinq
 
                 internal Enumerator(in WhereEnumerable<TEnumerable, TEnumerator, TSource> enumerable, CancellationToken cancellationToken)
                 {
-                    enumerator = enumerable.source.GetAsyncEnumerator();
+                    enumerator = enumerable.source.GetAsyncEnumerator(cancellationToken);
                     predicate = enumerable.predicate;
                     this.cancellationToken = cancellationToken;
                 }

@@ -15,7 +15,7 @@ namespace NetFabric.Hyperlinq.UnitTests
                 .AsValueReadOnlyCollection(source);
 
             // Act
-            Action action = () => ValueReadOnlyCollection
+            Action action = () => _ = ValueReadOnlyCollection
                 .First<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(wrapped);
 
             // Assert
@@ -54,7 +54,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var predicate = (Predicate<int>)null;
 
             // Act
-            Action action = () => ValueReadOnlyCollection
+            Action action = () => _ = ValueReadOnlyCollection
                 .First<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
 
             // Assert
@@ -72,7 +72,7 @@ namespace NetFabric.Hyperlinq.UnitTests
                 .AsValueReadOnlyCollection(source);
 
             // Act
-            Action action = () => ValueReadOnlyCollection
+            Action action = () => _ = ValueReadOnlyCollection
                 .First<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
 
             // Assert
@@ -111,9 +111,8 @@ namespace NetFabric.Hyperlinq.UnitTests
             var predicate = (PredicateAt<int>)null;
 
             // Act
-            Action action = () => wrapped
-                .Where<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(predicate)
-                .First();
+            Action action = () => _ = ValueReadOnlyCollection
+                .First<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
 
             // Assert
             _ = action.Must()
@@ -130,9 +129,8 @@ namespace NetFabric.Hyperlinq.UnitTests
                 .AsValueReadOnlyCollection(source);
 
             // Act
-            Action action = () => wrapped
-                .Where<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(predicate)
-                .First();
+            Action action = () => _ = ValueReadOnlyCollection
+                .First<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
 
             // Assert
             _ = action.Must()

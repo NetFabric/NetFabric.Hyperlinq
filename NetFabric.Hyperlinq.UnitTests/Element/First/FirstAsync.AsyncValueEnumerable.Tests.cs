@@ -16,7 +16,7 @@ namespace NetFabric.Hyperlinq.UnitTests
                 .AsAsyncValueEnumerable(source);
 
             // Act
-            Func<ValueTask> action = async () => await AsyncValueEnumerable
+            Func<ValueTask> action = async () => _ = await AsyncValueEnumerable
                 .FirstAsync<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int>(wrapped);
 
             // Assert
@@ -55,7 +55,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var predicate = (AsyncPredicate<int>)null;
 
             // Act
-            Action action = () => AsyncValueEnumerable
+            Action action = () => _ = AsyncValueEnumerable
                 .FirstAsync<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, predicate);
 
             // Assert
@@ -73,7 +73,7 @@ namespace NetFabric.Hyperlinq.UnitTests
                 .AsAsyncValueEnumerable(source);
 
             // Act
-            Func<ValueTask> action = async () => await AsyncValueEnumerable
+            Func<ValueTask> action = async () => _ = await AsyncValueEnumerable
                 .FirstAsync<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, predicate.AsAsync());
 
             // Assert
@@ -112,8 +112,8 @@ namespace NetFabric.Hyperlinq.UnitTests
             var predicate = (AsyncPredicateAt<int>)null;
 
             // Act
-            Action action = () => wrapped
-                .Where<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int>(predicate)
+            Action action = () => _ = AsyncValueEnumerable
+                .Where<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, predicate)
                 .FirstAsync();
 
             // Assert
@@ -131,8 +131,8 @@ namespace NetFabric.Hyperlinq.UnitTests
                 .AsAsyncValueEnumerable(source);
 
             // Act
-            Func<ValueTask> action = async () => await wrapped
-                .Where<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int>(predicate.AsAsync())
+            Func<ValueTask> action = async () => _ = await AsyncValueEnumerable
+                .Where<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, predicate.AsAsync())
                 .FirstAsync();
 
             // Assert
@@ -154,8 +154,8 @@ namespace NetFabric.Hyperlinq.UnitTests
                     System.Linq.Enumerable.Where(source, predicate.AsFunc()));
 
             // Act
-            var result = await wrapped
-                .Where<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int>(predicate.AsAsync())
+            var result = await AsyncValueEnumerable
+                .Where<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, predicate.AsAsync())
                 .FirstAsync();
 
             // Assert

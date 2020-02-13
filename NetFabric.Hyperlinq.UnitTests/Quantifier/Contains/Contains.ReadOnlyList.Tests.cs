@@ -38,8 +38,8 @@ namespace NetFabric.Hyperlinq.UnitTests
                         System.Linq.Enumerable.Skip(source, skipCount), takeCount), value, comparer);
 
             // Act
-            var result = wrapped
-                .Skip<Wrap.ValueReadOnlyList<int>, int>(skipCount)
+            var result = ReadOnlyList
+                .Skip<Wrap.ValueReadOnlyList<int>, int>(wrapped, skipCount)
                 .Take(takeCount)
                 .Contains(value, comparer);
 

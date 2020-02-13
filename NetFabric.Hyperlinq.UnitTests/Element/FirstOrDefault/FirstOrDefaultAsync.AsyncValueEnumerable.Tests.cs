@@ -38,7 +38,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var predicate = (AsyncPredicate<int>)null;
 
             // Act
-            Action action = () => AsyncValueEnumerable
+            Action action = () => _ = AsyncValueEnumerable
                 .FirstOrDefaultAsync<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, predicate);
 
             // Assert
@@ -78,8 +78,8 @@ namespace NetFabric.Hyperlinq.UnitTests
             var predicate = (AsyncPredicateAt<int>)null;
 
             // Act
-            Action action = () => wrapped
-                .Where<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int>(predicate)
+            Action action = () => _ = AsyncValueEnumerable
+                .Where<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, predicate)
                 .FirstOrDefaultAsync();
 
             // Assert
@@ -102,8 +102,8 @@ namespace NetFabric.Hyperlinq.UnitTests
                     System.Linq.Enumerable.Where(source, predicate.AsFunc()));
 
             // Act
-            var result = await wrapped
-                .Where<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int>(predicate.AsAsync())
+            var result = await AsyncValueEnumerable
+                .Where<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, predicate.AsAsync())
                 .FirstOrDefaultAsync();
 
             // Assert

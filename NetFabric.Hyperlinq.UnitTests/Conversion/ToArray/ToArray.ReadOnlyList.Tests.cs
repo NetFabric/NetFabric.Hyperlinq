@@ -18,8 +18,8 @@ namespace NetFabric.Hyperlinq.UnitTests
                 System.Linq.Enumerable.ToArray(wrapped);
 
             // Act
-            var result = wrapped
-                .ToArray<Wrap.ValueReadOnlyList<int>, int>();
+            var result = ReadOnlyList
+                .ToArray<Wrap.ValueReadOnlyList<int>, int>(wrapped);
 
             // Assert
             _ = result.Must()
@@ -41,8 +41,8 @@ namespace NetFabric.Hyperlinq.UnitTests
                     System.Linq.Enumerable.Where(wrapped, item => (item & 0x01) == 0));
 
             // Act
-            var result = wrapped
-                .Where<Wrap.ValueReadOnlyList<int>, int>(item => (item & 0x01) == 0)
+            var result = ReadOnlyList
+                .Where<Wrap.ValueReadOnlyList<int>, int>(wrapped, item => (item & 0x01) == 0)
                 .ToArray();
 
             // Assert
