@@ -22,7 +22,9 @@ namespace NetFabric.Hyperlinq
             internal AsyncValueEnumerable(T[] source)
                 => this.source = source;
 
-            public readonly AsyncEnumerator<T> GetAsyncEnumerator(CancellationToken _) 
+            public readonly AsyncEnumerator<T> GetAsyncEnumerator() 
+                => new AsyncEnumerator<T>(source);
+            readonly AsyncEnumerator<T> IAsyncValueEnumerable<T, AsyncEnumerator<T>>.GetAsyncEnumerator(CancellationToken _) 
                 => new AsyncEnumerator<T>(source);
             readonly IAsyncEnumerator<T> IAsyncEnumerable<T>.GetAsyncEnumerator(CancellationToken _) 
                 => new AsyncEnumerator<T>(source);

@@ -13,10 +13,11 @@ namespace NetFabric.Hyperlinq.UnitTests
         {
             // Arrange
             var wrapped = Wrap.AsValueEnumerable(source);
-            var expected = System.Linq.Enumerable.Skip(wrapped, count);
+            var expected = System.Linq.Enumerable.Skip(source, count);
 
             // Act
-            var result = ValueEnumerable.Skip<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, count);
+            var result = ValueEnumerable
+                .Skip<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, count);
 
             // Assert
             _ = result.Must()
@@ -30,10 +31,14 @@ namespace NetFabric.Hyperlinq.UnitTests
         {
             // Arrange
             var wrapped = Wrap.AsValueEnumerable(source);
-            var expected = System.Linq.Enumerable.Skip(System.Linq.Enumerable.Skip(wrapped, count0), count1);
+            var expected = 
+                System.Linq.Enumerable.Skip(
+                    System.Linq.Enumerable.Skip(source, count0), count1);
 
             // Act
-            var result = ValueEnumerable.Skip<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, count0).Skip(count1);
+            var result = ValueEnumerable
+                .Skip<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, count0)
+                .Skip(count1);
 
             // Assert
             _ = result.Must()
@@ -49,10 +54,14 @@ namespace NetFabric.Hyperlinq.UnitTests
         {
             // Arrange
             var wrapped = Wrap.AsValueEnumerable(source);
-            var expected = System.Linq.Enumerable.Take(System.Linq.Enumerable.Skip(wrapped, skipCount), takeCount);
+            var expected = 
+                System.Linq.Enumerable.Take(
+                    System.Linq.Enumerable.Skip(source, skipCount), takeCount);
 
             // Act
-            var result = ValueEnumerable.Skip<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, skipCount).Take(takeCount);
+            var result = ValueEnumerable
+                .Skip<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, skipCount)
+                .Take(takeCount);
 
             // Assert
             _ = result.Must()

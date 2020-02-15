@@ -106,7 +106,7 @@ namespace NetFabric.Hyperlinq
         }
 
         [Pure]
-        static (int Index, TSource Value) GetSingle<TEnumerable, TEnumerator, TSource>(this TEnumerable source, PredicateAt<TSource> predicate) 
+        static (ElementResult Success, TSource Value, int Index) GetSingle<TEnumerable, TEnumerator, TSource>(this TEnumerable source, PredicateAt<TSource> predicate) 
             where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
@@ -117,13 +117,13 @@ namespace NetFabric.Hyperlinq
                 {
                     if (predicate(enumerator.Current, index))
                     {
-                        var value = (index, enumerator.Current);
+                        var value = (ElementResult.Success, enumerator.Current, index);
 
                         // found first, keep going until end or find second
                         for (index++; enumerator.MoveNext(); index++)
                         {
                             if (predicate(enumerator.Current, index))
-                                return ((int)ElementResult.NotSingle, default);
+                                return (ElementResult.NotSingle, default, 0);
                         }
 
                         return value;
@@ -131,7 +131,7 @@ namespace NetFabric.Hyperlinq
                 }
             }
 
-            return ((int)ElementResult.Empty, default);
+            return (ElementResult.Empty, default, 0);
         }
     }
 }

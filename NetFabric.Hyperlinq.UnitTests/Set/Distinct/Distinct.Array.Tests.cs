@@ -16,8 +16,8 @@ namespace NetFabric.Hyperlinq.UnitTests
                 System.Linq.Enumerable.Distinct(source);
 
             // Act
-            var result = source
-                .Distinct<int>();
+            var result = Array
+                .Distinct<int>(source);
 
             // Assert
             _ = result.Must()

@@ -28,11 +28,11 @@ namespace NetFabric.Hyperlinq
 
         [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static TValue ThrowOnEmpty<TValue>(this (int Index, TValue Value) item)
-            => item.Index switch
+        public static TValue ThrowOnEmpty<TValue>(this (ElementResult Result, TValue Value, int Index) item)
+            => item.Result switch
             {
-                (int)ElementResult.Empty => Throw.EmptySequence<TValue>(),
-                (int)ElementResult.NotSingle => Throw.NotSingleSequence<TValue>(),
+                ElementResult.Empty => Throw.EmptySequence<TValue>(),
+                ElementResult.NotSingle => Throw.NotSingleSequence<TValue>(),
                 _ => item.Value,
             };
 
@@ -52,11 +52,11 @@ namespace NetFabric.Hyperlinq
         [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         [return:MaybeNull]
-        public static TValue DefaultOnEmpty<TValue>(this (int Index, TValue Value) item)
-            => item.Index switch
+        public static TValue DefaultOnEmpty<TValue>(this (ElementResult Result, TValue Value, int Index) item)
+            => item.Result switch
             {
-                (int)ElementResult.Empty => default!,
-                (int)ElementResult.NotSingle => Throw.NotSingleSequence<TValue>(),
+                ElementResult.Empty => default!,
+                ElementResult.NotSingle => Throw.NotSingleSequence<TValue>(),
                 _ => item.Value,
             };
 
@@ -73,9 +73,11 @@ namespace NetFabric.Hyperlinq
 
         [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static MaybeAt<TValue> AsMaybe<TValue>(this (int Index, TValue Value) item) 
-            => item.Index < 0 
-                ? default 
-                : new MaybeAt<TValue>(item.Value, item.Index);
+        public static MaybeAt<TValue> AsMaybe<TValue>(this (ElementResult Result, TValue Value, int Index) item) 
+            => item.Result switch
+            {
+                ElementResult.Success => new MaybeAt<TValue>(item.Value, item.Index),
+                _ => default,
+            };
     }
 }

@@ -56,8 +56,8 @@ namespace NetFabric.Hyperlinq.UnitTests
                             source, skipCount), takeCount), predicate.AsFunc());
 
             // Act
-            var result = source
-                .Skip(skipCount)
+            var result = Array
+                .Skip(source, skipCount)
                 .Take(takeCount)
                 .Where(predicate);
 
