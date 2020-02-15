@@ -14,7 +14,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var selector = (Selector<int, string>)null;
 
             // Act
-            Action action = () => ValueEnumerable.Select<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int, string>(enumerable, selector);
+            Action action = () => _ = ValueEnumerable.Select<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int, string>(enumerable, selector);
 
             // Assert
             _ = action.Must()

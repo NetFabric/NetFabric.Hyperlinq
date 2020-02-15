@@ -50,7 +50,7 @@ namespace NetFabric.Hyperlinq
 
                 internal Enumerator(in WhereIndexEnumerable<TEnumerable, TEnumerator, TSource> enumerable, CancellationToken cancellationToken)
                 {
-                    enumerator = enumerable.source.GetAsyncEnumerator();
+                    enumerator = enumerable.source.GetAsyncEnumerator(cancellationToken);
                     predicate = enumerable.predicate;
                     index = 0;
                     this.cancellationToken = cancellationToken;
@@ -106,13 +106,6 @@ namespace NetFabric.Hyperlinq
             public async ValueTask<TSource> FirstOrDefaultAsync(AsyncPredicateAt<TSource> predicate, CancellationToken cancellationToken = default)
                 => (await AsyncValueEnumerable.GetFirstAsync<TEnumerable, TEnumerator, TSource>(source, Utils.Combine(this.predicate, predicate), cancellationToken).ConfigureAwait(false))
                     .DefaultOnEmpty();
-
-            public ValueTask<(int Index, TSource Value)> TryFirstAsync(CancellationToken cancellationToken = default)
-                => AsyncValueEnumerable.GetFirstAsync<TEnumerable, TEnumerator, TSource>(source, predicate, cancellationToken);
-            public ValueTask<(int Index, TSource Value)> TryFirstAsync(AsyncPredicate<TSource> predicate, CancellationToken cancellationToken = default)
-                => AsyncValueEnumerable.GetFirstAsync<TEnumerable, TEnumerator, TSource>(source, Utils.Combine(this.predicate, predicate), cancellationToken);
-            public ValueTask<(int Index, TSource Value)> TryFirstAsync(AsyncPredicateAt<TSource> predicate, CancellationToken cancellationToken = default)
-                => AsyncValueEnumerable.GetFirstAsync<TEnumerable, TEnumerator, TSource>(source, Utils.Combine(this.predicate, predicate), cancellationToken);
 
             public async ValueTask<TSource> SingleAsync(CancellationToken cancellationToken = default)
                 => (await AsyncValueEnumerable.GetSingleAsync<TEnumerable, TEnumerator, TSource>(source, predicate, cancellationToken))

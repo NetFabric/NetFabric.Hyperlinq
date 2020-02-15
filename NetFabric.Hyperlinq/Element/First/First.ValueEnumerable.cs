@@ -20,7 +20,9 @@ namespace NetFabric.Hyperlinq
         public static TSource First<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Predicate<TSource> predicate)
             where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
-            => GetFirst<TEnumerable, TEnumerator, TSource>(source, predicate).ThrowOnEmpty();
+            => predicate is null
+                ? Throw.ArgumentNullException<TSource>(nameof(predicate))
+                : GetFirst<TEnumerable, TEnumerator, TSource>(source, predicate).ThrowOnEmpty();
 
         [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -36,28 +38,9 @@ namespace NetFabric.Hyperlinq
         public static TSource FirstOrDefault<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Predicate<TSource> predicate) 
             where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
-            => GetFirst<TEnumerable, TEnumerator, TSource>(source, predicate).DefaultOnEmpty();
-
-        [Pure]
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Maybe<TSource> TryFirst<TEnumerable, TEnumerator, TSource>(this TEnumerable source)
-            where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
-            where TEnumerator : struct, IEnumerator<TSource>
-            => GetFirst<TEnumerable, TEnumerator, TSource>(source).AsMaybe();
-
-        [Pure]
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Maybe<TSource> TryFirst<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Predicate<TSource> predicate)
-            where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
-            where TEnumerator : struct, IEnumerator<TSource>
-            => GetFirst<TEnumerable, TEnumerator, TSource>(source, predicate).AsMaybe();
-
-        [Pure]
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static MaybeAt<TSource> TryFirst<TEnumerable, TEnumerator, TSource>(this TEnumerable source, PredicateAt<TSource> predicate)
-            where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
-            where TEnumerator : struct, IEnumerator<TSource>
-            => GetFirst<TEnumerable, TEnumerator, TSource>(source, predicate).AsMaybe();
+            => predicate is null
+                ? Throw.ArgumentNullException<TSource>(nameof(predicate))
+                : GetFirst<TEnumerable, TEnumerator, TSource>(source, predicate).DefaultOnEmpty();
 
         [Pure]
         static (ElementResult Success, TSource Value) GetFirst<TEnumerable, TEnumerator, TSource>(this TEnumerable source) 

@@ -86,36 +86,6 @@ namespace NetFabric.Hyperlinq
         }
 
         [Pure]
-        public static ref readonly TSource Single<TSource>(this TSource[] source, PredicateAt<TSource> predicate, out int index)
-        {
-            if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
-
-            return ref Single<TSource>(source, predicate, out index, 0, source.Length);
-        }
-
-        [Pure]
-        static ref readonly TSource Single<TSource>(this TSource[] source, PredicateAt<TSource> predicate, out int index, int skipCount, int takeCount)
-        {
-            var end = skipCount + takeCount;
-            for (index = skipCount; index < end; index++)
-            {
-                if (predicate(source[index], index))
-                {
-                    ref var first = ref source[index];
-
-                    for (index++; index < end; index++)
-                    {
-                        if (predicate(source[index], index))
-                            Throw.NotSingleSequence();
-                    }
-
-                    return ref first;
-                }
-            }
-            return ref Throw.EmptySequenceRef<TSource>();
-        }
-
-        [Pure]
         [return: MaybeNull]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ref readonly TSource SingleOrDefault<TSource>(this TSource[] source)
@@ -196,39 +166,6 @@ namespace NetFabric.Hyperlinq
                     return ref first;
                 }
             }
-            return ref Default<TSource>.Value;
-        }
-
-        [Pure]
-        [return: MaybeNull]
-        public static ref readonly TSource SingleOrDefault<TSource>(this TSource[] source, PredicateAt<TSource> predicate, out int index)
-        {
-            if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
-
-            return ref SingleOrDefault<TSource>(source, predicate, out index, 0, source.Length);
-        }
-
-        [Pure]
-        [return: MaybeNull]
-        static ref readonly TSource SingleOrDefault<TSource>(this TSource[] source, PredicateAt<TSource> predicate, out int index, int skipCount, int takeCount)
-        {
-            var end = skipCount + takeCount;
-            for (index = skipCount; index < end; index++)
-            {
-                if (predicate(source[index], index))
-                {
-                    ref readonly var first = ref source[index];
-
-                    for (index++; index < end; index++)
-                    {
-                        if (predicate(source[index], index))
-                            Throw.NotSingleSequence();
-                    }
-
-                    return ref first;
-                }
-            }
-            index = -1;
             return ref Default<TSource>.Value;
         }
     }

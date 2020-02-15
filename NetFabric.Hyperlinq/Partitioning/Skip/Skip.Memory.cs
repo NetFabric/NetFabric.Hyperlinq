@@ -8,7 +8,10 @@ namespace NetFabric.Hyperlinq
     {
         [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ReadOnlyMemory<TSource> Skip<TSource>(this Memory<TSource> source, int count)
-            => Skip((ReadOnlyMemory<TSource>)source, count);
+        public static Memory<TSource> Skip<TSource>(this Memory<TSource> source, int count)
+        {
+            var (skipCount, takeCount) = Utils.Skip(source.Length, count);
+            return source.Slice(skipCount, takeCount);
+        }
     }
 }

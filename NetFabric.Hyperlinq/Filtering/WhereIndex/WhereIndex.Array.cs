@@ -139,8 +139,6 @@ namespace NetFabric.Hyperlinq
 
             public ref readonly TSource First()
                 => ref Array.First<TSource>(source, predicate, skipCount, takeCount);
-            public ref readonly TSource First(out int index)
-                => ref Array.First<TSource>(source, predicate, out index, skipCount, takeCount);
             public ref readonly TSource First(Predicate<TSource> predicate)
                 => ref Array.First<TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount);
             public ref readonly TSource First(PredicateAt<TSource> predicate)
@@ -150,9 +148,6 @@ namespace NetFabric.Hyperlinq
             public ref readonly TSource FirstOrDefault()
                 => ref Array.FirstOrDefault<TSource>(source, predicate, skipCount, takeCount);
             [return: MaybeNull]
-            public ref readonly TSource FirstOrDefault(out int index)
-                => ref Array.FirstOrDefault<TSource>(source, predicate, out index, skipCount, takeCount);
-            [return: MaybeNull]
             public ref readonly TSource FirstOrDefault(Predicate<TSource> predicate)
                 => ref Array.FirstOrDefault<TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount);
             [return: MaybeNull]
@@ -161,8 +156,6 @@ namespace NetFabric.Hyperlinq
 
             public ref readonly TSource Single()
                 => ref Array.Single<TSource>(source, predicate, skipCount, takeCount);
-            public ref readonly TSource Single(out int index)
-                => ref Array.Single<TSource>(source, predicate, out index, skipCount, takeCount);
             public ref readonly TSource Single(Predicate<TSource> predicate)
                 => ref Array.Single<TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount);
             public ref readonly TSource Single(PredicateAt<TSource> predicate)
@@ -171,9 +164,6 @@ namespace NetFabric.Hyperlinq
             [return: MaybeNull]
             public ref readonly TSource SingleOrDefault()
                 => ref Array.SingleOrDefault<TSource>(source, predicate, skipCount, takeCount);
-            [return: MaybeNull]
-            public ref readonly TSource SingleOrDefault(out int index)
-                => ref Array.SingleOrDefault<TSource>(source, predicate, out index, skipCount, takeCount);
             [return: MaybeNull]
             public ref readonly TSource SingleOrDefault(Predicate<TSource> predicate)
                 => ref Array.SingleOrDefault<TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount);

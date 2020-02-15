@@ -7,6 +7,28 @@ namespace NetFabric.Hyperlinq.UnitTests
 {
     public class SkipTakeValueReadOnlyListTests
     {
+
+        [Theory]
+        [InlineData(1, -1)]
+        [InlineData(1, 1)]
+        [InlineData(3, -1)]
+        [InlineData(3, 3)]
+        public void SkipTake_Indexer_With_OutOfRange__Should_Throw(int takeCount, int index)
+        {
+            // Arrange
+            var source = new int[] { 1, 2, 3, 4, 5 };
+            var wrapped = Wrap.AsValueReadOnlyList(source);
+
+            // Act
+            Func<int> action = () => ReadOnlyList
+                .SkipTake<Wrap.ValueReadOnlyList<int>, int>(wrapped, 0, takeCount)[index];
+
+            // Assert
+            _ = action.Must()
+                .Throw<ArgumentOutOfRangeException>()
+                .EvaluateTrue(exception => exception.ParamName == "index");
+        }
+
         [Theory]
         [MemberData(nameof(TestData.SkipTakeEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakeSingle), MemberType = typeof(TestData))]
@@ -176,7 +198,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var wrapped = Wrap.AsValueReadOnlyList(source);
 
             // Act
-            Action action = () => ReadOnlyList
+            Action action = () => _ = ReadOnlyList
                 .Skip<Wrap.ValueReadOnlyList<int>, int>(wrapped, skipCount)
                 .Take(takeCount)
                 .First();
@@ -218,7 +240,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var wrapped = Wrap.AsValueReadOnlyList(source);
 
             // Act
-            Action action = () => ReadOnlyList
+            Action action = () => _ = ReadOnlyList
                 .Skip<Wrap.ValueReadOnlyList<int>, int>(wrapped, skipCount)
                 .Take(takeCount)
                 .First(item => (item & 0x01) == 0);
@@ -308,7 +330,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var wrapped = Wrap.AsValueReadOnlyList(source);
 
             // Act
-            Action action = () => ReadOnlyList
+            Action action = () => _ = ReadOnlyList
                 .Skip<Wrap.ValueReadOnlyList<int>, int>(wrapped, skipCount)
                 .Take(takeCount)
                 .Single();
@@ -349,7 +371,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var wrapped = Wrap.AsValueReadOnlyList(source);
 
             // Act
-            Action action = () => ReadOnlyList
+            Action action = () => _ = ReadOnlyList
                 .Skip<Wrap.ValueReadOnlyList<int>, int>(wrapped, skipCount)
                 .Take(takeCount)
                 .Single(item => (item & 0x01) == 0);

@@ -14,7 +14,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             // Arrange
 
             // Act
-            Action action = () => ValueEnumerable.Range(0, count);
+            Action action = () => _ = ValueEnumerable.Range(0, count);
 
             // Assert
             _ = action.Must()

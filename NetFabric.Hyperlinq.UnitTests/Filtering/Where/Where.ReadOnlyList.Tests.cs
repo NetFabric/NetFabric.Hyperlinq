@@ -14,7 +14,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var predicate = (Predicate<int>)null;
 
             // Act
-            Action action = () => ReadOnlyList.Where(list, predicate);
+            Action action = () => _ = ReadOnlyList.Where(list, predicate);
 
             // Assert
             _ = action.Must()
@@ -23,7 +23,9 @@ namespace NetFabric.Hyperlinq.UnitTests
         }
 
         [Theory]
-        [MemberData(nameof(TestData.Predicate), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.PredicateEmpty), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.PredicateSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.PredicateMultiple), MemberType = typeof(TestData))]
         public void Where_Predicate_With_ValidData_Should_Succeed(int[] source, Predicate<int> predicate)
         {
             // Arrange

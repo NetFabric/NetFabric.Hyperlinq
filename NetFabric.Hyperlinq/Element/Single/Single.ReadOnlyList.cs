@@ -18,7 +18,17 @@ namespace NetFabric.Hyperlinq
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static TSource Single<TList, TSource>(this TList source, Predicate<TSource> predicate) 
             where TList : notnull, IReadOnlyList<TSource>
-            => GetSingle<TList, TSource>(source, predicate, 0, source.Count).ThrowOnEmpty();
+            => predicate is null
+                ? Throw.ArgumentNullExceptionRef<TSource>(nameof(predicate))
+                : GetSingle<TList, TSource>(source, predicate, 0, source.Count).ThrowOnEmpty();
+
+        [Pure]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static TSource Single<TList, TSource>(this TList source, PredicateAt<TSource> predicate) 
+            where TList : notnull, IReadOnlyList<TSource>
+            => predicate is null
+                ? Throw.ArgumentNullExceptionRef<TSource>(nameof(predicate))
+                : GetSingle<TList, TSource>(source, predicate, 0, source.Count).ThrowOnEmpty();
 
         [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -32,7 +42,18 @@ namespace NetFabric.Hyperlinq
         [return: MaybeNull]
         public static TSource SingleOrDefault<TList, TSource>(this TList source, Predicate<TSource> predicate) 
             where TList : notnull, IReadOnlyList<TSource>
-            => GetSingle<TList, TSource>(source, predicate, 0, source.Count).DefaultOnEmpty();
+            => predicate is null
+                ? Throw.ArgumentNullExceptionRef<TSource>(nameof(predicate))
+                : GetSingle<TList, TSource>(source, predicate, 0, source.Count).DefaultOnEmpty();
+
+        [Pure]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [return: MaybeNull]
+        public static TSource SingleOrDefault<TList, TSource>(this TList source, PredicateAt<TSource> predicate) 
+            where TList : notnull, IReadOnlyList<TSource>
+            => predicate is null
+                ? Throw.ArgumentNullExceptionRef<TSource>(nameof(predicate))
+                : GetSingle<TList, TSource>(source, predicate, 0, source.Count).DefaultOnEmpty();
 
         [Pure]
         static (ElementResult Success, TSource Value) GetSingle<TList, TSource>(this TList source, int skipCount, int takeCount)

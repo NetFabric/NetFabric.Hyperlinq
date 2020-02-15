@@ -13,7 +13,7 @@ namespace NetFabric.Hyperlinq.UnitTests
         {
             // Arrange
             var wrapped = Wrap.AsValueReadOnlyList(source);
-            var expected = System.Linq.Enumerable.Skip(wrapped, count);
+            var expected = System.Linq.Enumerable.Skip(source, count);
 
             // Act
             var result = ReadOnlyList.Skip<Wrap.ValueReadOnlyList<int>, int>(wrapped, count);

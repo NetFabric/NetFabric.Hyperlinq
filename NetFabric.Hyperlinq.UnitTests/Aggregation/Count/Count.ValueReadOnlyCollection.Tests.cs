@@ -36,7 +36,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var predicate = (Predicate<int>)null;
 
             // Act
-            Action action = () => ValueReadOnlyCollection
+            Action action = () => _ = ValueReadOnlyCollection
                 .Count<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
 
             // Assert
@@ -46,7 +46,9 @@ namespace NetFabric.Hyperlinq.UnitTests
         }
 
         [Theory]
-        [MemberData(nameof(TestData.Predicate), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.PredicateEmpty), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.PredicateSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.PredicateMultiple), MemberType = typeof(TestData))]
         public void Count_Predicate_With_ValidData_Should_Succeed(int[] source, Predicate<int> predicate)
         {
             // Arrange
@@ -74,7 +76,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var predicate = (PredicateAt<int>)null;
 
             // Act
-            Action action = () => ValueReadOnlyCollection
+            Action action = () => _ = ValueReadOnlyCollection
                 .Count<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
 
             // Assert
@@ -84,7 +86,9 @@ namespace NetFabric.Hyperlinq.UnitTests
         }
 
         [Theory]
-        [MemberData(nameof(TestData.PredicateAt), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.PredicateAtEmpty), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.PredicateAtSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.PredicateAtMultiple), MemberType = typeof(TestData))]
         public void Count_PredicateAt_With_ValidData_Should_Succeed(int[] source, PredicateAt<int> predicate)
         {
             // Arrange

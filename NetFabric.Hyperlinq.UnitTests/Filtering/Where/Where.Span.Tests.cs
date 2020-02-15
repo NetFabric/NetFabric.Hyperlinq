@@ -14,7 +14,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var predicate = (Predicate<int>)null;
 
             // Act
-            Action action = () => Array
+            Action action = () => _ = Array
                 .Where<int>(source.AsSpan(), predicate);
 
             // Assert
@@ -23,21 +23,36 @@ namespace NetFabric.Hyperlinq.UnitTests
                 .EvaluateTrue(exception => exception.ParamName == "predicate");
         }
 
-        // [Theory]
-        // [MemberData(nameof(TestData.Predicate), MemberType = typeof(TestData))]
-        // public void Where_Predicate_With_ValidData_Should_Succeed(int[] source, Predicate<int> predicate)
-        // {
-        //     // Arrange
-        //     var expected = System.Linq.Enumerable.Where(source, predicate.AsFunc());
+        [Theory]
+        [MemberData(nameof(TestData.PredicateEmpty), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.PredicateSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.PredicateMultiple), MemberType = typeof(TestData))]
+        public void Where_Predicate_With_ValidData_Should_Succeed(int[] source, Predicate<int> predicate)
+        {
+            // Arrange
+            var expected = System.Linq.Enumerable.Where(source, predicate.AsFunc());
 
-        //     // Act
-        //     var result = Array
-        //         .Where<int>(source.AsSpan(), predicate);
+            // Act
+            var result = Array
+                .Where<int>(source.AsSpan(), predicate);
 
-        //     // Assert
-        //     _ = result.Must()
-        //         .BeEnumerableOf<int>()
-        //         .BeEqualTo(expected);
-        // }
+            // Assert
+            var resultEnumerator = result.GetEnumerator();
+            using var expectedEnumerator = expected.GetEnumerator();
+            while (true)
+            {
+                var resultEnded = !resultEnumerator.MoveNext();
+                var expectedEnded = !expectedEnumerator.MoveNext();
+
+                if (resultEnded != expectedEnded)
+                    throw new Exception("Not same size");
+
+                if (resultEnded)
+                    break;
+
+                if (resultEnumerator.Current != expectedEnumerator.Current)
+                    throw new Exception("Items are not equal");
+            }
+        }
     }
 }

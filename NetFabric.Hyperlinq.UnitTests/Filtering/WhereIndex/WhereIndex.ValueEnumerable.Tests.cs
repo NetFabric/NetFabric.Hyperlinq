@@ -14,7 +14,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var predicate = (Predicate<int>)null;
 
             // Act
-            Action action = () => ValueEnumerable.Where<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(enumerable, predicate);
+            Action action = () => _ = ValueEnumerable.Where<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(enumerable, predicate);
 
             // Assert
             _ = action.Must()
@@ -23,7 +23,9 @@ namespace NetFabric.Hyperlinq.UnitTests
         }
 
         [Theory]
-        [MemberData(nameof(TestData.Predicate), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.PredicateEmpty), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.PredicateSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.PredicateMultiple), MemberType = typeof(TestData))]
         public void WhereIndex_With_ValidData_Should_Succeed(int[] source, Predicate<int> predicate)
         {
             // Arrange

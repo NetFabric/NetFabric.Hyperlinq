@@ -60,7 +60,7 @@ namespace NetFabric.Hyperlinq
 
                 internal Enumerator(in WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult> enumerable, CancellationToken cancellationToken)
                 {
-                    enumerator = enumerable.source.GetAsyncEnumerator();
+                    enumerator = enumerable.source.GetAsyncEnumerator(cancellationToken);
                     predicate = enumerable.predicate;
                     selector = enumerable.selector;
                     this.cancellationToken = cancellationToken;

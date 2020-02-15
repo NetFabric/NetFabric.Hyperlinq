@@ -115,7 +115,7 @@ namespace NetFabric.Hyperlinq
 
             static async ValueTask ExecuteAsync(TEnumerable source, AsyncActionAt<TSource> actionAsync, CancellationToken cancellationToken1)
             {
-                var enumerator = source.GetAsyncEnumerator();
+                var enumerator = source.GetAsyncEnumerator(cancellationToken1);
                 await using (enumerator.ConfigureAwait(false)) 
                 checked
                 {

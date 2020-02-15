@@ -36,7 +36,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var predicate = (Predicate<int>)null;
 
             // Act
-            Action action = () => ValueEnumerable
+            Action action = () => _ = ValueEnumerable
                 .LongCount<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
 
             // Assert
@@ -46,7 +46,9 @@ namespace NetFabric.Hyperlinq.UnitTests
         }
 
         [Theory]
-        [MemberData(nameof(TestData.Predicate), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.PredicateEmpty), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.PredicateSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.PredicateMultiple), MemberType = typeof(TestData))]
         public void LongCount_Predicate_With_ValidData_Should_Succeed(int[] source, Predicate<int> predicate)
         {
             // Arrange
@@ -73,7 +75,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             var predicate = (PredicateAtLong<int>)null;
 
             // Act
-            Action action = () => ValueEnumerable
+            Action action = () => _ = ValueEnumerable
                 .LongCount<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
 
             // Assert
@@ -83,8 +85,10 @@ namespace NetFabric.Hyperlinq.UnitTests
         }
 
         [Theory]
-        [MemberData(nameof(TestData.PredicateAtLong), MemberType = typeof(TestData))]
-        public void LongCount_PredicateAt_With_ValidData_Should_Succeed(int[] source, PredicateAtLong<int> predicate)
+        [MemberData(nameof(TestData.PredicateAtEmpty), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.PredicateAtSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.PredicateAtMultiple), MemberType = typeof(TestData))]
+        public void LongCount_PredicateAt_With_ValidData_Should_Succeed(int[] source, PredicateAt<int> predicate)
         {
             // Arrange
             var wrapped = Wrap
@@ -95,7 +99,7 @@ namespace NetFabric.Hyperlinq.UnitTests
 
             // Act
             var result = ValueEnumerable
-                .LongCount<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
+                .LongCount<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, predicate.AsPredicateAtLong());
 
             // Assert
             _ = result.Must()

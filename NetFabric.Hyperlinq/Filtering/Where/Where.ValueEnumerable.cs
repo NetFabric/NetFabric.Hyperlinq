@@ -120,13 +120,6 @@ namespace NetFabric.Hyperlinq
             public TSource FirstOrDefault(PredicateAt<TSource> predicate)
                 => ValueEnumerable.GetFirst<TEnumerable, TEnumerator, TSource>(source, Utils.Combine(this.predicate, predicate)).DefaultOnEmpty();
 
-            public (ElementResult Success, TSource Value) TryFirst()
-                => ValueEnumerable.GetFirst<TEnumerable, TEnumerator, TSource>(source, predicate);
-            public (ElementResult Success, TSource Value) TryFirst(Predicate<TSource> predicate)
-                => ValueEnumerable.GetFirst<TEnumerable, TEnumerator, TSource>(source, Utils.Combine(this.predicate, predicate));
-            public (int Index, TSource Value) TryFirst(PredicateAt<TSource> predicate)
-                => ValueEnumerable.GetFirst<TEnumerable, TEnumerator, TSource>(source, Utils.Combine(this.predicate, predicate));
-
             public TSource Single()
                 => ValueEnumerable.GetSingle<TEnumerable, TEnumerator, TSource>(source, predicate).ThrowOnEmpty();
             public TSource Single(Predicate<TSource> predicate)

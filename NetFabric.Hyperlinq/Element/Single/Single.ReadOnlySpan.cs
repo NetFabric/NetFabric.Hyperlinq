@@ -69,30 +69,6 @@ namespace NetFabric.Hyperlinq
         }
 
         [Pure]
-        public static ref readonly TSource Single<TSource>(this ReadOnlySpan<TSource> source, PredicateAt<TSource> predicate, out int index)
-        {
-            if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
-
-            var length = source.Length;
-            for (index = 0; index < length; index++)
-            {
-                if (predicate(source[index], index))
-                {
-                    ref readonly var first = ref source[index];
-
-                    for (index++; index < length; index++)
-                    {
-                        if (predicate(source[index], index))
-                            Throw.NotSingleSequence();
-                    }
-
-                    return ref first;
-                }
-            }
-            return ref Throw.EmptySequenceRef<TSource>();
-        }
-
-        [Pure]
         [return: MaybeNull]
         public static ref readonly TSource SingleOrDefault<TSource>(this ReadOnlySpan<TSource> source)
         {
@@ -154,32 +130,6 @@ namespace NetFabric.Hyperlinq
                     return ref first;
                 }
             }
-            return ref Default<TSource>.Value;
-        }
-
-        [Pure]
-        [return: MaybeNull]
-        public static ref readonly TSource SingleOrDefault<TSource>(this ReadOnlySpan<TSource> source, PredicateAt<TSource> predicate, out int index)
-        {
-            if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
-
-            var length = source.Length;
-            for (index = 0; index < length; index++)
-            {
-                if (predicate(source[index], index))
-                {
-                    ref readonly var first = ref source[index];
-
-                    for (index++; index < length; index++)
-                    {
-                        if (predicate(source[index], index))
-                            Throw.NotSingleSequence();
-                    }
-
-                    return ref first;
-                }
-            }
-            index = -1;
             return ref Default<TSource>.Value;
         }
     }

@@ -47,15 +47,13 @@ namespace NetFabric.Hyperlinq
                 [SuppressMessage("Style", "IDE0044:Add readonly modifier")]
                 TEnumerator enumerator; // do not make readonly
                 readonly IEqualityComparer<TSource>? comparer;
-                readonly CancellationToken cancellationToken;
                 EnumeratorState state;
                 HashSet<TSource>? set;
 
                 internal Enumerator(in DistinctEnumerable<TEnumerable, TEnumerator, TSource> enumerable, CancellationToken cancellationToken)
                 {
-                    enumerator = enumerable.source.GetAsyncEnumerator();
+                    enumerator = enumerable.source.GetAsyncEnumerator(cancellationToken);
                     comparer = enumerable.comparer;
-                    this.cancellationToken = cancellationToken;
                     state = EnumeratorState.Uninitialized;
                     set = null;
                 }

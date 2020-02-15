@@ -114,15 +114,6 @@ namespace NetFabric.Hyperlinq
         [return: MaybeNull]
         public static TKey FirstOrDefault<TKey, TValue>(this SortedDictionary<TKey, TValue>.KeyCollection source, Predicate<TKey> predicate)
             => ValueReadOnlyCollection.FirstOrDefault<ValueWrapper<TKey, TValue>, SortedDictionary<TKey, TValue>.KeyCollection.Enumerator, TKey>(new ValueWrapper<TKey, TValue>(source), predicate);
-        [Pure]
-        public static Maybe<TKey> TryFirst<TKey, TValue>(this SortedDictionary<TKey, TValue>.KeyCollection source)
-            => ValueReadOnlyCollection.TryFirst<ValueWrapper<TKey, TValue>, SortedDictionary<TKey, TValue>.KeyCollection.Enumerator, TKey>(new ValueWrapper<TKey, TValue>(source));
-        [Pure]
-        public static Maybe<TKey> TryFirst<TKey, TValue>(this SortedDictionary<TKey, TValue>.KeyCollection source, Predicate<TKey> predicate)
-            => ValueReadOnlyCollection.TryFirst<ValueWrapper<TKey, TValue>, SortedDictionary<TKey, TValue>.KeyCollection.Enumerator, TKey>(new ValueWrapper<TKey, TValue>(source), predicate);
-        [Pure]
-        public static MaybeAt<TKey> TryFirst<TKey, TValue>(this SortedDictionary<TKey, TValue>.KeyCollection source, PredicateAt<TKey> predicate)
-            => ValueReadOnlyCollection.TryFirst<ValueWrapper<TKey, TValue>, SortedDictionary<TKey, TValue>.KeyCollection.Enumerator, TKey>(new ValueWrapper<TKey, TValue>(source), predicate);
 
         [Pure]
         public static TKey Single<TKey, TValue>(this SortedDictionary<TKey, TValue>.KeyCollection source)

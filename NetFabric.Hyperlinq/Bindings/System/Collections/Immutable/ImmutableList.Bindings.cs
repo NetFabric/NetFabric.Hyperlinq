@@ -115,15 +115,6 @@ namespace NetFabric.Hyperlinq
         [return: MaybeNull]
         public static TSource FirstOrDefault<TSource>(this ImmutableList<TSource> source, Predicate<TSource> predicate)
             => ReadOnlyList.FirstOrDefault<ImmutableList<TSource>, TSource>(source, predicate);
-        [Pure]
-        public static Maybe<TSource> TryFirst<TSource>(this ImmutableList<TSource> source)
-            => ReadOnlyList.TryFirst<ImmutableList<TSource>, TSource>(source);
-        [Pure]
-        public static Maybe<TSource> TryFirst<TSource>(this ImmutableList<TSource> source, Predicate<TSource> predicate)
-            => ReadOnlyList.TryFirst<ImmutableList<TSource>, TSource>(source, predicate);
-        [Pure]
-        public static MaybeAt<TSource> TryFirst<TSource>(this ImmutableList<TSource> source, PredicateAt<TSource> predicate)
-            => ReadOnlyList.TryFirst<ImmutableList<TSource>, TSource>(source, predicate);
 
         [Pure]
         public static TSource Single<TSource>(this ImmutableList<TSource> source)

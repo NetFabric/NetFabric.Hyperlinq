@@ -17,7 +17,7 @@ namespace NetFabric.Hyperlinq
             => new SkipEnumerable<TEnumerable, TEnumerator, TSource>(in source, count);
 
         public readonly partial struct SkipEnumerable<TEnumerable, TEnumerator, TSource>
-            : IValueEnumerable<TSource, SkipEnumerable<TEnumerable, TEnumerator, TSource>.DisposableEnumerator>
+            : IValueEnumerable<TSource, SkipEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator>
             where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
@@ -31,49 +31,21 @@ namespace NetFabric.Hyperlinq
             }
 
             [Pure]
-            public readonly Enumerator GetEnumerator() => new Enumerator(in this);
-            readonly DisposableEnumerator IValueEnumerable<TSource, SkipEnumerable<TEnumerable, TEnumerator, TSource>.DisposableEnumerator>.GetEnumerator() => new DisposableEnumerator(in this);
-            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new DisposableEnumerator(in this);
-            readonly IEnumerator IEnumerable.GetEnumerator() => new DisposableEnumerator(in this);
+            public readonly Enumerator GetEnumerator() 
+                => new Enumerator(in this);
+            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() 
+                => new Enumerator(in this);
+            readonly IEnumerator IEnumerable.GetEnumerator() 
+                => new Enumerator(in this);
 
             public struct Enumerator
-            {
-                [SuppressMessage("Style", "IDE0044:Add readonly modifier")]
-                TEnumerator enumerator; // do not make readonly
-                int counter;
-
-                internal Enumerator(in SkipEnumerable<TEnumerable, TEnumerator, TSource> enumerable)
-                {
-                    enumerator = enumerable.source.GetEnumerator();
-                    counter = enumerable.count;
-                }
-
-                [MaybeNull]
-                public readonly TSource Current
-                    => enumerator.Current;
-
-                public bool MoveNext()
-                {
-                    while (counter > 0)
-                    {
-                        if(!enumerator.MoveNext())
-                            return false;
-
-                        counter--;
-                    }
-
-                    return enumerator.MoveNext();                    
-                }
-            }
-
-            public struct DisposableEnumerator
                 : IEnumerator<TSource>
             {
                 [SuppressMessage("Style", "IDE0044:Add readonly modifier")]
                 TEnumerator enumerator; // do not make readonly
                 int counter;
 
-                internal DisposableEnumerator(in SkipEnumerable<TEnumerable, TEnumerator, TSource> enumerable)
+                internal Enumerator(in SkipEnumerable<TEnumerable, TEnumerator, TSource> enumerable)
                 {
                     enumerator = enumerable.source.GetEnumerator();
                     counter = enumerable.count;
@@ -102,7 +74,8 @@ namespace NetFabric.Hyperlinq
                 public readonly void Reset() 
                     => throw new NotSupportedException();
 
-                public readonly void Dispose() { }
+                public readonly void Dispose() 
+                    => enumerator.Dispose();
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]

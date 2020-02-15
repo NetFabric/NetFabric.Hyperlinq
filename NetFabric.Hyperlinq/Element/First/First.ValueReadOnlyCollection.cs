@@ -20,7 +20,18 @@ namespace NetFabric.Hyperlinq
         public static TSource First<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Predicate<TSource> predicate) 
             where TEnumerable : notnull, IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
-            => GetFirst<TEnumerable, TEnumerator, TSource>(source, predicate).ThrowOnEmpty();
+            => predicate is null
+                ? Throw.ArgumentNullException<TSource>(nameof(predicate))
+                : GetFirst<TEnumerable, TEnumerator, TSource>(source, predicate).ThrowOnEmpty();
+
+        [Pure]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static TSource First<TEnumerable, TEnumerator, TSource>(this TEnumerable source, PredicateAt<TSource> predicate) 
+            where TEnumerable : notnull, IValueReadOnlyCollection<TSource, TEnumerator>
+            where TEnumerator : struct, IEnumerator<TSource>
+            => predicate is null
+                ? Throw.ArgumentNullException<TSource>(nameof(predicate))
+                : GetFirst<TEnumerable, TEnumerator, TSource>(source, predicate).ThrowOnEmpty();
 
         [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -36,42 +47,31 @@ namespace NetFabric.Hyperlinq
         public static TSource FirstOrDefault<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Predicate<TSource> predicate) 
             where TEnumerable : notnull, IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
-            => GetFirst<TEnumerable, TEnumerator, TSource>(source, predicate).DefaultOnEmpty();
+            => predicate is null
+                ? Throw.ArgumentNullException<TSource>(nameof(predicate))
+                : GetFirst<TEnumerable, TEnumerator, TSource>(source, predicate).DefaultOnEmpty();
 
         [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Maybe<TSource> TryFirst<TEnumerable, TEnumerator, TSource>(this TEnumerable source)
+        [return: MaybeNull]
+        public static TSource FirstOrDefault<TEnumerable, TEnumerator, TSource>(this TEnumerable source, PredicateAt<TSource> predicate) 
             where TEnumerable : notnull, IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
-            => GetFirst<TEnumerable, TEnumerator, TSource>(source).AsMaybe();
-
-        [Pure]
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Maybe<TSource> TryFirst<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Predicate<TSource> predicate)
-            where TEnumerable : notnull, IValueReadOnlyCollection<TSource, TEnumerator>
-            where TEnumerator : struct, IEnumerator<TSource>
-            => GetFirst<TEnumerable, TEnumerator, TSource>(source, predicate).AsMaybe();
-
-        [Pure]
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static MaybeAt<TSource> TryFirst<TEnumerable, TEnumerator, TSource>(this TEnumerable source, PredicateAt<TSource> predicate)
-            where TEnumerable : notnull, IValueReadOnlyCollection<TSource, TEnumerator>
-            where TEnumerator : struct, IEnumerator<TSource>
-            => GetFirst<TEnumerable, TEnumerator, TSource>(source, predicate).AsMaybe();
+            => predicate is null
+                ? Throw.ArgumentNullException<TSource>(nameof(predicate))
+                : GetFirst<TEnumerable, TEnumerator, TSource>(source, predicate).DefaultOnEmpty();
 
         [Pure]
         static (ElementResult Success, TSource Value) GetFirst<TEnumerable, TEnumerator, TSource>(this TEnumerable source) 
             where TEnumerable : notnull, IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
-            if (source.Count != 0)
-            {
-                using var enumerator = source.GetEnumerator();
-                if (enumerator.MoveNext())
-                    return (ElementResult.Success, enumerator.Current);
-            }
+            if (source.Count == 0)
+                return (ElementResult.Empty, default);
 
-            return (ElementResult.Empty, default);
+            using var enumerator = source.GetEnumerator();
+            _ = enumerator.MoveNext();
+            return (ElementResult.Success, enumerator.Current);
         }
 
         [Pure]
@@ -94,7 +94,7 @@ namespace NetFabric.Hyperlinq
         }
 
         [Pure]
-        static (int Index, TSource Value) GetFirst<TEnumerable, TEnumerator, TSource>(this TEnumerable source, PredicateAt<TSource> predicate) 
+        static (ElementResult Success, TSource Value) GetFirst<TEnumerable, TEnumerator, TSource>(this TEnumerable source, PredicateAt<TSource> predicate) 
             where TEnumerable : notnull, IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
@@ -107,12 +107,12 @@ namespace NetFabric.Hyperlinq
                     {
                         var item = enumerator.Current;
                         if (predicate(item, index))
-                            return (index, item);
+                            return (ElementResult.Success, item);
                     }
                 }
             }
 
-            return ((int)ElementResult.Empty,  default);
-        }    
+            return (ElementResult.Empty, default);
+        }
     }
 }

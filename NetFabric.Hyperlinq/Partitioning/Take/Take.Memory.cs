@@ -8,7 +8,7 @@ namespace NetFabric.Hyperlinq
     {
         [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ReadOnlyMemory<TSource> Take<TSource>(this Memory<TSource> source, int count)
-            => Take((ReadOnlyMemory<TSource>)source, count);
+        public static Memory<TSource> Take<TSource>(this Memory<TSource> source, int count)
+            => source.Slice(0, Utils.Take(source.Length, count));
     }
 }

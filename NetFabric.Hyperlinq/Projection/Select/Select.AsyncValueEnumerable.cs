@@ -55,7 +55,7 @@ namespace NetFabric.Hyperlinq
 
                 internal Enumerator(in SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult> enumerable, CancellationToken cancellationToken)
                 {
-                    enumerator = enumerable.source.GetAsyncEnumerator();
+                    enumerator = enumerable.source.GetAsyncEnumerator(cancellationToken);
                     selector = enumerable.selector;
                     this.cancellationToken = cancellationToken;
                     current = default;

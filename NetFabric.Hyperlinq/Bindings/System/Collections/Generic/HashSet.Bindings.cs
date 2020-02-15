@@ -114,15 +114,6 @@ namespace NetFabric.Hyperlinq
         [return: MaybeNull]
         public static TSource FirstOrDefault<TSource>(this HashSet<TSource> source, Predicate<TSource> predicate)
             => ValueReadOnlyCollection.FirstOrDefault<ValueWrapper<TSource>, HashSet<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
-        [Pure]
-        public static Maybe<TSource> TryFirst<TSource>(this HashSet<TSource> source)
-            => ValueReadOnlyCollection.TryFirst<ValueWrapper<TSource>, HashSet<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source));
-        [Pure]
-        public static Maybe<TSource> TryFirst<TSource>(this HashSet<TSource> source, Predicate<TSource> predicate)
-            => ValueReadOnlyCollection.TryFirst<ValueWrapper<TSource>, HashSet<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
-        [Pure]
-        public static MaybeAt<TSource> TryFirst<TSource>(this HashSet<TSource> source, PredicateAt<TSource> predicate)
-            => ValueReadOnlyCollection.TryFirst<ValueWrapper<TSource>, HashSet<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
 
         [Pure]
         public static TSource Single<TSource>(this HashSet<TSource> source)

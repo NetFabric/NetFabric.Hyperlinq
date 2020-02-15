@@ -9,23 +9,26 @@ namespace NetFabric.Hyperlinq
     {
         [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool Contains<TSource>(this TSource[] source, TSource value)
-            => System.Array.IndexOf<TSource>(source, value) >= 0;
+        public static bool Contains<TSource>(this TSource[] source, TSource value, IEqualityComparer<TSource>? comparer = null)
+        {
+            if (source.Length != 0)
+            {
+                if (comparer is null)
+                    return System.Array.IndexOf<TSource>(source, value) >= 0;
 
-        [Pure]
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static bool Contains<TSource>(this TSource[] source, TSource value, int skipCount, int takeCount)
-            => System.Array.IndexOf<TSource>(source, value, skipCount, takeCount) >= 0;
-
-        [Pure]
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool Contains<TSource>(this TSource[] source, TSource value, IEqualityComparer<TSource>? comparer)
-            => Contains<TSource>(source, value, comparer, 0, source.Length);
+                for (var index = 0; index < source.Length; index++)
+                {
+                    if (comparer.Equals(value, source[index]))
+                        return true;
+                }
+            }
+            return false;
+        }
 
         [Pure]
         static bool Contains<TSource>(this TSource[] source, TSource value, IEqualityComparer<TSource>? comparer, int skipCount, int takeCount)
         {
-            if (takeCount != 0)
+            if (takeCount != 0) 
             {
                 if (comparer is null)
                     return System.Array.IndexOf<TSource>(source, value, skipCount, takeCount) >= 0;

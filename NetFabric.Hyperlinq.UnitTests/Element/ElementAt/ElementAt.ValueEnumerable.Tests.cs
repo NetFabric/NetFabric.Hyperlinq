@@ -15,7 +15,7 @@ namespace NetFabric.Hyperlinq.UnitTests
                 .AsValueEnumerable(source);
 
             // Act
-            Action action = () => ValueEnumerable
+            Action action = () => _ = ValueEnumerable
                 .ElementAt<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, index);
 
             // Assert
