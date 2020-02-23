@@ -73,18 +73,5 @@ namespace NetFabric.Hyperlinq
             }
             return list;
         }
-
-        [Pure]
-        static List<TResult> ToList<TSource, TResult>(this ReadOnlySpan<TSource> source, PredicateAt<TSource> predicate, SelectorAt<TSource, TResult> selector)
-        {
-            var list = new List<TResult>(source.Length);
-            for (var index = 0; index < source.Length; index++)
-            {
-                var item = source[index];
-                if (predicate(item, index))
-                    list.Add(selector(item, index));
-            }
-            return list;
-        }
     }
 }

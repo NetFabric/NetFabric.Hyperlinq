@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Diagnostics.Contracts;
 using System.Threading;
 using System.Threading.Tasks;
@@ -11,47 +12,47 @@ namespace NetFabric.Hyperlinq
         [Pure]
         static async ValueTask<TSource[]> ToArrayAsync<TSource>(IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
         {
-            cancellationToken.ThrowIfCancellationRequested();
-            var (array, length) = await ToArrayWithLengthAsync(source, cancellationToken).ConfigureAwait(false);
-            System.Array.Resize(ref array, length);
-            return array;
+            var builder = new LargeArrayBuilder<TSource>(initialize: true);
+            await builder.AddRangeAsync(source, cancellationToken);
+            return builder.ToArray();
+        }
+    }
+}
 
-            static async ValueTask<(TSource[]?, int)> ToArrayWithLengthAsync(IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
+namespace System.Collections.Generic
+{
+    internal partial struct LargeArrayBuilder<T>
+    {
+        public async ValueTask AddRangeAsync(IAsyncEnumerable<T> items, CancellationToken cancellationToken)
+        {
+            Debug.Assert(items is object);
+
+            var enumerator = items.GetAsyncEnumerator();
+            await using (enumerator.ConfigureAwait(false))
             {
-                if (source is ICollection<TSource> collection)
-                {
-                    var count = collection.Count;
-                    if (count == 0)
-                        return default;
+                var destination = _current;
+                var index = _index;
 
-                    var buffer = new TSource[count];
-                    collection.CopyTo(buffer, 0);
-                    return (buffer, count);
+                // Continuously read in items from the enumerator, updating _count
+                // and _index when we run out of space.
+
+                while (await enumerator.MoveNextAsync().ConfigureAwait(false))
+                {
+                    cancellationToken.ThrowIfCancellationRequested();
+
+                    var item = enumerator.Current;
+
+                    if ((uint)index >= (uint)destination.Length)
+                        AddWithBufferAllocation(item, ref destination, ref index);
+                    else
+                        destination[index] = item;
+
+                    index++;
                 }
 
-                var enumerator = source.GetAsyncEnumerator(cancellationToken);
-                await using (enumerator.ConfigureAwait(false))
-                {
-                    if (await enumerator.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        var array = Utils.ToArrayAllocate<TSource>();
-                        array[0] = enumerator.Current;
-                        var count = 1;
-
-                        while (await enumerator.MoveNextAsync().ConfigureAwait(false))
-                        {
-                            if (count == array.Length)
-                                Utils.ToArrayResize(ref array, count);
-
-                            array[count] = enumerator.Current;
-                            count++;
-                        }
-
-                        return (array, count);
-                    }
-
-                    return default; // it's empty
-                }
+                // Final update to _count and _index.
+                _count += index - _index;
+                _index = index;
             }
         }
     }

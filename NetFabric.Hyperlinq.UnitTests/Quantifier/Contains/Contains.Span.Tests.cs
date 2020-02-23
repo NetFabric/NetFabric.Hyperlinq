@@ -5,7 +5,7 @@ using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests
 {
-    public class ContainsSpanTests
+    public partial class SpanTests
     {
         [Theory]
         [MemberData(nameof(TestData.Contains), MemberType = typeof(TestData))]

@@ -138,7 +138,7 @@ namespace NetFabric.Hyperlinq
                 => Array.Any<TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount);
 
             public Array.ArrayWhereSelectEnumerable<TSource, TResult> Select<TResult>(Selector<TSource, TResult> selector)
-                => Array.WhereSelect<TSource, TResult>(source, predicate, selector);
+                => Array.WhereSelect<TSource, TResult>(source, predicate, selector, skipCount, takeCount);
 
             public Array.ArrayWhereEnumerable<TSource> Where(Predicate<TSource> predicate)
                 => Array.Where<TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount);

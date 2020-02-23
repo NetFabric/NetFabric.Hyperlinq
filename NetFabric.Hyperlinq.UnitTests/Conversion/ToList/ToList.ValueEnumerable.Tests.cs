@@ -4,7 +4,7 @@ using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests
 {
-    public class ToListValueEnumerableTests
+    public partial class ValueEnumerableTests
     {
         [Theory]
         [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]

@@ -4,7 +4,7 @@ using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests
 {
-    public class ElementAtArrayTests
+    public partial class ArrayTests
     {
         [Theory]
         [MemberData(nameof(TestData.ElementAtOutOfRange), MemberType = typeof(TestData))]

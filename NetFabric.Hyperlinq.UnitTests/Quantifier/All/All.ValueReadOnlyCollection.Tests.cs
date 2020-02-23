@@ -6,7 +6,7 @@ using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests
 {
-    public class AllValueReadOnlyCollectionTests
+    public partial class ValueReadOnlyCollectionTests
     {
         [Fact]
         public void All_With_NullPredicate_Should_Throw()

@@ -19,12 +19,17 @@ namespace NetFabric.Hyperlinq
                 index = -1;
             }
 
-            public readonly T Current => source[index];
-            readonly object IEnumerator.Current => source[index];
+            public readonly T Current 
+                => source[index];
+            readonly object IEnumerator.Current 
+                => source[index];
 
-            public bool MoveNext() => ++index < source.Length;
-            public void Reset() => index = -1;
-            public readonly void Dispose() { }
+            public bool MoveNext() 
+                => ++index < source.Length;
+            public void Reset() 
+                => index = -1;
+            public readonly void Dispose() 
+            { }
         }
     }
 }

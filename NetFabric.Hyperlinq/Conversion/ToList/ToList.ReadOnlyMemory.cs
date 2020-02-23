@@ -37,11 +37,6 @@ namespace NetFabric.Hyperlinq
         static List<TResult> ToList<TSource, TResult>(this ReadOnlyMemory<TSource> source, Predicate<TSource> predicate, Selector<TSource, TResult> selector)
             => ToList(source.Span, predicate, selector);
 
-        [Pure]
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static List<TResult> ToList<TSource, TResult>(this ReadOnlyMemory<TSource> source, PredicateAt<TSource> predicate, SelectorAt<TSource, TResult> selector)
-            => ToList(source.Span, predicate, selector);
-
         [GeneratorIgnore]
         sealed class MemoryToListCollection<TSource>
             : ToListCollectionBase<TSource>

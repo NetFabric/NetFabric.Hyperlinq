@@ -4,7 +4,7 @@ using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests
 {
-    public class SkipMemoryTests
+    public partial class MemoryTests
     {
         [Theory]
         [MemberData(nameof(TestData.SkipEmpty), MemberType = typeof(TestData))]

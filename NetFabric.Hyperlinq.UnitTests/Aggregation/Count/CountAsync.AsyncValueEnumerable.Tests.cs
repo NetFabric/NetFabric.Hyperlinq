@@ -5,7 +5,7 @@ using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests
 {
-    public class CountAsyncValueEnumerableTests
+    public partial class AsyncValueEnumerableTests
     {
         [Theory]
         [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]

@@ -123,6 +123,14 @@ namespace NetFabric.Hyperlinq
             public TResult SingleOrDefault()
                 => selector(source.Span.SingleOrDefault(), 0);
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public TResult[] ToArray()
+                => Array.ToArray(source.Span, selector);
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public List<TResult> ToList()
+                => Array.ToList(source.Span, selector);
+
             public void ForEach(Action<TResult> action)
                 => Array.ForEach(source.Span, action, selector);
             public void ForEach(ActionAt<TResult> action)

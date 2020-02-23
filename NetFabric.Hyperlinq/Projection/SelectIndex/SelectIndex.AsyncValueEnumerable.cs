@@ -133,6 +133,9 @@ namespace NetFabric.Hyperlinq
                 return await selector(item, 0, cancellationToken).ConfigureAwait(false);
             }
 
+            public ValueTask<TResult[]> ToArrayAsync(CancellationToken cancellationToken = default)
+                => AsyncValueEnumerable.ToArrayAsync<TEnumerable, TEnumerator, TSource, TResult>(source, selector, cancellationToken);
+
             public ValueTask<List<TResult>> ToListAsync(CancellationToken cancellationToken = default)
                 => AsyncValueEnumerable.ToListAsync<TEnumerable, TEnumerator, TSource, TResult>(source, selector, cancellationToken);
 

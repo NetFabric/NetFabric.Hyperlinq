@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Diagnostics.Contracts;
+using NetFabric.Hyperlinq;
 
 namespace NetFabric.Hyperlinq
 {
@@ -11,127 +13,264 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
-            var (array, length) = ToArrayWithLength(source);
-            System.Array.Resize(ref array, length);
-            return array;
-
-            static (TSource[]?, int) ToArrayWithLength(TEnumerable source)
+            switch (source)
             {
-                if (source is ICollection<TSource> collection)
-                {
+                case ICollection<TSource> collection:
                     var count = collection.Count;
                     if (count == 0)
-                        return default;
+                        return System.Array.Empty<TSource>();
 
                     var buffer = new TSource[count];
                     collection.CopyTo(buffer, 0);
-                    return (buffer, count);
-                }
+                    return buffer;
 
-                using var enumerator = source.GetEnumerator();
-                if (enumerator.MoveNext())
-                {
-                    var array = Utils.ToArrayAllocate<TSource>();
-                    array[0] = enumerator.Current;
-                    var count = 1;
-
-                    while (enumerator.MoveNext())
-                    {
-                        if (count == array.Length)
-                            Utils.ToArrayResize(ref array, count);
-
-                        array[count] = enumerator.Current;
-                        count++;
-                    }
-
-                    return (array, count);
-                }
-
-                return default; // it's empty
+                default:
+                    var builder = new LargeArrayBuilder<TSource>(initialize: true);
+                    builder.AddRange<TEnumerable, TEnumerator>(source);
+                    return builder.ToArray();
             }
         }
 
         [Pure]
-        public static TSource[] ToArray<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Predicate<TSource> predicate)
+        static TSource[] ToArray<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Predicate<TSource> predicate)
             where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
-            var (array, length) = ToArrayWithLength(source, predicate);
-            System.Array.Resize(ref array, length);
-            return array;
-
-            static (TSource[]?, int) ToArrayWithLength(TEnumerable source, Predicate<TSource> predicate)
-            {
-                using var enumerator = source.GetEnumerator();
-                while (enumerator.MoveNext())
-                {
-                    if (predicate(enumerator.Current))
-                    {
-                        var array = Utils.ToArrayAllocate<TSource>();
-                        array[0] = enumerator.Current;
-                        var count = 1;
-
-                        while (enumerator.MoveNext())
-                        {
-                            var item = enumerator.Current;
-                            if (predicate(item))
-                            {
-                                if (count == array.Length)
-                                    Utils.ToArrayResize(ref array, count);
-
-                                array[count] = item;
-                                count++;
-                            }
-                        }
-
-                        return (array, count);
-                    }
-                }
-
-                return default; // it's empty
-            }
+            var builder = new LargeArrayBuilder<TSource>(initialize: true);
+            builder.AddRange<TEnumerable, TEnumerator>(source, predicate);
+            return builder.ToArray();
         }
 
         [Pure]
-        public static TSource[] ToArray<TEnumerable, TEnumerator, TSource>(this TEnumerable source, PredicateAt<TSource> predicate)
+        static TSource[] ToArray<TEnumerable, TEnumerator, TSource>(this TEnumerable source, PredicateAt<TSource> predicate)
             where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
-            var (array, length) = ToArrayWithLength(source, predicate);
-            System.Array.Resize(ref array, length);
-            return array;
+            var builder = new LargeArrayBuilder<TSource>(initialize: true);
+            builder.AddRange<TEnumerable, TEnumerator>(source, predicate);
+            return builder.ToArray();
+        }
 
-            static (TSource[]?, int) ToArrayWithLength(TEnumerable source, PredicateAt<TSource> predicate)
+        [Pure]
+        static TResult[] ToArray<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, Selector<TSource, TResult> selector)
+            where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
+            where TEnumerator : struct, IEnumerator<TSource>
+        {
+            var builder = new LargeArrayBuilder<TResult>(initialize: true);
+            builder.AddRange<TEnumerable, TEnumerator, TSource>(source, selector);
+            return builder.ToArray();
+        }
+
+        [Pure]
+        static TResult[] ToArray<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, SelectorAt<TSource, TResult> selector)
+            where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
+            where TEnumerator : struct, IEnumerator<TSource>
+        {
+            var builder = new LargeArrayBuilder<TResult>(initialize: true);
+            builder.AddRange<TEnumerable, TEnumerator, TSource>(source, selector);
+            return builder.ToArray();
+        }
+
+        [Pure]
+        static TResult[] ToArray<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, Predicate<TSource> predicate, Selector<TSource, TResult> selector)
+            where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
+            where TEnumerator : struct, IEnumerator<TSource>
+        {
+            var builder = new LargeArrayBuilder<TResult>(initialize: true);
+            builder.AddRange<TEnumerable, TEnumerator, TSource>(source, predicate, selector);
+            return builder.ToArray();
+        }
+    }
+}
+
+namespace System.Collections.Generic
+{
+    internal partial struct LargeArrayBuilder<T>
+    {
+        public void AddRange<TEnumerable, TEnumerator>(TEnumerable items)
+            where TEnumerable : notnull, IValueEnumerable<T, TEnumerator>
+            where TEnumerator : struct, IEnumerator<T>
+        {
+            Debug.Assert(items is object);
+
+            using var enumerator = items.GetEnumerator();
+            var destination = _current;
+            var index = _index;
+
+            // Continuously read in items from the enumerator, updating _count
+            // and _index when we run out of space.
+
+            while (enumerator.MoveNext())
             {
-                using var enumerator = source.GetEnumerator();
-                for (var index = 0; enumerator.MoveNext(); index++)
-                {
-                    if (predicate(enumerator.Current, index))
-                    {
-                        var array = Utils.ToArrayAllocate<TSource>();
-                        array[0] = enumerator.Current;
-                        var count = 1;
+                var item = enumerator.Current;
 
-                        // found first, keep going until end
-                        for (index++; enumerator.MoveNext(); index++)
-                        {
-                            var item = enumerator.Current;
-                            if (predicate(item, index))
-                            {
-                                if (count == array.Length)
-                                    Utils.ToArrayResize(ref array, count);
+                if ((uint)index >= (uint)destination.Length)
+                    AddWithBufferAllocation(item, ref destination, ref index);
+                else
+                    destination[index] = item;
 
-                                array[count] = item;
-                                count++;
-                            }
-                        }
-
-                        return (array, count);
-                    }
-                }
-
-                return default; // it's empty
+                index++;
             }
+
+            // Final update to _count and _index.
+            _count += index - _index;
+            _index = index;
+        }
+
+        public void AddRange<TEnumerable, TEnumerator>(TEnumerable items, Predicate<T> predicate)
+            where TEnumerable : notnull, IValueEnumerable<T, TEnumerator>
+            where TEnumerator : struct, IEnumerator<T>
+        {
+            Debug.Assert(items is object);
+
+            using var enumerator = items.GetEnumerator();
+            var destination = _current;
+            var index = _index;
+
+            // Continuously read in items from the enumerator, updating _count
+            // and _index when we run out of space.
+
+            while (enumerator.MoveNext())
+            {
+                var item = enumerator.Current;
+                if (predicate(item))
+                {
+                    if ((uint)index >= (uint)destination.Length)
+                        AddWithBufferAllocation(item, ref destination, ref index);
+                    else
+                        destination[index] = item;
+
+                    index++;
+                }
+            }
+
+            // Final update to _count and _index.
+            _count += index - _index;
+            _index = index;
+        }
+
+        public void AddRange<TEnumerable, TEnumerator>(TEnumerable items, PredicateAt<T> predicate)
+            where TEnumerable : notnull, IValueEnumerable<T, TEnumerator>
+            where TEnumerator : struct, IEnumerator<T>
+        {
+            Debug.Assert(items is object);
+
+            using var enumerator = items.GetEnumerator();
+            var destination = _current;
+            var index = _index;
+
+            // Continuously read in items from the enumerator, updating _count
+            // and _index when we run out of space.
+
+            for (var itemIndex = 0; enumerator.MoveNext(); itemIndex++)
+            {
+                var item = enumerator.Current;
+                if (predicate(item, itemIndex))
+                {
+                    if ((uint)index >= (uint)destination.Length)
+                        AddWithBufferAllocation(item, ref destination, ref index);
+                    else
+                        destination[index] = item;
+
+                    index++;
+                }
+            }
+
+            // Final update to _count and _index.
+            _count += index - _index;
+            _index = index;
+        }
+
+        public void AddRange<TEnumerable, TEnumerator, U>(TEnumerable items, Selector<U, T> selector)
+            where TEnumerable : notnull, IValueEnumerable<U, TEnumerator>
+            where TEnumerator : struct, IEnumerator<U>
+        {
+            Debug.Assert(items is object);
+
+            using var enumerator = items.GetEnumerator();
+            var destination = _current;
+            var index = _index;
+
+            // Continuously read in items from the enumerator, updating _count
+            // and _index when we run out of space.
+
+            while (enumerator.MoveNext())
+            {
+                var item = enumerator.Current;
+
+                if ((uint)index >= (uint)destination.Length)
+                    AddWithBufferAllocation(selector(item), ref destination, ref index);
+                else
+                    destination[index] = selector(item);
+
+                index++;
+            }
+
+            // Final update to _count and _index.
+            _count += index - _index;
+            _index = index;
+        }
+
+        public void AddRange<TEnumerable, TEnumerator, U>(TEnumerable items, SelectorAt<U, T> selector)
+            where TEnumerable : notnull, IValueEnumerable<U, TEnumerator>
+            where TEnumerator : struct, IEnumerator<U>
+        {
+            Debug.Assert(items is object);
+
+            using var enumerator = items.GetEnumerator();
+            var destination = _current;
+            var index = _index;
+
+            // Continuously read in items from the enumerator, updating _count
+            // and _index when we run out of space.
+
+            while (enumerator.MoveNext())
+            {
+                var item = enumerator.Current;
+
+                if ((uint)index >= (uint)destination.Length)
+                    AddWithBufferAllocation(selector(item, index), ref destination, ref index);
+                else
+                    destination[index] = selector(item, index);
+
+                index++;
+            }
+
+            // Final update to _count and _index.
+            _count += index - _index;
+            _index = index;
+        }
+
+        public void AddRange<TEnumerable, TEnumerator, U>(TEnumerable items, Predicate<U> predicate, Selector<U, T> selector)
+            where TEnumerable : notnull, IValueEnumerable<U, TEnumerator>
+            where TEnumerator : struct, IEnumerator<U>
+        {
+            Debug.Assert(items is object);
+
+            using var enumerator = items.GetEnumerator();
+            var destination = _current;
+            var index = _index;
+
+            // Continuously read in items from the enumerator, updating _count
+            // and _index when we run out of space.
+
+            while (enumerator.MoveNext())
+            {
+                var item = enumerator.Current;
+                if (predicate(item))
+                {
+                    if ((uint)index >= (uint)destination.Length)
+                        AddWithBufferAllocation(selector(item), ref destination, ref index);
+                    else
+                        destination[index] = selector(item);
+
+                    index++;
+                }
+            }
+
+            // Final update to _count and _index.
+            _count += index - _index;
+            _index = index;
         }
     }
 }

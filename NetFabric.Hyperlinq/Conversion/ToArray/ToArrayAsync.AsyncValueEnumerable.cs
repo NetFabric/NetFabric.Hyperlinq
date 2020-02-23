@@ -1,149 +1,290 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Diagnostics.Contracts;
 using System.Threading;
 using System.Threading.Tasks;
+using NetFabric.Hyperlinq;
 
 namespace NetFabric.Hyperlinq
 {
     public static partial class AsyncValueEnumerable
     {
         [Pure]
-        public static async ValueTask<TSource[]> ToArrayAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source, CancellationToken cancellationToken)
+        public static async ValueTask<TSource[]> ToArrayAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source, CancellationToken cancellationToken = default)
             where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
-            cancellationToken.ThrowIfCancellationRequested();
-            var (array, length) = await ToArrayWithLengthAsync(source, cancellationToken).ConfigureAwait(false);
-            System.Array.Resize(ref array, length);
-            return array;
+            var builder = new LargeArrayBuilder<TSource>(initialize: true);
+            await builder.AddRangeAsync<TEnumerable, TEnumerator>(source, cancellationToken);
+            return builder.ToArray();
+        }
 
-            static async ValueTask<(TSource[]?, int)> ToArrayWithLengthAsync(TEnumerable source, CancellationToken cancellationToken)
+        static async ValueTask<TSource[]> ToArrayAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source, AsyncPredicate<TSource> predicate, CancellationToken cancellationToken)
+            where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
+            where TEnumerator : struct, IAsyncEnumerator<TSource>
+        {
+            var builder = new LargeArrayBuilder<TSource>(initialize: true);
+            await builder.AddRangeAsync<TEnumerable, TEnumerator>(source, predicate, cancellationToken);
+            return builder.ToArray();
+        }
+
+        static async ValueTask<TSource[]> ToArrayAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source, AsyncPredicateAt<TSource> predicate, CancellationToken cancellationToken)
+            where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
+            where TEnumerator : struct, IAsyncEnumerator<TSource>
+        {
+            var builder = new LargeArrayBuilder<TSource>(initialize: true);
+            await builder.AddRangeAsync<TEnumerable, TEnumerator>(source, predicate, cancellationToken);
+            return builder.ToArray();
+        }
+
+
+        static async ValueTask<TResult[]> ToArrayAsync<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, AsyncSelector<TSource, TResult> selector, CancellationToken cancellationToken)
+            where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
+            where TEnumerator : struct, IAsyncEnumerator<TSource>
+        {
+            var builder = new LargeArrayBuilder<TResult>(initialize: true);
+            await builder.AddRangeAsync<TEnumerable, TEnumerator, TSource>(source, selector, cancellationToken);
+            return builder.ToArray();
+        }
+
+        static async ValueTask<TResult[]> ToArrayAsync<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, AsyncSelectorAt<TSource, TResult> selector, CancellationToken cancellationToken)
+            where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
+            where TEnumerator : struct, IAsyncEnumerator<TSource>
+        {
+            var builder = new LargeArrayBuilder<TResult>(initialize: true);
+            await builder.AddRangeAsync<TEnumerable, TEnumerator, TSource>(source, selector, cancellationToken);
+            return builder.ToArray();
+        }
+
+        static async ValueTask<TResult[]> ToArrayAsync<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, AsyncPredicate<TSource> predicate, AsyncSelector<TSource, TResult> selector, CancellationToken cancellationToken)
+            where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
+            where TEnumerator : struct, IAsyncEnumerator<TSource>
+        {
+            var builder = new LargeArrayBuilder<TResult>(initialize: true);
+            await builder.AddRangeAsync<TEnumerable, TEnumerator, TSource>(source, predicate, selector, cancellationToken);
+            return builder.ToArray();
+        }
+    }
+}
+
+namespace System.Collections.Generic
+{
+    internal partial struct LargeArrayBuilder<T>
+    {
+        public async ValueTask AddRangeAsync<TEnumerable, TEnumerator>(TEnumerable items, CancellationToken cancellationToken)
+            where TEnumerable : notnull, IAsyncValueEnumerable<T, TEnumerator>
+            where TEnumerator : struct, IAsyncEnumerator<T>
+        {
+            Debug.Assert(items is object);
+
+            var enumerator = items.GetAsyncEnumerator();
+            await using (enumerator.ConfigureAwait(false))
             {
-                if (source is ICollection<TSource> collection)
-                {
-                    var count = collection.Count;
-                    if (count == 0)
-                        return default;
+                var destination = _current;
+                var index = _index;
 
-                    var buffer = new TSource[count];
-                    collection.CopyTo(buffer, 0);
-                    return (buffer, count);
+                // Continuously read in items from the enumerator, updating _count
+                // and _index when we run out of space.
+
+                while (await enumerator.MoveNextAsync().ConfigureAwait(false))
+                {
+                    cancellationToken.ThrowIfCancellationRequested();
+
+                    var item = enumerator.Current;
+
+                    if ((uint)index >= (uint)destination.Length)
+                        AddWithBufferAllocation(item, ref destination, ref index);
+                    else
+                        destination[index] = item;
+
+                    index++;
                 }
 
-                var enumerator = source.GetAsyncEnumerator(cancellationToken);
-                await using (enumerator.ConfigureAwait(false))
-                {
-                    if (await enumerator.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        var array = Utils.ToArrayAllocate<TSource>();
-                        array[0] = enumerator.Current;
-                        var count = 1;
-
-                        while (await enumerator.MoveNextAsync().ConfigureAwait(false))
-                        {
-                            if (count == array.Length)
-                                Utils.ToArrayResize(ref array, count);
-
-                            array[count] = enumerator.Current;
-                            count++;
-                        }
-
-                        return (array, count);
-                    }
-
-                    return default; // it's empty
-                }
+                // Final update to _count and _index.
+                _count += index - _index;
+                _index = index;
             }
         }
 
-        [Pure]
-        public static async ValueTask<TSource[]> ToArrayAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source, AsyncPredicate<TSource> predicate, CancellationToken cancellationToken)
-            where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
-            where TEnumerator : struct, IAsyncEnumerator<TSource>
+        public async ValueTask AddRangeAsync<TEnumerable, TEnumerator>(TEnumerable items, AsyncPredicate<T> predicate, CancellationToken cancellationToken)
+            where TEnumerable : notnull, IAsyncValueEnumerable<T, TEnumerator>
+            where TEnumerator : struct, IAsyncEnumerator<T>
         {
-            cancellationToken.ThrowIfCancellationRequested();
-            var (array, length) = await ToArrayWithLengthAsync(source, predicate, cancellationToken).ConfigureAwait(false);
-            System.Array.Resize(ref array, length);
-            return array;
+            Debug.Assert(items is object);
 
-            static async ValueTask<(TSource[]?, int)> ToArrayWithLengthAsync(TEnumerable source, AsyncPredicate<TSource> predicate, CancellationToken cancellationToken)
+            var enumerator = items.GetAsyncEnumerator();
+            await using (enumerator.ConfigureAwait(false))
             {
-                var enumerator = source.GetAsyncEnumerator(cancellationToken);
-                await using (enumerator.ConfigureAwait(false))
+                var destination = _current;
+                var index = _index;
+
+                // Continuously read in items from the enumerator, updating _count
+                // and _index when we run out of space.
+
+                while (await enumerator.MoveNextAsync().ConfigureAwait(false))
                 {
-                    while (await enumerator.MoveNextAsync().ConfigureAwait(false))
+                    cancellationToken.ThrowIfCancellationRequested();
+
+                    var item = enumerator.Current;
+                    if (await predicate(item, cancellationToken).ConfigureAwait(false))
                     {
-                        if (await predicate(enumerator.Current, cancellationToken).ConfigureAwait(false))
-                        {
-                            var array = Utils.ToArrayAllocate<TSource>();
-                            array[0] = enumerator.Current;
-                            var count = 1;
+                        if ((uint)index >= (uint)destination.Length)
+                            AddWithBufferAllocation(item, ref destination, ref index);
+                        else
+                            destination[index] = item;
 
-                            while (await enumerator.MoveNextAsync().ConfigureAwait(false))
-                            {
-                                var item = enumerator.Current;
-                                if (await predicate(item, cancellationToken).ConfigureAwait(false))
-                                {
-                                    if (count == array.Length)
-                                        Utils.ToArrayResize(ref array, count);
-
-                                    array[count] = item;
-                                    count++;
-                                }
-                            }
-
-                            return (array, count);
-                        }
+                        index++;
                     }
-
-                    return default; // it's empty
                 }
+
+                // Final update to _count and _index.
+                _count += index - _index;
+                _index = index;
             }
         }
 
-        [Pure]
-        public static async ValueTask<TSource[]> ToArrayAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source, AsyncPredicateAt<TSource> predicate, CancellationToken cancellationToken)
-            where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
-            where TEnumerator : struct, IAsyncEnumerator<TSource>
+        public async ValueTask AddRangeAsync<TEnumerable, TEnumerator>(TEnumerable items, AsyncPredicateAt<T> predicate, CancellationToken cancellationToken)
+            where TEnumerable : notnull, IAsyncValueEnumerable<T, TEnumerator>
+            where TEnumerator : struct, IAsyncEnumerator<T>
         {
-            cancellationToken.ThrowIfCancellationRequested();
-            var (array, length) = await ToArrayWithLengthAsync(source, predicate, cancellationToken).ConfigureAwait(false);
-            System.Array.Resize(ref array, length);
-            return array;
+            Debug.Assert(items is object);
 
-            static async ValueTask<(TSource[]?, int)> ToArrayWithLengthAsync(TEnumerable source, AsyncPredicateAt<TSource> predicate, CancellationToken cancellationToken)
+            var enumerator = items.GetAsyncEnumerator();
+            await using (enumerator.ConfigureAwait(false))
             {
-                var enumerator = source.GetAsyncEnumerator(cancellationToken);
-                await using (enumerator.ConfigureAwait(false))
+                var destination = _current;
+                var index = _index;
+
+                // Continuously read in items from the enumerator, updating _count
+                // and _index when we run out of space.
+
+                while (await enumerator.MoveNextAsync().ConfigureAwait(false))
                 {
-                    for (var index = 0;  await enumerator.MoveNextAsync().ConfigureAwait(false); index++)
+                    cancellationToken.ThrowIfCancellationRequested();
+
+                    var item = enumerator.Current;
+                    if (await predicate(item, index, cancellationToken).ConfigureAwait(false))
                     {
-                        if (await predicate(enumerator.Current, index, cancellationToken).ConfigureAwait(false))
-                        {
-                            var array = Utils.ToArrayAllocate<TSource>();
-                            array[0] = enumerator.Current;
-                            var count = 1;
+                        if ((uint)index >= (uint)destination.Length)
+                            AddWithBufferAllocation(item, ref destination, ref index);
+                        else
+                            destination[index] = item;
 
-                            for (index++; await enumerator.MoveNextAsync().ConfigureAwait(false); index++)
-                            {
-                                var item = enumerator.Current;
-                                if (await predicate(item, index, cancellationToken).ConfigureAwait(false))
-                                {
-                                    if (count == array.Length)
-                                        Utils.ToArrayResize(ref array, count);
-
-                                    array[count] = item;
-                                    count++;
-                                }
-                            }
-
-                            return (array, count);
-                        }
+                        index++;
                     }
-
-                    return default; // it's empty
                 }
+
+                // Final update to _count and _index.
+                _count += index - _index;
+                _index = index;
+            }
+        }
+
+        public async ValueTask AddRangeAsync<TEnumerable, TEnumerator, U>(TEnumerable items, AsyncSelector<U, T> selector, CancellationToken cancellationToken)
+            where TEnumerable : notnull, IAsyncValueEnumerable<U, TEnumerator>
+            where TEnumerator : struct, IAsyncEnumerator<U>
+        {
+            Debug.Assert(items is object);
+
+            var enumerator = items.GetAsyncEnumerator();
+            await using (enumerator.ConfigureAwait(false))
+            {
+                var destination = _current;
+                var index = _index;
+
+                // Continuously read in items from the enumerator, updating _count
+                // and _index when we run out of space.
+
+                while (await enumerator.MoveNextAsync().ConfigureAwait(false))
+                {
+                    cancellationToken.ThrowIfCancellationRequested();
+
+                    var item = enumerator.Current;
+
+                    if ((uint)index >= (uint)destination.Length)
+                        AddWithBufferAllocation(await selector(item, cancellationToken).ConfigureAwait(false), ref destination, ref index);
+                    else
+                        destination[index] = await selector(item, cancellationToken).ConfigureAwait(false);
+
+                    index++;
+                }
+
+                // Final update to _count and _index.
+                _count += index - _index;
+                _index = index;
+            }
+        }
+
+        public async ValueTask AddRangeAsync<TEnumerable, TEnumerator, U>(TEnumerable items, AsyncSelectorAt<U, T> selector, CancellationToken cancellationToken)
+            where TEnumerable : notnull, IAsyncValueEnumerable<U, TEnumerator>
+            where TEnumerator : struct, IAsyncEnumerator<U>
+        {
+            Debug.Assert(items is object);
+
+            var enumerator = items.GetAsyncEnumerator();
+            await using (enumerator.ConfigureAwait(false))
+            {
+                var destination = _current;
+                var index = _index;
+
+                // Continuously read in items from the enumerator, updating _count
+                // and _index when we run out of space.
+
+                while (await enumerator.MoveNextAsync().ConfigureAwait(false))
+                {
+                    cancellationToken.ThrowIfCancellationRequested();
+
+                    var item = enumerator.Current;
+
+                    if ((uint)index >= (uint)destination.Length)
+                        AddWithBufferAllocation(await selector(item, index, cancellationToken).ConfigureAwait(false), ref destination, ref index);
+                    else
+                        destination[index] = await selector(item, index, cancellationToken).ConfigureAwait(false);
+
+                    index++;
+                }
+
+                // Final update to _count and _index.
+                _count += index - _index;
+                _index = index;
+            }
+        }
+
+        public async ValueTask AddRangeAsync<TEnumerable, TEnumerator, U>(TEnumerable items, AsyncPredicate<U> predicate, AsyncSelector<U, T> selector, CancellationToken cancellationToken)
+            where TEnumerable : notnull, IAsyncValueEnumerable<U, TEnumerator>
+            where TEnumerator : struct, IAsyncEnumerator<U>
+        {
+            Debug.Assert(items is object);
+
+            var enumerator = items.GetAsyncEnumerator();
+            await using (enumerator.ConfigureAwait(false))
+            {
+                var destination = _current;
+                var index = _index;
+
+                // Continuously read in items from the enumerator, updating _count
+                // and _index when we run out of space.
+
+                while (await enumerator.MoveNextAsync().ConfigureAwait(false))
+                {
+                    cancellationToken.ThrowIfCancellationRequested();
+
+                    var item = enumerator.Current;
+                    if (await predicate(item, cancellationToken).ConfigureAwait(false))
+                    {
+                        if ((uint)index >= (uint)destination.Length)
+                            AddWithBufferAllocation(await selector(item, cancellationToken).ConfigureAwait(false), ref destination, ref index);
+                        else
+                            destination[index] = await selector(item, cancellationToken).ConfigureAwait(false);
+
+                        index++;
+                    }
+                }
+
+                // Final update to _count and _index.
+                _count += index - _index;
+                _index = index;
             }
         }
     }

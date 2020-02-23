@@ -117,19 +117,9 @@ namespace NetFabric.Hyperlinq
             public TResult SingleOrDefault()
                 => selector(ValueReadOnlyCollection.SingleOrDefault<TEnumerable, TEnumerator, TSource>(source), 0);
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TResult[] ToArray()
-            {
-                var array = new TResult[source.Count];
-
-                if (source.Count != 0)
-                {
-                    using var enumerator = source.GetEnumerator();
-                    for (var index = 0; enumerator.MoveNext(); index++)
-                        array[index] = selector(enumerator.Current, index);
-                }
-
-                return array;
-            }
+                => ValueReadOnlyCollection.ToArray<TEnumerable, TEnumerator, TSource, TResult>(source, selector);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public List<TResult> ToList()

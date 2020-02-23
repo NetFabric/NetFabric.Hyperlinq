@@ -220,7 +220,7 @@ namespace NetFabric.Hyperlinq
             [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TSource[] ToArray()
-                => ToArray<TSource>(source, skipCount, takeCount);
+                => Array.ToArray<TSource>(source, skipCount, takeCount);
 
             [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]

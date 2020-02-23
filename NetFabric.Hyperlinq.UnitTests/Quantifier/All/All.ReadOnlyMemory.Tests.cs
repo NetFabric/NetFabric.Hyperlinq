@@ -4,7 +4,7 @@ using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests
 {
-    public class AllReadOnlyMemoryTests
+    public partial class ReadOnlyMemoryTests
     {
         [Fact]
         public void All_Predicate_With_NullPredicate_Should_Throw()

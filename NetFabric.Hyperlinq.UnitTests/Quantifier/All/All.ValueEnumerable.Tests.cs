@@ -4,7 +4,7 @@ using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests
 {
-    public class AllValueEnumerableTests
+    public partial class ValueEnumerableTests
     {
         [Fact]
         public void All_With_NullPredicate_Should_Throw()

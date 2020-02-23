@@ -6,7 +6,7 @@ using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests
 {
-    public class ContainsValueReadOnlyListTests
+    public partial class ReadOnlyListTests
     {
         [Theory]
         [MemberData(nameof(TestData.Contains), MemberType = typeof(TestData))]

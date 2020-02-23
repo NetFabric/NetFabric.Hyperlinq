@@ -10,20 +10,15 @@ namespace NetFabric.Hyperlinq
     public static partial class ReadOnlyList
     {
         [Pure]
-        internal static WhereSelectEnumerable<TList, TSource, TResult> WhereSelect<TList, TSource, TResult>(
+        static WhereSelectEnumerable<TList, TSource, TResult> WhereSelect<TList, TSource, TResult>(
             this TList source, 
             Predicate<TSource> predicate,
             Selector<TSource, TResult> selector)
             where TList : notnull, IReadOnlyList<TSource>
-        {
-            if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
-            if (selector is null) Throw.ArgumentNullException(nameof(selector));
-
-            return new WhereSelectEnumerable<TList, TSource, TResult>(in source, predicate, selector, 0, source.Count);
-        }
+            => new WhereSelectEnumerable<TList, TSource, TResult>(in source, predicate, selector, 0, source.Count);
 
         [Pure]
-        internal static WhereSelectEnumerable<TList, TSource, TResult> WhereSelect<TList, TSource, TResult>(
+        static WhereSelectEnumerable<TList, TSource, TResult> WhereSelect<TList, TSource, TResult>(
             this TList source,
             Predicate<TSource> predicate,
             Selector<TSource, TResult> selector, 
@@ -142,19 +137,11 @@ namespace NetFabric.Hyperlinq
             public bool Any(PredicateAt<TSource> predicate)
                 => ReadOnlyList.Any<TList, TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount);
 
+            public TResult[] ToArray()
+                => ReadOnlyList.ToArray<TList, TSource, TResult>(source, predicate, selector, skipCount, takeCount); 
+
             public List<TResult> ToList()
-            {
-                var list = new List<TResult>();
-
-                var end = skipCount + takeCount;
-                for (var index = skipCount; index < end; index++)
-                {
-                    if (predicate(source[index]))
-                        list.Add(selector(source[index]));
-                }
-
-                return list;
-            }
+                => ReadOnlyList.ToList<TList, TSource, TResult>(source, predicate, selector, skipCount, takeCount); 
 
             public Dictionary<TKey, TResult> ToDictionary<TKey>(Selector<TResult, TKey> keySelector)
                 => ToDictionary<TKey>(keySelector, EqualityComparer<TKey>.Default);

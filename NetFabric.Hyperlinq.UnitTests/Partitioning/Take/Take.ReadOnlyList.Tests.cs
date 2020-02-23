@@ -3,7 +3,7 @@ using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests
 {
-    public class TakeReadOnlyListTests
+    public partial class ReadOnlyListTests
     {
         [Theory]
         [MemberData(nameof(TestData.TakeEmpty), MemberType = typeof(TestData))]

@@ -4,38 +4,8 @@ using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests
 {
-    public class WhereSelectValueEnumerableTests
+    public partial class ValueEnumerableTests
     {
-        [Fact]
-        public void WhereSelect_With_NullPredicate_Should_Throw()
-        {
-            // Arrange
-            var enumerable = Wrap.AsValueEnumerable(new int[0]);
-
-            // Act
-            Action action = () => _ = ValueEnumerable.WhereSelect<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int, int>(enumerable, null, item => item);
-
-            // Assert
-            _ = action.Must()
-                .Throw<ArgumentNullException>()
-                .EvaluateTrue(exception => exception.ParamName == "predicate");
-        }
-
-        [Fact]
-        public void WhereSelect_With_NullSelector_Should_Throw()
-        {
-            // Arrange
-            var enumerable = Wrap.AsValueEnumerable(new int[0]);
-
-            // Act
-            Action action = () => _ = ValueEnumerable.WhereSelect<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int, int>(enumerable, item => (item & 0x01) == 0, null);
-
-            // Assert
-            _ = action.Must()
-                .Throw<ArgumentNullException>()
-                .EvaluateTrue(exception => exception.ParamName == "selector");
-        }
-
         [Theory]
         [MemberData(nameof(TestData.PredicateSelectorEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateSelectorSingle), MemberType = typeof(TestData))]
@@ -44,10 +14,14 @@ namespace NetFabric.Hyperlinq.UnitTests
         {
             // Arrange
             var wrapped = Wrap.AsValueEnumerable(source);
-            var expected = System.Linq.Enumerable.Select(System.Linq.Enumerable.Where(wrapped, predicate.AsFunc()), selector.AsFunc());
+            var expected = 
+                System.Linq.Enumerable.Select(
+                    System.Linq.Enumerable.Where(wrapped, predicate.AsFunc()), selector.AsFunc());
 
             // Act
-            var result = ValueEnumerable.WhereSelect<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int, string>(wrapped, predicate, selector);
+            var result = ValueEnumerable
+                .Where<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, predicate)
+                .Select(selector);
 
             // Assert
             _ = result.Must()

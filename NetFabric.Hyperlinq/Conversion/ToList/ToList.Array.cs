@@ -100,32 +100,6 @@ namespace NetFabric.Hyperlinq
             return list;
         }
 
-        [Pure]
-        static List<TResult> ToList<TSource, TResult>(this TSource[] source, PredicateAt<TSource> predicate, SelectorAt<TSource, TResult> selector, int skipCount, int takeCount)
-        {
-            var list = new List<TResult>();
-            if (skipCount == 0 && takeCount == source.Length)
-            {
-                for (var index = 0; index < source.Length; index++)
-                {
-                    var item = source[index];
-                    if (predicate(item, index))
-                        list.Add(selector(item, index));
-                }
-            }
-            else
-            {
-                var end = skipCount + takeCount;
-                for (var index = skipCount; index < end; index++)
-                {
-                    var item = source[index];
-                    if (predicate(item, index))
-                        list.Add(selector(item, index));
-                }
-            }
-            return list;
-        }
-
         [GeneratorIgnore]
         sealed class ToListCollection<TSource>
             : ToListCollectionBase<TSource>

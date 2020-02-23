@@ -11,18 +11,13 @@ namespace NetFabric.Hyperlinq
     public static partial class AsyncValueEnumerable
     {
         [Pure]
-        internal static WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult> WhereSelect<TEnumerable, TEnumerator, TSource, TResult>(
+        static WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult> WhereSelect<TEnumerable, TEnumerator, TSource, TResult>(
             this TEnumerable source, 
             AsyncPredicate<TSource> predicate,
             AsyncSelector<TSource, TResult> selector)
             where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
-        {
-            if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
-            if (selector is null) Throw.ArgumentNullException(nameof(selector));
-
-            return new WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>(in source, predicate, selector);
-        }
+            => new WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>(in source, predicate, selector);
 
         [GeneratorMapping("TSource", "TResult")]
         public readonly partial struct WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult> 
@@ -108,6 +103,9 @@ namespace NetFabric.Hyperlinq
                 => AsyncValueEnumerable.AnyAsync<TEnumerable, TEnumerator, TSource>(source, Utils.Combine(this.predicate, predicate), cancellationToken);
             public ValueTask<bool> AnyAsync(AsyncPredicateAt<TSource> predicate, CancellationToken cancellationToken = default)
                 => AsyncValueEnumerable.AnyAsync<TEnumerable, TEnumerator, TSource>(source, Utils.Combine(this.predicate, predicate), cancellationToken);
+
+            public ValueTask<TResult[]> ToArrayAsync(CancellationToken cancellationToken = default)
+                => AsyncValueEnumerable.ToArrayAsync<TEnumerable, TEnumerator, TSource, TResult>(source, predicate, selector, cancellationToken);
 
             public ValueTask<List<TResult>> ToListAsync(CancellationToken cancellationToken = default)
                 => AsyncValueEnumerable.ToListAsync<TEnumerable, TEnumerator, TSource, TResult>(source, predicate, selector, cancellationToken);

@@ -10,14 +10,14 @@ namespace NetFabric.Hyperlinq
     public static partial class Array
     {
         [Pure]
-        internal static ArrayWhereSelectEnumerable<TSource, TResult> WhereSelect<TSource, TResult>(
+        static ArrayWhereSelectEnumerable<TSource, TResult> WhereSelect<TSource, TResult>(
             this TSource[] source, 
             Predicate<TSource> predicate, 
             Selector<TSource, TResult> selector) 
             => new ArrayWhereSelectEnumerable<TSource, TResult>(source, predicate, selector, 0, source.Length);
 
         [Pure]
-        internal static ArrayWhereSelectEnumerable<TSource, TResult> WhereSelect<TSource, TResult>(
+        static ArrayWhereSelectEnumerable<TSource, TResult> WhereSelect<TSource, TResult>(
             this TSource[] source,
             Predicate<TSource> predicate,
             Selector<TSource, TResult> selector,
@@ -143,19 +143,11 @@ namespace NetFabric.Hyperlinq
             public bool Any(PredicateAt<TSource> predicate)
                 => Array.Any<TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount);
 
+            public TResult[] ToArray()
+                => Array.ToArray<TSource, TResult>(source, predicate, selector, skipCount, takeCount); 
+
             public List<TResult> ToList()
-            {
-                var list = new List<TResult>();
-
-                var end = skipCount + takeCount;
-                for (var index = skipCount; index < end; index++)
-                {
-                    if (predicate(source[index]))
-                        list.Add(selector(source[index]));
-                }
-
-                return list;
-            }
+                => Array.ToList<TSource, TResult>(source, predicate, selector, skipCount, takeCount); 
 
             public Dictionary<TKey, TResult> ToDictionary<TKey>(Selector<TResult, TKey> keySelector)
                 => ToDictionary<TKey>(keySelector, EqualityComparer<TKey>.Default);

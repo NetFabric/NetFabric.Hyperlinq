@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
 
@@ -7,16 +8,11 @@ namespace NetFabric.Hyperlinq
     public static partial class Array
     {
         [Pure]
-        internal static SpanWhereSelectEnumerable<TSource, TResult> WhereSelect<TSource, TResult>(
+        static SpanWhereSelectEnumerable<TSource, TResult> WhereSelect<TSource, TResult>(
             this ReadOnlySpan<TSource> source, 
             Predicate<TSource> predicate, 
             Selector<TSource, TResult> selector) 
-        {
-            if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
-            if (selector is null) Throw.ArgumentNullException(nameof(selector));
-
-            return new SpanWhereSelectEnumerable<TSource, TResult>(source, predicate, selector);
-        }
+            => new SpanWhereSelectEnumerable<TSource, TResult>(source, predicate, selector);
 
         [GeneratorMapping("TSource", "TResult")]
         public readonly ref struct SpanWhereSelectEnumerable<TSource, TResult>
@@ -80,6 +76,12 @@ namespace NetFabric.Hyperlinq
             [return: MaybeNull]
             public TResult SingleOrDefault()
                 => selector(source.SingleOrDefault(predicate));
+
+            public TResult[] ToArray()
+                => Array.ToArray(source, predicate, selector);
+
+            public List<TResult> ToList()
+                => Array.ToList(source, predicate, selector);
 
             public void ForEach(Action<TResult> action)
                 => source.ForEach(action, predicate, selector);

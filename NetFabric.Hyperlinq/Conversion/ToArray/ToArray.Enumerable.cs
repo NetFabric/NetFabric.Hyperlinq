@@ -9,43 +9,21 @@ namespace NetFabric.Hyperlinq
         [Pure]
         static T[] ToArray<T>(IEnumerable<T> source)
         {
-            var (array, length) = ToArrayWithLength(source);
-            System.Array.Resize(ref array, length);
-            return array;
-
-            static (T[]?, int) ToArrayWithLength(IEnumerable<T> source)
+            switch (source)
             {
-                if (source is ICollection<T> collection)
-                {
+                case ICollection<T> collection:
                     var count = collection.Count;
                     if (count == 0)
-                        return default;
+                        return System.Array.Empty<T>();
 
                     var buffer = new T[count];
                     collection.CopyTo(buffer, 0);
-                    return (buffer, count);
-                }
+                    return buffer;
 
-                using var enumerator = source.GetEnumerator();
-                if (enumerator.MoveNext())
-                {
-                    var array = Utils.ToArrayAllocate<T>();
-                    array[0] = enumerator.Current;
-                    var count = 1;
-
-                    while (enumerator.MoveNext())
-                    {
-                        if (count == array.Length)
-                            Utils.ToArrayResize(ref array, count);
-
-                        array[count] = enumerator.Current;
-                        count++;
-                    }
-
-                    return (array, count);
-                }
-
-                return default; // it's empty
+                default:
+                    var builder = new LargeArrayBuilder<T>(initialize: true);
+                    builder.AddRange(source);
+                    return builder.ToArray();
             }
         }
     }

@@ -10,18 +10,13 @@ namespace NetFabric.Hyperlinq
     public static partial class ValueEnumerable
     {
         [Pure]
-        internal static WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult> WhereSelect<TEnumerable, TEnumerator, TSource, TResult>(
+        static WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult> WhereSelect<TEnumerable, TEnumerator, TSource, TResult>(
             this TEnumerable source, 
             Predicate<TSource> predicate,
             Selector<TSource, TResult> selector)
             where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
-        {
-            if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
-            if (selector is null) Throw.ArgumentNullException(nameof(selector));
-
-            return new WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>(in source, predicate, selector);
-        }
+            => new WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>(in source, predicate, selector);
 
         [GeneratorMapping("TSource", "TResult")]
         public readonly partial struct WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult> 
@@ -103,6 +98,9 @@ namespace NetFabric.Hyperlinq
                 => ValueEnumerable.Any<TEnumerable, TEnumerator, TSource>(source, Utils.Combine(this.predicate, predicate));
             public bool Any(PredicateAt<TSource> predicate)
                 => ValueEnumerable.Any<TEnumerable, TEnumerator, TSource>(source, Utils.Combine(this.predicate, predicate));
+
+            public TResult[] ToArray()
+                => ValueEnumerable.ToArray<TEnumerable, TEnumerator, TSource, TResult>(source, predicate, selector);
 
             public List<TResult> ToList()
                 => ValueEnumerable.ToList<TEnumerable, TEnumerator, TSource, TResult>(source, predicate, selector);

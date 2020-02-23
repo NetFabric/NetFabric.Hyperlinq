@@ -23,14 +23,41 @@ namespace NetFabric.Hyperlinq
                     default:
                         {
                             using var enumerator = source.GetEnumerator();
-                            checked
-                            {
-                                for (var index = 0; enumerator.MoveNext(); index++)
-                                    array[index] = enumerator.Current;
-                            }
+                            for (var index = 0; enumerator.MoveNext(); index++)
+                                array[index] = enumerator.Current;
                         }
                         break;
                 }
+            }
+            return array;
+        }
+
+        [Pure]
+        static TResult[] ToArray<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, Selector<TSource, TResult> selector)
+            where TEnumerable : notnull, IValueReadOnlyCollection<TSource, TEnumerator>
+            where TEnumerator : struct, IEnumerator<TSource>
+        {
+            var array = new TResult[source.Count];
+            if (source.Count != 0)
+            {
+                using var enumerator = source.GetEnumerator();
+                for (var index = 0; enumerator.MoveNext(); index++)
+                    array[index] = selector(enumerator.Current);
+            }
+            return array;
+        }
+
+        [Pure]
+        static TResult[] ToArray<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, SelectorAt<TSource, TResult> selector)
+            where TEnumerable : notnull, IValueReadOnlyCollection<TSource, TEnumerator>
+            where TEnumerator : struct, IEnumerator<TSource>
+        {
+            var array = new TResult[source.Count];
+            if (source.Count != 0)
+            {
+                using var enumerator = source.GetEnumerator();
+                for (var index = 0; enumerator.MoveNext(); index++)
+                    array[index] = selector(enumerator.Current, index);
             }
             return array;
         }

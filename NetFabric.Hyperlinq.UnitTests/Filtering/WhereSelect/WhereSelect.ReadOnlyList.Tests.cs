@@ -4,38 +4,8 @@ using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests
 {
-    public class WhereSelectValueReadOnlyListTests
+    public partial class ReadOnlyListTests
     {
-        [Fact]
-        public void WhereSelect_With_NullPredicate_Should_Throw()
-        {
-            // Arrange
-            var list = Wrap.AsValueReadOnlyList(new int[0]);
-
-            // Act
-            Action action = () => _ = ReadOnlyList.WhereSelect<Wrap.ValueReadOnlyList<int>, int, int>(list, null, item => item);
-
-            // Assert
-            _ = action.Must()
-                .Throw<ArgumentNullException>()
-                .EvaluateTrue(exception => exception.ParamName == "predicate");
-        }
-
-        [Fact]
-        public void WhereSelect_With_NullSelector_Should_Throw()
-        {
-            // Arrange
-            var list = Wrap.AsValueReadOnlyList(new int[0]);
-
-            // Act
-            Action action = () => _ = ReadOnlyList.WhereSelect<Wrap.ValueReadOnlyList<int>, int, int>(list, item => (item & 0x01) == 0, null);
-
-            // Assert
-            _ = action.Must()
-                .Throw<ArgumentNullException>()
-                .EvaluateTrue(exception => exception.ParamName == "selector");
-        }
-
         [Theory]
         [MemberData(nameof(TestData.PredicateSelectorEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateSelectorSingle), MemberType = typeof(TestData))]
@@ -44,10 +14,14 @@ namespace NetFabric.Hyperlinq.UnitTests
         {
             // Arrange
             var wrapped = Wrap.AsValueReadOnlyList(source);
-            var expected = System.Linq.Enumerable.Select(System.Linq.Enumerable.Where(wrapped, predicate.AsFunc()), selector.AsFunc());
+            var expected = 
+                System.Linq.Enumerable.Select(
+                    System.Linq.Enumerable.Where(wrapped, predicate.AsFunc()), selector.AsFunc());
 
             // Act
-            var result = ReadOnlyList.WhereSelect<Wrap.ValueReadOnlyList<int>, int, string>(wrapped, predicate, selector);
+            var result = ReadOnlyList
+                .Where<Wrap.ValueReadOnlyList<int>, int>(wrapped, predicate)
+                .Select(selector);
 
             // Assert
             _ = result.Must()
