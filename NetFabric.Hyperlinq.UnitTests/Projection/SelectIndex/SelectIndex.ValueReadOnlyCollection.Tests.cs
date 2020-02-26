@@ -4,7 +4,7 @@ using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests
 {
-    public class SelectIndexValueReadOnlyCollectionTests
+    public partial class ValueReadOnlyCollectionTests
     {
         [Fact]
         public void SelectIndex_With_NullSelector_Should_Throw()

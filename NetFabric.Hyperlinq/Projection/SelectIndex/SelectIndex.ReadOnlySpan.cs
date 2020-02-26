@@ -67,10 +67,11 @@ namespace NetFabric.Hyperlinq
                     => ++index < source.Length;
             }
 
-            [Pure]
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public TResult[] ToArray()
+                => Array.ToArray(source, selector);
+
             public List<TResult> ToList()
-                => ToList<TSource, TResult>(source, selector);
+                => Array.ToList(source, selector);
 
             public void ForEach(Action<TResult> action)
                 => source.ForEach(action, selector);

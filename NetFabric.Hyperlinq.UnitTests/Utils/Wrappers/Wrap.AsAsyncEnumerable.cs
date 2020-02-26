@@ -20,12 +20,12 @@ namespace NetFabric.Hyperlinq
             readonly T[] source;
 
             internal AsyncEnumerable(T[] source)
-            {
-                this.source = source;
-            }
+                => this.source = source;
 
-            public readonly AsyncEnumerator<T> GetAsyncEnumerator() => new AsyncEnumerator<T>(source);
-            readonly IAsyncEnumerator<T> IAsyncEnumerable<T>.GetAsyncEnumerator(CancellationToken _) => new AsyncEnumerator<T>(source);
+            public readonly AsyncEnumerator<T> GetAsyncEnumerator() 
+                => new AsyncEnumerator<T>(source);
+            readonly IAsyncEnumerator<T> IAsyncEnumerable<T>.GetAsyncEnumerator(CancellationToken _) 
+                => new AsyncEnumerator<T>(source);
         }
     }
 }

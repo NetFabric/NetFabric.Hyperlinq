@@ -89,6 +89,16 @@ namespace NetFabric.Hyperlinq
 
                 public readonly void Dispose() { }
             }
+
+            [Pure]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public TSource[] ToArray()
+                => source.Span.ToArray();
+
+            [Pure]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public List<TSource> ToList()
+                => Array.ToList<TSource>(source.Span);
         }
 
         public static int Count<TSource>(this MemoryValueEnumerableWrapper<TSource> source)

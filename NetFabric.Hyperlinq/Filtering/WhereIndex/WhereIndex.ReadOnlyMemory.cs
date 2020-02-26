@@ -123,6 +123,12 @@ namespace NetFabric.Hyperlinq
             public TSource SingleOrDefault()
                 => source.Span.SingleOrDefault(predicate);
 
+            public TSource[] ToArray()
+                => Array.ToArray(source.Span, predicate);
+
+            public List<TSource> ToList()
+                => Array.ToList(source.Span, predicate);
+                
             public void ForEach(Action<TSource> action)
                 => Array.ForEach<TSource>(source.Span, action, predicate);
             public void ForEach(ActionAt<TSource> action)

@@ -161,15 +161,9 @@ namespace NetFabric.Hyperlinq
             public TResult SingleOrDefault()
                 => selector(ReadOnlyList.GetSingle<TList, TSource>(source, skipCount, takeCount).DefaultOnEmpty(), skipCount);
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TResult[] ToArray()
-            {
-                var array = new TResult[takeCount];
-
-                for (var index = 0; index < takeCount; index++)
-                    array[index] = selector(source[index + skipCount], index);
-
-                return array;
-            }
+                => ReadOnlyList.ToArray<TList, TSource, TResult>(source, selector, skipCount, takeCount);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public List<TResult> ToList()

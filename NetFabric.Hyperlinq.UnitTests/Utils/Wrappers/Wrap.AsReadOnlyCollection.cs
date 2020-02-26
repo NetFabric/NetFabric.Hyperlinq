@@ -19,15 +19,17 @@ namespace NetFabric.Hyperlinq
             readonly T[] source;
 
             public ReadOnlyCollection(T[] source)
-            {
-                this.source = source;
-            }
+                => this.source = source;
 
-            public readonly int Count => source.Length;
+            public readonly int Count 
+                => source.Length;
 
-            public readonly Enumerator<T> GetEnumerator() => new Enumerator<T>(source);
-            readonly IEnumerator<T> IEnumerable<T>.GetEnumerator() => new Enumerator<T>(source);
-            readonly IEnumerator IEnumerable.GetEnumerator() => new Enumerator<T>(source);
+            public readonly Enumerator<T> GetEnumerator() 
+                => new Enumerator<T>(source);
+            readonly IEnumerator<T> IEnumerable<T>.GetEnumerator() 
+                => new Enumerator<T>(source);
+            readonly IEnumerator IEnumerable.GetEnumerator()
+                => new Enumerator<T>(source);
         }  
     }
 }

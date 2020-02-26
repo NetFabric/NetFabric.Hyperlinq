@@ -131,6 +131,9 @@ namespace NetFabric.Hyperlinq
             public TResult SingleOrDefault()
                 => selector(ValueEnumerable.SingleOrDefault<TEnumerable, TEnumerator, TSource>(source));
 
+            public TResult[] ToArray()
+                => ValueEnumerable.ToArray<TEnumerable, TEnumerator, TSource, TResult>(source, selector);
+
             public List<TResult> ToList()
                 => ValueEnumerable.ToList<TEnumerable, TEnumerator, TSource, TResult>(source, selector);
 

@@ -4,7 +4,7 @@ using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests
 {
-    public class AnyReadOnlySpanTests
+    public partial class ReadOnlySpanTests
     {
 
         [Theory]

@@ -10,16 +10,11 @@ namespace NetFabric.Hyperlinq
     public static partial class Array
     {
         [Pure]
-        internal static MemoryWhereSelectEnumerable<TSource, TResult> WhereSelect<TSource, TResult>(
+        static MemoryWhereSelectEnumerable<TSource, TResult> WhereSelect<TSource, TResult>(
             this ReadOnlyMemory<TSource> source, 
             Predicate<TSource> predicate, 
             Selector<TSource, TResult> selector) 
-        {
-            if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
-            if (selector is null) Throw.ArgumentNullException(nameof(selector));
-
-            return new MemoryWhereSelectEnumerable<TSource, TResult>(source, predicate, selector);
-        }
+            => new MemoryWhereSelectEnumerable<TSource, TResult>(source, predicate, selector);
 
         [GeneratorMapping("TSource", "TResult")]
         public readonly partial struct MemoryWhereSelectEnumerable<TSource, TResult>
@@ -132,6 +127,12 @@ namespace NetFabric.Hyperlinq
             [return: MaybeNull]
             public TResult SingleOrDefault()
                 => selector(source.Span.SingleOrDefault(predicate));
+
+            public TResult[] ToArray()
+                => Array.ToArray<TSource, TResult>(source.Span, predicate, selector);
+
+            public List<TResult> ToList()
+                => Array.ToList<TSource, TResult>(source.Span, predicate, selector);
 
             public void ForEach(Action<TResult> action)
                 => source.Span.ForEach(action, predicate, selector);

@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Diagnostics.Contracts;
 using System.Runtime.CompilerServices;
+using NetFabric.Hyperlinq;
 
 namespace NetFabric.Hyperlinq
 {
@@ -23,112 +26,212 @@ namespace NetFabric.Hyperlinq
         [Pure]
         static TSource[] ToArray<TSource>(this TSource[] source, Predicate<TSource> predicate, int skipCount, int takeCount)
         {
-            var (array, length) = (skipCount == 0 && takeCount == source.Length)
-                ? ToArrayWithLength(source, predicate)
-                : IntervalToArrayWithLength(source, predicate, skipCount, takeCount);
-            System.Array.Resize(ref array, length);
-            return array;
-
-            static (TSource[]?, int) ToArrayWithLength(TSource[] source, Predicate<TSource> predicate)
-            {
-                TSource[]? array = null;
-                var count = 0;
-                for (var index = 0; index < source.Length; index++)
-                {
-                    var item = source[index];
-                    if (predicate(item))
-                    {
-                        if (count == 0)
-                            array = Utils.ToArrayAllocate<TSource>();
-                        else if (count == array!.Length)
-                            Utils.ToArrayResize(ref array, count);
-
-                        array[count] = item;
-                        count++;
-                    }
-                }
-
-                return (array, count);
-            }
-
-            static (TSource[]?, int) IntervalToArrayWithLength(TSource[] source, Predicate<TSource> predicate, int skipCount, int takeCount)
-            {
-                TSource[]? array = null;
-                var count = 0;
-                var end = skipCount + takeCount;
-                for (var index = skipCount; index < end; index++)
-                {
-                    var item = source[index];
-                    if (predicate(item))
-                    {
-                        if (count == 0)
-                            array = Utils.ToArrayAllocate<TSource>();
-                        else if (count == array!.Length)
-                            Utils.ToArrayResize(ref array, count);
-
-                        array[count] = item;
-                        count++;
-                    }
-                }
-
-                return (array, count);
-            }
+            var builder = new LargeArrayBuilder<TSource>(initialize: true);
+            builder.AddRange(source, predicate, skipCount, takeCount);
+            return builder.ToArray();
         }
-
 
         [Pure]
         static TSource[] ToArray<TSource>(this TSource[] source, PredicateAt<TSource> predicate, int skipCount, int takeCount)
         {
-            var (array, length) = (skipCount == 0 && takeCount == source.Length)
-                ? ToArrayWithLength(source, predicate)
-                : IntervalToArrayWithLength(source, predicate, skipCount, takeCount);
-            System.Array.Resize(ref array, length);
-            return array;
+            var builder = new LargeArrayBuilder<TSource>(initialize: true);
+            builder.AddRange(source, predicate, skipCount, takeCount);
+            return builder.ToArray();
+        }
 
-            static (TSource[]?, int) ToArrayWithLength(TSource[] source, PredicateAt<TSource> predicate)
+        [Pure]
+        static TResult[] ToArray<TSource, TResult>(this TSource[] source, Selector<TSource, TResult> selector, int skipCount, int takeCount)
+        {
+            var array = new TResult[takeCount];
+            if (skipCount == 0 && takeCount == source.Length)
             {
-                TSource[]? array = null;
-                var count = 0;
                 for (var index = 0; index < source.Length; index++)
-                {
-                    var item = source[index];
-                    if (predicate(item, index))
-                    {
-                        if (count == 0)
-                            array = Utils.ToArrayAllocate<TSource>();
-                        else if (count == array!.Length)
-                            Utils.ToArrayResize(ref array, count);
-
-                        array[count] = item;
-                        count++;
-                    }
-                }
-
-                return (array, count);
-            }
-
-            static (TSource[]?, int) IntervalToArrayWithLength(TSource[] source, PredicateAt<TSource> predicate, int skipCount, int takeCount)
+                    array[index] = selector(source[index]);
+            } 
+            else
             {
-                TSource[]? array = null;
-                var count = 0;
-                var end = skipCount + takeCount;
-                for (var index = skipCount; index < end; index++)
-                {
-                    var item = source[index];
-                    if (predicate(item, index))
-                    {
-                        if (count == 0)
-                            array = Utils.ToArrayAllocate<TSource>();
-                        else if (count == array!.Length)
-                            Utils.ToArrayResize(ref array, count);
-
-                        array[count] = item;
-                        count++;
-                    }
-                }
-
-                return (array, count);
+                for (var index = 0; index < takeCount; index++)
+                    array[index] = selector(source[index + skipCount]);
             }
+            return array;
+        }
+
+        [Pure]
+        static TResult[] ToArray<TSource, TResult>(this TSource[] source, SelectorAt<TSource, TResult> selector, int skipCount, int takeCount)
+        {
+            var array = new TResult[takeCount];
+            if (skipCount == 0 && takeCount == source.Length)
+            {
+                for (var index = 0; index < source.Length; index++)
+                    array[index] = selector(source[index], index);
+            } 
+            else
+            {
+                for (var index = 0; index < takeCount; index++)
+                    array[index] = selector(source[index + skipCount], index);
+            }
+            return array;
+        }
+
+        [Pure]
+        static TResult[] ToArray<TSource, TResult>(this TSource[] source, Predicate<TSource> predicate, Selector<TSource, TResult> selector, int skipCount, int takeCount)
+        {
+            var builder = new LargeArrayBuilder<TResult>(initialize: true);
+            builder.AddRange<TSource>(source, predicate, selector, skipCount, takeCount);
+            return builder.ToArray();
         }
     }
 }
+
+namespace System.Collections.Generic
+{
+    internal partial struct LargeArrayBuilder<T>
+    {
+        public void AddRange(T[] items, Predicate<T> predicate, int skipCount, int takeCount)
+        {
+            Debug.Assert(items is object);
+
+            var destination = _current;
+            var index = _index;
+
+            // Continuously read in items from the enumerator, updating _count
+            // and _index when we run out of space.
+
+            if (skipCount == 0 && takeCount == items.Length)
+            {
+                for (var itemIndex = 0; itemIndex < items.Length; itemIndex++)
+                {
+                    var item = items[itemIndex];
+                    if (predicate(item))
+                    {
+                        if ((uint)index >= (uint)destination.Length)
+                            AddWithBufferAllocation(item, ref destination, ref index);
+                        else
+                            destination[index] = item;
+
+                        index++;
+                    }
+                }
+            }
+            else
+            {
+                var end = skipCount + takeCount;
+                for (var itemIndex = skipCount; itemIndex < end; itemIndex++)
+                {
+                    var item = items[itemIndex];
+                    if (predicate(item))
+                    {
+                        if ((uint)index >= (uint)destination.Length)
+                            AddWithBufferAllocation(item, ref destination, ref index);
+                        else
+                            destination[index] = item;
+
+                        index++;
+                    }
+                }
+            }
+            
+            // Final update to _count and _index.
+            _count += index - _index;
+            _index = index;
+        }
+
+        public void AddRange(T[] items, PredicateAt<T> predicate, int skipCount, int takeCount)
+        {
+            Debug.Assert(items is object);
+
+            var destination = _current;
+            var index = _index;
+
+            // Continuously read in items from the enumerator, updating _count
+            // and _index when we run out of space.
+
+            if (skipCount == 0 && takeCount == items.Length)
+            {
+                for (var itemIndex = 0; itemIndex < items.Length; itemIndex++)
+                {
+                    var item = items[itemIndex];
+                    if (predicate(item, itemIndex))
+                    {
+                        if ((uint)index >= (uint)destination.Length)
+                            AddWithBufferAllocation(item, ref destination, ref index);
+                        else
+                            destination[index] = item;
+
+                        index++;
+                    }
+                }
+            }
+            else
+            {
+                for (var itemIndex = 0; itemIndex < takeCount; itemIndex++)
+                {
+                    var item = items[itemIndex + skipCount];
+                    if (predicate(item, itemIndex))
+                    {
+                        if ((uint)index >= (uint)destination.Length)
+                            AddWithBufferAllocation(item, ref destination, ref index);
+                        else
+                            destination[index] = item;
+
+                        index++;
+                    }
+                }
+            }
+            
+            // Final update to _count and _index.
+            _count += index - _index;
+            _index = index;
+        }
+
+        public void AddRange<U>(U[] items, Predicate<U> predicate, Selector<U, T> selector, int skipCount, int takeCount)
+        {
+            Debug.Assert(items is object);
+
+            var destination = _current;
+            var index = _index;
+
+            // Continuously read in items from the enumerator, updating _count
+            // and _index when we run out of space.
+
+            if (skipCount == 0 && takeCount == items.Length)
+            {
+                for (var itemIndex = 0; itemIndex < items.Length; itemIndex++)
+                {
+                    var item = items[itemIndex];
+                    if (predicate(item))
+                    {
+                        if ((uint)index >= (uint)destination.Length)
+                            AddWithBufferAllocation(selector(item), ref destination, ref index);
+                        else
+                            destination[index] = selector(item);
+
+                        index++;
+                    }
+                }
+            }
+            else
+            {
+                var end = skipCount + takeCount;
+                for (var itemIndex = skipCount; itemIndex < end; itemIndex++)
+                {
+                    var item = items[itemIndex];
+                    if (predicate(item))
+                    {
+                        if ((uint)index >= (uint)destination.Length)
+                            AddWithBufferAllocation(selector(item), ref destination, ref index);
+                        else
+                            destination[index] = selector(item);
+
+                        index++;
+                    }
+                }
+            }
+            
+            // Final update to _count and _index.
+            _count += index - _index;
+            _index = index;
+        }
+    }
+}
+

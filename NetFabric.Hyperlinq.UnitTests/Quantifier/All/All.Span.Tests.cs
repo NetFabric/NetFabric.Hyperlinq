@@ -4,7 +4,7 @@ using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests
 {
-    public class AllSpanTests
+    public partial class SpanTests
     {
         [Fact]
         public void All_Predicate_With_NullPredicate_Should_Throw()

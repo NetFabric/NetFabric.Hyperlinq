@@ -61,6 +61,21 @@ namespace NetFabric.Hyperlinq
             where TList : notnull, IReadOnlyList<TSource>
             => new List<TResult>(new IndexedToListCollection<TList, TSource, TResult>(source, selector, skipCount, takeCount));
 
+        [Pure]
+        static List<TResult> ToList<TList, TSource, TResult>(this TList source, Predicate<TSource> predicate, Selector<TSource, TResult> selector, int skipCount, int takeCount)
+            where TList : notnull, IReadOnlyList<TSource>
+        {
+            var list = new List<TResult>();
+            var end = skipCount + takeCount;
+            for (var index = skipCount; index < end; index++)
+            {
+                var item = source[index];
+                if (predicate(item))
+                    list.Add(selector(item));
+            }
+            return list;
+        }
+
         // helper implementation of ICollection<> so that CopyTo() is used to convert to List<>
         [GeneratorIgnore]
         sealed class ToListCollection<TList, TSource>

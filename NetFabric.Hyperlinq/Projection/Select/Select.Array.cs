@@ -180,15 +180,10 @@ namespace NetFabric.Hyperlinq
             public TResult SingleOrDefault()
                 => selector(Array.SingleOrDefault<TSource>(source, skipCount, takeCount));
 
+            [Pure]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TResult[] ToArray()
-            {
-                var array = new TResult[takeCount];
-
-                for (var index = 0; index < takeCount; index++)
-                    array[index] = selector(source[index + skipCount]);
-
-                return array;
-            }
+                => Array.ToArray<TSource, TResult>(source, selector, skipCount, takeCount);
 
             [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]

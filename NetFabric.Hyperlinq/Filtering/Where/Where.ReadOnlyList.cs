@@ -173,6 +173,7 @@ namespace NetFabric.Hyperlinq
 
             public TSource[] ToArray()
                 => ReadOnlyList.ToArray<TList, TSource>(source, predicate, skipCount, takeCount);
+
             public List<TSource> ToList()
                 => ReadOnlyList.ToList<TList, TSource>(source, predicate, skipCount, takeCount);
 

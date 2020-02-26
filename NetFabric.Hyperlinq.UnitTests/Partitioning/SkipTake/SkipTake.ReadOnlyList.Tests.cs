@@ -5,7 +5,7 @@ using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests
 {
-    public class SkipTakeValueReadOnlyListTests
+    public partial class ReadOnlyListTests
     {
 
         [Theory]

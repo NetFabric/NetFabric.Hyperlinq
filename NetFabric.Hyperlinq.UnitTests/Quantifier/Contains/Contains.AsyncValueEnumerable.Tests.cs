@@ -7,7 +7,7 @@ using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests
 {
-    public class ContainsAsyncValueEnumerableTests
+    public partial class AsyncValueEnumerableTests
     {
         [Theory]
         [MemberData(nameof(TestData.Contains), MemberType = typeof(TestData))]

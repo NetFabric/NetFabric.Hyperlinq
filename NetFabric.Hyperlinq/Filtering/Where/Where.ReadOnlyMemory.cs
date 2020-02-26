@@ -130,7 +130,7 @@ namespace NetFabric.Hyperlinq
                 => Array.ToArray<TSource>(source.Span, predicate);
 
             public List<TSource> ToList()
-                => Array.ToList<TSource>(source, predicate);
+                => Array.ToList<TSource>(source.Span, predicate);
 
             public void ForEach(Action<TSource> action)
                 => Array.ForEach<TSource>(source.Span, action, predicate);
