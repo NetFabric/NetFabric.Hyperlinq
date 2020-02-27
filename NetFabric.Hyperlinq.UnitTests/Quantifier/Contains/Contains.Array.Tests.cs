@@ -35,8 +35,8 @@ namespace NetFabric.Hyperlinq.UnitTests
                         System.Linq.Enumerable.Skip(source, skipCount), takeCount), value, comparer);
 
             // Act
-            var result = source
-                .Skip<int>(skipCount)
+            var result = Array
+                .Skip<int>(source, skipCount)
                 .Take(takeCount)
                 .Contains(value, comparer);
 

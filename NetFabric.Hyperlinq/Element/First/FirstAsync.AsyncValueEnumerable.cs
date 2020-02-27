@@ -94,7 +94,7 @@ namespace NetFabric.Hyperlinq
         }
 
         [Pure]
-        static async ValueTask<(int Index, TSource Value)> GetFirstAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source, AsyncPredicateAt<TSource> predicate, CancellationToken cancellationToken) 
+        static async ValueTask<(ElementResult Success, TSource Value, int Index)> GetFirstAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source, AsyncPredicateAt<TSource> predicate, CancellationToken cancellationToken) 
             where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
@@ -107,11 +107,11 @@ namespace NetFabric.Hyperlinq
                     {
                         var item = enumerator.Current;
                         if (await predicate(item, index, cancellationToken).ConfigureAwait(false))
-                            return (index, item);
+                            return (ElementResult.Success, item, index);
                     }
                 }   
 
-                return ((int)ElementResult.Empty, default);
+                return (ElementResult.Empty, default, 0);
             }
         }    
     }

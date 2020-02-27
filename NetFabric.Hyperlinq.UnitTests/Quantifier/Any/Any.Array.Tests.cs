@@ -38,8 +38,8 @@ namespace NetFabric.Hyperlinq.UnitTests
                         System.Linq.Enumerable.Skip(source, skipCount), takeCount));
 
             // Act
-            var result = source
-                .Skip<int>(skipCount)
+            var result = Array
+                .Skip<int>(source, skipCount)
                 .Take(takeCount)
                 .Any();
 
@@ -97,8 +97,8 @@ namespace NetFabric.Hyperlinq.UnitTests
                         System.Linq.Enumerable.Skip(source, skipCount), takeCount), predicate.AsFunc());
 
             // Act
-            var result = source
-                .Skip<int>(skipCount)
+            var result = Array
+                .Skip<int>(source, skipCount)
                 .Take(takeCount)
                 .Any(predicate);
 
@@ -159,8 +159,8 @@ namespace NetFabric.Hyperlinq.UnitTests
                                 source, skipCount), takeCount), predicate.AsFunc())) != 0;
 
             // Act
-            var result = source
-                .Skip<int>(skipCount)
+            var result = Array
+                .Skip<int>(source, skipCount)
                 .Take(takeCount)
                 .Any(predicate);
 

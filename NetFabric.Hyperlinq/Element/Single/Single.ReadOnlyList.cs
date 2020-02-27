@@ -93,7 +93,7 @@ namespace NetFabric.Hyperlinq
         }
 
         [Pure]
-        static (int Index, TSource Value) GetSingle<TList, TSource>(this TList source, PredicateAt<TSource> predicate, int skipCount, int takeCount)
+        static (ElementResult Success, TSource Value, int Index) GetSingle<TList, TSource>(this TList source, PredicateAt<TSource> predicate, int skipCount, int takeCount)
             where TList : notnull, IReadOnlyList<TSource>
         {
             var end = skipCount + takeCount;
@@ -101,19 +101,19 @@ namespace NetFabric.Hyperlinq
             {
                 if (predicate(source[index], index))
                 {
-                    var value = (index, source[index]);
+                    var value = (ElementResult.Success, source[index], index);
 
                     for (index++; index < end; index++)
                     {
                         if (predicate(source[index], index))
-                            return ((int)ElementResult.NotSingle, default);
+                            return (ElementResult.NotSingle, default, 0);
                     }
 
                     return value;
                 }
             }
 
-            return ((int)ElementResult.Empty, default);
+            return (ElementResult.Empty, default, 0);
         }
     }
 }

@@ -13,8 +13,8 @@ namespace NetFabric.Hyperlinq.UnitTests
             // Arrange
 
             // Act
-            var result = source
-                .ElementAtOrDefault<int>(index);
+            var result = Array
+                .ElementAtOrDefault<int>(source, index);
 
             // Assert
             _ = result.Must()
@@ -30,8 +30,8 @@ namespace NetFabric.Hyperlinq.UnitTests
                 System.Linq.Enumerable.ElementAtOrDefault(source, index);
 
             // Act
-            var result = source
-                .ElementAtOrDefault<int>(index);
+            var result = Array
+                .ElementAtOrDefault<int>(source, index);
 
             // Assert
             _ = result.Must()

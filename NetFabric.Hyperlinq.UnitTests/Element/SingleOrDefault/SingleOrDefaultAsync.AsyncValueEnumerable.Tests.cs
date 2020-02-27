@@ -1,25 +1,26 @@
 using NetFabric.Assertive;
 using System;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests
 {
-    public partial class ValueReadOnlyCollectionTests
+    public partial class AsyncValueEnumerableTests
     {
         [Theory]
         [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
-        public void SingleOrDefault_With_EmptyOrSingle_Should_Succeed(int[] source)
+        public async ValueTask SingleOrDefaultAsync_With_EmptyOrSingle_Should_Succeed(int[] source)
         {
             // Arrange
             var wrapped = Wrap
-                .AsValueReadOnlyCollection(source);
+                .AsAsyncValueEnumerable(source);
             var expected = 
                 System.Linq.Enumerable.SingleOrDefault(source);
 
             // Act
-            var result = ValueReadOnlyCollection
-                .SingleOrDefault<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(wrapped);
+            var result = await AsyncValueEnumerable
+                .SingleOrDefaultAsync<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int>(wrapped);
 
             // Assert
             _ = result.Must()
@@ -28,15 +29,15 @@ namespace NetFabric.Hyperlinq.UnitTests
 
         [Theory]
         [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
-        public void SingleOrDefault_With_Multiple_Should_Throw(int[] source)
+        public void SingleOrDefaultAsync_With_Multiple_Should_Throw(int[] source)
         {
             // Arrange
             var wrapped = Wrap
-                .AsValueReadOnlyCollection(source);
+                .AsAsyncValueEnumerable(source);
 
             // Act
-            Action action = () => _ = ValueReadOnlyCollection
-                .SingleOrDefault<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(wrapped);
+            Func<ValueTask> action = async () => _ = await AsyncValueEnumerable
+                .SingleOrDefaultAsync<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int>(wrapped);
 
             // Assert
             _ = action.Must()
@@ -45,17 +46,17 @@ namespace NetFabric.Hyperlinq.UnitTests
         }
 
         [Fact]
-        public void SingleOrDefault_Predicate_With_Null_Should_Throw()
+        public void SingleOrDefaultAsync_Predicate_With_Null_Should_Throw()
         {
             // Arrange
             var source = new int[0];
             var wrapped = Wrap
-                .AsValueReadOnlyCollection(source);
-            var predicate = (Predicate<int>)null;
+                .AsAsyncValueEnumerable(source);
+            var predicate = (AsyncPredicate<int>)null;
 
             // Act
-            Action action = () => _ = ValueReadOnlyCollection
-                .SingleOrDefault<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
+            Action action = () => _ = AsyncValueEnumerable
+                .SingleOrDefaultAsync<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, predicate);
 
             // Assert
             _ = action.Must()
@@ -66,17 +67,17 @@ namespace NetFabric.Hyperlinq.UnitTests
         [Theory]
         [MemberData(nameof(TestData.PredicateEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateSingle), MemberType = typeof(TestData))]
-        public void SingleOrDefault_Predicate_With_EmptyOrSingle_Should_Succeed(int[] source, Predicate<int> predicate)
+        public async ValueTask SingleOrDefaultAsync_Predicate_With_EmptyOrSingle_Should_Succeed(int[] source, Predicate<int> predicate)
         {
             // Arrange
             var wrapped = Wrap
-                .AsValueReadOnlyCollection(source);
+                .AsAsyncValueEnumerable(source);
             var expected = 
                 System.Linq.Enumerable.SingleOrDefault(source, predicate.AsFunc());
 
             // Act
-            var result = ValueReadOnlyCollection
-                .SingleOrDefault<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
+            var result = await AsyncValueEnumerable
+                .SingleOrDefaultAsync<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, predicate.AsAsync());
 
             // Assert
             _ = result.Must()
@@ -85,15 +86,15 @@ namespace NetFabric.Hyperlinq.UnitTests
 
         [Theory]
         [MemberData(nameof(TestData.PredicateMultiple), MemberType = typeof(TestData))]
-        public void SingleOrDefault_Predicate_With_Multiple_Should_Throw(int[] source, Predicate<int> predicate)
+        public void SingleOrDefaultAsync_Predicate_With_Multiple_Should_Throw(int[] source, Predicate<int> predicate)
         {
             // Arrange
             var wrapped = Wrap
-                .AsValueReadOnlyCollection(source);
+                .AsAsyncValueEnumerable(source);
 
             // Act
-            Action action = () => _ = ValueReadOnlyCollection
-                .SingleOrDefault<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
+            Func<ValueTask> action = async () => _ = await AsyncValueEnumerable
+                .SingleOrDefaultAsync<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, predicate.AsAsync());
 
             // Assert
             _ = action.Must()
@@ -102,17 +103,17 @@ namespace NetFabric.Hyperlinq.UnitTests
         }
 
         [Fact]
-        public void SingleOrDefault_PredicateAt_With_Null_Should_Throw()
+        public void SingleOrDefaultAsync_PredicateAt_With_Null_Should_Throw()
         {
             // Arrange
             var source = new int[0];
             var wrapped = Wrap
-                .AsValueReadOnlyCollection(source);
-            var predicate = (PredicateAt<int>)null;
+                .AsAsyncValueEnumerable(source);
+            var predicate = (AsyncPredicateAt<int>)null;
 
             // Act
-            Action action = () => _ = ValueReadOnlyCollection
-                .SingleOrDefault<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
+            Action action = () => _ = AsyncValueEnumerable
+                .SingleOrDefaultAsync<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, predicate);
 
             // Assert
             _ = action.Must()
@@ -123,18 +124,18 @@ namespace NetFabric.Hyperlinq.UnitTests
         [Theory]
         [MemberData(nameof(TestData.PredicateAtEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateAtSingle), MemberType = typeof(TestData))]
-        public void SingleOrDefault_PredicateAt_With_EmptyOrSingle_Should_Succeed(int[] source, PredicateAt<int> predicate)
+        public async ValueTask SingleOrDefaultAsync_PredicateAt_With_EmptyOrSingle_Should_Succeed(int[] source, PredicateAt<int> predicate)
         {
             // Arrange
             var wrapped = Wrap
-                .AsValueReadOnlyCollection(source);
+                .AsAsyncValueEnumerable(source);
             var expected = 
                 System.Linq.Enumerable.SingleOrDefault(
                     System.Linq.Enumerable.Where(source, predicate.AsFunc()));
 
             // Act
-            var result = ValueReadOnlyCollection
-                .SingleOrDefault<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
+            var result = await AsyncValueEnumerable
+                .SingleOrDefaultAsync<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, predicate.AsAsync());
 
             // Assert
             _ = result.Must()
@@ -143,15 +144,15 @@ namespace NetFabric.Hyperlinq.UnitTests
 
         [Theory]
         [MemberData(nameof(TestData.PredicateAtMultiple), MemberType = typeof(TestData))]
-        public void SingleOrDefault_PredicateAt_With_Multiple_Should_Throw(int[] source, PredicateAt<int> predicate)
+        public void SingleOrDefaultAsync_PredicateAt_With_Multiple_Should_Throw(int[] source, PredicateAt<int> predicate)
         {
             // Arrange
             var wrapped = Wrap
-                .AsValueReadOnlyCollection(source);
+                .AsAsyncValueEnumerable(source);
 
             // Act
-            Action action = () => _ = ValueReadOnlyCollection
-                .SingleOrDefault<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
+            Func<ValueTask> action = async () => _ = await AsyncValueEnumerable
+                .SingleOrDefaultAsync<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, predicate.AsAsync());
 
             // Assert
             _ = action.Must()

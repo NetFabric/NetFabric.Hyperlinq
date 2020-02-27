@@ -70,7 +70,7 @@ namespace NetFabric.Hyperlinq
         }
 
         [Pure]
-        static (int Index, TSource Value) GetFirst<TEnumerable, TEnumerator, TSource>(this TEnumerable source, PredicateAt<TSource> predicate) 
+        static (ElementResult Success, TSource Value, int Index) GetFirst<TEnumerable, TEnumerator, TSource>(this TEnumerable source, PredicateAt<TSource> predicate) 
             where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
@@ -81,11 +81,11 @@ namespace NetFabric.Hyperlinq
                 {
                     var item = enumerator.Current;
                     if (predicate(item, index))
-                        return (index, item);
+                        return (ElementResult.Success, item, index);
                 }
             }   
 
-            return ((int)ElementResult.Empty,  default);
+            return (ElementResult.Empty, default, 0);
         }    
     }
 }

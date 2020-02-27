@@ -14,8 +14,8 @@ namespace NetFabric.Hyperlinq.UnitTests
             // Arrange
 
             // Act
-            var result = source
-                .AsValueEnumerable();
+            var result = Array
+                .AsValueEnumerable(source);
 
             // Assert
             _ = result.Must()

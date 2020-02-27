@@ -39,6 +39,24 @@ namespace NetFabric.Hyperlinq
 
         [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ValueTask<TSource> SingleAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source, AsyncPredicateAt<TSource> predicate, CancellationToken cancellationToken = default) 
+            where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
+            where TEnumerator : struct, IAsyncEnumerator<TSource>
+        {
+            if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
+
+            cancellationToken.ThrowIfCancellationRequested();
+            return ExecuteAsync(source, predicate, cancellationToken);
+
+            static async ValueTask<TSource> ExecuteAsync(TEnumerable source, AsyncPredicateAt<TSource> predicate, CancellationToken cancellationToken)
+            {
+                var result = await GetSingleAsync<TEnumerable, TEnumerator, TSource>(source, predicate, cancellationToken).ConfigureAwait(false);
+                return result.ThrowOnEmpty();
+            }
+        }
+
+        [Pure]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static async ValueTask<TSource> SingleOrDefaultAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source, CancellationToken cancellationToken = default)
             where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
@@ -59,6 +77,24 @@ namespace NetFabric.Hyperlinq
             return ExecuteAsync(source, predicate, cancellationToken);
 
             static async ValueTask<TSource> ExecuteAsync(TEnumerable source, AsyncPredicate<TSource> predicate, CancellationToken cancellationToken)
+            {
+                var result = await GetSingleAsync<TEnumerable, TEnumerator, TSource>(source, predicate, cancellationToken).ConfigureAwait(false);
+                return result.DefaultOnEmpty();
+            }
+        }
+
+        [Pure]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ValueTask<TSource> SingleOrDefaultAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source, AsyncPredicateAt<TSource> predicate, CancellationToken cancellationToken = default) 
+            where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
+            where TEnumerator : struct, IAsyncEnumerator<TSource>
+        {
+            if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
+
+            cancellationToken.ThrowIfCancellationRequested();
+            return ExecuteAsync(source, predicate, cancellationToken);
+
+            static async ValueTask<TSource> ExecuteAsync(TEnumerable source, AsyncPredicateAt<TSource> predicate, CancellationToken cancellationToken)
             {
                 var result = await GetSingleAsync<TEnumerable, TEnumerator, TSource>(source, predicate, cancellationToken).ConfigureAwait(false);
                 return result.DefaultOnEmpty();
@@ -111,7 +147,7 @@ namespace NetFabric.Hyperlinq
         }
 
         [Pure]
-        static async ValueTask<(int Index, TSource Value)> GetSingleAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source, AsyncPredicateAt<TSource> predicate, CancellationToken cancellationToken) 
+        static async ValueTask<(ElementResult Success, TSource Value, int Index)> GetSingleAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source, AsyncPredicateAt<TSource> predicate, CancellationToken cancellationToken) 
             where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
@@ -124,13 +160,13 @@ namespace NetFabric.Hyperlinq
                     {
                         if (await predicate(enumerator.Current, index, cancellationToken).ConfigureAwait(false))
                         {
-                            var value = (index, enumerator.Current);
+                            var value = (ElementResult.Success, enumerator.Current, index);
 
                             // found first, keep going until end or find second
                             for (index++; await enumerator.MoveNextAsync().ConfigureAwait(false); index++)
                             {
                                 if (await predicate(enumerator.Current, index, cancellationToken).ConfigureAwait(false))
-                                    return ((int)ElementResult.NotSingle, default);
+                                    return (ElementResult.NotSingle, default, 0);
                             }
 
                             return value;
@@ -138,7 +174,7 @@ namespace NetFabric.Hyperlinq
                     }
                 }
 
-                return ((int)ElementResult.Empty, default);
+                return (ElementResult.Empty, default, 0);
             }
         }
     }
