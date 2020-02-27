@@ -58,6 +58,7 @@ namespace NetFabric.Hyperlinq
                     => ++index < source.Count;
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                [ExcludeFromCodeCoverage]
                 public void Reset() 
                     => index = -1;
 

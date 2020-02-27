@@ -95,6 +95,7 @@ namespace NetFabric.Hyperlinq
                     => enumerator.MoveNext();
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                [ExcludeFromCodeCoverage]
                 public readonly void Reset() 
                     => enumerator.Reset();
 
