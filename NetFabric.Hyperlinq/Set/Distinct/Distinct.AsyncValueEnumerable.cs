@@ -128,8 +128,8 @@ namespace NetFabric.Hyperlinq
                 => (await FillSetAsync(cancellationToken)).Count;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly async ValueTask<bool> AnyAsync(CancellationToken cancellationToken = default)
-                => (await FillSetAsync(cancellationToken)).Count != 0;
+            public readonly ValueTask<bool> AnyAsync(CancellationToken cancellationToken = default)
+                => AsyncValueEnumerable.AnyAsync<TEnumerable, TEnumerator, TSource>(source, cancellationToken);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly async ValueTask<TSource[]> ToArrayAsync(CancellationToken cancellationToken = default)

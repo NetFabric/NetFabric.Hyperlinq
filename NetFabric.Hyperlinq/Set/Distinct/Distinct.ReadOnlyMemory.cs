@@ -134,7 +134,7 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly bool Any()
-                => FillSet().Count != 0;
+                => source.Length != 0;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly TSource[] ToArray()
