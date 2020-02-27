@@ -5,15 +5,12 @@ namespace NetFabric.Hyperlinq.UnitTests
 {
     public partial class ValueEnumerableTests
     {
-        [Theory]
-        [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
-        public void AsValueEnumerable_With_ValidData_Should_Succeed(int[] source)
+        [Fact]
+        public void AsValueEnumerable_With_ValueType_Should_ReturnCopy()
         {
             // Arrange
-            var wrapped = Wrap
-                .AsValueEnumerable(source);
+            var source = new int[0];
+            var wrapped = Wrap.AsValueEnumerable(source);
 
             // Act
             var result = ValueEnumerable
@@ -21,28 +18,24 @@ namespace NetFabric.Hyperlinq.UnitTests
 
             // Assert
             _ = result.Must()
-                .BeEnumerableOf<int>()
                 .BeEqualTo(wrapped);
         }
-
-        [Theory]
-        [MemberData(nameof(TestData.ElementAt), MemberType = typeof(TestData))]
-        public void AsValueEnumerable_With_ElementAt_Should_Succeed(int[] source, int index)
+        
+        [Fact]
+        public void AsValueEnumerable_With_ReferenceType_Should_ReturnSame()
         {
             // Arrange
+            var source = new int[0];
             var wrapped = Wrap
-                .AsValueEnumerable(source);
-            var expected = 
-                System.Linq.Enumerable.ElementAt(wrapped, index);
+                .AsValueEnumerable(source) as IValueEnumerable<int, Wrap.Enumerator<int>>;
 
             // Act
             var result = ValueEnumerable
-                .AsValueEnumerable<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped)
-                .ElementAt<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(index);
+                .AsValueEnumerable<IValueEnumerable<int, Wrap.Enumerator<int>>, Wrap.Enumerator<int>, int>(wrapped);
 
             // Assert
             _ = result.Must()
-                .BeEqualTo(expected);
+                .BeSameAs(wrapped);
         }
     }
 }

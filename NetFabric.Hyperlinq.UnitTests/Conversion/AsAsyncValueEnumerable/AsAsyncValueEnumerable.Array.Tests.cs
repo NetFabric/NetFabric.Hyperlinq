@@ -1,46 +1,44 @@
 using NetFabric.Assertive;
 using Xunit;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace NetFabric.Hyperlinq.UnitTests
 {
-    public partial class ReadOnlyCollectionTests
+    public partial class ArrayTests
     {
         [Theory]
         [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
-        public void AsValueEnumerable_With_ValidData_Should_Succeed(int[] source)
+        public void AsAsyncValueEnumerable_With_ValidData_Should_Succeed(int[] source)
         {
             // Arrange
-            var wrapped = Wrap
-                .AsReadOnlyCollection(source);
 
             // Act
-            var result = ReadOnlyCollection
-                .AsValueEnumerable(wrapped);
+            var result = Array
+                .AsAsyncValueEnumerable(source);
 
             // Assert
             _ = result.Must()
-                .BeOfType<ReadOnlyCollection.ValueEnumerableWrapper<int>>()
-                .BeEnumerableOf<int>()
-                .BeEqualTo(wrapped);
+                .BeAsyncEnumerableOf<int>()
+                .BeEqualTo(source);
         }
 
         [Theory]
         [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
-        public void AsValueEnumerable_With_ToArray_Should_Succeed(int[] source)
+        public async ValueTask AsAsyncValueEnumerable_With_ToArrayAsync_Should_Succeed(int[] source)
         {
             // Arrange
             var expected = 
                 System.Linq.Enumerable.ToArray(source);
 
             // Act
-            var result = ReadOnlyCollection
-                .AsValueEnumerable<int>(source)
-                .ToArray();
+            var result = await Array
+                .AsAsyncValueEnumerable<int>(source)
+                .ToArrayAsync();
 
             // Assert
             _ = result.Must()
@@ -52,16 +50,16 @@ namespace NetFabric.Hyperlinq.UnitTests
         [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
-        public void AsValueEnumerable_With_ToList_Should_Succeed(int[] source)
+        public async ValueTask AsAsyncValueEnumerable_With_ToListAsync_Should_Succeed(int[] source)
         {
             // Arrange
             var expected = 
                 System.Linq.Enumerable.ToList(source);
 
             // Act
-            var result = ReadOnlyCollection
-                .AsValueEnumerable<int>(source)
-                .ToList();
+            var result = await Array
+                .AsAsyncValueEnumerable<int>(source)
+                .ToListAsync();
 
             // Assert
             _ = result.Must()
