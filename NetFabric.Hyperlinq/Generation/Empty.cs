@@ -59,6 +59,7 @@ namespace NetFabric.Hyperlinq
                 public readonly bool MoveNext()
                     => false;
 
+                [ExcludeFromCodeCoverage]
                 public readonly void Reset() { }
 
                 public readonly void Dispose() { }

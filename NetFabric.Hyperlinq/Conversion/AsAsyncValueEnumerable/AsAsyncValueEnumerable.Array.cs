@@ -102,6 +102,14 @@ namespace NetFabric.Hyperlinq
                 public readonly ValueTask DisposeAsync()
                     => default;
             }
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public ValueTask<TSource[]> ToArrayAsync(CancellationToken cancellationToken = default)
+                => new ValueTask<TSource[]>(Array.ToArray(source));
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public ValueTask<List<TSource>> ToListAsync(CancellationToken cancellationToken = default)
+                => new ValueTask<List<TSource>>(Array.ToList(source));
         }
     }
 }

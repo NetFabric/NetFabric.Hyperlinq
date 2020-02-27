@@ -1,6 +1,7 @@
 using NetFabric.Assertive;
-using Xunit;
+using System;
 using System.Collections.Generic;
+using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests
 {
@@ -10,41 +11,23 @@ namespace NetFabric.Hyperlinq.UnitTests
         [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
-        public void AsValueEnumerable_With_ValidData_Should_Succeed(int[] source)
+        public void ToList_With_ValidData_Should_Succeed(int[] source)
         {
             // Arrange
             var wrapped = Wrap
                 .AsReadOnlyCollection(source);
-
-            // Act
-            var result = ReadOnlyCollection
-                .AsValueEnumerable(wrapped);
-
-            // Assert
-            _ = result.Must()
-                .BeOfType<ReadOnlyCollection.ValueEnumerableWrapper<int>>()
-                .BeEnumerableOf<int>()
-                .BeEqualTo(wrapped);
-        }
-
-        [Theory]
-        [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
-        public void AsValueEnumerable_With_ToArray_Should_Succeed(int[] source)
-        {
-            // Arrange
             var expected = 
-                System.Linq.Enumerable.ToArray(source);
+                System.Linq.Enumerable.ToList(source);
 
             // Act
             var result = ReadOnlyCollection
-                .AsValueEnumerable<int>(source)
-                .ToArray();
+                .AsValueEnumerable<int>(wrapped)
+                .ToList();
 
             // Assert
             _ = result.Must()
-                .BeArrayOf<int>()
+                .BeOfType<List<int>>()
+                .BeEnumerableOf<int>()
                 .BeEqualTo(expected);
         }
 
@@ -52,15 +35,17 @@ namespace NetFabric.Hyperlinq.UnitTests
         [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
-        public void AsValueEnumerable_With_ToList_Should_Succeed(int[] source)
+        public void ToList_With_ValidData_Collections_Should_Succeed(int[] source)
         {
             // Arrange
+            var wrapped = Wrap
+                .AsValueCollection(source);
             var expected = 
                 System.Linq.Enumerable.ToList(source);
 
             // Act
             var result = ReadOnlyCollection
-                .AsValueEnumerable<int>(source)
+                .AsValueEnumerable<int>(wrapped)
                 .ToList();
 
             // Assert

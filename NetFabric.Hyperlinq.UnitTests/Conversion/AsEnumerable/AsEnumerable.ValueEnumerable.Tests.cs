@@ -6,7 +6,7 @@ namespace NetFabric.Hyperlinq.UnitTests
     public partial class ValueEnumerableTests
     {
         [Fact]
-        public void AsValueEnumerable_With_ValueType_Should_ReturnCopy()
+        public void AsEnumerable_With_ValueType_Should_ReturnCopy()
         {
             // Arrange
             var source = new int[0];
@@ -14,7 +14,7 @@ namespace NetFabric.Hyperlinq.UnitTests
 
             // Act
             var result = ValueEnumerable
-                .AsValueEnumerable<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped);
+                .AsEnumerable<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped);
 
             // Assert
             _ = result.Must()
@@ -22,7 +22,7 @@ namespace NetFabric.Hyperlinq.UnitTests
         }
         
         [Fact]
-        public void AsValueEnumerable_With_ReferenceType_Should_ReturnSame()
+        public void AsEnumerable_With_ReferenceType_Should_ReturnSame()
         {
             // Arrange
             var source = new int[0];
@@ -31,7 +31,7 @@ namespace NetFabric.Hyperlinq.UnitTests
 
             // Act
             var result = ValueEnumerable
-                .AsValueEnumerable<IValueEnumerable<int, Wrap.Enumerator<int>>, Wrap.Enumerator<int>, int>(wrapped);
+                .AsEnumerable<IValueEnumerable<int, Wrap.Enumerator<int>>, Wrap.Enumerator<int>, int>(wrapped);
 
             // Assert
             _ = result.Must()

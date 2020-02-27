@@ -85,6 +85,7 @@ namespace NetFabric.Hyperlinq
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public bool MoveNext() => ++index < source.Length;
 
+                [ExcludeFromCodeCoverage]
                 public void Reset() => index = -1;
 
                 public readonly void Dispose() { }
