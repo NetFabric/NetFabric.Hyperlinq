@@ -95,25 +95,6 @@ namespace NetFabric.Hyperlinq
             }
             return list;
         }
-
-        [Pure]
-        static List<TResult> ToList<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, PredicateAt<TSource> predicate, SelectorAt<TSource, TResult> selector)
-            where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
-            where TEnumerator : struct, IEnumerator<TSource>
-        {
-            var list = new List<TResult>();
-            using var enumerator = source.GetEnumerator();
-            checked
-            {
-                for (var index = 0; enumerator.MoveNext(); index++)
-                {
-                    var item = enumerator.Current;
-                    if (predicate(item, index))
-                        list.Add(selector(item, index));
-                }
-            }
-            return list;
-        }
         
     }
 }
