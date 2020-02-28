@@ -59,8 +59,6 @@ namespace System.Collections.Generic
     {
         public void AddRange(ReadOnlySpan<T> items, Predicate<T> predicate)
         {
-            Debug.Assert(items is object);
-
             var destination = _current;
             var index = _index;
 
@@ -88,8 +86,6 @@ namespace System.Collections.Generic
 
         public void AddRange(ReadOnlySpan<T> items, PredicateAt<T> predicate)
         {
-            Debug.Assert(items is object);
-
             var destination = _current;
             var index = _index;
 
@@ -117,8 +113,6 @@ namespace System.Collections.Generic
 
         public void AddRange<U>(ReadOnlySpan<U> items, Predicate<U> predicate, Selector<U, T> selector)
         {
-            Debug.Assert(items is object);
-
             var destination = _current;
             var index = _index;
 
