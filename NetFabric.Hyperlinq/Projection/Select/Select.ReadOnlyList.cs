@@ -30,6 +30,7 @@ namespace NetFabric.Hyperlinq
         [GeneratorMapping("TSource", "TResult")]
         public readonly partial struct SelectEnumerable<TList, TSource, TResult>
             : IValueReadOnlyList<TResult, SelectEnumerable<TList, TSource, TResult>.DisposableEnumerator>
+            , IList<TResult>
             where TList : notnull, IReadOnlyList<TSource>
         {
             readonly TList source;
@@ -43,13 +44,6 @@ namespace NetFabric.Hyperlinq
                 this.selector = selector;
                 (this.skipCount, this.takeCount) = Utils.SkipTake(source.Count, skipCount, takeCount);
             }
-
-            [Pure]
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly Enumerator GetEnumerator() => new Enumerator(in this);
-            readonly DisposableEnumerator IValueEnumerable<TResult, SelectEnumerable<TList, TSource, TResult>.DisposableEnumerator>.GetEnumerator() => new DisposableEnumerator(in this);
-            readonly IEnumerator<TResult> IEnumerable<TResult>.GetEnumerator() => new DisposableEnumerator(in this);
-            readonly IEnumerator IEnumerable.GetEnumerator() => new DisposableEnumerator(in this);
 
             public readonly int Count
                 => takeCount;
@@ -65,6 +59,57 @@ namespace NetFabric.Hyperlinq
                     return selector(source[index + skipCount]);
                 }
             }
+
+            [Pure]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public readonly Enumerator GetEnumerator() => new Enumerator(in this);
+            readonly DisposableEnumerator IValueEnumerable<TResult, SelectEnumerable<TList, TSource, TResult>.DisposableEnumerator>.GetEnumerator() => new DisposableEnumerator(in this);
+            readonly IEnumerator<TResult> IEnumerable<TResult>.GetEnumerator() => new DisposableEnumerator(in this);
+            readonly IEnumerator IEnumerable.GetEnumerator() => new DisposableEnumerator(in this);
+
+            [MaybeNull]
+            TResult IList<TResult>.this[int index]
+            {
+                get => this[index];
+                set => throw new NotImplementedException();
+            }
+
+            bool ICollection<TResult>.IsReadOnly  
+                => true;
+
+            void ICollection<TResult>.CopyTo(TResult[] array, int arrayIndex) 
+            {
+                for (var index = 0; index < takeCount; index++)
+                    array[index + arrayIndex] = selector(source[index + skipCount]);
+            }
+            void ICollection<TResult>.Add(TResult item) 
+                => throw new NotImplementedException();
+            void ICollection<TResult>.Clear() 
+                => throw new NotImplementedException();
+            bool ICollection<TResult>.Contains(TResult item) 
+            {
+                for (var index = 0; index < takeCount; index++)
+                {
+                    if (EqualityComparer<TResult>.Default.Equals(selector(source[index + skipCount]), item))
+                        return true;
+                }
+                return false;
+            }
+            bool ICollection<TResult>.Remove(TResult item) 
+                => throw new NotImplementedException();
+            int IList<TResult>.IndexOf(TResult item)
+            {
+                for (var index = 0; index < takeCount; index++)
+                {
+                    if (EqualityComparer<TResult>.Default.Equals(selector(source[index + skipCount]), item))
+                        return index;
+                }
+                return -1;
+            }
+            void IList<TResult>.Insert(int index, TResult item)
+                => throw new NotImplementedException();
+            void IList<TResult>.RemoveAt(int index)
+                => throw new NotImplementedException();
 
             public struct Enumerator
             {

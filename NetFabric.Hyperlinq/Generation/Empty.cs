@@ -15,10 +15,17 @@ namespace NetFabric.Hyperlinq
 
         public partial class EmptyEnumerable<TSource>
             : IValueReadOnlyList<TSource, EmptyEnumerable<TSource>.DisposableEnumerator>
+            , IList<TSource>
         {
             public static readonly EmptyEnumerable<TSource> Instance = new EmptyEnumerable<TSource>();
 
             private EmptyEnumerable() { }
+
+            public int Count 
+                => 0;
+
+            public TSource this[int index] 
+                => Throw.IndexOutOfRangeException<TSource>(); 
 
             [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -27,11 +34,32 @@ namespace NetFabric.Hyperlinq
             IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new DisposableEnumerator();
             IEnumerator IEnumerable.GetEnumerator() => new DisposableEnumerator();
 
-            public int Count 
-                => 0;
+            [MaybeNull]
+            TSource IList<TSource>.this[int index]
+            {
+                get => this[index];
+                set => throw new NotImplementedException();
+            }
 
-            public TSource this[int index] 
-                => Throw.IndexOutOfRangeException<TSource>(); 
+            bool ICollection<TSource>.IsReadOnly  
+                => true;
+
+            void ICollection<TSource>.CopyTo(TSource[] array, int arrayIndex) 
+            { }
+            void ICollection<TSource>.Add(TSource item) 
+                => throw new NotImplementedException();
+            void ICollection<TSource>.Clear() 
+                => throw new NotImplementedException();
+            bool ICollection<TSource>.Contains(TSource item) 
+                => false;
+            bool ICollection<TSource>.Remove(TSource item) 
+                => throw new NotImplementedException();
+            int IList<TSource>.IndexOf(TSource item)
+                => -1;
+            void IList<TSource>.Insert(int index, TSource item)
+                => throw new NotImplementedException();
+            void IList<TSource>.RemoveAt(int index)
+                => throw new NotImplementedException();
 
             public readonly struct Enumerator
             {

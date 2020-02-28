@@ -30,6 +30,7 @@ namespace NetFabric.Hyperlinq
         [GeneratorMapping("TSource", "int", true)]
         public readonly partial struct RangeEnumerable
             : IValueReadOnlyList<int, RangeEnumerable.DisposableEnumerator>
+            , IList<int>
         {
             readonly int start;
             readonly int count;
@@ -42,13 +43,6 @@ namespace NetFabric.Hyperlinq
                 this.end = end;
             }
 
-            [Pure]
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly Enumerator GetEnumerator() => new Enumerator(in this);
-            readonly DisposableEnumerator IValueEnumerable<int, DisposableEnumerator>.GetEnumerator() => new DisposableEnumerator(in this);
-            readonly IEnumerator<int> IEnumerable<int>.GetEnumerator() => new DisposableEnumerator(in this);
-            readonly IEnumerator IEnumerable.GetEnumerator() => new DisposableEnumerator(in this);
-
             public readonly int Count => count;
 
             public readonly int this[int index]
@@ -60,6 +54,43 @@ namespace NetFabric.Hyperlinq
                     return index + start;
                 }
             }
+
+            [Pure]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public readonly Enumerator GetEnumerator() => new Enumerator(in this);
+            readonly DisposableEnumerator IValueEnumerable<int, DisposableEnumerator>.GetEnumerator() => new DisposableEnumerator(in this);
+            readonly IEnumerator<int> IEnumerable<int>.GetEnumerator() => new DisposableEnumerator(in this);
+            readonly IEnumerator IEnumerable.GetEnumerator() => new DisposableEnumerator(in this);
+
+            [MaybeNull]
+            int IList<int>.this[int index]
+            {
+                get => this[index];
+                set => throw new NotImplementedException();
+            }
+
+            bool ICollection<int>.IsReadOnly  
+                => true;
+
+            void ICollection<int>.CopyTo(int[] array, int arrayIndex) 
+            {
+                for (var index = 0; index < count; index++)
+                    array[arrayIndex + index] = index;
+            }
+            void ICollection<int>.Add(int item) 
+                => throw new NotImplementedException();
+            void ICollection<int>.Clear() 
+                => throw new NotImplementedException();
+            bool ICollection<int>.Remove(int item) 
+                => throw new NotImplementedException();
+            int IList<int>.IndexOf(int item)
+                => item >= 0 && item < count
+                ? item
+                : -1;
+            void IList<int>.Insert(int index, int item)
+                => throw new NotImplementedException();
+            void IList<int>.RemoveAt(int index)
+                => throw new NotImplementedException();
 
             public struct Enumerator
             {

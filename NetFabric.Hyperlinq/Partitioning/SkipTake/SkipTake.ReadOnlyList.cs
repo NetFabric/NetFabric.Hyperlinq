@@ -17,6 +17,7 @@ namespace NetFabric.Hyperlinq
 
         public readonly partial struct SkipTakeEnumerable<TList, TSource>
             : IValueReadOnlyList<TSource, SkipTakeEnumerable<TList, TSource>.Enumerator>
+            , IList<TSource>
             where TList : notnull, IReadOnlyList<TSource>
         {
             internal readonly TList source;
@@ -49,6 +50,44 @@ namespace NetFabric.Hyperlinq
             public readonly Enumerator GetEnumerator() => new Enumerator(in this);
             readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new Enumerator(in this);
             readonly IEnumerator IEnumerable.GetEnumerator() => new Enumerator(in this);
+
+            [MaybeNull]
+            TSource IList<TSource>.this[int index]
+            {
+                get => this[index];
+                set => throw new NotImplementedException();
+            }
+
+            bool ICollection<TSource>.IsReadOnly  
+                => true;
+
+            void ICollection<TSource>.CopyTo(TSource[] array, int arrayIndex) 
+            {
+                for (var index = 0; index < takeCount; index++)
+                    array[index + arrayIndex] = source[index + skipCount];
+            }
+            void ICollection<TSource>.Add(TSource item) 
+                => throw new NotImplementedException();
+            void ICollection<TSource>.Clear() 
+                => throw new NotImplementedException();
+            bool ICollection<TSource>.Contains(TSource item) 
+                => ReadOnlyList.Contains<TList, TSource>(source, item, null, skipCount, takeCount);
+            bool ICollection<TSource>.Remove(TSource item) 
+                => throw new NotImplementedException();
+            int IList<TSource>.IndexOf(TSource item)
+            {
+                var end = skipCount + takeCount;
+                for (var index = skipCount; index < end; index++)
+                {
+                    if (EqualityComparer<TSource>.Default.Equals(source[index], item))
+                        return index;
+                }
+                return -1;
+            }
+            void IList<TSource>.Insert(int index, TSource item)
+                => throw new NotImplementedException();
+            void IList<TSource>.RemoveAt(int index)
+                => throw new NotImplementedException();
 
             public struct Enumerator
                 : IEnumerator<TSource>

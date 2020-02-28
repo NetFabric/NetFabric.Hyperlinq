@@ -16,11 +16,18 @@ namespace NetFabric.Hyperlinq
 
         public readonly partial struct MemoryValueEnumerableWrapper<TSource>
             : IValueReadOnlyList<TSource, MemoryValueEnumerableWrapper<TSource>.DisposableEnumerator>
+            , IList<TSource>
         {
             readonly ReadOnlyMemory<TSource> source;
 
             internal MemoryValueEnumerableWrapper(ReadOnlyMemory<TSource> source) 
                 => this.source = source;
+
+            public readonly int Count => source.Length;
+
+            [MaybeNull]
+            public readonly ref readonly TSource this[int index] 
+                => ref source.Span[index];
 
             [Pure]
             public readonly Enumerator GetEnumerator() 
@@ -32,14 +39,48 @@ namespace NetFabric.Hyperlinq
             readonly IEnumerator IEnumerable.GetEnumerator() 
                 => new DisposableEnumerator(source);
 
-            public readonly int Count => source.Length;
-
             [MaybeNull]
-            public readonly ref readonly TSource this[int index] 
-                => ref source.Span[index];
+            TSource IList<TSource>.this[int index]
+            {
+                get => source.Span[index];
+                set => throw new NotImplementedException();
+            }
+                
             [MaybeNull]
             readonly TSource IReadOnlyList<TSource>.this[int index] 
                 => source.Span[index];
+
+            bool ICollection<TSource>.IsReadOnly  
+                => true;
+
+            void ICollection<TSource>.CopyTo(TSource[] array, int arrayIndex) 
+            {
+                var span = source.Span;
+                for (var index = 0; index < source.Length; index++)
+                    array[arrayIndex + index] = span[index];
+            }
+            void ICollection<TSource>.Add(TSource item) 
+                => throw new NotImplementedException();
+            void ICollection<TSource>.Clear() 
+                => throw new NotImplementedException();
+            bool ICollection<TSource>.Contains(TSource item) 
+                => source.Contains(item);
+            bool ICollection<TSource>.Remove(TSource item) 
+                => throw new NotImplementedException();
+            int IList<TSource>.IndexOf(TSource item)
+            {
+                var span = source.Span;
+                for (var index = 0; index < source.Length; index++)
+                {
+                    if (EqualityComparer<TSource>.Default.Equals(span[index], item))
+                        return index;
+                }
+                return -1;
+            }
+            void IList<TSource>.Insert(int index, TSource item)
+                => throw new NotImplementedException();
+            void IList<TSource>.RemoveAt(int index)
+                => throw new NotImplementedException();
 
             public ref struct Enumerator
             {

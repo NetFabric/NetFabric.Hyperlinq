@@ -172,6 +172,7 @@ namespace NetFabric.Hyperlinq
         [GeneratorMapping("TSource", "TValue")]
         public readonly partial struct ValueWrapper<TKey, TValue>
             : IValueReadOnlyCollection<TValue, SortedDictionary<TKey, TValue>.ValueCollection.Enumerator>
+            , ICollection<TValue>
         {
             readonly SortedDictionary<TKey, TValue>.ValueCollection source;
 
@@ -186,6 +187,21 @@ namespace NetFabric.Hyperlinq
             public readonly SortedDictionary<TKey, TValue>.ValueCollection.Enumerator GetEnumerator() => source.GetEnumerator();
             readonly IEnumerator<TValue> IEnumerable<TValue>.GetEnumerator() => source.GetEnumerator();
             readonly IEnumerator IEnumerable.GetEnumerator() => source.GetEnumerator();
+
+            bool ICollection<TValue>.IsReadOnly  
+                => true;
+
+            void ICollection<TValue>.CopyTo(TValue[] array, int arrayIndex) 
+                => ((ICollection<TValue>)source).CopyTo(array, arrayIndex);
+
+            void ICollection<TValue>.Add(TValue item) 
+                => throw new NotImplementedException();
+            void ICollection<TValue>.Clear() 
+                => throw new NotImplementedException();
+            bool ICollection<TValue>.Contains(TValue item) 
+                => throw new NotImplementedException();
+            bool ICollection<TValue>.Remove(TValue item) 
+                => throw new NotImplementedException();
         }
 
         public static int Count<TKey, TValue>(this ValueWrapper<TKey, TValue> source)
