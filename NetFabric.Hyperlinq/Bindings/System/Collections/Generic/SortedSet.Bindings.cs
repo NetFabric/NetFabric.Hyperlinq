@@ -171,6 +171,7 @@ namespace NetFabric.Hyperlinq
 
         public readonly partial struct ValueWrapper<TSource>
             : IValueReadOnlyCollection<TSource, SortedSet<TSource>.Enumerator>
+            , ICollection<TSource>
         {
             readonly SortedSet<TSource> source;
 
@@ -185,6 +186,21 @@ namespace NetFabric.Hyperlinq
             public readonly SortedSet<TSource>.Enumerator GetEnumerator() => source.GetEnumerator();
             readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => source.GetEnumerator();
             readonly IEnumerator IEnumerable.GetEnumerator() => source.GetEnumerator();
+
+            bool ICollection<TSource>.IsReadOnly  
+                => true;
+
+            void ICollection<TSource>.CopyTo(TSource[] array, int arrayIndex) 
+                => ((ICollection<TSource>)source).CopyTo(array, arrayIndex);
+
+            void ICollection<TSource>.Add(TSource item) 
+                => throw new NotImplementedException();
+            void ICollection<TSource>.Clear() 
+                => throw new NotImplementedException();
+            bool ICollection<TSource>.Contains(TSource item) 
+                => throw new NotImplementedException();
+            bool ICollection<TSource>.Remove(TSource item) 
+                => throw new NotImplementedException();
         }
 
         public static int Count<TSource>(this ValueWrapper<TSource> source)

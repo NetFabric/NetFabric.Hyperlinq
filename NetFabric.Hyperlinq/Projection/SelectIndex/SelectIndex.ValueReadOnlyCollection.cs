@@ -24,6 +24,7 @@ namespace NetFabric.Hyperlinq
         [GeneratorMapping("TSource", "TResult")]
         public readonly partial struct SelectIndexEnumerable<TEnumerable, TEnumerator, TSource, TResult>
             : IValueReadOnlyCollection<TResult, SelectIndexEnumerable<TEnumerable, TEnumerator, TSource, TResult>.Enumerator>
+            , ICollection<TResult>
             where TEnumerable : notnull, IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
@@ -36,13 +37,38 @@ namespace NetFabric.Hyperlinq
                 this.selector = selector;
             }
 
+            public readonly int Count => source.Count;
+
             [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly Enumerator GetEnumerator() => new Enumerator(in this);
             readonly IEnumerator<TResult> IEnumerable<TResult>.GetEnumerator() => new Enumerator(in this);
             readonly IEnumerator IEnumerable.GetEnumerator() => new Enumerator(in this);
 
-            public readonly int Count => source.Count;
+            bool ICollection<TResult>.IsReadOnly  
+                => true;
+
+            void ICollection<TResult>.CopyTo(TResult[] array, int arrayIndex) 
+            {
+                if (source.Count == 0)
+                    return;
+
+                checked
+                {
+                    using var enumerator = source.GetEnumerator();
+                    for (var index = arrayIndex; enumerator.MoveNext(); index++)
+                        array[index] = selector(enumerator.Current, index);
+                }
+            }
+
+            void ICollection<TResult>.Add(TResult item) 
+                => throw new NotImplementedException();
+            void ICollection<TResult>.Clear() 
+                => throw new NotImplementedException();
+            bool ICollection<TResult>.Contains(TResult item) 
+                => throw new NotImplementedException();
+            bool ICollection<TResult>.Remove(TResult item) 
+                => throw new NotImplementedException();
 
             public struct Enumerator
                 : IEnumerator<TResult>

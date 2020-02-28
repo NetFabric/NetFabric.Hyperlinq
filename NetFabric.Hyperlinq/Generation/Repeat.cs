@@ -19,6 +19,7 @@ namespace NetFabric.Hyperlinq
 
         public readonly partial struct RepeatEnumerable<TSource>
             : IValueReadOnlyList<TSource, RepeatEnumerable<TSource>.DisposableEnumerator>
+            , IList<TSource>
         {
             internal readonly TSource value;
             internal readonly int count;
@@ -28,13 +29,6 @@ namespace NetFabric.Hyperlinq
                 this.value = value;
                 this.count = count;
             }
-
-            [Pure]
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly Enumerator GetEnumerator() => new Enumerator(in this);
-            readonly DisposableEnumerator IValueEnumerable<TSource, DisposableEnumerator>.GetEnumerator() => new DisposableEnumerator(in this);
-            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new DisposableEnumerator(in this);
-            readonly IEnumerator IEnumerable.GetEnumerator() => new DisposableEnumerator(in this);
 
             public readonly int Count => count;
 
@@ -48,6 +42,44 @@ namespace NetFabric.Hyperlinq
                     return value;
                 }
             }
+
+            [Pure]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public readonly Enumerator GetEnumerator() => new Enumerator(in this);
+            readonly DisposableEnumerator IValueEnumerable<TSource, DisposableEnumerator>.GetEnumerator() => new DisposableEnumerator(in this);
+            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new DisposableEnumerator(in this);
+            readonly IEnumerator IEnumerable.GetEnumerator() => new DisposableEnumerator(in this);
+
+            [MaybeNull]
+            TSource IList<TSource>.this[int index]
+            {
+                get => this[index];
+                set => throw new NotImplementedException();
+            }
+
+            bool ICollection<TSource>.IsReadOnly  
+                => true;
+
+            void ICollection<TSource>.CopyTo(TSource[] array, int arrayIndex) 
+            {
+                var end = arrayIndex + count;
+                for (var index = arrayIndex; index < end; index++)
+                    array[index] = value;
+            }
+            void ICollection<TSource>.Add(TSource item) 
+                => throw new NotImplementedException();
+            void ICollection<TSource>.Clear() 
+                => throw new NotImplementedException();
+            bool ICollection<TSource>.Remove(TSource item) 
+                => throw new NotImplementedException();
+            int IList<TSource>.IndexOf(TSource item)
+                => count > 0 && EqualityComparer<TSource>.Default.Equals(value, item)
+                ? 0
+                : -1;
+            void IList<TSource>.Insert(int index, TSource item)
+                => throw new NotImplementedException();
+            void IList<TSource>.RemoveAt(int index)
+                => throw new NotImplementedException();
 
             public struct Enumerator
             {

@@ -18,6 +18,7 @@ namespace NetFabric.Hyperlinq
 
         public readonly partial struct SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>
             : IValueReadOnlyCollection<TSource, SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator>
+            , ICollection<TSource>
             where TEnumerable : notnull, IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
@@ -38,6 +39,41 @@ namespace NetFabric.Hyperlinq
             public readonly Enumerator GetEnumerator() => new Enumerator(in this);
             readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new Enumerator(in this);
             readonly IEnumerator IEnumerable.GetEnumerator() => new Enumerator(in this);
+
+            bool ICollection<TSource>.IsReadOnly  
+                => true;
+
+            void ICollection<TSource>.CopyTo(TSource[] array, int arrayIndex) 
+            {
+                if (takeCount == 0)
+                    return;
+
+                using var enumerator = source.GetEnumerator();
+
+                // skip
+                for (var counter = 0; counter < skipCount; counter++)
+                {
+                    if (!enumerator.MoveNext()) Throw.InvalidOperationException();
+                }
+
+                // take
+                for (var counter = 0; counter < takeCount; counter++)
+                {
+                    if (!enumerator.MoveNext()) Throw.InvalidOperationException();
+
+                    array[arrayIndex] = enumerator.Current;
+                    arrayIndex++;
+                }
+            }
+
+            void ICollection<TSource>.Add(TSource item) 
+                => throw new NotImplementedException();
+            void ICollection<TSource>.Clear() 
+                => throw new NotImplementedException();
+            bool ICollection<TSource>.Contains(TSource item) 
+                => throw new NotImplementedException();
+            bool ICollection<TSource>.Remove(TSource item) 
+                => throw new NotImplementedException();
 
             public struct Enumerator
                 : IEnumerator<TSource>

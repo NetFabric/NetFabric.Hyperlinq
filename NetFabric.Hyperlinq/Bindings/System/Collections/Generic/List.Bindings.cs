@@ -170,6 +170,7 @@ namespace NetFabric.Hyperlinq
         
         public readonly partial struct ValueWrapper<TSource>
             : IValueReadOnlyList<TSource, List<TSource>.Enumerator>
+            , IList<TSource>
         {
             readonly List<TSource> source;
 
@@ -180,14 +181,40 @@ namespace NetFabric.Hyperlinq
                 => source.Count;
 
             [MaybeNull]
-            public readonly TSource this[int index]
-                => source[index];
+            public readonly TSource this[int index] => source[index];
 
             [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly List<TSource>.Enumerator GetEnumerator() => source.GetEnumerator();
             readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => source.GetEnumerator();
             readonly IEnumerator IEnumerable.GetEnumerator() => source.GetEnumerator();
+
+            [MaybeNull]
+            TSource IList<TSource>.this[int index]
+            {
+                get => source[index];
+                set => throw new NotImplementedException();
+            }
+
+            bool ICollection<TSource>.IsReadOnly  
+                => true;
+
+            void ICollection<TSource>.CopyTo(TSource[] array, int arrayIndex) 
+                => source.CopyTo(array, arrayIndex);
+            void ICollection<TSource>.Add(TSource item) 
+                => throw new NotImplementedException();
+            void ICollection<TSource>.Clear() 
+                => throw new NotImplementedException();
+            bool ICollection<TSource>.Contains(TSource item) 
+                => source.Contains(item);
+            bool ICollection<TSource>.Remove(TSource item) 
+                => throw new NotImplementedException();
+            int IList<TSource>.IndexOf(TSource item)
+                => source.IndexOf(item);
+            void IList<TSource>.Insert(int index, TSource item)
+                => throw new NotImplementedException();
+            void IList<TSource>.RemoveAt(int index)
+                => throw new NotImplementedException();
         }    
     }
 }

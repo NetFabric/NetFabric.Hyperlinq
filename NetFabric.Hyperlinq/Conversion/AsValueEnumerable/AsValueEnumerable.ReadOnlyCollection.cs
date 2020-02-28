@@ -24,6 +24,7 @@ namespace NetFabric.Hyperlinq
 
         public readonly partial struct ValueEnumerableWrapper<TEnumerable, TEnumerator, TSource>
             : IValueReadOnlyCollection<TSource, TEnumerator>
+            , ICollection<TSource>
             where TEnumerable : notnull, IReadOnlyCollection<TSource>
             where TEnumerator : struct, IEnumerator<TSource>
         {
@@ -48,6 +49,31 @@ namespace NetFabric.Hyperlinq
             readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => getEnumerator(source);
             readonly IEnumerator IEnumerable.GetEnumerator() => getEnumerator(source);
 
+            bool ICollection<TSource>.IsReadOnly  
+                => true;
+
+            void ICollection<TSource>.CopyTo(TSource[] array, int arrayIndex) 
+            {
+                if (source.Count == 0)
+                    return;
+
+                checked
+                {
+                    using var enumerator = source.GetEnumerator();
+                    for (var index = arrayIndex; enumerator.MoveNext(); index++)
+                        array[index] = enumerator.Current;
+                }
+            }
+
+            void ICollection<TSource>.Add(TSource item) 
+                => throw new NotImplementedException();
+            void ICollection<TSource>.Clear() 
+                => throw new NotImplementedException();
+            bool ICollection<TSource>.Contains(TSource item) 
+                => throw new NotImplementedException();
+            bool ICollection<TSource>.Remove(TSource item) 
+                => throw new NotImplementedException();
+
             [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TSource[] ToArray()
@@ -61,6 +87,7 @@ namespace NetFabric.Hyperlinq
 
         public readonly partial struct ValueEnumerableWrapper<TSource>
             : IValueReadOnlyCollection<TSource, ValueEnumerableWrapper<TSource>.Enumerator>
+            , ICollection<TSource>
         {
             readonly IReadOnlyCollection<TSource> source;
 
@@ -75,6 +102,31 @@ namespace NetFabric.Hyperlinq
             public readonly Enumerator GetEnumerator() => new Enumerator(source);
             readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new Enumerator(source);
             readonly IEnumerator IEnumerable.GetEnumerator() => new Enumerator(source);
+
+            bool ICollection<TSource>.IsReadOnly  
+                => true;
+
+            void ICollection<TSource>.CopyTo(TSource[] array, int arrayIndex) 
+            {
+                if (source.Count == 0)
+                    return;
+
+                checked
+                {
+                    using var enumerator = source.GetEnumerator();
+                    for (var index = arrayIndex; enumerator.MoveNext(); index++)
+                        array[index] = enumerator.Current;
+                }
+            }
+
+            void ICollection<TSource>.Add(TSource item) 
+                => throw new NotImplementedException();
+            void ICollection<TSource>.Clear() 
+                => throw new NotImplementedException();
+            bool ICollection<TSource>.Contains(TSource item) 
+                => throw new NotImplementedException();
+            bool ICollection<TSource>.Remove(TSource item) 
+                => throw new NotImplementedException();
 
             public readonly struct Enumerator
                 : IEnumerator<TSource>
