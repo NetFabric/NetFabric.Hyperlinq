@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Configs;
 
@@ -15,6 +16,11 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int[] Linq_Array() =>
             System.Linq.Enumerable.ToArray(array);
 
+        [BenchmarkCategory("Array")]
+        [Benchmark]
+        public int[] System_Span() =>
+            array.AsSpan().ToArray();
+
         [BenchmarkCategory("Enumerable_Value")]
         [Benchmark(Baseline = true)]
         public int[] Linq_Enumerable_Value() =>
@@ -29,6 +35,11 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [Benchmark(Baseline = true)]
         public int[] Linq_List_Value() =>
             System.Linq.Enumerable.ToArray(listValue);
+
+        [BenchmarkCategory("AsyncEnumerable_Value")]
+        [Benchmark(Baseline = true)]
+        public ValueTask<int[]> Linq_AsyncEnumerable_Value() =>
+            System.Linq.AsyncEnumerable.ToArrayAsync(asyncEnumerableValue);
 
         [BenchmarkCategory("Enumerable_Reference")]
         [Benchmark(Baseline = true)]
@@ -45,20 +56,15 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int[] Linq_List_Reference() =>
             System.Linq.Enumerable.ToArray(listReference);
 
+        [BenchmarkCategory("AsyncEnumerable_Reference")]
+        [Benchmark(Baseline = true)]
+        public ValueTask<int[]> Linq_AsyncEnumerable_Reference() =>
+            System.Linq.AsyncEnumerable.ToArrayAsync(asyncEnumerableReference);
+
         [BenchmarkCategory("Array")]
         [Benchmark]
         public int[] Hyperlinq_Array() =>
             array.ToArray();
-
-        [BenchmarkCategory("Array")]
-        [Benchmark]
-        public int[] Hyperlinq_Span() =>
-            array.AsSpan().ToArray();
-
-        [BenchmarkCategory("Array")]
-        [Benchmark]
-        public int[] Hyperlinq_Memory() =>
-            array.AsMemory().ToArray();
 
         [BenchmarkCategory("Enumerable_Value")]
         [Benchmark]
@@ -77,6 +83,14 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int[] Hyperlinq_List_Value() =>
             ReadOnlyList.AsValueEnumerable<int>(listValue)
             .ToArray();
+
+        [BenchmarkCategory("AsyncEnumerable_Value")]
+        [Benchmark]
+        public ValueTask<int[]> Hyperlinq_AsyncEnumerable_Value() =>
+            AsyncEnumerable.AsAsyncValueEnumerable<TestAsyncEnumerable.AsyncEnumerable, TestAsyncEnumerable.AsyncEnumerable.AsyncEnumerator, int>(
+                asyncEnumerableValue, 
+                (enumerable, cancellationToken) => enumerable.GetAsyncEnumerator(cancellationToken))
+            .ToArrayAsync();
 
         [BenchmarkCategory("Enumerable_Reference")]
         [Benchmark]
@@ -98,5 +112,12 @@ namespace NetFabric.Hyperlinq.Benchmarks
             listReference
             .AsValueEnumerable()
             .ToArray();
+
+        [BenchmarkCategory("AsyncEnumerable_Reference")]
+        [Benchmark]
+        public ValueTask<int[]> Hyperlinq_AsyncEnumerable_Reference() =>
+            asyncEnumerableReference
+            .AsAsyncValueEnumerable()
+            .ToArrayAsync();
     }
 }
