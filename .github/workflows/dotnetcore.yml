@@ -19,7 +19,8 @@ jobs:
     - name: Build solution
       run: dotnet build
     - name: Tests
-          
+      run: dotnet test ./NetFabric.Hyperlinq.UnitTests/NetFabric.Hyperlinq.UnitTests.csproj -f:netcoreapp3.1
+      
   windows:
     runs-on: windows-latest
 
