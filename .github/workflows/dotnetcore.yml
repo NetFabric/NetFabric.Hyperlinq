@@ -1,4 +1,4 @@
-name: .NET Core
+name: Build and test
 
 on: [push]
 
@@ -10,22 +10,25 @@ jobs:
         os: [ubuntu-latest, macos]
 
     steps:
-    - uses: actions/checkout@v1
+    - name: Check out repository
+      uses: actions/checkout@v2
     - name: Setup .NET Core
-      uses: actions/setup-dotnet@v1
+      uses: actions/setup-dotnet@v1.4.0
       with:
         dotnet-version: 3.1.102
     - name: Build solution
       run: dotnet build
     - name: Tests
-          
+      run: dotnet test ./NetFabric.Hyperlinq.UnitTests/NetFabric.Hyperlinq.UnitTests.csproj -f:netcoreapp3.1
+      
   windows:
     runs-on: windows-latest
 
     steps:
-    - uses: actions/checkout@v1
+    - name: Check out repository
+      uses: actions/checkout@v2
     - name: Setup .NET Core
-      uses: actions/setup-dotnet@v1
+      uses: actions/setup-dotnet@v1.4.0
       with:
         dotnet-version: 3.1.102
     - name: Build solution
