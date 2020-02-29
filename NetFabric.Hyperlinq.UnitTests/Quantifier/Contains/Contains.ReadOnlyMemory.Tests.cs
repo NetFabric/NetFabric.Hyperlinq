@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using NetFabric.Assertive;
 using Xunit;
 
-namespace NetFabric.Hyperlinq.UnitTests
+namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Contains
 {
-    public partial class ReadOnlyMemoryTests
+    public class ReadOnlyMemoryTests
     {
         [Theory]
         [MemberData(nameof(TestData.Contains), MemberType = typeof(TestData))]

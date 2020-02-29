@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net461;netcoreapp2.1;netcoreapp3.1</TargetFrameworks>
+    <TargetFrameworks>netcoreapp2.1;netcoreapp3.1</TargetFrameworks>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 
@@ -21,14 +21,7 @@
     </PackageReference>
   </ItemGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)'=='net461' Or '$(TargetFramework)'=='netstandard2.0'">
-    <Compile Remove="**\*.Span.Tests.cs" />
-    <Compile Remove="**\*.ReadOnlySpan.Tests.cs" />
-    <Compile Remove="**\*.Memory.Tests.cs" />
-    <Compile Remove="**\*.ReadOnlyMemory.Tests.cs" />
-  </ItemGroup>
-
-	<ItemGroup Condition="'$(TargetFramework)'!='netstandard2.1'">
+	<ItemGroup Condition="'$(TargetFramework)'=='netcoreapp2.1'">
 		<PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="1.1.0" />
 	</ItemGroup>
 

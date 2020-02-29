@@ -1,9 +1,9 @@
 using NetFabric.Assertive;
 using Xunit;
 
-namespace NetFabric.Hyperlinq.UnitTests
+namespace NetFabric.Hyperlinq.UnitTests.Partitioning.SkipTake
 {
-    public partial class ValueReadOnlyCollectionTests
+    public class ValueReadOnlyCollectionTests
     {
         [Theory]
         [MemberData(nameof(TestData.SkipTakeEmpty), MemberType = typeof(TestData))]

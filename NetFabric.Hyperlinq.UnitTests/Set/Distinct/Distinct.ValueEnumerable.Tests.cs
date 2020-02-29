@@ -1,9 +1,9 @@
 ﻿using NetFabric.Assertive;
 using Xunit;
 
-namespace NetFabric.Hyperlinq.UnitTests
+namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct
 {
-    public partial class ValueEnumerableTests
+    public class ValueEnumerableTests
     {
         [Theory]
         [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]

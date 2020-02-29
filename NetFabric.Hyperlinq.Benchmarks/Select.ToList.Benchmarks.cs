@@ -59,7 +59,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [BenchmarkCategory("Array")]
         [Benchmark]
         public List<int> Hyperlinq_Memory() =>
-            array.AsMemory().Select(item => item).ToList();
+            memory.Select(item => item).ToList();
 
         [BenchmarkCategory("Enumerable_Value")]
         [Benchmark]

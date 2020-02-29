@@ -76,10 +76,6 @@ namespace NetFabric.Hyperlinq
                 => FillSet().Count;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly long LongCount()
-                => FillSet().Count;
-
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly bool Any()
                 => source.Length != 0;
 

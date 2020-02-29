@@ -2,9 +2,9 @@ using NetFabric.Assertive;
 using System;
 using Xunit;
 
-namespace NetFabric.Hyperlinq.UnitTests
+namespace NetFabric.Hyperlinq.UnitTests.Aggregation.Count
 {
-    public partial class ArrayTests
+    public class ArrayTests
     {
         [Theory]
         [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
@@ -25,23 +25,6 @@ namespace NetFabric.Hyperlinq.UnitTests
                 .BeEqualTo(expected);
         }
 
-        [Fact]
-        public void Count_Predicate_With_Null_Should_Throw()
-        {
-            // Arrange
-            var source = new int[0];
-            var predicate = (Predicate<int>)null;
-
-            // Act
-            Action action = () => _ = Array
-                .Count<int>(source, predicate);
-
-            // Assert
-            _ = action.Must()
-                .Throw<ArgumentNullException>()
-                .EvaluateTrue(exception => exception.ParamName == "predicate");
-        }
-
         [Theory]
         [MemberData(nameof(TestData.PredicateEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateSingle), MemberType = typeof(TestData))]
@@ -54,51 +37,12 @@ namespace NetFabric.Hyperlinq.UnitTests
 
             // Act
             var result = Array
-                .Count<int>(source, predicate);
+                .Where<int>(source, predicate)
+                .Count();
 
             // Assert
             _ = result.Must()
                 .BeEqualTo(expected);
-        }
-
-        [Theory]
-        [MemberData(nameof(TestData.SkipTakePredicateEmpty), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.SkipTakePredicateSingle), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.SkipTakePredicateMultiple), MemberType = typeof(TestData))]
-        public void Count_Skip_Count_Predicate_With_ValidData_Should_Succeed(int[] source, int skipCount, int takeCount, Predicate<int> predicate)
-        {
-            // Arrange
-            var expected = 
-                System.Linq.Enumerable.Count(
-                    System.Linq.Enumerable.Take(
-                        System.Linq.Enumerable.Skip(source, skipCount), takeCount), predicate.AsFunc());
-
-            // Act
-            var result = Array
-                .Skip<int>(source, skipCount)
-                .Take(takeCount)
-                .Count<int>(predicate);
-
-            // Assert
-            _ = result.Must()
-                .BeEqualTo(expected);
-        }
-
-        [Fact]
-        public void Count_PredicateAt_With_Null_Should_Throw()
-        {
-            // Arrange
-            var source = new int[0];
-            var predicate = (PredicateAt<int>)null;
-
-            // Act
-            Action action = () => _ = Array
-                .Count<int>(source, predicate);
-
-            // Assert
-            _ = action.Must()
-                .Throw<ArgumentNullException>()
-                .EvaluateTrue(exception => exception.ParamName == "predicate");
         }
 
         [Theory]
@@ -114,31 +58,7 @@ namespace NetFabric.Hyperlinq.UnitTests
 
             // Act
             var result = Array
-                .Count<int>(source, predicate);
-
-            // Assert
-            _ = result.Must()
-                .BeEqualTo(expected);
-        }
-
-        [Theory]
-        [MemberData(nameof(TestData.SkipTakePredicateAtEmpty), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.SkipTakePredicateAtSingle), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.SkipTakePredicateAtMultiple), MemberType = typeof(TestData))]
-        public void Count_Skip_Count_PredicateAt_With_ValidData_Should_Succeed(int[] source, int skipCount, int takeCount, PredicateAt<int> predicate)
-        {
-            // Arrange
-            var expected = 
-                System.Linq.Enumerable.Count(
-                    System.Linq.Enumerable.Where(
-                        System.Linq.Enumerable.Take(
-                            System.Linq.Enumerable.Skip(source, skipCount), takeCount), predicate.AsFunc()));
-
-            // Act
-            var result = Array
-                .Skip(source, skipCount)
-                .Take(takeCount)
-                .Where(predicate)
+                .Where<int>(source, predicate)
                 .Count();
 
             // Assert

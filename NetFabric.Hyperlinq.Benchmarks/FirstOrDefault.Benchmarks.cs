@@ -1,6 +1,7 @@
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Configs;
 using JM.LinqFaster;
+using System; 
 
 namespace NetFabric.Hyperlinq.Benchmarks
 {
@@ -54,6 +55,16 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [Benchmark]
         public int Hyperlinq_Array() =>
             array.FirstOrDefault();
+
+        [BenchmarkCategory("Array")]
+        [Benchmark]
+        public int Hyperlinq_Span() =>
+            array.AsSpan().FirstOrDefault();
+
+        [BenchmarkCategory("Array")]
+        [Benchmark]
+        public int Hyperlinq_Memory() =>
+            memory.FirstOrDefault();
 
         [BenchmarkCategory("Enumerable_Value")]
         [Benchmark]

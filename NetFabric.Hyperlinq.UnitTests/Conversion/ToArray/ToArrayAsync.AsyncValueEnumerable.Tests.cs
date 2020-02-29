@@ -3,9 +3,9 @@ using System;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace NetFabric.Hyperlinq.UnitTests
+namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
 {
-    public partial class AsyncValueEnumerableTests
+    public class AsyncValueEnumerableTests
     {
         [Theory]
         [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]

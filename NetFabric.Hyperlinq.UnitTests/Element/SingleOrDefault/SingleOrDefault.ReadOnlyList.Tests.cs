@@ -2,9 +2,9 @@ using NetFabric.Assertive;
 using System;
 using Xunit;
 
-namespace NetFabric.Hyperlinq.UnitTests
+namespace NetFabric.Hyperlinq.UnitTests.Element.SingleOrDefault
 {
-    public partial class ReadOnlyListTests
+    public class ReadOnlyListTests
     {
         [Theory]
         [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
@@ -88,25 +88,6 @@ namespace NetFabric.Hyperlinq.UnitTests
                 .EvaluateTrue(exception => exception.Message == "Sequence contains more than one element");
         }
 
-        [Fact]
-        public void SingleOrDefault_Predicate_With_Null_Should_Throw()
-        {
-            // Arrange
-            var source = new int[0];
-            var wrapped = Wrap
-                .AsValueReadOnlyList(source);
-            var predicate = (Predicate<int>)null;
-
-            // Act
-            Action action = () => _ = ReadOnlyList
-                .SingleOrDefault<Wrap.ValueReadOnlyList<int>, int>(wrapped, predicate);
-
-            // Assert
-            _ = action.Must()
-                .Throw<ArgumentNullException>()
-                .EvaluateTrue(exception => exception.ParamName == "predicate");
-        }
-
         [Theory]
         [MemberData(nameof(TestData.PredicateEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateSingle), MemberType = typeof(TestData))]
@@ -120,7 +101,8 @@ namespace NetFabric.Hyperlinq.UnitTests
 
             // Act
             var result = ReadOnlyList
-                .SingleOrDefault<Wrap.ValueReadOnlyList<int>, int>(wrapped, predicate);
+                .Where<Wrap.ValueReadOnlyList<int>, int>(wrapped, predicate)
+                .SingleOrDefault();
 
             // Assert
             _ = result.Must()
@@ -137,7 +119,8 @@ namespace NetFabric.Hyperlinq.UnitTests
 
             // Act
             Action action = () => _ = ReadOnlyList
-                .SingleOrDefault<Wrap.ValueReadOnlyList<int>, int>(wrapped, predicate);
+                .Where<Wrap.ValueReadOnlyList<int>, int>(wrapped, predicate)
+                .SingleOrDefault();
 
             // Assert
             _ = action.Must()
@@ -162,7 +145,8 @@ namespace NetFabric.Hyperlinq.UnitTests
             var result = ReadOnlyList
                 .Skip<Wrap.ValueReadOnlyList<int>, int>(wrapped, skipCount)
                 .Take(takeCount)
-                .SingleOrDefault(predicate);
+                .Where(predicate)
+                .SingleOrDefault();
 
             // Assert
             _ = result.Must()
@@ -181,31 +165,13 @@ namespace NetFabric.Hyperlinq.UnitTests
             Action action = () => _ = ReadOnlyList
                 .Skip<Wrap.ValueReadOnlyList<int>, int>(wrapped, skipCount)
                 .Take(takeCount)
-                .SingleOrDefault(predicate);
+                .Where(predicate)
+                .SingleOrDefault();
 
             // Assert
             _ = action.Must()
                 .Throw<InvalidOperationException>()
                 .EvaluateTrue(exception => exception.Message == "Sequence contains more than one element");
-        }
-
-        [Fact]
-        public void SingleOrDefault_PredicateAt_With_Null_Should_Throw()
-        {
-            // Arrange
-            var source = new int[0];
-            var wrapped = Wrap
-                .AsValueReadOnlyList(source);
-            var predicate = (PredicateAt<int>)null;
-
-            // Act
-            Action action = () => _ = ReadOnlyList
-                .SingleOrDefault<Wrap.ValueReadOnlyList<int>, int>(wrapped, predicate);
-
-            // Assert
-            _ = action.Must()
-                .Throw<ArgumentNullException>()
-                .EvaluateTrue(exception => exception.ParamName == "predicate");
         }
 
         [Theory]
@@ -222,7 +188,8 @@ namespace NetFabric.Hyperlinq.UnitTests
 
             // Act
             var result = ReadOnlyList
-                .SingleOrDefault<Wrap.ValueReadOnlyList<int>, int>(wrapped, predicate);
+                .Where<Wrap.ValueReadOnlyList<int>, int>(wrapped, predicate)
+                .SingleOrDefault();
 
             // Assert
             _ = result.Must()
@@ -239,7 +206,8 @@ namespace NetFabric.Hyperlinq.UnitTests
 
             // Act
             Action action = () => _ = ReadOnlyList
-                .SingleOrDefault<Wrap.ValueReadOnlyList<int>, int>(wrapped, predicate);
+                .Where<Wrap.ValueReadOnlyList<int>, int>(wrapped, predicate)
+                .SingleOrDefault();
 
             // Assert
             _ = action.Must()
@@ -265,7 +233,8 @@ namespace NetFabric.Hyperlinq.UnitTests
             var result = ReadOnlyList
                 .Skip<Wrap.ValueReadOnlyList<int>, int>(wrapped, skipCount)
                 .Take(takeCount)
-                .SingleOrDefault(predicate);
+                .Where(predicate)
+                .SingleOrDefault();
 
             // Assert
             _ = result.Must()
@@ -284,7 +253,8 @@ namespace NetFabric.Hyperlinq.UnitTests
             Action action = () => _ = ReadOnlyList
                 .Skip<Wrap.ValueReadOnlyList<int>, int>(wrapped, skipCount)
                 .Take(takeCount)
-                .SingleOrDefault(predicate);
+                .Where(predicate)
+                .SingleOrDefault();
 
             // Assert
             _ = action.Must()

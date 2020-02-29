@@ -56,6 +56,16 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public bool Hyperlinq_Array() =>
             array.Any();
 
+        [BenchmarkCategory("Array")]
+        [Benchmark]
+        public bool Hyperlinq_Span() =>
+            array.AsSpan().Any();
+
+        [BenchmarkCategory("Array")]
+        [Benchmark]
+        public bool Hyperlinq_Memory() =>
+            memory.Any();
+
         [BenchmarkCategory("Enumerable_Value")]
         [Benchmark]
         public bool Hyperlinq_Enumerable_Value() =>

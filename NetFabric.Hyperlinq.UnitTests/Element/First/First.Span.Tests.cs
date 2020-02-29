@@ -2,9 +2,9 @@ using NetFabric.Assertive;
 using System;
 using Xunit;
 
-namespace NetFabric.Hyperlinq.UnitTests
+namespace NetFabric.Hyperlinq.UnitTests.Element.First
 {
-    public partial class SpanTests
+    public class SpanTests
     {
         [Theory]
         [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
@@ -13,7 +13,7 @@ namespace NetFabric.Hyperlinq.UnitTests
             // Arrange
 
             // Act
-            Action action = () => _ = Array
+            Action action = () => _ = ref Array
                 .First<int>(source.AsSpan());
 
             // Assert
@@ -40,23 +40,6 @@ namespace NetFabric.Hyperlinq.UnitTests
                 .BeEqualTo(expected);
         }
 
-        [Fact]
-        public void First_Predicate_With_Null_Should_Throw()
-        {
-            // Arrange
-            var source = new int[0];
-            var predicate = (Predicate<int>)null;
-
-            // Act
-            Action action = () => _ = Array
-                .First<int>(source.AsSpan(), predicate);
-
-            // Assert
-            _ = action.Must()
-                .Throw<ArgumentNullException>()
-                .EvaluateTrue(exception => exception.ParamName == "predicate");
-        }
-
         [Theory]
         [MemberData(nameof(TestData.PredicateEmpty), MemberType = typeof(TestData))]
         public void First_Predicate_With_Empty_Should_Throw(int[] source, Predicate<int> predicate)
@@ -64,8 +47,9 @@ namespace NetFabric.Hyperlinq.UnitTests
             // Arrange
 
             // Act
-            Action action = () => _ = Array
-                .First<int>(source.AsSpan(), predicate);
+            Action action = () => _ = ref Array
+                .Where<int>(source.AsSpan(), predicate)
+                .First();
 
             // Assert
             _ = action.Must()
@@ -84,28 +68,12 @@ namespace NetFabric.Hyperlinq.UnitTests
 
             // Act
             ref readonly var result = ref Array
-                .First<int>(source.AsSpan(), predicate);
+                .Where<int>(source.AsSpan(), predicate)
+                .First();
 
             // Assert
             _ = result.Must()
                 .BeEqualTo(expected);
-        }
-
-        [Fact]
-        public void First_PredicateAt_With_Null_Should_Throw()
-        {
-            // Arrange
-            var source = new int[0];
-            var predicate = (PredicateAt<int>)null;
-
-            // Act
-            Action action = () => _ = Array
-                .First<int>(source.AsSpan(), predicate);
-
-            // Assert
-            _ = action.Must()
-                .Throw<ArgumentNullException>()
-                .EvaluateTrue(exception => exception.ParamName == "predicate");
         }
 
         [Theory]
@@ -115,8 +83,9 @@ namespace NetFabric.Hyperlinq.UnitTests
             // Arrange
 
             // Act
-            Action action = () => _ = Array
-                .First<int>(source.AsSpan(), predicate);
+            Action action = () => _ = ref Array
+                .Where<int>(source.AsSpan(), predicate)
+                .First();
 
             // Assert
             _ = action.Must()
@@ -136,7 +105,8 @@ namespace NetFabric.Hyperlinq.UnitTests
 
             // Act
             ref readonly var result = ref Array
-                .First<int>(source.AsSpan(), predicate);
+                .Where<int>(source.AsSpan(), predicate)
+                .First();
 
             // Assert
             _ = result.Must()

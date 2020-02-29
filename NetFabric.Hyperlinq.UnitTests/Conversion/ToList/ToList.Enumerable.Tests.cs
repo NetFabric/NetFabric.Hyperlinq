@@ -3,9 +3,9 @@ using System;
 using System.Collections.Generic;
 using Xunit;
 
-namespace NetFabric.Hyperlinq.UnitTests
+namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
 {
-    public partial class EnumerableTests
+    public class EnumerableTests
     {
         [Theory]
         [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]

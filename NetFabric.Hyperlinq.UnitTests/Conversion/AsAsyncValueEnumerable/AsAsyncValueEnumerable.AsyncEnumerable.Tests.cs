@@ -3,9 +3,9 @@ using System.Threading.Tasks;
 using NetFabric.Assertive;
 using Xunit;
 
-namespace NetFabric.Hyperlinq.UnitTests
+namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsAsyncValueEnumerable
 {
-    public partial class AsyncEnumerableTests
+    public class AsyncEnumerableTests
     {
         [Theory]
         [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]

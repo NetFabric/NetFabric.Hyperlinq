@@ -1,6 +1,7 @@
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Configs;
 using JM.LinqFaster;
+using System;
 using System.Collections.Generic;
 
 namespace NetFabric.Hyperlinq.Benchmarks
@@ -12,6 +13,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
     public class SingleBenchmarks
     {
         int[] array;
+        Memory<int> memory;
 
         IEnumerable<int> enumerableReference;
         TestEnumerable.Enumerable enumerableValue;
@@ -26,6 +28,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public void GlobalSetup()
         {
             array = new int[] { 0 };
+            memory = array.AsMemory();
 
             enumerableReference = TestEnumerable.ReferenceType(1);
             enumerableValue = TestEnumerable.ValueType(1);
@@ -81,6 +84,16 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [Benchmark]
         public int Hyperlinq_Array() =>
             array.Single();
+
+        [BenchmarkCategory("Array")]
+        [Benchmark]
+        public int Hyperlinq_Span() =>
+            array.AsSpan().Single();
+
+        [BenchmarkCategory("Array")]
+        [Benchmark]
+        public int Hyperlinq_Memory() =>
+            memory.Single();
 
         [BenchmarkCategory("Enumerable_Value")]
         [Benchmark]

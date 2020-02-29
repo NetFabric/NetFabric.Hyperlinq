@@ -92,11 +92,6 @@ namespace NetFabric.Hyperlinq
             public ValueTask<int> CountAsync(AsyncPredicateAt<TSource> predicate, CancellationToken cancellationToken = default)
                 => AsyncValueEnumerable.CountAsync<TEnumerable, TEnumerator, TSource>(source, Utils.Combine(this.predicate, predicate), cancellationToken);
 
-            public ValueTask<long> LongCountAsync(CancellationToken cancellationToken = default)
-                => AsyncValueEnumerable.LongCountAsync<TEnumerable, TEnumerator, TSource>(source, predicate, cancellationToken);
-            public ValueTask<long> LongCountAsync(AsyncPredicate<TSource> predicate, CancellationToken cancellationToken = default)
-                => AsyncValueEnumerable.LongCountAsync<TEnumerable, TEnumerator, TSource>(source, Utils.Combine(this.predicate, predicate), cancellationToken);
-
             public ValueTask<bool> AnyAsync(CancellationToken cancellationToken = default)
                 => AsyncValueEnumerable.AnyAsync<TEnumerable, TEnumerator, TSource>(source, predicate, cancellationToken);
             public ValueTask<bool> AnyAsync(AsyncPredicate<TSource> predicate, CancellationToken cancellationToken = default)

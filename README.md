@@ -73,10 +73,6 @@ namespace ConsoleApp
 
 - Aggregation
   - `Count()`
-  - `Count(Predicate<TSource>)`
-  - `Count(PredicateAt<TSource>)`
-  - `LongCount()`
-  - `LongCount(Predicate<TSource>)`
 - Conversion
   - `AsEnumerable()`
   - `AsValueEnumerable()`
@@ -88,26 +84,12 @@ namespace ConsoleApp
   - `ToDictionary(Selector<TSource, TKey>, Selector<TSource, TElement>, IEqualityComparer<TKey>)`
 - Element
   - `TryElementAt()`
-  - `TryElementAt(Predicate<TSource>)`
-  - `TryElementAt(PredicateAt<TSource>)`
   - `ElementAt()`
-  - `ElementAt(Predicate<TSource>)`
-  - `ElementAt(PredicateAt<TSource>)`
   - `ElementAtOrDefault()`
-  - `ElementAtOrDefault(Predicate<TSource>)`
-  - `ElementAtOrDefault(PredicateAt<TSource>)`
   - `First()`
-  - `First(Predicate<TSource>)`
-  - `First(PredicateAt<TSource>)`
   - `FirstOrDefault()`
-  - `FirstOrDefault(Predicate<TSource>)`
-  - `FirstOrDefault(PredicateAt<TSource>)`
   - `Single()`
-  - `Single(Predicate<TSource>)`
-  - `Single(PredicateAt<TSource>)`
   - `SingleOrDefault()`
-  - `SingleOrDefault(Predicate<TSource>)`
-  - `SingleOrDefault(PredicateAt<TSource>)`
 - Filtering
   - `Where(Predicate<TSource>)`
   - `Where(PredicateAt<TSource>)`
@@ -137,7 +119,7 @@ namespace ConsoleApp
   - `Distinct(TSource, IEqualityComparer<TSource>)`
 - Other
   - `ForEach(Action<TSource>)`
-  - `ForEach(Action<TSource, int>)`
+  - `ForEach(ActionAt<TSource>)`
 
 ## Benchmarks
 

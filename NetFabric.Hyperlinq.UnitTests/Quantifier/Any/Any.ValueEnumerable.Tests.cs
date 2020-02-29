@@ -4,9 +4,9 @@ using System.Diagnostics;
 using NetFabric.Assertive;
 using Xunit;
 
-namespace NetFabric.Hyperlinq.UnitTests
+namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Any
 {
-    public partial class ValueEnumerableTests
+    public class ValueEnumerableTests
     {
         [Theory]
         [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]

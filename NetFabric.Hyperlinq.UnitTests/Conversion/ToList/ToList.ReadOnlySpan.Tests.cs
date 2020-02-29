@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using NetFabric.Assertive;
 using Xunit;
 
-namespace NetFabric.Hyperlinq.UnitTests
+namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
 {
-    public partial class ReadOnlySpanTests
+    public class ReadOnlySpanTests
     {
         [Theory]
         [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]

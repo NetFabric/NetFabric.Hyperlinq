@@ -2,9 +2,9 @@ using NetFabric.Assertive;
 using System;
 using Xunit;
 
-namespace NetFabric.Hyperlinq.UnitTests
+namespace NetFabric.Hyperlinq.UnitTests.Other.ForEach
 {
-    public partial class ValueReadOnlyCollectionTests
+    public class ValueReadOnlyCollectionTests
     {
         [Theory]
         [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]

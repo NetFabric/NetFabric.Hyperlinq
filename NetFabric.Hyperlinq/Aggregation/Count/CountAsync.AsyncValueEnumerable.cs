@@ -28,12 +28,10 @@ namespace NetFabric.Hyperlinq
         }
 
         [Pure]
-        public static ValueTask<int> CountAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source, AsyncPredicate<TSource> predicate, CancellationToken cancellationToken = default)
+        static ValueTask<int> CountAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source, AsyncPredicate<TSource> predicate, CancellationToken cancellationToken = default)
             where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
-            if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
-
             cancellationToken.ThrowIfCancellationRequested();
             return ExecuteAsync(source, predicate, cancellationToken);
 
@@ -57,12 +55,10 @@ namespace NetFabric.Hyperlinq
         }
 
         [Pure]
-        public static ValueTask<int> CountAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source, AsyncPredicateAt<TSource> predicate, CancellationToken cancellationToken = default)
+        static ValueTask<int> CountAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source, AsyncPredicateAt<TSource> predicate, CancellationToken cancellationToken = default)
             where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
-            if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
-
             cancellationToken.ThrowIfCancellationRequested();
             return ExecuteAsync(source, predicate, cancellationToken);
 

@@ -109,25 +109,25 @@ namespace NetFabric.Hyperlinq
             public int Count()
                 => source.Span.Count(predicate);
 
-            public TSource First()
-                => source.Span.First(predicate);
+            public ref readonly TSource First()
+                => ref source.Span.First(predicate);
 
             [return: MaybeNull]
-            public TSource FirstOrDefault()
-                => source.Span.FirstOrDefault(predicate);
+            public ref readonly TSource FirstOrDefault()
+                => ref source.Span.FirstOrDefault(predicate);
 
-            public TSource Single()
-                => source.Span.Single(predicate);
+            public ref readonly TSource Single()
+                => ref source.Span.Single(predicate);
 
             [return: MaybeNull]
-            public TSource SingleOrDefault()
-                => source.Span.SingleOrDefault(predicate);
+            public ref readonly TSource SingleOrDefault()
+                => ref source.Span.SingleOrDefault(predicate);
 
             public TSource[] ToArray()
                 => Array.ToArray(source.Span, predicate);
 
             public List<TSource> ToList()
-                => Array.ToList(source.Span, predicate);
+                => Array.ToList(source, predicate);  // memory performs best
                 
             public void ForEach(Action<TSource> action)
                 => Array.ForEach<TSource>(source.Span, action, predicate);

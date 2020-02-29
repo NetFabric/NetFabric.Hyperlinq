@@ -2,9 +2,9 @@ using NetFabric.Assertive;
 using System;
 using Xunit;
 
-namespace NetFabric.Hyperlinq.UnitTests
+namespace NetFabric.Hyperlinq.UnitTests.Element.FirstOrDefault
 {
-    public partial class ArrayTests
+    public class ArrayTests
     {
         [Theory]
         [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
@@ -26,46 +26,6 @@ namespace NetFabric.Hyperlinq.UnitTests
         }
 
         [Theory]
-        [MemberData(nameof(TestData.SkipTakeEmpty), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.SkipTakeSingle), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.SkipTakeMultiple), MemberType = typeof(TestData))]
-        public void FirstOrDefault_Skip_Take_With_ValidData_Should_Succeed(int[] source, int skipCount, int takeCount)
-        {
-            // Arrange
-            var expected = 
-                System.Linq.Enumerable.FirstOrDefault(
-                    System.Linq.Enumerable.Take(
-                        System.Linq.Enumerable.Skip(source, skipCount), takeCount));
-
-            // Act
-            ref readonly var result = ref Array
-                .Skip<int>(source, skipCount)
-                .Take(takeCount)
-                .FirstOrDefault();
-
-            // Assert
-            _ = result.Must()
-                .BeEqualTo(expected);
-        }
-
-        [Fact]
-        public void FirstOrDefault_Predicate_With_Null_Should_Throw()
-        {
-            // Arrange
-            var source = new int[0];
-            var predicate = (Predicate<int>)null;
-
-            // Act
-            Action action = () => _ = Array
-                .FirstOrDefault<int>(source, predicate);
-
-            // Assert
-            _ = action.Must()
-                .Throw<ArgumentNullException>()
-                .EvaluateTrue(exception => exception.ParamName == "predicate");
-        }
-
-        [Theory]
         [MemberData(nameof(TestData.PredicateEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateMultiple), MemberType = typeof(TestData))]
@@ -77,51 +37,12 @@ namespace NetFabric.Hyperlinq.UnitTests
 
             // Act
             ref readonly var result = ref Array
-                .FirstOrDefault<int>(source, predicate);
+                .Where<int>(source, predicate)
+                .FirstOrDefault();
 
             // Assert
             _ = result.Must()
                 .BeEqualTo(expected);
-        }
-
-        [Theory]
-        [MemberData(nameof(TestData.SkipTakePredicateEmpty), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.SkipTakePredicateSingle), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.SkipTakePredicateMultiple), MemberType = typeof(TestData))]
-        public void FirstOrDefault_Skip_Take_Predicate_With_ValidData_Should_Succeed(int[] source, int skipCount, int takeCount, Predicate<int> predicate)
-        {
-            // Arrange
-            var expected = 
-                System.Linq.Enumerable.FirstOrDefault(
-                    System.Linq.Enumerable.Take(
-                        System.Linq.Enumerable.Skip(source, skipCount), takeCount), predicate.AsFunc());
-
-            // Act
-            ref readonly var result = ref Array
-                .Skip<int>(source, skipCount)
-                .Take(takeCount)
-                .FirstOrDefault(predicate);
-
-            // Assert
-            _ = result.Must()
-                .BeEqualTo(expected);
-        }
-
-        [Fact]
-        public void FirstOrDefault_PredicateAt_With_Null_Should_Throw()
-        {
-            // Arrange
-            var source = new int[0];
-            var predicate = (PredicateAt<int>)null;
-
-            // Act
-            Action action = () => _ = Array
-                .FirstOrDefault<int>(source, predicate);
-
-            // Assert
-            _ = action.Must()
-                .Throw<ArgumentNullException>()
-                .EvaluateTrue(exception => exception.ParamName == "predicate");
         }
 
         [Theory]
@@ -137,31 +58,8 @@ namespace NetFabric.Hyperlinq.UnitTests
 
             // Act
             ref readonly var result = ref Array
-                .FirstOrDefault<int>(source, predicate);
-
-            // Assert
-            _ = result.Must()
-                .BeEqualTo(expected);
-        }
-
-        [Theory]
-        [MemberData(nameof(TestData.SkipTakePredicateAtEmpty), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.SkipTakePredicateAtSingle), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.SkipTakePredicateAtMultiple), MemberType = typeof(TestData))]
-        public void FirstOrDefault_Skip_Take_PredicateAt_With_ValidData_Should_Succeed(int[] source, int skipCount, int takeCount, PredicateAt<int> predicate)
-        {
-            // Arrange
-            var expected = 
-                System.Linq.Enumerable.FirstOrDefault(
-                    System.Linq.Enumerable.Where(
-                        System.Linq.Enumerable.Take(
-                            System.Linq.Enumerable.Skip(source, skipCount), takeCount), predicate.AsFunc()));
-
-            // Act
-            ref readonly var result = ref Array
-                .Skip<int>(source, skipCount)
-                .Take(takeCount)
-                .FirstOrDefault(predicate);
+                .Where<int>(source, predicate)
+                .FirstOrDefault();
 
             // Assert
             _ = result.Must()

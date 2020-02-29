@@ -2,9 +2,9 @@ using NetFabric.Assertive;
 using System;
 using Xunit;
 
-namespace NetFabric.Hyperlinq.UnitTests
+namespace NetFabric.Hyperlinq.UnitTests.Element.First
 {
-    public partial class ReadOnlyListTests
+    public class ReadOnlyListTests
     {
         [Theory]
         [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
@@ -88,25 +88,6 @@ namespace NetFabric.Hyperlinq.UnitTests
                 .BeEqualTo(expected);
         }
 
-        [Fact]
-        public void First_Predicate_With_Null_Should_Throw()
-        {
-            // Arrange
-            var source = new int[0];
-            var wrapped = Wrap
-                .AsValueReadOnlyList(source);
-            var predicate = (Predicate<int>)null;
-
-            // Act
-            Action action = () => _ = ReadOnlyList
-                .First<Wrap.ValueReadOnlyList<int>, int>(wrapped, predicate);
-
-            // Assert
-            _ = action.Must()
-                .Throw<ArgumentNullException>()
-                .EvaluateTrue(exception => exception.ParamName == "predicate");
-        }
-
         [Theory]
         [MemberData(nameof(TestData.PredicateEmpty), MemberType = typeof(TestData))]
         public void First_Predicate_With_Empty_Should_Throw(int[] source, Predicate<int> predicate)
@@ -117,7 +98,8 @@ namespace NetFabric.Hyperlinq.UnitTests
 
             // Act
             Action action = () => _ = ReadOnlyList
-                .First<Wrap.ValueReadOnlyList<int>, int>(wrapped, predicate);
+                .Where<Wrap.ValueReadOnlyList<int>, int>(wrapped, predicate)
+                .First();
 
             // Assert
             _ = action.Must()
@@ -138,7 +120,8 @@ namespace NetFabric.Hyperlinq.UnitTests
 
             // Act
             var result = ReadOnlyList
-                .First<Wrap.ValueReadOnlyList<int>, int>(wrapped, predicate);
+                .Where<Wrap.ValueReadOnlyList<int>, int>(wrapped, predicate)
+                .First();
 
             // Assert
             _ = result.Must()
@@ -157,7 +140,8 @@ namespace NetFabric.Hyperlinq.UnitTests
             Action action = () => _ = ReadOnlyList
                 .Skip<Wrap.ValueReadOnlyList<int>, int>(wrapped, skipCount)
                 .Take(takeCount)
-                .First(predicate);
+                .Where(predicate)
+                .First();
 
             // Assert
             _ = action.Must()
@@ -182,31 +166,12 @@ namespace NetFabric.Hyperlinq.UnitTests
             var result = ReadOnlyList
                 .Skip<Wrap.ValueReadOnlyList<int>, int>(wrapped, skipCount)
                 .Take(takeCount)
-                .First(predicate);
+                .Where(predicate)
+                .First();
 
             // Assert
             _ = result.Must()
                 .BeEqualTo(expected);
-        }
-
-        [Fact]
-        public void First_PredicateAt_With_Null_Should_Throw()
-        {
-            // Arrange
-            var source = new int[0];
-            var wrapped = Wrap
-                .AsValueReadOnlyList(source);
-            var predicate = (PredicateAt<int>)null;
-
-            // Act
-            Action action = () => _ = ReadOnlyList
-                .Where<Wrap.ValueReadOnlyList<int>, int>(wrapped, predicate)
-                .First();
-
-            // Assert
-            _ = action.Must()
-                .Throw<ArgumentNullException>()
-                .EvaluateTrue(exception => exception.ParamName == "predicate");
         }
 
         [Theory]
@@ -262,7 +227,8 @@ namespace NetFabric.Hyperlinq.UnitTests
             Action action = () => _ = ReadOnlyList
                 .Skip<Wrap.ValueReadOnlyList<int>, int>(wrapped, skipCount)
                 .Take(takeCount)
-                .First(predicate);
+                .Where(predicate)
+                .First();
 
             // Assert
             _ = action.Must()
@@ -288,7 +254,8 @@ namespace NetFabric.Hyperlinq.UnitTests
             var result = ReadOnlyList
                 .Skip<Wrap.ValueReadOnlyList<int>, int>(wrapped, skipCount)
                 .Take(takeCount)
-                .First(predicate);
+                .Where(predicate)
+                .First();
 
             // Assert
             _ = result.Must()

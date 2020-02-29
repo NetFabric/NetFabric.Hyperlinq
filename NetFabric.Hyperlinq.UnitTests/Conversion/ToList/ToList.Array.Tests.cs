@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using NetFabric.Assertive;
 using Xunit;
 
-namespace NetFabric.Hyperlinq.UnitTests
+namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
 {
-    public partial class ArrayTests
+    public class ArrayTests
     {
         [Theory]
         [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
-        public void ToList_With_ValidData_Should_Succeed(int[] source)
+        public void ToList_With_Should_Succeed(int[] source)
         {
             // Arrange
             var expected = 
@@ -26,49 +26,6 @@ namespace NetFabric.Hyperlinq.UnitTests
                 .BeOfType<List<int>>()
                 .BeEnumerableOf<int>()
                 .BeEqualTo(expected);
-        }
-
-        [Theory]
-        [MemberData(nameof(TestData.SkipTakeEmpty), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.SkipTakeSingle), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.SkipTakeMultiple), MemberType = typeof(TestData))]
-        public void ToList_Skip_Take_With_ValidData_Should_Succeed(int[] source, int skipCount, int takeCount)
-        {
-            // Arrange
-            var expected = 
-                System.Linq.Enumerable.ToList(
-                    System.Linq.Enumerable.Take(
-                        System.Linq.Enumerable.Skip(source, skipCount), takeCount));
-
-            // Act
-            var result = Array
-                .Skip<int>(source, skipCount)
-                .Take(takeCount)
-                .ToList();
-
-            // Assert
-            _ = result.Must()
-                .BeOfType<List<int>>()
-                .BeEnumerableOf<int>()
-                .BeEqualTo(expected);
-        }
-
-        [Fact]
-        public void ToList_Predicate_With_Null_Should_Throw()
-        {
-            // Arrange
-            var source = new int[0];
-            var predicate = (Predicate<int>)null;
-
-            // Act
-            Action action = () => _ = Array
-                .Where<int>(source, predicate)
-                .ToList();
-
-            // Assert
-            _ = action.Must()
-                .Throw<ArgumentNullException>()
-                .EvaluateTrue(exception => exception.ParamName == "predicate");
         }
 
         [Theory]
@@ -95,51 +52,6 @@ namespace NetFabric.Hyperlinq.UnitTests
         }
 
         [Theory]
-        [MemberData(nameof(TestData.SkipTakePredicateEmpty), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.SkipTakePredicateSingle), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.SkipTakePredicateMultiple), MemberType = typeof(TestData))]
-        public void ToList_Skip_Take_Predicate_With_ValidData_Should_Succeed(int[] source, int skipCount, int takeCount, Predicate<int> predicate)
-        {
-            // Arrange
-            var expected = 
-                System.Linq.Enumerable.ToList(
-                    System.Linq.Enumerable.Where(
-                        System.Linq.Enumerable.Take(
-                            System.Linq.Enumerable.Skip(source, skipCount), takeCount), predicate.AsFunc()));
-
-            // Act
-            var result = Array
-                .Skip<int>(source, skipCount)
-                .Take(takeCount)
-                .Where(predicate)
-                .ToList();
-
-            // Assert
-            _ = result.Must()
-                .BeOfType<List<int>>()
-                .BeEnumerableOf<int>()
-                .BeEqualTo(expected);
-        }
-
-        [Fact]
-        public void ToList_PredicateAt_With_Null_Should_Throw()
-        {
-            // Arrange
-            var source = new int[0];
-            var predicate = (PredicateAt<int>)null;
-
-            // Act
-            Action action = () => _ = Array
-                .Where<int>(source, predicate)
-                .ToList();
-
-            // Assert
-            _ = action.Must()
-                .Throw<ArgumentNullException>()
-                .EvaluateTrue(exception => exception.ParamName == "predicate");
-        }
-
-        [Theory]
         [MemberData(nameof(TestData.PredicateAtEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateAtSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateAtMultiple), MemberType = typeof(TestData))]
@@ -160,51 +72,6 @@ namespace NetFabric.Hyperlinq.UnitTests
                 .BeOfType<List<int>>()
                 .BeEnumerableOf<int>()
                 .BeEqualTo(expected);
-        }
-
-        [Theory]
-        [MemberData(nameof(TestData.SkipTakePredicateAtEmpty), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.SkipTakePredicateAtSingle), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.SkipTakePredicateAtMultiple), MemberType = typeof(TestData))]
-        public void ToList_Skip_Take_PredicateAt_With_ValidData_Should_Succeed(int[] source, int skipCount, int takeCount, PredicateAt<int> predicate)
-        {
-            // Arrange
-            var expected = 
-                System.Linq.Enumerable.ToList(
-                    System.Linq.Enumerable.Where(
-                        System.Linq.Enumerable.Take(
-                            System.Linq.Enumerable.Skip(source, skipCount), takeCount), predicate.AsFunc()));
-
-            // Act
-            var result = Array
-                .Skip<int>(source, skipCount)
-                .Take(takeCount)
-                .Where(predicate)
-                .ToList();
-
-            // Assert
-            _ = result.Must()
-                .BeOfType<List<int>>()
-                .BeEnumerableOf<int>()
-                .BeEqualTo(expected);
-        }
-
-        [Fact]
-        public void ToList_Selector_With_Null_Should_Throw()
-        {
-            // Arrange
-            var source = new int[0];
-            var selector = (Selector<int, string>)null;
-
-            // Act
-            Action action = () => _ = Array
-                .Select<int, string>(source, selector)
-                .ToList();
-
-            // Assert
-            _ = action.Must()
-                .Throw<ArgumentNullException>()
-                .EvaluateTrue(exception => exception.ParamName == "selector");
         }
 
         [Theory]
@@ -231,51 +98,6 @@ namespace NetFabric.Hyperlinq.UnitTests
         }
 
         [Theory]
-        [MemberData(nameof(TestData.SkipTakeSelectorEmpty), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.SkipTakeSelectorSingle), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.SkipTakeSelectorMultiple), MemberType = typeof(TestData))]
-        public void ToList_Skip_Take_Selector_With_ValidData_Should_Succeed(int[] source, int skipCount, int takeCount, Selector<int, string> selector)
-        {
-            // Arrange
-            var expected = 
-                System.Linq.Enumerable.ToList(
-                    System.Linq.Enumerable.Select(
-                        System.Linq.Enumerable.Take(
-                            System.Linq.Enumerable.Skip(source, skipCount), takeCount), selector.AsFunc()));
-
-            // Act
-            var result = Array
-                .Skip<int>(source, skipCount)
-                .Take(takeCount)
-                .Select(selector)
-                .ToList();
-
-            // Assert
-            _ = result.Must()
-                .BeOfType<List<string>>()
-                .BeEnumerableOf<string>()
-                .BeEqualTo(expected);
-        }
-
-        [Fact]
-        public void ToList_SelectorAt_With_Null_Should_Throw()
-        {
-            // Arrange
-            var source = new int[0];
-            var selector = (SelectorAt<int, string>)null;
-
-            // Act
-            Action action = () => _ = Array
-                .Select<int, string>(source, selector)
-                .ToList();
-
-            // Assert
-            _ = action.Must()
-                .Throw<ArgumentNullException>()
-                .EvaluateTrue(exception => exception.ParamName == "selector");
-        }
-
-        [Theory]
         [MemberData(nameof(TestData.SelectorAtEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SelectorAtSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SelectorAtMultiple), MemberType = typeof(TestData))]
@@ -299,37 +121,10 @@ namespace NetFabric.Hyperlinq.UnitTests
         }
 
         [Theory]
-        [MemberData(nameof(TestData.SkipTakeSelectorAtEmpty), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.SkipTakeSelectorAtSingle), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.SkipTakeSelectorAtMultiple), MemberType = typeof(TestData))]
-        public void ToList_Skip_Take_SelectorAt_With_ValidData_Should_Succeed(int[] source, int skipCount, int takeCount, SelectorAt<int, string> selector)
-        {
-            // Arrange
-            var expected = 
-                System.Linq.Enumerable.ToList(
-                    System.Linq.Enumerable.Select(
-                        System.Linq.Enumerable.Take(
-                            System.Linq.Enumerable.Skip(source, skipCount), takeCount), selector.AsFunc()));
-
-            // Act
-            var result = Array
-                .Skip<int>(source, skipCount)
-                .Take(takeCount)
-                .Select(selector)
-                .ToList();
-
-            // Assert
-            _ = result.Must()
-                .BeOfType<List<string>>()
-                .BeEnumerableOf<string>()
-                .BeEqualTo(expected);
-        }
-
-        [Theory]
         [MemberData(nameof(TestData.PredicateSelectorEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateSelectorSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateSelectorMultiple), MemberType = typeof(TestData))]
-        public void ToList_Predicate_Selector_With_ValidData_Should_Succeed(int[] source, Predicate<int> predicate, Selector<int, string> selector)
+        public void ToList_With_Predicate_Selector_Should_Succeed(int[] source, Predicate<int> predicate, Selector<int, string> selector)
         {
             // Arrange
             var expected = 
@@ -340,35 +135,6 @@ namespace NetFabric.Hyperlinq.UnitTests
             // Act
             var result = Array
                 .Where<int>(source, predicate)
-                .Select(selector)
-                .ToList();
-
-            // Assert
-            _ = result.Must()
-                .BeOfType<List<string>>()
-                .BeEnumerableOf<string>()
-                .BeEqualTo(expected);
-        }
-
-        [Theory]
-        [MemberData(nameof(TestData.SkipTakePredicateSelectorEmpty), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.SkipTakePredicateSelectorSingle), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.SkipTakePredicateSelectorMultiple), MemberType = typeof(TestData))]
-        public void ToList_Skip_Take_Predicate_Selector_With_ValidData_Should_Succeed(int[] source, int skipCount, int takeCount, Predicate<int> predicate, Selector<int, string> selector)
-        {
-            // Arrange
-            var expected = 
-                System.Linq.Enumerable.ToList(
-                    System.Linq.Enumerable.Select(
-                        System.Linq.Enumerable.Where(
-                            System.Linq.Enumerable.Take(
-                                System.Linq.Enumerable.Skip(source, skipCount), takeCount), predicate.AsFunc()), selector.AsFunc()));
-
-            // Act
-            var result = Array
-                .Skip<int>(source, skipCount)
-                .Take(takeCount)
-                .Where(predicate)
                 .Select(selector)
                 .ToList();
 

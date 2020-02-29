@@ -14,8 +14,9 @@ namespace NetFabric.Hyperlinq
         {
             for (var index = 0; index < source.Length; index++)
             {
-                if (predicate(source[index]))
-                    action(source[index]);
+                var item = source[index];
+                if (predicate(item))
+                    action(item);
             }
         }
 
@@ -23,8 +24,9 @@ namespace NetFabric.Hyperlinq
         {
             for (var index = 0; index < source.Length; index++)
             {
-                if (predicate(source[index], index))
-                    action(source[index]);
+                var item = source[index];
+                if (predicate(item, index))
+                    action(item);
             }
         }
 
@@ -44,8 +46,9 @@ namespace NetFabric.Hyperlinq
         {
             for (var index = 0; index < source.Length; index++)
             {
-                if (predicate(source[index]))
-                    action(selector(source[index]));
+                var item = source[index];
+                if (predicate(item))
+                    action(selector(item));
             }
         }
 
@@ -59,8 +62,9 @@ namespace NetFabric.Hyperlinq
         {
             for (var index = 0; index < source.Length; index++)
             {
-                if (predicate(source[index]))
-                    action(source[index], index);
+                var item = source[index];
+                if (predicate(item))
+                    action(item, index);
             }
         }
 
@@ -68,8 +72,9 @@ namespace NetFabric.Hyperlinq
         {
             for (var index = 0; index < source.Length; index++)
             {
-                if (predicate(source[index], index))
-                    action(source[index], index);
+                var item = source[index];
+                if (predicate(item, index))
+                    action(item, index);
             }
         }
 
@@ -89,8 +94,9 @@ namespace NetFabric.Hyperlinq
         {
             for (var index = 0; index < source.Length; index++)
             {
-                if (predicate(source[index]))
-                    action(selector(source[index]), index);
+                var item = source[index];
+                if (predicate(item))
+                    action(selector(item), index);
             }
         }
     }

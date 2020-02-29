@@ -2,9 +2,9 @@ using NetFabric.Assertive;
 using System;
 using Xunit;
 
-namespace NetFabric.Hyperlinq.UnitTests
+namespace NetFabric.Hyperlinq.UnitTests.Filtering.WhereSelect
 {
-    public partial class ValueEnumerableTests
+    public class ValueEnumerableTests
     {
         [Theory]
         [MemberData(nameof(TestData.PredicateSelectorEmpty), MemberType = typeof(TestData))]

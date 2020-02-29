@@ -1,9 +1,9 @@
 using NetFabric.Assertive;
 using Xunit;
 
-namespace NetFabric.Hyperlinq.UnitTests
+namespace NetFabric.Hyperlinq.UnitTests.Partitioning.Take
 {
-    public partial class ReadOnlyListTests
+    public class ReadOnlyListTests
     {
         [Theory]
         [MemberData(nameof(TestData.TakeEmpty), MemberType = typeof(TestData))]

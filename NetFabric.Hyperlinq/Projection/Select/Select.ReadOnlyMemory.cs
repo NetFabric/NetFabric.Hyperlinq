@@ -176,7 +176,7 @@ namespace NetFabric.Hyperlinq
                 => Array.ToArray(source.Span, selector);
 
             public List<TResult> ToList()
-                => Array.ToList(source.Span, selector);
+                => Array.ToList(source, selector); // memory performs best
 
             public void ForEach(Action<TResult> action)
                 => Array.ForEach(source.Span, action, selector);

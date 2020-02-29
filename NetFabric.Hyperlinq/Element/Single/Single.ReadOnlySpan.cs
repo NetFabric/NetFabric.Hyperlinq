@@ -21,10 +21,8 @@ namespace NetFabric.Hyperlinq
         }
 
         [Pure]
-        public static ref readonly TSource Single<TSource>(this ReadOnlySpan<TSource> source, Predicate<TSource> predicate)
+        static ref readonly TSource Single<TSource>(this ReadOnlySpan<TSource> source, Predicate<TSource> predicate)
         {
-            if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
-
             var length = source.Length;
             for (var index = 0; index < length; index++)
             {
@@ -45,10 +43,8 @@ namespace NetFabric.Hyperlinq
         }
 
         [Pure]
-        public static ref readonly TSource Single<TSource>(this ReadOnlySpan<TSource> source, PredicateAt<TSource> predicate)
+        static ref readonly TSource Single<TSource>(this ReadOnlySpan<TSource> source, PredicateAt<TSource> predicate)
         {
-            if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
-
             var length = source.Length;
             for (var index = 0; index < length; index++)
             {
@@ -85,10 +81,8 @@ namespace NetFabric.Hyperlinq
 
         [Pure]
         [return: MaybeNull]
-        public static ref readonly TSource SingleOrDefault<TSource>(this ReadOnlySpan<TSource> source, Predicate<TSource> predicate)
+        static ref readonly TSource SingleOrDefault<TSource>(this ReadOnlySpan<TSource> source, Predicate<TSource> predicate)
         {
-            if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
-
             var length = source.Length;
             for (var index = 0; index < length; index++)
             {
@@ -110,10 +104,8 @@ namespace NetFabric.Hyperlinq
 
         [Pure]
         [return: MaybeNull]
-        public static ref readonly TSource SingleOrDefault<TSource>(this ReadOnlySpan<TSource> source, PredicateAt<TSource> predicate)
+        static ref readonly TSource SingleOrDefault<TSource>(this ReadOnlySpan<TSource> source, PredicateAt<TSource> predicate)
         {
-            if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
-
             var length = source.Length;
             for (var index = 0; index < length; index++)
             {

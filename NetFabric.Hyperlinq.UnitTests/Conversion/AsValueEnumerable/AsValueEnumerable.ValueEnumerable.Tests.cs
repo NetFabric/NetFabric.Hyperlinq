@@ -1,9 +1,9 @@
 using NetFabric.Assertive;
 using Xunit;
 
-namespace NetFabric.Hyperlinq.UnitTests
+namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsValueEnumerable
 {
-    public partial class ValueEnumerableTests
+    public class ValueEnumerableTests
     {
         [Fact]
         public void AsValueEnumerable_With_ValueType_Should_ReturnCopy()

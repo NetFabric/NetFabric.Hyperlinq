@@ -3,9 +3,9 @@ using System;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace NetFabric.Hyperlinq.UnitTests
+namespace NetFabric.Hyperlinq.UnitTests.Element.SingleOrDefault
 {
-    public partial class AsyncValueEnumerableTests
+    public class AsyncValueEnumerableTests
     {
         [Theory]
         [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
@@ -45,25 +45,6 @@ namespace NetFabric.Hyperlinq.UnitTests
                 .EvaluateTrue(exception => exception.Message == "Sequence contains more than one element");
         }
 
-        [Fact]
-        public void SingleOrDefaultAsync_Predicate_With_Null_Should_Throw()
-        {
-            // Arrange
-            var source = new int[0];
-            var wrapped = Wrap
-                .AsAsyncValueEnumerable(source);
-            var predicate = (AsyncPredicate<int>)null;
-
-            // Act
-            Action action = () => _ = AsyncValueEnumerable
-                .SingleOrDefaultAsync<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, predicate);
-
-            // Assert
-            _ = action.Must()
-                .Throw<ArgumentNullException>()
-                .EvaluateTrue(exception => exception.ParamName == "predicate");
-        }
-
         [Theory]
         [MemberData(nameof(TestData.PredicateEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateSingle), MemberType = typeof(TestData))]
@@ -77,7 +58,8 @@ namespace NetFabric.Hyperlinq.UnitTests
 
             // Act
             var result = await AsyncValueEnumerable
-                .SingleOrDefaultAsync<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, predicate.AsAsync());
+                .Where<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, predicate.AsAsync())
+                .SingleOrDefaultAsync();
 
             // Assert
             _ = result.Must()
@@ -94,31 +76,13 @@ namespace NetFabric.Hyperlinq.UnitTests
 
             // Act
             Func<ValueTask> action = async () => _ = await AsyncValueEnumerable
-                .SingleOrDefaultAsync<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, predicate.AsAsync());
+                .Where<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, predicate.AsAsync())
+                .SingleOrDefaultAsync();
 
             // Assert
             _ = action.Must()
                 .Throw<InvalidOperationException>()
                 .EvaluateTrue(exception => exception.Message == "Sequence contains more than one element");
-        }
-
-        [Fact]
-        public void SingleOrDefaultAsync_PredicateAt_With_Null_Should_Throw()
-        {
-            // Arrange
-            var source = new int[0];
-            var wrapped = Wrap
-                .AsAsyncValueEnumerable(source);
-            var predicate = (AsyncPredicateAt<int>)null;
-
-            // Act
-            Action action = () => _ = AsyncValueEnumerable
-                .SingleOrDefaultAsync<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, predicate);
-
-            // Assert
-            _ = action.Must()
-                .Throw<ArgumentNullException>()
-                .EvaluateTrue(exception => exception.ParamName == "predicate");
         }
 
         [Theory]
@@ -135,7 +99,8 @@ namespace NetFabric.Hyperlinq.UnitTests
 
             // Act
             var result = await AsyncValueEnumerable
-                .SingleOrDefaultAsync<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, predicate.AsAsync());
+                .Where<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, predicate.AsAsync())
+                .SingleOrDefaultAsync();
 
             // Assert
             _ = result.Must()
@@ -152,7 +117,8 @@ namespace NetFabric.Hyperlinq.UnitTests
 
             // Act
             Func<ValueTask> action = async () => _ = await AsyncValueEnumerable
-                .SingleOrDefaultAsync<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, predicate.AsAsync());
+                .Where<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, predicate.AsAsync())
+                .SingleOrDefaultAsync();
 
             // Assert
             _ = action.Must()

@@ -12,19 +12,6 @@ namespace NetFabric.Hyperlinq
         [Pure]
         public static int Count<TSource>(this SortedSet<TSource> source)
             => source.Count;
-        [Pure]
-        public static int Count<TSource>(this SortedSet<TSource> source, Predicate<TSource> predicate)
-            => ValueReadOnlyCollection.Count<ValueWrapper<TSource>, SortedSet<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
-        [Pure]
-        public static int Count<TSource>(this SortedSet<TSource> source, PredicateAt<TSource> predicate)
-            => ValueReadOnlyCollection.Count<ValueWrapper<TSource>, SortedSet<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
-
-        [Pure]
-        public static long LongCount<TSource>(this SortedSet<TSource> source)
-            => ValueEnumerable.LongCount<ValueWrapper<TSource>, SortedSet<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source));
-        [Pure]
-        public static long LongCount<TSource>(this SortedSet<TSource> source, Predicate<TSource> predicate)
-            => ValueEnumerable.LongCount<ValueWrapper<TSource>, SortedSet<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
 
         [Pure]
         public static ValueReadOnlyCollection.SkipTakeEnumerable<ValueWrapper<TSource>, SortedSet<TSource>.Enumerator, TSource> Skip<TSource>(this SortedSet<TSource> source, int count)
@@ -104,31 +91,17 @@ namespace NetFabric.Hyperlinq
         public static TSource First<TSource>(this SortedSet<TSource> source)
             => ValueReadOnlyCollection.First<ValueWrapper<TSource>, SortedSet<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source));
         [Pure]
-        public static TSource First<TSource>(this SortedSet<TSource> source, Predicate<TSource> predicate)
-            => ValueReadOnlyCollection.First<ValueWrapper<TSource>, SortedSet<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
-        [Pure]
         [return: MaybeNull]
         public static TSource FirstOrDefault<TSource>(this SortedSet<TSource> source)
             => ValueReadOnlyCollection.FirstOrDefault<ValueWrapper<TSource>, SortedSet<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source));
-        [Pure]
-        [return: MaybeNull]
-        public static TSource FirstOrDefault<TSource>(this SortedSet<TSource> source, Predicate<TSource> predicate)
-            => ValueReadOnlyCollection.FirstOrDefault<ValueWrapper<TSource>, SortedSet<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
 
         [Pure]
         public static TSource Single<TSource>(this SortedSet<TSource> source)
             => ValueReadOnlyCollection.Single<ValueWrapper<TSource>, SortedSet<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source));
         [Pure]
-        public static TSource Single<TSource>(this SortedSet<TSource> source, Predicate<TSource> predicate)
-            => ValueReadOnlyCollection.Single<ValueWrapper<TSource>, SortedSet<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
-        [Pure]
         [return: MaybeNull]
         public static TSource SingleOrDefault<TSource>(this SortedSet<TSource> source)
             => ValueReadOnlyCollection.SingleOrDefault<ValueWrapper<TSource>, SortedSet<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source));
-        [Pure]
-        [return: MaybeNull]
-        public static TSource SingleOrDefault<TSource>(this SortedSet<TSource> source, Predicate<TSource> predicate)
-            => ValueReadOnlyCollection.SingleOrDefault<ValueWrapper<TSource>, SortedSet<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
 
         [Pure]
         public static ValueEnumerable.DistinctEnumerable<ValueWrapper<TSource>, SortedSet<TSource>.Enumerator, TSource> Distinct<TSource>(this SortedSet<TSource> source, IEqualityComparer<TSource>? comparer = null)

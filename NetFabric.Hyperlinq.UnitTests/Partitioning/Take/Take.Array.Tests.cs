@@ -1,9 +1,10 @@
 using NetFabric.Assertive;
+using System;
 using Xunit;
 
-namespace NetFabric.Hyperlinq.UnitTests
+namespace NetFabric.Hyperlinq.UnitTests.Partitioning.Take
 {
-    public partial class ArrayTests
+    public class ArrayTests
     {
         [Theory]
         [MemberData(nameof(TestData.TakeEmpty), MemberType = typeof(TestData))]
@@ -21,7 +22,6 @@ namespace NetFabric.Hyperlinq.UnitTests
 
             // Assert
             _ = result.Must()
-                .BeEnumerableOf<int>()
                 .BeEqualTo(expected);
         }
     }

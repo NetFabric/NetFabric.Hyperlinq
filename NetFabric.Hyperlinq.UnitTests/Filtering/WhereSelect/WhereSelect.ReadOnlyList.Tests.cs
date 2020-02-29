@@ -2,9 +2,9 @@ using NetFabric.Assertive;
 using System;
 using Xunit;
 
-namespace NetFabric.Hyperlinq.UnitTests
+namespace NetFabric.Hyperlinq.UnitTests.Filtering.WhereSelect
 {
-    public partial class ReadOnlyListTests
+    public class ReadOnlyListTests
     {
         [Theory]
         [MemberData(nameof(TestData.PredicateSelectorEmpty), MemberType = typeof(TestData))]

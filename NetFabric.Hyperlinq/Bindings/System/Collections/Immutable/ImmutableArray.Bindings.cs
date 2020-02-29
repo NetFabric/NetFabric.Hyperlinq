@@ -14,19 +14,6 @@ namespace NetFabric.Hyperlinq
         [Pure]
         public static int Count<TSource>(this ImmutableArray<TSource> source)
             => source.Length;
-        [Pure]
-        public static int Count<TSource>(this ImmutableArray<TSource> source, Predicate<TSource> predicate)
-            => ReadOnlyList.Count<ImmutableArray<TSource>, TSource>(source, predicate);
-        [Pure]
-        public static int Count<TSource>(this ImmutableArray<TSource> source, PredicateAt<TSource> predicate)
-            => ReadOnlyList.Count<ImmutableArray<TSource>, TSource>(source, predicate);
-
-        [Pure]
-        public static long LongCount<TSource>(this ImmutableArray<TSource> source)
-            => ValueEnumerable.LongCount<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source));
-        [Pure]
-        public static long LongCount<TSource>(this ImmutableArray<TSource> source, Predicate<TSource> predicate)
-            => ValueEnumerable.LongCount<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
 
         [Pure]
         public static ReadOnlyList.SkipTakeEnumerable<ImmutableArray<TSource>, TSource> Skip<TSource>(this ImmutableArray<TSource> source, int count)

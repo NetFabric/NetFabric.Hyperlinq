@@ -83,11 +83,6 @@ namespace NetFabric.Hyperlinq
             public int Count(PredicateAt<TSource> predicate)
                 => ValueEnumerable.Count<TEnumerable, TEnumerator, TSource>(source, Utils.Combine(this.predicate, predicate));
 
-            public long LongCount()
-                => ValueEnumerable.LongCount<TEnumerable, TEnumerator, TSource>(source, predicate);
-            public long LongCount(Predicate<TSource> predicate)
-                => ValueEnumerable.LongCount<TEnumerable, TEnumerator, TSource>(source, Utils.Combine(this.predicate, predicate));
-
             public bool Any()
                 => ValueEnumerable.Any<TEnumerable, TEnumerator, TSource>(source, predicate);
             public bool Any(Predicate<TSource> predicate)

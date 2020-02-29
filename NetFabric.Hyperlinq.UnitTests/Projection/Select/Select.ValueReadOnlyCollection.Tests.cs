@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using NetFabric.Assertive;
 using Xunit;
 
-namespace NetFabric.Hyperlinq.UnitTests
+namespace NetFabric.Hyperlinq.UnitTests.Projection.Select
 {
-    public partial class ValueReadOnlyCollectionTests
+    public class ValueReadOnlyCollectionTests
     {
         [Fact]
         public void Select_With_NullSelector_Should_Throw()

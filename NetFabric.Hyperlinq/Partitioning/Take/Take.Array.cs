@@ -1,5 +1,4 @@
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Diagnostics.Contracts;
 using System.Runtime.CompilerServices;
 
@@ -9,7 +8,7 @@ namespace NetFabric.Hyperlinq
     {
         [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static SkipTakeEnumerable<TSource> Take<TSource>(this TSource[] source, int count)
-            => SkipTake<TSource>(source, 0, count);
+        public static Memory<TSource> Take<TSource>(this TSource[] source, int count)
+            => Take(source.AsMemory(), count);
     }
 }
