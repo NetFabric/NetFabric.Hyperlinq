@@ -7,6 +7,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
     public abstract class BenchmarksBase
     {
         protected int[] array;
+        protected ReadOnlyMemory<int> memory;
         protected List<int> list;
         protected LinkedList<int> linkedList;
 
@@ -22,6 +23,9 @@ namespace NetFabric.Hyperlinq.Benchmarks
         protected IReadOnlyList<int> listReference;
         protected TestList.Enumerable listValue;
 
+        protected IAsyncEnumerable<int> asyncEnumerableReference;
+        protected TestAsyncEnumerable.AsyncEnumerable asyncEnumerableValue;
+
         [Params(10_000)]
         public int Count { get; set; }
 
@@ -32,6 +36,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
             hyperlinqRange = ValueEnumerable.Range(0, Count);
 
             array = hyperlinqRange.ToArray();
+            memory = array.AsMemory();
             list = new List<int>(hyperlinqRange);
             linkedList = new LinkedList<int>(hyperlinqRange);
 
@@ -43,6 +48,9 @@ namespace NetFabric.Hyperlinq.Benchmarks
 
             listReference = TestList.ReferenceType(Count);
             listValue = TestList.ValueType(Count);
+
+            asyncEnumerableReference = TestAsyncEnumerable.ReferenceType(Count);
+            asyncEnumerableValue = TestAsyncEnumerable.ValueType(Count);
         }
     }
 }

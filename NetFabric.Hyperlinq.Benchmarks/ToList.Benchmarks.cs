@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Configs;
 
@@ -79,6 +80,14 @@ namespace NetFabric.Hyperlinq.Benchmarks
             ReadOnlyList.AsValueEnumerable<int>(listValue)
             .ToList();
 
+        [BenchmarkCategory("AsyncEnumerable_Value")]
+        [Benchmark]
+        public ValueTask<List<int>> Hyperlinq_AsyncEnumerable_Value() =>
+            AsyncEnumerable.AsAsyncValueEnumerable<TestAsyncEnumerable.AsyncEnumerable, TestAsyncEnumerable.AsyncEnumerable.AsyncEnumerator, int>(
+                asyncEnumerableValue, 
+                (enumerable, cancellationToken) => enumerable.GetAsyncEnumerator(cancellationToken))
+            .ToListAsync();
+
         [BenchmarkCategory("Enumerable_Reference")]
         [Benchmark]
         public List<int> Hyperlinq_Enumerable_Reference() =>
@@ -99,5 +108,12 @@ namespace NetFabric.Hyperlinq.Benchmarks
             listReference
             .AsValueEnumerable()
             .ToList();
+
+        [BenchmarkCategory("AsyncEnumerable_Reference")]
+        [Benchmark]
+        public ValueTask<List<int>> Hyperlinq_AsyncEnumerable_Reference() =>
+            asyncEnumerableReference
+            .AsAsyncValueEnumerable()
+            .ToListAsync();
     }
 }

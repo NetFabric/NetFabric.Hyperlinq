@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Configs;
 
@@ -14,6 +15,11 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [Benchmark(Baseline = true)]
         public int[] Linq_Array() =>
             System.Linq.Enumerable.ToArray(array);
+
+        [BenchmarkCategory("Array")]
+        [Benchmark]
+        public int[] System_Span() =>
+            array.AsSpan().ToArray();
 
         [BenchmarkCategory("Enumerable_Value")]
         [Benchmark(Baseline = true)]
@@ -52,11 +58,6 @@ namespace NetFabric.Hyperlinq.Benchmarks
 
         [BenchmarkCategory("Array")]
         [Benchmark]
-        public int[] Hyperlinq_Span() =>
-            array.AsSpan().ToArray();
-
-        [BenchmarkCategory("Array")]
-        [Benchmark]
         public int[] Hyperlinq_Memory() =>
             array.AsMemory().ToArray();
 
@@ -78,6 +79,14 @@ namespace NetFabric.Hyperlinq.Benchmarks
             ReadOnlyList.AsValueEnumerable<int>(listValue)
             .ToArray();
 
+        [BenchmarkCategory("AsyncEnumerable_Value")]
+        [Benchmark]
+        public ValueTask<int[]> Hyperlinq_AsyncEnumerable_Value() =>
+            AsyncEnumerable.AsAsyncValueEnumerable<TestAsyncEnumerable.AsyncEnumerable, TestAsyncEnumerable.AsyncEnumerable.AsyncEnumerator, int>(
+                asyncEnumerableValue, 
+                (enumerable, cancellationToken) => enumerable.GetAsyncEnumerator(cancellationToken))
+            .ToArrayAsync();
+
         [BenchmarkCategory("Enumerable_Reference")]
         [Benchmark]
         public int[] Hyperlinq_Enumerable_Reference() =>
@@ -98,5 +107,12 @@ namespace NetFabric.Hyperlinq.Benchmarks
             listReference
             .AsValueEnumerable()
             .ToArray();
+
+        [BenchmarkCategory("AsyncEnumerable_Reference")]
+        [Benchmark]
+        public ValueTask<int[]> Hyperlinq_AsyncEnumerable_Reference() =>
+            asyncEnumerableReference
+            .AsAsyncValueEnumerable()
+            .ToArrayAsync();
     }
 }
