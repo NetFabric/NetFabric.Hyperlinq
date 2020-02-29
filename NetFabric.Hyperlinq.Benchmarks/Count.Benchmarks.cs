@@ -1,6 +1,7 @@
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Configs;
 using System;
+using System.Threading.Tasks;
 
 namespace NetFabric.Hyperlinq.Benchmarks
 {
@@ -30,6 +31,11 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Linq_List_Value() =>
             System.Linq.Enumerable.Count(listValue);
 
+        [BenchmarkCategory("AsyncEnumerable_Value")]
+        [Benchmark(Baseline = true)]
+        public ValueTask<int> Linq_AsyncEnumerable_Value() =>
+            System.Linq.AsyncEnumerable.CountAsync(asyncEnumerableValue);
+
         [BenchmarkCategory("Enumerable_Reference")]
         [Benchmark(Baseline = true)]
         public int Linq_Enumerable_Reference() =>
@@ -45,10 +51,20 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Linq_List_Reference() =>
             System.Linq.Enumerable.Count(listReference);
 
+        [BenchmarkCategory("AsyncEnumerable_Reference")]
+        [Benchmark(Baseline = true)]
+        public ValueTask<int> Linq_AsyncEnumerable_Reference() =>
+            System.Linq.AsyncEnumerable.CountAsync(asyncEnumerableReference);
+
         [BenchmarkCategory("Array")]
         [Benchmark]
         public int Hyperlinq_Array() =>
             array.Count();
+
+        [BenchmarkCategory("Array")]
+        [Benchmark]
+        public int Hyperlinq_Span() =>
+            array.AsSpan().Count();
 
         [BenchmarkCategory("Enumerable_Value")]
         [Benchmark]
@@ -67,6 +83,14 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Hyperlinq_List_Value() =>
             ReadOnlyList.AsValueEnumerable<int>(listValue)
             .Count();
+
+        [BenchmarkCategory("AsyncEnumerable_Value")]
+        [Benchmark]
+        public ValueTask<int> Hyperlinq_AsyncEnumerable_Value() =>
+            AsyncEnumerable.AsAsyncValueEnumerable<TestAsyncEnumerable.AsyncEnumerable, TestAsyncEnumerable.AsyncEnumerable.AsyncEnumerator, int>(
+                asyncEnumerableValue, 
+                (enumerable, cancellationToken) => enumerable.GetAsyncEnumerator(cancellationToken))
+            .CountAsync();
 
         [BenchmarkCategory("Enumerable_Reference")]
         [Benchmark]
@@ -88,5 +112,12 @@ namespace NetFabric.Hyperlinq.Benchmarks
             listReference
             .AsValueEnumerable()
             .Count();
+
+        [BenchmarkCategory("AsyncEnumerable_Reference")]
+        [Benchmark]
+        public ValueTask<int> Hyperlinq_AsyncEnumerable_Reference() =>
+            asyncEnumerableReference
+            .AsAsyncValueEnumerable()
+            .CountAsync();
     }
 }

@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
   <PropertyGroup>
@@ -15,8 +15,8 @@
   <ItemGroup>
     <PackageReference Include="BenchmarkDotNet" Version="0.12.0" />
     <PackageReference Include="LinqFaster" Version="1.0.0" />
-    <PackageReference Include="morelinq" Version="3.3.2" />
     <PackageReference Include="System.Interactive" Version="4.0.0" />
+    <PackageReference Include="System.Linq.Async" Version="4.0.0" />
     <ProjectReference Include="..\NetFabric.Hyperlinq\NetFabric.Hyperlinq.csproj" />
   </ItemGroup>
 
