@@ -10,7 +10,8 @@ jobs:
         os: [ubuntu-latest, macos]
 
     steps:
-    - uses: actions/checkout@v1
+    - name: Check out repository
+      uses: actions/checkout@v2
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1.4.0
       with:
@@ -23,7 +24,8 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - uses: actions/checkout@v1
+    - name: Check out repository
+      uses: actions/checkout@v2
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1.4.0
       with:
