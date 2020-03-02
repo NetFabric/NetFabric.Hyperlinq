@@ -3,9 +3,9 @@ using System;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace NetFabric.Hyperlinq.UnitTests
+namespace NetFabric.Hyperlinq.UnitTests.Element.FirstOrDefault
 {
-    public partial class AsyncValueEnumerableTests
+    public class AsyncValueEnumerableTests
     {
         [Theory]
         [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
@@ -28,25 +28,6 @@ namespace NetFabric.Hyperlinq.UnitTests
                 .BeEqualTo(expected);
         }
 
-        [Fact]
-        public void FirstOrDefaultAsync_Predicate_With_Null_Should_Throw()
-        {
-            // Arrange
-            var source = new int[0];
-            var wrapped = Wrap
-                .AsAsyncValueEnumerable(source);
-            var predicate = (AsyncPredicate<int>)null;
-
-            // Act
-            Action action = () => _ = AsyncValueEnumerable
-                .FirstOrDefaultAsync<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, predicate);
-
-            // Assert
-            _ = action.Must()
-                .Throw<ArgumentNullException>()
-                .EvaluateTrue(exception => exception.ParamName == "predicate");
-        }
-
         [Theory]
         [MemberData(nameof(TestData.PredicateEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateSingle), MemberType = typeof(TestData))]
@@ -61,31 +42,12 @@ namespace NetFabric.Hyperlinq.UnitTests
 
             // Act
             var result = await AsyncValueEnumerable
-                .FirstOrDefaultAsync<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, predicate.AsAsync());
+                .Where<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, predicate.AsAsync())
+                .FirstOrDefaultAsync();
 
             // Assert
             _ = result.Must()
                 .BeEqualTo(expected);
-        }
-
-        [Fact]
-        public void FirstOrDefaultAsync_PredicateAt_With_Null_Should_Throw()
-        {
-            // Arrange
-            var source = new int[0];
-            var wrapped = Wrap
-                .AsAsyncValueEnumerable(source);
-            var predicate = (AsyncPredicateAt<int>)null;
-
-            // Act
-            Action action = () => _ = AsyncValueEnumerable
-                .Where<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, predicate)
-                .FirstOrDefaultAsync();
-
-            // Assert
-            _ = action.Must()
-                .Throw<ArgumentNullException>()
-                .EvaluateTrue(exception => exception.ParamName == "predicate");
         }
 
         [Theory]

@@ -1,5 +1,6 @@
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Configs;
+using System;
 using System.Collections.Generic;
 
 namespace NetFabric.Hyperlinq.Benchmarks
@@ -86,6 +87,26 @@ namespace NetFabric.Hyperlinq.Benchmarks
         {
             var count = 0;
             foreach (var item in array.Distinct(this))
+                count++;
+            return count;
+        }
+
+        [BenchmarkCategory("Array")]
+        [Benchmark]
+        public int Hyperlinq_Span()
+        {
+            var count = 0;
+            foreach (var item in array.AsSpan().Distinct(this))
+                count++;
+            return count;
+        }
+
+        [BenchmarkCategory("Array")]
+        [Benchmark]
+        public int Hyperlinq_Memory()
+        {
+            var count = 0;
+            foreach (var item in memory.Distinct(this))
                 count++;
             return count;
         }

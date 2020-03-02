@@ -3,9 +3,9 @@ using System;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace NetFabric.Hyperlinq.UnitTests
+namespace NetFabric.Hyperlinq.UnitTests.Quantifier.All
 {
-    public partial class AsyncValueEnumerableTests
+    public class AsyncValueEnumerableTests
     {
         [Fact]
         public void AllAsync_With_NullPredicate_Should_Throw()

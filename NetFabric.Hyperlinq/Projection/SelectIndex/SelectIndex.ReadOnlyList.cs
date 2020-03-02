@@ -173,10 +173,6 @@ namespace NetFabric.Hyperlinq
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public long LongCount()
-                => source.Count;
-
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Any()
                 => takeCount != 0;
 

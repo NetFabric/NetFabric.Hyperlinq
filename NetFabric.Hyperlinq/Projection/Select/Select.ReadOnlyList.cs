@@ -169,10 +169,6 @@ namespace NetFabric.Hyperlinq
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public long LongCount()
-                => source.Count;
-
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public ReadOnlyList.SelectEnumerable<TList, TSource, TResult> Skip(int count)
                 => new ReadOnlyList.SelectEnumerable<TList, TSource, TResult>(source, selector, skipCount + count, takeCount);
 

@@ -3,9 +3,9 @@ using System;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace NetFabric.Hyperlinq.UnitTests
+namespace NetFabric.Hyperlinq.UnitTests.Aggregation.Count
 {
-    public partial class AsyncValueEnumerableTests
+    public class AsyncValueEnumerableTests
     {
         [Theory]
         [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
@@ -28,24 +28,6 @@ namespace NetFabric.Hyperlinq.UnitTests
                 .BeEqualTo(expected);
         }
 
-        [Fact]
-        public void CountAsync_Predicate_With_Null_Should_Throw()
-        {
-            // Arrange
-            var wrapped = Wrap
-                .AsAsyncValueEnumerable(new int[0]);
-            var predicate = (AsyncPredicate<int>)null;
-
-            // Act
-            Action action = () => _ = AsyncValueEnumerable
-                .CountAsync<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, predicate);
-
-            // Assert
-            _ = action.Must()
-                .Throw<ArgumentNullException>()
-                .EvaluateTrue(exception => exception.ParamName == "predicate");
-        }
-
         [Theory]
         [MemberData(nameof(TestData.PredicateEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateSingle), MemberType = typeof(TestData))]
@@ -60,29 +42,12 @@ namespace NetFabric.Hyperlinq.UnitTests
 
             // Act
             var result = await AsyncValueEnumerable
-                .CountAsync<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, predicate.AsAsync());
+                .Where<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, predicate.AsAsync())
+                .CountAsync();
 
             // Assert
             _ = result.Must()
                 .BeEqualTo(expected);
-        }
-
-        [Fact]
-        public void CountAsync_PredicateAt_With_Null_Should_Throw()
-        {
-            // Arrange
-            var wrapped = Wrap
-                .AsAsyncValueEnumerable(new int[0]);
-            var predicate = (AsyncPredicateAt<int>)null;
-
-            // Act
-            Action action = () => _ = AsyncValueEnumerable
-                .CountAsync<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, predicate);
-
-            // Assert
-            _ = action.Must()
-                .Throw<ArgumentNullException>()
-                .EvaluateTrue(exception => exception.ParamName == "predicate");
         }
 
         [Theory]
@@ -100,7 +65,8 @@ namespace NetFabric.Hyperlinq.UnitTests
 
             // Act
             var result = await AsyncValueEnumerable
-                .CountAsync<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, predicate.AsAsync());
+                .Where<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, predicate.AsAsync())
+                .CountAsync();
 
             // Assert
             _ = result.Must()

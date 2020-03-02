@@ -16,7 +16,7 @@ namespace NetFabric.Hyperlinq
 
         [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static TSource Single<TList, TSource>(this TList source, Predicate<TSource> predicate) 
+        static TSource Single<TList, TSource>(this TList source, Predicate<TSource> predicate) 
             where TList : notnull, IReadOnlyList<TSource>
             => predicate is null
                 ? Throw.ArgumentNullExceptionRef<TSource>(nameof(predicate))
@@ -24,7 +24,7 @@ namespace NetFabric.Hyperlinq
 
         [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static TSource Single<TList, TSource>(this TList source, PredicateAt<TSource> predicate) 
+        static TSource Single<TList, TSource>(this TList source, PredicateAt<TSource> predicate) 
             where TList : notnull, IReadOnlyList<TSource>
             => predicate is null
                 ? Throw.ArgumentNullExceptionRef<TSource>(nameof(predicate))
@@ -40,7 +40,7 @@ namespace NetFabric.Hyperlinq
         [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         [return: MaybeNull]
-        public static TSource SingleOrDefault<TList, TSource>(this TList source, Predicate<TSource> predicate) 
+        static TSource SingleOrDefault<TList, TSource>(this TList source, Predicate<TSource> predicate) 
             where TList : notnull, IReadOnlyList<TSource>
             => predicate is null
                 ? Throw.ArgumentNullExceptionRef<TSource>(nameof(predicate))
@@ -49,7 +49,7 @@ namespace NetFabric.Hyperlinq
         [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         [return: MaybeNull]
-        public static TSource SingleOrDefault<TList, TSource>(this TList source, PredicateAt<TSource> predicate) 
+        static TSource SingleOrDefault<TList, TSource>(this TList source, PredicateAt<TSource> predicate) 
             where TList : notnull, IReadOnlyList<TSource>
             => predicate is null
                 ? Throw.ArgumentNullExceptionRef<TSource>(nameof(predicate))
@@ -96,16 +96,15 @@ namespace NetFabric.Hyperlinq
         static (ElementResult Success, TSource Value, int Index) GetSingle<TList, TSource>(this TList source, PredicateAt<TSource> predicate, int skipCount, int takeCount)
             where TList : notnull, IReadOnlyList<TSource>
         {
-            var end = skipCount + takeCount;
-            for (var index = 0; index < end; index++)
+            for (var index = 0; index < takeCount; index++)
             {
-                if (predicate(source[index], index))
+                if (predicate(source[index + skipCount], index))
                 {
-                    var value = (ElementResult.Success, source[index], index);
+                    var value = (ElementResult.Success, source[index + skipCount], index);
 
-                    for (index++; index < end; index++)
+                    for (index++; index < takeCount; index++)
                     {
-                        if (predicate(source[index], index))
+                        if (predicate(source[index + skipCount], index))
                             return (ElementResult.NotSingle, default, 0);
                     }
 

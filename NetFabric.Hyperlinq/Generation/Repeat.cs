@@ -167,12 +167,7 @@ namespace NetFabric.Hyperlinq
                 var array = new TSource[count];
                 if (value is object)
                 {
-#if NETCORE    
                     System.Array.Fill<TSource>(array, value);
-#else                
-                    for (var index = 0; index < count; index++)
-                        array[index] = value;
-#endif
                 }
                 return array;
             }
@@ -234,12 +229,7 @@ namespace NetFabric.Hyperlinq
                 {
                     if (value is object)
                     {
-#if NETCORE    
                         System.Array.Fill<TSource>(array, value);
-#else                
-                        for (var index = 0; index < Count; index++)
-                            array[index] = value;
-#endif
                     }
                 }
             }

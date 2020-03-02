@@ -62,19 +62,25 @@ namespace NetFabric.Hyperlinq
             public int Count()
                 => source.Count(predicate);
 
-            public TSource First()
-                => source.First(predicate);
+            public SpanWhereIndexEnumerable<TSource> Where(Predicate<TSource> predicate)
+                => Where<TSource>(source, Utils.Combine(this.predicate, predicate));
+
+            public SpanWhereIndexEnumerable<TSource> Where(PredicateAt<TSource> predicate)
+                => Where<TSource>(source, Utils.Combine(this.predicate, predicate));
+
+            public ref readonly TSource First()
+                => ref source.First(predicate);
 
             [return: MaybeNull]
-            public TSource FirstOrDefault()
-                => source.FirstOrDefault(predicate);
+            public ref readonly TSource FirstOrDefault()
+                => ref source.FirstOrDefault(predicate);
 
-            public TSource Single()
-                => source.Single(predicate);
+            public ref readonly TSource Single()
+                => ref source.Single(predicate);
 
             [return: MaybeNull]
-            public TSource SingleOrDefault()
-                => source.SingleOrDefault(predicate);
+            public ref readonly TSource SingleOrDefault()
+                => ref source.SingleOrDefault(predicate);
 
             public TSource[] ToArray()
                 => Array.ToArray(source, predicate);

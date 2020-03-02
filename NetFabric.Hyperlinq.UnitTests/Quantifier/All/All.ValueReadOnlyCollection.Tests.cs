@@ -4,9 +4,9 @@ using System.Diagnostics;
 using NetFabric.Assertive;
 using Xunit;
 
-namespace NetFabric.Hyperlinq.UnitTests
+namespace NetFabric.Hyperlinq.UnitTests.Quantifier.All
 {
-    public partial class ValueReadOnlyCollectionTests
+    public class ValueReadOnlyCollectionTests
     {
         [Fact]
         public void All_With_NullPredicate_Should_Throw()

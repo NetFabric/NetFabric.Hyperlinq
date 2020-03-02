@@ -124,10 +124,6 @@ namespace NetFabric.Hyperlinq
                 => (await FillSetAsync(cancellationToken)).Count;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly async ValueTask<long> LongCountAsync(CancellationToken cancellationToken = default)
-                => (await FillSetAsync(cancellationToken)).Count;
-
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly ValueTask<bool> AnyAsync(CancellationToken cancellationToken = default)
                 => AsyncValueEnumerable.AnyAsync<TEnumerable, TEnumerator, TSource>(source, cancellationToken);
 

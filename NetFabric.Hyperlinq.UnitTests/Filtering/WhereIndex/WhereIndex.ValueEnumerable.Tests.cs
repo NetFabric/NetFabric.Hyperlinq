@@ -2,9 +2,9 @@ using NetFabric.Assertive;
 using System;
 using Xunit;
 
-namespace NetFabric.Hyperlinq.UnitTests
+namespace NetFabric.Hyperlinq.UnitTests.Filtering.WhereIndex
 {
-    public partial class ValueEnumerableTests
+    public class ValueEnumerableTests
     {
         [Fact]
         public void WhereIndex_With_NullPredicate_Should_Throw()

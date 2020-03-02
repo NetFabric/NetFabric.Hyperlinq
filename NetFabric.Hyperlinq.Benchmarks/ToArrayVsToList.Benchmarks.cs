@@ -84,12 +84,12 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [BenchmarkCategory("Array")]
         [Benchmark]
         public int[] Hyperlinq_Array_ToArray() =>
-            array.ToArray();
+            array.AsSpan().ToArray();
 
         [BenchmarkCategory("Array")]
         [Benchmark]
         public List<int> Hyperlinq_Array_ToList() =>
-            array.ToList();
+            array.AsSpan().ToList();
 
         [BenchmarkCategory("Array")]
         [Benchmark]
@@ -104,12 +104,12 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [BenchmarkCategory("Array")]
         [Benchmark]
         public int[] Hyperlinq_Memory_ToArray() =>
-            array.AsMemory().ToArray();
+            memory.ToArray();
 
         [BenchmarkCategory("Array")]
         [Benchmark]
         public List<int> Hyperlinq_Memory_ToList() =>
-            array.AsMemory().ToList();
+            memory.ToList();
 
         [BenchmarkCategory("Enumerable_ValueEnumerator")]
         [Benchmark]

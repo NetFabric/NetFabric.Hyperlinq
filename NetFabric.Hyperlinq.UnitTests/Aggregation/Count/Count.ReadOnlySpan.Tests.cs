@@ -2,9 +2,9 @@ using NetFabric.Assertive;
 using System;
 using Xunit;
 
-namespace NetFabric.Hyperlinq.UnitTests
+namespace NetFabric.Hyperlinq.UnitTests.Aggregation.Count
 {
-    public partial class ReadOnlySpanTests
+    public class ReadOnlySpanTests
     {
         [Theory]
         [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
@@ -25,23 +25,6 @@ namespace NetFabric.Hyperlinq.UnitTests
                 .BeEqualTo(expected);
         }
 
-        [Fact]
-        public void Count_Predicate_With_Null_Should_Throw()
-        {
-            // Arrange
-            var source = new int[0];
-            var predicate = (Predicate<int>)null;
-
-            // Act
-            Action action = () => _ = Array
-                .Count<int>((ReadOnlySpan<int>)source.AsSpan(), predicate);
-
-            // Assert
-            _ = action.Must()
-                .Throw<ArgumentNullException>()
-                .EvaluateTrue(exception => exception.ParamName == "predicate");
-        }
-
         [Theory]
         [MemberData(nameof(TestData.PredicateEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateSingle), MemberType = typeof(TestData))]
@@ -54,28 +37,12 @@ namespace NetFabric.Hyperlinq.UnitTests
 
             // Act
             var result = Array
-                .Count<int>((ReadOnlySpan<int>)source.AsSpan(), predicate);
+                .Where<int>((ReadOnlySpan<int>)source.AsSpan(), predicate)
+                .Count();
 
             // Assert
             _ = result.Must()
                 .BeEqualTo(expected);
-        }
-
-        [Fact]
-        public void Count_PredicateAt_With_Null_Should_Throw()
-        {
-            // Arrange
-            var source = new int[0];
-            var predicate = (PredicateAt<int>)null;
-
-            // Act
-            Action action = () => _ = Array
-                .Count<int>((ReadOnlySpan<int>)source.AsSpan(), predicate);
-
-            // Assert
-            _ = action.Must()
-                .Throw<ArgumentNullException>()
-                .EvaluateTrue(exception => exception.ParamName == "predicate");
         }
 
         [Theory]
@@ -91,7 +58,8 @@ namespace NetFabric.Hyperlinq.UnitTests
 
             // Act
             var result = Array
-                .Count<int>((ReadOnlySpan<int>)source.AsSpan(), predicate);
+                .Where<int>((ReadOnlySpan<int>)source.AsSpan(), predicate)
+                .Count();
 
             // Assert
             _ = result.Must()

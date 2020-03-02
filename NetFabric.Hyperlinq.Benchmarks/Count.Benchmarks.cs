@@ -66,6 +66,11 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Hyperlinq_Span() =>
             array.AsSpan().Count();
 
+        [BenchmarkCategory("Array")]
+        [Benchmark]
+        public int Hyperlinq_Memory() =>
+            memory.Count();
+
         [BenchmarkCategory("Enumerable_Value")]
         [Benchmark]
         public int Hyperlinq_Enumerable_Value() =>

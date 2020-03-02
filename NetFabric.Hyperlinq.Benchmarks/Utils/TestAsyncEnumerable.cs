@@ -21,9 +21,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
             readonly int count;
 
             public AsyncEnumerable(int count)
-            {
-                this.count = count;
-            }
+                => this.count = count;
 
             public readonly AsyncEnumerator GetAsyncEnumerator(CancellationToken cancellationToken = default) 
                 => new AsyncEnumerator(count, cancellationToken);

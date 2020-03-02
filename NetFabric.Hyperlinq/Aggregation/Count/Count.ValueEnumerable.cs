@@ -23,12 +23,10 @@ namespace NetFabric.Hyperlinq
         }
 
         [Pure]
-        public static int Count<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Predicate<TSource> predicate)
+        static int Count<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Predicate<TSource> predicate)
             where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
-            if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
-                
             var count = 0;
             using var enumerator = source.GetEnumerator();
             checked
@@ -43,12 +41,10 @@ namespace NetFabric.Hyperlinq
         }
 
         [Pure]
-        public static int Count<TEnumerable, TEnumerator, TSource>(this TEnumerable source, PredicateAt<TSource> predicate)
+        static int Count<TEnumerable, TEnumerator, TSource>(this TEnumerable source, PredicateAt<TSource> predicate)
             where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
-            if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
-                
             var count = 0;
             using var enumerator = source.GetEnumerator();
             checked

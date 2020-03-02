@@ -2,9 +2,9 @@ using NetFabric.Assertive;
 using System;
 using Xunit;
 
-namespace NetFabric.Hyperlinq.UnitTests
+namespace NetFabric.Hyperlinq.UnitTests.Filtering.Where
 {
-    public partial class ReadOnlyListTests
+    public class ReadOnlyListTests
     {
         [Fact]
         public void Where_Predicate_With_Null_Should_Throw()

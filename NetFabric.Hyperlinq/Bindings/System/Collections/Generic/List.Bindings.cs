@@ -12,19 +12,6 @@ namespace NetFabric.Hyperlinq
         [Pure]
         public static int Count<TSource>(this List<TSource> source)
             => source.Count;
-        [Pure]
-        public static int Count<TSource>(this List<TSource> source, Predicate<TSource> predicate)
-            => ReadOnlyList.Count<List<TSource>, TSource>(source, predicate);
-        [Pure]
-        public static int Count<TSource>(this List<TSource> source, PredicateAt<TSource> predicate)
-            => ReadOnlyList.Count<List<TSource>, TSource>(source, predicate);
-
-        [Pure]
-        public static long LongCount<TSource>(this List<TSource> source)
-            => ValueEnumerable.LongCount<ValueWrapper<TSource>, List<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source));
-        [Pure]
-        public static long LongCount<TSource>(this List<TSource> source, Predicate<TSource> predicate)
-            => ValueEnumerable.LongCount<ValueWrapper<TSource>, List<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
 
         [Pure]
         public static ReadOnlyList.SkipTakeEnumerable<List<TSource>, TSource> Skip<TSource>(this List<TSource> source, int count)
@@ -103,31 +90,17 @@ namespace NetFabric.Hyperlinq
         public static TSource First<TSource>(this List<TSource> source)
             => ReadOnlyList.First<List<TSource>, TSource>(source);
         [Pure]
-        public static TSource First<TSource>(this List<TSource> source, Predicate<TSource> predicate)
-            => ReadOnlyList.First<List<TSource>, TSource>(source, predicate);
-        [Pure]
         [return: MaybeNull]
         public static TSource FirstOrDefault<TSource>(this List<TSource> source)
             => ReadOnlyList.FirstOrDefault<List<TSource>, TSource>(source);
-        [Pure]
-        [return: MaybeNull]
-        public static TSource FirstOrDefault<TSource>(this List<TSource> source, Predicate<TSource> predicate)
-            => ReadOnlyList.FirstOrDefault<List<TSource>, TSource>(source, predicate);
 
         [Pure]
         public static TSource Single<TSource>(this List<TSource> source)
             => ReadOnlyList.Single<List<TSource>, TSource>(source);
         [Pure]
-        public static TSource Single<TSource>(this List<TSource> source, Predicate<TSource> predicate)
-            => ReadOnlyList.Single<List<TSource>, TSource>(source, predicate);
-        [Pure]
         [return: MaybeNull]
         public static TSource SingleOrDefault<TSource>(this List<TSource> source)
             => ReadOnlyList.SingleOrDefault<List<TSource>, TSource>(source);
-        [Pure]
-        [return: MaybeNull]
-        public static TSource SingleOrDefault<TSource>(this List<TSource> source, Predicate<TSource> predicate)
-            => ReadOnlyList.SingleOrDefault<List<TSource>, TSource>(source, predicate);
 
         [Pure]
         public static ReadOnlyList.DistinctEnumerable<List<TSource>, TSource> Distinct<TSource>(this List<TSource> source, IEqualityComparer<TSource>? comparer = null)

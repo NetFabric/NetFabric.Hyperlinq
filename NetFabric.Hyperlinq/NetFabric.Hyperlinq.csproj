@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net461;netstandard2.0;netcoreapp2.1;netstandard2.1</TargetFrameworks>
+    <TargetFrameworks>netcoreapp2.1;netstandard2.1</TargetFrameworks>
     <PackageId>NetFabric.Hyperlinq</PackageId>
     <Title>NetFabric.Hyperlinq</Title>
     <Description> High performance LINQ implementation with minimal heap allocations. Supports enumerables, async enumerables, arrays and Span.</Description>
@@ -15,10 +15,6 @@
     <!-- <TreatWarningsAsErrors>true</TreatWarningsAsErrors> -->
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(TargetFramework)'=='netcoreapp2.1' Or '$(TargetFramework)'=='netstandard2.1'">
-    <DefineConstants>$(DefineConstants);NETCORE</DefineConstants>
-  </PropertyGroup>
-
   <PropertyGroup Condition="'$(TargetFramework)'!='netstandard2.1'">
     <!-- disable nullable warning -->
     <NoWarn>$(NoWarn);8600;8601;8602;8603;8604</NoWarn>
@@ -26,13 +22,6 @@
 
   <ItemGroup Condition="'$(TargetFramework)'!='netcoreapp2.1'">
     <Compile Remove="Bindings\System\Collections\Immutable\*.cs" />
-  </ItemGroup>
-  
-  <ItemGroup Condition="'$(TargetFramework)'=='net461' Or '$(TargetFramework)'=='netstandard2.0'">
-    <Compile Remove="**\*.Span.cs" />
-    <Compile Remove="**\*.Memory.cs" />
-    <Compile Remove="**\*.ReadOnlySpan.cs" />
-    <Compile Remove="**\*.ReadOnlyMemory.cs" />
   </ItemGroup>
 
   <ItemGroup>

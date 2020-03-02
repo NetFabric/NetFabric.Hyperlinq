@@ -2,9 +2,9 @@ using NetFabric.Assertive;
 using System;
 using Xunit;
 
-namespace NetFabric.Hyperlinq.UnitTests
+namespace NetFabric.Hyperlinq.UnitTests.Quantifier.All
 {
-    public partial class ValueEnumerableTests
+    public class ValueEnumerableTests
     {
         [Fact]
         public void All_With_NullPredicate_Should_Throw()

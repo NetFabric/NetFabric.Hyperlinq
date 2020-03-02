@@ -13,16 +13,7 @@ namespace NetFabric.Hyperlinq
             => source.Count;
 
         [Pure]
-        public static int Count<TList, TSource>(this TList source, Predicate<TSource> predicate)
-            where TList : notnull, IReadOnlyList<TSource>
-        {
-            if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
-
-            return Count<TList, TSource>(source, predicate, 0, source.Count);
-        }
-
-        [Pure]
-        internal static int Count<TList, TSource>(this TList source, Predicate<TSource> predicate, int skipCount, int takeCount)
+        static int Count<TList, TSource>(this TList source, Predicate<TSource> predicate, int skipCount, int takeCount)
             where TList : notnull, IReadOnlyList<TSource>
         {
             var count = 0;
@@ -33,15 +24,6 @@ namespace NetFabric.Hyperlinq
                 count += Unsafe.As<bool, byte>(ref result);
             }
             return count;
-        }
-
-        [Pure]
-        public static int Count<TList, TSource>(this TList source, PredicateAt<TSource> predicate)
-            where TList : notnull, IReadOnlyList<TSource>
-        {
-            if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
-
-            return Count<TList, TSource>(source, predicate, 0, source.Count);
         }
 
         [Pure]

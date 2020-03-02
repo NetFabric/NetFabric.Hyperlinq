@@ -2,9 +2,9 @@ using NetFabric.Assertive;
 using Xunit;
 using System.Collections.Generic;
 
-namespace NetFabric.Hyperlinq.UnitTests
+namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsValueEnumerable
 {
-    public partial class EnumerableTests
+    public class EnumerableTests
     {
         [Theory]
         [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]

@@ -2,9 +2,9 @@ using NetFabric.Assertive;
 using System;
 using Xunit;
 
-namespace NetFabric.Hyperlinq.UnitTests
+namespace NetFabric.Hyperlinq.UnitTests.Element.Single
 {
-    public partial class ValueEnumerableTests
+    public class ValueEnumerableTests
     {
         [Theory]
         [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
@@ -61,25 +61,6 @@ namespace NetFabric.Hyperlinq.UnitTests
                 .EvaluateTrue(exception => exception.Message == "Sequence contains more than one element");
         }
 
-        [Fact]
-        public void Single_Predicate_With_Null_Should_Throw()
-        {
-            // Arrange
-            var source = new int[0];
-            var wrapped = Wrap
-                .AsValueEnumerable(source);
-            var predicate = (Predicate<int>)null;
-
-            // Act
-            Action action = () => _ = ValueEnumerable
-                .Single<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
-
-            // Assert
-            _ = action.Must()
-                .Throw<ArgumentNullException>()
-                .EvaluateTrue(exception => exception.ParamName == "predicate");
-        }
-
         [Theory]
         [MemberData(nameof(TestData.PredicateEmpty), MemberType = typeof(TestData))]
         public void Single_Predicate_With_Empty_Should_Throw(int[] source, Predicate<int> predicate)
@@ -90,7 +71,8 @@ namespace NetFabric.Hyperlinq.UnitTests
 
             // Act
             Action action = () => _ = ValueEnumerable
-                .Single<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
+                .Where<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, predicate)
+                .Single();
 
             // Assert
             _ = action.Must()
@@ -110,7 +92,8 @@ namespace NetFabric.Hyperlinq.UnitTests
 
             // Act
             var result = ValueEnumerable
-                .Single<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
+                .Where<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, predicate)
+                .Single();
 
             // Assert
             _ = result.Must()
@@ -127,31 +110,13 @@ namespace NetFabric.Hyperlinq.UnitTests
 
             // Act
             Action action = () => _ = ValueEnumerable
-                .Single<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
+                .Where<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, predicate)
+                .Single();
 
             // Assert
             _ = action.Must()
                 .Throw<InvalidOperationException>()
                 .EvaluateTrue(exception => exception.Message == "Sequence contains more than one element");
-        }
-
-        [Fact]
-        public void Single_PredicateAt_With_Null_Should_Throw()
-        {
-            // Arrange
-            var source = new int[0];
-            var wrapped = Wrap
-                .AsValueEnumerable(source);
-            var predicate = (PredicateAt<int>)null;
-
-            // Act
-            Action action = () => _ = ValueEnumerable
-                .Single<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
-
-            // Assert
-            _ = action.Must()
-                .Throw<ArgumentNullException>()
-                .EvaluateTrue(exception => exception.ParamName == "predicate");
         }
 
         [Theory]
@@ -164,7 +129,8 @@ namespace NetFabric.Hyperlinq.UnitTests
 
             // Act
             Action action = () => _ = ValueEnumerable
-                .Single<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
+                .Where<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, predicate)
+                .Single();
 
             // Assert
             _ = action.Must()
@@ -185,7 +151,8 @@ namespace NetFabric.Hyperlinq.UnitTests
 
             // Act
             var result = ValueEnumerable
-                .Single<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
+                .Where<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, predicate)
+                .Single();
 
             // Assert
             _ = result.Must()
@@ -202,7 +169,8 @@ namespace NetFabric.Hyperlinq.UnitTests
 
             // Act
             Action action = () => _ = ValueEnumerable
-                .Single<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
+                .Where<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, predicate)
+                .Single();
 
             // Assert
             _ = action.Must()

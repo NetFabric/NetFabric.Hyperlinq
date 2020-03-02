@@ -3,9 +3,9 @@ using System;
 using System.Collections.Generic;
 using Xunit;
 
-namespace NetFabric.Hyperlinq.UnitTests
+namespace NetFabric.Hyperlinq.UnitTests.Partitioning.SkipTake
 {
-    public partial class ReadOnlyListTests
+    public class ReadOnlyListTests
     {
 
         [Theory]

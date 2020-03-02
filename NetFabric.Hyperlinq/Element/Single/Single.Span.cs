@@ -13,31 +13,9 @@ namespace NetFabric.Hyperlinq
             => ref Single((ReadOnlySpan<TSource>)source);
 
         [Pure]
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ref readonly TSource Single<TSource>(this Span<TSource> source, Predicate<TSource> predicate)
-            => ref Single((ReadOnlySpan<TSource>)source, predicate);
-
-        [Pure]
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ref readonly TSource Single<TSource>(this Span<TSource> source, PredicateAt<TSource> predicate)
-            => ref Single((ReadOnlySpan<TSource>)source, predicate);
-
-        [Pure]
         [return: MaybeNull]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ref readonly TSource SingleOrDefault<TSource>(this Span<TSource> source)
             => ref SingleOrDefault((ReadOnlySpan<TSource>)source);
-
-        [Pure]
-        [return: MaybeNull]
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ref readonly TSource SingleOrDefault<TSource>(this Span<TSource> source, Predicate<TSource> predicate)
-            => ref SingleOrDefault((ReadOnlySpan<TSource>)source, predicate);
-
-        [Pure]
-        [return: MaybeNull]
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ref readonly TSource SingleOrDefault<TSource>(this Span<TSource> source, PredicateAt<TSource> predicate)
-            => ref SingleOrDefault((ReadOnlySpan<TSource>)source, predicate);
     }
 }

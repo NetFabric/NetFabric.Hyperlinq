@@ -2,9 +2,9 @@ using NetFabric.Assertive;
 using System;
 using Xunit;
 
-namespace NetFabric.Hyperlinq.UnitTests
+namespace NetFabric.Hyperlinq.UnitTests.Element.SingleOrDefault
 {
-    public partial class ReadOnlyMemoryTests
+    public class ReadOnlyMemoryTests
     {
         [Theory]
         [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
@@ -31,30 +31,13 @@ namespace NetFabric.Hyperlinq.UnitTests
             // Arrange
 
             // Act
-            Action action = () => _ = Array
+            Action action = () => _ = ref Array
                 .SingleOrDefault<int>((ReadOnlyMemory<int>)source.AsMemory());
 
             // Assert
             _ = action.Must()
                 .Throw<InvalidOperationException>()
                 .EvaluateTrue(exception => exception.Message == "Sequence contains more than one element");
-        }
-
-        [Fact]
-        public void SingleOrDefault_Predicate_With_Null_Should_Throw()
-        {
-            // Arrange
-            var source = new int[0];
-            var predicate = (Predicate<int>)null;
-
-            // Act
-            Action action = () => _ = Array
-                .SingleOrDefault<int>((ReadOnlyMemory<int>)source.AsMemory(), predicate);
-
-            // Assert
-            _ = action.Must()
-                .Throw<ArgumentNullException>()
-                .EvaluateTrue(exception => exception.ParamName == "predicate");
         }
 
         [Theory]
@@ -68,7 +51,8 @@ namespace NetFabric.Hyperlinq.UnitTests
 
             // Act
             ref readonly var result = ref Array
-                .SingleOrDefault<int>((ReadOnlyMemory<int>)source.AsMemory(), predicate);
+                .Where<int>((ReadOnlyMemory<int>)source.AsMemory(), predicate)
+                .SingleOrDefault();
 
             // Assert
             _ = result.Must()
@@ -82,30 +66,14 @@ namespace NetFabric.Hyperlinq.UnitTests
             // Arrange
 
             // Act
-            Action action = () => _ = Array
-                .SingleOrDefault<int>((ReadOnlyMemory<int>)source.AsMemory(), predicate);
+            Action action = () => _ = ref Array
+                .Where<int>((ReadOnlyMemory<int>)source.AsMemory(), predicate)
+                .SingleOrDefault();
 
             // Assert
             _ = action.Must()
                 .Throw<InvalidOperationException>()
                 .EvaluateTrue(exception => exception.Message == "Sequence contains more than one element");
-        }
-
-        [Fact]
-        public void SingleOrDefault_PredicateAt_With_Null_Should_Throw()
-        {
-            // Arrange
-            var source = new int[0];
-            var predicate = (PredicateAt<int>)null;
-
-            // Act
-            Action action = () => _ = Array
-                .SingleOrDefault<int>((ReadOnlyMemory<int>)source.AsMemory(), predicate);
-
-            // Assert
-            _ = action.Must()
-                .Throw<ArgumentNullException>()
-                .EvaluateTrue(exception => exception.ParamName == "predicate");
         }
 
         [Theory]
@@ -120,7 +88,8 @@ namespace NetFabric.Hyperlinq.UnitTests
 
             // Act
             ref readonly var result = ref Array
-                .SingleOrDefault<int>((ReadOnlyMemory<int>)source.AsMemory(), predicate);
+                .Where<int>((ReadOnlyMemory<int>)source.AsMemory(), predicate)
+                .SingleOrDefault();
 
             // Assert
             _ = result.Must()
@@ -134,8 +103,9 @@ namespace NetFabric.Hyperlinq.UnitTests
             // Arrange
 
             // Act
-            Action action = () => _ = Array
-                .SingleOrDefault<int>((ReadOnlyMemory<int>)source.AsMemory(), predicate);
+            Action action = () => _ = ref Array
+                .Where<int>((ReadOnlyMemory<int>)source.AsMemory(), predicate)
+                .SingleOrDefault();
 
             // Assert
             _ = action.Must()

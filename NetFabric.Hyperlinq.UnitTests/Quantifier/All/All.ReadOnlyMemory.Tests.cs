@@ -2,9 +2,9 @@ using System;
 using NetFabric.Assertive;
 using Xunit;
 
-namespace NetFabric.Hyperlinq.UnitTests
+namespace NetFabric.Hyperlinq.UnitTests.Quantifier.All
 {
-    public partial class ReadOnlyMemoryTests
+    public class ReadOnlyMemoryTests
     {
         [Fact]
         public void All_Predicate_With_NullPredicate_Should_Throw()

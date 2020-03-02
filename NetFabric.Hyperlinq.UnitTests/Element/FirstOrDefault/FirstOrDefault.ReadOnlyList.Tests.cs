@@ -2,9 +2,9 @@ using NetFabric.Assertive;
 using System;
 using Xunit;
 
-namespace NetFabric.Hyperlinq.UnitTests
+namespace NetFabric.Hyperlinq.UnitTests.Element.FirstOrDefault
 {
-    public partial class ReadOnlyListTests
+    public class ReadOnlyListTests
     {
         [Theory]
         [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
@@ -52,25 +52,6 @@ namespace NetFabric.Hyperlinq.UnitTests
                 .BeEqualTo(expected);
         }
 
-        [Fact]
-        public void FirstOrDefault_Predicate_With_Null_Should_Throw()
-        {
-            // Arrange
-            var source = new int[0];
-            var wrapped = Wrap
-                .AsValueReadOnlyList(source);
-            var predicate = (Predicate<int>)null;
-
-            // Act
-            Action action = () => _ = ReadOnlyList
-                .FirstOrDefault<Wrap.ValueReadOnlyList<int>, int>(wrapped, predicate);
-
-            // Assert
-            _ = action.Must()
-                .Throw<ArgumentNullException>()
-                .EvaluateTrue(exception => exception.ParamName == "predicate");
-        }
-
         [Theory]
         [MemberData(nameof(TestData.PredicateEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateSingle), MemberType = typeof(TestData))]
@@ -85,7 +66,8 @@ namespace NetFabric.Hyperlinq.UnitTests
 
             // Act
             var result = ReadOnlyList
-                .FirstOrDefault<Wrap.ValueReadOnlyList<int>, int>(wrapped, predicate);
+                .Where<Wrap.ValueReadOnlyList<int>, int>(wrapped, predicate)
+                .FirstOrDefault();
 
             // Assert
             _ = result.Must()
@@ -110,31 +92,12 @@ namespace NetFabric.Hyperlinq.UnitTests
             var result = ReadOnlyList
                 .Skip<Wrap.ValueReadOnlyList<int>, int>(wrapped, skipCount)
                 .Take(takeCount)
-                .FirstOrDefault(predicate);
+                .Where(predicate)
+                .FirstOrDefault();
 
             // Assert
             _ = result.Must()
                 .BeEqualTo(expected);
-        }
-
-        [Fact]
-        public void FirstOrDefault_PredicateAt_With_Null_Should_Throw()
-        {
-            // Arrange
-            var source = new int[0];
-            var wrapped = Wrap
-                .AsValueReadOnlyList(source);
-            var predicate = (PredicateAt<int>)null;
-
-            // Act
-            Action action = () => _ = ReadOnlyList
-                .Where<Wrap.ValueReadOnlyList<int>, int>(wrapped, predicate)
-                .FirstOrDefault();
-
-            // Assert
-            _ = action.Must()
-                .Throw<ArgumentNullException>()
-                .EvaluateTrue(exception => exception.ParamName == "predicate");
         }
 
         [Theory]
@@ -179,7 +142,8 @@ namespace NetFabric.Hyperlinq.UnitTests
             var result = ReadOnlyList
                 .Skip<Wrap.ValueReadOnlyList<int>, int>(wrapped, skipCount)
                 .Take(takeCount)
-                .FirstOrDefault(predicate);
+                .Where(predicate)
+                .FirstOrDefault();
 
             // Assert
             _ = result.Must()

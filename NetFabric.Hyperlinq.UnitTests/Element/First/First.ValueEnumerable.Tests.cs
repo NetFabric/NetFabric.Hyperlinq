@@ -2,9 +2,9 @@ using NetFabric.Assertive;
 using System;
 using Xunit;
 
-namespace NetFabric.Hyperlinq.UnitTests
+namespace NetFabric.Hyperlinq.UnitTests.Element.First
 {
-    public partial class ValueEnumerableTests
+    public class ValueEnumerableTests
     {
         [Theory]
         [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
@@ -44,25 +44,6 @@ namespace NetFabric.Hyperlinq.UnitTests
                 .BeEqualTo(expected);
         }
 
-        [Fact]
-        public void First_Predicate_With_Null_Should_Throw()
-        {
-            // Arrange
-            var source = new int[0];
-            var wrapped = Wrap
-                .AsValueEnumerable(source);
-            var predicate = (Predicate<int>)null;
-
-            // Act
-            Action action = () => _ = ValueEnumerable
-                .First<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
-
-            // Assert
-            _ = action.Must()
-                .Throw<ArgumentNullException>()
-                .EvaluateTrue(exception => exception.ParamName == "predicate");
-        }
-
         [Theory]
         [MemberData(nameof(TestData.PredicateEmpty), MemberType = typeof(TestData))]
         public void First_Predicate_With_Empty_Should_Throw(int[] source, Predicate<int> predicate)
@@ -73,7 +54,8 @@ namespace NetFabric.Hyperlinq.UnitTests
 
             // Act
             Action action = () => _ = ValueEnumerable
-                .First<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
+                .Where<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, predicate)
+                .First();
 
             // Assert
             _ = action.Must()
@@ -94,31 +76,12 @@ namespace NetFabric.Hyperlinq.UnitTests
 
             // Act
             var result = ValueEnumerable
-                .First<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
-
-            // Assert
-            _ = result.Must()
-                .BeEqualTo(expected);
-        }
-
-        [Fact]
-        public void First_PredicateAt_With_Null_Should_Throw()
-        {
-            // Arrange
-            var source = new int[0];
-            var wrapped = Wrap
-                .AsValueEnumerable(source);
-            var predicate = (PredicateAt<int>)null;
-
-            // Act
-            Action action = () => _ = ValueEnumerable
                 .Where<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, predicate)
                 .First();
 
             // Assert
-            _ = action.Must()
-                .Throw<ArgumentNullException>()
-                .EvaluateTrue(exception => exception.ParamName == "predicate");
+            _ = result.Must()
+                .BeEqualTo(expected);
         }
 
         [Theory]

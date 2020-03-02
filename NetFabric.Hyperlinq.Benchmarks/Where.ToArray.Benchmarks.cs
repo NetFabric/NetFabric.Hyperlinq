@@ -58,7 +58,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [BenchmarkCategory("Array")]
         [Benchmark]
         public int[] Hyperlinq_Memory() =>
-            array.AsMemory().Where(item => (item & 0x01) == 0).ToArray();
+            memory.Where(item => (item & 0x01) == 0).ToArray();
 
         [BenchmarkCategory("Enumerable_Value")]
         [Benchmark]

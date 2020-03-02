@@ -1,6 +1,8 @@
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Configs;
 using JM.LinqFaster;
+using JM.LinqFaster.SIMD;
+using System;
 
 namespace NetFabric.Hyperlinq.Benchmarks
 {
@@ -47,13 +49,28 @@ namespace NetFabric.Hyperlinq.Benchmarks
 
         [BenchmarkCategory("Array")]
         [Benchmark]
-        public bool LinqFaster_Array() =>
+        public bool LinqFaster_ConstainsF() =>
             array.ContainsF(Count - 1);
+
+        [BenchmarkCategory("Array")]
+        [Benchmark]
+        public bool LinqFaster_ContainsS() =>
+            array.ContainsS(Count - 1);
 
         [BenchmarkCategory("Array")]
         [Benchmark]
         public bool Hyperlinq_Array() =>
             array.Contains(Count - 1);
+
+        [BenchmarkCategory("Array")]
+        [Benchmark]
+        public bool Hyperlinq_Span() =>
+            array.AsSpan().Contains(Count - 1);
+
+        [BenchmarkCategory("Array")]
+        [Benchmark]
+        public bool Hyperlinq_Memory() =>
+            memory.Contains(Count - 1);
 
         [BenchmarkCategory("Enumerable_Value")]
         [Benchmark]

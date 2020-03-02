@@ -2,9 +2,9 @@ using System.Threading.Tasks;
 using NetFabric.Assertive;
 using Xunit;
 
-namespace NetFabric.Hyperlinq.UnitTests
+namespace NetFabric.Hyperlinq.UnitTests.Partitioning.Skip
 {
-    public partial class AsyncValueEnumerableTests
+    public class AsyncValueEnumerableTests
     {
         // [Theory]
         // [MemberData(nameof(TestData.SkipEmpty), MemberType = typeof(TestData))]

@@ -15,6 +15,7 @@
   <ItemGroup>
     <PackageReference Include="BenchmarkDotNet" Version="0.12.0" />
     <PackageReference Include="LinqFaster" Version="1.0.0" />
+    <PackageReference Include="LinqFaster.SIMD" Version="1.0.3" />
     <PackageReference Include="System.Interactive" Version="4.0.0" />
     <PackageReference Include="System.Linq.Async" Version="4.0.0" />
     <ProjectReference Include="..\NetFabric.Hyperlinq\NetFabric.Hyperlinq.csproj" />

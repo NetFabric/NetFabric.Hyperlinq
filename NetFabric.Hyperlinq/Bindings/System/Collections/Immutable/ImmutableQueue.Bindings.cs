@@ -14,19 +14,6 @@ namespace NetFabric.Hyperlinq
         [Pure]
         public static int Count<TSource>(this ImmutableQueue<TSource> source)
             => ValueEnumerable.Count<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source));
-        [Pure]
-        public static int Count<TSource>(this ImmutableQueue<TSource> source, Predicate<TSource> predicate)
-            => ValueEnumerable.Count<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
-        [Pure]
-        public static int Count<TSource>(this ImmutableQueue<TSource> source, PredicateAt<TSource> predicate)
-            => ValueEnumerable.Count<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
-
-        [Pure]
-        public static long LongCount<TSource>(this ImmutableQueue<TSource> source)
-            => ValueEnumerable.LongCount<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source));
-        [Pure]
-        public static long LongCount<TSource>(this ImmutableQueue<TSource> source, Predicate<TSource> predicate)
-            => ValueEnumerable.LongCount<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
 
         [Pure]
         public static ValueEnumerable.SkipEnumerable<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource> Skip<TSource>(this ImmutableQueue<TSource> source, int count)
@@ -105,31 +92,17 @@ namespace NetFabric.Hyperlinq
         public static TSource First<TSource>(this ImmutableQueue<TSource> source)
             => ValueEnumerable.First<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source));
         [Pure]
-        public static TSource First<TSource>(this ImmutableQueue<TSource> source, Predicate<TSource> predicate)
-            => ValueEnumerable.First<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
-        [Pure]
         [return: MaybeNull]
         public static TSource FirstOrDefault<TSource>(this ImmutableQueue<TSource> source)
             => ValueEnumerable.FirstOrDefault<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source));
-        [Pure]
-        [return: MaybeNull]
-        public static TSource FirstOrDefault<TSource>(this ImmutableQueue<TSource> source, Predicate<TSource> predicate)
-            => ValueEnumerable.FirstOrDefault<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
 
         [Pure]
         public static TSource Single<TSource>(this ImmutableQueue<TSource> source)
             => ValueEnumerable.Single<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source));
         [Pure]
-        public static TSource Single<TSource>(this ImmutableQueue<TSource> source, Predicate<TSource> predicate)
-            => ValueEnumerable.Single<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
-        [Pure]
         [return: MaybeNull]
         public static TSource SingleOrDefault<TSource>(this ImmutableQueue<TSource> source)
             => ValueEnumerable.SingleOrDefault<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source));
-        [Pure]
-        [return: MaybeNull]
-        public static TSource SingleOrDefault<TSource>(this ImmutableQueue<TSource> source, Predicate<TSource> predicate)
-            => ValueEnumerable.SingleOrDefault<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
 
         [Pure]
         public static ValueEnumerable.DistinctEnumerable<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource> Distinct<TSource>(this ImmutableQueue<TSource> source, IEqualityComparer<TSource>? comparer = null)

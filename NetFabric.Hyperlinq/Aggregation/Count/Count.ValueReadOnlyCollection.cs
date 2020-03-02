@@ -12,52 +12,6 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : notnull, IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
             => source.Count;
-
-        [Pure]
-        public static int Count<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Predicate<TSource> predicate)
-            where TEnumerable : notnull, IValueReadOnlyCollection<TSource, TEnumerator>
-            where TEnumerator : struct, IEnumerator<TSource>
-        {
-            if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
-
-            var count = 0;
-            if (source.Count != 0)
-            {
-                using var enumerator = source.GetEnumerator();
-                checked
-                {
-                    while (enumerator.MoveNext())
-                    {
-                        var result = predicate(enumerator.Current);
-                        count += Unsafe.As<bool, byte>(ref result);
-                    }
-                }
-            }
-            return count;
-        }
-
-        [Pure]
-        public static int Count<TEnumerable, TEnumerator, TSource>(this TEnumerable source, PredicateAt<TSource> predicate)
-            where TEnumerable : notnull, IValueReadOnlyCollection<TSource, TEnumerator>
-            where TEnumerator : struct, IEnumerator<TSource>
-        {
-            if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
-                
-            var count = 0;
-            if (source.Count != 0)
-            {
-                using var enumerator = source.GetEnumerator();
-                checked
-                {
-                    for (var index = 0; enumerator.MoveNext(); index++)
-                    {
-                        var result = predicate(enumerator.Current, index);
-                        count += Unsafe.As<bool, byte>(ref result);
-                    }
-                }
-            }
-            return count;
-        }
     }
 }
 

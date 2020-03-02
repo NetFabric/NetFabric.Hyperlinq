@@ -2,9 +2,9 @@ using NetFabric.Assertive;
 using System;
 using Xunit;
 
-namespace NetFabric.Hyperlinq.UnitTests
+namespace NetFabric.Hyperlinq.UnitTests.Projection.SelectIndex
 {
-    public partial class ValueEnumerableTests
+    public class ValueEnumerableTests
     {
         [Fact]
         public void SelectIndex_With_NullSelector_Should_Throw()
