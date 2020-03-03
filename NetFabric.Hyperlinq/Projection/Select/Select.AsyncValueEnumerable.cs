@@ -51,14 +51,14 @@ namespace NetFabric.Hyperlinq
                 TEnumerator enumerator; // do not make readonly
                 readonly AsyncSelector<TSource, TResult> selector;
                 readonly CancellationToken cancellationToken;
-                TResult current;
+                [MaybeNull] TResult current;
 
                 internal Enumerator(in SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult> enumerable, CancellationToken cancellationToken)
                 {
                     enumerator = enumerable.source.GetAsyncEnumerator(cancellationToken);
                     selector = enumerable.selector;
                     this.cancellationToken = cancellationToken;
-                    current = default;
+                    current = default!;
                 }
 
                 [MaybeNull]

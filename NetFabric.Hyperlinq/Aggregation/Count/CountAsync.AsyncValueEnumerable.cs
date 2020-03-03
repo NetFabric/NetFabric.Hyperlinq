@@ -28,57 +28,45 @@ namespace NetFabric.Hyperlinq
         }
 
         [Pure]
-        static ValueTask<int> CountAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source, AsyncPredicate<TSource> predicate, CancellationToken cancellationToken)
+        static async ValueTask<int> CountAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source, AsyncPredicate<TSource> predicate, CancellationToken cancellationToken)
             where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
-            cancellationToken.ThrowIfCancellationRequested();
-            return ExecuteAsync(source, predicate, cancellationToken);
-
-            static async ValueTask<int> ExecuteAsync(TEnumerable source, AsyncPredicate<TSource> predicate, CancellationToken cancellationToken)
+            var count = 0;
+            var enumerator = source.GetAsyncEnumerator(cancellationToken);
+            await using (enumerator.ConfigureAwait(false))
             {
-                var count = 0;
-                var enumerator = source.GetAsyncEnumerator(cancellationToken);
-                await using (enumerator.ConfigureAwait(false))
+                checked
                 {
-                    checked
+                    while (await enumerator.MoveNextAsync().ConfigureAwait(false))
                     {
-                        while (await enumerator.MoveNextAsync().ConfigureAwait(false))
-                        {
-                            var result = await predicate(enumerator.Current, cancellationToken).ConfigureAwait(false);
-                            count += Unsafe.As<bool, byte>(ref result);
-                        }
+                        var result = await predicate(enumerator.Current, cancellationToken).ConfigureAwait(false);
+                        count += Unsafe.As<bool, byte>(ref result);
                     }
                 }
-                return count;
             }
+            return count;
         }
 
         [Pure]
-        static ValueTask<int> CountAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source, AsyncPredicateAt<TSource> predicate, CancellationToken cancellationToken)
+        static async ValueTask<int> CountAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source, AsyncPredicateAt<TSource> predicate, CancellationToken cancellationToken)
             where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
-            cancellationToken.ThrowIfCancellationRequested();
-            return ExecuteAsync(source, predicate, cancellationToken);
-
-            static async ValueTask<int> ExecuteAsync(TEnumerable source, AsyncPredicateAt<TSource> predicate, CancellationToken cancellationToken)
+            var count = 0;
+            var enumerator = source.GetAsyncEnumerator(cancellationToken);
+            await using (enumerator.ConfigureAwait(false))
             {
-                var count = 0;
-                var enumerator = source.GetAsyncEnumerator(cancellationToken);
-                await using (enumerator.ConfigureAwait(false))
+                checked
                 {
-                    checked
+                    for (var index = 0; await enumerator.MoveNextAsync().ConfigureAwait(false); index++)
                     {
-                        for (var index = 0; await enumerator.MoveNextAsync().ConfigureAwait(false); index++)
-                        {
-                            var result = await predicate(enumerator.Current, index, cancellationToken).ConfigureAwait(false);
-                            count += Unsafe.As<bool, byte>(ref result);
-                        }
+                        var result = await predicate(enumerator.Current, index, cancellationToken).ConfigureAwait(false);
+                        count += Unsafe.As<bool, byte>(ref result);
                     }
                 }
-                return count;
             }
+            return count;
         }
     }
 }

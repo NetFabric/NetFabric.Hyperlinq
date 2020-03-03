@@ -18,18 +18,12 @@ namespace NetFabric.Hyperlinq
         }
 
         [Pure]
-        static ValueTask<TSource> FirstAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source, AsyncPredicate<TSource> predicate, CancellationToken cancellationToken = default)
+        static async ValueTask<TSource> FirstAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source, AsyncPredicate<TSource> predicate, CancellationToken cancellationToken = default)
             where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
-            cancellationToken.ThrowIfCancellationRequested();
-            return ExecuteAsync(source, predicate, cancellationToken);
-
-            static async ValueTask<TSource> ExecuteAsync(TEnumerable source, AsyncPredicate<TSource> predicate, CancellationToken cancellationToken)
-            {
-                var result = await GetFirstAsync<TEnumerable, TEnumerator, TSource>(source, predicate, cancellationToken).ConfigureAwait(false);
-                return result.ThrowOnEmpty();
-            }
+            var result = await GetFirstAsync<TEnumerable, TEnumerator, TSource>(source, predicate, cancellationToken).ConfigureAwait(false);
+            return result.ThrowOnEmpty();
         }
 
         [Pure]
@@ -42,20 +36,12 @@ namespace NetFabric.Hyperlinq
         }
 
         [Pure]
-        static ValueTask<TSource> FirstOrDefaultAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source, AsyncPredicate<TSource> predicate, CancellationToken cancellationToken = default) 
+        static async ValueTask<TSource> FirstOrDefaultAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source, AsyncPredicate<TSource> predicate, CancellationToken cancellationToken = default) 
             where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
-            if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
-
-            cancellationToken.ThrowIfCancellationRequested();
-            return ExecuteAsync(source, predicate, cancellationToken);
-
-            static async ValueTask<TSource> ExecuteAsync(TEnumerable source, AsyncPredicate<TSource> predicate, CancellationToken cancellationToken)
-            {
-                var result = await GetFirstAsync<TEnumerable, TEnumerator, TSource>(source, predicate, cancellationToken).ConfigureAwait(false);
-                return result.DefaultOnEmpty();
-            }
+            var result = await GetFirstAsync<TEnumerable, TEnumerator, TSource>(source, predicate, cancellationToken).ConfigureAwait(false);
+            return result.DefaultOnEmpty();
         }
 
         [Pure]

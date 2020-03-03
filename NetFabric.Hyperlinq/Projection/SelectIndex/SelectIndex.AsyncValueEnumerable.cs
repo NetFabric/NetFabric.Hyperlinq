@@ -52,7 +52,7 @@ namespace NetFabric.Hyperlinq
                 readonly AsyncSelectorAt<TSource, TResult> selector;
                 readonly CancellationToken cancellationToken;
                 int index;
-                TResult current;
+                [MaybeNull] TResult current;
 
                 internal Enumerator(in SelectIndexEnumerable<TEnumerable, TEnumerator, TSource, TResult> enumerable, CancellationToken cancellationToken)
                 {
@@ -60,7 +60,7 @@ namespace NetFabric.Hyperlinq
                     selector = enumerable.selector;
                     this.cancellationToken = cancellationToken;
                     index = -1;
-                    current = default;
+                    current = default!;
                 }
 
                 [MaybeNull]
