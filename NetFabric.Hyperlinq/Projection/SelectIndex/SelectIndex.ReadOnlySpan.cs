@@ -67,6 +67,14 @@ namespace NetFabric.Hyperlinq
                     => ++index < source.Length;
             }
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public bool Any()
+                => source.Length != 0;
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public bool Contains(TResult value, IEqualityComparer<TResult>? comparer = null)
+                => Array.Contains(source, value, comparer, selector);
+
             public TResult[] ToArray()
                 => Array.ToArray(source, selector);
 

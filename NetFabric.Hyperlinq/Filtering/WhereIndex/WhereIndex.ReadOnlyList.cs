@@ -116,17 +116,12 @@ namespace NetFabric.Hyperlinq
 
             public int Count()
                 => ReadOnlyList.Count<TList, TSource>(source, predicate, skipCount, takeCount);
-            public int Count(Predicate<TSource> predicate)
-                => ReadOnlyList.Count<TList, TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount);
-            public int Count(PredicateAt<TSource> predicate)
-                => ReadOnlyList.Count<TList, TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount);
 
             public bool Any()
                 => ReadOnlyList.Any<TList, TSource>(source, predicate, skipCount, takeCount);
-            public bool Any(Predicate<TSource> predicate)
-                => ReadOnlyList.Any<TList, TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount);
-            public bool Any(PredicateAt<TSource> predicate)
-                => ReadOnlyList.Any<TList, TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount);
+                
+            public bool Contains(TSource value, IEqualityComparer<TSource>? comparer = null)
+                => ReadOnlyList.Contains<TList, TSource>(source, value, comparer, predicate, skipCount, takeCount);
 
             public ReadOnlyList.WhereIndexEnumerable<TList, TSource> Where(Predicate<TSource> predicate)
                 => ReadOnlyList.Where<TList, TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount);
@@ -135,37 +130,17 @@ namespace NetFabric.Hyperlinq
 
             public TSource First()
                 => ReadOnlyList.GetFirst<TList, TSource>(source, predicate, skipCount, takeCount).ThrowOnEmpty();
-            public TSource First(Predicate<TSource> predicate)
-                => ReadOnlyList.GetFirst<TList, TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount).ThrowOnEmpty();
-            public TSource First(PredicateAt<TSource> predicate)
-                => ReadOnlyList.GetFirst<TList, TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount).ThrowOnEmpty();
 
             [return: MaybeNull]
             public TSource FirstOrDefault()
                 => ReadOnlyList.GetFirst<TList, TSource>(source, predicate, skipCount, takeCount).DefaultOnEmpty();
-            [return: MaybeNull]
-            public TSource FirstOrDefault(Predicate<TSource> predicate)
-                => ReadOnlyList.GetFirst<TList, TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount).DefaultOnEmpty();
-            [return: MaybeNull]
-            public TSource FirstOrDefault(PredicateAt<TSource> predicate)
-                => ReadOnlyList.GetFirst<TList, TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount).DefaultOnEmpty();
 
             public TSource Single()
                 => ReadOnlyList.GetSingle<TList, TSource>(source, predicate, skipCount, takeCount).ThrowOnEmpty();
-            public TSource Single(Predicate<TSource> predicate)
-                => ReadOnlyList.GetSingle<TList, TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount).ThrowOnEmpty();
-            public TSource Single(PredicateAt<TSource> predicate)
-                => ReadOnlyList.GetSingle<TList, TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount).ThrowOnEmpty();
 
             [return: MaybeNull]
             public TSource SingleOrDefault()
                 => ReadOnlyList.GetSingle<TList, TSource>(source, predicate, skipCount, takeCount).DefaultOnEmpty();
-            [return: MaybeNull]
-            public TSource SingleOrDefault(Predicate<TSource> predicate)
-                => ReadOnlyList.GetSingle<TList, TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount).DefaultOnEmpty();
-            [return: MaybeNull]
-            public TSource SingleOrDefault(PredicateAt<TSource> predicate)
-                => ReadOnlyList.GetSingle<TList, TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount).DefaultOnEmpty();
 
             public TSource[] ToArray()
                 => ReadOnlyList.ToArray<TList, TSource>(source, predicate, skipCount, takeCount);

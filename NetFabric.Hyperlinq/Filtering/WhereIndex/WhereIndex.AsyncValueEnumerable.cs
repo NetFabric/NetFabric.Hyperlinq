@@ -77,17 +77,12 @@ namespace NetFabric.Hyperlinq
 
             public ValueTask<int> CountAsync(CancellationToken cancellationToken = default)
                 => AsyncValueEnumerable.CountAsync<TEnumerable, TEnumerator, TSource>(source, predicate, cancellationToken);
-            public ValueTask<int> CountAsync(AsyncPredicate<TSource> predicate, CancellationToken cancellationToken = default)
-                => AsyncValueEnumerable.CountAsync<TEnumerable, TEnumerator, TSource>(source, Utils.Combine(this.predicate, predicate), cancellationToken);
-            public ValueTask<int> CountAsync(AsyncPredicateAt<TSource> predicate, CancellationToken cancellationToken = default)
-                => AsyncValueEnumerable.CountAsync<TEnumerable, TEnumerator, TSource>(source, Utils.Combine(this.predicate, predicate), cancellationToken);
 
             public ValueTask<bool> AnyAsync(CancellationToken cancellationToken = default)
                 => AsyncValueEnumerable.AnyAsync<TEnumerable, TEnumerator, TSource>(source, predicate, cancellationToken);
-            public ValueTask<bool> AnyAsync(AsyncPredicate<TSource> predicate, CancellationToken cancellationToken = default)
-                => AsyncValueEnumerable.AnyAsync<TEnumerable, TEnumerator, TSource>(source, Utils.Combine(this.predicate, predicate), cancellationToken);
-            public ValueTask<bool> AnyAsync(AsyncPredicateAt<TSource> predicate, CancellationToken cancellationToken = default)
-                => AsyncValueEnumerable.AnyAsync<TEnumerable, TEnumerator, TSource>(source, Utils.Combine(this.predicate, predicate), cancellationToken);
+                
+            public ValueTask<bool> ContainsAsync(TSource value, IEqualityComparer<TSource>? comparer = null, CancellationToken cancellationToken = default)
+                => AsyncValueEnumerable.ContainsAsync<TEnumerable, TEnumerator, TSource>(source, value, comparer, predicate, cancellationToken);
 
             public AsyncValueEnumerable.WhereIndexEnumerable<TEnumerable, TEnumerator, TSource> Where(AsyncPredicate<TSource> predicate)
                 => AsyncValueEnumerable.Where<TEnumerable, TEnumerator, TSource>(source, Utils.Combine(this.predicate, predicate));
@@ -97,44 +92,18 @@ namespace NetFabric.Hyperlinq
             public async ValueTask<TSource> FirstAsync(CancellationToken cancellationToken = default)
                 => (await AsyncValueEnumerable.GetFirstAsync<TEnumerable, TEnumerator, TSource>(source, predicate, cancellationToken).ConfigureAwait(false))
                     .ThrowOnEmpty();
-            public async ValueTask<TSource> FirstAsync(AsyncPredicate<TSource> predicate, CancellationToken cancellationToken = default)
-                => (await AsyncValueEnumerable.GetFirstAsync<TEnumerable, TEnumerator, TSource>(source, Utils.Combine(this.predicate, predicate), cancellationToken).ConfigureAwait(false))
-                    .ThrowOnEmpty();
-            public async ValueTask<TSource> FirstAsync(AsyncPredicateAt<TSource> predicate, CancellationToken cancellationToken = default)
-                => (await AsyncValueEnumerable.GetFirstAsync<TEnumerable, TEnumerator, TSource>(source, Utils.Combine(this.predicate, predicate), cancellationToken).ConfigureAwait(false))
-                    .ThrowOnEmpty();
 
             public async ValueTask<TSource> FirstOrDefaultAsync(CancellationToken cancellationToken = default)
                 => (await AsyncValueEnumerable.GetFirstAsync<TEnumerable, TEnumerator, TSource>(source, predicate, cancellationToken).ConfigureAwait(false))
-                    .DefaultOnEmpty();
-            public async ValueTask<TSource> FirstOrDefaultAsync(AsyncPredicate<TSource> predicate, CancellationToken cancellationToken = default)
-                => (await AsyncValueEnumerable.GetFirstAsync<TEnumerable, TEnumerator, TSource>(source, Utils.Combine(this.predicate, predicate), cancellationToken).ConfigureAwait(false))
-                    .DefaultOnEmpty();
-            public async ValueTask<TSource> FirstOrDefaultAsync(AsyncPredicateAt<TSource> predicate, CancellationToken cancellationToken = default)
-                => (await AsyncValueEnumerable.GetFirstAsync<TEnumerable, TEnumerator, TSource>(source, Utils.Combine(this.predicate, predicate), cancellationToken).ConfigureAwait(false))
                     .DefaultOnEmpty();
 
             public async ValueTask<TSource> SingleAsync(CancellationToken cancellationToken = default)
                 => (await AsyncValueEnumerable.GetSingleAsync<TEnumerable, TEnumerator, TSource>(source, predicate, cancellationToken))
                     .ThrowOnEmpty();
-            public async ValueTask<TSource> SingleAsync(AsyncPredicate<TSource> predicate, CancellationToken cancellationToken = default)
-                => (await AsyncValueEnumerable.GetSingleAsync<TEnumerable, TEnumerator, TSource>(source, Utils.Combine(this.predicate, predicate), cancellationToken))
-                    .ThrowOnEmpty();
-            public async ValueTask<TSource> SingleAsync(AsyncPredicateAt<TSource> predicate, CancellationToken cancellationToken = default)
-                => (await AsyncValueEnumerable.GetSingleAsync<TEnumerable, TEnumerator, TSource>(source, Utils.Combine(this.predicate, predicate), cancellationToken))
-                    .ThrowOnEmpty();
 
             [return: MaybeNull]
             public async ValueTask<TSource> SingleOrDefaultAsync(CancellationToken cancellationToken = default)
                 => (await AsyncValueEnumerable.GetSingleAsync<TEnumerable, TEnumerator, TSource>(source, predicate, cancellationToken))
-                    .DefaultOnEmpty();
-            [return: MaybeNull]
-            public async ValueTask<TSource> SingleOrDefaultAsync(AsyncPredicate<TSource> predicate, CancellationToken cancellationToken = default)
-                => (await AsyncValueEnumerable.GetSingleAsync<TEnumerable, TEnumerator, TSource>(source, Utils.Combine(this.predicate, predicate), cancellationToken))
-                    .DefaultOnEmpty();
-            [return: MaybeNull]
-            public async ValueTask<TSource> SingleOrDefaultAsync(AsyncPredicateAt<TSource> predicate, CancellationToken cancellationToken = default)
-                => (await AsyncValueEnumerable.GetSingleAsync<TEnumerable, TEnumerator, TSource>(source, Utils.Combine(this.predicate, predicate), cancellationToken))
                     .DefaultOnEmpty();
 
             public ValueTask<TSource[]> ToArrayAsync(CancellationToken cancellationToken = default)

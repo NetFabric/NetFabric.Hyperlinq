@@ -63,6 +63,12 @@ namespace NetFabric.Hyperlinq
             public int Count()
                 => source.Count(predicate);
 
+            public bool Any()
+                => Array.Any<TSource>(source, predicate);
+                
+            public bool Contains(TResult value, IEqualityComparer<TResult>? comparer = null)
+                => Array.Contains<TSource, TResult>(source, value, comparer, predicate, selector);
+
             public TResult First()
                 => selector(source.First(predicate));
 

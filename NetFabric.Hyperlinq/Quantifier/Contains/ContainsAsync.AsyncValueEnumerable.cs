@@ -37,7 +37,7 @@ namespace NetFabric.Hyperlinq
         }
 
         [Pure]
-        static async ValueTask<bool> Contains<TEnumerable, TEnumerator, TSource>(this TEnumerable source, TSource value, IEqualityComparer<TSource>? comparer, Predicate<TSource> predicate, CancellationToken cancellationToken)
+        static async ValueTask<bool> ContainsAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source, TSource value, IEqualityComparer<TSource>? comparer, AsyncPredicate<TSource> predicate, CancellationToken cancellationToken)
             where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
@@ -48,7 +48,8 @@ namespace NetFabric.Hyperlinq
                 {
                     while (await enumerator.MoveNextAsync().ConfigureAwait(false))
                     {
-                        if (predicate(enumerator.Current) && EqualityComparer<TSource>.Default.Equals(enumerator.Current, value))
+                        if (await predicate(enumerator.Current, cancellationToken).ConfigureAwait(false) 
+                        && EqualityComparer<TSource>.Default.Equals(enumerator.Current, value))
                             return true;
                     }
                 }
@@ -56,7 +57,8 @@ namespace NetFabric.Hyperlinq
                 {
                     while (await enumerator.MoveNextAsync().ConfigureAwait(false))
                     {
-                        if (predicate(enumerator.Current) && comparer.Equals(enumerator.Current, value))
+                        if (await predicate(enumerator.Current, cancellationToken).ConfigureAwait(false) 
+                        && comparer.Equals(enumerator.Current, value))
                             return true;
                     }
                 }
@@ -65,7 +67,7 @@ namespace NetFabric.Hyperlinq
         }
 
         [Pure]
-        static async ValueTask<bool> Contains<TEnumerable, TEnumerator, TSource>(this TEnumerable source, TSource value, IEqualityComparer<TSource>? comparer, PredicateAt<TSource> predicate, CancellationToken cancellationToken)
+        static async ValueTask<bool> ContainsAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source, TSource value, IEqualityComparer<TSource>? comparer, AsyncPredicateAt<TSource> predicate, CancellationToken cancellationToken)
             where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
@@ -78,7 +80,8 @@ namespace NetFabric.Hyperlinq
                     {
                         for (var index = 0; await enumerator.MoveNextAsync().ConfigureAwait(false); index++)
                         {
-                            if (predicate(enumerator.Current, index) && EqualityComparer<TSource>.Default.Equals(enumerator.Current, value))
+                            if (await predicate(enumerator.Current, index, cancellationToken).ConfigureAwait(false) 
+                            && EqualityComparer<TSource>.Default.Equals(enumerator.Current, value))
                                 return true;
                         }
                     }
@@ -89,7 +92,8 @@ namespace NetFabric.Hyperlinq
                     {
                         for (var index = 0; await enumerator.MoveNextAsync().ConfigureAwait(false); index++)
                         {
-                            if (predicate(enumerator.Current, index) && comparer.Equals(enumerator.Current, value))
+                            if (await predicate(enumerator.Current, index, cancellationToken).ConfigureAwait(false) 
+                            && comparer.Equals(enumerator.Current, value))
                                 return true;
                         }
                     }
@@ -99,7 +103,7 @@ namespace NetFabric.Hyperlinq
         }
 
         [Pure]
-        static async ValueTask<bool> Contains<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, TResult value, IEqualityComparer<TResult>? comparer, Selector<TSource, TResult> selector, CancellationToken cancellationToken)
+        static async ValueTask<bool> ContainsAsync<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, TResult value, IEqualityComparer<TResult>? comparer, AsyncSelector<TSource, TResult> selector, CancellationToken cancellationToken)
             where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
@@ -110,7 +114,7 @@ namespace NetFabric.Hyperlinq
                 {
                     while (await enumerator.MoveNextAsync().ConfigureAwait(false))
                     {
-                        if (EqualityComparer<TResult>.Default.Equals(selector(enumerator.Current), value))
+                        if (EqualityComparer<TResult>.Default.Equals(await selector(enumerator.Current, cancellationToken).ConfigureAwait(false), value))
                             return true;
                     }
                 }
@@ -118,7 +122,7 @@ namespace NetFabric.Hyperlinq
                 {
                     while (await enumerator.MoveNextAsync().ConfigureAwait(false))
                     {
-                        if (comparer.Equals(selector(enumerator.Current), value))
+                        if (comparer.Equals(await selector(enumerator.Current, cancellationToken).ConfigureAwait(false), value))
                             return true;
                     }
                 }
@@ -127,7 +131,7 @@ namespace NetFabric.Hyperlinq
         }
 
         [Pure]
-        static async ValueTask<bool> Contains<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, TResult value, IEqualityComparer<TResult>? comparer, SelectorAt<TSource, TResult> selector, CancellationToken cancellationToken)
+        static async ValueTask<bool> ContainsAsync<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, TResult value, IEqualityComparer<TResult>? comparer, AsyncSelectorAt<TSource, TResult> selector, CancellationToken cancellationToken)
             where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
@@ -140,7 +144,7 @@ namespace NetFabric.Hyperlinq
                     {
                         for (var index = 0; await enumerator.MoveNextAsync().ConfigureAwait(false); index++)
                         {
-                            if (EqualityComparer<TResult>.Default.Equals(selector(enumerator.Current, index), value))
+                            if (EqualityComparer<TResult>.Default.Equals(await selector(enumerator.Current, index, cancellationToken).ConfigureAwait(false), value))
                                 return true;
                         }
                     }
@@ -151,7 +155,7 @@ namespace NetFabric.Hyperlinq
                     {
                         for (var index = 0; await enumerator.MoveNextAsync().ConfigureAwait(false); index++)
                         {
-                            if (comparer.Equals(selector(enumerator.Current, index), value))
+                            if (comparer.Equals(await selector(enumerator.Current, index, cancellationToken).ConfigureAwait(false), value))
                                 return true;
                         }
                     }
@@ -161,7 +165,7 @@ namespace NetFabric.Hyperlinq
         }
 
         [Pure]
-        static async ValueTask<bool> Contains<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, TResult value, IEqualityComparer<TResult>? comparer, Predicate<TSource> predicate, Selector<TSource, TResult> selector, CancellationToken cancellationToken)
+        static async ValueTask<bool> ContainsAsync<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, TResult value, IEqualityComparer<TResult>? comparer, AsyncPredicate<TSource> predicate, AsyncSelector<TSource, TResult> selector, CancellationToken cancellationToken)
             where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
@@ -172,7 +176,8 @@ namespace NetFabric.Hyperlinq
                 {
                     while (await enumerator.MoveNextAsync().ConfigureAwait(false))
                     {
-                        if (predicate(enumerator.Current) && EqualityComparer<TResult>.Default.Equals(selector(enumerator.Current), value))
+                        if (await predicate(enumerator.Current, cancellationToken).ConfigureAwait(false) 
+                        && EqualityComparer<TResult>.Default.Equals(await selector(enumerator.Current, cancellationToken).ConfigureAwait(false), value))
                             return true;
                     }
                 }
@@ -180,7 +185,8 @@ namespace NetFabric.Hyperlinq
                 {
                     while (await enumerator.MoveNextAsync().ConfigureAwait(false))
                     {
-                        if (predicate(enumerator.Current) && comparer.Equals(selector(enumerator.Current), value))
+                        if (await predicate(enumerator.Current, cancellationToken).ConfigureAwait(false) 
+                        && comparer.Equals(await selector(enumerator.Current, cancellationToken).ConfigureAwait(false), value))
                             return true;
                     }
                 }

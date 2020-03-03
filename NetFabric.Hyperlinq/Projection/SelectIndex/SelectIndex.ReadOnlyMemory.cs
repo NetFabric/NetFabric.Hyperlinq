@@ -154,6 +154,14 @@ namespace NetFabric.Hyperlinq
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public bool Any()
+                => source.Length != 0;
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public bool Contains(TResult value, IEqualityComparer<TResult>? comparer = null)
+                => Array.Contains(source.Span, value, comparer, selector);
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TResult First()
                 => selector(source.Span.First(), 0);
 

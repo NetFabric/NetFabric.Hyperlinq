@@ -82,17 +82,12 @@ namespace NetFabric.Hyperlinq
 
             public int Count()
                 => ValueEnumerable.Count<TEnumerable, TEnumerator, TSource>(source, predicate);
-            public int Count(Predicate<TSource> predicate)
-                => ValueEnumerable.Count<TEnumerable, TEnumerator, TSource>(source, Utils.Combine(this.predicate, predicate));
-            public int Count(PredicateAt<TSource> predicate)
-                => ValueEnumerable.Count<TEnumerable, TEnumerator, TSource>(source, Utils.Combine(this.predicate, predicate));
 
             public bool Any()
                 => ValueEnumerable.Any<TEnumerable, TEnumerator, TSource>(source, predicate);
-            public bool Any(Predicate<TSource> predicate)
-                => ValueEnumerable.Any<TEnumerable, TEnumerator, TSource>(source, Utils.Combine(this.predicate, predicate));
-            public bool Any(PredicateAt<TSource> predicate)
-                => ValueEnumerable.Any<TEnumerable, TEnumerator, TSource>(source, Utils.Combine(this.predicate, predicate));
+                
+            public bool Contains(TResult value, IEqualityComparer<TResult>? comparer = null)
+                => ValueEnumerable.Contains<TEnumerable, TEnumerator, TSource, TResult>(source, value, comparer, predicate, selector);
 
             public TResult[] ToArray()
                 => ValueEnumerable.ToArray<TEnumerable, TEnumerator, TSource, TResult>(source, predicate, selector);

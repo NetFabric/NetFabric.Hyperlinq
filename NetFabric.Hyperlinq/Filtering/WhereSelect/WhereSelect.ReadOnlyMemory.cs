@@ -112,21 +112,27 @@ namespace NetFabric.Hyperlinq
             }
 
             public int Count()
-                => source.Span.Count(predicate);
+                => Array.Count<TSource>(source.Span, predicate);
+
+            public bool Any()
+                => Array.Any<TSource>(source.Span, predicate);
+                
+            public bool Contains(TResult value, IEqualityComparer<TResult>? comparer = null)
+                => Array.Contains<TSource, TResult>(source.Span, value, comparer, predicate, selector);
 
             public TResult First()
-                => selector(source.Span.First(predicate));
+                => selector(Array.First<TSource>(source.Span, predicate));
 
             [return: MaybeNull]
             public TResult FirstOrDefault()
-                => selector(source.Span.FirstOrDefault(predicate));
+                => selector(Array.FirstOrDefault<TSource>(source.Span, predicate));
 
             public TResult Single()
-                => selector(source.Span.Single(predicate));
+                => selector(Array.Single<TSource>(source.Span, predicate));
 
             [return: MaybeNull]
             public TResult SingleOrDefault()
-                => selector(source.Span.SingleOrDefault(predicate));
+                => selector(Array.SingleOrDefault<TSource>(source.Span, predicate));
 
             public TResult[] ToArray()
                 => Array.ToArray<TSource, TResult>(source.Span, predicate, selector);
