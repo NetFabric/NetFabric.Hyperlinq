@@ -8,7 +8,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Generation
     {
         [Theory]
         [MemberData(nameof(TestData.Return), MemberType = typeof(TestData))]
-        public void Return_With_Value_Should_Succeed(int value)
+        public void Return_With_Value_Must_Succeed(int value)
         {
             // Arrange
             var expected = System.Linq.EnumerableEx.Return(value);
@@ -25,7 +25,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Generation
         [Theory]
         [InlineData(0, 1)]
         [InlineData(0, -1)]
-        public void Indexer_With_IndexOutOfRange_Should_Throw(int value, int index)
+        public void Indexer_With_IndexOutOfRange_Must_Throw(int value, int index)
         {
             // Arrange
 

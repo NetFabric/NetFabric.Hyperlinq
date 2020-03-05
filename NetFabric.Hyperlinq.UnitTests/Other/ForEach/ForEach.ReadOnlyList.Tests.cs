@@ -10,7 +10,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Other.ForEach
         [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
-        public void ForEach_With_ValidData_Should_Succeed(int[] source)
+        public void ForEach_With_ValidData_Must_Succeed(int[] source)
         {
             // Arrange
             var wrapped = Wrap.AsValueReadOnlyList(source);
@@ -30,7 +30,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Other.ForEach
         [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
-        public void ForEachIndex_With_ValidData_Should_Succeed(int[] source)
+        public void ForEachIndex_With_ValidData_Must_Succeed(int[] source)
         {
             // Arrange
             var wrapped = Wrap.AsValueReadOnlyList(source);

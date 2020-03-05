@@ -8,7 +8,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
     {
         [Theory]
         [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
-        public void Single_With_Empty_Should_Throw(int[] source)
+        public void Single_With_Empty_Must_Throw(int[] source)
         {
             // Arrange
             var wrapped = Wrap
@@ -26,7 +26,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
 
         [Theory]
         [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
-        public void Single_With_Single_Should_Succeed(int[] source)
+        public void Single_With_Single_Must_Succeed(int[] source)
         {
             // Arrange
             var wrapped = Wrap
@@ -45,7 +45,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
 
         [Theory]
         [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
-        public void Single_With_Multiple_Should_Throw(int[] source)
+        public void Single_With_Multiple_Must_Throw(int[] source)
         {
             // Arrange
             var wrapped = Wrap

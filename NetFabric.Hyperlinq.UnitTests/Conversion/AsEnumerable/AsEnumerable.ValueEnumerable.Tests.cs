@@ -6,7 +6,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsEnumerable
     public class ValueEnumerableTests
     {
         [Fact]
-        public void AsEnumerable_With_ValueType_Should_ReturnCopy()
+        public void AsEnumerable_With_ValueType_Must_ReturnCopy()
         {
             // Arrange
             var source = new int[0];
@@ -22,7 +22,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsEnumerable
         }
         
         [Fact]
-        public void AsEnumerable_With_ReferenceType_Should_ReturnSame()
+        public void AsEnumerable_With_ReferenceType_Must_ReturnSame()
         {
             // Arrange
             var source = new int[0];

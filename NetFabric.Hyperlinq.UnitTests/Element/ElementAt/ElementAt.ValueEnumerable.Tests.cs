@@ -8,7 +8,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
     {
         [Theory]
         [MemberData(nameof(TestData.ElementAtOutOfRange), MemberType = typeof(TestData))]
-        public void ElementAt_With_OutOfRange_Should_Throw(int[] source, int index)
+        public void ElementAt_With_OutOfRange_Must_Throw(int[] source, int index)
         {
             // Arrange
             var wrapped = Wrap
@@ -25,7 +25,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
 
         [Theory]
         [MemberData(nameof(TestData.ElementAt), MemberType = typeof(TestData))]
-        public void ElementAt_With_ValidData_Should_Succeed(int[] source, int index)
+        public void ElementAt_With_ValidData_Must_Succeed(int[] source, int index)
         {
             // Arrange
             var wrapped = Wrap

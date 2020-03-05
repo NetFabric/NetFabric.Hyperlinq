@@ -10,7 +10,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
         [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
-        public void ToArray_Should_Succeed(int[] source)
+        public void ToArray_Must_Succeed(int[] source)
         {
             // Arrange
 

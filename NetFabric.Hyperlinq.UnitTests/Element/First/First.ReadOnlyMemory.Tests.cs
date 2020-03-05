@@ -8,7 +8,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
     {
         [Theory]
         [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
-        public void First_With_Empty_Should_Throw(int[] source)
+        public void First_With_Empty_Must_Throw(int[] source)
         {
             // Arrange
 
@@ -25,7 +25,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
         [Theory]
         [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
-        public void First_With_ValidData_Should_Succeed(int[] source)
+        public void First_With_ValidData_Must_Succeed(int[] source)
         {
             // Arrange
             var expected = 
@@ -42,7 +42,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
 
         [Theory]
         [MemberData(nameof(TestData.PredicateEmpty), MemberType = typeof(TestData))]
-        public void First_Predicate_With_Empty_Should_Throw(int[] source, Predicate<int> predicate)
+        public void First_Predicate_With_Empty_Must_Throw(int[] source, Predicate<int> predicate)
         {
             // Arrange
 
@@ -60,7 +60,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
         [Theory]
         [MemberData(nameof(TestData.PredicateSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateMultiple), MemberType = typeof(TestData))]
-        public void First_Predicate_With_ValidData_Should_Succeed(int[] source, Predicate<int> predicate)
+        public void First_Predicate_With_ValidData_Must_Succeed(int[] source, Predicate<int> predicate)
         {
             // Arrange
             var expected = 
@@ -78,7 +78,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
 
         [Theory]
         [MemberData(nameof(TestData.PredicateAtEmpty), MemberType = typeof(TestData))]
-        public void First_PredicateAt_With_Empty_Should_Throw(int[] source, PredicateAt<int> predicate)
+        public void First_PredicateAt_With_Empty_Must_Throw(int[] source, PredicateAt<int> predicate)
         {
             // Arrange
 
@@ -96,7 +96,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
         [Theory]
         [MemberData(nameof(TestData.PredicateAtSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateAtMultiple), MemberType = typeof(TestData))]
-        public void First_PredicateAt_With_ValidData_Should_Succeed(int[] source, PredicateAt<int> predicate)
+        public void First_PredicateAt_With_ValidData_Must_Succeed(int[] source, PredicateAt<int> predicate)
         {
             // Arrange
             var expected = 

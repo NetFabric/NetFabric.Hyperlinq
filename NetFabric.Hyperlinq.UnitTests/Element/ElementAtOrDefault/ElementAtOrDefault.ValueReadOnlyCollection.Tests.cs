@@ -8,7 +8,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAtOrDefault
     {
         [Theory]
         [MemberData(nameof(TestData.ElementAtOutOfRange), MemberType = typeof(TestData))]
-        public void ElementAtOrDefault_With_OutOfRange_Should_ReturnDefault(int[] source, int index)
+        public void ElementAtOrDefault_With_OutOfRange_Must_ReturnDefault(int[] source, int index)
         {
             // Arrange
             var wrapped = Wrap
@@ -25,7 +25,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAtOrDefault
 
         [Theory]
         [MemberData(nameof(TestData.ElementAt), MemberType = typeof(TestData))]
-        public void ElementAtOrDefault_With_ValidData_Should_Succeed(int[] source, int index)
+        public void ElementAtOrDefault_With_ValidData_Must_Succeed(int[] source, int index)
         {
             // Arrange
             var wrapped = Wrap

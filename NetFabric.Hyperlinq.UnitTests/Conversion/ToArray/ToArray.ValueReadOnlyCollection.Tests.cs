@@ -10,7 +10,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
         [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
-        public void ToArray_With_ValidData_Should_Succeed(int[] source)
+        public void ToArray_With_ValidData_Must_Succeed(int[] source)
         {
             // Arrange
             var wrapped = Wrap
@@ -32,7 +32,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
         [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
-        public void ToArray_With_ValidData_Collections_Should_Succeed(int[] source)
+        public void ToArray_With_ValidData_Collections_Must_Succeed(int[] source)
         {
             // Arrange
             var wrapped = Wrap
@@ -54,7 +54,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
         [MemberData(nameof(TestData.SelectorEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SelectorSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SelectorMultiple), MemberType = typeof(TestData))]
-        public void ToArray_Predicate_With_ValidData_Should_Succeed(int[] source, Selector<int, string> selector)
+        public void ToArray_Predicate_With_ValidData_Must_Succeed(int[] source, Selector<int, string> selector)
         {
             // Arrange
             var wrapped = Wrap
@@ -78,7 +78,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
         [MemberData(nameof(TestData.SelectorAtEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SelectorAtSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SelectorAtMultiple), MemberType = typeof(TestData))]
-        public void ToArray_SelectorAt_With_ValidData_Should_Succeed(int[] source, SelectorAt<int, string> selector)
+        public void ToArray_SelectorAt_With_ValidData_Must_Succeed(int[] source, SelectorAt<int, string> selector)
         {
             // Arrange
             var wrapped = Wrap

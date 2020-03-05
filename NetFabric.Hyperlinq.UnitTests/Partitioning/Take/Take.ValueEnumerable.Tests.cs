@@ -9,7 +9,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Partitioning.Take
         [MemberData(nameof(TestData.TakeEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.TakeSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.TakeMultiple), MemberType = typeof(TestData))]
-        public void Take_With_ValidData_Should_Succeed(int[] source, int count)
+        public void Take_With_ValidData_Must_Succeed(int[] source, int count)
         {
             // Arrange
             var wrapped = Wrap.AsValueEnumerable(source);
@@ -28,7 +28,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Partitioning.Take
 
         [Theory]
         [MemberData(nameof(TestData.Take_Take), MemberType = typeof(TestData))]
-        public void Take_Take_With_ValidData_Should_Succeed(int[] source, int count0, int count1)
+        public void Take_Take_With_ValidData_Must_Succeed(int[] source, int count0, int count1)
         {
             // Arrange
             var wrapped = Wrap.AsValueEnumerable(source);

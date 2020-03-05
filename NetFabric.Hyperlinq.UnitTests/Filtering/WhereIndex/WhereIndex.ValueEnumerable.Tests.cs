@@ -7,7 +7,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.WhereIndex
     public class ValueEnumerableTests
     {
         [Fact]
-        public void WhereIndex_With_NullPredicate_Should_Throw()
+        public void WhereIndex_With_NullPredicate_Must_Throw()
         {
             // Arrange
             var enumerable = Wrap.AsValueEnumerable(new int[0]);
@@ -26,7 +26,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.WhereIndex
         [MemberData(nameof(TestData.PredicateEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateMultiple), MemberType = typeof(TestData))]
-        public void WhereIndex_With_ValidData_Should_Succeed(int[] source, Predicate<int> predicate)
+        public void WhereIndex_With_ValidData_Must_Succeed(int[] source, Predicate<int> predicate)
         {
             // Arrange
             var wrapped = Wrap.AsValueEnumerable(source);

@@ -8,7 +8,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
     {
         [Theory]
         [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
-        public void Single_With_Empty_Should_Throw(int[] source)
+        public void Single_With_Empty_Must_Throw(int[] source)
         {
             // Arrange
             var wrapped = Wrap
@@ -26,7 +26,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
 
         [Theory]
         [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
-        public void Single_With_Single_Should_Succeed(int[] source)
+        public void Single_With_Single_Must_Succeed(int[] source)
         {
             // Arrange
             var wrapped = Wrap
@@ -45,7 +45,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
 
         [Theory]
         [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
-        public void Single_With_Multiple_Should_Throw(int[] source)
+        public void Single_With_Multiple_Must_Throw(int[] source)
         {
             // Arrange
             var wrapped = Wrap
@@ -63,7 +63,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
 
         [Theory]
         [MemberData(nameof(TestData.SkipTakeEmpty), MemberType = typeof(TestData))]
-        public void Single_Skip_Take_With_Empty_Should_Throw(int[] source, int skipCount, int takeCount)
+        public void Single_Skip_Take_With_Empty_Must_Throw(int[] source, int skipCount, int takeCount)
         {
             // Arrange
             var wrapped = Wrap
@@ -83,7 +83,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
 
         [Theory]
         [MemberData(nameof(TestData.SkipTakeSingle), MemberType = typeof(TestData))]
-        public void Single_Skip_Take_With_Single_Should_Succeed(int[] source, int skipCount, int takeCount)
+        public void Single_Skip_Take_With_Single_Must_Succeed(int[] source, int skipCount, int takeCount)
         {
             // Arrange
             var wrapped = Wrap
@@ -106,7 +106,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
 
         [Theory]
         [MemberData(nameof(TestData.SkipTakeMultiple), MemberType = typeof(TestData))]
-        public void Single_Skip_Take_With_Multiple_Should_Throw(int[] source, int skipCount, int takeCount)
+        public void Single_Skip_Take_With_Multiple_Must_Throw(int[] source, int skipCount, int takeCount)
         {
             // Arrange
             var wrapped = Wrap
@@ -126,7 +126,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
 
         [Theory]
         [MemberData(nameof(TestData.PredicateEmpty), MemberType = typeof(TestData))]
-        public void Single_Predicate_With_Empty_Should_Throw(int[] source, Predicate<int> predicate)
+        public void Single_Predicate_With_Empty_Must_Throw(int[] source, Predicate<int> predicate)
         {
             // Arrange
             var wrapped = Wrap
@@ -145,7 +145,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
 
         [Theory]
         [MemberData(nameof(TestData.PredicateSingle), MemberType = typeof(TestData))]
-        public void Single_Predicate_With_Single_Should_Succeed(int[] source, Predicate<int> predicate)
+        public void Single_Predicate_With_Single_Must_Succeed(int[] source, Predicate<int> predicate)
         {
             // Arrange
             var wrapped = Wrap
@@ -165,7 +165,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
 
         [Theory]
         [MemberData(nameof(TestData.PredicateMultiple), MemberType = typeof(TestData))]
-        public void Single_Predicate_With_Multiple_Should_Throw(int[] source, Predicate<int> predicate)
+        public void Single_Predicate_With_Multiple_Must_Throw(int[] source, Predicate<int> predicate)
         {
             // Arrange
             var wrapped = Wrap
@@ -184,7 +184,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
 
         [Theory]
         [MemberData(nameof(TestData.SkipTakePredicateEmpty), MemberType = typeof(TestData))]
-        public void Single_Skip_Take_Predicate_With_Empty_Should_Throw(int[] source, int skipCount, int takeCount, Predicate<int> predicate)
+        public void Single_Skip_Take_Predicate_With_Empty_Must_Throw(int[] source, int skipCount, int takeCount, Predicate<int> predicate)
         {
             // Arrange
             var wrapped = Wrap
@@ -205,7 +205,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
 
         [Theory]
         [MemberData(nameof(TestData.SkipTakePredicateSingle), MemberType = typeof(TestData))]
-        public void Single_Skip_Take_Predicate_With_Single_Should_Succeed(int[] source, int skipCount, int takeCount, Predicate<int> predicate)
+        public void Single_Skip_Take_Predicate_With_Single_Must_Succeed(int[] source, int skipCount, int takeCount, Predicate<int> predicate)
         {
             // Arrange
             var wrapped = Wrap
@@ -229,7 +229,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
 
         [Theory]
         [MemberData(nameof(TestData.SkipTakePredicateMultiple), MemberType = typeof(TestData))]
-        public void Single_Skip_Take_Predicate_With_Multiple_Should_Throw(int[] source, int skipCount, int takeCount, Predicate<int> predicate)
+        public void Single_Skip_Take_Predicate_With_Multiple_Must_Throw(int[] source, int skipCount, int takeCount, Predicate<int> predicate)
         {
             // Arrange
             var wrapped = Wrap
@@ -250,7 +250,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
 
         [Theory]
         [MemberData(nameof(TestData.PredicateAtEmpty), MemberType = typeof(TestData))]
-        public void Single_PredicateAt_With_Empty_Should_Throw(int[] source, PredicateAt<int> predicate)
+        public void Single_PredicateAt_With_Empty_Must_Throw(int[] source, PredicateAt<int> predicate)
         {
             // Arrange
             var wrapped = Wrap
@@ -269,7 +269,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
 
         [Theory]
         [MemberData(nameof(TestData.PredicateAtSingle), MemberType = typeof(TestData))]
-        public void Single_PredicateAt_With_Single_Should_Succeed(int[] source, PredicateAt<int> predicate)
+        public void Single_PredicateAt_With_Single_Must_Succeed(int[] source, PredicateAt<int> predicate)
         {
             // Arrange
             var wrapped = Wrap
@@ -290,7 +290,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
 
         [Theory]
         [MemberData(nameof(TestData.PredicateAtMultiple), MemberType = typeof(TestData))]
-        public void Single_PredicateAt_With_Multiple_Should_Throw(int[] source, PredicateAt<int> predicate)
+        public void Single_PredicateAt_With_Multiple_Must_Throw(int[] source, PredicateAt<int> predicate)
         {
             // Arrange
             var wrapped = Wrap
@@ -309,7 +309,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
 
         [Theory]
         [MemberData(nameof(TestData.SkipTakePredicateAtEmpty), MemberType = typeof(TestData))]
-        public void Single_Skip_Take_PredicateAt_With_Empty_Should_Throw(int[] source, int skipCount, int takeCount, PredicateAt<int> predicate)
+        public void Single_Skip_Take_PredicateAt_With_Empty_Must_Throw(int[] source, int skipCount, int takeCount, PredicateAt<int> predicate)
         {
             // Arrange
             var wrapped = Wrap
@@ -330,7 +330,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
 
         [Theory]
         [MemberData(nameof(TestData.SkipTakePredicateAtSingle), MemberType = typeof(TestData))]
-        public void Single_Skip_Take_PredicateAt_With_Single_Should_Succeed(int[] source, int skipCount, int takeCount, PredicateAt<int> predicate)
+        public void Single_Skip_Take_PredicateAt_With_Single_Must_Succeed(int[] source, int skipCount, int takeCount, PredicateAt<int> predicate)
         {
             // Arrange
             var wrapped = Wrap
@@ -355,7 +355,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
 
         [Theory]
         [MemberData(nameof(TestData.SkipTakePredicateAtMultiple), MemberType = typeof(TestData))]
-        public void Single_Skip_Take_PredicateAt_With_Multiple_Should_Throw(int[] source, int skipCount, int takeCount, PredicateAt<int> predicate)
+        public void Single_Skip_Take_PredicateAt_With_Multiple_Must_Throw(int[] source, int skipCount, int takeCount, PredicateAt<int> predicate)
         {
             // Arrange
             var wrapped = Wrap
