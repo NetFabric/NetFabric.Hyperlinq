@@ -126,16 +126,12 @@ namespace NetFabric.Hyperlinq
 
             public int Count()
                 => ReadOnlyList.Count<TList, TSource>(source, predicate, skipCount, takeCount);
-            public int Count(Predicate<TSource> predicate)
-                => ReadOnlyList.Count<TList, TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount);
-            public int Count(PredicateAt<TSource> predicate)
-                => ReadOnlyList.Count<TList, TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount);
+
             public bool Any()
                 => ReadOnlyList.Any<TList, TSource>(source, predicate, skipCount, takeCount);
-            public bool Any(Predicate<TSource> predicate)
-                => ReadOnlyList.Any<TList, TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount);
-            public bool Any(PredicateAt<TSource> predicate)
-                => ReadOnlyList.Any<TList, TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount);
+                
+            public bool Contains(TResult value, IEqualityComparer<TResult>? comparer = null)
+                => ReadOnlyList.Contains<TList, TSource, TResult>(source, value, comparer, predicate, selector, skipCount, takeCount);
 
             public TResult[] ToArray()
                 => ReadOnlyList.ToArray<TList, TSource, TResult>(source, predicate, selector, skipCount, takeCount); 

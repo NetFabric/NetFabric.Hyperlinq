@@ -110,6 +110,10 @@ namespace NetFabric.Hyperlinq
                 => source.Count != 0;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public bool Contains(TResult value, IEqualityComparer<TResult>? comparer = null)
+                => ValueReadOnlyCollection.Contains<TEnumerable, TEnumerator, TSource, TResult>(source, value, comparer, selector);
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public ValueReadOnlyCollection.SelectEnumerable<TEnumerable, TEnumerator, TSource, TSelectorResult> Select<TSelectorResult>(Selector<TResult, TSelectorResult> selector)
                 => ValueReadOnlyCollection.Select<TEnumerable, TEnumerator, TSource, TSelectorResult>(source, Utils.Combine(this.selector, selector));
 

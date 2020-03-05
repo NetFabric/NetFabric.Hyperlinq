@@ -91,7 +91,6 @@ namespace NetFabric.Hyperlinq
                 }
                 else
                 {
-
                     if (comparer is null)
                     {
                         var end = skipCount + takeCount;
@@ -149,20 +148,18 @@ namespace NetFabric.Hyperlinq
 
                     if (comparer is null)
                     {
-                        var end = skipCount + takeCount;
-                        for (var index = skipCount; index < end; index++)
+                        for (var index = 0; index < takeCount; index++)
                         {
-                            var item = source[index];
+                            var item = source[index + skipCount];
                             if (predicate(item, index) && EqualityComparer<TSource>.Default.Equals(value, item))
                                 return true;
                         }
                     }
                     else
                     {
-                        var end = skipCount + takeCount;
-                        for (var index = skipCount; index < end; index++)
+                        for (var index = 0; index < takeCount; index++)
                         {
-                            var item = source[index];
+                            var item = source[index + skipCount];
                             if (predicate(item, index) && comparer.Equals(value, item))
                                 return true;
                         }
@@ -253,19 +250,17 @@ namespace NetFabric.Hyperlinq
 
                     if (comparer is null)
                     {
-                        var end = skipCount + takeCount;
-                        for (var index = skipCount; index < end; index++)
+                        for (var index = 0; index < takeCount; index++)
                         {
-                            if (EqualityComparer<TResult>.Default.Equals(value, selector(source[index], index)))
+                            if (EqualityComparer<TResult>.Default.Equals(value, selector(source[index + skipCount], index)))
                                 return true;
                         }
                     }
                     else
                     {
-                        var end = skipCount + takeCount;
-                        for (var index = skipCount; index < end; index++)
+                        for (var index = 0; index < takeCount; index++)
                         {
-                            if (comparer.Equals(value, selector(source[index], index)))
+                            if (comparer.Equals(value, selector(source[index + skipCount], index)))
                                 return true;
                         }
                     }

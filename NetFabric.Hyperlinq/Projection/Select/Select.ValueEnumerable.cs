@@ -86,6 +86,10 @@ namespace NetFabric.Hyperlinq
                 => ValueEnumerable.Any<TEnumerable, TEnumerator, TSource>(source);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public bool Contains(TResult value, IEqualityComparer<TResult>? comparer = null)
+                => ValueEnumerable.Contains<TEnumerable, TEnumerator, TSource, TResult>(source, value, comparer, selector);
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public ValueEnumerable.SelectEnumerable<TEnumerable, TEnumerator, TSource, TSelectorResult> Select<TSelectorResult>(Selector<TResult, TSelectorResult> selector)
                 => ValueEnumerable.Select<TEnumerable, TEnumerator, TSource, TSelectorResult>(source, Utils.Combine(this.selector, selector));
 

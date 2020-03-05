@@ -182,6 +182,10 @@ namespace NetFabric.Hyperlinq
                 => takeCount != 0;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public bool Contains(TResult value, IEqualityComparer<TResult>? comparer = null)
+                => ReadOnlyList.Contains<TList, TSource, TResult>(source, value, comparer, selector, skipCount, takeCount);
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public ReadOnlyList.SelectEnumerable<TList, TSource, TSelectorResult> Select<TSelectorResult>(Selector<TResult, TSelectorResult> selector)
                 => ReadOnlyList.Select<TList, TSource, TSelectorResult>(source, Utils.Combine(this.selector, selector), skipCount, takeCount);
 
