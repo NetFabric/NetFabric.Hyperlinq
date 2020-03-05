@@ -7,7 +7,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Projection.SelectIndex
     public class ValueEnumerableTests
     {
         [Fact]
-        public void SelectIndex_With_NullSelector_Should_Throw()
+        public void SelectIndex_With_NullSelector_Must_Throw()
         {
             // Arrange
             var enumerable = Wrap.AsValueEnumerable(new int[0]);
@@ -26,7 +26,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Projection.SelectIndex
         [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
-        public void SelectIndex_With_ValidData_Should_Succeed(int[] source)
+        public void SelectIndex_With_ValidData_Must_Succeed(int[] source)
         {
             // Arrange
             var wrapped = Wrap.AsValueEnumerable(source);

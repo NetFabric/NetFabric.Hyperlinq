@@ -11,7 +11,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
         [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
-        public void ToList_With_ValidData_Should_Succeed(int[] source)
+        public void ToList_With_ValidData_Must_Succeed(int[] source)
         {
             // Arrange
             var wrapped = Wrap
@@ -35,7 +35,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
         [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
-        public void ToList_With_ValidData_Collections_Should_Succeed(int[] source)
+        public void ToList_With_ValidData_Collections_Must_Succeed(int[] source)
         {
             // Arrange
             var wrapped = Wrap

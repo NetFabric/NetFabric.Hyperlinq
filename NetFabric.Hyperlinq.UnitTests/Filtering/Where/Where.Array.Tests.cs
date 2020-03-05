@@ -7,7 +7,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.Where
     public class ArrayTests
     {
         [Fact]
-        public void Where_Predicate_With_Null_Should_Throw()
+        public void Where_Predicate_With_Null_Must_Throw()
         {
             // Arrange
             var source = new int[0];
@@ -27,7 +27,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.Where
         [MemberData(nameof(TestData.PredicateEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateMultiple), MemberType = typeof(TestData))]
-        public void Where_Predicate_With_ValidData_Should_Succeed(int[] source, Predicate<int> predicate)
+        public void Where_Predicate_With_ValidData_Must_Succeed(int[] source, Predicate<int> predicate)
         {
             // Arrange
             var expected = System.Linq.Enumerable.Where(source, predicate.AsFunc());

@@ -9,7 +9,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Partitioning.SkipTake
         [MemberData(nameof(TestData.SkipTakeEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakeSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakeMultiple), MemberType = typeof(TestData))]
-        public void SkipTake_With_ValidData_Should_Succeed(int[] source, int skipCount, int takeCount)
+        public void SkipTake_With_ValidData_Must_Succeed(int[] source, int skipCount, int takeCount)
         {
             // Arrange
             var wrapped = Wrap.AsValueEnumerable(source);
@@ -29,7 +29,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Partitioning.SkipTake
 
         [Theory]
         [MemberData(nameof(TestData.SkipTake_Take), MemberType = typeof(TestData))]
-        public void SkipTake_Take_With_ValidData_Should_Succeed(int[] source, int skipCount, int takeCount0, int takeCount1)
+        public void SkipTake_Take_With_ValidData_Must_Succeed(int[] source, int skipCount, int takeCount0, int takeCount1)
         {
             // Arrange
             var wrapped = Wrap.AsValueEnumerable(source);

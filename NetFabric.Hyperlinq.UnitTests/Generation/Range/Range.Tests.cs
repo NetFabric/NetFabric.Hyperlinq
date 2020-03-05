@@ -9,7 +9,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Generation
     {
         [Theory]
         [InlineData(-1)]
-        public void Range_With_NegativeCount_Should_Throw(int count)
+        public void Range_With_NegativeCount_Must_Throw(int count)
         {
             // Arrange
 
@@ -27,7 +27,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Generation
         [InlineData(1, 1)]
         [InlineData(1, 2)]
         [InlineData(1, -1)]
-        public void Indexer_With_IndexOutOfRange_Should_Throw(int count, int index)
+        public void Indexer_With_IndexOutOfRange_Must_Throw(int count, int index)
         {
             // Arrange
 
@@ -40,7 +40,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Generation
   
         [Theory]
         [MemberData(nameof(TestData.Range), MemberType = typeof(TestData))]
-        public void Range_With_ValidData_Should_Succeed(int start, int count)
+        public void Range_With_ValidData_Must_Succeed(int start, int count)
         {
             // Arrange
             var expected = System.Linq.Enumerable.Range(start, count);
@@ -56,7 +56,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Generation
 
         [Theory]
         [MemberData(nameof(TestData.Range_SkipTake), MemberType = typeof(TestData))]
-        public void Range_Skip_With_ValidData_Should_Succeed(int start, int count, int skipCount)
+        public void Range_Skip_With_ValidData_Must_Succeed(int start, int count, int skipCount)
         {
             // Arrange
             var expected = System.Linq.Enumerable.Skip(System.Linq.Enumerable.Range(start, count), skipCount);
@@ -72,7 +72,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Generation
 
         [Theory]
         [MemberData(nameof(TestData.Range_SkipTake), MemberType = typeof(TestData))]
-        public void Range_Take_With_ValidData_Should_Succeed(int start, int count, int takeCount)
+        public void Range_Take_With_ValidData_Must_Succeed(int start, int count, int takeCount)
         {
             // Arrange
             var expected = System.Linq.Enumerable.Take(System.Linq.Enumerable.Range(start, count), takeCount);
@@ -88,7 +88,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Generation
 
         [Theory]
         [MemberData(nameof(TestData.Range), MemberType = typeof(TestData))]
-        public void Range_Any_With_ValidData_Should_Succeed(int start, int count)
+        public void Range_Any_With_ValidData_Must_Succeed(int start, int count)
         {
             // Arrange
             var expected = System.Linq.Enumerable.Any(System.Linq.Enumerable.Range(start, count));
@@ -103,7 +103,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Generation
 
         [Theory]
         [MemberData(nameof(TestData.Range_Contains), MemberType = typeof(TestData))]
-        public void Range_Contains_With_ValidData_Should_Succeed(int start, int count, int value)
+        public void Range_Contains_With_ValidData_Must_Succeed(int start, int count, int value)
         {
             // Arrange
             var expected = System.Linq.Enumerable.Contains(System.Linq.Enumerable.Range(start, count), value);
@@ -118,7 +118,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Generation
 
         [Theory]
         [MemberData(nameof(TestData.Range), MemberType = typeof(TestData))]
-        public void Range_ToArray_With_ValidData_Should_Succeed(int start, int count)
+        public void Range_ToArray_With_ValidData_Must_Succeed(int start, int count)
         {
             // Arrange
             var expected = System.Linq.Enumerable.ToArray(System.Linq.Enumerable.Range(start, count));
@@ -135,7 +135,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Generation
   
         [Theory]
         [MemberData(nameof(TestData.Range), MemberType = typeof(TestData))]
-        public void Range_With_ToList_Should_Succeed(int start, int count)
+        public void Range_With_ToList_Must_Succeed(int start, int count)
         {
             // Arrange
             var expected = System.Linq.Enumerable.ToList(System.Linq.Enumerable.Range(start, count));

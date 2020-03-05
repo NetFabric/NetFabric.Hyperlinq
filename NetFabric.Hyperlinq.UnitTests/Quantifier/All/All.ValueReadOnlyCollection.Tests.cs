@@ -9,7 +9,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.All
     public class ValueReadOnlyCollectionTests
     {
         [Fact]
-        public void All_With_NullPredicate_Should_Throw()
+        public void All_With_NullPredicate_Must_Throw()
         {
             // Arrange
             var wrapped = Wrap.AsValueReadOnlyCollection(new int[0]);
@@ -29,7 +29,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.All
         [MemberData(nameof(TestData.PredicateEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateMultiple), MemberType = typeof(TestData))]
-        public void All_With_ValidData_Should_Succeed(int[] source, Predicate<int> predicate)
+        public void All_With_ValidData_Must_Succeed(int[] source, Predicate<int> predicate)
         {
             // Arrange
             var wrapped = Wrap.AsValueReadOnlyCollection(source);
@@ -46,7 +46,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.All
         }
 
         [Fact]
-        public void All_PredicateAt_With_NullPredicate_Should_Throw()
+        public void All_PredicateAt_With_NullPredicate_Must_Throw()
         {
             // Arrange
             var source = new int[0];
@@ -67,7 +67,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.All
         [MemberData(nameof(TestData.PredicateAtEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateAtSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateAtMultiple), MemberType = typeof(TestData))]
-        public void All_PredicateAt_With_ValidData_Should_Succeed(int[] source, PredicateAt<int> predicate)
+        public void All_PredicateAt_With_ValidData_Must_Succeed(int[] source, PredicateAt<int> predicate)
         {
             // Arrange
             var wrapped = Wrap.AsValueReadOnlyCollection(source);

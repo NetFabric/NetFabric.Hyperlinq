@@ -8,7 +8,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Projection.Select
     public class ValueReadOnlyCollectionTests
     {
         [Fact]
-        public void Select_With_NullSelector_Should_Throw()
+        public void Select_With_NullSelector_Must_Throw()
         {
             // Arrange
             var collection = Wrap.AsValueReadOnlyCollection(new int[0]);
@@ -27,7 +27,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Projection.Select
         [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
-        public void Select_With_ValidData_Should_Succeed(int[] source)
+        public void Select_With_ValidData_Must_Succeed(int[] source)
         {
             // Arrange
             var wrapped = Wrap.AsValueReadOnlyCollection(source);

@@ -11,7 +11,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsAsyncValueEnumerable
         [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
-        public void AsAsyncValueEnumerable_With_ValidData_Should_Succeed(int[] source)
+        public void AsAsyncValueEnumerable_With_ValidData_Must_Succeed(int[] source)
         {
             // Arrange
             var wrapped = Wrap
@@ -31,7 +31,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsAsyncValueEnumerable
         [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
-        public async ValueTask AsAsyncValueEnumerable_With_ToArrayAsync_Should_Succeed(int[] source)
+        public async ValueTask AsAsyncValueEnumerable_With_ToArrayAsync_Must_Succeed(int[] source)
         {
             // Arrange
             var wrapped = Wrap
@@ -54,7 +54,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsAsyncValueEnumerable
         [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
-        public async ValueTask AsAsyncValueEnumerable_With_ToListAsync_Should_Succeed(int[] source)
+        public async ValueTask AsAsyncValueEnumerable_With_ToListAsync_Must_Succeed(int[] source)
         {
             // Arrange
             var wrapped = Wrap

@@ -10,7 +10,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsValueEnumerable
         [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
-        public void AsValueEnumerable_With_ValidData_Should_Succeed(int[] source)
+        public void AsValueEnumerable_With_ValidData_Must_Succeed(int[] source)
         {
             // Arrange
             var wrapped = Wrap
@@ -31,7 +31,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsValueEnumerable
         [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
-        public void AsValueEnumerable_With_ToArray_Should_Succeed(int[] source)
+        public void AsValueEnumerable_With_ToArray_Must_Succeed(int[] source)
         {
             // Arrange
             var expected = 
@@ -52,7 +52,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsValueEnumerable
         [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
-        public void AsValueEnumerable_With_ToList_Should_Succeed(int[] source)
+        public void AsValueEnumerable_With_ToList_Must_Succeed(int[] source)
         {
             // Arrange
             var expected = 

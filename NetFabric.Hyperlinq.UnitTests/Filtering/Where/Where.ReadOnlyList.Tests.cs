@@ -7,7 +7,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.Where
     public class ReadOnlyListTests
     {
         [Fact]
-        public void Where_Predicate_With_Null_Should_Throw()
+        public void Where_Predicate_With_Null_Must_Throw()
         {
             // Arrange
             var list = Wrap.AsValueReadOnlyList(new int[0]);
@@ -26,7 +26,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.Where
         [MemberData(nameof(TestData.PredicateEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateMultiple), MemberType = typeof(TestData))]
-        public void Where_Predicate_With_ValidData_Should_Succeed(int[] source, Predicate<int> predicate)
+        public void Where_Predicate_With_ValidData_Must_Succeed(int[] source, Predicate<int> predicate)
         {
             // Arrange
             var wrapped = Wrap.AsValueReadOnlyList(source);

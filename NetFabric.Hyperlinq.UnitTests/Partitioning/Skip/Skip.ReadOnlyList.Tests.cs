@@ -9,7 +9,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Partitioning.Skip
         [MemberData(nameof(TestData.SkipEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipMultiple), MemberType = typeof(TestData))]
-        public void Skip_With_ValidData_Should_Succeed(int[] source, int count)
+        public void Skip_With_ValidData_Must_Succeed(int[] source, int count)
         {
             // Arrange
             var wrapped = Wrap.AsValueReadOnlyList(source);

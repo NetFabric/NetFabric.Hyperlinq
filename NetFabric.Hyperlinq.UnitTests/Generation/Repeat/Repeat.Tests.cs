@@ -9,7 +9,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Generation
     {
         [Theory]
         [InlineData(-1)]
-        public void Repeat_With_NegativeCount_Should_Throw(int count)
+        public void Repeat_With_NegativeCount_Must_Throw(int count)
         {
             // Arrange
 
@@ -27,7 +27,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Generation
         [InlineData(1, 1)]
         [InlineData(1, 2)]
         [InlineData(1, -1)]
-        public void Indexer_With_IndexOutOfRepeat_Should_Throw(int count, int index)
+        public void Indexer_With_IndexOutOfRepeat_Must_Throw(int count, int index)
         {
             // Arrange
 
@@ -41,7 +41,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Generation
   
         [Theory]
         [MemberData(nameof(TestData.Repeat), MemberType = typeof(TestData))]
-        public void Repeat_With_ValidData_Should_Succeed(int value, int count)
+        public void Repeat_With_ValidData_Must_Succeed(int value, int count)
         {
             // Arrange
             var expected = System.Linq.Enumerable.Repeat(value, count);
@@ -57,7 +57,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Generation
 
         [Theory]
         [MemberData(nameof(TestData.Repeat_SkipTake), MemberType = typeof(TestData))]
-        public void Repeat_Skip_With_ValidData_Should_Succeed(int value, int count, int skipCount)
+        public void Repeat_Skip_With_ValidData_Must_Succeed(int value, int count, int skipCount)
         {
             // Arrange
             var expected = System.Linq.Enumerable.Skip(System.Linq.Enumerable.Repeat(value, count), skipCount);
@@ -73,7 +73,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Generation
 
         [Theory]
         [MemberData(nameof(TestData.Repeat_SkipTake), MemberType = typeof(TestData))]
-        public void Repeat_Take_With_ValidData_Should_Succeed(int value, int count, int takeCount)
+        public void Repeat_Take_With_ValidData_Must_Succeed(int value, int count, int takeCount)
         {
             // Arrange
             var expected = System.Linq.Enumerable.Take(System.Linq.Enumerable.Repeat(value, count), takeCount);
@@ -89,7 +89,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Generation
 
         [Theory]
         [MemberData(nameof(TestData.Repeat), MemberType = typeof(TestData))]
-        public void Repeat_All_With_ValidData_Should_Succeed(int value, int count)
+        public void Repeat_All_With_ValidData_Must_Succeed(int value, int count)
         {
             // Arrange
             var expected = System.Linq.Enumerable.All(System.Linq.Enumerable.Repeat(value, count), item => false);
@@ -104,7 +104,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Generation
 
         [Theory]
         [MemberData(nameof(TestData.Repeat), MemberType = typeof(TestData))]
-        public void Repeat_Any_With_ValidData_Should_Succeed(int value, int count)
+        public void Repeat_Any_With_ValidData_Must_Succeed(int value, int count)
         {
             // Arrange
             var expected = System.Linq.Enumerable.Any(System.Linq.Enumerable.Repeat(value, count));
@@ -119,7 +119,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Generation
 
         [Theory]
         [MemberData(nameof(TestData.Repeat), MemberType = typeof(TestData))]
-        public void Repeat_ToArray_With_ValidData_Should_Succeed(int value, int count)
+        public void Repeat_ToArray_With_ValidData_Must_Succeed(int value, int count)
         {
             // Arrange
             var expected = System.Linq.Enumerable.ToArray(System.Linq.Enumerable.Repeat(value, count));
@@ -136,7 +136,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Generation
 
         [Theory]
         [MemberData(nameof(TestData.Repeat), MemberType = typeof(TestData))]
-        public void Repeat_ToList_With_ValidData_Should_Succeed(int value, int count)
+        public void Repeat_ToList_With_ValidData_Must_Succeed(int value, int count)
         {
             // Arrange
             var expected = System.Linq.Enumerable.ToList(System.Linq.Enumerable.Repeat(value, count));

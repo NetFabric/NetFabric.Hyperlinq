@@ -10,7 +10,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.WhereSelect
         [MemberData(nameof(TestData.PredicateSelectorEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateSelectorSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateSelectorMultiple), MemberType = typeof(TestData))]
-        public void WhereSelect_With_ValidData_Should_Succeed(int[] source, Predicate<int> predicate, Selector<int, string> selector)
+        public void WhereSelect_With_ValidData_Must_Succeed(int[] source, Predicate<int> predicate, Selector<int, string> selector)
         {
             // Arrange
             var wrapped = Wrap.AsValueReadOnlyList(source);

@@ -10,7 +10,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Aggregation.Count
         [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
-        public void Count_With_ValidData_Should_Succeed(int[] source)
+        public void Count_With_ValidData_Must_Succeed(int[] source)
         {
             // Arrange
             var wrapped = Wrap
@@ -28,20 +28,25 @@ namespace NetFabric.Hyperlinq.UnitTests.Aggregation.Count
         }
 
         [Theory]
-        [MemberData(nameof(TestData.PredicateEmpty), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.PredicateSingle), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.PredicateMultiple), MemberType = typeof(TestData))]
-        public void Count_Predicate_With_ValidData_Should_Succeed(int[] source, Predicate<int> predicate)
+        [MemberData(nameof(TestData.SkipTakePredicateEmpty), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakePredicateSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakePredicateMultiple), MemberType = typeof(TestData))]
+        public void Count_Predicate_With_ValidData_Must_Succeed(int[] source, int skipCount, int takeCount, Predicate<int> predicate)
         {
             // Arrange
             var wrapped = Wrap
                 .AsValueReadOnlyList(source);
             var expected = 
-                System.Linq.Enumerable.Count(source, predicate.AsFunc());
+                System.Linq.Enumerable.Count(
+                    System.Linq.Enumerable.Where(
+                        System.Linq.Enumerable.Take(
+                            System.Linq.Enumerable.Skip(source, skipCount), takeCount), predicate.AsFunc()));
 
             // Act
             var result = ReadOnlyList
-                .Where<Wrap.ValueReadOnlyList<int>, int>(wrapped, predicate)
+                .Skip<Wrap.ValueReadOnlyList<int>, int>(wrapped, skipCount)
+                .Take(takeCount)
+                .Where(predicate)
                 .Count();
 
             // Assert
@@ -50,21 +55,25 @@ namespace NetFabric.Hyperlinq.UnitTests.Aggregation.Count
         }
 
         [Theory]
-        [MemberData(nameof(TestData.PredicateAtEmpty), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.PredicateAtSingle), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.PredicateAtMultiple), MemberType = typeof(TestData))]
-        public void Count_PredicateAt_With_ValidData_Should_Succeed(int[] source, PredicateAt<int> predicate)
+        [MemberData(nameof(TestData.SkipTakePredicateAtEmpty), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakePredicateAtSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakePredicateAtMultiple), MemberType = typeof(TestData))]
+        public void Count_PredicateAt_With_ValidData_Must_Succeed(int[] source, int skipCount, int takeCount, PredicateAt<int> predicate)
         {
             // Arrange
             var wrapped = Wrap
                 .AsValueReadOnlyList(source);
             var expected = 
                 System.Linq.Enumerable.Count(
-                    System.Linq.Enumerable.Where(source, predicate.AsFunc()));
+                    System.Linq.Enumerable.Where(
+                        System.Linq.Enumerable.Take(
+                            System.Linq.Enumerable.Skip(source, skipCount), takeCount), predicate.AsFunc()));
 
             // Act
             var result = ReadOnlyList
-                .Where<Wrap.ValueReadOnlyList<int>, int>(wrapped, predicate)
+                .Skip<Wrap.ValueReadOnlyList<int>, int>(wrapped, skipCount)
+                .Take(takeCount)
+                .Where(predicate)
                 .Count();
 
             // Assert

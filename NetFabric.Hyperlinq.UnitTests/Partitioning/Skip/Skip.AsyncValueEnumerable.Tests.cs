@@ -10,7 +10,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Partitioning.Skip
         // [MemberData(nameof(TestData.SkipEmpty), MemberType = typeof(TestData))]
         // [MemberData(nameof(TestData.SkipSingle), MemberType = typeof(TestData))]
         // [MemberData(nameof(TestData.SkipMultiple), MemberType = typeof(TestData))]
-        // public void Skip_With_ValidData_Should_Succeed(int[] source, int count)
+        // public void Skip_With_ValidData_Must_Succeed(int[] source, int count)
         // {
         //     // Arrange
         //     var wrapped = Wrap.AsAsyncValueEnumerable(source);
@@ -28,7 +28,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Partitioning.Skip
 
         // [Theory]
         // [MemberData(nameof(TestData.Skip_Skip), MemberType = typeof(TestData))]
-        // public void Skip_Skip_With_ValidData_Should_Succeed(int[] source, int count0, int count1)
+        // public void Skip_Skip_With_ValidData_Must_Succeed(int[] source, int count0, int count1)
         // {
         //     // Arrange
         //     var wrapped = Wrap.AsAsyncValueEnumerable(source);
@@ -51,7 +51,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Partitioning.Skip
         // [MemberData(nameof(TestData.SkipTakeEmpty), MemberType = typeof(TestData))]
         // [MemberData(nameof(TestData.SkipTakeSingle), MemberType = typeof(TestData))]
         // [MemberData(nameof(TestData.SkipTakeMultiple), MemberType = typeof(TestData))]
-        // public void Skip_Take_With_ValidData_Should_Succeed(int[] source, int skipCount, int takeCount)
+        // public void Skip_Take_With_ValidData_Must_Succeed(int[] source, int skipCount, int takeCount)
         // {
         //     // Arrange
         //     var wrapped = Wrap.AsAsyncValueEnumerable(source);

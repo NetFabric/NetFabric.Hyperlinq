@@ -9,7 +9,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.SingleOrDefault
         [Theory]
         [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
-        public void SingleOrDefault_With_EmptyOrSingle_Should_Succeed(int[] source)
+        public void SingleOrDefault_With_EmptyOrSingle_Must_Succeed(int[] source)
         {
             // Arrange
             var wrapped = Wrap
@@ -28,7 +28,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.SingleOrDefault
 
         [Theory]
         [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
-        public void SingleOrDefault_With_Multiple_Should_Throw(int[] source)
+        public void SingleOrDefault_With_Multiple_Must_Throw(int[] source)
         {
             // Arrange
             var wrapped = Wrap

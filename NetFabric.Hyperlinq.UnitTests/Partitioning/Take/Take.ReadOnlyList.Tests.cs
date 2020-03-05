@@ -9,7 +9,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Partitioning.Take
         [MemberData(nameof(TestData.TakeEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.TakeSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.TakeMultiple), MemberType = typeof(TestData))]
-        public void Take_With_ValidData_Should_Succeed(int[] source, int count)
+        public void Take_With_ValidData_Must_Succeed(int[] source, int count)
         {
             // Arrange
             var wrapped = Wrap.AsValueReadOnlyList(source);
