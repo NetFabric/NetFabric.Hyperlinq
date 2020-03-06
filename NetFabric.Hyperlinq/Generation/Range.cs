@@ -165,7 +165,7 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Contains(int value)
-                => value >= start && value < start + count;
+                => value >= start && value < end;
                 
             public int[] ToArray()
             {
@@ -185,7 +185,6 @@ namespace NetFabric.Hyperlinq
             {
                 var dictionary = new Dictionary<TKey, int>(count, comparer);
 
-                var end = start + count;
                 for (var index = start; index < end; index++)
                     dictionary.Add(keySelector(index), index);
 
@@ -198,7 +197,6 @@ namespace NetFabric.Hyperlinq
             {
                 var dictionary = new Dictionary<TKey, TElement>(count, comparer);
 
-                var end = start + count;
                 for (var index = start; index < end; index++)
                     dictionary.Add(keySelector(index), elementSelector(index));
 
@@ -207,14 +205,13 @@ namespace NetFabric.Hyperlinq
 
             public void ForEach(Action<int> action)
             {
-                var end = start + count;
-                for (var value = start; value < end; value++)
-                    action(value);
+                for (var index = start; index < end; index++)
+                    action(index);
             }
-            public void ForEach(Action<int, int> action)
+            public void ForEach(ActionAt<int> action)
             {
-                for (var value = start; value < count; value++)
-                    action(value + start, value);
+                for (var index = 0; index < count; index++)
+                    action(index + start, index);
             }
         }
     }
