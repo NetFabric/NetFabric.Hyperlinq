@@ -130,6 +130,11 @@ namespace NetFabric.Hyperlinq
                 { new int[] { 1, 2, 3, 4, 5 }, 0, 9, (_, __) => false },
                 { new int[] { 1, 2, 3, 4, 5 }, 0, 9, (item, _) => item > 9 },
                 { new int[] { 1, 2, 3, 4, 5 }, 0, 9, (_, index) => index > 9 },
+
+                { new int[] { 1, 2, 3, 4, 5 }, 2, 0, (_, __) => true },
+                { new int[] { 1, 2, 3, 4, 5 }, 2, 9, (_, __) => false },
+                { new int[] { 1, 2, 3, 4, 5 }, 2, 9, (item, _) => item > 9 },
+                { new int[] { 1, 2, 3, 4, 5 }, 2, 9, (_, index) => index > 9 },
             };
 
         public static TheoryData<int[], Selector<int, string>> SelectorEmpty =>

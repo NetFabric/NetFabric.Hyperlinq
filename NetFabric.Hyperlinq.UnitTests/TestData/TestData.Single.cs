@@ -100,6 +100,8 @@ namespace NetFabric.Hyperlinq
                 { new int[] { 1, 2, 3, 4, 5 }, 0, 9, (_, index) => index == 0 },
                 { new int[] { 1, 2, 3, 4, 5 }, 0, 9, (_, index) => index == 2 },
                 { new int[] { 1, 2, 3, 4, 5 }, 0, 9, (_, index) => index == 4 },
+                { new int[] { 1, 2, 3, 4, 5 }, 2, 9, (_, index) => index == 0 },
+                { new int[] { 1, 2, 3, 4, 5 }, 2, 9, (_, index) => index == 2 },
             };
 
         public static TheoryData<int[], Selector<int, string>> SelectorSingle =>
