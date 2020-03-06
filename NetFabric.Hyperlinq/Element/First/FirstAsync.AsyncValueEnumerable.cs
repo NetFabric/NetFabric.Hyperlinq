@@ -18,29 +18,11 @@ namespace NetFabric.Hyperlinq
         }
 
         [Pure]
-        static async ValueTask<TSource> FirstAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source, AsyncPredicate<TSource> predicate, CancellationToken cancellationToken = default)
-            where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
-            where TEnumerator : struct, IAsyncEnumerator<TSource>
-        {
-            var result = await GetFirstAsync<TEnumerable, TEnumerator, TSource>(source, predicate, cancellationToken).ConfigureAwait(false);
-            return result.ThrowOnEmpty();
-        }
-
-        [Pure]
         public static async ValueTask<TSource> FirstOrDefaultAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source, CancellationToken cancellationToken = default) 
             where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
             var result = await GetFirstAsync<TEnumerable, TEnumerator, TSource>(source, cancellationToken).ConfigureAwait(false);
-            return result.DefaultOnEmpty();
-        }
-
-        [Pure]
-        static async ValueTask<TSource> FirstOrDefaultAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source, AsyncPredicate<TSource> predicate, CancellationToken cancellationToken = default) 
-            where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
-            where TEnumerator : struct, IAsyncEnumerator<TSource>
-        {
-            var result = await GetFirstAsync<TEnumerable, TEnumerator, TSource>(source, predicate, cancellationToken).ConfigureAwait(false);
             return result.DefaultOnEmpty();
         }
 

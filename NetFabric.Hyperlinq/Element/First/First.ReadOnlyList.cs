@@ -16,27 +16,10 @@ namespace NetFabric.Hyperlinq
 
         [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static TSource First<TList, TSource>(this TList source, Predicate<TSource> predicate) 
-            where TList : notnull, IReadOnlyList<TSource>
-            => predicate is null
-                ? Throw.ArgumentNullException<TSource>(nameof(predicate))
-                : GetFirst<TList, TSource>(source, predicate, 0, source.Count).ThrowOnEmpty();
-
-        [Pure]
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         [return: MaybeNull]
         public static TSource FirstOrDefault<TList, TSource>(this TList source)
             where TList : notnull, IReadOnlyList<TSource>
             => GetFirst<TList, TSource>(source, 0, source.Count).DefaultOnEmpty();
-
-        [Pure]
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        [return: MaybeNull]
-        public static TSource FirstOrDefault<TList, TSource>(this TList source, Predicate<TSource> predicate) 
-            where TList : notnull, IReadOnlyList<TSource>
-            => predicate is null
-                ? Throw.ArgumentNullException<TSource>(nameof(predicate))
-                : GetFirst<TList, TSource>(source, predicate, 0, source.Count).DefaultOnEmpty();
 
         [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

@@ -17,49 +17,11 @@ namespace NetFabric.Hyperlinq
 
         [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static TSource Single<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Predicate<TSource> predicate) 
-            where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
-            where TEnumerator : struct, IEnumerator<TSource>
-            => predicate is null
-                ? Throw.ArgumentNullExceptionRef<TSource>(nameof(predicate))
-                : GetSingle<TEnumerable, TEnumerator, TSource>(source, predicate).ThrowOnEmpty();
-
-        [Pure]
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static TSource Single<TEnumerable, TEnumerator, TSource>(this TEnumerable source, PredicateAt<TSource> predicate) 
-            where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
-            where TEnumerator : struct, IEnumerator<TSource>
-            => predicate is null
-                ? Throw.ArgumentNullExceptionRef<TSource>(nameof(predicate))
-                : GetSingle<TEnumerable, TEnumerator, TSource>(source, predicate).ThrowOnEmpty();
-
-        [Pure]
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         [return: MaybeNull]
         public static TSource SingleOrDefault<TEnumerable, TEnumerator, TSource>(this TEnumerable source)
             where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
             => GetSingle<TEnumerable, TEnumerator, TSource>(source).DefaultOnEmpty();
-
-        [Pure]
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        [return: MaybeNull]
-        static TSource SingleOrDefault<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Predicate<TSource> predicate) 
-            where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
-            where TEnumerator : struct, IEnumerator<TSource>
-            => predicate is null
-                ? Throw.ArgumentNullExceptionRef<TSource>(nameof(predicate))
-                : GetSingle<TEnumerable, TEnumerator, TSource>(source, predicate).DefaultOnEmpty();
-
-        [Pure]
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        [return: MaybeNull]
-        static TSource SingleOrDefault<TEnumerable, TEnumerator, TSource>(this TEnumerable source, PredicateAt<TSource> predicate) 
-            where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
-            where TEnumerator : struct, IEnumerator<TSource>
-            => predicate is null
-                ? Throw.ArgumentNullExceptionRef<TSource>(nameof(predicate))
-                : GetSingle<TEnumerable, TEnumerator, TSource>(source, predicate).DefaultOnEmpty();
 
         [Pure]
         static (ElementResult Success, TSource Value) GetSingle<TEnumerable, TEnumerator, TSource>(this TEnumerable source) 
