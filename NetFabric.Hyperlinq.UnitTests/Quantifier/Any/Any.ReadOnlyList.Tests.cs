@@ -141,8 +141,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Any
             // Arrange
             var wrapped = Wrap.AsValueReadOnlyList(source);
             var expected = 
-                System.Linq.Enumerable.Count(
-                    System.Linq.Enumerable.Where(source, predicate.AsFunc())) != 0;
+                System.Linq.Enumerable.Any(
+                    System.Linq.Enumerable.Where(source, predicate.AsFunc()));
 
             // Act
             var result = ReadOnlyList
@@ -162,11 +162,11 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Any
             // Arrange
             var wrapped = Wrap.AsValueReadOnlyList(source);
             var expected = 
-                System.Linq.Enumerable.Count(
+                System.Linq.Enumerable.Any(
                     System.Linq.Enumerable.Where(
                         System.Linq.Enumerable.Take(
                             System.Linq.Enumerable.Skip(
-                                source, skipCount), takeCount), predicate.AsFunc())) != 0;
+                                source, skipCount), takeCount), predicate.AsFunc()));
 
             // Act
             var result = ReadOnlyList

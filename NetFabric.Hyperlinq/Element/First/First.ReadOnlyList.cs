@@ -47,10 +47,23 @@ namespace NetFabric.Hyperlinq
         static (ElementResult Success, TSource Value, int Index) GetFirst<TList, TSource>(this TList source, PredicateAt<TSource> predicate, int skipCount, int takeCount)
             where TList : notnull, IReadOnlyList<TSource>
         {
-            for (var index = 0; index < takeCount; index++)
+            if (skipCount == 0)
             {
-                if (predicate(source[index + skipCount], index))
-                    return (ElementResult.Success, source[index + skipCount], index);
+                for (var index = 0; index < takeCount; index++)
+                {
+                    var item = source[index];
+                    if (predicate(item, index))
+                        return (ElementResult.Success, item, index);
+                }
+            }
+            else
+            {
+                for (var index = 0; index < takeCount; index++)
+                {
+                    var item = source[index + skipCount];
+                    if (predicate(item, index))
+                        return (ElementResult.Success, item, index);
+                }
             }
 
             return (ElementResult.Empty, default, 0);

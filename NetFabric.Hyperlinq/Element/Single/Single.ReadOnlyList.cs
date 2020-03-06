@@ -62,19 +62,40 @@ namespace NetFabric.Hyperlinq
         static (ElementResult Success, TSource Value, int Index) GetSingle<TList, TSource>(this TList source, PredicateAt<TSource> predicate, int skipCount, int takeCount)
             where TList : notnull, IReadOnlyList<TSource>
         {
-            for (var index = 0; index < takeCount; index++)
+            if (skipCount == 0)
             {
-                if (predicate(source[index + skipCount], index))
+                for (var index = 0; index < takeCount; index++)
                 {
-                    var value = (ElementResult.Success, source[index + skipCount], index);
-
-                    for (index++; index < takeCount; index++)
+                    if (predicate(source[index], index))
                     {
-                        if (predicate(source[index + skipCount], index))
-                            return (ElementResult.NotSingle, default, 0);
-                    }
+                        var value = (ElementResult.Success, source[index], index);
 
-                    return value;
+                        for (index++; index < takeCount; index++)
+                        {
+                            if (predicate(source[index], index))
+                                return (ElementResult.NotSingle, default, 0);
+                        }
+
+                        return value;
+                    }
+                }
+            }
+            else
+            {
+                for (var index = 0; index < takeCount; index++)
+                {
+                    if (predicate(source[index + skipCount], index))
+                    {
+                        var value = (ElementResult.Success, source[index + skipCount], index);
+
+                        for (index++; index < takeCount; index++)
+                        {
+                            if (predicate(source[index + skipCount], index))
+                                return (ElementResult.NotSingle, default, 0);
+                        }
+
+                        return value;
+                    }
                 }
             }
 

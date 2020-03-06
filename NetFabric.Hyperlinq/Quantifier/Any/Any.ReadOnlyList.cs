@@ -51,11 +51,21 @@ namespace NetFabric.Hyperlinq
         static bool Any<TList, TSource>(this TList source, PredicateAt<TSource> predicate, int skipCount, int takeCount)
             where TList : notnull, IReadOnlyList<TSource>
         {
-            var end = skipCount + takeCount;
-            for (var index = skipCount; index < end; index++)
+            if (skipCount == 0)
             {
-                if (predicate(source[index], index))
-                    return true;
+                for (var index = 0; index < takeCount; index++)
+                {
+                    if (predicate(source[index], index))
+                        return true;
+                }
+            }
+            else
+            {
+                for (var index = 0; index < takeCount; index++)
+                {
+                    if (predicate(source[index + skipCount], index))
+                        return true;
+                }
             }
             return false;
         }

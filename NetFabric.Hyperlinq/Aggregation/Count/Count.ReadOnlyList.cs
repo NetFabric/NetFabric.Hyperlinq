@@ -31,11 +31,21 @@ namespace NetFabric.Hyperlinq
             where TList : notnull, IReadOnlyList<TSource>
         {
             var count = 0;
-            var end = skipCount + takeCount;
-            for (var index = skipCount; index < end; index++)
+            if (skipCount == 0)
             {
-                var result = predicate(source[index], index);
-                count += Unsafe.As<bool, byte>(ref result);
+                for (var index = 0; index < takeCount; index++)
+                {
+                    var result = predicate(source[index], index);
+                    count += Unsafe.As<bool, byte>(ref result);
+                }
+            }
+            else
+            {
+                for (var index = 0; index < takeCount; index++)
+                {
+                    var result = predicate(source[index + skipCount], index);
+                    count += Unsafe.As<bool, byte>(ref result);
+                }
             }
             return count;
         }
