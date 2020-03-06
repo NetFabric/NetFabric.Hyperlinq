@@ -22,15 +22,22 @@ namespace NetFabric.Hyperlinq
             var array = new TSource[takeCount];
             if (takeCount != 0)
             {
-                if (takeCount == source.Count 
-                && source is ICollection<TSource> collection)
+                if (takeCount == source.Count && source is ICollection<TSource> collection)
                 {
                     collection.CopyTo(array, skipCount);
                 }
                 else
                 {
-                    for (var index = 0; index < takeCount; index++)
-                        array[index] = source[index + skipCount];
+                    if (skipCount == 0)
+                    {
+                        for (var index = 0; index < takeCount; index++)
+                            array[index] = source[index];
+                    }
+                    else
+                    {
+                        for (var index = 0; index < takeCount; index++)
+                            array[index] = source[index + skipCount];
+                    }
                 }
             }
             return array;
@@ -59,9 +66,9 @@ namespace NetFabric.Hyperlinq
             where TList : notnull, IReadOnlyList<TSource>
         {
             var array = new TResult[takeCount];
-            if (skipCount == 0 && takeCount == source.Count)
+            if (skipCount == 0)
             {
-                for (var index = 0; index < source.Count; index++)
+                for (var index = 0; index < takeCount; index++)
                     array[index] = selector(source[index]);
             } 
             else
@@ -77,9 +84,9 @@ namespace NetFabric.Hyperlinq
             where TList : notnull, IReadOnlyList<TSource>
         {
             var array = new TResult[takeCount];
-            if (skipCount == 0 && takeCount == source.Count)
+            if (skipCount == 0)
             {
-                for (var index = 0; index < source.Count; index++)
+                for (var index = 0; index < takeCount; index++)
                     array[index] = selector(source[index], index);
             } 
             else
@@ -147,10 +154,9 @@ namespace System.Collections.Generic
             // Continuously read in items from the enumerator, updating _count
             // and _index when we run out of space.
 
-            var end = skipCount + takeCount;
-            for (var itemIndex = skipCount; itemIndex < end; itemIndex++)
+            for (var itemIndex = 0; itemIndex < takeCount; itemIndex++)
             {
-                var item = items[itemIndex];
+                var item = items[itemIndex + skipCount];
                 if (predicate(item, itemIndex))
                 {
                     if ((uint)index >= (uint)destination.Length)

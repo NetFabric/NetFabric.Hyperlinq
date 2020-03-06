@@ -43,6 +43,30 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.All
                 .BeEqualTo(expected);
         }
 
+        [Theory]
+        [MemberData(nameof(TestData.SkipTakePredicateEmpty), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakePredicateSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakePredicateMultiple), MemberType = typeof(TestData))]
+        public void All_Skip_Take_Predicate_With_ValidData_Must_Succeed(int[] source, int skipCount, int takeCount, Predicate<int> predicate)
+        {
+            // Arrange
+            var wrapped = Wrap.AsValueReadOnlyList(source);
+            var expected = 
+                System.Linq.Enumerable.All(
+                    System.Linq.Enumerable.Take(
+                        System.Linq.Enumerable.Skip(source, skipCount), takeCount), predicate.AsFunc());
+
+            // Act
+            var result = ReadOnlyList
+                .Skip<Wrap.ValueReadOnlyList<int>, int>(wrapped, skipCount)
+                .Take(takeCount)
+                .All(predicate);
+
+            // Assert
+            _ = result.Must()
+                .BeEqualTo(expected);
+        }
+
         [Fact]
         public void All_PredicateAt_With_NullPredicate_Must_Throw()
         {
@@ -76,6 +100,35 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.All
             // Act
             var result = ReadOnlyList
                 .All<Wrap.ValueReadOnlyList<int>, int>(wrapped, predicate);
+
+            // Assert
+            _ = result.Must()
+                .BeEqualTo(expected);
+        }
+
+        [Theory]
+        [MemberData(nameof(TestData.SkipTakePredicateAtEmpty), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakePredicateAtSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakePredicateAtMultiple), MemberType = typeof(TestData))]
+        public void All_Skip_Take_PredicateAt_With_ValidData_Must_Succeed(int[] source, int skipCount, int takeCount, PredicateAt<int> predicate)
+        {
+            // Arrange
+            var wrapped = Wrap.AsValueReadOnlyList(source);
+            var count = 
+                System.Linq.Enumerable.Count(
+                    System.Linq.Enumerable.Take(
+                        System.Linq.Enumerable.Skip(source, skipCount), takeCount));
+            var expected = 
+                System.Linq.Enumerable.Count(
+                    System.Linq.Enumerable.Where(
+                        System.Linq.Enumerable.Take(
+                            System.Linq.Enumerable.Skip(source, skipCount), takeCount), predicate.AsFunc())) == count;
+
+            // Act
+            var result = ReadOnlyList
+                .Skip<Wrap.ValueReadOnlyList<int>, int>(wrapped, skipCount)
+                .Take(takeCount)
+                .All(predicate);
 
             // Assert
             _ = result.Must()
