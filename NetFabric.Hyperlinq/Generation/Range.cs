@@ -74,9 +74,18 @@ namespace NetFabric.Hyperlinq
 
             void ICollection<int>.CopyTo(int[] array, int arrayIndex) 
             {
-                for (var index = 0; index < count; index++)
-                    array[arrayIndex + index] = index;
+                if (arrayIndex == 0)
+                {
+                    for (var index = 0; index < count; index++)
+                        array[index] = index + start;
+                }
+                else
+                {
+                    for (var index = 0; index < count; index++)
+                        array[index + arrayIndex] = index + start;
+                } 
             }
+            
             void ICollection<int>.Add(int item) 
                 => throw new NotImplementedException();
             void ICollection<int>.Clear() 
@@ -168,7 +177,7 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public List<int> ToList()
-                => new List<int>(new ToListCollection(this));
+                => new List<int>(this);
 
             public Dictionary<TKey, int> ToDictionary<TKey>(Selector<int, TKey> keySelector)
                 => ToDictionary<TKey>(keySelector, EqualityComparer<TKey>.Default);
@@ -206,24 +215,6 @@ namespace NetFabric.Hyperlinq
             {
                 for (var value = start; value < count; value++)
                     action(value + start, value);
-            }
-
-            // helper implementation of ICollection<> so that CopyTo() is used to convert to List<>
-            [GeneratorIgnore]
-            sealed class ToListCollection
-                : ToListCollectionBase<int>
-            {
-                readonly int start;
-
-                public ToListCollection(in RangeEnumerable source)
-                    : base(source.count)
-                    => this.start = source.start;
-
-                public override void CopyTo(int[] array, int _)
-                {
-                    for(var index = 0; index < Count; index++)
-                        array[index] = start + index;
-                }
             }
         }
     }
