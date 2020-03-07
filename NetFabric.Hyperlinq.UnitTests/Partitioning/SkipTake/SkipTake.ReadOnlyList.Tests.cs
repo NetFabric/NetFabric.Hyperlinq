@@ -205,7 +205,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Partitioning.SkipTake
             // Arrange
             var wrapped = Wrap.AsValueReadOnlyList(source);
             var expected = 0;
-            MoreLinq.Extensions.ForEachExtension.ForEach(
+            System.Linq.EnumerableEx.ForEach(
                 System.Linq.Enumerable.Take(
                     System.Linq.Enumerable.Skip(wrapped, skipCount), takeCount), (item, index) => expected += item);
 
@@ -230,7 +230,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Partitioning.SkipTake
             // Arrange
             var wrapped = Wrap.AsValueReadOnlyList(source);
             var expected = 0;
-            MoreLinq.Extensions.ForEachExtension.ForEach(
+            System.Linq.EnumerableEx.ForEach(
                 System.Linq.Enumerable.Take(
                     System.Linq.Enumerable.Skip(wrapped, skipCount), takeCount), (item, index) => expected += item + index);
 

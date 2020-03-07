@@ -134,11 +134,12 @@ namespace NetFabric.Hyperlinq
             { 
                 checked
                 {
+                    var itemIndex = 0;
                     for (var index = 0; await enumerator.MoveNextAsync().ConfigureAwait(false); index++)
                     {
                         var item = enumerator.Current;
                         if (await predicate(item, cancellationToken).ConfigureAwait(false))
-                            await actionAsync(item, index, cancellationToken).ConfigureAwait(false);
+                            await actionAsync(item, itemIndex++, cancellationToken).ConfigureAwait(false);
                     }
                 }
             }
@@ -153,11 +154,12 @@ namespace NetFabric.Hyperlinq
             { 
                 checked
                 {
+                    var itemIndex = 0;
                     for (var index = 0; await enumerator.MoveNextAsync().ConfigureAwait(false); index++)
                     {
                         var item = enumerator.Current;
                         if (await predicate(item, index, cancellationToken).ConfigureAwait(false))
-                            await actionAsync(item, index, cancellationToken).ConfigureAwait(false);
+                            await actionAsync(item, itemIndex++, cancellationToken).ConfigureAwait(false);
                     }
                 }
             }
@@ -206,13 +208,14 @@ namespace NetFabric.Hyperlinq
             { 
                 checked
                 {
+                    var itemIndex = 0;
                     for (var index = 0; await enumerator.MoveNextAsync().ConfigureAwait(false); index++)
                     {
                         var item = enumerator.Current;
                         if (await predicate(item, cancellationToken).ConfigureAwait(false))
                         {
                             var projectedItem = await selector(item, cancellationToken).ConfigureAwait(false);
-                            await actionAsync(projectedItem, index, cancellationToken).ConfigureAwait(false);
+                            await actionAsync(projectedItem, itemIndex++, cancellationToken).ConfigureAwait(false);
                         }
                     }
                 }
