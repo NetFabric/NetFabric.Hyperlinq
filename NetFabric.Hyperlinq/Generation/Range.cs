@@ -170,8 +170,16 @@ namespace NetFabric.Hyperlinq
             public int[] ToArray()
             {
                 var array = new int[count];
-                for(var index = 0; index < count; index++)
-                    array[index] = start + index;
+                if (start == 0)
+                {
+                    for (var index = 0; index < array.Length; index++)
+                        array[index] = index;
+                }
+                else
+                {
+                    for (var index = 0; index < array.Length; index++)
+                        array[index] = index + start;
+                } 
                 return array;
             }
 
