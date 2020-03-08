@@ -84,7 +84,6 @@ namespace ConsoleApp
   - `ToDictionary(Selector<TSource, TKey>, Selector<TSource, TElement>)`
   - `ToDictionary(Selector<TSource, TKey>, Selector<TSource, TElement>, IEqualityComparer<TKey>)`
 - Element
-  - `TryElementAt()`
   - `ElementAt()`
   - `ElementAtOrDefault()`
   - `First()`

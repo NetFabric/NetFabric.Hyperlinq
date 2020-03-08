@@ -162,23 +162,38 @@ namespace NetFabric.Hyperlinq
             public bool Contains(TResult value, IEqualityComparer<TResult>? comparer = null)
                 => Array.Contains<TSource, TResult>(source.Span, value, comparer, selector);
 
+            [Pure]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public TResult ElementAt(int index)
+                => Array.ElementAt<TSource, TResult>(source.Span, index, selector);
+
+            [Pure]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            [return: MaybeNull]
+            public TResult ElementAtOrDefault(int index)
+                => Array.ElementAtOrDefault<TSource, TResult>(source.Span, index, selector);
+
+            [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TResult First()
-                => selector(source.Span.First());
+                => Array.First<TSource, TResult>(source.Span, selector);
 
+            [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             [return: MaybeNull]
             public TResult FirstOrDefault()
-                => selector(source.Span.FirstOrDefault());
+                => Array.FirstOrDefault<TSource, TResult>(source.Span, selector);
 
+            [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TResult Single()
-                => selector(source.Span.Single());
+                => Array.Single<TSource, TResult>(source.Span, selector);
 
+            [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             [return: MaybeNull]
             public TResult SingleOrDefault()
-                => selector(source.Span.SingleOrDefault());
+                => Array.SingleOrDefault<TSource, TResult>(source.Span, selector);
 
             public TResult[] ToArray()
                 => Array.ToArray(source.Span, selector);

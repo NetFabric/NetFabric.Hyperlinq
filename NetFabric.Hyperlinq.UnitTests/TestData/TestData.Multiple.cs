@@ -207,25 +207,17 @@ namespace NetFabric.Hyperlinq
                 { new int[] { 1, 2, 3, 4, 5 }, 0, 9, _ => true, item => item.ToString() },
                 { new int[] { 1, 2, 3, 4, 5 }, 2, 9, _ => true, item => item.ToString() },
 
-                { new int[] { 1, 2, 3, 4, 5 }, -1, 2, item => (item & 0x01) == 0, item => item.ToString() },
-                { new int[] { 1, 2, 3, 4, 5 }, 0, 2, item => (item & 0x01) == 0, item => item.ToString() },
-                { new int[] { 1, 2, 3, 4, 5 }, 2, 2, item => (item & 0x01) == 0, item => item.ToString() },
                 { new int[] { 1, 2, 3, 4, 5 }, -1, 5, item => (item & 0x01) == 0, item => item.ToString() },
                 { new int[] { 1, 2, 3, 4, 5 }, 0, 5, item => (item & 0x01) == 0, item => item.ToString() },
-                { new int[] { 1, 2, 3, 4, 5 }, 2, 3, item => (item & 0x01) == 0, item => item.ToString() },
                 { new int[] { 1, 2, 3, 4, 5 }, -1, 9, item => (item & 0x01) == 0, item => item.ToString() },
                 { new int[] { 1, 2, 3, 4, 5 }, 0, 9, item => (item & 0x01) == 0, item => item.ToString() },
-                { new int[] { 1, 2, 3, 4, 5 }, 2, 9, item => (item & 0x01) == 0, item => item.ToString() },
+                { new int[] { 1, 2, 3, 4, 5 }, 1, 9, item => (item & 0x01) == 0, item => item.ToString() },
 
-                { new int[] { 1, 2, 3, 4, 5 }, -1, 2, item => (item & 0x01) == 1, item => item.ToString() },
-                { new int[] { 1, 2, 3, 4, 5 }, 0, 2, item => (item & 0x01) == 1, item => item.ToString() },
-                { new int[] { 1, 2, 3, 4, 5 }, 2, 2, item => (item & 0x01) == 1, item => item.ToString() },
                 { new int[] { 1, 2, 3, 4, 5 }, -1, 5, item => (item & 0x01) == 1, item => item.ToString() },
                 { new int[] { 1, 2, 3, 4, 5 }, 0, 5, item => (item & 0x01) == 1, item => item.ToString() },
-                { new int[] { 1, 2, 3, 4, 5 }, 2, 3, item => (item & 0x01) == 1, item => item.ToString() },
                 { new int[] { 1, 2, 3, 4, 5 }, -1, 9, item => (item & 0x01) == 1, item => item.ToString() },
                 { new int[] { 1, 2, 3, 4, 5 }, 0, 9, item => (item & 0x01) == 1, item => item.ToString() },
-                { new int[] { 1, 2, 3, 4, 5 }, 2, 9, item => (item & 0x01) == 1, item => item.ToString() },
+                { new int[] { 1, 2, 3, 4, 5 }, 1, 9, item => (item & 0x01) == 1, item => item.ToString() },
             };
     }
 }

@@ -103,35 +103,32 @@ namespace NetFabric.Hyperlinq
             public AsyncValueEnumerable.SelectIndexEnumerable<TEnumerable, TEnumerator, TSource, TSelectorResult> Select<TSelectorResult>(AsyncSelectorAt<TResult, TSelectorResult> selector)
                 => AsyncValueEnumerable.Select<TEnumerable, TEnumerator, TSource, TSelectorResult>(source, Utils.Combine(this.selector, selector));
 
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public async ValueTask<TResult> FirstAsync(CancellationToken cancellationToken = default)
-            {
-                var item = await AsyncValueEnumerable.FirstAsync<TEnumerable, TEnumerator, TSource>(source, cancellationToken).ConfigureAwait(false);
-                return await selector(item, 0, cancellationToken).ConfigureAwait(false);
-            }
+            [Pure]
+            public ValueTask<TResult> ElementAtAsync(int index, CancellationToken cancellationToken = default)
+                => AsyncValueEnumerable.ElementAtAsync<TEnumerable, TEnumerator, TSource, TResult>(source, index, selector, cancellationToken);
 
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            [Pure]
             [return: MaybeNull]
-            public async ValueTask<TResult> FirstOrDefaultAsync(CancellationToken cancellationToken = default)
-            {
-                var item = await AsyncValueEnumerable.FirstOrDefaultAsync<TEnumerable, TEnumerator, TSource>(source, cancellationToken).ConfigureAwait(false);
-                return await selector(item, 0, cancellationToken).ConfigureAwait(false);
-            }
+            public ValueTask<TResult> ElementAtOrDefaultAsync(int index, CancellationToken cancellationToken = default)
+                => AsyncValueEnumerable.ElementAtOrDefaultAsync<TEnumerable, TEnumerator, TSource, TResult>(source, index, selector, cancellationToken);
 
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public async ValueTask<TResult> SingleAsync(CancellationToken cancellationToken = default)
-            {
-                var item = await AsyncValueEnumerable.SingleAsync<TEnumerable, TEnumerator, TSource>(source, cancellationToken).ConfigureAwait(false);
-                return await selector(item, 0, cancellationToken).ConfigureAwait(false);
-            }
+            [Pure]
+            public ValueTask<TResult> FirstAsync(CancellationToken cancellationToken = default)
+                => AsyncValueEnumerable.FirstAsync<TEnumerable, TEnumerator, TSource, TResult>(source, selector, cancellationToken);
 
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            [Pure]
             [return: MaybeNull]
-            public async ValueTask<TResult> SingleOrDefaultAsync(CancellationToken cancellationToken = default)
-            {
-                var item = await AsyncValueEnumerable.SingleOrDefaultAsync<TEnumerable, TEnumerator, TSource>(source, cancellationToken).ConfigureAwait(false);
-                return await selector(item, 0, cancellationToken).ConfigureAwait(false);
-            }
+            public ValueTask<TResult> FirstOrDefaultAsync(CancellationToken cancellationToken = default)
+                => AsyncValueEnumerable.FirstOrDefaultAsync<TEnumerable, TEnumerator, TSource, TResult>(source, selector, cancellationToken);
+
+            [Pure]
+            public ValueTask<TResult> SingleAsync(CancellationToken cancellationToken = default)
+                => AsyncValueEnumerable.SingleAsync<TEnumerable, TEnumerator, TSource, TResult>(source, selector, cancellationToken);
+
+            [Pure]
+            [return: MaybeNull]
+            public ValueTask<TResult> SingleOrDefaultAsync(CancellationToken cancellationToken = default)
+                => AsyncValueEnumerable.SingleOrDefaultAsync<TEnumerable, TEnumerator, TSource, TResult>(source, selector, cancellationToken);
 
             public ValueTask<TResult[]> ToArrayAsync(CancellationToken cancellationToken = default)
                 => AsyncValueEnumerable.ToArrayAsync<TEnumerable, TEnumerator, TSource, TResult>(source, selector, cancellationToken);

@@ -93,19 +93,26 @@ namespace NetFabric.Hyperlinq
             public ValueEnumerable.WhereIndexEnumerable<TEnumerable, TEnumerator, TSource> Where(PredicateAt<TSource> predicate)
                 => ValueEnumerable.Where<TEnumerable, TEnumerator, TSource>(source, Utils.Combine(this.predicate, predicate));
 
+            public TSource ElementAt(int index)
+                => ValueEnumerable.ElementAt<TEnumerable, TEnumerator, TSource>(source, index, predicate);
+
+            [return: MaybeNull]
+            public TSource ElementAtOrDefault(int index)
+                => ValueEnumerable.ElementAtOrDefault<TEnumerable, TEnumerator, TSource>(source, index, predicate);
+
             public TSource First()
-                => ValueEnumerable.GetFirst<TEnumerable, TEnumerator, TSource>(source, predicate).ThrowOnEmpty();
+                => ValueEnumerable.First<TEnumerable, TEnumerator, TSource>(source, predicate);
 
             [return: MaybeNull]
             public TSource FirstOrDefault()
-                => ValueEnumerable.GetFirst<TEnumerable, TEnumerator, TSource>(source, predicate).DefaultOnEmpty();
+                => ValueEnumerable.FirstOrDefault<TEnumerable, TEnumerator, TSource>(source, predicate);
 
             public TSource Single()
-                => ValueEnumerable.GetSingle<TEnumerable, TEnumerator, TSource>(source, predicate).ThrowOnEmpty();
+                => ValueEnumerable.Single<TEnumerable, TEnumerator, TSource>(source, predicate);
 
             [return: MaybeNull]
             public TSource SingleOrDefault()
-                => ValueEnumerable.GetSingle<TEnumerable, TEnumerator, TSource>(source, predicate).DefaultOnEmpty();
+                => ValueEnumerable.SingleOrDefault<TEnumerable, TEnumerator, TSource>(source, predicate);
 
             public TSource[] ToArray()
                 => ValueEnumerable.ToArray<TEnumerable, TEnumerator, TSource>(source, predicate);

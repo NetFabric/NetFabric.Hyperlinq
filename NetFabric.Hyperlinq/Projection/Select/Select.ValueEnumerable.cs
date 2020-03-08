@@ -99,37 +99,30 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TResult ElementAt(int index)
-                => selector(ValueEnumerable.ElementAt<TEnumerable, TEnumerator, TSource>(source, index));
+                => ValueEnumerable.ElementAt<TEnumerable, TEnumerator, TSource, TResult>(source, index, selector);
+                
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             [return: MaybeNull]
             public TResult ElementAtOrDefault(int index)
-                => selector(ValueEnumerable.ElementAtOrDefault<TEnumerable, TEnumerator, TSource>(source, index));
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public Maybe<TResult> TryElementAt(int index)
-            {
-                var item = ValueEnumerable.TryElementAt<TEnumerable, TEnumerator, TSource>(source, index);
-                return item.HasValue 
-                    ? new Maybe<TResult>(selector(item.Value)) 
-                    : default;
-            }
+                => ValueEnumerable.ElementAtOrDefault<TEnumerable, TEnumerator, TSource, TResult>(source, index, selector);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TResult First()
-                => selector(ValueEnumerable.First<TEnumerable, TEnumerator, TSource>(source));
+                => ValueEnumerable.First<TEnumerable, TEnumerator, TSource, TResult>(source, selector);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             [return: MaybeNull]
             public TResult FirstOrDefault()
-                => selector(ValueEnumerable.FirstOrDefault<TEnumerable, TEnumerator, TSource>(source));
+                => ValueEnumerable.FirstOrDefault<TEnumerable, TEnumerator, TSource, TResult>(source, selector);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TResult Single()
-                => selector(ValueEnumerable.Single<TEnumerable, TEnumerator, TSource>(source));
+                => ValueEnumerable.Single<TEnumerable, TEnumerator, TSource, TResult>(source, selector);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             [return: MaybeNull]
             public TResult SingleOrDefault()
-                => selector(ValueEnumerable.SingleOrDefault<TEnumerable, TEnumerator, TSource>(source));
+                => ValueEnumerable.SingleOrDefault<TEnumerable, TEnumerator, TSource, TResult>(source, selector);
 
             public TResult[] ToArray()
                 => ValueEnumerable.ToArray<TEnumerable, TEnumerator, TSource, TResult>(source, selector);

@@ -32,7 +32,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
             // Arrange
             var wrapped = Wrap
                 .AsValueReadOnlyList(source);
-            var expected = 
+            var expected =
                 System.Linq.Enumerable.First(source);
 
             // Act
@@ -72,7 +72,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
             // Arrange
             var wrapped = Wrap
                 .AsValueReadOnlyList(source);
-            var expected = 
+            var expected =
                 System.Linq.Enumerable.First(
                     System.Linq.Enumerable.Take(
                         System.Linq.Enumerable.Skip(source, skipCount), takeCount));
@@ -89,48 +89,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
         }
 
         [Theory]
-        [MemberData(nameof(TestData.PredicateEmpty), MemberType = typeof(TestData))]
-        public void First_Predicate_With_Empty_Must_Throw(int[] source, Predicate<int> predicate)
-        {
-            // Arrange
-            var wrapped = Wrap
-                .AsValueReadOnlyList(source);
-
-            // Act
-            Action action = () => _ = ReadOnlyList
-                .Where<Wrap.ValueReadOnlyList<int>, int>(wrapped, predicate)
-                .First();
-
-            // Assert
-            _ = action.Must()
-                .Throw<InvalidOperationException>()
-                .EvaluateTrue(exception => exception.Message == "Sequence contains no elements");
-        }
-
-        [Theory]
-        [MemberData(nameof(TestData.PredicateSingle), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.PredicateMultiple), MemberType = typeof(TestData))]
-        public void First_Predicate_With_ValidData_Must_Succeed(int[] source, Predicate<int> predicate)
-        {
-            // Arrange
-            var wrapped = Wrap
-                .AsValueReadOnlyList(source);
-            var expected = 
-                System.Linq.Enumerable.First(source, predicate.AsFunc());
-
-            // Act
-            var result = ReadOnlyList
-                .Where<Wrap.ValueReadOnlyList<int>, int>(wrapped, predicate)
-                .First();
-
-            // Assert
-            _ = result.Must()
-                .BeEqualTo(expected);
-        }
-
-        [Theory]
         [MemberData(nameof(TestData.SkipTakePredicateEmpty), MemberType = typeof(TestData))]
-        public void First_Skip_Take_Predicate_With_Empty_Must_Throw(int[] source, int skipCount, int takeCount, Predicate<int> predicate)
+        public void First_Skip_TakePredicate_With_Empty_Must_Throw(int[] source, int skipCount, int takeCount, Predicate<int> predicate)
         {
             // Arrange
             var wrapped = Wrap
@@ -152,99 +112,12 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
         [Theory]
         [MemberData(nameof(TestData.SkipTakePredicateSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakePredicateMultiple), MemberType = typeof(TestData))]
-        public void First_Skip_Take_Predicate_With_ValidData_Must_Succeed(int[] source, int skipCount, int takeCount, Predicate<int> predicate)
+        public void First_Skip_TakePredicate_With_ValidData_Must_Succeed(int[] source, int skipCount, int takeCount, Predicate<int> predicate)
         {
             // Arrange
             var wrapped = Wrap
                 .AsValueReadOnlyList(source);
-            var expected = 
-                System.Linq.Enumerable.First(
-                    System.Linq.Enumerable.Take(
-                        System.Linq.Enumerable.Skip(source, skipCount), takeCount), predicate.AsFunc());
-
-            // Act
-            var result = ReadOnlyList
-                .Skip<Wrap.ValueReadOnlyList<int>, int>(wrapped, skipCount)
-                .Take(takeCount)
-                .Where(predicate)
-                .First();
-
-            // Assert
-            _ = result.Must()
-                .BeEqualTo(expected);
-        }
-
-        [Theory]
-        [MemberData(nameof(TestData.PredicateAtEmpty), MemberType = typeof(TestData))]
-        public void First_PredicateAt_With_Empty_Must_Throw(int[] source, PredicateAt<int> predicate)
-        {
-            // Arrange
-            var wrapped = Wrap
-                .AsValueReadOnlyList(source);
-
-            // Act
-            Action action = () => _ = ReadOnlyList
-                .Where<Wrap.ValueReadOnlyList<int>, int>(wrapped, predicate)
-                .First();
-
-            // Assert
-            _ = action.Must()
-                .Throw<InvalidOperationException>()
-                .EvaluateTrue(exception => exception.Message == "Sequence contains no elements");
-        }
-
-        [Theory]
-        [MemberData(nameof(TestData.PredicateAtSingle), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.PredicateAtMultiple), MemberType = typeof(TestData))]
-        public void First_PredicateAt_With_ValidData_Must_Succeed(int[] source, PredicateAt<int> predicate)
-        {
-            // Arrange
-            var wrapped = Wrap
-                .AsValueReadOnlyList(source);
-            var expected = 
-                System.Linq.Enumerable.First(
-                    System.Linq.Enumerable.Where(wrapped, predicate.AsFunc()));
-
-            // Act
-            var result = ReadOnlyList
-                .Where<Wrap.ValueReadOnlyList<int>, int>(wrapped, predicate)
-                .First();
-
-            // Assert
-            _ = result.Must()
-                .BeEqualTo(expected);
-        }
-
-        [Theory]
-        [MemberData(nameof(TestData.SkipTakePredicateAtEmpty), MemberType = typeof(TestData))]
-        public void First_Skip_Take_PredicateAt_With_Empty_Must_Throw(int[] source, int skipCount, int takeCount, PredicateAt<int> predicate)
-        {
-            // Arrange
-            var wrapped = Wrap
-                .AsValueReadOnlyList(source);
-
-            // Act
-            Action action = () => _ = ReadOnlyList
-                .Skip<Wrap.ValueReadOnlyList<int>, int>(wrapped, skipCount)
-                .Take(takeCount)
-                .Where(predicate)
-                .First();
-
-            // Assert
-            _ = action.Must()
-                .Throw<InvalidOperationException>()
-                .EvaluateTrue(exception => exception.Message == "Sequence contains no elements");
-        }    
-
-        [Theory]
-        [MemberData(nameof(TestData.SkipTakePredicateAtSingle), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.SkipTakePredicateAtMultiple), MemberType = typeof(TestData))]
-        public void First_Skip_Take_PredicateAt_With_ValidData_Must_Succeed(int[] source, int skipCount, int takeCount, PredicateAt<int> predicate)
-        {
-            // Arrange
-            var wrapped = Wrap
-                .AsValueReadOnlyList(source);
-            var expected = 
+            var expected =
                 System.Linq.Enumerable.First(
                     System.Linq.Enumerable.Where(
                         System.Linq.Enumerable.Take(
@@ -255,6 +128,197 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
                 .Skip<Wrap.ValueReadOnlyList<int>, int>(wrapped, skipCount)
                 .Take(takeCount)
                 .Where(predicate)
+                .First();
+
+            // Assert
+            _ = result.Must()
+                .BeEqualTo(expected);
+        }
+
+        [Theory]
+        [MemberData(nameof(TestData.SkipTakePredicateAtEmpty), MemberType = typeof(TestData))]
+        public void First_Skip_TakePredicateAt_With_Empty_Must_Throw(int[] source, int skipCount, int takeCount, PredicateAt<int> predicate)
+        {
+            // Arrange
+            var wrapped = Wrap
+                .AsValueReadOnlyList(source);
+
+            // Act
+            Action action = () => _ = ReadOnlyList
+                .Skip<Wrap.ValueReadOnlyList<int>, int>(wrapped, skipCount)
+                .Take(takeCount)
+                .Where(predicate)
+                .First();
+
+            // Assert
+            _ = action.Must()
+                .Throw<InvalidOperationException>()
+                .EvaluateTrue(exception => exception.Message == "Sequence contains no elements");
+        }
+
+        [Theory]
+        [MemberData(nameof(TestData.SkipTakePredicateAtSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakePredicateAtMultiple), MemberType = typeof(TestData))]
+        public void First_Skip_TakePredicateAt_With_ValidData_Must_Succeed(int[] source, int skipCount, int takeCount, PredicateAt<int> predicate)
+        {
+            // Arrange
+            var wrapped = Wrap
+                .AsValueReadOnlyList(source);
+            var expected =
+                System.Linq.Enumerable.First(
+                    System.Linq.Enumerable.Where(
+                        System.Linq.Enumerable.Take(
+                            System.Linq.Enumerable.Skip(source, skipCount), takeCount), predicate.AsFunc()));
+
+            // Act
+            var result = ReadOnlyList
+                .Skip<Wrap.ValueReadOnlyList<int>, int>(wrapped, skipCount)
+                .Take(takeCount)
+                .Where(predicate)
+                .First();
+
+            // Assert
+            _ = result.Must()
+                .BeEqualTo(expected);
+        }
+
+        [Theory]
+        [MemberData(nameof(TestData.SkipTakeSelectorEmpty), MemberType = typeof(TestData))]
+        public void First_Skip_TakeSelector_With_Empty_Must_Throw(int[] source, int skipCount, int takeCount, Selector<int, string> selector)
+        {
+            // Arrange
+            var wrapped = Wrap
+                .AsValueReadOnlyList(source);
+
+            // Act
+            Action action = () => _ = ReadOnlyList
+                .Skip<Wrap.ValueReadOnlyList<int>, int>(wrapped, skipCount)
+                .Take(takeCount)
+                .Select(selector)
+                .First();
+
+            // Assert
+            _ = action.Must()
+                .Throw<InvalidOperationException>()
+                .EvaluateTrue(exception => exception.Message == "Sequence contains no elements");
+        }
+
+        [Theory]
+        [MemberData(nameof(TestData.SkipTakeSelectorSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakeSelectorMultiple), MemberType = typeof(TestData))]
+        public void First_Skip_TakeSelector_With_ValidData_Must_Succeed(int[] source, int skipCount, int takeCount, Selector<int, string> selector)
+        {
+            // Arrange
+            var wrapped = Wrap
+                .AsValueReadOnlyList(source);
+            var expected =
+                System.Linq.Enumerable.First(
+                    System.Linq.Enumerable.Select(
+                        System.Linq.Enumerable.Take(
+                            System.Linq.Enumerable.Skip(source, skipCount), takeCount), selector.AsFunc()));
+
+            // Act
+            var result = ReadOnlyList
+                .Skip<Wrap.ValueReadOnlyList<int>, int>(wrapped, skipCount)
+                .Take(takeCount)
+                .Select(selector)
+                .First();
+
+            // Assert
+            _ = result.Must()
+                .BeEqualTo(expected);
+        }
+
+        [Theory]
+        [MemberData(nameof(TestData.SkipTakeSelectorAtEmpty), MemberType = typeof(TestData))]
+        public void First_Skip_TakeSelectorAt_With_Empty_Must_Throw(int[] source, int skipCount, int takeCount, SelectorAt<int, string> selector)
+        {
+            // Arrange
+            var wrapped = Wrap
+                .AsValueReadOnlyList(source);
+
+            // Act
+            Action action = () => _ = ReadOnlyList
+                .Skip<Wrap.ValueReadOnlyList<int>, int>(wrapped, skipCount)
+                .Take(takeCount)
+                .Select(selector)
+                .First();
+
+            // Assert
+            _ = action.Must()
+                .Throw<InvalidOperationException>()
+                .EvaluateTrue(exception => exception.Message == "Sequence contains no elements");
+        }
+
+        [Theory]
+        [MemberData(nameof(TestData.SkipTakeSelectorAtSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakeSelectorAtMultiple), MemberType = typeof(TestData))]
+        public void First_Skip_TakeSelectorAt_With_ValidData_Must_Succeed(int[] source, int skipCount, int takeCount, SelectorAt<int, string> selector)
+        {
+            // Arrange
+            var wrapped = Wrap
+                .AsValueReadOnlyList(source);
+            var expected =
+                System.Linq.Enumerable.First(
+                    System.Linq.Enumerable.Select(
+                        System.Linq.Enumerable.Take(
+                            System.Linq.Enumerable.Skip(source, skipCount), takeCount), selector.AsFunc()));
+
+            // Act
+            var result = ReadOnlyList
+                .Skip<Wrap.ValueReadOnlyList<int>, int>(wrapped, skipCount)
+                .Take(takeCount)
+                .Select(selector)
+                .First();
+
+            // Assert
+            _ = result.Must()
+                .BeEqualTo(expected);
+        }
+
+        [Theory]
+        [MemberData(nameof(TestData.SkipTakePredicateSelectorEmpty), MemberType = typeof(TestData))]
+        public void First_Skip_Take_Predicate_Selector_With_Empty_Must_Throw(int[] source, int skipCount, int takeCount, Predicate<int> predicate, Selector<int, string> selector)
+        {
+            // Arrange
+            var wrapped = Wrap
+                .AsValueReadOnlyList(source);
+
+            // Act
+            Action action = () => _ = ReadOnlyList
+                .Skip<Wrap.ValueReadOnlyList<int>, int>(wrapped, skipCount)
+                .Take(takeCount)
+                .Where(predicate)
+                .Select(selector)
+                .First();
+
+            // Assert
+            _ = action.Must()
+                .Throw<InvalidOperationException>()
+                .EvaluateTrue(exception => exception.Message == "Sequence contains no elements");
+        }
+
+        [Theory]
+        [MemberData(nameof(TestData.SkipTakePredicateSelectorSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakePredicateSelectorMultiple), MemberType = typeof(TestData))]
+        public void First_Skip_Take_Predicate_Selector_With_ValidData_Must_Succeed(int[] source, int skipCount, int takeCount, Predicate<int> predicate, Selector<int, string> selector)
+        {
+            // Arrange
+            var wrapped = Wrap
+                .AsValueReadOnlyList(source);
+            var expected =
+                System.Linq.Enumerable.First(
+                    System.Linq.Enumerable.Select(
+                        System.Linq.Enumerable.Where(
+                            System.Linq.Enumerable.Take(
+                                System.Linq.Enumerable.Skip(source, skipCount), takeCount), predicate.AsFunc()), selector.AsFunc()));
+
+            // Act
+            var result = ReadOnlyList
+                .Skip<Wrap.ValueReadOnlyList<int>, int>(wrapped, skipCount)
+                .Take(takeCount)
+                .Where(predicate)
+                .Select(selector)
                 .First();
 
             // Assert

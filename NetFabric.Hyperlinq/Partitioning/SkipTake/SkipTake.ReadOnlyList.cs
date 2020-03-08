@@ -176,62 +176,34 @@ namespace NetFabric.Hyperlinq
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TSource ElementAt(int index)
                 => ReadOnlyList.ElementAt<TList, TSource>(source, index, skipCount, takeCount);
+
             [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             [return: MaybeNull]
             public TSource ElementAtOrDefault(int index)
                 => ReadOnlyList.ElementAtOrDefault<TList, TSource>(source, index, skipCount, takeCount);
-            [Pure]
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public Maybe<TSource> TryElementAt(int index)
-                => ReadOnlyList.TryElementAt<TList, TSource>(source, index, skipCount, takeCount);
 
             [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TSource First()
-                => ReadOnlyList.GetFirst<TList, TSource>(source, skipCount, takeCount).ThrowOnEmpty();
-            [Pure]
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public TSource First(Predicate<TSource> predicate)
-                => ReadOnlyList.GetFirst<TList, TSource>(source, predicate, skipCount, takeCount).ThrowOnEmpty();
-            [Pure]
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public TSource First(PredicateAt<TSource> predicate)
-                => ReadOnlyList.GetFirst<TList, TSource>(source, predicate, skipCount, takeCount).ThrowOnEmpty();
+                => ReadOnlyList.First<TList, TSource>(source, skipCount, takeCount);
+
             [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             [return: MaybeNull]
             public TSource FirstOrDefault()
-                => ReadOnlyList.GetFirst<TList, TSource>(source, skipCount, takeCount).DefaultOnEmpty();
-            [Pure]
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            [return: MaybeNull]
-            public TSource FirstOrDefault(Predicate<TSource> predicate)
-                => ReadOnlyList.GetFirst<TList, TSource>(source, predicate, skipCount, takeCount).DefaultOnEmpty();
-            [Pure]
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            [return: MaybeNull]
-            public TSource FirstOrDefault(PredicateAt<TSource> predicate)
-                => ReadOnlyList.GetFirst<TList, TSource>(source, predicate, skipCount, takeCount).DefaultOnEmpty();
+                => ReadOnlyList.FirstOrDefault<TList, TSource>(source, skipCount, takeCount);
 
             [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TSource Single()
-                => ReadOnlyList.GetSingle<TList, TSource>(source, skipCount, takeCount).ThrowOnEmpty();
-            [Pure]
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public TSource Single(Predicate<TSource> predicate)
-                => ReadOnlyList.GetSingle<TList, TSource>(source, predicate, skipCount, takeCount).ThrowOnEmpty();
+                => ReadOnlyList.Single<TList, TSource>(source, skipCount, takeCount);
+
             [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             [return: MaybeNull]
             public TSource SingleOrDefault()
-                => ReadOnlyList.GetSingle<TList, TSource>(source, skipCount, takeCount).DefaultOnEmpty();
-            [Pure]
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            [return: MaybeNull]
-            public TSource SingleOrDefault(Predicate<TSource> predicate)
-                => ReadOnlyList.GetSingle<TList, TSource>(source, predicate, skipCount, takeCount).DefaultOnEmpty();
+                => ReadOnlyList.SingleOrDefault<TList, TSource>(source, skipCount, takeCount);
 
             [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]

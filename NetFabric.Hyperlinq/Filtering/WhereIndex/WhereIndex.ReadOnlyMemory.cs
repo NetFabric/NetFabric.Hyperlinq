@@ -121,19 +121,26 @@ namespace NetFabric.Hyperlinq
             public MemoryWhereIndexEnumerable<TSource> Where(PredicateAt<TSource> predicate)
                 => Where<TSource>(source, Utils.Combine(this.predicate, predicate));
 
+            public ref readonly TSource ElementAt(int index)
+                => ref Array.ElementAt<TSource>(source.Span, index, predicate);
+
+            [return: MaybeNull]
+            public ref readonly TSource ElementAtOrDefault(int index)
+                => ref Array.ElementAtOrDefault<TSource>(source.Span, index, predicate);
+
             public ref readonly TSource First()
-                => ref source.Span.First(predicate);
+                => ref Array.First<TSource>(source.Span, predicate);
 
             [return: MaybeNull]
             public ref readonly TSource FirstOrDefault()
-                => ref source.Span.FirstOrDefault(predicate);
+                => ref Array.FirstOrDefault<TSource>(source.Span, predicate);
 
             public ref readonly TSource Single()
-                => ref source.Span.Single(predicate);
+                => ref Array.Single<TSource>(source.Span, predicate);
 
             [return: MaybeNull]
             public ref readonly TSource SingleOrDefault()
-                => ref source.Span.SingleOrDefault(predicate);
+                => ref Array.SingleOrDefault<TSource>(source.Span, predicate);
 
             public TSource[] ToArray()
                 => Array.ToArray(source.Span, predicate);

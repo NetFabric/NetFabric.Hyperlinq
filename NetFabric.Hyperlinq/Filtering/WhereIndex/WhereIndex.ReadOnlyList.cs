@@ -128,19 +128,26 @@ namespace NetFabric.Hyperlinq
             public ReadOnlyList.WhereIndexEnumerable<TList, TSource> Where(PredicateAt<TSource> predicate)
                 => ReadOnlyList.Where<TList, TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount);
 
+            public TSource ElementAt(int index)
+                => ReadOnlyList.ElementAt<TList, TSource>(source, index, predicate, skipCount, takeCount);
+
+            [return: MaybeNull]
+            public TSource ElementAtOrDefault(int index)
+                => ReadOnlyList.ElementAtOrDefault<TList, TSource>(source, index, predicate, skipCount, takeCount);
+
             public TSource First()
-                => ReadOnlyList.GetFirst<TList, TSource>(source, predicate, skipCount, takeCount).ThrowOnEmpty();
+                => ReadOnlyList.First<TList, TSource>(source, predicate, skipCount, takeCount);
 
             [return: MaybeNull]
             public TSource FirstOrDefault()
-                => ReadOnlyList.GetFirst<TList, TSource>(source, predicate, skipCount, takeCount).DefaultOnEmpty();
+                => ReadOnlyList.FirstOrDefault<TList, TSource>(source, predicate, skipCount, takeCount);
 
             public TSource Single()
-                => ReadOnlyList.GetSingle<TList, TSource>(source, predicate, skipCount, takeCount).ThrowOnEmpty();
+                => ReadOnlyList.Single<TList, TSource>(source, predicate, skipCount, takeCount);
 
             [return: MaybeNull]
             public TSource SingleOrDefault()
-                => ReadOnlyList.GetSingle<TList, TSource>(source, predicate, skipCount, takeCount).DefaultOnEmpty();
+                => ReadOnlyList.SingleOrDefault<TList, TSource>(source, predicate, skipCount, takeCount);
 
             public TSource[] ToArray()
                 => ReadOnlyList.ToArray<TList, TSource>(source, predicate, skipCount, takeCount);

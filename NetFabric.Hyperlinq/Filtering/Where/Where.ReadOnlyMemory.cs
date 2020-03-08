@@ -124,19 +124,26 @@ namespace NetFabric.Hyperlinq
             public MemoryWhereSelectEnumerable<TSource, TResult> Select<TResult>(Selector<TSource, TResult> selector)
                 => Array.WhereSelect<TSource, TResult>(source, predicate, selector);
 
+            public ref readonly TSource ElementAt(int index)
+                => ref Array.ElementAt(source.Span, index, predicate);
+
+            [return: MaybeNull]
+            public ref readonly TSource ElementAtOrDefault(int index)
+                => ref Array.ElementAtOrDefault(source.Span, index, predicate);
+
             public ref readonly TSource First()
-                => ref source.Span.First(predicate);
+                => ref Array.First(source.Span, predicate);
 
             [return: MaybeNull]
             public ref readonly TSource FirstOrDefault()
-                => ref source.Span.FirstOrDefault(predicate);
+                => ref Array.FirstOrDefault(source.Span, predicate);
 
             public ref readonly TSource Single()
-                => ref source.Span.Single(predicate);
+                => ref Array.Single(source.Span, predicate);
 
             [return: MaybeNull]
             public ref readonly TSource SingleOrDefault()
-                => ref source.Span.SingleOrDefault(predicate);
+                => ref Array.SingleOrDefault(source.Span, predicate);
 
             public TSource[] ToArray()
                 => Array.ToArray<TSource>(source.Span, predicate);
