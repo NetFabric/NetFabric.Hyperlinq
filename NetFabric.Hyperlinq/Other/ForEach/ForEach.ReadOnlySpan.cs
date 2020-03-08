@@ -60,21 +60,23 @@ namespace NetFabric.Hyperlinq
 
         static void ForEach<TSource>(this ReadOnlySpan<TSource> source, ActionAt<TSource> action, Predicate<TSource> predicate)
         {
+            var itemIndex = 0;
             for (var index = 0; index < source.Length; index++)
             {
                 var item = source[index];
                 if (predicate(item))
-                    action(item, index);
+                    action(item, itemIndex++);
             }
         }
 
         static void ForEach<TSource>(this ReadOnlySpan<TSource> source, ActionAt<TSource> action, PredicateAt<TSource> predicate)
         {
+            var itemIndex = 0;
             for (var index = 0; index < source.Length; index++)
             {
                 var item = source[index];
                 if (predicate(item, index))
-                    action(item, index);
+                    action(item, itemIndex++);
             }
         }
 
@@ -92,11 +94,12 @@ namespace NetFabric.Hyperlinq
 
         static void ForEach<TSource, TResult>(this ReadOnlySpan<TSource> source, ActionAt<TResult> action, Predicate<TSource> predicate, Selector<TSource, TResult> selector)
         {
+            var itemIndex = 0;
             for (var index = 0; index < source.Length; index++)
             {
                 var item = source[index];
                 if (predicate(item))
-                    action(selector(item), index);
+                    action(selector(item), itemIndex++);
             }
         }
     }

@@ -117,13 +117,14 @@ namespace NetFabric.Hyperlinq
         static void ForEach<TList, TSource>(this TList source, ActionAt<TSource> action, Predicate<TSource> predicate, int skipCount, int takeCount)
             where TList : notnull, IReadOnlyList<TSource>
         {
+            var itemIndex = 0;
             if (skipCount == 0)
             {
                 for (var index = 0; index < takeCount; index++)
                 {
                     var item = source[index];
                     if (predicate(item))
-                        action(item, index);
+                        action(item, itemIndex++);
                 }
             }
             else
@@ -132,7 +133,7 @@ namespace NetFabric.Hyperlinq
                 {
                     var item = source[index + skipCount];
                     if (predicate(item))
-                        action(item, index);
+                        action(item, itemIndex++);
                 }
             }
         }
@@ -140,13 +141,14 @@ namespace NetFabric.Hyperlinq
         static void ForEach<TList, TSource>(this TList source, ActionAt<TSource> action, PredicateAt<TSource> predicate, int skipCount, int takeCount)
             where TList : notnull, IReadOnlyList<TSource>
         {
+            var itemIndex = 0;
             if (skipCount == 0)
             {
                 for (var index = 0; index < takeCount; index++)
                 {
                     var item = source[index];
                     if (predicate(item, index))
-                        action(item, index);
+                        action(item, itemIndex++);
                 }
             }
             else
@@ -155,7 +157,7 @@ namespace NetFabric.Hyperlinq
                 {
                     var item = source[index + skipCount];
                     if (predicate(item, index))
-                        action(item, index);
+                        action(item, itemIndex++);
                 }
             }
         }
@@ -185,7 +187,7 @@ namespace NetFabric.Hyperlinq
             }
             else
             {
-                for (var index = 0; index < skipCount; index++)
+                for (var index = 0; index < takeCount; index++)
                     action(selector(source[index + skipCount], index), index);
             }
         }
@@ -193,13 +195,14 @@ namespace NetFabric.Hyperlinq
         static void ForEach<TList, TSource, TResult>(this TList source, ActionAt<TResult> action, Predicate<TSource> predicate, Selector<TSource, TResult> selector, int skipCount, int takeCount)
             where TList : notnull, IReadOnlyList<TSource>
         {
+            var itemIndex = 0;
             if (skipCount == 0)
             {
                 for (var index = 0; index < takeCount; index++)
                 {
                     var item = source[index];
                     if (predicate(item))
-                        action(selector(item), index);
+                        action(selector(item), itemIndex++);
                 }
             }
             else
@@ -208,7 +211,7 @@ namespace NetFabric.Hyperlinq
                 {
                     var item = source[index + skipCount];
                     if (predicate(item))
-                        action(selector(item), index);
+                        action(selector(item), itemIndex++);
                 }
             }
         }

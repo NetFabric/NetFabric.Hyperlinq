@@ -18,42 +18,6 @@ namespace NetFabric.Hyperlinq
                     action(enumerator.Current);
             }
         }
-
-        static void ForEach<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Action<TSource> action, Predicate<TSource> predicate)
-            where TEnumerable : notnull, IValueReadOnlyCollection<TSource, TEnumerator>
-            where TEnumerator : struct, IEnumerator<TSource>
-        {
-            if (source.Count != 0)
-            {
-                using var enumerator = source.GetEnumerator();
-                while (enumerator.MoveNext())
-                {
-                    var item = enumerator.Current;
-                    if (predicate(item))
-                        action(item);
-                }
-            }
-        }
-
-        static void ForEach<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Action<TSource> action, PredicateAt<TSource> predicate)
-            where TEnumerable : notnull, IValueReadOnlyCollection<TSource, TEnumerator>
-            where TEnumerator : struct, IEnumerator<TSource>
-        {
-            if (source.Count != 0)
-            {
-                using var enumerator = source.GetEnumerator();
-                checked
-                {
-                    for (var index = 0; enumerator.MoveNext(); index++)
-                    {
-                        var item = enumerator.Current;
-                        if (predicate(item, index))
-                            action(item);
-                    }
-                }
-            }
-        }
-
         static void ForEach<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, Action<TResult> action, Selector<TSource, TResult> selector)
             where TEnumerable : notnull, IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
@@ -81,22 +45,6 @@ namespace NetFabric.Hyperlinq
             }
         }
 
-        static void ForEach<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, Action<TResult> action, Predicate<TSource> predicate, Selector<TSource, TResult> selector)
-            where TEnumerable : notnull, IValueReadOnlyCollection<TSource, TEnumerator>
-            where TEnumerator : struct, IEnumerator<TSource>
-        {
-            if (source.Count != 0)
-            {
-                using var enumerator = source.GetEnumerator();
-                while (enumerator.MoveNext())
-                {
-                    var item = enumerator.Current;
-                    if (predicate(item))
-                        action(selector(item));
-                }
-            }
-        }
-
         public static void ForEach<TEnumerable, TEnumerator, TSource>(this TEnumerable source, ActionAt<TSource> action)
             where TEnumerable : notnull, IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
@@ -110,44 +58,6 @@ namespace NetFabric.Hyperlinq
                 {
                     for (var index = 0;  enumerator.MoveNext(); index++)
                         action(enumerator.Current, index);
-                }
-            }
-        }
-
-        static void ForEach<TEnumerable, TEnumerator, TSource>(this TEnumerable source, ActionAt<TSource> action, Predicate<TSource> predicate)
-            where TEnumerable : notnull, IValueReadOnlyCollection<TSource, TEnumerator>
-            where TEnumerator : struct, IEnumerator<TSource>
-        {
-            if (source.Count != 0)
-            {
-                using var enumerator = source.GetEnumerator();
-                checked
-                {
-                    for (var index = 0;  enumerator.MoveNext(); index++)
-                    {
-                        var item = enumerator.Current;
-                        if (predicate(item))
-                            action(item, index);
-                    }
-                }
-            }
-        }
-
-        static void ForEach<TEnumerable, TEnumerator, TSource>(this TEnumerable source, ActionAt<TSource> action, PredicateAt<TSource> predicate)
-            where TEnumerable : notnull, IValueReadOnlyCollection<TSource, TEnumerator>
-            where TEnumerator : struct, IEnumerator<TSource>
-        {
-            if (source.Count != 0)
-            {
-                using var enumerator = source.GetEnumerator();
-                checked
-                {
-                    for (var index = 0;  enumerator.MoveNext(); index++)
-                    {
-                        var item = enumerator.Current;
-                        if (predicate(item, index))
-                            action(item, index);
-                    }
                 }
             }
         }
@@ -178,25 +88,6 @@ namespace NetFabric.Hyperlinq
                 {
                     for (var index = 0; enumerator.MoveNext(); index++)
                         action(selector(enumerator.Current, index), index);
-                }
-            }
-        }
-
-        static void ForEach<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, ActionAt<TResult> action, Predicate<TSource> predicate, Selector<TSource, TResult> selector)
-            where TEnumerable : notnull, IValueReadOnlyCollection<TSource, TEnumerator>
-            where TEnumerator : struct, IEnumerator<TSource>
-        {
-            if (source.Count != 0)
-            {
-                using var enumerator = source.GetEnumerator();
-                checked
-                {
-                    for (var index = 0;  enumerator.MoveNext(); index++)
-                    {
-                        var item = enumerator.Current;
-                        if (predicate(item))
-                            action(selector(item), index);
-                    }
                 }
             }
         }

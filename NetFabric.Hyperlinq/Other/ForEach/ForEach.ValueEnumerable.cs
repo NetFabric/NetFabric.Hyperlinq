@@ -100,11 +100,12 @@ namespace NetFabric.Hyperlinq
             using var enumerator = source.GetEnumerator();
             checked
             {
+                var itemIndex = 0;
                 for (var index = 0;  enumerator.MoveNext(); index++)
                 {
                     var item = enumerator.Current;
                     if (predicate(item))
-                        action(item, index);
+                        action(item, itemIndex++);
                 }
             }
         }
@@ -116,11 +117,12 @@ namespace NetFabric.Hyperlinq
             using var enumerator = source.GetEnumerator();
             checked
             {
+                var itemIndex = 0;
                 for (var index = 0;  enumerator.MoveNext(); index++)
                 {
                     var item = enumerator.Current;
                     if (predicate(item, index))
-                        action(item, index);
+                        action(item, itemIndex++);
                 }
             }
         }
@@ -156,11 +158,12 @@ namespace NetFabric.Hyperlinq
             using var enumerator = source.GetEnumerator();
             checked
             {
+                var itemIndex = 0;
                 for (var index = 0;  enumerator.MoveNext(); index++)
                 {
                     var item = enumerator.Current;
                     if (predicate(item))
-                        action(selector(item), index);
+                        action(selector(item), itemIndex++);
                 }
             }
         }

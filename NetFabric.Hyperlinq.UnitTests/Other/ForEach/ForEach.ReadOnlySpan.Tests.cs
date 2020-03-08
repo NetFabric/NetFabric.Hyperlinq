@@ -5,7 +5,7 @@ using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests.Other.ForEach
 {
-    public class ValueEnumerableTests
+    public class ReadOnlySpanTests
     {
         [Theory]
         [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
@@ -14,14 +14,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Other.ForEach
         public void ForEach_Action_With_ValidData_Must_Succeed(int[] source)
         {
             // Arrange
-            var wrapped = Wrap.AsValueEnumerable(source);
             var result = new List<int>();
             var expected = new List<int>();
             System.Linq.EnumerableEx.ForEach(source, item => expected.Add(item));
 
             // Act
-            ValueEnumerable
-                .ForEach<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, item => result.Add(item));
+            Array
+                .ForEach<int>((ReadOnlySpan<int>)source.AsSpan(), item => result.Add(item));
 
             // Assert
             _ = result.Must()
@@ -36,15 +35,14 @@ namespace NetFabric.Hyperlinq.UnitTests.Other.ForEach
         public void ForEach_Action_Predicate_With_ValidData_Must_Succeed(int[] source, Predicate<int> predicate)
         {
             // Arrange
-            var wrapped = Wrap.AsValueEnumerable(source);
             var result = new List<int>();
             var expected = new List<int>();
             System.Linq.EnumerableEx.ForEach(
                 System.Linq.Enumerable.Where(source, predicate.AsFunc()), item => expected.Add(item));
 
             // Act
-            ValueEnumerable
-                .Where<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, predicate)
+            Array
+                .Where<int>((ReadOnlySpan<int>)source.AsSpan(), predicate)
                 .ForEach(item => result.Add(item));
 
             // Assert
@@ -60,15 +58,14 @@ namespace NetFabric.Hyperlinq.UnitTests.Other.ForEach
         public void ForEach_Action_PredicateAt_With_ValidData_Must_Succeed(int[] source, PredicateAt<int> predicate)
         {
             // Arrange
-            var wrapped = Wrap.AsValueEnumerable(source);
             var result = new List<int>();
             var expected = new List<int>();
             System.Linq.EnumerableEx.ForEach(
                 System.Linq.Enumerable.Where(source, predicate.AsFunc()), item => expected.Add(item));
 
             // Act
-            ValueEnumerable
-                .Where<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, predicate)
+            Array
+                .Where<int>((ReadOnlySpan<int>)source.AsSpan(), predicate)
                 .ForEach(item => result.Add(item));
 
             // Assert
@@ -84,15 +81,14 @@ namespace NetFabric.Hyperlinq.UnitTests.Other.ForEach
         public void ForEach_Action_Selector_With_ValidData_Must_Succeed(int[] source, Selector<int, string> selector)
         {
             // Arrange
-            var wrapped = Wrap.AsValueEnumerable(source);
             var result = new List<string>();
             var expected = new List<string>();
             System.Linq.EnumerableEx.ForEach(
                 System.Linq.Enumerable.Select(source, selector.AsFunc()), item => expected.Add(item));
 
             // Act
-            ValueEnumerable
-                .Select<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int, string>(wrapped, selector)
+            Array
+                .Select<int, string>((ReadOnlySpan<int>)source.AsSpan(), selector)
                 .ForEach(item => result.Add(item));
 
             // Assert
@@ -108,15 +104,14 @@ namespace NetFabric.Hyperlinq.UnitTests.Other.ForEach
         public void ForEach_Action_SelectorAt_With_ValidData_Must_Succeed(int[] source, SelectorAt<int, string> selector)
         {
             // Arrange
-            var wrapped = Wrap.AsValueEnumerable(source);
             var result = new List<string>();
             var expected = new List<string>();
             System.Linq.EnumerableEx.ForEach(
                 System.Linq.Enumerable.Select(source, selector.AsFunc()), item => expected.Add(item));
 
             // Act
-            ValueEnumerable
-                .Select<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int, string>(wrapped, selector)
+            Array
+                .Select<int, string>((ReadOnlySpan<int>)source.AsSpan(), selector)
                 .ForEach(item => result.Add(item));
 
             // Assert
@@ -132,7 +127,6 @@ namespace NetFabric.Hyperlinq.UnitTests.Other.ForEach
         public void ForEach_Action_Predicate_Selector_With_ValidData_Must_Succeed(int[] source, Predicate<int> predicate, Selector<int, string> selector)
         {
             // Arrange
-            var wrapped = Wrap.AsValueEnumerable(source);
             var result = new List<string>();
             var expected = new List<string>();
             System.Linq.EnumerableEx.ForEach(
@@ -140,8 +134,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Other.ForEach
                     System.Linq.Enumerable.Where(source, predicate.AsFunc()), selector.AsFunc()), item => expected.Add(item));
 
             // Act
-            ValueEnumerable
-                .Where<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, predicate)
+            Array
+                .Where<int>((ReadOnlySpan<int>)source.AsSpan(), predicate)
                 .Select(selector)
                 .ForEach(item => result.Add(item));
 
@@ -161,14 +155,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Other.ForEach
         public void ForEach_ActionAt_With_ValidData_Must_Succeed(int[] source)
         {
             // Arrange
-            var wrapped = Wrap.AsValueEnumerable(source);
             var result = new List<(int, int)>();
             var expected = new List<(int, int)>();
             System.Linq.EnumerableEx.ForEach(source, (item, index) => expected.Add((item, index)));
 
             // Act
-            ValueEnumerable
-                .ForEach<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, (item, index) => result.Add((item, index)));
+            Array
+                .ForEach<int>((ReadOnlySpan<int>)source.AsSpan(), (item, index) => result.Add((item, index)));
 
             // Assert
             _ = result.Must()
@@ -183,15 +176,14 @@ namespace NetFabric.Hyperlinq.UnitTests.Other.ForEach
         public void ForEach_ActionAt_Predicate_With_ValidData_Must_Succeed(int[] source, Predicate<int> predicate)
         {
             // Arrange
-            var wrapped = Wrap.AsValueEnumerable(source);
             var result = new List<(int, int)>();
             var expected = new List<(int, int)>();
             System.Linq.EnumerableEx.ForEach(
                 System.Linq.Enumerable.Where(source, predicate.AsFunc()), (item, index) => expected.Add((item, index)));
 
             // Act
-            ValueEnumerable
-                .Where<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, predicate)
+            Array
+                .Where<int>((ReadOnlySpan<int>)source.AsSpan(), predicate)
                 .ForEach((item, index) => result.Add((item, index)));
 
             // Assert
@@ -207,15 +199,14 @@ namespace NetFabric.Hyperlinq.UnitTests.Other.ForEach
         public void ForEach_ActionAt_PredicateAt_With_ValidData_Must_Succeed(int[] source, PredicateAt<int> predicate)
         {
             // Arrange
-            var wrapped = Wrap.AsValueEnumerable(source);
             var result = new List<(int, int)>();
             var expected = new List<(int, int)>();
             System.Linq.EnumerableEx.ForEach(
                 System.Linq.Enumerable.Where(source, predicate.AsFunc()), (item, index) => expected.Add((item, index)));
 
             // Act
-            ValueEnumerable
-                .Where<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, predicate)
+            Array
+                .Where<int>((ReadOnlySpan<int>)source.AsSpan(), predicate)
                 .ForEach((item, index) => result.Add((item, index)));
 
             // Assert
@@ -231,15 +222,14 @@ namespace NetFabric.Hyperlinq.UnitTests.Other.ForEach
         public void ForEach_ActionAt_Selector_With_ValidData_Must_Succeed(int[] source, Selector<int, string> selector)
         {
             // Arrange
-            var wrapped = Wrap.AsValueEnumerable(source);
             var result = new List<(string, int)>();
             var expected = new List<(string, int)>();
             System.Linq.EnumerableEx.ForEach(
                 System.Linq.Enumerable.Select(source, selector.AsFunc()), (item, index) => expected.Add((item, index)));
 
             // Act
-            ValueEnumerable
-                .Select<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int, string>(wrapped, selector)
+            Array
+                .Select<int, string>((ReadOnlySpan<int>)source.AsSpan(), selector)
                 .ForEach((item, index) => result.Add((item, index)));
 
             // Assert
@@ -255,15 +245,14 @@ namespace NetFabric.Hyperlinq.UnitTests.Other.ForEach
         public void ForEach_ActionAt_SelectorAt_With_ValidData_Must_Succeed(int[] source, SelectorAt<int, string> selector)
         {
             // Arrange
-            var wrapped = Wrap.AsValueEnumerable(source);
             var result = new List<(string, int)>();
             var expected = new List<(string, int)>();
             System.Linq.EnumerableEx.ForEach(
                 System.Linq.Enumerable.Select(source, selector.AsFunc()), (item, index) => expected.Add((item, index)));
 
             // Act
-            ValueEnumerable
-                .Select<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int, string>(wrapped, selector)
+            Array
+                .Select<int, string>((ReadOnlySpan<int>)source.AsSpan(), selector)
                 .ForEach((item, index) => result.Add((item, index)));
 
             // Assert
@@ -279,7 +268,6 @@ namespace NetFabric.Hyperlinq.UnitTests.Other.ForEach
         public void ForEach_ActionAt_Predicate_Selector_With_ValidData_Must_Succeed(int[] source, Predicate<int> predicate, Selector<int, string> selector)
         {
             // Arrange
-            var wrapped = Wrap.AsValueEnumerable(source);
             var result = new List<(string, int)>();
             var expected = new List<(string, int)>();
             System.Linq.EnumerableEx.ForEach(
@@ -287,8 +275,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Other.ForEach
                     System.Linq.Enumerable.Where(source, predicate.AsFunc()), selector.AsFunc()), (item, index) => expected.Add((item, index)));
 
             // Act
-            ValueEnumerable
-                .Where<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, predicate)
+            Array
+                .Where<int>((ReadOnlySpan<int>)source.AsSpan(), predicate)
                 .Select(selector)
                 .ForEach((item, index) => result.Add((item, index)));
 
