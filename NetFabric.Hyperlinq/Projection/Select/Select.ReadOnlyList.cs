@@ -193,44 +193,45 @@ namespace NetFabric.Hyperlinq
             public ReadOnlyList.SelectIndexEnumerable<TList, TSource, TSelectorResult> Select<TSelectorResult>(SelectorAt<TResult, TSelectorResult> selector)
                 => ReadOnlyList.Select<TList, TSource, TSelectorResult>(source, Utils.Combine(this.selector, selector), skipCount, takeCount);
 
+            [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TResult ElementAt(int index)
-                => selector(ReadOnlyList.ElementAt<TList, TSource>(source, index, skipCount, takeCount));
+                => ReadOnlyList.ElementAt<TList, TSource, TResult>(source, index, selector, skipCount, takeCount);
+
+            [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             [return: MaybeNull]
             public TResult ElementAtOrDefault(int index)
-                => selector(ReadOnlyList.ElementAtOrDefault<TList, TSource>(source, index, skipCount, takeCount));
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public Maybe<TResult> TryElementAt(int index)
-            {
-                var item = ReadOnlyList.TryElementAt<TList, TSource>(source, index, skipCount, takeCount);
-                return item.HasValue 
-                    ? new Maybe<TResult>(selector(item.Value)) 
-                    : default;
-            }
+                => ReadOnlyList.ElementAtOrDefault<TList, TSource, TResult>(source, index, selector, skipCount, takeCount);
 
+            [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TResult First()
-                => selector(ReadOnlyList.GetFirst<TList, TSource>(source, skipCount, takeCount).ThrowOnEmpty());
+                => ReadOnlyList.First<TList, TSource, TResult>(source, selector, skipCount, takeCount);
 
+            [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             [return: MaybeNull]
             public TResult FirstOrDefault()
-                => selector(ReadOnlyList.GetFirst<TList, TSource>(source, skipCount, takeCount).DefaultOnEmpty());
+                => ReadOnlyList.FirstOrDefault<TList, TSource, TResult>(source, selector, skipCount, takeCount);
 
+            [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TResult Single()
-                => selector(ReadOnlyList.GetSingle<TList, TSource>(source, skipCount, takeCount).ThrowOnEmpty());
+                => ReadOnlyList.Single<TList, TSource, TResult>(source, selector, skipCount, takeCount);
 
+            [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             [return: MaybeNull]
             public TResult SingleOrDefault()
-                => selector(ReadOnlyList.GetSingle<TList, TSource>(source, skipCount, takeCount).DefaultOnEmpty());
+                => ReadOnlyList.SingleOrDefault<TList, TSource, TResult>(source, selector, skipCount, takeCount);
 
+            [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TResult[] ToArray()
                 => ReadOnlyList.ToArray<TList, TSource, TResult>(source, selector, skipCount, takeCount);
 
+            [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public List<TResult> ToList()
                 => ReadOnlyList.ToList<TList, TSource, TResult>(source, selector, skipCount, takeCount);

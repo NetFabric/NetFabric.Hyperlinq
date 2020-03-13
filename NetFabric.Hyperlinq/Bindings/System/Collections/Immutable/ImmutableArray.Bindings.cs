@@ -75,9 +75,6 @@ namespace NetFabric.Hyperlinq
         [return: MaybeNull]
         public static TSource ElementAtOrDefault<TSource>(this ImmutableArray<TSource> source, int index)
             => ReadOnlyList.ElementAtOrDefault<ImmutableArray<TSource>, TSource>(source, index);
-        [Pure]
-        public static Maybe<TSource> TryElementAt<TSource>(this ImmutableArray<TSource> source, int index)
-            => ReadOnlyList.TryElementAt<ImmutableArray<TSource>, TSource>(source, index);
 
         [Pure]
         public static ReadOnlyList.DistinctEnumerable<ImmutableArray<TSource>, TSource> Distinct<TSource>(this ImmutableArray<TSource> source, IEqualityComparer<TSource>? comparer = null)

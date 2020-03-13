@@ -83,9 +83,6 @@ namespace NetFabric.Hyperlinq
         [return: MaybeNull]
         public static TValue ElementAtOrDefault<TKey, TValue>(this Dictionary<TKey, TValue>.ValueCollection source, int index)
             => ValueReadOnlyCollection.ElementAtOrDefault<ValueWrapper<TKey, TValue>, Dictionary<TKey, TValue>.ValueCollection.Enumerator, TValue>(new ValueWrapper<TKey, TValue>(source), index);
-        [Pure]
-        public static Maybe<TValue> TryElementAt<TKey, TValue>(this Dictionary<TKey, TValue>.ValueCollection source, int index)
-            => ValueReadOnlyCollection.TryElementAt<ValueWrapper<TKey, TValue>, Dictionary<TKey, TValue>.ValueCollection.Enumerator, TValue>(new ValueWrapper<TKey, TValue>(source), index);
 
         [Pure]
         public static TValue First<TKey, TValue>(this Dictionary<TKey, TValue>.ValueCollection source)

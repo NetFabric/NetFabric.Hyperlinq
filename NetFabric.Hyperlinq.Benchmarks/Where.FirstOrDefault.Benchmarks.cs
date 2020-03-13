@@ -13,90 +13,90 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [BenchmarkCategory("Array")]
         [Benchmark(Baseline = true)]
         public int Linq_Array() =>
-            System.Linq.Enumerable.FirstOrDefault(array, item => item == Count - 1);
+            System.Linq.Enumerable.FirstOrDefault(array, _ => true);
 
         [BenchmarkCategory("Enumerable_Value")]
         [Benchmark(Baseline = true)]
         public int Linq_Enumerable_Value() =>
-            System.Linq.Enumerable.FirstOrDefault(enumerableValue, item => item == Count - 1);
+            System.Linq.Enumerable.FirstOrDefault(enumerableValue, _ => true);
 
         [BenchmarkCategory("Collection_Value")]
         [Benchmark(Baseline = true)]
         public int Linq_Collection_Value() =>
-            System.Linq.Enumerable.FirstOrDefault(collectionValue, item => item == Count - 1);
+            System.Linq.Enumerable.FirstOrDefault(collectionValue, _ => true);
 
         [BenchmarkCategory("List_Value")]
         [Benchmark(Baseline = true)]
         public int Linq_List_Value() =>
-            System.Linq.Enumerable.FirstOrDefault(listValue, item => item == Count - 1);
+            System.Linq.Enumerable.FirstOrDefault(listValue, _ => true);
 
         [BenchmarkCategory("Enumerable_Reference")]
         [Benchmark(Baseline = true)]
         public int Linq_Enumerable_Reference() =>
-            System.Linq.Enumerable.FirstOrDefault(enumerableReference, item => item == Count - 1);
+            System.Linq.Enumerable.FirstOrDefault(enumerableReference, _ => true);
 
         [BenchmarkCategory("Collection_Reference")]
         [Benchmark(Baseline = true)]
         public int Linq_Collection_Reference() =>
-            System.Linq.Enumerable.FirstOrDefault(collectionReference, item => item == Count - 1);
+            System.Linq.Enumerable.FirstOrDefault(collectionReference, _ => true);
 
         [BenchmarkCategory("List_Reference")]
         [Benchmark(Baseline = true)]
         public int Linq_List_Reference() =>
-            System.Linq.Enumerable.FirstOrDefault(listReference, item => item == Count - 1);
+            System.Linq.Enumerable.FirstOrDefault(listReference, _ => true);
 
         [BenchmarkCategory("Array")]
         [Benchmark]
         public int Hyperlinq_Array() =>
-            array.Where(item => item == Count - 1).FirstOrDefault();
+            array.Where(_ => true).FirstOrDefault();
 
         [BenchmarkCategory("Array")]
         [Benchmark]
         public int Hyperlinq_Span() =>
-            array.AsSpan().Where(item => item == Count - 1).FirstOrDefault();
+            array.AsSpan().Where(_ => true).FirstOrDefault();
 
         [BenchmarkCategory("Array")]
         [Benchmark]
         public int Hyperlinq_Memory() =>
-            memory.Where(item => item == Count - 1).FirstOrDefault();
+            memory.Where(_ => true).FirstOrDefault();
 
         [BenchmarkCategory("Enumerable_Value")]
         [Benchmark]
         public int Hyperlinq_Enumerable_Value() =>
             Enumerable.AsValueEnumerable<TestEnumerable.Enumerable, TestEnumerable.Enumerable.Enumerator, int>(enumerableValue, enumerable => enumerable.GetEnumerator())
-            .Where(item => item == Count - 1).FirstOrDefault();
+            .Where(_ => true).FirstOrDefault();
 
         [BenchmarkCategory("Collection_Value")]
         [Benchmark]
         public int Hyperlinq_Collection_Value() =>
             ReadOnlyCollection.AsValueEnumerable<TestCollection.Enumerable, TestCollection.Enumerable.Enumerator, int>(collectionValue, enumerable => enumerable.GetEnumerator())
-            .Where(item => item == Count - 1).FirstOrDefault();
+            .Where(_ => true).FirstOrDefault();
 
         [BenchmarkCategory("List_Value")]
         [Benchmark]
         public int Hyperlinq_List_Value() =>
             ReadOnlyList.AsValueEnumerable<int>(listValue)
-            .Where(item => item == Count - 1).FirstOrDefault();
+            .Where(_ => true).FirstOrDefault();
 
         [BenchmarkCategory("Enumerable_Reference")]
         [Benchmark]
         public int Hyperlinq_Enumerable_Reference() =>
             enumerableReference
             .AsValueEnumerable()
-            .Where(item => item == Count - 1).FirstOrDefault();
+            .Where(_ => true).FirstOrDefault();
 
         [BenchmarkCategory("Collection_Reference")]
         [Benchmark]
         public int Hyperlinq_Collection_Reference() =>
             collectionReference
             .AsValueEnumerable()
-            .Where(item => item == Count - 1).FirstOrDefault();
+            .Where(_ => true).FirstOrDefault();
 
         [BenchmarkCategory("List_Reference")]
         [Benchmark]
         public int Hyperlinq_List_Reference() =>
             listReference
             .AsValueEnumerable()
-            .Where(item => item == Count - 1).FirstOrDefault();
+            .Where(_ => true).FirstOrDefault();
     }
 }

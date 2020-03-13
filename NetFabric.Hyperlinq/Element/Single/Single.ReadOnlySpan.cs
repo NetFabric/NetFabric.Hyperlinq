@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
+using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
@@ -23,14 +24,13 @@ namespace NetFabric.Hyperlinq
         [Pure]
         static ref readonly TSource Single<TSource>(this ReadOnlySpan<TSource> source, Predicate<TSource> predicate)
         {
-            var length = source.Length;
-            for (var index = 0; index < length; index++)
+            for (var index = 0; index < source.Length; index++)
             {
                 if (predicate(source[index]))
                 {
                     ref readonly var first = ref source[index];
 
-                    for (index++; index < length; index++)
+                    for (index++; index < source.Length; index++)
                     {
                         if (predicate(source[index]))
                             Throw.NotSingleSequence();
@@ -45,14 +45,13 @@ namespace NetFabric.Hyperlinq
         [Pure]
         static ref readonly TSource Single<TSource>(this ReadOnlySpan<TSource> source, PredicateAt<TSource> predicate)
         {
-            var length = source.Length;
-            for (var index = 0; index < length; index++)
+            for (var index = 0; index < source.Length; index++)
             {
                 if (predicate(source[index], index))
                 {
                     ref readonly var first = ref source[index];
 
-                    for (index++; index < length; index++)
+                    for (index++; index < source.Length; index++)
                     {
                         if (predicate(source[index], index))
                             Throw.NotSingleSequence();
@@ -62,6 +61,47 @@ namespace NetFabric.Hyperlinq
                 }
             }
             return ref Throw.EmptySequenceRef<TSource>();
+        }
+
+        [Pure]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        static TResult Single<TSource, TResult>(this ReadOnlySpan<TSource> source, Selector<TSource, TResult> selector)
+            => source.Length switch
+            {
+                0 => Throw.EmptySequence<TResult>(),
+                1 => selector(source[0]),
+                _ => Throw.NotSingleSequence<TResult>(),
+            };
+
+        [Pure]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        static TResult Single<TSource, TResult>(this ReadOnlySpan<TSource> source, SelectorAt<TSource, TResult> selector)
+            => source.Length switch
+            {
+                0 => Throw.EmptySequence<TResult>(),
+                1 => selector(source[0], 0),
+                _ => Throw.NotSingleSequence<TResult>(),
+            };
+
+        [Pure]
+        static TResult Single<TSource, TResult>(this ReadOnlySpan<TSource> source, Predicate<TSource> predicate, Selector<TSource, TResult> selector)
+        {
+            for (var index = 0; index < source.Length; index++)
+            {
+                if (predicate(source[index]))
+                {
+                    ref readonly var first = ref source[index];
+
+                    for (index++; index < source.Length; index++)
+                    {
+                        if (predicate(source[index]))
+                            Throw.NotSingleSequence();
+                    }
+
+                    return selector(first);
+                }
+            }
+            return Throw.EmptySequence<TResult>();
         }
 
         [Pure]
@@ -83,14 +123,13 @@ namespace NetFabric.Hyperlinq
         [return: MaybeNull]
         static ref readonly TSource SingleOrDefault<TSource>(this ReadOnlySpan<TSource> source, Predicate<TSource> predicate)
         {
-            var length = source.Length;
-            for (var index = 0; index < length; index++)
+            for (var index = 0; index < source.Length; index++)
             {
                 if (predicate(source[index]))
                 {
                     ref readonly var first = ref source[index];
 
-                    for (index++; index < length; index++)
+                    for (index++; index < source.Length; index++)
                     {
                         if (predicate(source[index]))
                             Throw.NotSingleSequence();
@@ -106,14 +145,13 @@ namespace NetFabric.Hyperlinq
         [return: MaybeNull]
         static ref readonly TSource SingleOrDefault<TSource>(this ReadOnlySpan<TSource> source, PredicateAt<TSource> predicate)
         {
-            var length = source.Length;
-            for (var index = 0; index < length; index++)
+            for (var index = 0; index < source.Length; index++)
             {
                 if (predicate(source[index], index))
                 {
                     ref readonly var first = ref source[index];
 
-                    for (index++; index < length; index++)
+                    for (index++; index < source.Length; index++)
                     {
                         if (predicate(source[index], index))
                             Throw.NotSingleSequence();
@@ -123,6 +161,47 @@ namespace NetFabric.Hyperlinq
                 }
             }
             return ref Default<TSource>.Value;
+        }
+
+        [Pure]
+        [return: MaybeNull]
+        public static TResult SingleOrDefault<TSource, TResult>(this ReadOnlySpan<TSource> source, Selector<TSource, TResult> selector) 
+            => source.Length switch
+            {
+                0 => default,
+                1 => selector(source[0]),
+                _ => Throw.NotSingleSequence<TResult>(),
+            };
+
+        [Pure]
+        [return: MaybeNull]
+        public static TResult SingleOrDefault<TSource, TResult>(this ReadOnlySpan<TSource> source, SelectorAt<TSource, TResult> selector) 
+            => source.Length switch
+            {
+                0 => default,
+                1 => selector(source[0], 0),
+                _ => Throw.NotSingleSequence<TResult>(),
+            };
+
+        [Pure]
+        static TResult SingleOrDefault<TSource, TResult>(this ReadOnlySpan<TSource> source, Predicate<TSource> predicate, Selector<TSource, TResult> selector)
+        {
+            for (var index = 0; index < source.Length; index++)
+            {
+                if (predicate(source[index]))
+                {
+                    ref readonly var first = ref source[index];
+
+                    for (index++; index < source.Length; index++)
+                    {
+                        if (predicate(source[index]))
+                            Throw.NotSingleSequence();
+                    }
+
+                    return selector(first);
+                }
+            }
+            return default;
         }
     }
 }

@@ -121,39 +121,33 @@ namespace NetFabric.Hyperlinq
             public ValueReadOnlyCollection.SelectIndexEnumerable<TEnumerable, TEnumerator, TSource, TSelectorResult> Select<TSelectorResult>(SelectorAt<TResult, TSelectorResult> selector)
                 => ValueReadOnlyCollection.Select<TEnumerable, TEnumerator, TSource, TSelectorResult>(source, Utils.Combine(this.selector, selector));
 
+
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TResult ElementAt(int index)
-                => selector(ValueReadOnlyCollection.ElementAt<TEnumerable, TEnumerator, TSource>(source, index));
+                => ValueReadOnlyCollection.ElementAt<TEnumerable, TEnumerator, TSource, TResult>(source, index, selector);
+                
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             [return: MaybeNull]
             public TResult ElementAtOrDefault(int index)
-                => selector(ValueReadOnlyCollection.ElementAtOrDefault<TEnumerable, TEnumerator, TSource>(source, index));
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public Maybe<TResult> TryElementAt(int index)
-            {
-                var item = ValueReadOnlyCollection.TryElementAt<TEnumerable, TEnumerator, TSource>(source, index);
-                return item.HasValue 
-                    ? new Maybe<TResult>(selector(item.Value)) 
-                    : default;
-            }
+                => ValueReadOnlyCollection.ElementAtOrDefault<TEnumerable, TEnumerator, TSource, TResult>(source, index, selector);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TResult First()
-                => selector(ValueReadOnlyCollection.First<TEnumerable, TEnumerator, TSource>(source));
+                => ValueReadOnlyCollection.First<TEnumerable, TEnumerator, TSource, TResult>(source, selector);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             [return: MaybeNull]
             public TResult FirstOrDefault()
-                => selector(ValueReadOnlyCollection.FirstOrDefault<TEnumerable, TEnumerator, TSource>(source));
+                => ValueReadOnlyCollection.FirstOrDefault<TEnumerable, TEnumerator, TSource, TResult>(source, selector);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TResult Single()
-                => selector(ValueReadOnlyCollection.Single<TEnumerable, TEnumerator, TSource>(source));
+                => ValueReadOnlyCollection.Single<TEnumerable, TEnumerator, TSource, TResult>(source, selector);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             [return: MaybeNull]
             public TResult SingleOrDefault()
-                => selector(ValueReadOnlyCollection.SingleOrDefault<TEnumerable, TEnumerator, TSource>(source));
+                => ValueReadOnlyCollection.SingleOrDefault<TEnumerable, TEnumerator, TSource, TResult>(source, selector);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TResult[] ToArray()

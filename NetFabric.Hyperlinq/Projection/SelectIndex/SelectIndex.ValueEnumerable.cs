@@ -101,23 +101,33 @@ namespace NetFabric.Hyperlinq
             public ValueEnumerable.SelectIndexEnumerable<TEnumerable, TEnumerator, TSource, TSelectorResult> Select<TSelectorResult>(SelectorAt<TResult, TSelectorResult> selector)
                 => ValueEnumerable.Select<TEnumerable, TEnumerator, TSource, TSelectorResult>(source, Utils.Combine(this.selector, selector));
 
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public TResult ElementAt(int index)
+                => ValueEnumerable.ElementAt<TEnumerable, TEnumerator, TSource, TResult>(source, index, selector);
+                
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            [return: MaybeNull]
+            public TResult ElementAtOrDefault(int index)
+                => ValueEnumerable.ElementAtOrDefault<TEnumerable, TEnumerator, TSource, TResult>(source, index, selector);
+
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TResult First()
-                => selector(ValueEnumerable.First<TEnumerable, TEnumerator, TSource>(source), 0);
+                => ValueEnumerable.First<TEnumerable, TEnumerator, TSource, TResult>(source, selector);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             [return: MaybeNull]
             public TResult FirstOrDefault()
-                => selector(ValueEnumerable.FirstOrDefault<TEnumerable, TEnumerator, TSource>(source), 0);
+                => ValueEnumerable.FirstOrDefault<TEnumerable, TEnumerator, TSource, TResult>(source, selector);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TResult Single()
-                => selector(ValueEnumerable.Single<TEnumerable, TEnumerator, TSource>(source), 0);
+                => ValueEnumerable.Single<TEnumerable, TEnumerator, TSource, TResult>(source, selector);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             [return: MaybeNull]
             public TResult SingleOrDefault()
-                => selector(ValueEnumerable.SingleOrDefault<TEnumerable, TEnumerator, TSource>(source), 0);
+                => ValueEnumerable.SingleOrDefault<TEnumerable, TEnumerator, TSource, TResult>(source, selector);
 
             public TResult[] ToArray()
                 => ValueEnumerable.ToArray<TEnumerable, TEnumerator, TSource, TResult>(source, selector);

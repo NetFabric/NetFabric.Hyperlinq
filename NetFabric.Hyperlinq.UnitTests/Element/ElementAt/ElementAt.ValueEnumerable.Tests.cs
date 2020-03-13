@@ -7,39 +7,291 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
     public class ValueEnumerableTests
     {
         [Theory]
-        [MemberData(nameof(TestData.ElementAtOutOfRange), MemberType = typeof(TestData))]
-        public void ElementAt_With_OutOfRange_Must_Throw(int[] source, int index)
+        [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
+        public void ElementAt_With_OutOfRange_Must_Throw(int[] source)
         {
             // Arrange
-            var wrapped = Wrap
-                .AsValueEnumerable(source);
+            var wrapped = Wrap.AsValueEnumerable(source);
 
             // Act
-            Action action = () => _ = ValueEnumerable
-                .ElementAt<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, index);
+            Action actionLess = () => _ = ValueEnumerable
+                .ElementAt<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, -1);
+            Action actionGreater = () => _ = ValueEnumerable
+                .ElementAt<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, source.Length);
 
             // Assert
-            _ = action.Must()
+            _ = actionLess.Must()
+                .Throw<ArgumentOutOfRangeException>();
+            _ = actionGreater.Must()
                 .Throw<ArgumentOutOfRangeException>();
         }
 
         [Theory]
-        [MemberData(nameof(TestData.ElementAt), MemberType = typeof(TestData))]
-        public void ElementAt_With_ValidData_Must_Succeed(int[] source, int index)
+        [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
+        public void ElementAt_With_ValidData_Must_Succeed(int[] source)
+        {
+            for (var index = 0; index < source.Length; index++)
+            {
+                // Arrange
+                var wrapped = Wrap.AsValueEnumerable(source);
+                var expected = 
+                    System.Linq.Enumerable.ElementAt(source, index);
+
+                // Act
+                var result = ValueEnumerable
+                    .ElementAt<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, index);
+
+                // Assert
+                _ = result.Must()
+                    .BeEqualTo(expected);
+            }
+        }
+
+        [Theory]
+        [MemberData(nameof(TestData.PredicateEmpty), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.PredicateSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.PredicateMultiple), MemberType = typeof(TestData))]
+        public void ElementAt_Predicate_With_OutOfRange_Must_Throw(int[] source, Predicate<int> predicate)
         {
             // Arrange
-            var wrapped = Wrap
-                .AsValueEnumerable(source);
-            var expected = 
-                System.Linq.Enumerable.ElementAt(wrapped, index);
+            var wrapped = Wrap.AsValueEnumerable(source);
 
             // Act
-            var result = ValueEnumerable
-                .ElementAt<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, index);
+            Action actionLess = () => _ = ValueEnumerable
+                .Where<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, predicate)
+                .ElementAt(-1);
+            Action actionGreater = () => _ = ValueEnumerable
+                .Where<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, predicate)
+                .ElementAt(source.Length);
 
             // Assert
-            _ = result.Must()
-                .BeEqualTo(expected);
+            _ = actionLess.Must()
+                .Throw<ArgumentOutOfRangeException>();
+            _ = actionGreater.Must()
+                .Throw<ArgumentOutOfRangeException>();
+        }
+
+        [Theory]
+        [MemberData(nameof(TestData.PredicateSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.PredicateMultiple), MemberType = typeof(TestData))]
+        public void ElementAt_Predicate_With_ValidData_Must_Succeed(int[] source, Predicate<int> predicate)
+        {
+            // Arrange
+            var wrapped = Wrap.AsValueEnumerable(source);
+            var expected = 
+                System.Linq.Enumerable.ToList(
+                    System.Linq.Enumerable.Where(source, predicate.AsFunc()));
+
+            for (var index = 0; index < expected.Count; index++)
+            {
+                // Act
+                var result = ValueEnumerable
+                    .Where<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, predicate)
+                    .ElementAt(index);
+
+                // Assert
+                _ = result.Must()
+                    .BeEqualTo(expected[index]);
+            }
+        }
+
+        [Theory]
+        [MemberData(nameof(TestData.PredicateAtEmpty), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.PredicateAtSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.PredicateAtMultiple), MemberType = typeof(TestData))]
+        public void ElementAt_PredicateAt_With_OutOfRange_Must_Throw(int[] source, PredicateAt<int> predicate)
+        {
+            // Arrange
+            var wrapped = Wrap.AsValueEnumerable(source);
+
+            // Act
+            Action actionLess = () => _ = ValueEnumerable
+                .Where<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, predicate)
+                .ElementAt(-1);
+            Action actionGreater = () => _ = ValueEnumerable
+                .Where<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, predicate)
+                .ElementAt(source.Length);
+
+            // Assert
+            _ = actionLess.Must()
+                .Throw<ArgumentOutOfRangeException>();
+            _ = actionGreater.Must()
+                .Throw<ArgumentOutOfRangeException>();
+        }
+
+        [Theory]
+        [MemberData(nameof(TestData.PredicateAtSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.PredicateAtMultiple), MemberType = typeof(TestData))]
+        public void ElementAt_PredicateAt_With_ValidData_Must_Succeed(int[] source, PredicateAt<int> predicate)
+        {
+            // Arrange
+            var wrapped = Wrap.AsValueEnumerable(source);
+            var expected = 
+                System.Linq.Enumerable.ToList(
+                    System.Linq.Enumerable.Where(source, predicate.AsFunc()));
+
+            for (var index = 0; index < expected.Count; index++)
+            {
+                // Act
+                var result = ValueEnumerable
+                    .Where<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, predicate)
+                    .ElementAt(index);
+
+                // Assert
+                _ = result.Must()
+                    .BeEqualTo(expected[index]);
+            }
+        }
+
+        [Theory]
+        [MemberData(nameof(TestData.SelectorEmpty), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SelectorSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SelectorMultiple), MemberType = typeof(TestData))]
+        public void ElementAt_Selector_With_OutOfRange_Must_Throw(int[] source, Selector<int, string> selector)
+        {
+            // Arrange
+            var wrapped = Wrap.AsValueEnumerable(source);
+
+            // Act
+            Action actionLess = () => _ = ValueEnumerable
+                .Select<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int, string>(wrapped, selector)
+                .ElementAt(-1);
+            Action actionGreater = () => _ = ValueEnumerable
+                .Select<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int, string>(wrapped, selector)
+                .ElementAt(source.Length);
+
+            // Assert
+            _ = actionLess.Must()
+                .Throw<ArgumentOutOfRangeException>();
+            _ = actionGreater.Must()
+                .Throw<ArgumentOutOfRangeException>();
+        }
+
+        [Theory]
+        [MemberData(nameof(TestData.SelectorSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SelectorMultiple), MemberType = typeof(TestData))]
+        public void ElementAt_Selector_With_ValidData_Must_Succeed(int[] source, Selector<int, string> selector)
+        {
+            for (var index = 0; index < source.Length; index++)
+            {
+                // Arrange
+                var wrapped = Wrap.AsValueEnumerable(source);
+                var expected = 
+                    System.Linq.Enumerable.ElementAt(
+                        System.Linq.Enumerable.Select(source, selector.AsFunc()), index);
+
+                // Act
+                var result = ValueEnumerable
+                    .Select<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int, string>(wrapped, selector)
+                    .ElementAt(index);
+
+                // Assert
+                _ = result.Must()
+                    .BeEqualTo(expected);
+            }
+        }
+        
+        [Theory]
+        [MemberData(nameof(TestData.SelectorAtEmpty), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SelectorAtSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SelectorAtMultiple), MemberType = typeof(TestData))]
+        public void ElementAt_SelectorAt_With_OutOfRange_Must_Throw(int[] source, SelectorAt<int, string> selector)
+        {
+            // Arrange
+            var wrapped = Wrap.AsValueEnumerable(source);
+
+            // Act
+            Action actionLess = () => _ = ValueEnumerable
+                .Select<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int, string>(wrapped, selector)
+                .ElementAt(-1);
+            Action actionGreater = () => _ = ValueEnumerable
+                .Select<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int, string>(wrapped, selector)
+                .ElementAt(source.Length);
+
+            // Assert
+            _ = actionLess.Must()
+                .Throw<ArgumentOutOfRangeException>();
+            _ = actionGreater.Must()
+                .Throw<ArgumentOutOfRangeException>();
+        }
+
+        [Theory]
+        [MemberData(nameof(TestData.SelectorAtSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SelectorAtMultiple), MemberType = typeof(TestData))]
+        public void ElementAt_SelectorAt_With_ValidData_Must_Succeed(int[] source, SelectorAt<int, string> selector)
+        {
+            for (var index = 0; index < source.Length; index++)
+            {
+                // Arrange
+                var wrapped = Wrap.AsValueEnumerable(source);
+                var expected = 
+                    System.Linq.Enumerable.ElementAt(
+                        System.Linq.Enumerable.Select(source, selector.AsFunc()), index);
+
+                // Act
+                var result = ValueEnumerable
+                    .Select<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int, string>(wrapped, selector)
+                    .ElementAt(index);
+
+                // Assert
+                _ = result.Must()
+                    .BeEqualTo(expected);
+            }
+        }
+
+        [Theory]
+        [MemberData(nameof(TestData.PredicateSelectorEmpty), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.PredicateSelectorSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.PredicateSelectorMultiple), MemberType = typeof(TestData))]
+        public void ElementAt_Predicate_Selector_With_OutOfRange_Must_Throw(int[] source, Predicate<int> predicate, Selector<int, string> selector)
+        {
+            // Arrange
+            var wrapped = Wrap.AsValueEnumerable(source);
+
+            // Act
+            Action actionLess = () => _ = ValueEnumerable
+                .Where<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, predicate)
+                .Select(selector)
+                .ElementAt(-1);
+            Action actionGreater = () => _ = ValueEnumerable
+                .Where<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, predicate)
+                .Select(selector)
+                .ElementAt(source.Length);
+
+            // Assert
+            _ = actionLess.Must()
+                .Throw<ArgumentOutOfRangeException>();
+            _ = actionGreater.Must()
+                .Throw<ArgumentOutOfRangeException>();
+        }
+
+        [Theory]
+        [MemberData(nameof(TestData.PredicateSelectorSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.PredicateSelectorMultiple), MemberType = typeof(TestData))]
+        public void ElementAt_Predicate_Selector_With_ValidData_Must_Succeed(int[] source, Predicate<int> predicate, Selector<int, string> selector)
+        {
+            // Arrange
+            var wrapped = Wrap.AsValueEnumerable(source);
+            var expected = 
+                System.Linq.Enumerable.ToList(
+                    System.Linq.Enumerable.Select(
+                        System.Linq.Enumerable.Where(source, predicate.AsFunc()), selector.AsFunc()));
+
+            for (var index = 0; index < expected.Count; index++)
+            {
+                // Act
+                var result = ValueEnumerable
+                    .Where<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, predicate)
+                    .Select(selector)
+                    .ElementAt(index);
+
+                // Assert
+                _ = result.Must()
+                    .BeEqualTo(expected[index]);
+            }
         }
     }
 }

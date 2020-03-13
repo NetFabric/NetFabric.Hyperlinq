@@ -82,9 +82,6 @@ namespace NetFabric.Hyperlinq
         [return: MaybeNull]
         public static TSource ElementAtOrDefault<TSource>(this List<TSource> source, int index)
             => ReadOnlyList.ElementAtOrDefault<List<TSource>, TSource>(source, index);
-        [Pure]
-        public static Maybe<TSource> TryElementAt<TSource>(this List<TSource> source, int index)
-            => ReadOnlyList.TryElementAt<List<TSource>, TSource>(source, index);
 
         [Pure]
         public static TSource First<TSource>(this List<TSource> source)

@@ -133,6 +133,27 @@ namespace NetFabric.Hyperlinq
             public bool Contains(TResult value, IEqualityComparer<TResult>? comparer = null)
                 => ReadOnlyList.Contains<TList, TSource, TResult>(source, value, comparer, predicate, selector, skipCount, takeCount);
 
+            public TResult ElementAt(int index)
+                => ReadOnlyList.ElementAt<TList, TSource, TResult>(source, index, predicate, selector, skipCount, takeCount);
+
+            [return: MaybeNull]
+            public TResult ElementAtOrDefault(int index)
+                => ReadOnlyList.ElementAtOrDefault<TList, TSource, TResult>(source, index, predicate, selector, skipCount, takeCount);
+
+            public TResult First()
+                => ReadOnlyList.First<TList, TSource, TResult>(source, predicate, selector, skipCount, takeCount);
+
+            [return: MaybeNull]
+            public TResult FirstOrDefault()
+                => ReadOnlyList.FirstOrDefault<TList, TSource, TResult>(source, predicate, selector, skipCount, takeCount);
+
+            public TResult Single()
+                => ReadOnlyList.Single<TList, TSource, TResult>(source, predicate, selector, skipCount, takeCount);
+
+            [return: MaybeNull]
+            public TResult SingleOrDefault()
+                => ReadOnlyList.SingleOrDefault<TList, TSource, TResult>(source, predicate, selector, skipCount, takeCount);
+
             public TResult[] ToArray()
                 => ReadOnlyList.ToArray<TList, TSource, TResult>(source, predicate, selector, skipCount, takeCount); 
 

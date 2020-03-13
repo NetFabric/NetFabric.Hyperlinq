@@ -82,9 +82,6 @@ namespace NetFabric.Hyperlinq
         [Pure]
         public static KeyValuePair<TKey, TValue> ElementAtOrDefault<TKey, TValue>(this SortedDictionary<TKey, TValue> source, int index)
             => ValueReadOnlyCollection.ElementAtOrDefault<ValueWrapper<TKey, TValue>, SortedDictionary<TKey, TValue>.Enumerator, KeyValuePair<TKey, TValue>>(new ValueWrapper<TKey, TValue>(source), index);
-        [Pure]
-        public static Maybe<KeyValuePair<TKey, TValue>> TryElementAt<TKey, TValue>(this SortedDictionary<TKey, TValue> source, int index)
-            => ValueReadOnlyCollection.TryElementAt<ValueWrapper<TKey, TValue>, SortedDictionary<TKey, TValue>.Enumerator, KeyValuePair<TKey, TValue>>(new ValueWrapper<TKey, TValue>(source), index);
 
         [Pure]
         public static KeyValuePair<TKey, TValue> First<TKey, TValue>(this SortedDictionary<TKey, TValue> source)

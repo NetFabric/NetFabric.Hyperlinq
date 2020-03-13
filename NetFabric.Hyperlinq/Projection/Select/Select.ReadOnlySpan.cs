@@ -75,23 +75,38 @@ namespace NetFabric.Hyperlinq
             public bool Contains(TResult value, IEqualityComparer<TResult>? comparer = null)
                 => Array.Contains<TSource, TResult>(source, value, comparer, selector);
 
+            [Pure]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public TResult ElementAt(int index)
+                => Array.ElementAt<TSource, TResult>(source, index, selector);
+
+            [Pure]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            [return: MaybeNull]
+            public TResult ElementAtOrDefault(int index)
+                => Array.ElementAtOrDefault<TSource, TResult>(source, index, selector);
+
+            [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TResult First()
-                => selector(source.First());
+                => Array.First<TSource, TResult>(source, selector);
 
+            [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             [return: MaybeNull]
             public TResult FirstOrDefault()
-                => selector(source.FirstOrDefault());
+                => Array.FirstOrDefault<TSource, TResult>(source, selector);
 
+            [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TResult Single()
-                => selector(source.Single());
+                => Array.Single<TSource, TResult>(source, selector);
 
+            [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             [return: MaybeNull]
             public TResult SingleOrDefault()
-                => selector(source.SingleOrDefault());
+                => Array.SingleOrDefault<TSource, TResult>(source, selector);
 
             public TResult[] ToArray()
                 => Array.ToArray(source, selector);

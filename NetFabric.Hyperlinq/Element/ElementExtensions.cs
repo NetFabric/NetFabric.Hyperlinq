@@ -59,25 +59,5 @@ namespace NetFabric.Hyperlinq
                 ElementResult.NotSingle => Throw.NotSingleSequence<TValue>(),
                 _ => item.Value,
             };
-
-        /////////////////////////////////////////////////////
-
-        [Pure]
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Maybe<TValue> AsMaybe<TValue>(this (ElementResult Result, TValue Value) item)
-            => item.Result switch
-            {
-                ElementResult.Success => new Maybe<TValue>(item.Value),
-                _ => default,
-            };
-
-        [Pure]
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static MaybeAt<TValue> AsMaybe<TValue>(this (ElementResult Result, TValue Value, int Index) item) 
-            => item.Result switch
-            {
-                ElementResult.Success => new MaybeAt<TValue>(item.Value, item.Index),
-                _ => default,
-            };
     }
 }

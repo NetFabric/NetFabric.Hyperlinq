@@ -120,19 +120,26 @@ namespace NetFabric.Hyperlinq
             public bool Contains(TResult value, IEqualityComparer<TResult>? comparer = null)
                 => Array.Contains<TSource, TResult>(source.Span, value, comparer, predicate, selector);
 
+            public TResult ElementAt(int index)
+                => Array.ElementAt<TSource, TResult>(source.Span, index, predicate, selector);
+
+            [return: MaybeNull]
+            public TResult ElementAtOrDefault(int index)
+                => Array.ElementAtOrDefault<TSource, TResult>(source.Span, index, predicate, selector);
+
             public TResult First()
-                => selector(Array.First<TSource>(source.Span, predicate));
+                => Array.First<TSource, TResult>(source.Span, predicate, selector);
 
             [return: MaybeNull]
             public TResult FirstOrDefault()
-                => selector(Array.FirstOrDefault<TSource>(source.Span, predicate));
+                => Array.FirstOrDefault<TSource, TResult>(source.Span, predicate, selector);
 
             public TResult Single()
-                => selector(Array.Single<TSource>(source.Span, predicate));
+                => Array.Single<TSource, TResult>(source.Span, predicate, selector);
 
             [return: MaybeNull]
             public TResult SingleOrDefault()
-                => selector(Array.SingleOrDefault<TSource>(source.Span, predicate));
+                => Array.SingleOrDefault<TSource, TResult>(source.Span, predicate, selector);
 
             public TResult[] ToArray()
                 => Array.ToArray<TSource, TResult>(source.Span, predicate, selector);

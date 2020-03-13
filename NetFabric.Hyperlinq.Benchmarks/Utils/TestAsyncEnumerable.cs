@@ -7,7 +7,9 @@ namespace NetFabric.Hyperlinq.Benchmarks
 {
     public static class TestAsyncEnumerable
     {
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
         public static async IAsyncEnumerable<int> ReferenceType(int count)
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
         {
             for (var value = 0; value < count; value++)
                 yield return value;            

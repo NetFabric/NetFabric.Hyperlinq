@@ -188,23 +188,38 @@ namespace NetFabric.Hyperlinq
             public ReadOnlyList.SelectIndexEnumerable<TList, TSource, TSelectorResult> Select<TSelectorResult>(SelectorAt<TResult, TSelectorResult> selector)
                 => ReadOnlyList.Select<TList, TSource, TSelectorResult>(source, Utils.Combine(this.selector, selector), skipCount, takeCount);
 
+            [Pure]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public TResult ElementAt(int index)
+                => ReadOnlyList.ElementAt<TList, TSource, TResult>(source, index, selector, skipCount, takeCount);
+
+            [Pure]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            [return: MaybeNull]
+            public TResult ElementAtOrDefault(int index)
+                => ReadOnlyList.ElementAtOrDefault<TList, TSource, TResult>(source, index, selector, skipCount, takeCount);
+
+            [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TResult First()
-                => selector(ReadOnlyList.GetFirst<TList, TSource>(source, skipCount, takeCount).ThrowOnEmpty(), skipCount);
+                => ReadOnlyList.First<TList, TSource, TResult>(source, selector, skipCount, takeCount);
 
+            [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             [return: MaybeNull]
             public TResult FirstOrDefault()
-                => selector(ReadOnlyList.GetFirst<TList, TSource>(source, skipCount, takeCount).DefaultOnEmpty(), skipCount);
+                => ReadOnlyList.FirstOrDefault<TList, TSource, TResult>(source, selector, skipCount, takeCount);
 
+            [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TResult Single()
-                => selector(ReadOnlyList.GetSingle<TList, TSource>(source, skipCount, takeCount).ThrowOnEmpty(), skipCount);
+                => ReadOnlyList.Single<TList, TSource, TResult>(source, selector, skipCount, takeCount);
 
+            [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             [return: MaybeNull]
             public TResult SingleOrDefault()
-                => selector(ReadOnlyList.GetSingle<TList, TSource>(source, skipCount, takeCount).DefaultOnEmpty(), skipCount);
+                => ReadOnlyList.SingleOrDefault<TList, TSource, TResult>(source, selector, skipCount, takeCount);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TResult[] ToArray()
