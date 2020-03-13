@@ -1,6 +1,6 @@
 ![GitHub last commit (master)](https://img.shields.io/github/last-commit/NetFabric/NetFabric.Hyperlinq/master.svg?style=flat-square&logo=github)
 [![Build (master)](https://img.shields.io/github/workflow/status/NetFabric/NetFabric.Hyperlinq/.NET%20Core/master.svg?style=flat-square&logo=github)](https://github.com/NetFabric/NetFabric.Hyperlinq/actions)
-[![Coverage](https://coveralls.io/repos/github/NetFabric/NetFabric.Hyperlinq/badge.svg?branch=master?style=flat-square&logo=coveralls)](https://dev.azure.com/aalmada/NetFabric.Hyperlinq/)
+[![Coverage](https://img.shields.io/coveralls/github/NetFabric/NetFabric.Hyperlinq/master?logo=coveralls)](https://coveralls.io/github/NetFabric/NetFabric.Hyperlinq)
 [![NuGet Version](https://img.shields.io/nuget/v/NetFabric.Hyperlinq.svg?style=flat-square&logo=nuget)](https://www.nuget.org/packages/NetFabric.Hyperlinq/)
 [![NuGet Downloads](https://img.shields.io/nuget/dt/NetFabric.Hyperlinq.svg?style=flat-square&logo=nuget)](https://www.nuget.org/packages/NetFabric.Hyperlinq/) 
 [![Gitter](https://img.shields.io/gitter/room/netfabric/netfabric.hyperlinq?style=flat-square&logo=gitter)](https://gitter.im/NetFabric/NetFabric.Hyperlinq)
