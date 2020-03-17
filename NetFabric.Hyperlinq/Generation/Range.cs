@@ -210,17 +210,6 @@ namespace NetFabric.Hyperlinq
 
                 return dictionary;
             }
-
-            public void ForEach(Action<int> action)
-            {
-                for (var index = start; index < end; index++)
-                    action(index);
-            }
-            public void ForEach(ActionAt<int> action)
-            {
-                for (var index = 0; index < count; index++)
-                    action(index + start, index);
-            }
         }
     }
 }

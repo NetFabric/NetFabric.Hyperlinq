@@ -117,9 +117,6 @@ namespace ConsoleApp
 - Set
   - `Distinct(TSource)`
   - `Distinct(TSource, IEqualityComparer<TSource>)`
-- Other
-  - `ForEach(Action<TSource>)`
-  - `ForEach(ActionAt<TSource>)`
 
 ## Benchmarks
 

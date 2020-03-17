@@ -157,11 +157,6 @@ namespace NetFabric.Hyperlinq
 
                 return dictionary;
             }
-
-            public void ForEach(Action<TResult> action)
-                => ValueEnumerable.ForEach<TEnumerable, TEnumerator, TSource, TResult>(source, action, predicate, selector);
-            public void ForEach(ActionAt<TResult> action)
-                => ValueEnumerable.ForEach<TEnumerable, TEnumerator, TSource, TResult>(source, action, predicate, selector);
         }
     }
 }

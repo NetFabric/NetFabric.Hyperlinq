@@ -199,11 +199,6 @@ namespace NetFabric.Hyperlinq
 
                 return dictionary;
             }
-
-            public void ForEach(Action<TResult> action)
-                => ReadOnlyList.ForEach<TList, TSource, TResult>(source, action, predicate, selector, skipCount, takeCount);
-            public void ForEach(ActionAt<TResult> action)
-                => ReadOnlyList.ForEach<TList, TSource, TResult>(source, action, predicate, selector, skipCount, takeCount);
         }
     }
 }

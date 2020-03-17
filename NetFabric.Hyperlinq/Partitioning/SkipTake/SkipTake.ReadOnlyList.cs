@@ -231,13 +231,6 @@ namespace NetFabric.Hyperlinq
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Selector<TSource, TKey> keySelector, Selector<TSource, TElement> elementSelector, IEqualityComparer<TKey> comparer)
                 => ReadOnlyList.ToDictionary<TList, TSource, TKey, TElement>(source, keySelector, elementSelector, comparer, skipCount, takeCount);
-
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public void ForEach(Action<TSource> action)
-                => ReadOnlyList.ForEach<TList, TSource>(source, action, skipCount, takeCount);
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public void ForEach(ActionAt<TSource> action)
-                => ReadOnlyList.ForEach<TList, TSource>(source, action, skipCount, takeCount);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
