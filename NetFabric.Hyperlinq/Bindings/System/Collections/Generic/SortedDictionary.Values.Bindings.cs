@@ -134,11 +134,6 @@ namespace NetFabric.Hyperlinq
         public static Dictionary<TKey2, TElement> ToDictionary<TKey, TValue, TKey2, TElement>(this SortedDictionary<TKey, TValue>.ValueCollection source, Selector<TValue, TKey2> keySelector, Selector<TValue, TElement> elementSelector, IEqualityComparer<TKey2>? comparer)
             => ValueReadOnlyCollection.ToDictionary<ValueWrapper<TKey, TValue>, SortedDictionary<TKey, TValue>.ValueCollection.Enumerator, TValue, TKey2, TElement>(new ValueWrapper<TKey, TValue>(source), keySelector, elementSelector, comparer);
 
-        public static void ForEach<TKey, TValue>(this SortedDictionary<TKey, TValue>.ValueCollection source, Action<TValue> action)
-            => ValueReadOnlyCollection.ForEach<ValueWrapper<TKey, TValue>, SortedDictionary<TKey, TValue>.ValueCollection.Enumerator, TValue>(new ValueWrapper<TKey, TValue>(source), action);
-        public static void ForEach<TKey, TValue>(this SortedDictionary<TKey, TValue>.ValueCollection source, ActionAt<TValue> action)
-            => ValueReadOnlyCollection.ForEach<ValueWrapper<TKey, TValue>, SortedDictionary<TKey, TValue>.ValueCollection.Enumerator, TValue>(new ValueWrapper<TKey, TValue>(source), action);
-
         [GeneratorMapping("TSource", "TValue")]
         public readonly partial struct ValueWrapper<TKey, TValue>
             : IValueReadOnlyCollection<TValue, SortedDictionary<TKey, TValue>.ValueCollection.Enumerator>

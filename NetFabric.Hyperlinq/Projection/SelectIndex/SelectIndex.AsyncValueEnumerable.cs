@@ -135,11 +135,6 @@ namespace NetFabric.Hyperlinq
 
             public ValueTask<List<TResult>> ToListAsync(CancellationToken cancellationToken = default)
                 => AsyncValueEnumerable.ToListAsync<TEnumerable, TEnumerator, TSource, TResult>(source, selector, cancellationToken);
-
-            public ValueTask ForEachAsync(AsyncAction<TResult> action, CancellationToken cancellationToken = default)
-                => AsyncValueEnumerable.ForEachAsync<TEnumerable, TEnumerator, TSource, TResult>(source, action, selector, cancellationToken);
-            public ValueTask ForEachAsync(AsyncActionAt<TResult> action, CancellationToken cancellationToken = default)
-                => AsyncValueEnumerable.ForEachAsync<TEnumerable, TEnumerator, TSource, TResult>(source, action, selector, cancellationToken);
         }
     }
 }

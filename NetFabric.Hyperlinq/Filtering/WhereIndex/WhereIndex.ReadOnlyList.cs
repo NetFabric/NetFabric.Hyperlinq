@@ -163,11 +163,6 @@ namespace NetFabric.Hyperlinq
                 => ReadOnlyList.ToDictionary<TList, TSource, TKey, TElement>(source, keySelector, elementSelector, EqualityComparer<TKey>.Default, predicate, skipCount, takeCount);
             public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Selector<TSource, TKey> keySelector, Selector<TSource, TElement> elementSelector, IEqualityComparer<TKey> comparer)
                 => ReadOnlyList.ToDictionary<TList, TSource, TKey, TElement>(source, keySelector, elementSelector, comparer, predicate, skipCount, takeCount);
-
-            public void ForEach(Action<TSource> action)
-                => ReadOnlyList.ForEach<TList, TSource>(source, action, predicate, skipCount, takeCount);
-            public void ForEach(ActionAt<TSource> action)
-                => ReadOnlyList.ForEach<TList, TSource>(source, action, predicate, skipCount, takeCount);
         }
     }
 }

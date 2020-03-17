@@ -113,11 +113,6 @@ namespace NetFabric.Hyperlinq
 
             public List<TResult> ToList()
                 => Array.ToList(source, selector);
-
-            public void ForEach(Action<TResult> action)
-                => source.ForEach(action, selector);
-            public void ForEach(ActionAt<TResult> action)
-                => source.ForEach(action, selector);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

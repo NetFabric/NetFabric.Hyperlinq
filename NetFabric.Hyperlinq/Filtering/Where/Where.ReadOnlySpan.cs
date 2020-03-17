@@ -103,11 +103,6 @@ namespace NetFabric.Hyperlinq
 
             public List<TSource> ToList()
                 => Array.ToList(source, predicate);
-
-            public void ForEach(Action<TSource> action)
-                => Array.ForEach(source, action, predicate);
-            public void ForEach(ActionAt<TSource> action)
-                => Array.ForEach(source, action, predicate);
         }
     }
 }

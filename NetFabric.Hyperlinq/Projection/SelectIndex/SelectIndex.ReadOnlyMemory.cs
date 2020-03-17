@@ -201,11 +201,6 @@ namespace NetFabric.Hyperlinq
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public List<TResult> ToList()
                 => Array.ToList(source, selector); // memory performs best
-
-            public void ForEach(Action<TResult> action)
-                => Array.ForEach(source.Span, action, selector);
-            public void ForEach(ActionAt<TResult> action)
-                => Array.ForEach(source.Span, action, selector);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

@@ -130,11 +130,6 @@ namespace NetFabric.Hyperlinq
                 => AsyncValueEnumerable.ToDictionaryAsync<TEnumerable, TEnumerator, TSource, TKey, TElement>(source, keySelector, elementSelector, EqualityComparer<TKey>.Default, predicate, cancellationToken);
             public ValueTask<Dictionary<TKey, TElement>> ToDictionaryAsync<TKey, TElement>(AsyncSelector<TSource, TKey> keySelector, AsyncSelector<TSource, TElement> elementSelector, IEqualityComparer<TKey> comparer, CancellationToken cancellationToken = default)
                 => AsyncValueEnumerable.ToDictionaryAsync<TEnumerable, TEnumerator, TSource, TKey, TElement>(source, keySelector, elementSelector, comparer, predicate, cancellationToken);
-
-            public ValueTask ForEachAsync(AsyncAction<TSource> action, CancellationToken cancellationToken = default)
-                => AsyncValueEnumerable.ForEachAsync<TEnumerable, TEnumerator, TSource>(source, action, predicate, cancellationToken);
-            public ValueTask ForEachAsync(AsyncActionAt<TSource> action, CancellationToken cancellationToken = default)
-                => AsyncValueEnumerable.ForEachAsync<TEnumerable, TEnumerator, TSource>(source, action, predicate, cancellationToken);
         }
     }
 }

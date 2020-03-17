@@ -134,11 +134,6 @@ namespace NetFabric.Hyperlinq
 
             public List<TResult> ToList()
                 => ValueEnumerable.ToList<TEnumerable, TEnumerator, TSource, TResult>(source, selector);
-
-            public void ForEach(Action<TResult> action)
-                => ValueEnumerable.ForEach<TEnumerable, TEnumerator, TSource, TResult>(source, action, selector);
-            public void ForEach(ActionAt<TResult> action)
-                => ValueEnumerable.ForEach<TEnumerable, TEnumerator, TSource, TResult>(source, action, selector);
         }
     }
 }
