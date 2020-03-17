@@ -48,54 +48,54 @@ namespace NetFabric.Hyperlinq.Benchmarks
 
         [BenchmarkCategory("Array")]
         [Benchmark]
-        public int Hyperlinq_Array() =>
+        public Option<int> Hyperlinq_Array() =>
             array.ElementAt(Count - 1);
 
         [BenchmarkCategory("Array")]
         [Benchmark]
-        public int Hyperlinq_Span() =>
+        public Option<int> Hyperlinq_Span() =>
             array.AsSpan().ElementAt(Count - 1);
 
         [BenchmarkCategory("Array")]
         [Benchmark]
-        public int Hyperlinq_Memory() =>
+        public Option<int> Hyperlinq_Memory() =>
             memory.ElementAt(Count - 1);
 
         [BenchmarkCategory("Enumerable_Value")]
         [Benchmark]
-        public int Hyperlinq_Enumerable_Value() =>
+        public Option<int> Hyperlinq_Enumerable_Value() =>
             Enumerable.AsValueEnumerable<TestEnumerable.Enumerable, TestEnumerable.Enumerable.Enumerator, int>(enumerableValue, enumerable => enumerable.GetEnumerator())
             .ElementAt(Count - 1);
 
         [BenchmarkCategory("Collection_Value")]
         [Benchmark]
-        public int Hyperlinq_Collection_Value() =>
+        public Option<int> Hyperlinq_Collection_Value() =>
             ReadOnlyCollection.AsValueEnumerable<TestCollection.Enumerable, TestCollection.Enumerable.Enumerator, int>(collectionValue, enumerable => enumerable.GetEnumerator())
             .ElementAt(Count - 1);
 
         [BenchmarkCategory("List_Value")]
         [Benchmark]
-        public int Hyperlinq_List_Value() =>
+        public Option<int> Hyperlinq_List_Value() =>
             ReadOnlyList.AsValueEnumerable<int>(listValue)
             .ElementAt(Count - 1);
 
         [BenchmarkCategory("Enumerable_Reference")]
         [Benchmark]
-        public int Hyperlinq_Enumerable_Reference() =>
+        public Option<int> Hyperlinq_Enumerable_Reference() =>
             enumerableReference
             .AsValueEnumerable()
             .ElementAt(Count - 1);
 
         [BenchmarkCategory("Collection_Reference")]
         [Benchmark]
-        public int Hyperlinq_Collection_Reference() =>
+        public Option<int> Hyperlinq_Collection_Reference() =>
             collectionReference
             .AsValueEnumerable()
             .ElementAt(Count - 1);
 
         [BenchmarkCategory("List_Reference")]
         [Benchmark]
-        public int Hyperlinq_List_Reference() =>
+        public Option<int> Hyperlinq_List_Reference() =>
             listReference
             .AsValueEnumerable()
             .ElementAt(Count - 1);

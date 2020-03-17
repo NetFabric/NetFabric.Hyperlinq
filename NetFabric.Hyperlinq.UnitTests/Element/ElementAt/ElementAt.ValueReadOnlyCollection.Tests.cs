@@ -10,28 +10,30 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
         [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
-        public void ElementAt_With_OutOfRange_Must_Throw(int[] source)
+        public void ElementAt_With_OutOfRange_Must_Return_None(int[] source)
         {
             // Arrange
             var wrapped = Wrap.AsValueReadOnlyCollection(source);
 
             // Act
-            Action actionLess = () => _ = ValueReadOnlyCollection
+            var optionNegative = ValueReadOnlyCollection
                 .ElementAt<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(wrapped, -1);
-            Action actionGreater = () => _ = ValueReadOnlyCollection
+            var optionTooLarge = ValueReadOnlyCollection
                 .ElementAt<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(wrapped, source.Length);
 
             // Assert
-            _ = actionLess.Must()
-                .Throw<ArgumentOutOfRangeException>();
-            _ = actionGreater.Must()
-                .Throw<ArgumentOutOfRangeException>();
+            _ = optionNegative.Must()
+                .BeOfType<Option<int>>()
+                .EvaluateTrue(option => option.IsNone);
+            _ = optionTooLarge.Must()
+                .BeOfType<Option<int>>()
+                .EvaluateTrue(option => option.IsNone);
         }
 
         [Theory]
         [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
-        public void ElementAt_With_ValidData_Must_Succeed(int[] source)
+        public void ElementAt_With_ValidData_Must_Return_Some(int[] source)
         {
             for (var index = 0; index < source.Length; index++)
             {
@@ -45,8 +47,9 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
                     .ElementAt<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(wrapped, index);
 
                 // Assert
-                _ = result.Must()
-                    .BeEqualTo(expected);
+                _ = result.Match(
+                    value => value.Must().BeEqualTo(expected),
+                    () => throw new Exception());
             }
         }
 
@@ -54,30 +57,32 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
         [MemberData(nameof(TestData.SelectorEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SelectorSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SelectorMultiple), MemberType = typeof(TestData))]
-        public void ElementAt_Selector_With_OutOfRange_Must_Throw(int[] source, Selector<int, string> selector)
+        public void ElementAt_Selector_With_OutOfRange_Must_Return_None(int[] source, Selector<int, string> selector)
         {
             // Arrange
             var wrapped = Wrap.AsValueReadOnlyCollection(source);
 
             // Act
-            Action actionLess = () => _ = ValueReadOnlyCollection
+            var optionNegative = ValueReadOnlyCollection
                 .Select<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int, string>(wrapped, selector)
                 .ElementAt(-1);
-            Action actionGreater = () => _ = ValueReadOnlyCollection
+            var optionTooLarge = ValueReadOnlyCollection
                 .Select<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int, string>(wrapped, selector)
                 .ElementAt(source.Length);
 
             // Assert
-            _ = actionLess.Must()
-                .Throw<ArgumentOutOfRangeException>();
-            _ = actionGreater.Must()
-                .Throw<ArgumentOutOfRangeException>();
+            _ = optionNegative.Must()
+                .BeOfType<Option<string>>()
+                .EvaluateTrue(option => option.IsNone);
+            _ = optionTooLarge.Must()
+                .BeOfType<Option<string>>()
+                .EvaluateTrue(option => option.IsNone);
         }
 
         [Theory]
         [MemberData(nameof(TestData.SelectorSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SelectorMultiple), MemberType = typeof(TestData))]
-        public void ElementAt_Selector_With_ValidData_Must_Succeed(int[] source, Selector<int, string> selector)
+        public void ElementAt_Selector_With_ValidData_Must_Return_Some(int[] source, Selector<int, string> selector)
         {
             for (var index = 0; index < source.Length; index++)
             {
@@ -93,8 +98,9 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
                     .ElementAt(index);
 
                 // Assert
-                _ = result.Must()
-                    .BeEqualTo(expected);
+                _ = result.Match(
+                    value => value.Must().BeEqualTo(expected),
+                    () => throw new Exception());
             }
         }
         
@@ -102,30 +108,32 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
         [MemberData(nameof(TestData.SelectorAtEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SelectorAtSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SelectorAtMultiple), MemberType = typeof(TestData))]
-        public void ElementAt_SelectorAt_With_OutOfRange_Must_Throw(int[] source, SelectorAt<int, string> selector)
+        public void ElementAt_SelectorAt_With_OutOfRange_Must_Return_None(int[] source, SelectorAt<int, string> selector)
         {
             // Arrange
             var wrapped = Wrap.AsValueReadOnlyCollection(source);
 
             // Act
-            Action actionLess = () => _ = ValueReadOnlyCollection
+            var optionNegative = ValueReadOnlyCollection
                 .Select<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int, string>(wrapped, selector)
                 .ElementAt(-1);
-            Action actionGreater = () => _ = ValueReadOnlyCollection
+            var optionTooLarge = ValueReadOnlyCollection
                 .Select<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int, string>(wrapped, selector)
                 .ElementAt(source.Length);
 
             // Assert
-            _ = actionLess.Must()
-                .Throw<ArgumentOutOfRangeException>();
-            _ = actionGreater.Must()
-                .Throw<ArgumentOutOfRangeException>();
+            _ = optionNegative.Must()
+                .BeOfType<Option<string>>()
+                .EvaluateTrue(option => option.IsNone);
+            _ = optionTooLarge.Must()
+                .BeOfType<Option<string>>()
+                .EvaluateTrue(option => option.IsNone);
         }
 
         [Theory]
         [MemberData(nameof(TestData.SelectorAtSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SelectorAtMultiple), MemberType = typeof(TestData))]
-        public void ElementAt_SelectorAt_With_ValidData_Must_Succeed(int[] source, SelectorAt<int, string> selector)
+        public void ElementAt_SelectorAt_With_ValidData_Must_Return_Some(int[] source, SelectorAt<int, string> selector)
         {
             for (var index = 0; index < source.Length; index++)
             {
@@ -141,8 +149,9 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
                     .ElementAt(index);
 
                 // Assert
-                _ = result.Must()
-                    .BeEqualTo(expected);
+                _ = result.Match(
+                    value => value.Must().BeEqualTo(expected),
+                    () => throw new Exception());
             }
         }
     }

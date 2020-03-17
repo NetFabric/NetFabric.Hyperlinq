@@ -96,26 +96,14 @@ namespace NetFabric.Hyperlinq
             public ValueEnumerable.WhereIndexEnumerable<TEnumerable, TEnumerator, TSource> Where(PredicateAt<TSource> predicate)
                 => ValueEnumerable.Where<TEnumerable, TEnumerator, TSource>(source, Utils.Combine(this.predicate, predicate));
 
-            public TSource ElementAt(int index)
+            public Option<TSource> ElementAt(int index)
                 => ValueEnumerable.ElementAt<TEnumerable, TEnumerator, TSource>(source, index, predicate);
 
-            [return: MaybeNull]
-            public TSource ElementAtOrDefault(int index)
-                => ValueEnumerable.ElementAtOrDefault<TEnumerable, TEnumerator, TSource>(source, index, predicate);
-
-            public TSource First()
+            public Option<TSource> First()
                 => ValueEnumerable.First<TEnumerable, TEnumerator, TSource>(source, predicate);
 
-            [return: MaybeNull]
-            public TSource FirstOrDefault()
-                => ValueEnumerable.FirstOrDefault<TEnumerable, TEnumerator, TSource>(source, predicate);
-
-            public TSource Single()
+            public Option<TSource> Single()
                 => ValueEnumerable.Single<TEnumerable, TEnumerator, TSource>(source, predicate);
-
-            [return: MaybeNull]
-            public TSource SingleOrDefault()
-                => ValueEnumerable.SingleOrDefault<TEnumerable, TEnumerator, TSource>(source, predicate);
 
             public TSource[] ToArray()
                 => ValueEnumerable.ToArray<TEnumerable, TEnumerator, TSource>(source, predicate);

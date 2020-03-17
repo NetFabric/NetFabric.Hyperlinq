@@ -77,28 +77,16 @@ namespace NetFabric.Hyperlinq
             => ValueEnumerable.Where<ValueWrapper<TSource>, SortedSet<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
 
         [Pure]
-        public static TSource ElementAt<TSource>(this SortedSet<TSource> source, int index)
+        public static Option<TSource> ElementAt<TSource>(this SortedSet<TSource> source, int index)
             => ValueReadOnlyCollection.ElementAt<ValueWrapper<TSource>, SortedSet<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), index);
-        [Pure]
-        [return: MaybeNull]
-        public static TSource ElementAtOrDefault<TSource>(this SortedSet<TSource> source, int index)
-            => ValueReadOnlyCollection.ElementAtOrDefault<ValueWrapper<TSource>, SortedSet<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), index);
 
         [Pure]
-        public static TSource First<TSource>(this SortedSet<TSource> source)
+        public static Option<TSource> First<TSource>(this SortedSet<TSource> source)
             => ValueReadOnlyCollection.First<ValueWrapper<TSource>, SortedSet<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source));
-        [Pure]
-        [return: MaybeNull]
-        public static TSource FirstOrDefault<TSource>(this SortedSet<TSource> source)
-            => ValueReadOnlyCollection.FirstOrDefault<ValueWrapper<TSource>, SortedSet<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source));
 
         [Pure]
-        public static TSource Single<TSource>(this SortedSet<TSource> source)
+        public static Option<TSource> Single<TSource>(this SortedSet<TSource> source)
             => ValueReadOnlyCollection.Single<ValueWrapper<TSource>, SortedSet<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source));
-        [Pure]
-        [return: MaybeNull]
-        public static TSource SingleOrDefault<TSource>(this SortedSet<TSource> source)
-            => ValueReadOnlyCollection.SingleOrDefault<ValueWrapper<TSource>, SortedSet<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source));
 
         [Pure]
         public static ValueEnumerable.DistinctEnumerable<ValueWrapper<TSource>, SortedSet<TSource>.Enumerator, TSource> Distinct<TSource>(this SortedSet<TSource> source, IEqualityComparer<TSource>? comparer = null)

@@ -77,28 +77,16 @@ namespace NetFabric.Hyperlinq
             => ValueEnumerable.Where<ValueWrapper<TSource>, Stack<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
 
         [Pure]
-        public static TSource ElementAt<TSource>(this Stack<TSource> source, int index)
+        public static Option<TSource> ElementAt<TSource>(this Stack<TSource> source, int index)
             => ValueReadOnlyCollection.ElementAt<ValueWrapper<TSource>, Stack<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), index);
-        [Pure]
-        [return: MaybeNull]
-        public static TSource ElementAtOrDefault<TSource>(this Stack<TSource> source, int index)
-            => ValueReadOnlyCollection.ElementAtOrDefault<ValueWrapper<TSource>, Stack<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), index);
 
         [Pure]
-        public static TSource First<TSource>(this Stack<TSource> source)
+        public static Option<TSource> First<TSource>(this Stack<TSource> source)
             => ValueReadOnlyCollection.First<ValueWrapper<TSource>, Stack<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source));
-        [Pure]
-        [return: MaybeNull]
-        public static TSource FirstOrDefault<TSource>(this Stack<TSource> source)
-            => ValueReadOnlyCollection.FirstOrDefault<ValueWrapper<TSource>, Stack<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source));
 
         [Pure]
-        public static TSource Single<TSource>(this Stack<TSource> source)
+        public static Option<TSource> Single<TSource>(this Stack<TSource> source)
             => ValueReadOnlyCollection.Single<ValueWrapper<TSource>, Stack<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source));
-        [Pure]
-        [return: MaybeNull]
-        public static TSource SingleOrDefault<TSource>(this Stack<TSource> source)
-            => ValueReadOnlyCollection.SingleOrDefault<ValueWrapper<TSource>, Stack<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source));
 
         [Pure]
         public static ValueEnumerable.DistinctEnumerable<ValueWrapper<TSource>, Stack<TSource>.Enumerator, TSource> Distinct<TSource>(this Stack<TSource> source, IEqualityComparer<TSource>? comparer = null)

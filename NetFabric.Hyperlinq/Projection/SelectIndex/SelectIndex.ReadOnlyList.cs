@@ -190,36 +190,18 @@ namespace NetFabric.Hyperlinq
 
             [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public TResult ElementAt(int index)
+            public Option<TResult> ElementAt(int index)
                 => ReadOnlyList.ElementAt<TList, TSource, TResult>(source, index, selector, skipCount, takeCount);
 
             [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            [return: MaybeNull]
-            public TResult ElementAtOrDefault(int index)
-                => ReadOnlyList.ElementAtOrDefault<TList, TSource, TResult>(source, index, selector, skipCount, takeCount);
-
-            [Pure]
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public TResult First()
+            public Option<TResult> First()
                 => ReadOnlyList.First<TList, TSource, TResult>(source, selector, skipCount, takeCount);
 
             [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            [return: MaybeNull]
-            public TResult FirstOrDefault()
-                => ReadOnlyList.FirstOrDefault<TList, TSource, TResult>(source, selector, skipCount, takeCount);
-
-            [Pure]
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public TResult Single()
+            public Option<TResult> Single()
                 => ReadOnlyList.Single<TList, TSource, TResult>(source, selector, skipCount, takeCount);
-
-            [Pure]
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            [return: MaybeNull]
-            public TResult SingleOrDefault()
-                => ReadOnlyList.SingleOrDefault<TList, TSource, TResult>(source, selector, skipCount, takeCount);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TResult[] ToArray()

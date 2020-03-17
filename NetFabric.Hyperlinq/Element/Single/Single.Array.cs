@@ -9,13 +9,7 @@ namespace NetFabric.Hyperlinq
     {
         [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ref readonly TSource Single<TSource>(this TSource[] source)
-            => ref Single((ReadOnlySpan<TSource>)source.AsSpan());
-
-        [Pure]
-        [return: MaybeNull]
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ref readonly TSource SingleOrDefault<TSource>(this TSource[] source)
-            => ref SingleOrDefault((ReadOnlySpan<TSource>)source.AsSpan());
+        public static Option<TSource> Single<TSource>(this TSource[] source)
+            => Single(source.AsSpan());
     }
 }

@@ -9,13 +9,7 @@ namespace NetFabric.Hyperlinq
     {
         [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ref readonly TSource ElementAt<TSource>(this Memory<TSource> source, int index)
-            => ref ElementAt((ReadOnlySpan<TSource>)source.Span, index);
-
-        [Pure]
-        [return: MaybeNull]
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ref readonly TSource ElementAtOrDefault<TSource>(this Memory<TSource> source, int index)
-            => ref ElementAtOrDefault((ReadOnlySpan<TSource>)source.Span, index);
+        public static Option<TSource> ElementAt<TSource>(this Memory<TSource> source, int index)
+            => ElementAt(source.Span, index);
     }
 }

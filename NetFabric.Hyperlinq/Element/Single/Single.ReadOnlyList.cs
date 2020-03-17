@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
 using System.Runtime.CompilerServices;
 
@@ -10,122 +9,60 @@ namespace NetFabric.Hyperlinq
     {
         [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static TSource Single<TList, TSource>(this TList source) 
+        public static Option<TSource> Single<TList, TSource>(this TList source) 
             where TList : notnull, IReadOnlyList<TSource>
             => Single<TList, TSource>(source, 0, source.Count);
 
         [Pure]
-        static TSource Single<TList, TSource>(this TList source, int skipCount, int takeCount) 
+        static Option<TSource> Single<TList, TSource>(this TList source, int skipCount, int takeCount) 
             where TList : notnull, IReadOnlyList<TSource>
             => takeCount switch
             {
-                0 => Throw.EmptySequence<TSource>(),
-                1 => source[skipCount],
-                _ => Throw.NotSingleSequence<TSource>(),
+                0 => Option.None,
+                1 => Option.Some(source[skipCount]),
+                _ => Option.None,
             };
 
         [Pure]
-        static TSource Single<TList, TSource>(this TList source, Predicate<TSource> predicate, int skipCount, int takeCount) 
+        static Option<TSource> Single<TList, TSource>(this TList source, Predicate<TSource> predicate, int skipCount, int takeCount) 
             where TList : notnull, IReadOnlyList<TSource>
-            => GetSingle<TList, TSource>(source, predicate, skipCount, takeCount).ThrowOnEmpty();
+            => GetSingle<TList, TSource>(source, predicate, skipCount, takeCount);
 
         [Pure]
-        static TSource Single<TList, TSource>(this TList source, PredicateAt<TSource> predicate, int skipCount, int takeCount) 
+        static Option<TSource> Single<TList, TSource>(this TList source, PredicateAt<TSource> predicate, int skipCount, int takeCount) 
             where TList : notnull, IReadOnlyList<TSource>
-            => GetSingle<TList, TSource>(source, predicate, skipCount, takeCount).ThrowOnEmpty();
+            => GetSingle<TList, TSource>(source, predicate, skipCount, takeCount);
 
         [Pure]
-        static TResult Single<TList, TSource, TResult>(this TList source, Selector<TSource, TResult> selector, int skipCount, int takeCount) 
+        static Option<TResult> Single<TList, TSource, TResult>(this TList source, Selector<TSource, TResult> selector, int skipCount, int takeCount) 
             where TList : notnull, IReadOnlyList<TSource>
             => takeCount switch
             {
-                0 => Throw.EmptySequence<TResult>(),
-                1 => selector(source[skipCount]),
-                _ => Throw.NotSingleSequence<TResult>(),
+                0 => Option.None,
+                1 => Option.Some(selector(source[skipCount])),
+                _ => Option.None,
             };
 
         [Pure]
-        static TResult Single<TList, TSource, TResult>(this TList source, SelectorAt<TSource, TResult> selector, int skipCount, int takeCount) 
+        static Option<TResult> Single<TList, TSource, TResult>(this TList source, SelectorAt<TSource, TResult> selector, int skipCount, int takeCount) 
             where TList : notnull, IReadOnlyList<TSource>
             => takeCount switch
             {
-                0 => Throw.EmptySequence<TResult>(),
-                1 => selector(source[skipCount], 0),
-                _ => Throw.NotSingleSequence<TResult>(),
+                0 => Option.None,
+                1 => Option.Some(selector(source[skipCount], 0)),
+                _ => Option.None,
             };
 
         [Pure]
-        static TResult Single<TList, TSource, TResult>(this TList source, Predicate<TSource> predicate, Selector<TSource, TResult> selector, int skipCount, int takeCount) 
+        static Option<TResult> Single<TList, TSource, TResult>(this TList source, Predicate<TSource> predicate, Selector<TSource, TResult> selector, int skipCount, int takeCount) 
             where TList : notnull, IReadOnlyList<TSource>
-            => selector(GetSingle<TList, TSource>(source, predicate, skipCount, takeCount).ThrowOnEmpty());
-
-        ////////////////////////////////
-        // SingleOrDefault 
-
-        [Pure]
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static TSource SingleOrDefault<TList, TSource>(this TList source) 
-            where TList : notnull, IReadOnlyList<TSource>
-            => SingleOrDefault<TList, TSource>(source, 0, source.Count);
-
-        [Pure]
-        static TSource SingleOrDefault<TList, TSource>(this TList source, int skipCount, int takeCount) 
-            where TList : notnull, IReadOnlyList<TSource>
-            => takeCount switch
-            {
-                0 => default,
-                1 => source[skipCount],
-                _ => Throw.NotSingleSequence<TSource>(),
-            };
-
-        [Pure]
-        static TSource SingleOrDefault<TList, TSource>(this TList source, Predicate<TSource> predicate, int skipCount, int takeCount) 
-            where TList : notnull, IReadOnlyList<TSource>
-            => GetSingle<TList, TSource>(source, predicate, skipCount, takeCount).DefaultOnEmpty();
-
-        [Pure]
-        static TSource SingleOrDefault<TList, TSource>(this TList source, PredicateAt<TSource> predicate, int skipCount, int takeCount) 
-            where TList : notnull, IReadOnlyList<TSource>
-            => GetSingle<TList, TSource>(source, predicate, skipCount, takeCount).DefaultOnEmpty();
-
-        [Pure]
-        static TResult SingleOrDefault<TList, TSource, TResult>(this TList source, Selector<TSource, TResult> selector, int skipCount, int takeCount) 
-            where TList : notnull, IReadOnlyList<TSource>
-            => takeCount switch
-            {
-                0 => default,
-                1 => selector(source[skipCount]),
-                _ => Throw.NotSingleSequence<TResult>(),
-            };
-
-        [Pure]
-        static TResult SingleOrDefault<TList, TSource, TResult>(this TList source, SelectorAt<TSource, TResult> selector, int skipCount, int takeCount) 
-            where TList : notnull, IReadOnlyList<TSource>
-            => takeCount switch
-            {
-                0 => default,
-                1 => selector(source[skipCount], 0),
-                _ => Throw.NotSingleSequence<TResult>(),
-            };
-
-        [Pure]
-        static TResult SingleOrDefault<TList, TSource, TResult>(this TList source, Predicate<TSource> predicate, Selector<TSource, TResult> selector, int skipCount, int takeCount) 
-            where TList : notnull, IReadOnlyList<TSource>
-        {
-            var (success, result) = GetSingle<TList, TSource>(source, predicate, skipCount, takeCount);
-            return success switch
-            {
-                ElementResult.Empty => default,
-                ElementResult.Success => selector(result),
-                _ => Throw.NotSingleSequence<TResult>(),
-            };
-        }
+            => GetSingle<TList, TSource>(source, predicate, skipCount, takeCount).Select(selector);
 
         ////////////////////////////////
         // GetSingle 
 
         [Pure]
-        static (ElementResult Success, TSource Value) GetSingle<TList, TSource>(this TList source, Predicate<TSource> predicate, int skipCount, int takeCount)
+        static Option<TSource> GetSingle<TList, TSource>(this TList source, Predicate<TSource> predicate, int skipCount, int takeCount)
             where TList : notnull, IReadOnlyList<TSource>
         {
             var end = skipCount + takeCount;
@@ -138,18 +75,18 @@ namespace NetFabric.Hyperlinq
                     for (index++; index < end; index++)
                     {
                         if (predicate(source[index]))
-                            return (ElementResult.NotSingle, default);
+                            return Option.None;
                     }
 
-                    return (ElementResult.Success, value);
+                    return Option.Some(value);
                 }
             }
 
-            return (ElementResult.Empty, default);
+            return Option.None;
         }
         
         [Pure]
-        static (ElementResult Success, TSource Value, int Index) GetSingle<TList, TSource>(this TList source, PredicateAt<TSource> predicate, int skipCount, int takeCount)
+        static Option<TSource> GetSingle<TList, TSource>(this TList source, PredicateAt<TSource> predicate, int skipCount, int takeCount)
             where TList : notnull, IReadOnlyList<TSource>
         {
             if (skipCount == 0)
@@ -158,15 +95,15 @@ namespace NetFabric.Hyperlinq
                 {
                     if (predicate(source[index], index))
                     {
-                        var value = (ElementResult.Success, source[index], index);
+                        var value = source[index];
 
                         for (index++; index < takeCount; index++)
                         {
                             if (predicate(source[index], index))
-                                return (ElementResult.NotSingle, default, 0);
+                                return Option.None;
                         }
 
-                        return value;
+                        return Option.Some(value);
                     }
                 }
             }
@@ -176,20 +113,20 @@ namespace NetFabric.Hyperlinq
                 {
                     if (predicate(source[index + skipCount], index))
                     {
-                        var value = (ElementResult.Success, source[index + skipCount], index);
+                        var value = source[index + skipCount];
 
                         for (index++; index < takeCount; index++)
                         {
                             if (predicate(source[index + skipCount], index))
-                                return (ElementResult.NotSingle, default, 0);
+                                return Option.None;
                         }
 
-                        return value;
+                        return Option.Some(value);
                     }
                 }
             }
 
-            return (ElementResult.Empty, default, 0);
+            return Option.None;
         }
     }
 }

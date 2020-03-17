@@ -149,22 +149,16 @@ namespace NetFabric.Hyperlinq
                 => new ReturnEnumerable<TResult>(selector(value));
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public TSource First()
-                => value;
+            public Option<TSource> ElementAt(int index)
+                => index == 0 ? Option.Some(value) : Option.None;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            [return: MaybeNull]
-            public TSource FirstOrDefault()
-                => value;
+            public Option<TSource> First()
+                => Option.Some(value);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public TSource Single()
-                => value;
-
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            [return: MaybeNull]
-            public TSource SingleOrDefault()
-                => value;
+            public Option<TSource> Single()
+                => Option.Some(value);
 
             public TSource[] ToArray()
                 => new TSource[] { value };

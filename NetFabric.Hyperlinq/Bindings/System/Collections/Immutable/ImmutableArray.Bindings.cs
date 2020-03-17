@@ -69,12 +69,16 @@ namespace NetFabric.Hyperlinq
             => ReadOnlyList.Where<ImmutableArray<TSource>, TSource>(source, predicate);
 
         [Pure]
-        public static TSource ElementAt<TSource>(this ImmutableArray<TSource> source, int index)
+        public static Option<TSource> ElementAt<TSource>(this ImmutableArray<TSource> source, int index)
             => ReadOnlyList.ElementAt<ImmutableArray<TSource>, TSource>(source, index);
+
         [Pure]
-        [return: MaybeNull]
-        public static TSource ElementAtOrDefault<TSource>(this ImmutableArray<TSource> source, int index)
-            => ReadOnlyList.ElementAtOrDefault<ImmutableArray<TSource>, TSource>(source, index);
+        public static Option<TSource> First<TSource>(this ImmutableArray<TSource> source)
+            => ReadOnlyList.First<ImmutableArray<TSource>, TSource>(source);
+
+        [Pure]
+        public static Option<TSource> Single<TSource>(this ImmutableArray<TSource> source)
+            => ReadOnlyList.Single<ImmutableArray<TSource>, TSource>(source);
 
         [Pure]
         public static ReadOnlyList.DistinctEnumerable<ImmutableArray<TSource>, TSource> Distinct<TSource>(this ImmutableArray<TSource> source, IEqualityComparer<TSource>? comparer = null)

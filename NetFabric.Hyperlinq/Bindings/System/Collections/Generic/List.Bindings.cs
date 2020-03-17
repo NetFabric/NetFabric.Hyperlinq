@@ -76,28 +76,16 @@ namespace NetFabric.Hyperlinq
             => ReadOnlyList.Where<List<TSource>, TSource>(source, predicate);
 
         [Pure]
-        public static TSource ElementAt<TSource>(this List<TSource> source, int index)
+        public static Option<TSource> ElementAt<TSource>(this List<TSource> source, int index)
             => ReadOnlyList.ElementAt<List<TSource>, TSource>(source, index);
-        [Pure]
-        [return: MaybeNull]
-        public static TSource ElementAtOrDefault<TSource>(this List<TSource> source, int index)
-            => ReadOnlyList.ElementAtOrDefault<List<TSource>, TSource>(source, index);
 
         [Pure]
-        public static TSource First<TSource>(this List<TSource> source)
+        public static Option<TSource> First<TSource>(this List<TSource> source)
             => ReadOnlyList.First<List<TSource>, TSource>(source);
-        [Pure]
-        [return: MaybeNull]
-        public static TSource FirstOrDefault<TSource>(this List<TSource> source)
-            => ReadOnlyList.FirstOrDefault<List<TSource>, TSource>(source);
 
         [Pure]
-        public static TSource Single<TSource>(this List<TSource> source)
+        public static Option<TSource> Single<TSource>(this List<TSource> source)
             => ReadOnlyList.Single<List<TSource>, TSource>(source);
-        [Pure]
-        [return: MaybeNull]
-        public static TSource SingleOrDefault<TSource>(this List<TSource> source)
-            => ReadOnlyList.SingleOrDefault<List<TSource>, TSource>(source);
 
         [Pure]
         public static ReadOnlyList.DistinctEnumerable<List<TSource>, TSource> Distinct<TSource>(this List<TSource> source, IEqualityComparer<TSource>? comparer = null)

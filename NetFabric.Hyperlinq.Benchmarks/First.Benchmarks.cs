@@ -53,56 +53,56 @@ namespace NetFabric.Hyperlinq.Benchmarks
 
         [BenchmarkCategory("Array")]
         [Benchmark]
-        public int Hyperlinq_Array() =>
+        public Option<int> Hyperlinq_Array() =>
             array.First();
 
         [BenchmarkCategory("Array")]
         [Benchmark]
-        public int Hyperlinq_Span() =>
+        public Option<int> Hyperlinq_Span() =>
             array.AsSpan().First();
 
         [BenchmarkCategory("Array")]
         [Benchmark]
-        public int Hyperlinq_Memory() =>
+        public Option<int> Hyperlinq_Memory() =>
             memory.First();
 
         [BenchmarkCategory("Enumerable_Value")]
         [Benchmark]
-        public int Hyperlinq_Enumerable_Value() =>
+        public Option<int> Hyperlinq_Enumerable_Value() =>
             Enumerable.AsValueEnumerable<TestEnumerable.Enumerable, TestEnumerable.Enumerable.Enumerator, int>(enumerableValue, enumerable => enumerable.GetEnumerator())
             .First();
 
         [BenchmarkCategory("Collection_Value")]
         [Benchmark]
-        public int Hyperlinq_Collection_Value() =>
+        public Option<int> Hyperlinq_Collection_Value() =>
             ReadOnlyCollection.AsValueEnumerable<TestCollection.Enumerable, TestCollection.Enumerable.Enumerator, int>(collectionValue, enumerable => enumerable.GetEnumerator())
             .First();
 
         [BenchmarkCategory("List_Value")]
         [Benchmark]
-        public int Hyperlinq_List_Value() =>
+        public Option<int> Hyperlinq_List_Value() =>
             ReadOnlyList.AsValueEnumerable<int>(listValue)
-            .First();
+                .First();
 
         [BenchmarkCategory("Enumerable_Reference")]
         [Benchmark]
-        public int Hyperlinq_Enumerable_Reference() =>
+        public Option<int> Hyperlinq_Enumerable_Reference() =>
             enumerableReference
             .AsValueEnumerable()
             .First();
 
         [BenchmarkCategory("Collection_Reference")]
         [Benchmark]
-        public int Hyperlinq_Collection_Reference() =>
+        public Option<int> Hyperlinq_Collection_Reference() =>
             collectionReference
             .AsValueEnumerable()
             .First();
 
         [BenchmarkCategory("List_Reference")]
         [Benchmark]
-        public int Hyperlinq_List_Reference() =>
+        public Option<int> Hyperlinq_List_Reference() =>
             listReference
-            .AsValueEnumerable()
-            .First();
+                .AsValueEnumerable()
+                .First();
     }
 }
