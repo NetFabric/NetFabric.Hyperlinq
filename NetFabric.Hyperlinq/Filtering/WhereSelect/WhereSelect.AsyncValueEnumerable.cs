@@ -176,11 +176,6 @@ namespace NetFabric.Hyperlinq
 
                 return dictionary;
             }
-
-            public ValueTask ForEachAsync(AsyncAction<TResult> action, CancellationToken cancellationToken = default)
-                => AsyncValueEnumerable.ForEachAsync<TEnumerable, TEnumerator, TSource, TResult>(source, action, predicate, selector, cancellationToken);
-            public ValueTask ForEachAsync(AsyncActionAt<TResult> action, CancellationToken cancellationToken = default)
-                => AsyncValueEnumerable.ForEachAsync<TEnumerable, TEnumerator, TSource, TResult>(source, action, predicate, selector, cancellationToken);
         }
     }
 }

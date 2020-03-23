@@ -146,11 +146,6 @@ namespace NetFabric.Hyperlinq
 
             public List<TResult> ToList()
                 => Array.ToList<TSource, TResult>(source, predicate, selector); // memory performs best
-
-            public void ForEach(Action<TResult> action)
-                => source.Span.ForEach(action, predicate, selector);
-            public void ForEach(ActionAt<TResult> action)
-                => source.Span.ForEach(action, predicate, selector);
         }
     }
 }

@@ -195,55 +195,5 @@ namespace NetFabric.Hyperlinq.UnitTests.Partitioning.SkipTake
                 .BeEnumerableOf<KeyValuePair<int, int>>()
                 .BeEqualTo(expected, false);
         }
-
-        [Theory]
-        [MemberData(nameof(TestData.SkipTakeEmpty), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.SkipTakeSingle), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.SkipTakeMultiple), MemberType = typeof(TestData))]
-        public void SkipTake_ForEach_With_ValidData_Must_Succeed(int[] source, int skipCount, int takeCount)
-        {
-            // Arrange
-            var wrapped = Wrap.AsValueReadOnlyList(source);
-            var expected = 0;
-            System.Linq.EnumerableEx.ForEach(
-                System.Linq.Enumerable.Take(
-                    System.Linq.Enumerable.Skip(wrapped, skipCount), takeCount), (item, index) => expected += item);
-
-            // Act
-            var result = 0;
-            ReadOnlyList
-                .Skip<Wrap.ValueReadOnlyList<int>, int>(wrapped, skipCount)
-                .Take(takeCount)
-                .ForEach((item, index) => result += item);
-
-            // Assert
-            _ = result.Must()
-                .BeEqualTo(expected);
-        }
-
-        [Theory]
-        [MemberData(nameof(TestData.SkipTakeEmpty), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.SkipTakeSingle), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.SkipTakeMultiple), MemberType = typeof(TestData))]
-        public void SkipTake_ForEachIndex_With_ValidData_Must_Succeed(int[] source, int skipCount, int takeCount)
-        {
-            // Arrange
-            var wrapped = Wrap.AsValueReadOnlyList(source);
-            var expected = 0;
-            System.Linq.EnumerableEx.ForEach(
-                System.Linq.Enumerable.Take(
-                    System.Linq.Enumerable.Skip(wrapped, skipCount), takeCount), (item, index) => expected += item + index);
-
-            // Act
-            var result = 0;
-            ReadOnlyList
-                .Skip<Wrap.ValueReadOnlyList<int>, int>(wrapped, skipCount)
-                .Take(takeCount)
-                .ForEach((item, index) => result += item + index);
-
-            // Assert
-            _ = result.Must()
-                .BeEqualTo(expected);
-        }
     }
 }
