@@ -65,4 +65,13 @@
   </ItemGroup>
   
   <Import Project="..\NetFabric.Hyperlinq.Generator\build\NetFabric.Hyperlinq.Generator.props" />
+  
+  <ItemGroup>
+    <UpToDateCheck Remove="Conversion\AsValueObservable\AsValueObservable.Observable.cs" />
+    <UpToDateCheck Remove="Conversion\AsValueObservable\AsValueObservable.ValueObservable.cs" />
+    <UpToDateCheck Remove="Disposables\AnonymousValueDisposable.cs" />
+    <UpToDateCheck Remove="Disposables\ValueDisposable.cs" />
+    <UpToDateCheck Remove="Filtering\Where\Where.ValueObservable.cs" />
+    <UpToDateCheck Remove="Projection\Select\Select.ValueObservable.cs" />
+  </ItemGroup>
 </Project>
