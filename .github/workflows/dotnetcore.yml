@@ -41,7 +41,7 @@ jobs:
       uses: coverallsapp/github-action@master
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
-        path-to-lcov: ./NetFabric.Hyperlinq.UnitTests/TestResults/coverage.info 
+        path-to-lcov: ./NetFabric.Hyperlinq.UnitTests/TestResults/coverage.netcoreapp3.1.info 
       
 
       
