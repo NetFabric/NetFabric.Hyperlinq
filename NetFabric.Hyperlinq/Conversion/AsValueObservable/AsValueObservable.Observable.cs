@@ -4,7 +4,7 @@ using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class Observable
+    public static partial class ValueObservable
     {
         [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -25,6 +25,9 @@ namespace NetFabric.Hyperlinq
 
             IDisposable IObservable<TSource>.Subscribe(IObserver<TSource> observer)
                 => source.Subscribe(observer);
+
+            public CountObservable<ValueObservableWrapper<TSource>, AnonymousValueDisposable<IObservable<TSource>>, TSource> Count()
+                => ValueObservable.Count<ValueObservableWrapper<TSource>, AnonymousValueDisposable<IObservable<TSource>>, TSource>(this);
         }
     }
 }
