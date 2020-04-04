@@ -132,26 +132,14 @@ namespace NetFabric.Hyperlinq
             public ReadOnlyList.WhereIndexEnumerable<TList, TSource> Where(PredicateAt<TSource> predicate)
                 => ReadOnlyList.Where<TList, TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount);
 
-            public TSource ElementAt(int index)
+            public Option<TSource> ElementAt(int index)
                 => ReadOnlyList.ElementAt<TList, TSource>(source, index, predicate, skipCount, takeCount);
 
-            [return: MaybeNull]
-            public TSource ElementAtOrDefault(int index)
-                => ReadOnlyList.ElementAtOrDefault<TList, TSource>(source, index, predicate, skipCount, takeCount);
-
-            public TSource First()
+            public Option<TSource> First()
                 => ReadOnlyList.First<TList, TSource>(source, predicate, skipCount, takeCount);
 
-            [return: MaybeNull]
-            public TSource FirstOrDefault()
-                => ReadOnlyList.FirstOrDefault<TList, TSource>(source, predicate, skipCount, takeCount);
-
-            public TSource Single()
+            public Option<TSource> Single()
                 => ReadOnlyList.Single<TList, TSource>(source, predicate, skipCount, takeCount);
-
-            [return: MaybeNull]
-            public TSource SingleOrDefault()
-                => ReadOnlyList.SingleOrDefault<TList, TSource>(source, predicate, skipCount, takeCount);
 
             public TSource[] ToArray()
                 => ReadOnlyList.ToArray<TList, TSource>(source, predicate, skipCount, takeCount);

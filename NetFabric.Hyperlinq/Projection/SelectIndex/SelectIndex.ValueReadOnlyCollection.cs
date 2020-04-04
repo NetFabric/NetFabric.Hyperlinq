@@ -127,31 +127,16 @@ namespace NetFabric.Hyperlinq
 
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public TResult ElementAt(int index)
+            public Option<TResult> ElementAt(int index)
                 => ValueReadOnlyCollection.ElementAt<TEnumerable, TEnumerator, TSource, TResult>(source, index, selector);
-                
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            [return: MaybeNull]
-            public TResult ElementAtOrDefault(int index)
-                => ValueReadOnlyCollection.ElementAtOrDefault<TEnumerable, TEnumerator, TSource, TResult>(source, index, selector);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public TResult First()
+            public Option<TResult> First()
                 => ValueReadOnlyCollection.First<TEnumerable, TEnumerator, TSource, TResult>(source, selector);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            [return: MaybeNull]
-            public TResult FirstOrDefault()
-                => ValueReadOnlyCollection.FirstOrDefault<TEnumerable, TEnumerator, TSource, TResult>(source, selector);
-
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public TResult Single()
+            public Option<TResult> Single()
                 => ValueReadOnlyCollection.Single<TEnumerable, TEnumerator, TSource, TResult>(source, selector);
-
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            [return: MaybeNull]
-            public TResult SingleOrDefault()
-                => ValueReadOnlyCollection.SingleOrDefault<TEnumerable, TEnumerator, TSource, TResult>(source, selector);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TResult[] ToArray()

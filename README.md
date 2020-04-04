@@ -85,11 +85,8 @@ namespace ConsoleApp
   - `ToDictionary(Selector<TSource, TKey>, Selector<TSource, TElement>, IEqualityComparer<TKey>)`
 - Element
   - `ElementAt()`
-  - `ElementAtOrDefault()`
   - `First()`
-  - `FirstOrDefault()`
   - `Single()`
-  - `SingleOrDefault()`
 - Filtering
   - `Where(Predicate<TSource>)`
   - `Where(PredicateAt<TSource>)`
@@ -131,6 +128,7 @@ The repository contains a [benchmarks project](https://github.com/NetFabric/NetF
 - [C# - How method calling works](http://www.levibotelho.com/development/how-method-calling-works/) by Levi Botelho
 - [Improving .NET Disruptor performance — Part 2](https://medium.com/@ocoanet/improving-net-disruptor-performance-part-2-5bf456cd595f) by Olivier Coanet
 - [Optimizing string.Count all the way from LINQ to hardware accelerated vectorized instructions](https://medium.com/@SergioPedri/optimizing-string-count-all-the-way-from-linq-to-hardware-accelerated-vectorized-instructions-186816010ad9) by Sergio Pedri 
+- [Simulating Return Type Inference in C#](https://tyrrrz.me/blog/return-type-inference) by Alexey Golub
 
 ## Credits
 

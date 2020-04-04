@@ -174,36 +174,18 @@ namespace NetFabric.Hyperlinq
 
             [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public TSource ElementAt(int index)
+            public Option<TSource> ElementAt(int index)
                 => ReadOnlyList.ElementAt<TList, TSource>(source, index, skipCount, takeCount);
 
             [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            [return: MaybeNull]
-            public TSource ElementAtOrDefault(int index)
-                => ReadOnlyList.ElementAtOrDefault<TList, TSource>(source, index, skipCount, takeCount);
-
-            [Pure]
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public TSource First()
+            public Option<TSource> First()
                 => ReadOnlyList.First<TList, TSource>(source, skipCount, takeCount);
 
             [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            [return: MaybeNull]
-            public TSource FirstOrDefault()
-                => ReadOnlyList.FirstOrDefault<TList, TSource>(source, skipCount, takeCount);
-
-            [Pure]
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public TSource Single()
+            public Option<TSource> Single()
                 => ReadOnlyList.Single<TList, TSource>(source, skipCount, takeCount);
-
-            [Pure]
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            [return: MaybeNull]
-            public TSource SingleOrDefault()
-                => ReadOnlyList.SingleOrDefault<TList, TSource>(source, skipCount, takeCount);
 
             [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]

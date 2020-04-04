@@ -7,11 +7,8 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class ValueReadOnlyCollection
     {
-        /////////////////
-        // ElementAt
-
         [Pure]
-        public static TSource ElementAt<TEnumerable, TEnumerator, TSource>(this TEnumerable source, int index) 
+        public static Option<TSource> ElementAt<TEnumerable, TEnumerator, TSource>(this TEnumerable source, int index) 
             where TEnumerable : notnull, IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
@@ -21,15 +18,15 @@ namespace NetFabric.Hyperlinq
                 while (enumerator.MoveNext())
                 {
                     if (index-- == 0)
-                        return enumerator.Current;
+                        return Option.Some(enumerator.Current);
                 }
             }
 
-            return Throw.ArgumentOutOfRangeException<TSource>(nameof(index));
+            return Option.None;
         }
 
         [Pure]
-        static TResult ElementAt<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, int index, Selector<TSource, TResult> selector) 
+        static Option<TResult> ElementAt<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, int index, Selector<TSource, TResult> selector) 
             where TEnumerable : notnull, IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
@@ -39,15 +36,15 @@ namespace NetFabric.Hyperlinq
                 while (enumerator.MoveNext())
                 {
                     if (index-- == 0)
-                        return selector(enumerator.Current);
+                        return Option.Some(selector(enumerator.Current));
                 }
             }
 
-            return Throw.ArgumentOutOfRangeException<TResult>(nameof(index));
+            return Option.None;
         }
 
         [Pure]
-        public static TResult ElementAt<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, int index, SelectorAt<TSource, TResult> selector) 
+        public static Option<TResult> ElementAt<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, int index, SelectorAt<TSource, TResult> selector) 
             where TEnumerable : notnull, IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
@@ -56,76 +53,14 @@ namespace NetFabric.Hyperlinq
                 using var enumerator = source.GetEnumerator();
                 checked
                 {
-                    for (var itemIndex = 0; enumerator.MoveNext(); itemIndex++)
+                    for (var sourceIndex = 0; enumerator.MoveNext(); sourceIndex++)
                     {
-                        if (itemIndex == index)
-                            return selector(enumerator.Current, index);
+                        if (sourceIndex == index)
+                            return Option.Some(selector(enumerator.Current, sourceIndex));
                     }
                 }
             }
-            return Throw.ArgumentOutOfRangeException<TResult>(nameof(index));
-        }
-
-        /////////////////
-        // ElementAtOrDefault
-
-        [Pure]
-        [return: MaybeNull]
-        public static TSource ElementAtOrDefault<TEnumerable, TEnumerator, TSource>(this TEnumerable source, int index) 
-            where TEnumerable : notnull, IValueReadOnlyCollection<TSource, TEnumerator>
-            where TEnumerator : struct, IEnumerator<TSource>
-        {
-            if (index >= 0 && index < source.Count)
-            {
-                using var enumerator = source.GetEnumerator();
-                while (enumerator.MoveNext())
-                {
-                    if (index-- == 0)
-                        return enumerator.Current;
-                }
-            }
-
-            return default!;
-        }
-
-        [Pure]
-        [return: MaybeNull]
-        static TResult ElementAtOrDefault<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, int index, Selector<TSource, TResult> selector) 
-            where TEnumerable : notnull, IValueReadOnlyCollection<TSource, TEnumerator>
-            where TEnumerator : struct, IEnumerator<TSource>
-        {
-            if (index >= 0 && index < source.Count)
-            {
-                using var enumerator = source.GetEnumerator();
-                while (enumerator.MoveNext())
-                {
-                    if (index-- == 0)
-                        return selector(enumerator.Current);
-                }
-            }
-
-            return default;
-        }
-
-        [Pure]
-        [return: MaybeNull]
-        public static TResult ElementAtOrDefault<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, int index, SelectorAt<TSource, TResult> selector) 
-            where TEnumerable : notnull, IValueReadOnlyCollection<TSource, TEnumerator>
-            where TEnumerator : struct, IEnumerator<TSource>
-        {
-            if (index >= 0 && index < source.Count)
-            {
-                using var enumerator = source.GetEnumerator();
-                checked
-                {
-                    for (var itemIndex = 0; enumerator.MoveNext(); itemIndex++)
-                    {
-                        if (itemIndex == index)
-                            return selector(enumerator.Current, index);
-                    }
-                }
-            }
-            return default;
+            return Option.None;
         }
     }
 }

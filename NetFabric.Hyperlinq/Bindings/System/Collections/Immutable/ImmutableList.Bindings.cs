@@ -78,28 +78,16 @@ namespace NetFabric.Hyperlinq
             => ReadOnlyList.Where<ImmutableList<TSource>, TSource>(source, predicate);
 
         [Pure]
-        public static TSource ElementAt<TSource>(this ImmutableList<TSource> source, int index)
+        public static Option<TSource> ElementAt<TSource>(this ImmutableList<TSource> source, int index)
             => ReadOnlyList.ElementAt<ImmutableList<TSource>, TSource>(source, index);
-        [Pure]
-        [return: MaybeNull]
-        public static TSource ElementAtOrDefault<TSource>(this ImmutableList<TSource> source, int index)
-            => ReadOnlyList.ElementAtOrDefault<ImmutableList<TSource>, TSource>(source, index);
 
         [Pure]
-        public static TSource First<TSource>(this ImmutableList<TSource> source)
+        public static Option<TSource> First<TSource>(this ImmutableList<TSource> source)
             => ReadOnlyList.First<ImmutableList<TSource>, TSource>(source);
-        [Pure]
-        [return: MaybeNull]
-        public static TSource FirstOrDefault<TSource>(this ImmutableList<TSource> source)
-            => ReadOnlyList.FirstOrDefault<ImmutableList<TSource>, TSource>(source);
 
         [Pure]
-        public static TSource Single<TSource>(this ImmutableList<TSource> source)
+        public static Option<TSource> Single<TSource>(this ImmutableList<TSource> source)
             => ReadOnlyList.Single<ImmutableList<TSource>, TSource>(source);
-        [Pure]
-        [return: MaybeNull]
-        public static TSource SingleOrDefault<TSource>(this ImmutableList<TSource> source)
-            => ReadOnlyList.SingleOrDefault<ImmutableList<TSource>, TSource>(source);
 
         [Pure]
         public static ReadOnlyList.DistinctEnumerable<ImmutableList<TSource>, TSource> Distinct<TSource>(this ImmutableList<TSource> source, IEqualityComparer<TSource>? comparer = null)

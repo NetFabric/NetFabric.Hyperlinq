@@ -217,9 +217,7 @@ namespace NetFabric.Hyperlinq
                 public override void CopyTo(TSource[] array, int _)
                 {
                     if (value is object)
-                    {
-                        System.Array.Fill<TSource>(array, value);
-                    }
+                        System.Array.Fill(array, value);
                 }
             }
         }

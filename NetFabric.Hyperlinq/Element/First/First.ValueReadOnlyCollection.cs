@@ -8,7 +8,7 @@ namespace NetFabric.Hyperlinq
     public static partial class ValueReadOnlyCollection
     {
         [Pure]
-        public static TSource First<TEnumerable, TEnumerator, TSource>(this TEnumerable source) 
+        public static Option<TSource> First<TEnumerable, TEnumerator, TSource>(this TEnumerable source) 
             where TEnumerable : notnull, IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
@@ -16,14 +16,14 @@ namespace NetFabric.Hyperlinq
             {
                 using var enumerator = source.GetEnumerator();
                 if (enumerator.MoveNext())
-                    return enumerator.Current;
+                    return Option.Some(enumerator.Current);
             }
-            return Throw.EmptySequence<TSource>();
+            return Option.None;
         }
 
         [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static TResult First<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, Selector<TSource, TResult> selector) 
+        public static Option<TResult> First<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, Selector<TSource, TResult> selector) 
             where TEnumerable : notnull, IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
@@ -31,14 +31,14 @@ namespace NetFabric.Hyperlinq
             {
                 using var enumerator = source.GetEnumerator();
                 if (enumerator.MoveNext())
-                    return selector(enumerator.Current);
+                    return Option.Some(selector(enumerator.Current));
             }
-            return Throw.EmptySequence<TResult>();
+            return Option.None;
         }
 
         [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static TResult First<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, SelectorAt<TSource, TResult> selector) 
+        public static Option<TResult> First<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, SelectorAt<TSource, TResult> selector) 
             where TEnumerable : notnull, IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
@@ -46,56 +46,9 @@ namespace NetFabric.Hyperlinq
             {
                 using var enumerator = source.GetEnumerator();
                 if (enumerator.MoveNext())
-                    return selector(enumerator.Current, 0);
+                    return Option.Some(selector(enumerator.Current, 0));
             }
-            return Throw.EmptySequence<TResult>();
-        }
-
-        /////////////////////////
-        // FirstOrDefault
-
-        [Pure]
-        public static TSource FirstOrDefault<TEnumerable, TEnumerator, TSource>(this TEnumerable source) 
-            where TEnumerable : notnull, IValueReadOnlyCollection<TSource, TEnumerator>
-            where TEnumerator : struct, IEnumerator<TSource>
-        {
-            if (source.Count != 0)
-            {
-                using var enumerator = source.GetEnumerator();
-                if (enumerator.MoveNext())
-                    return enumerator.Current;
-            }
-            return default;
-        }
-
-        [Pure]
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static TResult FirstOrDefault<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, Selector<TSource, TResult> selector) 
-            where TEnumerable : notnull, IValueReadOnlyCollection<TSource, TEnumerator>
-            where TEnumerator : struct, IEnumerator<TSource>
-        {
-            if (source.Count != 0)
-            {
-                using var enumerator = source.GetEnumerator();
-                if (enumerator.MoveNext())
-                    return selector(enumerator.Current);
-            }
-            return default;
-        }
-
-        [Pure]
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static TResult FirstOrDefault<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, SelectorAt<TSource, TResult> selector) 
-            where TEnumerable : notnull, IValueReadOnlyCollection<TSource, TEnumerator>
-            where TEnumerator : struct, IEnumerator<TSource>
-        {
-            if (source.Count != 0)
-            {
-                using var enumerator = source.GetEnumerator();
-                if (enumerator.MoveNext())
-                    return selector(enumerator.Current, 0);
-            }
-            return default;
+            return Option.None;
         }
     }
 }

@@ -7,136 +7,70 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class Array
     {
-        /////////////////
-        // ElementAt
-
         [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ref readonly TSource ElementAt<TSource>(this ReadOnlySpan<TSource> source, int index) 
-            => ref index < 0 || index >= source.Length ? 
-                ref Throw.ArgumentOutOfRangeExceptionRef<TSource>(nameof(index)) : 
-                ref source[index];
+        public static Option<TSource> ElementAt<TSource>(this ReadOnlySpan<TSource> source, int index) 
+            => index < 0 || index >= source.Length 
+                ? Option.None 
+                : Option.Some(source[index]);
 
         [Pure]
-        static ref readonly TSource ElementAt<TSource>(this ReadOnlySpan<TSource> source, int index, Predicate<TSource> predicate) 
+        static Option<TSource> ElementAt<TSource>(this ReadOnlySpan<TSource> source, int index, Predicate<TSource> predicate) 
         {
             if (index >= 0)
             {
-                for (var itemIndex = 0; itemIndex < source.Length; itemIndex++)
+                for (var sourceIndex = 0; sourceIndex < source.Length; sourceIndex++)
                 {
-                    if (predicate(source[itemIndex]) && index-- == 0)
-                        return ref source[itemIndex];
+                    var item = source[sourceIndex];
+                    if (predicate(item) && index-- == 0)
+                        return Option.Some(item);
                 }
             }
-            return ref Throw.ArgumentOutOfRangeExceptionRef<TSource>(nameof(index));
+            return Option.None;
         }
 
         [Pure]
-        static ref readonly TSource ElementAt<TSource>(this ReadOnlySpan<TSource> source, int index, PredicateAt<TSource> predicate) 
+        static Option<TSource> ElementAt<TSource>(this ReadOnlySpan<TSource> source, int index, PredicateAt<TSource> predicate) 
         {
             if (index >= 0)
             {
                 for (var sourceIndex = 0; sourceIndex < source.Length; sourceIndex++)
                 {
-                    if (predicate(source[sourceIndex], sourceIndex) && index-- == 0)
-                        return ref source[sourceIndex];
+                    var item = source[sourceIndex];
+                    if (predicate(item, sourceIndex) && index-- == 0)
+                        return Option.Some(item);
                 }
             }
-            return ref Throw.ArgumentOutOfRangeExceptionRef<TSource>(nameof(index));
+            return Option.None;
         }
 
         [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static TResult ElementAt<TSource, TResult>(this ReadOnlySpan<TSource> source, int index, Selector<TSource, TResult> selector) 
-            => index < 0 || index >= source.Length ? 
-                Throw.ArgumentOutOfRangeException<TResult>(nameof(index)) : 
-                selector(source[index]);
+        static Option<TResult> ElementAt<TSource, TResult>(this ReadOnlySpan<TSource> source, int index, Selector<TSource, TResult> selector) 
+            => index < 0 || index >= source.Length 
+                ? Option.None 
+                : Option.Some(selector(source[index]));
 
         [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static TResult ElementAt<TSource, TResult>(this ReadOnlySpan<TSource> source, int index, SelectorAt<TSource, TResult> selector) 
-            => index < 0 || index >= source.Length ? 
-                Throw.ArgumentOutOfRangeException<TResult>(nameof(index)) : 
-                selector(source[index], index);
+        public static Option<TResult> ElementAt<TSource, TResult>(this ReadOnlySpan<TSource> source, int index, SelectorAt<TSource, TResult> selector) 
+            => index < 0 || index >= source.Length 
+                ? Option.None 
+                : Option.Some(selector(source[index], index));
 
         [Pure]
-        static TResult ElementAt<TSource, TResult>(this ReadOnlySpan<TSource> source, int index, Predicate<TSource> predicate, Selector<TSource, TResult> selector) 
+        static Option<TResult> ElementAt<TSource, TResult>(this ReadOnlySpan<TSource> source, int index, Predicate<TSource> predicate, Selector<TSource, TResult> selector) 
         {
             if (index >= 0)
             {
                 for (var sourceIndex = 0; sourceIndex < source.Length; sourceIndex++)
                 {
-                    if (predicate(source[sourceIndex]) && index-- == 0)
-                        return selector(source[sourceIndex]);
+                    var item = source[sourceIndex];
+                    if (predicate(item) && index-- == 0)
+                        return Option.Some(selector(item));
                 }
             }
-            return Throw.ArgumentOutOfRangeException<TResult>(nameof(index));
-        }
-
-        /////////////////
-        // ElementAtOrDefault
-
-        [Pure]
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ref readonly TSource ElementAtOrDefault<TSource>(this ReadOnlySpan<TSource> source, int index) 
-            => ref index < 0 || index >= source.Length ? 
-                ref Default<TSource>.Value : 
-                ref source[index];
-
-        [Pure]
-        static ref readonly TSource ElementAtOrDefault<TSource>(this ReadOnlySpan<TSource> source, int index, Predicate<TSource> predicate) 
-        {
-            if (index >= 0)
-            {
-                for (var sourceIndex = 0; sourceIndex < source.Length; sourceIndex++)
-                {
-                    if (predicate(source[sourceIndex]) && index-- == 0)
-                        return ref source[sourceIndex];
-                }
-            }
-            return ref Default<TSource>.Value;
-        }    
-
-        [Pure]
-        static ref readonly TSource ElementAtOrDefault<TSource>(this ReadOnlySpan<TSource> source, int index, PredicateAt<TSource> predicate) 
-        {
-            if (index >= 0)
-            {
-                for (var sourceIndex = 0; sourceIndex < source.Length; sourceIndex++)
-                {
-                    if (predicate(source[sourceIndex], sourceIndex) && index-- == 0)
-                        return ref source[sourceIndex];
-                }
-            }
-            return ref Default<TSource>.Value;
-        }    
-
-        [Pure]
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static TResult ElementAtOrDefault<TSource, TResult>(this ReadOnlySpan<TSource> source, int index, Selector<TSource, TResult> selector) 
-            => index < 0 || index >= source.Length ? 
-                default : 
-                selector(source[index]);
-
-        [Pure]
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static TResult ElementAtOrDefault<TSource, TResult>(this ReadOnlySpan<TSource> source, int index, SelectorAt<TSource, TResult> selector) 
-            => index < 0 || index >= source.Length ? 
-                default : 
-                selector(source[index], index);
-
-        [Pure]
-        static TResult ElementAtOrDefault<TSource, TResult>(this ReadOnlySpan<TSource> source, int index, Predicate<TSource> predicate, Selector<TSource, TResult> selector) 
-        {
-            if (index >= 0)
-            {
-                for (var sourceIndex = 0; sourceIndex < source.Length; sourceIndex++)
-                {
-                    if (predicate(source[sourceIndex]) && index-- == 0)
-                        return selector(source[sourceIndex]);
-                }
-            }
-            return Default<TResult>.Value;
+            return Option.None;
         }
     }
 }

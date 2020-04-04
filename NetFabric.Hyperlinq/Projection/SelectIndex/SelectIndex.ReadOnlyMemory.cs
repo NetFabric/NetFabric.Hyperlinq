@@ -163,36 +163,18 @@ namespace NetFabric.Hyperlinq
 
             [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public TResult ElementAt(int index)
+            public Option<TResult> ElementAt(int index)
                 => Array.ElementAt<TSource, TResult>(source.Span, index, selector);
 
             [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            [return: MaybeNull]
-            public TResult ElementAtOrDefault(int index)
-                => Array.ElementAtOrDefault<TSource, TResult>(source.Span, index, selector);
-
-            [Pure]
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public TResult First()
+            public Option<TResult> First()
                 => Array.First<TSource, TResult>(source.Span, selector);
 
             [Pure]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            [return: MaybeNull]
-            public TResult FirstOrDefault()
-                => Array.FirstOrDefault<TSource, TResult>(source.Span, selector);
-
-            [Pure]
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public TResult Single()
+            public Option<TResult> Single()
                 => Array.Single<TSource, TResult>(source.Span, selector);
-
-            [Pure]
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            [return: MaybeNull]
-            public TResult SingleOrDefault()
-                => Array.SingleOrDefault<TSource, TResult>(source.Span, selector);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TResult[] ToArray()
