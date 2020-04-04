@@ -9,6 +9,6 @@ namespace NetFabric.Hyperlinq
         [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Option<TSource> First<TSource>(this TSource[] source)
-            => First<TSource>(source.AsSpan());
+            => First<TSource>((ReadOnlySpan<TSource>)source.AsSpan());
     }
 }
