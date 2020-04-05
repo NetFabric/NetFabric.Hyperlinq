@@ -115,10 +115,9 @@ namespace NetFabric.Hyperlinq
 
         [Pure]
         public readonly bool Contains(T value, IEqualityComparer<T>? comparer = null) 
-            => hasValue 
-            && (comparer is null 
-                    ? EqualityComparer<T>.Default.Equals(this.value, value) 
-                    : comparer.Equals(this.value, value));
+            => hasValue && (comparer is null 
+                ? EqualityComparer<T>.Default.Equals(this.value, value) 
+                : comparer.Equals(this.value, value));
 
         [Pure]
         public readonly Option<T> Where(Predicate<T> predicate) 
