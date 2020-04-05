@@ -1,5 +1,7 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
 using System.Runtime.CompilerServices;
 using System.Threading;
@@ -146,6 +148,13 @@ namespace NetFabric.Hyperlinq
 
         [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public readonly SelectManyEnumerable<TSubEnumerable, TSubEnumerator, TResult> SelectMany<TSubEnumerable, TSubEnumerator, TResult>(Selector<T, TSubEnumerable> selector) 
+            where TSubEnumerable : notnull, IValueEnumerable<TResult, TSubEnumerator>
+            where TSubEnumerator : struct, IEnumerator<TResult>
+            => new SelectManyEnumerable<TSubEnumerable, TSubEnumerator, TResult>(in this, selector);
+
+        [Pure]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public readonly Option<T> ElementAt(int index)
             => index == 0 
                 ? this 
@@ -172,5 +181,92 @@ namespace NetFabric.Hyperlinq
             => hasValue 
                 ? new List<T>(1) { value } 
                 : new List<T>(0); 
+
+
+        [GeneratorMapping("TSource", "TResult")]
+        public readonly partial struct SelectManyEnumerable<TSubEnumerable, TSubEnumerator, TResult>
+            : IValueEnumerable<TResult, SelectManyEnumerable<TSubEnumerable, TSubEnumerator, TResult>.Enumerator>
+            where TSubEnumerable : notnull, IValueEnumerable<TResult, TSubEnumerator>
+            where TSubEnumerator : struct, IEnumerator<TResult>
+        {
+            readonly Option<T> source;
+            readonly Selector<T, TSubEnumerable> selector;
+
+            internal SelectManyEnumerable(in Option<T> source, Selector<T, TSubEnumerable> selector)
+            {
+                this.source = source;
+                this.selector = selector;
+            }
+
+            [Pure]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public readonly Enumerator GetEnumerator() => new Enumerator(in this);
+            readonly IEnumerator<TResult> IEnumerable<TResult>.GetEnumerator() => new Enumerator(in this);
+            readonly IEnumerator IEnumerable.GetEnumerator() => new Enumerator(in this);
+
+            public struct Enumerator
+                : IEnumerator<TResult>
+            {
+                readonly Option<T> source; 
+                readonly Selector<T, TSubEnumerable> selector;
+                [SuppressMessage("Style", "IDE0044:Add readonly modifier")]
+                TSubEnumerator subEnumerator; // do not make readonly
+                int state;
+                TResult current;
+
+                internal Enumerator(in SelectManyEnumerable<TSubEnumerable, TSubEnumerator, TResult> enumerable)
+                {
+                    source = enumerable.source;
+                    selector = enumerable.selector;
+                    subEnumerator = default;
+                    state = 0;
+                    current = default;
+                }
+
+                [MaybeNull]
+                public readonly TResult Current
+                    => current;
+                readonly object IEnumerator.Current 
+                    => current;
+
+                public bool MoveNext()
+                {
+                    switch (state)
+                    {
+                        case 0:
+                            if (source.IsSome)
+                            {
+                                subEnumerator = selector(source.Value).GetEnumerator();
+                                state = 1;
+                                goto case 1;
+                            }
+                            state = 2;
+                            goto case 2;
+
+                        case 1:
+                            if (subEnumerator.MoveNext())
+                            {
+                                current = subEnumerator.Current;
+                                return true;
+                            }
+                            current = default;
+                            Dispose();
+                            state = 2;
+                            goto case 2;
+
+                        case 2:
+                            return false;
+                    }
+                    return false;
+                }
+
+                [ExcludeFromCodeCoverage]
+                public readonly void Reset() 
+                    => throw new NotSupportedException();
+
+                public void Dispose() 
+                    => subEnumerator.Dispose();
+            }
+        }
     }
 }
