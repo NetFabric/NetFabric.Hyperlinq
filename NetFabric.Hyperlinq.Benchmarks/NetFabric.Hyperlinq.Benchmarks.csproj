@@ -13,7 +13,7 @@
     <Compile Remove="Generation.Benchmarks.cs" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="BenchmarkDotNet" Version="0.12.0" />
+    <PackageReference Include="BenchmarkDotNet" Version="0.12.1" />
     <PackageReference Include="LinqFaster" Version="1.0.0" />
     <PackageReference Include="LinqFaster.SIMD" Version="1.0.3" />
     <PackageReference Include="System.Interactive" Version="4.1.1" />
