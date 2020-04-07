@@ -8,60 +8,205 @@
 
 # NetFabric.Hyperlinq
 
-*Hyperlinq* outperforms *LINQ* on collections that implement `IReadOnlyList<T>` (E.g. arrays and `List<T>`) and collections that have value-typed enumerators (E.g. collections in the `System.Collections.Generic` and `System.Collections.Immutable` namespaces). For any other collection, it also outperforms *LINQ* when multiple operations are composed.
+Hyperlinq** is an alternative implementation of several operations found in both the `System.Linq` and `System.Linq.Async` namespaces:
 
-This implementation favors performance and reduction of heap allocations, in detriment of assembly binary size (lots of overloads).
+- Uses value-types to improve performance by making method calls non-virtual and reducing GC collections by not allocating on the heap. 
+
+- Adds support for `Span<>` and `Memory<>`.
+
+This implementation **favors performance in detriment of assembly binary size** (lots of overloads).
+
+## Contents
+
+- [Usage](#usage)
+  - [BCL Collections](#bcl-collections)
+  - [AsValueEnumerable and AsAsyncValueEnumerable](#asvalueenumerable-and-asasyncvalueenumerable)
+  - [Method return types](#method-return-types)
+  - [Composition](#composition)
+  - [Option](#option)
+- [Documentation](#documentation)
+- [Supported operations](#supported-operations)
+- [Benchmarks](#benchmarks)
+- [References](#references)
+- [Credits](#credits)
+- [License](#license)
 
 ## Usage
 
-1. Add the *NetFabric.Hyperlinq* [NuGet package](https://www.nuget.org/packages/NetFabric.Hyperlinq/) to your project.
-1. Optionally, also add the *NetFabric.Hyperlinq.Analyzer* [NuGet package](https://www.nuget.org/packages/NetFabric.Hyperlinq.Analyzer/) to your project. It's a Roslyn analyzer that suggests performance improvements on your enumeration source code. No dependencies are added to your assemblies.
-1. Add an `using NetFabric.Hyperlinq` directive to all source code files where you want to use *NetFabric.Hyperlinq*.
-1. Use the `ValueEnumerable` static class for generation operations (E.g. `ValueEnumerable.Empty()`, `ValueEnumerable.Range(...)`, `ValueEnumerable.Repeat(...)`, `ValueEnumerable.Return(...)`, etc.)
-1. *NetFabric.Hyperlinq* and *System.Linq* namespaces can co-exist:
-   1. *NetFabric.Hyperlinq* uses explicit collection types and higher-order interfaces on its extension methods. These take precedence over the `IEnumerable<T>` extension methods implemented in *System.Linq*.
-   1. In the cases where doesn't automatically apply, use the `AsValueEnumerable<TSource>()` extension method. *NetFabric.Hyperlinq* implementations will then be used for the subsequent operations. For collections that are value-types and/or return enumerators that are value-types, favor the use of the `AsValueEnumerable<TEnumerable, TEnumerator, TSource>()` overload to avoid boxing.
-   1. *NetFabric.Hyperlinq* does not implement all *System.Linq* operations. In these cases, the `System.Linq` implementations will be automatically used. You'll can use `AsValueEnumerable()` on its result to apply *NetFabric.Hyperlinq* implementations from that point on.
+1. Add the [*NetFabric.Hyperlinq* NuGet package](https://www.nuget.org/packages/NetFabric.Hyperlinq/) to your project.
+1. Optionally, also add the [*NetFabric.Hyperlinq.Analyzer* NuGet package](https://www.nuget.org/packages/NetFabric.Hyperlinq.Analyzer/) to your project. It's a Roslyn analyzer that suggests performance improvements on your enumeration source code. No dependencies are added to your assemblies.
+1. Add an `using NetFabric.Hyperlinq` directive to all source code files where you want to use *NetFabric.Hyperlinq*. It can coexist with `System.Linq` and `System.Linq.Async` directives:
 
-```csharp
-using System.Collections.Generic;
+``` csharp
+using System;
 using System.Linq;
+using System.Linq.Async;
 using NetFabric.Hyperlinq; // add this directive
+```
 
-namespace ConsoleApp
+### BCL Collections
+
+*NetFabric.Hyperlinq* includes bindings for collections available in the namespaces; `System`, `System.Collections.Generic` and `System.Collections.Immutable`. This includes:
+
+- arrays
+- `Span<>`, `ReadOnlySpan<>`, `Memory<>` and `ReadOnlyMemory<>`
+- `List<>`, `Dictionary<>`, `Stack<>`, ...
+- `ImmutableArray<>`, `ImmutableList<>`, `ImmutableStack<>`, ...
+
+For all these collections, once the directive is added, *NetFabric.Hyperlinq* will used automatically.
+
+``` csharp
+public static void Example(ReadOnlySpan<int> span)
 {
-    class Program
-    {
-        static void Main()
-        {
-            var list = ValueEnumerable.Range(0, 10).ToList(); // Hyperlinq operations are used
+  var result = span
+    .Where(item => item > 2)
+    .Select(item => item * 2);
 
-            var a = list // Hyperlinq operations are used by default on List<>
-                .Where(i => i > 0) 
-                .Select(i => i * 10);
-            
-            var b = list // Hyperlinq operations are used by default on List<>
-                .Where(i => i > 0) 
-                .OrderByDescending(i => i) // Hyperlinq does not yet support this operation so LINQ is used
-                .AsValueEnumerable() // Hyperlinq operations are used on subsequent operations
-                .Select(i => i * 10);
-
-            var c = MyRange(0, 10) // LINQ operations are used by default on IEnumerable<>
-                .AsValueEnumerable() // Hyperlinq operations are used on subsequent operations
-                .Where(i => i > 0)
-                .Count();
-        }
-
-        // 'yield' generates a reference-type enumerable with a reference-type enumerator
-        static IEnumerable<int> MyRange(int start, int count)
-        {
-            var end = start + count;
-            for (var value = start; value < end; value++)
-                yield return value;
-        }
-    }
+  foreach(var value in result)
+    Console.WriteLine(value);
 }
 ```
+
+### AsValueEnumerable and AsAsyncValueEnumerable
+
+*NetFabric.Hyperlinq* implements operations (extension methods) for the interfaces:
+
+- `IValueEnumerable<,>`
+- `IValueReadOnlyCollection<,>`
+- `IValueReadOnlyList<,>`
+- `IAsyncValueEnumerable<,>`
+
+If the collection does not implement any of these, you have to use the conversion methods `AsValueEnumerable()` or `AsAsyncValueEnumerable()` to use the *NetFabric.Hyperlinq* operations. (Except for the BCL collections where specific bindings are provided.)
+
+In the following example, `AsValueEnumerable()` converts `IReadOnlyList<>` to `IValueReadOnlyList<>`. The subsequent operations used are the ones implemented in *NetFabric.Hyperlinq* (if available):
+
+``` csharp
+public static void Example(IReadOnlyList<int> list)
+{
+  var result = list
+    .AsValueEnumerable()
+    .Where(item => item > 2)
+    .Select(item => item * 2);
+
+  foreach(var value in result)
+  {
+    Console.WriteLine(value);
+  }
+}
+```
+
+The conversion methods can also be applied to the output of *LINQ* operators. This is useful when you use operations not available in *NetFabric.Hyperlinq* or that do not return a value enumeration interfaces.
+
+``` csharp
+public static void Example(IReadOnlyList<int> list)
+{
+  var result = list
+    .AsValueEnumerable()
+    .Where(item => item > 2)
+    .OrderByDescending(item => item) // does not return a value enumeration interfaces
+    .AsValueEnumerable()
+    .Select(item => item * 2);
+
+  foreach(var value in result)
+    Console.WriteLine(value);
+}
+```
+
+All value enumeration interfaces derive from `IEnumerable<>` or `IAsyncEnumerable` so, as you can see in the previous example, they can be used as the input of *LINQ* operations or of any other third-party library.
+
+### Generation operations
+
+In *NetFabric.Hyperlinq*, the generation operations like `Empty()`, `Range()`, `Repeat()` and `Return()` are static methods implemented in the static class `ValueEnumerable`. To use these, instead of the ones from *LINQ*, simply replace `Enumerable` for `ValueEnumerable`.
+
+``` csharp
+public static void Example(int count)
+{
+  var source = ValueEnumerable
+    .Range(0, count)
+    .Select(item => item * 2);
+
+  foreach(var value in source)
+    Console.WriteLine(value);
+}
+```
+
+### Method return types
+
+Usually, when returning a query, it's used `IEnumerable<>` as the method return type:
+
+``` csharp
+public static IEnumerable<int> Example(int count)
+  => ValueEnumerable
+    .Range(0, count)
+    .Select(value => value * 2);
+```
+
+This allows the caller to use *LINQ* or a `foreach` loop to pull and process the result. *NetFabric.Hyperlinq* can also be used but the `AsValueEnumerable()` conversion method has to be used.
+
+The operation in *NetFabric.Hyperlinq* are implemented so that they return the highest level enumeration interface possible. For example, the `Range()` operation returns `IValueReadOnlyList<,>` and the subsequent `Select()` does not change this. `IValueReadOnlyList<,>` derives from `IReadOnlyList<>` so, we can change the method to return this interface:
+
+``` csharp
+public static IReadOnlyList<int> Example(int count)
+  => ValueEnumerable
+    .Range(0, count)
+    .Select(value => value * 2);
+```
+
+Now, the caller is free to use the enumerator or the indexer, which are provided by this interface. This means that, all previous methods of iteration can be used plus the `for` loops, which are much more efficient. The indexer performs fewer internal operations and doesn't need an enumerator instance. *NetFabric.Hyperlinq* can also be used and the `AsValueEnumerable()` conversion method still has to be used but, *NetFabric.Hyperlinq* will now use the indexer.
+
+Otherwise, *NetFabric.Hyperlinq* will use enumerators. It implements all enumerators as value types. This allows the enumerators not to be allocated on the heap and calls to its methods to be non-virtual. The `IEnumerable<>` interface, and all other derived BCL interfaces, convert the enumerator to the `IEnumerator<>` interface. This results in the enumerator to be boxed, undoing the mentioned benefits.
+
+*NetFabric.Hyperlinq* defines value enumerable interfaces that contain the enumerator type as a generic parameter. This allows the caller to use it without boxing. Consider changing the method to return one of these interfaces:
+
+``` csharp
+public static IValueReadOnlyList<int, ReadOnlyList.SelectEnumerable<ValueEnumerable.RangeEnumerable, int, int>.DisposableEnumerator> Example(int count)
+  => ValueEnumerable
+    .Range(0, count)
+    .Select(value => value * 2);
+```
+
+The caller is now able to use *NetFabric.Hyperlinq* without requiring the `AsValueEnumerable()` conversion method. In this case, it will use the indexer in all subsequent operations but the enumerator is still available. In other cases (`IValueEnumerable<,>`, `IValueReadOnlyCollection<,>` and `IAsyncValueEnumerable<,>`) it will use the enumerator.
+
+Finding the correct generic types is hard but the *NetFabric.Hyperlinq.Analyzer* can help you. It will inform you when the type can be changed and to what types.
+
+*NetFabric.Hyperlinq* also implements the enumerables as value types. Returning an interface means that the enumerable will still be boxed. If you want to also avoid this, consider changing the return type to be the actual enumerable type. In this case:
+
+``` csharp
+public static ReadOnlyList.SelectEnumerable<ValueEnumerable.RangeEnumerable, int, int> Example(int count)
+  => ValueEnumerable
+    .Range(0, count)
+    .Select(value => value * 2);
+```
+
+The *NetFabric.Hyperlinq.Analyzer* can also help you here.
+
+**NOTE:** Returning the enumerable type or a value enumeration interface, allows major performance improvements but creates a library design issue. Changes in the method implementation may result in changes to the retun type. This is a breaking change. This is an issue on the public API but not so much for the private and internal methods. Take this into consideration when deciding on the return type.
+
+### Composition
+
+*NetFabric.Hyperlinq* operations can be composed just like with *LINQ*. The difference is on how each one optimizes the internals to reduce the number of enumerators required to iterate the values.
+
+Both *LINQ* and *NetFabric.Hyperlinq* optimize the code in the following example so that only one enumerator is used to perform both the `Where()` and the `Select()`:
+
+``` csharp
+var result = source.Where(item => item > 2).Select(item => item * 2);
+```
+
+But, *LINQ* does not do the same for this other example:
+
+``` csharp
+var result = source.Where(item => item > 2).First();
+```
+
+*LINQ* has a second overload for methods, like `First()` and `Single()`, that take the predicate as a parameter and allow the `Where()` to be removed. In *NetFabric.Hyperlinq* this is not required. It optimizes internally the code to have the same behavior. With the intention of reducing the code to be mantained and tested, these other overloads actually are not available.
+
+*NetFabric.Hyperlinq* includes many more composition optimizations. In the following code, only one enumerator is used because of the `Where()` operation. The `Select()` is only applied after `First()`, so that is only applied to only one item:
+
+``` csharp
+var result = array.Skip(2).Take(10).Where(item => item > 2).Select(item => item * 2).First();
+```
+
+### Option
 
 ## Documentation
 
