@@ -200,10 +200,10 @@ var result = source.Where(item => item > 2).First();
 
 *LINQ* has a second overload for methods, like `First()` and `Single()`, that take the predicate as a parameter and allow the `Where()` to be removed. In *NetFabric.Hyperlinq* this is not required. It optimizes internally the code to have the same behavior. With the intention of reducing the code to be mantained and tested, these other overloads actually are not available.
 
-*NetFabric.Hyperlinq* includes many more composition optimizations. In the following code, only one enumerator is used because of the `Where()` operation. The `Select()` is only applied after `First()`, so that is only applied to only one item:
+*NetFabric.Hyperlinq* includes many more composition optimizations. In the following code, only one enumerator is used, and only because of the `Where()` operation. Otherwise, the indexer would be used instead. The `Select()` is applied after `First()`, so that it's applied to only one of the items:
 
 ``` csharp
-var result = array.Skip(2).Take(10).Where(item => item > 2).Select(item => item * 2).First();
+var result = array.Skip(1).Take(10).Where(item => item > 2).Select(item => item * 2).First();
 ```
 
 ### Option
