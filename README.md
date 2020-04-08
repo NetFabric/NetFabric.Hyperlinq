@@ -89,9 +89,7 @@ public static void Example(IReadOnlyList<int> list)
     .Select(item => item * 2);
 
   foreach(var value in result)
-  {
     Console.WriteLine(value);
-  }
 }
 ```
 
@@ -208,7 +206,60 @@ var result = array.Skip(1).Take(10).Where(item => item > 2).Select(item => item 
 
 ### Option
 
+In *LINQ*, the aggregation operations like `First()`, `Single()` and `ElementAt()`, throw an exception when the source has no items. Often, empty collections are a valid scenario and exception handling is very slow. *LINQ* has alternative methods like `FirstOrDefault()`, `SingleOrDefault()` and `ElementAtOrDefault()`, that return the `default` value instead of throwing. This is still an issue when the items are value-typed, where there's no way to distinguish between an empty collection and a valid item.
+
+In *NetFabric.Hyperlinq*, aggregation operations return an `Option<>` type. This is similar in behavior to the [`Nullable<>`](https://docs.microsoft.com/en-us/dotnet/api/system.nullable-1) but it can contain reference types. 
+
+Here's a small example using `First()`:
+
+``` csharp
+var result = source.First();
+if (result.IsSome)
+  Console.WriteLine(result.Value);
+```
+
+It also provides a deconstructor so, you can convert it to a tuple:
+
+``` csharp
+var (isSome, value) = source.First();
+if (isSome)
+  Console.WriteLine(value);
+```
+
+If you prefer a more functional approach, you can use `Match()` to specify the value returned when the collection has values and when it's empty. Here's how to use it to define the previous behavior of `First()` and `FirstOrDefault()`:
+
+``` csharp
+var first = source.First().Match(
+  item => item,
+  () => throw new InvalidOperationException("Sequence contains no elements"));
+
+var firstOrDefault = source.First().Match(
+  item => item,
+  () => default);
+
+Console.WriteLine(first);
+Console.WriteLine(firstOrDefault);
+```
+
+`Match()` can also be used to define actions:
+
+``` csharp
+source.First().Match(
+  item => Console.WriteLine(item),
+  () => { });
+```
+
+The *NetFabric.Hyperlinq* operations can be applied to `Option<>`, including `Where()`, `Select()` and `SelectMany()`. These return another `Option<>` with the predicate/selector applied to the value, if it exists.
+
+```csharp
+source.First().Where(item => item > 2).Match(
+  item => Console.WriteLine(item),
+  () => { });
+```
+
 ## Documentation
+
+Articles explaining implementation:
 
 - [Optimizing LINQ](https://medium.com/@antao.almada/netfabric-hyperlinq-optimizing-linq-348e02566cef)
 - [Generation Operations](https://medium.com/@antao.almada/netfabric-hyperlinq-generation-operations-6530826a70ca)
