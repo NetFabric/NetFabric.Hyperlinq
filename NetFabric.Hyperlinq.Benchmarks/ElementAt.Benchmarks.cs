@@ -8,7 +8,6 @@ namespace NetFabric.Hyperlinq.Benchmarks
     [CategoriesColumn]
     [MemoryDiagnoser]
     [MarkdownExporterAttribute.GitHub]
-    [DisassemblyDiagnoser(printAsm: true, printSource: true)]
     public class ElementAtBenchmarks : BenchmarksBase
     {
         [BenchmarkCategory("Array")]
