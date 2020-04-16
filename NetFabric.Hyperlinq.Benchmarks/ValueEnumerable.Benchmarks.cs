@@ -19,10 +19,8 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Count { get; set; }
 
         [GlobalSetup]
-        public void GlobalSetup()
-        {
-            source = new RangeEnumerable(Count);
-        }
+        public void GlobalSetup() 
+            => source = new RangeEnumerable(Count);
 
         [BenchmarkCategory("Count")]
         [Benchmark(Baseline = true)]
@@ -222,10 +220,8 @@ namespace NetFabric.Hyperlinq.Benchmarks
         {
             readonly int count;
 
-            internal RangeEnumerable(int count)
-            {
-                this.count = count;
-            }
+            internal RangeEnumerable(int count) 
+                => this.count = count;
 
             readonly IEnumerator<int> IEnumerable<int>.GetEnumerator() => new Enumerator(count);
             readonly IEnumerator IEnumerable.GetEnumerator() => new Enumerator(count);
@@ -239,7 +235,9 @@ namespace NetFabric.Hyperlinq.Benchmarks
             public struct Enumerator : IEnumerator<int>
             {
                 readonly int count;
+#pragma warning disable IDE0032 // Use auto property
                 int current;
+#pragma warning restore IDE0032 // Use auto property
 
                 internal Enumerator(int count)
                 {
@@ -285,7 +283,9 @@ namespace NetFabric.Hyperlinq.Benchmarks
             public struct MyValueEnumerator : IMyValueEnumerator<int>
             {
                 readonly int count;
+#pragma warning disable IDE0032 // Use auto property
                 int current;
+#pragma warning restore IDE0032 // Use auto property
 
                 internal MyValueEnumerator(int count)
                 {
