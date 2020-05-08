@@ -43,6 +43,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\NetFabric.Hyperlinq.Interfaces\NetFabric.Hyperlinq.Interfaces.csproj" />
+    <ProjectReference Include="..\NetFabric.Hyperlinq.SourceGenerator\NetFabric.Hyperlinq.SourceGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
   </ItemGroup>
 
   <ItemGroup>

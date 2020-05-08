@@ -51,7 +51,7 @@ namespace NetFabric.Hyperlinq
             TSource IList<TSource>.this[int index]
             {
                 get => this[index];
-                set => throw new NotSupportedException();
+                set => throw new NotImplementedException();
             }
 
             bool ICollection<TSource>.IsReadOnly  
@@ -64,19 +64,19 @@ namespace NetFabric.Hyperlinq
                     array[index] = value;
             }
             void ICollection<TSource>.Add(TSource item) 
-                => throw new NotSupportedException();
+                => throw new NotImplementedException();
             void ICollection<TSource>.Clear() 
-                => throw new NotSupportedException();
+                => throw new NotImplementedException();
             bool ICollection<TSource>.Remove(TSource item) 
-                => throw new NotSupportedException();
+                => throw new NotImplementedException();
             int IList<TSource>.IndexOf(TSource item)
                 => count > 0 && EqualityComparer<TSource>.Default.Equals(value, item)
                     ? 0
                     : -1;
             void IList<TSource>.Insert(int index, TSource item)
-                => throw new NotSupportedException();
+                => throw new NotImplementedException();
             void IList<TSource>.RemoveAt(int index)
-                => throw new NotSupportedException();
+                => throw new NotImplementedException();
 
             public struct Enumerator
             {
@@ -154,8 +154,8 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Contains(TSource value, IEqualityComparer<TSource>? comparer = null)
-                => comparer is null
-                    ? count != 0 && EqualityComparer<TSource>.Default.Equals(this.value, value)
+                => comparer is null 
+                    ? count != 0 && EqualityComparer<TSource>.Default.Equals(this.value, value) 
                     : count != 0 && comparer.Equals(this.value, value);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
