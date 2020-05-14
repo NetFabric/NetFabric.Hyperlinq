@@ -48,7 +48,6 @@ namespace NetFabric.Hyperlinq
 
             public readonly int Count => takeCount;
 
-            [MaybeNull]
             public readonly TResult this[int index]
             {
                 get
@@ -67,7 +66,6 @@ namespace NetFabric.Hyperlinq
             readonly IEnumerator<TResult> IEnumerable<TResult>.GetEnumerator() => new DisposableEnumerator(in this);
             readonly IEnumerator IEnumerable.GetEnumerator() => new DisposableEnumerator(in this);
 
-            [MaybeNull]
             TResult IList<TResult>.this[int index]
             {
                 get => this[index];
@@ -155,7 +153,6 @@ namespace NetFabric.Hyperlinq
                     index = -1;
                 }
 
-                [MaybeNull]
                 public readonly TResult Current
                     => selector(source[index + skipCount], index);
                 readonly object? IEnumerator.Current 

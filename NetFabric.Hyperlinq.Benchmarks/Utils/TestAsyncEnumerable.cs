@@ -9,11 +9,11 @@ namespace NetFabric.Hyperlinq.Benchmarks
     {
 #pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
         public static async IAsyncEnumerable<int> ReferenceType(int count)
-#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
         {
             for (var value = 0; value < count; value++)
                 yield return value;            
         }
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
 
         public static AsyncEnumerable ValueType(int count) 
             => new AsyncEnumerable(count);
@@ -34,22 +34,20 @@ namespace NetFabric.Hyperlinq.Benchmarks
             {
                 readonly int count;
                 readonly CancellationToken cancellationToken;
-                int current;
 
                 public AsyncEnumerator(int count, CancellationToken cancellationToken)
                 {
                     this.count = count;
                     this.cancellationToken = cancellationToken;
-                    current = -1;
+                    Current = -1;
                 }
 
-                public int Current 
-                    => current;
+                public int Current { get; private set; }
 
                 public ValueTask<bool> MoveNextAsync() 
                 {
                     cancellationToken.ThrowIfCancellationRequested();
-                    return new ValueTask<bool>(++current < count);
+                    return new ValueTask<bool>(++Current < count);
                 }
 
                 public ValueTask DisposeAsync() 

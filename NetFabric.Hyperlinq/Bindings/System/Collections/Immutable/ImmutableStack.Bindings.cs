@@ -144,7 +144,6 @@ namespace NetFabric.Hyperlinq
                 internal Enumerator(ImmutableStack<TSource> enumerable) 
                     => enumerator = enumerable.GetEnumerator();
 
-                [MaybeNull]
                 public readonly TSource Current 
                     => enumerator.Current;
                 readonly object? IEnumerator.Current 

@@ -14,14 +14,10 @@ namespace NetFabric.Hyperlinq.Benchmarks
 
         public readonly struct Enumerable : IReadOnlyList<int>, IList<int>
         {
-            readonly int count;
+            public Enumerable(int count) 
+                => Count = count;
 
-            public Enumerable(int count)
-            {
-                this.count = count;
-            }
-
-            public readonly int Count => count;
+            public readonly int Count { get; }
 
             public readonly int this[int index] => index;
 
@@ -41,33 +37,32 @@ namespace NetFabric.Hyperlinq.Benchmarks
             public void RemoveAt(int index) => throw new NotImplementedException();
 
             public readonly bool Contains(int item)
-                => item >= 0 && item < count;
+                => item >= 0 && item < Count;
 
             public readonly void CopyTo(int[] array, int arrayIndex)
             {
-                for (var item = 0; item < count; item++)
+                for (var item = 0; item < Count; item++)
                     array[arrayIndex + item] = item;
             }
 
-            public readonly Enumerator GetEnumerator() => new Enumerator(count);
-            readonly IEnumerator<int> IEnumerable<int>.GetEnumerator() => new Enumerator(count);
-            readonly IEnumerator IEnumerable.GetEnumerator() => new Enumerator(count);
+            public readonly Enumerator GetEnumerator() => new Enumerator(Count);
+            readonly IEnumerator<int> IEnumerable<int>.GetEnumerator() => new Enumerator(Count);
+            readonly IEnumerator IEnumerable.GetEnumerator() => new Enumerator(Count);
 
             public struct Enumerator : IEnumerator<int>
             {
                 readonly int count;
-                int current;
 
                 public Enumerator(int count)
                 {
                     this.count = count;
-                    current = -1;
+                    Current = -1;
                 }
 
-                public int Current => current;
-                object IEnumerator.Current => current;
+                public int Current { get; private set; }
+                object IEnumerator.Current => Current;
 
-                public bool MoveNext() => ++current < count;
+                public bool MoveNext() => ++Current < count;
 
                 public void Reset() => throw new NotSupportedException();
 
@@ -75,16 +70,14 @@ namespace NetFabric.Hyperlinq.Benchmarks
             }
         }
 
+#pragma warning disable HLQ006 // GetEnumerator() or GetAsyncEnumerator() should return a value type.
+
         class EnumerableReferenceType : IReadOnlyList<int>, IList<int>
         {
-            readonly int count;
+            public EnumerableReferenceType(int count) 
+                => Count = count;
 
-            public EnumerableReferenceType(int count)
-            {
-                this.count = count;
-            }
-
-            public int Count => count;
+            public int Count { get; }
 
             public int this[int index] => index;
 
@@ -104,37 +97,39 @@ namespace NetFabric.Hyperlinq.Benchmarks
             public void RemoveAt(int index) => throw new NotImplementedException();
 
             public bool Contains(int item)
-                => item >= 0 && item < count;
+                => item >= 0 && item < Count;
 
             public void CopyTo(int[] array, int arrayIndex)
             {
-                for (var item = 0; item < count; item++)
+                for (var item = 0; item < Count; item++)
                     array[arrayIndex + item] = item;
             }
 
-            public IEnumerator<int> GetEnumerator() => new Enumerator(count);
-            IEnumerator IEnumerable.GetEnumerator() => new Enumerator(count);
+            public IEnumerator<int> GetEnumerator() => new Enumerator(Count);
+            IEnumerator IEnumerable.GetEnumerator() => new Enumerator(Count);
 
             class Enumerator : IEnumerator<int>
             {
                 readonly int count;
-                int current;
 
                 public Enumerator(int count)
                 {
                     this.count = count;
-                    current = -1;
+                    Current = -1;
                 }
 
-                public int Current => current;
-                object IEnumerator.Current => current;
+                public int Current { get; private set; }
+                object IEnumerator.Current => Current;
 
-                public bool MoveNext() => ++current < count;
+                public bool MoveNext() => ++Current < count;
 
                 public void Reset() => throw new NotSupportedException();
 
                 public void Dispose() { }
             }
         }
+
+#pragma warning restore HLQ006 // GetEnumerator() or GetAsyncEnumerator() should return a value type.
+
     }
 }

@@ -33,7 +33,6 @@ namespace NetFabric.Hyperlinq
             public readonly int Count
                 => takeCount;
 
-            [MaybeNull]
             public readonly TSource this[int index]
             {
                 get
@@ -51,7 +50,6 @@ namespace NetFabric.Hyperlinq
             readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new Enumerator(in this);
             readonly IEnumerator IEnumerable.GetEnumerator() => new Enumerator(in this);
 
-            [MaybeNull]
             TSource IList<TSource>.this[int index]
             {
                 get => this[index];
@@ -103,7 +101,6 @@ namespace NetFabric.Hyperlinq
                     index = enumerable.skipCount - 1;
                 }
 
-                [MaybeNull]
                 public readonly TSource Current
                     => source[index];
                 readonly object? IEnumerator.Current 

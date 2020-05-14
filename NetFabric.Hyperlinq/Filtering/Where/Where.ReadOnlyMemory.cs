@@ -53,7 +53,6 @@ namespace NetFabric.Hyperlinq
                     index = -1;
                 }
 
-                [MaybeNull]
                 public readonly ref readonly TSource Current 
                     => ref source[index];
 
@@ -82,7 +81,6 @@ namespace NetFabric.Hyperlinq
                     index = -1;
                 }
 
-                [MaybeNull] 
                 public readonly TSource Current 
                     => source.Span[index];
                 readonly object? IEnumerator.Current 
@@ -131,7 +129,9 @@ namespace NetFabric.Hyperlinq
                 => Array.First(source.Span, predicate);
 
             public Option<TSource> Single()
+#pragma warning disable HLQ005 // Avoid Single() and SingleOrDefault()
                 => Array.Single(source.Span, predicate);
+#pragma warning restore HLQ005 // Avoid Single() and SingleOrDefault()
 
             public TSource[] ToArray()
                 => Array.ToArray<TSource>(source.Span, predicate);

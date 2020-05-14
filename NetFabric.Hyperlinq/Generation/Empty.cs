@@ -34,7 +34,6 @@ namespace NetFabric.Hyperlinq
             IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new DisposableEnumerator();
             IEnumerator IEnumerable.GetEnumerator() => new DisposableEnumerator();
 
-            [MaybeNull]
             TSource IList<TSource>.this[int index]
             {
                 get => this[index];
@@ -76,7 +75,6 @@ namespace NetFabric.Hyperlinq
                 : IEnumerator<TSource>
             {
                 [ExcludeFromCodeCoverage]
-                [MaybeNull]
                 public readonly TSource Current
                     => default!;
 

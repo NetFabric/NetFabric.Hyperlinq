@@ -31,18 +31,17 @@ namespace NetFabric.Hyperlinq.Benchmarks
             public struct Enumerator : IEnumerator<int>
             {
                 readonly int count;
-                int current;
 
                 public Enumerator(int count)
                 {
                     this.count = count;
-                    current = -1;
+                    Current = -1;
                 }
 
-                public int Current => current;
-                object IEnumerator.Current => current;
+                public int Current { get; private set; }
+                object IEnumerator.Current => Current;
 
-                public bool MoveNext() => ++current < count;
+                public bool MoveNext() => ++Current < count;
 
                 public void Reset() => throw new NotSupportedException();
 

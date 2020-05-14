@@ -16,10 +16,6 @@
     <PackageReference Include="BenchmarkDotNet" Version="0.12.1" />
     <PackageReference Include="LinqFaster" Version="1.0.0" />
     <PackageReference Include="LinqFaster.SIMD" Version="1.0.3" />
-    <PackageReference Include="NetFabric.Hyperlinq.Analyzer" Version="1.5.5">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
     <PackageReference Include="System.Interactive" Version="4.1.1" />
     <PackageReference Include="System.Linq.Async" Version="4.1.1" />
     <ProjectReference Include="..\NetFabric.Hyperlinq\NetFabric.Hyperlinq.csproj" />

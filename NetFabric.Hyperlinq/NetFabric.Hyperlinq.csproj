@@ -34,12 +34,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="NetFabric.Hyperlinq.Analyzer" Version="1.5.5">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
     <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="4.7.1" />
-    <PackageReference Include="Uno.SourceGenerationTasks" Version="2.0.6">
+    <PackageReference Include="Uno.SourceGenerationTasks" Version="2.0.0-dev.16">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
@@ -69,4 +65,8 @@
   </ItemGroup>
   
   <Import Project="..\NetFabric.Hyperlinq.Generator\build\NetFabric.Hyperlinq.Generator.props" />
+  
+  <ItemGroup>
+    <UpToDateCheck Remove="GlobalSuppressions.cs" />
+  </ItemGroup>
 </Project>

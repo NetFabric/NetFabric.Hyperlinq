@@ -53,7 +53,6 @@ namespace NetFabric.Hyperlinq
                     index = -1;
                 }
 
-                [MaybeNull]
                 public readonly ref readonly TSource Current 
                     => ref source[index];
 
@@ -82,7 +81,6 @@ namespace NetFabric.Hyperlinq
                     index = -1;
                 }
 
-                [MaybeNull] 
                 public readonly TSource Current 
                     => source.Span[index];
                 readonly object? IEnumerator.Current 

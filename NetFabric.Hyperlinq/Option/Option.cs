@@ -211,7 +211,6 @@ namespace NetFabric.Hyperlinq
                 [SuppressMessage("Style", "IDE0044:Add readonly modifier")]
                 TSubEnumerator subEnumerator; // do not make readonly
                 int state;
-                TResult current;
 
                 internal Enumerator(in SelectManyEnumerable<TSubEnumerable, TSubEnumerator, TResult> enumerable)
                 {
@@ -219,14 +218,15 @@ namespace NetFabric.Hyperlinq
                     selector = enumerable.selector;
                     subEnumerator = default;
                     state = 0;
-                    current = default;
+                    Current = default!;
                 }
 
                 [MaybeNull]
-                public readonly TResult Current
-                    => current;
-                readonly object IEnumerator.Current 
-                    => current;
+#pragma warning disable CS8766 // Nullability of reference types in return type doesn't match implicitly implemented member (possibly because of nullability attributes).
+                public TResult Current { get; private set; }
+#pragma warning restore CS8766 // Nullability of reference types in return type doesn't match implicitly implemented member (possibly because of nullability attributes).
+                readonly object? IEnumerator.Current 
+                    => Current;
 
                 public bool MoveNext()
                 {
@@ -245,10 +245,10 @@ namespace NetFabric.Hyperlinq
                         case 1:
                             if (subEnumerator.MoveNext())
                             {
-                                current = subEnumerator.Current;
+                                Current = subEnumerator.Current;
                                 return true;
                             }
-                            current = default;
+                            Current = default!;
                             Dispose();
                             state = 2;
                             goto case 2;

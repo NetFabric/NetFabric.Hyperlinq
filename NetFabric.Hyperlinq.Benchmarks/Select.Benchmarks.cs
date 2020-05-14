@@ -95,9 +95,10 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [Benchmark]
         public int Hyperlinq_Array()
         {
+            var source = array.Select(item => item);
             var sum = 0;
-            foreach (var item in array.Select(item => item))
-                sum += item;
+            for (var index = 0; index < source.Count; index++)
+                sum += source[index];
             return sum;
         }
 
@@ -105,9 +106,10 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [Benchmark]
         public int Hyperlinq_Span()
         {
+            var source = array.AsSpan().Select(item => item);
             var sum = 0;
-            foreach (var item in array.AsSpan().Select(item => item))
-                sum += item;
+            for (var index = 0; index < source.Count; index++)
+                sum += source[index];
             return sum;
         }
 
@@ -115,9 +117,10 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [Benchmark]
         public int Hyperlinq_Memory()
         {
+            var source = memory.Select(item => item);
             var sum = 0;
-            foreach (var item in memory.Select(item => item))
-                sum += item;
+            for (var index = 0; index < source.Count; index++)
+                sum += source[index];
             return sum;
         }
 
@@ -178,9 +181,10 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [Benchmark]
         public int Hyperlinq_List_Reference()
         {
+            var source = listReference.AsValueEnumerable().Select(item => item);
             var sum = 0;
-            foreach (var item in listReference.AsValueEnumerable().Select(item => item))
-                sum += item;
+            for (var index = 0; index < source.Count; index++)
+                sum += source[index];
             return sum;
         }
     }

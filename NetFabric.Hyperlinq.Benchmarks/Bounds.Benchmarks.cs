@@ -21,8 +21,10 @@ namespace NetFabric.Hyperlinq.Benchmarks
         {
             array = ValueEnumerable.Range(0, Count).ToArray();
             intervalArray = ValueEnumerable.Range(0, Count + 200).ToArray();
+#pragma warning disable HLQ001 // Assigment to interface causes boxing of enumerator
             list = ValueEnumerable.Range(0, Count).ToList();
             intervalList = ValueEnumerable.Range(0, Count + 200).ToList();
+#pragma warning restore HLQ001 // Assigment to interface causes boxing of enumerator
         }
 
         [Benchmark(Baseline = true)]

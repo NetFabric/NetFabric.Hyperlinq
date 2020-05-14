@@ -17,7 +17,9 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public void GlobalSetup()
         {
             enumerable = TestEnumerable.ReferenceType(10);
+#pragma warning disable HLQ001 // Assigment to interface causes boxing of enumerator
             list = ValueEnumerable.Range(0, 10).ToList();
+#pragma warning restore HLQ001 // Assigment to interface causes boxing of enumerator
         }
 
         [Benchmark(Baseline = true)]

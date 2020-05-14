@@ -25,7 +25,6 @@ namespace NetFabric.Hyperlinq
 
             public readonly int Count => source.Length;
 
-            [MaybeNull]
             public readonly ref readonly TSource this[int index] 
                 => ref source.Span[index];
 
@@ -39,14 +38,12 @@ namespace NetFabric.Hyperlinq
             readonly IEnumerator IEnumerable.GetEnumerator() 
                 => new DisposableEnumerator(source);
 
-            [MaybeNull]
             TSource IList<TSource>.this[int index]
             {
                 get => source.Span[index];
                 set => throw new NotImplementedException();
             }
                 
-            [MaybeNull]
             readonly TSource IReadOnlyList<TSource>.this[int index] 
                 => source.Span[index];
 
@@ -93,7 +90,6 @@ namespace NetFabric.Hyperlinq
                     index = -1;
                 }
 
-                [MaybeNull]
                 public readonly ref readonly TSource Current 
                     => ref source[index];
 
@@ -114,10 +110,8 @@ namespace NetFabric.Hyperlinq
                     index = -1;
                 }
 
-                [MaybeNull]
                 public readonly ref readonly TSource Current 
                     => ref source.Span[index];
-                [MaybeNull]
                 readonly TSource IEnumerator<TSource>.Current 
                     => source.Span[index];
                 readonly object? IEnumerator.Current 

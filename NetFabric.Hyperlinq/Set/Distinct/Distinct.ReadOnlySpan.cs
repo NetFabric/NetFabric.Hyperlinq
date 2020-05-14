@@ -34,19 +34,17 @@ namespace NetFabric.Hyperlinq
                 readonly ReadOnlySpan<TSource> source;
                 readonly HashSet<TSource> set;
                 int index;
-                TSource current;
 
                 internal Enumerator(in SpanDistinctEnumerable<TSource> enumerable)
                 {
                     source = enumerable.source;
                     set = new HashSet<TSource>(enumerable.comparer);
                     index = -1;
-                    current = default!;
+                    Current = default!;
                 }
 
                 [MaybeNull]
-                public readonly TSource Current
-                    => current;
+                public TSource Current { get; private set; }
 
                 public bool MoveNext()
                 {
@@ -54,7 +52,7 @@ namespace NetFabric.Hyperlinq
                     {
                         if (set.Add(source[index]))
                         {
-                            current = source[index];
+                            Current = source[index];
                             return true;
                         }
                     }

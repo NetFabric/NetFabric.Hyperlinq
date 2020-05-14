@@ -95,7 +95,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Hyperlinq_Array()
         {
             var sum = 0;
-            foreach (var item in array.Where(item => (item & 0x01) == 0).Where(item => (item & 0x01) == 0))
+            foreach (ref readonly var item in array.Where(item => (item & 0x01) == 0).Where(item => (item & 0x01) == 0))
                 sum += item;
             return sum;
         }
@@ -105,7 +105,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Hyperlinq_Span()
         {
             var sum = 0;
-            foreach (var item in array.AsSpan().Where(item => (item & 0x01) == 0).Where(item => (item & 0x01) == 0))
+            foreach (ref readonly var item in array.AsSpan().Where(item => (item & 0x01) == 0).Where(item => (item & 0x01) == 0))
                 sum += item;
             return sum;
         }
@@ -115,7 +115,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Hyperlinq_Memory()
         {
             var sum = 0;
-            foreach (var item in memory.Where(item => (item & 0x01) == 0).Where(item => (item & 0x01) == 0))
+            foreach (ref readonly var item in memory.Where(item => (item & 0x01) == 0).Where(item => (item & 0x01) == 0))
                 sum += item;
             return sum;
         }

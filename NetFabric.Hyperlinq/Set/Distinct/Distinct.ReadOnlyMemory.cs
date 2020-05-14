@@ -43,19 +43,17 @@ namespace NetFabric.Hyperlinq
                 readonly ReadOnlySpan<TSource> source;
                 readonly HashSet<TSource> set;
                 int index;
-                TSource current;
 
                 internal Enumerator(in MemoryDistinctEnumerable<TSource> enumerable)
                 {
                     source = enumerable.source.Span;
                     set = new HashSet<TSource>(enumerable.comparer);
                     index = -1;
-                    current = default!;
+                    Current = default!;
                 }
 
                 [MaybeNull]
-                public readonly TSource Current
-                    => current;
+                public TSource Current { get; private set; }
 
                 public bool MoveNext()
                 {
@@ -63,7 +61,7 @@ namespace NetFabric.Hyperlinq
                     {
                         if (set.Add(source[index]))
                         {
-                            current = source[index];
+                            Current = source[index];
                             return true;
                         }
                     }
@@ -77,21 +75,21 @@ namespace NetFabric.Hyperlinq
                 readonly ReadOnlyMemory<TSource> source;
                 readonly HashSet<TSource> set;
                 int index;
-                TSource current;
 
                 internal DisposableEnumerator(in MemoryDistinctEnumerable<TSource> enumerable)
                 {
                     source = enumerable.source;
                     set = new HashSet<TSource>(enumerable.comparer);
                     index = -1;
-                    current = default!;
+                    Current = default!;
                 }
 
                 [MaybeNull]
-                public readonly TSource Current 
-                    => current;
+#pragma warning disable CS8766 // Nullability of reference types in return type doesn't match implicitly implemented member (possibly because of nullability attributes).
+                public TSource Current { get; private set; }
+#pragma warning restore CS8766 // Nullability of reference types in return type doesn't match implicitly implemented member (possibly because of nullability attributes).
                 readonly object? IEnumerator.Current 
-                    => current;
+                    => Current;
 
                 public bool MoveNext()
                 {
@@ -100,7 +98,7 @@ namespace NetFabric.Hyperlinq
                     {
                         if (set.Add(span[index]))
                         {
-                            current = span[index];
+                            Current = span[index];
                             return true;
                         }
                     }
