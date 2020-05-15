@@ -128,7 +128,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Generation
 
             // Assert
             _ = result.Must()
-                .BeOfType<int[]>()
+                .BeArrayOf<int>()
                 .BeEnumerableOf<int>()
                 .BeEqualTo(expected);
         }
