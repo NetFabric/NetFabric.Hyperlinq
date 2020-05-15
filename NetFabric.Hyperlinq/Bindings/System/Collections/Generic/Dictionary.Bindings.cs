@@ -86,7 +86,9 @@ namespace NetFabric.Hyperlinq
 
         [Pure]
         public static Option<KeyValuePair<TKey, TValue>> Single<TKey, TValue>(this Dictionary<TKey, TValue> source)
+#pragma warning disable HLQ005 // Avoid Single() and SingleOrDefault()
             => ValueReadOnlyCollection.Single<ValueWrapper<TKey, TValue>, Dictionary<TKey, TValue>.Enumerator, KeyValuePair<TKey, TValue>>(new ValueWrapper<TKey, TValue>(source));
+#pragma warning restore HLQ005 // Avoid Single() and SingleOrDefault()
 
         [Pure]
         public static ValueEnumerable.DistinctEnumerable<ValueWrapper<TKey, TValue>, Dictionary<TKey, TValue>.Enumerator, KeyValuePair<TKey, TValue>> Distinct<TKey, TValue>(this Dictionary<TKey, TValue> source, IEqualityComparer<KeyValuePair<TKey, TValue>>? comparer = null)

@@ -1,3 +1,5 @@
+#pragma warning disable HLQ005 // Avoid Single() and SingleOrDefault()
+
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Configs;
 using System;
@@ -100,3 +102,5 @@ namespace NetFabric.Hyperlinq.Benchmarks
             .Where(value => value == Count - 1).Single();
     }
 }
+
+#pragma warning restore HLQ005 // Avoid Single() and SingleOrDefault()

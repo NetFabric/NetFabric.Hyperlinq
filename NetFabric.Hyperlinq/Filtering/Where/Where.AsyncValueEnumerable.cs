@@ -56,7 +56,6 @@ namespace NetFabric.Hyperlinq
                     this.cancellationToken = cancellationToken;
                 }
 
-                [MaybeNull]
                 public readonly TSource Current
                     => enumerator.Current;
 

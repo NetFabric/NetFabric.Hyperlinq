@@ -77,7 +77,6 @@ namespace NetFabric.Hyperlinq
                 internal AsyncEnumerator(IAsyncEnumerable<TSource> enumerable, CancellationToken cancellationToken)
                     => enumerator = enumerable.GetAsyncEnumerator(cancellationToken);
 
-                [MaybeNull]
                 public readonly TSource Current 
                     => enumerator.Current;
 

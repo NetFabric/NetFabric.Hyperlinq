@@ -135,7 +135,6 @@ namespace NetFabric.Hyperlinq
             public int Count
                 => source.Count;
 
-            [MaybeNull]
             public TSource this[int index]
                 => source[index];
 
@@ -144,7 +143,6 @@ namespace NetFabric.Hyperlinq
             IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => source.GetEnumerator();
             IEnumerator IEnumerable.GetEnumerator() => source.GetEnumerator();
 
-            [MaybeNull]
             TSource IList<TSource>.this[int index]
             {
                 get => source[index];

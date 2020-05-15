@@ -21,7 +21,7 @@ namespace NetFabric.Hyperlinq
             : IValueReadOnlyList<TSource, RepeatEnumerable<TSource>.DisposableEnumerator>
             , IList<TSource>
         {
-            internal readonly TSource value;
+            [AllowNull, MaybeNull] internal readonly TSource value;
             internal readonly int count;
 
             internal RepeatEnumerable([AllowNull] TSource value, int count)
@@ -32,7 +32,6 @@ namespace NetFabric.Hyperlinq
 
             public readonly int Count => count;
 
-            [MaybeNull]
             public readonly TSource this[int index]
             {
                 get
@@ -50,7 +49,6 @@ namespace NetFabric.Hyperlinq
             readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new DisposableEnumerator(in this);
             readonly IEnumerator IEnumerable.GetEnumerator() => new DisposableEnumerator(in this);
 
-            [MaybeNull]
             TSource IList<TSource>.this[int index]
             {
                 get => this[index];
@@ -83,7 +81,7 @@ namespace NetFabric.Hyperlinq
 
             public struct Enumerator
             {
-                readonly TSource value;
+                [AllowNull, MaybeNull] readonly TSource value;
                 int counter;
 
                 internal Enumerator(in RepeatEnumerable<TSource> enumerable)
@@ -104,7 +102,7 @@ namespace NetFabric.Hyperlinq
             public struct DisposableEnumerator
                 : IEnumerator<TSource>
             {
-                readonly TSource value;
+                [AllowNull, MaybeNull] readonly TSource value;
                 int counter;
 
                 internal DisposableEnumerator(in RepeatEnumerable<TSource> enumerable)
@@ -113,9 +111,8 @@ namespace NetFabric.Hyperlinq
                     counter = enumerable.count;
                 }
 
-                [MaybeNull]
                 public readonly TSource Current
-                    => value;
+                    => value!;
                 readonly object? IEnumerator.Current 
                     => value;
 

@@ -36,14 +36,12 @@ namespace NetFabric.Hyperlinq
             readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new Enumerator(source);
             readonly IEnumerator IEnumerable.GetEnumerator() => new Enumerator(source);
 
-            [MaybeNull]
             TSource IList<TSource>.this[int index]
             {
                 get => source[index];
                 set => throw new NotImplementedException();
             }
 
-            [MaybeNull]
             TSource IReadOnlyList<TSource>.this[int index]
                 => source[index];
 
@@ -91,7 +89,6 @@ namespace NetFabric.Hyperlinq
                     index = -1;
                 }
 
-                [MaybeNull]
                 public readonly TSource Current 
                     => source[index];
                 readonly object? IEnumerator.Current 

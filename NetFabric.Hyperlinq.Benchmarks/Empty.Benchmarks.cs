@@ -19,6 +19,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
             return sum;
         }
 
+#pragma warning disable HLQ010 // Consider using a 'for' loop instead.
         [BenchmarkCategory("Empty()")]
         [Benchmark]
         public int Hyperlinq_Empty_ForEach()
@@ -28,6 +29,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
                 sum += item;
             return sum;
         }
+#pragma warning restore HLQ010 // Consider using a 'for' loop instead.
 
         [BenchmarkCategory("Empty()")]
         [Benchmark]
@@ -60,6 +62,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
             return sum;
         }
 
+#pragma warning disable HLQ010 // Consider using a 'for' loop instead.
         [BenchmarkCategory("Empty().Select()")]
         [Benchmark]
         public int Hyperlinq_Empty_Select_ForEach()
@@ -69,6 +72,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
                 sum += item;
             return sum;
         }
+#pragma warning restore HLQ010 // Consider using a 'for' loop instead.
 
         [BenchmarkCategory("Empty().Select()")]
         [Benchmark]

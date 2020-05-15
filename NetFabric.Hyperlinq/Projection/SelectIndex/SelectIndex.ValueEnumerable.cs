@@ -57,7 +57,6 @@ namespace NetFabric.Hyperlinq
                     index = -1;
                 }
 
-                [MaybeNull]
                 public readonly TResult Current
                     => selector(enumerator.Current, index);
                 readonly object? IEnumerator.Current 

@@ -17,16 +17,13 @@ namespace NetFabric.Hyperlinq
             : IValueReadOnlyList<TSource, ReturnEnumerable<TSource>.DisposableEnumerator>
             , IList<TSource>
         {
-            internal readonly TSource value;
+            [AllowNull, MaybeNull] internal readonly TSource value;
 
-            internal ReturnEnumerable(TSource value)
-            {
-                this.value = value;
-            }
+            internal ReturnEnumerable([MaybeNull] TSource value) 
+                => this.value = value;
 
             public readonly int Count => 1;
 
-            [MaybeNull]
             public readonly TSource this[int index]
             {
                 get
@@ -44,7 +41,6 @@ namespace NetFabric.Hyperlinq
             readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new DisposableEnumerator(in this);
             readonly IEnumerator IEnumerable.GetEnumerator() => new DisposableEnumerator(in this);
 
-            [MaybeNull]
             TSource IList<TSource>.this[int index]
             {
                 get => this[index];
@@ -73,7 +69,7 @@ namespace NetFabric.Hyperlinq
 
             public struct Enumerator
             {
-                readonly TSource value;
+                [AllowNull, MaybeNull] readonly TSource value;
                 bool moveNext;
 
                 internal Enumerator(in ReturnEnumerable<TSource> enumerable)
@@ -82,9 +78,8 @@ namespace NetFabric.Hyperlinq
                     moveNext = true;
                 }
 
-                [MaybeNull]
                 public readonly TSource Current
-                    => value;
+                    => value!;
 
                 public bool MoveNext()
                 {
@@ -100,7 +95,7 @@ namespace NetFabric.Hyperlinq
             public struct DisposableEnumerator
                 : IEnumerator<TSource>
             {
-                readonly TSource value;
+                [AllowNull, MaybeNull] readonly TSource value;
                 bool moveNext;
 
                 internal DisposableEnumerator(in ReturnEnumerable<TSource> enumerable)
@@ -109,9 +104,8 @@ namespace NetFabric.Hyperlinq
                     moveNext = true;
                 }
 
-                [MaybeNull]
                 public readonly TSource Current
-                    => value;
+                    => value!;
                 readonly object? IEnumerator.Current 
                     => value;
 

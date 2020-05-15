@@ -52,7 +52,6 @@ namespace NetFabric.Hyperlinq
                     counter = enumerable.count;
                 }
 
-                [MaybeNull]
                 public readonly TSource Current
                     => enumerator.Current;
 

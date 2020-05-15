@@ -1,3 +1,5 @@
+#pragma warning disable HLQ005 // Avoid Single() and SingleOrDefault()
+
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Configs;
 using JM.LinqFaster;
@@ -135,3 +137,5 @@ namespace NetFabric.Hyperlinq.Benchmarks
             .Single();
     }
 }
+
+#pragma warning restore HLQ005 // Avoid Single() and SingleOrDefault()

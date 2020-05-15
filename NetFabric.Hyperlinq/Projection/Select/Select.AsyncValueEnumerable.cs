@@ -51,25 +51,25 @@ namespace NetFabric.Hyperlinq
                 TEnumerator enumerator; // do not make readonly
                 readonly AsyncSelector<TSource, TResult> selector;
                 readonly CancellationToken cancellationToken;
-                [MaybeNull] TResult current;
 
                 internal Enumerator(in SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult> enumerable, CancellationToken cancellationToken)
                 {
                     enumerator = enumerable.source.GetAsyncEnumerator(cancellationToken);
                     selector = enumerable.selector;
                     this.cancellationToken = cancellationToken;
-                    current = default!;
+                    Current = default!;
                 }
 
                 [MaybeNull]
-                public readonly TResult Current
-                    => current;
+#pragma warning disable CS8766 // Nullability of reference types in return type doesn't match implicitly implemented member (possibly because of nullability attributes).
+                public TResult Current { get; private set; }
+#pragma warning restore CS8766 // Nullability of reference types in return type doesn't match implicitly implemented member (possibly because of nullability attributes).
 
                 public async ValueTask<bool> MoveNextAsync()
                 {
                     if (await enumerator.MoveNextAsync().ConfigureAwait(false))
                     {
-                        current = await selector(enumerator.Current, cancellationToken).ConfigureAwait(false);
+                        Current = await selector(enumerator.Current, cancellationToken).ConfigureAwait(false);
                         return true;
                     }
                     await DisposeAsync().ConfigureAwait(false);

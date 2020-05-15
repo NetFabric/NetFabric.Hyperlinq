@@ -169,7 +169,7 @@ namespace NetFabric.Hyperlinq.Generator
         {
             var mappingAttributeSymbol = GetGeneratorMappingAttributeSymbol(compilation);
             return type.GetAllAttributes()
-                .Where(attribute => attribute.AttributeClass.Equals(mappingAttributeSymbol))
+                .Where(attribute => SymbolEqualityComparer.Default.Equals(attribute.AttributeClass, mappingAttributeSymbol))
                 .Select(attribute => (
                     (string)attribute.ConstructorArguments[0].Value, 
                     (string)attribute.ConstructorArguments[1].Value,

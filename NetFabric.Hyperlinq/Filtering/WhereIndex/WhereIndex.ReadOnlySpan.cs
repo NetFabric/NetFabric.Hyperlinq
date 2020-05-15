@@ -44,7 +44,6 @@ namespace NetFabric.Hyperlinq
                     index = -1;
                 }
 
-                [MaybeNull]
                 public readonly ref readonly TSource Current 
                     => ref source[index];
 

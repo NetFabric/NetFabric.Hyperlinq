@@ -91,7 +91,6 @@ namespace NetFabric.Hyperlinq
                     index = enumerable.skipCount - 1;
                 }
 
-                [MaybeNull]
                 public readonly TSource Current
                     => source[index];
                 readonly object? IEnumerator.Current 

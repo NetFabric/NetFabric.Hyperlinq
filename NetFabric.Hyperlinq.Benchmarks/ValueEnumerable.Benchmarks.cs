@@ -3,6 +3,7 @@ using BenchmarkDotNet.Configs;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq.Benchmarks
@@ -235,20 +236,17 @@ namespace NetFabric.Hyperlinq.Benchmarks
             public struct Enumerator : IEnumerator<int>
             {
                 readonly int count;
-#pragma warning disable IDE0032 // Use auto property
-                int current;
-#pragma warning restore IDE0032 // Use auto property
 
                 internal Enumerator(int count)
                 {
                     this.count = count;
-                    current = -1;
+                    Current = -1;
                 }
 
-                public readonly int Current => current;
-                readonly object IEnumerator.Current => current;
+                public int Current { get; private set; }
+                readonly object IEnumerator.Current => Current;
 
-                public bool MoveNext() => ++current < count;
+                public bool MoveNext() => ++Current < count;
 
                 public readonly void Reset() => throw new NotSupportedException();
 
@@ -283,19 +281,16 @@ namespace NetFabric.Hyperlinq.Benchmarks
             public struct MyValueEnumerator : IMyValueEnumerator<int>
             {
                 readonly int count;
-#pragma warning disable IDE0032 // Use auto property
-                int current;
-#pragma warning restore IDE0032 // Use auto property
 
                 internal MyValueEnumerator(int count)
                 {
                     this.count = count;
-                    current = -1;
+                    Current = -1;
                 }
 
-                public readonly int Current => current;
+                public int Current { get; private set; }
 
-                public bool MoveNext() => ++current < count;
+                public bool MoveNext() => ++Current < count;
 
                 public readonly void Dispose() { }
             }

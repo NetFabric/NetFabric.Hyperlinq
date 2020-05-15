@@ -64,7 +64,6 @@ namespace NetFabric.Hyperlinq
                     state = 0;
                 }
 
-                [MaybeNull]
                 public readonly TResult Current
                     => subEnumerator.Current;
                 readonly object? IEnumerator.Current 

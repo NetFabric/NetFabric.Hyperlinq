@@ -133,7 +133,6 @@ namespace NetFabric.Hyperlinq
             public readonly int Count
                 => source.Count;
 
-            [MaybeNull]
             public readonly TSource this[int index] => source[index];
 
             [Pure]
@@ -142,7 +141,6 @@ namespace NetFabric.Hyperlinq
             readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => source.GetEnumerator();
             readonly IEnumerator IEnumerable.GetEnumerator() => source.GetEnumerator();
 
-            [MaybeNull]
             TSource IList<TSource>.this[int index]
             {
                 get => source[index];

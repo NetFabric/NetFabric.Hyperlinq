@@ -33,23 +33,22 @@ namespace NetFabric.Hyperlinq
             , IList<int>
         {
             readonly int start;
-            readonly int count;
             readonly int end;
 
             internal RangeEnumerable(int start, int count, int end)
             {
                 this.start = start;
-                this.count = count;
+                Count = count;
                 this.end = end;
             }
 
-            public readonly int Count => count;
+            public readonly int Count { get; }
 
             public readonly int this[int index]
             {
                 get
                 {
-                    if (index < 0 || index >= count) Throw.IndexOutOfRangeException();
+                    if (index < 0 || index >= Count) Throw.IndexOutOfRangeException();
 
                     return index + start;
                 }
@@ -76,12 +75,12 @@ namespace NetFabric.Hyperlinq
             {
                 if (arrayIndex == 0)
                 {
-                    for (var index = 0; index < count; index++)
+                    for (var index = 0; index < Count; index++)
                         array[index] = index + start;
                 }
                 else
                 {
-                    for (var index = 0; index < count; index++)
+                    for (var index = 0; index < Count; index++)
                         array[index + arrayIndex] = index + start;
                 } 
             }
@@ -93,7 +92,7 @@ namespace NetFabric.Hyperlinq
             bool ICollection<int>.Remove(int item) 
                 => throw new NotImplementedException();
             int IList<int>.IndexOf(int item)
-                => item >= 0 && item < count
+                => item >= 0 && item < Count
                 ? item
                 : -1;
             void IList<int>.Insert(int index, int item)
@@ -104,42 +103,38 @@ namespace NetFabric.Hyperlinq
             public struct Enumerator
             {
                 readonly int end;
-                int current;
 
                 internal Enumerator(in RangeEnumerable enumerable)
                 {
-                    current = enumerable.start - 1;
+                    Current = enumerable.start - 1;
                     end = enumerable.end;
                 }
 
-                public readonly int Current
-                    => current;
+                public int Current { get; private set; }
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public bool MoveNext() 
-                    => ++this.current < end;
+                    => ++Current < end;
             }
 
             public struct DisposableEnumerator
                 : IEnumerator<int>
             {
                 readonly int end;
-                int current;
 
                 internal DisposableEnumerator(in RangeEnumerable enumerable)
                 {
-                    current = enumerable.start - 1;
+                    Current = enumerable.start - 1;
                     end = enumerable.end;
                 }
 
-                public readonly int Current
-                    => current;
+                public int Current { get; private set; }
                 readonly object IEnumerator.Current 
-                    => current;
+                    => Current;
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public bool MoveNext() 
-                    => ++this.current < end;
+                    => ++this.Current < end;
 
                 [ExcludeFromCodeCoverage]
                 public readonly void Reset() 
@@ -151,17 +146,17 @@ namespace NetFabric.Hyperlinq
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public RangeEnumerable Skip(int count)
             {
-                var (skipCount, takeCount) = Utils.Skip(this.count, count);
+                var (skipCount, takeCount) = Utils.Skip(this.Count, count);
                 return Range(start + skipCount, takeCount);
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public RangeEnumerable Take(int count)
-                => Range(start, Utils.Take(this.count, count));
+                => Range(start, Utils.Take(this.Count, count));
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Any()
-                => count != 0;
+                => Count != 0;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Contains(int value)
@@ -169,7 +164,7 @@ namespace NetFabric.Hyperlinq
                 
             public int[] ToArray()
             {
-                var array = new int[count];
+                var array = new int[Count];
                 if (start == 0)
                 {
                     for (var index = 0; index < array.Length; index++)
@@ -191,7 +186,7 @@ namespace NetFabric.Hyperlinq
                 => ToDictionary<TKey>(keySelector, EqualityComparer<TKey>.Default);
             public Dictionary<TKey, int> ToDictionary<TKey>(Selector<int, TKey> keySelector, IEqualityComparer<TKey> comparer)
             {
-                var dictionary = new Dictionary<TKey, int>(count, comparer);
+                var dictionary = new Dictionary<TKey, int>(Count, comparer);
 
                 for (var index = start; index < end; index++)
                     dictionary.Add(keySelector(index), index);
@@ -203,7 +198,7 @@ namespace NetFabric.Hyperlinq
                 => ToDictionary<TKey, TElement>(keySelector, elementSelector, EqualityComparer<TKey>.Default);
             public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Selector<int, TKey> keySelector, Selector<int, TElement> elementSelector, IEqualityComparer<TKey> comparer)
             {
-                var dictionary = new Dictionary<TKey, TElement>(count, comparer);
+                var dictionary = new Dictionary<TKey, TElement>(Count, comparer);
 
                 for (var index = start; index < end; index++)
                     dictionary.Add(keySelector(index), elementSelector(index));

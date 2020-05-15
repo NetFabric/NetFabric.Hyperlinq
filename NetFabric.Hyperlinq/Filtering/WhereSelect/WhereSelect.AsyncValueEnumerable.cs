@@ -51,7 +51,6 @@ namespace NetFabric.Hyperlinq
                 readonly AsyncPredicate<TSource> predicate;
                 readonly AsyncSelector<TSource, TResult> selector;
                 readonly CancellationToken cancellationToken;
-                TResult current;
 
                 internal Enumerator(in WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult> enumerable, CancellationToken cancellationToken)
                 {
@@ -59,12 +58,11 @@ namespace NetFabric.Hyperlinq
                     predicate = enumerable.predicate;
                     selector = enumerable.selector;
                     this.cancellationToken = cancellationToken;
-                    current = default!;
+                    Current = default!;
                 }
 
                 [MaybeNull]
-                public readonly TResult Current
-                    => current;
+                public TResult Current { get; private set; }
                 
                 public async ValueTask<bool> MoveNextAsync()
                 {
@@ -73,7 +71,7 @@ namespace NetFabric.Hyperlinq
                         var item = enumerator.Current;
                         if (await predicate(item, cancellationToken).ConfigureAwait(false))
                         {
-                            current = await selector(item, cancellationToken).ConfigureAwait(false);
+                            Current = await selector(item, cancellationToken).ConfigureAwait(false);
                             return true;
                         }
                     }

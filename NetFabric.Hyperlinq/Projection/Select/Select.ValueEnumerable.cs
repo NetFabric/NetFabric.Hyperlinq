@@ -55,7 +55,6 @@ namespace NetFabric.Hyperlinq
                     selector = enumerable.selector;
                 }
 
-                [MaybeNull]
                 public readonly TResult Current
                     => selector(enumerator.Current);
                 readonly object? IEnumerator.Current 
