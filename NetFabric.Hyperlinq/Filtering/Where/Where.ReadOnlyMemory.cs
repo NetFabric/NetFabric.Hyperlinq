@@ -9,7 +9,7 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class Array
     {
-        [Pure]
+        
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static MemoryWhereEnumerable<TSource> Where<TSource>(this ReadOnlyMemory<TSource> source, Predicate<TSource> predicate) 
         {
@@ -30,7 +30,7 @@ namespace NetFabric.Hyperlinq
                 this.predicate = predicate;
             }
 
-            [Pure]
+            
             public readonly Enumerator GetEnumerator() 
                 => new Enumerator(in this);
             readonly DisposableEnumerator IValueEnumerable<TSource, MemoryWhereEnumerable<TSource>.DisposableEnumerator>.GetEnumerator() 

@@ -9,7 +9,7 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class Array
     {
-        [Pure]
+        
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static MemoryDistinctEnumerable<TSource> Distinct<TSource>(
             this ReadOnlyMemory<TSource> source, 
@@ -28,7 +28,7 @@ namespace NetFabric.Hyperlinq
                 this.comparer = comparer;
             }
 
-            [Pure]
+            
             public readonly Enumerator GetEnumerator() 
                 => new Enumerator(in this);
             readonly DisposableEnumerator IValueEnumerable<TSource, MemoryDistinctEnumerable<TSource>.DisposableEnumerator>.GetEnumerator() 

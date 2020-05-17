@@ -11,54 +11,54 @@ namespace NetFabric.Hyperlinq
     [GeneratorIgnore]
     public static partial class ImmutableListBindings
     {
-        [Pure]
+        
         public static int Count<TSource>(this ImmutableList<TSource> source)
             => source.Count;
 
-        [Pure]
+        
         public static ReadOnlyList.SkipTakeEnumerable<ImmutableList<TSource>, TSource> Skip<TSource>(this ImmutableList<TSource> source, int count)
             => ReadOnlyList.Skip<ImmutableList<TSource>, TSource>(source, count);
 
-        [Pure]
+        
         public static ReadOnlyList.SkipTakeEnumerable<ImmutableList<TSource>, TSource> Take<TSource>(this ImmutableList<TSource> source, int count)
             => ReadOnlyList.Take<ImmutableList<TSource>, TSource>(source, count);
 
-        [Pure]
+        
         public static bool All<TSource>(this ImmutableList<TSource> source, Predicate<TSource> predicate)
             => ReadOnlyList.All<ImmutableList<TSource>, TSource>(source, predicate);
-        [Pure]
+        
         public static bool All<TSource>(this ImmutableList<TSource> source, PredicateAt<TSource> predicate)
             => ReadOnlyList.All<ImmutableList<TSource>, TSource>(source, predicate);
 
-        [Pure]
+        
         public static bool Any<TSource>(this ImmutableList<TSource> source)
             => source.Count != 0;
-        [Pure]
+        
         public static bool Any<TSource>(this ImmutableList<TSource> source, Predicate<TSource> predicate)
             => ReadOnlyList.Any<ImmutableList<TSource>, TSource>(source, predicate);
-        [Pure]
+        
         public static bool Any<TSource>(this ImmutableList<TSource> source, PredicateAt<TSource> predicate)
             => ReadOnlyList.Any<ImmutableList<TSource>, TSource>(source, predicate);
 
-        [Pure]
+        
         public static bool Contains<TSource>(this ImmutableList<TSource> source, TSource value)
             => source.Contains(value);
-        [Pure]
+        
         public static bool Contains<TSource>(this ImmutableList<TSource> source, TSource value, IEqualityComparer<TSource>? comparer)
             => ReadOnlyList.Contains<ImmutableList<TSource>, TSource>(source, value, comparer);
 
-        [Pure]
+        
         public static ReadOnlyList.SelectEnumerable<ImmutableList<TSource>, TSource, TResult> Select<TSource, TResult>(
             this ImmutableList<TSource> source,
             Selector<TSource, TResult> selector)
             => ReadOnlyList.Select<ImmutableList<TSource>, TSource, TResult>(source, selector);
-        [Pure]
+        
         public static ReadOnlyList.SelectIndexEnumerable<ImmutableList<TSource>, TSource, TResult> Select<TSource, TResult>(
             this ImmutableList<TSource> source,
             SelectorAt<TSource, TResult> selector)
             => ReadOnlyList.Select<ImmutableList<TSource>, TSource, TResult>(source, selector);
 
-        [Pure]
+        
         public static ReadOnlyList.SelectManyEnumerable<ImmutableList<TSource>, TSource, TSubEnumerable, TSubEnumerator, TResult> SelectMany<TSource, TSubEnumerable, TSubEnumerator, TResult>(
             this ImmutableList<TSource> source,
             Selector<TSource, TSubEnumerable> selector)
@@ -66,60 +66,60 @@ namespace NetFabric.Hyperlinq
             where TSubEnumerator : struct, IEnumerator<TResult>
             => ReadOnlyList.SelectMany<ImmutableList<TSource>, TSource, TSubEnumerable, TSubEnumerator, TResult>(source, selector);
 
-        [Pure]
+        
         public static ReadOnlyList.WhereEnumerable<ImmutableList<TSource>, TSource> Where<TSource>(
             this ImmutableList<TSource> source,
             Predicate<TSource> predicate)
             => ReadOnlyList.Where<ImmutableList<TSource>, TSource>(source, predicate);
-        [Pure]
+        
         public static ReadOnlyList.WhereIndexEnumerable<ImmutableList<TSource>, TSource> Where<TSource>(
             this ImmutableList<TSource> source,
             PredicateAt<TSource> predicate)
             => ReadOnlyList.Where<ImmutableList<TSource>, TSource>(source, predicate);
 
-        [Pure]
+        
         public static Option<TSource> ElementAt<TSource>(this ImmutableList<TSource> source, int index)
             => ReadOnlyList.ElementAt<ImmutableList<TSource>, TSource>(source, index);
 
-        [Pure]
+        
         public static Option<TSource> First<TSource>(this ImmutableList<TSource> source)
             => ReadOnlyList.First<ImmutableList<TSource>, TSource>(source);
 
-        [Pure]
+        
         public static Option<TSource> Single<TSource>(this ImmutableList<TSource> source)
             => ReadOnlyList.Single<ImmutableList<TSource>, TSource>(source);
 
-        [Pure]
+        
         public static ReadOnlyList.DistinctEnumerable<ImmutableList<TSource>, TSource> Distinct<TSource>(this ImmutableList<TSource> source, IEqualityComparer<TSource>? comparer = null)
             => ReadOnlyList.Distinct<ImmutableList<TSource>, TSource>(source, comparer);
 
-        [Pure]
+        
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ImmutableList<TSource> AsEnumerable<TSource>(this ImmutableList<TSource> source)
             => source;
 
-        [Pure]
+        
         public static ValueWrapper<TSource> AsValueEnumerable<TSource>(this ImmutableList<TSource> source)
             => new ValueWrapper<TSource>(source);
 
-        [Pure]
+        
         public static TSource[] ToArray<TSource>(this ImmutableList<TSource> source)
             => ReadOnlyList.ToArray<ImmutableList<TSource>, TSource>(source);
 
-        [Pure]
+        
         public static List<TSource> ToList<TSource>(this ImmutableList<TSource> source)
             => new List<TSource>(source);
 
-        [Pure]
+        
         public static Dictionary<TKey, TSource> ToDictionary<TSource, TKey>(this ImmutableList<TSource> source, Selector<TSource, TKey> keySelector)
             => ReadOnlyList.ToDictionary<ImmutableList<TSource>, TSource, TKey>(source, keySelector);
-        [Pure]
+        
         public static Dictionary<TKey, TSource> ToDictionary<TSource, TKey>(this ImmutableList<TSource> source, Selector<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer)
             => ReadOnlyList.ToDictionary<ImmutableList<TSource>, TSource, TKey>(source, keySelector, comparer);
-        [Pure]
+        
         public static Dictionary<TKey, TElement> ToDictionary<TSource, TKey, TElement>(this ImmutableList<TSource> source, Selector<TSource, TKey> keySelector, Selector<TSource, TElement> elementSelector)
             => ReadOnlyList.ToDictionary<ImmutableList<TSource>, TSource, TKey, TElement>(source, keySelector, elementSelector);
-        [Pure]
+        
         public static Dictionary<TKey, TElement> ToDictionary<TSource, TKey, TElement>(this ImmutableList<TSource> source, Selector<TSource, TKey> keySelector, Selector<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer)
             => ReadOnlyList.ToDictionary<ImmutableList<TSource>, TSource, TKey, TElement>(source, keySelector, elementSelector, comparer);
 

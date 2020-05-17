@@ -6,12 +6,10 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class Array
     {
-        [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int Count<TSource>(this ReadOnlySpan<TSource> source)
             => source.Length;
 
-        [Pure]
         static int Count<TSource>(this ReadOnlySpan<TSource> source, Predicate<TSource> predicate)
         {
             var count = 0;
@@ -23,7 +21,6 @@ namespace NetFabric.Hyperlinq
             return count;
         }
 
-        [Pure]
         static int Count<TSource>(this ReadOnlySpan<TSource> source, PredicateAt<TSource> predicate)
         {
             var count = 0;

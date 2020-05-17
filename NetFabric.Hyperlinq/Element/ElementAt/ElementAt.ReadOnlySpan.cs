@@ -7,14 +7,14 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class Array
     {
-        [Pure]
+        
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Option<TSource> ElementAt<TSource>(this ReadOnlySpan<TSource> source, int index) 
             => index < 0 || index >= source.Length 
                 ? Option.None 
                 : Option.Some(source[index]);
 
-        [Pure]
+        
         static Option<TSource> ElementAt<TSource>(this ReadOnlySpan<TSource> source, int index, Predicate<TSource> predicate) 
         {
             if (index >= 0)
@@ -29,7 +29,7 @@ namespace NetFabric.Hyperlinq
             return Option.None;
         }
 
-        [Pure]
+        
         static Option<TSource> ElementAt<TSource>(this ReadOnlySpan<TSource> source, int index, PredicateAt<TSource> predicate) 
         {
             if (index >= 0)
@@ -44,21 +44,21 @@ namespace NetFabric.Hyperlinq
             return Option.None;
         }
 
-        [Pure]
+        
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static Option<TResult> ElementAt<TSource, TResult>(this ReadOnlySpan<TSource> source, int index, Selector<TSource, TResult> selector) 
             => index < 0 || index >= source.Length 
                 ? Option.None 
                 : Option.Some(selector(source[index]));
 
-        [Pure]
+        
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Option<TResult> ElementAt<TSource, TResult>(this ReadOnlySpan<TSource> source, int index, SelectorAt<TSource, TResult> selector) 
             => index < 0 || index >= source.Length 
                 ? Option.None 
                 : Option.Some(selector(source[index], index));
 
-        [Pure]
+        
         static Option<TResult> ElementAt<TSource, TResult>(this ReadOnlySpan<TSource> source, int index, Predicate<TSource> predicate, Selector<TSource, TResult> selector) 
         {
             if (index >= 0)

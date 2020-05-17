@@ -5,7 +5,7 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class Array
     {
-        [Pure]
+        
         public static SpanSelectEnumerable<TSource, TResult> Select<TSource, TResult>(this Span<TSource> source, Selector<TSource, TResult> selector)
             => Select((ReadOnlySpan<TSource>)source, selector);
     }

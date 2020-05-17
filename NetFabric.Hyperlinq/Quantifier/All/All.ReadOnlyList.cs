@@ -7,7 +7,7 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class ReadOnlyList
     {
-        [Pure]
+        
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool All<TList, TSource>(this TList source, Predicate<TSource> predicate)
             where TList : notnull, IReadOnlyList<TSource>
@@ -17,7 +17,7 @@ namespace NetFabric.Hyperlinq
             return All<TList, TSource>(source, predicate, 0, source.Count);
         }
 
-        [Pure]
+        
         static bool All<TList, TSource>(this TList source, Predicate<TSource> predicate, int skipCount, int takeCount)
             where TList : notnull, IReadOnlyList<TSource>
         {
@@ -30,7 +30,7 @@ namespace NetFabric.Hyperlinq
             return true;
         }
 
-        [Pure]
+        
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool All<TList, TSource>(this TList source, PredicateAt<TSource> predicate)
             where TList : notnull, IReadOnlyList<TSource>
@@ -40,7 +40,7 @@ namespace NetFabric.Hyperlinq
             return All<TList, TSource>(source, predicate, 0, source.Count);
         }
 
-        [Pure]
+        
         static bool All<TList, TSource>(this TList source, PredicateAt<TSource> predicate, int skipCount, int takeCount)
             where TList : notnull, IReadOnlyList<TSource>
         {

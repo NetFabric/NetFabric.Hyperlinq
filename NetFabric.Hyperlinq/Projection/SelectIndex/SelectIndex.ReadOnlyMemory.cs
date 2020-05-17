@@ -9,7 +9,7 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class Array
     {
-        [Pure]
+        
         public static MemorySelectIndexEnumerable<TSource, TResult> Select<TSource, TResult>(
             this ReadOnlyMemory<TSource> source, 
             SelectorAt<TSource, TResult> selector)
@@ -158,17 +158,17 @@ namespace NetFabric.Hyperlinq
             public bool Contains(TResult value, IEqualityComparer<TResult>? comparer = null)
                 => Array.Contains(source.Span, value, comparer, selector);
 
-            [Pure]
+            
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Option<TResult> ElementAt(int index)
                 => Array.ElementAt<TSource, TResult>(source.Span, index, selector);
 
-            [Pure]
+            
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Option<TResult> First()
                 => Array.First<TSource, TResult>(source.Span, selector);
 
-            [Pure]
+            
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Option<TResult> Single()
                 => Array.Single<TSource, TResult>(source.Span, selector);

@@ -9,7 +9,7 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class ReadOnlyList
     {
-        [Pure]
+        
         public static SelectEnumerable<TList, TSource, TResult> Select<TList, TSource, TResult>(
             this TList source, 
             Selector<TSource, TResult> selector)
@@ -59,7 +59,7 @@ namespace NetFabric.Hyperlinq
                 }
             }
 
-            [Pure]
+            
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly Enumerator GetEnumerator() => new Enumerator(in this);
             readonly DisposableEnumerator IValueEnumerable<TResult, SelectEnumerable<TList, TSource, TResult>.DisposableEnumerator>.GetEnumerator() => new DisposableEnumerator(in this);
@@ -190,27 +190,27 @@ namespace NetFabric.Hyperlinq
             public ReadOnlyList.SelectIndexEnumerable<TList, TSource, TSelectorResult> Select<TSelectorResult>(SelectorAt<TResult, TSelectorResult> selector)
                 => ReadOnlyList.Select<TList, TSource, TSelectorResult>(source, Utils.Combine(this.selector, selector), skipCount, takeCount);
 
-            [Pure]
+            
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Option<TResult> ElementAt(int index)
                 => ReadOnlyList.ElementAt<TList, TSource, TResult>(source, index, selector, skipCount, takeCount);
 
-            [Pure]
+            
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Option<TResult> First()
                 => ReadOnlyList.First<TList, TSource, TResult>(source, selector, skipCount, takeCount);
 
-            [Pure]
+            
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Option<TResult> Single()
                 => ReadOnlyList.Single<TList, TSource, TResult>(source, selector, skipCount, takeCount);
 
-            [Pure]
+            
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TResult[] ToArray()
                 => ReadOnlyList.ToArray<TList, TSource, TResult>(source, selector, skipCount, takeCount);
 
-            [Pure]
+            
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public List<TResult> ToList()
                 => ReadOnlyList.ToList<TList, TSource, TResult>(source, selector, skipCount, takeCount);
@@ -250,7 +250,7 @@ namespace NetFabric.Hyperlinq
             }
         }
 
-        [Pure]
+        
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int Count<TList, TSource, TResult>(this SelectEnumerable<TList, TSource, TResult> source)
             where TList : notnull, IReadOnlyList<TSource>

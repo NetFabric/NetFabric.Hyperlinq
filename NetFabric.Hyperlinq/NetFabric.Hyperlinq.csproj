@@ -10,7 +10,6 @@
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageTags>netfabric, hyperlinq, linq, enumeration, extensions, performance</PackageTags>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
-    <DefineConstants>$(DefineConstants);CONTRACTS_FULL</DefineConstants>
     <Nullable>enable</Nullable> 
     <!-- <TreatWarningsAsErrors>true</TreatWarningsAsErrors> -->
   </PropertyGroup>

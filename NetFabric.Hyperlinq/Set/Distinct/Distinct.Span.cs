@@ -7,7 +7,7 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class Array
     {
-        [Pure]
+        
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static SpanDistinctEnumerable<TSource> Distinct<TSource>(
             this Span<TSource> source, 

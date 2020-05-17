@@ -7,7 +7,7 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class ValueReadOnlyCollection
     {
-        [Pure]
+        
         public static Option<TSource> First<TEnumerable, TEnumerator, TSource>(this TEnumerable source) 
             where TEnumerable : notnull, IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
@@ -21,7 +21,7 @@ namespace NetFabric.Hyperlinq
             return Option.None;
         }
 
-        [Pure]
+        
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Option<TResult> First<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, Selector<TSource, TResult> selector) 
             where TEnumerable : notnull, IValueReadOnlyCollection<TSource, TEnumerator>
@@ -36,7 +36,7 @@ namespace NetFabric.Hyperlinq
             return Option.None;
         }
 
-        [Pure]
+        
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Option<TResult> First<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, SelectorAt<TSource, TResult> selector) 
             where TEnumerable : notnull, IValueReadOnlyCollection<TSource, TEnumerator>

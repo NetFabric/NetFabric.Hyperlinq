@@ -9,7 +9,7 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class AsyncEnumerable
     {
-        [Pure]
+        
         static async ValueTask<TSource[]> ToArrayAsync<TSource>(IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
         {
             var builder = new LargeArrayBuilder<TSource>(initialize: true);

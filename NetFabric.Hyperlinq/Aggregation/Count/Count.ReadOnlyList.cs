@@ -7,12 +7,10 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class ReadOnlyList
     {
-        [Pure]
         public static int Count<TList, TSource>(this TList source)
             where TList : notnull, IReadOnlyList<TSource>
             => source.Count;
 
-        [Pure]
         static int Count<TList, TSource>(this TList source, Predicate<TSource> predicate, int skipCount, int takeCount)
             where TList : notnull, IReadOnlyList<TSource>
         {
@@ -26,7 +24,6 @@ namespace NetFabric.Hyperlinq
             return count;
         }
 
-        [Pure]
         static int Count<TList, TSource>(this TList source, PredicateAt<TSource> predicate, int skipCount, int takeCount)
             where TList : notnull, IReadOnlyList<TSource>
         {

@@ -9,7 +9,7 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class ReadOnlyList
     {
-        [Pure]
+        
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ValueEnumerableWrapper<TSource> AsValueEnumerable<TSource>(this IReadOnlyList<TSource> source)
             => new ValueEnumerableWrapper<TSource>(source);
@@ -30,7 +30,7 @@ namespace NetFabric.Hyperlinq
             public readonly TSource this[int index]
                 => source[index];
 
-            [Pure]
+            
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly Enumerator GetEnumerator() => new Enumerator(source);
             readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new Enumerator(source);
@@ -107,12 +107,12 @@ namespace NetFabric.Hyperlinq
                 public readonly void Dispose() { }
             }
 
-            [Pure]
+            
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TSource[] ToArray()
                 => ReadOnlyList.ToArray<IReadOnlyList<TSource>, TSource>(source);
 
-            [Pure]
+            
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public List<TSource> ToList()
                 => ReadOnlyList.ToList<IReadOnlyList<TSource>, TSource>(source);

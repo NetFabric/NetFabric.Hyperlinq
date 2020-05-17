@@ -9,13 +9,13 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class Enumerable
     {
-        [Pure]
+        
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ValueEnumerableWrapper<TSource> AsValueEnumerable<TSource>(this IEnumerable<TSource> source)
             => new ValueEnumerableWrapper<TSource>(source);
 
         [GeneratorIgnore]
-        [Pure]
+        
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ValueEnumerableWrapper<TEnumerable, TEnumerator, TSource> AsValueEnumerable<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TEnumerable, TEnumerator> getEnumerator)
             where TEnumerable : notnull, IEnumerable<TSource>
@@ -36,18 +36,18 @@ namespace NetFabric.Hyperlinq
                 this.getEnumerator = getEnumerator;
             }
 
-            [Pure]
+            
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly TEnumerator GetEnumerator() => getEnumerator(source);
             readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => getEnumerator(source);
             readonly IEnumerator IEnumerable.GetEnumerator() => getEnumerator(source);
 
-            [Pure]
+            
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TSource[] ToArray()
                 => Enumerable.ToArray(source);
 
-            [Pure]
+            
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public List<TSource> ToList()
                 => Enumerable.ToList(source);
@@ -61,7 +61,7 @@ namespace NetFabric.Hyperlinq
             internal ValueEnumerableWrapper(IEnumerable<TSource> source) 
                 => this.source = source;
 
-            [Pure]
+            
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly Enumerator GetEnumerator() => new Enumerator(source);
             readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new Enumerator(source);
@@ -94,12 +94,12 @@ namespace NetFabric.Hyperlinq
                 public readonly void Dispose() => enumerator.Dispose();
             }
 
-            [Pure]
+            
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TSource[] ToArray()
                 => Enumerable.ToArray(source);
 
-            [Pure]
+            
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public List<TSource> ToList()
                 => Enumerable.ToList(source);

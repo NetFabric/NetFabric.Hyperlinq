@@ -8,7 +8,7 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class ValueEnumerable
 {
-        [Pure]
+        
         public static CreateValueEnumerable<TEnumerator, TSource> Create<TEnumerator, TSource>(Func<TEnumerator> getEnumerator) 
             where TEnumerator : struct, IEnumerator<TSource>
         {
@@ -28,7 +28,7 @@ namespace NetFabric.Hyperlinq
                 this.getEnumerator = getEnumerator;
             }
 
-            [Pure]
+            
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly TEnumerator GetEnumerator() => getEnumerator();
             readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => getEnumerator();
