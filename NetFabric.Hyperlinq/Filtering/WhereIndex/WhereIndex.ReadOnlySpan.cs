@@ -8,7 +8,7 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class Array
     {
-        [Pure]
+        
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static SpanWhereIndexEnumerable<TSource> Where<TSource>(this ReadOnlySpan<TSource> source, PredicateAt<TSource> predicate) 
         {
@@ -28,7 +28,7 @@ namespace NetFabric.Hyperlinq
                 this.predicate = predicate;
             }
 
-            [Pure]
+            
             public readonly Enumerator GetEnumerator() => new Enumerator(in this);
 
             public ref struct Enumerator 

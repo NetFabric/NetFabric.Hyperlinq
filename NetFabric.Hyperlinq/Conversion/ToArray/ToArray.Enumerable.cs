@@ -6,7 +6,7 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class Enumerable
     {
-        [Pure]
+        
         static T[] ToArray<T>(IEnumerable<T> source)
         {
             switch (source)

@@ -9,7 +9,7 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class ValueEnumerable
     {
-        [Pure]
+        
         public static RangeEnumerable Range(int start, int count)
         {
             if (count < 0) Throw.ArgumentOutOfRangeException(nameof(count));
@@ -54,7 +54,7 @@ namespace NetFabric.Hyperlinq
                 }
             }
 
-            [Pure]
+            
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly Enumerator GetEnumerator() => new Enumerator(in this);
             readonly DisposableEnumerator IValueEnumerable<int, DisposableEnumerator>.GetEnumerator() => new DisposableEnumerator(in this);

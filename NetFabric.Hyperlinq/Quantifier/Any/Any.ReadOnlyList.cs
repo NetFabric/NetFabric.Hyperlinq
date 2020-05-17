@@ -6,17 +6,17 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class ReadOnlyList
     {
-        [Pure]
+        
         public static bool Any<TList, TSource>(this TList source)
             where TList : notnull, IReadOnlyList<TSource>
             => source.Count != 0;
 
-        [Pure]
+        
         static bool Any<TList, TSource>(this TList source, int skipCount, int takeCount)
             where TList : notnull, IReadOnlyList<TSource>
             => takeCount != 0;
 
-        [Pure]
+        
         public static bool Any<TList, TSource>(this TList source, Predicate<TSource> predicate)
             where TList : notnull, IReadOnlyList<TSource>
         {
@@ -25,7 +25,7 @@ namespace NetFabric.Hyperlinq
             return Any<TList, TSource>(source, predicate, 0, source.Count);
         }
 
-        [Pure]
+        
         static bool Any<TList, TSource>(this TList source, Predicate<TSource> predicate, int skipCount, int takeCount)
             where TList : notnull, IReadOnlyList<TSource>
         {
@@ -38,7 +38,7 @@ namespace NetFabric.Hyperlinq
             return false;
         }
 
-        [Pure]
+        
         public static bool Any<TList, TSource>(this TList source, PredicateAt<TSource> predicate)
             where TList : notnull, IReadOnlyList<TSource>
         {
@@ -47,7 +47,7 @@ namespace NetFabric.Hyperlinq
             return Any<TList, TSource>(source, predicate, 0, source.Count);
         }
 
-        [Pure]
+        
         static bool Any<TList, TSource>(this TList source, PredicateAt<TSource> predicate, int skipCount, int takeCount)
             where TList : notnull, IReadOnlyList<TSource>
         {

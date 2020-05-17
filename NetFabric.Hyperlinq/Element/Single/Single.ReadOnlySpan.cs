@@ -7,7 +7,7 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class Array
     {
-        [Pure]
+        
         public static Option<TSource> Single<TSource>(this ReadOnlySpan<TSource> source)
         {
             switch (source.Length)
@@ -21,7 +21,7 @@ namespace NetFabric.Hyperlinq
             }
         }
 
-        [Pure]
+        
         static Option<TSource> Single<TSource>(this ReadOnlySpan<TSource> source, Predicate<TSource> predicate)
         {
             for (var index = 0; index < source.Length; index++)
@@ -42,7 +42,7 @@ namespace NetFabric.Hyperlinq
             return Option.None;
         }
 
-        [Pure]
+        
         static Option<TSource> Single<TSource>(this ReadOnlySpan<TSource> source, PredicateAt<TSource> predicate)
         {
             for (var index = 0; index < source.Length; index++)
@@ -63,7 +63,7 @@ namespace NetFabric.Hyperlinq
             return Option.None;
         }
 
-        [Pure]
+        
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static Option<TResult> Single<TSource, TResult>(this ReadOnlySpan<TSource> source, Selector<TSource, TResult> selector)
             => source.Length switch
@@ -73,7 +73,7 @@ namespace NetFabric.Hyperlinq
                 _ => Option.None,
             };
 
-        [Pure]
+        
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static Option<TResult> Single<TSource, TResult>(this ReadOnlySpan<TSource> source, SelectorAt<TSource, TResult> selector)
             => source.Length switch
@@ -83,7 +83,7 @@ namespace NetFabric.Hyperlinq
                 _ => Option.None,
             };
 
-        [Pure]
+        
         static Option<TResult> Single<TSource, TResult>(this ReadOnlySpan<TSource> source, Predicate<TSource> predicate, Selector<TSource, TResult> selector)
         {
             for (var index = 0; index < source.Length; index++)

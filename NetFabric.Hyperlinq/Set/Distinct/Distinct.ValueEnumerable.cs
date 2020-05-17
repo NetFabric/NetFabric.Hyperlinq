@@ -10,7 +10,7 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class ValueEnumerable
     {
-        [Pure]
+        
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static DistinctEnumerable<TEnumerable, TEnumerator, TSource> Distinct<TEnumerable, TEnumerator, TSource>(
             this TEnumerable source, 
@@ -33,7 +33,7 @@ namespace NetFabric.Hyperlinq
                 this.comparer = comparer;
             }
 
-            [Pure]
+            
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly Enumerator GetEnumerator() => new Enumerator(in this);
             readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new Enumerator(in this);

@@ -9,7 +9,7 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class ReadOnlyList
     {
-        [Pure]
+        
         public static SelectManyEnumerable<TList, TSource, TSubEnumerable, TSubEnumerator, TResult> SelectMany<TList, TSource, TSubEnumerable, TSubEnumerator, TResult>(
             this TList source, 
             Selector<TSource, TSubEnumerable> selector)
@@ -38,7 +38,7 @@ namespace NetFabric.Hyperlinq
                 this.selector = selector;
             }
 
-            [Pure]
+            
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly Enumerator GetEnumerator() => new Enumerator(in this);
             readonly IEnumerator<TResult> IEnumerable<TResult>.GetEnumerator() => new Enumerator(in this);

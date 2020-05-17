@@ -6,7 +6,7 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class Array
     {
-        [Pure]
+        
         public static List<TSource> ToList<TSource>(this ReadOnlySpan<TSource> source)
         {
             var list = new List<TSource>(source.Length);
@@ -17,7 +17,7 @@ namespace NetFabric.Hyperlinq
             return list;
         }
 
-        [Pure]
+        
         static List<TSource> ToList<TSource>(this ReadOnlySpan<TSource> source, Predicate<TSource> predicate)
         {
             var list = new List<TSource>(source.Length);
@@ -30,7 +30,7 @@ namespace NetFabric.Hyperlinq
             return list;
         }
 
-        [Pure]
+        
         static List<TSource> ToList<TSource>(this ReadOnlySpan<TSource> source, PredicateAt<TSource> predicate)
         {
             var list = new List<TSource>(source.Length);
@@ -43,7 +43,7 @@ namespace NetFabric.Hyperlinq
             return list;
         }
 
-        [Pure]
+        
         static List<TResult> ToList<TSource, TResult>(this ReadOnlySpan<TSource> source, Selector<TSource, TResult> selector)
         {
             var list = new List<TResult>(source.Length);
@@ -52,7 +52,7 @@ namespace NetFabric.Hyperlinq
             return list;
         }
 
-        [Pure]
+        
         static List<TResult> ToList<TSource, TResult>(this ReadOnlySpan<TSource> source, SelectorAt<TSource, TResult> selector)
         {
             var list = new List<TResult>(source.Length);
@@ -61,7 +61,7 @@ namespace NetFabric.Hyperlinq
             return list;
         }
 
-        [Pure]
+        
         static List<TResult> ToList<TSource, TResult>(this ReadOnlySpan<TSource> source, Predicate<TSource> predicate, Selector<TSource, TResult> selector)
         {
             var list = new List<TResult>(source.Length);

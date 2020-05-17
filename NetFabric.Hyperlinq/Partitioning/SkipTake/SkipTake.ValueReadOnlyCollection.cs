@@ -9,7 +9,7 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class ValueReadOnlyCollection
     {
-        [Pure]
+        
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static SkipTakeEnumerable<TEnumerable, TEnumerator, TSource> SkipTake<TEnumerable, TEnumerator, TSource>(this TEnumerable source, int skipCount, int takeCount)
             where TEnumerable : notnull, IValueReadOnlyCollection<TSource, TEnumerator>
@@ -34,7 +34,7 @@ namespace NetFabric.Hyperlinq
 
             public readonly int Count => takeCount;
 
-            [Pure]
+            
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly Enumerator GetEnumerator() => new Enumerator(in this);
             readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new Enumerator(in this);

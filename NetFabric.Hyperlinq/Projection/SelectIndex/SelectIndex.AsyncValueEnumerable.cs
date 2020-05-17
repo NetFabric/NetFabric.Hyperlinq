@@ -10,7 +10,7 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class AsyncValueEnumerable
     {
-        [Pure]
+        
         public static SelectIndexEnumerable<TEnumerable, TEnumerator, TSource, TResult> Select<TEnumerable, TEnumerator, TSource, TResult>(
             this TEnumerable source, 
             AsyncSelectorAt<TSource, TResult> selector)
@@ -37,7 +37,7 @@ namespace NetFabric.Hyperlinq
                 this.selector = selector;
             }
 
-            [Pure]
+            
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly Enumerator GetAsyncEnumerator(CancellationToken cancellationToken = default) 
                 => new Enumerator(in this, cancellationToken);
@@ -103,15 +103,15 @@ namespace NetFabric.Hyperlinq
             public AsyncValueEnumerable.SelectIndexEnumerable<TEnumerable, TEnumerator, TSource, TSelectorResult> Select<TSelectorResult>(AsyncSelectorAt<TResult, TSelectorResult> selector)
                 => AsyncValueEnumerable.Select<TEnumerable, TEnumerator, TSource, TSelectorResult>(source, Utils.Combine(this.selector, selector));
 
-            [Pure]
+            
             public ValueTask<Option<TResult>> ElementAtAsync(int index, CancellationToken cancellationToken = default)
                 => AsyncValueEnumerable.ElementAtAsync<TEnumerable, TEnumerator, TSource, TResult>(source, index, selector, cancellationToken);
 
-            [Pure]
+            
             public ValueTask<Option<TResult>> FirstAsync(CancellationToken cancellationToken = default)
                 => AsyncValueEnumerable.FirstAsync<TEnumerable, TEnumerator, TSource, TResult>(source, selector, cancellationToken);
 
-            [Pure]
+            
             public ValueTask<Option<TResult>> SingleAsync(CancellationToken cancellationToken = default)
                 => AsyncValueEnumerable.SingleAsync<TEnumerable, TEnumerator, TSource, TResult>(source, selector, cancellationToken);
 

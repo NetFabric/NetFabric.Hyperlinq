@@ -5,7 +5,7 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class Array
     {
-        [Pure]
+        
         public static bool All<TSource>(this ReadOnlySpan<TSource> source, Predicate<TSource> predicate)
         {
             if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
@@ -18,7 +18,7 @@ namespace NetFabric.Hyperlinq
             return true;
         }
 
-        [Pure]
+        
         public static bool All<TSource>(this ReadOnlySpan<TSource> source, PredicateAt<TSource> predicate)
         {
             if (predicate is null) Throw.ArgumentNullException(nameof(predicate));

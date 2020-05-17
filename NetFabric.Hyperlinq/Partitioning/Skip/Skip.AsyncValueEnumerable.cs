@@ -11,7 +11,7 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class AsyncValueEnumerable
     {
-        [Pure]
+        
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static SkipEnumerable<TEnumerable, TEnumerator, TSource> Skip<TEnumerable, TEnumerator, TSource>(this TEnumerable source, int count)
             where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
@@ -32,7 +32,7 @@ namespace NetFabric.Hyperlinq
                 this.count = count;
             }
 
-            [Pure]
+            
             public readonly Enumerator GetAsyncEnumerator(CancellationToken cancellationToken = default) 
                 => new Enumerator(in this, cancellationToken);
             readonly IAsyncEnumerator<TSource> IAsyncEnumerable<TSource>.GetAsyncEnumerator(CancellationToken cancellationToken) 

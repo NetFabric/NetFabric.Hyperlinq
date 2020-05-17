@@ -9,7 +9,7 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class ValueEnumerable
     {
-        [Pure]
+        
         public static SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult> Select<TEnumerable, TEnumerator, TSource, TResult>(
             this TEnumerable source, 
             Selector<TSource, TResult> selector)
@@ -36,7 +36,7 @@ namespace NetFabric.Hyperlinq
                 this.selector = selector;
             }
 
-            [Pure]
+            
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly Enumerator GetEnumerator() => new Enumerator(in this);
             readonly IEnumerator<TResult> IEnumerable<TResult>.GetEnumerator() => new Enumerator(in this);

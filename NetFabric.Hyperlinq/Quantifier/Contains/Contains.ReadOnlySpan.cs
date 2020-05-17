@@ -6,7 +6,7 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class Array
     {
-        [Pure]
+        
         public static bool Contains<TSource>(this ReadOnlySpan<TSource> source, TSource value, IEqualityComparer<TSource>? comparer = null)
         {
             if (source.Length != 0) 
@@ -31,7 +31,7 @@ namespace NetFabric.Hyperlinq
             return false;
         }
 
-        [Pure]
+        
         static bool Contains<TSource>(this ReadOnlySpan<TSource> source, TSource value, IEqualityComparer<TSource>? comparer, Predicate<TSource> predicate)
         {
             if (source.Length != 0) 
@@ -58,7 +58,7 @@ namespace NetFabric.Hyperlinq
             return false;
         }
 
-        [Pure]
+        
         static bool Contains<TSource>(this ReadOnlySpan<TSource> source, TSource value, IEqualityComparer<TSource>? comparer, PredicateAt<TSource> predicate)
         {
             if (source.Length != 0) 
@@ -85,7 +85,7 @@ namespace NetFabric.Hyperlinq
             return false;
         }
 
-        [Pure]
+        
         static bool Contains<TSource, TResult>(this ReadOnlySpan<TSource> source, TResult value, IEqualityComparer<TResult>? comparer, Selector<TSource, TResult> selector)
         {
             if (source.Length != 0) 
@@ -110,7 +110,7 @@ namespace NetFabric.Hyperlinq
             return false;
         }
 
-        [Pure]
+        
         static bool Contains<TSource, TResult>(this ReadOnlySpan<TSource> source, TResult value, IEqualityComparer<TResult>? comparer, SelectorAt<TSource, TResult> selector)
         {
             if (source.Length != 0) 
@@ -135,7 +135,7 @@ namespace NetFabric.Hyperlinq
             return false;
         }
 
-        [Pure]
+        
         static bool Contains<TSource, TResult>(this ReadOnlySpan<TSource> source, TResult value, IEqualityComparer<TResult>? comparer, Predicate<TSource> predicate, Selector<TSource, TResult> selector)
         {
             if (source.Length != 0) 

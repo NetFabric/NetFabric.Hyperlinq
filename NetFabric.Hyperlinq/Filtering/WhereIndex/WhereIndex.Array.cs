@@ -6,7 +6,7 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class Array
     {
-        [Pure]
+        
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static MemoryWhereIndexEnumerable<TSource> Where<TSource>(this TSource[] source, PredicateAt<TSource> predicate)
             => Where(source.AsMemory(), predicate);

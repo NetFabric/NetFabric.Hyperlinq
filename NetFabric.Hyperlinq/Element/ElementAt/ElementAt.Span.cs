@@ -7,7 +7,7 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class Array
     {
-        [Pure]
+        
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Option<TSource> ElementAt<TSource>(this Span<TSource> source, int index)
             => ElementAt((ReadOnlySpan<TSource>)source, index);

@@ -9,7 +9,7 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class ValueReadOnlyCollection
     {
-        [Pure]
+        
         public static SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult> Select<TEnumerable, TEnumerator, TSource, TResult>(
             this TEnumerable source, 
             Selector<TSource, TResult> selector)
@@ -39,7 +39,7 @@ namespace NetFabric.Hyperlinq
 
             public readonly int Count => source.Count;
 
-            [Pure]
+            
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly Enumerator GetEnumerator() => new Enumerator(in this);
             readonly IEnumerator<TResult> IEnumerable<TResult>.GetEnumerator() => new Enumerator(in this);
@@ -182,7 +182,7 @@ namespace NetFabric.Hyperlinq
             }
         }
 
-        [Pure]
+        
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int Count<TEnumerable, TEnumerator, TSource, TResult>(this SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult> source)
             where TEnumerable : notnull, IValueReadOnlyCollection<TSource, TEnumerator>

@@ -9,7 +9,7 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class ReadOnlyList
     {
-        [Pure]
+        
         public static WhereEnumerable<TList, TSource> Where<TList, TSource>(this TList source, Predicate<TSource> predicate)
             where TList : notnull, IReadOnlyList<TSource>
         {
@@ -18,7 +18,7 @@ namespace NetFabric.Hyperlinq
             return new WhereEnumerable<TList, TSource>(in source, predicate, 0, source.Count);
         }
 
-        [Pure]
+        
         static WhereEnumerable<TList, TSource> Where<TList, TSource>(this TList source, Predicate<TSource> predicate, int skipCount, int takeCount)
             where TList : notnull, IReadOnlyList<TSource>
             => new WhereEnumerable<TList, TSource>(in source, predicate, skipCount, takeCount);
@@ -39,7 +39,7 @@ namespace NetFabric.Hyperlinq
                 (this.skipCount, this.takeCount) = Utils.SkipTake(source.Count, skipCount, takeCount);
             }
 
-            [Pure]
+            
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly Enumerator GetEnumerator() => new Enumerator(in this);
             readonly DisposableEnumerator IValueEnumerable<TSource, WhereEnumerable<TList, TSource>.DisposableEnumerator>.GetEnumerator() => new DisposableEnumerator(in this);

@@ -9,7 +9,7 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class ValueEnumerable
     {
-        [Pure]
+        
         public static WhereEnumerable<TEnumerable, TEnumerator, TSource> Where<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Predicate<TSource> predicate)
             where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
@@ -33,7 +33,7 @@ namespace NetFabric.Hyperlinq
                 this.predicate = predicate;
             }
 
-            [Pure]
+            
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly Enumerator GetEnumerator() => new Enumerator(in this);
             readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new Enumerator(in this);

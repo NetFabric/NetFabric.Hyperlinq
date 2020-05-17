@@ -9,7 +9,7 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class Array
     {
-        [Pure]
+        
         static TSource[] ToArray<TSource>(this ReadOnlySpan<TSource> source, Predicate<TSource> predicate)
         {
             var builder = new LargeArrayBuilder<TSource>(initialize: true);
@@ -17,7 +17,7 @@ namespace NetFabric.Hyperlinq
             return builder.ToArray();
         }
 
-        [Pure]
+        
         static TSource[] ToArray<TSource>(this ReadOnlySpan<TSource> source, PredicateAt<TSource> predicate)
         {
             var builder = new LargeArrayBuilder<TSource>(initialize: true);
@@ -25,7 +25,7 @@ namespace NetFabric.Hyperlinq
             return builder.ToArray();
         }
 
-        [Pure]
+        
         static TResult[] ToArray<TSource, TResult>(this ReadOnlySpan<TSource> source, Selector<TSource, TResult> selector)
         {
             var array = new TResult[source.Length];
@@ -34,7 +34,7 @@ namespace NetFabric.Hyperlinq
             return array;
         }
 
-        [Pure]
+        
         static TResult[] ToArray<TSource, TResult>(this ReadOnlySpan<TSource> source, SelectorAt<TSource, TResult> selector)
         {
             var array = new TResult[source.Length];
@@ -43,7 +43,7 @@ namespace NetFabric.Hyperlinq
             return array;
         }
 
-        [Pure]
+        
         static TResult[] ToArray<TSource, TResult>(this ReadOnlySpan<TSource> source, Predicate<TSource> predicate, Selector<TSource, TResult> selector)
         {
             var builder = new LargeArrayBuilder<TResult>(initialize: true);

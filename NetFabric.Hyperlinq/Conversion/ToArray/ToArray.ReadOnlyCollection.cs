@@ -6,7 +6,7 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class ReadOnlyCollection
     {
-        [Pure]
+        
         static T[] ToArray<T>(IReadOnlyCollection<T> source)
         {
             var array = new T[source.Count];

@@ -232,8 +232,6 @@ namespace NetFabric.Hyperlinq.Generator
             builder.AppendLineInvariant(generatedCodeAttribute);
             builder.AppendLineInvariant("[DebuggerNonUserCode]");
             builder.AppendLineInvariant("[MethodImpl(MethodImplOptions.AggressiveInlining)]");
-            if (!implementedTypeMethod.ReturnsVoid)
-                builder.AppendLineInvariant("[Pure]");
             builder.AppendLineInvariant($"public {methodReadonly} {methodReturnType} {methodName}{methodGenericParameters}({methodParameters})");
             foreach (var (name, constraints) in typeParameters.Where(typeParameter => typeParameter.Constraints.Any()))
                 builder.AppendLineInvariant($"where {name} : {constraints.ToCommaSeparated()}");
@@ -265,8 +263,6 @@ namespace NetFabric.Hyperlinq.Generator
             builder.AppendLineInvariant(generatedCodeAttribute);
             builder.AppendLineInvariant("[DebuggerNonUserCode]");
             builder.AppendLineInvariant("[MethodImpl(MethodImplOptions.AggressiveInlining)]");
-            if (!implementedTypeMethod.ReturnsVoid)
-                builder.AppendLineInvariant("[Pure]");
             builder.AppendLineInvariant($"public static {methodReturnType} {methodName}{methodGenericParameters}(this {methodExtensionType} source{methodParameters})");
             foreach (var (name, constraints) in typeParameters.Where(typeParameter => typeParameter.Constraints.Any()))
                 builder.AppendLineInvariant($"where {name} : {constraints.ToCommaSeparated()}");

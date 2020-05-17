@@ -10,7 +10,7 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class AsyncValueEnumerable
     {
-        [Pure]
+        
         public static WhereIndexEnumerable<TEnumerable, TEnumerator, TSource> Where<TEnumerable, TEnumerator, TSource>(this TEnumerable source, AsyncPredicateAt<TSource> predicate)
             where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
@@ -34,7 +34,7 @@ namespace NetFabric.Hyperlinq
                 this.predicate = predicate;
             }
 
-            [Pure]
+            
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly Enumerator GetAsyncEnumerator(CancellationToken cancellationToken) => new Enumerator(in this, cancellationToken);
             readonly IAsyncEnumerator<TSource> IAsyncEnumerable<TSource>.GetAsyncEnumerator(CancellationToken cancellationToken) => new Enumerator(in this, cancellationToken);
@@ -88,15 +88,15 @@ namespace NetFabric.Hyperlinq
             public AsyncValueEnumerable.WhereIndexEnumerable<TEnumerable, TEnumerator, TSource> Where(AsyncPredicateAt<TSource> predicate)
                 => AsyncValueEnumerable.Where<TEnumerable, TEnumerator, TSource>(source, Utils.Combine(this.predicate, predicate));
 
-            [Pure]
+            
             public ValueTask<Option<TSource>> ElementAtAsync(int index, CancellationToken cancellationToken = default)
                 => AsyncValueEnumerable.ElementAtAsync<TEnumerable, TEnumerator, TSource>(source, index, predicate, cancellationToken);
 
-            [Pure]
+            
             public ValueTask<Option<TSource>> FirstAsync(CancellationToken cancellationToken = default)
                 => AsyncValueEnumerable.FirstAsync<TEnumerable, TEnumerator, TSource>(source, predicate, cancellationToken);
 
-            [Pure]
+            
             public ValueTask<Option<TSource>> SingleAsync(CancellationToken cancellationToken = default)
                 => AsyncValueEnumerable.SingleAsync<TEnumerable, TEnumerator, TSource>(source, predicate, cancellationToken);
 

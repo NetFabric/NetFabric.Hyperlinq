@@ -6,7 +6,7 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class ReadOnlyList
     {
-        [Pure]
+        
         public static List<TSource> ToList<TList, TSource>(this TList source)
             where TList : notnull, IReadOnlyList<TSource>
             => source switch
@@ -16,12 +16,12 @@ namespace NetFabric.Hyperlinq
                 _ => new List<TSource>(new ToListCollection<TList, TSource>(source, 0, source.Count)),
             };
 
-        [Pure]
+        
         static List<TSource> ToList<TList, TSource>(this TList source, int skipCount, int takeCount)
             where TList : notnull, IReadOnlyList<TSource>
             => new List<TSource>(new ToListCollection<TList, TSource>(source, skipCount, takeCount));
 
-        [Pure]
+        
         static List<TSource> ToList<TList, TSource>(this TList source, Predicate<TSource> predicate, int skipCount, int takeCount)
             where TList : notnull, IReadOnlyList<TSource>
         {
@@ -36,7 +36,7 @@ namespace NetFabric.Hyperlinq
             return list;
         }
 
-        [Pure]
+        
         static List<TSource> ToList<TList, TSource>(this TList source, PredicateAt<TSource> predicate, int skipCount, int takeCount)
             where TList : notnull, IReadOnlyList<TSource>
         {
@@ -50,17 +50,17 @@ namespace NetFabric.Hyperlinq
             return list;
         }
 
-        [Pure]
+        
         static List<TResult> ToList<TList, TSource, TResult>(this TList source, Selector<TSource, TResult> selector, int skipCount, int takeCount)
             where TList : notnull, IReadOnlyList<TSource>
             => new List<TResult>(new ToListCollection<TList, TSource, TResult>(source, selector, skipCount, takeCount));
 
-        [Pure]
+        
         static List<TResult> ToList<TList, TSource, TResult>(this TList source, SelectorAt<TSource, TResult> selector, int skipCount, int takeCount)
             where TList : notnull, IReadOnlyList<TSource>
             => new List<TResult>(new IndexedToListCollection<TList, TSource, TResult>(source, selector, skipCount, takeCount));
 
-        [Pure]
+        
         static List<TResult> ToList<TList, TSource, TResult>(this TList source, Predicate<TSource> predicate, Selector<TSource, TResult> selector, int skipCount, int takeCount)
             where TList : notnull, IReadOnlyList<TSource>
         {

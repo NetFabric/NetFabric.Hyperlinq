@@ -9,7 +9,7 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class ValueEnumerable
     {
-        [Pure]
+        
         public static EmptyEnumerable<TSource> Empty<TSource>() =>
             EmptyEnumerable<TSource>.Instance;
 
@@ -27,7 +27,7 @@ namespace NetFabric.Hyperlinq
             public TSource this[int index] 
                 => Throw.IndexOutOfRangeException<TSource>(); 
 
-            [Pure]
+            
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Enumerator GetEnumerator() => new Enumerator();
             DisposableEnumerator IValueEnumerable<TSource, EmptyEnumerable<TSource>.DisposableEnumerator>.GetEnumerator() => new DisposableEnumerator();

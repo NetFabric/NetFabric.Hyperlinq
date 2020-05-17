@@ -8,7 +8,7 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class Array
     {
-        [Pure]
+        
         public static SpanSelectEnumerable<TSource, TResult> Select<TSource, TResult>(
             this ReadOnlySpan<TSource> source, 
             Selector<TSource, TResult> selector)
@@ -30,7 +30,7 @@ namespace NetFabric.Hyperlinq
                 this.selector = selector;
             }
 
-            [Pure]
+            
             public readonly Enumerator GetEnumerator() => new Enumerator(in this);
 
             public readonly int Count => source.Length;
@@ -75,17 +75,17 @@ namespace NetFabric.Hyperlinq
             public bool Contains(TResult value, IEqualityComparer<TResult>? comparer = null)
                 => Array.Contains<TSource, TResult>(source, value, comparer, selector);
 
-            [Pure]
+            
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Option<TResult> ElementAt(int index)
                 => Array.ElementAt<TSource, TResult>(source, index, selector);
 
-            [Pure]
+            
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Option<TResult> First()
                 => Array.First<TSource, TResult>(source, selector);
 
-            [Pure]
+            
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Option<TResult> Single()
                 => Array.Single<TSource, TResult>(source, selector);

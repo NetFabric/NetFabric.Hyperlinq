@@ -8,7 +8,7 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class ValueEnumerable
     {
-        [Pure]
+        
         public static TSource[] ToArray<TEnumerable, TEnumerator, TSource>(this TEnumerable source)
             where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
@@ -31,7 +31,7 @@ namespace NetFabric.Hyperlinq
             }
         }
 
-        [Pure]
+        
         static TSource[] ToArray<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Predicate<TSource> predicate)
             where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
@@ -41,7 +41,7 @@ namespace NetFabric.Hyperlinq
             return builder.ToArray();
         }
 
-        [Pure]
+        
         static TSource[] ToArray<TEnumerable, TEnumerator, TSource>(this TEnumerable source, PredicateAt<TSource> predicate)
             where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
@@ -51,7 +51,7 @@ namespace NetFabric.Hyperlinq
             return builder.ToArray();
         }
 
-        [Pure]
+        
         static TResult[] ToArray<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, Selector<TSource, TResult> selector)
             where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
@@ -61,7 +61,7 @@ namespace NetFabric.Hyperlinq
             return builder.ToArray();
         }
 
-        [Pure]
+        
         static TResult[] ToArray<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, SelectorAt<TSource, TResult> selector)
             where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
@@ -71,7 +71,7 @@ namespace NetFabric.Hyperlinq
             return builder.ToArray();
         }
 
-        [Pure]
+        
         static TResult[] ToArray<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, Predicate<TSource> predicate, Selector<TSource, TResult> selector)
             where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>

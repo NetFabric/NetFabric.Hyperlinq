@@ -11,7 +11,7 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class AsyncValueEnumerable
     {
-        [Pure]
+        
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static SkipTakeEnumerable<TEnumerable, TEnumerator, TSource> SkipTake<TEnumerable, TEnumerator, TSource>(this TEnumerable source, int skipCount, int takeCount)
             where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
@@ -34,7 +34,7 @@ namespace NetFabric.Hyperlinq
                 this.takeCount = takeCount;
             }
 
-            [Pure]
+            
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly Enumerator GetAsyncEnumerator(CancellationToken cancellationToken = default) 
                 => new Enumerator(in this, cancellationToken);

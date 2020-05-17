@@ -9,7 +9,7 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class ReadOnlyList
     {
-        [Pure]
+        
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static DistinctEnumerable<TList, TSource> Distinct<TList, TSource>(
             this TList source, 
@@ -17,7 +17,7 @@ namespace NetFabric.Hyperlinq
             where TList : notnull, IReadOnlyList<TSource>
             => new DistinctEnumerable<TList, TSource>(source, comparer, 0, source.Count);
 
-        [Pure]
+        
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static DistinctEnumerable<TList, TSource> Distinct<TList, TSource>(
             this TList source,
@@ -42,7 +42,7 @@ namespace NetFabric.Hyperlinq
                 (this.skipCount, this.takeCount) = Utils.SkipTake(source.Count, skipCount, takeCount);
             }
 
-            [Pure]
+            
             public readonly Enumerator GetEnumerator() => new Enumerator(in this);
             readonly DisposableEnumerator IValueEnumerable<TSource, DistinctEnumerable<TList, TSource>.DisposableEnumerator>.GetEnumerator() => new DisposableEnumerator(in this);
             readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new DisposableEnumerator(in this);

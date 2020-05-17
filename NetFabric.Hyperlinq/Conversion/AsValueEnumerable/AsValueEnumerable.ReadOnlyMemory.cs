@@ -9,7 +9,7 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class Array
     {
-        [Pure]
+        
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static MemoryValueEnumerableWrapper<TSource> AsValueEnumerable<TSource>(this ReadOnlyMemory<TSource> source)
             => new MemoryValueEnumerableWrapper<TSource>(source);
@@ -28,7 +28,7 @@ namespace NetFabric.Hyperlinq
             public readonly ref readonly TSource this[int index] 
                 => ref source.Span[index];
 
-            [Pure]
+            
             public readonly Enumerator GetEnumerator() 
                 => new Enumerator(source);
             readonly DisposableEnumerator IValueEnumerable<TSource, MemoryValueEnumerableWrapper<TSource>.DisposableEnumerator>.GetEnumerator() 
@@ -126,12 +126,12 @@ namespace NetFabric.Hyperlinq
                 public readonly void Dispose() { }
             }
 
-            [Pure]
+            
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TSource[] ToArray()
                 => source.Span.ToArray();
 
-            [Pure]
+            
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public List<TSource> ToList()
                 => Array.ToList<TSource>(source.Span);

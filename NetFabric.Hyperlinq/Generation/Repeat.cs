@@ -9,7 +9,7 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class ValueEnumerable
     {
-        [Pure]
+        
         public static RepeatEnumerable<TSource> Repeat<TSource>([AllowNull] TSource value, int count)
         {
             if (count < 0) Throw.ArgumentOutOfRangeException(nameof(count));
@@ -42,7 +42,7 @@ namespace NetFabric.Hyperlinq
                 }
             }
 
-            [Pure]
+            
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly Enumerator GetEnumerator() => new Enumerator(in this);
             readonly DisposableEnumerator IValueEnumerable<TSource, DisposableEnumerator>.GetEnumerator() => new DisposableEnumerator(in this);

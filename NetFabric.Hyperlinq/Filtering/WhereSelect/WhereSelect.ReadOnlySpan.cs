@@ -7,7 +7,7 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class Array
     {
-        [Pure]
+        
         static SpanWhereSelectEnumerable<TSource, TResult> WhereSelect<TSource, TResult>(
             this ReadOnlySpan<TSource> source, 
             Predicate<TSource> predicate, 
@@ -28,7 +28,7 @@ namespace NetFabric.Hyperlinq
                 this.selector = selector;
             }
 
-            [Pure]
+            
             public readonly Enumerator GetEnumerator() => new Enumerator(in this);
 
             public ref struct Enumerator
