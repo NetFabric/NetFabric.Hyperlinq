@@ -61,9 +61,11 @@ namespace NetFabric.Hyperlinq
                     Current = default!;
                 }
 
+#pragma warning disable CS8766 // Nullability of reference types in return type doesn't match implicitly implemented member (possibly because of nullability attributes).
                 [MaybeNull]
                 public TResult Current { get; private set; }
-                
+#pragma warning restore CS8766 // Nullability of reference types in return type doesn't match implicitly implemented member (possibly because of nullability attributes).
+
                 public async ValueTask<bool> MoveNextAsync()
                 {
                     while (await enumerator.MoveNextAsync().ConfigureAwait(false))
@@ -112,7 +114,7 @@ namespace NetFabric.Hyperlinq
 
             public ValueTask<Dictionary<TKey, TResult>> ToDictionaryAsync<TKey>(AsyncSelector<TResult, TKey> keySelector, CancellationToken cancellationToken = default)
                 => ToDictionaryAsync<TKey>(keySelector, EqualityComparer<TKey>.Default, cancellationToken);
-            public async ValueTask<Dictionary<TKey, TResult>> ToDictionaryAsync<TKey>(AsyncSelector<TResult, TKey> keySelector, IEqualityComparer<TKey> comparer, CancellationToken cancellationToken = default)
+            public async ValueTask<Dictionary<TKey, TResult>> ToDictionaryAsync<TKey>(AsyncSelector<TResult, TKey> keySelector, IEqualityComparer<TKey>? comparer, CancellationToken cancellationToken = default)
             {
                 var dictionary = new Dictionary<TKey, TResult>(0, comparer);
 
@@ -136,7 +138,7 @@ namespace NetFabric.Hyperlinq
 
             public ValueTask<Dictionary<TKey, TElement>> ToDictionaryAsync<TKey, TElement>(AsyncSelector<TResult, TKey> keySelector, AsyncSelector<TResult, TElement> elementSelector, CancellationToken cancellationToken = default)
                 => ToDictionaryAsync<TKey, TElement>(keySelector, elementSelector, EqualityComparer<TKey>.Default);
-            public async ValueTask<Dictionary<TKey, TElement>> ToDictionaryAsync<TKey, TElement>(AsyncSelector<TResult, TKey> keySelector, AsyncSelector<TResult, TElement> elementSelector, IEqualityComparer<TKey> comparer, CancellationToken cancellationToken = default)
+            public async ValueTask<Dictionary<TKey, TElement>> ToDictionaryAsync<TKey, TElement>(AsyncSelector<TResult, TKey> keySelector, AsyncSelector<TResult, TElement> elementSelector, IEqualityComparer<TKey>? comparer, CancellationToken cancellationToken = default)
             {
                 var dictionary = new Dictionary<TKey, TElement>(0, comparer);
 

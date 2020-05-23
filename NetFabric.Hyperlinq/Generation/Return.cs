@@ -52,6 +52,8 @@ namespace NetFabric.Hyperlinq
 
             void ICollection<TSource>.CopyTo(TSource[] array, int arrayIndex) 
                 => array[arrayIndex] = value;
+            bool ICollection<TSource>.Contains(TSource item)
+                => Contains(item);
             void ICollection<TSource>.Add(TSource item) 
                 => throw new NotImplementedException();
             void ICollection<TSource>.Clear() 
@@ -131,12 +133,10 @@ namespace NetFabric.Hyperlinq
                 => true;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public bool Contains(TSource value)
-                => EqualityComparer<TSource>.Default.Equals(this.value, value);
-
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public bool Contains(TSource value, IEqualityComparer<TSource> comparer)
-                => comparer.Equals(this.value, value);
+            public bool Contains(TSource value, IEqualityComparer<TSource>? comparer = null)
+                => comparer is null
+                    ? EqualityComparer<TSource>.Default.Equals(this.value, value)
+                    : comparer.Equals(this.value, value);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public ReturnEnumerable<TResult> Select<TResult>(Selector<TSource, TResult> selector)
@@ -163,12 +163,12 @@ namespace NetFabric.Hyperlinq
 
             public Dictionary<TKey, TSource> ToDictionary<TKey>(Selector<TSource, TKey> keySelector)
                 => ToDictionary<TKey>(keySelector, EqualityComparer<TKey>.Default);
-            public Dictionary<TKey, TSource> ToDictionary<TKey>(Selector<TSource, TKey> keySelector, IEqualityComparer<TKey> comparer)
+            public Dictionary<TKey, TSource> ToDictionary<TKey>(Selector<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer)
                 => new Dictionary<TKey, TSource>(1, comparer) { { keySelector(value), value } };
 
             public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Selector<TSource, TKey> keySelector, Selector<TSource, TElement> elementSelector)
                 => ToDictionary<TKey, TElement>(keySelector, elementSelector, EqualityComparer<TKey>.Default);
-            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Selector<TSource, TKey> keySelector, Selector<TSource, TElement> elementSelector, IEqualityComparer<TKey> comparer)
+            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Selector<TSource, TKey> keySelector, Selector<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer)
                 => new Dictionary<TKey, TElement>(1, comparer) { { keySelector(value), elementSelector(value) } };
         }
 
