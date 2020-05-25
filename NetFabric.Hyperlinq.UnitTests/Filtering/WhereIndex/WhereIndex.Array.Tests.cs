@@ -7,7 +7,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.WhereIndex
     public class ArrayTests
     {
         [Fact]
-        public void WhereIndex_With_NullPredicate_Must_Throw()
+        public void Where_With_NullPredicate_Must_Throw()
         {
             // Arrange
             var source = new int[0];
@@ -26,7 +26,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.WhereIndex
         [MemberData(nameof(TestData.PredicateAtEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateAtSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateAtMultiple), MemberType = typeof(TestData))]
-        public void WhereIndex_With_ValidData_Must_Succeed(int[] source, PredicateAt<int> predicate)
+        public void Where_With_ValidData_Must_Succeed(int[] source, PredicateAt<int> predicate)
         {
             // Arrange
             var expected = System.Linq.Enumerable.Where(source, predicate.AsFunc());

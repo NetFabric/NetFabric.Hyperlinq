@@ -2,14 +2,14 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Diagnostics.Contracts;
 using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
     public static partial class ReadOnlyList
     {
-        
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static SelectIndexEnumerable<TList, TSource, TResult> Select<TList, TSource, TResult>(
             this TList source, 
             SelectorAt<TSource, TResult> selector)

@@ -2,14 +2,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Diagnostics.Contracts;
 using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
     public static partial class Array
     {
-        
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static MemoryWhereSelectEnumerable<TSource, TResult> WhereSelect<TSource, TResult>(
             this ReadOnlyMemory<TSource> source, 
             Predicate<TSource> predicate, 

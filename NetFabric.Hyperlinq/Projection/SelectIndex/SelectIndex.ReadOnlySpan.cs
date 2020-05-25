@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Diagnostics.Contracts;
 using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
     public static partial class Array
     {
-        
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static SpanSelectIndexEnumerable<TSource, TResult> Select<TSource, TResult>(
             this ReadOnlySpan<TSource> source, 
             SelectorAt<TSource, TResult> selector)

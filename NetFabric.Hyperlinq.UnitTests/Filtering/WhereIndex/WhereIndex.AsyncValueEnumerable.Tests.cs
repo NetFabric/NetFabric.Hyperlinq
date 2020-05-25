@@ -7,7 +7,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.WhereIndex
     public class AsyncValueEnumerableTests
     {
         [Fact]
-        public void WhereIndex_Predicate_With_Null_Must_Throw()
+        public void Where_Predicate_With_Null_Must_Throw()
         {
             // Arrange
             var enumerable = Wrap.AsAsyncValueEnumerable(new int[0]);
@@ -27,7 +27,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.WhereIndex
         [MemberData(nameof(TestData.PredicateAtEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateAtSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateAtMultiple), MemberType = typeof(TestData))]
-        public void WhereIndex_Predicate_With_ValidData_Must_Succeed(int[] source, PredicateAt<int> predicate)
+        public void Where_Predicate_With_ValidData_Must_Succeed(int[] source, PredicateAt<int> predicate)
         {
             // Arrange
             var wrapped = Wrap.AsAsyncValueEnumerable(source);
