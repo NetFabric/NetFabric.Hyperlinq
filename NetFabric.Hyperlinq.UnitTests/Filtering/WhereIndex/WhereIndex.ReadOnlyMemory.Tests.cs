@@ -4,17 +4,17 @@ using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests.Filtering.WhereIndex
 {
-    public class ReadOnlyListTests
+    public class ReadOnlyMemoryTests
     {
         [Fact]
         public void WhereIndex_With_NullPredicate_Must_Throw()
         {
             // Arrange
-            var list = Wrap.AsValueReadOnlyList(new int[0]);
+            var source = new int[0];
             var predicate = (PredicateAt<int>)null;
 
             // Act
-            Action action = () => _ = ReadOnlyList.Where(list, predicate);
+            Action action = () => _ = Array.Where((ReadOnlyMemory<int>)source.AsMemory(), predicate);
 
             // Assert
             _ = action.Must()
@@ -29,11 +29,10 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.WhereIndex
         public void WhereIndex_With_ValidData_Must_Succeed(int[] source, PredicateAt<int> predicate)
         {
             // Arrange
-            var wrapped = Wrap.AsValueReadOnlyList(source);
-            var expected = System.Linq.Enumerable.Where(wrapped, predicate.AsFunc());
+            var expected = System.Linq.Enumerable.Where(source, predicate.AsFunc());
 
             // Act
-            var result = ReadOnlyList.Where(wrapped, predicate);
+            var result = Array.Where((ReadOnlyMemory<int>)source.AsMemory(), predicate);
 
             // Assert
             _ = result.Must()

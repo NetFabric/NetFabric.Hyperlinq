@@ -51,7 +51,7 @@ namespace NetFabric.Hyperlinq
                 {
                     enumerator = enumerable.source.GetEnumerator();
                     predicate = enumerable.predicate;
-                    index = 0;
+                    index = -1;
                 }
 
                 public readonly TSource Current
@@ -63,9 +63,9 @@ namespace NetFabric.Hyperlinq
                 {
                     checked
                     {
-                        for (; enumerator.MoveNext(); index++)
+                        while (enumerator.MoveNext())
                         {
-                            if (predicate(enumerator.Current, index))
+                            if (predicate(enumerator.Current, ++index))
                                 return true;
                         }
                     }
