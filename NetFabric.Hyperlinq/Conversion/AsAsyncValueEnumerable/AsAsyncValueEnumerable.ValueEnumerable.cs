@@ -64,7 +64,7 @@ namespace NetFabric.Hyperlinq
                 public ValueTask DisposeAsync() 
                 {
                     enumerator.Dispose();
-                    return new ValueTask();
+                    return default;
                 }
             }
 

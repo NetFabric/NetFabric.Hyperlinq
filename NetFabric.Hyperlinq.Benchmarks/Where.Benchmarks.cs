@@ -2,6 +2,8 @@ using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Configs;
 using JM.LinqFaster;
 using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace NetFabric.Hyperlinq.Benchmarks
 {
@@ -51,6 +53,16 @@ namespace NetFabric.Hyperlinq.Benchmarks
             return sum;
         }
 
+        [BenchmarkCategory("AsyncEnumerable_Value")]
+        [Benchmark(Baseline = true)]
+        public async ValueTask<int> Linq_AsyncEnumerable_Value()
+        {
+            var sum = 0;
+            await foreach (var item in System.Linq.AsyncEnumerable.Where<int>(asyncEnumerableValue, item => (item & 0x01) == 0))
+                sum += item;
+            return sum;
+        }
+
         [BenchmarkCategory("Enumerable_Reference")]
         [Benchmark(Baseline = true)]
         public int Linq_Enumerable_Reference()
@@ -77,6 +89,16 @@ namespace NetFabric.Hyperlinq.Benchmarks
         {
             var sum = 0;
             foreach (var item in System.Linq.Enumerable.Where(listReference, item => (item & 0x01) == 0))
+                sum += item;
+            return sum;
+        }
+
+        [BenchmarkCategory("AsyncEnumerable_Reference")]
+        [Benchmark(Baseline = true)]
+        public async ValueTask<int> Linq_AsyncEnumerable_Reference()
+        {
+            var sum = 0;
+            await foreach (var item in System.Linq.AsyncEnumerable.Where<int>(asyncEnumerableReference, item => (item & 0x01) == 0))
                 sum += item;
             return sum;
         }
@@ -151,6 +173,20 @@ namespace NetFabric.Hyperlinq.Benchmarks
             return sum;
         }
 
+        [BenchmarkCategory("AsyncEnumerable_Value")]
+        [Benchmark]
+        public async ValueTask<int> Hyperlinq_AsyncEnumerable_Value()
+        {
+            var sum = 0;
+            await foreach (var item in AsyncEnumerable
+                .AsAsyncValueEnumerable<TestAsyncEnumerable.AsyncEnumerable, TestAsyncEnumerable.AsyncEnumerable.AsyncEnumerator, int>(asyncEnumerableValue, (enumerable, cancellationToken) => enumerable.GetAsyncEnumerator(cancellationToken))
+                .Where((item, _) => new ValueTask<bool>((item & 0x01) == 0)))
+            {
+                sum += item;
+            }
+            return sum;
+        }
+
         [BenchmarkCategory("Enumerable_Reference")]
         [Benchmark]
         public int Hyperlinq_Enumerable_Reference()
@@ -177,6 +213,16 @@ namespace NetFabric.Hyperlinq.Benchmarks
         {
             var sum = 0;
             foreach (var item in listReference.AsValueEnumerable().Where(item => (item & 0x01) == 0))
+                sum += item;
+            return sum;
+        }
+
+        [BenchmarkCategory("AsyncEnumerable_Reference")]
+        [Benchmark]
+        public async ValueTask<int> Hyperlinq_AsyncEnumerable_Reference()
+        {
+            var sum = 0;
+            await foreach (var item in asyncEnumerableReference.AsAsyncValueEnumerable().Where((item, _) => new ValueTask<bool>((item & 0x01) == 0)))
                 sum += item;
             return sum;
         }
