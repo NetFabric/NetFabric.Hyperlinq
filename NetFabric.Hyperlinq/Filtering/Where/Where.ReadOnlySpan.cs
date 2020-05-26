@@ -72,7 +72,11 @@ namespace NetFabric.Hyperlinq
                 => Where<TSource>(source, Utils.Combine(this.predicate, predicate));
 
             public SpanWhereSelectEnumerable<TSource, TResult> Select<TResult>(Selector<TSource, TResult> selector)
-                => WhereSelect<TSource, TResult>(source, predicate, selector);
+            {
+                if (selector is null) Throw.ArgumentNullException(nameof(selector));
+
+                return WhereSelect<TSource, TResult>(source, predicate, selector);
+            }
 
             public Option<TSource> ElementAt(int index)
                 => Array.ElementAt<TSource>(source, index, predicate);

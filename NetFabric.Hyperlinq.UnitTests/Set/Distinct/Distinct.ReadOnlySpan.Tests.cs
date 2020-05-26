@@ -3,7 +3,7 @@ using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct
 {
-    public class SpanTests
+    public class ReadOnlySpanTests
     {
         [Theory]
         [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
@@ -17,7 +17,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct
 
             // Act
             var result = Array
-                .Distinct<int>(source.AsSpan());
+                .Distinct<int>((ReadOnlySpan<int>)source.AsSpan());
 
             // Assert
             var resultEnumerator = result.GetEnumerator();

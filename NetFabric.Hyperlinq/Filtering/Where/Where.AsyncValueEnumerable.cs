@@ -194,7 +194,11 @@ namespace NetFabric.Hyperlinq
                 => AsyncValueEnumerable.ContainsAsync<TEnumerable, TEnumerator, TSource>(source, value, comparer, predicate, cancellationToken);
 
             public AsyncValueEnumerable.WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult> Select<TResult>(AsyncSelector<TSource, TResult> selector)
-                => AsyncValueEnumerable.WhereSelect<TEnumerable, TEnumerator, TSource, TResult>(source, predicate, selector);
+            {
+                if (selector is null) Throw.ArgumentNullException(nameof(selector));
+
+                return AsyncValueEnumerable.WhereSelect<TEnumerable, TEnumerator, TSource, TResult>(source, predicate, selector);
+            }
 
             public AsyncValueEnumerable.WhereEnumerable<TEnumerable, TEnumerator, TSource> Where(AsyncPredicate<TSource> predicate)
                 => AsyncValueEnumerable.Where<TEnumerable, TEnumerator, TSource>(source, Utils.Combine(this.predicate, predicate));

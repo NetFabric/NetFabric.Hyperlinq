@@ -4,18 +4,18 @@ using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests.Filtering.WhereSelect
 {
-    public class ReadOnlyListTests
+    public class SpanTests
     {
         [Fact]
         public void WhereSelect_Predicate_With_Null_Must_Throw()
         {
             // Arrange
-            var source = Wrap.AsValueReadOnlyList(new int[0]);
+            var source = new int[0];
             var predicate = (Predicate<int>)null;
 
             // Act
-            Action action = () => _ = ReadOnlyList
-                .Where<Wrap.ValueReadOnlyList<int>, int>(source, predicate)
+            Action action = () => _ = Array
+                .Where(source.AsSpan(), predicate)
                 .Select(item => item.ToString());
 
             // Assert
@@ -28,12 +28,12 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.WhereSelect
         public void WhereSelect_Selector_With_Null_Must_Throw()
         {
             // Arrange
-            var source = Wrap.AsValueReadOnlyList(new int[0]);
+            var source = new int[0];
             var selector = (Selector<int, string>)null;
 
             // Act
-            Action action = () => _ = ReadOnlyList
-                .Where<Wrap.ValueReadOnlyList<int>, int>(source, _ => true)
+            Action action = () => _ = Array
+                .Where(source.AsSpan(), _ => true)
                 .Select(selector);
 
             // Assert
@@ -49,20 +49,32 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.WhereSelect
         public void WhereSelect_With_ValidData_Must_Succeed(int[] source, Predicate<int> predicate, Selector<int, string> selector)
         {
             // Arrange
-            var wrapped = Wrap.AsValueReadOnlyList(source);
             var expected = 
                 System.Linq.Enumerable.Select(
-                    System.Linq.Enumerable.Where(wrapped, predicate.AsFunc()), selector.AsFunc());
+                    System.Linq.Enumerable.Where(source, predicate.AsFunc()), selector.AsFunc());
 
             // Act
-            var result = ReadOnlyList
-                .Where<Wrap.ValueReadOnlyList<int>, int>(wrapped, predicate)
+            var result = Array
+                .Where(source.AsSpan(), predicate)
                 .Select(selector);
 
             // Assert
-            _ = result.Must()
-                .BeEnumerableOf<string>()
-                .BeEqualTo(expected);
+            var resultEnumerator = result.GetEnumerator();
+            using var expectedEnumerator = expected.GetEnumerator();
+            while (true)
+            {
+                var resultEnded = !resultEnumerator.MoveNext();
+                var expectedEnded = !expectedEnumerator.MoveNext();
+
+                if (resultEnded != expectedEnded)
+                    throw new Exception("Not same size");
+
+                if (resultEnded)
+                    break;
+
+                if (resultEnumerator.Current != expectedEnumerator.Current)
+                    throw new Exception("Items are not equal");
+            }
         }
     }
 }

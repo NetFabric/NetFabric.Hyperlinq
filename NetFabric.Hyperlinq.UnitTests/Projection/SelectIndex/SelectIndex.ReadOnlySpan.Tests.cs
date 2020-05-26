@@ -4,17 +4,17 @@ using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests.Projection.SelectIndex
 {
-    public class ReadOnlyListTests
+    public class ReadOnlySpanTests
     {
         [Fact]
         public void Select_With_NullSelector_Must_Throw()
         {
             // Arrange
-            var source = Wrap.AsValueReadOnlyList(new int[0]);
+            var source = new int[0];
             var selector = (SelectorAt<int, string>)null;
 
             // Act
-            Action action = () => _ = ReadOnlyList.Select<Wrap.ValueReadOnlyList<int>, int, string>(source, selector);
+            Action action = () => _ = Array.Select((ReadOnlySpan<int>)source.AsSpan(), selector);
 
             // Assert
             _ = action.Must()
@@ -29,18 +29,29 @@ namespace NetFabric.Hyperlinq.UnitTests.Projection.SelectIndex
         public void Select_With_ValidData_Must_Succeed(int[] source, SelectorAt<int, string> selector)
         {
             // Arrange
-            var wrapped = Wrap.AsValueReadOnlyList(source);
             var expected = 
-                System.Linq.Enumerable.Select(wrapped, selector.AsFunc());
+                System.Linq.Enumerable.Select(source, selector.AsFunc());
 
             // Act
-            var result = ReadOnlyList
-                .Select<Wrap.ValueReadOnlyList<int>, int, string>(wrapped, selector);
+            var result = Array.Select((ReadOnlySpan<int>)source.AsSpan(), selector);
 
             // Assert
-            _ = result.Must()
-                .BeEnumerableOf<string>()
-                .BeEqualTo(expected);
+            var resultEnumerator = result.GetEnumerator();
+            using var expectedEnumerator = expected.GetEnumerator();
+            while (true)
+            {
+                var resultEnded = !resultEnumerator.MoveNext();
+                var expectedEnded = !expectedEnumerator.MoveNext();
+
+                if (resultEnded != expectedEnded)
+                    throw new Exception("Not same size");
+
+                if (resultEnded)
+                    break;
+
+                if (resultEnumerator.Current != expectedEnumerator.Current)
+                    throw new Exception("Items are not equal");
+            }
         }
     }
 }

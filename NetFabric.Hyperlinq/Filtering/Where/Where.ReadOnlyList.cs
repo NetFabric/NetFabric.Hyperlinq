@@ -124,7 +124,11 @@ namespace NetFabric.Hyperlinq
                 => ReadOnlyList.Contains<TList, TSource>(source, value, comparer, predicate, skipCount, takeCount);
 
             public ReadOnlyList.WhereSelectEnumerable<TList, TSource, TResult> Select<TResult>(Selector<TSource, TResult> selector)
-                => ReadOnlyList.WhereSelect<TList, TSource, TResult>(source, predicate, selector, skipCount, takeCount);
+            {
+                if (selector is null) Throw.ArgumentNullException(nameof(selector));
+
+                return ReadOnlyList.WhereSelect<TList, TSource, TResult>(source, predicate, selector, skipCount, takeCount);
+            }
 
             public ReadOnlyList.WhereEnumerable<TList, TSource> Where(Predicate<TSource> predicate)
                 => ReadOnlyList.Where<TList, TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount);
