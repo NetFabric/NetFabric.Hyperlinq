@@ -2,14 +2,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Diagnostics.Contracts;
 using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
     public static partial class ValueEnumerable
     {
-        
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult> Select<TEnumerable, TEnumerator, TSource, TResult>(
             this TEnumerable source, 
             Selector<TSource, TResult> selector)

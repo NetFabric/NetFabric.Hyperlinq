@@ -24,19 +24,19 @@ namespace NetFabric.Hyperlinq.UnitTests.Projection.Select
         }
 
         [Theory]
-        [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
-        public void Select_With_ValidData_Must_Succeed(int[] source)
+        [MemberData(nameof(TestData.SelectorEmpty), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SelectorSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SelectorMultiple), MemberType = typeof(TestData))]
+        public void Select_With_ValidData_Must_Succeed(int[] source, Selector<int, string> selector)
         {
             // Arrange
             var wrapped = Wrap.AsValueReadOnlyCollection(source);
             var expected = 
-                System.Linq.Enumerable.Select(wrapped, item => item.ToString());
+                System.Linq.Enumerable.Select(wrapped, selector.AsFunc());
 
             // Act
             var result = ValueReadOnlyCollection
-                .Select<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int, string>(wrapped, item => item.ToString());
+                .Select<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int, string>(wrapped, selector);
 
             // Assert
             _ = result.Must()

@@ -7,7 +7,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Projection.SelectIndex
     public class ValueReadOnlyCollectionTests
     {
         [Fact]
-        public void SelectIndex_With_NullSelector_Must_Throw()
+        public void Select_With_NullSelector_Must_Throw()
         {
             // Arrange
             var collection = Wrap.AsValueReadOnlyCollection(new int[0]);
@@ -23,19 +23,19 @@ namespace NetFabric.Hyperlinq.UnitTests.Projection.SelectIndex
         }
 
         [Theory]
-        [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
-        public void SelectIndex_With_ValidData_Must_Succeed(int[] source)
+        [MemberData(nameof(TestData.SelectorAtEmpty), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SelectorAtSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SelectorAtMultiple), MemberType = typeof(TestData))]
+        public void Select_With_ValidData_Must_Succeed(int[] source, SelectorAt<int, string> selector)
         {
             // Arrange
             var wrapped = Wrap.AsValueReadOnlyCollection(source);
             var expected = 
-                System.Linq.Enumerable.Select(wrapped, (item, index) => (item + index).ToString());
+                System.Linq.Enumerable.Select(wrapped, selector.AsFunc());
 
             // Act
             var result = ValueReadOnlyCollection
-                .Select<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int, string>(wrapped, (item, index) => (item + index).ToString());
+                .Select<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int, string>(wrapped, selector);
 
             // Assert
             _ = result.Must()

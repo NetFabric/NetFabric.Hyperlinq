@@ -1,5 +1,6 @@
 using NetFabric.Assertive;
 using System;
+using System.Linq;
 using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests.Filtering.Where
@@ -14,8 +15,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.Where
             var predicate = (Predicate<int>)null;
 
             // Act
-            Action action = () => _ = Array
-                .Where<int>(source, predicate);
+            Action action = () => _ = Array.Where<int>(source, predicate);
 
             // Assert
             _ = action.Must()
@@ -33,13 +33,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.Where
             var expected = System.Linq.Enumerable.Where(source, predicate.AsFunc());
 
             // Act
-            var result = Array
-                .Where<int>(source, predicate);
+            var result = Array.Where<int>(source, predicate);
 
             // Assert
             _ = result.Must()
                 .BeEnumerableOf<int>()
-                .BeEqualTo(expected);
+                .BeEqualTo(expected, testRefReturns: false, testRefStructs: false);
+            _ = result.SequenceEqual(expected).Must().BeTrue();
         }
     }
 }

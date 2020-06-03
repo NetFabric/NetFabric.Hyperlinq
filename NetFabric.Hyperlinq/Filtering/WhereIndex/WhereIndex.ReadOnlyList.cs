@@ -2,14 +2,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Diagnostics.Contracts;
 using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
     public static partial class ReadOnlyList
     {
-        
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static WhereIndexEnumerable<TList, TSource> Where<TList, TSource>(this TList source, PredicateAt<TSource> predicate)
             where TList : notnull, IReadOnlyList<TSource>
         {

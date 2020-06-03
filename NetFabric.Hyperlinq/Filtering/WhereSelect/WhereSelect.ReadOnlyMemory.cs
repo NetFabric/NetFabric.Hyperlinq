@@ -2,14 +2,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Diagnostics.Contracts;
 using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
     public static partial class Array
     {
-        
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static MemoryWhereSelectEnumerable<TSource, TResult> WhereSelect<TSource, TResult>(
             this ReadOnlyMemory<TSource> source, 
             Predicate<TSource> predicate, 
@@ -133,6 +133,28 @@ namespace NetFabric.Hyperlinq
 
             public List<TResult> ToList()
                 => Array.ToList<TSource, TResult>(source, predicate, selector); // memory performs best
+
+            public bool SequenceEqual(IEnumerable<TResult> other, IEqualityComparer<TResult>? comparer = null)
+            {
+                comparer ??= EqualityComparer<TResult>.Default;
+
+                var enumerator = GetEnumerator();
+                using var otherEnumerator = other.GetEnumerator();
+                while (true)
+                {
+                    var thisEnded = !enumerator.MoveNext();
+                    var otherEnded = !otherEnumerator.MoveNext();
+
+                    if (thisEnded != otherEnded)
+                        return false;
+
+                    if (thisEnded)
+                        return true;
+
+                    if (!comparer.Equals(enumerator.Current, otherEnumerator.Current))
+                        return false;
+                }
+            }
         }
     }
 }

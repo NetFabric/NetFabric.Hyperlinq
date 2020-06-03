@@ -2,14 +2,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Diagnostics.Contracts;
 using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
     public static partial class ValueEnumerable
     {
-        
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static WhereIndexEnumerable<TEnumerable, TEnumerator, TSource> Where<TEnumerable, TEnumerator, TSource>(this TEnumerable source, PredicateAt<TSource> predicate)
             where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
@@ -51,7 +51,7 @@ namespace NetFabric.Hyperlinq
                 {
                     enumerator = enumerable.source.GetEnumerator();
                     predicate = enumerable.predicate;
-                    index = 0;
+                    index = -1;
                 }
 
                 public readonly TSource Current
@@ -63,9 +63,9 @@ namespace NetFabric.Hyperlinq
                 {
                     checked
                     {
-                        for (; enumerator.MoveNext(); index++)
+                        while (enumerator.MoveNext())
                         {
-                            if (predicate(enumerator.Current, index))
+                            if (predicate(enumerator.Current, ++index))
                                 return true;
                         }
                     }

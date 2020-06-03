@@ -11,11 +11,11 @@ namespace NetFabric.Hyperlinq.UnitTests.Projection.Select
         public void Select_With_NullSelector_Must_Throw()
         {
             // Arrange
-            var list = Wrap.AsValueReadOnlyList(new int[0]);
+            var source = Wrap.AsValueReadOnlyList(new int[0]);
             var selector = (Selector<int, string>)null;
 
             // Act
-            Action action = () => _ = ReadOnlyList.Select<Wrap.ValueReadOnlyList<int>, int, string>(list, selector);
+            Action action = () => _ = ReadOnlyList.Select<Wrap.ValueReadOnlyList<int>, int, string>(source, selector);
 
             // Assert
             _ = action.Must()
@@ -24,19 +24,19 @@ namespace NetFabric.Hyperlinq.UnitTests.Projection.Select
         }
 
         [Theory]
-        [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
-        public void Select_With_ValidData_Must_Succeed(int[] source)
+        [MemberData(nameof(TestData.SelectorEmpty), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SelectorSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SelectorMultiple), MemberType = typeof(TestData))]
+        public void Select_With_ValidData_Must_Succeed(int[] source, Selector<int, string> selector)
         {
             // Arrange
             var wrapped = Wrap.AsValueReadOnlyList(source);
             var expected = 
-                System.Linq.Enumerable.Select(wrapped, item => item.ToString());
+                System.Linq.Enumerable.Select(wrapped, selector.AsFunc());
 
             // Act
             var result = ReadOnlyList
-                .Select<Wrap.ValueReadOnlyList<int>, int, string>(wrapped, item => item.ToString());
+                .Select<Wrap.ValueReadOnlyList<int>, int, string>(wrapped, selector);
 
             // Assert
             _ = result.Must()

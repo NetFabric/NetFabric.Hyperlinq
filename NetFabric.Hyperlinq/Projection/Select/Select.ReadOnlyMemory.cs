@@ -2,14 +2,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Diagnostics.Contracts;
 using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
     public static partial class Array
     {
-        
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static MemorySelectEnumerable<TSource, TResult> Select<TSource, TResult>(
             this ReadOnlyMemory<TSource> source, 
             Selector<TSource, TResult> selector)
@@ -33,7 +33,8 @@ namespace NetFabric.Hyperlinq
                 this.selector = selector;
             }
 
-            public readonly int Count => source.Length;
+            public readonly int Count 
+                => source.Length;
 
             public readonly TResult this[int index]
             {
@@ -59,7 +60,7 @@ namespace NetFabric.Hyperlinq
             TResult IList<TResult>.this[int index]
             {
                 get => this[index];
-                set => throw new NotImplementedException();
+                set => throw new NotSupportedException();
             }
 
             bool ICollection<TResult>.IsReadOnly  
@@ -72,9 +73,9 @@ namespace NetFabric.Hyperlinq
                     array[index + arrayIndex] = selector(span[index]);
             }
             void ICollection<TResult>.Add(TResult item) 
-                => throw new NotImplementedException();
+                => throw new NotSupportedException();
             void ICollection<TResult>.Clear() 
-                => throw new NotImplementedException();
+                => throw new NotSupportedException();
             bool ICollection<TResult>.Contains(TResult item) 
             {
                 var span = source.Span;
@@ -86,7 +87,7 @@ namespace NetFabric.Hyperlinq
                 return false;
             }
             bool ICollection<TResult>.Remove(TResult item) 
-                => throw new NotImplementedException();
+                => throw new NotSupportedException();
             int IList<TResult>.IndexOf(TResult item)
             {
                 var span = source.Span;
@@ -98,9 +99,9 @@ namespace NetFabric.Hyperlinq
                 return -1;
             }
             void IList<TResult>.Insert(int index, TResult item)
-                => throw new NotImplementedException();
+                => throw new NotSupportedException();
             void IList<TResult>.RemoveAt(int index)
-                => throw new NotImplementedException();
+                => throw new NotSupportedException();
 
             public ref struct Enumerator
             {
@@ -179,6 +180,28 @@ namespace NetFabric.Hyperlinq
 
             public List<TResult> ToList()
                 => Array.ToList(source, selector); // memory performs best
+
+            public bool SequenceEqual(IEnumerable<TResult> other, IEqualityComparer<TResult>? comparer = null)
+            {
+                comparer ??= EqualityComparer<TResult>.Default;
+
+                var enumerator = GetEnumerator();
+                using var otherEnumerator = other.GetEnumerator();
+                while (true)
+                {
+                    var thisEnded = !enumerator.MoveNext();
+                    var otherEnded = !otherEnumerator.MoveNext();
+
+                    if (thisEnded != otherEnded)
+                        return false;
+
+                    if (thisEnded)
+                        return true;
+
+                    if (!comparer.Equals(enumerator.Current, otherEnumerator.Current))
+                        return false;
+                }
+            }
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

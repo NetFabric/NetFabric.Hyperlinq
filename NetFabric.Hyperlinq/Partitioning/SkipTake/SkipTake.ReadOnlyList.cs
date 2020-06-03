@@ -53,7 +53,7 @@ namespace NetFabric.Hyperlinq
             TSource IList<TSource>.this[int index]
             {
                 get => this[index];
-                set => throw new NotImplementedException();
+                set => throw new NotSupportedException();
             }
 
             bool ICollection<TSource>.IsReadOnly  
@@ -65,13 +65,13 @@ namespace NetFabric.Hyperlinq
                     array[index + arrayIndex] = source[index + skipCount];
             }
             void ICollection<TSource>.Add(TSource item) 
-                => throw new NotImplementedException();
+                => throw new NotSupportedException();
             void ICollection<TSource>.Clear() 
-                => throw new NotImplementedException();
+                => throw new NotSupportedException();
             bool ICollection<TSource>.Contains(TSource item) 
                 => ReadOnlyList.Contains<TList, TSource>(source, item, null, skipCount, takeCount);
             bool ICollection<TSource>.Remove(TSource item) 
-                => throw new NotImplementedException();
+                => throw new NotSupportedException();
             int IList<TSource>.IndexOf(TSource item)
             {
                 var end = skipCount + takeCount;
@@ -83,9 +83,9 @@ namespace NetFabric.Hyperlinq
                 return -1;
             }
             void IList<TSource>.Insert(int index, TSource item)
-                => throw new NotImplementedException();
+                => throw new NotSupportedException();
             void IList<TSource>.RemoveAt(int index)
-                => throw new NotImplementedException();
+                => throw new NotSupportedException();
 
             public struct Enumerator
                 : IEnumerator<TSource>

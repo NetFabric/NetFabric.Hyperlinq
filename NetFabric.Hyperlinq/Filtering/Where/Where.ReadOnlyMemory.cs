@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Diagnostics.Contracts;
 using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
@@ -120,7 +119,12 @@ namespace NetFabric.Hyperlinq
                 => Array.Where<TSource>(source, Utils.Combine(this.predicate, predicate));
 
             public MemoryWhereSelectEnumerable<TSource, TResult> Select<TResult>(Selector<TSource, TResult> selector)
-                => Array.WhereSelect<TSource, TResult>(source, predicate, selector);
+            {
+                if (selector is null)
+                    Throw.ArgumentNullException(nameof(selector));
+
+                return Array.WhereSelect<TSource, TResult>(source, predicate, selector);
+            }
 
             public Option<TSource> ElementAt(int index)
                 => Array.ElementAt(source.Span, index, predicate);
@@ -138,6 +142,28 @@ namespace NetFabric.Hyperlinq
 
             public List<TSource> ToList()
                 => Array.ToList<TSource>(source, predicate); // memory performs best
+
+            public bool SequenceEqual(IEnumerable<TSource> other, IEqualityComparer<TSource>? comparer = null)
+            {
+                comparer ??= EqualityComparer<TSource>.Default;
+
+                var enumerator = GetEnumerator();
+                using var otherEnumerator = other.GetEnumerator();
+                while (true)
+                {
+                    var thisEnded = !enumerator.MoveNext();
+                    var otherEnded = !otherEnumerator.MoveNext();
+
+                    if (thisEnded != otherEnded)
+                        return false;
+
+                    if (thisEnded)
+                        return true;
+
+                    if (!comparer.Equals(enumerator.Current, otherEnumerator.Current))
+                        return false;
+                }
+            }
         }
     }
 }

@@ -1,10 +1,10 @@
 ﻿using NetFabric.Assertive;
-using Xunit;
 using System;
+using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct
 {
-    public class ArrayTests
+    public class SpanTests
     {
         [Theory]
         [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
@@ -21,22 +21,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct
                 .Distinct<int>(source.AsSpan());
 
             // Assert
-            var resultEnumerator = result.GetEnumerator();
-            using var expectedEnumerator = expected.GetEnumerator();
-            while (true)
-            {
-                var resultEnded = !resultEnumerator.MoveNext();
-                var expectedEnded = !expectedEnumerator.MoveNext();
-
-                if (resultEnded != expectedEnded)
-                    throw new Exception("Not same size");
-
-                if (resultEnded)
-                    break;
-
-                if (resultEnumerator.Current != expectedEnumerator.Current)
-                    throw new Exception("Items are not equal");
-            }
+            _ = result.SequenceEqual(expected).Must().BeTrue();
         }
     }
 }
