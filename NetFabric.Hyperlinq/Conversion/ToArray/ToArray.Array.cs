@@ -1,6 +1,4 @@
-﻿using System.Diagnostics.Contracts;
-
-namespace NetFabric.Hyperlinq
+﻿namespace NetFabric.Hyperlinq
 {
     public static partial class Array
     {

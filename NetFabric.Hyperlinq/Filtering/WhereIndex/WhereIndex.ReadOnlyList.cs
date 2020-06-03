@@ -18,8 +18,8 @@ namespace NetFabric.Hyperlinq
             return new WhereIndexEnumerable<TList, TSource>(in source, predicate, 0, source.Count);
         }
 
-        
-        static WhereIndexEnumerable<TList, TSource> Where<TList, TSource>(this TList source, PredicateAt<TSource> predicate, int skipCount, int takeCount)
+
+        internal static WhereIndexEnumerable<TList, TSource> Where<TList, TSource>(this TList source, PredicateAt<TSource> predicate, int skipCount, int takeCount)
             where TList : notnull, IReadOnlyList<TSource>
             => new WhereIndexEnumerable<TList, TSource>(in source, predicate, skipCount, takeCount);
 
@@ -150,6 +150,28 @@ namespace NetFabric.Hyperlinq
                 => ReadOnlyList.ToDictionary<TList, TSource, TKey, TElement>(source, keySelector, elementSelector, EqualityComparer<TKey>.Default, predicate, skipCount, takeCount);
             public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Selector<TSource, TKey> keySelector, Selector<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer)
                 => ReadOnlyList.ToDictionary<TList, TSource, TKey, TElement>(source, keySelector, elementSelector, comparer, predicate, skipCount, takeCount);
+
+            public readonly bool SequenceEqual(IEnumerable<TSource> other, IEqualityComparer<TSource>? comparer = null)
+            {
+                comparer ??= EqualityComparer<TSource>.Default;
+
+                var enumerator = GetEnumerator();
+                using var otherEnumerator = other.GetEnumerator();
+                while (true)
+                {
+                    var thisEnded = !enumerator.MoveNext();
+                    var otherEnded = !otherEnumerator.MoveNext();
+
+                    if (thisEnded != otherEnded)
+                        return false;
+
+                    if (thisEnded)
+                        return true;
+
+                    if (!comparer.Equals(enumerator.Current, otherEnumerator.Current))
+                        return false;
+                }
+            }
         }
     }
 }

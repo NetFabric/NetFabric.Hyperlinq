@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 
 namespace NetFabric.Hyperlinq
 {
@@ -12,7 +11,7 @@ namespace NetFabric.Hyperlinq
             => source.Count != 0;
 
         
-        static bool Any<TList, TSource>(this TList source, int skipCount, int takeCount)
+        internal static bool Any<TList, TSource>(this TList source, int skipCount, int takeCount)
             where TList : notnull, IReadOnlyList<TSource>
             => takeCount != 0;
 
@@ -25,8 +24,8 @@ namespace NetFabric.Hyperlinq
             return Any<TList, TSource>(source, predicate, 0, source.Count);
         }
 
-        
-        static bool Any<TList, TSource>(this TList source, Predicate<TSource> predicate, int skipCount, int takeCount)
+
+        internal static bool Any<TList, TSource>(this TList source, Predicate<TSource> predicate, int skipCount, int takeCount)
             where TList : notnull, IReadOnlyList<TSource>
         {
             var end = skipCount + takeCount;
@@ -47,8 +46,8 @@ namespace NetFabric.Hyperlinq
             return Any<TList, TSource>(source, predicate, 0, source.Count);
         }
 
-        
-        static bool Any<TList, TSource>(this TList source, PredicateAt<TSource> predicate, int skipCount, int takeCount)
+
+        internal static bool Any<TList, TSource>(this TList source, PredicateAt<TSource> predicate, int skipCount, int takeCount)
             where TList : notnull, IReadOnlyList<TSource>
         {
             if (skipCount == 0)

@@ -1,8 +1,7 @@
-﻿using System;
+﻿using NetFabric.Hyperlinq;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Diagnostics.Contracts;
-using NetFabric.Hyperlinq;
 
 namespace NetFabric.Hyperlinq
 {

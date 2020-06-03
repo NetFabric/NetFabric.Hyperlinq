@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Diagnostics.Contracts;
 using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
@@ -156,6 +155,28 @@ namespace NetFabric.Hyperlinq
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly List<TSource> ToList()
                 => HashSetBindings.ToList<TSource>(FillSet());
+
+            public readonly bool SequenceEqual(IEnumerable<TSource> other, IEqualityComparer<TSource>? comparer = null)
+            {
+                comparer ??= EqualityComparer<TSource>.Default;
+
+                var enumerator = GetEnumerator();
+                using var otherEnumerator = other.GetEnumerator();
+                while (true)
+                {
+                    var thisEnded = !enumerator.MoveNext();
+                    var otherEnded = !otherEnumerator.MoveNext();
+
+                    if (thisEnded != otherEnded)
+                        return false;
+
+                    if (thisEnded)
+                        return true;
+
+                    if (!comparer.Equals(enumerator.Current, otherEnumerator.Current))
+                        return false;
+                }
+            }
         }
     }
 }
