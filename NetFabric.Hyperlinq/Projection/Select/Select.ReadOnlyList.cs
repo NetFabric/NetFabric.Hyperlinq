@@ -20,7 +20,7 @@ namespace NetFabric.Hyperlinq
             return new SelectEnumerable<TList, TSource, TResult>(in source, selector, 0, source.Count);
         }
 
-        static SelectEnumerable<TList, TSource, TResult> Select<TList, TSource, TResult>(
+        internal static SelectEnumerable<TList, TSource, TResult> Select<TList, TSource, TResult>(
             this TList source,
             Selector<TSource, TResult> selector,
             int skipCount, int takeCount)
@@ -248,9 +248,31 @@ namespace NetFabric.Hyperlinq
 
                 return dictionary;
             }
+
+            public readonly bool SequenceEqual(IEnumerable<TResult> other, IEqualityComparer<TResult>? comparer = null)
+            {
+                comparer ??= EqualityComparer<TResult>.Default;
+
+                var enumerator = GetEnumerator();
+                using var otherEnumerator = other.GetEnumerator();
+                while (true)
+                {
+                    var thisEnded = !enumerator.MoveNext();
+                    var otherEnded = !otherEnumerator.MoveNext();
+
+                    if (thisEnded != otherEnded)
+                        return false;
+
+                    if (thisEnded)
+                        return true;
+
+                    if (!comparer.Equals(enumerator.Current, otherEnumerator.Current))
+                        return false;
+                }
+            }
         }
 
-        
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int Count<TList, TSource, TResult>(this SelectEnumerable<TList, TSource, TResult> source)
             where TList : notnull, IReadOnlyList<TSource>

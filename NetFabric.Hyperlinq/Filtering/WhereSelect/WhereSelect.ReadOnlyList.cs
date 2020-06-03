@@ -10,7 +10,7 @@ namespace NetFabric.Hyperlinq
     {
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static WhereSelectEnumerable<TList, TSource, TResult> WhereSelect<TList, TSource, TResult>(
+        internal static WhereSelectEnumerable<TList, TSource, TResult> WhereSelect<TList, TSource, TResult>(
             this TList source, 
             Predicate<TSource> predicate,
             Selector<TSource, TResult> selector)
@@ -186,6 +186,28 @@ namespace NetFabric.Hyperlinq
                 }
 
                 return dictionary;
+            }
+
+            public readonly bool SequenceEqual(IEnumerable<TResult> other, IEqualityComparer<TResult>? comparer = null)
+            {
+                comparer ??= EqualityComparer<TResult>.Default;
+
+                var enumerator = GetEnumerator();
+                using var otherEnumerator = other.GetEnumerator();
+                while (true)
+                {
+                    var thisEnded = !enumerator.MoveNext();
+                    var otherEnded = !otherEnumerator.MoveNext();
+
+                    if (thisEnded != otherEnded)
+                        return false;
+
+                    if (thisEnded)
+                        return true;
+
+                    if (!comparer.Equals(enumerator.Current, otherEnumerator.Current))
+                        return false;
+                }
             }
         }
     }

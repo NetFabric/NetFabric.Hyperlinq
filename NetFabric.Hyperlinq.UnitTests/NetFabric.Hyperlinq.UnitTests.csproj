@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netcoreapp2.1;netcoreapp3.1</TargetFrameworks>
+    <TargetFrameworks>net461;netcoreapp2.1;netcoreapp3.1</TargetFrameworks>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 
@@ -24,7 +24,19 @@
     </PackageReference>
   </ItemGroup>
 
-	<ItemGroup Condition="'$(TargetFramework)'=='netcoreapp2.1'">
+  <PropertyGroup Condition="'$(TargetFramework)'!='net461'">
+    <DefineConstants>$(DefineConstants);SPAN_SUPPORTED</DefineConstants>
+  </PropertyGroup>
+  
+  <ItemGroup Condition="'$(TargetFramework)'=='net461'">
+    <Compile Remove="Utils\SpanExtensions.cs" />
+    <Compile Remove="**\*.ReadOnlySpan.Tests.cs" />
+    <Compile Remove="**\*.Span.Tests.cs" />
+    <Compile Remove="**\*.ReadOnlyMemory.Tests.cs" />
+    <Compile Remove="**\*.Memory.Tests.cs" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)'=='netcoreapp2.1'">
 		<PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="1.1.1" />
 	</ItemGroup>
 

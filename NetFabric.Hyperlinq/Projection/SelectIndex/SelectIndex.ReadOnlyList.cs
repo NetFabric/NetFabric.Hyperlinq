@@ -20,8 +20,8 @@ namespace NetFabric.Hyperlinq
             return new SelectIndexEnumerable<TList, TSource, TResult>(in source, selector, 0, source.Count);
         }
 
-        
-        static SelectIndexEnumerable<TList, TSource, TResult> Select<TList, TSource, TResult>(
+
+        internal static SelectIndexEnumerable<TList, TSource, TResult> Select<TList, TSource, TResult>(
             this TList source,
             SelectorAt<TSource, TResult> selector,
             int skipCount, int takeCount)
@@ -240,6 +240,28 @@ namespace NetFabric.Hyperlinq
                 }
 
                 return dictionary;
+            }
+
+            public readonly bool SequenceEqual(IEnumerable<TResult> other, IEqualityComparer<TResult>? comparer = null)
+            {
+                comparer ??= EqualityComparer<TResult>.Default;
+
+                var enumerator = GetEnumerator();
+                using var otherEnumerator = other.GetEnumerator();
+                while (true)
+                {
+                    var thisEnded = !enumerator.MoveNext();
+                    var otherEnded = !otherEnumerator.MoveNext();
+
+                    if (thisEnded != otherEnded)
+                        return false;
+
+                    if (thisEnded)
+                        return true;
+
+                    if (!comparer.Equals(enumerator.Current, otherEnumerator.Current))
+                        return false;
+                }
             }
         }
 

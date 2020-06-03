@@ -1,6 +1,4 @@
 using System;
-using System.Diagnostics.CodeAnalysis;
-using System.Diagnostics.Contracts;
 using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
@@ -9,7 +7,12 @@ namespace NetFabric.Hyperlinq
     {
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+#if SPAN_SUPPORTED
         public static Option<TSource> Single<TSource>(this TSource[] source)
             => Single((ReadOnlySpan<TSource>)source.AsSpan());
+#else
+        public static Option<TSource> Single<TSource>(this TSource[] source)
+            => ReadOnlyList.Single<TSource[], TSource>(source);
+#endif
     }
 }

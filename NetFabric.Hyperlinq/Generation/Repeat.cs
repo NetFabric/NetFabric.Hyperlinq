@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Diagnostics.Contracts;
 using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
@@ -166,7 +165,12 @@ namespace NetFabric.Hyperlinq
                 var array = new TSource[count];
                 if (value is object)
                 {
+#if NETSTANDARD2_1
                     System.Array.Fill<TSource>(array, value);
+#else
+                    for (var index = 0; index < array.Length; index++)
+                        array[index] = value;
+#endif
                 }
                 return array;
             }
@@ -216,7 +220,14 @@ namespace NetFabric.Hyperlinq
                 public override void CopyTo(TSource[] array, int _)
                 {
                     if (value is object)
+                    {
+#if NETSTANDARD2_1
                         System.Array.Fill(array, value);
+#else
+                        for (var index = 0; index < array.Length; index++)
+                            array[index] = value;
+#endif
+                    }
                 }
             }
         }
