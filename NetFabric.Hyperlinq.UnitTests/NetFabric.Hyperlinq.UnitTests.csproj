@@ -24,7 +24,7 @@
     </PackageReference>
   </ItemGroup>
 
-  <PropertyGroup Condition="'$(TargetFramework)'=='netcoreapp2.1' Or '$(TargetFramework)'=='netstandard2.1'">
+  <PropertyGroup Condition="'$(TargetFramework)'!='net461'">
     <DefineConstants>$(DefineConstants);SPAN_SUPPORTED</DefineConstants>
   </PropertyGroup>
   
