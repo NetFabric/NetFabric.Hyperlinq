@@ -193,7 +193,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Partitioning.SkipTake
             _ = result.Must()
                 .BeOfType<Dictionary<int, int>>()
                 .BeEnumerableOf<KeyValuePair<int, int>>()
-                .BeEqualTo(expected, false);
+                .BeEqualTo(expected, testNonGeneric: false);
         }
     }
 }

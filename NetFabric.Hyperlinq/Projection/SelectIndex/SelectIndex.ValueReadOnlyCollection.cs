@@ -56,19 +56,19 @@ namespace NetFabric.Hyperlinq
                 checked
                 {
                     using var enumerator = source.GetEnumerator();
-                    for (var index = arrayIndex; enumerator.MoveNext(); index++)
-                        array[index] = selector(enumerator.Current, index);
+                    for (var index = 0; enumerator.MoveNext(); index++)
+                        array[index + arrayIndex] = selector(enumerator.Current, index);
                 }
             }
 
             void ICollection<TResult>.Add(TResult item) 
-                => throw new NotImplementedException();
+                => throw new NotSupportedException();
             void ICollection<TResult>.Clear() 
-                => throw new NotImplementedException();
+                => throw new NotSupportedException();
             bool ICollection<TResult>.Contains(TResult item) 
-                => throw new NotImplementedException();
+                => throw new NotSupportedException();
             bool ICollection<TResult>.Remove(TResult item) 
-                => throw new NotImplementedException();
+                => throw new NotSupportedException();
 
             public struct Enumerator
                 : IEnumerator<TResult>

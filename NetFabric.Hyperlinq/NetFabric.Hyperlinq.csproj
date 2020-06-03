@@ -66,6 +66,8 @@
   <Import Project="..\NetFabric.Hyperlinq.Generator\build\NetFabric.Hyperlinq.Generator.props" />
   
   <ItemGroup>
+    <UpToDateCheck Remove="Equality\SequenceEquality.ReadOnlySpan.cs" />
+    <UpToDateCheck Remove="Equality\SequenceEqual\SequenceEqual.ReadOnlySpan.cs" />
     <UpToDateCheck Remove="GlobalSuppressions.cs" />
   </ItemGroup>
 </Project>

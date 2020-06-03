@@ -61,7 +61,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.WhereSelect
             // Assert
             _ = result.Must()
                 .BeEnumerableOf<string>()
-                .BeEqualTo(expected);
+                .BeEqualTo(expected, testRefStructs: false);
+            _ = result.SequenceEqual(expected).Must().BeTrue();
         }
     }
 }

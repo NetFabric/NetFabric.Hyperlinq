@@ -1,4 +1,5 @@
 ﻿using NetFabric.Assertive;
+using System;
 using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct
@@ -22,7 +23,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct
             // Assert
             _ = result.Must()
                 .BeEnumerableOf<int>()
-                .BeEqualTo(expected);
+                .BeEqualTo(expected, testRefStructs: false);
+            _ = result.SequenceEqual(expected).Must().BeTrue();
         }
     }
 }

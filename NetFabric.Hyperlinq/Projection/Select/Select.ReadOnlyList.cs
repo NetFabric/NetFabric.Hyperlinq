@@ -69,7 +69,7 @@ namespace NetFabric.Hyperlinq
             TResult IList<TResult>.this[int index]
             {
                 get => this[index];
-                set => throw new NotImplementedException();
+                set => throw new NotSupportedException();
             }
 
             bool ICollection<TResult>.IsReadOnly  
@@ -81,9 +81,9 @@ namespace NetFabric.Hyperlinq
                     array[index + arrayIndex] = selector(source[index + skipCount]);
             }
             void ICollection<TResult>.Add(TResult item) 
-                => throw new NotImplementedException();
+                => throw new NotSupportedException();
             void ICollection<TResult>.Clear() 
-                => throw new NotImplementedException();
+                => throw new NotSupportedException();
             bool ICollection<TResult>.Contains(TResult item) 
             {
                 for (var index = 0; index < takeCount; index++)
@@ -94,7 +94,7 @@ namespace NetFabric.Hyperlinq
                 return false;
             }
             bool ICollection<TResult>.Remove(TResult item) 
-                => throw new NotImplementedException();
+                => throw new NotSupportedException();
             int IList<TResult>.IndexOf(TResult item)
             {
                 for (var index = 0; index < takeCount; index++)
@@ -105,9 +105,9 @@ namespace NetFabric.Hyperlinq
                 return -1;
             }
             void IList<TResult>.Insert(int index, TResult item)
-                => throw new NotImplementedException();
+                => throw new NotSupportedException();
             void IList<TResult>.RemoveAt(int index)
-                => throw new NotImplementedException();
+                => throw new NotSupportedException();
 
             public struct Enumerator
             {

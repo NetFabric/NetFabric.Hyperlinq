@@ -62,13 +62,13 @@ namespace NetFabric.Hyperlinq
             }
 
             void ICollection<TResult>.Add(TResult item) 
-                => throw new NotImplementedException();
+                => throw new NotSupportedException();
             void ICollection<TResult>.Clear() 
-                => throw new NotImplementedException();
+                => throw new NotSupportedException();
             bool ICollection<TResult>.Contains(TResult item) 
-                => throw new NotImplementedException();
+                => throw new NotSupportedException();
             bool ICollection<TResult>.Remove(TResult item) 
-                => throw new NotImplementedException();
+                => throw new NotSupportedException();
 
             public struct Enumerator
                 : IEnumerator<TResult>

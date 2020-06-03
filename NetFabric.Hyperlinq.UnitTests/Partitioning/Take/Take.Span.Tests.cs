@@ -20,21 +20,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Partitioning.Take
                 .Take(source.AsSpan(), count);
 
             // Assert
-            using var expectedEnumerator = expected.GetEnumerator();
-            for (var index = 0; true; index++)
-            {
-                var resultEnded = index == result.Length;
-                var expectedEnded = !expectedEnumerator.MoveNext();
-
-                if (resultEnded != expectedEnded)
-                    throw new Exception("Not same size");
-
-                if (resultEnded)
-                    break;
-
-                if (result[index] != expectedEnumerator.Current)
-                    throw new Exception("Items are not equal");
-            }
+            _ = result.SequenceEqual(expected).Must().BeTrue();
         }
     }
 }

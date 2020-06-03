@@ -1,5 +1,6 @@
 using NetFabric.Assertive;
 using System;
+using System.Linq;
 using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests.Projection.Select
@@ -38,7 +39,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Projection.Select
             // Assert
             _ = result.Must()
                 .BeEnumerableOf<string>()
-                .BeEqualTo(expected);
+                .BeEqualTo(expected, testRefStructs: false, testRefReturns: false);
+            _ = result.SequenceEqual(expected).Must().BeTrue();
         }
     }
 }

@@ -36,22 +36,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Projection.SelectIndex
             var result = Array.Select(source.AsSpan(), selector);
 
             // Assert
-            var resultEnumerator = result.GetEnumerator();
-            using var expectedEnumerator = expected.GetEnumerator();
-            while (true)
-            {
-                var resultEnded = !resultEnumerator.MoveNext();
-                var expectedEnded = !expectedEnumerator.MoveNext();
-
-                if (resultEnded != expectedEnded)
-                    throw new Exception("Not same size");
-
-                if (resultEnded)
-                    break;
-
-                if (resultEnumerator.Current != expectedEnumerator.Current)
-                    throw new Exception("Items are not equal");
-            }
+            _ = result.SequenceEqual(expected).Must().BeTrue();
         }
     }
 }

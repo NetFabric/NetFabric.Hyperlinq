@@ -1,5 +1,6 @@
 using NetFabric.Assertive;
 using System;
+using System.Linq;
 using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests.Filtering.Where
@@ -37,7 +38,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.Where
             // Assert
             _ = result.Must()
                 .BeEnumerableOf<int>()
-                .BeEqualTo(expected);
+                .BeEqualTo(expected, testRefReturns: false, testRefStructs: false);
+            _ = result.SequenceEqual(expected).Must().BeTrue();
         }
     }
 }

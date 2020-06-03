@@ -38,7 +38,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Projection.Select
             // Assert
             _ = result.Must()
                 .BeEnumerableOf<string>()
-                .BeEqualTo(expected);
+                .BeEqualTo(expected, testRefStructs: false);
+            _ = result.SequenceEqual(expected).Must().BeTrue();
         }
     }
 }
