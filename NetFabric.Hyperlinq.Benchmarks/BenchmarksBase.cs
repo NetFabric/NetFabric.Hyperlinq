@@ -1,9 +1,14 @@
 ﻿using BenchmarkDotNet.Attributes;
+using BenchmarkDotNet.Jobs;
 using System;
 using System.Collections.Generic;
 
 namespace NetFabric.Hyperlinq.Benchmarks
 {
+    [SimpleJob(RuntimeMoniker.Net461, baseline: true)]
+    //[SimpleJob(RuntimeMoniker.NetCoreApp21)]
+    //[SimpleJob(RuntimeMoniker.NetCoreApp31)]
+    [SimpleJob(RuntimeMoniker.NetCoreApp50)]
     public abstract class BenchmarksBase
     {
         protected int[] array;
@@ -26,7 +31,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         protected IAsyncEnumerable<int> asyncEnumerableReference;
         protected TestAsyncEnumerable.AsyncEnumerable asyncEnumerableValue;
 
-        [Params(10_000)]
+        [Params(100)]
         public int Count { get; set; }
 
         [GlobalSetup]

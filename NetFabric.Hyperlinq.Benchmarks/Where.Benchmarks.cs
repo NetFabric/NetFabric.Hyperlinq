@@ -1,5 +1,6 @@
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Configs;
+using BenchmarkDotNet.Jobs;
 using JM.LinqFaster;
 using System;
 using System.Threading;
@@ -117,12 +118,20 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [Benchmark]
         public int Hyperlinq_Array()
         {
+#if SPAN_SUPPORTED
             var sum = 0;
             foreach (ref readonly var item in array.Where(item => (item & 0x01) == 0))
                 sum += item;
             return sum;
+#else
+            var sum = 0;
+            foreach (var item in array.Where(item => (item & 0x01) == 0))
+                sum += item;
+            return sum;
+#endif
         }
 
+#if SPAN_SUPPORTED
         [BenchmarkCategory("Array")]
         [Benchmark]
         public int Hyperlinq_Span()
@@ -142,6 +151,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
                 sum += item;
             return sum;
         }
+#endif
 
         [BenchmarkCategory("Enumerable_Value")]
         [Benchmark]
