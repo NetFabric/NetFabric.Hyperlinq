@@ -1,9 +1,13 @@
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Configs;
+using BenchmarkDotNet.Jobs;
 using System;
 
 namespace NetFabric.Hyperlinq.Benchmarks
 {
+    [SimpleJob(RuntimeMoniker.Net461, baseline: true)]
+    [SimpleJob(RuntimeMoniker.NetCoreApp21)]
+    [SimpleJob(RuntimeMoniker.NetCoreApp31)]
     [GroupBenchmarksBy(BenchmarkLogicalGroupRule.ByCategory)]
     [CategoriesColumn]
     [MemoryDiagnoser]
@@ -50,6 +54,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Hyperlinq_Array() =>
             array.Where(item => (item & 0x01) == 0).Count();
 
+#if SPAN_SUPPORTED
         [BenchmarkCategory("Array")]
         [Benchmark]
         public int Hyperlinq_Span() =>
@@ -59,6 +64,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [Benchmark]
         public int Hyperlinq_Memory() =>
             memory.Where(item => (item & 0x01) == 0).Count();
+#endif
 
         [BenchmarkCategory("Enumerable_Value")]
         [Benchmark]

@@ -87,6 +87,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public Option<int> Hyperlinq_Array() =>
             array.Single();
 
+#if SPAN_SUPPORTED
         [BenchmarkCategory("Array")]
         [Benchmark]
         public Option<int> Hyperlinq_Span() =>
@@ -96,6 +97,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [Benchmark]
         public Option<int> Hyperlinq_Memory() =>
             memory.Single();
+#endif
 
         [BenchmarkCategory("Enumerable_Value")]
         [Benchmark]
