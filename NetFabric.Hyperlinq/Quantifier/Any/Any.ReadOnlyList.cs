@@ -10,12 +10,15 @@ namespace NetFabric.Hyperlinq
             where TList : notnull, IReadOnlyList<TSource>
             => source.Count != 0;
 
-        
-        internal static bool Any<TList, TSource>(this TList source, int skipCount, int takeCount)
-            where TList : notnull, IReadOnlyList<TSource>
-            => takeCount != 0;
 
-        
+        static bool Any<TList, TSource>(this TList source, int skipCount, int takeCount)
+            where TList : notnull, IReadOnlyList<TSource>
+        {
+            (_, var count) = Utils.SkipTake(source.Count, skipCount, takeCount);
+            return count != 0;
+        }
+
+
         public static bool Any<TList, TSource>(this TList source, Predicate<TSource> predicate)
             where TList : notnull, IReadOnlyList<TSource>
         {
@@ -25,7 +28,7 @@ namespace NetFabric.Hyperlinq
         }
 
 
-        internal static bool Any<TList, TSource>(this TList source, Predicate<TSource> predicate, int skipCount, int takeCount)
+        static bool Any<TList, TSource>(this TList source, Predicate<TSource> predicate, int skipCount, int takeCount)
             where TList : notnull, IReadOnlyList<TSource>
         {
             var end = skipCount + takeCount;
@@ -47,7 +50,7 @@ namespace NetFabric.Hyperlinq
         }
 
 
-        internal static bool Any<TList, TSource>(this TList source, PredicateAt<TSource> predicate, int skipCount, int takeCount)
+        static bool Any<TList, TSource>(this TList source, PredicateAt<TSource> predicate, int skipCount, int takeCount)
             where TList : notnull, IReadOnlyList<TSource>
         {
             if (skipCount == 0)

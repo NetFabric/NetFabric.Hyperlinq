@@ -10,8 +10,8 @@ namespace NetFabric.Hyperlinq
         public static Memory<TSource> Skip<TSource>(this TSource[] source, int count)
             => Skip(source.AsMemory(), count);
 #else
-        public static ReadOnlyList.SkipTakeEnumerable<TSource[], TSource> Skip<TSource>(this TSource[] source, int count)
-            => ReadOnlyList.Skip<TSource[], TSource>(source, count);
+        public static SkipTakeEnumerable<TSource> Skip<TSource>(this TSource[] source, int count)
+            => SkipTake<TSource>(source, count, source.Length);
 #endif
     }
 }

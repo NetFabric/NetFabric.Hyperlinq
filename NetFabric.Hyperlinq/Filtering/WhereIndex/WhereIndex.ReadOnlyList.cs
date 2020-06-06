@@ -19,7 +19,7 @@ namespace NetFabric.Hyperlinq
         }
 
 
-        internal static WhereIndexEnumerable<TList, TSource> Where<TList, TSource>(this TList source, PredicateAt<TSource> predicate, int skipCount, int takeCount)
+        static WhereIndexEnumerable<TList, TSource> Where<TList, TSource>(this TList source, PredicateAt<TSource> predicate, int skipCount, int takeCount)
             where TList : notnull, IReadOnlyList<TSource>
             => new WhereIndexEnumerable<TList, TSource>(in source, predicate, skipCount, takeCount);
 

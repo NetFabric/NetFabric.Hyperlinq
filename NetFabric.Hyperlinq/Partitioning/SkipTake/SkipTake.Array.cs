@@ -6,27 +6,28 @@ using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class ReadOnlyList
+    public static partial class Array
     {
+#if SPAN_SUPPORTED
+
+#else
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static SkipTakeEnumerable<TList, TSource> SkipTake<TList, TSource>(this TList source, int skipCount, int takeCount)
-            where TList : notnull, IReadOnlyList<TSource>
-            => new SkipTakeEnumerable<TList, TSource>(in source, skipCount, takeCount);
+        static SkipTakeEnumerable<TSource> SkipTake<TSource>(this TSource[] source, int skipCount, int takeCount)
+            => new SkipTakeEnumerable<TSource>(in source, skipCount, takeCount);
 
-        public readonly partial struct SkipTakeEnumerable<TList, TSource>
-            : IValueReadOnlyList<TSource, SkipTakeEnumerable<TList, TSource>.Enumerator>
+        public readonly partial struct SkipTakeEnumerable<TSource>
+            : IValueReadOnlyList<TSource, SkipTakeEnumerable<TSource>.Enumerator>
             , IList<TSource>
-            where TList : notnull, IReadOnlyList<TSource>
         {
-            internal readonly TList source;
+            internal readonly TSource[] source;
             internal readonly int skipCount;
             internal readonly int takeCount;
 
-            internal SkipTakeEnumerable(in TList source, int skipCount, int takeCount)
+            internal SkipTakeEnumerable(in TSource[] source, int skipCount, int takeCount)
             {
                 this.source = source;
-                (this.skipCount, this.takeCount) = Utils.SkipTake(source.Count, skipCount, takeCount);
+                (this.skipCount, this.takeCount) = Utils.SkipTake(source.Length, skipCount, takeCount);
             }
 
             public readonly int Count
@@ -68,7 +69,7 @@ namespace NetFabric.Hyperlinq
             void ICollection<TSource>.Clear() 
                 => throw new NotSupportedException();
             bool ICollection<TSource>.Contains(TSource item) 
-                => ReadOnlyList.Contains<TList, TSource>(source, item, null, skipCount, takeCount);
+                => Contains<TSource>(source, item, null, skipCount, takeCount);
             bool ICollection<TSource>.Remove(TSource item) 
                 => throw new NotSupportedException();
             int IList<TSource>.IndexOf(TSource item)
@@ -89,11 +90,11 @@ namespace NetFabric.Hyperlinq
             public struct Enumerator
                 : IEnumerator<TSource>
             {
-                readonly TList source;
+                readonly TSource[] source;
                 readonly int end;
                 int index;
 
-                internal Enumerator(in SkipTakeEnumerable<TList, TSource> enumerable)
+                internal Enumerator(in SkipTakeEnumerable<TSource> enumerable)
                 {
                     source = enumerable.source;
                     end = enumerable.skipCount + enumerable.takeCount;
@@ -118,120 +119,119 @@ namespace NetFabric.Hyperlinq
 
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public SkipTakeEnumerable<TList, TSource> Take(int count)
-                => ReadOnlyList.SkipTake<TList, TSource>(source, skipCount, Math.Min(takeCount, count));
+            public SkipTakeEnumerable<TSource> Take(int count)
+                => SkipTake<TSource>(source, skipCount, Math.Min(takeCount, count));
 
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool All(Predicate<TSource> predicate)
-                => ReadOnlyList.All<TList, TSource>(source, predicate, skipCount, takeCount);
+                => All<TSource>(source, predicate, skipCount, takeCount);
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool All(PredicateAt<TSource> predicate)
-                => ReadOnlyList.All<TList, TSource>(source, predicate, skipCount, takeCount);
+                => All<TSource>(source, predicate, skipCount, takeCount);
 
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Any()
-                => ReadOnlyList.Any<TList, TSource>(source, skipCount, takeCount);
+                => Any<TSource>(source, skipCount, takeCount);
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Any(Predicate<TSource> predicate)
-                => ReadOnlyList.Any<TList, TSource>(source, predicate, skipCount, takeCount);
+                => Any<TSource>(source, predicate, skipCount, takeCount);
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Any(PredicateAt<TSource> predicate)
-                => ReadOnlyList.Any<TList, TSource>(source, predicate, skipCount, takeCount);
+                => Any<TSource>(source, predicate, skipCount, takeCount);
 
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Contains(TSource value, IEqualityComparer<TSource>? comparer = null)
-                => ReadOnlyList.Contains<TList, TSource>(source, value, comparer, skipCount, takeCount);
+                => Contains<TSource>(source, value, comparer, skipCount, takeCount);
 
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public ReadOnlyList.WhereEnumerable<TList, TSource> Where(Predicate<TSource> predicate)
-                => ReadOnlyList.Where<TList, TSource>(source, predicate, skipCount, takeCount);
+            public WhereEnumerable<TSource> Where(Predicate<TSource> predicate)
+                => Where<TSource>(source, predicate, skipCount, takeCount);
 
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public ReadOnlyList.WhereIndexEnumerable<TList, TSource> Where(PredicateAt<TSource> predicate)
-                => ReadOnlyList.Where<TList, TSource>(source, predicate, skipCount, takeCount);
+            public WhereIndexEnumerable<TSource> Where(PredicateAt<TSource> predicate)
+                => Where<TSource>(source, predicate, skipCount, takeCount);
 
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public ReadOnlyList.SelectEnumerable<TList, TSource, TResult> Select<TResult>(Selector<TSource, TResult> selector)
-                => ReadOnlyList.Select<TList, TSource, TResult>(source, selector, skipCount, takeCount);
+            public SelectEnumerable<TSource, TResult> Select<TResult>(Selector<TSource, TResult> selector)
+                => Select<TSource, TResult>(source, selector, skipCount, takeCount);
 
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public ReadOnlyList.SelectIndexEnumerable<TList, TSource, TResult> Select<TResult>(SelectorAt<TSource, TResult> selector)
-                => ReadOnlyList.Select<TList, TSource, TResult>(source, selector, skipCount, takeCount);
+            public SelectIndexEnumerable<TSource, TResult> Select<TResult>(SelectorAt<TSource, TResult> selector)
+                => Select<TSource, TResult>(source, selector, skipCount, takeCount);
 
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Option<TSource> ElementAt(int index)
-                => ReadOnlyList.ElementAt<TList, TSource>(source, index, skipCount, takeCount);
+                => ElementAt<TSource>(source, index, skipCount, takeCount);
 
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Option<TSource> First()
-                => ReadOnlyList.First<TList, TSource>(source, skipCount, takeCount);
+                => First<TSource>(source, skipCount, takeCount);
 
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Option<TSource> Single()
-                => ReadOnlyList.Single<TList, TSource>(source, skipCount, takeCount);
+                => Single<TSource>(source, skipCount, takeCount);
 
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TSource[] ToArray()
-                => ToArray<TList, TSource>(source, skipCount, takeCount);
+                => ToArray<TSource>(source, skipCount, takeCount);
 
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public List<TSource> ToList()
-                => ToList<TList, TSource>(source, skipCount, takeCount);
+                => ToList<TSource>(source, skipCount, takeCount);
 
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Dictionary<TKey, TSource> ToDictionary<TKey>(Selector<TSource, TKey> keySelector)
-                => ReadOnlyList.ToDictionary<TList, TSource, TKey>(source, keySelector, EqualityComparer<TKey>.Default, skipCount, takeCount);
+                => ToDictionary<TSource, TKey>(source, keySelector, EqualityComparer<TKey>.Default, skipCount, takeCount);
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Dictionary<TKey, TSource> ToDictionary<TKey>(Selector<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer)
-                => ReadOnlyList.ToDictionary<TList, TSource, TKey>(source, keySelector, comparer, skipCount, takeCount);
+                => ToDictionary<TSource, TKey>(source, keySelector, comparer, skipCount, takeCount);
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Selector<TSource, TKey> keySelector, Selector<TSource, TElement> elementSelector)
-                => ReadOnlyList.ToDictionary<TList, TSource, TKey, TElement>(source, keySelector, elementSelector, EqualityComparer<TKey>.Default, skipCount, takeCount);
+                => ToDictionary<TSource, TKey, TElement>(source, keySelector, elementSelector, EqualityComparer<TKey>.Default, skipCount, takeCount);
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Selector<TSource, TKey> keySelector, Selector<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer)
-                => ReadOnlyList.ToDictionary<TList, TSource, TKey, TElement>(source, keySelector, elementSelector, comparer, skipCount, takeCount);
+                => ToDictionary<TSource, TKey, TElement>(source, keySelector, elementSelector, comparer, skipCount, takeCount);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int Count<TList, TSource>(this SkipTakeEnumerable<TList, TSource> source)
-            where TList : notnull, IReadOnlyList<TSource>
+        public static int Count<TSource>(this SkipTakeEnumerable<TSource> source)
             => source.Count;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int Count<TList, TSource>(this SkipTakeEnumerable<TList, TSource> source, Predicate<TSource> predicate)
-            where TList : notnull, IReadOnlyList<TSource>
+        public static int Count<TSource>(this SkipTakeEnumerable<TSource> source, Predicate<TSource> predicate)
         {
             if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
 
-            return ReadOnlyList.Count<TList, TSource>(source.source, predicate, source.skipCount, source.takeCount);
+            return Count<TSource>(source.source, predicate, source.skipCount, source.takeCount);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int Count<TList, TSource>(this SkipTakeEnumerable<TList, TSource> source, PredicateAt<TSource> predicate)
-            where TList : notnull, IReadOnlyList<TSource>
+        public static int Count<TSource>(this SkipTakeEnumerable<TSource> source, PredicateAt<TSource> predicate)
         {
             if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
 
-            return ReadOnlyList.Count<TList, TSource>(source.source, predicate, source.skipCount, source.takeCount);
+            return Count<TSource>(source.source, predicate, source.skipCount, source.takeCount);
         }
+
+#endif
     }
 }

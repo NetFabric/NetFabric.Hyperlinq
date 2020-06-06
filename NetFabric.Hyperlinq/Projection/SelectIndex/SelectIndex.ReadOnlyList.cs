@@ -21,7 +21,7 @@ namespace NetFabric.Hyperlinq
         }
 
 
-        internal static SelectIndexEnumerable<TList, TSource, TResult> Select<TList, TSource, TResult>(
+        static SelectIndexEnumerable<TList, TSource, TResult> Select<TList, TSource, TResult>(
             this TList source,
             SelectorAt<TSource, TResult> selector,
             int skipCount, int takeCount)

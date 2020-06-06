@@ -14,14 +14,14 @@ namespace NetFabric.Hyperlinq
 
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static Option<TSource> ElementAt<TList, TSource>(this TList source, int index, int skipCount, int takeCount) 
+        static Option<TSource> ElementAt<TList, TSource>(this TList source, int index, int skipCount, int takeCount) 
             where TList : notnull, IReadOnlyList<TSource>
             => index < 0 || index >= takeCount 
                 ? Option.None 
                 : Option.Some(source[index + skipCount]);
 
 
-        internal static Option<TSource> ElementAt<TList, TSource>(this TList source, int index, Predicate<TSource> predicate, int skipCount, int takeCount) 
+        static Option<TSource> ElementAt<TList, TSource>(this TList source, int index, Predicate<TSource> predicate, int skipCount, int takeCount) 
             where TList : notnull, IReadOnlyList<TSource>
         {
             if (index >= 0)
@@ -38,7 +38,7 @@ namespace NetFabric.Hyperlinq
         }
 
 
-        internal static Option<TSource> ElementAt<TList, TSource>(this TList source, int index, PredicateAt<TSource> predicate, int skipCount, int takeCount) 
+        static Option<TSource> ElementAt<TList, TSource>(this TList source, int index, PredicateAt<TSource> predicate, int skipCount, int takeCount) 
             where TList : notnull, IReadOnlyList<TSource>
         {
             if (index >= 0)
@@ -67,7 +67,7 @@ namespace NetFabric.Hyperlinq
 
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static Option<TResult> ElementAt<TList, TSource, TResult>(this TList source, int index, Selector<TSource, TResult> selector, int skipCount, int takeCount) 
+        static Option<TResult> ElementAt<TList, TSource, TResult>(this TList source, int index, Selector<TSource, TResult> selector, int skipCount, int takeCount) 
             where TList : notnull, IReadOnlyList<TSource>
             => index < 0 || index >= takeCount 
                 ? Option.None
@@ -82,7 +82,7 @@ namespace NetFabric.Hyperlinq
                 : Option.Some(selector(source[index + skipCount], index));
 
 
-        internal static Option<TResult> ElementAt<TList, TSource, TResult>(this TList source, int index, Predicate<TSource> predicate, Selector<TSource, TResult> selector, int skipCount, int takeCount) 
+        static Option<TResult> ElementAt<TList, TSource, TResult>(this TList source, int index, Predicate<TSource> predicate, Selector<TSource, TResult> selector, int skipCount, int takeCount) 
             where TList : notnull, IReadOnlyList<TSource>
         {
             if (index >= 0)

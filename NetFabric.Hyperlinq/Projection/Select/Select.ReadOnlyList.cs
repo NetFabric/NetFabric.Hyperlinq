@@ -20,7 +20,7 @@ namespace NetFabric.Hyperlinq
             return new SelectEnumerable<TList, TSource, TResult>(in source, selector, 0, source.Count);
         }
 
-        internal static SelectEnumerable<TList, TSource, TResult> Select<TList, TSource, TResult>(
+        static SelectEnumerable<TList, TSource, TResult> Select<TList, TSource, TResult>(
             this TList source,
             Selector<TSource, TResult> selector,
             int skipCount, int takeCount)

@@ -10,7 +10,7 @@ namespace NetFabric.Hyperlinq
             where TList : notnull, IReadOnlyList<TSource>
             => source.Count;
 
-        internal static int Count<TList, TSource>(this TList source, Predicate<TSource> predicate, int skipCount, int takeCount)
+        static int Count<TList, TSource>(this TList source, Predicate<TSource> predicate, int skipCount, int takeCount)
             where TList : notnull, IReadOnlyList<TSource>
         {
             var count = 0;
@@ -23,7 +23,7 @@ namespace NetFabric.Hyperlinq
             return count;
         }
 
-        internal static int Count<TList, TSource>(this TList source, PredicateAt<TSource> predicate, int skipCount, int takeCount)
+        static int Count<TList, TSource>(this TList source, PredicateAt<TSource> predicate, int skipCount, int takeCount)
             where TList : notnull, IReadOnlyList<TSource>
         {
             var count = 0;
