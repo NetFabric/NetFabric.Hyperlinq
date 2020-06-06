@@ -19,12 +19,13 @@ namespace NetFabric.Hyperlinq
         {
             if (takeCount != 0)
             {
-                if (comparer is null)
+                comparer ??= EqualityComparer<TSource>.Default;
+
+                if (skipCount == 0 && takeCount == source.Length)
                 {
-                    var end = skipCount + takeCount;
-                    for (var index = skipCount; index < end; index++)
+                    for (var index = 0; index < source.Length; index++)
                     {
-                        if (EqualityComparer<TSource>.Default.Equals(value, source[index]))
+                        if (comparer.Equals(value, source[index]))
                             return true;
                     }
                 }
@@ -46,13 +47,14 @@ namespace NetFabric.Hyperlinq
         {
             if (takeCount != 0)
             {
-                if (comparer is null)
+                comparer ??= EqualityComparer<TSource>.Default;
+
+                if (skipCount == 0 && takeCount == source.Length)
                 {
-                    var end = skipCount + takeCount;
-                    for (var index = skipCount; index < end; index++)
+                    for (var index = 0; index < source.Length; index++)
                     {
                         var item = source[index];
-                        if (predicate(item) && EqualityComparer<TSource>.Default.Equals(value, item))
+                        if (predicate(item) && comparer.Equals(value, item))
                             return true;
                     }
                 }
@@ -75,14 +77,16 @@ namespace NetFabric.Hyperlinq
         {
             if (takeCount != 0)
             {
+                comparer ??= EqualityComparer<TSource>.Default;
+
                 if (skipCount == 0)
                 {
-                    if (comparer is null)
+                    if (takeCount == source.Length)
                     {
-                        for (var index = 0; index < takeCount; index++)
+                        for (var index = 0; index < source.Length; index++)
                         {
                             var item = source[index];
-                            if (predicate(item, index) && EqualityComparer<TSource>.Default.Equals(value, item))
+                            if (predicate(item, index) && comparer.Equals(value, item))
                                 return true;
                         }
                     }
@@ -98,23 +102,11 @@ namespace NetFabric.Hyperlinq
                 }
                 else
                 {
-                    if (comparer is null)
+                    for (var index = 0; index < takeCount; index++)
                     {
-                        for (var index = 0; index < takeCount; index++)
-                        {
-                            var item = source[index + skipCount];
-                            if (predicate(item, index) && EqualityComparer<TSource>.Default.Equals(value, item))
-                                return true;
-                        }
-                    }
-                    else
-                    {
-                        for (var index = 0; index < takeCount; index++)
-                        {
-                            var item = source[index + skipCount];
-                            if (predicate(item, index) && comparer.Equals(value, item))
-                                return true;
-                        }
+                        var item = source[index + skipCount];
+                        if (predicate(item, index) && comparer.Equals(value, item))
+                            return true;
                     }
                 }
             }
@@ -126,12 +118,13 @@ namespace NetFabric.Hyperlinq
         {
             if (takeCount != 0)
             {
-                if (comparer is null)
+                comparer ??= EqualityComparer<TResult>.Default;
+
+                if (skipCount == 0 && takeCount == source.Length)
                 {
-                    var end = skipCount + takeCount;
-                    for (var index = skipCount; index < end; index++)
+                    for (var index = 0; index < source.Length; index++)
                     {
-                        if (EqualityComparer<TResult>.Default.Equals(value, selector(source[index])))
+                        if (comparer.Equals(value, selector(source[index])))
                             return true;
                     }
                 }
@@ -153,13 +146,15 @@ namespace NetFabric.Hyperlinq
         {
             if (takeCount != 0)
             {
+                comparer ??= EqualityComparer<TResult>.Default;
+
                 if (skipCount == 0)
                 {
-                    if (comparer is null)
+                    if (takeCount == source.Length)
                     {
-                        for (var index = 0; index < takeCount; index++)
+                        for (var index = 0; index < source.Length; index++)
                         {
-                            if (EqualityComparer<TResult>.Default.Equals(value, selector(source[index], index)))
+                            if (comparer.Equals(value, selector(source[index], index)))
                                 return true;
                         }
                     }
@@ -174,22 +169,10 @@ namespace NetFabric.Hyperlinq
                 }
                 else
                 {
-
-                    if (comparer is null)
+                    for (var index = 0; index < takeCount; index++)
                     {
-                        for (var index = 0; index < takeCount; index++)
-                        {
-                            if (EqualityComparer<TResult>.Default.Equals(value, selector(source[index + skipCount], index)))
-                                return true;
-                        }
-                    }
-                    else
-                    {
-                        for (var index = 0; index < takeCount; index++)
-                        {
-                            if (comparer.Equals(value, selector(source[index + skipCount], index)))
-                                return true;
-                        }
+                        if (comparer.Equals(value, selector(source[index + skipCount], index)))
+                            return true;
                     }
                 }
             }
@@ -201,13 +184,14 @@ namespace NetFabric.Hyperlinq
         {
             if (takeCount != 0)
             {
-                if (comparer is null)
+                comparer ??= EqualityComparer<TResult>.Default;
+
+                if (skipCount == 0 && takeCount == source.Length)
                 {
-                    var end = skipCount + takeCount;
-                    for (var index = skipCount; index < end; index++)
+                    for (var index = 0; index < source.Length; index++)
                     {
                         var item = source[index];
-                        if (predicate(item) && EqualityComparer<TResult>.Default.Equals(value, selector(item)))
+                        if (predicate(item) && comparer.Equals(value, selector(item)))
                             return true;
                     }
                 }

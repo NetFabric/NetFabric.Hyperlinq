@@ -16,11 +16,32 @@ namespace NetFabric.Hyperlinq
         static int Count<TSource>(this TSource[] source, Predicate<TSource> predicate, int skipCount, int takeCount)
         {
             var count = 0;
-            var end = skipCount + takeCount;
-            for (var index = skipCount; index < end; index++)
+            if (skipCount == 0)
             {
-                var result = predicate(source[index]);
-                count += Unsafe.As<bool, byte>(ref result);
+                if (takeCount == source.Length)
+                {
+                    for (var index = 0; index < source.Length; index++)
+                    {
+                        var result = predicate(source[index]);
+                        count += Unsafe.As<bool, byte>(ref result);
+                    }
+                }
+                else
+                {
+                    for (var index = 0; index < takeCount; index++)
+                    {
+                        var result = predicate(source[index]);
+                        count += Unsafe.As<bool, byte>(ref result);
+                    }
+                }
+            }
+            else
+            {
+                for (var index = 0; index < takeCount; index++)
+                {
+                    var result = predicate(source[index + skipCount]);
+                    count += Unsafe.As<bool, byte>(ref result);
+                }
             }
             return count;
         }

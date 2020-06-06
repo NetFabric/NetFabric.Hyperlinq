@@ -35,11 +35,22 @@ namespace NetFabric.Hyperlinq
 
         static bool All<TSource>(this TSource[] source, Predicate<TSource> predicate, int skipCount, int takeCount)
         {
-            var end = skipCount + takeCount;
-            for (var index = skipCount; index < end; index++)
+            if (skipCount == 0 && takeCount == source.Length)
             {
-                if (!predicate(source[index]))
-                    return false;
+                for (var index = 0; index < source.Length; index++)
+                {
+                    if (!predicate(source[index]))
+                        return false;
+                }
+            }
+            else
+            {
+                var end = skipCount + takeCount;
+                for (var index = skipCount; index < end; index++)
+                {
+                    if (!predicate(source[index]))
+                        return false;
+                }
             }
             return true;
         }
@@ -64,10 +75,21 @@ namespace NetFabric.Hyperlinq
         {
             if (skipCount == 0)
             {
-                for (var index = 0; index < takeCount; index++)
+                if (takeCount == source.Length)
                 {
-                    if (!predicate(source[index], index))
-                        return false;
+                    for (var index = 0; index < source.Length; index++)
+                    {
+                        if (!predicate(source[index], index))
+                            return false;
+                    }
+                }
+                else
+                {
+                    for (var index = 0; index < takeCount; index++)
+                    {
+                        if (!predicate(source[index], index))
+                            return false;
+                    }
                 }
             }
             else
