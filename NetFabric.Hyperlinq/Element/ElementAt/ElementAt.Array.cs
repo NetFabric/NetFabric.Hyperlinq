@@ -29,12 +29,24 @@ namespace NetFabric.Hyperlinq
         {
             if (index >= 0)
             {
-                var end = skipCount + takeCount;
-                for (var sourceIndex = skipCount; sourceIndex < end; sourceIndex++)
+                if (skipCount == 0 && takeCount == source.Length)
                 {
-                    var item = source[sourceIndex];
-                    if (predicate(item) && index-- == 0)
-                        return Option.Some(item);
+                    for (var sourceIndex = 0; sourceIndex < source.Length; sourceIndex++)
+                    {
+                        var item = source[sourceIndex];
+                        if (predicate(item) && index-- == 0)
+                            return Option.Some(item);
+                    }
+                }
+                else
+                {
+                    var end = skipCount + takeCount;
+                    for (var sourceIndex = skipCount; sourceIndex < end; sourceIndex++)
+                    {
+                        var item = source[sourceIndex];
+                        if (predicate(item) && index-- == 0)
+                            return Option.Some(item);
+                    }
                 }
             }
             return Option.None;
@@ -47,11 +59,23 @@ namespace NetFabric.Hyperlinq
             {
                 if (skipCount == 0)
                 {
-                    for (var sourceIndex = 0; sourceIndex < takeCount; sourceIndex++)
+                    if (takeCount == source.Length)
                     {
-                        var item = source[sourceIndex];
-                        if (predicate(item, sourceIndex) && index-- == 0)
-                            return Option.Some(item);
+                        for (var sourceIndex = 0; sourceIndex < source.Length; sourceIndex++)
+                        {
+                            var item = source[sourceIndex];
+                            if (predicate(item, sourceIndex) && index-- == 0)
+                                return Option.Some(item);
+                        }
+                    }
+                    else
+                    {
+                        for (var sourceIndex = 0; sourceIndex < takeCount; sourceIndex++)
+                        {
+                            var item = source[sourceIndex];
+                            if (predicate(item, sourceIndex) && index-- == 0)
+                                return Option.Some(item);
+                        }
                     }
                 }
                 else
@@ -86,12 +110,24 @@ namespace NetFabric.Hyperlinq
         {
             if (index >= 0)
             {
-                var end = skipCount + takeCount;
-                for (var sourceIndex = skipCount; sourceIndex < end; sourceIndex++)
+                if (skipCount == 0 && takeCount == source.Length)
                 {
-                    var item = source[sourceIndex];
-                    if (predicate(item) && index-- == 0)
-                        return Option.Some(selector(item));
+                    for (var sourceIndex = 0; sourceIndex < source.Length; sourceIndex++)
+                    {
+                        var item = source[sourceIndex];
+                        if (predicate(item) && index-- == 0)
+                            return Option.Some(selector(item));
+                    }
+                }
+                else
+                {
+                    var end = skipCount + takeCount;
+                    for (var sourceIndex = skipCount; sourceIndex < end; sourceIndex++)
+                    {
+                        var item = source[sourceIndex];
+                        if (predicate(item) && index-- == 0)
+                            return Option.Some(selector(item));
+                    }
                 }
             }
             return Option.None;

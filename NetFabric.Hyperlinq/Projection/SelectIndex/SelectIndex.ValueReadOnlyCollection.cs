@@ -145,53 +145,13 @@ namespace NetFabric.Hyperlinq
             public List<TResult> ToList()
                 => ValueReadOnlyCollection.ToList<TEnumerable, TEnumerator, TSource, TResult>(source, selector);
 
-            public Dictionary<TKey, TResult> ToDictionary<TKey>(Selector<TResult, TKey> keySelector)
-                => ToDictionary<TKey>(keySelector, EqualityComparer<TKey>.Default);
-            public Dictionary<TKey, TResult> ToDictionary<TKey>(Selector<TResult, TKey> keySelector, IEqualityComparer<TKey>? comparer)
-            {
-                var dictionary = new Dictionary<TKey, TResult>(source.Count, comparer);
+            public Dictionary<TKey, TResult> ToDictionary<TKey>(Selector<TResult, TKey> keySelector, IEqualityComparer<TKey>? comparer = null)
+                => ToDictionary<TKey>(keySelector, comparer);
 
-                if (source.Count != 0)
-                {
-                    TResult result;
-                    using var enumerator = source.GetEnumerator();
-                    checked
-                    {
-                        for (var index = 0; enumerator.MoveNext(); index++)
-                        {
-                            result = selector(enumerator.Current, index);
-                            dictionary.Add(keySelector(result), result);
-                        }
-                    }
-                }
-
-                return dictionary;
-            }
-
-            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Selector<TResult, TKey> keySelector, Selector<TResult, TElement> elementSelector)
+            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Selector<TResult, TKey> keySelector, Selector<TResult, TElement> elementSelector, IEqualityComparer<TKey>? comparer = null)
                 => ToDictionary<TKey, TElement>(keySelector, elementSelector, EqualityComparer<TKey>.Default);
-            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Selector<TResult, TKey> keySelector, Selector<TResult, TElement> elementSelector, IEqualityComparer<TKey>? comparer)
-            {
-                var dictionary = new Dictionary<TKey, TElement>(source.Count, comparer);
-
-                if (source.Count != 0)
-                {
-                    TResult result;
-                    using var enumerator = source.GetEnumerator();
-                    checked
-                    {
-                        for (var index = 0; enumerator.MoveNext(); index++)
-                        {
-                            result = selector(enumerator.Current, index);
-                            dictionary.Add(keySelector(result), elementSelector(result));
-                        }
-                    }
-                }
-
-                return dictionary;
-            }
         }
-
+        
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int Count<TEnumerable, TEnumerator, TSource, TResult>(this SelectIndexEnumerable<TEnumerable, TEnumerator, TSource, TResult> source)
             where TEnumerable : notnull, IValueReadOnlyCollection<TSource, TEnumerator>

@@ -119,42 +119,42 @@ namespace NetFabric.Hyperlinq
             }
 
             public int Count()
-                => Count<TSource>(source, predicate, skipCount, takeCount);
+                => Array.Count<TSource>(source, predicate, skipCount, takeCount);
 
             public bool Any()
-                => Any<TSource>(source, predicate, skipCount, takeCount);
+                => Array.Any<TSource>(source, predicate, skipCount, takeCount);
 
             public bool Contains(TSource value, IEqualityComparer<TSource>? comparer = null)
-                => Contains<TSource>(source, value, comparer, predicate, skipCount, takeCount);
+                => Array.Contains<TSource>(source, value, comparer, predicate, skipCount, takeCount);
 
             public WhereIndexEnumerable<TSource> Where(Predicate<TSource> predicate)
-                => Where<TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount);
+                => Array.Where<TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount);
             public WhereIndexEnumerable<TSource> Where(PredicateAt<TSource> predicate)
-                => Where<TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount);
+                => Array.Where<TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount);
 
             public Option<TSource> ElementAt(int index)
-                => ElementAt<TSource>(source, index, predicate, skipCount, takeCount);
+                => Array.ElementAt<TSource>(source, index, predicate, skipCount, takeCount);
 
             public Option<TSource> First()
-                => First<TSource>(source, predicate, skipCount, takeCount);
+                => Array.First<TSource>(source, predicate, skipCount, takeCount);
 
             public Option<TSource> Single()
-                => Single<TSource>(source, predicate, skipCount, takeCount);
+                => Array.Single<TSource>(source, predicate, skipCount, takeCount);
 
             public TSource[] ToArray()
-                => ToArray<TSource>(source, predicate, skipCount, takeCount);
+                => Array.ToArray<TSource>(source, predicate, skipCount, takeCount);
 
             public List<TSource> ToList()
-                => ToList<TSource>(source, predicate, skipCount, takeCount);
+                => Array.ToList<TSource>(source, predicate, skipCount, takeCount);
 
             public Dictionary<TKey, TSource> ToDictionary<TKey>(Selector<TSource, TKey> keySelector)
-                => ToDictionary<TSource, TKey>(source, keySelector, EqualityComparer<TKey>.Default, predicate, skipCount, takeCount);
+                => Array.ToDictionary<TSource, TKey>(source, keySelector, EqualityComparer<TKey>.Default, predicate, skipCount, takeCount);
             public Dictionary<TKey, TSource> ToDictionary<TKey>(Selector<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer)
-                => ToDictionary<TSource, TKey>(source, keySelector, comparer, predicate, skipCount, takeCount);
+                => Array.ToDictionary<TSource, TKey>(source, keySelector, comparer, predicate, skipCount, takeCount);
             public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Selector<TSource, TKey> keySelector, Selector<TSource, TElement> elementSelector)
-                => ToDictionary<TSource, TKey, TElement>(source, keySelector, elementSelector, EqualityComparer<TKey>.Default, predicate, skipCount, takeCount);
+                => Array.ToDictionary<TSource, TKey, TElement>(source, keySelector, elementSelector, EqualityComparer<TKey>.Default, predicate, skipCount, takeCount);
             public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Selector<TSource, TKey> keySelector, Selector<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer)
-                => ToDictionary<TSource, TKey, TElement>(source, keySelector, elementSelector, comparer, predicate, skipCount, takeCount);
+                => Array.ToDictionary<TSource, TKey, TElement>(source, keySelector, elementSelector, comparer, predicate, skipCount, takeCount);
 
             public readonly bool SequenceEqual(IEnumerable<TSource> other, IEqualityComparer<TSource>? comparer = null)
             {

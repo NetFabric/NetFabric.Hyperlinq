@@ -40,11 +40,23 @@ namespace NetFabric.Hyperlinq
             where TList : notnull, IReadOnlyList<TSource>
         {
             var list = new List<TSource>();
-            for (var index = 0; index < takeCount; index++)
+            if (skipCount == 0)
             {
-                var item = source[index + skipCount];
-                if (predicate(item, index))
-                    list.Add(item);
+                for (var index = 0; index < takeCount; index++)
+                {
+                    var item = source[index];
+                    if (predicate(item, index))
+                        list.Add(item);
+                }
+            }
+            else
+            {
+                for (var index = 0; index < takeCount; index++)
+                {
+                    var item = source[index + skipCount];
+                    if (predicate(item, index))
+                        list.Add(item);
+                }
             }
             return list;
         }

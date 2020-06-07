@@ -29,12 +29,24 @@ namespace NetFabric.Hyperlinq
 
         static Option<TSource> First<TSource>(this TSource[] source, Predicate<TSource> predicate, int skipCount, int takeCount)
         {
-            var end = skipCount + takeCount;
-            for (var index = skipCount; index < end; index++)
+            if (skipCount == 0 && takeCount == source.Length)
             {
-                var item = source[index];
-                if (predicate(item))
-                    return Option.Some(item);
+                for (var index = 0; index < source.Length; index++)
+                {
+                    var item = source[index];
+                    if (predicate(item))
+                        return Option.Some(item);
+                }
+            }
+            else
+            {
+                var end = skipCount + takeCount;
+                for (var index = skipCount; index < end; index++)
+                {
+                    var item = source[index];
+                    if (predicate(item))
+                        return Option.Some(item);
+                }
             }
             return Option.None;
         }
@@ -44,11 +56,23 @@ namespace NetFabric.Hyperlinq
         {
             if (skipCount == 0)
             {
-                for (var index = 0; index < takeCount; index++)
+                if (takeCount == source.Length)
                 {
-                    var item = source[index];
-                    if (predicate(item, index))
-                        return Option.Some(item);
+                    for (var index = 0; index < source.Length; index++)
+                    {
+                        var item = source[index];
+                        if (predicate(item, index))
+                            return Option.Some(item);
+                    }
+                }
+                else
+                {
+                    for (var index = 0; index < takeCount; index++)
+                    {
+                        var item = source[index];
+                        if (predicate(item, index))
+                            return Option.Some(item);
+                    }
                 }
             }
             else
@@ -84,11 +108,22 @@ namespace NetFabric.Hyperlinq
 
         static Option<TResult> First<TSource, TResult>(this TSource[] source, Predicate<TSource> predicate, Selector<TSource, TResult> selector, int skipCount, int takeCount)
         {
-            var end = skipCount + takeCount;
-            for (var index = skipCount; index < end; index++)
+            if (skipCount == 0 && takeCount == source.Length)
             {
-                if (predicate(source[index]))
-                    return Option.Some(selector(source[index]));
+                for (var index = 0; index < source.Length; index++)
+                {
+                    if (predicate(source[index]))
+                        return Option.Some(selector(source[index]));
+                }
+            }
+            else
+            {
+                var end = skipCount + takeCount;
+                for (var index = skipCount; index < end; index++)
+                {
+                    if (predicate(source[index]))
+                        return Option.Some(selector(source[index]));
+                }
             }
             return Option.None;
         }

@@ -182,72 +182,38 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Contains(TResult value, IEqualityComparer<TResult>? comparer = null)
-                => Contains<TSource, TResult>(source, value, comparer, selector, skipCount, Count);
+                => Array.Contains<TSource, TResult>(source, value, comparer, selector, skipCount, Count);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public SelectIndexEnumerable<TSource, TSelectorResult> Select<TSelectorResult>(Selector<TResult, TSelectorResult> selector)
-                => Select<TSource, TSelectorResult>(source, Utils.Combine(this.selector, selector), skipCount, Count);
+                => Array.Select<TSource, TSelectorResult>(source, Utils.Combine(this.selector, selector), skipCount, Count);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public SelectIndexEnumerable<TSource, TSelectorResult> Select<TSelectorResult>(SelectorAt<TResult, TSelectorResult> selector)
-                => Select<TSource, TSelectorResult>(source, Utils.Combine(this.selector, selector), skipCount, Count);
+                => Array.Select<TSource, TSelectorResult>(source, Utils.Combine(this.selector, selector), skipCount, Count);
 
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Option<TResult> ElementAt(int index)
-                => ElementAt<TSource, TResult>(source, index, selector, skipCount, Count);
+                => Array.ElementAt<TSource, TResult>(source, index, selector, skipCount, Count);
 
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Option<TResult> First()
-                => First<TSource, TResult>(source, selector, skipCount, Count);
+                => Array.First<TSource, TResult>(source, selector, skipCount, Count);
 
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Option<TResult> Single()
-                => Single<TSource, TResult>(source, selector, skipCount, Count);
+                => Array.Single<TSource, TResult>(source, selector, skipCount, Count);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TResult[] ToArray()
-                => ToArray<TSource, TResult>(source, selector, skipCount, Count);
+                => Array.ToArray<TSource, TResult>(source, selector, skipCount, Count);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public List<TResult> ToList()
-                => ToList<TSource, TResult>(source, selector, skipCount, Count);
-
-            public Dictionary<TKey, TResult> ToDictionary<TKey>(Selector<TResult, TKey> keySelector)
-                => ToDictionary<TKey>(keySelector, EqualityComparer<TKey>.Default);
-            public Dictionary<TKey, TResult> ToDictionary<TKey>(Selector<TResult, TKey> keySelector, IEqualityComparer<TKey>? comparer)
-            {
-                var dictionary = new Dictionary<TKey, TResult>(source.Length, comparer);
-
-                TResult item;
-                var end = skipCount + Count;
-                for (var index = skipCount; index < end; index++)
-                {
-                    item = selector(source[index], index);
-                    dictionary.Add(keySelector(item), item);
-                }
-
-                return dictionary;
-            }
-
-            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Selector<TResult, TKey> keySelector, Selector<TResult, TElement> elementSelector)
-                => ToDictionary<TKey, TElement>(keySelector, elementSelector, EqualityComparer<TKey>.Default);
-            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Selector<TResult, TKey> keySelector, Selector<TResult, TElement> elementSelector, IEqualityComparer<TKey>? comparer)
-            {
-                var dictionary = new Dictionary<TKey, TElement>(source.Length, comparer);
-
-                TResult item;
-                var end = skipCount + Count;
-                for (var index = skipCount; index < end; index++)
-                {
-                    item = selector(source[index], index);
-                    dictionary.Add(keySelector(item), elementSelector(item));
-                }
-
-                return dictionary;
-            }
+                => Array.ToList<TSource, TResult>(source, selector, skipCount, Count);
 
             public readonly bool SequenceEqual(IEnumerable<TResult> other, IEqualityComparer<TResult>? comparer = null)
             {

@@ -6,16 +6,7 @@ namespace NetFabric.Hyperlinq
     public static partial class ReadOnlyList
     {
         
-        public static Dictionary<TKey, TSource> ToDictionary<TList, TSource, TKey>(this TList source, Selector<TSource, TKey> keySelector)
-            where TList : notnull, IReadOnlyList<TSource>
-        {
-            if (keySelector is null) Throw.ArgumentNullException(nameof(keySelector));
-
-            return ToDictionary<TList, TSource, TKey>(source, keySelector, EqualityComparer<TKey>.Default, 0, source.Count);
-        }
-
-        
-        public static Dictionary<TKey, TSource> ToDictionary<TList, TSource, TKey>(this TList source, Selector<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer)
+        public static Dictionary<TKey, TSource> ToDictionary<TList, TSource, TKey>(this TList source, Selector<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer = null)
             where TList : notnull, IReadOnlyList<TSource>
         {
             if (keySelector is null) Throw.ArgumentNullException(nameof(keySelector));
@@ -24,17 +15,7 @@ namespace NetFabric.Hyperlinq
         }
 
         
-        public static Dictionary<TKey, TElement> ToDictionary<TList, TSource, TKey, TElement>(this TList source, Selector<TSource, TKey> keySelector, Selector<TSource, TElement> elementSelector)
-            where TList : notnull, IReadOnlyList<TSource>
-        {
-            if (keySelector is null) Throw.ArgumentNullException(nameof(keySelector));
-            if (elementSelector is null) Throw.ArgumentNullException(nameof(elementSelector));
-
-            return ToDictionary<TList, TSource, TKey, TElement>(source, keySelector, elementSelector, EqualityComparer<TKey>.Default, 0, source.Count);
-        }
-
-        
-        public static Dictionary<TKey, TElement> ToDictionary<TList, TSource, TKey, TElement>(this TList source, Selector<TSource, TKey> keySelector, Selector<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer)
+        public static Dictionary<TKey, TElement> ToDictionary<TList, TSource, TKey, TElement>(this TList source, Selector<TSource, TKey> keySelector, Selector<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer = null)
             where TList : notnull, IReadOnlyList<TSource>
         {
             if (keySelector is null) Throw.ArgumentNullException(nameof(keySelector));

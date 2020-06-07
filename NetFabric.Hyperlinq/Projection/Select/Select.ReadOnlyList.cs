@@ -215,39 +215,11 @@ namespace NetFabric.Hyperlinq
             public List<TResult> ToList()
                 => ReadOnlyList.ToList<TList, TSource, TResult>(source, selector, skipCount, takeCount);
 
-            public Dictionary<TKey, TResult> ToDictionary<TKey>(Selector<TResult, TKey> keySelector)
-                => ToDictionary<TKey>(keySelector, EqualityComparer<TKey>.Default);
-            public Dictionary<TKey, TResult> ToDictionary<TKey>(Selector<TResult, TKey> keySelector, IEqualityComparer<TKey>? comparer)
-            {
-                var dictionary = new Dictionary<TKey, TResult>(source.Count, comparer);
+            public Dictionary<TKey, TResult> ToDictionary<TKey>(Selector<TResult, TKey> keySelector, IEqualityComparer<TKey>? comparer = null)
+                => ToDictionary<TKey>(keySelector, comparer);
 
-                TResult item;
-                var end = skipCount + takeCount;
-                for (var index = skipCount; index < end; index++)
-                {
-                    item = selector(source[index]);
-                    dictionary.Add(keySelector(item), item);
-                }
-
-                return dictionary;
-            }
-
-            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Selector<TResult, TKey> keySelector, Selector<TResult, TElement> elementSelector)
-                => ToDictionary<TKey, TElement>(keySelector, elementSelector, EqualityComparer<TKey>.Default);
-            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Selector<TResult, TKey> keySelector, Selector<TResult, TElement> elementSelector, IEqualityComparer<TKey>? comparer)
-            {
-                var dictionary = new Dictionary<TKey, TElement>(source.Count, comparer);
-
-                TResult item;
-                var end = skipCount + takeCount;
-                for (var index = skipCount; index < end; index++)
-                {
-                    item = selector(source[index]);
-                    dictionary.Add(keySelector(item), elementSelector(item));
-                }
-
-                return dictionary;
-            }
+            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Selector<TResult, TKey> keySelector, Selector<TResult, TElement> elementSelector, IEqualityComparer<TKey>? comparer = null)
+                => ToDictionary<TKey, TElement>(keySelector, elementSelector, comparer);
 
             public readonly bool SequenceEqual(IEnumerable<TResult> other, IEqualityComparer<TResult>? comparer = null)
             {

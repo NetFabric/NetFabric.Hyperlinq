@@ -6,14 +6,29 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class Array
     {
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool Contains<TSource>(this TSource[] source, TSource value, IEqualityComparer<TSource>? comparer = null)
-            => source.Contains(value, comparer);
 
 #if SPAN_SUPPORTED
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool Contains<TSource>(this TSource[] source, TSource value, IEqualityComparer<TSource>? comparer = null)
+            => Array.Contains((ReadOnlySpan<TSource>)source, value, comparer);
 
 #else
+
+        public static bool Contains<TSource>(this TSource[] source, TSource value, IEqualityComparer<TSource>? comparer = null)
+        {
+            if (source.Length != 0) 
+            {
+                comparer ??= EqualityComparer<TSource>.Default;
+
+                for (var index = 0; index < source.Length; index++)
+                {
+                    if (comparer.Equals(value, source[index]))
+                        return true;
+                }
+            }
+            return false;
+        }
 
         static bool Contains<TSource>(this TSource[] source, TSource value, IEqualityComparer<TSource>? comparer, int skipCount, int takeCount)
         {

@@ -51,10 +51,21 @@ namespace NetFabric.Hyperlinq
             var count = 0;
             if (skipCount == 0)
             {
-                for (var index = 0; index < takeCount; index++)
+                if (takeCount == source.Length)
                 {
-                    var result = predicate(source[index], index);
-                    count += Unsafe.As<bool, byte>(ref result);
+                    for (var index = 0; index < source.Length; index++)
+                    {
+                        var result = predicate(source[index], index);
+                        count += Unsafe.As<bool, byte>(ref result);
+                    }
+                }
+                else
+                {
+                    for (var index = 0; index < takeCount; index++)
+                    {
+                        var result = predicate(source[index], index);
+                        count += Unsafe.As<bool, byte>(ref result);
+                    }
                 }
             }
             else

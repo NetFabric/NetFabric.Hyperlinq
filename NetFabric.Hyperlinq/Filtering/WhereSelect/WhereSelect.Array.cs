@@ -121,68 +121,28 @@ namespace NetFabric.Hyperlinq
             }
 
             public int Count()
-                => Count<TSource>(source, predicate, skipCount, takeCount);
+                => Array.Count<TSource>(source, predicate, skipCount, takeCount);
 
             public bool Any()
-                => Any<TSource>(source, predicate, skipCount, takeCount);
+                => Array.Any<TSource>(source, predicate, skipCount, takeCount);
 
             public bool Contains(TResult value, IEqualityComparer<TResult>? comparer = null)
-                => Contains<TSource, TResult>(source, value, comparer, predicate, selector, skipCount, takeCount);
+                => Array.Contains<TSource, TResult>(source, value, comparer, predicate, selector, skipCount, takeCount);
 
             public Option<TResult> ElementAt(int index)
-                => ElementAt<TSource, TResult>(source, index, predicate, selector, skipCount, takeCount);
+                => Array.ElementAt<TSource, TResult>(source, index, predicate, selector, skipCount, takeCount);
 
             public Option<TResult> First()
-                => First<TSource, TResult>(source, predicate, selector, skipCount, takeCount);
+                => Array.First<TSource, TResult>(source, predicate, selector, skipCount, takeCount);
 
             public Option<TResult> Single()
-                => Single<TSource, TResult>(source, predicate, selector, skipCount, takeCount);
+                => Array.Single<TSource, TResult>(source, predicate, selector, skipCount, takeCount);
 
             public TResult[] ToArray()
-                => ToArray<TSource, TResult>(source, predicate, selector, skipCount, takeCount);
+                => Array.ToArray<TSource, TResult>(source, predicate, selector, skipCount, takeCount);
 
             public List<TResult> ToList()
-                => ToList<TSource, TResult>(source, predicate, selector, skipCount, takeCount);
-
-            public Dictionary<TKey, TResult> ToDictionary<TKey>(Selector<TResult, TKey> keySelector)
-                => ToDictionary<TKey>(keySelector, EqualityComparer<TKey>.Default);
-            public Dictionary<TKey, TResult> ToDictionary<TKey>(Selector<TResult, TKey> keySelector, IEqualityComparer<TKey>? comparer)
-            {
-                var dictionary = new Dictionary<TKey, TResult>(0, comparer);
-
-                TResult item;
-                var end = skipCount + takeCount;
-                for (var index = skipCount; index < end; index++)
-                {
-                    if (predicate(source[index]))
-                    {
-                        item = selector(source[index]);
-                        dictionary.Add(keySelector(item), item);
-                    }
-                }
-
-                return dictionary;
-            }
-
-            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Selector<TResult, TKey> keySelector, Selector<TResult, TElement> elementSelector)
-                => ToDictionary<TKey, TElement>(keySelector, elementSelector, EqualityComparer<TKey>.Default);
-            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Selector<TResult, TKey> keySelector, Selector<TResult, TElement> elementSelector, IEqualityComparer<TKey>? comparer)
-            {
-                var dictionary = new Dictionary<TKey, TElement>(0, comparer);
-
-                TResult item;
-                var end = skipCount + takeCount;
-                for (var index = skipCount; index < end; index++)
-                {
-                    if (predicate(source[index]))
-                    {
-                        item = selector(source[index]);
-                        dictionary.Add(keySelector(item), elementSelector(item));
-                    }
-                }
-
-                return dictionary;
-            }
+                => Array.ToList<TSource, TResult>(source, predicate, selector, skipCount, takeCount);
 
             public readonly bool SequenceEqual(IEnumerable<TResult> other, IEqualityComparer<TResult>? comparer = null)
             {

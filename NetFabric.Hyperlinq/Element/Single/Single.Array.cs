@@ -62,23 +62,43 @@ namespace NetFabric.Hyperlinq
 
         static Option<TSource> GetSingle<TSource>(this TSource[] source, Predicate<TSource> predicate, int skipCount, int takeCount)
         {
-            var end = skipCount + takeCount;
-            for (var index = skipCount; index < end; index++)
+            if (skipCount == 0 && takeCount == source.Length)
             {
-                if (predicate(source[index]))
+                for (var index = 0; index < source.Length; index++)
                 {
-                    var value = source[index];
-
-                    for (index++; index < end; index++)
+                    if (predicate(source[index]))
                     {
-                        if (predicate(source[index]))
-                            return Option.None;
-                    }
+                        var value = source[index];
 
-                    return Option.Some(value);
+                        for (index++; index < source.Length; index++)
+                        {
+                            if (predicate(source[index]))
+                                return Option.None;
+                        }
+
+                        return Option.Some(value);
+                    }
                 }
             }
+            else
+            {
+                var end = skipCount + takeCount;
+                for (var index = skipCount; index < end; index++)
+                {
+                    if (predicate(source[index]))
+                    {
+                        var value = source[index];
 
+                        for (index++; index < end; index++)
+                        {
+                            if (predicate(source[index]))
+                                return Option.None;
+                        }
+
+                        return Option.Some(value);
+                    }
+                }
+            }
             return Option.None;
         }
 
@@ -87,19 +107,40 @@ namespace NetFabric.Hyperlinq
         {
             if (skipCount == 0)
             {
-                for (var index = 0; index < takeCount; index++)
+                if (takeCount == source.Length)
                 {
-                    if (predicate(source[index], index))
+                    for (var index = 0; index < source.Length; index++)
                     {
-                        var value = source[index];
-
-                        for (index++; index < takeCount; index++)
+                        if (predicate(source[index], index))
                         {
-                            if (predicate(source[index], index))
-                                return Option.None;
-                        }
+                            var value = source[index];
 
-                        return Option.Some(value);
+                            for (index++; index < source.Length; index++)
+                            {
+                                if (predicate(source[index], index))
+                                    return Option.None;
+                            }
+
+                            return Option.Some(value);
+                        }
+                    }
+                }
+                else
+                {
+                    for (var index = 0; index < takeCount; index++)
+                    {
+                        if (predicate(source[index], index))
+                        {
+                            var value = source[index];
+
+                            for (index++; index < takeCount; index++)
+                            {
+                                if (predicate(source[index], index))
+                                    return Option.None;
+                            }
+
+                            return Option.Some(value);
+                        }
                     }
                 }
             }
