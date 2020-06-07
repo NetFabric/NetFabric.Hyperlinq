@@ -39,7 +39,7 @@ namespace NetFabric.Hyperlinq
                 if (predicate(source[index]))
                     return true;
             }
-            return true;
+            return false;
         }
 
 
@@ -76,7 +76,7 @@ namespace NetFabric.Hyperlinq
                 if (predicate(source[index], index))
                     return true;
             }
-            return true;
+            return false;
         }
 
 
