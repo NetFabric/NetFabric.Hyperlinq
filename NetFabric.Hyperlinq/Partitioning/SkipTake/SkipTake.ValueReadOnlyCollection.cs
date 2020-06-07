@@ -23,15 +23,14 @@ namespace NetFabric.Hyperlinq
         {
             readonly TEnumerable source;
             readonly int skipCount;
-            readonly int takeCount;
 
             internal SkipTakeEnumerable(in TEnumerable source, int skipCount, int takeCount)
             {
                 this.source = source;
-                (this.skipCount, this.takeCount) = Utils.SkipTake(source.Count, skipCount, takeCount);
+                (this.skipCount, Count) = Utils.SkipTake(source.Count, skipCount, takeCount);
             }
 
-            public readonly int Count => takeCount;
+            public readonly int Count { get; }
 
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -44,7 +43,7 @@ namespace NetFabric.Hyperlinq
 
             void ICollection<TSource>.CopyTo(TSource[] array, int arrayIndex) 
             {
-                if (takeCount == 0)
+                if (Count == 0)
                     return;
 
                 using var enumerator = source.GetEnumerator();
@@ -56,7 +55,7 @@ namespace NetFabric.Hyperlinq
                 }
 
                 // take
-                for (var counter = 0; counter < takeCount; counter++)
+                for (var counter = 0; counter < Count; counter++)
                 {
                     if (!enumerator.MoveNext()) Throw.InvalidOperationException();
 
@@ -87,7 +86,7 @@ namespace NetFabric.Hyperlinq
                 {
                     enumerator = enumerable.source.GetEnumerator();
                     skipCounter = enumerable.skipCount;
-                    takeCounter = enumerable.takeCount;
+                    takeCounter = enumerable.Count;
                     state = takeCounter > 0 ? EnumeratorState.Uninitialized : EnumeratorState.Complete;
                 }
 
@@ -148,7 +147,7 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public SkipTakeEnumerable<TEnumerable, TEnumerator, TSource> Take(int count)
-                => ValueReadOnlyCollection.SkipTake<TEnumerable, TEnumerator, TSource>(source, skipCount, Math.Min(takeCount, count));
+                => ValueReadOnlyCollection.SkipTake<TEnumerable, TEnumerator, TSource>(source, skipCount, Math.Min(Count, count));
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

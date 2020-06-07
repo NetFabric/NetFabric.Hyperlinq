@@ -89,9 +89,9 @@ namespace NetFabric.Hyperlinq
                 => throw new NotSupportedException();
             bool ICollection<TResult>.Contains(TResult item)
             {
-                for (var index = 0; index < Count; index++)
+                for (var index = skipCount; index < Count; index++)
                 {
-                    if (EqualityComparer<TResult>.Default.Equals(selector(source[index + skipCount]), item))
+                    if (EqualityComparer<TResult>.Default.Equals(selector(source[index]), item))
                         return true;
                 }
                 return false;
@@ -100,10 +100,10 @@ namespace NetFabric.Hyperlinq
                 => throw new NotSupportedException();
             int IList<TResult>.IndexOf(TResult item)
             {
-                for (var index = 0; index < Count; index++)
+                for (var index = skipCount; index < Count; index++)
                 {
-                    if (EqualityComparer<TResult>.Default.Equals(selector(source[index + skipCount]), item))
-                        return index;
+                    if (EqualityComparer<TResult>.Default.Equals(selector(source[index]), item))
+                        return index - skipCount;
                 }
                 return -1;
             }

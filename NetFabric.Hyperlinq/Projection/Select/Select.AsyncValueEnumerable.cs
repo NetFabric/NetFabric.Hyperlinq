@@ -78,9 +78,9 @@ namespace NetFabric.Hyperlinq
                 }
 
                 [MaybeNull]
-#pragma warning disable CS8766 // Nullability of reference types in return type doesn't match implicitly implemented member (possibly because of nullability attributes).
                 public TResult Current { get; private set; }
-#pragma warning restore CS8766 // Nullability of reference types in return type doesn't match implicitly implemented member (possibly because of nullability attributes).
+                TResult IAsyncEnumerator<TResult>.Current 
+                    => Current;
 
                 //public async ValueTask<bool> MoveNextAsync()
                 //{
