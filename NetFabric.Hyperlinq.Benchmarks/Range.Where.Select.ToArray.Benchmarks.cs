@@ -9,7 +9,7 @@ using System.ComponentModel;
 namespace NetFabric.Hyperlinq.Benchmarks
 {
     [SimpleJob(RuntimeMoniker.Net472, baseline: true)]
-    [SimpleJob(RuntimeMoniker.NetCoreApp50)]
+    [SimpleJob(RuntimeMoniker.NetCoreApp31)]
     [MemoryDiagnoser]
     public class RangeWhereSelectToArrayBenchmarks
     {
