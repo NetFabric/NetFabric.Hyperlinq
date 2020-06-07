@@ -99,9 +99,9 @@ namespace NetFabric.Hyperlinq
                 }
 
                 [MaybeNull]
-#pragma warning disable CS8766 // Nullability of reference types in return type doesn't match implicitly implemented member (possibly because of nullability attributes).
                 public TSource Current { get; private set; }
-#pragma warning restore CS8766 // Nullability of reference types in return type doesn't match implicitly implemented member (possibly because of nullability attributes).
+                readonly TSource IEnumerator<TSource>.Current
+                    => Current;
                 readonly object? IEnumerator.Current 
                     => Current;
 

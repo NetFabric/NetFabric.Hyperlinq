@@ -79,8 +79,9 @@ namespace NetFabric.Hyperlinq
                     moveNext = true;
                 }
 
+                [MaybeNull]
                 public readonly TSource Current
-                    => value!;
+                    => value;
 
                 public bool MoveNext()
                 {
@@ -105,9 +106,12 @@ namespace NetFabric.Hyperlinq
                     moveNext = true;
                 }
 
+                [MaybeNull]
                 public readonly TSource Current
-                    => value!;
-                readonly object? IEnumerator.Current 
+                    => value;
+                readonly TSource IEnumerator<TSource>.Current 
+                    => value;
+                readonly object? IEnumerator.Current
                     => value;
 
                 public bool MoveNext()

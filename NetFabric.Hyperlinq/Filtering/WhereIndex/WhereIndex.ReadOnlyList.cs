@@ -93,6 +93,8 @@ namespace NetFabric.Hyperlinq
 
                 public readonly TSource Current
                     => source[index];
+                readonly TSource IEnumerator<TSource>.Current 
+                    => source[index];
                 readonly object? IEnumerator.Current 
                     => source[index];
 

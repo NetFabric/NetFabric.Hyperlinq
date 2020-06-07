@@ -55,7 +55,10 @@ namespace NetFabric.Hyperlinq
                     set = null;
                 }
 
+                [MaybeNull]
                 public readonly TSource Current 
+                    => enumerator.Current;
+                readonly TSource IEnumerator<TSource>.Current 
                     => enumerator.Current;
                 readonly object? IEnumerator.Current 
                     => enumerator.Current;

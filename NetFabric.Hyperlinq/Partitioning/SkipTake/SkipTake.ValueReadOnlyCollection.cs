@@ -91,7 +91,10 @@ namespace NetFabric.Hyperlinq
                     state = takeCounter > 0 ? EnumeratorState.Uninitialized : EnumeratorState.Complete;
                 }
 
+                [MaybeNull]
                 public readonly TSource Current
+                    => enumerator.Current;
+                readonly TSource IEnumerator<TSource>.Current 
                     => enumerator.Current;
                 readonly object? IEnumerator.Current 
                     => enumerator.Current;

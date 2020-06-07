@@ -48,7 +48,10 @@ namespace NetFabric.Hyperlinq
                     counter = enumerable.count;
                 }
 
+                [MaybeNull]
                 public readonly TSource Current
+                    => enumerator.Current;
+                readonly TSource IAsyncEnumerator<TSource>.Current
                     => enumerator.Current;
 
                 public async ValueTask<bool> MoveNextAsync()

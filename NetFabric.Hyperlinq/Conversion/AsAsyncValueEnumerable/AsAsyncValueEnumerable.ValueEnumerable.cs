@@ -51,7 +51,11 @@ namespace NetFabric.Hyperlinq
                     this.cancellationToken = cancellationToken;
                 }
 
-                public readonly TSource Current => enumerator.Current;
+                [MaybeNull]
+                public readonly TSource Current 
+                    => enumerator.Current;
+                readonly TSource IAsyncEnumerator<TSource>.Current
+                    => enumerator.Current;
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public ValueTask<bool> MoveNextAsync() 

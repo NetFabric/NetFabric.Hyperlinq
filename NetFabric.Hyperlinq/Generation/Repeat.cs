@@ -112,6 +112,8 @@ namespace NetFabric.Hyperlinq
 
                 public readonly TSource Current
                     => value!;
+                readonly TSource IEnumerator<TSource>.Current 
+                    => value;
                 readonly object? IEnumerator.Current 
                     => value;
 

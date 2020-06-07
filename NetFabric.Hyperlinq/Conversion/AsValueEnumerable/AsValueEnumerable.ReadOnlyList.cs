@@ -89,9 +89,12 @@ namespace NetFabric.Hyperlinq
                     index = -1;
                 }
 
+                [MaybeNull]
                 public readonly TSource Current 
                     => source[index];
-                readonly object? IEnumerator.Current 
+                readonly TSource IEnumerator<TSource>.Current 
+                    => source[index];
+                readonly object? IEnumerator.Current
                     => source[index];
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]

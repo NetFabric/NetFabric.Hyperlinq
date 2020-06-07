@@ -75,12 +75,12 @@ namespace NetFabric.Hyperlinq
                 internal Enumerator(IEnumerable<TSource> enumerable) 
                     => enumerator = enumerable.GetEnumerator();
 
-                public readonly TSource Current 
-                {
-                    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                    get => enumerator.Current;
-                }
-                readonly object? IEnumerator.Current 
+                [MaybeNull]
+                public readonly TSource Current
+                    => enumerator.Current;
+                readonly TSource IEnumerator<TSource>.Current 
+                    => enumerator.Current;
+                readonly object? IEnumerator.Current
                     => enumerator.Current;
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
