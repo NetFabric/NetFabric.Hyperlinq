@@ -81,6 +81,7 @@
     <UpToDateCheck Remove="Equality\SequenceEquality.ReadOnlySpan.cs" />
     <UpToDateCheck Remove="Equality\SequenceEqual\SequenceEqual.ReadOnlySpan.cs" />
     <UpToDateCheck Remove="GlobalSuppressions.cs" />
+    <UpToDateCheck Remove="Partitioning\SkipTake\SkipTake.Array.cs" />
     <UpToDateCheck Remove="Properties\AssemblyInfo.cs" />
   </ItemGroup>
 </Project>

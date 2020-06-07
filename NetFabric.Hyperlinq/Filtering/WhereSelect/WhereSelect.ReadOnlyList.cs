@@ -10,15 +10,6 @@ namespace NetFabric.Hyperlinq
     {
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static WhereSelectEnumerable<TList, TSource, TResult> WhereSelect<TList, TSource, TResult>(
-            this TList source, 
-            Predicate<TSource> predicate,
-            Selector<TSource, TResult> selector)
-            where TList : notnull, IReadOnlyList<TSource>
-            => new WhereSelectEnumerable<TList, TSource, TResult>(in source, predicate, selector, 0, source.Count);
-
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static WhereSelectEnumerable<TList, TSource, TResult> WhereSelect<TList, TSource, TResult>(
             this TList source,
             Predicate<TSource> predicate,

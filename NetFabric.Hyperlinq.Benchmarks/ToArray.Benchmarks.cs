@@ -21,12 +21,12 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [Benchmark]
         public int[] System_Span() =>
             array.AsSpan().ToArray();
+#endif
 
         [BenchmarkCategory("Enumerable_Value")]
         [Benchmark(Baseline = true)]
         public int[] Linq_Enumerable_Value() =>
             System.Linq.Enumerable.ToArray(enumerableValue);
-#endif
 
         [BenchmarkCategory("Collection_Value")]
         [Benchmark(Baseline = true)]

@@ -11,7 +11,7 @@ namespace NetFabric.Hyperlinq
             => ReadOnlyList.Contains<TList, TSource>(source, value, comparer, 0, source.Count);
 
 
-        internal static bool Contains<TList, TSource>(this TList source, TSource value, IEqualityComparer<TSource>? comparer, int skipCount, int takeCount)
+        static bool Contains<TList, TSource>(this TList source, TSource value, IEqualityComparer<TSource>? comparer, int skipCount, int takeCount)
             where TList : notnull, IReadOnlyList<TSource>
         {
             if (takeCount != 0) 
@@ -69,7 +69,7 @@ namespace NetFabric.Hyperlinq
         }
 
 
-        internal static bool Contains<TList, TSource>(this TList source, TSource value, IEqualityComparer<TSource>? comparer, PredicateAt<TSource> predicate, int skipCount, int takeCount)
+        static bool Contains<TList, TSource>(this TList source, TSource value, IEqualityComparer<TSource>? comparer, PredicateAt<TSource> predicate, int skipCount, int takeCount)
             where TList : notnull, IReadOnlyList<TSource>
         {
             if (takeCount != 0) 
@@ -121,7 +121,7 @@ namespace NetFabric.Hyperlinq
         }
 
 
-        internal static bool Contains<TList, TSource, TResult>(this TList source, TResult value, IEqualityComparer<TResult>? comparer, Selector<TSource, TResult> selector, int skipCount, int takeCount)
+        static bool Contains<TList, TSource, TResult>(this TList source, TResult value, IEqualityComparer<TResult>? comparer, Selector<TSource, TResult> selector, int skipCount, int takeCount)
             where TList : notnull, IReadOnlyList<TSource>
         {
             if (takeCount != 0) 
@@ -149,7 +149,7 @@ namespace NetFabric.Hyperlinq
         }
 
 
-        internal static bool Contains<TList, TSource, TResult>(this TList source, TResult value, IEqualityComparer<TResult>? comparer, SelectorAt<TSource, TResult> selector, int skipCount, int takeCount)
+        static bool Contains<TList, TSource, TResult>(this TList source, TResult value, IEqualityComparer<TResult>? comparer, SelectorAt<TSource, TResult> selector, int skipCount, int takeCount)
             where TList : notnull, IReadOnlyList<TSource>
         {
             if (takeCount != 0) 
@@ -198,7 +198,7 @@ namespace NetFabric.Hyperlinq
         }
 
 
-        internal static bool Contains<TList, TSource, TResult>(this TList source, TResult value, IEqualityComparer<TResult>? comparer, Predicate<TSource> predicate, Selector<TSource, TResult> selector, int skipCount, int takeCount)
+        static bool Contains<TList, TSource, TResult>(this TList source, TResult value, IEqualityComparer<TResult>? comparer, Predicate<TSource> predicate, Selector<TSource, TResult> selector, int skipCount, int takeCount)
             where TList : notnull, IReadOnlyList<TSource>
         {
             if (takeCount != 0) 

@@ -112,6 +112,8 @@ namespace NetFabric.Hyperlinq
 
                 public readonly TSource Current
                     => value!;
+                readonly TSource IEnumerator<TSource>.Current 
+                    => value;
                 readonly object? IEnumerator.Current 
                     => value;
 
@@ -179,32 +181,11 @@ namespace NetFabric.Hyperlinq
             public List<TSource> ToList()
                 => new List<TSource>(new ToListCollection(this));
 
-            public Dictionary<TKey, TSource> ToDictionary<TKey>(Selector<TSource, TKey> keySelector)
-                => ToDictionary<TKey>(keySelector, EqualityComparer<TKey>.Default);
-            public Dictionary<TKey, TSource> ToDictionary<TKey>(Selector<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer)
-            {
-                var dictionary = new Dictionary<TKey, TSource>(count, comparer);
+            public Dictionary<TKey, TSource> ToDictionary<TKey>(Selector<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer = null)
+                => ToDictionary<TKey>(keySelector, comparer);
 
-                var key = keySelector(value);
-                for (var index = 0; index < count; index++)
-                    dictionary.Add(key, value);
-
-                return dictionary;
-            }
-
-            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Selector<TSource, TKey> keySelector, Selector<TSource, TElement> elementSelector)
-                => ToDictionary<TKey, TElement>(keySelector, elementSelector, EqualityComparer<TKey>.Default);
-            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Selector<TSource, TKey> keySelector, Selector<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer)
-            {
-                var dictionary = new Dictionary<TKey, TElement>(count, comparer);
-
-                var key = keySelector(value);
-                var element = elementSelector(value);
-                for (var index = 0; index < count; index++)
-                    dictionary.Add(key, element);
-
-                return dictionary;
-            }
+            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Selector<TSource, TKey> keySelector, Selector<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer = null)
+                => ToDictionary<TKey, TElement>(keySelector, elementSelector, comparer);
 
             // helper implementation of ICollection<> so that CopyTo() is used to convert to List<>
             [GeneratorIgnore]

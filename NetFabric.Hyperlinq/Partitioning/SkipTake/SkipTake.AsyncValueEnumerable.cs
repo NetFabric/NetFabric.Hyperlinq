@@ -11,7 +11,7 @@ namespace NetFabric.Hyperlinq
     {
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static SkipTakeEnumerable<TEnumerable, TEnumerator, TSource> SkipTake<TEnumerable, TEnumerator, TSource>(this TEnumerable source, int skipCount, int takeCount)
+        static SkipTakeEnumerable<TEnumerable, TEnumerator, TSource> SkipTake<TEnumerable, TEnumerator, TSource>(this TEnumerable source, int skipCount, int takeCount)
             where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
             => new SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>(in source, skipCount, takeCount);
@@ -54,7 +54,10 @@ namespace NetFabric.Hyperlinq
                     takeCounter = enumerable.takeCount;
                 }
 
+                [MaybeNull]
                 public readonly TSource Current
+                    => enumerator.Current;
+                readonly TSource IAsyncEnumerator<TSource>.Current
                     => enumerator.Current;
 
                 public async ValueTask<bool> MoveNextAsync()

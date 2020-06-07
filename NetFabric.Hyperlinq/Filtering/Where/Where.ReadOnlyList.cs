@@ -18,8 +18,7 @@ namespace NetFabric.Hyperlinq
             return new WhereEnumerable<TList, TSource>(in source, predicate, 0, source.Count);
         }
 
-
-        internal static WhereEnumerable<TList, TSource> Where<TList, TSource>(this TList source, Predicate<TSource> predicate, int skipCount, int takeCount)
+        static WhereEnumerable<TList, TSource> Where<TList, TSource>(this TList source, Predicate<TSource> predicate, int skipCount, int takeCount)
             where TList : notnull, IReadOnlyList<TSource>
             => new WhereEnumerable<TList, TSource>(in source, predicate, skipCount, takeCount);
 
@@ -92,9 +91,12 @@ namespace NetFabric.Hyperlinq
                     index = enumerable.skipCount - 1;
                 }
 
+                [MaybeNull]
                 public readonly TSource Current 
                     => source[index];
-                readonly object? IEnumerator.Current 
+                readonly TSource IEnumerator<TSource>.Current 
+                    => source[index];
+                readonly object? IEnumerator.Current
                     => source[index];
 
                 public bool MoveNext()

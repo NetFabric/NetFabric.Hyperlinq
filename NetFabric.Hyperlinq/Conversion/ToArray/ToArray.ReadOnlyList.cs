@@ -15,7 +15,7 @@ namespace NetFabric.Hyperlinq
             => ToArray<TList, TSource>(source, 0, source.Count);
 
         
-        internal static TSource[] ToArray<TList, TSource>(this TList source, int skipCount, int takeCount)
+        static TSource[] ToArray<TList, TSource>(this TList source, int skipCount, int takeCount)
             where TList : notnull, IReadOnlyList<TSource>
         {
             var array = new TSource[takeCount];
@@ -43,7 +43,7 @@ namespace NetFabric.Hyperlinq
         }
 
 
-        internal static TSource[] ToArray<TList, TSource>(this TList source, Predicate<TSource> predicate, int skipCount, int takeCount)
+        static TSource[] ToArray<TList, TSource>(this TList source, Predicate<TSource> predicate, int skipCount, int takeCount)
             where TList : notnull, IReadOnlyList<TSource>
         {
             var builder = new LargeArrayBuilder<TSource>(initialize: true);
@@ -52,7 +52,7 @@ namespace NetFabric.Hyperlinq
         }
 
 
-        internal static TSource[] ToArray<TList, TSource>(this TList source, PredicateAt<TSource> predicate, int skipCount, int takeCount)
+        static TSource[] ToArray<TList, TSource>(this TList source, PredicateAt<TSource> predicate, int skipCount, int takeCount)
             where TList : notnull, IReadOnlyList<TSource>
         {
             var builder = new LargeArrayBuilder<TSource>(initialize: true);
@@ -61,7 +61,7 @@ namespace NetFabric.Hyperlinq
         }
 
 
-        internal static TResult[] ToArray<TList, TSource, TResult>(this TList source, Selector<TSource, TResult> selector, int skipCount, int takeCount)
+        static TResult[] ToArray<TList, TSource, TResult>(this TList source, Selector<TSource, TResult> selector, int skipCount, int takeCount)
             where TList : notnull, IReadOnlyList<TSource>
         {
             var array = new TResult[takeCount];
@@ -79,7 +79,7 @@ namespace NetFabric.Hyperlinq
         }
 
 
-        internal static TResult[] ToArray<TList, TSource, TResult>(this TList source, SelectorAt<TSource, TResult> selector, int skipCount, int takeCount)
+        static TResult[] ToArray<TList, TSource, TResult>(this TList source, SelectorAt<TSource, TResult> selector, int skipCount, int takeCount)
             where TList : notnull, IReadOnlyList<TSource>
         {
             var array = new TResult[takeCount];
@@ -97,7 +97,7 @@ namespace NetFabric.Hyperlinq
         }
 
 
-        internal static TResult[] ToArray<TList, TSource, TResult>(this TList source, Predicate<TSource> predicate, Selector<TSource, TResult> selector, int skipCount, int takeCount)
+        static TResult[] ToArray<TList, TSource, TResult>(this TList source, Predicate<TSource> predicate, Selector<TSource, TResult> selector, int skipCount, int takeCount)
             where TList : notnull, IReadOnlyList<TSource>
         {
             var builder = new LargeArrayBuilder<TResult>(initialize: true);
@@ -109,7 +109,7 @@ namespace NetFabric.Hyperlinq
 
 namespace System.Collections.Generic
 {
-    internal partial struct LargeArrayBuilder<T>
+    partial struct LargeArrayBuilder<T>
     {
         public void AddRange<TList>(TList items, Predicate<T> predicate, int skipCount, int takeCount)
             where TList : notnull, IReadOnlyList<T>

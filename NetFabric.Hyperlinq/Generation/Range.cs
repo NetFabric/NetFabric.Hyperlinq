@@ -181,29 +181,11 @@ namespace NetFabric.Hyperlinq
             public List<int> ToList()
                 => new List<int>(this);
 
-            public Dictionary<TKey, int> ToDictionary<TKey>(Selector<int, TKey> keySelector)
-                => ToDictionary<TKey>(keySelector, EqualityComparer<TKey>.Default);
-            public Dictionary<TKey, int> ToDictionary<TKey>(Selector<int, TKey> keySelector, IEqualityComparer<TKey>? comparer)
-            {
-                var dictionary = new Dictionary<TKey, int>(Count, comparer);
+            public Dictionary<TKey, int> ToDictionary<TKey>(Selector<int, TKey> keySelector, IEqualityComparer<TKey>? comparer = null)
+                => ToDictionary<TKey>(keySelector, comparer);
 
-                for (var index = start; index < end; index++)
-                    dictionary.Add(keySelector(index), index);
-
-                return dictionary;
-            }
-
-            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Selector<int, TKey> keySelector, Selector<int, TElement> elementSelector)
-                => ToDictionary<TKey, TElement>(keySelector, elementSelector, EqualityComparer<TKey>.Default);
-            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Selector<int, TKey> keySelector, Selector<int, TElement> elementSelector, IEqualityComparer<TKey>? comparer)
-            {
-                var dictionary = new Dictionary<TKey, TElement>(Count, comparer);
-
-                for (var index = start; index < end; index++)
-                    dictionary.Add(keySelector(index), elementSelector(index));
-
-                return dictionary;
-            }
+            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Selector<int, TKey> keySelector, Selector<int, TElement> elementSelector, IEqualityComparer<TKey>? comparer = null)
+                => ToDictionary<TKey, TElement>(keySelector, elementSelector, comparer);
         }
     }
 }
