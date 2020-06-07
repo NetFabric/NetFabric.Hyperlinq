@@ -49,8 +49,9 @@ namespace NetFabric.Hyperlinq.Benchmarks
                 typeof(WhereSelectCountBenchmarks),
                 typeof(ImmutableArrayBenchmarks),
                 typeof(LinkedListBenchmarks),
+                typeof(RangeWhereSelectToArrayBenchmarks),
             });
-            switcher.Run(args);        
+            _ = switcher.Run(args);        
         }
     }
 }
