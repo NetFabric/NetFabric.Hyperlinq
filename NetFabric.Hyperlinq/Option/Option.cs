@@ -14,50 +14,35 @@ namespace NetFabric.Hyperlinq
         public static NoneOption None { get; } = new NoneOption();
 
         
-        public static Option<T> Some<T>(T value) 
+        public static Option<T> Some<T>([AllowNull] T value) 
             => new Option<T>(value);
     }
 
     public readonly struct Option<T>
     {
-#pragma warning disable IDE0032 // Use auto property
-        readonly bool hasValue;
-        readonly T value;
-#pragma warning restore IDE0032 // Use auto property
-
-        Option(bool hasValue, T value)
+        Option(bool hasValue, [AllowNull] T value)
         {
-            this.hasValue = hasValue;
-            this.value = value;
+            IsSome = hasValue;
+            Value = value;
         }
 
-        internal Option(T value)
+        internal Option([AllowNull] T value)
             : this (true, value)
         {
         }
 
         public bool IsNone
-        {
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            get => !hasValue;
-        }
+            => !IsSome;
 
-        public bool IsSome
-        {
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            get => hasValue;
-        }
+        public bool IsSome { get; }
 
-        public T Value
-        {
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            get => value;
-        }
+        [MaybeNull]
+        public T Value { get; }
 
         public readonly void Deconstruct(out bool hasValue, out T value)
         {
-            hasValue = this.hasValue;
-            value = this.value;
+            hasValue = IsSome;
+            value = Value;
         }
 
         
@@ -68,80 +53,80 @@ namespace NetFabric.Hyperlinq
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public readonly TOut Match<TOut>(Func<T, TOut> some, Func<TOut> none) 
-            => hasValue 
-                ? some(value) 
+            => IsSome
+                ? some(Value) 
                 : none();
 
         
         public readonly ValueTask<TOut> MatchAsync<TOut>(Func<T, CancellationToken, ValueTask<TOut>> some, Func<CancellationToken, ValueTask<TOut>> none, CancellationToken cancellationToken = default) 
-            => hasValue 
-                ? some(value, cancellationToken) 
+            => IsSome
+                ? some(Value, cancellationToken) 
                 : none(cancellationToken);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public readonly void Match(Action<T> some, Action none)
         {
-            if (hasValue)
-                some(value);
+            if (IsSome)
+                some(Value);
             else
                 none();
         }
 
         
         public readonly ValueTask MatchAsync(Func<T, CancellationToken, ValueTask> some, Func<CancellationToken, ValueTask> none, CancellationToken cancellationToken = default) 
-            => hasValue 
-                ? some(value, cancellationToken) 
+            => IsSome
+                ? some(Value, cancellationToken) 
                 : none(cancellationToken);
 
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public readonly Option<TOut> Bind<TOut>(Func<T, Option<TOut>> bind)
-            => hasValue
-                ? bind(value)
+            => IsSome
+                ? bind(Value)
                 : default;
 
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public readonly int Count()
-            => hasValue 
+            => IsSome
                 ? 1 
                 : 0;
 
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public readonly bool Any()
-            => hasValue;
+            => IsSome;
 
         
         public readonly bool Contains(T value, IEqualityComparer<T>? comparer = null) 
-            => hasValue && (comparer is null 
-                ? EqualityComparer<T>.Default.Equals(this.value, value) 
-                : comparer.Equals(this.value, value));
+            => IsSome && (comparer is null 
+                ? EqualityComparer<T>.Default.Equals(Value, value) 
+                : comparer.Equals(Value, value));
 
         
         public readonly Option<T> Where(Predicate<T> predicate) 
-            => hasValue && predicate(value) 
+            => IsSome && predicate(Value) 
                 ? this 
                 : default;
 
         
         public async readonly ValueTask<Option<T>> WhereAsync(AsyncPredicate<T> predicate, CancellationToken cancellationToken = default) 
-            => hasValue && await predicate(value, cancellationToken).ConfigureAwait(false)
+            => IsSome && await predicate(Value, cancellationToken).ConfigureAwait(false)
                 ? this 
                 : default;
 
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public readonly Option<TOut> Select<TOut>(Selector<T, TOut> selector) 
-            => hasValue 
-                ? new Option<TOut>(selector(value)) 
+            => IsSome
+                ? new Option<TOut>(selector(Value)) 
                 : default;
 
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public async readonly ValueTask<Option<TOut>> SelectAsync<TOut>(AsyncSelector<T, TOut> selector, CancellationToken cancellationToken = default) 
-            => hasValue 
-                ? new Option<TOut>(await selector(value, cancellationToken).ConfigureAwait(false)) 
+            => IsSome
+                ? new Option<TOut>(await selector(Value, cancellationToken).ConfigureAwait(false)) 
                 : default;
 
         
@@ -170,14 +155,14 @@ namespace NetFabric.Hyperlinq
 
         
         public readonly T[] ToArray()
-            => hasValue 
-                ? new T[] { value } 
+            => IsSome
+                ? new T[] { Value } 
                 : System.Array.Empty<T>();
 
         
         public readonly List<T> ToList()
-            => hasValue 
-                ? new List<T>(1) { value } 
+            => IsSome
+                ? new List<T>(1) { Value } 
                 : new List<T>(0); 
 
 
@@ -221,10 +206,10 @@ namespace NetFabric.Hyperlinq
                 }
 
                 [MaybeNull]
-#pragma warning disable CS8766 // Nullability of reference types in return type doesn't match implicitly implemented member (possibly because of nullability attributes).
                 public TResult Current { get; private set; }
-#pragma warning restore CS8766 // Nullability of reference types in return type doesn't match implicitly implemented member (possibly because of nullability attributes).
-                readonly object? IEnumerator.Current 
+                readonly TResult IEnumerator<TResult>.Current 
+                    => Current;
+                readonly object? IEnumerator.Current
                     => Current;
 
                 public bool MoveNext()

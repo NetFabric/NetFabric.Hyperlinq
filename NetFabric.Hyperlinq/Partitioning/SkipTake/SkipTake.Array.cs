@@ -22,22 +22,20 @@ namespace NetFabric.Hyperlinq
         {
             internal readonly TSource[] source;
             internal readonly int skipCount;
-            internal readonly int takeCount;
 
             internal SkipTakeEnumerable(in TSource[] source, int skipCount, int takeCount)
             {
                 this.source = source;
-                (this.skipCount, this.takeCount) = Utils.SkipTake(source.Length, skipCount, takeCount);
+                (this.skipCount, Count) = Utils.SkipTake(source.Length, skipCount, takeCount);
             }
 
-            public readonly int Count
-                => takeCount;
+            public readonly int Count { get;  }
 
             public readonly TSource this[int index]
             {
                 get
                 {
-                    if (index < 0 || index >= takeCount) 
+                    if (index < 0 || index >= Count) 
                         Throw.ArgumentOutOfRangeException(nameof(index));
 
                     return source[index + skipCount];
@@ -61,24 +59,91 @@ namespace NetFabric.Hyperlinq
 
             void ICollection<TSource>.CopyTo(TSource[] array, int arrayIndex) 
             {
-                for (var index = 0; index < takeCount; index++)
-                    array[index + arrayIndex] = source[index + skipCount];
+                if (arrayIndex == 0)
+                {
+                    if (skipCount == 0)
+                    {
+                        if (Count == array.Length)
+                        {
+                            for (var index = 0; index < array.Length; index++)
+                                array[index] = source[index];
+                        }
+                        else
+                        {
+                            for (var index = 0; index < Count; index++)
+                                array[index] = source[index];
+                        }
+                    }
+                    else
+                    {
+                        if (Count == array.Length)
+                        {
+                            for (var index = 0; index < array.Length; index++)
+                                array[index] = source[index + skipCount];
+                        }
+                        else
+                        {
+                            for (var index = 0; index < Count; index++)
+                                array[index] = source[index + skipCount];
+                        }
+                    }
+                }
+                else
+                {
+                    if (skipCount == 0)
+                    {
+                        if (Count == array.Length)
+                        {
+                            for (var index = 0; index < array.Length; index++)
+                                array[index + arrayIndex] = source[index];
+                        }
+                        else
+                        {
+                            for (var index = 0; index < Count; index++)
+                                array[index + arrayIndex] = source[index];
+                        }
+                    }
+                    else
+                    {
+                        if (Count == array.Length)
+                        {
+                            for (var index = 0; index < array.Length; index++)
+                                array[index + arrayIndex] = source[index + skipCount];
+                        }
+                        else
+                        {
+                            for (var index = 0; index < Count; index++)
+                                array[index + arrayIndex] = source[index + skipCount];
+                        }
+                    }
+                }
             }
             void ICollection<TSource>.Add(TSource item) 
                 => throw new NotSupportedException();
             void ICollection<TSource>.Clear() 
                 => throw new NotSupportedException();
             bool ICollection<TSource>.Contains(TSource item) 
-                => Contains<TSource>(source, item, null, skipCount, takeCount);
+                => Contains<TSource>(source, item, null, skipCount, Count);
             bool ICollection<TSource>.Remove(TSource item) 
                 => throw new NotSupportedException();
             int IList<TSource>.IndexOf(TSource item)
             {
-                var end = skipCount + takeCount;
-                for (var index = skipCount; index < end; index++)
+                if (skipCount == 0 && Count == source.Length)
                 {
-                    if (EqualityComparer<TSource>.Default.Equals(source[index], item))
-                        return index;
+                    for (var index = 0; index < source.Length; index++)
+                    {
+                        if (EqualityComparer<TSource>.Default.Equals(source[index], item))
+                            return index;
+                    }
+                }
+                else
+                {
+                    var end = skipCount + Count;
+                    for (var index = skipCount; index < end; index++)
+                    {
+                        if (EqualityComparer<TSource>.Default.Equals(source[index], item))
+                            return index - skipCount;
+                    }
                 }
                 return -1;
             }
@@ -97,7 +162,7 @@ namespace NetFabric.Hyperlinq
                 internal Enumerator(in SkipTakeEnumerable<TSource> enumerable)
                 {
                     source = enumerable.source;
-                    end = enumerable.skipCount + enumerable.takeCount;
+                    end = enumerable.skipCount + enumerable.Count;
                     index = enumerable.skipCount - 1;
                 }
 
@@ -123,88 +188,88 @@ namespace NetFabric.Hyperlinq
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public SkipTakeEnumerable<TSource> Take(int count)
-                => Array.SkipTake<TSource>(source, skipCount, Math.Min(takeCount, count));
+                => Array.SkipTake<TSource>(source, skipCount, Math.Min(Count, count));
 
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool All(Predicate<TSource> predicate)
-                => Array.All<TSource>(source, predicate, skipCount, takeCount);
+                => Array.All<TSource>(source, predicate, skipCount, Count);
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool All(PredicateAt<TSource> predicate)
-                => Array.All<TSource>(source, predicate, skipCount, takeCount);
+                => Array.All<TSource>(source, predicate, skipCount, Count);
 
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Any()
-                => Array.Any<TSource>(source, skipCount, takeCount);
+                => Array.Any<TSource>(source, skipCount, Count);
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Any(Predicate<TSource> predicate)
-                => Array.Any<TSource>(source, predicate, skipCount, takeCount);
+                => Array.Any<TSource>(source, predicate, skipCount, Count);
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Any(PredicateAt<TSource> predicate)
-                => Array.Any<TSource>(source, predicate, skipCount, takeCount);
+                => Array.Any<TSource>(source, predicate, skipCount, Count);
 
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Contains(TSource value, IEqualityComparer<TSource>? comparer = null)
-                => Array.Contains<TSource>(source, value, comparer, skipCount, takeCount);
+                => Array.Contains<TSource>(source, value, comparer, skipCount, Count);
 
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public WhereEnumerable<TSource> Where(Predicate<TSource> predicate)
-                => Array.Where<TSource>(source, predicate, skipCount, takeCount);
+                => Array.Where<TSource>(source, predicate, skipCount, Count);
 
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public WhereIndexEnumerable<TSource> Where(PredicateAt<TSource> predicate)
-                => Array.Where<TSource>(source, predicate, skipCount, takeCount);
+                => Array.Where<TSource>(source, predicate, skipCount, Count);
 
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public SelectEnumerable<TSource, TResult> Select<TResult>(Selector<TSource, TResult> selector)
-                => Array.Select<TSource, TResult>(source, selector, skipCount, takeCount);
+                => Array.Select<TSource, TResult>(source, selector, skipCount, Count);
 
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public SelectIndexEnumerable<TSource, TResult> Select<TResult>(SelectorAt<TSource, TResult> selector)
-                => Array.Select<TSource, TResult>(source, selector, skipCount, takeCount);
+                => Array.Select<TSource, TResult>(source, selector, skipCount, Count);
 
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Option<TSource> ElementAt(int index)
-                => Array.ElementAt<TSource>(source, index, skipCount, takeCount);
+                => Array.ElementAt<TSource>(source, index, skipCount, Count);
 
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Option<TSource> First()
-                => Array.First<TSource>(source, skipCount, takeCount);
+                => Array.First<TSource>(source, skipCount, Count);
 
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Option<TSource> Single()
-                => Array.Single<TSource>(source, skipCount, takeCount);
+                => Array.Single<TSource>(source, skipCount, Count);
 
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TSource[] ToArray()
-                => Array.ToArray<TSource>(source, skipCount, takeCount);
+                => Array.ToArray<TSource>(source, skipCount, Count);
 
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public List<TSource> ToList()
-                => Array.ToList<TSource>(source, skipCount, takeCount);
+                => Array.ToList<TSource>(source, skipCount, Count);
 
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Dictionary<TKey, TSource> ToDictionary<TKey>(Selector<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer = null)
-                => Array.ToDictionary<TSource, TKey>(source, keySelector, comparer, skipCount, takeCount);
+                => Array.ToDictionary<TSource, TKey>(source, keySelector, comparer, skipCount, Count);
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Selector<TSource, TKey> keySelector, Selector<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer = null)
-                => Array.ToDictionary<TSource, TKey, TElement>(source, keySelector, elementSelector, comparer, skipCount, takeCount);
+                => Array.ToDictionary<TSource, TKey, TElement>(source, keySelector, elementSelector, comparer, skipCount, Count);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -216,7 +281,7 @@ namespace NetFabric.Hyperlinq
         {
             if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
 
-            return Array.Count<TSource>(source.source, predicate, source.skipCount, source.takeCount);
+            return Array.Count<TSource>(source.source, predicate, source.skipCount, source.Count);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -224,7 +289,7 @@ namespace NetFabric.Hyperlinq
         {
             if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
 
-            return Array.Count<TSource>(source.source, predicate, source.skipCount, source.takeCount);
+            return Array.Count<TSource>(source.source, predicate, source.skipCount, source.Count);
         }
 
 #endif
