@@ -91,7 +91,7 @@ namespace NetFabric.Hyperlinq
             public override void CopyTo(TResult[] array, int _)
             {
                 var span = source.Span;
-                for (var index = 0; index < source.Length; index++)
+                for (var index = 0; index < span.Length; index++)
                     array[index] = selector(span[index]);
             }
         }
@@ -113,7 +113,7 @@ namespace NetFabric.Hyperlinq
             public override void CopyTo(TResult[] array, int _)
             {
                 var span = source.Span;
-                for (var index = 0; index < source.Length; index++)
+                for (var index = 0; index < span.Length; index++)
                     array[index] = selector(span[index], index);
             }
         }

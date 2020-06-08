@@ -12,20 +12,26 @@ namespace NetFabric.Hyperlinq
             {
                 ICollection<TSource> collection => new List<TSource>(collection), // no need to allocate helper class
 
-                _ => new List<TSource>(new ToListCollection<TEnumerable, TEnumerator, TSource>(source)),
+                _ => source.Count == 0
+                    ? new List<TSource>()
+                    : new List<TSource>(new ToListCollection<TEnumerable, TEnumerator, TSource>(source)),
             };
 
         
         public static List<TResult> ToList<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, Selector<TSource, TResult> selector)
             where TEnumerable : notnull, IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
-            => new List<TResult>(new ToListCollection<TEnumerable, TEnumerator, TSource, TResult>(source, selector));
+            => source.Count == 0
+                ? new List<TResult>()
+                : new List<TResult>(new ToListCollection<TEnumerable, TEnumerator, TSource, TResult>(source, selector));
 
         
         public static List<TResult> ToList<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, SelectorAt<TSource, TResult> selector)
             where TEnumerable : notnull, IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
-            => new List<TResult>(new IndexedToListCollection<TEnumerable, TEnumerator, TSource, TResult>(source, selector));
+            => source.Count == 0
+                ? new List<TResult>()
+                : new List<TResult>(new IndexedToListCollection<TEnumerable, TEnumerator, TSource, TResult>(source, selector));
 
         // helper implementation of ICollection<> so that CopyTo() is used to convert to List<>
         [GeneratorIgnore]
@@ -42,7 +48,6 @@ namespace NetFabric.Hyperlinq
 
             public override void CopyTo(TSource[] array, int _)
             {
-                // List<T> constructor checks if Count is zero
                 using var enumerator = source.GetEnumerator();
                 checked
                 {
@@ -70,7 +75,6 @@ namespace NetFabric.Hyperlinq
 
             public override void CopyTo(TResult[] array, int _)
             {
-                // List<T> constructor checks if Count is zero
                 using var enumerator = source.GetEnumerator();
                 checked
                 {
@@ -98,7 +102,6 @@ namespace NetFabric.Hyperlinq
 
             public override void CopyTo(TResult[] array, int _)
             {
-                // List<T> constructor checks if Count is zero
                 using var enumerator = source.GetEnumerator();
                 checked
                 {

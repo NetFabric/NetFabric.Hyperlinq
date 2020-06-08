@@ -11,7 +11,9 @@ namespace NetFabric.Hyperlinq
             {
                 ICollection<T> collection => new List<T>(collection), // no need to allocate helper class
 
-                _ => new List<T>(new ToListCollection<T>(source)),
+                _ => source.Count == 0 
+                    ? new List<T>()
+                    : new List<T>(new ToListCollection<T>(source)),
             };
 
         // helper implementation of ICollection<> so that CopyTo() is used to convert to List<>
@@ -27,7 +29,6 @@ namespace NetFabric.Hyperlinq
 
             public override void CopyTo(TSource[] array, int _)
             {
-                // List<T> constructor checks if Count is zero
                 using var enumerator = source.GetEnumerator();
                 checked
                 {
