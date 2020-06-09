@@ -53,7 +53,7 @@ namespace NetFabric.Hyperlinq
             Selector<TSource, TResult> selector)
             => ReadOnlyList.Select<ImmutableList<TSource>, TSource, TResult>(source, selector);
         
-        public static ReadOnlyList.SelectIndexEnumerable<ImmutableList<TSource>, TSource, TResult> Select<TSource, TResult>(
+        public static ReadOnlyList.SelectAtEnumerable<ImmutableList<TSource>, TSource, TResult> Select<TSource, TResult>(
             this ImmutableList<TSource> source,
             SelectorAt<TSource, TResult> selector)
             => ReadOnlyList.Select<ImmutableList<TSource>, TSource, TResult>(source, selector);
@@ -72,7 +72,7 @@ namespace NetFabric.Hyperlinq
             Predicate<TSource> predicate)
             => ReadOnlyList.Where<ImmutableList<TSource>, TSource>(source, predicate);
         
-        public static ReadOnlyList.WhereIndexEnumerable<ImmutableList<TSource>, TSource> Where<TSource>(
+        public static ReadOnlyList.WhereAtEnumerable<ImmutableList<TSource>, TSource> Where<TSource>(
             this ImmutableList<TSource> source,
             PredicateAt<TSource> predicate)
             => ReadOnlyList.Where<ImmutableList<TSource>, TSource>(source, predicate);

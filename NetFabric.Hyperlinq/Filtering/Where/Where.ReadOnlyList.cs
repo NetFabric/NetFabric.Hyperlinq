@@ -134,7 +134,7 @@ namespace NetFabric.Hyperlinq
 
             public ReadOnlyList.WhereEnumerable<TList, TSource> Where(Predicate<TSource> predicate)
                 => ReadOnlyList.Where<TList, TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount);
-            public ReadOnlyList.WhereIndexEnumerable<TList, TSource> Where(PredicateAt<TSource> predicate)
+            public ReadOnlyList.WhereAtEnumerable<TList, TSource> Where(PredicateAt<TSource> predicate)
                 => ReadOnlyList.Where<TList, TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount);
 
             public Option<TSource> ElementAt(int index)

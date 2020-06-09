@@ -2,7 +2,7 @@ using NetFabric.Assertive;
 using System;
 using Xunit;
 
-namespace NetFabric.Hyperlinq.UnitTests.Projection.SelectIndex
+namespace NetFabric.Hyperlinq.UnitTests.Projection.SelectAt
 {
     public class ArrayTests
     {

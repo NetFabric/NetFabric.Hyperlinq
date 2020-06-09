@@ -139,7 +139,7 @@ namespace NetFabric.Hyperlinq
 
             public WhereEnumerable<TSource> Where(Predicate<TSource> predicate)
                 => Array.Where<TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount);
-            public WhereIndexEnumerable<TSource> Where(PredicateAt<TSource> predicate)
+            public WhereAtEnumerable<TSource> Where(PredicateAt<TSource> predicate)
                 => Array.Where<TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount);
 
             public Option<TSource> ElementAt(int index)

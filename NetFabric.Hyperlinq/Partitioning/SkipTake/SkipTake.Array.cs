@@ -224,7 +224,7 @@ namespace NetFabric.Hyperlinq
 
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public WhereIndexEnumerable<TSource> Where(PredicateAt<TSource> predicate)
+            public WhereAtEnumerable<TSource> Where(PredicateAt<TSource> predicate)
                 => Array.Where<TSource>(source, predicate, skipCount, Count);
 
             
@@ -234,7 +234,7 @@ namespace NetFabric.Hyperlinq
 
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public SelectIndexEnumerable<TSource, TResult> Select<TResult>(SelectorAt<TSource, TResult> selector)
+            public SelectAtEnumerable<TSource, TResult> Select<TResult>(SelectorAt<TSource, TResult> selector)
                 => Array.Select<TSource, TResult>(source, selector, skipCount, Count);
 
             

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -6,43 +6,48 @@ using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class ReadOnlyList
+    public static partial class Array
     {
+#if SPAN_SUPPORTED
+        
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static MemorySelectAtEnumerable<TSource, TResult> Select<TSource, TResult>(this TSource[] source, SelectorAt<TSource, TResult> selector)
+            => Select(source.AsMemory(), selector);
+
+#else
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static SelectIndexEnumerable<TList, TSource, TResult> Select<TList, TSource, TResult>(
-            this TList source, 
+        public static SelectAtEnumerable<TSource, TResult> Select<TSource, TResult>(
+            this TSource[] source,
             SelectorAt<TSource, TResult> selector)
-            where TList : notnull, IReadOnlyList<TSource>
         {
-            if(selector is null) Throw.ArgumentNullException(nameof(selector));
+            if (selector is null)
+                Throw.ArgumentNullException(nameof(selector));
 
-            return new SelectIndexEnumerable<TList, TSource, TResult>(in source, selector, 0, source.Count);
+            return new SelectAtEnumerable<TSource, TResult>(in source, selector, 0, source.Length);
         }
 
 
-        static SelectIndexEnumerable<TList, TSource, TResult> Select<TList, TSource, TResult>(
-            this TList source,
+        static SelectAtEnumerable<TSource, TResult> Select<TSource, TResult>(
+            this TSource[] source,
             SelectorAt<TSource, TResult> selector,
             int skipCount, int takeCount)
-            where TList : notnull, IReadOnlyList<TSource>
-            => new SelectIndexEnumerable<TList, TSource, TResult>(source, selector, skipCount, takeCount);
+            => new SelectAtEnumerable<TSource, TResult>(source, selector, skipCount, takeCount);
 
         [GeneratorMapping("TSource", "TResult")]
-        public readonly partial struct SelectIndexEnumerable<TList, TSource, TResult>
-            : IValueReadOnlyList<TResult, SelectIndexEnumerable<TList, TSource, TResult>.DisposableEnumerator>
+        public readonly partial struct SelectAtEnumerable<TSource, TResult>
+            : IValueReadOnlyList<TResult, SelectAtEnumerable<TSource, TResult>.DisposableEnumerator>
             , IList<TResult>
-            where TList : notnull, IReadOnlyList<TSource>
         {
-            readonly TList source;
+            readonly TSource[] source;
             readonly SelectorAt<TSource, TResult> selector;
             readonly int skipCount;
 
-            internal SelectIndexEnumerable(in TList source, SelectorAt<TSource, TResult> selector, int skipCount, int takeCount)
+            internal SelectAtEnumerable(in TSource[] source, SelectorAt<TSource, TResult> selector, int skipCount, int takeCount)
             {
                 this.source = source;
                 this.selector = selector;
-                (this.skipCount, Count) = Utils.SkipTake(source.Count, skipCount, takeCount);
+                (this.skipCount, Count) = Utils.SkipTake(source.Length, skipCount, takeCount);
             }
 
             public readonly int Count { get; }
@@ -58,10 +63,10 @@ namespace NetFabric.Hyperlinq
                 }
             }
 
-            
+
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly Enumerator GetEnumerator() => new Enumerator(in this);
-            readonly DisposableEnumerator IValueEnumerable<TResult, SelectIndexEnumerable<TList, TSource, TResult>.DisposableEnumerator>.GetEnumerator() => new DisposableEnumerator(in this);
+            readonly DisposableEnumerator IValueEnumerable<TResult, SelectAtEnumerable<TSource, TResult>.DisposableEnumerator>.GetEnumerator() => new DisposableEnumerator(in this);
             readonly IEnumerator<TResult> IEnumerable<TResult>.GetEnumerator() => new DisposableEnumerator(in this);
             readonly IEnumerator IEnumerable.GetEnumerator() => new DisposableEnumerator(in this);
 
@@ -71,43 +76,19 @@ namespace NetFabric.Hyperlinq
                 set => throw new NotSupportedException();
             }
 
-            bool ICollection<TResult>.IsReadOnly  
+            bool ICollection<TResult>.IsReadOnly
                 => true;
 
-            void ICollection<TResult>.CopyTo(TResult[] array, int arrayIndex) 
+            void ICollection<TResult>.CopyTo(TResult[] array, int arrayIndex)
             {
-                if (skipCount == 0)
-                {
-                    if (arrayIndex == 0)
-                    {
-                        for (var index = 0; index < Count; index++)
-                            array[index] = selector(source[index], index);
-                    }
-                    else
-                    {
-                        for (var index = 0; index < Count; index++)
-                            array[index + arrayIndex] = selector(source[index], index);
-                    }
-                }
-                else
-                {
-                    if (arrayIndex == 0)
-                    {
-                        for (var index = 0; index < Count; index++)
-                            array[index] = selector(source[index + skipCount], index);
-                    }
-                    else
-                    {
-                        for (var index = 0; index < Count; index++)
-                            array[index + arrayIndex] = selector(source[index + skipCount], index);
-                    }
-                }
+                for (var index = 0; index < Count; index++)
+                    array[index + arrayIndex] = selector(source[index + skipCount], index);
             }
-            void ICollection<TResult>.Add(TResult item) 
+            void ICollection<TResult>.Add(TResult item)
                 => throw new NotSupportedException();
-            void ICollection<TResult>.Clear() 
+            void ICollection<TResult>.Clear()
                 => throw new NotSupportedException();
-            bool ICollection<TResult>.Contains(TResult item) 
+            bool ICollection<TResult>.Contains(TResult item)
             {
                 for (var index = 0; index < Count; index++)
                 {
@@ -116,7 +97,7 @@ namespace NetFabric.Hyperlinq
                 }
                 return false;
             }
-            bool ICollection<TResult>.Remove(TResult item) 
+            bool ICollection<TResult>.Remove(TResult item)
                 => throw new NotSupportedException();
             int IList<TResult>.IndexOf(TResult item)
             {
@@ -134,13 +115,13 @@ namespace NetFabric.Hyperlinq
 
             public struct Enumerator
             {
-                readonly TList source;
+                readonly TSource[] source;
                 readonly SelectorAt<TSource, TResult> selector;
                 readonly int skipCount;
                 readonly int takeCount;
                 int index;
 
-                internal Enumerator(in SelectIndexEnumerable<TList, TSource, TResult> enumerable)
+                internal Enumerator(in SelectAtEnumerable<TSource, TResult> enumerable)
                 {
                     source = enumerable.source;
                     selector = enumerable.selector;
@@ -154,20 +135,20 @@ namespace NetFabric.Hyperlinq
                     => selector(source[index + skipCount], index);
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                public bool MoveNext() 
+                public bool MoveNext()
                     => ++index < takeCount;
             }
 
             public struct DisposableEnumerator
                 : IEnumerator<TResult>
             {
-                readonly TList source;
+                readonly TSource[] source;
                 readonly SelectorAt<TSource, TResult> selector;
                 readonly int skipCount;
                 readonly int takeCount;
                 int index;
 
-                internal DisposableEnumerator(in SelectIndexEnumerable<TList, TSource, TResult> enumerable)
+                internal DisposableEnumerator(in SelectAtEnumerable<TSource, TResult> enumerable)
                 {
                     source = enumerable.source;
                     selector = enumerable.selector;
@@ -176,17 +157,20 @@ namespace NetFabric.Hyperlinq
                     index = -1;
                 }
 
+                [MaybeNull]
                 public readonly TResult Current
                     => selector(source[index + skipCount], index);
-                readonly object? IEnumerator.Current 
+                readonly TResult IEnumerator<TResult>.Current
+                    => selector(source[index + skipCount], index);
+                readonly object? IEnumerator.Current
                     => selector(source[index + skipCount], index);
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                public bool MoveNext() 
+                public bool MoveNext()
                     => ++index < takeCount;
 
                 [ExcludeFromCodeCoverage]
-                public readonly void Reset() 
+                public readonly void Reset()
                     => throw new NotSupportedException();
 
                 public readonly void Dispose() { }
@@ -198,44 +182,38 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Contains(TResult value, IEqualityComparer<TResult>? comparer = null)
-                => ReadOnlyList.Contains<TList, TSource, TResult>(source, value, comparer, selector, skipCount, Count);
+                => Array.Contains<TSource, TResult>(source, value, comparer, selector, skipCount, Count);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public ReadOnlyList.SelectIndexEnumerable<TList, TSource, TSelectorResult> Select<TSelectorResult>(Selector<TResult, TSelectorResult> selector)
-                => ReadOnlyList.Select<TList, TSource, TSelectorResult>(source, Utils.Combine(this.selector, selector), skipCount, Count);
+            public SelectAtEnumerable<TSource, TSelectorResult> Select<TSelectorResult>(Selector<TResult, TSelectorResult> selector)
+                => Array.Select<TSource, TSelectorResult>(source, Utils.Combine(this.selector, selector), skipCount, Count);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public ReadOnlyList.SelectIndexEnumerable<TList, TSource, TSelectorResult> Select<TSelectorResult>(SelectorAt<TResult, TSelectorResult> selector)
-                => ReadOnlyList.Select<TList, TSource, TSelectorResult>(source, Utils.Combine(this.selector, selector), skipCount, Count);
+            public SelectAtEnumerable<TSource, TSelectorResult> Select<TSelectorResult>(SelectorAt<TResult, TSelectorResult> selector)
+                => Array.Select<TSource, TSelectorResult>(source, Utils.Combine(this.selector, selector), skipCount, Count);
 
-            
+
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Option<TResult> ElementAt(int index)
-                => ReadOnlyList.ElementAt<TList, TSource, TResult>(source, index, selector, skipCount, Count);
+                => Array.ElementAt<TSource, TResult>(source, index, selector, skipCount, Count);
 
-            
+
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Option<TResult> First()
-                => ReadOnlyList.First<TList, TSource, TResult>(source, selector, skipCount, Count);
+                => Array.First<TSource, TResult>(source, selector, skipCount, Count);
 
-            
+
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Option<TResult> Single()
-                => ReadOnlyList.Single<TList, TSource, TResult>(source, selector, skipCount, Count);
+                => Array.Single<TSource, TResult>(source, selector, skipCount, Count);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TResult[] ToArray()
-                => ReadOnlyList.ToArray<TList, TSource, TResult>(source, selector, skipCount, Count);
+                => Array.ToArray<TSource, TResult>(source, selector, skipCount, Count);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public List<TResult> ToList()
-                => ReadOnlyList.ToList<TList, TSource, TResult>(source, selector, skipCount, Count);
-
-            public Dictionary<TKey, TResult> ToDictionary<TKey>(Selector<TResult, TKey> keySelector, IEqualityComparer<TKey>? comparer = null)
-                => ToDictionary<TKey>(keySelector, comparer);
-
-            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Selector<TResult, TKey> keySelector, Selector<TResult, TElement> elementSelector, IEqualityComparer<TKey>? comparer = null)
-                => ToDictionary<TKey, TElement>(keySelector, elementSelector, comparer);
+                => Array.ToList<TSource, TResult>(source, selector, skipCount, Count);
 
             public readonly bool SequenceEqual(IEnumerable<TResult> other, IEqualityComparer<TResult>? comparer = null)
             {
@@ -261,9 +239,10 @@ namespace NetFabric.Hyperlinq
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int Count<TList, TSource, TResult>(this SelectIndexEnumerable<TList, TSource, TResult> source)
-            where TList : notnull, IReadOnlyList<TSource>
+        public static int Count<TSource, TResult>(this SelectAtEnumerable<TSource, TResult> source)
             => source.Count;
+
+#endif
     }
 }
 

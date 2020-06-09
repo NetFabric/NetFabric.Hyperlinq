@@ -115,7 +115,7 @@ namespace NetFabric.Hyperlinq
             public MemoryWhereEnumerable<TSource> Where(Predicate<TSource> predicate)
                 => Array.Where<TSource>(source, Utils.Combine(this.predicate, predicate));
 
-            public MemoryWhereIndexEnumerable<TSource> Where(PredicateAt<TSource> predicate)
+            public MemoryWhereAtEnumerable<TSource> Where(PredicateAt<TSource> predicate)
                 => Array.Where<TSource>(source, Utils.Combine(this.predicate, predicate));
 
             public MemoryWhereSelectEnumerable<TSource, TResult> Select<TResult>(Selector<TSource, TResult> selector)

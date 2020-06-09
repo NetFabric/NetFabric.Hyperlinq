@@ -6,53 +6,58 @@ using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class ReadOnlyList
+    public static partial class Array
     {
+#if SPAN_SUPPORTED
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static WhereIndexEnumerable<TList, TSource> Where<TList, TSource>(this TList source, PredicateAt<TSource> predicate)
-            where TList : notnull, IReadOnlyList<TSource>
-        {
-            if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
+        public static MemoryWhereAtEnumerable<TSource> Where<TSource>(this TSource[] source, PredicateAt<TSource> predicate)
+            => Where(source.AsMemory(), predicate);
 
-            return new WhereIndexEnumerable<TList, TSource>(in source, predicate, 0, source.Count);
+#else
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static WhereAtEnumerable<TSource> Where<TSource>(this TSource[] source, PredicateAt<TSource> predicate)
+        {
+            if (predicate is null)
+                Throw.ArgumentNullException(nameof(predicate));
+
+            return new WhereAtEnumerable<TSource>(in source, predicate, 0, source.Length);
         }
 
 
-        static WhereIndexEnumerable<TList, TSource> Where<TList, TSource>(this TList source, PredicateAt<TSource> predicate, int skipCount, int takeCount)
-            where TList : notnull, IReadOnlyList<TSource>
-            => new WhereIndexEnumerable<TList, TSource>(in source, predicate, skipCount, takeCount);
+        static WhereAtEnumerable<TSource> Where<TSource>(this TSource[] source, PredicateAt<TSource> predicate, int skipCount, int takeCount)
+            => new WhereAtEnumerable<TSource>(in source, predicate, skipCount, takeCount);
 
-        public readonly partial struct WhereIndexEnumerable<TList, TSource>
-            : IValueEnumerable<TSource, WhereIndexEnumerable<TList, TSource>.DisposableEnumerator>
-            where TList : notnull, IReadOnlyList<TSource>
+        public readonly partial struct WhereAtEnumerable<TSource>
+            : IValueEnumerable<TSource, WhereAtEnumerable<TSource>.DisposableEnumerator>
         {
-            readonly TList source;
+            readonly TSource[] source;
             readonly PredicateAt<TSource> predicate;
             readonly int skipCount;
             readonly int takeCount;
 
-            internal WhereIndexEnumerable(in TList source, PredicateAt<TSource> predicate, int skipCount, int takeCount)
+            internal WhereAtEnumerable(in TSource[] source, PredicateAt<TSource> predicate, int skipCount, int takeCount)
             {
                 this.source = source;
                 this.predicate = predicate;
-                (this.skipCount, this.takeCount) = Utils.SkipTake(source.Count, skipCount, takeCount);
+                (this.skipCount, this.takeCount) = Utils.SkipTake(source.Length, skipCount, takeCount);
             }
 
-            
+
             public readonly Enumerator GetEnumerator() => new Enumerator(in this);
-            readonly DisposableEnumerator IValueEnumerable<TSource, WhereIndexEnumerable<TList, TSource>.DisposableEnumerator>.GetEnumerator() => new DisposableEnumerator(in this);
+            readonly DisposableEnumerator IValueEnumerable<TSource, WhereAtEnumerable<TSource>.DisposableEnumerator>.GetEnumerator() => new DisposableEnumerator(in this);
             readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new DisposableEnumerator(in this);
             readonly IEnumerator IEnumerable.GetEnumerator() => new DisposableEnumerator(in this);
 
             public struct Enumerator
             {
-                readonly TList source;
+                readonly TSource[] source;
                 readonly PredicateAt<TSource> predicate;
                 readonly int end;
                 int index;
 
-                internal Enumerator(in WhereIndexEnumerable<TList, TSource> enumerable)
+                internal Enumerator(in WhereAtEnumerable<TSource> enumerable)
                 {
                     source = enumerable.source;
                     predicate = enumerable.predicate;
@@ -78,12 +83,12 @@ namespace NetFabric.Hyperlinq
             public struct DisposableEnumerator
                 : IEnumerator<TSource>
             {
-                readonly TList source;
+                readonly TSource[] source;
                 readonly PredicateAt<TSource> predicate;
                 readonly int end;
                 int index;
 
-                internal DisposableEnumerator(in WhereIndexEnumerable<TList, TSource> enumerable)
+                internal DisposableEnumerator(in WhereAtEnumerable<TSource> enumerable)
                 {
                     source = enumerable.source;
                     predicate = enumerable.predicate;
@@ -93,9 +98,9 @@ namespace NetFabric.Hyperlinq
 
                 public readonly TSource Current
                     => source[index];
-                readonly TSource IEnumerator<TSource>.Current 
+                readonly TSource IEnumerator<TSource>.Current
                     => source[index];
-                readonly object? IEnumerator.Current 
+                readonly object? IEnumerator.Current
                     => source[index];
 
                 public bool MoveNext()
@@ -109,49 +114,49 @@ namespace NetFabric.Hyperlinq
                 }
 
                 [ExcludeFromCodeCoverage]
-                public readonly void Reset() 
+                public readonly void Reset()
                     => throw new NotSupportedException();
 
                 public readonly void Dispose() { }
             }
 
             public int Count()
-                => ReadOnlyList.Count<TList, TSource>(source, predicate, skipCount, takeCount);
+                => Array.Count<TSource>(source, predicate, skipCount, takeCount);
 
             public bool Any()
-                => ReadOnlyList.Any<TList, TSource>(source, predicate, skipCount, takeCount);
-                
-            public bool Contains(TSource value, IEqualityComparer<TSource>? comparer = null)
-                => ReadOnlyList.Contains<TList, TSource>(source, value, comparer, predicate, skipCount, takeCount);
+                => Array.Any<TSource>(source, predicate, skipCount, takeCount);
 
-            public ReadOnlyList.WhereIndexEnumerable<TList, TSource> Where(Predicate<TSource> predicate)
-                => ReadOnlyList.Where<TList, TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount);
-            public ReadOnlyList.WhereIndexEnumerable<TList, TSource> Where(PredicateAt<TSource> predicate)
-                => ReadOnlyList.Where<TList, TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount);
+            public bool Contains(TSource value, IEqualityComparer<TSource>? comparer = null)
+                => Array.Contains<TSource>(source, value, comparer, predicate, skipCount, takeCount);
+
+            public WhereAtEnumerable<TSource> Where(Predicate<TSource> predicate)
+                => Array.Where<TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount);
+            public WhereAtEnumerable<TSource> Where(PredicateAt<TSource> predicate)
+                => Array.Where<TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount);
 
             public Option<TSource> ElementAt(int index)
-                => ReadOnlyList.ElementAt<TList, TSource>(source, index, predicate, skipCount, takeCount);
+                => Array.ElementAt<TSource>(source, index, predicate, skipCount, takeCount);
 
             public Option<TSource> First()
-                => ReadOnlyList.First<TList, TSource>(source, predicate, skipCount, takeCount);
+                => Array.First<TSource>(source, predicate, skipCount, takeCount);
 
             public Option<TSource> Single()
-                => ReadOnlyList.Single<TList, TSource>(source, predicate, skipCount, takeCount);
+                => Array.Single<TSource>(source, predicate, skipCount, takeCount);
 
             public TSource[] ToArray()
-                => ReadOnlyList.ToArray<TList, TSource>(source, predicate, skipCount, takeCount);
+                => Array.ToArray<TSource>(source, predicate, skipCount, takeCount);
 
             public List<TSource> ToList()
-                => ReadOnlyList.ToList<TList, TSource>(source, predicate, skipCount, takeCount);
+                => Array.ToList<TSource>(source, predicate, skipCount, takeCount);
 
             public Dictionary<TKey, TSource> ToDictionary<TKey>(Selector<TSource, TKey> keySelector)
-                => ReadOnlyList.ToDictionary<TList, TSource, TKey>(source, keySelector, EqualityComparer<TKey>.Default, predicate, skipCount, takeCount);
+                => Array.ToDictionary<TSource, TKey>(source, keySelector, EqualityComparer<TKey>.Default, predicate, skipCount, takeCount);
             public Dictionary<TKey, TSource> ToDictionary<TKey>(Selector<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer)
-                => ReadOnlyList.ToDictionary<TList, TSource, TKey>(source, keySelector, comparer, predicate, skipCount, takeCount);
+                => Array.ToDictionary<TSource, TKey>(source, keySelector, comparer, predicate, skipCount, takeCount);
             public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Selector<TSource, TKey> keySelector, Selector<TSource, TElement> elementSelector)
-                => ReadOnlyList.ToDictionary<TList, TSource, TKey, TElement>(source, keySelector, elementSelector, EqualityComparer<TKey>.Default, predicate, skipCount, takeCount);
+                => Array.ToDictionary<TSource, TKey, TElement>(source, keySelector, elementSelector, EqualityComparer<TKey>.Default, predicate, skipCount, takeCount);
             public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Selector<TSource, TKey> keySelector, Selector<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer)
-                => ReadOnlyList.ToDictionary<TList, TSource, TKey, TElement>(source, keySelector, elementSelector, comparer, predicate, skipCount, takeCount);
+                => Array.ToDictionary<TSource, TKey, TElement>(source, keySelector, elementSelector, comparer, predicate, skipCount, takeCount);
 
             public readonly bool SequenceEqual(IEnumerable<TSource> other, IEqualityComparer<TSource>? comparer = null)
             {
@@ -175,6 +180,8 @@ namespace NetFabric.Hyperlinq
                 }
             }
         }
+
+#endif
     }
 }
 

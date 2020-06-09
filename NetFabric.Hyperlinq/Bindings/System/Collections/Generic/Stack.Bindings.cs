@@ -52,7 +52,7 @@ namespace NetFabric.Hyperlinq
             Selector<TSource, TResult> selector)
             => ValueReadOnlyCollection.Select<ValueWrapper<TSource>, Stack<TSource>.Enumerator, TSource, TResult>(new ValueWrapper<TSource>(source), selector);
         
-        public static ValueReadOnlyCollection.SelectIndexEnumerable<ValueWrapper<TSource>, Stack<TSource>.Enumerator, TSource, TResult> Select<TSource, TResult>(
+        public static ValueReadOnlyCollection.SelectAtEnumerable<ValueWrapper<TSource>, Stack<TSource>.Enumerator, TSource, TResult> Select<TSource, TResult>(
             this Stack<TSource> source,
             SelectorAt<TSource, TResult> selector)
             => ValueReadOnlyCollection.Select<ValueWrapper<TSource>, Stack<TSource>.Enumerator, TSource, TResult>(new ValueWrapper<TSource>(source), selector);
@@ -71,7 +71,7 @@ namespace NetFabric.Hyperlinq
             Predicate<TSource> predicate)
             => ValueEnumerable.Where<ValueWrapper<TSource>, Stack<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
         
-        public static ValueEnumerable.WhereIndexEnumerable<ValueWrapper<TSource>, Stack<TSource>.Enumerator, TSource> Where<TSource>(
+        public static ValueEnumerable.WhereAtEnumerable<ValueWrapper<TSource>, Stack<TSource>.Enumerator, TSource> Where<TSource>(
             this Stack<TSource> source,
             PredicateAt<TSource> predicate)
             => ValueEnumerable.Where<ValueWrapper<TSource>, Stack<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);

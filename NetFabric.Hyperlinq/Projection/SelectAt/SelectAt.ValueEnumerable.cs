@@ -10,7 +10,7 @@ namespace NetFabric.Hyperlinq
     {
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static SelectIndexEnumerable<TEnumerable, TEnumerator, TSource, TResult> Select<TEnumerable, TEnumerator, TSource, TResult>(
+        public static SelectAtEnumerable<TEnumerable, TEnumerator, TSource, TResult> Select<TEnumerable, TEnumerator, TSource, TResult>(
             this TEnumerable source, 
             SelectorAt<TSource, TResult> selector)
             where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
@@ -18,19 +18,19 @@ namespace NetFabric.Hyperlinq
         {
             if (selector is null) Throw.ArgumentNullException(nameof(selector));
 
-            return new SelectIndexEnumerable<TEnumerable, TEnumerator, TSource, TResult>(in source, selector);
+            return new SelectAtEnumerable<TEnumerable, TEnumerator, TSource, TResult>(in source, selector);
         }
 
         [GeneratorMapping("TSource", "TResult")]
-        public readonly partial struct SelectIndexEnumerable<TEnumerable, TEnumerator, TSource, TResult> 
-            : IValueEnumerable<TResult, SelectIndexEnumerable<TEnumerable, TEnumerator, TSource, TResult>.Enumerator>
+        public readonly partial struct SelectAtEnumerable<TEnumerable, TEnumerator, TSource, TResult> 
+            : IValueEnumerable<TResult, SelectAtEnumerable<TEnumerable, TEnumerator, TSource, TResult>.Enumerator>
             where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
             readonly TEnumerable source;
             readonly SelectorAt<TSource, TResult> selector;
 
-            internal SelectIndexEnumerable(in TEnumerable source, SelectorAt<TSource, TResult> selector)
+            internal SelectAtEnumerable(in TEnumerable source, SelectorAt<TSource, TResult> selector)
             {
                 this.source = source;
                 this.selector = selector;
@@ -50,7 +50,7 @@ namespace NetFabric.Hyperlinq
                 readonly SelectorAt<TSource, TResult> selector;
                 int index;
 
-                internal Enumerator(in SelectIndexEnumerable<TEnumerable, TEnumerator, TSource, TResult> enumerable)
+                internal Enumerator(in SelectAtEnumerable<TEnumerable, TEnumerator, TSource, TResult> enumerable)
                 {
                     enumerator = enumerable.source.GetEnumerator();
                     selector = enumerable.selector;
@@ -93,11 +93,11 @@ namespace NetFabric.Hyperlinq
                 => ValueEnumerable.Contains<TEnumerable, TEnumerator, TSource, TResult>(source, value, comparer, selector);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public ValueEnumerable.SelectIndexEnumerable<TEnumerable, TEnumerator, TSource, TSelectorResult> Select<TSelectorResult>(Selector<TResult, TSelectorResult> selector)
+            public ValueEnumerable.SelectAtEnumerable<TEnumerable, TEnumerator, TSource, TSelectorResult> Select<TSelectorResult>(Selector<TResult, TSelectorResult> selector)
                 => ValueEnumerable.Select<TEnumerable, TEnumerator, TSource, TSelectorResult>(source, Utils.Combine(this.selector, selector));
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public ValueEnumerable.SelectIndexEnumerable<TEnumerable, TEnumerator, TSource, TSelectorResult> Select<TSelectorResult>(SelectorAt<TResult, TSelectorResult> selector)
+            public ValueEnumerable.SelectAtEnumerable<TEnumerable, TEnumerator, TSource, TSelectorResult> Select<TSelectorResult>(SelectorAt<TResult, TSelectorResult> selector)
                 => ValueEnumerable.Select<TEnumerable, TEnumerator, TSource, TSelectorResult>(source, Utils.Combine(this.selector, selector));
 
 

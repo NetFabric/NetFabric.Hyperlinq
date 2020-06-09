@@ -9,22 +9,22 @@ namespace NetFabric.Hyperlinq
     {
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static SpanSelectIndexEnumerable<TSource, TResult> Select<TSource, TResult>(
+        public static SpanSelectAtEnumerable<TSource, TResult> Select<TSource, TResult>(
             this ReadOnlySpan<TSource> source, 
             SelectorAt<TSource, TResult> selector)
         {
             if (selector is null) Throw.ArgumentNullException(nameof(selector));
 
-            return new SpanSelectIndexEnumerable<TSource, TResult>(in source, selector);
+            return new SpanSelectAtEnumerable<TSource, TResult>(in source, selector);
         }
 
         [GeneratorMapping("TSource", "TResult")]
-        public readonly ref struct SpanSelectIndexEnumerable<TSource, TResult>
+        public readonly ref struct SpanSelectAtEnumerable<TSource, TResult>
         {
             internal readonly ReadOnlySpan<TSource> source;
             internal readonly SelectorAt<TSource, TResult> selector;
 
-            internal SpanSelectIndexEnumerable(in ReadOnlySpan<TSource> source, SelectorAt<TSource, TResult> selector)
+            internal SpanSelectAtEnumerable(in ReadOnlySpan<TSource> source, SelectorAt<TSource, TResult> selector)
             {
                 this.source = source;
                 this.selector = selector;
@@ -53,7 +53,7 @@ namespace NetFabric.Hyperlinq
                 readonly SelectorAt<TSource, TResult> selector;
                 int index;
 
-                internal Enumerator(in SpanSelectIndexEnumerable<TSource, TResult> enumerable)
+                internal Enumerator(in SpanSelectAtEnumerable<TSource, TResult> enumerable)
                 {
                     source = enumerable.source;
                     selector = enumerable.selector;
@@ -120,7 +120,7 @@ namespace NetFabric.Hyperlinq
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int Count<TSource, TResult>(this SpanSelectIndexEnumerable<TSource, TResult> source)
+        public static int Count<TSource, TResult>(this SpanSelectAtEnumerable<TSource, TResult> source)
             => source.Count;
     }
 }

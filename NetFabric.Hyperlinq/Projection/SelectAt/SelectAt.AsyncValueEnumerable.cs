@@ -11,7 +11,7 @@ namespace NetFabric.Hyperlinq
     {
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static SelectIndexEnumerable<TEnumerable, TEnumerator, TSource, TResult> Select<TEnumerable, TEnumerator, TSource, TResult>(
+        public static SelectAtEnumerable<TEnumerable, TEnumerator, TSource, TResult> Select<TEnumerable, TEnumerator, TSource, TResult>(
             this TEnumerable source,
             AsyncSelectorAt<TSource, TResult> selector)
             where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
@@ -20,19 +20,19 @@ namespace NetFabric.Hyperlinq
             if (selector is null)
                 Throw.ArgumentNullException(nameof(selector));
 
-            return new SelectIndexEnumerable<TEnumerable, TEnumerator, TSource, TResult>(in source, selector);
+            return new SelectAtEnumerable<TEnumerable, TEnumerator, TSource, TResult>(in source, selector);
         }
 
         [GeneratorMapping("TSource", "TResult")]
-        public readonly partial struct SelectIndexEnumerable<TEnumerable, TEnumerator, TSource, TResult>
-            : IAsyncValueEnumerable<TResult, SelectIndexEnumerable<TEnumerable, TEnumerator, TSource, TResult>.Enumerator>
+        public readonly partial struct SelectAtEnumerable<TEnumerable, TEnumerator, TSource, TResult>
+            : IAsyncValueEnumerable<TResult, SelectAtEnumerable<TEnumerable, TEnumerator, TSource, TResult>.Enumerator>
             where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
             readonly TEnumerable source;
             readonly AsyncSelectorAt<TSource, TResult> selector;
 
-            internal SelectIndexEnumerable(in TEnumerable source, AsyncSelectorAt<TSource, TResult> selector)
+            internal SelectAtEnumerable(in TEnumerable source, AsyncSelectorAt<TSource, TResult> selector)
             {
                 this.source = source;
                 this.selector = selector;
@@ -63,7 +63,7 @@ namespace NetFabric.Hyperlinq
                 ConfiguredValueTaskAwaitable<TResult>.ConfiguredValueTaskAwaiter u__2;
                 ConfiguredValueTaskAwaitable.ConfiguredValueTaskAwaiter u__3;
 
-                internal Enumerator(in SelectIndexEnumerable<TEnumerable, TEnumerator, TSource, TResult> enumerable, CancellationToken cancellationToken)
+                internal Enumerator(in SelectAtEnumerable<TEnumerable, TEnumerator, TSource, TResult> enumerable, CancellationToken cancellationToken)
                 {
                     enumerator = enumerable.source.GetAsyncEnumerator(cancellationToken);
                     selector = enumerable.selector;
@@ -207,11 +207,11 @@ namespace NetFabric.Hyperlinq
                 => AsyncValueEnumerable.ContainsAsync<TEnumerable, TEnumerator, TSource, TResult>(source, value, comparer, selector, cancellationToken);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public AsyncValueEnumerable.SelectIndexEnumerable<TEnumerable, TEnumerator, TSource, TSelectorResult> Select<TSelectorResult>(AsyncSelector<TResult, TSelectorResult> selector)
+            public AsyncValueEnumerable.SelectAtEnumerable<TEnumerable, TEnumerator, TSource, TSelectorResult> Select<TSelectorResult>(AsyncSelector<TResult, TSelectorResult> selector)
                 => AsyncValueEnumerable.Select<TEnumerable, TEnumerator, TSource, TSelectorResult>(source, Utils.Combine(this.selector, selector));
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public AsyncValueEnumerable.SelectIndexEnumerable<TEnumerable, TEnumerator, TSource, TSelectorResult> Select<TSelectorResult>(AsyncSelectorAt<TResult, TSelectorResult> selector)
+            public AsyncValueEnumerable.SelectAtEnumerable<TEnumerable, TEnumerator, TSource, TSelectorResult> Select<TSelectorResult>(AsyncSelectorAt<TResult, TSelectorResult> selector)
                 => AsyncValueEnumerable.Select<TEnumerable, TEnumerator, TSource, TSelectorResult>(source, Utils.Combine(this.selector, selector));
 
 
