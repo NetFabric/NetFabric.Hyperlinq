@@ -3,7 +3,7 @@ using System;
 using System.Net.Security;
 using Xunit;
 
-namespace NetFabric.Hyperlinq.UnitTests.Projection.SelectIndex
+namespace NetFabric.Hyperlinq.UnitTests.Projection.SelectAt
 {
     public class ValueEnumerableTests
     {

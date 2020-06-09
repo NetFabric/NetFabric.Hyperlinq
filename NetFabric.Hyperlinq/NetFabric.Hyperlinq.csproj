@@ -80,8 +80,17 @@
   <ItemGroup>
     <UpToDateCheck Remove="Equality\SequenceEquality.ReadOnlySpan.cs" />
     <UpToDateCheck Remove="Equality\SequenceEqual\SequenceEqual.ReadOnlySpan.cs" />
+    <UpToDateCheck Remove="Filtering\WhereAt\WhereAt.Array.cs" />
+    <UpToDateCheck Remove="Filtering\WhereAt\WhereAt.AsyncValueEnumerable.cs" />
+    <UpToDateCheck Remove="Filtering\WhereAt\WhereAt.ReadOnlyList.cs" />
+    <UpToDateCheck Remove="Filtering\WhereAt\WhereAt.ValueEnumerable.cs" />
     <UpToDateCheck Remove="GlobalSuppressions.cs" />
     <UpToDateCheck Remove="Partitioning\SkipTake\SkipTake.Array.cs" />
+    <UpToDateCheck Remove="Projection\SelectAt\SelectAt.Array.cs" />
+    <UpToDateCheck Remove="Projection\SelectAt\SelectAt.AsyncValueEnumerable.cs" />
+    <UpToDateCheck Remove="Projection\SelectAt\SelectAt.ReadOnlyList.cs" />
+    <UpToDateCheck Remove="Projection\SelectAt\SelectAt.ValueEnumerable.cs" />
+    <UpToDateCheck Remove="Projection\SelectAt\SelectAt.ValueReadOnlyCollection.cs" />
     <UpToDateCheck Remove="Properties\AssemblyInfo.cs" />
   </ItemGroup>
 </Project>

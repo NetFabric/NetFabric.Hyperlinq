@@ -68,7 +68,7 @@ namespace NetFabric.Hyperlinq
             public SpanWhereEnumerable<TSource> Where(Predicate<TSource> predicate)
                 => Where<TSource>(source, Utils.Combine(this.predicate, predicate));
 
-            public SpanWhereIndexEnumerable<TSource> Where(PredicateAt<TSource> predicate)
+            public SpanWhereAtEnumerable<TSource> Where(PredicateAt<TSource> predicate)
                 => Where<TSource>(source, Utils.Combine(this.predicate, predicate));
 
             public SpanWhereSelectEnumerable<TSource, TResult> Select<TResult>(Selector<TSource, TResult> selector)

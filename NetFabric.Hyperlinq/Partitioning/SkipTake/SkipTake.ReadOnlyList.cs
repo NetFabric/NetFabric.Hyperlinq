@@ -180,7 +180,7 @@ namespace NetFabric.Hyperlinq
 
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public ReadOnlyList.WhereIndexEnumerable<TList, TSource> Where(PredicateAt<TSource> predicate)
+            public ReadOnlyList.WhereAtEnumerable<TList, TSource> Where(PredicateAt<TSource> predicate)
                 => ReadOnlyList.Where<TList, TSource>(source, predicate, skipCount, Count);
 
             
@@ -190,7 +190,7 @@ namespace NetFabric.Hyperlinq
 
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public ReadOnlyList.SelectIndexEnumerable<TList, TSource, TResult> Select<TResult>(SelectorAt<TSource, TResult> selector)
+            public ReadOnlyList.SelectAtEnumerable<TList, TSource, TResult> Select<TResult>(SelectorAt<TSource, TResult> selector)
                 => ReadOnlyList.Select<TList, TSource, TResult>(source, selector, skipCount, Count);
 
             

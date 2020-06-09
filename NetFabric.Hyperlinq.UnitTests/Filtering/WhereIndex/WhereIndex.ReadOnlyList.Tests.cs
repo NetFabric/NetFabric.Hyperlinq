@@ -2,7 +2,7 @@ using NetFabric.Assertive;
 using System;
 using Xunit;
 
-namespace NetFabric.Hyperlinq.UnitTests.Filtering.WhereIndex
+namespace NetFabric.Hyperlinq.UnitTests.Filtering.WhereAt
 {
     public class ReadOnlyListTests
     {

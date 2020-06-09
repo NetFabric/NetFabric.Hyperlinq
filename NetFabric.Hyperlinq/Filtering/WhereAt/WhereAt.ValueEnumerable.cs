@@ -10,24 +10,24 @@ namespace NetFabric.Hyperlinq
     {
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static WhereIndexEnumerable<TEnumerable, TEnumerator, TSource> Where<TEnumerable, TEnumerator, TSource>(this TEnumerable source, PredicateAt<TSource> predicate)
+        public static WhereAtEnumerable<TEnumerable, TEnumerator, TSource> Where<TEnumerable, TEnumerator, TSource>(this TEnumerable source, PredicateAt<TSource> predicate)
             where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
             if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
 
-            return new WhereIndexEnumerable<TEnumerable, TEnumerator, TSource>(in source, predicate);
+            return new WhereAtEnumerable<TEnumerable, TEnumerator, TSource>(in source, predicate);
         }
 
-        public readonly partial struct WhereIndexEnumerable<TEnumerable, TEnumerator, TSource> 
-            : IValueEnumerable<TSource, WhereIndexEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator>
+        public readonly partial struct WhereAtEnumerable<TEnumerable, TEnumerator, TSource> 
+            : IValueEnumerable<TSource, WhereAtEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator>
             where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
             internal readonly TEnumerable source;
             internal readonly PredicateAt<TSource> predicate;
 
-            internal WhereIndexEnumerable(in TEnumerable source, PredicateAt<TSource> predicate)
+            internal WhereAtEnumerable(in TEnumerable source, PredicateAt<TSource> predicate)
             {
                 this.source = source;
                 this.predicate = predicate;
@@ -47,7 +47,7 @@ namespace NetFabric.Hyperlinq
                 readonly PredicateAt<TSource> predicate;
                 int index;
 
-                internal Enumerator(in WhereIndexEnumerable<TEnumerable, TEnumerator, TSource> enumerable)
+                internal Enumerator(in WhereAtEnumerable<TEnumerable, TEnumerator, TSource> enumerable)
                 {
                     enumerator = enumerable.source.GetEnumerator();
                     predicate = enumerable.predicate;
@@ -93,9 +93,9 @@ namespace NetFabric.Hyperlinq
             public bool Contains(TSource value, IEqualityComparer<TSource>? comparer = null)
                 => ValueEnumerable.Contains<TEnumerable, TEnumerator, TSource>(source, value, comparer, predicate);
 
-            public ValueEnumerable.WhereIndexEnumerable<TEnumerable, TEnumerator, TSource> Where(Predicate<TSource> predicate)
+            public ValueEnumerable.WhereAtEnumerable<TEnumerable, TEnumerator, TSource> Where(Predicate<TSource> predicate)
                 => ValueEnumerable.Where<TEnumerable, TEnumerator, TSource>(source, Utils.Combine(this.predicate, predicate));
-            public ValueEnumerable.WhereIndexEnumerable<TEnumerable, TEnumerator, TSource> Where(PredicateAt<TSource> predicate)
+            public ValueEnumerable.WhereAtEnumerable<TEnumerable, TEnumerator, TSource> Where(PredicateAt<TSource> predicate)
                 => ValueEnumerable.Where<TEnumerable, TEnumerator, TSource>(source, Utils.Combine(this.predicate, predicate));
 
             public Option<TSource> ElementAt(int index)

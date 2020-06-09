@@ -10,24 +10,24 @@ namespace NetFabric.Hyperlinq
     {
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static MemorySelectIndexEnumerable<TSource, TResult> Select<TSource, TResult>(
+        public static MemorySelectAtEnumerable<TSource, TResult> Select<TSource, TResult>(
             this ReadOnlyMemory<TSource> source, 
             SelectorAt<TSource, TResult> selector)
         {
             if (selector is null) Throw.ArgumentNullException(nameof(selector));
 
-            return new MemorySelectIndexEnumerable<TSource, TResult>(in source, selector);
+            return new MemorySelectAtEnumerable<TSource, TResult>(in source, selector);
         }
 
         [GeneratorMapping("TSource", "TResult")]
-        public readonly partial struct MemorySelectIndexEnumerable<TSource, TResult>
-            : IValueReadOnlyList<TResult, MemorySelectIndexEnumerable<TSource, TResult>.DisposableEnumerator>
+        public readonly partial struct MemorySelectAtEnumerable<TSource, TResult>
+            : IValueReadOnlyList<TResult, MemorySelectAtEnumerable<TSource, TResult>.DisposableEnumerator>
             , IList<TResult>
         {
             internal readonly ReadOnlyMemory<TSource> source;
             internal readonly SelectorAt<TSource, TResult> selector;
 
-            internal MemorySelectIndexEnumerable(in ReadOnlyMemory<TSource> source, SelectorAt<TSource, TResult> selector)
+            internal MemorySelectAtEnumerable(in ReadOnlyMemory<TSource> source, SelectorAt<TSource, TResult> selector)
             {
                 this.source = source;
                 this.selector = selector;
@@ -48,7 +48,7 @@ namespace NetFabric.Hyperlinq
 
             public readonly Enumerator GetEnumerator() 
                 => new Enumerator(in this);
-            readonly DisposableEnumerator IValueEnumerable<TResult, MemorySelectIndexEnumerable<TSource, TResult>.DisposableEnumerator>.GetEnumerator() 
+            readonly DisposableEnumerator IValueEnumerable<TResult, MemorySelectAtEnumerable<TSource, TResult>.DisposableEnumerator>.GetEnumerator() 
                 => new DisposableEnumerator(in this);
             readonly IEnumerator<TResult> IEnumerable<TResult>.GetEnumerator() 
                 => new DisposableEnumerator(in this);
@@ -64,11 +64,11 @@ namespace NetFabric.Hyperlinq
             bool ICollection<TResult>.IsReadOnly  
                 => true;
 
-            void ICollection<TResult>.CopyTo(TResult[] array, int arrayIndex) 
+            void ICollection<TResult>.CopyTo(TResult[] array, int arrayAt) 
             {
                 var span = source.Span;
                 for (var index = 0; index < source.Length; index++)
-                    array[index + arrayIndex] = selector(span[index], index);
+                    array[index + arrayAt] = selector(span[index], index);
             }
             void ICollection<TResult>.Add(TResult item) 
                 => throw new NotSupportedException();
@@ -107,7 +107,7 @@ namespace NetFabric.Hyperlinq
                 readonly SelectorAt<TSource, TResult> selector;
                 int index;
 
-                internal Enumerator(in MemorySelectIndexEnumerable<TSource, TResult> enumerable)
+                internal Enumerator(in MemorySelectAtEnumerable<TSource, TResult> enumerable)
                 {
                     source = enumerable.source.Span;
                     selector = enumerable.selector;
@@ -128,7 +128,7 @@ namespace NetFabric.Hyperlinq
                 readonly SelectorAt<TSource, TResult> selector;
                 int index;
 
-                internal DisposableEnumerator(in MemorySelectIndexEnumerable<TSource, TResult> enumerable)
+                internal DisposableEnumerator(in MemorySelectAtEnumerable<TSource, TResult> enumerable)
                 {
                     source = enumerable.source;
                     selector = enumerable.selector;
@@ -205,7 +205,7 @@ namespace NetFabric.Hyperlinq
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int Count<TSource, TResult>(this MemorySelectIndexEnumerable<TSource, TResult> source)
+        public static int Count<TSource, TResult>(this MemorySelectAtEnumerable<TSource, TResult> source)
             => source.Count;
     }
 }

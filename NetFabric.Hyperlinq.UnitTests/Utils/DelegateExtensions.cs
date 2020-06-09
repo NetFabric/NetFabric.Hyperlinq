@@ -15,7 +15,7 @@ namespace NetFabric.Hyperlinq
             => (item, _) => new ValueTask<bool>(predicate(item));
             
         public static AsyncPredicateAt<T> AsAsync<T>(this PredicateAt<T> predicate)
-            => (item, position, _) => new ValueTask<bool>(predicate(item, position));
+            => (item, index, _) => new ValueTask<bool>(predicate(item, index));
 
         public static Func<TSource, TResult> AsFunc<TSource, TResult>(this Selector<TSource, TResult> selector)
             => new Func<TSource, TResult>(selector);
@@ -27,6 +27,6 @@ namespace NetFabric.Hyperlinq
             => (item, _) => new ValueTask<TResult>(selector(item));
             
         public static AsyncSelectorAt<TSource, TResult> AsAsync<TSource, TResult>(this SelectorAt<TSource, TResult> selector)
-            => (item, position, _) => new ValueTask<TResult>(selector(item, position));
+            => (item, index, _) => new ValueTask<TResult>(selector(item, index));
     }
 }

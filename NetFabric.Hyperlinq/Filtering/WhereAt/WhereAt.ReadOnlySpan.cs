@@ -8,19 +8,19 @@ namespace NetFabric.Hyperlinq
     {
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static SpanWhereIndexEnumerable<TSource> Where<TSource>(this ReadOnlySpan<TSource> source, PredicateAt<TSource> predicate) 
+        public static SpanWhereAtEnumerable<TSource> Where<TSource>(this ReadOnlySpan<TSource> source, PredicateAt<TSource> predicate) 
         {
             if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
 
-            return new SpanWhereIndexEnumerable<TSource>(source, predicate);
+            return new SpanWhereAtEnumerable<TSource>(source, predicate);
         }
 
-        public readonly ref struct SpanWhereIndexEnumerable<TSource>
+        public readonly ref struct SpanWhereAtEnumerable<TSource>
         {
             internal readonly ReadOnlySpan<TSource> source;
             internal readonly PredicateAt<TSource> predicate;
 
-            internal SpanWhereIndexEnumerable(in ReadOnlySpan<TSource> source, PredicateAt<TSource> predicate)
+            internal SpanWhereAtEnumerable(in ReadOnlySpan<TSource> source, PredicateAt<TSource> predicate)
             {
                 this.source = source;
                 this.predicate = predicate;
@@ -35,7 +35,7 @@ namespace NetFabric.Hyperlinq
                 readonly PredicateAt<TSource> predicate;
                 int index;
 
-                internal Enumerator(in SpanWhereIndexEnumerable<TSource> enumerable)
+                internal Enumerator(in SpanWhereAtEnumerable<TSource> enumerable)
                 {
                     source = enumerable.source;
                     predicate = enumerable.predicate;
@@ -65,10 +65,10 @@ namespace NetFabric.Hyperlinq
             public bool Contains(TSource value, IEqualityComparer<TSource>? comparer = null)
                 => Array.Contains(source, value, comparer, predicate);
 
-            public SpanWhereIndexEnumerable<TSource> Where(Predicate<TSource> predicate)
+            public SpanWhereAtEnumerable<TSource> Where(Predicate<TSource> predicate)
                 => Where<TSource>(source, Utils.Combine(this.predicate, predicate));
 
-            public SpanWhereIndexEnumerable<TSource> Where(PredicateAt<TSource> predicate)
+            public SpanWhereAtEnumerable<TSource> Where(PredicateAt<TSource> predicate)
                 => Where<TSource>(source, Utils.Combine(this.predicate, predicate));
 
             public Option<TSource> ElementAt(int index)
