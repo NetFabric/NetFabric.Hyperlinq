@@ -32,38 +32,37 @@ namespace NetFabric.Hyperlinq
             public ref struct Enumerator
             {
                 readonly ReadOnlySpan<TSource> source;
-                readonly HashSet<TSource> set;
+                Set<TSource>? set;
                 int index;
 
                 internal Enumerator(in SpanDistinctEnumerable<TSource> enumerable)
                 {
                     source = enumerable.source;
-                    set = new HashSet<TSource>(enumerable.comparer);
+                    set = source.Length == 0 ? null : new Set<TSource>(enumerable.comparer);
                     index = -1;
-                    Current = default!;
                 }
 
-                [MaybeNull]
-                public TSource Current { get; private set; }
+                public ref readonly TSource Current => ref source[index];
 
                 public bool MoveNext()
                 {
                     while (++index < source.Length)
                     {
-                        if (set.Add(source[index]))
-                        {
-                            Current = source[index];
+                        if (set!.Add(source[index]))
                             return true;
-                        }
                     }
+
+                    Dispose();
                     return false;
                 }
+
+                public void Dispose()
+                    => set = null;
             }
 
-            // helper function for optimization of non-lazy operations
-            readonly HashSet<TSource> FillSet() 
+            readonly Set<TSource> GetSet() 
             {
-                var set = new HashSet<TSource>(comparer);
+                var set = new Set<TSource>(comparer);
                 for (var index = 0; index < source.Length; index++)
                     _ = set.Add(source[index]);
                 return set;
@@ -71,7 +70,9 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly int Count()
-                => FillSet().Count;
+                => source.Length == 0
+                    ? 0
+                    : GetSet().Count;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly bool Any()
@@ -79,11 +80,15 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly TSource[] ToArray()
-                => HashSetBindings.ToArray<TSource>(FillSet());
+                => source.Length == 0
+                    ? System.Array.Empty<TSource>()
+                    : GetSet().ToArray();
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly List<TSource> ToList()
-                => HashSetBindings.ToList<TSource>(FillSet());
+                => source.Length == 0
+                    ? new List<TSource>()
+                    : GetSet().ToList();
 
             public readonly bool SequenceEqual(IEnumerable<TSource> other, IEqualityComparer<TSource>? comparer = null)
             {
