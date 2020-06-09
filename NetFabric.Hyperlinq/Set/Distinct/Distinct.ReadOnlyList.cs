@@ -26,7 +26,7 @@ namespace NetFabric.Hyperlinq
             => new DistinctEnumerable<TList, TSource>(source, comparer, skipCount, takeCount);
 
         public readonly partial struct DistinctEnumerable<TList, TSource>
-            : IValueEnumerable<TSource, DistinctEnumerable<TList, TSource>.DisposableEnumerator>
+            : IValueEnumerable<TSource, DistinctEnumerable<TList, TSource>.Enumerator>
             where TList : notnull, IReadOnlyList<TSource>
         {
             readonly TList source;
@@ -43,63 +43,27 @@ namespace NetFabric.Hyperlinq
 
             
             public readonly Enumerator GetEnumerator() => new Enumerator(in this);
-            readonly DisposableEnumerator IValueEnumerable<TSource, DistinctEnumerable<TList, TSource>.DisposableEnumerator>.GetEnumerator() => new DisposableEnumerator(in this);
-            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new DisposableEnumerator(in this);
-            readonly IEnumerator IEnumerable.GetEnumerator() => new DisposableEnumerator(in this);
+            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new Enumerator(in this);
+            readonly IEnumerator IEnumerable.GetEnumerator() => new Enumerator(in this);
 
             public struct Enumerator
+                : IEnumerator<TSource>
             {
                 readonly TList source;
-                readonly HashSet<TSource> set;
+                Set<TSource>? set;
                 readonly int end;
                 int index;
 
                 internal Enumerator(in DistinctEnumerable<TList, TSource> enumerable)
                 {
                     source = enumerable.source;
-                    set = new HashSet<TSource>(enumerable.comparer);
+                    set = source.Count == 0 ? null : new Set<TSource>(enumerable.comparer);
                     end = enumerable.skipCount + enumerable.takeCount;
                     index = enumerable.skipCount - 1;
-                    Current = default!;
                 }
 
                 [MaybeNull]
-                public TSource Current { get; private set; }
-
-                public bool MoveNext()
-                {
-                    while (++index < end)
-                    {
-                        if (set.Add(source[index]))
-                        {
-                            Current = source[index];
-                            return true;
-                        }
-                    }
-
-                    return false;
-                }
-            }
-
-            public struct DisposableEnumerator
-                : IEnumerator<TSource>
-            {
-                readonly TList source;
-                readonly HashSet<TSource> set;
-                readonly int end;
-                int index;
-
-                internal DisposableEnumerator(in DistinctEnumerable<TList, TSource> enumerable)
-                {
-                    source = enumerable.source;
-                    set = new HashSet<TSource>(enumerable.comparer);
-                    end = enumerable.skipCount + enumerable.takeCount;
-                    index = enumerable.skipCount - 1;
-                    Current = default!;
-                }
-
-                [MaybeNull]
-                public TSource Current { get; private set; }
+                public readonly TSource Current => source[index];
                 readonly TSource IEnumerator<TSource>.Current
                     => Current;
                 readonly object? IEnumerator.Current 
@@ -109,13 +73,11 @@ namespace NetFabric.Hyperlinq
                 {
                     while (++index < end)
                     {
-                        if (set.Add(source[index]))
-                        {
-                            Current = source[index];
+                        if (set!.Add(source[index]))
                             return true;
-                        }
                     }
 
+                    Dispose();
                     return false;
                 }
 
@@ -123,13 +85,18 @@ namespace NetFabric.Hyperlinq
                 public readonly void Reset() 
                     => throw new NotSupportedException();
 
-                public readonly void Dispose() { }
+                public void Dispose()
+                    => set = null;
             }
 
-            // helper function for optimization of non-lazy operations
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            readonly HashSet<TSource> FillSet() 
-                => new HashSet<TSource>(source, comparer);
+            readonly Set<TSource> GetSet()
+            {
+                var set = new Set<TSource>(comparer);
+                for (var index = 0; index < source.Count; index++)
+                    _ = set.Add(source[index]);
+                return set;
+            }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly DistinctEnumerable<TList, TSource> Skip(int count)
@@ -142,7 +109,9 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly int Count()
-                => FillSet().Count;
+                => source.Count == 0
+                    ? 0
+                    : GetSet().Count;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly bool Any()
@@ -150,11 +119,15 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly TSource[] ToArray()
-                => HashSetBindings.ToArray<TSource>(FillSet());
+                => source.Count == 0 
+                    ? System.Array.Empty<TSource>()
+                    : GetSet().ToArray();
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly List<TSource> ToList()
-                => HashSetBindings.ToList<TSource>(FillSet());
+                => source.Count == 0
+                    ? new List<TSource>()
+                    : GetSet().ToList();
 
             public readonly bool SequenceEqual(IEnumerable<TSource> other, IEqualityComparer<TSource>? comparer = null)
             {

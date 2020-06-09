@@ -25,7 +25,6 @@ namespace NetFabric.Hyperlinq.Benchmarks
                 typeof(ContainsBenchmarks),
                 typeof(ContainsComparerBenchmarks),
                 typeof(DistinctBenchmarks),
-                typeof(DistinctComparerBenchmarks),
                 typeof(ElementAtBenchmarks),
                 typeof(FirstBenchmarks),
                 typeof(SingleBenchmarks),
@@ -50,6 +49,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
                 typeof(ImmutableArrayBenchmarks),
                 typeof(LinkedListBenchmarks),
                 typeof(RangeWhereSelectToArrayBenchmarks),
+                typeof(RangeSelectDistinctToListBenchmarks),
             });
             _ = switcher.Run(args);        
         }

@@ -45,7 +45,7 @@ namespace NetFabric.Hyperlinq
                 TEnumerator enumerator; // do not make readonly
                 readonly IEqualityComparer<TSource>? comparer;
                 EnumeratorState state;
-                HashSet<TSource>? set;
+                Set<TSource>? set;
 
                 internal Enumerator(in DistinctEnumerable<TEnumerable, TEnumerator, TSource> enumerable)
                 {
@@ -70,19 +70,17 @@ namespace NetFabric.Hyperlinq
                         case EnumeratorState.Uninitialized:
                             if (!enumerator.MoveNext())
                             {
+                                Dispose();
                                 state = EnumeratorState.Complete;
-                                goto case EnumeratorState.Complete;
+                                return false;
                             }
 
-                            set = new HashSet<TSource>(comparer)
-                            {
-                                enumerator.Current
-                            };
+                            set = new Set<TSource>(comparer);
+                            _ = set.Add(enumerator.Current);
                             state = EnumeratorState.Enumerating;
                             return true;
 
                         case EnumeratorState.Enumerating:
-                            Debug.Assert(set is object);
                             while (enumerator.MoveNext())
                             {
                                 if (set!.Add(enumerator.Current))
@@ -91,7 +89,7 @@ namespace NetFabric.Hyperlinq
 
                             Dispose();
                             state = EnumeratorState.Complete;
-                            goto case EnumeratorState.Complete;
+                            return false;
 
                         case EnumeratorState.Complete:
                         default:
@@ -106,19 +104,23 @@ namespace NetFabric.Hyperlinq
                 public void Dispose()
                 {
                     enumerator.Dispose();
-                    set?.Clear();
                     set = null;
                 }
             }
 
-            // helper function for optimization of non-lazy operations
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            readonly HashSet<TSource> FillSet() 
-                => new HashSet<TSource>(source, comparer);
+            readonly Set<TSource> GetSet()
+            { 
+                var set = new Set<TSource>(comparer);
+                using var enumerator = source.GetEnumerator();
+                while (enumerator.MoveNext())
+                    _ = set.Add(enumerator.Current);
+                return set;
+            }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly int Count()
-                => FillSet().Count;
+                => GetSet().Count;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly bool Any()
@@ -126,11 +128,11 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly TSource[] ToArray()
-                => HashSetBindings.ToArray<TSource>(FillSet());
+                => GetSet().ToArray();
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly List<TSource> ToList()
-                => HashSetBindings.ToList<TSource>(FillSet());
+                => GetSet().ToList();
         }
     }
 }

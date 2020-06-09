@@ -47,7 +47,7 @@ namespace NetFabric.Hyperlinq
                 TEnumerator enumerator; // do not make readonly
                 readonly IEqualityComparer<TSource>? comparer;
                 EnumeratorState enumeratorState;
-                HashSet<TSource>? hashSet;
+                Set<TSource>? set;
 
                 int state;
                 AsyncValueTaskMethodBuilder<bool> builder;
@@ -62,7 +62,7 @@ namespace NetFabric.Hyperlinq
                     enumerator = enumerable.source.GetAsyncEnumerator(cancellationToken);
                     comparer = enumerable.comparer;
                     enumeratorState = EnumeratorState.Uninitialized;
-                    hashSet = null;
+                    set = null;
 
                     state = default;
                     builder = default;
@@ -90,7 +90,7 @@ namespace NetFabric.Hyperlinq
                 //                goto case EnumeratorState.Complete;
                 //            }
 
-                //            set = new HashSet<TSource>(comparer)
+                //            set = new Set<TSource>(comparer)
                 //            {
                 //                enumerator.Current
                 //            };
@@ -125,8 +125,7 @@ namespace NetFabric.Hyperlinq
                 public ValueTask DisposeAsync()
                 {
                     enumeratorState = EnumeratorState.Complete;
-                    hashSet?.Clear();
-                    hashSet = null;
+                    set = null;
                     return enumerator.DisposeAsync();
                 }
 
@@ -197,7 +196,7 @@ namespace NetFabric.Hyperlinq
                                     enumeratorState = EnumeratorState.Complete;
                                     break;
                                 }
-                                hashSet = new HashSet<TSource>(comparer)
+                                set = new Set<TSource>(comparer)
                                 {
                                     enumerator.Current
                                 };
@@ -218,7 +217,7 @@ namespace NetFabric.Hyperlinq
                                     }
                                     goto IL_0266;
                                 }
-                                if (!hashSet.Add(enumerator.Current))
+                                if (!set.Add(enumerator.Current))
                                 {
                                     goto IL_0174;
                                 }
@@ -248,10 +247,9 @@ namespace NetFabric.Hyperlinq
                 { }
             }
 
-            // helper function for optimization of non-lazy operations
-            readonly async ValueTask<HashSet<TSource>> FillSetAsync(CancellationToken cancellationToken)
+            readonly async ValueTask<Set<TSource>> FillSetAsync(CancellationToken cancellationToken)
             {
-                var set = new HashSet<TSource>(comparer);
+                var set = new Set<TSource>(comparer);
                 var enumerator = source.GetAsyncEnumerator(cancellationToken);
                 await using (enumerator.ConfigureAwait(false))
                 {
@@ -271,11 +269,11 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly async ValueTask<TSource[]> ToArrayAsync(CancellationToken cancellationToken = default)
-                => HashSetBindings.ToArray<TSource>(await FillSetAsync(cancellationToken));
+                => (await FillSetAsync(cancellationToken)).ToArray();
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly async ValueTask<List<TSource>> ToListAsync(CancellationToken cancellationToken = default)
-                => HashSetBindings.ToList<TSource>(await FillSetAsync(cancellationToken));
+                => (await FillSetAsync(cancellationToken)).ToList();
         }
     }
 }
