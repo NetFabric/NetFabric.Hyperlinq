@@ -1,128 +1,94 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace NetFabric.Hyperlinq
 {
     public static partial class ValueEnumerable
     {
         
-        public static bool Contains<TEnumerable, TEnumerator, TSource>(this TEnumerable source, TSource value, IEqualityComparer<TSource>? comparer = null)
+        public static bool Contains<TEnumerable, TEnumerator, TSource>(this TEnumerable source, [AllowNull] TSource value, IEqualityComparer<TSource>? comparer = null)
             where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
-            using var enumerator = source.GetEnumerator();
-            if (comparer is null)
+            if (comparer is null && source is ICollection<TSource> collection)
+                return collection.Contains(value);
+
+            if (Utils.UseDefault(comparer))
+                return DefaultContains(source, value);
+
+            comparer ??= EqualityComparer<TSource>.Default;
+            return ComparerContains(source, value, comparer);
+
+            static bool DefaultContains(TEnumerable source, [AllowNull] TSource value)
             {
+                using var enumerator = source.GetEnumerator();
                 while (enumerator.MoveNext())
                 {
                     if (EqualityComparer<TSource>.Default.Equals(enumerator.Current, value))
                         return true;
                 }
+                return false;
             }
-            else
+
+            static bool ComparerContains(TEnumerable source, [AllowNull] TSource value, IEqualityComparer<TSource> comparer)
             {
+                using var enumerator = source.GetEnumerator();
                 while (enumerator.MoveNext())
                 {
                     if (comparer.Equals(enumerator.Current, value))
                         return true;
                 }
+                return false;
             }
-
-            return false;
         }
 
-        
-        static bool Contains<TEnumerable, TEnumerator, TSource>(this TEnumerable source, TSource value, IEqualityComparer<TSource>? comparer, Predicate<TSource> predicate)
+
+        internal static bool Contains<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, [AllowNull] TResult value, Selector<TSource, TResult> selector)
             where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
-            using var enumerator = source.GetEnumerator();
-            if (comparer is null)
-            {
-                while (enumerator.MoveNext())
-                {
-                    if (predicate(enumerator.Current) && EqualityComparer<TSource>.Default.Equals(enumerator.Current, value))
-                        return true;
-                }
-            }
-            else
-            {
-                while (enumerator.MoveNext())
-                {
-                    if (predicate(enumerator.Current) && comparer.Equals(enumerator.Current, value))
-                        return true;
-                }
-            }
+            return default(TResult) is object
+                ? ValueContains(source, value, selector)
+                : ReferenceContains(source, value, selector);
 
-            return false;
-        }
-
-        
-        static bool Contains<TEnumerable, TEnumerator, TSource>(this TEnumerable source, TSource value, IEqualityComparer<TSource>? comparer, PredicateAt<TSource> predicate)
-            where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
-            where TEnumerator : struct, IEnumerator<TSource>
-        {
-            using var enumerator = source.GetEnumerator();
-            if (comparer is null)
+            static bool ValueContains(TEnumerable source, [AllowNull] TResult value, Selector<TSource, TResult> selector)
             {
-                checked
-                {
-                    for (var index = 0; enumerator.MoveNext(); index++)
-                    {
-                        if (predicate(enumerator.Current, index) && EqualityComparer<TSource>.Default.Equals(enumerator.Current, value))
-                            return true;
-                    }
-                }
-            }
-            else
-            {
-                checked
-                {
-                    for (var index = 0; enumerator.MoveNext(); index++)
-                    {
-                        if (predicate(enumerator.Current, index) && comparer.Equals(enumerator.Current, value))
-                            return true;
-                    }
-                }
-            }
-
-            return false;
-        }
-
-        
-        static bool Contains<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, TResult value, IEqualityComparer<TResult>? comparer, Selector<TSource, TResult> selector)
-            where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
-            where TEnumerator : struct, IEnumerator<TSource>
-        {
-            using var enumerator = source.GetEnumerator();
-            if (comparer is null)
-            {
+                using var enumerator = source.GetEnumerator();
                 while (enumerator.MoveNext())
                 {
                     if (EqualityComparer<TResult>.Default.Equals(selector(enumerator.Current), value))
                         return true;
                 }
+                return false;
             }
-            else
+
+            static bool ReferenceContains(TEnumerable source, [AllowNull] TResult value, Selector<TSource, TResult> selector)
             {
+                var defaultComparer = EqualityComparer<TResult>.Default;
+
+                using var enumerator = source.GetEnumerator();
                 while (enumerator.MoveNext())
                 {
-                    if (comparer.Equals(selector(enumerator.Current), value))
+                    if (defaultComparer.Equals(selector(enumerator.Current), value))
                         return true;
                 }
+                return false;
             }
-
-            return false;
         }
 
-        
-        static bool Contains<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, TResult value, IEqualityComparer<TResult>? comparer, SelectorAt<TSource, TResult> selector)
+
+        internal static bool Contains<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, [AllowNull] TResult value, SelectorAt<TSource, TResult> selector)
             where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
-            using var enumerator = source.GetEnumerator();
-            if (comparer is null)
+            return default(TResult) is object
+                ? ValueContains(source, value, selector)
+                : ReferenceContains(source, value, selector);
+
+            static bool ValueContains(TEnumerable source, [AllowNull] TResult value, SelectorAt<TSource, TResult> selector)
             {
+                using var enumerator = source.GetEnumerator();
                 checked
                 {
                     for (var index = 0; enumerator.MoveNext(); index++)
@@ -131,46 +97,24 @@ namespace NetFabric.Hyperlinq
                             return true;
                     }
                 }
+                return false;
             }
-            else
+
+            static bool ReferenceContains(TEnumerable source, [AllowNull] TResult value, SelectorAt<TSource, TResult> selector)
             {
+                var defaultComparer = EqualityComparer<TResult>.Default;
+
+                using var enumerator = source.GetEnumerator();
                 checked
                 {
                     for (var index = 0; enumerator.MoveNext(); index++)
                     {
-                        if (comparer.Equals(selector(enumerator.Current, index), value))
+                        if (defaultComparer.Equals(selector(enumerator.Current, index), value))
                             return true;
                     }
                 }
+                return false;
             }
-
-            return false;
-        }
-
-        
-        static bool Contains<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, TResult value, IEqualityComparer<TResult>? comparer, Predicate<TSource> predicate, Selector<TSource, TResult> selector)
-            where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
-            where TEnumerator : struct, IEnumerator<TSource>
-        {
-            using var enumerator = source.GetEnumerator();
-            if (comparer is null)
-            {
-                while (enumerator.MoveNext())
-                {
-                    if (predicate(enumerator.Current) && EqualityComparer<TResult>.Default.Equals(selector(enumerator.Current), value))
-                        return true;
-                }
-            }
-            else
-            {
-                while (enumerator.MoveNext())
-                {
-                    if (predicate(enumerator.Current) && comparer.Equals(selector(enumerator.Current), value))
-                        return true;
-                }
-            }
-
-            return false;
         }
     }
 }

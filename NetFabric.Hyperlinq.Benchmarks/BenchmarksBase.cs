@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace NetFabric.Hyperlinq.Benchmarks
 {
-    [SimpleJob(RuntimeMoniker.Net472, baseline: true)]
+    //[SimpleJob(RuntimeMoniker.Net472, baseline: true)]
     //[SimpleJob(RuntimeMoniker.NetCoreApp21)]
     [SimpleJob(RuntimeMoniker.NetCoreApp31)]
     //[SimpleJob(RuntimeMoniker.NetCoreApp50)]

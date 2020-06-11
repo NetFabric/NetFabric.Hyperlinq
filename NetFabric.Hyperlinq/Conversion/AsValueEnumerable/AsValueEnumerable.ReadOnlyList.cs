@@ -29,21 +29,19 @@ namespace NetFabric.Hyperlinq
             [MaybeNull]
             public readonly TSource this[int index]
                 => source[index];
+            TSource IReadOnlyList<TSource>.this[int index]
+                => source[index];
+            TSource IList<TSource>.this[int index]
+            {
+                get => source[index];
+                set => Throw.NotSupportedException();
+            }
 
-            
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly Enumerator GetEnumerator() => new Enumerator(source);
             readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new Enumerator(source);
             readonly IEnumerator IEnumerable.GetEnumerator() => new Enumerator(source);
 
-            TSource IList<TSource>.this[int index]
-            {
-                get => source[index];
-                set => throw new NotSupportedException();
-            }
-
-            TSource IReadOnlyList<TSource>.this[int index]
-                => source[index];
 
             bool ICollection<TSource>.IsReadOnly  
                 => true;
@@ -55,27 +53,40 @@ namespace NetFabric.Hyperlinq
             }
 
             void ICollection<TSource>.Add(TSource item) 
-                => throw new NotSupportedException();
+                => Throw.NotSupportedException();
             void ICollection<TSource>.Clear() 
-                => throw new NotSupportedException();
+                => Throw.NotSupportedException();
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             bool ICollection<TSource>.Contains(TSource item) 
-                => source.Contains(item);
+                => ReadOnlyList.Contains(source, item);
             bool ICollection<TSource>.Remove(TSource item) 
-                => throw new NotSupportedException();
+                => Throw.NotSupportedException<bool>();
             int IList<TSource>.IndexOf(TSource item)
             {
-                for (var index = 0; index < source.Count; index++)
+                if (default(TSource) is object)
                 {
-                    if (EqualityComparer<TSource>.Default.Equals(source[index], item))
-                        return index;
+                    for (var index = 0; index < source.Count; index++)
+                    {
+                        if (EqualityComparer<TSource>.Default.Equals(source[index], item))
+                            return index;
+                    }
+                }
+                else
+                {
+                    var defaultComparer = EqualityComparer<TSource>.Default;
+                    for (var index = 0; index < source.Count; index++)
+                    {
+                        if (defaultComparer.Equals(source[index], item))
+                            return index;
+                    }
                 }
                 return -1;
             }
 
             void IList<TSource>.Insert(int index, TSource item)
-                => throw new NotSupportedException();
+                => Throw.NotSupportedException();
             void IList<TSource>.RemoveAt(int index)
-                => throw new NotSupportedException();
+                => Throw.NotSupportedException();
 
             public struct Enumerator
                 : IEnumerator<TSource>
@@ -121,6 +132,7 @@ namespace NetFabric.Hyperlinq
                 => ReadOnlyList.ToList<IReadOnlyList<TSource>, TSource>(source);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int Count<TSource>(this ValueEnumerableWrapper<TSource> source)
             => source.Count;
     }

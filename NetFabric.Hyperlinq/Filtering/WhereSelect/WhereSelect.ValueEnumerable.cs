@@ -85,9 +85,6 @@ namespace NetFabric.Hyperlinq
             public bool Any()
                 => ValueEnumerable.Any<TEnumerable, TEnumerator, TSource>(source, predicate);
                 
-            public bool Contains(TResult value, IEqualityComparer<TResult>? comparer = null)
-                => ValueEnumerable.Contains<TEnumerable, TEnumerator, TSource, TResult>(source, value, comparer, predicate, selector);
-
             public Option<TResult> ElementAt(int index)
                 => ValueEnumerable.ElementAt<TEnumerable, TEnumerator, TSource, TResult>(source, index, predicate, selector);
 

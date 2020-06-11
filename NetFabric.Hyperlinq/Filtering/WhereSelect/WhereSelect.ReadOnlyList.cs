@@ -121,9 +121,6 @@ namespace NetFabric.Hyperlinq
             public bool Any()
                 => ReadOnlyList.Any<TList, TSource>(source, predicate, skipCount, takeCount);
                 
-            public bool Contains(TResult value, IEqualityComparer<TResult>? comparer = null)
-                => ReadOnlyList.Contains<TList, TSource, TResult>(source, value, comparer, predicate, selector, skipCount, takeCount);
-
             public Option<TResult> ElementAt(int index)
                 => ReadOnlyList.ElementAt<TList, TSource, TResult>(source, index, predicate, selector, skipCount, takeCount);
 
@@ -140,7 +137,7 @@ namespace NetFabric.Hyperlinq
                 => ReadOnlyList.ToList<TList, TSource, TResult>(source, predicate, selector, skipCount, takeCount); 
 
             public Dictionary<TKey, TResult> ToDictionary<TKey>(Selector<TResult, TKey> keySelector)
-                => ToDictionary<TKey>(keySelector, EqualityComparer<TKey>.Default);
+                => ToDictionary<TKey>(keySelector, null);
             public Dictionary<TKey, TResult> ToDictionary<TKey>(Selector<TResult, TKey> keySelector, IEqualityComparer<TKey>? comparer)
             {
                 var dictionary = new Dictionary<TKey, TResult>(0, comparer);
@@ -160,7 +157,7 @@ namespace NetFabric.Hyperlinq
             }
 
             public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Selector<TResult, TKey> keySelector, Selector<TResult, TElement> elementSelector)
-                => ToDictionary<TKey, TElement>(keySelector, elementSelector, EqualityComparer<TKey>.Default);
+                => ToDictionary<TKey, TElement>(keySelector, elementSelector, null);
             public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Selector<TResult, TKey> keySelector, Selector<TResult, TElement> elementSelector, IEqualityComparer<TKey>? comparer)
             {
                 var dictionary = new Dictionary<TKey, TElement>(0, comparer);

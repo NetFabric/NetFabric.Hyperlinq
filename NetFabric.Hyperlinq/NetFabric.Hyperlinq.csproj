@@ -10,6 +10,7 @@
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageTags>netfabric, hyperlinq, linq, enumeration, extensions, performance</PackageTags>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <LangVersion>preview</LangVersion>
     <Nullable>enable</Nullable> 
     <!-- <TreatWarningsAsErrors>true</TreatWarningsAsErrors> -->
   </PropertyGroup>
@@ -92,6 +93,8 @@
     <UpToDateCheck Remove="Projection\SelectAt\SelectAt.ValueEnumerable.cs" />
     <UpToDateCheck Remove="Projection\SelectAt\SelectAt.ValueReadOnlyCollection.cs" />
     <UpToDateCheck Remove="Properties\AssemblyInfo.cs" />
+    <UpToDateCheck Remove="Quantifier\Contains\Contains.ReadOnlyCollection.cs" />
     <UpToDateCheck Remove="Set\Distinct\Set.cs" />
+    <UpToDateCheck Remove="Utils\Utils.EqualityComparer.cs" />
   </ItemGroup>
 </Project>

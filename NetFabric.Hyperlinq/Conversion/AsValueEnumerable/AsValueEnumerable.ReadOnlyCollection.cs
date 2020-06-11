@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
 using System.Runtime.CompilerServices;
@@ -38,11 +39,7 @@ namespace NetFabric.Hyperlinq
             }
 
             public readonly int Count
-            {
-                [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                get => source.Count;
-            }
-
+                => source.Count;
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly TEnumerator GetEnumerator() => getEnumerator(source);
@@ -54,14 +51,14 @@ namespace NetFabric.Hyperlinq
 
             void ICollection<TSource>.CopyTo(TSource[] array, int arrayIndex) 
             {
-                if (source.Count == 0)
-                    return;
-
-                checked
+                if (source.Count != 0)
                 {
-                    using var enumerator = source.GetEnumerator();
-                    for (var index = arrayIndex; enumerator.MoveNext(); index++)
-                        array[index] = enumerator.Current;
+                    checked
+                    {
+                        using var enumerator = source.GetEnumerator();
+                        for (var index = arrayIndex; enumerator.MoveNext(); index++)
+                            array[index] = enumerator.Current;
+                    }
                 }
             }
 
@@ -69,8 +66,9 @@ namespace NetFabric.Hyperlinq
                 => throw new NotSupportedException();
             void ICollection<TSource>.Clear() 
                 => throw new NotSupportedException();
-            bool ICollection<TSource>.Contains(TSource item) 
-                => throw new NotSupportedException();
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            bool ICollection<TSource>.Contains(TSource item)
+                => ReadOnlyCollection.Contains(source, item);
             bool ICollection<TSource>.Remove(TSource item) 
                 => throw new NotSupportedException();
 
@@ -108,14 +106,14 @@ namespace NetFabric.Hyperlinq
 
             void ICollection<TSource>.CopyTo(TSource[] array, int arrayIndex) 
             {
-                if (source.Count == 0)
-                    return;
-
-                checked
+                if (source.Count != 0)
                 {
-                    using var enumerator = source.GetEnumerator();
-                    for (var index = arrayIndex; enumerator.MoveNext(); index++)
-                        array[index] = enumerator.Current;
+                    checked
+                    {
+                        using var enumerator = source.GetEnumerator();
+                        for (var index = arrayIndex; enumerator.MoveNext(); index++)
+                            array[index] = enumerator.Current;
+                    }
                 }
             }
 
@@ -123,8 +121,8 @@ namespace NetFabric.Hyperlinq
                 => throw new NotSupportedException();
             void ICollection<TSource>.Clear() 
                 => throw new NotSupportedException();
-            bool ICollection<TSource>.Contains(TSource item) 
-                => throw new NotSupportedException();
+            bool ICollection<TSource>.Contains(TSource item)
+                => ReadOnlyCollection.Contains(source, item);
             bool ICollection<TSource>.Remove(TSource item) 
                 => throw new NotSupportedException();
 
@@ -137,12 +135,21 @@ namespace NetFabric.Hyperlinq
                     => enumerator = enumerable.GetEnumerator();
 
                 [MaybeNull]
-                public readonly TSource Current 
-                    => enumerator.Current;
-                readonly TSource IEnumerator<TSource>.Current 
-                    => enumerator.Current;
+                public readonly TSource Current
+                {
+                    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                    get => enumerator.Current;
+                }
+                readonly TSource IEnumerator<TSource>.Current
+                {
+                    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                    get => enumerator.Current;
+                }
                 readonly object? IEnumerator.Current
-                    => enumerator.Current;
+                {
+                    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                    get => enumerator.Current;
+                }
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public readonly bool MoveNext() 

@@ -109,9 +109,6 @@ namespace NetFabric.Hyperlinq
             public bool Any()
                 => source.Span.Any(predicate);
                 
-            public bool Contains(TSource value, IEqualityComparer<TSource>? comparer = null)
-                => source.Span.Contains(value, comparer, predicate);
-
             public MemoryWhereAtEnumerable<TSource> Where(Predicate<TSource> predicate)
                 => Where<TSource>(source, Utils.Combine(this.predicate, predicate));
 

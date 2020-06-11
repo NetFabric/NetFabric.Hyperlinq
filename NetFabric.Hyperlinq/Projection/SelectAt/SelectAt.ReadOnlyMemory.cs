@@ -33,8 +33,10 @@ namespace NetFabric.Hyperlinq
                 this.selector = selector;
             }
 
-            public readonly int Count => source.Length;
+            public readonly int Count 
+                => source.Length;
 
+            [MaybeNull]
             public readonly TResult this[int index]
             {
                 get
@@ -44,6 +46,13 @@ namespace NetFabric.Hyperlinq
 
                     return selector(source.Span[index], index);
                 }
+            }
+            TResult IReadOnlyList<TResult>.this[int index]
+                => this[index]!;
+            TResult IList<TResult>.this[int index]
+            {
+                get => this[index]!;
+                set => Throw.NotSupportedException();
             }
 
             public readonly Enumerator GetEnumerator() 
@@ -55,12 +64,6 @@ namespace NetFabric.Hyperlinq
             readonly IEnumerator IEnumerable.GetEnumerator() 
                 => new DisposableEnumerator(in this);
 
-            TResult IList<TResult>.this[int index]
-            {
-                get => this[index];
-                set => throw new NotSupportedException();
-            }
-
             bool ICollection<TResult>.IsReadOnly  
                 => true;
 
@@ -68,38 +71,42 @@ namespace NetFabric.Hyperlinq
             {
                 var span = source.Span;
                 for (var index = 0; index < source.Length; index++)
-                    array[index + arrayAt] = selector(span[index], index);
+                    array[index + arrayAt] = selector(span[index], index)!;
             }
             void ICollection<TResult>.Add(TResult item) 
-                => throw new NotSupportedException();
+                => Throw.NotSupportedException();
             void ICollection<TResult>.Clear() 
-                => throw new NotSupportedException();
-            bool ICollection<TResult>.Contains(TResult item) 
-            {
-                var span = source.Span;
-                for (var index = 0; index < source.Length; index++)
-                {
-                    if (EqualityComparer<TResult>.Default.Equals(selector(span[index], index), item))
-                        return true;
-                }
-                return false;
-            }
+                => Throw.NotSupportedException();
+            bool ICollection<TResult>.Contains(TResult item)
+                => Array.Contains(source.Span, item, selector);
             bool ICollection<TResult>.Remove(TResult item) 
-                => throw new NotSupportedException();
+                => Throw.NotSupportedException<bool>();
             int IList<TResult>.IndexOf(TResult item)
             {
                 var span = source.Span;
-                for (var index = 0; index < source.Length; index++)
+                if (default(TResult) is object)
                 {
-                    if (EqualityComparer<TResult>.Default.Equals(selector(span[index], index), item))
-                        return index;
+                    for (var index = 0; index < source.Length; index++)
+                    {
+                        if (EqualityComparer<TResult>.Default.Equals(selector(span[index], index)!, item))
+                            return index;
+                    }
+                }
+                else
+                {
+                    var defaultComparer = EqualityComparer<TResult>.Default;
+                    for (var index = 0; index < source.Length; index++)
+                    {
+                        if (defaultComparer.Equals(selector(span[index], index)!, item))
+                            return index;
+                    }
                 }
                 return -1;
             }
             void IList<TResult>.Insert(int index, TResult item)
-                => throw new NotSupportedException();
+                => Throw.NotSupportedException();
             void IList<TResult>.RemoveAt(int index)
-                => throw new NotSupportedException();
+                => Throw.NotSupportedException();
 
             public ref struct Enumerator
             {
@@ -114,6 +121,7 @@ namespace NetFabric.Hyperlinq
                     index = -1;
                 }
 
+                [MaybeNull]
                 public readonly TResult Current 
                     => selector(source[index], index);
 
@@ -135,9 +143,12 @@ namespace NetFabric.Hyperlinq
                     index = -1;
                 }
  
+                [MaybeNull]
                 public readonly TResult Current 
                     => selector(source.Span[index], index);
-                readonly object? IEnumerator.Current 
+                readonly TResult IEnumerator<TResult>.Current 
+                    => selector(source.Span[index], index)!;
+                readonly object? IEnumerator.Current
                     => selector(source.Span[index], index);
 
                 public bool MoveNext() 
@@ -145,7 +156,7 @@ namespace NetFabric.Hyperlinq
 
                 [ExcludeFromCodeCoverage]
                 public readonly void Reset() 
-                    => throw new NotSupportedException();
+                    => Throw.NotSupportedException();
 
                 public void Dispose() { }
             }
@@ -153,10 +164,6 @@ namespace NetFabric.Hyperlinq
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Any()
                 => source.Length != 0;
-
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public bool Contains(TResult value, IEqualityComparer<TResult>? comparer = null)
-                => Array.Contains(source.Span, value, comparer, selector);
 
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]

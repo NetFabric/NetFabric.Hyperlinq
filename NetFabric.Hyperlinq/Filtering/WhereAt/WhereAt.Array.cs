@@ -126,9 +126,6 @@ namespace NetFabric.Hyperlinq
             public bool Any()
                 => Array.Any<TSource>(source, predicate, skipCount, takeCount);
 
-            public bool Contains(TSource value, IEqualityComparer<TSource>? comparer = null)
-                => Array.Contains<TSource>(source, value, comparer, predicate, skipCount, takeCount);
-
             public WhereAtEnumerable<TSource> Where(Predicate<TSource> predicate)
                 => Array.Where<TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount);
             public WhereAtEnumerable<TSource> Where(PredicateAt<TSource> predicate)
@@ -150,11 +147,11 @@ namespace NetFabric.Hyperlinq
                 => Array.ToList<TSource>(source, predicate, skipCount, takeCount);
 
             public Dictionary<TKey, TSource> ToDictionary<TKey>(Selector<TSource, TKey> keySelector)
-                => Array.ToDictionary<TSource, TKey>(source, keySelector, EqualityComparer<TKey>.Default, predicate, skipCount, takeCount);
+                => Array.ToDictionary<TSource, TKey>(source, keySelector, null, predicate, skipCount, takeCount);
             public Dictionary<TKey, TSource> ToDictionary<TKey>(Selector<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer)
                 => Array.ToDictionary<TSource, TKey>(source, keySelector, comparer, predicate, skipCount, takeCount);
             public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Selector<TSource, TKey> keySelector, Selector<TSource, TElement> elementSelector)
-                => Array.ToDictionary<TSource, TKey, TElement>(source, keySelector, elementSelector, EqualityComparer<TKey>.Default, predicate, skipCount, takeCount);
+                => Array.ToDictionary<TSource, TKey, TElement>(source, keySelector, elementSelector, null, predicate, skipCount, takeCount);
             public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Selector<TSource, TKey> keySelector, Selector<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer)
                 => Array.ToDictionary<TSource, TKey, TElement>(source, keySelector, elementSelector, comparer, predicate, skipCount, takeCount);
 

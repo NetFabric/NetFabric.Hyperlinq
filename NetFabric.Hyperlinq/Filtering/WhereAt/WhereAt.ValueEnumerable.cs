@@ -90,9 +90,6 @@ namespace NetFabric.Hyperlinq
             public bool Any()
                 => ValueEnumerable.Any<TEnumerable, TEnumerator, TSource>(source, predicate);
                 
-            public bool Contains(TSource value, IEqualityComparer<TSource>? comparer = null)
-                => ValueEnumerable.Contains<TEnumerable, TEnumerator, TSource>(source, value, comparer, predicate);
-
             public ValueEnumerable.WhereAtEnumerable<TEnumerable, TEnumerator, TSource> Where(Predicate<TSource> predicate)
                 => ValueEnumerable.Where<TEnumerable, TEnumerator, TSource>(source, Utils.Combine(this.predicate, predicate));
             public ValueEnumerable.WhereAtEnumerable<TEnumerable, TEnumerator, TSource> Where(PredicateAt<TSource> predicate)
@@ -114,11 +111,11 @@ namespace NetFabric.Hyperlinq
                 => ValueEnumerable.ToList<TEnumerable, TEnumerator, TSource>(source, predicate);
 
             public Dictionary<TKey, TSource> ToDictionary<TKey>(Selector<TSource, TKey> keySelector)
-                => ValueEnumerable.ToDictionary<TEnumerable, TEnumerator, TSource, TKey>(source, keySelector, EqualityComparer<TKey>.Default, predicate);
+                => ValueEnumerable.ToDictionary<TEnumerable, TEnumerator, TSource, TKey>(source, keySelector, null, predicate);
             public Dictionary<TKey, TSource> ToDictionary<TKey>(Selector<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer)
                 => ValueEnumerable.ToDictionary<TEnumerable, TEnumerator, TSource, TKey>(source, keySelector, comparer, predicate);
             public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Selector<TSource, TKey> keySelector, Selector<TSource, TElement> elementSelector)
-                => ValueEnumerable.ToDictionary<TEnumerable, TEnumerator, TSource, TKey, TElement>(source, keySelector, elementSelector, EqualityComparer<TKey>.Default, predicate);
+                => ValueEnumerable.ToDictionary<TEnumerable, TEnumerator, TSource, TKey, TElement>(source, keySelector, elementSelector, null, predicate);
             public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Selector<TSource, TKey> keySelector, Selector<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer)
                 => ValueEnumerable.ToDictionary<TEnumerable, TEnumerator, TSource, TKey, TElement>(source, keySelector, elementSelector, comparer, predicate);
         }

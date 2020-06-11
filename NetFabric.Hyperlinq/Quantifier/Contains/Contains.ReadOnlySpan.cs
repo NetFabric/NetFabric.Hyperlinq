@@ -1,165 +1,108 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
+using System.Diagnostics.CodeAnalysis;
 
 namespace NetFabric.Hyperlinq
 {
     public static partial class Array
     {
-        
-        public static bool Contains<TSource>(this ReadOnlySpan<TSource> source, TSource value, IEqualityComparer<TSource>? comparer = null)
+      
+        public static bool Contains<TSource>(this ReadOnlySpan<TSource> source, [AllowNull] TSource value, IEqualityComparer<TSource>? comparer = null)
         {
-            if (source.Length != 0) 
+            if (source.Length == 0)
+                return false;
+
+            if (Utils.UseDefault(comparer))
+                return DefaultContains(source, value!);
+
+            comparer ??= EqualityComparer<TSource>.Default;
+            return ComparerContains(source, value, comparer);
+
+            static bool DefaultContains(ReadOnlySpan<TSource> source, [AllowNull] TSource value)
             {
-                if (comparer is null)
+                for (var index = 0; index < source.Length; index++)
                 {
-                    for (var index = 0; index < source.Length; index++)
-                    {
-                        if (EqualityComparer<TSource>.Default.Equals(value, source[index]))
-                            return true;
-                    }
+                    if (EqualityComparer<TSource>.Default.Equals(source[index], value!))
+                        return true;
                 }
-                else
-                {
-                    for (var index = 0; index < source.Length; index++)
-                    {
-                        if (comparer.Equals(value, source[index]))
-                            return true;
-                    }
-                }
+                return false;
             }
-            return false;
+
+            static bool ComparerContains(ReadOnlySpan<TSource> source, [AllowNull] TSource value, IEqualityComparer<TSource> comparer)
+            {
+                for (var index = 0; index < source.Length; index++)
+                {
+                    if (comparer.Equals(source[index], value!))
+                        return true;
+                }
+                return false;
+            }
         }
 
-        
-        static bool Contains<TSource>(this ReadOnlySpan<TSource> source, TSource value, IEqualityComparer<TSource>? comparer, Predicate<TSource> predicate)
+
+        static bool Contains<TSource, TResult>(this ReadOnlySpan<TSource> source, [AllowNull] TResult value, Selector<TSource, TResult> selector)
         {
-            if (source.Length != 0) 
+            if (source.Length == 0)
+                return false;
+
+            return default(TResult) is object
+                ? ValueContains(source, value, selector)
+                : ReferenceContains(source, value, selector);
+
+            static bool ValueContains(ReadOnlySpan<TSource> source, [AllowNull] TResult value, Selector<TSource, TResult> selector)
             {
-                if (comparer is null)
+                for (var index = 0; index < source.Length; index++)
                 {
-                    for (var index = 0; index < source.Length; index++)
-                    {
-                        var item = source[index];
-                        if (predicate(item) && EqualityComparer<TSource>.Default.Equals(value, item))
-                            return true;
-                    }
+                    if (EqualityComparer<TResult>.Default.Equals(selector(source[index])!, value!))
+                        return true;
                 }
-                else
-                {
-                    for (var index = 0; index < source.Length; index++)
-                    {
-                        var item = source[index];
-                        if (predicate(item) && comparer.Equals(value, item))
-                            return true;
-                    }
-                }
+                return false;
             }
-            return false;
+
+            static bool ReferenceContains(ReadOnlySpan<TSource> source, [AllowNull] TResult value, Selector<TSource, TResult> selector)
+            {
+                var defaultComparer = EqualityComparer<TResult>.Default;
+
+                for (var index = 0; index < source.Length; index++)
+                {
+                    if (defaultComparer.Equals(selector(source[index])!, value!))
+                        return true;
+                }
+                return false;
+            }
         }
 
-        
-        static bool Contains<TSource>(this ReadOnlySpan<TSource> source, TSource value, IEqualityComparer<TSource>? comparer, PredicateAt<TSource> predicate)
-        {
-            if (source.Length != 0) 
-            {
-                if (comparer is null)
-                {
-                    for (var index = 0; index < source.Length; index++)
-                    {
-                        var item = source[index];
-                        if (predicate(item, index) && EqualityComparer<TSource>.Default.Equals(value, item))
-                            return true;
-                    }
-                }
-                else
-                {
-                    for (var index = 0; index < source.Length; index++)
-                    {
-                        var item = source[index];
-                        if (predicate(item, index) && comparer.Equals(value, item))
-                            return true;
-                    }
-                }
-            }
-            return false;
-        }
 
-        
-        static bool Contains<TSource, TResult>(this ReadOnlySpan<TSource> source, TResult value, IEqualityComparer<TResult>? comparer, Selector<TSource, TResult> selector)
+        static bool Contains<TSource, TResult>(this ReadOnlySpan<TSource> source, [AllowNull] TResult value, SelectorAt<TSource, TResult> selector)
         {
-            if (source.Length != 0) 
-            {
-                if (comparer is null)
-                {
-                    for (var index = 0; index < source.Length; index++)
-                    {
-                        if (EqualityComparer<TResult>.Default.Equals(value, selector(source[index])))
-                            return true;
-                    }
-                }
-                else
-                {
-                    for (var index = 0; index < source.Length; index++)
-                    {
-                        if (comparer.Equals(value, selector(source[index])))
-                            return true;
-                    }
-                }
-            }
-            return false;
-        }
+            if (source.Length == 0)
+                return false;
 
-        
-        static bool Contains<TSource, TResult>(this ReadOnlySpan<TSource> source, TResult value, IEqualityComparer<TResult>? comparer, SelectorAt<TSource, TResult> selector)
-        {
-            if (source.Length != 0) 
-            {
-                if (comparer is null)
-                {
-                    for (var index = 0; index < source.Length; index++)
-                    {
-                        if (EqualityComparer<TResult>.Default.Equals(value, selector(source[index], index)))
-                            return true;
-                    }
-                }
-                else
-                {
-                    for (var index = 0; index < source.Length; index++)
-                    {
-                        if (comparer.Equals(value, selector(source[index], index)))
-                            return true;
-                    }
-                }
-            }
-            return false;
-        }
+            return default(TResult) is object
+                ? ValueContains(source, value, selector)
+                : ReferenceContains(source, value, selector);
 
-        
-        static bool Contains<TSource, TResult>(this ReadOnlySpan<TSource> source, TResult value, IEqualityComparer<TResult>? comparer, Predicate<TSource> predicate, Selector<TSource, TResult> selector)
-        {
-            if (source.Length != 0) 
+            static bool ValueContains(ReadOnlySpan<TSource> source, [AllowNull] TResult value, SelectorAt<TSource, TResult> selector)
             {
-                if (comparer is null)
+                for (var index = 0; index < source.Length; index++)
                 {
-                    for (var index = 0; index < source.Length; index++)
-                    {
-                        var item = source[index];
-                        if (predicate(item) && EqualityComparer<TResult>.Default.Equals(value, selector(item)))
-                            return true;
-                    }
+                    if (EqualityComparer<TResult>.Default.Equals(selector(source[index], index)!, value!))
+                        return true;
                 }
-                else
-                {
-                    for (var index = 0; index < source.Length; index++)
-                    {
-                        var item = source[index];
-                        if (predicate(item) && comparer.Equals(value, selector(item)))
-                            return true;
-                    }
-                }
+                return false;
             }
-            return false;
+
+            static bool ReferenceContains(ReadOnlySpan<TSource> source, [AllowNull] TResult value, SelectorAt<TSource, TResult> selector)
+            {
+                var defaultComparer = EqualityComparer<TResult>.Default;
+
+                for (var index = 0; index < source.Length; index++)
+                {
+                    if (defaultComparer.Equals(selector(source[index], index)!, value!))
+                        return true;
+                }
+                return false;
+            }
         }
     }
 }

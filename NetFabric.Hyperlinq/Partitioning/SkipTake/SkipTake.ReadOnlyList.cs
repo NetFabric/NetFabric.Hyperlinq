@@ -90,7 +90,7 @@ namespace NetFabric.Hyperlinq
             void ICollection<TSource>.Clear() 
                 => throw new NotSupportedException();
             bool ICollection<TSource>.Contains(TSource item) 
-                => ReadOnlyList.Contains<TList, TSource>(source, item, null, skipCount, Count);
+                => Contains(item);
             bool ICollection<TSource>.Remove(TSource item) 
                 => throw new NotSupportedException();
             int IList<TSource>.IndexOf(TSource item)

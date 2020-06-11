@@ -23,12 +23,19 @@ namespace NetFabric.Hyperlinq
             internal MemoryValueEnumerableWrapper(ReadOnlyMemory<TSource> source) 
                 => this.source = source;
 
-            public readonly int Count => source.Length;
+            public readonly int Count 
+                => source.Length;
 
             public readonly ref readonly TSource this[int index] 
                 => ref source.Span[index];
+            readonly TSource IReadOnlyList<TSource>.this[int index]
+                => source.Span[index];
+            TSource IList<TSource>.this[int index]
+            {
+                get => source.Span[index];
+                set => throw new NotSupportedException();
+            }
 
-            
             public readonly Enumerator GetEnumerator() 
                 => new Enumerator(source);
             readonly DisposableEnumerator IValueEnumerable<TSource, MemoryValueEnumerableWrapper<TSource>.DisposableEnumerator>.GetEnumerator() 
@@ -37,15 +44,6 @@ namespace NetFabric.Hyperlinq
                 => new DisposableEnumerator(source);
             readonly IEnumerator IEnumerable.GetEnumerator() 
                 => new DisposableEnumerator(source);
-
-            TSource IList<TSource>.this[int index]
-            {
-                get => source.Span[index];
-                set => throw new NotSupportedException();
-            }
-                
-            readonly TSource IReadOnlyList<TSource>.this[int index] 
-                => source.Span[index];
 
             bool ICollection<TSource>.IsReadOnly  
                 => true;
@@ -60,6 +58,7 @@ namespace NetFabric.Hyperlinq
                 => throw new NotSupportedException();
             void ICollection<TSource>.Clear() 
                 => throw new NotSupportedException();
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             bool ICollection<TSource>.Contains(TSource item) 
                 => source.Contains(item);
             bool ICollection<TSource>.Remove(TSource item) 
@@ -67,10 +66,22 @@ namespace NetFabric.Hyperlinq
             int IList<TSource>.IndexOf(TSource item)
             {
                 var span = source.Span;
-                for (var index = 0; index < source.Length; index++)
+                if (default(TSource) is object)
                 {
-                    if (EqualityComparer<TSource>.Default.Equals(span[index], item))
-                        return index;
+                    for (var index = 0; index < source.Length; index++)
+                    {
+                        if (EqualityComparer<TSource>.Default.Equals(span[index], item))
+                            return index;
+                    }
+                }
+                else
+                {
+                    var defaultComparer = EqualityComparer<TSource>.Default;
+                    for (var index = 0; index < source.Length; index++)
+                    {
+                        if (defaultComparer.Equals(span[index], item))
+                            return index;
+                    }
                 }
                 return -1;
             }

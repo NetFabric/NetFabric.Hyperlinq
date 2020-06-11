@@ -1,12 +1,14 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
     public static partial class ReadOnlyList
     {
-        
-        public static bool Contains<TList, TSource>(this TList source, TSource value, IEqualityComparer<TSource>? comparer = null)
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool Contains<TList, TSource>(this TList source, TSource value, IEqualityComparer<TSource>? comparer = default)
             where TList : notnull, IReadOnlyList<TSource>
             => ReadOnlyList.Contains<TList, TSource>(source, value, comparer, 0, source.Count);
 
@@ -14,217 +16,130 @@ namespace NetFabric.Hyperlinq
         static bool Contains<TList, TSource>(this TList source, TSource value, IEqualityComparer<TSource>? comparer, int skipCount, int takeCount)
             where TList : notnull, IReadOnlyList<TSource>
         {
-            if (takeCount != 0) 
+            if (takeCount == 0)
+                return false;
+
+            if (comparer is null && source is ICollection<TSource> collection)
+                return collection.Contains(value);
+
+            if (Utils.UseDefault(comparer))
+                return DefaultContains(source, value, skipCount, takeCount);
+
+            comparer ??= EqualityComparer<TSource>.Default;
+            return ComparerContains(source, value, comparer, skipCount, takeCount);
+
+            static bool DefaultContains(TList source, TSource value, int skipCount, int takeCount)
             {
-                if (comparer is null)
+                var end = skipCount + takeCount;
+                for (var index = skipCount; index < end; index++)
                 {
-                    var end = skipCount + takeCount;
-                    for (var index = skipCount; index < end; index++)
-                    {
-                        if (EqualityComparer<TSource>.Default.Equals(value, source[index]))
-                            return true;
-                    }
+                    if (EqualityComparer<TSource>.Default.Equals(source[index], value))
+                        return true;
                 }
-                else
-                {
-                    var end = skipCount + takeCount;
-                    for (var index = skipCount; index < end; index++)
-                    {
-                        if (comparer.Equals(value, source[index]))
-                            return true;
-                    }
-                }
+                return false;
             }
-            return false;
+
+            static bool ComparerContains(TList source, TSource value, IEqualityComparer<TSource> comparer, int skipCount, int takeCount)
+            {
+                var end = skipCount + takeCount;
+                for (var index = skipCount; index < end; index++)
+                {
+                    if (comparer.Equals(source[index], value))
+                        return true;
+                }
+                return false;
+            }
         }
 
-        
-        static bool Contains<TList, TSource>(this TList source, TSource value, IEqualityComparer<TSource>? comparer, Predicate<TSource> predicate, int skipCount, int takeCount)
+        static bool Contains<TList, TSource, TResult>(this TList source, TResult value, Selector<TSource, TResult> selector, int skipCount, int takeCount)
             where TList : notnull, IReadOnlyList<TSource>
         {
-            if (takeCount != 0) 
+            if (takeCount == 0)
+                return false;
+
+            return default(TResult) is object
+                ? ValueContains(source, value, selector, skipCount, takeCount)
+                : ReferenceContains(source, value, selector, skipCount, takeCount);
+
+            static bool ValueContains(TList source, TResult value, Selector<TSource, TResult> selector, int skipCount, int takeCount)
             {
-                if (comparer is null)
+                var end = skipCount + takeCount;
+                for (var index = skipCount; index < end; index++)
                 {
-                    var end = skipCount + takeCount;
-                    for (var index = skipCount; index < end; index++)
-                    {
-                        var item = source[index];
-                        if (predicate(item) && EqualityComparer<TSource>.Default.Equals(value, item))
-                            return true;
-                    }
+                    if (EqualityComparer<TResult>.Default.Equals(selector(source[index]), value))
+                        return true;
                 }
-                else
-                {
-                    var end = skipCount + takeCount;
-                    for (var index = skipCount; index < end; index++)
-                    {
-                        var item = source[index];
-                        if (predicate(item) && comparer.Equals(value, item))
-                            return true;
-                    }
-                }
+                return false;
             }
-            return false;
+
+            static bool ReferenceContains(TList source, TResult value, Selector<TSource, TResult> selector, int skipCount, int takeCount)
+            {
+                var defaultComparer = EqualityComparer<TResult>.Default;
+
+                var end = skipCount + takeCount;
+                for (var index = skipCount; index < end; index++)
+                {
+                    if (defaultComparer.Equals(selector(source[index]), value))
+                        return true;
+                }
+                return false;
+            }
         }
 
 
-        static bool Contains<TList, TSource>(this TList source, TSource value, IEqualityComparer<TSource>? comparer, PredicateAt<TSource> predicate, int skipCount, int takeCount)
+        static bool Contains<TList, TSource, TResult>(this TList source, TResult value, SelectorAt<TSource, TResult> selector, int skipCount, int takeCount)
             where TList : notnull, IReadOnlyList<TSource>
         {
-            if (takeCount != 0) 
+            if (takeCount == 0)
+                return false;
+
+            return default(TResult) is object
+                ? ValueContains(source, value, selector, skipCount, takeCount)
+                : ReferenceContains(source, value, selector, skipCount, takeCount);
+
+            static bool ValueContains(TList source, TResult value, SelectorAt<TSource, TResult> selector, int skipCount, int takeCount)
             {
                 if (skipCount == 0)
                 {
-                    if (comparer is null)
+                    for (var index = 0; index < takeCount; index++)
                     {
-                        for (var index = 0; index < takeCount; index++)
-                        {
-                            var item = source[index];
-                            if (predicate(item, index) && EqualityComparer<TSource>.Default.Equals(value, item))
-                                return true;
-                        }
-                    }
-                    else
-                    {
-                        for (var index = 0; index < takeCount; index++)
-                        {
-                            var item = source[index];
-                            if (predicate(item, index) && comparer.Equals(value, item))
-                                return true;
-                        }
-                    }
-                }
-                else
-                {
-                    if (comparer is null)
-                    {
-                        for (var index = 0; index < takeCount; index++)
-                        {
-                            var item = source[index + skipCount];
-                            if (predicate(item, index) && EqualityComparer<TSource>.Default.Equals(value, item))
-                                return true;
-                        }
-                    }
-                    else
-                    {
-                        for (var index = 0; index < takeCount; index++)
-                        {
-                            var item = source[index + skipCount];
-                            if (predicate(item, index) && comparer.Equals(value, item))
-                                return true;
-                        }
-                    }
-                }
-            }
-            return false;
-        }
-
-
-        static bool Contains<TList, TSource, TResult>(this TList source, TResult value, IEqualityComparer<TResult>? comparer, Selector<TSource, TResult> selector, int skipCount, int takeCount)
-            where TList : notnull, IReadOnlyList<TSource>
-        {
-            if (takeCount != 0) 
-            {
-                if (comparer is null)
-                {
-                    var end = skipCount + takeCount;
-                    for (var index = skipCount; index < end; index++)
-                    {
-                        if (EqualityComparer<TResult>.Default.Equals(value, selector(source[index])))
+                        if (EqualityComparer<TResult>.Default.Equals(selector(source[index], index), value))
                             return true;
                     }
                 }
                 else
                 {
-                    var end = skipCount + takeCount;
-                    for (var index = skipCount; index < end; index++)
+                    for (var index = 0; index < takeCount; index++)
                     {
-                        if (comparer.Equals(value, selector(source[index])))
+                        if (EqualityComparer<TResult>.Default.Equals(selector(source[index + skipCount], index), value))
                             return true;
                     }
                 }
+                return false;
             }
-            return false;
-        }
 
-
-        static bool Contains<TList, TSource, TResult>(this TList source, TResult value, IEqualityComparer<TResult>? comparer, SelectorAt<TSource, TResult> selector, int skipCount, int takeCount)
-            where TList : notnull, IReadOnlyList<TSource>
-        {
-            if (takeCount != 0) 
+            static bool ReferenceContains(TList source, TResult value, SelectorAt<TSource, TResult> selector, int skipCount, int takeCount)
             {
+                var defaultComparer = EqualityComparer<TResult>.Default;
+
                 if (skipCount == 0)
                 {
-                    if (comparer is null)
+                    for (var index = 0; index < takeCount; index++)
                     {
-                        for (var index = 0; index < takeCount; index++)
-                        {
-                            if (EqualityComparer<TResult>.Default.Equals(value, selector(source[index], index)))
-                                return true;
-                        }
-                    }
-                    else
-                    {
-                        for (var index = 0; index < takeCount; index++)
-                        {
-                            if (comparer.Equals(value, selector(source[index], index)))
-                                return true;
-                        }
-                    }
-                }
-                else
-                {
-
-                    if (comparer is null)
-                    {
-                        for (var index = 0; index < takeCount; index++)
-                        {
-                            if (EqualityComparer<TResult>.Default.Equals(value, selector(source[index + skipCount], index)))
-                                return true;
-                        }
-                    }
-                    else
-                    {
-                        for (var index = 0; index < takeCount; index++)
-                        {
-                            if (comparer.Equals(value, selector(source[index + skipCount], index)))
-                                return true;
-                        }
-                    }
-                }
-            }
-            return false;
-        }
-
-
-        static bool Contains<TList, TSource, TResult>(this TList source, TResult value, IEqualityComparer<TResult>? comparer, Predicate<TSource> predicate, Selector<TSource, TResult> selector, int skipCount, int takeCount)
-            where TList : notnull, IReadOnlyList<TSource>
-        {
-            if (takeCount != 0) 
-            {
-                if (comparer is null)
-                {
-                    var end = skipCount + takeCount;
-                    for (var index = skipCount; index < end; index++)
-                    {
-                        var item = source[index];
-                        if (predicate(item) && EqualityComparer<TResult>.Default.Equals(value, selector(item)))
+                        if (defaultComparer.Equals(selector(source[index], index), value))
                             return true;
                     }
                 }
                 else
                 {
-                    var end = skipCount + takeCount;
-                    for (var index = skipCount; index < end; index++)
+                    for (var index = 0; index < takeCount; index++)
                     {
-                        var item = source[index];
-                        if (predicate(item) && comparer.Equals(value, selector(item)))
+                        if (defaultComparer.Equals(selector(source[index + skipCount], index), value))
                             return true;
                     }
                 }
+                return false;
             }
-            return false;
         }
     }
 }

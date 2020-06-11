@@ -227,10 +227,6 @@ namespace NetFabric.Hyperlinq
             public ValueTask<bool> AnyAsync(CancellationToken cancellationToken = default)
                 => AsyncValueEnumerable.AnyAsync<TEnumerable, TEnumerator, TSource>(source, predicate, cancellationToken);
 
-            public ValueTask<bool> ContainsAsync(TResult value, IEqualityComparer<TResult>? comparer = null, CancellationToken cancellationToken = default)
-                => AsyncValueEnumerable.ContainsAsync<TEnumerable, TEnumerator, TSource, TResult>(source, value, comparer, predicate, selector, cancellationToken);
-
-
             public ValueTask<Option<TResult>> ElementAtAsync(int index, CancellationToken cancellationToken = default)
                 => AsyncValueEnumerable.ElementAtAsync<TEnumerable, TEnumerator, TSource, TResult>(source, index, predicate, selector, cancellationToken);
 
@@ -249,7 +245,7 @@ namespace NetFabric.Hyperlinq
                 => AsyncValueEnumerable.ToListAsync<TEnumerable, TEnumerator, TSource, TResult>(source, predicate, selector, cancellationToken);
 
             public ValueTask<Dictionary<TKey, TResult>> ToDictionaryAsync<TKey>(AsyncSelector<TResult, TKey> keySelector, CancellationToken cancellationToken = default)
-                => ToDictionaryAsync<TKey>(keySelector, EqualityComparer<TKey>.Default, cancellationToken);
+                => ToDictionaryAsync<TKey>(keySelector, null, cancellationToken);
             public async ValueTask<Dictionary<TKey, TResult>> ToDictionaryAsync<TKey>(AsyncSelector<TResult, TKey> keySelector, IEqualityComparer<TKey>? comparer, CancellationToken cancellationToken = default)
             {
                 var dictionary = new Dictionary<TKey, TResult>(0, comparer);
@@ -273,7 +269,7 @@ namespace NetFabric.Hyperlinq
             }
 
             public ValueTask<Dictionary<TKey, TElement>> ToDictionaryAsync<TKey, TElement>(AsyncSelector<TResult, TKey> keySelector, AsyncSelector<TResult, TElement> elementSelector, CancellationToken cancellationToken = default)
-                => ToDictionaryAsync<TKey, TElement>(keySelector, elementSelector, EqualityComparer<TKey>.Default);
+                => ToDictionaryAsync<TKey, TElement>(keySelector, elementSelector, null);
             public async ValueTask<Dictionary<TKey, TElement>> ToDictionaryAsync<TKey, TElement>(AsyncSelector<TResult, TKey> keySelector, AsyncSelector<TResult, TElement> elementSelector, IEqualityComparer<TKey>? comparer, CancellationToken cancellationToken = default)
             {
                 var dictionary = new Dictionary<TKey, TElement>(0, comparer);

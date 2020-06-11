@@ -46,6 +46,7 @@ namespace NetFabric.Hyperlinq
 
             public readonly int Count { get; } 
 
+            [MaybeNull]
             public readonly TResult this[int index]
             {
                 get
@@ -56,19 +57,20 @@ namespace NetFabric.Hyperlinq
                     return selector(source[index + skipCount]);
                 }
             }
+            TResult IReadOnlyList<TResult>.this[int index]
+                => this[index];
+            TResult IList<TResult>.this[int index]
+            {
+                get => this[index];
+                set => Throw.NotSupportedException();
+            }
 
-            
+
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly Enumerator GetEnumerator() => new Enumerator(in this);
             readonly DisposableEnumerator IValueEnumerable<TResult, SelectEnumerable<TList, TSource, TResult>.DisposableEnumerator>.GetEnumerator() => new DisposableEnumerator(in this);
             readonly IEnumerator<TResult> IEnumerable<TResult>.GetEnumerator() => new DisposableEnumerator(in this);
             readonly IEnumerator IEnumerable.GetEnumerator() => new DisposableEnumerator(in this);
-
-            TResult IList<TResult>.this[int index]
-            {
-                get => this[index];
-                set => throw new NotSupportedException();
-            }
 
             bool ICollection<TResult>.IsReadOnly  
                 => true;
@@ -103,33 +105,38 @@ namespace NetFabric.Hyperlinq
                 }
             }
             void ICollection<TResult>.Add(TResult item) 
-                => throw new NotSupportedException();
+                => Throw.NotSupportedException();
             void ICollection<TResult>.Clear() 
-                => throw new NotSupportedException();
-            bool ICollection<TResult>.Contains(TResult item) 
-            {
-                for (var index = skipCount; index < Count; index++)
-                {
-                    if (EqualityComparer<TResult>.Default.Equals(selector(source[index]), item))
-                        return true;
-                }
-                return false;
-            }
+                => Throw.NotSupportedException();
+            bool ICollection<TResult>.Contains(TResult item)
+                => ReadOnlyList.Contains<TList, TSource, TResult>(source, item, selector, skipCount, Count);
             bool ICollection<TResult>.Remove(TResult item) 
-                => throw new NotSupportedException();
+                => Throw.NotSupportedException<bool>();
             int IList<TResult>.IndexOf(TResult item)
             {
-                for (var index = skipCount; index < Count; index++)
+                if (default(TResult) is object)
                 {
-                    if (EqualityComparer<TResult>.Default.Equals(selector(source[index]), item))
-                        return index - skipCount;
+                    for (var index = skipCount; index < Count; index++)
+                    {
+                        if (EqualityComparer<TResult>.Default.Equals(selector(source[index]), item))
+                            return index - skipCount;
+                    }
+                }
+                else
+                {
+                    var defaultComparer = EqualityComparer<TResult>.Default;
+                    for (var index = skipCount; index < Count; index++)
+                    {
+                        if (defaultComparer.Equals(selector(source[index]), item))
+                            return index - skipCount;
+                    }
                 }
                 return -1;
             }
             void IList<TResult>.Insert(int index, TResult item)
-                => throw new NotSupportedException();
+                => Throw.NotSupportedException();
             void IList<TResult>.RemoveAt(int index)
-                => throw new NotSupportedException();
+                => Throw.NotSupportedException();
 
             public struct Enumerator
             {
@@ -171,9 +178,12 @@ namespace NetFabric.Hyperlinq
                     index = enumerable.skipCount - 1;
                 }
 
+                [MaybeNull]
                 public readonly TResult Current
                     => selector(source[index]);
-                readonly object? IEnumerator.Current 
+                readonly TResult IEnumerator<TResult>.Current 
+                    => selector(source[index]);
+                readonly object? IEnumerator.Current
                     => selector(source[index]);
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -182,7 +192,7 @@ namespace NetFabric.Hyperlinq
 
                 [ExcludeFromCodeCoverage]
                 public readonly void Reset() 
-                    => throw new NotSupportedException();
+                    => Throw.NotSupportedException();
 
                 public readonly void Dispose() { }
             }
@@ -199,10 +209,6 @@ namespace NetFabric.Hyperlinq
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Any()
                 => Count != 0;
-
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public bool Contains(TResult value, IEqualityComparer<TResult>? comparer = null)
-                => ReadOnlyList.Contains<TList, TSource, TResult>(source, value, comparer, selector, skipCount, Count);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public ReadOnlyList.SelectEnumerable<TList, TSource, TSelectorResult> Select<TSelectorResult>(Selector<TResult, TSelectorResult> selector)
