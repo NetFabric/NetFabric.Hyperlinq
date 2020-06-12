@@ -57,6 +57,7 @@ namespace NetFabric.Hyperlinq
                     index = -1;
                 }
 
+                [MaybeNull]
                 public TResult Current 
                     => selector(source[index]);
 
@@ -87,8 +88,11 @@ namespace NetFabric.Hyperlinq
                     index = -1;
                 }
 
+                [MaybeNull]
                 public readonly TResult Current 
                     => selector(source.Span[index]);
+                readonly TResult IEnumerator<TResult>.Current 
+                    => selector(source.Span[index])!;
                 readonly object? IEnumerator.Current 
                     => selector(source.Span[index]);
 
@@ -148,7 +152,7 @@ namespace NetFabric.Hyperlinq
                     if (thisEnded)
                         return true;
 
-                    if (!comparer.Equals(enumerator.Current, otherEnumerator.Current))
+                    if (!comparer.Equals(enumerator.Current!, otherEnumerator.Current))
                         return false;
                 }
             }

@@ -7,12 +7,12 @@ namespace NetFabric.Hyperlinq
     public static partial class ValueEnumerableExtensions
     {
         
-        public static bool Contains<TEnumerable, TEnumerator, TSource>(this TEnumerable source, [AllowNull] TSource value, IEqualityComparer<TSource>? comparer = null)
+        public static bool Contains<TEnumerable, TEnumerator, TSource>(this TEnumerable source, [AllowNull] TSource value, IEqualityComparer<TSource>? comparer = default)
             where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
             if (comparer is null && source is ICollection<TSource> collection)
-                return collection.Contains(value);
+                return collection.Contains(value!);
 
             if (Utils.UseDefault(comparer))
                 return DefaultContains(source, value);
@@ -25,7 +25,7 @@ namespace NetFabric.Hyperlinq
                 using var enumerator = source.GetEnumerator();
                 while (enumerator.MoveNext())
                 {
-                    if (EqualityComparer<TSource>.Default.Equals(enumerator.Current, value))
+                    if (EqualityComparer<TSource>.Default.Equals(enumerator.Current, value!))
                         return true;
                 }
                 return false;
@@ -36,7 +36,7 @@ namespace NetFabric.Hyperlinq
                 using var enumerator = source.GetEnumerator();
                 while (enumerator.MoveNext())
                 {
-                    if (comparer.Equals(enumerator.Current, value))
+                    if (comparer.Equals(enumerator.Current, value!))
                         return true;
                 }
                 return false;
@@ -57,7 +57,7 @@ namespace NetFabric.Hyperlinq
                 using var enumerator = source.GetEnumerator();
                 while (enumerator.MoveNext())
                 {
-                    if (EqualityComparer<TResult>.Default.Equals(selector(enumerator.Current), value))
+                    if (EqualityComparer<TResult>.Default.Equals(selector(enumerator.Current)!, value!))
                         return true;
                 }
                 return false;
@@ -70,7 +70,7 @@ namespace NetFabric.Hyperlinq
                 using var enumerator = source.GetEnumerator();
                 while (enumerator.MoveNext())
                 {
-                    if (defaultComparer.Equals(selector(enumerator.Current), value))
+                    if (defaultComparer.Equals(selector(enumerator.Current)!, value!))
                         return true;
                 }
                 return false;
@@ -93,7 +93,7 @@ namespace NetFabric.Hyperlinq
                 {
                     for (var index = 0; enumerator.MoveNext(); index++)
                     {
-                        if (EqualityComparer<TResult>.Default.Equals(selector(enumerator.Current, index), value))
+                        if (EqualityComparer<TResult>.Default.Equals(selector(enumerator.Current, index)!, value!))
                             return true;
                     }
                 }
@@ -109,7 +109,7 @@ namespace NetFabric.Hyperlinq
                 {
                     for (var index = 0; enumerator.MoveNext(); index++)
                     {
-                        if (defaultComparer.Equals(selector(enumerator.Current, index), value))
+                        if (defaultComparer.Equals(selector(enumerator.Current, index)!, value!))
                             return true;
                     }
                 }

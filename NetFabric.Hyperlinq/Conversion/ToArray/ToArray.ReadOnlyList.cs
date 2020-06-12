@@ -68,12 +68,12 @@ namespace NetFabric.Hyperlinq
             if (skipCount == 0)
             {
                 for (var index = 0; index < takeCount; index++)
-                    array[index] = selector(source[index]);
+                    array[index] = selector(source[index])!;
             } 
             else
             {
                 for (var index = 0; index < takeCount; index++)
-                    array[index] = selector(source[index + skipCount]);
+                    array[index] = selector(source[index + skipCount])!;
             }
             return array;
         }
@@ -86,12 +86,12 @@ namespace NetFabric.Hyperlinq
             if (skipCount == 0)
             {
                 for (var index = 0; index < takeCount; index++)
-                    array[index] = selector(source[index], index);
+                    array[index] = selector(source[index], index)!;
             } 
             else
             {
                 for (var index = 0; index < takeCount; index++)
-                    array[index] = selector(source[index + skipCount], index);
+                    array[index] = selector(source[index + skipCount], index)!;
             }
             return array;
         }
@@ -192,7 +192,7 @@ namespace System.Collections.Generic
                     if ((uint)index >= (uint)destination.Length)
                         AddWithBufferAllocation(selector(item), ref destination, ref index);
                     else
-                        destination[index] = selector(item);
+                        destination[index] = selector(item)!;
 
                     index++;
                 }

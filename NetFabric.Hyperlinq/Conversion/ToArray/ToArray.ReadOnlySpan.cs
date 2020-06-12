@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Diagnostics.Contracts;
 using System.Runtime.CompilerServices;
 using NetFabric.Hyperlinq;
 
@@ -30,7 +29,7 @@ namespace NetFabric.Hyperlinq
         {
             var array = new TResult[source.Length];
             for (var index = 0; index < source.Length; index++)
-                array[index] = selector(source[index]);
+                array[index] = selector(source[index])!;
             return array;
         }
 
@@ -39,7 +38,7 @@ namespace NetFabric.Hyperlinq
         {
             var array = new TResult[source.Length];
             for (var index = 0; index < source.Length; index++)
-                array[index] = selector(source[index], index);
+                array[index] = selector(source[index], index)!;
             return array;
         }
 
@@ -127,7 +126,7 @@ namespace System.Collections.Generic
                     if ((uint)index >= (uint)destination.Length)
                         AddWithBufferAllocation(selector(item), ref destination, ref index);
                     else
-                        destination[index] = selector(item);
+                        destination[index] = selector(item)!;
 
                     index++;
                 }

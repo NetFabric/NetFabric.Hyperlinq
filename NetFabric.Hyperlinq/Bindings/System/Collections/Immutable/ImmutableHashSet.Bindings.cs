@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
-using System.Diagnostics.Contracts;
 using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
@@ -41,10 +40,10 @@ namespace NetFabric.Hyperlinq
             => ValueReadOnlyCollectionExtensions.Any<ValueWrapper<TSource>, ImmutableHashSet<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
 
         
-        public static bool Contains<TSource>(this ImmutableHashSet<TSource> source, TSource value)
+        public static bool Contains<TSource>(this ImmutableHashSet<TSource> source, [AllowNull] TSource value)
             => source.Contains(value);
         
-        public static bool Contains<TSource>(this ImmutableHashSet<TSource> source, TSource value, IEqualityComparer<TSource>? comparer)
+        public static bool Contains<TSource>(this ImmutableHashSet<TSource> source, [AllowNull] TSource value, IEqualityComparer<TSource>? comparer)
             => ValueReadOnlyCollectionExtensions.Contains<ValueWrapper<TSource>, ImmutableHashSet<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), value, comparer);
 
         

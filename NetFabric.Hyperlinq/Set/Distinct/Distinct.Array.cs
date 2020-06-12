@@ -11,7 +11,7 @@ namespace NetFabric.Hyperlinq
 #if SPAN_SUPPORTED
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static MemoryDistinctEnumerable<TSource> Distinct<TSource>(this TSource[] source, IEqualityComparer<TSource>? comparer = null)
+        public static MemoryDistinctEnumerable<TSource> Distinct<TSource>(this TSource[] source, IEqualityComparer<TSource>? comparer = default)
             => Distinct((ReadOnlyMemory<TSource>)source.AsMemory(), comparer);
 
 #else
@@ -19,7 +19,7 @@ namespace NetFabric.Hyperlinq
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static DistinctEnumerable<TSource> Distinct<TSource>(
             this TSource[] source, 
-            IEqualityComparer<TSource>? comparer = null)
+            IEqualityComparer<TSource>? comparer = default)
             => new DistinctEnumerable<TSource>(source, comparer, 0, source.Length);
 
         
@@ -66,7 +66,7 @@ namespace NetFabric.Hyperlinq
                     Current = default!;
                 }
 
-                [MaybeNull]
+                [MaybeNull, AllowNull]
                 public TSource Current { get; private set; }
                 readonly TSource IEnumerator<TSource>.Current 
                     => Current;
@@ -93,7 +93,7 @@ namespace NetFabric.Hyperlinq
                     => Throw.NotSupportedException();
 
                 public void Dispose() 
-                    => set = null;
+                    => set = default;
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -135,7 +135,7 @@ namespace NetFabric.Hyperlinq
                     ? new List<TSource>()
                     : GetSet().ToList();
 
-            public readonly bool SequenceEqual(IEnumerable<TSource> other, IEqualityComparer<TSource>? comparer = null)
+            public readonly bool SequenceEqual(IEnumerable<TSource> other, IEqualityComparer<TSource>? comparer = default)
             {
                 comparer ??= EqualityComparer<TSource>.Default;
 

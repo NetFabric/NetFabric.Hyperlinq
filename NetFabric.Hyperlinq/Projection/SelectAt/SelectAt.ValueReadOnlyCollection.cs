@@ -57,7 +57,7 @@ namespace NetFabric.Hyperlinq
                 {
                     using var enumerator = source.GetEnumerator();
                     for (var index = 0; enumerator.MoveNext(); index++)
-                        array[index + arrayIndex] = selector(enumerator.Current, index);
+                        array[index + arrayIndex] = selector(enumerator.Current, index)!;
                 }
             }
 
@@ -89,7 +89,7 @@ namespace NetFabric.Hyperlinq
                 public readonly TResult Current
                     => selector(enumerator.Current, index);
                 readonly TResult IEnumerator<TResult>.Current 
-                    => selector(enumerator.Current, index);
+                    => selector(enumerator.Current, index)!;
                 readonly object? IEnumerator.Current
                     => selector(enumerator.Current, index);
 
@@ -144,11 +144,11 @@ namespace NetFabric.Hyperlinq
             public List<TResult> ToList()
                 => ValueReadOnlyCollectionExtensions.ToList<TEnumerable, TEnumerator, TSource, TResult>(source, selector);
 
-            public Dictionary<TKey, TResult> ToDictionary<TKey>(Selector<TResult, TKey> keySelector, IEqualityComparer<TKey>? comparer = null)
+            public Dictionary<TKey, TResult> ToDictionary<TKey>(Selector<TResult, TKey> keySelector, IEqualityComparer<TKey>? comparer = default)
                 => ToDictionary<TKey>(keySelector, comparer);
 
-            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Selector<TResult, TKey> keySelector, Selector<TResult, TElement> elementSelector, IEqualityComparer<TKey>? comparer = null)
-                => ToDictionary<TKey, TElement>(keySelector, elementSelector, null);
+            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Selector<TResult, TKey> keySelector, Selector<TResult, TElement> elementSelector, IEqualityComparer<TKey>? comparer = default)
+                => ToDictionary<TKey, TElement>(keySelector, elementSelector, comparer);
         }
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

@@ -58,7 +58,7 @@ namespace NetFabric.Hyperlinq
                 {
                     using var enumerator = source.GetEnumerator();
                     for (var index = arrayIndex; enumerator.MoveNext(); index++)
-                        array[index] = selector(enumerator.Current);
+                        array[index] = selector(enumerator.Current)!;
                 }
             }
 
@@ -88,7 +88,7 @@ namespace NetFabric.Hyperlinq
                 public readonly TResult Current
                     => selector(enumerator.Current);
                 readonly TResult IEnumerator<TResult>.Current 
-                    => selector(enumerator.Current);
+                    => selector(enumerator.Current)!;
                 readonly object? IEnumerator.Current
                     => selector(enumerator.Current);
 
@@ -141,10 +141,10 @@ namespace NetFabric.Hyperlinq
             public List<TResult> ToList()
                 => ValueReadOnlyCollectionExtensions.ToList<TEnumerable, TEnumerator, TSource, TResult>(source, selector);
 
-            public Dictionary<TKey, TResult> ToDictionary<TKey>(Selector<TResult, TKey> keySelector, IEqualityComparer<TKey>? comparer = null)
+            public Dictionary<TKey, TResult> ToDictionary<TKey>(Selector<TResult, TKey> keySelector, IEqualityComparer<TKey>? comparer = default)
                 => ToDictionary<TKey>(keySelector, comparer);
 
-            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Selector<TResult, TKey> keySelector, Selector<TResult, TElement> elementSelector, IEqualityComparer<TKey>? comparer = null)
+            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Selector<TResult, TKey> keySelector, Selector<TResult, TElement> elementSelector, IEqualityComparer<TKey>? comparer = default)
                 => ToDictionary<TKey, TElement>(keySelector, elementSelector, comparer);
         }
 

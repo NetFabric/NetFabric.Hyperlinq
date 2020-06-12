@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Diagnostics.Contracts;
 using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
@@ -42,7 +40,8 @@ namespace NetFabric.Hyperlinq
                     index = -1;
                 }
 
-                public ref readonly TSource Current => ref source[index];
+                public ref readonly TSource Current 
+                    => ref source[index];
 
                 public bool MoveNext()
                 {

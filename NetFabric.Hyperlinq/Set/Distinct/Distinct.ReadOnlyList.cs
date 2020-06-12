@@ -12,7 +12,7 @@ namespace NetFabric.Hyperlinq
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static DistinctEnumerable<TList, TSource> Distinct<TList, TSource>(
             this TList source, 
-            IEqualityComparer<TSource>? comparer = null)
+            IEqualityComparer<TSource>? comparer = default)
             where TList : notnull, IReadOnlyList<TSource>
             => new DistinctEnumerable<TList, TSource>(source, comparer, 0, source.Count);
 
@@ -63,11 +63,12 @@ namespace NetFabric.Hyperlinq
                 }
 
                 [MaybeNull]
-                public readonly TSource Current => source[index];
+                public readonly TSource Current 
+                    => source[index];
                 readonly TSource IEnumerator<TSource>.Current
-                    => Current;
+                    => source[index];
                 readonly object? IEnumerator.Current 
-                    => Current;
+                    => source[index];
 
                 public bool MoveNext()
                 {
@@ -86,7 +87,7 @@ namespace NetFabric.Hyperlinq
                     => Throw.NotSupportedException();
 
                 public void Dispose()
-                    => set = null;
+                    => set = default;
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -129,7 +130,7 @@ namespace NetFabric.Hyperlinq
                     ? new List<TSource>()
                     : GetSet().ToList();
 
-            public readonly bool SequenceEqual(IEnumerable<TSource> other, IEqualityComparer<TSource>? comparer = null)
+            public readonly bool SequenceEqual(IEnumerable<TSource> other, IEqualityComparer<TSource>? comparer = default)
             {
                 comparer ??= EqualityComparer<TSource>.Default;
 
@@ -146,7 +147,7 @@ namespace NetFabric.Hyperlinq
                     if (thisEnded)
                         return true;
 
-                    if (!comparer.Equals(enumerator.Current, otherEnumerator.Current))
+                    if (!comparer.Equals(enumerator.Current!, otherEnumerator.Current))
                         return false;
                 }
             }

@@ -36,7 +36,7 @@ namespace NetFabric.Hyperlinq
 
         public bool IsSome { get; }
 
-        [MaybeNull]
+        [MaybeNull, AllowNull]
         public T Value { get; }
 
         public readonly void Deconstruct(out bool hasValue, out T value)
@@ -54,7 +54,7 @@ namespace NetFabric.Hyperlinq
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public readonly TOut Match<TOut>(Func<T, TOut> some, Func<TOut> none) 
             => IsSome
-                ? some(Value) 
+                ? some(Value!) 
                 : none();
 
         
@@ -67,7 +67,7 @@ namespace NetFabric.Hyperlinq
         public readonly void Match(Action<T> some, Action none)
         {
             if (IsSome)
-                some(Value);
+                some(Value!);
             else
                 none();
         }
@@ -75,14 +75,14 @@ namespace NetFabric.Hyperlinq
         
         public readonly ValueTask MatchAsync(Func<T, CancellationToken, ValueTask> some, Func<CancellationToken, ValueTask> none, CancellationToken cancellationToken = default) 
             => IsSome
-                ? some(Value, cancellationToken) 
+                ? some(Value!, cancellationToken) 
                 : none(cancellationToken);
 
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public readonly Option<TOut> Bind<TOut>(Func<T, Option<TOut>> bind)
             => IsSome
-                ? bind(Value)
+                ? bind(Value!)
                 : default;
 
         
@@ -98,14 +98,14 @@ namespace NetFabric.Hyperlinq
             => IsSome;
 
         
-        public readonly bool Contains(T value, IEqualityComparer<T>? comparer = null) 
+        public readonly bool Contains(T value, IEqualityComparer<T>? comparer = default) 
             => IsSome && (comparer is null 
-                ? EqualityComparer<T>.Default.Equals(Value, value) 
-                : comparer.Equals(Value, value));
+                ? EqualityComparer<T>.Default.Equals(Value!, value) 
+                : comparer.Equals(Value!, value));
 
         
         public readonly Option<T> Where(Predicate<T> predicate) 
-            => IsSome && predicate(Value) 
+            => IsSome && predicate(Value!) 
                 ? this 
                 : default;
 
@@ -156,13 +156,13 @@ namespace NetFabric.Hyperlinq
         
         public readonly T[] ToArray()
             => IsSome
-                ? new T[] { Value } 
+                ? new T[] { Value! } 
                 : Array.Empty<T>();
 
         
         public readonly List<T> ToList()
             => IsSome
-                ? new List<T>(1) { Value } 
+                ? new List<T>(1) { Value! } 
                 : new List<T>(0); 
 
 
@@ -205,10 +205,10 @@ namespace NetFabric.Hyperlinq
                     Current = default!;
                 }
 
-                [MaybeNull]
+                [MaybeNull, AllowNull]
                 public TResult Current { get; private set; }
                 readonly TResult IEnumerator<TResult>.Current 
-                    => Current;
+                    => Current!;
                 readonly object? IEnumerator.Current
                     => Current;
 

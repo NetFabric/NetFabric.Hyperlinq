@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Diagnostics.Contracts;
 using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
@@ -39,11 +38,11 @@ namespace NetFabric.Hyperlinq
             => ValueReadOnlyCollectionExtensions.Any<ValueWrapper<TSource>, Stack<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
 
         
-        public static bool Contains<TSource>(this Stack<TSource> source, TSource value)
-            => source.Contains(value);
+        public static bool Contains<TSource>(this Stack<TSource> source, [AllowNull] TSource value)
+            => source.Contains(value!);
 
         
-        public static bool Contains<TSource>(this Stack<TSource> source, TSource value, IEqualityComparer<TSource>? comparer)
+        public static bool Contains<TSource>(this Stack<TSource> source, [AllowNull] TSource value, IEqualityComparer<TSource>? comparer)
             => ValueReadOnlyCollectionExtensions.Contains<ValueWrapper<TSource>, Stack<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), value, comparer);
 
         
@@ -89,7 +88,7 @@ namespace NetFabric.Hyperlinq
             => ValueReadOnlyCollectionExtensions.Single<ValueWrapper<TSource>, Stack<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source));
 
         
-        public static ValueEnumerableExtensions.DistinctEnumerable<ValueWrapper<TSource>, Stack<TSource>.Enumerator, TSource> Distinct<TSource>(this Stack<TSource> source, IEqualityComparer<TSource>? comparer = null)
+        public static ValueEnumerableExtensions.DistinctEnumerable<ValueWrapper<TSource>, Stack<TSource>.Enumerator, TSource> Distinct<TSource>(this Stack<TSource> source, IEqualityComparer<TSource>? comparer = default)
             => ValueEnumerableExtensions.Distinct<ValueWrapper<TSource>, Stack<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), comparer);
 
         

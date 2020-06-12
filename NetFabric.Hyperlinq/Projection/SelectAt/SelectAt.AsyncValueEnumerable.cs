@@ -80,10 +80,10 @@ namespace NetFabric.Hyperlinq
                     u__3 = default;
                 }
 
-                [MaybeNull]
+                [MaybeNull, AllowNull]
                 public TResult Current { get; private set; }
                 TResult IAsyncEnumerator<TResult>.Current
-                    => Current;
+                    => Current!;
 
                 //public async ValueTask<bool> MoveNextAsync()
                 //{

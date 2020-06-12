@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 
 namespace NetFabric.Hyperlinq
 {
@@ -48,7 +47,7 @@ namespace NetFabric.Hyperlinq
         {
             var list = new List<TResult>(source.Length);
             for (var index = 0; index < source.Length; index++)
-                list.Add(selector(source[index]));
+                list.Add(selector(source[index])!);
             return list;
         }
 
@@ -57,7 +56,7 @@ namespace NetFabric.Hyperlinq
         {
             var list = new List<TResult>(source.Length);
             for (var index = 0; index < source.Length; index++)
-                list.Add(selector(source[index], index));
+                list.Add(selector(source[index], index)!);
             return list;
         }
 
@@ -69,7 +68,7 @@ namespace NetFabric.Hyperlinq
             {
                 var item = source[index];
                 if (predicate(item))
-                    list.Add(selector(item));
+                    list.Add(selector(item)!);
             }
             return list;
         }

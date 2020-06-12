@@ -13,7 +13,7 @@ namespace NetFabric.Hyperlinq
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static DistinctEnumerable<TEnumerable, TEnumerator, TSource> Distinct<TEnumerable, TEnumerator, TSource>(
             this TEnumerable source, 
-            IEqualityComparer<TSource>? comparer = null)
+            IEqualityComparer<TSource>? comparer = default)
             where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
             => new DistinctEnumerable<TEnumerable, TEnumerator, TSource>(source, comparer);
@@ -52,7 +52,7 @@ namespace NetFabric.Hyperlinq
                     enumerator = enumerable.source.GetEnumerator();
                     comparer = enumerable.comparer;
                     state = EnumeratorState.Uninitialized;
-                    set = null;
+                    set = default;
                 }
 
                 [MaybeNull]
@@ -104,7 +104,7 @@ namespace NetFabric.Hyperlinq
                 public void Dispose()
                 {
                     enumerator.Dispose();
-                    set = null;
+                    set = default;
                 }
             }
 

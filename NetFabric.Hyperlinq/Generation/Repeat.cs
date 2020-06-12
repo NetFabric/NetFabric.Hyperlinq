@@ -31,6 +31,7 @@ namespace NetFabric.Hyperlinq
 
             public readonly int Count => count;
 
+            [MaybeNull]
             public readonly TSource this[int index]
             {
                 get
@@ -40,19 +41,19 @@ namespace NetFabric.Hyperlinq
                     return value;
                 }
             }
+            TSource IReadOnlyList<TSource>.this[int index]
+                => this[index]!;
+            TSource IList<TSource>.this[int index]
+            {
+                get => this[index]!;
+                set => Throw.NotSupportedException();
+            }
 
-            
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly Enumerator GetEnumerator() => new Enumerator(in this);
             readonly DisposableEnumerator IValueEnumerable<TSource, DisposableEnumerator>.GetEnumerator() => new DisposableEnumerator(in this);
             readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new DisposableEnumerator(in this);
             readonly IEnumerator IEnumerable.GetEnumerator() => new DisposableEnumerator(in this);
-
-            TSource IList<TSource>.this[int index]
-            {
-                get => this[index];
-                set => Throw.NotSupportedException();
-            }
 
             bool ICollection<TSource>.IsReadOnly  
                 => true;
@@ -80,18 +81,16 @@ namespace NetFabric.Hyperlinq
 
             public struct Enumerator
             {
-                [AllowNull, MaybeNull] readonly TSource value;
                 int counter;
 
                 internal Enumerator(in RepeatEnumerable<TSource> enumerable)
                 {
-                    value = enumerable.value;
+                    Current = enumerable.value;
                     counter = enumerable.count;
                 }
 
                 [MaybeNull]
-                public readonly TSource Current
-                    => value;
+                public readonly TSource Current { get; }
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public bool MoveNext() 
@@ -101,21 +100,20 @@ namespace NetFabric.Hyperlinq
             public struct DisposableEnumerator
                 : IEnumerator<TSource>
             {
-                [AllowNull, MaybeNull] readonly TSource value;
                 int counter;
 
                 internal DisposableEnumerator(in RepeatEnumerable<TSource> enumerable)
                 {
-                    value = enumerable.value;
+                    Current = enumerable.value;
                     counter = enumerable.count;
                 }
 
-                public readonly TSource Current
-                    => value!;
+                [MaybeNull]
+                public readonly TSource Current { get; }
                 readonly TSource IEnumerator<TSource>.Current 
-                    => value;
+                    => Current!;
                 readonly object? IEnumerator.Current 
-                    => value;
+                    => Current;
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public bool MoveNext() => counter-- > 0;
@@ -153,7 +151,7 @@ namespace NetFabric.Hyperlinq
                 => count != 0 && EqualityComparer<TSource>.Default.Equals(this.value, value);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public bool Contains(TSource value, IEqualityComparer<TSource>? comparer = null)
+            public bool Contains(TSource value, IEqualityComparer<TSource>? comparer = default)
                 => comparer is null
                     ? count != 0 && EqualityComparer<TSource>.Default.Equals(this.value, value)
                     : count != 0 && comparer.Equals(this.value, value);
@@ -181,10 +179,10 @@ namespace NetFabric.Hyperlinq
             public List<TSource> ToList()
                 => new List<TSource>(new ToListCollection(this));
 
-            public Dictionary<TKey, TSource> ToDictionary<TKey>(Selector<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer = null)
+            public Dictionary<TKey, TSource> ToDictionary<TKey>(Selector<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer = default)
                 => ToDictionary<TKey>(keySelector, comparer);
 
-            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Selector<TSource, TKey> keySelector, Selector<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer = null)
+            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Selector<TSource, TKey> keySelector, Selector<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer = default)
                 => ToDictionary<TKey, TElement>(keySelector, elementSelector, comparer);
 
             // helper implementation of ICollection<> so that CopyTo() is used to convert to List<>

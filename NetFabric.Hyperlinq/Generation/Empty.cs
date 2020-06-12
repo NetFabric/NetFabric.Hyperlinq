@@ -23,21 +23,19 @@ namespace NetFabric.Hyperlinq
             public int Count 
                 => 0;
 
-            public TSource this[int index] 
-                => Throw.IndexOutOfRangeException<TSource>(); 
-
-            
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public Enumerator GetEnumerator() => new Enumerator();
-            DisposableEnumerator IValueEnumerable<TSource, EmptyEnumerable<TSource>.DisposableEnumerator>.GetEnumerator() => new DisposableEnumerator();
-            IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new DisposableEnumerator();
-            IEnumerator IEnumerable.GetEnumerator() => new DisposableEnumerator();
-
+            public TSource this[int index]
+                => Throw.IndexOutOfRangeException<TSource>();
             TSource IList<TSource>.this[int index]
             {
                 get => this[index];
                 set => Throw.NotSupportedException();
             }
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public Enumerator GetEnumerator() => new Enumerator();
+            DisposableEnumerator IValueEnumerable<TSource, EmptyEnumerable<TSource>.DisposableEnumerator>.GetEnumerator() => new DisposableEnumerator();
+            IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new DisposableEnumerator();
+            IEnumerator IEnumerable.GetEnumerator() => new DisposableEnumerator();
 
             bool ICollection<TSource>.IsReadOnly  
                 => true;
@@ -64,7 +62,7 @@ namespace NetFabric.Hyperlinq
                 [ExcludeFromCodeCoverage]
                 [MaybeNull]                
                 public readonly TSource Current
-                    => default!;
+                    => default;
 
                 public readonly bool MoveNext() 
                     => false;
@@ -74,7 +72,12 @@ namespace NetFabric.Hyperlinq
                 : IEnumerator<TSource>
             {
                 [ExcludeFromCodeCoverage]
+                [MaybeNull]
                 public readonly TSource Current
+                    => default;
+
+                [ExcludeFromCodeCoverage]
+                readonly TSource IEnumerator<TSource>.Current
                     => default!;
 
                 [ExcludeFromCodeCoverage]

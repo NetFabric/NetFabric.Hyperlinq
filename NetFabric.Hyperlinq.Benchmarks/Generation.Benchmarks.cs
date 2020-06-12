@@ -44,7 +44,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
             {
                 for(var counter = Count; counter != 0; counter--)
                 {
-                    enumerator.MoveNext();
+                    _ = enumerator.MoveNext();
                     sum += enumerator.Current;
                 }
             }
@@ -69,14 +69,15 @@ namespace NetFabric.Hyperlinq.Benchmarks
             foreach(var item in System.Linq.EnumerableEx.Create(() => new Enumerator(1, Count)))
                 sum += item;
             return sum;
-        } 
+        }
 
+#pragma warning disable HLQ010 // Consider using a 'for' loop instead.
         [BenchmarkCategory("Range")]
         [Benchmark]
         public int Hyperlinq_Range_ForEach() 
         {
             var sum = 0;
-            foreach(var item in ValueEnumerable.Range(0, Count))
+            foreach (var item in ValueEnumerable.Range(0, Count))
                 sum += item;
             return sum;
         }    
@@ -89,7 +90,8 @@ namespace NetFabric.Hyperlinq.Benchmarks
             foreach(var item in ValueEnumerable.Repeat(1, Count))
                 sum += item;
             return sum;
-        }        
+        }
+#pragma warning restore HLQ010 // Consider using a 'for' loop instead.
 
         [BenchmarkCategory("Range")]
         [Benchmark]
@@ -113,6 +115,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
             return sum;
         }
 
+#pragma warning disable HLQ010 // Consider using a 'for' loop instead.
         [BenchmarkCategory("Return")]
         [Benchmark]
         public int Hyperlinq_Return()
@@ -122,6 +125,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
                 sum += item;
             return sum;
         }
+#pragma warning restore HLQ010 // Consider using a 'for' loop instead.
 
         [BenchmarkCategory("Create")]
         [Benchmark]
@@ -135,17 +139,17 @@ namespace NetFabric.Hyperlinq.Benchmarks
 
         struct Enumerator : IEnumerator<int>
         {
-            readonly int value;
             int counter;
 
             public Enumerator(int value, int count)
             {
-                this.value = value;
-                this.counter = count;
+                Current = value;
+                counter = count;
             }
 
-            public readonly int Current => value;
-            readonly object IEnumerator.Current => value;
+            public int Current { get; private set; }
+            readonly object IEnumerator.Current 
+                => Current;
 
             public bool MoveNext() => counter-- > 0;
 

@@ -119,7 +119,7 @@ namespace System.Collections.Generic
 #if DEBUG
             // Try to prevent callers from using the ArrayBuilder after ToArray, if _count != 0.
             _count = -1;
-            _array = null;
+            _array = default;
 #endif
 
             return result;

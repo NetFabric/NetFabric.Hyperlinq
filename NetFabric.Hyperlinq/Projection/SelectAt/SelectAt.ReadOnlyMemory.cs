@@ -205,7 +205,7 @@ namespace NetFabric.Hyperlinq
                     if (thisEnded)
                         return true;
 
-                    if (!comparer.Equals(enumerator.Current, otherEnumerator.Current))
+                    if (!comparer.Equals(enumerator.Current!, otherEnumerator.Current))
                         return false;
                 }
             }

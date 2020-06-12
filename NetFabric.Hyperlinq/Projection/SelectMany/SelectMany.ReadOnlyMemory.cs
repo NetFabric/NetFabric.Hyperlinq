@@ -2,8 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Diagnostics.Contracts;
-using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
@@ -117,7 +115,10 @@ namespace NetFabric.Hyperlinq
                     state = 0;
                 }
 
+                [MaybeNull]
                 public readonly TResult Current
+                    => subEnumerator.Current;
+                readonly TResult IEnumerator<TResult>.Current 
                     => subEnumerator.Current;
                 readonly object? IEnumerator.Current 
                     => subEnumerator.Current;
