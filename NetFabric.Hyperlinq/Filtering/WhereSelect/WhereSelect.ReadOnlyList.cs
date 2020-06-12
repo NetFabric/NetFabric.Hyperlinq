@@ -61,6 +61,7 @@ namespace NetFabric.Hyperlinq
                     index = enumerable.skipCount - 1;
                 }
 
+                [MaybeNull]
                 public readonly TResult Current
                     => selector(source[index]);
 
@@ -93,8 +94,11 @@ namespace NetFabric.Hyperlinq
                     index = enumerable.skipCount - 1;
                 }
 
+                [MaybeNull]
                 public readonly TResult Current
                     => selector(source[index]);
+                readonly TResult IEnumerator<TResult>.Current 
+                    => selector(source[index])!;
                 readonly object? IEnumerator.Current 
                     => selector(source[index]);
 
@@ -176,7 +180,7 @@ namespace NetFabric.Hyperlinq
                 return dictionary;
             }
 
-            public readonly bool SequenceEqual(IEnumerable<TResult> other, IEqualityComparer<TResult>? comparer = null)
+            public readonly bool SequenceEqual(IEnumerable<TResult> other, IEqualityComparer<TResult>? comparer = default)
             {
                 comparer ??= EqualityComparer<TResult>.Default;
 
@@ -193,7 +197,7 @@ namespace NetFabric.Hyperlinq
                     if (thisEnded)
                         return true;
 
-                    if (!comparer.Equals(enumerator.Current, otherEnumerator.Current))
+                    if (!comparer.Equals(enumerator.Current!, otherEnumerator.Current))
                         return false;
                 }
             }

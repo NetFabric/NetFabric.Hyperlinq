@@ -9,7 +9,7 @@ namespace NetFabric.Hyperlinq
     public static partial class ValueEnumerable
     {
         
-        public static ReturnEnumerable<TSource> Return<TSource>(TSource value) =>
+        public static ReturnEnumerable<TSource> Return<TSource>([AllowNull] TSource value) =>
             new ReturnEnumerable<TSource>(value);
 
         public readonly partial struct ReturnEnumerable<TSource>
@@ -18,11 +18,13 @@ namespace NetFabric.Hyperlinq
         {
             [AllowNull, MaybeNull] internal readonly TSource value;
 
-            internal ReturnEnumerable([MaybeNull] TSource value) 
+            internal ReturnEnumerable([AllowNull] TSource value) 
                 => this.value = value;
 
-            public readonly int Count => 1;
+            public readonly int Count 
+                => 1;
 
+            [MaybeNull]
             public readonly TSource this[int index]
             {
                 get
@@ -32,19 +34,19 @@ namespace NetFabric.Hyperlinq
                     return value;
                 }
             }
+            TSource IReadOnlyList<TSource>.this[int index]
+                => this[index]!;
+            TSource IList<TSource>.this[int index]
+            {
+                get => this[index]!;
+                set => Throw.NotSupportedException();
+            }
 
-            
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly Enumerator GetEnumerator() => new Enumerator(in this);
             readonly DisposableEnumerator IValueEnumerable<TSource, DisposableEnumerator>.GetEnumerator() => new DisposableEnumerator(in this);
             readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new DisposableEnumerator(in this);
             readonly IEnumerator IEnumerable.GetEnumerator() => new DisposableEnumerator(in this);
-
-            TSource IList<TSource>.this[int index]
-            {
-                get => this[index];
-                set => Throw.NotSupportedException();
-            }
 
             bool ICollection<TSource>.IsReadOnly  
                 => true;
@@ -70,18 +72,16 @@ namespace NetFabric.Hyperlinq
 
             public struct Enumerator
             {
-                [AllowNull, MaybeNull] readonly TSource value;
                 bool moveNext;
 
                 internal Enumerator(in ReturnEnumerable<TSource> enumerable)
                 {
-                    value = enumerable.value;
+                    Current = enumerable.value;
                     moveNext = true;
                 }
 
                 [MaybeNull]
-                public readonly TSource Current
-                    => value;
+                public readonly TSource Current { get; }
 
                 public bool MoveNext()
                 {
@@ -97,22 +97,20 @@ namespace NetFabric.Hyperlinq
             public struct DisposableEnumerator
                 : IEnumerator<TSource>
             {
-                [AllowNull, MaybeNull] readonly TSource value;
                 bool moveNext;
 
                 internal DisposableEnumerator(in ReturnEnumerable<TSource> enumerable)
                 {
-                    value = enumerable.value;
+                    Current = enumerable.value;
                     moveNext = true;
                 }
 
                 [MaybeNull]
-                public readonly TSource Current
-                    => value;
+                public readonly TSource Current { get; }
                 readonly TSource IEnumerator<TSource>.Current 
-                    => value;
+                    => Current!;
                 readonly object? IEnumerator.Current
-                    => value;
+                    => Current;
 
                 public bool MoveNext()
                 {
@@ -136,7 +134,7 @@ namespace NetFabric.Hyperlinq
                 => true;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public bool Contains(TSource value, IEqualityComparer<TSource>? comparer = null)
+            public bool Contains(TSource value, IEqualityComparer<TSource>? comparer = default)
                 => comparer is null
                     ? EqualityComparer<TSource>.Default.Equals(this.value, value)
                     : comparer.Equals(this.value, value);
@@ -164,16 +162,18 @@ namespace NetFabric.Hyperlinq
             public List<TSource> ToList()
                 => new List<TSource>(1) { value };
 
-            public Dictionary<TKey, TSource> ToDictionary<TKey>(Selector<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer = null)
+            public Dictionary<TKey, TSource> ToDictionary<TKey>(Selector<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer = default)
                 => new Dictionary<TKey, TSource>(1, comparer) { { keySelector(value), value } };
 
-            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Selector<TSource, TKey> keySelector, Selector<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer = null)
+            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Selector<TSource, TKey> keySelector, Selector<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer = default)
                 => new Dictionary<TKey, TElement>(1, comparer) { { keySelector(value), elementSelector(value) } };
         }
 
+#pragma warning disable IDE0060 // Remove unused parameter
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int Count<TSource>(this ReturnEnumerable<TSource> source)
             => 1;
+#pragma warning restore IDE0060 // Remove unused parameter
     }
 }
 

@@ -60,7 +60,7 @@ namespace NetFabric.Hyperlinq
             var list = new List<TResult>();
             using var enumerator = source.GetEnumerator();
             while (enumerator.MoveNext())
-                list.Add(selector(enumerator.Current));
+                list.Add(selector(enumerator.Current)!);
             return list;
         }
 
@@ -74,7 +74,7 @@ namespace NetFabric.Hyperlinq
             checked
             {
                 for (var index = 0; enumerator.MoveNext(); index++)
-                    list.Add(selector(enumerator.Current, index));
+                    list.Add(selector(enumerator.Current, index)!);
             }
             return list;
         }
@@ -90,7 +90,7 @@ namespace NetFabric.Hyperlinq
             {
                 var item = enumerator.Current;
                 if (predicate(item))
-                    list.Add(selector(item));
+                    list.Add(selector(item)!);
             }
             return list;
         }

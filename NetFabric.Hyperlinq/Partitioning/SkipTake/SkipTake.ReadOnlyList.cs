@@ -30,6 +30,7 @@ namespace NetFabric.Hyperlinq
 
             public readonly int Count { get; }
 
+            [MaybeNull]
             public readonly TSource this[int index]
             {
                 get
@@ -40,18 +41,18 @@ namespace NetFabric.Hyperlinq
                     return source[index + skipCount];
                 }
             }
+            TSource IReadOnlyList<TSource>.this[int index]
+                => this[index]!;
+            TSource IList<TSource>.this[int index]
+            {
+                get => this[index]!;
+                set => Throw.NotSupportedException();
+            }
 
-            
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly Enumerator GetEnumerator() => new Enumerator(in this);
             readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new Enumerator(in this);
             readonly IEnumerator IEnumerable.GetEnumerator() => new Enumerator(in this);
-
-            TSource IList<TSource>.this[int index]
-            {
-                get => this[index];
-                set => Throw.NotSupportedException();
-            }
 
             bool ICollection<TSource>.IsReadOnly  
                 => true;
@@ -170,7 +171,7 @@ namespace NetFabric.Hyperlinq
 
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public bool Contains(TSource value, IEqualityComparer<TSource>? comparer = null)
+            public bool Contains(TSource value, IEqualityComparer<TSource>? comparer = default)
                 => ReadOnlyListExtensions.Contains<TList, TSource>(source, value, comparer, skipCount, Count);
 
             
@@ -220,11 +221,11 @@ namespace NetFabric.Hyperlinq
 
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public Dictionary<TKey, TSource> ToDictionary<TKey>(Selector<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer = null)
+            public Dictionary<TKey, TSource> ToDictionary<TKey>(Selector<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer = default)
                 => ReadOnlyListExtensions.ToDictionary<TList, TSource, TKey>(source, keySelector, comparer, skipCount, Count);
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Selector<TSource, TKey> keySelector, Selector<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer = null)
+            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Selector<TSource, TKey> keySelector, Selector<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer = default)
                 => ReadOnlyListExtensions.ToDictionary<TList, TSource, TKey, TElement>(source, keySelector, elementSelector, comparer, skipCount, Count);
         }
 

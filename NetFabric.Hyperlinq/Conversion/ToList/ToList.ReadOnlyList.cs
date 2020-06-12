@@ -81,7 +81,7 @@ namespace NetFabric.Hyperlinq
             {
                 var item = source[index];
                 if (predicate(item))
-                    list.Add(selector(item));
+                    list.Add(selector(item)!);
             }
             return list;
         }
@@ -144,12 +144,12 @@ namespace NetFabric.Hyperlinq
                 if (skipCount == 0)
                 {
                     for (var index = 0; index < takeCount; index++)
-                        array[index] = selector(source[index]);
+                        array[index] = selector(source[index])!;
                 }
                 else
                 {
                     for (var index = 0; index < takeCount; index++)
-                        array[index] = selector(source[index + skipCount]);
+                        array[index] = selector(source[index + skipCount])!;
                 }
             }
         }
@@ -179,12 +179,12 @@ namespace NetFabric.Hyperlinq
                 if (skipCount == 0)
                 {
                     for (var index = 0; index < takeCount; index++)
-                        array[index] = selector(source[index], index);
+                        array[index] = selector(source[index], index)!;
                 }
                 else
                 {
                     for (var index = 0; index < takeCount; index++)
-                        array[index] = selector(source[index + skipCount], index);
+                        array[index] = selector(source[index + skipCount], index)!;
                 }
             }
         }

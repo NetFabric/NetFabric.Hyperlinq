@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
-using System.Diagnostics.Contracts;
 using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
@@ -41,10 +40,10 @@ namespace NetFabric.Hyperlinq
             => ReadOnlyListExtensions.Any<ImmutableList<TSource>, TSource>(source, predicate);
 
         
-        public static bool Contains<TSource>(this ImmutableList<TSource> source, TSource value)
+        public static bool Contains<TSource>(this ImmutableList<TSource> source, [AllowNull] TSource value)
             => source.Contains(value);
         
-        public static bool Contains<TSource>(this ImmutableList<TSource> source, TSource value, IEqualityComparer<TSource>? comparer)
+        public static bool Contains<TSource>(this ImmutableList<TSource> source, [AllowNull] TSource value, IEqualityComparer<TSource>? comparer)
             => ReadOnlyListExtensions.Contains<ImmutableList<TSource>, TSource>(source, value, comparer);
 
         
@@ -135,19 +134,21 @@ namespace NetFabric.Hyperlinq
             public int Count
                 => source.Count;
 
+            [MaybeNull]
             public TSource this[int index]
                 => source[index];
-
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly ImmutableList<TSource>.Enumerator GetEnumerator() => source.GetEnumerator();
-            IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => source.GetEnumerator();
-            IEnumerator IEnumerable.GetEnumerator() => source.GetEnumerator();
-
+            TSource IReadOnlyList<TSource>.this[int index]
+                => source[index];
             TSource IList<TSource>.this[int index]
             {
                 get => source[index];
                 set => throw new NotSupportedException();
             }
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public readonly ImmutableList<TSource>.Enumerator GetEnumerator() => source.GetEnumerator();
+            IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => source.GetEnumerator();
+            IEnumerator IEnumerable.GetEnumerator() => source.GetEnumerator();
 
             bool ICollection<TSource>.IsReadOnly  
                 => true;

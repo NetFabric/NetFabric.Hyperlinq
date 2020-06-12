@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 
 namespace System.Collections.Generic
@@ -139,7 +140,7 @@ namespace System.Collections.Generic
 
         // Non-inline to improve code quality as uncommon path
         [MethodImpl(MethodImplOptions.NoInlining)]
-        private void AddWithBufferAllocation(T item, ref T[] destination, ref int index)
+        private void AddWithBufferAllocation([AllowNull] T item, ref T[] destination, ref int index)
         {
             _count += index - _index;
             _index = index;

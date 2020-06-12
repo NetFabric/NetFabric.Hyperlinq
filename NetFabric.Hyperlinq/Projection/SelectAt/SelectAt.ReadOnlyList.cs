@@ -59,10 +59,10 @@ namespace NetFabric.Hyperlinq
                 }
             }
             TResult IReadOnlyList<TResult>.this[int index]
-                => this[index];
+                => this[index]!;
             TResult IList<TResult>.this[int index]
             {
-                get => this[index];
+                get => this[index]!;
                 set => Throw.NotSupportedException();
             }
 
@@ -82,12 +82,12 @@ namespace NetFabric.Hyperlinq
                     if (arrayIndex == 0)
                     {
                         for (var index = 0; index < Count; index++)
-                            array[index] = selector(source[index], index);
+                            array[index] = selector(source[index], index)!;
                     }
                     else
                     {
                         for (var index = 0; index < Count; index++)
-                            array[index + arrayIndex] = selector(source[index], index);
+                            array[index + arrayIndex] = selector(source[index], index)!;
                     }
                 }
                 else
@@ -95,12 +95,12 @@ namespace NetFabric.Hyperlinq
                     if (arrayIndex == 0)
                     {
                         for (var index = 0; index < Count; index++)
-                            array[index] = selector(source[index + skipCount], index);
+                            array[index] = selector(source[index + skipCount], index)!;
                     }
                     else
                     {
                         for (var index = 0; index < Count; index++)
-                            array[index + arrayIndex] = selector(source[index + skipCount], index);
+                            array[index + arrayIndex] = selector(source[index + skipCount], index)!;
                     }
                 }
             }
@@ -120,7 +120,7 @@ namespace NetFabric.Hyperlinq
                     {
                         for (var index = 0; index < Count; index++)
                         {
-                            if (EqualityComparer<TResult>.Default.Equals(selector(source[index], index), item))
+                            if (EqualityComparer<TResult>.Default.Equals(selector(source[index], index)!, item))
                                 return index;
                         }
                     }
@@ -128,7 +128,7 @@ namespace NetFabric.Hyperlinq
                     {
                         for (var index = 0; index < Count; index++)
                         {
-                            if (EqualityComparer<TResult>.Default.Equals(selector(source[index + skipCount], index), item))
+                            if (EqualityComparer<TResult>.Default.Equals(selector(source[index + skipCount], index)!, item))
                                 return index;
                         }
                     }
@@ -141,7 +141,7 @@ namespace NetFabric.Hyperlinq
                     {
                         for (var index = 0; index < Count; index++)
                         {
-                            if (defaultComparer.Equals(selector(source[index], index), item))
+                            if (defaultComparer.Equals(selector(source[index], index)!, item))
                                 return index;
                         }
                     }
@@ -149,7 +149,7 @@ namespace NetFabric.Hyperlinq
                     {
                         for (var index = 0; index < Count; index++)
                         {
-                            if (defaultComparer.Equals(selector(source[index + skipCount], index), item))
+                            if (defaultComparer.Equals(selector(source[index + skipCount], index)!, item))
                                 return index;
                         }
                     }
@@ -209,7 +209,7 @@ namespace NetFabric.Hyperlinq
                 public readonly TResult Current
                     => selector(source[index + skipCount], index);
                 readonly TResult IEnumerator<TResult>.Current 
-                    => selector(source[index + skipCount], index);
+                    => selector(source[index + skipCount], index)!;
                 readonly object? IEnumerator.Current
                     => selector(source[index + skipCount], index);
 
@@ -259,13 +259,13 @@ namespace NetFabric.Hyperlinq
             public List<TResult> ToList()
                 => ReadOnlyListExtensions.ToList<TList, TSource, TResult>(source, selector, skipCount, Count);
 
-            public Dictionary<TKey, TResult> ToDictionary<TKey>(Selector<TResult, TKey> keySelector, IEqualityComparer<TKey>? comparer = null)
+            public Dictionary<TKey, TResult> ToDictionary<TKey>(Selector<TResult, TKey> keySelector, IEqualityComparer<TKey>? comparer = default)
                 => ToDictionary<TKey>(keySelector, comparer);
 
-            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Selector<TResult, TKey> keySelector, Selector<TResult, TElement> elementSelector, IEqualityComparer<TKey>? comparer = null)
+            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Selector<TResult, TKey> keySelector, Selector<TResult, TElement> elementSelector, IEqualityComparer<TKey>? comparer = default)
                 => ToDictionary<TKey, TElement>(keySelector, elementSelector, comparer);
 
-            public readonly bool SequenceEqual(IEnumerable<TResult> other, IEqualityComparer<TResult>? comparer = null)
+            public readonly bool SequenceEqual(IEnumerable<TResult> other, IEqualityComparer<TResult>? comparer = default)
             {
                 comparer ??= EqualityComparer<TResult>.Default;
 
@@ -282,7 +282,7 @@ namespace NetFabric.Hyperlinq
                     if (thisEnded)
                         return true;
 
-                    if (!comparer.Equals(enumerator.Current, otherEnumerator.Current))
+                    if (!comparer.Equals(enumerator.Current!, otherEnumerator.Current))
                         return false;
                 }
             }

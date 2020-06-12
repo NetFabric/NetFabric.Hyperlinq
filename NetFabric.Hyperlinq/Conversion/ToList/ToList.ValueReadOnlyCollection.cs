@@ -79,7 +79,7 @@ namespace NetFabric.Hyperlinq
                 checked
                 {
                     for (var index = 0; enumerator.MoveNext(); index++)
-                        array[index] = selector(enumerator.Current);
+                        array[index] = selector(enumerator.Current)!;
                 }
             }
         }
@@ -106,7 +106,7 @@ namespace NetFabric.Hyperlinq
                 checked
                 {
                     for (var index = 0; enumerator.MoveNext(); index++)
-                        array[index] = selector(enumerator.Current, index);
+                        array[index] = selector(enumerator.Current, index)!;
                 }
             }
         }

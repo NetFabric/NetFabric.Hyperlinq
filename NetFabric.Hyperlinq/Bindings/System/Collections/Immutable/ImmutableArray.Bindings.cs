@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
-using System.Diagnostics.Contracts;
 using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
@@ -32,10 +31,10 @@ namespace NetFabric.Hyperlinq
             => ReadOnlyListExtensions.Any<ImmutableArray<TSource>, TSource>(source, predicate);
 
         
-        public static bool Contains<TSource>(this ImmutableArray<TSource> source, TSource value)
+        public static bool Contains<TSource>(this ImmutableArray<TSource> source, [AllowNull] TSource value)
             => source.Contains(value);
         
-        public static bool Contains<TSource>(this ImmutableArray<TSource> source, TSource value, IEqualityComparer<TSource>? comparer)
+        public static bool Contains<TSource>(this ImmutableArray<TSource> source, [AllowNull] TSource value, IEqualityComparer<TSource>? comparer)
             => ReadOnlyListExtensions.Contains<ImmutableArray<TSource>, TSource>(source, value, comparer);
 
         
@@ -105,19 +104,21 @@ namespace NetFabric.Hyperlinq
             public int Count
                 => source.Length;
 
+            [MaybeNull]
             public TSource this[int index]
                 => source[index];
-
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly Enumerator GetEnumerator() => new Enumerator(source);
-            IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new Enumerator(source);
-            IEnumerator IEnumerable.GetEnumerator() => new Enumerator(source);
-
+            TSource IReadOnlyList<TSource>.this[int index]
+                => source[index];
             TSource IList<TSource>.this[int index]
             {
                 get => source[index];
                 set => throw new NotSupportedException();
             }
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public readonly Enumerator GetEnumerator() => new Enumerator(source);
+            IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new Enumerator(source);
+            IEnumerator IEnumerable.GetEnumerator() => new Enumerator(source);
 
             bool ICollection<TSource>.IsReadOnly  
                 => true;
@@ -148,9 +149,12 @@ namespace NetFabric.Hyperlinq
                 internal Enumerator(ImmutableArray<TSource> enumerable) 
                     => enumerator = enumerable.GetEnumerator();
 
+                [MaybeNull]
                 public readonly TSource Current 
                     => enumerator.Current;
-                readonly object? IEnumerator.Current 
+                readonly TSource IEnumerator<TSource>.Current 
+                    => enumerator.Current;
+                readonly object? IEnumerator.Current
                     => enumerator.Current;
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]

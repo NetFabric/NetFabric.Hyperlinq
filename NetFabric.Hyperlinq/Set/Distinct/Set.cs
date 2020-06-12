@@ -69,7 +69,7 @@ namespace NetFabric.Hyperlinq
                 hashCode = value is null ? 0 : EqualityComparer<TElement>.Default.GetHashCode(value) & 0x7FFFFFFF;
                 for (var i = buckets[hashCode % buckets.Length] - 1; i >= 0; i = slots[i].Next)
                 {
-                    if (slots[i].HashCode == hashCode && EqualityComparer<TElement>.Default.Equals(slots[i].Value, value))
+                    if (slots[i].HashCode == hashCode && EqualityComparer<TElement>.Default.Equals(slots[i].Value, value!))
                         return false;
                 }
             }
@@ -79,7 +79,7 @@ namespace NetFabric.Hyperlinq
                 hashCode = value is null ? 0 : comparer.GetHashCode(value) & 0x7FFFFFFF;
                 for (var i = buckets[hashCode % buckets.Length] - 1; i >= 0; i = slots[i].Next)
                 {
-                    if (slots[i].HashCode == hashCode && comparer.Equals(slots[i].Value, value))
+                    if (slots[i].HashCode == hashCode && comparer.Equals(slots[i].Value, value!))
                         return false;
                 }
             }
@@ -181,7 +181,7 @@ namespace NetFabric.Hyperlinq
             /// <summary>
             /// The item held by this slot.
             /// </summary>
-            public TElement Value;
+            [MaybeNull, AllowNull] public TElement Value;
         }
     }
 }

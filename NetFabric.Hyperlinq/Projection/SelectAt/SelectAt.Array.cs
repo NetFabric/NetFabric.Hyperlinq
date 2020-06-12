@@ -218,7 +218,7 @@ namespace NetFabric.Hyperlinq
             public List<TResult> ToList()
                 => ArrayExtensions.ToList<TSource, TResult>(source, selector, skipCount, Count);
 
-            public readonly bool SequenceEqual(IEnumerable<TResult> other, IEqualityComparer<TResult>? comparer = null)
+            public readonly bool SequenceEqual(IEnumerable<TResult> other, IEqualityComparer<TResult>? comparer = default)
             {
                 comparer ??= EqualityComparer<TResult>.Default;
 

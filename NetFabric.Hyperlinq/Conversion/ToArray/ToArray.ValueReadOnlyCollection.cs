@@ -40,7 +40,7 @@ namespace NetFabric.Hyperlinq
             {
                 using var enumerator = source.GetEnumerator();
                 for (var index = 0; enumerator.MoveNext(); index++)
-                    array[index] = selector(enumerator.Current);
+                    array[index] = selector(enumerator.Current)!;
             }
             return array;
         }
@@ -55,7 +55,7 @@ namespace NetFabric.Hyperlinq
             {
                 using var enumerator = source.GetEnumerator();
                 for (var index = 0; enumerator.MoveNext(); index++)
-                    array[index] = selector(enumerator.Current, index);
+                    array[index] = selector(enumerator.Current, index)!;
             }
             return array;
         }

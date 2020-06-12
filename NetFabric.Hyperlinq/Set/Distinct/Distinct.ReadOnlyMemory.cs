@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Diagnostics.Contracts;
 using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
@@ -51,10 +50,10 @@ namespace NetFabric.Hyperlinq
                     Current = default!;
                 }
 
-                [MaybeNull]
+                [MaybeNull, AllowNull]
                 public TSource Current { get; private set; }
                 readonly TSource IEnumerator<TSource>.Current 
-                    => Current;
+                    => Current!;
                 readonly object? IEnumerator.Current
                     => Current;
 
@@ -130,7 +129,7 @@ namespace NetFabric.Hyperlinq
                     if (thisEnded)
                         return true;
 
-                    if (!comparer.Equals(enumerator.Current, otherEnumerator.Current))
+                    if (!comparer.Equals(enumerator.Current!, otherEnumerator.Current))
                         return false;
                 }
             }

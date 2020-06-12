@@ -200,7 +200,7 @@ namespace System.Collections.Generic
                 if ((uint)index >= (uint)destination.Length)
                     AddWithBufferAllocation(selector(item), ref destination, ref index);
                 else
-                    destination[index] = selector(item);
+                    destination[index] = selector(item)!;
 
                 index++;
             }
@@ -230,7 +230,7 @@ namespace System.Collections.Generic
                 if ((uint)index >= (uint)destination.Length)
                     AddWithBufferAllocation(selector(item, index), ref destination, ref index);
                 else
-                    destination[index] = selector(item, index);
+                    destination[index] = selector(item, index)!;
 
                 index++;
             }
@@ -261,7 +261,7 @@ namespace System.Collections.Generic
                     if ((uint)index >= (uint)destination.Length)
                         AddWithBufferAllocation(selector(item), ref destination, ref index);
                     else
-                        destination[index] = selector(item);
+                        destination[index] = selector(item)!;
 
                     index++;
                 }

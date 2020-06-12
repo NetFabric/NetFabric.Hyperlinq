@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Diagnostics.Contracts;
 using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
@@ -39,10 +38,10 @@ namespace NetFabric.Hyperlinq
             => ReadOnlyListExtensions.Any<List<TSource>, TSource>(source, predicate);
 
         
-        public static bool Contains<TSource>(this List<TSource> source, TSource value)
-            => source.Contains(value);
+        public static bool Contains<TSource>(this List<TSource> source, [AllowNull] TSource value)
+            => source.Contains(value!);
         
-        public static bool Contains<TSource>(this List<TSource> source, TSource value, IEqualityComparer<TSource>? comparer)
+        public static bool Contains<TSource>(this List<TSource> source, [AllowNull] TSource value, IEqualityComparer<TSource>? comparer)
             => ReadOnlyListExtensions.Contains<List<TSource>, TSource>(source, value, comparer);
 
         
@@ -88,7 +87,7 @@ namespace NetFabric.Hyperlinq
             => ReadOnlyListExtensions.Single<List<TSource>, TSource>(source);
 
         
-        public static ReadOnlyListExtensions.DistinctEnumerable<List<TSource>, TSource> Distinct<TSource>(this List<TSource> source, IEqualityComparer<TSource>? comparer = null)
+        public static ReadOnlyListExtensions.DistinctEnumerable<List<TSource>, TSource> Distinct<TSource>(this List<TSource> source, IEqualityComparer<TSource>? comparer = default)
             => ReadOnlyListExtensions.Distinct<List<TSource>, TSource>(source, comparer);
 
         
@@ -133,19 +132,22 @@ namespace NetFabric.Hyperlinq
             public readonly int Count
                 => source.Count;
 
-            public readonly TSource this[int index] => source[index];
-
-            
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly List<TSource>.Enumerator GetEnumerator() => source.GetEnumerator();
-            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => source.GetEnumerator();
-            readonly IEnumerator IEnumerable.GetEnumerator() => source.GetEnumerator();
-
+            [MaybeNull]
+            public readonly TSource this[int index] 
+                => source[index];
+            TSource IReadOnlyList<TSource>.this[int index]
+                => source[index];
             TSource IList<TSource>.this[int index]
             {
                 get => source[index];
                 set => Throw.NotSupportedException();
             }
+
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public readonly List<TSource>.Enumerator GetEnumerator() => source.GetEnumerator();
+            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => source.GetEnumerator();
+            readonly IEnumerator IEnumerable.GetEnumerator() => source.GetEnumerator();
 
             bool ICollection<TSource>.IsReadOnly  
                 => true;

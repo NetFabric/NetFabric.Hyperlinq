@@ -55,9 +55,9 @@ namespace NetFabric.Hyperlinq
 
                 int state;
                 AsyncValueTaskMethodBuilder<bool> builder;
-                TSource item;
+                [MaybeNull, AllowNull] TSource item;
                 bool s__2;
-                TResult s__3;
+                [MaybeNull, AllowNull] TResult s__3;
                 bool s__4;
                 ConfiguredValueTaskAwaitable<bool>.ConfiguredValueTaskAwaiter u__1;
                 ConfiguredValueTaskAwaitable<TResult>.ConfiguredValueTaskAwaiter u__2;
@@ -82,10 +82,10 @@ namespace NetFabric.Hyperlinq
                     u__3 = default;
                 }
 
-                [MaybeNull]
+                [MaybeNull, AllowNull]
                 public TResult Current { get; private set; }
                 TResult IAsyncEnumerator<TResult>.Current
-                    => Current;
+                    => Current!;
 
                 //public async ValueTask<bool> MoveNextAsync()
                 //{

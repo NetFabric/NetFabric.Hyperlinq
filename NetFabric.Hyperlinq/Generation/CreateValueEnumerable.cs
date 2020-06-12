@@ -22,12 +22,9 @@ namespace NetFabric.Hyperlinq
         {
             readonly Func<TEnumerator> getEnumerator;
 
-            internal CreateValueEnumerable(Func<TEnumerator> getEnumerator)
-            {
-                this.getEnumerator = getEnumerator;
-            }
+            internal CreateValueEnumerable(Func<TEnumerator> getEnumerator) 
+                => this.getEnumerator = getEnumerator;
 
-            
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly TEnumerator GetEnumerator() => getEnumerator();
             readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => getEnumerator();
