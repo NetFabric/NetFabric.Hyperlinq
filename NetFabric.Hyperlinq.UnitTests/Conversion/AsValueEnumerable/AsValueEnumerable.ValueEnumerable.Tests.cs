@@ -13,7 +13,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsValueEnumerable
             var wrapped = Wrap.AsValueEnumerable(source);
 
             // Act
-            var result = ValueEnumerable
+            var result = ValueEnumerableExtensions
                 .AsValueEnumerable<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped);
 
             // Assert
@@ -30,7 +30,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsValueEnumerable
                 .AsValueEnumerable(source) as IValueEnumerable<int, Wrap.Enumerator<int>>;
 
             // Act
-            var result = ValueEnumerable
+            var result = ValueEnumerableExtensions
                 .AsValueEnumerable<IValueEnumerable<int, Wrap.Enumerator<int>>, Wrap.Enumerator<int>, int>(wrapped);
 
             // Assert

@@ -13,85 +13,85 @@ namespace NetFabric.Hyperlinq
     {
         
         public static int Count<TSource>(this ImmutableStack<TSource> source)
-            => ValueEnumerable.Count<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source));
+            => ValueEnumerableExtensions.Count<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source));
 
         
-        public static ValueEnumerable.SkipEnumerable<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource> Skip<TSource>(this ImmutableStack<TSource> source, int count)
-            => ValueEnumerable.Skip<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), count);
+        public static ValueEnumerableExtensions.SkipEnumerable<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource> Skip<TSource>(this ImmutableStack<TSource> source, int count)
+            => ValueEnumerableExtensions.Skip<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), count);
 
         
-        public static ValueEnumerable.TakeEnumerable<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource> Take<TSource>(this ImmutableStack<TSource> source, int count)
-            => ValueEnumerable.Take<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), count);
+        public static ValueEnumerableExtensions.TakeEnumerable<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource> Take<TSource>(this ImmutableStack<TSource> source, int count)
+            => ValueEnumerableExtensions.Take<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), count);
 
         
         public static bool All<TSource>(this ImmutableStack<TSource> source, Predicate<TSource> predicate)
-            => ValueEnumerable.All<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
+            => ValueEnumerableExtensions.All<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
         
         public static bool All<TSource>(this ImmutableStack<TSource> source, PredicateAt<TSource> predicate)
-            => ValueEnumerable.All<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
+            => ValueEnumerableExtensions.All<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
 
         
         public static bool Any<TSource>(this ImmutableStack<TSource> source)
-            => ValueEnumerable.Any<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source));
+            => ValueEnumerableExtensions.Any<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source));
         
         public static bool Any<TSource>(this ImmutableStack<TSource> source, Predicate<TSource> predicate)
-            => ValueEnumerable.Any<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
+            => ValueEnumerableExtensions.Any<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
         
         public static bool Any<TSource>(this ImmutableStack<TSource> source, PredicateAt<TSource> predicate)
-            => ValueEnumerable.Any<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
+            => ValueEnumerableExtensions.Any<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
 
         
         public static bool Contains<TSource>(this ImmutableStack<TSource> source, TSource value)
             => source.Contains(value);
         
         public static bool Contains<TSource>(this ImmutableStack<TSource> source, TSource value, IEqualityComparer<TSource>? comparer)
-            => ValueEnumerable.Contains<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), value, comparer);
+            => ValueEnumerableExtensions.Contains<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), value, comparer);
 
         
-        public static ValueEnumerable.SelectEnumerable<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource, TResult> Select<TSource, TResult>(
+        public static ValueEnumerableExtensions.SelectEnumerable<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource, TResult> Select<TSource, TResult>(
             this ImmutableStack<TSource> source,
             Selector<TSource, TResult> selector)
-            => ValueEnumerable.Select<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource, TResult>(new ValueWrapper<TSource>(source), selector);
+            => ValueEnumerableExtensions.Select<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource, TResult>(new ValueWrapper<TSource>(source), selector);
         
-        public static ValueEnumerable.SelectAtEnumerable<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource, TResult> Select<TSource, TResult>(
+        public static ValueEnumerableExtensions.SelectAtEnumerable<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource, TResult> Select<TSource, TResult>(
             this ImmutableStack<TSource> source,
             SelectorAt<TSource, TResult> selector)
-            => ValueEnumerable.Select<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource, TResult>(new ValueWrapper<TSource>(source), selector);
+            => ValueEnumerableExtensions.Select<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource, TResult>(new ValueWrapper<TSource>(source), selector);
 
         
-        public static ValueEnumerable.SelectManyEnumerable<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource, TSubEnumerable, TSubEnumerator, TResult> SelectMany<TSource, TSubEnumerable, TSubEnumerator, TResult>(
+        public static ValueEnumerableExtensions.SelectManyEnumerable<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource, TSubEnumerable, TSubEnumerator, TResult> SelectMany<TSource, TSubEnumerable, TSubEnumerator, TResult>(
             this ImmutableStack<TSource> source,
             Selector<TSource, TSubEnumerable> selector)
             where TSubEnumerable : notnull, IValueEnumerable<TResult, TSubEnumerator>
             where TSubEnumerator : struct, IEnumerator<TResult>
-            => ValueEnumerable.SelectMany<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource, TSubEnumerable, TSubEnumerator, TResult>(new ValueWrapper<TSource>(source), selector);
+            => ValueEnumerableExtensions.SelectMany<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource, TSubEnumerable, TSubEnumerator, TResult>(new ValueWrapper<TSource>(source), selector);
 
         
-        public static ValueEnumerable.WhereEnumerable<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource> Where<TSource>(
+        public static ValueEnumerableExtensions.WhereEnumerable<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource> Where<TSource>(
             this ImmutableStack<TSource> source,
             Predicate<TSource> predicate)
-            => ValueEnumerable.Where<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
+            => ValueEnumerableExtensions.Where<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
         
-        public static ValueEnumerable.WhereAtEnumerable<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource> Where<TSource>(
+        public static ValueEnumerableExtensions.WhereAtEnumerable<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource> Where<TSource>(
             this ImmutableStack<TSource> source,
             PredicateAt<TSource> predicate)
-            => ValueEnumerable.Where<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
+            => ValueEnumerableExtensions.Where<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
 
         
         public static Option<TSource> ElementAt<TSource>(this ImmutableStack<TSource> source, int index)
-            => ValueEnumerable.ElementAt<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), index);
+            => ValueEnumerableExtensions.ElementAt<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), index);
 
         
         public static Option<TSource> First<TSource>(this ImmutableStack<TSource> source)
-            => ValueEnumerable.First<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source));
+            => ValueEnumerableExtensions.First<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source));
 
         
         public static Option<TSource> Single<TSource>(this ImmutableStack<TSource> source)
-            => ValueEnumerable.Single<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source));
+            => ValueEnumerableExtensions.Single<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source));
 
         
-        public static ValueEnumerable.DistinctEnumerable<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource> Distinct<TSource>(this ImmutableStack<TSource> source, IEqualityComparer<TSource>? comparer = null)
-            => ValueEnumerable.Distinct<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), comparer);
+        public static ValueEnumerableExtensions.DistinctEnumerable<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource> Distinct<TSource>(this ImmutableStack<TSource> source, IEqualityComparer<TSource>? comparer = null)
+            => ValueEnumerableExtensions.Distinct<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), comparer);
 
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -104,7 +104,7 @@ namespace NetFabric.Hyperlinq
 
         
         public static TSource[] ToArray<TSource>(this ImmutableStack<TSource> source)
-            => ValueEnumerable.ToArray<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source));
+            => ValueEnumerableExtensions.ToArray<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source));
 
         
         public static List<TSource> ToList<TSource>(this ImmutableStack<TSource> source)
@@ -112,16 +112,16 @@ namespace NetFabric.Hyperlinq
 
         
         public static Dictionary<TKey, TSource> ToDictionary<TSource, TKey>(this ImmutableStack<TSource> source, Selector<TSource, TKey> keySelector)
-            => ValueEnumerable.ToDictionary<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource, TKey>(new ValueWrapper<TSource>(source), keySelector);
+            => ValueEnumerableExtensions.ToDictionary<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource, TKey>(new ValueWrapper<TSource>(source), keySelector);
         
         public static Dictionary<TKey, TSource> ToDictionary<TSource, TKey>(this ImmutableStack<TSource> source, Selector<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer)
-            => ValueEnumerable.ToDictionary<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource, TKey>(new ValueWrapper<TSource>(source), keySelector, comparer);
+            => ValueEnumerableExtensions.ToDictionary<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource, TKey>(new ValueWrapper<TSource>(source), keySelector, comparer);
         
         public static Dictionary<TKey, TElement> ToDictionary<TSource, TKey, TElement>(this ImmutableStack<TSource> source, Selector<TSource, TKey> keySelector, Selector<TSource, TElement> elementSelector)
-            => ValueEnumerable.ToDictionary<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource, TKey, TElement>(new ValueWrapper<TSource>(source), keySelector, elementSelector);
+            => ValueEnumerableExtensions.ToDictionary<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource, TKey, TElement>(new ValueWrapper<TSource>(source), keySelector, elementSelector);
         
         public static Dictionary<TKey, TElement> ToDictionary<TSource, TKey, TElement>(this ImmutableStack<TSource> source, Selector<TSource, TKey> keySelector, Selector<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer)
-            => ValueEnumerable.ToDictionary<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource, TKey, TElement>(new ValueWrapper<TSource>(source), keySelector, elementSelector, comparer);
+            => ValueEnumerableExtensions.ToDictionary<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource, TKey, TElement>(new ValueWrapper<TSource>(source), keySelector, elementSelector, comparer);
 
         public readonly partial struct ValueWrapper<TSource>
             : IValueEnumerable<TSource, ValueWrapper<TSource>.Enumerator>

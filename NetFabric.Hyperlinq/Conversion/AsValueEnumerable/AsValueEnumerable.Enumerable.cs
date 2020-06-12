@@ -2,12 +2,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Diagnostics.Contracts;
 using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class Enumerable
+    public static partial class EnumerableExtensions
     {
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -45,12 +44,12 @@ namespace NetFabric.Hyperlinq
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TSource[] ToArray()
-                => Enumerable.ToArray(source);
+                => EnumerableExtensions.ToArray(source);
 
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public List<TSource> ToList()
-                => Enumerable.ToList(source);
+                => EnumerableExtensions.ToList(source);
         }
 
         public partial struct ValueEnumerableWrapper<TSource>
@@ -97,12 +96,12 @@ namespace NetFabric.Hyperlinq
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TSource[] ToArray()
-                => Enumerable.ToArray(source);
+                => EnumerableExtensions.ToArray(source);
 
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public List<TSource> ToList()
-                => Enumerable.ToList(source);
+                => EnumerableExtensions.ToList(source);
         }
     }
 }

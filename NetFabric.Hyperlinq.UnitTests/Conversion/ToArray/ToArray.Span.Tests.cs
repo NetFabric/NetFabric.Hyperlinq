@@ -18,7 +18,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
                     System.Linq.Enumerable.Where(source, predicate.AsFunc()));
 
             // Act
-            var result = Array
+            var result = ArrayExtensions
                 .Where<int>(source.AsSpan(), predicate)
                 .ToArray();
 
@@ -40,7 +40,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
                     System.Linq.Enumerable.Where(source, predicate.AsFunc()));
 
             // Act
-            var result = Array
+            var result = ArrayExtensions
                 .Where<int>(source.AsSpan(), predicate)
                 .ToArray();
 
@@ -62,7 +62,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
                     System.Linq.Enumerable.Select(source, selector.AsFunc()));
 
             // Act
-            var result = Array
+            var result = ArrayExtensions
                 .Select<int, string>(source.AsSpan(), selector)
                 .ToArray();
 
@@ -84,7 +84,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
                     System.Linq.Enumerable.Select(source, selector.AsFunc()));
 
             // Act
-            var result = Array
+            var result = ArrayExtensions
                 .Select<int, string>(source.AsSpan(), selector)
                 .ToArray();
 
@@ -107,7 +107,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
                         System.Linq.Enumerable.Where(source, predicate.AsFunc()), selector.AsFunc()));
 
             // Act
-            var result = Array
+            var result = ArrayExtensions
                 .Where<int>(source.AsSpan(), predicate)
                 .Select(selector)
                 .ToArray();

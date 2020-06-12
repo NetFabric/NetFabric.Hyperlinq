@@ -158,7 +158,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Hyperlinq_Enumerable_Value()
         {
             var sum = 0;
-            foreach (var item in Enumerable.AsValueEnumerable<TestEnumerable.Enumerable, TestEnumerable.Enumerable.Enumerator, int>(enumerableValue, enumerable => enumerable.GetEnumerator()).Where(item => (item & 0x01) == 0))
+            foreach (var item in EnumerableExtensions.AsValueEnumerable<TestEnumerable.Enumerable, TestEnumerable.Enumerable.Enumerator, int>(enumerableValue, enumerable => enumerable.GetEnumerator()).Where(item => (item & 0x01) == 0))
                 sum += item;
             return sum;
         }
@@ -168,7 +168,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Hyperlinq_Collection_Value()
         {
             var sum = 0;
-            foreach (var item in Enumerable.AsValueEnumerable<TestCollection.Enumerable, TestCollection.Enumerable.Enumerator, int>(collectionValue, enumerable => enumerable.GetEnumerator()).Where(item => (item & 0x01) == 0))
+            foreach (var item in EnumerableExtensions.AsValueEnumerable<TestCollection.Enumerable, TestCollection.Enumerable.Enumerator, int>(collectionValue, enumerable => enumerable.GetEnumerator()).Where(item => (item & 0x01) == 0))
                 sum += item;
             return sum;
         }
@@ -178,7 +178,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Hyperlinq_List_Value()
         {
             var sum = 0;
-            foreach (var item in Enumerable.AsValueEnumerable<TestList.Enumerable, TestList.Enumerable.Enumerator, int>(listValue, enumerable => enumerable.GetEnumerator()).Where(item => (item & 0x01) == 0))
+            foreach (var item in EnumerableExtensions.AsValueEnumerable<TestList.Enumerable, TestList.Enumerable.Enumerator, int>(listValue, enumerable => enumerable.GetEnumerator()).Where(item => (item & 0x01) == 0))
                 sum += item;
             return sum;
         }
@@ -188,7 +188,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public async ValueTask<int> Hyperlinq_AsyncEnumerable_Value()
         {
             var sum = 0;
-            await foreach (var item in AsyncEnumerable
+            await foreach (var item in AsyncEnumerableExtensions
                 .AsAsyncValueEnumerable<TestAsyncEnumerable.AsyncEnumerable, TestAsyncEnumerable.AsyncEnumerable.AsyncEnumerator, int>(asyncEnumerableValue, (enumerable, cancellationToken) => enumerable.GetAsyncEnumerator(cancellationToken))
                 .Where((item, _) => new ValueTask<bool>((item & 0x01) == 0)))
             {

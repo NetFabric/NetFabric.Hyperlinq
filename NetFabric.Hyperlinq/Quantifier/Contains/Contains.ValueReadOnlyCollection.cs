@@ -4,27 +4,27 @@ using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class ValueReadOnlyCollection
+    public static partial class ValueReadOnlyCollectionExtensions
     {
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool Contains<TEnumerable, TEnumerator, TSource>(this TEnumerable source, [AllowNull] TSource value, IEqualityComparer<TSource>? comparer = default)
             where TEnumerable : notnull, IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
-            => source.Count != 0 && ValueEnumerable.Contains<TEnumerable, TEnumerator, TSource>(source, value, comparer);
+            => source.Count != 0 && ValueEnumerableExtensions.Contains<TEnumerable, TEnumerator, TSource>(source, value, comparer);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static bool Contains<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, [AllowNull] TResult value, Selector<TSource, TResult> selector)
             where TEnumerable : notnull, IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
-            => source.Count != 0 && ValueEnumerable.Contains<TEnumerable, TEnumerator, TSource, TResult>(source, value, selector);
+            => source.Count != 0 && ValueEnumerableExtensions.Contains<TEnumerable, TEnumerator, TSource, TResult>(source, value, selector);
 
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static bool Contains<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, [AllowNull] TResult value, SelectorAt<TSource, TResult> selector)
             where TEnumerable : notnull, IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
-            => source.Count != 0 && ValueEnumerable.Contains<TEnumerable, TEnumerator, TSource, TResult>(source, value, selector);
+            => source.Count != 0 && ValueEnumerableExtensions.Contains<TEnumerable, TEnumerator, TSource, TResult>(source, value, selector);
 
     }
 }

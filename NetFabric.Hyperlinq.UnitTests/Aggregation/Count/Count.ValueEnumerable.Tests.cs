@@ -19,7 +19,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Aggregation.Count
                 System.Linq.Enumerable.Count(source);
 
             // Act
-            var result = ValueEnumerable
+            var result = ValueEnumerableExtensions
                 .Count<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped);
 
             // Assert
@@ -40,7 +40,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Aggregation.Count
                 System.Linq.Enumerable.Count(source, predicate.AsFunc());
 
             // Act
-            var result = ValueEnumerable
+            var result = ValueEnumerableExtensions
                 .Where<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, predicate)
                 .Count();
 
@@ -63,7 +63,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Aggregation.Count
                     System.Linq.Enumerable.Where(source, predicate.AsFunc()));
 
             // Act
-            var result = ValueEnumerable
+            var result = ValueEnumerableExtensions
                 .Where<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, predicate)
                 .Count();
 

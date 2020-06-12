@@ -5,7 +5,7 @@ using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class Array
+    public static partial class ArrayExtensions
     {
         
         public static Option<TSource> Single<TSource>(this ReadOnlySpan<TSource> source)

@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class Array
+    public static partial class ArrayExtensions
     {
 #if SPAN_SUPPORTED
 
@@ -115,31 +115,31 @@ namespace NetFabric.Hyperlinq
 
                 [ExcludeFromCodeCoverage]
                 public readonly void Reset()
-                    => throw new NotSupportedException();
+                    => Throw.NotSupportedException();
 
                 public readonly void Dispose() { }
             }
 
             public int Count()
-                => Array.Count<TSource>(source, predicate, skipCount, takeCount);
+                => ArrayExtensions.Count<TSource>(source, predicate, skipCount, takeCount);
 
             public bool Any()
-                => Array.Any<TSource>(source, predicate, skipCount, takeCount);
+                => ArrayExtensions.Any<TSource>(source, predicate, skipCount, takeCount);
 
             public Option<TResult> ElementAt(int index)
-                => Array.ElementAt<TSource, TResult>(source, index, predicate, selector, skipCount, takeCount);
+                => ArrayExtensions.ElementAt<TSource, TResult>(source, index, predicate, selector, skipCount, takeCount);
 
             public Option<TResult> First()
-                => Array.First<TSource, TResult>(source, predicate, selector, skipCount, takeCount);
+                => ArrayExtensions.First<TSource, TResult>(source, predicate, selector, skipCount, takeCount);
 
             public Option<TResult> Single()
-                => Array.Single<TSource, TResult>(source, predicate, selector, skipCount, takeCount);
+                => ArrayExtensions.Single<TSource, TResult>(source, predicate, selector, skipCount, takeCount);
 
             public TResult[] ToArray()
-                => Array.ToArray<TSource, TResult>(source, predicate, selector, skipCount, takeCount);
+                => ArrayExtensions.ToArray<TSource, TResult>(source, predicate, selector, skipCount, takeCount);
 
             public List<TResult> ToList()
-                => Array.ToList<TSource, TResult>(source, predicate, selector, skipCount, takeCount);
+                => ArrayExtensions.ToList<TSource, TResult>(source, predicate, selector, skipCount, takeCount);
 
             public readonly bool SequenceEqual(IEnumerable<TResult> other, IEqualityComparer<TResult>? comparer = null)
             {

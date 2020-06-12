@@ -14,7 +14,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.Where
             var predicate = (Predicate<int>)null;
 
             // Act
-            Action action = () => _ = ReadOnlyList.Where(list, predicate);
+            Action action = () => _ = ReadOnlyListExtensions.Where(list, predicate);
 
             // Assert
             _ = action.Must()
@@ -34,7 +34,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.Where
                 System.Linq.Enumerable.Where(source, predicate.AsFunc());
 
             // Act
-            var result = ReadOnlyList.Where(wrapped, predicate);
+            var result = ReadOnlyListExtensions.Where(wrapped, predicate);
 
             // Assert
             _ = result.Must()

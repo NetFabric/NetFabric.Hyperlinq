@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class ValueEnumerable
+    public static partial class ValueEnumerableExtensions
     {
         
         public static bool All<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Predicate<TSource> predicate)

@@ -14,7 +14,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.WhereSelect
             var predicate = (Predicate<int>)null;
 
             // Act
-            Action action = () => _ = Array
+            Action action = () => _ = ArrayExtensions
                 .Where((ReadOnlyMemory<int>)source.AsMemory(), predicate)
                 .Select(item => item.ToString());
 
@@ -32,7 +32,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.WhereSelect
             var selector = (Selector<int, string>)null;
 
             // Act
-            Action action = () => _ = Array
+            Action action = () => _ = ArrayExtensions
                 .Where((ReadOnlyMemory<int>)source.AsMemory(), _ => true)
                 .Select(selector);
 
@@ -54,7 +54,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.WhereSelect
                     System.Linq.Enumerable.Where(source, predicate.AsFunc()), selector.AsFunc());
 
             // Act
-            var result = Array
+            var result = ArrayExtensions
                 .Where((ReadOnlyMemory<int>)source.AsMemory(), predicate)
                 .Select(selector);
 

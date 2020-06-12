@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class ValueEnumerable
+    public static partial class ValueEnumerableExtensions
     {
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -74,44 +74,44 @@ namespace NetFabric.Hyperlinq
 
                 [ExcludeFromCodeCoverage]
                 public readonly void Reset() 
-                    => throw new NotSupportedException();
+                    => Throw.NotSupportedException();
 
                 public void Dispose() => enumerator.Dispose();
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public int Count()
-                => ValueEnumerable.Count<TEnumerable, TEnumerator, TSource>(source);
+                => ValueEnumerableExtensions.Count<TEnumerable, TEnumerator, TSource>(source);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Any()
-                => ValueEnumerable.Any<TEnumerable, TEnumerator, TSource>(source);
+                => ValueEnumerableExtensions.Any<TEnumerable, TEnumerator, TSource>(source);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public ValueEnumerable.SelectEnumerable<TEnumerable, TEnumerator, TSource, TSelectorResult> Select<TSelectorResult>(Selector<TResult, TSelectorResult> selector)
-                => ValueEnumerable.Select<TEnumerable, TEnumerator, TSource, TSelectorResult>(source, Utils.Combine(this.selector, selector));
+            public ValueEnumerableExtensions.SelectEnumerable<TEnumerable, TEnumerator, TSource, TSelectorResult> Select<TSelectorResult>(Selector<TResult, TSelectorResult> selector)
+                => ValueEnumerableExtensions.Select<TEnumerable, TEnumerator, TSource, TSelectorResult>(source, Utils.Combine(this.selector, selector));
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public ValueEnumerable.SelectAtEnumerable<TEnumerable, TEnumerator, TSource, TSelectorResult> Select<TSelectorResult>(SelectorAt<TResult, TSelectorResult> selector)
-                => ValueEnumerable.Select<TEnumerable, TEnumerator, TSource, TSelectorResult>(source, Utils.Combine(this.selector, selector));
+            public ValueEnumerableExtensions.SelectAtEnumerable<TEnumerable, TEnumerator, TSource, TSelectorResult> Select<TSelectorResult>(SelectorAt<TResult, TSelectorResult> selector)
+                => ValueEnumerableExtensions.Select<TEnumerable, TEnumerator, TSource, TSelectorResult>(source, Utils.Combine(this.selector, selector));
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Option<TResult> ElementAt(int index)
-                => ValueEnumerable.ElementAt<TEnumerable, TEnumerator, TSource, TResult>(source, index, selector);
+                => ValueEnumerableExtensions.ElementAt<TEnumerable, TEnumerator, TSource, TResult>(source, index, selector);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Option<TResult> First()
-                => ValueEnumerable.First<TEnumerable, TEnumerator, TSource, TResult>(source, selector);
+                => ValueEnumerableExtensions.First<TEnumerable, TEnumerator, TSource, TResult>(source, selector);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Option<TResult> Single()
-                => ValueEnumerable.Single<TEnumerable, TEnumerator, TSource, TResult>(source, selector);
+                => ValueEnumerableExtensions.Single<TEnumerable, TEnumerator, TSource, TResult>(source, selector);
 
             public TResult[] ToArray()
-                => ValueEnumerable.ToArray<TEnumerable, TEnumerator, TSource, TResult>(source, selector);
+                => ValueEnumerableExtensions.ToArray<TEnumerable, TEnumerator, TSource, TResult>(source, selector);
 
             public List<TResult> ToList()
-                => ValueEnumerable.ToList<TEnumerable, TEnumerator, TSource, TResult>(source, selector);
+                => ValueEnumerableExtensions.ToList<TEnumerable, TEnumerator, TSource, TResult>(source, selector);
         }
     }
 }

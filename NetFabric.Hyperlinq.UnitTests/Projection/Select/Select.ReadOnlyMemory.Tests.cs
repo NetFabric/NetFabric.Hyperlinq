@@ -15,7 +15,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Projection.Select
             var selector = (Selector<int, string>)null;
 
             // Act
-            Action action = () => _ = Array.Select((ReadOnlyMemory<int>)source.AsMemory(), selector);
+            Action action = () => _ = ArrayExtensions.Select((ReadOnlyMemory<int>)source.AsMemory(), selector);
 
             // Assert
             _ = action.Must()
@@ -34,7 +34,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Projection.Select
                 System.Linq.Enumerable.Select(source, selector.AsFunc());
 
             // Act
-            var result = Array.Select((ReadOnlyMemory<int>)source.AsMemory(), selector);
+            var result = ArrayExtensions.Select((ReadOnlyMemory<int>)source.AsMemory(), selector);
 
             // Assert
             _ = result.Must()

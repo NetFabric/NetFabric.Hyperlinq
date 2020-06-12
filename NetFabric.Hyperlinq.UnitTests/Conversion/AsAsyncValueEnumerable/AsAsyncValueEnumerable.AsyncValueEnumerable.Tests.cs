@@ -13,7 +13,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsAsyncValueEnumerable
             var wrapped = Wrap.AsAsyncValueEnumerable(source);
 
             // Act
-            var result = AsyncValueEnumerable
+            var result = AsyncValueEnumerableExtensions
                 .AsAsyncValueEnumerable<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int>(wrapped);
 
             // Assert
@@ -30,7 +30,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsAsyncValueEnumerable
                 .AsAsyncValueEnumerable(source) as IAsyncValueEnumerable<int, Wrap.AsyncEnumerator<int>>;
 
             // Act
-            var result = AsyncValueEnumerable
+            var result = AsyncValueEnumerableExtensions
                 .AsAsyncValueEnumerable<IAsyncValueEnumerable<int, Wrap.AsyncEnumerator<int>>, Wrap.AsyncEnumerator<int>, int>(wrapped);
 
             // Assert

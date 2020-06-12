@@ -15,7 +15,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.All
             var predicate = (AsyncPredicate<int>)null;
 
             // Act
-            Action action = () => _ = AsyncValueEnumerable
+            Action action = () => _ = AsyncValueEnumerableExtensions
                 .AllAsync<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, predicate);
 
             // Assert
@@ -36,7 +36,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.All
                 System.Linq.Enumerable.All(source, predicate.AsFunc());
 
             // Act
-            var result = await AsyncValueEnumerable
+            var result = await AsyncValueEnumerableExtensions
                 .AllAsync<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, predicate.AsAsync());
 
             // Assert
@@ -53,7 +53,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.All
             var predicate = (AsyncPredicateAt<int>)null;
 
             // Act
-            Action action = () => _ = AsyncValueEnumerable
+            Action action = () => _ = AsyncValueEnumerableExtensions
                 .AllAsync<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, predicate);
 
             // Assert
@@ -75,7 +75,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.All
                     System.Linq.Enumerable.Where(source, predicate.AsFunc())) == source.Length;
 
             // Act
-            var result = await AsyncValueEnumerable
+            var result = await AsyncValueEnumerableExtensions
                 .AllAsync<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, predicate.AsAsync());
 
             // Assert

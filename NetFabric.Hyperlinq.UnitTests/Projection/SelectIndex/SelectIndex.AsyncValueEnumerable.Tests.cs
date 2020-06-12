@@ -14,7 +14,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Projection.SelectAt
             var predicate = (AsyncSelectorAt<int, string>)null;
 
             // Act
-            Action action = () => _ = AsyncValueEnumerable
+            Action action = () => _ = AsyncValueEnumerableExtensions
                 .Select<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int, string>(enumerable, predicate);
 
             // Assert
@@ -35,7 +35,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Projection.SelectAt
                 .Select(source, selector.AsFunc());
 
             // Act
-            var result = AsyncValueEnumerable
+            var result = AsyncValueEnumerableExtensions
                 .Select<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int, string>(wrapped, selector.AsAsync());
 
             // Assert

@@ -15,7 +15,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.Where
             var predicate = (Predicate<int>)null;
 
             // Act
-            Action action = () => _ = Array.Where<int>(source, predicate);
+            Action action = () => _ = ArrayExtensions.Where<int>(source, predicate);
 
             // Assert
             _ = action.Must()
@@ -33,7 +33,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.Where
             var expected = System.Linq.Enumerable.Where(source, predicate.AsFunc());
 
             // Act
-            var result = Array.Where<int>(source, predicate);
+            var result = ArrayExtensions.Where<int>(source, predicate);
 
             // Assert
             _ = result.Must()

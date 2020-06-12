@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class ReadOnlyList
+    public static partial class ReadOnlyListExtensions
     {
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

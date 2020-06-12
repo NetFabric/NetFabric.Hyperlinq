@@ -14,7 +14,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.All
             var predicate = (Predicate<int>)null;
 
             // Act
-            Action action = () => _ = ReadOnlyList
+            Action action = () => _ = ReadOnlyListExtensions
                 .All<Wrap.ValueReadOnlyList<int>, int>(wrapped, predicate);
 
             // Assert
@@ -35,7 +35,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.All
                 System.Linq.Enumerable.All(wrapped, predicate.AsFunc());
 
             // Act
-            var result = ReadOnlyList
+            var result = ReadOnlyListExtensions
                 .All<Wrap.ValueReadOnlyList<int>, int>(wrapped, predicate);
 
             // Assert
@@ -57,7 +57,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.All
                         System.Linq.Enumerable.Skip(source, skipCount), takeCount), predicate.AsFunc());
 
             // Act
-            var result = ReadOnlyList
+            var result = ReadOnlyListExtensions
                 .Skip<Wrap.ValueReadOnlyList<int>, int>(wrapped, skipCount)
                 .Take(takeCount)
                 .All(predicate);
@@ -76,7 +76,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.All
             var predicate = (PredicateAt<int>)null;
 
             // Act
-            Action action = () => _ = ReadOnlyList
+            Action action = () => _ = ReadOnlyListExtensions
                 .All<Wrap.ValueReadOnlyList<int>, int>(wrapped, predicate);
 
             // Assert
@@ -98,7 +98,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.All
                     System.Linq.Enumerable.Where(source, predicate.AsFunc())) == source.Length;
 
             // Act
-            var result = ReadOnlyList
+            var result = ReadOnlyListExtensions
                 .All<Wrap.ValueReadOnlyList<int>, int>(wrapped, predicate);
 
             // Assert
@@ -125,7 +125,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.All
                             System.Linq.Enumerable.Skip(source, skipCount), takeCount), predicate.AsFunc())) == count;
 
             // Act
-            var result = ReadOnlyList
+            var result = ReadOnlyListExtensions
                 .Skip<Wrap.ValueReadOnlyList<int>, int>(wrapped, skipCount)
                 .Take(takeCount)
                 .All(predicate);

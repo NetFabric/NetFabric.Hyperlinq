@@ -17,7 +17,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct
                 System.Linq.Enumerable.Distinct(source);
 
             // Act
-            var result = Array
+            var result = ArrayExtensions
                 .Distinct<int>((ReadOnlySpan<int>)source.AsSpan());
 
             // Assert
@@ -36,7 +36,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct
                     System.Linq.Enumerable.Distinct(source));
 
             // Act
-            var result = Array
+            var result = ArrayExtensions
                 .Distinct<int>((ReadOnlySpan<int>)source.AsSpan())
                 .ToArray();
 
@@ -58,7 +58,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct
                     System.Linq.Enumerable.Distinct(source));
 
             // Act
-            var result = Array
+            var result = ArrayExtensions
                 .Distinct<int>((ReadOnlySpan<int>)source.AsSpan())
                 .ToList();
 

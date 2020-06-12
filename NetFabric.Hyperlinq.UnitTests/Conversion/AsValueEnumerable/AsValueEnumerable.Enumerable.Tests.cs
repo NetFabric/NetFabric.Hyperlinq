@@ -17,7 +17,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsValueEnumerable
                 .AsEnumerable(source);
 
             // Act
-            var result = Enumerable
+            var result = EnumerableExtensions
                 .AsValueEnumerable(wrapped);
 
             // Assert
@@ -37,7 +37,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsValueEnumerable
                 System.Linq.Enumerable.ToArray(source);
 
             // Act
-            var result = Enumerable
+            var result = EnumerableExtensions
                 .AsValueEnumerable<int>(source)
                 .ToArray();
 
@@ -58,7 +58,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsValueEnumerable
                 System.Linq.Enumerable.ToList(source);
 
             // Act
-            var result = Enumerable
+            var result = EnumerableExtensions
                 .AsValueEnumerable<int>(source)
                 .ToList();
 

@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class AsyncValueEnumerable
+    public static partial class AsyncValueEnumerableExtensions
     {
         
         public static ValueTask<Option<TSource>> ElementAtAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source, int index, CancellationToken cancellationToken = default) 

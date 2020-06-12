@@ -14,7 +14,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.Where
             var predicate = (Predicate<int>)null;
 
             // Act
-            Action action = () => _ = ValueEnumerable
+            Action action = () => _ = ValueEnumerableExtensions
                 .Where<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(enumerable, predicate);
 
             // Assert
@@ -35,7 +35,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.Where
                 System.Linq.Enumerable.Where(source, predicate.AsFunc());
 
             // Act
-            var result = ValueEnumerable
+            var result = ValueEnumerableExtensions
                 .Where<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
 
             // Assert

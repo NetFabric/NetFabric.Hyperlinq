@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Diagnostics.Contracts;
 using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class ReadOnlyList
+    public static partial class ReadOnlyListExtensions
     {
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -58,7 +56,7 @@ namespace NetFabric.Hyperlinq
                 => Throw.NotSupportedException();
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             bool ICollection<TSource>.Contains(TSource item) 
-                => ReadOnlyList.Contains(source, item);
+                => ReadOnlyListExtensions.Contains(source, item);
             bool ICollection<TSource>.Remove(TSource item) 
                 => Throw.NotSupportedException<bool>();
             int IList<TSource>.IndexOf(TSource item)
@@ -124,12 +122,12 @@ namespace NetFabric.Hyperlinq
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TSource[] ToArray()
-                => ReadOnlyList.ToArray<IReadOnlyList<TSource>, TSource>(source);
+                => ReadOnlyListExtensions.ToArray<IReadOnlyList<TSource>, TSource>(source);
 
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public List<TSource> ToList()
-                => ReadOnlyList.ToList<IReadOnlyList<TSource>, TSource>(source);
+                => ReadOnlyListExtensions.ToList<IReadOnlyList<TSource>, TSource>(source);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

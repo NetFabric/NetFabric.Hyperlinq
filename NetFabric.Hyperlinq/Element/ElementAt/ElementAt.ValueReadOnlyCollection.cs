@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class ValueReadOnlyCollection
+    public static partial class ValueReadOnlyCollectionExtensions
     {
         
         public static Option<TSource> ElementAt<TEnumerable, TEnumerator, TSource>(this TEnumerable source, int index) 

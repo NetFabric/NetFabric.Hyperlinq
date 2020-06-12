@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class AsyncEnumerable
+    public static partial class AsyncEnumerableExtensions
     {
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -47,12 +47,12 @@ namespace NetFabric.Hyperlinq
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public ValueTask<TSource[]> ToArrayAsync(CancellationToken cancellationToken = default)
-                => AsyncEnumerable.ToArrayAsync<TSource>(source, cancellationToken);
+                => AsyncEnumerableExtensions.ToArrayAsync<TSource>(source, cancellationToken);
 
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public ValueTask<List<TSource>> ToListAsync(CancellationToken cancellationToken = default)
-                => AsyncEnumerable.ToListAsync<TSource>(source, cancellationToken);
+                => AsyncEnumerableExtensions.ToListAsync<TSource>(source, cancellationToken);
         }
 
         public readonly partial struct AsyncValueEnumerableWrapper<TSource>
@@ -95,11 +95,11 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public ValueTask<TSource[]> ToArrayAsync(CancellationToken cancellationToken = default)
-                => AsyncEnumerable.ToArrayAsync(source, cancellationToken);
+                => AsyncEnumerableExtensions.ToArrayAsync(source, cancellationToken);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public ValueTask<List<TSource>> ToListAsync(CancellationToken cancellationToken = default)
-                => AsyncEnumerable.ToListAsync(source, cancellationToken);
+                => AsyncEnumerableExtensions.ToListAsync(source, cancellationToken);
         }
     }
 }

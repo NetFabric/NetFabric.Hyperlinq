@@ -18,7 +18,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Contains
             var wrapped = Wrap.AsValueReadOnlyCollection(source);
 
             // Act
-            var result = ValueReadOnlyCollection
+            var result = ValueReadOnlyCollectionExtensions
                 .Contains<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(wrapped, value, null);
 
             // Assert
@@ -36,7 +36,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Contains
             var wrapped = Wrap.AsValueReadOnlyCollection(source);
 
             // Act
-            var result = ValueReadOnlyCollection
+            var result = ValueReadOnlyCollectionExtensions
                 .Contains<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(wrapped, value, null);
 
             // Assert
@@ -55,7 +55,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Contains
             var wrapped = Wrap.AsValueReadOnlyCollection(source);
 
             // Act
-            var result = ValueReadOnlyCollection
+            var result = ValueReadOnlyCollectionExtensions
                 .Contains<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(wrapped, value, EqualityComparer<int>.Default);
 
             // Assert
@@ -73,7 +73,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Contains
             var wrapped = Wrap.AsValueReadOnlyCollection(source);
 
             // Act
-            var result = ValueReadOnlyCollection
+            var result = ValueReadOnlyCollectionExtensions
                 .Contains<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(wrapped, value, EqualityComparer<int>.Default);
 
             // Assert
@@ -92,7 +92,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Contains
             var wrapped = Wrap.AsValueReadOnlyCollection(source);
 
             // Act
-            var result = ValueReadOnlyCollection
+            var result = ValueReadOnlyCollectionExtensions
                 .Contains<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(wrapped, value, TestComparer<int>.Instance);
 
             // Assert
@@ -110,7 +110,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Contains
             var wrapped = Wrap.AsValueReadOnlyCollection(source);
 
             // Act
-            var result = ValueReadOnlyCollection
+            var result = ValueReadOnlyCollectionExtensions
                 .Contains<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(wrapped, value, TestComparer<int>.Instance);
 
             // Assert

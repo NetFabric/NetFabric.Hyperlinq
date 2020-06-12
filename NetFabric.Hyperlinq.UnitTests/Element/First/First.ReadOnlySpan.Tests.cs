@@ -13,7 +13,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
             // Arrange
 
             // Act
-            var result = Array
+            var result = ArrayExtensions
                 .First<int>((ReadOnlySpan<int>)source.AsSpan());
 
             // Assert
@@ -32,7 +32,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
                 System.Linq.Enumerable.First(source);
 
             // Act
-            var result = Array
+            var result = ArrayExtensions
                 .First<int>((ReadOnlySpan<int>)source.AsSpan());
 
             // Assert
@@ -48,7 +48,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
             // Arrange
 
             // Act
-            var result = Array
+            var result = ArrayExtensions
                 .Where<int>((ReadOnlySpan<int>)source.AsSpan(), predicate)
                 .First();
 
@@ -68,7 +68,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
                 System.Linq.Enumerable.First(source, predicate.AsFunc());
 
             // Act
-            var result = Array
+            var result = ArrayExtensions
                 .Where<int>((ReadOnlySpan<int>)source.AsSpan(), predicate)
                 .First();
 
@@ -85,7 +85,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
             // Arrange
 
             // Act
-            var result = Array
+            var result = ArrayExtensions
                 .Where<int>((ReadOnlySpan<int>)source.AsSpan(), predicate)
                 .First();
 
@@ -106,7 +106,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
                     System.Linq.Enumerable.Where(source, predicate.AsFunc()));
 
             // Act
-            var result = Array
+            var result = ArrayExtensions
                 .Where<int>((ReadOnlySpan<int>)source.AsSpan(), predicate)
                 .First();
 
@@ -123,7 +123,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
             // Arrange
 
             // Act
-            var result = Array
+            var result = ArrayExtensions
                 .Select<int, string>((ReadOnlySpan<int>)source.AsSpan(), selector)
                 .First();
 
@@ -144,7 +144,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
                     System.Linq.Enumerable.Select(source, selector.AsFunc()));
 
             // Act
-            var result = Array
+            var result = ArrayExtensions
                 .Select<int, string>((ReadOnlySpan<int>)source.AsSpan(), selector)
                 .First();
 
@@ -161,7 +161,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
             // Arrange
 
             // Act
-            var result = Array
+            var result = ArrayExtensions
                 .Select<int, string>((ReadOnlySpan<int>)source.AsSpan(), selector)
                 .First();
 
@@ -182,7 +182,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
                     System.Linq.Enumerable.Select(source, selector.AsFunc()));
 
             // Act
-            var result = Array
+            var result = ArrayExtensions
                 .Select<int, string>((ReadOnlySpan<int>)source.AsSpan(), selector)
                 .First();
 
@@ -199,7 +199,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
             // Arrange
 
             // Act
-            var result = Array
+            var result = ArrayExtensions
                 .Where<int>((ReadOnlySpan<int>)source.AsSpan(), predicate)
                 .Select(selector)
                 .First();
@@ -222,7 +222,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
                         System.Linq.Enumerable.Where(source, predicate.AsFunc()), selector.AsFunc()));
 
             // Act
-            var result = Array
+            var result = ArrayExtensions
                 .Where<int>((ReadOnlySpan<int>)source.AsSpan(), predicate)
                 .Select(selector)
                 .First();

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class ReadOnlyCollection
+    public static partial class ReadOnlyCollectionExtensions
     {
         static List<T> ToList<T>(IReadOnlyCollection<T> source)
             => source switch

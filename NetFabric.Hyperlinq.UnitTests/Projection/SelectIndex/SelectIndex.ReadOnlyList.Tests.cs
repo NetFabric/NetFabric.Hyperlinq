@@ -14,7 +14,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Projection.SelectAt
             var selector = (SelectorAt<int, string>)null;
 
             // Act
-            Action action = () => _ = ReadOnlyList.Select<Wrap.ValueReadOnlyList<int>, int, string>(source, selector);
+            Action action = () => _ = ReadOnlyListExtensions.Select<Wrap.ValueReadOnlyList<int>, int, string>(source, selector);
 
             // Assert
             _ = action.Must()
@@ -34,7 +34,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Projection.SelectAt
                 System.Linq.Enumerable.Select(wrapped, selector.AsFunc());
 
             // Act
-            var result = ReadOnlyList
+            var result = ReadOnlyListExtensions
                 .Select<Wrap.ValueReadOnlyList<int>, int, string>(wrapped, selector);
 
             // Assert

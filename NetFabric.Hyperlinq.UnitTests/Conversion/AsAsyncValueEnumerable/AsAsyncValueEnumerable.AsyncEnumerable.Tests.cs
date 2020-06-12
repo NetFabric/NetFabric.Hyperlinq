@@ -18,7 +18,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsAsyncValueEnumerable
                 .AsAsyncEnumerable(source);
 
             // Act
-            var result = AsyncEnumerable
+            var result = AsyncEnumerableExtensions
                 .AsAsyncValueEnumerable(wrapped);
 
             // Assert
@@ -40,7 +40,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsAsyncValueEnumerable
                 System.Linq.Enumerable.ToArray(source);
 
             // Act
-            var result = await AsyncEnumerable
+            var result = await AsyncEnumerableExtensions
                 .AsAsyncValueEnumerable<int>(wrapped)
                 .ToArrayAsync();
 
@@ -63,7 +63,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsAsyncValueEnumerable
                 System.Linq.Enumerable.ToList(source);
 
             // Act
-            var result = await AsyncEnumerable
+            var result = await AsyncEnumerableExtensions
                 .AsAsyncValueEnumerable<int>(wrapped)
                 .ToListAsync();
 

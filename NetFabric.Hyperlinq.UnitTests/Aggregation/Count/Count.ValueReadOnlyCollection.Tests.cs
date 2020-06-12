@@ -19,7 +19,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Aggregation.Count
                 System.Linq.Enumerable.Count(source);
 
             // Act
-            var result = ValueReadOnlyCollection
+            var result = ValueReadOnlyCollectionExtensions
                 .Count<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(wrapped);
 
             // Assert

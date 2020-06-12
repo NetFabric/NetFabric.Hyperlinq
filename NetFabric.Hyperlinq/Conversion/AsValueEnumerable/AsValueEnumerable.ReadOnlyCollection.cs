@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
-using System.Diagnostics.Contracts;
 using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class ReadOnlyCollection
+    public static partial class ReadOnlyCollectionExtensions
     {
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -63,24 +61,24 @@ namespace NetFabric.Hyperlinq
             }
 
             void ICollection<TSource>.Add(TSource item) 
-                => throw new NotSupportedException();
+                => Throw.NotSupportedException();
             void ICollection<TSource>.Clear() 
-                => throw new NotSupportedException();
+                => Throw.NotSupportedException();
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             bool ICollection<TSource>.Contains(TSource item)
-                => ReadOnlyCollection.Contains(source, item);
+                => ReadOnlyCollectionExtensions.Contains(source, item);
             bool ICollection<TSource>.Remove(TSource item) 
-                => throw new NotSupportedException();
+                => Throw.NotSupportedException<bool>();
 
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TSource[] ToArray()
-                => ReadOnlyCollection.ToArray(source);
+                => ReadOnlyCollectionExtensions.ToArray(source);
 
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public List<TSource> ToList()
-                => ReadOnlyCollection.ToList(source);
+                => ReadOnlyCollectionExtensions.ToList(source);
         }
 
         public readonly partial struct ValueEnumerableWrapper<TSource>
@@ -118,13 +116,13 @@ namespace NetFabric.Hyperlinq
             }
 
             void ICollection<TSource>.Add(TSource item) 
-                => throw new NotSupportedException();
+                => Throw.NotSupportedException();
             void ICollection<TSource>.Clear() 
-                => throw new NotSupportedException();
+                => Throw.NotSupportedException();
             bool ICollection<TSource>.Contains(TSource item)
-                => ReadOnlyCollection.Contains(source, item);
+                => ReadOnlyCollectionExtensions.Contains(source, item);
             bool ICollection<TSource>.Remove(TSource item) 
-                => throw new NotSupportedException();
+                => Throw.NotSupportedException<bool>();
 
             public readonly struct Enumerator
                 : IEnumerator<TSource>
@@ -168,12 +166,12 @@ namespace NetFabric.Hyperlinq
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TSource[] ToArray()
-                => ReadOnlyCollection.ToArray(source);
+                => ReadOnlyCollectionExtensions.ToArray(source);
 
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public List<TSource> ToList()
-                => ReadOnlyCollection.ToList(source);
+                => ReadOnlyCollectionExtensions.ToList(source);
         }
 
         public static int Count<TSource>(this ValueEnumerableWrapper<TSource> source)

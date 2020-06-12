@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class ReadOnlyList
+    public static partial class ReadOnlyListExtensions
     {
         
         public static SelectManyEnumerable<TList, TSource, TSubEnumerable, TSubEnumerator, TResult> SelectMany<TList, TSource, TSubEnumerable, TSubEnumerator, TResult>(
@@ -101,7 +101,7 @@ namespace NetFabric.Hyperlinq
 
                 [ExcludeFromCodeCoverage]
                 public readonly void Reset() 
-                    => throw new NotSupportedException();
+                    => Throw.NotSupportedException();
 
                 public void Dispose() => subEnumerator.Dispose();
             }

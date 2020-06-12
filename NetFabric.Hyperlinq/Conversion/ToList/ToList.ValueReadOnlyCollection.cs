@@ -2,7 +2,7 @@
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class ValueReadOnlyCollection
+    public static partial class ValueReadOnlyCollectionExtensions
     {
         
         public static List<TSource> ToList<TEnumerable, TEnumerator, TSource>(this TEnumerable source)

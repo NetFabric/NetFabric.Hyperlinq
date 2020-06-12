@@ -5,7 +5,7 @@ using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class Array
+    public static partial class ArrayExtensions
     {
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -18,7 +18,7 @@ namespace NetFabric.Hyperlinq
         public static bool Contains<TSource>(this TSource[] source, TSource value, IEqualityComparer<TSource>? comparer)
             => comparer is null
                 ? ((ICollection<TSource>)source).Contains(value)
-                : Array.Contains((ReadOnlySpan<TSource>)source, value, comparer);
+                : ArrayExtensions.Contains((ReadOnlySpan<TSource>)source, value, comparer);
 
 #else
 

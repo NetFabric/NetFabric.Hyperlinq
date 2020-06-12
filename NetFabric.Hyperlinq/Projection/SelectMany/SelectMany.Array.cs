@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class Array
+    public static partial class ArrayExtensions
     {
 #if SPAN_SUPPORTED
 
@@ -110,7 +110,7 @@ namespace NetFabric.Hyperlinq
 
                 [ExcludeFromCodeCoverage]
                 public readonly void Reset()
-                    => throw new NotSupportedException();
+                    => Throw.NotSupportedException();
 
                 public void Dispose() => subEnumerator.Dispose();
             }

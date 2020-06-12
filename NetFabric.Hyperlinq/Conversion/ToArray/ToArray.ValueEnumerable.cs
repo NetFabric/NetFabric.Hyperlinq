@@ -5,7 +5,7 @@ using System.Diagnostics;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class ValueEnumerable
+    public static partial class ValueEnumerableExtensions
     {
         
         public static TSource[] ToArray<TEnumerable, TEnumerator, TSource>(this TEnumerable source)
@@ -17,7 +17,7 @@ namespace NetFabric.Hyperlinq
                 case ICollection<TSource> collection:
                     var count = collection.Count;
                     if (count == 0)
-                        return System.Array.Empty<TSource>();
+                        return Array.Empty<TSource>();
 
                     var buffer = new TSource[count];
                     collection.CopyTo(buffer, 0);

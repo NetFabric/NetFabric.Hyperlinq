@@ -71,19 +71,19 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [BenchmarkCategory("Enumerable_Value")]
         [Benchmark]
         public Option<int> Hyperlinq_Enumerable_Value() =>
-            Enumerable.AsValueEnumerable<TestEnumerable.Enumerable, TestEnumerable.Enumerable.Enumerator, int>(enumerableValue, enumerable => enumerable.GetEnumerator())
+            EnumerableExtensions.AsValueEnumerable<TestEnumerable.Enumerable, TestEnumerable.Enumerable.Enumerator, int>(enumerableValue, enumerable => enumerable.GetEnumerator())
             .First();
 
         [BenchmarkCategory("Collection_Value")]
         [Benchmark]
         public Option<int> Hyperlinq_Collection_Value() =>
-            ReadOnlyCollection.AsValueEnumerable<TestCollection.Enumerable, TestCollection.Enumerable.Enumerator, int>(collectionValue, enumerable => enumerable.GetEnumerator())
+            ReadOnlyCollectionExtensions.AsValueEnumerable<TestCollection.Enumerable, TestCollection.Enumerable.Enumerator, int>(collectionValue, enumerable => enumerable.GetEnumerator())
             .First();
 
         [BenchmarkCategory("List_Value")]
         [Benchmark]
         public Option<int> Hyperlinq_List_Value() =>
-            ReadOnlyList.AsValueEnumerable<int>(listValue)
+            ReadOnlyListExtensions.AsValueEnumerable<int>(listValue)
                 .First();
 
         [BenchmarkCategory("Enumerable_Reference")]

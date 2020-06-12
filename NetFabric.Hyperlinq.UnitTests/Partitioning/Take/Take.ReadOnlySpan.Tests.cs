@@ -16,7 +16,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Partitioning.Take
             var expected = System.Linq.Enumerable.Take(source, count);
 
             // Act
-            var result = Array
+            var result = ArrayExtensions
                 .Take((ReadOnlySpan<int>)source.AsSpan(), count);
 
             // Assert

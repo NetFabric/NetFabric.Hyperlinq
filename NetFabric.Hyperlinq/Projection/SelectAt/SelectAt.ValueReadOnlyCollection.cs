@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class ValueReadOnlyCollection
+    public static partial class ValueReadOnlyCollectionExtensions
     {
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -62,13 +62,13 @@ namespace NetFabric.Hyperlinq
             }
 
             void ICollection<TResult>.Add(TResult item) 
-                => throw new NotSupportedException();
+                => Throw.NotSupportedException();
             void ICollection<TResult>.Clear() 
-                => throw new NotSupportedException();
+                => Throw.NotSupportedException();
             bool ICollection<TResult>.Contains(TResult item)
-                => ValueReadOnlyCollection.Contains<TEnumerable, TEnumerator, TSource, TResult>(source, item, selector);
+                => ValueReadOnlyCollectionExtensions.Contains<TEnumerable, TEnumerator, TSource, TResult>(source, item, selector);
             bool ICollection<TResult>.Remove(TResult item) 
-                => throw new NotSupportedException();
+                => Throw.NotSupportedException<bool>();
 
             public struct Enumerator
                 : IEnumerator<TResult>
@@ -106,7 +106,7 @@ namespace NetFabric.Hyperlinq
 
                 [ExcludeFromCodeCoverage]
                 public readonly void Reset() 
-                    => throw new NotSupportedException();
+                    => Throw.NotSupportedException();
 
                 public void Dispose() => enumerator.Dispose();
             }
@@ -116,33 +116,33 @@ namespace NetFabric.Hyperlinq
                 => source.Count != 0;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public ValueReadOnlyCollection.SelectAtEnumerable<TEnumerable, TEnumerator, TSource, TSelectorResult> Select<TSelectorResult>(Selector<TResult, TSelectorResult> selector)
-                => ValueReadOnlyCollection.Select<TEnumerable, TEnumerator, TSource, TSelectorResult>(source, Utils.Combine(this.selector, selector));
+            public ValueReadOnlyCollectionExtensions.SelectAtEnumerable<TEnumerable, TEnumerator, TSource, TSelectorResult> Select<TSelectorResult>(Selector<TResult, TSelectorResult> selector)
+                => ValueReadOnlyCollectionExtensions.Select<TEnumerable, TEnumerator, TSource, TSelectorResult>(source, Utils.Combine(this.selector, selector));
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public ValueReadOnlyCollection.SelectAtEnumerable<TEnumerable, TEnumerator, TSource, TSelectorResult> Select<TSelectorResult>(SelectorAt<TResult, TSelectorResult> selector)
-                => ValueReadOnlyCollection.Select<TEnumerable, TEnumerator, TSource, TSelectorResult>(source, Utils.Combine(this.selector, selector));
+            public ValueReadOnlyCollectionExtensions.SelectAtEnumerable<TEnumerable, TEnumerator, TSource, TSelectorResult> Select<TSelectorResult>(SelectorAt<TResult, TSelectorResult> selector)
+                => ValueReadOnlyCollectionExtensions.Select<TEnumerable, TEnumerator, TSource, TSelectorResult>(source, Utils.Combine(this.selector, selector));
 
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Option<TResult> ElementAt(int index)
-                => ValueReadOnlyCollection.ElementAt<TEnumerable, TEnumerator, TSource, TResult>(source, index, selector);
+                => ValueReadOnlyCollectionExtensions.ElementAt<TEnumerable, TEnumerator, TSource, TResult>(source, index, selector);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Option<TResult> First()
-                => ValueReadOnlyCollection.First<TEnumerable, TEnumerator, TSource, TResult>(source, selector);
+                => ValueReadOnlyCollectionExtensions.First<TEnumerable, TEnumerator, TSource, TResult>(source, selector);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Option<TResult> Single()
-                => ValueReadOnlyCollection.Single<TEnumerable, TEnumerator, TSource, TResult>(source, selector);
+                => ValueReadOnlyCollectionExtensions.Single<TEnumerable, TEnumerator, TSource, TResult>(source, selector);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TResult[] ToArray()
-                => ValueReadOnlyCollection.ToArray<TEnumerable, TEnumerator, TSource, TResult>(source, selector);
+                => ValueReadOnlyCollectionExtensions.ToArray<TEnumerable, TEnumerator, TSource, TResult>(source, selector);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public List<TResult> ToList()
-                => ValueReadOnlyCollection.ToList<TEnumerable, TEnumerator, TSource, TResult>(source, selector);
+                => ValueReadOnlyCollectionExtensions.ToList<TEnumerable, TEnumerator, TSource, TResult>(source, selector);
 
             public Dictionary<TKey, TResult> ToDictionary<TKey>(Selector<TResult, TKey> keySelector, IEqualityComparer<TKey>? comparer = null)
                 => ToDictionary<TKey>(keySelector, comparer);

@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class Array
+    public static partial class ArrayExtensions
     {
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -111,25 +111,25 @@ namespace NetFabric.Hyperlinq
             }
 
             public int Count()
-                => Array.Count<TSource>(source.Span, predicate);
+                => ArrayExtensions.Count<TSource>(source.Span, predicate);
 
             public bool Any()
-                => Array.Any<TSource>(source.Span, predicate);
+                => ArrayExtensions.Any<TSource>(source.Span, predicate);
                 
             public Option<TResult> ElementAt(int index)
-                => Array.ElementAt<TSource, TResult>(source.Span, index, predicate, selector);
+                => ArrayExtensions.ElementAt<TSource, TResult>(source.Span, index, predicate, selector);
 
             public Option<TResult> First()
-                => Array.First<TSource, TResult>(source.Span, predicate, selector);
+                => ArrayExtensions.First<TSource, TResult>(source.Span, predicate, selector);
 
             public Option<TResult> Single()
-                => Array.Single<TSource, TResult>(source.Span, predicate, selector);
+                => ArrayExtensions.Single<TSource, TResult>(source.Span, predicate, selector);
 
             public TResult[] ToArray()
-                => Array.ToArray<TSource, TResult>(source.Span, predicate, selector);
+                => ArrayExtensions.ToArray<TSource, TResult>(source.Span, predicate, selector);
 
             public List<TResult> ToList()
-                => Array.ToList<TSource, TResult>(source, predicate, selector); // memory performs best
+                => ArrayExtensions.ToList<TSource, TResult>(source, predicate, selector); // memory performs best
 
             public bool SequenceEqual(IEnumerable<TResult> other, IEqualityComparer<TResult>? comparer = null)
             {

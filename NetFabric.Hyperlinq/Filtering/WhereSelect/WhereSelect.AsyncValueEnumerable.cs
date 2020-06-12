@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class AsyncValueEnumerable
+    public static partial class AsyncValueEnumerableExtensions
     {
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -222,27 +222,27 @@ namespace NetFabric.Hyperlinq
             }
 
             public ValueTask<int> CountAsync(CancellationToken cancellationToken = default)
-                => AsyncValueEnumerable.CountAsync<TEnumerable, TEnumerator, TSource>(source, predicate, cancellationToken);
+                => AsyncValueEnumerableExtensions.CountAsync<TEnumerable, TEnumerator, TSource>(source, predicate, cancellationToken);
 
             public ValueTask<bool> AnyAsync(CancellationToken cancellationToken = default)
-                => AsyncValueEnumerable.AnyAsync<TEnumerable, TEnumerator, TSource>(source, predicate, cancellationToken);
+                => AsyncValueEnumerableExtensions.AnyAsync<TEnumerable, TEnumerator, TSource>(source, predicate, cancellationToken);
 
             public ValueTask<Option<TResult>> ElementAtAsync(int index, CancellationToken cancellationToken = default)
-                => AsyncValueEnumerable.ElementAtAsync<TEnumerable, TEnumerator, TSource, TResult>(source, index, predicate, selector, cancellationToken);
+                => AsyncValueEnumerableExtensions.ElementAtAsync<TEnumerable, TEnumerator, TSource, TResult>(source, index, predicate, selector, cancellationToken);
 
 
             public ValueTask<Option<TResult>> FirstAsync(CancellationToken cancellationToken = default)
-                => AsyncValueEnumerable.FirstAsync<TEnumerable, TEnumerator, TSource, TResult>(source, predicate, selector, cancellationToken);
+                => AsyncValueEnumerableExtensions.FirstAsync<TEnumerable, TEnumerator, TSource, TResult>(source, predicate, selector, cancellationToken);
 
 
             public ValueTask<Option<TResult>> SingleAsync(CancellationToken cancellationToken = default)
-                => AsyncValueEnumerable.SingleAsync<TEnumerable, TEnumerator, TSource, TResult>(source, predicate, selector, cancellationToken);
+                => AsyncValueEnumerableExtensions.SingleAsync<TEnumerable, TEnumerator, TSource, TResult>(source, predicate, selector, cancellationToken);
 
             public ValueTask<TResult[]> ToArrayAsync(CancellationToken cancellationToken = default)
-                => AsyncValueEnumerable.ToArrayAsync<TEnumerable, TEnumerator, TSource, TResult>(source, predicate, selector, cancellationToken);
+                => AsyncValueEnumerableExtensions.ToArrayAsync<TEnumerable, TEnumerator, TSource, TResult>(source, predicate, selector, cancellationToken);
 
             public ValueTask<List<TResult>> ToListAsync(CancellationToken cancellationToken = default)
-                => AsyncValueEnumerable.ToListAsync<TEnumerable, TEnumerator, TSource, TResult>(source, predicate, selector, cancellationToken);
+                => AsyncValueEnumerableExtensions.ToListAsync<TEnumerable, TEnumerator, TSource, TResult>(source, predicate, selector, cancellationToken);
 
             public ValueTask<Dictionary<TKey, TResult>> ToDictionaryAsync<TKey>(AsyncSelector<TResult, TKey> keySelector, CancellationToken cancellationToken = default)
                 => ToDictionaryAsync<TKey>(keySelector, null, cancellationToken);

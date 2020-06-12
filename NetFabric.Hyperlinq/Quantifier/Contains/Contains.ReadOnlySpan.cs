@@ -4,7 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class Array
+    public static partial class ArrayExtensions
     {
       
         public static bool Contains<TSource>(this ReadOnlySpan<TSource> source, [AllowNull] TSource value, IEqualityComparer<TSource>? comparer = null)

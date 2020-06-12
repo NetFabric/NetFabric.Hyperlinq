@@ -4,7 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class ValueEnumerable
+    public static partial class ValueEnumerableExtensions
     {
         
         public static bool Contains<TEnumerable, TEnumerator, TSource>(this TEnumerable source, [AllowNull] TSource value, IEqualityComparer<TSource>? comparer = null)

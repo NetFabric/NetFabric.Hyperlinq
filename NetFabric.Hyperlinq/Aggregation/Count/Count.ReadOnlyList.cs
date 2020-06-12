@@ -4,7 +4,7 @@ using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class ReadOnlyList
+    public static partial class ReadOnlyListExtensions
     {
         public static int Count<TList, TSource>(this TList source)
             where TList : notnull, IReadOnlyList<TSource>

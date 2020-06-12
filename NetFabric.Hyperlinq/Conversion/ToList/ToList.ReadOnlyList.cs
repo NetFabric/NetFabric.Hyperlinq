@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class ReadOnlyList
+    public static partial class ReadOnlyListExtensions
     {
         
         public static List<TSource> ToList<TList, TSource>(this TList source)

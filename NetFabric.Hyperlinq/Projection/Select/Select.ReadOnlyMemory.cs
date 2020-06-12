@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class Array
+    public static partial class ArrayExtensions
     {
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -79,7 +79,7 @@ namespace NetFabric.Hyperlinq
             void ICollection<TResult>.Clear() 
                 => Throw.NotSupportedException();
             bool ICollection<TResult>.Contains(TResult item)
-                => Array.Contains(source.Span, item, selector);
+                => ArrayExtensions.Contains(source.Span, item, selector);
             bool ICollection<TResult>.Remove(TResult item) 
                 => Throw.NotSupportedException<bool>();
             int IList<TResult>.IndexOf(TResult item)
@@ -168,23 +168,23 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Option<TResult> ElementAt(int index)
-                => Array.ElementAt<TSource, TResult>(source.Span, index, selector);
+                => ArrayExtensions.ElementAt<TSource, TResult>(source.Span, index, selector);
 
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Option<TResult> First()
-                => Array.First<TSource, TResult>(source.Span, selector);
+                => ArrayExtensions.First<TSource, TResult>(source.Span, selector);
 
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Option<TResult> Single()
-                => Array.Single<TSource, TResult>(source.Span, selector);
+                => ArrayExtensions.Single<TSource, TResult>(source.Span, selector);
 
             public TResult[] ToArray()
-                => Array.ToArray(source.Span, selector);
+                => ArrayExtensions.ToArray(source.Span, selector);
 
             public List<TResult> ToList()
-                => Array.ToList(source, selector); // memory performs best
+                => ArrayExtensions.ToList(source, selector); // memory performs best
 
             public bool SequenceEqual(IEnumerable<TResult> other, IEqualityComparer<TResult>? comparer = null)
             {

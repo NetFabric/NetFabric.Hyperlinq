@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class Array
+    public static partial class ArrayExtensions
     {
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -104,41 +104,41 @@ namespace NetFabric.Hyperlinq
             }
 
             public int Count()
-                => Array.Count<TSource>(source.Span, predicate);
+                => ArrayExtensions.Count<TSource>(source.Span, predicate);
 
             public bool Any()
-                => Array.Any<TSource>(source.Span, predicate);
+                => ArrayExtensions.Any<TSource>(source.Span, predicate);
                 
             public MemoryWhereEnumerable<TSource> Where(Predicate<TSource> predicate)
-                => Array.Where<TSource>(source, Utils.Combine(this.predicate, predicate));
+                => ArrayExtensions.Where<TSource>(source, Utils.Combine(this.predicate, predicate));
 
             public MemoryWhereAtEnumerable<TSource> Where(PredicateAt<TSource> predicate)
-                => Array.Where<TSource>(source, Utils.Combine(this.predicate, predicate));
+                => ArrayExtensions.Where<TSource>(source, Utils.Combine(this.predicate, predicate));
 
             public MemoryWhereSelectEnumerable<TSource, TResult> Select<TResult>(Selector<TSource, TResult> selector)
             {
                 if (selector is null)
                     Throw.ArgumentNullException(nameof(selector));
 
-                return Array.WhereSelect<TSource, TResult>(source, predicate, selector);
+                return ArrayExtensions.WhereSelect<TSource, TResult>(source, predicate, selector);
             }
 
             public Option<TSource> ElementAt(int index)
-                => Array.ElementAt(source.Span, index, predicate);
+                => ArrayExtensions.ElementAt(source.Span, index, predicate);
 
             public Option<TSource> First()
-                => Array.First(source.Span, predicate);
+                => ArrayExtensions.First(source.Span, predicate);
 
             public Option<TSource> Single()
 #pragma warning disable HLQ005 // Avoid Single() and SingleOrDefault()
-                => Array.Single(source.Span, predicate);
+                => ArrayExtensions.Single(source.Span, predicate);
 #pragma warning restore HLQ005 // Avoid Single() and SingleOrDefault()
 
             public TSource[] ToArray()
-                => Array.ToArray<TSource>(source.Span, predicate);
+                => ArrayExtensions.ToArray<TSource>(source.Span, predicate);
 
             public List<TSource> ToList()
-                => Array.ToList<TSource>(source, predicate); // memory performs best
+                => ArrayExtensions.ToList<TSource>(source, predicate); // memory performs best
 
             public bool SequenceEqual(IEnumerable<TSource> other, IEqualityComparer<TSource>? comparer = null)
             {

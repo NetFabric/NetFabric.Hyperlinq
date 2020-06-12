@@ -14,29 +14,29 @@ namespace NetFabric.Hyperlinq
             => source.Count;
 
         
-        public static ValueReadOnlyCollection.SkipTakeEnumerable<ValueWrapper<TSource>, Queue<TSource>.Enumerator, TSource> Skip<TSource>(this Queue<TSource> source, int count)
-            => ValueReadOnlyCollection.Skip<ValueWrapper<TSource>, Queue<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), count);
+        public static ValueReadOnlyCollectionExtensions.SkipTakeEnumerable<ValueWrapper<TSource>, Queue<TSource>.Enumerator, TSource> Skip<TSource>(this Queue<TSource> source, int count)
+            => ValueReadOnlyCollectionExtensions.Skip<ValueWrapper<TSource>, Queue<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), count);
 
         
-        public static ValueReadOnlyCollection.SkipTakeEnumerable<ValueWrapper<TSource>, Queue<TSource>.Enumerator, TSource> Take<TSource>(this Queue<TSource> source, int count)
-            => ValueReadOnlyCollection.Take<ValueWrapper<TSource>, Queue<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), count);
+        public static ValueReadOnlyCollectionExtensions.SkipTakeEnumerable<ValueWrapper<TSource>, Queue<TSource>.Enumerator, TSource> Take<TSource>(this Queue<TSource> source, int count)
+            => ValueReadOnlyCollectionExtensions.Take<ValueWrapper<TSource>, Queue<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), count);
 
         
         public static bool All<TSource>(this Queue<TSource> source, Predicate<TSource> predicate)
-            => ValueReadOnlyCollection.All<ValueWrapper<TSource>, Queue<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
+            => ValueReadOnlyCollectionExtensions.All<ValueWrapper<TSource>, Queue<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
         
         public static bool All<TSource>(this Queue<TSource> source, PredicateAt<TSource> predicate)
-            => ValueReadOnlyCollection.All<ValueWrapper<TSource>, Queue<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
+            => ValueReadOnlyCollectionExtensions.All<ValueWrapper<TSource>, Queue<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
 
         
         public static bool Any<TSource>(this Queue<TSource> source)
             => source.Count != 0;
         
         public static bool Any<TSource>(this Queue<TSource> source, Predicate<TSource> predicate)
-            => ValueReadOnlyCollection.Any<ValueWrapper<TSource>, Queue<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
+            => ValueReadOnlyCollectionExtensions.Any<ValueWrapper<TSource>, Queue<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
         
         public static bool Any<TSource>(this Queue<TSource> source, PredicateAt<TSource> predicate)
-            => ValueReadOnlyCollection.Any<ValueWrapper<TSource>, Queue<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
+            => ValueReadOnlyCollectionExtensions.Any<ValueWrapper<TSource>, Queue<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
 
         
         public static bool Contains<TSource>(this Queue<TSource> source, TSource value)
@@ -44,53 +44,53 @@ namespace NetFabric.Hyperlinq
 
         
         public static bool Contains<TSource>(this Queue<TSource> source, TSource value, IEqualityComparer<TSource>? comparer)
-            => ValueReadOnlyCollection.Contains<ValueWrapper<TSource>, Queue<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), value, comparer);
+            => ValueReadOnlyCollectionExtensions.Contains<ValueWrapper<TSource>, Queue<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), value, comparer);
 
         
-        public static ValueReadOnlyCollection.SelectEnumerable<ValueWrapper<TSource>, Queue<TSource>.Enumerator, TSource, TResult> Select<TSource, TResult>(
+        public static ValueReadOnlyCollectionExtensions.SelectEnumerable<ValueWrapper<TSource>, Queue<TSource>.Enumerator, TSource, TResult> Select<TSource, TResult>(
             this Queue<TSource> source,
             Selector<TSource, TResult> selector)
-            => ValueReadOnlyCollection.Select<ValueWrapper<TSource>, Queue<TSource>.Enumerator, TSource, TResult>(new ValueWrapper<TSource>(source), selector);
+            => ValueReadOnlyCollectionExtensions.Select<ValueWrapper<TSource>, Queue<TSource>.Enumerator, TSource, TResult>(new ValueWrapper<TSource>(source), selector);
         
-        public static ValueReadOnlyCollection.SelectAtEnumerable<ValueWrapper<TSource>, Queue<TSource>.Enumerator, TSource, TResult> Select<TSource, TResult>(
+        public static ValueReadOnlyCollectionExtensions.SelectAtEnumerable<ValueWrapper<TSource>, Queue<TSource>.Enumerator, TSource, TResult> Select<TSource, TResult>(
             this Queue<TSource> source,
             SelectorAt<TSource, TResult> selector)
-            => ValueReadOnlyCollection.Select<ValueWrapper<TSource>, Queue<TSource>.Enumerator, TSource, TResult>(new ValueWrapper<TSource>(source), selector);
+            => ValueReadOnlyCollectionExtensions.Select<ValueWrapper<TSource>, Queue<TSource>.Enumerator, TSource, TResult>(new ValueWrapper<TSource>(source), selector);
 
         
-        public static ValueEnumerable.SelectManyEnumerable<ValueWrapper<TSource>, Queue<TSource>.Enumerator, TSource, TSubEnumerable, TSubEnumerator, TResult> SelectMany<TSource, TSubEnumerable, TSubEnumerator, TResult>(
+        public static ValueEnumerableExtensions.SelectManyEnumerable<ValueWrapper<TSource>, Queue<TSource>.Enumerator, TSource, TSubEnumerable, TSubEnumerator, TResult> SelectMany<TSource, TSubEnumerable, TSubEnumerator, TResult>(
             this Queue<TSource> source,
             Selector<TSource, TSubEnumerable> selector)
             where TSubEnumerable : notnull, IValueEnumerable<TResult, TSubEnumerator>
             where TSubEnumerator : struct, IEnumerator<TResult>
-            => ValueEnumerable.SelectMany<ValueWrapper<TSource>, Queue<TSource>.Enumerator, TSource, TSubEnumerable, TSubEnumerator, TResult>(new ValueWrapper<TSource>(source), selector);
+            => ValueEnumerableExtensions.SelectMany<ValueWrapper<TSource>, Queue<TSource>.Enumerator, TSource, TSubEnumerable, TSubEnumerator, TResult>(new ValueWrapper<TSource>(source), selector);
 
         
-        public static ValueEnumerable.WhereEnumerable<ValueWrapper<TSource>, Queue<TSource>.Enumerator, TSource> Where<TSource>(
+        public static ValueEnumerableExtensions.WhereEnumerable<ValueWrapper<TSource>, Queue<TSource>.Enumerator, TSource> Where<TSource>(
             this Queue<TSource> source,
             Predicate<TSource> predicate)
-            => ValueEnumerable.Where<ValueWrapper<TSource>, Queue<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
+            => ValueEnumerableExtensions.Where<ValueWrapper<TSource>, Queue<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
         
-        public static ValueEnumerable.WhereAtEnumerable<ValueWrapper<TSource>, Queue<TSource>.Enumerator, TSource> Where<TSource>(
+        public static ValueEnumerableExtensions.WhereAtEnumerable<ValueWrapper<TSource>, Queue<TSource>.Enumerator, TSource> Where<TSource>(
             this Queue<TSource> source,
             PredicateAt<TSource> predicate)
-            => ValueEnumerable.Where<ValueWrapper<TSource>, Queue<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
+            => ValueEnumerableExtensions.Where<ValueWrapper<TSource>, Queue<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
 
         
         public static Option<TSource> ElementAt<TSource>(this Queue<TSource> source, int index)
-            => ValueReadOnlyCollection.ElementAt<ValueWrapper<TSource>, Queue<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), index);
+            => ValueReadOnlyCollectionExtensions.ElementAt<ValueWrapper<TSource>, Queue<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), index);
 
         
         public static Option<TSource> First<TSource>(this Queue<TSource> source)
-            => ValueReadOnlyCollection.First<ValueWrapper<TSource>, Queue<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source));
+            => ValueReadOnlyCollectionExtensions.First<ValueWrapper<TSource>, Queue<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source));
 
         
         public static Option<TSource> Single<TSource>(this Queue<TSource> source)
-            => ValueReadOnlyCollection.Single<ValueWrapper<TSource>, Queue<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source));
+            => ValueReadOnlyCollectionExtensions.Single<ValueWrapper<TSource>, Queue<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source));
 
         
-        public static ValueEnumerable.DistinctEnumerable<ValueWrapper<TSource>, Queue<TSource>.Enumerator, TSource> Distinct<TSource>(this Queue<TSource> source, IEqualityComparer<TSource>? comparer = null)
-            => ValueEnumerable.Distinct<ValueWrapper<TSource>, Queue<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), comparer);
+        public static ValueEnumerableExtensions.DistinctEnumerable<ValueWrapper<TSource>, Queue<TSource>.Enumerator, TSource> Distinct<TSource>(this Queue<TSource> source, IEqualityComparer<TSource>? comparer = null)
+            => ValueEnumerableExtensions.Distinct<ValueWrapper<TSource>, Queue<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), comparer);
 
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -103,24 +103,24 @@ namespace NetFabric.Hyperlinq
 
         
         public static TSource[] ToArray<TSource>(this Queue<TSource> source)
-            => ValueReadOnlyCollection.ToArray<ValueWrapper<TSource>, Queue<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source));
+            => ValueReadOnlyCollectionExtensions.ToArray<ValueWrapper<TSource>, Queue<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source));
 
         
         public static List<TSource> ToList<TSource>(this Queue<TSource> source)
-            => ValueReadOnlyCollection.ToList<ValueWrapper<TSource>, Queue<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source));
+            => ValueReadOnlyCollectionExtensions.ToList<ValueWrapper<TSource>, Queue<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source));
 
         
         public static Dictionary<TKey, TSource> ToDictionary<TSource, TKey>(this Queue<TSource> source, Selector<TSource, TKey> keySelector)
-            => ValueReadOnlyCollection.ToDictionary<ValueWrapper<TSource>, Queue<TSource>.Enumerator, TSource, TKey>(new ValueWrapper<TSource>(source), keySelector);
+            => ValueReadOnlyCollectionExtensions.ToDictionary<ValueWrapper<TSource>, Queue<TSource>.Enumerator, TSource, TKey>(new ValueWrapper<TSource>(source), keySelector);
         
         public static Dictionary<TKey, TSource> ToDictionary<TSource, TKey>(this Queue<TSource> source, Selector<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer)
-            => ValueReadOnlyCollection.ToDictionary<ValueWrapper<TSource>, Queue<TSource>.Enumerator, TSource, TKey>(new ValueWrapper<TSource>(source), keySelector, comparer);
+            => ValueReadOnlyCollectionExtensions.ToDictionary<ValueWrapper<TSource>, Queue<TSource>.Enumerator, TSource, TKey>(new ValueWrapper<TSource>(source), keySelector, comparer);
         
         public static Dictionary<TKey, TElement> ToDictionary<TSource, TKey, TElement>(this Queue<TSource> source, Selector<TSource, TKey> keySelector, Selector<TSource, TElement> elementSelector)
-            => ValueReadOnlyCollection.ToDictionary<ValueWrapper<TSource>, Queue<TSource>.Enumerator, TSource, TKey, TElement>(new ValueWrapper<TSource>(source), keySelector, elementSelector);
+            => ValueReadOnlyCollectionExtensions.ToDictionary<ValueWrapper<TSource>, Queue<TSource>.Enumerator, TSource, TKey, TElement>(new ValueWrapper<TSource>(source), keySelector, elementSelector);
         
         public static Dictionary<TKey, TElement> ToDictionary<TSource, TKey, TElement>(this Queue<TSource> source, Selector<TSource, TKey> keySelector, Selector<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer)
-            => ValueReadOnlyCollection.ToDictionary<ValueWrapper<TSource>, Queue<TSource>.Enumerator, TSource, TKey, TElement>(new ValueWrapper<TSource>(source), keySelector, elementSelector, comparer);
+            => ValueReadOnlyCollectionExtensions.ToDictionary<ValueWrapper<TSource>, Queue<TSource>.Enumerator, TSource, TKey, TElement>(new ValueWrapper<TSource>(source), keySelector, elementSelector, comparer);
 
         public readonly partial struct ValueWrapper<TSource>
             : IValueReadOnlyCollection<TSource, Queue<TSource>.Enumerator>
@@ -147,13 +147,13 @@ namespace NetFabric.Hyperlinq
                 => ((ICollection<TSource>)source).CopyTo(array, arrayIndex);
 
             void ICollection<TSource>.Add(TSource item) 
-                => throw new NotSupportedException();
+                => Throw.NotSupportedException();
             void ICollection<TSource>.Clear() 
-                => throw new NotSupportedException();
+                => Throw.NotSupportedException();
             bool ICollection<TSource>.Contains(TSource item) 
-                => throw new NotSupportedException();
+                => Throw.NotSupportedException<bool>();
             bool ICollection<TSource>.Remove(TSource item) 
-                => throw new NotSupportedException();
+                => Throw.NotSupportedException<bool>();
         }
 
         public static int Count<TSource>(this ValueWrapper<TSource> source)

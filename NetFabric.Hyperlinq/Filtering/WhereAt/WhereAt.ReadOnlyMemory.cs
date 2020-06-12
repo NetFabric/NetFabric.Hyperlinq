@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class Array
+    public static partial class ArrayExtensions
     {
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -116,19 +116,19 @@ namespace NetFabric.Hyperlinq
                 => Where<TSource>(source, Utils.Combine(this.predicate, predicate));
 
             public Option<TSource> ElementAt(int index)
-                => Array.ElementAt<TSource>(source.Span, index, predicate);
+                => ArrayExtensions.ElementAt<TSource>(source.Span, index, predicate);
 
             public Option<TSource> First()
-                => Array.First<TSource>(source.Span, predicate);
+                => ArrayExtensions.First<TSource>(source.Span, predicate);
 
             public Option<TSource> Single()
-                => Array.Single<TSource>(source.Span, predicate);
+                => ArrayExtensions.Single<TSource>(source.Span, predicate);
 
             public TSource[] ToArray()
-                => Array.ToArray(source.Span, predicate);
+                => ArrayExtensions.ToArray(source.Span, predicate);
 
             public List<TSource> ToList()
-                => Array.ToList(source, predicate);  // memory performs best
+                => ArrayExtensions.ToList(source, predicate);  // memory performs best
 
             public bool SequenceEqual(IEnumerable<TSource> other, IEqualityComparer<TSource>? comparer = null)
             {

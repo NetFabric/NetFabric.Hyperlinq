@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class ValueEnumerable
+    public static partial class ValueEnumerableExtensions
     {
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -77,7 +77,7 @@ namespace NetFabric.Hyperlinq
 
                 [ExcludeFromCodeCoverage]
                 public readonly void Reset() 
-                    => throw new NotSupportedException();
+                    => Throw.NotSupportedException();
 
                 public void Dispose() 
                     => enumerator.Dispose();
@@ -85,7 +85,7 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TakeEnumerable<TEnumerable, TEnumerator, TSource> Take(int count)
-                => ValueEnumerable.Take<TEnumerable, TEnumerator, TSource>(source, Math.Min(this.count, count));
+                => ValueEnumerableExtensions.Take<TEnumerable, TEnumerator, TSource>(source, Math.Min(this.count, count));
         }
     }
 }

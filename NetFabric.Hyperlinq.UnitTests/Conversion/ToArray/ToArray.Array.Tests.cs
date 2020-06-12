@@ -15,7 +15,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
             // Arrange
 
             // Act
-            var result = Array
+            var result = ArrayExtensions
                 .ToArray<int>(source);
 
             // Assert

@@ -20,21 +20,21 @@ namespace NetFabric.Hyperlinq
             => true;
 
         IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() 
-            => throw new NotSupportedException();
+            => Throw.NotSupportedException<IEnumerator<TSource>>();
 
         IEnumerator IEnumerable.GetEnumerator() 
-            => throw new NotSupportedException();
+            => Throw.NotSupportedException<IEnumerator>();
 
         void ICollection<TSource>.Add(TSource item) 
-            => throw new NotSupportedException();
+            => Throw.NotSupportedException();
 
         bool ICollection<TSource>.Remove(TSource item) 
-            => throw new NotSupportedException();
+            => Throw.NotSupportedException<bool>();
 
         void ICollection<TSource>.Clear() 
-            => throw new NotSupportedException();
+            => Throw.NotSupportedException();
 
         bool ICollection<TSource>.Contains(TSource item) 
-            => throw new NotSupportedException();
+            => Throw.NotSupportedException<bool>();
     }
 }

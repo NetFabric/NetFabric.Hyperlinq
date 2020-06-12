@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class Array
+    public static partial class ArrayExtensions
     {
 #if SPAN_SUPPORTED
 
@@ -90,7 +90,7 @@ namespace NetFabric.Hyperlinq
 
                 [ExcludeFromCodeCoverage]
                 public readonly void Reset() 
-                    => throw new NotSupportedException();
+                    => Throw.NotSupportedException();
 
                 public void Dispose() 
                     => set = null;
@@ -126,7 +126,7 @@ namespace NetFabric.Hyperlinq
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly TSource[] ToArray()
                 => source.Length == 0
-                    ? System.Array.Empty<TSource>()
+                    ? Array.Empty<TSource>()
                     : GetSet().ToArray();
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]

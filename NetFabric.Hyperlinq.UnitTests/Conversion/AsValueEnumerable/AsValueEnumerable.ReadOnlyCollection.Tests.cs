@@ -17,12 +17,12 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsValueEnumerable
                 .AsReadOnlyCollection(source);
 
             // Act
-            var result = ReadOnlyCollection
+            var result = ReadOnlyCollectionExtensions
                 .AsValueEnumerable(wrapped);
 
             // Assert
             _ = result.Must()
-                .BeOfType<ReadOnlyCollection.ValueEnumerableWrapper<int>>()
+                .BeOfType<ReadOnlyCollectionExtensions.ValueEnumerableWrapper<int>>()
                 .BeEnumerableOf<int>()
                 .BeEqualTo(wrapped);
         }
@@ -38,7 +38,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsValueEnumerable
                 System.Linq.Enumerable.ToArray(source);
 
             // Act
-            var result = ReadOnlyCollection
+            var result = ReadOnlyCollectionExtensions
                 .AsValueEnumerable<int>(source)
                 .ToArray();
 
@@ -59,7 +59,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsValueEnumerable
                 System.Linq.Enumerable.ToList(source);
 
             // Act
-            var result = ReadOnlyCollection
+            var result = ReadOnlyCollectionExtensions
                 .AsValueEnumerable<int>(source)
                 .ToList();
 

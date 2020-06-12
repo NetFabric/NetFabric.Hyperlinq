@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
-    static partial class ReadOnlyCollection
+    static partial class ReadOnlyCollectionExtensions
     {
         static bool Contains<TSource>(this IReadOnlyCollection<TSource> source, TSource value)
         {

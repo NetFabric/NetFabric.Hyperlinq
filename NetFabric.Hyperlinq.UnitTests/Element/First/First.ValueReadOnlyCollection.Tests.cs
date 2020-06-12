@@ -15,7 +15,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
                 .AsValueReadOnlyCollection(source);
 
             // Act
-            var result = ValueReadOnlyCollection
+            var result = ValueReadOnlyCollectionExtensions
                 .First<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(wrapped);
 
             // Assert
@@ -36,7 +36,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
                 System.Linq.Enumerable.First(source);
 
             // Act
-            var result = ValueReadOnlyCollection
+            var result = ValueReadOnlyCollectionExtensions
                 .First<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(wrapped);
 
             // Assert
@@ -54,7 +54,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
                 .AsValueReadOnlyCollection(source);
 
             // Act
-            var result = ValueReadOnlyCollection
+            var result = ValueReadOnlyCollectionExtensions
                 .Select<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int, string>(wrapped, selector)
                 .First();
 
@@ -77,7 +77,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
                     System.Linq.Enumerable.Select(source, selector.AsFunc()));
 
             // Act
-            var result = ValueReadOnlyCollection
+            var result = ValueReadOnlyCollectionExtensions
                 .Select<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int, string>(wrapped, selector)
                 .First();
 
@@ -96,7 +96,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
                 .AsValueReadOnlyCollection(source);
 
             // Act
-            var result = ValueReadOnlyCollection
+            var result = ValueReadOnlyCollectionExtensions
                 .Select<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int, string>(wrapped, selector)
                 .First();
 
@@ -119,7 +119,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
                     System.Linq.Enumerable.Select(source, selector.AsFunc()));
 
             // Act
-            var result = ValueReadOnlyCollection
+            var result = ValueReadOnlyCollectionExtensions
                 .Select<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int, string>(wrapped, selector)
                 .First();
 

@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class ReadOnlyList
+    public static partial class ReadOnlyListExtensions
     {
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -83,7 +83,7 @@ namespace NetFabric.Hyperlinq
 
                 [ExcludeFromCodeCoverage]
                 public readonly void Reset() 
-                    => throw new NotSupportedException();
+                    => Throw.NotSupportedException();
 
                 public void Dispose()
                     => set = null;
@@ -120,7 +120,7 @@ namespace NetFabric.Hyperlinq
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly TSource[] ToArray()
                 => source.Count == 0 
-                    ? System.Array.Empty<TSource>()
+                    ? Array.Empty<TSource>()
                     : GetSet().ToArray();
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]

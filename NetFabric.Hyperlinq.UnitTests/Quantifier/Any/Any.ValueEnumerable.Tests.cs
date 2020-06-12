@@ -20,7 +20,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Any
                 System.Linq.Enumerable.Any(source);
 
             // Act
-            var result = ValueEnumerable
+            var result = ValueEnumerableExtensions
                 .Any<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped);
 
             // Assert
@@ -38,7 +38,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Any
 
             // Act
             Action action = () => _ = 
-                ValueEnumerable.Any<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
+                ValueEnumerableExtensions.Any<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
 
             // Assert
             _ = action.Must()
@@ -58,7 +58,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Any
                 System.Linq.Enumerable.Any(source, predicate.AsFunc());
 
             // Act
-            var result = ValueEnumerable
+            var result = ValueEnumerableExtensions
                 .Any<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
 
             // Assert
@@ -75,7 +75,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Any
             var predicate = (PredicateAt<int>)null;
 
             // Act
-            Action action = () => _ = ValueEnumerable
+            Action action = () => _ = ValueEnumerableExtensions
                 .Any<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
 
             // Assert
@@ -97,7 +97,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Any
                     System.Linq.Enumerable.Where(source, predicate.AsFunc())) != 0;
 
             // Act
-            var result = ValueEnumerable
+            var result = ValueEnumerableExtensions
                 .Any<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
 
             // Assert

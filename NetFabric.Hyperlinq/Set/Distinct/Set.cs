@@ -106,7 +106,7 @@ namespace NetFabric.Hyperlinq
             var newSize = checked((Count * 2) + 1);
             var newBuckets = new int[newSize];
             var newSlots = new Slot[newSize];
-            System.Array.Copy(slots, newSlots, Count);
+            Array.Copy(slots, newSlots, Count);
             for (var i = 0; i < Count; i++)
             {
                 var bucket = newSlots[i].HashCode % newSize;
@@ -143,18 +143,25 @@ namespace NetFabric.Hyperlinq
         /// </summary>
         public int Count { get; private set; }
 
-        bool ICollection<TElement>.IsReadOnly => true;
-        void ICollection<TElement>.Add(TElement item) => throw new NotSupportedException();
-        void ICollection<TElement>.Clear() => throw new NotSupportedException();
-        bool ICollection<TElement>.Contains(TElement item) => throw new NotSupportedException();
+        bool ICollection<TElement>.IsReadOnly 
+            => true;
+        void ICollection<TElement>.Add(TElement item) 
+            => Throw.NotSupportedException();
+        void ICollection<TElement>.Clear() 
+            => Throw.NotSupportedException();
+        bool ICollection<TElement>.Contains(TElement item) 
+            => Throw.NotSupportedException<bool>();
         public void CopyTo(TElement[] array, int _)
         {
             for (var index = 0; index < Count; index++)
                 array[index] = slots[index].Value;
         }
-        bool ICollection<TElement>.Remove(TElement item) => throw new NotSupportedException();
-        IEnumerator<TElement> IEnumerable<TElement>.GetEnumerator() => throw new NotSupportedException();
-        IEnumerator IEnumerable.GetEnumerator() => throw new NotSupportedException();
+        bool ICollection<TElement>.Remove(TElement item) 
+            => Throw.NotSupportedException<bool>();
+        IEnumerator<TElement> IEnumerable<TElement>.GetEnumerator() 
+            => Throw.NotSupportedException<IEnumerator<TElement>>();
+        IEnumerator IEnumerable.GetEnumerator() 
+            => Throw.NotSupportedException<IEnumerator>();
 
         /// <summary>
         /// An entry in the hash set.

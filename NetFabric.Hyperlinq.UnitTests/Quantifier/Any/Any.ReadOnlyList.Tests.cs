@@ -20,7 +20,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Any
                 System.Linq.Enumerable.Any(source);
 
             // Act
-            var result = ReadOnlyList
+            var result = ReadOnlyListExtensions
                 .Any<Wrap.ValueReadOnlyList<int>, int>(wrapped);
 
             // Assert
@@ -42,7 +42,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Any
                         System.Linq.Enumerable.Skip(source, skipCount), takeCount));
 
             // Act
-            var result = ReadOnlyList
+            var result = ReadOnlyListExtensions
                 .Skip<Wrap.ValueReadOnlyList<int>, int>(wrapped, skipCount)
                 .Take(takeCount)
                 .Any();
@@ -61,7 +61,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Any
             var predicate = (Predicate<int>)null;
 
             // Act
-            Action action = () => _ = ReadOnlyList
+            Action action = () => _ = ReadOnlyListExtensions
                 .Any<Wrap.ValueReadOnlyList<int>, int>(wrapped, predicate);
 
             // Assert
@@ -82,7 +82,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Any
                 System.Linq.Enumerable.Any(wrapped, predicate.AsFunc());
 
             // Act
-            var result = ReadOnlyList
+            var result = ReadOnlyListExtensions
                 .Any<Wrap.ValueReadOnlyList<int>, int>(wrapped, predicate);
 
             // Assert
@@ -104,7 +104,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Any
                         System.Linq.Enumerable.Skip(source, skipCount), takeCount), predicate.AsFunc());
 
             // Act
-            var result = ReadOnlyList
+            var result = ReadOnlyListExtensions
                 .Skip<Wrap.ValueReadOnlyList<int>, int>(wrapped, skipCount)
                 .Take(takeCount)
                 .Any(predicate);
@@ -123,7 +123,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Any
             var predicate = (PredicateAt<int>)null;
 
             // Act
-            Action action = () => _ = ReadOnlyList
+            Action action = () => _ = ReadOnlyListExtensions
                 .Any<Wrap.ValueReadOnlyList<int>, int>(wrapped, predicate);
 
             // Assert
@@ -145,7 +145,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Any
                     System.Linq.Enumerable.Where(source, predicate.AsFunc()));
 
             // Act
-            var result = ReadOnlyList
+            var result = ReadOnlyListExtensions
                 .Any<Wrap.ValueReadOnlyList<int>, int>(wrapped, predicate);
 
             // Assert
@@ -169,7 +169,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Any
                                 source, skipCount), takeCount), predicate.AsFunc()));
 
             // Act
-            var result = ReadOnlyList
+            var result = ReadOnlyListExtensions
                 .Skip<Wrap.ValueReadOnlyList<int>, int>(wrapped, skipCount)
                 .Take(takeCount)
                 .Any(predicate);

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class Array
+    public static partial class ArrayExtensions
     {
         public static bool SequenceEqual<TEnumerable, TEnumerator, TSource>(this ReadOnlySpan<TSource> first, TEnumerable second, IEqualityComparer<TSource>? comparer = null)
             where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>

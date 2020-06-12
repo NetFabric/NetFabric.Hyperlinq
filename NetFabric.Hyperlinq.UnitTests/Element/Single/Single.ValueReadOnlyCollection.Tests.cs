@@ -15,7 +15,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
                 .AsValueReadOnlyCollection(source);
 
             // Act
-            var result = ValueReadOnlyCollection
+            var result = ValueReadOnlyCollectionExtensions
                 .Single<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(wrapped);
 
             // Assert
@@ -35,7 +35,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
                 System.Linq.Enumerable.Single(source);
 
             // Act
-            var result = ValueReadOnlyCollection
+            var result = ValueReadOnlyCollectionExtensions
                 .Single<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(wrapped);
 
             // Assert
@@ -53,7 +53,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
                 .AsValueReadOnlyCollection(source);
 
             // Act
-            var result = ValueReadOnlyCollection
+            var result = ValueReadOnlyCollectionExtensions
                 .Single<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(wrapped);
 
             // Assert
@@ -71,7 +71,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
                 .AsValueReadOnlyCollection(source);
 
             // Act
-            var result = ValueReadOnlyCollection
+            var result = ValueReadOnlyCollectionExtensions
                 .Select<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int, string>(wrapped, selector)
                 .Single();
 
@@ -93,7 +93,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
                     System.Linq.Enumerable.Select(source, selector.AsFunc()));
 
             // Act
-            var result = ValueReadOnlyCollection
+            var result = ValueReadOnlyCollectionExtensions
                 .Select<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int, string>(wrapped, selector)
                 .Single();
 
@@ -112,7 +112,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
                 .AsValueReadOnlyCollection(source);
 
             // Act
-            var result = ValueReadOnlyCollection
+            var result = ValueReadOnlyCollectionExtensions
                 .Select<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int, string>(wrapped, selector)
                 .Single();
 
@@ -131,7 +131,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
                 .AsValueReadOnlyCollection(source);
 
             // Act
-            var result = ValueReadOnlyCollection
+            var result = ValueReadOnlyCollectionExtensions
                 .Select<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int, string>(wrapped, selector)
                 .Single();
 
@@ -153,7 +153,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
                     System.Linq.Enumerable.Select(source, selector.AsFunc()));
 
             // Act
-            var result = ValueReadOnlyCollection
+            var result = ValueReadOnlyCollectionExtensions
                 .Select<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int, string>(wrapped, selector)
                 .Single();
 
@@ -172,7 +172,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
                 .AsValueReadOnlyCollection(source);
 
             // Act
-            var result = ValueReadOnlyCollection
+            var result = ValueReadOnlyCollectionExtensions
                 .Select<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int, string>(wrapped, selector)
                 .Single();
 

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class AsyncValueEnumerable
+    public static partial class AsyncValueEnumerableExtensions
     {
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -78,7 +78,7 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TakeEnumerable<TEnumerable, TEnumerator, TSource> Take(int count)
-                => AsyncValueEnumerable.Take<TEnumerable, TEnumerator, TSource>(source, Math.Min(this.count, count));
+                => AsyncValueEnumerableExtensions.Take<TEnumerable, TEnumerator, TSource>(source, Math.Min(this.count, count));
         }
     }
 }
