@@ -62,13 +62,13 @@ namespace NetFabric.Hyperlinq
             }
 
             void ICollection<TResult>.Add(TResult item) 
-                => throw new NotSupportedException();
+                => Throw.NotSupportedException();
             void ICollection<TResult>.Clear() 
-                => throw new NotSupportedException();
+                => Throw.NotSupportedException();
             bool ICollection<TResult>.Contains(TResult item)
                 => ValueReadOnlyCollection.Contains<TEnumerable, TEnumerator, TSource, TResult>(source, item, selector);
             bool ICollection<TResult>.Remove(TResult item) 
-                => throw new NotSupportedException();
+                => Throw.NotSupportedException<bool>();
 
             public struct Enumerator
                 : IEnumerator<TResult>
@@ -106,7 +106,7 @@ namespace NetFabric.Hyperlinq
 
                 [ExcludeFromCodeCoverage]
                 public readonly void Reset() 
-                    => throw new NotSupportedException();
+                    => Throw.NotSupportedException();
 
                 public void Dispose() => enumerator.Dispose();
             }

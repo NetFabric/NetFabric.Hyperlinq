@@ -51,7 +51,7 @@ namespace NetFabric.Hyperlinq
             TSource IList<TSource>.this[int index]
             {
                 get => this[index];
-                set => throw new NotSupportedException();
+                set => Throw.NotSupportedException();
             }
 
             bool ICollection<TSource>.IsReadOnly  
@@ -119,13 +119,13 @@ namespace NetFabric.Hyperlinq
                 }
             }
             void ICollection<TSource>.Add(TSource item) 
-                => throw new NotSupportedException();
+                => Throw.NotSupportedException();
             void ICollection<TSource>.Clear() 
-                => throw new NotSupportedException();
+                => Throw.NotSupportedException();
             bool ICollection<TSource>.Contains(TSource item) 
                 => Contains(item);
             bool ICollection<TSource>.Remove(TSource item) 
-                => throw new NotSupportedException();
+                => Throw.NotSupportedException<bool>();
             int IList<TSource>.IndexOf(TSource item)
             {
                 if (skipCount == 0 && Count == source.Length)
@@ -148,9 +148,9 @@ namespace NetFabric.Hyperlinq
                 return -1;
             }
             void IList<TSource>.Insert(int index, TSource item)
-                => throw new NotSupportedException();
+                => Throw.NotSupportedException();
             void IList<TSource>.RemoveAt(int index)
-                => throw new NotSupportedException();
+                => Throw.NotSupportedException();
 
             public struct Enumerator
                 : IEnumerator<TSource>
@@ -180,7 +180,7 @@ namespace NetFabric.Hyperlinq
 
                 [ExcludeFromCodeCoverage]
                 public readonly void Reset() 
-                    => throw new NotSupportedException();
+                    => Throw.NotSupportedException();
 
                 public readonly void Dispose() { }
             }

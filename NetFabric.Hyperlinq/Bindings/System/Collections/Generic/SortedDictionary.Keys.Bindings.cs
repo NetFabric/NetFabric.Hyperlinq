@@ -148,13 +148,13 @@ namespace NetFabric.Hyperlinq
                 => ((ICollection<TKey>)source).CopyTo(array, arrayIndex);
 
             void ICollection<TKey>.Add(TKey item) 
-                => throw new NotSupportedException();
+                => Throw.NotSupportedException();
             void ICollection<TKey>.Clear() 
-                => throw new NotSupportedException();
+                => Throw.NotSupportedException();
             bool ICollection<TKey>.Contains(TKey item) 
-                => throw new NotSupportedException();
+                => Throw.NotSupportedException<bool>();
             bool ICollection<TKey>.Remove(TKey item) 
-                => throw new NotSupportedException();   
+                => Throw.NotSupportedException<bool>();   
         }
 
         public static int Count<TKey, TValue>(this ValueWrapper<TKey, TValue> source)

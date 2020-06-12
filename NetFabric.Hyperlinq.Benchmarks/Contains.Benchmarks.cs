@@ -91,7 +91,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [BenchmarkCategory("List_Value")]
         [Benchmark]
         public bool Hyperlinq_List_Value() =>
-            ReadOnlyList.AsValueEnumerable<int>(listValue)
+            ReadOnlyList.AsValueEnumerable(listValue)
             .Contains(Count - 1);
 
         [BenchmarkCategory("Enumerable_Reference")]
