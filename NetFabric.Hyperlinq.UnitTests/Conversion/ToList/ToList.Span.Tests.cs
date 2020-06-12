@@ -18,7 +18,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
                 System.Linq.Enumerable.ToList(source);
 
             // Act
-            var result = Array
+            var result = ArrayExtensions
                 .ToList<int>(source.AsSpan());
 
             // Assert
@@ -40,7 +40,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
                     System.Linq.Enumerable.Where(source, predicate.AsFunc()));
 
             // Act
-            var result = Array
+            var result = ArrayExtensions
                 .Where<int>(source.AsSpan(), predicate)
                 .ToList();
 
@@ -63,7 +63,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
                     System.Linq.Enumerable.Where(source, predicate.AsFunc()));
 
             // Act
-            var result = Array
+            var result = ArrayExtensions
                 .Where<int>(source.AsSpan(), predicate)
                 .ToList();
 
@@ -86,7 +86,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
                     System.Linq.Enumerable.Select(source, selector.AsFunc()));
 
             // Act
-            var result = Array
+            var result = ArrayExtensions
                 .Select<int, string>(source.AsSpan(), selector)
                 .ToList();
 
@@ -109,7 +109,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
                     System.Linq.Enumerable.Select(source, selector.AsFunc()));
 
             // Act
-            var result = Array
+            var result = ArrayExtensions
                 .Select<int, string>(source.AsSpan(), selector)
                 .ToList();
 
@@ -133,7 +133,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
                         System.Linq.Enumerable.Where(source, predicate.AsFunc()), selector.AsFunc()));
 
             // Act
-            var result = Array
+            var result = ArrayExtensions
                 .Where<int>(source.AsSpan(), predicate)
                 .Select(selector)
                 .ToList();

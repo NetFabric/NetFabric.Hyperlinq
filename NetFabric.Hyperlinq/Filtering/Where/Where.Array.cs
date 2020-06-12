@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class Array
+    public static partial class ArrayExtensions
     {
 #if SPAN_SUPPORTED
 
@@ -121,47 +121,47 @@ namespace NetFabric.Hyperlinq
             }
 
             public int Count()
-                => Array.Count<TSource>(source, predicate, skipCount, takeCount);
+                => ArrayExtensions.Count<TSource>(source, predicate, skipCount, takeCount);
 
             public bool Any()
-                => Array.Any<TSource>(source, predicate, skipCount, takeCount);
+                => ArrayExtensions.Any<TSource>(source, predicate, skipCount, takeCount);
 
             public WhereSelectEnumerable<TSource, TResult> Select<TResult>(Selector<TSource, TResult> selector)
             {
                 if (selector is null)
                     Throw.ArgumentNullException(nameof(selector));
 
-                return Array.WhereSelect<TSource, TResult>(source, predicate, selector, skipCount, takeCount);
+                return ArrayExtensions.WhereSelect<TSource, TResult>(source, predicate, selector, skipCount, takeCount);
             }
 
             public WhereEnumerable<TSource> Where(Predicate<TSource> predicate)
-                => Array.Where<TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount);
+                => ArrayExtensions.Where<TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount);
             public WhereAtEnumerable<TSource> Where(PredicateAt<TSource> predicate)
-                => Array.Where<TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount);
+                => ArrayExtensions.Where<TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount);
 
             public Option<TSource> ElementAt(int index)
-                => Array.ElementAt<TSource>(source, index, predicate, skipCount, takeCount);
+                => ArrayExtensions.ElementAt<TSource>(source, index, predicate, skipCount, takeCount);
 
             public Option<TSource> First()
-                => Array.First<TSource>(source, predicate, skipCount, takeCount);
+                => ArrayExtensions.First<TSource>(source, predicate, skipCount, takeCount);
 
             public Option<TSource> Single()
-                => Array.Single<TSource>(source, predicate, skipCount, takeCount);
+                => ArrayExtensions.Single<TSource>(source, predicate, skipCount, takeCount);
 
             public TSource[] ToArray()
-                => Array.ToArray<TSource>(source, predicate, skipCount, takeCount);
+                => ArrayExtensions.ToArray<TSource>(source, predicate, skipCount, takeCount);
 
             public List<TSource> ToList()
-                => Array.ToList<TSource>(source, predicate, skipCount, takeCount);
+                => ArrayExtensions.ToList<TSource>(source, predicate, skipCount, takeCount);
 
             public Dictionary<TKey, TSource> ToDictionary<TKey>(Selector<TSource, TKey> keySelector)
-                => Array.ToDictionary<TSource, TKey>(source, keySelector, null, predicate, skipCount, takeCount);
+                => ArrayExtensions.ToDictionary<TSource, TKey>(source, keySelector, null, predicate, skipCount, takeCount);
             public Dictionary<TKey, TSource> ToDictionary<TKey>(Selector<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer)
-                => Array.ToDictionary<TSource, TKey>(source, keySelector, comparer, predicate, skipCount, takeCount);
+                => ArrayExtensions.ToDictionary<TSource, TKey>(source, keySelector, comparer, predicate, skipCount, takeCount);
             public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Selector<TSource, TKey> keySelector, Selector<TSource, TElement> elementSelector)
-                => Array.ToDictionary<TSource, TKey, TElement>(source, keySelector, elementSelector, null, predicate, skipCount, takeCount);
+                => ArrayExtensions.ToDictionary<TSource, TKey, TElement>(source, keySelector, elementSelector, null, predicate, skipCount, takeCount);
             public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Selector<TSource, TKey> keySelector, Selector<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer)
-                => Array.ToDictionary<TSource, TKey, TElement>(source, keySelector, elementSelector, comparer, predicate, skipCount, takeCount);
+                => ArrayExtensions.ToDictionary<TSource, TKey, TElement>(source, keySelector, elementSelector, comparer, predicate, skipCount, takeCount);
         }
 #endif
     }

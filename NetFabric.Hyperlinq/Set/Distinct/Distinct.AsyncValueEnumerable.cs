@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class AsyncValueEnumerable
+    public static partial class AsyncValueEnumerableExtensions
     {
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -265,7 +265,7 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly ValueTask<bool> AnyAsync(CancellationToken cancellationToken = default)
-                => AsyncValueEnumerable.AnyAsync<TEnumerable, TEnumerator, TSource>(source, cancellationToken);
+                => AsyncValueEnumerableExtensions.AnyAsync<TEnumerable, TEnumerator, TSource>(source, cancellationToken);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly async ValueTask<TSource[]> ToArrayAsync(CancellationToken cancellationToken = default)

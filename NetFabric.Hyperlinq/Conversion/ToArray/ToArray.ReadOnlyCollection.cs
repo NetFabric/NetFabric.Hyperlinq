@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class ReadOnlyCollection
+    public static partial class ReadOnlyCollectionExtensions
     {
         
         static T[] ToArray<T>(IReadOnlyCollection<T> source)

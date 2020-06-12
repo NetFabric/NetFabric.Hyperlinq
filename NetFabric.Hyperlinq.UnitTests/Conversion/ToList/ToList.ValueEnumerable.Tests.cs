@@ -20,7 +20,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
                 System.Linq.Enumerable.ToList(source);
 
             // Act
-            var result = ValueEnumerable
+            var result = ValueEnumerableExtensions
                 .ToList<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped);
 
             // Assert
@@ -43,7 +43,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
                 System.Linq.Enumerable.ToList(source);
 
             // Act
-            var result = ValueEnumerable
+            var result = ValueEnumerableExtensions
                 .ToList<Wrap.ValueCollection<int>, Wrap.Enumerator<int>, int>(wrapped);
 
             // Assert
@@ -67,7 +67,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
                     System.Linq.Enumerable.Where(source, predicate.AsFunc()));
 
             // Act
-            var result = ValueEnumerable
+            var result = ValueEnumerableExtensions
                 .Where<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, predicate)
                 .ToList();
 
@@ -92,7 +92,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
                     System.Linq.Enumerable.Where(source, predicate.AsFunc()));
 
             // Act
-            var result = ValueEnumerable
+            var result = ValueEnumerableExtensions
                 .Where<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, predicate)
                 .ToList();
 
@@ -117,7 +117,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
                     System.Linq.Enumerable.Select(source, selector.AsFunc()));
 
             // Act
-            var result = ValueEnumerable
+            var result = ValueEnumerableExtensions
                 .Select<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int, string>(wrapped, selector)
                 .ToList();
 
@@ -142,7 +142,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
                     System.Linq.Enumerable.Select(source, selector.AsFunc()));
 
             // Act
-            var result = ValueEnumerable
+            var result = ValueEnumerableExtensions
                 .Select<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int, string>(wrapped, selector)
                 .ToList();
 
@@ -169,7 +169,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
                         System.Linq.Enumerable.Where(source, predicate.AsFunc()), selector.AsFunc()));
 
             // Act
-            var result = ValueEnumerable
+            var result = ValueEnumerableExtensions
                 .Where<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, predicate)
                 .Select(selector)
                 .ToList();

@@ -14,7 +14,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Projection.SelectAt
             var selector = (SelectorAt<int, string>)null;
 
             // Act
-            Action action = () => _ = Array.Select(source, selector);
+            Action action = () => _ = ArrayExtensions.Select(source, selector);
 
             // Assert
             _ = action.Must()
@@ -33,7 +33,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Projection.SelectAt
                 System.Linq.Enumerable.Select(source, selector.AsFunc());
 
             // Act
-            var result = Array.Select(source, selector);
+            var result = ArrayExtensions.Select(source, selector);
 
             // Assert
             _ = result.Must()

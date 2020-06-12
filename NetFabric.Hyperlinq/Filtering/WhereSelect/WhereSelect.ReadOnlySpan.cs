@@ -4,7 +4,7 @@ using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class Array
+    public static partial class ArrayExtensions
     {
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -64,22 +64,22 @@ namespace NetFabric.Hyperlinq
                 => source.Count(predicate);
 
             public bool Any()
-                => Array.Any<TSource>(source, predicate);
+                => ArrayExtensions.Any<TSource>(source, predicate);
                 
             public Option<TResult> ElementAt(int index)
-                => Array.ElementAt<TSource, TResult>(source, index, predicate, selector);
+                => ArrayExtensions.ElementAt<TSource, TResult>(source, index, predicate, selector);
 
             public Option<TResult> First()
-                => Array.First<TSource, TResult>(source, predicate, selector);
+                => ArrayExtensions.First<TSource, TResult>(source, predicate, selector);
 
             public Option<TResult> Single()
-                => Array.Single<TSource, TResult>(source, predicate, selector);
+                => ArrayExtensions.Single<TSource, TResult>(source, predicate, selector);
 
             public TResult[] ToArray()
-                => Array.ToArray(source, predicate, selector);
+                => ArrayExtensions.ToArray(source, predicate, selector);
 
             public List<TResult> ToList()
-                => Array.ToList(source, predicate, selector);
+                => ArrayExtensions.ToList(source, predicate, selector);
 
             public bool SequenceEqual(IEnumerable<TResult> other, IEqualityComparer<TResult>? comparer = null)
             {

@@ -1,8 +1,9 @@
+using System;
 using System.Collections.Generic;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class Enumerable
+    public static partial class EnumerableExtensions
     {
         
         static T[] ToArray<T>(IEnumerable<T> source)
@@ -12,7 +13,7 @@ namespace NetFabric.Hyperlinq
                 case ICollection<T> collection:
                     var count = collection.Count;
                     if (count == 0)
-                        return System.Array.Empty<T>();
+                        return Array.Empty<T>();
 
                     var buffer = new T[count];
                     collection.CopyTo(buffer, 0);

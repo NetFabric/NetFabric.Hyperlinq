@@ -17,7 +17,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Contains
             var value = int.MaxValue;
 
             // Act
-            var result = Array
+            var result = ArrayExtensions
                 .Contains<int>((ReadOnlyMemory<int>)source.AsMemory(), value, null);
 
             // Assert
@@ -34,7 +34,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Contains
             var value = System.Linq.Enumerable.Last(source);
 
             // Act
-            var result = Array
+            var result = ArrayExtensions
                 .Contains<int>((ReadOnlyMemory<int>)source.AsMemory(), value, null);
 
             // Assert
@@ -52,7 +52,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Contains
             var value = int.MaxValue;
 
             // Act
-            var result = Array
+            var result = ArrayExtensions
                 .Contains<int>((ReadOnlyMemory<int>)source.AsMemory(), value, EqualityComparer<int>.Default);
 
             // Assert
@@ -69,7 +69,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Contains
             var value = System.Linq.Enumerable.Last(source);
 
             // Act
-            var result = Array
+            var result = ArrayExtensions
                 .Contains<int>((ReadOnlyMemory<int>)source.AsMemory(), value, EqualityComparer<int>.Default);
 
             // Assert
@@ -87,7 +87,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Contains
             var value = int.MaxValue;
 
             // Act
-            var result = Array
+            var result = ArrayExtensions
                 .Contains<int>((ReadOnlyMemory<int>)source.AsMemory(), value, TestComparer<int>.Instance);
 
             // Assert
@@ -104,7 +104,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Contains
             var value = System.Linq.Enumerable.Last(source);
 
             // Act
-            var result = Array
+            var result = ArrayExtensions
                 .Contains<int>((ReadOnlyMemory<int>)source.AsMemory(), value, TestComparer<int>.Instance);
 
             // Assert

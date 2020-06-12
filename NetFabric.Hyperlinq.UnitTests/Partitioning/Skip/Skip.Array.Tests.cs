@@ -16,7 +16,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Partitioning.Skip
             var expected = System.Linq.Enumerable.Skip(source, count);
 
             // Act
-            var result = Array.Skip(source, count);
+            var result = ArrayExtensions.Skip(source, count);
 
             // Assert
 #if SPAN_SUPPORTED

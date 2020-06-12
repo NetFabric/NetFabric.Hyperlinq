@@ -3,7 +3,7 @@ using System.Diagnostics.Contracts;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class Array
+    public static partial class ArrayExtensions
     {
         
         public static bool All<TSource>(this ReadOnlySpan<TSource> source, Predicate<TSource> predicate)

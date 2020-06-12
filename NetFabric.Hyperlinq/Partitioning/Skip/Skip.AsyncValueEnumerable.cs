@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class AsyncValueEnumerable
+    public static partial class AsyncValueEnumerableExtensions
     {
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -73,11 +73,11 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public SkipEnumerable<TEnumerable, TEnumerator, TSource> Skip(int count)
-                => AsyncValueEnumerable.Skip<TEnumerable, TEnumerator, TSource>(source, this.count + count);
+                => AsyncValueEnumerableExtensions.Skip<TEnumerable, TEnumerator, TSource>(source, this.count + count);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public SkipTakeEnumerable<TEnumerable, TEnumerator, TSource> Take(int count)
-                => AsyncValueEnumerable.SkipTake<TEnumerable, TEnumerator, TSource>(source, this.count, count);
+                => AsyncValueEnumerableExtensions.SkipTake<TEnumerable, TEnumerator, TSource>(source, this.count, count);
         }
     }
 }

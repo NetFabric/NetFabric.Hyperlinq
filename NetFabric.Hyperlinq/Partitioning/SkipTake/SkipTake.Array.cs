@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class Array
+    public static partial class ArrayExtensions
     {
 #if SPAN_SUPPORTED
 
@@ -188,88 +188,88 @@ namespace NetFabric.Hyperlinq
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public SkipTakeEnumerable<TSource> Take(int count)
-                => Array.SkipTake<TSource>(source, skipCount, Math.Min(Count, count));
+                => ArrayExtensions.SkipTake<TSource>(source, skipCount, Math.Min(Count, count));
 
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool All(Predicate<TSource> predicate)
-                => Array.All<TSource>(source, predicate, skipCount, Count);
+                => ArrayExtensions.All<TSource>(source, predicate, skipCount, Count);
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool All(PredicateAt<TSource> predicate)
-                => Array.All<TSource>(source, predicate, skipCount, Count);
+                => ArrayExtensions.All<TSource>(source, predicate, skipCount, Count);
 
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Any()
-                => Array.Any<TSource>(source, skipCount, Count);
+                => ArrayExtensions.Any<TSource>(source, skipCount, Count);
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Any(Predicate<TSource> predicate)
-                => Array.Any<TSource>(source, predicate, skipCount, Count);
+                => ArrayExtensions.Any<TSource>(source, predicate, skipCount, Count);
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Any(PredicateAt<TSource> predicate)
-                => Array.Any<TSource>(source, predicate, skipCount, Count);
+                => ArrayExtensions.Any<TSource>(source, predicate, skipCount, Count);
 
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Contains(TSource value, IEqualityComparer<TSource>? comparer = null)
-                => Array.Contains<TSource>(source, value, comparer, skipCount, Count);
+                => ArrayExtensions.Contains<TSource>(source, value, comparer, skipCount, Count);
 
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public WhereEnumerable<TSource> Where(Predicate<TSource> predicate)
-                => Array.Where<TSource>(source, predicate, skipCount, Count);
+                => ArrayExtensions.Where<TSource>(source, predicate, skipCount, Count);
 
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public WhereAtEnumerable<TSource> Where(PredicateAt<TSource> predicate)
-                => Array.Where<TSource>(source, predicate, skipCount, Count);
+                => ArrayExtensions.Where<TSource>(source, predicate, skipCount, Count);
 
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public SelectEnumerable<TSource, TResult> Select<TResult>(Selector<TSource, TResult> selector)
-                => Array.Select<TSource, TResult>(source, selector, skipCount, Count);
+                => ArrayExtensions.Select<TSource, TResult>(source, selector, skipCount, Count);
 
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public SelectAtEnumerable<TSource, TResult> Select<TResult>(SelectorAt<TSource, TResult> selector)
-                => Array.Select<TSource, TResult>(source, selector, skipCount, Count);
+                => ArrayExtensions.Select<TSource, TResult>(source, selector, skipCount, Count);
 
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Option<TSource> ElementAt(int index)
-                => Array.ElementAt<TSource>(source, index, skipCount, Count);
+                => ArrayExtensions.ElementAt<TSource>(source, index, skipCount, Count);
 
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Option<TSource> First()
-                => Array.First<TSource>(source, skipCount, Count);
+                => ArrayExtensions.First<TSource>(source, skipCount, Count);
 
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Option<TSource> Single()
-                => Array.Single<TSource>(source, skipCount, Count);
+                => ArrayExtensions.Single<TSource>(source, skipCount, Count);
 
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TSource[] ToArray()
-                => Array.ToArray<TSource>(source, skipCount, Count);
+                => ArrayExtensions.ToArray<TSource>(source, skipCount, Count);
 
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public List<TSource> ToList()
-                => Array.ToList<TSource>(source, skipCount, Count);
+                => ArrayExtensions.ToList<TSource>(source, skipCount, Count);
 
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Dictionary<TKey, TSource> ToDictionary<TKey>(Selector<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer = null)
-                => Array.ToDictionary<TSource, TKey>(source, keySelector, comparer, skipCount, Count);
+                => ArrayExtensions.ToDictionary<TSource, TKey>(source, keySelector, comparer, skipCount, Count);
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Selector<TSource, TKey> keySelector, Selector<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer = null)
-                => Array.ToDictionary<TSource, TKey, TElement>(source, keySelector, elementSelector, comparer, skipCount, Count);
+                => ArrayExtensions.ToDictionary<TSource, TKey, TElement>(source, keySelector, elementSelector, comparer, skipCount, Count);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -281,7 +281,7 @@ namespace NetFabric.Hyperlinq
         {
             if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
 
-            return Array.Count<TSource>(source.source, predicate, source.skipCount, source.Count);
+            return ArrayExtensions.Count<TSource>(source.source, predicate, source.skipCount, source.Count);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -289,7 +289,7 @@ namespace NetFabric.Hyperlinq
         {
             if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
 
-            return Array.Count<TSource>(source.source, predicate, source.skipCount, source.Count);
+            return ArrayExtensions.Count<TSource>(source.source, predicate, source.skipCount, source.Count);
         }
 
 #endif

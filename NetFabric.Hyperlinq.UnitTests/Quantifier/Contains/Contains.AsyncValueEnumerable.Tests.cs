@@ -19,7 +19,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.ContainsAsync
             var wrapped = Wrap.AsAsyncValueEnumerable(source);
 
             // Act
-            var result = await AsyncValueEnumerable
+            var result = await AsyncValueEnumerableExtensions
                 .ContainsAsync<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, value, null);
 
             // Assert
@@ -37,7 +37,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.ContainsAsync
             var wrapped = Wrap.AsAsyncValueEnumerable(source);
 
             // Act
-            var result = await AsyncValueEnumerable
+            var result = await AsyncValueEnumerableExtensions
                 .ContainsAsync<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, value, null);
 
             // Assert
@@ -56,7 +56,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.ContainsAsync
             var wrapped = Wrap.AsAsyncValueEnumerable(source);
 
             // Act
-            var result = await AsyncValueEnumerable
+            var result = await AsyncValueEnumerableExtensions
                 .ContainsAsync<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, value, EqualityComparer<int>.Default);
 
             // Assert
@@ -74,7 +74,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.ContainsAsync
             var wrapped = Wrap.AsAsyncValueEnumerable(source);
 
             // Act
-            var result = await AsyncValueEnumerable
+            var result = await AsyncValueEnumerableExtensions
                 .ContainsAsync<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, value, EqualityComparer<int>.Default);
 
             // Assert
@@ -94,7 +94,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.ContainsAsync
             var wrapped = Wrap.AsAsyncValueEnumerable(source);
 
             // Act
-            var result = await AsyncValueEnumerable
+            var result = await AsyncValueEnumerableExtensions
                 .ContainsAsync<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, value, TestComparer<int>.Instance);
 
             // Assert
@@ -112,7 +112,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.ContainsAsync
             var wrapped = Wrap.AsAsyncValueEnumerable(source);
 
             // Act
-            var result = await AsyncValueEnumerable
+            var result = await AsyncValueEnumerableExtensions
                 .ContainsAsync<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, value, TestComparer<int>.Instance);
 
             // Assert

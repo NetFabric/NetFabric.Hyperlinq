@@ -106,7 +106,7 @@ namespace NetFabric.Hyperlinq
             var newSize = checked((Count * 2) + 1);
             var newBuckets = new int[newSize];
             var newSlots = new Slot[newSize];
-            System.Array.Copy(slots, newSlots, Count);
+            Array.Copy(slots, newSlots, Count);
             for (var i = 0; i < Count; i++)
             {
                 var bucket = newSlots[i].HashCode % newSize;

@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class ValueReadOnlyCollection
+    public static partial class ValueReadOnlyCollectionExtensions
     {
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -69,7 +69,7 @@ namespace NetFabric.Hyperlinq
             void ICollection<TSource>.Clear() 
                 => Throw.NotSupportedException();
             bool ICollection<TSource>.Contains(TSource item)
-                => ValueReadOnlyCollection.Contains<TEnumerable, TEnumerator, TSource>(source, item);
+                => ValueReadOnlyCollectionExtensions.Contains<TEnumerable, TEnumerator, TSource>(source, item);
             bool ICollection<TSource>.Remove(TSource item) 
                 => Throw.NotSupportedException<bool>();
 
@@ -147,7 +147,7 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public SkipTakeEnumerable<TEnumerable, TEnumerator, TSource> Take(int count)
-                => ValueReadOnlyCollection.SkipTake<TEnumerable, TEnumerator, TSource>(source, skipCount, Math.Min(Count, count));
+                => ValueReadOnlyCollectionExtensions.SkipTake<TEnumerable, TEnumerator, TSource>(source, skipCount, Math.Min(Count, count));
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

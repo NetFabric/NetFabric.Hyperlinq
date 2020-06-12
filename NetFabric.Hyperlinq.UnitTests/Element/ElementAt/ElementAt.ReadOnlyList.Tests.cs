@@ -16,9 +16,9 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
             var wrapped = Wrap.AsValueReadOnlyList(source);
 
             // Act
-            var optionNegative = ReadOnlyList
+            var optionNegative = ReadOnlyListExtensions
                 .ElementAt<Wrap.ValueReadOnlyList<int>, int>(wrapped, -1);
-            var optionTooLarge = ReadOnlyList
+            var optionTooLarge = ReadOnlyListExtensions
                 .ElementAt<Wrap.ValueReadOnlyList<int>, int>(wrapped, source.Length);
 
             // Assert
@@ -43,7 +43,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
                     System.Linq.Enumerable.ElementAt(source, index);
 
                 // Act
-                var result = ReadOnlyList
+                var result = ReadOnlyListExtensions
                     .ElementAt<Wrap.ValueReadOnlyList<int>, int>(wrapped, index);
 
                 // Assert
@@ -63,11 +63,11 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
             var wrapped = Wrap.AsValueReadOnlyList(source);
 
             // Act
-            var optionNegative = ReadOnlyList
+            var optionNegative = ReadOnlyListExtensions
                 .Skip<Wrap.ValueReadOnlyList<int>, int>(wrapped, skipCount)
                 .Take(takeCount)
                 .ElementAt(-1);
-            var optionTooLarge = ReadOnlyList
+            var optionTooLarge = ReadOnlyListExtensions
                 .Skip<Wrap.ValueReadOnlyList<int>, int>(wrapped, skipCount)
                 .Take(takeCount)
                 .ElementAt(takeCount);
@@ -96,7 +96,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
             for (var index = 0; index < expected.Count; index++)
             {
                 // Act
-                var result = ReadOnlyList
+                var result = ReadOnlyListExtensions
                     .Skip<Wrap.ValueReadOnlyList<int>, int>(wrapped, skipCount)
                     .Take(takeCount)
                     .ElementAt(index);
@@ -118,12 +118,12 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
             var wrapped = Wrap.AsValueReadOnlyList(source);
 
             // Act
-            var optionNegative = ReadOnlyList
+            var optionNegative = ReadOnlyListExtensions
                 .Skip<Wrap.ValueReadOnlyList<int>, int>(wrapped, skipCount)
                 .Take(takeCount)
                 .Where(predicate)
                 .ElementAt(-1);
-            var optionTooLarge = ReadOnlyList
+            var optionTooLarge = ReadOnlyListExtensions
                 .Skip<Wrap.ValueReadOnlyList<int>, int>(wrapped, skipCount)
                 .Take(takeCount)
                 .Where(predicate)
@@ -154,7 +154,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
             for (var index = 0; index < expected.Count; index++)
             {
                 // Act
-                var result = ReadOnlyList
+                var result = ReadOnlyListExtensions
                     .Skip<Wrap.ValueReadOnlyList<int>, int>(wrapped, skipCount)
                     .Take(takeCount)
                     .Where(predicate)
@@ -177,12 +177,12 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
             var wrapped = Wrap.AsValueReadOnlyList(source);
 
             // Act
-            var optionNegative = ReadOnlyList
+            var optionNegative = ReadOnlyListExtensions
                 .Skip<Wrap.ValueReadOnlyList<int>, int>(wrapped, skipCount)
                 .Take(takeCount)
                 .Where(predicate)
                 .ElementAt(-1);
-            var optionTooLarge = ReadOnlyList
+            var optionTooLarge = ReadOnlyListExtensions
                 .Skip<Wrap.ValueReadOnlyList<int>, int>(wrapped, skipCount)
                 .Take(takeCount)
                 .Where(predicate)
@@ -213,7 +213,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
             for (var index = 0; index < expected.Count; index++)
             {
                 // Act
-                var result = ReadOnlyList
+                var result = ReadOnlyListExtensions
                     .Skip<Wrap.ValueReadOnlyList<int>, int>(wrapped, skipCount)
                     .Take(takeCount)
                     .Where(predicate)
@@ -236,12 +236,12 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
             var wrapped = Wrap.AsValueReadOnlyList(source);
 
             // Act
-            var optionNegative = ReadOnlyList
+            var optionNegative = ReadOnlyListExtensions
                 .Skip<Wrap.ValueReadOnlyList<int>, int>(wrapped, skipCount)
                 .Take(takeCount)
                 .Select(selector)
                 .ElementAt(-1);
-            var optionTooLarge = ReadOnlyList
+            var optionTooLarge = ReadOnlyListExtensions
                 .Skip<Wrap.ValueReadOnlyList<int>, int>(wrapped, skipCount)
                 .Take(takeCount)
                 .Select(selector)
@@ -272,7 +272,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
             for (var index = 0; index < expected.Count; index++)
             {
                 // Act
-                var result = ReadOnlyList
+                var result = ReadOnlyListExtensions
                     .Skip<Wrap.ValueReadOnlyList<int>, int>(wrapped, skipCount)
                     .Take(takeCount)
                     .Select(selector)
@@ -295,12 +295,12 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
             var wrapped = Wrap.AsValueReadOnlyList(source);
 
             // Act
-            var optionNegative = ReadOnlyList
+            var optionNegative = ReadOnlyListExtensions
                 .Skip<Wrap.ValueReadOnlyList<int>, int>(wrapped, skipCount)
                 .Take(takeCount)
                 .Select(selector)
                 .ElementAt(-1);
-            var optionTooLarge = ReadOnlyList
+            var optionTooLarge = ReadOnlyListExtensions
                 .Skip<Wrap.ValueReadOnlyList<int>, int>(wrapped, skipCount)
                 .Take(takeCount)
                 .Select(selector)
@@ -331,7 +331,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
             for (var index = 0; index < expected.Count; index++)
             {
                 // Act
-                var result = ReadOnlyList
+                var result = ReadOnlyListExtensions
                     .Skip<Wrap.ValueReadOnlyList<int>, int>(wrapped, skipCount)
                     .Take(takeCount)
                     .Select(selector)
@@ -354,13 +354,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
             var wrapped = Wrap.AsValueReadOnlyList(source);
 
             // Act
-            var optionNegative = ReadOnlyList
+            var optionNegative = ReadOnlyListExtensions
                 .Skip<Wrap.ValueReadOnlyList<int>, int>(wrapped, skipCount)
                 .Take(takeCount)
                 .Where(predicate)
                 .Select(selector)
                 .ElementAt(-1);
-            var optionTooLarge = ReadOnlyList
+            var optionTooLarge = ReadOnlyListExtensions
                 .Skip<Wrap.ValueReadOnlyList<int>, int>(wrapped, skipCount)
                 .Take(takeCount)
                 .Where(predicate)
@@ -393,7 +393,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
             for (var index = 0; index < expected.Count; index++)
             {
                 // Act
-                var result = ReadOnlyList
+                var result = ReadOnlyListExtensions
                     .Skip<Wrap.ValueReadOnlyList<int>, int>(wrapped, skipCount)
                     .Take(takeCount)
                     .Where(predicate)

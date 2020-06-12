@@ -5,11 +5,11 @@ using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class Array
+    public static partial class ArrayExtensions
     {
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static List<TSource> ToList<TSource>(this Memory<TSource> source)
-            => Array.ToList<TSource>((ReadOnlyMemory<TSource>)source);
+            => ArrayExtensions.ToList<TSource>((ReadOnlyMemory<TSource>)source);
     }
 }

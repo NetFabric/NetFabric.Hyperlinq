@@ -17,9 +17,9 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAtAsync
             var wrapped = Wrap.AsAsyncValueEnumerable(source);
 
             // Act
-            var optionNegative = await AsyncValueEnumerable
+            var optionNegative = await AsyncValueEnumerableExtensions
                 .ElementAtAsync<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, -1);
-            var optionTooLarge = await AsyncValueEnumerable
+            var optionTooLarge = await AsyncValueEnumerableExtensions
                 .ElementAtAsync<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, source.Length);
 
             // Assert
@@ -44,7 +44,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAtAsync
                     System.Linq.Enumerable.ElementAt(source, index);
 
                 // Act
-                var result = await AsyncValueEnumerable
+                var result = await AsyncValueEnumerableExtensions
                     .ElementAtAsync<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, index);
 
                 // Assert
@@ -64,10 +64,10 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAtAsync
             var wrapped = Wrap.AsAsyncValueEnumerable(source);
 
             // Act
-            var optionNegative = await AsyncValueEnumerable
+            var optionNegative = await AsyncValueEnumerableExtensions
                 .Where<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, predicate.AsAsync())
                 .ElementAtAsync(-1);
-            var optionTooLarge = await AsyncValueEnumerable
+            var optionTooLarge = await AsyncValueEnumerableExtensions
                 .Where<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, predicate.AsAsync())
                 .ElementAtAsync(source.Length);
 
@@ -94,7 +94,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAtAsync
             for (var index = 0; index < expected.Count; index++)
             {
                 // Act
-                var result = await AsyncValueEnumerable
+                var result = await AsyncValueEnumerableExtensions
                     .Where<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, predicate.AsAsync())
                     .ElementAtAsync(index);
 
@@ -115,10 +115,10 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAtAsync
             var wrapped = Wrap.AsAsyncValueEnumerable(source);
 
             // Act
-            var optionNegative = await AsyncValueEnumerable
+            var optionNegative = await AsyncValueEnumerableExtensions
                 .Where<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, predicate.AsAsync())
                 .ElementAtAsync(-1);
-            var optionTooLarge = await AsyncValueEnumerable
+            var optionTooLarge = await AsyncValueEnumerableExtensions
                 .Where<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, predicate.AsAsync())
                 .ElementAtAsync(source.Length);
 
@@ -145,7 +145,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAtAsync
             for (var index = 0; index < expected.Count; index++)
             {
                 // Act
-                var result = await AsyncValueEnumerable
+                var result = await AsyncValueEnumerableExtensions
                     .Where<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, predicate.AsAsync())
                     .ElementAtAsync(index);
 
@@ -166,10 +166,10 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAtAsync
             var wrapped = Wrap.AsAsyncValueEnumerable(source);
 
             // Act
-            var optionNegative = await AsyncValueEnumerable
+            var optionNegative = await AsyncValueEnumerableExtensions
                 .Select<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int, string>(wrapped, selector.AsAsync())
                 .ElementAtAsync(-1);
-            var optionTooLarge = await AsyncValueEnumerable
+            var optionTooLarge = await AsyncValueEnumerableExtensions
                 .Select<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int, string>(wrapped, selector.AsAsync())
                 .ElementAtAsync(source.Length);
 
@@ -196,7 +196,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAtAsync
                         System.Linq.Enumerable.Select(source, selector.AsFunc()), index);
 
                 // Act
-                var result = await AsyncValueEnumerable
+                var result = await AsyncValueEnumerableExtensions
                     .Select<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int, string>(wrapped, selector.AsAsync())
                     .ElementAtAsync(index);
 
@@ -217,10 +217,10 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAtAsync
             var wrapped = Wrap.AsAsyncValueEnumerable(source);
 
             // Act
-            var optionNegative = await AsyncValueEnumerable
+            var optionNegative = await AsyncValueEnumerableExtensions
                 .Select<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int, string>(wrapped, selector.AsAsync())
                 .ElementAtAsync(-1);
-            var optionTooLarge = await AsyncValueEnumerable
+            var optionTooLarge = await AsyncValueEnumerableExtensions
                 .Select<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int, string>(wrapped, selector.AsAsync())
                 .ElementAtAsync(source.Length);
 
@@ -247,7 +247,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAtAsync
                         System.Linq.Enumerable.Select(source, selector.AsFunc()), index);
 
                 // Act
-                var result = await AsyncValueEnumerable
+                var result = await AsyncValueEnumerableExtensions
                     .Select<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int, string>(wrapped, selector.AsAsync())
                     .ElementAtAsync(index);
 
@@ -268,11 +268,11 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAtAsync
             var wrapped = Wrap.AsAsyncValueEnumerable(source);
 
             // Act
-            var optionNegative = await AsyncValueEnumerable
+            var optionNegative = await AsyncValueEnumerableExtensions
                 .Where<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, predicate.AsAsync())
                 .Select(selector.AsAsync())
                 .ElementAtAsync(-1);
-            var optionTooLarge = await AsyncValueEnumerable
+            var optionTooLarge = await AsyncValueEnumerableExtensions
                 .Where<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, predicate.AsAsync())
                 .Select(selector.AsAsync())
                 .ElementAtAsync(source.Length);
@@ -301,7 +301,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAtAsync
             for (var index = 0; index < expected.Count; index++)
             {
                 // Act
-                var result = await AsyncValueEnumerable
+                var result = await AsyncValueEnumerableExtensions
                     .Where<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, predicate.AsAsync())
                     .Select(selector.AsAsync())
                     .ElementAtAsync(index);

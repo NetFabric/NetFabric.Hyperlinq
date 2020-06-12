@@ -21,7 +21,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
                 System.Linq.Enumerable.ToList(source);
 
             // Act
-            var result = await AsyncEnumerable
+            var result = await AsyncEnumerableExtensions
                 .AsAsyncValueEnumerable<int>(wrapped)
                 .ToListAsync();
 

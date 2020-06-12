@@ -15,7 +15,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
                 .AsValueEnumerable(source);
 
             // Act
-            var result = ValueEnumerable
+            var result = ValueEnumerableExtensions
                 .Single<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped);
 
             // Assert
@@ -35,7 +35,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
                 System.Linq.Enumerable.Single(source);
 
             // Act
-            var result = ValueEnumerable
+            var result = ValueEnumerableExtensions
                 .Single<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped);
 
             // Assert
@@ -53,7 +53,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
                 .AsValueEnumerable(source);
 
             // Act
-            var result = ValueEnumerable
+            var result = ValueEnumerableExtensions
                 .Single<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped);
 
             // Assert
@@ -71,7 +71,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
                 .AsValueEnumerable(source);
 
             // Act
-            var result = ValueEnumerable
+            var result = ValueEnumerableExtensions
                 .Where<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, predicate)
                 .Single();
 
@@ -92,7 +92,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
                 System.Linq.Enumerable.Single(source, predicate.AsFunc());
 
             // Act
-            var result = ValueEnumerable
+            var result = ValueEnumerableExtensions
                 .Where<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, predicate)
                 .Single();
 
@@ -111,7 +111,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
                 .AsValueEnumerable(source);
 
             // Act
-            var result = ValueEnumerable
+            var result = ValueEnumerableExtensions
                 .Where<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, predicate)
                 .Single();
 
@@ -130,7 +130,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
                 .AsValueEnumerable(source);
 
             // Act
-            var result = ValueEnumerable
+            var result = ValueEnumerableExtensions
                 .Where<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, predicate)
                 .Single();
 
@@ -152,7 +152,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
                     System.Linq.Enumerable.Where(source, predicate.AsFunc()));
 
             // Act
-            var result = ValueEnumerable
+            var result = ValueEnumerableExtensions
                 .Where<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, predicate)
                 .Single();
 
@@ -171,7 +171,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
                 .AsValueEnumerable(source);
 
             // Act
-            var result = ValueEnumerable
+            var result = ValueEnumerableExtensions
                 .Where<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, predicate)
                 .Single();
 
@@ -190,7 +190,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
                 .AsValueEnumerable(source);
 
             // Act
-            var result = ValueEnumerable
+            var result = ValueEnumerableExtensions
                 .Select<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int, string>(wrapped, selector)
                 .Single();
 
@@ -212,7 +212,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
                     System.Linq.Enumerable.Select(source, selector.AsFunc()));
 
             // Act
-            var result = ValueEnumerable
+            var result = ValueEnumerableExtensions
                 .Select<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int, string>(wrapped, selector)
                 .Single();
 
@@ -231,7 +231,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
                 .AsValueEnumerable(source);
 
             // Act
-            var result = ValueEnumerable
+            var result = ValueEnumerableExtensions
                 .Select<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int, string>(wrapped, selector)
                 .Single();
 
@@ -250,7 +250,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
                 .AsValueEnumerable(source);
 
             // Act
-            var result = ValueEnumerable
+            var result = ValueEnumerableExtensions
                 .Select<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int, string>(wrapped, selector)
                 .Single();
 
@@ -272,7 +272,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
                     System.Linq.Enumerable.Select(source, selector.AsFunc()));
 
             // Act
-            var result = ValueEnumerable
+            var result = ValueEnumerableExtensions
                 .Select<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int, string>(wrapped, selector)
                 .Single();
 
@@ -291,7 +291,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
                 .AsValueEnumerable(source);
 
             // Act
-            var result = ValueEnumerable
+            var result = ValueEnumerableExtensions
                 .Select<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int, string>(wrapped, selector)
                 .Single();
 
@@ -310,7 +310,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
                 .AsValueEnumerable(source);
 
             // Act
-            var result = ValueEnumerable
+            var result = ValueEnumerableExtensions
                 .Where<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, predicate)
                 .Select(selector)
                 .Single();
@@ -334,7 +334,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
                         System.Linq.Enumerable.Where(source, predicate.AsFunc()), selector.AsFunc()));
 
             // Act
-            var result = ValueEnumerable
+            var result = ValueEnumerableExtensions
                 .Where<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, predicate)
                 .Select(selector)
                 .Single();
@@ -354,7 +354,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
                 .AsValueEnumerable(source);
 
             // Act
-            var result = ValueEnumerable
+            var result = ValueEnumerableExtensions
                 .Where<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, predicate)
                 .Select(selector)
                 .Single();

@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class ValueEnumerable
+    public static partial class ValueEnumerableExtensions
     {
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -80,25 +80,25 @@ namespace NetFabric.Hyperlinq
             }
 
             public int Count()
-                => ValueEnumerable.Count<TEnumerable, TEnumerator, TSource>(source, predicate);
+                => ValueEnumerableExtensions.Count<TEnumerable, TEnumerator, TSource>(source, predicate);
 
             public bool Any()
-                => ValueEnumerable.Any<TEnumerable, TEnumerator, TSource>(source, predicate);
+                => ValueEnumerableExtensions.Any<TEnumerable, TEnumerator, TSource>(source, predicate);
                 
             public Option<TResult> ElementAt(int index)
-                => ValueEnumerable.ElementAt<TEnumerable, TEnumerator, TSource, TResult>(source, index, predicate, selector);
+                => ValueEnumerableExtensions.ElementAt<TEnumerable, TEnumerator, TSource, TResult>(source, index, predicate, selector);
 
             public Option<TResult> First()
-                => ValueEnumerable.First<TEnumerable, TEnumerator, TSource, TResult>(source, predicate, selector);
+                => ValueEnumerableExtensions.First<TEnumerable, TEnumerator, TSource, TResult>(source, predicate, selector);
 
             public Option<TResult> Single()
-                => ValueEnumerable.Single<TEnumerable, TEnumerator, TSource, TResult>(source, predicate, selector);
+                => ValueEnumerableExtensions.Single<TEnumerable, TEnumerator, TSource, TResult>(source, predicate, selector);
 
             public TResult[] ToArray()
-                => ValueEnumerable.ToArray<TEnumerable, TEnumerator, TSource, TResult>(source, predicate, selector);
+                => ValueEnumerableExtensions.ToArray<TEnumerable, TEnumerator, TSource, TResult>(source, predicate, selector);
 
             public List<TResult> ToList()
-                => ValueEnumerable.ToList<TEnumerable, TEnumerator, TSource, TResult>(source, predicate, selector);
+                => ValueEnumerableExtensions.ToList<TEnumerable, TEnumerator, TSource, TResult>(source, predicate, selector);
 
             public Dictionary<TKey, TResult> ToDictionary<TKey>(Selector<TResult, TKey> keySelector, IEqualityComparer<TKey>? comparer = null)
                 => ToDictionary<TKey>(keySelector, comparer);

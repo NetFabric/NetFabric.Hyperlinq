@@ -21,7 +21,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Any
                 System.Linq.Enumerable.Any(source);
 
             // Act
-            var result = await AsyncValueEnumerable
+            var result = await AsyncValueEnumerableExtensions
                 .AnyAsync<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int>(wrapped);
 
             // Assert
@@ -39,7 +39,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Any
 
             // Act
             Action action = () => _ = 
-                AsyncValueEnumerable.AnyAsync<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, predicate);
+                AsyncValueEnumerableExtensions.AnyAsync<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, predicate);
 
             // Assert
             _ = action.Must()
@@ -59,7 +59,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Any
                 System.Linq.Enumerable.Any(source, predicate.AsFunc());
 
             // Act
-            var result = await AsyncValueEnumerable
+            var result = await AsyncValueEnumerableExtensions
                 .AnyAsync<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, predicate.AsAsync());
 
             // Assert
@@ -76,7 +76,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Any
             var predicate = (AsyncPredicateAt<int>)null;
 
             // Act
-            Action action = () => _ = AsyncValueEnumerable
+            Action action = () => _ = AsyncValueEnumerableExtensions
                 .AnyAsync<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, predicate);
 
             // Assert
@@ -98,7 +98,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Any
                     System.Linq.Enumerable.Where(source, predicate.AsFunc())) != 0;
 
             // Act
-            var result = await AsyncValueEnumerable
+            var result = await AsyncValueEnumerableExtensions
                 .AnyAsync<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, predicate.AsAsync());
 
             // Assert

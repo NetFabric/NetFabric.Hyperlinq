@@ -14,29 +14,29 @@ namespace NetFabric.Hyperlinq
             => source.Count;
 
         
-        public static ValueReadOnlyCollection.SkipTakeEnumerable<ValueWrapper<TSource>, HashSet<TSource>.Enumerator, TSource> Skip<TSource>(this HashSet<TSource> source, int count)
-            => ValueReadOnlyCollection.Skip<ValueWrapper<TSource>, HashSet<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), count);
+        public static ValueReadOnlyCollectionExtensions.SkipTakeEnumerable<ValueWrapper<TSource>, HashSet<TSource>.Enumerator, TSource> Skip<TSource>(this HashSet<TSource> source, int count)
+            => ValueReadOnlyCollectionExtensions.Skip<ValueWrapper<TSource>, HashSet<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), count);
 
         
-        public static ValueReadOnlyCollection.SkipTakeEnumerable<ValueWrapper<TSource>, HashSet<TSource>.Enumerator, TSource> Take<TSource>(this HashSet<TSource> source, int count)
-            => ValueReadOnlyCollection.Take<ValueWrapper<TSource>, HashSet<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), count);
+        public static ValueReadOnlyCollectionExtensions.SkipTakeEnumerable<ValueWrapper<TSource>, HashSet<TSource>.Enumerator, TSource> Take<TSource>(this HashSet<TSource> source, int count)
+            => ValueReadOnlyCollectionExtensions.Take<ValueWrapper<TSource>, HashSet<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), count);
 
         
         public static bool All<TSource>(this HashSet<TSource> source, PredicateAt<TSource> predicate)
-            => ValueReadOnlyCollection.All<ValueWrapper<TSource>, HashSet<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
+            => ValueReadOnlyCollectionExtensions.All<ValueWrapper<TSource>, HashSet<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
         
         public static bool All<TSource>(this HashSet<TSource> source, Predicate<TSource> predicate)
-            => ValueReadOnlyCollection.All<ValueWrapper<TSource>, HashSet<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
+            => ValueReadOnlyCollectionExtensions.All<ValueWrapper<TSource>, HashSet<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
 
         
         public static bool Any<TSource>(this HashSet<TSource> source)
             => source.Count != 0;
         
         public static bool Any<TSource>(this HashSet<TSource> source, Predicate<TSource> predicate)
-            => ValueReadOnlyCollection.Any<ValueWrapper<TSource>, HashSet<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
+            => ValueReadOnlyCollectionExtensions.Any<ValueWrapper<TSource>, HashSet<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
         
         public static bool Any<TSource>(this HashSet<TSource> source, PredicateAt<TSource> predicate)
-            => ValueReadOnlyCollection.Any<ValueWrapper<TSource>, HashSet<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
+            => ValueReadOnlyCollectionExtensions.Any<ValueWrapper<TSource>, HashSet<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
 
         
         public static bool Contains<TSource>(this HashSet<TSource> source, TSource value)
@@ -44,53 +44,53 @@ namespace NetFabric.Hyperlinq
 
         
         public static bool Contains<TSource>(this HashSet<TSource> source, TSource value, IEqualityComparer<TSource>? comparer)
-            => ValueReadOnlyCollection.Contains<ValueWrapper<TSource>, HashSet<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), value, comparer);
+            => ValueReadOnlyCollectionExtensions.Contains<ValueWrapper<TSource>, HashSet<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), value, comparer);
 
         
-        public static ValueReadOnlyCollection.SelectEnumerable<ValueWrapper<TSource>, HashSet<TSource>.Enumerator, TSource, TResult> Select<TSource, TResult>(
+        public static ValueReadOnlyCollectionExtensions.SelectEnumerable<ValueWrapper<TSource>, HashSet<TSource>.Enumerator, TSource, TResult> Select<TSource, TResult>(
             this HashSet<TSource> source,
             Selector<TSource, TResult> selector)
-            => ValueReadOnlyCollection.Select<ValueWrapper<TSource>, HashSet<TSource>.Enumerator, TSource, TResult>(new ValueWrapper<TSource>(source), selector);
+            => ValueReadOnlyCollectionExtensions.Select<ValueWrapper<TSource>, HashSet<TSource>.Enumerator, TSource, TResult>(new ValueWrapper<TSource>(source), selector);
         
-        public static ValueReadOnlyCollection.SelectAtEnumerable<ValueWrapper<TSource>, HashSet<TSource>.Enumerator, TSource, TResult> Select<TSource, TResult>(
+        public static ValueReadOnlyCollectionExtensions.SelectAtEnumerable<ValueWrapper<TSource>, HashSet<TSource>.Enumerator, TSource, TResult> Select<TSource, TResult>(
             this HashSet<TSource> source,
             SelectorAt<TSource, TResult> selector)
-            => ValueReadOnlyCollection.Select<ValueWrapper<TSource>, HashSet<TSource>.Enumerator, TSource, TResult>(new ValueWrapper<TSource>(source), selector);
+            => ValueReadOnlyCollectionExtensions.Select<ValueWrapper<TSource>, HashSet<TSource>.Enumerator, TSource, TResult>(new ValueWrapper<TSource>(source), selector);
 
         
-        public static ValueEnumerable.SelectManyEnumerable<ValueWrapper<TSource>, HashSet<TSource>.Enumerator, TSource, TSubEnumerable, TSubEnumerator, TResult> SelectMany<TSource, TSubEnumerable, TSubEnumerator, TResult>(
+        public static ValueEnumerableExtensions.SelectManyEnumerable<ValueWrapper<TSource>, HashSet<TSource>.Enumerator, TSource, TSubEnumerable, TSubEnumerator, TResult> SelectMany<TSource, TSubEnumerable, TSubEnumerator, TResult>(
             this HashSet<TSource> source,
             Selector<TSource, TSubEnumerable> selector)
             where TSubEnumerable : notnull, IValueEnumerable<TResult, TSubEnumerator>
             where TSubEnumerator : struct, IEnumerator<TResult>
-            => ValueEnumerable.SelectMany<ValueWrapper<TSource>, HashSet<TSource>.Enumerator, TSource, TSubEnumerable, TSubEnumerator, TResult>(new ValueWrapper<TSource>(source), selector);
+            => ValueEnumerableExtensions.SelectMany<ValueWrapper<TSource>, HashSet<TSource>.Enumerator, TSource, TSubEnumerable, TSubEnumerator, TResult>(new ValueWrapper<TSource>(source), selector);
 
         
-        public static ValueEnumerable.WhereEnumerable<ValueWrapper<TSource>, HashSet<TSource>.Enumerator, TSource> Where<TSource>(
+        public static ValueEnumerableExtensions.WhereEnumerable<ValueWrapper<TSource>, HashSet<TSource>.Enumerator, TSource> Where<TSource>(
             this HashSet<TSource> source,
             Predicate<TSource> predicate)
-            => ValueEnumerable.Where<ValueWrapper<TSource>, HashSet<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
+            => ValueEnumerableExtensions.Where<ValueWrapper<TSource>, HashSet<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
         
-        public static ValueEnumerable.WhereAtEnumerable<ValueWrapper<TSource>, HashSet<TSource>.Enumerator, TSource> Where<TSource>(
+        public static ValueEnumerableExtensions.WhereAtEnumerable<ValueWrapper<TSource>, HashSet<TSource>.Enumerator, TSource> Where<TSource>(
             this HashSet<TSource> source,
             PredicateAt<TSource> predicate)
-            => ValueEnumerable.Where<ValueWrapper<TSource>, HashSet<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
+            => ValueEnumerableExtensions.Where<ValueWrapper<TSource>, HashSet<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
 
         
         public static Option<TSource> ElementAt<TSource>(this HashSet<TSource> source, int index)
-            => ValueReadOnlyCollection.ElementAt<ValueWrapper<TSource>, HashSet<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), index);
+            => ValueReadOnlyCollectionExtensions.ElementAt<ValueWrapper<TSource>, HashSet<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), index);
 
         
         public static Option<TSource> First<TSource>(this HashSet<TSource> source)
-            => ValueReadOnlyCollection.First<ValueWrapper<TSource>, HashSet<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source));
+            => ValueReadOnlyCollectionExtensions.First<ValueWrapper<TSource>, HashSet<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source));
 
         
         public static Option<TSource> Single<TSource>(this HashSet<TSource> source)
-            => ValueReadOnlyCollection.Single<ValueWrapper<TSource>, HashSet<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source));
+            => ValueReadOnlyCollectionExtensions.Single<ValueWrapper<TSource>, HashSet<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source));
 
         
-        public static ValueEnumerable.DistinctEnumerable<ValueWrapper<TSource>, HashSet<TSource>.Enumerator, TSource> Distinct<TSource>(this HashSet<TSource> source, IEqualityComparer<TSource>? comparer = null)
-            => ValueEnumerable.Distinct<ValueWrapper<TSource>, HashSet<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), comparer);
+        public static ValueEnumerableExtensions.DistinctEnumerable<ValueWrapper<TSource>, HashSet<TSource>.Enumerator, TSource> Distinct<TSource>(this HashSet<TSource> source, IEqualityComparer<TSource>? comparer = null)
+            => ValueEnumerableExtensions.Distinct<ValueWrapper<TSource>, HashSet<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), comparer);
 
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -103,18 +103,18 @@ namespace NetFabric.Hyperlinq
 
         
         public static TSource[] ToArray<TSource>(this HashSet<TSource> source)
-            => ValueReadOnlyCollection.ToArray<ValueWrapper<TSource>, HashSet<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source));
+            => ValueReadOnlyCollectionExtensions.ToArray<ValueWrapper<TSource>, HashSet<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source));
 
         
         public static List<TSource> ToList<TSource>(this HashSet<TSource> source)
-            => ValueReadOnlyCollection.ToList<ValueWrapper<TSource>, HashSet<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source));
+            => ValueReadOnlyCollectionExtensions.ToList<ValueWrapper<TSource>, HashSet<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source));
 
         
         public static Dictionary<TKey, TSource> ToDictionary<TSource, TKey>(this HashSet<TSource> source, Selector<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer = null)
-            => ValueReadOnlyCollection.ToDictionary<ValueWrapper<TSource>, HashSet<TSource>.Enumerator, TSource, TKey>(new ValueWrapper<TSource>(source), keySelector, comparer);
+            => ValueReadOnlyCollectionExtensions.ToDictionary<ValueWrapper<TSource>, HashSet<TSource>.Enumerator, TSource, TKey>(new ValueWrapper<TSource>(source), keySelector, comparer);
         
         public static Dictionary<TKey, TElement> ToDictionary<TSource, TKey, TElement>(this HashSet<TSource> source, Selector<TSource, TKey> keySelector, Selector<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer = null)
-            => ValueReadOnlyCollection.ToDictionary<ValueWrapper<TSource>, HashSet<TSource>.Enumerator, TSource, TKey, TElement>(new ValueWrapper<TSource>(source), keySelector, elementSelector, comparer);
+            => ValueReadOnlyCollectionExtensions.ToDictionary<ValueWrapper<TSource>, HashSet<TSource>.Enumerator, TSource, TKey, TElement>(new ValueWrapper<TSource>(source), keySelector, elementSelector, comparer);
 
         public readonly partial struct ValueWrapper<TSource>
             : IValueReadOnlyCollection<TSource, HashSet<TSource>.Enumerator>

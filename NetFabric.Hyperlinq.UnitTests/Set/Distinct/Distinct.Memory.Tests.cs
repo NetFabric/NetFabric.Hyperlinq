@@ -17,7 +17,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct
                 System.Linq.Enumerable.Distinct(source);
 
             // Act
-            var result = Array
+            var result = ArrayExtensions
                 .Distinct(source.AsMemory());
 
             // Assert
@@ -39,7 +39,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct
                     System.Linq.Enumerable.Distinct(source));
 
             // Act
-            var result = Array
+            var result = ArrayExtensions
                 .Distinct(source.AsMemory())
                 .ToArray();
 
@@ -61,7 +61,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct
                     System.Linq.Enumerable.Distinct(source));
 
             // Act
-            var result = Array
+            var result = ArrayExtensions
                 .Distinct(source.AsMemory())
                 .ToList();
 

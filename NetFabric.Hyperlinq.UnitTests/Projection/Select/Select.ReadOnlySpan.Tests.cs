@@ -14,7 +14,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Projection.Select
             var selector = (Selector<int, string>)null;
 
             // Act
-            Action action = () => _ = Array.Select((ReadOnlySpan<int>)source.AsSpan(), selector);
+            Action action = () => _ = ArrayExtensions.Select((ReadOnlySpan<int>)source.AsSpan(), selector);
 
             // Assert
             _ = action.Must()
@@ -33,7 +33,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Projection.Select
                 System.Linq.Enumerable.Select(source, selector.AsFunc());
 
             // Act
-            var result = Array.Select((ReadOnlySpan<int>)source.AsSpan(), selector);
+            var result = ArrayExtensions.Select((ReadOnlySpan<int>)source.AsSpan(), selector);
 
             // Assert
             _ = result.SequenceEqual(expected).Must().BeTrue();

@@ -20,7 +20,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
                 System.Linq.Enumerable.ToArray(source);
 
             // Act
-            var result = await AsyncEnumerable
+            var result = await AsyncEnumerableExtensions
                 .AsAsyncValueEnumerable<int>(wrapped)
                 .ToArrayAsync();
 

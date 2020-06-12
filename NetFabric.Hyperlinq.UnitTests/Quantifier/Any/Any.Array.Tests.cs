@@ -18,7 +18,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Any
                 System.Linq.Enumerable.Any(source);
 
             // Act
-            var result = Array
+            var result = ArrayExtensions
                 .Any<int>(source);
 
             // Assert
@@ -34,7 +34,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Any
             var predicate = (Predicate<int>)null;
 
             // Act
-            Action action = () => _ = Array
+            Action action = () => _ = ArrayExtensions
                 .Any<int>(source, predicate);
 
             // Assert
@@ -54,7 +54,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Any
                 System.Linq.Enumerable.Any(source, predicate.AsFunc());
 
             // Act
-            var result = Array
+            var result = ArrayExtensions
                 .Any<int>(source, predicate);
 
             // Assert
@@ -70,7 +70,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Any
             var predicate = (PredicateAt<int>)null;
 
             // Act
-            Action action = () => _ = Array
+            Action action = () => _ = ArrayExtensions
                 .Any<int>(source, predicate);
 
             // Assert
@@ -91,7 +91,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Any
                     System.Linq.Enumerable.Where(source, predicate.AsFunc())) != 0;
 
             // Act
-            var result = Array
+            var result = ArrayExtensions
                 .Any<int>(source, predicate);
 
             // Assert

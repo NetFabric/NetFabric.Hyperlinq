@@ -16,7 +16,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Partitioning.Skip
             var expected = System.Linq.Enumerable.Skip(source, count);
 
             // Act
-            var result = Array.Skip(source.AsSpan(), count);
+            var result = ArrayExtensions.Skip(source.AsSpan(), count);
 
             // Assert
             _ = result.SequenceEqual(expected).Must().BeTrue();

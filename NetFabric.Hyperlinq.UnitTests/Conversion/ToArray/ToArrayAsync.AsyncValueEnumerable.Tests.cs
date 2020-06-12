@@ -20,7 +20,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
                 System.Linq.Enumerable.ToArray(source);
 
             // Act
-            var result = await AsyncValueEnumerable
+            var result = await AsyncValueEnumerableExtensions
                 .ToArrayAsync<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int>(wrapped);
 
             // Assert
@@ -43,7 +43,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
                     System.Linq.Enumerable.Where(source, predicate.AsFunc()));
 
             // Act
-            var result = await AsyncValueEnumerable
+            var result = await AsyncValueEnumerableExtensions
                 .Where<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, predicate.AsAsync())
                 .ToArrayAsync();
 
@@ -67,7 +67,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
                     System.Linq.Enumerable.Where(source, predicate.AsFunc()));
 
             // Act
-            var result = await AsyncValueEnumerable
+            var result = await AsyncValueEnumerableExtensions
                 .Where<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, predicate.AsAsync())
                 .ToArrayAsync();
 
@@ -91,7 +91,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
                     System.Linq.Enumerable.Select(source, selector.AsFunc()));
 
             // Act
-            var result = await AsyncValueEnumerable
+            var result = await AsyncValueEnumerableExtensions
                 .Select<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int, string>(wrapped, selector.AsAsync())
                 .ToArrayAsync();
 
@@ -115,7 +115,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
                     System.Linq.Enumerable.Select(source, selector.AsFunc()));
 
             // Act
-            var result = await AsyncValueEnumerable
+            var result = await AsyncValueEnumerableExtensions
                 .Select<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int, string>(wrapped, selector.AsAsync())
                 .ToArrayAsync();
 
@@ -141,7 +141,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
                         System.Linq.Enumerable.Where(source, predicate.AsFunc()), selector.AsFunc()));
 
             // Act
-            var result = await AsyncValueEnumerable
+            var result = await AsyncValueEnumerableExtensions
                 .Where<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, predicate.AsAsync())
                 .Select(selector.AsAsync())
                 .ToArrayAsync();

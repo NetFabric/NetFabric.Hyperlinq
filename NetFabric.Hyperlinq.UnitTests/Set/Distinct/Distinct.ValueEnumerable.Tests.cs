@@ -17,7 +17,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct
                 System.Linq.Enumerable.Distinct(wrapped);
 
             // Act
-            var result = ValueEnumerable
+            var result = ValueEnumerableExtensions
                 .Distinct<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped);
 
             // Assert
@@ -39,7 +39,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct
                     System.Linq.Enumerable.Distinct(source));
 
             // Act
-            var result = ValueEnumerable
+            var result = ValueEnumerableExtensions
                 .Distinct<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped)
                 .ToArray();
 
@@ -62,7 +62,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct
                     System.Linq.Enumerable.Distinct(source));
 
             // Act
-            var result = ValueEnumerable
+            var result = ValueEnumerableExtensions
                 .Distinct<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped)
                 .ToList();
 

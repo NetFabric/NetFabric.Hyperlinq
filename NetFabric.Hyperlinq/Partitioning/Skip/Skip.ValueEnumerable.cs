@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class ValueEnumerable
+    public static partial class ValueEnumerableExtensions
     {
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -81,11 +81,11 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public SkipEnumerable<TEnumerable, TEnumerator, TSource> Skip(int count)
-                => ValueEnumerable.Skip<TEnumerable, TEnumerator, TSource>(source, this.count + count);
+                => ValueEnumerableExtensions.Skip<TEnumerable, TEnumerator, TSource>(source, this.count + count);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public SkipTakeEnumerable<TEnumerable, TEnumerator, TSource> Take(int count)
-                => ValueEnumerable.SkipTake<TEnumerable, TEnumerator, TSource>(source, this.count, count);
+                => ValueEnumerableExtensions.SkipTake<TEnumerable, TEnumerator, TSource>(source, this.count, count);
         }
     }
 }

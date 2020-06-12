@@ -49,7 +49,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int WhereHyper()
         {
             var sum = 0;
-            foreach (var item in ReadOnlyList.Where<ImmutableArray<int>, int>(array, item => (item & 0x01) == 0))
+            foreach (var item in ReadOnlyListExtensions.Where<ImmutableArray<int>, int>(array, item => (item & 0x01) == 0))
                 sum += item;
             return sum;
         }
@@ -58,7 +58,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [Benchmark]
         public int SelectHyper()
         {
-            var source = ReadOnlyList.Select<ImmutableArray<int>, int, int>(array, item => item);
+            var source = ReadOnlyListExtensions.Select<ImmutableArray<int>, int, int>(array, item => item);
             var sum = 0;
             for (var index = 0; index < source.Count; index++)
                 sum += source[index];

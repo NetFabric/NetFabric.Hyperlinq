@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class Array
+    public static partial class ArrayExtensions
     {
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -144,7 +144,7 @@ namespace NetFabric.Hyperlinq
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public List<TSource> ToList()
-                => Array.ToList<TSource>(source.Span);
+                => ArrayExtensions.ToList<TSource>(source.Span);
         }
 
         public static int Count<TSource>(this MemoryValueEnumerableWrapper<TSource> source)

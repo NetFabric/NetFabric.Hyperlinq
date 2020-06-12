@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class Array
+    public static partial class ArrayExtensions
     {
 #if SPAN_SUPPORTED
         
@@ -91,7 +91,7 @@ namespace NetFabric.Hyperlinq
             void ICollection<TResult>.Clear()
                 => Throw.NotSupportedException();
             bool ICollection<TResult>.Contains(TResult item)
-                => Array.Contains<TSource, TResult>(source, item, selector, skipCount, Count);
+                => ArrayExtensions.Contains<TSource, TResult>(source, item, selector, skipCount, Count);
             bool ICollection<TResult>.Remove(TResult item)
                 => Throw.NotSupportedException<bool>();
             int IList<TResult>.IndexOf(TResult item)
@@ -189,34 +189,34 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public SelectAtEnumerable<TSource, TSelectorResult> Select<TSelectorResult>(Selector<TResult, TSelectorResult> selector)
-                => Array.Select<TSource, TSelectorResult>(source, Utils.Combine(this.selector, selector), skipCount, Count);
+                => ArrayExtensions.Select<TSource, TSelectorResult>(source, Utils.Combine(this.selector, selector), skipCount, Count);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public SelectAtEnumerable<TSource, TSelectorResult> Select<TSelectorResult>(SelectorAt<TResult, TSelectorResult> selector)
-                => Array.Select<TSource, TSelectorResult>(source, Utils.Combine(this.selector, selector), skipCount, Count);
+                => ArrayExtensions.Select<TSource, TSelectorResult>(source, Utils.Combine(this.selector, selector), skipCount, Count);
 
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Option<TResult> ElementAt(int index)
-                => Array.ElementAt<TSource, TResult>(source, index, selector, skipCount, Count);
+                => ArrayExtensions.ElementAt<TSource, TResult>(source, index, selector, skipCount, Count);
 
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Option<TResult> First()
-                => Array.First<TSource, TResult>(source, selector, skipCount, Count);
+                => ArrayExtensions.First<TSource, TResult>(source, selector, skipCount, Count);
 
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Option<TResult> Single()
-                => Array.Single<TSource, TResult>(source, selector, skipCount, Count);
+                => ArrayExtensions.Single<TSource, TResult>(source, selector, skipCount, Count);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TResult[] ToArray()
-                => Array.ToArray<TSource, TResult>(source, selector, skipCount, Count);
+                => ArrayExtensions.ToArray<TSource, TResult>(source, selector, skipCount, Count);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public List<TResult> ToList()
-                => Array.ToList<TSource, TResult>(source, selector, skipCount, Count);
+                => ArrayExtensions.ToList<TSource, TResult>(source, selector, skipCount, Count);
 
             public readonly bool SequenceEqual(IEnumerable<TResult> other, IEqualityComparer<TResult>? comparer = null)
             {

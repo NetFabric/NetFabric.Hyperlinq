@@ -4,13 +4,13 @@ using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class ReadOnlyList
+    public static partial class ReadOnlyListExtensions
     {
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool Contains<TList, TSource>(this TList source, TSource value, IEqualityComparer<TSource>? comparer = default)
             where TList : notnull, IReadOnlyList<TSource>
-            => ReadOnlyList.Contains<TList, TSource>(source, value, comparer, 0, source.Count);
+            => ReadOnlyListExtensions.Contains<TList, TSource>(source, value, comparer, 0, source.Count);
 
 
         static bool Contains<TList, TSource>(this TList source, TSource value, IEqualityComparer<TSource>? comparer, int skipCount, int takeCount)

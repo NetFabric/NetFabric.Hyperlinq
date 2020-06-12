@@ -19,7 +19,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
                 System.Linq.Enumerable.ToArray(wrapped);
 
             // Act
-            var result = ValueReadOnlyCollection
+            var result = ValueReadOnlyCollectionExtensions
                 .ToArray<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(wrapped);
 
             // Assert
@@ -41,7 +41,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
                 System.Linq.Enumerable.ToArray(source);
 
             // Act
-            var result = ValueReadOnlyCollection
+            var result = ValueReadOnlyCollectionExtensions
                 .ToArray<Wrap.ValueCollection<int>, Wrap.Enumerator<int>, int>(wrapped);
 
             // Assert
@@ -64,7 +64,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
                     System.Linq.Enumerable.Select(source, selector.AsFunc()));
 
             // Act
-            var result = ValueReadOnlyCollection
+            var result = ValueReadOnlyCollectionExtensions
                 .Select<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int, string>(wrapped, selector)
                 .ToArray();
 
@@ -88,7 +88,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
                     System.Linq.Enumerable.Select(source, selector.AsFunc()));
 
             // Act
-            var result = ValueReadOnlyCollection
+            var result = ValueReadOnlyCollectionExtensions
                 .Select<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int, string>(wrapped, selector)
                 .ToArray();
 

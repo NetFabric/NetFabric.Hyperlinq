@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class ReadOnlyCollection
+    public static partial class ReadOnlyCollectionExtensions
     {
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -66,19 +66,19 @@ namespace NetFabric.Hyperlinq
                 => Throw.NotSupportedException();
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             bool ICollection<TSource>.Contains(TSource item)
-                => ReadOnlyCollection.Contains(source, item);
+                => ReadOnlyCollectionExtensions.Contains(source, item);
             bool ICollection<TSource>.Remove(TSource item) 
                 => Throw.NotSupportedException<bool>();
 
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TSource[] ToArray()
-                => ReadOnlyCollection.ToArray(source);
+                => ReadOnlyCollectionExtensions.ToArray(source);
 
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public List<TSource> ToList()
-                => ReadOnlyCollection.ToList(source);
+                => ReadOnlyCollectionExtensions.ToList(source);
         }
 
         public readonly partial struct ValueEnumerableWrapper<TSource>
@@ -120,7 +120,7 @@ namespace NetFabric.Hyperlinq
             void ICollection<TSource>.Clear() 
                 => Throw.NotSupportedException();
             bool ICollection<TSource>.Contains(TSource item)
-                => ReadOnlyCollection.Contains(source, item);
+                => ReadOnlyCollectionExtensions.Contains(source, item);
             bool ICollection<TSource>.Remove(TSource item) 
                 => Throw.NotSupportedException<bool>();
 
@@ -166,12 +166,12 @@ namespace NetFabric.Hyperlinq
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TSource[] ToArray()
-                => ReadOnlyCollection.ToArray(source);
+                => ReadOnlyCollectionExtensions.ToArray(source);
 
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public List<TSource> ToList()
-                => ReadOnlyCollection.ToList(source);
+                => ReadOnlyCollectionExtensions.ToList(source);
         }
 
         public static int Count<TSource>(this ValueEnumerableWrapper<TSource> source)

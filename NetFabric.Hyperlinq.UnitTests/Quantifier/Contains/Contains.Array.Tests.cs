@@ -17,7 +17,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Contains
             var value = int.MaxValue;
 
             // Act
-            var result = Array
+            var result = ArrayExtensions
                 .Contains<int>(source, value, null);
 
             // Assert
@@ -34,7 +34,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Contains
             var value = System.Linq.Enumerable.Last(source);
  
             // Act
-            var result = Array
+            var result = ArrayExtensions
                 .Contains<int>(source, value, null);
 
             // Assert
@@ -52,7 +52,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Contains
             var value = int.MaxValue;
 
             // Act
-            var result = Array
+            var result = ArrayExtensions
                 .Contains<int>(source, value, EqualityComparer<int>.Default);
 
             // Assert
@@ -69,7 +69,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Contains
             var value = System.Linq.Enumerable.Last(source);
 
             // Act
-            var result = Array
+            var result = ArrayExtensions
                 .Contains<int>(source, value, EqualityComparer<int>.Default);
 
             // Assert
@@ -88,7 +88,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Contains
             var value = int.MaxValue;
 
             // Act
-            var result = Array
+            var result = ArrayExtensions
                 .Contains<int>(source, value, TestComparer<int>.Instance);
 
             // Assert
@@ -105,7 +105,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Contains
             var value = System.Linq.Enumerable.Last(source);
 
             // Act
-            var result = Array
+            var result = ArrayExtensions
                 .Contains<int>(source, value, TestComparer<int>.Instance);
 
             // Assert

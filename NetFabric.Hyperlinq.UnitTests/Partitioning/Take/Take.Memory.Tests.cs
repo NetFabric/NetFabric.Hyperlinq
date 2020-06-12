@@ -17,7 +17,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Partitioning.Take
                 System.Linq.Enumerable.Take(source, count);
 
             // Act
-            var result = Array
+            var result = ArrayExtensions
                 .Take(source.AsMemory(), count);
 
             // Assert

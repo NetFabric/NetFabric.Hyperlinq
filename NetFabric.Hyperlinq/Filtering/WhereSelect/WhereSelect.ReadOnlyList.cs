@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class ReadOnlyList
+    public static partial class ReadOnlyListExtensions
     {
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -116,25 +116,25 @@ namespace NetFabric.Hyperlinq
             }
 
             public int Count()
-                => ReadOnlyList.Count<TList, TSource>(source, predicate, skipCount, takeCount);
+                => ReadOnlyListExtensions.Count<TList, TSource>(source, predicate, skipCount, takeCount);
 
             public bool Any()
-                => ReadOnlyList.Any<TList, TSource>(source, predicate, skipCount, takeCount);
+                => ReadOnlyListExtensions.Any<TList, TSource>(source, predicate, skipCount, takeCount);
                 
             public Option<TResult> ElementAt(int index)
-                => ReadOnlyList.ElementAt<TList, TSource, TResult>(source, index, predicate, selector, skipCount, takeCount);
+                => ReadOnlyListExtensions.ElementAt<TList, TSource, TResult>(source, index, predicate, selector, skipCount, takeCount);
 
             public Option<TResult> First()
-                => ReadOnlyList.First<TList, TSource, TResult>(source, predicate, selector, skipCount, takeCount);
+                => ReadOnlyListExtensions.First<TList, TSource, TResult>(source, predicate, selector, skipCount, takeCount);
 
             public Option<TResult> Single()
-                => ReadOnlyList.Single<TList, TSource, TResult>(source, predicate, selector, skipCount, takeCount);
+                => ReadOnlyListExtensions.Single<TList, TSource, TResult>(source, predicate, selector, skipCount, takeCount);
 
             public TResult[] ToArray()
-                => ReadOnlyList.ToArray<TList, TSource, TResult>(source, predicate, selector, skipCount, takeCount); 
+                => ReadOnlyListExtensions.ToArray<TList, TSource, TResult>(source, predicate, selector, skipCount, takeCount); 
 
             public List<TResult> ToList()
-                => ReadOnlyList.ToList<TList, TSource, TResult>(source, predicate, selector, skipCount, takeCount); 
+                => ReadOnlyListExtensions.ToList<TList, TSource, TResult>(source, predicate, selector, skipCount, takeCount); 
 
             public Dictionary<TKey, TResult> ToDictionary<TKey>(Selector<TResult, TKey> keySelector)
                 => ToDictionary<TKey>(keySelector, null);

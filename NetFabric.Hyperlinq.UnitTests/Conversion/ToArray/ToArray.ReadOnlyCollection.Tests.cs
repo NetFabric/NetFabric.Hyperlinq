@@ -19,7 +19,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
                 System.Linq.Enumerable.ToArray(source);
 
             // Act
-            var result = ReadOnlyCollection
+            var result = ReadOnlyCollectionExtensions
                 .AsValueEnumerable<int>(wrapped)
                 .ToArray();
 
@@ -42,7 +42,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
                 System.Linq.Enumerable.ToArray(source);
 
             // Act
-            var result = ReadOnlyCollection
+            var result = ReadOnlyCollectionExtensions
                 .AsValueEnumerable<int>(wrapped)
                 .ToArray();
 

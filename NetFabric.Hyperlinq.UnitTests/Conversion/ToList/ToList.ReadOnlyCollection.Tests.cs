@@ -20,7 +20,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
                 System.Linq.Enumerable.ToList(source);
 
             // Act
-            var result = ReadOnlyCollection
+            var result = ReadOnlyCollectionExtensions
                 .AsValueEnumerable<int>(wrapped)
                 .ToList();
 
@@ -44,7 +44,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
                 System.Linq.Enumerable.ToList(source);
 
             // Act
-            var result = ReadOnlyCollection
+            var result = ReadOnlyCollectionExtensions
                 .AsValueEnumerable<int>(wrapped)
                 .ToList();
 

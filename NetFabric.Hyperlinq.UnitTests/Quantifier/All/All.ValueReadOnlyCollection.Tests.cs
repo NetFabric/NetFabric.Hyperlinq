@@ -16,7 +16,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.All
             var predicate = (Predicate<int>)null;
 
             // Act
-            Action action = () => _ = ValueReadOnlyCollection
+            Action action = () => _ = ValueReadOnlyCollectionExtensions
                 .All<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
 
             // Assert
@@ -37,7 +37,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.All
                 System.Linq.Enumerable.All(wrapped, predicate.AsFunc());
 
             // Act
-            var result = ValueReadOnlyCollection
+            var result = ValueReadOnlyCollectionExtensions
                 .All<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
 
             // Assert
@@ -54,7 +54,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.All
             var predicate = (PredicateAt<int>)null;
 
             // Act
-            Action action = () => _ = ValueReadOnlyCollection
+            Action action = () => _ = ValueReadOnlyCollectionExtensions
                 .All<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
 
             // Assert
@@ -76,7 +76,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.All
                     System.Linq.Enumerable.Where(source, predicate.AsFunc())) == source.Length;
 
             // Act
-            var result = ValueReadOnlyCollection
+            var result = ValueReadOnlyCollectionExtensions
                 .All<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
 
             // Assert

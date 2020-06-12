@@ -17,7 +17,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Aggregation.Count
                 System.Linq.Enumerable.Count(source);
 
             // Act
-            var result = Array
+            var result = ArrayExtensions
                 .Count<int>(source);
 
             // Assert
@@ -36,7 +36,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Aggregation.Count
                 System.Linq.Enumerable.Count(source, predicate.AsFunc());
 
             // Act
-            var result = Array
+            var result = ArrayExtensions
                 .Where<int>(source, predicate)
                 .Count();
 
@@ -57,7 +57,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Aggregation.Count
                     System.Linq.Enumerable.Where(source, predicate.AsFunc()));
 
             // Act
-            var result = Array
+            var result = ArrayExtensions
                 .Where<int>(source, predicate)
                 .Count();
 

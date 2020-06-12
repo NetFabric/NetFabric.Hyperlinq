@@ -157,7 +157,7 @@ namespace NetFabric.Hyperlinq
         public readonly T[] ToArray()
             => IsSome
                 ? new T[] { Value } 
-                : System.Array.Empty<T>();
+                : Array.Empty<T>();
 
         
         public readonly List<T> ToList()

@@ -83,25 +83,25 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [BenchmarkCategory("Enumerable_Value")]
         [Benchmark]
         public int[] Hyperlinq_Enumerable_Value() =>
-            Enumerable.AsValueEnumerable<TestEnumerable.Enumerable, TestEnumerable.Enumerable.Enumerator, int>(enumerableValue, enumerable => enumerable.GetEnumerator())
+            EnumerableExtensions.AsValueEnumerable<TestEnumerable.Enumerable, TestEnumerable.Enumerable.Enumerator, int>(enumerableValue, enumerable => enumerable.GetEnumerator())
             .ToArray();
 
         [BenchmarkCategory("Collection_Value")]
         [Benchmark]
         public int[] Hyperlinq_Collection_Value() =>
-            ReadOnlyCollection.AsValueEnumerable<TestCollection.Enumerable, TestCollection.Enumerable.Enumerator, int>(collectionValue, enumerable => enumerable.GetEnumerator())
+            ReadOnlyCollectionExtensions.AsValueEnumerable<TestCollection.Enumerable, TestCollection.Enumerable.Enumerator, int>(collectionValue, enumerable => enumerable.GetEnumerator())
             .ToArray();
 
         [BenchmarkCategory("List_Value")]
         [Benchmark]
         public int[] Hyperlinq_List_Value() =>
-            ReadOnlyList.AsValueEnumerable<int>(listValue)
+            ReadOnlyListExtensions.AsValueEnumerable<int>(listValue)
             .ToArray();
 
         [BenchmarkCategory("AsyncEnumerable_Value")]
         [Benchmark]
         public ValueTask<int[]> Hyperlinq_AsyncEnumerable_Value() =>
-            AsyncEnumerable.AsAsyncValueEnumerable<TestAsyncEnumerable.AsyncEnumerable, TestAsyncEnumerable.AsyncEnumerable.AsyncEnumerator, int>(
+            AsyncEnumerableExtensions.AsAsyncValueEnumerable<TestAsyncEnumerable.AsyncEnumerable, TestAsyncEnumerable.AsyncEnumerable.AsyncEnumerator, int>(
                 asyncEnumerableValue, 
                 (enumerable, cancellationToken) => enumerable.GetAsyncEnumerator(cancellationToken))
             .ToArrayAsync();

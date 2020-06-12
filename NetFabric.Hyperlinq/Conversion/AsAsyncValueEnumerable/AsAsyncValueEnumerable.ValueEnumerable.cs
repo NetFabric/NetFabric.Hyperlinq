@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class ValueEnumerable
+    public static partial class ValueEnumerableExtensions
     {
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -74,11 +74,11 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public ValueTask<TSource[]> ToArrayAsync(CancellationToken cancellationToken = default)
-                => new ValueTask<TSource[]>(ValueEnumerable.ToArray<TEnumerable, TEnumerator, TSource>(source));
+                => new ValueTask<TSource[]>(ValueEnumerableExtensions.ToArray<TEnumerable, TEnumerator, TSource>(source));
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public ValueTask<List<TSource>> ToListAsync(CancellationToken cancellationToken = default)
-                => new ValueTask<List<TSource>>(ValueEnumerable.ToList<TEnumerable, TEnumerator, TSource>(source));
+                => new ValueTask<List<TSource>>(ValueEnumerableExtensions.ToList<TEnumerable, TEnumerator, TSource>(source));
         }
     }
 }

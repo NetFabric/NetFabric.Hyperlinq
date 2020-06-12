@@ -16,73 +16,73 @@ namespace NetFabric.Hyperlinq
             => source.Length;
 
         
-        public static ReadOnlyList.SkipTakeEnumerable<ImmutableArray<TSource>, TSource> Skip<TSource>(this ImmutableArray<TSource> source, int count)
-            => ReadOnlyList.Skip<ImmutableArray<TSource>, TSource>(source, count);
+        public static ReadOnlyListExtensions.SkipTakeEnumerable<ImmutableArray<TSource>, TSource> Skip<TSource>(this ImmutableArray<TSource> source, int count)
+            => ReadOnlyListExtensions.Skip<ImmutableArray<TSource>, TSource>(source, count);
 
         
-        public static ReadOnlyList.SkipTakeEnumerable<ImmutableArray<TSource>, TSource> Take<TSource>(this ImmutableArray<TSource> source, int count)
-            => ReadOnlyList.Take<ImmutableArray<TSource>, TSource>(source, count);
+        public static ReadOnlyListExtensions.SkipTakeEnumerable<ImmutableArray<TSource>, TSource> Take<TSource>(this ImmutableArray<TSource> source, int count)
+            => ReadOnlyListExtensions.Take<ImmutableArray<TSource>, TSource>(source, count);
 
         
         public static bool All<TSource>(this ImmutableArray<TSource> source, PredicateAt<TSource> predicate)
-            => ReadOnlyList.All<ImmutableArray<TSource>, TSource>(source, predicate);
+            => ReadOnlyListExtensions.All<ImmutableArray<TSource>, TSource>(source, predicate);
 
         
         public static bool Any<TSource>(this ImmutableArray<TSource> source, PredicateAt<TSource> predicate)
-            => ReadOnlyList.Any<ImmutableArray<TSource>, TSource>(source, predicate);
+            => ReadOnlyListExtensions.Any<ImmutableArray<TSource>, TSource>(source, predicate);
 
         
         public static bool Contains<TSource>(this ImmutableArray<TSource> source, TSource value)
             => source.Contains(value);
         
         public static bool Contains<TSource>(this ImmutableArray<TSource> source, TSource value, IEqualityComparer<TSource>? comparer)
-            => ReadOnlyList.Contains<ImmutableArray<TSource>, TSource>(source, value, comparer);
+            => ReadOnlyListExtensions.Contains<ImmutableArray<TSource>, TSource>(source, value, comparer);
 
         
-        public static ReadOnlyList.SelectEnumerable<ImmutableArray<TSource>, TSource, TResult> SelectHyper<TSource, TResult>(
+        public static ReadOnlyListExtensions.SelectEnumerable<ImmutableArray<TSource>, TSource, TResult> SelectHyper<TSource, TResult>(
             this ImmutableArray<TSource> source,
             Selector<TSource, TResult> selector)
-            => ReadOnlyList.Select<ImmutableArray<TSource>, TSource, TResult>(source, selector);
+            => ReadOnlyListExtensions.Select<ImmutableArray<TSource>, TSource, TResult>(source, selector);
         
-        public static ReadOnlyList.SelectAtEnumerable<ImmutableArray<TSource>, TSource, TResult> SelectHyper<TSource, TResult>(
+        public static ReadOnlyListExtensions.SelectAtEnumerable<ImmutableArray<TSource>, TSource, TResult> SelectHyper<TSource, TResult>(
             this ImmutableArray<TSource> source,
             SelectorAt<TSource, TResult> selector)
-            => ReadOnlyList.Select<ImmutableArray<TSource>, TSource, TResult>(source, selector);
+            => ReadOnlyListExtensions.Select<ImmutableArray<TSource>, TSource, TResult>(source, selector);
 
         
-        public static ReadOnlyList.SelectManyEnumerable<ImmutableArray<TSource>, TSource, TSubEnumerable, TSubEnumerator, TResult> SelectMany<TSource, TSubEnumerable, TSubEnumerator, TResult>(
+        public static ReadOnlyListExtensions.SelectManyEnumerable<ImmutableArray<TSource>, TSource, TSubEnumerable, TSubEnumerator, TResult> SelectMany<TSource, TSubEnumerable, TSubEnumerator, TResult>(
             this ImmutableArray<TSource> source,
             Selector<TSource, TSubEnumerable> selector)
             where TSubEnumerable : notnull, IValueEnumerable<TResult, TSubEnumerator>
             where TSubEnumerator : struct, IEnumerator<TResult>
-            => ReadOnlyList.SelectMany<ImmutableArray<TSource>, TSource, TSubEnumerable, TSubEnumerator, TResult>(source, selector);
+            => ReadOnlyListExtensions.SelectMany<ImmutableArray<TSource>, TSource, TSubEnumerable, TSubEnumerator, TResult>(source, selector);
 
         
-        public static ReadOnlyList.WhereEnumerable<ImmutableArray<TSource>, TSource> WhereHyper<TSource>(
+        public static ReadOnlyListExtensions.WhereEnumerable<ImmutableArray<TSource>, TSource> WhereHyper<TSource>(
             this ImmutableArray<TSource> source,
             Predicate<TSource> predicate)
-            => ReadOnlyList.Where<ImmutableArray<TSource>, TSource>(source, predicate);
+            => ReadOnlyListExtensions.Where<ImmutableArray<TSource>, TSource>(source, predicate);
         
-        public static ReadOnlyList.WhereAtEnumerable<ImmutableArray<TSource>, TSource> HyperWhere<TSource>(
+        public static ReadOnlyListExtensions.WhereAtEnumerable<ImmutableArray<TSource>, TSource> HyperWhere<TSource>(
             this ImmutableArray<TSource> source,
             PredicateAt<TSource> predicate)
-            => ReadOnlyList.Where<ImmutableArray<TSource>, TSource>(source, predicate);
+            => ReadOnlyListExtensions.Where<ImmutableArray<TSource>, TSource>(source, predicate);
 
         
         public static Option<TSource> ElementAt<TSource>(this ImmutableArray<TSource> source, int index)
-            => ReadOnlyList.ElementAt<ImmutableArray<TSource>, TSource>(source, index);
+            => ReadOnlyListExtensions.ElementAt<ImmutableArray<TSource>, TSource>(source, index);
 
         
         public static Option<TSource> First<TSource>(this ImmutableArray<TSource> source)
-            => ReadOnlyList.First<ImmutableArray<TSource>, TSource>(source);
+            => ReadOnlyListExtensions.First<ImmutableArray<TSource>, TSource>(source);
 
         
         public static Option<TSource> Single<TSource>(this ImmutableArray<TSource> source)
-            => ReadOnlyList.Single<ImmutableArray<TSource>, TSource>(source);
+            => ReadOnlyListExtensions.Single<ImmutableArray<TSource>, TSource>(source);
 
         
-        public static ReadOnlyList.DistinctEnumerable<ImmutableArray<TSource>, TSource> Distinct<TSource>(this ImmutableArray<TSource> source, IEqualityComparer<TSource>? comparer = null)
-            => ReadOnlyList.Distinct<ImmutableArray<TSource>, TSource>(source, comparer);
+        public static ReadOnlyListExtensions.DistinctEnumerable<ImmutableArray<TSource>, TSource> Distinct<TSource>(this ImmutableArray<TSource> source, IEqualityComparer<TSource>? comparer = null)
+            => ReadOnlyListExtensions.Distinct<ImmutableArray<TSource>, TSource>(source, comparer);
 
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

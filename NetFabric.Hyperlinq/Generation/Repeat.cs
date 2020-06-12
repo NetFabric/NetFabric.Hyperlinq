@@ -168,7 +168,7 @@ namespace NetFabric.Hyperlinq
                 if (value is object)
                 {
 #if NETSTANDARD2_1
-                    System.Array.Fill<TSource>(array, value);
+                    Array.Fill<TSource>(array, value);
 #else
                     for (var index = 0; index < array.Length; index++)
                         array[index] = value;
@@ -203,7 +203,7 @@ namespace NetFabric.Hyperlinq
                     if (value is object)
                     {
 #if NETSTANDARD2_1
-                        System.Array.Fill(array, value);
+                        Array.Fill(array, value);
 #else
                         for (var index = 0; index < array.Length; index++)
                             array[index] = value;

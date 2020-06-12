@@ -19,7 +19,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
                 System.Linq.Enumerable.ToList(source);
 
             // Act
-            var result = ReadOnlyList
+            var result = ReadOnlyListExtensions
                 .ToList<Wrap.ValueReadOnlyList<int>, int>(wrapped);
 
             // Assert
@@ -41,7 +41,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
                 System.Linq.Enumerable.ToList(source);
 
             // Act
-            var result = ReadOnlyList
+            var result = ReadOnlyListExtensions
                 .ToList<Wrap.ValueCollection<int>, int>(wrapped);
 
             // Assert
@@ -65,7 +65,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
                         System.Linq.Enumerable.Skip(source, skipCount), takeCount));
 
             // Act
-            var result = ReadOnlyList
+            var result = ReadOnlyListExtensions
                 .Skip<Wrap.ValueReadOnlyList<int>, int>(wrapped, skipCount)
                 .Take(takeCount)
                 .ToList();
@@ -86,7 +86,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
             var predicate = (Predicate<int>)null;
 
             // Act
-            Action action = () => _ = ReadOnlyList
+            Action action = () => _ = ReadOnlyListExtensions
                 .Where<Wrap.ValueReadOnlyList<int>, int>(wrapped, predicate)
                 .ToList();
 
@@ -109,7 +109,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
                     System.Linq.Enumerable.Where(source, predicate.AsFunc()));
 
             // Act
-            var result = ReadOnlyList
+            var result = ReadOnlyListExtensions
                 .Where<Wrap.ValueReadOnlyList<int>, int>(wrapped, predicate)
                 .ToList();
 
@@ -135,7 +135,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
                             System.Linq.Enumerable.Skip(source, skipCount), takeCount), predicate.AsFunc()));
 
             // Act
-            var result = ReadOnlyList
+            var result = ReadOnlyListExtensions
                 .Skip<Wrap.ValueReadOnlyList<int>, int>(wrapped, skipCount)
                 .Take(takeCount)
                 .Where(predicate)
@@ -157,7 +157,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
             var predicate = (PredicateAt<int>)null;
 
             // Act
-            Action action = () => _ = ReadOnlyList
+            Action action = () => _ = ReadOnlyListExtensions
                 .Where<Wrap.ValueReadOnlyList<int>, int>(wrapped, predicate)
                 .ToList();
 
@@ -180,7 +180,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
                     System.Linq.Enumerable.Where(source, predicate.AsFunc()));
 
             // Act
-            var result = ReadOnlyList
+            var result = ReadOnlyListExtensions
                 .Where<Wrap.ValueReadOnlyList<int>, int>(wrapped, predicate)
                 .ToList();
 
@@ -206,7 +206,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
                             System.Linq.Enumerable.Skip(source, skipCount), takeCount), predicate.AsFunc()));
 
             // Act
-            var result = ReadOnlyList
+            var result = ReadOnlyListExtensions
                 .Skip<Wrap.ValueReadOnlyList<int>, int>(wrapped, skipCount)
                 .Take(takeCount)
                 .Where(predicate)
@@ -228,7 +228,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
             var selector = (Selector<int, string>)null;
 
             // Act
-            Action action = () => _ = ReadOnlyList
+            Action action = () => _ = ReadOnlyListExtensions
                 .Select<Wrap.ValueReadOnlyList<int>, int, string>(wrapped, selector)
                 .ToList();
 
@@ -251,7 +251,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
                     System.Linq.Enumerable.Select(source, selector.AsFunc()));
 
             // Act
-            var result = ReadOnlyList
+            var result = ReadOnlyListExtensions
                 .Select<Wrap.ValueReadOnlyList<int>, int, string>(wrapped, selector)
                 .ToList();
 
@@ -277,7 +277,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
                             System.Linq.Enumerable.Skip(source, skipCount), takeCount), selector.AsFunc()));
 
             // Act
-            var result = ReadOnlyList
+            var result = ReadOnlyListExtensions
                 .Skip<Wrap.ValueReadOnlyList<int>, int>(wrapped, skipCount)
                 .Take(takeCount)
                 .Select(selector)
@@ -299,7 +299,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
             var selector = (SelectorAt<int, string>)null;
 
             // Act
-            Action action = () => _ = ReadOnlyList
+            Action action = () => _ = ReadOnlyListExtensions
                 .Select<Wrap.ValueReadOnlyList<int>, int, string>(wrapped, selector)
                 .ToList();
 
@@ -322,7 +322,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
                     System.Linq.Enumerable.Select(source, selector.AsFunc()));
 
             // Act
-            var result = ReadOnlyList
+            var result = ReadOnlyListExtensions
                 .Select<Wrap.ValueReadOnlyList<int>, int, string>(wrapped, selector)
                 .ToList();
 
@@ -348,7 +348,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
                             System.Linq.Enumerable.Skip(source, skipCount), takeCount), selector.AsFunc()));
 
             // Act
-            var result = ReadOnlyList
+            var result = ReadOnlyListExtensions
                 .Skip<Wrap.ValueReadOnlyList<int>, int>(wrapped, skipCount)
                 .Take(takeCount)
                 .Select(selector)
@@ -375,7 +375,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
                         System.Linq.Enumerable.Where(source, predicate.AsFunc()), selector.AsFunc()));
 
             // Act
-            var result = ReadOnlyList
+            var result = ReadOnlyListExtensions
                 .Where<Wrap.ValueReadOnlyList<int>, int>(wrapped, predicate)
                 .Select(selector)
                 .ToList();
@@ -403,7 +403,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
                                 System.Linq.Enumerable.Skip(source, skipCount), takeCount), predicate.AsFunc()), selector.AsFunc()));
 
             // Act
-            var result = ReadOnlyList
+            var result = ReadOnlyListExtensions
                 .Skip<Wrap.ValueReadOnlyList<int>, int>(wrapped, skipCount)
                 .Take(takeCount)
                 .Where(predicate)

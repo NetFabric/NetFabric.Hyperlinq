@@ -4,7 +4,7 @@ using System.Diagnostics.Contracts;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class Array
+    public static partial class ArrayExtensions
     {
         
         public static List<TSource> ToList<TSource>(this ReadOnlyMemory<TSource> source)

@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class ReadOnlyList
+    public static partial class ReadOnlyListExtensions
     {
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -109,7 +109,7 @@ namespace NetFabric.Hyperlinq
             void ICollection<TResult>.Clear() 
                 => Throw.NotSupportedException();
             bool ICollection<TResult>.Contains(TResult item)
-                => ReadOnlyList.Contains<TList, TSource, TResult>(source, item, selector, skipCount, Count);
+                => ReadOnlyListExtensions.Contains<TList, TSource, TResult>(source, item, selector, skipCount, Count);
             bool ICollection<TResult>.Remove(TResult item) 
                 => Throw.NotSupportedException<bool>();
             int IList<TResult>.IndexOf(TResult item)
@@ -229,35 +229,35 @@ namespace NetFabric.Hyperlinq
                 => Count != 0;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public ReadOnlyList.SelectAtEnumerable<TList, TSource, TSelectorResult> Select<TSelectorResult>(Selector<TResult, TSelectorResult> selector)
-                => ReadOnlyList.Select<TList, TSource, TSelectorResult>(source, Utils.Combine(this.selector, selector), skipCount, Count);
+            public ReadOnlyListExtensions.SelectAtEnumerable<TList, TSource, TSelectorResult> Select<TSelectorResult>(Selector<TResult, TSelectorResult> selector)
+                => ReadOnlyListExtensions.Select<TList, TSource, TSelectorResult>(source, Utils.Combine(this.selector, selector), skipCount, Count);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public ReadOnlyList.SelectAtEnumerable<TList, TSource, TSelectorResult> Select<TSelectorResult>(SelectorAt<TResult, TSelectorResult> selector)
-                => ReadOnlyList.Select<TList, TSource, TSelectorResult>(source, Utils.Combine(this.selector, selector), skipCount, Count);
+            public ReadOnlyListExtensions.SelectAtEnumerable<TList, TSource, TSelectorResult> Select<TSelectorResult>(SelectorAt<TResult, TSelectorResult> selector)
+                => ReadOnlyListExtensions.Select<TList, TSource, TSelectorResult>(source, Utils.Combine(this.selector, selector), skipCount, Count);
 
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Option<TResult> ElementAt(int index)
-                => ReadOnlyList.ElementAt<TList, TSource, TResult>(source, index, selector, skipCount, Count);
+                => ReadOnlyListExtensions.ElementAt<TList, TSource, TResult>(source, index, selector, skipCount, Count);
 
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Option<TResult> First()
-                => ReadOnlyList.First<TList, TSource, TResult>(source, selector, skipCount, Count);
+                => ReadOnlyListExtensions.First<TList, TSource, TResult>(source, selector, skipCount, Count);
 
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Option<TResult> Single()
-                => ReadOnlyList.Single<TList, TSource, TResult>(source, selector, skipCount, Count);
+                => ReadOnlyListExtensions.Single<TList, TSource, TResult>(source, selector, skipCount, Count);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TResult[] ToArray()
-                => ReadOnlyList.ToArray<TList, TSource, TResult>(source, selector, skipCount, Count);
+                => ReadOnlyListExtensions.ToArray<TList, TSource, TResult>(source, selector, skipCount, Count);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public List<TResult> ToList()
-                => ReadOnlyList.ToList<TList, TSource, TResult>(source, selector, skipCount, Count);
+                => ReadOnlyListExtensions.ToList<TList, TSource, TResult>(source, selector, skipCount, Count);
 
             public Dictionary<TKey, TResult> ToDictionary<TKey>(Selector<TResult, TKey> keySelector, IEqualityComparer<TKey>? comparer = null)
                 => ToDictionary<TKey>(keySelector, comparer);
