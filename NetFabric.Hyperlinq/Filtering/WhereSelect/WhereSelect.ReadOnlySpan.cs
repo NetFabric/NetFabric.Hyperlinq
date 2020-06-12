@@ -66,9 +66,6 @@ namespace NetFabric.Hyperlinq
             public bool Any()
                 => Array.Any<TSource>(source, predicate);
                 
-            public bool Contains(TResult value, IEqualityComparer<TResult>? comparer = null)
-                => Array.Contains<TSource, TResult>(source, value, comparer, predicate, selector);
-
             public Option<TResult> ElementAt(int index)
                 => Array.ElementAt<TSource, TResult>(source, index, predicate, selector);
 

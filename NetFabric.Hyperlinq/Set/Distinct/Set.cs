@@ -64,7 +64,7 @@ namespace NetFabric.Hyperlinq
         public bool Add([AllowNull] TElement value)
         {
             int hashCode;
-            if (comparer is null)
+            if (Utils.UseDefault(comparer))
             {
                 hashCode = value is null ? 0 : EqualityComparer<TElement>.Default.GetHashCode(value) & 0x7FFFFFFF;
                 for (var i = buckets[hashCode % buckets.Length] - 1; i >= 0; i = slots[i].Next)
@@ -75,6 +75,7 @@ namespace NetFabric.Hyperlinq
             }
             else
             {
+                var comparer = this.comparer ?? EqualityComparer<TElement>.Default;
                 hashCode = value is null ? 0 : comparer.GetHashCode(value) & 0x7FFFFFFF;
                 for (var i = buckets[hashCode % buckets.Length] - 1; i >= 0; i = slots[i].Next)
                 {

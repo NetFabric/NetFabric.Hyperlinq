@@ -68,8 +68,8 @@ namespace NetFabric.Hyperlinq
                 => throw new NotSupportedException();
             void ICollection<TSource>.Clear() 
                 => throw new NotSupportedException();
-            bool ICollection<TSource>.Contains(TSource item) 
-                => throw new NotSupportedException();
+            bool ICollection<TSource>.Contains(TSource item)
+                => ValueReadOnlyCollection.Contains<TEnumerable, TEnumerator, TSource>(source, item);
             bool ICollection<TSource>.Remove(TSource item) 
                 => throw new NotSupportedException();
 

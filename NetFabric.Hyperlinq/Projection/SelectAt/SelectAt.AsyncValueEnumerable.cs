@@ -203,10 +203,6 @@ namespace NetFabric.Hyperlinq
                 => AsyncValueEnumerable.AnyAsync<TEnumerable, TEnumerator, TSource>(source, cancellationToken);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public ValueTask<bool> ContainsAsync(TResult value, IEqualityComparer<TResult>? comparer = null, CancellationToken cancellationToken = default)
-                => AsyncValueEnumerable.ContainsAsync<TEnumerable, TEnumerator, TSource, TResult>(source, value, comparer, selector, cancellationToken);
-
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public AsyncValueEnumerable.SelectAtEnumerable<TEnumerable, TEnumerator, TSource, TSelectorResult> Select<TSelectorResult>(AsyncSelector<TResult, TSelectorResult> selector)
                 => AsyncValueEnumerable.Select<TEnumerable, TEnumerator, TSource, TSelectorResult>(source, Utils.Combine(this.selector, selector));
 

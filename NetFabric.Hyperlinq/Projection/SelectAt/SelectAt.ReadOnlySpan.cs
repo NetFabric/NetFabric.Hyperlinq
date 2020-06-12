@@ -60,6 +60,7 @@ namespace NetFabric.Hyperlinq
                     index = -1;
                 }
 
+                [MaybeNull]
                 public readonly TResult Current 
                     => selector(source[index], index);
 
@@ -71,11 +72,6 @@ namespace NetFabric.Hyperlinq
             public bool Any()
                 => source.Length != 0;
 
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public bool Contains(TResult value, IEqualityComparer<TResult>? comparer = null)
-                => Array.Contains(source, value, comparer, selector);
-
-            
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Option<TResult> ElementAt(int index)
                 => Array.ElementAt<TSource, TResult>(source, index, selector);

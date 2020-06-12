@@ -121,9 +121,6 @@ namespace NetFabric.Hyperlinq
             public bool Any()
                 => ReadOnlyList.Any<TList, TSource>(source, predicate, skipCount, takeCount);
                 
-            public bool Contains(TSource value, IEqualityComparer<TSource>? comparer = null)
-                => ReadOnlyList.Contains<TList, TSource>(source, value, comparer, predicate, skipCount, takeCount);
-
             public ReadOnlyList.WhereAtEnumerable<TList, TSource> Where(Predicate<TSource> predicate)
                 => ReadOnlyList.Where<TList, TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount);
             public ReadOnlyList.WhereAtEnumerable<TList, TSource> Where(PredicateAt<TSource> predicate)
@@ -145,11 +142,11 @@ namespace NetFabric.Hyperlinq
                 => ReadOnlyList.ToList<TList, TSource>(source, predicate, skipCount, takeCount);
 
             public Dictionary<TKey, TSource> ToDictionary<TKey>(Selector<TSource, TKey> keySelector)
-                => ReadOnlyList.ToDictionary<TList, TSource, TKey>(source, keySelector, EqualityComparer<TKey>.Default, predicate, skipCount, takeCount);
+                => ReadOnlyList.ToDictionary<TList, TSource, TKey>(source, keySelector, null, predicate, skipCount, takeCount);
             public Dictionary<TKey, TSource> ToDictionary<TKey>(Selector<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer)
                 => ReadOnlyList.ToDictionary<TList, TSource, TKey>(source, keySelector, comparer, predicate, skipCount, takeCount);
             public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Selector<TSource, TKey> keySelector, Selector<TSource, TElement> elementSelector)
-                => ReadOnlyList.ToDictionary<TList, TSource, TKey, TElement>(source, keySelector, elementSelector, EqualityComparer<TKey>.Default, predicate, skipCount, takeCount);
+                => ReadOnlyList.ToDictionary<TList, TSource, TKey, TElement>(source, keySelector, elementSelector, null, predicate, skipCount, takeCount);
             public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Selector<TSource, TKey> keySelector, Selector<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer)
                 => ReadOnlyList.ToDictionary<TList, TSource, TKey, TElement>(source, keySelector, elementSelector, comparer, predicate, skipCount, takeCount);
 

@@ -92,8 +92,8 @@ namespace NetFabric.Hyperlinq
                 => throw new NotSupportedException();
             int IList<int>.IndexOf(int item)
                 => item >= 0 && item < Count
-                ? item
-                : -1;
+                    ? item
+                    : -1;
             void IList<int>.Insert(int index, int item)
                 => throw new NotSupportedException();
             void IList<int>.RemoveAt(int index)

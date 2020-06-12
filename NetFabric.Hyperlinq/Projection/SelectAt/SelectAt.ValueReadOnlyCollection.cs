@@ -65,8 +65,8 @@ namespace NetFabric.Hyperlinq
                 => throw new NotSupportedException();
             void ICollection<TResult>.Clear() 
                 => throw new NotSupportedException();
-            bool ICollection<TResult>.Contains(TResult item) 
-                => throw new NotSupportedException();
+            bool ICollection<TResult>.Contains(TResult item)
+                => ValueReadOnlyCollection.Contains<TEnumerable, TEnumerator, TSource, TResult>(source, item, selector);
             bool ICollection<TResult>.Remove(TResult item) 
                 => throw new NotSupportedException();
 
@@ -85,9 +85,12 @@ namespace NetFabric.Hyperlinq
                     index = -1;
                 }
 
+                [MaybeNull]
                 public readonly TResult Current
                     => selector(enumerator.Current, index);
-                readonly object? IEnumerator.Current 
+                readonly TResult IEnumerator<TResult>.Current 
+                    => selector(enumerator.Current, index);
+                readonly object? IEnumerator.Current
                     => selector(enumerator.Current, index);
 
                 public bool MoveNext()
@@ -111,10 +114,6 @@ namespace NetFabric.Hyperlinq
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Any()
                 => source.Count != 0;
-
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public bool Contains(TResult value, IEqualityComparer<TResult>? comparer = null)
-                => ValueReadOnlyCollection.Contains<TEnumerable, TEnumerator, TSource, TResult>(source, value, comparer, selector);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public ValueReadOnlyCollection.SelectAtEnumerable<TEnumerable, TEnumerator, TSource, TSelectorResult> Select<TSelectorResult>(Selector<TResult, TSelectorResult> selector)
@@ -149,7 +148,7 @@ namespace NetFabric.Hyperlinq
                 => ToDictionary<TKey>(keySelector, comparer);
 
             public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Selector<TResult, TKey> keySelector, Selector<TResult, TElement> elementSelector, IEqualityComparer<TKey>? comparer = null)
-                => ToDictionary<TKey, TElement>(keySelector, elementSelector, EqualityComparer<TKey>.Default);
+                => ToDictionary<TKey, TElement>(keySelector, elementSelector, null);
         }
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

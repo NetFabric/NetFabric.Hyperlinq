@@ -55,9 +55,12 @@ namespace NetFabric.Hyperlinq
                     selector = enumerable.selector;
                 }
 
+                [MaybeNull]
                 public readonly TResult Current
                     => selector(enumerator.Current);
-                readonly object? IEnumerator.Current 
+                readonly TResult IEnumerator<TResult>.Current 
+                    => selector(enumerator.Current);
+                readonly object? IEnumerator.Current
                     => selector(enumerator.Current);
 
                 public bool MoveNext()
@@ -83,10 +86,6 @@ namespace NetFabric.Hyperlinq
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Any()
                 => ValueEnumerable.Any<TEnumerable, TEnumerator, TSource>(source);
-
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public bool Contains(TResult value, IEqualityComparer<TResult>? comparer = null)
-                => ValueEnumerable.Contains<TEnumerable, TEnumerator, TSource, TResult>(source, value, comparer, selector);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public ValueEnumerable.SelectEnumerable<TEnumerable, TEnumerator, TSource, TSelectorResult> Select<TSelectorResult>(Selector<TResult, TSelectorResult> selector)

@@ -61,8 +61,8 @@ namespace NetFabric.Hyperlinq
                 => throw new NotSupportedException();
             int IList<TSource>.IndexOf(TSource item)
                 => EqualityComparer<TSource>.Default.Equals(value, item)
-                ? 0
-                : -1;
+                    ? 0
+                    : -1;
             void IList<TSource>.Insert(int index, TSource item)
                 => throw new NotSupportedException();
             void IList<TSource>.RemoveAt(int index)
