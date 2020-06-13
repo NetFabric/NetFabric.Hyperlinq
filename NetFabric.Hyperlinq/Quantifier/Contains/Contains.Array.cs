@@ -116,7 +116,7 @@ namespace NetFabric.Hyperlinq
 
 #endif
 
-        static bool Contains<TSource, TResult>(this TSource[] source, [AllowNull] TResult value, Selector<TSource, TResult> selector, int skipCount, int takeCount)
+        static bool Contains<TSource, TResult>(this TSource[] source, [AllowNull] TResult value, NullableSelector<TSource, TResult> selector, int skipCount, int takeCount)
         {
             if (takeCount == 0)
                 return false;
@@ -125,7 +125,7 @@ namespace NetFabric.Hyperlinq
                 ? ValueContains(source, value, selector, skipCount, takeCount)
                 : ReferenceContains(source, value, selector, skipCount, takeCount);
 
-            static bool ValueContains(TSource[] source, [AllowNull] TResult value, Selector<TSource, TResult> selector, int skipCount, int takeCount)
+            static bool ValueContains(TSource[] source, [AllowNull] TResult value, NullableSelector<TSource, TResult> selector, int skipCount, int takeCount)
             {
                 if (skipCount == 0 && takeCount == source.Length)
                 {
@@ -147,7 +147,7 @@ namespace NetFabric.Hyperlinq
                 return false;
             }
 
-            static bool ReferenceContains(TSource[] source, [AllowNull] TResult value, Selector<TSource, TResult> selector, int skipCount, int takeCount)
+            static bool ReferenceContains(TSource[] source, [AllowNull] TResult value, NullableSelector<TSource, TResult> selector, int skipCount, int takeCount)
             {
                 var defaultComparer = EqualityComparer<TResult>.Default;
 
@@ -173,7 +173,7 @@ namespace NetFabric.Hyperlinq
         }
 
 
-        static bool Contains<TSource, TResult>(this TSource[] source, [AllowNull] TResult value, SelectorAt<TSource, TResult> selector, int skipCount, int takeCount)
+        static bool Contains<TSource, TResult>(this TSource[] source, [AllowNull] TResult value, NullableSelectorAt<TSource, TResult> selector, int skipCount, int takeCount)
         {
             if (takeCount == 0)
                 return false;
@@ -182,7 +182,7 @@ namespace NetFabric.Hyperlinq
                 ? ValueContains(source, value, selector, skipCount, takeCount)
                 : ReferenceContains(source, value, selector, skipCount, takeCount);
 
-            static bool ValueContains(TSource[] source, [AllowNull] TResult value, SelectorAt<TSource, TResult> selector, int skipCount, int takeCount)
+            static bool ValueContains(TSource[] source, [AllowNull] TResult value, NullableSelectorAt<TSource, TResult> selector, int skipCount, int takeCount)
             {
                 if (skipCount == 0)
                 {
@@ -214,7 +214,7 @@ namespace NetFabric.Hyperlinq
                 return false;
             }
 
-            static bool ReferenceContains(TSource[] source, [AllowNull] TResult value, SelectorAt<TSource, TResult> selector, int skipCount, int takeCount)
+            static bool ReferenceContains(TSource[] source, [AllowNull] TResult value, NullableSelectorAt<TSource, TResult> selector, int skipCount, int takeCount)
             {
                 var defaultComparer = EqualityComparer<TResult>.Default;
 

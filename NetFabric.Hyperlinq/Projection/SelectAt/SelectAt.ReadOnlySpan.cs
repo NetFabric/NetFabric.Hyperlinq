@@ -11,7 +11,7 @@ namespace NetFabric.Hyperlinq
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static SpanSelectAtEnumerable<TSource, TResult> Select<TSource, TResult>(
             this ReadOnlySpan<TSource> source, 
-            SelectorAt<TSource, TResult> selector)
+            NullableSelectorAt<TSource, TResult> selector)
         {
             if (selector is null) Throw.ArgumentNullException(nameof(selector));
 
@@ -22,9 +22,9 @@ namespace NetFabric.Hyperlinq
         public readonly ref struct SpanSelectAtEnumerable<TSource, TResult>
         {
             internal readonly ReadOnlySpan<TSource> source;
-            internal readonly SelectorAt<TSource, TResult> selector;
+            internal readonly NullableSelectorAt<TSource, TResult> selector;
 
-            internal SpanSelectAtEnumerable(in ReadOnlySpan<TSource> source, SelectorAt<TSource, TResult> selector)
+            internal SpanSelectAtEnumerable(in ReadOnlySpan<TSource> source, NullableSelectorAt<TSource, TResult> selector)
             {
                 this.source = source;
                 this.selector = selector;
@@ -50,7 +50,7 @@ namespace NetFabric.Hyperlinq
             public ref struct Enumerator
             {
                 readonly ReadOnlySpan<TSource> source;
-                readonly SelectorAt<TSource, TResult> selector;
+                readonly NullableSelectorAt<TSource, TResult> selector;
                 int index;
 
                 internal Enumerator(in SpanSelectAtEnumerable<TSource, TResult> enumerable)

@@ -68,7 +68,7 @@ namespace NetFabric.Hyperlinq
             public SpanWhereAtEnumerable<TSource> Where(PredicateAt<TSource> predicate)
                 => Where<TSource>(source, Utils.Combine(this.predicate, predicate));
 
-            public SpanWhereSelectEnumerable<TSource, TResult> Select<TResult>(Selector<TSource, TResult> selector)
+            public SpanWhereSelectEnumerable<TSource, TResult> Select<TResult>(NullableSelector<TSource, TResult> selector)
             {
                 if (selector is null) Throw.ArgumentNullException(nameof(selector));
 

@@ -28,19 +28,19 @@ namespace NetFabric.Hyperlinq
             => GetSingle<TEnumerable, TEnumerator, TSource>(source, predicate);
 
         
-        static Option<TResult> Single<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, Selector<TSource, TResult> selector) 
+        static Option<TResult> Single<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, NullableSelector<TSource, TResult> selector) 
             where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
             => GetSingle<TEnumerable, TEnumerator, TSource>(source).Select(selector);
 
         
-        static Option<TResult> Single<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, SelectorAt<TSource, TResult> selector) 
+        static Option<TResult> Single<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, NullableSelectorAt<TSource, TResult> selector) 
             where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
             => GetSingle<TEnumerable, TEnumerator, TSource>(source).Select(item => selector(item, 0));
 
         
-        static Option<TResult> Single<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, Predicate<TSource> predicate, Selector<TSource, TResult> selector) 
+        static Option<TResult> Single<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, Predicate<TSource> predicate, NullableSelector<TSource, TResult> selector) 
             where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
             => GetSingle<TEnumerable, TEnumerator, TSource>(source, predicate).Select(selector);

@@ -7,7 +7,7 @@ namespace NetFabric.Hyperlinq
     {
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static MemoryWhereSelectEnumerable<TSource, TResult> WhereSelect<TSource, TResult>(this Memory<TSource> source, Predicate<TSource> predicate, Selector<TSource, TResult> selector)
+        static MemoryWhereSelectEnumerable<TSource, TResult> WhereSelect<TSource, TResult>(this Memory<TSource> source, Predicate<TSource> predicate, NullableSelector<TSource, TResult> selector)
             => WhereSelect((ReadOnlyMemory<TSource>)source, predicate, selector);
     }
 }

@@ -61,7 +61,7 @@ namespace NetFabric.Hyperlinq
         }
 
         
-        static Option<TResult> ElementAt<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, int index, Selector<TSource, TResult> selector) 
+        static Option<TResult> ElementAt<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, int index, NullableSelector<TSource, TResult> selector) 
             where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
@@ -79,7 +79,7 @@ namespace NetFabric.Hyperlinq
         }
 
         
-        public static Option<TResult> ElementAt<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, int index, SelectorAt<TSource, TResult> selector) 
+        public static Option<TResult> ElementAt<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, int index, NullableSelectorAt<TSource, TResult> selector) 
             where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
@@ -99,7 +99,7 @@ namespace NetFabric.Hyperlinq
         }
 
         
-        static Option<TResult> ElementAt<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, int index, Predicate<TSource> predicate, Selector<TSource, TResult> selector) 
+        static Option<TResult> ElementAt<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, int index, Predicate<TSource> predicate, NullableSelector<TSource, TResult> selector) 
             where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {

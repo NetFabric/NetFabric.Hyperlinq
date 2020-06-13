@@ -9,23 +9,23 @@ namespace NetFabric.Hyperlinq
 #if SPAN_SUPPORTED
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Dictionary<TKey, TSource> ToDictionary<TSource, TKey>(this TSource[] source, Selector<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer = default)
+        public static Dictionary<TKey, TSource> ToDictionary<TSource, TKey>(this TSource[] source, NullableSelector<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer = default)
             => ToDictionary((ReadOnlySpan<TSource>)source.AsSpan(), keySelector, comparer);
 
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Dictionary<TKey, TElement> ToDictionary<TSource, TKey, TElement>(this TSource[] source, Selector<TSource, TKey> keySelector, Selector<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer = default)
+        public static Dictionary<TKey, TElement> ToDictionary<TSource, TKey, TElement>(this TSource[] source, NullableSelector<TSource, TKey> keySelector, NullableSelector<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer = default)
             => ToDictionary((ReadOnlySpan<TSource>)source.AsSpan(), keySelector, elementSelector, comparer);
 
 #else
-        public static Dictionary<TKey, TSource> ToDictionary<TSource, TKey>(this TSource[] source, Selector<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer = default)
+        public static Dictionary<TKey, TSource> ToDictionary<TSource, TKey>(this TSource[] source, NullableSelector<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer = default)
         {
             if (keySelector is null) Throw.ArgumentNullException(nameof(keySelector));
 
             return ToDictionary<TSource, TKey>(source, keySelector, comparer, 0, source.Length);
         }
         
-        public static Dictionary<TKey, TElement> ToDictionary<TSource, TKey, TElement>(this TSource[] source, Selector<TSource, TKey> keySelector, Selector<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer = default)
+        public static Dictionary<TKey, TElement> ToDictionary<TSource, TKey, TElement>(this TSource[] source, NullableSelector<TSource, TKey> keySelector, NullableSelector<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer = default)
         {
             if (keySelector is null) Throw.ArgumentNullException(nameof(keySelector));
             if (elementSelector is null) Throw.ArgumentNullException(nameof(elementSelector));
@@ -34,7 +34,7 @@ namespace NetFabric.Hyperlinq
         }
 
 
-        static Dictionary<TKey, TSource> ToDictionary<TSource, TKey>(this TSource[] source, Selector<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer, int skipCount, int takeCount)
+        static Dictionary<TKey, TSource> ToDictionary<TSource, TKey>(this TSource[] source, NullableSelector<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer, int skipCount, int takeCount)
         {
             var dictionary = new Dictionary<TKey, TSource>(source.Length, comparer);
             if (skipCount == 0 && takeCount == source.Length)
@@ -52,7 +52,7 @@ namespace NetFabric.Hyperlinq
         }
 
 
-        static Dictionary<TKey, TElement> ToDictionary<TSource, TKey, TElement>(this TSource[] source, Selector<TSource, TKey> keySelector, Selector<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer, int skipCount, int takeCount)
+        static Dictionary<TKey, TElement> ToDictionary<TSource, TKey, TElement>(this TSource[] source, NullableSelector<TSource, TKey> keySelector, NullableSelector<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer, int skipCount, int takeCount)
         {
             var dictionary = new Dictionary<TKey, TElement>(source.Length, comparer);
             if (skipCount == 0 && takeCount == source.Length)
@@ -70,7 +70,7 @@ namespace NetFabric.Hyperlinq
         }
 
 
-        static Dictionary<TKey, TSource> ToDictionary<TSource, TKey>(this TSource[] source, Selector<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer, Predicate<TSource> predicate, int skipCount, int takeCount)
+        static Dictionary<TKey, TSource> ToDictionary<TSource, TKey>(this TSource[] source, NullableSelector<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer, Predicate<TSource> predicate, int skipCount, int takeCount)
         {
             var dictionary = new Dictionary<TKey, TSource>(source.Length, comparer);
             if (skipCount == 0 && takeCount == source.Length)
@@ -94,7 +94,7 @@ namespace NetFabric.Hyperlinq
         }
 
 
-        static Dictionary<TKey, TElement> ToDictionary<TSource, TKey, TElement>(this TSource[] source, Selector<TSource, TKey> keySelector, Selector<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer, Predicate<TSource> predicate, int skipCount, int takeCount)
+        static Dictionary<TKey, TElement> ToDictionary<TSource, TKey, TElement>(this TSource[] source, NullableSelector<TSource, TKey> keySelector, NullableSelector<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer, Predicate<TSource> predicate, int skipCount, int takeCount)
         {
             var dictionary = new Dictionary<TKey, TElement>(source.Length, comparer);
             if (skipCount == 0 && takeCount == source.Length)
@@ -118,7 +118,7 @@ namespace NetFabric.Hyperlinq
         }
 
 
-        static Dictionary<TKey, TSource> ToDictionary<TSource, TKey>(this TSource[] source, Selector<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer, PredicateAt<TSource> predicate, int skipCount, int takeCount)
+        static Dictionary<TKey, TSource> ToDictionary<TSource, TKey>(this TSource[] source, NullableSelector<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer, PredicateAt<TSource> predicate, int skipCount, int takeCount)
         {
             var dictionary = new Dictionary<TKey, TSource>(source.Length, comparer);
             if (skipCount == 0 && takeCount == source.Length)
@@ -142,7 +142,7 @@ namespace NetFabric.Hyperlinq
         }
 
 
-        static Dictionary<TKey, TElement> ToDictionary<TSource, TKey, TElement>(this TSource[] source, Selector<TSource, TKey> keySelector, Selector<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer, PredicateAt<TSource> predicate, int skipCount, int takeCount)
+        static Dictionary<TKey, TElement> ToDictionary<TSource, TKey, TElement>(this TSource[] source, NullableSelector<TSource, TKey> keySelector, NullableSelector<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer, PredicateAt<TSource> predicate, int skipCount, int takeCount)
         {
             var dictionary = new Dictionary<TKey, TElement>(source.Length, comparer);
             var end = skipCount + takeCount;

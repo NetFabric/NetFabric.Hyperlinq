@@ -68,7 +68,7 @@ namespace NetFabric.Hyperlinq
         }
 
 
-        static TResult[] ToArray<TSource, TResult>(this TSource[] source, Selector<TSource, TResult> selector, int skipCount, int takeCount)
+        static TResult[] ToArray<TSource, TResult>(this TSource[] source, NullableSelector<TSource, TResult> selector, int skipCount, int takeCount)
         {
             var array = new TResult[takeCount];
             if (skipCount == 0)
@@ -93,7 +93,7 @@ namespace NetFabric.Hyperlinq
         }
 
 
-        static TResult[] ToArray<TSource, TResult>(this TSource[] source, SelectorAt<TSource, TResult> selector, int skipCount, int takeCount)
+        static TResult[] ToArray<TSource, TResult>(this TSource[] source, NullableSelectorAt<TSource, TResult> selector, int skipCount, int takeCount)
         {
             var array = new TResult[takeCount];
             if (skipCount == 0)
@@ -118,7 +118,7 @@ namespace NetFabric.Hyperlinq
         }
 
 
-        static TResult[] ToArray<TSource, TResult>(this TSource[] source, Predicate<TSource> predicate, Selector<TSource, TResult> selector, int skipCount, int takeCount)
+        static TResult[] ToArray<TSource, TResult>(this TSource[] source, Predicate<TSource> predicate, NullableSelector<TSource, TResult> selector, int skipCount, int takeCount)
         {
             var builder = new LargeArrayBuilder<TResult>(initialize: true);
             builder.AddRange<TSource>(source, predicate, selector, skipCount, takeCount);
@@ -248,7 +248,7 @@ namespace System.Collections.Generic
             _index = index;
         }
 
-        public void AddRange<U>(U[] items, Predicate<U> predicate, Selector<U, T> selector, int skipCount, int takeCount)
+        public void AddRange<U>(U[] items, Predicate<U> predicate, NullableSelector<U, T> selector, int skipCount, int takeCount)
         {
             Debug.Assert(items is object);
 

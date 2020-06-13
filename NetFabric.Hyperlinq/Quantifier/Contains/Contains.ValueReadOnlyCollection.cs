@@ -14,14 +14,14 @@ namespace NetFabric.Hyperlinq
             => source.Count != 0 && ValueEnumerableExtensions.Contains<TEnumerable, TEnumerator, TSource>(source, value, comparer);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static bool Contains<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, [AllowNull] TResult value, Selector<TSource, TResult> selector)
+        static bool Contains<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, [AllowNull] TResult value, NullableSelector<TSource, TResult> selector)
             where TEnumerable : notnull, IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
             => source.Count != 0 && ValueEnumerableExtensions.Contains<TEnumerable, TEnumerator, TSource, TResult>(source, value, selector);
 
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static bool Contains<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, [AllowNull] TResult value, SelectorAt<TSource, TResult> selector)
+        static bool Contains<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, [AllowNull] TResult value, NullableSelectorAt<TSource, TResult> selector)
             where TEnumerable : notnull, IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
             => source.Count != 0 && ValueEnumerableExtensions.Contains<TEnumerable, TEnumerator, TSource, TResult>(source, value, selector);

@@ -27,7 +27,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Projection.Select
         [MemberData(nameof(TestData.SelectorEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SelectorSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SelectorMultiple), MemberType = typeof(TestData))]
-        public void Select_Selector_With_ValidData_Must_Succeed(int[] source, Selector<int, string> selector)
+        public void Select_Selector_With_ValidData_Must_Succeed(int[] source, NullableSelector<int, string> selector)
         {
             // Arrange
             var wrapped = Wrap.AsAsyncValueEnumerable(source);

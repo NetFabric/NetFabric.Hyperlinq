@@ -51,7 +51,7 @@ namespace NetFabric.Hyperlinq
         }
 
         
-        static TResult[] ToArray<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, Selector<TSource, TResult> selector)
+        static TResult[] ToArray<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, NullableSelector<TSource, TResult> selector)
             where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
@@ -61,7 +61,7 @@ namespace NetFabric.Hyperlinq
         }
 
         
-        static TResult[] ToArray<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, SelectorAt<TSource, TResult> selector)
+        static TResult[] ToArray<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, NullableSelectorAt<TSource, TResult> selector)
             where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
@@ -71,7 +71,7 @@ namespace NetFabric.Hyperlinq
         }
 
         
-        static TResult[] ToArray<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, Predicate<TSource> predicate, Selector<TSource, TResult> selector)
+        static TResult[] ToArray<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, Predicate<TSource> predicate, NullableSelector<TSource, TResult> selector)
             where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
@@ -180,7 +180,7 @@ namespace System.Collections.Generic
             _index = index;
         }
 
-        public void AddRange<TEnumerable, TEnumerator, U>(TEnumerable items, Selector<U, T> selector)
+        public void AddRange<TEnumerable, TEnumerator, U>(TEnumerable items, NullableSelector<U, T> selector)
             where TEnumerable : notnull, IValueEnumerable<U, TEnumerator>
             where TEnumerator : struct, IEnumerator<U>
         {
@@ -210,7 +210,7 @@ namespace System.Collections.Generic
             _index = index;
         }
 
-        public void AddRange<TEnumerable, TEnumerator, U>(TEnumerable items, SelectorAt<U, T> selector)
+        public void AddRange<TEnumerable, TEnumerator, U>(TEnumerable items, NullableSelectorAt<U, T> selector)
             where TEnumerable : notnull, IValueEnumerable<U, TEnumerator>
             where TEnumerator : struct, IEnumerator<U>
         {
@@ -240,7 +240,7 @@ namespace System.Collections.Generic
             _index = index;
         }
 
-        public void AddRange<TEnumerable, TEnumerator, U>(TEnumerable items, Predicate<U> predicate, Selector<U, T> selector)
+        public void AddRange<TEnumerable, TEnumerator, U>(TEnumerable items, Predicate<U> predicate, NullableSelector<U, T> selector)
             where TEnumerable : notnull, IValueEnumerable<U, TEnumerator>
             where TEnumerator : struct, IEnumerator<U>
         {

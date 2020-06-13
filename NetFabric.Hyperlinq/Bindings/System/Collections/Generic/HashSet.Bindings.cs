@@ -48,18 +48,18 @@ namespace NetFabric.Hyperlinq
         
         public static ValueReadOnlyCollectionExtensions.SelectEnumerable<ValueWrapper<TSource>, HashSet<TSource>.Enumerator, TSource, TResult> Select<TSource, TResult>(
             this HashSet<TSource> source,
-            Selector<TSource, TResult> selector)
+            NullableSelector<TSource, TResult> selector)
             => ValueReadOnlyCollectionExtensions.Select<ValueWrapper<TSource>, HashSet<TSource>.Enumerator, TSource, TResult>(new ValueWrapper<TSource>(source), selector);
         
         public static ValueReadOnlyCollectionExtensions.SelectAtEnumerable<ValueWrapper<TSource>, HashSet<TSource>.Enumerator, TSource, TResult> Select<TSource, TResult>(
             this HashSet<TSource> source,
-            SelectorAt<TSource, TResult> selector)
+            NullableSelectorAt<TSource, TResult> selector)
             => ValueReadOnlyCollectionExtensions.Select<ValueWrapper<TSource>, HashSet<TSource>.Enumerator, TSource, TResult>(new ValueWrapper<TSource>(source), selector);
 
         
         public static ValueEnumerableExtensions.SelectManyEnumerable<ValueWrapper<TSource>, HashSet<TSource>.Enumerator, TSource, TSubEnumerable, TSubEnumerator, TResult> SelectMany<TSource, TSubEnumerable, TSubEnumerator, TResult>(
             this HashSet<TSource> source,
-            Selector<TSource, TSubEnumerable> selector)
+            NullableSelector<TSource, TSubEnumerable> selector)
             where TSubEnumerable : notnull, IValueEnumerable<TResult, TSubEnumerator>
             where TSubEnumerator : struct, IEnumerator<TResult>
             => ValueEnumerableExtensions.SelectMany<ValueWrapper<TSource>, HashSet<TSource>.Enumerator, TSource, TSubEnumerable, TSubEnumerator, TResult>(new ValueWrapper<TSource>(source), selector);
@@ -109,10 +109,10 @@ namespace NetFabric.Hyperlinq
             => ValueReadOnlyCollectionExtensions.ToList<ValueWrapper<TSource>, HashSet<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source));
 
         
-        public static Dictionary<TKey, TSource> ToDictionary<TSource, TKey>(this HashSet<TSource> source, Selector<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer = default)
+        public static Dictionary<TKey, TSource> ToDictionary<TSource, TKey>(this HashSet<TSource> source, NullableSelector<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer = default)
             => ValueReadOnlyCollectionExtensions.ToDictionary<ValueWrapper<TSource>, HashSet<TSource>.Enumerator, TSource, TKey>(new ValueWrapper<TSource>(source), keySelector, comparer);
         
-        public static Dictionary<TKey, TElement> ToDictionary<TSource, TKey, TElement>(this HashSet<TSource> source, Selector<TSource, TKey> keySelector, Selector<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer = default)
+        public static Dictionary<TKey, TElement> ToDictionary<TSource, TKey, TElement>(this HashSet<TSource> source, NullableSelector<TSource, TKey> keySelector, NullableSelector<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer = default)
             => ValueReadOnlyCollectionExtensions.ToDictionary<ValueWrapper<TSource>, HashSet<TSource>.Enumerator, TSource, TKey, TElement>(new ValueWrapper<TSource>(source), keySelector, elementSelector, comparer);
 
         public readonly partial struct ValueWrapper<TSource>

@@ -38,15 +38,15 @@ namespace NetFabric.Hyperlinq
         }
 
         
-        static List<TResult> ToList<TSource, TResult>(this ReadOnlyMemory<TSource> source, Selector<TSource, TResult> selector)
+        static List<TResult> ToList<TSource, TResult>(this ReadOnlyMemory<TSource> source, NullableSelector<TSource, TResult> selector)
             => new List<TResult>(new ToListCollection<TSource, TResult>(source, selector));
 
         
-        static List<TResult> ToList<TSource, TResult>(this ReadOnlyMemory<TSource> source, SelectorAt<TSource, TResult> selector)
+        static List<TResult> ToList<TSource, TResult>(this ReadOnlyMemory<TSource> source, NullableSelectorAt<TSource, TResult> selector)
             => new List<TResult>(new IndexedToListCollection<TSource, TResult>(source, selector));
 
         
-        static List<TResult> ToList<TSource, TResult>(this ReadOnlyMemory<TSource> source, Predicate<TSource> predicate, Selector<TSource, TResult> selector)
+        static List<TResult> ToList<TSource, TResult>(this ReadOnlyMemory<TSource> source, Predicate<TSource> predicate, NullableSelector<TSource, TResult> selector)
         {
             var list = new List<TResult>();
             var span = source.Span;
@@ -78,9 +78,9 @@ namespace NetFabric.Hyperlinq
             : ToListCollectionBase<TResult>
         {
             readonly ReadOnlyMemory<TSource> source;
-            readonly Selector<TSource, TResult> selector;
+            readonly NullableSelector<TSource, TResult> selector;
 
-            public ToListCollection(ReadOnlyMemory<TSource> source, Selector<TSource, TResult> selector)
+            public ToListCollection(ReadOnlyMemory<TSource> source, NullableSelector<TSource, TResult> selector)
                 : base(source.Length)
             {
                 this.source = source;
@@ -100,9 +100,9 @@ namespace NetFabric.Hyperlinq
             : ToListCollectionBase<TResult>
         {
             readonly ReadOnlyMemory<TSource> source;
-            readonly SelectorAt<TSource, TResult> selector;
+            readonly NullableSelectorAt<TSource, TResult> selector;
 
-            public IndexedToListCollection(ReadOnlyMemory<TSource> source, SelectorAt<TSource, TResult> selector)
+            public IndexedToListCollection(ReadOnlyMemory<TSource> source, NullableSelectorAt<TSource, TResult> selector)
                 : base(source.Length)
             {
                 this.source = source;

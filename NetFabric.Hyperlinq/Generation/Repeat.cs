@@ -157,7 +157,7 @@ namespace NetFabric.Hyperlinq
                     : count != 0 && comparer.Equals(this.value, value);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public RepeatEnumerable<TResult> Select<TResult>(Selector<TSource, TResult> selector) 
+            public RepeatEnumerable<TResult> Select<TResult>(NullableSelector<TSource, TResult> selector) 
                 => new RepeatEnumerable<TResult>(selector(value), count);
 
             public TSource[] ToArray()
@@ -179,10 +179,10 @@ namespace NetFabric.Hyperlinq
             public List<TSource> ToList()
                 => new List<TSource>(new ToListCollection(this));
 
-            public Dictionary<TKey, TSource> ToDictionary<TKey>(Selector<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer = default)
+            public Dictionary<TKey, TSource> ToDictionary<TKey>(NullableSelector<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer = default)
                 => ToDictionary<TKey>(keySelector, comparer);
 
-            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Selector<TSource, TKey> keySelector, Selector<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer = default)
+            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(NullableSelector<TSource, TKey> keySelector, NullableSelector<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer = default)
                 => ToDictionary<TKey, TElement>(keySelector, elementSelector, comparer);
 
             // helper implementation of ICollection<> so that CopyTo() is used to convert to List<>

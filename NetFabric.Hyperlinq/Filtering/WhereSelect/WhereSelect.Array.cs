@@ -11,7 +11,7 @@ namespace NetFabric.Hyperlinq
 #if SPAN_SUPPORTED
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static MemoryWhereSelectEnumerable<TSource, TResult> WhereSelect<TSource, TResult>(this TSource[] source, Predicate<TSource> predicate, Selector<TSource, TResult> selector)
+        static MemoryWhereSelectEnumerable<TSource, TResult> WhereSelect<TSource, TResult>(this TSource[] source, Predicate<TSource> predicate, NullableSelector<TSource, TResult> selector)
             => WhereSelect(source.AsMemory(), predicate, selector);
 
 #else
@@ -20,7 +20,7 @@ namespace NetFabric.Hyperlinq
         static WhereSelectEnumerable<TSource, TResult> WhereSelect<TSource, TResult>(
             this TSource[] source,
             Predicate<TSource> predicate,
-            Selector<TSource, TResult> selector,
+            NullableSelector<TSource, TResult> selector,
             int skipCount, int takeCount)
             => new WhereSelectEnumerable<TSource, TResult>(in source, predicate, selector, skipCount, takeCount);
 
@@ -30,11 +30,11 @@ namespace NetFabric.Hyperlinq
         {
             readonly TSource[] source;
             readonly Predicate<TSource> predicate;
-            readonly Selector<TSource, TResult> selector;
+            readonly NullableSelector<TSource, TResult> selector;
             readonly int skipCount;
             readonly int takeCount;
 
-            internal WhereSelectEnumerable(in TSource[] source, Predicate<TSource> predicate, Selector<TSource, TResult> selector, int skipCount, int takeCount)
+            internal WhereSelectEnumerable(in TSource[] source, Predicate<TSource> predicate, NullableSelector<TSource, TResult> selector, int skipCount, int takeCount)
             {
                 this.source = source;
                 this.predicate = predicate;
@@ -53,7 +53,7 @@ namespace NetFabric.Hyperlinq
             {
                 readonly TSource[] source;
                 readonly Predicate<TSource> predicate;
-                readonly Selector<TSource, TResult> selector;
+                readonly NullableSelector<TSource, TResult> selector;
                 readonly int end;
                 int index;
 
@@ -86,7 +86,7 @@ namespace NetFabric.Hyperlinq
             {
                 readonly TSource[] source;
                 readonly Predicate<TSource> predicate;
-                readonly Selector<TSource, TResult> selector;
+                readonly NullableSelector<TSource, TResult> selector;
                 readonly int end;
                 int index;
 

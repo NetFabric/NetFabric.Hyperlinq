@@ -12,7 +12,7 @@ namespace NetFabric.Hyperlinq
         static SpanWhereSelectEnumerable<TSource, TResult> WhereSelect<TSource, TResult>(
             this ReadOnlySpan<TSource> source, 
             Predicate<TSource> predicate, 
-            Selector<TSource, TResult> selector) 
+            NullableSelector<TSource, TResult> selector) 
             => new SpanWhereSelectEnumerable<TSource, TResult>(source, predicate, selector);
 
         [GeneratorMapping("TSource", "TResult")]
@@ -20,9 +20,9 @@ namespace NetFabric.Hyperlinq
         {
             internal readonly ReadOnlySpan<TSource> source;
             internal readonly Predicate<TSource> predicate;
-            internal readonly Selector<TSource, TResult> selector;
+            internal readonly NullableSelector<TSource, TResult> selector;
 
-            internal SpanWhereSelectEnumerable(ReadOnlySpan<TSource> source, Predicate<TSource> predicate, Selector<TSource, TResult> selector)
+            internal SpanWhereSelectEnumerable(ReadOnlySpan<TSource> source, Predicate<TSource> predicate, NullableSelector<TSource, TResult> selector)
             {
                 this.source = source;
                 this.predicate = predicate;
@@ -36,7 +36,7 @@ namespace NetFabric.Hyperlinq
             {
                 readonly ReadOnlySpan<TSource> source;
                 readonly Predicate<TSource> predicate;
-                readonly Selector<TSource, TResult> selector;
+                readonly NullableSelector<TSource, TResult> selector;
                 int index;
 
                 internal Enumerator(in SpanWhereSelectEnumerable<TSource, TResult> enumerable)

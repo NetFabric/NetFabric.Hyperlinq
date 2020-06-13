@@ -12,7 +12,7 @@ namespace NetFabric.Hyperlinq
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static SelectAtEnumerable<TEnumerable, TEnumerator, TSource, TResult> Select<TEnumerable, TEnumerator, TSource, TResult>(
             this TEnumerable source, 
-            SelectorAt<TSource, TResult> selector)
+            NullableSelectorAt<TSource, TResult> selector)
             where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
@@ -28,9 +28,9 @@ namespace NetFabric.Hyperlinq
             where TEnumerator : struct, IEnumerator<TSource>
         {
             readonly TEnumerable source;
-            readonly SelectorAt<TSource, TResult> selector;
+            readonly NullableSelectorAt<TSource, TResult> selector;
 
-            internal SelectAtEnumerable(in TEnumerable source, SelectorAt<TSource, TResult> selector)
+            internal SelectAtEnumerable(in TEnumerable source, NullableSelectorAt<TSource, TResult> selector)
             {
                 this.source = source;
                 this.selector = selector;
@@ -47,7 +47,7 @@ namespace NetFabric.Hyperlinq
             {
                 [SuppressMessage("Style", "IDE0044:Add readonly modifier")]
                 TEnumerator enumerator; // do not make readonly
-                readonly SelectorAt<TSource, TResult> selector;
+                readonly NullableSelectorAt<TSource, TResult> selector;
                 int index;
 
                 internal Enumerator(in SelectAtEnumerable<TEnumerable, TEnumerator, TSource, TResult> enumerable)
@@ -92,11 +92,11 @@ namespace NetFabric.Hyperlinq
                 => ValueEnumerableExtensions.Any<TEnumerable, TEnumerator, TSource>(source);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public ValueEnumerableExtensions.SelectAtEnumerable<TEnumerable, TEnumerator, TSource, TSelectorResult> Select<TSelectorResult>(Selector<TResult, TSelectorResult> selector)
+            public ValueEnumerableExtensions.SelectAtEnumerable<TEnumerable, TEnumerator, TSource, TSelectorResult> Select<TSelectorResult>(NullableSelector<TResult, TSelectorResult> selector)
                 => ValueEnumerableExtensions.Select<TEnumerable, TEnumerator, TSource, TSelectorResult>(source, Utils.Combine(this.selector, selector));
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public ValueEnumerableExtensions.SelectAtEnumerable<TEnumerable, TEnumerator, TSource, TSelectorResult> Select<TSelectorResult>(SelectorAt<TResult, TSelectorResult> selector)
+            public ValueEnumerableExtensions.SelectAtEnumerable<TEnumerable, TEnumerator, TSource, TSelectorResult> Select<TSelectorResult>(NullableSelectorAt<TResult, TSelectorResult> selector)
                 => ValueEnumerableExtensions.Select<TEnumerable, TEnumerator, TSource, TSelectorResult>(source, Utils.Combine(this.selector, selector));
 
 

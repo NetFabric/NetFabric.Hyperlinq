@@ -264,7 +264,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
 
         [Theory]
         [MemberData(nameof(TestData.SkipTakeSelectorEmpty), MemberType = typeof(TestData))]
-        public void Single_Skip_Take_Selector_With_Empty_Must_Return_None(int[] source, int skipCount, int takeCount, Selector<int, string> selector)
+        public void Single_Skip_Take_Selector_With_Empty_Must_Return_None(int[] source, int skipCount, int takeCount, NullableSelector<int, string> selector)
         {
             // Arrange
             var wrapped = Wrap
@@ -285,7 +285,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
 
         [Theory]
         [MemberData(nameof(TestData.SkipTakeSelectorSingle), MemberType = typeof(TestData))]
-        public void Single_Skip_Take_Selector_With_Single_Must_Return_Some(int[] source, int skipCount, int takeCount, Selector<int, string> selector)
+        public void Single_Skip_Take_Selector_With_Single_Must_Return_Some(int[] source, int skipCount, int takeCount, NullableSelector<int, string> selector)
         {
             // Arrange
             var wrapped = Wrap
@@ -311,7 +311,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
 
         [Theory]
         [MemberData(nameof(TestData.SkipTakeSelectorMultiple), MemberType = typeof(TestData))]
-        public void Single_Skip_Take_Selector_With_Multiple_Must_Return_None(int[] source, int skipCount, int takeCount, Selector<int, string> selector)
+        public void Single_Skip_Take_Selector_With_Multiple_Must_Return_None(int[] source, int skipCount, int takeCount, NullableSelector<int, string> selector)
         {
             // Arrange
             var wrapped = Wrap
@@ -332,7 +332,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
 
         [Theory]
         [MemberData(nameof(TestData.SkipTakeSelectorAtEmpty), MemberType = typeof(TestData))]
-        public void Single_Skip_Take_SelectorAt_With_Empty_Must_Return_None(int[] source, int skipCount, int takeCount, SelectorAt<int, string> selector)
+        public void Single_Skip_Take_SelectorAt_With_Empty_Must_Return_None(int[] source, int skipCount, int takeCount, NullableSelectorAt<int, string> selector)
         {
             // Arrange
             var wrapped = Wrap
@@ -353,7 +353,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
 
         [Theory]
         [MemberData(nameof(TestData.SkipTakeSelectorAtSingle), MemberType = typeof(TestData))]
-        public void Single_Skip_Take_SelectorAt_With_Single_Must_Return_Some(int[] source, int skipCount, int takeCount, SelectorAt<int, string> selector)
+        public void Single_Skip_Take_SelectorAt_With_Single_Must_Return_Some(int[] source, int skipCount, int takeCount, NullableSelectorAt<int, string> selector)
         {
             // Arrange
             var wrapped = Wrap
@@ -379,7 +379,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
 
         [Theory]
         [MemberData(nameof(TestData.SkipTakeSelectorAtMultiple), MemberType = typeof(TestData))]
-        public void Single_Skip_Take_SelectorAt_With_Multiple_Must_Return_None(int[] source, int skipCount, int takeCount, SelectorAt<int, string> selector)
+        public void Single_Skip_Take_SelectorAt_With_Multiple_Must_Return_None(int[] source, int skipCount, int takeCount, NullableSelectorAt<int, string> selector)
         {
             // Arrange
             var wrapped = Wrap
@@ -400,7 +400,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
 
         [Theory]
         [MemberData(nameof(TestData.SkipTakePredicateSelectorEmpty), MemberType = typeof(TestData))]
-        public void Single_Skip_Take_Predicate_Selector_With_Empty_Must_Return_None(int[] source, int skipCount, int takeCount, Predicate<int> predicate, Selector<int, string> selector)
+        public void Single_Skip_Take_Predicate_Selector_With_Empty_Must_Return_None(int[] source, int skipCount, int takeCount, Predicate<int> predicate, NullableSelector<int, string> selector)
         {
             // Arrange
             var wrapped = Wrap
@@ -422,7 +422,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
 
         [Theory]
         [MemberData(nameof(TestData.SkipTakePredicateSelectorSingle), MemberType = typeof(TestData))]
-        public void Single_Skip_Take_Predicate_Selector_With_Single_Must_Return_Some(int[] source, int skipCount, int takeCount, Predicate<int> predicate, Selector<int, string> selector)
+        public void Single_Skip_Take_Predicate_Selector_With_Single_Must_Return_Some(int[] source, int skipCount, int takeCount, Predicate<int> predicate, NullableSelector<int, string> selector)
         {
             // Arrange
             var wrapped = Wrap
@@ -450,7 +450,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
 
         [Theory]
         [MemberData(nameof(TestData.SkipTakePredicateSelectorMultiple), MemberType = typeof(TestData))]
-        public void Single_Skip_Take_Predicate_Selector_With_Multiple_Must_Return_None(int[] source, int skipCount, int takeCount, Predicate<int> predicate, Selector<int, string> selector)
+        public void Single_Skip_Take_Predicate_Selector_With_Multiple_Must_Return_None(int[] source, int skipCount, int takeCount, Predicate<int> predicate, NullableSelector<int, string> selector)
         {
             // Arrange
             var wrapped = Wrap

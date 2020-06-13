@@ -11,7 +11,7 @@ namespace NetFabric.Hyperlinq
 #if SPAN_SUPPORTED
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static MemorySelectEnumerable<TSource, TResult> Select<TSource, TResult>(this TSource[] source, Selector<TSource, TResult> selector)
+        public static MemorySelectEnumerable<TSource, TResult> Select<TSource, TResult>(this TSource[] source, NullableSelector<TSource, TResult> selector)
             => Select(source.AsMemory(), selector);
 
 #else
@@ -19,7 +19,7 @@ namespace NetFabric.Hyperlinq
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static SelectEnumerable<TSource, TResult> Select<TSource, TResult>(
             this TSource[] source,
-            Selector<TSource, TResult> selector)
+            NullableSelector<TSource, TResult> selector)
         {
             if (selector is null)
                 Throw.ArgumentNullException(nameof(selector));
@@ -29,7 +29,7 @@ namespace NetFabric.Hyperlinq
 
         static SelectEnumerable<TSource, TResult> Select<TSource, TResult>(
             this TSource[] source,
-            Selector<TSource, TResult> selector,
+            NullableSelector<TSource, TResult> selector,
             int skipCount, int Count)
             => new SelectEnumerable<TSource, TResult>(source, selector, skipCount, Count);
 
@@ -39,10 +39,10 @@ namespace NetFabric.Hyperlinq
             , IList<TResult>
         {
             readonly TSource[] source;
-            readonly Selector<TSource, TResult> selector;
+            readonly NullableSelector<TSource, TResult> selector;
             readonly int skipCount;
 
-            internal SelectEnumerable(in TSource[] source, Selector<TSource, TResult> selector, int skipCount, int takeCount)
+            internal SelectEnumerable(in TSource[] source, NullableSelector<TSource, TResult> selector, int skipCount, int takeCount)
             {
                 this.source = source;
                 this.selector = selector;
@@ -121,7 +121,7 @@ namespace NetFabric.Hyperlinq
             public struct Enumerator
             {
                 readonly TSource[] source;
-                readonly Selector<TSource, TResult> selector;
+                readonly NullableSelector<TSource, TResult> selector;
                 readonly int end;
                 int index;
 
@@ -146,7 +146,7 @@ namespace NetFabric.Hyperlinq
                 : IEnumerator<TResult>
             {
                 readonly TSource[] source;
-                readonly Selector<TSource, TResult> selector;
+                readonly NullableSelector<TSource, TResult> selector;
                 readonly int end;
                 int index;
 
@@ -191,11 +191,11 @@ namespace NetFabric.Hyperlinq
                 => Count != 0;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public SelectEnumerable<TSource, TSelectorResult> Select<TSelectorResult>(Selector<TResult, TSelectorResult> selector)
+            public SelectEnumerable<TSource, TSelectorResult> Select<TSelectorResult>(NullableSelector<TResult, TSelectorResult> selector)
                 => ArrayExtensions.Select<TSource, TSelectorResult>(source, Utils.Combine(this.selector, selector), skipCount, Count);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public SelectAtEnumerable<TSource, TSelectorResult> Select<TSelectorResult>(SelectorAt<TResult, TSelectorResult> selector)
+            public SelectAtEnumerable<TSource, TSelectorResult> Select<TSelectorResult>(NullableSelectorAt<TResult, TSelectorResult> selector)
                 => ArrayExtensions.Select<TSource, TSelectorResult>(source, Utils.Combine(this.selector, selector), skipCount, Count);
 
 

@@ -230,12 +230,12 @@ namespace NetFabric.Hyperlinq
 
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public SelectEnumerable<TSource, TResult> Select<TResult>(Selector<TSource, TResult> selector)
+            public SelectEnumerable<TSource, TResult> Select<TResult>(NullableSelector<TSource, TResult> selector)
                 => ArrayExtensions.Select<TSource, TResult>(source, selector, skipCount, Count);
 
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public SelectAtEnumerable<TSource, TResult> Select<TResult>(SelectorAt<TSource, TResult> selector)
+            public SelectAtEnumerable<TSource, TResult> Select<TResult>(NullableSelectorAt<TSource, TResult> selector)
                 => ArrayExtensions.Select<TSource, TResult>(source, selector, skipCount, Count);
 
             
@@ -265,11 +265,11 @@ namespace NetFabric.Hyperlinq
 
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public Dictionary<TKey, TSource> ToDictionary<TKey>(Selector<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer = default)
+            public Dictionary<TKey, TSource> ToDictionary<TKey>(NullableSelector<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer = default)
                 => ArrayExtensions.ToDictionary<TSource, TKey>(source, keySelector, comparer, skipCount, Count);
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Selector<TSource, TKey> keySelector, Selector<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer = default)
+            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(NullableSelector<TSource, TKey> keySelector, NullableSelector<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer = default)
                 => ArrayExtensions.ToDictionary<TSource, TKey, TElement>(source, keySelector, elementSelector, comparer, skipCount, Count);
         }
 

@@ -25,7 +25,7 @@ namespace NetFabric.Hyperlinq
         }
 
         
-        static TResult[] ToArray<TSource, TResult>(this ReadOnlySpan<TSource> source, Selector<TSource, TResult> selector)
+        static TResult[] ToArray<TSource, TResult>(this ReadOnlySpan<TSource> source, NullableSelector<TSource, TResult> selector)
         {
             var array = new TResult[source.Length];
             for (var index = 0; index < source.Length; index++)
@@ -34,7 +34,7 @@ namespace NetFabric.Hyperlinq
         }
 
         
-        static TResult[] ToArray<TSource, TResult>(this ReadOnlySpan<TSource> source, SelectorAt<TSource, TResult> selector)
+        static TResult[] ToArray<TSource, TResult>(this ReadOnlySpan<TSource> source, NullableSelectorAt<TSource, TResult> selector)
         {
             var array = new TResult[source.Length];
             for (var index = 0; index < source.Length; index++)
@@ -43,7 +43,7 @@ namespace NetFabric.Hyperlinq
         }
 
         
-        static TResult[] ToArray<TSource, TResult>(this ReadOnlySpan<TSource> source, Predicate<TSource> predicate, Selector<TSource, TResult> selector)
+        static TResult[] ToArray<TSource, TResult>(this ReadOnlySpan<TSource> source, Predicate<TSource> predicate, NullableSelector<TSource, TResult> selector)
         {
             var builder = new LargeArrayBuilder<TResult>(initialize: true);
             builder.AddRange<TSource>(source, predicate, selector);
@@ -110,7 +110,7 @@ namespace System.Collections.Generic
             _index = index;
         }
 
-        public void AddRange<U>(ReadOnlySpan<U> items, Predicate<U> predicate, Selector<U, T> selector)
+        public void AddRange<U>(ReadOnlySpan<U> items, Predicate<U> predicate, NullableSelector<U, T> selector)
         {
             var destination = _current;
             var index = _index;

@@ -118,7 +118,7 @@ namespace NetFabric.Hyperlinq
             public MemoryWhereAtEnumerable<TSource> Where(PredicateAt<TSource> predicate)
                 => ArrayExtensions.Where<TSource>(source, Utils.Combine(this.predicate, predicate));
 
-            public MemoryWhereSelectEnumerable<TSource, TResult> Select<TResult>(Selector<TSource, TResult> selector)
+            public MemoryWhereSelectEnumerable<TSource, TResult> Select<TResult>(NullableSelector<TSource, TResult> selector)
             {
                 if (selector is null)
                     Throw.ArgumentNullException(nameof(selector));

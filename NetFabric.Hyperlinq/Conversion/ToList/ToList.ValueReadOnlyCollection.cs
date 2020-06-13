@@ -18,7 +18,7 @@ namespace NetFabric.Hyperlinq
             };
 
         
-        public static List<TResult> ToList<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, Selector<TSource, TResult> selector)
+        public static List<TResult> ToList<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, NullableSelector<TSource, TResult> selector)
             where TEnumerable : notnull, IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
             => source.Count == 0
@@ -26,7 +26,7 @@ namespace NetFabric.Hyperlinq
                 : new List<TResult>(new ToListCollection<TEnumerable, TEnumerator, TSource, TResult>(source, selector));
 
         
-        public static List<TResult> ToList<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, SelectorAt<TSource, TResult> selector)
+        public static List<TResult> ToList<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, NullableSelectorAt<TSource, TResult> selector)
             where TEnumerable : notnull, IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
             => source.Count == 0
@@ -64,9 +64,9 @@ namespace NetFabric.Hyperlinq
             where TEnumerator : struct, IEnumerator<TSource>
         {
             readonly TEnumerable source;
-            readonly Selector<TSource, TResult> selector;
+            readonly NullableSelector<TSource, TResult> selector;
 
-            public ToListCollection(TEnumerable source, Selector<TSource, TResult> selector)
+            public ToListCollection(TEnumerable source, NullableSelector<TSource, TResult> selector)
                 : base(source.Count) 
             {
                 this.source = source;
@@ -91,9 +91,9 @@ namespace NetFabric.Hyperlinq
             where TEnumerator : struct, IEnumerator<TSource>
         {
             readonly TEnumerable source;
-            readonly SelectorAt<TSource, TResult> selector;
+            readonly NullableSelectorAt<TSource, TResult> selector;
 
-            public IndexedToListCollection(TEnumerable source, SelectorAt<TSource, TResult> selector)
+            public IndexedToListCollection(TEnumerable source, NullableSelectorAt<TSource, TResult> selector)
                 : base(source.Count) 
             {
                 this.source = source;
