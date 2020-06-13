@@ -43,7 +43,7 @@ namespace NetFabric.Hyperlinq
         }
 
         
-        static List<TResult> ToList<TSource, TResult>(this ReadOnlySpan<TSource> source, Selector<TSource, TResult> selector)
+        static List<TResult> ToList<TSource, TResult>(this ReadOnlySpan<TSource> source, NullableSelector<TSource, TResult> selector)
         {
             var list = new List<TResult>(source.Length);
             for (var index = 0; index < source.Length; index++)
@@ -52,7 +52,7 @@ namespace NetFabric.Hyperlinq
         }
 
         
-        static List<TResult> ToList<TSource, TResult>(this ReadOnlySpan<TSource> source, SelectorAt<TSource, TResult> selector)
+        static List<TResult> ToList<TSource, TResult>(this ReadOnlySpan<TSource> source, NullableSelectorAt<TSource, TResult> selector)
         {
             var list = new List<TResult>(source.Length);
             for (var index = 0; index < source.Length; index++)
@@ -61,7 +61,7 @@ namespace NetFabric.Hyperlinq
         }
 
         
-        static List<TResult> ToList<TSource, TResult>(this ReadOnlySpan<TSource> source, Predicate<TSource> predicate, Selector<TSource, TResult> selector)
+        static List<TResult> ToList<TSource, TResult>(this ReadOnlySpan<TSource> source, Predicate<TSource> predicate, NullableSelector<TSource, TResult> selector)
         {
             var list = new List<TResult>(source.Length);
             for (var index = 0; index < source.Length; index++)

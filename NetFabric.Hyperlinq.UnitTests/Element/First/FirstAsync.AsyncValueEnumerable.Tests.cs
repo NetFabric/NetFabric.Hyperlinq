@@ -131,7 +131,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.FirstAsync
 
         [Theory]
         [MemberData(nameof(TestData.SelectorEmpty), MemberType = typeof(TestData))]
-        public async void FirstAsync_Selector_With_Empty_Must_Return_None(int[] source, Selector<int, string> selector)
+        public async void FirstAsync_Selector_With_Empty_Must_Return_None(int[] source, NullableSelector<int, string> selector)
         {
             // Arrange
             var wrapped = Wrap
@@ -151,7 +151,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.FirstAsync
         [Theory]
         [MemberData(nameof(TestData.SelectorSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SelectorMultiple), MemberType = typeof(TestData))]
-        public async ValueTask FirstAsync_Selector_With_ValidData_Must_Return_Some(int[] source, Selector<int, string> selector)
+        public async ValueTask FirstAsync_Selector_With_ValidData_Must_Return_Some(int[] source, NullableSelector<int, string> selector)
         {
             // Arrange
             var wrapped = Wrap
@@ -173,7 +173,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.FirstAsync
 
         [Theory]
         [MemberData(nameof(TestData.SelectorAtEmpty), MemberType = typeof(TestData))]
-        public async void FirstAsync_SelectorAt_With_Empty_Must_Return_None(int[] source, SelectorAt<int, string> selector)
+        public async void FirstAsync_SelectorAt_With_Empty_Must_Return_None(int[] source, NullableSelectorAt<int, string> selector)
         {
             // Arrange
             var wrapped = Wrap
@@ -193,7 +193,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.FirstAsync
         [Theory]
         [MemberData(nameof(TestData.SelectorAtSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SelectorAtMultiple), MemberType = typeof(TestData))]
-        public async ValueTask FirstAsync_SelectorAt_With_ValidData_Must_Return_Some(int[] source, SelectorAt<int, string> selector)
+        public async ValueTask FirstAsync_SelectorAt_With_ValidData_Must_Return_Some(int[] source, NullableSelectorAt<int, string> selector)
         {
             // Arrange
             var wrapped = Wrap
@@ -215,7 +215,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.FirstAsync
 
         [Theory]
         [MemberData(nameof(TestData.PredicateSelectorEmpty), MemberType = typeof(TestData))]
-        public async void FirstAsync_Predicate_Selector_With_Empty_Must_Return_None(int[] source, Predicate<int> predicate, Selector<int, string> selector)
+        public async void FirstAsync_Predicate_Selector_With_Empty_Must_Return_None(int[] source, Predicate<int> predicate, NullableSelector<int, string> selector)
         {
             // Arrange
             var wrapped = Wrap
@@ -236,7 +236,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.FirstAsync
         [Theory]
         [MemberData(nameof(TestData.PredicateSelectorSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateSelectorMultiple), MemberType = typeof(TestData))]
-        public async ValueTask FirstAsync_Predicate_Selector_With_ValidData_Must_Return_Some(int[] source, Predicate<int> predicate, Selector<int, string> selector)
+        public async ValueTask FirstAsync_Predicate_Selector_With_ValidData_Must_Return_Some(int[] source, Predicate<int> predicate, NullableSelector<int, string> selector)
         {
             // Arrange
             var wrapped = Wrap

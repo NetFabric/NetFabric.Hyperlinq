@@ -13,7 +13,7 @@ namespace NetFabric.Hyperlinq
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static MemorySelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, TResult> SelectMany<TSource, TSubEnumerable, TSubEnumerator, TResult>(
             this TSource[] source,
-            Selector<TSource, TSubEnumerable> selector)
+            NullableSelector<TSource, TSubEnumerable> selector)
             where TSubEnumerable : notnull, IValueEnumerable<TResult, TSubEnumerator>
             where TSubEnumerator : struct, IEnumerator<TResult>
             => SelectMany<TSource, TSubEnumerable, TSubEnumerator, TResult>((ReadOnlyMemory<TSource>)source, selector);
@@ -22,7 +22,7 @@ namespace NetFabric.Hyperlinq
 
         public static SelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, TResult> SelectMany<TSource, TSubEnumerable, TSubEnumerator, TResult>(
             this TSource[] source,
-            Selector<TSource, TSubEnumerable> selector)
+            NullableSelector<TSource, TSubEnumerable> selector)
             where TSubEnumerable : notnull, IValueEnumerable<TResult, TSubEnumerator>
             where TSubEnumerator : struct, IEnumerator<TResult>
         {
@@ -39,9 +39,9 @@ namespace NetFabric.Hyperlinq
             where TSubEnumerator : struct, IEnumerator<TResult>
         {
             readonly TSource[] source;
-            readonly Selector<TSource, TSubEnumerable> selector;
+            readonly NullableSelector<TSource, TSubEnumerable> selector;
 
-            internal SelectManyEnumerable(TSource[] source, Selector<TSource, TSubEnumerable> selector)
+            internal SelectManyEnumerable(TSource[] source, NullableSelector<TSource, TSubEnumerable> selector)
             {
                 this.source = source;
                 this.selector = selector;
@@ -57,7 +57,7 @@ namespace NetFabric.Hyperlinq
                 : IEnumerator<TResult>
             {
                 readonly TSource[] source;
-                readonly Selector<TSource, TSubEnumerable> selector;
+                readonly NullableSelector<TSource, TSubEnumerable> selector;
                 readonly int sourceCount;
                 int sourceIndex;
                 TSubEnumerator subEnumerator; // do not make readonly

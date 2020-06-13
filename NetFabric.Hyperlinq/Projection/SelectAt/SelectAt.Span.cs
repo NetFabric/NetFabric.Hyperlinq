@@ -7,7 +7,7 @@ namespace NetFabric.Hyperlinq
     {
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static SpanSelectAtEnumerable<TSource, TResult> Select<TSource, TResult>(this Span<TSource> source, SelectorAt<TSource, TResult> selector)
+        public static SpanSelectAtEnumerable<TSource, TResult> Select<TSource, TResult>(this Span<TSource> source, NullableSelectorAt<TSource, TResult> selector)
             => Select((ReadOnlySpan<TSource>)source, selector);
     }
 }

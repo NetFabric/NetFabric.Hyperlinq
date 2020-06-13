@@ -12,7 +12,7 @@ namespace NetFabric.Hyperlinq
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static SelectAtEnumerable<TList, TSource, TResult> Select<TList, TSource, TResult>(
             this TList source, 
-            SelectorAt<TSource, TResult> selector)
+            NullableSelectorAt<TSource, TResult> selector)
             where TList : notnull, IReadOnlyList<TSource>
         {
             if(selector is null) Throw.ArgumentNullException(nameof(selector));
@@ -23,7 +23,7 @@ namespace NetFabric.Hyperlinq
 
         static SelectAtEnumerable<TList, TSource, TResult> Select<TList, TSource, TResult>(
             this TList source,
-            SelectorAt<TSource, TResult> selector,
+            NullableSelectorAt<TSource, TResult> selector,
             int skipCount, int takeCount)
             where TList : notnull, IReadOnlyList<TSource>
             => new SelectAtEnumerable<TList, TSource, TResult>(source, selector, skipCount, takeCount);
@@ -35,10 +35,10 @@ namespace NetFabric.Hyperlinq
             where TList : notnull, IReadOnlyList<TSource>
         {
             readonly TList source;
-            readonly SelectorAt<TSource, TResult> selector;
+            readonly NullableSelectorAt<TSource, TResult> selector;
             readonly int skipCount;
 
-            internal SelectAtEnumerable(in TList source, SelectorAt<TSource, TResult> selector, int skipCount, int takeCount)
+            internal SelectAtEnumerable(in TList source, NullableSelectorAt<TSource, TResult> selector, int skipCount, int takeCount)
             {
                 this.source = source;
                 this.selector = selector;
@@ -164,7 +164,7 @@ namespace NetFabric.Hyperlinq
             public struct Enumerator
             {
                 readonly TList source;
-                readonly SelectorAt<TSource, TResult> selector;
+                readonly NullableSelectorAt<TSource, TResult> selector;
                 readonly int skipCount;
                 readonly int takeCount;
                 int index;
@@ -191,7 +191,7 @@ namespace NetFabric.Hyperlinq
                 : IEnumerator<TResult>
             {
                 readonly TList source;
-                readonly SelectorAt<TSource, TResult> selector;
+                readonly NullableSelectorAt<TSource, TResult> selector;
                 readonly int skipCount;
                 readonly int takeCount;
                 int index;
@@ -229,11 +229,11 @@ namespace NetFabric.Hyperlinq
                 => Count != 0;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public ReadOnlyListExtensions.SelectAtEnumerable<TList, TSource, TSelectorResult> Select<TSelectorResult>(Selector<TResult, TSelectorResult> selector)
+            public ReadOnlyListExtensions.SelectAtEnumerable<TList, TSource, TSelectorResult> Select<TSelectorResult>(NullableSelector<TResult, TSelectorResult> selector)
                 => ReadOnlyListExtensions.Select<TList, TSource, TSelectorResult>(source, Utils.Combine(this.selector, selector), skipCount, Count);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public ReadOnlyListExtensions.SelectAtEnumerable<TList, TSource, TSelectorResult> Select<TSelectorResult>(SelectorAt<TResult, TSelectorResult> selector)
+            public ReadOnlyListExtensions.SelectAtEnumerable<TList, TSource, TSelectorResult> Select<TSelectorResult>(NullableSelectorAt<TResult, TSelectorResult> selector)
                 => ReadOnlyListExtensions.Select<TList, TSource, TSelectorResult>(source, Utils.Combine(this.selector, selector), skipCount, Count);
 
             
@@ -259,10 +259,10 @@ namespace NetFabric.Hyperlinq
             public List<TResult> ToList()
                 => ReadOnlyListExtensions.ToList<TList, TSource, TResult>(source, selector, skipCount, Count);
 
-            public Dictionary<TKey, TResult> ToDictionary<TKey>(Selector<TResult, TKey> keySelector, IEqualityComparer<TKey>? comparer = default)
+            public Dictionary<TKey, TResult> ToDictionary<TKey>(NullableSelector<TResult, TKey> keySelector, IEqualityComparer<TKey>? comparer = default)
                 => ToDictionary<TKey>(keySelector, comparer);
 
-            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Selector<TResult, TKey> keySelector, Selector<TResult, TElement> elementSelector, IEqualityComparer<TKey>? comparer = default)
+            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(NullableSelector<TResult, TKey> keySelector, NullableSelector<TResult, TElement> elementSelector, IEqualityComparer<TKey>? comparer = default)
                 => ToDictionary<TKey, TElement>(keySelector, elementSelector, comparer);
 
             public readonly bool SequenceEqual(IEnumerable<TResult> other, IEqualityComparer<TResult>? comparer = default)

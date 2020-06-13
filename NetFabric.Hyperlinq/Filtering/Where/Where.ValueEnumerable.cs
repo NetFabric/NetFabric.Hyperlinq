@@ -84,7 +84,7 @@ namespace NetFabric.Hyperlinq
             public bool Any()
                 => ValueEnumerableExtensions.Any<TEnumerable, TEnumerator, TSource>(source, predicate);
                 
-            public ValueEnumerableExtensions.WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult> Select<TResult>(Selector<TSource, TResult> selector)
+            public ValueEnumerableExtensions.WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult> Select<TResult>(NullableSelector<TSource, TResult> selector)
                 => ValueEnumerableExtensions.WhereSelect<TEnumerable, TEnumerator, TSource, TResult>(source, predicate, selector);
 
             public ValueEnumerableExtensions.WhereEnumerable<TEnumerable, TEnumerator, TSource> Where(Predicate<TSource> predicate)
@@ -107,13 +107,13 @@ namespace NetFabric.Hyperlinq
             public List<TSource> ToList()
                 => ValueEnumerableExtensions.ToList<TEnumerable, TEnumerator, TSource>(source, predicate);
 
-            public Dictionary<TKey, TSource> ToDictionary<TKey>(Selector<TSource, TKey> keySelector)
+            public Dictionary<TKey, TSource> ToDictionary<TKey>(NullableSelector<TSource, TKey> keySelector)
                 => ValueEnumerableExtensions.ToDictionary<TEnumerable, TEnumerator, TSource, TKey>(source, keySelector, null, predicate);
-            public Dictionary<TKey, TSource> ToDictionary<TKey>(Selector<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer)
+            public Dictionary<TKey, TSource> ToDictionary<TKey>(NullableSelector<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer)
                 => ValueEnumerableExtensions.ToDictionary<TEnumerable, TEnumerator, TSource, TKey>(source, keySelector, comparer, predicate);
-            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Selector<TSource, TKey> keySelector, Selector<TSource, TElement> elementSelector)
+            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(NullableSelector<TSource, TKey> keySelector, NullableSelector<TSource, TElement> elementSelector)
                 => ValueEnumerableExtensions.ToDictionary<TEnumerable, TEnumerator, TSource, TKey, TElement>(source, keySelector, elementSelector, null, predicate);
-            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Selector<TSource, TKey> keySelector, Selector<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer)
+            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(NullableSelector<TSource, TKey> keySelector, NullableSelector<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer)
                 => ValueEnumerableExtensions.ToDictionary<TEnumerable, TEnumerator, TSource, TKey, TElement>(source, keySelector, elementSelector, comparer, predicate);
         }
     }

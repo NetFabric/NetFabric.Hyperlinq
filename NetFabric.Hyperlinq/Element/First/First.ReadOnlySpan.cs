@@ -36,7 +36,7 @@ namespace NetFabric.Hyperlinq
 
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static Option<TResult> First<TSource, TResult>(this ReadOnlySpan<TSource> source, Selector<TSource, TResult> selector)
+        static Option<TResult> First<TSource, TResult>(this ReadOnlySpan<TSource> source, NullableSelector<TSource, TResult> selector)
             => source.Length switch
             {
                 0 => Option.None,
@@ -45,7 +45,7 @@ namespace NetFabric.Hyperlinq
 
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static Option<TResult> First<TSource, TResult>(this ReadOnlySpan<TSource> source, SelectorAt<TSource, TResult> selector)
+        static Option<TResult> First<TSource, TResult>(this ReadOnlySpan<TSource> source, NullableSelectorAt<TSource, TResult> selector)
             => source.Length switch
             {
                 0 => Option.None,
@@ -53,7 +53,7 @@ namespace NetFabric.Hyperlinq
             };
 
         
-        static Option<TResult> First<TSource, TResult>(this ReadOnlySpan<TSource> source, Predicate<TSource> predicate, Selector<TSource, TResult> selector)
+        static Option<TResult> First<TSource, TResult>(this ReadOnlySpan<TSource> source, Predicate<TSource> predicate, NullableSelector<TSource, TResult> selector)
         {
             for (var index = 0; index < source.Length; index++)
             {

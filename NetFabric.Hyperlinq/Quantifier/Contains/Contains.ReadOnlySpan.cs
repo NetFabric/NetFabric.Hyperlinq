@@ -40,7 +40,7 @@ namespace NetFabric.Hyperlinq
         }
 
 
-        static bool Contains<TSource, TResult>(this ReadOnlySpan<TSource> source, [AllowNull] TResult value, Selector<TSource, TResult> selector)
+        static bool Contains<TSource, TResult>(this ReadOnlySpan<TSource> source, [AllowNull] TResult value, NullableSelector<TSource, TResult> selector)
         {
             if (source.Length == 0)
                 return false;
@@ -49,7 +49,7 @@ namespace NetFabric.Hyperlinq
                 ? ValueContains(source, value, selector)
                 : ReferenceContains(source, value, selector);
 
-            static bool ValueContains(ReadOnlySpan<TSource> source, [AllowNull] TResult value, Selector<TSource, TResult> selector)
+            static bool ValueContains(ReadOnlySpan<TSource> source, [AllowNull] TResult value, NullableSelector<TSource, TResult> selector)
             {
                 for (var index = 0; index < source.Length; index++)
                 {
@@ -59,7 +59,7 @@ namespace NetFabric.Hyperlinq
                 return false;
             }
 
-            static bool ReferenceContains(ReadOnlySpan<TSource> source, [AllowNull] TResult value, Selector<TSource, TResult> selector)
+            static bool ReferenceContains(ReadOnlySpan<TSource> source, [AllowNull] TResult value, NullableSelector<TSource, TResult> selector)
             {
                 var defaultComparer = EqualityComparer<TResult>.Default;
 
@@ -73,7 +73,7 @@ namespace NetFabric.Hyperlinq
         }
 
 
-        static bool Contains<TSource, TResult>(this ReadOnlySpan<TSource> source, [AllowNull] TResult value, SelectorAt<TSource, TResult> selector)
+        static bool Contains<TSource, TResult>(this ReadOnlySpan<TSource> source, [AllowNull] TResult value, NullableSelectorAt<TSource, TResult> selector)
         {
             if (source.Length == 0)
                 return false;
@@ -82,7 +82,7 @@ namespace NetFabric.Hyperlinq
                 ? ValueContains(source, value, selector)
                 : ReferenceContains(source, value, selector);
 
-            static bool ValueContains(ReadOnlySpan<TSource> source, [AllowNull] TResult value, SelectorAt<TSource, TResult> selector)
+            static bool ValueContains(ReadOnlySpan<TSource> source, [AllowNull] TResult value, NullableSelectorAt<TSource, TResult> selector)
             {
                 for (var index = 0; index < source.Length; index++)
                 {
@@ -92,7 +92,7 @@ namespace NetFabric.Hyperlinq
                 return false;
             }
 
-            static bool ReferenceContains(ReadOnlySpan<TSource> source, [AllowNull] TResult value, SelectorAt<TSource, TResult> selector)
+            static bool ReferenceContains(ReadOnlySpan<TSource> source, [AllowNull] TResult value, NullableSelectorAt<TSource, TResult> selector)
             {
                 var defaultComparer = EqualityComparer<TResult>.Default;
 

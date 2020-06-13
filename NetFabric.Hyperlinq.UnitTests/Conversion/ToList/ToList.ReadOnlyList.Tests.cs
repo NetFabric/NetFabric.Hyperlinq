@@ -225,7 +225,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
             // Arrange
             var source = new int[0];
             var wrapped = Wrap.AsValueReadOnlyList(source);
-            var selector = (Selector<int, string>)null;
+            var selector = (NullableSelector<int, string>)null;
 
             // Act
             Action action = () => _ = ReadOnlyListExtensions
@@ -242,7 +242,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
         [MemberData(nameof(TestData.SelectorEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SelectorSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SelectorMultiple), MemberType = typeof(TestData))]
-        public void ToList_With_Selector_Must_Succeed(int[] source, Selector<int, string> selector)
+        public void ToList_With_Selector_Must_Succeed(int[] source, NullableSelector<int, string> selector)
         {
             // Arrange
             var wrapped = Wrap.AsValueReadOnlyList(source);
@@ -266,7 +266,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
         [MemberData(nameof(TestData.SkipTakeSelectorEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakeSelectorSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakeSelectorMultiple), MemberType = typeof(TestData))]
-        public void ToList_Skip_Take_Selector_With_ValidData_Must_Succeed(int[] source, int skipCount, int takeCount, Selector<int, string> selector)
+        public void ToList_Skip_Take_Selector_With_ValidData_Must_Succeed(int[] source, int skipCount, int takeCount, NullableSelector<int, string> selector)
         {
             // Arrange
             var wrapped = Wrap.AsValueReadOnlyList(source);
@@ -296,7 +296,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
             // Arrange
             var source = new int[0];
             var wrapped = Wrap.AsValueReadOnlyList(source);
-            var selector = (SelectorAt<int, string>)null;
+            var selector = (NullableSelectorAt<int, string>)null;
 
             // Act
             Action action = () => _ = ReadOnlyListExtensions
@@ -313,7 +313,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
         [MemberData(nameof(TestData.SelectorAtEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SelectorAtSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SelectorAtMultiple), MemberType = typeof(TestData))]
-        public void ToList_With_SelectorAt_Must_Succeed(int[] source, SelectorAt<int, string> selector)
+        public void ToList_With_SelectorAt_Must_Succeed(int[] source, NullableSelectorAt<int, string> selector)
         {
             // Arrange
             var wrapped = Wrap.AsValueReadOnlyList(source);
@@ -337,7 +337,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
         [MemberData(nameof(TestData.SkipTakeSelectorAtEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakeSelectorAtSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakeSelectorAtMultiple), MemberType = typeof(TestData))]
-        public void ToList_Skip_Take_SelectorAt_With_ValidData_Must_Succeed(int[] source, int skipCount, int takeCount, SelectorAt<int, string> selector)
+        public void ToList_Skip_Take_SelectorAt_With_ValidData_Must_Succeed(int[] source, int skipCount, int takeCount, NullableSelectorAt<int, string> selector)
         {
             // Arrange
             var wrapped = Wrap.AsValueReadOnlyList(source);
@@ -365,7 +365,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
         [MemberData(nameof(TestData.PredicateSelectorEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateSelectorSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateSelectorMultiple), MemberType = typeof(TestData))]
-        public void ToList_Predicate_Selector_With_ValidData_Must_Succeed(int[] source, Predicate<int> predicate, Selector<int, string> selector)
+        public void ToList_Predicate_Selector_With_ValidData_Must_Succeed(int[] source, Predicate<int> predicate, NullableSelector<int, string> selector)
         {
             // Arrange
             var wrapped = Wrap.AsValueReadOnlyList(source);
@@ -391,7 +391,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
         [MemberData(nameof(TestData.SkipTakePredicateSelectorEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakePredicateSelectorSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakePredicateSelectorMultiple), MemberType = typeof(TestData))]
-        public void ToList_Skip_Take_Predicate_Selector_With_ValidData_Must_Succeed(int[] source, int skipCount, int takeCount, Predicate<int> predicate, Selector<int, string> selector)
+        public void ToList_Skip_Take_Predicate_Selector_With_ValidData_Must_Succeed(int[] source, int skipCount, int takeCount, Predicate<int> predicate, NullableSelector<int, string> selector)
         {
             // Arrange
             var wrapped = Wrap.AsValueReadOnlyList(source);

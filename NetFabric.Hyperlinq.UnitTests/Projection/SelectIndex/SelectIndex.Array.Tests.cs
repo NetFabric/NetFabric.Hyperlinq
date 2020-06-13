@@ -11,7 +11,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Projection.SelectAt
         {
             // Arrange
             var source = new int[0];
-            var selector = (SelectorAt<int, string>)null;
+            var selector = (NullableSelectorAt<int, string>)null;
 
             // Act
             Action action = () => _ = ArrayExtensions.Select(source, selector);
@@ -26,7 +26,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Projection.SelectAt
         [MemberData(nameof(TestData.SelectorAtEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SelectorAtSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SelectorAtMultiple), MemberType = typeof(TestData))]
-        public void Select_With_ValidData_Must_Succeed(int[] source, SelectorAt<int, string> selector)
+        public void Select_With_ValidData_Must_Succeed(int[] source, NullableSelectorAt<int, string> selector)
         {
             // Arrange
             var expected =

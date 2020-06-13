@@ -12,7 +12,7 @@ namespace NetFabric.Hyperlinq
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static MemorySelectAtEnumerable<TSource, TResult> Select<TSource, TResult>(
             this ReadOnlyMemory<TSource> source, 
-            SelectorAt<TSource, TResult> selector)
+            NullableSelectorAt<TSource, TResult> selector)
         {
             if (selector is null) Throw.ArgumentNullException(nameof(selector));
 
@@ -25,9 +25,9 @@ namespace NetFabric.Hyperlinq
             , IList<TResult>
         {
             internal readonly ReadOnlyMemory<TSource> source;
-            internal readonly SelectorAt<TSource, TResult> selector;
+            internal readonly NullableSelectorAt<TSource, TResult> selector;
 
-            internal MemorySelectAtEnumerable(in ReadOnlyMemory<TSource> source, SelectorAt<TSource, TResult> selector)
+            internal MemorySelectAtEnumerable(in ReadOnlyMemory<TSource> source, NullableSelectorAt<TSource, TResult> selector)
             {
                 this.source = source;
                 this.selector = selector;
@@ -111,7 +111,7 @@ namespace NetFabric.Hyperlinq
             public ref struct Enumerator
             {
                 readonly ReadOnlySpan<TSource> source;
-                readonly SelectorAt<TSource, TResult> selector;
+                readonly NullableSelectorAt<TSource, TResult> selector;
                 int index;
 
                 internal Enumerator(in MemorySelectAtEnumerable<TSource, TResult> enumerable)
@@ -133,7 +133,7 @@ namespace NetFabric.Hyperlinq
                 : IEnumerator<TResult>
             {
                 readonly ReadOnlyMemory<TSource> source;
-                readonly SelectorAt<TSource, TResult> selector;
+                readonly NullableSelectorAt<TSource, TResult> selector;
                 int index;
 
                 internal DisposableEnumerator(in MemorySelectAtEnumerable<TSource, TResult> enumerable)

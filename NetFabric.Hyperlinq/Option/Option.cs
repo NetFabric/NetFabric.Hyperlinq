@@ -117,7 +117,7 @@ namespace NetFabric.Hyperlinq
 
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public readonly Option<TOut> Select<TOut>(Selector<T, TOut> selector) 
+        public readonly Option<TOut> Select<TOut>(NullableSelector<T, TOut> selector) 
             => IsSome
                 ? new Option<TOut>(selector(Value)) 
                 : default;
@@ -131,7 +131,7 @@ namespace NetFabric.Hyperlinq
 
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public readonly SelectManyEnumerable<TSubEnumerable, TSubEnumerator, TResult> SelectMany<TSubEnumerable, TSubEnumerator, TResult>(Selector<T, TSubEnumerable> selector) 
+        public readonly SelectManyEnumerable<TSubEnumerable, TSubEnumerator, TResult> SelectMany<TSubEnumerable, TSubEnumerator, TResult>(NullableSelector<T, TSubEnumerable> selector) 
             where TSubEnumerable : notnull, IValueEnumerable<TResult, TSubEnumerator>
             where TSubEnumerator : struct, IEnumerator<TResult>
             => new SelectManyEnumerable<TSubEnumerable, TSubEnumerator, TResult>(in this, selector);
@@ -173,9 +173,9 @@ namespace NetFabric.Hyperlinq
             where TSubEnumerator : struct, IEnumerator<TResult>
         {
             readonly Option<T> source;
-            readonly Selector<T, TSubEnumerable> selector;
+            readonly NullableSelector<T, TSubEnumerable> selector;
 
-            internal SelectManyEnumerable(in Option<T> source, Selector<T, TSubEnumerable> selector)
+            internal SelectManyEnumerable(in Option<T> source, NullableSelector<T, TSubEnumerable> selector)
             {
                 this.source = source;
                 this.selector = selector;
@@ -191,7 +191,7 @@ namespace NetFabric.Hyperlinq
                 : IEnumerator<TResult>
             {
                 readonly Option<T> source; 
-                readonly Selector<T, TSubEnumerable> selector;
+                readonly NullableSelector<T, TSubEnumerable> selector;
                 [SuppressMessage("Style", "IDE0044:Add readonly modifier")]
                 TSubEnumerator subEnumerator; // do not make readonly
                 int state;

@@ -49,18 +49,18 @@ namespace NetFabric.Hyperlinq
         
         public static ReadOnlyListExtensions.SelectEnumerable<ImmutableList<TSource>, TSource, TResult> Select<TSource, TResult>(
             this ImmutableList<TSource> source,
-            Selector<TSource, TResult> selector)
+            NullableSelector<TSource, TResult> selector)
             => ReadOnlyListExtensions.Select<ImmutableList<TSource>, TSource, TResult>(source, selector);
         
         public static ReadOnlyListExtensions.SelectAtEnumerable<ImmutableList<TSource>, TSource, TResult> Select<TSource, TResult>(
             this ImmutableList<TSource> source,
-            SelectorAt<TSource, TResult> selector)
+            NullableSelectorAt<TSource, TResult> selector)
             => ReadOnlyListExtensions.Select<ImmutableList<TSource>, TSource, TResult>(source, selector);
 
         
         public static ReadOnlyListExtensions.SelectManyEnumerable<ImmutableList<TSource>, TSource, TSubEnumerable, TSubEnumerator, TResult> SelectMany<TSource, TSubEnumerable, TSubEnumerator, TResult>(
             this ImmutableList<TSource> source,
-            Selector<TSource, TSubEnumerable> selector)
+            NullableSelector<TSource, TSubEnumerable> selector)
             where TSubEnumerable : notnull, IValueEnumerable<TResult, TSubEnumerator>
             where TSubEnumerator : struct, IEnumerator<TResult>
             => ReadOnlyListExtensions.SelectMany<ImmutableList<TSource>, TSource, TSubEnumerable, TSubEnumerator, TResult>(source, selector);
@@ -110,16 +110,16 @@ namespace NetFabric.Hyperlinq
             => new List<TSource>(source);
 
         
-        public static Dictionary<TKey, TSource> ToDictionary<TSource, TKey>(this ImmutableList<TSource> source, Selector<TSource, TKey> keySelector)
+        public static Dictionary<TKey, TSource> ToDictionary<TSource, TKey>(this ImmutableList<TSource> source, NullableSelector<TSource, TKey> keySelector)
             => ReadOnlyListExtensions.ToDictionary<ImmutableList<TSource>, TSource, TKey>(source, keySelector);
         
-        public static Dictionary<TKey, TSource> ToDictionary<TSource, TKey>(this ImmutableList<TSource> source, Selector<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer)
+        public static Dictionary<TKey, TSource> ToDictionary<TSource, TKey>(this ImmutableList<TSource> source, NullableSelector<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer)
             => ReadOnlyListExtensions.ToDictionary<ImmutableList<TSource>, TSource, TKey>(source, keySelector, comparer);
         
-        public static Dictionary<TKey, TElement> ToDictionary<TSource, TKey, TElement>(this ImmutableList<TSource> source, Selector<TSource, TKey> keySelector, Selector<TSource, TElement> elementSelector)
+        public static Dictionary<TKey, TElement> ToDictionary<TSource, TKey, TElement>(this ImmutableList<TSource> source, NullableSelector<TSource, TKey> keySelector, NullableSelector<TSource, TElement> elementSelector)
             => ReadOnlyListExtensions.ToDictionary<ImmutableList<TSource>, TSource, TKey, TElement>(source, keySelector, elementSelector);
         
-        public static Dictionary<TKey, TElement> ToDictionary<TSource, TKey, TElement>(this ImmutableList<TSource> source, Selector<TSource, TKey> keySelector, Selector<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer)
+        public static Dictionary<TKey, TElement> ToDictionary<TSource, TKey, TElement>(this ImmutableList<TSource> source, NullableSelector<TSource, TKey> keySelector, NullableSelector<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer)
             => ReadOnlyListExtensions.ToDictionary<ImmutableList<TSource>, TSource, TKey, TElement>(source, keySelector, elementSelector, comparer);
 
         public readonly partial struct ValueWrapper<TSource>

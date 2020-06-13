@@ -40,18 +40,18 @@ namespace NetFabric.Hyperlinq
         
         public static ReadOnlyListExtensions.SelectEnumerable<ImmutableArray<TSource>, TSource, TResult> SelectHyper<TSource, TResult>(
             this ImmutableArray<TSource> source,
-            Selector<TSource, TResult> selector)
+            NullableSelector<TSource, TResult> selector)
             => ReadOnlyListExtensions.Select<ImmutableArray<TSource>, TSource, TResult>(source, selector);
         
         public static ReadOnlyListExtensions.SelectAtEnumerable<ImmutableArray<TSource>, TSource, TResult> SelectHyper<TSource, TResult>(
             this ImmutableArray<TSource> source,
-            SelectorAt<TSource, TResult> selector)
+            NullableSelectorAt<TSource, TResult> selector)
             => ReadOnlyListExtensions.Select<ImmutableArray<TSource>, TSource, TResult>(source, selector);
 
         
         public static ReadOnlyListExtensions.SelectManyEnumerable<ImmutableArray<TSource>, TSource, TSubEnumerable, TSubEnumerator, TResult> SelectMany<TSource, TSubEnumerable, TSubEnumerator, TResult>(
             this ImmutableArray<TSource> source,
-            Selector<TSource, TSubEnumerable> selector)
+            NullableSelector<TSource, TSubEnumerable> selector)
             where TSubEnumerable : notnull, IValueEnumerable<TResult, TSubEnumerator>
             where TSubEnumerator : struct, IEnumerator<TResult>
             => ReadOnlyListExtensions.SelectMany<ImmutableArray<TSource>, TSource, TSubEnumerable, TSubEnumerator, TResult>(source, selector);

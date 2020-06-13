@@ -160,7 +160,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAtAsync
         [MemberData(nameof(TestData.SelectorEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SelectorSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SelectorMultiple), MemberType = typeof(TestData))]
-        public async void ElementAtAsync_Selector_With_OutOfRange_Must_Return_None(int[] source, Selector<int, string> selector)
+        public async void ElementAtAsync_Selector_With_OutOfRange_Must_Return_None(int[] source, NullableSelector<int, string> selector)
         {
             // Arrange
             var wrapped = Wrap.AsAsyncValueEnumerable(source);
@@ -185,7 +185,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAtAsync
         [Theory]
         [MemberData(nameof(TestData.SelectorSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SelectorMultiple), MemberType = typeof(TestData))]
-        public async ValueTask ElementAtAsync_Selector_With_ValidData_Must_Return_Some(int[] source, Selector<int, string> selector)
+        public async ValueTask ElementAtAsync_Selector_With_ValidData_Must_Return_Some(int[] source, NullableSelector<int, string> selector)
         {
             for (var index = 0; index < source.Length; index++)
             {
@@ -211,7 +211,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAtAsync
         [MemberData(nameof(TestData.SelectorAtEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SelectorAtSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SelectorAtMultiple), MemberType = typeof(TestData))]
-        public async void ElementAtAsync_SelectorAt_With_OutOfRange_Must_Return_None(int[] source, SelectorAt<int, string> selector)
+        public async void ElementAtAsync_SelectorAt_With_OutOfRange_Must_Return_None(int[] source, NullableSelectorAt<int, string> selector)
         {
             // Arrange
             var wrapped = Wrap.AsAsyncValueEnumerable(source);
@@ -236,7 +236,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAtAsync
         [Theory]
         [MemberData(nameof(TestData.SelectorAtSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SelectorAtMultiple), MemberType = typeof(TestData))]
-        public async ValueTask ElementAtAsync_SelectorAt_With_ValidData_Must_Return_Some(int[] source, SelectorAt<int, string> selector)
+        public async ValueTask ElementAtAsync_SelectorAt_With_ValidData_Must_Return_Some(int[] source, NullableSelectorAt<int, string> selector)
         {
             for (var index = 0; index < source.Length; index++)
             {
@@ -262,7 +262,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAtAsync
         [MemberData(nameof(TestData.PredicateSelectorEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateSelectorSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateSelectorMultiple), MemberType = typeof(TestData))]
-        public async void ElementAtAsync_Predicate_Selector_With_OutOfRange_Must_Return_None(int[] source, Predicate<int> predicate, Selector<int, string> selector)
+        public async void ElementAtAsync_Predicate_Selector_With_OutOfRange_Must_Return_None(int[] source, Predicate<int> predicate, NullableSelector<int, string> selector)
         {
             // Arrange
             var wrapped = Wrap.AsAsyncValueEnumerable(source);
@@ -289,7 +289,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAtAsync
         [Theory]
         [MemberData(nameof(TestData.PredicateSelectorSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateSelectorMultiple), MemberType = typeof(TestData))]
-        public async ValueTask ElementAtAsync_Predicate_Selector_With_ValidData_Must_Return_Some(int[] source, Predicate<int> predicate, Selector<int, string> selector)
+        public async ValueTask ElementAtAsync_Predicate_Selector_With_ValidData_Must_Return_Some(int[] source, Predicate<int> predicate, NullableSelector<int, string> selector)
         {
             // Arrange
             var wrapped = Wrap.AsAsyncValueEnumerable(source);

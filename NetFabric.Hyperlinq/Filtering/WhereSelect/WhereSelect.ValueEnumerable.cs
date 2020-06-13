@@ -13,7 +13,7 @@ namespace NetFabric.Hyperlinq
         static WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult> WhereSelect<TEnumerable, TEnumerator, TSource, TResult>(
             this TEnumerable source, 
             Predicate<TSource> predicate,
-            Selector<TSource, TResult> selector)
+            NullableSelector<TSource, TResult> selector)
             where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
             => new WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>(in source, predicate, selector);
@@ -26,9 +26,9 @@ namespace NetFabric.Hyperlinq
         {
             readonly TEnumerable source;
             readonly Predicate<TSource> predicate;
-            readonly Selector<TSource, TResult> selector;
+            readonly NullableSelector<TSource, TResult> selector;
 
-            internal WhereSelectEnumerable(in TEnumerable source, Predicate<TSource> predicate, Selector<TSource, TResult> selector)
+            internal WhereSelectEnumerable(in TEnumerable source, Predicate<TSource> predicate, NullableSelector<TSource, TResult> selector)
             {
                 this.source = source;
                 this.predicate = predicate;
@@ -47,7 +47,7 @@ namespace NetFabric.Hyperlinq
                 [SuppressMessage("Style", "IDE0044:Add readonly modifier")]
                 TEnumerator enumerator; // do not make readonly
                 readonly Predicate<TSource> predicate;
-                readonly Selector<TSource, TResult> selector;
+                readonly NullableSelector<TSource, TResult> selector;
 
                 internal Enumerator(in WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult> enumerable)
                 {
@@ -103,10 +103,10 @@ namespace NetFabric.Hyperlinq
             public List<TResult> ToList()
                 => ValueEnumerableExtensions.ToList<TEnumerable, TEnumerator, TSource, TResult>(source, predicate, selector);
 
-            public Dictionary<TKey, TResult> ToDictionary<TKey>(Selector<TResult, TKey> keySelector, IEqualityComparer<TKey>? comparer = default)
+            public Dictionary<TKey, TResult> ToDictionary<TKey>(NullableSelector<TResult, TKey> keySelector, IEqualityComparer<TKey>? comparer = default)
                 => ToDictionary<TKey>(keySelector, comparer);
 
-            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Selector<TResult, TKey> keySelector, Selector<TResult, TElement> elementSelector, IEqualityComparer<TKey>? comparer = default)
+            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(NullableSelector<TResult, TKey> keySelector, NullableSelector<TResult, TElement> elementSelector, IEqualityComparer<TKey>? comparer = default)
                 => ToDictionary<TKey, TElement>(keySelector, elementSelector, comparer);
         }
     }

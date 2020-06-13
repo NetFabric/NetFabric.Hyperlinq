@@ -45,20 +45,20 @@ namespace NetFabric.Hyperlinq
 
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static Option<TResult> ElementAt<TSource, TResult>(this ReadOnlySpan<TSource> source, int index, Selector<TSource, TResult> selector) 
+        static Option<TResult> ElementAt<TSource, TResult>(this ReadOnlySpan<TSource> source, int index, NullableSelector<TSource, TResult> selector) 
             => index < 0 || index >= source.Length 
                 ? Option.None 
                 : Option.Some(selector(source[index]));
 
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Option<TResult> ElementAt<TSource, TResult>(this ReadOnlySpan<TSource> source, int index, SelectorAt<TSource, TResult> selector) 
+        public static Option<TResult> ElementAt<TSource, TResult>(this ReadOnlySpan<TSource> source, int index, NullableSelectorAt<TSource, TResult> selector) 
             => index < 0 || index >= source.Length 
                 ? Option.None 
                 : Option.Some(selector(source[index], index));
 
         
-        static Option<TResult> ElementAt<TSource, TResult>(this ReadOnlySpan<TSource> source, int index, Predicate<TSource> predicate, Selector<TSource, TResult> selector) 
+        static Option<TResult> ElementAt<TSource, TResult>(this ReadOnlySpan<TSource> source, int index, Predicate<TSource> predicate, NullableSelector<TSource, TResult> selector) 
         {
             if (index >= 0)
             {

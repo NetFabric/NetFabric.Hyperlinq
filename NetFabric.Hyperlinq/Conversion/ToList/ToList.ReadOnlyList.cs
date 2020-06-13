@@ -62,17 +62,17 @@ namespace NetFabric.Hyperlinq
         }
 
 
-        static List<TResult> ToList<TList, TSource, TResult>(this TList source, Selector<TSource, TResult> selector, int skipCount, int takeCount)
+        static List<TResult> ToList<TList, TSource, TResult>(this TList source, NullableSelector<TSource, TResult> selector, int skipCount, int takeCount)
             where TList : notnull, IReadOnlyList<TSource>
             => new List<TResult>(new ToListCollection<TList, TSource, TResult>(source, selector, skipCount, takeCount));
 
 
-        static List<TResult> ToList<TList, TSource, TResult>(this TList source, SelectorAt<TSource, TResult> selector, int skipCount, int takeCount)
+        static List<TResult> ToList<TList, TSource, TResult>(this TList source, NullableSelectorAt<TSource, TResult> selector, int skipCount, int takeCount)
             where TList : notnull, IReadOnlyList<TSource>
             => new List<TResult>(new IndexedToListCollection<TList, TSource, TResult>(source, selector, skipCount, takeCount));
 
 
-        static List<TResult> ToList<TList, TSource, TResult>(this TList source, Predicate<TSource> predicate, Selector<TSource, TResult> selector, int skipCount, int takeCount)
+        static List<TResult> ToList<TList, TSource, TResult>(this TList source, Predicate<TSource> predicate, NullableSelector<TSource, TResult> selector, int skipCount, int takeCount)
             where TList : notnull, IReadOnlyList<TSource>
         {
             var list = new List<TResult>();
@@ -126,11 +126,11 @@ namespace NetFabric.Hyperlinq
             where TList : notnull, IReadOnlyList<TSource>
         {
             readonly TList source;
-            readonly Selector<TSource, TResult> selector;
+            readonly NullableSelector<TSource, TResult> selector;
             readonly int skipCount;
             readonly int takeCount;
 
-            public ToListCollection(in TList source, Selector<TSource, TResult> selector, int skipCount, int takeCount)
+            public ToListCollection(in TList source, NullableSelector<TSource, TResult> selector, int skipCount, int takeCount)
                 : base(takeCount)
             {
                 this.source = source;
@@ -161,11 +161,11 @@ namespace NetFabric.Hyperlinq
             where TList : notnull, IReadOnlyList<TSource>
         {
             readonly TList source;
-            readonly SelectorAt<TSource, TResult> selector;
+            readonly NullableSelectorAt<TSource, TResult> selector;
             readonly int skipCount;
             readonly int takeCount;
 
-            public IndexedToListCollection(in TList source, SelectorAt<TSource, TResult> selector, int skipCount, int takeCount)
+            public IndexedToListCollection(in TList source, NullableSelectorAt<TSource, TResult> selector, int skipCount, int takeCount)
                 : base(takeCount)
             {
                 this.source = source;

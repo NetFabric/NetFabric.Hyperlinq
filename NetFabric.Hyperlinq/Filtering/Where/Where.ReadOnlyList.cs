@@ -122,7 +122,7 @@ namespace NetFabric.Hyperlinq
             public bool Any()
                 => ReadOnlyListExtensions.Any<TList, TSource>(source, predicate, skipCount, takeCount);
                 
-            public ReadOnlyListExtensions.WhereSelectEnumerable<TList, TSource, TResult> Select<TResult>(Selector<TSource, TResult> selector)
+            public ReadOnlyListExtensions.WhereSelectEnumerable<TList, TSource, TResult> Select<TResult>(NullableSelector<TSource, TResult> selector)
             {
                 if (selector is null) Throw.ArgumentNullException(nameof(selector));
 
@@ -149,13 +149,13 @@ namespace NetFabric.Hyperlinq
             public List<TSource> ToList()
                 => ReadOnlyListExtensions.ToList<TList, TSource>(source, predicate, skipCount, takeCount);
 
-            public Dictionary<TKey, TSource> ToDictionary<TKey>(Selector<TSource, TKey> keySelector)
+            public Dictionary<TKey, TSource> ToDictionary<TKey>(NullableSelector<TSource, TKey> keySelector)
                 => ReadOnlyListExtensions.ToDictionary<TList, TSource, TKey>(source, keySelector, null, predicate, skipCount, takeCount);
-            public Dictionary<TKey, TSource> ToDictionary<TKey>(Selector<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer)
+            public Dictionary<TKey, TSource> ToDictionary<TKey>(NullableSelector<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer)
                 => ReadOnlyListExtensions.ToDictionary<TList, TSource, TKey>(source, keySelector, comparer, predicate, skipCount, takeCount);
-            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Selector<TSource, TKey> keySelector, Selector<TSource, TElement> elementSelector)
+            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(NullableSelector<TSource, TKey> keySelector, NullableSelector<TSource, TElement> elementSelector)
                 => ReadOnlyListExtensions.ToDictionary<TList, TSource, TKey, TElement>(source, keySelector, elementSelector, null, predicate, skipCount, takeCount);
-            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Selector<TSource, TKey> keySelector, Selector<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer)
+            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(NullableSelector<TSource, TKey> keySelector, NullableSelector<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer)
                 => ReadOnlyListExtensions.ToDictionary<TList, TSource, TKey, TElement>(source, keySelector, elementSelector, comparer, predicate, skipCount, takeCount);
         }
     }

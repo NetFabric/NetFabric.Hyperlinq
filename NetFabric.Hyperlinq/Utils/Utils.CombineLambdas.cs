@@ -17,16 +17,16 @@ namespace NetFabric.Hyperlinq
         public static PredicateAt<TSource> Combine<TSource>(PredicateAt<TSource> first, PredicateAt<TSource> second) => 
             (item, index) => first(item, index) && second(item, index);
 
-        public static Selector<TSource, TTarget> Combine<TSource, TMiddle, TTarget>(Selector<TSource, TMiddle> first, Selector<TMiddle, TTarget> second) => 
+        public static NullableSelector<TSource, TTarget> Combine<TSource, TMiddle, TTarget>(NullableSelector<TSource, TMiddle> first, NullableSelector<TMiddle, TTarget> second) => 
             item => second(first(item));
 
-        public static SelectorAt<TSource, TTarget> Combine<TSource, TMiddle, TTarget>(SelectorAt<TSource, TMiddle> first, Selector<TMiddle, TTarget> second) => 
+        public static NullableSelectorAt<TSource, TTarget> Combine<TSource, TMiddle, TTarget>(NullableSelectorAt<TSource, TMiddle> first, NullableSelector<TMiddle, TTarget> second) => 
             (item, index) => second(first(item, index));
 
-        public static SelectorAt<TSource, TTarget> Combine<TSource, TMiddle, TTarget>(Selector<TSource, TMiddle> first, SelectorAt<TMiddle, TTarget> second) => 
+        public static NullableSelectorAt<TSource, TTarget> Combine<TSource, TMiddle, TTarget>(NullableSelector<TSource, TMiddle> first, NullableSelectorAt<TMiddle, TTarget> second) => 
             (item, index) => second(first(item), index);
 
-        public static SelectorAt<TSource, TTarget> Combine<TSource, TMiddle, TTarget>(SelectorAt<TSource, TMiddle> first, SelectorAt<TMiddle, TTarget> second) => 
+        public static NullableSelectorAt<TSource, TTarget> Combine<TSource, TMiddle, TTarget>(NullableSelectorAt<TSource, TMiddle> first, NullableSelectorAt<TMiddle, TTarget> second) => 
             (item, index) => second(first(item, index), index);
 
         public static AsyncPredicate<TSource> Combine<TSource>(AsyncPredicate<TSource> first, AsyncPredicate<TSource> second) =>

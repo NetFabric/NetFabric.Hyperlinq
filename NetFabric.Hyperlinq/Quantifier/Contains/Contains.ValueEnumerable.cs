@@ -44,7 +44,7 @@ namespace NetFabric.Hyperlinq
         }
 
 
-        internal static bool Contains<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, [AllowNull] TResult value, Selector<TSource, TResult> selector)
+        internal static bool Contains<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, [AllowNull] TResult value, NullableSelector<TSource, TResult> selector)
             where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
@@ -52,7 +52,7 @@ namespace NetFabric.Hyperlinq
                 ? ValueContains(source, value, selector)
                 : ReferenceContains(source, value, selector);
 
-            static bool ValueContains(TEnumerable source, [AllowNull] TResult value, Selector<TSource, TResult> selector)
+            static bool ValueContains(TEnumerable source, [AllowNull] TResult value, NullableSelector<TSource, TResult> selector)
             {
                 using var enumerator = source.GetEnumerator();
                 while (enumerator.MoveNext())
@@ -63,7 +63,7 @@ namespace NetFabric.Hyperlinq
                 return false;
             }
 
-            static bool ReferenceContains(TEnumerable source, [AllowNull] TResult value, Selector<TSource, TResult> selector)
+            static bool ReferenceContains(TEnumerable source, [AllowNull] TResult value, NullableSelector<TSource, TResult> selector)
             {
                 var defaultComparer = EqualityComparer<TResult>.Default;
 
@@ -78,7 +78,7 @@ namespace NetFabric.Hyperlinq
         }
 
 
-        internal static bool Contains<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, [AllowNull] TResult value, SelectorAt<TSource, TResult> selector)
+        internal static bool Contains<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, [AllowNull] TResult value, NullableSelectorAt<TSource, TResult> selector)
             where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
@@ -86,7 +86,7 @@ namespace NetFabric.Hyperlinq
                 ? ValueContains(source, value, selector)
                 : ReferenceContains(source, value, selector);
 
-            static bool ValueContains(TEnumerable source, [AllowNull] TResult value, SelectorAt<TSource, TResult> selector)
+            static bool ValueContains(TEnumerable source, [AllowNull] TResult value, NullableSelectorAt<TSource, TResult> selector)
             {
                 using var enumerator = source.GetEnumerator();
                 checked
@@ -100,7 +100,7 @@ namespace NetFabric.Hyperlinq
                 return false;
             }
 
-            static bool ReferenceContains(TEnumerable source, [AllowNull] TResult value, SelectorAt<TSource, TResult> selector)
+            static bool ReferenceContains(TEnumerable source, [AllowNull] TResult value, NullableSelectorAt<TSource, TResult> selector)
             {
                 var defaultComparer = EqualityComparer<TResult>.Default;
 

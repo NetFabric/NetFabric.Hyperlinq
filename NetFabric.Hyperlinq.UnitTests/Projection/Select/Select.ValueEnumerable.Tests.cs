@@ -11,7 +11,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Projection.Select
         {
             // Arrange
             var enumerable = Wrap.AsValueEnumerable(new int[0]);
-            var selector = (Selector<int, string>)null;
+            var selector = (NullableSelector<int, string>)null;
 
             // Act
             Action action = () => _ = ValueEnumerableExtensions.Select<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int, string>(enumerable, selector);
@@ -26,7 +26,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Projection.Select
         [MemberData(nameof(TestData.SelectorEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SelectorSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SelectorMultiple), MemberType = typeof(TestData))]
-        public void Select_With_ValidData_Must_Succeed(int[] source, Selector<int, string> selector)
+        public void Select_With_ValidData_Must_Succeed(int[] source, NullableSelector<int, string> selector)
         {
             // Arrange
             var wrapped = Wrap.AsValueEnumerable(source);
