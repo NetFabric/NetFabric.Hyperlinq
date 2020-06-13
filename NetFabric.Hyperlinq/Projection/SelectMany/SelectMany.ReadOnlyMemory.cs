@@ -10,7 +10,7 @@ namespace NetFabric.Hyperlinq
         
         public static MemorySelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, TResult> SelectMany<TSource, TSubEnumerable, TSubEnumerator, TResult>(
             this ReadOnlyMemory<TSource> source, 
-            NullableSelector<TSource, TSubEnumerable> selector)
+            Selector<TSource, TSubEnumerable> selector)
             where TSubEnumerable : notnull, IValueEnumerable<TResult, TSubEnumerator>
             where TSubEnumerator : struct, IEnumerator<TResult>
         {
@@ -26,9 +26,9 @@ namespace NetFabric.Hyperlinq
             where TSubEnumerator : struct, IEnumerator<TResult>
         {
             readonly ReadOnlyMemory<TSource> source;
-            readonly NullableSelector<TSource, TSubEnumerable> selector;
+            readonly Selector<TSource, TSubEnumerable> selector;
 
-            internal MemorySelectManyEnumerable(ReadOnlyMemory<TSource> source, NullableSelector<TSource, TSubEnumerable> selector)
+            internal MemorySelectManyEnumerable(ReadOnlyMemory<TSource> source, Selector<TSource, TSubEnumerable> selector)
             {
                 this.source = source;
                 this.selector = selector;
@@ -47,7 +47,7 @@ namespace NetFabric.Hyperlinq
             public ref struct Enumerator
             {
                 readonly ReadOnlySpan<TSource> source;
-                readonly NullableSelector<TSource, TSubEnumerable> selector;
+                readonly Selector<TSource, TSubEnumerable> selector;
                 int sourceIndex;
                 [SuppressMessage("Style", "IDE0044:Add readonly modifier")]
                 TSubEnumerator subEnumerator; // do not make readonly
@@ -79,6 +79,8 @@ namespace NetFabric.Hyperlinq
                                 break;
 
                             var enumerable = selector(source[sourceIndex]);
+                            if (enumerable is null)
+                                Throw.InvalidOperationException("The 'selector' in SelectMany returned 'null'.");
                             subEnumerator = enumerable.GetEnumerator();
                             
                             state = 2;
@@ -100,7 +102,7 @@ namespace NetFabric.Hyperlinq
                 : IEnumerator<TResult>
             {
                 readonly ReadOnlyMemory<TSource> source;
-                readonly NullableSelector<TSource, TSubEnumerable> selector;
+                readonly Selector<TSource, TSubEnumerable> selector;
                 int sourceIndex;
                 [SuppressMessage("Style", "IDE0044:Add readonly modifier")]
                 TSubEnumerator subEnumerator; // do not make readonly

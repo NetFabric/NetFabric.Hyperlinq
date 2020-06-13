@@ -60,7 +60,7 @@ namespace NetFabric.Hyperlinq
         
         public static ValueEnumerableExtensions.SelectManyEnumerable<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource, TSubEnumerable, TSubEnumerator, TResult> SelectMany<TSource, TSubEnumerable, TSubEnumerator, TResult>(
             this ImmutableStack<TSource> source,
-            NullableSelector<TSource, TSubEnumerable> selector)
+            Selector<TSource, TSubEnumerable> selector)
             where TSubEnumerable : notnull, IValueEnumerable<TResult, TSubEnumerator>
             where TSubEnumerator : struct, IEnumerator<TResult>
             => ValueEnumerableExtensions.SelectMany<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource, TSubEnumerable, TSubEnumerator, TResult>(new ValueWrapper<TSource>(source), selector);

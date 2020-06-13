@@ -11,7 +11,7 @@ namespace NetFabric.Hyperlinq
         
         public static SelectManyEnumerable<TList, TSource, TSubEnumerable, TSubEnumerator, TResult> SelectMany<TList, TSource, TSubEnumerable, TSubEnumerator, TResult>(
             this TList source, 
-            NullableSelector<TSource, TSubEnumerable> selector)
+            Selector<TSource, TSubEnumerable> selector)
             where TList : notnull, IReadOnlyList<TSource>
             where TSubEnumerable : notnull, IValueEnumerable<TResult, TSubEnumerator>
             where TSubEnumerator : struct, IEnumerator<TResult>
@@ -29,9 +29,9 @@ namespace NetFabric.Hyperlinq
             where TSubEnumerator : struct, IEnumerator<TResult>
         {
             readonly TList source;
-            readonly NullableSelector<TSource, TSubEnumerable> selector;
+            readonly Selector<TSource, TSubEnumerable> selector;
 
-            internal SelectManyEnumerable(TList source, NullableSelector<TSource, TSubEnumerable> selector)
+            internal SelectManyEnumerable(TList source, Selector<TSource, TSubEnumerable> selector)
             {
                 this.source = source;
                 this.selector = selector;
@@ -47,7 +47,7 @@ namespace NetFabric.Hyperlinq
                 : IEnumerator<TResult>
             {
                 readonly TList source;
-                readonly NullableSelector<TSource, TSubEnumerable> selector;
+                readonly Selector<TSource, TSubEnumerable> selector;
                 readonly int sourceCount;
                 int sourceIndex;
                 [SuppressMessage("Style", "IDE0044:Add readonly modifier")]
@@ -85,6 +85,8 @@ namespace NetFabric.Hyperlinq
                                 break;
 
                             var enumerable = selector(source[sourceIndex]);
+                            if (enumerable is null)
+                                Throw.InvalidOperationException("The 'selector' in SelectMany returned 'null'.");
                             subEnumerator = enumerable.GetEnumerator();
                             
                             state = 2;
