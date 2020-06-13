@@ -71,6 +71,10 @@ namespace NetFabric.Hyperlinq
             => throw new InvalidOperationException();
 
         [DoesNotReturn]
+        public static void InvalidOperationException(string message)
+            => throw new InvalidOperationException(message);
+
+        [DoesNotReturn]
         public static T InvalidOperationException<T>()
             => throw new InvalidOperationException();
 

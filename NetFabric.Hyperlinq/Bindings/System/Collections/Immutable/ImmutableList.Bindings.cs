@@ -60,7 +60,7 @@ namespace NetFabric.Hyperlinq
         
         public static ReadOnlyListExtensions.SelectManyEnumerable<ImmutableList<TSource>, TSource, TSubEnumerable, TSubEnumerator, TResult> SelectMany<TSource, TSubEnumerable, TSubEnumerator, TResult>(
             this ImmutableList<TSource> source,
-            NullableSelector<TSource, TSubEnumerable> selector)
+            Selector<TSource, TSubEnumerable> selector)
             where TSubEnumerable : notnull, IValueEnumerable<TResult, TSubEnumerator>
             where TSubEnumerator : struct, IEnumerator<TResult>
             => ReadOnlyListExtensions.SelectMany<ImmutableList<TSource>, TSource, TSubEnumerable, TSubEnumerator, TResult>(source, selector);
