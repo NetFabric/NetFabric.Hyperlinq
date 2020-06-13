@@ -11,16 +11,16 @@
     <PackageTags>netfabric, hyperlinq, linq, enumeration, extensions, performance</PackageTags>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <LangVersion>preview</LangVersion>
-    <Nullable>enable</Nullable> 
+    <Nullable>enable</Nullable>
     <!-- <TreatWarningsAsErrors>true</TreatWarningsAsErrors> -->
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(TargetFramework)'!='netstandard2.1'">
+  <PropertyGroup Condition="'$(TargetFramework)'=='net461' Or '$(TargetFramework)'=='netstandard2.0' Or '$(TargetFramework)'=='netcoreapp2.1'">
     <!-- disable nullable warning -->
     <NoWarn>$(NoWarn);8600;8601;8602;8603;8604</NoWarn>
   </PropertyGroup>
-  
-  <PropertyGroup Condition="'$(TargetFramework)'=='netcoreapp2.1' Or '$(TargetFramework)'=='netstandard2.1'">
+
+  <PropertyGroup Condition="'$(TargetFramework)'!='net461' And '$(TargetFramework)'!='netstandard2.0'">
     <DefineConstants>$(DefineConstants);SPAN_SUPPORTED</DefineConstants>
   </PropertyGroup>
 
@@ -35,7 +35,7 @@
   <ItemGroup Condition="'$(TargetFramework)'!='netcoreapp2.1'">
     <Compile Remove="Bindings\System\Collections\Immutable\*.cs" />
   </ItemGroup>
-
+  
   <ItemGroup>
     <None Include="..\Icon.png" Pack="true" PackagePath="" />
     <None Include="..\LICENSE" Pack="true" PackagePath="" />

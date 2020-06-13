@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net461;netcoreapp2.1;netcoreapp3.1</TargetFrameworks>
+    <TargetFrameworks>net461;netcoreapp2.1;netcoreapp3.1;net50</TargetFrameworks>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 
@@ -24,10 +24,10 @@
     </PackageReference>
   </ItemGroup>
 
-  <PropertyGroup Condition="'$(TargetFramework)'!='net461'">
+  <PropertyGroup Condition="'$(TargetFramework)'!='net461' And '$(TargetFramework)'!='netstandard2.0'">
     <DefineConstants>$(DefineConstants);SPAN_SUPPORTED</DefineConstants>
   </PropertyGroup>
-  
+
   <ItemGroup Condition="'$(TargetFramework)'=='net461'">
     <Compile Remove="Utils\SpanExtensions.cs" />
     <Compile Remove="**\*.ReadOnlySpan.Tests.cs" />
@@ -36,9 +36,9 @@
     <Compile Remove="**\*.Memory.Tests.cs" />
   </ItemGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)'=='netcoreapp2.1'">
-		<PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="1.1.1" />
-	</ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)'=='net461' Or '$(TargetFramework)'=='netcoreapp2.1'">
+    <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="1.1.1" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\NetFabric.Hyperlinq\NetFabric.Hyperlinq.csproj" />
@@ -47,5 +47,5 @@
   <ItemGroup>
     <DotNetCliToolReference Include="dotnet-reportgenerator-cli" Version="4.3.8" />
   </ItemGroup>
-  
+
 </Project>
