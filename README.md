@@ -12,6 +12,7 @@
 
 - Uses value-types to improve performance by making method calls non-virtual and reducing GC collections by not allocating on the heap. 
 - Adds support for `Span<>`, `ReadOnlySpan<>`, `Memory<>` and `ReadOnlyMemory<>`.
+- [Nullable reference type](https://docs.microsoft.com/en-us/dotnet/csharp/nullable-references) annotations.
 - One single NuGet package support for both sync and async enumerables.
 
 This implementation **favors performance in detriment of assembly binary size** (lots of overloads).
