@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace NetFabric.Hyperlinq
 {
@@ -8,7 +9,7 @@ namespace NetFabric.Hyperlinq
         : struct
         , IEnumerator<T>
     {
-        new TEnumerator GetEnumerator();
+        [return: NotNull] new TEnumerator GetEnumerator();
     }
 
     public interface IValueReadOnlyCollection<out T, TEnumerator>

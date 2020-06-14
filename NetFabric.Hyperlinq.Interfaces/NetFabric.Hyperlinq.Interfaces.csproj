@@ -5,12 +5,13 @@
     <PackageId>NetFabric.Hyperlinq.Interfaces</PackageId>
     <Title>NetFabric.Hyperlinq.Interfaces</Title>
     <Description>Base interfaces for high performance enumeration.</Description>
-    <Version>2.0.1</Version>
+    <Version>2.1.0</Version>
     <PackageIcon>Icon.png</PackageIcon>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageTags>netfabric, hyperlinq, linq, enumeration, performance</PackageTags>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <PackageReleaseNotes>Added async interfaces.</PackageReleaseNotes>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
@@ -19,6 +20,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Nullable" Version="1.2.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
