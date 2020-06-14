@@ -11,7 +11,7 @@ namespace NetFabric.Hyperlinq
         public static MemorySelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, TResult> SelectMany<TSource, TSubEnumerable, TSubEnumerator, TResult>(
             this Memory<TSource> source,
             Selector<TSource, TSubEnumerable> selector)
-            where TSubEnumerable : notnull, IValueEnumerable<TResult, TSubEnumerator>
+            where TSubEnumerable : IValueEnumerable<TResult, TSubEnumerator>
             where TSubEnumerator : struct, IEnumerator<TResult>
             => SelectMany<TSource, TSubEnumerable, TSubEnumerator, TResult>((ReadOnlyMemory<TSource>)source, selector);
     }

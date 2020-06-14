@@ -25,6 +25,7 @@ namespace NetFabric.Hyperlinq
             }
 
             
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly Enumerator GetEnumerator() => new Enumerator(in this);
 
             public ref struct Enumerator

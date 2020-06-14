@@ -10,7 +10,7 @@ namespace NetFabric.Hyperlinq
     {
         
         public static async ValueTask<TSource[]> ToArrayAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source, CancellationToken cancellationToken = default)
-            where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
             var builder = new LargeArrayBuilder<TSource>(initialize: true);
@@ -19,7 +19,7 @@ namespace NetFabric.Hyperlinq
         }
 
         static async ValueTask<TSource[]> ToArrayAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source, AsyncPredicate<TSource> predicate, CancellationToken cancellationToken)
-            where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
             var builder = new LargeArrayBuilder<TSource>(initialize: true);
@@ -28,7 +28,7 @@ namespace NetFabric.Hyperlinq
         }
 
         static async ValueTask<TSource[]> ToArrayAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source, AsyncPredicateAt<TSource> predicate, CancellationToken cancellationToken)
-            where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
             var builder = new LargeArrayBuilder<TSource>(initialize: true);
@@ -38,7 +38,7 @@ namespace NetFabric.Hyperlinq
 
 
         static async ValueTask<TResult[]> ToArrayAsync<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, AsyncSelector<TSource, TResult> selector, CancellationToken cancellationToken)
-            where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
             var builder = new LargeArrayBuilder<TResult>(initialize: true);
@@ -47,7 +47,7 @@ namespace NetFabric.Hyperlinq
         }
 
         static async ValueTask<TResult[]> ToArrayAsync<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, AsyncSelectorAt<TSource, TResult> selector, CancellationToken cancellationToken)
-            where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
             var builder = new LargeArrayBuilder<TResult>(initialize: true);
@@ -56,7 +56,7 @@ namespace NetFabric.Hyperlinq
         }
 
         static async ValueTask<TResult[]> ToArrayAsync<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, AsyncPredicate<TSource> predicate, AsyncSelector<TSource, TResult> selector, CancellationToken cancellationToken)
-            where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
             var builder = new LargeArrayBuilder<TResult>(initialize: true);
@@ -71,7 +71,7 @@ namespace System.Collections.Generic
     internal partial struct LargeArrayBuilder<T>
     {
         public async ValueTask AddRangeAsync<TEnumerable, TEnumerator>(TEnumerable items, CancellationToken cancellationToken)
-            where TEnumerable : notnull, IAsyncValueEnumerable<T, TEnumerator>
+            where TEnumerable : IAsyncValueEnumerable<T, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<T>
         {
             Debug.Assert(items is object);
@@ -106,7 +106,7 @@ namespace System.Collections.Generic
         }
 
         public async ValueTask AddRangeAsync<TEnumerable, TEnumerator>(TEnumerable items, AsyncPredicate<T> predicate, CancellationToken cancellationToken)
-            where TEnumerable : notnull, IAsyncValueEnumerable<T, TEnumerator>
+            where TEnumerable : IAsyncValueEnumerable<T, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<T>
         {
             Debug.Assert(items is object);
@@ -143,7 +143,7 @@ namespace System.Collections.Generic
         }
 
         public async ValueTask AddRangeAsync<TEnumerable, TEnumerator>(TEnumerable items, AsyncPredicateAt<T> predicate, CancellationToken cancellationToken)
-            where TEnumerable : notnull, IAsyncValueEnumerable<T, TEnumerator>
+            where TEnumerable : IAsyncValueEnumerable<T, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<T>
         {
             Debug.Assert(items is object);
@@ -180,7 +180,7 @@ namespace System.Collections.Generic
         }
 
         public async ValueTask AddRangeAsync<TEnumerable, TEnumerator, U>(TEnumerable items, AsyncSelector<U, T> selector, CancellationToken cancellationToken)
-            where TEnumerable : notnull, IAsyncValueEnumerable<U, TEnumerator>
+            where TEnumerable : IAsyncValueEnumerable<U, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<U>
         {
             Debug.Assert(items is object);
@@ -215,7 +215,7 @@ namespace System.Collections.Generic
         }
 
         public async ValueTask AddRangeAsync<TEnumerable, TEnumerator, U>(TEnumerable items, AsyncSelectorAt<U, T> selector, CancellationToken cancellationToken)
-            where TEnumerable : notnull, IAsyncValueEnumerable<U, TEnumerator>
+            where TEnumerable : IAsyncValueEnumerable<U, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<U>
         {
             Debug.Assert(items is object);
@@ -250,7 +250,7 @@ namespace System.Collections.Generic
         }
 
         public async ValueTask AddRangeAsync<TEnumerable, TEnumerator, U>(TEnumerable items, AsyncPredicate<U> predicate, AsyncSelector<U, T> selector, CancellationToken cancellationToken)
-            where TEnumerable : notnull, IAsyncValueEnumerable<U, TEnumerator>
+            where TEnumerable : IAsyncValueEnumerable<U, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<U>
         {
             Debug.Assert(items is object);

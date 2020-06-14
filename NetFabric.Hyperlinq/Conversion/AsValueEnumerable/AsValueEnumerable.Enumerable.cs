@@ -17,13 +17,13 @@ namespace NetFabric.Hyperlinq
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ValueEnumerableWrapper<TEnumerable, TEnumerator, TSource> AsValueEnumerable<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TEnumerable, TEnumerator> getEnumerator)
-            where TEnumerable : notnull, IEnumerable<TSource>
+            where TEnumerable : IEnumerable<TSource>
             where TEnumerator : struct, IEnumerator<TSource>
             => new ValueEnumerableWrapper<TEnumerable, TEnumerator, TSource>(source, getEnumerator);
 
         public readonly partial struct ValueEnumerableWrapper<TEnumerable, TEnumerator, TSource>
             : IValueEnumerable<TSource, TEnumerator>
-            where TEnumerable : notnull, IEnumerable<TSource>
+            where TEnumerable : IEnumerable<TSource>
             where TEnumerator : struct, IEnumerator<TSource>
         {
             readonly TEnumerable source;

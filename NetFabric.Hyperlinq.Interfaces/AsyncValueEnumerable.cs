@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 
 namespace NetFabric.Hyperlinq
@@ -7,6 +8,6 @@ namespace NetFabric.Hyperlinq
         : IAsyncEnumerable<T>
         where TEnumerator : struct, IAsyncEnumerator<T>
     {
-        new TEnumerator GetAsyncEnumerator(CancellationToken cancellationToken = default);
+        [return: NotNull] new TEnumerator GetAsyncEnumerator(CancellationToken cancellationToken = default);
     }
 }

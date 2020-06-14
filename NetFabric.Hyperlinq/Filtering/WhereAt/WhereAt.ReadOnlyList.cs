@@ -11,7 +11,7 @@ namespace NetFabric.Hyperlinq
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static WhereAtEnumerable<TList, TSource> Where<TList, TSource>(this TList source, PredicateAt<TSource> predicate)
-            where TList : notnull, IReadOnlyList<TSource>
+            where TList : IReadOnlyList<TSource>
         {
             if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
 
@@ -20,12 +20,12 @@ namespace NetFabric.Hyperlinq
 
 
         static WhereAtEnumerable<TList, TSource> Where<TList, TSource>(this TList source, PredicateAt<TSource> predicate, int skipCount, int takeCount)
-            where TList : notnull, IReadOnlyList<TSource>
+            where TList : IReadOnlyList<TSource>
             => new WhereAtEnumerable<TList, TSource>(in source, predicate, skipCount, takeCount);
 
         public readonly partial struct WhereAtEnumerable<TList, TSource>
             : IValueEnumerable<TSource, WhereAtEnumerable<TList, TSource>.DisposableEnumerator>
-            where TList : notnull, IReadOnlyList<TSource>
+            where TList : IReadOnlyList<TSource>
         {
             readonly TList source;
             readonly PredicateAt<TSource> predicate;

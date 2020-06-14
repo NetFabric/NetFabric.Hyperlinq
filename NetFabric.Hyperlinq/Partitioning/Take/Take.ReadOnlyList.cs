@@ -8,7 +8,7 @@ namespace NetFabric.Hyperlinq
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static SkipTakeEnumerable<TList, TSource> Take<TList, TSource>(this TList source, int count)
-            where TList : notnull, IReadOnlyList<TSource>
+            where TList : IReadOnlyList<TSource>
             => SkipTake<TList, TSource>(source, 0, count);
     }
 }

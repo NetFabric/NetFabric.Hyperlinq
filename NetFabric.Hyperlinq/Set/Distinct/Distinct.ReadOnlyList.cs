@@ -13,7 +13,7 @@ namespace NetFabric.Hyperlinq
         public static DistinctEnumerable<TList, TSource> Distinct<TList, TSource>(
             this TList source, 
             IEqualityComparer<TSource>? comparer = default)
-            where TList : notnull, IReadOnlyList<TSource>
+            where TList : IReadOnlyList<TSource>
             => new DistinctEnumerable<TList, TSource>(source, comparer, 0, source.Count);
 
         
@@ -22,12 +22,12 @@ namespace NetFabric.Hyperlinq
             this TList source,
             IEqualityComparer<TSource>? comparer,
             int skipCount, int takeCount)
-            where TList : notnull, IReadOnlyList<TSource>
+            where TList : IReadOnlyList<TSource>
             => new DistinctEnumerable<TList, TSource>(source, comparer, skipCount, takeCount);
 
         public readonly partial struct DistinctEnumerable<TList, TSource>
             : IValueEnumerable<TSource, DistinctEnumerable<TList, TSource>.Enumerator>
-            where TList : notnull, IReadOnlyList<TSource>
+            where TList : IReadOnlyList<TSource>
         {
             readonly TList source;
             readonly IEqualityComparer<TSource>? comparer;
@@ -42,6 +42,7 @@ namespace NetFabric.Hyperlinq
             }
 
             
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly Enumerator GetEnumerator() => new Enumerator(in this);
             readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new Enumerator(in this);
             readonly IEnumerator IEnumerable.GetEnumerator() => new Enumerator(in this);

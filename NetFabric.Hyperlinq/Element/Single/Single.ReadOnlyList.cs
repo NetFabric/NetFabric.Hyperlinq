@@ -9,12 +9,12 @@ namespace NetFabric.Hyperlinq
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Option<TSource> Single<TList, TSource>(this TList source) 
-            where TList : notnull, IReadOnlyList<TSource>
+            where TList : IReadOnlyList<TSource>
             => Single<TList, TSource>(source, 0, source.Count);
 
 
         static Option<TSource> Single<TList, TSource>(this TList source, int skipCount, int takeCount) 
-            where TList : notnull, IReadOnlyList<TSource>
+            where TList : IReadOnlyList<TSource>
             => takeCount switch
             {
                 0 => Option.None,
@@ -24,17 +24,17 @@ namespace NetFabric.Hyperlinq
 
 
         static Option<TSource> Single<TList, TSource>(this TList source, Predicate<TSource> predicate, int skipCount, int takeCount) 
-            where TList : notnull, IReadOnlyList<TSource>
+            where TList : IReadOnlyList<TSource>
             => GetSingle<TList, TSource>(source, predicate, skipCount, takeCount);
 
 
         static Option<TSource> Single<TList, TSource>(this TList source, PredicateAt<TSource> predicate, int skipCount, int takeCount) 
-            where TList : notnull, IReadOnlyList<TSource>
+            where TList : IReadOnlyList<TSource>
             => GetSingle<TList, TSource>(source, predicate, skipCount, takeCount);
 
 
         static Option<TResult> Single<TList, TSource, TResult>(this TList source, NullableSelector<TSource, TResult> selector, int skipCount, int takeCount) 
-            where TList : notnull, IReadOnlyList<TSource>
+            where TList : IReadOnlyList<TSource>
             => takeCount switch
             {
                 0 => Option.None,
@@ -44,7 +44,7 @@ namespace NetFabric.Hyperlinq
 
 
         static Option<TResult> Single<TList, TSource, TResult>(this TList source, NullableSelectorAt<TSource, TResult> selector, int skipCount, int takeCount) 
-            where TList : notnull, IReadOnlyList<TSource>
+            where TList : IReadOnlyList<TSource>
             => takeCount switch
             {
                 0 => Option.None,
@@ -54,7 +54,7 @@ namespace NetFabric.Hyperlinq
 
 
         static Option<TResult> Single<TList, TSource, TResult>(this TList source, Predicate<TSource> predicate, NullableSelector<TSource, TResult> selector, int skipCount, int takeCount) 
-            where TList : notnull, IReadOnlyList<TSource>
+            where TList : IReadOnlyList<TSource>
             => GetSingle<TList, TSource>(source, predicate, skipCount, takeCount).Select(selector);
 
         ////////////////////////////////
@@ -62,7 +62,7 @@ namespace NetFabric.Hyperlinq
 
         
         static Option<TSource> GetSingle<TList, TSource>(this TList source, Predicate<TSource> predicate, int skipCount, int takeCount)
-            where TList : notnull, IReadOnlyList<TSource>
+            where TList : IReadOnlyList<TSource>
         {
             var end = skipCount + takeCount;
             for (var index = skipCount; index < end; index++)
@@ -86,7 +86,7 @@ namespace NetFabric.Hyperlinq
         
         
         static Option<TSource> GetSingle<TList, TSource>(this TList source, PredicateAt<TSource> predicate, int skipCount, int takeCount)
-            where TList : notnull, IReadOnlyList<TSource>
+            where TList : IReadOnlyList<TSource>
         {
             if (skipCount == 0)
             {

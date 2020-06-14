@@ -11,12 +11,12 @@ namespace NetFabric.Hyperlinq
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static TSource[] ToArray<TList, TSource>(this TList source)
-            where TList : notnull, IReadOnlyList<TSource>
+            where TList : IReadOnlyList<TSource>
             => ToArray<TList, TSource>(source, 0, source.Count);
 
         
         static TSource[] ToArray<TList, TSource>(this TList source, int skipCount, int takeCount)
-            where TList : notnull, IReadOnlyList<TSource>
+            where TList : IReadOnlyList<TSource>
         {
             var array = new TSource[takeCount];
             if (takeCount != 0)
@@ -44,7 +44,7 @@ namespace NetFabric.Hyperlinq
 
 
         static TSource[] ToArray<TList, TSource>(this TList source, Predicate<TSource> predicate, int skipCount, int takeCount)
-            where TList : notnull, IReadOnlyList<TSource>
+            where TList : IReadOnlyList<TSource>
         {
             var builder = new LargeArrayBuilder<TSource>(initialize: true);
             builder.AddRange<TList>(source, predicate, skipCount, takeCount);
@@ -53,7 +53,7 @@ namespace NetFabric.Hyperlinq
 
 
         static TSource[] ToArray<TList, TSource>(this TList source, PredicateAt<TSource> predicate, int skipCount, int takeCount)
-            where TList : notnull, IReadOnlyList<TSource>
+            where TList : IReadOnlyList<TSource>
         {
             var builder = new LargeArrayBuilder<TSource>(initialize: true);
             builder.AddRange<TList>(source, predicate, skipCount, takeCount);
@@ -62,7 +62,7 @@ namespace NetFabric.Hyperlinq
 
 
         static TResult[] ToArray<TList, TSource, TResult>(this TList source, NullableSelector<TSource, TResult> selector, int skipCount, int takeCount)
-            where TList : notnull, IReadOnlyList<TSource>
+            where TList : IReadOnlyList<TSource>
         {
             var array = new TResult[takeCount];
             if (skipCount == 0)
@@ -80,7 +80,7 @@ namespace NetFabric.Hyperlinq
 
 
         static TResult[] ToArray<TList, TSource, TResult>(this TList source, NullableSelectorAt<TSource, TResult> selector, int skipCount, int takeCount)
-            where TList : notnull, IReadOnlyList<TSource>
+            where TList : IReadOnlyList<TSource>
         {
             var array = new TResult[takeCount];
             if (skipCount == 0)
@@ -98,7 +98,7 @@ namespace NetFabric.Hyperlinq
 
 
         static TResult[] ToArray<TList, TSource, TResult>(this TList source, Predicate<TSource> predicate, NullableSelector<TSource, TResult> selector, int skipCount, int takeCount)
-            where TList : notnull, IReadOnlyList<TSource>
+            where TList : IReadOnlyList<TSource>
         {
             var builder = new LargeArrayBuilder<TResult>(initialize: true);
             builder.AddRange<TList, TSource>(source, predicate, selector, skipCount, takeCount);
@@ -112,7 +112,7 @@ namespace System.Collections.Generic
     partial struct LargeArrayBuilder<T>
     {
         public void AddRange<TList>(TList items, Predicate<T> predicate, int skipCount, int takeCount)
-            where TList : notnull, IReadOnlyList<T>
+            where TList : IReadOnlyList<T>
         {
             Debug.Assert(items is object);
 
@@ -143,7 +143,7 @@ namespace System.Collections.Generic
         }
 
         public void AddRange<TList>(TList items, PredicateAt<T> predicate, int skipCount, int takeCount)
-            where TList : notnull, IReadOnlyList<T>
+            where TList : IReadOnlyList<T>
         {
             Debug.Assert(items is object);
 
@@ -173,7 +173,7 @@ namespace System.Collections.Generic
         }
 
         public void AddRange<TList, U>(TList items, Predicate<U> predicate, NullableSelector<U, T> selector, int skipCount, int takeCount)
-            where TList : notnull, IReadOnlyList<U>
+            where TList : IReadOnlyList<U>
         {
             Debug.Assert(items is object);
 
