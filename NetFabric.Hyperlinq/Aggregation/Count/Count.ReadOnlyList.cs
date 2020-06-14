@@ -7,11 +7,11 @@ namespace NetFabric.Hyperlinq
     public static partial class ReadOnlyListExtensions
     {
         public static int Count<TList, TSource>(this TList source)
-            where TList : notnull, IReadOnlyList<TSource>
+            where TList : IReadOnlyList<TSource>
             => source.Count;
 
         static int Count<TList, TSource>(this TList source, Predicate<TSource> predicate, int skipCount, int takeCount)
-            where TList : notnull, IReadOnlyList<TSource>
+            where TList : IReadOnlyList<TSource>
         {
             var count = 0;
             var end = skipCount + takeCount;
@@ -24,7 +24,7 @@ namespace NetFabric.Hyperlinq
         }
 
         static int Count<TList, TSource>(this TList source, PredicateAt<TSource> predicate, int skipCount, int takeCount)
-            where TList : notnull, IReadOnlyList<TSource>
+            where TList : IReadOnlyList<TSource>
         {
             var count = 0;
             if (skipCount == 0)

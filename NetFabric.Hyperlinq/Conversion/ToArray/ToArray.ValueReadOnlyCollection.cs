@@ -6,7 +6,7 @@ namespace NetFabric.Hyperlinq
     {
         
         public static TSource[] ToArray<TEnumerable, TEnumerator, TSource>(this TEnumerable source)
-            where TEnumerable : notnull, IValueReadOnlyCollection<TSource, TEnumerator>
+            where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
             var array = new TSource[source.Count];
@@ -32,7 +32,7 @@ namespace NetFabric.Hyperlinq
 
         
         static TResult[] ToArray<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, NullableSelector<TSource, TResult> selector)
-            where TEnumerable : notnull, IValueReadOnlyCollection<TSource, TEnumerator>
+            where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
             var array = new TResult[source.Count];
@@ -47,7 +47,7 @@ namespace NetFabric.Hyperlinq
 
         
         static TResult[] ToArray<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, NullableSelectorAt<TSource, TResult> selector)
-            where TEnumerable : notnull, IValueReadOnlyCollection<TSource, TEnumerator>
+            where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
             var array = new TResult[source.Count];

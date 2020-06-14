@@ -11,13 +11,13 @@ namespace NetFabric.Hyperlinq
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static SkipTakeEnumerable<TEnumerable, TEnumerator, TSource> SkipTake<TEnumerable, TEnumerator, TSource>(this TEnumerable source, int skipCount, int takeCount)
-            where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
             => new SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>(in source, skipCount, takeCount);
 
         public readonly partial struct SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>
             : IValueEnumerable<TSource, SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator>
-            where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
             readonly TEnumerable source;

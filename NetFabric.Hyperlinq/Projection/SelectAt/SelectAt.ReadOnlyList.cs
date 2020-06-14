@@ -13,7 +13,7 @@ namespace NetFabric.Hyperlinq
         public static SelectAtEnumerable<TList, TSource, TResult> Select<TList, TSource, TResult>(
             this TList source, 
             NullableSelectorAt<TSource, TResult> selector)
-            where TList : notnull, IReadOnlyList<TSource>
+            where TList : IReadOnlyList<TSource>
         {
             if(selector is null) Throw.ArgumentNullException(nameof(selector));
 
@@ -25,14 +25,14 @@ namespace NetFabric.Hyperlinq
             this TList source,
             NullableSelectorAt<TSource, TResult> selector,
             int skipCount, int takeCount)
-            where TList : notnull, IReadOnlyList<TSource>
+            where TList : IReadOnlyList<TSource>
             => new SelectAtEnumerable<TList, TSource, TResult>(source, selector, skipCount, takeCount);
 
         [GeneratorMapping("TSource", "TResult")]
         public readonly partial struct SelectAtEnumerable<TList, TSource, TResult>
             : IValueReadOnlyList<TResult, SelectAtEnumerable<TList, TSource, TResult>.DisposableEnumerator>
             , IList<TResult>
-            where TList : notnull, IReadOnlyList<TSource>
+            where TList : IReadOnlyList<TSource>
         {
             readonly TList source;
             readonly NullableSelectorAt<TSource, TResult> selector;
@@ -290,7 +290,7 @@ namespace NetFabric.Hyperlinq
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int Count<TList, TSource, TResult>(this SelectAtEnumerable<TList, TSource, TResult> source)
-            where TList : notnull, IReadOnlyList<TSource>
+            where TList : IReadOnlyList<TSource>
             => source.Count;
     }
 }

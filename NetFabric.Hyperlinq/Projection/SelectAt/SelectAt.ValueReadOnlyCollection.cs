@@ -13,7 +13,7 @@ namespace NetFabric.Hyperlinq
         public static SelectAtEnumerable<TEnumerable, TEnumerator, TSource, TResult> Select<TEnumerable, TEnumerator, TSource, TResult>(
             this TEnumerable source, 
             NullableSelectorAt<TSource, TResult> selector)
-            where TEnumerable : notnull, IValueReadOnlyCollection<TSource, TEnumerator>
+            where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
             if(selector is null) Throw.ArgumentNullException(nameof(selector));
@@ -25,7 +25,7 @@ namespace NetFabric.Hyperlinq
         public readonly partial struct SelectAtEnumerable<TEnumerable, TEnumerator, TSource, TResult>
             : IValueReadOnlyCollection<TResult, SelectAtEnumerable<TEnumerable, TEnumerator, TSource, TResult>.Enumerator>
             , ICollection<TResult>
-            where TEnumerable : notnull, IValueReadOnlyCollection<TSource, TEnumerator>
+            where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
             readonly TEnumerable source;
@@ -153,7 +153,7 @@ namespace NetFabric.Hyperlinq
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int Count<TEnumerable, TEnumerator, TSource, TResult>(this SelectAtEnumerable<TEnumerable, TEnumerator, TSource, TResult> source)
-            where TEnumerable : notnull, IValueReadOnlyCollection<TSource, TEnumerator>
+            where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
             => source.Count;
     }

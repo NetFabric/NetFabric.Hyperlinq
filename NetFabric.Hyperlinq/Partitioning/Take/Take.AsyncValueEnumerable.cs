@@ -12,13 +12,13 @@ namespace NetFabric.Hyperlinq
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static TakeEnumerable<TEnumerable, TEnumerator, TSource> Take<TEnumerable, TEnumerator, TSource>(this TEnumerable source, int count)
-            where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
             => new TakeEnumerable<TEnumerable, TEnumerator, TSource>(in source, count);
 
         public readonly partial struct TakeEnumerable<TEnumerable, TEnumerator, TSource>
             : IAsyncValueEnumerable<TSource, TakeEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator>
-            where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
             readonly TEnumerable source;

@@ -9,7 +9,7 @@ namespace NetFabric.Hyperlinq
     {
         
         public static TSource[] ToArray<TEnumerable, TEnumerator, TSource>(this TEnumerable source)
-            where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
             switch (source)
@@ -32,7 +32,7 @@ namespace NetFabric.Hyperlinq
 
         
         static TSource[] ToArray<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Predicate<TSource> predicate)
-            where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
             var builder = new LargeArrayBuilder<TSource>(initialize: true);
@@ -42,7 +42,7 @@ namespace NetFabric.Hyperlinq
 
         
         static TSource[] ToArray<TEnumerable, TEnumerator, TSource>(this TEnumerable source, PredicateAt<TSource> predicate)
-            where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
             var builder = new LargeArrayBuilder<TSource>(initialize: true);
@@ -52,7 +52,7 @@ namespace NetFabric.Hyperlinq
 
         
         static TResult[] ToArray<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, NullableSelector<TSource, TResult> selector)
-            where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
             var builder = new LargeArrayBuilder<TResult>(initialize: true);
@@ -62,7 +62,7 @@ namespace NetFabric.Hyperlinq
 
         
         static TResult[] ToArray<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, NullableSelectorAt<TSource, TResult> selector)
-            where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
             var builder = new LargeArrayBuilder<TResult>(initialize: true);
@@ -72,7 +72,7 @@ namespace NetFabric.Hyperlinq
 
         
         static TResult[] ToArray<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, Predicate<TSource> predicate, NullableSelector<TSource, TResult> selector)
-            where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
             var builder = new LargeArrayBuilder<TResult>(initialize: true);
@@ -87,7 +87,7 @@ namespace System.Collections.Generic
     internal partial struct LargeArrayBuilder<T>
     {
         public void AddRange<TEnumerable, TEnumerator>(TEnumerable items)
-            where TEnumerable : notnull, IValueEnumerable<T, TEnumerator>
+            where TEnumerable : IValueEnumerable<T, TEnumerator>
             where TEnumerator : struct, IEnumerator<T>
         {
             Debug.Assert(items is object);
@@ -117,7 +117,7 @@ namespace System.Collections.Generic
         }
 
         public void AddRange<TEnumerable, TEnumerator>(TEnumerable items, Predicate<T> predicate)
-            where TEnumerable : notnull, IValueEnumerable<T, TEnumerator>
+            where TEnumerable : IValueEnumerable<T, TEnumerator>
             where TEnumerator : struct, IEnumerator<T>
         {
             Debug.Assert(items is object);
@@ -149,7 +149,7 @@ namespace System.Collections.Generic
         }
 
         public void AddRange<TEnumerable, TEnumerator>(TEnumerable items, PredicateAt<T> predicate)
-            where TEnumerable : notnull, IValueEnumerable<T, TEnumerator>
+            where TEnumerable : IValueEnumerable<T, TEnumerator>
             where TEnumerator : struct, IEnumerator<T>
         {
             Debug.Assert(items is object);
@@ -181,7 +181,7 @@ namespace System.Collections.Generic
         }
 
         public void AddRange<TEnumerable, TEnumerator, U>(TEnumerable items, NullableSelector<U, T> selector)
-            where TEnumerable : notnull, IValueEnumerable<U, TEnumerator>
+            where TEnumerable : IValueEnumerable<U, TEnumerator>
             where TEnumerator : struct, IEnumerator<U>
         {
             Debug.Assert(items is object);
@@ -211,7 +211,7 @@ namespace System.Collections.Generic
         }
 
         public void AddRange<TEnumerable, TEnumerator, U>(TEnumerable items, NullableSelectorAt<U, T> selector)
-            where TEnumerable : notnull, IValueEnumerable<U, TEnumerator>
+            where TEnumerable : IValueEnumerable<U, TEnumerator>
             where TEnumerator : struct, IEnumerator<U>
         {
             Debug.Assert(items is object);
@@ -241,7 +241,7 @@ namespace System.Collections.Generic
         }
 
         public void AddRange<TEnumerable, TEnumerator, U>(TEnumerable items, Predicate<U> predicate, NullableSelector<U, T> selector)
-            where TEnumerable : notnull, IValueEnumerable<U, TEnumerator>
+            where TEnumerable : IValueEnumerable<U, TEnumerator>
             where TEnumerator : struct, IEnumerator<U>
         {
             Debug.Assert(items is object);

@@ -15,13 +15,13 @@ namespace NetFabric.Hyperlinq
             Predicate<TSource> predicate,
             NullableSelector<TSource, TResult> selector, 
             int skipCount, int takeCount)
-            where TList : notnull, IReadOnlyList<TSource>
+            where TList : IReadOnlyList<TSource>
             => new WhereSelectEnumerable<TList, TSource, TResult>(in source, predicate, selector, skipCount, takeCount);
 
         [GeneratorMapping("TSource", "TResult")]
         public readonly partial struct WhereSelectEnumerable<TList, TSource, TResult>
             : IValueEnumerable<TResult, WhereSelectEnumerable<TList, TSource, TResult>.DisposableEnumerator>
-            where TList : notnull, IReadOnlyList<TSource>
+            where TList : IReadOnlyList<TSource>
         {
             readonly TList source;
             readonly Predicate<TSource> predicate;

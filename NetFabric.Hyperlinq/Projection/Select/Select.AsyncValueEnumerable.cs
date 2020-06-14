@@ -14,7 +14,7 @@ namespace NetFabric.Hyperlinq
         public static SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult> Select<TEnumerable, TEnumerator, TSource, TResult>(
             this TEnumerable source,
             AsyncSelector<TSource, TResult> selector)
-            where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
             if (selector is null) Throw.ArgumentNullException(nameof(selector));
@@ -25,7 +25,7 @@ namespace NetFabric.Hyperlinq
         [GeneratorMapping("TSource", "TResult")]
         public readonly partial struct SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>
             : IAsyncValueEnumerable<TResult, SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>.Enumerator>
-            where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
             readonly TEnumerable source;

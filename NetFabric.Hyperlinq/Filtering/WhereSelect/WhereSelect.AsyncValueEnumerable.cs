@@ -15,14 +15,14 @@ namespace NetFabric.Hyperlinq
             this TEnumerable source,
             AsyncPredicate<TSource> predicate,
             AsyncSelector<TSource, TResult> selector)
-            where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
             => new WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>(in source, predicate, selector);
 
         [GeneratorMapping("TSource", "TResult")]
         public readonly partial struct WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>
             : IAsyncValueEnumerable<TResult, WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>.Enumerator>
-            where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
             readonly TEnumerable source;

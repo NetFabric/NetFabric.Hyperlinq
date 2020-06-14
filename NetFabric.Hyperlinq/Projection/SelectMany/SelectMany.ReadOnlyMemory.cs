@@ -11,7 +11,7 @@ namespace NetFabric.Hyperlinq
         public static MemorySelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, TResult> SelectMany<TSource, TSubEnumerable, TSubEnumerator, TResult>(
             this ReadOnlyMemory<TSource> source, 
             Selector<TSource, TSubEnumerable> selector)
-            where TSubEnumerable : notnull, IValueEnumerable<TResult, TSubEnumerator>
+            where TSubEnumerable : IValueEnumerable<TResult, TSubEnumerator>
             where TSubEnumerator : struct, IEnumerator<TResult>
         {
             if (selector is null) Throw.ArgumentNullException(nameof(selector));
@@ -22,7 +22,7 @@ namespace NetFabric.Hyperlinq
         [GeneratorMapping("TSource", "TResult")]
         public readonly partial struct MemorySelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, TResult>
             : IValueEnumerable<TResult, MemorySelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, TResult>.DisposableEnumerator>
-            where TSubEnumerable : notnull, IValueEnumerable<TResult, TSubEnumerator>
+            where TSubEnumerable : IValueEnumerable<TResult, TSubEnumerator>
             where TSubEnumerator : struct, IEnumerator<TResult>
         {
             readonly ReadOnlyMemory<TSource> source;
@@ -35,6 +35,7 @@ namespace NetFabric.Hyperlinq
             }
 
             
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly Enumerator GetEnumerator() 
                 => new Enumerator(in this);
             readonly DisposableEnumerator IValueEnumerable<TResult, MemorySelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, TResult>.DisposableEnumerator>.GetEnumerator() 

@@ -13,13 +13,13 @@ namespace NetFabric.Hyperlinq
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static AsyncValueEnumerableWrapper<TEnumerable, TEnumerator, TSource> AsAsyncValueEnumerable<TEnumerable, TEnumerator, TSource>(this TEnumerable source)
-            where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
             => new AsyncValueEnumerableWrapper<TEnumerable, TEnumerator, TSource>(source);
 
         public partial struct AsyncValueEnumerableWrapper<TEnumerable, TEnumerator, TSource>
             : IAsyncValueEnumerable<TSource, AsyncValueEnumerableWrapper<TEnumerable, TEnumerator, TSource>.AsyncEnumerator>
-            where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
             readonly TEnumerable source;

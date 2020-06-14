@@ -132,7 +132,7 @@ namespace NetFabric.Hyperlinq
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public readonly SelectManyEnumerable<TSubEnumerable, TSubEnumerator, TResult> SelectMany<TSubEnumerable, TSubEnumerator, TResult>(NullableSelector<T, TSubEnumerable> selector) 
-            where TSubEnumerable : notnull, IValueEnumerable<TResult, TSubEnumerator>
+            where TSubEnumerable : IValueEnumerable<TResult, TSubEnumerator>
             where TSubEnumerator : struct, IEnumerator<TResult>
             => new SelectManyEnumerable<TSubEnumerable, TSubEnumerator, TResult>(in this, selector);
 
@@ -169,7 +169,7 @@ namespace NetFabric.Hyperlinq
         [GeneratorMapping("TSource", "TResult")]
         public readonly partial struct SelectManyEnumerable<TSubEnumerable, TSubEnumerator, TResult>
             : IValueEnumerable<TResult, SelectManyEnumerable<TSubEnumerable, TSubEnumerator, TResult>.Enumerator>
-            where TSubEnumerable : notnull, IValueEnumerable<TResult, TSubEnumerator>
+            where TSubEnumerable : IValueEnumerable<TResult, TSubEnumerator>
             where TSubEnumerator : struct, IEnumerator<TResult>
         {
             readonly Option<T> source;

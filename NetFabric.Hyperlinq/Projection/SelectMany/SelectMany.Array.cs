@@ -14,7 +14,7 @@ namespace NetFabric.Hyperlinq
         public static MemorySelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, TResult> SelectMany<TSource, TSubEnumerable, TSubEnumerator, TResult>(
             this TSource[] source,
             Selector<TSource, TSubEnumerable> selector)
-            where TSubEnumerable : notnull, IValueEnumerable<TResult, TSubEnumerator>
+            where TSubEnumerable : IValueEnumerable<TResult, TSubEnumerator>
             where TSubEnumerator : struct, IEnumerator<TResult>
             => SelectMany<TSource, TSubEnumerable, TSubEnumerator, TResult>((ReadOnlyMemory<TSource>)source, selector);
 
@@ -23,7 +23,7 @@ namespace NetFabric.Hyperlinq
         public static SelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, TResult> SelectMany<TSource, TSubEnumerable, TSubEnumerator, TResult>(
             this TSource[] source,
             Selector<TSource, TSubEnumerable> selector)
-            where TSubEnumerable : notnull, IValueEnumerable<TResult, TSubEnumerator>
+            where TSubEnumerable : IValueEnumerable<TResult, TSubEnumerator>
             where TSubEnumerator : struct, IEnumerator<TResult>
         {
             if (selector is null)
@@ -35,7 +35,7 @@ namespace NetFabric.Hyperlinq
         [GeneratorMapping("TSource", "TResult")]
         public readonly partial struct SelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, TResult>
             : IValueEnumerable<TResult, SelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, TResult>.Enumerator>
-            where TSubEnumerable : notnull, IValueEnumerable<TResult, TSubEnumerator>
+            where TSubEnumerable : IValueEnumerable<TResult, TSubEnumerator>
             where TSubEnumerator : struct, IEnumerator<TResult>
         {
             readonly TSource[] source;
