@@ -89,8 +89,8 @@ namespace NetFabric.Hyperlinq
             bool ICollection<int>.Remove(int item) 
                 => Throw.NotSupportedException<bool>();
             int IList<int>.IndexOf(int item)
-                => item >= 0 && item < Count
-                    ? item
+                => item >= start && item < end
+                    ? item - start
                     : -1;
             void IList<int>.Insert(int index, int item)
                 => Throw.NotSupportedException();

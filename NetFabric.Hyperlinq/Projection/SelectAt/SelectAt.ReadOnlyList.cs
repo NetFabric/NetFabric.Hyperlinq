@@ -114,6 +114,7 @@ namespace NetFabric.Hyperlinq
                 => Throw.NotSupportedException<bool>();
             int IList<TResult>.IndexOf(TResult item)
             {
+                var end = skipCount + Count;
                 if (default(TResult) is object)
                 {
                     if (skipCount == 0)

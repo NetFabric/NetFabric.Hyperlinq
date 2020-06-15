@@ -96,6 +96,7 @@ namespace NetFabric.Hyperlinq
                 => Throw.NotSupportedException<bool>();
             int IList<TResult>.IndexOf(TResult item)
             {
+                var end = skipCount + Count;
                 if (default(TResult) is object)
                 {
                     for (var index = 0; index < Count; index++)

@@ -52,7 +52,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Generation
             // Assert
             _ = result.Must()
                 .BeEnumerableOf<int>()
-                .BeEqualTo(expected);
+                .BeEqualTo(expected, testIndexOf: false);
         }
 
         [Theory]
@@ -68,7 +68,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Generation
             // Assert
             _ = result.Must()
                 .BeEnumerableOf<int>()
-                .BeEqualTo(expected);
+                .BeEqualTo(expected, testIndexOf: false);
         }
 
         [Theory]
@@ -84,7 +84,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Generation
             // Assert
             _ = result.Must()
                 .BeEnumerableOf<int>()
-                .BeEqualTo(expected);
+                .BeEqualTo(expected, testIndexOf: false);
         }
 
         [Theory]
@@ -147,7 +147,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Generation
             _ = result.Must()
                 .BeOfType<List<int>>()
                 .BeEnumerableOf<int>()
-                .BeEqualTo(expected);
+                .BeEqualTo(expected, testIndexOf: false);
         }
     }
 }

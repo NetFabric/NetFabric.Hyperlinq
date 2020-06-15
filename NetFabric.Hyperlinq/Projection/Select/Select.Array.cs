@@ -94,9 +94,10 @@ namespace NetFabric.Hyperlinq
                 => Throw.NotSupportedException<bool>();
             int IList<TResult>.IndexOf(TResult item)
             {
+                var end = skipCount + Count;
                 if (default(TResult) is object)
                 {
-                    for (var index = skipCount; index < Count; index++)
+                    for (var index = skipCount; index < end; index++)
                     {
                         if (EqualityComparer<TResult>.Default.Equals(selector(source[index]), item))
                             return index - skipCount;
@@ -105,7 +106,7 @@ namespace NetFabric.Hyperlinq
                 else
                 {
                     var defaultComparer = EqualityComparer<TResult>.Default;
-                    for (var index = skipCount; index < Count; index++)
+                    for (var index = skipCount; index < end; index++)
                     {
                         if (defaultComparer.Equals(selector(source[index]), item))
                             return index - skipCount;
