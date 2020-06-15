@@ -129,21 +129,45 @@ namespace NetFabric.Hyperlinq
                 => Throw.NotSupportedException<bool>();
             int IList<TSource>.IndexOf(TSource item)
             {
-                if (skipCount == 0 && Count == source.Length)
+                if (default(TSource) is object)
                 {
-                    for (var index = 0; index < source.Length; index++)
+                    if (skipCount == 0 && Count == source.Length)
                     {
-                        if (EqualityComparer<TSource>.Default.Equals(source[index], item))
-                            return index;
+                        for (var index = 0; index < source.Length; index++)
+                        {
+                            if (EqualityComparer<TSource>.Default.Equals(source[index], item))
+                                return index;
+                        }
+                    }
+                    else
+                    {
+                        var end = skipCount + Count;
+                        for (var index = skipCount; index < end; index++)
+                        {
+                            if (EqualityComparer<TSource>.Default.Equals(source[index], item))
+                                return index - skipCount;
+                        }
                     }
                 }
                 else
                 {
-                    var end = skipCount + Count;
-                    for (var index = skipCount; index < end; index++)
+                    var defaultComparer = EqualityComparer<TSource>.Default;
+                    if (skipCount == 0 && Count == source.Length)
                     {
-                        if (EqualityComparer<TSource>.Default.Equals(source[index], item))
-                            return index - skipCount;
+                        for (var index = 0; index < source.Length; index++)
+                        {
+                            if (defaultComparer.Equals(source[index], item))
+                                return index;
+                        }
+                    }
+                    else
+                    {
+                        var end = skipCount + Count;
+                        for (var index = skipCount; index < end; index++)
+                        {
+                            if (defaultComparer.Equals(source[index], item))
+                                return index - skipCount;
+                        }
                     }
                 }
                 return -1;

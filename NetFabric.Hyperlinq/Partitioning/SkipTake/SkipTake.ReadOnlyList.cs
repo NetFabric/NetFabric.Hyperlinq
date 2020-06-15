@@ -97,10 +97,22 @@ namespace NetFabric.Hyperlinq
             int IList<TSource>.IndexOf(TSource item)
             {
                 var end = skipCount + Count;
-                for (var index = skipCount; index < end; index++)
+                if (default(TSource) is object)
                 {
-                    if (EqualityComparer<TSource>.Default.Equals(source[index], item))
-                        return index - skipCount;
+                    for (var index = skipCount; index < end; index++)
+                    {
+                        if (EqualityComparer<TSource>.Default.Equals(source[index], item))
+                            return index - skipCount;
+                    }
+                }
+                else
+                {
+                    var defaultComparer = EqualityComparer<TSource>.Default;
+                    for (var index = skipCount; index < end; index++)
+                    {
+                        if (defaultComparer.Equals(source[index], item))
+                            return index - skipCount;
+                    }
                 }
                 return -1;
             }
