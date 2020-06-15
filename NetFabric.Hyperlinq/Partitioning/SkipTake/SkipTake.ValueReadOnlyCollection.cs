@@ -41,35 +41,45 @@ namespace NetFabric.Hyperlinq
             bool ICollection<TSource>.IsReadOnly  
                 => true;
 
-            void ICollection<TSource>.CopyTo(TSource[] array, int arrayIndex) 
+            public void CopyTo(TSource[] array, int arrayIndex) 
             {
                 if (Count == 0)
                     return;
 
-                using var enumerator = source.GetEnumerator();
-
-                // skip
-                for (var counter = 0; counter < skipCount; counter++)
+                if (skipCount == 0 && Count == source.Count && source is ICollection<TSource> collection)
                 {
-                    if (!enumerator.MoveNext()) Throw.InvalidOperationException();
+                    collection.CopyTo(array, arrayIndex);
                 }
-
-                // take
-                for (var counter = 0; counter < Count; counter++)
+                else
                 {
-                    if (!enumerator.MoveNext()) Throw.InvalidOperationException();
+                    using var enumerator = source.GetEnumerator();
 
-                    array[arrayIndex] = enumerator.Current;
-                    arrayIndex++;
+                    // skip
+                    for (var counter = 0; counter < skipCount; counter++)
+                    {
+                        if (!enumerator.MoveNext())
+                            Throw.InvalidOperationException();
+                    }
+
+                    // take
+                    for (var counter = 0; counter < Count; counter++)
+                    {
+                        if (!enumerator.MoveNext())
+                            Throw.InvalidOperationException();
+
+                        array[arrayIndex] = enumerator.Current;
+                        checked { arrayIndex++; }
+                    }
                 }
             }
+
+            bool ICollection<TSource>.Contains(TSource item)
+                => Contains(item);
 
             void ICollection<TSource>.Add(TSource item) 
                 => Throw.NotSupportedException();
             void ICollection<TSource>.Clear() 
                 => Throw.NotSupportedException();
-            bool ICollection<TSource>.Contains(TSource item)
-                => ValueReadOnlyCollectionExtensions.Contains<TEnumerable, TEnumerator, TSource>(source, item);
             bool ICollection<TSource>.Remove(TSource item) 
                 => Throw.NotSupportedException<bool>();
 
@@ -143,6 +153,70 @@ namespace NetFabric.Hyperlinq
                     => Throw.NotSupportedException();
 
                 public void Dispose() => enumerator.Dispose();
+            }
+
+            public bool Contains([MaybeNull] TSource value, IEqualityComparer<TSource>? comparer = default)
+            {
+                if (source.Count == 0)
+                    return false;
+
+                if (comparer is null || ReferenceEquals(comparer, EqualityComparer<TSource>.Default))
+                {
+                    if (skipCount == 0 && Count == source.Count && source is ICollection<TSource> collection)
+                        return collection.Contains(value);
+
+                    if (default(TSource) is object)
+                        return DefaultContains(source, value, skipCount, Count);
+                }
+
+                comparer ??= EqualityComparer<TSource>.Default;
+                return ComparerContains(source, value, comparer, skipCount, Count);
+
+                static bool DefaultContains(TEnumerable source, [AllowNull] TSource value, int skipCount, int takeCount)
+                {
+                    using var enumerator = source.GetEnumerator();
+
+                    // skip
+                    for (var counter = 0; counter < skipCount; counter++)
+                    {
+                        if (!enumerator.MoveNext())
+                            Throw.InvalidOperationException();
+                    }
+
+                    // take
+                    for (var counter = 0; counter < takeCount; counter++)
+                    {
+                        if (!enumerator.MoveNext())
+                            Throw.InvalidOperationException();
+
+                        if (EqualityComparer<TSource>.Default.Equals(enumerator.Current, value))
+                            return true;
+                    }
+                    return false;
+                }
+
+                static bool ComparerContains(TEnumerable source, [AllowNull] TSource value, IEqualityComparer<TSource> comparer, int skipCount, int takeCount)
+                {
+                    using var enumerator = source.GetEnumerator();
+
+                    // skip
+                    for (var counter = 0; counter < skipCount; counter++)
+                    {
+                        if (!enumerator.MoveNext())
+                            Throw.InvalidOperationException();
+                    }
+
+                    // take
+                    for (var counter = 0; counter < takeCount; counter++)
+                    {
+                        if (!enumerator.MoveNext())
+                            Throw.InvalidOperationException();
+
+                        if (comparer.Equals(enumerator.Current, value))
+                            return true;
+                    }
+                    return false;
+                }
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]

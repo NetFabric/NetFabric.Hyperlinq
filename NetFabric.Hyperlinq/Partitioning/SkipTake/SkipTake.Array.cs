@@ -58,120 +58,47 @@ namespace NetFabric.Hyperlinq
             bool ICollection<TSource>.IsReadOnly  
                 => true;
 
-            void ICollection<TSource>.CopyTo(TSource[] array, int arrayIndex) 
-            {
-                if (arrayIndex == 0)
-                {
-                    if (skipCount == 0)
-                    {
-                        if (Count == array.Length)
-                        {
-                            for (var index = 0; index < array.Length; index++)
-                                array[index] = source[index];
-                        }
-                        else
-                        {
-                            for (var index = 0; index < Count; index++)
-                                array[index] = source[index];
-                        }
-                    }
-                    else
-                    {
-                        if (Count == array.Length)
-                        {
-                            for (var index = 0; index < array.Length; index++)
-                                array[index] = source[index + skipCount];
-                        }
-                        else
-                        {
-                            for (var index = 0; index < Count; index++)
-                                array[index] = source[index + skipCount];
-                        }
-                    }
-                }
-                else
-                {
-                    if (skipCount == 0)
-                    {
-                        if (Count == array.Length)
-                        {
-                            for (var index = 0; index < array.Length; index++)
-                                array[index + arrayIndex] = source[index];
-                        }
-                        else
-                        {
-                            for (var index = 0; index < Count; index++)
-                                array[index + arrayIndex] = source[index];
-                        }
-                    }
-                    else
-                    {
-                        if (Count == array.Length)
-                        {
-                            for (var index = 0; index < array.Length; index++)
-                                array[index + arrayIndex] = source[index + skipCount];
-                        }
-                        else
-                        {
-                            for (var index = 0; index < Count; index++)
-                                array[index + arrayIndex] = source[index + skipCount];
-                        }
-                    }
-                }
-            }
-            void ICollection<TSource>.Add(TSource item) 
-                => Throw.NotSupportedException();
-            void ICollection<TSource>.Clear() 
-                => Throw.NotSupportedException();
-            bool ICollection<TSource>.Contains(TSource item) 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            bool ICollection<TSource>.Contains(TSource item)
                 => Contains(item);
-            bool ICollection<TSource>.Remove(TSource item) 
-                => Throw.NotSupportedException<bool>();
-            int IList<TSource>.IndexOf(TSource item)
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public void CopyTo(TSource[] array, int arrayIndex) 
+                => Array.Copy(source, skipCount, array, arrayIndex, Count);
+
+            public int IndexOf(TSource item)
             {
+                if (skipCount == 0 && Count == source.Length)
+                    return ((IList<TSource>)source).IndexOf(item);
+
                 if (default(TSource) is object)
                 {
-                    if (skipCount == 0 && Count == source.Length)
+                    var end = skipCount + Count;
+                    for (var index = skipCount; index < end; index++)
                     {
-                        for (var index = 0; index < source.Length; index++)
-                        {
-                            if (EqualityComparer<TSource>.Default.Equals(source[index], item))
-                                return index;
-                        }
-                    }
-                    else
-                    {
-                        var end = skipCount + Count;
-                        for (var index = skipCount; index < end; index++)
-                        {
-                            if (EqualityComparer<TSource>.Default.Equals(source[index], item))
-                                return index - skipCount;
-                        }
+                        if (EqualityComparer<TSource>.Default.Equals(source[index], item))
+                            return index - skipCount;
                     }
                 }
                 else
                 {
                     var defaultComparer = EqualityComparer<TSource>.Default;
-                    if (skipCount == 0 && Count == source.Length)
+                    var end = skipCount + Count;
+                    for (var index = skipCount; index < end; index++)
                     {
-                        for (var index = 0; index < source.Length; index++)
-                        {
-                            if (defaultComparer.Equals(source[index], item))
-                                return index;
-                        }
-                    }
-                    else
-                    {
-                        var end = skipCount + Count;
-                        for (var index = skipCount; index < end; index++)
-                        {
-                            if (defaultComparer.Equals(source[index], item))
-                                return index - skipCount;
-                        }
+                        if (defaultComparer.Equals(source[index], item))
+                            return index - skipCount;
                     }
                 }
                 return -1;
             }
+
+            void ICollection<TSource>.Add(TSource item) 
+                => Throw.NotSupportedException();
+            void ICollection<TSource>.Clear() 
+                => Throw.NotSupportedException();
+            bool ICollection<TSource>.Remove(TSource item) 
+                => Throw.NotSupportedException<bool>();
             void IList<TSource>.Insert(int index, TSource item)
                 => Throw.NotSupportedException();
             void IList<TSource>.RemoveAt(int index)

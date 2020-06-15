@@ -57,7 +57,7 @@ namespace NetFabric.Hyperlinq
             bool ICollection<TSource>.IsReadOnly  
                 => true;
 
-            void ICollection<TSource>.CopyTo(TSource[] array, int arrayIndex) 
+            public void CopyTo(TSource[] array, int arrayIndex) 
             {
                 if (skipCount == 0)
                 {
@@ -68,8 +68,15 @@ namespace NetFabric.Hyperlinq
                     }
                     else
                     {
-                        for (var index = 0; index < Count; index++)
-                            array[index + arrayIndex] = source[index];
+                        if (Count == source.Count && source is ICollection<TSource> collection)
+                        {
+                            collection.CopyTo(array, arrayIndex);
+                        }
+                        else
+                        {
+                            for (var index = 0; index < Count; index++)
+                                array[index + arrayIndex] = source[index];
+                        }
                     }
                 }
                 else
@@ -86,16 +93,16 @@ namespace NetFabric.Hyperlinq
                     }
                 }
             }
-            void ICollection<TSource>.Add(TSource item) 
-                => Throw.NotSupportedException();
-            void ICollection<TSource>.Clear() 
-                => Throw.NotSupportedException();
-            bool ICollection<TSource>.Contains(TSource item) 
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            bool ICollection<TSource>.Contains(TSource item)
                 => Contains(item);
-            bool ICollection<TSource>.Remove(TSource item) 
-                => Throw.NotSupportedException<bool>();
-            int IList<TSource>.IndexOf(TSource item)
+
+            public int IndexOf(TSource item)
             {
+                if (skipCount == 0 && Count == source.Count && source is IList<TSource> list)
+                    return list.IndexOf(item);
+
                 var end = skipCount + Count;
                 if (default(TSource) is object)
                 {
@@ -116,6 +123,13 @@ namespace NetFabric.Hyperlinq
                 }
                 return -1;
             }
+
+            void ICollection<TSource>.Add(TSource item) 
+                => Throw.NotSupportedException();
+            void ICollection<TSource>.Clear() 
+                => Throw.NotSupportedException();
+            bool ICollection<TSource>.Remove(TSource item) 
+                => Throw.NotSupportedException<bool>();
             void IList<TSource>.Insert(int index, TSource item)
                 => Throw.NotSupportedException();
             void IList<TSource>.RemoveAt(int index)

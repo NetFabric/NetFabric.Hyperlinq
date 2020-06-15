@@ -44,23 +44,34 @@ namespace NetFabric.Hyperlinq
             bool ICollection<TSource>.IsReadOnly  
                 => true;
 
-            void ICollection<TSource>.CopyTo(TSource[] array, int arrayIndex) 
+            public void CopyTo(TSource[] array, int arrayIndex) 
             {
-                for (var index = 0; index < source.Count; index++)
-                    array[arrayIndex + index] = source[index];
+                if (source.Count == 0)
+                    return;
+
+                if (source is ICollection<TSource> collection)
+                {
+                    collection.CopyTo(array, arrayIndex);
+                }
+                else
+                {
+                    for (var index = 0; index < source.Count; index++)
+                        array[arrayIndex + index] = source[index];
+                }
             }
 
-            void ICollection<TSource>.Add(TSource item) 
-                => Throw.NotSupportedException();
-            void ICollection<TSource>.Clear() 
-                => Throw.NotSupportedException();
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             bool ICollection<TSource>.Contains(TSource item) 
                 => ReadOnlyListExtensions.Contains(source, item);
-            bool ICollection<TSource>.Remove(TSource item) 
-                => Throw.NotSupportedException<bool>();
-            int IList<TSource>.IndexOf(TSource item)
+
+            public int IndexOf(TSource item)
             {
+                if (source.Count == 0)
+                    return -1;
+
+                if (source is IList<TSource> list)
+                    return list.IndexOf(item);
+
                 if (default(TSource) is object)
                 {
                     for (var index = 0; index < source.Count; index++)
@@ -80,6 +91,13 @@ namespace NetFabric.Hyperlinq
                 }
                 return -1;
             }
+
+            void ICollection<TSource>.Add(TSource item)
+                => Throw.NotSupportedException();
+            bool ICollection<TSource>.Remove(TSource item)
+                => Throw.NotSupportedException<bool>();
+            void ICollection<TSource>.Clear()
+                => Throw.NotSupportedException();
 
             void IList<TSource>.Insert(int index, TSource item)
                 => Throw.NotSupportedException();
@@ -119,7 +137,46 @@ namespace NetFabric.Hyperlinq
                 public readonly void Dispose() { }
             }
 
-            
+            public bool Contains([AllowNull] TSource value, IEqualityComparer<TSource>? comparer = default)
+                => ReadOnlyListExtensions.Contains(source, value, comparer);
+/*
+            {
+                if (source.Count == 0)
+                    return false;
+
+                if (comparer is null || ReferenceEquals(comparer, EqualityComparer<TSource>.Default))
+                {
+                    if (source is ICollection<TSource> collection)
+                        return collection.Contains(value!);
+
+                    if (default(TSource) is object)
+                        return DefaultContains(source, value);
+                }
+
+                comparer ??= EqualityComparer<TSource>.Default;
+                return ComparerContains(source, value, comparer);
+
+                static bool DefaultContains(IReadOnlyList<TSource> source, [AllowNull] TSource value)
+                {
+                    for (var index = 0; index < source.Count; index++)
+                    {
+                        if (EqualityComparer<TSource>.Default.Equals(source[index], value!))
+                            return true;
+                    }
+                    return false;
+                }
+
+                static bool ComparerContains(IReadOnlyList<TSource> source, [AllowNull] TSource value, IEqualityComparer<TSource> comparer)
+                {
+                    for (var index = 0; index < source.Count; index++)
+                    {
+                        if (comparer.Equals(source[index], value!))
+                            return true;
+                    }
+                    return false;
+                }
+            }
+*/
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TSource[] ToArray()
                 => ReadOnlyListExtensions.ToArray<IReadOnlyList<TSource>, TSource>(source);

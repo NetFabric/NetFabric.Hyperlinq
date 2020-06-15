@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 
 namespace NetFabric.Hyperlinq
 {
@@ -47,9 +48,16 @@ namespace NetFabric.Hyperlinq
             bool ICollection<TSource>.IsReadOnly  
                 => true;
 
-            void ICollection<TSource>.CopyTo(TSource[] array, int arrayIndex) 
+            public void CopyTo(TSource[] array, int arrayIndex) 
             {
-                if (source.Count != 0)
+                if (source.Count == 0)
+                    return;
+
+                if (source is ICollection<TSource> collection)
+                {
+                    collection.CopyTo(array, arrayIndex);
+                }
+                else
                 {
                     checked
                     {
@@ -60,17 +68,57 @@ namespace NetFabric.Hyperlinq
                 }
             }
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            bool ICollection<TSource>.Contains(TSource item)
+                => Contains(item);
+
             void ICollection<TSource>.Add(TSource item) 
                 => Throw.NotSupportedException();
             void ICollection<TSource>.Clear() 
                 => Throw.NotSupportedException();
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            bool ICollection<TSource>.Contains(TSource item)
-                => ReadOnlyCollectionExtensions.Contains(source, item);
             bool ICollection<TSource>.Remove(TSource item) 
                 => Throw.NotSupportedException<bool>();
 
-            
+            public bool Contains([MaybeNull] TSource value, IEqualityComparer<TSource>? comparer = default)
+            {
+                if (source.Count == 0)
+                    return false;
+
+                if (comparer is null || ReferenceEquals(comparer, EqualityComparer<TSource>.Default))
+                {
+                    if (source is ICollection<TSource> collection)
+                        return collection.Contains(value!);
+
+                    if (default(TSource) is object)
+                        return DefaultContains(this, value);
+                }
+
+                comparer ??= EqualityComparer<TSource>.Default;
+                return ComparerContains(this, value, comparer);
+
+                static bool DefaultContains(ValueEnumerableWrapper<TEnumerable, TEnumerator, TSource> source, [AllowNull] TSource value)
+                {
+                    using var enumerator = source.GetEnumerator();
+                    while (enumerator.MoveNext())
+                    {
+                        if (EqualityComparer<TSource>.Default.Equals(enumerator.Current, value!))
+                            return true;
+                    }
+                    return false;
+                }
+
+                static bool ComparerContains(ValueEnumerableWrapper<TEnumerable, TEnumerator, TSource> source, [AllowNull] TSource value, IEqualityComparer<TSource> comparer)
+                {
+                    using var enumerator = source.GetEnumerator();
+                    while (enumerator.MoveNext())
+                    {
+                        if (comparer.Equals(enumerator.Current, value!))
+                            return true;
+                    }
+                    return false;
+                }
+            }
+
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TSource[] ToArray()
                 => ReadOnlyCollectionExtensions.ToArray(source);
@@ -102,9 +150,16 @@ namespace NetFabric.Hyperlinq
             bool ICollection<TSource>.IsReadOnly  
                 => true;
 
-            void ICollection<TSource>.CopyTo(TSource[] array, int arrayIndex) 
+            public void CopyTo(TSource[] array, int arrayIndex) 
             {
-                if (source.Count != 0)
+                if (source.Count == 0)
+                    return;
+
+                if (source is ICollection<TSource> collection)
+                {
+                    collection.CopyTo(array, arrayIndex);
+                }
+                else
                 {
                     checked
                     {
@@ -115,12 +170,14 @@ namespace NetFabric.Hyperlinq
                 }
             }
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            bool ICollection<TSource>.Contains(TSource item)
+                => Contains(item);
+
             void ICollection<TSource>.Add(TSource item) 
                 => Throw.NotSupportedException();
             void ICollection<TSource>.Clear() 
                 => Throw.NotSupportedException();
-            bool ICollection<TSource>.Contains(TSource item)
-                => ReadOnlyCollectionExtensions.Contains(source, item);
             bool ICollection<TSource>.Remove(TSource item) 
                 => Throw.NotSupportedException<bool>();
 
@@ -154,7 +211,46 @@ namespace NetFabric.Hyperlinq
                     => enumerator.Dispose();
             }
 
-            
+            public bool Contains([MaybeNull] TSource value, IEqualityComparer<TSource>? comparer = default)
+            {
+                if (source.Count == 0)
+                    return false;
+
+                if (comparer is null || ReferenceEquals(comparer, EqualityComparer<TSource>.Default))
+                {
+                    if (source is ICollection<TSource> collection)
+                        return collection.Contains(value!);
+
+                    if (default(TSource) is object)
+                        return DefaultContains(this, value);
+                }
+
+                comparer ??= EqualityComparer<TSource>.Default;
+                return ComparerContains(this, value, comparer);
+
+                static bool DefaultContains(ValueEnumerableWrapper<TSource> source, [AllowNull] TSource value)
+                {
+                    using var enumerator = source.GetEnumerator();
+                    while (enumerator.MoveNext())
+                    {
+                        if (EqualityComparer<TSource>.Default.Equals(enumerator.Current, value!))
+                            return true;
+                    }
+                    return false;
+                }
+
+                static bool ComparerContains(ValueEnumerableWrapper<TSource> source, [AllowNull] TSource value, IEqualityComparer<TSource> comparer)
+                {
+                    using var enumerator = source.GetEnumerator();
+                    while (enumerator.MoveNext())
+                    {
+                        if (comparer.Equals(enumerator.Current, value!))
+                            return true;
+                    }
+                    return false;
+                }
+            }
+
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TSource[] ToArray()
                 => ReadOnlyCollectionExtensions.ToArray(source);
