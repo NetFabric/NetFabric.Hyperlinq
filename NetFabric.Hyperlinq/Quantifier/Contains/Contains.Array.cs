@@ -11,7 +11,7 @@ namespace NetFabric.Hyperlinq
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool Contains<TSource>(this TSource[] source, [AllowNull] TSource value)
-            => ((ICollection<TSource>)source).Contains(value!);
+            => ((ICollection<TSource>)source).Contains(value);
 
 #if SPAN_SUPPORTED
 
@@ -28,24 +28,11 @@ namespace NetFabric.Hyperlinq
             if (source.Length == 0)
                 return false;
 
-            if (comparer is null)
+            if (comparer is null || ReferenceEquals(comparer, EqualityComparer<TSource>.Default))
                 return ((ICollection<TSource>)source).Contains(value);
-
-            if (Utils.UseDefault(comparer))
-                return DefaultContains(source, value);
 
             comparer ??= EqualityComparer<TSource>.Default;
             return ComparerContains(source, value, comparer);
-
-            static bool DefaultContains(TSource[] source, [AllowNull] TSource value)
-            {
-                for (var index = 0; index < source.Length; index++)
-                {
-                    if (EqualityComparer<TSource>.Default.Equals(source[index], value))
-                        return true;
-                }
-                return false;
-            }
 
             static bool ComparerContains(TSource[] source, [AllowNull] TSource value, IEqualityComparer<TSource> comparer)
             {
@@ -63,8 +50,14 @@ namespace NetFabric.Hyperlinq
             if (takeCount == 0)
                 return false;
 
-            if (Utils.UseDefault(comparer))
-                return DefaultContains(source, value, skipCount, takeCount);
+            if (comparer is null || ReferenceEquals(comparer, EqualityComparer<TSource>.Default))
+            {
+                if (skipCount == 0 && takeCount == source.Length)
+                    return ((ICollection<TSource>)source).Contains(value);
+
+                if (default(TSource) is object)
+                    return DefaultContains(source, value, skipCount, takeCount);
+            }
 
             comparer ??= EqualityComparer<TSource>.Default;
             return ComparerContains(source, value, comparer, skipCount, takeCount);

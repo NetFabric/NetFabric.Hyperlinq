@@ -11,11 +11,14 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
-            if (comparer is null && source is ICollection<TSource> collection)
-                return collection.Contains(value!);
+            if (comparer is null || ReferenceEquals(comparer, EqualityComparer<TSource>.Default))
+            {
+                if (source is ICollection<TSource> collection)
+                    return collection.Contains(value!);
 
-            if (Utils.UseDefault(comparer))
-                return DefaultContains(source, value);
+                if (default(TSource) is object)
+                    return DefaultContains(source, value);
+            }
 
             comparer ??= EqualityComparer<TSource>.Default;
             return ComparerContains(source, value, comparer);

@@ -20,11 +20,14 @@ namespace NetFabric.Hyperlinq
             if (takeCount == 0)
                 return false;
 
-            if (comparer is null && source is ICollection<TSource> collection)
-                return collection.Contains(value!);
+            if (comparer is null || ReferenceEquals(comparer, EqualityComparer<TSource>.Default))
+            {
+                if (skipCount == 0 && takeCount == source.Count && source is ICollection<TSource> collection)
+                    return collection.Contains(value);
 
-            if (Utils.UseDefault(comparer))
-                return DefaultContains(source, value, skipCount, takeCount);
+                if (default(TSource) is object)
+                    return DefaultContains(source, value, skipCount, takeCount);
+            }
 
             comparer ??= EqualityComparer<TSource>.Default;
             return ComparerContains(source, value, comparer, skipCount, takeCount);
