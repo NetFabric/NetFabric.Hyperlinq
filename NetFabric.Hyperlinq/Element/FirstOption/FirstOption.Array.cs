@@ -9,17 +9,17 @@ namespace NetFabric.Hyperlinq
 #if SPAN_SUPPORTED
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Option<TSource> First<TSource>(this TSource[] source)
-            => First<TSource>((ReadOnlySpan<TSource>)source.AsSpan());
+        public static Option<TSource> FirstOption<TSource>(this TSource[] source)
+            => FirstOption<TSource>((ReadOnlySpan<TSource>)source.AsSpan());
 
 #else
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Option<TSource> First<TSource>(this TSource[] source)
-            => First(source, 0, source.Length);
+        public static Option<TSource> FirstOption<TSource>(this TSource[] source)
+            => FirstOption(source, 0, source.Length);
 
 
-        static Option<TSource> First<TSource>(this TSource[] source, int skipCount, int takeCount)
+        static Option<TSource> FirstOption<TSource>(this TSource[] source, int skipCount, int takeCount)
             => takeCount switch
             {
                 0 => Option.None,
@@ -27,7 +27,7 @@ namespace NetFabric.Hyperlinq
             };
 
 
-        static Option<TSource> First<TSource>(this TSource[] source, Predicate<TSource> predicate, int skipCount, int takeCount)
+        static Option<TSource> FirstOption<TSource>(this TSource[] source, Predicate<TSource> predicate, int skipCount, int takeCount)
         {
             if (skipCount == 0 && takeCount == source.Length)
             {
@@ -52,7 +52,7 @@ namespace NetFabric.Hyperlinq
         }
 
 
-        static Option<TSource> First<TSource>(this TSource[] source, PredicateAt<TSource> predicate, int skipCount, int takeCount)
+        static Option<TSource> FirstOption<TSource>(this TSource[] source, PredicateAt<TSource> predicate, int skipCount, int takeCount)
         {
             if (skipCount == 0)
             {
@@ -89,7 +89,7 @@ namespace NetFabric.Hyperlinq
 
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static Option<TResult> First<TSource, TResult>(this TSource[] source, NullableSelector<TSource, TResult> selector, int skipCount, int takeCount)
+        static Option<TResult> FirstOption<TSource, TResult>(this TSource[] source, NullableSelector<TSource, TResult> selector, int skipCount, int takeCount)
             => takeCount switch
             {
                 0 => Option.None,
@@ -98,7 +98,7 @@ namespace NetFabric.Hyperlinq
 
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static Option<TResult> First<TSource, TResult>(this TSource[] source, NullableSelectorAt<TSource, TResult> selector, int skipCount, int takeCount)
+        static Option<TResult> FirstOption<TSource, TResult>(this TSource[] source, NullableSelectorAt<TSource, TResult> selector, int skipCount, int takeCount)
             => takeCount switch
             {
                 0 => Option.None,
@@ -106,7 +106,7 @@ namespace NetFabric.Hyperlinq
             };
 
 
-        static Option<TResult> First<TSource, TResult>(this TSource[] source, Predicate<TSource> predicate, NullableSelector<TSource, TResult> selector, int skipCount, int takeCount)
+        static Option<TResult> FirstOption<TSource, TResult>(this TSource[] source, Predicate<TSource> predicate, NullableSelector<TSource, TResult> selector, int skipCount, int takeCount)
         {
             if (skipCount == 0 && takeCount == source.Length)
             {

@@ -48,7 +48,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [BenchmarkCategory("Array")]
         [Benchmark]
         public Option<int> Hyperlinq_Array() =>
-            array.Where(value => value == Count - 1).First();
+            array.Where(value => value == Count - 1).FirstOption();
 
 #if SPAN_SUPPORTED
         [BenchmarkCategory("Array")]
@@ -67,21 +67,21 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public Option<int> Hyperlinq_Enumerable_Value() =>
             EnumerableExtensions.AsValueEnumerable<TestEnumerable.Enumerable, TestEnumerable.Enumerable.Enumerator, int>(enumerableValue, enumerable => enumerable.GetEnumerator())
             .Where(value => value == Count - 1)
-            .First();
+            .FirstOption();
 
         [BenchmarkCategory("Collection_Value")]
         [Benchmark]
         public Option<int> Hyperlinq_Collection_Value() =>
             ReadOnlyCollectionExtensions.AsValueEnumerable<TestCollection.Enumerable, TestCollection.Enumerable.Enumerator, int>(collectionValue, enumerable => enumerable.GetEnumerator())
             .Where(value => value == Count - 1)
-            .First();
+            .FirstOption();
 
         [BenchmarkCategory("List_Value")]
         [Benchmark]
         public Option<int> Hyperlinq_List_Value() =>
             ReadOnlyListExtensions.AsValueEnumerable<int>(listValue)
                 .Where(value => value == Count - 1)
-                .First();
+                .FirstOption();
 
         [BenchmarkCategory("Enumerable_Reference")]
         [Benchmark]
@@ -89,7 +89,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
             enumerableReference
                 .AsValueEnumerable()
                 .Where(value => value == Count - 1)
-                .First();
+                .FirstOption();
 
         [BenchmarkCategory("Collection_Reference")]
         [Benchmark]
@@ -97,7 +97,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
             collectionReference
                 .AsValueEnumerable()
                 .Where(value => value == Count - 1).
-                First();
+                FirstOption();
 
         [BenchmarkCategory("List_Reference")]
         [Benchmark]
@@ -105,6 +105,6 @@ namespace NetFabric.Hyperlinq.Benchmarks
             listReference
                 .AsValueEnumerable()
                 .Where(value => value == Count - 1)
-                .First();
+                .FirstOption();
     }
 }

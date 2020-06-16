@@ -82,7 +82,7 @@ namespace NetFabric.Hyperlinq
 
         
         public static Option<TSource> First<TSource>(this ImmutableHashSet<TSource> source)
-            => ValueReadOnlyCollectionExtensions.First<ValueWrapper<TSource>, ImmutableHashSet<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source));
+            => ValueReadOnlyCollectionExtensions.FirstOption<ValueWrapper<TSource>, ImmutableHashSet<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source));
 
         
         public static Option<TSource> Single<TSource>(this ImmutableHashSet<TSource> source)

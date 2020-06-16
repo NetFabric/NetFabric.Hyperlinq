@@ -128,8 +128,8 @@ namespace NetFabric.Hyperlinq
             public Option<TResult> ElementAt(int index)
                 => ReadOnlyListExtensions.ElementAt<TList, TSource, TResult>(source, index, predicate, selector, skipCount, takeCount);
 
-            public Option<TResult> First()
-                => ReadOnlyListExtensions.First<TList, TSource, TResult>(source, predicate, selector, skipCount, takeCount);
+            public Option<TResult> FirstOption()
+                => ReadOnlyListExtensions.FirstOption<TList, TSource, TResult>(source, predicate, selector, skipCount, takeCount);
 
             public Option<TResult> Single()
                 => ReadOnlyListExtensions.Single<TList, TSource, TResult>(source, predicate, selector, skipCount, takeCount);

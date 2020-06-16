@@ -80,7 +80,7 @@ namespace NetFabric.Hyperlinq
 
         
         public static Option<KeyValuePair<TKey, TValue>> First<TKey, TValue>(this SortedDictionary<TKey, TValue> source)
-            => ValueReadOnlyCollectionExtensions.First<ValueWrapper<TKey, TValue>, SortedDictionary<TKey, TValue>.Enumerator, KeyValuePair<TKey, TValue>>(new ValueWrapper<TKey, TValue>(source));
+            => ValueReadOnlyCollectionExtensions.FirstOption<ValueWrapper<TKey, TValue>, SortedDictionary<TKey, TValue>.Enumerator, KeyValuePair<TKey, TValue>>(new ValueWrapper<TKey, TValue>(source));
 
         
         public static Option<KeyValuePair<TKey, TValue>> Single<TKey, TValue>(this SortedDictionary<TKey, TValue> source)

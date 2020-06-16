@@ -77,5 +77,13 @@
   </ItemGroup>
   
   <Import Project="..\NetFabric.Hyperlinq.Generator\build\NetFabric.Hyperlinq.Generator.props" />
+  
+  <ItemGroup>
+    <UpToDateCheck Remove="Element\FirstOption\FirstOption.Array.cs" />
+    <UpToDateCheck Remove="Element\FirstOption\FirstOption.ReadOnlyList.cs" />
+    <UpToDateCheck Remove="Element\FirstOption\FirstOption.ValueEnumerable.cs" />
+    <UpToDateCheck Remove="Element\FirstOption\FirstOption.ValueReadOnlyCollection.cs" />
+    <UpToDateCheck Remove="Element\FirstOption\FirstOptionAsync.AsyncValueEnumerable.cs" />
+  </ItemGroup>
 
 </Project>

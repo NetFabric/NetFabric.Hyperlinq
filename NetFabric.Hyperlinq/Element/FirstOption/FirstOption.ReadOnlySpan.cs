@@ -7,13 +7,13 @@ namespace NetFabric.Hyperlinq
     {
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Option<TSource> First<TSource>(this ReadOnlySpan<TSource> source) 
+        public static Option<TSource> FirstOption<TSource>(this ReadOnlySpan<TSource> source) 
             => source.Length == 0 
                 ? Option.None
                 : Option.Some(source[0]);
 
         
-        static Option<TSource> First<TSource>(this ReadOnlySpan<TSource> source, Predicate<TSource> predicate)
+        static Option<TSource> FirstOption<TSource>(this ReadOnlySpan<TSource> source, Predicate<TSource> predicate)
         {
             for (var index = 0; index < source.Length; index++)
             {
@@ -24,7 +24,7 @@ namespace NetFabric.Hyperlinq
         }
 
         
-        static Option<TSource> First<TSource>(this ReadOnlySpan<TSource> source, PredicateAt<TSource> predicate)
+        static Option<TSource> FirstOption<TSource>(this ReadOnlySpan<TSource> source, PredicateAt<TSource> predicate)
         {
             for (var index = 0; index < source.Length; index++)
             {
@@ -36,7 +36,7 @@ namespace NetFabric.Hyperlinq
 
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static Option<TResult> First<TSource, TResult>(this ReadOnlySpan<TSource> source, NullableSelector<TSource, TResult> selector)
+        static Option<TResult> FirstOption<TSource, TResult>(this ReadOnlySpan<TSource> source, NullableSelector<TSource, TResult> selector)
             => source.Length switch
             {
                 0 => Option.None,
@@ -45,7 +45,7 @@ namespace NetFabric.Hyperlinq
 
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static Option<TResult> First<TSource, TResult>(this ReadOnlySpan<TSource> source, NullableSelectorAt<TSource, TResult> selector)
+        static Option<TResult> FirstOption<TSource, TResult>(this ReadOnlySpan<TSource> source, NullableSelectorAt<TSource, TResult> selector)
             => source.Length switch
             {
                 0 => Option.None,
@@ -53,7 +53,7 @@ namespace NetFabric.Hyperlinq
             };
 
         
-        static Option<TResult> First<TSource, TResult>(this ReadOnlySpan<TSource> source, Predicate<TSource> predicate, NullableSelector<TSource, TResult> selector)
+        static Option<TResult> FirstOption<TSource, TResult>(this ReadOnlySpan<TSource> source, Predicate<TSource> predicate, NullableSelector<TSource, TResult> selector)
         {
             for (var index = 0; index < source.Length; index++)
             {

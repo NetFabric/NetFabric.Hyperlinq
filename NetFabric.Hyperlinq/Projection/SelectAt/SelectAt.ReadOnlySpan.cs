@@ -79,7 +79,7 @@ namespace NetFabric.Hyperlinq
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Option<TResult> First()
-                => ArrayExtensions.First<TSource, TResult>(source, selector);
+                => ArrayExtensions.FirstOption<TSource, TResult>(source, selector);
 
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]

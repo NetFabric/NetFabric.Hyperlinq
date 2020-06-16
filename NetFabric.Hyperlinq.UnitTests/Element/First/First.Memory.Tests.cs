@@ -14,7 +14,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
 
             // Act
             var result = ArrayExtensions
-                .First<int>(source.AsMemory());
+                .FirstOption<int>(source.AsMemory());
 
             // Assert
             _ = result.Must()
@@ -33,7 +33,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
 
             // Act
             var result = ArrayExtensions
-                .First<int>(source.AsMemory());
+                .FirstOption<int>(source.AsMemory());
 
             // Assert
             _ = result.Match(

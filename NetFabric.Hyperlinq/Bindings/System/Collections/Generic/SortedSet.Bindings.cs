@@ -81,7 +81,7 @@ namespace NetFabric.Hyperlinq
 
         
         public static Option<TSource> First<TSource>(this SortedSet<TSource> source)
-            => ValueReadOnlyCollectionExtensions.First<ValueWrapper<TSource>, SortedSet<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source));
+            => ValueReadOnlyCollectionExtensions.FirstOption<ValueWrapper<TSource>, SortedSet<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source));
 
         
         public static Option<TSource> Single<TSource>(this SortedSet<TSource> source)

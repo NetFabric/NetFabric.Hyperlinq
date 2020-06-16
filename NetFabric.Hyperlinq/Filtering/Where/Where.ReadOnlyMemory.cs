@@ -130,7 +130,7 @@ namespace NetFabric.Hyperlinq
                 => ArrayExtensions.ElementAt(source.Span, index, predicate);
 
             public Option<TSource> First()
-                => ArrayExtensions.First(source.Span, predicate);
+                => ArrayExtensions.FirstOption(source.Span, predicate);
 
             public Option<TSource> Single()
 #pragma warning disable HLQ005 // Avoid Single() and SingleOrDefault()

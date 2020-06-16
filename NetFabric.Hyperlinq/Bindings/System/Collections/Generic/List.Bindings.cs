@@ -80,7 +80,7 @@ namespace NetFabric.Hyperlinq
 
         
         public static Option<TSource> First<TSource>(this List<TSource> source)
-            => ReadOnlyListExtensions.First<List<TSource>, TSource>(source);
+            => ReadOnlyListExtensions.FirstOption<List<TSource>, TSource>(source);
 
         
         public static Option<TSource> Single<TSource>(this List<TSource> source)

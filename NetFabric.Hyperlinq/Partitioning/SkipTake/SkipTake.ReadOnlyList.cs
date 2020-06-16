@@ -227,8 +227,8 @@ namespace NetFabric.Hyperlinq
 
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public Option<TSource> First()
-                => ReadOnlyListExtensions.First<TList, TSource>(source, skipCount, Count);
+            public Option<TSource> FirstOption()
+                => ReadOnlyListExtensions.FirstOption<TList, TSource>(source, skipCount, Count);
 
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]

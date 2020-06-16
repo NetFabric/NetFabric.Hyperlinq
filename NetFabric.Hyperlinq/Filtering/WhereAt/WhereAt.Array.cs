@@ -135,8 +135,8 @@ namespace NetFabric.Hyperlinq
             public Option<TSource> ElementAt(int index)
                 => ArrayExtensions.ElementAt<TSource>(source, index, predicate, skipCount, takeCount);
 
-            public Option<TSource> First()
-                => ArrayExtensions.First<TSource>(source, predicate, skipCount, takeCount);
+            public Option<TSource> FirstOption()
+                => ArrayExtensions.FirstOption<TSource>(source, predicate, skipCount, takeCount);
 
             public Option<TSource> Single()
                 => ArrayExtensions.Single<TSource>(source, predicate, skipCount, takeCount);

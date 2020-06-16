@@ -7,7 +7,7 @@ namespace NetFabric.Hyperlinq
     public static partial class ValueEnumerableExtensions
     {
         
-        public static Option<TSource> First<TEnumerable, TEnumerator, TSource>(this TEnumerable source) 
+        public static Option<TSource> FirstOption<TEnumerable, TEnumerator, TSource>(this TEnumerable source) 
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
@@ -17,8 +17,8 @@ namespace NetFabric.Hyperlinq
                 : Option.None;
         }
 
-        
-        static Option<TSource> First<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Predicate<TSource> predicate) 
+
+        internal static Option<TSource> FirstOption<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Predicate<TSource> predicate) 
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
@@ -33,8 +33,8 @@ namespace NetFabric.Hyperlinq
             return Option.None;
         }
 
-        
-        static Option<TSource> First<TEnumerable, TEnumerator, TSource>(this TEnumerable source, PredicateAt<TSource> predicate) 
+
+        internal static Option<TSource> FirstOption<TEnumerable, TEnumerator, TSource>(this TEnumerable source, PredicateAt<TSource> predicate) 
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
@@ -53,7 +53,7 @@ namespace NetFabric.Hyperlinq
 
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Option<TResult> First<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, NullableSelector<TSource, TResult> selector) 
+        internal static Option<TResult> FirstOption<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, NullableSelector<TSource, TResult> selector) 
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
@@ -65,7 +65,7 @@ namespace NetFabric.Hyperlinq
 
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Option<TResult> First<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, NullableSelectorAt<TSource, TResult> selector) 
+        internal static Option<TResult> FirstOption<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, NullableSelectorAt<TSource, TResult> selector) 
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
@@ -75,8 +75,8 @@ namespace NetFabric.Hyperlinq
                 : Option.None;
         }
 
-        
-        static Option<TResult> First<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, Predicate<TSource> predicate, NullableSelector<TSource, TResult> selector) 
+
+        internal static Option<TResult> FirstOption<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, Predicate<TSource> predicate, NullableSelector<TSource, TResult> selector) 
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {

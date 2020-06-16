@@ -82,7 +82,7 @@ namespace NetFabric.Hyperlinq
 
         
         public static Option<TSource> First<TSource>(this ImmutableQueue<TSource> source)
-            => ValueEnumerableExtensions.First<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source));
+            => ValueEnumerableExtensions.FirstOption<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source));
 
         
         public static Option<TSource> Single<TSource>(this ImmutableQueue<TSource> source)

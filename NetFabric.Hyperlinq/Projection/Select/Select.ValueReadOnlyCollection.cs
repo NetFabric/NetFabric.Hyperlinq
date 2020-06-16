@@ -126,8 +126,8 @@ namespace NetFabric.Hyperlinq
                 => ValueReadOnlyCollectionExtensions.ElementAt<TEnumerable, TEnumerator, TSource, TResult>(source, index, selector);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public Option<TResult> First()
-                => ValueReadOnlyCollectionExtensions.First<TEnumerable, TEnumerator, TSource, TResult>(source, selector);
+            public Option<TResult> FirstOption()
+                => ValueReadOnlyCollectionExtensions.FirstOption<TEnumerable, TEnumerator, TSource, TResult>(source, selector);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Option<TResult> Single()

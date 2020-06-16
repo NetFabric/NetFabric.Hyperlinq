@@ -213,7 +213,7 @@ namespace NetFabric.Hyperlinq
 
 
             public ValueTask<Option<TResult>> FirstAsync(CancellationToken cancellationToken = default)
-                => AsyncValueEnumerableExtensions.FirstAsync<TEnumerable, TEnumerator, TSource, TResult>(source, selector, cancellationToken);
+                => AsyncValueEnumerableExtensions.FirstOptionAsync<TEnumerable, TEnumerator, TSource, TResult>(source, selector, cancellationToken);
 
 
             public ValueTask<Option<TResult>> SingleAsync(CancellationToken cancellationToken = default)

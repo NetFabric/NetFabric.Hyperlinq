@@ -122,7 +122,7 @@ namespace NetFabric.Hyperlinq
                 => ArrayExtensions.ElementAt<TSource>(source.Span, index, predicate);
 
             public Option<TSource> First()
-                => ArrayExtensions.First<TSource>(source.Span, predicate);
+                => ArrayExtensions.FirstOption<TSource>(source.Span, predicate);
 
             public Option<TSource> Single()
                 => ArrayExtensions.Single<TSource>(source.Span, predicate);

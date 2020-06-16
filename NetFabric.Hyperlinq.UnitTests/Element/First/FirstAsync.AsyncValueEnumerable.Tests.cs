@@ -17,7 +17,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.FirstAsync
 
             // Act
             var result = await AsyncValueEnumerableExtensions
-                .FirstAsync<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(wrapped);
+                .FirstOptionAsync<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(wrapped);
 
             // Assert
             _ = result.Must()
@@ -38,7 +38,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.FirstAsync
 
             // Act
             var result = await AsyncValueEnumerableExtensions
-                .FirstAsync<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(wrapped);
+                .FirstOptionAsync<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(wrapped);
 
             // Assert
             _ = result.Match(

@@ -100,8 +100,8 @@ namespace NetFabric.Hyperlinq
                 => ValueEnumerableExtensions.ElementAt<TEnumerable, TEnumerator, TSource, TResult>(source, index, selector);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public Option<TResult> First()
-                => ValueEnumerableExtensions.First<TEnumerable, TEnumerator, TSource, TResult>(source, selector);
+            public Option<TResult> FirstOption()
+                => ValueEnumerableExtensions.FirstOption<TEnumerable, TEnumerator, TSource, TResult>(source, selector);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Option<TResult> Single()

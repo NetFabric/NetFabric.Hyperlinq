@@ -16,7 +16,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
 
             // Act
             var result = ReadOnlyListExtensions
-                .First<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped);
+                .FirstOption<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped);
 
             // Assert
             _ = result.Must()
@@ -37,7 +37,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
 
             // Act
             var result = ReadOnlyListExtensions
-                .First<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped);
+                .FirstOption<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped);
 
             // Assert
             _ = result.Match(
@@ -57,7 +57,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
             var result = ReadOnlyListExtensions
                 .Skip<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped, skipCount)
                 .Take(takeCount)
-                .First();
+                .FirstOption();
 
             // Assert
             _ = result.Must()
@@ -82,7 +82,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
             var result = ReadOnlyListExtensions
                 .Skip<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped, skipCount)
                 .Take(takeCount)
-                .First();
+                .FirstOption();
 
             // Assert
             _ = result.Match(
@@ -103,7 +103,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
                 .Skip<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped, skipCount)
                 .Take(takeCount)
                 .Where(predicate)
-                .First();
+                .FirstOption();
 
             // Assert
             _ = result.Must()
@@ -130,7 +130,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
                 .Skip<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped, skipCount)
                 .Take(takeCount)
                 .Where(predicate)
-                .First();
+                .FirstOption();
 
             // Assert
             _ = result.Match(
@@ -151,7 +151,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
                 .Skip<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped, skipCount)
                 .Take(takeCount)
                 .Where(predicate)
-                .First();
+                .FirstOption();
 
             // Assert
             _ = result.Must()
@@ -178,7 +178,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
                 .Skip<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped, skipCount)
                 .Take(takeCount)
                 .Where(predicate)
-                .First();
+                .FirstOption();
 
             // Assert
             _ = result.Match(
@@ -199,7 +199,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
                 .Skip<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped, skipCount)
                 .Take(takeCount)
                 .Select(selector)
-                .First();
+                .FirstOption();
 
             // Assert
             _ = result.Must()
@@ -226,7 +226,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
                 .Skip<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped, skipCount)
                 .Take(takeCount)
                 .Select(selector)
-                .First();
+                .FirstOption();
 
             // Assert
             _ = result.Match(
@@ -247,7 +247,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
                 .Skip<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped, skipCount)
                 .Take(takeCount)
                 .Select(selector)
-                .First();
+                .FirstOption();
 
             // Assert
             _ = result.Must()
@@ -274,7 +274,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
                 .Skip<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped, skipCount)
                 .Take(takeCount)
                 .Select(selector)
-                .First();
+                .FirstOption();
 
             // Assert
             _ = result.Match(
@@ -296,7 +296,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
                 .Take(takeCount)
                 .Where(predicate)
                 .Select(selector)
-                .First();
+                .FirstOption();
 
             // Assert
             _ = result.Must()
@@ -325,7 +325,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
                 .Take(takeCount)
                 .Where(predicate)
                 .Select(selector)
-                .First();
+                .FirstOption();
 
             // Assert
             _ = result.Match(

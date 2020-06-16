@@ -16,7 +16,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
 
             // Act
             var result = ValueEnumerableExtensions
-                .First<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(wrapped);
+                .FirstOption<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(wrapped);
 
             // Assert
             _ = result.Must()
@@ -37,7 +37,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
 
             // Act
             var result = ValueEnumerableExtensions
-                .First<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(wrapped);
+                .FirstOption<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(wrapped);
 
             // Assert
             _ = result.Match(
@@ -56,7 +56,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
             // Act
             var result = ValueEnumerableExtensions
                 .Where<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(wrapped, predicate)
-                .First();
+                .FirstOption();
 
             // Assert
             _ = result.Must()
@@ -78,7 +78,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
             // Act
             var result = ValueEnumerableExtensions
                 .Where<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(wrapped, predicate)
-                .First();
+                .FirstOption();
 
             // Assert
             _ = result.Match(
@@ -97,7 +97,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
             // Act
             var result = ValueEnumerableExtensions
                 .Where<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(wrapped, predicate)
-                .First();
+                .FirstOption();
 
             // Assert
             _ = result.Must()
@@ -120,7 +120,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
             // Act
             var result = ValueEnumerableExtensions
                 .Where<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(wrapped, predicate)
-                .First();
+                .FirstOption();
 
             // Assert
             _ = result.Match(
@@ -139,7 +139,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
             // Act
             var result = ValueEnumerableExtensions
                 .Select<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int, string>(wrapped, selector)
-                .First();
+                .FirstOption();
 
             // Assert
             _ = result.Must()
@@ -162,7 +162,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
             // Act
             var result = ValueEnumerableExtensions
                 .Select<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int, string>(wrapped, selector)
-                .First();
+                .FirstOption();
 
             // Assert
             _ = result.Match(
@@ -181,7 +181,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
             // Act
             var result = ValueEnumerableExtensions
                 .Select<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int, string>(wrapped, selector)
-                .First();
+                .FirstOption();
 
             // Assert
             _ = result.Must()
@@ -204,7 +204,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
             // Act
             var result = ValueEnumerableExtensions
                 .Select<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int, string>(wrapped, selector)
-                .First();
+                .FirstOption();
 
             // Assert
             _ = result.Match(
@@ -224,7 +224,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
             var result = ValueEnumerableExtensions
                 .Where<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(wrapped, predicate)
                 .Select(selector)
-                .First();
+                .FirstOption();
 
             // Assert
             _ = result.Must()
@@ -249,7 +249,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
             var result = ValueEnumerableExtensions
                 .Where<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(wrapped, predicate)
                 .Select(selector)
-                .First();
+                .FirstOption();
 
             // Assert
             _ = result.Match(

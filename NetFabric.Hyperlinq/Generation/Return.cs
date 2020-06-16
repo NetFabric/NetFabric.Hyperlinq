@@ -148,7 +148,7 @@ namespace NetFabric.Hyperlinq
                 => index == 0 ? Option.Some(value) : Option.None;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public Option<TSource> First()
+            public Option<TSource> FirstOption()
                 => Option.Some(value);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]

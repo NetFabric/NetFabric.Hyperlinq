@@ -54,18 +54,18 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [BenchmarkCategory("Array")]
         [Benchmark]
         public Option<int> Hyperlinq_Array() =>
-            array.First();
+            array.FirstOption();
 
 #if SPAN_SUPPORTED
         [BenchmarkCategory("Array")]
         [Benchmark]
         public Option<int> Hyperlinq_Span() =>
-            array.AsSpan().First();
+            array.AsSpan().FirstOption();
 
         [BenchmarkCategory("Array")]
         [Benchmark]
         public Option<int> Hyperlinq_Memory() =>
-            memory.First();
+            memory.FirstOption();
 #endif
 
         [BenchmarkCategory("Enumerable_Value")]

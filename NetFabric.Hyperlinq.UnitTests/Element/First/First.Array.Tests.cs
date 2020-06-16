@@ -14,7 +14,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
 
             // Act
             var result = ArrayExtensions
-                .First<int>(source);
+                .FirstOption<int>(source);
 
             // Assert
             _ = result.Must()
@@ -33,7 +33,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
 
             // Act
             var result = ArrayExtensions
-                .First<int>(source);
+                .FirstOption<int>(source);
 
             // Assert
             _ = result.Match(
@@ -50,7 +50,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
             // Act
             var result = ArrayExtensions
                 .Where<int>(source, predicate)
-                .First();
+                .FirstOption();
 
             // Assert
             _ = result.Must()
@@ -70,7 +70,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
             // Act
             var result = ArrayExtensions
                 .Where<int>(source, predicate)
-                .First();
+                .FirstOption();
 
             // Assert
             _ = result.Match(
@@ -87,7 +87,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
             // Act
             var result = ArrayExtensions
                 .Where<int>(source, predicate)
-                .First();
+                .FirstOption();
 
             // Assert
             _ = result.Must()
@@ -108,7 +108,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
             // Act
             var result = ArrayExtensions
                 .Where<int>(source, predicate)
-                .First();
+                .FirstOption();
 
             // Assert
             _ = result.Match(
@@ -125,7 +125,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
             // Act
             var result = ArrayExtensions
                 .Select<int, string>(source, selector)
-                .First();
+                .FirstOption();
 
             // Assert
             _ = result.Must()
@@ -146,7 +146,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
             // Act
             var result = ArrayExtensions
                 .Select<int, string>(source, selector)
-                .First();
+                .FirstOption();
 
             // Assert
             _ = result.Match(
@@ -163,7 +163,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
             // Act
             var result = ArrayExtensions
                 .Select<int, string>(source, selector)
-                .First();
+                .FirstOption();
 
             // Assert
             _ = result.Must()
@@ -184,7 +184,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
             // Act
             var result = ArrayExtensions
                 .Select<int, string>(source, selector)
-                .First();
+                .FirstOption();
 
             // Assert
             _ = result.Match(
@@ -202,7 +202,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
             var result = ArrayExtensions
                 .Where<int>(source, predicate)
                 .Select(selector)
-                .First();
+                .FirstOption();
 
             // Assert
             _ = result.Must()
@@ -225,7 +225,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
             var result = ArrayExtensions
                 .Where<int>(source, predicate)
                 .Select(selector)
-                .First();
+                .FirstOption();
 
             // Assert
             _ = result.Match(

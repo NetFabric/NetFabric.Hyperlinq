@@ -91,8 +91,8 @@ namespace NetFabric.Hyperlinq
             public Option<TResult> ElementAt(int index)
                 => ValueEnumerableExtensions.ElementAt<TEnumerable, TEnumerator, TSource, TResult>(source, index, predicate, selector);
 
-            public Option<TResult> First()
-                => ValueEnumerableExtensions.First<TEnumerable, TEnumerator, TSource, TResult>(source, predicate, selector);
+            public Option<TResult> FirstOption()
+                => ValueEnumerableExtensions.FirstOption<TEnumerable, TEnumerator, TSource, TResult>(source, predicate, selector);
 
             public Option<TResult> Single()
                 => ValueEnumerableExtensions.Single<TEnumerable, TEnumerator, TSource, TResult>(source, predicate, selector);

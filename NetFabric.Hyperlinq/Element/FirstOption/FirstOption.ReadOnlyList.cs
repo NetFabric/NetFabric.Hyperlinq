@@ -8,12 +8,12 @@ namespace NetFabric.Hyperlinq
     {
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Option<TSource> First<TList, TSource>(this TList source) 
+        public static Option<TSource> FirstOption<TList, TSource>(this TList source) 
             where TList : IReadOnlyList<TSource>
-            => First<TList, TSource>(source, 0, source.Count);
+            => FirstOption<TList, TSource>(source, 0, source.Count);
 
 
-        static Option<TSource> First<TList, TSource>(this TList source, int skipCount, int takeCount) 
+        static Option<TSource> FirstOption<TList, TSource>(this TList source, int skipCount, int takeCount) 
             where TList : IReadOnlyList<TSource>
             => takeCount switch
             {
@@ -22,7 +22,7 @@ namespace NetFabric.Hyperlinq
             };
 
 
-        static Option<TSource> First<TList, TSource>(this TList source, Predicate<TSource> predicate, int skipCount, int takeCount)
+        static Option<TSource> FirstOption<TList, TSource>(this TList source, Predicate<TSource> predicate, int skipCount, int takeCount)
             where TList : IReadOnlyList<TSource>
         {
             var end = skipCount + takeCount;
@@ -36,7 +36,7 @@ namespace NetFabric.Hyperlinq
         }
 
 
-        static Option<TSource> First<TList, TSource>(this TList source, PredicateAt<TSource> predicate, int skipCount, int takeCount)
+        static Option<TSource> FirstOption<TList, TSource>(this TList source, PredicateAt<TSource> predicate, int skipCount, int takeCount)
             where TList : IReadOnlyList<TSource>
         {
             if (skipCount == 0)
@@ -62,7 +62,7 @@ namespace NetFabric.Hyperlinq
 
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static Option<TResult> First<TList, TSource, TResult>(this TList source, NullableSelector<TSource, TResult> selector, int skipCount, int takeCount)
+        static Option<TResult> FirstOption<TList, TSource, TResult>(this TList source, NullableSelector<TSource, TResult> selector, int skipCount, int takeCount)
             where TList : IReadOnlyList<TSource>
             => takeCount switch
             {
@@ -72,7 +72,7 @@ namespace NetFabric.Hyperlinq
 
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static Option<TResult> First<TList, TSource, TResult>(this TList source, NullableSelectorAt<TSource, TResult> selector, int skipCount, int takeCount)
+        static Option<TResult> FirstOption<TList, TSource, TResult>(this TList source, NullableSelectorAt<TSource, TResult> selector, int skipCount, int takeCount)
             where TList : IReadOnlyList<TSource>
             => takeCount switch
             {
@@ -81,7 +81,7 @@ namespace NetFabric.Hyperlinq
             };
 
 
-        static Option<TResult> First<TList, TSource, TResult>(this TList source, Predicate<TSource> predicate, NullableSelector<TSource, TResult> selector, int skipCount, int takeCount)
+        static Option<TResult> FirstOption<TList, TSource, TResult>(this TList source, Predicate<TSource> predicate, NullableSelector<TSource, TResult> selector, int skipCount, int takeCount)
             where TList : IReadOnlyList<TSource>
         {
             var end = skipCount + takeCount;

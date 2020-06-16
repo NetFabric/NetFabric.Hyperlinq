@@ -72,7 +72,7 @@ namespace NetFabric.Hyperlinq
                 => ArrayExtensions.ElementAt<TSource>(source, index, predicate);
 
             public Option<TSource> First()
-                => ArrayExtensions.First<TSource>(source, predicate);
+                => ArrayExtensions.FirstOption<TSource>(source, predicate);
 
             public Option<TSource> Single()
                 => ArrayExtensions.Single<TSource>(source, predicate);

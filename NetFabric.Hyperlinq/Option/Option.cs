@@ -145,7 +145,7 @@ namespace NetFabric.Hyperlinq
 
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public readonly Option<T> First()
+        public readonly Option<T> FirstOption()
             => this;
 
         
