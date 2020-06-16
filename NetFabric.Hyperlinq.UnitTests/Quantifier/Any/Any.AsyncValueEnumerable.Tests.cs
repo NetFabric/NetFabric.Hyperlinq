@@ -22,7 +22,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Any
 
             // Act
             var result = await AsyncValueEnumerableExtensions
-                .AnyAsync<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int>(wrapped);
+                .AnyAsync<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(wrapped);
 
             // Assert
             _ = result.Must()
@@ -39,7 +39,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Any
 
             // Act
             Action action = () => _ = 
-                AsyncValueEnumerableExtensions.AnyAsync<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, predicate);
+                AsyncValueEnumerableExtensions.AnyAsync<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, predicate);
 
             // Assert
             _ = action.Must()
@@ -60,7 +60,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Any
 
             // Act
             var result = await AsyncValueEnumerableExtensions
-                .AnyAsync<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, predicate.AsAsync());
+                .AnyAsync<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, predicate.AsAsync());
 
             // Assert
             _ = result.Must()
@@ -77,7 +77,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Any
 
             // Act
             Action action = () => _ = AsyncValueEnumerableExtensions
-                .AnyAsync<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, predicate);
+                .AnyAsync<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, predicate);
 
             // Assert
             _ = action.Must()
@@ -99,7 +99,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Any
 
             // Act
             var result = await AsyncValueEnumerableExtensions
-                .AnyAsync<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, predicate.AsAsync());
+                .AnyAsync<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, predicate.AsAsync());
 
             // Assert
             _ = result.Must()

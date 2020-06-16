@@ -15,7 +15,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.Where
 
             // Act
             Action action = () => _ = AsyncValueEnumerableExtensions
-                .Where<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int>(enumerable, predicate);
+                .Where<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(enumerable, predicate);
 
             // Assert
             _ = action.Must()
@@ -36,7 +36,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.Where
 
             // Act
             var result = AsyncValueEnumerableExtensions
-                .Where<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, predicate.AsAsync());
+                .Where<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, predicate.AsAsync());
 
             // Assert
             _ = result.Must()

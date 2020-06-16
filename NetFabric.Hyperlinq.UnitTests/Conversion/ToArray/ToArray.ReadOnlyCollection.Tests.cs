@@ -37,7 +37,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
         {
             // Arrange
             var wrapped = Wrap
-                .AsValueCollection(source);
+                .AsCollection(source);
             var expected = 
                 System.Linq.Enumerable.ToArray(source);
 

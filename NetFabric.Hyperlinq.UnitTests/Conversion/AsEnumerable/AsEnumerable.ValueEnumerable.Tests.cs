@@ -14,7 +14,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsEnumerable
 
             // Act
             var result = ValueEnumerableExtensions
-                .AsEnumerable<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped);
+                .AsEnumerable<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(wrapped);
 
             // Assert
             _ = result.Must()

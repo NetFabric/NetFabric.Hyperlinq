@@ -14,7 +14,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsAsyncValueEnumerable
 
             // Act
             var result = AsyncValueEnumerableExtensions
-                .AsAsyncValueEnumerable<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int>(wrapped);
+                .AsAsyncValueEnumerable<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(wrapped);
 
             // Assert
             _ = result.Must()

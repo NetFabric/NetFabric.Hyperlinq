@@ -17,7 +17,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Partitioning.Skip
 
             // Act
             var result = ValueEnumerableExtensions
-                .Skip<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, count);
+                .Skip<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(wrapped, count);
 
             // Assert
             _ = result.Must()
@@ -37,7 +37,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Partitioning.Skip
 
             // Act
             var result = ValueEnumerableExtensions
-                .Skip<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, count0)
+                .Skip<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(wrapped, count0)
                 .Skip(count1);
 
             // Assert
@@ -60,7 +60,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Partitioning.Skip
 
             // Act
             var result = ValueEnumerableExtensions
-                .Skip<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, skipCount)
+                .Skip<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(wrapped, skipCount)
                 .Take(takeCount);
 
             // Assert

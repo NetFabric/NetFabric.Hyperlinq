@@ -20,7 +20,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Aggregation.Count
 
             // Act
             var result = ValueReadOnlyCollectionExtensions
-                .Count<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(wrapped);
+                .Count<Wrap.ValueReadOnlyCollectionWrapper<int>, Wrap.Enumerator<int>, int>(wrapped);
 
             // Assert
             _ = result.Must()

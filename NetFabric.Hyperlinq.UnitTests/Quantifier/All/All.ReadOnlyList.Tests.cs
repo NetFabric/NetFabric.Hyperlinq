@@ -15,7 +15,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.All
 
             // Act
             Action action = () => _ = ReadOnlyListExtensions
-                .All<Wrap.ValueReadOnlyList<int>, int>(wrapped, predicate);
+                .All<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped, predicate);
 
             // Assert
             _ = action.Must()
@@ -36,7 +36,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.All
 
             // Act
             var result = ReadOnlyListExtensions
-                .All<Wrap.ValueReadOnlyList<int>, int>(wrapped, predicate);
+                .All<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped, predicate);
 
             // Assert
             _ = result.Must()
@@ -58,7 +58,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.All
 
             // Act
             var result = ReadOnlyListExtensions
-                .Skip<Wrap.ValueReadOnlyList<int>, int>(wrapped, skipCount)
+                .Skip<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped, skipCount)
                 .Take(takeCount)
                 .All(predicate);
 
@@ -77,7 +77,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.All
 
             // Act
             Action action = () => _ = ReadOnlyListExtensions
-                .All<Wrap.ValueReadOnlyList<int>, int>(wrapped, predicate);
+                .All<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped, predicate);
 
             // Assert
             _ = action.Must()
@@ -99,7 +99,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.All
 
             // Act
             var result = ReadOnlyListExtensions
-                .All<Wrap.ValueReadOnlyList<int>, int>(wrapped, predicate);
+                .All<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped, predicate);
 
             // Assert
             _ = result.Must()
@@ -126,7 +126,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.All
 
             // Act
             var result = ReadOnlyListExtensions
-                .Skip<Wrap.ValueReadOnlyList<int>, int>(wrapped, skipCount)
+                .Skip<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped, skipCount)
                 .Take(takeCount)
                 .All(predicate);
 

@@ -15,7 +15,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Projection.Select
             var selector = (NullableSelector<int, string>)null;
 
             // Act
-            Action action = () => _ = ReadOnlyListExtensions.Select<Wrap.ValueReadOnlyList<int>, int, string>(source, selector);
+            Action action = () => _ = ReadOnlyListExtensions.Select<Wrap.ValueReadOnlyListWrapper<int>, int, string>(source, selector);
 
             // Assert
             _ = action.Must()
@@ -36,7 +36,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Projection.Select
 
             // Act
             var result = ReadOnlyListExtensions
-                .Select<Wrap.ValueReadOnlyList<int>, int, string>(wrapped, selector);
+                .Select<Wrap.ValueReadOnlyListWrapper<int>, int, string>(wrapped, selector);
 
             // Assert
             _ = result.Must()

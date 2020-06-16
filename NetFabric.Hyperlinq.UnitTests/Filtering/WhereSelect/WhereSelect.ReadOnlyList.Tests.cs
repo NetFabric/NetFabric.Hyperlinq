@@ -15,7 +15,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.WhereSelect
 
             // Act
             Action action = () => _ = ReadOnlyListExtensions
-                .Where<Wrap.ValueReadOnlyList<int>, int>(source, predicate)
+                .Where<Wrap.ValueReadOnlyListWrapper<int>, int>(source, predicate)
                 .Select(item => item.ToString());
 
             // Assert
@@ -33,7 +33,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.WhereSelect
 
             // Act
             Action action = () => _ = ReadOnlyListExtensions
-                .Where<Wrap.ValueReadOnlyList<int>, int>(source, _ => true)
+                .Where<Wrap.ValueReadOnlyListWrapper<int>, int>(source, _ => true)
                 .Select(selector);
 
             // Assert
@@ -56,7 +56,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.WhereSelect
 
             // Act
             var result = ReadOnlyListExtensions
-                .Where<Wrap.ValueReadOnlyList<int>, int>(wrapped, predicate)
+                .Where<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped, predicate)
                 .Select(selector);
 
             // Assert

@@ -139,44 +139,7 @@ namespace NetFabric.Hyperlinq
 
             public bool Contains([AllowNull] TSource value, IEqualityComparer<TSource>? comparer = default)
                 => ReadOnlyListExtensions.Contains(source, value, comparer);
-/*
-            {
-                if (source.Count == 0)
-                    return false;
 
-                if (comparer is null || ReferenceEquals(comparer, EqualityComparer<TSource>.Default))
-                {
-                    if (source is ICollection<TSource> collection)
-                        return collection.Contains(value!);
-
-                    if (default(TSource) is object)
-                        return DefaultContains(source, value);
-                }
-
-                comparer ??= EqualityComparer<TSource>.Default;
-                return ComparerContains(source, value, comparer);
-
-                static bool DefaultContains(IReadOnlyList<TSource> source, [AllowNull] TSource value)
-                {
-                    for (var index = 0; index < source.Count; index++)
-                    {
-                        if (EqualityComparer<TSource>.Default.Equals(source[index], value!))
-                            return true;
-                    }
-                    return false;
-                }
-
-                static bool ComparerContains(IReadOnlyList<TSource> source, [AllowNull] TSource value, IEqualityComparer<TSource> comparer)
-                {
-                    for (var index = 0; index < source.Count; index++)
-                    {
-                        if (comparer.Equals(source[index], value!))
-                            return true;
-                    }
-                    return false;
-                }
-            }
-*/
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TSource[] ToArray()
                 => ReadOnlyListExtensions.ToArray<IReadOnlyList<TSource>, TSource>(source);

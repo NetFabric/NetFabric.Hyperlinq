@@ -20,7 +20,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Aggregation.Count
 
             // Act
             var result = ValueEnumerableExtensions
-                .Count<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped);
+                .Count<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(wrapped);
 
             // Assert
             _ = result.Must()
@@ -41,7 +41,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Aggregation.Count
 
             // Act
             var result = ValueEnumerableExtensions
-                .Where<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, predicate)
+                .Where<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(wrapped, predicate)
                 .Count();
 
             // Assert
@@ -64,7 +64,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Aggregation.Count
 
             // Act
             var result = ValueEnumerableExtensions
-                .Where<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, predicate)
+                .Where<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(wrapped, predicate)
                 .Count();
 
             // Assert

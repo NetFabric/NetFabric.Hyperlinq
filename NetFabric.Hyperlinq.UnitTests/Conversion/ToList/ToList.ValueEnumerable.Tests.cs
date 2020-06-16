@@ -21,7 +21,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
 
             // Act
             var result = ValueEnumerableExtensions
-                .ToList<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped);
+                .ToList<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(wrapped);
 
             // Assert
             _ = result.Must()
@@ -44,7 +44,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
 
             // Act
             var result = ValueEnumerableExtensions
-                .ToList<Wrap.ValueCollection<int>, Wrap.Enumerator<int>, int>(wrapped);
+                .ToList<Wrap.ValueCollectionWrapper<int>, Wrap.Enumerator<int>, int>(wrapped);
 
             // Assert
             _ = result.Must()
@@ -68,7 +68,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
 
             // Act
             var result = ValueEnumerableExtensions
-                .Where<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, predicate)
+                .Where<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(wrapped, predicate)
                 .ToList();
 
             // Assert
@@ -93,7 +93,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
 
             // Act
             var result = ValueEnumerableExtensions
-                .Where<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, predicate)
+                .Where<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(wrapped, predicate)
                 .ToList();
 
             // Assert
@@ -118,7 +118,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
 
             // Act
             var result = ValueEnumerableExtensions
-                .Select<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int, string>(wrapped, selector)
+                .Select<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int, string>(wrapped, selector)
                 .ToList();
 
             // Assert
@@ -143,7 +143,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
 
             // Act
             var result = ValueEnumerableExtensions
-                .Select<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int, string>(wrapped, selector)
+                .Select<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int, string>(wrapped, selector)
                 .ToList();
 
             // Assert
@@ -170,7 +170,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
 
             // Act
             var result = ValueEnumerableExtensions
-                .Where<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, predicate)
+                .Where<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(wrapped, predicate)
                 .Select(selector)
                 .ToList();
 

@@ -39,7 +39,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
         {
             // Arrange
             var wrapped = Wrap
-                .AsValueCollection(source);
+                .AsCollection(source);
             var expected = 
                 System.Linq.Enumerable.ToList(source);
 

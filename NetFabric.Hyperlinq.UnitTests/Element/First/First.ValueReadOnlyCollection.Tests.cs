@@ -16,7 +16,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
 
             // Act
             var result = ValueReadOnlyCollectionExtensions
-                .First<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(wrapped);
+                .First<Wrap.ValueReadOnlyCollectionWrapper<int>, Wrap.Enumerator<int>, int>(wrapped);
 
             // Assert
             _ = result.Must()
@@ -37,7 +37,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
 
             // Act
             var result = ValueReadOnlyCollectionExtensions
-                .First<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(wrapped);
+                .First<Wrap.ValueReadOnlyCollectionWrapper<int>, Wrap.Enumerator<int>, int>(wrapped);
 
             // Assert
             _ = result.Match(
@@ -55,7 +55,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
 
             // Act
             var result = ValueReadOnlyCollectionExtensions
-                .Select<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int, string>(wrapped, selector)
+                .Select<Wrap.ValueReadOnlyCollectionWrapper<int>, Wrap.Enumerator<int>, int, string>(wrapped, selector)
                 .First();
 
             // Assert
@@ -78,7 +78,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
 
             // Act
             var result = ValueReadOnlyCollectionExtensions
-                .Select<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int, string>(wrapped, selector)
+                .Select<Wrap.ValueReadOnlyCollectionWrapper<int>, Wrap.Enumerator<int>, int, string>(wrapped, selector)
                 .First();
 
             // Assert
@@ -97,7 +97,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
 
             // Act
             var result = ValueReadOnlyCollectionExtensions
-                .Select<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int, string>(wrapped, selector)
+                .Select<Wrap.ValueReadOnlyCollectionWrapper<int>, Wrap.Enumerator<int>, int, string>(wrapped, selector)
                 .First();
 
             // Assert
@@ -120,7 +120,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
 
             // Act
             var result = ValueReadOnlyCollectionExtensions
-                .Select<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int, string>(wrapped, selector)
+                .Select<Wrap.ValueReadOnlyCollectionWrapper<int>, Wrap.Enumerator<int>, int, string>(wrapped, selector)
                 .First();
 
             // Assert

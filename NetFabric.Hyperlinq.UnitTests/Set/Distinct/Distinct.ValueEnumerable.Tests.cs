@@ -18,7 +18,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct
 
             // Act
             var result = ValueEnumerableExtensions
-                .Distinct<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped);
+                .Distinct<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(wrapped);
 
             // Assert
             _ = result.Must()
@@ -40,7 +40,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct
 
             // Act
             var result = ValueEnumerableExtensions
-                .Distinct<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped)
+                .Distinct<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(wrapped)
                 .ToArray();
 
             // Assert
@@ -63,7 +63,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct
 
             // Act
             var result = ValueEnumerableExtensions
-                .Distinct<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped)
+                .Distinct<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(wrapped)
                 .ToList();
 
             // Assert

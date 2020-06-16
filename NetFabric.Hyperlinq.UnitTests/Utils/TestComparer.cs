@@ -4,7 +4,7 @@ namespace NetFabric.Hyperlinq.UnitTests
 {
     class TestComparer<T> : IEqualityComparer<T>
     {
-        private TestComparer() { }
+        TestComparer() { }
 
         public static TestComparer<T> Instance { get; } = new TestComparer<T>();
 
