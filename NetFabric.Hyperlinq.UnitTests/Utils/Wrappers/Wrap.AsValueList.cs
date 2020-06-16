@@ -6,24 +6,33 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class Wrap
     {
-        public static ValueCollectionWrapper<T> AsValueCollection<T>(T[] source)
+        public static ValueListWrapper<T> AsValueList<T>(T[] source)
         {
             if (source is null) throw new ArgumentNullException(nameof(source));
 
-            return new ValueCollectionWrapper<T>(source);
+            return new ValueListWrapper<T>(source);
         }
 
-        public readonly struct ValueCollectionWrapper<T> 
-            : IValueReadOnlyCollection<T, Enumerator<T>>
-            , ICollection<T>
+        public readonly struct ValueListWrapper<T> 
+            : IValueReadOnlyList<T, Enumerator<T>>
+            , IList<T>
         {
             readonly T[] source;
 
-            internal ValueCollectionWrapper(T[] source)
+            internal ValueListWrapper(T[] source)
                 => this.source = source;
 
             public readonly int Count 
                 => source.Length;
+
+            public readonly T this[int index] 
+                => source[index];
+
+            T IList<T>.this[int index] 
+            { 
+                get => source[index]; 
+                set => throw new NotSupportedException(); 
+            }
 
             public readonly Enumerator<T> GetEnumerator() 
                 => new Enumerator<T>(source);
@@ -38,13 +47,21 @@ namespace NetFabric.Hyperlinq
                 => source.CopyTo(array, arrayIndex);
 
             public bool Contains(T item)
-                => ((ICollection<T>)source).Contains(item);
+                => ((IList<T>)source).Contains(item);
+
+            public int IndexOf(T item)
+                => ((IList<T>)source).IndexOf(item);
 
             void ICollection<T>.Add(T item) 
                 => throw new NotSupportedException();
             bool ICollection<T>.Remove(T item) 
                 => throw new NotSupportedException();
             void ICollection<T>.Clear() 
+                => throw new NotSupportedException();
+
+            void IList<T>.Insert(int index, T item) 
+                => throw new NotSupportedException();
+            void IList<T>.RemoveAt(int index) 
                 => throw new NotSupportedException();
         }
     }

@@ -21,7 +21,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Any
 
             // Act
             var result = ValueEnumerableExtensions
-                .Any<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped);
+                .Any<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(wrapped);
 
             // Assert
             _ = result.Must()
@@ -38,7 +38,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Any
 
             // Act
             Action action = () => _ = 
-                ValueEnumerableExtensions.Any<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
+                ValueEnumerableExtensions.Any<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
 
             // Assert
             _ = action.Must()
@@ -59,7 +59,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Any
 
             // Act
             var result = ValueEnumerableExtensions
-                .Any<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
+                .Any<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
 
             // Assert
             _ = result.Must()
@@ -76,7 +76,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Any
 
             // Act
             Action action = () => _ = ValueEnumerableExtensions
-                .Any<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
+                .Any<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
 
             // Assert
             _ = action.Must()
@@ -98,7 +98,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Any
 
             // Act
             var result = ValueEnumerableExtensions
-                .Any<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
+                .Any<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
 
             // Assert
             _ = result.Must()

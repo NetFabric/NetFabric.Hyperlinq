@@ -6,26 +6,26 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class Wrap
     {
-        public static Enumerable<T> AsEnumerable<T>(T[] source)
+        public static EnumerableWrapper<T> AsEnumerable<T>(T[] source)
         {
             if (source is null) throw new ArgumentNullException(nameof(source));
 
-            return new Enumerable<T>(source);
+            return new EnumerableWrapper<T>(source);
         }
 
-        public readonly struct Enumerable<T> 
+        public class EnumerableWrapper<T> 
             : IEnumerable<T>
         {
-            readonly T[] source;
+            protected readonly T[] source;
 
-            internal Enumerable(T[] source)
+            internal EnumerableWrapper(T[] source)
                 => this.source = source;
 
-            public readonly Enumerator<T> GetEnumerator() 
+            public Enumerator<T> GetEnumerator() 
                 => new Enumerator<T>(source);
-            readonly IEnumerator<T> IEnumerable<T>.GetEnumerator() 
+            IEnumerator<T> IEnumerable<T>.GetEnumerator() 
                 => new Enumerator<T>(source);
-            readonly IEnumerator IEnumerable.GetEnumerator() 
+            IEnumerator IEnumerable.GetEnumerator() 
                 => new Enumerator<T>(source);
         }
     }

@@ -18,7 +18,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct
 
             // Act
             var result = ReadOnlyListExtensions
-                .Distinct<Wrap.ValueReadOnlyList<int>, int>(wrapped);
+                .Distinct<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped);
 
             // Assert
             _ = result.Must()
@@ -40,7 +40,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct
 
             // Act
             var result = ReadOnlyListExtensions
-                .Distinct<Wrap.ValueReadOnlyList<int>, int>(wrapped)
+                .Distinct<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped)
                 .ToArray();
 
             // Assert
@@ -63,7 +63,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct
 
             // Act
             var result = ReadOnlyListExtensions
-                .Distinct<Wrap.ValueReadOnlyList<int>, int>(wrapped)
+                .Distinct<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped)
                 .ToList();
 
             // Assert

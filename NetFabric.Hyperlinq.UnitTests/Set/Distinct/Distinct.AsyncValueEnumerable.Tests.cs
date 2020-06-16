@@ -19,7 +19,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct
 
             // Act
             var result = AsyncValueEnumerableExtensions
-                .Distinct<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int>(wrapped);
+                .Distinct<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(wrapped);
 
             // Assert
             _ = result.Must()
@@ -41,7 +41,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct
 
             // Act
             var result = await AsyncValueEnumerableExtensions
-                .Distinct<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int>(wrapped)
+                .Distinct<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(wrapped)
                 .ToArrayAsync();
 
             // Assert
@@ -64,7 +64,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct
 
             // Act
             var result = await AsyncValueEnumerableExtensions
-                .Distinct<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int>(wrapped)
+                .Distinct<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(wrapped)
                 .ToListAsync();
 
             // Assert

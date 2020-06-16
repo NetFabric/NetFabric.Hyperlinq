@@ -21,7 +21,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
 
             // Act
             var result = ValueReadOnlyCollectionExtensions
-                .ToList<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int>(wrapped);
+                .ToList<Wrap.ValueReadOnlyCollectionWrapper<int>, Wrap.Enumerator<int>, int>(wrapped);
 
             // Assert
             _ = result.Must()
@@ -44,7 +44,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
 
             // Act
             var result = ValueReadOnlyCollectionExtensions
-                .ToList<Wrap.ValueCollection<int>, Wrap.Enumerator<int>, int>(wrapped);
+                .ToList<Wrap.ValueCollectionWrapper<int>, Wrap.Enumerator<int>, int>(wrapped);
 
             // Assert
             _ = result.Must()
@@ -68,7 +68,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
 
             // Act
             var result = ValueReadOnlyCollectionExtensions
-                .Select<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int, string>(wrapped, selector)
+                .Select<Wrap.ValueReadOnlyCollectionWrapper<int>, Wrap.Enumerator<int>, int, string>(wrapped, selector)
                 .ToList();
 
             // Assert
@@ -93,7 +93,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
 
             // Act
             var result = ValueReadOnlyCollectionExtensions
-                .Select<Wrap.ValueReadOnlyCollection<int>, Wrap.Enumerator<int>, int, string>(wrapped, selector)
+                .Select<Wrap.ValueReadOnlyCollectionWrapper<int>, Wrap.Enumerator<int>, int, string>(wrapped, selector)
                 .ToList();
 
             // Assert

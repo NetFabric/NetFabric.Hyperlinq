@@ -21,7 +21,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
 
             // Act
             var result = await AsyncValueEnumerableExtensions
-                .ToArrayAsync<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int>(wrapped);
+                .ToArrayAsync<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(wrapped);
 
             // Assert
             _ = result.Must()
@@ -44,7 +44,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
 
             // Act
             var result = await AsyncValueEnumerableExtensions
-                .Where<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, predicate.AsAsync())
+                .Where<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, predicate.AsAsync())
                 .ToArrayAsync();
 
             // Assert
@@ -68,7 +68,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
 
             // Act
             var result = await AsyncValueEnumerableExtensions
-                .Where<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, predicate.AsAsync())
+                .Where<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, predicate.AsAsync())
                 .ToArrayAsync();
 
             // Assert
@@ -92,7 +92,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
 
             // Act
             var result = await AsyncValueEnumerableExtensions
-                .Select<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int, string>(wrapped, selector.AsAsync())
+                .Select<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int, string>(wrapped, selector.AsAsync())
                 .ToArrayAsync();
 
             // Assert
@@ -116,7 +116,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
 
             // Act
             var result = await AsyncValueEnumerableExtensions
-                .Select<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int, string>(wrapped, selector.AsAsync())
+                .Select<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int, string>(wrapped, selector.AsAsync())
                 .ToArrayAsync();
 
             // Assert
@@ -142,7 +142,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
 
             // Act
             var result = await AsyncValueEnumerableExtensions
-                .Where<Wrap.AsyncValueEnumerable<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, predicate.AsAsync())
+                .Where<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, predicate.AsAsync())
                 .Select(selector.AsAsync())
                 .ToArrayAsync();
 

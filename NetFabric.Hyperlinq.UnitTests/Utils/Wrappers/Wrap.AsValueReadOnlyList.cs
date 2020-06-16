@@ -6,19 +6,19 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class Wrap
     {
-        public static ValueReadOnlyList<T> AsValueReadOnlyList<T>(T[] source)
+        public static ValueReadOnlyListWrapper<T> AsValueReadOnlyList<T>(T[] source)
         {
             if (source is null) throw new ArgumentNullException(nameof(source));
 
-            return new ValueReadOnlyList<T>(source);
+            return new ValueReadOnlyListWrapper<T>(source);
         }
 
-        public readonly struct ValueReadOnlyList<T> 
+        public readonly struct ValueReadOnlyListWrapper<T> 
             : IValueReadOnlyList<T, Enumerator<T>>
         {
             readonly T[] source;
 
-            internal ValueReadOnlyList(T[] source)
+            internal ValueReadOnlyListWrapper(T[] source)
                 => this.source = source;
 
             public readonly int Count 

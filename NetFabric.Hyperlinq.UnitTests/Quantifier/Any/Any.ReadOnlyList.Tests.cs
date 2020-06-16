@@ -21,7 +21,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Any
 
             // Act
             var result = ReadOnlyListExtensions
-                .Any<Wrap.ValueReadOnlyList<int>, int>(wrapped);
+                .Any<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped);
 
             // Assert
             _ = result.Must()
@@ -43,7 +43,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Any
 
             // Act
             var result = ReadOnlyListExtensions
-                .Skip<Wrap.ValueReadOnlyList<int>, int>(wrapped, skipCount)
+                .Skip<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped, skipCount)
                 .Take(takeCount)
                 .Any();
 
@@ -62,7 +62,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Any
 
             // Act
             Action action = () => _ = ReadOnlyListExtensions
-                .Any<Wrap.ValueReadOnlyList<int>, int>(wrapped, predicate);
+                .Any<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped, predicate);
 
             // Assert
             _ = action.Must()
@@ -83,7 +83,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Any
 
             // Act
             var result = ReadOnlyListExtensions
-                .Any<Wrap.ValueReadOnlyList<int>, int>(wrapped, predicate);
+                .Any<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped, predicate);
 
             // Assert
             _ = result.Must()
@@ -105,7 +105,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Any
 
             // Act
             var result = ReadOnlyListExtensions
-                .Skip<Wrap.ValueReadOnlyList<int>, int>(wrapped, skipCount)
+                .Skip<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped, skipCount)
                 .Take(takeCount)
                 .Any(predicate);
 
@@ -124,7 +124,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Any
 
             // Act
             Action action = () => _ = ReadOnlyListExtensions
-                .Any<Wrap.ValueReadOnlyList<int>, int>(wrapped, predicate);
+                .Any<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped, predicate);
 
             // Assert
             _ = action.Must()
@@ -146,7 +146,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Any
 
             // Act
             var result = ReadOnlyListExtensions
-                .Any<Wrap.ValueReadOnlyList<int>, int>(wrapped, predicate);
+                .Any<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped, predicate);
 
             // Assert
             _ = result.Must()
@@ -170,7 +170,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Any
 
             // Act
             var result = ReadOnlyListExtensions
-                .Skip<Wrap.ValueReadOnlyList<int>, int>(wrapped, skipCount)
+                .Skip<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped, skipCount)
                 .Take(takeCount)
                 .Any(predicate);
 

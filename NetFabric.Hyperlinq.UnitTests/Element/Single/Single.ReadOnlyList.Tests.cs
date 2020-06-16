@@ -16,7 +16,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
 
             // Act
             var result = ReadOnlyListExtensions
-                .Single<Wrap.ValueReadOnlyList<int>, int>(wrapped);
+                .Single<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped);
 
             // Assert
             _ = result.Must()
@@ -36,7 +36,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
 
             // Act
             var result = ReadOnlyListExtensions
-                .Single<Wrap.ValueReadOnlyList<int>, int>(wrapped);
+                .Single<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped);
 
             // Assert
             _ = result.Match(
@@ -54,7 +54,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
 
             // Act
             var result = ReadOnlyListExtensions
-                .Single<Wrap.ValueReadOnlyList<int>, int>(wrapped);
+                .Single<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped);
 
             // Assert
             _ = result.Must()
@@ -72,7 +72,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
 
             // Act
             var result = ReadOnlyListExtensions
-                .Skip<Wrap.ValueReadOnlyList<int>, int>(wrapped, skipCount)
+                .Skip<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped, skipCount)
                 .Take(takeCount)
                 .Single();
 
@@ -96,7 +96,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
 
             // Act
             var result = ReadOnlyListExtensions
-                .Skip<Wrap.ValueReadOnlyList<int>, int>(wrapped, skipCount)
+                .Skip<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped, skipCount)
                 .Take(takeCount)
                 .Single();
 
@@ -116,7 +116,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
 
             // Act
             var result = ReadOnlyListExtensions
-                .Skip<Wrap.ValueReadOnlyList<int>, int>(wrapped, skipCount)
+                .Skip<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped, skipCount)
                 .Take(takeCount)
                 .Single();
 
@@ -136,7 +136,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
 
             // Act
             var result = ReadOnlyListExtensions
-                .Skip<Wrap.ValueReadOnlyList<int>, int>(wrapped, skipCount)
+                .Skip<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped, skipCount)
                 .Take(takeCount)
                 .Where(predicate)
                 .Single();
@@ -162,7 +162,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
 
             // Act
             var result = ReadOnlyListExtensions
-                .Skip<Wrap.ValueReadOnlyList<int>, int>(wrapped, skipCount)
+                .Skip<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped, skipCount)
                 .Take(takeCount)
                 .Where(predicate)
                 .Single();
@@ -183,7 +183,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
 
             // Act
             var result = ReadOnlyListExtensions
-                .Skip<Wrap.ValueReadOnlyList<int>, int>(wrapped, skipCount)
+                .Skip<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped, skipCount)
                 .Take(takeCount)
                 .Where(predicate)
                 .Single();
@@ -204,7 +204,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
 
             // Act
             var result = ReadOnlyListExtensions
-                .Skip<Wrap.ValueReadOnlyList<int>, int>(wrapped, skipCount)
+                .Skip<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped, skipCount)
                 .Take(takeCount)
                 .Where(predicate)
                 .Single();
@@ -230,7 +230,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
 
             // Act
             var result = ReadOnlyListExtensions
-                .Skip<Wrap.ValueReadOnlyList<int>, int>(wrapped, skipCount)
+                .Skip<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped, skipCount)
                 .Take(takeCount)
                 .Where(predicate)
                 .Single();
@@ -251,7 +251,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
 
             // Act
             var result = ReadOnlyListExtensions
-                .Skip<Wrap.ValueReadOnlyList<int>, int>(wrapped, skipCount)
+                .Skip<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped, skipCount)
                 .Take(takeCount)
                 .Where(predicate)
                 .Single();
@@ -272,7 +272,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
 
             // Act
             var result = ReadOnlyListExtensions
-                .Skip<Wrap.ValueReadOnlyList<int>, int>(wrapped, skipCount)
+                .Skip<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped, skipCount)
                 .Take(takeCount)
                 .Select(selector)
                 .Single();
@@ -298,7 +298,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
 
             // Act
             var result = ReadOnlyListExtensions
-                .Skip<Wrap.ValueReadOnlyList<int>, int>(wrapped, skipCount)
+                .Skip<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped, skipCount)
                 .Take(takeCount)
                 .Select(selector)
                 .Single();
@@ -319,7 +319,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
 
             // Act
             var result = ReadOnlyListExtensions
-                .Skip<Wrap.ValueReadOnlyList<int>, int>(wrapped, skipCount)
+                .Skip<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped, skipCount)
                 .Take(takeCount)
                 .Select(selector)
                 .Single();
@@ -340,7 +340,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
 
             // Act
             var result = ReadOnlyListExtensions
-                .Skip<Wrap.ValueReadOnlyList<int>, int>(wrapped, skipCount)
+                .Skip<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped, skipCount)
                 .Take(takeCount)
                 .Select(selector)
                 .Single();
@@ -366,7 +366,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
 
             // Act
             var result = ReadOnlyListExtensions
-                .Skip<Wrap.ValueReadOnlyList<int>, int>(wrapped, skipCount)
+                .Skip<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped, skipCount)
                 .Take(takeCount)
                 .Select(selector)
                 .Single();
@@ -387,7 +387,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
 
             // Act
             var result = ReadOnlyListExtensions
-                .Skip<Wrap.ValueReadOnlyList<int>, int>(wrapped, skipCount)
+                .Skip<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped, skipCount)
                 .Take(takeCount)
                 .Select(selector)
                 .Single();
@@ -408,7 +408,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
 
             // Act
             var result = ReadOnlyListExtensions
-                .Skip<Wrap.ValueReadOnlyList<int>, int>(wrapped, skipCount)
+                .Skip<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped, skipCount)
                 .Take(takeCount)
                 .Where(predicate)
                 .Select(selector)
@@ -436,7 +436,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
 
             // Act
             var result = ReadOnlyListExtensions
-                .Skip<Wrap.ValueReadOnlyList<int>, int>(wrapped, skipCount)
+                .Skip<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped, skipCount)
                 .Take(takeCount)
                 .Where(predicate)
                 .Select(selector)
@@ -458,7 +458,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
 
             // Act
             var result = ReadOnlyListExtensions
-                .Skip<Wrap.ValueReadOnlyList<int>, int>(wrapped, skipCount)
+                .Skip<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped, skipCount)
                 .Take(takeCount)
                 .Where(predicate)
                 .Select(selector)

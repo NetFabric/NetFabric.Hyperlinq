@@ -20,7 +20,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Aggregation.Count
 
             // Act
             var result = ReadOnlyListExtensions
-                .Count<Wrap.ValueReadOnlyList<int>, int>(wrapped);
+                .Count<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped);
 
             // Assert
             _ = result.Must()
@@ -44,7 +44,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Aggregation.Count
 
             // Act
             var result = ReadOnlyListExtensions
-                .Skip<Wrap.ValueReadOnlyList<int>, int>(wrapped, skipCount)
+                .Skip<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped, skipCount)
                 .Take(takeCount)
                 .Where(predicate)
                 .Count();
@@ -71,7 +71,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Aggregation.Count
 
             // Act
             var result = ReadOnlyListExtensions
-                .Skip<Wrap.ValueReadOnlyList<int>, int>(wrapped, skipCount)
+                .Skip<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped, skipCount)
                 .Take(takeCount)
                 .Where(predicate)
                 .Count();
