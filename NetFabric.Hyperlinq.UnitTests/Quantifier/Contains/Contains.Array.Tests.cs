@@ -149,5 +149,107 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Contains
             _ = result.Must()
                 .BeTrue();
         }
+
+        [Theory]
+        [MemberData(nameof(TestData.SkipEmpty), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipMultiple), MemberType = typeof(TestData))]
+        public void Skip_Contains_ValueType_With_Null_And_NotContains_Must_ReturnFalse(int[] source, int count)
+        {
+            // Arrange
+            var value = int.MaxValue;
+
+            // Act
+            var result = ArrayExtensions.Skip(source, count).Contains(value);
+
+            // Assert
+            _ = result.Must()
+                .BeFalse();
+        }
+
+        [Theory]
+        [MemberData(nameof(TestData.SkipSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipMultiple), MemberType = typeof(TestData))]
+        public void Skip_Contains_ValueType_With_Null_And_Contains_Must_ReturnTrue(int[] source, int count)
+        {
+            // Arrange
+            var value = source.Last();
+
+            // Act
+            var result = ArrayExtensions.Skip(source, count).Contains(value);
+
+            // Assert
+            _ = result.Must()
+                .BeTrue();
+        }
+
+        [Theory]
+        [MemberData(nameof(TestData.SkipEmpty), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipMultiple), MemberType = typeof(TestData))]
+        public void Skip_Contains_ReferenceType_With_Null_And_NotContains_Must_ReturnFalse(int[] source, int count)
+        {
+            // Arrange
+            var value = default(string);
+            var wrapped = source.Select(item => item.ToString()).ToArray();
+
+            // Act
+            var result = ArrayExtensions.Skip(wrapped, count).Contains(value);
+
+            // Assert
+            _ = result.Must()
+                .BeFalse();
+        }
+
+        [Theory]
+        [MemberData(nameof(TestData.SkipSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipMultiple), MemberType = typeof(TestData))]
+        public void Skip_Contains_ReferenceType_With_Null_And_Contains_Must_ReturnTrue(int[] source, int count)
+        {
+            // Arrange
+            var value = source.Last().ToString();
+            var wrapped = source.Select(item => item.ToString()).ToArray();
+
+            // Act
+            var result = ArrayExtensions.Skip(wrapped, count).Contains(value);
+
+            // Assert
+            _ = result.Must()
+                .BeTrue();
+        }
+
+        [Theory]
+        [MemberData(nameof(TestData.SkipEmpty), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipMultiple), MemberType = typeof(TestData))]
+        public void Skip_Contains_ValueType_With_DefaultComparer_And_NotContains_Must_ReturnFalse(int[] source, int count)
+        {
+            // Arrange
+            var value = int.MaxValue;
+
+            // Act
+            var result = ArrayExtensions.Skip(source, count).Contains(value, EqualityComparer<int>.Default);
+
+            // Assert
+            _ = result.Must()
+                .BeFalse();
+        }
+
+        [Theory]
+        [MemberData(nameof(TestData.SkipEmpty), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipMultiple), MemberType = typeof(TestData))]
+        public void Skip_Contains_ValueType_With_Comparer_And_NotContains_Must_ReturnFalse(int[] source, int count)
+        {
+            // Arrange
+            var value = int.MaxValue;
+
+            // Act
+            var result = ArrayExtensions.Skip(source, count).Contains(value, TestComparer<int>.Instance);
+
+            // Assert
+            _ = result.Must()
+                .BeFalse();
+        }
     }
 }
