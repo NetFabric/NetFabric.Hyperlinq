@@ -1,4 +1,4 @@
-using NetFabric.Assertive;
+﻿using NetFabric.Assertive;
 using Xunit;
 using System.Collections.Generic;
 
@@ -36,7 +36,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsValueEnumerable
             // Arrange
             var wrapped = Wrap
                 .AsReadOnlyList(source);
-            var expected = 
+            var expected =
                 System.Linq.Enumerable.ToArray(source);
 
             // Act
@@ -82,7 +82,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsValueEnumerable
             // Arrange
             var wrapped = Wrap
                 .AsReadOnlyList(source);
-            var expected = 
+            var expected =
                 System.Linq.Enumerable.ToList(source);
 
             // Act

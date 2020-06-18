@@ -1,5 +1,5 @@
 ![GitHub last commit (main)](https://img.shields.io/github/last-commit/NetFabric/NetFabric.Hyperlinq/main.svg?style=flat-square&logo=github)
-![Build and test](https://github.com/NetFabric/NetFabric.Hyperlinq/workflows/Build%20and%20test/badge.svg?style=flat-square)
+[![Build and test](https://github.com/NetFabric/NetFabric.Hyperlinq/workflows/Build%20and%20test/badge.svg?style=flat-square)](https://github.com/NetFabric/NetFabric.Hyperlinq/actions)
 [![Coverage](https://img.shields.io/coveralls/github/NetFabric/NetFabric.Hyperlinq/main?style=flat-square&logo=coveralls)](https://coveralls.io/github/NetFabric/NetFabric.Hyperlinq)
 [![NuGet Version](https://img.shields.io/nuget/v/NetFabric.Hyperlinq.svg?style=flat-square&logo=nuget)](https://www.nuget.org/packages/NetFabric.Hyperlinq/)
 [![NuGet Downloads](https://img.shields.io/nuget/dt/NetFabric.Hyperlinq.svg?style=flat-square&logo=nuget)](https://www.nuget.org/packages/NetFabric.Hyperlinq/) 

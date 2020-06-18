@@ -7,7 +7,7 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class ReadOnlyListExtensions
     {
-        
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ValueEnumerableWrapper<TSource> AsValueEnumerable<TSource>(this IReadOnlyList<TSource> source)
             => new ValueEnumerableWrapper<TSource>(source);
@@ -18,7 +18,7 @@ namespace NetFabric.Hyperlinq
         {
             readonly IReadOnlyList<TSource> source;
 
-            internal ValueEnumerableWrapper(IReadOnlyList<TSource> source) 
+            internal ValueEnumerableWrapper(IReadOnlyList<TSource> source)
                 => this.source = source;
 
             public readonly int Count
@@ -41,10 +41,10 @@ namespace NetFabric.Hyperlinq
             readonly IEnumerator IEnumerable.GetEnumerator() => new Enumerator(source);
 
 
-            bool ICollection<TSource>.IsReadOnly  
+            bool ICollection<TSource>.IsReadOnly
                 => true;
 
-            public void CopyTo(TSource[] array, int arrayIndex) 
+            public void CopyTo(TSource[] array, int arrayIndex)
             {
                 if (source.Count == 0)
                     return;
@@ -61,7 +61,7 @@ namespace NetFabric.Hyperlinq
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            bool ICollection<TSource>.Contains(TSource item) 
+            bool ICollection<TSource>.Contains(TSource item)
                 => ReadOnlyListExtensions.Contains(source, item);
 
             public int IndexOf(TSource item)
@@ -110,27 +110,27 @@ namespace NetFabric.Hyperlinq
                 readonly IReadOnlyList<TSource> source;
                 int index;
 
-                internal Enumerator(IReadOnlyList<TSource> source) 
+                internal Enumerator(IReadOnlyList<TSource> source)
                 {
                     this.source = source;
                     index = -1;
                 }
 
                 [MaybeNull]
-                public readonly TSource Current 
+                public readonly TSource Current
                     => source[index];
-                readonly TSource IEnumerator<TSource>.Current 
+                readonly TSource IEnumerator<TSource>.Current
                     => source[index];
                 readonly object? IEnumerator.Current
                     => source[index];
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                public bool MoveNext() 
+                public bool MoveNext()
                     => ++index < source.Count;
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 [ExcludeFromCodeCoverage]
-                public void Reset() 
+                public void Reset()
                     => index = -1;
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -144,7 +144,7 @@ namespace NetFabric.Hyperlinq
             public TSource[] ToArray()
                 => ReadOnlyListExtensions.ToArray<IReadOnlyList<TSource>, TSource>(source);
 
-            
+
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public List<TSource> ToList()
                 => ReadOnlyListExtensions.ToList<IReadOnlyList<TSource>, TSource>(source);

@@ -15,7 +15,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Projection.Select
             var selector = (NullableSelector<int, string>)null;
 
             // Act
-            Action action = () => _ = ReadOnlyListExtensions.Select<Wrap.ValueReadOnlyListWrapper<int>, int, string>(source, selector);
+            Action action = () => _ = ReadOnlyListExtensions.Select(source, selector);
 
             // Assert
             _ = action.Must()
@@ -30,13 +30,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Projection.Select
         public void Select_With_ValidData_Must_Succeed(int[] source, NullableSelector<int, string> selector)
         {
             // Arrange
-            var wrapped = Wrap.AsValueReadOnlyList(source);
+            var wrapped = Wrap.AsReadOnlyList(source);
             var expected = 
                 System.Linq.Enumerable.Select(wrapped, selector.AsFunc());
 
             // Act
             var result = ReadOnlyListExtensions
-                .Select<Wrap.ValueReadOnlyListWrapper<int>, int, string>(wrapped, selector);
+                .Select(wrapped, selector);
 
             // Assert
             _ = result.Must()
