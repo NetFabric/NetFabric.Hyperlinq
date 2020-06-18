@@ -139,12 +139,16 @@ namespace NetFabric.Hyperlinq
             void ICollection<TSource>.CopyTo(TSource[] array, int arrayIndex) 
                 => ((ICollection<TSource>)source).CopyTo(array, arrayIndex);
 
+            [ExcludeFromCodeCoverage]
             void ICollection<TSource>.Add(TSource item) 
                 => Throw.NotSupportedException();
+            [ExcludeFromCodeCoverage]
             void ICollection<TSource>.Clear() 
                 => Throw.NotSupportedException();
+            [ExcludeFromCodeCoverage]
             bool ICollection<TSource>.Contains(TSource item) 
                 => Throw.NotSupportedException<bool>();
+            [ExcludeFromCodeCoverage]
             bool ICollection<TSource>.Remove(TSource item) 
                 => Throw.NotSupportedException<bool>();
         }

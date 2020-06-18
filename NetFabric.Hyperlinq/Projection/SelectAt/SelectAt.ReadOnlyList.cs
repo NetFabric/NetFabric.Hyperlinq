@@ -63,6 +63,7 @@ namespace NetFabric.Hyperlinq
             TResult IList<TResult>.this[int index]
             {
                 get => this[index]!;
+                [ExcludeFromCodeCoverage]
                 set => Throw.NotSupportedException();
             }
 
@@ -75,7 +76,7 @@ namespace NetFabric.Hyperlinq
             bool ICollection<TResult>.IsReadOnly  
                 => true;
 
-            void ICollection<TResult>.CopyTo(TResult[] array, int arrayIndex) 
+            public void CopyTo(TResult[] array, int arrayIndex) 
             {
                 if (skipCount == 0)
                 {
@@ -104,15 +105,11 @@ namespace NetFabric.Hyperlinq
                     }
                 }
             }
-            void ICollection<TResult>.Add(TResult item) 
-                => Throw.NotSupportedException();
-            void ICollection<TResult>.Clear() 
-                => Throw.NotSupportedException();
-            bool ICollection<TResult>.Contains(TResult item)
+
+            public bool Contains(TResult item)
                 => ReadOnlyListExtensions.Contains<TList, TSource, TResult>(source, item, selector, skipCount, Count);
-            bool ICollection<TResult>.Remove(TResult item) 
-                => Throw.NotSupportedException<bool>();
-            int IList<TResult>.IndexOf(TResult item)
+
+            public int IndexOf(TResult item)
             {
                 var end = skipCount + Count;
                 if (default(TResult) is object)
@@ -157,8 +154,21 @@ namespace NetFabric.Hyperlinq
                 }
                 return -1;
             }
+
+            [ExcludeFromCodeCoverage]
+            void ICollection<TResult>.Add(TResult item) 
+                => Throw.NotSupportedException();
+            [ExcludeFromCodeCoverage]
+            void ICollection<TResult>.Clear() 
+                => Throw.NotSupportedException();
+            [ExcludeFromCodeCoverage]
+            bool ICollection<TResult>.Remove(TResult item) 
+                => Throw.NotSupportedException<bool>();
+
+            [ExcludeFromCodeCoverage]
             void IList<TResult>.Insert(int index, TResult item)
                 => Throw.NotSupportedException();
+            [ExcludeFromCodeCoverage]
             void IList<TResult>.RemoveAt(int index)
                 => Throw.NotSupportedException();
 

@@ -140,6 +140,7 @@ namespace NetFabric.Hyperlinq
             TSource IList<TSource>.this[int index]
             {
                 get => source[index];
+                [ExcludeFromCodeCoverage]
                 set => Throw.NotSupportedException();
             }
 
@@ -154,18 +155,26 @@ namespace NetFabric.Hyperlinq
 
             void ICollection<TSource>.CopyTo(TSource[] array, int arrayIndex) 
                 => source.CopyTo(array, arrayIndex);
-            void ICollection<TSource>.Add(TSource item) 
-                => Throw.NotSupportedException();
-            void ICollection<TSource>.Clear() 
-                => Throw.NotSupportedException();
-            bool ICollection<TSource>.Contains(TSource item) 
+
+            bool ICollection<TSource>.Contains(TSource item)
                 => source.Contains(item);
-            bool ICollection<TSource>.Remove(TSource item) 
-                => Throw.NotSupportedException<bool>();
+
             int IList<TSource>.IndexOf(TSource item)
                 => source.IndexOf(item);
+
+            [ExcludeFromCodeCoverage]
+            void ICollection<TSource>.Add(TSource item) 
+                => Throw.NotSupportedException();
+            [ExcludeFromCodeCoverage]
+            void ICollection<TSource>.Clear() 
+                => Throw.NotSupportedException();
+            [ExcludeFromCodeCoverage]
+            bool ICollection<TSource>.Remove(TSource item) 
+                => Throw.NotSupportedException<bool>();
+            [ExcludeFromCodeCoverage]
             void IList<TSource>.Insert(int index, TSource item)
                 => Throw.NotSupportedException();
+            [ExcludeFromCodeCoverage]
             void IList<TSource>.RemoveAt(int index)
                 => Throw.NotSupportedException();
         }    

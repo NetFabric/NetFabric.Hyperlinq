@@ -39,6 +39,7 @@ namespace NetFabric.Hyperlinq
             TSource IList<TSource>.this[int index]
             {
                 get => this[index]!;
+                [ExcludeFromCodeCoverage]
                 set => Throw.NotSupportedException();
             }
 
@@ -51,22 +52,31 @@ namespace NetFabric.Hyperlinq
             bool ICollection<TSource>.IsReadOnly  
                 => true;
 
-            void ICollection<TSource>.CopyTo(TSource[] array, int arrayIndex) 
+            public void CopyTo(TSource[] array, int arrayIndex) 
                 => array[arrayIndex] = value;
-            bool ICollection<TSource>.Contains(TSource item)
-                => Contains(item);
+
+            public bool Contains(TSource item)
+                => Contains(item, null);
+
+            [ExcludeFromCodeCoverage]
             void ICollection<TSource>.Add(TSource item) 
                 => Throw.NotSupportedException();
+            [ExcludeFromCodeCoverage]
             void ICollection<TSource>.Clear() 
                 => Throw.NotSupportedException();
+            [ExcludeFromCodeCoverage]
             bool ICollection<TSource>.Remove(TSource item) 
                 => Throw.NotSupportedException<bool>();
+
             int IList<TSource>.IndexOf(TSource item)
                 => EqualityComparer<TSource>.Default.Equals(value, item)
                     ? 0
                     : -1;
+
+            [ExcludeFromCodeCoverage]
             void IList<TSource>.Insert(int index, TSource item)
                 => Throw.NotSupportedException();
+            [ExcludeFromCodeCoverage]
             void IList<TSource>.RemoveAt(int index)
                 => Throw.NotSupportedException();
 
@@ -134,7 +144,7 @@ namespace NetFabric.Hyperlinq
                 => true;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public bool Contains(TSource value, IEqualityComparer<TSource>? comparer = default)
+            public bool Contains(TSource value, IEqualityComparer<TSource>? comparer)
                 => comparer is null
                     ? EqualityComparer<TSource>.Default.Equals(this.value, value)
                     : comparer.Equals(this.value, value);

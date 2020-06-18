@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
@@ -139,12 +140,16 @@ namespace NetFabric.Hyperlinq
             void ICollection<TValue>.CopyTo(TValue[] array, int arrayIndex) 
                 => ((ICollection<TValue>)source).CopyTo(array, arrayIndex);
 
+            [ExcludeFromCodeCoverage]
             void ICollection<TValue>.Add(TValue item) 
                 => Throw.NotSupportedException();
+            [ExcludeFromCodeCoverage]
             void ICollection<TValue>.Clear() 
                 => Throw.NotSupportedException();
+            [ExcludeFromCodeCoverage]
             bool ICollection<TValue>.Contains(TValue item) 
                 => Throw.NotSupportedException<bool>();
+            [ExcludeFromCodeCoverage]
             bool ICollection<TValue>.Remove(TValue item) 
                 => Throw.NotSupportedException<bool>();
         }

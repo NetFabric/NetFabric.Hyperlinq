@@ -28,6 +28,7 @@ namespace NetFabric.Hyperlinq
             TSource IList<TSource>.this[int index]
             {
                 get => this[index];
+                [ExcludeFromCodeCoverage]
                 set => Throw.NotSupportedException();
             }
 
@@ -40,20 +41,30 @@ namespace NetFabric.Hyperlinq
             bool ICollection<TSource>.IsReadOnly  
                 => true;
 
-            void ICollection<TSource>.CopyTo(TSource[] array, int arrayIndex) 
-            { }
+            public void CopyTo(TSource[] array, int arrayIndex) 
+            {
+                // nothing to do 
+            }
+
+            public bool Contains(TSource item)
+                => false;
+
+            public int IndexOf(TSource item)
+                => -1;
+
+            [ExcludeFromCodeCoverage]
             void ICollection<TSource>.Add(TSource item) 
                 => Throw.NotSupportedException();
+            [ExcludeFromCodeCoverage]
             void ICollection<TSource>.Clear() 
                 => Throw.NotSupportedException();
-            bool ICollection<TSource>.Contains(TSource item) 
-                => false;
+            [ExcludeFromCodeCoverage]
             bool ICollection<TSource>.Remove(TSource item) 
                 => Throw.NotSupportedException<bool>();
-            int IList<TSource>.IndexOf(TSource item)
-                => -1;
+            [ExcludeFromCodeCoverage]
             void IList<TSource>.Insert(int index, TSource item)
                 => Throw.NotSupportedException();
+            [ExcludeFromCodeCoverage]
             void IList<TSource>.RemoveAt(int index)
                 => Throw.NotSupportedException();
 
