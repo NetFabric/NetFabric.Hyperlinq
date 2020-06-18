@@ -19,7 +19,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Contains
 
             // Act
             var result = ValueReadOnlyCollectionExtensions
-                .Contains<Wrap.ValueReadOnlyCollectionWrapper<int>, Wrap.Enumerator<int>, int>(wrapped, value, null);
+                .Contains<Wrap.ValueReadOnlyCollectionWrapper<int>, Wrap.Enumerator<int>, int>(wrapped, value);
 
             // Assert
             _ = result.Must()
@@ -38,7 +38,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Contains
 
             // Act
             var result = ValueReadOnlyCollectionExtensions
-                .Contains<Wrap.ValueReadOnlyCollectionWrapper<string>, Wrap.Enumerator<string>, string>(wrapped, value, null);
+                .Contains<Wrap.ValueReadOnlyCollectionWrapper<string>, Wrap.Enumerator<string>, string>(wrapped, value);
 
             // Assert
             _ = result.Must()
@@ -56,7 +56,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Contains
 
             // Act
             var result = ValueReadOnlyCollectionExtensions
-                .Contains<Wrap.ValueReadOnlyCollectionWrapper<int>, Wrap.Enumerator<int>, int>(wrapped, value, null);
+                .Contains<Wrap.ValueReadOnlyCollectionWrapper<int>, Wrap.Enumerator<int>, int>(wrapped, value);
 
             // Assert
             _ = result.Must()
@@ -74,7 +74,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Contains
 
             // Act
             var result = ValueReadOnlyCollectionExtensions
-                .Contains<Wrap.ValueReadOnlyCollectionWrapper<string>, Wrap.Enumerator<string>, string>(wrapped, value, null);
+                .Contains<Wrap.ValueReadOnlyCollectionWrapper<string>, Wrap.Enumerator<string>, string>(wrapped, value);
 
             // Assert
             _ = result.Must()

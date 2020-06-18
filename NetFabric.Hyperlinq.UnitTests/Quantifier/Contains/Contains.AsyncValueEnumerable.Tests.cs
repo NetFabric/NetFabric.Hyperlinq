@@ -21,7 +21,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.ContainsAsync
 
             // Act
             var result = await AsyncValueEnumerableExtensions
-                .ContainsAsync<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, value, null);
+                .ContainsAsync<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, value);
 
             // Assert
             _ = result.Must()
@@ -40,7 +40,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.ContainsAsync
 
             // Act
             var result = await AsyncValueEnumerableExtensions
-                .ContainsAsync<Wrap.AsyncValueEnumerableWrapper<string>, Wrap.AsyncEnumerator<string>, string>(wrapped, value, null);
+                .ContainsAsync<Wrap.AsyncValueEnumerableWrapper<string>, Wrap.AsyncEnumerator<string>, string>(wrapped, value);
 
             // Assert
             _ = result.Must()
@@ -58,7 +58,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.ContainsAsync
 
             // Act
             var result = await AsyncValueEnumerableExtensions
-                .ContainsAsync<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, value, null);
+                .ContainsAsync<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, value);
 
             // Assert
             _ = result.Must()
@@ -76,7 +76,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.ContainsAsync
 
             // Act
             var result = await AsyncValueEnumerableExtensions
-                .ContainsAsync<Wrap.AsyncValueEnumerableWrapper<string>, Wrap.AsyncEnumerator<string>, string>(wrapped, value, null);
+                .ContainsAsync<Wrap.AsyncValueEnumerableWrapper<string>, Wrap.AsyncEnumerator<string>, string>(wrapped, value);
 
             // Assert
             _ = result.Must()
