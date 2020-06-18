@@ -2,29 +2,55 @@ using NetFabric.Assertive;
 using Xunit;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System;
 
 namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsAsyncValueEnumerable
 {
     public class ValueEnumerableTests
     {
-        // [Theory]
-        // [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
-        // [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
-        // [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
-        // public void AsAsyncValueEnumerable_With_ValidData_Must_Succeed(int[] source)
-        // {
-        //     // Arrange
-        //     var wrapped = Wrap.AsValueEnumerable(source);
+        [Theory]
+        [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
+        public async ValueTask AsAsyncValueEnumerable_With_ValidData_Must_Succeed(int[] source)
+        {
+            // Arrange
+            var wrapped = Wrap.AsValueEnumerable(source);
 
-        //     // Act
-        //     var result = ValueEnumerable
-        //         .AsAsyncValueEnumerable<Wrap.ValueEnumerable<int>, Wrap.Enumerator<int>, int>(wrapped);
+            // Act
+            var result = ValueEnumerableExtensions
+                .AsAsyncValueEnumerable<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(wrapped);
 
-        //     // Assert
-        //     _ = result.Must()
-        //         .BeAsyncEnumerableOf<int>()
-        //         .BeEqualTo(source);
-        // }
+            // Assert
+            var enumerator = result.GetAsyncEnumerator();
+            await using (enumerator.ConfigureAwait(false))
+            {
+                var index = 0;
+                while (true)
+                {
+                    var isResultCompleted = !await enumerator.MoveNextAsync();
+                    var isSourceCompleted = index == source.Length;
+
+                    if (isResultCompleted && isSourceCompleted)
+                        return;
+
+                    if (isResultCompleted)
+                        throw new Exception("'result' is shorter.");
+
+                    if (isSourceCompleted)
+                        throw new Exception("'result' is longer.");
+
+                    if (!EqualityComparer<int>.Default.Equals(enumerator.Current, source[index]))
+                        throw new Exception($"Items are not equal at index '{index}'.");
+
+                    index++;
+                }
+            }
+            // TODO: figure out why this doesn't work...
+            //_ = result.Must()
+            //    .BeAsyncEnumerableOf<int>()
+            //    .BeEqualTo(source);
+        }
 
         [Theory]
         [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]

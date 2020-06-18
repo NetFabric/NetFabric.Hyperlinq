@@ -145,21 +145,29 @@ namespace NetFabric.Hyperlinq
 
         bool ICollection<TElement>.IsReadOnly 
             => true;
-        void ICollection<TElement>.Add(TElement item) 
-            => Throw.NotSupportedException();
-        void ICollection<TElement>.Clear() 
-            => Throw.NotSupportedException();
-        bool ICollection<TElement>.Contains(TElement item) 
-            => Throw.NotSupportedException<bool>();
+
         public void CopyTo(TElement[] array, int _)
         {
             for (var index = 0; index < Count; index++)
                 array[index] = slots[index].Value;
         }
+
+        [ExcludeFromCodeCoverage]
+        void ICollection<TElement>.Add(TElement item) 
+            => Throw.NotSupportedException();
+        [ExcludeFromCodeCoverage]
+        void ICollection<TElement>.Clear() 
+            => Throw.NotSupportedException();
+        [ExcludeFromCodeCoverage]
+        bool ICollection<TElement>.Contains(TElement item) 
+            => Throw.NotSupportedException<bool>();
+        [ExcludeFromCodeCoverage]
         bool ICollection<TElement>.Remove(TElement item) 
             => Throw.NotSupportedException<bool>();
+        [ExcludeFromCodeCoverage]
         IEnumerator<TElement> IEnumerable<TElement>.GetEnumerator() 
             => Throw.NotSupportedException<IEnumerator<TElement>>();
+        [ExcludeFromCodeCoverage]
         IEnumerator IEnumerable.GetEnumerator() 
             => Throw.NotSupportedException<IEnumerator>();
 

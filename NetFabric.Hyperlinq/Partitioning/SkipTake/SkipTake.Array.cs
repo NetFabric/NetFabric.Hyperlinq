@@ -47,6 +47,7 @@ namespace NetFabric.Hyperlinq
             TSource IList<TSource>.this[int index]
             {
                 get => this[index];
+                [ExcludeFromCodeCoverage]
                 set => Throw.NotSupportedException();
             }
 
@@ -93,14 +94,19 @@ namespace NetFabric.Hyperlinq
                 return -1;
             }
 
+            [ExcludeFromCodeCoverage]
             void ICollection<TSource>.Add(TSource item) 
                 => Throw.NotSupportedException();
+            [ExcludeFromCodeCoverage]
             void ICollection<TSource>.Clear() 
                 => Throw.NotSupportedException();
+            [ExcludeFromCodeCoverage]
             bool ICollection<TSource>.Remove(TSource item) 
                 => Throw.NotSupportedException<bool>();
+            [ExcludeFromCodeCoverage]
             void IList<TSource>.Insert(int index, TSource item)
                 => Throw.NotSupportedException();
+            [ExcludeFromCodeCoverage]
             void IList<TSource>.RemoveAt(int index)
                 => Throw.NotSupportedException();
 

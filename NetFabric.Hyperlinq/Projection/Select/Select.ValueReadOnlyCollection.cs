@@ -49,7 +49,7 @@ namespace NetFabric.Hyperlinq
             bool ICollection<TResult>.IsReadOnly  
                 => true;
 
-            void ICollection<TResult>.CopyTo(TResult[] array, int arrayIndex) 
+            public void CopyTo(TResult[] array, int arrayIndex) 
             {
                 if (source.Count == 0)
                     return;
@@ -62,12 +62,16 @@ namespace NetFabric.Hyperlinq
                 }
             }
 
+            public bool Contains(TResult item)
+                => ValueReadOnlyCollectionExtensions.Contains<TEnumerable, TEnumerator, TSource, TResult>(source, item, selector);
+
+            [ExcludeFromCodeCoverage]
             void ICollection<TResult>.Add(TResult item) 
                 => Throw.NotSupportedException();
+            [ExcludeFromCodeCoverage]
             void ICollection<TResult>.Clear() 
                 => Throw.NotSupportedException();
-            bool ICollection<TResult>.Contains(TResult item)
-                => ValueReadOnlyCollectionExtensions.Contains<TEnumerable, TEnumerator, TSource, TResult>(source, item, selector);
+            [ExcludeFromCodeCoverage]
             bool ICollection<TResult>.Remove(TResult item) 
                 => Throw.NotSupportedException<bool>();
 

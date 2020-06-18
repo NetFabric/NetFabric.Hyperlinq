@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 
@@ -55,6 +56,7 @@ namespace NetFabric.Hyperlinq
             int IList<int>.this[int index]
             {
                 get => this[index];
+                [ExcludeFromCodeCoverage]
                 set => Throw.NotSupportedException();
             }
 
@@ -68,7 +70,7 @@ namespace NetFabric.Hyperlinq
             bool ICollection<int>.IsReadOnly  
                 => true;
 
-            void ICollection<int>.CopyTo(int[] array, int arrayIndex) 
+            public void CopyTo(int[] array, int arrayIndex) 
             {
                 if (arrayIndex == 0)
                 {
@@ -81,17 +83,25 @@ namespace NetFabric.Hyperlinq
                         array[index + arrayIndex] = index + start;
                 } 
             }
-            
-            void ICollection<int>.Add(int item) 
-                => Throw.NotSupportedException();
-            void ICollection<int>.Clear() 
-                => Throw.NotSupportedException();
-            bool ICollection<int>.Remove(int item) 
-                => Throw.NotSupportedException<bool>();
-            int IList<int>.IndexOf(int item)
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public bool Contains(int value)
+                => value >= start && value < end;
+
+            public int IndexOf(int item)
                 => item >= start && item < end
                     ? item - start
                     : -1;
+
+            [ExcludeFromCodeCoverage]
+            void ICollection<int>.Add(int item) 
+                => Throw.NotSupportedException();
+            [ExcludeFromCodeCoverage]
+            void ICollection<int>.Clear() 
+                => Throw.NotSupportedException();
+            [ExcludeFromCodeCoverage]
+            bool ICollection<int>.Remove(int item) 
+                => Throw.NotSupportedException<bool>();
             void IList<int>.Insert(int index, int item)
                 => Throw.NotSupportedException();
             void IList<int>.RemoveAt(int index)
@@ -156,9 +166,11 @@ namespace NetFabric.Hyperlinq
                 => Count != 0;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public bool Contains(int value)
-                => value >= start && value < end;
-                
+            public bool Contains(int value, IEqualityComparer<int>? comparer)
+                => comparer is null
+                    ? value >= start && value < end
+                    : ReadOnlyListExtensions.Contains(this, value, comparer);
+
             public int[] ToArray()
             {
                 var array = new int[Count];

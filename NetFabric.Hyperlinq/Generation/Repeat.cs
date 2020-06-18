@@ -46,6 +46,7 @@ namespace NetFabric.Hyperlinq
             TSource IList<TSource>.this[int index]
             {
                 get => this[index]!;
+                [ExcludeFromCodeCoverage]
                 set => Throw.NotSupportedException();
             }
 
@@ -58,24 +59,36 @@ namespace NetFabric.Hyperlinq
             bool ICollection<TSource>.IsReadOnly  
                 => true;
 
-            void ICollection<TSource>.CopyTo(TSource[] array, int arrayIndex) 
+            public void CopyTo(TSource[] array, int arrayIndex) 
             {
                 var end = arrayIndex + count;
                 for (var index = arrayIndex; index < end; index++)
                     array[index] = value;
             }
-            void ICollection<TSource>.Add(TSource item) 
-                => Throw.NotSupportedException();
-            void ICollection<TSource>.Clear() 
-                => Throw.NotSupportedException();
-            bool ICollection<TSource>.Remove(TSource item) 
-                => Throw.NotSupportedException<bool>();
-            int IList<TSource>.IndexOf(TSource item)
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            bool ICollection<TSource>.Contains(TSource value)
+                => Contains(value);
+
+            public int IndexOf(TSource item)
                 => count > 0 && EqualityComparer<TSource>.Default.Equals(value, item)
                     ? 0
                     : -1;
+
+            [ExcludeFromCodeCoverage]
+            void ICollection<TSource>.Add(TSource item) 
+                => Throw.NotSupportedException();
+            [ExcludeFromCodeCoverage]
+            void ICollection<TSource>.Clear() 
+                => Throw.NotSupportedException();
+            [ExcludeFromCodeCoverage]
+            bool ICollection<TSource>.Remove(TSource item) 
+                => Throw.NotSupportedException<bool>();
+
+            [ExcludeFromCodeCoverage]
             void IList<TSource>.Insert(int index, TSource item)
                 => Throw.NotSupportedException();
+            [ExcludeFromCodeCoverage]
             void IList<TSource>.RemoveAt(int index)
                 => Throw.NotSupportedException();
 
@@ -145,10 +158,6 @@ namespace NetFabric.Hyperlinq
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Any()
                 => count != 0;
-
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public bool Contains(TSource value)
-                => count != 0 && EqualityComparer<TSource>.Default.Equals(this.value, value);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Contains(TSource value, IEqualityComparer<TSource>? comparer = default)
