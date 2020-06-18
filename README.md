@@ -19,6 +19,8 @@ This implementation **favors performance in detriment of assembly binary size** 
 
 ## Contents
 
+- [Fast enumeration](#fast-enumeration)
+- [Reduced heap allocations](#reduced-heap-allocations)
 - [Usage](#usage)
   - [BCL Collections](#bcl-collections)
   - [AsValueEnumerable and AsAsyncValueEnumerable](#asvalueenumerable-and-asasyncvalueenumerable)
@@ -31,6 +33,36 @@ This implementation **favors performance in detriment of assembly binary size** 
 - [References](#references)
 - [Credits](#credits)
 - [License](#license)
+
+## Fast enumeration
+
+`NetFabric.Hyperlinq` can enumerate faster the results of a query than `System.Linq` by performing all of the following:
+
+- Merges multiple enumerators into a single one for several more scenarios.
+- It does not box value-type enumerators so, calls to the `Current` property and the `MoveNext()` method are non-virtual.
+- All the enumerables returned by operations define a value-type enumerator.
+- Whenever possible, the enumerator returned by the public `GetEnumerator()` or `GetAsyncEnumerator()` does not implement `IDisposable`. This allows the `foreach` that enumerates the result to be inlinable. 
+- Operations enumerate the source using the indexer when the source is an array, `Span<>`, `ReadOnlySpan<>`, `Memory<>`, `ReadOnlyMemory<>`, or implements `IReadOnlyList<>`. The indexer performs a lot fewer operations than the enumerator.
+- The enumerables returned by operations like `Range()`, `Repeat()`, `Return()`, and `Select()`, implement `IReadOnlyList<>` and `IList<>`.
+- Elimination of conditional branchs in `Count()` with a predicate.
+- Allows the JIT compiler to perform optimizations on array enumeration whenever possible.
+- Takes advantage of `EqualityComparer<>.Default` devirtualization whenever possible.
+- `ToList()` uses `ICollection<>.CopyTo()` to add the items to the resulting `List<>`. This removes the many operations performed when adding items one-by-one or using an `IEnumerable<>`. 
+
+The performance is equivalent when the enumerator is a reference-type. This happens when the enumerable is generated using `yield` or when it's cast to one of the BCL enumerable interfaces (`IEnumerable`, `IEnumerable<>`, `IReadOnlyCollection<>`, `ICollection<>`, `IReadOnlyList<>`, `IList<>`, or `IAsyncEnumerable<>`). In the case of operation composition, this only affects the first operation. The subsequent operations will have value-type enumerators.
+
+## Reduced heap allocations
+
+`NetFabric.Hyperlinq` allocates as much as possible on the stack. Enumerables and enumerators are defined as value-types. Generics constraints are used for the operation parameters so that the value-types are not boxed.
+
+When the indexers are used, no allocation is performed.
+
+It only allocates on the heap for the following cases:
+
+- `ToArray()` and `ToList()` allocate their results on the heap.
+- Operations that use `ICollection<>.CopyTo()`, `ICollection<>.Contains()`, or `IList<>.IndexOf()` will box enumerables that are value-types.   
+- `ToList()`, when applied to collections that implement `IReadOnlyCollection<>` but not `ICollection<>`, allocates an instance of an helper class so that `ICollection<>.CopyTo()` can be used.
+- `Distinct()` allocates its internal hash set on the heap.
 
 ## Usage
 
