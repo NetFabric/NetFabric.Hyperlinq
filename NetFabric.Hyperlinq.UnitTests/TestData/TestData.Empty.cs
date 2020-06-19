@@ -146,6 +146,7 @@ namespace NetFabric.Hyperlinq
         public static TheoryData<int[], int, int, NullableSelector<int, string>> SkipTakeSelectorEmpty =>
             new TheoryData<int[], int, int, NullableSelector<int, string>>
             {
+                { new int[] { }, 0, 0, item => item.ToString() },
                 { new int[] { }, 0, 9, item => item.ToString() },
 
                 { new int[] { 1 }, 0, 0, item => item.ToString() },
@@ -164,6 +165,7 @@ namespace NetFabric.Hyperlinq
         public static TheoryData<int[], int, int, NullableSelectorAt<int, string>> SkipTakeSelectorAtEmpty =>
             new TheoryData<int[], int, int, NullableSelectorAt<int, string>>
             {
+                { new int[] { }, 0, 0, (item, index) => $"{item} {index}" },
                 { new int[] { }, 0, 9, (item, index) => $"{item} {index}" },
 
                 { new int[] { 1 }, 0, 0, (item, index) => $"{item} {index}" },

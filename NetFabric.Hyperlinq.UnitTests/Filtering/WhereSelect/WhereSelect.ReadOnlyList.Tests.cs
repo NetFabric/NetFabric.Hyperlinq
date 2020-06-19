@@ -1,5 +1,6 @@
 using NetFabric.Assertive;
 using System;
+using System.Linq;
 using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests.Filtering.WhereSelect
@@ -10,12 +11,12 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.WhereSelect
         public void WhereSelect_Predicate_With_Null_Must_Throw()
         {
             // Arrange
-            var source = Wrap.AsValueReadOnlyList(new int[0]);
+            var source = Wrap.AsReadOnlyList(new int[0]);
             var predicate = (Predicate<int>)null;
 
             // Act
             Action action = () => _ = ReadOnlyListExtensions
-                .Where<Wrap.ValueReadOnlyListWrapper<int>, int>(source, predicate)
+                .Where<Wrap.ReadOnlyListWrapper<int>, int>(source, predicate)
                 .Select(item => item.ToString());
 
             // Assert
@@ -28,12 +29,12 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.WhereSelect
         public void WhereSelect_Selector_With_Null_Must_Throw()
         {
             // Arrange
-            var source = Wrap.AsValueReadOnlyList(new int[0]);
+            var source = Wrap.AsReadOnlyList(new int[0]);
             var selector = (NullableSelector<int, string>)null;
 
             // Act
             Action action = () => _ = ReadOnlyListExtensions
-                .Where<Wrap.ValueReadOnlyListWrapper<int>, int>(source, _ => true)
+                .Where<Wrap.ReadOnlyListWrapper<int>, int>(source, _ => true)
                 .Select(selector);
 
             // Assert
@@ -43,20 +44,24 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.WhereSelect
         }
 
         [Theory]
-        [MemberData(nameof(TestData.PredicateSelectorEmpty), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.PredicateSelectorSingle), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.PredicateSelectorMultiple), MemberType = typeof(TestData))]
-        public void WhereSelect_With_ValidData_Must_Succeed(int[] source, Predicate<int> predicate, NullableSelector<int, string> selector)
+        [MemberData(nameof(TestData.SkipTakePredicateSelectorEmpty), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakePredicateSelectorSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakePredicateSelectorMultiple), MemberType = typeof(TestData))]
+        public void WhereSelect_With_ValidData_Must_Succeed(int[] source, int skipCount, int takeCount, Predicate<int> predicate, NullableSelector<int, string> selector)
         {
             // Arrange
-            var wrapped = Wrap.AsValueReadOnlyList(source);
-            var expected = 
-                System.Linq.Enumerable.Select(
-                    System.Linq.Enumerable.Where(wrapped, predicate.AsFunc()), selector.AsFunc());
+            var wrapped = Wrap.AsReadOnlyList(source);
+            var expected = Enumerable
+                .Skip(source, skipCount)
+                .Take(takeCount)
+                .Where(predicate.AsFunc())
+                .Select(selector.AsFunc());
 
             // Act
             var result = ReadOnlyListExtensions
-                .Where<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped, predicate)
+                .Skip<Wrap.ReadOnlyListWrapper<int>, int>(wrapped, skipCount)
+                .Take(takeCount)
+                .Where(predicate)
                 .Select(selector);
 
             // Assert

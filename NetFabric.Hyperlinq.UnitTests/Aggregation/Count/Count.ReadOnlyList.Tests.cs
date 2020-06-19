@@ -1,5 +1,6 @@
 using NetFabric.Assertive;
 using System;
+using System.Linq;
 using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests.Aggregation.Count
@@ -14,13 +15,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Aggregation.Count
         {
             // Arrange
             var wrapped = Wrap
-                .AsValueReadOnlyList(source);
-            var expected = 
-                System.Linq.Enumerable.Count(source);
+                .AsReadOnlyList(source);
+            var expected = Enumerable
+                .Count(source);
 
             // Act
             var result = ReadOnlyListExtensions
-                .Count<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped);
+                .Count<Wrap.ReadOnlyListWrapper<int>, int>(wrapped);
 
             // Assert
             _ = result.Must()
@@ -35,16 +36,16 @@ namespace NetFabric.Hyperlinq.UnitTests.Aggregation.Count
         {
             // Arrange
             var wrapped = Wrap
-                .AsValueReadOnlyList(source);
-            var expected = 
-                System.Linq.Enumerable.Count(
-                    System.Linq.Enumerable.Where(
-                        System.Linq.Enumerable.Take(
-                            System.Linq.Enumerable.Skip(source, skipCount), takeCount), predicate.AsFunc()));
+                .AsReadOnlyList(source);
+            var expected = Enumerable
+                .Skip(source, skipCount)
+                .Take(takeCount)
+                .Where(predicate.AsFunc())
+                .Count();
 
             // Act
             var result = ReadOnlyListExtensions
-                .Skip<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped, skipCount)
+                .Skip<Wrap.ReadOnlyListWrapper<int>, int>(wrapped, skipCount)
                 .Take(takeCount)
                 .Where(predicate)
                 .Count();
@@ -62,16 +63,16 @@ namespace NetFabric.Hyperlinq.UnitTests.Aggregation.Count
         {
             // Arrange
             var wrapped = Wrap
-                .AsValueReadOnlyList(source);
-            var expected = 
-                System.Linq.Enumerable.Count(
-                    System.Linq.Enumerable.Where(
-                        System.Linq.Enumerable.Take(
-                            System.Linq.Enumerable.Skip(source, skipCount), takeCount), predicate.AsFunc()));
+                .AsReadOnlyList(source);
+            var expected = Enumerable
+                .Skip(source, skipCount)
+                .Take(takeCount)
+                .Where(predicate.AsFunc())
+                .Count();
 
             // Act
             var result = ReadOnlyListExtensions
-                .Skip<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped, skipCount)
+                .Skip<Wrap.ReadOnlyListWrapper<int>, int>(wrapped, skipCount)
                 .Take(takeCount)
                 .Where(predicate)
                 .Count();

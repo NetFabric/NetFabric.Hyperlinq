@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using NetFabric.Assertive;
 using Xunit;
 
@@ -13,13 +14,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
         public void ToArray_With_Predicate_Must_Succeed(int[] source, Predicate<int> predicate)
         {
             // Arrange
-            var expected = 
-                System.Linq.Enumerable.ToArray(
-                    System.Linq.Enumerable.Where(source, predicate.AsFunc()));
+            var expected = Enumerable
+                .Where(source, predicate.AsFunc())
+                .ToArray();
 
             // Act
             var result = ArrayExtensions
-                .Where<int>(source.AsMemory(), predicate)
+                .Where(source.AsMemory(), predicate)
                 .ToArray();
 
             // Assert
@@ -35,13 +36,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
         public void ToArray_With_PredicateAt_Must_Succeed(int[] source, PredicateAt<int> predicate)
         {
             // Arrange
-            var expected = 
-                System.Linq.Enumerable.ToArray(
-                    System.Linq.Enumerable.Where(source, predicate.AsFunc()));
+            var expected = Enumerable
+                .Where(source, predicate.AsFunc())
+                .ToArray();
 
             // Act
             var result = ArrayExtensions
-                .Where<int>(source.AsMemory(), predicate)
+                .Where(source.AsMemory(), predicate)
                 .ToArray();
 
             // Assert
@@ -57,13 +58,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
         public void ToArray_With_Selector_Must_Succeed(int[] source, NullableSelector<int, string> selector)
         {
             // Arrange
-            var expected = 
-                System.Linq.Enumerable.ToArray(
-                    System.Linq.Enumerable.Select(source, selector.AsFunc()));
+            var expected = Enumerable
+                .Select(source, selector.AsFunc())
+                .ToArray();
 
             // Act
             var result = ArrayExtensions
-                .Select<int, string>(source.AsMemory(), selector)
+                .Select(source.AsMemory(), selector)
                 .ToArray();
 
             // Assert
@@ -79,13 +80,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
         public void ToArray_With_SelectorAt_Must_Succeed(int[] source, NullableSelectorAt<int, string> selector)
         {
             // Arrange
-            var expected = 
-                System.Linq.Enumerable.ToArray(
-                    System.Linq.Enumerable.Select(source, selector.AsFunc()));
+            var expected = Enumerable
+                .Select(source, selector.AsFunc())
+                .ToArray();
 
             // Act
             var result = ArrayExtensions
-                .Select<int, string>(source.AsMemory(), selector)
+                .Select(source.AsMemory(), selector)
                 .ToArray();
 
             // Assert
@@ -101,14 +102,14 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
         public void ToArray_With_Predicate_Selector_Must_Succeed(int[] source, Predicate<int> predicate, NullableSelector<int, string> selector)
         {
             // Arrange
-            var expected = 
-                System.Linq.Enumerable.ToArray(
-                    System.Linq.Enumerable.Select(
-                        System.Linq.Enumerable.Where(source, predicate.AsFunc()), selector.AsFunc()));
+            var expected = Enumerable
+                .Where(source, predicate.AsFunc())
+                .Select(selector.AsFunc())
+                .ToArray();
 
             // Act
             var result = ArrayExtensions
-                .Where<int>(source.AsMemory(), predicate)
+                .Where(source.AsMemory(), predicate)
                 .Select(selector)
                 .ToArray();
 

@@ -1,5 +1,6 @@
 using NetFabric.Assertive;
 using System;
+using System.Linq;
 using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests.Aggregation.Count
@@ -15,8 +16,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Aggregation.Count
             // Arrange
             var wrapped = Wrap
                 .AsValueReadOnlyCollection(source);
-            var expected = 
-                System.Linq.Enumerable.Count(source);
+            var expected = Enumerable
+                .Count(source);
 
             // Act
             var result = ValueReadOnlyCollectionExtensions

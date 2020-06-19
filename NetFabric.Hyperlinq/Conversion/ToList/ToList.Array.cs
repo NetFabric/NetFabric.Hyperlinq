@@ -21,7 +21,7 @@ namespace NetFabric.Hyperlinq
         static List<TSource> ToList<TSource>(this TSource[] source, Predicate<TSource> predicate, int skipCount, int takeCount)
         {
             var list = new List<TSource>();
-            if (takeCount == 0 && skipCount == source.Length)
+            if (skipCount == 0 && takeCount == source.Length)
             {
                 for (var index = 0; index < source.Length; index++)
                 {

@@ -1,6 +1,7 @@
 using NetFabric.Assertive;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -17,8 +18,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
             // Arrange
             var wrapped = Wrap
                 .AsAsyncValueEnumerable(source);
-            var expected = 
-                System.Linq.Enumerable.ToList(source);
+            var expected = Enumerable
+                .ToList(source);
 
             // Act
             var result = await AsyncValueEnumerableExtensions
@@ -40,9 +41,9 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
             // Arrange
             var wrapped = Wrap
                 .AsAsyncValueEnumerable(source);
-            var expected = 
-                System.Linq.Enumerable.ToList(
-                    System.Linq.Enumerable.Where(source, predicate.AsFunc()));
+            var expected = Enumerable
+                .Where(source, predicate.AsFunc())
+                .ToList();
 
             // Act
             var result = await AsyncValueEnumerableExtensions
@@ -65,9 +66,9 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
             // Arrange
             var wrapped = Wrap
                 .AsAsyncValueEnumerable(source);
-            var expected = 
-                System.Linq.Enumerable.ToList(
-                    System.Linq.Enumerable.Where(source, predicate.AsFunc()));
+            var expected = Enumerable
+                .Where(source, predicate.AsFunc())
+                .ToList();
 
             // Act
             var result = await AsyncValueEnumerableExtensions
@@ -90,9 +91,9 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
             // Arrange
             var wrapped = Wrap
                 .AsAsyncValueEnumerable(source);
-            var expected = 
-                System.Linq.Enumerable.ToList(
-                    System.Linq.Enumerable.Select(source, selector.AsFunc()));
+            var expected = Enumerable
+                .Select(source, selector.AsFunc())
+                .ToList();
 
             // Act
             var result = await AsyncValueEnumerableExtensions
@@ -115,9 +116,9 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
             // Arrange
             var wrapped = Wrap
                 .AsAsyncValueEnumerable(source);
-            var expected = 
-                System.Linq.Enumerable.ToList(
-                    System.Linq.Enumerable.Select(source, selector.AsFunc()));
+            var expected = Enumerable
+                .Select(source, selector.AsFunc())
+                .ToList();
 
             // Act
             var result = await AsyncValueEnumerableExtensions
@@ -141,10 +142,10 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
             // Arrange
             var wrapped = Wrap
                 .AsAsyncValueEnumerable(source);
-            var expected = 
-                System.Linq.Enumerable.ToList(
-                    System.Linq.Enumerable.Select(
-                        System.Linq.Enumerable.Where(source, predicate.AsFunc()), selector.AsFunc()));
+            var expected = Enumerable
+                .Where(source, predicate.AsFunc())
+                .Select(selector.AsFunc())
+                .ToList();
 
             // Act
             var result = await AsyncValueEnumerableExtensions

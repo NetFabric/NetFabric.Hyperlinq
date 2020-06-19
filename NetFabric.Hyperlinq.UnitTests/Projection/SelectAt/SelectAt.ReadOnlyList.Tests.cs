@@ -10,11 +10,11 @@ namespace NetFabric.Hyperlinq.UnitTests.Projection.SelectAt
         public void Select_With_NullSelector_Must_Throw()
         {
             // Arrange
-            var source = Wrap.AsValueReadOnlyList(new int[0]);
+            var source = Wrap.AsReadOnlyList(new int[0]);
             var selector = (NullableSelectorAt<int, string>)null;
 
             // Act
-            Action action = () => _ = ReadOnlyListExtensions.Select<Wrap.ValueReadOnlyListWrapper<int>, int, string>(source, selector);
+            Action action = () => _ = ReadOnlyListExtensions.Select<Wrap.ReadOnlyListWrapper<int>, int, string>(source, selector);
 
             // Assert
             _ = action.Must()
@@ -29,13 +29,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Projection.SelectAt
         public void Select_With_ValidData_Must_Succeed(int[] source, NullableSelectorAt<int, string> selector)
         {
             // Arrange
-            var wrapped = Wrap.AsValueReadOnlyList(source);
+            var wrapped = Wrap.AsReadOnlyList(source);
             var expected = 
                 System.Linq.Enumerable.Select(wrapped, selector.AsFunc());
 
             // Act
             var result = ReadOnlyListExtensions
-                .Select<Wrap.ValueReadOnlyListWrapper<int>, int, string>(wrapped, selector);
+                .Select<Wrap.ReadOnlyListWrapper<int>, int, string>(wrapped, selector);
 
             // Assert
             _ = result.Must()

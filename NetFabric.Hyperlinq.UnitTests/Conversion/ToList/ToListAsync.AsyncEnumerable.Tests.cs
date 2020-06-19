@@ -1,6 +1,7 @@
 using NetFabric.Assertive;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -17,12 +18,12 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
             // Arrange
             var wrapped = Wrap
                 .AsAsyncEnumerable(source);
-            var expected = 
-                System.Linq.Enumerable.ToList(source);
+            var expected = Enumerable
+                .ToList(source);
 
             // Act
             var result = await AsyncEnumerableExtensions
-                .AsAsyncValueEnumerable<int>(wrapped)
+                .AsAsyncValueEnumerable(wrapped)
                 .ToListAsync();
 
             // Assert

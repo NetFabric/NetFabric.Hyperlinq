@@ -54,26 +54,28 @@ namespace NetFabric.Hyperlinq
             {
                 readonly TSource[] source;
                 readonly PredicateAt<TSource> predicate;
-                readonly int end;
+                readonly int skipCount;
+                readonly int takeCount;
                 int index;
 
                 internal Enumerator(in WhereAtEnumerable<TSource> enumerable)
                 {
                     source = enumerable.source;
                     predicate = enumerable.predicate;
-                    end = enumerable.skipCount + enumerable.takeCount;
-                    index = enumerable.skipCount - 1;
+                    skipCount = enumerable.skipCount;
+                    takeCount = enumerable.takeCount;
+                    index = -1;
                 }
 
                 [MaybeNull]
                 public readonly TSource Current
-                    => source[index];
+                    => source[index + skipCount];
 
                 public bool MoveNext()
                 {
-                    while (++index < end)
+                    while (++index < takeCount)
                     {
-                        if (predicate(source[index], index))
+                        if (predicate(source[index + skipCount], index))
                             return true;
                     }
                     return false;
@@ -85,30 +87,32 @@ namespace NetFabric.Hyperlinq
             {
                 readonly TSource[] source;
                 readonly PredicateAt<TSource> predicate;
-                readonly int end;
+                readonly int skipCount;
+                readonly int takeCount;
                 int index;
 
                 internal DisposableEnumerator(in WhereAtEnumerable<TSource> enumerable)
                 {
                     source = enumerable.source;
                     predicate = enumerable.predicate;
-                    end = enumerable.skipCount + enumerable.takeCount;
-                    index = enumerable.skipCount - 1;
+                    skipCount = enumerable.skipCount;
+                    takeCount = enumerable.takeCount;
+                    index = -1;
                 }
 
                 [MaybeNull]
                 public readonly TSource Current
-                    => source[index];
+                    => source[index + skipCount];
                 readonly TSource IEnumerator<TSource>.Current
-                    => source[index];
+                    => source[index + skipCount];
                 readonly object? IEnumerator.Current
-                    => source[index];
+                    => source[index + skipCount];
 
                 public bool MoveNext()
                 {
-                    while (++index < end)
+                    while (++index < takeCount)
                     {
-                        if (predicate(source[index], index))
+                        if (predicate(source[index + skipCount], index))
                             return true;
                     }
                     return false;

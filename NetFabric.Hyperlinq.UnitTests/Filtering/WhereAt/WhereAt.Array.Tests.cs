@@ -1,5 +1,6 @@
 using NetFabric.Assertive;
 using System;
+using System.Linq;
 using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests.Filtering.WhereAt
@@ -23,16 +24,22 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.WhereAt
         }
 
         [Theory]
-        [MemberData(nameof(TestData.PredicateAtEmpty), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.PredicateAtSingle), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.PredicateAtMultiple), MemberType = typeof(TestData))]
-        public void Where_With_ValidData_Must_Succeed(int[] source, PredicateAt<int> predicate)
+        [MemberData(nameof(TestData.SkipTakePredicateAtEmpty), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakePredicateAtSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakePredicateAtMultiple), MemberType = typeof(TestData))]
+        public void Where_With_ValidData_Must_Succeed(int[] source, int skipCount, int takeCount, PredicateAt<int> predicate)
         {
             // Arrange
-            var expected = System.Linq.Enumerable.Where(source, predicate.AsFunc());
+            var expected = Enumerable
+                .Skip(source, skipCount)
+                .Take(takeCount)
+                .Where(predicate.AsFunc());
 
             // Act
-            var result = ArrayExtensions.Where(source, predicate);
+            var result = ArrayExtensions
+                .Skip(source, skipCount)
+                .Take(takeCount)
+                .Where(predicate);
 
             // Assert
             _ = result.Must()

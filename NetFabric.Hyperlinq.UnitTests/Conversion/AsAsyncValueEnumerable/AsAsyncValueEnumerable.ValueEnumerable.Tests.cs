@@ -3,6 +3,7 @@ using Xunit;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System;
+using System.Linq;
 
 namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsAsyncValueEnumerable
 {
@@ -15,7 +16,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsAsyncValueEnumerable
         public async ValueTask AsAsyncValueEnumerable_With_ValidData_Must_Succeed(int[] source)
         {
             // Arrange
-            var wrapped = Wrap.AsValueEnumerable(source);
+            var wrapped = Wrap
+                .AsValueEnumerable(source);
 
             // Act
             var result = ValueEnumerableExtensions
@@ -59,9 +61,10 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsAsyncValueEnumerable
         public async ValueTask AsAsyncValueEnumerable_With_ToArrayAsync_Must_Succeed(int[] source)
         {
             // Arrange
-            var wrapped = Wrap.AsValueEnumerable(source);
-            var expected = 
-                System.Linq.Enumerable.ToArray(source);
+            var wrapped = Wrap
+                .AsValueEnumerable(source);
+            var expected = Enumerable
+                .ToArray(source);
 
             // Act
             var result = await ValueEnumerableExtensions
@@ -81,9 +84,10 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsAsyncValueEnumerable
         public async ValueTask AsAsyncValueEnumerable_With_ToListAsync_Must_Succeed(int[] source)
         {
             // Arrange
-            var wrapped = Wrap.AsValueEnumerable(source);
-            var expected = 
-                System.Linq.Enumerable.ToList(source);
+            var wrapped = Wrap
+                .AsValueEnumerable(source);
+            var expected = Enumerable
+                .ToList(source);
 
             // Act
             var result = await ValueEnumerableExtensions

@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
 using NetFabric.Assertive;
 using Xunit;
 
@@ -11,7 +13,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Projection.Select
         public void Select_With_NullSelector_Must_Throw()
         {
             // Arrange
-            var source = Wrap.AsValueReadOnlyList(new int[0]);
+            var source = Wrap.AsReadOnlyList(new int[0]);
             var selector = (NullableSelector<int, string>)null;
 
             // Act
@@ -24,19 +26,23 @@ namespace NetFabric.Hyperlinq.UnitTests.Projection.Select
         }
 
         [Theory]
-        [MemberData(nameof(TestData.SelectorEmpty), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.SelectorSingle), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.SelectorMultiple), MemberType = typeof(TestData))]
-        public void Select_With_ValidData_Must_Succeed(int[] source, NullableSelector<int, string> selector)
+        [MemberData(nameof(TestData.SkipTakeSelectorEmpty), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakeSelectorSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakeSelectorMultiple), MemberType = typeof(TestData))]
+        public void Select_With_ValidData_Must_Succeed(int[] source, int skipCount, int takeCount, NullableSelector<int, string> selector)
         {
             // Arrange
             var wrapped = Wrap.AsReadOnlyList(source);
-            var expected = 
-                System.Linq.Enumerable.Select(wrapped, selector.AsFunc());
+            var expected = Enumerable
+                .Skip(source, skipCount)
+                .Take(takeCount)
+                .Select(selector.AsFunc());
 
             // Act
             var result = ReadOnlyListExtensions
-                .Select(wrapped, selector);
+                .Skip<Wrap.ReadOnlyListWrapper<int>, int>(wrapped, skipCount)
+                .Take(takeCount)
+                .Select(selector);
 
             // Assert
             _ = result.Must()
