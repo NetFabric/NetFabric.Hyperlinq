@@ -25,7 +25,7 @@ namespace NetFabric.Hyperlinq
                 if (skipCount == 0 && takeCount == source.Count && source is ICollection<TSource> collection)
                     return collection.Contains(value);
 
-                if (default(TSource) is object)
+                if (Utils.IsValueType<TSource>())
                     return DefaultContains(source, value, skipCount, takeCount);
             }
 
@@ -61,7 +61,7 @@ namespace NetFabric.Hyperlinq
             if (takeCount == 0)
                 return false;
 
-            return default(TResult) is object
+            return Utils.IsValueType<TResult>()
                 ? ValueContains(source, value, selector, skipCount, takeCount)
                 : ReferenceContains(source, value, selector, skipCount, takeCount);
 
@@ -97,7 +97,7 @@ namespace NetFabric.Hyperlinq
             if (takeCount == 0)
                 return false;
 
-            return default(TResult) is object
+            return Utils.IsValueType<TResult>()
                 ? ValueContains(source, value, selector, skipCount, takeCount)
                 : ReferenceContains(source, value, selector, skipCount, takeCount);
 

@@ -151,16 +151,20 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Contains
         }
 
         [Theory]
-        [MemberData(nameof(TestData.SkipEmpty), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.SkipSingle), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.SkipMultiple), MemberType = typeof(TestData))]
-        public void Skip_Contains_ValueType_With_Null_And_NotContains_Must_ReturnFalse(int[] source, int count)
+        [MemberData(nameof(TestData.SkipTakeEmpty), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakeSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakeMultiple), MemberType = typeof(TestData))]
+        public void SkipTake_Select_Contains_ValueType_With_Null_And_NotContains_Must_ReturnFalse(int[] source, int skipCount, int takeCount, NullableSelector<int, string> selector)
         {
             // Arrange
             var value = int.MaxValue;
 
             // Act
-            var result = ArrayExtensions.Skip(source, count).Contains(value);
+            var result = ArrayExtensions
+                .Skip(source, skipCount)
+                .Take(takeCount)
+                .Select(item => item)
+                .Contains(value);
 
             // Assert
             _ = result.Must()
@@ -168,15 +172,19 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Contains
         }
 
         [Theory]
-        [MemberData(nameof(TestData.SkipSingle), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.SkipMultiple), MemberType = typeof(TestData))]
-        public void Skip_Contains_ValueType_With_Null_And_Contains_Must_ReturnTrue(int[] source, int count)
+        [MemberData(nameof(TestData.SkipTakeSelectorSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakeSelectorMultiple), MemberType = typeof(TestData))]
+        public void SkipTake_Select_Contains_ValueType_With_Null_And_Contains_Must_ReturnTrue(int[] source, int skipCount, int takeCount, NullableSelector<int, string> selector)
         {
             // Arrange
             var value = source.Last();
 
             // Act
-            var result = ArrayExtensions.Skip(source, count).Contains(value);
+            var result = ArrayExtensions
+                .Skip(source, skipCount)
+                .Take(takeCount)
+                .Select(item => item)
+                .Contains(value);
 
             // Assert
             _ = result.Must()
@@ -184,17 +192,20 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Contains
         }
 
         [Theory]
-        [MemberData(nameof(TestData.SkipEmpty), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.SkipSingle), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.SkipMultiple), MemberType = typeof(TestData))]
-        public void Skip_Contains_ReferenceType_With_Null_And_NotContains_Must_ReturnFalse(int[] source, int count)
+        [MemberData(nameof(TestData.SkipTakeSelectorEmpty), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakeSelectorSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakeSelectorMultiple), MemberType = typeof(TestData))]
+        public void SkipTake_Select_Contains_ReferenceType_With_Null_And_NotContains_Must_ReturnFalse(int[] source, int skipCount, int takeCount, NullableSelector<int, string> selector)
         {
             // Arrange
             var value = default(string);
-            var wrapped = source.Select(item => item.ToString()).ToArray();
 
             // Act
-            var result = ArrayExtensions.Skip(wrapped, count).Contains(value);
+            var result = ArrayExtensions
+                .Skip(source, skipCount)
+                .Take(takeCount)
+                .Select(selector)
+                .Contains(value);
 
             // Assert
             _ = result.Must()
@@ -202,16 +213,19 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Contains
         }
 
         [Theory]
-        [MemberData(nameof(TestData.SkipSingle), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.SkipMultiple), MemberType = typeof(TestData))]
-        public void Skip_Contains_ReferenceType_With_Null_And_Contains_Must_ReturnTrue(int[] source, int count)
+        [MemberData(nameof(TestData.SkipTakeSelectorSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakeSelectorMultiple), MemberType = typeof(TestData))]
+        public void SkipTake_Select_Contains_ReferenceType_With_Null_And_Contains_Must_ReturnTrue(int[] source, int skipCount, int takeCount, NullableSelector<int, string> selector)
         {
             // Arrange
             var value = source.Last().ToString();
-            var wrapped = source.Select(item => item.ToString()).ToArray();
 
             // Act
-            var result = ArrayExtensions.Skip(wrapped, count).Contains(value);
+            var result = ArrayExtensions
+                .Skip(source, skipCount)
+                .Take(takeCount)
+                .Select(selector)
+                .Contains(value);
 
             // Assert
             _ = result.Must()
@@ -219,16 +233,20 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Contains
         }
 
         [Theory]
-        [MemberData(nameof(TestData.SkipEmpty), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.SkipSingle), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.SkipMultiple), MemberType = typeof(TestData))]
-        public void Skip_Contains_ValueType_With_DefaultComparer_And_NotContains_Must_ReturnFalse(int[] source, int count)
+        [MemberData(nameof(TestData.SkipTakeSelectorEmpty), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakeSelectorSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakeSelectorMultiple), MemberType = typeof(TestData))]
+        public void SkipTake_Select_Contains_With_DefaultComparer_And_NotContains_Must_ReturnFalse(int[] source, int skipCount, int takeCount, NullableSelector<int, string> selector)
         {
             // Arrange
-            var value = int.MaxValue;
+            var value = default(string);
 
             // Act
-            var result = ArrayExtensions.Skip(source, count).Contains(value, EqualityComparer<int>.Default);
+            var result = ArrayExtensions
+                .Skip(source, skipCount)
+                .Take(takeCount)
+                .Select(selector)
+                .Contains(value, EqualityComparer<string>.Default);
 
             // Assert
             _ = result.Must()
@@ -236,20 +254,66 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Contains
         }
 
         [Theory]
-        [MemberData(nameof(TestData.SkipEmpty), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.SkipSingle), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.SkipMultiple), MemberType = typeof(TestData))]
-        public void Skip_Contains_ValueType_With_Comparer_And_NotContains_Must_ReturnFalse(int[] source, int count)
+        [MemberData(nameof(TestData.SkipTakeSelectorEmpty), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakeSelectorSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakeSelectorMultiple), MemberType = typeof(TestData))]
+        public void SkipTake_Select_Contains_With_DefaultComparer_And_Contains_Must_ReturnTrue(int[] source, int skipCount, int takeCount, NullableSelector<int, string> selector)
         {
             // Arrange
-            var value = int.MaxValue;
+            var value = source.Last().ToString();
 
             // Act
-            var result = ArrayExtensions.Skip(source, count).Contains(value, TestComparer<int>.Instance);
+            var result = ArrayExtensions
+                .Skip(source, skipCount)
+                .Take(takeCount)
+                .Select(selector)
+                .Contains(value, EqualityComparer<string>.Default);
+
+            // Assert
+            _ = result.Must()
+                .BeTrue();
+        }
+
+        [Theory]
+        [MemberData(nameof(TestData.SkipTakeSelectorEmpty), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakeSelectorSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakeSelectorMultiple), MemberType = typeof(TestData))]
+        public void SkipTake_Select_Contains_With_Comparer_And_NotContains_Must_ReturnFalse(int[] source, int skipCount, int takeCount, NullableSelector<int, string> selector)
+        {
+            // Arrange
+            var value = default(string);
+
+            // Act
+            var result = ArrayExtensions
+                .Skip(source, skipCount)
+                .Take(takeCount)
+                .Select(selector)
+                .Contains(value, TestComparer<string>.Instance);
 
             // Assert
             _ = result.Must()
                 .BeFalse();
+        }
+
+        [Theory]
+        [MemberData(nameof(TestData.SkipTakeSelectorEmpty), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakeSelectorSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakeSelectorMultiple), MemberType = typeof(TestData))]
+        public void SkipTake_Select_Contains_With_Comparer_And_Contains_Must_ReturnTrue(int[] source, int skipCount, int takeCount, NullableSelector<int, string> selector)
+        {
+            // Arrange
+            var value = source.Last().ToString();
+
+            // Act
+            var result = ArrayExtensions
+                .Skip(source, skipCount)
+                .Take(takeCount)
+                .Select(selector)
+                .Contains(value, TestComparer<string>.Instance);
+
+            // Assert
+            _ = result.Must()
+                .BeTrue();
         }
     }
 }

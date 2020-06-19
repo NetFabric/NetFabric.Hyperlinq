@@ -16,7 +16,7 @@ namespace NetFabric.Hyperlinq
                 if (source is ICollection<TSource> collection)
                     return collection.Contains(value!);
 
-                if (default(TSource) is object)
+                if (Utils.IsValueType<TSource>())
                     return DefaultContains(source, value);
             }
 
@@ -51,7 +51,7 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
-            return default(TResult) is object
+            return Utils.IsValueType<TResult>()
                 ? ValueContains(source, value, selector)
                 : ReferenceContains(source, value, selector);
 
@@ -85,7 +85,7 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
-            return default(TResult) is object
+            return Utils.IsValueType<TResult>()
                 ? ValueContains(source, value, selector)
                 : ReferenceContains(source, value, selector);
 

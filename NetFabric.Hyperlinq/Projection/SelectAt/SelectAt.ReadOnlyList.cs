@@ -112,7 +112,7 @@ namespace NetFabric.Hyperlinq
             public int IndexOf(TResult item)
             {
                 var end = skipCount + Count;
-                if (default(TResult) is object)
+                if (Utils.IsValueType<TResult>())
                 {
                     if (skipCount == 0)
                     {
