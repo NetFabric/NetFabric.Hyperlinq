@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using NetFabric.Assertive;
@@ -37,8 +38,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsAsyncValueEnumerable
             // Arrange
             var wrapped = Wrap
                 .AsAsyncEnumerable(source);
-            var expected = 
-                System.Linq.Enumerable.ToArray(source);
+            var expected = Enumerable
+                .ToArray(source);
 
             // Act
             var result = await AsyncEnumerableExtensions
@@ -60,8 +61,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsAsyncValueEnumerable
             // Arrange
             var wrapped = Wrap
                 .AsAsyncEnumerable(source);
-            var expected = 
-                System.Linq.Enumerable.ToList(source);
+            var expected = Enumerable
+                .ToList(source);
 
             // Act
             var result = await AsyncEnumerableExtensions

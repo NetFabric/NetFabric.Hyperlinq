@@ -1,5 +1,6 @@
 using NetFabric.Assertive;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -16,8 +17,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Aggregation.Count
             // Arrange
             var wrapped = Wrap
                 .AsAsyncValueEnumerable(source);
-            var expected = 
-                System.Linq.Enumerable.Count(source);
+            var expected = Enumerable
+                .Count(source);
 
             // Act
             var result = await AsyncValueEnumerableExtensions
@@ -37,8 +38,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Aggregation.Count
             // Arrange
             var wrapped = Wrap
                 .AsAsyncValueEnumerable(source);
-            var expected = 
-                System.Linq.Enumerable.Count(source, predicate.AsFunc());
+            var expected = Enumerable
+                .Count(source, predicate.AsFunc());
 
             // Act
             var result = await AsyncValueEnumerableExtensions
@@ -59,9 +60,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Aggregation.Count
             // Arrange
             var wrapped = Wrap
                 .AsAsyncValueEnumerable(source);
-            var expected = 
-                System.Linq.Enumerable.Count(
-                    System.Linq.Enumerable.Where(source, predicate.AsFunc()));
+            var expected = Enumerable.Where(source, predicate.AsFunc())
+                .Count();
 
             // Act
             var result = await AsyncValueEnumerableExtensions

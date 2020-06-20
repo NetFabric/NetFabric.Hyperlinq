@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using NetFabric.Assertive;
 using Xunit;
 
@@ -16,8 +17,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
             // Arrange
             var wrapped = Wrap
                 .AsValueReadOnlyCollection(source);
-            var expected = 
-                System.Linq.Enumerable.ToList(wrapped);
+            var expected = Enumerable
+                .ToList(wrapped);
 
             // Act
             var result = ValueReadOnlyCollectionExtensions
@@ -39,8 +40,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
             // Arrange
             var wrapped = Wrap
                 .AsValueCollection(source);
-            var expected = 
-                System.Linq.Enumerable.ToList(source);
+            var expected = Enumerable
+                .ToList(source);
 
             // Act
             var result = ValueReadOnlyCollectionExtensions
@@ -62,9 +63,9 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
             // Arrange
             var wrapped = Wrap
                 .AsValueReadOnlyCollection(source);
-            var expected = 
-                System.Linq.Enumerable.ToList(
-                    System.Linq.Enumerable.Select(source, selector.AsFunc()));
+            var expected = Enumerable
+                .Select(source, selector.AsFunc())
+                .ToList();
 
             // Act
             var result = ValueReadOnlyCollectionExtensions
@@ -87,9 +88,9 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
             // Arrange
             var wrapped = Wrap
                 .AsValueReadOnlyCollection(source);
-            var expected = 
-                System.Linq.Enumerable.ToList(
-                    System.Linq.Enumerable.Select(source, selector.AsFunc()));
+            var expected = Enumerable
+                .Select(source, selector.AsFunc())
+                .ToList();
 
             // Act
             var result = ValueReadOnlyCollectionExtensions

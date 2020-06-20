@@ -18,7 +18,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Contains
 
             // Act
             var result = ArrayExtensions
-                .Contains<int>((ReadOnlySpan<int>)source.AsSpan(), value, null);
+                .Contains<int>((ReadOnlySpan<int>)source.AsSpan(), value);
 
             // Assert
             _ = result.Must()
@@ -37,7 +37,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Contains
 
             // Act
             var result = ArrayExtensions
-                .Contains<string>((ReadOnlySpan<string>)wrapped.AsSpan(), value, null);
+                .Contains<string>((ReadOnlySpan<string>)wrapped.AsSpan(), value);
 
             // Assert
             _ = result.Must()
@@ -54,7 +54,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Contains
 
             // Act
             var result = ArrayExtensions
-                .Contains<int>((ReadOnlySpan<int>)source.AsSpan(), value, null);
+                .Contains<int>((ReadOnlySpan<int>)source.AsSpan(), value);
 
             // Assert
             _ = result.Must()
@@ -72,7 +72,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Contains
 
             // Act
             var result = ArrayExtensions
-                .Contains<string>((ReadOnlySpan<string>)wrapped.AsSpan(), value, null);
+                .Contains<string>((ReadOnlySpan<string>)wrapped.AsSpan(), value);
 
             // Assert
             _ = result.Must()

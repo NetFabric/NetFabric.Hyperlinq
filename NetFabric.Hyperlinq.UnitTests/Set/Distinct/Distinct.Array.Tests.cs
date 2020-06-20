@@ -1,5 +1,6 @@
 ﻿using NetFabric.Assertive;
 using System;
+using System.Linq;
 using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct
@@ -7,18 +8,22 @@ namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct
     public class ArrayTests
     {
         [Theory]
-        [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
-        public void Distinct_With_ValidData_Must_Succeed(int[] source)
+        [MemberData(nameof(TestData.SkipTakeEmpty), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakeSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakeMultiple), MemberType = typeof(TestData))]
+        public void Distinct_With_ValidData_Must_Succeed(int[] source, int skipCount, int takeCount)
         {
             // Arrange
-            var expected =
-                System.Linq.Enumerable.Distinct(source);
+            var expected = Enumerable
+                .Skip(source, skipCount)
+                .Take(takeCount)
+                .Distinct();
 
             // Act
             var result = ArrayExtensions
-                .Distinct(source);
+                .Skip(source, skipCount)
+                .Take(takeCount)
+                .Distinct();
 
             // Assert
             _ = result.Must()
@@ -28,19 +33,23 @@ namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct
         }
 
         [Theory]
-        [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
-        public void Distinct_ToArray_With_ValidData_Must_Succeed(int[] source)
+        [MemberData(nameof(TestData.SkipTakeEmpty), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakeSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakeMultiple), MemberType = typeof(TestData))]
+        public void Distinct_ToArray_With_ValidData_Must_Succeed(int[] source, int skipCount, int takeCount)
         {
             // Arrange
-            var expected =
-                System.Linq.Enumerable.ToArray(
-                    System.Linq.Enumerable.Distinct(source));
+            var expected = Enumerable
+                .Skip(source, skipCount)
+                .Take(takeCount)
+                .Distinct()
+                .ToArray();
 
             // Act
             var result = ArrayExtensions
-                .Distinct(source)
+                .Skip(source, skipCount)
+                .Take(takeCount)
+                .Distinct()
                 .ToArray();
 
             // Assert
@@ -50,19 +59,23 @@ namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct
         }
 
         [Theory]
-        [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
-        public void Distinct_ToList_With_ValidData_Must_Succeed(int[] source)
+        [MemberData(nameof(TestData.SkipTakeEmpty), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakeSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakeMultiple), MemberType = typeof(TestData))]
+        public void Distinct_ToList_With_ValidData_Must_Succeed(int[] source, int skipCount, int takeCount)
         {
             // Arrange
-            var expected =
-                System.Linq.Enumerable.ToList(
-                    System.Linq.Enumerable.Distinct(source));
+            var expected = Enumerable
+                .Skip(source, skipCount)
+                .Take(takeCount)
+                .Distinct()
+                .ToList();
 
             // Act
             var result = ArrayExtensions
-                .Distinct(source)
+                .Skip(source, skipCount)
+                .Take(takeCount)
+                .Distinct()
                 .ToList();
 
             // Assert

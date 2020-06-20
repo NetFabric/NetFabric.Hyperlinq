@@ -24,16 +24,22 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.Where
         }
 
         [Theory]
-        [MemberData(nameof(TestData.PredicateEmpty), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.PredicateSingle), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.PredicateMultiple), MemberType = typeof(TestData))]
-        public void Where_Predicate_With_ValidData_Must_Succeed(int[] source, Predicate<int> predicate)
+        [MemberData(nameof(TestData.SkipTakePredicateEmpty), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakePredicateSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakePredicateMultiple), MemberType = typeof(TestData))]
+        public void Where_Predicate_With_ValidData_Must_Succeed(int[] source, int skipCount, int takeCount, Predicate<int> predicate)
         {
             // Arrange
-            var expected = System.Linq.Enumerable.Where(source, predicate.AsFunc());
+            var expected = Enumerable
+                .Skip(source, skipCount)
+                .Take(takeCount)
+                .Where(predicate.AsFunc());
 
             // Act
-            var result = ArrayExtensions.Where<int>(source, predicate);
+            var result = ArrayExtensions
+                .Skip(source, skipCount)
+                .Take(takeCount)
+                .Where(predicate);
 
             // Assert
             _ = result.Must()

@@ -73,7 +73,7 @@ namespace NetFabric.Hyperlinq
                 if (source is IList<TSource> list)
                     return list.IndexOf(item);
 
-                if (default(TSource) is object)
+                if (Utils.IsValueType<TSource>())
                 {
                     for (var index = 0; index < source.Count; index++)
                     {

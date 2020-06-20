@@ -1,6 +1,7 @@
 using NetFabric.Assertive;
 using Xunit;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsValueEnumerable
 {
@@ -35,8 +36,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsValueEnumerable
             // Arrange
             var wrapped = Wrap
                 .AsEnumerable(source);
-            var expected = 
-                System.Linq.Enumerable.ToArray(source);
+            var expected = Enumerable
+                .ToArray(source);
 
             // Act
             var result = EnumerableExtensions
@@ -58,8 +59,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsValueEnumerable
             // Arrange
             var wrapped = Wrap
                 .AsEnumerable(source);
-            var expected = 
-                System.Linq.Enumerable.ToList(source);
+            var expected = Enumerable
+                .ToList(source);
 
             // Act
             var result = EnumerableExtensions
@@ -102,8 +103,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsValueEnumerable
             // Arrange
             var wrapped = Wrap
                 .AsEnumerable(source);
-            var expected =
-                System.Linq.Enumerable.ToArray(source);
+            var expected = Enumerable
+                .ToArray(source);
 
             // Act
             var result = EnumerableExtensions
@@ -125,8 +126,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsValueEnumerable
             // Arrange
             var wrapped = Wrap
                 .AsEnumerable(source);
-            var expected =
-                System.Linq.Enumerable.ToList(source);
+            var expected = Enumerable
+                .ToList(source);
 
             // Act
             var result = EnumerableExtensions

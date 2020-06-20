@@ -168,7 +168,7 @@ namespace NetFabric.Hyperlinq
                     if (skipCount == 0 && Count == source.Count && source is ICollection<TSource> collection)
                         return collection.Contains(value);
 
-                    if (default(TSource) is object)
+                    if (Utils.IsValueType<TSource>())
                         return DefaultContains(source, value, skipCount, Count);
                 }
 

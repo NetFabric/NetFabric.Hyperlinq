@@ -55,6 +55,7 @@ namespace NetFabric.Hyperlinq
             new TheoryData<int[], int, int, Predicate<int>>
             {
                 { new int[] { 1 }, -1, 9, _ => true },
+                { new int[] { 1 }, 0, 1, _ => true },
                 { new int[] { 1 }, 0, 9, _ => true },
                 { new int[] { 1 }, 0, 9, item => item == 1 },
 
@@ -85,6 +86,11 @@ namespace NetFabric.Hyperlinq
         public static TheoryData<int[], int, int, PredicateAt<int>> SkipTakePredicateAtSingle =>
             new TheoryData<int[], int, int, PredicateAt<int>>
             {
+                { new int[] { 1 }, -1, 1, (_, __) => true },
+                { new int[] { 1 }, 0, 1, (_, __) => true },
+                { new int[] { 1 }, 0, 1, (item, _) => item == 1 },
+                { new int[] { 1 }, 0, 1, (_, index) => index == 0 },
+
                 { new int[] { 1 }, -1, 9, (_, __) => true },
                 { new int[] { 1 }, 0, 9, (_, __) => true },
                 { new int[] { 1 }, 0, 9, (item, _) => item == 1 },
@@ -113,6 +119,8 @@ namespace NetFabric.Hyperlinq
         public static TheoryData<int[], int, int, NullableSelector<int, string>> SkipTakeSelectorSingle =>
             new TheoryData<int[], int, int, NullableSelector<int, string>>
             {
+                { new int[] { 1 }, 0, 1, item => item.ToString() },
+
                 { new int[] { 1 }, -1, 9, item => item.ToString() },
                 { new int[] { 1 }, 0, 9, item => item.ToString() },
 
@@ -130,6 +138,9 @@ namespace NetFabric.Hyperlinq
         public static TheoryData<int[], int, int, NullableSelectorAt<int, string>> SkipTakeSelectorAtSingle =>
             new TheoryData<int[], int, int, NullableSelectorAt<int, string>>
             {
+                { new int[] { 1 }, -1, 1, (item, index) => $"{item} {index}" },
+                { new int[] { 1 }, 0, 1, (item, index) => $"{item} {index}" },
+
                 { new int[] { 1 }, -1, 9, (item, index) => $"{item} {index}" },
                 { new int[] { 1 }, 0, 9, (item, index) => $"{item} {index}" },
 
@@ -152,6 +163,10 @@ namespace NetFabric.Hyperlinq
         public static TheoryData<int[], int, int, Predicate<int>, NullableSelector<int, string>> SkipTakePredicateSelectorSingle =>
             new TheoryData<int[], int, int, Predicate<int>, NullableSelector<int, string>>
             {
+                { new int[] { 1 }, -1, 1, _ => true, item => item.ToString() },
+                { new int[] { 1 }, 0, 1, _ => true, item => item.ToString() },
+                { new int[] { 1 }, 0, 1, item => item == 1, item => item.ToString() },
+
                 { new int[] { 1 }, -1, 9, _ => true, item => item.ToString() },
                 { new int[] { 1 }, 0, 9, _ => true, item => item.ToString() },
                 { new int[] { 1 }, 0, 9, item => item == 1, item => item.ToString() },

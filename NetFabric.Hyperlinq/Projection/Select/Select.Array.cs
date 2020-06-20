@@ -92,7 +92,7 @@ namespace NetFabric.Hyperlinq
             public int IndexOf(TResult item)
             {
                 var end = skipCount + Count;
-                if (default(TResult) is object)
+                if (Utils.IsValueType<TResult>())
                 {
                     for (var index = skipCount; index < end; index++)
                     {

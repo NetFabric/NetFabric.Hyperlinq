@@ -19,7 +19,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Contains
 
             // Act
             var result = ArrayExtensions
-                .Contains<int>(source.AsMemory(), value, null);
+                .Contains<int>(source.AsMemory(), value);
 
             // Assert
             _ = result.Must()
@@ -38,7 +38,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Contains
 
             // Act
             var result = ArrayExtensions
-                .Contains<string>(referenceSource.AsMemory(), value, null);
+                .Contains<string>(referenceSource.AsMemory(), value);
 
             // Assert
             _ = result.Must()
@@ -55,7 +55,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Contains
 
             // Act
             var result = ArrayExtensions
-                .Contains<int>(source.AsMemory(), value, null);
+                .Contains<int>(source.AsMemory(), value);
 
             // Assert
             _ = result.Must()
@@ -73,7 +73,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Contains
 
             // Act
             var result = ArrayExtensions
-                .Contains<string>(referenceSource.AsMemory(), value, null);
+                .Contains<string>(referenceSource.AsMemory(), value);
 
             // Assert
             _ = result.Must()

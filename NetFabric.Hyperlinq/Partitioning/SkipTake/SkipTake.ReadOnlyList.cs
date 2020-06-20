@@ -105,7 +105,7 @@ namespace NetFabric.Hyperlinq
                     return list.IndexOf(item);
 
                 var end = skipCount + Count;
-                if (default(TSource) is object)
+                if (Utils.IsValueType<TSource>())
                 {
                     for (var index = skipCount; index < end; index++)
                     {

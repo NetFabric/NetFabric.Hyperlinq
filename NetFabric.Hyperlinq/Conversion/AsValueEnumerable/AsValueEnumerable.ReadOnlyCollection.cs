@@ -92,7 +92,7 @@ namespace NetFabric.Hyperlinq
                     if (source is ICollection<TSource> collection)
                         return collection.Contains(value!);
 
-                    if (default(TSource) is object)
+                    if (Utils.IsValueType<TSource>())
                         return DefaultContains(this, value);
                 }
 
@@ -227,7 +227,7 @@ namespace NetFabric.Hyperlinq
                     if (source is ICollection<TSource> collection)
                         return collection.Contains(value!);
 
-                    if (default(TSource) is object)
+                    if (Utils.IsValueType<TSource>())
                         return DefaultContains(this, value);
                 }
 
