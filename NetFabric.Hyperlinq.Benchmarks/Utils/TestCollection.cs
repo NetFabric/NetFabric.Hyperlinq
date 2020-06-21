@@ -14,14 +14,10 @@ namespace NetFabric.Hyperlinq.Benchmarks
 
         public readonly struct Enumerable : IReadOnlyCollection<int>, ICollection<int>
         {
-            readonly int count;
+            public Enumerable(int count) 
+                => Count = count;
 
-            public Enumerable(int count)
-            {
-                this.count = count;
-            }
-
-            public readonly int Count => count;
+            public readonly int Count { get; }
 
             public readonly bool IsReadOnly => true;
 
@@ -30,17 +26,17 @@ namespace NetFabric.Hyperlinq.Benchmarks
             public void Clear() => throw new NotImplementedException();
 
             public readonly bool Contains(int item)
-                => item >= 0 && item < count;
+                => item >= 0 && item < Count;
 
             public readonly void CopyTo(int[] array, int arrayIndex)
             {
-                for (var item = 0; item < count; item++)
+                for (var item = 0; item < Count; item++)
                     array[arrayIndex + item] = item;
             }
 
-            public readonly Enumerator GetEnumerator() => new Enumerator(count);
-            readonly IEnumerator<int> IEnumerable<int>.GetEnumerator() => new Enumerator(count);
-            readonly IEnumerator IEnumerable.GetEnumerator() => new Enumerator(count);
+            public readonly Enumerator GetEnumerator() => new Enumerator(Count);
+            readonly IEnumerator<int> IEnumerable<int>.GetEnumerator() => new Enumerator(Count);
+            readonly IEnumerator IEnumerable.GetEnumerator() => new Enumerator(Count);
 
             public struct Enumerator : IEnumerator<int>
             {

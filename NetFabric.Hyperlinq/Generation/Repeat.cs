@@ -67,8 +67,10 @@ namespace NetFabric.Hyperlinq
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            bool ICollection<TSource>.Contains(TSource value)
-                => Contains(value);
+            bool ICollection<TSource>.Contains(TSource item)
+                => count > 0 && EqualityComparer<TSource>.Default.Equals(value, item)
+                    ? true
+                    : false;
 
             public int IndexOf(TSource item)
                 => count > 0 && EqualityComparer<TSource>.Default.Equals(value, item)

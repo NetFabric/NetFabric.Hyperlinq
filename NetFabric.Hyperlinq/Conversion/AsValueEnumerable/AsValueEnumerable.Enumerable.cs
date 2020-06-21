@@ -41,7 +41,10 @@ namespace NetFabric.Hyperlinq
             readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => getEnumerator(source);
             readonly IEnumerator IEnumerable.GetEnumerator() => getEnumerator(source);
 
-            
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public bool Contains([MaybeNull] TSource item, IEqualityComparer<TSource>? comparer = default)
+                => EnumerableExtensions.Contains(source, getEnumerator, item, comparer);
+
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TSource[] ToArray()
                 => EnumerableExtensions.ToArray(source);
@@ -93,7 +96,10 @@ namespace NetFabric.Hyperlinq
                 public readonly void Dispose() => enumerator.Dispose();
             }
 
-            
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public bool Contains([MaybeNull] TSource item, IEqualityComparer<TSource>? comparer = default)
+                => EnumerableExtensions.Contains(source, item, comparer);
+
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TSource[] ToArray()
                 => EnumerableExtensions.ToArray(source);

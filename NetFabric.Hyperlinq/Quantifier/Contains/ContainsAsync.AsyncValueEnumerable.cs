@@ -7,7 +7,23 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class AsyncValueEnumerableExtensions
     {
-        
+        public static async ValueTask<bool> ContainsAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source, [AllowNull] TSource value)
+            where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
+            where TEnumerator : struct, IAsyncEnumerator<TSource>
+            where TSource : struct
+        {
+            var enumerator = source.GetAsyncEnumerator();
+            await using (enumerator.ConfigureAwait(false))
+            {
+                while (await enumerator.MoveNextAsync().ConfigureAwait(false))
+                {
+                    if (EqualityComparer<TSource>.Default.Equals(enumerator.Current, value!))
+                        return true;
+                }
+            }
+            return false;
+        }
+
         public static ValueTask<bool> ContainsAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source, [AllowNull] TSource value, IEqualityComparer<TSource>? comparer = default, CancellationToken cancellationToken = default)
             where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>

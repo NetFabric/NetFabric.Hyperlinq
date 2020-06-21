@@ -59,9 +59,32 @@ namespace NetFabric.Hyperlinq
             bool ICollection<TSource>.IsReadOnly  
                 => true;
 
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             bool ICollection<TSource>.Contains(TSource item)
-                => Contains(item);
+            {
+                if (skipCount == 0 && Count == source.Length)
+                    return ((ICollection<TSource>)source).Contains(item);
+
+                if (Utils.IsValueType<TSource>())
+                {
+                    var end = skipCount + Count;
+                    for (var index = skipCount; index < end; index++)
+                    {
+                        if (EqualityComparer<TSource>.Default.Equals(source[index], item))
+                            return true;
+                    }
+                }
+                else
+                {
+                    var defaultComparer = EqualityComparer<TSource>.Default;
+                    var end = skipCount + Count;
+                    for (var index = skipCount; index < end; index++)
+                    {
+                        if (defaultComparer.Equals(source[index], item))
+                            return true;
+                    }
+                }
+                return false;
+            }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public void CopyTo(TSource[] array, int arrayIndex) 

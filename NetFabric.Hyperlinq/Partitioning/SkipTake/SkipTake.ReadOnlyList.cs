@@ -95,9 +95,31 @@ namespace NetFabric.Hyperlinq
                 }
             }
 
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             bool ICollection<TSource>.Contains(TSource item)
-                => Contains(item);
+            {
+                if (skipCount == 0 && Count == source.Count && source is ICollection<TSource> collection)
+                    return collection.Contains(item);
+
+                var end = skipCount + Count;
+                if (Utils.IsValueType<TSource>())
+                {
+                    for (var index = skipCount; index < end; index++)
+                    {
+                        if (EqualityComparer<TSource>.Default.Equals(source[index], item))
+                            return true;
+                    }
+                }
+                else
+                {
+                    var defaultComparer = EqualityComparer<TSource>.Default;
+                    for (var index = skipCount; index < end; index++)
+                    {
+                        if (defaultComparer.Equals(source[index], item))
+                            return true;
+                    }
+                }
+                return false;
+            }
 
             public int IndexOf(TSource item)
             {

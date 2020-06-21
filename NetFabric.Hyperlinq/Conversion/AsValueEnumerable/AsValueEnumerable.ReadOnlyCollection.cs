@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
 
 namespace NetFabric.Hyperlinq
 {
@@ -70,7 +69,7 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             bool ICollection<TSource>.Contains(TSource item)
-                => Contains(item);
+                => Count != 0 && EnumerableExtensions.Contains(source, getEnumerator, item);
 
             [ExcludeFromCodeCoverage]
             void ICollection<TSource>.Add(TSource item) 
@@ -83,44 +82,7 @@ namespace NetFabric.Hyperlinq
                 => Throw.NotSupportedException<bool>();
 
             public bool Contains([MaybeNull] TSource value, IEqualityComparer<TSource>? comparer = default)
-            {
-                if (source.Count == 0)
-                    return false;
-
-                if (comparer is null || ReferenceEquals(comparer, EqualityComparer<TSource>.Default))
-                {
-                    if (source is ICollection<TSource> collection)
-                        return collection.Contains(value!);
-
-                    if (Utils.IsValueType<TSource>())
-                        return DefaultContains(this, value);
-                }
-
-                comparer ??= EqualityComparer<TSource>.Default;
-                return ComparerContains(this, value, comparer);
-
-                static bool DefaultContains(ValueEnumerableWrapper<TEnumerable, TEnumerator, TSource> source, [AllowNull] TSource value)
-                {
-                    using var enumerator = source.GetEnumerator();
-                    while (enumerator.MoveNext())
-                    {
-                        if (EqualityComparer<TSource>.Default.Equals(enumerator.Current, value!))
-                            return true;
-                    }
-                    return false;
-                }
-
-                static bool ComparerContains(ValueEnumerableWrapper<TEnumerable, TEnumerator, TSource> source, [AllowNull] TSource value, IEqualityComparer<TSource> comparer)
-                {
-                    using var enumerator = source.GetEnumerator();
-                    while (enumerator.MoveNext())
-                    {
-                        if (comparer.Equals(enumerator.Current, value!))
-                            return true;
-                    }
-                    return false;
-                }
-            }
+                => Count != 0 && EnumerableExtensions.Contains(source, getEnumerator, value, comparer);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TSource[] ToArray()
@@ -175,7 +137,7 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             bool ICollection<TSource>.Contains(TSource item)
-                => Contains(item);
+                => Count != 0 && EnumerableExtensions.Contains(source, item);
 
             [ExcludeFromCodeCoverage]
             void ICollection<TSource>.Add(TSource item) 
@@ -218,44 +180,7 @@ namespace NetFabric.Hyperlinq
             }
 
             public bool Contains([MaybeNull] TSource value, IEqualityComparer<TSource>? comparer = default)
-            {
-                if (source.Count == 0)
-                    return false;
-
-                if (comparer is null || ReferenceEquals(comparer, EqualityComparer<TSource>.Default))
-                {
-                    if (source is ICollection<TSource> collection)
-                        return collection.Contains(value!);
-
-                    if (Utils.IsValueType<TSource>())
-                        return DefaultContains(this, value);
-                }
-
-                comparer ??= EqualityComparer<TSource>.Default;
-                return ComparerContains(this, value, comparer);
-
-                static bool DefaultContains(ValueEnumerableWrapper<TSource> source, [AllowNull] TSource value)
-                {
-                    using var enumerator = source.GetEnumerator();
-                    while (enumerator.MoveNext())
-                    {
-                        if (EqualityComparer<TSource>.Default.Equals(enumerator.Current, value!))
-                            return true;
-                    }
-                    return false;
-                }
-
-                static bool ComparerContains(ValueEnumerableWrapper<TSource> source, [AllowNull] TSource value, IEqualityComparer<TSource> comparer)
-                {
-                    using var enumerator = source.GetEnumerator();
-                    while (enumerator.MoveNext())
-                    {
-                        if (comparer.Equals(enumerator.Current, value!))
-                            return true;
-                    }
-                    return false;
-                }
-            }
+                => Count != 0 && EnumerableExtensions.Contains(source, value, comparer);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TSource[] ToArray()
