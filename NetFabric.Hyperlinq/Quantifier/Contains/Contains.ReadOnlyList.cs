@@ -7,11 +7,25 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class ReadOnlyListExtensions
     {
+        public static bool Contains<TList, TSource>(this TList source, [AllowNull] TSource value)
+            where TList : IReadOnlyList<TSource>
+            where TSource : struct
+        {
+            if (source is ICollection<TSource> collection)
+                return collection.Contains(value);
+
+            for (var index = 0; index < source.Count; index++)
+            {
+                if (EqualityComparer<TSource>.Default.Equals(source[index], value!))
+                    return true;
+            }
+            return false;
+        }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool Contains<TList, TSource>(this TList source, [AllowNull] TSource value, IEqualityComparer<TSource>? comparer = default)
             where TList : IReadOnlyList<TSource>
-            => ReadOnlyListExtensions.Contains<TList, TSource>(source, value, comparer, 0, source.Count);
+            => Contains(source, value, comparer, 0, source.Count);
 
 
         static bool Contains<TList, TSource>(this TList source, [AllowNull] TSource value, IEqualityComparer<TSource>? comparer, int skipCount, int takeCount)

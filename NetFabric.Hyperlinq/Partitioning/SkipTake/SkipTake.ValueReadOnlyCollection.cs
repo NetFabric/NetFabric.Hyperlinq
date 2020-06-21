@@ -74,7 +74,48 @@ namespace NetFabric.Hyperlinq
             }
 
             bool ICollection<TSource>.Contains(TSource item)
-                => Contains(item);
+            {
+                if (Count == 0)
+                    return false;
+
+                if (skipCount == 0 && Count == source.Count && source is ICollection<TSource> collection)
+                    return collection.Contains(item);
+
+                using var enumerator = source.GetEnumerator();
+
+                // skip
+                for (var counter = 0; counter < skipCount; counter++)
+                {
+                    if (!enumerator.MoveNext())
+                        Throw.InvalidOperationException();
+                }
+
+                // take
+                if (Utils.IsValueType<TSource>())
+                {
+                    for (var counter = 0; counter < Count; counter++)
+                    {
+                        if (!enumerator.MoveNext())
+                            Throw.InvalidOperationException();
+
+                        if (EqualityComparer<TSource>.Default.Equals(enumerator.Current, item))
+                            return true;
+                    }
+                }
+                else
+                {
+                    var defaultComparer = EqualityComparer<TSource>.Default;
+                    for (var counter = 0; counter < Count; counter++)
+                    {
+                        if (!enumerator.MoveNext())
+                            Throw.InvalidOperationException();
+
+                        if (defaultComparer.Equals(enumerator.Current, item))
+                            return true;
+                    }
+                }
+                return false;
+            }
 
             [ExcludeFromCodeCoverage]
             void ICollection<TSource>.Add(TSource item) 

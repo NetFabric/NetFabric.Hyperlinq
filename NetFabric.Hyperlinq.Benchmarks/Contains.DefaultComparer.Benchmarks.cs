@@ -3,6 +3,7 @@ using BenchmarkDotNet.Configs;
 using JM.LinqFaster;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace NetFabric.Hyperlinq.Benchmarks
 {
@@ -15,58 +16,58 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [BenchmarkCategory("Array")]
         [Benchmark(Baseline = true)]
         public bool Linq_Array() =>
-            System.Linq.Enumerable.Contains(array, Count - 1, EqualityComparer<int>.Default);
+            Enumerable.Contains(array, Count - 1, EqualityComparer<int>.Default);
 
         [BenchmarkCategory("Enumerable_Value")]
         [Benchmark(Baseline = true)]
         public bool Linq_Enumerable_Value() =>
-            System.Linq.Enumerable.Contains(enumerableValue, Count - 1, EqualityComparer<int>.Default);
+            Enumerable.Contains(enumerableValue, Count - 1, EqualityComparer<int>.Default);
 
         [BenchmarkCategory("Collection_Value")]
         [Benchmark(Baseline = true)]
         public bool Linq_Collection_Value() =>
-            System.Linq.Enumerable.Contains(collectionValue, Count - 1, EqualityComparer<int>.Default);
+            Enumerable.Contains(collectionValue, Count - 1, EqualityComparer<int>.Default);
 
         [BenchmarkCategory("List_Value")]
         [Benchmark(Baseline = true)]
         public bool Linq_List_Value() =>
-            System.Linq.Enumerable.Contains(listValue, Count - 1, EqualityComparer<int>.Default);
+            Enumerable.Contains(listValue, Count - 1, EqualityComparer<int>.Default);
 
         [BenchmarkCategory("Enumerable_Reference")]
         [Benchmark(Baseline = true)]
         public bool Linq_Enumerable_Reference() =>
-            System.Linq.Enumerable.Contains(enumerableReference, Count - 1, EqualityComparer<int>.Default);
+            Enumerable.Contains(enumerableReference, Count - 1, EqualityComparer<int>.Default);
 
         [BenchmarkCategory("Collection_Reference")]
         [Benchmark(Baseline = true)]
         public bool Linq_Collection_Reference() =>
-            System.Linq.Enumerable.Contains(collectionReference, Count - 1, EqualityComparer<int>.Default);
+            Enumerable.Contains(collectionReference, Count - 1, EqualityComparer<int>.Default);
 
         [BenchmarkCategory("List_Reference")]
         [Benchmark(Baseline = true)]
         public bool Linq_List_Reference() =>
-            System.Linq.Enumerable.Contains(listReference, Count - 1, EqualityComparer<int>.Default);
+            Enumerable.Contains(listReference, Count - 1, EqualityComparer<int>.Default);
 
         [BenchmarkCategory("Array")]
         [Benchmark]
         public bool LinqFaster_Array() =>
-            array.ContainsF(Count - 1, EqualityComparer<int>.Default);
+            LinqFaster.ContainsF(array, Count - 1, EqualityComparer<int>.Default);
 
         [BenchmarkCategory("Array")]
         [Benchmark]
         public bool Hyperlinq_Array() =>
-            array.Contains(Count - 1, EqualityComparer<int>.Default);
+            ArrayExtensions.Contains(array, Count - 1, EqualityComparer<int>.Default);
 
 #if SPAN_SUPPORTED
         [BenchmarkCategory("Array")]
         [Benchmark]
         public bool Hyperlinq_Span() =>
-            array.AsSpan().Contains(Count - 1, EqualityComparer<int>.Default);
+            ArrayExtensions.Contains(array.AsSpan(), Count - 1, EqualityComparer<int>.Default);
 
         [BenchmarkCategory("Array")]
         [Benchmark]
         public bool Hyperlinq_Memory() =>
-            memory.Contains(Count - 1, EqualityComparer<int>.Default);
+            ArrayExtensions.Contains(memory, Count - 1, EqualityComparer<int>.Default);
 #endif
 
         [BenchmarkCategory("Enumerable_Value")]
@@ -84,8 +85,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [BenchmarkCategory("List_Value")]
         [Benchmark]
         public bool Hyperlinq_List_Value() =>
-            ReadOnlyListExtensions.AsValueEnumerable<int>(listValue)
-            .Contains(Count - 1, EqualityComparer<int>.Default);
+            ReadOnlyListExtensions.Contains(listValue, Count - 1, EqualityComparer<int>.Default);
 
         [BenchmarkCategory("Enumerable_Reference")]
         [Benchmark]
@@ -104,8 +104,6 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [BenchmarkCategory("List_Reference")]
         [Benchmark]
         public bool Hyperlinq_List_Reference() =>
-            listReference
-            .AsValueEnumerable()
-            .Contains(Count - 1, EqualityComparer<int>.Default);
+            ReadOnlyListExtensions.Contains(listReference, Count - 1, EqualityComparer<int>.Default);
     }
 }

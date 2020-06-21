@@ -6,7 +6,17 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class ArrayExtensions
     {
-      
+        public static bool Contains<TList, TSource>(this ReadOnlySpan<TSource> source, [AllowNull] TSource value)
+            where TSource : struct
+        {
+            for (var index = 0; index < source.Length; index++)
+            {
+                if (EqualityComparer<TSource>.Default.Equals(source[index], value!))
+                    return true;
+            }
+            return false;
+        }
+
         public static bool Contains<TSource>(this ReadOnlySpan<TSource> source, [AllowNull] TSource value, IEqualityComparer<TSource>? comparer = null)
         {
             if (source.Length == 0)

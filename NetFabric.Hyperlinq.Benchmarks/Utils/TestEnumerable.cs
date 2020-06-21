@@ -19,10 +19,8 @@ namespace NetFabric.Hyperlinq.Benchmarks
         {
             readonly int count;
 
-            public Enumerable(int count)
-            {
-                this.count = count;
-            }
+            public Enumerable(int count) 
+                => this.count = count;
 
             public readonly Enumerator GetEnumerator() => new Enumerator(count);
             readonly IEnumerator<int> IEnumerable<int>.GetEnumerator() => new Enumerator(count);
