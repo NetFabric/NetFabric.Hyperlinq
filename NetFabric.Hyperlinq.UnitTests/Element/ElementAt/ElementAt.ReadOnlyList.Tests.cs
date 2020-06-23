@@ -1,5 +1,6 @@
 using NetFabric.Assertive;
 using System;
+using System.Linq;
 using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
@@ -13,16 +14,16 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
         public void ElementAt_With_OutOfRange_Must_Return_None(int[] source)
         {
             // Arrange
-            var wrapped = Wrap.AsValueReadOnlyList(source);
+            var wrapped = Wrap.AsReadOnlyList(source);
 
             // Act
-            var optionNegative = ReadOnlyListExtensions
-                .ElementAt<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped, -1);
+            var optionTooSmall = ReadOnlyListExtensions
+                .ElementAt<Wrap.ReadOnlyListWrapper<int>, int>(wrapped, -1);
             var optionTooLarge = ReadOnlyListExtensions
-                .ElementAt<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped, source.Length);
+                .ElementAt<Wrap.ReadOnlyListWrapper<int>, int>(wrapped, source.Length);
 
             // Assert
-            _ = optionNegative.Must()
+            _ = optionTooSmall.Must()
                 .BeOfType<Option<int>>()
                 .EvaluateTrue(option => option.IsNone);
             _ = optionTooLarge.Must()
@@ -35,20 +36,18 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
         [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
         public void ElementAt_With_ValidData_Must_Return_Some(int[] source)
         {
+            // Arrange
+            var wrapped = Wrap.AsReadOnlyList(source);
+
             for (var index = 0; index < source.Length; index++)
             {
-                // Arrange
-                var wrapped = Wrap.AsValueReadOnlyList(source);
-                var expected = 
-                    System.Linq.Enumerable.ElementAt(source, index);
-
                 // Act
                 var result = ReadOnlyListExtensions
-                    .ElementAt<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped, index);
+                    .ElementAt<Wrap.ReadOnlyListWrapper<int>, int>(wrapped, index);
 
                 // Assert
                 _ = result.Match(
-                    value => value.Must().BeEqualTo(expected),
+                    value => value.Must().BeEqualTo(source[index]),
                     () => throw new Exception());
             }
         }
@@ -60,20 +59,20 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
         public void ElementAt_Skip_Take_With_OutOfRange_Must_Return_None(int[] source, int skipCount, int takeCount)
         {
             // Arrange
-            var wrapped = Wrap.AsValueReadOnlyList(source);
+            var wrapped = Wrap.AsReadOnlyList(source);
 
             // Act
-            var optionNegative = ReadOnlyListExtensions
-                .Skip<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped, skipCount)
+            var optionTooSmall = ReadOnlyListExtensions
+                .Skip<Wrap.ReadOnlyListWrapper<int>, int>(wrapped, skipCount)
                 .Take(takeCount)
                 .ElementAt(-1);
             var optionTooLarge = ReadOnlyListExtensions
-                .Skip<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped, skipCount)
+                .Skip<Wrap.ReadOnlyListWrapper<int>, int>(wrapped, skipCount)
                 .Take(takeCount)
                 .ElementAt(takeCount);
 
             // Assert
-            _ = optionNegative.Must()
+            _ = optionTooSmall.Must()
                 .BeOfType<Option<int>>()
                 .EvaluateTrue(option => option.IsNone);
             _ = optionTooLarge.Must()
@@ -87,17 +86,17 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
         public void ElementAt_Skip_Take_With_ValidData_Must_Return_Some(int[] source, int skipCount, int takeCount)
         {
             // Arrange
-            var wrapped = Wrap.AsValueReadOnlyList(source);
-            var expected = 
-                System.Linq.Enumerable.ToList(
-                    System.Linq.Enumerable.Take(
-                        System.Linq.Enumerable.Skip(source, skipCount), takeCount));
+            var wrapped = Wrap.AsReadOnlyList(source);
+            var expected = Enumerable
+                .Skip(source, skipCount)
+                .Take(takeCount)
+                .ToList();
 
             for (var index = 0; index < expected.Count; index++)
             {
                 // Act
                 var result = ReadOnlyListExtensions
-                    .Skip<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped, skipCount)
+                    .Skip<Wrap.ReadOnlyListWrapper<int>, int>(wrapped, skipCount)
                     .Take(takeCount)
                     .ElementAt(index);
 
@@ -115,22 +114,22 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
         public void ElementAt_Skip_Take_Predicate_With_OutOfRange_Must_Return_None(int[] source, int skipCount, int takeCount, Predicate<int> predicate)
         {
             // Arrange
-            var wrapped = Wrap.AsValueReadOnlyList(source);
+            var wrapped = Wrap.AsReadOnlyList(source);
 
             // Act
-            var optionNegative = ReadOnlyListExtensions
-                .Skip<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped, skipCount)
+            var optionTooSmall = ReadOnlyListExtensions
+                .Skip<Wrap.ReadOnlyListWrapper<int>, int>(wrapped, skipCount)
                 .Take(takeCount)
                 .Where(predicate)
                 .ElementAt(-1);
             var optionTooLarge = ReadOnlyListExtensions
-                .Skip<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped, skipCount)
+                .Skip<Wrap.ReadOnlyListWrapper<int>, int>(wrapped, skipCount)
                 .Take(takeCount)
                 .Where(predicate)
-                .ElementAt(wrapped.Count);
+                .ElementAt(takeCount);
 
             // Assert
-            _ = optionNegative.Must()
+            _ = optionTooSmall.Must()
                 .BeOfType<Option<int>>()
                 .EvaluateTrue(option => option.IsNone);
             _ = optionTooLarge.Must()
@@ -144,18 +143,18 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
         public void ElementAt_Skip_Take_Predicate_With_ValidData_Must_Return_Some(int[] source, int skipCount, int takeCount, Predicate<int> predicate)
         {
             // Arrange
-            var wrapped = Wrap.AsValueReadOnlyList(source);
-            var expected = 
-                System.Linq.Enumerable.ToList(
-                    System.Linq.Enumerable.Where(
-                        System.Linq.Enumerable.Take(
-                            System.Linq.Enumerable.Skip(source, skipCount), takeCount), predicate.AsFunc()));
+            var wrapped = Wrap.AsReadOnlyList(source);
+            var expected = Enumerable
+                .Skip(source, skipCount)
+                .Take(takeCount)
+                .Where(predicate.AsFunc())
+                .ToList();
 
             for (var index = 0; index < expected.Count; index++)
             {
                 // Act
                 var result = ReadOnlyListExtensions
-                    .Skip<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped, skipCount)
+                    .Skip<Wrap.ReadOnlyListWrapper<int>, int>(wrapped, skipCount)
                     .Take(takeCount)
                     .Where(predicate)
                     .ElementAt(index);
@@ -174,22 +173,22 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
         public void ElementAt_Skip_Take_PredicateAt_With_OutOfRange_Must_Return_None(int[] source, int skipCount, int takeCount, PredicateAt<int> predicate)
         {
             // Arrange
-            var wrapped = Wrap.AsValueReadOnlyList(source);
+            var wrapped = Wrap.AsReadOnlyList(source);
 
             // Act
-            var optionNegative = ReadOnlyListExtensions
-                .Skip<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped, skipCount)
+            var optionTooSmall = ReadOnlyListExtensions
+                .Skip<Wrap.ReadOnlyListWrapper<int>, int>(wrapped, skipCount)
                 .Take(takeCount)
                 .Where(predicate)
                 .ElementAt(-1);
             var optionTooLarge = ReadOnlyListExtensions
-                .Skip<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped, skipCount)
+                .Skip<Wrap.ReadOnlyListWrapper<int>, int>(wrapped, skipCount)
                 .Take(takeCount)
                 .Where(predicate)
-                .ElementAt(wrapped.Count);
+                .ElementAt(takeCount);
 
             // Assert
-            _ = optionNegative.Must()
+            _ = optionTooSmall.Must()
                 .BeOfType<Option<int>>()
                 .EvaluateTrue(option => option.IsNone);
             _ = optionTooLarge.Must()
@@ -203,18 +202,18 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
         public void ElementAt_Skip_Take_PredicateAt_With_ValidData_Must_Return_Some(int[] source, int skipCount, int takeCount, PredicateAt<int> predicate)
         {
             // Arrange
-            var wrapped = Wrap.AsValueReadOnlyList(source);
-            var expected = 
-                System.Linq.Enumerable.ToList(
-                    System.Linq.Enumerable.Where(
-                        System.Linq.Enumerable.Take(
-                            System.Linq.Enumerable.Skip(source, skipCount), takeCount), predicate.AsFunc()));
+            var wrapped = Wrap.AsReadOnlyList(source);
+            var expected = Enumerable
+                .Skip(source, skipCount)
+                .Take(takeCount)
+                .Where(predicate.AsFunc())
+                .ToList();
 
             for (var index = 0; index < expected.Count; index++)
             {
                 // Act
                 var result = ReadOnlyListExtensions
-                    .Skip<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped, skipCount)
+                    .Skip<Wrap.ReadOnlyListWrapper<int>, int>(wrapped, skipCount)
                     .Take(takeCount)
                     .Where(predicate)
                     .ElementAt(index);
@@ -233,22 +232,22 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
         public void ElementAt_Skip_Take_Selector_With_OutOfRange_Must_Return_None(int[] source, int skipCount, int takeCount, NullableSelector<int, string> selector)
         {
             // Arrange
-            var wrapped = Wrap.AsValueReadOnlyList(source);
+            var wrapped = Wrap.AsReadOnlyList(source);
 
             // Act
-            var optionNegative = ReadOnlyListExtensions
-                .Skip<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped, skipCount)
+            var optionTooSmall = ReadOnlyListExtensions
+                .Skip<Wrap.ReadOnlyListWrapper<int>, int>(wrapped, skipCount)
                 .Take(takeCount)
                 .Select(selector)
                 .ElementAt(-1);
             var optionTooLarge = ReadOnlyListExtensions
-                .Skip<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped, skipCount)
+                .Skip<Wrap.ReadOnlyListWrapper<int>, int>(wrapped, skipCount)
                 .Take(takeCount)
                 .Select(selector)
-                .ElementAt(wrapped.Count);
+                .ElementAt(takeCount);
 
             // Assert
-            _ = optionNegative.Must()
+            _ = optionTooSmall.Must()
                 .BeOfType<Option<string>>()
                 .EvaluateTrue(option => option.IsNone);
             _ = optionTooLarge.Must()
@@ -262,18 +261,18 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
         public void ElementAt_Skip_Take_Selector_With_ValidData_Must_Return_Some(int[] source, int skipCount, int takeCount, NullableSelector<int, string> selector)
         {
             // Arrange
-            var wrapped = Wrap.AsValueReadOnlyList(source);
-            var expected = 
-                System.Linq.Enumerable.ToList(
-                    System.Linq.Enumerable.Select(
-                        System.Linq.Enumerable.Take(
-                            System.Linq.Enumerable.Skip(source, skipCount), takeCount), selector.AsFunc()));
+            var wrapped = Wrap.AsReadOnlyList(source);
+            var expected = Enumerable
+                .Skip(source, skipCount)
+                .Take(takeCount)
+                .Select(selector.AsFunc())
+                .ToList();
 
             for (var index = 0; index < expected.Count; index++)
             {
                 // Act
                 var result = ReadOnlyListExtensions
-                    .Skip<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped, skipCount)
+                    .Skip<Wrap.ReadOnlyListWrapper<int>, int>(wrapped, skipCount)
                     .Take(takeCount)
                     .Select(selector)
                     .ElementAt(index);
@@ -284,7 +283,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
                     () => throw new Exception());
             }
         }
-        
+
         [Theory]
         [MemberData(nameof(TestData.SkipTakeSelectorAtEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakeSelectorAtSingle), MemberType = typeof(TestData))]
@@ -292,22 +291,22 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
         public void ElementAt_Skip_Take_SelectorAt_With_OutOfRange_Must_Return_None(int[] source, int skipCount, int takeCount, NullableSelectorAt<int, string> selector)
         {
             // Arrange
-            var wrapped = Wrap.AsValueReadOnlyList(source);
+            var wrapped = Wrap.AsReadOnlyList(source);
 
             // Act
-            var optionNegative = ReadOnlyListExtensions
-                .Skip<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped, skipCount)
+            var optionTooSmall = ReadOnlyListExtensions
+                .Skip<Wrap.ReadOnlyListWrapper<int>, int>(wrapped, skipCount)
                 .Take(takeCount)
                 .Select(selector)
                 .ElementAt(-1);
             var optionTooLarge = ReadOnlyListExtensions
-                .Skip<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped, skipCount)
+                .Skip<Wrap.ReadOnlyListWrapper<int>, int>(wrapped, skipCount)
                 .Take(takeCount)
                 .Select(selector)
-                .ElementAt(wrapped.Count);
+                .ElementAt(takeCount);
 
             // Assert
-            _ = optionNegative.Must()
+            _ = optionTooSmall.Must()
                 .BeOfType<Option<string>>()
                 .EvaluateTrue(option => option.IsNone);
             _ = optionTooLarge.Must()
@@ -321,18 +320,18 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
         public void ElementAt_Skip_Take_SelectorAt_With_ValidData_Must_Return_Some(int[] source, int skipCount, int takeCount, NullableSelectorAt<int, string> selector)
         {
             // Arrange
-            var wrapped = Wrap.AsValueReadOnlyList(source);
-            var expected = 
-                System.Linq.Enumerable.ToList(
-                    System.Linq.Enumerable.Select(
-                        System.Linq.Enumerable.Take(
-                            System.Linq.Enumerable.Skip(source, skipCount), takeCount), selector.AsFunc()));
+            var wrapped = Wrap.AsReadOnlyList(source);
+            var expected = Enumerable
+                .Skip(source, skipCount)
+                .Take(takeCount)
+                .Select(selector.AsFunc())
+                .ToList();
 
             for (var index = 0; index < expected.Count; index++)
             {
                 // Act
                 var result = ReadOnlyListExtensions
-                    .Skip<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped, skipCount)
+                    .Skip<Wrap.ReadOnlyListWrapper<int>, int>(wrapped, skipCount)
                     .Take(takeCount)
                     .Select(selector)
                     .ElementAt(index);
@@ -351,24 +350,24 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
         public void ElementAt_Skip_Take_Predicate_Selector_With_OutOfRange_Must_Return_None(int[] source, int skipCount, int takeCount, Predicate<int> predicate, NullableSelector<int, string> selector)
         {
             // Arrange
-            var wrapped = Wrap.AsValueReadOnlyList(source);
+            var wrapped = Wrap.AsReadOnlyList(source);
 
             // Act
-            var optionNegative = ReadOnlyListExtensions
-                .Skip<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped, skipCount)
+            var optionTooSmall = ReadOnlyListExtensions
+                .Skip<Wrap.ReadOnlyListWrapper<int>, int>(wrapped, skipCount)
                 .Take(takeCount)
                 .Where(predicate)
                 .Select(selector)
                 .ElementAt(-1);
             var optionTooLarge = ReadOnlyListExtensions
-                .Skip<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped, skipCount)
+                .Skip<Wrap.ReadOnlyListWrapper<int>, int>(wrapped, skipCount)
                 .Take(takeCount)
                 .Where(predicate)
                 .Select(selector)
-                .ElementAt(wrapped.Count);
+                .ElementAt(takeCount);
 
             // Assert
-            _ = optionNegative.Must()
+            _ = optionTooSmall.Must()
                 .BeOfType<Option<string>>()
                 .EvaluateTrue(option => option.IsNone);
             _ = optionTooLarge.Must()
@@ -382,19 +381,19 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
         public void ElementAt_Skip_Take_Predicate_Selector_With_ValidData_Must_Return_Some(int[] source, int skipCount, int takeCount, Predicate<int> predicate, NullableSelector<int, string> selector)
         {
             // Arrange
-            var wrapped = Wrap.AsValueReadOnlyList(source);
-            var expected = 
-                System.Linq.Enumerable.ToList(
-                    System.Linq.Enumerable.Select(
-                        System.Linq.Enumerable.Where(
-                            System.Linq.Enumerable.Take(
-                                System.Linq.Enumerable.Skip(source, skipCount), takeCount), predicate.AsFunc()), selector.AsFunc()));
+            var wrapped = Wrap.AsReadOnlyList(source);
+            var expected = Enumerable
+                .Skip(source, skipCount)
+                .Take(takeCount)
+                .Where(predicate.AsFunc())
+                .Select(selector.AsFunc())
+                .ToList();
 
             for (var index = 0; index < expected.Count; index++)
             {
                 // Act
                 var result = ReadOnlyListExtensions
-                    .Skip<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped, skipCount)
+                    .Skip<Wrap.ReadOnlyListWrapper<int>, int>(wrapped, skipCount)
                     .Take(takeCount)
                     .Where(predicate)
                     .Select(selector)

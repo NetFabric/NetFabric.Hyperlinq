@@ -1,10 +1,11 @@
 using NetFabric.Assertive;
 using System;
+using System.Linq;
 using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
 {
-    public class ArrayTests
+    public class ArrayTests 
     {
         [Theory]
         [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
@@ -15,13 +16,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
             // Arrange
 
             // Act
-            var optionNegative = ArrayExtensions
+            var optionTooSmall = ArrayExtensions
                 .ElementAt<int>(source, -1);
             var optionTooLarge = ArrayExtensions
                 .ElementAt<int>(source, source.Length);
 
             // Assert
-            _ = optionNegative.Must()
+            _ = optionTooSmall.Must()
                 .BeOfType<Option<int>>()
                 .EvaluateTrue(option => option.IsNone);
             _ = optionTooLarge.Must()
@@ -34,41 +35,40 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
         [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
         public void ElementAt_With_ValidData_Must_Return_Some(int[] source)
         {
+            // Arrange
             for (var index = 0; index < source.Length; index++)
             {
-                // Arrange
-                var expected = 
-                    System.Linq.Enumerable.ElementAt(source, index);
-
                 // Act
                 var result = ArrayExtensions
-                    .ElementAt<int>(source, index);
+                    .ElementAt(source, index);
 
                 // Assert
                 _ = result.Match(
-                    value => value.Must().BeEqualTo(expected),
+                    value => value.Must().BeEqualTo(source[index]),
                     () => throw new Exception());
             }
         }
 
         [Theory]
-        [MemberData(nameof(TestData.PredicateEmpty), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.PredicateSingle), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.PredicateMultiple), MemberType = typeof(TestData))]
-        public void ElementAt_Predicate_With_OutOfRange_Must_Return_None(int[] source, Predicate<int> predicate)
+        [MemberData(nameof(TestData.SkipTakeEmpty), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakeSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakeMultiple), MemberType = typeof(TestData))]
+        public void ElementAt_Skip_Take_With_OutOfRange_Must_Return_None(int[] source, int skipCount, int takeCount)
         {
             // Arrange
 
             // Act
-            var optionNegative = ArrayExtensions
-                .Where<int>(source, predicate)
+            var optionTooSmall = ArrayExtensions
+                .Skip<int>(source, skipCount)
+                .Take(takeCount)
                 .ElementAt(-1);
             var optionTooLarge = ArrayExtensions
-                .Where<int>(source, predicate)
-                .ElementAt(source.Length);
+                .Skip<int>(source, skipCount)
+                .Take(takeCount)
+                .ElementAt(takeCount);
 
             // Assert
-            _ = optionNegative.Must()
+            _ = optionTooSmall.Must()
                 .BeOfType<Option<int>>()
                 .EvaluateTrue(option => option.IsNone);
             _ = optionTooLarge.Must()
@@ -77,20 +77,22 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
         }
 
         [Theory]
-        [MemberData(nameof(TestData.PredicateSingle), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.PredicateMultiple), MemberType = typeof(TestData))]
-        public void ElementAt_Predicate_With_ValidData_Must_Return_Some(int[] source, Predicate<int> predicate)
+        [MemberData(nameof(TestData.SkipTakeSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakeMultiple), MemberType = typeof(TestData))]
+        public void ElementAt_Skip_Take_With_ValidData_Must_Return_Some(int[] source, int skipCount, int takeCount)
         {
             // Arrange
-            var expected = 
-                System.Linq.Enumerable.ToList(
-                    System.Linq.Enumerable.Where(source, predicate.AsFunc()));
+            var expected = Enumerable
+                .Skip(source, skipCount)
+                .Take(takeCount)
+                .ToList();
 
             for (var index = 0; index < expected.Count; index++)
             {
                 // Act
                 var result = ArrayExtensions
-                    .Where<int>(source, predicate)
+                    .Skip<int>(source, skipCount)
+                    .Take(takeCount)
                     .ElementAt(index);
 
                 // Assert
@@ -101,23 +103,27 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
         }
 
         [Theory]
-        [MemberData(nameof(TestData.PredicateAtEmpty), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.PredicateAtSingle), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.PredicateAtMultiple), MemberType = typeof(TestData))]
-        public void ElementAt_PredicateAt_With_OutOfRange_Must_Return_None(int[] source, PredicateAt<int> predicate)
+        [MemberData(nameof(TestData.SkipTakePredicateEmpty), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakePredicateSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakePredicateMultiple), MemberType = typeof(TestData))]
+        public void ElementAt_Skip_Take_Predicate_With_OutOfRange_Must_Return_None(int[] source, int skipCount, int takeCount, Predicate<int> predicate)
         {
             // Arrange
 
             // Act
-            var optionNegative = ArrayExtensions
-                .Where<int>(source, predicate)
+            var optionTooSmall = ArrayExtensions
+                .Skip<int>(source, skipCount)
+                .Take(takeCount)
+                .Where(predicate)
                 .ElementAt(-1);
             var optionTooLarge = ArrayExtensions
-                .Where<int>(source, predicate)
-                .ElementAt(source.Length);
+                .Skip<int>(source, skipCount)
+                .Take(takeCount)
+                .Where(predicate)
+                .ElementAt(takeCount);
 
             // Assert
-            _ = optionNegative.Must()
+            _ = optionTooSmall.Must()
                 .BeOfType<Option<int>>()
                 .EvaluateTrue(option => option.IsNone);
             _ = optionTooLarge.Must()
@@ -126,20 +132,24 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
         }
 
         [Theory]
-        [MemberData(nameof(TestData.PredicateAtSingle), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.PredicateAtMultiple), MemberType = typeof(TestData))]
-        public void ElementAt_PredicateAt_With_ValidData_Must_Return_Some(int[] source, PredicateAt<int> predicate)
+        [MemberData(nameof(TestData.SkipTakePredicateSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakePredicateMultiple), MemberType = typeof(TestData))]
+        public void ElementAt_Skip_Take_Predicate_With_ValidData_Must_Return_Some(int[] source, int skipCount, int takeCount, Predicate<int> predicate)
         {
             // Arrange
-            var expected = 
-                System.Linq.Enumerable.ToList(
-                    System.Linq.Enumerable.Where(source, predicate.AsFunc()));
+            var expected = Enumerable
+                .Skip(source, skipCount)
+                .Take(takeCount)
+                .Where(predicate.AsFunc())
+                .ToList();
 
             for (var index = 0; index < expected.Count; index++)
             {
                 // Act
                 var result = ArrayExtensions
-                    .Where<int>(source, predicate)
+                    .Skip<int>(source, skipCount)
+                    .Take(takeCount)
+                    .Where(predicate)
                     .ElementAt(index);
 
                 // Assert
@@ -150,23 +160,84 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
         }
 
         [Theory]
-        [MemberData(nameof(TestData.SelectorEmpty), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.SelectorSingle), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.SelectorMultiple), MemberType = typeof(TestData))]
-        public void ElementAt_Selector_With_OutOfRange_Must_Return_None(int[] source, NullableSelector<int, string> selector)
+        [MemberData(nameof(TestData.SkipTakePredicateAtEmpty), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakePredicateAtSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakePredicateAtMultiple), MemberType = typeof(TestData))]
+        public void ElementAt_Skip_Take_PredicateAt_With_OutOfRange_Must_Return_None(int[] source, int skipCount, int takeCount, PredicateAt<int> predicate)
         {
             // Arrange
 
             // Act
-            var optionNegative = ArrayExtensions
-                .Select<int, string>(source, selector)
+            var optionTooSmall = ArrayExtensions
+                .Skip<int>(source, skipCount)
+                .Take(takeCount)
+                .Where(predicate)
                 .ElementAt(-1);
             var optionTooLarge = ArrayExtensions
-                .Select<int, string>(source, selector)
-                .ElementAt(source.Length);
+                .Skip<int>(source, skipCount)
+                .Take(takeCount)
+                .Where(predicate)
+                .ElementAt(takeCount);
 
             // Assert
-            _ = optionNegative.Must()
+            _ = optionTooSmall.Must()
+                .BeOfType<Option<int>>()
+                .EvaluateTrue(option => option.IsNone);
+            _ = optionTooLarge.Must()
+                .BeOfType<Option<int>>()
+                .EvaluateTrue(option => option.IsNone);
+        }
+
+        [Theory]
+        [MemberData(nameof(TestData.SkipTakePredicateAtSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakePredicateAtMultiple), MemberType = typeof(TestData))]
+        public void ElementAt_Skip_Take_PredicateAt_With_ValidData_Must_Return_Some(int[] source, int skipCount, int takeCount, PredicateAt<int> predicate)
+        {
+            // Arrange
+            var expected = Enumerable
+                .Skip(source, skipCount)
+                .Take(takeCount)
+                .Where(predicate.AsFunc())
+                .ToList();
+
+            for (var index = 0; index < expected.Count; index++)
+            {
+                // Act
+                var result = ArrayExtensions
+                    .Skip<int>(source, skipCount)
+                    .Take(takeCount)
+                    .Where(predicate)
+                    .ElementAt(index);
+
+                // Assert
+                _ = result.Match(
+                    value => value.Must().BeEqualTo(expected[index]),
+                    () => throw new Exception());
+            }
+        }
+
+        [Theory]
+        [MemberData(nameof(TestData.SkipTakeSelectorEmpty), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakeSelectorSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakeSelectorMultiple), MemberType = typeof(TestData))]
+        public void ElementAt_Skip_Take_Selector_With_OutOfRange_Must_Return_None(int[] source, int skipCount, int takeCount, NullableSelector<int, string> selector)
+        {
+            // Arrange
+
+            // Act
+            var optionTooSmall = ArrayExtensions
+                .Skip<int>(source, skipCount)
+                .Take(takeCount)
+                .Select(selector)
+                .ElementAt(-1);
+            var optionTooLarge = ArrayExtensions
+                .Skip<int>(source, skipCount)
+                .Take(takeCount)
+                .Select(selector)
+                .ElementAt(takeCount);
+
+            // Assert
+            _ = optionTooSmall.Must()
                 .BeOfType<Option<string>>()
                 .EvaluateTrue(option => option.IsNone);
             _ = optionTooLarge.Must()
@@ -175,47 +246,55 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
         }
 
         [Theory]
-        [MemberData(nameof(TestData.SelectorSingle), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.SelectorMultiple), MemberType = typeof(TestData))]
-        public void ElementAt_Selector_With_ValidData_Must_Return_Some(int[] source, NullableSelector<int, string> selector)
+        [MemberData(nameof(TestData.SkipTakeSelectorSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakeSelectorMultiple), MemberType = typeof(TestData))]
+        public void ElementAt_Skip_Take_Selector_With_ValidData_Must_Return_Some(int[] source, int skipCount, int takeCount, NullableSelector<int, string> selector)
         {
-            for (var index = 0; index < source.Length; index++)
-            {
-                // Arrange
-                var expected = 
-                    System.Linq.Enumerable.ElementAt(
-                        System.Linq.Enumerable.Select(source, selector.AsFunc()), index);
+            // Arrange
+            var expected = Enumerable
+                .Skip(source, skipCount)
+                .Take(takeCount)
+                .Select(selector.AsFunc())
+                .ToList();
 
+            for (var index = 0; index < expected.Count; index++)
+            {
                 // Act
                 var result = ArrayExtensions
-                    .Select<int, string>(source, selector)
+                    .Skip<int>(source, skipCount)
+                    .Take(takeCount)
+                    .Select(selector)
                     .ElementAt(index);
 
                 // Assert
                 _ = result.Match(
-                    value => value.Must().BeEqualTo(expected),
+                    value => value.Must().BeEqualTo(expected[index]),
                     () => throw new Exception());
             }
         }
         
         [Theory]
-        [MemberData(nameof(TestData.SelectorAtEmpty), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.SelectorAtSingle), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.SelectorAtMultiple), MemberType = typeof(TestData))]
-        public void ElementAt_SelectorAt_With_OutOfRange_Must_Return_None(int[] source, NullableSelectorAt<int, string> selector)
+        [MemberData(nameof(TestData.SkipTakeSelectorAtEmpty), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakeSelectorAtSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakeSelectorAtMultiple), MemberType = typeof(TestData))]
+        public void ElementAt_Skip_Take_SelectorAt_With_OutOfRange_Must_Return_None(int[] source, int skipCount, int takeCount, NullableSelectorAt<int, string> selector)
         {
             // Arrange
 
             // Act
-            var optionNegative = ArrayExtensions
-                .Select<int, string>(source, selector)
+            var optionTooSmall = ArrayExtensions
+                .Skip<int>(source, skipCount)
+                .Take(takeCount)
+                .Select(selector)
                 .ElementAt(-1);
             var optionTooLarge = ArrayExtensions
-                .Select<int, string>(source, selector)
-                .ElementAt(source.Length);
+                .Skip<int>(source, skipCount)
+                .Take(takeCount)
+                .Select(selector)
+                .ElementAt(takeCount);
 
             // Assert
-            _ = optionNegative.Must()
+            _ = optionTooSmall.Must()
                 .BeOfType<Option<string>>()
                 .EvaluateTrue(option => option.IsNone);
             _ = optionTooLarge.Must()
@@ -224,72 +303,84 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
         }
 
         [Theory]
-        [MemberData(nameof(TestData.SelectorAtSingle), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.SelectorAtMultiple), MemberType = typeof(TestData))]
-        public void ElementAt_SelectorAt_With_ValidData_Must_Return_Some(int[] source, NullableSelectorAt<int, string> selector)
-        {
-            for (var index = 0; index < source.Length; index++)
-            {
-                // Arrange
-                var expected = 
-                    System.Linq.Enumerable.ElementAt(
-                        System.Linq.Enumerable.Select(source, selector.AsFunc()), index);
-
-                // Act
-                var result = ArrayExtensions
-                    .Select<int, string>(source, selector)
-                    .ElementAt(index);
-
-                // Assert
-                _ = result.Match(
-                    value => value.Must().BeEqualTo(expected),
-                    () => throw new Exception());
-            }
-        }
-
-        [Theory]
-        [MemberData(nameof(TestData.PredicateSelectorEmpty), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.PredicateSelectorSingle), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.PredicateSelectorMultiple), MemberType = typeof(TestData))]
-        public void ElementAt_Predicate_Selector_With_OutOfRange_Must_Return_None(int[] source, Predicate<int> predicate, NullableSelector<int, string> selector)
+        [MemberData(nameof(TestData.SkipTakeSelectorAtSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakeSelectorAtMultiple), MemberType = typeof(TestData))]
+        public void ElementAt_Skip_Take_SelectorAt_With_ValidData_Must_Return_Some(int[] source, int skipCount, int takeCount, NullableSelectorAt<int, string> selector)
         {
             // Arrange
-
-            // Act
-            var optionNegative = ArrayExtensions
-                .Where<int>(source, predicate)
-                .Select(selector)
-                .ElementAt(-1);
-            var optionTooLarge = ArrayExtensions
-                .Where<int>(source, predicate)
-                .Select(selector)
-                .ElementAt(source.Length);
-
-            // Assert
-            _ = optionNegative.Must()
-                .BeOfType<Option<string>>()
-                .EvaluateTrue(option => option.IsNone);
-            _ = optionTooLarge.Must()
-                .BeOfType<Option<string>>()
-                .EvaluateTrue(option => option.IsNone);
-        }
-
-        [Theory]
-        [MemberData(nameof(TestData.PredicateSelectorSingle), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.PredicateSelectorMultiple), MemberType = typeof(TestData))]
-        public void ElementAt_Predicate_Selector_With_ValidData_Must_Return_Some(int[] source, Predicate<int> predicate, NullableSelector<int, string> selector)
-        {
-            // Arrange
-            var expected = 
-                System.Linq.Enumerable.ToList(
-                    System.Linq.Enumerable.Select(
-                        System.Linq.Enumerable.Where(source, predicate.AsFunc()), selector.AsFunc()));
+            var expected = Enumerable
+                .Skip(source, skipCount)
+                .Take(takeCount)
+                .Select(selector.AsFunc())
+                .ToList();
 
             for (var index = 0; index < expected.Count; index++)
             {
                 // Act
                 var result = ArrayExtensions
-                    .Where<int>(source, predicate)
+                    .Skip<int>(source, skipCount)
+                    .Take(takeCount)
+                    .Select(selector)
+                    .ElementAt(index);
+
+                // Assert
+                _ = result.Match(
+                    value => value.Must().BeEqualTo(expected[index]),
+                    () => throw new Exception());
+            }
+        }
+
+        [Theory]
+        [MemberData(nameof(TestData.SkipTakePredicateSelectorEmpty), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakePredicateSelectorSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakePredicateSelectorMultiple), MemberType = typeof(TestData))]
+        public void ElementAt_Skip_Take_Predicate_Selector_With_OutOfRange_Must_Return_None(int[] source, int skipCount, int takeCount, Predicate<int> predicate, NullableSelector<int, string> selector)
+        {
+            // Arrange
+
+            // Act
+            var optionTooSmall = ArrayExtensions
+                .Skip<int>(source, skipCount)
+                .Take(takeCount)
+                .Where(predicate)
+                .Select(selector)
+                .ElementAt(-1);
+            var optionTooLarge = ArrayExtensions
+                .Skip<int>(source, skipCount)
+                .Take(takeCount)
+                .Where(predicate)
+                .Select(selector)
+                .ElementAt(takeCount);
+
+            // Assert
+            _ = optionTooSmall.Must()
+                .BeOfType<Option<string>>()
+                .EvaluateTrue(option => option.IsNone);
+            _ = optionTooLarge.Must()
+                .BeOfType<Option<string>>()
+                .EvaluateTrue(option => option.IsNone);
+        }
+
+        [Theory]
+        [MemberData(nameof(TestData.SkipTakePredicateSelectorSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakePredicateSelectorMultiple), MemberType = typeof(TestData))]
+        public void ElementAt_Skip_Take_Predicate_Selector_With_ValidData_Must_Return_Some(int[] source, int skipCount, int takeCount, Predicate<int> predicate, NullableSelector<int, string> selector)
+        {
+            // Arrange
+            var expected = Enumerable
+                .Skip(source, skipCount)
+                .Take(takeCount)
+                .Where(predicate.AsFunc())
+                .Select(selector.AsFunc())
+                .ToList();
+
+            for (var index = 0; index < expected.Count; index++)
+            {
+                // Act
+                var result = ArrayExtensions
+                    .Skip<int>(source, skipCount)
+                    .Take(takeCount)
+                    .Where(predicate)
                     .Select(selector)
                     .ElementAt(index);
 

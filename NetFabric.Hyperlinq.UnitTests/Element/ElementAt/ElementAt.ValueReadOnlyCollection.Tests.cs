@@ -1,5 +1,6 @@
 using NetFabric.Assertive;
 using System;
+using System.Linq;
 using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
@@ -13,7 +14,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
         public void ElementAt_With_OutOfRange_Must_Return_None(int[] source)
         {
             // Arrange
-            var wrapped = Wrap.AsValueReadOnlyCollection(source);
+            var wrapped = Wrap
+                .AsValueReadOnlyCollection(source);
 
             // Act
             var optionNegative = ValueReadOnlyCollectionExtensions
@@ -38,9 +40,10 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
             for (var index = 0; index < source.Length; index++)
             {
                 // Arrange
-                var wrapped = Wrap.AsValueReadOnlyCollection(source);
-                var expected = 
-                    System.Linq.Enumerable.ElementAt(source, index);
+                var wrapped = Wrap
+                    .AsValueReadOnlyCollection(source);
+                var expected = Enumerable
+                    .ElementAt(source, index);
 
                 // Act
                 var result = ValueReadOnlyCollectionExtensions
@@ -60,7 +63,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
         public void ElementAt_Selector_With_OutOfRange_Must_Return_None(int[] source, NullableSelector<int, string> selector)
         {
             // Arrange
-            var wrapped = Wrap.AsValueReadOnlyCollection(source);
+            var wrapped = Wrap
+                .AsValueReadOnlyCollection(source);
 
             // Act
             var optionNegative = ValueReadOnlyCollectionExtensions
@@ -84,14 +88,14 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
         [MemberData(nameof(TestData.SelectorMultiple), MemberType = typeof(TestData))]
         public void ElementAt_Selector_With_ValidData_Must_Return_Some(int[] source, NullableSelector<int, string> selector)
         {
+            // Arrange
+            var wrapped = Wrap.AsValueReadOnlyCollection(source);
+            var expected = Enumerable
+                .Select(source, selector.AsFunc())
+                .ToList();
+
             for (var index = 0; index < source.Length; index++)
             {
-                // Arrange
-                var wrapped = Wrap.AsValueReadOnlyCollection(source);
-                var expected = 
-                    System.Linq.Enumerable.ElementAt(
-                        System.Linq.Enumerable.Select(source, selector.AsFunc()), index);
-
                 // Act
                 var result = ValueReadOnlyCollectionExtensions
                     .Select<Wrap.ValueReadOnlyCollectionWrapper<int>, Wrap.Enumerator<int>, int, string>(wrapped, selector)
@@ -99,7 +103,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
 
                 // Assert
                 _ = result.Match(
-                    value => value.Must().BeEqualTo(expected),
+                    value => value.Must().BeEqualTo(expected[index]),
                     () => throw new Exception());
             }
         }
@@ -111,7 +115,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
         public void ElementAt_SelectorAt_With_OutOfRange_Must_Return_None(int[] source, NullableSelectorAt<int, string> selector)
         {
             // Arrange
-            var wrapped = Wrap.AsValueReadOnlyCollection(source);
+            var wrapped = Wrap
+                .AsValueReadOnlyCollection(source);
 
             // Act
             var optionNegative = ValueReadOnlyCollectionExtensions
@@ -135,14 +140,15 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
         [MemberData(nameof(TestData.SelectorAtMultiple), MemberType = typeof(TestData))]
         public void ElementAt_SelectorAt_With_ValidData_Must_Return_Some(int[] source, NullableSelectorAt<int, string> selector)
         {
+            // Arrange
+            var wrapped = Wrap
+                .AsValueReadOnlyCollection(source);
+            var expected = Enumerable
+                .Select(source, selector.AsFunc())
+                .ToList();
+
             for (var index = 0; index < source.Length; index++)
             {
-                // Arrange
-                var wrapped = Wrap.AsValueReadOnlyCollection(source);
-                var expected = 
-                    System.Linq.Enumerable.ElementAt(
-                        System.Linq.Enumerable.Select(source, selector.AsFunc()), index);
-
                 // Act
                 var result = ValueReadOnlyCollectionExtensions
                     .Select<Wrap.ValueReadOnlyCollectionWrapper<int>, Wrap.Enumerator<int>, int, string>(wrapped, selector)
@@ -150,7 +156,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
 
                 // Assert
                 _ = result.Match(
-                    value => value.Must().BeEqualTo(expected),
+                    value => value.Must().BeEqualTo(expected[index]),
                     () => throw new Exception());
             }
         }

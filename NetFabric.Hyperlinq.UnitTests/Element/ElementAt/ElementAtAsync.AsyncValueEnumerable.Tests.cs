@@ -1,5 +1,6 @@
 using NetFabric.Assertive;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -14,7 +15,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAtAsync
         public async void ElementAtAsync_With_OutOfRange_Must_Return_None(int[] source)
         {
             // Arrange
-            var wrapped = Wrap.AsAsyncValueEnumerable(source);
+            var wrapped = Wrap
+                .AsAsyncValueEnumerable(source);
 
             // Act
             var optionNegative = await AsyncValueEnumerableExtensions
@@ -36,12 +38,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAtAsync
         [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
         public async ValueTask ElementAtAsync_With_ValidData_Must_Return_Some(int[] source)
         {
-            var wrapped = Wrap.AsAsyncValueEnumerable(source);
+            var wrapped = Wrap
+                .AsAsyncValueEnumerable(source);
             for (var index = 0; index < source.Length; index++)
             {
                 // Arrange
-                var expected = 
-                    System.Linq.Enumerable.ElementAt(source, index);
+                var expected = Enumerable
+                    .ElementAt(source, index);
 
                 // Act
                 var result = await AsyncValueEnumerableExtensions
@@ -61,7 +64,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAtAsync
         public async void ElementAtAsync_Predicate_With_OutOfRange_Must_Return_None(int[] source, Predicate<int> predicate)
         {
             // Arrange
-            var wrapped = Wrap.AsAsyncValueEnumerable(source);
+            var wrapped = Wrap
+                .AsAsyncValueEnumerable(source);
 
             // Act
             var optionNegative = await AsyncValueEnumerableExtensions
@@ -86,10 +90,11 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAtAsync
         public async ValueTask ElementAtAsync_Predicate_With_ValidData_Must_Return_Some(int[] source, Predicate<int> predicate)
         {
             // Arrange
-            var wrapped = Wrap.AsAsyncValueEnumerable(source);
-            var expected = 
-                System.Linq.Enumerable.ToList(
-                    System.Linq.Enumerable.Where(source, predicate.AsFunc()));
+            var wrapped = Wrap
+                .AsAsyncValueEnumerable(source);
+            var expected = Enumerable
+                .Where(source, predicate.AsFunc())
+                .ToList();
 
             for (var index = 0; index < expected.Count; index++)
             {
@@ -112,7 +117,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAtAsync
         public async void ElementAtAsync_PredicateAt_With_OutOfRange_Must_Return_None(int[] source, PredicateAt<int> predicate)
         {
             // Arrange
-            var wrapped = Wrap.AsAsyncValueEnumerable(source);
+            var wrapped = Wrap
+                .AsAsyncValueEnumerable(source);
 
             // Act
             var optionNegative = await AsyncValueEnumerableExtensions
@@ -138,9 +144,9 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAtAsync
         {
             // Arrange
             var wrapped = Wrap.AsAsyncValueEnumerable(source);
-            var expected = 
-                System.Linq.Enumerable.ToList(
-                    System.Linq.Enumerable.Where(source, predicate.AsFunc()));
+            var expected = Enumerable
+                .Where(source, predicate.AsFunc())
+                .ToList();
 
             for (var index = 0; index < expected.Count; index++)
             {
@@ -163,7 +169,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAtAsync
         public async void ElementAtAsync_Selector_With_OutOfRange_Must_Return_None(int[] source, NullableSelector<int, string> selector)
         {
             // Arrange
-            var wrapped = Wrap.AsAsyncValueEnumerable(source);
+            var wrapped = Wrap
+                .AsAsyncValueEnumerable(source);
 
             // Act
             var optionNegative = await AsyncValueEnumerableExtensions
@@ -187,14 +194,14 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAtAsync
         [MemberData(nameof(TestData.SelectorMultiple), MemberType = typeof(TestData))]
         public async ValueTask ElementAtAsync_Selector_With_ValidData_Must_Return_Some(int[] source, NullableSelector<int, string> selector)
         {
+            // Arrange
+            var wrapped = Wrap.AsAsyncValueEnumerable(source);
+            var expected = Enumerable
+                .Select(source, selector.AsFunc())
+                .ToList();
+
             for (var index = 0; index < source.Length; index++)
             {
-                // Arrange
-                var wrapped = Wrap.AsAsyncValueEnumerable(source);
-                var expected = 
-                    System.Linq.Enumerable.ElementAt(
-                        System.Linq.Enumerable.Select(source, selector.AsFunc()), index);
-
                 // Act
                 var result = await AsyncValueEnumerableExtensions
                     .Select<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int, string>(wrapped, selector.AsAsync())
@@ -202,7 +209,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAtAsync
 
                 // Assert
                 _ = result.Match(
-                    value => value.Must().BeEqualTo(expected),
+                    value => value.Must().BeEqualTo(expected[index]),
                     () => throw new Exception());
             }
         }
@@ -214,7 +221,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAtAsync
         public async void ElementAtAsync_SelectorAt_With_OutOfRange_Must_Return_None(int[] source, NullableSelectorAt<int, string> selector)
         {
             // Arrange
-            var wrapped = Wrap.AsAsyncValueEnumerable(source);
+            var wrapped = Wrap
+                .AsAsyncValueEnumerable(source);
 
             // Act
             var optionNegative = await AsyncValueEnumerableExtensions
@@ -238,14 +246,15 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAtAsync
         [MemberData(nameof(TestData.SelectorAtMultiple), MemberType = typeof(TestData))]
         public async ValueTask ElementAtAsync_SelectorAt_With_ValidData_Must_Return_Some(int[] source, NullableSelectorAt<int, string> selector)
         {
+            // Arrange
+            var wrapped = Wrap
+                .AsAsyncValueEnumerable(source);
+            var expected = Enumerable
+                .Select(source, selector.AsFunc())
+                .ToList();
+
             for (var index = 0; index < source.Length; index++)
             {
-                // Arrange
-                var wrapped = Wrap.AsAsyncValueEnumerable(source);
-                var expected = 
-                    System.Linq.Enumerable.ElementAt(
-                        System.Linq.Enumerable.Select(source, selector.AsFunc()), index);
-
                 // Act
                 var result = await AsyncValueEnumerableExtensions
                     .Select<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int, string>(wrapped, selector.AsAsync())
@@ -253,7 +262,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAtAsync
 
                 // Assert
                 _ = result.Match(
-                    value => value.Must().BeEqualTo(expected),
+                    value => value.Must().BeEqualTo(expected[index]),
                     () => throw new Exception());
             }
         }
@@ -265,7 +274,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAtAsync
         public async void ElementAtAsync_Predicate_Selector_With_OutOfRange_Must_Return_None(int[] source, Predicate<int> predicate, NullableSelector<int, string> selector)
         {
             // Arrange
-            var wrapped = Wrap.AsAsyncValueEnumerable(source);
+            var wrapped = Wrap
+                .AsAsyncValueEnumerable(source);
 
             // Act
             var optionNegative = await AsyncValueEnumerableExtensions
@@ -292,11 +302,12 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAtAsync
         public async ValueTask ElementAtAsync_Predicate_Selector_With_ValidData_Must_Return_Some(int[] source, Predicate<int> predicate, NullableSelector<int, string> selector)
         {
             // Arrange
-            var wrapped = Wrap.AsAsyncValueEnumerable(source);
-            var expected = 
-                System.Linq.Enumerable.ToList(
-                    System.Linq.Enumerable.Select(
-                        System.Linq.Enumerable.Where(source, predicate.AsFunc()), selector.AsFunc()));
+            var wrapped = Wrap
+                .AsAsyncValueEnumerable(source);
+            var expected = Enumerable
+                .Where(source, predicate.AsFunc())
+                .Select(selector.AsFunc())
+                .ToList();
 
             for (var index = 0; index < expected.Count; index++)
             {
