@@ -94,16 +94,16 @@ namespace NetFabric.Hyperlinq
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static Option<TResult> ElementAt<TSource, TResult>(this TSource[] source, int index, NullableSelector<TSource, TResult> selector, int skipCount, int takeCount)
-            => index < 0 || index >= takeCount
-                ? Option.None
-                : Option.Some(selector(source[index + skipCount]));
+            => index >= 0 && index < takeCount
+                ? Option.Some(selector(source[index + skipCount]))
+                : Option.None;
 
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Option<TResult> ElementAt<TSource, TResult>(this TSource[] source, int index, NullableSelectorAt<TSource, TResult> selector, int skipCount, int takeCount)
-            => index < 0 || index >= takeCount
-                ? Option.None
-                : Option.Some(selector(source[index + skipCount], index));
+            => index >= 0 && index < takeCount
+                ? Option.Some(selector(source[index + skipCount], index))
+                : Option.None;
 
 
         static Option<TResult> ElementAt<TSource, TResult>(this TSource[] source, int index, Predicate<TSource> predicate, NullableSelector<TSource, TResult> selector, int skipCount, int takeCount)

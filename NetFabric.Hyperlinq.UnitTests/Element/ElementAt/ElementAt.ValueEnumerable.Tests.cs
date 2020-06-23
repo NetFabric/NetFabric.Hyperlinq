@@ -1,5 +1,6 @@
 using NetFabric.Assertive;
 using System;
+using System.Linq;
 using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
@@ -13,7 +14,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
         public void ElementAt_With_OutOfRange_Must_Return_None(int[] source)
         {
             // Arrange
-            var wrapped = Wrap.AsValueEnumerable(source);
+            var wrapped = Wrap
+                .AsValueEnumerable(source);
 
             // Act
             var optionNegative = ValueEnumerableExtensions
@@ -38,9 +40,10 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
             for (var index = 0; index < source.Length; index++)
             {
                 // Arrange
-                var wrapped = Wrap.AsValueEnumerable(source);
-                var expected = 
-                    System.Linq.Enumerable.ElementAt(source, index);
+                var wrapped = Wrap
+                    .AsValueEnumerable(source);
+                var expected = Enumerable
+                    .ElementAt(source, index);
 
                 // Act
                 var result = ValueEnumerableExtensions
@@ -60,7 +63,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
         public void ElementAt_Predicate_With_OutOfRange_Must_Return_None(int[] source, Predicate<int> predicate)
         {
             // Arrange
-            var wrapped = Wrap.AsValueEnumerable(source);
+            var wrapped = Wrap
+                .AsValueEnumerable(source);
 
             // Act
             var optionNegative = ValueEnumerableExtensions
@@ -85,10 +89,11 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
         public void ElementAt_Predicate_With_ValidData_Must_Return_Some(int[] source, Predicate<int> predicate)
         {
             // Arrange
-            var wrapped = Wrap.AsValueEnumerable(source);
-            var expected = 
-                System.Linq.Enumerable.ToList(
-                    System.Linq.Enumerable.Where(source, predicate.AsFunc()));
+            var wrapped = Wrap
+                .AsValueEnumerable(source);
+            var expected = Enumerable
+                .Where(source, predicate.AsFunc())
+                .ToList();
 
             for (var index = 0; index < expected.Count; index++)
             {
@@ -111,7 +116,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
         public void ElementAt_PredicateAt_With_OutOfRange_Must_Return_None(int[] source, PredicateAt<int> predicate)
         {
             // Arrange
-            var wrapped = Wrap.AsValueEnumerable(source);
+            var wrapped = Wrap
+                .AsValueEnumerable(source);
 
             // Act
             var optionNegative = ValueEnumerableExtensions
@@ -136,10 +142,11 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
         public void ElementAt_PredicateAt_With_ValidData_Must_Return_Some(int[] source, PredicateAt<int> predicate)
         {
             // Arrange
-            var wrapped = Wrap.AsValueEnumerable(source);
-            var expected = 
-                System.Linq.Enumerable.ToList(
-                    System.Linq.Enumerable.Where(source, predicate.AsFunc()));
+            var wrapped = Wrap
+                .AsValueEnumerable(source);
+            var expected = Enumerable
+                .Where(source, predicate.AsFunc())
+                .ToList();
 
             for (var index = 0; index < expected.Count; index++)
             {
@@ -162,7 +169,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
         public void ElementAt_Selector_With_OutOfRange_Must_Return_None(int[] source, NullableSelector<int, string> selector)
         {
             // Arrange
-            var wrapped = Wrap.AsValueEnumerable(source);
+            var wrapped = Wrap
+                .AsValueEnumerable(source);
 
             // Act
             var optionNegative = ValueEnumerableExtensions
@@ -186,14 +194,15 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
         [MemberData(nameof(TestData.SelectorMultiple), MemberType = typeof(TestData))]
         public void ElementAt_Selector_With_ValidData_Must_Return_Some(int[] source, NullableSelector<int, string> selector)
         {
+            // Arrange
+            var wrapped = Wrap
+                .AsValueEnumerable(source);
+            var expected = Enumerable
+                .Select(source, selector.AsFunc())
+                .ToList();
+
             for (var index = 0; index < source.Length; index++)
             {
-                // Arrange
-                var wrapped = Wrap.AsValueEnumerable(source);
-                var expected = 
-                    System.Linq.Enumerable.ElementAt(
-                        System.Linq.Enumerable.Select(source, selector.AsFunc()), index);
-
                 // Act
                 var result = ValueEnumerableExtensions
                     .Select<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int, string>(wrapped, selector)
@@ -201,7 +210,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
 
                 // Assert
                 _ = result.Match(
-                    value => value.Must().BeEqualTo(expected),
+                    value => value.Must().BeEqualTo(expected[index]),
                     () => throw new Exception());
             }
         }
@@ -213,7 +222,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
         public void ElementAt_SelectorAt_With_OutOfRange_Must_Return_None(int[] source, NullableSelectorAt<int, string> selector)
         {
             // Arrange
-            var wrapped = Wrap.AsValueEnumerable(source);
+            var wrapped = Wrap
+                .AsValueEnumerable(source);
 
             // Act
             var optionNegative = ValueEnumerableExtensions
@@ -237,14 +247,15 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
         [MemberData(nameof(TestData.SelectorAtMultiple), MemberType = typeof(TestData))]
         public void ElementAt_SelectorAt_With_ValidData_Must_Return_Some(int[] source, NullableSelectorAt<int, string> selector)
         {
+            // Arrange
+            var wrapped = Wrap
+                .AsValueEnumerable(source);
+            var expected = Enumerable
+                .Select(source, selector.AsFunc())
+                .ToList();
+
             for (var index = 0; index < source.Length; index++)
             {
-                // Arrange
-                var wrapped = Wrap.AsValueEnumerable(source);
-                var expected = 
-                    System.Linq.Enumerable.ElementAt(
-                        System.Linq.Enumerable.Select(source, selector.AsFunc()), index);
-
                 // Act
                 var result = ValueEnumerableExtensions
                     .Select<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int, string>(wrapped, selector)
@@ -252,7 +263,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
 
                 // Assert
                 _ = result.Match(
-                    value => value.Must().BeEqualTo(expected),
+                    value => value.Must().BeEqualTo(expected[index]),
                     () => throw new Exception());
             }
         }
@@ -264,7 +275,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
         public void ElementAt_Predicate_Selector_With_OutOfRange_Must_Return_None(int[] source, Predicate<int> predicate, NullableSelector<int, string> selector)
         {
             // Arrange
-            var wrapped = Wrap.AsValueEnumerable(source);
+            var wrapped = Wrap
+                .AsValueEnumerable(source);
 
             // Act
             var optionNegative = ValueEnumerableExtensions
@@ -291,11 +303,12 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
         public void ElementAt_Predicate_Selector_With_ValidData_Must_Return_Some(int[] source, Predicate<int> predicate, NullableSelector<int, string> selector)
         {
             // Arrange
-            var wrapped = Wrap.AsValueEnumerable(source);
-            var expected = 
-                System.Linq.Enumerable.ToList(
-                    System.Linq.Enumerable.Select(
-                        System.Linq.Enumerable.Where(source, predicate.AsFunc()), selector.AsFunc()));
+            var wrapped = Wrap
+                .AsValueEnumerable(source);
+            var expected = Enumerable
+                .Where(source, predicate.AsFunc())
+                .Select(selector.AsFunc())
+                .ToList();
 
             for (var index = 0; index < expected.Count; index++)
             {
