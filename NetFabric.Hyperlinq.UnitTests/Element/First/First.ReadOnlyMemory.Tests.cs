@@ -1,5 +1,6 @@
 using NetFabric.Assertive;
 using System;
+using System.Linq;
 using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests.Element.First
@@ -14,7 +15,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
 
             // Act
             var result = ArrayExtensions
-                .First<int>((ReadOnlyMemory<int>)source.AsMemory());
+                .First((ReadOnlyMemory<int>)source.AsMemory());
 
             // Assert
             _ = result.Must()
@@ -28,16 +29,16 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
         public void First_With_ValidData_Must_Return_Some(int[] source)
         {
             // Arrange
-            var expected =
-                System.Linq.Enumerable.First(source);
+            var expected = Enumerable
+                .First(source);
 
             // Act
             var result = ArrayExtensions
-                .First<int>((ReadOnlyMemory<int>)source.AsMemory());
+                .First((ReadOnlyMemory<int>)source.AsMemory());
 
             // Assert
             _ = result.Match(
-                value => value.Must().BeEqualTo(expected), 
+                value => value.Must().BeEqualTo(expected),
                 () => throw new Exception());
         }
 
@@ -49,7 +50,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
 
             // Act
             var result = ArrayExtensions
-                .Where<int>((ReadOnlyMemory<int>)source.AsMemory(), predicate)
+                .Where((ReadOnlyMemory<int>)source.AsMemory(), predicate)
                 .First();
 
             // Assert
@@ -64,17 +65,17 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
         public void First_Predicate_With_ValidData_Must_Return_Some(int[] source, Predicate<int> predicate)
         {
             // Arrange
-            var expected =
-                System.Linq.Enumerable.First(source, predicate.AsFunc());
+            var expected = Enumerable
+                .First(source, predicate.AsFunc());
 
             // Act
             var result = ArrayExtensions
-                .Where<int>((ReadOnlyMemory<int>)source.AsMemory(), predicate)
+                .Where((ReadOnlyMemory<int>)source.AsMemory(), predicate)
                 .First();
 
             // Assert
             _ = result.Match(
-                value => value.Must().BeEqualTo(expected), 
+                value => value.Must().BeEqualTo(expected),
                 () => throw new Exception());
         }
 
@@ -86,7 +87,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
 
             // Act
             var result = ArrayExtensions
-                .Where<int>((ReadOnlyMemory<int>)source.AsMemory(), predicate)
+                .Where((ReadOnlyMemory<int>)source.AsMemory(), predicate)
                 .First();
 
             // Assert
@@ -101,18 +102,18 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
         public void First_PredicateAt_With_ValidData_Must_Return_Some(int[] source, PredicateAt<int> predicate)
         {
             // Arrange
-            var expected =
-                System.Linq.Enumerable.First(
-                    System.Linq.Enumerable.Where(source, predicate.AsFunc()));
+            var expected = Enumerable
+                .Where(source, predicate.AsFunc())
+                .First();
 
             // Act
             var result = ArrayExtensions
-                .Where<int>((ReadOnlyMemory<int>)source.AsMemory(), predicate)
+                .Where((ReadOnlyMemory<int>)source.AsMemory(), predicate)
                 .First();
 
             // Assert
             _ = result.Match(
-                value => value.Must().BeEqualTo(expected), 
+                value => value.Must().BeEqualTo(expected),
                 () => throw new Exception());
         }
 
@@ -124,7 +125,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
 
             // Act
             var result = ArrayExtensions
-                .Select<int, string>((ReadOnlyMemory<int>)source.AsMemory(), selector)
+                .Select((ReadOnlyMemory<int>)source.AsMemory(), selector)
                 .First();
 
             // Assert
@@ -139,18 +140,18 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
         public void First_Selector_With_ValidData_Must_Return_Some(int[] source, NullableSelector<int, string> selector)
         {
             // Arrange
-            var expected =
-                System.Linq.Enumerable.First(
-                    System.Linq.Enumerable.Select(source, selector.AsFunc()));
+            var expected = Enumerable
+                .Select(source, selector.AsFunc())
+                .First();
 
             // Act
             var result = ArrayExtensions
-                .Select<int, string>((ReadOnlyMemory<int>)source.AsMemory(), selector)
+                .Select((ReadOnlyMemory<int>)source.AsMemory(), selector)
                 .First();
 
             // Assert
             _ = result.Match(
-                value => value.Must().BeEqualTo(expected), 
+                value => value.Must().BeEqualTo(expected),
                 () => throw new Exception());
         }
 
@@ -162,7 +163,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
 
             // Act
             var result = ArrayExtensions
-                .Select<int, string>((ReadOnlyMemory<int>)source.AsMemory(), selector)
+                .Select((ReadOnlyMemory<int>)source.AsMemory(), selector)
                 .First();
 
             // Assert
@@ -177,18 +178,18 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
         public void First_SelectorAt_With_ValidData_Must_Return_Some(int[] source, NullableSelectorAt<int, string> selector)
         {
             // Arrange
-            var expected =
-                System.Linq.Enumerable.First(
-                    System.Linq.Enumerable.Select(source, selector.AsFunc()));
+            var expected = Enumerable
+                .Select(source, selector.AsFunc())
+                .First();
 
             // Act
             var result = ArrayExtensions
-                .Select<int, string>((ReadOnlyMemory<int>)source.AsMemory(), selector)
+                .Select((ReadOnlyMemory<int>)source.AsMemory(), selector)
                 .First();
 
             // Assert
             _ = result.Match(
-                value => value.Must().BeEqualTo(expected), 
+                value => value.Must().BeEqualTo(expected),
                 () => throw new Exception());
         }
 
@@ -200,7 +201,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
 
             // Act
             var result = ArrayExtensions
-                .Where<int>((ReadOnlyMemory<int>)source.AsMemory(), predicate)
+                .Where((ReadOnlyMemory<int>)source.AsMemory(), predicate)
                 .Select(selector)
                 .First();
 
@@ -216,10 +217,10 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
         public void First_Predicate_Selector_With_ValidData_Must_Return_Some(int[] source, Predicate<int> predicate, NullableSelector<int, string> selector)
         {
             // Arrange
-            var expected =
-                System.Linq.Enumerable.First(
-                    System.Linq.Enumerable.Select(
-                        System.Linq.Enumerable.Where(source, predicate.AsFunc()), selector.AsFunc()));
+            var expected = Enumerable
+                .Where(source, predicate.AsFunc())
+                .Select(selector.AsFunc())
+                .First();
 
             // Act
             var result = ArrayExtensions
@@ -229,7 +230,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
 
             // Assert
             _ = result.Match(
-                value => value.Must().BeEqualTo(expected), 
+                value => value.Must().BeEqualTo(expected),
                 () => throw new Exception());
         }
     }
