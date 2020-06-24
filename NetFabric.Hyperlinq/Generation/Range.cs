@@ -169,9 +169,20 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Contains(int value, IEqualityComparer<int>? comparer)
-                => comparer is null
-                    ? value >= start && value < end
-                    : ReadOnlyListExtensions.Contains(this, value, comparer);
+            {
+                if (Count == 0)
+                    return false;
+
+                if (comparer is null || ReferenceEquals(comparer, EqualityComparer<int>.Default))
+                    return value >= start && value < end;
+
+                for (var v = start; v < end; v++)
+                {
+                    if (comparer.Equals(v, value))
+                        return true;
+                }
+                return false;
+            }
 
             public int[] ToArray()
             {
