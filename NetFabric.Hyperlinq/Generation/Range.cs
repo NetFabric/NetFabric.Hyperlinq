@@ -62,10 +62,14 @@ namespace NetFabric.Hyperlinq
 
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly Enumerator GetEnumerator() => new Enumerator(in this);
-            readonly DisposableEnumerator IValueEnumerable<int, DisposableEnumerator>.GetEnumerator() => new DisposableEnumerator(in this);
-            readonly IEnumerator<int> IEnumerable<int>.GetEnumerator() => new DisposableEnumerator(in this);
-            readonly IEnumerator IEnumerable.GetEnumerator() => new DisposableEnumerator(in this);
+            public readonly Enumerator GetEnumerator() 
+                => new Enumerator(in this);
+            readonly DisposableEnumerator IValueEnumerable<int, DisposableEnumerator>.GetEnumerator() 
+                => new DisposableEnumerator(in this);
+            readonly IEnumerator<int> IEnumerable<int>.GetEnumerator() 
+                => new DisposableEnumerator(in this);
+            readonly IEnumerator IEnumerable.GetEnumerator() 
+                => new DisposableEnumerator(in this);
 
             bool ICollection<int>.IsReadOnly  
                 => true;
@@ -143,7 +147,7 @@ namespace NetFabric.Hyperlinq
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public bool MoveNext() 
-                    => ++this.Current < end;
+                    => ++Current < end;
 
                 [ExcludeFromCodeCoverage]
                 public readonly void Reset() 
@@ -155,19 +159,18 @@ namespace NetFabric.Hyperlinq
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public RangeEnumerable Skip(int count)
             {
-                var (skipCount, takeCount) = Utils.Skip(this.Count, count);
+                var (skipCount, takeCount) = Utils.Skip(Count, count);
                 return Range(start + skipCount, takeCount);
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public RangeEnumerable Take(int count)
-                => Range(start, Utils.Take(this.Count, count));
+                => Range(start, Utils.Take(Count, count));
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Any()
                 => Count != 0;
 
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Contains(int value, IEqualityComparer<int>? comparer)
             {
                 if (Count == 0)
@@ -176,9 +179,9 @@ namespace NetFabric.Hyperlinq
                 if (comparer is null || ReferenceEquals(comparer, EqualityComparer<int>.Default))
                     return value >= start && value < end;
 
-                for (var v = start; v < end; v++)
+                for (var item = start; item < end; item++)
                 {
-                    if (comparer.Equals(v, value))
+                    if (comparer.Equals(item, value))
                         return true;
                 }
                 return false;
