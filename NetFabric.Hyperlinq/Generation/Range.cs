@@ -102,8 +102,10 @@ namespace NetFabric.Hyperlinq
             [ExcludeFromCodeCoverage]
             bool ICollection<int>.Remove(int item) 
                 => Throw.NotSupportedException<bool>();
+            [ExcludeFromCodeCoverage]
             void IList<int>.Insert(int index, int item)
                 => Throw.NotSupportedException();
+            [ExcludeFromCodeCoverage]
             void IList<int>.RemoveAt(int index)
                 => Throw.NotSupportedException();
 
@@ -190,12 +192,6 @@ namespace NetFabric.Hyperlinq
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public List<int> ToList()
                 => new List<int>(this);
-
-            public Dictionary<TKey, int> ToDictionary<TKey>(NullableSelector<int, TKey> keySelector, IEqualityComparer<TKey>? comparer = default)
-                => ToDictionary<TKey>(keySelector, comparer);
-
-            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(NullableSelector<int, TKey> keySelector, NullableSelector<int, TElement> elementSelector, IEqualityComparer<TKey>? comparer = default)
-                => ToDictionary<TKey, TElement>(keySelector, elementSelector, comparer);
         }
     }
 }
