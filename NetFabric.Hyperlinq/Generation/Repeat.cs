@@ -29,7 +29,8 @@ namespace NetFabric.Hyperlinq
                 this.count = count;
             }
 
-            public readonly int Count => count;
+            public readonly int Count 
+                => count;
 
             [MaybeNull]
             public readonly TSource this[int index]
@@ -51,10 +52,14 @@ namespace NetFabric.Hyperlinq
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly Enumerator GetEnumerator() => new Enumerator(in this);
-            readonly DisposableEnumerator IValueEnumerable<TSource, DisposableEnumerator>.GetEnumerator() => new DisposableEnumerator(in this);
-            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new DisposableEnumerator(in this);
-            readonly IEnumerator IEnumerable.GetEnumerator() => new DisposableEnumerator(in this);
+            public readonly Enumerator GetEnumerator() 
+                => new Enumerator(in this);
+            readonly DisposableEnumerator IValueEnumerable<TSource, DisposableEnumerator>.GetEnumerator() 
+                => new DisposableEnumerator(in this);
+            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() 
+                => new DisposableEnumerator(in this);
+            readonly IEnumerator IEnumerable.GetEnumerator() 
+                => new DisposableEnumerator(in this);
 
             bool ICollection<TSource>.IsReadOnly  
                 => true;
@@ -67,13 +72,11 @@ namespace NetFabric.Hyperlinq
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            bool ICollection<TSource>.Contains(TSource item)
-                => count > 0 && EqualityComparer<TSource>.Default.Equals(value, item)
-                    ? true
-                    : false;
+            public bool Contains(TSource item)
+                => count != 0 && EqualityComparer<TSource>.Default.Equals(value, item);
 
             public int IndexOf(TSource item)
-                => count > 0 && EqualityComparer<TSource>.Default.Equals(value, item)
+                => count != 0 && EqualityComparer<TSource>.Default.Equals(value, item)
                     ? 0
                     : -1;
 
@@ -131,7 +134,8 @@ namespace NetFabric.Hyperlinq
                     => Current;
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                public bool MoveNext() => counter-- > 0;
+                public bool MoveNext() 
+                    => counter-- > 0;
 
                 [ExcludeFromCodeCoverage]
                 public readonly void Reset() 
@@ -162,7 +166,7 @@ namespace NetFabric.Hyperlinq
                 => count != 0;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public bool Contains(TSource value, IEqualityComparer<TSource>? comparer = default)
+            public bool Contains(TSource value, IEqualityComparer<TSource>? comparer)
                 => comparer is null
                     ? count != 0 && EqualityComparer<TSource>.Default.Equals(this.value, value)
                     : count != 0 && comparer.Equals(this.value, value);
@@ -188,38 +192,7 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public List<TSource> ToList()
-                => new List<TSource>(new ToListCollection(this));
-
-            public Dictionary<TKey, TSource> ToDictionary<TKey>(NullableSelector<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer = default)
-                => ToDictionary<TKey>(keySelector, comparer);
-
-            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(NullableSelector<TSource, TKey> keySelector, NullableSelector<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer = default)
-                => ToDictionary<TKey, TElement>(keySelector, elementSelector, comparer);
-
-            // helper implementation of ICollection<> so that CopyTo() is used to convert to List<>
-            [GeneratorIgnore]
-            sealed class ToListCollection
-                : ToListCollectionBase<TSource>
-            {
-                readonly TSource value;
-
-                public ToListCollection(in RepeatEnumerable<TSource> source)
-                    : base(source.count)
-                    => value = source.value;
-
-                public override void CopyTo(TSource[] array, int _)
-                {
-                    if (value is object)
-                    {
-#if NETSTANDARD2_1
-                        Array.Fill(array, value);
-#else
-                        for (var index = 0; index < array.Length; index++)
-                            array[index] = value;
-#endif
-                    }
-                }
-            }
+                => new List<TSource>(this);
         }
     }
 }

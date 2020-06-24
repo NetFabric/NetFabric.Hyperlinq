@@ -44,19 +44,31 @@ namespace NetFabric.Hyperlinq
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly Enumerator GetEnumerator() => new Enumerator(in this);
-            readonly DisposableEnumerator IValueEnumerable<TSource, DisposableEnumerator>.GetEnumerator() => new DisposableEnumerator(in this);
-            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new DisposableEnumerator(in this);
-            readonly IEnumerator IEnumerable.GetEnumerator() => new DisposableEnumerator(in this);
+            public readonly Enumerator GetEnumerator() 
+                => new Enumerator(in this);
+            readonly DisposableEnumerator IValueEnumerable<TSource, DisposableEnumerator>.GetEnumerator() 
+                => new DisposableEnumerator(in this);
+            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() 
+                => new DisposableEnumerator(in this);
+            readonly IEnumerator IEnumerable.GetEnumerator() 
+                => new DisposableEnumerator(in this);
 
             bool ICollection<TSource>.IsReadOnly  
                 => true;
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public void CopyTo(TSource[] array, int arrayIndex) 
                 => array[arrayIndex] = value;
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Contains(TSource item)
-                => Contains(item, null);
+                => EqualityComparer<TSource>.Default.Equals(value, item);
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            int IList<TSource>.IndexOf(TSource item)
+                => EqualityComparer<TSource>.Default.Equals(value, item)
+                    ? 0
+                    : -1;
 
             [ExcludeFromCodeCoverage]
             void ICollection<TSource>.Add(TSource item) 
@@ -67,11 +79,6 @@ namespace NetFabric.Hyperlinq
             [ExcludeFromCodeCoverage]
             bool ICollection<TSource>.Remove(TSource item) 
                 => Throw.NotSupportedException<bool>();
-
-            int IList<TSource>.IndexOf(TSource item)
-                => EqualityComparer<TSource>.Default.Equals(value, item)
-                    ? 0
-                    : -1;
 
             [ExcludeFromCodeCoverage]
             void IList<TSource>.Insert(int index, TSource item)
@@ -165,6 +172,7 @@ namespace NetFabric.Hyperlinq
             public Option<TSource> Single()
                 => Option.Some(value);
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TSource[] ToArray()
                 => new TSource[] { value };
 
@@ -172,9 +180,11 @@ namespace NetFabric.Hyperlinq
             public List<TSource> ToList()
                 => new List<TSource>(1) { value };
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Dictionary<TKey, TSource> ToDictionary<TKey>(NullableSelector<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer = default)
                 => new Dictionary<TKey, TSource>(1, comparer) { { keySelector(value), value } };
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(NullableSelector<TSource, TKey> keySelector, NullableSelector<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer = default)
                 => new Dictionary<TKey, TElement>(1, comparer) { { keySelector(value), elementSelector(value) } };
         }

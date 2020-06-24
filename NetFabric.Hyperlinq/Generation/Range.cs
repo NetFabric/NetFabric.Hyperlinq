@@ -106,6 +106,7 @@ namespace NetFabric.Hyperlinq
             [ExcludeFromCodeCoverage]
             bool ICollection<int>.Remove(int item) 
                 => Throw.NotSupportedException<bool>();
+
             [ExcludeFromCodeCoverage]
             void IList<int>.Insert(int index, int item)
                 => Throw.NotSupportedException();

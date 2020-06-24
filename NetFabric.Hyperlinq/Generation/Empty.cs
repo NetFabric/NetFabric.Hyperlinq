@@ -18,7 +18,7 @@ namespace NetFabric.Hyperlinq
         {
             public static readonly EmptyEnumerable<TSource> Instance = new EmptyEnumerable<TSource>();
 
-            private EmptyEnumerable() { }
+            EmptyEnumerable() { }
 
             public int Count 
                 => 0;
@@ -33,10 +33,14 @@ namespace NetFabric.Hyperlinq
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public Enumerator GetEnumerator() => new Enumerator();
-            DisposableEnumerator IValueEnumerable<TSource, EmptyEnumerable<TSource>.DisposableEnumerator>.GetEnumerator() => new DisposableEnumerator();
-            IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new DisposableEnumerator();
-            IEnumerator IEnumerable.GetEnumerator() => new DisposableEnumerator();
+            public Enumerator GetEnumerator() 
+                => new Enumerator();
+            DisposableEnumerator IValueEnumerable<TSource, EmptyEnumerable<TSource>.DisposableEnumerator>.GetEnumerator() 
+                => new DisposableEnumerator();
+            IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() 
+                => new DisposableEnumerator();
+            IEnumerator IEnumerable.GetEnumerator() 
+                => new DisposableEnumerator();
 
             bool ICollection<TSource>.IsReadOnly  
                 => true;
@@ -46,9 +50,11 @@ namespace NetFabric.Hyperlinq
                 // nothing to do 
             }
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Contains(TSource item)
                 => false;
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public int IndexOf(TSource item)
                 => -1;
 
@@ -61,6 +67,7 @@ namespace NetFabric.Hyperlinq
             [ExcludeFromCodeCoverage]
             bool ICollection<TSource>.Remove(TSource item) 
                 => Throw.NotSupportedException<bool>();
+
             [ExcludeFromCodeCoverage]
             void IList<TSource>.Insert(int index, TSource item)
                 => Throw.NotSupportedException();
@@ -70,7 +77,6 @@ namespace NetFabric.Hyperlinq
 
             public readonly struct Enumerator
             {
-                [ExcludeFromCodeCoverage]
                 [MaybeNull]                
                 public readonly TSource Current
                     => default;
@@ -82,16 +88,13 @@ namespace NetFabric.Hyperlinq
             public readonly struct DisposableEnumerator
                 : IEnumerator<TSource>
             {
-                [ExcludeFromCodeCoverage]
                 [MaybeNull]
                 public readonly TSource Current
                     => default;
 
-                [ExcludeFromCodeCoverage]
                 readonly TSource IEnumerator<TSource>.Current
                     => default!;
 
-                [ExcludeFromCodeCoverage]
                 readonly object? IEnumerator.Current 
                     => default;
 
