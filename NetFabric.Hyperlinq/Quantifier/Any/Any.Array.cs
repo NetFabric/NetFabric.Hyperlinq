@@ -89,7 +89,7 @@ namespace NetFabric.Hyperlinq
                     for (var index = 0; index < source.Length; index++)
                     {
                         if (predicate(source[index], index))
-                            return false;
+                            return true;
                     }
                 }
                 else
@@ -97,7 +97,7 @@ namespace NetFabric.Hyperlinq
                     for (var index = 0; index < takeCount; index++)
                     {
                         if (predicate(source[index], index))
-                            return false;
+                            return true;
                     }
                 }
             }

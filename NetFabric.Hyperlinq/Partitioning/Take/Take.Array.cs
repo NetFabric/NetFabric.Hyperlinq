@@ -11,7 +11,7 @@ namespace NetFabric.Hyperlinq
             => Take(source.AsMemory(), count);
 #else
         public static SkipTakeEnumerable<TSource> Take<TSource>(this TSource[] source, int count)
-            => SkipTake<TSource>(source, 0, count);
+            => SkipTake(source, 0, count);
 #endif
     }
 }

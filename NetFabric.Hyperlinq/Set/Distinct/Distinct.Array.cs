@@ -46,9 +46,12 @@ namespace NetFabric.Hyperlinq
             }
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly Enumerator GetEnumerator() => new Enumerator(in this);
-            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new Enumerator(in this);
-            readonly IEnumerator IEnumerable.GetEnumerator() => new Enumerator(in this);
+            public readonly Enumerator GetEnumerator() 
+                => new Enumerator(in this);
+            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() 
+                => new Enumerator(in this);
+            readonly IEnumerator IEnumerable.GetEnumerator() 
+                => new Enumerator(in this);
 
             public struct Enumerator
                 : IEnumerator<TSource>
@@ -61,7 +64,7 @@ namespace NetFabric.Hyperlinq
                 internal Enumerator(in DistinctEnumerable<TSource> enumerable)
                 {
                     source = enumerable.source;
-                    set = source.Length == 0 ? null : new Set<TSource>(enumerable.comparer);
+                    set = enumerable.takeCount == 0 ? null : new Set<TSource>(enumerable.comparer);
                     end = enumerable.skipCount + enumerable.takeCount;
                     index = enumerable.skipCount - 1;
                     Current = default!;
@@ -101,7 +104,8 @@ namespace NetFabric.Hyperlinq
             readonly Set<TSource> GetSet()
             {
                 var set = new Set<TSource>(comparer);
-                for (var index = 0; index < source.Length; index++)
+                var end = skipCount + takeCount;
+                for (var index = skipCount; index < end; index++)
                     _ = set.Add(source[index]);
                 return set;
             }
@@ -116,23 +120,23 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly int Count()
-                => source.Length == 0
+                => takeCount == 0
                     ? 0
                     : GetSet().Count;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly bool Any()
-                => source.Length != 0;
+                => takeCount != 0;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly TSource[] ToArray()
-                => source.Length == 0
+                => takeCount == 0
                     ? Array.Empty<TSource>()
                     : GetSet().ToArray();
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly List<TSource> ToList()
-                => source.Length == 0
+                => takeCount == 0
                     ? new List<TSource>()
                     : GetSet().ToList();
 

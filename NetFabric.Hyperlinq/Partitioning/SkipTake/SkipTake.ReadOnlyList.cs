@@ -196,10 +196,14 @@ namespace NetFabric.Hyperlinq
                 public readonly void Dispose() { }
             }
 
-            
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public SkipTakeEnumerable<TList, TSource> Skip(int count)
+                => ReadOnlyListExtensions.SkipTake<TList, TSource>(source, skipCount + count, Count);
+
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public SkipTakeEnumerable<TList, TSource> Take(int count)
-                => ReadOnlyListExtensions.SkipTake<TList, TSource>(source, skipCount, Math.Min(Count, count));
+                => ReadOnlyListExtensions.SkipTake<TList, TSource>(source, skipCount, Math.Min(count, Count));
 
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
