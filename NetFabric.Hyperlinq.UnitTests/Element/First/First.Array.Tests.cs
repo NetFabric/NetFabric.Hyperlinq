@@ -1,5 +1,6 @@
 using NetFabric.Assertive;
 using System;
+using System.Linq;
 using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests.Element.First
@@ -14,7 +15,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
 
             // Act
             var result = ArrayExtensions
-                .First<int>(source);
+                .First(source);
 
             // Assert
             _ = result.Must()
@@ -28,12 +29,12 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
         public void First_With_ValidData_Must_Return_Some(int[] source)
         {
             // Arrange
-            var expected = 
-                System.Linq.Enumerable.First(source);
+            var expected = Enumerable
+                .First(source);
 
             // Act
             var result = ArrayExtensions
-                .First<int>(source);
+                .First(source);
 
             // Assert
             _ = result.Match(
@@ -42,14 +43,16 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
         }
 
         [Theory]
-        [MemberData(nameof(TestData.PredicateEmpty), MemberType = typeof(TestData))]
-        public void First_Predicate_With_Empty_Must_Return_None(int[] source, Predicate<int> predicate)
+        [MemberData(nameof(TestData.SkipTakePredicateEmpty), MemberType = typeof(TestData))]
+        public void First_Predicate_With_Empty_Must_Return_None(int[] source, int skipCount, int takeCount, Predicate<int> predicate)
         {
             // Arrange
 
             // Act
             var result = ArrayExtensions
-                .Where<int>(source, predicate)
+                .Skip(source, skipCount)
+                .Take(takeCount)
+                .Where(predicate)
                 .First();
 
             // Assert
@@ -59,17 +62,21 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
         }
 
         [Theory]
-        [MemberData(nameof(TestData.PredicateSingle), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.PredicateMultiple), MemberType = typeof(TestData))]
-        public void First_Predicate_With_ValidData_Must_Return_Some(int[] source, Predicate<int> predicate)
+        [MemberData(nameof(TestData.SkipTakePredicateSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakePredicateMultiple), MemberType = typeof(TestData))]
+        public void First_Predicate_With_ValidData_Must_Return_Some(int[] source, int skipCount, int takeCount, Predicate<int> predicate)
         {
             // Arrange
-            var expected = 
-                System.Linq.Enumerable.First(source, predicate.AsFunc());
+            var expected = Enumerable
+                .Skip(source, skipCount)
+                .Take(takeCount)
+                .First(predicate.AsFunc());
 
             // Act
             var result = ArrayExtensions
-                .Where<int>(source, predicate)
+                .Skip(source, skipCount)
+                .Take(takeCount)
+                .Where(predicate)
                 .First();
 
             // Assert
@@ -79,14 +86,16 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
         }
 
         [Theory]
-        [MemberData(nameof(TestData.PredicateAtEmpty), MemberType = typeof(TestData))]
-        public void First_PredicateAt_With_Empty_Must_Return_None(int[] source, PredicateAt<int> predicate)
+        [MemberData(nameof(TestData.SkipTakePredicateAtEmpty), MemberType = typeof(TestData))]
+        public void First_PredicateAt_With_Empty_Must_Return_None(int[] source, int skipCount, int takeCount, PredicateAt<int> predicate)
         {
             // Arrange
 
             // Act
             var result = ArrayExtensions
-                .Where<int>(source, predicate)
+                .Skip(source, skipCount)
+                .Take(takeCount)
+                .Where(predicate)
                 .First();
 
             // Assert
@@ -96,18 +105,22 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
         }
 
         [Theory]
-        [MemberData(nameof(TestData.PredicateAtSingle), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.PredicateAtMultiple), MemberType = typeof(TestData))]
-        public void First_PredicateAt_With_ValidData_Must_Return_Some(int[] source, PredicateAt<int> predicate)
+        [MemberData(nameof(TestData.SkipTakePredicateAtSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakePredicateAtMultiple), MemberType = typeof(TestData))]
+        public void First_PredicateAt_With_ValidData_Must_Return_Some(int[] source, int skipCount, int takeCount, PredicateAt<int> predicate)
         {
             // Arrange
-            var expected = 
-                System.Linq.Enumerable.First(
-                    System.Linq.Enumerable.Where(source, predicate.AsFunc()));
+            var expected = Enumerable
+                .Skip(source, skipCount)
+                .Take(takeCount)
+                .Where(predicate.AsFunc())
+                .First();
 
             // Act
             var result = ArrayExtensions
-                .Where<int>(source, predicate)
+                .Skip(source, skipCount)
+                .Take(takeCount)
+                .Where(predicate)
                 .First();
 
             // Assert
@@ -117,90 +130,15 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
         }
 
         [Theory]
-        [MemberData(nameof(TestData.SelectorEmpty), MemberType = typeof(TestData))]
-        public void First_Selector_With_Empty_Must_Return_None(int[] source, NullableSelector<int, string> selector)
+        [MemberData(nameof(TestData.SkipTakeSelectorEmpty), MemberType = typeof(TestData))]
+        public void First_Selector_With_Empty_Must_Return_None(int[] source, int skipCount, int takeCount, NullableSelector<int, string> selector)
         {
             // Arrange
 
             // Act
             var result = ArrayExtensions
-                .Select<int, string>(source, selector)
-                .First();
-
-            // Assert
-            _ = result.Must()
-                .BeOfType<Option<string>>()
-                .EvaluateTrue(option => option.IsNone);
-        }
-
-        [Theory]
-        [MemberData(nameof(TestData.SelectorSingle), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.SelectorMultiple), MemberType = typeof(TestData))]
-        public void First_Selector_With_ValidData_Must_Return_Some(int[] source, NullableSelector<int, string> selector)
-        {
-            // Arrange
-            var expected = 
-                System.Linq.Enumerable.First(
-                    System.Linq.Enumerable.Select(source, selector.AsFunc()));
-
-            // Act
-            var result = ArrayExtensions
-                .Select<int, string>(source, selector)
-                .First();
-
-            // Assert
-            _ = result.Match(
-                value => value.Must().BeEqualTo(expected), 
-                () => throw new Exception());
-        }
-
-        [Theory]
-        [MemberData(nameof(TestData.SelectorAtEmpty), MemberType = typeof(TestData))]
-        public void First_SelectorAt_With_Empty_Must_Return_None(int[] source, NullableSelectorAt<int, string> selector)
-        {
-            // Arrange
-
-            // Act
-            var result = ArrayExtensions
-                .Select<int, string>(source, selector)
-                .First();
-
-            // Assert
-            _ = result.Must()
-                .BeOfType<Option<string>>()
-                .EvaluateTrue(option => option.IsNone);
-        }
-
-        [Theory]
-        [MemberData(nameof(TestData.SelectorAtSingle), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.SelectorAtMultiple), MemberType = typeof(TestData))]
-        public void First_SelectorAt_With_ValidData_Must_Return_Some(int[] source, NullableSelectorAt<int, string> selector)
-        {
-            // Arrange
-            var expected = 
-                System.Linq.Enumerable.First(
-                    System.Linq.Enumerable.Select(source, selector.AsFunc()));
-
-            // Act
-            var result = ArrayExtensions
-                .Select<int, string>(source, selector)
-                .First();
-
-            // Assert
-            _ = result.Match(
-                value => value.Must().BeEqualTo(expected), 
-                () => throw new Exception());
-        }
-
-        [Theory]
-        [MemberData(nameof(TestData.PredicateSelectorEmpty), MemberType = typeof(TestData))]
-        public void First_Predicate_Selector_With_Empty_Must_Return_None(int[] source, Predicate<int> predicate, NullableSelector<int, string> selector)
-        {
-            // Arrange
-
-            // Act
-            var result = ArrayExtensions
-                .Where<int>(source, predicate)
+                .Skip(source, skipCount)
+                .Take(takeCount)
                 .Select(selector)
                 .First();
 
@@ -211,19 +149,112 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
         }
 
         [Theory]
-        [MemberData(nameof(TestData.PredicateSelectorSingle), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.PredicateSelectorMultiple), MemberType = typeof(TestData))]
-        public void First_Predicate_Selector_With_ValidData_Must_Return_Some(int[] source, Predicate<int> predicate, NullableSelector<int, string> selector)
+        [MemberData(nameof(TestData.SkipTakeSelectorSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakeSelectorMultiple), MemberType = typeof(TestData))]
+        public void First_Selector_With_ValidData_Must_Return_Some(int[] source, int skipCount, int takeCount, NullableSelector<int, string> selector)
         {
             // Arrange
-            var expected = 
-                System.Linq.Enumerable.First(
-                    System.Linq.Enumerable.Select(
-                        System.Linq.Enumerable.Where(source, predicate.AsFunc()), selector.AsFunc()));
+            var expected = Enumerable
+                .Skip(source, skipCount)
+                .Take(takeCount)
+                .Select(selector.AsFunc())
+                .First();
 
             // Act
             var result = ArrayExtensions
-                .Where<int>(source, predicate)
+                .Skip(source, skipCount)
+                .Take(takeCount)
+                .Select(selector)
+                .First();
+
+            // Assert
+            _ = result.Match(
+                value => value.Must().BeEqualTo(expected), 
+                () => throw new Exception());
+        }
+
+        [Theory]
+        [MemberData(nameof(TestData.SkipTakeSelectorAtEmpty), MemberType = typeof(TestData))]
+        public void First_SelectorAt_With_Empty_Must_Return_None(int[] source, int skipCount, int takeCount, NullableSelectorAt<int, string> selector)
+        {
+            // Arrange
+
+            // Act
+            var result = ArrayExtensions
+                .Skip(source, skipCount)
+                .Take(takeCount)
+                .Select(selector)
+                .First();
+
+            // Assert
+            _ = result.Must()
+                .BeOfType<Option<string>>()
+                .EvaluateTrue(option => option.IsNone);
+        }
+
+        [Theory]
+        [MemberData(nameof(TestData.SkipTakeSelectorAtSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakeSelectorAtMultiple), MemberType = typeof(TestData))]
+        public void First_SelectorAt_With_ValidData_Must_Return_Some(int[] source, int skipCount, int takeCount, NullableSelectorAt<int, string> selector)
+        {
+            // Arrange
+            var expected = Enumerable
+                .Skip(source, skipCount)
+                .Take(takeCount)
+                .Select(selector.AsFunc())
+                .First();
+
+            // Act
+            var result = ArrayExtensions
+                .Skip(source, skipCount)
+                .Take(takeCount)
+                .Select(selector)
+                .First();
+
+            // Assert
+            _ = result.Match(
+                value => value.Must().BeEqualTo(expected), 
+                () => throw new Exception());
+        }
+
+        [Theory]
+        [MemberData(nameof(TestData.SkipTakePredicateSelectorEmpty), MemberType = typeof(TestData))]
+        public void First_Predicate_Selector_With_Empty_Must_Return_None(int[] source, int skipCount, int takeCount, Predicate<int> predicate, NullableSelector<int, string> selector)
+        {
+            // Arrange
+
+            // Act
+            var result = ArrayExtensions
+                .Skip(source, skipCount)
+                .Take(takeCount)
+                .Where(predicate)
+                .Select(selector)
+                .First();
+
+            // Assert
+            _ = result.Must()
+                .BeOfType<Option<string>>()
+                .EvaluateTrue(option => option.IsNone);
+        }
+
+        [Theory]
+        [MemberData(nameof(TestData.SkipTakePredicateSelectorSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakePredicateSelectorMultiple), MemberType = typeof(TestData))]
+        public void First_Predicate_Selector_With_ValidData_Must_Return_Some(int[] source, int skipCount, int takeCount, Predicate<int> predicate, NullableSelector<int, string> selector)
+        {
+            // Arrange
+            var expected = Enumerable
+                .Skip(source, skipCount)
+                .Take(takeCount)
+                .Where(predicate.AsFunc())
+                .Select(selector.AsFunc())
+                .First();
+
+            // Act
+            var result = ArrayExtensions
+                .Skip(source, skipCount)
+                .Take(takeCount)
+                .Where(predicate)
                 .Select(selector)
                 .First();
 

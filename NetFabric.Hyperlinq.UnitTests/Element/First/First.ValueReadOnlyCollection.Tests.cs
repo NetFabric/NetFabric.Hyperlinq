@@ -1,5 +1,6 @@
 using NetFabric.Assertive;
 using System;
+using System.Linq;
 using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests.Element.First
@@ -32,8 +33,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
             // Arrange
             var wrapped = Wrap
                 .AsValueReadOnlyCollection(source);
-            var expected =
-                System.Linq.Enumerable.First(source);
+            var expected = Enumerable
+                .First(source);
 
             // Act
             var result = ValueReadOnlyCollectionExtensions
@@ -72,9 +73,9 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
             // Arrange
             var wrapped = Wrap
                 .AsValueReadOnlyCollection(source);
-            var expected =
-                System.Linq.Enumerable.First(
-                    System.Linq.Enumerable.Select(source, selector.AsFunc()));
+            var expected = Enumerable
+                .Select(source, selector.AsFunc())
+                .First();
 
             // Act
             var result = ValueReadOnlyCollectionExtensions
@@ -114,9 +115,9 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
             // Arrange
             var wrapped = Wrap
                 .AsValueReadOnlyCollection(source);
-            var expected =
-                System.Linq.Enumerable.First(
-                    System.Linq.Enumerable.Select(source, selector.AsFunc()));
+            var expected = Enumerable
+                .Select(source, selector.AsFunc())
+                .First();
 
             // Act
             var result = ValueReadOnlyCollectionExtensions
