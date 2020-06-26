@@ -14,7 +14,7 @@ namespace NetFabric.Hyperlinq
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
             var builder = new LargeArrayBuilder<TSource>(initialize: true);
-            await builder.AddRangeAsync<TEnumerable, TEnumerator>(source, cancellationToken);
+            await builder.AddRangeAsync<TEnumerable, TEnumerator>(source, cancellationToken).ConfigureAwait(false);
             return builder.ToArray();
         }
 
@@ -23,7 +23,7 @@ namespace NetFabric.Hyperlinq
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
             var builder = new LargeArrayBuilder<TSource>(initialize: true);
-            await builder.AddRangeAsync<TEnumerable, TEnumerator>(source, predicate, cancellationToken);
+            await builder.AddRangeAsync<TEnumerable, TEnumerator>(source, predicate, cancellationToken).ConfigureAwait(false);
             return builder.ToArray();
         }
 
@@ -32,7 +32,7 @@ namespace NetFabric.Hyperlinq
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
             var builder = new LargeArrayBuilder<TSource>(initialize: true);
-            await builder.AddRangeAsync<TEnumerable, TEnumerator>(source, predicate, cancellationToken);
+            await builder.AddRangeAsync<TEnumerable, TEnumerator>(source, predicate, cancellationToken).ConfigureAwait(false);
             return builder.ToArray();
         }
 
@@ -42,7 +42,7 @@ namespace NetFabric.Hyperlinq
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
             var builder = new LargeArrayBuilder<TResult>(initialize: true);
-            await builder.AddRangeAsync<TEnumerable, TEnumerator, TSource>(source, selector, cancellationToken);
+            await builder.AddRangeAsync<TEnumerable, TEnumerator, TSource>(source, selector, cancellationToken).ConfigureAwait(false);
             return builder.ToArray();
         }
 
@@ -51,7 +51,7 @@ namespace NetFabric.Hyperlinq
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
             var builder = new LargeArrayBuilder<TResult>(initialize: true);
-            await builder.AddRangeAsync<TEnumerable, TEnumerator, TSource>(source, selector, cancellationToken);
+            await builder.AddRangeAsync<TEnumerable, TEnumerator, TSource>(source, selector, cancellationToken).ConfigureAwait(false);
             return builder.ToArray();
         }
 
@@ -60,7 +60,7 @@ namespace NetFabric.Hyperlinq
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
             var builder = new LargeArrayBuilder<TResult>(initialize: true);
-            await builder.AddRangeAsync<TEnumerable, TEnumerator, TSource>(source, predicate, selector, cancellationToken);
+            await builder.AddRangeAsync<TEnumerable, TEnumerator, TSource>(source, predicate, selector, cancellationToken).ConfigureAwait(false);
             return builder.ToArray();
         }
     }
