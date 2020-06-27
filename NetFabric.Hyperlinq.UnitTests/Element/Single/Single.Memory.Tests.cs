@@ -1,5 +1,6 @@
 using NetFabric.Assertive;
 using System;
+using System.Linq;
 using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests.Element.Single
@@ -14,7 +15,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
 
             // Act
             var result = ArrayExtensions
-                .Single<int>(source.AsMemory());
+                .Single(source.AsMemory());
 
             // Assert
             _ = result.Must()
@@ -27,12 +28,12 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
         public void Single_With_Single_Must_Return_Some(int[] source)
         {
             // Arrange
-            var expected =
-                System.Linq.Enumerable.Single(source);
+            var expected = Enumerable
+                .Single(source);
 
             // Act
             var result = ArrayExtensions
-                .Single<int>(source.AsMemory());
+                .Single(source.AsMemory());
 
             // Assert
             _ = result.Match(
@@ -48,7 +49,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
 
             // Act
             var result = ArrayExtensions
-                .Single<int>(source.AsMemory());
+                .Single(source.AsMemory());
 
             // Assert
             _ = result.Must()
@@ -64,7 +65,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
 
             // Act
             var result = ArrayExtensions
-                .Where<int>(source.AsMemory(), predicate)
+                .Where(source.AsMemory(), predicate)
                 .Single();
 
             // Assert
@@ -79,11 +80,11 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
         {
             // Arrange
             var expected =
-                System.Linq.Enumerable.Single(source, predicate.AsFunc());
+                Enumerable.Single(source, predicate.AsFunc());
 
             // Act
             var result = ArrayExtensions
-                .Where<int>(source.AsMemory(), predicate)
+                .Where(source.AsMemory(), predicate)
                 .Single();
 
             // Assert
@@ -100,7 +101,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
 
             // Act
             var result = ArrayExtensions
-                .Where<int>(source.AsMemory(), predicate)
+                .Where(source.AsMemory(), predicate)
                 .Single();
 
             // Assert
@@ -117,7 +118,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
 
             // Act
             var result = ArrayExtensions
-                .Where<int>(source.AsMemory(), predicate)
+                .Where(source.AsMemory(), predicate)
                 .Single();
 
             // Assert
@@ -131,13 +132,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
         public void Single_PredicateAt_With_Single_Must_Return_Some(int[] source, PredicateAt<int> predicate)
         {
             // Arrange
-            var expected =
-                System.Linq.Enumerable.Single(
-                    System.Linq.Enumerable.Where(source, predicate.AsFunc()));
+            var expected = Enumerable
+                .Where(source, predicate.AsFunc())
+                .Single();
 
             // Act
             var result = ArrayExtensions
-                .Where<int>(source.AsMemory(), predicate)
+                .Where(source.AsMemory(), predicate)
                 .Single();
 
             // Assert
@@ -154,7 +155,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
 
             // Act
             var result = ArrayExtensions
-                .Where<int>(source.AsMemory(), predicate)
+                .Where(source.AsMemory(), predicate)
                 .Single();
 
             // Assert
@@ -171,7 +172,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
 
             // Act
             var result = ArrayExtensions
-                .Select<int, string>(source.AsMemory(), selector)
+                .Select(source.AsMemory(), selector)
                 .Single();
 
             // Assert
@@ -186,8 +187,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
         {
             // Arrange
             var expected =
-                System.Linq.Enumerable.Single(
-                    System.Linq.Enumerable.Select(source, selector.AsFunc()));
+                Enumerable.Single(
+                    Enumerable.Select(source, selector.AsFunc()));
 
             // Act
             var result = ArrayExtensions
@@ -239,9 +240,9 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
         public void Single_SelectorAt_With_Single_Must_Return_Some(int[] source, NullableSelectorAt<int, string> selector)
         {
             // Arrange
-            var expected =
-                System.Linq.Enumerable.Single(
-                    System.Linq.Enumerable.Select(source, selector.AsFunc()));
+            var expected = Enumerable
+                .Select(source, selector.AsFunc())
+                .Single();
 
             // Act
             var result = ArrayExtensions
@@ -262,7 +263,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
 
             // Act
             var result = ArrayExtensions
-                .Select<int, string>(source.AsMemory(), selector)
+                .Select(source.AsMemory(), selector)
                 .Single();
 
             // Assert
@@ -279,7 +280,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
 
             // Act
             var result = ArrayExtensions
-                .Where<int>(source.AsMemory(), predicate)
+                .Where(source.AsMemory(), predicate)
                 .Select(selector)
                 .Single();
 
@@ -294,14 +295,14 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
         public void Single_Predicate_Selector_With_Single_Must_Return_Some(int[] source, Predicate<int> predicate, NullableSelector<int, string> selector)
         {
             // Arrange
-            var expected =
-                System.Linq.Enumerable.Single(
-                    System.Linq.Enumerable.Select(
-                        System.Linq.Enumerable.Where(source, predicate.AsFunc()), selector.AsFunc()));
+            var expected = Enumerable
+                .Where(source, predicate.AsFunc())
+                .Select(selector.AsFunc())
+                .Single();
 
             // Act
             var result = ArrayExtensions
-                .Where<int>(source.AsMemory(), predicate)
+                .Where(source.AsMemory(), predicate)
                 .Select(selector)
                 .Single();
 
@@ -319,7 +320,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
 
             // Act
             var result = ArrayExtensions
-                .Where<int>(source.AsMemory(), predicate)
+                .Where(source.AsMemory(), predicate)
                 .Select(selector)
                 .Single();
 
