@@ -88,15 +88,13 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [BenchmarkCategory("List_Value")]
         [Benchmark]
         public int Hyperlinq_List_Value() =>
-            ReadOnlyListExtensions.AsValueEnumerable<int>(listValue)
+            listValue.AsValueEnumerable()
             .Count();
 
         [BenchmarkCategory("AsyncEnumerable_Value")]
         [Benchmark]
         public ValueTask<int> Hyperlinq_AsyncEnumerable_Value() =>
-            AsyncEnumerableExtensions.AsAsyncValueEnumerable<TestAsyncEnumerable.AsyncEnumerable, TestAsyncEnumerable.AsyncEnumerable.AsyncEnumerator, int>(
-                asyncEnumerableValue, 
-                (enumerable, cancellationToken) => enumerable.GetAsyncEnumerator(cancellationToken))
+            asyncEnumerableValue.AsAsyncValueEnumerable<TestAsyncEnumerable.AsyncEnumerable, TestAsyncEnumerable.AsyncEnumerable.AsyncEnumerator, int>((enumerable, cancellationToken) => enumerable.GetAsyncEnumerator(cancellationToken))
             .CountAsync();
 
         [BenchmarkCategory("Enumerable_Reference")]

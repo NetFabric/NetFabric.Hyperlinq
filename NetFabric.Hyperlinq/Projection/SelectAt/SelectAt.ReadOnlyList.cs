@@ -300,7 +300,7 @@ namespace NetFabric.Hyperlinq
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int Count<TList, TSource, TResult>(this SelectAtEnumerable<TList, TSource, TResult> source)
+        public static int Count<TList, TSource, TResult>(this in SelectAtEnumerable<TList, TSource, TResult> source)
             where TList : IReadOnlyList<TSource>
             => source.Count;
     }

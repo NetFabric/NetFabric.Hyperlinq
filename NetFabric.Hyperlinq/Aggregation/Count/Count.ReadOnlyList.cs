@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
@@ -10,7 +9,7 @@ namespace NetFabric.Hyperlinq
             where TList : IReadOnlyList<TSource>
             => source.Count;
 
-        static int Count<TList, TSource>(this TList source, Predicate<TSource> predicate, int skipCount, int takeCount)
+        static unsafe int Count<TList, TSource>(this TList source, Predicate<TSource> predicate, int skipCount, int takeCount)
             where TList : IReadOnlyList<TSource>
         {
             var count = 0;
@@ -18,12 +17,12 @@ namespace NetFabric.Hyperlinq
             for (var index = skipCount; index < end; index++)
             {
                 var result = predicate(source[index]);
-                count += Unsafe.As<bool, byte>(ref result);
+                count += *(int*)&result;
             }
             return count;
         }
 
-        static int Count<TList, TSource>(this TList source, PredicateAt<TSource> predicate, int skipCount, int takeCount)
+        static unsafe int Count<TList, TSource>(this TList source, PredicateAt<TSource> predicate, int skipCount, int takeCount)
             where TList : IReadOnlyList<TSource>
         {
             var count = 0;
@@ -32,7 +31,7 @@ namespace NetFabric.Hyperlinq
                 for (var index = 0; index < takeCount; index++)
                 {
                     var result = predicate(source[index], index);
-                    count += Unsafe.As<bool, byte>(ref result);
+                    count += *(int*)&result;
                 }
             }
             else
@@ -40,7 +39,7 @@ namespace NetFabric.Hyperlinq
                 for (var index = 0; index < takeCount; index++)
                 {
                     var result = predicate(source[index + skipCount], index);
-                    count += Unsafe.As<bool, byte>(ref result);
+                    count += *(int*)&result;
                 }
             }
             return count;

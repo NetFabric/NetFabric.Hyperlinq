@@ -40,8 +40,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Aggregation.Count
             var expected = Enumerable
                 .Skip(source, skipCount)
                 .Take(takeCount)
-                .Where(predicate.AsFunc())
-                .Count();
+                .Count(predicate.AsFunc());
 
             // Act
             var result = ReadOnlyListExtensions

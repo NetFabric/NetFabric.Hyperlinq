@@ -13,6 +13,7 @@
     <LangVersion>preview</LangVersion>
     <Nullable>enable</Nullable>
     <!-- <TreatWarningsAsErrors>true</TreatWarningsAsErrors> -->
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(TargetFramework)'=='net461' Or '$(TargetFramework)'=='netstandard2.0' Or '$(TargetFramework)'=='netcoreapp2.1'">

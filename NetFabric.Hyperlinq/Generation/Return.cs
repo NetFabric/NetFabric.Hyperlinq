@@ -191,7 +191,7 @@ namespace NetFabric.Hyperlinq
 
 #pragma warning disable IDE0060 // Remove unused parameter
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int Count<TSource>(this ReturnEnumerable<TSource> source)
+        public static int Count<TSource>(this in ReturnEnumerable<TSource> source)
             => 1;
 #pragma warning restore IDE0060 // Remove unused parameter
     }

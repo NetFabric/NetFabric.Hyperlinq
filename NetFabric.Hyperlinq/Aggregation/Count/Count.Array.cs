@@ -13,7 +13,7 @@ namespace NetFabric.Hyperlinq
 
 #else
 
-        static int Count<TSource>(this TSource[] source, Predicate<TSource> predicate, int skipCount, int takeCount)
+        static unsafe int Count<TSource>(this TSource[] source, Predicate<TSource> predicate, int skipCount, int takeCount)
         {
             var count = 0;
             if (skipCount == 0)
@@ -23,7 +23,7 @@ namespace NetFabric.Hyperlinq
                     for (var index = 0; index < source.Length; index++)
                     {
                         var result = predicate(source[index]);
-                        count += Unsafe.As<bool, byte>(ref result);
+                        count += *(int*)&result;
                     }
                 }
                 else
@@ -31,7 +31,7 @@ namespace NetFabric.Hyperlinq
                     for (var index = 0; index < takeCount; index++)
                     {
                         var result = predicate(source[index]);
-                        count += Unsafe.As<bool, byte>(ref result);
+                        count += *(int*)&result;
                     }
                 }
             }
@@ -40,13 +40,13 @@ namespace NetFabric.Hyperlinq
                 for (var index = 0; index < takeCount; index++)
                 {
                     var result = predicate(source[index + skipCount]);
-                    count += Unsafe.As<bool, byte>(ref result);
+                    count += *(int*)&result;
                 }
             }
             return count;
         }
 
-        static int Count<TSource>(this TSource[] source, PredicateAt<TSource> predicate, int skipCount, int takeCount)
+        static unsafe int Count<TSource>(this TSource[] source, PredicateAt<TSource> predicate, int skipCount, int takeCount)
         {
             var count = 0;
             if (skipCount == 0)
@@ -56,7 +56,7 @@ namespace NetFabric.Hyperlinq
                     for (var index = 0; index < source.Length; index++)
                     {
                         var result = predicate(source[index], index);
-                        count += Unsafe.As<bool, byte>(ref result);
+                        count += *(int*)&result;
                     }
                 }
                 else
@@ -64,7 +64,7 @@ namespace NetFabric.Hyperlinq
                     for (var index = 0; index < takeCount; index++)
                     {
                         var result = predicate(source[index], index);
-                        count += Unsafe.As<bool, byte>(ref result);
+                        count += *(int*)&result;
                     }
                 }
             }
@@ -73,7 +73,7 @@ namespace NetFabric.Hyperlinq
                 for (var index = 0; index < takeCount; index++)
                 {
                     var result = predicate(source[index + skipCount], index);
-                    count += Unsafe.As<bool, byte>(ref result);
+                    count += *(int*)&result;
                 }
             }
             return count;
