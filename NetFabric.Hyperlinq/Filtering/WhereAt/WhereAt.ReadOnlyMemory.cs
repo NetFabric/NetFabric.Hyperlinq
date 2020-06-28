@@ -52,8 +52,8 @@ namespace NetFabric.Hyperlinq
                     index = -1;
                 }
 
-                public readonly ref readonly TSource Current 
-                    => ref source[index];
+                public readonly TSource Current 
+                    => source[index];
 
                 public bool MoveNext()
                 {

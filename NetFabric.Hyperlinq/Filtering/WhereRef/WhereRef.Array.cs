@@ -11,32 +11,32 @@ namespace NetFabric.Hyperlinq
 #if SPAN_SUPPORTED
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static MemoryWhereEnumerable<TSource> Where<TSource>(this TSource[] source, Predicate<TSource> predicate)
-            => Where(source.AsMemory(), predicate);
+        public static MemoryWhereRefEnumerable<TSource> WhereRef<TSource>(this TSource[] source, Predicate<TSource> predicate)
+            => WhereRef(source.AsMemory(), predicate);
 
 #else
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static WhereEnumerable<TSource> Where<TSource>(this TSource[] source, Predicate<TSource> predicate)
+        public static WhereRefEnumerable<TSource> WhereRef<TSource>(this TSource[] source, Predicate<TSource> predicate)
         {
             if (predicate is null)
                 Throw.ArgumentNullException(nameof(predicate));
 
-            return new WhereEnumerable<TSource>(in source, predicate, 0, source.Length);
+            return new WhereRefEnumerable<TSource>(in source, predicate, 0, source.Length);
         }
 
-        static WhereEnumerable<TSource> Where<TSource>(this TSource[] source, Predicate<TSource> predicate, int skipCount, int takeCount)
-            => new WhereEnumerable<TSource>(in source, predicate, skipCount, takeCount);
+        static WhereRefEnumerable<TSource> WhereRef<TSource>(this TSource[] source, Predicate<TSource> predicate, int skipCount, int takeCount)
+            => new WhereRefEnumerable<TSource>(in source, predicate, skipCount, takeCount);
 
-        public readonly partial struct WhereEnumerable<TSource>
-            : IValueEnumerable<TSource, WhereEnumerable<TSource>.DisposableEnumerator>
+        public readonly partial struct WhereRefEnumerable<TSource>
+            : IValueEnumerable<TSource, WhereRefEnumerable<TSource>.DisposableEnumerator>
         {
             readonly TSource[] source;
             readonly Predicate<TSource> predicate;
             readonly int skipCount;
             readonly int takeCount;
 
-            internal WhereEnumerable(in TSource[] source, Predicate<TSource> predicate, int skipCount, int takeCount)
+            internal WhereRefEnumerable(in TSource[] source, Predicate<TSource> predicate, int skipCount, int takeCount)
             {
                 this.source = source;
                 this.predicate = predicate;
@@ -44,10 +44,14 @@ namespace NetFabric.Hyperlinq
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly Enumerator GetEnumerator() => new Enumerator(in this);
-            readonly DisposableEnumerator IValueEnumerable<TSource, WhereEnumerable<TSource>.DisposableEnumerator>.GetEnumerator() => new DisposableEnumerator(in this);
-            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new DisposableEnumerator(in this);
-            readonly IEnumerator IEnumerable.GetEnumerator() => new DisposableEnumerator(in this);
+            public readonly Enumerator GetEnumerator() 
+                => new Enumerator(in this);
+            readonly DisposableEnumerator IValueEnumerable<TSource, WhereRefEnumerable<TSource>.DisposableEnumerator>.GetEnumerator() 
+                => new DisposableEnumerator(in this);
+            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() 
+                => new DisposableEnumerator(in this);
+            readonly IEnumerator IEnumerable.GetEnumerator() 
+                => new DisposableEnumerator(in this);
 
             public struct Enumerator
             {
@@ -56,7 +60,7 @@ namespace NetFabric.Hyperlinq
                 readonly int end;
                 int index;
 
-                internal Enumerator(in WhereEnumerable<TSource> enumerable)
+                internal Enumerator(in WhereRefEnumerable<TSource> enumerable)
                 {
                     source = enumerable.source;
                     predicate = enumerable.predicate;
@@ -64,9 +68,8 @@ namespace NetFabric.Hyperlinq
                     index = enumerable.skipCount - 1;
                 }
 
-                [MaybeNull]
-                public readonly TSource Current
-                    => source[index];
+                public readonly ref TSource Current
+                    => ref source[index];
 
                 public bool MoveNext()
                 {
@@ -87,7 +90,7 @@ namespace NetFabric.Hyperlinq
                 readonly int end;
                 int index;
 
-                internal DisposableEnumerator(in WhereEnumerable<TSource> enumerable)
+                internal DisposableEnumerator(in WhereRefEnumerable<TSource> enumerable)
                 {
                     source = enumerable.source;
                     predicate = enumerable.predicate;
@@ -95,9 +98,8 @@ namespace NetFabric.Hyperlinq
                     index = enumerable.skipCount - 1;
                 }
 
-                [MaybeNull]
-                public readonly TSource Current
-                    => source[index];
+                public readonly ref TSource Current
+                    => ref source[index];
                 readonly TSource IEnumerator<TSource>.Current
                     => source[index];
                 readonly object? IEnumerator.Current
@@ -131,6 +133,11 @@ namespace NetFabric.Hyperlinq
             public WhereAtEnumerable<TSource> Where(PredicateAt<TSource> predicate)
                 => ArrayExtensions.Where<TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount);
 
+            public WhereRefEnumerable<TSource> WhereRef(Predicate<TSource> predicate)
+                => ArrayExtensions.WhereRef<TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount);
+            public WhereRefAtEnumerable<TSource> WhereRef(PredicateAt<TSource> predicate)
+                => ArrayExtensions.WhereRef<TSource>(source, Utils.Combine(this.predicate, predicate), skipCount, takeCount);
+
             public WhereSelectEnumerable<TSource, TResult> Select<TResult>(NullableSelector<TSource, TResult> selector)
             {
                 if (selector is null)
@@ -153,11 +160,6 @@ namespace NetFabric.Hyperlinq
 
             public List<TSource> ToList()
                 => ArrayExtensions.ToList<TSource>(source, predicate, skipCount, takeCount);
-
-            public Dictionary<TKey, TSource> ToDictionary<TKey>(NullableSelector<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer = default)
-                => ArrayExtensions.ToDictionary<TSource, TKey>(source, keySelector, comparer, predicate, skipCount, takeCount);
-            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(NullableSelector<TSource, TKey> keySelector, NullableSelector<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer = default)
-                => ArrayExtensions.ToDictionary<TSource, TKey, TElement>(source, keySelector, elementSelector, comparer, predicate, skipCount, takeCount);
         }
 #endif
     }

@@ -8,19 +8,19 @@ namespace NetFabric.Hyperlinq
     {
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static SpanWhereAtEnumerable<TSource> Where<TSource>(this ReadOnlySpan<TSource> source, PredicateAt<TSource> predicate) 
+        public static ReadOnlySpanWhereRefAtEnumerable<TSource> WhereRef<TSource>(this ReadOnlySpan<TSource> source, PredicateAt<TSource> predicate) 
         {
             if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
 
-            return new SpanWhereAtEnumerable<TSource>(source, predicate);
+            return new ReadOnlySpanWhereRefAtEnumerable<TSource>(source, predicate);
         }
 
-        public readonly ref struct SpanWhereAtEnumerable<TSource>
+        public readonly ref struct ReadOnlySpanWhereRefAtEnumerable<TSource>
         {
             internal readonly ReadOnlySpan<TSource> source;
             internal readonly PredicateAt<TSource> predicate;
 
-            internal SpanWhereAtEnumerable(in ReadOnlySpan<TSource> source, PredicateAt<TSource> predicate)
+            internal ReadOnlySpanWhereRefAtEnumerable(in ReadOnlySpan<TSource> source, PredicateAt<TSource> predicate)
             {
                 this.source = source;
                 this.predicate = predicate;
@@ -35,7 +35,7 @@ namespace NetFabric.Hyperlinq
                 readonly PredicateAt<TSource> predicate;
                 int index;
 
-                internal Enumerator(in SpanWhereAtEnumerable<TSource> enumerable)
+                internal Enumerator(in ReadOnlySpanWhereRefAtEnumerable<TSource> enumerable)
                 {
                     source = enumerable.source;
                     predicate = enumerable.predicate;
@@ -62,11 +62,11 @@ namespace NetFabric.Hyperlinq
             public bool Any()
                 => ArrayExtensions.Any(source, predicate);
 
-            public SpanWhereAtEnumerable<TSource> Where(Predicate<TSource> predicate)
-                => Where<TSource>(source, Utils.Combine(this.predicate, predicate));
+            public ReadOnlySpanWhereRefAtEnumerable<TSource> WhereRef(Predicate<TSource> predicate)
+                => WhereRef<TSource>(source, Utils.Combine(this.predicate, predicate));
 
-            public SpanWhereAtEnumerable<TSource> Where(PredicateAt<TSource> predicate)
-                => Where<TSource>(source, Utils.Combine(this.predicate, predicate));
+            public ReadOnlySpanWhereRefAtEnumerable<TSource> WhereRef(PredicateAt<TSource> predicate)
+                => WhereRef<TSource>(source, Utils.Combine(this.predicate, predicate));
 
             public Option<TSource> ElementAt(int index)
                 => ArrayExtensions.ElementAt<TSource>(source, index, predicate);

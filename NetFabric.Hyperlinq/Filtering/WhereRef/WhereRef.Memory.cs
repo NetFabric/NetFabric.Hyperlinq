@@ -8,52 +8,53 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class ArrayExtensions
     {
-        
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static MemoryWhereEnumerable<TSource> Where<TSource>(this ReadOnlyMemory<TSource> source, Predicate<TSource> predicate) 
-        {
-            if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
 
-            return new MemoryWhereEnumerable<TSource>(source, predicate);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static MemoryWhereRefEnumerable<TSource> WhereRef<TSource>(this Memory<TSource> source, Predicate<TSource> predicate)
+        {
+            if (predicate is null)
+                Throw.ArgumentNullException(nameof(predicate));
+
+            return new MemoryWhereRefEnumerable<TSource>(source, predicate);
         }
 
-        public readonly partial struct MemoryWhereEnumerable<TSource>
-            : IValueEnumerable<TSource, MemoryWhereEnumerable<TSource>.DisposableEnumerator>
+        public readonly partial struct MemoryWhereRefEnumerable<TSource>
+            : IValueEnumerable<TSource, MemoryWhereRefEnumerable<TSource>.DisposableEnumerator>
         {
-            internal readonly ReadOnlyMemory<TSource> source;
+            internal readonly Memory<TSource> source;
             internal readonly Predicate<TSource> predicate;
 
-            internal MemoryWhereEnumerable(in ReadOnlyMemory<TSource> source, Predicate<TSource> predicate)
+            internal MemoryWhereRefEnumerable(in Memory<TSource> source, Predicate<TSource> predicate)
             {
                 this.source = source;
                 this.predicate = predicate;
             }
 
-            
-            public readonly Enumerator GetEnumerator() 
+
+            public readonly Enumerator GetEnumerator()
                 => new Enumerator(in this);
-            readonly DisposableEnumerator IValueEnumerable<TSource, MemoryWhereEnumerable<TSource>.DisposableEnumerator>.GetEnumerator() 
+            readonly DisposableEnumerator IValueEnumerable<TSource, MemoryWhereRefEnumerable<TSource>.DisposableEnumerator>.GetEnumerator()
                 => new DisposableEnumerator(in this);
-            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() 
+            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator()
                 => new DisposableEnumerator(in this);
-            readonly IEnumerator IEnumerable.GetEnumerator() 
+            readonly IEnumerator IEnumerable.GetEnumerator()
                 => new DisposableEnumerator(in this);
 
-            public ref struct Enumerator 
+            public ref struct Enumerator
             {
-                readonly ReadOnlySpan<TSource> source;
+                readonly Span<TSource> source;
                 readonly Predicate<TSource> predicate;
                 int index;
 
-                internal Enumerator(in MemoryWhereEnumerable<TSource> enumerable)
+                internal Enumerator(in MemoryWhereRefEnumerable<TSource> enumerable)
                 {
                     source = enumerable.source.Span;
                     predicate = enumerable.predicate;
                     index = -1;
                 }
 
-                public readonly TSource Current 
-                    => source[index];
+                public readonly ref TSource Current
+                    => ref source[index];
 
                 public bool MoveNext()
                 {
@@ -66,26 +67,25 @@ namespace NetFabric.Hyperlinq
                 }
             }
 
-            public struct DisposableEnumerator 
+            public struct DisposableEnumerator
                 : IEnumerator<TSource>
             {
-                readonly ReadOnlyMemory<TSource> source;
+                readonly Memory<TSource> source;
                 readonly Predicate<TSource> predicate;
                 int index;
 
-                internal DisposableEnumerator(in MemoryWhereEnumerable<TSource> enumerable)
+                internal DisposableEnumerator(in MemoryWhereRefEnumerable<TSource> enumerable)
                 {
                     source = enumerable.source;
                     predicate = enumerable.predicate;
                     index = -1;
                 }
 
-                [MaybeNull]
-                public readonly TSource Current 
+                public readonly ref TSource Current
+                    => ref source.Span[index];
+                readonly TSource IEnumerator<TSource>.Current
                     => source.Span[index];
-                readonly TSource IEnumerator<TSource>.Current 
-                    => source.Span[index];
-                readonly object? IEnumerator.Current 
+                readonly object? IEnumerator.Current
                     => source.Span[index];
 
                 public bool MoveNext()
@@ -100,7 +100,7 @@ namespace NetFabric.Hyperlinq
                 }
 
                 [ExcludeFromCodeCoverage]
-                public readonly void Reset() 
+                public readonly void Reset()
                     => throw new NotSupportedException();
 
                 public void Dispose() { }
@@ -111,12 +111,18 @@ namespace NetFabric.Hyperlinq
 
             public bool Any()
                 => ArrayExtensions.Any<TSource>(source.Span, predicate);
-                
+
             public MemoryWhereEnumerable<TSource> Where(Predicate<TSource> predicate)
                 => ArrayExtensions.Where<TSource>(source, Utils.Combine(this.predicate, predicate));
 
             public MemoryWhereAtEnumerable<TSource> Where(PredicateAt<TSource> predicate)
                 => ArrayExtensions.Where<TSource>(source, Utils.Combine(this.predicate, predicate));
+
+            public MemoryWhereRefEnumerable<TSource> WhereRef(Predicate<TSource> predicate)
+                => ArrayExtensions.WhereRef<TSource>(source, Utils.Combine(this.predicate, predicate));
+
+            public MemoryWhereRefAtEnumerable<TSource> WhereRef(PredicateAt<TSource> predicate)
+                => ArrayExtensions.WhereRef<TSource>(source, Utils.Combine(this.predicate, predicate));
 
             public MemoryWhereSelectEnumerable<TSource, TResult> Select<TResult>(NullableSelector<TSource, TResult> selector)
             {
@@ -132,8 +138,8 @@ namespace NetFabric.Hyperlinq
             public Option<TSource> First()
                 => ArrayExtensions.First(source.Span, predicate);
 
-            public Option<TSource> Single()
 #pragma warning disable HLQ005 // Avoid Single() and SingleOrDefault()
+            public Option<TSource> Single()
                 => ArrayExtensions.Single(source.Span, predicate);
 #pragma warning restore HLQ005 // Avoid Single() and SingleOrDefault()
 
