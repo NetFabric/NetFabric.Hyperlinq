@@ -192,7 +192,7 @@ namespace NetFabric.Hyperlinq
                 => ReadOnlyCollectionExtensions.ToList(source);
         }
 
-        public static int Count<TSource>(this ValueEnumerableWrapper<TSource> source)
+        public static int Count<TSource>(this in ValueEnumerableWrapper<TSource> source)
             => source.Count;
     }
 }

@@ -275,11 +275,11 @@ namespace NetFabric.Hyperlinq
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int Count<TSource>(this SkipTakeEnumerable<TSource> source)
+        public static int Count<TSource>(this in SkipTakeEnumerable<TSource> source)
             => source.Count;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int Count<TSource>(this SkipTakeEnumerable<TSource> source, Predicate<TSource> predicate)
+        public static int Count<TSource>(this in SkipTakeEnumerable<TSource> source, Predicate<TSource> predicate)
         {
             if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
 
@@ -287,7 +287,7 @@ namespace NetFabric.Hyperlinq
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int Count<TSource>(this SkipTakeEnumerable<TSource> source, PredicateAt<TSource> predicate)
+        public static int Count<TSource>(this in SkipTakeEnumerable<TSource> source, PredicateAt<TSource> predicate)
         {
             if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
 

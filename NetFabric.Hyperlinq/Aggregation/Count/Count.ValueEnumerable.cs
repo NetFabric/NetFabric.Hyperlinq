@@ -20,7 +20,7 @@ namespace NetFabric.Hyperlinq
             return count;
         }
 
-        static int Count<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Predicate<TSource> predicate)
+        static unsafe int Count<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Predicate<TSource> predicate)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
@@ -31,13 +31,13 @@ namespace NetFabric.Hyperlinq
                 while (enumerator.MoveNext())
                 {
                     var result = predicate(enumerator.Current);
-                    count += Unsafe.As<bool, byte>(ref result);
+                    count += *(int*)&result;
                 }
             }
             return count;
         }
 
-        static int Count<TEnumerable, TEnumerator, TSource>(this TEnumerable source, PredicateAt<TSource> predicate)
+        static unsafe int Count<TEnumerable, TEnumerator, TSource>(this TEnumerable source, PredicateAt<TSource> predicate)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
@@ -48,7 +48,7 @@ namespace NetFabric.Hyperlinq
                 for (var index = 0; enumerator.MoveNext(); index++)
                 {
                     var result = predicate(enumerator.Current, index);
-                    count += Unsafe.As<bool, byte>(ref result);
+                    count += *(int*)&result;
                 }
             }
             return count;

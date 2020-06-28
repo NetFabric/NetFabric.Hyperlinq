@@ -37,7 +37,10 @@ namespace NetFabric.Hyperlinq
                     while (await enumerator.MoveNextAsync().ConfigureAwait(false))
                     {
                         var result = await predicate(enumerator.Current, cancellationToken).ConfigureAwait(false);
-                        count += Unsafe.As<bool, byte>(ref result);
+                        unsafe
+                        {
+                            count += *(int*)&result;
+                        }
                     }
                 }
             }
@@ -57,7 +60,10 @@ namespace NetFabric.Hyperlinq
                     for (var index = 0; await enumerator.MoveNextAsync().ConfigureAwait(false); index++)
                     {
                         var result = await predicate(enumerator.Current, index, cancellationToken).ConfigureAwait(false);
-                        count += Unsafe.As<bool, byte>(ref result);
+                        unsafe
+                        {
+                            count += *(int*)&result;
+                        }
                     }
                 }
             }

@@ -269,7 +269,7 @@ namespace NetFabric.Hyperlinq
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int Count<TEnumerable, TEnumerator, TSource>(this SkipTakeEnumerable<TEnumerable, TEnumerator, TSource> source)
+        public static int Count<TEnumerable, TEnumerator, TSource>(this in SkipTakeEnumerable<TEnumerable, TEnumerator, TSource> source)
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
             => source.Count;

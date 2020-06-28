@@ -15,16 +15,19 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public static Enumerable ValueType(int count) 
             => new Enumerable(count);
 
-        public readonly struct Enumerable : IEnumerable<int>
+        public class Enumerable : IEnumerable<int>
         {
             readonly int count;
 
             public Enumerable(int count) 
                 => this.count = count;
 
-            public readonly Enumerator GetEnumerator() => new Enumerator(count);
-            readonly IEnumerator<int> IEnumerable<int>.GetEnumerator() => new Enumerator(count);
-            readonly IEnumerator IEnumerable.GetEnumerator() => new Enumerator(count);
+            public Enumerator GetEnumerator() 
+                => new Enumerator(count);
+            IEnumerator<int> IEnumerable<int>.GetEnumerator() 
+                => new Enumerator(count);
+            IEnumerator IEnumerable.GetEnumerator() 
+                => new Enumerator(count);
 
             public struct Enumerator : IEnumerator<int>
             {

@@ -18,16 +18,16 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public static AsyncEnumerable ValueType(int count) 
             => new AsyncEnumerable(count);
 
-        public readonly struct AsyncEnumerable : IAsyncEnumerable<int>
+        public class AsyncEnumerable : IAsyncEnumerable<int>
         {
             readonly int count;
 
             public AsyncEnumerable(int count)
                 => this.count = count;
 
-            public readonly AsyncEnumerator GetAsyncEnumerator(CancellationToken cancellationToken = default) 
+            public AsyncEnumerator GetAsyncEnumerator(CancellationToken cancellationToken = default) 
                 => new AsyncEnumerator(count, cancellationToken);
-            readonly IAsyncEnumerator<int> IAsyncEnumerable<int>.GetAsyncEnumerator(CancellationToken cancellationToken) 
+            IAsyncEnumerator<int> IAsyncEnumerable<int>.GetAsyncEnumerator(CancellationToken cancellationToken) 
                 => new AsyncEnumerator(count, cancellationToken);
 
             public struct AsyncEnumerator : IAsyncEnumerator<int>
