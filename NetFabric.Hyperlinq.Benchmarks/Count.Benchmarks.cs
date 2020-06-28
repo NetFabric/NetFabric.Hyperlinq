@@ -1,5 +1,6 @@
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Configs;
+using StructLinq;
 using System;
 using System.Threading.Tasks;
 
@@ -55,6 +56,11 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [Benchmark(Baseline = true)]
         public ValueTask<int> Linq_AsyncEnumerable_Reference() =>
             System.Linq.AsyncEnumerable.CountAsync(asyncEnumerableReference);
+
+        [BenchmarkCategory("Array")]
+        [Benchmark]
+        public int StructLinq_Count() =>
+            array.ToStructEnumerable().Count(x => x);
 
         [BenchmarkCategory("Array")]
         [Benchmark]

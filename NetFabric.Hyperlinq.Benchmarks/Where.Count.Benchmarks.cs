@@ -1,12 +1,14 @@
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Configs;
 using BenchmarkDotNet.Jobs;
+using JM.LinqFaster;
+using StructLinq;
 using System;
 
 namespace NetFabric.Hyperlinq.Benchmarks
 {
-    [SimpleJob(RuntimeMoniker.Net461, baseline: true)]
-    [SimpleJob(RuntimeMoniker.NetCoreApp21)]
+    //[SimpleJob(RuntimeMoniker.Net461, baseline: true)]
+    //[SimpleJob(RuntimeMoniker.NetCoreApp21)]
     [SimpleJob(RuntimeMoniker.NetCoreApp31)]
     [GroupBenchmarksBy(BenchmarkLogicalGroupRule.ByCategory)]
     [CategoriesColumn]
@@ -48,6 +50,16 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [Benchmark(Baseline = true)]
         public int Linq_List_Reference() =>
             System.Linq.Enumerable.Count(listReference, item => (item & 0x01) == 0);
+
+        [BenchmarkCategory("Array")]
+        [Benchmark]
+        public int LinqFaster_CountF() =>
+            LinqFaster.CountF(array, item => (item & 0x01) == 0);
+
+        [BenchmarkCategory("Array")]
+        [Benchmark]
+        public int StructLinq_Count() =>
+            array.ToStructEnumerable().Where(item => (item & 0x01) == 0, x => x).Count(x => x);
 
         [BenchmarkCategory("Array")]
         [Benchmark]

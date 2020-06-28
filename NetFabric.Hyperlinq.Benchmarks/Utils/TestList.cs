@@ -12,14 +12,14 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public static Enumerable ValueType(int count) 
             => new Enumerable(count);
 
-        public readonly struct Enumerable : IReadOnlyList<int>, IList<int>
+        public class Enumerable : IReadOnlyList<int>, IList<int>
         {
             public Enumerable(int count) 
                 => Count = count;
 
-            public readonly int Count { get; }
+            public int Count { get; }
 
-            public readonly int this[int index] => index;
+            public int this[int index] => index;
 
             int IList<int>.this[int index] 
             { 
@@ -27,7 +27,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
                 set => throw new NotImplementedException(); 
             }
 
-            public readonly bool IsReadOnly => true;
+            public bool IsReadOnly => true;
 
             public void Add(int item) => throw new NotImplementedException();
             public bool Remove(int item) => throw new NotImplementedException();
@@ -36,18 +36,21 @@ namespace NetFabric.Hyperlinq.Benchmarks
             public void Insert(int index, int item) => throw new NotImplementedException();
             public void RemoveAt(int index) => throw new NotImplementedException();
 
-            public readonly bool Contains(int item)
+            public bool Contains(int item)
                 => item >= 0 && item < Count;
 
-            public readonly void CopyTo(int[] array, int arrayIndex)
+            public void CopyTo(int[] array, int arrayIndex)
             {
                 for (var item = 0; item < Count; item++)
                     array[arrayIndex + item] = item;
             }
 
-            public readonly Enumerator GetEnumerator() => new Enumerator(Count);
-            readonly IEnumerator<int> IEnumerable<int>.GetEnumerator() => new Enumerator(Count);
-            readonly IEnumerator IEnumerable.GetEnumerator() => new Enumerator(Count);
+            public Enumerator GetEnumerator() 
+                => new Enumerator(Count);
+            IEnumerator<int> IEnumerable<int>.GetEnumerator() 
+                => new Enumerator(Count);
+            IEnumerator IEnumerable.GetEnumerator() 
+                => new Enumerator(Count);
 
             public struct Enumerator : IEnumerator<int>
             {
