@@ -3,16 +3,16 @@ using System;
 using System.Linq;
 using Xunit;
 
-namespace NetFabric.Hyperlinq.UnitTests.Filtering.WhereRef
+namespace NetFabric.Hyperlinq.UnitTests.Filtering.WhereRefIndex
 {
     public class ReadOnlyMemoryTests
     {
         [Fact]
-        public void WhereRef_Predicate_With_Null_Must_Throw()
+        public void WhereRef_With_NullPredicate_Must_Throw()
         {
             // Arrange
             var source = new int[0];
-            var predicate = (Predicate<int>)null;
+            var predicate = (PredicateAt<int>)null;
 
             // Act
             Action action = () => _ = ArrayExtensions
@@ -25,10 +25,10 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.WhereRef
         }
 
         [Theory]
-        [MemberData(nameof(TestData.PredicateEmpty), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.PredicateSingle), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.PredicateMultiple), MemberType = typeof(TestData))]
-        public void WhereRef_Predicate_With_ValidData_Must_Succeed(int[] source, Predicate<int> predicate)
+        [MemberData(nameof(TestData.PredicateAtEmpty), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.PredicateAtSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.PredicateAtMultiple), MemberType = typeof(TestData))]
+        public void WhereRef_With_ValidData_Must_Succeed(int[] source, PredicateAt<int> predicate)
         {
             // Arrange
             var expected = Enumerable

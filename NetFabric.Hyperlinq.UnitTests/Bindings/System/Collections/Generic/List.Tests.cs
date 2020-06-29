@@ -282,7 +282,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Bindings.System.Collections.Generic
             // Assert
             _ = result.Must()
                 .BeEnumerableOf<int>()
-                .BeEqualTo(expected, testRefReturns: false, testRefStructs: false);
+                .BeEqualTo(expected, testRefStructs: false);
             _ = result.SequenceEqual(expected).Must().BeTrue();
         }
 
@@ -304,7 +304,63 @@ namespace NetFabric.Hyperlinq.UnitTests.Bindings.System.Collections.Generic
             // Assert
             _ = result.Must()
                 .BeEnumerableOf<int>()
-                .BeEqualTo(expected, testRefReturns: false, testRefStructs: false);
+                .BeEqualTo(expected, testRefStructs: false);
+            _ = result.SequenceEqual(expected).Must().BeTrue();
+        }
+
+        [Theory]
+        [MemberData(nameof(TestData.PredicateEmpty), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.PredicateSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.PredicateMultiple), MemberType = typeof(TestData))]
+        public void WhereRef_Predicate_With_ValidData_Must_Succeed(int[] source, Predicate<int> predicate)
+        {
+            // Arrange
+            var list = source.ToList();
+            var expected = Enumerable
+                .Where(source, predicate.AsFunc());
+
+            // Act
+            var result = ListBindings
+                .WhereRef(list, predicate);
+
+            // Assert
+#if NETCOREAPP3_1 || NET5_0
+            //_ = result.Must()
+            //    .BeEnumerableOf<int>()
+            //    .BeEqualTo(expected, testRefStructs: false);
+#else
+            _ = result.Must()
+                .BeEnumerableOf<int>()
+                .BeEqualTo(expected, testRefStructs: false, testRefReturns: false);
+#endif
+            _ = result.SequenceEqual(expected).Must().BeTrue();
+        }
+
+        [Theory]
+        [MemberData(nameof(TestData.PredicateAtEmpty), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.PredicateAtSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.PredicateAtMultiple), MemberType = typeof(TestData))]
+        public void WhereRef_PredicateAt_With_ValidData_Must_Succeed(int[] source, PredicateAt<int> predicate)
+        {
+            // Arrange
+            var list = source.ToList();
+            var expected = Enumerable
+                .Where(source, predicate.AsFunc());
+
+            // Act
+            var result = ListBindings
+                .WhereRef(list, predicate);
+
+            // Assert
+#if NETCOREAPP3_1 || NET5_0
+            //_ = result.Must()
+            //    .BeEnumerableOf<int>()
+            //    .BeEqualTo(expected, testRefStructs: false);
+#else
+            _ = result.Must()
+                .BeEnumerableOf<int>()
+                .BeEqualTo(expected, testRefStructs: false, testRefReturns: false);
+#endif
             _ = result.SequenceEqual(expected).Must().BeTrue();
         }
 

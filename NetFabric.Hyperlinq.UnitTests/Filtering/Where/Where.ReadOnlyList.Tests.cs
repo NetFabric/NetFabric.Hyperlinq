@@ -11,11 +11,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.Where
         public void Where_Predicate_With_Null_Must_Throw()
         {
             // Arrange
-            var list = Wrap.AsReadOnlyList(new int[0]);
+            var list = Wrap
+                .AsReadOnlyList(new int[0]);
             var predicate = (Predicate<int>)null;
 
             // Act
-            Action action = () => _ = ReadOnlyListExtensions.Where(list, predicate);
+            Action action = () => _ = ReadOnlyListExtensions
+                .Where(list, predicate);
 
             // Assert
             _ = action.Must()
@@ -30,7 +32,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.Where
         public void Where_Predicate_With_ValidData_Must_Succeed(int[] source, int skipCount, int takeCount, Predicate<int> predicate)
         {
             // Arrange
-            var wrapped = Wrap.AsReadOnlyList(source);
+            var wrapped = Wrap
+                .AsReadOnlyList(source);
             var expected = Enumerable
                 .Skip(source, skipCount)
                 .Take(takeCount)

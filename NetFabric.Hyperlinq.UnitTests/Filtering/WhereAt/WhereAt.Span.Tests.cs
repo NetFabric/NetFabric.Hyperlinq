@@ -1,5 +1,6 @@
 using NetFabric.Assertive;
 using System;
+using System.Linq;
 using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests.Filtering.WhereIndex
@@ -14,7 +15,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.WhereIndex
             var predicate = (PredicateAt<int>)null;
 
             // Act
-            Action action = () => _ = ArrayExtensions.Where(source, predicate);
+            Action action = () => _ = ArrayExtensions
+                .Where(source, predicate);
 
             // Assert
             _ = action.Must()
@@ -29,10 +31,12 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.WhereIndex
         public void Where_With_ValidData_Must_Succeed(int[] source, PredicateAt<int> predicate)
         {
             // Arrange
-            var expected = System.Linq.Enumerable.Where(source, predicate.AsFunc());
+            var expected = Enumerable
+                .Where(source, predicate.AsFunc());
 
             // Act
-            var result = ArrayExtensions.Where(source.AsSpan(), predicate);
+            var result = ArrayExtensions
+                .Where(source.AsSpan(), predicate);
 
             // Assert
             _ = result.SequenceEqual(expected).Must().BeTrue();

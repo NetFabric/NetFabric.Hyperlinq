@@ -1,5 +1,6 @@
 using NetFabric.Assertive;
 using System;
+using System.Linq;
 using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests.Filtering.WhereAt
@@ -30,9 +31,10 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.WhereAt
         public void Where_Predicate_With_ValidData_Must_Succeed(int[] source, PredicateAt<int> predicate)
         {
             // Arrange
-            var wrapped = Wrap.AsAsyncValueEnumerable(source);
-            var expected = System.Linq.Enumerable
-                .Where<int>(source, predicate.AsFunc());
+            var wrapped = Wrap
+                .AsAsyncValueEnumerable(source);
+            var expected = Enumerable
+                .Where(source, predicate.AsFunc());
 
             // Act
             var result = AsyncValueEnumerableExtensions

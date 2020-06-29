@@ -15,7 +15,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.Where
 
             // Act
             Action action = () => _ = ArrayExtensions
-                .Where<int>(source.AsMemory(), predicate);
+                .Where(source.AsMemory(), predicate);
 
             // Assert
             _ = action.Must()
@@ -34,7 +34,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.Where
 
             // Act
             var result = ArrayExtensions
-                .Where<int>(source.AsMemory(), predicate);
+                .Where(source.AsMemory(), predicate);
 
             // Assert
             _ = result.Must()
