@@ -15,7 +15,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.WhereAt
             var predicate = (PredicateAt<int>)null;
 
             // Act
-            Action action = () => _ = ArrayExtensions.Where(source, predicate);
+            Action action = () => _ = ArrayExtensions
+                .Where(source, predicate);
 
             // Assert
             _ = action.Must()

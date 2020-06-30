@@ -80,6 +80,8 @@
   <Import Project="..\NetFabric.Hyperlinq.Generator\build\NetFabric.Hyperlinq.Generator.props" />
   
   <ItemGroup>
+    <UpToDateCheck Remove="Filtering\WhereRefAt\WhereRefAt.Array.cs" />
+    <UpToDateCheck Remove="Filtering\WhereRef\WhereRef.Array.cs" />
     <UpToDateCheck Remove="Quantifier\Contains\Contains.Enumerable.cs" />
   </ItemGroup>
 

@@ -1,5 +1,6 @@
 using NetFabric.Assertive;
 using System;
+using System.Linq;
 using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests.Filtering.Where
@@ -10,7 +11,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.Where
         public void Where_Predicate_With_Null_Must_Throw()
         {
             // Arrange
-            var enumerable = Wrap.AsAsyncValueEnumerable(new int[0]);
+            var enumerable = Wrap
+                .AsAsyncValueEnumerable(new int[0]);
             var predicate = (AsyncPredicate<int>)null;
 
             // Act
@@ -30,9 +32,10 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.Where
         public void Where_Predicate_With_ValidData_Must_Succeed(int[] source, Predicate<int> predicate)
         {
             // Arrange
-            var wrapped = Wrap.AsAsyncValueEnumerable(source);
-            var expected = System.Linq.Enumerable
-                .Where<int>(source, predicate.AsFunc());
+            var wrapped = Wrap
+                .AsAsyncValueEnumerable(source);
+            var expected = Enumerable
+                .Where(source, predicate.AsFunc());
 
             // Act
             var result = AsyncValueEnumerableExtensions

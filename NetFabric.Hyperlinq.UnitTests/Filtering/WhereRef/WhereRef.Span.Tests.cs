@@ -3,20 +3,20 @@ using System;
 using System.Linq;
 using Xunit;
 
-namespace NetFabric.Hyperlinq.UnitTests.Filtering.WhereIndex
+namespace NetFabric.Hyperlinq.UnitTests.Filtering.WhereRef
 {
     public class SpanTests
     {
         [Fact]
-        public void Where_With_NullPredicate_Must_Throw()
+        public void WhereRef_Predicate_With_Null_Must_Throw()
         {
             // Arrange
             var source = new int[0];
-            var predicate = (PredicateAt<int>)null;
+            var predicate = (Predicate<int>)null;
 
             // Act
             Action action = () => _ = ArrayExtensions
-                .Where(source, predicate);
+                .WhereRef(source.AsSpan(), predicate);
 
             // Assert
             _ = action.Must()
@@ -25,10 +25,10 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.WhereIndex
         }
 
         [Theory]
-        [MemberData(nameof(TestData.PredicateAtEmpty), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.PredicateAtSingle), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.PredicateAtMultiple), MemberType = typeof(TestData))]
-        public void Where_With_ValidData_Must_Succeed(int[] source, PredicateAt<int> predicate)
+        [MemberData(nameof(TestData.PredicateEmpty), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.PredicateSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.PredicateMultiple), MemberType = typeof(TestData))]
+        public void WhereRef_Predicate_With_ValidData_Must_Succeed(int[] source, Predicate<int> predicate)
         {
             // Arrange
             var expected = Enumerable
@@ -36,7 +36,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.WhereIndex
 
             // Act
             var result = ArrayExtensions
-                .Where(source.AsSpan(), predicate);
+                .WhereRef(source.AsSpan(), predicate);
 
             // Assert
             _ = result.SequenceEqual(expected).Must().BeTrue();

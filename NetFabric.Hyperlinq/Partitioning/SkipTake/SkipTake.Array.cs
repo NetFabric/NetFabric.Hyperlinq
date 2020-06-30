@@ -214,7 +214,16 @@ namespace NetFabric.Hyperlinq
             public WhereAtEnumerable<TSource> Where(PredicateAt<TSource> predicate)
                 => ArrayExtensions.Where(source, predicate, skipCount, Count);
 
-            
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public WhereRefEnumerable<TSource> WhereRef(Predicate<TSource> predicate)
+                => ArrayExtensions.WhereRef(source, predicate, skipCount, Count);
+
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public WhereRefAtEnumerable<TSource> WhereRef(PredicateAt<TSource> predicate)
+                => ArrayExtensions.WhereRef(source, predicate, skipCount, Count);
+
+
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public SelectEnumerable<TSource, TResult> Select<TResult>(NullableSelector<TSource, TResult> selector)
                 => ArrayExtensions.Select(source, selector, skipCount, Count);

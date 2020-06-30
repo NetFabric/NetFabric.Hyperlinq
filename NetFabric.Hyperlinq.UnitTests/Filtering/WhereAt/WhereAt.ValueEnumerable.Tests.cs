@@ -1,5 +1,6 @@
 using NetFabric.Assertive;
 using System;
+using System.Linq;
 using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests.Filtering.WhereAt
@@ -10,11 +11,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.WhereAt
         public void Where_With_NullPredicate_Must_Throw()
         {
             // Arrange
-            var enumerable = Wrap.AsValueEnumerable(new int[0]);
+            var enumerable = Wrap
+                .AsValueEnumerable(new int[0]);
             var predicate = (PredicateAt<int>)null;
 
             // Act
-            Action action = () => _ = ValueEnumerableExtensions.Where<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(enumerable, predicate);
+            Action action = () => _ = ValueEnumerableExtensions
+            .Where<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(enumerable, predicate);
 
             // Assert
             _ = action.Must()
@@ -29,11 +32,14 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.WhereAt
         public void Where_With_ValidData_Must_Succeed(int[] source, PredicateAt<int> predicate)
         {
             // Arrange
-            var wrapped = Wrap.AsValueEnumerable(source);
-            var expected = System.Linq.Enumerable.Where(wrapped, predicate.AsFunc());
+            var wrapped = Wrap
+                .AsValueEnumerable(source);
+            var expected = Enumerable
+                .Where(wrapped, predicate.AsFunc());
 
             // Act
-            var result = ValueEnumerableExtensions.Where<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
+            var result = ValueEnumerableExtensions
+                .Where<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
 
             // Assert
             _ = result.Must()

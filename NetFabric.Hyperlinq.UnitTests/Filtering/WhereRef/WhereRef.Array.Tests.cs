@@ -3,12 +3,12 @@ using System;
 using System.Linq;
 using Xunit;
 
-namespace NetFabric.Hyperlinq.UnitTests.Filtering.Where
+namespace NetFabric.Hyperlinq.UnitTests.Filtering.WhereRef
 {
     public class ArrayTests
     {
         [Fact]
-        public void Where_Predicate_With_Null_Must_Throw()
+        public void WhereRef_Predicate_With_Null_Must_Throw()
         {
             // Arrange
             var source = new int[0];
@@ -16,7 +16,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.Where
 
             // Act
             Action action = () => _ = ArrayExtensions
-                .Where<int>(source, predicate);
+                .WhereRef<int>(source, predicate);
 
             // Assert
             _ = action.Must()
@@ -28,7 +28,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.Where
         [MemberData(nameof(TestData.SkipTakePredicateEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakePredicateSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakePredicateMultiple), MemberType = typeof(TestData))]
-        public void Where_Predicate_With_ValidData_Must_Succeed(int[] source, int skipCount, int takeCount, Predicate<int> predicate)
+        public void WhereRef_Predicate_With_ValidData_Must_Succeed(int[] source, int skipCount, int takeCount, Predicate<int> predicate)
         {
             // Arrange
             var expected = Enumerable
@@ -40,7 +40,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.Where
             var result = ArrayExtensions
                 .Skip(source, skipCount)
                 .Take(takeCount)
-                .Where(predicate);
+                .WhereRef(predicate);
 
             // Assert
             _ = result.Must()

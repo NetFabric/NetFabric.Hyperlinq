@@ -3,20 +3,20 @@ using System;
 using System.Linq;
 using Xunit;
 
-namespace NetFabric.Hyperlinq.UnitTests.Filtering.Where
+namespace NetFabric.Hyperlinq.UnitTests.Filtering.WhereRefAt
 {
     public class ArrayTests
     {
         [Fact]
-        public void Where_Predicate_With_Null_Must_Throw()
+        public void WhereRef_With_NullPredicate_Must_Throw()
         {
             // Arrange
             var source = new int[0];
-            var predicate = (Predicate<int>)null;
+            var predicate = (PredicateAt<int>)null;
 
             // Act
             Action action = () => _ = ArrayExtensions
-                .Where<int>(source, predicate);
+                .WhereRef(source, predicate);
 
             // Assert
             _ = action.Must()
@@ -25,10 +25,10 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.Where
         }
 
         [Theory]
-        [MemberData(nameof(TestData.SkipTakePredicateEmpty), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.SkipTakePredicateSingle), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.SkipTakePredicateMultiple), MemberType = typeof(TestData))]
-        public void Where_Predicate_With_ValidData_Must_Succeed(int[] source, int skipCount, int takeCount, Predicate<int> predicate)
+        [MemberData(nameof(TestData.SkipTakePredicateAtEmpty), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakePredicateAtSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakePredicateAtMultiple), MemberType = typeof(TestData))]
+        public void WhereRef_With_ValidData_Must_Succeed(int[] source, int skipCount, int takeCount, PredicateAt<int> predicate)
         {
             // Arrange
             var expected = Enumerable
@@ -40,12 +40,12 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.Where
             var result = ArrayExtensions
                 .Skip(source, skipCount)
                 .Take(takeCount)
-                .Where(predicate);
+                .WhereRef(predicate);
 
             // Assert
             _ = result.Must()
                 .BeEnumerableOf<int>()
-                .BeEqualTo(expected, testRefReturns: false, testRefStructs: false);
+                .BeEqualTo(expected, testRefStructs: false, testRefReturns: false);
             _ = result.SequenceEqual(expected).Must().BeTrue();
         }
     }

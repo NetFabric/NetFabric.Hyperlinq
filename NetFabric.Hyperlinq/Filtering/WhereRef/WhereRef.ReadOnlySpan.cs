@@ -8,48 +8,49 @@ namespace NetFabric.Hyperlinq
     {
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static SpanWhereAtEnumerable<TSource> Where<TSource>(this ReadOnlySpan<TSource> source, PredicateAt<TSource> predicate) 
+        public static ReadOnlySpanWhereRefEnumerable<TSource> WhereRef<TSource>(this ReadOnlySpan<TSource> source, Predicate<TSource> predicate) 
         {
             if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
 
-            return new SpanWhereAtEnumerable<TSource>(source, predicate);
+            return new ReadOnlySpanWhereRefEnumerable<TSource>(source, predicate);
         }
 
-        public readonly ref struct SpanWhereAtEnumerable<TSource>
+        public readonly ref struct ReadOnlySpanWhereRefEnumerable<TSource>
         {
             internal readonly ReadOnlySpan<TSource> source;
-            internal readonly PredicateAt<TSource> predicate;
+            internal readonly Predicate<TSource> predicate;
 
-            internal SpanWhereAtEnumerable(in ReadOnlySpan<TSource> source, PredicateAt<TSource> predicate)
+            internal ReadOnlySpanWhereRefEnumerable(in ReadOnlySpan<TSource> source, Predicate<TSource> predicate)
             {
                 this.source = source;
                 this.predicate = predicate;
             }
-
             
-            public readonly Enumerator GetEnumerator() => new Enumerator(in this);
+            
+            public readonly Enumerator GetEnumerator() 
+                => new Enumerator(in this);
 
             public ref struct Enumerator 
             {
                 readonly ReadOnlySpan<TSource> source;
-                readonly PredicateAt<TSource> predicate;
+                readonly Predicate<TSource> predicate;
                 int index;
 
-                internal Enumerator(in SpanWhereAtEnumerable<TSource> enumerable)
+                internal Enumerator(in ReadOnlySpanWhereRefEnumerable<TSource> enumerable)
                 {
                     source = enumerable.source;
                     predicate = enumerable.predicate;
                     index = -1;
                 }
 
-                public readonly TSource Current 
-                    => source[index];
+                public readonly ref readonly TSource Current 
+                    => ref source[index];
 
                 public bool MoveNext()
                 {
                     while (++index < source.Length)
                     {
-                        if (predicate(source[index], index))
+                        if (predicate(source[index]))
                             return true;
                     }
                     return false;
@@ -61,12 +62,25 @@ namespace NetFabric.Hyperlinq
 
             public bool Any()
                 => ArrayExtensions.Any(source, predicate);
-
-            public SpanWhereAtEnumerable<TSource> Where(Predicate<TSource> predicate)
-                => Where<TSource>(source, Utils.Combine(this.predicate, predicate));
+                
+            public SpanWhereEnumerable<TSource> Where(Predicate<TSource> predicate)
+                => ArrayExtensions.Where<TSource>(source, Utils.Combine(this.predicate, predicate));
 
             public SpanWhereAtEnumerable<TSource> Where(PredicateAt<TSource> predicate)
-                => Where<TSource>(source, Utils.Combine(this.predicate, predicate));
+                => ArrayExtensions.Where<TSource>(source, Utils.Combine(this.predicate, predicate));
+
+            public ReadOnlySpanWhereRefEnumerable<TSource> WhereRef(Predicate<TSource> predicate)
+                => ArrayExtensions.WhereRef<TSource>(source, Utils.Combine(this.predicate, predicate));
+
+            public ReadOnlySpanWhereRefAtEnumerable<TSource> WhereRef(PredicateAt<TSource> predicate)
+                => ArrayExtensions.WhereRef<TSource>(source, Utils.Combine(this.predicate, predicate));
+
+            public SpanWhereSelectEnumerable<TSource, TResult> Select<TResult>(NullableSelector<TSource, TResult> selector)
+            {
+                if (selector is null) Throw.ArgumentNullException(nameof(selector));
+
+                return WhereSelect<TSource, TResult>(source, predicate, selector);
+            }
 
             public Option<TSource> ElementAt(int index)
                 => ArrayExtensions.ElementAt<TSource>(source, index, predicate);

@@ -71,7 +71,19 @@ namespace NetFabric.Hyperlinq
             this List<TSource> source,
             PredicateAt<TSource> predicate)
             => source.Unwrap().Where(predicate);
+        
+        public static ArrayExtensions.MemoryWhereRefEnumerable<TSource> WhereRef<TSource>(
+            this List<TSource> source,
+            Predicate<TSource> predicate)
+            => source.Unwrap().WhereRef(predicate);
+        
+        public static ArrayExtensions.MemoryWhereRefAtEnumerable<TSource> WhereRef<TSource>(
+            this List<TSource> source,
+            PredicateAt<TSource> predicate)
+            => source.Unwrap().WhereRef(predicate);
+
 #else
+
         public static ArrayExtensions.SelectEnumerable<TSource, TResult> Select<TSource, TResult>(
             this List<TSource> source,
             NullableSelector<TSource, TResult> selector)
@@ -99,6 +111,16 @@ namespace NetFabric.Hyperlinq
             this List<TSource> source,
             PredicateAt<TSource> predicate)
             => source.Unwrap().Where(predicate);
+
+        public static ArrayExtensions.WhereRefEnumerable<TSource> WhereRef<TSource>(
+            this List<TSource> source,
+            Predicate<TSource> predicate)
+            => source.Unwrap().WhereRef(predicate);
+
+        public static ArrayExtensions.WhereRefAtEnumerable<TSource> WhereRef<TSource>(
+            this List<TSource> source,
+            PredicateAt<TSource> predicate)
+            => source.Unwrap().WhereRef(predicate);
 #endif
 
         public static Option<TSource> ElementAt<TSource>(this List<TSource> source, int index)
@@ -148,7 +170,7 @@ namespace NetFabric.Hyperlinq
 
 #if SPAN_SUPPORTED
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static ReadOnlyMemory<TSource> Unwrap<TSource>(this List<TSource> source)
+        static Memory<TSource> Unwrap<TSource>(this List<TSource> source)
             => source.GetItems().AsMemory().Slice(0, source.Count);
 #else
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

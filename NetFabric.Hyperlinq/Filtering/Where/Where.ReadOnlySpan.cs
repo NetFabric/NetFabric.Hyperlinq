@@ -27,7 +27,8 @@ namespace NetFabric.Hyperlinq
             }
             
             
-            public readonly Enumerator GetEnumerator() => new Enumerator(in this);
+            public readonly Enumerator GetEnumerator() 
+                => new Enumerator(in this);
 
             public ref struct Enumerator 
             {
@@ -42,8 +43,8 @@ namespace NetFabric.Hyperlinq
                     index = -1;
                 }
 
-                public readonly ref readonly TSource Current 
-                    => ref source[index];
+                public readonly TSource Current 
+                    => source[index];
 
                 public bool MoveNext()
                 {

@@ -3,12 +3,12 @@ using System;
 using System.Linq;
 using Xunit;
 
-namespace NetFabric.Hyperlinq.UnitTests.Filtering.WhereIndex
+namespace NetFabric.Hyperlinq.UnitTests.Filtering.WhereRefIndex
 {
-    public class ReadOnlyMemoryTests
+    public class SpanTests
     {
         [Fact]
-        public void Where_With_NullPredicate_Must_Throw()
+        public void WhereRef_With_NullPredicate_Must_Throw()
         {
             // Arrange
             var source = new int[0];
@@ -16,7 +16,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.WhereIndex
 
             // Act
             Action action = () => _ = ArrayExtensions
-                .Where((ReadOnlyMemory<int>)source.AsMemory(), predicate);
+                .WhereRef(source, predicate);
 
             // Assert
             _ = action.Must()
@@ -28,7 +28,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.WhereIndex
         [MemberData(nameof(TestData.PredicateAtEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateAtSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateAtMultiple), MemberType = typeof(TestData))]
-        public void Where_With_ValidData_Must_Succeed(int[] source, PredicateAt<int> predicate)
+        public void WhereRef_With_ValidData_Must_Succeed(int[] source, PredicateAt<int> predicate)
         {
             // Arrange
             var expected = Enumerable
@@ -36,12 +36,9 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.WhereIndex
 
             // Act
             var result = ArrayExtensions
-                .Where((ReadOnlyMemory<int>)source.AsMemory(), predicate);
+                .WhereRef(source.AsSpan(), predicate);
 
             // Assert
-            _ = result.Must()
-                .BeEnumerableOf<int>()
-                .BeEqualTo(expected, testRefStructs: false, testRefReturns: false);
             _ = result.SequenceEqual(expected).Must().BeTrue();
         }
     }
