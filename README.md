@@ -42,7 +42,7 @@ This implementation **favors performance in detriment of assembly binary size** 
 - It does not box value-type enumerators so, calls to the `Current` property and the `MoveNext()` method are non-virtual.
 - All the enumerables returned by operations define a value-type enumerator.
 - Whenever possible, the enumerator returned by the public `GetEnumerator()` or `GetAsyncEnumerator()` does not implement `IDisposable`. This allows the `foreach` that enumerates the result to be inlinable. 
-- Operations enumerate the source using the indexer when the source is an array, `Span<>`, `ReadOnlySpan<>`, `Memory<>`, `ReadOnlyMemory<>`, or implements `IReadOnlyList<>`. The indexer performs a lot fewer operations than the enumerator.
+- Operations enumerate the source using the indexer when the source is an array, `ArraySegment<>`, `Span<>`, `ReadOnlySpan<>`, `Memory<>`, `ReadOnlyMemory<>`, or implements `IReadOnlyList<>`. The indexer performs a lot fewer operations than the enumerator.
 - The enumerables returned by operations like `Range()`, `Repeat()`, `Return()`, and `Select()`, implement `IReadOnlyList<>` and `IList<>`.
 - Elimination of conditional branchs in `Count()` with a predicate.
 - Allows the JIT compiler to perform optimizations on array enumeration whenever possible.
@@ -81,7 +81,7 @@ using NetFabric.Hyperlinq; // add this directive
 
 `NetFabric.Hyperlinq` includes bindings for collections available in the namespaces: 
 
-- **`System`** - arrays, `Span<>`, `ReadOnlySpan<>`, `Memory<>` and `ReadOnlyMemory<>`
+- **`System`** - arrays, `ArraySegment<>`, `Span<>`, `ReadOnlySpan<>`, `Memory<>` and `ReadOnlyMemory<>`
 - **`System.Collections.Generic`** - `List<>`, `Dictionary<>`, `Stack<>`, ...
 - **`System.Collections.Immutable`** - `ImmutableArray<>`, `ImmutableList<>`, `ImmutableStack<>`, ...
 

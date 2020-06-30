@@ -17,8 +17,7 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
-            if (selector is null)
-                Throw.ArgumentNullException(nameof(selector));
+            if (selector is null) Throw.ArgumentNullException(nameof(selector));
 
             return new SelectAtEnumerable<TEnumerable, TEnumerator, TSource, TResult>(in source, selector);
         }
