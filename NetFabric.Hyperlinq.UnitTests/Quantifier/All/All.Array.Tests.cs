@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using NetFabric.Assertive;
 using Xunit;
 
@@ -15,7 +16,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.All
 
             // Act
             Action action = () => _ = ArrayExtensions
-                .All<int>(source, predicate);
+                .All(source, predicate);
 
             // Assert
             _ = action.Must()
@@ -30,11 +31,12 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.All
         public void All_Predicate_With_ValidData_Must_Succeed(int[] source, Predicate<int> predicate)
         {
             // Arrange
-            var expected = System.Linq.Enumerable.All(source, predicate.AsFunc());
+            var expected = Enumerable
+                .All(source, predicate.AsFunc());
 
             // Act
             var result = ArrayExtensions
-                .All<int>(source, predicate);
+                .All(source, predicate);
 
             // Assert
             _ = result.Must()
@@ -50,7 +52,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.All
 
             // Act
             Action action = () => _ = ArrayExtensions
-                .All<int>(source, predicate);
+                .All(source, predicate);
 
             // Assert
             _ = action.Must()
@@ -65,13 +67,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.All
         public void All_PredicateAt_With_ValidData_Must_Succeed(int[] source, PredicateAt<int> predicate)
         {
             // Arrange
-            var expected = 
-                System.Linq.Enumerable.Count(
-                    System.Linq.Enumerable.Where(source, predicate.AsFunc())) == source.Length;
+            var expected = Enumerable
+                .Where(source, predicate.AsFunc())
+                .Count() == source.Length;
 
             // Act
             var result = ArrayExtensions
-                .All<int>(source, predicate);
+                .All(source, predicate);
 
             // Assert
             _ = result.Must()

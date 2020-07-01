@@ -5,18 +5,19 @@ using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests.Projection.SelectAt
 {
-    public class ArrayTests
+    public class ArraySegmentTests
     {
         [Fact]
         public void Select_With_NullSelector_Must_Throw()
         {
             // Arrange
             var source = new int[0];
+            var wrapped = new ArraySegment<int>(source);
             var selector = (NullableSelectorAt<int, string>)null;
 
             // Act
             Action action = () => _ = ArrayExtensions
-                .Select(source, selector);
+                .Select(wrapped, selector);
 
             // Assert
             _ = action.Must()
@@ -31,12 +32,39 @@ namespace NetFabric.Hyperlinq.UnitTests.Projection.SelectAt
         public void Select_With_ValidData_Must_Succeed(int[] source, NullableSelectorAt<int, string> selector)
         {
             // Arrange
+            var wrapped = new ArraySegment<int>(source);
             var expected = Enumerable
                 .Select(source, selector.AsFunc());
 
             // Act
             var result = ArrayExtensions
-                .Select(source, selector);
+                .Select(wrapped, selector);
+
+            // Assert
+            _ = result.Must()
+                .BeEnumerableOf<string>()
+                .BeEqualTo(expected, testRefStructs: false);
+            _ = result.SequenceEqual(expected).Must().BeTrue();
+        }
+
+        [Theory]
+        [MemberData(nameof(TestData.SkipTakeSelectorAtEmpty), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakeSelectorAtSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakeSelectorAtMultiple), MemberType = typeof(TestData))]
+        public void Select_Skip_Count_With_ValidData_Must_Succeed(int[] source, int skipCount, int takeCount, NullableSelectorAt<int, string> selector)
+        {
+            // Arrange
+            var wrapped = new ArraySegment<int>(source);
+            var expected = Enumerable
+                .Skip(source, skipCount)
+                .Take(takeCount)
+                .Select(selector.AsFunc());
+
+            // Act
+            var result = ArrayExtensions
+                .Skip(wrapped, skipCount)
+                .Take(takeCount)
+                .Select(selector);
 
             // Assert
             _ = result.Must()

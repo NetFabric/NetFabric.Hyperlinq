@@ -5,7 +5,7 @@ using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests.Partitioning.Skip
 {
-    public class ArrayTests
+    public class ArraySegmentTests
     {
         [Theory]
         [MemberData(nameof(TestData.SkipEmpty), MemberType = typeof(TestData))]
@@ -14,22 +14,18 @@ namespace NetFabric.Hyperlinq.UnitTests.Partitioning.Skip
         public void Skip_With_ValidData_Must_Succeed(int[] source, int count)
         {
             // Arrange
+            var wrapped = new ArraySegment<int>(source);
             var expected = Enumerable
                 .Skip(source, count);
 
             // Act
             var result = ArrayExtensions
-                .Skip(source, count);
+                .Skip(wrapped, count);
 
             // Assert
-#if SPAN_SUPPORTED
-            _ = result.Must()
-                .BeEqualTo(expected);
-#else
             _ = result.Must()
                 .BeEnumerableOf<int>()
                 .BeEqualTo(expected);
-#endif
         }
     }
 }

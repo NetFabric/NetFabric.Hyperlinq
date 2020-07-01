@@ -9,7 +9,7 @@ namespace NetFabric.Hyperlinq
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static List<TSource> ToList<TSource>(this in ArraySegment<TSource> source)
-            => new List<TSource>(new ArraySegmentToListCollection<TSource>(source));
+            => new List<TSource>(source);
 
         static List<TSource> ToList<TSource>(this in ArraySegment<TSource> source, Predicate<TSource> predicate)
         {
@@ -107,20 +107,6 @@ namespace NetFabric.Hyperlinq
                 }
             }
             return list;
-        }
-
-        // helper implementation of ICollection<> so that CopyTo() is used to convert to List<>
-        sealed class ArraySegmentToListCollection<TSource>
-            : ToListCollectionBase<TSource>
-        {
-            readonly ArraySegment<TSource> source;
-
-            public ArraySegmentToListCollection(in ArraySegment<TSource> source)
-                : base(source.Count)
-                => this.source = source;
-
-            public override void CopyTo(TSource[] array, int _)
-                => Array.Copy(source.Array, source.Offset, array, 0, source.Count);
         }
 
         // helper implementation of ICollection<> so that CopyTo() is used to convert to List<>

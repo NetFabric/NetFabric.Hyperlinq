@@ -8,7 +8,11 @@ namespace NetFabric.Hyperlinq
     public static partial class ArrayExtensions
     {
         public static WhereAtEnumerable<TSource> Where<TSource>(this in ArraySegment<TSource> source, PredicateAt<TSource> predicate)
-            => new WhereAtEnumerable<TSource>(source, predicate);
+        {
+            if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
+
+            return new WhereAtEnumerable<TSource>(source, predicate);
+        }
 
         public readonly partial struct WhereAtEnumerable<TSource>
             : IValueEnumerable<TSource, WhereAtEnumerable<TSource>.DisposableEnumerator>

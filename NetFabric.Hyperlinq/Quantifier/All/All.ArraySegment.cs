@@ -8,22 +8,25 @@ namespace NetFabric.Hyperlinq
         {
             if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
 
-            var array = source.Array;
-            if (source.Offset == 0 && source.Count == array.Length)
+            if (source.Count != 0)
             {
-                for (var index = 0; index < array.Length; index++)
+                var array = source.Array;
+                if (source.Offset == 0 && source.Count == array.Length)
                 {
-                    if (!predicate(array[index]))
-                        return false;
+                    for (var index = 0; index < array.Length; index++)
+                    {
+                        if (!predicate(array[index]))
+                            return false;
+                    }
                 }
-            }
-            else
-            {
-                var end = source.Offset + source.Count;
-                for (var index = source.Offset; index < end; index++)
+                else
                 {
-                    if (!predicate(array[index]))
-                        return false;
+                    var end = source.Offset + source.Count;
+                    for (var index = source.Offset; index < end; index++)
+                    {
+                        if (!predicate(array[index]))
+                            return false;
+                    }
                 }
             }
             return true;
@@ -33,33 +36,36 @@ namespace NetFabric.Hyperlinq
         {
             if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
 
-            var array = source.Array;
-            if (source.Offset == 0)
+            if (source.Count != 0)
             {
-                if (source.Count == array.Length)
+                var array = source.Array;
+                if (source.Offset == 0)
                 {
-                    for (var index = 0; index < array.Length; index++)
+                    if (source.Count == array.Length)
                     {
-                        if (!predicate(array[index], index))
-                            return false;
+                        for (var index = 0; index < array.Length; index++)
+                        {
+                            if (!predicate(array[index], index))
+                                return false;
+                        }
+                    }
+                    else
+                    {
+                        for (var index = 0; index < source.Count; index++)
+                        {
+                            if (!predicate(array[index], index))
+                                return false;
+                        }
                     }
                 }
                 else
                 {
+                    var offset = source.Offset;
                     for (var index = 0; index < source.Count; index++)
                     {
-                        if (!predicate(array[index], index))
+                        if (!predicate(array[index + offset], index))
                             return false;
                     }
-                }
-            }
-            else
-            {
-                var offset = source.Offset;
-                for (var index = 0; index < source.Count; index++)
-                {
-                    if (!predicate(array[index + offset], index))
-                        return false;
                 }
             }
             return true;

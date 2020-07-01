@@ -6,7 +6,7 @@ using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Contains
 {
-    public class ArrayTests
+    public class ArraySegmentTests
     {
         [Theory]
         [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
@@ -16,10 +16,11 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Contains
         {
             // Arrange
             var value = int.MaxValue;
+            var wrapped = new ArraySegment<int>(source);
 
             // Act
             var result = ArrayExtensions
-                .Contains(source, value);
+                .Contains(wrapped, value);
 
             // Assert
             _ = result.Must()
@@ -34,7 +35,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Contains
         {
             // Arrange
             var value = default(string);
-            var wrapped = source.Select(item => item.ToString()).ToArray();
+            var wrapped = new ArraySegment<string>(source.Select(item => item.ToString()).ToArray());
 
             // Act
             var result = ArrayExtensions
@@ -52,10 +53,11 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Contains
         {
             // Arrange
             var value = source.Last();
- 
+            var wrapped = new ArraySegment<int>(source);
+
             // Act
             var result = ArrayExtensions
-                .Contains(source, value);
+                .Contains(wrapped, value);
 
             // Assert
             _ = result.Must()
@@ -69,7 +71,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Contains
         {
             // Arrange
             var value = source.Last().ToString();
-            var wrapped = source.Select(item => item.ToString()).ToArray();
+            var wrapped = new ArraySegment<string>(source.Select(item => item.ToString()).ToArray());
 
             // Act
             var result = ArrayExtensions
@@ -88,10 +90,11 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Contains
         {
             // Arrange
             var value = int.MaxValue;
+            var wrapped = new ArraySegment<int>(source);
 
             // Act
             var result = ArrayExtensions
-                .Contains(source, value, EqualityComparer<int>.Default);
+                .Contains(wrapped, value, EqualityComparer<int>.Default);
 
             // Assert
             _ = result.Must()
@@ -105,10 +108,11 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Contains
         {
             // Arrange
             var value = source.Last();
+            var wrapped = new ArraySegment<int>(source);
 
             // Act
             var result = ArrayExtensions
-                .Contains(source, value, EqualityComparer<int>.Default);
+                .Contains(wrapped, value, EqualityComparer<int>.Default);
 
             // Assert
             _ = result.Must()
@@ -123,10 +127,11 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Contains
         {
             // Arrange
             var value = int.MaxValue;
+            var wrapped = new ArraySegment<int>(source);
 
             // Act
             var result = ArrayExtensions
-                .Contains(source, value, TestComparer<int>.Instance);
+                .Contains(wrapped, value, TestComparer<int>.Instance);
 
             // Assert
             _ = result.Must()
@@ -140,10 +145,11 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Contains
         {
             // Arrange
             var value = source.Last();
+            var wrapped = new ArraySegment<int>(source);
 
             // Act
             var result = ArrayExtensions
-                .Contains(source, value, TestComparer<int>.Instance);
+                .Contains(wrapped, value, TestComparer<int>.Instance);
 
             // Assert
             _ = result.Must()

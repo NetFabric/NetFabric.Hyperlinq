@@ -5,18 +5,19 @@ using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests.Filtering.Where
 {
-    public class ArrayTests
+    public class ArraySegmentTests
     {
         [Fact]
         public void Where_Predicate_With_Null_Must_Throw()
         {
             // Arrange
             var source = new int[0];
+            var wrapped = new ArraySegment<int>(source);
             var predicate = (Predicate<int>)null;
 
             // Act
             Action action = () => _ = ArrayExtensions
-                .Where<int>(source, predicate);
+                .Where(wrapped, predicate);
 
             // Assert
             _ = action.Must()
@@ -25,18 +26,23 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.Where
         }
 
         [Theory]
-        [MemberData(nameof(TestData.PredicateEmpty), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.PredicateSingle), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.PredicateMultiple), MemberType = typeof(TestData))]
-        public void Where_Predicate_With_ValidData_Must_Succeed(int[] source, Predicate<int> predicate)
+        [MemberData(nameof(TestData.SkipTakePredicateEmpty), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakePredicateSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakePredicateMultiple), MemberType = typeof(TestData))]
+        public void Where_Predicate_With_ValidData_Must_Succeed(int[] source, int skipCount, int takeCount, Predicate<int> predicate)
         {
             // Arrange
+            var wrapped = new ArraySegment<int>(source);
             var expected = Enumerable
-                .Where(source, predicate.AsFunc());
+                .Skip(source, skipCount)
+                .Take(takeCount)
+                .Where(predicate.AsFunc());
 
             // Act
             var result = ArrayExtensions
-                .Where(source, predicate);
+                .Skip(wrapped, skipCount)
+                .Take(takeCount)
+                .Where(predicate);
 
             // Assert
             _ = result.Must()

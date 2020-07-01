@@ -1,10 +1,11 @@
 using NetFabric.Assertive;
+using System;
 using System.Linq;
 using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests.Partitioning.Take
 {
-    public class ReadOnlyListTests
+    public class ArraySegmentTests
     {
         [Theory]
         [MemberData(nameof(TestData.TakeEmpty), MemberType = typeof(TestData))]
@@ -13,14 +14,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Partitioning.Take
         public void Take_With_ValidData_Must_Succeed(int[] source, int count)
         {
             // Arrange
-            var wrapped = Wrap
-                .AsValueReadOnlyList(source);
+            var wrapped = new ArraySegment<int>(source);
             var expected = Enumerable
                 .Take(source, count);
 
             // Act
-            var result = ReadOnlyListExtensions
-                .Take<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped, count);
+            var result = ArrayExtensions
+                .Take(wrapped, count);
 
             // Assert
             _ = result.Must()
