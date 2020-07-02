@@ -31,13 +31,13 @@ namespace NetFabric.Hyperlinq
             public ref struct Enumerator
             {
                 readonly ReadOnlySpan<TSource> source;
-                Set<TSource>? set;
+                Set<TSource> set;
                 int index;
 
                 internal Enumerator(in SpanDistinctEnumerable<TSource> enumerable)
                 {
                     source = enumerable.source;
-                    set = source.Length == 0 ? null : new Set<TSource>(enumerable.comparer);
+                    set = new Set<TSource>(enumerable.comparer);
                     index = -1;
                 }
 
@@ -48,7 +48,7 @@ namespace NetFabric.Hyperlinq
                 {
                     while (++index < source.Length)
                     {
-                        if (set!.Add(source[index]))
+                        if (set.Add(source[index]))
                             return true;
                     }
 
@@ -56,8 +56,8 @@ namespace NetFabric.Hyperlinq
                     return false;
                 }
 
-                public void Dispose()
-                    => set = null;
+                public void Dispose() 
+                    => set.Dispose();
             }
 
             readonly Set<TSource> GetSet() 

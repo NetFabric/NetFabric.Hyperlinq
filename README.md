@@ -44,6 +44,7 @@ This implementation **favors performance in detriment of assembly binary size** 
 - Whenever possible, the enumerator returned by the public `GetEnumerator()` or `GetAsyncEnumerator()` does not implement `IDisposable`. This allows the `foreach` that enumerates the result to be inlinable. 
 - Operations enumerate the source using the indexer when the source is an array, `ArraySegment<>`, `Span<>`, `ReadOnlySpan<>`, `Memory<>`, `ReadOnlyMemory<>`, or implements `IReadOnlyList<>`. The indexer performs a lot fewer operations than the enumerator.
 - The enumerables returned by operations like `Range()`, `Repeat()`, `Return()`, and `Select()`, implement `IReadOnlyList<>` and `IList<>`.
+- Use of object pools in operations like `Distinct()`.
 - Elimination of conditional branchs in `Count()` with a predicate.
 - Allows the JIT compiler to perform optimizations on array enumeration whenever possible.
 - Takes advantage of `EqualityComparer<>.Default` devirtualization whenever possible.
@@ -62,7 +63,6 @@ It only allocates on the heap for the following cases:
 - `ToArray()` and `ToList()` allocate their results on the heap.
 - Operations that use `ICollection<>.CopyTo()`, `ICollection<>.Contains()`, or `IList<>.IndexOf()` will box enumerables that are value-types.   
 - `ToList()`, when applied to collections that implement `IReadOnlyCollection<>` but not `ICollection<>`, allocates an instance of an helper class so that `ICollection<>.CopyTo()` can be used.
-- `Distinct()` allocates its internal hash set on the heap.
 
 ## Usage
 

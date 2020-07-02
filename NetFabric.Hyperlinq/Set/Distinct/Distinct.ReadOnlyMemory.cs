@@ -40,13 +40,13 @@ namespace NetFabric.Hyperlinq
                 : IEnumerator<TSource>
             {
                 readonly ReadOnlyMemory<TSource> source;
-                Set<TSource>? set;
+                Set<TSource> set;
                 int index;
 
                 internal Enumerator(in MemoryDistinctEnumerable<TSource> enumerable)
                 {
                     source = enumerable.source;
-                    set = source.Length == 0 ? null : new Set<TSource>(enumerable.comparer);
+                    set = new Set<TSource>(enumerable.comparer);
                     index = -1;
                     Current = default!;
                 }
@@ -63,7 +63,7 @@ namespace NetFabric.Hyperlinq
                     var span = source.Span;
                     while (++index < source.Length)
                     {
-                        if (set!.Add(span[index]))
+                        if (set.Add(span[index]))
                         {
                             Current = span[index];
                             return true;
@@ -78,8 +78,8 @@ namespace NetFabric.Hyperlinq
                 public readonly void Reset() 
                     => throw new NotSupportedException();
 
-                public void Dispose()
-                    => set = null;
+                public void Dispose() 
+                    => set.Dispose();
             }
 
             readonly Set<TSource> GetSet() 

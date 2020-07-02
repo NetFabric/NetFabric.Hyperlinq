@@ -33,14 +33,14 @@ namespace NetFabric.Hyperlinq
                 : IEnumerator<TSource>
             {
                 readonly TSource[] source;
-                Set<TSource>? set;
+                Set<TSource> set;
                 readonly int end;
                 int index;
 
                 internal Enumerator(in DistinctEnumerable<TSource> enumerable)
                 {
                     source = enumerable.source.Array;
-                    set = enumerable.source.Count == 0 ? null : new Set<TSource>(enumerable.comparer);
+                    set = new Set<TSource>(enumerable.comparer);
                     end = enumerable.source.Offset + enumerable.source.Count;
                     index = enumerable.source.Offset - 1;
                     Current = default!;
@@ -73,13 +73,13 @@ namespace NetFabric.Hyperlinq
                     => Throw.NotSupportedException();
 
                 public void Dispose() 
-                    => set = default;
+                    => set.Dispose();
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             readonly Set<TSource> GetSet()
             {
-                var set = new Set<TSource>(comparer);
+                using var set = new Set<TSource>(comparer);
                 var array = source.Array;
                 var end = source.Offset + source.Count;
                 for (var index = source.Offset; index < end; index++)

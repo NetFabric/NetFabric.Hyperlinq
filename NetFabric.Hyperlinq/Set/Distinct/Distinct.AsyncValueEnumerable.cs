@@ -47,7 +47,7 @@ namespace NetFabric.Hyperlinq
                 TEnumerator enumerator; // do not make readonly
                 readonly IEqualityComparer<TSource>? comparer;
                 EnumeratorState enumeratorState;
-                Set<TSource>? set;
+                Set<TSource> set;
 
                 int state;
                 AsyncValueTaskMethodBuilder<bool> builder;
@@ -62,7 +62,7 @@ namespace NetFabric.Hyperlinq
                     enumerator = enumerable.source.GetAsyncEnumerator(cancellationToken);
                     comparer = enumerable.comparer;
                     enumeratorState = EnumeratorState.Uninitialized;
-                    set = default;
+                    set = new Set<TSource>(comparer);
 
                     state = default;
                     builder = default;
@@ -125,7 +125,7 @@ namespace NetFabric.Hyperlinq
                 public ValueTask DisposeAsync()
                 {
                     enumeratorState = EnumeratorState.Complete;
-                    set = default;
+                    set.Dispose();
                     return enumerator.DisposeAsync();
                 }
 
