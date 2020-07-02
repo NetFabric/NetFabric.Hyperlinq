@@ -17,7 +17,7 @@
     <PackageReference Include="LinqFaster.Parallel" Version="1.0.2" />
     <PackageReference Include="LinqFaster.SIMD" Version="1.0.3" />
     <PackageReference Include="LinqFaster.SIMD.Parallel" Version="1.0.2" />
-    <PackageReference Include="StructLinq" Version="0.1.6" />
+    <PackageReference Include="StructLinq" Version="0.1.7" />
     <PackageReference Include="System.Interactive" Version="4.1.1" />
     <PackageReference Include="System.Linq.Async" Version="4.1.1" />
     <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="1.1.1" />
