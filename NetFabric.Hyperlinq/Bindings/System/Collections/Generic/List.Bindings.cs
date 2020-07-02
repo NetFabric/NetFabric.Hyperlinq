@@ -18,10 +18,10 @@ namespace NetFabric.Hyperlinq
         public static ReadOnlyMemory<TSource> Take<TSource>(this List<TSource> source, int count)
             => source.Unwrap().Take(count);
 #else
-        public static ArrayExtensions.SkipTakeEnumerable<TSource> Skip<TSource>(this List<TSource> source, int count)
+        public static ArraySegment<TSource> Skip<TSource>(this List<TSource> source, int count)
             => source.Unwrap().Skip(count);
 
-        public static ArrayExtensions.SkipTakeEnumerable<TSource> Take<TSource>(this List<TSource> source, int count)
+        public static ArraySegment<TSource> Take<TSource>(this List<TSource> source, int count)
             => source.Unwrap().Take(count);
 #endif
 
@@ -45,6 +45,7 @@ namespace NetFabric.Hyperlinq
             => source.Unwrap().Contains(value, comparer);
 
 #if SPAN_SUPPORTED
+
         public static ArrayExtensions.MemorySelectEnumerable<TSource, TResult> Select<TSource, TResult>(
             this List<TSource> source,
             NullableSelector<TSource, TResult> selector)
@@ -99,7 +100,7 @@ namespace NetFabric.Hyperlinq
             Selector<TSource, TSubEnumerable> selector)
             where TSubEnumerable : IValueEnumerable<TResult, TSubEnumerator>
             where TSubEnumerator : struct, IEnumerator<TResult>
-            => source.Unwrap().SelectMany<TSubEnumerable, TSubEnumerator, TResult>(selector);
+            => source.Unwrap().SelectMany<TSource, TSubEnumerable, TSubEnumerator, TResult>(selector);
 
         
         public static ArrayExtensions.WhereEnumerable<TSource> Where<TSource>(
@@ -169,13 +170,17 @@ namespace NetFabric.Hyperlinq
             => source.Unwrap().ToDictionary(keySelector, elementSelector, comparer);
 
 #if SPAN_SUPPORTED
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static Memory<TSource> Unwrap<TSource>(this List<TSource> source)
             => source.GetItems().AsMemory().Slice(0, source.Count);
+
 #else
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static ArrayExtensions.SkipTakeEnumerable<TSource> Unwrap<TSource>(this List<TSource> source)
-            => source.GetItems().Take(source.Count);
+        static ArraySegment<TSource> Unwrap<TSource>(this List<TSource> source)
+            => new ArraySegment<TSource>(source.GetItems(), 0, source.Count);
+
 #endif
 
         class ListLayout<TSource>

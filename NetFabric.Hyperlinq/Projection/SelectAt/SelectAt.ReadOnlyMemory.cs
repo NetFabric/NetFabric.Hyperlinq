@@ -10,9 +10,7 @@ namespace NetFabric.Hyperlinq
     {
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static MemorySelectAtEnumerable<TSource, TResult> Select<TSource, TResult>(
-            this ReadOnlyMemory<TSource> source, 
-            NullableSelectorAt<TSource, TResult> selector)
+        public static MemorySelectAtEnumerable<TSource, TResult> Select<TSource, TResult>(this ReadOnlyMemory<TSource> source, NullableSelectorAt<TSource, TResult> selector)
         {
             if (selector is null) Throw.ArgumentNullException(nameof(selector));
 

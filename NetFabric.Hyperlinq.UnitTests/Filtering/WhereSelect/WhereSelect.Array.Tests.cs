@@ -44,23 +44,19 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.WhereSelect
         }
 
         [Theory]
-        [MemberData(nameof(TestData.SkipTakePredicateSelectorEmpty), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.SkipTakePredicateSelectorSingle), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.SkipTakePredicateSelectorMultiple), MemberType = typeof(TestData))]
-        public void WhereSelect_With_ValidData_Must_Succeed(int[] source, int skipCount, int takeCount, Predicate<int> predicate, NullableSelector<int, string> selector)
+        [MemberData(nameof(TestData.PredicateSelectorEmpty), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.PredicateSelectorSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.PredicateSelectorMultiple), MemberType = typeof(TestData))]
+        public void WhereSelect_With_ValidData_Must_Succeed(int[] source, Predicate<int> predicate, NullableSelector<int, string> selector)
         {
             // Arrange
             var expected = Enumerable
-                .Skip(source, skipCount)
-                .Take(takeCount)
-                .Where(predicate.AsFunc())
+                .Where(source, predicate.AsFunc())
                 .Select(selector.AsFunc());
 
             // Act
             var result = ArrayExtensions
-                .Skip(source, skipCount)
-                .Take(takeCount)
-                .Where(predicate)
+                .Where(source, predicate)
                 .Select(selector);
 
             // Assert

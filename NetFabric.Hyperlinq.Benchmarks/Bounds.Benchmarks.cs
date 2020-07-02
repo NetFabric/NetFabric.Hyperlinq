@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using BenchmarkDotNet.Attributes;
 
@@ -8,10 +9,12 @@ namespace NetFabric.Hyperlinq.Benchmarks
     public class BoundsBenchmarks
     {
         int[] array;
-        int[] intervalArray;
-        IReadOnlyList<int> list;
-        IReadOnlyList<int> intervalList;
+        ArraySegment<int> arraySegment;
+        List<int> list;
+        ReadOnlyListSegment<List<int>, int> listSegment;
 
+        [Params(0)]
+        public int Offset { get; set; }
 
         [Params(10_000)]
         public int Count { get; set; }
@@ -20,15 +23,13 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public void GlobalSetup()
         {
             array = ValueEnumerable.Range(0, Count).ToArray();
-            intervalArray = ValueEnumerable.Range(0, Count + 200).ToArray();
-#pragma warning disable HLQ001 // Assigment to interface causes boxing of enumerator
+            arraySegment = new ArraySegment<int>(array, Offset, Count);
             list = ValueEnumerable.Range(0, Count).ToList();
-            intervalList = ValueEnumerable.Range(0, Count + 200).ToList();
-#pragma warning restore HLQ001 // Assigment to interface causes boxing of enumerator
+            listSegment = new ReadOnlyListSegment<List<int>, int>(list, Offset, Count);
         }
 
         [Benchmark(Baseline = true)]
-        public int Array_Property()
+        public int Array()
         {
             var total = 0;
             for (var index = 0; index < array.Length; index++)
@@ -37,28 +38,38 @@ namespace NetFabric.Hyperlinq.Benchmarks
         }
 
         [Benchmark]
-        public int Array_Variable()
+        public int Array_Variables()
         {
             var total = 0;
-            var take = array.Length;
-            for (var index = 0; index < take; index++)
+            var end = Offset + Count;
+            for (var index = Offset; index < end; index++)
                 total += array[index];
             return total;
         }
 
         [Benchmark]
-        public int IntervalArray()
+        public int ArraySegment()
         {
             var total = 0;
-            var skip = 100;
-            var take = array.Length - 100;
-            for (var index = skip; index < take; index++)
+            var array = arraySegment.Array;
+            for (var index = 0; index < array.Length; index++)
                 total += array[index];
             return total;
         }
 
         [Benchmark]
-        public int List_Property()
+        public int ArraySegment_Variables()
+        {
+            var total = 0;
+            var array = arraySegment.Array;
+            var end = arraySegment.Offset + arraySegment.Count;
+            for (var index = arraySegment.Offset; index < end; index++)
+                total += array[index];
+            return total;
+        }
+
+        [Benchmark]
+        public int List()
         {
             var total = 0;
             for (var index = 0; index < list.Count; index++)
@@ -70,21 +81,42 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int List_Variable()
         {
             var total = 0;
-            var take = list.Count;
-            for (var index = 0; index < take; index++)
+            var end = Offset + Count;
+            for (var index = Offset; index < end; index++)
                 total += list[index];
             return total;
         }
 
         [Benchmark]
-        public int IntervalList()
+        public int ListSegment()
         {
             var total = 0;
-            var skip = 100;
-            var take = list.Count - 100;
-            for (var index = skip; index < take; index++)
+            var list = listSegment.List;
+            for (var index = 0; index < list.Count; index++)
                 total += list[index];
             return total;
         }
+
+        [Benchmark]
+        public int ListSegment_Variables()
+        {
+            var total = 0;
+            var list = listSegment.List;
+            var end = listSegment.Offset + listSegment.Count;
+            for (var index = listSegment.Offset; index < end; index++)
+                total += list[index];
+            return total;
+        }
+    }
+
+    readonly struct ReadOnlyListSegment<TList, T>
+        where TList : IReadOnlyList<T>
+    {
+        public ReadOnlyListSegment(TList list, int offset, int count)
+            => (List, Offset, Count) = (list, offset, count);
+
+        public TList List { get; }
+        public int Offset { get; }
+        public int Count { get; }
     }
 }

@@ -1,4 +1,5 @@
 using NetFabric.Assertive;
+using System.Linq;
 using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests.Partitioning.Take
@@ -12,9 +13,10 @@ namespace NetFabric.Hyperlinq.UnitTests.Partitioning.Take
         public void Take_With_ValidData_Must_Succeed(int[] source, int count)
         {
             // Arrange
-            var wrapped = Wrap.AsValueReadOnlyCollection(source);
-            var expected = 
-                System.Linq.Enumerable.Take(wrapped, count);
+            var wrapped = Wrap
+                .AsValueReadOnlyCollection(source);
+            var expected = Enumerable
+                .Take(wrapped, count);
 
             // Act
             var result = ValueReadOnlyCollectionExtensions

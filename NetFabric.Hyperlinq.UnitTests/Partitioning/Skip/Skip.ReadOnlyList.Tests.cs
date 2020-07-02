@@ -1,4 +1,5 @@
 using NetFabric.Assertive;
+using System.Linq;
 using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests.Partitioning.Skip
@@ -12,11 +13,14 @@ namespace NetFabric.Hyperlinq.UnitTests.Partitioning.Skip
         public void Skip_With_ValidData_Must_Succeed(int[] source, int count)
         {
             // Arrange
-            var wrapped = Wrap.AsValueReadOnlyList(source);
-            var expected = System.Linq.Enumerable.Skip(source, count);
+            var wrapped = Wrap
+                .AsValueReadOnlyList(source);
+            var expected = Enumerable
+                .Skip(source, count);
 
             // Act
-            var result = ReadOnlyListExtensions.Skip<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped, count);
+            var result = ReadOnlyListExtensions
+                .Skip<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped, count);
 
             // Assert
             _ = result.Must()

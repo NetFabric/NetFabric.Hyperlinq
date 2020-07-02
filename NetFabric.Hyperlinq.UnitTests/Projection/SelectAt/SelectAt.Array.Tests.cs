@@ -1,5 +1,6 @@
 using NetFabric.Assertive;
 using System;
+using System.Linq;
 using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests.Projection.SelectAt
@@ -14,7 +15,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Projection.SelectAt
             var selector = (NullableSelectorAt<int, string>)null;
 
             // Act
-            Action action = () => _ = ArrayExtensions.Select(source, selector);
+            Action action = () => _ = ArrayExtensions
+                .Select(source, selector);
 
             // Assert
             _ = action.Must()
@@ -29,11 +31,12 @@ namespace NetFabric.Hyperlinq.UnitTests.Projection.SelectAt
         public void Select_With_ValidData_Must_Succeed(int[] source, NullableSelectorAt<int, string> selector)
         {
             // Arrange
-            var expected =
-                System.Linq.Enumerable.Select(source, selector.AsFunc());
+            var expected = Enumerable
+                .Select(source, selector.AsFunc());
 
             // Act
-            var result = ArrayExtensions.Select(source, selector);
+            var result = ArrayExtensions
+                .Select(source, selector);
 
             // Assert
             _ = result.Must()

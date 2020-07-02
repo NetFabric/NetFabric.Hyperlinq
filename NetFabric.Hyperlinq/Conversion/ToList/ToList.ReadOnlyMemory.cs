@@ -7,7 +7,7 @@ namespace NetFabric.Hyperlinq
     {
         
         public static List<TSource> ToList<TSource>(this ReadOnlyMemory<TSource> source)
-            => new List<TSource>(new ToListCollection<TSource>(source));
+            => new List<TSource>(new ReadOnlyMemoryToListCollection<TSource>(source));
 
         
         static List<TSource> ToList<TSource>(this ReadOnlyMemory<TSource> source, Predicate<TSource> predicate)
@@ -39,11 +39,11 @@ namespace NetFabric.Hyperlinq
 
         
         static List<TResult> ToList<TSource, TResult>(this ReadOnlyMemory<TSource> source, NullableSelector<TSource, TResult> selector)
-            => new List<TResult>(new ToListCollection<TSource, TResult>(source, selector));
+            => new List<TResult>(new ReadOnlyMemorySelectorToListCollection<TSource, TResult>(source, selector));
 
         
         static List<TResult> ToList<TSource, TResult>(this ReadOnlyMemory<TSource> source, NullableSelectorAt<TSource, TResult> selector)
-            => new List<TResult>(new IndexedToListCollection<TSource, TResult>(source, selector));
+            => new List<TResult>(new ReadOnlyMemorySelectorAtToListCollection<TSource, TResult>(source, selector));
 
         
         static List<TResult> ToList<TSource, TResult>(this ReadOnlyMemory<TSource> source, Predicate<TSource> predicate, NullableSelector<TSource, TResult> selector)
@@ -59,13 +59,12 @@ namespace NetFabric.Hyperlinq
             return list;
         }
 
-        [GeneratorIgnore]
-        sealed class ToListCollection<TSource>
+        sealed class ReadOnlyMemoryToListCollection<TSource>
             : ToListCollectionBase<TSource>
         {
             readonly ReadOnlyMemory<TSource> source;
 
-            public ToListCollection(ReadOnlyMemory<TSource> source)
+            public ReadOnlyMemoryToListCollection(ReadOnlyMemory<TSource> source)
                 : base(source.Length)
                 => this.source = source;
 
@@ -73,14 +72,13 @@ namespace NetFabric.Hyperlinq
                 => source.Span.CopyTo(array.AsSpan());
         }
 
-        [GeneratorIgnore]
-        sealed class ToListCollection<TSource, TResult>
+        sealed class ReadOnlyMemorySelectorToListCollection<TSource, TResult>
             : ToListCollectionBase<TResult>
         {
             readonly ReadOnlyMemory<TSource> source;
             readonly NullableSelector<TSource, TResult> selector;
 
-            public ToListCollection(ReadOnlyMemory<TSource> source, NullableSelector<TSource, TResult> selector)
+            public ReadOnlyMemorySelectorToListCollection(ReadOnlyMemory<TSource> source, NullableSelector<TSource, TResult> selector)
                 : base(source.Length)
             {
                 this.source = source;
@@ -95,14 +93,13 @@ namespace NetFabric.Hyperlinq
             }
         }
 
-        [GeneratorIgnore]
-        sealed class IndexedToListCollection<TSource, TResult>
+        sealed class ReadOnlyMemorySelectorAtToListCollection<TSource, TResult>
             : ToListCollectionBase<TResult>
         {
             readonly ReadOnlyMemory<TSource> source;
             readonly NullableSelectorAt<TSource, TResult> selector;
 
-            public IndexedToListCollection(ReadOnlyMemory<TSource> source, NullableSelectorAt<TSource, TResult> selector)
+            public ReadOnlyMemorySelectorAtToListCollection(ReadOnlyMemory<TSource> source, NullableSelectorAt<TSource, TResult> selector)
                 : base(source.Length)
             {
                 this.source = source;

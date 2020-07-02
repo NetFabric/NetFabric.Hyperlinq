@@ -19,7 +19,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Contains
 
             // Act
             var result = ArrayExtensions
-                .Contains<int>(source, value);
+                .Contains(source, value);
 
             // Assert
             _ = result.Must()
@@ -38,7 +38,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Contains
 
             // Act
             var result = ArrayExtensions
-                .Contains<string>(wrapped, value);
+                .Contains(wrapped, value);
 
             // Assert
             _ = result.Must()
@@ -55,7 +55,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Contains
  
             // Act
             var result = ArrayExtensions
-                .Contains<int>(source, value);
+                .Contains(source, value);
 
             // Assert
             _ = result.Must()
@@ -73,7 +73,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Contains
 
             // Act
             var result = ArrayExtensions
-                .Contains<string>(wrapped, value);
+                .Contains(wrapped, value);
 
             // Assert
             _ = result.Must()
@@ -91,7 +91,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Contains
 
             // Act
             var result = ArrayExtensions
-                .Contains<int>(source, value, EqualityComparer<int>.Default);
+                .Contains(source, value, EqualityComparer<int>.Default);
 
             // Assert
             _ = result.Must()
@@ -108,7 +108,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Contains
 
             // Act
             var result = ArrayExtensions
-                .Contains<int>(source, value, EqualityComparer<int>.Default);
+                .Contains(source, value, EqualityComparer<int>.Default);
 
             // Assert
             _ = result.Must()
@@ -126,7 +126,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Contains
 
             // Act
             var result = ArrayExtensions
-                .Contains<int>(source, value, TestComparer<int>.Instance);
+                .Contains(source, value, TestComparer<int>.Instance);
 
             // Assert
             _ = result.Must()
@@ -143,7 +143,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Contains
 
             // Act
             var result = ArrayExtensions
-                .Contains<int>(source, value, TestComparer<int>.Instance);
+                .Contains(source, value, TestComparer<int>.Instance);
 
             // Assert
             _ = result.Must()

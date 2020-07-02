@@ -27,48 +27,18 @@ namespace NetFabric.Hyperlinq.UnitTests.Aggregation.Count
         }
 
         [Theory]
-        [MemberData(nameof(TestData.SkipTakePredicateEmpty), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.SkipTakePredicateSingle), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.SkipTakePredicateMultiple), MemberType = typeof(TestData))]
-        public void Count_Predicate_With_ValidData_Must_Succeed(int[] source, int skipCount, int takeCount, Predicate<int> predicate)
+        [MemberData(nameof(TestData.PredicateEmpty), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.PredicateSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.PredicateMultiple), MemberType = typeof(TestData))]
+        public void Count_Predicate_With_ValidData_Must_Succeed(int[] source, Predicate<int> predicate)
         {
             // Arrange
             var expected = Enumerable
-                .Skip(source, skipCount)
-                .Take(takeCount)
-                .Count(predicate.AsFunc());
+                .Count(source, predicate.AsFunc());
 
             // Act
             var result = ArrayExtensions
-                .Skip(source, skipCount)
-                .Take(takeCount)
-                .Where(predicate)
-                .Count();
-
-            // Assert
-            _ = result.Must()
-                .BeEqualTo(expected);
-        }
-
-        [Theory]
-        [MemberData(nameof(TestData.SkipTakePredicateAtEmpty), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.SkipTakePredicateAtSingle), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.SkipTakePredicateAtMultiple), MemberType = typeof(TestData))]
-        public void Count_PredicateAt_With_ValidData_Must_Succeed(int[] source, int skipCount, int takeCount, PredicateAt<int> predicate)
-        {
-            // Arrange
-            var expected = Enumerable
-                .Skip(source, skipCount)
-                .Take(takeCount)
-                .Where(predicate.AsFunc())
-                .Count();
-
-            // Act
-            var result = ArrayExtensions
-                .Skip(source, skipCount)
-                .Take(takeCount)
-                .Where(predicate)
-                .Count();
+                .Count(source, predicate);
 
             // Assert
             _ = result.Must()

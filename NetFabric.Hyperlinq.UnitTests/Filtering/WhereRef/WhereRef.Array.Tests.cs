@@ -16,7 +16,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.WhereRef
 
             // Act
             Action action = () => _ = ArrayExtensions
-                .WhereRef<int>(source, predicate);
+                .WhereRef(source, predicate);
 
             // Assert
             _ = action.Must()
@@ -25,22 +25,18 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.WhereRef
         }
 
         [Theory]
-        [MemberData(nameof(TestData.SkipTakePredicateEmpty), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.SkipTakePredicateSingle), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.SkipTakePredicateMultiple), MemberType = typeof(TestData))]
-        public void WhereRef_Predicate_With_ValidData_Must_Succeed(int[] source, int skipCount, int takeCount, Predicate<int> predicate)
+        [MemberData(nameof(TestData.PredicateEmpty), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.PredicateSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.PredicateMultiple), MemberType = typeof(TestData))]
+        public void WhereRef_Predicate_With_ValidData_Must_Succeed(int[] source, Predicate<int> predicate)
         {
             // Arrange
             var expected = Enumerable
-                .Skip(source, skipCount)
-                .Take(takeCount)
-                .Where(predicate.AsFunc());
+                .Where(source, predicate.AsFunc());
 
             // Act
             var result = ArrayExtensions
-                .Skip(source, skipCount)
-                .Take(takeCount)
-                .WhereRef(predicate);
+                .WhereRef(source, predicate);
 
             // Assert
             _ = result.Must()

@@ -1,4 +1,5 @@
 using NetFabric.Assertive;
+using System.Linq;
 using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests.Partitioning.Skip
@@ -12,8 +13,10 @@ namespace NetFabric.Hyperlinq.UnitTests.Partitioning.Skip
         public void Skip_With_ValidData_Must_Succeed(int[] source, int count)
         {
             // Arrange
-            var wrapped = Wrap.AsValueEnumerable(source);
-            var expected = System.Linq.Enumerable.Skip(source, count);
+            var wrapped = Wrap
+                .AsValueEnumerable(source);
+            var expected = Enumerable
+                .Skip(source, count);
 
             // Act
             var result = ValueEnumerableExtensions
@@ -30,10 +33,11 @@ namespace NetFabric.Hyperlinq.UnitTests.Partitioning.Skip
         public void Skip_Skip_With_ValidData_Must_Succeed(int[] source, int count0, int count1)
         {
             // Arrange
-            var wrapped = Wrap.AsValueEnumerable(source);
-            var expected = 
-                System.Linq.Enumerable.Skip(
-                    System.Linq.Enumerable.Skip(source, count0), count1);
+            var wrapped = Wrap
+                .AsValueEnumerable(source);
+            var expected = Enumerable
+                .Skip(source, count0)
+                .Skip( count1);
 
             // Act
             var result = ValueEnumerableExtensions
@@ -53,10 +57,11 @@ namespace NetFabric.Hyperlinq.UnitTests.Partitioning.Skip
         public void Skip_Take_With_ValidData_Must_Succeed(int[] source, int skipCount, int takeCount)
         {
             // Arrange
-            var wrapped = Wrap.AsValueEnumerable(source);
-            var expected = 
-                System.Linq.Enumerable.Take(
-                    System.Linq.Enumerable.Skip(source, skipCount), takeCount);
+            var wrapped = Wrap
+                .AsValueEnumerable(source);
+            var expected = Enumerable
+                .Skip(source, skipCount)
+                .Take(takeCount);
 
             // Act
             var result = ValueEnumerableExtensions
