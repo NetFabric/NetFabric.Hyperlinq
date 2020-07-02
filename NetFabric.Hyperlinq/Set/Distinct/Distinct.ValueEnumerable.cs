@@ -45,14 +45,14 @@ namespace NetFabric.Hyperlinq
                 TEnumerator enumerator; // do not make readonly
                 readonly IEqualityComparer<TSource>? comparer;
                 EnumeratorState state;
-                Set<TSource>? set;
+                Set<TSource> set;
 
                 internal Enumerator(in DistinctEnumerable<TEnumerable, TEnumerator, TSource> enumerable)
                 {
                     enumerator = enumerable.source.GetEnumerator();
                     comparer = enumerable.comparer;
                     state = EnumeratorState.Uninitialized;
-                    set = default;
+                    set = new Set<TSource>(comparer);
                 }
 
                 [MaybeNull]
@@ -65,36 +65,14 @@ namespace NetFabric.Hyperlinq
 
                 public bool MoveNext()
                 {
-                    switch (state)
+                    while (enumerator.MoveNext())
                     {
-                        case EnumeratorState.Uninitialized:
-                            if (!enumerator.MoveNext())
-                            {
-                                Dispose();
-                                state = EnumeratorState.Complete;
-                                return false;
-                            }
-
-                            set = new Set<TSource>(comparer);
-                            _ = set.Add(enumerator.Current);
-                            state = EnumeratorState.Enumerating;
+                        if (set!.Add(enumerator.Current))
                             return true;
-
-                        case EnumeratorState.Enumerating:
-                            while (enumerator.MoveNext())
-                            {
-                                if (set!.Add(enumerator.Current))
-                                    return true;
-                            }
-
-                            Dispose();
-                            state = EnumeratorState.Complete;
-                            return false;
-
-                        case EnumeratorState.Complete:
-                        default:
-                            return false;
                     }
+
+                    Dispose();
+                    return false;
                 }
 
                 [ExcludeFromCodeCoverage]
@@ -104,14 +82,14 @@ namespace NetFabric.Hyperlinq
                 public void Dispose()
                 {
                     enumerator.Dispose();
-                    set = default;
+                    set.Dispose();
                 }
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             readonly Set<TSource> GetSet()
             { 
-                var set = new Set<TSource>(comparer);
+                using var set = new Set<TSource>(comparer);
                 using var enumerator = source.GetEnumerator();
                 while (enumerator.MoveNext())
                     _ = set.Add(enumerator.Current);

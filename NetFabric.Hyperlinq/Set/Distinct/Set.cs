@@ -1,8 +1,7 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
+﻿// Based on implementation from https://github.com/dotnet/runtime/blob/master/src/libraries/System.Linq/src/System/Linq/Set.cs
 
 using System;
+using System.Buffers;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -14,8 +13,11 @@ namespace NetFabric.Hyperlinq
     /// A lightweight hash set.
     /// </summary>
     /// <typeparam name="TElement">The type of the set's items.</typeparam>
-    sealed class Set<TElement> : ICollection<TElement>
+    struct Set<TElement> : ICollection<TElement>, IDisposable
     {
+        readonly ArrayPool<int> bucketsPool;
+        readonly ArrayPool<Slot> slotsPool;
+
         /// <summary>
         /// The comparer used to hash and compare items in the set.
         /// </summary>
@@ -24,12 +26,12 @@ namespace NetFabric.Hyperlinq
         /// <summary>
         /// The hash buckets, which are used to index into the slots.
         /// </summary>
-        int[] buckets;
+        int[]? buckets;
 
         /// <summary>
         /// The slots, each of which store an item and its hash code.
         /// </summary>
-        Slot[] slots;
+        Slot[]? slots;
 
         /// <summary>
         /// Constructs a set that compares items with the specified comparer.
@@ -37,21 +39,18 @@ namespace NetFabric.Hyperlinq
         /// <param name="comparer">
         /// The comparer. If this is <c>null</c>, it defaults to <see cref="EqualityComparer{TElement}.Default"/>.
         /// </param>
-        public Set(IEqualityComparer<TElement>? comparer)
-        {
-            if (comparer is null)
-            {
-                if (!typeof(TElement).IsValueType)
-                    this.comparer = EqualityComparer<TElement>.Default;
-            }
-            else 
-            {
-                if (comparer != EqualityComparer<TElement>.Default)
-                    this.comparer = comparer;
-            }
+        public Set(IEqualityComparer<TElement>? comparer = default)
+            : this(ArrayPool<int>.Shared, ArrayPool<Slot>.Shared, comparer)
+        { }
 
-            buckets = new int[7];
-            slots = new Slot[7];
+        public Set(ArrayPool<int> bucketsPool, ArrayPool<Slot> slotsPool, IEqualityComparer<TElement>? comparer = default)
+        {
+            this.bucketsPool = bucketsPool;
+            this.slotsPool = slotsPool;
+            this.comparer = comparer ?? EqualityComparer<TElement>.Default;
+            buckets = default;
+            slots = default;
+            Count = 0;
         }
 
         /// <summary>
@@ -63,38 +62,44 @@ namespace NetFabric.Hyperlinq
         /// </returns>
         public bool Add([AllowNull] TElement value)
         {
-            int hashCode;
+            if (Count == 0)
+            {
+                buckets = bucketsPool.Rent(7);
+                Array.Clear(buckets, 0, buckets.Length);
+
+                slots = slotsPool.Rent(7);
+                Array.Clear(slots, 0, slots.Length);
+            }
+
+            var hashCode = value is null ? 0 : comparer.GetHashCode(value) & 0x7FFFFFFF;
             if (Utils.UseDefault(comparer))
             {
-                hashCode = value is null ? 0 : EqualityComparer<TElement>.Default.GetHashCode(value) & 0x7FFFFFFF;
-                for (var i = buckets[hashCode % buckets.Length] - 1; i >= 0; i = slots[i].Next)
+                for (var index = buckets[hashCode % buckets.Length] - 1; index >= 0; index = slots[index].Next)
                 {
-                    if (slots[i].HashCode == hashCode && EqualityComparer<TElement>.Default.Equals(slots[i].Value, value!))
+                    if (slots[index].HashCode == hashCode && EqualityComparer<TElement>.Default.Equals(slots[index].Value, value!))
                         return false;
                 }
             }
             else
             {
-                var comparer = this.comparer ?? EqualityComparer<TElement>.Default;
-                hashCode = value is null ? 0 : comparer.GetHashCode(value) & 0x7FFFFFFF;
-                for (var i = buckets[hashCode % buckets.Length] - 1; i >= 0; i = slots[i].Next)
+                for (var index = buckets[hashCode % buckets.Length] - 1; index >= 0; index = slots[index].Next)
                 {
-                    if (slots[i].HashCode == hashCode && comparer.Equals(slots[i].Value, value!))
+                    if (slots[index].HashCode == hashCode && comparer.Equals(slots[index].Value, value!))
                         return false;
                 }
             }
 
-            if (Count == slots.Length)
+            if (Count == slots.Length || Count == buckets.Length)
                 Resize();
 
-            var index = Count;
-            Count++;
             var bucket = hashCode % buckets.Length;
-            ref var slot = ref slots[index];
+            ref var slot = ref slots[Count];
             slot.HashCode = hashCode;
             slot.Value = value;
             slot.Next = buckets[bucket] - 1;
-            buckets[bucket] = index + 1;
+            buckets[bucket] = Count + 1;
+            Count++;
+
             return true;
         }
 
@@ -104,18 +109,29 @@ namespace NetFabric.Hyperlinq
         void Resize()
         {
             var newSize = checked((Count * 2) + 1);
-            var newBuckets = new int[newSize];
-            var newSlots = new Slot[newSize];
-            Array.Copy(slots, newSlots, Count);
-            for (var i = 0; i < Count; i++)
+            var newBuckets = bucketsPool.Rent(newSize);
+            var newSlots = slotsPool.Rent(newSize);
+            try
             {
-                var bucket = newSlots[i].HashCode % newSize;
-                newSlots[i].Next = newBuckets[bucket] - 1;
-                newBuckets[bucket] = i + 1;
-            }
+                Array.Copy(slots, newSlots, Count);
+                Array.Clear(newSlots, Count, newSlots.Length - Count);
 
-            buckets = newBuckets;
-            slots = newSlots;
+                Array.Clear(newBuckets, 0, newBuckets.Length);
+                for (var i = 0; i < Count; i++)
+                {
+                    var bucket = newSlots[i].HashCode % newSize;
+                    newSlots[i].Next = newBuckets[bucket] - 1;
+                    newBuckets[bucket] = i + 1;
+                }
+            }
+            finally
+            {
+                bucketsPool.Return(buckets);
+                slotsPool.Return(slots);
+
+                buckets = newBuckets;
+                slots = newSlots;
+            }
         }
 
         /// <summary>
@@ -174,7 +190,7 @@ namespace NetFabric.Hyperlinq
         /// <summary>
         /// An entry in the hash set.
         /// </summary>
-        struct Slot
+        public struct Slot
         {
             /// <summary>
             /// The hash code of the item.
@@ -190,6 +206,20 @@ namespace NetFabric.Hyperlinq
             /// The item held by this slot.
             /// </summary>
             [MaybeNull, AllowNull] public TElement Value;
+        }
+
+        public void Dispose()
+        {
+            if (buckets is object)
+            {
+                bucketsPool.Return(buckets);
+                buckets = default;
+            }
+            if (slots is object)
+            {
+                slotsPool.Return(slots);
+                slots = default;
+            }
         }
     }
 }

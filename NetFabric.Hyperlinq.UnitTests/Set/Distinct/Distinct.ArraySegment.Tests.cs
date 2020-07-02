@@ -30,6 +30,27 @@ namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct
         }
 
         [Theory]
+        [InlineData(100)]
+        public void Distinct_With_LargeData_Must_Succeed(int count)
+        {
+            // Arrange
+            var source = ValueEnumerable.Range(0, count).ToArray();
+            var wrapped = new ArraySegment<int>(source);
+            var expected = Enumerable
+                .Distinct(source);
+
+            // Act
+            var result = ArrayExtensions
+                .Distinct(wrapped);
+
+            // Assert
+            _ = result.Must()
+                .BeEnumerableOf<int>()
+                .BeEqualTo(expected, testRefStructs: false, testRefReturns: false);
+            _ = result.SequenceEqual(expected).Must().BeTrue();
+        }
+
+        [Theory]
         [MemberData(nameof(TestData.SkipTakeEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakeSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakeMultiple), MemberType = typeof(TestData))]
