@@ -9,7 +9,7 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class AsyncValueEnumerableExtensions
     {
-        
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static SkipTakeEnumerable<TEnumerable, TEnumerator, TSource> SkipTake<TEnumerable, TEnumerator, TSource>(this TEnumerable source, int skipCount, int takeCount)
             where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
@@ -32,26 +32,41 @@ namespace NetFabric.Hyperlinq
                 this.takeCount = takeCount;
             }
 
-            
+
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly Enumerator GetAsyncEnumerator(CancellationToken cancellationToken = default) 
+            public readonly Enumerator GetAsyncEnumerator(CancellationToken cancellationToken = default)
                 => new Enumerator(in this, cancellationToken);
-            readonly IAsyncEnumerator<TSource> IAsyncEnumerable<TSource>.GetAsyncEnumerator(CancellationToken cancellationToken) 
+            readonly IAsyncEnumerator<TSource> IAsyncEnumerable<TSource>.GetAsyncEnumerator(CancellationToken cancellationToken)
                 => new Enumerator(in this, cancellationToken);
 
             public struct Enumerator
                 : IAsyncEnumerator<TSource>
+                , IAsyncStateMachine
             {
                 [SuppressMessage("Style", "IDE0044:Add readonly modifier")]
                 TEnumerator enumerator; // do not make readonly
                 int skipCounter;
                 int takeCounter;
 
+                int state;
+                AsyncValueTaskMethodBuilder<bool> builder;
+                bool s__1;
+                bool s__2;
+                ConfiguredValueTaskAwaitable<bool>.ConfiguredValueTaskAwaiter u__1;
+                ConfiguredValueTaskAwaitable.ConfiguredValueTaskAwaiter u__2;
+
                 internal Enumerator(in SkipTakeEnumerable<TEnumerable, TEnumerator, TSource> enumerable, CancellationToken cancellationToken)
                 {
                     enumerator = enumerable.source.GetAsyncEnumerator(cancellationToken);
                     skipCounter = enumerable.skipCount;
                     takeCounter = enumerable.takeCount;
+
+                    state = default;
+                    builder = default;
+                    s__1 = default;
+                    s__2 = default;
+                    u__1 = default;
+                    u__2 = default;
                 }
 
                 [MaybeNull]
@@ -60,33 +75,143 @@ namespace NetFabric.Hyperlinq
                 readonly TSource IAsyncEnumerator<TSource>.Current
                     => enumerator.Current;
 
-                public async ValueTask<bool> MoveNextAsync()
+                //public async ValueTask<bool> MoveNextAsync()
+                //{
+                //    while (skipCounter > 0)
+                //    {
+                //        if (!await enumerator.MoveNextAsync().ConfigureAwait(false))
+                //            return false;
+
+                //        skipCounter--;
+                //    }
+
+                //    if (takeCounter > 0)
+                //    {
+                //        if (await enumerator.MoveNextAsync().ConfigureAwait(false))
+                //        {
+                //            takeCounter--;
+                //            return true;
+                //        }
+
+                //        takeCounter = 0;
+                //    }
+
+                //    await DisposeAsync().ConfigureAwait(false);
+                //    return false;
+                //}
+
+                public ValueTask<bool> MoveNextAsync()
                 {
-                    while (skipCounter > 0)
-                    {
-                        if (!await enumerator.MoveNextAsync().ConfigureAwait(false))
-                            return false;
-
-                        skipCounter--;
-                    }
-
-                    if (takeCounter > 0)
-                    {
-                        if (await enumerator.MoveNextAsync().ConfigureAwait(false))
-                        {
-                            takeCounter--;
-                            return true;
-                        }
-
-                        takeCounter = 0;
-                    }
-
-                    await DisposeAsync().ConfigureAwait(false);
-                    return false;
+                    state = -1;
+                    builder = AsyncValueTaskMethodBuilder<bool>.Create();
+                    builder.Start(ref this);
+                    return builder.Task;
                 }
 
-                public ValueTask DisposeAsync() 
+                public readonly ValueTask DisposeAsync()
                     => enumerator.DisposeAsync();
+
+                void IAsyncStateMachine.MoveNext()
+                {
+                    var num = state;
+                    bool result;
+                    try
+                    {
+                        ConfiguredValueTaskAwaitable<bool>.ConfiguredValueTaskAwaiter awaiter3;
+                        ConfiguredValueTaskAwaitable<bool>.ConfiguredValueTaskAwaiter awaiter2;
+                        ConfiguredValueTaskAwaitable.ConfiguredValueTaskAwaiter awaiter;
+                        switch (num)
+                        {
+                            case 0:
+                                awaiter3 = u__1;
+                                u__1 = default;
+                                num = state = -1;
+                                goto IL_009f;
+                            default:
+                                if (skipCounter > 0)
+                                {
+                                    awaiter3 = enumerator.MoveNextAsync().ConfigureAwait(false).GetAwaiter();
+                                    if (!awaiter3.IsCompleted)
+                                    {
+                                        num = state = 0;
+                                        u__1 = awaiter3;
+                                        builder.AwaitUnsafeOnCompleted(ref awaiter3, ref this);
+                                        return;
+                                    }
+                                    goto IL_009f;
+                                }
+                                if (takeCounter > 0)
+                                {
+                                    awaiter2 = enumerator.MoveNextAsync().ConfigureAwait(false).GetAwaiter();
+                                    if (!awaiter2.IsCompleted)
+                                    {
+                                        num = state = 1;
+                                        u__1 = awaiter2;
+                                        builder.AwaitUnsafeOnCompleted(ref awaiter2, ref this);
+                                        return;
+                                    }
+                                    goto IL_017c;
+                                }
+                                goto IL_01c2;
+                            case 1:
+                                awaiter2 = u__1;
+                                u__1 = default;
+                                num = state = -1;
+                                goto IL_017c;
+                            case 2:
+                                {
+                                    awaiter = u__2;
+                                    u__2 = default;
+                                    num = state = -1;
+                                    break;
+                                }
+                            IL_009f:
+                                s__1 = awaiter3.GetResult();
+                                if (s__1)
+                                {
+                                    skipCounter--;
+                                    goto default;
+                                }
+                                result = false;
+                                goto end_IL_0007;
+                            IL_017c:
+                                s__2 = awaiter2.GetResult();
+                                if (!s__2)
+                                {
+                                    takeCounter = 0;
+                                    goto IL_01c2;
+                                }
+                                takeCounter--;
+                                result = true;
+                                goto end_IL_0007;
+                            IL_01c2:
+                                awaiter = DisposeAsync().ConfigureAwait(false).GetAwaiter();
+                                if (!awaiter.IsCompleted)
+                                {
+                                    num = state = 2;
+                                    u__2 = awaiter;
+                                    builder.AwaitUnsafeOnCompleted(ref awaiter, ref this);
+                                    return;
+                                }
+                                break;
+                        }
+                        awaiter.GetResult();
+                        result = false;
+                    end_IL_0007:
+                        ;
+                    }
+                    catch (Exception exception)
+                    {
+                        state = -2;
+                        builder.SetException(exception);
+                        return;
+                    }
+                    state = -2;
+                    builder.SetResult(result);
+                }
+
+                void IAsyncStateMachine.SetStateMachine(IAsyncStateMachine stateMachine)
+                { }
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
