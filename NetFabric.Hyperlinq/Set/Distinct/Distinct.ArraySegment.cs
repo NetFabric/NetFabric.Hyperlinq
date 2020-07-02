@@ -33,7 +33,7 @@ namespace NetFabric.Hyperlinq
                 : IEnumerator<TSource>
             {
                 readonly TSource[] source;
-                Set<TSource> set;
+                readonly Set<TSource> set;
                 readonly int end;
                 int index;
 
@@ -57,7 +57,7 @@ namespace NetFabric.Hyperlinq
                 {
                     while (++index < end)
                     {
-                        if (set!.Add(source[index]))
+                        if (set.Add(source[index]))
                         {
                             Current = source[index];
                             return true;

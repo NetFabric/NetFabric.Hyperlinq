@@ -44,14 +44,12 @@ namespace NetFabric.Hyperlinq
                 [SuppressMessage("Style", "IDE0044:Add readonly modifier")]
                 TEnumerator enumerator; // do not make readonly
                 readonly IEqualityComparer<TSource>? comparer;
-                EnumeratorState state;
-                Set<TSource> set;
+                readonly Set<TSource> set;
 
                 internal Enumerator(in DistinctEnumerable<TEnumerable, TEnumerator, TSource> enumerable)
                 {
                     enumerator = enumerable.source.GetEnumerator();
                     comparer = enumerable.comparer;
-                    state = EnumeratorState.Uninitialized;
                     set = new Set<TSource>(comparer);
                 }
 
@@ -67,7 +65,7 @@ namespace NetFabric.Hyperlinq
                 {
                     while (enumerator.MoveNext())
                     {
-                        if (set!.Add(enumerator.Current))
+                        if (set.Add(enumerator.Current))
                             return true;
                     }
 

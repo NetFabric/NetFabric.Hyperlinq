@@ -31,7 +31,7 @@ namespace NetFabric.Hyperlinq
             public ref struct Enumerator
             {
                 readonly ReadOnlySpan<TSource> source;
-                Set<TSource> set;
+                readonly Set<TSource> set;
                 int index;
 
                 internal Enumerator(in SpanDistinctEnumerable<TSource> enumerable)
