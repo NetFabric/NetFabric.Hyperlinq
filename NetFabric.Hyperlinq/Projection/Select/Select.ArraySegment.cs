@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Buffers;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -63,36 +64,7 @@ namespace NetFabric.Hyperlinq
                 => true;
 
             public void CopyTo(TResult[] array, int arrayIndex)
-            {
-                var sourceArray = source.Array;
-                var offset = source.Offset;
-                if (offset == 0)
-                {
-                    if (arrayIndex == 0)
-                    {
-                        for (var index = 0; index < Count; index++)
-                            array[index] = selector(sourceArray[index]);
-                    }
-                    else
-                    {
-                        for (var index = 0; index < Count; index++)
-                            array[index + arrayIndex] = selector(sourceArray[index]);
-                    }
-                }
-                else
-                {
-                    if (arrayIndex == 0)
-                    {
-                        for (var index = 0; index < Count; index++)
-                            array[index] = selector(sourceArray[index + offset]);
-                    }
-                    else
-                    {
-                        for (var index = 0; index < Count; index++)
-                            array[index + arrayIndex] = selector(sourceArray[index + offset]);
-                    }
-                }
-            }
+                => ArrayExtensions.Copy(source, new ArraySegment<TResult>(array, arrayIndex, source.Count), selector);
 
             bool ICollection<TResult>.Contains(TResult item)
                 => ArrayExtensions.Contains<TSource, TResult>(source, item, selector);
@@ -105,7 +77,7 @@ namespace NetFabric.Hyperlinq
                 {
                     for (var index = source.Offset; index < end; index++)
                     {
-                        if (EqualityComparer<TResult>.Default.Equals(selector(array[index]), item))
+                        if (EqualityComparer<TResult>.Default.Equals(selector(array[index])!, item))
                             return index - source.Offset;
                     }
                 }
@@ -114,7 +86,7 @@ namespace NetFabric.Hyperlinq
                     var defaultComparer = EqualityComparer<TResult>.Default;
                     for (var index = source.Offset; index < end; index++)
                     {
-                        if (defaultComparer.Equals(selector(array[index]), item))
+                        if (defaultComparer.Equals(selector(array[index])!, item))
                             return index - source.Offset;
                     }
                 }
@@ -243,6 +215,9 @@ namespace NetFabric.Hyperlinq
             public TResult[] ToArray()
                 => ArrayExtensions.ToArray<TSource, TResult>(source, selector);
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public IMemoryOwner<TResult> ToArray(MemoryPool<TResult> pool)
+                => ArrayExtensions.ToArray<TSource, TResult>(source, selector, pool);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public List<TResult> ToList()

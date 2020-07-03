@@ -1,4 +1,7 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System;
+using System.Buffers;
+using System.Diagnostics;
+using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
@@ -7,8 +10,25 @@ namespace NetFabric.Hyperlinq
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static TSource[] ToArray<TSource>(this TSource[] source)
-            => (TSource[])source.Clone();
+        {
+#if NET5_0
+            var result = GC.AllocateUninitializedArray<TSource>(source.Length);
+#else
+            var result = new TSource[source.Length];
+#endif
+            Array.Copy(source, result, source.Length);
+            return result;
+        }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static IMemoryOwner<TSource> ToArray<TSource>(this TSource[] source, MemoryPool<TSource> pool)
+        {
+            if (pool is null) Throw.ArgumentNullException(nameof(pool));
+
+            var result = pool.RentSliced(source.Length);
+            ArrayExtensions.Copy(source.AsSpan(), result.Memory.Span);
+            return result;
+        }
     }
 }
 

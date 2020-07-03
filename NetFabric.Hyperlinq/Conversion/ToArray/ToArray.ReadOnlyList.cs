@@ -1,5 +1,5 @@
-using NetFabric.Hyperlinq;
 using System;
+using System.Buffers;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
@@ -14,193 +14,195 @@ namespace NetFabric.Hyperlinq
             where TList : IReadOnlyList<TSource>
             => ToArray<TList, TSource>(source, 0, source.Count);
 
-        
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static IMemoryOwner<TSource> ToArray<TList, TSource>(this TList source, MemoryPool<TSource> pool)
+            where TList : IReadOnlyList<TSource>
+        {
+            if (pool is null) Throw.ArgumentNullException(nameof(pool));
+
+            return ToArray(source, 0, source.Count, pool);
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static TSource[] ToArray<TList, TSource>(this TList source, int skipCount, int takeCount)
             where TList : IReadOnlyList<TSource>
         {
-            var array = new TSource[takeCount];
-            if (takeCount != 0)
-            {
-                if (takeCount == source.Count && source is ICollection<TSource> collection)
-                {
-                    collection.CopyTo(array, skipCount);
-                }
-                else
-                {
-                    if (skipCount == 0)
-                    {
-                        for (var index = 0; index < takeCount; index++)
-                            array[index] = source[index];
-                    }
-                    else
-                    {
-                        for (var index = 0; index < takeCount; index++)
-                            array[index] = source[index + skipCount];
-                    }
-                }
-            }
-            return array;
+#if NET5_0
+            var result = GC.AllocateUninitializedArray<TSource>(takeCount);
+#else
+            var result = new TSource[takeCount];
+#endif
+            ReadOnlyListExtensions.Copy(source, skipCount, result, 0, takeCount);
+            return result;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        static IMemoryOwner<TSource> ToArray<TList, TSource>(this TList source, int skipCount, int takeCount, MemoryPool<TSource> pool)
+            where TList : IReadOnlyList<TSource>
+        {
+            Debug.Assert(pool is object);
 
+            var result = pool.RentSliced(takeCount);
+            ReadOnlyListExtensions.Copy<TList, TSource>(source, skipCount, result.Memory.Span, takeCount);
+            return result;
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static TSource[] ToArray<TList, TSource>(this TList source, Predicate<TSource> predicate, int skipCount, int takeCount)
             where TList : IReadOnlyList<TSource>
-        {
-            var builder = new LargeArrayBuilder<TSource>(initialize: true);
-            builder.AddRange<TList>(source, predicate, skipCount, takeCount);
-            return builder.ToArray();
-        }
+            => ToArrayBuilder(source, predicate, skipCount, takeCount, ArrayPool<TSource>.Shared).ToArray();
 
-
-        static TSource[] ToArray<TList, TSource>(this TList source, PredicateAt<TSource> predicate, int skipCount, int takeCount)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        static IMemoryOwner<TSource> ToArray<TList, TSource>(this TList source, Predicate<TSource> predicate, int skipCount, int takeCount, MemoryPool<TSource> pool)
             where TList : IReadOnlyList<TSource>
         {
-            var builder = new LargeArrayBuilder<TSource>(initialize: true);
-            builder.AddRange<TList>(source, predicate, skipCount, takeCount);
-            return builder.ToArray();
+            Debug.Assert(pool is object);
+            return ToArrayBuilder(source, predicate, skipCount, takeCount, ArrayPool<TSource>.Shared).ToArray(pool);
         }
 
+        static LargeArrayBuilder<TSource> ToArrayBuilder<TList, TSource>(in TList source, Predicate<TSource> predicate, int skipCount, int takeCount, ArrayPool<TSource> pool)
+            where TList : IReadOnlyList<TSource>
+        {
+            Debug.Assert(pool is object);
 
+            using var builder = new LargeArrayBuilder<TSource>(pool);
+            var end = skipCount + takeCount;
+            for (var index = skipCount; index < end; index++)
+            {
+                if (predicate(source[index]))
+                    builder.Add(source[index]);
+            }
+            return builder;
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        static TSource[] ToArray<TList, TSource>(this TList source, PredicateAt<TSource> predicate, int skipCount, int takeCount)
+            where TList : IReadOnlyList<TSource>
+            => ToArrayBuilder(source, predicate, skipCount, takeCount, ArrayPool<TSource>.Shared).ToArray();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        static IMemoryOwner<TSource> ToArray<TList, TSource>(this TList source, PredicateAt<TSource> predicate, int skipCount, int takeCount, MemoryPool<TSource> pool)
+            where TList : IReadOnlyList<TSource>
+        {
+            Debug.Assert(pool is object);
+            return ToArrayBuilder(source, predicate, skipCount, takeCount, ArrayPool<TSource>.Shared).ToArray(pool);
+        }
+
+        static LargeArrayBuilder<TSource> ToArrayBuilder<TList, TSource>(in TList source, PredicateAt<TSource> predicate, int skipCount, int takeCount, ArrayPool<TSource> pool)
+            where TList : IReadOnlyList<TSource>
+        {
+            Debug.Assert(pool is object);
+
+            using var builder = new LargeArrayBuilder<TSource>(pool);
+            if (skipCount == 0)
+            {
+                for (var index = 0; index < takeCount; index++)
+                {
+                    if (predicate(source[index], index))
+                        builder.Add(source[index]);
+                }
+            }
+            else
+            {
+                for (var index = 0; index < takeCount; index++)
+                {
+                    if (predicate(source[index + skipCount], index))
+                        builder.Add(source[index + skipCount]);
+                }
+            }
+            return builder;
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static TResult[] ToArray<TList, TSource, TResult>(this TList source, NullableSelector<TSource, TResult> selector, int skipCount, int takeCount)
             where TList : IReadOnlyList<TSource>
         {
-            var array = new TResult[takeCount];
-            if (skipCount == 0)
-            {
-                for (var index = 0; index < takeCount; index++)
-                    array[index] = selector(source[index])!;
-            } 
-            else
-            {
-                for (var index = 0; index < takeCount; index++)
-                    array[index] = selector(source[index + skipCount])!;
-            }
-            return array;
+#if NET5_0
+            var result = GC.AllocateUninitializedArray<TResult>(takeCount);
+#else
+            var result = new TResult[takeCount];
+#endif
+            ReadOnlyListExtensions.Copy(source, skipCount, result, 0, takeCount, selector);
+            return result;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static IMemoryOwner<TResult> ToArray<TList, TSource, TResult>(this TList source, NullableSelector<TSource, TResult> selector, int skipCount, int takeCount, MemoryPool<TResult> pool)
+            where TList : IReadOnlyList<TSource>
+        {
+            Debug.Assert(pool is object);
 
+            var result = pool.RentSliced(takeCount);
+            ReadOnlyListExtensions.Copy(source, skipCount, result.Memory.Span, takeCount, selector);
+            return result;
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static TResult[] ToArray<TList, TSource, TResult>(this TList source, NullableSelectorAt<TSource, TResult> selector, int skipCount, int takeCount)
             where TList : IReadOnlyList<TSource>
         {
-            var array = new TResult[takeCount];
-            if (skipCount == 0)
-            {
-                for (var index = 0; index < takeCount; index++)
-                    array[index] = selector(source[index], index)!;
-            } 
-            else
-            {
-                for (var index = 0; index < takeCount; index++)
-                    array[index] = selector(source[index + skipCount], index)!;
-            }
-            return array;
+#if NET5_0
+            var result = GC.AllocateUninitializedArray<TResult>(takeCount);
+#else
+            var result = new TResult[takeCount];
+#endif
+            ReadOnlyListExtensions.Copy(source, skipCount, result, 0, takeCount, selector);
+            return result;
         }
 
-
-        static TResult[] ToArray<TList, TSource, TResult>(this TList source, Predicate<TSource> predicate, NullableSelector<TSource, TResult> selector, int skipCount, int takeCount)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static IMemoryOwner<TResult> ToArray<TList, TSource, TResult>(this TList source, NullableSelectorAt<TSource, TResult> selector, int skipCount, int takeCount, MemoryPool<TResult> pool)
             where TList : IReadOnlyList<TSource>
         {
-            var builder = new LargeArrayBuilder<TResult>(initialize: true);
-            builder.AddRange<TList, TSource>(source, predicate, selector, skipCount, takeCount);
-            return builder.ToArray();
+            Debug.Assert(pool is object);
+
+            var result = pool.RentSliced(takeCount);
+            ReadOnlyListExtensions.Copy(source, skipCount, result.Memory.Span, takeCount, selector);
+            return result;
         }
-    }
-}
 
-namespace System.Collections.Generic
-{
-    partial struct LargeArrayBuilder<T>
-    {
-        public void AddRange<TList>(TList items, Predicate<T> predicate, int skipCount, int takeCount)
-            where TList : IReadOnlyList<T>
+        //////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        static TResult[] ToArray<TList, TSource, TResult>(this TList source, Predicate<TSource> predicate, NullableSelector<TSource, TResult> selector, int skipCount, int takeCount)
+            where TList : IReadOnlyList<TSource>
+            => ToArrayBuilder(source, predicate, selector, skipCount, takeCount, ArrayPool<TResult>.Shared).ToArray();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        static IMemoryOwner<TResult> ToArray<TList, TSource, TResult>(this TList source, Predicate<TSource> predicate, NullableSelector<TSource, TResult> selector, int skipCount, int takeCount, MemoryPool<TResult> pool)
+            where TList : IReadOnlyList<TSource>
         {
-            Debug.Assert(items is object);
+            Debug.Assert(pool is object);
+            return ToArrayBuilder(source, predicate, selector, skipCount, takeCount, ArrayPool<TResult>.Shared).ToArray(pool);
+        }
 
-            var destination = _current;
-            var index = _index;
+        static LargeArrayBuilder<TResult> ToArrayBuilder<TList, TSource, TResult>(in TList source, Predicate<TSource> predicate, NullableSelector<TSource, TResult> selector, int skipCount, int takeCount, ArrayPool<TResult> pool)
+            where TList : IReadOnlyList<TSource>
+        {
+            Debug.Assert(pool is object);
 
-            // Continuously read in items from the enumerator, updating _count
-            // and _index when we run out of space.
-
+            using var builder = new LargeArrayBuilder<TResult>(pool);
             var end = skipCount + takeCount;
-            for (var itemIndex = skipCount; itemIndex < end; itemIndex++)
+            for (var index = skipCount; index < end; index++)
             {
-                var item = items[itemIndex];
-                if (predicate(item))
-                {
-                    if ((uint)index >= (uint)destination.Length)
-                        AddWithBufferAllocation(item, ref destination, ref index);
-                    else
-                        destination[index] = item;
-
-                    index++;
-                }
+                if (predicate(source[index]))
+                    builder.Add(selector(source[index]));
             }
-            
-            // Final update to _count and _index.
-            _count += index - _index;
-            _index = index;
-        }
-
-        public void AddRange<TList>(TList items, PredicateAt<T> predicate, int skipCount, int takeCount)
-            where TList : IReadOnlyList<T>
-        {
-            Debug.Assert(items is object);
-
-            var destination = _current;
-            var index = _index;
-
-            // Continuously read in items from the enumerator, updating _count
-            // and _index when we run out of space.
-
-            for (var itemIndex = 0; itemIndex < takeCount; itemIndex++)
-            {
-                var item = items[itemIndex + skipCount];
-                if (predicate(item, itemIndex))
-                {
-                    if ((uint)index >= (uint)destination.Length)
-                        AddWithBufferAllocation(item, ref destination, ref index);
-                    else
-                        destination[index] = item;
-
-                    index++;
-                }
-            }
-            
-            // Final update to _count and _index.
-            _count += index - _index;
-            _index = index;
-        }
-
-        public void AddRange<TList, U>(TList items, Predicate<U> predicate, NullableSelector<U, T> selector, int skipCount, int takeCount)
-            where TList : IReadOnlyList<U>
-        {
-            Debug.Assert(items is object);
-
-            var destination = _current;
-            var index = _index;
-
-            // Continuously read in items from the enumerator, updating _count
-            // and _index when we run out of space.
-
-            var end = skipCount + takeCount;
-            for (var itemIndex = skipCount; itemIndex < end; itemIndex++)
-            {
-                var item = items[itemIndex];
-                if (predicate(item))
-                {
-                    if ((uint)index >= (uint)destination.Length)
-                        AddWithBufferAllocation(selector(item), ref destination, ref index);
-                    else
-                        destination[index] = selector(item)!;
-
-                    index++;
-                }
-            }
-            
-            // Final update to _count and _index.
-            _count += index - _index;
-            _index = index;
+            return builder;
         }
     }
 }

@@ -1,9 +1,14 @@
-﻿// Based on implementation from https://github.com/dotnet/runtime/blob/master/src/libraries/System.Linq/src/System/Linq/Set.cs
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
+
+// based on https://github.com/dotnet/runtime/blob/master/src/libraries/System.Linq/src/System/Linq/Set.cs
 
 using System;
 using System.Buffers;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 
@@ -21,7 +26,7 @@ namespace NetFabric.Hyperlinq
         /// <summary>
         /// The comparer used to hash and compare items in the set.
         /// </summary>
-        readonly IEqualityComparer<TElement>? comparer;
+        readonly IEqualityComparer<TElement> comparer;
 
         /// <summary>
         /// The hash buckets, which are used to index into the slots.
@@ -40,13 +45,9 @@ namespace NetFabric.Hyperlinq
         /// The comparer. If this is <c>null</c>, it defaults to <see cref="EqualityComparer{TElement}.Default"/>.
         /// </param>
         public Set(IEqualityComparer<TElement>? comparer = default)
-            : this(ArrayPool<int>.Shared, ArrayPool<Slot>.Shared, comparer)
-        { }
-
-        public Set(ArrayPool<int> bucketsPool, ArrayPool<Slot> slotsPool, IEqualityComparer<TElement>? comparer = default)
         {
-            this.bucketsPool = bucketsPool;
-            this.slotsPool = slotsPool;
+            bucketsPool = ArrayPool<int>.Shared;
+            slotsPool = ArrayPool<Slot>.Shared;
             this.comparer = comparer ?? EqualityComparer<TElement>.Default;
             buckets = default;
             slots = default;
@@ -71,12 +72,15 @@ namespace NetFabric.Hyperlinq
                 Array.Clear(slots, 0, slots.Length);
             }
 
+            Debug.Assert(buckets is object);
+            Debug.Assert(slots is object);
+
             var hashCode = value is null ? 0 : comparer.GetHashCode(value) & 0x7FFFFFFF;
-            if (Utils.UseDefault(comparer))
+            if (Utils.IsValueType<TElement>() && ReferenceEquals(comparer, EqualityComparer<TElement>.Default))
             {
                 for (var index = buckets[hashCode % buckets.Length] - 1; index >= 0; index = slots[index].Next)
                 {
-                    if (slots[index].HashCode == hashCode && EqualityComparer<TElement>.Default.Equals(slots[index].Value, value!))
+                    if (slots[index].HashCode == hashCode && EqualityComparer<TElement>.Default.Equals(slots[index].Value!, value!))
                         return false;
                 }
             }
@@ -84,7 +88,7 @@ namespace NetFabric.Hyperlinq
             {
                 for (var index = buckets[hashCode % buckets.Length] - 1; index >= 0; index = slots[index].Next)
                 {
-                    if (slots[index].HashCode == hashCode && comparer.Equals(slots[index].Value, value!))
+                    if (slots[index].HashCode == hashCode && comparer.Equals(slots[index].Value!, value!))
                         return false;
                 }
             }
@@ -139,11 +143,31 @@ namespace NetFabric.Hyperlinq
         /// </summary>
         /// <returns>An array of the items in this set.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public TElement[] ToArray()
+        public readonly TElement[] ToArray()
         {
+#if NET5_0
+            var array = GC.AllocateUninitializedArray<TElement>(Count);
+#else
             var array = new TElement[Count];
-            CopyTo(array, 0);
+#endif
+            CopyTo(array);
             return array;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public readonly ArraySegment<TElement> ToArray(ArrayPool<TElement> pool)
+        {
+            var result = pool.RentSliced(Count);
+            CopyTo(result.Array);
+            return result;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public readonly IMemoryOwner<TElement> ToArray(MemoryPool<TElement> pool)
+        {
+            var result = pool.RentSliced(Count);
+            CopyTo(result.Memory.Span);
+            return result;
         }
 
         /// <summary>
@@ -151,7 +175,7 @@ namespace NetFabric.Hyperlinq
         /// </summary>
         /// <returns>A list of the items in this set.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public List<TElement> ToList()
+        public readonly List<TElement> ToList()
             => new List<TElement>(this);
 
         /// <summary>
@@ -162,10 +186,39 @@ namespace NetFabric.Hyperlinq
         bool ICollection<TElement>.IsReadOnly 
             => true;
 
-        public void CopyTo(TElement[] array, int _)
+        public readonly void CopyTo(Span<TElement> span)
         {
-            for (var index = 0; index < Count; index++)
-                array[index] = slots[index].Value;
+            if (slots is object)
+            {
+                for (var index = 0; index < Count; index++)
+                    span[index] = slots[index].Value!;
+            }
+        }
+
+        public readonly void CopyTo(TElement[] array)
+        {
+            if (slots is object)
+            {
+                for (var index = 0; index < Count; index++)
+                    array[index] = slots[index].Value!;
+            }
+        }
+
+        public readonly void CopyTo(TElement[] array, int arrayIndex)
+        {
+            if (slots is object)
+            {
+                if (arrayIndex == 0)
+                {
+                    for (var index = 0; index < Count; index++)
+                        array[index] = slots[index].Value!;
+                }
+                else
+                {
+                    for (var index = 0; index < Count; index++)
+                        array[index + arrayIndex] = slots[index].Value!;
+                }
+            }
         }
 
         [ExcludeFromCodeCoverage]
@@ -190,7 +243,7 @@ namespace NetFabric.Hyperlinq
         /// <summary>
         /// An entry in the hash set.
         /// </summary>
-        public struct Slot
+        struct Slot
         {
             /// <summary>
             /// The hash code of the item.

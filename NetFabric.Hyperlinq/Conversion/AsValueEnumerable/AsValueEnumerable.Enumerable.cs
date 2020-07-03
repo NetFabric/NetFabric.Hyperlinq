@@ -40,19 +40,6 @@ namespace NetFabric.Hyperlinq
             public readonly TEnumerator GetEnumerator() => getEnumerator(source);
             readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => getEnumerator(source);
             readonly IEnumerator IEnumerable.GetEnumerator() => getEnumerator(source);
-
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public bool Contains([MaybeNull] TSource item, IEqualityComparer<TSource>? comparer = default)
-                => EnumerableExtensions.Contains(source, getEnumerator, item, comparer);
-
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public TSource[] ToArray()
-                => EnumerableExtensions.ToArray(source);
-
-            
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public List<TSource> ToList()
-                => EnumerableExtensions.ToList(source);
         }
 
         public partial struct ValueEnumerableWrapper<TSource>
@@ -95,19 +82,6 @@ namespace NetFabric.Hyperlinq
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public readonly void Dispose() => enumerator.Dispose();
             }
-
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public bool Contains([MaybeNull] TSource item, IEqualityComparer<TSource>? comparer = default)
-                => EnumerableExtensions.Contains(source, item, comparer);
-
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public TSource[] ToArray()
-                => EnumerableExtensions.ToArray(source);
-
-            
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public List<TSource> ToList()
-                => EnumerableExtensions.ToList(source);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Buffers;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -110,25 +111,28 @@ namespace NetFabric.Hyperlinq
             }
 
             public int Count()
-                => ArrayExtensions.Count<TSource>(source, predicate);
+                => ArrayExtensions.Count(source, predicate);
 
             public bool Any()
-                => ArrayExtensions.Any<TSource>(source, predicate);
+                => ArrayExtensions.Any(source, predicate);
 
             public Option<TResult> ElementAt(int index)
-                => ArrayExtensions.ElementAt<TSource, TResult>(source, index, predicate, selector);
+                => ArrayExtensions.ElementAt(source, index, predicate, selector);
 
             public Option<TResult> First()
-                => ArrayExtensions.First<TSource, TResult>(source, predicate, selector);
+                => ArrayExtensions.First(source, predicate, selector);
 
             public Option<TResult> Single()
-                => ArrayExtensions.Single<TSource, TResult>(source, predicate, selector);
+                => ArrayExtensions.Single(source, predicate, selector);
 
             public TResult[] ToArray()
-                => ArrayExtensions.ToArray<TSource, TResult>(source, predicate, selector);
+                => ArrayExtensions.ToArray(source, predicate, selector);
+
+            public IMemoryOwner<TResult> ToArray(MemoryPool<TResult> pool)
+                => ArrayExtensions.ToArray<TSource, TResult>(source, predicate, selector, pool);
 
             public List<TResult> ToList()
-                => ArrayExtensions.ToList<TSource, TResult>(source, predicate, selector);
+                => ArrayExtensions.ToList(source, predicate, selector);
 
             public readonly bool SequenceEqual(IEnumerable<TResult> other, IEqualityComparer<TResult>? comparer = default)
             {

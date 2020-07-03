@@ -1,4 +1,5 @@
 using System;
+using System.Buffers;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -15,7 +16,7 @@ namespace NetFabric.Hyperlinq
             NullableSelectorAt<TSource, TResult> selector)
             where TList : IReadOnlyList<TSource>
         {
-            if(selector is null) Throw.ArgumentNullException(nameof(selector));
+            if (selector is null) Throw.ArgumentNullException(nameof(selector));
 
             return new SelectAtEnumerable<TList, TSource, TResult>(in source, selector, 0, source.Count);
         }
@@ -76,27 +77,32 @@ namespace NetFabric.Hyperlinq
             bool ICollection<TResult>.IsReadOnly  
                 => true;
 
-            public void CopyTo(TResult[] array, int arrayIndex) 
+            public void CopyTo(TResult[] array) 
             {
                 if (skipCount == 0)
                 {
-                    if (arrayIndex == 0)
-                    {
-                        for (var index = 0; index < Count; index++)
-                            array[index] = selector(source[index], index)!;
-                    }
-                    else
-                    {
-                        for (var index = 0; index < Count; index++)
-                            array[index + arrayIndex] = selector(source[index], index)!;
-                    }
+                    for (var index = 0; index < Count; index++)
+                        array[index] = selector(source[index], index)!;
                 }
                 else
                 {
-                    if (arrayIndex == 0)
+                    for (var index = 0; index < Count; index++)
+                        array[index] = selector(source[index + skipCount], index)!;
+                }
+            }
+
+            public void CopyTo(TResult[] array, int arrayIndex)
+            {
+                if (arrayIndex == 0)
+                {
+                    CopyTo(array);
+                }
+                else
+                {
+                    if (skipCount == 0)
                     {
                         for (var index = 0; index < Count; index++)
-                            array[index] = selector(source[index + skipCount], index)!;
+                            array[index + arrayIndex] = selector(source[index], index)!;
                     }
                     else
                     {
@@ -265,6 +271,10 @@ namespace NetFabric.Hyperlinq
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TResult[] ToArray()
                 => ReadOnlyListExtensions.ToArray<TList, TSource, TResult>(source, selector, skipCount, Count);
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public IMemoryOwner<TResult> ToArray(MemoryPool<TResult> pool)
+                => ReadOnlyListExtensions.ToArray<TList, TSource, TResult>(source, selector, skipCount, Count, pool);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public List<TResult> ToList()

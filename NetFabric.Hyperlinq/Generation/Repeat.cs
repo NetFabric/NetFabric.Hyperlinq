@@ -1,4 +1,5 @@
 using System;
+using System.Buffers;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -64,7 +65,19 @@ namespace NetFabric.Hyperlinq
             bool ICollection<TSource>.IsReadOnly  
                 => true;
 
-            public void CopyTo(TSource[] array, int arrayIndex) 
+            public void CopyTo(Span<TSource> span) 
+            {
+                for (var index = 0; index < count; index++)
+                    span[index] = value;
+            }
+
+            public void CopyTo(TSource[] array)
+            {
+                for (var index = 0; index < count; index++)
+                    array[index] = value;
+            }
+
+            public void CopyTo(TSource[] array, int arrayIndex)
             {
                 var end = arrayIndex + count;
                 for (var index = arrayIndex; index < end; index++)
@@ -181,13 +194,30 @@ namespace NetFabric.Hyperlinq
                 if (value is object)
                 {
 #if NETSTANDARD2_1
-                    Array.Fill<TSource>(array, value);
+                    Array.Fill(array, value);
 #else
-                    for (var index = 0; index < array.Length; index++)
-                        array[index] = value;
+                    CopyTo(array);
 #endif
                 }
                 return array;
+            }
+
+            public ArraySegment<TSource> ToArray(ArrayPool<TSource> pool)
+            {
+                var result = pool.RentSliced(Count);
+#if NETSTANDARD2_1
+                Array.Fill(result.Array, value);
+#else
+                CopyTo(result.Array);
+#endif
+                return result;
+            }
+
+            public IMemoryOwner<TSource> ToArray(MemoryPool<TSource> pool)
+            {
+                var result = pool.RentSliced(Count);
+                CopyTo(result.Memory.Span);
+                return result;
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]

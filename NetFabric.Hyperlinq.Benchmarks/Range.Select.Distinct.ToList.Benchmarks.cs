@@ -15,7 +15,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
 
         [Benchmark(Baseline = true)]
         public List<int> Linq()
-            => System.Linq.Enumerable.Range(0, Count).Select(item => item % 10).Distinct().ToList();
+            => Enumerable.Range(0, Count).Select(item => item % 10).Distinct().ToList();
 
         [Benchmark]
         public List<int> Hyperlinq()

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Buffers;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -135,7 +136,10 @@ namespace NetFabric.Hyperlinq
                 => ReadOnlyListExtensions.Single<TList, TSource, TResult>(source, predicate, selector, skipCount, takeCount);
 
             public TResult[] ToArray()
-                => ReadOnlyListExtensions.ToArray<TList, TSource, TResult>(source, predicate, selector, skipCount, takeCount); 
+                => ReadOnlyListExtensions.ToArray<TList, TSource, TResult>(source, predicate, selector, skipCount, takeCount);
+
+            public IMemoryOwner<TResult> ToArray(MemoryPool<TResult> pool)
+                => ReadOnlyListExtensions.ToArray<TList, TSource, TResult>(source, predicate, selector, skipCount, takeCount, pool);
 
             public List<TResult> ToList()
                 => ReadOnlyListExtensions.ToList<TList, TSource, TResult>(source, predicate, selector, skipCount, takeCount); 

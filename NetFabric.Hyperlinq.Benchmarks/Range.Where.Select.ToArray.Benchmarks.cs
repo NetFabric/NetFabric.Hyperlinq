@@ -14,7 +14,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
 
         [Benchmark(Baseline = true)]
         public int[] Linq()
-            => System.Linq.Enumerable.Range(0, Count).Where(item => (item & 0x01) == 0).Select(item => item * 2).ToArray();
+            => Enumerable.Range(0, Count).Where(item => (item & 0x01) == 0).Select(item => item * 2).ToArray();
 
         [Benchmark]
         public int[] Hyperlinq()

@@ -44,14 +44,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Bindings.System.Collections.Generic
                 .Skip(list, count);
 
             // Assert
-#if SPAN_SUPPORTED
-            _ = result.Must()
-                .BeEqualTo(expected);
-#else
-            _ = result.Must()
-                .BeEnumerableOf<int>()
-                .BeEqualTo(expected);
-#endif
+            _ = result.SequenceEqual(expected).Must().BeTrue();
         }
 
 
@@ -71,14 +64,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Bindings.System.Collections.Generic
                 .Take(list, count);
 
             // Assert
-#if SPAN_SUPPORTED
-            _ = result.Must()
-                .BeEqualTo(expected);
-#else
-            _ = result.Must()
-                .BeEnumerableOf<int>()
-                .BeEqualTo(expected);
-#endif
+            _ = result.SequenceEqual(expected).Must().BeTrue();
         }
 
         [Theory]

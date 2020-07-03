@@ -22,14 +22,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Partitioning.Skip
                 .Skip(source, count);
 
             // Assert
-#if SPAN_SUPPORTED
-            _ = result.Must()
-                .BeEqualTo(expected);
-#else
-            _ = result.Must()
-                .BeEnumerableOf<int>()
-                .BeEqualTo(expected);
-#endif
+            _ = result.SequenceEqual(expected).Must().BeTrue();
         }
     }
 }

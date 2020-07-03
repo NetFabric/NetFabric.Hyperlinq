@@ -1,11 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
     public static partial class ArrayExtensions
     {
-        
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static List<TSource> ToList<TSource>(this ReadOnlyMemory<TSource> source)
             => new List<TSource>(new ReadOnlyMemoryToListCollection<TSource>(source));
 
@@ -80,17 +82,10 @@ namespace NetFabric.Hyperlinq
 
             public ReadOnlyMemorySelectorToListCollection(ReadOnlyMemory<TSource> source, NullableSelector<TSource, TResult> selector)
                 : base(source.Length)
-            {
-                this.source = source;
-                this.selector = selector;
-            }
+                => (this.source, this.selector) = (source, selector);
 
             public override void CopyTo(TResult[] array, int _)
-            {
-                var span = source.Span;
-                for (var index = 0; index < span.Length; index++)
-                    array[index] = selector(span[index])!;
-            }
+                => ArrayExtensions.Copy(source.Span, array, selector);
         }
 
         sealed class ReadOnlyMemorySelectorAtToListCollection<TSource, TResult>
@@ -101,17 +96,10 @@ namespace NetFabric.Hyperlinq
 
             public ReadOnlyMemorySelectorAtToListCollection(ReadOnlyMemory<TSource> source, NullableSelectorAt<TSource, TResult> selector)
                 : base(source.Length)
-            {
-                this.source = source;
-                this.selector = selector;
-            }
+                => (this.source, this.selector) = (source, selector);
 
             public override void CopyTo(TResult[] array, int _)
-            {
-                var span = source.Span;
-                for (var index = 0; index < span.Length; index++)
-                    array[index] = selector(span[index], index)!;
-            }
+                => ArrayExtensions.Copy(source.Span, array, selector);
         }
     }
 }

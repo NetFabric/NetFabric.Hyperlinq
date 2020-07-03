@@ -1,4 +1,6 @@
 using System;
+using System.Buffers;
+using System.Linq;
 using NetFabric.Assertive;
 using Xunit;
 
@@ -6,24 +8,99 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
 {
     public class SpanTests
     {
+
+        [Theory]
+        [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
+        public void ToArray_MemoryPool_Must_Succeed(int[] source)
+        {
+            // Arrange
+            var pool = MemoryPool<int>.Shared;
+            var expected = Enumerable
+                .ToArray(source);
+
+            // Act
+            using var result = ArrayExtensions
+                .ToArray(source.AsSpan(), pool);
+
+            // Assert
+            _ = result.Memory.Span
+                .SequenceEqual(expected)
+                .Must().BeTrue();
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////
+
+
         [Theory]
         [MemberData(nameof(TestData.PredicateEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateMultiple), MemberType = typeof(TestData))]
-        public void ToArray_With_Predicate_Must_Succeed(int[] source, Predicate<int> predicate)
+        public void ToArray_Predicate_Must_Succeed(int[] source, Predicate<int> predicate)
         {
             // Arrange
-            var expected = 
-                System.Linq.Enumerable.ToArray(
-                    System.Linq.Enumerable.Where(source, predicate.AsFunc()));
+            var expected = Enumerable
+                .Where(source, predicate.AsFunc())
+                .ToArray();
 
             // Act
             var result = ArrayExtensions
-                .Where<int>(source.AsSpan(), predicate)
+                .Where(source.AsSpan(), predicate)
                 .ToArray();
 
             // Assert
             _ = result.Must()
+                .BeNotSameAs(source)
+                .BeArrayOf<int>()
+                .BeEqualTo(expected);
+        }
+
+        [Theory]
+        [MemberData(nameof(TestData.PredicateEmpty), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.PredicateSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.PredicateMultiple), MemberType = typeof(TestData))]
+        public void ToArray_Predicate_MemoryPool_Must_Succeed(int[] source, Predicate<int> predicate)
+        {
+            // Arrange
+            var pool = MemoryPool<int>.Shared;
+            var expected = Enumerable
+                .Where(source, predicate.AsFunc())
+                .ToArray();
+
+            // Act
+            using var result = ArrayExtensions
+                .Where(source.AsSpan(), predicate)
+                .ToArray(pool);
+
+            // Assert
+            _ = result.Memory.Span
+                .SequenceEqual(expected)
+                .Must().BeTrue();
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+        [Theory]
+        [MemberData(nameof(TestData.PredicateAtEmpty), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.PredicateAtSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.PredicateAtMultiple), MemberType = typeof(TestData))]
+        public void ToArray_PredicateAt_Must_Succeed(int[] source, PredicateAt<int> predicate)
+        {
+            // Arrange
+            var expected = Enumerable
+                .Where(source, predicate.AsFunc())
+                .ToArray();
+
+            // Act
+            var result = ArrayExtensions
+                .Where(source.AsSpan(), predicate)
+                .ToArray();
+
+            // Assert
+            _ = result.Must()
+                .BeNotSameAs(source)
                 .BeArrayOf<int>()
                 .BeEqualTo(expected);
         }
@@ -32,21 +109,48 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
         [MemberData(nameof(TestData.PredicateAtEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateAtSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateAtMultiple), MemberType = typeof(TestData))]
-        public void ToArray_With_PredicateAt_Must_Succeed(int[] source, PredicateAt<int> predicate)
+        public void ToArray_PredicateAt_MemoryPool_Must_Succeed(int[] source, PredicateAt<int> predicate)
         {
             // Arrange
-            var expected = 
-                System.Linq.Enumerable.ToArray(
-                    System.Linq.Enumerable.Where(source, predicate.AsFunc()));
+            var pool = MemoryPool<int>.Shared;
+            var expected = Enumerable
+                .Where(source, predicate.AsFunc())
+                .ToArray();
+
+            // Act
+            using var result = ArrayExtensions
+                .Where(source.AsSpan(), predicate)
+                .ToArray(pool);
+
+            // Assert
+            _ = result.Memory.Span
+                .SequenceEqual(expected)
+                .Must().BeTrue();
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+        [Theory]
+        [MemberData(nameof(TestData.SelectorEmpty), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SelectorSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SelectorMultiple), MemberType = typeof(TestData))]
+        public void ToArray_Selector_Must_Succeed(int[] source, NullableSelector<int, string> selector)
+        {
+            // Arrange
+            var expected = Enumerable
+                .Select(source, selector.AsFunc())
+                .ToArray();
 
             // Act
             var result = ArrayExtensions
-                .Where<int>(source.AsSpan(), predicate)
+                .Select(source.AsSpan(), selector)
                 .ToArray();
 
             // Assert
             _ = result.Must()
-                .BeArrayOf<int>()
+                .BeNotSameAs(source)
+                .BeArrayOf<string>()
                 .BeEqualTo(expected);
         }
 
@@ -54,20 +158,47 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
         [MemberData(nameof(TestData.SelectorEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SelectorSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SelectorMultiple), MemberType = typeof(TestData))]
-        public void ToArray_With_Selector_Must_Succeed(int[] source, NullableSelector<int, string> selector)
+        public void ToArray_Selector_MemoryPool_Must_Succeed(int[] source, NullableSelector<int, string> selector)
         {
             // Arrange
-            var expected = 
-                System.Linq.Enumerable.ToArray(
-                    System.Linq.Enumerable.Select(source, selector.AsFunc()));
+            var pool = MemoryPool<string>.Shared;
+            var expected = Enumerable
+                .Select(source, selector.AsFunc())
+                .ToArray();
+
+            // Act
+            using var result = ArrayExtensions
+                .Select(source.AsSpan(), selector)
+                .ToArray(pool);
+
+            // Assert
+            _ = result.Memory.Span
+                .SequenceEqual(expected)
+                .Must().BeTrue();
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+        [Theory]
+        [MemberData(nameof(TestData.SelectorAtEmpty), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SelectorAtSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SelectorAtMultiple), MemberType = typeof(TestData))]
+        public void ToArray_SelectorAt_Must_Succeed(int[] source, NullableSelectorAt<int, string> selector)
+        {
+            // Arrange
+            var expected = Enumerable
+                .Select(source, selector.AsFunc())
+                .ToArray();
 
             // Act
             var result = ArrayExtensions
-                .Select<int, string>(source.AsSpan(), selector)
+                .Select(source.AsSpan(), selector)
                 .ToArray();
 
             // Assert
             _ = result.Must()
+                .BeNotSameAs(source)
                 .BeArrayOf<string>()
                 .BeEqualTo(expected);
         }
@@ -76,20 +207,49 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
         [MemberData(nameof(TestData.SelectorAtEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SelectorAtSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SelectorAtMultiple), MemberType = typeof(TestData))]
-        public void ToArray_With_SelectorAt_Must_Succeed(int[] source, NullableSelectorAt<int, string> selector)
+        public void ToArray_SelectorAt_MemoryPool_Must_Succeed(int[] source, NullableSelectorAt<int, string> selector)
         {
             // Arrange
-            var expected = 
-                System.Linq.Enumerable.ToArray(
-                    System.Linq.Enumerable.Select(source, selector.AsFunc()));
+            var pool = MemoryPool<string>.Shared;
+            var expected = Enumerable
+                .Select(source, selector.AsFunc())
+                .ToArray();
+
+            // Act
+            using var result = ArrayExtensions
+                .Select(source.AsSpan(), selector)
+                .ToArray(pool);
+
+            // Assert
+            _ = result.Memory.Span
+                .SequenceEqual(expected)
+                .Must().BeTrue();
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+        [Theory]
+        [MemberData(nameof(TestData.PredicateSelectorEmpty), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.PredicateSelectorSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.PredicateSelectorMultiple), MemberType = typeof(TestData))]
+        public void ToArray_Predicate_Selector_Must_Succeed(int[] source, Predicate<int> predicate, NullableSelector<int, string> selector)
+        {
+            // Arrange
+            var expected = Enumerable
+                .Where(source, predicate.AsFunc())
+                .Select(selector.AsFunc())
+                .ToArray();
 
             // Act
             var result = ArrayExtensions
-                .Select<int, string>(source.AsSpan(), selector)
+                .Where(source.AsSpan(), predicate)
+                .Select(selector)
                 .ToArray();
 
             // Assert
             _ = result.Must()
+                .BeNotSameAs(source)
                 .BeArrayOf<string>()
                 .BeEqualTo(expected);
         }
@@ -98,24 +258,25 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
         [MemberData(nameof(TestData.PredicateSelectorEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateSelectorSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateSelectorMultiple), MemberType = typeof(TestData))]
-        public void ToArray_With_Predicate_Selector_Must_Succeed(int[] source, Predicate<int> predicate, NullableSelector<int, string> selector)
+        public void ToArray_Predicate_Selector_MemoryPool_Must_Succeed(int[] source, Predicate<int> predicate, NullableSelector<int, string> selector)
         {
             // Arrange
-            var expected = 
-                System.Linq.Enumerable.ToArray(
-                    System.Linq.Enumerable.Select(
-                        System.Linq.Enumerable.Where(source, predicate.AsFunc()), selector.AsFunc()));
-
-            // Act
-            var result = ArrayExtensions
-                .Where<int>(source.AsSpan(), predicate)
-                .Select(selector)
+            var pool = MemoryPool<string>.Shared;
+            var expected = Enumerable
+                .Where(source, predicate.AsFunc())
+                .Select(selector.AsFunc())
                 .ToArray();
 
+            // Act
+            using var result = ArrayExtensions
+                .Where(source.AsSpan(), predicate)
+                .Select(selector)
+                .ToArray(pool);
+
             // Assert
-            _ = result.Must()
-                .BeArrayOf<string>()
-                .BeEqualTo(expected);
+            _ = result.Memory.Span
+                .SequenceEqual(expected)
+                .Must().BeTrue();
         }
     }
 }

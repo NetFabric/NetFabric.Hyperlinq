@@ -41,7 +41,7 @@ namespace NetFabric.Hyperlinq
             bool ICollection<TSource>.IsReadOnly  
                 => true;
 
-            public void CopyTo(TSource[] array, int arrayIndex) 
+            public void CopyTo(TSource[] array, int arrayIndex = 0)
             {
                 if (Count == 0)
                     return;

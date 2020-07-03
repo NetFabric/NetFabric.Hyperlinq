@@ -1,4 +1,5 @@
 using System;
+using System.Buffers;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -48,16 +49,16 @@ namespace NetFabric.Hyperlinq
             bool ICollection<TResult>.IsReadOnly  
                 => true;
 
-            public void CopyTo(TResult[] array, int arrayIndex) 
+            public void CopyTo(TResult[] array, int arrayIndex = 0) 
             {
-                if (source.Count == 0)
-                    return;
-
-                checked
+                if (source.Count != 0)
                 {
-                    using var enumerator = source.GetEnumerator();
-                    for (var index = 0; enumerator.MoveNext(); index++)
-                        array[index + arrayIndex] = selector(enumerator.Current, index)!;
+                    checked
+                    {
+                        using var enumerator = source.GetEnumerator();
+                        for (var index = 0; enumerator.MoveNext(); index++)
+                            array[index + arrayIndex] = selector(enumerator.Current, index)!;
+                    }
                 }
             }
 
@@ -143,6 +144,10 @@ namespace NetFabric.Hyperlinq
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TResult[] ToArray()
                 => ValueReadOnlyCollectionExtensions.ToArray<TEnumerable, TEnumerator, TSource, TResult>(source, selector);
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public IMemoryOwner<TResult> ToArray(MemoryPool<TResult> pool)
+                => ValueReadOnlyCollectionExtensions.ToArray<TEnumerable, TEnumerator, TSource, TResult>(source, selector, pool);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public List<TResult> ToList()

@@ -51,7 +51,6 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public List<int> Hyperlinq_Array() =>
             array.Select(item => item).ToList();
 
-#if SPAN_SUPPORTED
         [BenchmarkCategory("Array")]
         [Benchmark]
         public List<int> Hyperlinq_Span() =>
@@ -61,7 +60,6 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [Benchmark]
         public List<int> Hyperlinq_Memory() =>
             memory.Select(item => item).ToList();
-#endif
 
         [BenchmarkCategory("Enumerable_Value")]
         [Benchmark]

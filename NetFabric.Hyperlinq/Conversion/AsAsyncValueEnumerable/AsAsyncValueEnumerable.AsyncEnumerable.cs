@@ -14,7 +14,7 @@ namespace NetFabric.Hyperlinq
         public static AsyncValueEnumerableWrapper<TSource> AsAsyncValueEnumerable<TSource>(this IAsyncEnumerable<TSource> source)
             => new AsyncValueEnumerableWrapper<TSource>(source);
 
-        [GeneratorIgnore]
+        [GeneratorIgnore] // TODO: to be removed
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static AsyncValueEnumerableWrapper<TEnumerable, TEnumerator, TSource> AsAsyncValueEnumerable<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TEnumerable, CancellationToken, TEnumerator> getEnumerator)
@@ -42,16 +42,6 @@ namespace NetFabric.Hyperlinq
                 => getAsyncEnumerator(source, cancellationToken);
             readonly IAsyncEnumerator<TSource> IAsyncEnumerable<TSource>.GetAsyncEnumerator(CancellationToken cancellationToken) 
                 => getAsyncEnumerator(source, cancellationToken);
-
-            
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public ValueTask<TSource[]> ToArrayAsync(CancellationToken cancellationToken = default)
-                => AsyncEnumerableExtensions.ToArrayAsync<TSource>(source, cancellationToken);
-
-            
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public ValueTask<List<TSource>> ToListAsync(CancellationToken cancellationToken = default)
-                => AsyncEnumerableExtensions.ToListAsync<TSource>(source, cancellationToken);
         }
 
         public readonly partial struct AsyncValueEnumerableWrapper<TSource>
@@ -91,14 +81,6 @@ namespace NetFabric.Hyperlinq
                 public readonly ValueTask DisposeAsync() 
                     => enumerator.DisposeAsync();
             }
-
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public ValueTask<TSource[]> ToArrayAsync(CancellationToken cancellationToken = default)
-                => AsyncEnumerableExtensions.ToArrayAsync(source, cancellationToken);
-
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public ValueTask<List<TSource>> ToListAsync(CancellationToken cancellationToken = default)
-                => AsyncEnumerableExtensions.ToListAsync(source, cancellationToken);
         }
     }
 }
