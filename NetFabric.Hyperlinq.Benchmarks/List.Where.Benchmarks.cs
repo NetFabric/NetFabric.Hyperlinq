@@ -64,6 +64,16 @@ namespace NetFabric.Hyperlinq.Benchmarks
         }
 
         [Benchmark]
+        public int StructLinqFaster_Where()
+        {
+            var sum = 0;
+            var where = new WhereFunction();
+            foreach (var item in list.ToStructEnumerable().Where(ref where, x => x))
+                sum += item;
+            return sum;
+        }
+
+        [Benchmark]
         public int Hyperlinq_Where()
         {
             var sum = 0;
@@ -71,5 +81,12 @@ namespace NetFabric.Hyperlinq.Benchmarks
                 sum += item;
             return sum;
         }
+
     }
+
+    internal struct WhereFunction: IFunction<int, bool>
+    {
+        public bool Eval(int element) => (element & 0x01) == 0;
+    }
+
 }
