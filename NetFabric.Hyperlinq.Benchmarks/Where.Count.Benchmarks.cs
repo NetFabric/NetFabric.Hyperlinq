@@ -105,20 +105,6 @@ namespace NetFabric.Hyperlinq.Benchmarks
             ReadOnlyListExtensions.AsValueEnumerable<int>(listValue)
             .Where(item => (item & 0x01) == 0).Count();
 
-        [BenchmarkCategory("List_Value")]
-        [Benchmark]
-        public int StructLinq_List()
-        {
-            return listValue.ToStructEnumerable().Where(item => (item & 0x01) == 0, x => x).Count(x => x);
-        }
-
-        [BenchmarkCategory("List_Value")]
-        [Benchmark]
-        public int StructLinqFaster_List()
-        {
-            var where = new WhereFunction();
-            return listValue.ToStructEnumerable().Where(ref where, x => x).Count(x => x);
-        }
 
         [BenchmarkCategory("Enumerable_Reference")]
         [Benchmark]
