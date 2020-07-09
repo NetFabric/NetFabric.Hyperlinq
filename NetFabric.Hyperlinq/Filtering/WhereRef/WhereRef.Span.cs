@@ -16,6 +16,7 @@ namespace NetFabric.Hyperlinq
             return new SpanWhereRefEnumerable<TSource>(source, predicate);
         }
 
+        [GeneratorIgnore]
         public readonly ref struct SpanWhereRefEnumerable<TSource>
         {
             internal readonly Span<TSource> source;
@@ -58,66 +59,47 @@ namespace NetFabric.Hyperlinq
                 }
             }
 
-            public int Count()
-                => ArrayExtensions.Count(source, predicate);
-
-            public bool Any()
-                => ArrayExtensions.Any(source, predicate);
-
-            public SpanWhereEnumerable<TSource> Where(Predicate<TSource> predicate)
-                => Where<TSource>(source, Utils.Combine(this.predicate, predicate));
-
-            public SpanWhereAtEnumerable<TSource> Where(PredicateAt<TSource> predicate)
-                => Where<TSource>(source, Utils.Combine(this.predicate, predicate));
-
-            public SpanWhereRefEnumerable<TSource> WhereRef(Predicate<TSource> predicate)
-                => WhereRef<TSource>(source, Utils.Combine(this.predicate, predicate));
-
-            public SpanWhereRefAtEnumerable<TSource> WhereRef(PredicateAt<TSource> predicate)
-                => WhereRef<TSource>(source, Utils.Combine(this.predicate, predicate));
-
-            public SpanWhereSelectEnumerable<TSource, TResult> Select<TResult>(NullableSelector<TSource, TResult> selector)
-            {
-                if (selector is null)
-                    Throw.ArgumentNullException(nameof(selector));
-
-                return WhereSelect<TSource, TResult>(source, predicate, selector);
-            }
-
-            public Option<TSource> ElementAt(int index)
-                => ArrayExtensions.ElementAt<TSource>(source, index, predicate);
-
-            public Option<TSource> First()
-                => ArrayExtensions.First<TSource>(source, predicate);
-
-            public Option<TSource> Single()
-                => ArrayExtensions.Single<TSource>(source, predicate);
-
-            public TSource[] ToArray()
-                => ArrayExtensions.ToArray(source, predicate);
-
-            public List<TSource> ToList()
-                => ArrayExtensions.ToList(source, predicate);
-
             public bool SequenceEqual(IEnumerable<TSource> other, IEqualityComparer<TSource>? comparer = null)
             {
-                comparer ??= EqualityComparer<TSource>.Default;
-
-                var enumerator = GetEnumerator();
-                using var otherEnumerator = other.GetEnumerator();
-                while (true)
+                if (Utils.UseDefault(comparer))
                 {
-                    var thisEnded = !enumerator.MoveNext();
-                    var otherEnded = !otherEnumerator.MoveNext();
+                    var enumerator = GetEnumerator();
+                    using var otherEnumerator = other.GetEnumerator();
+                    while (true)
+                    {
+                        var thisEnded = !enumerator.MoveNext();
+                        var otherEnded = !otherEnumerator.MoveNext();
 
-                    if (thisEnded != otherEnded)
-                        return false;
+                        if (thisEnded != otherEnded)
+                            return false;
 
-                    if (thisEnded)
-                        return true;
+                        if (thisEnded)
+                            return true;
 
-                    if (!comparer.Equals(enumerator.Current, otherEnumerator.Current))
-                        return false;
+                        if (!EqualityComparer<TSource>.Default.Equals(enumerator.Current, otherEnumerator.Current))
+                            return false;
+                    }
+                }
+                else
+                {
+                    comparer ??= EqualityComparer<TSource>.Default;
+
+                    var enumerator = GetEnumerator();
+                    using var otherEnumerator = other.GetEnumerator();
+                    while (true)
+                    {
+                        var thisEnded = !enumerator.MoveNext();
+                        var otherEnded = !otherEnumerator.MoveNext();
+
+                        if (thisEnded != otherEnded)
+                            return false;
+
+                        if (thisEnded)
+                            return true;
+
+                        if (!comparer.Equals(enumerator.Current, otherEnumerator.Current))
+                            return false;
+                    }
                 }
             }
         }
