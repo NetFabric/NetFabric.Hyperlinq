@@ -1,6 +1,7 @@
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Configs;
 using System;
+using StructLinq;
 
 namespace NetFabric.Hyperlinq.Benchmarks
 {
@@ -138,6 +139,28 @@ namespace NetFabric.Hyperlinq.Benchmarks
                 sum += item;
             return sum;
         }
+
+        [BenchmarkCategory("List")]
+        [Benchmark]
+        public int StructLinq_List()
+        {
+            var sum = 0;
+            foreach (var item in list.ToStructEnumerable().Where(item => (item & 0x01) == 0, x=> x).Where(item => (item & 0x01) == 0, x=>x))
+                sum += item;
+            return sum;
+        }
+
+        [BenchmarkCategory("List")]
+        [Benchmark]
+        public int StructLinqFaster_List()
+        {
+            var sum = 0;
+            var where = new WhereFunction();
+            foreach (var item in list.ToStructEnumerable().Where(ref where, x=>x).Where(ref where, x=>x))
+                sum += item;
+            return sum;
+        }
+
 
         [BenchmarkCategory("Enumerable_Reference")]
         [Benchmark]

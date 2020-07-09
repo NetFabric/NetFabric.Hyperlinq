@@ -67,5 +67,20 @@ namespace NetFabric.Hyperlinq.Benchmarks
                 sum += items[index];
             return sum;
         }
+
+        [Benchmark]
+        public int StructLinqFaster_Select()
+        {
+            var sum = 0;
+            var mult = new Mult();
+            foreach (var item in list.ToStructEnumerable().Select(ref mult, x => x, x=> x))
+                sum += item;
+            return sum;
+        }
+
+        internal struct Mult: IFunction<int, int>
+        {
+            public int Eval(int element) => element * 2;
+        }
     }
 }
