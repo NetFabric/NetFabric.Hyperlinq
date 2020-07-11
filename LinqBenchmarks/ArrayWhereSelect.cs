@@ -1,37 +1,27 @@
 ﻿using BenchmarkDotNet.Attributes;
-using BenchmarkDotNet.Jobs;
-using JM.LinqFaster;
 using NetFabric.Hyperlinq;
 using StructLinq;
 using System.Linq;
 
 namespace LinqBenchmarks
 {
-    [SimpleJob(RuntimeMoniker.Net48, baseline: true)]
-    [SimpleJob(RuntimeMoniker.NetCoreApp31)]
-    [SimpleJob(RuntimeMoniker.NetCoreApp50)]
-    [MemoryDiagnoser]
-    [MarkdownExporterAttribute.GitHub]
-    public class ArrayWhereBenchmarks
+    public class ArrayWhereSelect : BenchmarkBase
     {
-        int[] array;
-
-        [Params(0, 1, 10, 1_000)]
-        public int Count { get; set; }
+        int[] source;
 
         [GlobalSetup]
         public void GlobalSetup()
-            => array = Enumerable.Range(0, Count).ToArray();
+            => source = Enumerable.Range(0, Count).ToArray();
 
         [Benchmark(Baseline = true)]
         public int ForLoop()
         {
             var sum = 0;
-            for (var index = 0; index < array.Length; index++)
+            for (var index = 0; index < source.Length; index++)
             {
-                var item = array[index];
+                var item = source[index];
                 if ((item & 0x01) == 0)
-                    sum += item;
+                    sum += item * 2;
             }
             return sum;
         }
@@ -40,27 +30,27 @@ namespace LinqBenchmarks
         public int ForeachLoop()
         {
             var sum = 0;
-            foreach (var item in array)
+            foreach (var item in source)
             {
                 if ((item & 0x01) == 0)
-                    sum += item;
+                    sum += item * 2;
             }
             return sum;
         }
 
         [Benchmark]
-        public int Linq_Where()
+        public int Linq()
         {
             var sum = 0;
-            foreach (var item in Enumerable.Where(array, item => (item & 0x01) == 0))
+            foreach (var item in Enumerable.Where(source, item => (item & 0x01) == 0).Select(item => item * 2))
                 sum += item;
             return sum;
         }
 
         [Benchmark]
-        public int LinqFaster_WhereF()
+        public int LinqFaster()
         {
-            var items = LinqFaster.WhereF(array, item => (item & 0x01) == 0);
+            var items = JM.LinqFaster.LinqFaster.WhereSelectF(source, item => (item & 0x01) == 0, item => item * 2);
             var sum = 0;
             for (var index = 0; index < items.Length; index++)
                 sum += items[index];
@@ -68,29 +58,30 @@ namespace LinqBenchmarks
         }
 
         [Benchmark]
-        public int StructLinq_Where()
+        public int StructLinq()
         {
             var sum = 0;
-            foreach (var item in array.ToStructEnumerable().Where(item => (item & 0x01) == 0, x => x))
+            foreach (var item in source.ToStructEnumerable().Where(item => (item & 0x01) == 0, x => x).Select(item => item * 2, x => x))
                 sum += item;
             return sum;
         }
 
         [Benchmark]
-        public int StructLinqFaster_Where()
+        public int StructLinq_IFunction()
         {
             var sum = 0;
             var where = new WhereFunction();
-            foreach (var item in array.ToStructEnumerable().Where(ref where, x => x))
+            var mult = new Mult();
+            foreach (var item in source.ToStructEnumerable().Where(ref where, x => x).Select(ref mult, x => x, x => x))
                 sum += item;
             return sum;
         }
 
         [Benchmark]
-        public int Hyperlinq_Where()
+        public int Hyperlinq()
         {
             var sum = 0;
-            foreach (var item in ArrayExtensions.Where(array, item => (item & 0x01) == 0))
+            foreach (var item in ArrayExtensions.Where(source, item => (item & 0x01) == 0).Select(item => item * 2))
                 sum += item;
             return sum;
         }
@@ -99,6 +90,12 @@ namespace LinqBenchmarks
         {
             public bool Eval(int element) 
                 => (element & 0x01) == 0;
+        }
+
+        struct Mult: IFunction<int, int>
+        {
+            public int Eval(int element)
+                => element * 2;
         }
     }
 }

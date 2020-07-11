@@ -8,10 +8,16 @@ namespace LinqBenchmarks
         static void Main(string[] args)
         {
             var switcher = new BenchmarkSwitcher(new[] {
-                typeof(ArraySelectBenchmarks),
-                typeof(ArrayWhereBenchmarks),
-                typeof(ListSelectBenchmarks),
-                typeof(ListWhereBenchmarks),
+                typeof(ArraySelect),
+                typeof(ArrayWhere),
+                typeof(ArrayWhereSelect),
+                typeof(ArrayWhereSelectToArray),
+                typeof(ArrayWhereSelectToList),
+                typeof(ListSelect),
+                typeof(ListWhere),
+                typeof(ListWhereSelect),
+                typeof(ListWhereSelectToArray),
+                typeof(ListWhereSelectToList),
             });
             _ = switcher.Run(args);
         }

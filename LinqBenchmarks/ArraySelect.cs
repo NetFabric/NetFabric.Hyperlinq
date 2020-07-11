@@ -1,34 +1,24 @@
 ﻿using BenchmarkDotNet.Attributes;
-using BenchmarkDotNet.Jobs;
-using JM.LinqFaster;
 using NetFabric.Hyperlinq;
 using StructLinq;
 using System.Linq;
 
 namespace LinqBenchmarks
 {
-    [SimpleJob(RuntimeMoniker.Net48, baseline: true)]
-    [SimpleJob(RuntimeMoniker.NetCoreApp31)]
-    [SimpleJob(RuntimeMoniker.NetCoreApp50)]
-    [MemoryDiagnoser]
-    [MarkdownExporterAttribute.GitHub]
-    public class ArraySelectBenchmarks
+    public class ArraySelect : BenchmarkBase
     {
-        int[] array;
-
-        [Params(0, 1, 10, 1_000)]
-        public int Count { get; set; }
+        int[] source;
 
         [GlobalSetup]
         public void GlobalSetup()
-            => array = Enumerable.Range(0, Count).ToArray();
+            => source = Enumerable.Range(0, Count).ToArray();
 
         [Benchmark(Baseline = true)]
         public int ForLoop()
         {
             var sum = 0;
-            for (var index = 0; index < array.Length; index++)
-                sum += array[index] * 2;
+            for (var index = 0; index < source.Length; index++)
+                sum += source[index] * 2;
             return sum;
         }
 
@@ -36,24 +26,24 @@ namespace LinqBenchmarks
         public int ForeachLoop()
         {
             var sum = 0;
-            foreach (var item in array)
+            foreach (var item in source)
                 sum += item * 2;
             return sum;
         }
 
         [Benchmark]
-        public int Linq_Select()
+        public int Linq()
         {
             var sum = 0;
-            foreach (var item in Enumerable.Select(array, item => item * 2))
+            foreach (var item in Enumerable.Select(source, item => item * 2))
                 sum += item;
             return sum;
         }
 
         [Benchmark]
-        public int LinqFaster_SelectF()
+        public int LinqFaster()
         {
-            var items = LinqFaster.SelectF(array, item => item * 2);
+            var items = JM.LinqFaster.LinqFaster.SelectF(source, item => item * 2);
             var sum = 0;
             for (var index = 0; index < items.Length; index++)
                 sum += items[index];
@@ -61,28 +51,28 @@ namespace LinqBenchmarks
         }
 
         [Benchmark]
-        public int StructLinq_Select()
+        public int StructLinq()
         {
             var sum = 0;
-            foreach (var item in array.ToStructEnumerable().Select(item => item * 2, x => x))
+            foreach (var item in source.ToStructEnumerable().Select(item => item * 2, x => x))
                 sum += item;
             return sum;
         }
 
         [Benchmark]
-        public int StructLinqFaster_Select()
+        public int StructLinq_IFunction()
         {
             var sum = 0;
             var mult = new Mult();
-            foreach (var item in array.ToStructEnumerable().Select(ref mult, x => x, x => x))
+            foreach (var item in source.ToStructEnumerable().Select(ref mult, x => x, x => x))
                 sum += item;
             return sum;
         }
 
         [Benchmark]
-        public int Hyperlinq_Select()
+        public int Hyperlinq()
         {
-            var items = ArrayExtensions.Select(array, item => item * 2);
+            var items = ArrayExtensions.Select(source, item => item * 2);
             var sum = 0;
             for (var index = 0; index < items.Count; index++)
                 sum += items[index];
