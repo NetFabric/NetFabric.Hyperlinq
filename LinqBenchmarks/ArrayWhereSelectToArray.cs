@@ -21,7 +21,7 @@ namespace LinqBenchmarks
             for (var index = 0; index < source.Length; index++)
             {
                 var item = source[index];
-                if ((item & 0x01) == 0)
+                if (item.IsEven())
                     list.Add(item * 2);
             }
             return list.ToArray();
@@ -33,7 +33,7 @@ namespace LinqBenchmarks
             var list = new List<int>();
             foreach (var item in source)
             {
-                if ((item & 0x01) == 0)
+                if (item.IsEven())
                     list.Add(item * 2);
             }
             return list.ToArray();
@@ -41,38 +41,26 @@ namespace LinqBenchmarks
 
         [Benchmark]
         public int[] Linq()
-            => Enumerable.Where(source, item => (item & 0x01) == 0).Select(item => item * 2).ToArray();
+            => Enumerable.Where(source, item => item.IsEven()).Select(item => item * 2).ToArray();
 
         [Benchmark]
         public int[] LinqFaster()
-            => JM.LinqFaster.LinqFaster.WhereSelectF(source, item => (item & 0x01) == 0, item => item * 2);
+            => JM.LinqFaster.LinqFaster.WhereSelectF(source, item => item.IsEven(), item => item * 2);
 
         [Benchmark]
         public int[] StructLinq()
-            => source.ToStructEnumerable().Where(item => (item & 0x01) == 0, x => x).Select(item => item * 2, x => x).ToArray();
+            => source.ToStructEnumerable().Where(item => item.IsEven(), x => x).Select(item => item * 2, x => x).ToArray();
 
         [Benchmark]
         public int[] StructLinq_IFunction()
         {
-            var where = new WhereFunction();
-            var mult = new Mult();
+            var where = new IsEvenFunction();
+            var mult = new DoubleFunction();
             return source.ToStructEnumerable().Where(ref where, x => x).Select(ref mult, x => x, x => x).ToArray();
         }
 
         [Benchmark]
         public int[] Hyperlinq()
-            => ArrayExtensions.Where(source, item => (item & 0x01) == 0).Select(item => item * 2).ToArray();
-
-        struct WhereFunction: IFunction<int, bool>
-        {
-            public bool Eval(int element) 
-                => (element & 0x01) == 0;
-        }
-
-        struct Mult: IFunction<int, int>
-        {
-            public int Eval(int element)
-                => element * 2;
-        }
+            => ArrayExtensions.Where(source, item => item.IsEven()).Select(item => item * 2).ToArray();
     }
 }

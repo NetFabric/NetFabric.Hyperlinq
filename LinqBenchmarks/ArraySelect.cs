@@ -63,7 +63,7 @@ namespace LinqBenchmarks
         public int StructLinq_IFunction()
         {
             var sum = 0;
-            var mult = new Mult();
+            var mult = new DoubleFunction();
             foreach (var item in source.ToStructEnumerable().Select(ref mult, x => x, x => x))
                 sum += item;
             return sum;
@@ -77,12 +77,6 @@ namespace LinqBenchmarks
             for (var index = 0; index < items.Count; index++)
                 sum += items[index];
             return sum;
-        }
-
-        struct Mult: IFunction<int, int>
-        {
-            public int Eval(int element) 
-                => element * 2;
         }
     }
 }

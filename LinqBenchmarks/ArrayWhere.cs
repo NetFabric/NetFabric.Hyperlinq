@@ -20,7 +20,7 @@ namespace LinqBenchmarks
             for (var index = 0; index < source.Length; index++)
             {
                 var item = source[index];
-                if ((item & 0x01) == 0)
+                if (item.IsEven())
                     sum += item;
             }
             return sum;
@@ -32,7 +32,7 @@ namespace LinqBenchmarks
             var sum = 0;
             foreach (var item in source)
             {
-                if ((item & 0x01) == 0)
+                if (item.IsEven())
                     sum += item;
             }
             return sum;
@@ -42,7 +42,7 @@ namespace LinqBenchmarks
         public int Linq()
         {
             var sum = 0;
-            foreach (var item in Enumerable.Where(source, item => (item & 0x01) == 0))
+            foreach (var item in Enumerable.Where(source, item => item.IsEven()))
                 sum += item;
             return sum;
         }
@@ -50,7 +50,7 @@ namespace LinqBenchmarks
         [Benchmark]
         public int LinqFaster()
         {
-            var items = JM.LinqFaster.LinqFaster.WhereF(source, item => (item & 0x01) == 0);
+            var items = JM.LinqFaster.LinqFaster.WhereF(source, item => item.IsEven());
             var sum = 0;
             for (var index = 0; index < items.Length; index++)
                 sum += items[index];
@@ -61,7 +61,7 @@ namespace LinqBenchmarks
         public int StructLinq()
         {
             var sum = 0;
-            foreach (var item in source.ToStructEnumerable().Where(item => (item & 0x01) == 0, x => x))
+            foreach (var item in source.ToStructEnumerable().Where(item => item.IsEven(), x => x))
                 sum += item;
             return sum;
         }
@@ -70,7 +70,7 @@ namespace LinqBenchmarks
         public int StructLinq_IFunction()
         {
             var sum = 0;
-            var where = new WhereFunction();
+            var where = new IsEvenFunction();
             foreach (var item in source.ToStructEnumerable().Where(ref where, x => x))
                 sum += item;
             return sum;
@@ -80,15 +80,9 @@ namespace LinqBenchmarks
         public int Hyperlinq()
         {
             var sum = 0;
-            foreach (var item in ArrayExtensions.Where(source, item => (item & 0x01) == 0))
+            foreach (var item in ArrayExtensions.Where(source, item => item.IsEven()))
                 sum += item;
             return sum;
-        }
-
-        struct WhereFunction: IFunction<int, bool>
-        {
-            public bool Eval(int element) 
-                => (element & 0x01) == 0;
         }
     }
 }
