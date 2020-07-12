@@ -69,8 +69,19 @@ namespace LinqBenchmarks
             return sum;
         }
 
+#pragma warning disable HLQ010 // Consider using a 'for' loop instead.
         [Benchmark]
-        public int Hyperlinq()
+        public int Hyperlinq_Foreach()
+        {
+            var sum = 0;
+            foreach (var item in ArrayExtensions.Select(source, item => item * 2))
+                sum += item;
+            return sum;
+        }
+#pragma warning restore HLQ010 // Consider using a 'for' loop instead.
+
+        [Benchmark]
+        public int Hyperlinq_For()
         {
             var items = ArrayExtensions.Select(source, item => item * 2);
             var sum = 0;
