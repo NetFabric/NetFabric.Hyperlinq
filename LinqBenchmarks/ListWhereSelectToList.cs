@@ -27,6 +27,7 @@ namespace LinqBenchmarks
             return list;
         }
 
+#pragma warning disable HLQ010 // Consider using a 'for' loop instead.
         [Benchmark]
         public List<int> ForeachLoop()
         {
@@ -38,6 +39,7 @@ namespace LinqBenchmarks
             }
             return list;
         }
+#pragma warning restore HLQ010 // Consider using a 'for' loop instead.
 
         [Benchmark]
         public List<int> Linq()

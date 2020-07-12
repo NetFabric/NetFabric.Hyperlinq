@@ -28,6 +28,7 @@ namespace LinqBenchmarks
             return sum;
         }
 
+#pragma warning disable HLQ010 // Consider using a 'for' loop instead.
         [Benchmark]
         public int ForeachLoop()
         {
@@ -39,6 +40,7 @@ namespace LinqBenchmarks
             }
             return sum;
         }
+#pragma warning restore HLQ010 // Consider using a 'for' loop instead.
 
         [Benchmark]
         public int Linq()

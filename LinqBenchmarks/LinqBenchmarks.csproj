@@ -3,12 +3,17 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFrameworks>net48;netcoreapp3.1;net5.0</TargetFrameworks>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="BenchmarkDotNet" Version="0.12.1" />
     <PackageReference Include="JM.LinqFaster" Version="1.1.2" />
     <PackageReference Include="NetFabric.Hyperlinq" Version="3.0.0-beta17" />
+    <PackageReference Include="NetFabric.Hyperlinq.Analyzer" Version="2.0.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="StructLinq.BCL" Version="0.1.9" />
     <PackageReference Include="System.Interactive" Version="4.1.1" />
     <PackageReference Include="System.Linq.Async" Version="4.1.1" />
