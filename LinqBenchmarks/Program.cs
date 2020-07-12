@@ -24,6 +24,12 @@ namespace LinqBenchmarks
                 typeof(ListWhereSelect),
                 typeof(ListWhereSelectToArray),
                 typeof(ListWhereSelectToList),
+                typeof(Range),
+                typeof(RangeSelect),
+                typeof(RangeSelectToArray),
+                typeof(RangeSelectToList),
+                typeof(RangeToArray),
+                typeof(RangeToList),
             });
             _ = switcher.Run(args);
         }
