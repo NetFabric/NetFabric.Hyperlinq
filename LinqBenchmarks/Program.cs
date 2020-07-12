@@ -8,6 +8,7 @@ namespace LinqBenchmarks
         static void Main(string[] args)
         {
             var switcher = new BenchmarkSwitcher(new[] {
+                typeof(ArrayDistinct),
                 typeof(ArraySelect),
                 typeof(ArraySkipTakeSelect),
                 typeof(ArraySkipTakeWhere),
@@ -15,6 +16,7 @@ namespace LinqBenchmarks
                 typeof(ArrayWhereSelect),
                 typeof(ArrayWhereSelectToArray),
                 typeof(ArrayWhereSelectToList),
+                typeof(ListDistinct),
                 typeof(ListSelect),
                 typeof(ListWhere),
                 typeof(ListSkipTakeSelect),
