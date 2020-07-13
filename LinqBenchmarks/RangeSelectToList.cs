@@ -24,6 +24,22 @@ namespace LinqBenchmarks
         }
 
         [Benchmark]
+        public List<int> ForeachLoop()
+        {
+            var list = new List<int>();
+            foreach (var value in Range(Start, Count))
+                list.Add(value * 2);
+            return list;
+
+            static IEnumerable<int> Range(int start, int count)
+            {
+                var end = start + count;
+                for (var value = start; value < end; value++)
+                    yield return value;
+            }
+        }
+
+        [Benchmark]
         public List<int> Linq()
             => Enumerable.Range(Start, Count).Select(item => item * 2).ToList();
 

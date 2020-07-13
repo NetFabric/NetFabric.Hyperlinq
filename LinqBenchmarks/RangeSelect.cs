@@ -3,6 +3,7 @@ using BenchmarkDotNet.Attributes;
 using JM.LinqFaster;
 using NetFabric.Hyperlinq;
 using StructLinq;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace LinqBenchmarks
@@ -21,6 +22,22 @@ namespace LinqBenchmarks
             for (var value = Start; value < end; value++)
                 sum += value * 2;
             return sum;
+        }
+
+        [Benchmark]
+        public int ForeachLoop()
+        {
+            var sum = 0;
+            foreach (var value in Range(Start, Count))
+                sum += value * 2;
+            return sum;
+
+            static IEnumerable<int> Range(int start, int count)
+            {
+                var end = start + count;
+                for (var value = start; value < end; value++)
+                    yield return value;
+            }
         }
 
         [Benchmark]
