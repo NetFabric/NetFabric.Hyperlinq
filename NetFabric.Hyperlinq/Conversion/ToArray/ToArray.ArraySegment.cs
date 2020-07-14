@@ -42,32 +42,6 @@ namespace NetFabric.Hyperlinq
             return ToArrayBuilder(source, predicate, ArrayPool<TSource>.Shared).ToArray(pool);
         }
 
-        static LargeArrayBuilder<TSource> ToArrayBuilder<TSource>(in ArraySegment<TSource> source, Predicate<TSource> predicate, ArrayPool<TSource> pool)
-        {
-            Debug.Assert(pool is object);
-
-            using var builder = new LargeArrayBuilder<TSource>(pool);
-            var array = source.Array;
-            if (source.Offset == 0 && source.Count == array.Length)
-            {
-                for (var index = 0; index < array.Length; index++)
-                {
-                    if (predicate(array[index]))
-                        builder.Add(array[index]);
-                }
-            }
-            else
-            {
-                var end = source.Offset + source.Count;
-                for (var index = source.Offset; index < end; index++)
-                {
-                    if (predicate(array[index]))
-                        builder.Add(array[index]);
-                }
-            }
-            return builder;
-        }
-
         //////////////////////////////////////////////////////////////////////////////////////////////////
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -79,45 +53,6 @@ namespace NetFabric.Hyperlinq
         {
             Debug.Assert(pool is object);
             return ToArrayBuilder(source, predicate, ArrayPool<TSource>.Shared).ToArray(pool);
-        }
-
-        static LargeArrayBuilder<TSource> ToArrayBuilder<TSource>(in ArraySegment<TSource> source, PredicateAt<TSource> predicate, ArrayPool<TSource> pool)
-        {
-            Debug.Assert(pool is object);
-
-            using var builder = new LargeArrayBuilder<TSource>(pool);
-            var array = source.Array;
-            if (source.Offset == 0)
-            {
-                if (source.Count == array.Length)
-                {
-                    for (var index = 0; index < array.Length; index++)
-                    {
-                        if (predicate(array[index], index))
-                            builder.Add(array[index]);
-                    }
-                }
-                else
-                {
-                    for (var index = 0; index < source.Count; index++)
-                    {
-                        if (predicate(array[index], index))
-                            builder.Add(array[index]);
-                    }
-                }
-            }
-            else
-            {
-                var offset = source.Offset;
-                var count = source.Count;
-                for (var index = 0; index < count; index++)
-                {
-                    var item = array[index + offset];
-                    if (predicate(item, index))
-                        builder.Add(item);
-                }
-            }
-            return builder;
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -180,32 +115,6 @@ namespace NetFabric.Hyperlinq
         {
             Debug.Assert(pool is object);
             return ToArrayBuilder(source, predicate, selector, ArrayPool<TResult>.Shared).ToArray(pool);
-        }
-
-        static LargeArrayBuilder<TResult> ToArrayBuilder<TSource, TResult>(in ArraySegment<TSource> source, Predicate<TSource> predicate, NullableSelector<TSource, TResult> selector, ArrayPool<TResult> pool)
-        {
-            Debug.Assert(pool is object);
-
-            using var builder = new LargeArrayBuilder<TResult>(pool);
-            var array = source.Array;
-            if (source.Offset == 0 && source.Count == array.Length)
-            {
-                for (var sourceIndex = 0; sourceIndex < array.Length; sourceIndex++)
-                {
-                    if (predicate(array[sourceIndex]))
-                        builder.Add(selector(array[sourceIndex]));
-                }
-            }
-            else
-            {
-                var end = source.Offset + source.Count;
-                for (var index = source.Offset; index < end; index++)
-                {
-                    if (predicate(array[index]))
-                        builder.Add(selector(array[index]));
-                }
-            }
-            return builder;
         }
     }
 }

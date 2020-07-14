@@ -96,9 +96,10 @@ namespace NetFabric.Hyperlinq
         /// </remarks>
         public void UncheckedAdd([AllowNull] T item)
         {
+            Debug.Assert(buffer is object);
             Debug.Assert(Count < Capacity);
 
-            buffer![Count++] = item!;
+            buffer[Count++] = item!;
         }
 
         void EnsureCapacity(int minimum)

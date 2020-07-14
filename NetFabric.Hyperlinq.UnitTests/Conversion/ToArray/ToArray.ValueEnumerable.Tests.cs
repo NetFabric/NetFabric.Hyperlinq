@@ -116,7 +116,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
                 .ToArray();
 
             // Act
-            var result = ValueEnumerableExtensions
+            using var result = ValueEnumerableExtensions
                 .Where<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(wrapped, predicate)
                 .ToArray(pool);
 
@@ -167,7 +167,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
                 .ToArray();
 
             // Act
-            var result = ValueEnumerableExtensions
+            using var result = ValueEnumerableExtensions
                 .Where<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(wrapped, predicate)
                 .ToArray(pool);
 
@@ -218,7 +218,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
                 .ToArray();
 
             // Act
-            var result = ValueEnumerableExtensions
+            using var result = ValueEnumerableExtensions
                 .Select<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int, string>(wrapped, selector)
                 .ToArray(pool);
 
@@ -269,7 +269,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
                 .ToArray();
 
             // Act
-            var result = ValueEnumerableExtensions
+            using var result = ValueEnumerableExtensions
                 .Select<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int, string>(wrapped, selector)
                 .ToArray(pool);
 
@@ -323,7 +323,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
                 .ToArray();
 
             // Act
-            var result = ValueEnumerableExtensions
+            using var result = ValueEnumerableExtensions
                 .Where<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(wrapped, predicate)
                 .Select(selector)
                 .ToArray(pool);

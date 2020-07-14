@@ -202,17 +202,6 @@ namespace NetFabric.Hyperlinq
                 return array;
             }
 
-            public ArraySegment<TSource> ToArray(ArrayPool<TSource> pool)
-            {
-                var result = pool.RentSliced(Count);
-#if NETSTANDARD2_1
-                Array.Fill(result.Array, value);
-#else
-                CopyTo(result.Array);
-#endif
-                return result;
-            }
-
             public IMemoryOwner<TSource> ToArray(MemoryPool<TSource> pool)
             {
                 var result = pool.RentSliced(Count);

@@ -6,6 +6,8 @@
 
 using System;
 using System.Buffers;
+using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
@@ -18,6 +20,7 @@ namespace NetFabric.Hyperlinq
     /// <typeparam name="T">The element type.</typeparam>
     struct LargeArrayBuilder<T> 
         : IDisposable
+        , ICollection<T>
     {
         const int DefaultMinCapacity = 4;
 
@@ -215,5 +218,21 @@ namespace NetFabric.Hyperlinq
                 pool.Return(buffers[index]!);
             buffers.Dispose();
         }
+
+        bool ICollection<T>.IsReadOnly
+            => true;
+
+        [ExcludeFromCodeCoverage]
+        IEnumerator<T> IEnumerable<T>.GetEnumerator() => throw new NotSupportedException();
+        [ExcludeFromCodeCoverage]
+        IEnumerator IEnumerable.GetEnumerator() => throw new NotSupportedException();
+        [ExcludeFromCodeCoverage]
+        void ICollection<T>.Add(T item) => throw new NotSupportedException();
+        [ExcludeFromCodeCoverage]
+        void ICollection<T>.Clear() => throw new NotSupportedException();
+        [ExcludeFromCodeCoverage]
+        bool ICollection<T>.Contains(T item) => throw new NotSupportedException();
+        [ExcludeFromCodeCoverage]
+        bool ICollection<T>.Remove(T item) => throw new NotSupportedException();
     }
 }

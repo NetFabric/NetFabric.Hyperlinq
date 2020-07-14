@@ -9,7 +9,7 @@ namespace NetFabric.Hyperlinq
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static List<TSource> ToList<TSource>(this TSource[] source)
-            => new List<TSource>(source);
+            => ArrayExtensions.ToList(source.AsMemory()); // Memory<> uses ICollection<>
 
     }
 }

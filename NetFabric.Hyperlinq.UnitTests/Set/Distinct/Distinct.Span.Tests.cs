@@ -1,5 +1,7 @@
 ﻿using NetFabric.Assertive;
 using System;
+using System.Buffers;
+using System.Linq;
 using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct
@@ -13,12 +15,12 @@ namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct
         public void Distinct_With_ValidData_Must_Succeed(int[] source)
         {
             // Arrange
-            var expected = 
-                System.Linq.Enumerable.Distinct(source);
+            var expected = Enumerable
+                .Distinct(source);
 
             // Act
             var result = ArrayExtensions
-                .Distinct<int>(source.AsSpan());
+                .Distinct(source.AsSpan());
 
             // Assert
             _ = result.SequenceEqual(expected).Must().BeTrue();
@@ -31,13 +33,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct
         public void Distinct_ToArray_With_ValidData_Must_Succeed(int[] source)
         {
             // Arrange
-            var expected =
-                System.Linq.Enumerable.ToArray(
-                    System.Linq.Enumerable.Distinct(source));
+            var expected = Enumerable
+                .Distinct(source)
+                .ToArray();
 
             // Act
             var result = ArrayExtensions
-                .Distinct<int>(source.AsSpan())
+                .Distinct(source.AsSpan())
                 .ToArray();
 
             // Assert
@@ -50,16 +52,39 @@ namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct
         [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
-        public void Distinct_ToList_With_ValidData_Must_Succeed(int[] source)
+        public void Distinct_ToArray_MemoryPool_With_ValidData_Must_Succeed(int[] source)
         {
             // Arrange
-            var expected =
-                System.Linq.Enumerable.ToList(
-                    System.Linq.Enumerable.Distinct(source));
+            var pool = MemoryPool<int>.Shared;
+            var expected = Enumerable
+                .Distinct(source)
+                .ToArray();
 
             // Act
             var result = ArrayExtensions
-                .Distinct<int>(source.AsSpan())
+                .Distinct(source.AsSpan())
+                .ToArray(pool);
+
+            // Assert
+            _ = result
+                .SequenceEqual(expected)
+                .Must().BeTrue();
+        }
+
+        [Theory]
+        [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
+        public void Distinct_ToList_With_ValidData_Must_Succeed(int[] source)
+        {
+            // Arrange
+            var expected = Enumerable
+                .Distinct(source)
+                .ToList();
+
+            // Act
+            var result = ArrayExtensions
+                .Distinct(source.AsSpan())
                 .ToList();
 
             // Assert

@@ -20,7 +20,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
 
             // Act
             var result = ArrayExtensions
-                .ToList<int>(source.AsSpan());
+                .ToList(source.AsSpan());
 
             // Assert
             _ = result.Must()
