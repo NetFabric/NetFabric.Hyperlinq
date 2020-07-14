@@ -14,7 +14,7 @@ namespace NetFabric.Hyperlinq
         {
             Debug.Assert(arrayPool is object);
 
-            using var builder = new LargeArrayBuilder<TSource>(arrayPool);
+            var builder = new LargeArrayBuilder<TSource>(arrayPool);
             using var enumerator = source.GetEnumerator();
             while (enumerator.MoveNext())
                 builder.Add(enumerator.Current);
@@ -27,7 +27,7 @@ namespace NetFabric.Hyperlinq
         {
             Debug.Assert(arrayPool is object);
 
-            using var builder = new LargeArrayBuilder<TSource>(arrayPool);
+            var builder = new LargeArrayBuilder<TSource>(arrayPool);
             using var enumerator = source.GetEnumerator();
             while (enumerator.MoveNext())
             {
@@ -44,7 +44,7 @@ namespace NetFabric.Hyperlinq
         {
             Debug.Assert(arrayPool is object);
 
-            using var builder = new LargeArrayBuilder<TSource>(arrayPool);
+            var builder = new LargeArrayBuilder<TSource>(arrayPool);
             using var enumerator = source.GetEnumerator();
             for (var index = 0; enumerator.MoveNext(); index++)
             {
@@ -61,7 +61,7 @@ namespace NetFabric.Hyperlinq
         {
             Debug.Assert(arrayPool is object);
 
-            using var builder = new LargeArrayBuilder<TResult>(arrayPool);
+            var builder = new LargeArrayBuilder<TResult>(arrayPool);
             using var enumerator = source.GetEnumerator();
             while (enumerator.MoveNext())
                 builder.Add(selector(enumerator.Current));
@@ -74,7 +74,7 @@ namespace NetFabric.Hyperlinq
         {
             Debug.Assert(arrayPool is object);
 
-            using var builder = new LargeArrayBuilder<TResult>(arrayPool);
+            var builder = new LargeArrayBuilder<TResult>(arrayPool);
             using var enumerator = source.GetEnumerator();
             checked
             {
@@ -90,7 +90,7 @@ namespace NetFabric.Hyperlinq
         {
             Debug.Assert(arrayPool is object);
 
-            using var builder = new LargeArrayBuilder<TResult>(arrayPool);
+            var builder = new LargeArrayBuilder<TResult>(arrayPool);
             using var enumerator = source.GetEnumerator();
             while (enumerator.MoveNext())
             {

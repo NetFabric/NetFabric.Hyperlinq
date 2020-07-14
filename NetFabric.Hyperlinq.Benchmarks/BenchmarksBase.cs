@@ -31,7 +31,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         protected IAsyncEnumerable<int> asyncEnumerableReference;
         protected TestAsyncEnumerable.AsyncEnumerable asyncEnumerableValue;
 
-        [Params(100)]
+        [Params(10_000)]
         public int Count { get; set; }
 
         [GlobalSetup]

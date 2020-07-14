@@ -54,14 +54,17 @@ namespace NetFabric.Hyperlinq
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static TSource[] ToArray<TList, TSource>(this TList source, Predicate<TSource> predicate, int skipCount, int takeCount)
             where TList : IReadOnlyList<TSource>
-            => ToArrayBuilder(source, predicate, skipCount, takeCount, ArrayPool<TSource>.Shared).ToArray();
+        {
+            using var arrayBuilder = ToArrayBuilder(source, predicate, skipCount, takeCount, ArrayPool<TSource>.Shared);
+            return arrayBuilder.ToArray();
+        }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static IMemoryOwner<TSource> ToArray<TList, TSource>(this TList source, Predicate<TSource> predicate, int skipCount, int takeCount, MemoryPool<TSource> pool)
             where TList : IReadOnlyList<TSource>
         {
-            Debug.Assert(pool is object);
-            return ToArrayBuilder(source, predicate, skipCount, takeCount, ArrayPool<TSource>.Shared).ToArray(pool);
+            using var arrayBuilder = ToArrayBuilder(source, predicate, skipCount, takeCount, ArrayPool<TSource>.Shared);
+            return arrayBuilder.ToArray(pool);
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -70,14 +73,17 @@ namespace NetFabric.Hyperlinq
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static TSource[] ToArray<TList, TSource>(this TList source, PredicateAt<TSource> predicate, int skipCount, int takeCount)
             where TList : IReadOnlyList<TSource>
-            => ToArrayBuilder(source, predicate, skipCount, takeCount, ArrayPool<TSource>.Shared).ToArray();
+        {
+            using var arrayBuilder = ToArrayBuilder(source, predicate, skipCount, takeCount, ArrayPool<TSource>.Shared);
+            return arrayBuilder.ToArray();
+        }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static IMemoryOwner<TSource> ToArray<TList, TSource>(this TList source, PredicateAt<TSource> predicate, int skipCount, int takeCount, MemoryPool<TSource> pool)
             where TList : IReadOnlyList<TSource>
         {
-            Debug.Assert(pool is object);
-            return ToArrayBuilder(source, predicate, skipCount, takeCount, ArrayPool<TSource>.Shared).ToArray(pool);
+            using var arrayBuilder = ToArrayBuilder(source, predicate, skipCount, takeCount, ArrayPool<TSource>.Shared);
+            return arrayBuilder.ToArray(pool);
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -140,14 +146,17 @@ namespace NetFabric.Hyperlinq
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static TResult[] ToArray<TList, TSource, TResult>(this TList source, Predicate<TSource> predicate, NullableSelector<TSource, TResult> selector, int skipCount, int takeCount)
             where TList : IReadOnlyList<TSource>
-            => ToArrayBuilder(source, predicate, selector, skipCount, takeCount, ArrayPool<TResult>.Shared).ToArray();
+        {
+            using var arrayBuilder = ToArrayBuilder(source, predicate, selector, skipCount, takeCount, ArrayPool<TResult>.Shared);
+            return arrayBuilder.ToArray();
+        }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static IMemoryOwner<TResult> ToArray<TList, TSource, TResult>(this TList source, Predicate<TSource> predicate, NullableSelector<TSource, TResult> selector, int skipCount, int takeCount, MemoryPool<TResult> pool)
             where TList : IReadOnlyList<TSource>
         {
-            Debug.Assert(pool is object);
-            return ToArrayBuilder(source, predicate, selector, skipCount, takeCount, ArrayPool<TResult>.Shared).ToArray(pool);
+            using var arrayBuilder = ToArrayBuilder(source, predicate, selector, skipCount, takeCount, ArrayPool<TResult>.Shared);
+            return arrayBuilder.ToArray(pool);
         }
     }
 }

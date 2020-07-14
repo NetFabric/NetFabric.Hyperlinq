@@ -19,8 +19,8 @@ namespace NetFabric.Hyperlinq
     /// </summary>
     /// <typeparam name="T">The element type.</typeparam>
     struct LargeArrayBuilder<T> 
-        : IDisposable
-        , ICollection<T>
+        : ICollection<T>
+        , IDisposable
     {
         const int DefaultMinCapacity = 4;
 
@@ -113,6 +113,7 @@ namespace NetFabric.Hyperlinq
         public readonly void CopyTo(Span<T> span)
         {
             var count = Count;
+            var arrayIndex = 0;
             for (var index = 0; count > 0; index++)
             {
                 // Find the buffer we're copying from.
@@ -120,10 +121,11 @@ namespace NetFabric.Hyperlinq
 
                 // Copy until we satisfy count, or we reach the end of the buffer.
                 var toCopy = Math.Min(count, buffer.Length);
-                buffer.AsSpan().Slice(0, toCopy).CopyTo(span);
+                buffer.AsSpan().Slice(0, toCopy).CopyTo(span.Slice(arrayIndex, toCopy));
 
                 // Increment variables to that position.
                 count -= toCopy;
+                arrayIndex += toCopy;
             }
         }
 

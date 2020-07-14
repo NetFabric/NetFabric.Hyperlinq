@@ -32,13 +32,19 @@ namespace NetFabric.Hyperlinq
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static List<TSource> ToList<TList, TSource>(this TList source, Predicate<TSource> predicate, int skipCount, int takeCount)
             where TList : IReadOnlyList<TSource>
-            => new List<TSource>(ToArrayBuilder(source, predicate, skipCount, takeCount, ArrayPool<TSource>.Shared));
+        {
+            using var arrayBuilder = ToArrayBuilder(source, predicate, skipCount, takeCount, ArrayPool<TSource>.Shared);
+            return new List<TSource>(arrayBuilder);
+        }
 
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static List<TSource> ToList<TList, TSource>(this TList source, PredicateAt<TSource> predicate, int skipCount, int takeCount)
             where TList : IReadOnlyList<TSource>
-            => new List<TSource>(ToArrayBuilder(source, predicate, skipCount, takeCount, ArrayPool<TSource>.Shared));
+        {
+            using var arrayBuilder = ToArrayBuilder(source, predicate, skipCount, takeCount, ArrayPool<TSource>.Shared);
+            return new List<TSource>(arrayBuilder);
+        }
 
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -60,7 +66,10 @@ namespace NetFabric.Hyperlinq
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static List<TResult> ToList<TList, TSource, TResult>(this TList source, Predicate<TSource> predicate, NullableSelector<TSource, TResult> selector, int skipCount, int takeCount)
             where TList : IReadOnlyList<TSource>
-            => new List<TResult>(ToArrayBuilder(source, predicate, selector, skipCount, takeCount, ArrayPool<TResult>.Shared));
+        {
+            using var arrayBuilder = ToArrayBuilder(source, predicate, selector, skipCount, takeCount, ArrayPool<TResult>.Shared);
+            return new List<TResult>(arrayBuilder);
+        }
 
         // helper implementation of ICollection<> so that CopyTo() is used to convert to List<>
         [GeneratorIgnore]

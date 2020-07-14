@@ -14,11 +14,17 @@ namespace NetFabric.Hyperlinq
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static List<TSource> ToList<TSource>(this in ArraySegment<TSource> source, Predicate<TSource> predicate)
-            => new List<TSource>(ToArrayBuilder(source, predicate, ArrayPool<TSource>.Shared));
+        {
+            using var arrayBuilder = ToArrayBuilder(source, predicate, ArrayPool<TSource>.Shared);
+            return new List<TSource>(arrayBuilder);
+        }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static List<TSource> ToList<TSource>(this in ArraySegment<TSource> source, PredicateAt<TSource> predicate)
-            => new List<TSource>(ToArrayBuilder(source, predicate, ArrayPool<TSource>.Shared));
+        {
+            using var arrayBuilder = ToArrayBuilder(source, predicate, ArrayPool<TSource>.Shared);
+            return new List<TSource>(arrayBuilder);
+        }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static List<TResult> ToList<TSource, TResult>(this in ArraySegment<TSource> source, NullableSelector<TSource, TResult> selector)
@@ -35,7 +41,10 @@ namespace NetFabric.Hyperlinq
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static List<TResult> ToList<TSource, TResult>(this in ArraySegment<TSource> source, Predicate<TSource> predicate, NullableSelector<TSource, TResult> selector)
-            => new List<TResult>(ToArrayBuilder(source, predicate, selector, ArrayPool<TResult>.Shared));
+        {
+            using var arrayBuilder = ToArrayBuilder(source, predicate, selector, ArrayPool<TResult>.Shared);
+            return new List<TResult>(arrayBuilder);
+        }
 
         // helper implementation of ICollection<> so that CopyTo() is used to convert to List<>
         sealed class ArraySegmentSelectorToListCollection<TSource, TResult>
