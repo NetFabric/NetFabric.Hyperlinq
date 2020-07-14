@@ -109,12 +109,6 @@ namespace NetFabric.Hyperlinq
                     : GetSet().ToArray();
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly ArraySegment<TSource> ToArray(ArrayPool<TSource> pool)
-                => source.Length == 0
-                    ? new ArraySegment<TSource>(pool.Rent(0), 0, 0)
-                    : GetSet().ToArray(pool);
-
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly IMemoryOwner<TSource> ToArray(MemoryPool<TSource> pool)
                 => source.Length == 0
                     ? pool.Rent(0)

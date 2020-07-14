@@ -31,19 +31,6 @@ namespace NetFabric.Hyperlinq
             return ToArrayBuilder(source, predicate, ArrayPool<TSource>.Shared).ToArray(memoryPool);
         }
 
-        static LargeArrayBuilder<TSource> ToArrayBuilder<TSource>(in ReadOnlySpan<TSource> source, Predicate<TSource> predicate, ArrayPool<TSource> arrayPool)
-        {
-            Debug.Assert(arrayPool is object);
-
-            using var builder = new LargeArrayBuilder<TSource>(arrayPool);
-            for (var index = 0; index < source.Length; index++)
-            {
-                if (predicate(source[index]))
-                    builder.Add(source[index]);
-            }
-            return builder;
-        }
-
         //////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -56,19 +43,6 @@ namespace NetFabric.Hyperlinq
         {
             Debug.Assert(memoryPool is object);
             return ToArrayBuilder(source, predicate, ArrayPool<TSource>.Shared).ToArray(memoryPool);
-        }
-
-        static LargeArrayBuilder<TSource> ToArrayBuilder<TSource>(in ReadOnlySpan<TSource> source, PredicateAt<TSource> predicate, ArrayPool<TSource> arrayPool)
-        {
-            Debug.Assert(arrayPool is object);
-
-            using var builder = new LargeArrayBuilder<TSource>(arrayPool);
-            for (var index = 0; index < source.Length; index++)
-            {
-                if (predicate(source[index], index))
-                    builder.Add(source[index]);
-            }
-            return builder;
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -120,19 +94,6 @@ namespace NetFabric.Hyperlinq
         {
             Debug.Assert(memoryPool is object);
             return ToArrayBuilder(source, predicate, selector, ArrayPool<TResult>.Shared).ToArray(memoryPool);
-        }
-
-        static LargeArrayBuilder<TResult> ToArrayBuilder<TSource, TResult>(in ReadOnlySpan<TSource> source, Predicate<TSource> predicate, NullableSelector<TSource, TResult> selector, ArrayPool<TResult> arrayPool)
-        {
-            Debug.Assert(arrayPool is object);
-
-            using var builder = new LargeArrayBuilder<TResult>(arrayPool);
-            for (var index = 0; index < source.Length; index++)
-            {
-                if (predicate(source[index]))
-                    builder.Add(selector(source[index]));
-            }
-            return builder;
         }
     }
 }

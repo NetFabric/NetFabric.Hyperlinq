@@ -116,7 +116,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
                 .ToArray();
 
             // Act
-            var result = ValueReadOnlyCollectionExtensions
+            using var result = ValueReadOnlyCollectionExtensions
                 .Select<Wrap.ValueReadOnlyCollectionWrapper<int>, Wrap.Enumerator<int>, int, string>(wrapped, selector)
                 .ToArray(pool);
 
@@ -167,7 +167,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
                 .ToArray();
 
             // Act
-            var result = ValueReadOnlyCollectionExtensions
+            using var result = ValueReadOnlyCollectionExtensions
                 .Select<Wrap.ValueReadOnlyCollectionWrapper<int>, Wrap.Enumerator<int>, int, string>(wrapped, selector)
                 .ToArray(pool);
 

@@ -1,5 +1,6 @@
 ﻿using NetFabric.Assertive;
 using System;
+using System.Buffers;
 using System.Linq;
 using Xunit;
 
@@ -101,6 +102,34 @@ namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct
             _ = result.Must()
                 .BeArrayOf<int>()
                 .BeEqualTo(expected);
+        }
+
+        [Theory]
+        [MemberData(nameof(TestData.SkipTakeEmpty), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakeSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakeMultiple), MemberType = typeof(TestData))]
+        public void Distinct_Skip_Take_ToArray_MemoryPool_With_ValidData_Must_Succeed(int[] source, int skipCount, int takeCount)
+        {
+            // Arrange
+            var pool = MemoryPool<int>.Shared;
+            var wrapped = new ArraySegment<int>(source);
+            var expected = Enumerable
+                .Skip(source, skipCount)
+                .Take(takeCount)
+                .Distinct()
+                .ToArray();
+
+            // Act
+            using var result = ArrayExtensions
+                .Skip(wrapped, skipCount)
+                .Take(takeCount)
+                .Distinct()
+                .ToArray(pool);
+
+            // Assert
+            _ = result
+                .SequenceEqual(expected)
+                .Must().BeTrue();
         }
 
         [Theory]

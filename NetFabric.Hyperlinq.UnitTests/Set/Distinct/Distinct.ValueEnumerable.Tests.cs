@@ -1,4 +1,6 @@
 ﻿using NetFabric.Assertive;
+using System.Buffers;
+using System.Linq;
 using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct
@@ -13,8 +15,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct
         {
             // Arrange
             var wrapped = Wrap.AsValueEnumerable(source);
-            var expected = 
-                System.Linq.Enumerable.Distinct(wrapped);
+            var expected = Enumerable
+                .Distinct(wrapped);
 
             // Act
             var result = ValueEnumerableExtensions
@@ -34,9 +36,9 @@ namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct
         {
             // Arrange
             var wrapped = Wrap.AsValueEnumerable(source);
-            var expected =
-                System.Linq.Enumerable.ToArray(
-                    System.Linq.Enumerable.Distinct(source));
+            var expected = Enumerable
+                .Distinct(source)
+                .ToArray();
 
             // Act
             var result = ValueEnumerableExtensions
@@ -53,13 +55,37 @@ namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct
         [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
+        public void Distinct_ToArray_MemoryPool_With_ValidData_Must_Succeed(int[] source)
+        {
+            // Arrange
+            var pool = MemoryPool<int>.Shared;
+            var wrapped = Wrap.AsValueEnumerable(source);
+            var expected = Enumerable
+                .Distinct(source)
+                .ToArray();
+
+            // Act
+            using var result = ValueEnumerableExtensions
+                .Distinct<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(wrapped)
+                .ToArray(pool);
+
+            // Assert
+            _ = result
+                .SequenceEqual(expected)
+                .Must().BeTrue();
+        }
+
+        [Theory]
+        [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
         public void Distinct_ToList_With_ValidData_Must_Succeed(int[] source)
         {
             // Arrange
             var wrapped = Wrap.AsValueEnumerable(source);
-            var expected =
-                System.Linq.Enumerable.ToList(
-                    System.Linq.Enumerable.Distinct(source));
+            var expected = Enumerable
+                .Distinct(source)
+                .ToList();
 
             // Act
             var result = ValueEnumerableExtensions

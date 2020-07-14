@@ -55,30 +55,23 @@ namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct
         [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
-        public void Distinct_ToArray_ArrayPool_With_ValidData_Must_Succeed(int[] source)
+        public void Distinct_ToArray_MemoryPool_With_ValidData_Must_Succeed(int[] source)
         {
             // Arrange
-            var pool = ArrayPool<int>.Shared;
+            var pool = MemoryPool<int>.Shared;
             var expected = Enumerable
                 .Distinct(source)
                 .ToArray();
 
             // Act
-            var result = ArrayExtensions
+            using var result = ArrayExtensions
                 .Distinct(source)
                 .ToArray(pool);
 
-            try
-            {
-                // Assert
-                _ = result.Must()
-                    .BeArraySegmentOf<int>()
-                    .BeEqualTo(expected);
-            }
-            finally
-            {
-                pool.Return(result.Array);
-            }
+            // Assert
+            _ = result
+                .SequenceEqual(expected)
+                .Must().BeTrue();
         }
     }
 }

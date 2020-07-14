@@ -14,6 +14,7 @@ namespace NetFabric.Hyperlinq
             source.CopyTo(destination);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Copy<TSource, TResult>(ReadOnlySpan<TSource> source, Span<TResult> destination, NullableSelector<TSource, TResult> selector)
         {
             Debug.Assert(destination.Length >= source.Length);
@@ -22,6 +23,7 @@ namespace NetFabric.Hyperlinq
                 destination[index] = selector(source[index])!;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Copy<TSource, TResult>(ReadOnlySpan<TSource> source, Span<TResult> destination, NullableSelectorAt<TSource, TResult> selector)
         {
             Debug.Assert(destination.Length >= source.Length);

@@ -2,6 +2,7 @@
 using System.Buffers;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
@@ -24,191 +25,88 @@ namespace NetFabric.Hyperlinq
                     return result;
 
                 default:
-                    {
-                        using var builder = new LargeArrayBuilder<TSource>(ArrayPool<TSource>.Shared);
-                        using var enumerator = source.GetEnumerator();
-                        while (enumerator.MoveNext())
-                            builder.Add(enumerator.Current);
-                        return builder.ToArray();
-                    }
+                    return ToArrayBuilder<TEnumerable, TEnumerator, TSource>(source, ArrayPool<TSource>.Shared).ToArray();
             }
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static IMemoryOwner<TSource> ToArray<TEnumerable, TEnumerator, TSource>(this TEnumerable source, MemoryPool<TSource> pool)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
-        {
-            Debug.Assert(pool is object);
-
-            using var builder = new LargeArrayBuilder<TSource>(ArrayPool<TSource>.Shared);
-            using var enumerator = source.GetEnumerator();
-            while (enumerator.MoveNext())
-                builder.Add(enumerator.Current);
-            return builder.ToArray(pool);
-        }
+            => ToArrayBuilder<TEnumerable, TEnumerator, TSource>(source, ArrayPool<TSource>.Shared).ToArray(pool);
 
         //////////////////////////////////////////////////////////////////////////////////////////////////
 
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static TSource[] ToArray<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Predicate<TSource> predicate)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
-        {
-            using var builder = new LargeArrayBuilder<TSource>(ArrayPool<TSource>.Shared);
-            using var enumerator = source.GetEnumerator();
-            while (enumerator.MoveNext())
-            {
-                var item = enumerator.Current;
-                if (predicate(item))
-                    builder.Add(item);
-            }
-            return builder.ToArray();
-        }
+            => ToArrayBuilder<TEnumerable, TEnumerator, TSource>(source, predicate, ArrayPool<TSource>.Shared).ToArray();
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static IMemoryOwner<TSource> ToArray<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Predicate<TSource> predicate, MemoryPool<TSource> pool)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
-        {
-            Debug.Assert(pool is object);
-
-            using var builder = new LargeArrayBuilder<TSource>(ArrayPool<TSource>.Shared);
-            using var enumerator = source.GetEnumerator();
-            while (enumerator.MoveNext())
-            {
-                var item = enumerator.Current;
-                if (predicate(item))
-                    builder.Add(item);
-            }
-            return builder.ToArray(pool);
-        }
+            => ToArrayBuilder<TEnumerable, TEnumerator, TSource>(source, predicate, ArrayPool<TSource>.Shared).ToArray(pool);
 
         //////////////////////////////////////////////////////////////////////////////////////////////////
 
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static TSource[] ToArray<TEnumerable, TEnumerator, TSource>(this TEnumerable source, PredicateAt<TSource> predicate)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
-        {
-            using var builder = new LargeArrayBuilder<TSource>(ArrayPool<TSource>.Shared);
-            using var enumerator = source.GetEnumerator();
-            for (var index = 0; enumerator.MoveNext(); index++)
-            {
-                var item = enumerator.Current;
-                if (predicate(item, index))
-                    builder.Add(item);
-            }
-            return builder.ToArray();
-        }
+            => ToArrayBuilder<TEnumerable, TEnumerator, TSource>(source, predicate, ArrayPool<TSource>.Shared).ToArray();
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static IMemoryOwner<TSource> ToArray<TEnumerable, TEnumerator, TSource>(this TEnumerable source, PredicateAt<TSource> predicate, MemoryPool<TSource> pool)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
-        {
-            Debug.Assert(pool is object);
-
-            using var builder = new LargeArrayBuilder<TSource>(ArrayPool<TSource>.Shared);
-            using var enumerator = source.GetEnumerator();
-            for (var index = 0; enumerator.MoveNext(); index++)
-            {
-                var item = enumerator.Current;
-                if (predicate(item, index))
-                    builder.Add(item);
-            }
-            return builder.ToArray(pool);
-        }
+            => ToArrayBuilder<TEnumerable, TEnumerator, TSource>(source, predicate, ArrayPool<TSource>.Shared).ToArray(pool);
 
         //////////////////////////////////////////////////////////////////////////////////////////////////
 
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static TResult[] ToArray<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, NullableSelector<TSource, TResult> selector)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
-        {
-            using var builder = new LargeArrayBuilder<TResult>(ArrayPool<TResult>.Shared);
-            using var enumerator = source.GetEnumerator();
-            while (enumerator.MoveNext())
-                builder.Add(selector(enumerator.Current));
-            return builder.ToArray();
-        }
+            => ToArrayBuilder<TEnumerable, TEnumerator, TSource, TResult>(source, selector, ArrayPool<TResult>.Shared).ToArray();
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static IMemoryOwner<TResult> ToArray<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, NullableSelector<TSource, TResult> selector, MemoryPool<TResult> pool)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
-        {
-            Debug.Assert(pool is object);
-
-            using var builder = new LargeArrayBuilder<TResult>(ArrayPool<TResult>.Shared);
-            using var enumerator = source.GetEnumerator();
-            while (enumerator.MoveNext())
-                builder.Add(selector(enumerator.Current));
-            return builder.ToArray(pool);
-        }
+            => ToArrayBuilder<TEnumerable, TEnumerator, TSource, TResult>(source, selector, ArrayPool<TResult>.Shared).ToArray(pool);
 
         //////////////////////////////////////////////////////////////////////////////////////////////////
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static TResult[] ToArray<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, NullableSelectorAt<TSource, TResult> selector)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
-        {
-            using var builder = new LargeArrayBuilder<TResult>(ArrayPool<TResult>.Shared);
-            using var enumerator = source.GetEnumerator();
-            checked
-            {
-                for (var index = 0; enumerator.MoveNext(); index++)
-                    builder.Add(selector(enumerator.Current, index));
-            }
-            return builder.ToArray();
-        }
+            => ToArrayBuilder<TEnumerable, TEnumerator, TSource, TResult>(source, selector, ArrayPool<TResult>.Shared).ToArray();
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static IMemoryOwner<TResult> ToArray<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, NullableSelectorAt<TSource, TResult> selector, MemoryPool<TResult> pool)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
-        {
-            Debug.Assert(pool is object);
-
-            using var builder = new LargeArrayBuilder<TResult>(ArrayPool<TResult>.Shared);
-            using var enumerator = source.GetEnumerator();
-            checked
-            {
-                for (var index = 0; enumerator.MoveNext(); index++)
-                    builder.Add(selector(enumerator.Current, index));
-            }
-            return builder.ToArray(pool);
-        }
+            => ToArrayBuilder<TEnumerable, TEnumerator, TSource, TResult>(source, selector, ArrayPool<TResult>.Shared).ToArray(pool);
 
         //////////////////////////////////////////////////////////////////////////////////////////////////
 
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static TResult[] ToArray<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, Predicate<TSource> predicate, NullableSelector<TSource, TResult> selector)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
-        {
-            using var builder = new LargeArrayBuilder<TResult>(ArrayPool<TResult>.Shared);
-            using var enumerator = source.GetEnumerator();
-            while (enumerator.MoveNext())
-            {
-                var item = enumerator.Current;
-                if (predicate(item))
-                    builder.Add(selector(item));
-            }
-            return builder.ToArray();
-        }
+            => ToArrayBuilder<TEnumerable, TEnumerator, TSource, TResult>(source, predicate, selector, ArrayPool<TResult>.Shared).ToArray();
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static IMemoryOwner<TResult> ToArray<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, Predicate<TSource> predicate, NullableSelector<TSource, TResult> selector, MemoryPool<TResult> pool)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
-        {
-            Debug.Assert(pool is object);
-
-            using var builder = new LargeArrayBuilder<TResult>(ArrayPool<TResult>.Shared);
-            using var enumerator = source.GetEnumerator();
-            while (enumerator.MoveNext())
-            {
-                var item = enumerator.Current;
-                if (predicate(item))
-                    builder.Add(selector(item));
-            }
-            return builder.ToArray(pool);
-        }
+            => ToArrayBuilder<TEnumerable, TEnumerator, TSource, TResult>(source, predicate, selector, ArrayPool<TResult>.Shared).ToArray(pool);
     }
 }

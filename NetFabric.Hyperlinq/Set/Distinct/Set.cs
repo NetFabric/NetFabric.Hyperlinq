@@ -120,13 +120,13 @@ namespace NetFabric.Hyperlinq
                 Array.Copy(slots, newSlots, Count);
                 Array.Clear(newSlots, Count, newSlots.Length - Count);
 
-                Array.Clear(newBuckets, 0, newBuckets.Length);
                 for (var i = 0; i < Count; i++)
                 {
                     var bucket = newSlots[i].HashCode % newSize;
                     newSlots[i].Next = newBuckets[bucket] - 1;
                     newBuckets[bucket] = i + 1;
                 }
+                Array.Clear(newBuckets, Count, newBuckets.Length);
             }
             finally
             {
@@ -152,14 +152,6 @@ namespace NetFabric.Hyperlinq
 #endif
             CopyTo(array);
             return array;
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public readonly ArraySegment<TElement> ToArray(ArrayPool<TElement> pool)
-        {
-            var result = pool.RentSliced(Count);
-            CopyTo(result.Array);
-            return result;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
