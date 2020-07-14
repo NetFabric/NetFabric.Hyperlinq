@@ -1,6 +1,8 @@
 using System;
+using System.Buffers;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 
@@ -11,19 +13,11 @@ namespace NetFabric.Hyperlinq
         public static int Count<TSource>(this List<TSource> source)
             => source.Count;
 
-#if SPAN_SUPPORTED
         public static ReadOnlyMemory<TSource> Skip<TSource>(this List<TSource> source, int count)
             => source.Unwrap().Skip(count);
 
         public static ReadOnlyMemory<TSource> Take<TSource>(this List<TSource> source, int count)
             => source.Unwrap().Take(count);
-#else
-        public static ArraySegment<TSource> Skip<TSource>(this List<TSource> source, int count)
-            => source.Unwrap().Skip(count);
-
-        public static ArraySegment<TSource> Take<TSource>(this List<TSource> source, int count)
-            => source.Unwrap().Take(count);
-#endif
 
         public static bool All<TSource>(this List<TSource> source, Predicate<TSource> predicate)
             => source.Unwrap().All(predicate);
@@ -43,8 +37,6 @@ namespace NetFabric.Hyperlinq
         
         public static bool Contains<TSource>(this List<TSource> source, [AllowNull] TSource value, IEqualityComparer<TSource>? comparer = default)
             => source.Unwrap().Contains(value, comparer);
-
-#if SPAN_SUPPORTED
 
         public static ArrayExtensions.MemorySelectEnumerable<TSource, TResult> Select<TSource, TResult>(
             this List<TSource> source,
@@ -83,47 +75,6 @@ namespace NetFabric.Hyperlinq
             PredicateAt<TSource> predicate)
             => source.Unwrap().WhereRef(predicate);
 
-#else
-
-        public static ArrayExtensions.SelectEnumerable<TSource, TResult> Select<TSource, TResult>(
-            this List<TSource> source,
-            NullableSelector<TSource, TResult> selector)
-            => source.Unwrap().Select(selector);
-
-        public static ArrayExtensions.SelectAtEnumerable<TSource, TResult> Select<TSource, TResult>(
-            this List<TSource> source,
-            NullableSelectorAt<TSource, TResult> selector)
-            => source.Unwrap().Select(selector);
-
-        public static ArrayExtensions.SelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, TResult> SelectMany<TSource, TSubEnumerable, TSubEnumerator, TResult>(
-            this List<TSource> source,
-            Selector<TSource, TSubEnumerable> selector)
-            where TSubEnumerable : IValueEnumerable<TResult, TSubEnumerator>
-            where TSubEnumerator : struct, IEnumerator<TResult>
-            => source.Unwrap().SelectMany<TSource, TSubEnumerable, TSubEnumerator, TResult>(selector);
-
-        
-        public static ArrayExtensions.WhereEnumerable<TSource> Where<TSource>(
-            this List<TSource> source,
-            Predicate<TSource> predicate)
-            => source.Unwrap().Where(predicate);
-        
-        public static ArrayExtensions.WhereAtEnumerable<TSource> Where<TSource>(
-            this List<TSource> source,
-            PredicateAt<TSource> predicate)
-            => source.Unwrap().Where(predicate);
-
-        public static ArrayExtensions.WhereRefEnumerable<TSource> WhereRef<TSource>(
-            this List<TSource> source,
-            Predicate<TSource> predicate)
-            => source.Unwrap().WhereRef(predicate);
-
-        public static ArrayExtensions.WhereRefAtEnumerable<TSource> WhereRef<TSource>(
-            this List<TSource> source,
-            PredicateAt<TSource> predicate)
-            => source.Unwrap().WhereRef(predicate);
-#endif
-
         public static Option<TSource> ElementAt<TSource>(this List<TSource> source, int index)
             => source.Unwrap().ElementAt(index);
 
@@ -135,13 +86,8 @@ namespace NetFabric.Hyperlinq
         public static Option<TSource> Single<TSource>(this List<TSource> source)
             => source.Unwrap().Single();
 
-#if SPAN_SUPPORTED
         public static ArrayExtensions.MemoryDistinctEnumerable<TSource> Distinct<TSource>(this List<TSource> source, IEqualityComparer<TSource>? comparer = default)
             => source.Unwrap().Distinct(comparer);
-#else
-        public static ArrayExtensions.DistinctEnumerable<TSource> Distinct<TSource>(this List<TSource> source, IEqualityComparer<TSource>? comparer = default)
-            => source.Unwrap().Distinct(comparer);
-#endif
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static List<TSource> AsEnumerable<TSource>(this List<TSource> source)
@@ -155,10 +101,17 @@ namespace NetFabric.Hyperlinq
         public static TSource[] ToArray<TSource>(this List<TSource> source)
         {
             var array = new TSource[source.Count];
-            Array.Copy(source.GetItems(), array, source.Count);
+            Array.Copy(source.GetItems(), 0, array, 0, source.Count);
             return array;
         }
-        
+
+        public static IMemoryOwner<TSource> ToArray<TSource>(this List<TSource> source, MemoryPool<TSource> pool)
+        {
+            var result = pool.RentSliced(source.Count);
+            ArrayExtensions.Copy(source.GetItems(), result.Memory.Span);
+            return result;
+        }
+
         public static List<TSource> ToList<TSource>(this List<TSource> source)
             => new List<TSource>(source);
 
@@ -169,19 +122,9 @@ namespace NetFabric.Hyperlinq
         public static Dictionary<TKey, TElement> ToDictionary<TSource, TKey, TElement>(this List<TSource> source, NullableSelector<TSource, TKey> keySelector, NullableSelector<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer = default)
             => source.Unwrap().ToDictionary(keySelector, elementSelector, comparer);
 
-#if SPAN_SUPPORTED
-
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static Memory<TSource> Unwrap<TSource>(this List<TSource> source)
             => source.GetItems().AsMemory().Slice(0, source.Count);
-
-#else
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static ArraySegment<TSource> Unwrap<TSource>(this List<TSource> source)
-            => new ArraySegment<TSource>(source.GetItems(), 0, source.Count);
-
-#endif
 
         class ListLayout<TSource>
         {

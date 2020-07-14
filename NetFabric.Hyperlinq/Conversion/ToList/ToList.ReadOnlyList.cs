@@ -1,24 +1,31 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
     public static partial class ReadOnlyListExtensions
     {
-        
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static List<TSource> ToList<TList, TSource>(this TList source)
             where TList : IReadOnlyList<TSource>
-            => source switch
-            {
-                ICollection<TSource> collection => new List<TSource>(collection), // no need to allocate helper class
+            => source.Count == 0
+                ? new List<TSource>()
+                : source switch
+                    {
+                        ICollection<TSource> collection => new List<TSource>(collection), // no need to allocate helper class
 
-                _ => new List<TSource>(new ToListCollection<TList, TSource>(source, 0, source.Count)),
-            };
+                        _ => new List<TSource>(new ToListCollection<TList, TSource>(source, 0, source.Count)),
+                    };
 
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static List<TSource> ToList<TList, TSource>(this TList source, int skipCount, int takeCount)
             where TList : IReadOnlyList<TSource>
-            => new List<TSource>(new ToListCollection<TList, TSource>(source, skipCount, takeCount));
+            => source.Count == 0
+                ? new List<TSource>()
+                : new List<TSource>(new ToListCollection<TList, TSource>(source, skipCount, takeCount));
 
 
         static List<TSource> ToList<TList, TSource>(this TList source, Predicate<TSource> predicate, int skipCount, int takeCount)
@@ -62,14 +69,20 @@ namespace NetFabric.Hyperlinq
         }
 
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static List<TResult> ToList<TList, TSource, TResult>(this TList source, NullableSelector<TSource, TResult> selector, int skipCount, int takeCount)
             where TList : IReadOnlyList<TSource>
-            => new List<TResult>(new ToListCollection<TList, TSource, TResult>(source, selector, skipCount, takeCount));
+            => source.Count == 0
+                ? new List<TResult>()
+                : new List<TResult>(new ToListCollection<TList, TSource, TResult>(source, selector, skipCount, takeCount));
 
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static List<TResult> ToList<TList, TSource, TResult>(this TList source, NullableSelectorAt<TSource, TResult> selector, int skipCount, int takeCount)
             where TList : IReadOnlyList<TSource>
-            => new List<TResult>(new IndexedToListCollection<TList, TSource, TResult>(source, selector, skipCount, takeCount));
+            => source.Count == 0
+                ? new List<TResult>()
+                : new List<TResult>(new IndexedToListCollection<TList, TSource, TResult>(source, selector, skipCount, takeCount));
 
 
         static List<TResult> ToList<TList, TSource, TResult>(this TList source, Predicate<TSource> predicate, NullableSelector<TSource, TResult> selector, int skipCount, int takeCount)
@@ -106,16 +119,8 @@ namespace NetFabric.Hyperlinq
 
             public override void CopyTo(TSource[] array, int _)
             {
-                if (skipCount == 0)
-                {
-                    for (var index = 0; index < takeCount; index++)
-                        array[index] = source[index];
-                }
-                else
-                {
-                    for (var index = 0; index < takeCount; index++)
-                        array[index] = source[index + skipCount];
-                }
+                for (var index = 0; index < takeCount; index++)
+                    array[index] = source[index + skipCount];
             }
         }
 
@@ -139,19 +144,8 @@ namespace NetFabric.Hyperlinq
                 this.takeCount = takeCount;
             }
 
-            public override void CopyTo(TResult[] array, int _)
-            {
-                if (skipCount == 0)
-                {
-                    for (var index = 0; index < takeCount; index++)
-                        array[index] = selector(source[index])!;
-                }
-                else
-                {
-                    for (var index = 0; index < takeCount; index++)
-                        array[index] = selector(source[index + skipCount])!;
-                }
-            }
+            public override void CopyTo(TResult[] array, int arrayIndex)
+                => ReadOnlyListExtensions.Copy(source, skipCount, array, arrayIndex, takeCount, selector);
         }
 
         // helper implementation of ICollection<> so that CopyTo() is used to convert to List<>
@@ -174,19 +168,8 @@ namespace NetFabric.Hyperlinq
                 this.takeCount = takeCount;
             }
 
-            public override void CopyTo(TResult[] array, int _)
-            {
-                if (skipCount == 0)
-                {
-                    for (var index = 0; index < takeCount; index++)
-                        array[index] = selector(source[index], index)!;
-                }
-                else
-                {
-                    for (var index = 0; index < takeCount; index++)
-                        array[index] = selector(source[index + skipCount], index)!;
-                }
-            }
+            public override void CopyTo(TResult[] array, int arrayIndex)
+                => ReadOnlyListExtensions.Copy(source, skipCount, array, arrayIndex, takeCount, selector);
         }
     }
 }

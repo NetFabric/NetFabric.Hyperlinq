@@ -50,7 +50,6 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public Option<int> Hyperlinq_Array() =>
             array.ElementAt(Count - 1);
 
-#if SPAN_SUPPORTED
         [BenchmarkCategory("Array")]
         [Benchmark]
         public Option<int> Hyperlinq_Span() =>
@@ -60,7 +59,6 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [Benchmark]
         public Option<int> Hyperlinq_Memory() =>
             memory.ElementAt(Count - 1);
-#endif
 
         [BenchmarkCategory("Enumerable_Value")]
         [Benchmark]

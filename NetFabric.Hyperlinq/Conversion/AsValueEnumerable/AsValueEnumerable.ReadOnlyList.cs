@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿using System;
+using System.Buffers;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
@@ -48,21 +50,8 @@ namespace NetFabric.Hyperlinq
             bool ICollection<TSource>.IsReadOnly
                 => true;
 
-            public void CopyTo(TSource[] array, int arrayIndex)
-            {
-                if (source.Count == 0)
-                    return;
-
-                if (source is ICollection<TSource> collection)
-                {
-                    collection.CopyTo(array, arrayIndex);
-                }
-                else
-                {
-                    for (var index = 0; index < source.Count; index++)
-                        array[arrayIndex + index] = source[index];
-                }
-            }
+            public void CopyTo(TSource[] array, int arrayIndex = 0)
+                => ReadOnlyListExtensions.Copy(source, 0, array, arrayIndex, source.Count);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             bool ICollection<TSource>.Contains(TSource item)
@@ -153,6 +142,9 @@ namespace NetFabric.Hyperlinq
             public TSource[] ToArray()
                 => ReadOnlyListExtensions.ToArray<IReadOnlyList<TSource>, TSource>(source);
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public IMemoryOwner<TSource> ToArray(MemoryPool<TSource> pool)
+                => ReadOnlyListExtensions.ToArray<IReadOnlyList<TSource>, TSource>(source, pool);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public List<TSource> ToList()

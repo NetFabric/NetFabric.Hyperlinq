@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Buffers;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
@@ -36,8 +37,10 @@ namespace NetFabric.Hyperlinq
 
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly Enumerator GetAsyncEnumerator(CancellationToken cancellationToken) => new Enumerator(in this, cancellationToken);
-            readonly IAsyncEnumerator<TSource> IAsyncEnumerable<TSource>.GetAsyncEnumerator(CancellationToken cancellationToken) => new Enumerator(in this, cancellationToken);
+            public readonly Enumerator GetAsyncEnumerator(CancellationToken cancellationToken) 
+                => new Enumerator(in this, cancellationToken);
+            readonly IAsyncEnumerator<TSource> IAsyncEnumerable<TSource>.GetAsyncEnumerator(CancellationToken cancellationToken) 
+                => new Enumerator(in this, cancellationToken);
 
             public struct Enumerator
                 : IAsyncEnumerator<TSource>
@@ -212,6 +215,9 @@ namespace NetFabric.Hyperlinq
 
             public ValueTask<TSource[]> ToArrayAsync(CancellationToken cancellationToken = default)
                 => AsyncValueEnumerableExtensions.ToArrayAsync<TEnumerable, TEnumerator, TSource>(source, predicate, cancellationToken);
+
+            public ValueTask<IMemoryOwner<TSource>> ToArrayAsync(MemoryPool<TSource> pool, CancellationToken cancellationToken = default)
+                => AsyncValueEnumerableExtensions.ToArrayAsync<TEnumerable, TEnumerator, TSource>(source, predicate, pool, cancellationToken);
 
             public ValueTask<List<TSource>> ToListAsync(CancellationToken cancellationToken = default)
                 => AsyncValueEnumerableExtensions.ToListAsync<TEnumerable, TEnumerator, TSource>(source, predicate, cancellationToken);

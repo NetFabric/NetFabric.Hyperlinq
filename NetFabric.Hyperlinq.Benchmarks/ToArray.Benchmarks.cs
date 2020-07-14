@@ -16,12 +16,10 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int[] Linq_Array() =>
             System.Linq.Enumerable.ToArray(array);
 
-#if SPAN_SUPPORTED
         [BenchmarkCategory("Array")]
         [Benchmark]
         public int[] System_Span() =>
             array.AsSpan().ToArray();
-#endif
 
         [BenchmarkCategory("Enumerable_Value")]
         [Benchmark(Baseline = true)]
@@ -68,7 +66,6 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int[] Hyperlinq_Array() =>
             array.ToArray();
 
-#if SPAN_SUPPORTED
         [BenchmarkCategory("Array")]
         [Benchmark]
         public int[] Hyperlinq_Span() =>
@@ -78,7 +75,6 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [Benchmark]
         public int[] Hyperlinq_Memory() =>
             memory.ToArray();
-#endif
 
         [BenchmarkCategory("Enumerable_Value")]
         [Benchmark]

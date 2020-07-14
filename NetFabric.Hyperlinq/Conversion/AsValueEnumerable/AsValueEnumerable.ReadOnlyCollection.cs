@@ -47,22 +47,27 @@ namespace NetFabric.Hyperlinq
             bool ICollection<TSource>.IsReadOnly  
                 => true;
 
-            public void CopyTo(TSource[] array, int arrayIndex) 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public void CopyTo(TSource[] array, int arrayIndex = 0)
             {
-                if (source.Count == 0)
-                    return;
-
-                if (source is ICollection<TSource> collection)
+                if (source.Count != 0)
                 {
-                    collection.CopyTo(array, arrayIndex);
-                }
-                else
-                {
-                    checked
+                    switch (source)
                     {
-                        using var enumerator = source.GetEnumerator();
-                        for (var index = arrayIndex; enumerator.MoveNext(); index++)
-                            array[index] = enumerator.Current;
+                        case ICollection<TSource> collection:
+                            collection.CopyTo(array, arrayIndex);
+                            break;
+
+                        default:
+                            {
+                                using var enumerator = GetEnumerator();
+                                checked
+                                {
+                                    for (var index = arrayIndex; enumerator.MoveNext(); index++)
+                                        array[index] = enumerator.Current;
+                                }
+                            }
+                            break;
                     }
                 }
             }
@@ -83,15 +88,6 @@ namespace NetFabric.Hyperlinq
 
             public bool Contains([MaybeNull] TSource value, IEqualityComparer<TSource>? comparer = default)
                 => Count != 0 && EnumerableExtensions.Contains(source, getEnumerator, value, comparer);
-
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public TSource[] ToArray()
-                => ReadOnlyCollectionExtensions.ToArray(source);
-
-            
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public List<TSource> ToList()
-                => ReadOnlyCollectionExtensions.ToList(source);
         }
 
         public readonly partial struct ValueEnumerableWrapper<TSource>
@@ -115,22 +111,27 @@ namespace NetFabric.Hyperlinq
             bool ICollection<TSource>.IsReadOnly  
                 => true;
 
-            public void CopyTo(TSource[] array, int arrayIndex) 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public void CopyTo(TSource[] array, int arrayIndex = 0)
             {
-                if (source.Count == 0)
-                    return;
-
-                if (source is ICollection<TSource> collection)
+                if (source.Count != 0)
                 {
-                    collection.CopyTo(array, arrayIndex);
-                }
-                else
-                {
-                    checked
+                    switch (source)
                     {
-                        using var enumerator = source.GetEnumerator();
-                        for (var index = arrayIndex; enumerator.MoveNext(); index++)
-                            array[index] = enumerator.Current;
+                        case ICollection<TSource> collection:
+                            collection.CopyTo(array, arrayIndex);
+                            break;
+
+                        default:
+                            {
+                                using var enumerator = GetEnumerator();
+                                checked
+                                {
+                                    for (var index = arrayIndex; enumerator.MoveNext(); index++)
+                                        array[index] = enumerator.Current;
+                                }
+                            }
+                            break;
                     }
                 }
             }
@@ -181,15 +182,6 @@ namespace NetFabric.Hyperlinq
 
             public bool Contains([MaybeNull] TSource value, IEqualityComparer<TSource>? comparer = default)
                 => Count != 0 && EnumerableExtensions.Contains(source, value, comparer);
-
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public TSource[] ToArray()
-                => ReadOnlyCollectionExtensions.ToArray(source);
-
-            
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public List<TSource> ToList()
-                => ReadOnlyCollectionExtensions.ToList(source);
         }
 
         public static int Count<TSource>(this in ValueEnumerableWrapper<TSource> source)

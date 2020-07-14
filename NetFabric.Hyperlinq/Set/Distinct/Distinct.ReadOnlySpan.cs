@@ -1,4 +1,5 @@
 using System;
+using System.Buffers;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
@@ -81,8 +82,20 @@ namespace NetFabric.Hyperlinq
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly TSource[] ToArray()
                 => source.Length == 0
-                    ? System.Array.Empty<TSource>()
+                    ? Array.Empty<TSource>()
                     : GetSet().ToArray();
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public readonly ArraySegment<TSource> ToArray(ArrayPool<TSource> pool)
+                => source.Length == 0
+                    ? new ArraySegment<TSource>(pool.Rent(0), 0, 0)
+                    : GetSet().ToArray(pool);
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public readonly IMemoryOwner<TSource> ToArray(MemoryPool<TSource> pool)
+                => source.Length == 0
+                    ? pool.Rent(0)
+                    : GetSet().ToArray(pool);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly List<TSource> ToList()

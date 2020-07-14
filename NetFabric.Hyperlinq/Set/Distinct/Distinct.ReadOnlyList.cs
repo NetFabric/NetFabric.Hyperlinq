@@ -1,7 +1,9 @@
 using System;
+using System.Buffers;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Diagnostics.Tracing;
 using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
@@ -124,6 +126,18 @@ namespace NetFabric.Hyperlinq
                 => source.Count == 0 
                     ? Array.Empty<TSource>()
                     : GetSet().ToArray();
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public readonly ArraySegment<TSource> ToArray(ArrayPool<TSource> pool)
+                => source.Count == 0
+                    ? pool.RentSliced(0)
+                    : GetSet().ToArray(pool);
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public readonly IMemoryOwner<TSource> ToArray(MemoryPool<TSource> pool)
+                => source.Count == 0
+                    ? pool.RentSliced(0)
+                    : GetSet().ToArray(pool);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly List<TSource> ToList()

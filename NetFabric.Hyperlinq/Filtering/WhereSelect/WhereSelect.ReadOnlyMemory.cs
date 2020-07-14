@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Buffers;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -131,6 +132,9 @@ namespace NetFabric.Hyperlinq
 
             public TResult[] ToArray()
                 => ArrayExtensions.ToArray<TSource, TResult>(source.Span, predicate, selector);
+
+            public IMemoryOwner<TResult> ToArray(MemoryPool<TResult> memoryPool)
+                => ArrayExtensions.ToArray<TSource, TResult>(source, predicate, selector, memoryPool);
 
             public List<TResult> ToList()
                 => ArrayExtensions.ToList<TSource, TResult>(source, predicate, selector); // memory performs best

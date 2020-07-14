@@ -2,61 +2,73 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable enable
-using System.Diagnostics;
+// based on https://github.com/dotnet/runtime/blob/master/src/libraries/Common/src/System/Collections/Generic/ArrayBuilder.cs
 
-namespace System.Collections.Generic
+using System;
+using System.Buffers;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+
+namespace NetFabric.Hyperlinq
 {
     /// <summary>
     /// Helper type for avoiding allocations while building arrays.
     /// </summary>
     /// <typeparam name="T">The element type.</typeparam>
-    [Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-    internal struct ArrayBuilder<T>
+    struct ArrayBuilder<T> 
+        : IDisposable
     {
-        private const int DefaultCapacity = 4;
-        private const int MaxCoreClrArrayLength = 0x7fefffff; // For byte arrays the limit is slightly larger
+        const int DefaultMinCapacity = 4;
+        const int MaxCoreClrArrayLength = 0x7fefffff; // For byte arrays the limit is slightly larger
 
-        private T[]? _array; // Starts out null, initialized on first Add.
-        private int _count; // Number of items into _array we're using.
+        readonly ArrayPool<T> pool;
+        T[]? buffer; // Starts out null, initialized on first Add.
 
         /// <summary>
         /// Initializes the <see cref="ArrayBuilder{T}"/> with a specified capacity.
         /// </summary>
         /// <param name="capacity">The capacity of the array to allocate.</param>
-        public ArrayBuilder(int capacity) : this()
+        public ArrayBuilder(int capacity, ArrayPool<T> pool) 
+            : this(pool)
         {
             Debug.Assert(capacity >= 0);
             if (capacity > 0)
             {
-                _array = new T[capacity];
+                buffer = this.pool.Rent(capacity);
             }
+        }
+
+        public ArrayBuilder(ArrayPool<T> pool)
+        {
+            Debug.Assert(pool is object);
+            this.pool = pool;
+            buffer = default;
+            Count = 0;
         }
 
         /// <summary>
         /// Gets the number of items this instance can store without re-allocating,
         /// or 0 if the backing array is <c>null</c>.
         /// </summary>
-        public int Capacity => _array?.Length ?? 0;
-
-        /// <summary>Gets the current underlying array.</summary>
-        public T[]? Buffer => _array;
+        public int Capacity 
+            => buffer?.Length ?? 0;
 
         /// <summary>
         /// Gets the number of items in the array currently in use.
         /// </summary>
-        public int Count => _count;
+        public int Count { get; private set; }
 
         /// <summary>
         /// Gets or sets the item at a certain index in the array.
         /// </summary>
         /// <param name="index">The index into the array.</param>
+        [MaybeNull]
         public T this[int index]
         {
             get
             {
-                Debug.Assert(index >= 0 && index < _count);
-                return _array![index];
+                Debug.Assert(index >= 0 && index < Count);
+                return buffer![index];
             }
         }
 
@@ -64,65 +76,14 @@ namespace System.Collections.Generic
         /// Adds an item to the backing array, resizing it if necessary.
         /// </summary>
         /// <param name="item">The item to add.</param>
-        public void Add(T item)
+        public void Add([AllowNull] T item)
         {
-            if (_count == Capacity)
+            if (Count == Capacity)
             {
-                EnsureCapacity(_count + 1);
+                EnsureCapacity(Count + 1);
             }
 
             UncheckedAdd(item);
-        }
-
-        /// <summary>
-        /// Gets the first item in this builder.
-        /// </summary>
-        public T First()
-        {
-            Debug.Assert(_count > 0);
-            return _array![0];
-        }
-
-        /// <summary>
-        /// Gets the last item in this builder.
-        /// </summary>
-        public T Last()
-        {
-            Debug.Assert(_count > 0);
-            return _array![_count - 1];
-        }
-
-        /// <summary>
-        /// Creates an array from the contents of this builder.
-        /// </summary>
-        /// <remarks>
-        /// Do not call this method twice on the same builder.
-        /// </remarks>
-        public T[] ToArray()
-        {
-            if (_count == 0)
-            {
-                return Array.Empty<T>();
-            }
-
-            Debug.Assert(_array != null); // Nonzero _count should imply this
-
-            T[] result = _array;
-            if (_count < result.Length)
-            {
-                // Avoid a bit of overhead (method call, some branches, extra codegen)
-                // which would be incurred by using Array.Resize
-                result = new T[_count];
-                Array.Copy(_array, result, _count);
-            }
-
-#if DEBUG
-            // Try to prevent callers from using the ArrayBuilder after ToArray, if _count != 0.
-            _count = -1;
-            _array = default;
-#endif
-
-            return result;
         }
 
         /// <summary>
@@ -133,19 +94,19 @@ namespace System.Collections.Generic
         /// Use this method if you know there is enough space in the <see cref="ArrayBuilder{T}"/>
         /// for another item, and you are writing performance-sensitive code.
         /// </remarks>
-        public void UncheckedAdd(T item)
+        public void UncheckedAdd([AllowNull] T item)
         {
-            Debug.Assert(_count < Capacity);
+            Debug.Assert(Count < Capacity);
 
-            _array![_count++] = item;
+            buffer![Count++] = item!;
         }
 
-        private void EnsureCapacity(int minimum)
+        void EnsureCapacity(int minimum)
         {
             Debug.Assert(minimum > Capacity);
 
-            int capacity = Capacity;
-            int nextCapacity = capacity == 0 ? DefaultCapacity : 2 * capacity;
+            var capacity = Capacity;
+            var nextCapacity = capacity == 0 ? DefaultMinCapacity : 2 * capacity;
 
             if ((uint)nextCapacity > (uint)MaxCoreClrArrayLength)
             {
@@ -154,12 +115,26 @@ namespace System.Collections.Generic
 
             nextCapacity = Math.Max(nextCapacity, minimum);
 
-            T[] next = new T[nextCapacity];
-            if (_count > 0)
+            var next = pool.Rent(nextCapacity);
+            try
             {
-                Array.Copy(_array!, next, _count);
+                if (buffer is object)
+                {
+                    Array.Copy(buffer, next, Count);
+                }
             }
-            _array = next;
+            finally
+            {
+                if (buffer is object)
+                    pool.Return(buffer);
+                buffer = next;
+            }
+        }
+
+        public readonly void Dispose()
+        {
+            if (buffer is object)
+                pool.Return(buffer);
         }
     }
 }

@@ -102,7 +102,6 @@ namespace NetFabric.Hyperlinq.Benchmarks
             return sum;
         }
 
-#if SPAN_SUPPORTED
         [BenchmarkCategory("Array")]
         [Benchmark]
         public int Hyperlinq_Span()
@@ -124,7 +123,6 @@ namespace NetFabric.Hyperlinq.Benchmarks
                 sum += source[index];
             return sum;
         }
-#endif
 
         [BenchmarkCategory("Enumerable_Value")]
         [Benchmark]

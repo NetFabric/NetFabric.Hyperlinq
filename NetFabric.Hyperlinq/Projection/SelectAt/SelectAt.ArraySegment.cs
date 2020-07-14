@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Buffers;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -64,36 +65,7 @@ namespace NetFabric.Hyperlinq
                 => true;
 
             public void CopyTo(TResult[] array, int arrayIndex)
-            {
-                var sourceArray = source.Array;
-                var offset = source.Offset;
-                if (offset == 0)
-                {
-                    if (arrayIndex == 0)
-                    {
-                        for (var index = 0; index < Count; index++)
-                            array[index] = selector(sourceArray[index], index);
-                    }
-                    else
-                    {
-                        for (var index = 0; index < Count; index++)
-                            array[index + arrayIndex] = selector(sourceArray[index], index);
-                    }
-                }
-                else
-                {
-                    if (arrayIndex == 0)
-                    {
-                        for (var index = 0; index < Count; index++)
-                            array[index] = selector(sourceArray[index + offset], index);
-                    }
-                    else
-                    {
-                        for (var index = 0; index < Count; index++)
-                            array[index + arrayIndex] = selector(sourceArray[index + offset], index);
-                    }
-                }
-            }
+                => ArrayExtensions.Copy(source, new ArraySegment<TResult>(array, arrayIndex, source.Count), selector);
 
             public bool Contains(TResult item)
                 => ArrayExtensions.Contains<TSource, TResult>(source, item, selector);
@@ -109,7 +81,7 @@ namespace NetFabric.Hyperlinq
                     {
                         for (var index = 0; index < Count; index++)
                         {
-                            if (EqualityComparer<TResult>.Default.Equals(selector(array[index], index), item))
+                            if (EqualityComparer<TResult>.Default.Equals(selector(array[index], index)!, item))
                                 return index;
                         }
                     }
@@ -117,7 +89,7 @@ namespace NetFabric.Hyperlinq
                     {
                         for (var index = 0; index < Count; index++)
                         {
-                            if (EqualityComparer<TResult>.Default.Equals(selector(array[index + offset], index), item))
+                            if (EqualityComparer<TResult>.Default.Equals(selector(array[index + offset], index)!, item))
                                 return index;
                         }
                     }
@@ -129,7 +101,7 @@ namespace NetFabric.Hyperlinq
                     {
                         for (var index = 0; index < Count; index++)
                         {
-                            if (defaultComparer.Equals(selector(array[index], index), item))
+                            if (defaultComparer.Equals(selector(array[index], index)!, item))
                                 return index;
                         }
                     }
@@ -137,7 +109,7 @@ namespace NetFabric.Hyperlinq
                     {
                         for (var index = 0; index < Count; index++)
                         {
-                            if (defaultComparer.Equals(selector(array[index + offset], index), item))
+                            if (defaultComparer.Equals(selector(array[index + offset], index)!, item))
                                 return index;
                         }
                     }
@@ -255,6 +227,10 @@ namespace NetFabric.Hyperlinq
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TResult[] ToArray()
                 => ArrayExtensions.ToArray<TSource, TResult>(source, selector);
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public IMemoryOwner<TResult> ToArray(MemoryPool<TResult> pool)
+                => ArrayExtensions.ToArray<TSource, TResult>(source, selector, pool);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public List<TResult> ToList()

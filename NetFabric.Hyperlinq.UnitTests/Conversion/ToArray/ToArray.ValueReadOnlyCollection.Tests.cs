@@ -1,4 +1,6 @@
 using System;
+using System.Buffers;
+using System.Linq;
 using NetFabric.Assertive;
 using Xunit;
 
@@ -15,8 +17,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
             // Arrange
             var wrapped = Wrap
                 .AsValueReadOnlyCollection(source);
-            var expected = 
-                System.Linq.Enumerable.ToArray(wrapped);
+            var expected = Enumerable
+                .ToArray(wrapped);
 
             // Act
             var result = ValueReadOnlyCollectionExtensions
@@ -37,8 +39,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
             // Arrange
             var wrapped = Wrap
                 .AsValueCollection(source);
-            var expected = 
-                System.Linq.Enumerable.ToArray(source);
+            var expected = Enumerable
+                .ToArray(source);
 
             // Act
             var result = ValueReadOnlyCollectionExtensions
@@ -51,6 +53,31 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
         }
 
         [Theory]
+        [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
+        public void ToArray_MemoryPool_Must_Succeed(int[] source)
+        {
+            // Arrange
+            var pool = MemoryPool<int>.Shared;
+            var wrapped = Wrap
+                .AsValueReadOnlyCollection(source);
+            var expected = Enumerable
+                .ToArray(source);
+
+            // Act
+            using var result = ValueEnumerableExtensions
+                .ToArray<Wrap.ValueReadOnlyCollectionWrapper<int>, Wrap.Enumerator<int>, int>(wrapped, pool);
+
+            // Assert
+            _ = result
+                .SequenceEqual(expected)
+                .Must().BeTrue();
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////
+
+        [Theory]
         [MemberData(nameof(TestData.SelectorEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SelectorSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SelectorMultiple), MemberType = typeof(TestData))]
@@ -59,9 +86,60 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
             // Arrange
             var wrapped = Wrap
                 .AsValueReadOnlyCollection(source);
-            var expected = 
-                System.Linq.Enumerable.ToArray(
-                    System.Linq.Enumerable.Select(source, selector.AsFunc()));
+            var expected = Enumerable
+                .Select(source, selector.AsFunc())
+                .ToArray();
+
+            // Act
+            var result = ValueReadOnlyCollectionExtensions
+                .Select<Wrap.ValueReadOnlyCollectionWrapper<int>, Wrap.Enumerator<int>, int, string>(wrapped, selector)
+                .ToArray();
+
+            // Assert
+            _ = result.Must()
+                .BeArrayOf<string>()
+                .BeEqualTo(expected);
+        }
+
+        [Theory]
+        [MemberData(nameof(TestData.SelectorEmpty), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SelectorSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SelectorMultiple), MemberType = typeof(TestData))]
+        public void ToArray_Predicate_MemoryPool_With_ValidData_Must_Succeed(int[] source, NullableSelector<int, string> selector)
+        {
+            // Arrange
+            var pool = MemoryPool<string>.Shared;
+            var wrapped = Wrap
+                .AsValueReadOnlyCollection(source);
+            var expected = Enumerable
+                .Select(source, selector.AsFunc())
+                .ToArray();
+
+            // Act
+            var result = ValueReadOnlyCollectionExtensions
+                .Select<Wrap.ValueReadOnlyCollectionWrapper<int>, Wrap.Enumerator<int>, int, string>(wrapped, selector)
+                .ToArray(pool);
+
+            // Assert
+            _ = result
+                .SequenceEqual(expected)
+                .Must().BeTrue();
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////
+
+        [Theory]
+        [MemberData(nameof(TestData.SelectorAtEmpty), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SelectorAtSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SelectorAtMultiple), MemberType = typeof(TestData))]
+        public void ToArray_SelectorAt_With_ValidData_Must_Succeed(int[] source, NullableSelectorAt<int, string> selector)
+        {
+            // Arrange
+            var wrapped = Wrap
+                .AsValueReadOnlyCollection(source);
+            var expected = Enumerable
+                .Select(source, selector.AsFunc())
+                .ToArray();
 
             // Act
             var result = ValueReadOnlyCollectionExtensions
@@ -78,24 +156,25 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
         [MemberData(nameof(TestData.SelectorAtEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SelectorAtSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SelectorAtMultiple), MemberType = typeof(TestData))]
-        public void ToArray_SelectorAt_With_ValidData_Must_Succeed(int[] source, NullableSelectorAt<int, string> selector)
+        public void ToArray_SelectorAt_MemoryPool_With_ValidData_Must_Succeed(int[] source, NullableSelectorAt<int, string> selector)
         {
             // Arrange
+            var pool = MemoryPool<string>.Shared;
             var wrapped = Wrap
                 .AsValueReadOnlyCollection(source);
-            var expected = 
-                System.Linq.Enumerable.ToArray(
-                    System.Linq.Enumerable.Select(source, selector.AsFunc()));
+            var expected = Enumerable
+                .Select(source, selector.AsFunc())
+                .ToArray();
 
             // Act
             var result = ValueReadOnlyCollectionExtensions
                 .Select<Wrap.ValueReadOnlyCollectionWrapper<int>, Wrap.Enumerator<int>, int, string>(wrapped, selector)
-                .ToArray();
+                .ToArray(pool);
 
             // Assert
-            _ = result.Must()
-                .BeArrayOf<string>()
-                .BeEqualTo(expected);
+            _ = result
+                .SequenceEqual(expected)
+                .Must().BeTrue();
         }
 
     }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Runtime.InteropServices.ComTypes;
 
 namespace NetFabric.Hyperlinq
 {
@@ -14,7 +15,7 @@ namespace NetFabric.Hyperlinq
 
                 _ => source.Count == 0
                     ? new List<TSource>()
-                    : new List<TSource>(new ToListCollection<TEnumerable, TEnumerator, TSource>(source)),
+                    : new List<TSource>(new ValueReadOnlyCollectionToListCollection<TEnumerable, TEnumerator, TSource>(source)),
             };
 
         
@@ -23,7 +24,7 @@ namespace NetFabric.Hyperlinq
             where TEnumerator : struct, IEnumerator<TSource>
             => source.Count == 0
                 ? new List<TResult>()
-                : new List<TResult>(new ToListCollection<TEnumerable, TEnumerator, TSource, TResult>(source, selector));
+                : new List<TResult>(new ValueReadOnlyCollectionSelectorToListCollection<TEnumerable, TEnumerator, TSource, TResult>(source, selector));
 
         
         public static List<TResult> ToList<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, NullableSelectorAt<TSource, TResult> selector)
@@ -31,18 +32,18 @@ namespace NetFabric.Hyperlinq
             where TEnumerator : struct, IEnumerator<TSource>
             => source.Count == 0
                 ? new List<TResult>()
-                : new List<TResult>(new IndexedToListCollection<TEnumerable, TEnumerator, TSource, TResult>(source, selector));
+                : new List<TResult>(new ValueReadOnlyCollectionSelectorAtToListCollection<TEnumerable, TEnumerator, TSource, TResult>(source, selector));
 
         // helper implementation of ICollection<> so that CopyTo() is used to convert to List<>
         [GeneratorIgnore]
-        internal sealed class ToListCollection<TEnumerable, TEnumerator, TSource>
+        internal sealed class ValueReadOnlyCollectionToListCollection<TEnumerable, TEnumerator, TSource>
             : ToListCollectionBase<TSource>
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
             readonly TEnumerable source;
 
-            public ToListCollection(TEnumerable source)
+            public ValueReadOnlyCollectionToListCollection(TEnumerable source)
                 : base(source.Count) 
                 => this.source = source;
 
@@ -58,7 +59,7 @@ namespace NetFabric.Hyperlinq
         }
 
         [GeneratorIgnore]
-        internal sealed class ToListCollection<TEnumerable, TEnumerator, TSource, TResult>
+        internal sealed class ValueReadOnlyCollectionSelectorToListCollection<TEnumerable, TEnumerator, TSource, TResult>
             : ToListCollectionBase<TResult>
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
@@ -66,26 +67,16 @@ namespace NetFabric.Hyperlinq
             readonly TEnumerable source;
             readonly NullableSelector<TSource, TResult> selector;
 
-            public ToListCollection(TEnumerable source, NullableSelector<TSource, TResult> selector)
-                : base(source.Count) 
-            {
-                this.source = source;
-                this.selector = selector;
-            }
+            public ValueReadOnlyCollectionSelectorToListCollection(TEnumerable source, NullableSelector<TSource, TResult> selector)
+                : base(source.Count)
+                => (this.source, this.selector) = (source, selector);
 
             public override void CopyTo(TResult[] array, int _)
-            {
-                using var enumerator = source.GetEnumerator();
-                checked
-                {
-                    for (var index = 0; enumerator.MoveNext(); index++)
-                        array[index] = selector(enumerator.Current)!;
-                }
-            }
+                => ValueReadOnlyCollectionExtensions.Copy<TEnumerable, TEnumerator, TSource, TResult>(source, array, selector);
         }
 
         [GeneratorIgnore]
-        internal sealed class IndexedToListCollection<TEnumerable, TEnumerator, TSource, TResult>
+        internal sealed class ValueReadOnlyCollectionSelectorAtToListCollection<TEnumerable, TEnumerator, TSource, TResult>
             : ToListCollectionBase<TResult>
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
@@ -93,22 +84,12 @@ namespace NetFabric.Hyperlinq
             readonly TEnumerable source;
             readonly NullableSelectorAt<TSource, TResult> selector;
 
-            public IndexedToListCollection(TEnumerable source, NullableSelectorAt<TSource, TResult> selector)
-                : base(source.Count) 
-            {
-                this.source = source;
-                this.selector = selector;
-            }
+            public ValueReadOnlyCollectionSelectorAtToListCollection(TEnumerable source, NullableSelectorAt<TSource, TResult> selector)
+                : base(source.Count)
+                => (this.source, this.selector) = (source, selector);
 
             public override void CopyTo(TResult[] array, int _)
-            {
-                using var enumerator = source.GetEnumerator();
-                checked
-                {
-                    for (var index = 0; enumerator.MoveNext(); index++)
-                        array[index] = selector(enumerator.Current, index)!;
-                }
-            }
+                => ValueReadOnlyCollectionExtensions.Copy<TEnumerable, TEnumerator, TSource, TResult>(source, array, selector);
         }
     }
 }

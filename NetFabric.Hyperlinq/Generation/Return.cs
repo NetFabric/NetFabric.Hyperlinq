@@ -57,7 +57,7 @@ namespace NetFabric.Hyperlinq
                 => true;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public void CopyTo(TSource[] array, int arrayIndex) 
+            public void CopyTo(TSource[] array, int arrayIndex = 0) 
                 => array[arrayIndex] = value;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]

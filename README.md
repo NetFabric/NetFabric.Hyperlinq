@@ -27,6 +27,9 @@ This implementation **favors performance in detriment of assembly binary size** 
   - [Method return types](#method-return-types)
   - [Composition](#composition)
   - [Option](#option)
+  - [Buffer pools](#buffer-pools)
+    - [`MemoryPool<>`](#memorypool)
+    - [`ArrayPool<>`](#arraypool)
 - [Documentation](#documentation)
 - [Supported operations](#supported-operations)
 - [Benchmarks](#benchmarks)
@@ -42,13 +45,13 @@ This implementation **favors performance in detriment of assembly binary size** 
 - It does not box value-type enumerators so, calls to the `Current` property and the `MoveNext()` method are non-virtual.
 - All the enumerables returned by operations define a value-type enumerator.
 - Whenever possible, the enumerator returned by the public `GetEnumerator()` or `GetAsyncEnumerator()` does not implement `IDisposable`. This allows the `foreach` that enumerates the result to be inlinable. 
-- Operations enumerate the source using the indexer when the source is an array, `ArraySegment<>`, `Span<>`, `ReadOnlySpan<>`, `Memory<>`, `ReadOnlyMemory<>`, or implements `IReadOnlyList<>`. The indexer performs a lot fewer operations than the enumerator.
+- Operations enumerate the source using the indexer when the source is an array, `ArraySegment<>`, `Span<>`, `ReadOnlySpan<>`, `Memory<>`, `ReadOnlyMemory<>`, or implements `IReadOnlyList<>`. The indexer performs fewer operations than the enumerator.
 - The enumerables returned by operations like `Range()`, `Repeat()`, `Return()`, and `Select()`, implement `IReadOnlyList<>` and `IList<>`.
-- Use of object pools in operations like `Distinct()`.
-- Elimination of conditional branchs in `Count()` with a predicate.
+- Use of buffer pools in operations like `Distinct()` and `ToArray()`.
+- Elimination of conditional branchs in `Where().Count()`.
 - Allows the JIT compiler to perform optimizations on array enumeration whenever possible.
 - Takes advantage of `EqualityComparer<>.Default` devirtualization whenever possible.
-- `ToList()` uses `ICollection<>.CopyTo()` to add the items to the resulting `List<>`. This removes the many operations performed when adding items one-by-one or using an `IEnumerable<>`. 
+- `ToList()` uses `ICollection<>.CopyTo()` to add the items to the resulting `List<>`. This removes many of the operations performed when adding items one-by-one or using an `IEnumerable<>`. 
 
 The performance is equivalent when the enumerator is a reference-type. This happens when the enumerable is generated using `yield` or when it's cast to one of the BCL enumerable interfaces (`IEnumerable`, `IEnumerable<>`, `IReadOnlyCollection<>`, `ICollection<>`, `IReadOnlyList<>`, `IList<>`, or `IAsyncEnumerable<>`). In the case of operation composition, this only affects the first operation. The subsequent operations will have value-type enumerators.
 
@@ -60,20 +63,19 @@ When the indexers are used, no allocation is performed.
 
 It only allocates on the heap for the following cases:
 
-- `ToArray()` and `ToList()` allocate their results on the heap.
 - Operations that use `ICollection<>.CopyTo()`, `ICollection<>.Contains()`, or `IList<>.IndexOf()` will box enumerables that are value-types.   
 - `ToList()`, when applied to collections that implement `IReadOnlyCollection<>` but not `ICollection<>`, allocates an instance of an helper class so that `ICollection<>.CopyTo()` can be used.
+- `ToArray()` and `ToList()` allocate their results on the heap. You can use the `ToArray()` overload that take an buffer pool as parameter so that its result is not managed by the garbage collector.
 
 ## Usage
 
 1. Add the [`NetFabric.Hyperlinq` NuGet package](https://www.nuget.org/packages/NetFabric.Hyperlinq/) to your project.
-1. Optionally, also add the [*NetFabric.Hyperlinq.Analyzer* NuGet package](https://www.nuget.org/packages/NetFabric.Hyperlinq.Analyzer/) to your project. It's a Roslyn analyzer that suggests performance improvements on your enumeration source code. No dependencies are added to your assemblies.
+1. Optionally, also add the [`NetFabric.Hyperlinq.Analyzer` NuGet package](https://www.nuget.org/packages/NetFabric.Hyperlinq.Analyzer/) to your project. It's a Roslyn analyzer that suggests performance improvements on your enumeration source code. No dependencies are added to your assemblies.
 1. Add an `using NetFabric.Hyperlinq` directive to all source code files where you want to use `NetFabric.Hyperlinq`. It can coexist with `System.Linq` and `System.Linq.Async` directives:
 
 ``` csharp
 using System;
 using System.Linq;
-using System.Linq.Async;
 using NetFabric.Hyperlinq; // add this directive
 ```
 
@@ -146,7 +148,7 @@ public static void Example(IReadOnlyList<int> list)
 }
 ```
 
-To add  `Netfabric.Hyperlinq` operations after a `System.Linq` operation, simply add one more  `AsValueEnumerable()` or `AsAsyncValueEnumerable()`.
+To add  `NetFabric.Hyperlinq` operations after a `System.Linq` operation, simply add one more  `AsValueEnumerable()` or `AsAsyncValueEnumerable()`.
 
 ### Generation operations
 
@@ -177,7 +179,7 @@ public static IEnumerable<int> Example(int count)
 
 This allows the caller to use `System.Linq` or a `foreach` loop to pull and process the result. `NetFabric.Hyperlinq` can also be used but the `AsValueEnumerable()` conversion method has to be used.
 
-The operation in `NetFabric.Hyperlinq` are implemented so that they return the highest level enumeration interface possible. For example, the `Range()` operation returns `IValueReadOnlyList<,>` and the subsequent `Select()` does not change this. `IValueReadOnlyList<,>` derives from `IReadOnlyList<>` so, we can change the method to return this interface:
+The operation in `NetFabric.Hyperlinq` are implemented so that they return the highest level enumeration interface possible. For example, the `Range()` operation return implements `IValueReadOnlyList<,>` and the subsequent `Select()` return does the same thing. `IValueReadOnlyList<,>` derives from `IReadOnlyList<>` so, we can change the method to return this interface:
 
 ``` csharp
 public static IReadOnlyList<int> Example(int count)
@@ -298,6 +300,28 @@ source.First().Where(item => item > 2).Match(
   () => { });
 ```
 
+### Buffer pools
+
+There are operations that do have to allocate on the heap. Some need to use a collection internally (like `Distinct()`) and others need to return a collection (like `ToList()` and `ToArray()`).
+
+[Buffer pools](https://adamsitnik.com/Array-Pool/) allow the use of heap memory without adding pressure to the garbage collector. It preallocates a chunk of memory and "rents" it as required. The garbage collector will add this memory to the Large Object Heap (LOH).
+
+`Netfabric.Hyperlinq` uses the buffer pool for internal collections.
+
+`ToArray()` is usually used to cache values for a brief period. `Netfabric.Hyperlinq` adds an oveload that takes a `MemoryPool<>` as a parameter:
+
+``` csharp
+using(var buffer = source.ToArray(MemoryPool<int>.Shared))
+{
+    var memory = buffer.Memory;
+    // use memory here
+}
+```
+
+It returns an [`IMemoryOwner<>`](https://docs.microsoft.com/en-us/dotnet/api/system.buffers.imemoryowner-1). The `using` statement guarantees that it is disposed and the buffer automatically returned to the pool. 
+
+Buffer pools may return buffers larger than requested. `ToArray()` always returns buffers with the exact same size as the result. The `Length` property can be used to check for the end of an iteration.
+
 ## Documentation
 
 Articles explaining implementation:
@@ -366,6 +390,7 @@ The repository contains a [benchmarks project](https://github.com/NetFabric/NetF
 - [Improving .NET Disruptor performance — Part 2](https://medium.com/@ocoanet/improving-net-disruptor-performance-part-2-5bf456cd595f) by Olivier Coanet
 - [Optimizing string.Count all the way from LINQ to hardware accelerated vectorized instructions](https://medium.com/@SergioPedri/optimizing-string-count-all-the-way-from-linq-to-hardware-accelerated-vectorized-instructions-186816010ad9) by Sergio Pedri 
 - [Simulating Return Type Inference in C#](https://tyrrrz.me/blog/return-type-inference) by Alexey Golub
+- [Pooling large arrays with ArrayPool](https://adamsitnik.com/Array-Pool/) by Adam Sitnik
 
 ## Credits
 

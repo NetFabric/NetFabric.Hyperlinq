@@ -75,7 +75,6 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Hyperlinq_Array() =>
             array.Where(item => (item & 0x01) == 0).Count();
 
-#if SPAN_SUPPORTED
         [BenchmarkCategory("Array")]
         [Benchmark]
         public int Hyperlinq_Span() =>
@@ -85,7 +84,6 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [Benchmark]
         public int Hyperlinq_Memory() =>
             memory.Where(item => (item & 0x01) == 0).Count();
-#endif
 
         [BenchmarkCategory("Enumerable_Value")]
         [Benchmark]

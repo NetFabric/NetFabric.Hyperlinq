@@ -22,8 +22,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Partitioning.Skip
                 .Skip(source.AsMemory(), count);
 
             // Assert
-            _ = result.Must()
-                .BeEqualTo(expected);
+            _ = result.SequenceEqual(expected).Must().BeTrue();
         }
     }
 }

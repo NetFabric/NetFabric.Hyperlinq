@@ -1,4 +1,5 @@
 using System;
+using System.Buffers;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -58,42 +59,10 @@ namespace NetFabric.Hyperlinq
             bool ICollection<TSource>.IsReadOnly  
                 => true;
 
-            public void CopyTo(TSource[] array, int arrayIndex) 
-            {
-                if (skipCount == 0)
-                {
-                    if (arrayIndex == 0)
-                    {
-                        for (var index = 0; index < Count; index++)
-                            array[index] = source[index];
-                    }
-                    else
-                    {
-                        if (Count == source.Count && source is ICollection<TSource> collection)
-                        {
-                            collection.CopyTo(array, arrayIndex);
-                        }
-                        else
-                        {
-                            for (var index = 0; index < Count; index++)
-                                array[index + arrayIndex] = source[index];
-                        }
-                    }
-                }
-                else
-                {
-                    if (arrayIndex == 0)
-                    {
-                        for (var index = 0; index < Count; index++)
-                            array[index] = source[index + skipCount];
-                    }
-                    else
-                    {
-                        for (var index = 0; index < Count; index++)
-                            array[index + arrayIndex] = source[index + skipCount];
-                    }
-                }
-            }
+
+            public void CopyTo(TSource[] array, int arrayIndex = 0) 
+                => ReadOnlyListExtensions.Copy(source, skipCount, array, arrayIndex, Count);
+
 
             bool ICollection<TSource>.Contains(TSource item)
             {
@@ -270,12 +239,15 @@ namespace NetFabric.Hyperlinq
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TSource[] ToArray()
-                => ToArray<TList, TSource>(source, skipCount, Count);
+                => ReadOnlyListExtensions.ToArray<TList, TSource>(source, skipCount, Count);
 
-            
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public IMemoryOwner<TSource> ToArray(MemoryPool<TSource> pool)
+                => ReadOnlyListExtensions.ToArray<TList, TSource>(source, skipCount, Count, pool);
+
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public List<TSource> ToList()
-                => ToList<TList, TSource>(source, skipCount, Count);
+                => ReadOnlyListExtensions.ToList<TList, TSource>(source, skipCount, Count);
 
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]

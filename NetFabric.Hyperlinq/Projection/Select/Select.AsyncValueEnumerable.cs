@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Buffers;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
@@ -208,20 +209,29 @@ namespace NetFabric.Hyperlinq
                 => AsyncValueEnumerableExtensions.Select<TEnumerable, TEnumerator, TSource, TSelectorResult>(source, Utils.Combine(this.selector, selector));
 
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public ValueTask<Option<TResult>> ElementAtAsync(int index, CancellationToken cancellationToken = default)
                 => AsyncValueEnumerableExtensions.ElementAtAsync<TEnumerable, TEnumerator, TSource, TResult>(source, index, selector, cancellationToken);
 
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public ValueTask<Option<TResult>> FirstAsync(CancellationToken cancellationToken = default)
                 => AsyncValueEnumerableExtensions.FirstAsync<TEnumerable, TEnumerator, TSource, TResult>(source, selector, cancellationToken);
 
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public ValueTask<Option<TResult>> SingleAsync(CancellationToken cancellationToken = default)
                 => AsyncValueEnumerableExtensions.SingleAsync<TEnumerable, TEnumerator, TSource, TResult>(source, selector, cancellationToken);
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public ValueTask<TResult[]> ToArrayAsync(CancellationToken cancellationToken = default)
                 => AsyncValueEnumerableExtensions.ToArrayAsync<TEnumerable, TEnumerator, TSource, TResult>(source, selector, cancellationToken);
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public ValueTask<IMemoryOwner<TResult>> ToArrayAsync(MemoryPool<TResult> pool, CancellationToken cancellationToken = default)
+                => AsyncValueEnumerableExtensions.ToArrayAsync<TEnumerable, TEnumerator, TSource, TResult>(source, selector, pool, cancellationToken);
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public ValueTask<List<TResult>> ToListAsync(CancellationToken cancellationToken = default)
                 => AsyncValueEnumerableExtensions.ToListAsync<TEnumerable, TEnumerator, TSource, TResult>(source, selector, cancellationToken);
         }

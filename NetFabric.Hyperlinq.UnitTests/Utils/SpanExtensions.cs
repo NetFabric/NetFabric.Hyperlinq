@@ -1,12 +1,22 @@
 ﻿using System;
+using System.Buffers;
 using System.Collections.Generic;
 
 namespace NetFabric.Hyperlinq.UnitTests
 {
     static class SpanExtensions
     {
-        public static bool SequenceEqual<T>(this Span<T> first, IEnumerable<T> second)
-            => SequenceEqual((ReadOnlySpan<T>)first, second);
+        public static bool SequenceEqual<T>(this IMemoryOwner<T> first, IEnumerable<T> second, IEqualityComparer<T> comparer = null)
+            => SequenceEqual((ReadOnlySpan<T>)first.Memory.Span, second, comparer);
+
+        public static bool SequenceEqual<T>(this Memory<T> first, IEnumerable<T> second, IEqualityComparer<T> comparer = null)
+            => SequenceEqual((ReadOnlySpan<T>)first.Span, second, comparer);
+
+        public static bool SequenceEqual<T>(this ReadOnlyMemory<T> first, IEnumerable<T> second, IEqualityComparer<T> comparer = null)
+            => SequenceEqual(first.Span, second, comparer);
+
+        public static bool SequenceEqual<T>(this Span<T> first, IEnumerable<T> second, IEqualityComparer<T> comparer = null)
+            => SequenceEqual((ReadOnlySpan<T>)first, second, comparer);
 
         public static bool SequenceEqual<T>(this ReadOnlySpan<T> first, IEnumerable<T> second, IEqualityComparer<T> comparer = null)
         {

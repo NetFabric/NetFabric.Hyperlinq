@@ -27,12 +27,12 @@ namespace NetFabric.Hyperlinq
                 : base(source.Count) 
                 => this.source = source;
 
-            public override void CopyTo(TSource[] array, int _)
+            public override void CopyTo(TSource[] array, int arrayIndex)
             {
                 using var enumerator = source.GetEnumerator();
                 checked
                 {
-                    for (var index = 0; enumerator.MoveNext(); index++)
+                    for (var index = arrayIndex; enumerator.MoveNext(); index++)
                         array[index] = enumerator.Current;
                 }
             }

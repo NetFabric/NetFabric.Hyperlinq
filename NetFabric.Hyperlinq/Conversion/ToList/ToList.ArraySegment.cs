@@ -77,10 +77,14 @@ namespace NetFabric.Hyperlinq
 
 
         static List<TResult> ToList<TSource, TResult>(this in ArraySegment<TSource> source, NullableSelector<TSource, TResult> selector)
-            => new List<TResult>(new ArraySegmentSelectorToListCollection<TSource, TResult>(source, selector));
+            => source.Count == 0
+                ? new List<TResult>()
+                : new List<TResult>(new ArraySegmentSelectorToListCollection<TSource, TResult>(source, selector));
 
         static List<TResult> ToList<TSource, TResult>(this in ArraySegment<TSource> source, NullableSelectorAt<TSource, TResult> selector)
-            => new List<TResult>(new ArraySegmentSelectorAtToListCollection<TSource, TResult>(source, selector));
+            => source.Count == 0
+                ? new List<TResult>()
+                : new List<TResult>(new ArraySegmentSelectorAtToListCollection<TSource, TResult>(source, selector));
 
 
         static List<TResult> ToList<TSource, TResult>(this in ArraySegment<TSource> source, Predicate<TSource> predicate, NullableSelector<TSource, TResult> selector)
@@ -93,7 +97,7 @@ namespace NetFabric.Hyperlinq
                 {
                     var item = array[index];
                     if (predicate(item))
-                        list.Add(selector(item));
+                        list.Add(selector(item)!);
                 }
             }
             else
@@ -103,7 +107,7 @@ namespace NetFabric.Hyperlinq
                 {
                     var item = array[index];
                     if (predicate(item))
-                        list.Add(selector(item));
+                        list.Add(selector(item)!);
                 }
             }
             return list;
@@ -120,28 +124,8 @@ namespace NetFabric.Hyperlinq
                 : base(source.Count)
                 => (this.source, this.selector) = (source, selector);
 
-            public override void CopyTo(TResult[] array, int _)
-            {
-                var sourceArray = source.Array;
-                if (source.Offset == 0)
-                {
-                    if (source.Count == array.Length)
-                    {
-                        for (var index = 0; index < array.Length; index++)
-                            array[index] = selector(sourceArray[index]);
-                    }
-                    else
-                    {
-                        for (var index = 0; index < source.Count; index++)
-                            array[index] = selector(sourceArray[index]);
-                    }
-                }
-                else
-                {
-                    for (var index = 0; index < source.Count; index++)
-                        array[index] = selector(sourceArray[index + source.Offset]);
-                }
-            }
+            public override void CopyTo(TResult[] array, int arrayIndex)
+                => ArrayExtensions.Copy(source, new ArraySegment<TResult>(array, arrayIndex, array.Length), selector);
         }
 
         // helper implementation of ICollection<> so that CopyTo() is used to convert to List<>
@@ -155,28 +139,9 @@ namespace NetFabric.Hyperlinq
                 : base(source.Count)
                 => (this.source, this.selector) = (source, selector);
 
-            public override void CopyTo(TResult[] array, int _)
-            {
-                var sourceArray = source.Array;
-                if (source.Offset == 0)
-                {
-                    if (source.Count == array.Length)
-                    {
-                        for (var index = 0; index < array.Length; index++)
-                            array[index] = selector(sourceArray[index], index);
-                    }
-                    else
-                    {
-                        for (var index = 0; index < source.Count; index++)
-                            array[index] = selector(sourceArray[index], index);
-                    }
-                }
-                else
-                {
-                    for (var index = 0; index < source.Count; index++)
-                        array[index] = selector(sourceArray[index + source.Offset], index);
-                }
-            }
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public override void CopyTo(TResult[] array, int arrayIndex)
+                => ArrayExtensions.Copy(source, new ArraySegment<TResult>(array, arrayIndex, array.Length), selector);
         }
     }
 }

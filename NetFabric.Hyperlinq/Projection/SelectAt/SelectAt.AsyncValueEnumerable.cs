@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Buffers;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
@@ -223,6 +224,10 @@ namespace NetFabric.Hyperlinq
 
             public ValueTask<TResult[]> ToArrayAsync(CancellationToken cancellationToken = default)
                 => AsyncValueEnumerableExtensions.ToArrayAsync<TEnumerable, TEnumerator, TSource, TResult>(source, selector, cancellationToken);
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public ValueTask<IMemoryOwner<TResult>> ToArray(MemoryPool<TResult> pool, CancellationToken cancellationToken = default)
+                => AsyncValueEnumerableExtensions.ToArrayAsync<TEnumerable, TEnumerator, TSource, TResult>(source, selector, pool, cancellationToken);
 
             public ValueTask<List<TResult>> ToListAsync(CancellationToken cancellationToken = default)
                 => AsyncValueEnumerableExtensions.ToListAsync<TEnumerable, TEnumerator, TSource, TResult>(source, selector, cancellationToken);

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Buffers;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
@@ -79,6 +80,9 @@ namespace NetFabric.Hyperlinq
 
             public TSource[] ToArray()
                 => ArrayExtensions.ToArray(source, predicate);
+
+            public IMemoryOwner<TSource> ToArray(MemoryPool<TSource> memoryPool)
+                => ArrayExtensions.ToArray<TSource>(source, predicate, memoryPool);
 
             public List<TSource> ToList()
                 => ArrayExtensions.ToList(source, predicate);

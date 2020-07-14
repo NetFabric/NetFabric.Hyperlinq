@@ -6,8 +6,6 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class ArrayExtensions
     {
-#if SPAN_SUPPORTED
-
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static MemorySelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, TResult> SelectMany<TSource, TSubEnumerable, TSubEnumerator, TResult>(
             this TSource[] source,
@@ -15,18 +13,6 @@ namespace NetFabric.Hyperlinq
             where TSubEnumerable : IValueEnumerable<TResult, TSubEnumerator>
             where TSubEnumerator : struct, IEnumerator<TResult>
             => SelectMany<TSource, TSubEnumerable, TSubEnumerator, TResult>((ReadOnlyMemory<TSource>)source, selector);
-
-#else
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static SelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, TResult> SelectMany<TSource, TSubEnumerable, TSubEnumerator, TResult>(
-            this TSource[] source,
-            Selector<TSource, TSubEnumerable> selector)
-            where TSubEnumerable : IValueEnumerable<TResult, TSubEnumerator>
-            where TSubEnumerator : struct, IEnumerator<TResult>
-            => SelectMany<TSource, TSubEnumerable, TSubEnumerator, TResult>(new ArraySegment<TSource>(source), selector);
-
-#endif
     }
 }
 

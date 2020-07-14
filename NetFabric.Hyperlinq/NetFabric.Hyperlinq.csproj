@@ -21,20 +21,16 @@
     <NoWarn>$(NoWarn);8600;8601;8602;8603;8604</NoWarn>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(TargetFramework)'!='net461' And '$(TargetFramework)'!='netstandard2.0'">
-    <DefineConstants>$(DefineConstants);SPAN_SUPPORTED</DefineConstants>
-  </PropertyGroup>
-
   <ItemGroup Condition="'$(TargetFramework)'=='net461' Or '$(TargetFramework)'=='netstandard2.0'">
-    <Compile Remove="**\*.ReadOnlySpan.cs" />
-    <Compile Remove="**\*.Span.cs" />
-    <Compile Remove="**\*.ReadOnlyMemory.cs" />
-    <Compile Remove="**\*.Memory.cs" />
     <PackageReference Include="System.ValueTuple" Version="4.5.0" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)'!='netcoreapp2.1'">
     <Compile Remove="Bindings\System\Collections\Immutable\*.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Utils\Copy\Copy.ReadOnlyCollection.cs" />
   </ItemGroup>
   
   <ItemGroup>
@@ -47,6 +43,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="System.Memory" Version="4.5.4" />
     <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="4.7.1" />
     <PackageReference Include="System.Buffers" Version="4.5.1" />
     <PackageReference Include="Uno.SourceGenerationTasks" Version="2.0.6">

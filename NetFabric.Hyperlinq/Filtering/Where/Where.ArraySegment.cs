@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Buffers;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -106,17 +107,22 @@ namespace NetFabric.Hyperlinq
                 public readonly void Dispose() { }
             }
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public int Count()
                 => ArrayExtensions.Count<TSource>(source, predicate);
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Any()
                 => ArrayExtensions.Any<TSource>(source, predicate);
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public WhereEnumerable<TSource> Where(Predicate<TSource> predicate)
                 => ArrayExtensions.Where<TSource>(source, Utils.Combine(this.predicate, predicate));
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public WhereAtEnumerable<TSource> Where(PredicateAt<TSource> predicate)
                 => ArrayExtensions.Where<TSource>(source, Utils.Combine(this.predicate, predicate));
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public WhereSelectEnumerable<TSource, TResult> Select<TResult>(NullableSelector<TSource, TResult> selector)
             {
                 if (selector is null)
@@ -125,23 +131,34 @@ namespace NetFabric.Hyperlinq
                 return ArrayExtensions.WhereSelect<TSource, TResult>(source, predicate, selector);
             }
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Option<TSource> ElementAt(int index)
                 => ArrayExtensions.ElementAt<TSource>(source, index, predicate);
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Option<TSource> First()
                 => ArrayExtensions.First<TSource>(source, predicate);
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Option<TSource> Single()
                 => ArrayExtensions.Single<TSource>(source, predicate);
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TSource[] ToArray()
                 => ArrayExtensions.ToArray<TSource>(source, predicate);
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public IMemoryOwner<TSource> ToArray(MemoryPool<TSource> pool)
+                => ArrayExtensions.ToArray<TSource>(source, predicate, pool);
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public List<TSource> ToList()
                 => ArrayExtensions.ToList<TSource>(source, predicate);
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Dictionary<TKey, TSource> ToDictionary<TKey>(NullableSelector<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer = default)
                 => ArrayExtensions.ToDictionary<TSource, TKey>(source, keySelector, comparer, predicate);
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(NullableSelector<TSource, TKey> keySelector, NullableSelector<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer = default)
                 => ArrayExtensions.ToDictionary<TSource, TKey, TElement>(source, keySelector, elementSelector, comparer, predicate);
         }
