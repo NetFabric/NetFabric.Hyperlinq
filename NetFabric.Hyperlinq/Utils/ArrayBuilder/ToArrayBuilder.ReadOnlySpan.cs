@@ -11,7 +11,7 @@ namespace NetFabric.Hyperlinq
         {
             Debug.Assert(arrayPool is object);
 
-            using var builder = new LargeArrayBuilder<TSource>(arrayPool);
+            var builder = new LargeArrayBuilder<TSource>(arrayPool);
             for (var index = 0; index < source.Length; index++)
             {
                 if (predicate(source[index]))
@@ -24,7 +24,7 @@ namespace NetFabric.Hyperlinq
         {
             Debug.Assert(arrayPool is object);
 
-            using var builder = new LargeArrayBuilder<TSource>(arrayPool);
+            var builder = new LargeArrayBuilder<TSource>(arrayPool);
             for (var index = 0; index < source.Length; index++)
             {
                 if (predicate(source[index], index))
@@ -37,7 +37,7 @@ namespace NetFabric.Hyperlinq
         {
             Debug.Assert(arrayPool is object);
 
-            using var builder = new LargeArrayBuilder<TResult>(arrayPool);
+            var builder = new LargeArrayBuilder<TResult>(arrayPool);
             for (var index = 0; index < source.Length; index++)
             {
                 if (predicate(source[index]))

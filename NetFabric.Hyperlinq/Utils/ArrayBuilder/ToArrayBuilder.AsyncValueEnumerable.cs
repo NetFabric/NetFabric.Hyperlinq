@@ -16,7 +16,7 @@ namespace NetFabric.Hyperlinq
         {
             Debug.Assert(arrayPool is object);
 
-            using var builder = new LargeArrayBuilder<TSource>(arrayPool);
+            var builder = new LargeArrayBuilder<TSource>(arrayPool);
             var enumerator = source.GetAsyncEnumerator();
             await using (enumerator.ConfigureAwait(false))
             {
@@ -35,7 +35,7 @@ namespace NetFabric.Hyperlinq
         {
             Debug.Assert(arrayPool is object);
 
-            using var builder = new LargeArrayBuilder<TSource>(arrayPool);
+            var builder = new LargeArrayBuilder<TSource>(arrayPool);
             var enumerator = source.GetAsyncEnumerator();
             await using (enumerator.ConfigureAwait(false))
             {
@@ -57,7 +57,7 @@ namespace NetFabric.Hyperlinq
         {
             Debug.Assert(arrayPool is object);
 
-            using var builder = new LargeArrayBuilder<TSource>(arrayPool);
+            var builder = new LargeArrayBuilder<TSource>(arrayPool);
             var enumerator = source.GetAsyncEnumerator();
             await using (enumerator.ConfigureAwait(false))
             {
@@ -82,7 +82,7 @@ namespace NetFabric.Hyperlinq
         {
             Debug.Assert(arrayPool is object);
 
-            using var builder = new LargeArrayBuilder<TResult>(arrayPool);
+            var builder = new LargeArrayBuilder<TResult>(arrayPool);
             var enumerator = source.GetAsyncEnumerator();
             await using (enumerator.ConfigureAwait(false))
             {
@@ -102,7 +102,7 @@ namespace NetFabric.Hyperlinq
         {
             Debug.Assert(arrayPool is object);
 
-            using var builder = new LargeArrayBuilder<TResult>(arrayPool);
+            var builder = new LargeArrayBuilder<TResult>(arrayPool);
             var enumerator = source.GetAsyncEnumerator();
             await using (enumerator.ConfigureAwait(false))
             {
@@ -125,7 +125,7 @@ namespace NetFabric.Hyperlinq
         {
             Debug.Assert(arrayPool is object);
 
-            using var builder = new LargeArrayBuilder<TResult>(arrayPool);
+            var builder = new LargeArrayBuilder<TResult>(arrayPool);
             var enumerator = source.GetAsyncEnumerator();
             await using (enumerator.ConfigureAwait(false))
             {

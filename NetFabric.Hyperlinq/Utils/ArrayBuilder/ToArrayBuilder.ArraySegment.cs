@@ -11,7 +11,7 @@ namespace NetFabric.Hyperlinq
         {
             Debug.Assert(pool is object);
 
-            using var builder = new LargeArrayBuilder<TSource>(pool);
+            var builder = new LargeArrayBuilder<TSource>(pool);
             var array = source.Array;
             if (source.Offset == 0 && source.Count == array.Length)
             {
@@ -38,7 +38,7 @@ namespace NetFabric.Hyperlinq
         {
             Debug.Assert(pool is object);
 
-            using var builder = new LargeArrayBuilder<TSource>(pool);
+            var builder = new LargeArrayBuilder<TSource>(pool);
             var array = source.Array;
             if (source.Offset == 0)
             {
@@ -77,7 +77,7 @@ namespace NetFabric.Hyperlinq
         {
             Debug.Assert(pool is object);
 
-            using var builder = new LargeArrayBuilder<TResult>(pool);
+            var builder = new LargeArrayBuilder<TResult>(pool);
             var array = source.Array;
             if (source.Offset == 0 && source.Count == array.Length)
             {

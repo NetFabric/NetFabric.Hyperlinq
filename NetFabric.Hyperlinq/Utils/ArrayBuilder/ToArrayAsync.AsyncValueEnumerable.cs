@@ -13,7 +13,7 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
-            using var builder = new LargeArrayBuilder<TSource>(ArrayPool<TSource>.Shared);
+            var builder = new LargeArrayBuilder<TSource>(ArrayPool<TSource>.Shared);
             var enumerator = source.GetAsyncEnumerator();
             await using (enumerator.ConfigureAwait(false))
             {
@@ -30,7 +30,7 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
-            using var builder = new LargeArrayBuilder<TSource>(ArrayPool<TSource>.Shared);
+            var builder = new LargeArrayBuilder<TSource>(ArrayPool<TSource>.Shared);
             var enumerator = source.GetAsyncEnumerator();
             await using (enumerator.ConfigureAwait(false))
             {
@@ -49,7 +49,7 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
-            using var builder = new LargeArrayBuilder<TSource>(ArrayPool<TSource>.Shared);
+            var builder = new LargeArrayBuilder<TSource>(ArrayPool<TSource>.Shared);
             var enumerator = source.GetAsyncEnumerator();
             await using (enumerator.ConfigureAwait(false))
             {
@@ -69,7 +69,7 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
-            using var builder = new LargeArrayBuilder<TSource>(ArrayPool<TSource>.Shared);
+            var builder = new LargeArrayBuilder<TSource>(ArrayPool<TSource>.Shared);
             var enumerator = source.GetAsyncEnumerator();
             await using (enumerator.ConfigureAwait(false))
             {
@@ -91,7 +91,7 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
-            using var builder = new LargeArrayBuilder<TSource>(ArrayPool<TSource>.Shared);
+            var builder = new LargeArrayBuilder<TSource>(ArrayPool<TSource>.Shared);
             var enumerator = source.GetAsyncEnumerator();
             await using (enumerator.ConfigureAwait(false))
             {
@@ -114,7 +114,7 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
-            using var builder = new LargeArrayBuilder<TSource>(ArrayPool<TSource>.Shared);
+            var builder = new LargeArrayBuilder<TSource>(ArrayPool<TSource>.Shared);
             var enumerator = source.GetAsyncEnumerator();
             await using (enumerator.ConfigureAwait(false))
             {
@@ -139,7 +139,7 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
-            using var builder = new LargeArrayBuilder<TResult>(ArrayPool<TResult>.Shared);
+            var builder = new LargeArrayBuilder<TResult>(ArrayPool<TResult>.Shared);
             var enumerator = source.GetAsyncEnumerator();
             await using (enumerator.ConfigureAwait(false))
             {
@@ -157,7 +157,7 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
-            using var builder = new LargeArrayBuilder<TResult>(ArrayPool<TResult>.Shared);
+            var builder = new LargeArrayBuilder<TResult>(ArrayPool<TResult>.Shared);
             var enumerator = source.GetAsyncEnumerator();
             await using (enumerator.ConfigureAwait(false))
             {
@@ -177,7 +177,7 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
-            using var builder = new LargeArrayBuilder<TResult>(ArrayPool<TResult>.Shared);
+            var builder = new LargeArrayBuilder<TResult>(ArrayPool<TResult>.Shared);
             var enumerator = source.GetAsyncEnumerator();
             await using (enumerator.ConfigureAwait(false))
             {
@@ -198,7 +198,7 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
-            using var builder = new LargeArrayBuilder<TResult>(ArrayPool<TResult>.Shared);
+            var builder = new LargeArrayBuilder<TResult>(ArrayPool<TResult>.Shared);
             var enumerator = source.GetAsyncEnumerator();
             await using (enumerator.ConfigureAwait(false))
             {
@@ -221,7 +221,7 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
-            using var builder = new LargeArrayBuilder<TResult>(ArrayPool<TResult>.Shared);
+            var builder = new LargeArrayBuilder<TResult>(ArrayPool<TResult>.Shared);
             var enumerator = source.GetAsyncEnumerator();
             await using (enumerator.ConfigureAwait(false))
             {
@@ -241,7 +241,7 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
-            using var builder = new LargeArrayBuilder<TResult>(ArrayPool<TResult>.Shared);
+            var builder = new LargeArrayBuilder<TResult>(ArrayPool<TResult>.Shared);
             var enumerator = source.GetAsyncEnumerator();
             await using (enumerator.ConfigureAwait(false))
             {

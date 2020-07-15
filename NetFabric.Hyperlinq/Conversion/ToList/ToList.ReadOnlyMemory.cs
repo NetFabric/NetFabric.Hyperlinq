@@ -14,12 +14,17 @@ namespace NetFabric.Hyperlinq
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static List<TSource> ToList<TSource>(this ReadOnlyMemory<TSource> source, Predicate<TSource> predicate)
-            => new List<TSource>(ToArrayBuilder(source.Span, predicate, ArrayPool<TSource>.Shared));
-
+        {
+            using var arrayBuilder = ToArrayBuilder(source.Span, predicate, ArrayPool<TSource>.Shared);
+            return new List<TSource>(arrayBuilder);
+        }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static List<TSource> ToList<TSource>(this ReadOnlyMemory<TSource> source, PredicateAt<TSource> predicate)
-            => new List<TSource>(ToArrayBuilder(source.Span, predicate, ArrayPool<TSource>.Shared));
+        {
+            using var arrayBuilder = ToArrayBuilder(source.Span, predicate, ArrayPool<TSource>.Shared);
+            return new List<TSource>(arrayBuilder);
+        }
 
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -34,7 +39,10 @@ namespace NetFabric.Hyperlinq
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static List<TResult> ToList<TSource, TResult>(this ReadOnlyMemory<TSource> source, Predicate<TSource> predicate, NullableSelector<TSource, TResult> selector)
-            => new List<TResult>(ToArrayBuilder(source.Span, predicate, selector, ArrayPool<TResult>.Shared));
+        {
+            using var arrayBuilder = ToArrayBuilder(source.Span, predicate, selector, ArrayPool<TResult>.Shared);
+            return new List<TResult>(arrayBuilder);
+        }
 
         sealed class ReadOnlyMemoryToListCollection<TSource>
             : ToListCollectionBase<TSource>
