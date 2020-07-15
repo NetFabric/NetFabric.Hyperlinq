@@ -94,53 +94,36 @@ namespace NetFabric.Hyperlinq
         {
             Debug.Assert(arrayIndex <= array.Length);
 
-            var count = Count;
-            for (var index = 0; count > 0; index++)
+            for (var bufferIndex = 0; bufferIndex < buffers.Count; bufferIndex++)
             {
-                // Find the buffer we're copying from.
-                var buffer = GetBuffer(index);
+                var buffer = buffers[bufferIndex];
+                var length = buffer.Length;
+                Array.Copy(buffer, 0, array, arrayIndex, length);
 
-                // Copy until we satisfy count, or we reach the end of the buffer.
-                var toCopy = Math.Min(count, buffer.Length);
-                Array.Copy(buffer, 0, array, arrayIndex, toCopy);
-
-                // Increment variables to that position.
-                count -= toCopy;
-                arrayIndex += toCopy;
+                arrayIndex += length;
+            }
+            if (arrayIndex < Count)
+            {
+                Array.Copy(current, 0, array, arrayIndex, Count - arrayIndex);
             }
         }
 
         public readonly void CopyTo(Span<T> span)
         {
-            var count = Count;
             var arrayIndex = 0;
-            for (var index = 0; count > 0; index++)
+            for (var bufferIndex = 0; bufferIndex < buffers.Count; bufferIndex++)
             {
-                // Find the buffer we're copying from.
-                var buffer = GetBuffer(index);
+                var buffer = buffers[bufferIndex];
+                var length = buffer.Length;
+                buffer.AsSpan().CopyTo(span.Slice(arrayIndex, length));
 
-                // Copy until we satisfy count, or we reach the end of the buffer.
-                var toCopy = Math.Min(count, buffer.Length);
-                buffer.AsSpan().Slice(0, toCopy).CopyTo(span.Slice(arrayIndex, toCopy));
-
-                // Increment variables to that position.
-                count -= toCopy;
-                arrayIndex += toCopy;
+                arrayIndex += length;
             }
-        }
-
-        /// <summary>
-        /// Retrieves the buffer at the specified index.
-        /// </summary>
-        /// <param name="index">The index of the buffer.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        readonly T[] GetBuffer(int index)
-        {
-            Debug.Assert(index >= 0 && index < buffers.Count + 1);
-
-            return index < buffers.Count
-                    ? buffers[index]!
-                    : current;
+            if (arrayIndex < Count)
+            {
+                var length = Count - arrayIndex;
+                current.AsSpan().Slice(0, length).CopyTo(span.Slice(arrayIndex, length));
+            }
         }
 
         /// <summary>
