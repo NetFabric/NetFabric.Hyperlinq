@@ -1,6 +1,7 @@
 ﻿using BenchmarkDotNet.Attributes;
 using NetFabric.Hyperlinq;
 using StructLinq;
+using System.Buffers;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -64,5 +65,12 @@ namespace LinqBenchmarks
         [Benchmark]
         public int[] Hyperlinq()
             => ListBindings.Where(source, item => item.IsEven()).Select(item => item * 2).ToArray();
+
+        [Benchmark]
+        public int Hyperlinq_Pool()
+        {
+            using var array = ListBindings.Where(source, item => item.IsEven()).Select(item => item * 2).ToArray(MemoryPool<int>.Shared);
+            return array.Memory.Span[0];
+        }
     }
 }

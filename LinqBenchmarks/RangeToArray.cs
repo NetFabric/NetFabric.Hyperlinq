@@ -2,6 +2,7 @@
 using BenchmarkDotNet.Attributes;
 using NetFabric.Hyperlinq;
 using StructLinq;
+using System.Buffers;
 using System.Linq;
 
 namespace LinqBenchmarks
@@ -36,5 +37,12 @@ namespace LinqBenchmarks
         [Benchmark]
         public int[] Hyperlinq()
             => ValueEnumerable.Range(Start, Count).ToArray();
+
+        [Benchmark]
+        public int Hyperlinq_Pool()
+        {
+            using var array = ValueEnumerable.Range(Start, Count).ToArray(MemoryPool<int>.Shared);
+            return array.Memory.Span[0];
+        }
     }
 }
