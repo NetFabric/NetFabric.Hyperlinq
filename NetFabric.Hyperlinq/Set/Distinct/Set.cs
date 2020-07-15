@@ -120,13 +120,13 @@ namespace NetFabric.Hyperlinq
                 Array.Copy(slots, newSlots, Count);
                 Array.Clear(newSlots, Count, newSlots.Length - Count);
 
-                for (var i = 0; i < Count; i++)
+                Array.Clear(newBuckets, 0, newBuckets.Length);
+                for (var index = 0; index < Count; index++)
                 {
-                    var bucket = newSlots[i].HashCode % newSize;
-                    newSlots[i].Next = newBuckets[bucket] - 1;
-                    newBuckets[bucket] = i + 1;
+                    var bucket = newSlots[index].HashCode % newSize;
+                    newSlots[index].Next = newBuckets[bucket] - 1;
+                    newBuckets[bucket] = index + 1;
                 }
-                Array.Clear(newBuckets, Count, newBuckets.Length);
             }
             finally
             {

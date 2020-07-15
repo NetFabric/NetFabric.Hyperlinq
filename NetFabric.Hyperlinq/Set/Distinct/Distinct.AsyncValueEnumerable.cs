@@ -43,7 +43,7 @@ namespace NetFabric.Hyperlinq
                 [SuppressMessage("Style", "IDE0044:Add readonly modifier")]
                 TEnumerator enumerator; // do not make readonly
                 readonly IEqualityComparer<TSource>? comparer;
-                readonly Set<TSource> set;
+                Set<TSource> set;
 
                 int state;
                 AsyncValueTaskMethodBuilder<bool> builder;
