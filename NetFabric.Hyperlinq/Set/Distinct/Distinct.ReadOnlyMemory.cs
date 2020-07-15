@@ -41,7 +41,7 @@ namespace NetFabric.Hyperlinq
                 : IEnumerator<TSource>
             {
                 readonly ReadOnlyMemory<TSource> source;
-                readonly Set<TSource> set;
+                Set<TSource> set;
                 int index;
 
                 internal Enumerator(in MemoryDistinctEnumerable<TSource> enumerable)

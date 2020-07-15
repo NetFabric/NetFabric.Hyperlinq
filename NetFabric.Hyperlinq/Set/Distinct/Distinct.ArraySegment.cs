@@ -34,7 +34,7 @@ namespace NetFabric.Hyperlinq
                 : IEnumerator<TSource>
             {
                 readonly TSource[] source;
-                readonly Set<TSource> set;
+                Set<TSource> set;
                 readonly int end;
                 int index;
 
