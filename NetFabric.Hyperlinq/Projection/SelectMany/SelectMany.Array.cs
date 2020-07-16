@@ -12,7 +12,7 @@ namespace NetFabric.Hyperlinq
             Selector<TSource, TSubEnumerable> selector)
             where TSubEnumerable : IValueEnumerable<TResult, TSubEnumerator>
             where TSubEnumerator : struct, IEnumerator<TResult>
-            => SelectMany<TSource, TSubEnumerable, TSubEnumerator, TResult>((ReadOnlyMemory<TSource>)source, selector);
+            => SelectMany<TSource, TSubEnumerable, TSubEnumerator, TResult>(source.AsMemory(), selector);
     }
 }
 

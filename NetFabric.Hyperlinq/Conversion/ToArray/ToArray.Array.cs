@@ -22,13 +22,7 @@ namespace NetFabric.Hyperlinq
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static IMemoryOwner<TSource> ToArray<TSource>(this TSource[] source, MemoryPool<TSource> pool)
-        {
-            if (pool is null) Throw.ArgumentNullException(nameof(pool));
-
-            var result = pool.RentSliced(source.Length);
-            ArrayExtensions.Copy(source.AsSpan(), result.Memory.Span);
-            return result;
-        }
+            => ArrayExtensions.ToArray(source.AsMemory(), pool);
     }
 }
 

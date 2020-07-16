@@ -57,7 +57,11 @@ namespace NetFabric.Hyperlinq
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static TResult[] ToArray<TSource, TResult>(this in ReadOnlySpan<TSource> source, NullableSelector<TSource, TResult> selector)
         {
+#if NET5_0
+            var result = GC.AllocateUninitializedArray<TResult>(source.Length);
+#else
             var result = new TResult[source.Length];
+#endif
             ArrayExtensions.Copy(source, result, selector);
             return result;
         }
@@ -75,7 +79,11 @@ namespace NetFabric.Hyperlinq
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static TResult[] ToArray<TSource, TResult>(this in ReadOnlySpan<TSource> source, NullableSelectorAt<TSource, TResult> selector)
         {
+#if NET5_0
+            var result = GC.AllocateUninitializedArray<TResult>(source.Length);
+#else
             var result = new TResult[source.Length];
+#endif
             ArrayExtensions.Copy(source, result, selector);
             return result;
         }

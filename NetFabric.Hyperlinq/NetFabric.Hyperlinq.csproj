@@ -42,8 +42,11 @@
     <ProjectReference Include="..\NetFabric.Hyperlinq.Interfaces\NetFabric.Hyperlinq.Interfaces.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)'=='net461' Or '$(TargetFramework)'=='netstandard2.0'">
     <PackageReference Include="System.Memory" Version="4.5.4" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="4.7.1" />
     <PackageReference Include="System.Buffers" Version="4.5.1" />
     <PackageReference Include="Uno.SourceGenerationTasks" Version="2.0.13">
@@ -76,14 +79,4 @@
   </ItemGroup>
   
   <Import Project="..\NetFabric.Hyperlinq.Generator\build\NetFabric.Hyperlinq.Generator.props" />
-  
-  <ItemGroup>
-    <UpToDateCheck Remove="Utils\ArrayBuilder\ToArrayAsync.AsyncValueEnumerable.cs" />
-    <UpToDateCheck Remove="Utils\ArrayBuilder\ToArrayBuilder.ArraySegment.cs" />
-    <UpToDateCheck Remove="Utils\ArrayBuilder\ToArrayBuilder.AsyncValueEnumerable.cs" />
-    <UpToDateCheck Remove="Utils\ArrayBuilder\ToArrayBuilder.ReadOnlyList.cs" />
-    <UpToDateCheck Remove="Utils\ArrayBuilder\ToArrayBuilder.ReadOnlySpan.cs" />
-    <UpToDateCheck Remove="Utils\ArrayBuilder\ToArrayBuilder.ValueEnumerable.cs" />
-    <UpToDateCheck Remove="Utils\ListExtensions.cs" />
-  </ItemGroup>
 </Project>

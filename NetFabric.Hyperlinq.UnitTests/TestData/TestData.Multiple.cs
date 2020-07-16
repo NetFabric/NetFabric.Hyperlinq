@@ -83,6 +83,25 @@ namespace NetFabric.Hyperlinq
                 { new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 }, 2, 20, item => (item & 0x01) == 1 },
             };
 
+
+        public static TheoryData<int[], Predicate<int>, Predicate<int>> PredicatePredicateMultiple =>
+            new TheoryData<int[], Predicate<int>, Predicate<int>>
+            {
+                { new int[] { 1, 2, 3, 4, 5 }, _ => true, _ => true },
+
+                { new int[] { 1, 2, 3, 4, 5 }, _ => true, item => (item & 0x01) == 0 },
+                { new int[] { 1, 2, 3, 4, 5 }, item => (item & 0x01) == 1, _ => true },
+            };
+
+        public static TheoryData<int[], int, int, Predicate<int>, Predicate<int>> SkipTakePredicatePredicateMultiple =>
+            new TheoryData<int[], int, int, Predicate<int>, Predicate<int>>
+            {
+                { new int[] { 1, 2, 3, 4, 5 }, 0, 9, _ => true, _ => true },
+
+                { new int[] { 1, 2, 3, 4, 5 }, 0, 9, _ => true, item => (item & 0x01) == 0 },
+                { new int[] { 1, 2, 3, 4, 5 }, 0, 9, item => (item & 0x01) == 1, _ => true },
+            };
+
         public static TheoryData<int[], PredicateAt<int>> PredicateAtMultiple =>
             new TheoryData<int[], PredicateAt<int>>
             {

@@ -34,7 +34,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Aggregation.Count
         {
             // Arrange
             var expected = Enumerable
-                .Count(source, predicate.AsFunc());
+                .Where(source, predicate.AsFunc())
+                .Count();
 
             // Act
             var result = ArrayExtensions

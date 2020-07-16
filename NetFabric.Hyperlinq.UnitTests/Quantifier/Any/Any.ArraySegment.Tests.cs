@@ -9,15 +9,16 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Any
     {
 
         [Theory]
-        [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
-        public void Any_With_ValidData_Must_Succeed(int[] source)
+        [MemberData(nameof(TestData.SkipTakeEmpty), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakeSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakeMultiple), MemberType = typeof(TestData))]
+        public void Any_With_ValidData_Must_Succeed(int[] source, int skipCount, int takeCount)
         {
             // Arrange
-            var wrapped = new ArraySegment<int>(source);
+            var (skip, take) = Utils.SkipTake(source.Length, skipCount, takeCount);
+            var wrapped = new ArraySegment<int>(source, skip, take);
             var expected = Enumerable
-                .Any(source);
+                .Any(wrapped);
 
             // Act
             var result = ArrayExtensions
@@ -47,43 +48,20 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Any
         }
 
         [Theory]
-        [MemberData(nameof(TestData.PredicateEmpty), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.PredicateSingle), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.PredicateMultiple), MemberType = typeof(TestData))]
-        public void Any_Predicate_With_ValidData_Must_Succeed(int[] source, Predicate<int> predicate)
+        [MemberData(nameof(TestData.SkipTakePredicateEmpty), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakePredicateSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakePredicateMultiple), MemberType = typeof(TestData))]
+        public void Any_Predicate_With_ValidData_Must_Succeed(int[] source, int skipCount, int takeCount, Predicate<int> predicate)
         {
             // Arrange
-            var wrapped = new ArraySegment<int>(source);
+            var (skip, take) = Utils.SkipTake(source.Length, skipCount, takeCount);
+            var wrapped = new ArraySegment<int>(source, skip, take);
             var expected = Enumerable
-                .Any(source, predicate.AsFunc());
+                .Any(wrapped, predicate.AsFunc());
 
             // Act
             var result = ArrayExtensions
                 .Any(wrapped, predicate);
-
-            // Assert
-            _ = result.Must()
-                .BeEqualTo(expected);
-        }
-
-        [Theory]
-        [MemberData(nameof(TestData.SkipTakePredicateEmpty), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.SkipTakePredicateSingle), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.SkipTakePredicateMultiple), MemberType = typeof(TestData))]
-        public void Any_Skip_Take_Predicate_With_ValidData_Must_Succeed(int[] source, int skipCount, int takeCount, Predicate<int> predicate)
-        {
-            // Arrange
-            var wrapped = new ArraySegment<int>(source);
-            var expected = Enumerable
-                .Skip(source, skipCount)
-                .Take(takeCount)
-                .Any(predicate.AsFunc());
-
-            // Act
-            var result = ArrayExtensions
-                .Skip(wrapped, skipCount)
-                .Take(takeCount)
-                .Any(predicate);
 
             // Assert
             _ = result.Must()
@@ -109,45 +87,21 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Any
         }
 
         [Theory]
-        [MemberData(nameof(TestData.PredicateAtEmpty), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.PredicateAtSingle), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.PredicateAtMultiple), MemberType = typeof(TestData))]
-        public void Any_PredicateAt_With_ValidData_Must_Succeed(int[] source, PredicateAt<int> predicate)
+        [MemberData(nameof(TestData.SkipTakePredicateAtEmpty), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakePredicateAtSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakePredicateAtMultiple), MemberType = typeof(TestData))]
+        public void Any_PredicateAt_With_ValidData_Must_Succeed(int[] source, int skipCount, int takeCount, PredicateAt<int> predicate)
         {
             // Arrange
-            var wrapped = new ArraySegment<int>(source);
+            var (skip, take) = Utils.SkipTake(source.Length, skipCount, takeCount);
+            var wrapped = new ArraySegment<int>(source, skip, take);
             var expected = Enumerable
-                .Where(source, predicate.AsFunc())
+                .Where(wrapped, predicate.AsFunc())
                 .Count() != 0;
 
             // Act
             var result = ArrayExtensions
                 .Any(wrapped, predicate);
-
-            // Assert
-            _ = result.Must()
-                .BeEqualTo(expected);
-        }
-
-        [Theory]
-        [MemberData(nameof(TestData.SkipTakePredicateAtEmpty), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.SkipTakePredicateAtSingle), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.SkipTakePredicateAtMultiple), MemberType = typeof(TestData))]
-        public void Any_Skip_Take_PredicateAt_With_ValidData_Must_Succeed(int[] source, int skipCount, int takeCount, PredicateAt<int> predicate)
-        {
-            // Arrange
-            var wrapped = new ArraySegment<int>(source);
-            var expected = Enumerable
-                .Skip(source, skipCount)
-                .Take(takeCount)
-                .Where(predicate.AsFunc())
-                .Count() != 0;
-
-            // Act
-            var result = ArrayExtensions
-                .Skip(wrapped, skipCount)
-                .Take(takeCount)
-                .Any(predicate);
 
             // Assert
             _ = result.Must()
