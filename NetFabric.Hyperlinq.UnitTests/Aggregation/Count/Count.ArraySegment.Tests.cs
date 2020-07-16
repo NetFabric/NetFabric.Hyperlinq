@@ -8,70 +8,20 @@ namespace NetFabric.Hyperlinq.UnitTests.Aggregation.Count
     public class ArraySegmentTests
     {
         [Theory]
-        [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
-        public void Count_With_ValidData_Must_Succeed(int[] source)
+        [MemberData(nameof(TestData.SkipTakeEmpty), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakeSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakeMultiple), MemberType = typeof(TestData))]
+        public void Count_With_ValidData_Must_Succeed(int[] source, int skipCount, int takeCount)
         {
             // Arrange
-            var wrapped = new ArraySegment<int>(source);
+            var (skip, take) = Utils.SkipTake(source.Length, skipCount, takeCount);
+            var wrapped = new ArraySegment<int>(source, skip, take);
             var expected = Enumerable
-                .Count(source);
+                .Count(wrapped);
 
             // Act
             var result = ArrayExtensions
                 .Count(wrapped);
-
-            // Assert
-            _ = result.Must()
-                .BeEqualTo(expected);
-        }
-
-        [Theory]
-        [MemberData(nameof(TestData.SkipTakePredicateEmpty), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.SkipTakePredicateSingle), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.SkipTakePredicateMultiple), MemberType = typeof(TestData))]
-        public void Count_Predicate_With_ValidData_Must_Succeed(int[] source, int skipCount, int takeCount, Predicate<int> predicate)
-        {
-            // Arrange
-            var wrapped = new ArraySegment<int>(source);
-            var expected = Enumerable
-                .Skip(source, skipCount)
-                .Take(takeCount)
-                .Count(predicate.AsFunc());
-
-            // Act
-            var result = ArrayExtensions
-                .Skip(wrapped, skipCount)
-                .Take(takeCount)
-                .Where(predicate)
-                .Count();
-
-            // Assert
-            _ = result.Must()
-                .BeEqualTo(expected);
-        }
-
-        [Theory]
-        [MemberData(nameof(TestData.SkipTakePredicateAtEmpty), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.SkipTakePredicateAtSingle), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.SkipTakePredicateAtMultiple), MemberType = typeof(TestData))]
-        public void Count_PredicateAt_With_ValidData_Must_Succeed(int[] source, int skipCount, int takeCount, PredicateAt<int> predicate)
-        {
-            // Arrange
-            var wrapped = new ArraySegment<int>(source);
-            var expected = Enumerable
-                .Skip(source, skipCount)
-                .Take(takeCount)
-                .Where(predicate.AsFunc())
-                .Count();
-
-            // Act
-            var result = ArrayExtensions
-                .Skip(wrapped, skipCount)
-                .Take(takeCount)
-                .Where(predicate)
-                .Count();
 
             // Assert
             _ = result.Must()

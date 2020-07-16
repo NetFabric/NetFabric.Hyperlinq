@@ -8,10 +8,6 @@ namespace NetFabric.Hyperlinq
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int Count<TSource>(this TSource[] source)
             => source.Length;
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int Count<TSource>(this TSource[] source, Predicate<TSource> predicate)
-            => Count((ReadOnlySpan<TSource>)source.AsSpan(), predicate);
     }
 }
 

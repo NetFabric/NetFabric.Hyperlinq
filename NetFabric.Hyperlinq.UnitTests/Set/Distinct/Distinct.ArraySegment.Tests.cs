@@ -9,36 +9,16 @@ namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct
     public class ArraySegmentTests
     {
         [Theory]
-        [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
-        public void Distinct_With_ValidData_Must_Succeed(int[] source)
+        [MemberData(nameof(TestData.SkipTakeEmpty), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakeSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakeMultiple), MemberType = typeof(TestData))]
+        public void Distinct_With_ValidData_Must_Succeed(int[] source, int skipCount, int takeCount)
         {
             // Arrange
-            var wrapped = new ArraySegment<int>(source);
+            var (skip, take) = Utils.SkipTake(source.Length, skipCount, takeCount);
+            var wrapped = new ArraySegment<int>(source, skip, take);
             var expected = Enumerable
-                .Distinct(source);
-
-            // Act
-            var result = ArrayExtensions
                 .Distinct(wrapped);
-
-            // Assert
-            _ = result.Must()
-                .BeEnumerableOf<int>()
-                .BeEqualTo(expected, testRefStructs: false, testRefReturns: false);
-            _ = result.SequenceEqual(expected).Must().BeTrue();
-        }
-
-        [Theory]
-        [InlineData(100)]
-        public void Distinct_With_LargeData_Must_Succeed(int count)
-        {
-            // Arrange
-            var source = ValueEnumerable.Range(0, count).ToArray();
-            var wrapped = new ArraySegment<int>(source);
-            var expected = Enumerable
-                .Distinct(source);
 
             // Act
             var result = ArrayExtensions
@@ -55,47 +35,18 @@ namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct
         [MemberData(nameof(TestData.SkipTakeEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakeSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakeMultiple), MemberType = typeof(TestData))]
-        public void Distinct_Skip_Take_With_ValidData_Must_Succeed(int[] source, int skipCount, int takeCount)
+        public void Distinct_ToArray_With_ValidData_Must_Succeed(int[] source, int skipCount, int takeCount)
         {
             // Arrange
-            var wrapped = new ArraySegment<int>(source);
+            var (skip, take) = Utils.SkipTake(source.Length, skipCount, takeCount);
+            var wrapped = new ArraySegment<int>(source, skip, take);
             var expected = Enumerable
-                .Skip(source, skipCount)
-                .Take(takeCount)
-                .Distinct();
-
-            // Act
-            var result = ArrayExtensions
-                .Skip(wrapped, skipCount)
-                .Take(takeCount)
-                .Distinct();
-
-            // Assert
-            _ = result.Must()
-                .BeEnumerableOf<int>()
-                .BeEqualTo(expected, testRefStructs: false, testRefReturns: false);
-            _ = result.SequenceEqual(expected).Must().BeTrue();
-        }
-
-        [Theory]
-        [MemberData(nameof(TestData.SkipTakeEmpty), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.SkipTakeSingle), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.SkipTakeMultiple), MemberType = typeof(TestData))]
-        public void Distinct_Skip_Take_ToArray_With_ValidData_Must_Succeed(int[] source, int skipCount, int takeCount)
-        {
-            // Arrange
-            var wrapped = new ArraySegment<int>(source);
-            var expected = Enumerable
-                .Skip(source, skipCount)
-                .Take(takeCount)
-                .Distinct()
+                .Distinct(wrapped)
                 .ToArray();
 
             // Act
             var result = ArrayExtensions
-                .Skip(wrapped, skipCount)
-                .Take(takeCount)
-                .Distinct()
+                .Distinct(wrapped)
                 .ToArray();
 
             // Assert
@@ -108,22 +59,19 @@ namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct
         [MemberData(nameof(TestData.SkipTakeEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakeSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakeMultiple), MemberType = typeof(TestData))]
-        public void Distinct_Skip_Take_ToArray_MemoryPool_With_ValidData_Must_Succeed(int[] source, int skipCount, int takeCount)
+        public void Distinct_ToArray_MemoryPool_With_ValidData_Must_Succeed(int[] source, int skipCount, int takeCount)
         {
             // Arrange
             var pool = MemoryPool<int>.Shared;
-            var wrapped = new ArraySegment<int>(source);
+            var (skip, take) = Utils.SkipTake(source.Length, skipCount, takeCount);
+            var wrapped = new ArraySegment<int>(source, skip, take);
             var expected = Enumerable
-                .Skip(source, skipCount)
-                .Take(takeCount)
-                .Distinct()
+                .Distinct(wrapped)
                 .ToArray();
 
             // Act
             using var result = ArrayExtensions
-                .Skip(wrapped, skipCount)
-                .Take(takeCount)
-                .Distinct()
+                .Distinct(wrapped)
                 .ToArray(pool);
 
             // Assert
@@ -136,21 +84,18 @@ namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct
         [MemberData(nameof(TestData.SkipTakeEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakeSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakeMultiple), MemberType = typeof(TestData))]
-        public void Distinct_Skip_Take_ToList_With_ValidData_Must_Succeed(int[] source, int skipCount, int takeCount)
+        public void Distinct_ToList_With_ValidData_Must_Succeed(int[] source, int skipCount, int takeCount)
         {
             // Arrange
-            var wrapped = new ArraySegment<int>(source);
+            var (skip, take) = Utils.SkipTake(source.Length, skipCount, takeCount);
+            var wrapped = new ArraySegment<int>(source, skip, take);
             var expected = Enumerable
-                .Skip(source, skipCount)
-                .Take(takeCount)
-                .Distinct()
+                .Distinct(wrapped)
                 .ToList();
 
             // Act
             var result = ArrayExtensions
-                .Skip(wrapped, skipCount)
-                .Take(takeCount)
-                .Distinct()
+                .Distinct(wrapped)
                 .ToList();
 
             // Assert

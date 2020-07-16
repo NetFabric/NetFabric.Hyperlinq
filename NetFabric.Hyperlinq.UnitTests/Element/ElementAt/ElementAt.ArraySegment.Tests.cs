@@ -8,19 +8,20 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
     public class ArraySegmentTests 
     {
         [Theory]
-        [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
-        public void ElementAt_With_OutOfRange_Must_Return_None(int[] source)
+        [MemberData(nameof(TestData.SkipTakeEmpty), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakeSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakeMultiple), MemberType = typeof(TestData))]
+        public void ElementAt_With_OutOfRange_Must_Return_None(int[] source, int skipCount, int takeCount)
         {
             // Arrange
-            var wrapped = new ArraySegment<int>(source);
+            var (skip, take) = Utils.SkipTake(source.Length, skipCount, takeCount);
+            var wrapped = new ArraySegment<int>(source, skip, take);
 
             // Act
             var optionTooSmall = ArrayExtensions
-                .ElementAt<int>(wrapped, -1);
+                .ElementAt(wrapped, -1);
             var optionTooLarge = ArrayExtensions
-                .ElementAt<int>(wrapped, source.Length);
+                .ElementAt(wrapped, takeCount);
 
             // Assert
             _ = optionTooSmall.Must()
@@ -32,371 +33,21 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
         }
 
         [Theory]
-        [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
-        public void ElementAt_With_ValidData_Must_Return_Some(int[] source)
+        [MemberData(nameof(TestData.SkipTakeSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakeMultiple), MemberType = typeof(TestData))]
+        public void ElementAt_With_ValidData_Must_Return_Some(int[] source, int skipCount, int takeCount)
         {
             // Arrange
-            var wrapped = new ArraySegment<int>(source);
-            for (var index = 0; index < source.Length; index++)
+            var (skip, take) = Utils.SkipTake(source.Length, skipCount, takeCount);
+            var wrapped = new ArraySegment<int>(source, skip, take);
+            var expected = Enumerable
+                .ToList(wrapped);
+
+            for (var index = 0; index < expected.Count; index++)
             {
                 // Act
                 var result = ArrayExtensions
                     .ElementAt(wrapped, index);
-
-                // Assert
-                _ = result.Match(
-                    value => value.Must().BeEqualTo(source[index]),
-                    () => throw new Exception());
-            }
-        }
-
-        [Theory]
-        [MemberData(nameof(TestData.SkipTakeEmpty), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.SkipTakeSingle), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.SkipTakeMultiple), MemberType = typeof(TestData))]
-        public void ElementAt_Skip_Take_With_OutOfRange_Must_Return_None(int[] source, int skipCount, int takeCount)
-        {
-            // Arrange
-            var wrapped = new ArraySegment<int>(source);
-
-            // Act
-            var optionTooSmall = ArrayExtensions
-                .Skip(wrapped, skipCount)
-                .Take(takeCount)
-                .ElementAt(-1);
-            var optionTooLarge = ArrayExtensions
-                .Skip(wrapped, skipCount)
-                .Take(takeCount)
-                .ElementAt(takeCount);
-
-            // Assert
-            _ = optionTooSmall.Must()
-                .BeOfType<Option<int>>()
-                .EvaluateTrue(option => option.IsNone);
-            _ = optionTooLarge.Must()
-                .BeOfType<Option<int>>()
-                .EvaluateTrue(option => option.IsNone);
-        }
-
-        [Theory]
-        [MemberData(nameof(TestData.SkipTakeSingle), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.SkipTakeMultiple), MemberType = typeof(TestData))]
-        public void ElementAt_Skip_Take_With_ValidData_Must_Return_Some(int[] source, int skipCount, int takeCount)
-        {
-            // Arrange
-            var wrapped = new ArraySegment<int>(source);
-            var expected = Enumerable
-                .Skip(source, skipCount)
-                .Take(takeCount)
-                .ToList();
-
-            for (var index = 0; index < expected.Count; index++)
-            {
-                // Act
-                var result = ArrayExtensions
-                    .Skip(wrapped, skipCount)
-                    .Take(takeCount)
-                    .ElementAt(index);
-
-                // Assert
-                _ = result.Match(
-                    value => value.Must().BeEqualTo(expected[index]),
-                    () => throw new Exception());
-            }
-        }
-
-        [Theory]
-        [MemberData(nameof(TestData.SkipTakePredicateEmpty), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.SkipTakePredicateSingle), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.SkipTakePredicateMultiple), MemberType = typeof(TestData))]
-        public void ElementAt_Skip_Take_Predicate_With_OutOfRange_Must_Return_None(int[] source, int skipCount, int takeCount, Predicate<int> predicate)
-        {
-            // Arrange
-            var wrapped = new ArraySegment<int>(source);
-
-            // Act
-            var optionTooSmall = ArrayExtensions
-                .Skip(wrapped, skipCount)
-                .Take(takeCount)
-                .Where(predicate)
-                .ElementAt(-1);
-            var optionTooLarge = ArrayExtensions
-                .Skip(wrapped, skipCount)
-                .Take(takeCount)
-                .Where(predicate)
-                .ElementAt(takeCount);
-
-            // Assert
-            _ = optionTooSmall.Must()
-                .BeOfType<Option<int>>()
-                .EvaluateTrue(option => option.IsNone);
-            _ = optionTooLarge.Must()
-                .BeOfType<Option<int>>()
-                .EvaluateTrue(option => option.IsNone);
-        }
-
-        [Theory]
-        [MemberData(nameof(TestData.SkipTakePredicateSingle), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.SkipTakePredicateMultiple), MemberType = typeof(TestData))]
-        public void ElementAt_Skip_Take_Predicate_With_ValidData_Must_Return_Some(int[] source, int skipCount, int takeCount, Predicate<int> predicate)
-        {
-            // Arrange
-            var wrapped = new ArraySegment<int>(source);
-            var expected = Enumerable
-                .Skip(source, skipCount)
-                .Take(takeCount)
-                .Where(predicate.AsFunc())
-                .ToList();
-
-            for (var index = 0; index < expected.Count; index++)
-            {
-                // Act
-                var result = ArrayExtensions
-                    .Skip(wrapped, skipCount)
-                    .Take(takeCount)
-                    .Where(predicate)
-                    .ElementAt(index);
-
-                // Assert
-                _ = result.Match(
-                    value => value.Must().BeEqualTo(expected[index]),
-                    () => throw new Exception());
-            }
-        }
-
-        [Theory]
-        [MemberData(nameof(TestData.SkipTakePredicateAtEmpty), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.SkipTakePredicateAtSingle), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.SkipTakePredicateAtMultiple), MemberType = typeof(TestData))]
-        public void ElementAt_Skip_Take_PredicateAt_With_OutOfRange_Must_Return_None(int[] source, int skipCount, int takeCount, PredicateAt<int> predicate)
-        {
-            // Arrange
-            var wrapped = new ArraySegment<int>(source);
-
-            // Act
-            var optionTooSmall = ArrayExtensions
-                .Skip(wrapped, skipCount)
-                .Take(takeCount)
-                .Where(predicate)
-                .ElementAt(-1);
-            var optionTooLarge = ArrayExtensions
-                .Skip(wrapped, skipCount)
-                .Take(takeCount)
-                .Where(predicate)
-                .ElementAt(takeCount);
-
-            // Assert
-            _ = optionTooSmall.Must()
-                .BeOfType<Option<int>>()
-                .EvaluateTrue(option => option.IsNone);
-            _ = optionTooLarge.Must()
-                .BeOfType<Option<int>>()
-                .EvaluateTrue(option => option.IsNone);
-        }
-
-        [Theory]
-        [MemberData(nameof(TestData.SkipTakePredicateAtSingle), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.SkipTakePredicateAtMultiple), MemberType = typeof(TestData))]
-        public void ElementAt_Skip_Take_PredicateAt_With_ValidData_Must_Return_Some(int[] source, int skipCount, int takeCount, PredicateAt<int> predicate)
-        {
-            // Arrange
-            var wrapped = new ArraySegment<int>(source);
-            var expected = Enumerable
-                .Skip(source, skipCount)
-                .Take(takeCount)
-                .Where(predicate.AsFunc())
-                .ToList();
-
-            for (var index = 0; index < expected.Count; index++)
-            {
-                // Act
-                var result = ArrayExtensions
-                    .Skip(wrapped, skipCount)
-                    .Take(takeCount)
-                    .Where(predicate)
-                    .ElementAt(index);
-
-                // Assert
-                _ = result.Match(
-                    value => value.Must().BeEqualTo(expected[index]),
-                    () => throw new Exception());
-            }
-        }
-
-        [Theory]
-        [MemberData(nameof(TestData.SkipTakeSelectorEmpty), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.SkipTakeSelectorSingle), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.SkipTakeSelectorMultiple), MemberType = typeof(TestData))]
-        public void ElementAt_Skip_Take_Selector_With_OutOfRange_Must_Return_None(int[] source, int skipCount, int takeCount, NullableSelector<int, string> selector)
-        {
-            // Arrange
-            var wrapped = new ArraySegment<int>(source);
-
-            // Act
-            var optionTooSmall = ArrayExtensions
-                .Skip(wrapped, skipCount)
-                .Take(takeCount)
-                .Select(selector)
-                .ElementAt(-1);
-            var optionTooLarge = ArrayExtensions
-                .Skip(wrapped, skipCount)
-                .Take(takeCount)
-                .Select(selector)
-                .ElementAt(takeCount);
-
-            // Assert
-            _ = optionTooSmall.Must()
-                .BeOfType<Option<string>>()
-                .EvaluateTrue(option => option.IsNone);
-            _ = optionTooLarge.Must()
-                .BeOfType<Option<string>>()
-                .EvaluateTrue(option => option.IsNone);
-        }
-
-        [Theory]
-        [MemberData(nameof(TestData.SkipTakeSelectorSingle), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.SkipTakeSelectorMultiple), MemberType = typeof(TestData))]
-        public void ElementAt_Skip_Take_Selector_With_ValidData_Must_Return_Some(int[] source, int skipCount, int takeCount, NullableSelector<int, string> selector)
-        {
-            // Arrange
-            var wrapped = new ArraySegment<int>(source);
-            var expected = Enumerable
-                .Skip(source, skipCount)
-                .Take(takeCount)
-                .Select(selector.AsFunc())
-                .ToList();
-
-            for (var index = 0; index < expected.Count; index++)
-            {
-                // Act
-                var result = ArrayExtensions
-                    .Skip(wrapped, skipCount)
-                    .Take(takeCount)
-                    .Select(selector)
-                    .ElementAt(index);
-
-                // Assert
-                _ = result.Match(
-                    value => value.Must().BeEqualTo(expected[index]),
-                    () => throw new Exception());
-            }
-        }
-        
-        [Theory]
-        [MemberData(nameof(TestData.SkipTakeSelectorAtEmpty), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.SkipTakeSelectorAtSingle), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.SkipTakeSelectorAtMultiple), MemberType = typeof(TestData))]
-        public void ElementAt_Skip_Take_SelectorAt_With_OutOfRange_Must_Return_None(int[] source, int skipCount, int takeCount, NullableSelectorAt<int, string> selector)
-        {
-            // Arrange
-            var wrapped = new ArraySegment<int>(source);
-
-            // Act
-            var optionTooSmall = ArrayExtensions
-                .Skip(wrapped, skipCount)
-                .Take(takeCount)
-                .Select(selector)
-                .ElementAt(-1);
-            var optionTooLarge = ArrayExtensions
-                .Skip(wrapped, skipCount)
-                .Take(takeCount)
-                .Select(selector)
-                .ElementAt(takeCount);
-
-            // Assert
-            _ = optionTooSmall.Must()
-                .BeOfType<Option<string>>()
-                .EvaluateTrue(option => option.IsNone);
-            _ = optionTooLarge.Must()
-                .BeOfType<Option<string>>()
-                .EvaluateTrue(option => option.IsNone);
-        }
-
-        [Theory]
-        [MemberData(nameof(TestData.SkipTakeSelectorAtSingle), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.SkipTakeSelectorAtMultiple), MemberType = typeof(TestData))]
-        public void ElementAt_Skip_Take_SelectorAt_With_ValidData_Must_Return_Some(int[] source, int skipCount, int takeCount, NullableSelectorAt<int, string> selector)
-        {
-            // Arrange
-            var wrapped = new ArraySegment<int>(source);
-            var expected = Enumerable
-                .Skip(source, skipCount)
-                .Take(takeCount)
-                .Select(selector.AsFunc())
-                .ToList();
-
-            for (var index = 0; index < expected.Count; index++)
-            {
-                // Act
-                var result = ArrayExtensions
-                    .Skip(wrapped, skipCount)
-                    .Take(takeCount)
-                    .Select(selector)
-                    .ElementAt(index);
-
-                // Assert
-                _ = result.Match(
-                    value => value.Must().BeEqualTo(expected[index]),
-                    () => throw new Exception());
-            }
-        }
-
-        [Theory]
-        [MemberData(nameof(TestData.SkipTakePredicateSelectorEmpty), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.SkipTakePredicateSelectorSingle), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.SkipTakePredicateSelectorMultiple), MemberType = typeof(TestData))]
-        public void ElementAt_Skip_Take_Predicate_Selector_With_OutOfRange_Must_Return_None(int[] source, int skipCount, int takeCount, Predicate<int> predicate, NullableSelector<int, string> selector)
-        {
-            // Arrange
-            var wrapped = new ArraySegment<int>(source);
-
-            // Act
-            var optionTooSmall = ArrayExtensions
-                .Skip(wrapped, skipCount)
-                .Take(takeCount)
-                .Where(predicate)
-                .Select(selector)
-                .ElementAt(-1);
-            var optionTooLarge = ArrayExtensions
-                .Skip(wrapped, skipCount)
-                .Take(takeCount)
-                .Where(predicate)
-                .Select(selector)
-                .ElementAt(takeCount);
-
-            // Assert
-            _ = optionTooSmall.Must()
-                .BeOfType<Option<string>>()
-                .EvaluateTrue(option => option.IsNone);
-            _ = optionTooLarge.Must()
-                .BeOfType<Option<string>>()
-                .EvaluateTrue(option => option.IsNone);
-        }
-
-        [Theory]
-        [MemberData(nameof(TestData.SkipTakePredicateSelectorSingle), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.SkipTakePredicateSelectorMultiple), MemberType = typeof(TestData))]
-        public void ElementAt_Skip_Take_Predicate_Selector_With_ValidData_Must_Return_Some(int[] source, int skipCount, int takeCount, Predicate<int> predicate, NullableSelector<int, string> selector)
-        {
-            // Arrange
-            var wrapped = new ArraySegment<int>(source);
-            var expected = Enumerable
-                .Skip(source, skipCount)
-                .Take(takeCount)
-                .Where(predicate.AsFunc())
-                .Select(selector.AsFunc())
-                .ToList();
-
-            for (var index = 0; index < expected.Count; index++)
-            {
-                // Act
-                var result = ArrayExtensions
-                    .Skip(wrapped, skipCount)
-                    .Take(takeCount)
-                    .Where(predicate)
-                    .Select(selector)
-                    .ElementAt(index);
 
                 // Assert
                 _ = result.Match(

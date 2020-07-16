@@ -26,45 +26,20 @@ namespace NetFabric.Hyperlinq.UnitTests.Projection.SelectAt
         }
 
         [Theory]
-        [MemberData(nameof(TestData.SelectorAtEmpty), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.SelectorAtSingle), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.SelectorAtMultiple), MemberType = typeof(TestData))]
-        public void Select_With_ValidData_Must_Succeed(int[] source, NullableSelectorAt<int, string> selector)
+        [MemberData(nameof(TestData.SkipTakeSelectorAtEmpty), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakeSelectorAtSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakeSelectorAtMultiple), MemberType = typeof(TestData))]
+        public void Select_With_ValidData_Must_Succeed(int[] source, int skipCount, int takeCount, NullableSelectorAt<int, string> selector)
         {
             // Arrange
-            var wrapped = new ArraySegment<int>(source);
+            var (skip, take) = Utils.SkipTake(source.Length, skipCount, takeCount);
+            var wrapped = new ArraySegment<int>(source, skip, take);
             var expected = Enumerable
-                .Select(source, selector.AsFunc());
+                .Select(wrapped, selector.AsFunc());
 
             // Act
             var result = ArrayExtensions
                 .Select(wrapped, selector);
-
-            // Assert
-            _ = result.Must()
-                .BeEnumerableOf<string>()
-                .BeEqualTo(expected, testRefStructs: false);
-            _ = result.SequenceEqual(expected).Must().BeTrue();
-        }
-
-        [Theory]
-        [MemberData(nameof(TestData.SkipTakeSelectorAtEmpty), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.SkipTakeSelectorAtSingle), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.SkipTakeSelectorAtMultiple), MemberType = typeof(TestData))]
-        public void Select_Skip_Count_With_ValidData_Must_Succeed(int[] source, int skipCount, int takeCount, NullableSelectorAt<int, string> selector)
-        {
-            // Arrange
-            var wrapped = new ArraySegment<int>(source);
-            var expected = Enumerable
-                .Skip(source, skipCount)
-                .Take(takeCount)
-                .Select(selector.AsFunc());
-
-            // Act
-            var result = ArrayExtensions
-                .Skip(wrapped, skipCount)
-                .Take(takeCount)
-                .Select(selector);
 
             // Assert
             _ = result.Must()
