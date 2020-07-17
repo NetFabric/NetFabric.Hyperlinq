@@ -41,6 +41,7 @@ namespace NetFabric.Hyperlinq
                 : IEnumerator<TSource>
             {
                 readonly ReadOnlyMemory<TSource> source;
+                readonly int end;
                 Set<TSource> set;
                 int index;
 
@@ -49,6 +50,7 @@ namespace NetFabric.Hyperlinq
                     source = enumerable.source;
                     set = new Set<TSource>(enumerable.comparer);
                     index = -1;
+                    end = index + source.Length;
                     Current = default!;
                 }
 
@@ -62,7 +64,7 @@ namespace NetFabric.Hyperlinq
                 public bool MoveNext()
                 {
                     var span = source.Span;
-                    while (++index < source.Length)
+                    while (++index <= end)
                     {
                         if (set.Add(span[index]))
                         {

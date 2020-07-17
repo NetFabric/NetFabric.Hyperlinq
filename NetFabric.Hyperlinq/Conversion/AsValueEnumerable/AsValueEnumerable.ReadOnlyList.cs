@@ -106,11 +106,13 @@ namespace NetFabric.Hyperlinq
                 : IEnumerator<TSource>
             {
                 readonly IReadOnlyList<TSource> source;
+                readonly int end;
                 int index;
 
                 internal Enumerator(IReadOnlyList<TSource> source)
                 {
                     this.source = source;
+                    end = source.Count - 1;
                     index = -1;
                 }
 
@@ -124,7 +126,7 @@ namespace NetFabric.Hyperlinq
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public bool MoveNext()
-                    => ++index < source.Count;
+                    => ++index <= end;
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 [ExcludeFromCodeCoverage]

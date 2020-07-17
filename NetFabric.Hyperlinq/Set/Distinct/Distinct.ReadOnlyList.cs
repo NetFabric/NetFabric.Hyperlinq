@@ -61,8 +61,8 @@ namespace NetFabric.Hyperlinq
                 {
                     source = enumerable.source;
                     set = new Set<TSource>(enumerable.comparer);
-                    end = enumerable.skipCount + enumerable.takeCount;
                     index = enumerable.skipCount - 1;
+                    end = index + enumerable.takeCount;
                 }
 
                 [MaybeNull]
@@ -75,7 +75,7 @@ namespace NetFabric.Hyperlinq
 
                 public bool MoveNext()
                 {
-                    while (++index < end)
+                    while (++index <= end)
                     {
                         if (set.Add(source[index]))
                             return true;

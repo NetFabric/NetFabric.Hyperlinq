@@ -47,6 +47,7 @@ namespace NetFabric.Hyperlinq
 
             public readonly int this[int index]
             {
+                [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 get
                 {
                     if (index < 0 || index >= Count) Throw.IndexOutOfRangeException();

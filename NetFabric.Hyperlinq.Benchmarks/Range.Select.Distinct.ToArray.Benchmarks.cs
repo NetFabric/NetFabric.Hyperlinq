@@ -22,7 +22,10 @@ namespace NetFabric.Hyperlinq.Benchmarks
             => ValueEnumerable.Range(0, Count).Select(item => item % 10).Distinct().ToArray();
 
         [Benchmark]
-        public IMemoryOwner<int> Hyperlinq_Pool()
-            => ValueEnumerable.Range(0, Count).Select(item => item % 10).Distinct().ToArray(MemoryPool<int>.Shared);
+        public int Hyperlinq_Pool()
+        {
+            using var result = ValueEnumerable.Range(0, Count).Select(item => item % 10).Distinct().ToArray(MemoryPool<int>.Shared);
+            return result.Memory.Span[0];
+        }
     }
 }

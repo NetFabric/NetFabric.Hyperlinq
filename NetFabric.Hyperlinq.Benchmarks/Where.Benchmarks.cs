@@ -2,6 +2,7 @@ using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Configs;
 using BenchmarkDotNet.Jobs;
 using JM.LinqFaster;
+using StructLinq;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -104,6 +105,8 @@ namespace NetFabric.Hyperlinq.Benchmarks
             return sum;
         }
 
+        // -------------------
+
         [BenchmarkCategory("Array")]
         [Benchmark]
         public int LinqFaster_Array()
@@ -113,6 +116,80 @@ namespace NetFabric.Hyperlinq.Benchmarks
                 sum += item;
             return sum;
         }
+
+        // -------------------
+
+        [BenchmarkCategory("Array")]
+        [Benchmark]
+        public int StructLinq_Array()
+        {
+            var sum = 0;
+            foreach (var item in array.ToStructEnumerable().Where(item => (item & 0x01) == 0, x => x))
+                sum += item;
+            return sum;
+        }
+
+        [BenchmarkCategory("Enumerable_Value")]
+        [Benchmark]
+        public int StructLinq_Enumerable_Value()
+        {
+            var sum = 0;
+            foreach (var item in enumerableValue.ToStructEnumerable().Where(item => (item & 0x01) == 0, x => x))
+                sum += item;
+            return sum;
+        }
+
+        [BenchmarkCategory("Collection_Value")]
+        [Benchmark]
+        public int StructLinq_Collection_Value()
+        {
+            var sum = 0;
+            foreach (var item in collectionValue.ToStructEnumerable().Where(item => (item & 0x01) == 0, x => x))
+                sum += item;
+            return sum;
+        }
+
+        [BenchmarkCategory("List_Value")]
+        [Benchmark]
+        public int StructLinq_List_Value()
+        {
+            var sum = 0;
+            foreach (var item in listValue.ToStructEnumerable().Where(item => (item & 0x01) == 0, x => x))
+                sum += item;
+            return sum;
+        }
+
+        [BenchmarkCategory("Enumerable_Reference")]
+        [Benchmark]
+        public int StructLinq_Enumerable_Reference()
+        {
+            var sum = 0;
+            foreach (var item in enumerableReference.ToStructEnumerable().Where(item => (item & 0x01) == 0, x => x))
+                sum += item;
+            return sum;
+        }
+
+        [BenchmarkCategory("Collection_Reference")]
+        [Benchmark]
+        public int StructLinq_Collection_Reference()
+        {
+            var sum = 0;
+            foreach (var item in collectionReference.ToStructEnumerable().Where(item => (item & 0x01) == 0, x => x))
+                sum += item;
+            return sum;
+        }
+
+        [BenchmarkCategory("List_Reference")]
+        [Benchmark]
+        public int StructLinq_List_Reference()
+        {
+            var sum = 0;
+            foreach (var item in listReference.ToStructEnumerable().Where(item => (item & 0x01) == 0, x => x))
+                sum += item;
+            return sum;
+        }
+
+        // -------------------
 
         [BenchmarkCategory("Array")]
         [Benchmark]
@@ -124,7 +201,6 @@ namespace NetFabric.Hyperlinq.Benchmarks
             return sum;
         }
 
-#if SPAN_SUPPORTED
         [BenchmarkCategory("Array")]
         [Benchmark]
         public int Hyperlinq_Span()
@@ -144,7 +220,6 @@ namespace NetFabric.Hyperlinq.Benchmarks
                 sum += item;
             return sum;
         }
-#endif
 
         [BenchmarkCategory("Enumerable_Value")]
         [Benchmark]
