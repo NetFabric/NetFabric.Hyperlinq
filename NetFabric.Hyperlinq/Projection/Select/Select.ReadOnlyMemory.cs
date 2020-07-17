@@ -40,6 +40,7 @@ namespace NetFabric.Hyperlinq
             [MaybeNull]
             public readonly TResult this[int index]
             {
+                [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 get
                 {
                     if (index < 0 || index >= source.Length)
@@ -114,6 +115,7 @@ namespace NetFabric.Hyperlinq
             {
                 readonly ReadOnlySpan<TSource> source;
                 readonly NullableSelector<TSource, TResult> selector;
+                readonly int end;
                 int index;
 
                 internal Enumerator(in MemorySelectEnumerable<TSource, TResult> enumerable)
@@ -121,6 +123,7 @@ namespace NetFabric.Hyperlinq
                     source = enumerable.source.Span;
                     selector = enumerable.selector;
                     index = -1;
+                    end = index + source.Length;
                 }
 
                 [MaybeNull]
@@ -128,7 +131,7 @@ namespace NetFabric.Hyperlinq
                     => selector(source[index]);
 
                 public bool MoveNext() 
-                    => ++index < source.Length;
+                    => ++index <= end;
             }
 
             public struct DisposableEnumerator
@@ -136,6 +139,7 @@ namespace NetFabric.Hyperlinq
             {
                 readonly ReadOnlyMemory<TSource> source;
                 readonly NullableSelector<TSource, TResult> selector;
+                readonly int end;
                 int index;
 
                 internal DisposableEnumerator(in MemorySelectEnumerable<TSource, TResult> enumerable)
@@ -143,8 +147,9 @@ namespace NetFabric.Hyperlinq
                     source = enumerable.source;
                     selector = enumerable.selector;
                     index = -1;
+                    end = index + source.Length;
                 }
- 
+
                 [MaybeNull]
                 public readonly TResult Current 
                     => selector(source.Span[index]);
@@ -154,7 +159,7 @@ namespace NetFabric.Hyperlinq
                     => selector(source.Span[index]);
 
                 public bool MoveNext() 
-                    => ++index < source.Length;
+                    => ++index <= end;
 
                 [ExcludeFromCodeCoverage]
                 public readonly void Reset() 

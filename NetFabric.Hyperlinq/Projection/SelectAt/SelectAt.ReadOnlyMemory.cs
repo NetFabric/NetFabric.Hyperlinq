@@ -38,6 +38,7 @@ namespace NetFabric.Hyperlinq
             [MaybeNull]
             public readonly TResult this[int index]
             {
+                [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 get
                 {
                     if (index < 0 || index >= source.Length)

@@ -54,6 +54,7 @@ namespace NetFabric.Hyperlinq
             {
                 readonly ReadOnlySpan<TSource> source;
                 readonly NullableSelector<TSource, TResult> selector;
+                readonly int end;
                 int index;
 
                 internal Enumerator(in SpanSelectEnumerable<TSource, TResult> enumerable)
@@ -61,6 +62,7 @@ namespace NetFabric.Hyperlinq
                     source = enumerable.source;
                     selector = enumerable.selector;
                     index = -1;
+                    end = index + source.Length;
                 }
 
                 [MaybeNull]
@@ -68,7 +70,7 @@ namespace NetFabric.Hyperlinq
                     => selector(source[index]);
 
                 public bool MoveNext() 
-                    => ++index < source.Length;
+                    => ++index <= end;
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]

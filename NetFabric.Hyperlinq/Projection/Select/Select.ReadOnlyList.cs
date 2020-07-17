@@ -50,6 +50,7 @@ namespace NetFabric.Hyperlinq
             [MaybeNull]
             public readonly TResult this[int index]
             {
+                [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 get
                 {
                     if (index < 0 || index >= Count)
@@ -134,8 +135,8 @@ namespace NetFabric.Hyperlinq
                 {
                     source = enumerable.source;
                     selector = enumerable.selector;
-                    end = enumerable.skipCount + enumerable.Count;
                     index = enumerable.skipCount - 1;
+                    end = index + enumerable.Count;
                 }
 
                 [MaybeNull]
@@ -144,7 +145,7 @@ namespace NetFabric.Hyperlinq
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public bool MoveNext() 
-                    => ++index < end;
+                    => ++index <= end;
             }
 
             public struct DisposableEnumerator
@@ -159,8 +160,8 @@ namespace NetFabric.Hyperlinq
                 {
                     source = enumerable.source;
                     selector = enumerable.selector;
-                    end = enumerable.skipCount + enumerable.Count;
                     index = enumerable.skipCount - 1;
+                    end = index + enumerable.Count;
                 }
 
                 [MaybeNull]
@@ -173,7 +174,7 @@ namespace NetFabric.Hyperlinq
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public bool MoveNext() 
-                    => ++index < end;
+                    => ++index <= end;
 
                 [ExcludeFromCodeCoverage]
                 public readonly void Reset() 

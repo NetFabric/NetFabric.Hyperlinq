@@ -58,8 +58,8 @@ namespace NetFabric.Hyperlinq
                     source = enumerable.source;
                     predicate = enumerable.predicate;
                     selector = enumerable.selector;
-                    end = enumerable.skipCount + enumerable.takeCount;
                     index = enumerable.skipCount - 1;
+                    end = index + enumerable.takeCount;
                 }
 
                 [MaybeNull]
@@ -68,7 +68,7 @@ namespace NetFabric.Hyperlinq
 
                 public bool MoveNext()
                 {
-                    while (++index < end)
+                    while (++index <= end)
                     {
                         if (predicate(source[index]))
                             return true;
@@ -91,8 +91,8 @@ namespace NetFabric.Hyperlinq
                     source = enumerable.source;
                     predicate = enumerable.predicate;
                     selector = enumerable.selector;
-                    end = enumerable.skipCount + enumerable.takeCount;
                     index = enumerable.skipCount - 1;
+                    end = index + enumerable.takeCount;
                 }
 
                 [MaybeNull]
@@ -105,7 +105,7 @@ namespace NetFabric.Hyperlinq
 
                 public bool MoveNext()
                 {
-                    while (++index < end)
+                    while (++index <= end)
                     {
                         if (predicate(source[index]))
                             return true;

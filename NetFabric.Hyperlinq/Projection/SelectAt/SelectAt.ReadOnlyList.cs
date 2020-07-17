@@ -51,6 +51,7 @@ namespace NetFabric.Hyperlinq
             [MaybeNull]
             public readonly TResult this[int index]
             {
+                [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 get
                 {
                     if (index < 0 || index >= Count)
@@ -182,26 +183,26 @@ namespace NetFabric.Hyperlinq
             {
                 readonly TList source;
                 readonly NullableSelectorAt<TSource, TResult> selector;
-                readonly int skipCount;
-                readonly int takeCount;
+                readonly int offset;
+                readonly int end;
                 int index;
 
                 internal Enumerator(in SelectAtEnumerable<TList, TSource, TResult> enumerable)
                 {
                     source = enumerable.source;
                     selector = enumerable.selector;
-                    skipCount = enumerable.skipCount;
-                    takeCount = enumerable.Count;
+                    offset = enumerable.skipCount;
                     index = -1;
+                    end = index + enumerable.Count;
                 }
 
                 [MaybeNull]
                 public readonly TResult Current
-                    => selector(source[index + skipCount], index);
+                    => selector(source[index + offset], index);
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public bool MoveNext() 
-                    => ++index < takeCount;
+                    => ++index <= end;
             }
 
             public struct DisposableEnumerator
@@ -209,30 +210,30 @@ namespace NetFabric.Hyperlinq
             {
                 readonly TList source;
                 readonly NullableSelectorAt<TSource, TResult> selector;
-                readonly int skipCount;
-                readonly int takeCount;
+                readonly int offset;
+                readonly int end;
                 int index;
 
                 internal DisposableEnumerator(in SelectAtEnumerable<TList, TSource, TResult> enumerable)
                 {
                     source = enumerable.source;
                     selector = enumerable.selector;
-                    skipCount = enumerable.skipCount;
-                    takeCount = enumerable.Count;
+                    offset = enumerable.skipCount;
                     index = -1;
+                    end = index + enumerable.Count;
                 }
 
                 [MaybeNull]
                 public readonly TResult Current
-                    => selector(source[index + skipCount], index);
+                    => selector(source[index + offset], index);
                 readonly TResult IEnumerator<TResult>.Current 
-                    => selector(source[index + skipCount], index)!;
+                    => selector(source[index + offset], index)!;
                 readonly object? IEnumerator.Current
-                    => selector(source[index + skipCount], index);
+                    => selector(source[index + offset], index);
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public bool MoveNext() 
-                    => ++index < takeCount;
+                    => ++index <= end;
 
                 [ExcludeFromCodeCoverage]
                 public readonly void Reset() 

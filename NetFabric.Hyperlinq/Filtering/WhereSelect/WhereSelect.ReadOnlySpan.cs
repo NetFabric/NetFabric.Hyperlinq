@@ -38,6 +38,7 @@ namespace NetFabric.Hyperlinq
                 readonly ReadOnlySpan<TSource> source;
                 readonly Predicate<TSource> predicate;
                 readonly NullableSelector<TSource, TResult> selector;
+                readonly int end;
                 int index;
 
                 internal Enumerator(in SpanWhereSelectEnumerable<TSource, TResult> enumerable)
@@ -46,6 +47,7 @@ namespace NetFabric.Hyperlinq
                     predicate = enumerable.predicate;
                     selector = enumerable.selector;
                     index = -1;
+                    end = index + source.Length;
                 }
 
                 [MaybeNull]
@@ -54,7 +56,7 @@ namespace NetFabric.Hyperlinq
 
                 public bool MoveNext()
                 {
-                    while (++index < source.Length)
+                    while (++index <= end)
                     {
                         if (predicate(source[index]))
                             return true;

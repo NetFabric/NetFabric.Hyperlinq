@@ -16,7 +16,7 @@ namespace NetFabric.Hyperlinq
             => new SkipTakeEnumerable<TList, TSource>(in source, skipCount, takeCount);
 
         public readonly partial struct SkipTakeEnumerable<TList, TSource>
-            : IValueReadOnlyList<TSource, SkipTakeEnumerable<TList, TSource>.Enumerator>
+            : IValueReadOnlyList<TSource, SkipTakeEnumerable<TList, TSource>.DisposableEnumerator>
             , IList<TSource>
             where TList : IReadOnlyList<TSource>
         {
@@ -34,6 +34,7 @@ namespace NetFabric.Hyperlinq
             [MaybeNull]
             public readonly TSource this[int index]
             {
+                [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 get
                 {
                     if (index < 0 || index >= Count) 
@@ -52,9 +53,14 @@ namespace NetFabric.Hyperlinq
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly Enumerator GetEnumerator() => new Enumerator(in this);
-            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new Enumerator(in this);
-            readonly IEnumerator IEnumerable.GetEnumerator() => new Enumerator(in this);
+            public readonly Enumerator GetEnumerator() 
+                => new Enumerator(in this);
+            readonly DisposableEnumerator IValueEnumerable<TSource, SkipTakeEnumerable<TList, TSource>.DisposableEnumerator>.GetEnumerator() 
+                => new DisposableEnumerator(in this);
+            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() 
+                => new DisposableEnumerator(in this);
+            readonly IEnumerator IEnumerable.GetEnumerator() 
+                => new DisposableEnumerator(in this);
 
             bool ICollection<TSource>.IsReadOnly  
                 => true;
@@ -133,7 +139,6 @@ namespace NetFabric.Hyperlinq
                 => Throw.NotSupportedException();
 
             public struct Enumerator
-                : IEnumerator<TSource>
             {
                 readonly TList source;
                 readonly int end;
@@ -142,8 +147,31 @@ namespace NetFabric.Hyperlinq
                 internal Enumerator(in SkipTakeEnumerable<TList, TSource> enumerable)
                 {
                     source = enumerable.source;
-                    end = enumerable.skipCount + enumerable.Count;
                     index = enumerable.skipCount - 1;
+                    end = index + enumerable.Count;
+                }
+
+                [MaybeNull]
+                public readonly TSource Current
+                    => source[index];
+
+                [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                public bool MoveNext()
+                    => ++index <= end;
+            }
+
+            public struct DisposableEnumerator
+                : IEnumerator<TSource>
+            {
+                readonly TList source;
+                readonly int end;
+                int index;
+
+                internal DisposableEnumerator(in SkipTakeEnumerable<TList, TSource> enumerable)
+                {
+                    source = enumerable.source;
+                    index = enumerable.skipCount - 1;
+                    end = index + enumerable.Count;
                 }
 
                 [MaybeNull]
@@ -156,7 +184,7 @@ namespace NetFabric.Hyperlinq
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public bool MoveNext() 
-                    => ++index < end;
+                    => ++index <= end;
 
                 [ExcludeFromCodeCoverage]
                 public readonly void Reset() 

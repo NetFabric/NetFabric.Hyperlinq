@@ -35,6 +35,7 @@ namespace NetFabric.Hyperlinq
             {
                 readonly ReadOnlySpan<TSource> source;
                 readonly Predicate<TSource> predicate;
+                readonly int end;
                 int index;
 
                 internal Enumerator(in ReadOnlyMemoryWhereRefEnumerable<TSource> enumerable)
@@ -42,6 +43,7 @@ namespace NetFabric.Hyperlinq
                     source = enumerable.source.Span;
                     predicate = enumerable.predicate;
                     index = -1;
+                    end = index + source.Length;
                 }
 
                 public readonly ref readonly TSource Current 
@@ -49,7 +51,7 @@ namespace NetFabric.Hyperlinq
 
                 public bool MoveNext()
                 {
-                    while (++index < source.Length)
+                    while (++index <= end)
                     {
                         if (predicate(source[index]))
                             return true;

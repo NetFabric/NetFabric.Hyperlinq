@@ -27,6 +27,7 @@ namespace NetFabric.Hyperlinq
             [MaybeNull]
             public readonly TSource this[int index]
             {
+                [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 get
                 {
                     if (index != 0) Throw.IndexOutOfRangeException();
