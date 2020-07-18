@@ -2,8 +2,11 @@
 using BenchmarkDotNet.Loggers;
 using BenchmarkDotNet.Reports;
 using BenchmarkDotNet.Running;
+using CommandLine;
+using JM.LinqFaster;
+using NetFabric.Hyperlinq;
+using StructLinq;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -29,61 +32,38 @@ namespace LinqBenchmarks
             if (title is null)
                 return;
 
-            var titleLine = $"## {title}";
+            var resultsPath = Path.Combine(solutionDir, "Results");
+            _ = Directory.CreateDirectory(resultsPath);
 
-            var filePath = Path.Combine(solutionDir, "BENCHMARKS.md");
-
-            var prefixLines = new List<string>();
-            var suffixLines = new List<string>();
+            var filePath = Path.Combine(resultsPath, $"{title}.md");
 
             if (File.Exists(filePath))
-            {
-                var allLines = File.ReadAllLines(filePath);
-
-                var foundSummary = false;
-                var inOldSummary = false;
-
-                foreach (var line in allLines)
-                {
-                    if (!foundSummary)
-                    {
-                        if (line == titleLine)
-                        {
-                            foundSummary = true;
-                            inOldSummary = true;
-                            continue;
-                        }
-
-                        prefixLines.Add(line);
-                        continue;
-                    }
-
-                    if (inOldSummary)
-                    {
-                        if (!line.StartsWith("#"))
-                            continue;
-
-                        inOldSummary = false;
-                    }
-
-                    suffixLines.Add(line);
-                }
-            }
+                File.Delete(filePath);
 
             using var fileWriter = new StreamWriter(filePath, false, Encoding.UTF8);
             var logger = new StreamLogger(fileWriter);
 
-            foreach (var line in prefixLines)
-                logger.WriteLine(line);
+            logger.WriteLine($"## {title}");
+            logger.WriteLine();
 
-            logger.WriteLineHeader(titleLine);
+            var linqFasterVersion = GetVersion(typeof(LinqFaster).Assembly);
+            logger.WriteLine($"- JM.LinqFaster: [{linqFasterVersion}](https://www.nuget.org/packages/JM.LinqFaster/{linqFasterVersion})");
+
+            var structLinqVersion = GetVersion(typeof(StructLinq.BCL.List.ListEnumerable<>).Assembly);
+            logger.WriteLine($"- StructLinq.BCL: [{structLinqVersion}](https://www.nuget.org/packages/StructLinq.BCL/{structLinqVersion})");
+
+            var hyperlinqVersion = GetVersion(typeof(ValueEnumerable).Assembly);
+            logger.WriteLine($"- NetFabric.Hyperlinq: [{hyperlinqVersion}](https://www.nuget.org/packages/NetFabric.Hyperlinq/{hyperlinqVersion})");
+
             logger.WriteLine();
 
             MarkdownExporter.GitHub.ExportToLog(summary, logger);
-            logger.WriteLine();
+        }
 
-            foreach (var line in suffixLines)
-                logger.WriteLine(line);
+        static string GetVersion(Assembly assembly)
+        {
+            var version = ((AssemblyInformationalVersionAttribute)Attribute.GetCustomAttribute(assembly, typeof(AssemblyInformationalVersionAttribute), false))?.InformationalVersion ?? string.Empty;
+            return version.Split('+')[0];
         }
 
         static string GetTitle(Summary summary)
