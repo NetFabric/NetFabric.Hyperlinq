@@ -12,7 +12,11 @@ namespace LinqBenchmarks
 
         [GlobalSetup]
         public void GlobalSetup()
-            => source = Enumerable.Range(0, Count).ToList();
+        {
+            var list = Enumerable.Range(0, Count / 2).ToList();
+            source.AddRange(list);
+            source.AddRange(list);
+        }
 
         [Benchmark(Baseline = true)]
         public int ForLoop()
@@ -67,6 +71,16 @@ namespace LinqBenchmarks
         {
             var sum = 0;
             foreach (var item in source.ToStructEnumerable().Distinct(x => x))
+                sum += item;
+            return sum;
+        }
+
+        [Benchmark]
+        public int StructLinq_IFunction()
+        {
+            var sum = 0;
+            var comparer = new IntEqualityComparer();
+            foreach (var item in source.ToStructEnumerable().Distinct(comparer, x => x))
                 sum += item;
             return sum;
         }
