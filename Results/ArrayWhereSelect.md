@@ -1,9 +1,14 @@
 ﻿## ArrayWhereSelect
 
+### Source
+[ArrayWhereSelect.cs](../LinqBenchmarks/ArrayWhereSelect.cs)
+
+### References:
 - JM.LinqFaster: [1.1.2](https://www.nuget.org/packages/JM.LinqFaster/1.1.2)
 - StructLinq.BCL: [0.1.9](https://www.nuget.org/packages/StructLinq.BCL/0.1.9)
 - NetFabric.Hyperlinq: [3.0.0-beta19](https://www.nuget.org/packages/NetFabric.Hyperlinq/3.0.0-beta19)
 
+### Results:
 ``` ini
 
 BenchmarkDotNet=v0.12.1, OS=Windows 10.0.19042
@@ -17,10 +22,10 @@ Job=.NET Core 5.0  Runtime=.NET Core 5.0
 ```
 |               Method | Count |      Mean |    Error |   StdDev | Ratio | RatioSD |  Gen 0 | Gen 1 | Gen 2 | Allocated |
 |--------------------- |------ |----------:|---------:|---------:|------:|--------:|-------:|------:|------:|----------:|
-|              ForLoop |   100 |  80.52 ns | 0.317 ns | 0.297 ns |  1.00 |    0.00 |      - |     - |     - |         - |
-|          ForeachLoop |   100 |  65.27 ns | 0.285 ns | 0.253 ns |  0.81 |    0.00 |      - |     - |     - |         - |
-|                 Linq |   100 | 544.13 ns | 4.080 ns | 3.617 ns |  6.76 |    0.04 | 0.0496 |     - |     - |     104 B |
-|           LinqFaster |   100 | 385.78 ns | 1.229 ns | 1.089 ns |  4.79 |    0.02 | 0.3095 |     - |     - |     648 B |
-|           StructLinq |   100 | 424.77 ns | 4.626 ns | 4.101 ns |  5.28 |    0.05 |      - |     - |     - |         - |
-| StructLinq_IFunction |   100 | 184.38 ns | 1.230 ns | 1.090 ns |  2.29 |    0.02 |      - |     - |     - |         - |
-|            Hyperlinq |   100 | 437.96 ns | 1.610 ns | 1.428 ns |  5.44 |    0.03 |      - |     - |     - |         - |
+|              ForLoop |   100 |  79.15 ns | 0.208 ns | 0.185 ns |  1.00 |    0.00 |      - |     - |     - |         - |
+|          ForeachLoop |   100 |  74.91 ns | 0.145 ns | 0.129 ns |  0.95 |    0.00 |      - |     - |     - |         - |
+|                 Linq |   100 | 561.40 ns | 1.704 ns | 1.594 ns |  7.09 |    0.03 | 0.0496 |     - |     - |     104 B |
+|           LinqFaster |   100 | 387.83 ns | 1.273 ns | 0.994 ns |  4.90 |    0.02 | 0.3095 |     - |     - |     648 B |
+|           StructLinq |   100 | 414.83 ns | 1.951 ns | 1.729 ns |  5.24 |    0.02 |      - |     - |     - |         - |
+| StructLinq_IFunction |   100 | 181.15 ns | 0.384 ns | 0.320 ns |  2.29 |    0.00 |      - |     - |     - |         - |
+|            Hyperlinq |   100 | 519.82 ns | 2.324 ns | 2.174 ns |  6.56 |    0.03 |      - |     - |     - |         - |

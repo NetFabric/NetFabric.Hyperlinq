@@ -1,9 +1,14 @@
 ﻿## ListSkipTakeSelect
 
+### Source
+[ListSkipTakeSelect.cs](../LinqBenchmarks/ListSkipTakeSelect.cs)
+
+### References:
 - JM.LinqFaster: [1.1.2](https://www.nuget.org/packages/JM.LinqFaster/1.1.2)
 - StructLinq.BCL: [0.1.9](https://www.nuget.org/packages/StructLinq.BCL/0.1.9)
 - NetFabric.Hyperlinq: [3.0.0-beta19](https://www.nuget.org/packages/NetFabric.Hyperlinq/3.0.0-beta19)
 
+### Results:
 ``` ini
 
 BenchmarkDotNet=v0.12.1, OS=Windows 10.0.19042
@@ -15,10 +20,10 @@ Intel Core i7-7567U CPU 3.50GHz (Kaby Lake), 1 CPU, 4 logical and 2 physical cor
 Job=.NET Core 5.0  Runtime=.NET Core 5.0  
 
 ```
-|            Method | Skip | Count |        Mean |     Error |    StdDev | Ratio | RatioSD |  Gen 0 | Gen 1 | Gen 2 | Allocated |
-|------------------ |----- |------ |------------:|----------:|----------:|------:|--------:|-------:|------:|------:|----------:|
-|           ForLoop | 1000 |   100 |    84.21 ns |  0.498 ns |  0.416 ns |  1.00 |    0.00 |      - |     - |     - |         - |
-|       ForeachLoop | 1000 |   100 | 3,459.24 ns | 16.946 ns | 14.151 ns | 41.08 |    0.28 | 0.0191 |     - |     - |      40 B |
-|              Linq | 1000 |   100 |   901.67 ns |  9.918 ns |  9.277 ns | 10.70 |    0.13 | 0.0725 |     - |     - |     152 B |
-| Hyperlinq_Foreach | 1000 |   100 |   241.81 ns |  2.640 ns |  2.340 ns |  2.87 |    0.03 |      - |     - |     - |         - |
-|     Hyperlinq_For | 1000 |   100 |   465.00 ns |  3.662 ns |  3.425 ns |  5.52 |    0.04 |      - |     - |     - |         - |
+|            Method | Skip | Count |        Mean |    Error |   StdDev | Ratio | RatioSD |  Gen 0 | Gen 1 | Gen 2 | Allocated |
+|------------------ |----- |------ |------------:|---------:|---------:|------:|--------:|-------:|------:|------:|----------:|
+|           ForLoop | 1000 |   100 |    70.17 ns | 0.223 ns | 0.197 ns |  1.00 |    0.00 |      - |     - |     - |         - |
+|       ForeachLoop | 1000 |   100 | 3,424.27 ns | 6.035 ns | 5.040 ns | 48.79 |    0.18 | 0.0191 |     - |     - |      40 B |
+|              Linq | 1000 |   100 |   939.25 ns | 2.616 ns | 2.319 ns | 13.38 |    0.05 | 0.0725 |     - |     - |     152 B |
+| Hyperlinq_Foreach | 1000 |   100 |   238.18 ns | 1.285 ns | 1.202 ns |  3.39 |    0.02 |      - |     - |     - |         - |
+|     Hyperlinq_For | 1000 |   100 |   459.77 ns | 1.216 ns | 1.015 ns |  6.55 |    0.03 |      - |     - |     - |         - |

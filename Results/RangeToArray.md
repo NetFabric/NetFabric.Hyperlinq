@@ -1,9 +1,14 @@
 ﻿## RangeToArray
 
+### Source
+[RangeToArray.cs](../LinqBenchmarks/RangeToArray.cs)
+
+### References:
 - JM.LinqFaster: [1.1.2](https://www.nuget.org/packages/JM.LinqFaster/1.1.2)
 - StructLinq.BCL: [0.1.9](https://www.nuget.org/packages/StructLinq.BCL/0.1.9)
 - NetFabric.Hyperlinq: [3.0.0-beta19](https://www.nuget.org/packages/NetFabric.Hyperlinq/3.0.0-beta19)
 
+### Results:
 ``` ini
 
 BenchmarkDotNet=v0.12.1, OS=Windows 10.0.19042
@@ -17,9 +22,9 @@ Job=.NET Core 5.0  Runtime=.NET Core 5.0
 ```
 |         Method | Start | Count |      Mean |    Error |   StdDev | Ratio | RatioSD |  Gen 0 | Gen 1 | Gen 2 | Allocated |
 |--------------- |------ |------ |----------:|---------:|---------:|------:|--------:|-------:|------:|------:|----------:|
-|        ForLoop |     0 |   100 |  77.84 ns | 0.730 ns | 0.683 ns |  1.00 |    0.00 | 0.2027 |     - |     - |     424 B |
-|           Linq |     0 |   100 |  83.24 ns | 1.146 ns | 1.072 ns |  1.07 |    0.01 | 0.2218 |     - |     - |     464 B |
-|     LinqFaster |     0 |   100 |  67.95 ns | 0.634 ns | 0.593 ns |  0.87 |    0.01 | 0.2027 |     - |     - |     424 B |
-|     StructLinq |     0 |   100 | 315.61 ns | 4.507 ns | 3.995 ns |  4.05 |    0.07 | 0.7801 |     - |     - |    1632 B |
-|      Hyperlinq |     0 |   100 |  85.29 ns | 0.772 ns | 0.722 ns |  1.10 |    0.01 | 0.2027 |     - |     - |     424 B |
-| Hyperlinq_Pool |     0 |   100 | 116.23 ns | 1.436 ns | 1.344 ns |  1.49 |    0.02 | 0.0267 |     - |     - |      56 B |
+|        ForLoop |     0 |   100 |  77.42 ns | 0.272 ns | 0.227 ns |  1.00 |    0.00 | 0.2027 |     - |     - |     424 B |
+|           Linq |     0 |   100 |  81.92 ns | 0.349 ns | 0.327 ns |  1.06 |    0.00 | 0.2218 |     - |     - |     464 B |
+|     LinqFaster |     0 |   100 |  66.16 ns | 0.402 ns | 0.356 ns |  0.85 |    0.00 | 0.2027 |     - |     - |     424 B |
+|     StructLinq |     0 |   100 | 308.87 ns | 2.282 ns | 2.023 ns |  3.99 |    0.03 | 0.7801 |     - |     - |    1632 B |
+|      Hyperlinq |     0 |   100 |  78.98 ns | 0.593 ns | 0.555 ns |  1.02 |    0.01 | 0.2027 |     - |     - |     424 B |
+| Hyperlinq_Pool |     0 |   100 | 117.97 ns | 0.612 ns | 0.543 ns |  1.52 |    0.01 | 0.0267 |     - |     - |      56 B |

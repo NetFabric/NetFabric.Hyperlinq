@@ -46,6 +46,12 @@ namespace LinqBenchmarks
             logger.WriteLine($"## {title}");
             logger.WriteLine();
 
+            logger.WriteLine("### Source");
+            logger.WriteLine($"[{title}.cs](../LinqBenchmarks/{title}.cs)");
+            logger.WriteLine();
+
+            logger.WriteLine("### References:");
+
             var linqFasterVersion = GetVersion(typeof(LinqFaster).Assembly);
             logger.WriteLine($"- JM.LinqFaster: [{linqFasterVersion}](https://www.nuget.org/packages/JM.LinqFaster/{linqFasterVersion})");
 
@@ -57,6 +63,7 @@ namespace LinqBenchmarks
 
             logger.WriteLine();
 
+            logger.WriteLine("### Results:");
             MarkdownExporter.GitHub.ExportToLog(summary, logger);
         }
 
