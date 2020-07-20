@@ -4,15 +4,11 @@ namespace LinqBenchmarks
 {
     struct IntEqualityComparer : IEqualityComparer<int>
     {
-        public bool Equals(int x, int y)
-        {
-            return x == y;
-        }
+        public bool Equals(int x, int y) 
+            => x == y;
 
-        public int GetHashCode(int obj)
-        {
-            return obj;
-        }
+        public int GetHashCode(int obj) 
+            => obj;
 
     }
 }

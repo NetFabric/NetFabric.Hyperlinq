@@ -1,7 +1,7 @@
 ﻿## ArrayDistinct
 
 ### Source
-[ArrayDistinct.cs](../LinqBenchmarks/ArrayDistinct.cs)
+[ArrayDistinct.cs](../LinqBenchmarks/Int32/Array/ArrayDistinct.cs)
 
 ### References:
 - JM.LinqFaster: [1.1.2](https://www.nuget.org/packages/JM.LinqFaster/1.1.2)
@@ -20,10 +20,10 @@ Intel Core i7-7567U CPU 3.50GHz (Kaby Lake), 1 CPU, 4 logical and 2 physical cor
 Job=.NET Core 5.0  Runtime=.NET Core 5.0  
 
 ```
-|      Method | Count |     Mean |     Error |    StdDev | Ratio |  Gen 0 | Gen 1 | Gen 2 | Allocated |
-|------------ |------ |---------:|----------:|----------:|------:|-------:|------:|------:|----------:|
-|     ForLoop |   100 | 1.433 μs | 0.0112 μs | 0.0093 μs |  1.00 | 2.8706 |     - |     - |    6008 B |
-| ForeachLoop |   100 | 1.386 μs | 0.0119 μs | 0.0099 μs |  0.97 | 2.8706 |     - |     - |    6008 B |
-|        Linq |   100 | 2.562 μs | 0.0060 μs | 0.0050 μs |  1.79 | 2.0599 |     - |     - |    4312 B |
-|  StructLinq |   100 | 1.953 μs | 0.0071 μs | 0.0063 μs |  1.36 |      - |     - |     - |         - |
-|   Hyperlinq |   100 | 1.822 μs | 0.0032 μs | 0.0030 μs |  1.27 |      - |     - |     - |         - |
+|      Method | Count |     Mean |     Error |    StdDev |   Median | Ratio | RatioSD |  Gen 0 | Gen 1 | Gen 2 | Allocated |
+|------------ |------ |---------:|----------:|----------:|---------:|------:|--------:|-------:|------:|------:|----------:|
+|     ForLoop |   100 | 1.829 μs | 0.0318 μs | 0.0774 μs | 1.796 μs |  1.00 |    0.00 | 2.8687 |     - |     - |    6008 B |
+| ForeachLoop |   100 | 1.876 μs | 0.1064 μs | 0.3054 μs | 1.706 μs |  1.06 |    0.20 | 2.8706 |     - |     - |    6008 B |
+|        Linq |   100 | 2.982 μs | 0.0604 μs | 0.1773 μs | 2.903 μs |  1.64 |    0.11 | 2.0599 |     - |     - |    4312 B |
+|  StructLinq |   100 | 2.412 μs | 0.1199 μs | 0.3535 μs | 2.248 μs |  1.29 |    0.18 |      - |     - |     - |         - |
+|   Hyperlinq |   100 | 2.138 μs | 0.0681 μs | 0.1942 μs | 2.052 μs |  1.18 |    0.12 |      - |     - |     - |         - |

@@ -2,7 +2,6 @@
 using BenchmarkDotNet.Loggers;
 using BenchmarkDotNet.Reports;
 using BenchmarkDotNet.Running;
-using CommandLine;
 using JM.LinqFaster;
 using NetFabric.Hyperlinq;
 using StructLinq;
@@ -28,7 +27,8 @@ namespace LinqBenchmarks
             if (solutionDir is null)
                 return;
 
-            var title = GetTitle(summary);
+            var targetType = GetTargetType(summary);
+            var title = targetType.Name;
             if (title is null)
                 return;
 
@@ -47,7 +47,11 @@ namespace LinqBenchmarks
             logger.WriteLine();
 
             logger.WriteLine("### Source");
-            logger.WriteLine($"[{title}.cs](../LinqBenchmarks/{title}.cs)");
+            var sourceLink = new StringBuilder("../LinqBenchmarks");
+            foreach (var folder in targetType.Namespace.Split('.').AsEnumerable().Skip(1))
+                _ = sourceLink.Append($"/{folder}");
+            _ = sourceLink.Append($"/{title}.cs");
+            logger.WriteLine($"[{title}.cs]({sourceLink})");
             logger.WriteLine();
 
             logger.WriteLine("### References:");
@@ -73,10 +77,10 @@ namespace LinqBenchmarks
             return version.Split('+')[0];
         }
 
-        static string GetTitle(Summary summary)
+        static Type GetTargetType(Summary summary)
         {
             var targetTypes = summary.BenchmarksCases.Select(i => i.Descriptor.Type).Distinct().ToList();
-            return targetTypes.Count == 1 ? targetTypes[0].Name : null;
+            return targetTypes.Count == 1 ? targetTypes[0] : null;
         }
 
         static string GetSolutionDirectory()
