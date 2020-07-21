@@ -65,9 +65,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct
                 .ToArray(MemoryPool<int>.Shared);
 
             // Assert
-            _ = result.Memory.Span
-                .SequenceEqual(expected)
-                .Must().BeTrue();
+            _ = result.Memory.Must()
+                .BeEqualTo(expected);
         }
 
         [Theory]

@@ -41,13 +41,8 @@ namespace NetFabric.Hyperlinq
             [MaybeNull]
             public readonly TResult this[int index]
             {
-                get
-                {
-                    if (index < 0 || index >= source.Length)
-                        Throw.ArgumentOutOfRangeException(nameof(index));
-
-                    return selector(source[index]);
-                }
+                [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                get => selector(source[index]);
             }
 
             public ref struct Enumerator

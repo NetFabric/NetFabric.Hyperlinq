@@ -54,7 +54,7 @@ namespace NetFabric.Hyperlinq
                 get
                 {
                     if (index < 0 || index >= Count)
-                        Throw.ArgumentOutOfRangeException(nameof(index));
+                        Throw.IndexOutOfRangeException();
 
                     return selector(source[index + skipCount]);
                 }

@@ -24,7 +24,6 @@ namespace NetFabric.Hyperlinq.UnitTests.Partitioning.Take
 
             // Assert
             _ = result.Must()
-                .BeEnumerableOf<int>()
                 .BeEqualTo(expected);
         }
     }

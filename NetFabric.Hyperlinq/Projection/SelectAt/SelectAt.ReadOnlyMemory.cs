@@ -39,13 +39,7 @@ namespace NetFabric.Hyperlinq
             public readonly TResult this[int index]
             {
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                get
-                {
-                    if (index < 0 || index >= source.Length)
-                        Throw.ArgumentOutOfRangeException(nameof(index));
-
-                    return selector(source.Span[index], index);
-                }
+                get => selector(source.Span[index], index);
             }
             TResult IReadOnlyList<TResult>.this[int index]
                 => this[index]!;
