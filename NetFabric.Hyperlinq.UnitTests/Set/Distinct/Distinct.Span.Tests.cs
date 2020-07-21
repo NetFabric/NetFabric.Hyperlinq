@@ -66,9 +66,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct
                 .ToArray(pool);
 
             // Assert
-            _ = result
-                .SequenceEqual(expected)
-                .Must().BeTrue();
+            _ = result.Memory
+                .SequenceEqual(expected);
         }
 
         [Theory]

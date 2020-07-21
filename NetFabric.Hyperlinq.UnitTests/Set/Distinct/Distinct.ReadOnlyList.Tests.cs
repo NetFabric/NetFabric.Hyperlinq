@@ -84,8 +84,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct
 
             // Assert
             _ = result
-                .SequenceEqual(expected)
-                .Must().BeTrue();
+                .SequenceEqual(expected);
         }
 
         [Theory]

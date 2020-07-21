@@ -53,7 +53,6 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
             {
                 // Assert
                 _ = result.Must()
-                    .BeArraySegmentOf<int>()
                     .BeEqualTo(expected);
             }
             finally
@@ -80,7 +79,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
             using var result = builder.ToArray(pool);
 
             // Assert
-            _ = result.Memory.SequenceEqual(expected).Must().BeTrue();
+            _ = result.Memory.Must()
+                .BeEqualTo(expected);
         }
     }
 }

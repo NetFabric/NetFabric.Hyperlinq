@@ -70,9 +70,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
                 .ToArray<Wrap.ValueReadOnlyCollectionWrapper<int>, Wrap.Enumerator<int>, int>(wrapped, pool);
 
             // Assert
-            _ = result
-                .SequenceEqual(expected)
-                .Must().BeTrue();
+            _ = result.Memory
+                .SequenceEqual(expected);
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -121,9 +120,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
                 .ToArray(pool);
 
             // Assert
-            _ = result
-                .SequenceEqual(expected)
-                .Must().BeTrue();
+            _ = result.Memory
+                .SequenceEqual(expected);
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -172,9 +170,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
                 .ToArray(pool);
 
             // Assert
-            _ = result
-                .SequenceEqual(expected)
-                .Must().BeTrue();
+            _ = result.Memory
+                .SequenceEqual(expected);
         }
 
     }

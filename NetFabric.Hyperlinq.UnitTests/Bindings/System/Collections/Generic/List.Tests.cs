@@ -44,7 +44,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Bindings.System.Collections.Generic
                 .Skip(list, count);
 
             // Assert
-            _ = result.SequenceEqual(expected).Must().BeTrue();
+            _ = result.Must()
+                .BeEqualTo(expected);
         }
 
 
@@ -64,7 +65,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Bindings.System.Collections.Generic
                 .Take(list, count);
 
             // Assert
-            _ = result.SequenceEqual(expected).Must().BeTrue();
+            _ = result.Must()
+                .BeEqualTo(expected);
         }
 
         [Theory]

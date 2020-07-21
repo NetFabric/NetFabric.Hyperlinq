@@ -22,7 +22,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Partitioning.Take
                 .Take(source, count);
 
             // Assert
-            _ = result.SequenceEqual(expected).Must().BeTrue();
+            _ = result
+                .SequenceEqual(expected);
         }
     }
 }

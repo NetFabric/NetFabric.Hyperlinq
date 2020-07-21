@@ -25,9 +25,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
                 .ToArray(source.AsMemory(), pool);
 
             // Assert
-            _ = result.Memory.Span
-                .SequenceEqual(expected)
-                .Must().BeTrue();
+            _ = result.Memory.Must()
+                .BeEqualTo(expected);
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -74,9 +73,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
                 .ToArray(pool);
 
             // Assert
-            _ = result.Memory.Span
-                .SequenceEqual(expected)
-                .Must().BeTrue();
+            _ = result.Memory.Must()
+                .BeEqualTo(expected);
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -123,9 +121,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
                 .ToArray(pool);
 
             // Assert
-            _ = result.Memory.Span
-                .SequenceEqual(expected)
-                .Must().BeTrue();
+            _ = result.Memory.Must()
+                .BeEqualTo(expected);
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -172,9 +169,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
                 .ToArray(pool);
 
             // Assert
-            _ = result.Memory.Span
-                .SequenceEqual(expected)
-                .Must().BeTrue();
+            _ = result.Memory.Must()
+                .BeEqualTo(expected);
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -221,9 +217,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
                 .ToArray(pool);
 
             // Assert
-            _ = result.Memory.Span
-                .SequenceEqual(expected)
-                .Must().BeTrue();
+            _ = result.Memory.Must()
+                .BeEqualTo(expected);
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -274,9 +269,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
                 .ToArray(pool);
 
             // Assert
-            _ = result.Memory.Span
-                .SequenceEqual(expected)
-                .Must().BeTrue();
+            _ = result.Memory.Must()
+                .BeEqualTo(expected);
         }
     }
 }
