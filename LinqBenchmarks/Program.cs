@@ -28,9 +28,13 @@ namespace LinqBenchmarks
                 return;
 
             var targetType = GetTargetType(summary);
-            var title = targetType.Name;
-            if (title is null)
+            if (targetType is null)
                 return;
+
+            var title = targetType.Name;
+            var pointIndex = targetType.Namespace.IndexOf('.');
+            if (pointIndex >= 0)
+                title = $"{EndSubstring(targetType.Namespace, pointIndex + 1)}.{targetType.Name}";
 
             var resultsPath = Path.Combine(solutionDir, "Results");
             _ = Directory.CreateDirectory(resultsPath);
@@ -50,8 +54,8 @@ namespace LinqBenchmarks
             var sourceLink = new StringBuilder("../LinqBenchmarks");
             foreach (var folder in targetType.Namespace.Split('.').AsEnumerable().Skip(1))
                 _ = sourceLink.Append($"/{folder}");
-            _ = sourceLink.Append($"/{title}.cs");
-            logger.WriteLine($"[{title}.cs]({sourceLink})");
+            _ = sourceLink.Append($"/{targetType.Name}.cs");
+            logger.WriteLine($"[{targetType.Name}.cs]({sourceLink})");
             logger.WriteLine();
 
             logger.WriteLine("### References:");
@@ -70,6 +74,9 @@ namespace LinqBenchmarks
             logger.WriteLine("### Results:");
             MarkdownExporter.GitHub.ExportToLog(summary, logger);
         }
+
+        static string EndSubstring(string str, int index)
+            => str.Substring(index, str.Length - index);
 
         static string GetVersion(Assembly assembly)
         {

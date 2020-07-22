@@ -1,4 +1,5 @@
 ﻿using BenchmarkDotNet.Attributes;
+using BenchmarkDotNet.Diagnosers;
 using BenchmarkDotNet.Jobs;
 
 namespace LinqBenchmarks
@@ -9,6 +10,7 @@ namespace LinqBenchmarks
     [MemoryDiagnoser]
     [MarkdownExporterAttribute.GitHub]
     //[RPlotExporter, CsvMeasurementsExporter] // requires installation of R (https://benchmarkdotnet.org/articles/configs/exporters.html#plots)
+    [HardwareCounters(HardwareCounter.BranchMispredictions, HardwareCounter.CacheMisses)]
     public class BenchmarkBase
     {
         [Params(100)]

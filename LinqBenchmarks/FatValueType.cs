@@ -2,17 +2,34 @@
 
 namespace LinqBenchmarks
 {
-    public struct FatValueType
+    public struct FatValueType : IComparable<FatValueType>
     {
-        public long Value0;
-        public long Value1;
-        public long Value2;
-        public long Value3;
-        public long Value4;
-        public long Value5;
-        public long Value6;
-        public long Value7;
-        public long Value8;
-        public long Value9;
+        public int Value0;
+        public int Value1;
+        public int Value2;
+        public int Value3;
+        public int Value4;
+        public int Value5;
+        public int Value6;
+        public int Value7;
+        public int Value8;
+        public int Value9;
+
+        public FatValueType(int value)
+        {
+            Value0 = value;
+            Value1 = value;
+            Value2 = value;
+            Value3 = value;
+            Value4 = value;
+            Value5 = value;
+            Value6 = value;
+            Value7 = value;
+            Value8 = value;
+            Value9 = value;
+        }
+
+        public int CompareTo(FatValueType other)
+            => Value0 - other.Value0;
     }
 }

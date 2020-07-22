@@ -8,61 +8,62 @@ Benchmarks comparing the perfomance of [LINQ](https://docs.microsoft.com/en-us/d
 
 ## Results
 
-### Item Type: `int`
+### Source: `Range()`
 
-#### Source: array
+- [Range()](Results/Range.md)
+- [Range().Select()](Results/RangeSelect.md)
+- [Range().Select().ToArray()](Results/RangeSelectToArray.md)
+- [Range().Select().ToList()](Results/RangeSelectToList.md)
+- [Range().ToArray()](Results/RangeToArray.md)
+- [Range().ToList()](Results/RangeToList.md)
 
-- [array.Distinct()](Results/Int32ArrayDistinct.md)
-- [array.Select()](Results/Int32ArraySelect.md)
-- [array.Skip().Take().Select()](Results/Int32ArraySkipTakeSelect.md)
-- [array.Skip().Take().Where()](Results/Int32ArraySkipTakeWhere.md)
-- [array.Where()](Results/Int32ArrayWhere.md)
-- [array.Where().Count()](Results/Int32ArrayWhereCount.md)
-- [array.Where().Select()](Results/Int32ArrayWhereSelect.md)
-- [array.Where().Select().ToArray()](Results/Int32ArrayWhereSelectToArray.md)
-- [array.Where().Select().ToList()](Results/Int32ArrayWhereSelectToList.md)
+### Source: array
 
-#### Source: `List<>`
+#### Item Type: `int`
 
-- [list.Distinct()](Results/Int32ListDistinct.md)
-- [list.Select()](Results/Int32ListSelect.md)
-- [list.Skip().Take().Select()](Results/Int32ListSkipTakeSelect.md)
-- [list.Skip().Take().Where()](Results/Int32ListSkipTakeWhere.md)
-- [list.Where()](Results/Int32ListWhere.md)
-- [list.Where().Select()](Results/Int32ListWhereSelect.md)
-- [list.Where().Select().ToArray()](Results/Int32ListWhereSelectToArray.md)
-- [list.Where().Select().ToList()](Results/Int32ListWhereSelectToList.md)
+- [array.Distinct()](Results/ArrayInt32Distinct.md)
+- [array.Select()](Results/ArrayInt32Select.md)
+- [array.Skip().Take().Select()](Results/ArrayInt32SkipTakeSelect.md)
+- [array.Skip().Take().Where()](Results/ArrayInt32SkipTakeWhere.md)
+- [array.Where()](Results/ArrayInt32Where.md)
+- [array.Where().Count()](Results/ArrayInt32WhereCount.md)
+- [array.Where().Select()](Results/ArrayInt32WhereSelect.md)
+- [array.Where().Select().ToArray()](Results/ArrayInt32WhereSelectToArray.md)
+- [array.Where().Select().ToList()](Results/ArrayInt32WhereSelectToList.md)
 
-#### Source: `Range()`
+#### Item Type: Value Type
 
-- [Range().Select()](Results/Int32RangeSelect.md)
-- [Range().Select().ToArray()](Results/Int32RangeSelectToArray.md)
-- [Range().Select().ToList()](Results/Int32RangeSelectToList.md)
-- [Range().ToArray()](Results/Int32RangeToArray.md)
-- [Range().ToList()](Results/Int32RangeToList.md)
+- [array.Distinct()](Results/ArrayValueTypeDistinct.md)
+- [array.Select()](Results/ArrayValueTypeSelect.md)
+- [array.Skip().Take().Select()](Results/ArrayValueTypeSkipTakeSelect.md)
+- [array.Skip().Take().Where()](Results/ArrayValueTypeSkipTakeWhere.md)
+- [array.Where()](Results/ArrayValueTypeWhere.md)
+- [array.Where().Count()](Results/ArrayValueTypeWhereCount.md)
+- [array.Where().Select()](Results/ArrayValueTypeWhereSelect.md)
+- [array.Where().Select().ToArray()](Results/ArrayValueTypeWhereSelectToArray.md)
+- [array.Where().Select().ToList()](Results/ArrayValueTypeWhereSelectToList.md)
 
+### Source: `List<>`
 
-### Item Type: Fat value type
+#### Item Type: `int`
 
-#### Source: array
+- [list.Distinct()](Results/ListInt32Distinct.md)
+- [list.Select()](Results/ListInt32Select.md)
+- [list.Skip().Take().Select()](Results/ListInt32SkipTakeSelect.md)
+- [list.Skip().Take().Where()](Results/ListInt32SkipTakeWhere.md)
+- [list.Where()](Results/ListInt32Where.md)
+- [list.Where().Select()](Results/ListInt32WhereSelect.md)
+- [list.Where().Select().ToArray()](Results/ListInt32WhereSelectToArray.md)
+- [list.Where().Select().ToList()](Results/ListInt32WhereSelectToList.md)
 
-- [array.Distinct()](Results/ValueTypeArrayDistinct.md)
-- [array.Select()](Results/ValueTypeArraySelect.md)
-- [array.Skip().Take().Select()](Results/ValueTypeArraySkipTakeSelect.md)
-- [array.Skip().Take().Where()](Results/ValueTypeArraySkipTakeWhere.md)
-- [array.Where()](Results/ValueTypeArrayWhere.md)
-- [array.Where().Count()](Results/ValueTypeArrayWhereCount.md)
-- [array.Where().Select()](Results/ValueTypeArrayWhereSelect.md)
-- [array.Where().Select().ToArray()](Results/ValueTypeArrayWhereSelectToArray.md)
-- [array.Where().Select().ToList()](Results/ValueTypeArrayWhereSelectToList.md)
+#### Item Type: Value Type
 
-#### Source: `List<>`
+- [list.Distinct()](Results/ListValueTypeDistinct.md)
+- [list.Select()](Results/ListValueTypeSelect.md)
+- [list.Skip().Take().Select()](Results/ListValueTypeSkipTakeSelect.md)
+- [list.Skip().Take().Where()](Results/ListValueTypeSkipTakeWhere.md)
+- [list.Where()](Results/ListValueTypeWhere.md)
+- [list.Where().Select()](Results/ListValueTypeWhereSelect.md)
+- [list.Where().Select().ToArray()](Results/ListValueTypeWhereSelectToArray.md)
+- [list.Where().Select().ToList()](Results/ListValueTypeWhereSelectToList.md)
 
-- [list.Distinct()](Results/ValueTypeListDistinct.md)
-- [list.Select()](Results/ValueTypeListSelect.md)
-- [list.Skip().Take().Select()](Results/ValueTypeListSkipTakeSelect.md)
-- [list.Skip().Take().Where()](Results/ValueTypeListSkipTakeWhere.md)
-- [list.Where()](Results/ValueTypeListWhere.md)
-- [list.Where().Select()](Results/ValueTypeListWhereSelect.md)
-- [list.Where().Select().ToArray()](Results/ValueTypeListWhereSelectToArray.md)
-- [list.Where().Select().ToList()](Results/ValueTypeListWhereSelectToList.md)
