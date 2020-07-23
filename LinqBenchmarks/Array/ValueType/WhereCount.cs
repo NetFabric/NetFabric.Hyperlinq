@@ -48,8 +48,8 @@ namespace LinqBenchmarks.Array.ValueType
         [Benchmark]
         public int StructLinq_IFunction()
         {
-            var where = new FatValueTypeIsEven();
-            return source.ToRefStructEnumerable().Where(ref where, x => x).Count();
+            var predicate = new FatValueTypeIsEven();
+            return source.ToRefStructEnumerable().Where(ref predicate, x => x).Count();
         }
 
         [Benchmark]

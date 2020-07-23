@@ -71,8 +71,8 @@ namespace LinqBenchmarks.List.Int32
         //public int StructLinq_IFunction()
         //{
         //    var sum = 0;
-        //    var where = new IsEvenFunction();
-        //    foreach (var item in source.ToStructEnumerable().Where(ref where, x => x))
+        //    var predicate = new IsEvenFunction();
+        //    foreach (var item in source.ToStructEnumerable().Where(ref predicate, x => x))
         //        sum += item;
         //    return sum;
         //}

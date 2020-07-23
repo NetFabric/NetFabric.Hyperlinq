@@ -13,9 +13,9 @@ namespace LinqBenchmarks.Array.ValueType
             var sum = default(FatValueType);
             for (var index = 0; index < source.Length; index++)
             {
-                ref readonly  var item = ref source[index];
+                ref readonly var item = ref source[index];
                 if (item.IsEven())
-                    sum += (item * 2);
+                    sum += item * 2;
             }
             return sum;
         }
@@ -27,7 +27,7 @@ namespace LinqBenchmarks.Array.ValueType
             foreach (var item in source)
             {
                 if (item.IsEven())
-                    sum += (item * 2);
+                    sum += item * 2;
             }
             return sum;
         }
@@ -64,9 +64,9 @@ namespace LinqBenchmarks.Array.ValueType
         public FatValueType StructLinq_IFunction()
         {
             var sum = default(FatValueType);
-            var where = new FatValueTypeIsEven();
-            var mult = new DoubleOfFatValueType();
-            foreach (var item in source.ToRefStructEnumerable().Where(ref where, x => x).Select(ref mult, x => x, x => x))
+            var predicate = new FatValueTypeIsEven();
+            var selector = new DoubleOfFatValueType();
+            foreach (var item in source.ToRefStructEnumerable().Where(ref predicate, x => x).Select(ref selector, x => x, x => x))
                 sum += item;
             return sum;
         }

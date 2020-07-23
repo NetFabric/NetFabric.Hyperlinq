@@ -68,9 +68,9 @@ namespace LinqBenchmarks.List.Int32
         public int StructLinq_IFunction()
         {
             var sum = 0;
-            var where = new Int32IsEven();
-            var mult = new DoubleOfInt32();
-            foreach (var item in source.ToStructEnumerable().Where(ref where, x => x).Select(ref mult, x => x, x => x))
+            var predicate = new Int32IsEven();
+            var selector = new DoubleOfInt32();
+            foreach (var item in source.ToStructEnumerable().Where(ref predicate, x => x).Select(ref selector, x => x, x => x))
                 sum += item;
             return sum;
         }

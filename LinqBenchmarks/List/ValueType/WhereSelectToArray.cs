@@ -59,11 +59,11 @@ namespace LinqBenchmarks.List.ValueType
         [Benchmark]
         public FatValueType[] StructLinq_IFunction()
         {
-            var where = new FatValueTypeIsEven();
-            var mult = new DoubleOfFatValueType();
+            var predicate = new FatValueTypeIsEven();
+            var selector = new DoubleOfFatValueType();
             return source.ToRefStructEnumerable()
-                .Where(ref where, x => x)
-                .Select(ref mult, x => x, x => x)
+                .Where(ref predicate, x => x)
+                .Select(ref selector, x => x, x => x)
                 .ToArray();
         }
 

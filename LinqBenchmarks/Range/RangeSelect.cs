@@ -68,8 +68,8 @@ namespace LinqBenchmarks.Range
         public int StructLinq_IFunction()
         {
             var sum = 0;
-            var mult = new DoubleOfInt32();
-            foreach (var item in StructEnumerable.Range(Start, Count).Select(ref mult, x => x, x => x))
+            var selector = new DoubleOfInt32();
+            foreach (var item in StructEnumerable.Range(Start, Count).Select(ref selector, x => x, x => x))
                 sum += item;
             return sum;
         }

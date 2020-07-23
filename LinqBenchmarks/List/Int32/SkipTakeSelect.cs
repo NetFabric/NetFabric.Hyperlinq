@@ -63,8 +63,8 @@ namespace LinqBenchmarks.List.Int32
         //public int StructLinq_IFunction()
         //{
         //    var sum = 0;
-        //    var mult = new DoubleFunction();
-        //    foreach (var item in source.ToStructEnumerable().Select(ref mult, x => x))
+        //    var selector = new DoubleFunction();
+        //    foreach (var item in source.ToStructEnumerable().Select(ref selector, x => x))
         //        sum += item;
         //    return sum;
         //}

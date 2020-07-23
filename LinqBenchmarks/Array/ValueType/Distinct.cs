@@ -29,7 +29,7 @@ namespace LinqBenchmarks.Array.ValueType
             var sum = default(FatValueType);
             for (var index = 0; index < source.Length; index++)
             {
-                ref readonly  var item = ref source[index];
+                ref readonly var item = ref source[index];
                 if (set.Add(item))
                     sum += item;
             }

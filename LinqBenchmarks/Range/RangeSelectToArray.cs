@@ -34,8 +34,8 @@ namespace LinqBenchmarks.Range
         [Benchmark]
         public int[] StructLinq_IFunction()
         {
-            var mult = new DoubleOfInt32();
-            return StructEnumerable.Range(Start, Count).Select(ref mult, x => x, x => x).ToArray();
+            var selector = new DoubleOfInt32();
+            return StructEnumerable.Range(Start, Count).Select(ref selector, x => x, x => x).ToArray();
         }
 
         [Benchmark]

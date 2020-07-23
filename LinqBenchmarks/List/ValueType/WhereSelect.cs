@@ -68,9 +68,9 @@ namespace LinqBenchmarks.List.ValueType
         public FatValueType StructLinq_IFunction()
         {
             var sum = default(FatValueType);
-            var where = new FatValueTypeIsEven();
-            var mult = new DoubleOfFatValueType();
-            foreach (var item in source.ToRefStructEnumerable().Where(ref where, x => x).Select(ref mult, x => x, x => x))
+            var predicate = new FatValueTypeIsEven();
+            var selector = new DoubleOfFatValueType();
+            foreach (var item in source.ToRefStructEnumerable().Where(ref predicate, x => x).Select(ref selector, x => x, x => x))
                 sum += item;
             return sum;
         }

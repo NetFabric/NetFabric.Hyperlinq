@@ -12,7 +12,10 @@ namespace LinqBenchmarks.Array.ValueType
         {
             var sum = default(FatValueType);
             for (var index = 0; index < source.Length; index++)
-                sum += source[index] * 2;
+            {
+                ref readonly var item = ref source[index];
+                sum += item * 2;
+            }
             return sum;
         }
 
@@ -57,8 +60,8 @@ namespace LinqBenchmarks.Array.ValueType
         public FatValueType StructLinq_IFunction()
         {
             var sum = default(FatValueType);
-            var mult = new DoubleOfFatValueType();
-            foreach (var item in source.ToRefStructEnumerable().Select(ref mult, x => x, x => x))
+            var selector = new DoubleOfFatValueType();
+            foreach (var item in source.ToRefStructEnumerable().Select(ref selector, x => x, x => x))
                 sum += item;
             return sum;
         }

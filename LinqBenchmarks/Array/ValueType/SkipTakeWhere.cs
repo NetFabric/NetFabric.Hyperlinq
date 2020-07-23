@@ -16,7 +16,7 @@ namespace LinqBenchmarks.Array.ValueType
             var end = Skip + Count;
             for (var index = Skip; index < end; index++)
             {
-                ref readonly  var item = ref source[index];
+                ref readonly var item = ref source[index];
                 if (item.IsEven())
                     sum += item;
             }
@@ -71,8 +71,8 @@ namespace LinqBenchmarks.Array.ValueType
         //public FatValueType StructLinq_IFunction()
         //{
         //    var sum = default(FatValueType);
-        //    var where = new IsEvenFunction();
-        //    foreach (var item in source.ToStructEnumerable().Where(ref where, x => x))
+        //    var predicate = new IsEvenFunction();
+        //    foreach (var item in source.ToStructEnumerable().Where(ref predicate, x => x))
         //        sum += item;
         //    return sum;
         //}

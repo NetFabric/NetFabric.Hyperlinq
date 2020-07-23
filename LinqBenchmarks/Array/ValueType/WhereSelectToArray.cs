@@ -15,7 +15,7 @@ namespace LinqBenchmarks.Array.ValueType
             var list = new List<FatValueType>();
             for (var index = 0; index < source.Length; index++)
             {
-                ref readonly  var item = ref source[index];
+                ref readonly var item = ref source[index];
                 if (item.IsEven())
                     list.Add(item * 2);
             }
@@ -57,11 +57,11 @@ namespace LinqBenchmarks.Array.ValueType
         [Benchmark]
         public FatValueType[] StructLinq_IFunction()
         {
-            var where = new FatValueTypeIsEven();
-            var mult = new DoubleOfFatValueType();
+            var predicate = new FatValueTypeIsEven();
+            var selector = new DoubleOfFatValueType();
             return source.ToRefStructEnumerable()
-                .Where(ref where, x => x)
-                .Select(ref mult, x => x, x => x)
+                .Where(ref predicate, x => x)
+                .Select(ref selector, x => x, x => x)
                 .ToArray();
         }
 

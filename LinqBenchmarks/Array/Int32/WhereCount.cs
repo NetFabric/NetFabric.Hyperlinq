@@ -48,8 +48,8 @@ namespace LinqBenchmarks.Array.Int32
         [Benchmark]
         public int StructLinq_IFunction()
         {
-            var where = new Int32IsEven();
-            return source.ToStructEnumerable().Where(ref where, x => x).Count();
+            var predicate = new Int32IsEven();
+            return source.ToStructEnumerable().Where(ref predicate, x => x).Count();
         }
 
         [Benchmark]

@@ -63,8 +63,8 @@ namespace LinqBenchmarks.List.ValueType
         //public FatValueType StructLinq_IFunction()
         //{
         //    var sum = default(FatValueType);
-        //    var mult = new DoubleFunction();
-        //    foreach (var item in source.ToStructEnumerable().Select(ref mult, x => x))
+        //    var selector = new DoubleFunction();
+        //    foreach (var item in source.ToStructEnumerable().Select(ref selector, x => x))
         //        sum += item;
         //    return sum;
         //}
