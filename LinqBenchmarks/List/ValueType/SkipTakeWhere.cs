@@ -10,79 +10,79 @@ namespace LinqBenchmarks.List.ValueType
     public class ListValueTypeSkipTakeWhere: ValueTypeListSkipTakeBenchmarkBase
     {
         [Benchmark(Baseline = true)]
-        public int ForLoop()
+        public FatValueType ForLoop()
         {
-            var sum = 0;
+            var sum = default(FatValueType);
             var end = Skip + Count;
             for (var index = Skip; index < end; index++)
             {
                 var item = source[index];
-                if (item.Value0.IsEven())
-                    sum += item.Value0;
+                if (item.IsEven())
+                    sum += item;
             }
             return sum;
         }
 
         [Benchmark]
-        public int ForeachLoop()
+        public FatValueType ForeachLoop()
         {
             using var enumerator = ((IEnumerable<FatValueType>)source).GetEnumerator();
             for (var index = 0; index < Skip; index++)
                 _ = enumerator.MoveNext();
-            var sum = 0;
+            var sum = default(FatValueType);
             for (var index = 0; index < Count; index++)
             {
                 var item = enumerator.Current;
-                if (item.Value0.IsEven())
-                    sum += item.Value0;
+                if (item.IsEven())
+                    sum += item;
             }
             return sum;
         }
 
         [Benchmark]
-        public int Linq()
+        public FatValueType Linq()
         {
-            var sum = 0;
-            foreach (var item in Enumerable.Skip(source, Skip).Take(Count).Where(item => item.Value0.IsEven()))
-                sum += item.Value0;
+            var sum = default(FatValueType);
+            foreach (var item in Enumerable.Skip(source, Skip).Take(Count).Where(item => item.IsEven()))
+                sum += item;
             return sum;
         }
 
         //[Benchmark]
-        //public int LinqFaster()
+        //public FatValueType LinqFaster()
         //{
-        //    var items = JM.LinqFaster.LinqFaster.WhereF(source, item => item.Value0.IsEven());
-        //    var sum = 0;
+        //    var items = JM.LinqFaster.LinqFaster.WhereF(source, item => item.IsEven());
+        //    var sum = default(FatValueType);
         //    for (var index = 0; index < items.Length; index++)
-        //        sum += items[index].Value0;
+        //        sum += items[index];
         //    return sum;
         //}
 
         //[Benchmark]
-        //public int StructLinq()
+        //public FatValueType StructLinq()
         //{
-        //    var sum = 0;
-        //    foreach (var item in source.ToStructEnumerable().Where(item => item.Value0.IsEven(), x => x))
-        //        sum += item.Value0;
+        //    var sum = default(FatValueType);
+        //    foreach (var item in source.ToStructEnumerable().Where(item => item.IsEven(), x => x))
+        //        sum += item;
         //    return sum;
         //}
 
         //[Benchmark]
-        //public int StructLinq_IFunction()
+        //public FatValueType StructLinq_IFunction()
         //{
-        //    var sum = 0;
+        //    var sum = default(FatValueType);
         //    var where = new IsEvenFunction();
         //    foreach (var item in source.ToStructEnumerable().Where(ref where, x => x))
-        //        sum += item.Value0;
+        //        sum += item;
         //    return sum;
         //}
 
         [Benchmark]
-        public int Hyperlinq()
+        public FatValueType Hyperlinq()
         {
-            var sum = 0;
-            foreach (var item in ListBindings.Skip(source, Skip).Take(Count).Where(item => item.Value0.IsEven()))
-                sum += item.Value0;
+            var sum = default(FatValueType);
+            foreach (var item in ListBindings.Skip(source, Skip).Take(Count).Where(item => item.IsEven()))
+                sum += item;
             return sum;
         }
     }

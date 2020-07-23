@@ -13,7 +13,7 @@ namespace LinqBenchmarks
     [HardwareCounters(HardwareCounter.BranchMispredictions, HardwareCounter.CacheMisses)]
     public class BenchmarkBase
     {
-        [Params(100)]
+        [Params(0, 1, 10, 100)]
         public int Count { get; set; }
     }
 }

@@ -23,13 +23,13 @@ namespace LinqBenchmarks.Array.ValueType
                 .ToArray();
 
         [Benchmark(Baseline = true)]
-        public int ForLoop()
+        public FatValueType ForLoop()
         {
-            var set = new HashSet<int>();
-            var sum = 0;
+            var set = new HashSet<FatValueType>();
+            var sum = default(FatValueType);
             for (var index = 0; index < source.Length; index++)
             {
-                var item = source[index].Value0;
+                ref readonly  var item = ref source[index];
                 if (set.Add(item))
                     sum += item;
             }
@@ -37,52 +37,52 @@ namespace LinqBenchmarks.Array.ValueType
         }
 
         [Benchmark]
-        public int ForeachLoop()
+        public FatValueType ForeachLoop()
         {
-            var set = new HashSet<int>();
-            var sum = 0;
+            var set = new HashSet<FatValueType>();
+            var sum = default(FatValueType);
             foreach (var item in source)
             {
-                if (set.Add(item.Value0))
-                    sum += item.Value0;
+                if (set.Add(item))
+                    sum += item;
             }
             return sum;
         }
 
         [Benchmark]
-        public int Linq()
+        public FatValueType Linq()
         {
-            var sum = 0;
+            var sum = default(FatValueType);
             foreach (var item in Enumerable.Distinct(source))
-                sum += item.Value0;
+                sum += item;
             return sum;
         }
 
         //[Benchmark]
-        //public int LinqFaster()
+        //public FatValueType LinqFaster()
         //{
         //    JM.LinqFaster.LinqFaster.DistinctInPlaceF(source);
-        //    var sum = 0;
+        //    var sum = default(FatValueType);
         //    for (var index = 0; index < items.Length; index++)
         //        sum += items[index];
         //    return sum;
         //}
 
         [Benchmark]
-        public int StructLinq()
+        public FatValueType StructLinq()
         {
-            var sum = 0;
-            foreach (ref var item in source.ToRefStructEnumerable().Distinct(x => x))
-                sum += item.Value0;
+            var sum = default(FatValueType);
+            foreach (ref readonly  var item in source.ToRefStructEnumerable().Distinct(x => x))
+                sum += item;
             return sum;
         }
 
         [Benchmark]
-        public int Hyperlinq()
+        public FatValueType Hyperlinq()
         {
-            var sum = 0;
+            var sum = default(FatValueType);
             foreach (var item in ArrayExtensions.Distinct(source))
-                sum += item.Value0;
+                sum += item;
             return sum;
         }
     }

@@ -81,7 +81,7 @@ namespace LinqBenchmarks.List.Int32
                 .Where(source, item => item.IsEven())
                 .Select(item => item * 2)
                 .ToArray(MemoryPool<int>.Shared);
-            return array.Memory.Span[0];
+            return Count == 0 ? default : array.Memory.Span[0];
         }
     }
 }

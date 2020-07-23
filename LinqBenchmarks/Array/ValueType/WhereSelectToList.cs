@@ -14,9 +14,9 @@ namespace LinqBenchmarks.Array.ValueType
             var list = new List<FatValueType>();
             for (var index = 0; index < source.Length; index++)
             {
-                var item = source[index];
-                if (item.Value0.IsEven())
-                    list.Add(new FatValueType(item.Value0 * 2));
+                ref readonly  var item = ref source[index];
+                if (item.IsEven())
+                    list.Add(item * 2);
             }
             return list;
         }
@@ -27,23 +27,23 @@ namespace LinqBenchmarks.Array.ValueType
             var list = new List<FatValueType>();
             foreach (var item in source)
             {
-                if (item.Value0.IsEven())
-                    list.Add(new FatValueType(item.Value0 * 2));
+                if (item.IsEven())
+                    list.Add(item * 2);
             }
             return list;
         }
 
         [Benchmark]
         public List<FatValueType> Linq()
-            => Enumerable.Where(source, item => item.Value0.IsEven()).Select(item => new FatValueType(item.Value0 * 2)).ToList();
+            => Enumerable.Where(source, item => item.IsEven()).Select(item => item * 2).ToList();
 
         [Benchmark]
         public List<FatValueType> LinqFaster()
-            => new List<FatValueType>(JM.LinqFaster.LinqFaster.WhereSelectF(source, item => item.Value0.IsEven(), item => new FatValueType(item.Value0 * 2)));
+            => new List<FatValueType>(JM.LinqFaster.LinqFaster.WhereSelectF(source, item => item.IsEven(), item => item * 2));
 
         [Benchmark]
         public List<FatValueType> StructLinq()
-            => source.ToStructEnumerable().Where(item => item.Value0.IsEven(), x => x).Select(item => new FatValueType(item.Value0 * 2), x => x).ToList();
+            => source.ToStructEnumerable().Where(item => item.IsEven(), x => x).Select(item => item * 2, x => x).ToList();
 
         [Benchmark]
         public List<FatValueType> StructLinq_IFunction()
@@ -55,6 +55,6 @@ namespace LinqBenchmarks.Array.ValueType
 
         [Benchmark]
         public List<FatValueType> Hyperlinq()
-            => ArrayExtensions.Where(source, item => item.Value0.IsEven()).Select(item => new FatValueType(item.Value0 * 2)).ToList();
+            => ArrayExtensions.Where(source, item => item.IsEven()).Select(item => item * 2).ToList();
     }
 }

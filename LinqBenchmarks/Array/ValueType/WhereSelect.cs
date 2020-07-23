@@ -8,75 +8,75 @@ namespace LinqBenchmarks.Array.ValueType
     public class ArrayValueTypeWhereSelect: ValueTypeArrayBenchmarkBase
     {
         [Benchmark(Baseline = true)]
-        public int ForLoop()
+        public FatValueType ForLoop()
         {
-            var sum = 0;
+            var sum = default(FatValueType);
             for (var index = 0; index < source.Length; index++)
             {
-                var item = source[index];
-                if (item.Value0.IsEven())
-                    sum += new FatValueType(item.Value0 * 2).Value0;
+                ref readonly  var item = ref source[index];
+                if (item.IsEven())
+                    sum += (item * 2);
             }
             return sum;
         }
 
         [Benchmark]
-        public int ForeachLoop()
+        public FatValueType ForeachLoop()
         {
-            var sum = 0;
+            var sum = default(FatValueType);
             foreach (var item in source)
             {
-                if (item.Value0.IsEven())
-                    sum += new FatValueType(item.Value0 * 2).Value0;
+                if (item.IsEven())
+                    sum += (item * 2);
             }
             return sum;
         }
 
         [Benchmark]
-        public int Linq()
+        public FatValueType Linq()
         {
-            var sum = 0;
-            foreach (var item in Enumerable.Where(source, item => item.Value0.IsEven()).Select(item => new FatValueType(item.Value0 * 2)))
-                sum += item.Value0;
+            var sum = default(FatValueType);
+            foreach (var item in Enumerable.Where(source, item => item.IsEven()).Select(item => item * 2))
+                sum += item;
             return sum;
         }
 
         [Benchmark]
-        public int LinqFaster()
+        public FatValueType LinqFaster()
         {
-            var items = JM.LinqFaster.LinqFaster.WhereSelectF(source, item => item.Value0.IsEven(), item => new FatValueType(item.Value0 * 2));
-            var sum = 0;
+            var items = JM.LinqFaster.LinqFaster.WhereSelectF(source, item => item.IsEven(), item => item * 2);
+            var sum = default(FatValueType);
             for (var index = 0; index < items.Length; index++)
-                sum += items[index].Value0;
+                sum += items[index];
             return sum;
         }
 
         [Benchmark]
-        public int StructLinq()
+        public FatValueType StructLinq()
         {
-            var sum = 0;
-            foreach (var item in source.ToStructEnumerable().Where(item => item.Value0.IsEven(), x => x).Select(item => new FatValueType(item.Value0 * 2), x => x))
-                sum += item.Value0;
+            var sum = default(FatValueType);
+            foreach (var item in source.ToStructEnumerable().Where(item => item.IsEven(), x => x).Select(item => item * 2, x => x))
+                sum += item;
             return sum;
         }
 
         [Benchmark]
-        public int StructLinq_IFunction()
+        public FatValueType StructLinq_IFunction()
         {
-            var sum = 0;
+            var sum = default(FatValueType);
             var where = new FatValueTypeIsEven();
             var mult = new DoubleOfFatValueType();
             foreach (var item in source.ToRefStructEnumerable().Where(ref where, x => x).Select(ref mult, x => x, x => x))
-                sum += item.Value0;
+                sum += item;
             return sum;
         }
 
         [Benchmark]
-        public int Hyperlinq()
+        public FatValueType Hyperlinq()
         {
-            var sum = 0;
-            foreach (var item in ArrayExtensions.Where(source, item => item.Value0.IsEven()).Select(item => new FatValueType(item.Value0 * 2)))
-                sum += item.Value0;
+            var sum = default(FatValueType);
+            foreach (var item in ArrayExtensions.Where(source, item => item.IsEven()).Select(item => item * 2))
+                sum += item;
             return sum;
         }
     }

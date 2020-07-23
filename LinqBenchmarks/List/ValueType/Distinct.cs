@@ -23,78 +23,78 @@ namespace LinqBenchmarks.List.ValueType
                 .ToList();
 
         [Benchmark(Baseline = true)]
-        public int ForLoop()
+        public FatValueType ForLoop()
         {
-            var set = new HashSet<int>();
-            var sum = 0;
+            var set = new HashSet<FatValueType>();
+            var sum = default(FatValueType);
             for (var index = 0; index < source.Count; index++)
             {
                 var item = source[index];
-                if (set.Add(item.Value0))
-                    sum += item.Value0;
+                if (set.Add(item))
+                    sum += item;
             }
             return sum;
         }
 
 #pragma warning disable HLQ010 // Consider using a 'for' loop instead.
         [Benchmark]
-        public int ForeachLoop()
+        public FatValueType ForeachLoop()
         {
-            var set = new HashSet<int>();
-            var sum = 0;
+            var set = new HashSet<FatValueType>();
+            var sum = default(FatValueType);
             foreach (var item in source)
             {
-                if (set.Add(item.Value0))
-                    sum += item.Value0;
+                if (set.Add(item))
+                    sum += item;
             }
             return sum;
         }
 #pragma warning restore HLQ010 // Consider using a 'for' loop instead.
 
         [Benchmark]
-        public int Linq()
+        public FatValueType Linq()
         {
-            var sum = 0;
+            var sum = default(FatValueType);
             foreach (var item in Enumerable.Distinct(source))
-                sum += item.Value0;
+                sum += item;
             return sum;
         }
 
         [Benchmark]
-        public int LinqFaster()
+        public FatValueType LinqFaster()
         {
             JM.LinqFaster.LinqFaster.DistinctInPlaceF(source, new FatValueTypeEqualityComparer());
-            var sum = 0;
+            var sum = default(FatValueType);
             for (var index = 0; index < source.Count; index++)
-                sum += source[index].Value0;
+                sum += source[index];
             return sum;
         }
 
         [Benchmark]
-        public int StructLinq()
+        public FatValueType StructLinq()
         {
-            var sum = 0;
-            foreach (ref var item in source.ToRefStructEnumerable().Distinct(x => x))
-                sum += item.Value0;
+            var sum = default(FatValueType);
+            foreach (ref readonly  var item in source.ToRefStructEnumerable().Distinct(x => x))
+                sum += item;
             return sum;
         }
 
         [Benchmark]
-        public int StructLinq_IFunction()
+        public FatValueType StructLinq_IFunction()
         {
-            var sum = 0;
+            var sum = default(FatValueType);
             var comparer = new FatValueTypeEqualityComparer();
             foreach (var item in source.ToStructEnumerable().Distinct(comparer, x => x))
-                sum += item.Value0;
+                sum += item;
             return sum;
         }
 
         [Benchmark]
-        public int Hyperlinq()
+        public FatValueType Hyperlinq()
         {
-            var sum = 0;
+            var sum = default(FatValueType);
             foreach (var item in ListBindings.Distinct(source))
-                sum += item.Value0;
+                sum += item;
             return sum;
         }
     }

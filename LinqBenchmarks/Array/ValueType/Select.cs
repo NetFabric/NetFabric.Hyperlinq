@@ -8,79 +8,79 @@ namespace LinqBenchmarks.Array.ValueType
     public class ArrayValueTypeSelect: ValueTypeArrayBenchmarkBase
     {
         [Benchmark(Baseline = true)]
-        public int ForLoop()
+        public FatValueType ForLoop()
         {
-            var sum = 0;
+            var sum = default(FatValueType);
             for (var index = 0; index < source.Length; index++)
-                sum += new FatValueType(source[index].Value0 * 2).Value0;
+                sum += source[index] * 2;
             return sum;
         }
 
         [Benchmark]
-        public int ForeachLoop()
+        public FatValueType ForeachLoop()
         {
-            var sum = 0;
+            var sum = default(FatValueType);
             foreach (var item in source)
-                sum += new FatValueType(item.Value0 * 2).Value0;
+                sum += item * 2;
             return sum;
         }
 
         [Benchmark]
-        public int Linq()
+        public FatValueType Linq()
         {
-            var sum = 0;
-            foreach (var item in Enumerable.Select(source, item => new FatValueType(item.Value0 * 2)))
-                sum += item.Value0;
+            var sum = default(FatValueType);
+            foreach (var item in Enumerable.Select(source, item => item * 2))
+                sum += item;
             return sum;
         }
 
         [Benchmark]
-        public int LinqFaster()
+        public FatValueType LinqFaster()
         {
-            var items = JM.LinqFaster.LinqFaster.SelectF(source, item => new FatValueType(item.Value0 * 2));
-            var sum = 0;
+            var items = JM.LinqFaster.LinqFaster.SelectF(source, item => item * 2);
+            var sum = default(FatValueType);
             for (var index = 0; index < items.Length; index++)
-                sum += items[index].Value0;
+                sum += items[index];
             return sum;
         }
 
         [Benchmark]
-        public int StructLinq()
+        public FatValueType StructLinq()
         {
-            var sum = 0;
-            foreach (var item in source.ToStructEnumerable().Select(item => new FatValueType(item.Value0 * 2), x => x))
-                sum += item.Value0;
+            var sum = default(FatValueType);
+            foreach (var item in source.ToStructEnumerable().Select(item => item * 2, x => x))
+                sum += item;
             return sum;
         }
 
         [Benchmark]
-        public int StructLinq_IFunction()
+        public FatValueType StructLinq_IFunction()
         {
-            var sum = 0;
+            var sum = default(FatValueType);
             var mult = new DoubleOfFatValueType();
             foreach (var item in source.ToRefStructEnumerable().Select(ref mult, x => x, x => x))
-                sum += item.Value0;
+                sum += item;
             return sum;
         }
 
 #pragma warning disable HLQ010 // Consider using a 'for' loop instead.
         [Benchmark]
-        public int Hyperlinq_Foreach()
+        public FatValueType Hyperlinq_Foreach()
         {
-            var sum = 0;
-            foreach (var item in ArrayExtensions.Select(source, item => new FatValueType(item.Value0 * 2)))
-                sum += item.Value0;
+            var sum = default(FatValueType);
+            foreach (var item in ArrayExtensions.Select(source, item => item * 2))
+                sum += item;
             return sum;
         }
 #pragma warning restore HLQ010 // Consider using a 'for' loop instead.
 
         [Benchmark]
-        public int Hyperlinq_For()
+        public FatValueType Hyperlinq_For()
         {
-            var items = ArrayExtensions.Select(source, item => new FatValueType(item.Value0 * 2));
-            var sum = 0;
+            var items = ArrayExtensions.Select(source, item => item * 2);
+            var sum = default(FatValueType);
             for (var index = 0; index < items.Count; index++)
-                sum += items[index].Value0;
+                sum += items[index];
             return sum;
         }
     }

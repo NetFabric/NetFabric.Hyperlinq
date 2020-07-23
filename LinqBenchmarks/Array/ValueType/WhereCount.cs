@@ -14,8 +14,8 @@ namespace LinqBenchmarks.Array.ValueType
             var count = 0;
             for (var index = 0; index < source.Length; index++)
             {
-                var item = source[index];
-                if (item.Value0.IsEven())
+                ref readonly var item = ref source[index];
+                if (item.IsEven())
                     count++;
             }
             return count;
@@ -27,7 +27,7 @@ namespace LinqBenchmarks.Array.ValueType
             var count = 0;
             foreach (var item in source)
             {
-                if (item.Value0.IsEven())
+                if (item.IsEven())
                     count++;
             }
             return count;
@@ -35,15 +35,15 @@ namespace LinqBenchmarks.Array.ValueType
 
         [Benchmark]
         public int Linq()
-            => Enumerable.Count(source, item => item.Value0.IsEven());
+            => Enumerable.Count(source, item => item.IsEven());
 
         [Benchmark]
         public int LinqFaster()
-            => JM.LinqFaster.LinqFaster.CountF(source, item => item.Value0.IsEven());
+            => JM.LinqFaster.LinqFaster.CountF(source, item => item.IsEven());
 
         [Benchmark]
         public int StructLinq()
-            => source.ToStructEnumerable().Where(item => item.Value0.IsEven(), x => x).Count();
+            => source.ToStructEnumerable().Where(item => item.IsEven(), x => x).Count();
 
         [Benchmark]
         public int StructLinq_IFunction()
@@ -54,6 +54,6 @@ namespace LinqBenchmarks.Array.ValueType
 
         [Benchmark]
         public int Hyperlinq()
-            => ArrayExtensions.Where(source, item => item.Value0.IsEven()).Count();
+            => ArrayExtensions.Where(source, item => item.IsEven()).Count();
     }
 }

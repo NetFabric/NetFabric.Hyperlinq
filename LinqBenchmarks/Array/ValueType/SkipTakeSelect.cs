@@ -10,83 +10,83 @@ namespace LinqBenchmarks.Array.ValueType
     public class ArrayValueTypeSkipTakeSelect: ValueTypeArraySkipTakeBenchmarkBase
     {
         [Benchmark(Baseline = true)]
-        public int ForLoop()
+        public FatValueType ForLoop()
         {
-            var sum = 0;
+            var sum = default(FatValueType);
             var end = Skip + Count;
             for (var index = Skip; index < end; index++)
-                sum += new FatValueType(source[index].Value0 * 2).Value0;
+                sum += source[index] * 2;
             return sum;
         }
 
         [Benchmark]
-        public int ForeachLoop()
+        public FatValueType ForeachLoop()
         {
             using var enumerator = ((IEnumerable<FatValueType>)source).GetEnumerator();
             for (var index = 0; index < Skip; index++)
                 _ = enumerator.MoveNext();
-            var sum = 0;
+            var sum = default(FatValueType);
             for (var index = 0; index < Count; index++)
-                sum += new FatValueType(enumerator.Current.Value0 * 2).Value0;
+                sum += enumerator.Current * 2;
             return sum;
         }
 
         [Benchmark]
-        public int Linq()
+        public FatValueType Linq()
         {
-            var sum = 0;
-            foreach (var item in Enumerable.Skip(source, Skip).Take(Count).Select(item => new FatValueType(item.Value0 * 2)))
-                sum += item.Value0;
+            var sum = default(FatValueType);
+            foreach (var item in Enumerable.Skip(source, Skip).Take(Count).Select(item => item * 2))
+                sum += item;
             return sum;
         }
 
         [Benchmark]
-        public int LinqFaster()
+        public FatValueType LinqFaster()
         {
-            var items = JM.LinqFaster.LinqFaster.SelectF(source.AsSpan().Slice(Skip, Count), item => new FatValueType(item.Value0 * 2));
-            var sum = 0;
+            var items = JM.LinqFaster.LinqFaster.SelectF(source.AsSpan().Slice(Skip, Count), item => item * 2);
+            var sum = default(FatValueType);
             for (var index = 0; index < items.Length; index++)
-                sum += items[index].Value0;
+                sum += items[index];
             return sum;
         }
 
         //[Benchmark]
-        //public int StructLinq()
+        //public FatValueType StructLinq()
         //{
-        //    var sum = 0;
-        //    foreach (var item in source.ToStructEnumerable().Select(item => new FatValueType(item.Value0 * 2), x => x))
-        //        sum += item.Value0;
+        //    var sum = default(FatValueType);
+        //    foreach (var item in source.ToStructEnumerable().Select(item => item * 2, x => x))
+        //        sum += item;
         //    return sum;
         //}
 
         //[Benchmark]
-        //public int StructLinq_IFunction()
+        //public FatValueType StructLinq_IFunction()
         //{
-        //    var sum = 0;
+        //    var sum = default(FatValueType);
         //    var mult = new DoubleFunction();
         //    foreach (var item in source.ToStructEnumerable().Select(ref mult, x => x))
-        //        sum += item.Value0;
+        //        sum += item;
         //    return sum;
         //}
 
 #pragma warning disable HLQ010 // Consider using a 'for' loop instead.
         [Benchmark]
-        public int Hyperlinq_Foreach()
+        public FatValueType Hyperlinq_Foreach()
         {
-            var sum = 0;
-            foreach (var item in ArrayExtensions.Skip(source, Skip).Take(Count).Select(item => new FatValueType(item.Value0 * 2)))
-                sum += item.Value0;
+            var sum = default(FatValueType);
+            foreach (var item in ArrayExtensions.Skip(source, Skip).Take(Count).Select(item => item * 2))
+                sum += item;
             return sum;
         }
 #pragma warning restore HLQ010 // Consider using a 'for' loop instead.
 
         [Benchmark]
-        public int Hyperlinq_For()
+        public FatValueType Hyperlinq_For()
         {
-            var sum = 0;
-            var items = ArrayExtensions.Skip(source, Skip).Take(Count).Select(item => new FatValueType(item.Value0 * 2));
+            var sum = default(FatValueType);
+            var items = ArrayExtensions.Skip(source, Skip).Take(Count).Select(item => item * 2);
             for (var index = 0; index < items.Count; index++)
-                sum += items[index].Value0;
+                sum += items[index];
             return sum;
         }
     }
