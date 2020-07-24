@@ -9,18 +9,22 @@ namespace LinqBenchmarks.List.ValueType
     public class ListValueTypeDistinct: BenchmarkBase
     {
         List<FatValueType> source;
+        List<FatValueType> sourceLinqFaster;
 
         [Params(4)]
         public int Duplicates { get; set; }
 
         [GlobalSetup]
-        public void GlobalSetup() 
-            => source = Enumerable
+        public void GlobalSetup()
+        {
+            var items = Enumerable
                 .SelectMany(
-                    Enumerable.Range(0, Duplicates), 
-                    _ => Enumerable.Range(0, Count / Duplicates)
-                        .Select(value => new FatValueType(value)))
-                .ToList();
+                    Enumerable.Range(0, Duplicates),
+                    _ => Enumerable.Range(0, Count / Duplicates).Select(value => new FatValueType(value)));
+
+            source = items.ToList();
+            sourceLinqFaster = items.ToList();
+        }
 
         [Benchmark(Baseline = true)]
         public FatValueType ForLoop()
@@ -63,10 +67,11 @@ namespace LinqBenchmarks.List.ValueType
         [Benchmark]
         public FatValueType LinqFaster()
         {
-            JM.LinqFaster.LinqFaster.DistinctInPlaceF(source, new FatValueTypeEqualityComparer());
+            if (Count != 0)
+                JM.LinqFaster.LinqFaster.DistinctInPlaceF(sourceLinqFaster, new FatValueTypeEqualityComparer());
             var sum = default(FatValueType);
-            for (var index = 0; index < source.Count; index++)
-                sum += source[index];
+            for (var index = 0; index < sourceLinqFaster.Count; index++)
+                sum += sourceLinqFaster[index];
             return sum;
         }
 

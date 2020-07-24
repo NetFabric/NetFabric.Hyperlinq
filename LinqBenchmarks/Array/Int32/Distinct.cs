@@ -57,16 +57,6 @@ namespace LinqBenchmarks.Array.Int32
             return sum;
         }
 
-        //[Benchmark]
-        //public int LinqFaster()
-        //{
-        //    JM.LinqFaster.LinqFaster.DistinctInPlaceF(source);
-        //    var sum = 0;
-        //    for (var index = 0; index < items.Length; index++)
-        //        sum += items[index];
-        //    return sum;
-        //}
-
         [Benchmark]
         public int StructLinq()
         {

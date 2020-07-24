@@ -58,16 +58,6 @@ namespace LinqBenchmarks.Array.ValueType
             return sum;
         }
 
-        //[Benchmark]
-        //public FatValueType LinqFaster()
-        //{
-        //    JM.LinqFaster.LinqFaster.DistinctInPlaceF(source);
-        //    var sum = default(FatValueType);
-        //    for (var index = 0; index < items.Length; index++)
-        //        sum += items[index];
-        //    return sum;
-        //}
-
         [Benchmark]
         public FatValueType StructLinq()
         {

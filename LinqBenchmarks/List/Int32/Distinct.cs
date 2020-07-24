@@ -9,17 +9,22 @@ namespace LinqBenchmarks.List.Int32
     public class ListInt32Distinct: BenchmarkBase
     {
         List<int> source;
+        List<int> sourceLinqFaster;
 
         [Params(4)]
         public int Duplicates { get; set; }
 
         [GlobalSetup]
-        public void GlobalSetup() 
-            => source = Enumerable
+        public void GlobalSetup()
+        {
+            var items = Enumerable
                 .SelectMany(
-                    Enumerable.Range(0, Duplicates), 
-                    _ => Enumerable.Range(0, Count / Duplicates))
-                .ToList();
+                    Enumerable.Range(0, Duplicates),
+                    _ => Enumerable.Range(0, Count / Duplicates));
+
+            source = items.ToList();
+            sourceLinqFaster = items.ToList();
+        }
 
         [Benchmark(Baseline = true)]
         public int ForLoop()
@@ -62,10 +67,11 @@ namespace LinqBenchmarks.List.Int32
         [Benchmark]
         public int LinqFaster()
         {
-            JM.LinqFaster.LinqFaster.DistinctInPlaceF(source);
+            if (Count != 0)
+                JM.LinqFaster.LinqFaster.DistinctInPlaceF(sourceLinqFaster);
             var sum = 0;
-            for (var index = 0; index < source.Count; index++)
-                sum += source[index];
+            for (var index = 0; index < sourceLinqFaster.Count; index++)
+                sum += sourceLinqFaster[index];
             return sum;
         }
 
