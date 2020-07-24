@@ -37,7 +37,7 @@ namespace LinqBenchmarks.Range
 
         [Benchmark]
         public List<int> Linq()
-            => Enumerable.Range(Start, Count).Select(item => item * 2).ToList();
+            => System.Linq.Enumerable.Range(Start, Count).Select(item => item * 2).ToList();
 
         [Benchmark]
         public List<int> LinqFaster()

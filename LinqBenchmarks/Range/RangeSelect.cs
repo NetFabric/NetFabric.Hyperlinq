@@ -40,7 +40,7 @@ namespace LinqBenchmarks.Range
         public int Linq()
         {
             var sum = 0;
-            foreach (var item in Enumerable.Range(Start, Count).Select(item => item * 2))
+            foreach (var item in System.Linq.Enumerable.Range(Start, Count).Select(item => item * 2))
                 sum += item;
             return sum;
         }

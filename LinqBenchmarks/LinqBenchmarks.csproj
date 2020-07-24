@@ -22,7 +22,6 @@
 
   <ItemGroup>
     <Folder Include="obj\" />
-    <Folder Include="ValueType\" />
   </ItemGroup>
 
 </Project>

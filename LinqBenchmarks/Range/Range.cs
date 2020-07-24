@@ -39,7 +39,7 @@ namespace LinqBenchmarks.Range
         public int Linq()
         {
             var sum = 0;
-            foreach (var item in Enumerable.Range(Start, Count))
+            foreach (var item in System.Linq.Enumerable.Range(Start, Count))
                 sum += item;
             return sum;
         }

@@ -21,7 +21,7 @@ namespace LinqBenchmarks.Range
 
         [Benchmark]
         public int[] Linq()
-            => Enumerable.Range(Start, Count).Select(item => item * 2).ToArray();
+            => System.Linq.Enumerable.Range(Start, Count).Select(item => item * 2).ToArray();
 
         [Benchmark]
         public int[] LinqFaster()

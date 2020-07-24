@@ -36,7 +36,7 @@ namespace LinqBenchmarks.Range
 
         [Benchmark]
         public List<int> Linq()
-            => Enumerable.Range(Start, Count).ToList();
+            => System.Linq.Enumerable.Range(Start, Count).ToList();
 
         [Benchmark]
         public List<int> LinqFaster()

@@ -8,7 +8,7 @@ Benchmarks comparing the perfomance of [LINQ](https://docs.microsoft.com/en-us/d
 
 ## Results
 
-### Source: `Range()`
+### `Range()`
 
 - [Range()](Results/Range.md)
 - [Range().Select()](Results/RangeSelect.md)
@@ -17,9 +17,19 @@ Benchmarks comparing the perfomance of [LINQ](https://docs.microsoft.com/en-us/d
 - [Range().ToArray()](Results/RangeToArray.md)
 - [Range().ToList()](Results/RangeToList.md)
 
-### Source: array
+### `IEnumerable<int>`
 
-#### Item Type: `int`
+- [enumerable.Distinct()](Results/EnumerableInt32Distinct.md)
+- [enumerable.Select()](Results/EnumerableInt32Select.md)
+- [enumerable.Skip().Take().Select()](Results/EnumerableInt32SkipTakeSelect.md)
+- [enumerable.Skip().Take().Where()](Results/EnumerableInt32SkipTakeWhere.md)
+- [enumerable.Where()](Results/EnumerableInt32Where.md)
+- [enumerable.Where().Count()](Results/EnumerableInt32WhereCount.md)
+- [enumerable.Where().Select()](Results/EnumerableInt32WhereSelect.md)
+- [enumerable.Where().Select().ToArray()](Results/EnumerableInt32WhereSelectToArray.md)
+- [enumerable.Where().Select().ToList()](Results/EnumerableInt32WhereSelectToList.md)
+
+### `int[]`
 
 - [array.Distinct()](Results/ArrayInt32Distinct.md)
 - [array.Select()](Results/ArrayInt32Select.md)
@@ -31,7 +41,7 @@ Benchmarks comparing the perfomance of [LINQ](https://docs.microsoft.com/en-us/d
 - [array.Where().Select().ToArray()](Results/ArrayInt32WhereSelectToArray.md)
 - [array.Where().Select().ToList()](Results/ArrayInt32WhereSelectToList.md)
 
-#### Item Type: Value Type
+### `FatValueType[]`
 
 - [array.Distinct()](Results/ArrayValueTypeDistinct.md)
 - [array.Select()](Results/ArrayValueTypeSelect.md)
@@ -43,9 +53,7 @@ Benchmarks comparing the perfomance of [LINQ](https://docs.microsoft.com/en-us/d
 - [array.Where().Select().ToArray()](Results/ArrayValueTypeWhereSelectToArray.md)
 - [array.Where().Select().ToList()](Results/ArrayValueTypeWhereSelectToList.md)
 
-### Source: `List<>`
-
-#### Item Type: `int`
+### `List<int>`
 
 - [list.Distinct()](Results/ListInt32Distinct.md)
 - [list.Select()](Results/ListInt32Select.md)
@@ -56,7 +64,7 @@ Benchmarks comparing the perfomance of [LINQ](https://docs.microsoft.com/en-us/d
 - [list.Where().Select().ToArray()](Results/ListInt32WhereSelectToArray.md)
 - [list.Where().Select().ToList()](Results/ListInt32WhereSelectToList.md)
 
-#### Item Type: Value Type
+### `List<FatValueType>`
 
 - [list.Distinct()](Results/ListValueTypeDistinct.md)
 - [list.Select()](Results/ListValueTypeSelect.md)

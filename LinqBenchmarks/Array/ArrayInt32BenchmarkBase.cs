@@ -9,6 +9,6 @@ namespace LinqBenchmarks
 
         [GlobalSetup]
         public void GlobalSetup()
-            => source = Enumerable.Range(0, Count).ToArray();
+            => source = System.Linq.Enumerable.Range(0, Count).ToArray();
     }
 }

@@ -20,7 +20,7 @@ namespace LinqBenchmarks.Range
 
         [Benchmark]
         public int[] Linq()
-            => Enumerable.Range(Start, Count).ToArray();
+            => System.Linq.Enumerable.Range(Start, Count).ToArray();
 
         [Benchmark]
         public int[] LinqFaster()

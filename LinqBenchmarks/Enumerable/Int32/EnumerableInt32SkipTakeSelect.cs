@@ -1,0 +1,40 @@
+﻿using BenchmarkDotNet.Attributes;
+using NetFabric.Hyperlinq;
+using StructLinq;
+using System.Linq;
+
+namespace LinqBenchmarks.Enumerable.Int32
+{
+    public class EnumerableInt32SkipTakeSelect: EnumerableInt32SkipTakeBenchmarkBase
+    {
+        [Benchmark(Baseline = true)]
+        public int ForeachLoop()
+        {
+            using var enumerator = source.GetEnumerator();
+            for (var index = 0; index < Skip; index++)
+                _ = enumerator.MoveNext();
+            var sum = 0;
+            for (var index = 0; index < Count; index++)
+                sum += enumerator.Current * 2;
+            return sum;
+        }
+
+        [Benchmark]
+        public int Linq()
+        {
+            var sum = 0;
+            foreach (var item in source.Skip(Skip).Take(Count).Select(item => item * 2))
+                sum += item;
+            return sum;
+        }
+
+        [Benchmark]
+        public int Hyperlinq_Foreach()
+        {
+            var sum = 0;
+            foreach (var item in source.AsValueEnumerable().Skip(Skip).Take(Count).Select(item => item * 2))
+                sum += item;
+            return sum;
+        }
+    }
+}
