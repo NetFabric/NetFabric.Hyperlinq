@@ -15,7 +15,7 @@ namespace NetFabric.Hyperlinq
         {
             if (selector is null) Throw.ArgumentNullException(nameof(selector));
 
-            return new MemorySelectAtEnumerable<TSource, TResult>(in source, selector);
+            return new MemorySelectAtEnumerable<TSource, TResult>(source, selector);
         }
 
         [GeneratorMapping("TSource", "TResult")]
@@ -26,7 +26,7 @@ namespace NetFabric.Hyperlinq
             internal readonly ReadOnlyMemory<TSource> source;
             internal readonly NullableSelectorAt<TSource, TResult> selector;
 
-            internal MemorySelectAtEnumerable(in ReadOnlyMemory<TSource> source, NullableSelectorAt<TSource, TResult> selector)
+            internal MemorySelectAtEnumerable(ReadOnlyMemory<TSource> source, NullableSelectorAt<TSource, TResult> selector)
             {
                 this.source = source;
                 this.selector = selector;
@@ -64,7 +64,7 @@ namespace NetFabric.Hyperlinq
             void ICollection<TResult>.CopyTo(TResult[] array, int arrayAt) 
             {
                 var span = source.Span;
-                for (var index = 0; index < source.Length; index++)
+                for (var index = 0; index < span.Length; index++)
                     array[index + arrayAt] = selector(span[index], index)!;
             }
             void ICollection<TResult>.Add(TResult item) 
@@ -78,9 +78,9 @@ namespace NetFabric.Hyperlinq
             int IList<TResult>.IndexOf(TResult item)
             {
                 var span = source.Span;
-                if (default(TResult) is object)
+                if (Utils.IsValueType<TResult>())
                 {
-                    for (var index = 0; index < source.Length; index++)
+                    for (var index = 0; index < span.Length; index++)
                     {
                         if (EqualityComparer<TResult>.Default.Equals(selector(span[index], index)!, item))
                             return index;
@@ -89,7 +89,7 @@ namespace NetFabric.Hyperlinq
                 else
                 {
                     var defaultComparer = EqualityComparer<TResult>.Default;
-                    for (var index = 0; index < source.Length; index++)
+                    for (var index = 0; index < span.Length; index++)
                     {
                         if (defaultComparer.Equals(selector(span[index], index)!, item))
                             return index;

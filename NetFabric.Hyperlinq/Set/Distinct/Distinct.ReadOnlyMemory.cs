@@ -89,7 +89,7 @@ namespace NetFabric.Hyperlinq
             {
                 var set = new Set<TSource>(comparer);
                 var span = source.Span;
-                for (var index = 0; index < source.Length; index++)
+                for (var index = 0; index < span.Length; index++)
                     _ = set.Add(span[index]);
                 return set;
             }

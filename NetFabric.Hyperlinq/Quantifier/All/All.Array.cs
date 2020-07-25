@@ -7,12 +7,12 @@ namespace NetFabric.Hyperlinq
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool All<TSource>(this TSource[] source, Predicate<TSource> predicate)
-            => All(source.AsMemory(), predicate);
+            => All(new ArraySegment<TSource>(source), predicate);
 
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool All<TSource>(this TSource[] source, PredicateAt<TSource> predicate)
-            => All(source.AsMemory(), predicate);
+            => All(new ArraySegment<TSource>(source), predicate);
     }
 }
 

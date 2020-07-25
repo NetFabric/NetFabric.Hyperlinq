@@ -7,23 +7,23 @@ namespace NetFabric.Hyperlinq
     {
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static (int SkipCount, int TakeCount) Skip(int sourceCount, int skipCount)
+        public static (int Offset, int Count) Skip(int sourceCount, int offset)
         {
-            skipCount = Math.Min(sourceCount, Math.Max(0, skipCount));
-            return (skipCount, Math.Max(0, sourceCount - skipCount));
+            offset = Math.Min(sourceCount, Math.Max(0, offset));
+            return (offset, Math.Max(0, sourceCount - offset));
         }
 
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int Take(int sourceCount, int takeCount)
-            => Math.Min(sourceCount, Math.Max(0, takeCount));
+        public static int Take(int sourceCount, int count)
+            => Math.Min(sourceCount, Math.Max(0, count));
 
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static (int SkipCount, int TakeCount) SkipTake(int sourceCount, int skipCount, int takeCount)
+        public static (int Offset, int Count) SkipTake(int sourceCount, int offset, int count)
         {
-            skipCount = Math.Min(sourceCount, Math.Max(0, skipCount));
-            return (skipCount, Math.Min(sourceCount - skipCount, Math.Max(0, takeCount))); 
+            offset = Math.Min(sourceCount, Math.Max(0, offset));
+            return (offset, Math.Min(sourceCount - offset, Math.Max(0, count))); 
         }
     }
 }

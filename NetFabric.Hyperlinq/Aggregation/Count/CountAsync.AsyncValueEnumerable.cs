@@ -11,24 +11,24 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
-            var count = 0;
+            var counter = 0;
             var enumerator = source.GetAsyncEnumerator(cancellationToken);
             await using (enumerator.ConfigureAwait(false))
             {
                 checked
                 {
                     while (await enumerator.MoveNextAsync().ConfigureAwait(false))
-                        count++;
+                        counter++;
                 }
             }
-            return count;
+            return counter;
         }
 
         static async ValueTask<int> CountAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source, AsyncPredicate<TSource> predicate, CancellationToken cancellationToken)
             where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
-            var count = 0;
+            var counter = 0;
             var enumerator = source.GetAsyncEnumerator(cancellationToken);
             await using (enumerator.ConfigureAwait(false))
             {
@@ -39,19 +39,19 @@ namespace NetFabric.Hyperlinq
                         var result = await predicate(enumerator.Current, cancellationToken).ConfigureAwait(false);
                         unsafe
                         {
-                            count += *(int*)&result;
+                            counter += *(int*)&result;
                         }
                     }
                 }
             }
-            return count;
+            return counter;
         }
 
         static async ValueTask<int> CountAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source, AsyncPredicateAt<TSource> predicate, CancellationToken cancellationToken)
             where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
-            var count = 0;
+            var counter = 0;
             var enumerator = source.GetAsyncEnumerator(cancellationToken);
             await using (enumerator.ConfigureAwait(false))
             {
@@ -62,12 +62,12 @@ namespace NetFabric.Hyperlinq
                         var result = await predicate(enumerator.Current, index, cancellationToken).ConfigureAwait(false);
                         unsafe
                         {
-                            count += *(int*)&result;
+                            counter += *(int*)&result;
                         }
                     }
                 }
             }
-            return count;
+            return counter;
         }
     }
 }

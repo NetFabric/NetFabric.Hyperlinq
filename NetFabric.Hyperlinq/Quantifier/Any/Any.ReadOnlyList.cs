@@ -11,11 +11,11 @@ namespace NetFabric.Hyperlinq
             => source.Count != 0;
 
 
-        static bool Any<TList, TSource>(this TList source, int skipCount, int takeCount)
+        static bool Any<TList, TSource>(this TList source, int offset, int count)
             where TList : IReadOnlyList<TSource>
         {
-            (_, var count) = Utils.SkipTake(source.Count, skipCount, takeCount);
-            return count != 0;
+            (_, var take) = Utils.SkipTake(source.Count, offset, count);
+            return take != 0;
         }
 
 
@@ -28,11 +28,11 @@ namespace NetFabric.Hyperlinq
         }
 
 
-        static bool Any<TList, TSource>(this TList source, Predicate<TSource> predicate, int skipCount, int takeCount)
+        static bool Any<TList, TSource>(this TList source, Predicate<TSource> predicate, int offset, int count)
             where TList : IReadOnlyList<TSource>
         {
-            var end = skipCount + takeCount;
-            for (var index = skipCount; index < end; index++)
+            var end = offset + count;
+            for (var index = offset; index < end; index++)
             {
                 if (predicate(source[index]))
                     return true;
@@ -50,12 +50,12 @@ namespace NetFabric.Hyperlinq
         }
 
 
-        static bool Any<TList, TSource>(this TList source, PredicateAt<TSource> predicate, int skipCount, int takeCount)
+        static bool Any<TList, TSource>(this TList source, PredicateAt<TSource> predicate, int offset, int count)
             where TList : IReadOnlyList<TSource>
         {
-            if (skipCount == 0)
+            if (offset == 0)
             {
-                for (var index = 0; index < takeCount; index++)
+                for (var index = 0; index < count; index++)
                 {
                     if (predicate(source[index], index))
                         return true;
@@ -63,9 +63,9 @@ namespace NetFabric.Hyperlinq
             }
             else
             {
-                for (var index = 0; index < takeCount; index++)
+                for (var index = 0; index < count; index++)
                 {
-                    if (predicate(source[index + skipCount], index))
+                    if (predicate(source[index + offset], index))
                         return true;
                 }
             }

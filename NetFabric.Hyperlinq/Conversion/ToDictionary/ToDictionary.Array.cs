@@ -11,7 +11,7 @@ namespace NetFabric.Hyperlinq
         {
             if (keySelector is null) Throw.ArgumentNullException(nameof(keySelector));
 
-            return ToDictionary(source.AsMemory(), keySelector, comparer);
+            return ToDictionary(new ArraySegment<TSource>(source), keySelector, comparer);
         }
 
         
@@ -21,7 +21,7 @@ namespace NetFabric.Hyperlinq
             if (keySelector is null) Throw.ArgumentNullException(nameof(keySelector));
             if (elementSelector is null) Throw.ArgumentNullException(nameof(elementSelector));
 
-            return ToDictionary(source.AsMemory(), keySelector, elementSelector, comparer);
+            return ToDictionary(new ArraySegment<TSource>(source), keySelector, elementSelector, comparer);
         }
     }
 }

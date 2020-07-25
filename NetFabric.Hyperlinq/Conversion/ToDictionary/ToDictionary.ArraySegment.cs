@@ -11,7 +11,20 @@ namespace NetFabric.Hyperlinq
         {
             if (keySelector is null) Throw.ArgumentNullException(nameof(keySelector));
 
-            return ToDictionary(source.AsMemory(), keySelector, comparer);
+            var dictionary = new Dictionary<TKey, TSource>(source.Count, comparer);
+            var array = source.Array;
+            if (source.IsWhole())
+            {
+                foreach (var item in source)
+                    dictionary.Add(keySelector(item), item);
+            }
+            else
+            {
+                var end = source.Count;
+                for (var index = source.Offset; index < end; index++)
+                    dictionary.Add(keySelector(array[index]), array[index]);
+            }
+            return dictionary;
         }
 
 
@@ -21,7 +34,20 @@ namespace NetFabric.Hyperlinq
             if (keySelector is null) Throw.ArgumentNullException(nameof(keySelector));
             if (elementSelector is null) Throw.ArgumentNullException(nameof(elementSelector));
 
-            return ToDictionary(source.AsMemory(), keySelector, elementSelector, comparer);
+            var dictionary = new Dictionary<TKey, TElement>(source.Count, comparer);
+            var array = source.Array;
+            if (source.IsWhole())
+            {
+                foreach (var item in source)
+                    dictionary.Add(keySelector(item), elementSelector(item));
+            }
+            else
+            {
+                var end = source.Count;
+                for (var index = source.Offset; index < end; index++)
+                    dictionary.Add(keySelector(array[index]), elementSelector(array[index]));
+            }
+            return dictionary;
         }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
@@ -10,48 +9,48 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
-            var count = 0;
+            var counter = 0;
             using var enumerator = source.GetEnumerator();
             checked
             {
                 while (enumerator.MoveNext())
-                    count++;
+                    counter++;
             }
-            return count;
+            return counter;
         }
 
         static unsafe int Count<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Predicate<TSource> predicate)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
-            var count = 0;
+            var counter = 0;
             using var enumerator = source.GetEnumerator();
             checked
             {
                 while (enumerator.MoveNext())
                 {
                     var result = predicate(enumerator.Current);
-                    count += *(int*)&result;
+                    counter += *(int*)&result;
                 }
             }
-            return count;
+            return counter;
         }
 
         static unsafe int Count<TEnumerable, TEnumerator, TSource>(this TEnumerable source, PredicateAt<TSource> predicate)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
-            var count = 0;
+            var counter = 0;
             using var enumerator = source.GetEnumerator();
             checked
             {
                 for (var index = 0; enumerator.MoveNext(); index++)
                 {
                     var result = predicate(enumerator.Current, index);
-                    count += *(int*)&result;
+                    counter += *(int*)&result;
                 }
             }
-            return count;
+            return counter;
         }
     }
 }

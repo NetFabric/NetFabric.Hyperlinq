@@ -7,6 +7,6 @@ namespace NetFabric.Hyperlinq
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Memory<TSource> Take<TSource>(this TSource[] source, int count)
-            => Take(source.AsMemory(), count);
+            => new ArraySegment<TSource>(source, 0, Utils.Take(source.Length, count));
     }
 }

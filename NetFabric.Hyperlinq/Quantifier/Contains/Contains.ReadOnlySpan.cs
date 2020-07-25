@@ -52,12 +52,13 @@ namespace NetFabric.Hyperlinq
 
         static bool Contains<TSource, TResult>(this ReadOnlySpan<TSource> source, [AllowNull] TResult value, NullableSelector<TSource, TResult> selector)
         {
-            if (source.Length == 0)
-                return false;
-
-            return default(TResult) is object
-                ? ValueContains(source, value, selector)
-                : ReferenceContains(source, value, selector);
+            return source.Length switch
+            {
+                0 => false,
+                _ => Utils.IsValueType<TResult>()
+                    ? ValueContains(source, value, selector)
+                    : ReferenceContains(source, value, selector)
+            };
 
             static bool ValueContains(ReadOnlySpan<TSource> source, [AllowNull] TResult value, NullableSelector<TSource, TResult> selector)
             {
@@ -85,12 +86,13 @@ namespace NetFabric.Hyperlinq
 
         static bool Contains<TSource, TResult>(this ReadOnlySpan<TSource> source, [AllowNull] TResult value, NullableSelectorAt<TSource, TResult> selector)
         {
-            if (source.Length == 0)
-                return false;
-
-            return default(TResult) is object
-                ? ValueContains(source, value, selector)
-                : ReferenceContains(source, value, selector);
+            return source.Length switch
+            {
+                0 => false,
+                _ => Utils.IsValueType<TResult>()
+                    ? ValueContains(source, value, selector)
+                    : ReferenceContains(source, value, selector),
+            };
 
             static bool ValueContains(ReadOnlySpan<TSource> source, [AllowNull] TResult value, NullableSelectorAt<TSource, TResult> selector)
             {

@@ -16,7 +16,7 @@ namespace NetFabric.Hyperlinq
         {
             if (selector is null) Throw.ArgumentNullException(nameof(selector));
 
-            return new SpanSelectEnumerable<TSource, TResult>(in source, selector);
+            return new SpanSelectEnumerable<TSource, TResult>(source, selector);
         }
 
         [GeneratorMapping("TSource", "TResult")]
@@ -25,7 +25,7 @@ namespace NetFabric.Hyperlinq
             internal readonly ReadOnlySpan<TSource> source;
             internal readonly NullableSelector<TSource, TResult> selector;
 
-            internal SpanSelectEnumerable(in ReadOnlySpan<TSource> source, NullableSelector<TSource, TResult> selector)
+            internal SpanSelectEnumerable(ReadOnlySpan<TSource> source, NullableSelector<TSource, TResult> selector)
             {
                 this.source = source;
                 this.selector = selector;

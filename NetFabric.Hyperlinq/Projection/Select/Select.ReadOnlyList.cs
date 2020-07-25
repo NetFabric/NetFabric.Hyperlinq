@@ -24,9 +24,9 @@ namespace NetFabric.Hyperlinq
         static SelectEnumerable<TList, TSource, TResult> Select<TList, TSource, TResult>(
             this TList source,
             NullableSelector<TSource, TResult> selector,
-            int skipCount, int takeCount)
+            int offset, int count)
             where TList : IReadOnlyList<TSource>
-            => new SelectEnumerable<TList, TSource, TResult>(source, selector, skipCount, takeCount);
+            => new SelectEnumerable<TList, TSource, TResult>(source, selector, offset, count);
 
         [GeneratorMapping("TSource", "TResult")]
         public readonly partial struct SelectEnumerable<TList, TSource, TResult>
@@ -36,13 +36,13 @@ namespace NetFabric.Hyperlinq
         {
             readonly TList source;
             readonly NullableSelector<TSource, TResult> selector;
-            readonly int skipCount;
+            readonly int offset;
 
-            internal SelectEnumerable(in TList source, NullableSelector<TSource, TResult> selector, int skipCount, int takeCount)
+            internal SelectEnumerable(in TList source, NullableSelector<TSource, TResult> selector, int offset, int count)
             {
                 this.source = source;
                 this.selector = selector;
-                (this.skipCount, Count) = Utils.SkipTake(source.Count, skipCount, takeCount);
+                (this.offset, Count) = Utils.SkipTake(source.Count, offset, count);
             }
 
             public readonly int Count { get; } 
@@ -56,7 +56,7 @@ namespace NetFabric.Hyperlinq
                     if (index < 0 || index >= Count)
                         Throw.IndexOutOfRangeException();
 
-                    return selector(source[index + skipCount]);
+                    return selector(source[index + offset]);
                 }
             }
             TResult IReadOnlyList<TResult>.this[int index]
@@ -79,29 +79,29 @@ namespace NetFabric.Hyperlinq
                 => true;
 
             public void CopyTo(TResult[] array, int arrayIndex = 0)
-                => ReadOnlyListExtensions.Copy(source, skipCount, array, arrayIndex, Count, selector);
+                => ReadOnlyListExtensions.Copy(source, offset, array, arrayIndex, Count, selector);
 
             public bool Contains(TResult item)
-                => ReadOnlyListExtensions.Contains<TList, TSource, TResult>(source, item, selector, skipCount, Count);
+                => ReadOnlyListExtensions.Contains<TList, TSource, TResult>(source, item, selector, offset, Count);
 
             public int IndexOf(TResult item)
             {
-                var end = skipCount + Count;
+                var end = offset + Count;
                 if (Utils.IsValueType<TResult>())
                 {
-                    for (var index = skipCount; index < end; index++)
+                    for (var index = offset; index < end; index++)
                     {
                         if (EqualityComparer<TResult>.Default.Equals(selector(source[index])!, item))
-                            return index - skipCount;
+                            return index - offset;
                     }
                 }
                 else
                 {
                     var defaultComparer = EqualityComparer<TResult>.Default;
-                    for (var index = skipCount; index < end; index++)
+                    for (var index = offset; index < end; index++)
                     {
                         if (defaultComparer.Equals(selector(source[index])!, item))
-                            return index - skipCount;
+                            return index - offset;
                     }
                 }
                 return -1;
@@ -135,7 +135,7 @@ namespace NetFabric.Hyperlinq
                 {
                     source = enumerable.source;
                     selector = enumerable.selector;
-                    index = enumerable.skipCount - 1;
+                    index = enumerable.offset - 1;
                     end = index + enumerable.Count;
                 }
 
@@ -160,7 +160,7 @@ namespace NetFabric.Hyperlinq
                 {
                     source = enumerable.source;
                     selector = enumerable.selector;
-                    index = enumerable.skipCount - 1;
+                    index = enumerable.offset - 1;
                     end = index + enumerable.Count;
                 }
 
@@ -185,11 +185,11 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public ReadOnlyListExtensions.SelectEnumerable<TList, TSource, TResult> Skip(int count)
-                => new ReadOnlyListExtensions.SelectEnumerable<TList, TSource, TResult>(source, selector, skipCount + count, Count);
+                => new ReadOnlyListExtensions.SelectEnumerable<TList, TSource, TResult>(source, selector, offset + count, Count);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public ReadOnlyListExtensions.SelectEnumerable<TList, TSource, TResult> Take(int count)
-                => new ReadOnlyListExtensions.SelectEnumerable<TList, TSource, TResult>(source, selector, skipCount, Math.Min(Count, count));
+                => new ReadOnlyListExtensions.SelectEnumerable<TList, TSource, TResult>(source, selector, offset, Math.Min(Count, count));
 
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -198,40 +198,40 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public ReadOnlyListExtensions.SelectEnumerable<TList, TSource, TSelectorResult> Select<TSelectorResult>(NullableSelector<TResult, TSelectorResult> selector)
-                => ReadOnlyListExtensions.Select<TList, TSource, TSelectorResult>(source, Utils.Combine(this.selector, selector), skipCount, Count);
+                => ReadOnlyListExtensions.Select<TList, TSource, TSelectorResult>(source, Utils.Combine(this.selector, selector), offset, Count);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public ReadOnlyListExtensions.SelectAtEnumerable<TList, TSource, TSelectorResult> Select<TSelectorResult>(NullableSelectorAt<TResult, TSelectorResult> selector)
-                => ReadOnlyListExtensions.Select<TList, TSource, TSelectorResult>(source, Utils.Combine(this.selector, selector), skipCount, Count);
+                => ReadOnlyListExtensions.Select<TList, TSource, TSelectorResult>(source, Utils.Combine(this.selector, selector), offset, Count);
 
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Option<TResult> ElementAt(int index)
-                => ReadOnlyListExtensions.ElementAt<TList, TSource, TResult>(source, index, selector, skipCount, Count);
+                => ReadOnlyListExtensions.ElementAt<TList, TSource, TResult>(source, index, selector, offset, Count);
 
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Option<TResult> First()
-                => ReadOnlyListExtensions.First<TList, TSource, TResult>(source, selector, skipCount, Count);
+                => ReadOnlyListExtensions.First<TList, TSource, TResult>(source, selector, offset, Count);
 
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Option<TResult> Single()
-                => ReadOnlyListExtensions.Single<TList, TSource, TResult>(source, selector, skipCount, Count);
+                => ReadOnlyListExtensions.Single<TList, TSource, TResult>(source, selector, offset, Count);
 
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TResult[] ToArray()
-                => ReadOnlyListExtensions.ToArray<TList, TSource, TResult>(source, selector, skipCount, Count);
+                => ReadOnlyListExtensions.ToArray<TList, TSource, TResult>(source, selector, offset, Count);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public IMemoryOwner<TResult> ToArray(MemoryPool<TResult> pool)
-                => ReadOnlyListExtensions.ToArray<TList, TSource, TResult>(source, selector, skipCount, Count, pool);
+                => ReadOnlyListExtensions.ToArray<TList, TSource, TResult>(source, selector, offset, Count, pool);
 
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public List<TResult> ToList()
-                => ReadOnlyListExtensions.ToList<TList, TSource, TResult>(source, selector, skipCount, Count);
+                => ReadOnlyListExtensions.ToList<TList, TSource, TResult>(source, selector, offset, Count);
 
             public Dictionary<TKey, TResult> ToDictionary<TKey>(NullableSelector<TResult, TKey> keySelector, IEqualityComparer<TKey>? comparer = default)
                 => ToDictionary<TKey>(keySelector, comparer);

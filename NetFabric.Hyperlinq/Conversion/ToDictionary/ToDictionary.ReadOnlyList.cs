@@ -25,34 +25,34 @@ namespace NetFabric.Hyperlinq
         }
 
 
-        static Dictionary<TKey, TSource> ToDictionary<TList, TSource, TKey>(this TList source, NullableSelector<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer, int skipCount, int takeCount)
+        static Dictionary<TKey, TSource> ToDictionary<TList, TSource, TKey>(this TList source, NullableSelector<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer, int offset, int count)
             where TList : IReadOnlyList<TSource>
         {
             var dictionary = new Dictionary<TKey, TSource>(source.Count, comparer);
-            var end = skipCount + takeCount;
-            for (var index = skipCount; index < end; index++)
+            var end = offset + count;
+            for (var index = offset; index < end; index++)
                 dictionary.Add(keySelector(source[index]), source[index]);
             return dictionary;
         }
 
 
-        static Dictionary<TKey, TElement> ToDictionary<TList, TSource, TKey, TElement>(this TList source, NullableSelector<TSource, TKey> keySelector, NullableSelector<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer, int skipCount, int takeCount)
+        static Dictionary<TKey, TElement> ToDictionary<TList, TSource, TKey, TElement>(this TList source, NullableSelector<TSource, TKey> keySelector, NullableSelector<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer, int offset, int count)
             where TList : IReadOnlyList<TSource>
         {
             var dictionary = new Dictionary<TKey, TElement>(source.Count, comparer);
-            var end = skipCount + takeCount;
-            for (var index = skipCount; index < end; index++)
+            var end = offset + count;
+            for (var index = offset; index < end; index++)
                 dictionary.Add(keySelector(source[index]), elementSelector(source[index]));
             return dictionary;
         }
 
 
-        static Dictionary<TKey, TSource> ToDictionary<TList, TSource, TKey>(this TList source, NullableSelector<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer, Predicate<TSource> predicate, int skipCount, int takeCount)
+        static Dictionary<TKey, TSource> ToDictionary<TList, TSource, TKey>(this TList source, NullableSelector<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer, Predicate<TSource> predicate, int offset, int count)
             where TList : IReadOnlyList<TSource>
         {
             var dictionary = new Dictionary<TKey, TSource>(source.Count, comparer);
-            var end = skipCount + takeCount;
-            for (var index = skipCount; index < end; index++)
+            var end = offset + count;
+            for (var index = offset; index < end; index++)
             {
                 if (predicate(source[index]))
                     dictionary.Add(keySelector(source[index]), source[index]);
@@ -61,12 +61,12 @@ namespace NetFabric.Hyperlinq
         }
 
 
-        static Dictionary<TKey, TElement> ToDictionary<TList, TSource, TKey, TElement>(this TList source, NullableSelector<TSource, TKey> keySelector, NullableSelector<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer, Predicate<TSource> predicate, int skipCount, int takeCount)
+        static Dictionary<TKey, TElement> ToDictionary<TList, TSource, TKey, TElement>(this TList source, NullableSelector<TSource, TKey> keySelector, NullableSelector<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer, Predicate<TSource> predicate, int offset, int count)
             where TList : IReadOnlyList<TSource>
         {
             var dictionary = new Dictionary<TKey, TElement>(source.Count, comparer);
-            var end = skipCount + takeCount;
-            for (var index = skipCount; index < end; index++)
+            var end = offset + count;
+            for (var index = offset; index < end; index++)
             {
                 if (predicate(source[index]))
                     dictionary.Add(keySelector(source[index]), elementSelector(source[index]));
@@ -75,12 +75,12 @@ namespace NetFabric.Hyperlinq
         }
 
 
-        static Dictionary<TKey, TSource> ToDictionary<TList, TSource, TKey>(this TList source, NullableSelector<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer, PredicateAt<TSource> predicate, int skipCount, int takeCount)
+        static Dictionary<TKey, TSource> ToDictionary<TList, TSource, TKey>(this TList source, NullableSelector<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer, PredicateAt<TSource> predicate, int offset, int count)
             where TList : IReadOnlyList<TSource>
         {
             var dictionary = new Dictionary<TKey, TSource>(source.Count, comparer);
-            var end = skipCount + takeCount;
-            for (var index = skipCount; index < end; index++)
+            var end = offset + count;
+            for (var index = offset; index < end; index++)
             {
                 if (predicate(source[index], index))
                     dictionary.Add(keySelector(source[index]), source[index]);
@@ -89,12 +89,12 @@ namespace NetFabric.Hyperlinq
         }
 
 
-        static Dictionary<TKey, TElement> ToDictionary<TList, TSource, TKey, TElement>(this TList source, NullableSelector<TSource, TKey> keySelector, NullableSelector<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer, PredicateAt<TSource> predicate, int skipCount, int takeCount)
+        static Dictionary<TKey, TElement> ToDictionary<TList, TSource, TKey, TElement>(this TList source, NullableSelector<TSource, TKey> keySelector, NullableSelector<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer, PredicateAt<TSource> predicate, int offset, int count)
             where TList : IReadOnlyList<TSource>
         {
             var dictionary = new Dictionary<TKey, TElement>(source.Count, comparer);
-            var end = skipCount + takeCount;
-            for (var index = skipCount; index < end; index++)
+            var end = offset + count;
+            for (var index = offset; index < end; index++)
             {
                 if (predicate(source[index], index))
                     dictionary.Add(keySelector(source[index]), elementSelector(source[index]));
