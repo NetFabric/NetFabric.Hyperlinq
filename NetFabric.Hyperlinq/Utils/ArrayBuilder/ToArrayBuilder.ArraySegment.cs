@@ -13,12 +13,12 @@ namespace NetFabric.Hyperlinq
 
             var builder = new LargeArrayBuilder<TSource>(pool);
             var array = source.Array;
-            if (source.Offset == 0 && source.Count == array.Length)
+            if (source.IsWhole())
             {
-                for (var index = 0; index < array.Length; index++)
+                foreach (var item in array)
                 {
-                    if (predicate(array[index]))
-                        builder.Add(array[index]);
+                    if (predicate(item))
+                        builder.Add(item);
                 }
             }
             else
@@ -40,17 +40,20 @@ namespace NetFabric.Hyperlinq
 
             var builder = new LargeArrayBuilder<TSource>(pool);
             var array = source.Array;
-            if (source.Offset == 0)
+            if (source.IsWhole())
             {
-                if (source.Count == array.Length)
+                var index = 0;
+                foreach (var item in array)
                 {
-                    for (var index = 0; index < array.Length; index++)
-                    {
-                        if (predicate(array[index], index))
-                            builder.Add(array[index]);
-                    }
+                    if (predicate(item, index))
+                        builder.Add(item);
+
+                    index++;
                 }
-                else
+            }
+            else
+            {
+                if (source.Offset == 0)
                 {
                     for (var index = 0; index < source.Count; index++)
                     {
@@ -58,16 +61,16 @@ namespace NetFabric.Hyperlinq
                             builder.Add(array[index]);
                     }
                 }
-            }
-            else
-            {
-                var offset = source.Offset;
-                var count = source.Count;
-                for (var index = 0; index < count; index++)
+                else
                 {
-                    var item = array[index + offset];
-                    if (predicate(item, index))
-                        builder.Add(item);
+                    var offset = source.Offset;
+                    var count = source.Count;
+                    for (var index = 0; index < count; index++)
+                    {
+                        var item = array[index + offset];
+                        if (predicate(item, index))
+                            builder.Add(item);
+                    }
                 }
             }
             return builder;
@@ -79,12 +82,12 @@ namespace NetFabric.Hyperlinq
 
             var builder = new LargeArrayBuilder<TResult>(pool);
             var array = source.Array;
-            if (source.Offset == 0 && source.Count == array.Length)
+            if (source.IsWhole())
             {
-                for (var sourceIndex = 0; sourceIndex < array.Length; sourceIndex++)
+                foreach (var item in array)
                 {
-                    if (predicate(array[sourceIndex]))
-                        builder.Add(selector(array[sourceIndex]));
+                    if (predicate(item))
+                        builder.Add(selector(item));
                 }
             }
             else

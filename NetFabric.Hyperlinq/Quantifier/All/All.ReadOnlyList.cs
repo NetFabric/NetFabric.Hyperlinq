@@ -17,11 +17,11 @@ namespace NetFabric.Hyperlinq
         }
 
         
-        internal static bool All<TList, TSource>(this TList source, Predicate<TSource> predicate, int skipCount, int takeCount)
+        internal static bool All<TList, TSource>(this TList source, Predicate<TSource> predicate, int offset, int count)
             where TList : IReadOnlyList<TSource>
         {
-            var end = skipCount + takeCount;
-            for (var index = skipCount; index < end; index++)
+            var end = offset + count;
+            for (var index = offset; index < end; index++)
             {
                 if (!predicate(source[index]))
                     return false;
@@ -40,12 +40,12 @@ namespace NetFabric.Hyperlinq
         }
 
         
-        internal static bool All<TList, TSource>(this TList source, PredicateAt<TSource> predicate, int skipCount, int takeCount)
+        internal static bool All<TList, TSource>(this TList source, PredicateAt<TSource> predicate, int offset, int count)
             where TList : IReadOnlyList<TSource>
         {
-            if (skipCount == 0)
+            if (offset == 0)
             {
-                for (var index = 0; index < takeCount; index++)
+                for (var index = 0; index < count; index++)
                 {
                     if (!predicate(source[index], index))
                         return false;
@@ -53,9 +53,9 @@ namespace NetFabric.Hyperlinq
             }
             else
             {
-                for (var index = 0; index < takeCount; index++)
+                for (var index = 0; index < count; index++)
                 {
-                    if (!predicate(source[index + skipCount], index))
+                    if (!predicate(source[index + offset], index))
                         return false;
                 }
             }

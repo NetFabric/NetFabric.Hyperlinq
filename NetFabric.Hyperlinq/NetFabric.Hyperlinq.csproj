@@ -79,4 +79,10 @@
   </ItemGroup>
   
   <Import Project="..\NetFabric.Hyperlinq.Generator\build\NetFabric.Hyperlinq.Generator.props" />
+  
+  <ItemGroup>
+    <UpToDateCheck Remove="Filtering\WhereSelect\WhereSelect.ArraySegment.cs" />
+    <UpToDateCheck Remove="Utils\ArraySegmentExtensions.cs" />
+    <UpToDateCheck Remove="Utils\Copy\Copy.Array.cs" />
+  </ItemGroup>
 </Project>

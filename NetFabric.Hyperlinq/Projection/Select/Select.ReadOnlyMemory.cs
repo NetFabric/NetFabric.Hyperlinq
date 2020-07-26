@@ -17,7 +17,7 @@ namespace NetFabric.Hyperlinq
         {
             if (selector is null) Throw.ArgumentNullException(nameof(selector));
 
-            return new MemorySelectEnumerable<TSource, TResult>(in source, selector);
+            return new MemorySelectEnumerable<TSource, TResult>(source, selector);
         }
 
         [GeneratorMapping("TSource", "TResult")]
@@ -28,7 +28,7 @@ namespace NetFabric.Hyperlinq
             internal readonly ReadOnlyMemory<TSource> source;
             internal readonly NullableSelector<TSource, TResult> selector;
 
-            internal MemorySelectEnumerable(in ReadOnlyMemory<TSource> source, NullableSelector<TSource, TResult> selector)
+            internal MemorySelectEnumerable(ReadOnlyMemory<TSource> source, NullableSelector<TSource, TResult> selector)
             {
                 this.source = source;
                 this.selector = selector;
@@ -64,12 +64,8 @@ namespace NetFabric.Hyperlinq
             bool ICollection<TResult>.IsReadOnly  
                 => true;
 
-            void ICollection<TResult>.CopyTo(TResult[] array, int arrayIndex) 
-            {
-                var span = source.Span;
-                for (var index = 0; index < source.Length; index++)
-                    array[index + arrayIndex] = selector(span[index])!;
-            }
+            void ICollection<TResult>.CopyTo(TResult[] array, int arrayIndex)
+                => ArrayExtensions.Copy(source.Span, array.AsSpan(arrayIndex), selector);
             void ICollection<TResult>.Add(TResult item) 
                 => Throw.NotSupportedException();
             void ICollection<TResult>.Clear() 
@@ -81,9 +77,9 @@ namespace NetFabric.Hyperlinq
             int IList<TResult>.IndexOf(TResult item)
             {
                 var span = source.Span;
-                if (default(TResult) is object)
+                if (Utils.IsValueType<TResult>())
                 {
-                    for (var index = 0; index < source.Length; index++)
+                    for (var index = 0; index < span.Length; index++)
                     {
                         if (EqualityComparer<TResult>.Default.Equals(selector(span[index])!, item))
                             return index;
@@ -92,7 +88,7 @@ namespace NetFabric.Hyperlinq
                 else
                 {
                     var defaultComparer = EqualityComparer<TResult>.Default;
-                    for (var index = 0; index < source.Length; index++)
+                    for (var index = 0; index < span.Length; index++)
                     {
                         if (defaultComparer.Equals(selector(span[index])!, item))
                             return index;

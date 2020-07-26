@@ -6,7 +6,10 @@ namespace NetFabric.Hyperlinq
     public static partial class ArrayExtensions
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Memory<TSource> Skip<TSource>(this TSource[] source, int count)
-            => Skip(source.AsMemory(), count);
+        public static ArraySegment<TSource> Skip<TSource>(this TSource[] source, int count)
+        {
+            var (skipCount, takeCount) = Utils.Skip(source.Length, count);
+            return new ArraySegment<TSource>(source, skipCount, takeCount);
+        }
     }
 }

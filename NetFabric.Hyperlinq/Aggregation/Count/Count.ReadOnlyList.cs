@@ -9,40 +9,40 @@ namespace NetFabric.Hyperlinq
             where TList : IReadOnlyList<TSource>
             => source.Count;
 
-        static unsafe int Count<TList, TSource>(this TList source, Predicate<TSource> predicate, int skipCount, int takeCount)
+        static unsafe int Count<TList, TSource>(this TList source, Predicate<TSource> predicate, int offset, int count)
             where TList : IReadOnlyList<TSource>
         {
-            var count = 0;
-            var end = skipCount + takeCount;
-            for (var index = skipCount; index < end; index++)
+            var counter = 0;
+            var end = offset + count;
+            for (var index = offset; index < end; index++)
             {
                 var result = predicate(source[index]);
-                count += *(int*)&result;
+                counter += *(int*)&result;
             }
-            return count;
+            return counter;
         }
 
-        static unsafe int Count<TList, TSource>(this TList source, PredicateAt<TSource> predicate, int skipCount, int takeCount)
+        static unsafe int Count<TList, TSource>(this TList source, PredicateAt<TSource> predicate, int offset, int count)
             where TList : IReadOnlyList<TSource>
         {
-            var count = 0;
-            if (skipCount == 0)
+            var counter = 0;
+            if (offset == 0)
             {
-                for (var index = 0; index < takeCount; index++)
+                for (var index = 0; index < count; index++)
                 {
                     var result = predicate(source[index], index);
-                    count += *(int*)&result;
+                    counter += *(int*)&result;
                 }
             }
             else
             {
-                for (var index = 0; index < takeCount; index++)
+                for (var index = 0; index < count; index++)
                 {
-                    var result = predicate(source[index + skipCount], index);
-                    count += *(int*)&result;
+                    var result = predicate(source[index + offset], index);
+                    counter += *(int*)&result;
                 }
             }
-            return count;
+            return counter;
         }
     }
 }

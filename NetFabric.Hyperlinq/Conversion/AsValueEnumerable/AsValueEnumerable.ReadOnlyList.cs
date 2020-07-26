@@ -112,8 +112,8 @@ namespace NetFabric.Hyperlinq
                 internal Enumerator(IReadOnlyList<TSource> source)
                 {
                     this.source = source;
-                    end = source.Count - 1;
                     index = -1;
+                    end = index + source.Count;
                 }
 
                 [MaybeNull]

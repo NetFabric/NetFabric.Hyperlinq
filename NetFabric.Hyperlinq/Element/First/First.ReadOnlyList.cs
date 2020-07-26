@@ -13,20 +13,20 @@ namespace NetFabric.Hyperlinq
             => First<TList, TSource>(source, 0, source.Count);
 
 
-        static Option<TSource> First<TList, TSource>(this TList source, int skipCount, int takeCount) 
+        static Option<TSource> First<TList, TSource>(this TList source, int offset, int count) 
             where TList : IReadOnlyList<TSource>
-            => takeCount switch
+            => count switch
             {
                 0 => Option.None,
-                _ => Option.Some(source[skipCount]),
+                _ => Option.Some(source[offset]),
             };
 
 
-        static Option<TSource> First<TList, TSource>(this TList source, Predicate<TSource> predicate, int skipCount, int takeCount)
+        static Option<TSource> First<TList, TSource>(this TList source, Predicate<TSource> predicate, int offset, int count)
             where TList : IReadOnlyList<TSource>
         {
-            var end = skipCount + takeCount;
-            for (var index = skipCount; index < end; index++)
+            var end = offset + count;
+            for (var index = offset; index < end; index++)
             {
                 var item = source[index];
                 if (predicate(item))
@@ -36,12 +36,12 @@ namespace NetFabric.Hyperlinq
         }
 
 
-        static Option<TSource> First<TList, TSource>(this TList source, PredicateAt<TSource> predicate, int skipCount, int takeCount)
+        static Option<TSource> First<TList, TSource>(this TList source, PredicateAt<TSource> predicate, int offset, int count)
             where TList : IReadOnlyList<TSource>
         {
-            if (skipCount == 0)
+            if (offset == 0)
             {
-                for (var index = 0; index < takeCount; index++)
+                for (var index = 0; index < count; index++)
                 {
                     var item = source[index];
                     if (predicate(item, index))
@@ -50,9 +50,9 @@ namespace NetFabric.Hyperlinq
             }
             else
             {
-                for (var index = 0; index < takeCount; index++)
+                for (var index = 0; index < count; index++)
                 {
-                    var item = source[index + skipCount];
+                    var item = source[index + offset];
                     if (predicate(item, index))
                         return Option.Some(item);
                 }
@@ -62,30 +62,30 @@ namespace NetFabric.Hyperlinq
 
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static Option<TResult> First<TList, TSource, TResult>(this TList source, NullableSelector<TSource, TResult> selector, int skipCount, int takeCount)
+        static Option<TResult> First<TList, TSource, TResult>(this TList source, NullableSelector<TSource, TResult> selector, int offset, int count)
             where TList : IReadOnlyList<TSource>
-            => takeCount switch
+            => count switch
             {
                 0 => Option.None,
-                _ => Option.Some(selector(source[skipCount])),
+                _ => Option.Some(selector(source[offset])),
             };
 
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static Option<TResult> First<TList, TSource, TResult>(this TList source, NullableSelectorAt<TSource, TResult> selector, int skipCount, int takeCount)
+        static Option<TResult> First<TList, TSource, TResult>(this TList source, NullableSelectorAt<TSource, TResult> selector, int offset, int count)
             where TList : IReadOnlyList<TSource>
-            => takeCount switch
+            => count switch
             {
                 0 => Option.None,
-                _ => Option.Some(selector(source[skipCount], 0)),
+                _ => Option.Some(selector(source[offset], 0)),
             };
 
 
-        static Option<TResult> First<TList, TSource, TResult>(this TList source, Predicate<TSource> predicate, NullableSelector<TSource, TResult> selector, int skipCount, int takeCount)
+        static Option<TResult> First<TList, TSource, TResult>(this TList source, Predicate<TSource> predicate, NullableSelector<TSource, TResult> selector, int offset, int count)
             where TList : IReadOnlyList<TSource>
         {
-            var end = skipCount + takeCount;
-            for (var index = skipCount; index < end; index++)
+            var end = offset + count;
+            for (var index = offset; index < end; index++)
             {
                 if (predicate(source[index]))
                     return Option.Some(selector(source[index]));

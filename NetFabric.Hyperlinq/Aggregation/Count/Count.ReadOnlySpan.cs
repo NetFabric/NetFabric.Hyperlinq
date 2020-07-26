@@ -9,26 +9,26 @@ namespace NetFabric.Hyperlinq
         public static int Count<TSource>(this ReadOnlySpan<TSource> source)
             => source.Length;
 
-        static int Count<TSource>(this ReadOnlySpan<TSource> source, Predicate<TSource> predicate)
+        static unsafe int Count<TSource>(this ReadOnlySpan<TSource> source, Predicate<TSource> predicate)
         {
-            var count = 0;
+            var counter = 0;
             for (var index = 0; index < source.Length; index++)
             {
                 var result = predicate(source[index]);
-                count += Unsafe.As<bool, byte>(ref result);
+                counter += *(int*)&result;
             }
-            return count;
+            return counter;
         }
 
-        static int Count<TSource>(this ReadOnlySpan<TSource> source, PredicateAt<TSource> predicate)
+        static unsafe int Count<TSource>(this ReadOnlySpan<TSource> source, PredicateAt<TSource> predicate)
         {
-            var count = 0;
+            var counter = 0;
             for (var index = 0; index < source.Length; index++)
             {
                 var result = predicate(source[index], index);
-                count += Unsafe.As<bool, byte>(ref result);
+                counter += *(int*)&result;
             }
-            return count;
+            return counter;
         }
     }
 }

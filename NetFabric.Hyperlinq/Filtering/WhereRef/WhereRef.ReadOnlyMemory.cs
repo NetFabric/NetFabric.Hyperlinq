@@ -21,7 +21,7 @@ namespace NetFabric.Hyperlinq
             internal readonly ReadOnlyMemory<TSource> source;
             internal readonly Predicate<TSource> predicate;
 
-            internal ReadOnlyMemoryWhereRefEnumerable(in ReadOnlyMemory<TSource> source, Predicate<TSource> predicate)
+            internal ReadOnlyMemoryWhereRefEnumerable(ReadOnlyMemory<TSource> source, Predicate<TSource> predicate)
             {
                 this.source = source;
                 this.predicate = predicate;

@@ -15,9 +15,9 @@ namespace NetFabric.Hyperlinq
             this TList source,
             Predicate<TSource> predicate,
             NullableSelector<TSource, TResult> selector, 
-            int skipCount, int takeCount)
+            int offset, int count)
             where TList : IReadOnlyList<TSource>
-            => new WhereSelectEnumerable<TList, TSource, TResult>(in source, predicate, selector, skipCount, takeCount);
+            => new WhereSelectEnumerable<TList, TSource, TResult>(in source, predicate, selector, offset, count);
 
         [GeneratorMapping("TSource", "TResult")]
         public readonly partial struct WhereSelectEnumerable<TList, TSource, TResult>
@@ -27,15 +27,15 @@ namespace NetFabric.Hyperlinq
             readonly TList source;
             readonly Predicate<TSource> predicate;
             readonly NullableSelector<TSource, TResult> selector;
-            readonly int skipCount;
-            readonly int takeCount;
+            readonly int offset;
+            readonly int count;
 
-            internal WhereSelectEnumerable(in TList source, Predicate<TSource> predicate, NullableSelector<TSource, TResult> selector, int skipCount, int takeCount)
+            internal WhereSelectEnumerable(in TList source, Predicate<TSource> predicate, NullableSelector<TSource, TResult> selector, int offset, int count)
             {
                 this.source = source;
                 this.predicate = predicate;
                 this.selector = selector;
-                (this.skipCount, this.takeCount) = Utils.SkipTake(source.Count, skipCount, takeCount);
+                (this.offset, this.count) = Utils.SkipTake(source.Count, offset, count);
             }
 
             
@@ -58,8 +58,8 @@ namespace NetFabric.Hyperlinq
                     source = enumerable.source;
                     predicate = enumerable.predicate;
                     selector = enumerable.selector;
-                    index = enumerable.skipCount - 1;
-                    end = index + enumerable.takeCount;
+                    index = enumerable.offset - 1;
+                    end = index + enumerable.count;
                 }
 
                 [MaybeNull]
@@ -91,8 +91,8 @@ namespace NetFabric.Hyperlinq
                     source = enumerable.source;
                     predicate = enumerable.predicate;
                     selector = enumerable.selector;
-                    index = enumerable.skipCount - 1;
-                    end = index + enumerable.takeCount;
+                    index = enumerable.offset - 1;
+                    end = index + enumerable.count;
                 }
 
                 [MaybeNull]
@@ -121,28 +121,28 @@ namespace NetFabric.Hyperlinq
             }
 
             public int Count()
-                => ReadOnlyListExtensions.Count<TList, TSource>(source, predicate, skipCount, takeCount);
+                => ReadOnlyListExtensions.Count<TList, TSource>(source, predicate, offset, count);
 
             public bool Any()
-                => ReadOnlyListExtensions.Any<TList, TSource>(source, predicate, skipCount, takeCount);
+                => ReadOnlyListExtensions.Any<TList, TSource>(source, predicate, offset, count);
                 
             public Option<TResult> ElementAt(int index)
-                => ReadOnlyListExtensions.ElementAt<TList, TSource, TResult>(source, index, predicate, selector, skipCount, takeCount);
+                => ReadOnlyListExtensions.ElementAt<TList, TSource, TResult>(source, index, predicate, selector, offset, count);
 
             public Option<TResult> First()
-                => ReadOnlyListExtensions.First<TList, TSource, TResult>(source, predicate, selector, skipCount, takeCount);
+                => ReadOnlyListExtensions.First<TList, TSource, TResult>(source, predicate, selector, offset, count);
 
             public Option<TResult> Single()
-                => ReadOnlyListExtensions.Single<TList, TSource, TResult>(source, predicate, selector, skipCount, takeCount);
+                => ReadOnlyListExtensions.Single<TList, TSource, TResult>(source, predicate, selector, offset, count);
 
             public TResult[] ToArray()
-                => ReadOnlyListExtensions.ToArray<TList, TSource, TResult>(source, predicate, selector, skipCount, takeCount);
+                => ReadOnlyListExtensions.ToArray<TList, TSource, TResult>(source, predicate, selector, offset, count);
 
             public IMemoryOwner<TResult> ToArray(MemoryPool<TResult> pool)
-                => ReadOnlyListExtensions.ToArray<TList, TSource, TResult>(source, predicate, selector, skipCount, takeCount, pool);
+                => ReadOnlyListExtensions.ToArray<TList, TSource, TResult>(source, predicate, selector, offset, count, pool);
 
             public List<TResult> ToList()
-                => ReadOnlyListExtensions.ToList<TList, TSource, TResult>(source, predicate, selector, skipCount, takeCount); 
+                => ReadOnlyListExtensions.ToList<TList, TSource, TResult>(source, predicate, selector, offset, count); 
 
             public Dictionary<TKey, TResult> ToDictionary<TKey>(NullableSelector<TResult, TKey> keySelector)
                 => ToDictionary<TKey>(keySelector, null);
@@ -151,8 +151,8 @@ namespace NetFabric.Hyperlinq
                 var dictionary = new Dictionary<TKey, TResult>(0, comparer);
 
                 TResult item;
-                var end = skipCount + takeCount;
-                for (var index = skipCount; index < end; index++)
+                var end = offset + count;
+                for (var index = offset; index < end; index++)
                 {
                     if (predicate(source[index]))
                     {
@@ -171,8 +171,8 @@ namespace NetFabric.Hyperlinq
                 var dictionary = new Dictionary<TKey, TElement>(0, comparer);
 
                 TResult item;
-                var end = skipCount + takeCount;
-                for (var index = skipCount; index < end; index++)
+                var end = offset + count;
+                for (var index = offset; index < end; index++)
                 {
                     if (predicate(source[index]))
                     {

@@ -7,7 +7,7 @@ namespace NetFabric.Hyperlinq
     public static partial class ArrayExtensions
     {
 
-        static LargeArrayBuilder<TSource> ToArrayBuilder<TSource>(in ReadOnlySpan<TSource> source, Predicate<TSource> predicate, ArrayPool<TSource> arrayPool)
+        static LargeArrayBuilder<TSource> ToArrayBuilder<TSource>(ReadOnlySpan<TSource> source, Predicate<TSource> predicate, ArrayPool<TSource> arrayPool)
         {
             Debug.Assert(arrayPool is object);
 
@@ -20,7 +20,7 @@ namespace NetFabric.Hyperlinq
             return builder;
         }
 
-        static LargeArrayBuilder<TSource> ToArrayBuilder<TSource>(in ReadOnlySpan<TSource> source, PredicateAt<TSource> predicate, ArrayPool<TSource> arrayPool)
+        static LargeArrayBuilder<TSource> ToArrayBuilder<TSource>(ReadOnlySpan<TSource> source, PredicateAt<TSource> predicate, ArrayPool<TSource> arrayPool)
         {
             Debug.Assert(arrayPool is object);
 
@@ -33,7 +33,7 @@ namespace NetFabric.Hyperlinq
             return builder;
         }
 
-        static LargeArrayBuilder<TResult> ToArrayBuilder<TSource, TResult>(in ReadOnlySpan<TSource> source, Predicate<TSource> predicate, NullableSelector<TSource, TResult> selector, ArrayPool<TResult> arrayPool)
+        static LargeArrayBuilder<TResult> ToArrayBuilder<TSource, TResult>(ReadOnlySpan<TSource> source, Predicate<TSource> predicate, NullableSelector<TSource, TResult> selector, ArrayPool<TResult> arrayPool)
         {
             Debug.Assert(arrayPool is object);
 

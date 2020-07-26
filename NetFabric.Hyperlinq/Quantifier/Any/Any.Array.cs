@@ -12,11 +12,11 @@ namespace NetFabric.Hyperlinq
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool Any<TSource>(this TSource[] source, Predicate<TSource> predicate)
-            => Any(source.AsMemory(), predicate);
+            => Any(new ArraySegment<TSource>(source), predicate);
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool Any<TSource>(this TSource[] source, PredicateAt<TSource> predicate)
-            => Any(source.AsMemory(), predicate);
+            => Any(new ArraySegment<TSource>(source), predicate);
     }
 }
 

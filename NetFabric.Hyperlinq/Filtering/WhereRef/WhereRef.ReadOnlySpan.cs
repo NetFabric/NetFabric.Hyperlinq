@@ -21,7 +21,7 @@ namespace NetFabric.Hyperlinq
             internal readonly ReadOnlySpan<TSource> source;
             internal readonly Predicate<TSource> predicate;
 
-            internal ReadOnlySpanWhereRefEnumerable(in ReadOnlySpan<TSource> source, Predicate<TSource> predicate)
+            internal ReadOnlySpanWhereRefEnumerable(ReadOnlySpan<TSource> source, Predicate<TSource> predicate)
             {
                 this.source = source;
                 this.predicate = predicate;
