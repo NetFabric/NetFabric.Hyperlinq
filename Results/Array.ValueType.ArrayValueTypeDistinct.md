@@ -6,7 +6,7 @@
 ### References:
 - JM.LinqFaster: [1.1.2](https://www.nuget.org/packages/JM.LinqFaster/1.1.2)
 - StructLinq.BCL: [0.19.1](https://www.nuget.org/packages/StructLinq.BCL/0.19.1)
-- NetFabric.Hyperlinq: [3.0.0-beta19](https://www.nuget.org/packages/NetFabric.Hyperlinq/3.0.0-beta19)
+- NetFabric.Hyperlinq: [3.0.0-beta20](https://www.nuget.org/packages/NetFabric.Hyperlinq/3.0.0-beta20)
 
 ### Results:
 ``` ini
@@ -20,10 +20,10 @@ Intel Core i7-7567U CPU 3.50GHz (Kaby Lake), 1 CPU, 4 logical and 2 physical cor
 Job=.NET Core 5.0  Runtime=.NET Core 5.0  
 
 ```
-|      Method | Duplicates | Count |     Mean |    Error |   StdDev | Ratio |   Gen 0 | Gen 1 | Gen 2 | Allocated | CacheMisses/Op | BranchMispredictions/Op |
-|------------ |----------- |------ |---------:|---------:|---------:|------:|--------:|------:|------:|----------:|---------------:|------------------------:|
-|     ForLoop |          4 |   100 | 38.40 μs | 0.217 μs | 0.193 μs |  1.00 | 72.6929 |     - |     - | 148.45 KB |            161 |                      70 |
-| ForeachLoop |          4 |   100 | 37.24 μs | 0.403 μs | 0.336 μs |  0.97 | 72.6929 |     - |     - | 148.45 KB |            158 |                      64 |
-|        Linq |          4 |   100 | 39.32 μs | 0.540 μs | 0.479 μs |  1.02 | 72.3877 |     - |     - | 147.94 KB |            252 |                      88 |
-|  StructLinq |          4 |   100 | 41.57 μs | 0.248 μs | 0.220 μs |  1.08 | 70.9229 |     - |     - | 144.92 KB |            188 |                      73 |
-|   Hyperlinq |          4 |   100 | 38.11 μs | 0.344 μs | 0.287 μs |  0.99 | 70.9229 |     - |     - | 144.92 KB |            182 |                      64 |
+|      Method | Duplicates | Count |     Mean |    Error |   StdDev | Ratio | RatioSD |   Gen 0 | Gen 1 | Gen 2 | Allocated | CacheMisses/Op | BranchMispredictions/Op |
+|------------ |----------- |------ |---------:|---------:|---------:|------:|--------:|--------:|------:|------:|----------:|---------------:|------------------------:|
+|     ForLoop |          4 |   100 | 36.25 μs | 0.268 μs | 0.251 μs |  1.00 |    0.00 | 72.6929 |     - |     - | 148.45 KB |            135 |                      63 |
+| ForeachLoop |          4 |   100 | 37.82 μs | 0.235 μs | 0.208 μs |  1.04 |    0.01 | 72.6929 |     - |     - | 148.45 KB |            131 |                      57 |
+|        Linq |          4 |   100 | 38.34 μs | 0.499 μs | 0.442 μs |  1.06 |    0.02 | 72.3877 |     - |     - | 147.94 KB |            155 |                      68 |
+|  StructLinq |          4 |   100 | 41.13 μs | 0.262 μs | 0.245 μs |  1.13 |    0.01 | 70.9229 |     - |     - | 144.92 KB |            159 |                      71 |
+|   Hyperlinq |          4 |   100 | 36.57 μs | 0.309 μs | 0.289 μs |  1.01 |    0.01 | 70.9229 |     - |     - | 144.92 KB |            205 |                      70 |

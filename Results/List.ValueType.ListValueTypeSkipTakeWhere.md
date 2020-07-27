@@ -6,7 +6,7 @@
 ### References:
 - JM.LinqFaster: [1.1.2](https://www.nuget.org/packages/JM.LinqFaster/1.1.2)
 - StructLinq.BCL: [0.19.1](https://www.nuget.org/packages/StructLinq.BCL/0.19.1)
-- NetFabric.Hyperlinq: [3.0.0-beta19](https://www.nuget.org/packages/NetFabric.Hyperlinq/3.0.0-beta19)
+- NetFabric.Hyperlinq: [3.0.0-beta20](https://www.nuget.org/packages/NetFabric.Hyperlinq/3.0.0-beta20)
 
 ### Results:
 ``` ini
@@ -22,7 +22,7 @@ Job=.NET Core 5.0  Runtime=.NET Core 5.0
 ```
 |      Method | Skip | Count |       Mean |    Error |   StdDev | Ratio | RatioSD |  Gen 0 | Gen 1 | Gen 2 | Allocated | CacheMisses/Op | BranchMispredictions/Op |
 |------------ |----- |------ |-----------:|---------:|---------:|------:|--------:|-------:|------:|------:|----------:|---------------:|------------------------:|
-|     ForLoop | 1000 |   100 |   499.6 ns |  3.24 ns |  2.87 ns |  1.00 |    0.00 |      - |     - |     - |         - |              0 |                       0 |
-| ForeachLoop | 1000 |   100 | 4,178.3 ns | 34.26 ns | 32.04 ns |  8.36 |    0.07 | 0.0305 |     - |     - |      72 B |              2 |                       2 |
-|        Linq | 1000 |   100 | 1,564.3 ns |  7.37 ns |  6.89 ns |  3.13 |    0.03 | 0.1183 |     - |     - |     248 B |              2 |                       1 |
-|   Hyperlinq | 1000 |   100 |   730.9 ns |  2.23 ns |  2.09 ns |  1.46 |    0.01 |      - |     - |     - |         - |              0 |                       1 |
+|     ForLoop | 1000 |   100 |   484.9 ns |  4.62 ns |  4.32 ns |  1.00 |    0.00 |      - |     - |     - |         - |              0 |                       0 |
+| ForeachLoop | 1000 |   100 | 4,160.0 ns | 33.75 ns | 31.57 ns |  8.58 |    0.12 | 0.0305 |     - |     - |      72 B |              2 |                       2 |
+|        Linq | 1000 |   100 | 1,563.6 ns |  7.20 ns |  6.38 ns |  3.23 |    0.04 | 0.1183 |     - |     - |     248 B |              2 |                       1 |
+|   Hyperlinq | 1000 |   100 |   737.9 ns |  5.13 ns |  4.80 ns |  1.52 |    0.02 |      - |     - |     - |         - |              0 |                       1 |

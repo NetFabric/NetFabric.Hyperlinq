@@ -6,7 +6,7 @@
 ### References:
 - JM.LinqFaster: [1.1.2](https://www.nuget.org/packages/JM.LinqFaster/1.1.2)
 - StructLinq.BCL: [0.19.1](https://www.nuget.org/packages/StructLinq.BCL/0.19.1)
-- NetFabric.Hyperlinq: [3.0.0-beta19](https://www.nuget.org/packages/NetFabric.Hyperlinq/3.0.0-beta19)
+- NetFabric.Hyperlinq: [3.0.0-beta20](https://www.nuget.org/packages/NetFabric.Hyperlinq/3.0.0-beta20)
 
 ### Results:
 ``` ini
@@ -22,10 +22,10 @@ Job=.NET Core 5.0  Runtime=.NET Core 5.0
 ```
 |               Method | Start | Count |      Mean |    Error |   StdDev | Ratio | RatioSD |  Gen 0 | Gen 1 | Gen 2 | Allocated | CacheMisses/Op | BranchMispredictions/Op |
 |--------------------- |------ |------ |----------:|---------:|---------:|------:|--------:|-------:|------:|------:|----------:|---------------:|------------------------:|
-|              ForLoop |     0 |   100 |  86.11 ns | 0.824 ns | 0.688 ns |  1.00 |    0.00 | 0.2027 |     - |     - |     424 B |              0 |                       0 |
-|                 Linq |     0 |   100 | 278.34 ns | 1.393 ns | 1.235 ns |  3.23 |    0.03 | 0.2446 |     - |     - |     512 B |              1 |                       1 |
-|           LinqFaster |     0 |   100 | 284.94 ns | 1.971 ns | 1.747 ns |  3.31 |    0.04 | 0.4053 |     - |     - |     848 B |              1 |                       1 |
-|           StructLinq |     0 |   100 | 543.74 ns | 3.649 ns | 3.234 ns |  6.32 |    0.06 | 0.2174 |     - |     - |     456 B |              2 |                       3 |
-| StructLinq_IFunction |     0 |   100 | 380.56 ns | 2.244 ns | 1.989 ns |  4.42 |    0.04 | 0.2179 |     - |     - |     456 B |              2 |                       0 |
-|            Hyperlinq |     0 |   100 | 262.86 ns | 1.253 ns | 1.111 ns |  3.05 |    0.03 | 0.2027 |     - |     - |     424 B |              1 |                       1 |
-|       Hyperlinq_Pool |     0 |   100 | 278.54 ns | 1.847 ns | 1.727 ns |  3.23 |    0.03 | 0.0267 |     - |     - |      56 B |              1 |                       0 |
+|              ForLoop |     0 |   100 |  88.49 ns | 0.492 ns | 0.411 ns |  1.00 |    0.00 | 0.2027 |     - |     - |     424 B |              0 |                       0 |
+|                 Linq |     0 |   100 | 225.07 ns | 1.704 ns | 1.423 ns |  2.54 |    0.02 | 0.2446 |     - |     - |     512 B |              1 |                       0 |
+|           LinqFaster |     0 |   100 | 281.76 ns | 1.962 ns | 1.739 ns |  3.18 |    0.03 | 0.4053 |     - |     - |     848 B |              1 |                       1 |
+|           StructLinq |     0 |   100 | 551.45 ns | 3.050 ns | 2.704 ns |  6.24 |    0.04 | 0.2174 |     - |     - |     456 B |              2 |                       3 |
+| StructLinq_IFunction |     0 |   100 | 379.72 ns | 2.329 ns | 1.819 ns |  4.29 |    0.03 | 0.2179 |     - |     - |     456 B |              1 |                       0 |
+|            Hyperlinq |     0 |   100 | 235.17 ns | 1.941 ns | 1.721 ns |  2.66 |    0.02 | 0.2027 |     - |     - |     424 B |              1 |                       0 |
+|       Hyperlinq_Pool |     0 |   100 | 305.79 ns | 1.527 ns | 1.429 ns |  3.45 |    0.02 | 0.0267 |     - |     - |      56 B |              0 |                       0 |

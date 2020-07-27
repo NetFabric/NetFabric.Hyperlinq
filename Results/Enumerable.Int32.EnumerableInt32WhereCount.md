@@ -6,7 +6,7 @@
 ### References:
 - JM.LinqFaster: [1.1.2](https://www.nuget.org/packages/JM.LinqFaster/1.1.2)
 - StructLinq.BCL: [0.19.1](https://www.nuget.org/packages/StructLinq.BCL/0.19.1)
-- NetFabric.Hyperlinq: [3.0.0-beta19](https://www.nuget.org/packages/NetFabric.Hyperlinq/3.0.0-beta19)
+- NetFabric.Hyperlinq: [3.0.0-beta20](https://www.nuget.org/packages/NetFabric.Hyperlinq/3.0.0-beta20)
 
 ### Results:
 ``` ini
@@ -22,8 +22,8 @@ Job=.NET Core 5.0  Runtime=.NET Core 5.0
 ```
 |               Method | Count |     Mean |   Error |  StdDev | Ratio |  Gen 0 | Gen 1 | Gen 2 | Allocated | CacheMisses/Op | BranchMispredictions/Op |
 |--------------------- |------ |---------:|--------:|--------:|------:|-------:|------:|------:|----------:|---------------:|------------------------:|
-|          ForeachLoop |   100 | 483.9 ns | 3.06 ns | 2.86 ns |  1.00 | 0.0191 |     - |     - |      40 B |              0 |                       1 |
-|                 Linq |   100 | 639.5 ns | 2.98 ns | 2.78 ns |  1.32 | 0.0191 |     - |     - |      40 B |              0 |                       1 |
-|           StructLinq |   100 | 731.1 ns | 4.55 ns | 4.03 ns |  1.51 | 0.0343 |     - |     - |      72 B |              1 |                       1 |
-| StructLinq_IFunction |   100 | 512.2 ns | 2.57 ns | 2.41 ns |  1.06 | 0.0343 |     - |     - |      72 B |              1 |                       1 |
-|            Hyperlinq |   100 | 610.2 ns | 3.14 ns | 2.94 ns |  1.26 | 0.0191 |     - |     - |      40 B |              0 |                       1 |
+|          ForeachLoop |   100 | 510.8 ns | 3.81 ns | 3.56 ns |  1.00 | 0.0191 |     - |     - |      40 B |              0 |                       1 |
+|                 Linq |   100 | 638.9 ns | 4.69 ns | 4.38 ns |  1.25 | 0.0191 |     - |     - |      40 B |              0 |                       1 |
+|           StructLinq |   100 | 796.5 ns | 3.89 ns | 3.25 ns |  1.56 | 0.0343 |     - |     - |      72 B |              1 |                       1 |
+| StructLinq_IFunction |   100 | 506.7 ns | 4.15 ns | 3.67 ns |  0.99 | 0.0343 |     - |     - |      72 B |              1 |                       1 |
+|            Hyperlinq |   100 | 643.6 ns | 2.83 ns | 2.51 ns |  1.26 | 0.0191 |     - |     - |      40 B |              0 |                       1 |
