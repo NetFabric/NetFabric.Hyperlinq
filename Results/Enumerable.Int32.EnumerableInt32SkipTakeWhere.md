@@ -6,7 +6,7 @@
 ### References:
 - JM.LinqFaster: [1.1.2](https://www.nuget.org/packages/JM.LinqFaster/1.1.2)
 - StructLinq.BCL: [0.19.1](https://www.nuget.org/packages/StructLinq.BCL/0.19.1)
-- NetFabric.Hyperlinq: [3.0.0-beta19](https://www.nuget.org/packages/NetFabric.Hyperlinq/3.0.0-beta19)
+- NetFabric.Hyperlinq: [3.0.0-beta20](https://www.nuget.org/packages/NetFabric.Hyperlinq/3.0.0-beta20)
 
 ### Results:
 ``` ini
@@ -20,8 +20,8 @@ Intel Core i7-7567U CPU 3.50GHz (Kaby Lake), 1 CPU, 4 logical and 2 physical cor
 Job=.NET Core 5.0  Runtime=.NET Core 5.0  
 
 ```
-|      Method | Skip | Count |     Mean |     Error |    StdDev | Ratio |  Gen 0 | Gen 1 | Gen 2 | Allocated | CacheMisses/Op | BranchMispredictions/Op |
-|------------ |----- |------ |---------:|----------:|----------:|------:|-------:|------:|------:|----------:|---------------:|------------------------:|
-| ForeachLoop | 1000 |   100 | 2.635 μs | 0.0133 μs | 0.0118 μs |  1.00 | 0.0191 |     - |     - |      40 B |              1 |                       2 |
-|        Linq | 1000 |   100 | 3.808 μs | 0.0198 μs | 0.0185 μs |  1.44 | 0.0992 |     - |     - |     208 B |              3 |                       3 |
-|   Hyperlinq | 1000 |   100 | 3.777 μs | 0.0244 μs | 0.0217 μs |  1.43 | 0.0992 |     - |     - |     208 B |              3 |                       3 |
+|      Method | Skip | Count |     Mean |     Error |    StdDev | Ratio | RatioSD |  Gen 0 | Gen 1 | Gen 2 | Allocated | CacheMisses/Op | BranchMispredictions/Op |
+|------------ |----- |------ |---------:|----------:|----------:|------:|--------:|-------:|------:|------:|----------:|---------------:|------------------------:|
+| ForeachLoop | 1000 |   100 | 3.152 μs | 0.0217 μs | 0.0203 μs |  1.00 |    0.00 | 0.0191 |     - |     - |      40 B |              1 |                       2 |
+|        Linq | 1000 |   100 | 4.561 μs | 0.0252 μs | 0.0236 μs |  1.45 |    0.01 | 0.0992 |     - |     - |     208 B |              3 |                       3 |
+|   Hyperlinq | 1000 |   100 | 4.628 μs | 0.0453 μs | 0.0424 μs |  1.47 |    0.02 | 0.0992 |     - |     - |     208 B |              3 |                       4 |

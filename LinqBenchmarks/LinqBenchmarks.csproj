@@ -10,7 +10,7 @@
     <PackageReference Include="BenchmarkDotNet" Version="0.12.1" />
     <PackageReference Include="BenchmarkDotNet.Diagnostics.Windows" Version="0.12.1" />
     <PackageReference Include="JM.LinqFaster" Version="1.1.2" />
-    <PackageReference Include="NetFabric.Hyperlinq" Version="3.0.0-beta19" />
+    <PackageReference Include="NetFabric.Hyperlinq" Version="3.0.0-beta20" />
     <PackageReference Include="NetFabric.Hyperlinq.Analyzer" Version="2.0.1">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

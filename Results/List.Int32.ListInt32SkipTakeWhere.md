@@ -6,7 +6,7 @@
 ### References:
 - JM.LinqFaster: [1.1.2](https://www.nuget.org/packages/JM.LinqFaster/1.1.2)
 - StructLinq.BCL: [0.19.1](https://www.nuget.org/packages/StructLinq.BCL/0.19.1)
-- NetFabric.Hyperlinq: [3.0.0-beta19](https://www.nuget.org/packages/NetFabric.Hyperlinq/3.0.0-beta19)
+- NetFabric.Hyperlinq: [3.0.0-beta20](https://www.nuget.org/packages/NetFabric.Hyperlinq/3.0.0-beta20)
 
 ### Results:
 ``` ini
@@ -20,9 +20,9 @@ Intel Core i7-7567U CPU 3.50GHz (Kaby Lake), 1 CPU, 4 logical and 2 physical cor
 Job=.NET Core 5.0  Runtime=.NET Core 5.0  
 
 ```
-|      Method | Skip | Count |        Mean |     Error |    StdDev | Ratio | RatioSD |  Gen 0 | Gen 1 | Gen 2 | Allocated | CacheMisses/Op | BranchMispredictions/Op |
-|------------ |----- |------ |------------:|----------:|----------:|------:|--------:|-------:|------:|------:|----------:|---------------:|------------------------:|
-|     ForLoop | 1000 |   100 |    85.62 ns |  0.748 ns |  0.663 ns |  1.00 |    0.00 |      - |     - |     - |         - |              0 |                       0 |
-| ForeachLoop | 1000 |   100 | 3,550.34 ns |  9.534 ns |  8.452 ns | 41.47 |    0.37 | 0.0191 |     - |     - |      40 B |              1 |                       2 |
-|        Linq | 1000 |   100 | 1,229.25 ns | 20.549 ns | 21.102 ns | 14.38 |    0.32 | 0.0725 |     - |     - |     152 B |              2 |                       1 |
-|   Hyperlinq | 1000 |   100 |   360.43 ns |  2.597 ns |  2.168 ns |  4.21 |    0.05 |      - |     - |     - |         - |              0 |                       0 |
+|      Method | Skip | Count |       Mean |    Error |   StdDev | Ratio | RatioSD |  Gen 0 | Gen 1 | Gen 2 | Allocated | CacheMisses/Op | BranchMispredictions/Op |
+|------------ |----- |------ |-----------:|---------:|---------:|------:|--------:|-------:|------:|------:|----------:|---------------:|------------------------:|
+|     ForLoop | 1000 |   100 |   122.0 ns |  0.48 ns |  0.44 ns |  1.00 |    0.00 |      - |     - |     - |         - |              0 |                       0 |
+| ForeachLoop | 1000 |   100 | 3,551.5 ns | 34.41 ns | 32.18 ns | 29.11 |    0.30 | 0.0191 |     - |     - |      40 B |              1 |                       1 |
+|        Linq | 1000 |   100 | 1,250.7 ns |  3.90 ns |  3.05 ns | 10.26 |    0.05 | 0.0725 |     - |     - |     152 B |              1 |                       1 |
+|   Hyperlinq | 1000 |   100 |   343.9 ns |  1.54 ns |  1.37 ns |  2.82 |    0.02 |      - |     - |     - |         - |              0 |                       0 |
