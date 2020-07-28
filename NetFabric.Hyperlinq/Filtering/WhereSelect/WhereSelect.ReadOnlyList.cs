@@ -151,8 +151,8 @@ namespace NetFabric.Hyperlinq
                 var dictionary = new Dictionary<TKey, TResult>(0, comparer);
 
                 TResult item;
-                var end = offset + count;
-                for (var index = offset; index < end; index++)
+                var end = offset + count - 1;
+                for (var index = offset; index <= end; index++)
                 {
                     if (predicate(source[index]))
                     {
@@ -171,8 +171,8 @@ namespace NetFabric.Hyperlinq
                 var dictionary = new Dictionary<TKey, TElement>(0, comparer);
 
                 TResult item;
-                var end = offset + count;
-                for (var index = offset; index < end; index++)
+                var end = offset + count - 1;
+                for (var index = offset; index <= end; index++)
                 {
                     if (predicate(source[index]))
                     {

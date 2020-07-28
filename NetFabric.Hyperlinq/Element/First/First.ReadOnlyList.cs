@@ -25,8 +25,8 @@ namespace NetFabric.Hyperlinq
         static Option<TSource> First<TList, TSource>(this TList source, Predicate<TSource> predicate, int offset, int count)
             where TList : IReadOnlyList<TSource>
         {
-            var end = offset + count;
-            for (var index = offset; index < end; index++)
+            var end = offset + count - 1;
+            for (var index = offset; index <= end; index++)
             {
                 var item = source[index];
                 if (predicate(item))
@@ -39,9 +39,10 @@ namespace NetFabric.Hyperlinq
         static Option<TSource> First<TList, TSource>(this TList source, PredicateAt<TSource> predicate, int offset, int count)
             where TList : IReadOnlyList<TSource>
         {
+            var end = count - 1;
             if (offset == 0)
             {
-                for (var index = 0; index < count; index++)
+                for (var index = 0; index <= end; index++)
                 {
                     var item = source[index];
                     if (predicate(item, index))
@@ -50,7 +51,7 @@ namespace NetFabric.Hyperlinq
             }
             else
             {
-                for (var index = 0; index < count; index++)
+                for (var index = 0; index <= end; index++)
                 {
                     var item = source[index + offset];
                     if (predicate(item, index))
@@ -84,8 +85,8 @@ namespace NetFabric.Hyperlinq
         static Option<TResult> First<TList, TSource, TResult>(this TList source, Predicate<TSource> predicate, NullableSelector<TSource, TResult> selector, int offset, int count)
             where TList : IReadOnlyList<TSource>
         {
-            var end = offset + count;
-            for (var index = offset; index < end; index++)
+            var end = offset + count - 1;
+            for (var index = offset; index <= end; index++)
             {
                 if (predicate(source[index]))
                     return Option.Some(selector(source[index]));

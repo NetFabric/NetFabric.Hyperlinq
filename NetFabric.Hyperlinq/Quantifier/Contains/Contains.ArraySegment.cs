@@ -20,8 +20,8 @@ namespace NetFabric.Hyperlinq
             }
             else
             {
-                var end = source.Count + source.Offset;
-                for (var index = source.Offset; index < end; index++)
+                var end = source.Count + source.Offset - 1;
+                for (var index = source.Offset; index <= end; index++)
                 {
                     if (EqualityComparer<TSource>.Default.Equals(array[index], value!))
                         return true;
@@ -54,8 +54,8 @@ namespace NetFabric.Hyperlinq
                 }
                 else
                 {
-                    var end = source.Count + source.Offset;
-                    for (var index = source.Offset; index < end; index++)
+                    var end = source.Count + source.Offset - 1;
+                    for (var index = source.Offset; index <= end; index++)
                     {
                         if (EqualityComparer<TSource>.Default.Equals(array[index], value!))
                             return true;
@@ -77,8 +77,8 @@ namespace NetFabric.Hyperlinq
                 }
                 else
                 {
-                    var end = source.Count + source.Offset;
-                    for (var index = source.Offset; index < end; index++)
+                    var end = source.Count + source.Offset - 1;
+                    for (var index = source.Offset; index <= end; index++)
                     {
                         if (comparer.Equals(array[index], value!))
                             return true;
@@ -112,8 +112,8 @@ namespace NetFabric.Hyperlinq
                 }
                 else
                 {
-                    var end = source.Count + source.Offset;
-                    for (var index = source.Offset; index < end; index++)
+                    var end = source.Count + source.Offset - 1;
+                    for (var index = source.Offset; index <= end; index++)
                     {
                         if (EqualityComparer<TResult>.Default.Equals(selector(array[index])!, value!))
                             return true;
@@ -137,8 +137,8 @@ namespace NetFabric.Hyperlinq
                 }
                 else
                 {
-                    var end = source.Count + source.Offset;
-                    for (var index = source.Offset; index < end; index++)
+                    var end = source.Count + source.Offset - 1;
+                    for (var index = source.Offset; index <= end; index++)
                     {
                         if (defaultComparer.Equals(selector(array[index])!, value!))
                             return true;
@@ -175,10 +175,10 @@ namespace NetFabric.Hyperlinq
                 }
                 else
                 {
+                    var end = source.Count - 1;
                     if (source.Offset == 0)
                     {
-                        var end = source.Count;
-                        for (var index = 0; index < end; index++)
+                        for (var index = 0; index <= end; index++)
                         {
                             if (EqualityComparer<TResult>.Default.Equals(selector(array[index], index)!, value!))
                                 return true;
@@ -187,8 +187,7 @@ namespace NetFabric.Hyperlinq
                     else
                     {
                         var offset = source.Offset;
-                        var end = source.Count;
-                        for (var index = 0; index < end; index++)
+                        for (var index = 0; index <= end; index++)
                         {
                             if (EqualityComparer<TResult>.Default.Equals(selector(array[index + offset], index)!, value!))
                                 return true;
@@ -216,10 +215,10 @@ namespace NetFabric.Hyperlinq
                 }
                 else
                 {
+                    var end = source.Count - 1;
                     if (source.Offset == 0)
                     {
-                        var end = source.Count;
-                        for (var index = 0; index < end; index++)
+                        for (var index = 0; index <= end; index++)
                         {
                             if (defaultComparer.Equals(selector(array[index], index)!, value!))
                                 return true;
@@ -228,8 +227,7 @@ namespace NetFabric.Hyperlinq
                     else
                     {
                         var offset = source.Offset;
-                        var end = source.Count;
-                        for (var index = 0; index < end; index++)
+                        for (var index = 0; index <= end; index++)
                         {
                             if (defaultComparer.Equals(selector(array[index + offset], index)!, value!))
                                 return true;

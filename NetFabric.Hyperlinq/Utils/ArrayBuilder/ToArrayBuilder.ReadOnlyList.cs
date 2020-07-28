@@ -14,8 +14,8 @@ namespace NetFabric.Hyperlinq
             Debug.Assert(pool is object);
 
             var builder = new LargeArrayBuilder<TSource>(pool);
-            var end = offset + count;
-            for (var index = offset; index < end; index++)
+            var end = offset + count - 1;
+            for (var index = offset; index <= end; index++)
             {
                 if (predicate(source[index]))
                     builder.Add(source[index]);
@@ -29,9 +29,10 @@ namespace NetFabric.Hyperlinq
             Debug.Assert(pool is object);
 
             var builder = new LargeArrayBuilder<TSource>(pool);
+            var end = count - 1;
             if (offset == 0)
             {
-                for (var index = 0; index < count; index++)
+                for (var index = 0; index <= end; index++)
                 {
                     if (predicate(source[index], index))
                         builder.Add(source[index]);
@@ -39,7 +40,7 @@ namespace NetFabric.Hyperlinq
             }
             else
             {
-                for (var index = 0; index < count; index++)
+                for (var index = 0; index <= end; index++)
                 {
                     if (predicate(source[index + offset], index))
                         builder.Add(source[index + offset]);
@@ -54,8 +55,8 @@ namespace NetFabric.Hyperlinq
             Debug.Assert(pool is object);
 
             var builder = new LargeArrayBuilder<TResult>(pool);
-            var end = offset + count;
-            for (var index = offset; index < end; index++)
+            var end = offset + count - 1;
+            for (var index = offset; index <= end; index++)
             {
                 if (predicate(source[index]))
                     builder.Add(selector(source[index]));

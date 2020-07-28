@@ -29,8 +29,8 @@ namespace NetFabric.Hyperlinq
             where TList : IReadOnlyList<TSource>
         {
             var dictionary = new Dictionary<TKey, TSource>(source.Count, comparer);
-            var end = offset + count;
-            for (var index = offset; index < end; index++)
+            var end = offset + count - 1;
+            for (var index = offset; index <= end; index++)
                 dictionary.Add(keySelector(source[index]), source[index]);
             return dictionary;
         }
@@ -40,8 +40,8 @@ namespace NetFabric.Hyperlinq
             where TList : IReadOnlyList<TSource>
         {
             var dictionary = new Dictionary<TKey, TElement>(source.Count, comparer);
-            var end = offset + count;
-            for (var index = offset; index < end; index++)
+            var end = offset + count - 1;
+            for (var index = offset; index <= end; index++)
                 dictionary.Add(keySelector(source[index]), elementSelector(source[index]));
             return dictionary;
         }
@@ -51,8 +51,8 @@ namespace NetFabric.Hyperlinq
             where TList : IReadOnlyList<TSource>
         {
             var dictionary = new Dictionary<TKey, TSource>(source.Count, comparer);
-            var end = offset + count;
-            for (var index = offset; index < end; index++)
+            var end = offset + count - 1;
+            for (var index = offset; index <= end; index++)
             {
                 if (predicate(source[index]))
                     dictionary.Add(keySelector(source[index]), source[index]);
@@ -65,8 +65,8 @@ namespace NetFabric.Hyperlinq
             where TList : IReadOnlyList<TSource>
         {
             var dictionary = new Dictionary<TKey, TElement>(source.Count, comparer);
-            var end = offset + count;
-            for (var index = offset; index < end; index++)
+            var end = offset + count - 1;
+            for (var index = offset; index <= end; index++)
             {
                 if (predicate(source[index]))
                     dictionary.Add(keySelector(source[index]), elementSelector(source[index]));
@@ -79,8 +79,8 @@ namespace NetFabric.Hyperlinq
             where TList : IReadOnlyList<TSource>
         {
             var dictionary = new Dictionary<TKey, TSource>(source.Count, comparer);
-            var end = offset + count;
-            for (var index = offset; index < end; index++)
+            var end = offset + count - 1;
+            for (var index = offset; index <= end; index++)
             {
                 if (predicate(source[index], index))
                     dictionary.Add(keySelector(source[index]), source[index]);
@@ -93,8 +93,8 @@ namespace NetFabric.Hyperlinq
             where TList : IReadOnlyList<TSource>
         {
             var dictionary = new Dictionary<TKey, TElement>(source.Count, comparer);
-            var end = offset + count;
-            for (var index = offset; index < end; index++)
+            var end = offset + count - 1;
+            for (var index = offset; index <= end; index++)
             {
                 if (predicate(source[index], index))
                     dictionary.Add(keySelector(source[index]), elementSelector(source[index]));

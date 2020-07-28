@@ -14,7 +14,8 @@ namespace NetFabric.Hyperlinq
             if (source is ICollection<TSource> collection)
                 return collection.Contains(value);
 
-            for (var index = 0; index < source.Count; index++)
+            var end = source.Count - 1;
+            for (var index = 0; index <= end; index++)
             {
                 if (EqualityComparer<TSource>.Default.Equals(source[index], value!))
                     return true;
@@ -48,8 +49,8 @@ namespace NetFabric.Hyperlinq
 
             static bool DefaultContains(TList source, [AllowNull] TSource value, int offset, int count)
             {
-                var end = offset + count;
-                for (var index = offset; index < end; index++)
+                var end = offset + count - 1;
+                for (var index = offset; index <= end; index++)
                 {
                     if (EqualityComparer<TSource>.Default.Equals(source[index], value!))
                         return true;
@@ -59,8 +60,8 @@ namespace NetFabric.Hyperlinq
 
             static bool ComparerContains(TList source, [AllowNull] TSource value, IEqualityComparer<TSource> comparer, int offset, int count)
             {
-                var end = offset + count;
-                for (var index = offset; index < end; index++)
+                var end = offset + count - 1;
+                for (var index = offset; index <= end; index++)
                 {
                     if (comparer.Equals(source[index], value!))
                         return true;
@@ -81,8 +82,8 @@ namespace NetFabric.Hyperlinq
 
             static bool ValueContains(TList source, [AllowNull] TResult value, NullableSelector<TSource, TResult> selector, int offset, int count)
             {
-                var end = offset + count;
-                for (var index = offset; index < end; index++)
+                var end = offset + count - 1;
+                for (var index = offset; index <= end; index++)
                 {
                     if (EqualityComparer<TResult>.Default.Equals(selector(source[index])!, value!))
                         return true;
@@ -94,8 +95,8 @@ namespace NetFabric.Hyperlinq
             {
                 var defaultComparer = EqualityComparer<TResult>.Default;
 
-                var end = offset + count;
-                for (var index = offset; index < end; index++)
+                var end = offset + count - 1;
+                for (var index = offset; index <= end; index++)
                 {
                     if (defaultComparer.Equals(selector(source[index])!, value!))
                         return true;
@@ -117,9 +118,10 @@ namespace NetFabric.Hyperlinq
 
             static bool ValueContains(TList source, [AllowNull] TResult value, NullableSelectorAt<TSource, TResult> selector, int offset, int count)
             {
+                var end = count - 1;
                 if (offset == 0)
                 {
-                    for (var index = 0; index < count; index++)
+                    for (var index = 0; index <= end; index++)
                     {
                         if (EqualityComparer<TResult>.Default.Equals(selector(source[index], index)!, value!))
                             return true;
@@ -127,7 +129,7 @@ namespace NetFabric.Hyperlinq
                 }
                 else
                 {
-                    for (var index = 0; index < count; index++)
+                    for (var index = 0; index <= end; index++)
                     {
                         if (EqualityComparer<TResult>.Default.Equals(selector(source[index + offset], index)!, value!))
                             return true;
@@ -140,9 +142,10 @@ namespace NetFabric.Hyperlinq
             {
                 var defaultComparer = EqualityComparer<TResult>.Default;
 
+                var end = count - 1;
                 if (offset == 0)
                 {
-                    for (var index = 0; index < count; index++)
+                    for (var index = 0; index <= end; index++)
                     {
                         if (defaultComparer.Equals(selector(source[index], index)!, value!))
                             return true;
@@ -150,7 +153,7 @@ namespace NetFabric.Hyperlinq
                 }
                 else
                 {
-                    for (var index = 0; index < count; index++)
+                    for (var index = 0; index <= end; index++)
                     {
                         if (defaultComparer.Equals(selector(source[index + offset], index)!, value!))
                             return true;

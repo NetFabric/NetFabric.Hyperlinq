@@ -106,12 +106,12 @@ namespace NetFabric.Hyperlinq
                 }
                 else
                 {
-                    var end = source.Count;
+                    var end = source.Count - 1;
                     if (source.Offset == 0)
                     {
                         if (Utils.IsValueType<TResult>())
                         {
-                            for (var index = 0; index < end; index++)
+                            for (var index = 0; index <= end; index++)
                             {
                                 if (EqualityComparer<TResult>.Default.Equals(selector(array[index], index)!, item))
                                     return index;
@@ -120,7 +120,7 @@ namespace NetFabric.Hyperlinq
                         else
                         {
                             var defaultComparer = EqualityComparer<TResult>.Default;
-                            for (var index = 0; index < end; index++)
+                            for (var index = 0; index <= end; index++)
                             {
                                 if (defaultComparer.Equals(selector(array[index], index)!, item))
                                     return index;
@@ -132,7 +132,7 @@ namespace NetFabric.Hyperlinq
                         var offset = source.Offset;
                         if (Utils.IsValueType<TResult>())
                         {
-                            for (var index = 0; index < end; index++)
+                            for (var index = 0; index <= end; index++)
                             {
                                 if (EqualityComparer<TResult>.Default.Equals(selector(array[index + offset], index)!, item))
                                     return index;
@@ -141,7 +141,7 @@ namespace NetFabric.Hyperlinq
                         else
                         {
                             var defaultComparer = EqualityComparer<TResult>.Default;
-                            for (var index = 0; index < end; index++)
+                            for (var index = 0; index <= end; index++)
                             {
                                 if (defaultComparer.Equals(selector(array[index + offset], index)!, item))
                                     return index;

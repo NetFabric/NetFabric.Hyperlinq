@@ -15,7 +15,7 @@ namespace NetFabric.Hyperlinq
             var array = source.Array;
             if (source.IsWhole())
             {
-                foreach (var item in source)
+                foreach (var item in array)
                 {
                     var result = predicate(item);
                     counter += *(int*)&result;
@@ -23,8 +23,8 @@ namespace NetFabric.Hyperlinq
             }
             else
             {
-                var end = source.Offset + source.Count;
-                for (var index = source.Offset; index < end; index++)
+                var end = source.Offset + source.Count - 1;
+                for (var index = source.Offset; index <= end; index++)
                 {
                     var result = predicate(array[index]);
                     counter += *(int*)&result;
@@ -40,7 +40,7 @@ namespace NetFabric.Hyperlinq
             if (source.IsWhole())
             {
                 var index = 0;
-                foreach (var item in source)
+                foreach (var item in array)
                 {
                     var result = predicate(item, index);
                     counter += *(int*)&result;
@@ -49,10 +49,10 @@ namespace NetFabric.Hyperlinq
             }
             else
             {
+                var end = source.Count - 1;
                 if (source.Offset == 0)
                 {
-                    var end = source.Count;
-                    for (var index = 0; index < end; index++)
+                    for (var index = 0; index <= end; index++)
                     {
                         var result = predicate(array[index], index);
                         counter += *(int*)&result;
@@ -60,9 +60,8 @@ namespace NetFabric.Hyperlinq
                 }
                 else
                 {
-                    var end = source.Count;
                     var offset = source.Offset;
-                    for (var index = 0; index < end; index++)
+                    for (var index = 0; index <= end; index++)
                     {
                         var result = predicate(array[index + offset], index);
                         counter += *(int*)&result;

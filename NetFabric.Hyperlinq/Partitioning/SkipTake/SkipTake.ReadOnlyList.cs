@@ -75,10 +75,10 @@ namespace NetFabric.Hyperlinq
                 if (offset == 0 && Count == source.Count && source is ICollection<TSource> collection)
                     return collection.Contains(item);
 
-                var end = offset + Count;
+                var end = offset + Count - 1;
                 if (Utils.IsValueType<TSource>())
                 {
-                    for (var index = offset; index < end; index++)
+                    for (var index = offset; index <= end; index++)
                     {
                         if (EqualityComparer<TSource>.Default.Equals(source[index], item))
                             return true;
@@ -87,7 +87,7 @@ namespace NetFabric.Hyperlinq
                 else
                 {
                     var defaultComparer = EqualityComparer<TSource>.Default;
-                    for (var index = offset; index < end; index++)
+                    for (var index = offset; index <= end; index++)
                     {
                         if (defaultComparer.Equals(source[index], item))
                             return true;
@@ -101,10 +101,10 @@ namespace NetFabric.Hyperlinq
                 if (offset == 0 && Count == source.Count && source is IList<TSource> list)
                     return list.IndexOf(item);
 
-                var end = offset + Count;
+                var end = offset + Count - 1;
                 if (Utils.IsValueType<TSource>())
                 {
-                    for (var index = offset; index < end; index++)
+                    for (var index = offset; index <= end; index++)
                     {
                         if (EqualityComparer<TSource>.Default.Equals(source[index], item))
                             return index - offset;
@@ -113,7 +113,7 @@ namespace NetFabric.Hyperlinq
                 else
                 {
                     var defaultComparer = EqualityComparer<TSource>.Default;
-                    for (var index = offset; index < end; index++)
+                    for (var index = offset; index <= end; index++)
                     {
                         if (defaultComparer.Equals(source[index], item))
                             return index - offset;

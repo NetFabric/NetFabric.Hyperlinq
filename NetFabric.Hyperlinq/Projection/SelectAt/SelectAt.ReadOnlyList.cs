@@ -80,14 +80,15 @@ namespace NetFabric.Hyperlinq
 
             public void CopyTo(TResult[] array) 
             {
+                var end = Count - 1;
                 if (offset == 0)
                 {
-                    for (var index = 0; index < Count; index++)
+                    for (var index = 0; index <= end; index++)
                         array[index] = selector(source[index], index)!;
                 }
                 else
                 {
-                    for (var index = 0; index < Count; index++)
+                    for (var index = 0; index <= end; index++)
                         array[index] = selector(source[index + offset], index)!;
                 }
             }
@@ -100,14 +101,15 @@ namespace NetFabric.Hyperlinq
                 }
                 else
                 {
+                    var end = Count - 1;
                     if (offset == 0)
                     {
-                        for (var index = 0; index < Count; index++)
+                        for (var index = 0; index <= end; index++)
                             array[index + arrayIndex] = selector(source[index], index)!;
                     }
                     else
                     {
-                        for (var index = 0; index < Count; index++)
+                        for (var index = 0; index <= end; index++)
                             array[index + arrayIndex] = selector(source[index + offset], index)!;
                     }
                 }
@@ -118,12 +120,12 @@ namespace NetFabric.Hyperlinq
 
             public int IndexOf(TResult item)
             {
-                var end = offset + Count;
+                var end = Count - 1;
                 if (Utils.IsValueType<TResult>())
                 {
                     if (offset == 0)
                     {
-                        for (var index = 0; index < Count; index++)
+                        for (var index = 0; index <= end; index++)
                         {
                             if (EqualityComparer<TResult>.Default.Equals(selector(source[index], index)!, item))
                                 return index;
@@ -131,7 +133,7 @@ namespace NetFabric.Hyperlinq
                     }
                     else
                     {
-                        for (var index = 0; index < Count; index++)
+                        for (var index = 0; index <= end; index++)
                         {
                             if (EqualityComparer<TResult>.Default.Equals(selector(source[index + offset], index)!, item))
                                 return index;
@@ -144,7 +146,7 @@ namespace NetFabric.Hyperlinq
 
                     if (offset == 0)
                     {
-                        for (var index = 0; index < Count; index++)
+                        for (var index = 0; index <= end; index++)
                         {
                             if (defaultComparer.Equals(selector(source[index], index)!, item))
                                 return index;
@@ -152,7 +154,7 @@ namespace NetFabric.Hyperlinq
                     }
                     else
                     {
-                        for (var index = 0; index < Count; index++)
+                        for (var index = 0; index <= end; index++)
                         {
                             if (defaultComparer.Equals(selector(source[index + offset], index)!, item))
                                 return index;

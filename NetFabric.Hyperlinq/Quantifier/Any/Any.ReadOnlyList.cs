@@ -31,8 +31,8 @@ namespace NetFabric.Hyperlinq
         static bool Any<TList, TSource>(this TList source, Predicate<TSource> predicate, int offset, int count)
             where TList : IReadOnlyList<TSource>
         {
-            var end = offset + count;
-            for (var index = offset; index < end; index++)
+            var end = offset + count - 1;
+            for (var index = offset; index <= end; index++)
             {
                 if (predicate(source[index]))
                     return true;
@@ -53,9 +53,10 @@ namespace NetFabric.Hyperlinq
         static bool Any<TList, TSource>(this TList source, PredicateAt<TSource> predicate, int offset, int count)
             where TList : IReadOnlyList<TSource>
         {
+            var end = count - 1;
             if (offset == 0)
             {
-                for (var index = 0; index < count; index++)
+                for (var index = 0; index <= end; index++)
                 {
                     if (predicate(source[index], index))
                         return true;
@@ -63,7 +64,7 @@ namespace NetFabric.Hyperlinq
             }
             else
             {
-                for (var index = 0; index < count; index++)
+                for (var index = 0; index <= end; index++)
                 {
                     if (predicate(source[index + offset], index))
                         return true;

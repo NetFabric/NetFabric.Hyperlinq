@@ -86,10 +86,10 @@ namespace NetFabric.Hyperlinq
 
             public int IndexOf(TResult item)
             {
-                var end = offset + Count;
+                var end = offset + Count - 1;
                 if (Utils.IsValueType<TResult>())
                 {
-                    for (var index = offset; index < end; index++)
+                    for (var index = offset; index <= end; index++)
                     {
                         if (EqualityComparer<TResult>.Default.Equals(selector(source[index])!, item))
                             return index - offset;
@@ -98,7 +98,7 @@ namespace NetFabric.Hyperlinq
                 else
                 {
                     var defaultComparer = EqualityComparer<TResult>.Default;
-                    for (var index = offset; index < end; index++)
+                    for (var index = offset; index <= end; index++)
                     {
                         if (defaultComparer.Equals(selector(source[index])!, item))
                             return index - offset;

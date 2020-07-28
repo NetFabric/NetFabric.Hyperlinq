@@ -17,8 +17,8 @@ namespace NetFabric.Hyperlinq
         static Option<TSource> Single<TSource>(this in ArraySegment<TSource> source, Predicate<TSource> predicate)
         {
             var array = source.Array;
-            var end = source.Offset + source.Count;
-            for (var index = source.Offset; index < end; index++)
+            var end = source.Offset + source.Count - 1;
+            for (var index = source.Offset; index <= end; index++)
             {
                 if (predicate(array[index]))
                 {
@@ -40,8 +40,8 @@ namespace NetFabric.Hyperlinq
         static Option<TSource> Single<TSource>(this in ArraySegment<TSource> source, PredicateAt<TSource> predicate)
         {
             var array = source.Array;
-            var end = source.Offset + source.Count;
-            for (var index = source.Offset; index < end; index++)
+            var end = source.Offset + source.Count - 1;
+            for (var index = source.Offset; index <= end; index++)
             {
                 if (predicate(array[index], index))
                 {
@@ -83,8 +83,8 @@ namespace NetFabric.Hyperlinq
         static Option<TResult> Single<TSource, TResult>(this in ArraySegment<TSource> source, Predicate<TSource> predicate, NullableSelector<TSource, TResult> selector)
         {
             var array = source.Array;
-            var end = source.Offset + source.Count;
-            for (var index = source.Offset; index < end; index++)
+            var end = source.Offset + source.Count - 1;
+            for (var index = source.Offset; index <= end; index++)
             {
                 if (predicate(array[index]))
                 {

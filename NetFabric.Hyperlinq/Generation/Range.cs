@@ -57,6 +57,7 @@ namespace NetFabric.Hyperlinq
             }
             int IList<int>.this[int index]
             {
+                [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 get => this[index];
                 [ExcludeFromCodeCoverage]
                 set => Throw.NotSupportedException();
@@ -106,16 +107,25 @@ namespace NetFabric.Hyperlinq
 
             public void CopyTo(int[] array, int arrayIndex)
             {
-                if (arrayIndex == 0)
+                if (start == 0)
                 {
-                    CopyTo(array);
-                }
-                else
-                {
-                    if (start == 0)
+                    if (arrayIndex == 0)
+                    {
+                        for (var index = 0; index < Count; index++)
+                            array[index] = index;
+                    }
+                    else
                     {
                         for (var index = 0; index < Count; index++)
                             array[index + arrayIndex] = index;
+                    }
+                }
+                else
+                {
+                    if (arrayIndex == 0)
+                    {
+                        for (var index = 0; index < Count; index++)
+                            array[index] = index + start;
                     }
                     else
                     {
@@ -130,6 +140,7 @@ namespace NetFabric.Hyperlinq
             public bool Contains(int value)
                 => value >= start && value < end;
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public int IndexOf(int item)
                 => item >= start && item < end
                     ? item - start
@@ -159,14 +170,14 @@ namespace NetFabric.Hyperlinq
                 internal Enumerator(in RangeEnumerable enumerable)
                 {
                     Current = enumerable.start - 1;
-                    end = enumerable.end;
+                    end = Current + enumerable.Count;
                 }
 
                 public int Current { get; private set; }
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public bool MoveNext() 
-                    => ++Current < end;
+                    => ++Current <= end;
             }
 
             public struct DisposableEnumerator
@@ -177,7 +188,7 @@ namespace NetFabric.Hyperlinq
                 internal DisposableEnumerator(in RangeEnumerable enumerable)
                 {
                     Current = enumerable.start - 1;
-                    end = enumerable.end;
+                    end = Current + enumerable.Count;
                 }
 
                 public int Current { get; private set; }
@@ -186,7 +197,7 @@ namespace NetFabric.Hyperlinq
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public bool MoveNext() 
-                    => ++Current < end;
+                    => ++Current <= end;
 
                 [ExcludeFromCodeCoverage]
                 public readonly void Reset() 
