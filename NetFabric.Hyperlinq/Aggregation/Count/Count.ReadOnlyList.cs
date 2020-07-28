@@ -13,8 +13,8 @@ namespace NetFabric.Hyperlinq
             where TList : IReadOnlyList<TSource>
         {
             var counter = 0;
-            var end = offset + count;
-            for (var index = offset; index < end; index++)
+            var end = offset + count - 1;
+            for (var index = offset; index <= end; index++)
             {
                 var result = predicate(source[index]);
                 counter += *(int*)&result;
@@ -26,9 +26,10 @@ namespace NetFabric.Hyperlinq
             where TList : IReadOnlyList<TSource>
         {
             var counter = 0;
+            var end = count - 1;
             if (offset == 0)
             {
-                for (var index = 0; index < count; index++)
+                for (var index = 0; index <= end; index++)
                 {
                     var result = predicate(source[index], index);
                     counter += *(int*)&result;
@@ -36,7 +37,7 @@ namespace NetFabric.Hyperlinq
             }
             else
             {
-                for (var index = 0; index < count; index++)
+                for (var index = 0; index <= end; index++)
                 {
                     var result = predicate(source[index + offset], index);
                     counter += *(int*)&result;

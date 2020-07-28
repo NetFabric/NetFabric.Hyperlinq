@@ -106,10 +106,10 @@ namespace NetFabric.Hyperlinq
                 }
                 else
                 {
-                    var end = source.Offset + source.Count;
+                    var end = source.Offset + source.Count - 1;
                     if (Utils.IsValueType<TResult>())
                     {
-                        for (var index = source.Offset; index < end; index++)
+                        for (var index = source.Offset; index <= end; index++)
                         {
                             if (EqualityComparer<TResult>.Default.Equals(selector(array[index])!, item))
                                 return index - source.Offset;
@@ -118,7 +118,7 @@ namespace NetFabric.Hyperlinq
                     else
                     {
                         var defaultComparer = EqualityComparer<TResult>.Default;
-                        for (var index = source.Offset; index < end; index++)
+                        for (var index = source.Offset; index <= end; index++)
                         {
                             if (defaultComparer.Equals(selector(array[index])!, item))
                                 return index - source.Offset;

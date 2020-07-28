@@ -64,14 +64,14 @@ namespace NetFabric.Hyperlinq
         static Option<TSource> GetSingle<TList, TSource>(this TList source, Predicate<TSource> predicate, int offset, int count)
             where TList : IReadOnlyList<TSource>
         {
-            var end = offset + count;
-            for (var index = offset; index < end; index++)
+            var end = offset + count - 1;
+            for (var index = offset; index <= end; index++)
             {
                 if (predicate(source[index]))
                 {
                     var value = source[index];
 
-                    for (index++; index < end; index++)
+                    for (index++; index <= end; index++)
                     {
                         if (predicate(source[index]))
                             return Option.None;
@@ -88,15 +88,16 @@ namespace NetFabric.Hyperlinq
         static Option<TSource> GetSingle<TList, TSource>(this TList source, PredicateAt<TSource> predicate, int offset, int count)
             where TList : IReadOnlyList<TSource>
         {
+            var end = count - 1;
             if (offset == 0)
             {
-                for (var index = 0; index < count; index++)
+                for (var index = 0; index <= end; index++)
                 {
                     if (predicate(source[index], index))
                     {
                         var value = source[index];
 
-                        for (index++; index < count; index++)
+                        for (index++; index <= end; index++)
                         {
                             if (predicate(source[index], index))
                                 return Option.None;
@@ -108,13 +109,13 @@ namespace NetFabric.Hyperlinq
             }
             else
             {
-                for (var index = 0; index < count; index++)
+                for (var index = 0; index <= end; index++)
                 {
                     if (predicate(source[index + offset], index))
                     {
                         var value = source[index + offset];
 
-                        for (index++; index < count; index++)
+                        for (index++; index <= end; index++)
                         {
                             if (predicate(source[index + offset], index))
                                 return Option.None;

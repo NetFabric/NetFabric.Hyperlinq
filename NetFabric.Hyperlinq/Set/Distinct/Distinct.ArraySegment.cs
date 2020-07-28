@@ -92,8 +92,8 @@ namespace NetFabric.Hyperlinq
                 }
                 else
                 {
-                    var end = source.Offset + source.Count;
-                    for (var index = source.Offset; index < end; index++)
+                    var end = source.Offset + source.Count - 1;
+                    for (var index = source.Offset; index <= end; index++)
                         _ = set.Add(array[index]);
                 }
                 return set;

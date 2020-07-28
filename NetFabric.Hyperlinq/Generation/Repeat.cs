@@ -68,20 +68,22 @@ namespace NetFabric.Hyperlinq
 
             public void CopyTo(Span<TSource> span) 
             {
-                for (var index = 0; index < count; index++)
+                var end = count - 1;
+                for (var index = 0; index <= end; index++)
                     span[index] = value;
             }
 
             public void CopyTo(TSource[] array)
             {
-                for (var index = 0; index < count; index++)
+                var end = count - 1;
+                for (var index = 0; index <= end; index++)
                     array[index] = value;
             }
 
             public void CopyTo(TSource[] array, int arrayIndex)
             {
-                var end = arrayIndex + count;
-                for (var index = arrayIndex; index < end; index++)
+                var end = arrayIndex + count - 1;
+                for (var index = arrayIndex; index <= end; index++)
                     array[index] = value;
             }
 

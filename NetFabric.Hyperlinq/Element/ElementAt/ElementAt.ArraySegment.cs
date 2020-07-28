@@ -26,8 +26,8 @@ namespace NetFabric.Hyperlinq
                 }
                 else
                 {
-                    var end = source.Offset + source.Count;
-                    for (var sourceIndex = source.Offset; sourceIndex < end; sourceIndex++)
+                    var end = source.Offset + source.Count - 1;
+                    for (var sourceIndex = source.Offset; sourceIndex <= end; sourceIndex++)
                     {
                         var item = array[sourceIndex];
                         if (predicate(item) && index-- == 0)
@@ -59,8 +59,8 @@ namespace NetFabric.Hyperlinq
                 {
                     if (source.Offset == 0)
                     {
-                        var end = source.Count;
-                        for (var sourceIndex = 0; sourceIndex < end; sourceIndex++)
+                        var end = source.Count - 1;
+                        for (var sourceIndex = 0; sourceIndex <= end; sourceIndex++)
                         {
                             var item = array[sourceIndex];
                             if (predicate(item, sourceIndex) && index-- == 0)
@@ -70,8 +70,8 @@ namespace NetFabric.Hyperlinq
                     else
                     {
                         var offset = source.Offset;
-                        var end = source.Count;
-                        for (var sourceIndex = 0; sourceIndex < end; sourceIndex++)
+                        var end = source.Count - 1;
+                        for (var sourceIndex = 0; sourceIndex <= end; sourceIndex++)
                         {
                             var item = array[sourceIndex + offset];
                             if (predicate(item, sourceIndex) && index-- == 0)
@@ -113,8 +113,8 @@ namespace NetFabric.Hyperlinq
                 }
                 else
                 {
-                    var end = source.Offset + source.Count;
-                    for (var sourceIndex = source.Offset; sourceIndex < end; sourceIndex++)
+                    var end = source.Offset + source.Count - 1;
+                    for (var sourceIndex = source.Offset; sourceIndex <= end; sourceIndex++)
                     {
                         var item = array[sourceIndex];
                         if (predicate(item) && index-- == 0)

@@ -23,8 +23,8 @@ namespace NetFabric.Hyperlinq
             }
             else
             {
-                var end = source.Offset + source.Count;
-                for (var index = source.Offset; index < end; index++)
+                var end = source.Offset + source.Count - 1;
+                for (var index = source.Offset; index <= end; index++)
                 {
                     if (predicate(array[index]))
                         builder.Add(array[index]);
@@ -53,9 +53,10 @@ namespace NetFabric.Hyperlinq
             }
             else
             {
+                var end = source.Count - 1;
                 if (source.Offset == 0)
                 {
-                    for (var index = 0; index < source.Count; index++)
+                    for (var index = 0; index <= end; index++)
                     {
                         if (predicate(array[index], index))
                             builder.Add(array[index]);
@@ -64,8 +65,7 @@ namespace NetFabric.Hyperlinq
                 else
                 {
                     var offset = source.Offset;
-                    var count = source.Count;
-                    for (var index = 0; index < count; index++)
+                    for (var index = 0; index <= end; index++)
                     {
                         var item = array[index + offset];
                         if (predicate(item, index))
@@ -92,8 +92,8 @@ namespace NetFabric.Hyperlinq
             }
             else
             {
-                var end = source.Offset + source.Count;
-                for (var index = source.Offset; index < end; index++)
+                var end = source.Offset + source.Count - 1;
+                for (var index = source.Offset; index <= end; index++)
                 {
                     if (predicate(array[index]))
                         builder.Add(selector(array[index]));

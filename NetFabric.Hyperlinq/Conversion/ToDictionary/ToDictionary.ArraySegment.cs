@@ -15,13 +15,13 @@ namespace NetFabric.Hyperlinq
             var array = source.Array;
             if (source.IsWhole())
             {
-                foreach (var item in source)
+                foreach (var item in array)
                     dictionary.Add(keySelector(item), item);
             }
             else
             {
-                var end = source.Count;
-                for (var index = source.Offset; index < end; index++)
+                var end = source.Count - 1;
+                for (var index = source.Offset; index <= end; index++)
                     dictionary.Add(keySelector(array[index]), array[index]);
             }
             return dictionary;
@@ -38,13 +38,13 @@ namespace NetFabric.Hyperlinq
             var array = source.Array;
             if (source.IsWhole())
             {
-                foreach (var item in source)
+                foreach (var item in array)
                     dictionary.Add(keySelector(item), elementSelector(item));
             }
             else
             {
-                var end = source.Count;
-                for (var index = source.Offset; index < end; index++)
+                var end = source.Count - 1;
+                for (var index = source.Offset; index <= end; index++)
                     dictionary.Add(keySelector(array[index]), elementSelector(array[index]));
             }
             return dictionary;

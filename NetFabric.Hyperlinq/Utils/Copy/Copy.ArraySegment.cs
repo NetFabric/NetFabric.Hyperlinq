@@ -31,17 +31,16 @@ namespace NetFabric.Hyperlinq
             }
             else
             {
+                var end = source.Count - 1;
                 if (source.Offset == 0)
                 {
-                    var end = source.Count;
-                    for (var index = 0; index < end; index++)
+                    for (var index = 0; index <= end; index++)
                         destination[index] = selector(array[index])!;
                 }
                 else
                 {
                     var offset = source.Offset;
-                    var end = source.Count;
-                    for (var index = 0; index < end; index++)
+                    for (var index = 0; index <= end; index++)
                         destination[index] = selector(array[index + offset])!;
                 }
             }
@@ -64,17 +63,16 @@ namespace NetFabric.Hyperlinq
             }
             else
             {
+                var end = source.Count - 1;
                 if (source.Offset == 0)
                 {
-                    var end = source.Count;
-                    for (var index = 0; index < end; index++)
+                    for (var index = 0; index <= end; index++)
                         destination[index] = selector(array[index], index)!;
                 }
                 else
                 {
                     var offset = source.Offset;
-                    var end = source.Count;
-                    for (var index = 0; index < end; index++)
+                    for (var index = 0; index <= end; index++)
                         destination[index] = selector(array[index + offset], index)!;
                 }
             }
