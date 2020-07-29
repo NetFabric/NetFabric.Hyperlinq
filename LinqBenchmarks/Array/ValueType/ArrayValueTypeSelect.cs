@@ -1,4 +1,5 @@
 ﻿using BenchmarkDotNet.Attributes;
+using JM.LinqFaster;
 using NetFabric.Hyperlinq;
 using StructLinq;
 using System.Linq;
@@ -11,9 +12,10 @@ namespace LinqBenchmarks.Array.ValueType
         public FatValueType ForLoop()
         {
             var sum = default(FatValueType);
-            for (var index = 0; index < source.Length; index++)
+            var array = source;
+            for (var index = 0; index < array.Length; index++)
             {
-                ref readonly var item = ref source[index];
+                ref readonly var item = ref array[index];
                 sum += item * 2;
             }
             return sum;
@@ -40,7 +42,7 @@ namespace LinqBenchmarks.Array.ValueType
         [Benchmark]
         public FatValueType LinqFaster()
         {
-            var items = JM.LinqFaster.LinqFaster.SelectF(source, item => item * 2);
+            var items = source.SelectF(item => item * 2);
             var sum = default(FatValueType);
             for (var index = 0; index < items.Length; index++)
                 sum += items[index];

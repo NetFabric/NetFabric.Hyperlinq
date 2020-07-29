@@ -1,5 +1,6 @@
 ﻿using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Diagnosers;
+using JM.LinqFaster;
 using NetFabric.Hyperlinq;
 using StructLinq;
 using System.Linq;
@@ -12,9 +13,10 @@ namespace LinqBenchmarks.Array.ValueType
         public int ForLoop()
         {
             var count = 0;
-            for (var index = 0; index < source.Length; index++)
+            var array = source;
+            for (var index = 0; index < array.Length; index++)
             {
-                ref readonly var item = ref source[index];
+                ref readonly var item = ref array[index];
                 if (item.IsEven())
                     count++;
             }
@@ -39,7 +41,7 @@ namespace LinqBenchmarks.Array.ValueType
 
         [Benchmark]
         public int LinqFaster()
-            => JM.LinqFaster.LinqFaster.CountF(source, item => item.IsEven());
+            => source.CountF(item => item.IsEven());
 
         [Benchmark]
         public int StructLinq()

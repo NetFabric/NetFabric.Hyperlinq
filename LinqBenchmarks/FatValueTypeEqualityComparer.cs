@@ -2,7 +2,7 @@
 
 namespace LinqBenchmarks
 {
-    struct FatValueTypeEqualityComparer : IEqualityComparer<FatValueType>
+    readonly struct FatValueTypeEqualityComparer : IEqualityComparer<FatValueType>
     {
         public bool Equals(FatValueType x, FatValueType y)
             => x.Value0 == y.Value0

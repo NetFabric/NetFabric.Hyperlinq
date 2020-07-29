@@ -1,4 +1,5 @@
 ﻿using BenchmarkDotNet.Attributes;
+using JM.LinqFaster;
 using NetFabric.Hyperlinq;
 using StructLinq;
 using System.Buffers;
@@ -13,9 +14,10 @@ namespace LinqBenchmarks.Array.ValueType
         public FatValueType[] ForLoop()
         {
             var list = new List<FatValueType>();
-            for (var index = 0; index < source.Length; index++)
+            var array = source;
+            for (var index = 0; index < array.Length; index++)
             {
-                ref readonly var item = ref source[index];
+                ref readonly var item = ref array[index];
                 if (item.IsEven())
                     list.Add(item * 2);
             }
@@ -43,8 +45,8 @@ namespace LinqBenchmarks.Array.ValueType
 
         [Benchmark]
         public FatValueType[] LinqFaster()
-            => JM.LinqFaster.LinqFaster
-                .WhereSelectF(source, item => item.IsEven(), item => item * 2);
+            => source
+                .WhereSelectF(item => item.IsEven(), item => item * 2);
 
         [Benchmark]
         public FatValueType[] StructLinq()
@@ -79,7 +81,9 @@ namespace LinqBenchmarks.Array.ValueType
                 .Where(source, item => item.IsEven())
                 .Select(item => item * 2)
                 .ToArray(MemoryPool<FatValueType>.Shared);
-            return Count == 0 ? default : array.Memory.Span[0];
+            return Count == 0 
+                ? default 
+                : array.Memory.Span[0];
         }
     }
 }

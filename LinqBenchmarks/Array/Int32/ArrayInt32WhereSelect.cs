@@ -1,4 +1,5 @@
 ﻿using BenchmarkDotNet.Attributes;
+using JM.LinqFaster;
 using NetFabric.Hyperlinq;
 using StructLinq;
 using System.Linq;
@@ -11,9 +12,10 @@ namespace LinqBenchmarks.Array.Int32
         public int ForLoop()
         {
             var sum = 0;
-            for (var index = 0; index < source.Length; index++)
+            var array = source;
+            for (var index = 0; index < array.Length; index++)
             {
-                var item = source[index];
+                var item = array[index];
                 if (item.IsEven())
                     sum += item * 2;
             }
@@ -44,7 +46,7 @@ namespace LinqBenchmarks.Array.Int32
         [Benchmark]
         public int LinqFaster()
         {
-            var items = JM.LinqFaster.LinqFaster.WhereSelectF(source, item => item.IsEven(), item => item * 2);
+            var items = source.WhereSelectF(item => item.IsEven(), item => item * 2);
             var sum = 0;
             for (var index = 0; index < items.Length; index++)
                 sum += items[index];

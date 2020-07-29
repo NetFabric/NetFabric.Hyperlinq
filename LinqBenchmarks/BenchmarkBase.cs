@@ -11,6 +11,7 @@ namespace LinqBenchmarks
     [MarkdownExporterAttribute.GitHub]
     //[RPlotExporter, CsvMeasurementsExporter] // requires installation of R (https://benchmarkdotnet.org/articles/configs/exporters.html#plots)
     [HardwareCounters(HardwareCounter.BranchMispredictions, HardwareCounter.CacheMisses)]
+    [DisassemblyDiagnoser(printSource: true, maxDepth: 2)]
     public class BenchmarkBase
     {
         [Params(100)]

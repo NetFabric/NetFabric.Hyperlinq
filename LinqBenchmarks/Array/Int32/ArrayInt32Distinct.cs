@@ -18,7 +18,7 @@ namespace LinqBenchmarks.Array.Int32
             => source = System.Linq.Enumerable
                 .SelectMany(
                     System.Linq.Enumerable.Range(0, Duplicates),
-                    _ => System.Linq.Enumerable.Range(0, Count / Duplicates))
+                    _ => System.Linq.Enumerable.Range(0, Count))
                 .ToArray();
 
         [Benchmark(Baseline = true)]
@@ -26,9 +26,10 @@ namespace LinqBenchmarks.Array.Int32
         {
             var set = new HashSet<int>();
             var sum = 0;
-            for (var index = 0; index < source.Length; index++)
+            var array = source;
+            for (var index = 0; index < array.Length; index++)
             {
-                var item = source[index];
+                var item = array[index];
                 if (set.Add(item))
                     sum += item;
             }

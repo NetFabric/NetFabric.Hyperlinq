@@ -1,4 +1,5 @@
 ﻿using BenchmarkDotNet.Attributes;
+using JM.LinqFaster;
 using NetFabric.Hyperlinq;
 using StructLinq;
 using System.Collections.Generic;
@@ -12,9 +13,10 @@ namespace LinqBenchmarks.Array.ValueType
         public List<FatValueType> ForLoop()
         {
             var list = new List<FatValueType>();
-            for (var index = 0; index < source.Length; index++)
+            var array = source;
+            for (var index = 0; index < array.Length; index++)
             {
-                ref readonly var item = ref source[index];
+                ref readonly var item = ref array[index];
                 if (item.IsEven())
                     list.Add(item * 2);
             }
@@ -35,26 +37,35 @@ namespace LinqBenchmarks.Array.ValueType
 
         [Benchmark]
         public List<FatValueType> Linq()
-            => System.Linq.Enumerable.Where(source, item => item.IsEven()).Select(item => item * 2).ToList();
+            => System.Linq.Enumerable
+                .Where(source, item => item.IsEven()).Select(item => item * 2)
+                .ToList();
 
         [Benchmark]
         public List<FatValueType> LinqFaster()
-            => new List<FatValueType>(JM.LinqFaster.LinqFaster.WhereSelectF(source, item => item.IsEven(), item => item * 2));
+            => new List<FatValueType>(source
+                .WhereSelectF(item => item.IsEven(), item => item * 2));
 
         [Benchmark]
         public List<FatValueType> StructLinq()
-            => source.ToStructEnumerable().Where(item => item.IsEven(), x => x).Select(item => item * 2, x => x).ToList();
+            => source.ToStructEnumerable()
+                .Where(item => item.IsEven(), x => x).Select(item => item * 2, x => x)
+                .ToList();
 
         [Benchmark]
         public List<FatValueType> StructLinq_IFunction()
         {
             var predicate = new FatValueTypeIsEven();
             var selector = new DoubleOfFatValueType();
-            return source.ToRefStructEnumerable().Where(ref predicate, x => x).Select(ref selector, x => x, x => x).ToList();
+            return source.ToRefStructEnumerable()
+                .Where(ref predicate, x => x).Select(ref selector, x => x, x => x)
+                .ToList();
         }
 
         [Benchmark]
         public List<FatValueType> Hyperlinq()
-            => ArrayExtensions.Where(source, item => item.IsEven()).Select(item => item * 2).ToList();
+            => ArrayExtensions
+                .Where(source, item => item.IsEven()).Select(item => item * 2)
+                .ToList();
     }
 }

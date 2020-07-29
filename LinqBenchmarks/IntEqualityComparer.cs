@@ -2,7 +2,7 @@
 
 namespace LinqBenchmarks
 {
-    struct IntEqualityComparer : IEqualityComparer<int>
+    readonly struct IntEqualityComparer : IEqualityComparer<int>
     {
         public bool Equals(int x, int y) 
             => x == y;

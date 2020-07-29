@@ -2,14 +2,14 @@
 
 namespace LinqBenchmarks
 {
-    struct DoubleOfInt32
+    readonly struct DoubleOfInt32
         : IFunction<int, int>
     {
         public int Eval(int element)
             => element * 2;
     }
 
-    struct DoubleOfFatValueType
+    readonly struct DoubleOfFatValueType
         : IInFunction<FatValueType, FatValueType>
     {
         public FatValueType Eval(in FatValueType element)

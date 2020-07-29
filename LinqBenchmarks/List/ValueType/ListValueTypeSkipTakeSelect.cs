@@ -1,4 +1,5 @@
 ﻿using BenchmarkDotNet.Attributes;
+using JM.LinqFaster;
 using NetFabric.Hyperlinq;
 using StructLinq;
 using System;
@@ -39,6 +40,35 @@ namespace LinqBenchmarks.List.ValueType
                 sum += item;
             return sum;
         }
+
+        [Benchmark]
+        public FatValueType LinqFaster()
+        {
+            var items = source.SkipF(Skip).TakeF(Count).SelectF(item => item * 2);
+            var sum = default(FatValueType);
+            for (var index = 0; index < items.Count; index++)
+                sum += items[index];
+            return sum;
+        }
+
+        [Benchmark]
+        public FatValueType StructLinq()
+        {
+            var sum = default(FatValueType);
+            foreach (var item in System.Linq.Enumerable.Skip(source, Skip).Take(Count).ToStructEnumerable().Select(item => item * 2, x => x))
+                sum += item;
+            return sum;
+        }
+
+        //[Benchmark]
+        //public FatValueType StructLinq_IFunction()
+        //{
+        //    var sum = default(FatValueType);
+        //    var selector = new DoubleOfFatValueType();
+        //    foreach (var item in System.Linq.Enumerable.Skip(source, Skip).Take(Count).ToStructEnumerable().Select(ref selector, x => x, x => x))
+        //        sum += item;
+        //    return sum;
+        //}
 
 #pragma warning disable HLQ010 // Consider using a 'for' loop instead.
         [Benchmark]

@@ -1,4 +1,5 @@
 ﻿using BenchmarkDotNet.Attributes;
+using JM.LinqFaster;
 using NetFabric.Hyperlinq;
 using StructLinq;
 using System;
@@ -47,6 +48,35 @@ namespace LinqBenchmarks.List.ValueType
                 sum += item;
             return sum;
         }
+
+        [Benchmark]
+        public FatValueType LinqFaster()
+        {
+            var items = source.SkipF(Skip).TakeF(Count).WhereF(item => item.IsEven());
+            var sum = default(FatValueType);
+            for (var index = 0; index < items.Count; index++)
+                sum += items[index];
+            return sum;
+        }
+
+        [Benchmark]
+        public FatValueType StructLinq()
+        {
+            var sum = default(FatValueType);
+            foreach (var item in System.Linq.Enumerable.Skip(source, Skip).Take(Count).ToStructEnumerable().Where(item => item.IsEven(), x => x))
+                sum += item;
+            return sum;
+        }
+
+        //[Benchmark]
+        //public FatValueType StructLinq_IFunction()
+        //{
+        //    var sum = default(FatValueType);
+        //    var predicate = new FatValueTypeIsEven();
+        //    foreach (var item in System.Linq.Enumerable.Skip(source, Skip).Take(Count).ToStructEnumerable().Where(ref predicate, x => x))
+        //        sum += item;
+        //    return sum;
+        //}
 
         [Benchmark]
         public FatValueType Hyperlinq()

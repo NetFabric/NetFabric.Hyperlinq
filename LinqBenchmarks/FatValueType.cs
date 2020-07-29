@@ -33,7 +33,7 @@ namespace LinqBenchmarks
             => (Value0 & 0x01) == 0;
 
         public static FatValueType operator +(in FatValueType left, in FatValueType right)
-            => new FatValueType(left.Value0 * right.Value0);
+            => new FatValueType(left.Value0 + right.Value0);
 
         public static FatValueType operator *(in FatValueType left, int right)
             => new FatValueType(left.Value0 * right);

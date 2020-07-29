@@ -1,4 +1,5 @@
 ﻿using BenchmarkDotNet.Attributes;
+using JM.LinqFaster;
 using NetFabric.Hyperlinq;
 using StructLinq;
 using System;
@@ -36,6 +37,35 @@ namespace LinqBenchmarks.List.Int32
         {
             var sum = 0;
             foreach (var item in System.Linq.Enumerable.Skip(source, Skip).Take(Count).Select(item => item * 2))
+                sum += item;
+            return sum;
+        }
+
+        [Benchmark]
+        public int LinqFaster()
+        {
+            var items = source.SkipF(Skip).TakeF(Count).SelectF(item => item * 2);
+            var sum = 0;
+            for (var index = 0; index < items.Count; index++)
+                sum += items[index];
+            return sum;
+        }
+
+        [Benchmark]
+        public int StructLinq()
+        {
+            var sum = 0;
+            foreach (var item in System.Linq.Enumerable.Skip(source, Skip).Take(Count).ToStructEnumerable().Select(item => item * 2, x => x))
+                sum += item;
+            return sum;
+        }
+
+        [Benchmark]
+        public int StructLinq_IFunction()
+        {
+            var sum = 0;
+            var selector = new DoubleOfInt32();
+            foreach (var item in System.Linq.Enumerable.Skip(source, Skip).Take(Count).ToStructEnumerable().Select(ref selector, x => x, x => x))
                 sum += item;
             return sum;
         }

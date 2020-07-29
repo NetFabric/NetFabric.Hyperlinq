@@ -1,4 +1,5 @@
 ﻿using BenchmarkDotNet.Attributes;
+using JM.LinqFaster;
 using NetFabric.Hyperlinq;
 using StructLinq;
 using System.Buffers;
@@ -45,8 +46,8 @@ namespace LinqBenchmarks.List.Int32
 
         [Benchmark]
         public int[] LinqFaster()
-            => JM.LinqFaster.LinqFaster
-                .WhereSelectF(source, item => item.IsEven(), item => item * 2)
+            => source
+                .WhereSelectF(item => item.IsEven(), item => item * 2)
                 .ToArray();
 
         [Benchmark]

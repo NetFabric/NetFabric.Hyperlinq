@@ -1,4 +1,5 @@
 ﻿using BenchmarkDotNet.Attributes;
+using JM.LinqFaster;
 using NetFabric.Hyperlinq;
 using StructLinq;
 using System.Collections.Generic;
@@ -47,7 +48,7 @@ namespace LinqBenchmarks.List.ValueType
         [Benchmark]
         public FatValueType LinqFaster()
         {
-            var items = JM.LinqFaster.LinqFaster.WhereF(source, item => item.IsEven());
+            var items = source.WhereF(item => item.IsEven());
             var sum = default(FatValueType);
             for (var index = 0; index < items.Count; index++)
                 sum += items[index];

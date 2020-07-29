@@ -1,4 +1,5 @@
 ﻿using BenchmarkDotNet.Attributes;
+using JM.LinqFaster;
 using NetFabric.Hyperlinq;
 using StructLinq;
 using System.Collections.Generic;
@@ -12,9 +13,10 @@ namespace LinqBenchmarks.Array.Int32
         public List<int> ForLoop()
         {
             var list = new List<int>();
-            for (var index = 0; index < source.Length; index++)
+            var array = source;
+            for (var index = 0; index < array.Length; index++)
             {
-                var item = source[index];
+                var item = array[index];
                 if (item.IsEven())
                     list.Add(item * 2);
             }
@@ -39,7 +41,7 @@ namespace LinqBenchmarks.Array.Int32
 
         [Benchmark]
         public List<int> LinqFaster()
-            => new List<int>(JM.LinqFaster.LinqFaster.WhereSelectF(source, item => item.IsEven(), item => item * 2));
+            => new List<int>(source.WhereSelectF(item => item.IsEven(), item => item * 2));
 
         [Benchmark]
         public List<int> StructLinq()
