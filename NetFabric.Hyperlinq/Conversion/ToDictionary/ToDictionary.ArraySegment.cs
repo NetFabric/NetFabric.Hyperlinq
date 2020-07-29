@@ -7,7 +7,7 @@ namespace NetFabric.Hyperlinq
     public static partial class ArrayExtensions
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Dictionary<TKey, TSource> ToDictionary<TSource, TKey>(this in ArraySegment<TSource> source, NullableSelector<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer = default)
+        public static Dictionary<TKey, TSource> ToDictionary<TSource, TKey>(this in ArraySegment<TSource> source, Selector<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer = default)
         {
             if (keySelector is null) Throw.ArgumentNullException(nameof(keySelector));
 
@@ -29,7 +29,7 @@ namespace NetFabric.Hyperlinq
 
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Dictionary<TKey, TElement> ToDictionary<TSource, TKey, TElement>(this in ArraySegment<TSource> source, NullableSelector<TSource, TKey> keySelector, NullableSelector<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer = default)
+        public static Dictionary<TKey, TElement> ToDictionary<TSource, TKey, TElement>(this in ArraySegment<TSource> source, Selector<TSource, TKey> keySelector, NullableSelector<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer = default)
         {
             if (keySelector is null) Throw.ArgumentNullException(nameof(keySelector));
             if (elementSelector is null) Throw.ArgumentNullException(nameof(elementSelector));
@@ -39,13 +39,13 @@ namespace NetFabric.Hyperlinq
             if (source.IsWhole())
             {
                 foreach (var item in array)
-                    dictionary.Add(keySelector(item), elementSelector(item));
+                    dictionary.Add(keySelector(item), elementSelector(item)!);
             }
             else
             {
                 var end = source.Count - 1;
                 for (var index = source.Offset; index <= end; index++)
-                    dictionary.Add(keySelector(array[index]), elementSelector(array[index]));
+                    dictionary.Add(keySelector(array[index]), elementSelector(array[index])!);
             }
             return dictionary;
         }

@@ -6,7 +6,7 @@ namespace NetFabric.Hyperlinq
     public static partial class ValueEnumerableExtensions
     {
         
-        public static Dictionary<TKey, TSource> ToDictionary<TEnumerable, TEnumerator, TSource, TKey>(this TEnumerable source, NullableSelector<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer = default)
+        public static Dictionary<TKey, TSource> ToDictionary<TEnumerable, TEnumerator, TSource, TKey>(this TEnumerable source, Selector<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer = default)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
@@ -23,7 +23,7 @@ namespace NetFabric.Hyperlinq
         }
 
         
-        static Dictionary<TKey, TSource> ToDictionary<TEnumerable, TEnumerator, TSource, TKey>(this TEnumerable source, NullableSelector<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer, Predicate<TSource> predicate)
+        static Dictionary<TKey, TSource> ToDictionary<TEnumerable, TEnumerator, TSource, TKey>(this TEnumerable source, Selector<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer, Predicate<TSource> predicate)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
@@ -41,7 +41,7 @@ namespace NetFabric.Hyperlinq
         }
 
         
-        static Dictionary<TKey, TSource> ToDictionary<TEnumerable, TEnumerator, TSource, TKey>(this TEnumerable source, NullableSelector<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer, PredicateAt<TSource> predicate)
+        static Dictionary<TKey, TSource> ToDictionary<TEnumerable, TEnumerator, TSource, TKey>(this TEnumerable source, Selector<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer, PredicateAt<TSource> predicate)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
@@ -62,7 +62,7 @@ namespace NetFabric.Hyperlinq
         }
 
         
-        public static Dictionary<TKey, TElement> ToDictionary<TEnumerable, TEnumerator, TSource, TKey, TElement>(this TEnumerable source, NullableSelector<TSource, TKey> keySelector, NullableSelector<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer = default)
+        public static Dictionary<TKey, TElement> ToDictionary<TEnumerable, TEnumerator, TSource, TKey, TElement>(this TEnumerable source, Selector<TSource, TKey> keySelector, NullableSelector<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer = default)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
@@ -75,14 +75,14 @@ namespace NetFabric.Hyperlinq
             while (enumerator.MoveNext())
             {
                 var item = enumerator.Current;
-                dictionary.Add(keySelector(item), elementSelector(item));
+                dictionary.Add(keySelector(item), elementSelector(item)!);
             }
 
             return dictionary;
         }
 
         
-        static Dictionary<TKey, TElement> ToDictionary<TEnumerable, TEnumerator, TSource, TKey, TElement>(this TEnumerable source, NullableSelector<TSource, TKey> keySelector, NullableSelector<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer, Predicate<TSource> predicate)
+        static Dictionary<TKey, TElement> ToDictionary<TEnumerable, TEnumerator, TSource, TKey, TElement>(this TEnumerable source, Selector<TSource, TKey> keySelector, NullableSelector<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer, Predicate<TSource> predicate)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
@@ -95,13 +95,13 @@ namespace NetFabric.Hyperlinq
             {
                 var item = enumerator.Current;
                 if (predicate(item))
-                    dictionary.Add(keySelector(item), elementSelector(item));
+                    dictionary.Add(keySelector(item), elementSelector(item)!);
             }
             return dictionary;
         }
 
         
-        static Dictionary<TKey, TElement> ToDictionary<TEnumerable, TEnumerator, TSource, TKey, TElement>(this TEnumerable source, NullableSelector<TSource, TKey> keySelector, NullableSelector<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer, PredicateAt<TSource> predicate)
+        static Dictionary<TKey, TElement> ToDictionary<TEnumerable, TEnumerator, TSource, TKey, TElement>(this TEnumerable source, Selector<TSource, TKey> keySelector, NullableSelector<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer, PredicateAt<TSource> predicate)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
@@ -116,7 +116,7 @@ namespace NetFabric.Hyperlinq
                 {
                     var item = enumerator.Current;
                     if (predicate(item, index))
-                        dictionary.Add(keySelector(item), elementSelector(item));
+                        dictionary.Add(keySelector(item), elementSelector(item)!);
                 }
                 return dictionary;
             }

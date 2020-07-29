@@ -128,7 +128,7 @@ namespace NetFabric.Hyperlinq
                                 checked
                                 {
                                     for (var index = arrayIndex; enumerator.MoveNext(); index++)
-                                        array[index] = enumerator.Current;
+                                        array[index] = enumerator.Current!;
                                 }
                             }
                             break;

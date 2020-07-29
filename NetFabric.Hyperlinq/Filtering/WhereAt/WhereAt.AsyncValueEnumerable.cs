@@ -222,13 +222,9 @@ namespace NetFabric.Hyperlinq
             public ValueTask<List<TSource>> ToListAsync(CancellationToken cancellationToken = default)
                 => AsyncValueEnumerableExtensions.ToListAsync<TEnumerable, TEnumerator, TSource>(source, predicate, cancellationToken);
 
-            public ValueTask<Dictionary<TKey, TSource>> ToDictionaryAsync<TKey>(AsyncSelector<TSource, TKey> keySelector, CancellationToken cancellationToken = default)
-                => AsyncValueEnumerableExtensions.ToDictionaryAsync<TEnumerable, TEnumerator, TSource, TKey>(source, keySelector, null, predicate, cancellationToken);
-            public ValueTask<Dictionary<TKey, TSource>> ToDictionaryAsync<TKey>(AsyncSelector<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer, CancellationToken cancellationToken = default)
+            public ValueTask<Dictionary<TKey, TSource>> ToDictionaryAsync<TKey>(AsyncSelector<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer = default, CancellationToken cancellationToken = default)
                 => AsyncValueEnumerableExtensions.ToDictionaryAsync<TEnumerable, TEnumerator, TSource, TKey>(source, keySelector, comparer, predicate, cancellationToken);
-            public ValueTask<Dictionary<TKey, TElement>> ToDictionaryAsync<TKey, TElement>(AsyncSelector<TSource, TKey> keySelector, AsyncSelector<TSource, TElement> elementSelector, CancellationToken cancellationToken = default)
-                => AsyncValueEnumerableExtensions.ToDictionaryAsync<TEnumerable, TEnumerator, TSource, TKey, TElement>(source, keySelector, elementSelector, null, predicate, cancellationToken);
-            public ValueTask<Dictionary<TKey, TElement>> ToDictionaryAsync<TKey, TElement>(AsyncSelector<TSource, TKey> keySelector, AsyncSelector<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer, CancellationToken cancellationToken = default)
+            public ValueTask<Dictionary<TKey, TElement>> ToDictionaryAsync<TKey, TElement>(AsyncSelector<TSource, TKey> keySelector, AsyncSelector<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer = default, CancellationToken cancellationToken = default)
                 => AsyncValueEnumerableExtensions.ToDictionaryAsync<TEnumerable, TEnumerator, TSource, TKey, TElement>(source, keySelector, elementSelector, comparer, predicate, cancellationToken);
         }
     }

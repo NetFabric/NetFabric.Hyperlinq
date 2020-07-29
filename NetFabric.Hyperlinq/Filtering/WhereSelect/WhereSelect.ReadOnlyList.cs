@@ -144,9 +144,7 @@ namespace NetFabric.Hyperlinq
             public List<TResult> ToList()
                 => ReadOnlyListExtensions.ToList<TList, TSource, TResult>(source, predicate, selector, offset, count); 
 
-            public Dictionary<TKey, TResult> ToDictionary<TKey>(NullableSelector<TResult, TKey> keySelector)
-                => ToDictionary<TKey>(keySelector, null);
-            public Dictionary<TKey, TResult> ToDictionary<TKey>(NullableSelector<TResult, TKey> keySelector, IEqualityComparer<TKey>? comparer)
+            public Dictionary<TKey, TResult> ToDictionary<TKey>(Selector<TResult, TKey> keySelector, IEqualityComparer<TKey>? comparer = default)
             {
                 var dictionary = new Dictionary<TKey, TResult>(0, comparer);
 
@@ -157,16 +155,14 @@ namespace NetFabric.Hyperlinq
                     if (predicate(source[index]))
                     {
                         item = selector(source[index]);
-                        dictionary.Add(keySelector(item), item);
+                        dictionary.Add(keySelector(item), item!);
                     }
                 }
 
                 return dictionary;
             }
 
-            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(NullableSelector<TResult, TKey> keySelector, NullableSelector<TResult, TElement> elementSelector)
-                => ToDictionary<TKey, TElement>(keySelector, elementSelector, null);
-            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(NullableSelector<TResult, TKey> keySelector, NullableSelector<TResult, TElement> elementSelector, IEqualityComparer<TKey>? comparer)
+            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Selector<TResult, TKey> keySelector, NullableSelector<TResult, TElement> elementSelector, IEqualityComparer<TKey>? comparer = default)
             {
                 var dictionary = new Dictionary<TKey, TElement>(0, comparer);
 
@@ -177,7 +173,7 @@ namespace NetFabric.Hyperlinq
                     if (predicate(source[index]))
                     {
                         item = selector(source[index]);
-                        dictionary.Add(keySelector(item), elementSelector(item));
+                        dictionary.Add(keySelector(item), elementSelector(item)!);
                     }
                 }
 

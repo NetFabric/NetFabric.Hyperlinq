@@ -109,16 +109,10 @@ namespace NetFabric.Hyperlinq
             => ValueReadOnlyCollectionExtensions.ToList<ValueWrapper<TSource>, Queue<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source));
 
         
-        public static Dictionary<TKey, TSource> ToDictionary<TSource, TKey>(this Queue<TSource> source, NullableSelector<TSource, TKey> keySelector)
-            => ValueReadOnlyCollectionExtensions.ToDictionary<ValueWrapper<TSource>, Queue<TSource>.Enumerator, TSource, TKey>(new ValueWrapper<TSource>(source), keySelector);
-        
-        public static Dictionary<TKey, TSource> ToDictionary<TSource, TKey>(this Queue<TSource> source, NullableSelector<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer)
+        public static Dictionary<TKey, TSource> ToDictionary<TSource, TKey>(this Queue<TSource> source, Selector<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer = default)
             => ValueReadOnlyCollectionExtensions.ToDictionary<ValueWrapper<TSource>, Queue<TSource>.Enumerator, TSource, TKey>(new ValueWrapper<TSource>(source), keySelector, comparer);
         
-        public static Dictionary<TKey, TElement> ToDictionary<TSource, TKey, TElement>(this Queue<TSource> source, NullableSelector<TSource, TKey> keySelector, NullableSelector<TSource, TElement> elementSelector)
-            => ValueReadOnlyCollectionExtensions.ToDictionary<ValueWrapper<TSource>, Queue<TSource>.Enumerator, TSource, TKey, TElement>(new ValueWrapper<TSource>(source), keySelector, elementSelector);
-        
-        public static Dictionary<TKey, TElement> ToDictionary<TSource, TKey, TElement>(this Queue<TSource> source, NullableSelector<TSource, TKey> keySelector, NullableSelector<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer)
+        public static Dictionary<TKey, TElement> ToDictionary<TSource, TKey, TElement>(this Queue<TSource> source, Selector<TSource, TKey> keySelector, NullableSelector<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer = default)
             => ValueReadOnlyCollectionExtensions.ToDictionary<ValueWrapper<TSource>, Queue<TSource>.Enumerator, TSource, TKey, TElement>(new ValueWrapper<TSource>(source), keySelector, elementSelector, comparer);
 
         public readonly partial struct ValueWrapper<TSource>

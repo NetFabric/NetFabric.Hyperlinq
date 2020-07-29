@@ -110,16 +110,10 @@ namespace NetFabric.Hyperlinq
             => new List<TSource>(source);
 
         
-        public static Dictionary<TKey, TSource> ToDictionary<TSource, TKey>(this ImmutableList<TSource> source, NullableSelector<TSource, TKey> keySelector)
-            => ReadOnlyListExtensions.ToDictionary<ImmutableList<TSource>, TSource, TKey>(source, keySelector);
-        
-        public static Dictionary<TKey, TSource> ToDictionary<TSource, TKey>(this ImmutableList<TSource> source, NullableSelector<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer)
+        public static Dictionary<TKey, TSource> ToDictionary<TSource, TKey>(this ImmutableList<TSource> source, Selector<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer = default)
             => ReadOnlyListExtensions.ToDictionary<ImmutableList<TSource>, TSource, TKey>(source, keySelector, comparer);
         
-        public static Dictionary<TKey, TElement> ToDictionary<TSource, TKey, TElement>(this ImmutableList<TSource> source, NullableSelector<TSource, TKey> keySelector, NullableSelector<TSource, TElement> elementSelector)
-            => ReadOnlyListExtensions.ToDictionary<ImmutableList<TSource>, TSource, TKey, TElement>(source, keySelector, elementSelector);
-        
-        public static Dictionary<TKey, TElement> ToDictionary<TSource, TKey, TElement>(this ImmutableList<TSource> source, NullableSelector<TSource, TKey> keySelector, NullableSelector<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer)
+        public static Dictionary<TKey, TElement> ToDictionary<TSource, TKey, TElement>(this ImmutableList<TSource> source, Selector<TSource, TKey> keySelector, NullableSelector<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer = default)
             => ReadOnlyListExtensions.ToDictionary<ImmutableList<TSource>, TSource, TKey, TElement>(source, keySelector, elementSelector, comparer);
 
         public readonly partial struct ValueWrapper<TSource>

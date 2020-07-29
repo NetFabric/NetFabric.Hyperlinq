@@ -110,10 +110,10 @@ namespace NetFabric.Hyperlinq
             => new List<TSource>(source);
 
         
-        public static Dictionary<TKey, TSource> ToDictionary<TSource, TKey>(this List<TSource> source, NullableSelector<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer = default)
+        public static Dictionary<TKey, TSource> ToDictionary<TSource, TKey>(this List<TSource> source, Selector<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer = default)
             => source.AsMemory().ToDictionary(keySelector, comparer);
         
-        public static Dictionary<TKey, TElement> ToDictionary<TSource, TKey, TElement>(this List<TSource> source, NullableSelector<TSource, TKey> keySelector, NullableSelector<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer = default)
+        public static Dictionary<TKey, TElement> ToDictionary<TSource, TKey, TElement>(this List<TSource> source, Selector<TSource, TKey> keySelector, NullableSelector<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer = default)
             => source.AsMemory().ToDictionary(keySelector, elementSelector, comparer);
 
         public readonly partial struct ValueWrapper<TSource>

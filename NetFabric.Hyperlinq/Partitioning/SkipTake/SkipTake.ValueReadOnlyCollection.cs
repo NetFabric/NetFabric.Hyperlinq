@@ -233,7 +233,7 @@ namespace NetFabric.Hyperlinq
                         if (!enumerator.MoveNext())
                             Throw.InvalidOperationException();
 
-                        if (EqualityComparer<TSource>.Default.Equals(enumerator.Current, value))
+                        if (EqualityComparer<TSource>.Default.Equals(enumerator.Current, value!))
                             return true;
                     }
                     return false;
@@ -256,7 +256,7 @@ namespace NetFabric.Hyperlinq
                         if (!enumerator.MoveNext())
                             Throw.InvalidOperationException();
 
-                        if (comparer.Equals(enumerator.Current, value))
+                        if (comparer.Equals(enumerator.Current, value!))
                             return true;
                     }
                     return false;

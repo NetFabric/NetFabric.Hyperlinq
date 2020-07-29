@@ -39,7 +39,7 @@ namespace NetFabric.Hyperlinq
         [MaybeNull, AllowNull]
         public T Value { get; }
 
-        public readonly void Deconstruct(out bool hasValue, out T value)
+        public readonly void Deconstruct(out bool hasValue, [MaybeNull] out T value)
         {
             hasValue = IsSome;
             value = Value;
@@ -60,7 +60,7 @@ namespace NetFabric.Hyperlinq
         
         public readonly ValueTask<TOut> MatchAsync<TOut>(Func<T, CancellationToken, ValueTask<TOut>> some, Func<CancellationToken, ValueTask<TOut>> none, CancellationToken cancellationToken = default) 
             => IsSome
-                ? some(Value, cancellationToken) 
+                ? some(Value!, cancellationToken) 
                 : none(cancellationToken);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -131,7 +131,7 @@ namespace NetFabric.Hyperlinq
 
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public readonly SelectManyEnumerable<TSubEnumerable, TSubEnumerator, TResult> SelectMany<TSubEnumerable, TSubEnumerator, TResult>(NullableSelector<T, TSubEnumerable> selector) 
+        public readonly SelectManyEnumerable<TSubEnumerable, TSubEnumerator, TResult> SelectMany<TSubEnumerable, TSubEnumerator, TResult>(Selector<T, TSubEnumerable> selector) 
             where TSubEnumerable : IValueEnumerable<TResult, TSubEnumerator>
             where TSubEnumerator : struct, IEnumerator<TResult>
             => new SelectManyEnumerable<TSubEnumerable, TSubEnumerator, TResult>(in this, selector);
@@ -173,9 +173,9 @@ namespace NetFabric.Hyperlinq
             where TSubEnumerator : struct, IEnumerator<TResult>
         {
             readonly Option<T> source;
-            readonly NullableSelector<T, TSubEnumerable> selector;
+            readonly Selector<T, TSubEnumerable> selector;
 
-            internal SelectManyEnumerable(in Option<T> source, NullableSelector<T, TSubEnumerable> selector)
+            internal SelectManyEnumerable(in Option<T> source, Selector<T, TSubEnumerable> selector)
             {
                 this.source = source;
                 this.selector = selector;
@@ -191,7 +191,7 @@ namespace NetFabric.Hyperlinq
                 : IEnumerator<TResult>
             {
                 readonly Option<T> source; 
-                readonly NullableSelector<T, TSubEnumerable> selector;
+                readonly Selector<T, TSubEnumerable> selector;
                 [SuppressMessage("Style", "IDE0044:Add readonly modifier")]
                 TSubEnumerator subEnumerator; // do not make readonly
                 int state;

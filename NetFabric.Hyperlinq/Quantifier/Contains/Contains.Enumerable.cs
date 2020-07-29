@@ -48,6 +48,7 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IEnumerable<TSource>
             where TEnumerator : struct, IEnumerator<TSource>
         {
+            // TODO:
             //if (comparer is null || ReferenceEquals(comparer, EqualityComparer<TSource>.Default))
             //{
             //    if (source is ICollection<TSource> collection)
@@ -65,7 +66,7 @@ namespace NetFabric.Hyperlinq
                 using var enumerator = getEnumerator(source);
                 while (enumerator.MoveNext())
                 {
-                    if (EqualityComparer<TSource>.Default.Equals(enumerator.Current, value))
+                    if (EqualityComparer<TSource>.Default.Equals(enumerator.Current, value!))
                         return true;
                 }
                 return false;
