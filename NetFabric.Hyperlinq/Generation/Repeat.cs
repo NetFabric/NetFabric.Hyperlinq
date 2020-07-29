@@ -73,14 +73,7 @@ namespace NetFabric.Hyperlinq
                     span[index] = value;
             }
 
-            public void CopyTo(TSource[] array)
-            {
-                var end = count - 1;
-                for (var index = 0; index <= end; index++)
-                    array[index] = value;
-            }
-
-            public void CopyTo(TSource[] array, int arrayIndex)
+            public void CopyTo(TSource[] array, int arrayIndex = 0)
             {
                 var end = arrayIndex + count - 1;
                 for (var index = arrayIndex; index <= end; index++)
@@ -173,9 +166,7 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool All(Predicate<TSource> predicate)
-                => count == 0 
-                    ? true 
-                    : predicate(value);
+                => count == 0 || predicate(value);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Any()

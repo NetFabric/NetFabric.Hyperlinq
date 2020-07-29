@@ -107,10 +107,10 @@ namespace NetFabric.Hyperlinq
             public List<TResult> ToList()
                 => ValueEnumerableExtensions.ToList<TEnumerable, TEnumerator, TSource, TResult>(source, predicate, selector);
 
-            public Dictionary<TKey, TResult> ToDictionary<TKey>(NullableSelector<TResult, TKey> keySelector, IEqualityComparer<TKey>? comparer = default)
+            public Dictionary<TKey, TResult> ToDictionary<TKey>(Selector<TResult, TKey> keySelector, IEqualityComparer<TKey>? comparer = default)
                 => ToDictionary<TKey>(keySelector, comparer);
 
-            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(NullableSelector<TResult, TKey> keySelector, NullableSelector<TResult, TElement> elementSelector, IEqualityComparer<TKey>? comparer = default)
+            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Selector<TResult, TKey> keySelector, NullableSelector<TResult, TElement> elementSelector, IEqualityComparer<TKey>? comparer = default)
                 => ToDictionary<TKey, TElement>(keySelector, elementSelector, comparer);
         }
     }

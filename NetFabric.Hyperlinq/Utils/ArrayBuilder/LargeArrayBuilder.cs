@@ -97,7 +97,7 @@ namespace NetFabric.Hyperlinq
             for (var bufferIndex = 0; bufferIndex < buffers.Count; bufferIndex++)
             {
                 var buffer = buffers[bufferIndex];
-                var length = buffer.Length;
+                var length = buffer!.Length;
                 Array.Copy(buffer, 0, array, arrayIndex, length);
 
                 arrayIndex += length;
@@ -114,7 +114,7 @@ namespace NetFabric.Hyperlinq
             for (var bufferIndex = 0; bufferIndex < buffers.Count; bufferIndex++)
             {
                 var buffer = buffers[bufferIndex];
-                var length = buffer.Length;
+                var length = buffer!.Length;
                 buffer.AsSpan().CopyTo(span.Slice(arrayIndex, length));
 
                 arrayIndex += length;

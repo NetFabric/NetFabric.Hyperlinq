@@ -182,12 +182,12 @@ namespace NetFabric.Hyperlinq
                 => new List<TSource>(1) { value };
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public Dictionary<TKey, TSource> ToDictionary<TKey>(NullableSelector<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer = default)
+            public Dictionary<TKey, TSource> ToDictionary<TKey>(Selector<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer = default)
                 => new Dictionary<TKey, TSource>(1, comparer) { { keySelector(value), value } };
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(NullableSelector<TSource, TKey> keySelector, NullableSelector<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer = default)
-                => new Dictionary<TKey, TElement>(1, comparer) { { keySelector(value), elementSelector(value) } };
+            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Selector<TSource, TKey> keySelector, NullableSelector<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer = default)
+                => new Dictionary<TKey, TElement>(1, comparer) { { keySelector(value), elementSelector(value)! } };
         }
 
 #pragma warning disable IDE0060 // Remove unused parameter

@@ -248,9 +248,7 @@ namespace NetFabric.Hyperlinq
             public ValueTask<List<TResult>> ToListAsync(CancellationToken cancellationToken = default)
                 => AsyncValueEnumerableExtensions.ToListAsync<TEnumerable, TEnumerator, TSource, TResult>(source, predicate, selector, cancellationToken);
 
-            public ValueTask<Dictionary<TKey, TResult>> ToDictionaryAsync<TKey>(AsyncSelector<TResult, TKey> keySelector, CancellationToken cancellationToken = default)
-                => ToDictionaryAsync<TKey>(keySelector, null, cancellationToken);
-            public async ValueTask<Dictionary<TKey, TResult>> ToDictionaryAsync<TKey>(AsyncSelector<TResult, TKey> keySelector, IEqualityComparer<TKey>? comparer, CancellationToken cancellationToken = default)
+            public async ValueTask<Dictionary<TKey, TResult>> ToDictionaryAsync<TKey>(AsyncSelector<TResult, TKey> keySelector, IEqualityComparer<TKey>? comparer = default, CancellationToken cancellationToken = default)
             {
                 var dictionary = new Dictionary<TKey, TResult>(0, comparer);
 
@@ -272,9 +270,7 @@ namespace NetFabric.Hyperlinq
                 return dictionary;
             }
 
-            public ValueTask<Dictionary<TKey, TElement>> ToDictionaryAsync<TKey, TElement>(AsyncSelector<TResult, TKey> keySelector, AsyncSelector<TResult, TElement> elementSelector, CancellationToken cancellationToken = default)
-                => ToDictionaryAsync<TKey, TElement>(keySelector, elementSelector, null);
-            public async ValueTask<Dictionary<TKey, TElement>> ToDictionaryAsync<TKey, TElement>(AsyncSelector<TResult, TKey> keySelector, AsyncSelector<TResult, TElement> elementSelector, IEqualityComparer<TKey>? comparer, CancellationToken cancellationToken = default)
+            public async ValueTask<Dictionary<TKey, TElement>> ToDictionaryAsync<TKey, TElement>(AsyncSelector<TResult, TKey> keySelector, AsyncSelector<TResult, TElement> elementSelector, IEqualityComparer<TKey>? comparer = default, CancellationToken cancellationToken = default)
             {
                 var dictionary = new Dictionary<TKey, TElement>(0, comparer);
 

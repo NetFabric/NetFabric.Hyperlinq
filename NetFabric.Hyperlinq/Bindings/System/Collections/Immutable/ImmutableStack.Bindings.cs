@@ -110,16 +110,10 @@ namespace NetFabric.Hyperlinq
             => new List<TSource>(source);
 
         
-        public static Dictionary<TKey, TSource> ToDictionary<TSource, TKey>(this ImmutableStack<TSource> source, NullableSelector<TSource, TKey> keySelector)
-            => ValueEnumerableExtensions.ToDictionary<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource, TKey>(new ValueWrapper<TSource>(source), keySelector);
-        
-        public static Dictionary<TKey, TSource> ToDictionary<TSource, TKey>(this ImmutableStack<TSource> source, NullableSelector<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer)
+        public static Dictionary<TKey, TSource> ToDictionary<TSource, TKey>(this ImmutableStack<TSource> source, Selector<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer = default)
             => ValueEnumerableExtensions.ToDictionary<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource, TKey>(new ValueWrapper<TSource>(source), keySelector, comparer);
         
-        public static Dictionary<TKey, TElement> ToDictionary<TSource, TKey, TElement>(this ImmutableStack<TSource> source, NullableSelector<TSource, TKey> keySelector, NullableSelector<TSource, TElement> elementSelector)
-            => ValueEnumerableExtensions.ToDictionary<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource, TKey, TElement>(new ValueWrapper<TSource>(source), keySelector, elementSelector);
-        
-        public static Dictionary<TKey, TElement> ToDictionary<TSource, TKey, TElement>(this ImmutableStack<TSource> source, NullableSelector<TSource, TKey> keySelector, NullableSelector<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer)
+        public static Dictionary<TKey, TElement> ToDictionary<TSource, TKey, TElement>(this ImmutableStack<TSource> source, Selector<TSource, TKey> keySelector, NullableSelector<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer = default)
             => ValueEnumerableExtensions.ToDictionary<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource, TKey, TElement>(new ValueWrapper<TSource>(source), keySelector, elementSelector, comparer);
 
         public readonly partial struct ValueWrapper<TSource>

@@ -161,6 +161,8 @@ namespace NetFabric.Hyperlinq.Generator
                     if(instanceMethods.Count != 0 || extensionMethods.Count != 0)
                     {
                         var builder = new IndentedStringBuilder();
+                        builder.AppendLineInvariant("#nullable enable");
+                        builder.AppendLine();
                         builder.AppendLineInvariant("using System;");
                         builder.AppendLineInvariant("using System.CodeDom.Compiler;");
                         builder.AppendLineInvariant("using System.Diagnostics;");
