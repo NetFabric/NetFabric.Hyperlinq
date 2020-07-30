@@ -249,6 +249,7 @@ namespace NetFabric.Hyperlinq
                 => AsyncValueEnumerableExtensions.ToListAsync<TEnumerable, TEnumerator, TSource, TResult>(source, predicate, selector, cancellationToken);
 
             public async ValueTask<Dictionary<TKey, TResult>> ToDictionaryAsync<TKey>(AsyncSelector<TResult, TKey> keySelector, IEqualityComparer<TKey>? comparer = default, CancellationToken cancellationToken = default)
+                where TKey : notnull
             {
                 var dictionary = new Dictionary<TKey, TResult>(0, comparer);
 
@@ -271,6 +272,7 @@ namespace NetFabric.Hyperlinq
             }
 
             public async ValueTask<Dictionary<TKey, TElement>> ToDictionaryAsync<TKey, TElement>(AsyncSelector<TResult, TKey> keySelector, AsyncSelector<TResult, TElement> elementSelector, IEqualityComparer<TKey>? comparer = default, CancellationToken cancellationToken = default)
+                where TKey : notnull
             {
                 var dictionary = new Dictionary<TKey, TElement>(0, comparer);
 

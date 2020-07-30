@@ -12,10 +12,6 @@ namespace NetFabric.Hyperlinq
         public bool IsType { get; }
 
         public GeneratorMappingAttribute(string from, string to, bool isType = false)
-        {
-            From = from;
-            To = to;
-            IsType = isType;
-        }
+            => (From, To, IsType) = (from, to , isType);
     }
 }

@@ -167,6 +167,7 @@ namespace NetFabric.Hyperlinq.Generator
                         builder.AppendLineInvariant("using System.CodeDom.Compiler;");
                         builder.AppendLineInvariant("using System.Diagnostics;");
                         builder.AppendLineInvariant("using System.Runtime.CompilerServices;");
+                        builder.AppendLine();
 
                         using (builder.BlockInvariant($"namespace {containerClass.ContainingNamespace}"))
                         {

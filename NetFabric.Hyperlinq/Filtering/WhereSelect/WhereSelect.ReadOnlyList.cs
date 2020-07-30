@@ -145,6 +145,7 @@ namespace NetFabric.Hyperlinq
                 => ReadOnlyListExtensions.ToList<TList, TSource, TResult>(source, predicate, selector, offset, count); 
 
             public Dictionary<TKey, TResult> ToDictionary<TKey>(Selector<TResult, TKey> keySelector, IEqualityComparer<TKey>? comparer = default)
+                where TKey : notnull
             {
                 var dictionary = new Dictionary<TKey, TResult>(0, comparer);
 
@@ -163,6 +164,7 @@ namespace NetFabric.Hyperlinq
             }
 
             public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Selector<TResult, TKey> keySelector, NullableSelector<TResult, TElement> elementSelector, IEqualityComparer<TKey>? comparer = default)
+                where TKey : notnull
             {
                 var dictionary = new Dictionary<TKey, TElement>(0, comparer);
 

@@ -284,9 +284,11 @@ namespace NetFabric.Hyperlinq
                 => ReadOnlyListExtensions.ToList<TList, TSource, TResult>(source, selector, offset, Count);
 
             public Dictionary<TKey, TResult> ToDictionary<TKey>(Selector<TResult, TKey> keySelector, IEqualityComparer<TKey>? comparer = default)
+                where TKey : notnull
                 => ToDictionary<TKey>(keySelector, comparer);
 
             public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Selector<TResult, TKey> keySelector, NullableSelector<TResult, TElement> elementSelector, IEqualityComparer<TKey>? comparer = default)
+                where TKey : notnull
                 => ToDictionary<TKey, TElement>(keySelector, elementSelector, comparer);
 
             public readonly bool SequenceEqual(IEnumerable<TResult> other, IEqualityComparer<TResult>? comparer = default)
