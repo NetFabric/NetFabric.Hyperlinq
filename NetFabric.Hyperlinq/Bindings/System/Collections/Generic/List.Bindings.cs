@@ -2,7 +2,6 @@ using System;
 using System.Buffers;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 
@@ -13,81 +12,81 @@ namespace NetFabric.Hyperlinq
         public static int Count<TSource>(this List<TSource> source)
             => source.Count;
 
-        public static ReadOnlyMemory<TSource> Skip<TSource>(this List<TSource> source, int count)
-            => source.AsMemory().Skip(count);
+        public static ArraySegment<TSource> Skip<TSource>(this List<TSource> source, int count)
+            => source.AsArraySegment().Skip(count);
 
-        public static ReadOnlyMemory<TSource> Take<TSource>(this List<TSource> source, int count)
-            => source.AsMemory().Take(count);
+        public static ArraySegment<TSource> Take<TSource>(this List<TSource> source, int count)
+            => source.AsArraySegment().Take(count);
 
         public static bool All<TSource>(this List<TSource> source, Predicate<TSource> predicate)
-            => source.AsMemory().All(predicate);
+            => source.AsArraySegment().All(predicate);
         
         public static bool All<TSource>(this List<TSource> source, PredicateAt<TSource> predicate)
-            => source.AsMemory().All(predicate);
+            => source.AsArraySegment().All(predicate);
 
         
         public static bool Any<TSource>(this List<TSource> source)
             => source.Count != 0;
         
         public static bool Any<TSource>(this List<TSource> source, Predicate<TSource> predicate)
-            => source.AsMemory().Any(predicate);
+            => source.AsArraySegment().Any(predicate);
         
         public static bool Any<TSource>(this List<TSource> source, PredicateAt<TSource> predicate)
-            => source.AsMemory().Any(predicate);
+            => source.AsArraySegment().Any(predicate);
         
         public static bool Contains<TSource>(this List<TSource> source, [AllowNull] TSource value, IEqualityComparer<TSource>? comparer = default)
-            => source.AsMemory().Contains(value, comparer);
+            => source.AsArraySegment().Contains(value, comparer);
 
-        public static ArrayExtensions.MemorySelectEnumerable<TSource, TResult> Select<TSource, TResult>(
+        public static ArrayExtensions.ArraySegmentSelectEnumerable<TSource, TResult> Select<TSource, TResult>(
             this List<TSource> source,
             NullableSelector<TSource, TResult> selector)
-            => source.AsMemory().Select(selector);
+            => source.AsArraySegment().Select(selector);
 
-        public static ArrayExtensions.MemorySelectAtEnumerable<TSource, TResult> Select<TSource, TResult>(
+        public static ArrayExtensions.ArraySegmentSelectAtEnumerable<TSource, TResult> Select<TSource, TResult>(
             this List<TSource> source,
             NullableSelectorAt<TSource, TResult> selector)
-            => source.AsMemory().Select(selector);
+            => source.AsArraySegment().Select(selector);
 
-        public static ArrayExtensions.MemorySelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, TResult> SelectMany<TSource, TSubEnumerable, TSubEnumerator, TResult>(
+        public static ArrayExtensions.ArraySegmentSelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, TResult> SelectMany<TSource, TSubEnumerable, TSubEnumerator, TResult>(
             this List<TSource> source,
             Selector<TSource, TSubEnumerable> selector)
             where TSubEnumerable : IValueEnumerable<TResult, TSubEnumerator>
             where TSubEnumerator : struct, IEnumerator<TResult>
-            => source.AsMemory().SelectMany<TSource, TSubEnumerable, TSubEnumerator, TResult>(selector);
+            => source.AsArraySegment().SelectMany<TSource, TSubEnumerable, TSubEnumerator, TResult>(selector);
         
-        public static ArrayExtensions.MemoryWhereEnumerable<TSource> Where<TSource>(
+        public static ArrayExtensions.ArraySegmentWhereEnumerable<TSource> Where<TSource>(
             this List<TSource> source,
             Predicate<TSource> predicate)
-            => source.AsMemory().Where(predicate);
+            => source.AsArraySegment().Where(predicate);
         
-        public static ArrayExtensions.MemoryWhereAtEnumerable<TSource> Where<TSource>(
+        public static ArrayExtensions.ArraySegmentWhereAtEnumerable<TSource> Where<TSource>(
             this List<TSource> source,
             PredicateAt<TSource> predicate)
-            => source.AsMemory().Where(predicate);
+            => source.AsArraySegment().Where(predicate);
         
-        public static ArrayExtensions.MemoryWhereRefEnumerable<TSource> WhereRef<TSource>(
+        public static ArrayExtensions.ArraySegmentWhereRefEnumerable<TSource> WhereRef<TSource>(
             this List<TSource> source,
             Predicate<TSource> predicate)
-            => source.AsMemory().WhereRef(predicate);
+            => source.AsArraySegment().WhereRef(predicate);
         
-        public static ArrayExtensions.MemoryWhereRefAtEnumerable<TSource> WhereRef<TSource>(
+        public static ArrayExtensions.ArraySegmentWhereRefAtEnumerable<TSource> WhereRef<TSource>(
             this List<TSource> source,
             PredicateAt<TSource> predicate)
-            => source.AsMemory().WhereRef(predicate);
+            => source.AsArraySegment().WhereRef(predicate);
 
         public static Option<TSource> ElementAt<TSource>(this List<TSource> source, int index)
-            => source.AsMemory().ElementAt(index);
+            => source.AsArraySegment().ElementAt(index);
 
         
         public static Option<TSource> First<TSource>(this List<TSource> source)
-            => source.AsMemory().First();
+            => source.AsArraySegment().First();
 
         
         public static Option<TSource> Single<TSource>(this List<TSource> source)
-            => source.AsMemory().Single();
+            => source.AsArraySegment().Single();
 
-        public static ArrayExtensions.MemoryDistinctEnumerable<TSource> Distinct<TSource>(this List<TSource> source, IEqualityComparer<TSource>? comparer = default)
-            => source.AsMemory().Distinct(comparer);
+        public static ArrayExtensions.ArraySegmentDistinctEnumerable<TSource> Distinct<TSource>(this List<TSource> source, IEqualityComparer<TSource>? comparer = default)
+            => source.AsArraySegment().Distinct(comparer);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static List<TSource> AsEnumerable<TSource>(this List<TSource> source)
@@ -111,10 +110,12 @@ namespace NetFabric.Hyperlinq
 
         
         public static Dictionary<TKey, TSource> ToDictionary<TSource, TKey>(this List<TSource> source, Selector<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer = default)
-            => source.AsMemory().ToDictionary(keySelector, comparer);
+            where TKey : notnull
+            => source.AsArraySegment().ToDictionary(keySelector, comparer);
         
         public static Dictionary<TKey, TElement> ToDictionary<TSource, TKey, TElement>(this List<TSource> source, Selector<TSource, TKey> keySelector, NullableSelector<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer = default)
-            => source.AsMemory().ToDictionary(keySelector, elementSelector, comparer);
+            where TKey : notnull
+            => source.AsArraySegment().ToDictionary(keySelector, elementSelector, comparer);
 
         public readonly partial struct ValueWrapper<TSource>
             : IValueReadOnlyList<TSource, List<TSource>.Enumerator>

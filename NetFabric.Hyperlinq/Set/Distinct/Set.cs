@@ -112,6 +112,9 @@ namespace NetFabric.Hyperlinq
         /// </summary>
         void Resize()
         {
+            Debug.Assert(buckets is object);
+            Debug.Assert(slots is object);
+
             var newSize = checked((Count * 2) + 1);
             var newBuckets = bucketsPool.Rent(newSize);
             var newSlots = slotsPool.Rent(newSize);

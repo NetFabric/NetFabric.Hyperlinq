@@ -7,7 +7,7 @@ namespace NetFabric.Hyperlinq
     {
         
         public static bool All<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Predicate<TSource> predicate)
-            where TEnumerable : IValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
             if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
@@ -23,7 +23,7 @@ namespace NetFabric.Hyperlinq
 
         
         public static bool All<TEnumerable, TEnumerator, TSource>(this TEnumerable source, PredicateAt<TSource> predicate)
-            where TEnumerable : IValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
             if (predicate is null) Throw.ArgumentNullException(nameof(predicate));

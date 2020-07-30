@@ -13,13 +13,13 @@ namespace NetFabric.Hyperlinq
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static AsyncValueEnumerableWrapper<TEnumerable, TEnumerator, TSource> AsAsyncValueEnumerable<TEnumerable, TEnumerator, TSource>(this TEnumerable source)
-            where TEnumerable : IValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
             => new AsyncValueEnumerableWrapper<TEnumerable, TEnumerator, TSource>(source);
 
         public readonly partial struct AsyncValueEnumerableWrapper<TEnumerable, TEnumerator, TSource>
             : IAsyncValueEnumerable<TSource, AsyncValueEnumerableWrapper<TEnumerable, TEnumerator, TSource>.AsyncEnumerator>
-            where TEnumerable : IValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
             readonly TEnumerable source;
@@ -72,14 +72,14 @@ namespace NetFabric.Hyperlinq
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Task<TSource[]> ToArrayAsync(CancellationToken cancellationToken = default)
                 => Task<TSource[]>.Factory.StartNew(
-                    source => ValueEnumerableExtensions.ToArray<TEnumerable, TEnumerator, TSource>((TEnumerable)source),
+                    source => ValueEnumerableExtensions.ToArray<TEnumerable, TEnumerator, TSource>((TEnumerable)source!),
                     source,
                     cancellationToken);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Task<List<TSource>> ToListAsync(CancellationToken cancellationToken = default)
                 => Task<List<TSource>>.Factory.StartNew(
-                    source => ValueEnumerableExtensions.ToList<TEnumerable, TEnumerator, TSource>((TEnumerable)source),
+                    source => ValueEnumerableExtensions.ToList<TEnumerable, TEnumerator, TSource>((TEnumerable)source!),
                     source,
                     cancellationToken);
         }

@@ -45,7 +45,7 @@ namespace NetFabric.Hyperlinq
 
             public struct Enumerator
             {
-                readonly TSource[] source;
+                readonly TSource[]? source;
                 readonly Predicate<TSource> predicate;
                 readonly NullableSelector<TSource, TResult> selector;
                 readonly int end;
@@ -62,13 +62,13 @@ namespace NetFabric.Hyperlinq
 
                 [MaybeNull]
                 public TResult Current 
-                    => selector(source[index]);
+                    => selector(source![index]);
 
                 public bool MoveNext()
                 {
                     while (++index <= end)
                     {
-                        if (predicate(source[index]))
+                        if (predicate(source![index]))
                             return true;
                     }
                     return false;
@@ -78,7 +78,7 @@ namespace NetFabric.Hyperlinq
             public struct DisposableEnumerator
                 : IEnumerator<TResult>
             {
-                readonly TSource[] source;
+                readonly TSource[]? source;
                 readonly Predicate<TSource> predicate;
                 readonly NullableSelector<TSource, TResult> selector;
                 readonly int end;
@@ -95,18 +95,17 @@ namespace NetFabric.Hyperlinq
 
                 [MaybeNull]
                 public readonly TResult Current 
-                    => selector(source[index]);
+                    => selector(source![index]);
                 readonly TResult IEnumerator<TResult>.Current 
-                    => selector(source[index])!;
+                    => selector(source![index])!;
                 readonly object? IEnumerator.Current 
-                    => selector(source[index]);
+                    => selector(source![index]);
 
                 public bool MoveNext()
                 {
-                    var span = source;
                     while (++index <= end)
                     {
-                        if (predicate(span[index]))
+                        if (predicate(source![index]))
                             return true;
                     }
                     return false;

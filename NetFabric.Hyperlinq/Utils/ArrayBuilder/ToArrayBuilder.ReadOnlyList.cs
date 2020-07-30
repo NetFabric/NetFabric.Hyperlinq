@@ -9,7 +9,7 @@ namespace NetFabric.Hyperlinq
     {
 
         static LargeArrayBuilder<TSource> ToArrayBuilder<TList, TSource>(in TList source, Predicate<TSource> predicate, int offset, int count, ArrayPool<TSource> pool)
-            where TList : IReadOnlyList<TSource>
+            where TList : notnull, IReadOnlyList<TSource>
         {
             Debug.Assert(pool is object);
 
@@ -24,7 +24,7 @@ namespace NetFabric.Hyperlinq
         }
 
         static LargeArrayBuilder<TSource> ToArrayBuilder<TList, TSource>(in TList source, PredicateAt<TSource> predicate, int offset, int count, ArrayPool<TSource> pool)
-            where TList : IReadOnlyList<TSource>
+            where TList : notnull, IReadOnlyList<TSource>
         {
             Debug.Assert(pool is object);
 
@@ -50,7 +50,7 @@ namespace NetFabric.Hyperlinq
         }
 
         static LargeArrayBuilder<TResult> ToArrayBuilder<TList, TSource, TResult>(in TList source, Predicate<TSource> predicate, NullableSelector<TSource, TResult> selector, int offset, int count, ArrayPool<TResult> pool)
-            where TList : IReadOnlyList<TSource>
+            where TList : notnull, IReadOnlyList<TSource>
         {
             Debug.Assert(pool is object);
 

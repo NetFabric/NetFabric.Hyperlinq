@@ -14,7 +14,7 @@ namespace NetFabric.Hyperlinq
         public static SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult> Select<TEnumerable, TEnumerator, TSource, TResult>(
             this TEnumerable source, 
             NullableSelector<TSource, TResult> selector)
-            where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
+            where TEnumerable : notnull, IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
             if (selector is null) Throw.ArgumentNullException(nameof(selector));
@@ -26,7 +26,7 @@ namespace NetFabric.Hyperlinq
         public readonly partial struct SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>
             : IValueReadOnlyCollection<TResult, SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>.Enumerator>
             , ICollection<TResult>
-            where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
+            where TEnumerable : notnull, IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
             readonly TEnumerable source;
@@ -151,16 +151,18 @@ namespace NetFabric.Hyperlinq
                 => ValueReadOnlyCollectionExtensions.ToList<TEnumerable, TEnumerator, TSource, TResult>(source, selector);
 
             public Dictionary<TKey, TResult> ToDictionary<TKey>(Selector<TResult, TKey> keySelector, IEqualityComparer<TKey>? comparer = default)
+                where TKey : notnull
                 => ToDictionary<TKey>(keySelector, comparer);
 
             public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Selector<TResult, TKey> keySelector, NullableSelector<TResult, TElement> elementSelector, IEqualityComparer<TKey>? comparer = default)
+                where TKey : notnull
                 => ToDictionary<TKey, TElement>(keySelector, elementSelector, comparer);
         }
 
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int Count<TEnumerable, TEnumerator, TSource, TResult>(this in SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult> source)
-            where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
+            where TEnumerable : notnull, IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
             => source.Count;
     }

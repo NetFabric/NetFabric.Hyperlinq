@@ -36,7 +36,7 @@ namespace NetFabric.Hyperlinq
 
             public struct Enumerator
             {
-                readonly TSource[] source;
+                readonly TSource[]? source;
                 readonly Predicate<TSource> predicate;
                 readonly int end;
                 int index;
@@ -50,13 +50,13 @@ namespace NetFabric.Hyperlinq
                 }
 
                 public ref TSource Current
-                    => ref source[index];
+                    => ref source![index];
 
                 public bool MoveNext()
                 {
                     while (++index <= end)
                     {
-                        if (predicate(source[index]))
+                        if (predicate(source![index]))
                             return true;
                     }
                     return false;

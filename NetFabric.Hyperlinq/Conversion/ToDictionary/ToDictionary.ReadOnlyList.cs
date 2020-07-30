@@ -7,7 +7,8 @@ namespace NetFabric.Hyperlinq
     {
         
         public static Dictionary<TKey, TSource> ToDictionary<TList, TSource, TKey>(this TList source, Selector<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer = default)
-            where TList : IReadOnlyList<TSource>
+            where TList : notnull, IReadOnlyList<TSource>
+            where TKey : notnull
         {
             if (keySelector is null) Throw.ArgumentNullException(nameof(keySelector));
 
@@ -16,7 +17,8 @@ namespace NetFabric.Hyperlinq
 
         
         public static Dictionary<TKey, TElement> ToDictionary<TList, TSource, TKey, TElement>(this TList source, Selector<TSource, TKey> keySelector, NullableSelector<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer = default)
-            where TList : IReadOnlyList<TSource>
+            where TList : notnull, IReadOnlyList<TSource>
+            where TKey : notnull
         {
             if (keySelector is null) Throw.ArgumentNullException(nameof(keySelector));
             if (elementSelector is null) Throw.ArgumentNullException(nameof(elementSelector));
@@ -26,7 +28,8 @@ namespace NetFabric.Hyperlinq
 
 
         static Dictionary<TKey, TSource> ToDictionary<TList, TSource, TKey>(this TList source, Selector<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer, int offset, int count)
-            where TList : IReadOnlyList<TSource>
+            where TList : notnull, IReadOnlyList<TSource>
+            where TKey : notnull
         {
             var dictionary = new Dictionary<TKey, TSource>(source.Count, comparer);
             var end = offset + count - 1;
@@ -37,7 +40,8 @@ namespace NetFabric.Hyperlinq
 
 
         static Dictionary<TKey, TElement> ToDictionary<TList, TSource, TKey, TElement>(this TList source, Selector<TSource, TKey> keySelector, NullableSelector<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer, int offset, int count)
-            where TList : IReadOnlyList<TSource>
+            where TList : notnull, IReadOnlyList<TSource>
+            where TKey : notnull
         {
             var dictionary = new Dictionary<TKey, TElement>(source.Count, comparer);
             var end = offset + count - 1;
@@ -48,7 +52,8 @@ namespace NetFabric.Hyperlinq
 
 
         static Dictionary<TKey, TSource> ToDictionary<TList, TSource, TKey>(this TList source, Selector<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer, Predicate<TSource> predicate, int offset, int count)
-            where TList : IReadOnlyList<TSource>
+            where TList : notnull, IReadOnlyList<TSource>
+            where TKey : notnull
         {
             var dictionary = new Dictionary<TKey, TSource>(source.Count, comparer);
             var end = offset + count - 1;
@@ -62,7 +67,8 @@ namespace NetFabric.Hyperlinq
 
 
         static Dictionary<TKey, TElement> ToDictionary<TList, TSource, TKey, TElement>(this TList source, Selector<TSource, TKey> keySelector, NullableSelector<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer, Predicate<TSource> predicate, int offset, int count)
-            where TList : IReadOnlyList<TSource>
+            where TList : notnull, IReadOnlyList<TSource>
+            where TKey : notnull
         {
             var dictionary = new Dictionary<TKey, TElement>(source.Count, comparer);
             var end = offset + count - 1;
@@ -76,7 +82,8 @@ namespace NetFabric.Hyperlinq
 
 
         static Dictionary<TKey, TSource> ToDictionary<TList, TSource, TKey>(this TList source, Selector<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer, PredicateAt<TSource> predicate, int offset, int count)
-            where TList : IReadOnlyList<TSource>
+            where TList : notnull, IReadOnlyList<TSource>
+            where TKey : notnull
         {
             var dictionary = new Dictionary<TKey, TSource>(source.Count, comparer);
             var end = offset + count - 1;
@@ -90,7 +97,8 @@ namespace NetFabric.Hyperlinq
 
 
         static Dictionary<TKey, TElement> ToDictionary<TList, TSource, TKey, TElement>(this TList source, Selector<TSource, TKey> keySelector, NullableSelector<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer, PredicateAt<TSource> predicate, int offset, int count)
-            where TList : IReadOnlyList<TSource>
+            where TList : notnull, IReadOnlyList<TSource>
+            where TKey : notnull
         {
             var dictionary = new Dictionary<TKey, TElement>(source.Count, comparer);
             var end = offset + count - 1;

@@ -10,7 +10,7 @@ namespace NetFabric.Hyperlinq
     {
         
         public static async ValueTask<TSource[]> ToArrayBuilderAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source, CancellationToken cancellationToken = default)
-            where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
             var builder = new LargeArrayBuilder<TSource>(ArrayPool<TSource>.Shared);
@@ -27,7 +27,7 @@ namespace NetFabric.Hyperlinq
         }
 
         public static async ValueTask<IMemoryOwner<TSource>> ToArrayBuilderAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source, MemoryPool<TSource> pool, CancellationToken cancellationToken = default)
-            where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
             var builder = new LargeArrayBuilder<TSource>(ArrayPool<TSource>.Shared);
@@ -46,7 +46,7 @@ namespace NetFabric.Hyperlinq
         //////////////////////////////////////////////////////////////////////////////////////////////////
 
         static async ValueTask<TSource[]> ToArrayBuilderAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source, AsyncPredicate<TSource> predicate, CancellationToken cancellationToken)
-            where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
             var builder = new LargeArrayBuilder<TSource>(ArrayPool<TSource>.Shared);
@@ -66,7 +66,7 @@ namespace NetFabric.Hyperlinq
         }
 
         static async ValueTask<IMemoryOwner<TSource>> ToArrayBuilderAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source, AsyncPredicate<TSource> predicate, MemoryPool<TSource> pool, CancellationToken cancellationToken)
-            where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
             var builder = new LargeArrayBuilder<TSource>(ArrayPool<TSource>.Shared);
@@ -88,7 +88,7 @@ namespace NetFabric.Hyperlinq
         //////////////////////////////////////////////////////////////////////////////////////////////////
 
         static async ValueTask<TSource[]> ToArrayBuilderAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source, AsyncPredicateAt<TSource> predicate, CancellationToken cancellationToken)
-            where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
             var builder = new LargeArrayBuilder<TSource>(ArrayPool<TSource>.Shared);
@@ -111,7 +111,7 @@ namespace NetFabric.Hyperlinq
         }
 
         static async ValueTask<IMemoryOwner<TSource>> ToArrayBuilderAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source, AsyncPredicateAt<TSource> predicate, MemoryPool<TSource> pool, CancellationToken cancellationToken)
-            where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
             var builder = new LargeArrayBuilder<TSource>(ArrayPool<TSource>.Shared);
@@ -136,7 +136,7 @@ namespace NetFabric.Hyperlinq
         //////////////////////////////////////////////////////////////////////////////////////////////////
 
         static async ValueTask<TResult[]> ToArrayBuilderAsync<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, AsyncSelector<TSource, TResult> selector, CancellationToken cancellationToken)
-            where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
             var builder = new LargeArrayBuilder<TResult>(ArrayPool<TResult>.Shared);
@@ -154,7 +154,7 @@ namespace NetFabric.Hyperlinq
         }
 
         static async ValueTask<IMemoryOwner<TResult>> ToArrayBuilderAsync<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, AsyncSelector<TSource, TResult> selector, MemoryPool<TResult> pool, CancellationToken cancellationToken)
-            where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
             var builder = new LargeArrayBuilder<TResult>(ArrayPool<TResult>.Shared);
@@ -174,7 +174,7 @@ namespace NetFabric.Hyperlinq
         //////////////////////////////////////////////////////////////////////////////////////////////////
 
         static async ValueTask<TResult[]> ToArrayBuilderAsync<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, AsyncSelectorAt<TSource, TResult> selector, CancellationToken cancellationToken)
-            where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
             var builder = new LargeArrayBuilder<TResult>(ArrayPool<TResult>.Shared);
@@ -195,7 +195,7 @@ namespace NetFabric.Hyperlinq
         }
 
         static async ValueTask<IMemoryOwner<TResult>> ToArrayBuilderAsync<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, AsyncSelectorAt<TSource, TResult> selector, MemoryPool<TResult> pool, CancellationToken cancellationToken)
-            where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
             var builder = new LargeArrayBuilder<TResult>(ArrayPool<TResult>.Shared);
@@ -218,7 +218,7 @@ namespace NetFabric.Hyperlinq
         //////////////////////////////////////////////////////////////////////////////////////////////////
 
         static async ValueTask<TResult[]> ToArrayBuilderAsync<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, AsyncPredicate<TSource> predicate, AsyncSelector<TSource, TResult> selector, CancellationToken cancellationToken)
-            where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
             var builder = new LargeArrayBuilder<TResult>(ArrayPool<TResult>.Shared);
@@ -238,7 +238,7 @@ namespace NetFabric.Hyperlinq
         }
 
         static async ValueTask<IMemoryOwner<TResult>> ToArrayBuilderAsync<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, AsyncPredicate<TSource> predicate, AsyncSelector<TSource, TResult> selector, MemoryPool<TResult> pool, CancellationToken cancellationToken)
-            where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
             var builder = new LargeArrayBuilder<TResult>(ArrayPool<TResult>.Shared);

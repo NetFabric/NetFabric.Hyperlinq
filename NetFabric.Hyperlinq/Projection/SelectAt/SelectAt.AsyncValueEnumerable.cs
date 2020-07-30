@@ -15,7 +15,7 @@ namespace NetFabric.Hyperlinq
         public static SelectAtEnumerable<TEnumerable, TEnumerator, TSource, TResult> Select<TEnumerable, TEnumerator, TSource, TResult>(
             this TEnumerable source,
             AsyncSelectorAt<TSource, TResult> selector)
-            where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
             if (selector is null) Throw.ArgumentNullException(nameof(selector));
@@ -26,7 +26,7 @@ namespace NetFabric.Hyperlinq
         [GeneratorMapping("TSource", "TResult")]
         public readonly partial struct SelectAtEnumerable<TEnumerable, TEnumerator, TSource, TResult>
             : IAsyncValueEnumerable<TResult, SelectAtEnumerable<TEnumerable, TEnumerator, TSource, TResult>.Enumerator>
-            where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
             readonly TEnumerable source;
@@ -226,7 +226,7 @@ namespace NetFabric.Hyperlinq
                 => AsyncValueEnumerableExtensions.ToArrayAsync<TEnumerable, TEnumerator, TSource, TResult>(source, selector, cancellationToken);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public ValueTask<IMemoryOwner<TResult>> ToArray(MemoryPool<TResult> pool, CancellationToken cancellationToken = default)
+            public ValueTask<IMemoryOwner<TResult>> ToArrayAsync(MemoryPool<TResult> pool, CancellationToken cancellationToken = default)
                 => AsyncValueEnumerableExtensions.ToArrayAsync<TEnumerable, TEnumerator, TSource, TResult>(source, selector, pool, cancellationToken);
 
             public ValueTask<List<TResult>> ToListAsync(CancellationToken cancellationToken = default)

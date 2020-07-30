@@ -15,7 +15,7 @@ namespace NetFabric.Hyperlinq
         public static DistinctEnumerable<TList, TSource> Distinct<TList, TSource>(
             this TList source, 
             IEqualityComparer<TSource>? comparer = default)
-            where TList : IReadOnlyList<TSource>
+            where TList : notnull, IReadOnlyList<TSource>
             => new DistinctEnumerable<TList, TSource>(source, comparer, 0, source.Count);
 
         
@@ -24,12 +24,12 @@ namespace NetFabric.Hyperlinq
             this TList source,
             IEqualityComparer<TSource>? comparer,
             int offset, int count)
-            where TList : IReadOnlyList<TSource>
+            where TList : notnull, IReadOnlyList<TSource>
             => new DistinctEnumerable<TList, TSource>(source, comparer, offset, count);
 
         public readonly partial struct DistinctEnumerable<TList, TSource>
             : IValueEnumerable<TSource, DistinctEnumerable<TList, TSource>.Enumerator>
-            where TList : IReadOnlyList<TSource>
+            where TList : notnull, IReadOnlyList<TSource>
         {
             readonly TList source;
             readonly IEqualityComparer<TSource>? comparer;

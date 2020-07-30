@@ -37,7 +37,7 @@ namespace NetFabric.Hyperlinq
             public struct Enumerator
                 : IEnumerator<TSource>
             {
-                readonly TSource[] source;
+                readonly TSource[]? source;
                 readonly int end;
                 Set<TSource> set;
                 int index;
@@ -48,25 +48,22 @@ namespace NetFabric.Hyperlinq
                     set = new Set<TSource>(enumerable.comparer);
                     index = enumerable.source.Offset - 1;
                     end = index + enumerable.source.Count;
-                    Current = default!;
                 }
 
                 [MaybeNull, AllowNull]
-                public TSource Current { get; private set; }
+                public TSource Current 
+                    => source![index];
                 readonly TSource IEnumerator<TSource>.Current
-                    => Current!;
+                    => source![index]!;
                 readonly object? IEnumerator.Current
-                    => Current;
+                    => source![index];
 
                 public bool MoveNext()
                 {
                     while (++index <= end)
                     {
-                        if (set.Add(source[index]))
-                        {
-                            Current = source[index];
+                        if (set.Add(source![index]))
                             return true;
-                        }
                     }
 
                     Dispose();
@@ -84,17 +81,20 @@ namespace NetFabric.Hyperlinq
             readonly Set<TSource> GetSet()
             {
                 var set = new Set<TSource>(comparer);
-                var array = source.Array;
-                if (source.IsWhole())
+                if (source.Count != 0)
                 {
-                    foreach (var item in array)
-                        _ = set.Add(item);
-                }
-                else
-                {
-                    var end = source.Offset + source.Count - 1;
-                    for (var index = source.Offset; index <= end; index++)
-                        _ = set.Add(array[index]);
+                    var array = source.Array;
+                    if (source.Count == array!.Length)
+                    {
+                        for (var index = 0; index < array.Length; index++)
+                            _ = set.Add(array![index]);
+                    }
+                    else
+                    {
+                        var end = source.Offset + source.Count - 1;
+                        for (var index = source.Offset; index <= end; index++)
+                            _ = set.Add(array![index]);
+                    }
                 }
                 return set;
             }

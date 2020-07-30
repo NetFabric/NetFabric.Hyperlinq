@@ -10,7 +10,7 @@ namespace NetFabric.Hyperlinq
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static List<TSource> ToList<TList, TSource>(this TList source)
-            where TList : IReadOnlyList<TSource>
+            where TList : notnull, IReadOnlyList<TSource>
             => source.Count == 0
                 ? new List<TSource>()
                 : source switch
@@ -23,7 +23,7 @@ namespace NetFabric.Hyperlinq
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static List<TSource> ToList<TList, TSource>(this TList source, int offset, int count)
-            where TList : IReadOnlyList<TSource>
+            where TList : notnull, IReadOnlyList<TSource>
             => source.Count == 0
                 ? new List<TSource>()
                 : new List<TSource>(new ToListCollection<TList, TSource>(source, offset, count));
@@ -31,7 +31,7 @@ namespace NetFabric.Hyperlinq
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static List<TSource> ToList<TList, TSource>(this TList source, Predicate<TSource> predicate, int offset, int count)
-            where TList : IReadOnlyList<TSource>
+            where TList : notnull, IReadOnlyList<TSource>
         {
             using var arrayBuilder = ToArrayBuilder(source, predicate, offset, count, ArrayPool<TSource>.Shared);
             return new List<TSource>(arrayBuilder);
@@ -40,7 +40,7 @@ namespace NetFabric.Hyperlinq
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static List<TSource> ToList<TList, TSource>(this TList source, PredicateAt<TSource> predicate, int offset, int count)
-            where TList : IReadOnlyList<TSource>
+            where TList : notnull, IReadOnlyList<TSource>
         {
             using var arrayBuilder = ToArrayBuilder(source, predicate, offset, count, ArrayPool<TSource>.Shared);
             return new List<TSource>(arrayBuilder);
@@ -49,7 +49,7 @@ namespace NetFabric.Hyperlinq
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static List<TResult> ToList<TList, TSource, TResult>(this TList source, NullableSelector<TSource, TResult> selector, int offset, int count)
-            where TList : IReadOnlyList<TSource>
+            where TList : notnull, IReadOnlyList<TSource>
             => source.Count == 0
                 ? new List<TResult>()
                 : new List<TResult>(new ToListCollection<TList, TSource, TResult>(source, selector, offset, count));
@@ -57,7 +57,7 @@ namespace NetFabric.Hyperlinq
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static List<TResult> ToList<TList, TSource, TResult>(this TList source, NullableSelectorAt<TSource, TResult> selector, int offset, int count)
-            where TList : IReadOnlyList<TSource>
+            where TList : notnull, IReadOnlyList<TSource>
             => source.Count == 0
                 ? new List<TResult>()
                 : new List<TResult>(new IndexedToListCollection<TList, TSource, TResult>(source, selector, offset, count));
@@ -65,7 +65,7 @@ namespace NetFabric.Hyperlinq
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static List<TResult> ToList<TList, TSource, TResult>(this TList source, Predicate<TSource> predicate, NullableSelector<TSource, TResult> selector, int offset, int count)
-            where TList : IReadOnlyList<TSource>
+            where TList : notnull, IReadOnlyList<TSource>
         {
             using var arrayBuilder = ToArrayBuilder(source, predicate, selector, offset, count, ArrayPool<TResult>.Shared);
             return new List<TResult>(arrayBuilder);
@@ -75,7 +75,7 @@ namespace NetFabric.Hyperlinq
         [GeneratorIgnore]
         sealed class ToListCollection<TList, TSource>
             : ToListCollectionBase<TSource>
-            where TList : IReadOnlyList<TSource>
+            where TList : notnull, IReadOnlyList<TSource>
         {
             readonly TList source;
             readonly int offset;
@@ -100,7 +100,7 @@ namespace NetFabric.Hyperlinq
         [GeneratorIgnore]
         sealed class ToListCollection<TList, TSource, TResult>
             : ToListCollectionBase<TResult>
-            where TList : IReadOnlyList<TSource>
+            where TList : notnull, IReadOnlyList<TSource>
         {
             readonly TList source;
             readonly NullableSelector<TSource, TResult> selector;
@@ -124,7 +124,7 @@ namespace NetFabric.Hyperlinq
         [GeneratorIgnore]
         sealed class IndexedToListCollection<TList, TSource, TResult>
             : ToListCollectionBase<TResult>
-            where TList : IReadOnlyList<TSource>
+            where TList : notnull, IReadOnlyList<TSource>
         {
             readonly TList source;
             readonly NullableSelectorAt<TSource, TResult> selector;

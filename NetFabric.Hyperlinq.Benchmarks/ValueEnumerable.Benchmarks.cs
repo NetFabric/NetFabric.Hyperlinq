@@ -64,7 +64,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
             CountMyValueEnumerable<RangeEnumerable, RangeEnumerable.MyValueEnumerator, int>(source, item => (item & 0x01) == 0);
 
         static int CountEnumerable<TEnumerable, TEnumerator, TSource>(TEnumerable source)
-            where TEnumerable : IEnumerable<TSource>
+            where TEnumerable : notnull, IEnumerable<TSource>
             where TEnumerator : IEnumerator<TSource>
         {
             var count = 0;
@@ -76,7 +76,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         }
 
         static int CountEnumerable<TEnumerable, TEnumerator, TSource>(TEnumerable source, Predicate<TSource> predicate)
-            where TEnumerable : IEnumerable<TSource>
+            where TEnumerable : notnull, IEnumerable<TSource>
             where TEnumerator : IEnumerator<TSource>
         {
             var count = 0;
@@ -89,7 +89,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         }
 
         static int CountMyEnumerable<TEnumerable, TEnumerator, TSource>(TEnumerable source)
-            where TEnumerable : IMyEnumerable<TSource>
+            where TEnumerable : notnull, IMyEnumerable<TSource>
             where TEnumerator : IEnumerator<TSource>
         {
             var count = 0;
@@ -101,7 +101,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         }
 
         static int CountMyEnumerable<TEnumerable, TEnumerator, TSource>(TEnumerable source, Predicate<TSource> predicate)
-            where TEnumerable : IMyEnumerable<TSource>
+            where TEnumerable : notnull, IMyEnumerable<TSource>
             where TEnumerator : IEnumerator<TSource>
         {
             var count = 0;
@@ -114,7 +114,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         }        
 
         static int CountBenValueEnumerable<TEnumerable, TEnumerator, TSource>(TEnumerable source)
-            where TEnumerable : IBenValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : notnull, IBenValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IBenValueEnumerator<TSource>
         {
             var count = 0;
@@ -127,7 +127,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         }
 
         static int CountBenValueEnumerable<TEnumerable, TEnumerator, TSource>(TEnumerable source, Predicate<TSource> predicate)
-            where TEnumerable : IBenValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : notnull, IBenValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IBenValueEnumerator<TSource>
         {
             var count = 0;
@@ -146,7 +146,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         }
 
         static int CountMyValueEnumerable<TEnumerable, TEnumerator, TSource>(TEnumerable source)
-            where TEnumerable : IMyValueEnumerable<TEnumerator, TSource>
+            where TEnumerable : notnull, IMyValueEnumerable<TEnumerator, TSource>
             where TEnumerator : struct, IMyValueEnumerator<TSource>
         {
             var count = 0;
@@ -159,7 +159,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         }
 
         static int CountMyValueEnumerable<TEnumerable, TEnumerator, TSource>(TEnumerable source, Predicate<TSource> predicate)
-            where TEnumerable : IMyValueEnumerable<TEnumerator, TSource>
+            where TEnumerable : notnull, IMyValueEnumerable<TEnumerator, TSource>
             where TEnumerator : struct, IMyValueEnumerator<TSource>
         {
             var count = 0;

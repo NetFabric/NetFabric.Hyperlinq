@@ -8,7 +8,7 @@ namespace NetFabric.Hyperlinq
     public static partial class ReadOnlyListExtensions
     {
         public static bool Contains<TList, TSource>(this TList source, [AllowNull] TSource value)
-            where TList : IReadOnlyList<TSource>
+            where TList : notnull, IReadOnlyList<TSource>
             where TSource : struct
         {
             if (source is ICollection<TSource> collection)
@@ -25,12 +25,12 @@ namespace NetFabric.Hyperlinq
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool Contains<TList, TSource>(this TList source, [AllowNull] TSource value, IEqualityComparer<TSource>? comparer = default)
-            where TList : IReadOnlyList<TSource>
+            where TList : notnull, IReadOnlyList<TSource>
             => Contains(source, value, comparer, 0, source.Count);
 
 
         static bool Contains<TList, TSource>(this TList source, [AllowNull] TSource value, IEqualityComparer<TSource>? comparer, int offset, int count)
-            where TList : IReadOnlyList<TSource>
+            where TList : notnull, IReadOnlyList<TSource>
         {
             if (count == 0)
                 return false;
@@ -71,7 +71,7 @@ namespace NetFabric.Hyperlinq
         }
 
         static bool Contains<TList, TSource, TResult>(this TList source, [AllowNull] TResult value, NullableSelector<TSource, TResult> selector, int offset, int count)
-            where TList : IReadOnlyList<TSource>
+            where TList : notnull, IReadOnlyList<TSource>
         {
             if (count == 0)
                 return false;
@@ -107,7 +107,7 @@ namespace NetFabric.Hyperlinq
 
 
         static bool Contains<TList, TSource, TResult>(this TList source, [AllowNull] TResult value, NullableSelectorAt<TSource, TResult> selector, int offset, int count)
-            where TList : IReadOnlyList<TSource>
+            where TList : notnull, IReadOnlyList<TSource>
         {
             if (count == 0)
                 return false;

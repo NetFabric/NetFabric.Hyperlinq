@@ -42,7 +42,7 @@ namespace NetFabric.Hyperlinq
 
             public struct Enumerator
             {
-                readonly TSource[] source;
+                readonly TSource[]? source;
                 readonly Predicate<TSource> predicate;
                 readonly int end;
                 int index;
@@ -56,13 +56,13 @@ namespace NetFabric.Hyperlinq
                 }
 
                 public readonly TSource Current
-                    => source[index];
+                    => source![index];
 
                 public bool MoveNext()
                 {
                     while (++index <= end)
                     {
-                        if (predicate(source[index]))
+                        if (predicate(source![index]))
                             return true;
                     }
                     return false;
@@ -72,7 +72,7 @@ namespace NetFabric.Hyperlinq
             public struct DisposableEnumerator
                 : IEnumerator<TSource>
             {
-                readonly TSource[] source;
+                readonly TSource[]? source;
                 readonly Predicate<TSource> predicate;
                 readonly int end;
                 int index;
@@ -87,17 +87,17 @@ namespace NetFabric.Hyperlinq
 
                 [MaybeNull]
                 public readonly TSource Current
-                    => source[index];
+                    => source![index];
                 readonly TSource IEnumerator<TSource>.Current
-                    => source[index];
+                    => source![index];
                 readonly object? IEnumerator.Current
-                    => source[index];
+                    => source![index];
 
                 public bool MoveNext()
                 {
                     while (++index <= end)
                     {
-                        if (predicate(source[index]))
+                        if (predicate(source![index]))
                             return true;
                     }
                     return false;

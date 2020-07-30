@@ -7,7 +7,7 @@ namespace NetFabric.Hyperlinq
     public static partial class EnumerableExtensions
     {
         internal static bool Contains<TEnumerable, TSource>(this TEnumerable source, [AllowNull] TSource value, IEqualityComparer<TSource>? comparer = default)
-            where TEnumerable : IEnumerable<TSource>
+            where TEnumerable : notnull, IEnumerable<TSource>
         {
             if (comparer is null || ReferenceEquals(comparer, EqualityComparer<TSource>.Default))
             {
@@ -45,7 +45,7 @@ namespace NetFabric.Hyperlinq
         }
 
         internal static bool Contains<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TEnumerable, TEnumerator> getEnumerator, [AllowNull] TSource value, IEqualityComparer<TSource>? comparer = default)
-            where TEnumerable : IEnumerable<TSource>
+            where TEnumerable : notnull, IEnumerable<TSource>
             where TEnumerator : struct, IEnumerator<TSource>
         {
             // TODO:
@@ -77,7 +77,7 @@ namespace NetFabric.Hyperlinq
                 using var enumerator = getEnumerator(source);
                 while (enumerator.MoveNext())
                 {
-                    if (comparer.Equals(enumerator.Current, value))
+                    if (comparer.Equals(enumerator.Current, value!))
                         return true;
                 }
                 return false;

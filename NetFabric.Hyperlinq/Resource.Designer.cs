@@ -61,6 +61,15 @@ namespace NetFabric.Hyperlinq {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The array in the ArraySegment is null.
+        /// </summary>
+        internal static string ArraySegmentNull {
+            get {
+                return ResourceManager.GetString("ArraySegmentNull", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Sequence contains no elements.
         /// </summary>
         internal static string EmptySequence {

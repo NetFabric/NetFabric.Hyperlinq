@@ -9,7 +9,7 @@ namespace NetFabric.Hyperlinq
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool All<TList, TSource>(this TList source, Predicate<TSource> predicate)
-            where TList : IReadOnlyList<TSource>
+            where TList : notnull, IReadOnlyList<TSource>
         {
             if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
 
@@ -18,7 +18,7 @@ namespace NetFabric.Hyperlinq
 
         
         internal static bool All<TList, TSource>(this TList source, Predicate<TSource> predicate, int offset, int count)
-            where TList : IReadOnlyList<TSource>
+            where TList : notnull, IReadOnlyList<TSource>
         {
             var end = offset + count - 1;
             for (var index = offset; index <= end; index++)
@@ -32,7 +32,7 @@ namespace NetFabric.Hyperlinq
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool All<TList, TSource>(this TList source, PredicateAt<TSource> predicate)
-            where TList : IReadOnlyList<TSource>
+            where TList : notnull, IReadOnlyList<TSource>
         {
             if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
 
@@ -41,7 +41,7 @@ namespace NetFabric.Hyperlinq
 
         
         internal static bool All<TList, TSource>(this TList source, PredicateAt<TSource> predicate, int offset, int count)
-            where TList : IReadOnlyList<TSource>
+            where TList : notnull, IReadOnlyList<TSource>
         {
             var end = count - 1;
             if (offset == 0)

@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net461;netcoreapp2.1;netcoreapp3.1</TargetFrameworks>
+    <TargetFrameworks>net461;netcoreapp2.1;netcoreapp3.1;net5.0</TargetFrameworks>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 
@@ -23,10 +23,6 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
   </ItemGroup>
-
-  <PropertyGroup Condition="'$(TargetFramework)'!='net461'">
-    <DefineConstants>$(DefineConstants);SPAN_SUPPORTED</DefineConstants>
-  </PropertyGroup>
 
   <ItemGroup Condition="'$(TargetFramework)'=='net461' Or '$(TargetFramework)'=='netcoreapp2.1'">
     <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="1.1.1" />
