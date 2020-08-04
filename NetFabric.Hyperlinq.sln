@@ -4,13 +4,8 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 16.0.28516.95
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetFabric.Hyperlinq", "NetFabric.Hyperlinq\NetFabric.Hyperlinq.csproj", "{EEEAA31B-434E-4849-A3E5-FA9664F5CE9B}"
-	ProjectSection(ProjectDependencies) = postProject
-		{35400B81-751A-4405-AC01-D9851D6DAE46} = {35400B81-751A-4405-AC01-D9851D6DAE46}
-	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetFabric.Hyperlinq.UnitTests", "NetFabric.Hyperlinq.UnitTests\NetFabric.Hyperlinq.UnitTests.csproj", "{FE0CFD9E-7685-4595-8691-5364228722E9}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetFabric.Hyperlinq.Benchmarks", "NetFabric.Hyperlinq.Benchmarks\NetFabric.Hyperlinq.Benchmarks.csproj", "{B2231C1C-CB99-4A6B-AE09-7B105BF02E9A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{2C452DA5-FE07-451C-BFE1-AD14A57F7B09}"
 	ProjectSection(SolutionItems) = preProject
@@ -27,7 +22,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetFabric.Hyperlinq.Interfaces", "NetFabric.Hyperlinq.Interfaces\NetFabric.Hyperlinq.Interfaces.csproj", "{5D186C2C-056C-4146-98AF-137BA449570A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetFabric.Hyperlinq.Generator", "NetFabric.Hyperlinq.Generator\NetFabric.Hyperlinq.Generator.csproj", "{35400B81-751A-4405-AC01-D9851D6DAE46}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetFabric.Hyperlinq.Benchmarks", "NetFabric.Hyperlinq.Benchmarks\NetFabric.Hyperlinq.Benchmarks.csproj", "{02EE275F-6E2D-444A-AB1F-9BCD02DEA204}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetFabric.Hyperlinq.SourceGenerator", "NetFabric.Hyperlinq.SourceGenerator\NetFabric.Hyperlinq.SourceGenerator.csproj", "{B8C004E3-F59E-4017-8781-C0F99B61BDEF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -43,18 +40,18 @@ Global
 		{FE0CFD9E-7685-4595-8691-5364228722E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FE0CFD9E-7685-4595-8691-5364228722E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FE0CFD9E-7685-4595-8691-5364228722E9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B2231C1C-CB99-4A6B-AE09-7B105BF02E9A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B2231C1C-CB99-4A6B-AE09-7B105BF02E9A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B2231C1C-CB99-4A6B-AE09-7B105BF02E9A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B2231C1C-CB99-4A6B-AE09-7B105BF02E9A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5D186C2C-056C-4146-98AF-137BA449570A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5D186C2C-056C-4146-98AF-137BA449570A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5D186C2C-056C-4146-98AF-137BA449570A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5D186C2C-056C-4146-98AF-137BA449570A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{35400B81-751A-4405-AC01-D9851D6DAE46}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{35400B81-751A-4405-AC01-D9851D6DAE46}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{35400B81-751A-4405-AC01-D9851D6DAE46}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{35400B81-751A-4405-AC01-D9851D6DAE46}.Release|Any CPU.Build.0 = Release|Any CPU
+		{02EE275F-6E2D-444A-AB1F-9BCD02DEA204}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{02EE275F-6E2D-444A-AB1F-9BCD02DEA204}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{02EE275F-6E2D-444A-AB1F-9BCD02DEA204}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{02EE275F-6E2D-444A-AB1F-9BCD02DEA204}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B8C004E3-F59E-4017-8781-C0F99B61BDEF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B8C004E3-F59E-4017-8781-C0F99B61BDEF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B8C004E3-F59E-4017-8781-C0F99B61BDEF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B8C004E3-F59E-4017-8781-C0F99B61BDEF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

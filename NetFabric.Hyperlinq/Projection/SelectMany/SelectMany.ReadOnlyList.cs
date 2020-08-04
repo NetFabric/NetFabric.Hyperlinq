@@ -12,7 +12,7 @@ namespace NetFabric.Hyperlinq
         public static SelectManyEnumerable<TList, TSource, TSubEnumerable, TSubEnumerator, TResult> SelectMany<TList, TSource, TSubEnumerable, TSubEnumerator, TResult>(
             this TList source, 
             Selector<TSource, TSubEnumerable> selector)
-            where TList : IReadOnlyList<TSource>
+            where TList : notnull, IReadOnlyList<TSource>
             where TSubEnumerable : IValueEnumerable<TResult, TSubEnumerator>
             where TSubEnumerator : struct, IEnumerator<TResult>
         {
@@ -24,7 +24,7 @@ namespace NetFabric.Hyperlinq
         [GeneratorMapping("TSource", "TResult")]
         public readonly partial struct SelectManyEnumerable<TList, TSource, TSubEnumerable, TSubEnumerator, TResult>
             : IValueEnumerable<TResult, SelectManyEnumerable<TList, TSource, TSubEnumerable, TSubEnumerator, TResult>.Enumerator>
-            where TList : IReadOnlyList<TSource>
+            where TList : notnull, IReadOnlyList<TSource>
             where TSubEnumerable : IValueEnumerable<TResult, TSubEnumerator>
             where TSubEnumerator : struct, IEnumerator<TResult>
         {
@@ -48,20 +48,20 @@ namespace NetFabric.Hyperlinq
             {
                 readonly TList source;
                 readonly Selector<TSource, TSubEnumerable> selector;
-                readonly int sourceCount;
+                readonly int end;
+                EnumeratorState state;
                 int sourceIndex;
                 [SuppressMessage("Style", "IDE0044:Add readonly modifier")]
                 TSubEnumerator subEnumerator; // do not make readonly
-                int state;
 
                 internal Enumerator(in SelectManyEnumerable<TList, TSource, TSubEnumerable, TSubEnumerator, TResult> enumerable)
                 {
                     source = enumerable.source;
                     selector = enumerable.selector;
-                    sourceCount = source.Count;
+                    state = EnumeratorState.Enumerating;
                     sourceIndex = -1;
+                    end = sourceIndex + enumerable.source.Count;
                     subEnumerator = default;
-                    state = 0;
                 }
 
                 [MaybeNull]
@@ -76,32 +76,31 @@ namespace NetFabric.Hyperlinq
                 {
                     switch (state)
                     {
-                        case 0:
-                            state = 1;
-                            goto case 1;
-
-                        case 1:
-                            if (++sourceIndex >= sourceCount)
-                                break;
+                        case EnumeratorState.Enumerating:
+                            if (++sourceIndex >= end)
+                            {
+                                Dispose();
+                                state = EnumeratorState.Complete;
+                                return false;
+                            }
 
                             var enumerable = selector(source[sourceIndex]);
-                            if (enumerable is null)
-                                Throw.InvalidOperationException("The 'selector' in SelectMany returned 'null'.");
                             subEnumerator = enumerable.GetEnumerator();
-                            
-                            state = 2;
-                            goto case 2;
 
-                        case 2:
+                            state = EnumeratorState.EnumeratingSub;
+                            goto case EnumeratorState.EnumeratingSub;
+
+                        case EnumeratorState.EnumeratingSub:
                             if (!subEnumerator.MoveNext())
                             {
-                                state = 1;
-                                goto case 1;
+                                state = EnumeratorState.Enumerating;
+                                goto case EnumeratorState.Enumerating;
                             }
                             return true;
+
+                        default:
+                            return false;
                     }
-                    Dispose();
-                    return false;
                 }
 
                 [ExcludeFromCodeCoverage]

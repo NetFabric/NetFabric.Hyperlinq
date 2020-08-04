@@ -400,11 +400,12 @@ The following open-source projects are used to build and test this project:
 - [BenchmarkDotNet](https://benchmarkdotnet.org/)
 - [coveralls](https://coveralls.io)
 - [coverlet](https://github.com/tonerdo/coverlet)
+- [ILRepack](https://github.com/gluck/il-repack)
+- [ILRepack.MSBuild.Task](https://github.com/peters/ILRepack.MSBuild.Task)
 - [NetFabric.Assertive](https://github.com/NetFabric/NetFabric.Assertive)
 - [NetFabric.Hyperlinq.Analyzer](https://github.com/NetFabric/NetFabric.Hyperlinq.Analyzer)
 - [Nullable](https://github.com/manuelroemer/Nullable)
 - [Source Link](https://github.com/dotnet/sourcelink)
-- [Uno.SourceGeneration](https://github.com/unoplatform/Uno.SourceGeneration)
 - [xUnit.net](https://xunit.net/)
 
 ## License

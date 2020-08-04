@@ -11,22 +11,25 @@ namespace NetFabric.Hyperlinq
             if (predicate is null)
                 Throw.ArgumentNullException(nameof(predicate));
 
-            var array = source.Array;
-            if (source.IsWhole())
+            if (source.Count != 0)
             {
-                foreach (var item in array)
+                var array = source.Array;
+                if (source.Count == array!.Length)
                 {
-                    if (!predicate(item))
-                        return false;
+                    for (var index = 0; index < array.Length; index++)
+                    {
+                        if (!predicate(array![index]))
+                            return false;
+                    }
                 }
-            }
-            else
-            {
-                var end = source.Count + source.Offset - 1;
-                for (var index = source.Offset; index <= end; index++)
+                else
                 {
-                    if (!predicate(array[index]))
-                        return false;
+                    var end = source.Count + source.Offset - 1;
+                    for (var index = source.Offset; index <= end; index++)
+                    {
+                        if (!predicate(array![index]))
+                            return false;
+                    }
                 }
             }
             return true;
@@ -39,25 +42,25 @@ namespace NetFabric.Hyperlinq
             if (predicate is null)
                 Throw.ArgumentNullException(nameof(predicate));
 
-            var array = source.Array;
-            if (source.IsWhole())
+            if (source.Count != 0)
             {
-                var index = 0;
-                foreach (var item in array)
+                var array = source.Array;
+                if (source.Count == array!.Length)
                 {
-                    if (!predicate(item, index))
-                        return false;
-
-                    index++;
+                    for (var index = 0; index < array.Length; index++)
+                    {
+                        if (!predicate(array![index], index))
+                            return false;
+                    }
                 }
-            }
-            else
-            {
-                var end = source.Count + source.Offset - 1;
-                for (var index = source.Offset; index <= end; index++)
+                else
                 {
-                    if (!predicate(array[index], index))
-                        return false;
+                    var end = source.Count + source.Offset - 1;
+                    for (var index = source.Offset; index <= end; index++)
+                    {
+                        if (!predicate(array![index], index))
+                            return false;
+                    }
                 }
             }
             return true;

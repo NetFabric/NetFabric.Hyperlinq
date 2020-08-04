@@ -12,22 +12,27 @@ namespace NetFabric.Hyperlinq
             Debug.Assert(pool is object);
 
             var builder = new LargeArrayBuilder<TSource>(pool);
-            var array = source.Array;
-            if (source.IsWhole())
+            if (source.Count != 0)
             {
-                foreach (var item in array)
+                var array = source.Array;
+                if (source.Count == array!.Length)
                 {
-                    if (predicate(item))
-                        builder.Add(item);
+                    for (var index = 0; index < array.Length; index++)
+                    {
+                        var item = array![index];
+                        if (predicate(item))
+                            builder.Add(item);
+                    }
                 }
-            }
-            else
-            {
-                var end = source.Offset + source.Count - 1;
-                for (var index = source.Offset; index <= end; index++)
+                else
                 {
-                    if (predicate(array[index]))
-                        builder.Add(array[index]);
+                    var end = source.Offset + source.Count - 1;
+                    for (var index = source.Offset; index <= end; index++)
+                    {
+                        var item = array![index];
+                        if (predicate(item))
+                            builder.Add(item);
+                    }
                 }
             }
             return builder;
@@ -39,37 +44,39 @@ namespace NetFabric.Hyperlinq
             Debug.Assert(pool is object);
 
             var builder = new LargeArrayBuilder<TSource>(pool);
-            var array = source.Array;
-            if (source.IsWhole())
+            if (source.Count != 0)
             {
-                var index = 0;
-                foreach (var item in array)
+                var array = source!.Array;
+                if (source.Count == array!.Length)
                 {
-                    if (predicate(item, index))
-                        builder.Add(item);
-
-                    index++;
-                }
-            }
-            else
-            {
-                var end = source.Count - 1;
-                if (source.Offset == 0)
-                {
-                    for (var index = 0; index <= end; index++)
+                    for (var index = 0; index < array.Length; index++)
                     {
-                        if (predicate(array[index], index))
-                            builder.Add(array[index]);
+                        var item = array![index];
+                        if (predicate(item, index))
+                            builder.Add(item);
                     }
                 }
                 else
                 {
-                    var offset = source.Offset;
-                    for (var index = 0; index <= end; index++)
+                    var end = source.Count - 1;
+                    if (source.Offset == 0)
                     {
-                        var item = array[index + offset];
-                        if (predicate(item, index))
-                            builder.Add(item);
+                        for (var index = 0; index <= end; index++)
+                        {
+                            var item = array![index];
+                            if (predicate(item, index))
+                                builder.Add(item);
+                        }
+                    }
+                    else
+                    {
+                        var offset = source.Offset;
+                        for (var index = 0; index <= end; index++)
+                        {
+                            var item = array![index + offset];
+                            if (predicate(item, index))
+                                builder.Add(item);
+                        }
                     }
                 }
             }
@@ -81,22 +88,27 @@ namespace NetFabric.Hyperlinq
             Debug.Assert(pool is object);
 
             var builder = new LargeArrayBuilder<TResult>(pool);
-            var array = source.Array;
-            if (source.IsWhole())
+            if (source.Count != 0)
             {
-                foreach (var item in array)
+                var array = source.Array;
+                if (source.Count == array!.Length)
                 {
-                    if (predicate(item))
-                        builder.Add(selector(item));
+                    for (var index = 0; index < array.Length; index++)
+                    {
+                        var item = array![index];
+                        if (predicate(item))
+                            builder.Add(selector(item));
+                    }
                 }
-            }
-            else
-            {
-                var end = source.Offset + source.Count - 1;
-                for (var index = source.Offset; index <= end; index++)
+                else
                 {
-                    if (predicate(array[index]))
-                        builder.Add(selector(array[index]));
+                    var end = source.Offset + source.Count - 1;
+                    for (var index = source.Offset; index <= end; index++)
+                    {
+                        var item = array![index];
+                        if (predicate(item))
+                            builder.Add(selector(item));
+                    }
                 }
             }
             return builder;

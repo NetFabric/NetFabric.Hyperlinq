@@ -7,19 +7,20 @@ namespace NetFabric.Hyperlinq
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Option<TSource> ElementAt<TSource>(this in ArraySegment<TSource> source, int index)
-            => index < 0 || index >= source.Count
+            => index < 0 || index >= source.Count || source.Array is null
                 ? Option.None
                 : Option.Some(source.Array[index + source.Offset]);
 
         static Option<TSource> ElementAt<TSource>(this in ArraySegment<TSource> source, int index, Predicate<TSource> predicate)
         {
-            if (index >= 0)
+            if (source.Count != 0 && index >= 0)
             {
                 var array = source.Array;
-                if (source.IsWhole())
+                if (source.Count == array!.Length)
                 {
-                    foreach (var item in array)
+                    for (var sourceIndex = 0; sourceIndex < array.Length; sourceIndex++)
                     {
+                        var item = array![sourceIndex];
                         if (predicate(item) && index-- == 0)
                             return Option.Some(item);
                     }
@@ -29,7 +30,7 @@ namespace NetFabric.Hyperlinq
                     var end = source.Offset + source.Count - 1;
                     for (var sourceIndex = source.Offset; sourceIndex <= end; sourceIndex++)
                     {
-                        var item = array[sourceIndex];
+                        var item = array![sourceIndex];
                         if (predicate(item) && index-- == 0)
                             return Option.Some(item);
                     }
@@ -41,18 +42,16 @@ namespace NetFabric.Hyperlinq
 
         static Option<TSource> ElementAt<TSource>(this in ArraySegment<TSource> source, int index, PredicateAt<TSource> predicate)
         {
-            if (index >= 0)
+            if (source.Count != 0 && index >= 0)
             {
                 var array = source.Array;
-                if (source.IsWhole())
+                if (source.Count == array!.Length)
                 {
-                    var sourceIndex = 0;
-                    foreach (var item in array)
+                    for (var sourceIndex = 0; sourceIndex < array.Length; sourceIndex++)
                     {
+                        var item = array![sourceIndex];
                         if (predicate(item, sourceIndex) && index-- == 0)
                             return Option.Some(item);
-
-                        sourceIndex++;
                     }
                 }
                 else
@@ -62,7 +61,7 @@ namespace NetFabric.Hyperlinq
                         var end = source.Count - 1;
                         for (var sourceIndex = 0; sourceIndex <= end; sourceIndex++)
                         {
-                            var item = array[sourceIndex];
+                            var item = array![sourceIndex];
                             if (predicate(item, sourceIndex) && index-- == 0)
                                 return Option.Some(item);
                         }
@@ -73,7 +72,7 @@ namespace NetFabric.Hyperlinq
                         var end = source.Count - 1;
                         for (var sourceIndex = 0; sourceIndex <= end; sourceIndex++)
                         {
-                            var item = array[sourceIndex + offset];
+                            var item = array![sourceIndex + offset];
                             if (predicate(item, sourceIndex) && index-- == 0)
                                 return Option.Some(item);
                         }
@@ -86,27 +85,28 @@ namespace NetFabric.Hyperlinq
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static Option<TResult> ElementAt<TSource, TResult>(this in ArraySegment<TSource> source, int index, NullableSelector<TSource, TResult> selector)
-            => index < 0 || index >= source.Count
+            => index < 0 || index >= source.Count || source.Array is null
                 ? Option.None
                 : Option.Some(selector(source.Array[index + source.Offset]));
 
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Option<TResult> ElementAt<TSource, TResult>(this in ArraySegment<TSource> source, int index, NullableSelectorAt<TSource, TResult> selector)
-            => index < 0 || index >= source.Count
+            => index < 0 || index >= source.Count || source.Array is null
                 ? Option.None
                 : Option.Some(selector(source.Array[index + source.Offset], index));
 
 
         static Option<TResult> ElementAt<TSource, TResult>(this in ArraySegment<TSource> source, int index, Predicate<TSource> predicate, NullableSelector<TSource, TResult> selector)
         {
-            if (index >= 0)
+            if (source.Count != 0 && index >= 0)
             {
                 var array = source.Array;
-                if (source.IsWhole())
+                if (source.Count == array!.Length)
                 {
-                    foreach (var item in array)
+                    for (var sourceIndex = 0; sourceIndex < array.Length; sourceIndex++)
                     {
+                        var item = array![sourceIndex];
                         if (predicate(item) && index-- == 0)
                             return Option.Some(selector(item));
                     }
@@ -116,7 +116,7 @@ namespace NetFabric.Hyperlinq
                     var end = source.Offset + source.Count - 1;
                     for (var sourceIndex = source.Offset; sourceIndex <= end; sourceIndex++)
                     {
-                        var item = array[sourceIndex];
+                        var item = array![sourceIndex];
                         if (predicate(item) && index-- == 0)
                             return Option.Some(selector(item));
                     }

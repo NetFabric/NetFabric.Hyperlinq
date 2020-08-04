@@ -11,18 +11,18 @@ namespace NetFabric.Hyperlinq
     {
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static WhereSelectEnumerable<TList, TSource, TResult> WhereSelect<TList, TSource, TResult>(
+        static WhereSelecTList<TList, TSource, TResult> WhereSelect<TList, TSource, TResult>(
             this TList source,
             Predicate<TSource> predicate,
             NullableSelector<TSource, TResult> selector, 
             int offset, int count)
-            where TList : IReadOnlyList<TSource>
-            => new WhereSelectEnumerable<TList, TSource, TResult>(in source, predicate, selector, offset, count);
+            where TList : notnull, IReadOnlyList<TSource>
+            => new WhereSelecTList<TList, TSource, TResult>(in source, predicate, selector, offset, count);
 
         [GeneratorMapping("TSource", "TResult")]
-        public readonly partial struct WhereSelectEnumerable<TList, TSource, TResult>
-            : IValueEnumerable<TResult, WhereSelectEnumerable<TList, TSource, TResult>.DisposableEnumerator>
-            where TList : IReadOnlyList<TSource>
+        public readonly partial struct WhereSelecTList<TList, TSource, TResult>
+            : IValueEnumerable<TResult, WhereSelecTList<TList, TSource, TResult>.DisposableEnumerator>
+            where TList : notnull, IReadOnlyList<TSource>
         {
             readonly TList source;
             readonly Predicate<TSource> predicate;
@@ -30,7 +30,7 @@ namespace NetFabric.Hyperlinq
             readonly int offset;
             readonly int count;
 
-            internal WhereSelectEnumerable(in TList source, Predicate<TSource> predicate, NullableSelector<TSource, TResult> selector, int offset, int count)
+            internal WhereSelecTList(in TList source, Predicate<TSource> predicate, NullableSelector<TSource, TResult> selector, int offset, int count)
             {
                 this.source = source;
                 this.predicate = predicate;
@@ -41,7 +41,7 @@ namespace NetFabric.Hyperlinq
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly Enumerator GetEnumerator() => new Enumerator(in this);
-            readonly DisposableEnumerator IValueEnumerable<TResult, WhereSelectEnumerable<TList, TSource, TResult>.DisposableEnumerator>.GetEnumerator() => new DisposableEnumerator(in this);
+            readonly DisposableEnumerator IValueEnumerable<TResult, WhereSelecTList<TList, TSource, TResult>.DisposableEnumerator>.GetEnumerator() => new DisposableEnumerator(in this);
             readonly IEnumerator<TResult> IEnumerable<TResult>.GetEnumerator() => new DisposableEnumerator(in this);
             readonly IEnumerator IEnumerable.GetEnumerator() => new DisposableEnumerator(in this);
 
@@ -53,7 +53,7 @@ namespace NetFabric.Hyperlinq
                 readonly int end;
                 int index;
 
-                internal Enumerator(in WhereSelectEnumerable<TList, TSource, TResult> enumerable)
+                internal Enumerator(in WhereSelecTList<TList, TSource, TResult> enumerable)
                 {
                     source = enumerable.source;
                     predicate = enumerable.predicate;
@@ -86,7 +86,7 @@ namespace NetFabric.Hyperlinq
                 readonly int end;
                 int index;
 
-                internal DisposableEnumerator(in WhereSelectEnumerable<TList, TSource, TResult> enumerable)
+                internal DisposableEnumerator(in WhereSelecTList<TList, TSource, TResult> enumerable)
                 {
                     source = enumerable.source;
                     predicate = enumerable.predicate;
@@ -145,6 +145,7 @@ namespace NetFabric.Hyperlinq
                 => ReadOnlyListExtensions.ToList<TList, TSource, TResult>(source, predicate, selector, offset, count); 
 
             public Dictionary<TKey, TResult> ToDictionary<TKey>(Selector<TResult, TKey> keySelector, IEqualityComparer<TKey>? comparer = default)
+                where TKey : notnull
             {
                 var dictionary = new Dictionary<TKey, TResult>(0, comparer);
 
@@ -163,6 +164,7 @@ namespace NetFabric.Hyperlinq
             }
 
             public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Selector<TResult, TKey> keySelector, NullableSelector<TResult, TElement> elementSelector, IEqualityComparer<TKey>? comparer = default)
+                where TKey : notnull
             {
                 var dictionary = new Dictionary<TKey, TElement>(0, comparer);
 

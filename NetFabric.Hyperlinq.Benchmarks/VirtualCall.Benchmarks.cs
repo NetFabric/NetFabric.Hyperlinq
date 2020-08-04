@@ -111,7 +111,7 @@ namespace NetFabric.Hyperlinq
             => Count<ArrayWrapper<TSource>, TSource>(new ArrayWrapper<TSource>(source), predicate);
         
         public static int Count<TEnumerable, TSource>(TEnumerable source, Predicate<TSource> predicate)
-            where TEnumerable : IReadOnlyList<TSource>
+            where TEnumerable : notnull, IReadOnlyList<TSource>
         {
             var count = 0;
             for (var index = 0; index < source.Count; index++)

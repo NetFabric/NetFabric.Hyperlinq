@@ -11,7 +11,7 @@ namespace NetFabric.Hyperlinq
     {
 
         static async ValueTask<LargeArrayBuilder<TSource>> ToArrayBuilderAsync<TEnumerable, TEnumerator, TSource>(TEnumerable source, ArrayPool<TSource> arrayPool, CancellationToken cancellationToken)
-            where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
             Debug.Assert(arrayPool is object);
@@ -30,7 +30,7 @@ namespace NetFabric.Hyperlinq
         }
 
         static async ValueTask<LargeArrayBuilder<TSource>> ToArrayBuilderAsync<TEnumerable, TEnumerator, TSource>(TEnumerable source, AsyncPredicate<TSource> predicate, ArrayPool<TSource> arrayPool, CancellationToken cancellationToken)
-            where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
             Debug.Assert(arrayPool is object);
@@ -52,7 +52,7 @@ namespace NetFabric.Hyperlinq
         }
 
         static async ValueTask<LargeArrayBuilder<TSource>> ToArrayBuilderAsync<TEnumerable, TEnumerator, TSource>(TEnumerable source, AsyncPredicateAt<TSource> predicate, ArrayPool<TSource> arrayPool, CancellationToken cancellationToken)
-            where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
             Debug.Assert(arrayPool is object);
@@ -77,7 +77,7 @@ namespace NetFabric.Hyperlinq
         }
 
         static async ValueTask<LargeArrayBuilder<TResult>> ToArrayBuilderAsync<TEnumerable, TEnumerator, TSource, TResult>(TEnumerable source, AsyncSelector<TSource, TResult> selector, ArrayPool<TResult> arrayPool, CancellationToken cancellationToken)
-            where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
             Debug.Assert(arrayPool is object);
@@ -97,7 +97,7 @@ namespace NetFabric.Hyperlinq
         }
 
         static async ValueTask<LargeArrayBuilder<TResult>> ToArrayBuilderAsync<TEnumerable, TEnumerator, TSource, TResult>(TEnumerable source, AsyncSelectorAt<TSource, TResult> selector, ArrayPool<TResult> arrayPool, CancellationToken cancellationToken)
-            where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
             Debug.Assert(arrayPool is object);
@@ -120,7 +120,7 @@ namespace NetFabric.Hyperlinq
         }
 
         static async ValueTask<LargeArrayBuilder<TResult>> ToArrayBuilderAsync<TEnumerable, TEnumerator, TSource, TResult>(TEnumerable source, AsyncPredicate<TSource> predicate, AsyncSelector<TSource, TResult> selector, ArrayPool<TResult> arrayPool, CancellationToken cancellationToken)
-            where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
             Debug.Assert(arrayPool is object);

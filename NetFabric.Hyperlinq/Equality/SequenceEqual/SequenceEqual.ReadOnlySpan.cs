@@ -8,7 +8,7 @@ namespace NetFabric.Hyperlinq
     public static partial class ArrayExtensions
     {
         public static bool SequenceEqual<TEnumerable, TEnumerator, TSource>(this ReadOnlySpan<TSource> first, TEnumerable second, IEqualityComparer<TSource>? comparer = null)
-            where TEnumerable : IValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
             comparer ??= EqualityComparer<TSource>.Default;
@@ -31,7 +31,7 @@ namespace NetFabric.Hyperlinq
         }
 
         //public static bool SequenceEqual<TEnumerable, TEnumerator, TSource>(this ReadOnlySpan<TSource> first, TEnumerable second, IEqualityComparer<TSource>? comparer = null)
-        //    where TEnumerable : IValueReadOnlyList<TSource, TEnumerator>
+        //    where TEnumerable : notnull, IValueReadOnlyList<TSource, TEnumerator>
         //    where TEnumerator : struct, IEnumerator<TSource>
         //{
         //    comparer ??= EqualityComparer<TSource>.Default;

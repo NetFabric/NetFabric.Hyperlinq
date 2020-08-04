@@ -9,7 +9,7 @@ namespace NetFabric.Hyperlinq
     {
 
         static LargeArrayBuilder<TSource> ToArrayBuilder<TEnumerable, TEnumerator, TSource>(TEnumerable source, ArrayPool<TSource> arrayPool)
-            where TEnumerable : IValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
             Debug.Assert(arrayPool is object);
@@ -22,7 +22,7 @@ namespace NetFabric.Hyperlinq
         }
 
         static LargeArrayBuilder<TSource> ToArrayBuilder<TEnumerable, TEnumerator, TSource>(TEnumerable source, Predicate<TSource> predicate, ArrayPool<TSource> arrayPool)
-            where TEnumerable : IValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
             Debug.Assert(arrayPool is object);
@@ -39,7 +39,7 @@ namespace NetFabric.Hyperlinq
         }
 
         static LargeArrayBuilder<TSource> ToArrayBuilder<TEnumerable, TEnumerator, TSource>(TEnumerable source, PredicateAt<TSource> predicate, ArrayPool<TSource> arrayPool)
-            where TEnumerable : IValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
             Debug.Assert(arrayPool is object);
@@ -56,7 +56,7 @@ namespace NetFabric.Hyperlinq
         }
 
         static LargeArrayBuilder<TResult> ToArrayBuilder<TEnumerable, TEnumerator, TSource, TResult>(TEnumerable source, NullableSelector<TSource, TResult> selector, ArrayPool<TResult> arrayPool)
-            where TEnumerable : IValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
             Debug.Assert(arrayPool is object);
@@ -69,7 +69,7 @@ namespace NetFabric.Hyperlinq
         }
 
         static LargeArrayBuilder<TResult> ToArrayBuilder<TEnumerable, TEnumerator, TSource, TResult>(TEnumerable source, NullableSelectorAt<TSource, TResult> selector, ArrayPool<TResult> arrayPool)
-            where TEnumerable : IValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
             Debug.Assert(arrayPool is object);
@@ -85,7 +85,7 @@ namespace NetFabric.Hyperlinq
         }
 
         static LargeArrayBuilder<TResult> ToArrayBuilder<TEnumerable, TEnumerator, TSource, TResult>(TEnumerable source, Predicate<TSource> predicate, NullableSelector<TSource, TResult> selector, ArrayPool<TResult> arrayPool)
-            where TEnumerable : IValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
             Debug.Assert(arrayPool is object);

@@ -15,8 +15,8 @@ namespace NetFabric.Hyperlinq
     public delegate ValueTask<bool> AsyncPredicate<in TSource>([AllowNull] TSource obj, CancellationToken cancellationToken);
     public delegate ValueTask<bool> AsyncPredicateAt<in TSource>([AllowNull] TSource obj, int index, CancellationToken cancellationToken);
 
-    public delegate TResult Selector<in TSource, TResult>([AllowNull] TSource obj);
-    public delegate TResult SelectorAt<in TSource, TResult>([AllowNull] TSource obj, int index);
+    public delegate TResult Selector<in TSource, TResult>([AllowNull] TSource obj) where TResult : notnull;
+    public delegate TResult SelectorAt<in TSource, TResult>([AllowNull] TSource obj, int index) where TResult : notnull;
 
     [return: MaybeNull] public delegate TResult NullableSelector<in TSource, TResult>([AllowNull] TSource obj);
     [return: MaybeNull] public delegate TResult NullableSelectorAt<in TSource, TResult>([AllowNull] TSource obj, int index);

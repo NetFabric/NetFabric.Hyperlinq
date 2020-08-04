@@ -110,7 +110,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
     }
 
     readonly struct ReadOnlyListSegment<TList, T>
-        where TList : IReadOnlyList<T>
+        where TList : notnull, IReadOnlyList<T>
     {
         public ReadOnlyListSegment(TList list, int offset, int count)
             => (List, Offset, Count) = (list, offset, count);

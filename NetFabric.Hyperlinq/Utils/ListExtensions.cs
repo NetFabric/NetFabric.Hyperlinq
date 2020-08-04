@@ -7,6 +7,10 @@ namespace NetFabric.Hyperlinq
     static class ListExtensions
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ArraySegment<TSource> AsArraySegment<TSource>(this List<TSource> source)
+            => new ArraySegment<TSource>(source.GetItems(), 0, source.Count);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Span<TSource> AsSpan<TSource>(this List<TSource> source)
             => source.GetItems().AsSpan().Slice(0, source.Count);
 

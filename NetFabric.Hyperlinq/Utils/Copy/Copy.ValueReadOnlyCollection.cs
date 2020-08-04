@@ -6,7 +6,7 @@ namespace NetFabric.Hyperlinq
     static partial class ValueReadOnlyCollectionExtensions
     {
         public static void Copy<TEnumerable, TEnumerator, TSource>(TEnumerable source, TSource[] destination)
-            where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
+            where TEnumerable : notnull, IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
             if (source.Count == 0)
@@ -32,7 +32,7 @@ namespace NetFabric.Hyperlinq
         }
 
         public static void Copy<TEnumerable, TEnumerator, TSource>(TEnumerable source, Span<TSource> destination)
-            where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
+            where TEnumerable : notnull, IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
             if (source.Count == 0)
@@ -47,7 +47,7 @@ namespace NetFabric.Hyperlinq
         }
 
         public static void Copy<TEnumerable, TEnumerator, TSource, TResult>(TEnumerable source, TResult[] destination, NullableSelector<TSource, TResult> selector)
-            where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
+            where TEnumerable : notnull, IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
             if (source.Count == 0)
@@ -62,7 +62,7 @@ namespace NetFabric.Hyperlinq
         }
 
         public static void Copy<TEnumerable, TEnumerator, TSource, TResult>(TEnumerable source, Span<TResult> destination, NullableSelector<TSource, TResult> selector)
-            where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
+            where TEnumerable : notnull, IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
             if (source.Count == 0)
@@ -77,7 +77,7 @@ namespace NetFabric.Hyperlinq
         }
 
         public static void Copy<TEnumerable, TEnumerator, TSource, TResult>(TEnumerable source, TResult[] destination, NullableSelectorAt<TSource, TResult> selector)
-            where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
+            where TEnumerable : notnull, IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
             if (source.Count == 0)
@@ -92,7 +92,7 @@ namespace NetFabric.Hyperlinq
         }
 
         public static void Copy<TEnumerable, TEnumerator, TSource, TResult>(TEnumerable source, Span<TResult> destination, NullableSelectorAt<TSource, TResult> selector)
-            where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
+            where TEnumerable : notnull, IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
             if (source.Count == 0)

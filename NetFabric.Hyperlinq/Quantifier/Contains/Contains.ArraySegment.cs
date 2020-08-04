@@ -9,22 +9,25 @@ namespace NetFabric.Hyperlinq
         public static bool Contains<TList, TSource>(this in ArraySegment<TSource> source, [AllowNull] TSource value)
             where TSource : struct
         {
-            var array = source.Array;
-            if (source.IsWhole())
+            if (source.Count != 0)
             {
-                foreach (var item in array)
+                var array = source.Array;
+                if (source.Count == array!.Length)
                 {
-                    if (EqualityComparer<TSource>.Default.Equals(item, value!))
-                        return true;
+                    for (var index = 0; index < array.Length; index++)
+                    {
+                        if (EqualityComparer<TSource>.Default.Equals(array![index], value!))
+                            return true;
+                    }
                 }
-            }
-            else
-            {
-                var end = source.Count + source.Offset - 1;
-                for (var index = source.Offset; index <= end; index++)
+                else
                 {
-                    if (EqualityComparer<TSource>.Default.Equals(array[index], value!))
-                        return true;
+                    var end = source.Count + source.Offset - 1;
+                    for (var index = source.Offset; index <= end; index++)
+                    {
+                        if (EqualityComparer<TSource>.Default.Equals(array![index], value!))
+                            return true;
+                    }
                 }
             }
             return false;
@@ -43,22 +46,25 @@ namespace NetFabric.Hyperlinq
 
             static bool DefaultContains(in ArraySegment<TSource> source, [AllowNull] TSource value)
             {
-                var array = source.Array;
-                if (source.IsWhole())
+                if (source.Count != 0)
                 {
-                    foreach (var item in array)
+                    var array = source.Array;
+                    if (source.Count == array!.Length)
                     {
-                        if (EqualityComparer<TSource>.Default.Equals(item, value!))
-                            return true;
+                        for (var index = 0; index < array.Length; index++)
+                        {
+                            if (EqualityComparer<TSource>.Default.Equals(array![index], value!))
+                                return true;
+                        }
                     }
-                }
-                else
-                {
-                    var end = source.Count + source.Offset - 1;
-                    for (var index = source.Offset; index <= end; index++)
+                    else
                     {
-                        if (EqualityComparer<TSource>.Default.Equals(array[index], value!))
-                            return true;
+                        var end = source.Count + source.Offset - 1;
+                        for (var index = source.Offset; index <= end; index++)
+                        {
+                            if (EqualityComparer<TSource>.Default.Equals(array![index], value!))
+                                return true;
+                        }
                     }
                 }
                 return false;
@@ -66,22 +72,25 @@ namespace NetFabric.Hyperlinq
 
             static bool ComparerContains(in ArraySegment<TSource> source, [AllowNull] TSource value, IEqualityComparer<TSource> comparer)
             {
-                var array = source.Array;
-                if (source.IsWhole())
+                if (source.Count != 0)
                 {
-                    foreach (var item in array)
+                    var array = source.Array;
+                    if (source.Count == array!.Length)
                     {
-                        if (comparer.Equals(item, value!))
-                            return true;
+                        for (var index = 0; index < array.Length; index++)
+                        {
+                            if (comparer.Equals(array![index], value!))
+                                return true;
+                        }
                     }
-                }
-                else
-                {
-                    var end = source.Count + source.Offset - 1;
-                    for (var index = source.Offset; index <= end; index++)
+                    else
                     {
-                        if (comparer.Equals(array[index], value!))
-                            return true;
+                        var end = source.Count + source.Offset - 1;
+                        for (var index = source.Offset; index <= end; index++)
+                        {
+                            if (comparer.Equals(array![index], value!))
+                                return true;
+                        }
                     }
                 }
                 return false;
@@ -101,22 +110,25 @@ namespace NetFabric.Hyperlinq
 
             static bool ValueContains(in ArraySegment<TSource> source, [AllowNull] TResult value, NullableSelector<TSource, TResult> selector)
             {
-                var array = source.Array;
-                if (source.IsWhole())
+                if (source.Count != 0)
                 {
-                    foreach (var item in array)
+                    var array = source.Array;
+                    if (source.Count == array!.Length)
                     {
-                        if (EqualityComparer<TResult>.Default.Equals(selector(item)!, value!))
-                            return true;
+                        for (var index = 0; index < array.Length; index++)
+                        {
+                            if (EqualityComparer<TResult>.Default.Equals(selector(array![index])!, value!))
+                                return true;
+                        }
                     }
-                }
-                else
-                {
-                    var end = source.Count + source.Offset - 1;
-                    for (var index = source.Offset; index <= end; index++)
+                    else
                     {
-                        if (EqualityComparer<TResult>.Default.Equals(selector(array[index])!, value!))
-                            return true;
+                        var end = source.Count + source.Offset - 1;
+                        for (var index = source.Offset; index <= end; index++)
+                        {
+                            if (EqualityComparer<TResult>.Default.Equals(selector(array![index])!, value!))
+                                return true;
+                        }
                     }
                 }
                 return false;
@@ -126,22 +138,25 @@ namespace NetFabric.Hyperlinq
             {
                 var defaultComparer = EqualityComparer<TResult>.Default;
 
-                var array = source.Array;
-                if (source.IsWhole())
+                if (source.Count != 0)
                 {
-                    foreach (var item in array)
+                    var array = source.Array;
+                    if (source.Count == array!.Length)
                     {
-                        if (defaultComparer.Equals(selector(item)!, value!))
-                            return true;
+                        for (var index = 0; index < array.Length; index++)
+                        {
+                            if (defaultComparer.Equals(selector(array![index])!, value!))
+                                return true;
+                        }
                     }
-                }
-                else
-                {
-                    var end = source.Count + source.Offset - 1;
-                    for (var index = source.Offset; index <= end; index++)
+                    else
                     {
-                        if (defaultComparer.Equals(selector(array[index])!, value!))
-                            return true;
+                        var end = source.Count + source.Offset - 1;
+                        for (var index = source.Offset; index <= end; index++)
+                        {
+                            if (defaultComparer.Equals(selector(array![index])!, value!))
+                                return true;
+                        }
                     }
                 }
                 return false;
@@ -161,36 +176,36 @@ namespace NetFabric.Hyperlinq
 
             static bool ValueContains(in ArraySegment<TSource> source, [AllowNull] TResult value, NullableSelectorAt<TSource, TResult> selector)
             {
-                var array = source.Array;
-                if (source.IsWhole())
+                if (source.Count != 0)
                 {
-                    var index = 0;
-                    foreach (var item in array)
+                    var array = source.Array;
+                    if (source.Count == array!.Length)
                     {
-                        if (EqualityComparer<TResult>.Default.Equals(selector(item, index)!, value!))
-                            return true;
-
-                        index++;
-                    }
-                }
-                else
-                {
-                    var end = source.Count - 1;
-                    if (source.Offset == 0)
-                    {
-                        for (var index = 0; index <= end; index++)
+                        for (var index = 0; index < array.Length; index++)
                         {
-                            if (EqualityComparer<TResult>.Default.Equals(selector(array[index], index)!, value!))
+                            if (EqualityComparer<TResult>.Default.Equals(selector(array![index], index)!, value!))
                                 return true;
                         }
                     }
                     else
                     {
-                        var offset = source.Offset;
-                        for (var index = 0; index <= end; index++)
+                        var end = source.Count - 1;
+                        if (source.Offset == 0)
                         {
-                            if (EqualityComparer<TResult>.Default.Equals(selector(array[index + offset], index)!, value!))
-                                return true;
+                            for (var index = 0; index <= end; index++)
+                            {
+                                if (EqualityComparer<TResult>.Default.Equals(selector(array![index], index)!, value!))
+                                    return true;
+                            }
+                        }
+                        else
+                        {
+                            var offset = source.Offset;
+                            for (var index = 0; index <= end; index++)
+                            {
+                                if (EqualityComparer<TResult>.Default.Equals(selector(array![index + offset], index)!, value!))
+                                    return true;
+                            }
                         }
                     }
                 }
@@ -201,36 +216,36 @@ namespace NetFabric.Hyperlinq
             {
                 var defaultComparer = EqualityComparer<TResult>.Default;
 
-                var array = source.Array;
-                if (source.IsWhole())
+                if (source.Count != 0)
                 {
-                    var index = 0;
-                    foreach (var item in array)
+                    var array = source.Array;
+                    if (source.Count == array!.Length)
                     {
-                        if (defaultComparer.Equals(selector(item, index)!, value!))
-                            return true;
-
-                        index++;
-                    }
-                }
-                else
-                {
-                    var end = source.Count - 1;
-                    if (source.Offset == 0)
-                    {
-                        for (var index = 0; index <= end; index++)
+                        for (var index = 0; index < array.Length; index++)
                         {
-                            if (defaultComparer.Equals(selector(array[index], index)!, value!))
+                            if (defaultComparer.Equals(selector(array![index], index)!, value!))
                                 return true;
                         }
                     }
                     else
                     {
-                        var offset = source.Offset;
-                        for (var index = 0; index <= end; index++)
+                        var end = source.Count - 1;
+                        if (source.Offset == 0)
                         {
-                            if (defaultComparer.Equals(selector(array[index + offset], index)!, value!))
-                                return true;
+                            for (var index = 0; index <= end; index++)
+                            {
+                                if (defaultComparer.Equals(selector(array![index], index)!, value!))
+                                    return true;
+                            }
+                        }
+                        else
+                        {
+                            var offset = source.Offset;
+                            for (var index = 0; index <= end; index++)
+                            {
+                                if (defaultComparer.Equals(selector(array![index + offset], index)!, value!))
+                                    return true;
+                            }
                         }
                     }
                 }

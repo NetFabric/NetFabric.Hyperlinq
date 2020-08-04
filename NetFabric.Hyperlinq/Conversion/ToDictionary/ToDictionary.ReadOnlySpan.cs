@@ -7,6 +7,7 @@ namespace NetFabric.Hyperlinq
     {
                 
         public static Dictionary<TKey, TSource> ToDictionary<TSource, TKey>(this ReadOnlySpan<TSource> source, Selector<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer = null)
+            where TKey : notnull
         {
             if (keySelector is null) Throw.ArgumentNullException(nameof(keySelector));
 
@@ -17,6 +18,7 @@ namespace NetFabric.Hyperlinq
         }
 
         public static Dictionary<TKey, TElement> ToDictionary<TSource, TKey, TElement>(this ReadOnlySpan<TSource> source, Selector<TSource, TKey> keySelector, NullableSelector<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer = null)
+            where TKey : notnull
         {
             if (keySelector is null) Throw.ArgumentNullException(nameof(keySelector));
             if (elementSelector is null) Throw.ArgumentNullException(nameof(elementSelector));

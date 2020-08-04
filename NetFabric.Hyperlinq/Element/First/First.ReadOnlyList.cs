@@ -9,12 +9,12 @@ namespace NetFabric.Hyperlinq
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Option<TSource> First<TList, TSource>(this TList source) 
-            where TList : IReadOnlyList<TSource>
+            where TList : notnull, IReadOnlyList<TSource>
             => First<TList, TSource>(source, 0, source.Count);
 
 
         static Option<TSource> First<TList, TSource>(this TList source, int offset, int count) 
-            where TList : IReadOnlyList<TSource>
+            where TList : notnull, IReadOnlyList<TSource>
             => count switch
             {
                 0 => Option.None,
@@ -23,7 +23,7 @@ namespace NetFabric.Hyperlinq
 
 
         static Option<TSource> First<TList, TSource>(this TList source, Predicate<TSource> predicate, int offset, int count)
-            where TList : IReadOnlyList<TSource>
+            where TList : notnull, IReadOnlyList<TSource>
         {
             var end = offset + count - 1;
             for (var index = offset; index <= end; index++)
@@ -37,7 +37,7 @@ namespace NetFabric.Hyperlinq
 
 
         static Option<TSource> First<TList, TSource>(this TList source, PredicateAt<TSource> predicate, int offset, int count)
-            where TList : IReadOnlyList<TSource>
+            where TList : notnull, IReadOnlyList<TSource>
         {
             var end = count - 1;
             if (offset == 0)
@@ -64,7 +64,7 @@ namespace NetFabric.Hyperlinq
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static Option<TResult> First<TList, TSource, TResult>(this TList source, NullableSelector<TSource, TResult> selector, int offset, int count)
-            where TList : IReadOnlyList<TSource>
+            where TList : notnull, IReadOnlyList<TSource>
             => count switch
             {
                 0 => Option.None,
@@ -74,7 +74,7 @@ namespace NetFabric.Hyperlinq
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static Option<TResult> First<TList, TSource, TResult>(this TList source, NullableSelectorAt<TSource, TResult> selector, int offset, int count)
-            where TList : IReadOnlyList<TSource>
+            where TList : notnull, IReadOnlyList<TSource>
             => count switch
             {
                 0 => Option.None,
@@ -83,7 +83,7 @@ namespace NetFabric.Hyperlinq
 
 
         static Option<TResult> First<TList, TSource, TResult>(this TList source, Predicate<TSource> predicate, NullableSelector<TSource, TResult> selector, int offset, int count)
-            where TList : IReadOnlyList<TSource>
+            where TList : notnull, IReadOnlyList<TSource>
         {
             var end = offset + count - 1;
             for (var index = offset; index <= end; index++)

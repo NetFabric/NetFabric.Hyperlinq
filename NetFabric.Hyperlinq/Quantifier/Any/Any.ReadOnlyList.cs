@@ -7,12 +7,12 @@ namespace NetFabric.Hyperlinq
     {
         
         public static bool Any<TList, TSource>(this TList source)
-            where TList : IReadOnlyList<TSource>
+            where TList : notnull, IReadOnlyList<TSource>
             => source.Count != 0;
 
 
         static bool Any<TList, TSource>(this TList source, int offset, int count)
-            where TList : IReadOnlyList<TSource>
+            where TList : notnull, IReadOnlyList<TSource>
         {
             (_, var take) = Utils.SkipTake(source.Count, offset, count);
             return take != 0;
@@ -20,7 +20,7 @@ namespace NetFabric.Hyperlinq
 
 
         public static bool Any<TList, TSource>(this TList source, Predicate<TSource> predicate)
-            where TList : IReadOnlyList<TSource>
+            where TList : notnull, IReadOnlyList<TSource>
         {
             if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
 
@@ -29,7 +29,7 @@ namespace NetFabric.Hyperlinq
 
 
         static bool Any<TList, TSource>(this TList source, Predicate<TSource> predicate, int offset, int count)
-            where TList : IReadOnlyList<TSource>
+            where TList : notnull, IReadOnlyList<TSource>
         {
             var end = offset + count - 1;
             for (var index = offset; index <= end; index++)
@@ -42,7 +42,7 @@ namespace NetFabric.Hyperlinq
 
         
         public static bool Any<TList, TSource>(this TList source, PredicateAt<TSource> predicate)
-            where TList : IReadOnlyList<TSource>
+            where TList : notnull, IReadOnlyList<TSource>
         {
             if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
 
@@ -51,7 +51,7 @@ namespace NetFabric.Hyperlinq
 
 
         static bool Any<TList, TSource>(this TList source, PredicateAt<TSource> predicate, int offset, int count)
-            where TList : IReadOnlyList<TSource>
+            where TList : notnull, IReadOnlyList<TSource>
         {
             var end = count - 1;
             if (offset == 0)

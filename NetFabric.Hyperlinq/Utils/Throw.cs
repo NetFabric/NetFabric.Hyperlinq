@@ -1,11 +1,16 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Runtime.Versioning;
 
 namespace NetFabric.Hyperlinq
 {
     [ExcludeFromCodeCoverage]
     static class Throw
     {
+        [DoesNotReturn]
+        public static void ArgumentArraySegmentNullException(string paramName)
+            => throw new ArgumentException(Resource.ArraySegmentNull, paramName);
+
         [DoesNotReturn]
         public static void ArgumentException(string message, string paramName)
             => throw new ArgumentException(message, paramName);

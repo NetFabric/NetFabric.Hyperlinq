@@ -9,20 +9,20 @@ namespace NetFabric.Hyperlinq
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Option<TSource> ElementAt<TList, TSource>(this TList source, int index) 
-            where TList : IReadOnlyList<TSource>
+            where TList : notnull, IReadOnlyList<TSource>
             => ElementAt<TList, TSource>(source, index, 0, source.Count);
 
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static Option<TSource> ElementAt<TList, TSource>(this TList source, int index, int offset, int count) 
-            where TList : IReadOnlyList<TSource>
+            where TList : notnull, IReadOnlyList<TSource>
             => index < 0 || index >= count 
                 ? Option.None 
                 : Option.Some(source[index + offset]);
 
 
         static Option<TSource> ElementAt<TList, TSource>(this TList source, int index, Predicate<TSource> predicate, int offset, int count) 
-            where TList : IReadOnlyList<TSource>
+            where TList : notnull, IReadOnlyList<TSource>
         {
             if (index >= 0)
             {
@@ -39,7 +39,7 @@ namespace NetFabric.Hyperlinq
 
 
         static Option<TSource> ElementAt<TList, TSource>(this TList source, int index, PredicateAt<TSource> predicate, int offset, int count) 
-            where TList : IReadOnlyList<TSource>
+            where TList : notnull, IReadOnlyList<TSource>
         {
             if (index >= 0)
             {
@@ -69,7 +69,7 @@ namespace NetFabric.Hyperlinq
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static Option<TResult> ElementAt<TList, TSource, TResult>(this TList source, int index, NullableSelector<TSource, TResult> selector, int offset, int count) 
-            where TList : IReadOnlyList<TSource>
+            where TList : notnull, IReadOnlyList<TSource>
             => index < 0 || index >= count 
                 ? Option.None
                 : Option.Some(selector(source[index + offset]));
@@ -77,14 +77,14 @@ namespace NetFabric.Hyperlinq
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Option<TResult> ElementAt<TList, TSource, TResult>(this TList source, int index, NullableSelectorAt<TSource, TResult> selector, int offset, int count) 
-            where TList : IReadOnlyList<TSource>
+            where TList : notnull, IReadOnlyList<TSource>
             => index < 0 || index >= count 
                 ? Option.None 
                 : Option.Some(selector(source[index + offset], index));
 
 
         static Option<TResult> ElementAt<TList, TSource, TResult>(this TList source, int index, Predicate<TSource> predicate, NullableSelector<TSource, TResult> selector, int offset, int count) 
-            where TList : IReadOnlyList<TSource>
+            where TList : notnull, IReadOnlyList<TSource>
         {
             if (index >= 0)
             {

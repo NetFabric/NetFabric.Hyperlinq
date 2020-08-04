@@ -7,7 +7,7 @@ namespace NetFabric.Hyperlinq
     {
         
         public static List<TSource> ToList<TEnumerable, TEnumerator, TSource>(this TEnumerable source)
-            where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
+            where TEnumerable : notnull, IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
             => source switch
             {
@@ -20,7 +20,7 @@ namespace NetFabric.Hyperlinq
 
         
         public static List<TResult> ToList<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, NullableSelector<TSource, TResult> selector)
-            where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
+            where TEnumerable : notnull, IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
             => source.Count == 0
                 ? new List<TResult>()
@@ -28,7 +28,7 @@ namespace NetFabric.Hyperlinq
 
         
         public static List<TResult> ToList<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, NullableSelectorAt<TSource, TResult> selector)
-            where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
+            where TEnumerable : notnull, IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
             => source.Count == 0
                 ? new List<TResult>()
@@ -38,7 +38,7 @@ namespace NetFabric.Hyperlinq
         [GeneratorIgnore]
         internal sealed class ValueReadOnlyCollectionToListCollection<TEnumerable, TEnumerator, TSource>
             : ToListCollectionBase<TSource>
-            where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
+            where TEnumerable : notnull, IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
             readonly TEnumerable source;
@@ -61,7 +61,7 @@ namespace NetFabric.Hyperlinq
         [GeneratorIgnore]
         internal sealed class ValueReadOnlyCollectionSelectorToListCollection<TEnumerable, TEnumerator, TSource, TResult>
             : ToListCollectionBase<TResult>
-            where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
+            where TEnumerable : notnull, IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
             readonly TEnumerable source;
@@ -78,7 +78,7 @@ namespace NetFabric.Hyperlinq
         [GeneratorIgnore]
         internal sealed class ValueReadOnlyCollectionSelectorAtToListCollection<TEnumerable, TEnumerator, TSource, TResult>
             : ToListCollectionBase<TResult>
-            where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
+            where TEnumerable : notnull, IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
             readonly TEnumerable source;

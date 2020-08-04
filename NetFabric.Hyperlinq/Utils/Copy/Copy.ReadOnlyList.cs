@@ -7,7 +7,7 @@ namespace NetFabric.Hyperlinq
     static partial class ReadOnlyListExtensions
     {
         public static void Copy<TList, TSource>(TList source, int sourceOffset, TSource[] destination, int destinationOffset, int count)
-            where TList : IReadOnlyList<TSource>
+            where TList : notnull, IReadOnlyList<TSource>
         {
             Debug.Assert(source.Count >= sourceOffset);
             Debug.Assert(destination.Length - destinationOffset >= count);
@@ -51,7 +51,7 @@ namespace NetFabric.Hyperlinq
         }
 
         public static void Copy<TList, TSource>(TList source, int sourceOffset, Span<TSource> destination, int count)
-            where TList : IReadOnlyList<TSource>
+            where TList : notnull, IReadOnlyList<TSource>
         {
             Debug.Assert(source.Count >= sourceOffset);
             Debug.Assert(destination.Length >= count);
@@ -72,7 +72,7 @@ namespace NetFabric.Hyperlinq
         }
 
         public static void Copy<TList, TSource, TResult>(TList source, int sourceOffset, TResult[] destination, int destinationOffset, int count, NullableSelector<TSource, TResult> selector)
-            where TList : IReadOnlyList<TSource>
+            where TList : notnull, IReadOnlyList<TSource>
         {
             Debug.Assert(source.Count >= sourceOffset);
             Debug.Assert(destination.Length - destinationOffset >= count);
@@ -109,7 +109,7 @@ namespace NetFabric.Hyperlinq
         }
 
         public static void Copy<TList, TSource, TResult>(TList source, int sourceOffset, Span<TResult> destination, int count, NullableSelector<TSource, TResult> selector)
-            where TList : IReadOnlyList<TSource>
+            where TList : notnull, IReadOnlyList<TSource>
         {
             Debug.Assert(source.Count >= sourceOffset);
             Debug.Assert(destination.Length >= count);
@@ -130,7 +130,7 @@ namespace NetFabric.Hyperlinq
         }
 
         public static void Copy<TList, TSource, TResult>(TList source, int sourceOffset, TResult[] destination, int destinationOffset, int count, NullableSelectorAt<TSource, TResult> selector)
-            where TList : IReadOnlyList<TSource>
+            where TList : notnull, IReadOnlyList<TSource>
         {
             Debug.Assert(source.Count >= sourceOffset);
             Debug.Assert(destination.Length - destinationOffset >= count);
@@ -167,7 +167,7 @@ namespace NetFabric.Hyperlinq
         }
 
         public static void Copy<TList, TSource, TResult>(TList source, int sourceOffset, Span<TResult> destination, int count, NullableSelectorAt<TSource, TResult> selector)
-            where TList : IReadOnlyList<TSource>
+            where TList : notnull, IReadOnlyList<TSource>
         {
             Debug.Assert(source.Count >= sourceOffset);
             Debug.Assert(destination.Length >= count);

@@ -40,7 +40,7 @@ namespace NetFabric.Hyperlinq
             {
                 get
                 {
-                    if (index < 0 || index >= source.Count) Throw.IndexOutOfRangeException();
+                    if (index < 0 || index >= source.Count || source.Array is null) Throw.IndexOutOfRangeException();
 
                     return selector(source.Array[index + source.Offset], index);
                 }
@@ -78,73 +78,71 @@ namespace NetFabric.Hyperlinq
                 => Throw.NotSupportedException<bool>();
             int IList<TResult>.IndexOf(TResult item)
             {
-                var array = source.Array;
-                if (source.IsWhole())
+                if (source.Count != 0)
                 {
-                    var index = 0;
-                    if (Utils.IsValueType<TResult>())
-                    {
-                        foreach (var sourceItem in array)
-                        {
-                            if (EqualityComparer<TResult>.Default.Equals(selector(sourceItem, index)!, item))
-                                return index;
-
-                            index++;
-                        }
-                    }
-                    else
-                    {
-                        var defaultComparer = EqualityComparer<TResult>.Default;
-                        foreach (var sourceItem in array)
-                        {
-                            if (defaultComparer.Equals(selector(sourceItem, index)!, item))
-                                return index;
-
-                            index++;
-                        }
-                    }
-                }
-                else
-                {
-                    var end = source.Count - 1;
-                    if (source.Offset == 0)
+                    var array = source.Array;
+                    if (source.Count == array!.Length)
                     {
                         if (Utils.IsValueType<TResult>())
                         {
-                            for (var index = 0; index <= end; index++)
+                            for (var index = 0; index < array.Length; index++)
                             {
-                                if (EqualityComparer<TResult>.Default.Equals(selector(array[index], index)!, item))
+                                if (EqualityComparer<TResult>.Default.Equals(selector(array![index], index)!, item))
                                     return index;
                             }
                         }
                         else
                         {
                             var defaultComparer = EqualityComparer<TResult>.Default;
-                            for (var index = 0; index <= end; index++)
+                            for (var index = 0; index < array.Length; index++)
                             {
-                                if (defaultComparer.Equals(selector(array[index], index)!, item))
+                                if (defaultComparer.Equals(selector(array![index], index)!, item))
                                     return index;
                             }
                         }
                     }
                     else
                     {
-                        var offset = source.Offset;
-                        if (Utils.IsValueType<TResult>())
+                        var end = source.Count - 1;
+                        if (source.Offset == 0)
                         {
-                            for (var index = 0; index <= end; index++)
+                            if (Utils.IsValueType<TResult>())
                             {
-                                if (EqualityComparer<TResult>.Default.Equals(selector(array[index + offset], index)!, item))
-                                    return index;
+                                for (var index = 0; index <= end; index++)
+                                {
+                                    if (EqualityComparer<TResult>.Default.Equals(selector(array![index], index)!, item))
+                                        return index;
+                                }
+                            }
+                            else
+                            {
+                                var defaultComparer = EqualityComparer<TResult>.Default;
+                                for (var index = 0; index <= end; index++)
+                                {
+                                    if (defaultComparer.Equals(selector(array![index], index)!, item))
+                                        return index;
+                                }
                             }
                         }
                         else
                         {
-                            var defaultComparer = EqualityComparer<TResult>.Default;
-                            for (var index = 0; index <= end; index++)
+                            var offset = source.Offset;
+                            if (Utils.IsValueType<TResult>())
                             {
-                                if (defaultComparer.Equals(selector(array[index + offset], index)!, item))
-                                    return index;
+                                for (var index = 0; index <= end; index++)
+                                {
+                                    if (EqualityComparer<TResult>.Default.Equals(selector(array![index + offset], index)!, item))
+                                        return index;
+                                }
+                            }
+                            else
+                            {
+                                var defaultComparer = EqualityComparer<TResult>.Default;
+                                for (var index = 0; index <= end; index++)
+                                {
+                                    if (defaultComparer.Equals(selector(array![index + offset], index)!, item))
+                                        return index;
+                                }
                             }
                         }
                     }
@@ -158,7 +156,7 @@ namespace NetFabric.Hyperlinq
 
             public struct Enumerator
             {
-                readonly TSource[] source;
+                readonly TSource[]? source;
                 readonly NullableSelectorAt<TSource, TResult> selector;
                 readonly int offset;
                 readonly int end;
@@ -175,7 +173,7 @@ namespace NetFabric.Hyperlinq
 
                 [MaybeNull]
                 public readonly TResult Current
-                    => selector(source[index + offset], index);
+                    => selector(source![index + offset], index);
 
                 public bool MoveNext()
                     => ++index <= end;
@@ -184,7 +182,7 @@ namespace NetFabric.Hyperlinq
             public struct DisposableEnumerator
                 : IEnumerator<TResult>
             {
-                readonly TSource[] source;
+                readonly TSource[]? source;
                 readonly NullableSelectorAt<TSource, TResult> selector;
                 readonly int offset;
                 readonly int end;
@@ -201,11 +199,11 @@ namespace NetFabric.Hyperlinq
 
                 [MaybeNull]
                 public readonly TResult Current
-                    => selector(source[index + offset], index);
+                    => selector(source![index + offset], index);
                 readonly TResult IEnumerator<TResult>.Current
-                    => selector(source[index + offset], index)!;
+                    => selector(source![index + offset], index)!;
                 readonly object? IEnumerator.Current
-                    => selector(source[index + offset], index);
+                    => selector(source![index + offset], index);
 
                 public bool MoveNext()
                     => ++index <= end;

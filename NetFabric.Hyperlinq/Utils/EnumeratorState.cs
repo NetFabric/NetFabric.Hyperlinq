@@ -4,6 +4,7 @@ namespace NetFabric.Hyperlinq
     {
         Uninitialized,
         Enumerating,
+        EnumeratingSub,
         Complete
     }
 }

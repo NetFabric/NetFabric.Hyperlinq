@@ -150,9 +150,8 @@ namespace NetFabric.Hyperlinq
         public readonly ArraySegment<T> ToArray(ArrayPool<T> pool)
         {
             Debug.Assert(pool is object);
-
             var result = pool.RentSliced(Count);
-            CopyTo(result.Array);
+            CopyTo(result.Array!);
             return result;
         }
 
