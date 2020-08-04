@@ -3,24 +3,6 @@ name: Build and test
 on: [push]
 
 jobs:
-  linux:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix: 
-        os: [ubuntu-latest, macos-latest]
-
-    steps:
-    - name: Check out repository
-      uses: actions/checkout@v2
-    - name: Setup .NET Core
-      uses: actions/setup-dotnet@v1.4.0
-      with:
-        dotnet-version: 5.0.100-preview.7
-    - name: Build solution
-      run: dotnet build
-    - name: Tests
-      run: dotnet test ./NetFabric.Hyperlinq.UnitTests/NetFabric.Hyperlinq.UnitTests.csproj -f:netcoreapp3.1
-      
   windows:
     runs-on: windows-latest
 
@@ -33,15 +15,13 @@ jobs:
         dotnet-version: 5.0.100-preview.7
     - name: Build solution
       run: dotnet build
-    - name: Tests
-      run: dotnet test ./NetFabric.Hyperlinq.UnitTests/NetFabric.Hyperlinq.UnitTests.csproj
-    - name: Generate coverage report
-      run: dotnet test ./NetFabric.Hyperlinq.UnitTests/NetFabric.Hyperlinq.UnitTests.csproj -f:netcoreapp3.1 -p:CollectCoverage=true -p:CoverletOutputFormat=lcov -p:CoverletOutput=TestResults/ /p:ExcludeByAttribute="GeneratedCodeAttribute" /p:ExcludeByFile="../NetFabric.Hyperlinq.Interfaces/*.cs"
+    - name: Tests and coverage
+      run: dotnet test ./NetFabric.Hyperlinq.UnitTests/NetFabric.Hyperlinq.UnitTests.csproj -p:CollectCoverage=true -p:CoverletOutputFormat=lcov -p:CoverletOutput=TestResults/ /p:ExcludeByAttribute="GeneratedCodeAttribute" /p:ExcludeByFile="../NetFabric.Hyperlinq.Interfaces/*.cs"
     - name: Publish coverage report to coveralls.io
       uses: coverallsapp/github-action@master
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
-        path-to-lcov: ./NetFabric.Hyperlinq.UnitTests/TestResults/coverage.netcoreapp3.1.info 
+        path-to-lcov: ./NetFabric.Hyperlinq.UnitTests/TestResults/coverage.net5.0.info 
       
 
       
