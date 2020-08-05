@@ -13,11 +13,11 @@ namespace NetFabric.Hyperlinq
 
         static Option<TSource> ElementAt<TSource>(this in ArraySegment<TSource> source, int index, Predicate<TSource> predicate)
         {
-            if (source.Count != 0 && index >= 0)
+            if (source.Any() && index >= 0)
             {
-                var array = source.Array;
-                if (source.Count == array!.Length)
+                if (source.IsWhole())
                 {
+                    var array = source.Array;
                     for (var sourceIndex = 0; sourceIndex < array.Length; sourceIndex++)
                     {
                         var item = array![sourceIndex];
@@ -27,6 +27,7 @@ namespace NetFabric.Hyperlinq
                 }
                 else
                 {
+                    var array = source.Array;
                     var end = source.Offset + source.Count - 1;
                     for (var sourceIndex = source.Offset; sourceIndex <= end; sourceIndex++)
                     {
@@ -42,11 +43,11 @@ namespace NetFabric.Hyperlinq
 
         static Option<TSource> ElementAt<TSource>(this in ArraySegment<TSource> source, int index, PredicateAt<TSource> predicate)
         {
-            if (source.Count != 0 && index >= 0)
+            if (source.Any() && index >= 0)
             {
-                var array = source.Array;
-                if (source.Count == array!.Length)
+                if (source.IsWhole())
                 {
+                    var array = source.Array;
                     for (var sourceIndex = 0; sourceIndex < array.Length; sourceIndex++)
                     {
                         var item = array![sourceIndex];
@@ -58,6 +59,7 @@ namespace NetFabric.Hyperlinq
                 {
                     if (source.Offset == 0)
                     {
+                        var array = source.Array;
                         var end = source.Count - 1;
                         for (var sourceIndex = 0; sourceIndex <= end; sourceIndex++)
                         {
@@ -68,6 +70,7 @@ namespace NetFabric.Hyperlinq
                     }
                     else
                     {
+                        var array = source.Array;
                         var offset = source.Offset;
                         var end = source.Count - 1;
                         for (var sourceIndex = 0; sourceIndex <= end; sourceIndex++)
@@ -99,11 +102,11 @@ namespace NetFabric.Hyperlinq
 
         static Option<TResult> ElementAt<TSource, TResult>(this in ArraySegment<TSource> source, int index, Predicate<TSource> predicate, NullableSelector<TSource, TResult> selector)
         {
-            if (source.Count != 0 && index >= 0)
+            if (source.Any() && index >= 0)
             {
-                var array = source.Array;
-                if (source.Count == array!.Length)
+                if (source.IsWhole())
                 {
+                    var array = source.Array;
                     for (var sourceIndex = 0; sourceIndex < array.Length; sourceIndex++)
                     {
                         var item = array![sourceIndex];
@@ -113,6 +116,7 @@ namespace NetFabric.Hyperlinq
                 }
                 else
                 {
+                    var array = source.Array;
                     var end = source.Offset + source.Count - 1;
                     for (var sourceIndex = source.Offset; sourceIndex <= end; sourceIndex++)
                     {

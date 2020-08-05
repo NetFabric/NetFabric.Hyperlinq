@@ -16,11 +16,11 @@ namespace NetFabric.Hyperlinq
             if (predicate is null)
                 Throw.ArgumentNullException(nameof(predicate));
 
-            if (source.Count != 0)
+            if (source.Any())
             {
-                var array = source.Array;
-                if (source.Count == array!.Length)
+                if (source.IsWhole())
                 {
+                    var array = source.Array;
                     for (var index = 0; index < array.Length; index++)
                     {
                         if (predicate(array![index]))
@@ -29,6 +29,7 @@ namespace NetFabric.Hyperlinq
                 }
                 else
                 {
+                    var array = source.Array;
                     var end = source.Count + source.Offset - 1;
                     for (var index = source.Offset; index <= end; index++)
                     {
@@ -46,11 +47,11 @@ namespace NetFabric.Hyperlinq
             if (predicate is null)
                 Throw.ArgumentNullException(nameof(predicate));
 
-            if (source.Count != 0)
+            if (source.Any())
             {
-                var array = source.Array;
-                if (source.Count == array!.Length)
+                if (source.IsWhole())
                 {
+                    var array = source.Array;
                     for (var index = 0; index < array.Length; index++)
                     {
                         if (predicate(array![index], index))
@@ -62,6 +63,7 @@ namespace NetFabric.Hyperlinq
                     var end = source.Count - 1;
                     if (source.Offset == 0)
                     {
+                        var array = source.Array;
                         for (var index = 0; index <= end; index++)
                         {
                             if (predicate(array![index], index))
@@ -70,6 +72,7 @@ namespace NetFabric.Hyperlinq
                     }
                     else
                     {
+                        var array = source.Array;
                         var offset = source.Offset;
                         for (var index = 0; index <= end; index++)
                         {

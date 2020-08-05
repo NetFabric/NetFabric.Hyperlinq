@@ -14,11 +14,11 @@ namespace NetFabric.Hyperlinq
         static unsafe int Count<TSource>(this in ArraySegment<TSource> source, Predicate<TSource> predicate)
         {
             var counter = 0;
-            if (source.Count != 0)
+            if (source.Any())
             {
-                var array = source.Array;
-                if (source.Count == array!.Length)
+                if (source.IsWhole())
                 {
+                    var array = source.Array;
                     for (var index = 0; index < array.Length; index++)
                     {
                         var result = predicate(array![index]);
@@ -27,6 +27,7 @@ namespace NetFabric.Hyperlinq
                 }
                 else
                 {
+                    var array = source.Array;
                     var end = source.Offset + source.Count - 1;
                     for (var index = source.Offset; index <= end; index++)
                     {
@@ -44,11 +45,11 @@ namespace NetFabric.Hyperlinq
                 Throw.ArgumentArraySegmentNullException(nameof(source));
 
             var counter = 0;
-            if (source.Count != 0)
+            if (source.Any())
             {
-                var array = source.Array;
-                if (source.Count == array!.Length)
+                if (source.IsWhole())
                 {
+                    var array = source.Array;
                     for (var index = 0; index < array.Length; index++)
                     {
                         var result = predicate(array![index], index);
@@ -57,6 +58,7 @@ namespace NetFabric.Hyperlinq
                 }
                 else
                 {
+                    var array = source.Array;
                     var end = source.Count - 1;
                     if (source.Offset == 0)
                     {

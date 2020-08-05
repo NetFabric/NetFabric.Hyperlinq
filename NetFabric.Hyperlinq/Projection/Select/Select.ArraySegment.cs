@@ -78,13 +78,13 @@ namespace NetFabric.Hyperlinq
                 => Throw.NotSupportedException<bool>();
             int IList<TResult>.IndexOf(TResult item)
             {
-                if (source.Count != 0)
+                if (source.Any())
                 {
-                    var array = source.Array;
-                    if (source.Count == array!.Length)
+                    if (source.IsWhole())
                     {
                         if (Utils.IsValueType<TResult>())
                         {
+                            var array = source.Array;
                             for (var index = 0; index < array.Length; index++)
                             {
                                 if (EqualityComparer<TResult>.Default.Equals(selector(array![index])!, item))
@@ -93,6 +93,7 @@ namespace NetFabric.Hyperlinq
                         }
                         else
                         {
+                            var array = source.Array;
                             var defaultComparer = EqualityComparer<TResult>.Default;
                             for (var index = 0; index < array.Length; index++)
                             {
@@ -106,6 +107,7 @@ namespace NetFabric.Hyperlinq
                         var end = source.Offset + source.Count - 1;
                         if (Utils.IsValueType<TResult>())
                         {
+                            var array = source.Array;
                             for (var index = source.Offset; index <= end; index++)
                             {
                                 if (EqualityComparer<TResult>.Default.Equals(selector(array![index])!, item))
@@ -115,6 +117,7 @@ namespace NetFabric.Hyperlinq
                         else
                         {
                             var defaultComparer = EqualityComparer<TResult>.Default;
+                            var array = source.Array;
                             for (var index = source.Offset; index <= end; index++)
                             {
                                 if (defaultComparer.Equals(selector(array![index])!, item))
@@ -213,7 +216,7 @@ namespace NetFabric.Hyperlinq
                 => ArrayExtensions.ToArray<TSource, TResult>(source, selector, pool);
 
             public List<TResult> ToList()
-                => ArrayExtensions.ToList(source, selector); // memory performs best
+                => ArrayExtensions.ToList(source, selector);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

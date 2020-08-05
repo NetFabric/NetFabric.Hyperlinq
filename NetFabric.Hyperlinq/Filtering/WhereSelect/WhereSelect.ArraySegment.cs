@@ -140,7 +140,7 @@ namespace NetFabric.Hyperlinq
                 => ArrayExtensions.ToArray<TSource, TResult>(source, predicate, selector, memoryPool);
 
             public List<TResult> ToList()
-                => ArrayExtensions.ToList<TSource, TResult>(source, predicate, selector); // memory performs best
+                => ArrayExtensions.ToList<TSource, TResult>(source, predicate, selector);
         }
     }
 }

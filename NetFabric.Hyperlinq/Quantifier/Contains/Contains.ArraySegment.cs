@@ -9,11 +9,11 @@ namespace NetFabric.Hyperlinq
         public static bool Contains<TList, TSource>(this in ArraySegment<TSource> source, [AllowNull] TSource value)
             where TSource : struct
         {
-            if (source.Count != 0)
+            if (source.Any())
             {
-                var array = source.Array;
-                if (source.Count == array!.Length)
+                if (source.IsWhole())
                 {
+                    var array = source.Array;
                     for (var index = 0; index < array.Length; index++)
                     {
                         if (EqualityComparer<TSource>.Default.Equals(array![index], value!))
@@ -22,6 +22,7 @@ namespace NetFabric.Hyperlinq
                 }
                 else
                 {
+                    var array = source.Array;
                     var end = source.Count + source.Offset - 1;
                     for (var index = source.Offset; index <= end; index++)
                     {
@@ -46,11 +47,11 @@ namespace NetFabric.Hyperlinq
 
             static bool DefaultContains(in ArraySegment<TSource> source, [AllowNull] TSource value)
             {
-                if (source.Count != 0)
+                if (source.Any())
                 {
-                    var array = source.Array;
-                    if (source.Count == array!.Length)
+                    if (source.IsWhole())
                     {
+                        var array = source.Array;
                         for (var index = 0; index < array.Length; index++)
                         {
                             if (EqualityComparer<TSource>.Default.Equals(array![index], value!))
@@ -59,6 +60,7 @@ namespace NetFabric.Hyperlinq
                     }
                     else
                     {
+                        var array = source.Array;
                         var end = source.Count + source.Offset - 1;
                         for (var index = source.Offset; index <= end; index++)
                         {
@@ -72,11 +74,11 @@ namespace NetFabric.Hyperlinq
 
             static bool ComparerContains(in ArraySegment<TSource> source, [AllowNull] TSource value, IEqualityComparer<TSource> comparer)
             {
-                if (source.Count != 0)
+                if (source.Any())
                 {
-                    var array = source.Array;
-                    if (source.Count == array!.Length)
+                    if (source.IsWhole())
                     {
+                        var array = source.Array;
                         for (var index = 0; index < array.Length; index++)
                         {
                             if (comparer.Equals(array![index], value!))
@@ -85,6 +87,7 @@ namespace NetFabric.Hyperlinq
                     }
                     else
                     {
+                        var array = source.Array;
                         var end = source.Count + source.Offset - 1;
                         for (var index = source.Offset; index <= end; index++)
                         {
@@ -110,11 +113,11 @@ namespace NetFabric.Hyperlinq
 
             static bool ValueContains(in ArraySegment<TSource> source, [AllowNull] TResult value, NullableSelector<TSource, TResult> selector)
             {
-                if (source.Count != 0)
+                if (source.Any())
                 {
-                    var array = source.Array;
-                    if (source.Count == array!.Length)
+                    if (source.IsWhole())
                     {
+                        var array = source.Array;
                         for (var index = 0; index < array.Length; index++)
                         {
                             if (EqualityComparer<TResult>.Default.Equals(selector(array![index])!, value!))
@@ -123,6 +126,7 @@ namespace NetFabric.Hyperlinq
                     }
                     else
                     {
+                        var array = source.Array;
                         var end = source.Count + source.Offset - 1;
                         for (var index = source.Offset; index <= end; index++)
                         {
@@ -138,11 +142,11 @@ namespace NetFabric.Hyperlinq
             {
                 var defaultComparer = EqualityComparer<TResult>.Default;
 
-                if (source.Count != 0)
+                if (source.Any())
                 {
-                    var array = source.Array;
-                    if (source.Count == array!.Length)
+                    if (source.IsWhole())
                     {
+                        var array = source.Array;
                         for (var index = 0; index < array.Length; index++)
                         {
                             if (defaultComparer.Equals(selector(array![index])!, value!))
@@ -151,6 +155,7 @@ namespace NetFabric.Hyperlinq
                     }
                     else
                     {
+                        var array = source.Array;
                         var end = source.Count + source.Offset - 1;
                         for (var index = source.Offset; index <= end; index++)
                         {
@@ -176,11 +181,11 @@ namespace NetFabric.Hyperlinq
 
             static bool ValueContains(in ArraySegment<TSource> source, [AllowNull] TResult value, NullableSelectorAt<TSource, TResult> selector)
             {
-                if (source.Count != 0)
+                if (source.Any())
                 {
-                    var array = source.Array;
-                    if (source.Count == array!.Length)
+                    if (source.IsWhole())
                     {
+                        var array = source.Array;
                         for (var index = 0; index < array.Length; index++)
                         {
                             if (EqualityComparer<TResult>.Default.Equals(selector(array![index], index)!, value!))
@@ -192,6 +197,7 @@ namespace NetFabric.Hyperlinq
                         var end = source.Count - 1;
                         if (source.Offset == 0)
                         {
+                            var array = source.Array;
                             for (var index = 0; index <= end; index++)
                             {
                                 if (EqualityComparer<TResult>.Default.Equals(selector(array![index], index)!, value!))
@@ -200,6 +206,7 @@ namespace NetFabric.Hyperlinq
                         }
                         else
                         {
+                            var array = source.Array;
                             var offset = source.Offset;
                             for (var index = 0; index <= end; index++)
                             {
@@ -216,11 +223,11 @@ namespace NetFabric.Hyperlinq
             {
                 var defaultComparer = EqualityComparer<TResult>.Default;
 
-                if (source.Count != 0)
+                if (source.Any())
                 {
-                    var array = source.Array;
-                    if (source.Count == array!.Length)
+                    if (source.IsWhole())
                     {
+                        var array = source.Array;
                         for (var index = 0; index < array.Length; index++)
                         {
                             if (defaultComparer.Equals(selector(array![index], index)!, value!))
@@ -232,6 +239,7 @@ namespace NetFabric.Hyperlinq
                         var end = source.Count - 1;
                         if (source.Offset == 0)
                         {
+                            var array = source.Array;
                             for (var index = 0; index <= end; index++)
                             {
                                 if (defaultComparer.Equals(selector(array![index], index)!, value!))
@@ -240,6 +248,7 @@ namespace NetFabric.Hyperlinq
                         }
                         else
                         {
+                            var array = source.Array;
                             var offset = source.Offset;
                             for (var index = 0; index <= end; index++)
                             {
