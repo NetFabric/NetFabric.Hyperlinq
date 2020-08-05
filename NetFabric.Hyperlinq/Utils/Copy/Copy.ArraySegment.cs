@@ -22,11 +22,11 @@ namespace NetFabric.Hyperlinq
         {
             Debug.Assert(destination.Length >= source.Count);
 
-            if (source.Count != 0)
+            if (source.Any())
             {
-                var array = source.Array;
-                if (source.Count == array!.Length)
+                if (source.IsWhole())
                 {
+                    var array = source.Array;
                     for (var index = 0; index < array.Length; index++)
                         destination[index] = selector(array![index])!;
                 }
@@ -35,11 +35,13 @@ namespace NetFabric.Hyperlinq
                     var end = source.Count - 1;
                     if (source.Offset == 0)
                     {
+                        var array = source.Array;
                         for (var index = 0; index <= end; index++)
                             destination[index] = selector(array![index])!;
                     }
                     else
                     {
+                        var array = source.Array;
                         var offset = source.Offset;
                         for (var index = 0; index <= end; index++)
                             destination[index] = selector(array![index + offset])!;
@@ -53,11 +55,11 @@ namespace NetFabric.Hyperlinq
         {
             Debug.Assert(destination.Length >= source.Count);
 
-            if (source.Count != 0)
+            if (source.Any())
             {
-                var array = source.Array;
-                if (source.Count == array!.Length)
+                if (source.IsWhole())
                 {
+                    var array = source.Array;
                     for (var index = 0; index < array.Length; index++)
                         destination[index] = selector(array![index], index)!;
                 }
@@ -66,11 +68,13 @@ namespace NetFabric.Hyperlinq
                     var end = source.Count - 1;
                     if (source.Offset == 0)
                     {
+                        var array = source.Array;
                         for (var index = 0; index <= end; index++)
                             destination[index] = selector(array![index], index)!;
                     }
                     else
                     {
+                        var array = source.Array;
                         var offset = source.Offset;
                         for (var index = 0; index <= end; index++)
                             destination[index] = selector(array![index + offset], index)!;

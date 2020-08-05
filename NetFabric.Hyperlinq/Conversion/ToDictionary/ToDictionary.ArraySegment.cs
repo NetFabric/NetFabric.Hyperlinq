@@ -16,11 +16,11 @@ namespace NetFabric.Hyperlinq
                 return new Dictionary<TKey, TSource>();
 
             var dictionary = new Dictionary<TKey, TSource>(source.Count, comparer);
-            if (source.Count != 0)
+            if (source.Any())
             {
-                var array = source.Array;
-                if (source.Count == array!.Length)
+                if (source.IsWhole())
                 {
+                    var array = source.Array;
                     for (var index = 0; index < array.Length; index++)
                     {
                         var item = array![index];
@@ -29,6 +29,7 @@ namespace NetFabric.Hyperlinq
                 }
                 else
                 {
+                    var array = source.Array;
                     var end = source.Count - 1;
                     for (var index = source.Offset; index <= end; index++)
                         dictionary.Add(keySelector(array![index]), array![index]);
@@ -49,11 +50,11 @@ namespace NetFabric.Hyperlinq
                 return new Dictionary<TKey, TElement>();
 
             var dictionary = new Dictionary<TKey, TElement>(source.Count, comparer);
-            if (source.Count != 0)
+            if (source.Any())
             {
-                var array = source.Array;
-                if (source.Count == array!.Length)
+                if (source.IsWhole())
                 {
+                    var array = source.Array;
                     for (var index = 0; index < array.Length; index++)
                     {
                         var item = array![index];
@@ -62,6 +63,7 @@ namespace NetFabric.Hyperlinq
                 }
                 else
                 {
+                    var array = source.Array;
                     var end = source.Count - 1;
                     for (var index = source.Offset; index <= end; index++)
                     {
