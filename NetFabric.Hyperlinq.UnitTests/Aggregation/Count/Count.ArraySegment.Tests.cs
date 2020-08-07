@@ -7,6 +7,21 @@ namespace NetFabric.Hyperlinq.UnitTests.Aggregation.Count
 {
     public class ArraySegmentTests
     {
+        [Fact]
+        public void Count_With_NullArray_Must_Succeed()
+        {
+            // Arrange
+            var source = default(ArraySegment<int>);
+
+            // Act
+            var result = ArrayExtensions
+                .Count(source);
+
+            // Assert
+            _ = result.Must()
+                .BeEqualTo(0);
+        }
+
         [Theory]
         [MemberData(nameof(TestData.SkipTakeEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakeSingle), MemberType = typeof(TestData))]

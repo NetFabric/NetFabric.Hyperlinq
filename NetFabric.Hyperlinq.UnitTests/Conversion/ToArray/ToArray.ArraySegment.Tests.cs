@@ -8,6 +8,21 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
 {
     public class ArraySegmentTests
     {
+        [Fact]
+        public void ToArray_With_NullArray_Must_Succeed()
+        {
+            // Arrange
+            var source = default(ArraySegment<int>);
+
+            // Act
+            var result = ArrayExtensions
+                .ToArray(source);
+
+            // Assert
+            _ = result.Must()
+                .BeArrayOf<int>()
+                .BeEqualTo(Array.Empty<int>());
+        }
 
         [Theory]
         [MemberData(nameof(TestData.SkipTakeEmpty), MemberType = typeof(TestData))]

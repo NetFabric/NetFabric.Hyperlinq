@@ -7,6 +7,22 @@ namespace NetFabric.Hyperlinq.UnitTests.Partitioning.Skip
 {
     public class ArraySegmentTests
     {
+        [Fact]
+        public void Skip_With_NullArray_Must_Succeed()
+        {
+            // Arrange
+            var source = default(ArraySegment<int>);
+            var expected = Enumerable.Empty<int>();
+
+            // Act
+            var result = ArrayExtensions
+                .Skip(source, 0);
+
+            // Assert
+            _ = result.Must()
+                .BeEqualTo(expected);
+        }
+
         [Theory]
         [MemberData(nameof(TestData.SkipEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipSingle), MemberType = typeof(TestData))]

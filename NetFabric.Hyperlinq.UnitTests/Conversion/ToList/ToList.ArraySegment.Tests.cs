@@ -8,6 +8,23 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
 {
     public class ArraySegmentTests
     {
+        [Fact]
+        public void ToList_With_NullArray_Must_Succeed()
+        {
+            // Arrange
+            var source = default(ArraySegment<int>);
+
+            // Act
+            var result = ArrayExtensions
+                .ToList(source);
+
+            // Assert
+            _ = result.Must()
+                .BeOfType<List<int>>()
+                .BeEnumerableOf<int>()
+                .BeEqualTo(new List<int>());
+        }
+
         [Theory]
         [MemberData(nameof(TestData.SkipTakeEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakeSingle), MemberType = typeof(TestData))]

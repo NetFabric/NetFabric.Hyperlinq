@@ -25,6 +25,23 @@ namespace NetFabric.Hyperlinq.UnitTests.Projection.Select
                 .EvaluateTrue(exception => exception.ParamName == "selector");
         }
 
+        [Fact]
+        public void Select_With_NullArray_Must_Succeed()
+        {
+            // Arrange
+            var source = default(ArraySegment<int>);
+            var expected = Enumerable.Empty<int>();
+
+            // Act
+            var result = ArrayExtensions
+                .Select(source, item => item);
+
+            // Assert
+            _ = result.Must()
+                .BeEnumerableOf<int>()
+                .BeEqualTo(expected);
+        }
+
         [Theory]
         [MemberData(nameof(TestData.SkipTakeSelectorEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakeSelectorSingle), MemberType = typeof(TestData))]

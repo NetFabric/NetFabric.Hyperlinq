@@ -45,6 +45,24 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.WhereSelect
                 .EvaluateTrue(exception => exception.ParamName == "selector");
         }
 
+        [Fact]
+        public void WhereRef_With_NullArray_Must_Succeed()
+        {
+            // Arrange
+            var source = default(ArraySegment<int>);
+            var expected = Enumerable.Empty<int>();
+
+            // Act
+            var result = ArrayExtensions
+                .Where(source, _ => true)
+                .Select(item => item);
+
+            // Assert
+            _ = result.Must()
+                .BeEnumerableOf<int>()
+                .BeEqualTo(expected);
+        }
+
         [Theory]
         [MemberData(nameof(TestData.SkipTakePredicateSelectorEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakePredicateSelectorSingle), MemberType = typeof(TestData))]

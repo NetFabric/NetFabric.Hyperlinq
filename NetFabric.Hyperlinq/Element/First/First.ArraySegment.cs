@@ -7,7 +7,7 @@ namespace NetFabric.Hyperlinq
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Option<TSource> First<TSource>(this in ArraySegment<TSource> source)
-            => source.Count == 0 || source.Array is null
+            => source.Count == 0
                 ? Option.None
                 : Option.Some(source.Array[source.Offset]);
 
@@ -73,14 +73,14 @@ namespace NetFabric.Hyperlinq
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static Option<TResult> First<TSource, TResult>(this in ArraySegment<TSource> source, NullableSelector<TSource, TResult> selector)
-            => source.Count == 0 || source.Array is null
+            => source.Count == 0
                 ? Option.None
                 : Option.Some(selector(source.Array[source.Offset]));
 
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static Option<TResult> First<TSource, TResult>(this in ArraySegment<TSource> source, NullableSelectorAt<TSource, TResult> selector)
-            => source.Count == 0 || source.Array is null
+            => source.Count == 0
                 ? Option.None
                 : Option.Some(selector(source.Array[source.Offset], 0));
 

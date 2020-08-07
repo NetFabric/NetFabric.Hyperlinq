@@ -41,9 +41,6 @@ namespace NetFabric.Hyperlinq
 
         static unsafe int Count<TSource>(this in ArraySegment<TSource> source, PredicateAt<TSource> predicate)
         {
-            if (source.Array is null)
-                Throw.ArgumentArraySegmentNullException(nameof(source));
-
             var counter = 0;
             if (source.Any())
             {

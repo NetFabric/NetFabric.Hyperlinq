@@ -25,6 +25,21 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.All
                 .EvaluateTrue(exception => exception.ParamName == "predicate");
         }
 
+        [Fact]
+        public void All_With_NullArray_Must_Succeed()
+        {
+            // Arrange
+            var source = default(ArraySegment<int>);
+
+            // Act
+            var result = ArrayExtensions
+                .All(source, _ => true);
+
+            // Assert
+            _ = result.Must()
+                .BeTrue();
+        }
+
         [Theory]
         [MemberData(nameof(TestData.SkipTakePredicateEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakePredicateSingle), MemberType = typeof(TestData))]

@@ -25,6 +25,24 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.WhereRef
                 .EvaluateTrue(exception => exception.ParamName == "predicate");
         }
 
+        [Fact]
+        public void WhereRef_With_NullArray_Must_Succeed()
+        {
+            // Arrange
+            var source = default(ArraySegment<int>);
+            var expected = Enumerable.Empty<int>();
+
+            // Act
+            var result = ArrayExtensions
+                .WhereRef(source, _ => true);
+
+            // Assert
+            _ = result.Must()
+                .BeEnumerableOf<int>()
+                .BeEqualTo(expected, testRefStructs: false, testRefReturns: false);
+            _ = result.SequenceEqual(expected).Must().BeTrue();
+        }
+
         [Theory]
         [MemberData(nameof(TestData.SkipTakePredicateEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakePredicateSingle), MemberType = typeof(TestData))]

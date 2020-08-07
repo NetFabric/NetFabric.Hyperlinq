@@ -7,6 +7,22 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
 {
     public class ArraySegmentTests
     {
+        [Fact]
+        public void Single_With_NullArray_Must_Succeed()
+        {
+            // Arrange
+            var source = default(ArraySegment<int>);
+
+            // Act
+            var result = ArrayExtensions
+                .Single(source);
+
+            // Assert
+            _ = result.Must()
+                .BeOfType<Option<int>>()
+                .EvaluateTrue(option => option.IsNone);
+        }
+
         [Theory]
         [MemberData(nameof(TestData.SkipTakeEmpty), MemberType = typeof(TestData))]
         public void Single_With_Empty_Must_Return_None(int[] source, int skipCount, int takeCount)

@@ -12,9 +12,6 @@ namespace NetFabric.Hyperlinq
         {
             if (keySelector is null) Throw.ArgumentNullException(nameof(keySelector));
 
-            if (source.Array is null)
-                return new Dictionary<TKey, TSource>();
-
             var dictionary = new Dictionary<TKey, TSource>(source.Count, comparer);
             if (source.Any())
             {
@@ -45,9 +42,6 @@ namespace NetFabric.Hyperlinq
         {
             if (keySelector is null) Throw.ArgumentNullException(nameof(keySelector));
             if (elementSelector is null) Throw.ArgumentNullException(nameof(elementSelector));
-
-            if (source.Array is null)
-                return new Dictionary<TKey, TElement>();
 
             var dictionary = new Dictionary<TKey, TElement>(source.Count, comparer);
             if (source.Any())

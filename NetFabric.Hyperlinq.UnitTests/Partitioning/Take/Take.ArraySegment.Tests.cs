@@ -7,6 +7,22 @@ namespace NetFabric.Hyperlinq.UnitTests.Partitioning.Take
 {
     public class ArraySegmentTests
     {
+        [Fact]
+        public void Take_With_NullArray_Must_Succeed()
+        {
+            // Arrange
+            var source = default(ArraySegment<int>);
+            var expected = Enumerable.Empty<int>();
+
+            // Act
+            var result = ArrayExtensions
+                .Take(source, 1);
+
+            // Assert
+            _ = result.Must()
+                .BeEqualTo(expected);
+        }
+
         [Theory]
         [MemberData(nameof(TestData.TakeEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.TakeSingle), MemberType = typeof(TestData))]

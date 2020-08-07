@@ -7,8 +7,10 @@ namespace NetFabric.Hyperlinq
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ArraySegment<TSource> Take<TSource>(this in ArraySegment<TSource> source, int count) 
-            => source.Array is null 
-                ? source 
-                : new ArraySegment<TSource>(source.Array, source.Offset, Utils.Take(source.Count, count));
+            => source.Count switch
+            {
+                0 => default,
+                _ => new ArraySegment<TSource>(source.Array, source.Offset, Utils.Take(source.Count, count)),
+            };
     }
 }

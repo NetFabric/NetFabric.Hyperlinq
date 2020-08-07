@@ -8,11 +8,15 @@ namespace NetFabric.Hyperlinq
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ArraySegment<TSource> Skip<TSource>(this in ArraySegment<TSource> source, int count)
         {
-            if (source.Array is null)
-                return source;
+            switch (source.Count)
+            {
+                case 0:
+                    return default;
 
-            var (skipCount, takeCount) = Utils.Skip(source.Count, count);
-            return new ArraySegment<TSource>(source.Array!, source.Offset + skipCount, takeCount);
+                default:
+                    var (skipCount, takeCount) = Utils.Skip(source.Count, count);
+                    return new ArraySegment<TSource>(source.Array!, source.Offset + skipCount, takeCount);
+            }
         }
     }
 }
