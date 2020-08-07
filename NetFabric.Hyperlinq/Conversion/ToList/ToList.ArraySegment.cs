@@ -27,13 +27,13 @@ namespace NetFabric.Hyperlinq
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static List<TResult> ToList<TSource, TResult>(this in ArraySegment<TSource> source, NullableSelector<TSource, TResult> selector)
-            => source.Count == 0 || source.Array is null
+            => source.Count == 0
                 ? new List<TResult>()
                 : new List<TResult>(new ArraySegmentSelectorToListCollection<TSource, TResult>(source, selector));
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static List<TResult> ToList<TSource, TResult>(this in ArraySegment<TSource> source, NullableSelectorAt<TSource, TResult> selector)
-            => source.Count == 0 || source.Array is null
+            => source.Count == 0
                 ? new List<TResult>()
                 : new List<TResult>(new ArraySegmentSelectorAtToListCollection<TSource, TResult>(source, selector));
 

@@ -7,6 +7,22 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
 {
     public class ArraySegmentTests 
     {
+        [Fact]
+        public void ElementAt_With_NullArray_Must_Succeed()
+        {
+            // Arrange
+            var source = default(ArraySegment<int>);
+
+            // Act
+            var result = ArrayExtensions
+                .ElementAt(source, 0);
+
+            // Assert
+            _ = result.Must()
+                .BeOfType<Option<int>>()
+                .EvaluateTrue(option => option.IsNone);
+        }
+
         [Theory]
         [MemberData(nameof(TestData.SkipTakeEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakeSingle), MemberType = typeof(TestData))]

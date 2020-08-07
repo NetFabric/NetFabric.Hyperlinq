@@ -28,6 +28,21 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Contains
                 .BeFalse();
         }
 
+        [Fact]
+        public void Contains_With_NullArray_Must_Succeed()
+        {
+            // Arrange
+            var source = default(ArraySegment<int>);
+
+            // Act
+            var result = ArrayExtensions
+                .Contains(source, 0);
+
+            // Assert
+            _ = result.Must()
+                .BeFalse();
+        }
+
         [Theory]
         [MemberData(nameof(TestData.SkipTakeEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakeSingle), MemberType = typeof(TestData))]

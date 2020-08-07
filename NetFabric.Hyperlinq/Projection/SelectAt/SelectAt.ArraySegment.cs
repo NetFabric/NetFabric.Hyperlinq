@@ -38,9 +38,10 @@ namespace NetFabric.Hyperlinq
             [MaybeNull]
             public readonly TResult this[int index]
             {
+                [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 get
                 {
-                    if (index < 0 || index >= source.Count || source.Array is null) Throw.IndexOutOfRangeException();
+                    if (index < 0 || index >= source.Count) Throw.IndexOutOfRangeException();
 
                     return selector(source.Array[index + source.Offset], index);
                 }
@@ -53,6 +54,7 @@ namespace NetFabric.Hyperlinq
                 set => Throw.NotSupportedException();
             }
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly Enumerator GetEnumerator()
                 => new Enumerator(in this);
             readonly DisposableEnumerator IValueEnumerable<TResult, ArraySegmentSelectAtEnumerable<TSource, TResult>.DisposableEnumerator>.GetEnumerator()
