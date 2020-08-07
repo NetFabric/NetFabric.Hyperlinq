@@ -99,7 +99,8 @@ namespace NetFabric.Hyperlinq
 
         
         public readonly bool Contains(T value, IEqualityComparer<T>? comparer = default) 
-            => IsSome && (comparer is null 
+            => IsSome && 
+            (comparer is null 
                 ? EqualityComparer<T>.Default.Equals(Value!, value) 
                 : comparer.Equals(Value!, value));
 
@@ -139,9 +140,11 @@ namespace NetFabric.Hyperlinq
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public readonly Option<T> ElementAt(int index)
-            => index == 0 
-                ? this 
-                : default;
+            => index switch
+            {
+                0 => this,
+                _ => default,
+            };
 
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

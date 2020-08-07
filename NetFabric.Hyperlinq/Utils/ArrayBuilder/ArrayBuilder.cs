@@ -107,7 +107,11 @@ namespace NetFabric.Hyperlinq
             Debug.Assert(minimum > Capacity);
 
             var capacity = Capacity;
-            var nextCapacity = capacity == 0 ? DefaultMinCapacity : 2 * capacity;
+            var nextCapacity = capacity switch
+            { 
+                0 => DefaultMinCapacity,
+                _ => 2 * capacity,
+            };
 
             if ((uint)nextCapacity > (uint)MaxCoreClrArrayLength)
             {

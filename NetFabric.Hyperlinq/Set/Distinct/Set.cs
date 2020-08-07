@@ -75,7 +75,11 @@ namespace NetFabric.Hyperlinq
             Debug.Assert(buckets is object);
             Debug.Assert(slots is object);
 
-            var hashCode = value is null ? 0 : comparer.GetHashCode(value) & 0x7FFFFFFF;
+            var hashCode = value switch
+            { 
+                null => 0,
+                _ => comparer.GetHashCode(value) & 0x7FFFFFFF,
+            };
             if (Utils.IsValueType<TElement>() && ReferenceEquals(comparer, EqualityComparer<TElement>.Default))
             {
                 for (var index = buckets[hashCode % buckets.Length] - 1; index >= 0; index = slots[index].Next)
