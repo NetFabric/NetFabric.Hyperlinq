@@ -36,13 +36,13 @@ namespace NetFabric.Hyperlinq
             [GeneratedCode("NetFabric.Hyperlinq.SourceGenerator", "1.0.0")]
             [DebuggerNonUserCode]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly NetFabric.Hyperlinq.ReadOnlyListExtensions.WhereAtEnumerable<NetFabric.Hyperlinq.ValueEnumerable.ReturnEnumerable<TSource>,TSource> Where(NetFabric.Hyperlinq.PredicateAt<TSource> predicate)
+            public readonly NetFabric.Hyperlinq.ReadOnlyListExtensions.WhereEnumerable<NetFabric.Hyperlinq.ValueEnumerable.ReturnEnumerable<TSource>,TSource> Where(System.Predicate<TSource> predicate)
             => NetFabric.Hyperlinq.ReadOnlyListExtensions.Where<NetFabric.Hyperlinq.ValueEnumerable.ReturnEnumerable<TSource>,TSource>(this,predicate);
 
             [GeneratedCode("NetFabric.Hyperlinq.SourceGenerator", "1.0.0")]
             [DebuggerNonUserCode]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly NetFabric.Hyperlinq.ReadOnlyListExtensions.WhereEnumerable<NetFabric.Hyperlinq.ValueEnumerable.ReturnEnumerable<TSource>,TSource> Where(System.Predicate<TSource> predicate)
+            public readonly NetFabric.Hyperlinq.ReadOnlyListExtensions.WhereAtEnumerable<NetFabric.Hyperlinq.ValueEnumerable.ReturnEnumerable<TSource>,TSource> Where(NetFabric.Hyperlinq.PredicateAt<TSource> predicate)
             => NetFabric.Hyperlinq.ReadOnlyListExtensions.Where<NetFabric.Hyperlinq.ValueEnumerable.ReturnEnumerable<TSource>,TSource>(this,predicate);
 
             [GeneratedCode("NetFabric.Hyperlinq.SourceGenerator", "1.0.0")]

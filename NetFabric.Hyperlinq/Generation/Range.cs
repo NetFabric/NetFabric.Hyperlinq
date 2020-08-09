@@ -30,8 +30,8 @@ namespace NetFabric.Hyperlinq
 
         [GeneratorMapping("TSource", "int", true)]
         public readonly partial struct RangeEnumerable
-            : IValueReadOnlyList<int, RangeEnumerable.DisposableEnumerator>
-            , IList<int>
+            : IValueReadOnlyCollection<int, RangeEnumerable.DisposableEnumerator>
+            , ICollection<int>
         {
             readonly int start;
             readonly int end;
@@ -44,24 +44,6 @@ namespace NetFabric.Hyperlinq
             }
 
             public readonly int Count { get; }
-
-            public readonly int this[int index]
-            {
-                [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                get
-                {
-                    if (index < 0 || index >= Count) Throw.IndexOutOfRangeException();
-
-                    return index + start;
-                }
-            }
-            int IList<int>.this[int index]
-            {
-                [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                get => this[index];
-                [ExcludeFromCodeCoverage]
-                set => Throw.NotSupportedException();
-            }
 
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -140,12 +122,6 @@ namespace NetFabric.Hyperlinq
             public bool Contains(int value)
                 => value >= start && value < end;
 
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public int IndexOf(int item)
-                => item >= start && item < end
-                    ? item - start
-                    : -1;
-
             [ExcludeFromCodeCoverage]
             void ICollection<int>.Add(int item) 
                 => Throw.NotSupportedException();
@@ -156,20 +132,15 @@ namespace NetFabric.Hyperlinq
             bool ICollection<int>.Remove(int item) 
                 => Throw.NotSupportedException<bool>();
 
-            [ExcludeFromCodeCoverage]
-            void IList<int>.Insert(int index, int item)
-                => Throw.NotSupportedException();
-            [ExcludeFromCodeCoverage]
-            void IList<int>.RemoveAt(int index)
-                => Throw.NotSupportedException();
-
             public struct Enumerator
             {
+                readonly int start;
                 readonly int end;
 
                 internal Enumerator(in RangeEnumerable enumerable)
                 {
-                    Current = enumerable.start - 1;
+                    start = enumerable.start;
+                    Current = start - 1;
                     end = Current + enumerable.Count;
                 }
 
@@ -183,16 +154,18 @@ namespace NetFabric.Hyperlinq
             public struct DisposableEnumerator
                 : IEnumerator<int>
             {
+                readonly int start;
                 readonly int end;
 
                 internal DisposableEnumerator(in RangeEnumerable enumerable)
                 {
-                    Current = enumerable.start - 1;
+                    start = enumerable.start;
+                    Current = start - 1;
                     end = Current + enumerable.Count;
                 }
 
                 public int Current { get; private set; }
-                readonly object IEnumerator.Current 
+                object IEnumerator.Current
                     => Current;
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]

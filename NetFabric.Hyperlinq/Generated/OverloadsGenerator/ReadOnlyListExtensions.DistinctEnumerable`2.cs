@@ -80,14 +80,20 @@ namespace NetFabric.Hyperlinq
             [GeneratedCode("NetFabric.Hyperlinq.SourceGenerator", "1.0.0")]
             [DebuggerNonUserCode]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public readonly NetFabric.Hyperlinq.ValueEnumerableExtensions.WhereEnumerable<NetFabric.Hyperlinq.ReadOnlyListExtensions.DistinctEnumerable<TList, TSource>,NetFabric.Hyperlinq.ReadOnlyListExtensions.DistinctEnumerable<TList, TSource>.Enumerator,TSource> Where(System.Predicate<TSource> predicate)
+            => NetFabric.Hyperlinq.ValueEnumerableExtensions.Where<NetFabric.Hyperlinq.ReadOnlyListExtensions.DistinctEnumerable<TList, TSource>,NetFabric.Hyperlinq.ReadOnlyListExtensions.DistinctEnumerable<TList, TSource>.Enumerator,TSource>(this,predicate);
+
+            [GeneratedCode("NetFabric.Hyperlinq.SourceGenerator", "1.0.0")]
+            [DebuggerNonUserCode]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly NetFabric.Hyperlinq.ValueEnumerableExtensions.WhereAtEnumerable<NetFabric.Hyperlinq.ReadOnlyListExtensions.DistinctEnumerable<TList, TSource>,NetFabric.Hyperlinq.ReadOnlyListExtensions.DistinctEnumerable<TList, TSource>.Enumerator,TSource> Where(NetFabric.Hyperlinq.PredicateAt<TSource> predicate)
             => NetFabric.Hyperlinq.ValueEnumerableExtensions.Where<NetFabric.Hyperlinq.ReadOnlyListExtensions.DistinctEnumerable<TList, TSource>,NetFabric.Hyperlinq.ReadOnlyListExtensions.DistinctEnumerable<TList, TSource>.Enumerator,TSource>(this,predicate);
 
             [GeneratedCode("NetFabric.Hyperlinq.SourceGenerator", "1.0.0")]
             [DebuggerNonUserCode]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly NetFabric.Hyperlinq.ValueEnumerableExtensions.WhereEnumerable<NetFabric.Hyperlinq.ReadOnlyListExtensions.DistinctEnumerable<TList, TSource>,NetFabric.Hyperlinq.ReadOnlyListExtensions.DistinctEnumerable<TList, TSource>.Enumerator,TSource> Where(System.Predicate<TSource> predicate)
-            => NetFabric.Hyperlinq.ValueEnumerableExtensions.Where<NetFabric.Hyperlinq.ReadOnlyListExtensions.DistinctEnumerable<TList, TSource>,NetFabric.Hyperlinq.ReadOnlyListExtensions.DistinctEnumerable<TList, TSource>.Enumerator,TSource>(this,predicate);
+            public readonly NetFabric.Hyperlinq.ValueEnumerableExtensions.SelectEnumerable<NetFabric.Hyperlinq.ReadOnlyListExtensions.DistinctEnumerable<TList, TSource>,NetFabric.Hyperlinq.ReadOnlyListExtensions.DistinctEnumerable<TList, TSource>.Enumerator,TSource,TResult> Select<TResult>(NetFabric.Hyperlinq.NullableSelector<TSource, TResult> selector)
+            => NetFabric.Hyperlinq.ValueEnumerableExtensions.Select<NetFabric.Hyperlinq.ReadOnlyListExtensions.DistinctEnumerable<TList, TSource>,NetFabric.Hyperlinq.ReadOnlyListExtensions.DistinctEnumerable<TList, TSource>.Enumerator,TSource,TResult>(this,selector);
 
             [GeneratedCode("NetFabric.Hyperlinq.SourceGenerator", "1.0.0")]
             [DebuggerNonUserCode]
@@ -102,12 +108,6 @@ namespace NetFabric.Hyperlinq
             where TSubEnumerable : NetFabric.Hyperlinq.IValueEnumerable<TResult, TSubEnumerator>
             where TSubEnumerator : struct,System.Collections.Generic.IEnumerator<TResult>
             => NetFabric.Hyperlinq.ValueEnumerableExtensions.SelectMany<NetFabric.Hyperlinq.ReadOnlyListExtensions.DistinctEnumerable<TList, TSource>,NetFabric.Hyperlinq.ReadOnlyListExtensions.DistinctEnumerable<TList, TSource>.Enumerator,TSource,TSubEnumerable,TSubEnumerator,TResult>(this,selector);
-
-            [GeneratedCode("NetFabric.Hyperlinq.SourceGenerator", "1.0.0")]
-            [DebuggerNonUserCode]
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly NetFabric.Hyperlinq.ValueEnumerableExtensions.SelectEnumerable<NetFabric.Hyperlinq.ReadOnlyListExtensions.DistinctEnumerable<TList, TSource>,NetFabric.Hyperlinq.ReadOnlyListExtensions.DistinctEnumerable<TList, TSource>.Enumerator,TSource,TResult> Select<TResult>(NetFabric.Hyperlinq.NullableSelector<TSource, TResult> selector)
-            => NetFabric.Hyperlinq.ValueEnumerableExtensions.Select<NetFabric.Hyperlinq.ReadOnlyListExtensions.DistinctEnumerable<TList, TSource>,NetFabric.Hyperlinq.ReadOnlyListExtensions.DistinctEnumerable<TList, TSource>.Enumerator,TSource,TResult>(this,selector);
 
             [GeneratedCode("NetFabric.Hyperlinq.SourceGenerator", "1.0.0")]
             [DebuggerNonUserCode]

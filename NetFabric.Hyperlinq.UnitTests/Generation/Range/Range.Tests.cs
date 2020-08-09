@@ -23,22 +23,6 @@ namespace NetFabric.Hyperlinq.UnitTests.Generation
         }
 
         [Theory]
-        [InlineData(0, 0)]
-        [InlineData(1, 1)]
-        [InlineData(1, 2)]
-        [InlineData(1, -1)]
-        public void Indexer_With_IndexOutOfRange_Must_Throw(int count, int index)
-        {
-            // Arrange
-
-            // Act
-            Func<int> action = () => ValueEnumerable.Range(0, count)[index];
-
-            // Assert
-            _ = action.Must().Throw<IndexOutOfRangeException>();
-        }
-  
-        [Theory]
         [MemberData(nameof(TestData.Range), MemberType = typeof(TestData))]
         public void Range_With_ValidData_Must_Succeed(int start, int count)
         {

@@ -46,8 +46,8 @@ This implementation **favors performance in detriment of assembly binary size** 
 - All the enumerables returned by operations define a value-type enumerator.
 - Whenever possible, the enumerator returned by the public `GetEnumerator()` or `GetAsyncEnumerator()` does not implement `IDisposable`. This allows the `foreach` that enumerates the result to be inlinable. 
 - Operations enumerate the source using the indexer when the source is an array, `ArraySegment<>`, `Span<>`, `ReadOnlySpan<>`, `Memory<>`, `ReadOnlyMemory<>`, or implements `IReadOnlyList<>`. The indexer performs fewer operations than the enumerator.
-- The enumerables returned by operations like `Range()`, `Repeat()`, `Return()`, and `Select()`, implement `IReadOnlyList<>` and `IList<>`.
-- Use of buffer pools in operations like `Distinct()` and `ToArray()`.
+- `Range()` and `Repeat()` return enumerables that implement `IReadOnlyCollection<>` and `ICollection<>`. `Return()` and `Select()` return enumerables that implement `IReadOnlyList<>` and `IList<>`.
+- Use of buffer pools in operations like `Distinct()`, `ToArray()` and `ToList()`.
 - Elimination of conditional branchs in `Where().Count()`.
 - Allows the JIT compiler to perform optimizations on array enumeration whenever possible.
 - Takes advantage of `EqualityComparer<>.Default` devirtualization whenever possible.
