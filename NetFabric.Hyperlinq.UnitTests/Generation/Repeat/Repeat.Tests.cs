@@ -22,23 +22,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Generation
                 .EvaluateTrue(exception => exception.ParamName == "count");
         }
 
-        [Theory]
-        [InlineData(0, 0)]
-        [InlineData(1, 1)]
-        [InlineData(1, 2)]
-        [InlineData(1, -1)]
-        public void Indexer_With_IndexOutOfRepeat_Must_Throw(int count, int index)
-        {
-            // Arrange
 
-            // Act
-            Func<int> action = () => ValueEnumerable.Repeat(0, count)[index];
-
-            // Assert
-            _ = action.Must().Throw<IndexOutOfRangeException>();
-        }
-  
-  
         [Theory]
         [MemberData(nameof(TestData.Repeat), MemberType = typeof(TestData))]
         public void Repeat_With_ValidData_Must_Succeed(int value, int count)
