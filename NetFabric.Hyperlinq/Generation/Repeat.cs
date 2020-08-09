@@ -18,8 +18,8 @@ namespace NetFabric.Hyperlinq
         }
 
         public readonly partial struct RepeatEnumerable<TSource>
-            : IValueReadOnlyList<TSource, RepeatEnumerable<TSource>.DisposableEnumerator>
-            , IList<TSource>
+            : IValueReadOnlyCollection<TSource, RepeatEnumerable<TSource>.DisposableEnumerator>
+            , ICollection<TSource>
         {
             [AllowNull, MaybeNull] internal readonly TSource value;
             internal readonly int count;
@@ -32,26 +32,6 @@ namespace NetFabric.Hyperlinq
 
             public readonly int Count 
                 => count;
-
-            [MaybeNull]
-            public readonly TSource this[int index]
-            {
-                [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                get
-                {
-                    if (index < 0 || index >= count) Throw.IndexOutOfRangeException();
-
-                    return value;
-                }
-            }
-            TSource IReadOnlyList<TSource>.this[int index]
-                => this[index]!;
-            TSource IList<TSource>.this[int index]
-            {
-                get => this[index]!;
-                [ExcludeFromCodeCoverage]
-                set => Throw.NotSupportedException();
-            }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly Enumerator GetEnumerator() 
@@ -99,21 +79,16 @@ namespace NetFabric.Hyperlinq
             bool ICollection<TSource>.Remove(TSource item) 
                 => Throw.NotSupportedException<bool>();
 
-            [ExcludeFromCodeCoverage]
-            void IList<TSource>.Insert(int index, TSource item)
-                => Throw.NotSupportedException();
-            [ExcludeFromCodeCoverage]
-            void IList<TSource>.RemoveAt(int index)
-                => Throw.NotSupportedException();
-
             public struct Enumerator
             {
+                readonly int end;
                 int counter;
 
                 internal Enumerator(in RepeatEnumerable<TSource> enumerable)
                 {
                     Current = enumerable.value;
-                    counter = enumerable.count;
+                    counter = -1;
+                    end = counter + enumerable.Count;
                 }
 
                 [MaybeNull]
@@ -121,18 +96,20 @@ namespace NetFabric.Hyperlinq
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public bool MoveNext() 
-                    => counter-- > 0;
+                    => ++counter <= end;
             }
 
             public struct DisposableEnumerator
                 : IEnumerator<TSource>
             {
+                readonly int end;
                 int counter;
 
                 internal DisposableEnumerator(in RepeatEnumerable<TSource> enumerable)
                 {
                     Current = enumerable.value;
-                    counter = enumerable.count;
+                    counter = -1;
+                    end = counter + enumerable.Count;
                 }
 
                 [MaybeNull]
@@ -144,7 +121,7 @@ namespace NetFabric.Hyperlinq
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public bool MoveNext() 
-                    => counter-- > 0;
+                    => ++counter <= end;
 
                 [ExcludeFromCodeCoverage]
                 public readonly void Reset() 
