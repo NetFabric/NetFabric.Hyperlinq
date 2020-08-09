@@ -12,7 +12,7 @@ namespace NetFabric.Hyperlinq.SourceGenerator
     [Generator]
     public class OverloadsGenerator: ISourceGenerator
     {
-        const bool serializeSource = false;
+        const bool serializeSource = true;
 
         public void Initialize(InitializationContext context)
         {
