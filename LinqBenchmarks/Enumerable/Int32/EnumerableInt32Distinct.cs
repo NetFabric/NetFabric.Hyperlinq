@@ -31,6 +31,15 @@ namespace LinqBenchmarks.Enumerable.Int32
         }
 
         [Benchmark]
+        public int LinqAF()
+        {
+            var sum = 0;
+            foreach (var item in global::LinqAF.IEnumerableExtensionMethods.Distinct(source))
+                sum += item;
+            return sum;
+        }
+
+        [Benchmark]
         public int StructLinq()
         {
             var sum = 0;

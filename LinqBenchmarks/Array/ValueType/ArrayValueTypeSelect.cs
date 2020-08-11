@@ -50,6 +50,15 @@ namespace LinqBenchmarks.Array.ValueType
         }
 
         [Benchmark]
+        public FatValueType LinqAF()
+        {
+            var sum = default(FatValueType);
+            foreach (var item in global::LinqAF.ArrayExtensionMethods.Select(source, item => item * 2))
+                sum += item;
+            return sum;
+        }
+
+        [Benchmark]
         public FatValueType StructLinq()
         {
             var sum = default(FatValueType);

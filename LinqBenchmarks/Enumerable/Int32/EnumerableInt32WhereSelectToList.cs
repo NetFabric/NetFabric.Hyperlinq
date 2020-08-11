@@ -25,6 +25,10 @@ namespace LinqBenchmarks.Enumerable.Int32
             => source.Where(item => item.IsEven()).Select(item => item * 2).ToList();
 
         [Benchmark]
+        public List<int> LinqAF()
+            => global::LinqAF.IEnumerableExtensionMethods.Where(source, item => item.IsEven()).Select(item => item * 2).ToList();
+
+        [Benchmark]
         public List<int> StructLinq()
             => source.ToStructEnumerable().Where(item => item.IsEven(), x => x).Select(item => item * 2, x => x).ToList();
 

@@ -51,6 +51,13 @@ namespace LinqBenchmarks.List.ValueType
                 .ToArray();
 
         [Benchmark]
+        public FatValueType[] LinqAF()
+            => global::LinqAF.ListExtensionMethods
+                .Where(source, item => item.IsEven())
+                .Select(item => item * 2)
+                .ToArray();
+
+        [Benchmark]
         public FatValueType[] StructLinq()
             => source.ToStructEnumerable()
                 .Where(item => item.IsEven(), x => x)

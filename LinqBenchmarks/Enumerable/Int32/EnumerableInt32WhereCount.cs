@@ -25,6 +25,10 @@ namespace LinqBenchmarks.Enumerable.Int32
             => source.Count(item => item.IsEven());
 
         [Benchmark]
+        public int LinqAF()
+            => global::LinqAF.IEnumerableExtensionMethods.Count(source, item => item.IsEven());
+
+        [Benchmark]
         public int StructLinq()
             => source.ToStructEnumerable().Where(item => item.IsEven(), x => x).Count();
 

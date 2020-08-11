@@ -27,6 +27,10 @@ namespace LinqBenchmarks.Range
             => JM.LinqFaster.LinqFaster.RangeArrayF(Start, Count);
 
         [Benchmark]
+        public int[] LinqAF()
+            => global::LinqAF.Enumerable.Range(Start, Count).ToArray();
+
+        [Benchmark]
         public int[] StructLinq()
             => StructEnumerable.Range(Start, Count).ToArray();
 

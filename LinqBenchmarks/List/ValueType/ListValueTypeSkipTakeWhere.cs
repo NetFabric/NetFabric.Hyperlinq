@@ -60,6 +60,15 @@ namespace LinqBenchmarks.List.ValueType
         }
 
         [Benchmark]
+        public FatValueType LinqAF()
+        {
+            var sum = default(FatValueType);
+            foreach (var item in global::LinqAF.ListExtensionMethods.Skip(source, Skip).Take(Count).Where(item => item.IsEven()))
+                sum += item;
+            return sum;
+        }
+
+        [Benchmark]
         public FatValueType StructLinq()
         {
             var sum = default(FatValueType);

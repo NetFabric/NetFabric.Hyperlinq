@@ -60,6 +60,15 @@ namespace LinqBenchmarks.Array.Int32
         }
 
         [Benchmark]
+        public int LinqAF()
+        {
+            var sum = 0;
+            foreach (var item in global::LinqAF.ArrayExtensionMethods.Skip(source, Skip).Take(Count).Where(item => item.IsEven()))
+                sum += item;
+            return sum;
+        }
+
+        [Benchmark]
         public int StructLinq()
         {
             var sum = 0;

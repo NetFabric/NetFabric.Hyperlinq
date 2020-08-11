@@ -44,6 +44,10 @@ namespace LinqBenchmarks.Range
             => new List<int>(JM.LinqFaster.LinqFaster.RangeArrayF(Start, Count).SelectF(item => item * 2));
 
         [Benchmark]
+        public List<int> LinqAF()
+            => global::LinqAF.Enumerable.Range(Start, Count).Select(item => item * 2).ToList();
+
+        [Benchmark]
         public List<int> StructLinq()
             => StructEnumerable.Range(Start, Count).Select(item => item * 2, x => x).ToList();
 
