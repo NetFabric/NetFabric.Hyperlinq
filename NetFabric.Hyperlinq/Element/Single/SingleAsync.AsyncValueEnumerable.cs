@@ -35,7 +35,7 @@ namespace NetFabric.Hyperlinq
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
             var option = await GetSingleAsync<TEnumerable, TEnumerator, TSource>(source, cancellationToken).ConfigureAwait(false);
-            return await option.SelectAsync(selector, cancellationToken);
+            return await option.SelectAsync(selector, cancellationToken).ConfigureAwait(false);
         }
 
         
@@ -55,7 +55,7 @@ namespace NetFabric.Hyperlinq
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
             var option = await GetSingleAsync<TEnumerable, TEnumerator, TSource>(source, predicate, cancellationToken).ConfigureAwait(false);
-            return await option.SelectAsync(selector, cancellationToken);
+            return await option.SelectAsync(selector, cancellationToken).ConfigureAwait(false);
         }
 
         /////////////////////////

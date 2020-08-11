@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
 namespace NetFabric.Hyperlinq
 {
@@ -12,6 +13,7 @@ namespace NetFabric.Hyperlinq
         public static ReturnEnumerable<TSource> Return<TSource>([AllowNull] TSource value) =>
             new ReturnEnumerable<TSource>(value);
 
+        [StructLayout(LayoutKind.Auto)]
         public readonly partial struct ReturnEnumerable<TSource>
             : IValueReadOnlyList<TSource, ReturnEnumerable<TSource>.DisposableEnumerator>
             , IList<TSource>
@@ -58,7 +60,7 @@ namespace NetFabric.Hyperlinq
                 => true;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public void CopyTo(TSource[] array, int arrayIndex = 0) 
+            public void CopyTo(TSource[] array, int arrayIndex) 
                 => array[arrayIndex] = value;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -88,6 +90,7 @@ namespace NetFabric.Hyperlinq
             void IList<TSource>.RemoveAt(int index)
                 => Throw.NotSupportedException();
 
+            [StructLayout(LayoutKind.Auto)]
             public struct Enumerator
             {
                 bool moveNext;
@@ -112,6 +115,7 @@ namespace NetFabric.Hyperlinq
                 }
             }
 
+            [StructLayout(LayoutKind.Auto)]
             public struct DisposableEnumerator
                 : IEnumerator<TSource>
             {

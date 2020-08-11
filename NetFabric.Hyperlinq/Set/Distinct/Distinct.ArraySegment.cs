@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
 namespace NetFabric.Hyperlinq
 {
@@ -13,6 +14,7 @@ namespace NetFabric.Hyperlinq
         public static ArraySegmentDistinctEnumerable<TSource> Distinct<TSource>(this in ArraySegment<TSource> source, IEqualityComparer<TSource>? comparer = default)
             => new ArraySegmentDistinctEnumerable<TSource>(source, comparer);
 
+        [StructLayout(LayoutKind.Auto)]
         public readonly partial struct ArraySegmentDistinctEnumerable<TSource>
             : IValueEnumerable<TSource, ArraySegmentDistinctEnumerable<TSource>.Enumerator>
         {
@@ -34,6 +36,7 @@ namespace NetFabric.Hyperlinq
             readonly IEnumerator IEnumerable.GetEnumerator()
                 => new Enumerator(in this);
 
+            [StructLayout(LayoutKind.Auto)]
             public struct Enumerator
                 : IEnumerator<TSource>
             {

@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
 namespace NetFabric.Hyperlinq
 {
@@ -18,6 +19,7 @@ namespace NetFabric.Hyperlinq
     /// A lightweight hash set.
     /// </summary>
     /// <typeparam name="TElement">The type of the set's items.</typeparam>
+    [StructLayout(LayoutKind.Auto)]
     struct Set<TElement> : ICollection<TElement>, IDisposable
     {
         readonly ArrayPool<int> bucketsPool;
@@ -242,6 +244,7 @@ namespace NetFabric.Hyperlinq
         /// <summary>
         /// An entry in the hash set.
         /// </summary>
+        [StructLayout(LayoutKind.Auto)]
         struct Slot
         {
             /// <summary>

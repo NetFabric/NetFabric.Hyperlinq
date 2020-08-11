@@ -37,7 +37,7 @@ namespace NetFabric.Hyperlinq
 
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly Enumerator GetAsyncEnumerator(CancellationToken cancellationToken) 
+            public readonly Enumerator GetAsyncEnumerator(CancellationToken cancellationToken = default) 
                 => new Enumerator(in this, cancellationToken);
             readonly IAsyncEnumerator<TSource> IAsyncEnumerable<TSource>.GetAsyncEnumerator(CancellationToken cancellationToken) 
                 => new Enumerator(in this, cancellationToken);

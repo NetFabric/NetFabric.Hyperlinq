@@ -5,6 +5,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Runtime.InteropServices;
 
 namespace NetFabric.Hyperlinq
 {
@@ -19,6 +20,7 @@ namespace NetFabric.Hyperlinq
             where TEnumerator : struct, IAsyncEnumerator<TSource>
             => new DistinctEnumerable<TEnumerable, TEnumerator, TSource>(source, comparer);
 
+        [StructLayout(LayoutKind.Auto)]
         public readonly partial struct DistinctEnumerable<TEnumerable, TEnumerator, TSource>
             : IAsyncValueEnumerable<TSource, DistinctEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator>
             where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
@@ -37,6 +39,7 @@ namespace NetFabric.Hyperlinq
             readonly IAsyncEnumerator<TSource> IAsyncEnumerable<TSource>.GetAsyncEnumerator(CancellationToken cancellationToken)
                 => new Enumerator(in this, cancellationToken);
 
+            [StructLayout(LayoutKind.Auto)]
             public struct Enumerator
                 : IAsyncEnumerator<TSource>
                 , IAsyncStateMachine
@@ -183,7 +186,7 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly async ValueTask<int> CountAsync(CancellationToken cancellationToken = default)
-                => (await FillSetAsync(cancellationToken)).Count;
+                => (await FillSetAsync(cancellationToken).ConfigureAwait(false)).Count;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly ValueTask<bool> AnyAsync(CancellationToken cancellationToken = default)
@@ -191,15 +194,15 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly async ValueTask<TSource[]> ToArrayAsync(CancellationToken cancellationToken = default)
-                => (await FillSetAsync(cancellationToken)).ToArray();
+                => (await FillSetAsync(cancellationToken).ConfigureAwait(false)).ToArray();
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly async ValueTask<IMemoryOwner<TSource>> ToArrayAsync(MemoryPool<TSource> pool, CancellationToken cancellationToken = default)
-                => (await FillSetAsync(cancellationToken)).ToArray(pool);
+                => (await FillSetAsync(cancellationToken).ConfigureAwait(false)).ToArray(pool);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly async ValueTask<List<TSource>> ToListAsync(CancellationToken cancellationToken = default)
-                => (await FillSetAsync(cancellationToken)).ToList();
+                => (await FillSetAsync(cancellationToken).ConfigureAwait(false)).ToList();
         }
     }
 }

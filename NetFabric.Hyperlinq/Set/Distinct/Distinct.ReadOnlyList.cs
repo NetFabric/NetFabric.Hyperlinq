@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Tracing;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
 namespace NetFabric.Hyperlinq
 {
@@ -27,6 +28,7 @@ namespace NetFabric.Hyperlinq
             where TList : notnull, IReadOnlyList<TSource>
             => new DistinctEnumerable<TList, TSource>(source, comparer, offset, count);
 
+        [StructLayout(LayoutKind.Auto)]
         public readonly partial struct DistinctEnumerable<TList, TSource>
             : IValueEnumerable<TSource, DistinctEnumerable<TList, TSource>.Enumerator>
             where TList : notnull, IReadOnlyList<TSource>
@@ -49,6 +51,7 @@ namespace NetFabric.Hyperlinq
             readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new Enumerator(in this);
             readonly IEnumerator IEnumerable.GetEnumerator() => new Enumerator(in this);
 
+            [StructLayout(LayoutKind.Auto)]
             public struct Enumerator
                 : IEnumerator<TSource>
             {

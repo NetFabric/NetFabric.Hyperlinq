@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
 namespace NetFabric.Hyperlinq
 {
@@ -16,6 +17,7 @@ namespace NetFabric.Hyperlinq
             IEqualityComparer<TSource>? comparer = null)
             => new MemoryDistinctEnumerable<TSource>(source, comparer);
 
+        [StructLayout(LayoutKind.Auto)]
         public readonly partial struct MemoryDistinctEnumerable<TSource>
             : IValueEnumerable<TSource, MemoryDistinctEnumerable<TSource>.Enumerator>
         {
@@ -37,6 +39,7 @@ namespace NetFabric.Hyperlinq
             readonly IEnumerator IEnumerable.GetEnumerator() 
                 => new Enumerator(in this);
 
+            [StructLayout(LayoutKind.Auto)]
             public struct Enumerator
                 : IEnumerator<TSource>
             {

@@ -48,7 +48,7 @@ namespace NetFabric.Hyperlinq
                 => true;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public void CopyTo(TSource[] array, int arrayIndex = 0)
+            public void CopyTo(TSource[] array, int arrayIndex)
             {
                 if (source.Count != 0)
                 {
@@ -112,7 +112,7 @@ namespace NetFabric.Hyperlinq
                 => true;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public void CopyTo(TSource[] array, int arrayIndex = 0)
+            public void CopyTo(TSource[] array, int arrayIndex)
             {
                 if (source.Count != 0)
                 {

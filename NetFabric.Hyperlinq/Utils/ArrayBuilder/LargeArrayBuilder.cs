@@ -90,7 +90,7 @@ namespace NetFabric.Hyperlinq
         /// <param name="array">The destination array.</param>
         /// <param name="arrayIndex">The index in <paramref name="array"/> to start copying to.</param>
         /// <param name="count">The number of items to copy.</param>
-        public readonly void CopyTo(T[] array, int arrayIndex = 0)
+        public readonly void CopyTo(T[] array, int arrayIndex)
         {
             Debug.Assert(arrayIndex <= array.Length);
 
