@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
 namespace NetFabric.Hyperlinq
 {
@@ -29,6 +30,7 @@ namespace NetFabric.Hyperlinq
         }
 
         [GeneratorMapping("TSource", "int", true)]
+        [StructLayout(LayoutKind.Auto)]
         public readonly partial struct RangeEnumerable
             : IValueReadOnlyCollection<int, RangeEnumerable.DisposableEnumerator>
             , ICollection<int>
@@ -132,45 +134,51 @@ namespace NetFabric.Hyperlinq
             bool ICollection<int>.Remove(int item) 
                 => Throw.NotSupportedException<bool>();
 
+            [StructLayout(LayoutKind.Explicit)]
             public struct Enumerator
             {
-                readonly int start;
-                readonly int end;
+                [FieldOffset(0)] int current;
+                [FieldOffset(4)] readonly int end;
+                [FieldOffset(8)] readonly long pad;
 
                 internal Enumerator(in RangeEnumerable enumerable)
                 {
-                    start = enumerable.start;
-                    Current = start - 1;
-                    end = Current + enumerable.Count;
+                    current = enumerable.start - 1;
+                    end = current + enumerable.Count;
+                    pad = default;
                 }
 
-                public int Current { get; private set; }
+                public int Current 
+                    => current;
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public bool MoveNext() 
-                    => ++Current <= end;
+                    => ++current <= end;
             }
 
+            [StructLayout(LayoutKind.Explicit)]
             public struct DisposableEnumerator
                 : IEnumerator<int>
             {
-                readonly int start;
-                readonly int end;
+                [FieldOffset(0)] int current;
+                [FieldOffset(4)] readonly int end;
+                [FieldOffset(8)] readonly long pad;
 
                 internal DisposableEnumerator(in RangeEnumerable enumerable)
                 {
-                    start = enumerable.start;
-                    Current = start - 1;
-                    end = Current + enumerable.Count;
+                    current = enumerable.start - 1;
+                    end = current + enumerable.Count;
+                    pad = default;
                 }
 
-                public int Current { get; private set; }
+                public int Current 
+                    => current;
                 object IEnumerator.Current
-                    => Current;
+                    => current;
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public bool MoveNext() 
-                    => ++Current <= end;
+                    => ++current <= end;
 
                 [ExcludeFromCodeCoverage]
                 public readonly void Reset() 

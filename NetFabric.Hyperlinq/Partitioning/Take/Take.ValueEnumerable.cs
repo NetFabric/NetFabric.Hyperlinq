@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
 namespace NetFabric.Hyperlinq
 {
@@ -15,6 +16,7 @@ namespace NetFabric.Hyperlinq
             where TEnumerator : struct, IEnumerator<TSource>
             => new TakeEnumerable<TEnumerable, TEnumerator, TSource>(in source, count);
 
+        [StructLayout(LayoutKind.Auto)]
         public readonly partial struct TakeEnumerable<TEnumerable, TEnumerator, TSource>
             : IValueEnumerable<TSource, TakeEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator>
             where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
@@ -38,6 +40,7 @@ namespace NetFabric.Hyperlinq
             readonly IEnumerator IEnumerable.GetEnumerator() 
                 => new Enumerator(in this);
 
+            [StructLayout(LayoutKind.Auto)]
             public struct Enumerator
                 : IEnumerator<TSource>
             {

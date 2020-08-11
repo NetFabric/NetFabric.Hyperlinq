@@ -4,6 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Runtime.InteropServices;
 
 namespace NetFabric.Hyperlinq
 {
@@ -16,6 +17,7 @@ namespace NetFabric.Hyperlinq
             where TEnumerator : struct, IAsyncEnumerator<TSource>
             => new SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>(in source, skipCount, takeCount);
 
+        [StructLayout(LayoutKind.Auto)]
         public readonly partial struct SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>
             : IAsyncValueEnumerable<TSource, SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator>
             where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
@@ -39,6 +41,7 @@ namespace NetFabric.Hyperlinq
             readonly IAsyncEnumerator<TSource> IAsyncEnumerable<TSource>.GetAsyncEnumerator(CancellationToken cancellationToken)
                 => new Enumerator(in this, cancellationToken);
 
+            [StructLayout(LayoutKind.Auto)]
             public struct Enumerator
                 : IAsyncEnumerator<TSource>
                 , IAsyncStateMachine

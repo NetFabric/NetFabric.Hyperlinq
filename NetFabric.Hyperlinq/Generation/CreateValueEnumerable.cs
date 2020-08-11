@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
 namespace NetFabric.Hyperlinq
 {
@@ -16,6 +17,7 @@ namespace NetFabric.Hyperlinq
             return new CreateValueEnumerable<TEnumerator, TSource>(getEnumerator);
         }
 
+        [StructLayout(LayoutKind.Auto)]
         public readonly partial struct CreateValueEnumerable<TEnumerator, TSource> 
             : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>

@@ -5,6 +5,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Runtime.InteropServices;
 
 namespace NetFabric.Hyperlinq
 {
@@ -18,6 +19,7 @@ namespace NetFabric.Hyperlinq
             => new Option<T>(value);
     }
 
+    [StructLayout(LayoutKind.Auto)]
     public readonly struct Option<T>
     {
         Option(bool hasValue, [AllowNull] T value)

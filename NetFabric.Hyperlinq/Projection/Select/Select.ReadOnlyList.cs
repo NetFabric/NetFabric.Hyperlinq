@@ -78,7 +78,7 @@ namespace NetFabric.Hyperlinq
             bool ICollection<TResult>.IsReadOnly  
                 => true;
 
-            public void CopyTo(TResult[] array, int arrayIndex = 0)
+            public void CopyTo(TResult[] array, int arrayIndex)
                 => ReadOnlyListExtensions.Copy(source, offset, array, arrayIndex, Count, selector);
 
             public bool Contains(TResult item)

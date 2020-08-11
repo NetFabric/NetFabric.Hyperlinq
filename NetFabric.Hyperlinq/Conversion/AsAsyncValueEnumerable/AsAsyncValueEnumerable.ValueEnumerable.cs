@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Diagnostics.Contracts;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Runtime.InteropServices;
 
 namespace NetFabric.Hyperlinq
 {
@@ -17,6 +17,7 @@ namespace NetFabric.Hyperlinq
             where TEnumerator : struct, IEnumerator<TSource>
             => new AsyncValueEnumerableWrapper<TEnumerable, TEnumerator, TSource>(source);
 
+        [StructLayout(LayoutKind.Auto)]
         public readonly partial struct AsyncValueEnumerableWrapper<TEnumerable, TEnumerator, TSource>
             : IAsyncValueEnumerable<TSource, AsyncValueEnumerableWrapper<TEnumerable, TEnumerator, TSource>.AsyncEnumerator>
             where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
@@ -36,6 +37,7 @@ namespace NetFabric.Hyperlinq
             readonly IAsyncEnumerator<TSource> IAsyncEnumerable<TSource>.GetAsyncEnumerator(CancellationToken cancellationToken)
                 => GetAsyncEnumerator(cancellationToken);
 
+            [StructLayout(LayoutKind.Auto)]
             public readonly partial struct AsyncEnumerator
                 : IAsyncEnumerator<TSource>
             {

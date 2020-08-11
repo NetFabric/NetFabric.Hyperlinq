@@ -2,6 +2,7 @@ using System;
 using System.Buffers;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
 namespace NetFabric.Hyperlinq
 {
@@ -14,6 +15,7 @@ namespace NetFabric.Hyperlinq
             IEqualityComparer<TSource>? comparer = null)
             => new SpanDistinctEnumerable<TSource>(source, comparer);
 
+        [StructLayout(LayoutKind.Auto)]
         public readonly ref struct SpanDistinctEnumerable<TSource>
         {
             readonly ReadOnlySpan<TSource> source;
@@ -29,6 +31,7 @@ namespace NetFabric.Hyperlinq
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly Enumerator GetEnumerator() => new Enumerator(in this);
 
+            [StructLayout(LayoutKind.Auto)]
             public ref struct Enumerator
             {
                 readonly ReadOnlySpan<TSource> source;

@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
 namespace NetFabric.Hyperlinq
 {
@@ -15,6 +16,7 @@ namespace NetFabric.Hyperlinq
             where TList : notnull, IReadOnlyList<TSource>
             => new SkipTakeEnumerable<TList, TSource>(in source, offset, count);
 
+        [StructLayout(LayoutKind.Auto)]
         public readonly partial struct SkipTakeEnumerable<TList, TSource>
             : IValueReadOnlyList<TSource, SkipTakeEnumerable<TList, TSource>.DisposableEnumerator>
             , IList<TSource>
@@ -66,7 +68,7 @@ namespace NetFabric.Hyperlinq
                 => true;
 
 
-            public void CopyTo(TSource[] array, int arrayIndex = 0) 
+            public void CopyTo(TSource[] array, int arrayIndex) 
                 => ReadOnlyListExtensions.Copy(source, offset, array, arrayIndex, Count);
 
 
@@ -138,6 +140,7 @@ namespace NetFabric.Hyperlinq
             void IList<TSource>.RemoveAt(int index)
                 => Throw.NotSupportedException();
 
+            [StructLayout(LayoutKind.Auto)]
             public struct Enumerator
             {
                 readonly TList source;
@@ -160,6 +163,7 @@ namespace NetFabric.Hyperlinq
                     => ++index <= end;
             }
 
+            [StructLayout(LayoutKind.Auto)]
             public struct DisposableEnumerator
                 : IEnumerator<TSource>
             {

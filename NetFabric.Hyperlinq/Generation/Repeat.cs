@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
 namespace NetFabric.Hyperlinq
 {
@@ -17,6 +18,7 @@ namespace NetFabric.Hyperlinq
             return new RepeatEnumerable<TSource>(value, count);
         }
 
+        [StructLayout(LayoutKind.Auto)]
         public readonly partial struct RepeatEnumerable<TSource>
             : IValueReadOnlyCollection<TSource, RepeatEnumerable<TSource>.DisposableEnumerator>
             , ICollection<TSource>
@@ -53,7 +55,7 @@ namespace NetFabric.Hyperlinq
                     span[index] = value;
             }
 
-            public void CopyTo(TSource[] array, int arrayIndex = 0)
+            public void CopyTo(TSource[] array, int arrayIndex)
             {
                 var end = arrayIndex + count - 1;
                 for (var index = arrayIndex; index <= end; index++)
@@ -79,10 +81,11 @@ namespace NetFabric.Hyperlinq
             bool ICollection<TSource>.Remove(TSource item) 
                 => Throw.NotSupportedException<bool>();
 
+            [StructLayout(LayoutKind.Auto)]
             public struct Enumerator
             {
-                readonly int end;
                 int counter;
+                readonly int end;
 
                 internal Enumerator(in RepeatEnumerable<TSource> enumerable)
                 {
@@ -99,11 +102,12 @@ namespace NetFabric.Hyperlinq
                     => ++counter <= end;
             }
 
+            [StructLayout(LayoutKind.Auto)]
             public struct DisposableEnumerator
                 : IEnumerator<TSource>
             {
-                readonly int end;
                 int counter;
+                readonly int end;
 
                 internal DisposableEnumerator(in RepeatEnumerable<TSource> enumerable)
                 {
