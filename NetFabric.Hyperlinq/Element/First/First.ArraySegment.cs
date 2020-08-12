@@ -57,13 +57,28 @@ namespace NetFabric.Hyperlinq
                 }
                 else
                 {
-                    var array = source.Array;
-                    var end = source.Offset + source.Count - 1;
-                    for (var index = source.Offset; index <= end; index++)
+                    if (source.Offset == 0)
                     {
-                        var item = array![index];
-                        if (predicate(item, index))
-                            return Option.Some(item);
+                        var array = source.Array;
+                        var end = source.Count - 1;
+                        for (var index = 0; index <= end; index++)
+                        {
+                            var item = array![index];
+                            if (predicate(item, index))
+                                return Option.Some(item);
+                        }
+                    }
+                    else
+                    {
+                        var array = source.Array;
+                        var offset = source.Offset;
+                        var end = source.Count - 1;
+                        for (var index = 0; index <= end; index++)
+                        {
+                            var item = array![index + offset];
+                            if (predicate(item, index))
+                                return Option.Some(item);
+                        }
                     }
                 }
             }
