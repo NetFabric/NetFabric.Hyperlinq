@@ -44,11 +44,11 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.All
         [MemberData(nameof(TestData.SkipTakePredicateEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakePredicateSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakePredicateMultiple), MemberType = typeof(TestData))]
-        public void All_Predicate_With_ValidData_Must_Succeed(int[] source, int skipCount, int takeCount, Predicate<int> predicate)
+        public void All_Predicate_With_ValidData_Must_Succeed(int[] source, int skip, int take, Predicate<int> predicate)
         {
             // Arrange
-            var (skip, take) = Utils.SkipTake(source.Length, skipCount, takeCount);
-            var wrapped = new ArraySegment<int>(source, skip, take);
+            var (offset, count) = Utils.SkipTake(source.Length, skip, take);
+            var wrapped = new ArraySegment<int>(source, offset, count);
             var expected = Enumerable
                 .All(wrapped, predicate.AsFunc());
 
@@ -83,13 +83,11 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.All
         [MemberData(nameof(TestData.SkipTakePredicateAtEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakePredicateAtSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakePredicateAtMultiple), MemberType = typeof(TestData))]
-        public void All_Skip_Take_PredicateAt_With_ValidData_Must_Succeed(int[] source, int skipCount, int takeCount, PredicateAt<int> predicate)
+        public void All_Skip_Take_PredicateAt_With_ValidData_Must_Succeed(int[] source, int skip, int take, PredicateAt<int> predicate)
         {
             // Arrange
-            var (skip, take) = Utils.SkipTake(source.Length, skipCount, takeCount);
-            var wrapped = new ArraySegment<int>(source, skip, take);
-            var count = Enumerable
-                .Count(wrapped);
+            var (offset, count) = Utils.SkipTake(source.Length, skip, take);
+            var wrapped = new ArraySegment<int>(source, offset, count);
             var expected = Enumerable
                 .Where(wrapped, predicate.AsFunc())
                 .Count() == count;

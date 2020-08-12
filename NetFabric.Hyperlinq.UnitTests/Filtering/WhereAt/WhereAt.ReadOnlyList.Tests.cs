@@ -28,20 +28,20 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.WhereAt
         [MemberData(nameof(TestData.SkipTakePredicateAtEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakePredicateAtSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakePredicateAtMultiple), MemberType = typeof(TestData))]
-        public void Where_With_ValidData_Must_Succeed(int[] source, int skipCount, int takeCount, PredicateAt<int> predicate)
+        public void Where_With_ValidData_Must_Succeed(int[] source, int skip, int take, PredicateAt<int> predicate)
         {
             // Arrange
             var wrapped = Wrap
                 .AsReadOnlyList(source);
             var expected = Enumerable
-                .Skip(source, skipCount)
-                .Take(takeCount)
+                .Skip(source, skip)
+                .Take(take)
                 .Where(predicate.AsFunc());
 
             // Act
             var result = ReadOnlyListExtensions
-                .Skip<Wrap.ReadOnlyListWrapper<int>, int>(wrapped, skipCount)
-                .Take(takeCount)
+                .Skip<Wrap.ReadOnlyListWrapper<int>, int>(wrapped, skip)
+                .Take(take)
                 .Where(predicate);
 
             // Assert

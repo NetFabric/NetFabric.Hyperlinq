@@ -41,13 +41,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Generation
 
         [Theory]
         [MemberData(nameof(TestData.Repeat_SkipTake), MemberType = typeof(TestData))]
-        public void Repeat_Skip_With_ValidData_Must_Succeed(int value, int count, int skipCount)
+        public void Repeat_Skip_With_ValidData_Must_Succeed(int value, int count, int skip)
         {
             // Arrange
-            var expected = System.Linq.Enumerable.Skip(System.Linq.Enumerable.Repeat(value, count), skipCount);
+            var expected = System.Linq.Enumerable.Skip(System.Linq.Enumerable.Repeat(value, count), skip);
 
             // Act
-            var result = ValueEnumerable.Repeat(value, count).Skip(skipCount);
+            var result = ValueEnumerable.Repeat(value, count).Skip(skip);
 
             // Assert
             _ = result.Must()
@@ -57,13 +57,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Generation
 
         [Theory]
         [MemberData(nameof(TestData.Repeat_SkipTake), MemberType = typeof(TestData))]
-        public void Repeat_Take_With_ValidData_Must_Succeed(int value, int count, int takeCount)
+        public void Repeat_Take_With_ValidData_Must_Succeed(int value, int count, int take)
         {
             // Arrange
-            var expected = System.Linq.Enumerable.Take(System.Linq.Enumerable.Repeat(value, count), takeCount);
+            var expected = System.Linq.Enumerable.Take(System.Linq.Enumerable.Repeat(value, count), take);
 
             // Act
-            var result = ValueEnumerable.Repeat(value, count).Take(takeCount);
+            var result = ValueEnumerable.Repeat(value, count).Take(take);
 
             // Assert
             _ = result.Must()

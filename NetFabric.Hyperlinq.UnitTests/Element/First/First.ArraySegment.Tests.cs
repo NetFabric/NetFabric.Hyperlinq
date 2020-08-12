@@ -25,11 +25,11 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
 
         [Theory]
         [MemberData(nameof(TestData.SkipTakeEmpty), MemberType = typeof(TestData))]
-        public void First_With_Empty_Must_Return_None(int[] source, int skipCount, int takeCount)
+        public void First_With_Empty_Must_Return_None(int[] source, int skip, int take)
         {
             // Arrange
-            var (skip, take) = Utils.SkipTake(source.Length, skipCount, takeCount);
-            var wrapped = new ArraySegment<int>(source, skip, take);
+            var (offset, count) = Utils.SkipTake(source.Length, skip, take);
+            var wrapped = new ArraySegment<int>(source, offset, count);
 
             // Act
             var result = ArrayExtensions
@@ -44,11 +44,11 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
         [Theory]
         [MemberData(nameof(TestData.SkipTakeSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakeMultiple), MemberType = typeof(TestData))]
-        public void First_With_ValidData_Must_Return_Some(int[] source, int skipCount, int takeCount)
+        public void First_With_ValidData_Must_Return_Some(int[] source, int skip, int take)
         {
             // Arrange
-            var (skip, take) = Utils.SkipTake(source.Length, skipCount, takeCount);
-            var wrapped = new ArraySegment<int>(source, skip, take);
+            var (offset, count) = Utils.SkipTake(source.Length, skip, take);
+            var wrapped = new ArraySegment<int>(source, offset, count);
             var expected = Enumerable
                 .First(wrapped);
 

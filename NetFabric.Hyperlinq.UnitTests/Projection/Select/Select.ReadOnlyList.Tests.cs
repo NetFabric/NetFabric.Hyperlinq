@@ -29,19 +29,19 @@ namespace NetFabric.Hyperlinq.UnitTests.Projection.Select
         [MemberData(nameof(TestData.SkipTakeSelectorEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakeSelectorSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakeSelectorMultiple), MemberType = typeof(TestData))]
-        public void Select_With_ValidData_Must_Succeed(int[] source, int skipCount, int takeCount, NullableSelector<int, string> selector)
+        public void Select_With_ValidData_Must_Succeed(int[] source, int skip, int take, NullableSelector<int, string> selector)
         {
             // Arrange
             var wrapped = Wrap.AsReadOnlyList(source);
             var expected = Enumerable
-                .Skip(source, skipCount)
-                .Take(takeCount)
+                .Skip(source, skip)
+                .Take(take)
                 .Select(selector.AsFunc());
 
             // Act
             var result = ReadOnlyListExtensions
-                .Skip<Wrap.ReadOnlyListWrapper<int>, int>(wrapped, skipCount)
-                .Take(takeCount)
+                .Skip<Wrap.ReadOnlyListWrapper<int>, int>(wrapped, skip)
+                .Take(take)
                 .Select(selector);
 
             // Assert

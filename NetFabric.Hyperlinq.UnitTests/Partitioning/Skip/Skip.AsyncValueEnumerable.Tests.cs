@@ -54,19 +54,19 @@ namespace NetFabric.Hyperlinq.UnitTests.Partitioning.Skip
         [MemberData(nameof(TestData.SkipTakeEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakeSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakeMultiple), MemberType = typeof(TestData))]
-        public void Skip_Take_With_ValidData_Must_Succeed(int[] source, int skipCount, int takeCount)
+        public void Skip_Take_With_ValidData_Must_Succeed(int[] source, int skip, int take)
         {
             // Arrange
             var wrapped = Wrap
                 .AsAsyncValueEnumerable(source);
             var expected = Enumerable
-                .Skip(source, skipCount)
-                .Take(takeCount);
+                .Skip(source, skip)
+                .Take(take);
 
             // Act
             var result = AsyncValueEnumerableExtensions
-                .Skip<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, skipCount)
-                .Take(takeCount);
+                .Skip<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, skip)
+                .Take(take);
 
             // Assert
             _ = result.Must()

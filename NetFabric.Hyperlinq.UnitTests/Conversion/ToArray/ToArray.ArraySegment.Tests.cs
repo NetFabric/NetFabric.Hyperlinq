@@ -28,11 +28,11 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
         [MemberData(nameof(TestData.SkipTakeEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakeSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakeMultiple), MemberType = typeof(TestData))]
-        public void ToArray_Must_Succeed(int[] source, int skipCount, int takeCount)
+        public void ToArray_Must_Succeed(int[] source, int skip, int take)
         {
             // Arrange
-            var (skip, take) = Utils.SkipTake(source.Length, skipCount, takeCount);
-            var wrapped = new ArraySegment<int>(source, skip, take);
+            var (offset, count) = Utils.SkipTake(source.Length, skip, take);
+            var wrapped = new ArraySegment<int>(source, offset, count);
             var expected = Enumerable
                 .ToArray(wrapped);
 
@@ -51,12 +51,12 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
         [MemberData(nameof(TestData.SkipTakeEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakeSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakeMultiple), MemberType = typeof(TestData))]
-        public void ToArray_MemoryPool_Must_Succeed(int[] source, int skipCount, int takeCount)
+        public void ToArray_MemoryPool_Must_Succeed(int[] source, int skip, int take)
         {
             // Arrange
             var pool = MemoryPool<int>.Shared;
-            var (skip, take) = Utils.SkipTake(source.Length, skipCount, takeCount);
-            var wrapped = new ArraySegment<int>(source, skip, take);
+            var (offset, count) = Utils.SkipTake(source.Length, skip, take);
+            var wrapped = new ArraySegment<int>(source, offset, count);
             var expected = Enumerable
                 .ToArray(wrapped);
 

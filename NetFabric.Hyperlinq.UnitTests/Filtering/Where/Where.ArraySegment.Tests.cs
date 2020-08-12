@@ -46,11 +46,11 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.Where
         [MemberData(nameof(TestData.SkipTakePredicateEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakePredicateSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakePredicateMultiple), MemberType = typeof(TestData))]
-        public void Where_With_ValidData_Must_Succeed(int[] source, int skipCount, int takeCount, Predicate<int> predicate)
+        public void Where_With_ValidData_Must_Succeed(int[] source, int skip, int take, Predicate<int> predicate)
         {
             // Arrange
-            var (skip, take) = Utils.SkipTake(source.Length, skipCount, takeCount);
-            var wrapped = new ArraySegment<int>(source, skip, take);
+            var (offset, count) = Utils.SkipTake(source.Length, skip, take);
+            var wrapped = new ArraySegment<int>(source, offset, count);
             var expected = Enumerable
                 .Where(wrapped, predicate.AsFunc());
 
@@ -69,11 +69,11 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.Where
         [MemberData(nameof(TestData.SkipTakePredicatePredicateEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakePredicatePredicateSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakePredicatePredicateMultiple), MemberType = typeof(TestData))]
-        public void Where_Where_With_ValidData_Must_Succeed(int[] source, int skipCount, int takeCount, Predicate<int> predicate0, Predicate<int> predicate1)
+        public void Where_Where_With_ValidData_Must_Succeed(int[] source, int skip, int take, Predicate<int> predicate0, Predicate<int> predicate1)
         {
             // Arrange
-            var (skip, take) = Utils.SkipTake(source.Length, skipCount, takeCount);
-            var wrapped = new ArraySegment<int>(source, skip, take);
+            var (offset, count) = Utils.SkipTake(source.Length, skip, take);
+            var wrapped = new ArraySegment<int>(source, offset, count);
             var expected = Enumerable
                 .Where(wrapped, predicate0.AsFunc())
                 .Where(predicate1.AsFunc());

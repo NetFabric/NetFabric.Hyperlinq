@@ -47,20 +47,20 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.WhereSelect
         [MemberData(nameof(TestData.SkipTakePredicateSelectorEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakePredicateSelectorSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakePredicateSelectorMultiple), MemberType = typeof(TestData))]
-        public void WhereSelect_With_ValidData_Must_Succeed(int[] source, int skipCount, int takeCount, Predicate<int> predicate, NullableSelector<int, string> selector)
+        public void WhereSelect_With_ValidData_Must_Succeed(int[] source, int skip, int take, Predicate<int> predicate, NullableSelector<int, string> selector)
         {
             // Arrange
             var wrapped = Wrap.AsReadOnlyList(source);
             var expected = Enumerable
-                .Skip(source, skipCount)
-                .Take(takeCount)
+                .Skip(source, skip)
+                .Take(take)
                 .Where(predicate.AsFunc())
                 .Select(selector.AsFunc());
 
             // Act
             var result = ReadOnlyListExtensions
-                .Skip<Wrap.ReadOnlyListWrapper<int>, int>(wrapped, skipCount)
-                .Take(takeCount)
+                .Skip<Wrap.ReadOnlyListWrapper<int>, int>(wrapped, skip)
+                .Take(take)
                 .Where(predicate)
                 .Select(selector);
 
