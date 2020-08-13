@@ -12,19 +12,19 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
         [MemberData(nameof(TestData.SkipTakeEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakeSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakeMultiple), MemberType = typeof(TestData))]
-        public void ToList_Skip_Take_With_ReadOnlyList_ValidData_Must_Succeed(int[] source, int skipCount, int takeCount)
+        public void ToList_Skip_Take_With_ReadOnlyList_ValidData_Must_Succeed(int[] source, int skip, int take)
         {
             // Arrange
             var wrapped = Wrap.AsReadOnlyList(source);
             var expected = Enumerable
-                .Skip(source, skipCount)
-                .Take(takeCount)
+                .Skip(source, skip)
+                .Take(take)
                 .ToList();
 
             // Act
             var result = ReadOnlyListExtensions
-                .Skip<Wrap.ReadOnlyListWrapper<int>, int>(wrapped, skipCount)
-                .Take(takeCount)
+                .Skip<Wrap.ReadOnlyListWrapper<int>, int>(wrapped, skip)
+                .Take(take)
                 .ToList();
 
             // Assert
@@ -38,19 +38,19 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
         [MemberData(nameof(TestData.SkipTakeEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakeSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakeMultiple), MemberType = typeof(TestData))]
-        public void ToList_Skip_Take_With_List_ValidData_Must_Succeed(int[] source, int skipCount, int takeCount)
+        public void ToList_Skip_Take_With_List_ValidData_Must_Succeed(int[] source, int skip, int take)
         {
             // Arrange
             var wrapped = Wrap.AsList(source);
             var expected = Enumerable
-                .Skip(source, skipCount)
-                .Take(takeCount)
+                .Skip(source, skip)
+                .Take(take)
                 .ToList();
 
             // Act
             var result = ReadOnlyListExtensions
-                .Skip<Wrap.ListWrapper<int>, int>(wrapped, skipCount)
-                .Take(takeCount)
+                .Skip<Wrap.ListWrapper<int>, int>(wrapped, skip)
+                .Take(take)
                 .ToList();
 
             // Assert
@@ -83,20 +83,20 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
         [MemberData(nameof(TestData.SkipTakePredicateEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakePredicateSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakePredicateMultiple), MemberType = typeof(TestData))]
-        public void ToList_Skip_Take_Predicate_With_ValidData_Must_Succeed(int[] source, int skipCount, int takeCount, Predicate<int> predicate)
+        public void ToList_Skip_Take_Predicate_With_ValidData_Must_Succeed(int[] source, int skip, int take, Predicate<int> predicate)
         {
             // Arrange
             var wrapped = Wrap.AsReadOnlyList(source);
             var expected = Enumerable
-                .Skip(source, skipCount)
-                .Take(takeCount)
+                .Skip(source, skip)
+                .Take(take)
                 .Where(predicate.AsFunc())
                 .ToList();
 
             // Act
             var result = ReadOnlyListExtensions
-                .Skip<Wrap.ReadOnlyListWrapper<int>, int>(wrapped, skipCount)
-                .Take(takeCount)
+                .Skip<Wrap.ReadOnlyListWrapper<int>, int>(wrapped, skip)
+                .Take(take)
                 .Where(predicate)
                 .ToList();
 
@@ -130,21 +130,21 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
         [MemberData(nameof(TestData.SkipTakePredicateAtEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakePredicateAtSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakePredicateAtMultiple), MemberType = typeof(TestData))]
-        public void ToList_Skip_Take_PredicateAt_With_ValidData_Must_Succeed(int[] source, int skipCount, int takeCount, PredicateAt<int> predicate)
+        public void ToList_Skip_Take_PredicateAt_With_ValidData_Must_Succeed(int[] source, int skip, int take, PredicateAt<int> predicate)
         {
             // Arrange
             var wrapped = Wrap
                 .AsReadOnlyList(source);
             var expected = Enumerable
-                .Skip(source, skipCount)
-                .Take(takeCount)
+                .Skip(source, skip)
+                .Take(take)
                 .Where(predicate.AsFunc())
                 .ToList();
 
             // Act
             var result = ReadOnlyListExtensions
-                .Skip<Wrap.ReadOnlyListWrapper<int>, int>(wrapped, skipCount)
-                .Take(takeCount)
+                .Skip<Wrap.ReadOnlyListWrapper<int>, int>(wrapped, skip)
+                .Take(take)
                 .Where(predicate)
                 .ToList();
 
@@ -178,20 +178,20 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
         [MemberData(nameof(TestData.SkipTakeSelectorEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakeSelectorSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakeSelectorMultiple), MemberType = typeof(TestData))]
-        public void ToList_Skip_Take_Selector_With_ValidData_Must_Succeed(int[] source, int skipCount, int takeCount, NullableSelector<int, string> selector)
+        public void ToList_Skip_Take_Selector_With_ValidData_Must_Succeed(int[] source, int skip, int take, NullableSelector<int, string> selector)
         {
             // Arrange
             var wrapped = Wrap.AsReadOnlyList(source);
             var expected = Enumerable
-                .Skip(source, skipCount)
-                .Take(takeCount)
+                .Skip(source, skip)
+                .Take(take)
                 .Select(selector.AsFunc())
                 .ToList();
 
             // Act
             var result = ReadOnlyListExtensions
-                .Skip<Wrap.ReadOnlyListWrapper<int>, int>(wrapped, skipCount)
-                .Take(takeCount)
+                .Skip<Wrap.ReadOnlyListWrapper<int>, int>(wrapped, skip)
+                .Take(take)
                 .Select(selector)
                 .ToList();
 
@@ -225,20 +225,20 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
         [MemberData(nameof(TestData.SkipTakeSelectorAtEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakeSelectorAtSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakeSelectorAtMultiple), MemberType = typeof(TestData))]
-        public void ToList_Skip_Take_SelectorAt_With_ValidData_Must_Succeed(int[] source, int skipCount, int takeCount, NullableSelectorAt<int, string> selector)
+        public void ToList_Skip_Take_SelectorAt_With_ValidData_Must_Succeed(int[] source, int skip, int take, NullableSelectorAt<int, string> selector)
         {
             // Arrange
             var wrapped = Wrap.AsReadOnlyList(source);
             var expected = Enumerable
-                .Skip(source, skipCount)
-                .Take(takeCount)
+                .Skip(source, skip)
+                .Take(take)
                 .Select(selector.AsFunc())
                 .ToList();
 
             // Act
             var result = ReadOnlyListExtensions
-                .Skip<Wrap.ReadOnlyListWrapper<int>, int>(wrapped, skipCount)
-                .Take(takeCount)
+                .Skip<Wrap.ReadOnlyListWrapper<int>, int>(wrapped, skip)
+                .Take(take)
                 .Select(selector)
                 .ToList();
 
@@ -253,21 +253,21 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
         [MemberData(nameof(TestData.SkipTakePredicateSelectorEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakePredicateSelectorSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakePredicateSelectorMultiple), MemberType = typeof(TestData))]
-        public void ToList_Skip_Take_Predicate_Selector_With_ValidData_Must_Succeed(int[] source, int skipCount, int takeCount, Predicate<int> predicate, NullableSelector<int, string> selector)
+        public void ToList_Skip_Take_Predicate_Selector_With_ValidData_Must_Succeed(int[] source, int skip, int take, Predicate<int> predicate, NullableSelector<int, string> selector)
         {
             // Arrange
             var wrapped = Wrap.AsReadOnlyList(source);
             var expected = Enumerable
-                .Skip(source, skipCount)
-                .Take(takeCount)
+                .Skip(source, skip)
+                .Take(take)
                 .Where(predicate.AsFunc())
                 .Select(selector.AsFunc())
                 .ToArray();
 
             // Act
             var result = ReadOnlyListExtensions
-                .Skip<Wrap.ReadOnlyListWrapper<int>, int>(wrapped, skipCount)
-                .Take(takeCount)
+                .Skip<Wrap.ReadOnlyListWrapper<int>, int>(wrapped, skip)
+                .Take(take)
                 .Where(predicate)
                 .Select(selector)
                 .ToList();

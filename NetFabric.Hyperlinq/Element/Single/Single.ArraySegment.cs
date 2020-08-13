@@ -21,7 +21,7 @@ namespace NetFabric.Hyperlinq
                 {
                     ref readonly var first = ref array![index];
 
-                    for (index++; index < end; index++)
+                    for (index++; index <= end; index++)
                     {
                         if (predicate(array![index]))
                             return Option.None;
@@ -36,21 +36,45 @@ namespace NetFabric.Hyperlinq
 
         static Option<TSource> Single<TSource>(this in ArraySegment<TSource> source, PredicateAt<TSource> predicate)
         {
-            var array = source.Array;
-            var end = source.Offset + source.Count - 1;
-            for (var index = source.Offset; index <= end; index++)
+            if (source.Offset == 0)
             {
-                if (predicate(array![index], index))
+                var array = source.Array;
+                var end = source.Count - 1;
+                for (var index = 0; index <= end; index++)
                 {
-                    ref readonly var first = ref array![index];
-
-                    for (index++; index < end; index++)
+                    if (predicate(array![index], index))
                     {
-                        if (predicate(array![index], index))
-                            return Option.None;
-                    }
+                        ref readonly var first = ref array![index];
 
-                    return Option.Some(first);
+                        for (index++; index <= end; index++)
+                        {
+                            if (predicate(array![index], index))
+                                return Option.None;
+                        }
+
+                        return Option.Some(first);
+                    }
+                }
+            }
+            else
+            {
+                var array = source.Array;
+                var offset = source.Offset;
+                var end = source.Count - 1;
+                for (var index = 0; index <= end; index++)
+                {
+                    if (predicate(array![index + offset], index))
+                    {
+                        ref readonly var first = ref array![index + offset];
+
+                        for (index++; index <= end; index++)
+                        {
+                            if (predicate(array![index + offset], index))
+                                return Option.None;
+                        }
+
+                        return Option.Some(first);
+                    }
                 }
             }
             return Option.None;
@@ -81,7 +105,7 @@ namespace NetFabric.Hyperlinq
                 {
                     ref readonly var first = ref array![index];
 
-                    for (index++; index < end; index++)
+                    for (index++; index <= end; index++)
                     {
                         if (predicate(array![index]))
                             return Option.None;

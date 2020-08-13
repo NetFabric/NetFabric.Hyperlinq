@@ -46,11 +46,11 @@ namespace NetFabric.Hyperlinq.UnitTests.Projection.SelectAt
         [MemberData(nameof(TestData.SkipTakeSelectorAtEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakeSelectorAtSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakeSelectorAtMultiple), MemberType = typeof(TestData))]
-        public void Select_With_ValidData_Must_Succeed(int[] source, int skipCount, int takeCount, NullableSelectorAt<int, string> selector)
+        public void Select_With_ValidData_Must_Succeed(int[] source, int skip, int take, NullableSelectorAt<int, string> selector)
         {
             // Arrange
-            var (skip, take) = Utils.SkipTake(source.Length, skipCount, takeCount);
-            var wrapped = new ArraySegment<int>(source, skip, take);
+            var (offset, count) = Utils.SkipTake(source.Length, skip, take);
+            var wrapped = new ArraySegment<int>(source, offset, count);
             var expected = Enumerable
                 .Select(wrapped, selector.AsFunc());
 
