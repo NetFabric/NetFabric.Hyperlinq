@@ -46,7 +46,7 @@ namespace NetFabric.Hyperlinq
 
         // helper implementation of ICollection<> so that CopyTo() is used to convert to List<>
         [GeneratorIgnore]
-        internal sealed class ArraySegmentSelectorToListCollection<TSource, TResult>
+        sealed class ArraySegmentSelectorToListCollection<TSource, TResult>
             : ToListCollectionBase<TResult>
         {
             readonly ArraySegment<TSource> source;
@@ -61,7 +61,7 @@ namespace NetFabric.Hyperlinq
         }
 
         [GeneratorIgnore]
-        internal sealed class ArraySegmentSelectorAtToListCollection<TSource, TResult>
+        sealed class ArraySegmentSelectorAtToListCollection<TSource, TResult>
             : ToListCollectionBase<TResult>
         {
             readonly ArraySegment<TSource> source;
