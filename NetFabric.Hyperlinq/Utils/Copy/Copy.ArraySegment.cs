@@ -32,10 +32,10 @@ namespace NetFabric.Hyperlinq
                 }
                 else
                 {
-                    var end = source.Count - 1;
                     if (source.Offset == 0)
                     {
                         var array = source.Array;
+                        var end = source.Count - 1;
                         for (var index = 0; index <= end; index++)
                             destination[index] = selector(array![index])!;
                     }
@@ -43,6 +43,7 @@ namespace NetFabric.Hyperlinq
                     {
                         var array = source.Array;
                         var offset = source.Offset;
+                        var end = source.Count - 1;
                         for (var index = 0; index <= end; index++)
                             destination[index] = selector(array![index + offset])!;
                     }

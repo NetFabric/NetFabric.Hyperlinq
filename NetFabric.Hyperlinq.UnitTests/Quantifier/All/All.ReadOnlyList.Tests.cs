@@ -47,19 +47,19 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.All
         [MemberData(nameof(TestData.SkipTakePredicateEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakePredicateSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakePredicateMultiple), MemberType = typeof(TestData))]
-        public void All_Skip_Take_Predicate_With_ValidData_Must_Succeed(int[] source, int skipCount, int takeCount, Predicate<int> predicate)
+        public void All_Skip_Take_Predicate_With_ValidData_Must_Succeed(int[] source, int skip, int take, Predicate<int> predicate)
         {
             // Arrange
             var wrapped = Wrap.AsValueReadOnlyList(source);
             var expected = 
                 System.Linq.Enumerable.All(
                     System.Linq.Enumerable.Take(
-                        System.Linq.Enumerable.Skip(source, skipCount), takeCount), predicate.AsFunc());
+                        System.Linq.Enumerable.Skip(source, skip), take), predicate.AsFunc());
 
             // Act
             var result = ReadOnlyListExtensions
-                .Skip<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped, skipCount)
-                .Take(takeCount)
+                .Skip<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped, skip)
+                .Take(take)
                 .All(predicate);
 
             // Assert
@@ -110,24 +110,24 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.All
         [MemberData(nameof(TestData.SkipTakePredicateAtEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakePredicateAtSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakePredicateAtMultiple), MemberType = typeof(TestData))]
-        public void All_Skip_Take_PredicateAt_With_ValidData_Must_Succeed(int[] source, int skipCount, int takeCount, PredicateAt<int> predicate)
+        public void All_Skip_Take_PredicateAt_With_ValidData_Must_Succeed(int[] source, int skip, int take, PredicateAt<int> predicate)
         {
             // Arrange
             var wrapped = Wrap.AsValueReadOnlyList(source);
             var count = 
                 System.Linq.Enumerable.Count(
                     System.Linq.Enumerable.Take(
-                        System.Linq.Enumerable.Skip(source, skipCount), takeCount));
+                        System.Linq.Enumerable.Skip(source, skip), take));
             var expected = 
                 System.Linq.Enumerable.Count(
                     System.Linq.Enumerable.Where(
                         System.Linq.Enumerable.Take(
-                            System.Linq.Enumerable.Skip(source, skipCount), takeCount), predicate.AsFunc())) == count;
+                            System.Linq.Enumerable.Skip(source, skip), take), predicate.AsFunc())) == count;
 
             // Act
             var result = ReadOnlyListExtensions
-                .Skip<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped, skipCount)
-                .Take(takeCount)
+                .Skip<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped, skip)
+                .Take(take)
                 .All(predicate);
 
             // Assert
