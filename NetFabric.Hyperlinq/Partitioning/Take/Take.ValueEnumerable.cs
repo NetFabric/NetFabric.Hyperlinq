@@ -62,6 +62,7 @@ namespace NetFabric.Hyperlinq
                 readonly object? IEnumerator.Current 
                     => enumerator.Current;
 
+                [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public bool MoveNext()
                 {
                     if (counter > 0)

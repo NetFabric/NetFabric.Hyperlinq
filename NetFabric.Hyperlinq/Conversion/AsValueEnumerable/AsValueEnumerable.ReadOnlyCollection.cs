@@ -175,7 +175,6 @@ namespace NetFabric.Hyperlinq
                 public readonly void Reset() 
                     => enumerator.Reset();
 
-                [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public readonly void Dispose() 
                     => enumerator.Dispose();
             }

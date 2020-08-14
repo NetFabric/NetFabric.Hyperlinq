@@ -65,6 +65,7 @@ namespace NetFabric.Hyperlinq
                 public readonly TSource Current
                     => source[index];
 
+                [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public bool MoveNext()
                 {
                     while (++index <= end)
@@ -100,6 +101,7 @@ namespace NetFabric.Hyperlinq
                 readonly object? IEnumerator.Current
                     => source[index];
 
+                [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public bool MoveNext()
                 {
                     while (++index <= end)

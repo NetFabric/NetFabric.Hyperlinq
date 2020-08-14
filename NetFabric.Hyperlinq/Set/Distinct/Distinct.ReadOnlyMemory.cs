@@ -64,6 +64,7 @@ namespace NetFabric.Hyperlinq
                 readonly object? IEnumerator.Current
                     => Current;
 
+                [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public bool MoveNext()
                 {
                     var span = source.Span;

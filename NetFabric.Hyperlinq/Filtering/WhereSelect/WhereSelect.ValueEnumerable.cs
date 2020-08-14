@@ -65,6 +65,7 @@ namespace NetFabric.Hyperlinq
                 readonly object? IEnumerator.Current 
                     => selector(enumerator.Current);
 
+                [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public bool MoveNext()
                 {
                     while (enumerator.MoveNext())
@@ -80,7 +81,8 @@ namespace NetFabric.Hyperlinq
                 public readonly void Reset() 
                     => Throw.NotSupportedException();
 
-                public void Dispose() => enumerator.Dispose();
+                public void Dispose() 
+                    => enumerator.Dispose();
             }
 
             public int Count()

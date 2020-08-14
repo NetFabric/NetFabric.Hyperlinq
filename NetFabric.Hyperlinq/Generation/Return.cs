@@ -104,6 +104,7 @@ namespace NetFabric.Hyperlinq
                 [MaybeNull]
                 public readonly TSource Current { get; }
 
+                [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public bool MoveNext()
                 {
                     if (moveNext)
@@ -134,6 +135,7 @@ namespace NetFabric.Hyperlinq
                 readonly object? IEnumerator.Current
                     => Current;
 
+                [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public bool MoveNext()
                 {
                     if (moveNext)

@@ -66,6 +66,7 @@ namespace NetFabric.Hyperlinq
                 readonly object? IEnumerator.Current
                     => selector(enumerator.Current, index);
 
+                [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public bool MoveNext()
                 {
                     if (enumerator.MoveNext())
@@ -81,7 +82,8 @@ namespace NetFabric.Hyperlinq
                 public readonly void Reset() 
                     => Throw.NotSupportedException();
 
-                public void Dispose() => enumerator.Dispose();
+                public void Dispose() 
+                    => enumerator.Dispose();
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
