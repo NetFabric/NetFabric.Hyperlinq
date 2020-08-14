@@ -1,7 +1,6 @@
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Configs;
 using BenchmarkDotNet.Jobs;
-using JM.LinqFaster;
 using StructLinq;
 using System;
 
@@ -53,20 +52,15 @@ namespace NetFabric.Hyperlinq.Benchmarks
 
         [BenchmarkCategory("Array")]
         [Benchmark]
-        public int LinqFaster_CountF() =>
-            LinqFaster.CountF(array, item => (item & 0x01) == 0);
-
-        [BenchmarkCategory("Array")]
-        [Benchmark]
         public int StructLinq_Count() =>
             array.ToStructEnumerable().Where(item => (item & 0x01) == 0, x => x).Count(x => x);
 
         [BenchmarkCategory("Array")]
         [Benchmark]
-        public int StructLinqFaster_Count()
+        public int StructLinq_Count_IFunction()
         {
-            var where = new WhereFunction();
-            var count = array.ToStructEnumerable().Where(ref where, x => x).Count(x => x);
+            var predicate = new IsEven();
+            var count = array.ToStructEnumerable().Where(ref predicate, x => x).Count(x => x);
             return count;
         }
 

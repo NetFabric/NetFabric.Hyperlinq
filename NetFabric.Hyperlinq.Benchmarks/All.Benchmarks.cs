@@ -1,6 +1,5 @@
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Configs;
-using JM.LinqFaster;
 using System;
 
 namespace NetFabric.Hyperlinq.Benchmarks
@@ -45,11 +44,6 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [Benchmark(Baseline = true)]
         public bool Linq_List_Reference() =>
             System.Linq.Enumerable.All(listReference, item => (item & 0x01) == 0);
-
-        [BenchmarkCategory("Array")]
-        [Benchmark]
-        public bool LinqFaster_Array() =>
-            array.AllF(item => (item & 0x01) == 0);
 
         [BenchmarkCategory("Array")]
         [Benchmark]

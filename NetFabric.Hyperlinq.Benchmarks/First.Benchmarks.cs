@@ -1,6 +1,5 @@
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Configs;
-using JM.LinqFaster;
 using System;
 
 namespace NetFabric.Hyperlinq.Benchmarks
@@ -45,11 +44,6 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [Benchmark(Baseline = true)]
         public int Linq_List_Reference() =>
             System.Linq.Enumerable.First(listReference);
-
-        [BenchmarkCategory("Array")]
-        [Benchmark]
-        public int LinqFaster_Array() =>
-            array.FirstF();
 
         [BenchmarkCategory("Array")]
         [Benchmark]

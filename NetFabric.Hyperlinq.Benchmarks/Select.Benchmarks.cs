@@ -1,6 +1,5 @@
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Configs;
-using JM.LinqFaster;
 using StructLinq;
 using System;
 
@@ -78,18 +77,6 @@ namespace NetFabric.Hyperlinq.Benchmarks
         {
             var sum = 0;
             foreach (var item in System.Linq.Enumerable.Select(listReference, item => item))
-                sum += item;
-            return sum;
-        }
-
-        // -------------------
-
-        [BenchmarkCategory("Array")]
-        [Benchmark]
-        public int LinqFaster_Array()
-        {
-            var sum = 0;
-            foreach (var item in array.SelectF(item => item))
                 sum += item;
             return sum;
         }

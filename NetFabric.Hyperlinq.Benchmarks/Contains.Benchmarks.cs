@@ -1,7 +1,5 @@
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Configs;
-using JM.LinqFaster;
-using JM.LinqFaster.SIMD;
 using System;
 using System.Linq;
 
@@ -47,16 +45,6 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [Benchmark(Baseline = true)]
         public bool Linq_List_Reference() =>
             Enumerable.Contains(listReference, Count - 1);
-
-        [BenchmarkCategory("Array")]
-        [Benchmark]
-        public bool LinqFaster_ConstainsF() =>
-            LinqFaster.ContainsF(array, Count - 1);
-
-        [BenchmarkCategory("Array")]
-        [Benchmark]
-        public bool LinqFaster_ContainsS() =>
-            LinqFasterSIMD.ContainsS(array, Count - 1);
 
         [BenchmarkCategory("Array")]
         [Benchmark]

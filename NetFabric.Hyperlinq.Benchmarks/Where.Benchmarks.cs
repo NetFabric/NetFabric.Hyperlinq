@@ -1,7 +1,6 @@
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Configs;
 using BenchmarkDotNet.Jobs;
-using JM.LinqFaster;
 using StructLinq;
 using System;
 using System.Threading;
@@ -101,18 +100,6 @@ namespace NetFabric.Hyperlinq.Benchmarks
         {
             var sum = 0;
             await foreach (var item in System.Linq.AsyncEnumerable.Where<int>(asyncEnumerableReference, item => (item & 0x01) == 0))
-                sum += item;
-            return sum;
-        }
-
-        // -------------------
-
-        [BenchmarkCategory("Array")]
-        [Benchmark]
-        public int LinqFaster_Array()
-        {
-            var sum = 0;
-            foreach (var item in array.WhereF(item => (item & 0x01) == 0))
                 sum += item;
             return sum;
         }

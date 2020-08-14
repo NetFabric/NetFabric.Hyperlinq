@@ -1,6 +1,5 @@
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Configs;
-using JM.LinqFaster;
 using System;
 
 namespace NetFabric.Hyperlinq.Benchmarks

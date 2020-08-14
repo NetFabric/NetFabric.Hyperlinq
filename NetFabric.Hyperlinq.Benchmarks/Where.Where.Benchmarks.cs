@@ -141,18 +141,6 @@ namespace NetFabric.Hyperlinq.Benchmarks
             return sum;
         }
 
-        [BenchmarkCategory("List")]
-        [Benchmark]
-        public int StructLinqFaster_List()
-        {
-            var sum = 0;
-            var where = new WhereFunction();
-            foreach (var item in list.ToStructEnumerable().Where(ref where, x=>x).Where(ref where, x=>x))
-                sum += item;
-            return sum;
-        }
-
-
         [BenchmarkCategory("Enumerable_Reference")]
         [Benchmark]
         public int Hyperlinq_Enumerable_Reference()

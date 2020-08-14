@@ -1,7 +1,6 @@
 ﻿using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Configs;
 using BenchmarkDotNet.Jobs;
-using JM.LinqFaster;
 using StructLinq;
 using System.Collections.Generic;
 using System.Linq;
@@ -45,16 +44,6 @@ namespace NetFabric.Hyperlinq.Benchmarks
         }
 
         [Benchmark]
-        public int LinqFaster_WhereF()
-        {
-            var items = LinqFaster.WhereF(list, item => (item & 0x01) == 0);
-            var sum = 0;
-            for (var index = 0; index < items.Count; index++)
-                sum += items[index];
-            return sum;
-        }
-
-        [Benchmark]
         public int StructLinq_Where()
         {
             var sum = 0;
@@ -64,11 +53,11 @@ namespace NetFabric.Hyperlinq.Benchmarks
         }
 
         [Benchmark]
-        public int StructLinqFaster_Where()
+        public int StructLinq_Where_IFunction()
         {
             var sum = 0;
-            var where = new WhereFunction();
-            foreach (var item in list.ToStructEnumerable().Where(ref where, x => x))
+            var predicate = new IsEven();
+            foreach (var item in list.ToStructEnumerable().Where(ref predicate, x => x))
                 sum += item;
             return sum;
         }
@@ -81,12 +70,5 @@ namespace NetFabric.Hyperlinq.Benchmarks
                 sum += item;
             return sum;
         }
-
     }
-
-    internal struct WhereFunction: IFunction<int, bool>
-    {
-        public bool Eval(int element) => (element & 0x01) == 0;
-    }
-
 }
