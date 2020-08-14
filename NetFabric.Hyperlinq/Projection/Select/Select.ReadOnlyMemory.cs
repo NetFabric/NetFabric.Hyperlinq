@@ -120,6 +120,7 @@ namespace NetFabric.Hyperlinq
                 public readonly TResult Current 
                     => selector(source[index]);
 
+                [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public bool MoveNext() 
                     => ++index <= end;
             }
@@ -148,6 +149,7 @@ namespace NetFabric.Hyperlinq
                 readonly object? IEnumerator.Current
                     => selector(source.Span[index]);
 
+                [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public bool MoveNext() 
                     => ++index <= end;
 

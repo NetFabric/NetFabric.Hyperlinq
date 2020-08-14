@@ -54,6 +54,7 @@ namespace NetFabric.Hyperlinq
                 public TResult Current 
                     => selector(source[index]);
 
+                [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public bool MoveNext()
                 {
                     while (++index <= end)

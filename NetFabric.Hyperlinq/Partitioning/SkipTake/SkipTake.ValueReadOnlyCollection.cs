@@ -199,7 +199,8 @@ namespace NetFabric.Hyperlinq
                 public readonly void Reset() 
                     => Throw.NotSupportedException();
 
-                public void Dispose() => enumerator.Dispose();
+                public void Dispose() 
+                    => enumerator.Dispose();
             }
 
             public bool Contains([MaybeNull] TSource value, IEqualityComparer<TSource>? comparer = default)

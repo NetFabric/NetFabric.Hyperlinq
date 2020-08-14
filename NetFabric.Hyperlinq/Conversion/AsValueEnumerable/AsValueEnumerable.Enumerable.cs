@@ -79,8 +79,8 @@ namespace NetFabric.Hyperlinq
                 [ExcludeFromCodeCoverage]
                 public readonly void Reset() => enumerator.Reset();
 
-                [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                public readonly void Dispose() => enumerator.Dispose();
+                public readonly void Dispose() 
+                    => enumerator.Dispose();
             }
         }
     }

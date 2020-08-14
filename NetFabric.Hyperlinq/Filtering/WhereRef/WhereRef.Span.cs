@@ -48,6 +48,7 @@ namespace NetFabric.Hyperlinq
                 public readonly ref readonly TSource Current
                     => ref source[index];
 
+                [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public bool MoveNext()
                 {
                     while (++index < source.Length)

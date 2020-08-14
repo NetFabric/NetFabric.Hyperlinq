@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Runtime.InteropServices;
 
 namespace NetFabric.Hyperlinq
 {
@@ -63,7 +63,6 @@ namespace NetFabric.Hyperlinq
                     return new ValueTask<bool>(enumerator.MoveNext());
                 }
 
-                [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public ValueTask DisposeAsync() 
                 {
                     enumerator.Dispose();
