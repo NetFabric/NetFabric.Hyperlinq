@@ -125,7 +125,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Hyperlinq_Collection_Value()
         {
             var sum = 0;
-            foreach (var item in EnumerableExtensions.AsValueEnumerable<TestCollection.Enumerable, TestCollection.Enumerable.Enumerator, int>(collectionValue, enumerable => enumerable.GetEnumerator()).Distinct())
+            foreach (var item in ReadOnlyCollectionExtensions.AsValueEnumerable<TestCollection.Enumerable, TestCollection.Enumerable.Enumerator, int>(collectionValue, enumerable => enumerable.GetEnumerator()).Distinct())
                 sum += item;
             return sum;
         }

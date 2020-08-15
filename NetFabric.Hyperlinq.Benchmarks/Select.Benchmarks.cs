@@ -241,7 +241,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Hyperlinq_Collection_Value()
         {
             var sum = 0;
-            foreach (var item in EnumerableExtensions.AsValueEnumerable<TestCollection.Enumerable, TestCollection.Enumerable.Enumerator, int>(collectionValue, enumerable => enumerable.GetEnumerator())
+            foreach (var item in ReadOnlyCollectionExtensions.AsValueEnumerable<TestCollection.Enumerable, TestCollection.Enumerable.Enumerator, int>(collectionValue, enumerable => enumerable.GetEnumerator())
                 .Select(item => item))
                 sum += item;
             return sum;
@@ -249,11 +249,24 @@ namespace NetFabric.Hyperlinq.Benchmarks
 
         [BenchmarkCategory("List_Value")]
         [Benchmark]
-        public int Hyperlinq_List_Value()
+        public int Hyperlinq_List_Value_For()
+        {
+            var source = listValue.AsValueEnumerable().Select(item => item);
+            var sum = 0;
+            for (var index = 0; index < source.Count; index++)
+            {
+                var item = source[index];
+                sum += item;
+            }
+            return sum;
+        }
+
+        [BenchmarkCategory("List_Value")]
+        [Benchmark]
+        public int Hyperlinq_List_Value_Foreach()
         {
             var sum = 0;
-            foreach (var item in EnumerableExtensions.AsValueEnumerable<TestList.Enumerable, TestList.Enumerable.Enumerator, int>(listValue, enumerable => enumerable.GetEnumerator())
-                .Select(item => item))
+            foreach (var item in listValue.AsValueEnumerable().Select(item => item))
                 sum += item;
             return sum;
         }
@@ -278,6 +291,17 @@ namespace NetFabric.Hyperlinq.Benchmarks
             return sum;
         }
 
+        [BenchmarkCategory("List_Reference")]
+        [Benchmark]
+        public int Hyperlinq_List_Reference_For()
+        {
+            var source = listReference.AsValueEnumerable().Select(item => item);
+            var sum = 0;
+            for (var index = 0; index < source.Count; index++)
+                sum += source[index];
+            return sum;
+        }
+
 #pragma warning disable HLQ010 // Consider using a 'for' loop instead.
         [BenchmarkCategory("List_Reference")]
         [Benchmark]
@@ -289,16 +313,5 @@ namespace NetFabric.Hyperlinq.Benchmarks
             return sum;
         }
 #pragma warning restore HLQ010 // Consider using a 'for' loop instead.
-
-        [BenchmarkCategory("List_Reference")]
-        [Benchmark]
-        public int Hyperlinq_List_Reference_For()
-        {
-            var source = listReference.AsValueEnumerable().Select(item => item);
-            var sum = 0;
-            for (var index = 0; index < source.Count; index++)
-                sum += source[index];
-            return sum;
-        }
     }
 }
