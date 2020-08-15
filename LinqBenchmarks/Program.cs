@@ -63,6 +63,9 @@ namespace LinqBenchmarks
             var linqFasterVersion = GetVersion(typeof(LinqFaster).Assembly);
             logger.WriteLine($"- JM.LinqFaster: [{linqFasterVersion}](https://www.nuget.org/packages/JM.LinqFaster/{linqFasterVersion})");
 
+            var linqAfVersion = GetVersion(typeof(global::LinqAF.Enumerable).Assembly);
+            logger.WriteLine($"- LinqAF: [{linqAfVersion}](https://www.nuget.org/packages/LinqAF/{linqAfVersion})");
+
             var structLinqVersion = GetVersion(typeof(StructLinq.BCL.List.ListEnumerable<>).Assembly);
             logger.WriteLine($"- StructLinq.BCL: [{structLinqVersion}](https://www.nuget.org/packages/StructLinq.BCL/{structLinqVersion})");
 

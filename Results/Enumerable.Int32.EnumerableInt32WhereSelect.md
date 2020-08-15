@@ -5,8 +5,9 @@
 
 ### References:
 - JM.LinqFaster: [1.1.2](https://www.nuget.org/packages/JM.LinqFaster/1.1.2)
+- LinqAF: [1.0.0](https://www.nuget.org/packages/LinqAF/1.0.0)
 - StructLinq.BCL: [0.19.1](https://www.nuget.org/packages/StructLinq.BCL/0.19.1)
-- NetFabric.Hyperlinq: [3.0.0-beta24](https://www.nuget.org/packages/NetFabric.Hyperlinq/3.0.0-beta24)
+- NetFabric.Hyperlinq: [3.0.0-beta25](https://www.nuget.org/packages/NetFabric.Hyperlinq/3.0.0-beta25)
 
 ### Results:
 ``` ini
@@ -22,9 +23,9 @@ Job=.NET Core 5.0  Runtime=.NET Core 5.0
 ```
 |               Method | Count |       Mean |   Error |  StdDev | Ratio |  Gen 0 | Gen 1 | Gen 2 | Allocated |
 |--------------------- |------ |-----------:|--------:|--------:|------:|-------:|------:|------:|----------:|
-|          ForeachLoop |   100 |   524.7 ns | 0.57 ns | 0.48 ns |  1.00 | 0.0191 |     - |     - |      40 B |
-|                 Linq |   100 | 1,177.8 ns | 1.26 ns | 1.05 ns |  2.24 | 0.0763 |     - |     - |     160 B |
-|               LinqAF |   100 | 1,193.0 ns | 3.94 ns | 3.50 ns |  2.27 | 0.0191 |     - |     - |      40 B |
-|           StructLinq |   100 | 1,025.9 ns | 0.56 ns | 0.50 ns |  1.96 | 0.0191 |     - |     - |      40 B |
-| StructLinq_IFunction |   100 |   617.2 ns | 0.62 ns | 0.48 ns |  1.18 | 0.0191 |     - |     - |      40 B |
-|            Hyperlinq |   100 | 1,037.4 ns | 2.51 ns | 2.34 ns |  1.98 | 0.0191 |     - |     - |      40 B |
+|          ForeachLoop |   100 |   524.1 ns | 1.28 ns | 1.13 ns |  1.00 | 0.0191 |     - |     - |      40 B |
+|                 Linq |   100 | 1,101.0 ns | 3.15 ns | 2.63 ns |  2.10 | 0.0763 |     - |     - |     160 B |
+|               LinqAF |   100 | 1,159.0 ns | 1.87 ns | 1.56 ns |  2.21 | 0.0191 |     - |     - |      40 B |
+|           StructLinq |   100 | 1,008.1 ns | 1.63 ns | 1.36 ns |  1.92 | 0.0191 |     - |     - |      40 B |
+| StructLinq_IFunction |   100 |   621.5 ns | 3.24 ns | 2.70 ns |  1.19 | 0.0191 |     - |     - |      40 B |
+|            Hyperlinq |   100 | 1,078.2 ns | 2.16 ns | 2.02 ns |  2.06 | 0.0191 |     - |     - |      40 B |

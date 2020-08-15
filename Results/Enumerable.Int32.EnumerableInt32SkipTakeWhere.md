@@ -5,8 +5,9 @@
 
 ### References:
 - JM.LinqFaster: [1.1.2](https://www.nuget.org/packages/JM.LinqFaster/1.1.2)
+- LinqAF: [1.0.0](https://www.nuget.org/packages/LinqAF/1.0.0)
 - StructLinq.BCL: [0.19.1](https://www.nuget.org/packages/StructLinq.BCL/0.19.1)
-- NetFabric.Hyperlinq: [3.0.0-beta24](https://www.nuget.org/packages/NetFabric.Hyperlinq/3.0.0-beta24)
+- NetFabric.Hyperlinq: [3.0.0-beta25](https://www.nuget.org/packages/NetFabric.Hyperlinq/3.0.0-beta25)
 
 ### Results:
 ``` ini
@@ -22,9 +23,9 @@ Job=.NET Core 5.0  Runtime=.NET Core 5.0
 ```
 |               Method | Skip | Count |     Mean |     Error |    StdDev | Ratio |  Gen 0 | Gen 1 | Gen 2 | Allocated |
 |--------------------- |----- |------ |---------:|----------:|----------:|------:|-------:|------:|------:|----------:|
-|          ForeachLoop | 1000 |   100 | 3.936 μs | 0.0155 μs | 0.0129 μs |  1.00 | 0.0153 |     - |     - |      40 B |
-|                 Linq | 1000 |   100 | 4.514 μs | 0.0154 μs | 0.0144 μs |  1.15 | 0.0992 |     - |     - |     208 B |
-|               LinqAF | 1000 |   100 | 5.409 μs | 0.0207 μs | 0.0194 μs |  1.37 | 0.0153 |     - |     - |      40 B |
-|           StructLinq | 1000 |   100 | 4.208 μs | 0.0039 μs | 0.0033 μs |  1.07 | 0.0687 |     - |     - |     152 B |
-| StructLinq_IFunction | 1000 |   100 | 4.285 μs | 0.0193 μs | 0.0180 μs |  1.09 | 0.0687 |     - |     - |     152 B |
-|            Hyperlinq | 1000 |   100 | 4.488 μs | 0.0111 μs | 0.0099 μs |  1.14 | 0.0992 |     - |     - |     208 B |
+|          ForeachLoop | 1000 |   100 | 3.557 μs | 0.0121 μs | 0.0114 μs |  1.00 | 0.0191 |     - |     - |      40 B |
+|                 Linq | 1000 |   100 | 5.101 μs | 0.0061 μs | 0.0048 μs |  1.43 | 0.0992 |     - |     - |     208 B |
+|               LinqAF | 1000 |   100 | 5.312 μs | 0.0170 μs | 0.0159 μs |  1.49 | 0.0153 |     - |     - |      40 B |
+|           StructLinq | 1000 |   100 | 4.743 μs | 0.0074 μs | 0.0058 μs |  1.33 | 0.0687 |     - |     - |     152 B |
+| StructLinq_IFunction | 1000 |   100 | 4.151 μs | 0.0116 μs | 0.0103 μs |  1.17 | 0.0687 |     - |     - |     152 B |
+|            Hyperlinq | 1000 |   100 | 5.103 μs | 0.0084 μs | 0.0070 μs |  1.43 | 0.0992 |     - |     - |     208 B |
