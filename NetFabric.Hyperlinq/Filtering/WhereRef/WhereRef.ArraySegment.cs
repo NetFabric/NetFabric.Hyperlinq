@@ -53,7 +53,10 @@ namespace NetFabric.Hyperlinq
                 }
 
                 public ref TSource Current
-                    => ref source![index];
+                {
+                    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                    get => ref source![index];
+                }
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public bool MoveNext()

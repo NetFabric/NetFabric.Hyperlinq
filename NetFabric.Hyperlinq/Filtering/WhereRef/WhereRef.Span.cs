@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
 namespace NetFabric.Hyperlinq
 {
@@ -17,6 +18,7 @@ namespace NetFabric.Hyperlinq
         }
 
         [GeneratorIgnore]
+        [StructLayout(LayoutKind.Auto)]
         public readonly ref struct SpanWhereRefEnumerable<TSource>
         {
             internal readonly Span<TSource> source;
@@ -32,11 +34,12 @@ namespace NetFabric.Hyperlinq
             public readonly Enumerator GetEnumerator()
                 => new Enumerator(in this);
 
+            [StructLayout(LayoutKind.Sequential)]
             public ref struct Enumerator
             {
+                int index;
                 readonly Span<TSource> source;
                 readonly Predicate<TSource> predicate;
-                int index;
 
                 internal Enumerator(in SpanWhereRefEnumerable<TSource> enumerable)
                 {
@@ -46,7 +49,10 @@ namespace NetFabric.Hyperlinq
                 }
 
                 public readonly ref readonly TSource Current
-                    => ref source[index];
+                {
+                    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                    get => ref source[index];
+                }
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public bool MoveNext()
