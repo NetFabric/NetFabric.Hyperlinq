@@ -3,6 +3,7 @@ using System.Buffers;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
 namespace NetFabric.Hyperlinq
 {
@@ -17,6 +18,7 @@ namespace NetFabric.Hyperlinq
             => new SpanWhereSelectEnumerable<TSource, TResult>(source, predicate, selector);
 
         [GeneratorMapping("TSource", "TResult")]
+        [StructLayout(LayoutKind.Auto)]
         public readonly ref struct SpanWhereSelectEnumerable<TSource, TResult>
         {
             internal readonly ReadOnlySpan<TSource> source;
@@ -33,13 +35,14 @@ namespace NetFabric.Hyperlinq
             
             public readonly Enumerator GetEnumerator() => new Enumerator(in this);
 
+            [StructLayout(LayoutKind.Sequential)]
             public ref struct Enumerator
             {
+                int index;
+                readonly int end;
                 readonly ReadOnlySpan<TSource> source;
                 readonly Predicate<TSource> predicate;
                 readonly NullableSelector<TSource, TResult> selector;
-                readonly int end;
-                int index;
 
                 internal Enumerator(in SpanWhereSelectEnumerable<TSource, TResult> enumerable)
                 {
@@ -52,7 +55,10 @@ namespace NetFabric.Hyperlinq
 
                 [MaybeNull]
                 public TResult Current 
-                    => selector(source[index]);
+                {
+                    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                    get => selector(source[index]);
+                }
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public bool MoveNext()

@@ -13,8 +13,7 @@ namespace NetFabric.Hyperlinq
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ArraySegmentWhereRefAtEnumerable<TSource> WhereRef<TSource>(this in ArraySegment<TSource> source, PredicateAt<TSource> predicate)
         {
-            if (predicate is null)
-                Throw.ArgumentNullException(nameof(predicate));
+            if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
 
             return new ArraySegmentWhereRefAtEnumerable<TSource>(source, predicate);
         }
@@ -55,7 +54,10 @@ namespace NetFabric.Hyperlinq
                 }
 
                 public ref TSource Current
-                    => ref source![index + offset];
+                {
+                    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                    get => ref source![index + offset];
+                }
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public bool MoveNext()

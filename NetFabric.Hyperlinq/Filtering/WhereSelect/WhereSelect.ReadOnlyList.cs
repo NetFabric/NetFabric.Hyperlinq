@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
 namespace NetFabric.Hyperlinq
 {
@@ -20,6 +21,7 @@ namespace NetFabric.Hyperlinq
             => new WhereSelecTList<TList, TSource, TResult>(in source, predicate, selector, offset, count);
 
         [GeneratorMapping("TSource", "TResult")]
+        [StructLayout(LayoutKind.Auto)]
         public readonly partial struct WhereSelecTList<TList, TSource, TResult>
             : IValueEnumerable<TResult, WhereSelecTList<TList, TSource, TResult>.DisposableEnumerator>
             where TList : notnull, IReadOnlyList<TSource>
@@ -45,13 +47,14 @@ namespace NetFabric.Hyperlinq
             readonly IEnumerator<TResult> IEnumerable<TResult>.GetEnumerator() => new DisposableEnumerator(in this);
             readonly IEnumerator IEnumerable.GetEnumerator() => new DisposableEnumerator(in this);
 
+            [StructLayout(LayoutKind.Sequential)]
             public struct Enumerator
             {
+                int index;
+                readonly int end;
                 readonly TList source;
                 readonly Predicate<TSource> predicate;
                 readonly NullableSelector<TSource, TResult> selector;
-                readonly int end;
-                int index;
 
                 internal Enumerator(in WhereSelecTList<TList, TSource, TResult> enumerable)
                 {
@@ -64,7 +67,10 @@ namespace NetFabric.Hyperlinq
 
                 [MaybeNull]
                 public readonly TResult Current
-                    => selector(source[index]);
+                {
+                    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                    get => selector(source[index]);
+                }
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public bool MoveNext()
@@ -78,14 +84,15 @@ namespace NetFabric.Hyperlinq
                 }
             }
 
+            [StructLayout(LayoutKind.Sequential)]
             public struct DisposableEnumerator
                 : IEnumerator<TResult>
             {
+                readonly int end;
+                int index;
                 readonly TList source;
                 readonly Predicate<TSource> predicate;
                 readonly NullableSelector<TSource, TResult> selector;
-                readonly int end;
-                int index;
 
                 internal DisposableEnumerator(in WhereSelecTList<TList, TSource, TResult> enumerable)
                 {
@@ -98,7 +105,10 @@ namespace NetFabric.Hyperlinq
 
                 [MaybeNull]
                 public readonly TResult Current
-                    => selector(source[index]);
+                {
+                    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                    get => selector(source[index]);
+                }
                 readonly TResult IEnumerator<TResult>.Current 
                     => selector(source[index])!;
                 readonly object? IEnumerator.Current 
