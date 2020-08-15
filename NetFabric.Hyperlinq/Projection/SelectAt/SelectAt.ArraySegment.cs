@@ -20,7 +20,7 @@ namespace NetFabric.Hyperlinq
         }
 
         [GeneratorMapping("TSource", "TResult")]
-        [StructLayout(LayoutKind.Auto)]
+        [StructLayout(LayoutKind.Sequential)]
         public readonly partial struct ArraySegmentSelectAtEnumerable<TSource, TResult>
             : IValueReadOnlyList<TResult, ArraySegmentSelectAtEnumerable<TSource, TResult>.DisposableEnumerator>
             , IList<TResult>
