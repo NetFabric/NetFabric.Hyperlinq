@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
 namespace NetFabric.Hyperlinq
 {
@@ -18,11 +19,12 @@ namespace NetFabric.Hyperlinq
             return new MemoryWhereAtEnumerable<TSource>(source, predicate);
         }
 
+        [StructLayout(LayoutKind.Auto)]
         public readonly partial struct MemoryWhereAtEnumerable<TSource>
             : IValueEnumerable<TSource, MemoryWhereAtEnumerable<TSource>.DisposableEnumerator>
         {
-            internal readonly ReadOnlyMemory<TSource> source;
-            internal readonly PredicateAt<TSource> predicate;
+            readonly ReadOnlyMemory<TSource> source;
+            readonly PredicateAt<TSource> predicate;
 
             internal MemoryWhereAtEnumerable(ReadOnlyMemory<TSource> source, PredicateAt<TSource> predicate)
             {
@@ -40,12 +42,13 @@ namespace NetFabric.Hyperlinq
             readonly IEnumerator IEnumerable.GetEnumerator() 
                 => new DisposableEnumerator(in this);
 
+            [StructLayout(LayoutKind.Sequential)]
             public ref struct Enumerator 
             {
+                int index;
+                readonly int end;
                 readonly ReadOnlySpan<TSource> source;
                 readonly PredicateAt<TSource> predicate;
-                readonly int end;
-                int index;
 
                 internal Enumerator(in MemoryWhereAtEnumerable<TSource> enumerable)
                 {
@@ -56,7 +59,10 @@ namespace NetFabric.Hyperlinq
                 }
 
                 public readonly TSource Current 
-                    => source[index];
+                {
+                    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                    get => source[index];
+                }
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public bool MoveNext()
@@ -70,13 +76,14 @@ namespace NetFabric.Hyperlinq
                 }
             }
 
+            [StructLayout(LayoutKind.Sequential)]
             public struct DisposableEnumerator 
                 : IEnumerator<TSource>
             {
+                int index;
+                readonly int end;
                 readonly ReadOnlyMemory<TSource> source;
                 readonly PredicateAt<TSource> predicate;
-                readonly int end;
-                int index;
 
                 internal DisposableEnumerator(in MemoryWhereAtEnumerable<TSource> enumerable)
                 {
@@ -88,7 +95,10 @@ namespace NetFabric.Hyperlinq
 
                 [MaybeNull]
                 public readonly TSource Current 
-                    => source.Span[index];
+                {
+                    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                    get => source.Span[index];
+                }
                 readonly TSource IEnumerator<TSource>.Current 
                     => source.Span[index];
                 readonly object? IEnumerator.Current 

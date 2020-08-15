@@ -61,7 +61,10 @@ namespace NetFabric.Hyperlinq
                 }
 
                 public readonly TSource Current
-                    => source![index + offset];
+                {
+                    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                    get => source![index + offset];
+                }
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public bool MoveNext()
@@ -96,7 +99,10 @@ namespace NetFabric.Hyperlinq
 
                 [MaybeNull]
                 public readonly TSource Current
-                    => source![index + offset];
+                {
+                    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                    get => source![index + offset];
+                }
                 readonly TSource IEnumerator<TSource>.Current
                     => source![index + offset];
                 readonly object? IEnumerator.Current
