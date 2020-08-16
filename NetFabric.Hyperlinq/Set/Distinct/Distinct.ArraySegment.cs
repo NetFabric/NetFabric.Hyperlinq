@@ -36,14 +36,14 @@ namespace NetFabric.Hyperlinq
             readonly IEnumerator IEnumerable.GetEnumerator()
                 => new Enumerator(in this);
 
-            [StructLayout(LayoutKind.Auto)]
+            [StructLayout(LayoutKind.Sequential)]
             public struct Enumerator
                 : IEnumerator<TSource>
             {
-                readonly TSource[]? source;
-                readonly int end;
-                Set<TSource> set;
                 int index;
+                readonly int end;
+                readonly TSource[]? source;
+                Set<TSource> set;
 
                 internal Enumerator(in ArraySegmentDistinctEnumerable<TSource> enumerable)
                 {
@@ -53,9 +53,12 @@ namespace NetFabric.Hyperlinq
                     end = index + enumerable.source.Count;
                 }
 
-                [MaybeNull, AllowNull]
+                [MaybeNull]
                 public TSource Current 
-                    => source![index];
+                {
+                    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                    get => source![index];
+                }
                 readonly TSource IEnumerator<TSource>.Current
                     => source![index]!;
                 readonly object? IEnumerator.Current

@@ -31,13 +31,13 @@ namespace NetFabric.Hyperlinq
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly Enumerator GetEnumerator() => new Enumerator(in this);
 
-            [StructLayout(LayoutKind.Auto)]
+            [StructLayout(LayoutKind.Sequential)]
             public ref struct Enumerator
             {
-                readonly ReadOnlySpan<TSource> source;
-                readonly int end;
-                Set<TSource> set;
                 int index;
+                readonly int end;
+                readonly ReadOnlySpan<TSource> source;
+                Set<TSource> set;
 
                 internal Enumerator(in SpanDistinctEnumerable<TSource> enumerable)
                 {
@@ -48,7 +48,10 @@ namespace NetFabric.Hyperlinq
                 }
 
                 public ref readonly TSource Current 
-                    => ref source[index];
+                {
+                    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                    get => ref source[index];
+                }
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public bool MoveNext()

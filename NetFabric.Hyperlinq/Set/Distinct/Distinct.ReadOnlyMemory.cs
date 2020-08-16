@@ -39,14 +39,14 @@ namespace NetFabric.Hyperlinq
             readonly IEnumerator IEnumerable.GetEnumerator() 
                 => new Enumerator(in this);
 
-            [StructLayout(LayoutKind.Auto)]
+            [StructLayout(LayoutKind.Sequential)]
             public struct Enumerator
                 : IEnumerator<TSource>
             {
-                readonly ReadOnlyMemory<TSource> source;
-                readonly int end;
-                Set<TSource> set;
                 int index;
+                readonly int end;
+                readonly ReadOnlyMemory<TSource> source;
+                Set<TSource> set;
 
                 internal Enumerator(in MemoryDistinctEnumerable<TSource> enumerable)
                 {
