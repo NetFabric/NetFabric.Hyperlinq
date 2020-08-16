@@ -72,13 +72,7 @@ namespace NetFabric.Hyperlinq
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public bool MoveNext()
-                {
-                    if (enumerator.MoveNext())
-                        return true;
-
-                    Dispose();
-                    return false;
-                }
+                    => enumerator.MoveNext();
 
                 [ExcludeFromCodeCoverage]
                 public readonly void Reset() 

@@ -86,8 +86,6 @@ namespace NetFabric.Hyperlinq
                         if (set.Add(source[index]))
                             return true;
                     }
-
-                    Dispose();
                     return false;
                 }
 

@@ -80,7 +80,6 @@ namespace NetFabric.Hyperlinq
                                 return true;
                         }
                     }
-                    Dispose();
                     return false;
                 }
 
