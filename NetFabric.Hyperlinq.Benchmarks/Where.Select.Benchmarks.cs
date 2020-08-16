@@ -125,7 +125,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Hyperlinq_Collection_Value()
         {
             var sum = 0;
-            foreach (var item in EnumerableExtensions.AsValueEnumerable<TestCollection.Enumerable, TestCollection.Enumerable.Enumerator, int>(collectionValue, enumerable => enumerable.GetEnumerator()).Where(item => (item & 0x01) == 0).Select(item => item))
+            foreach (var item in ReadOnlyCollectionExtensions.AsValueEnumerable<TestCollection.Enumerable, TestCollection.Enumerable.Enumerator, int>(collectionValue, enumerable => enumerable.GetEnumerator()).Where(item => (item & 0x01) == 0).Select(item => item))
                 sum += item;
             return sum;
         }
@@ -135,7 +135,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Hyperlinq_List_Value()
         {
             var sum = 0;
-            foreach (var item in EnumerableExtensions.AsValueEnumerable<TestList.Enumerable, TestList.Enumerable.Enumerator, int>(listValue, enumerable => enumerable.GetEnumerator()).Where(item => (item & 0x01) == 0).Select(item => item))
+            foreach (var item in ReadOnlyCollectionExtensions.AsValueEnumerable<TestList.Enumerable, TestList.Enumerable.Enumerator, int>(listValue, enumerable => enumerable.GetEnumerator()).Where(item => (item & 0x01) == 0).Select(item => item))
                 sum += item;
             return sum;
         }

@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
 namespace NetFabric.Hyperlinq
 {
@@ -19,6 +20,7 @@ namespace NetFabric.Hyperlinq
         }
 
         [GeneratorIgnore]
+        [StructLayout(LayoutKind.Auto)]
         public readonly struct ArraySegmentWhereRefEnumerable<TSource>
         {
             internal readonly ArraySegment<TSource> source;
@@ -34,12 +36,13 @@ namespace NetFabric.Hyperlinq
             public readonly Enumerator GetEnumerator()
                 => new Enumerator(in this);
 
+            [StructLayout(LayoutKind.Sequential)]
             public struct Enumerator
             {
+                int index;
+                readonly int end;
                 readonly TSource[]? source;
                 readonly Predicate<TSource> predicate;
-                readonly int end;
-                int index;
 
                 internal Enumerator(in ArraySegmentWhereRefEnumerable<TSource> enumerable)
                 {
@@ -50,7 +53,10 @@ namespace NetFabric.Hyperlinq
                 }
 
                 public ref TSource Current
-                    => ref source![index];
+                {
+                    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                    get => ref source![index];
+                }
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public bool MoveNext()

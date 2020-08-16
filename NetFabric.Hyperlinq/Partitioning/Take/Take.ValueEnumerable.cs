@@ -40,13 +40,14 @@ namespace NetFabric.Hyperlinq
             readonly IEnumerator IEnumerable.GetEnumerator() 
                 => new Enumerator(in this);
 
-            [StructLayout(LayoutKind.Auto)]
+            [StructLayout(LayoutKind.Sequential)]
             public struct Enumerator
                 : IEnumerator<TSource>
             {
+                int counter;
+                
                 [SuppressMessage("Style", "IDE0044:Add readonly modifier")]
                 TEnumerator enumerator; // do not make readonly
-                int counter;
 
                 internal Enumerator(in TakeEnumerable<TEnumerable, TEnumerator, TSource> enumerable)
                 {
@@ -56,7 +57,10 @@ namespace NetFabric.Hyperlinq
 
                 [MaybeNull]
                 public readonly TSource Current
-                    => enumerator.Current;
+                {
+                    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                    get => enumerator.Current;
+                }
                 readonly TSource IEnumerator<TSource>.Current 
                     => enumerator.Current;
                 readonly object? IEnumerator.Current 

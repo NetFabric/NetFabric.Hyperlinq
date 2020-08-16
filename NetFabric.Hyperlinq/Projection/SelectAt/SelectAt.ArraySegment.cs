@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
 namespace NetFabric.Hyperlinq
 {
@@ -19,6 +20,7 @@ namespace NetFabric.Hyperlinq
         }
 
         [GeneratorMapping("TSource", "TResult")]
+        [StructLayout(LayoutKind.Sequential)]
         public readonly partial struct ArraySegmentSelectAtEnumerable<TSource, TResult>
             : IValueReadOnlyList<TResult, ArraySegmentSelectAtEnumerable<TSource, TResult>.DisposableEnumerator>
             , IList<TResult>
@@ -161,13 +163,14 @@ namespace NetFabric.Hyperlinq
             void IList<TResult>.RemoveAt(int index)
                 => Throw.NotSupportedException();
 
+            [StructLayout(LayoutKind.Sequential)]
             public struct Enumerator
             {
+                int index;
+                readonly int end;
                 readonly TSource[]? source;
                 readonly NullableSelectorAt<TSource, TResult> selector;
                 readonly int offset;
-                readonly int end;
-                int index;
 
                 internal Enumerator(in ArraySegmentSelectAtEnumerable<TSource, TResult> enumerable)
                 {
@@ -187,14 +190,15 @@ namespace NetFabric.Hyperlinq
                     => ++index <= end;
             }
 
+            [StructLayout(LayoutKind.Sequential)]
             public struct DisposableEnumerator
                 : IEnumerator<TResult>
             {
+                int index;
+                readonly int end;
+                readonly int offset;
                 readonly TSource[]? source;
                 readonly NullableSelectorAt<TSource, TResult> selector;
-                readonly int offset;
-                readonly int end;
-                int index;
 
                 internal DisposableEnumerator(in ArraySegmentSelectAtEnumerable<TSource, TResult> enumerable)
                 {

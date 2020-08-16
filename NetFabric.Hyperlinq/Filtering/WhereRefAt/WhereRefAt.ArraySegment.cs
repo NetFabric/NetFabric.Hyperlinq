@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
 namespace NetFabric.Hyperlinq
 {
@@ -12,13 +13,13 @@ namespace NetFabric.Hyperlinq
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ArraySegmentWhereRefAtEnumerable<TSource> WhereRef<TSource>(this in ArraySegment<TSource> source, PredicateAt<TSource> predicate)
         {
-            if (predicate is null)
-                Throw.ArgumentNullException(nameof(predicate));
+            if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
 
             return new ArraySegmentWhereRefAtEnumerable<TSource>(source, predicate);
         }
 
         [GeneratorIgnore]
+        [StructLayout(LayoutKind.Auto)]
         public readonly struct ArraySegmentWhereRefAtEnumerable<TSource>
         {
             internal readonly ArraySegment<TSource> source;
@@ -34,13 +35,14 @@ namespace NetFabric.Hyperlinq
             public readonly Enumerator GetEnumerator()
                 => new Enumerator(in this);
 
+            [StructLayout(LayoutKind.Sequential)]
             public struct Enumerator
             {
+                int index;
+                readonly int end;
+                readonly int offset;
                 readonly TSource[]? source;
                 readonly PredicateAt<TSource> predicate;
-                readonly int offset;
-                readonly int end;
-                int index;
 
                 internal Enumerator(in ArraySegmentWhereRefAtEnumerable<TSource> enumerable)
                 {
@@ -52,7 +54,10 @@ namespace NetFabric.Hyperlinq
                 }
 
                 public ref TSource Current
-                    => ref source![index + offset];
+                {
+                    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                    get => ref source![index + offset];
+                }
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public bool MoveNext()

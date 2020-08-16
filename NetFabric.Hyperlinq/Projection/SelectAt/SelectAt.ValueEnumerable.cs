@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
 namespace NetFabric.Hyperlinq
 {
@@ -23,6 +24,7 @@ namespace NetFabric.Hyperlinq
         }
 
         [GeneratorMapping("TSource", "TResult")]
+        [StructLayout(LayoutKind.Auto)]
         public readonly partial struct SelectAtEnumerable<TEnumerable, TEnumerator, TSource, TResult> 
             : IValueEnumerable<TResult, SelectAtEnumerable<TEnumerable, TEnumerator, TSource, TResult>.Enumerator>
             where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
@@ -43,13 +45,14 @@ namespace NetFabric.Hyperlinq
             readonly IEnumerator<TResult> IEnumerable<TResult>.GetEnumerator() => new Enumerator(in this);
             readonly IEnumerator IEnumerable.GetEnumerator() => new Enumerator(in this);
 
+            [StructLayout(LayoutKind.Sequential)]
             public struct Enumerator
                 : IEnumerator<TResult>
             {
+                int index;
                 [SuppressMessage("Style", "IDE0044:Add readonly modifier")]
                 TEnumerator enumerator; // do not make readonly
                 readonly NullableSelectorAt<TSource, TResult> selector;
-                int index;
 
                 internal Enumerator(in SelectAtEnumerable<TEnumerable, TEnumerator, TSource, TResult> enumerable)
                 {
@@ -60,7 +63,10 @@ namespace NetFabric.Hyperlinq
 
                 [MaybeNull]
                 public readonly TResult Current
-                    => selector(enumerator.Current, index);
+                {
+                    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                    get => selector(enumerator.Current, index);
+                }
                 readonly TResult IEnumerator<TResult>.Current 
                     => selector(enumerator.Current, index)!;
                 readonly object? IEnumerator.Current

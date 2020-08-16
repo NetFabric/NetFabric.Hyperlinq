@@ -3,7 +3,6 @@ using System.Buffers;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Diagnostics.Tracing;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
@@ -51,14 +50,14 @@ namespace NetFabric.Hyperlinq
             readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new Enumerator(in this);
             readonly IEnumerator IEnumerable.GetEnumerator() => new Enumerator(in this);
 
-            [StructLayout(LayoutKind.Auto)]
+            [StructLayout(LayoutKind.Sequential)]
             public struct Enumerator
                 : IEnumerator<TSource>
             {
+                int index;
+                readonly int end;
                 readonly TList source;
                 Set<TSource> set;
-                readonly int end;
-                int index;
 
                 internal Enumerator(in DistinctEnumerable<TList, TSource> enumerable)
                 {
@@ -70,7 +69,10 @@ namespace NetFabric.Hyperlinq
 
                 [MaybeNull]
                 public readonly TSource Current 
-                    => source[index];
+                {
+                    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                    get => source[index];
+                }
                 readonly TSource IEnumerator<TSource>.Current
                     => source[index];
                 readonly object? IEnumerator.Current 

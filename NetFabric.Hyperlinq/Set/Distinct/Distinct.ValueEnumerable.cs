@@ -2,9 +2,9 @@ using System;
 using System.Buffers;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
 namespace NetFabric.Hyperlinq
 {
@@ -19,6 +19,7 @@ namespace NetFabric.Hyperlinq
             where TEnumerator : struct, IEnumerator<TSource>
             => new DistinctEnumerable<TEnumerable, TEnumerator, TSource>(source, comparer);
 
+        [StructLayout(LayoutKind.Auto)]
         public readonly partial struct DistinctEnumerable<TEnumerable, TEnumerator, TSource>
             : IValueEnumerable<TSource, DistinctEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator>
             where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
@@ -39,6 +40,7 @@ namespace NetFabric.Hyperlinq
             readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new Enumerator(in this);
             readonly IEnumerator IEnumerable.GetEnumerator() => new Enumerator(in this);
 
+            [StructLayout(LayoutKind.Sequential)]
             public struct Enumerator
                 : IEnumerator<TSource>
             {
@@ -56,12 +58,16 @@ namespace NetFabric.Hyperlinq
 
                 [MaybeNull]
                 public readonly TSource Current 
-                    => enumerator.Current;
+                {
+                    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                    get => enumerator.Current;
+                }
                 readonly TSource IEnumerator<TSource>.Current 
                     => enumerator.Current;
                 readonly object? IEnumerator.Current 
                     => enumerator.Current;
 
+                [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public bool MoveNext()
                 {
                     while (enumerator.MoveNext())

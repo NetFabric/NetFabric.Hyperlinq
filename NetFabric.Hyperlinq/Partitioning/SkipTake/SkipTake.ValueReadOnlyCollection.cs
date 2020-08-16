@@ -129,15 +129,15 @@ namespace NetFabric.Hyperlinq
             bool ICollection<TSource>.Remove(TSource item) 
                 => Throw.NotSupportedException<bool>();
 
-            [StructLayout(LayoutKind.Auto)]
+            [StructLayout(LayoutKind.Sequential)]
             public struct Enumerator
                 : IEnumerator<TSource>
             {
+                EnumeratorState state;
+                int takeCounter;
+                int skipCounter;
                 [SuppressMessage("Style", "IDE0044:Add readonly modifier")]
                 TEnumerator enumerator; // do not make readonly
-                EnumeratorState state;
-                int skipCounter;
-                int takeCounter;
 
                 internal Enumerator(in SkipTakeEnumerable<TEnumerable, TEnumerator, TSource> enumerable)
                 {
@@ -149,7 +149,10 @@ namespace NetFabric.Hyperlinq
 
                 [MaybeNull]
                 public readonly TSource Current
-                    => enumerator.Current;
+                {
+                    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                    get => enumerator.Current;
+                }
                 readonly TSource IEnumerator<TSource>.Current 
                     => enumerator.Current;
                 readonly object? IEnumerator.Current 

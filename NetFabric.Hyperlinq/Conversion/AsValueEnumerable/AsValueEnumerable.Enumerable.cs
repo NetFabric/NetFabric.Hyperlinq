@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
 namespace NetFabric.Hyperlinq
 {
@@ -21,6 +22,7 @@ namespace NetFabric.Hyperlinq
             where TEnumerator : struct, IEnumerator<TSource>
             => new ValueEnumerableWrapper<TEnumerable, TEnumerator, TSource>(source, getEnumerator);
 
+        [StructLayout(LayoutKind.Auto)]
         public readonly partial struct ValueEnumerableWrapper<TEnumerable, TEnumerator, TSource>
             : IValueEnumerable<TSource, TEnumerator>
             where TEnumerable : notnull, IEnumerable<TSource>
@@ -42,6 +44,7 @@ namespace NetFabric.Hyperlinq
             readonly IEnumerator IEnumerable.GetEnumerator() => getEnumerator(source);
         }
 
+        [StructLayout(LayoutKind.Auto)]
         public partial struct ValueEnumerableWrapper<TSource>
             : IValueEnumerable<TSource, ValueEnumerableWrapper<TSource>.Enumerator>
         {
@@ -56,6 +59,7 @@ namespace NetFabric.Hyperlinq
             readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new Enumerator(source);
             readonly IEnumerator IEnumerable.GetEnumerator() => new Enumerator(source);
 
+            [StructLayout(LayoutKind.Auto)]
             public readonly struct Enumerator
                 : IEnumerator<TSource>
             {
@@ -66,18 +70,23 @@ namespace NetFabric.Hyperlinq
 
                 [MaybeNull]
                 public readonly TSource Current
-                    => enumerator.Current;
+                {
+                    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                    get => enumerator.Current;
+                }
                 readonly TSource IEnumerator<TSource>.Current
                     => enumerator.Current;
                 readonly object? IEnumerator.Current
                     => enumerator.Current;
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                public readonly bool MoveNext() => enumerator.MoveNext();
+                public readonly bool MoveNext() 
+                    => enumerator.MoveNext();
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 [ExcludeFromCodeCoverage]
-                public readonly void Reset() => enumerator.Reset();
+                public readonly void Reset() 
+                    => enumerator.Reset();
 
                 public readonly void Dispose() 
                     => enumerator.Dispose();

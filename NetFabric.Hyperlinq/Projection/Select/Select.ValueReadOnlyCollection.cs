@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
 namespace NetFabric.Hyperlinq
 {
@@ -23,6 +24,7 @@ namespace NetFabric.Hyperlinq
         }
 
         [GeneratorMapping("TSource", "TResult")]
+        [StructLayout(LayoutKind.Auto)]
         public readonly partial struct SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>
             : IValueReadOnlyCollection<TResult, SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>.Enumerator>
             , ICollection<TResult>
@@ -76,6 +78,7 @@ namespace NetFabric.Hyperlinq
             bool ICollection<TResult>.Remove(TResult item) 
                 => Throw.NotSupportedException<bool>();
 
+            [StructLayout(LayoutKind.Sequential)]
             public struct Enumerator
                 : IEnumerator<TResult>
             {
@@ -91,7 +94,10 @@ namespace NetFabric.Hyperlinq
 
                 [MaybeNull]
                 public readonly TResult Current
-                    => selector(enumerator.Current);
+                {
+                    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                    get => selector(enumerator.Current);
+                }
                 readonly TResult IEnumerator<TResult>.Current 
                     => selector(enumerator.Current)!;
                 readonly object? IEnumerator.Current

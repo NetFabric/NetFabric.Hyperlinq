@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
 namespace NetFabric.Hyperlinq
 {
@@ -18,6 +19,7 @@ namespace NetFabric.Hyperlinq
             => new ArraySegmentWhereSelectEnumerable<TSource, TResult>(source, predicate, selector);
 
         [GeneratorMapping("TSource", "TResult")]
+        [StructLayout(LayoutKind.Auto)]
         public readonly partial struct ArraySegmentWhereSelectEnumerable<TSource, TResult>
             : IValueEnumerable<TResult, ArraySegmentWhereSelectEnumerable<TSource, TResult>.DisposableEnumerator>
         {
@@ -43,13 +45,14 @@ namespace NetFabric.Hyperlinq
             readonly IEnumerator IEnumerable.GetEnumerator() 
                 => new DisposableEnumerator(in this);
 
+            [StructLayout(LayoutKind.Sequential)]
             public struct Enumerator
             {
+                int index;
+                readonly int end;
                 readonly TSource[]? source;
                 readonly Predicate<TSource> predicate;
                 readonly NullableSelector<TSource, TResult> selector;
-                readonly int end;
-                int index;
 
                 internal Enumerator(in ArraySegmentWhereSelectEnumerable<TSource, TResult> enumerable)
                 {
@@ -76,14 +79,15 @@ namespace NetFabric.Hyperlinq
                 }
             }
 
+            [StructLayout(LayoutKind.Sequential)]
             public struct DisposableEnumerator
                 : IEnumerator<TResult>
             {
+                int index;
+                readonly int end;
                 readonly TSource[]? source;
                 readonly Predicate<TSource> predicate;
                 readonly NullableSelector<TSource, TResult> selector;
-                readonly int end;
-                int index;
 
                 internal DisposableEnumerator(in ArraySegmentWhereSelectEnumerable<TSource, TResult> enumerable)
                 {
