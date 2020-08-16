@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
 namespace NetFabric.Hyperlinq
 {
@@ -14,6 +15,7 @@ namespace NetFabric.Hyperlinq
         public static ValueEnumerableWrapper<TSource> AsValueEnumerable<TSource>(this IReadOnlyList<TSource> source)
             => new ValueEnumerableWrapper<TSource>(source);
 
+        [StructLayout(LayoutKind.Auto)]
         public readonly partial struct ValueEnumerableWrapper<TSource>
             : IValueReadOnlyList<TSource, ValueEnumerableWrapper<TSource>.Enumerator>
             , IList<TSource>
@@ -28,7 +30,10 @@ namespace NetFabric.Hyperlinq
 
             [MaybeNull]
             public readonly TSource this[int index]
-                => source[index];
+            {
+                [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                get => source[index];
+            }
             TSource IReadOnlyList<TSource>.this[int index]
                 => source[index];
             TSource IList<TSource>.this[int index]
@@ -102,12 +107,13 @@ namespace NetFabric.Hyperlinq
             void IList<TSource>.RemoveAt(int index)
                 => Throw.NotSupportedException();
 
+            [StructLayout(LayoutKind.Sequential)]
             public struct Enumerator
                 : IEnumerator<TSource>
             {
-                readonly IReadOnlyList<TSource> source;
-                readonly int end;
                 int index;
+                readonly int end;
+                readonly IReadOnlyList<TSource> source;
 
                 internal Enumerator(IReadOnlyList<TSource> source)
                 {
@@ -118,7 +124,10 @@ namespace NetFabric.Hyperlinq
 
                 [MaybeNull]
                 public readonly TSource Current
-                    => source[index];
+                {
+                    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                    get => source[index];
+                }
                 readonly TSource IEnumerator<TSource>.Current
                     => source[index];
                 readonly object? IEnumerator.Current

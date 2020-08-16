@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
 namespace NetFabric.Hyperlinq
 {
@@ -21,6 +22,7 @@ namespace NetFabric.Hyperlinq
             where TEnumerator : struct, IEnumerator<TSource>
             => new ValueEnumerableWrapper<TEnumerable, TEnumerator, TSource>(source, getEnumerator);
 
+        [StructLayout(LayoutKind.Auto)]
         public readonly partial struct ValueEnumerableWrapper<TEnumerable, TEnumerator, TSource>
             : IValueReadOnlyCollection<TSource, TEnumerator>
             , ICollection<TSource>
@@ -90,6 +92,7 @@ namespace NetFabric.Hyperlinq
                 => Count != 0 && EnumerableExtensions.Contains(source, getEnumerator, value, comparer);
         }
 
+        [StructLayout(LayoutKind.Auto)]
         public readonly partial struct ValueEnumerableWrapper<TSource>
             : IValueReadOnlyCollection<TSource, ValueEnumerableWrapper<TSource>.Enumerator>
             , ICollection<TSource>
@@ -150,6 +153,7 @@ namespace NetFabric.Hyperlinq
             bool ICollection<TSource>.Remove(TSource item) 
                 => Throw.NotSupportedException<bool>();
 
+            [StructLayout(LayoutKind.Auto)]
             public readonly struct Enumerator
                 : IEnumerator<TSource>
             {
@@ -160,7 +164,10 @@ namespace NetFabric.Hyperlinq
 
                 [MaybeNull]
                 public readonly TSource Current 
-                    => enumerator.Current;
+                {
+                    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                    get => enumerator.Current;
+                }
                 readonly TSource IEnumerator<TSource>.Current
                     => enumerator.Current;
                 readonly object? IEnumerator.Current
