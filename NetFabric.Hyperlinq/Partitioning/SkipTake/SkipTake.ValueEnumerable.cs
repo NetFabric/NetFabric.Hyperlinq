@@ -89,8 +89,6 @@ namespace NetFabric.Hyperlinq
 
                         takeCounter = 0;
                     }
-
-                    Dispose();
                     return false;
                 }
 

@@ -112,7 +112,6 @@ namespace NetFabric.Hyperlinq
                         checked { index++; }
                         return true;
                     }
-                    Dispose();
                     return false;
                 }
 

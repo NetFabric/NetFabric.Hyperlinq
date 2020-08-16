@@ -238,7 +238,6 @@ namespace NetFabric.Hyperlinq
                                 return true;
                             }
                             Current = default!;
-                            Dispose();
                             state = 2;
                             goto case 2;
 

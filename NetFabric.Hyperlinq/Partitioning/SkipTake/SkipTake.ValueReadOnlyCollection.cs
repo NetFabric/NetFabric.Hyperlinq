@@ -187,8 +187,6 @@ namespace NetFabric.Hyperlinq
 
                                 return true;
                             }
-
-                            Dispose();
                             state = EnumeratorState.Complete;
                             goto case EnumeratorState.Complete;
 

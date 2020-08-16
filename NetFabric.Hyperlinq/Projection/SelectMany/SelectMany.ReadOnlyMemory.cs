@@ -80,7 +80,6 @@ namespace NetFabric.Hyperlinq
                         case EnumeratorState.Enumerating:
                             if (++sourceIndex >= end)
                             {
-                                Dispose();
                                 state = EnumeratorState.Complete;
                                 return false;
                             }

@@ -79,7 +79,6 @@ namespace NetFabric.Hyperlinq
 
                         counter = 0;
                     }
-                    Dispose();
                     return false; 
                 }
 
