@@ -16,14 +16,14 @@ namespace NetFabric.Hyperlinq
             where TList : notnull, IReadOnlyList<TSource>
             => new SkipTakeEnumerable<TList, TSource>(in source, offset, count);
 
-        [StructLayout(LayoutKind.Auto)]
+        [StructLayout(LayoutKind.Sequential)]
         public readonly partial struct SkipTakeEnumerable<TList, TSource>
             : IValueReadOnlyList<TSource, SkipTakeEnumerable<TList, TSource>.DisposableEnumerator>
             , IList<TSource>
             where TList : notnull, IReadOnlyList<TSource>
         {
-            internal readonly TList source;
             internal readonly int offset;
+            internal readonly TList source;
 
             internal SkipTakeEnumerable(in TList source, int offset, int count)
             {
@@ -39,8 +39,7 @@ namespace NetFabric.Hyperlinq
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 get
                 {
-                    if (index < 0 || index >= Count) 
-                        Throw.ArgumentOutOfRangeException(nameof(index));
+                    if (index < 0 || index >= Count) Throw.ArgumentOutOfRangeException(nameof(index));
 
                     return source[index + offset];
                 }
@@ -140,12 +139,12 @@ namespace NetFabric.Hyperlinq
             void IList<TSource>.RemoveAt(int index)
                 => Throw.NotSupportedException();
 
-            [StructLayout(LayoutKind.Auto)]
+            [StructLayout(LayoutKind.Sequential)]
             public struct Enumerator
             {
-                readonly TList source;
-                readonly int end;
                 int index;
+                readonly int end;
+                readonly TList source;
 
                 internal Enumerator(in SkipTakeEnumerable<TList, TSource> enumerable)
                 {
@@ -156,20 +155,23 @@ namespace NetFabric.Hyperlinq
 
                 [MaybeNull]
                 public readonly TSource Current
-                    => source[index];
+                {
+                    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                    get => source[index];
+                }
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public bool MoveNext()
                     => ++index <= end;
             }
 
-            [StructLayout(LayoutKind.Auto)]
+            [StructLayout(LayoutKind.Sequential)]
             public struct DisposableEnumerator
                 : IEnumerator<TSource>
             {
-                readonly TList source;
-                readonly int end;
                 int index;
+                readonly int end;
+                readonly TList source;
 
                 internal DisposableEnumerator(in SkipTakeEnumerable<TList, TSource> enumerable)
                 {
@@ -180,7 +182,10 @@ namespace NetFabric.Hyperlinq
 
                 [MaybeNull]
                 public readonly TSource Current
-                    => source[index];
+                {
+                    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                    get => source[index];
+                }
                 readonly TSource IEnumerator<TSource>.Current 
                     => source[index];
                 readonly object? IEnumerator.Current 
