@@ -39,12 +39,18 @@ namespace NetFabric.Hyperlinq
             }
 
             public readonly int Count
-                => source.Count;
+            {
+                [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                get => source.Count;
+            }
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly TEnumerator GetEnumerator() => getEnumerator(source);
-            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => getEnumerator(source);
-            readonly IEnumerator IEnumerable.GetEnumerator() => getEnumerator(source);
+            public readonly TEnumerator GetEnumerator() 
+                => getEnumerator(source);
+            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() 
+                => getEnumerator(source);
+            readonly IEnumerator IEnumerable.GetEnumerator() 
+                => getEnumerator(source);
 
             bool ICollection<TSource>.IsReadOnly  
                 => true;
@@ -107,9 +113,12 @@ namespace NetFabric.Hyperlinq
 
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly Enumerator GetEnumerator() => new Enumerator(source);
-            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new Enumerator(source);
-            readonly IEnumerator IEnumerable.GetEnumerator() => new Enumerator(source);
+            public readonly Enumerator GetEnumerator() 
+                => new Enumerator(source);
+            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() 
+                => new Enumerator(source);
+            readonly IEnumerator IEnumerable.GetEnumerator() 
+                => new Enumerator(source);
 
             bool ICollection<TSource>.IsReadOnly  
                 => true;

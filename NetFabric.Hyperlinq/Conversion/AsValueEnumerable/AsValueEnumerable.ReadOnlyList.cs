@@ -26,7 +26,10 @@ namespace NetFabric.Hyperlinq
                 => this.source = source;
 
             public readonly int Count
-                => source.Count;
+            {
+                [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                get => source.Count;
+            }
 
             [MaybeNull]
             public readonly TSource this[int index]

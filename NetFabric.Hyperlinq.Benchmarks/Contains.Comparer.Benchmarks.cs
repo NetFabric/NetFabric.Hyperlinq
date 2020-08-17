@@ -96,7 +96,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [BenchmarkCategory("List_Reference")]
         [Benchmark]
         public bool Hyperlinq_List_Reference() =>
-            ReadOnlyListExtensions.Contains(listReference, Count - 1, this);
+            listReference.Contains(Count - 1, this);
 
         public bool Equals(int x, int y) 
             => EqualityComparer<int>.Default.Equals(x, y);

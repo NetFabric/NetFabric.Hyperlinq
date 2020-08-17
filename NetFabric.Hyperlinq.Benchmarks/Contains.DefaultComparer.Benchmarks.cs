@@ -77,7 +77,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [BenchmarkCategory("List_Value")]
         [Benchmark]
         public bool Hyperlinq_List_Value() =>
-            ReadOnlyListExtensions.Contains(listValue, Count - 1, EqualityComparer<int>.Default);
+            listValue.Contains(Count - 1, EqualityComparer<int>.Default);
 
         [BenchmarkCategory("Enumerable_Reference")]
         [Benchmark]
@@ -96,6 +96,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [BenchmarkCategory("List_Reference")]
         [Benchmark]
         public bool Hyperlinq_List_Reference() =>
-            ReadOnlyListExtensions.Contains(listReference, Count - 1, EqualityComparer<int>.Default);
+            listReference
+            .Contains(Count - 1, EqualityComparer<int>.Default);
     }
 }

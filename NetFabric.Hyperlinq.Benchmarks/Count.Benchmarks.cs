@@ -92,7 +92,8 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [BenchmarkCategory("List_Value")]
         [Benchmark]
         public int Hyperlinq_List_Value() =>
-            listValue.AsValueEnumerable()
+            listValue
+            .AsValueEnumerable()
             .Count();
 
         [BenchmarkCategory("AsyncEnumerable_Value")]
