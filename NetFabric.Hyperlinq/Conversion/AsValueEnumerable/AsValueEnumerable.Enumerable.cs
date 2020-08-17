@@ -39,9 +39,12 @@ namespace NetFabric.Hyperlinq
 
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly TEnumerator GetEnumerator() => getEnumerator(source);
-            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => getEnumerator(source);
-            readonly IEnumerator IEnumerable.GetEnumerator() => getEnumerator(source);
+            public readonly TEnumerator GetEnumerator() 
+                => getEnumerator(source);
+            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() 
+                => getEnumerator(source);
+            readonly IEnumerator IEnumerable.GetEnumerator() 
+                => getEnumerator(source);
         }
 
         [StructLayout(LayoutKind.Auto)]
@@ -55,9 +58,12 @@ namespace NetFabric.Hyperlinq
 
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly Enumerator GetEnumerator() => new Enumerator(source);
-            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new Enumerator(source);
-            readonly IEnumerator IEnumerable.GetEnumerator() => new Enumerator(source);
+            public readonly Enumerator GetEnumerator() 
+                => new Enumerator(source);
+            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() 
+                => new Enumerator(source);
+            readonly IEnumerator IEnumerable.GetEnumerator() 
+                => new Enumerator(source);
 
             [StructLayout(LayoutKind.Auto)]
             public readonly struct Enumerator
@@ -88,6 +94,7 @@ namespace NetFabric.Hyperlinq
                 public readonly void Reset() 
                     => enumerator.Reset();
 
+                [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public readonly void Dispose() 
                     => enumerator.Dispose();
             }

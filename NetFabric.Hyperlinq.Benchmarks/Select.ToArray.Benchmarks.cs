@@ -75,7 +75,8 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [BenchmarkCategory("List_Value")]
         [Benchmark]
         public int[] Hyperlinq_List_Value() =>
-            ReadOnlyListExtensions.AsValueEnumerable<int>(listValue)
+            listValue
+            .AsValueEnumerable()
             .Select(item => item).ToArray();
 
         [BenchmarkCategory("Enumerable_Reference")]

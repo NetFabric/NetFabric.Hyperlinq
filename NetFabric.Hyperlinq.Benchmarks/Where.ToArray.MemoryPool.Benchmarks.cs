@@ -96,8 +96,8 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [Benchmark]
         public int Hyperlinq_List_Value()
         {
-            using var memoryOwner = ReadOnlyListExtensions
-                .AsValueEnumerable<int>(listValue)
+            using var memoryOwner = listValue
+                .AsValueEnumerable()
                 .Where(item => (item & 0x01) == 0)
                 .ToArray(memoryPool);
             return memoryOwner.Memory.Span[0];

@@ -53,49 +53,62 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [BenchmarkCategory("Array")]
         [Benchmark]
         public int StructLinq_Count() =>
-            array.ToStructEnumerable().Where(item => (item & 0x01) == 0, x => x).Count(x => x);
+            array.ToStructEnumerable()
+            .Where(item => (item & 0x01) == 0, x => x)
+            .Count(x => x);
 
         [BenchmarkCategory("Array")]
         [Benchmark]
         public int StructLinq_Count_IFunction()
         {
             var predicate = new IsEven();
-            var count = array.ToStructEnumerable().Where(ref predicate, x => x).Count(x => x);
-            return count;
+            return array.ToStructEnumerable()
+                .Where(ref predicate, x => x)
+                .Count(x => x);
         }
 
         [BenchmarkCategory("Array")]
         [Benchmark]
         public int Hyperlinq_Array() =>
-            array.Where(item => (item & 0x01) == 0).Count();
+            array
+            .Where(item => (item & 0x01) == 0)
+            .Count();
 
         [BenchmarkCategory("Array")]
         [Benchmark]
         public int Hyperlinq_Span() =>
-            array.AsSpan().Where(item => (item & 0x01) == 0).Count();
+            array.AsSpan()
+            .Where(item => (item & 0x01) == 0)
+            .Count();
 
         [BenchmarkCategory("Array")]
         [Benchmark]
         public int Hyperlinq_Memory() =>
-            memory.Where(item => (item & 0x01) == 0).Count();
+            memory
+            .Where(item => (item & 0x01) == 0)
+            .Count();
 
         [BenchmarkCategory("Enumerable_Value")]
         [Benchmark]
         public int Hyperlinq_Enumerable_Value() =>
             EnumerableExtensions.AsValueEnumerable<TestEnumerable.Enumerable, TestEnumerable.Enumerable.Enumerator, int>(enumerableValue, enumerable => enumerable.GetEnumerator())
-            .Where(item => (item & 0x01) == 0).Count();
+            .Where(item => (item & 0x01) == 0)
+            .Count();
 
         [BenchmarkCategory("Collection_Value")]
         [Benchmark]
         public int Hyperlinq_Collection_Value() =>
             ReadOnlyCollectionExtensions.AsValueEnumerable<TestCollection.Enumerable, TestCollection.Enumerable.Enumerator, int>(collectionValue, enumerable => enumerable.GetEnumerator())
-            .Where(item => (item & 0x01) == 0).Count();
+            .Where(item => (item & 0x01) == 0)
+            .Count();
 
         [BenchmarkCategory("List_Value")]
         [Benchmark]
         public int Hyperlinq_List_Value() =>
-            ReadOnlyListExtensions.AsValueEnumerable<int>(listValue)
-            .Where(item => (item & 0x01) == 0).Count();
+            listValue
+            .AsValueEnumerable()
+            .Where(item => (item & 0x01) == 0)
+            .Count();
 
 
         [BenchmarkCategory("Enumerable_Reference")]
@@ -103,20 +116,23 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Hyperlinq_Enumerable_Reference() =>
             enumerableReference
             .AsValueEnumerable()
-            .Where(item => (item & 0x01) == 0).Count();
+            .Where(item => (item & 0x01) == 0)
+            .Count();
 
         [BenchmarkCategory("Collection_Reference")]
         [Benchmark]
         public int Hyperlinq_Collection_Reference() =>
             collectionReference
             .AsValueEnumerable()
-            .Where(item => (item & 0x01) == 0).Count();
+            .Where(item => (item & 0x01) == 0)
+            .Count();
 
         [BenchmarkCategory("List_Reference")]
         [Benchmark]
         public int Hyperlinq_List_Reference() =>
             listReference
             .AsValueEnumerable()
-            .Where(item => (item & 0x01) == 0).Count();
+            .Where(item => (item & 0x01) == 0)
+            .Count();
     }
 }

@@ -81,18 +81,21 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [BenchmarkCategory("Enumerable_Reference")]
         [Benchmark]
         public bool Hyperlinq_Enumerable_Reference() => 
-            EnumerableExtensions.AsValueEnumerable(enumerableReference)
+            enumerableReference
+            .AsValueEnumerable()
             .Contains(Count - 1);
 
         [BenchmarkCategory("Collection_Reference")]
         [Benchmark]
         public bool Hyperlinq_Collection_Reference() => 
-            ReadOnlyCollectionExtensions.AsValueEnumerable(collectionReference)
+            collectionReference
+            .AsValueEnumerable()
             .Contains(Count - 1);
 
         [BenchmarkCategory("List_Reference")]
         [Benchmark]
         public bool Hyperlinq_List_Reference() => 
-            ReadOnlyListExtensions.Contains(listReference, Count - 1);
+            listReference
+            .Contains(Count - 1);
     }
 }
