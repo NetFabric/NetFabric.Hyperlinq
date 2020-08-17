@@ -60,16 +60,16 @@ namespace LinqBenchmarks
 
             logger.WriteLine("### References:");
 
-            var linqFasterVersion = GetVersion(typeof(LinqFaster).Assembly);
+            var linqFasterVersion = GetInformationalVersion(typeof(LinqFaster).Assembly);
             logger.WriteLine($"- JM.LinqFaster: [{linqFasterVersion}](https://www.nuget.org/packages/JM.LinqFaster/{linqFasterVersion})");
 
-            var linqAfVersion = GetVersion(typeof(global::LinqAF.Enumerable).Assembly);
+            var linqAfVersion = GetFileVersion(typeof(LinqAF.Enumerable).Assembly);
             logger.WriteLine($"- LinqAF: [{linqAfVersion}](https://www.nuget.org/packages/LinqAF/{linqAfVersion})");
 
-            var structLinqVersion = GetVersion(typeof(StructLinq.BCL.List.ListEnumerable<>).Assembly);
+            var structLinqVersion = GetInformationalVersion(typeof(StructLinq.BCL.List.ListEnumerable<>).Assembly);
             logger.WriteLine($"- StructLinq.BCL: [{structLinqVersion}](https://www.nuget.org/packages/StructLinq.BCL/{structLinqVersion})");
 
-            var hyperlinqVersion = GetVersion(typeof(ValueEnumerable).Assembly);
+            var hyperlinqVersion = GetInformationalVersion(typeof(ValueEnumerable).Assembly);
             logger.WriteLine($"- NetFabric.Hyperlinq: [{hyperlinqVersion}](https://www.nuget.org/packages/NetFabric.Hyperlinq/{hyperlinqVersion})");
 
             logger.WriteLine();
@@ -81,11 +81,14 @@ namespace LinqBenchmarks
         static string EndSubstring(string str, int index)
             => str.Substring(index, str.Length - index);
 
-        static string GetVersion(Assembly assembly)
-        {
-            var version = ((AssemblyInformationalVersionAttribute)Attribute.GetCustomAttribute(assembly, typeof(AssemblyInformationalVersionAttribute), false))?.InformationalVersion ?? string.Empty;
-            return version.Split('+')[0];
-        }
+        static string GetInformationalVersion(Assembly assembly)
+            => GetCustomAttribute<AssemblyInformationalVersionAttribute>(assembly)?.InformationalVersion.Split('+')[0];
+
+        static string GetFileVersion(Assembly assembly)
+            => GetCustomAttribute<AssemblyFileVersionAttribute>(assembly)?.Version;
+
+        static T GetCustomAttribute<T>(Assembly assembly) where T : Attribute
+            => (T)Attribute.GetCustomAttribute(assembly, typeof(T), false);
 
         static Type GetTargetType(Summary summary)
         {
