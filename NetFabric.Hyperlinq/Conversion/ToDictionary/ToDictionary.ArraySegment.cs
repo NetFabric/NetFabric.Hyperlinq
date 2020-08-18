@@ -17,12 +17,8 @@ namespace NetFabric.Hyperlinq
             {
                 if (source.IsWhole())
                 {
-                    var array = source.Array;
-                    for (var index = 0; index < array.Length; index++)
-                    {
-                        var item = array![index];
+                    foreach (var item in source.Array)
                         dictionary.Add(keySelector(item), item);
-                    }
                 }
                 else
                 {
@@ -48,12 +44,8 @@ namespace NetFabric.Hyperlinq
             {
                 if (source.IsWhole())
                 {
-                    var array = source.Array;
-                    for (var index = 0; index < array.Length; index++)
-                    {
-                        var item = array![index];
+                    foreach (var item in source.Array)
                         dictionary.Add(keySelector(item), elementSelector(item)!);
-                    }
                 }
                 else
                 {

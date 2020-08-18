@@ -16,10 +16,8 @@ namespace NetFabric.Hyperlinq
             {
                 if (source.IsWhole())
                 {
-                    var array = source.Array;
-                    for (var index = 0; index < array.Length; index++)
+                    foreach (var item in source.Array)
                     {
-                        var item = array![index];
                         if (predicate(item))
                             builder.Add(item);
                     }
@@ -49,12 +47,13 @@ namespace NetFabric.Hyperlinq
             {
                 if (source.IsWhole())
                 {
-                    var array = source.Array;
-                    for (var index = 0; index < array.Length; index++)
+                    var index = 0;
+                    foreach (var item in source.Array)
                     {
-                        var item = array![index];
                         if (predicate(item, index))
                             builder.Add(item);
+
+                        index++;
                     }
                 }
                 else
@@ -95,10 +94,8 @@ namespace NetFabric.Hyperlinq
             {
                 if (source.IsWhole())
                 {
-                    var array = source.Array;
-                    for (var index = 0; index < array.Length; index++)
+                    foreach (var item in source.Array)
                     {
-                        var item = array![index];
                         if (predicate(item))
                             builder.Add(selector(item));
                     }

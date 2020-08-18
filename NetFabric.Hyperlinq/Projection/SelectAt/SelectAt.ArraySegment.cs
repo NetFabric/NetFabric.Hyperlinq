@@ -88,10 +88,10 @@ namespace NetFabric.Hyperlinq
                     {
                         if (Utils.IsValueType<TResult>())
                         {
-                            var array = source.Array;
-                            for (var index = 0; index < array.Length; index++)
+                            var index = 0;
+                            foreach (var sourceItem in source.Array)
                             {
-                                if (EqualityComparer<TResult>.Default.Equals(selector(array![index], index)!, item))
+                                if (EqualityComparer<TResult>.Default.Equals(selector(sourceItem, index)!, item))
                                     return index;
                             }
                         }

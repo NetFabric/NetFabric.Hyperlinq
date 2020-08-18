@@ -26,9 +26,12 @@ namespace NetFabric.Hyperlinq
             {
                 if (source.IsWhole())
                 {
-                    var array = source.Array;
-                    for (var index = 0; index < array.Length; index++)
-                        destination[index] = selector(array![index])!;
+                    var index = 0;
+                    foreach (var item in source.Array)
+                    {
+                        destination[index] = selector(item)!;
+                        index++;
+                    }
                 }
                 else
                 {
@@ -60,9 +63,12 @@ namespace NetFabric.Hyperlinq
             {
                 if (source.IsWhole())
                 {
-                    var array = source.Array;
-                    for (var index = 0; index < array.Length; index++)
-                        destination[index] = selector(array![index], index)!;
+                    var index = 0;
+                    foreach (var item in source.Array)
+                    {
+                        destination[index] = selector(item, index)!;
+                        index++;
+                    }
                 }
                 else
                 {
