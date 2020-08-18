@@ -5,9 +5,9 @@
 
 ### References:
 - JM.LinqFaster: [1.1.2](https://www.nuget.org/packages/JM.LinqFaster/1.1.2)
-- LinqAF: [1.0.0](https://www.nuget.org/packages/LinqAF/1.0.0)
+- LinqAF: [3.0.0.0](https://www.nuget.org/packages/LinqAF/3.0.0.0)
 - StructLinq.BCL: [0.19.1](https://www.nuget.org/packages/StructLinq.BCL/0.19.1)
-- NetFabric.Hyperlinq: [3.0.0-beta25](https://www.nuget.org/packages/NetFabric.Hyperlinq/3.0.0-beta25)
+- NetFabric.Hyperlinq: [3.0.0-beta26](https://www.nuget.org/packages/NetFabric.Hyperlinq/3.0.0-beta26)
 
 ### Results:
 ``` ini
@@ -23,8 +23,8 @@ Job=.NET Core 5.0  Runtime=.NET Core 5.0
 ```
 |      Method | Count |     Mean |     Error |    StdDev | Ratio |  Gen 0 | Gen 1 | Gen 2 | Allocated |
 |------------ |------ |---------:|----------:|----------:|------:|-------:|------:|------:|----------:|
-| ForeachLoop |   100 | 2.327 μs | 0.0057 μs | 0.0048 μs |  1.00 | 2.8915 |     - |     - |    6048 B |
-|        Linq |   100 | 3.001 μs | 0.0038 μs | 0.0032 μs |  1.29 | 2.0638 |     - |     - |    4320 B |
-|      LinqAF |   100 | 4.422 μs | 0.0182 μs | 0.0152 μs |  1.90 | 2.5024 |     - |     - |    5240 B |
-|  StructLinq |   100 | 2.891 μs | 0.0110 μs | 0.0092 μs |  1.24 | 0.0191 |     - |     - |      40 B |
-|   Hyperlinq |   100 | 2.577 μs | 0.0033 μs | 0.0027 μs |  1.11 | 0.0191 |     - |     - |      40 B |
+| ForeachLoop |   100 | 2.334 μs | 0.0137 μs | 0.0128 μs |  1.00 | 2.8915 |     - |     - |    6048 B |
+|        Linq |   100 | 2.971 μs | 0.0074 μs | 0.0069 μs |  1.27 | 2.0638 |     - |     - |    4320 B |
+|      LinqAF |   100 | 4.369 μs | 0.0060 μs | 0.0046 μs |  1.87 | 2.5024 |     - |     - |    5240 B |
+|  StructLinq |   100 | 2.837 μs | 0.0042 μs | 0.0033 μs |  1.22 | 0.0191 |     - |     - |      40 B |
+|   Hyperlinq |   100 | 2.658 μs | 0.0044 μs | 0.0039 μs |  1.14 | 0.0191 |     - |     - |      40 B |

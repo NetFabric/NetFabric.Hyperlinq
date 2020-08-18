@@ -5,9 +5,9 @@
 
 ### References:
 - JM.LinqFaster: [1.1.2](https://www.nuget.org/packages/JM.LinqFaster/1.1.2)
-- LinqAF: [1.0.0](https://www.nuget.org/packages/LinqAF/1.0.0)
+- LinqAF: [3.0.0.0](https://www.nuget.org/packages/LinqAF/3.0.0.0)
 - StructLinq.BCL: [0.19.1](https://www.nuget.org/packages/StructLinq.BCL/0.19.1)
-- NetFabric.Hyperlinq: [3.0.0-beta25](https://www.nuget.org/packages/NetFabric.Hyperlinq/3.0.0-beta25)
+- NetFabric.Hyperlinq: [3.0.0-beta26](https://www.nuget.org/packages/NetFabric.Hyperlinq/3.0.0-beta26)
 
 ### Results:
 ``` ini
@@ -23,9 +23,9 @@ Job=.NET Core 5.0  Runtime=.NET Core 5.0
 ```
 |               Method | Count |       Mean |   Error |  StdDev | Ratio |  Gen 0 | Gen 1 | Gen 2 | Allocated |
 |--------------------- |------ |-----------:|--------:|--------:|------:|-------:|------:|------:|----------:|
-|          ForeachLoop |   100 |   509.6 ns | 0.60 ns | 0.53 ns |  1.00 | 0.0191 |     - |     - |      40 B |
-|                 Linq |   100 | 1,136.2 ns | 1.87 ns | 1.56 ns |  2.23 | 0.0458 |     - |     - |      96 B |
-|               LinqAF |   100 |   931.2 ns | 3.61 ns | 3.38 ns |  1.83 | 0.0191 |     - |     - |      40 B |
-|           StructLinq |   100 |   742.6 ns | 0.44 ns | 0.35 ns |  1.46 | 0.0191 |     - |     - |      40 B |
-| StructLinq_IFunction |   100 |   594.2 ns | 1.80 ns | 1.68 ns |  1.17 | 0.0191 |     - |     - |      40 B |
-|    Hyperlinq_Foreach |   100 |   849.6 ns | 5.45 ns | 4.83 ns |  1.67 | 0.0191 |     - |     - |      40 B |
+|          ForeachLoop |   100 |   507.2 ns | 0.50 ns | 0.42 ns |  1.00 | 0.0191 |     - |     - |      40 B |
+|                 Linq |   100 | 1,196.3 ns | 2.17 ns | 1.92 ns |  2.36 | 0.0458 |     - |     - |      96 B |
+|               LinqAF |   100 |   930.0 ns | 3.09 ns | 2.58 ns |  1.83 | 0.0191 |     - |     - |      40 B |
+|           StructLinq |   100 |   740.0 ns | 1.73 ns | 1.54 ns |  1.46 | 0.0191 |     - |     - |      40 B |
+| StructLinq_IFunction |   100 |   594.8 ns | 1.86 ns | 1.65 ns |  1.17 | 0.0191 |     - |     - |      40 B |
+|    Hyperlinq_Foreach |   100 |   793.1 ns | 1.23 ns | 1.09 ns |  1.56 | 0.0191 |     - |     - |      40 B |
