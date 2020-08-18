@@ -90,9 +90,8 @@ namespace NetFabric.Hyperlinq
                 {
                     if (source.IsWhole())
                     {
-                        var array = source.Array;
-                        for (var index = 0; index < array.Length; index++)
-                            _ = set.Add(array![index]);
+                        foreach (var item in source.Array)
+                            _ = set.Add(item);
                     }
                     else
                     {

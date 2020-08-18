@@ -13,10 +13,9 @@ namespace NetFabric.Hyperlinq
             {
                 if (source.IsWhole())
                 {
-                    var array = source.Array;
-                    for (var index = 0; index < array.Length; index++)
+                    foreach (var item in source.Array)
                     {
-                        if (EqualityComparer<TSource>.Default.Equals(array![index], value!))
+                        if (EqualityComparer<TSource>.Default.Equals(item, value!))
                             return true;
                     }
                 }
@@ -51,10 +50,9 @@ namespace NetFabric.Hyperlinq
                 {
                     if (source.IsWhole())
                     {
-                        var array = source.Array;
-                        for (var index = 0; index < array.Length; index++)
+                        foreach (var item in source.Array)
                         {
-                            if (EqualityComparer<TSource>.Default.Equals(array![index], value!))
+                            if (EqualityComparer<TSource>.Default.Equals(item, value!))
                                 return true;
                         }
                     }
@@ -78,10 +76,9 @@ namespace NetFabric.Hyperlinq
                 {
                     if (source.IsWhole())
                     {
-                        var array = source.Array;
-                        for (var index = 0; index < array.Length; index++)
+                        foreach (var item in source.Array)
                         {
-                            if (comparer.Equals(array![index], value!))
+                            if (comparer.Equals(item, value!))
                                 return true;
                         }
                     }
@@ -117,10 +114,9 @@ namespace NetFabric.Hyperlinq
                 {
                     if (source.IsWhole())
                     {
-                        var array = source.Array;
-                        for (var index = 0; index < array.Length; index++)
+                        foreach (var item in source.Array)
                         {
-                            if (EqualityComparer<TResult>.Default.Equals(selector(array![index])!, value!))
+                            if (EqualityComparer<TResult>.Default.Equals(selector(item)!, value!))
                                 return true;
                         }
                     }
@@ -146,10 +142,9 @@ namespace NetFabric.Hyperlinq
                 {
                     if (source.IsWhole())
                     {
-                        var array = source.Array;
-                        for (var index = 0; index < array.Length; index++)
+                        foreach (var item in source.Array)
                         {
-                            if (defaultComparer.Equals(selector(array![index])!, value!))
+                            if (defaultComparer.Equals(selector(item)!, value!))
                                 return true;
                         }
                     }
@@ -185,11 +180,13 @@ namespace NetFabric.Hyperlinq
                 {
                     if (source.IsWhole())
                     {
-                        var array = source.Array;
-                        for (var index = 0; index < array.Length; index++)
+                        var index = 0;
+                        foreach (var item in source.Array)
                         {
-                            if (EqualityComparer<TResult>.Default.Equals(selector(array![index], index)!, value!))
+                            if (EqualityComparer<TResult>.Default.Equals(selector(item, index)!, value!))
                                 return true;
+
+                            index++;
                         }
                     }
                     else
@@ -227,11 +224,13 @@ namespace NetFabric.Hyperlinq
                 {
                     if (source.IsWhole())
                     {
-                        var array = source.Array;
-                        for (var index = 0; index < array.Length; index++)
+                        var index = 0;
+                        foreach (var item in source.Array)
                         {
-                            if (defaultComparer.Equals(selector(array![index], index)!, value!))
+                            if (defaultComparer.Equals(selector(item, index)!, value!))
                                 return true;
+
+                            index++;
                         }
                     }
                     else
