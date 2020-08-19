@@ -21,6 +21,7 @@ This implementation **favors performance in detriment of assembly binary size** 
 
 - [Fast enumeration](#fast-enumeration)
 - [Reduced heap allocations](#reduced-heap-allocations)
+- [Benchmarks](#benchmarks)
 - [Usage](#usage)
   - [BCL Collections](#bcl-collections)
   - [AsValueEnumerable and AsAsyncValueEnumerable](#asvalueenumerable-and-asasyncvalueenumerable)
@@ -32,7 +33,6 @@ This implementation **favors performance in detriment of assembly binary size** 
     - [`ArrayPool<>`](#arraypool)
 - [Documentation](#documentation)
 - [Supported operations](#supported-operations)
-- [Benchmarks](#benchmarks)
 - [References](#references)
 - [Credits](#credits)
 - [License](#license)
@@ -66,6 +66,12 @@ It only allocates on the heap for the following cases:
 - Operations that use `ICollection<>.CopyTo()`, `ICollection<>.Contains()`, or `IList<>.IndexOf()` will box enumerables that are value-types.   
 - `ToList()`, when applied to collections that implement `IReadOnlyCollection<>` but not `ICollection<>`, allocates an instance of an helper class so that `ICollection<>.CopyTo()` can be used.
 - `ToArray()` and `ToList()` allocate their results on the heap. You can use the `ToArray()` overload that take an buffer pool as parameter so that its result is not managed by the garbage collector.
+
+## Benchmarks
+
+The repository contains a [benchmarks project](https://github.com/NetFabric/NetFabric.Hyperlinq/tree/main/NetFabric.Hyperlinq.Benchmarks) based on [BenchmarkDotNet](https://benchmarkdotnet.org) that compares `NetFabric.Hyperlinq` to `System.Linq` for many of the supported operations and its combinations.
+
+The results can be found in the [benchmarks folder](https://github.com/NetFabric/NetFabric.Hyperlinq//Benchmarks).
 
 ## Usage
 
@@ -375,10 +381,6 @@ Articles explaining implementation:
 - Set
   - `Distinct(TSource)`
   - `Distinct(TSource, IEqualityComparer<TSource>)`
-
-## Benchmarks
-
-The repository contains a [benchmarks project](https://github.com/NetFabric/NetFabric.Hyperlinq/tree/main/NetFabric.Hyperlinq.Benchmarks) based on [BenchmarkDotNet](https://benchmarkdotnet.org) that compares `NetFabric.Hyperlinq` to `System.Linq` for many of the supported operations and its combinations.
 
 ## References
 
