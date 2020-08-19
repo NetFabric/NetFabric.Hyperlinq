@@ -71,7 +71,7 @@ It only allocates on the heap for the following cases:
 
 The repository contains a [benchmarks project](https://github.com/NetFabric/NetFabric.Hyperlinq/tree/main/NetFabric.Hyperlinq.Benchmarks) based on [BenchmarkDotNet](https://benchmarkdotnet.org) that compares `NetFabric.Hyperlinq` to `System.Linq` for many of the supported operations and its combinations.
 
-The results can be found in the [benchmarks folder](https://github.com/NetFabric/NetFabric.Hyperlinq//Benchmarks).
+The results can be found in the [Benchmarks](https://github.com/NetFabric/NetFabric.Hyperlinq/tree/main/Benchmarks) folder.
 
 ## Usage
 
