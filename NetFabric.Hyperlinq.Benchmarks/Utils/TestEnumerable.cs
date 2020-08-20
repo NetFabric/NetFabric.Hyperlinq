@@ -6,43 +6,71 @@ namespace NetFabric.Hyperlinq.Benchmarks
 {
     public static class TestEnumerable
     {
-        public static IEnumerable<int> ReferenceType(int count)
-        {
-            for (var value = 0; value < count; value++)
-                yield return value;            
-        }
+        public static Enumerable ValueType(int[] array) 
+            => new Enumerable(array);
 
-        public static Enumerable ValueType(int count) 
-            => new Enumerable(count);
+        public static IEnumerable<int> ReferenceType(int[] array)
+            => new ReferenceEnumerable(array);
 
         public class Enumerable : IEnumerable<int>
         {
-            readonly int count;
+            readonly int[] array;
 
-            public Enumerable(int count) 
-                => this.count = count;
+            public Enumerable(int[] array) 
+                => this.array = array;
 
             public Enumerator GetEnumerator() 
-                => new Enumerator(count);
+                => new Enumerator(array);
             IEnumerator<int> IEnumerable<int>.GetEnumerator() 
-                => new Enumerator(count);
+                => new Enumerator(array);
             IEnumerator IEnumerable.GetEnumerator() 
-                => new Enumerator(count);
+                => new Enumerator(array);
 
             public struct Enumerator : IEnumerator<int>
             {
-                readonly int count;
+                readonly int[] array;
+                int index;
 
-                public Enumerator(int count)
+                public Enumerator(int[] array)
                 {
-                    this.count = count;
-                    Current = -1;
+                    this.array = array;
+                    index = -1;
                 }
 
-                public int Current { get; private set; }
-                object IEnumerator.Current => Current;
+                public int Current => array[index];
+                object IEnumerator.Current => array[index];
 
-                public bool MoveNext() => ++Current < count;
+                public bool MoveNext() => ++index < array.Length;
+
+                public void Reset() => throw new NotSupportedException();
+
+                public void Dispose() { }
+            }
+        }
+
+        class ReferenceEnumerable : IEnumerable<int>
+        {
+            readonly int[] array;
+
+            public ReferenceEnumerable(int[] array)
+                => this.array = array;
+
+            public IEnumerator<int> GetEnumerator()
+                => new Enumerator(array);
+            IEnumerator IEnumerable.GetEnumerator()
+                => new Enumerator(array);
+
+            class Enumerator : IEnumerator<int>
+            {
+                readonly int[] array;
+                int index =  -1;
+
+                public Enumerator(int[] array) => this.array = array;
+
+                public int Current => array[index];
+                object IEnumerator.Current => array[index];
+
+                public bool MoveNext() => ++index < array.Length;
 
                 public void Reset() => throw new NotSupportedException();
 

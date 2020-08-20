@@ -7,50 +7,83 @@ namespace NetFabric.Hyperlinq.Benchmarks
 {
     public static class TestAsyncEnumerable
     {
-#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
-        public static async IAsyncEnumerable<int> ReferenceType(int count)
+
+        public static Enumerable ValueType(int[] array) 
+            => new Enumerable(array);
+
+        public static IAsyncEnumerable<int> ReferenceType(int[] array)
+            => new ReferenceEnumerable(array);
+
+        public class Enumerable : IAsyncEnumerable<int>
         {
-            for (var value = 0; value < count; value++)
-                yield return value;            
-        }
-#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
+            readonly int[] array;
 
-        public static AsyncEnumerable ValueType(int count) 
-            => new AsyncEnumerable(count);
+            public Enumerable(int[] array)
+                => this.array = array;
 
-        public class AsyncEnumerable : IAsyncEnumerable<int>
-        {
-            readonly int count;
-
-            public AsyncEnumerable(int count)
-                => this.count = count;
-
-            public AsyncEnumerator GetAsyncEnumerator(CancellationToken cancellationToken = default) 
-                => new AsyncEnumerator(count, cancellationToken);
+            public Enumerator GetAsyncEnumerator(CancellationToken cancellationToken = default) 
+                => new Enumerator(array, cancellationToken);
             IAsyncEnumerator<int> IAsyncEnumerable<int>.GetAsyncEnumerator(CancellationToken cancellationToken) 
-                => new AsyncEnumerator(count, cancellationToken);
+                => new Enumerator(array, cancellationToken);
 
-            public struct AsyncEnumerator : IAsyncEnumerator<int>
+            public struct Enumerator : IAsyncEnumerator<int>
             {
-                readonly int count;
+                readonly int[] array;
                 readonly CancellationToken cancellationToken;
+                int index;
 
-                public AsyncEnumerator(int count, CancellationToken cancellationToken)
+                public Enumerator(int[] array, CancellationToken cancellationToken)
                 {
-                    this.count = count;
+                    this.array = array;
                     this.cancellationToken = cancellationToken;
-                    Current = -1;
+                    index = -1;
                 }
 
-                public int Current { get; private set; }
+                public int Current => array[index];
 
                 public ValueTask<bool> MoveNextAsync() 
                 {
                     cancellationToken.ThrowIfCancellationRequested();
-                    return new ValueTask<bool>(++Current < count);
+                    return new ValueTask<bool>(++index < array.Length);
                 }
 
                 public ValueTask DisposeAsync() 
+                    => default;
+            }
+        }
+
+        class ReferenceEnumerable : IAsyncEnumerable<int>
+        {
+            readonly int[] array;
+
+            public ReferenceEnumerable(int[] array)
+                => this.array = array;
+
+            public IAsyncEnumerator<int> GetAsyncEnumerator(CancellationToken cancellationToken)
+                => new Enumerator(array, cancellationToken);
+
+            class Enumerator : IAsyncEnumerator<int>
+            {
+                readonly int[] array;
+                readonly CancellationToken cancellationToken;
+                int index;
+
+                public Enumerator(int[] array, CancellationToken cancellationToken)
+                {
+                    this.array = array;
+                    this.cancellationToken = cancellationToken;
+                    index = -1;
+                }
+
+                public int Current => array[index];
+
+                public ValueTask<bool> MoveNextAsync()
+                {
+                    cancellationToken.ThrowIfCancellationRequested();
+                    return new ValueTask<bool>(++index < array.Length);
+                }
+
+                public ValueTask DisposeAsync()
                     => default;
             }
         }

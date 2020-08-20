@@ -44,14 +44,26 @@ namespace NetFabric.Hyperlinq.Benchmarks
             logger.WriteLine($"## {title}");
             logger.WriteLine();
 
-            //logger.WriteLine("### Source");
-            //logger.WriteLine($"[{title}.cs](../NetFabric.Hyperlinq.Benchmarks/{title}.cs)");
-            //logger.WriteLine();
+            logger.WriteLine("### Source");
+            logger.WriteLine($"[{title}.cs](../NetFabric.Hyperlinq.Benchmarks/Benchmarks/{title}.cs)");
+            logger.WriteLine();
 
             logger.WriteLine("### References:");
 
-            var structLinqVersion = GetInformationalVersion(typeof(StructLinq.BCL.List.ListEnumerable<>).Assembly);
-            logger.WriteLine($"- StructLinq.BCL: [{structLinqVersion}](https://www.nuget.org/packages/StructLinq.BCL/{structLinqVersion})");
+            var linqVersion = GetInformationalVersion(typeof(Enumerable).Assembly);
+            logger.WriteLine($"- Linq: {linqVersion}");
+
+            var linqAsyncVersion = GetInformationalVersion(typeof(AsyncEnumerable).Assembly);
+            logger.WriteLine($"- System.Linq.Async: [{linqAsyncVersion}](https://www.nuget.org/packages/System.Linq.Async/{linqAsyncVersion})");
+
+            var interactiveVersion = GetInformationalVersion(typeof(EnumerableEx).Assembly);
+            logger.WriteLine($"- System.Interactive: [{interactiveVersion}](https://www.nuget.org/packages/System.Interactive/{interactiveVersion})");
+
+            var interactiveAsyncVersion = GetInformationalVersion(typeof(AsyncEnumerableEx).Assembly);
+            logger.WriteLine($"- System.Interactive.Async: [{interactiveAsyncVersion}](https://www.nuget.org/packages/System.Interactive.Async/{interactiveAsyncVersion})");
+
+            var structLinqVersion = GetInformationalVersion(typeof(StructLinq.StructEnumerable).Assembly);
+            logger.WriteLine($"- StructLinq: [{structLinqVersion}](https://www.nuget.org/packages/StructLinq/{structLinqVersion})");
 
             var hyperlinqVersion = GetInformationalVersion(typeof(ValueEnumerable).Assembly);
             logger.WriteLine($"- NetFabric.Hyperlinq: [{hyperlinqVersion}](https://www.nuget.org/packages/NetFabric.Hyperlinq/{hyperlinqVersion})");
@@ -61,9 +73,6 @@ namespace NetFabric.Hyperlinq.Benchmarks
             logger.WriteLine("### Results:");
             MarkdownExporter.GitHub.ExportToLog(summary, logger);
         }
-
-        static string EndSubstring(string str, int index)
-            => str.Substring(index, str.Length - index);
 
         static string GetInformationalVersion(Assembly assembly)
             => GetCustomAttribute<AssemblyInformationalVersionAttribute>(assembly)?.InformationalVersion.Split('+')[0];

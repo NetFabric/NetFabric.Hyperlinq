@@ -69,9 +69,34 @@ It only allocates on the heap for the following cases:
 
 ## Benchmarks
 
-The repository contains a [benchmarks project](https://github.com/NetFabric/NetFabric.Hyperlinq/tree/main/NetFabric.Hyperlinq.Benchmarks) based on [BenchmarkDotNet](https://benchmarkdotnet.org) that compares `NetFabric.Hyperlinq` to `System.Linq` for many of the supported operations and its combinations.
+The repository contains a [benchmarks project](https://github.com/NetFabric/NetFabric.Hyperlinq/tree/main/NetFabric.Hyperlinq.Benchmarks) based on [BenchmarkDotNet](https://benchmarkdotnet.org) that compares the performance of the operators for diferent libraries and source types.
 
-The results can be found in the [Benchmarks](https://github.com/NetFabric/NetFabric.Hyperlinq/tree/main/Benchmarks) folder.
+The results can be found in the [Benchmarks](https://github.com/NetFabric/NetFabric.Hyperlinq/tree/main/Benchmarks) folder. 
+
+The names of the benchmarks are structured as follow:
+
+- The library used:
+  - _Linq_ - the `System.Linq` namespace (includes [System.Linq.Async](https://www.nuget.org/packages/System.Linq.Async/), [System.Interactive](https://www.nuget.org/packages/System.Interactive/), and [System.Interactive.Async](https://www.nuget.org/packages/System.Interactive.Async/))
+  - _StructLinq_ - [StructLinq](https://www.nuget.org/packages/StructLinq/)
+  - _Hyperlinq_ - [NetFabric.Hyperlinq](https://www.nuget.org/packages/Hyperlinq/)
+- The type of collection used as source:
+  - _Array_ - an array
+  - _Span_ - a `Span<>`
+  - _Memory_ - a `Memory<>`
+  - _Enumerable_ - implements `IEnumerable<>`
+  - _Collection_ - implements `IReadOnlyCollection<>` and `ICollection<>`
+  - _List_ - implements `IReadOnlyList<>` and `IList<>` but not an array
+  - _AsyncEnumerable_ - implements `IAsyncEnumerable<>`
+- The type of enumerator provided by the source:
+  - _Value_ - the enumerator is a value type
+  - _Reference_ - the enumerator is a reference type
+- The contents of the source:
+  - _Sequential_ - contains numbers in sequential order
+  - _Random_ - contains numbers in random order  
+- How the result of the operation is iterated:
+  - _For_ - a `for` loop is used to call the indexer
+  - _Foreach_ - a `foreach` loop is used to call the enumerator  
+
 
 ## Usage
 
