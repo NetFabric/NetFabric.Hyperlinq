@@ -17,10 +17,10 @@ namespace NetFabric.Hyperlinq
         [GeneratorIgnore] // TODO: to be removed
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static AsyncValueEnumerableWrapper<TEnumerable, TEnumerator, TSource> AsAsyncValueEnumerable<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TEnumerable, CancellationToken, TEnumerator> getEnumerator)
+        public static AsyncValueEnumerableWrapper<TEnumerable, TEnumerator, TSource> AsAsyncValueEnumerable<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TEnumerable, CancellationToken, TEnumerator> getAsyncEnumerator)
             where TEnumerable : notnull, IAsyncEnumerable<TSource>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
-            => new AsyncValueEnumerableWrapper<TEnumerable, TEnumerator, TSource>(source, getEnumerator);
+            => new AsyncValueEnumerableWrapper<TEnumerable, TEnumerator, TSource>(source, getAsyncEnumerator);
 
         public readonly partial struct AsyncValueEnumerableWrapper<TEnumerable, TEnumerator, TSource>
             : IAsyncValueEnumerable<TSource, TEnumerator>

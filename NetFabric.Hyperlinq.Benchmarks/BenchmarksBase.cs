@@ -2,6 +2,7 @@
 using BenchmarkDotNet.Jobs;
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 
 namespace NetFabric.Hyperlinq.Benchmarks
 {
@@ -9,12 +10,13 @@ namespace NetFabric.Hyperlinq.Benchmarks
     //[SimpleJob(RuntimeMoniker.NetCoreApp21)]
     //[SimpleJob(RuntimeMoniker.NetCoreApp31)]
     [SimpleJob(RuntimeMoniker.NetCoreApp50)]
+    [MemoryDiagnoser]
     public abstract class BenchmarksBase
     {
+        const int seed = 42;
+
         protected int[] array;
         protected ReadOnlyMemory<int> memory;
-        protected List<int> list;
-        protected LinkedList<int> linkedList;
 
         protected IEnumerable<int> linqRange;
         protected ValueEnumerable.RangeEnumerable hyperlinqRange;
@@ -29,33 +31,41 @@ namespace NetFabric.Hyperlinq.Benchmarks
         protected TestList.Enumerable listValue;
 
         protected IAsyncEnumerable<int> asyncEnumerableReference;
-        protected TestAsyncEnumerable.AsyncEnumerable asyncEnumerableValue;
-
-        [Params(100)]
-        public int Count { get; set; }
+        protected TestAsyncEnumerable.Enumerable asyncEnumerableValue;
 
         [GlobalSetup]
-        public void GlobalSetup()
+        public abstract void GlobalSetup();
+
+        protected void Initialize(int[] array)
         {
-            linqRange = System.Linq.Enumerable.Range(0, Count);
-            hyperlinqRange = ValueEnumerable.Range(0, Count);
-
-            array = hyperlinqRange.ToArray();
+            this.array = array;
             memory = array.AsMemory();
-            list = new List<int>(hyperlinqRange);
-            linkedList = new LinkedList<int>(hyperlinqRange);
 
-            enumerableReference = TestEnumerable.ReferenceType(Count);
-            enumerableValue = TestEnumerable.ValueType(Count);
+            enumerableReference = TestEnumerable.ReferenceType(array);
+            enumerableValue = TestEnumerable.ValueType(array);
 
-            collectionReference = TestCollection.ReferenceType(Count);
-            collectionValue = TestCollection.ValueType(Count);
+            collectionReference = TestCollection.ReferenceType(array);
+            collectionValue = TestCollection.ValueType(array);
 
-            listReference = TestList.ReferenceType(Count);
-            listValue = TestList.ValueType(Count);
+            listReference = TestList.ReferenceType(array);
+            listValue = TestList.ValueType(array);
 
-            asyncEnumerableReference = TestAsyncEnumerable.ReferenceType(Count);
-            asyncEnumerableValue = TestAsyncEnumerable.ValueType(Count);
+            asyncEnumerableReference = TestAsyncEnumerable.ReferenceType(array);
+            asyncEnumerableValue = TestAsyncEnumerable.ValueType(array);
+        }
+
+        protected static int[] GetSequentialValues(int count)
+            => ValueEnumerable.Range(0, count).ToArray();
+
+        protected static int[] GetRandomValues(int count)
+        {
+            var array = new int[count];
+
+            var random = new Random(seed);
+            for (var index = 0; index < count; index++)
+                array[index] = random.Next(count);
+
+            return array;
         }
     }
 }
