@@ -49,13 +49,19 @@ namespace LinqBenchmarks.Range
 
         [Benchmark]
         public List<int> StructLinq()
-            => StructEnumerable.Range(Start, Count).Select(item => item * 2, x => x).ToList();
+            => StructEnumerable
+                .Range(Start, Count)
+                .Select(item => item * 2)
+                .ToList();
 
         [Benchmark]
         public List<int> StructLinq_IFunction()
         {
             var selector = new DoubleOfInt32();
-            return StructEnumerable.Range(Start, Count).Select(ref selector, x => x, x => x).ToList();
+            return StructEnumerable
+                .Range(Start, Count)
+                .Select(ref selector, x => x, x => x)
+                .ToList(x=>x);
         }
 
         [Benchmark]

@@ -52,8 +52,10 @@ namespace LinqBenchmarks.Array.ValueType
 
         [Benchmark]
         public List<FatValueType> StructLinq()
-            => source.ToStructEnumerable()
-                .Where(item => item.IsEven(), x => x).Select(item => item * 2, x => x)
+            => source
+                .ToRefStructEnumerable()
+                .Where((in FatValueType item) => item.IsEven())
+                .Select((in FatValueType item) => item * 2)
                 .ToList();
 
         [Benchmark]
@@ -62,8 +64,9 @@ namespace LinqBenchmarks.Array.ValueType
             var predicate = new FatValueTypeIsEven();
             var selector = new DoubleOfFatValueType();
             return source.ToRefStructEnumerable()
-                .Where(ref predicate, x => x).Select(ref selector, x => x, x => x)
-                .ToList();
+                .Where(ref predicate, x => x)
+                .Select(ref selector, x => x, x => x)
+                .ToList(x=>x);
         }
 
         [Benchmark]

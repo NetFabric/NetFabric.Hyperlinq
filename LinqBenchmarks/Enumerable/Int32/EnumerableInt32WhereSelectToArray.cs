@@ -31,14 +31,21 @@ namespace LinqBenchmarks.Enumerable.Int32
 
         [Benchmark]
         public int[] StructLinq()
-            => source.ToStructEnumerable().Where(item => item.IsEven(), x => x).Select(item => item * 2, x => x).ToArray();
+            => source.ToStructEnumerable()
+                .Where(item => item.IsEven())
+                .Select(item => item * 2)
+                .ToArray();
 
         [Benchmark]
         public int[] StructLinq_IFunction()
         {
             var predicate = new Int32IsEven();
             var selector = new DoubleOfInt32();
-            return source.ToStructEnumerable().Where(ref predicate, x => x).Select(ref selector, x => x, x => x).ToArray();
+            return source
+                .ToStructEnumerable()
+                .Where(ref predicate, x => x)
+                .Select(ref selector, x => x, x => x)
+                .ToArray(x=>x);
         }
 
         [Benchmark]

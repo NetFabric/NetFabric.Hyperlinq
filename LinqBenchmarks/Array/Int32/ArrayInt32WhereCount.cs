@@ -1,9 +1,7 @@
 ﻿using BenchmarkDotNet.Attributes;
-using BenchmarkDotNet.Diagnosers;
 using JM.LinqFaster;
 using NetFabric.Hyperlinq;
 using StructLinq;
-using System.Linq;
 
 namespace LinqBenchmarks.Array.Int32
 {
@@ -49,13 +47,19 @@ namespace LinqBenchmarks.Array.Int32
 
         [Benchmark]
         public int StructLinq()
-            => source.ToStructEnumerable().Where(item => item.IsEven(), x => x).Count();
+            => source
+                .ToStructEnumerable()
+                .Where(item => item.IsEven())
+                .Count();
 
         [Benchmark]
         public int StructLinq_IFunction()
         {
             var predicate = new Int32IsEven();
-            return source.ToStructEnumerable().Where(ref predicate, x => x).Count();
+            return source
+                .ToStructEnumerable()
+                .Where(ref predicate, x => x)
+                .Count(x=>x);
         }
 
         [Benchmark]

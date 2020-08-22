@@ -72,7 +72,21 @@ namespace LinqBenchmarks.Array.ValueType
         public FatValueType StructLinq()
         {
             var sum = default(FatValueType);
-            foreach (ref readonly  var item in source.ToRefStructEnumerable().Distinct(x => x))
+            foreach (ref readonly  var item in source
+                .ToRefStructEnumerable()
+                .Distinct())
+                sum += item;
+            return sum;
+        }
+
+        [Benchmark]
+        public FatValueType StructLinq_IFunction()
+        {
+            var sum = default(FatValueType);
+            var comparer = new FatValueTypeEqualityComparer();
+            foreach (ref readonly  var item in source
+                .ToRefStructEnumerable()
+                .Distinct(comparer, x=> x))
                 sum += item;
             return sum;
         }

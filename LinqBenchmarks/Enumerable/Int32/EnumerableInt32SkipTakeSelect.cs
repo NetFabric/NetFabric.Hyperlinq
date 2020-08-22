@@ -42,7 +42,11 @@ namespace LinqBenchmarks.Enumerable.Int32
         public int StructLinq()
         {
             var sum = 0;
-            foreach (var item in System.Linq.Enumerable.Skip(source, Skip).Take(Count).ToStructEnumerable().Select(item => item * 2, x => x))
+            foreach (var item in source
+                .ToStructEnumerable()
+                .Skip((uint)Skip)
+                .Take((uint)Count)
+                .Select(item => item * 2))
                 sum += item;
             return sum;
         }
@@ -52,7 +56,11 @@ namespace LinqBenchmarks.Enumerable.Int32
         {
             var sum = 0;
             var selector = new DoubleOfInt32();
-            foreach (var item in System.Linq.Enumerable.Skip(source, Skip).Take(Count).ToStructEnumerable().Select(ref selector, x => x, x => x))
+            foreach (var item in source
+                .ToStructEnumerable()
+                .Skip((uint)Skip, x=> x)
+                .Take((uint)Count, x=>x)
+                .Select(ref selector, x=> x, x=>x))
                 sum += item;
             return sum;
         }

@@ -32,7 +32,9 @@ namespace LinqBenchmarks.Range
 
         [Benchmark]
         public int[] StructLinq()
-            => StructEnumerable.Range(Start, Count).ToArray();
+            => StructEnumerable
+                .Range(Start, Count)
+                .ToArray(x=>x);
 
         [Benchmark]
         public int[] Hyperlinq()

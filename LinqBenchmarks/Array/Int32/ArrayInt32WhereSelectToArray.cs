@@ -54,8 +54,8 @@ namespace LinqBenchmarks.Array.Int32
         [Benchmark]
         public int[] StructLinq()
             => source.ToStructEnumerable()
-                .Where(item => item.IsEven(), x => x)
-                .Select(item => item * 2, x => x)
+                .Where(item => item.IsEven())
+                .Select(item => item * 2)
                 .ToArray();
 
         [Benchmark]
@@ -66,7 +66,7 @@ namespace LinqBenchmarks.Array.Int32
             return source.ToStructEnumerable()
                 .Where(ref predicate, x => x)
                 .Select(ref selector, x => x, x => x)
-                .ToArray();
+                .ToArray(x=>x);
         }
 
         [Benchmark]

@@ -68,7 +68,9 @@ namespace LinqBenchmarks.Range
         public int StructLinq()
         {
             var sum = 0;
-            foreach (var item in StructEnumerable.Range(Start, Count).Select(item => item * 2, x => x))
+            foreach (var item in StructEnumerable
+                .Range(Start, Count)
+                .Select(item => item * 2))
                 sum += item;
             return sum;
         }
@@ -78,7 +80,9 @@ namespace LinqBenchmarks.Range
         {
             var sum = 0;
             var selector = new DoubleOfInt32();
-            foreach (var item in StructEnumerable.Range(Start, Count).Select(ref selector, x => x, x => x))
+            foreach (var item in StructEnumerable
+                .Range(Start, Count)
+                .Select(ref selector, x => x, x => x))
                 sum += item;
             return sum;
         }

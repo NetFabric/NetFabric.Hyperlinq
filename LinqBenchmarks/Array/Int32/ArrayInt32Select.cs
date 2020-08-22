@@ -59,7 +59,7 @@ namespace LinqBenchmarks.Array.Int32
         public int StructLinq()
         {
             var sum = 0;
-            foreach (var item in source.ToStructEnumerable().Select(item => item * 2, x => x))
+            foreach (var item in source.ToStructEnumerable().Select(item => item * 2))
                 sum += item;
             return sum;
         }

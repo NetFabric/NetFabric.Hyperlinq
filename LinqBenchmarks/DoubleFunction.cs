@@ -13,6 +13,6 @@ namespace LinqBenchmarks
         : IInFunction<FatValueType, FatValueType>
     {
         public FatValueType Eval(in FatValueType element)
-            => new FatValueType(element.Value0 * 2);
+            => element * 2;
     }
 }

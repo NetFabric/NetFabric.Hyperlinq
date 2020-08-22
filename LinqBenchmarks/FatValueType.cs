@@ -29,7 +29,7 @@ namespace LinqBenchmarks
             Value9 = value;
         }
 
-        public bool IsEven()
+        public readonly bool IsEven()
             => (Value0 & 0x01) == 0;
 
         public static FatValueType operator +(in FatValueType left, in FatValueType right)

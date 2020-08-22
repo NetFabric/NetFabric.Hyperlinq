@@ -2,7 +2,6 @@
 using JM.LinqFaster;
 using NetFabric.Hyperlinq;
 using StructLinq;
-using System.Linq;
 
 namespace LinqBenchmarks.Array.ValueType
 {
@@ -66,7 +65,9 @@ namespace LinqBenchmarks.Array.ValueType
         public FatValueType StructLinq()
         {
             var sum = default(FatValueType);
-            foreach (var item in source.ToStructEnumerable().Where(item => item.IsEven(), x => x))
+            foreach (var item in source
+                .ToRefStructEnumerable()
+                .Where((in FatValueType item) => item.IsEven()))
                 sum += item;
             return sum;
         }
@@ -76,7 +77,9 @@ namespace LinqBenchmarks.Array.ValueType
         {
             var sum = default(FatValueType);
             var predicate = new FatValueTypeIsEven();
-            foreach (ref var item in source.ToRefStructEnumerable().Where(ref predicate, x => x))
+            foreach (ref var item in source
+                .ToRefStructEnumerable()
+                .Where(ref predicate, x => x))
                 sum += item;
             return sum;
         }

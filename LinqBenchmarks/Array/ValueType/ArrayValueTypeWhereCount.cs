@@ -1,9 +1,7 @@
 ﻿using BenchmarkDotNet.Attributes;
-using BenchmarkDotNet.Diagnosers;
 using JM.LinqFaster;
 using NetFabric.Hyperlinq;
 using StructLinq;
-using System.Linq;
 
 namespace LinqBenchmarks.Array.ValueType
 {
@@ -49,13 +47,19 @@ namespace LinqBenchmarks.Array.ValueType
 
         [Benchmark]
         public int StructLinq()
-            => source.ToStructEnumerable().Where(item => item.IsEven(), x => x).Count();
+            => source
+                .ToRefStructEnumerable()
+                .Where((in FatValueType item) => item.IsEven())
+                .Count();
 
         [Benchmark]
         public int StructLinq_IFunction()
         {
             var predicate = new FatValueTypeIsEven();
-            return source.ToRefStructEnumerable().Where(ref predicate, x => x).Count();
+            return source
+                .ToRefStructEnumerable()
+                .Where(ref predicate, x => x)
+                .Count(x=> x);
         }
 
         [Benchmark]

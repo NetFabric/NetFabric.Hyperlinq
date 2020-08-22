@@ -72,20 +72,29 @@ namespace LinqBenchmarks.Array.ValueType
         public FatValueType StructLinq()
         {
             var sum = default(FatValueType);
-            foreach (var item in System.Linq.Enumerable.Skip(source, Skip).Take(Count).ToStructEnumerable().Where(item => item.IsEven(), x => x))
+            foreach (var item in source
+                .ToRefStructEnumerable()
+                .Skip((uint)Skip)
+                .Take(Count)
+                .Where((in FatValueType element) => element.IsEven()))
                 sum += item;
             return sum;
         }
 
-        //[Benchmark]
-        //public FatValueType StructLinq_IFunction()
-        //{
-        //    var sum = default(FatValueType);
-        //    var predicate = new FatValueTypeIsEven();
-        //    foreach (var item in System.Linq.Enumerable.Skip(source, Skip).Take(Count).ToStructEnumerable().Where(ref predicate, x => x))
-        //        sum += item;
-        //    return sum;
-        //}
+        [Benchmark]
+        public FatValueType StructLinq_IFunction()
+        {
+            var sum = default(FatValueType);
+            var predicate = new FatValueTypeIsEven();
+
+            foreach (var item in source
+                .ToRefStructEnumerable()
+                .Skip((uint)Skip, x=> x)
+                .Take(Count, x=> x)
+                .Where(ref predicate, x=> x))
+                sum += item;
+            return sum;
+        }
 
         [Benchmark]
         public FatValueType Hyperlinq()

@@ -2,7 +2,6 @@
 using JM.LinqFaster;
 using NetFabric.Hyperlinq;
 using StructLinq;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace LinqBenchmarks.List.Int32
@@ -68,7 +67,10 @@ namespace LinqBenchmarks.List.Int32
         public int StructLinq()
         {
             var sum = 0;
-            foreach (var item in source.ToStructEnumerable().Where(item => item.IsEven(), x => x).Select(item => item * 2, x => x))
+            foreach (var item in source
+                .ToStructEnumerable()
+                .Where(item => item.IsEven())
+                .Select(item => item * 2))
                 sum += item;
             return sum;
         }
@@ -79,7 +81,10 @@ namespace LinqBenchmarks.List.Int32
             var sum = 0;
             var predicate = new Int32IsEven();
             var selector = new DoubleOfInt32();
-            foreach (var item in source.ToStructEnumerable().Where(ref predicate, x => x).Select(ref selector, x => x, x => x))
+            foreach (var item in source
+                .ToStructEnumerable()
+                .Where(ref predicate, x => x)
+                .Select(ref selector, x => x, x => x))
                 sum += item;
             return sum;
         }

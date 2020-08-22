@@ -1,8 +1,5 @@
 ﻿using BenchmarkDotNet.Attributes;
-using JM.LinqFaster;
-using NetFabric.Hyperlinq;
 using StructLinq;
-using System;
 using System.Linq;
 
 namespace LinqBenchmarks.Enumerable.Int32
@@ -48,7 +45,11 @@ namespace LinqBenchmarks.Enumerable.Int32
         public int StructLinq()
         {
             var sum = 0;
-            foreach (var item in System.Linq.Enumerable.Skip(source, Skip).Take(Count).ToStructEnumerable().Select(item => item * 2, x => x))
+            foreach (var item in source
+                .ToStructEnumerable()
+                .Skip((uint)Skip)
+                .Take((uint)Count)
+                .Where(item => item.IsEven()))
                 sum += item;
             return sum;
         }
@@ -58,7 +59,11 @@ namespace LinqBenchmarks.Enumerable.Int32
         {
             var sum = 0;
             var predicate = new Int32IsEven();
-            foreach (var item in System.Linq.Enumerable.Skip(source, Skip).Take(Count).ToStructEnumerable().Where(ref predicate, x => x))
+            foreach (var item in source
+                .ToStructEnumerable()
+                .Skip((uint)Skip, x=> x)
+                .Take((uint)Count, x=>x)
+                .Where(ref predicate, x=>x))
                 sum += item;
             return sum;
         }

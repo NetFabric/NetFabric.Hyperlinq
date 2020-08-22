@@ -3,7 +3,6 @@ using BenchmarkDotNet.Attributes;
 using NetFabric.Hyperlinq;
 using StructLinq;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace LinqBenchmarks.Range
 {

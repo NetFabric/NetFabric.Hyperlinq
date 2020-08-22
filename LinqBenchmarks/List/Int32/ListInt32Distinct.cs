@@ -89,7 +89,9 @@ namespace LinqBenchmarks.List.Int32
         public int StructLinq()
         {
             var sum = 0;
-            foreach (var item in source.ToStructEnumerable().Distinct(x => x))
+            foreach (var item in source
+                .ToStructEnumerable()
+                .Distinct())
                 sum += item;
             return sum;
         }
@@ -98,8 +100,10 @@ namespace LinqBenchmarks.List.Int32
         public int StructLinq_IFunction()
         {
             var sum = 0;
-            var comparer = new IntEqualityComparer();
-            foreach (var item in source.ToStructEnumerable().Distinct(comparer, x => x))
+            var comparer = new DefaultStructEqualityComparer();
+            foreach (var item in source
+                .ToStructEnumerable()
+                .Distinct(comparer, x=>x ))
                 sum += item;
             return sum;
         }

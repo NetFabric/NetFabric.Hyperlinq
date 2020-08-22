@@ -2,7 +2,6 @@
 using JM.LinqFaster;
 using NetFabric.Hyperlinq;
 using StructLinq;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -67,20 +66,30 @@ namespace LinqBenchmarks.Array.ValueType
         public FatValueType StructLinq()
         {
             var sum = default(FatValueType);
-            foreach (var item in System.Linq.Enumerable.Skip(source, Skip).Take(Count).ToStructEnumerable().Select(item => item * 2, x => x))
+            foreach (var item in source
+                .ToRefStructEnumerable()
+                .Skip((uint)Skip)
+                .Take(Count)
+                .Select((in FatValueType element) => element * 2))
                 sum += item;
             return sum;
         }
 
-        //[Benchmark]
-        //public FatValueType StructLinq_IFunction()
-        //{
-        //    var sum = default(FatValueType);
-        //    var selector = new DoubleOfFatValueType();
-        //    foreach (var item in System.Linq.Enumerable.Skip(source, Skip).Take(Count).ToStructEnumerable().Select(ref selector, x => x, x => x))
-        //        sum += item;
-        //    return sum;
-        //}
+
+        [Benchmark]
+        public FatValueType StructLinq_IFunction()
+        {
+            var sum = default(FatValueType);
+            var selector = new DoubleOfFatValueType();
+
+            foreach (var item in source
+                .ToRefStructEnumerable()
+                .Skip((uint)Skip, x=>x)
+                .Take(Count, x=>x)
+                .Select(ref selector, x=> x, x=>x))
+                sum += item;
+            return sum;
+        }
 
 #pragma warning disable HLQ010 // Consider using a 'for' loop instead.
         [Benchmark]

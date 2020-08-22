@@ -2,8 +2,6 @@
 using JM.LinqFaster;
 using NetFabric.Hyperlinq;
 using StructLinq;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace LinqBenchmarks.List.ValueType
 {
@@ -61,7 +59,9 @@ namespace LinqBenchmarks.List.ValueType
         public FatValueType StructLinq()
         {
             var sum = default(FatValueType);
-            foreach (var item in source.ToStructEnumerable().Select(item => item * 2, x => x))
+            foreach (var item in source
+                .ToRefStructEnumerable()
+                .Select((in FatValueType x) => x * 2))
                 sum += item;
             return sum;
         }
@@ -71,7 +71,9 @@ namespace LinqBenchmarks.List.ValueType
         {
             var sum = default(FatValueType);
             var selector = new DoubleOfFatValueType();
-            foreach (var item in source.ToRefStructEnumerable().Select(ref selector, x => x, x => x))
+            foreach (var item in source
+                .ToRefStructEnumerable()
+                .Select(ref selector, x => x, x => x))
                 sum += item;
             return sum;
         }

@@ -50,14 +50,22 @@ namespace LinqBenchmarks.List.Int32
 
         [Benchmark]
         public List<int> StructLinq()
-            => source.ToStructEnumerable().Where(item => item.IsEven(), x => x).Select(item => item * 2, x => x).ToList();
+            => source
+                .ToStructEnumerable()
+                .Where(item => item.IsEven())
+                .Select(item => item * 2)
+                .ToList();
 
         [Benchmark]
         public List<int> StructLinq_IFunction()
         {
             var predicate = new Int32IsEven();
             var selector = new DoubleOfInt32();
-            return source.ToStructEnumerable().Where(ref predicate, x => x).Select(ref selector, x => x, x => x).ToList();
+            return source
+                .ToStructEnumerable()
+                .Where(ref predicate, x => x)
+                .Select(ref selector, x => x, x => x)
+                .ToList(x=>x);
         }
 
         [Benchmark]
