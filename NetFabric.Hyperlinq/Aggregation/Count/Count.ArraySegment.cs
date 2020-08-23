@@ -11,7 +11,14 @@ namespace NetFabric.Hyperlinq
         public static int Count<TSource>(this in ArraySegment<TSource> source)
             => source.Count;
 
-        static unsafe int Count<TSource>(this in ArraySegment<TSource> source, Predicate<TSource> predicate)
+        [StructLayout(LayoutKind.Explicit)]
+        struct BoolInt32
+        {
+            [FieldOffset(0)] public bool Bool;
+            [FieldOffset(0)] public int Int32;
+        }
+
+        static int Count<TSource>(this in ArraySegment<TSource> source, Predicate<TSource> predicate)
         {
             var counter = 0;
             if (source.Any())
@@ -21,7 +28,7 @@ namespace NetFabric.Hyperlinq
                     foreach (var item in source.Array)
                     {
                         var result = predicate(item);
-                        counter += *(int*)&result;
+                        counter += new BoolInt32 { Bool = result }.Int32;
                     }
                 }
                 else
@@ -31,7 +38,7 @@ namespace NetFabric.Hyperlinq
                     for (var index = source.Offset; index <= end; index++)
                     {
                         var result = predicate(array![index]);
-                        counter += *(int*)&result;
+                        counter += new BoolInt32 { Bool = result }.Int32;
                     }
                 }
             }
