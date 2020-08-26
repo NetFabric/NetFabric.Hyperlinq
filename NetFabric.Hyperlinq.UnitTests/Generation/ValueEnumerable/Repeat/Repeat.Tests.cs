@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using Xunit;
 
-namespace NetFabric.Hyperlinq.UnitTests.Generation
+namespace NetFabric.Hyperlinq.UnitTests.Generation.ValueEnumerableTests
 {
     public class RepeatTests
     {
