@@ -62,13 +62,13 @@ namespace NetFabric.Hyperlinq
             [GeneratedCode("NetFabric.Hyperlinq.SourceGenerator", "1.0.0")]
             [DebuggerNonUserCode]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly NetFabric.Hyperlinq.ValueEnumerableExtensions.WhereEnumerable<NetFabric.Hyperlinq.ValueEnumerableExtensions.SelectAtEnumerable<TEnumerable, TEnumerator, TSource, TResult>,NetFabric.Hyperlinq.ValueEnumerableExtensions.SelectAtEnumerable<TEnumerable, TEnumerator, TSource, TResult>.Enumerator,TResult> Where(System.Predicate<TResult> predicate)
+            public readonly NetFabric.Hyperlinq.ValueEnumerableExtensions.WhereAtEnumerable<NetFabric.Hyperlinq.ValueEnumerableExtensions.SelectAtEnumerable<TEnumerable, TEnumerator, TSource, TResult>,NetFabric.Hyperlinq.ValueEnumerableExtensions.SelectAtEnumerable<TEnumerable, TEnumerator, TSource, TResult>.Enumerator,TResult> Where(NetFabric.Hyperlinq.PredicateAt<TResult> predicate)
             => NetFabric.Hyperlinq.ValueEnumerableExtensions.Where<NetFabric.Hyperlinq.ValueEnumerableExtensions.SelectAtEnumerable<TEnumerable, TEnumerator, TSource, TResult>,NetFabric.Hyperlinq.ValueEnumerableExtensions.SelectAtEnumerable<TEnumerable, TEnumerator, TSource, TResult>.Enumerator,TResult>(this,predicate);
 
             [GeneratedCode("NetFabric.Hyperlinq.SourceGenerator", "1.0.0")]
             [DebuggerNonUserCode]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly NetFabric.Hyperlinq.ValueEnumerableExtensions.WhereAtEnumerable<NetFabric.Hyperlinq.ValueEnumerableExtensions.SelectAtEnumerable<TEnumerable, TEnumerator, TSource, TResult>,NetFabric.Hyperlinq.ValueEnumerableExtensions.SelectAtEnumerable<TEnumerable, TEnumerator, TSource, TResult>.Enumerator,TResult> Where(NetFabric.Hyperlinq.PredicateAt<TResult> predicate)
+            public readonly NetFabric.Hyperlinq.ValueEnumerableExtensions.WhereEnumerable<NetFabric.Hyperlinq.ValueEnumerableExtensions.SelectAtEnumerable<TEnumerable, TEnumerator, TSource, TResult>,NetFabric.Hyperlinq.ValueEnumerableExtensions.SelectAtEnumerable<TEnumerable, TEnumerator, TSource, TResult>.Enumerator,TResult> Where(System.Predicate<TResult> predicate)
             => NetFabric.Hyperlinq.ValueEnumerableExtensions.Where<NetFabric.Hyperlinq.ValueEnumerableExtensions.SelectAtEnumerable<TEnumerable, TEnumerator, TSource, TResult>,NetFabric.Hyperlinq.ValueEnumerableExtensions.SelectAtEnumerable<TEnumerable, TEnumerator, TSource, TResult>.Enumerator,TResult>(this,predicate);
 
             [GeneratedCode("NetFabric.Hyperlinq.SourceGenerator", "1.0.0")]
@@ -86,12 +86,6 @@ namespace NetFabric.Hyperlinq
             [GeneratedCode("NetFabric.Hyperlinq.SourceGenerator", "1.0.0")]
             [DebuggerNonUserCode]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly NetFabric.Hyperlinq.ValueEnumerableExtensions.SelectEnumerable<NetFabric.Hyperlinq.ValueEnumerableExtensions.SelectAtEnumerable<TEnumerable, TEnumerator, TSource, TResult>,NetFabric.Hyperlinq.ValueEnumerableExtensions.SelectAtEnumerable<TEnumerable, TEnumerator, TSource, TResult>.Enumerator,TResult,TResult> Select(NetFabric.Hyperlinq.NullableSelector<TResult, TResult> selector)
-            => NetFabric.Hyperlinq.ValueEnumerableExtensions.Select<NetFabric.Hyperlinq.ValueEnumerableExtensions.SelectAtEnumerable<TEnumerable, TEnumerator, TSource, TResult>,NetFabric.Hyperlinq.ValueEnumerableExtensions.SelectAtEnumerable<TEnumerable, TEnumerator, TSource, TResult>.Enumerator,TResult,TResult>(this,selector);
-
-            [GeneratedCode("NetFabric.Hyperlinq.SourceGenerator", "1.0.0")]
-            [DebuggerNonUserCode]
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly NetFabric.Hyperlinq.ValueEnumerableExtensions.SelectAtEnumerable<NetFabric.Hyperlinq.ValueEnumerableExtensions.SelectAtEnumerable<TEnumerable, TEnumerator, TSource, TResult>,NetFabric.Hyperlinq.ValueEnumerableExtensions.SelectAtEnumerable<TEnumerable, TEnumerator, TSource, TResult>.Enumerator,TResult,TResult> Select(NetFabric.Hyperlinq.NullableSelectorAt<TResult, TResult> selector)
             => NetFabric.Hyperlinq.ValueEnumerableExtensions.Select<NetFabric.Hyperlinq.ValueEnumerableExtensions.SelectAtEnumerable<TEnumerable, TEnumerator, TSource, TResult>,NetFabric.Hyperlinq.ValueEnumerableExtensions.SelectAtEnumerable<TEnumerable, TEnumerator, TSource, TResult>.Enumerator,TResult,TResult>(this,selector);
 
@@ -102,6 +96,12 @@ namespace NetFabric.Hyperlinq
             where TSubEnumerable : NetFabric.Hyperlinq.IValueEnumerable<TResult, TSubEnumerator>
             where TSubEnumerator : struct,System.Collections.Generic.IEnumerator<TResult>
             => NetFabric.Hyperlinq.ValueEnumerableExtensions.SelectMany<NetFabric.Hyperlinq.ValueEnumerableExtensions.SelectAtEnumerable<TEnumerable, TEnumerator, TSource, TResult>,NetFabric.Hyperlinq.ValueEnumerableExtensions.SelectAtEnumerable<TEnumerable, TEnumerator, TSource, TResult>.Enumerator,TResult,TSubEnumerable,TSubEnumerator,TResult>(this,selector);
+
+            [GeneratedCode("NetFabric.Hyperlinq.SourceGenerator", "1.0.0")]
+            [DebuggerNonUserCode]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public readonly NetFabric.Hyperlinq.ValueEnumerableExtensions.SelectEnumerable<NetFabric.Hyperlinq.ValueEnumerableExtensions.SelectAtEnumerable<TEnumerable, TEnumerator, TSource, TResult>,NetFabric.Hyperlinq.ValueEnumerableExtensions.SelectAtEnumerable<TEnumerable, TEnumerator, TSource, TResult>.Enumerator,TResult,TResult> Select(NetFabric.Hyperlinq.NullableSelector<TResult, TResult> selector)
+            => NetFabric.Hyperlinq.ValueEnumerableExtensions.Select<NetFabric.Hyperlinq.ValueEnumerableExtensions.SelectAtEnumerable<TEnumerable, TEnumerator, TSource, TResult>,NetFabric.Hyperlinq.ValueEnumerableExtensions.SelectAtEnumerable<TEnumerable, TEnumerator, TSource, TResult>.Enumerator,TResult,TResult>(this,selector);
 
             [GeneratedCode("NetFabric.Hyperlinq.SourceGenerator", "1.0.0")]
             [DebuggerNonUserCode]

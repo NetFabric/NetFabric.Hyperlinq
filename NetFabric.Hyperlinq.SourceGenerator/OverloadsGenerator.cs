@@ -3,6 +3,7 @@ using Microsoft.CodeAnalysis.Text;
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -13,6 +14,14 @@ namespace NetFabric.Hyperlinq.SourceGenerator
     public class OverloadsGenerator: ISourceGenerator
     {
         const bool serializeSource = true;
+
+        static readonly DiagnosticDescriptor UnhandledExceptionError = new DiagnosticDescriptor(
+            id: "HPLG001",
+            title: "Unhandled exception while generating oveloads",
+            messageFormat: "Unhandled exception while generating oveloads: {0}",
+            category: "OverloadsGenerator",
+            DiagnosticSeverity.Error,
+            isEnabledByDefault: true);
 
         public void Initialize(InitializationContext context)
         {
@@ -34,8 +43,15 @@ namespace NetFabric.Hyperlinq.SourceGenerator
                 _ = Directory.CreateDirectory(generatedPath);
             }
 
-            var collectedExtensionMethods = CollectExtensionMethods(context);
-            GenerateSource(context, collectedExtensionMethods, generatedPath);
+            try
+            {
+                var collectedExtensionMethods = CollectExtensionMethods(context);
+                GenerateSource(context, collectedExtensionMethods, generatedPath);
+            }
+            catch(Exception ex)
+            {
+                context.ReportDiagnostic(Diagnostic.Create(UnhandledExceptionError, Location.None, ex.Message));
+            }
         }
 
         /// <summary>

@@ -11,20 +11,21 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class ValueEnumerable
     {
-        
+
         public static RangeEnumerable Range(int start, int count)
         {
-            if (count < 0) Throw.ArgumentOutOfRangeException(nameof(count));
+            if (count < 0)
+                Throw.ArgumentOutOfRangeException(nameof(count));
 
             var end = 0;
             try
             {
                 end = checked(start + count);
             }
-            catch(OverflowException)
+            catch (OverflowException)
             {
                 Throw.ArgumentOutOfRangeException(nameof(count));
-            }   
+            }
 
             return new RangeEnumerable(start, count, end);
         }
@@ -49,16 +50,16 @@ namespace NetFabric.Hyperlinq
 
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly Enumerator GetEnumerator() 
+            public readonly Enumerator GetEnumerator()
                 => new Enumerator(in this);
-            readonly DisposableEnumerator IValueEnumerable<int, DisposableEnumerator>.GetEnumerator() 
+            readonly DisposableEnumerator IValueEnumerable<int, DisposableEnumerator>.GetEnumerator()
                 => new DisposableEnumerator(in this);
-            readonly IEnumerator<int> IEnumerable<int>.GetEnumerator() 
+            readonly IEnumerator<int> IEnumerable<int>.GetEnumerator()
                 => new DisposableEnumerator(in this);
-            readonly IEnumerator IEnumerable.GetEnumerator() 
+            readonly IEnumerator IEnumerable.GetEnumerator()
                 => new DisposableEnumerator(in this);
 
-            bool ICollection<int>.IsReadOnly  
+            bool ICollection<int>.IsReadOnly
                 => true;
 
             public void CopyTo(Span<int> array)
@@ -125,13 +126,13 @@ namespace NetFabric.Hyperlinq
                 => value >= start && value < end;
 
             [ExcludeFromCodeCoverage]
-            void ICollection<int>.Add(int item) 
+            void ICollection<int>.Add(int item)
                 => Throw.NotSupportedException();
             [ExcludeFromCodeCoverage]
-            void ICollection<int>.Clear() 
+            void ICollection<int>.Clear()
                 => Throw.NotSupportedException();
             [ExcludeFromCodeCoverage]
-            bool ICollection<int>.Remove(int item) 
+            bool ICollection<int>.Remove(int item)
                 => Throw.NotSupportedException<bool>();
 
             [StructLayout(LayoutKind.Explicit)]
@@ -148,11 +149,14 @@ namespace NetFabric.Hyperlinq
                     pad = default;
                 }
 
-                public int Current 
-                    => current;
+                public int Current
+                {
+                    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                    get => current;
+                }
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                public bool MoveNext() 
+                public bool MoveNext()
                     => ++current <= end;
             }
 
@@ -171,17 +175,20 @@ namespace NetFabric.Hyperlinq
                     pad = default;
                 }
 
-                public int Current 
-                    => current;
+                public int Current
+                {
+                    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                    get => current;
+                }
                 object IEnumerator.Current
                     => current;
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                public bool MoveNext() 
+                public bool MoveNext()
                     => ++current <= end;
 
                 [ExcludeFromCodeCoverage]
-                public readonly void Reset() 
+                public readonly void Reset()
                     => Throw.NotSupportedException();
 
                 public readonly void Dispose() { }
@@ -238,4 +245,3 @@ namespace NetFabric.Hyperlinq
         }
     }
 }
-

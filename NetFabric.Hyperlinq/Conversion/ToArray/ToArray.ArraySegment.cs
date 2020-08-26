@@ -101,7 +101,7 @@ namespace NetFabric.Hyperlinq
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static IMemoryOwner<TResult> ToArray<TSource, TResult>(this in ArraySegment<TSource> source, NullableSelector<TSource, TResult> selector, MemoryPool<TResult> pool)
+        static IMemoryOwner<TResult> ToArray<TSource, TResult>(this in ArraySegment<TSource> source, NullableSelector<TSource, TResult> selector, MemoryPool<TResult> pool)
         {
             if (source.Count == 0)
                 return pool.Rent(0);
@@ -129,7 +129,7 @@ namespace NetFabric.Hyperlinq
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static IMemoryOwner<TResult> ToArray<TSource, TResult>(this in ArraySegment<TSource> source, NullableSelectorAt<TSource, TResult> selector, MemoryPool<TResult> pool)
+        static IMemoryOwner<TResult> ToArray<TSource, TResult>(this in ArraySegment<TSource> source, NullableSelectorAt<TSource, TResult> selector, MemoryPool<TResult> pool)
         {
             if (source.Count == 0)
                 return pool.Rent(0);

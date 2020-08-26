@@ -106,13 +106,13 @@ namespace NetFabric.Hyperlinq
             [GeneratedCode("NetFabric.Hyperlinq.SourceGenerator", "1.0.0")]
             [DebuggerNonUserCode]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.WhereEnumerable<NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.TakeEnumerable<TEnumerable, TEnumerator, TSource>,NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.TakeEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator,TSource> Where(NetFabric.Hyperlinq.AsyncPredicate<TSource> predicate)
+            public readonly NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.WhereAtEnumerable<NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.TakeEnumerable<TEnumerable, TEnumerator, TSource>,NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.TakeEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator,TSource> Where(NetFabric.Hyperlinq.AsyncPredicateAt<TSource> predicate)
             => NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.Where<NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.TakeEnumerable<TEnumerable, TEnumerator, TSource>,NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.TakeEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator,TSource>(this,predicate);
 
             [GeneratedCode("NetFabric.Hyperlinq.SourceGenerator", "1.0.0")]
             [DebuggerNonUserCode]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.WhereAtEnumerable<NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.TakeEnumerable<TEnumerable, TEnumerator, TSource>,NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.TakeEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator,TSource> Where(NetFabric.Hyperlinq.AsyncPredicateAt<TSource> predicate)
+            public readonly NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.WhereEnumerable<NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.TakeEnumerable<TEnumerable, TEnumerator, TSource>,NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.TakeEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator,TSource> Where(NetFabric.Hyperlinq.AsyncPredicate<TSource> predicate)
             => NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.Where<NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.TakeEnumerable<TEnumerable, TEnumerator, TSource>,NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.TakeEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator,TSource>(this,predicate);
 
             [GeneratedCode("NetFabric.Hyperlinq.SourceGenerator", "1.0.0")]
@@ -124,13 +124,13 @@ namespace NetFabric.Hyperlinq
             [GeneratedCode("NetFabric.Hyperlinq.SourceGenerator", "1.0.0")]
             [DebuggerNonUserCode]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SelectEnumerable<NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.TakeEnumerable<TEnumerable, TEnumerator, TSource>,NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.TakeEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator,TSource,TResult> Select<TResult>(NetFabric.Hyperlinq.AsyncSelector<TSource, TResult> selector)
+            public readonly NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SelectAtEnumerable<NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.TakeEnumerable<TEnumerable, TEnumerator, TSource>,NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.TakeEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator,TSource,TResult> Select<TResult>(NetFabric.Hyperlinq.AsyncSelectorAt<TSource, TResult> selector)
             => NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.Select<NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.TakeEnumerable<TEnumerable, TEnumerator, TSource>,NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.TakeEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator,TSource,TResult>(this,selector);
 
             [GeneratedCode("NetFabric.Hyperlinq.SourceGenerator", "1.0.0")]
             [DebuggerNonUserCode]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SelectAtEnumerable<NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.TakeEnumerable<TEnumerable, TEnumerator, TSource>,NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.TakeEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator,TSource,TResult> Select<TResult>(NetFabric.Hyperlinq.AsyncSelectorAt<TSource, TResult> selector)
+            public readonly NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SelectEnumerable<NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.TakeEnumerable<TEnumerable, TEnumerator, TSource>,NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.TakeEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator,TSource,TResult> Select<TResult>(NetFabric.Hyperlinq.AsyncSelector<TSource, TResult> selector)
             => NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.Select<NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.TakeEnumerable<TEnumerable, TEnumerator, TSource>,NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.TakeEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator,TSource,TResult>(this,selector);
 
             [GeneratedCode("NetFabric.Hyperlinq.SourceGenerator", "1.0.0")]

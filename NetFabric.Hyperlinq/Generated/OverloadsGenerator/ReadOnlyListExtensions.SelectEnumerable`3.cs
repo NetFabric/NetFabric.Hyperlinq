@@ -12,26 +12,8 @@ namespace NetFabric.Hyperlinq
             [GeneratedCode("NetFabric.Hyperlinq.SourceGenerator", "1.0.0")]
             [DebuggerNonUserCode]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly System.Buffers.IMemoryOwner<TResult> ToArray(NetFabric.Hyperlinq.NullableSelector<TResult, TResult> selector,int offset,int count,System.Buffers.MemoryPool<TResult> pool)
-            => NetFabric.Hyperlinq.ReadOnlyListExtensions.ToArray<NetFabric.Hyperlinq.ReadOnlyListExtensions.SelectEnumerable<TList, TSource, TResult>,TResult,TResult>(this,selector,offset,count,pool);
-
-            [GeneratedCode("NetFabric.Hyperlinq.SourceGenerator", "1.0.0")]
-            [DebuggerNonUserCode]
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly System.Buffers.IMemoryOwner<TResult> ToArray(NetFabric.Hyperlinq.NullableSelectorAt<TResult, TResult> selector,int offset,int count,System.Buffers.MemoryPool<TResult> pool)
-            => NetFabric.Hyperlinq.ReadOnlyListExtensions.ToArray<NetFabric.Hyperlinq.ReadOnlyListExtensions.SelectEnumerable<TList, TSource, TResult>,TResult,TResult>(this,selector,offset,count,pool);
-
-            [GeneratedCode("NetFabric.Hyperlinq.SourceGenerator", "1.0.0")]
-            [DebuggerNonUserCode]
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly NetFabric.Hyperlinq.Option<TResult> ElementAt(int index,NetFabric.Hyperlinq.NullableSelectorAt<TResult, TResult> selector,int offset,int count)
             => NetFabric.Hyperlinq.ReadOnlyListExtensions.ElementAt<NetFabric.Hyperlinq.ReadOnlyListExtensions.SelectEnumerable<TList, TSource, TResult>,TResult,TResult>(this,index,selector,offset,count);
-
-            [GeneratedCode("NetFabric.Hyperlinq.SourceGenerator", "1.0.0")]
-            [DebuggerNonUserCode]
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly NetFabric.Hyperlinq.ReadOnlyListExtensions.WhereEnumerable<NetFabric.Hyperlinq.ReadOnlyListExtensions.SelectEnumerable<TList, TSource, TResult>,TResult> Where(System.Predicate<TResult> predicate)
-            => NetFabric.Hyperlinq.ReadOnlyListExtensions.Where<NetFabric.Hyperlinq.ReadOnlyListExtensions.SelectEnumerable<TList, TSource, TResult>,TResult>(this,predicate);
 
             [GeneratedCode("NetFabric.Hyperlinq.SourceGenerator", "1.0.0")]
             [DebuggerNonUserCode]
@@ -42,8 +24,8 @@ namespace NetFabric.Hyperlinq
             [GeneratedCode("NetFabric.Hyperlinq.SourceGenerator", "1.0.0")]
             [DebuggerNonUserCode]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly NetFabric.Hyperlinq.ReadOnlyListExtensions.SelectEnumerable<NetFabric.Hyperlinq.ReadOnlyListExtensions.SelectEnumerable<TList, TSource, TResult>,TResult,TResult> Select(NetFabric.Hyperlinq.NullableSelector<TResult, TResult> selector)
-            => NetFabric.Hyperlinq.ReadOnlyListExtensions.Select<NetFabric.Hyperlinq.ReadOnlyListExtensions.SelectEnumerable<TList, TSource, TResult>,TResult,TResult>(this,selector);
+            public readonly NetFabric.Hyperlinq.ReadOnlyListExtensions.WhereEnumerable<NetFabric.Hyperlinq.ReadOnlyListExtensions.SelectEnumerable<TList, TSource, TResult>,TResult> Where(System.Predicate<TResult> predicate)
+            => NetFabric.Hyperlinq.ReadOnlyListExtensions.Where<NetFabric.Hyperlinq.ReadOnlyListExtensions.SelectEnumerable<TList, TSource, TResult>,TResult>(this,predicate);
 
             [GeneratedCode("NetFabric.Hyperlinq.SourceGenerator", "1.0.0")]
             [DebuggerNonUserCode]
@@ -58,6 +40,12 @@ namespace NetFabric.Hyperlinq
             where TSubEnumerable : NetFabric.Hyperlinq.IValueEnumerable<TResult, TSubEnumerator>
             where TSubEnumerator : struct,System.Collections.Generic.IEnumerator<TResult>
             => NetFabric.Hyperlinq.ReadOnlyListExtensions.SelectMany<NetFabric.Hyperlinq.ReadOnlyListExtensions.SelectEnumerable<TList, TSource, TResult>,TResult,TSubEnumerable,TSubEnumerator,TResult>(this,selector);
+
+            [GeneratedCode("NetFabric.Hyperlinq.SourceGenerator", "1.0.0")]
+            [DebuggerNonUserCode]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public readonly NetFabric.Hyperlinq.ReadOnlyListExtensions.SelectEnumerable<NetFabric.Hyperlinq.ReadOnlyListExtensions.SelectEnumerable<TList, TSource, TResult>,TResult,TResult> Select(NetFabric.Hyperlinq.NullableSelector<TResult, TResult> selector)
+            => NetFabric.Hyperlinq.ReadOnlyListExtensions.Select<NetFabric.Hyperlinq.ReadOnlyListExtensions.SelectEnumerable<TList, TSource, TResult>,TResult,TResult>(this,selector);
 
             [GeneratedCode("NetFabric.Hyperlinq.SourceGenerator", "1.0.0")]
             [DebuggerNonUserCode]
@@ -94,18 +82,6 @@ namespace NetFabric.Hyperlinq
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly NetFabric.Hyperlinq.ReadOnlyListExtensions.DistinctEnumerable<NetFabric.Hyperlinq.ReadOnlyListExtensions.SelectEnumerable<TList, TSource, TResult>,TResult> Distinct(System.Collections.Generic.IEqualityComparer<TResult>? comparer = default)
             => NetFabric.Hyperlinq.ReadOnlyListExtensions.Distinct<NetFabric.Hyperlinq.ReadOnlyListExtensions.SelectEnumerable<TList, TSource, TResult>,TResult>(this,comparer);
-
-            [GeneratedCode("NetFabric.Hyperlinq.SourceGenerator", "1.0.0")]
-            [DebuggerNonUserCode]
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly System.Buffers.IMemoryOwner<TResult> ToArray(NetFabric.Hyperlinq.NullableSelector<TResult, TResult> selector,System.Buffers.MemoryPool<TResult> pool)
-            => NetFabric.Hyperlinq.ValueReadOnlyCollectionExtensions.ToArray<NetFabric.Hyperlinq.ReadOnlyListExtensions.SelectEnumerable<TList, TSource, TResult>,NetFabric.Hyperlinq.ReadOnlyListExtensions.SelectEnumerable<TList, TSource, TResult>.DisposableEnumerator,TResult,TResult>(this,selector,pool);
-
-            [GeneratedCode("NetFabric.Hyperlinq.SourceGenerator", "1.0.0")]
-            [DebuggerNonUserCode]
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly System.Buffers.IMemoryOwner<TResult> ToArray(NetFabric.Hyperlinq.NullableSelectorAt<TResult, TResult> selector,System.Buffers.MemoryPool<TResult> pool)
-            => NetFabric.Hyperlinq.ValueReadOnlyCollectionExtensions.ToArray<NetFabric.Hyperlinq.ReadOnlyListExtensions.SelectEnumerable<TList, TSource, TResult>,NetFabric.Hyperlinq.ReadOnlyListExtensions.SelectEnumerable<TList, TSource, TResult>.DisposableEnumerator,TResult,TResult>(this,selector,pool);
 
             [GeneratedCode("NetFabric.Hyperlinq.SourceGenerator", "1.0.0")]
             [DebuggerNonUserCode]

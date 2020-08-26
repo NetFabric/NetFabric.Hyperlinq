@@ -12,18 +12,6 @@ namespace NetFabric.Hyperlinq
             [GeneratedCode("NetFabric.Hyperlinq.SourceGenerator", "1.0.0")]
             [DebuggerNonUserCode]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly System.Buffers.IMemoryOwner<TResult> ToArray<TResult>(NetFabric.Hyperlinq.NullableSelector<int, TResult> selector,System.Buffers.MemoryPool<TResult> pool)
-            => NetFabric.Hyperlinq.ValueReadOnlyCollectionExtensions.ToArray<NetFabric.Hyperlinq.ValueEnumerable.RangeEnumerable,NetFabric.Hyperlinq.ValueEnumerable.RangeEnumerable.DisposableEnumerator,int,TResult>(this,selector,pool);
-
-            [GeneratedCode("NetFabric.Hyperlinq.SourceGenerator", "1.0.0")]
-            [DebuggerNonUserCode]
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly System.Buffers.IMemoryOwner<TResult> ToArray<TResult>(NetFabric.Hyperlinq.NullableSelectorAt<int, TResult> selector,System.Buffers.MemoryPool<TResult> pool)
-            => NetFabric.Hyperlinq.ValueReadOnlyCollectionExtensions.ToArray<NetFabric.Hyperlinq.ValueEnumerable.RangeEnumerable,NetFabric.Hyperlinq.ValueEnumerable.RangeEnumerable.DisposableEnumerator,int,TResult>(this,selector,pool);
-
-            [GeneratedCode("NetFabric.Hyperlinq.SourceGenerator", "1.0.0")]
-            [DebuggerNonUserCode]
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly System.Collections.Generic.Dictionary<TKey, int> ToDictionary<TKey>(NetFabric.Hyperlinq.Selector<int, TKey> keySelector,System.Collections.Generic.IEqualityComparer<TKey>? comparer = default)
             where TKey : notnull
             => NetFabric.Hyperlinq.ValueReadOnlyCollectionExtensions.ToDictionary<NetFabric.Hyperlinq.ValueEnumerable.RangeEnumerable,NetFabric.Hyperlinq.ValueEnumerable.RangeEnumerable.DisposableEnumerator,int,TKey>(this,keySelector,comparer);
@@ -98,13 +86,13 @@ namespace NetFabric.Hyperlinq
             [GeneratedCode("NetFabric.Hyperlinq.SourceGenerator", "1.0.0")]
             [DebuggerNonUserCode]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly NetFabric.Hyperlinq.ValueReadOnlyCollectionExtensions.SelectEnumerable<NetFabric.Hyperlinq.ValueEnumerable.RangeEnumerable,NetFabric.Hyperlinq.ValueEnumerable.RangeEnumerable.DisposableEnumerator,int,TResult> Select<TResult>(NetFabric.Hyperlinq.NullableSelector<int, TResult> selector)
+            public readonly NetFabric.Hyperlinq.ValueReadOnlyCollectionExtensions.SelectAtEnumerable<NetFabric.Hyperlinq.ValueEnumerable.RangeEnumerable,NetFabric.Hyperlinq.ValueEnumerable.RangeEnumerable.DisposableEnumerator,int,TResult> Select<TResult>(NetFabric.Hyperlinq.NullableSelectorAt<int, TResult> selector)
             => NetFabric.Hyperlinq.ValueReadOnlyCollectionExtensions.Select<NetFabric.Hyperlinq.ValueEnumerable.RangeEnumerable,NetFabric.Hyperlinq.ValueEnumerable.RangeEnumerable.DisposableEnumerator,int,TResult>(this,selector);
 
             [GeneratedCode("NetFabric.Hyperlinq.SourceGenerator", "1.0.0")]
             [DebuggerNonUserCode]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly NetFabric.Hyperlinq.ValueReadOnlyCollectionExtensions.SelectAtEnumerable<NetFabric.Hyperlinq.ValueEnumerable.RangeEnumerable,NetFabric.Hyperlinq.ValueEnumerable.RangeEnumerable.DisposableEnumerator,int,TResult> Select<TResult>(NetFabric.Hyperlinq.NullableSelectorAt<int, TResult> selector)
+            public readonly NetFabric.Hyperlinq.ValueReadOnlyCollectionExtensions.SelectEnumerable<NetFabric.Hyperlinq.ValueEnumerable.RangeEnumerable,NetFabric.Hyperlinq.ValueEnumerable.RangeEnumerable.DisposableEnumerator,int,TResult> Select<TResult>(NetFabric.Hyperlinq.NullableSelector<int, TResult> selector)
             => NetFabric.Hyperlinq.ValueReadOnlyCollectionExtensions.Select<NetFabric.Hyperlinq.ValueEnumerable.RangeEnumerable,NetFabric.Hyperlinq.ValueEnumerable.RangeEnumerable.DisposableEnumerator,int,TResult>(this,selector);
 
             [GeneratedCode("NetFabric.Hyperlinq.SourceGenerator", "1.0.0")]
@@ -152,13 +140,13 @@ namespace NetFabric.Hyperlinq
             [GeneratedCode("NetFabric.Hyperlinq.SourceGenerator", "1.0.0")]
             [DebuggerNonUserCode]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly NetFabric.Hyperlinq.ValueEnumerableExtensions.WhereEnumerable<NetFabric.Hyperlinq.ValueEnumerable.RangeEnumerable,NetFabric.Hyperlinq.ValueEnumerable.RangeEnumerable.DisposableEnumerator,int> Where(System.Predicate<int> predicate)
+            public readonly NetFabric.Hyperlinq.ValueEnumerableExtensions.WhereAtEnumerable<NetFabric.Hyperlinq.ValueEnumerable.RangeEnumerable,NetFabric.Hyperlinq.ValueEnumerable.RangeEnumerable.DisposableEnumerator,int> Where(NetFabric.Hyperlinq.PredicateAt<int> predicate)
             => NetFabric.Hyperlinq.ValueEnumerableExtensions.Where<NetFabric.Hyperlinq.ValueEnumerable.RangeEnumerable,NetFabric.Hyperlinq.ValueEnumerable.RangeEnumerable.DisposableEnumerator,int>(this,predicate);
 
             [GeneratedCode("NetFabric.Hyperlinq.SourceGenerator", "1.0.0")]
             [DebuggerNonUserCode]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly NetFabric.Hyperlinq.ValueEnumerableExtensions.WhereAtEnumerable<NetFabric.Hyperlinq.ValueEnumerable.RangeEnumerable,NetFabric.Hyperlinq.ValueEnumerable.RangeEnumerable.DisposableEnumerator,int> Where(NetFabric.Hyperlinq.PredicateAt<int> predicate)
+            public readonly NetFabric.Hyperlinq.ValueEnumerableExtensions.WhereEnumerable<NetFabric.Hyperlinq.ValueEnumerable.RangeEnumerable,NetFabric.Hyperlinq.ValueEnumerable.RangeEnumerable.DisposableEnumerator,int> Where(System.Predicate<int> predicate)
             => NetFabric.Hyperlinq.ValueEnumerableExtensions.Where<NetFabric.Hyperlinq.ValueEnumerable.RangeEnumerable,NetFabric.Hyperlinq.ValueEnumerable.RangeEnumerable.DisposableEnumerator,int>(this,predicate);
 
             [GeneratedCode("NetFabric.Hyperlinq.SourceGenerator", "1.0.0")]
