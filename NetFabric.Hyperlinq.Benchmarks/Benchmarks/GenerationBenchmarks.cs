@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Configs;
 using StructLinq;
@@ -16,7 +18,17 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Linq_Range() 
         {
             var sum = 0;
-            foreach(var item in System.Linq.Enumerable.Range(0, Count))
+            foreach(var item in Enumerable.Range(0, Count))
+                sum += item;
+            return sum;
+        }
+
+        [BenchmarkCategory("Range_Async")]
+        [Benchmark(Baseline = true)]
+        public async ValueTask<int> Linq_Range_Async()
+        {
+            var sum = 0;
+            await foreach (var item in AsyncEnumerable.Range(0, Count))
                 sum += item;
             return sum;
         }
@@ -26,7 +38,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Linq_Repeat()
         {
             var sum = 0;
-            using (var enumerator = System.Linq.EnumerableEx.Repeat(1).GetEnumerator())
+            using (var enumerator = EnumerableEx.Repeat(1).GetEnumerator())
             {
                 for (var counter = Count; counter != 0; counter--)
                 {
@@ -42,7 +54,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Linq_Repeat_Count() 
         {
             var sum = 0;
-            foreach(var item in System.Linq.Enumerable.Repeat(1, Count))
+            foreach(var item in Enumerable.Repeat(1, Count))
                 sum += item;
             return sum;
         }
@@ -52,7 +64,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Linq_Return()
         {
             var sum = 0;
-            foreach (var item in System.Linq.EnumerableEx.Return(1))
+            foreach (var item in EnumerableEx.Return(1))
                 sum += item;
             return sum;
         }
@@ -62,7 +74,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Linq_Create() 
         {
             var sum = 0;
-            foreach(var item in System.Linq.EnumerableEx.Create(() => new Enumerator(1, Count)))
+            foreach(var item in EnumerableEx.Create(() => new Enumerator(1, Count)))
                 sum += item;
             return sum;
         }
@@ -89,7 +101,17 @@ namespace NetFabric.Hyperlinq.Benchmarks
             foreach (var item in ValueEnumerable.Range(0, Count))
                 sum += item;
             return sum;
-        }    
+        }
+
+        [BenchmarkCategory("Range_Async")]
+        [Benchmark]
+        public async ValueTask<int> Hyperlinq_Range_Async()
+        {
+            var sum = 0;
+            await foreach (var item in AsyncValueEnumerable.Range(0, Count))
+                sum += item;
+            return sum;
+        }
 
         [BenchmarkCategory("Repeat")]
         [Benchmark]

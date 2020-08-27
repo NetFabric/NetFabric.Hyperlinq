@@ -67,7 +67,7 @@ namespace NetFabric.Hyperlinq
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static IMemoryOwner<TResult> ToArray<TSource, TResult>(this ReadOnlySpan<TSource> source, NullableSelector<TSource, TResult> selector, MemoryPool<TResult> pool)
+        static IMemoryOwner<TResult> ToArray<TSource, TResult>(this ReadOnlySpan<TSource> source, NullableSelector<TSource, TResult> selector, MemoryPool<TResult> pool)
         {
             var result = pool.RentSliced(source.Length);
             ArrayExtensions.Copy(source, result.Memory.Span, selector);
@@ -89,7 +89,7 @@ namespace NetFabric.Hyperlinq
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static IMemoryOwner<TResult> ToArray<TSource, TResult>(this ReadOnlySpan<TSource> source, NullableSelectorAt<TSource, TResult> selector, MemoryPool<TResult> pool)
+        static IMemoryOwner<TResult> ToArray<TSource, TResult>(this ReadOnlySpan<TSource> source, NullableSelectorAt<TSource, TResult> selector, MemoryPool<TResult> pool)
         {
             var result = pool.RentSliced(source.Length);
             ArrayExtensions.Copy(source, result.Memory.Span, selector);

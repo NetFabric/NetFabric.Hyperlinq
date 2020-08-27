@@ -103,7 +103,7 @@ namespace NetFabric.Hyperlinq
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static IMemoryOwner<TResult> ToArray<TList, TSource, TResult>(this TList source, NullableSelector<TSource, TResult> selector, int offset, int count, MemoryPool<TResult> pool)
+        static IMemoryOwner<TResult> ToArray<TList, TSource, TResult>(this TList source, NullableSelector<TSource, TResult> selector, int offset, int count, MemoryPool<TResult> pool)
             where TList : notnull, IReadOnlyList<TSource>
         {
             Debug.Assert(pool is object);
@@ -130,7 +130,7 @@ namespace NetFabric.Hyperlinq
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static IMemoryOwner<TResult> ToArray<TList, TSource, TResult>(this TList source, NullableSelectorAt<TSource, TResult> selector, int offset, int count, MemoryPool<TResult> pool)
+        static IMemoryOwner<TResult> ToArray<TList, TSource, TResult>(this TList source, NullableSelectorAt<TSource, TResult> selector, int offset, int count, MemoryPool<TResult> pool)
             where TList : notnull, IReadOnlyList<TSource>
         {
             Debug.Assert(pool is object);

@@ -24,18 +24,6 @@ namespace NetFabric.Hyperlinq
             [GeneratedCode("NetFabric.Hyperlinq.SourceGenerator", "1.0.0")]
             [DebuggerNonUserCode]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly System.Buffers.IMemoryOwner<TResult> ToArray<TSource,TResult>(NetFabric.Hyperlinq.NullableSelector<TValue, TResult> selector,System.Buffers.MemoryPool<TResult> pool)
-            => NetFabric.Hyperlinq.ValueReadOnlyCollectionExtensions.ToArray<NetFabric.Hyperlinq.DictionaryValuesBindings.ValueWrapper<TKey, TValue>,System.Collections.Generic.Dictionary<TKey, TValue>.ValueCollection.Enumerator,TValue,TResult>(this,selector,pool);
-
-            [GeneratedCode("NetFabric.Hyperlinq.SourceGenerator", "1.0.0")]
-            [DebuggerNonUserCode]
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly System.Buffers.IMemoryOwner<TResult> ToArray<TSource,TResult>(NetFabric.Hyperlinq.NullableSelectorAt<TValue, TResult> selector,System.Buffers.MemoryPool<TResult> pool)
-            => NetFabric.Hyperlinq.ValueReadOnlyCollectionExtensions.ToArray<NetFabric.Hyperlinq.DictionaryValuesBindings.ValueWrapper<TKey, TValue>,System.Collections.Generic.Dictionary<TKey, TValue>.ValueCollection.Enumerator,TValue,TResult>(this,selector,pool);
-
-            [GeneratedCode("NetFabric.Hyperlinq.SourceGenerator", "1.0.0")]
-            [DebuggerNonUserCode]
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly System.Collections.Generic.Dictionary<TKey, TValue> ToDictionary<TSource>(NetFabric.Hyperlinq.Selector<TValue, TKey> keySelector,System.Collections.Generic.IEqualityComparer<TKey>? comparer = default)
             => NetFabric.Hyperlinq.ValueReadOnlyCollectionExtensions.ToDictionary<NetFabric.Hyperlinq.DictionaryValuesBindings.ValueWrapper<TKey, TValue>,System.Collections.Generic.Dictionary<TKey, TValue>.ValueCollection.Enumerator,TValue,TKey>(this,keySelector,comparer);
 
@@ -126,13 +114,13 @@ namespace NetFabric.Hyperlinq
             [GeneratedCode("NetFabric.Hyperlinq.SourceGenerator", "1.0.0")]
             [DebuggerNonUserCode]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly NetFabric.Hyperlinq.ValueReadOnlyCollectionExtensions.SelectEnumerable<NetFabric.Hyperlinq.DictionaryValuesBindings.ValueWrapper<TKey, TValue>,System.Collections.Generic.Dictionary<TKey, TValue>.ValueCollection.Enumerator,TValue,TResult> Select<TSource,TResult>(NetFabric.Hyperlinq.NullableSelector<TValue, TResult> selector)
+            public readonly NetFabric.Hyperlinq.ValueReadOnlyCollectionExtensions.SelectAtEnumerable<NetFabric.Hyperlinq.DictionaryValuesBindings.ValueWrapper<TKey, TValue>,System.Collections.Generic.Dictionary<TKey, TValue>.ValueCollection.Enumerator,TValue,TResult> Select<TSource,TResult>(NetFabric.Hyperlinq.NullableSelectorAt<TValue, TResult> selector)
             => NetFabric.Hyperlinq.ValueReadOnlyCollectionExtensions.Select<NetFabric.Hyperlinq.DictionaryValuesBindings.ValueWrapper<TKey, TValue>,System.Collections.Generic.Dictionary<TKey, TValue>.ValueCollection.Enumerator,TValue,TResult>(this,selector);
 
             [GeneratedCode("NetFabric.Hyperlinq.SourceGenerator", "1.0.0")]
             [DebuggerNonUserCode]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly NetFabric.Hyperlinq.ValueReadOnlyCollectionExtensions.SelectAtEnumerable<NetFabric.Hyperlinq.DictionaryValuesBindings.ValueWrapper<TKey, TValue>,System.Collections.Generic.Dictionary<TKey, TValue>.ValueCollection.Enumerator,TValue,TResult> Select<TSource,TResult>(NetFabric.Hyperlinq.NullableSelectorAt<TValue, TResult> selector)
+            public readonly NetFabric.Hyperlinq.ValueReadOnlyCollectionExtensions.SelectEnumerable<NetFabric.Hyperlinq.DictionaryValuesBindings.ValueWrapper<TKey, TValue>,System.Collections.Generic.Dictionary<TKey, TValue>.ValueCollection.Enumerator,TValue,TResult> Select<TSource,TResult>(NetFabric.Hyperlinq.NullableSelector<TValue, TResult> selector)
             => NetFabric.Hyperlinq.ValueReadOnlyCollectionExtensions.Select<NetFabric.Hyperlinq.DictionaryValuesBindings.ValueWrapper<TKey, TValue>,System.Collections.Generic.Dictionary<TKey, TValue>.ValueCollection.Enumerator,TValue,TResult>(this,selector);
 
             [GeneratedCode("NetFabric.Hyperlinq.SourceGenerator", "1.0.0")]
@@ -198,13 +186,13 @@ namespace NetFabric.Hyperlinq
             [GeneratedCode("NetFabric.Hyperlinq.SourceGenerator", "1.0.0")]
             [DebuggerNonUserCode]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly NetFabric.Hyperlinq.ValueEnumerableExtensions.WhereEnumerable<NetFabric.Hyperlinq.DictionaryValuesBindings.ValueWrapper<TKey, TValue>,System.Collections.Generic.Dictionary<TKey, TValue>.ValueCollection.Enumerator,TValue> Where<TSource>(System.Predicate<TValue> predicate)
+            public readonly NetFabric.Hyperlinq.ValueEnumerableExtensions.WhereAtEnumerable<NetFabric.Hyperlinq.DictionaryValuesBindings.ValueWrapper<TKey, TValue>,System.Collections.Generic.Dictionary<TKey, TValue>.ValueCollection.Enumerator,TValue> Where<TSource>(NetFabric.Hyperlinq.PredicateAt<TValue> predicate)
             => NetFabric.Hyperlinq.ValueEnumerableExtensions.Where<NetFabric.Hyperlinq.DictionaryValuesBindings.ValueWrapper<TKey, TValue>,System.Collections.Generic.Dictionary<TKey, TValue>.ValueCollection.Enumerator,TValue>(this,predicate);
 
             [GeneratedCode("NetFabric.Hyperlinq.SourceGenerator", "1.0.0")]
             [DebuggerNonUserCode]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly NetFabric.Hyperlinq.ValueEnumerableExtensions.WhereAtEnumerable<NetFabric.Hyperlinq.DictionaryValuesBindings.ValueWrapper<TKey, TValue>,System.Collections.Generic.Dictionary<TKey, TValue>.ValueCollection.Enumerator,TValue> Where<TSource>(NetFabric.Hyperlinq.PredicateAt<TValue> predicate)
+            public readonly NetFabric.Hyperlinq.ValueEnumerableExtensions.WhereEnumerable<NetFabric.Hyperlinq.DictionaryValuesBindings.ValueWrapper<TKey, TValue>,System.Collections.Generic.Dictionary<TKey, TValue>.ValueCollection.Enumerator,TValue> Where<TSource>(System.Predicate<TValue> predicate)
             => NetFabric.Hyperlinq.ValueEnumerableExtensions.Where<NetFabric.Hyperlinq.DictionaryValuesBindings.ValueWrapper<TKey, TValue>,System.Collections.Generic.Dictionary<TKey, TValue>.ValueCollection.Enumerator,TValue>(this,predicate);
 
             [GeneratedCode("NetFabric.Hyperlinq.SourceGenerator", "1.0.0")]

@@ -41,7 +41,7 @@ namespace NetFabric.Hyperlinq
             => ToArray(source.Span, selector);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static IMemoryOwner<TResult> ToArray<TSource, TResult>(this ReadOnlyMemory<TSource> source, NullableSelector<TSource, TResult> selector, MemoryPool<TResult> pool)
+        static IMemoryOwner<TResult> ToArray<TSource, TResult>(this ReadOnlyMemory<TSource> source, NullableSelector<TSource, TResult> selector, MemoryPool<TResult> pool)
             => ToArray(source.Span, selector, pool);
 
         //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -51,7 +51,7 @@ namespace NetFabric.Hyperlinq
             => ToArray(source.Span, selector);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static IMemoryOwner<TResult> ToArray<TSource, TResult>(this ReadOnlyMemory<TSource> source, NullableSelectorAt<TSource, TResult> selector, MemoryPool<TResult> pool)
+        static IMemoryOwner<TResult> ToArray<TSource, TResult>(this ReadOnlyMemory<TSource> source, NullableSelectorAt<TSource, TResult> selector, MemoryPool<TResult> pool)
             => ToArray(source.Span, selector, pool);
 
         //////////////////////////////////////////////////////////////////////////////////////////////////

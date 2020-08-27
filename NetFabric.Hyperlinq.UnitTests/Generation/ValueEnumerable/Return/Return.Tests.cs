@@ -2,7 +2,7 @@ using NetFabric.Assertive;
 using System;
 using Xunit;
 
-namespace NetFabric.Hyperlinq.UnitTests.Generation
+namespace NetFabric.Hyperlinq.UnitTests.Generation.ValueEnumerableTests
 {
     public class ReturnTests
     {
