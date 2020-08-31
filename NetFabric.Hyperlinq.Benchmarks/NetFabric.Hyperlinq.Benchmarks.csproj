@@ -17,7 +17,7 @@
 
   <ItemGroup>
     <PackageReference Include="BenchmarkDotNet" Version="0.12.1" />
-    <PackageReference Include="StructLinq.BCL" Version="0.19.2" />
+    <PackageReference Include="StructLinq.BCL" Version="0.19.3" />
     <PackageReference Include="System.Interactive" Version="4.1.1" />
     <PackageReference Include="System.Interactive.Async" Version="4.1.1" />
     <PackageReference Include="System.Linq.Async" Version="4.1.1" />
