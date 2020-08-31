@@ -82,7 +82,7 @@ namespace NetFabric.Hyperlinq
                     => default;
 
                 public readonly bool MoveNext() 
-                    => false;
+                    => default;
             }
 
             public readonly struct DisposableEnumerator
@@ -99,7 +99,7 @@ namespace NetFabric.Hyperlinq
                     => default;
 
                 public readonly bool MoveNext()
-                    => false;
+                    => default;
 
                 [ExcludeFromCodeCoverage]
                 public readonly void Reset() { }

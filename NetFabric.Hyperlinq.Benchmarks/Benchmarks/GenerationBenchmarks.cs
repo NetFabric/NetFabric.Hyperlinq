@@ -13,6 +13,26 @@ namespace NetFabric.Hyperlinq.Benchmarks
     [CategoriesColumn]
     public class GenerationOperationsBenchmarks : CountBenchmarksBase
     {
+        [BenchmarkCategory("Empty")]
+        [Benchmark(Baseline = true)]
+        public int Linq_Empty()
+        {
+            var sum = 0;
+            foreach (var item in Enumerable.Empty<int>())
+                sum += item;
+            return sum;
+        }
+
+        [BenchmarkCategory("Empty_Async")]
+        [Benchmark(Baseline = true)]
+        public async ValueTask<int> Linq_Empty_Async()
+        {
+            var sum = 0;
+            await foreach (var item in AsyncEnumerable.Empty<int>())
+                sum += item;
+            return sum;
+        }
+
         [BenchmarkCategory("Range")]
         [Benchmark(Baseline = true)]
         public int Linq_Range() 
@@ -49,7 +69,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
             return sum;
         }
 
-        [BenchmarkCategory("Repeat")]
+        [BenchmarkCategory("Repeat_Count")]
         [Benchmark(Baseline = true)]
         public int Linq_Repeat_Count() 
         {
@@ -83,7 +103,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
 
         [BenchmarkCategory("Range")]
         [Benchmark]
-        public int StructLinq()
+        public int StructLinq_Range()
         {
             var sum = 0;
             foreach (var item in StructEnumerable.Range(0, Count))
@@ -92,6 +112,26 @@ namespace NetFabric.Hyperlinq.Benchmarks
         }
 
         // ---------------------------------------------------------------------
+
+        [BenchmarkCategory("Empty")]
+        [Benchmark]
+        public int Hyperlinq_Empty()
+        {
+            var sum = 0;
+            foreach (var item in ValueEnumerable.Empty<int>())
+                sum += item;
+            return sum;
+        }
+
+        [BenchmarkCategory("Empty_Async")]
+        [Benchmark]
+        public async ValueTask<int> Hyperlinq_Empty_Async()
+        {
+            var sum = 0;
+            await foreach (var item in AsyncValueEnumerable.Empty<int>())
+                sum += item;
+            return sum;
+        }
 
         [BenchmarkCategory("Range")]
         [Benchmark]
@@ -113,9 +153,23 @@ namespace NetFabric.Hyperlinq.Benchmarks
             return sum;
         }
 
-        [BenchmarkCategory("Repeat")]
+        //[BenchmarkCategory("Repeat")]
+        //[Benchmark]
+        //public int Hyperlinq_Repeat()
+        //{
+        //    var sum = 0;
+        //    var enumerator = ValueEnumerable.Repeat(1).GetEnumerator();
+        //    for (var counter = Count; counter != 0; counter--)
+        //    {
+        //        _ = enumerator.MoveNext();
+        //        sum += enumerator.Current;
+        //    }
+        //    return sum;
+        //}
+
+        [BenchmarkCategory("Repeat_Count")]
         [Benchmark]
-        public int Hyperlinq_Repeat() 
+        public int Hyperlinq_Repeat_Count() 
         {
             var sum = 0;
             foreach(var item in ValueEnumerable.Repeat(1, Count))
