@@ -89,6 +89,16 @@ namespace NetFabric.Hyperlinq.Benchmarks
             return sum;
         }
 
+        [BenchmarkCategory("Return_Async")]
+        [Benchmark(Baseline = true)]
+        public async ValueTask<int> Linq_Return_Async()
+        {
+            var sum = 0;
+            await foreach (var item in AsyncEnumerableEx.Return(1))
+                sum += item;
+            return sum;
+        }
+
         [BenchmarkCategory("Create")]
         [Benchmark(Baseline = true)]
         public int Linq_Create() 
@@ -188,6 +198,16 @@ namespace NetFabric.Hyperlinq.Benchmarks
             return sum;
         }
 #pragma warning restore HLQ010 // Consider using a 'for' loop instead.
+
+        [BenchmarkCategory("Return_Async")]
+        [Benchmark]
+        public async ValueTask<int> Hyperlinq_Return_Async()
+        {
+            var sum = 0;
+            await foreach (var item in AsyncValueEnumerable.Return(1))
+                sum += item;
+            return sum;
+        }
 
         [BenchmarkCategory("Create")]
         [Benchmark]
