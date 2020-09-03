@@ -107,12 +107,9 @@ namespace NetFabric.Hyperlinq
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public bool MoveNext()
                 {
-                    if (moveNext)
-                    {
-                        moveNext = false;
-                        return true;
-                    }
-                    return false;
+                    var previous = moveNext;
+                    moveNext = false;
+                    return previous;
                 }
             }
 
@@ -138,17 +135,14 @@ namespace NetFabric.Hyperlinq
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public bool MoveNext()
                 {
-                    if (moveNext)
-                    {
-                        moveNext = false;
-                        return true;
-                    }
-                    return false;
+                    var previous = moveNext;
+                    moveNext = false;
+                    return previous;
                 }
 
                 [ExcludeFromCodeCoverage]
-                public readonly void Reset() 
-                    => Throw.NotSupportedException();
+                public void Reset() 
+                    => moveNext = true;
 
                 public readonly void Dispose() { }
             }
