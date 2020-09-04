@@ -126,7 +126,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Generation.AsyncValueEnumerableTests
             var expected = Enumerable.ToList(Enumerable.Range(start, count));
 
             // Act
-            var result = AsyncValueEnumerable.Range(start, count).ToListAsync();
+            var result = await AsyncValueEnumerable.Range(start, count).ToListAsync();
 
             // Assert
             _ = result.Must()
