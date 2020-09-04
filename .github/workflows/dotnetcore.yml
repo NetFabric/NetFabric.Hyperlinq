@@ -16,7 +16,7 @@ jobs:
     - name: Build solution
       run: dotnet build
     - name: Tests and coverage
-      run: dotnet test ./NetFabric.Hyperlinq.UnitTests/NetFabric.Hyperlinq.UnitTests.csproj -p:CollectCoverage=true -p:CoverletOutputFormat=lcov -p:CoverletOutput=TestResults/ /p:ExcludeByAttribute="GeneratedCodeAttribute" /p:ExcludeByFile="../NetFabric.Hyperlinq.Interfaces/*.cs"
+      run: dotnet test ./NetFabric.Hyperlinq.UnitTests/NetFabric.Hyperlinq.UnitTests.csproj -f:net5.0 -p:CollectCoverage=true -p:CoverletOutputFormat=lcov -p:CoverletOutput=TestResults/ /p:ExcludeByAttribute="GeneratedCodeAttribute" /p:ExcludeByFile="../NetFabric.Hyperlinq.Interfaces/*.cs"
     - name: Publish coverage report to coveralls.io
       uses: coverallsapp/github-action@master
       with:
