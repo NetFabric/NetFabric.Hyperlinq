@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 
@@ -32,12 +33,6 @@ namespace NetFabric.Hyperlinq
         
         public static bool Any<TSource>(this ImmutableHashSet<TSource> source)
             => source.Count != 0;
-        
-        public static bool Any<TSource>(this ImmutableHashSet<TSource> source, Predicate<TSource> predicate)
-            => ValueReadOnlyCollectionExtensions.Any<ValueWrapper<TSource>, ImmutableHashSet<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
-        
-        public static bool Any<TSource>(this ImmutableHashSet<TSource> source, PredicateAt<TSource> predicate)
-            => ValueReadOnlyCollectionExtensions.Any<ValueWrapper<TSource>, ImmutableHashSet<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
 
         
         public static bool Contains<TSource>(this ImmutableHashSet<TSource> source, [AllowNull] TSource value)
@@ -66,12 +61,12 @@ namespace NetFabric.Hyperlinq
             => ValueEnumerableExtensions.SelectMany<ValueWrapper<TSource>, ImmutableHashSet<TSource>.Enumerator, TSource, TSubEnumerable, TSubEnumerator, TResult>(new ValueWrapper<TSource>(source), selector);
 
         
-        public static ValueEnumerableExtensions.WhereEnumerable<ValueWrapper<TSource>, ImmutableHashSet<TSource>.Enumerator, TSource> Where<TSource>(
+        public static ValueEnumerableExtensions.WhereEnumerable<ValueWrapper<TSource>, ImmutableHashSet<TSource>.Enumerator, TSource, ValuePredicate<TSource>> Where<TSource>(
             this ImmutableHashSet<TSource> source,
             Predicate<TSource> predicate)
             => ValueEnumerableExtensions.Where<ValueWrapper<TSource>, ImmutableHashSet<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
         
-        public static ValueEnumerableExtensions.WhereAtEnumerable<ValueWrapper<TSource>, ImmutableHashSet<TSource>.Enumerator, TSource> Where<TSource>(
+        public static ValueEnumerableExtensions.WhereAtEnumerable<ValueWrapper<TSource>, ImmutableHashSet<TSource>.Enumerator, TSource, ValuePredicateAt<TSource>> Where<TSource>(
             this ImmutableHashSet<TSource> source,
             PredicateAt<TSource> predicate)
             => ValueEnumerableExtensions.Where<ValueWrapper<TSource>, ImmutableHashSet<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);

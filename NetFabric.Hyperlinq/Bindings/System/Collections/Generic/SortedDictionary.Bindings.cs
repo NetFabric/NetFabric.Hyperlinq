@@ -36,14 +36,6 @@ namespace NetFabric.Hyperlinq
         public static bool Any<TKey, TValue>(this SortedDictionary<TKey, TValue> source)
             where TKey : notnull
             => source.Count != 0;
-        
-        public static bool Any<TKey, TValue>(this SortedDictionary<TKey, TValue> source, Predicate<KeyValuePair<TKey, TValue>> predicate)
-            where TKey : notnull
-            => ValueReadOnlyCollectionExtensions.Any<ValueWrapper<TKey, TValue>, SortedDictionary<TKey, TValue>.Enumerator, KeyValuePair<TKey, TValue>>(new ValueWrapper<TKey, TValue>(source), predicate);
-        
-        public static bool Any<TKey, TValue>(this SortedDictionary<TKey, TValue> source, PredicateAt<KeyValuePair<TKey, TValue>> predicate)
-            where TKey : notnull
-            => ValueReadOnlyCollectionExtensions.Any<ValueWrapper<TKey, TValue>, SortedDictionary<TKey, TValue>.Enumerator, KeyValuePair<TKey, TValue>>(new ValueWrapper<TKey, TValue>(source), predicate);
 
         
         public static bool Contains<TKey, TValue>(this SortedDictionary<TKey, TValue> source, KeyValuePair<TKey, TValue> value)
@@ -78,13 +70,13 @@ namespace NetFabric.Hyperlinq
             => ValueEnumerableExtensions.SelectMany<ValueWrapper<TKey, TValue>, SortedDictionary<TKey, TValue>.Enumerator, KeyValuePair<TKey, TValue>, TSubEnumerable, TSubEnumerator, TResult>(new ValueWrapper<TKey, TValue>(source), selector);
 
         
-        public static ValueEnumerableExtensions.WhereEnumerable<ValueWrapper<TKey, TValue>, SortedDictionary<TKey, TValue>.Enumerator, KeyValuePair<TKey, TValue>> Where<TKey, TValue>(
+        public static ValueEnumerableExtensions.WhereEnumerable<ValueWrapper<TKey, TValue>, SortedDictionary<TKey, TValue>.Enumerator, KeyValuePair<TKey, TValue>, ValuePredicate<KeyValuePair<TKey, TValue>>> Where<TKey, TValue>(
             this SortedDictionary<TKey, TValue> source,
             Predicate<KeyValuePair<TKey, TValue>> predicate)
             where TKey : notnull
             => ValueEnumerableExtensions.Where<ValueWrapper<TKey, TValue>, SortedDictionary<TKey, TValue>.Enumerator, KeyValuePair<TKey, TValue>>(new ValueWrapper<TKey, TValue>(source), predicate);
         
-        public static ValueEnumerableExtensions.WhereAtEnumerable<ValueWrapper<TKey, TValue>, SortedDictionary<TKey, TValue>.Enumerator, KeyValuePair<TKey, TValue>> Where<TKey, TValue>(
+        public static ValueEnumerableExtensions.WhereAtEnumerable<ValueWrapper<TKey, TValue>, SortedDictionary<TKey, TValue>.Enumerator, KeyValuePair<TKey, TValue>, ValuePredicateAt<KeyValuePair<TKey, TValue>>> Where<TKey, TValue>(
             this SortedDictionary<TKey, TValue> source,
             PredicateAt<KeyValuePair<TKey, TValue>> predicate)
             where TKey : notnull

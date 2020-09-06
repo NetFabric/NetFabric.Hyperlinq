@@ -30,12 +30,6 @@ namespace NetFabric.Hyperlinq
         
         public static bool Any<TSource>(this Queue<TSource> source)
             => source.Count != 0;
-        
-        public static bool Any<TSource>(this Queue<TSource> source, Predicate<TSource> predicate)
-            => ValueReadOnlyCollectionExtensions.Any<ValueWrapper<TSource>, Queue<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
-        
-        public static bool Any<TSource>(this Queue<TSource> source, PredicateAt<TSource> predicate)
-            => ValueReadOnlyCollectionExtensions.Any<ValueWrapper<TSource>, Queue<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
 
         
         public static bool Contains<TSource>(this Queue<TSource> source, [AllowNull] TSource value)
@@ -65,12 +59,12 @@ namespace NetFabric.Hyperlinq
             => ValueEnumerableExtensions.SelectMany<ValueWrapper<TSource>, Queue<TSource>.Enumerator, TSource, TSubEnumerable, TSubEnumerator, TResult>(new ValueWrapper<TSource>(source), selector);
 
         
-        public static ValueEnumerableExtensions.WhereEnumerable<ValueWrapper<TSource>, Queue<TSource>.Enumerator, TSource> Where<TSource>(
+        public static ValueEnumerableExtensions.WhereEnumerable<ValueWrapper<TSource>, Queue<TSource>.Enumerator, TSource, ValuePredicate<TSource>> Where<TSource>(
             this Queue<TSource> source,
             Predicate<TSource> predicate)
             => ValueEnumerableExtensions.Where<ValueWrapper<TSource>, Queue<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
         
-        public static ValueEnumerableExtensions.WhereAtEnumerable<ValueWrapper<TSource>, Queue<TSource>.Enumerator, TSource> Where<TSource>(
+        public static ValueEnumerableExtensions.WhereAtEnumerable<ValueWrapper<TSource>, Queue<TSource>.Enumerator, TSource, ValuePredicateAt<TSource>> Where<TSource>(
             this Queue<TSource> source,
             PredicateAt<TSource> predicate)
             => ValueEnumerableExtensions.Where<ValueWrapper<TSource>, Queue<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);

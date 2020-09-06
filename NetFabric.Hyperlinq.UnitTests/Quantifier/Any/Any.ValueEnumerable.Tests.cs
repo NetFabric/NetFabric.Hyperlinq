@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using NetFabric.Assertive;
 using Xunit;
 
@@ -16,8 +17,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Any
         {
             // Arrange
             var wrapped = Wrap.AsValueEnumerable(source);
-            var expected = 
-                System.Linq.Enumerable.Any(source);
+            var expected = Enumerable
+                .Any(source);
 
             // Act
             var result = ValueEnumerableExtensions
@@ -37,8 +38,9 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Any
             var predicate = (Predicate<int>)null;
 
             // Act
-            Action action = () => _ = 
-                ValueEnumerableExtensions.Any<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
+            Action action = () => _ = ValueEnumerableExtensions
+                .Where<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(wrapped, predicate)
+                .Any();
 
             // Assert
             _ = action.Must()
@@ -54,12 +56,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Any
         {
             // Arrange
             var wrapped = Wrap.AsValueEnumerable(source);
-            var expected = 
-                System.Linq.Enumerable.Any(source, predicate.AsFunc());
+            var expected = Enumerable
+                .Any(source, predicate.AsFunc());
 
             // Act
             var result = ValueEnumerableExtensions
-                .Any<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
+                .Where<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(wrapped, predicate)
+                .Any();
 
             // Assert
             _ = result.Must()
@@ -76,7 +79,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Any
 
             // Act
             Action action = () => _ = ValueEnumerableExtensions
-                .Any<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
+                .Where<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(wrapped, predicate)
+                .Any();
 
             // Assert
             _ = action.Must()
@@ -92,13 +96,14 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Any
         {
             // Arrange
             var wrapped = Wrap.AsValueEnumerable(source);
-            var expected = 
-                System.Linq.Enumerable.Count(
-                    System.Linq.Enumerable.Where(source, predicate.AsFunc())) != 0;
+            var expected = Enumerable   
+                .Where(source, predicate.AsFunc())
+                .Count() != 0;
 
             // Act
             var result = ValueEnumerableExtensions
-                .Any<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
+                .Where<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(wrapped, predicate)
+                .Any();
 
             // Assert
             _ = result.Must()

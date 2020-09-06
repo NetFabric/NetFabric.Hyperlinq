@@ -17,7 +17,7 @@ namespace NetFabric.Hyperlinq
             Debug.Assert(arrayPool is object);
 
             var builder = new LargeArrayBuilder<TSource>(arrayPool);
-            var enumerator = source.GetAsyncEnumerator();
+            var enumerator = source.GetAsyncEnumerator(cancellationToken);
             await using (enumerator.ConfigureAwait(false))
             {
                 while (await enumerator.MoveNextAsync().ConfigureAwait(false))
@@ -29,14 +29,15 @@ namespace NetFabric.Hyperlinq
             return builder;
         }
 
-        static async ValueTask<LargeArrayBuilder<TSource>> ToArrayBuilderAsync<TEnumerable, TEnumerator, TSource>(TEnumerable source, AsyncPredicate<TSource> predicate, ArrayPool<TSource> arrayPool, CancellationToken cancellationToken)
+        static async ValueTask<LargeArrayBuilder<TSource>> ToArrayBuilderAsync<TEnumerable, TEnumerator, TSource, TPredicate>(TEnumerable source, TPredicate predicate, ArrayPool<TSource> arrayPool, CancellationToken cancellationToken)
             where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
+            where TPredicate : struct, IAsyncPredicate<TSource>
         {
             Debug.Assert(arrayPool is object);
 
             var builder = new LargeArrayBuilder<TSource>(arrayPool);
-            var enumerator = source.GetAsyncEnumerator();
+            var enumerator = source.GetAsyncEnumerator(cancellationToken);
             await using (enumerator.ConfigureAwait(false))
             {
                 while (await enumerator.MoveNextAsync().ConfigureAwait(false))
@@ -44,21 +45,22 @@ namespace NetFabric.Hyperlinq
                     cancellationToken.ThrowIfCancellationRequested();
 
                     var item = enumerator.Current;
-                    if (await predicate(item, cancellationToken).ConfigureAwait(false))
+                    if (await predicate.InvokeAsync(item, cancellationToken).ConfigureAwait(false))
                         builder.Add(item);
                 }
             }
             return builder;
         }
 
-        static async ValueTask<LargeArrayBuilder<TSource>> ToArrayBuilderAsync<TEnumerable, TEnumerator, TSource>(TEnumerable source, AsyncPredicateAt<TSource> predicate, ArrayPool<TSource> arrayPool, CancellationToken cancellationToken)
+        static async ValueTask<LargeArrayBuilder<TSource>> ToArrayBuilderAtAsync<TEnumerable, TEnumerator, TSource, TPredicate>(TEnumerable source, TPredicate predicate, ArrayPool<TSource> arrayPool, CancellationToken cancellationToken)
             where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
+            where TPredicate : struct, IAsyncPredicateAt<TSource>
         {
             Debug.Assert(arrayPool is object);
 
             var builder = new LargeArrayBuilder<TSource>(arrayPool);
-            var enumerator = source.GetAsyncEnumerator();
+            var enumerator = source.GetAsyncEnumerator(cancellationToken);
             await using (enumerator.ConfigureAwait(false))
             {
                 checked
@@ -68,7 +70,7 @@ namespace NetFabric.Hyperlinq
                         cancellationToken.ThrowIfCancellationRequested();
 
                         var item = enumerator.Current;
-                        if (await predicate(item, index, cancellationToken).ConfigureAwait(false))
+                        if (await predicate.InvokeAsync(item, index, cancellationToken).ConfigureAwait(false))
                             builder.Add(item);
                     }
                 }
@@ -83,7 +85,7 @@ namespace NetFabric.Hyperlinq
             Debug.Assert(arrayPool is object);
 
             var builder = new LargeArrayBuilder<TResult>(arrayPool);
-            var enumerator = source.GetAsyncEnumerator();
+            var enumerator = source.GetAsyncEnumerator(cancellationToken);
             await using (enumerator.ConfigureAwait(false))
             {
                 while (await enumerator.MoveNextAsync().ConfigureAwait(false))
@@ -103,7 +105,7 @@ namespace NetFabric.Hyperlinq
             Debug.Assert(arrayPool is object);
 
             var builder = new LargeArrayBuilder<TResult>(arrayPool);
-            var enumerator = source.GetAsyncEnumerator();
+            var enumerator = source.GetAsyncEnumerator(cancellationToken);
             await using (enumerator.ConfigureAwait(false))
             {
                 checked
@@ -119,14 +121,15 @@ namespace NetFabric.Hyperlinq
             return builder;
         }
 
-        static async ValueTask<LargeArrayBuilder<TResult>> ToArrayBuilderAsync<TEnumerable, TEnumerator, TSource, TResult>(TEnumerable source, AsyncPredicate<TSource> predicate, AsyncSelector<TSource, TResult> selector, ArrayPool<TResult> arrayPool, CancellationToken cancellationToken)
+        static async ValueTask<LargeArrayBuilder<TResult>> ToArrayBuilderAsync<TEnumerable, TEnumerator, TSource, TResult, TPredicate>(TEnumerable source, TPredicate predicate, AsyncSelector<TSource, TResult> selector, ArrayPool<TResult> arrayPool, CancellationToken cancellationToken)
             where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
+            where TPredicate : struct, IAsyncPredicate<TSource>
         {
             Debug.Assert(arrayPool is object);
 
             var builder = new LargeArrayBuilder<TResult>(arrayPool);
-            var enumerator = source.GetAsyncEnumerator();
+            var enumerator = source.GetAsyncEnumerator(cancellationToken);
             await using (enumerator.ConfigureAwait(false))
             {
                 while (await enumerator.MoveNextAsync().ConfigureAwait(false))
@@ -134,7 +137,7 @@ namespace NetFabric.Hyperlinq
                     cancellationToken.ThrowIfCancellationRequested();
 
                     var item = enumerator.Current;
-                    if (await predicate(item, cancellationToken).ConfigureAwait(false))
+                    if (await predicate.InvokeAsync(item, cancellationToken).ConfigureAwait(false))
                         builder.Add(await selector(item, cancellationToken).ConfigureAwait(false));
                 }
             }

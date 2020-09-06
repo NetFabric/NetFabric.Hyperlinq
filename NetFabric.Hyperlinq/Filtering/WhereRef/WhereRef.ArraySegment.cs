@@ -11,26 +11,29 @@ namespace NetFabric.Hyperlinq
     public static partial class ArrayExtensions
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ArraySegmentWhereRefEnumerable<TSource> WhereRef<TSource>(this in ArraySegment<TSource> source, Predicate<TSource> predicate)
+        public static ArraySegmentWhereRefEnumerable<TSource, ValuePredicate<TSource>> WhereRef<TSource>(this in ArraySegment<TSource> source, Predicate<TSource> predicate)
         {
             if (predicate is null)
                 Throw.ArgumentNullException(nameof(predicate));
 
-            return new ArraySegmentWhereRefEnumerable<TSource>(source, predicate);
+            return WhereRef(source, new ValuePredicate<TSource>(predicate));
         }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ArraySegmentWhereRefEnumerable<TSource, TPredicate> WhereRef<TSource, TPredicate>(this in ArraySegment<TSource> source, TPredicate predicate = default)
+            where TPredicate : struct, IPredicate<TSource>
+            => new ArraySegmentWhereRefEnumerable<TSource, TPredicate>(source, predicate);
 
         [GeneratorIgnore]
         [StructLayout(LayoutKind.Auto)]
-        public readonly struct ArraySegmentWhereRefEnumerable<TSource>
+        public readonly struct ArraySegmentWhereRefEnumerable<TSource, TPredicate>
+            where TPredicate : struct, IPredicate<TSource>
         {
             internal readonly ArraySegment<TSource> source;
-            internal readonly Predicate<TSource> predicate;
+            internal readonly TPredicate predicate;
 
-            internal ArraySegmentWhereRefEnumerable(in ArraySegment<TSource> source, Predicate<TSource> predicate)
-            {
-                this.source = source;
-                this.predicate = predicate;
-            }
+            internal ArraySegmentWhereRefEnumerable(in ArraySegment<TSource> source, TPredicate predicate)
+                => (this.source, this.predicate) = (source, predicate);
 
 
             public readonly Enumerator GetEnumerator()
@@ -42,9 +45,9 @@ namespace NetFabric.Hyperlinq
                 int index;
                 readonly int end;
                 readonly TSource[]? source;
-                readonly Predicate<TSource> predicate;
+                readonly TPredicate predicate;
 
-                internal Enumerator(in ArraySegmentWhereRefEnumerable<TSource> enumerable)
+                internal Enumerator(in ArraySegmentWhereRefEnumerable<TSource, TPredicate> enumerable)
                 {
                     source = enumerable.source.Array;
                     predicate = enumerable.predicate;
@@ -63,7 +66,7 @@ namespace NetFabric.Hyperlinq
                 {
                     while (++index <= end)
                     {
-                        if (predicate(source![index]))
+                        if (predicate.Invoke(source![index]))
                             return true;
                     }
                     return false;

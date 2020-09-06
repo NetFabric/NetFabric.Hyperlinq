@@ -32,12 +32,6 @@ namespace NetFabric.Hyperlinq
         
         public static bool Any<TSource>(this ImmutableList<TSource> source)
             => source.Count != 0;
-        
-        public static bool Any<TSource>(this ImmutableList<TSource> source, Predicate<TSource> predicate)
-            => ReadOnlyListExtensions.Any<ImmutableList<TSource>, TSource>(source, predicate);
-        
-        public static bool Any<TSource>(this ImmutableList<TSource> source, PredicateAt<TSource> predicate)
-            => ReadOnlyListExtensions.Any<ImmutableList<TSource>, TSource>(source, predicate);
 
         
         public static bool Contains<TSource>(this ImmutableList<TSource> source, [AllowNull] TSource value)
@@ -66,12 +60,12 @@ namespace NetFabric.Hyperlinq
             => ReadOnlyListExtensions.SelectMany<ImmutableList<TSource>, TSource, TSubEnumerable, TSubEnumerator, TResult>(source, selector);
 
         
-        public static ReadOnlyListExtensions.WhereEnumerable<ImmutableList<TSource>, TSource> Where<TSource>(
+        public static ReadOnlyListExtensions.WhereEnumerable<ImmutableList<TSource>, TSource, ValuePredicate<TSource>> Where<TSource>(
             this ImmutableList<TSource> source,
             Predicate<TSource> predicate)
             => ReadOnlyListExtensions.Where<ImmutableList<TSource>, TSource>(source, predicate);
         
-        public static ReadOnlyListExtensions.WhereAtEnumerable<ImmutableList<TSource>, TSource> Where<TSource>(
+        public static ReadOnlyListExtensions.WhereAtEnumerable<ImmutableList<TSource>, TSource, ValuePredicateAt<TSource>> Where<TSource>(
             this ImmutableList<TSource> source,
             PredicateAt<TSource> predicate)
             => ReadOnlyListExtensions.Where<ImmutableList<TSource>, TSource>(source, predicate);

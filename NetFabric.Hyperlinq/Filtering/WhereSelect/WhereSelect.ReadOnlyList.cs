@@ -12,27 +12,29 @@ namespace NetFabric.Hyperlinq
     {
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static WhereSelecTList<TList, TSource, TResult> WhereSelect<TList, TSource, TResult>(
+        static WhereSelecEnumerable<TList, TSource, TResult, TPredicate> WhereSelect<TList, TSource, TResult, TPredicate>(
             this TList source,
-            Predicate<TSource> predicate,
+            TPredicate predicate,
             NullableSelector<TSource, TResult> selector, 
             int offset, int count)
             where TList : notnull, IReadOnlyList<TSource>
-            => new WhereSelecTList<TList, TSource, TResult>(in source, predicate, selector, offset, count);
+            where TPredicate : struct, IPredicate<TSource>
+            => new WhereSelecEnumerable<TList, TSource, TResult, TPredicate>(in source, predicate, selector, offset, count);
 
         [GeneratorMapping("TSource", "TResult")]
         [StructLayout(LayoutKind.Auto)]
-        public readonly partial struct WhereSelecTList<TList, TSource, TResult>
-            : IValueEnumerable<TResult, WhereSelecTList<TList, TSource, TResult>.DisposableEnumerator>
+        public readonly partial struct WhereSelecEnumerable<TList, TSource, TResult, TPredicate>
+            : IValueEnumerable<TResult, WhereSelecEnumerable<TList, TSource, TResult, TPredicate>.DisposableEnumerator>
             where TList : notnull, IReadOnlyList<TSource>
+            where TPredicate : struct, IPredicate<TSource>
         {
             readonly TList source;
-            readonly Predicate<TSource> predicate;
+            readonly TPredicate predicate;
             readonly NullableSelector<TSource, TResult> selector;
             readonly int offset;
             readonly int count;
 
-            internal WhereSelecTList(in TList source, Predicate<TSource> predicate, NullableSelector<TSource, TResult> selector, int offset, int count)
+            internal WhereSelecEnumerable(in TList source, TPredicate predicate, NullableSelector<TSource, TResult> selector, int offset, int count)
             {
                 this.source = source;
                 this.predicate = predicate;
@@ -43,7 +45,7 @@ namespace NetFabric.Hyperlinq
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly Enumerator GetEnumerator() => new Enumerator(in this);
-            readonly DisposableEnumerator IValueEnumerable<TResult, WhereSelecTList<TList, TSource, TResult>.DisposableEnumerator>.GetEnumerator() => new DisposableEnumerator(in this);
+            readonly DisposableEnumerator IValueEnumerable<TResult, WhereSelecEnumerable<TList, TSource, TResult, TPredicate>.DisposableEnumerator>.GetEnumerator() => new DisposableEnumerator(in this);
             readonly IEnumerator<TResult> IEnumerable<TResult>.GetEnumerator() => new DisposableEnumerator(in this);
             readonly IEnumerator IEnumerable.GetEnumerator() => new DisposableEnumerator(in this);
 
@@ -53,10 +55,10 @@ namespace NetFabric.Hyperlinq
                 int index;
                 readonly int end;
                 readonly TList source;
-                readonly Predicate<TSource> predicate;
+                readonly TPredicate predicate;
                 readonly NullableSelector<TSource, TResult> selector;
 
-                internal Enumerator(in WhereSelecTList<TList, TSource, TResult> enumerable)
+                internal Enumerator(in WhereSelecEnumerable<TList, TSource, TResult, TPredicate> enumerable)
                 {
                     source = enumerable.source;
                     predicate = enumerable.predicate;
@@ -77,7 +79,7 @@ namespace NetFabric.Hyperlinq
                 {
                     while (++index <= end)
                     {
-                        if (predicate(source[index]))
+                        if (predicate.Invoke(source[index]))
                             return true;
                     }
                     return false;
@@ -91,10 +93,10 @@ namespace NetFabric.Hyperlinq
                 readonly int end;
                 int index;
                 readonly TList source;
-                readonly Predicate<TSource> predicate;
+                readonly TPredicate predicate;
                 readonly NullableSelector<TSource, TResult> selector;
 
-                internal DisposableEnumerator(in WhereSelecTList<TList, TSource, TResult> enumerable)
+                internal DisposableEnumerator(in WhereSelecEnumerable<TList, TSource, TResult, TPredicate> enumerable)
                 {
                     source = enumerable.source;
                     predicate = enumerable.predicate;
@@ -119,7 +121,7 @@ namespace NetFabric.Hyperlinq
                 {
                     while (++index <= end)
                     {
-                        if (predicate(source[index]))
+                        if (predicate.Invoke(source[index]))
                             return true;
                     }
                     return false;
@@ -133,28 +135,28 @@ namespace NetFabric.Hyperlinq
             }
 
             public int Count()
-                => ReadOnlyListExtensions.Count<TList, TSource>(source, predicate, offset, count);
+                => ReadOnlyListExtensions.Count<TList, TSource, TPredicate>(source, predicate, offset, count);
 
             public bool Any()
-                => ReadOnlyListExtensions.Any<TList, TSource>(source, predicate, offset, count);
+                => ReadOnlyListExtensions.Any<TList, TSource, TPredicate>(source, predicate, offset, count);
                 
             public Option<TResult> ElementAt(int index)
-                => ReadOnlyListExtensions.ElementAt<TList, TSource, TResult>(source, index, predicate, selector, offset, count);
+                => ReadOnlyListExtensions.ElementAt<TList, TSource, TResult, TPredicate>(source, index, predicate, selector, offset, count);
 
             public Option<TResult> First()
-                => ReadOnlyListExtensions.First<TList, TSource, TResult>(source, predicate, selector, offset, count);
+                => ReadOnlyListExtensions.First<TList, TSource, TResult, TPredicate>(source, predicate, selector, offset, count);
 
             public Option<TResult> Single()
-                => ReadOnlyListExtensions.Single<TList, TSource, TResult>(source, predicate, selector, offset, count);
+                => ReadOnlyListExtensions.Single<TList, TSource, TResult, TPredicate>(source, predicate, selector, offset, count);
 
             public TResult[] ToArray()
-                => ReadOnlyListExtensions.ToArray<TList, TSource, TResult>(source, predicate, selector, offset, count);
+                => ReadOnlyListExtensions.ToArray<TList, TSource, TResult, TPredicate>(source, predicate, selector, offset, count);
 
             public IMemoryOwner<TResult> ToArray(MemoryPool<TResult> pool)
-                => ReadOnlyListExtensions.ToArray<TList, TSource, TResult>(source, predicate, selector, offset, count, pool);
+                => ReadOnlyListExtensions.ToArray<TList, TSource, TResult, TPredicate>(source, predicate, selector, offset, count, pool);
 
             public List<TResult> ToList()
-                => ReadOnlyListExtensions.ToList<TList, TSource, TResult>(source, predicate, selector, offset, count); 
+                => ReadOnlyListExtensions.ToList<TList, TSource, TResult, TPredicate>(source, predicate, selector, offset, count); 
 
             public Dictionary<TKey, TResult> ToDictionary<TKey>(Selector<TResult, TKey> keySelector, IEqualityComparer<TKey>? comparer = default)
                 where TKey : notnull
@@ -165,7 +167,7 @@ namespace NetFabric.Hyperlinq
                 var end = offset + count - 1;
                 for (var index = offset; index <= end; index++)
                 {
-                    if (predicate(source[index]))
+                    if (predicate.Invoke(source[index]))
                     {
                         item = selector(source[index]);
                         dictionary.Add(keySelector(item), item!);
@@ -184,7 +186,7 @@ namespace NetFabric.Hyperlinq
                 var end = offset + count - 1;
                 for (var index = offset; index <= end; index++)
                 {
-                    if (predicate(source[index]))
+                    if (predicate.Invoke(source[index]))
                     {
                         item = selector(source[index]);
                         dictionary.Add(keySelector(item), elementSelector(item)!);

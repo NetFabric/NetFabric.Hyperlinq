@@ -24,16 +24,17 @@ namespace NetFabric.Hyperlinq
         }
 
         
-        static Option<TSource> ElementAt<TEnumerable, TEnumerator, TSource>(this TEnumerable source, int index, Predicate<TSource> predicate) 
+        static Option<TSource> ElementAt<TEnumerable, TEnumerator, TSource, TPredicate>(this TEnumerable source, int index, TPredicate predicate) 
             where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
+            where TPredicate : struct, IPredicate<TSource>
         {
             if (index >= 0)
             {
                 using var enumerator = source.GetEnumerator();
                 while (enumerator.MoveNext())
                 {
-                    if (predicate(enumerator.Current) && index-- == 0)
+                    if (predicate.Invoke(enumerator.Current) && index-- == 0)
                         return Option.Some(enumerator.Current);
                 }
             }
@@ -41,9 +42,10 @@ namespace NetFabric.Hyperlinq
         }
 
         
-        static Option<TSource> ElementAt<TEnumerable, TEnumerator, TSource>(this TEnumerable source, int index, PredicateAt<TSource> predicate) 
+        static Option<TSource> ElementAtAt<TEnumerable, TEnumerator, TSource, TPredicate>(this TEnumerable source, int index, TPredicate predicate) 
             where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
+            where TPredicate : struct, IPredicateAt<TSource>
         {
             if (index >= 0)
             {
@@ -52,7 +54,7 @@ namespace NetFabric.Hyperlinq
                 {
                     for (var sourceIndex = 0; enumerator.MoveNext(); sourceIndex++)
                     {
-                        if (predicate(enumerator.Current, sourceIndex) && index-- == 0)
+                        if (predicate.Invoke(enumerator.Current, sourceIndex) && index-- == 0)
                             return Option.Some(enumerator.Current);
                     }
                 }
@@ -61,7 +63,7 @@ namespace NetFabric.Hyperlinq
         }
 
         
-        static Option<TResult> ElementAt<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, int index, NullableSelector<TSource, TResult> selector) 
+        static Option<TResult?> ElementAt<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, int index, NullableSelector<TSource, TResult> selector) 
             where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
@@ -79,7 +81,7 @@ namespace NetFabric.Hyperlinq
         }
 
         
-        public static Option<TResult> ElementAt<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, int index, NullableSelectorAt<TSource, TResult> selector) 
+        public static Option<TResult?> ElementAt<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, int index, NullableSelectorAt<TSource, TResult> selector) 
             where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
@@ -99,16 +101,17 @@ namespace NetFabric.Hyperlinq
         }
 
         
-        static Option<TResult> ElementAt<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, int index, Predicate<TSource> predicate, NullableSelector<TSource, TResult> selector) 
+        static Option<TResult?> ElementAt<TEnumerable, TEnumerator, TSource, TResult, TPredicate>(this TEnumerable source, int index, TPredicate predicate, NullableSelector<TSource, TResult> selector) 
             where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
+            where TPredicate : struct, IPredicate<TSource>
         {
             if (index >= 0)
             {
                 using var enumerator = source.GetEnumerator();
                 while (enumerator.MoveNext())
                 {
-                    if (predicate(enumerator.Current) && index-- == 0)
+                    if (predicate.Invoke(enumerator.Current) && index-- == 0)
                         return Option.Some(selector(enumerator.Current));
                 }
             }

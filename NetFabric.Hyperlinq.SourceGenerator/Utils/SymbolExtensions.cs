@@ -21,7 +21,7 @@ namespace NetFabric.Hyperlinq.SourceGenerator
                 && (bool)attribute.ConstructorArguments[0].Value!;
         }
 
-        public static AttributeData GetAttribute(this ISymbol property, INamedTypeSymbol attributeClassSymbol) 
+        public static AttributeData? GetAttribute(this ISymbol property, INamedTypeSymbol attributeClassSymbol) 
             => property.GetAttributes().FirstOrDefault(attribute => SymbolEqualityComparer.Default.Equals(attribute.AttributeClass, attributeClassSymbol));
 
     }

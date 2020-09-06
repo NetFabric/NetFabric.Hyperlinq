@@ -11,26 +11,24 @@ namespace NetFabric.Hyperlinq
             => source.Length != 0;
 
         
-        public static bool Any<TSource>(this ReadOnlySpan<TSource> source, Predicate<TSource> predicate)
+        static bool Any<TSource, TPredicate>(this ReadOnlySpan<TSource> source, TPredicate predicate)
+            where TPredicate : struct, IPredicate<TSource>
         {
-            if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
-
             for (var index = 0; index < source.Length; index++)
             {
-                if (predicate(source[index]))
+                if (predicate.Invoke(source[index]))
                     return true;
             }
             return false;
         }
 
         
-        public static bool Any<TSource>(this ReadOnlySpan<TSource> source, PredicateAt<TSource> predicate)
+        static bool AnyAt<TSource, TPredicate>(this ReadOnlySpan<TSource> source, TPredicate predicate)
+            where TPredicate : struct, IPredicateAt<TSource>
         {
-            if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
-
             for (var index = 0; index < source.Length; index++)
             {
-                if (predicate(source[index], index))
+                if (predicate.Invoke(source[index], index))
                     return true;
             }
             return false;

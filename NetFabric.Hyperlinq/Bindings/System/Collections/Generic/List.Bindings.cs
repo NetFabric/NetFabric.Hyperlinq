@@ -2,6 +2,7 @@ using System;
 using System.Buffers;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 
@@ -28,12 +29,6 @@ namespace NetFabric.Hyperlinq
         public static bool Any<TSource>(this List<TSource> source)
             => source.Count != 0;
         
-        public static bool Any<TSource>(this List<TSource> source, Predicate<TSource> predicate)
-            => source.AsArraySegment().Any(predicate);
-        
-        public static bool Any<TSource>(this List<TSource> source, PredicateAt<TSource> predicate)
-            => source.AsArraySegment().Any(predicate);
-        
         public static bool Contains<TSource>(this List<TSource> source, [AllowNull] TSource value, IEqualityComparer<TSource>? comparer = default)
             => source.AsArraySegment().Contains(value, comparer);
 
@@ -54,22 +49,22 @@ namespace NetFabric.Hyperlinq
             where TSubEnumerator : struct, IEnumerator<TResult>
             => source.AsArraySegment().SelectMany<TSource, TSubEnumerable, TSubEnumerator, TResult>(selector);
         
-        public static ArrayExtensions.ArraySegmentWhereEnumerable<TSource> Where<TSource>(
+        public static ArrayExtensions.ArraySegmentWhereEnumerable<TSource, ValuePredicate<TSource>> Where<TSource>(
             this List<TSource> source,
             Predicate<TSource> predicate)
             => source.AsArraySegment().Where(predicate);
         
-        public static ArrayExtensions.ArraySegmentWhereAtEnumerable<TSource> Where<TSource>(
+        public static ArrayExtensions.ArraySegmentWhereAtEnumerable<TSource, ValuePredicateAt<TSource>> Where<TSource>(
             this List<TSource> source,
             PredicateAt<TSource> predicate)
             => source.AsArraySegment().Where(predicate);
         
-        public static ArrayExtensions.ArraySegmentWhereRefEnumerable<TSource> WhereRef<TSource>(
+        public static ArrayExtensions.ArraySegmentWhereRefEnumerable<TSource, ValuePredicate<TSource>> WhereRef<TSource>(
             this List<TSource> source,
             Predicate<TSource> predicate)
             => source.AsArraySegment().WhereRef(predicate);
         
-        public static ArrayExtensions.ArraySegmentWhereRefAtEnumerable<TSource> WhereRef<TSource>(
+        public static ArrayExtensions.ArraySegmentWhereRefAtEnumerable<TSource, ValuePredicateAt<TSource>> WhereRef<TSource>(
             this List<TSource> source,
             PredicateAt<TSource> predicate)
             => source.AsArraySegment().WhereRef(predicate);

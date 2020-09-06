@@ -22,9 +22,10 @@ namespace NetFabric.Hyperlinq
         }
 
         
-        static async ValueTask<Option<TSource>> FirstAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source, AsyncPredicate<TSource> predicate, CancellationToken cancellationToken) 
+        static async ValueTask<Option<TSource>> FirstAsync<TEnumerable, TEnumerator, TSource, TPredicate>(this TEnumerable source, TPredicate predicate, CancellationToken cancellationToken) 
             where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
+            where TPredicate : struct, IAsyncPredicate<TSource>
         {
             var enumerator = source.GetAsyncEnumerator(cancellationToken);
             await using (enumerator.ConfigureAwait(false))
@@ -32,7 +33,7 @@ namespace NetFabric.Hyperlinq
                 while (await enumerator.MoveNextAsync().ConfigureAwait(false))
                 {
                     var item = enumerator.Current;
-                    if (await predicate(item, cancellationToken).ConfigureAwait(false))
+                    if (await predicate.InvokeAsync(item, cancellationToken).ConfigureAwait(false))
                         return Option.Some(item);
                 }   
             }
@@ -40,9 +41,10 @@ namespace NetFabric.Hyperlinq
         }
 
         
-        static async ValueTask<Option<TSource>> FirstAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source, AsyncPredicateAt<TSource> predicate, CancellationToken cancellationToken) 
+        static async ValueTask<Option<TSource>> FirstAtAsync<TEnumerable, TEnumerator, TSource, TPredicate>(this TEnumerable source, TPredicate predicate, CancellationToken cancellationToken) 
             where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
+            where TPredicate : struct, IAsyncPredicateAt<TSource>
         {
             var enumerator = source.GetAsyncEnumerator(cancellationToken);
             await using (enumerator.ConfigureAwait(false))
@@ -52,7 +54,7 @@ namespace NetFabric.Hyperlinq
                     for (var index = 0; await enumerator.MoveNextAsync().ConfigureAwait(false); index++)
                     {
                         var item = enumerator.Current;
-                        if (await predicate(item, index, cancellationToken).ConfigureAwait(false))
+                        if (await predicate.InvokeAsync(item, index, cancellationToken).ConfigureAwait(false))
                             return Option.Some(item);
                     }   
                 }
@@ -91,9 +93,10 @@ namespace NetFabric.Hyperlinq
         }
 
         
-        static async ValueTask<Option<TResult>> FirstAsync<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, AsyncPredicate<TSource> predicate, AsyncSelector<TSource, TResult> selector, CancellationToken cancellationToken) 
+        static async ValueTask<Option<TResult>> FirstAsync<TEnumerable, TEnumerator, TSource, TResult, TPredicate>(this TEnumerable source, TPredicate predicate, AsyncSelector<TSource, TResult> selector, CancellationToken cancellationToken) 
             where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
+            where TPredicate : struct, IAsyncPredicate<TSource>
         {
             var enumerator = source.GetAsyncEnumerator(cancellationToken);
             await using (enumerator.ConfigureAwait(false))
@@ -101,7 +104,7 @@ namespace NetFabric.Hyperlinq
                 while (await enumerator.MoveNextAsync().ConfigureAwait(false))
                 {
                     var item = enumerator.Current;
-                    if (await predicate(item, cancellationToken).ConfigureAwait(false))
+                    if (await predicate.InvokeAsync(item, cancellationToken).ConfigureAwait(false))
                         return Option.Some(await selector(item, cancellationToken).ConfigureAwait(false));
                 }   
             }

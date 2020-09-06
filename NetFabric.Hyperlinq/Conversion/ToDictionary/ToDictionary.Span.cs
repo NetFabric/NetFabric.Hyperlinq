@@ -6,18 +6,52 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class ArrayExtensions
     {
-
-        
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Dictionary<TKey, TSource> ToDictionary<TSource, TKey>(this Span<TSource> source, Selector<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer = null)
+        public static Dictionary<TKey, TSource> ToDictionary<TSource, TKey>(this Span<TSource> source, Selector<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer = default)
             where TKey : notnull
-            => ToDictionary((ReadOnlySpan<TSource>)source, keySelector, comparer);
+        {
+            if (keySelector is null)
+                Throw.ArgumentNullException(nameof(keySelector));
 
-        
+            return ToDictionary((ReadOnlySpan<TSource>)source, keySelector, comparer);
+        }
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Dictionary<TKey, TElement> ToDictionary<TSource, TKey, TElement>(this Span<TSource> source, Selector<TSource, TKey> keySelector, NullableSelector<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer = null)
+        static Dictionary<TKey, TSource> ToDictionary<TSource, TKey, TPredicate>(this Span<TSource> source, Selector<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer, TPredicate predicate)
             where TKey : notnull
-            => ToDictionary((ReadOnlySpan<TSource>)source, keySelector, elementSelector, comparer);
+            where TPredicate : struct, IPredicate<TSource>
+            => ToDictionary((ReadOnlySpan<TSource>)source, keySelector, comparer, predicate);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        static Dictionary<TKey, TSource> ToDictionaryAt<TSource, TKey, TPredicate>(this Span<TSource> source, Selector<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer, TPredicate predicate)
+            where TKey : notnull
+            where TPredicate : struct, IPredicateAt<TSource>
+            => ToDictionaryAt((ReadOnlySpan<TSource>)source, keySelector, comparer, predicate);
+
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Dictionary<TKey, TElement> ToDictionary<TSource, TKey, TElement>(this Span<TSource> source, Selector<TSource, TKey> keySelector, NullableSelector<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer = default)
+            where TKey : notnull
+        {
+            if (keySelector is null)
+                Throw.ArgumentNullException(nameof(keySelector));
+            if (elementSelector is null)
+                Throw.ArgumentNullException(nameof(elementSelector));
+
+            return ToDictionary((ReadOnlySpan<TSource>)source, keySelector, elementSelector, comparer);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Dictionary<TKey, TElement> ToDictionary<TSource, TKey, TElement, TPredicate>(this Span<TSource> source, Selector<TSource, TKey> keySelector, NullableSelector<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer, TPredicate predicate)
+            where TKey : notnull
+            where TPredicate : struct, IPredicate<TSource>
+            => ToDictionary((ReadOnlySpan<TSource>)source, keySelector, elementSelector, comparer, predicate);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Dictionary<TKey, TElement> ToDictionaryAt<TSource, TKey, TElement, TPredicate>(this Span<TSource> source, Selector<TSource, TKey> keySelector, NullableSelector<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer, TPredicate predicate)
+            where TKey : notnull
+            where TPredicate : struct, IPredicateAt<TSource>
+            => ToDictionaryAt((ReadOnlySpan<TSource>)source, keySelector, elementSelector, comparer, predicate);
     }
 }
 

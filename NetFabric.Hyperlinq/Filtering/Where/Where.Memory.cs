@@ -7,7 +7,16 @@ namespace NetFabric.Hyperlinq
     {
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static MemoryWhereEnumerable<TSource> Where<TSource>(this Memory<TSource> source, Predicate<TSource> predicate)
+        public static MemoryWhereEnumerable<TSource, ValuePredicate<TSource>> Where<TSource>(this Memory<TSource> source, Predicate<TSource> predicate)
+        {
+            if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
+
+            return Where(source, new ValuePredicate<TSource>(predicate));
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static MemoryWhereEnumerable<TSource, TPredicate> Where<TSource, TPredicate>(this Memory<TSource> source, TPredicate predicate = default)
+            where TPredicate : struct, IPredicate<TSource>
             => Where((ReadOnlyMemory<TSource>)source, predicate);
     }
 }

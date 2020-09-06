@@ -12,16 +12,18 @@ namespace NetFabric.Hyperlinq
             => new List<TSource>(source);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static List<TSource> ToList<TSource>(this in ArraySegment<TSource> source, Predicate<TSource> predicate)
+        static List<TSource> ToList<TSource, TPredicate>(this in ArraySegment<TSource> source, TPredicate predicate)
+            where TPredicate : struct, IPredicate<TSource>
         {
             using var arrayBuilder = ToArrayBuilder(source, predicate, ArrayPool<TSource>.Shared);
             return new List<TSource>(arrayBuilder);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static List<TSource> ToList<TSource>(this in ArraySegment<TSource> source, PredicateAt<TSource> predicate)
+        static List<TSource> ToListAt<TSource, TPredicate>(this in ArraySegment<TSource> source, TPredicate predicate)
+            where TPredicate : struct, IPredicateAt<TSource>
         {
-            using var arrayBuilder = ToArrayBuilder(source, predicate, ArrayPool<TSource>.Shared);
+            using var arrayBuilder = ToArrayBuilderAt(source, predicate, ArrayPool<TSource>.Shared);
             return new List<TSource>(arrayBuilder);
         }
 
@@ -38,7 +40,8 @@ namespace NetFabric.Hyperlinq
                 : new List<TResult>(new ArraySegmentSelectorAtToListCollection<TSource, TResult>(source, selector));
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static List<TResult> ToList<TSource, TResult>(this in ArraySegment<TSource> source, Predicate<TSource> predicate, NullableSelector<TSource, TResult> selector)
+        static List<TResult> ToList<TSource, TResult, TPredicate>(this in ArraySegment<TSource> source, TPredicate predicate, NullableSelector<TSource, TResult> selector)
+            where TPredicate : struct, IPredicate<TSource>
         {
             using var arrayBuilder = ToArrayBuilder(source, predicate, selector, ArrayPool<TResult>.Shared);
             return new List<TResult>(arrayBuilder);

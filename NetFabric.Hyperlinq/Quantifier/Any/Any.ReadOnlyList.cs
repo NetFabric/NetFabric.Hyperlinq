@@ -18,47 +18,29 @@ namespace NetFabric.Hyperlinq
             return take != 0;
         }
 
-
-        public static bool Any<TList, TSource>(this TList source, Predicate<TSource> predicate)
+        static bool Any<TList, TSource, TPredicate>(this TList source, TPredicate predicate, int offset, int count)
             where TList : notnull, IReadOnlyList<TSource>
-        {
-            if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
-
-            return Any<TList, TSource>(source, predicate, 0, source.Count);
-        }
-
-
-        static bool Any<TList, TSource>(this TList source, Predicate<TSource> predicate, int offset, int count)
-            where TList : notnull, IReadOnlyList<TSource>
+            where TPredicate : struct, IPredicate<TSource>
         {
             var end = offset + count - 1;
             for (var index = offset; index <= end; index++)
             {
-                if (predicate(source[index]))
+                if (predicate.Invoke(source[index]))
                     return true;
             }
             return false;
         }
 
-        
-        public static bool Any<TList, TSource>(this TList source, PredicateAt<TSource> predicate)
+        static bool AnyAt<TList, TSource, TPredicate>(this TList source, TPredicate predicate, int offset, int count)
             where TList : notnull, IReadOnlyList<TSource>
-        {
-            if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
-
-            return Any<TList, TSource>(source, predicate, 0, source.Count);
-        }
-
-
-        static bool Any<TList, TSource>(this TList source, PredicateAt<TSource> predicate, int offset, int count)
-            where TList : notnull, IReadOnlyList<TSource>
+            where TPredicate : struct, IPredicateAt<TSource>
         {
             var end = count - 1;
             if (offset == 0)
             {
                 for (var index = 0; index <= end; index++)
                 {
-                    if (predicate(source[index], index))
+                    if (predicate.Invoke(source[index], index))
                         return true;
                 }
             }
@@ -66,7 +48,7 @@ namespace NetFabric.Hyperlinq
             {
                 for (var index = 0; index <= end; index++)
                 {
-                    if (predicate(source[index + offset], index))
+                    if (predicate.Invoke(source[index + offset], index))
                         return true;
                 }
             }

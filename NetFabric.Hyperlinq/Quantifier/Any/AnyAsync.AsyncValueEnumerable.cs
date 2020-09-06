@@ -19,54 +19,40 @@ namespace NetFabric.Hyperlinq
         }
 
         
-        public static ValueTask<bool> AnyAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source, AsyncPredicate<TSource> predicate, CancellationToken cancellationToken = default)
+        static async ValueTask<bool> AnyAsync<TEnumerable, TEnumerator, TSource, TPredicate>(this TEnumerable source, TPredicate predicate, CancellationToken cancellationToken = default)
             where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
+            where TPredicate : struct, IAsyncPredicate<TSource>
         {
-            if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
-
-            cancellationToken.ThrowIfCancellationRequested();
-            return ExecuteAsync(source, predicate, cancellationToken);
-
-            static async ValueTask<bool> ExecuteAsync(TEnumerable source, AsyncPredicate<TSource> predicate, CancellationToken cancellationToken)
+            var enumerator = source.GetAsyncEnumerator(cancellationToken);
+            await using (enumerator.ConfigureAwait(false))
             {
-                var enumerator = source.GetAsyncEnumerator(cancellationToken);
-                await using (enumerator.ConfigureAwait(false))
+                while (await enumerator.MoveNextAsync().ConfigureAwait(false))
                 {
-                    while (await enumerator.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        if (await predicate(enumerator.Current, cancellationToken).ConfigureAwait(false))
-                            return true;
-                    }
-                    return false;
+                    if (await predicate.InvokeAsync(enumerator.Current, cancellationToken).ConfigureAwait(false))
+                        return true;
                 }
+                return false;
             }
         }
 
-        public static ValueTask<bool> AnyAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source, AsyncPredicateAt<TSource> predicate, CancellationToken cancellationToken = default)
+        static async ValueTask<bool> AnyAtAsync<TEnumerable, TEnumerator, TSource, TPredicate>(this TEnumerable source, TPredicate predicate, CancellationToken cancellationToken = default)
             where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
+            where TPredicate : struct, IAsyncPredicateAt<TSource>
         {
-            if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
-
-            cancellationToken.ThrowIfCancellationRequested();
-            return ExecuteAsync(source, predicate, cancellationToken);
-
-            static async ValueTask<bool> ExecuteAsync(TEnumerable source, AsyncPredicateAt<TSource> predicate, CancellationToken cancellationToken)
+            var enumerator = source.GetAsyncEnumerator(cancellationToken);
+            await using (enumerator.ConfigureAwait(false))
             {
-                var enumerator = source.GetAsyncEnumerator(cancellationToken);
-                await using (enumerator.ConfigureAwait(false))
+                checked
                 {
-                    checked
+                    for (var index = 0; await enumerator.MoveNextAsync().ConfigureAwait(false); index++)
                     {
-                        for (var index = 0; await enumerator.MoveNextAsync().ConfigureAwait(false); index++)
-                        {
-                            if (await predicate(enumerator.Current, index, cancellationToken).ConfigureAwait(false))
-                                return true;
-                        }
+                        if (await predicate.InvokeAsync(enumerator.Current, index, cancellationToken).ConfigureAwait(false))
+                            return true;
                     }
-                    return false;
                 }
+                return false;
             }
         }
     }

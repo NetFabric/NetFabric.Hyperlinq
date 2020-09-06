@@ -27,6 +27,7 @@ This implementation **favors performance in detriment of assembly binary size** 
   - [AsValueEnumerable and AsAsyncValueEnumerable](#asvalueenumerable-and-asasyncvalueenumerable)
   - [Method return types](#method-return-types)
   - [Composition](#composition)
+  - [Value delegates](#value-delegates)
   - [Option](#option)
   - [Buffer pools](#buffer-pools)
     - [`MemoryPool<>`](#memorypool)
@@ -43,6 +44,7 @@ This implementation **favors performance in detriment of assembly binary size** 
 
 - Merges multiple enumerators into a single one for several more scenarios.
 - It does not box value-type enumerators so, calls to the `Current` property and the `MoveNext()` method are non-virtual.
+- Option of using value delegates instead of lambda expressions.
 - All the enumerables returned by operations define a value-type enumerator.
 - Whenever possible, the enumerator returned by the public `GetEnumerator()` or `GetAsyncEnumerator()` does not implement `IDisposable`. This allows the `foreach` that enumerates the result to be inlinable. 
 - Operations enumerate the source using the indexer when the source is an array, `ArraySegment<>`, `Span<>`, `ReadOnlySpan<>`, `Memory<>`, `ReadOnlyMemory<>`, or implements `IReadOnlyList<>`. The indexer performs fewer operations than the enumerator.
@@ -277,6 +279,10 @@ var result = array
     .Select(item => item * 2)
     .First();
 ```
+
+### Value delegates
+
+TODO
 
 ### Option
 

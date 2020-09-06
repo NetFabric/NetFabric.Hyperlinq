@@ -26,23 +26,6 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Any
             _ = result.Must()
                 .BeEqualTo(expected);
         }
-        
-        [Fact]
-        public void Any_Predicate_With_Null_Must_Throw()
-        {
-            // Arrange
-            var source = new int[0];
-            var predicate = (Predicate<int>)null;
-
-            // Act
-            Action action = () => _ = ArrayExtensions
-                .Any(source, predicate);
-
-            // Assert
-            _ = action.Must()
-                .Throw<ArgumentNullException>()
-                .EvaluateTrue(exception => exception.ParamName == "predicate");
-        }
 
         [Theory]
         [MemberData(nameof(TestData.PredicateEmpty), MemberType = typeof(TestData))]
@@ -56,28 +39,12 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Any
 
             // Act
             var result = ArrayExtensions
-                .Any(source, predicate);
+                .Where(source, predicate)
+                .Any();
 
             // Assert
             _ = result.Must()
                 .BeEqualTo(expected);
-        }
-        
-        [Fact]
-        public void Any_PredicateAt_With_Null_Must_Throw()
-        {
-            // Arrange
-            var source = new int[0];
-            var predicate = (PredicateAt<int>)null;
-
-            // Act
-            Action action = () => _ = ArrayExtensions
-                .Any(source, predicate);
-
-            // Assert
-            _ = action.Must()
-                .Throw<ArgumentNullException>()
-                .EvaluateTrue(exception => exception.ParamName == "predicate");
         }
 
         [Theory]
@@ -93,7 +60,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Any
 
             // Act
             var result = ArrayExtensions
-                .Any(source, predicate);
+                .Where(source, predicate)
+                .Any();
 
             // Assert
             _ = result.Must()

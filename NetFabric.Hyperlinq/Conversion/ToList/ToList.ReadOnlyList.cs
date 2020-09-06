@@ -30,8 +30,9 @@ namespace NetFabric.Hyperlinq
 
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static List<TSource> ToList<TList, TSource>(this TList source, Predicate<TSource> predicate, int offset, int count)
+        static List<TSource> ToList<TList, TSource, TPredicate>(this TList source, TPredicate predicate, int offset, int count)
             where TList : notnull, IReadOnlyList<TSource>
+            where TPredicate : struct, IPredicate<TSource>
         {
             using var arrayBuilder = ToArrayBuilder(source, predicate, offset, count, ArrayPool<TSource>.Shared);
             return new List<TSource>(arrayBuilder);
@@ -39,10 +40,11 @@ namespace NetFabric.Hyperlinq
 
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static List<TSource> ToList<TList, TSource>(this TList source, PredicateAt<TSource> predicate, int offset, int count)
+        static List<TSource> ToListAt<TList, TSource, TPredicate>(this TList source, TPredicate predicate, int offset, int count)
             where TList : notnull, IReadOnlyList<TSource>
+            where TPredicate : struct, IPredicateAt<TSource>
         {
-            using var arrayBuilder = ToArrayBuilder(source, predicate, offset, count, ArrayPool<TSource>.Shared);
+            using var arrayBuilder = ToArrayBuilderAt(source, predicate, offset, count, ArrayPool<TSource>.Shared);
             return new List<TSource>(arrayBuilder);
         }
 
@@ -64,8 +66,9 @@ namespace NetFabric.Hyperlinq
 
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static List<TResult> ToList<TList, TSource, TResult>(this TList source, Predicate<TSource> predicate, NullableSelector<TSource, TResult> selector, int offset, int count)
+        static List<TResult> ToList<TList, TSource, TResult, TPredicate>(this TList source, TPredicate predicate, NullableSelector<TSource, TResult> selector, int offset, int count)
             where TList : notnull, IReadOnlyList<TSource>
+            where TPredicate : struct, IPredicate<TSource>
         {
             using var arrayBuilder = ToArrayBuilder(source, predicate, selector, offset, count, ArrayPool<TResult>.Shared);
             return new List<TResult>(arrayBuilder);

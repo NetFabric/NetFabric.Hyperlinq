@@ -96,7 +96,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public ValueTask<bool> Hyperlinq_AsyncEnumerable_Value() 
             => asyncEnumerableValue
                 .AsAsyncValueEnumerable<TestAsyncEnumerable.Enumerable, TestAsyncEnumerable.Enumerable.Enumerator, int>((enumerable, cancellationToke) => enumerable.GetAsyncEnumerator(cancellationToke))
-                .AllAsync((item, _) => new ValueTask<bool>((item & 0x01) == 0));
+                .AllAsync((item, _) => new ValueTask<bool>(item.IsEven()));
 
         [BenchmarkCategory("Enumerable_Reference")]
         [Benchmark]
@@ -124,6 +124,6 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public ValueTask<bool> Hyperlinq_AsyncEnumerable_Reference() 
             => asyncEnumerableReference
                 .AsAsyncValueEnumerable()
-                .AllAsync((item, _) => new ValueTask<bool>((item & 0x01) == 0));
+                .AllAsync((item, _) => new ValueTask<bool>(item.IsEven()));
     }
 }

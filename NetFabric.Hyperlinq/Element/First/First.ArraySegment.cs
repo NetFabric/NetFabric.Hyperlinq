@@ -12,7 +12,8 @@ namespace NetFabric.Hyperlinq
                 : Option.Some(source.Array[source.Offset]);
 
 
-        static Option<TSource> First<TSource>(this in ArraySegment<TSource> source, Predicate<TSource> predicate)
+        static Option<TSource> First<TSource, TPredicate>(this in ArraySegment<TSource> source, TPredicate predicate)
+            where TPredicate : struct, IPredicate<TSource>
         {
             if (source.Any())
             {
@@ -20,7 +21,7 @@ namespace NetFabric.Hyperlinq
                 {
                     foreach (var item in source.Array)
                     {
-                        if (predicate(item))
+                        if (predicate.Invoke(item))
                             return Option.Some(item);
                     }
                 }
@@ -30,7 +31,7 @@ namespace NetFabric.Hyperlinq
                     var end = source.Offset + source.Count - 1;
                     for (var index = source.Offset; index <= end; index++)
                     {
-                        if (predicate(array![index]))
+                        if (predicate.Invoke(array![index]))
                             return Option.Some(array![index]);
                     }
                 }
@@ -39,7 +40,8 @@ namespace NetFabric.Hyperlinq
         }
 
 
-        static Option<TSource> First<TSource>(this in ArraySegment<TSource> source, PredicateAt<TSource> predicate)
+        static Option<TSource> FirstAt<TSource, TPredicate>(this in ArraySegment<TSource> source, TPredicate predicate)
+            where TPredicate : struct, IPredicateAt<TSource>
         {
             if (source.Any())
             {
@@ -48,7 +50,7 @@ namespace NetFabric.Hyperlinq
                     var index = 0;
                     foreach (var item in source.Array)
                     {
-                        if (predicate(item, index))
+                        if (predicate.Invoke(item, index))
                             return Option.Some(item);
 
                         index++;
@@ -63,7 +65,7 @@ namespace NetFabric.Hyperlinq
                         for (var index = 0; index <= end; index++)
                         {
                             var item = array![index];
-                            if (predicate(item, index))
+                            if (predicate.Invoke(item, index))
                                 return Option.Some(item);
                         }
                     }
@@ -75,7 +77,7 @@ namespace NetFabric.Hyperlinq
                         for (var index = 0; index <= end; index++)
                         {
                             var item = array![index + offset];
-                            if (predicate(item, index))
+                            if (predicate.Invoke(item, index))
                                 return Option.Some(item);
                         }
                     }
@@ -86,20 +88,21 @@ namespace NetFabric.Hyperlinq
 
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static Option<TResult> First<TSource, TResult>(this in ArraySegment<TSource> source, NullableSelector<TSource, TResult> selector)
+        static Option<TResult?> First<TSource, TResult>(this in ArraySegment<TSource> source, NullableSelector<TSource, TResult> selector)
             => source.Count == 0
                 ? Option.None
                 : Option.Some(selector(source.Array[source.Offset]));
 
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static Option<TResult> First<TSource, TResult>(this in ArraySegment<TSource> source, NullableSelectorAt<TSource, TResult> selector)
+        static Option<TResult?> First<TSource, TResult>(this in ArraySegment<TSource> source, NullableSelectorAt<TSource, TResult> selector)
             => source.Count == 0
                 ? Option.None
                 : Option.Some(selector(source.Array[source.Offset], 0));
 
 
-        static Option<TResult> First<TSource, TResult>(this in ArraySegment<TSource> source, Predicate<TSource> predicate, NullableSelector<TSource, TResult> selector)
+        static Option<TResult?> First<TSource, TResult, TPredicate>(this in ArraySegment<TSource> source, TPredicate predicate, NullableSelector<TSource, TResult> selector)
+            where TPredicate : struct, IPredicate<TSource>
         {
             if (source.Any())
             {
@@ -107,7 +110,7 @@ namespace NetFabric.Hyperlinq
                 {
                     foreach (var item in source.Array)
                     {
-                        if (predicate(item))
+                        if (predicate.Invoke(item))
                             return Option.Some(selector(item));
                     }
                 }
@@ -117,7 +120,7 @@ namespace NetFabric.Hyperlinq
                     var end = source.Offset + source.Count - 1;
                     for (var index = source.Offset; index <= end; index++)
                     {
-                        if (predicate(array![index]))
+                        if (predicate.Invoke(array![index]))
                             return Option.Some(selector(array![index]));
                     }
                 }

@@ -12,30 +12,33 @@ namespace NetFabric.Hyperlinq
     {
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static MemoryWhereAtEnumerable<TSource> Where<TSource>(this ReadOnlyMemory<TSource> source, PredicateAt<TSource> predicate) 
+        public static MemoryWhereAtEnumerable<TSource, ValuePredicateAt<TSource>> Where<TSource>(this ReadOnlyMemory<TSource> source, PredicateAt<TSource> predicate) 
         {
             if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
 
-            return new MemoryWhereAtEnumerable<TSource>(source, predicate);
+            return WhereAt(source, new ValuePredicateAt<TSource>(predicate));
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static MemoryWhereAtEnumerable<TSource, TPredicate> WhereAt<TSource, TPredicate>(this ReadOnlyMemory<TSource> source, TPredicate predicate = default)
+            where TPredicate : struct, IPredicateAt<TSource>
+            => new MemoryWhereAtEnumerable<TSource, TPredicate>(source, predicate);
+
         [StructLayout(LayoutKind.Auto)]
-        public readonly partial struct MemoryWhereAtEnumerable<TSource>
-            : IValueEnumerable<TSource, MemoryWhereAtEnumerable<TSource>.DisposableEnumerator>
+        public readonly partial struct MemoryWhereAtEnumerable<TSource, TPredicate>
+            : IValueEnumerable<TSource, MemoryWhereAtEnumerable<TSource, TPredicate>.DisposableEnumerator>
+            where TPredicate : struct, IPredicateAt<TSource>
         {
             readonly ReadOnlyMemory<TSource> source;
-            readonly PredicateAt<TSource> predicate;
+            readonly TPredicate predicate;
 
-            internal MemoryWhereAtEnumerable(ReadOnlyMemory<TSource> source, PredicateAt<TSource> predicate)
-            {
-                this.source = source;
-                this.predicate = predicate;
-            }
+            internal MemoryWhereAtEnumerable(ReadOnlyMemory<TSource> source, TPredicate predicate)
+                => (this.source, this.predicate) = (source, predicate);
 
-            
+
             public readonly Enumerator GetEnumerator() 
                 => new Enumerator(in this);
-            readonly DisposableEnumerator IValueEnumerable<TSource, MemoryWhereAtEnumerable<TSource>.DisposableEnumerator>.GetEnumerator() 
+            readonly DisposableEnumerator IValueEnumerable<TSource, MemoryWhereAtEnumerable<TSource, TPredicate>.DisposableEnumerator>.GetEnumerator() 
                 => new DisposableEnumerator(in this);
             readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() 
                 => new DisposableEnumerator(in this);
@@ -48,9 +51,9 @@ namespace NetFabric.Hyperlinq
                 int index;
                 readonly int end;
                 readonly ReadOnlySpan<TSource> source;
-                readonly PredicateAt<TSource> predicate;
+                readonly TPredicate predicate;
 
-                internal Enumerator(in MemoryWhereAtEnumerable<TSource> enumerable)
+                internal Enumerator(in MemoryWhereAtEnumerable<TSource, TPredicate> enumerable)
                 {
                     source = enumerable.source.Span;
                     predicate = enumerable.predicate;
@@ -69,7 +72,7 @@ namespace NetFabric.Hyperlinq
                 {
                     while (++index <= end)
                     {
-                        if (predicate(source[index], index))
+                        if (predicate.Invoke(source[index], index))
                             return true;
                     }
                     return false;
@@ -83,9 +86,9 @@ namespace NetFabric.Hyperlinq
                 int index;
                 readonly int end;
                 readonly ReadOnlyMemory<TSource> source;
-                readonly PredicateAt<TSource> predicate;
+                readonly TPredicate predicate;
 
-                internal DisposableEnumerator(in MemoryWhereAtEnumerable<TSource> enumerable)
+                internal DisposableEnumerator(in MemoryWhereAtEnumerable<TSource, TPredicate> enumerable)
                 {
                     source = enumerable.source;
                     predicate = enumerable.predicate;
@@ -110,7 +113,7 @@ namespace NetFabric.Hyperlinq
                     var span = source.Span;
                     while (++index <= end)
                     {
-                        if (predicate(span[index], index))
+                        if (predicate.Invoke(span[index], index))
                             return true;
                     }
                     return false;
@@ -124,34 +127,59 @@ namespace NetFabric.Hyperlinq
             }
 
             public int Count()
-                => source.Span.Count(predicate);
+                => source.Span.CountAt<TSource, TPredicate>(predicate);
 
             public bool Any()
-                => source.Span.Any(predicate);
-                
-            public MemoryWhereAtEnumerable<TSource> Where(Predicate<TSource> predicate)
-                => Where<TSource>(source, Utils.Combine(this.predicate, predicate));
+                => source.Span.AnyAt<TSource, TPredicate>(predicate);
 
-            public MemoryWhereAtEnumerable<TSource> Where(PredicateAt<TSource> predicate)
-                => Where<TSource>(source, Utils.Combine(this.predicate, predicate));
+            public MemoryWhereAtEnumerable<TSource, PredicatePredicateAtCombination<ValuePredicate<TSource>, TPredicate, TSource>> Where(Predicate<TSource> predicate)
+            {
+                if (predicate is null)
+                    Throw.ArgumentNullException(nameof(predicate));
+
+                return this.Where(new ValuePredicate<TSource>(predicate));
+            }
+
+            public MemoryWhereAtEnumerable<TSource, PredicatePredicateAtCombination<TPredicate2, TPredicate, TSource>> Where<TPredicate2>(TPredicate2 predicate)
+                where TPredicate2 : struct, IPredicate<TSource>
+                => WhereAt<TSource, PredicatePredicateAtCombination<TPredicate2, TPredicate, TSource>>(source, new PredicatePredicateAtCombination<TPredicate2, TPredicate, TSource>(predicate, this.predicate));
+
+            public MemoryWhereAtEnumerable<TSource, PredicateAtPredicateAtCombination<TPredicate, ValuePredicateAt<TSource>, TSource>> Where(PredicateAt<TSource> predicate)
+            {
+                if (predicate is null)
+                    Throw.ArgumentNullException(nameof(predicate));
+
+                return this.WhereAt(new ValuePredicateAt<TSource>(predicate));
+            }
+
+            public MemoryWhereAtEnumerable<TSource, PredicateAtPredicateAtCombination<TPredicate, TPredicate2, TSource>> WhereAt<TPredicate2>(TPredicate2 predicate)
+                where TPredicate2 : struct, IPredicateAt<TSource>
+                => WhereAt<TSource, PredicateAtPredicateAtCombination<TPredicate, TPredicate2, TSource>>(source, new PredicateAtPredicateAtCombination<TPredicate, TPredicate2, TSource>(this.predicate, predicate));
 
             public Option<TSource> ElementAt(int index)
-                => ArrayExtensions.ElementAt<TSource>(source.Span, index, predicate);
+                => ArrayExtensions.ElementAtAt<TSource, TPredicate>(source.Span, index, predicate);
 
             public Option<TSource> First()
-                => ArrayExtensions.First<TSource>(source.Span, predicate);
+                => ArrayExtensions.FirstAt<TSource, TPredicate>(source.Span, predicate);
 
             public Option<TSource> Single()
-                => ArrayExtensions.Single<TSource>(source.Span, predicate);
+                => ArrayExtensions.SingleAt<TSource, TPredicate>(source.Span, predicate);
 
             public TSource[] ToArray()
-                => ArrayExtensions.ToArray(source.Span, predicate);
+                => ArrayExtensions.ToArrayAt<TSource, TPredicate>(source.Span, predicate);
 
             public IMemoryOwner<TSource> ToArray(MemoryPool<TSource> memoryPool)
-                => ArrayExtensions.ToArray<TSource>(source, predicate, memoryPool);
+                => ArrayExtensions.ToArrayAt<TSource, TPredicate>(source, predicate, memoryPool);
 
             public List<TSource> ToList()
-                => ArrayExtensions.ToList(source, predicate);  // memory performs best
+                => ArrayExtensions.ToListAt<TSource, TPredicate>(source, predicate);  // memory performs best
+
+            public Dictionary<TKey, TSource> ToDictionary<TKey>(Selector<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer = default)
+                where TKey : notnull
+                => ArrayExtensions.ToDictionaryAt<TSource, TKey, TPredicate>(source, keySelector, comparer, predicate);
+            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Selector<TSource, TKey> keySelector, NullableSelector<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer = default)
+                where TKey : notnull
+                => ArrayExtensions.ToDictionaryAt<TSource, TKey, TElement, TPredicate>(source, keySelector, elementSelector, comparer, predicate);
 
             public bool SequenceEqual(IEnumerable<TSource> other, IEqualityComparer<TSource>? comparer = null)
             {

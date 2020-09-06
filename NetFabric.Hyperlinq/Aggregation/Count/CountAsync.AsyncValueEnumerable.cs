@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -24,9 +23,10 @@ namespace NetFabric.Hyperlinq
             return counter;
         }
 
-        static async ValueTask<int> CountAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source, AsyncPredicate<TSource> predicate, CancellationToken cancellationToken)
+        static async ValueTask<int> CountAsync<TEnumerable, TEnumerator, TSource, TPredicate>(this TEnumerable source, TPredicate predicate, CancellationToken cancellationToken)
             where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
+            where TPredicate : struct, IAsyncPredicate<TSource>
         {
             var counter = 0;
             var enumerator = source.GetAsyncEnumerator(cancellationToken);
@@ -36,7 +36,7 @@ namespace NetFabric.Hyperlinq
                 {
                     while (await enumerator.MoveNextAsync().ConfigureAwait(false))
                     {
-                        var result = await predicate(enumerator.Current, cancellationToken).ConfigureAwait(false);
+                        var result = await predicate.InvokeAsync(enumerator.Current, cancellationToken).ConfigureAwait(false);
                         counter += result.AsByte();
                     }
                 }
@@ -44,9 +44,10 @@ namespace NetFabric.Hyperlinq
             return counter;
         }
 
-        static async ValueTask<int> CountAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source, AsyncPredicateAt<TSource> predicate, CancellationToken cancellationToken)
+        static async ValueTask<int> CountAtAsync<TEnumerable, TEnumerator, TSource, TPredicate>(this TEnumerable source, TPredicate predicate, CancellationToken cancellationToken)
             where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
+            where TPredicate : struct, IAsyncPredicateAt<TSource>
         {
             var counter = 0;
             var enumerator = source.GetAsyncEnumerator(cancellationToken);
@@ -56,7 +57,7 @@ namespace NetFabric.Hyperlinq
                 {
                     for (var index = 0; await enumerator.MoveNextAsync().ConfigureAwait(false); index++)
                     {
-                        var result = await predicate(enumerator.Current, index, cancellationToken).ConfigureAwait(false);
+                        var result = await predicate.InvokeAsync(enumerator.Current, index, cancellationToken).ConfigureAwait(false);
                         counter += result.AsByte();
                     }
                 }

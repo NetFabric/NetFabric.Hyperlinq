@@ -1,5 +1,6 @@
 using NetFabric.Assertive;
 using System;
+using System.Linq;
 using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Any
@@ -14,12 +15,12 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Any
         public void Any_With_ValidData_Must_Succeed(int[] source)
         {
             // Arrange
-            var expected = 
-                System.Linq.Enumerable.Any(source);
+            var expected = Enumerable
+                .Any(source);
 
             // Act
             var result = ArrayExtensions
-                .Any<int>(source.AsSpan());
+                .Any(source.AsSpan());
 
             // Assert
             _ = result.Must()
@@ -35,7 +36,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Any
 
             // Act
             Action action = () => _ = ArrayExtensions
-                .Any<int>(source.AsSpan(), predicate);
+                .Where(source.AsSpan(), predicate)
+                .Any();
 
             // Assert
             _ = action.Must()
@@ -50,12 +52,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Any
         public void Any_Predicate_With_ValidData_Must_Succeed(int[] source, Predicate<int> predicate)
         {
             // Arrange
-            var expected = 
-                System.Linq.Enumerable.Any(source, predicate.AsFunc());
+            var expected = Enumerable
+                .Any(source, predicate.AsFunc());
 
             // Act
             var result = ArrayExtensions
-                .Any<int>(source.AsSpan(), predicate);
+                .Where(source.AsSpan(), predicate)
+                .Any();
 
             // Assert
             _ = result.Must()
@@ -71,7 +74,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Any
 
             // Act
             Action action = () => _ = ArrayExtensions
-                .Any<int>(source.AsSpan(), predicate);
+                .Where(source.AsSpan(), predicate)
+                .Any();
 
             // Assert
             _ = action.Must()
@@ -86,13 +90,14 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Any
         public void Any_PredicateAt_With_ValidData_Must_Succeed(int[] source, PredicateAt<int> predicate)
         {
             // Arrange
-            var expected = 
-                System.Linq.Enumerable.Count(
-                    System.Linq.Enumerable.Where(source, predicate.AsFunc())) != 0;
+            var expected = Enumerable
+                .Where(source, predicate.AsFunc())
+                .Count() != 0;
 
             // Act
             var result = ArrayExtensions
-                .Any<int>(source.AsSpan(), predicate);
+                .Where(source.AsSpan(), predicate)
+                .Any();
 
             // Assert
             _ = result.Must()

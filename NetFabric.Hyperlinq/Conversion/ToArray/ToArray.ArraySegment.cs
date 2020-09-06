@@ -40,7 +40,8 @@ namespace NetFabric.Hyperlinq
         //////////////////////////////////////////////////////////////////////////////////////////////////
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static TSource[] ToArray<TSource>(this in ArraySegment<TSource> source, Predicate<TSource> predicate)
+        static TSource[] ToArray<TSource, TPredicate>(this in ArraySegment<TSource> source, TPredicate predicate)
+            where TPredicate : struct, IPredicate<TSource>
         {
             if (source.Count == 0)
                 return Array.Empty<TSource>();
@@ -50,7 +51,8 @@ namespace NetFabric.Hyperlinq
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static IMemoryOwner<TSource> ToArray<TSource>(this in ArraySegment<TSource> source, Predicate<TSource> predicate, MemoryPool<TSource> pool)
+        static IMemoryOwner<TSource> ToArray<TSource, TPredicate>(this in ArraySegment<TSource> source, TPredicate predicate, MemoryPool<TSource> pool)
+            where TPredicate : struct, IPredicate<TSource>
         {
             if (source.Count == 0)
                 return pool.Rent(0);
@@ -63,22 +65,24 @@ namespace NetFabric.Hyperlinq
 
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static TSource[] ToArray<TSource>(this in ArraySegment<TSource> source, PredicateAt<TSource> predicate)
+        static TSource[] ToArrayAt<TSource, TPredicate>(this in ArraySegment<TSource> source, TPredicate predicate)
+            where TPredicate : struct, IPredicateAt<TSource>
         {
             if (source.Count == 0)
                 return Array.Empty<TSource>();
 
-            using var arrayBuilder = ToArrayBuilder(source, predicate, ArrayPool<TSource>.Shared);
+            using var arrayBuilder = ToArrayBuilderAt(source, predicate, ArrayPool<TSource>.Shared);
             return arrayBuilder.ToArray();
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static IMemoryOwner<TSource> ToArray<TSource>(this in ArraySegment<TSource> source, PredicateAt<TSource> predicate, MemoryPool<TSource> pool)
+        static IMemoryOwner<TSource> ToArrayAt<TSource, TPredicate>(this in ArraySegment<TSource> source, TPredicate predicate, MemoryPool<TSource> pool)
+            where TPredicate : struct, IPredicateAt<TSource>
         {
             if (source.Count == 0)
                 return pool.Rent(0);
 
-            using var arrayBuilder = ToArrayBuilder(source, predicate, ArrayPool<TSource>.Shared);
+            using var arrayBuilder = ToArrayBuilderAt(source, predicate, ArrayPool<TSource>.Shared);
             return arrayBuilder.ToArray(pool);
         }
 
@@ -143,7 +147,8 @@ namespace NetFabric.Hyperlinq
 
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static TResult[] ToArray<TSource, TResult>(this in ArraySegment<TSource> source, Predicate<TSource> predicate, NullableSelector<TSource, TResult> selector)
+        static TResult[] ToArray<TSource, TResult, TPredicate>(this in ArraySegment<TSource> source, TPredicate predicate, NullableSelector<TSource, TResult> selector)
+            where TPredicate : struct, IPredicate<TSource>
         {
             if (source.Count == 0)
                 return Array.Empty<TResult>();
@@ -153,7 +158,8 @@ namespace NetFabric.Hyperlinq
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static IMemoryOwner<TResult> ToArray<TSource, TResult>(this in ArraySegment<TSource> source, Predicate<TSource> predicate, NullableSelector<TSource, TResult> selector, MemoryPool<TResult> pool)
+        static IMemoryOwner<TResult> ToArray<TSource, TResult, TPredicate>(this in ArraySegment<TSource> source, TPredicate predicate, NullableSelector<TSource, TResult> selector, MemoryPool<TResult> pool)
+            where TPredicate : struct, IPredicate<TSource>
         {
             if (source.Count == 0)
                 return pool.Rent(0);

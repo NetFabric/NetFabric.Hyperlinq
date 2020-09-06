@@ -5,7 +5,7 @@
     <PackageId>NetFabric.Hyperlinq.Interfaces</PackageId>
     <Title>NetFabric.Hyperlinq.Interfaces</Title>
     <Description>Base interfaces for high performance enumeration.</Description>
-    <Version>2.1.0</Version>
+    <Version>2.2.0</Version>
     <PackageIcon>Icon.png</PackageIcon>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageTags>netfabric, hyperlinq, linq, enumeration, performance</PackageTags>

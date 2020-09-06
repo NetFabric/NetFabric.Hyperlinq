@@ -15,17 +15,19 @@ namespace NetFabric.Hyperlinq
 
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static Option<TSource> Single<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Predicate<TSource> predicate) 
+        static Option<TSource> Single<TEnumerable, TEnumerator, TSource, TPredicate>(this TEnumerable source, TPredicate predicate) 
             where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
-            => GetSingle<TEnumerable, TEnumerator, TSource>(source, predicate);
+            where TPredicate : struct, IPredicate<TSource>
+            => GetSingle<TEnumerable, TEnumerator, TSource, TPredicate>(source, predicate);
 
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static Option<TSource> Single<TEnumerable, TEnumerator, TSource>(this TEnumerable source, PredicateAt<TSource> predicate) 
+        static Option<TSource> SingleAt<TEnumerable, TEnumerator, TSource, TPredicate>(this TEnumerable source, TPredicate predicate) 
             where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
-            => GetSingle<TEnumerable, TEnumerator, TSource>(source, predicate);
+            where TPredicate : struct, IPredicateAt<TSource>
+            => GetSingleAt<TEnumerable, TEnumerator, TSource, TPredicate>(source, predicate);
 
         
         static Option<TResult> Single<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, NullableSelector<TSource, TResult> selector) 
@@ -40,10 +42,11 @@ namespace NetFabric.Hyperlinq
             => GetSingle<TEnumerable, TEnumerator, TSource>(source).Select(item => selector(item, 0));
 
         
-        static Option<TResult> Single<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, Predicate<TSource> predicate, NullableSelector<TSource, TResult> selector) 
+        static Option<TResult> Single<TEnumerable, TEnumerator, TSource, TResult, TPredicate>(this TEnumerable source, TPredicate predicate, NullableSelector<TSource, TResult> selector) 
             where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
-            => GetSingle<TEnumerable, TEnumerator, TSource>(source, predicate).Select(selector);
+            where TPredicate : struct, IPredicate<TSource>
+            => GetSingle<TEnumerable, TEnumerator, TSource, TPredicate>(source, predicate).Select(selector);
 
         ////////////////////////////////
         // GetSingle 
@@ -66,21 +69,22 @@ namespace NetFabric.Hyperlinq
         }
 
         
-        static Option<TSource> GetSingle<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Predicate<TSource> predicate) 
+        static Option<TSource> GetSingle<TEnumerable, TEnumerator, TSource, TPredicate>(this TEnumerable source, TPredicate predicate) 
             where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
+            where TPredicate : struct, IPredicate<TSource>
         {
             using var enumerator = source.GetEnumerator();
             while (enumerator.MoveNext())
             {
-                if (predicate(enumerator.Current))
+                if (predicate.Invoke(enumerator.Current))
                 {
                     var value = enumerator.Current;
 
                     // found first, keep going until end or find second
                     while (enumerator.MoveNext())
                     {
-                        if (predicate(enumerator.Current))
+                        if (predicate.Invoke(enumerator.Current))
                             return Option.None;
                     }
 
@@ -91,23 +95,24 @@ namespace NetFabric.Hyperlinq
         }
 
         
-        static Option<TSource> GetSingle<TEnumerable, TEnumerator, TSource>(this TEnumerable source, PredicateAt<TSource> predicate) 
+        static Option<TSource> GetSingleAt<TEnumerable, TEnumerator, TSource, TPredicate>(this TEnumerable source, TPredicate predicate) 
             where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
+            where TPredicate : struct, IPredicateAt<TSource>
         {
             var enumerator = source.GetEnumerator();
             checked
             {
                 for (var index = 0; enumerator.MoveNext(); index++)
                 {
-                    if (predicate(enumerator.Current, index))
+                    if (predicate.Invoke(enumerator.Current, index))
                     {
                         var value = enumerator.Current;
 
                         // found first, keep going until end or find second
                         for (index++; enumerator.MoveNext(); index++)
                         {
-                            if (predicate(enumerator.Current, index))
+                            if (predicate.Invoke(enumerator.Current, index))
                                 return Option.None;
                         }
 

@@ -11,18 +11,16 @@ namespace NetFabric.Hyperlinq
             => source.Count != 0;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool Any<TSource>(this in ArraySegment<TSource> source, Predicate<TSource> predicate)
+        static bool Any<TSource, TPredicate>(this in ArraySegment<TSource> source, TPredicate predicate)
+            where TPredicate : struct, IPredicate<TSource>
         {
-            if (predicate is null)
-                Throw.ArgumentNullException(nameof(predicate));
-
             if (source.Any())
             {
                 if (source.IsWhole())
                 {
                     foreach (var item in source.Array)
                     {
-                        if (predicate(item))
+                        if (predicate.Invoke(item))
                             return true;
                     }
                 }
@@ -32,7 +30,7 @@ namespace NetFabric.Hyperlinq
                     var end = source.Count + source.Offset - 1;
                     for (var index = source.Offset; index <= end; index++)
                     {
-                        if (predicate(array![index]))
+                        if (predicate.Invoke(array![index]))
                             return true;
                     }
                 }
@@ -41,11 +39,9 @@ namespace NetFabric.Hyperlinq
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool Any<TSource>(this in ArraySegment<TSource> source, PredicateAt<TSource> predicate)
+        static bool AnyAt<TSource, TPredicate>(this in ArraySegment<TSource> source, TPredicate predicate)
+            where TPredicate : struct, IPredicateAt<TSource>
         {
-            if (predicate is null)
-                Throw.ArgumentNullException(nameof(predicate));
-
             if (source.Any())
             {
                 if (source.IsWhole())
@@ -53,7 +49,7 @@ namespace NetFabric.Hyperlinq
                     var index = 0;
                     foreach (var item in source.Array)
                     {
-                        if (predicate(item, index))
+                        if (predicate.Invoke(item, index))
                             return true;
 
                         index++;
@@ -67,7 +63,7 @@ namespace NetFabric.Hyperlinq
                         var array = source.Array;
                         for (var index = 0; index <= end; index++)
                         {
-                            if (predicate(array![index], index))
+                            if (predicate.Invoke(array![index], index))
                                 return true;
                         }
                     }
@@ -77,7 +73,7 @@ namespace NetFabric.Hyperlinq
                         var offset = source.Offset;
                         for (var index = 0; index <= end; index++)
                         {
-                            if (predicate(array![index + offset], index))
+                            if (predicate.Invoke(array![index + offset], index))
                                 return true;
                         }
                     }

@@ -8,16 +8,22 @@ namespace NetFabric.Hyperlinq
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool All<TSource>(this in ArraySegment<TSource> source, Predicate<TSource> predicate)
         {
-            if (predicate is null)
-                Throw.ArgumentNullException(nameof(predicate));
+            if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
 
+            return All(source, new ValuePredicate<TSource>(predicate));
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool All<TSource, TPredicate>(this in ArraySegment<TSource> source, TPredicate predicate = default)
+            where TPredicate : struct, IPredicate<TSource>
+        {
             if (source.Any())
             {
                 if (source.IsWhole())
                 {
                     foreach (var item in source.Array)
                     {
-                        if (!predicate(item))
+                        if (!predicate.Invoke(item))
                             return false;
                     }
                 }
@@ -27,7 +33,7 @@ namespace NetFabric.Hyperlinq
                     var end = source.Count + source.Offset - 1;
                     for (var index = source.Offset; index <= end; index++)
                     {
-                        if (!predicate(array![index]))
+                        if (!predicate.Invoke(array![index]))
                             return false;
                     }
                 }
@@ -35,13 +41,18 @@ namespace NetFabric.Hyperlinq
             return true;
         }
 
-
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool All<TSource>(this in ArraySegment<TSource> source, PredicateAt<TSource> predicate)
         {
-            if (predicate is null)
-                Throw.ArgumentNullException(nameof(predicate));
+            if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
 
+            return AllAt(source, new ValuePredicateAt<TSource>(predicate));
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool AllAt<TSource, TPredicate>(this in ArraySegment<TSource> source, TPredicate predicate = default)
+            where TPredicate : struct, IPredicateAt<TSource>
+        {
             if (source.Any())
             {
                 if (source.IsWhole())
@@ -49,7 +60,7 @@ namespace NetFabric.Hyperlinq
                     var index = 0;
                     foreach (var item in source.Array)
                     {
-                        if (!predicate(item, index))
+                        if (!predicate.Invoke(item, index))
                             return false;
 
                         index++;
@@ -61,7 +72,7 @@ namespace NetFabric.Hyperlinq
                     var end = source.Count + source.Offset - 1;
                     for (var index = source.Offset; index <= end; index++)
                     {
-                        if (!predicate(array![index], index))
+                        if (!predicate.Invoke(array![index], index))
                             return false;
                     }
                 }

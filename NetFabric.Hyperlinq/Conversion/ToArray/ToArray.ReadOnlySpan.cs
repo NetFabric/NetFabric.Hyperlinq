@@ -21,14 +21,16 @@ namespace NetFabric.Hyperlinq
         //////////////////////////////////////////////////////////////////////////////////////////////////
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static TSource[] ToArray<TSource>(this ReadOnlySpan<TSource> source, Predicate<TSource> predicate)
+        static TSource[] ToArray<TSource, TPredicate>(this ReadOnlySpan<TSource> source, TPredicate predicate)
+            where TPredicate : struct, IPredicate<TSource>
         {
             using var arrayBuilder = ToArrayBuilder(source, predicate,ArrayPool<TSource>.Shared);
             return arrayBuilder.ToArray();
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static IMemoryOwner<TSource> ToArray<TSource>(this ReadOnlySpan<TSource> source, Predicate<TSource> predicate, MemoryPool<TSource> pool)
+        static IMemoryOwner<TSource> ToArray<TSource, TPredicate>(this ReadOnlySpan<TSource> source, TPredicate predicate, MemoryPool<TSource> pool)
+            where TPredicate : struct, IPredicate<TSource>
         {
             using var arrayBuilder = ToArrayBuilder(source, predicate, ArrayPool<TSource>.Shared);
             return arrayBuilder.ToArray(pool);
@@ -38,16 +40,18 @@ namespace NetFabric.Hyperlinq
 
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static TSource[] ToArray<TSource>(this ReadOnlySpan<TSource> source, PredicateAt<TSource> predicate)
+        static TSource[] ToArrayAt<TSource, TPredicate>(this ReadOnlySpan<TSource> source, TPredicate predicate)
+            where TPredicate : struct, IPredicateAt<TSource>
         {
-            using var arrayBuilder = ToArrayBuilder(source, predicate, ArrayPool<TSource>.Shared);
+            using var arrayBuilder = ToArrayBuilderAt(source, predicate, ArrayPool<TSource>.Shared);
             return arrayBuilder.ToArray();
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static IMemoryOwner<TSource> ToArray<TSource>(this ReadOnlySpan<TSource> source, PredicateAt<TSource> predicate, MemoryPool<TSource> pool)
+        static IMemoryOwner<TSource> ToArrayAt<TSource, TPredicate>(this ReadOnlySpan<TSource> source, TPredicate predicate, MemoryPool<TSource> pool)
+            where TPredicate : struct, IPredicateAt<TSource>
         {
-            using var arrayBuilder = ToArrayBuilder(source, predicate, ArrayPool<TSource>.Shared);
+            using var arrayBuilder = ToArrayBuilderAt(source, predicate, ArrayPool<TSource>.Shared);
             return arrayBuilder.ToArray(pool);
         }
 
@@ -100,14 +104,16 @@ namespace NetFabric.Hyperlinq
 
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static TResult[] ToArray<TSource, TResult>(this ReadOnlySpan<TSource> source, Predicate<TSource> predicate, NullableSelector<TSource, TResult> selector)
+        static TResult[] ToArray<TSource, TResult, TPredicate>(this ReadOnlySpan<TSource> source, TPredicate predicate, NullableSelector<TSource, TResult> selector)
+            where TPredicate : struct, IPredicate<TSource>
         {
             using var arrayBuilder = ToArrayBuilder(source, predicate, selector, ArrayPool<TResult>.Shared);
             return arrayBuilder.ToArray();
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static IMemoryOwner<TResult> ToArray<TSource, TResult>(this ReadOnlySpan<TSource> source, Predicate<TSource> predicate, NullableSelector<TSource, TResult> selector, MemoryPool<TResult> pool)
+        static IMemoryOwner<TResult> ToArray<TSource, TResult, TPredicate>(this ReadOnlySpan<TSource> source, TPredicate predicate, NullableSelector<TSource, TResult> selector, MemoryPool<TResult> pool)
+            where TPredicate : struct, IPredicate<TSource>
         {
             using var arrayBuilder = ToArrayBuilder(source, predicate, selector, ArrayPool<TResult>.Shared);
             return arrayBuilder.ToArray(pool);

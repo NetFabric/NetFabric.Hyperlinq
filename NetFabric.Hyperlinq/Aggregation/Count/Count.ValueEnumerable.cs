@@ -19,30 +19,32 @@ namespace NetFabric.Hyperlinq
             return counter;
         }
 
-        static int Count<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Predicate<TSource> predicate)
+        static int Count<TEnumerable, TEnumerator, TSource, TPredicate>(this TEnumerable source, TPredicate predicate)
             where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
+            where TPredicate : struct, IPredicate<TSource>
         {
             var counter = 0;
             using var enumerator = source.GetEnumerator();
             checked
             {
                 while (enumerator.MoveNext())
-                    counter += predicate(enumerator.Current).AsByte();
+                    counter += predicate.Invoke(enumerator.Current).AsByte();
             }
             return counter;
         }
 
-        static int Count<TEnumerable, TEnumerator, TSource>(this TEnumerable source, PredicateAt<TSource> predicate)
+        static int CountAt<TEnumerable, TEnumerator, TSource, TPredicate>(this TEnumerable source, TPredicate predicate)
             where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
+            where TPredicate : struct, IPredicateAt<TSource>
         {
             var counter = 0;
             using var enumerator = source.GetEnumerator();
             checked
             {
                 for (var index = 0; enumerator.MoveNext(); index++)
-                    counter += predicate(enumerator.Current, index).AsByte();
+                    counter += predicate.Invoke(enumerator.Current, index).AsByte();
             }
             return counter;
         }

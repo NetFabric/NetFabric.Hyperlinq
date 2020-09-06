@@ -12,20 +12,26 @@ namespace NetFabric.Hyperlinq
             [GeneratedCode("NetFabric.Hyperlinq.SourceGenerator", "1.0.0")]
             [DebuggerNonUserCode]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly System.Threading.Tasks.ValueTask<int> CountAsync(System.Threading.CancellationToken cancellationToken = default)
-            => NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.CountAsync<NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>,NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator,TSource>(this,cancellationToken);
+            public readonly NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipEnumerable<NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>,NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator,TSource> Skip(int count)
+            => NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.Skip<NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>,NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator,TSource>(this,count);
 
             [GeneratedCode("NetFabric.Hyperlinq.SourceGenerator", "1.0.0")]
             [DebuggerNonUserCode]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource> AsAsyncEnumerable()
-            => NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.AsAsyncEnumerable<NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>,NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator,TSource>(this);
+            public readonly System.Threading.Tasks.ValueTask<bool> ContainsAsync(TSource value,System.Threading.CancellationToken cancellationToken = default)
+            => NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.ContainsAsync<NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>,NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator,TSource>(this,value,cancellationToken);
 
             [GeneratedCode("NetFabric.Hyperlinq.SourceGenerator", "1.0.0")]
             [DebuggerNonUserCode]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource> AsAsyncValueEnumerable()
-            => NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.AsAsyncValueEnumerable<NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>,NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator,TSource>(this);
+            public readonly System.Threading.Tasks.ValueTask<bool> ContainsAsync(TSource value,System.Collections.Generic.IEqualityComparer<TSource>? comparer = default,System.Threading.CancellationToken cancellationToken = default)
+            => NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.ContainsAsync<NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>,NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator,TSource>(this,value,comparer,cancellationToken);
+
+            [GeneratedCode("NetFabric.Hyperlinq.SourceGenerator", "1.0.0")]
+            [DebuggerNonUserCode]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public readonly System.Threading.Tasks.ValueTask<NetFabric.Hyperlinq.Option<TSource>> SingleAsync(System.Threading.CancellationToken cancellationToken = default)
+            => NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SingleAsync<NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>,NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator,TSource>(this,cancellationToken);
 
             [GeneratedCode("NetFabric.Hyperlinq.SourceGenerator", "1.0.0")]
             [DebuggerNonUserCode]
@@ -42,30 +48,146 @@ namespace NetFabric.Hyperlinq
             [GeneratedCode("NetFabric.Hyperlinq.SourceGenerator", "1.0.0")]
             [DebuggerNonUserCode]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly System.Threading.Tasks.ValueTask<System.Collections.Generic.Dictionary<TKey, TSource>> ToDictionaryAsync<TKey>(NetFabric.Hyperlinq.AsyncSelector<TSource, TKey> keySelector,System.Threading.CancellationToken cancellationToken = default)
-            where TKey : notnull
+            public readonly System.Threading.Tasks.ValueTask<bool> AllAsync(NetFabric.Hyperlinq.AsyncPredicate<TSource> predicate,System.Threading.CancellationToken cancellationToken = default)
+            => NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.AllAsync<NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>,NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator,TSource>(this,predicate,cancellationToken);
+
+            [GeneratedCode("NetFabric.Hyperlinq.SourceGenerator", "1.0.0")]
+            [DebuggerNonUserCode]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public readonly System.Threading.Tasks.ValueTask<bool> AllAsync(TPredicate predicate = default,System.Threading.CancellationToken cancellationToken = default)
+            => NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.AllAsync<NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>,NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator,TSource,TPredicate>(this,predicate,cancellationToken);
+
+            [GeneratedCode("NetFabric.Hyperlinq.SourceGenerator", "1.0.0")]
+            [DebuggerNonUserCode]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public readonly System.Threading.Tasks.ValueTask<bool> AllAsync(NetFabric.Hyperlinq.AsyncPredicateAt<TSource> predicate,System.Threading.CancellationToken cancellationToken = default)
+            => NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.AllAsync<NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>,NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator,TSource>(this,predicate,cancellationToken);
+
+            [GeneratedCode("NetFabric.Hyperlinq.SourceGenerator", "1.0.0")]
+            [DebuggerNonUserCode]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public readonly System.Threading.Tasks.ValueTask<bool> AllAtAsync(TPredicate predicate = default,System.Threading.CancellationToken cancellationToken = default)
+            => NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.AllAtAsync<NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>,NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator,TSource,TPredicate>(this,predicate,cancellationToken);
+
+            [GeneratedCode("NetFabric.Hyperlinq.SourceGenerator", "1.0.0")]
+            [DebuggerNonUserCode]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public readonly System.Threading.Tasks.ValueTask<bool> AnyAsync(System.Threading.CancellationToken cancellationToken = default)
+            => NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.AnyAsync<NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>,NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator,TSource>(this,cancellationToken);
+
+            [GeneratedCode("NetFabric.Hyperlinq.SourceGenerator", "1.0.0")]
+            [DebuggerNonUserCode]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public readonly NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SelectAtEnumerable<NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>,NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator,TSource,TResult> Select(NetFabric.Hyperlinq.AsyncSelectorAt<TSource, TResult> selector)
+            => NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.Select<NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>,NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator,TSource,TResult>(this,selector);
+
+            [GeneratedCode("NetFabric.Hyperlinq.SourceGenerator", "1.0.0")]
+            [DebuggerNonUserCode]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public readonly NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.WhereEnumerable<NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>,NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator,TSource,NetFabric.Hyperlinq.AsyncValuePredicate<TSource>> Where(NetFabric.Hyperlinq.AsyncPredicate<TSource> predicate)
+            => NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.Where<NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>,NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator,TSource>(this,predicate);
+
+            [GeneratedCode("NetFabric.Hyperlinq.SourceGenerator", "1.0.0")]
+            [DebuggerNonUserCode]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public readonly NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.WhereEnumerable<NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>,NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator,TSource,TPredicate> Where(TPredicate predicate = default)
+            => NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.Where<NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>,NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator,TSource,TPredicate>(this,predicate);
+
+            [GeneratedCode("NetFabric.Hyperlinq.SourceGenerator", "1.0.0")]
+            [DebuggerNonUserCode]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public readonly NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource> AsAsyncValueEnumerable()
+            => NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.AsAsyncValueEnumerable<NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>,NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator,TSource>(this);
+
+            [GeneratedCode("NetFabric.Hyperlinq.SourceGenerator", "1.0.0")]
+            [DebuggerNonUserCode]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public readonly NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.WhereAtEnumerable<NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>,NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator,TSource,NetFabric.Hyperlinq.AsyncValuePredicateAt<TSource>> Where(NetFabric.Hyperlinq.AsyncPredicateAt<TSource> predicate)
+            => NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.Where<NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>,NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator,TSource>(this,predicate);
+
+            [GeneratedCode("NetFabric.Hyperlinq.SourceGenerator", "1.0.0")]
+            [DebuggerNonUserCode]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public readonly NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.WhereAtEnumerable<NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>,NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator,TSource,TPredicate> WhereAt(TPredicate predicate = default)
+            => NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.WhereAt<NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>,NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator,TSource,TPredicate>(this,predicate);
+
+            [GeneratedCode("NetFabric.Hyperlinq.SourceGenerator", "1.0.0")]
+            [DebuggerNonUserCode]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public readonly System.Threading.Tasks.ValueTask<int> CountAsync(System.Threading.CancellationToken cancellationToken = default)
+            => NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.CountAsync<NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>,NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator,TSource>(this,cancellationToken);
+
+            [GeneratedCode("NetFabric.Hyperlinq.SourceGenerator", "1.0.0")]
+            [DebuggerNonUserCode]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public readonly System.Threading.Tasks.ValueTask<TSource[]> ToArrayBuilderAsync(System.Threading.CancellationToken cancellationToken = default)
+            => NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.ToArrayBuilderAsync<NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>,NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator,TSource>(this,cancellationToken);
+
+            [GeneratedCode("NetFabric.Hyperlinq.SourceGenerator", "1.0.0")]
+            [DebuggerNonUserCode]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public readonly System.Threading.Tasks.ValueTask<System.Buffers.IMemoryOwner<TSource>> ToArrayBuilderAsync(System.Buffers.MemoryPool<TSource> pool,System.Threading.CancellationToken cancellationToken = default)
+            => NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.ToArrayBuilderAsync<NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>,NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator,TSource>(this,pool,cancellationToken);
+
+            [GeneratedCode("NetFabric.Hyperlinq.SourceGenerator", "1.0.0")]
+            [DebuggerNonUserCode]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public readonly System.Threading.Tasks.ValueTask<NetFabric.Hyperlinq.Option<TSource>> FirstAsync(System.Threading.CancellationToken cancellationToken = default)
+            => NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.FirstAsync<NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>,NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator,TSource>(this,cancellationToken);
+
+            [GeneratedCode("NetFabric.Hyperlinq.SourceGenerator", "1.0.0")]
+            [DebuggerNonUserCode]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public readonly System.Threading.Tasks.ValueTask<NetFabric.Hyperlinq.Option<TResult>> FirstAsync(NetFabric.Hyperlinq.AsyncSelector<TSource, TResult> selector,System.Threading.CancellationToken cancellationToken)
+            => NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.FirstAsync<NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>,NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator,TSource,TResult>(this,selector,cancellationToken);
+
+            [GeneratedCode("NetFabric.Hyperlinq.SourceGenerator", "1.0.0")]
+            [DebuggerNonUserCode]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public readonly System.Threading.Tasks.ValueTask<NetFabric.Hyperlinq.Option<TResult>> FirstAsync(NetFabric.Hyperlinq.AsyncSelectorAt<TSource, TResult> selector,System.Threading.CancellationToken cancellationToken)
+            => NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.FirstAsync<NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>,NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator,TSource,TResult>(this,selector,cancellationToken);
+
+            [GeneratedCode("NetFabric.Hyperlinq.SourceGenerator", "1.0.0")]
+            [DebuggerNonUserCode]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public readonly NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.DistinctEnumerable<NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>,NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator,TSource> Distinct(System.Collections.Generic.IEqualityComparer<TSource>? comparer = default)
+            => NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.Distinct<NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>,NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator,TSource>(this,comparer);
+
+            [GeneratedCode("NetFabric.Hyperlinq.SourceGenerator", "1.0.0")]
+            [DebuggerNonUserCode]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public readonly NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SelectEnumerable<NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>,NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator,TSource,TResult> Select(NetFabric.Hyperlinq.AsyncSelector<TSource, TResult> selector)
+            => NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.Select<NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>,NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator,TSource,TResult>(this,selector);
+
+            [GeneratedCode("NetFabric.Hyperlinq.SourceGenerator", "1.0.0")]
+            [DebuggerNonUserCode]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public readonly System.Threading.Tasks.ValueTask<System.Collections.Generic.Dictionary<TKey, TSource>> ToDictionaryAsync(NetFabric.Hyperlinq.AsyncSelector<TSource, TKey> keySelector,System.Threading.CancellationToken cancellationToken = default)
             => NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.ToDictionaryAsync<NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>,NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator,TSource,TKey>(this,keySelector,cancellationToken);
 
             [GeneratedCode("NetFabric.Hyperlinq.SourceGenerator", "1.0.0")]
             [DebuggerNonUserCode]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly System.Threading.Tasks.ValueTask<System.Collections.Generic.Dictionary<TKey, TSource>> ToDictionaryAsync<TKey>(NetFabric.Hyperlinq.AsyncSelector<TSource, TKey> keySelector,System.Collections.Generic.IEqualityComparer<TKey>? comparer,System.Threading.CancellationToken cancellationToken = default)
-            where TKey : notnull
+            public readonly System.Threading.Tasks.ValueTask<System.Collections.Generic.Dictionary<TKey, TSource>> ToDictionaryAsync(NetFabric.Hyperlinq.AsyncSelector<TSource, TKey> keySelector,System.Collections.Generic.IEqualityComparer<TKey>? comparer,System.Threading.CancellationToken cancellationToken = default)
             => NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.ToDictionaryAsync<NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>,NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator,TSource,TKey>(this,keySelector,comparer,cancellationToken);
 
             [GeneratedCode("NetFabric.Hyperlinq.SourceGenerator", "1.0.0")]
             [DebuggerNonUserCode]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly System.Threading.Tasks.ValueTask<System.Collections.Generic.Dictionary<TKey, TElement>> ToDictionaryAsync<TKey,TElement>(NetFabric.Hyperlinq.AsyncSelector<TSource, TKey> keySelector,NetFabric.Hyperlinq.AsyncSelector<TSource, TElement> elementSelector,System.Threading.CancellationToken cancellationToken = default)
-            where TKey : notnull
+            public readonly System.Threading.Tasks.ValueTask<System.Collections.Generic.Dictionary<TKey, TElement>> ToDictionaryAsync(NetFabric.Hyperlinq.AsyncSelector<TSource, TKey> keySelector,NetFabric.Hyperlinq.AsyncSelector<TSource, TElement> elementSelector,System.Threading.CancellationToken cancellationToken = default)
             => NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.ToDictionaryAsync<NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>,NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator,TSource,TKey,TElement>(this,keySelector,elementSelector,cancellationToken);
 
             [GeneratedCode("NetFabric.Hyperlinq.SourceGenerator", "1.0.0")]
             [DebuggerNonUserCode]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly System.Threading.Tasks.ValueTask<System.Collections.Generic.Dictionary<TKey, TElement>> ToDictionaryAsync<TKey,TElement>(NetFabric.Hyperlinq.AsyncSelector<TSource, TKey> keySelector,NetFabric.Hyperlinq.AsyncSelector<TSource, TElement> elementSelector,System.Collections.Generic.IEqualityComparer<TKey>? comparer,System.Threading.CancellationToken cancellationToken = default)
-            where TKey : notnull
+            public readonly System.Threading.Tasks.ValueTask<System.Collections.Generic.Dictionary<TKey, TElement>> ToDictionaryAsync(NetFabric.Hyperlinq.AsyncSelector<TSource, TKey> keySelector,NetFabric.Hyperlinq.AsyncSelector<TSource, TElement> elementSelector,System.Collections.Generic.IEqualityComparer<TKey>? comparer,System.Threading.CancellationToken cancellationToken = default)
             => NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.ToDictionaryAsync<NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>,NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator,TSource,TKey,TElement>(this,keySelector,elementSelector,comparer,cancellationToken);
+
+            [GeneratedCode("NetFabric.Hyperlinq.SourceGenerator", "1.0.0")]
+            [DebuggerNonUserCode]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public readonly NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource> AsAsyncEnumerable()
+            => NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.AsAsyncEnumerable<NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>,NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator,TSource>(this);
 
             [GeneratedCode("NetFabric.Hyperlinq.SourceGenerator", "1.0.0")]
             [DebuggerNonUserCode]
@@ -82,116 +204,8 @@ namespace NetFabric.Hyperlinq
             [GeneratedCode("NetFabric.Hyperlinq.SourceGenerator", "1.0.0")]
             [DebuggerNonUserCode]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly System.Threading.Tasks.ValueTask<NetFabric.Hyperlinq.Option<TSource>> FirstAsync(System.Threading.CancellationToken cancellationToken = default)
-            => NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.FirstAsync<NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>,NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator,TSource>(this,cancellationToken);
-
-            [GeneratedCode("NetFabric.Hyperlinq.SourceGenerator", "1.0.0")]
-            [DebuggerNonUserCode]
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly System.Threading.Tasks.ValueTask<NetFabric.Hyperlinq.Option<TResult>> FirstAsync<TResult>(NetFabric.Hyperlinq.AsyncSelector<TSource, TResult> selector,System.Threading.CancellationToken cancellationToken)
-            => NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.FirstAsync<NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>,NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator,TSource,TResult>(this,selector,cancellationToken);
-
-            [GeneratedCode("NetFabric.Hyperlinq.SourceGenerator", "1.0.0")]
-            [DebuggerNonUserCode]
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly System.Threading.Tasks.ValueTask<NetFabric.Hyperlinq.Option<TResult>> FirstAsync<TResult>(NetFabric.Hyperlinq.AsyncSelectorAt<TSource, TResult> selector,System.Threading.CancellationToken cancellationToken)
-            => NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.FirstAsync<NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>,NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator,TSource,TResult>(this,selector,cancellationToken);
-
-            [GeneratedCode("NetFabric.Hyperlinq.SourceGenerator", "1.0.0")]
-            [DebuggerNonUserCode]
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly System.Threading.Tasks.ValueTask<NetFabric.Hyperlinq.Option<TSource>> SingleAsync(System.Threading.CancellationToken cancellationToken = default)
-            => NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SingleAsync<NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>,NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator,TSource>(this,cancellationToken);
-
-            [GeneratedCode("NetFabric.Hyperlinq.SourceGenerator", "1.0.0")]
-            [DebuggerNonUserCode]
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.WhereAtEnumerable<NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>,NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator,TSource> Where(NetFabric.Hyperlinq.AsyncPredicateAt<TSource> predicate)
-            => NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.Where<NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>,NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator,TSource>(this,predicate);
-
-            [GeneratedCode("NetFabric.Hyperlinq.SourceGenerator", "1.0.0")]
-            [DebuggerNonUserCode]
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.WhereEnumerable<NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>,NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator,TSource> Where(NetFabric.Hyperlinq.AsyncPredicate<TSource> predicate)
-            => NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.Where<NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>,NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator,TSource>(this,predicate);
-
-            [GeneratedCode("NetFabric.Hyperlinq.SourceGenerator", "1.0.0")]
-            [DebuggerNonUserCode]
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipEnumerable<NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>,NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator,TSource> Skip(int count)
-            => NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.Skip<NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>,NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator,TSource>(this,count);
-
-            [GeneratedCode("NetFabric.Hyperlinq.SourceGenerator", "1.0.0")]
-            [DebuggerNonUserCode]
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SelectAtEnumerable<NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>,NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator,TSource,TResult> Select<TResult>(NetFabric.Hyperlinq.AsyncSelectorAt<TSource, TResult> selector)
-            => NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.Select<NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>,NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator,TSource,TResult>(this,selector);
-
-            [GeneratedCode("NetFabric.Hyperlinq.SourceGenerator", "1.0.0")]
-            [DebuggerNonUserCode]
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SelectEnumerable<NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>,NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator,TSource,TResult> Select<TResult>(NetFabric.Hyperlinq.AsyncSelector<TSource, TResult> selector)
-            => NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.Select<NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>,NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator,TSource,TResult>(this,selector);
-
-            [GeneratedCode("NetFabric.Hyperlinq.SourceGenerator", "1.0.0")]
-            [DebuggerNonUserCode]
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly System.Threading.Tasks.ValueTask<bool> AllAsync(NetFabric.Hyperlinq.AsyncPredicate<TSource> predicate,System.Threading.CancellationToken cancellationToken = default)
-            => NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.AllAsync<NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>,NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator,TSource>(this,predicate,cancellationToken);
-
-            [GeneratedCode("NetFabric.Hyperlinq.SourceGenerator", "1.0.0")]
-            [DebuggerNonUserCode]
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly System.Threading.Tasks.ValueTask<bool> AllAsync(NetFabric.Hyperlinq.AsyncPredicateAt<TSource> predicate,System.Threading.CancellationToken cancellationToken = default)
-            => NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.AllAsync<NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>,NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator,TSource>(this,predicate,cancellationToken);
-
-            [GeneratedCode("NetFabric.Hyperlinq.SourceGenerator", "1.0.0")]
-            [DebuggerNonUserCode]
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly System.Threading.Tasks.ValueTask<bool> AnyAsync(System.Threading.CancellationToken cancellationToken = default)
-            => NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.AnyAsync<NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>,NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator,TSource>(this,cancellationToken);
-
-            [GeneratedCode("NetFabric.Hyperlinq.SourceGenerator", "1.0.0")]
-            [DebuggerNonUserCode]
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly System.Threading.Tasks.ValueTask<bool> AnyAsync(NetFabric.Hyperlinq.AsyncPredicate<TSource> predicate,System.Threading.CancellationToken cancellationToken = default)
-            => NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.AnyAsync<NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>,NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator,TSource>(this,predicate,cancellationToken);
-
-            [GeneratedCode("NetFabric.Hyperlinq.SourceGenerator", "1.0.0")]
-            [DebuggerNonUserCode]
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly System.Threading.Tasks.ValueTask<bool> AnyAsync(NetFabric.Hyperlinq.AsyncPredicateAt<TSource> predicate,System.Threading.CancellationToken cancellationToken = default)
-            => NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.AnyAsync<NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>,NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator,TSource>(this,predicate,cancellationToken);
-
-            [GeneratedCode("NetFabric.Hyperlinq.SourceGenerator", "1.0.0")]
-            [DebuggerNonUserCode]
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly System.Threading.Tasks.ValueTask<bool> ContainsAsync(TSource value)
-            => NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.ContainsAsync<NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>,NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator,TSource>(this,value);
-
-            [GeneratedCode("NetFabric.Hyperlinq.SourceGenerator", "1.0.0")]
-            [DebuggerNonUserCode]
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly System.Threading.Tasks.ValueTask<bool> ContainsAsync(TSource value,System.Collections.Generic.IEqualityComparer<TSource>? comparer = default,System.Threading.CancellationToken cancellationToken = default)
-            => NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.ContainsAsync<NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>,NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator,TSource>(this,value,comparer,cancellationToken);
-
-            [GeneratedCode("NetFabric.Hyperlinq.SourceGenerator", "1.0.0")]
-            [DebuggerNonUserCode]
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.DistinctEnumerable<NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>,NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator,TSource> Distinct(System.Collections.Generic.IEqualityComparer<TSource>? comparer = default)
-            => NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.Distinct<NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>,NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator,TSource>(this,comparer);
-
-            [GeneratedCode("NetFabric.Hyperlinq.SourceGenerator", "1.0.0")]
-            [DebuggerNonUserCode]
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly System.Threading.Tasks.ValueTask<TSource[]> ToArrayBuilderAsync(System.Threading.CancellationToken cancellationToken = default)
-            => NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.ToArrayBuilderAsync<NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>,NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator,TSource>(this,cancellationToken);
-
-            [GeneratedCode("NetFabric.Hyperlinq.SourceGenerator", "1.0.0")]
-            [DebuggerNonUserCode]
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly System.Threading.Tasks.ValueTask<System.Buffers.IMemoryOwner<TSource>> ToArrayBuilderAsync(System.Buffers.MemoryPool<TSource> pool,System.Threading.CancellationToken cancellationToken = default)
-            => NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.ToArrayBuilderAsync<NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>,NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator,TSource>(this,pool,cancellationToken);
+            public readonly NetFabric.Hyperlinq.AsyncEnumerableExtensions.AsyncValueEnumerableWrapper<NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>,NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator,TSource> AsAsyncValueEnumerable(System.Func<TEnumerable, System.Threading.CancellationToken, TEnumerator> getAsyncEnumerator)
+            => NetFabric.Hyperlinq.AsyncEnumerableExtensions.AsAsyncValueEnumerable<NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>,NetFabric.Hyperlinq.AsyncValueEnumerableExtensions.SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator,TSource>(this,getAsyncEnumerator);
 
         }
 

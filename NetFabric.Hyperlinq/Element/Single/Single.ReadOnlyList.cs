@@ -23,17 +23,19 @@ namespace NetFabric.Hyperlinq
             };
 
 
-        static Option<TSource> Single<TList, TSource>(this TList source, Predicate<TSource> predicate, int offset, int count) 
+        static Option<TSource> Single<TList, TSource, TPredicate>(this TList source, TPredicate predicate, int offset, int count) 
             where TList : notnull, IReadOnlyList<TSource>
-            => GetSingle<TList, TSource>(source, predicate, offset, count);
+            where TPredicate : struct, IPredicate<TSource>
+            => GetSingle<TList, TSource, TPredicate>(source, predicate, offset, count);
 
 
-        static Option<TSource> Single<TList, TSource>(this TList source, PredicateAt<TSource> predicate, int offset, int count) 
+        static Option<TSource> SingleAt<TList, TSource, TPredicate>(this TList source, TPredicate predicate, int offset, int count) 
             where TList : notnull, IReadOnlyList<TSource>
-            => GetSingle<TList, TSource>(source, predicate, offset, count);
+            where TPredicate : struct, IPredicateAt<TSource>
+            => GetSingleAt<TList, TSource, TPredicate>(source, predicate, offset, count);
 
 
-        static Option<TResult> Single<TList, TSource, TResult>(this TList source, NullableSelector<TSource, TResult> selector, int offset, int count) 
+        static Option<TResult?> Single<TList, TSource, TResult>(this TList source, NullableSelector<TSource, TResult> selector, int offset, int count) 
             where TList : notnull, IReadOnlyList<TSource>
             => count switch
             {
@@ -43,7 +45,7 @@ namespace NetFabric.Hyperlinq
             };
 
 
-        static Option<TResult> Single<TList, TSource, TResult>(this TList source, NullableSelectorAt<TSource, TResult> selector, int offset, int count) 
+        static Option<TResult?> Single<TList, TSource, TResult>(this TList source, NullableSelectorAt<TSource, TResult> selector, int offset, int count) 
             where TList : notnull, IReadOnlyList<TSource>
             => count switch
             {
@@ -53,27 +55,29 @@ namespace NetFabric.Hyperlinq
             };
 
 
-        static Option<TResult> Single<TList, TSource, TResult>(this TList source, Predicate<TSource> predicate, NullableSelector<TSource, TResult> selector, int offset, int count) 
+        static Option<TResult> Single<TList, TSource, TResult, TPredicate>(this TList source, TPredicate predicate, NullableSelector<TSource, TResult> selector, int offset, int count) 
             where TList : notnull, IReadOnlyList<TSource>
-            => GetSingle<TList, TSource>(source, predicate, offset, count).Select(selector);
+            where TPredicate : struct, IPredicate<TSource>
+            => GetSingle<TList, TSource, TPredicate>(source, predicate, offset, count).Select(selector);
 
         ////////////////////////////////
         // GetSingle 
 
         
-        static Option<TSource> GetSingle<TList, TSource>(this TList source, Predicate<TSource> predicate, int offset, int count)
+        static Option<TSource> GetSingle<TList, TSource, TPredicate>(this TList source, TPredicate predicate, int offset, int count)
             where TList : notnull, IReadOnlyList<TSource>
+            where TPredicate : struct, IPredicate<TSource>
         {
             var end = offset + count - 1;
             for (var index = offset; index <= end; index++)
             {
-                if (predicate(source[index]))
+                if (predicate.Invoke(source[index]))
                 {
                     var value = source[index];
 
                     for (index++; index <= end; index++)
                     {
-                        if (predicate(source[index]))
+                        if (predicate.Invoke(source[index]))
                             return Option.None;
                     }
 
@@ -85,21 +89,22 @@ namespace NetFabric.Hyperlinq
         }
         
         
-        static Option<TSource> GetSingle<TList, TSource>(this TList source, PredicateAt<TSource> predicate, int offset, int count)
+        static Option<TSource> GetSingleAt<TList, TSource, TPredicate>(this TList source, TPredicate predicate, int offset, int count)
             where TList : notnull, IReadOnlyList<TSource>
+            where TPredicate : struct, IPredicateAt<TSource>
         {
             var end = count - 1;
             if (offset == 0)
             {
                 for (var index = 0; index <= end; index++)
                 {
-                    if (predicate(source[index], index))
+                    if (predicate.Invoke(source[index], index))
                     {
                         var value = source[index];
 
                         for (index++; index <= end; index++)
                         {
-                            if (predicate(source[index], index))
+                            if (predicate.Invoke(source[index], index))
                                 return Option.None;
                         }
 
@@ -111,13 +116,13 @@ namespace NetFabric.Hyperlinq
             {
                 for (var index = 0; index <= end; index++)
                 {
-                    if (predicate(source[index + offset], index))
+                    if (predicate.Invoke(source[index + offset], index))
                     {
                         var value = source[index + offset];
 
                         for (index++; index <= end; index++)
                         {
-                            if (predicate(source[index + offset], index))
+                            if (predicate.Invoke(source[index + offset], index))
                                 return Option.None;
                         }
 

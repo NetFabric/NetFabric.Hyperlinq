@@ -14,14 +14,15 @@ namespace NetFabric.Hyperlinq
                 : Option.Some(source[index]);
 
         
-        static Option<TSource> ElementAt<TSource>(this ReadOnlySpan<TSource> source, int index, Predicate<TSource> predicate) 
+        static Option<TSource> ElementAt<TSource, TPredicate>(this ReadOnlySpan<TSource> source, int index, TPredicate predicate) 
+            where TPredicate : struct, IPredicate<TSource>
         {
             if (index >= 0)
             {
                 for (var sourceIndex = 0; sourceIndex < source.Length; sourceIndex++)
                 {
                     var item = source[sourceIndex];
-                    if (predicate(item) && index-- == 0)
+                    if (predicate.Invoke(item) && index-- == 0)
                         return Option.Some(item);
                 }
             }
@@ -29,14 +30,15 @@ namespace NetFabric.Hyperlinq
         }
 
         
-        static Option<TSource> ElementAt<TSource>(this ReadOnlySpan<TSource> source, int index, PredicateAt<TSource> predicate) 
+        static Option<TSource> ElementAtAt<TSource, TPredicate>(this ReadOnlySpan<TSource> source, int index, TPredicate predicate) 
+            where TPredicate : struct, IPredicateAt<TSource>
         {
             if (index >= 0)
             {
                 for (var sourceIndex = 0; sourceIndex < source.Length; sourceIndex++)
                 {
                     var item = source[sourceIndex];
-                    if (predicate(item, sourceIndex) && index-- == 0)
+                    if (predicate.Invoke(item, sourceIndex) && index-- == 0)
                         return Option.Some(item);
                 }
             }
@@ -45,27 +47,28 @@ namespace NetFabric.Hyperlinq
 
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static Option<TResult> ElementAt<TSource, TResult>(this ReadOnlySpan<TSource> source, int index, NullableSelector<TSource, TResult> selector) 
+        static Option<TResult?> ElementAt<TSource, TResult>(this ReadOnlySpan<TSource> source, int index, NullableSelector<TSource, TResult> selector) 
             => index < 0 || index >= source.Length 
                 ? Option.None 
                 : Option.Some(selector(source[index]));
 
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Option<TResult> ElementAt<TSource, TResult>(this ReadOnlySpan<TSource> source, int index, NullableSelectorAt<TSource, TResult> selector) 
+        public static Option<TResult?> ElementAt<TSource, TResult>(this ReadOnlySpan<TSource> source, int index, NullableSelectorAt<TSource, TResult> selector) 
             => index < 0 || index >= source.Length 
                 ? Option.None 
                 : Option.Some(selector(source[index], index));
 
         
-        static Option<TResult> ElementAt<TSource, TResult>(this ReadOnlySpan<TSource> source, int index, Predicate<TSource> predicate, NullableSelector<TSource, TResult> selector) 
+        static Option<TResult?> ElementAt<TSource, TResult, TPredicate>(this ReadOnlySpan<TSource> source, int index, TPredicate predicate, NullableSelector<TSource, TResult> selector) 
+            where TPredicate : struct, IPredicate<TSource>
         {
             if (index >= 0)
             {
                 for (var sourceIndex = 0; sourceIndex < source.Length; sourceIndex++)
                 {
                     var item = source[sourceIndex];
-                    if (predicate(item) && index-- == 0)
+                    if (predicate.Invoke(item) && index-- == 0)
                         return Option.Some(selector(item));
                 }
             }

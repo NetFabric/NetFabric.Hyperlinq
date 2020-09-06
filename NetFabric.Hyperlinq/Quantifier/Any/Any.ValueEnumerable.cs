@@ -15,33 +15,31 @@ namespace NetFabric.Hyperlinq
         }
 
         
-        public static bool Any<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Predicate<TSource> predicate)
+        static bool Any<TEnumerable, TEnumerator, TSource, TPredicate>(this TEnumerable source, TPredicate predicate)
             where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
+            where TPredicate : struct, IPredicate<TSource>
         {
-            if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
-
             using var enumerator = source.GetEnumerator();
             while (enumerator.MoveNext())
             {
-                if (predicate(enumerator.Current))
+                if (predicate.Invoke(enumerator.Current))
                     return true;
             }
             return false;
         }
 
-        public static bool Any<TEnumerable, TEnumerator, TSource>(this TEnumerable source, PredicateAt<TSource> predicate)
+        public static bool AnyAt<TEnumerable, TEnumerator, TSource, TPredicate>(this TEnumerable source, TPredicate predicate)
             where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
+            where TPredicate : struct, IPredicateAt<TSource>
         {
-            if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
-
             using var enumerator = source.GetEnumerator();
             checked
             {
                 for (var index = 0; enumerator.MoveNext(); index++)
                 {
-                    if (predicate(enumerator.Current, index))
+                    if (predicate.Invoke(enumerator.Current, index))
                         return true;
                 }
             }

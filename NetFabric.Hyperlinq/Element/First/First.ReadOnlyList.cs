@@ -22,22 +22,24 @@ namespace NetFabric.Hyperlinq
             };
 
 
-        static Option<TSource> First<TList, TSource>(this TList source, Predicate<TSource> predicate, int offset, int count)
+        static Option<TSource> First<TList, TSource, TPredicate>(this TList source, TPredicate predicate, int offset, int count)
             where TList : notnull, IReadOnlyList<TSource>
+            where TPredicate : struct, IPredicate<TSource>
         {
             var end = offset + count - 1;
             for (var index = offset; index <= end; index++)
             {
                 var item = source[index];
-                if (predicate(item))
+                if (predicate.Invoke(item))
                     return Option.Some(item);
             }
             return Option.None;
         }
 
 
-        static Option<TSource> First<TList, TSource>(this TList source, PredicateAt<TSource> predicate, int offset, int count)
+        static Option<TSource> FirstAt<TList, TSource, TPredicate>(this TList source, TPredicate predicate, int offset, int count)
             where TList : notnull, IReadOnlyList<TSource>
+            where TPredicate : struct, IPredicateAt<TSource>
         {
             var end = count - 1;
             if (offset == 0)
@@ -45,7 +47,7 @@ namespace NetFabric.Hyperlinq
                 for (var index = 0; index <= end; index++)
                 {
                     var item = source[index];
-                    if (predicate(item, index))
+                    if (predicate.Invoke(item, index))
                         return Option.Some(item);
                 }
             }
@@ -54,7 +56,7 @@ namespace NetFabric.Hyperlinq
                 for (var index = 0; index <= end; index++)
                 {
                     var item = source[index + offset];
-                    if (predicate(item, index))
+                    if (predicate.Invoke(item, index))
                         return Option.Some(item);
                 }
             }
@@ -63,7 +65,7 @@ namespace NetFabric.Hyperlinq
 
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static Option<TResult> First<TList, TSource, TResult>(this TList source, NullableSelector<TSource, TResult> selector, int offset, int count)
+        static Option<TResult?> First<TList, TSource, TResult>(this TList source, NullableSelector<TSource, TResult> selector, int offset, int count)
             where TList : notnull, IReadOnlyList<TSource>
             => count switch
             {
@@ -73,7 +75,7 @@ namespace NetFabric.Hyperlinq
 
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static Option<TResult> First<TList, TSource, TResult>(this TList source, NullableSelectorAt<TSource, TResult> selector, int offset, int count)
+        static Option<TResult?> First<TList, TSource, TResult>(this TList source, NullableSelectorAt<TSource, TResult> selector, int offset, int count)
             where TList : notnull, IReadOnlyList<TSource>
             => count switch
             {
@@ -82,13 +84,14 @@ namespace NetFabric.Hyperlinq
             };
 
 
-        static Option<TResult> First<TList, TSource, TResult>(this TList source, Predicate<TSource> predicate, NullableSelector<TSource, TResult> selector, int offset, int count)
+        static Option<TResult?> First<TList, TSource, TResult, TPredicate>(this TList source, TPredicate predicate, NullableSelector<TSource, TResult> selector, int offset, int count)
             where TList : notnull, IReadOnlyList<TSource>
+            where TPredicate : struct, IPredicate<TSource>
         {
             var end = offset + count - 1;
             for (var index = offset; index <= end; index++)
             {
-                if (predicate(source[index]))
+                if (predicate.Invoke(source[index]))
                     return Option.Some(selector(source[index]));
             }
             return Option.None;

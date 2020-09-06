@@ -143,7 +143,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Bindings.System.Collections.Generic
 
             // Act
             var result = ListBindings
-                .Any(list, predicate);
+                .Where(list, predicate)
+                .Any();
 
             // Assert
             _ = result.Must()
@@ -164,7 +165,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Bindings.System.Collections.Generic
 
             // Act
             var result = ListBindings
-                .Any(list, predicate);
+                .Where(list, predicate)
+                .Any();
 
             // Assert
             _ = result.Must()

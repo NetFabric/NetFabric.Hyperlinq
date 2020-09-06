@@ -149,7 +149,7 @@ namespace NetFabric.Hyperlinq
                 public readonly void Dispose() { }
             }
 
-            public bool Contains([AllowNull] TSource value, IEqualityComparer<TSource>? comparer = default)
+            public bool Contains(TSource? value, IEqualityComparer<TSource>? comparer = default)
                 => ReadOnlyListExtensions.Contains(source, value, comparer);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]

@@ -12,33 +12,31 @@ namespace NetFabric.Hyperlinq
     {
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult> WhereSelect<TEnumerable, TEnumerator, TSource, TResult>(
-            this TEnumerable source, 
-            Predicate<TSource> predicate,
+        static WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult, TPredicate> WhereSelect<TEnumerable, TEnumerator, TSource, TResult, TPredicate>(
+            this TEnumerable source,
+            TPredicate predicate,
             NullableSelector<TSource, TResult> selector)
             where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
-            => new WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>(in source, predicate, selector);
+            where TPredicate : struct, IPredicate<TSource>
+            => new WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult, TPredicate>(in source, predicate, selector);
 
         [GeneratorMapping("TSource", "TResult")]
         [StructLayout(LayoutKind.Auto)]
-        public readonly partial struct WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult> 
-            : IValueEnumerable<TResult, WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult>.Enumerator>
+        public readonly partial struct WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult, TPredicate> 
+            : IValueEnumerable<TResult, WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult, TPredicate>.Enumerator>
             where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
+            where TPredicate : struct, IPredicate<TSource>
         {
             readonly TEnumerable source;
-            readonly Predicate<TSource> predicate;
+            readonly TPredicate predicate;
             readonly NullableSelector<TSource, TResult> selector;
 
-            internal WhereSelectEnumerable(in TEnumerable source, Predicate<TSource> predicate, NullableSelector<TSource, TResult> selector)
-            {
-                this.source = source;
-                this.predicate = predicate;
-                this.selector = selector;
-            }
+            internal WhereSelectEnumerable(in TEnumerable source, TPredicate predicate, NullableSelector<TSource, TResult> selector)
+                => (this.source, this.predicate, this.selector) = (source, predicate, selector);
 
-            
+
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly Enumerator GetEnumerator() => new Enumerator(in this);
             readonly IEnumerator<TResult> IEnumerable<TResult>.GetEnumerator() => new Enumerator(in this);
@@ -50,10 +48,10 @@ namespace NetFabric.Hyperlinq
             {
                 [SuppressMessage("Style", "IDE0044:Add readonly modifier")]
                 TEnumerator enumerator; // do not make readonly
-                readonly Predicate<TSource> predicate;
+                readonly TPredicate predicate;
                 readonly NullableSelector<TSource, TResult> selector;
 
-                internal Enumerator(in WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult> enumerable)
+                internal Enumerator(in WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult, TPredicate> enumerable)
                 {
                     enumerator = enumerable.source.GetEnumerator();
                     predicate = enumerable.predicate;
@@ -76,7 +74,7 @@ namespace NetFabric.Hyperlinq
                 {
                     while (enumerator.MoveNext())
                     {
-                        if (predicate(enumerator.Current))
+                        if (predicate.Invoke(enumerator.Current))
                             return true;
                     }
                     return false;
@@ -91,36 +89,28 @@ namespace NetFabric.Hyperlinq
             }
 
             public int Count()
-                => ValueEnumerableExtensions.Count<TEnumerable, TEnumerator, TSource>(source, predicate);
+                => ValueEnumerableExtensions.Count<TEnumerable, TEnumerator, TSource, TPredicate>(source, predicate);
 
             public bool Any()
-                => ValueEnumerableExtensions.Any<TEnumerable, TEnumerator, TSource>(source, predicate);
+                => ValueEnumerableExtensions.Any<TEnumerable, TEnumerator, TSource, TPredicate>(source, predicate);
                 
             public Option<TResult> ElementAt(int index)
-                => ValueEnumerableExtensions.ElementAt<TEnumerable, TEnumerator, TSource, TResult>(source, index, predicate, selector);
+                => ValueEnumerableExtensions.ElementAt<TEnumerable, TEnumerator, TSource, TResult, TPredicate>(source, index, predicate, selector);
 
             public Option<TResult> First()
-                => ValueEnumerableExtensions.First<TEnumerable, TEnumerator, TSource, TResult>(source, predicate, selector);
+                => ValueEnumerableExtensions.First<TEnumerable, TEnumerator, TSource, TResult, TPredicate>(source, predicate, selector);
 
             public Option<TResult> Single()
-                => ValueEnumerableExtensions.Single<TEnumerable, TEnumerator, TSource, TResult>(source, predicate, selector);
+                => ValueEnumerableExtensions.Single<TEnumerable, TEnumerator, TSource, TResult, TPredicate>(source, predicate, selector);
 
             public TResult[] ToArray()
-                => ValueEnumerableExtensions.ToArray<TEnumerable, TEnumerator, TSource, TResult>(source, predicate, selector);
+                => ValueEnumerableExtensions.ToArray<TEnumerable, TEnumerator, TSource, TResult, TPredicate>(source, predicate, selector);
 
             public IMemoryOwner<TResult> ToArray(MemoryPool<TResult> pool)
-                => ValueEnumerableExtensions.ToArray<TEnumerable, TEnumerator, TSource, TResult>(source, predicate, selector, pool);
+                => ValueEnumerableExtensions.ToArray<TEnumerable, TEnumerator, TSource, TResult, TPredicate>(source, predicate, selector, pool);
 
             public List<TResult> ToList()
-                => ValueEnumerableExtensions.ToList<TEnumerable, TEnumerator, TSource, TResult>(source, predicate, selector);
-
-            public Dictionary<TKey, TResult> ToDictionary<TKey>(Selector<TResult, TKey> keySelector, IEqualityComparer<TKey>? comparer = default)
-                where TKey : notnull
-                => ToDictionary<TKey>(keySelector, comparer);
-
-            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Selector<TResult, TKey> keySelector, NullableSelector<TResult, TElement> elementSelector, IEqualityComparer<TKey>? comparer = default)
-                where TKey : notnull
-                => ToDictionary<TKey, TElement>(keySelector, elementSelector, comparer);
+                => ValueEnumerableExtensions.ToList<TEnumerable, TEnumerator, TSource, TResult, TPredicate>(source, predicate, selector);
         }
     }
 }

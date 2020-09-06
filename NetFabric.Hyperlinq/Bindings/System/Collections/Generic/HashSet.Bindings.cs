@@ -30,12 +30,6 @@ namespace NetFabric.Hyperlinq
         
         public static bool Any<TSource>(this HashSet<TSource> source)
             => source.Count != 0;
-        
-        public static bool Any<TSource>(this HashSet<TSource> source, Predicate<TSource> predicate)
-            => ValueReadOnlyCollectionExtensions.Any<ValueWrapper<TSource>, HashSet<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
-        
-        public static bool Any<TSource>(this HashSet<TSource> source, PredicateAt<TSource> predicate)
-            => ValueReadOnlyCollectionExtensions.Any<ValueWrapper<TSource>, HashSet<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
 
         
         public static bool Contains<TSource>(this HashSet<TSource> source, [AllowNull] TSource value)
@@ -65,12 +59,12 @@ namespace NetFabric.Hyperlinq
             => ValueEnumerableExtensions.SelectMany<ValueWrapper<TSource>, HashSet<TSource>.Enumerator, TSource, TSubEnumerable, TSubEnumerator, TResult>(new ValueWrapper<TSource>(source), selector);
 
         
-        public static ValueEnumerableExtensions.WhereEnumerable<ValueWrapper<TSource>, HashSet<TSource>.Enumerator, TSource> Where<TSource>(
+        public static ValueEnumerableExtensions.WhereEnumerable<ValueWrapper<TSource>, HashSet<TSource>.Enumerator, TSource, ValuePredicate<TSource>> Where<TSource>(
             this HashSet<TSource> source,
             Predicate<TSource> predicate)
             => ValueEnumerableExtensions.Where<ValueWrapper<TSource>, HashSet<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
         
-        public static ValueEnumerableExtensions.WhereAtEnumerable<ValueWrapper<TSource>, HashSet<TSource>.Enumerator, TSource> Where<TSource>(
+        public static ValueEnumerableExtensions.WhereAtEnumerable<ValueWrapper<TSource>, HashSet<TSource>.Enumerator, TSource, ValuePredicateAt<TSource>> Where<TSource>(
             this HashSet<TSource> source,
             PredicateAt<TSource> predicate)
             => ValueEnumerableExtensions.Where<ValueWrapper<TSource>, HashSet<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);

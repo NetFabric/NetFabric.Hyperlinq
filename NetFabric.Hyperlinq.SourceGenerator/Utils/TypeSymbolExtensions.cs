@@ -124,23 +124,55 @@ namespace NetFabric.Hyperlinq.SourceGenerator
             }
         }
 
-        public static IEnumerable<(string Name, IEnumerable<string> Constraints)> ExtractMethodTypeArguments(this ITypeSymbol extendedType, IMethodSymbol method, ImmutableArray<(string, string, bool)> genericsMapping)
+        public static IEnumerable<(string Name, ITypeParameterSymbol TypeParameter)> ExtractTypeArgumentsFromMethod(IMethodSymbol methodSymbol, HashSet<string> set, ImmutableArray<(string, string, bool)> genericsMapping)
+        {
+            var typeArguments = methodSymbol.TypeArguments;
+            for (var index = 0; index < typeArguments.Length; index++)
+            {
+                var typeArgument = typeArguments[index];
+                if (typeArgument is ITypeParameterSymbol typeParameter)
+                {
+                    var (isMapped, mappedTo, isMappedToType) = typeParameter.IsMapped(genericsMapping);
+                    if (!isMappedToType)
+                    {
+                        var displayString = typeParameter.ToDisplayString();
+                        if (set.Add(displayString))
+                        {
+                            yield return (displayString, typeParameter);
+
+                            if (isMapped && set.Add(mappedTo))
+                                yield return (mappedTo, typeParameter);
+                        }
+                    }
+                }
+            }
+        }
+
+        public static IEnumerable<(string Name, IEnumerable<string> Constraints)> ExtractMethodTypeArguments(this INamedTypeSymbol extendedType, IMethodSymbol method, ImmutableArray<(string, string, bool)> genericsMapping)
         {
             var set = new HashSet<string>();
 
-            // get the type arguments list from the extension method parameters
-            var parameteresTypeArguments =
+            // get the type arguments list from the extended type
+            var typeTypeArguments =
                 ExtractTypeArgumentsFromType(extendedType, set, genericsMapping)
-                .Concat(method.Parameters.SelectMany(parameter => ExtractTypeArgumentsFromType(parameter.Type, set, genericsMapping)))
                 .ToList();
 
-            // get the type arguments list from the contraints
+            var methodTypeArguments = method.TypeArguments
+                .SelectMany(parameter => ExtractTypeArgumentsFromType(parameter, set, genericsMapping));
+
+            //// get the type arguments list from the extension method parameters
+            var parameteresTypeArguments = method.Parameters
+                .SelectMany(parameter => ExtractTypeArgumentsFromType(parameter.Type, set, genericsMapping));
+
+            //// get the type arguments list from the contraints
             var constraintsTypeArguments = parameteresTypeArguments
                 .SelectMany(typeArgument => typeArgument.TypeParameter.ConstraintTypes)
-                .SelectMany(type => ExtractTypeArgumentsFromType(type, set, genericsMapping))
-                .ToList();
+                .SelectMany(type => ExtractTypeArgumentsFromType(type, set, genericsMapping));
 
-            return parameteresTypeArguments.Concat(constraintsTypeArguments)
+            return typeTypeArguments
+                .Concat(methodTypeArguments)
+                .Concat(parameteresTypeArguments)
+                .Concat(constraintsTypeArguments)
                 .Select(typeArgument => (typeArgument.Name, typeArgument.TypeParameter.AsConstraintsStrings()));
         }
 

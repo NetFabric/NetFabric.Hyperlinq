@@ -30,12 +30,6 @@ namespace NetFabric.Hyperlinq
         
         public static bool Any<TSource>(this SortedSet<TSource> source)
             => source.Count != 0;
-        
-        public static bool Any<TSource>(this SortedSet<TSource> source, Predicate<TSource> predicate)
-            => ValueReadOnlyCollectionExtensions.Any<ValueWrapper<TSource>, SortedSet<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
-        
-        public static bool Any<TSource>(this SortedSet<TSource> source, PredicateAt<TSource> predicate)
-            => ValueReadOnlyCollectionExtensions.Any<ValueWrapper<TSource>, SortedSet<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
 
         
         public static bool Contains<TSource>(this SortedSet<TSource> source, [AllowNull] TSource value)
@@ -65,12 +59,12 @@ namespace NetFabric.Hyperlinq
             => ValueEnumerableExtensions.SelectMany<ValueWrapper<TSource>, SortedSet<TSource>.Enumerator, TSource, TSubEnumerable, TSubEnumerator, TResult>(new ValueWrapper<TSource>(source), selector);
 
         
-        public static ValueEnumerableExtensions.WhereEnumerable<ValueWrapper<TSource>, SortedSet<TSource>.Enumerator, TSource> Where<TSource>(
+        public static ValueEnumerableExtensions.WhereEnumerable<ValueWrapper<TSource>, SortedSet<TSource>.Enumerator, TSource, ValuePredicate<TSource>> Where<TSource>(
             this SortedSet<TSource> source,
             Predicate<TSource> predicate)
             => ValueEnumerableExtensions.Where<ValueWrapper<TSource>, SortedSet<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
         
-        public static ValueEnumerableExtensions.WhereAtEnumerable<ValueWrapper<TSource>, SortedSet<TSource>.Enumerator, TSource> Where<TSource>(
+        public static ValueEnumerableExtensions.WhereAtEnumerable<ValueWrapper<TSource>, SortedSet<TSource>.Enumerator, TSource, ValuePredicateAt<TSource>> Where<TSource>(
             this SortedSet<TSource> source,
             PredicateAt<TSource> predicate)
             => ValueEnumerableExtensions.Where<ValueWrapper<TSource>, SortedSet<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);

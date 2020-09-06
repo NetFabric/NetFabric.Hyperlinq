@@ -211,28 +211,37 @@ namespace NetFabric.Hyperlinq
             public SkipTakeEnumerable<TList, TSource> Take(int count)
                 => ReadOnlyListExtensions.SkipTake<TList, TSource>(source, offset, Math.Min(count, Count));
 
-            
+
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool All(Predicate<TSource> predicate)
-                => ReadOnlyListExtensions.All<TList, TSource>(source, predicate, offset, Count);
-            
+            {
+                if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
+
+                return All(new ValuePredicate<TSource>(predicate));
+            }
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public bool All<TPredicate>(TPredicate predicate = default)
+                where TPredicate : struct, IPredicate<TSource>
+                => ReadOnlyListExtensions.All<TList, TSource, TPredicate>(source, predicate, offset, Count);
+
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool All(PredicateAt<TSource> predicate)
-                => ReadOnlyListExtensions.All<TList, TSource>(source, predicate, offset, Count);
+            {
+                if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
 
-            
+                return AllAt(new ValuePredicateAt<TSource>(predicate));
+            }
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public bool AllAt<TPredicate>(TPredicate predicate = default)
+                where TPredicate : struct, IPredicateAt<TSource>
+                => ReadOnlyListExtensions.AllAt<TList, TSource, TPredicate>(source, predicate, offset, Count);
+
+
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Any()
                 => ReadOnlyListExtensions.Any<TList, TSource>(source, offset, Count);
-            
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public bool Any(Predicate<TSource> predicate)
-                => ReadOnlyListExtensions.Any<TList, TSource>(source, predicate, offset, Count);
-            
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public bool Any(PredicateAt<TSource> predicate)
-                => ReadOnlyListExtensions.Any<TList, TSource>(source, predicate, offset, Count);
-
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Contains(TSource value, IEqualityComparer<TSource>? comparer = default)
@@ -240,15 +249,25 @@ namespace NetFabric.Hyperlinq
 
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public ReadOnlyListExtensions.WhereEnumerable<TList, TSource> Where(Predicate<TSource> predicate)
-                => ReadOnlyListExtensions.Where<TList, TSource>(source, predicate, offset, Count);
+            public ReadOnlyListExtensions.WhereEnumerable<TList, TSource, ValuePredicate<TSource>> Where(Predicate<TSource> predicate)
+                => Where<ValuePredicate<TSource>>(new ValuePredicate<TSource>(predicate));
 
-            
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public ReadOnlyListExtensions.WhereAtEnumerable<TList, TSource> Where(PredicateAt<TSource> predicate)
-                => ReadOnlyListExtensions.Where<TList, TSource>(source, predicate, offset, Count);
+            public ReadOnlyListExtensions.WhereEnumerable<TList, TSource, TPredicate> Where<TPredicate>(TPredicate predicate = default)
+                where TPredicate : struct, IPredicate<TSource>
+                => ReadOnlyListExtensions.Where<TList, TSource, TPredicate>(source, predicate, offset, Count);
 
-            
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public ReadOnlyListExtensions.WhereAtEnumerable<TList, TSource, ValuePredicateAt<TSource>> Where(PredicateAt<TSource> predicate)
+                => WhereAt<ValuePredicateAt<TSource>>(new ValuePredicateAt<TSource>(predicate));
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public ReadOnlyListExtensions.WhereAtEnumerable<TList, TSource, TPredicate> WhereAt<TPredicate>(TPredicate predicate = default)
+                where TPredicate : struct, IPredicateAt<TSource>
+                => ReadOnlyListExtensions.WhereAt<TList, TSource, TPredicate>(source, predicate, offset, Count);
+
+
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public ReadOnlyListExtensions.SelectEnumerable<TList, TSource, TResult> Select<TResult>(NullableSelector<TSource, TResult> selector)
                 => ReadOnlyListExtensions.Select<TList, TSource, TResult>(source, selector, offset, Count);
@@ -302,23 +321,5 @@ namespace NetFabric.Hyperlinq
         public static int Count<TList, TSource>(this in SkipTakeEnumerable<TList, TSource> source)
             where TList : notnull, IReadOnlyList<TSource>
             => source.Count;
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int Count<TList, TSource>(this in SkipTakeEnumerable<TList, TSource> source, Predicate<TSource> predicate)
-            where TList : notnull, IReadOnlyList<TSource>
-        {
-            if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
-
-            return ReadOnlyListExtensions.Count<TList, TSource>(source.source, predicate, source.offset, source.Count);
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int Count<TList, TSource>(this in SkipTakeEnumerable<TList, TSource> source, PredicateAt<TSource> predicate)
-            where TList : notnull, IReadOnlyList<TSource>
-        {
-            if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
-
-            return ReadOnlyListExtensions.Count<TList, TSource>(source.source, predicate, source.offset, source.Count);
-        }
     }
 }
