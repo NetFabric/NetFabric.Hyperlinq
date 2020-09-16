@@ -6,8 +6,8 @@ namespace NetFabric.Hyperlinq
     public interface IValueEnumerable<out T, TEnumerator>
         : IEnumerable<T>
         where TEnumerator 
-        : struct
-        , IEnumerator<T>
+            : struct
+            , IEnumerator<T>
     {
         [return: NotNull] new TEnumerator GetEnumerator();
     }
@@ -16,8 +16,8 @@ namespace NetFabric.Hyperlinq
         : IReadOnlyCollection<T>
         , IValueEnumerable<T, TEnumerator>
         where TEnumerator 
-        : struct
-        , IEnumerator<T>
+            : struct
+            , IEnumerator<T>
     {
     }
 
@@ -25,8 +25,8 @@ namespace NetFabric.Hyperlinq
         : IReadOnlyList<T>
         , IValueReadOnlyCollection<T, TEnumerator>
         where TEnumerator 
-        : struct
-        , IEnumerator<T>
+            : struct
+            , IEnumerator<T>
     {
     }
 }

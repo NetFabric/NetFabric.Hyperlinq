@@ -30,6 +30,7 @@ namespace NetFabric.Hyperlinq
             => new SelectEnumerable<TList, TSource, TResult>(source, selector, offset, count);
 
         [GeneratorMapping("TSource", "TResult")]
+        [GeneratorMapping("TResult", "TResult2")]
         [StructLayout(LayoutKind.Sequential)]
         public readonly partial struct SelectEnumerable<TList, TSource, TResult>
             : IValueReadOnlyList<TResult, SelectEnumerable<TList, TSource, TResult>.DisposableEnumerator>
@@ -206,12 +207,12 @@ namespace NetFabric.Hyperlinq
                 => Count != 0;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public ReadOnlyListExtensions.SelectEnumerable<TList, TSource, TSelectorResult> Select<TSelectorResult>(NullableSelector<TResult, TSelectorResult> selector)
-                => ReadOnlyListExtensions.Select<TList, TSource, TSelectorResult>(source, Utils.Combine(this.selector, selector), offset, Count);
+            public ReadOnlyListExtensions.SelectEnumerable<TList, TSource, TResult2> Select<TResult2>(NullableSelector<TResult, TResult2> selector)
+                => ReadOnlyListExtensions.Select<TList, TSource, TResult2>(source, Utils.Combine(this.selector, selector), offset, Count);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public ReadOnlyListExtensions.SelectAtEnumerable<TList, TSource, TSelectorResult> Select<TSelectorResult>(NullableSelectorAt<TResult, TSelectorResult> selector)
-                => ReadOnlyListExtensions.Select<TList, TSource, TSelectorResult>(source, Utils.Combine(this.selector, selector), offset, Count);
+            public ReadOnlyListExtensions.SelectAtEnumerable<TList, TSource, TResult2> Select<TResult2>(NullableSelectorAt<TResult, TResult2> selector)
+                => ReadOnlyListExtensions.Select<TList, TSource, TResult2>(source, Utils.Combine(this.selector, selector), offset, Count);
 
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]

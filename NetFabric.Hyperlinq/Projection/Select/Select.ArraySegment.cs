@@ -20,6 +20,7 @@ namespace NetFabric.Hyperlinq
         }
 
         [GeneratorMapping("TSource", "TResult")]
+        [GeneratorMapping("TResult", "TResult2")]
         [StructLayout(LayoutKind.Sequential)]
         public readonly partial struct ArraySegmentSelectEnumerable<TSource, TResult>
             : IValueReadOnlyList<TResult, ArraySegmentSelectEnumerable<TSource, TResult>.DisposableEnumerator>
@@ -208,6 +209,14 @@ namespace NetFabric.Hyperlinq
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Any()
                 => source.Count != 0;
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public ArrayExtensions.ArraySegmentSelectEnumerable<TSource, TResult2> Select<TResult2>(NullableSelector<TResult, TResult2> selector)
+                => ArrayExtensions.Select<TSource, TResult2>(source, Utils.Combine(this.selector, selector));
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public ArrayExtensions.ArraySegmentSelectAtEnumerable<TSource, TResult2> Select<TResult2>(NullableSelectorAt<TResult, TResult2> selector)
+                => ArrayExtensions.Select<TSource, TResult2>(source, Utils.Combine(this.selector, selector));
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Option<TResult> ElementAt(int index)

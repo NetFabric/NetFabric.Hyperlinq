@@ -21,6 +21,7 @@ namespace NetFabric.Hyperlinq
         }
 
         [GeneratorMapping("TSource", "TResult")]
+        [GeneratorMapping("TResult", "TResult2")]
         [StructLayout(LayoutKind.Sequential)]
         public readonly ref struct SpanSelectEnumerable<TSource, TResult>
         {
@@ -80,9 +81,16 @@ namespace NetFabric.Hyperlinq
                 => source.Length != 0;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public ArrayExtensions.SpanSelectEnumerable<TSource, TResult2> Select<TResult2>(NullableSelector<TResult, TResult2> selector)
+                => ArrayExtensions.Select<TSource, TResult2>(source, Utils.Combine(this.selector, selector));
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public ArrayExtensions.SpanSelectAtEnumerable<TSource, TResult2> Select<TResult2>(NullableSelectorAt<TResult, TResult2> selector)
+                => ArrayExtensions.Select<TSource, TResult2>(source, Utils.Combine(this.selector, selector));
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Option<TResult> ElementAt(int index)
                 => ArrayExtensions.ElementAt<TSource, TResult>(source, index, selector);
-
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Option<TResult> First()

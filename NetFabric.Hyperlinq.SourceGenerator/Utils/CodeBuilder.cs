@@ -3,39 +3,50 @@ using System.Text;
 
 namespace NetFabric.Hyperlinq.SourceGenerator
 {
-    class CodeBuilder : IDisposable
+    class CodeBuilder
     {
         static readonly string tab = "    ";
 
-        readonly StringBuilder builder = new StringBuilder();
+        readonly StringBuilder builder = new();
         int currentLevel = 0;
 
-        void AppendSpaces()
+        StringBuilder AppendIndentation()
         {
             for (var level = 0; level < currentLevel; level++)
                 _ = builder.Append(tab);
+
+            return builder;
         }
 
-        public void AppendLine()
-            => builder.AppendLine();
-
-        public void AppendLine(char line)
+        public CodeBuilder AppendLine()
         {
-            AppendSpaces();
-            _ = builder.Append(line);
             _ = builder.AppendLine();
+            return this;
         }
 
-        public void AppendLine(string line)
+        public CodeBuilder AppendLine(char line)
         {
-            AppendSpaces();
-            _ = builder.AppendLine(line);
+            _ = AppendIndentation().Append(line).AppendLine();
+            return this;
         }
 
-        public IDisposable AppendBlock(string line)
+        public CodeBuilder AppendLine(string line)
         {
-            AppendLine(line);
-            AppendLine('{');
+            _ = AppendIndentation().AppendLine(line);
+            return this;
+        }
+
+        public CodeBuilder AppendLine(Action<StringBuilder> line)
+        {
+            _ = AppendIndentation();
+            line(builder);
+            _ = AppendLine();
+            return this;
+        }
+
+        public IDisposable AppendBlock(string line) 
+        {
+            _ = AppendLine(line).AppendLine('{');
             currentLevel++;
             return new CloseBlock(this);
         }
@@ -50,13 +61,11 @@ namespace NetFabric.Hyperlinq.SourceGenerator
             public void Dispose()
             {
                 builder.currentLevel--;
-                builder.AppendLine('}');
+                _ = builder.AppendLine('}');
             }
         }
 
         public override string ToString() 
             => builder.ToString();
-
-        public void Dispose() { }
     }
 }
