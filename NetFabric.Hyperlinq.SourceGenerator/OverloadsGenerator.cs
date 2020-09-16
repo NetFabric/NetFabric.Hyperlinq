@@ -23,11 +23,11 @@ namespace NetFabric.Hyperlinq.SourceGenerator
             DiagnosticSeverity.Error,
             isEnabledByDefault: true);
 
-        public void Initialize(InitializationContext context)
+        public void Initialize(GeneratorInitializationContext context)
         {
         }
 
-        public void Execute(SourceGeneratorContext context)
+        public void Execute(GeneratorExecutionContext context)
         {
             //_ = Debugger.Launch(); // uncomment to debug this source generator
 
@@ -59,7 +59,7 @@ namespace NetFabric.Hyperlinq.SourceGenerator
         /// </summary>
         /// <param name="context"></param>
         /// <returns>A dictionary containing collections of the extension methods per type extended.</returns>
-        ImmutableDictionary<string, List<IMethodSymbol>> CollectExtensionMethods(SourceGeneratorContext context)
+        ImmutableDictionary<string, List<IMethodSymbol>> CollectExtensionMethods(GeneratorExecutionContext context)
         {
             var result = ImmutableDictionary.Create<string, List<IMethodSymbol>>();
 
@@ -107,7 +107,7 @@ namespace NetFabric.Hyperlinq.SourceGenerator
         /// <param name="context"></param>
         /// <param name="collectedExtensionMethods">A dictionary containing the defined extension methods.</param>
         /// <param name="generatedPath">The path where to serialize the generated code for debugging.</param>
-        void GenerateSource(SourceGeneratorContext context, ImmutableDictionary<string, List<IMethodSymbol>> collectedExtensionMethods, string? generatedPath)
+        void GenerateSource(GeneratorExecutionContext context, ImmutableDictionary<string, List<IMethodSymbol>> collectedExtensionMethods, string? generatedPath)
         {
             // go through all public static types
             // the enumerables are defined inside of these
