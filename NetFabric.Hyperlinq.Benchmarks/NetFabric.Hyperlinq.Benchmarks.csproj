@@ -26,13 +26,13 @@
 
   <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp3.1'">
     <PackageReference Include="Cistern.ValueLinq">
-      <Version>0.0.3</Version>
+      <Version>0.0.4</Version>
     </PackageReference>
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net5.0'">
     <PackageReference Include="Cistern.ValueLinq">
-      <Version>0.0.3</Version>
+      <Version>0.0.4</Version>
     </PackageReference>
   </ItemGroup>
 </Project>
