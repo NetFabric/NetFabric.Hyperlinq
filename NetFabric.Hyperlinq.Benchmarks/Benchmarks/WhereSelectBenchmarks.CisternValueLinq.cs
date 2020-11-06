@@ -65,6 +65,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [Benchmark]
         public int CisternValueLinq_Enumerable_Reference() =>
             enumerableReference
+            .OfEnumerable() // *shouldn't* need this!!! only because we are in the NetFabric.Hyperlinq namespace; so c# chooses incorrect overload
             .Where(item => (item & 0x01) == 0)
             .Select(item => item)
             .Sum();
@@ -73,6 +74,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [Benchmark]
         public int CisternValueLinq_Collection_Reference() =>
             collectionReference
+            .OfEnumerable() // *shouldn't* need this!!! only because we are in the NetFabric.Hyperlinq namespace; so c# chooses incorrect overload
             .Where(item => (item & 0x01) == 0)
             .Select(item => item)
             .Sum();
@@ -81,6 +83,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [Benchmark]
         public int CisternValueLinq_List_Reference() =>
             listReference
+            .OfEnumerable() // *shouldn't* need this!!! only because we are in the NetFabric.Hyperlinq namespace; so c# chooses incorrect overload
             .Where(item => (item & 0x01) == 0)
             .Select(item => item)
             .Sum();
