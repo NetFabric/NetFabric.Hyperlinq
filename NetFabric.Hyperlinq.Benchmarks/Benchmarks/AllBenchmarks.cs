@@ -8,7 +8,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
 {
     [GroupBenchmarksBy(BenchmarkLogicalGroupRule.ByCategory)]
     [CategoriesColumn]
-    public class AllBenchmarks : RandomBenchmarksBase
+    public partial class AllBenchmarks : RandomBenchmarksBase
     {
         [BenchmarkCategory("Array")]
         [Benchmark(Baseline = true)]
