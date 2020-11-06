@@ -2,6 +2,7 @@
 
 using BenchmarkDotNet.Attributes;
 using Cistern.ValueLinq;
+using System;
 
 namespace NetFabric.Hyperlinq.Benchmarks
 {
@@ -12,6 +13,23 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int CisternValueLinq_Array() =>
             array
             .OfArray() // *shouldn't* need this!!! only because we are in the NetFabric.Hyperlinq namespace; so c# chooses incorrect overload
+            .Where(item => (item & 0x01) == 0)
+            .Select(item => item)
+            .Sum();
+
+        [BenchmarkCategory("Array")]
+        [Benchmark]
+        public int CisternValueLinq_Span() =>
+            Enumerable
+            .FromSpan<int[], int>(array, array => array.AsSpan())
+            .Where(item => (item & 0x01) == 0)
+            .Select(item => item)
+            .Sum();
+
+        [BenchmarkCategory("Array")]
+        [Benchmark]
+        public int CisternValueLinq_Memory() =>
+            memory
             .Where(item => (item & 0x01) == 0)
             .Select(item => item)
             .Sum();
