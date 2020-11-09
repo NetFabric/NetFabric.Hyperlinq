@@ -228,7 +228,7 @@ namespace NetFabric.Hyperlinq.SourceGenerator
                                 {
                                     foreach (var instanceMethod in instanceMethodsToBeGenerated)
                                     {
-                                        GenerateMethodSource(builder, extendingType, instanceMethod, enumerableType, enumeratorType, generatedCodeAttribute, genericsMapping, false);
+                                        GenerateMethodSource(builder, extendingType, instanceMethod, enumerableType, enumeratorType, sourceType, generatedCodeAttribute, genericsMapping, false);
                                     }
                                 }
                             }
@@ -237,7 +237,7 @@ namespace NetFabric.Hyperlinq.SourceGenerator
                             // generate the extension methods in the outter type
                             foreach (var extensionMethod in extensionMethodsToBeGenerated)
                             {
-                                GenerateMethodSource(builder, extendingType, extensionMethod, enumerableType, enumeratorType, generatedCodeAttribute, genericsMapping, true);
+                                GenerateMethodSource(builder, extendingType, extensionMethod, enumerableType, enumeratorType, sourceType, generatedCodeAttribute, genericsMapping, true);
                             }
                         }
                     }
@@ -248,7 +248,7 @@ namespace NetFabric.Hyperlinq.SourceGenerator
             }
         }
 
-        void GenerateMethodSource(CodeBuilder builder, INamedTypeSymbol extendingType, MethodInfo methodToGenerate, ITypeSymbol enumerableType, ITypeSymbol enumeratorType, string generatedCodeAttribute, ImmutableArray<(string, string, bool)> genericsMapping, bool isExtensionMethod)
+        void GenerateMethodSource(CodeBuilder builder, INamedTypeSymbol extendingType, MethodInfo methodToGenerate, ITypeSymbol enumerableType, ITypeSymbol enumeratorType, ITypeSymbol sourceType, string generatedCodeAttribute, ImmutableArray<(string, string, bool)> genericsMapping, bool isExtensionMethod)
         {
             var extendingTypeTypeParameters = extendingType.MappedTypeParameters(genericsMapping)
                 .ToArray();
@@ -259,9 +259,16 @@ namespace NetFabric.Hyperlinq.SourceGenerator
                     && !extendingTypeTypeParameters.Any(t => typeParameter.Name == t.Name))
                 .ToArray();
 
-            var methodReturnType = MapTypeProperties(methodToGenerate.ReturnType, enumerableType, enumeratorType, genericsMapping);
+            var methodReturnType = methodToGenerate.ReturnType.ToDisplayString();
+            var genericsIndex = methodReturnType.IndexOf('<');
+            if (genericsIndex >= 0)
+            {
+                methodReturnType = methodReturnType.Substring(0, genericsIndex);
+                methodReturnType += MapTypeProperties(methodToGenerate.ReturnType.TypeParameters.Select(parameter => parameter.Name), enumerableType, enumeratorType, sourceType, genericsMapping);
+            }
             if (methodReturnType == "TEnumerable")
                 methodReturnType = extendingType.ToDisplayString();
+
             var methodName = methodToGenerate.Name;
             var methodExtensionType = extendingType.ToDisplayString();
             var methodParameters = methodToGenerate.Parameters
@@ -278,7 +285,7 @@ namespace NetFabric.Hyperlinq.SourceGenerator
 
             var returnKeyword = string.Empty;
             var callContainingType = methodToGenerate.ContainingType;
-            var callTypeParameters = MapTypeProperties(methodToGenerate.TypeParameters, enumerableType, enumeratorType);
+            var callTypeParameters = MapTypeProperties(methodToGenerate.TypeParameters.Select(parameter => parameter.Name), enumerableType, enumeratorType, sourceType, genericsMapping);
             var callParameters = methodToGenerate.Parameters.Select(parameter => parameter.Name).ToCommaSeparated();
 
             // generate the source
@@ -307,25 +314,18 @@ namespace NetFabric.Hyperlinq.SourceGenerator
                 .AppendLine();
         }
 
-        string MapTypeProperties(IEnumerable<(string Name, string Constraints, bool IsConcreteType)> properties, ITypeSymbol enumerableType, ITypeSymbol enumeratorType)
+        string MapTypeProperties(IEnumerable<string> typePropertyNames, ITypeSymbol enumerableType, ITypeSymbol enumeratorType, ITypeSymbol sourceType, ImmutableArray<(string, string, bool)> genericsMapping)
         {
-            var str = properties.Select(parameter => parameter.Name switch
+            var str = typePropertyNames.Select(typePropertyName => typePropertyName switch
             {
-                "TEnumerable" or "TList" => enumerableType.ToDisplayString(),
-                "TEnumerator" => enumeratorType.ToDisplayString(),
-                _ => parameter.Name
+                "TEnumerable" or "TList" => enumerableType.ToDisplayString(genericsMapping),
+                "TEnumerator" => enumeratorType.ToDisplayString(genericsMapping),
+                "TSource" => sourceType.ToDisplayString(genericsMapping),
+                _ => typePropertyName
             })
             .ToCommaSeparated();
 
             return string.IsNullOrEmpty(str) ? string.Empty : $"<{str}>";
-        }
-
-        string MapTypeProperties(string str, ITypeSymbol enumerableType, ITypeSymbol enumeratorType, ImmutableArray<(string, string, bool)> genericsMapping)
-        {
-            str = str.Replace("TEnumerable", enumerableType.ToDisplayString(genericsMapping));
-            str = str.Replace("TList", enumerableType.ToDisplayString(genericsMapping));
-            str = str.Replace("TEnumerator", enumeratorType.ToDisplayString(genericsMapping));
-            return str;
         }
     }
 }

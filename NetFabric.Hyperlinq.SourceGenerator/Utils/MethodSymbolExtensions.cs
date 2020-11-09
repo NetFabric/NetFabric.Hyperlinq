@@ -8,7 +8,7 @@ namespace NetFabric.Hyperlinq.SourceGenerator
     struct MethodInfo
     {
         public string ContainingType { get; set; }
-        public string ReturnType { get; set; }
+        public INamedTypeSymbol ReturnType { get; set; }
         public string Name { get; set; }
         public IReadOnlyList<(string Name, string Constraints, bool IsConcreteType)> TypeParameters { get; set; }
         public IReadOnlyList<(string Name, string Type, string? DefaultValue)> Parameters { get; set; }
@@ -31,7 +31,7 @@ namespace NetFabric.Hyperlinq.SourceGenerator
             => new MethodInfo
             {
                 ContainingType = method.ContainingType.ToDisplayString(),
-                ReturnType = method.ReturnType.ToDisplayString(),
+                ReturnType = (INamedTypeSymbol)method.ReturnType,
                 Name = method.Name,
                 Parameters = method.Parameters
                     .Skip(skip)
@@ -51,7 +51,7 @@ namespace NetFabric.Hyperlinq.SourceGenerator
             var result = new MethodInfo
             {
                 ContainingType = method.ContainingType.ApplyMappings(genericsMapping, out _),
-                ReturnType = method.ReturnType.ApplyMappings(genericsMapping, out _),
+                ReturnType = method.ReturnType,
                 Name = method.Name,
                 Parameters = method.Parameters
                     .Select(parameter => (parameter.Name, parameter.Type.ApplyMappings(genericsMapping, out _), parameter.DefaultValue))
@@ -98,7 +98,7 @@ namespace NetFabric.Hyperlinq.SourceGenerator
                 }
                 else
                 {
-                    if (constraints0 is null)
+                    if (constraints1 is null)
                         return false;
 
                     return constraints0 == constraints1;
