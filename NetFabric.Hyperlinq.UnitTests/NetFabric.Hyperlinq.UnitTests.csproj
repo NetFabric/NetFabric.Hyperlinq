@@ -25,7 +25,7 @@
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)'=='net461' Or '$(TargetFramework)'=='netcoreapp2.1'">
-    <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="5.0.0-rc.1.20451.14" />
+    <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="5.0.0" />
   </ItemGroup>
 
   <ItemGroup>
