@@ -12,7 +12,7 @@ jobs:
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1.6.0
       with:
-        dotnet-version: 5.0.100-rc.1
+        dotnet-version: 5.0.100
     - name: Test source generator
       run: dotnet test ./NetFabric.Hyperlinq.SourceGenerator.UnitTests/NetFabric.Hyperlinq.SourceGenerator.UnitTests.csproj 
     - name: Build solution

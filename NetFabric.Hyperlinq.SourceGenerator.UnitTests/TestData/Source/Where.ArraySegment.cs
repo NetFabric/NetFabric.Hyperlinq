@@ -6,6 +6,7 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class ArrayExtensions
     {
+        [GeneratorMapping("TPredicate", "NetFabric.Hyperlinq.FunctionWrapper<TSource, bool>")]
         public static ArraySegmentWhereEnumerable<TSource, FunctionWrapper<TSource, bool>> Where<TSource>(this in ArraySegment<TSource> source, Func<TSource, bool> predicate)
             => Where(source, new FunctionWrapper<TSource, bool>(predicate));
 

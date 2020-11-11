@@ -89,7 +89,8 @@ namespace NetFabric.Hyperlinq.SourceGenerator
                         list = new List<MethodInfo>();
                         result.Add(key, list);
                     }
-                    list.Add(extensionMethod.GetInfo(1));
+                    var info = extensionMethod.GetInfo(compilation, 1);
+                    list.Add(info);
                 }
             }
 
@@ -130,12 +131,12 @@ namespace NetFabric.Hyperlinq.SourceGenerator
                 var sourceType = valueEnumerableInterface.TypeArguments[0];
 
                 // get the type mappings from the GeneratorMappingsAttribute, if found.
-                var genericsMapping = extendingType.GetGenericMappings(compilation);
+                var typeGenericsMapping = extendingType.GetGenericsMappings(compilation);
 
                 // get the info of all the instance methods declared in the type to be extended
                 var implementedInstanceMethods = extendingType.GetMembers().OfType<IMethodSymbol>()
                     .Where(method => method.Name != ".ctor") // ignore the constructors
-                    .Select(method => method.GetInfo())
+                    .Select(method => method.GetInfo(compilation))
                     .ToArray();
 
                 // get the extension methods for this type declared in the outter static type
@@ -143,7 +144,7 @@ namespace NetFabric.Hyperlinq.SourceGenerator
                     .Where(method 
                         => method.IsExtensionMethod 
                         && method.Parameters[0].Type.ToDisplayString() == extendingType.ToDisplayString())
-                    .Select(method => method.GetInfo(1)) 
+                    .Select(method => method.GetInfo(compilation, 1)) 
                     .ToArray();
 
                 // join the two lists together as these are the implemented methods for this type
@@ -172,7 +173,7 @@ namespace NetFabric.Hyperlinq.SourceGenerator
                         var overloadingMethod = overloadingMethods[methodIndex];
 
                         // check if already implemented
-                        var mappedOverloadingMethods = overloadingMethod.ApplyMappings(genericsMapping);
+                        var mappedOverloadingMethods = overloadingMethod.ApplyMappings(typeGenericsMapping);
                         if (!implementedMethods.Any(method => method.IsOverload(mappedOverloadingMethods)))
                         {
                             // check if there's a collision with a property
@@ -228,7 +229,8 @@ namespace NetFabric.Hyperlinq.SourceGenerator
                                 {
                                     foreach (var instanceMethod in instanceMethodsToBeGenerated)
                                     {
-                                        GenerateMethodSource(builder, extendingType, instanceMethod, enumerableType, enumeratorType, sourceType, generatedCodeAttribute, genericsMapping, false);
+                                        var methodGenericsMapping = typeGenericsMapping.AddRange(instanceMethod.GenericsMapping);
+                                        GenerateMethodSource(builder, extendingType, instanceMethod, enumerableType, enumeratorType, sourceType, generatedCodeAttribute, methodGenericsMapping, false);
                                     }
                                 }
                             }
@@ -237,7 +239,8 @@ namespace NetFabric.Hyperlinq.SourceGenerator
                             // generate the extension methods in the outter type
                             foreach (var extensionMethod in extensionMethodsToBeGenerated)
                             {
-                                GenerateMethodSource(builder, extendingType, extensionMethod, enumerableType, enumeratorType, sourceType, generatedCodeAttribute, genericsMapping, true);
+                                var methodGenericsMapping = typeGenericsMapping.AddRange(extensionMethod.GenericsMapping);
+                                GenerateMethodSource(builder, extendingType, extensionMethod, enumerableType, enumeratorType, sourceType, generatedCodeAttribute, methodGenericsMapping, true);
                             }
                         }
                     }
@@ -321,7 +324,7 @@ namespace NetFabric.Hyperlinq.SourceGenerator
                 "TEnumerable" or "TList" => enumerableType.ToDisplayString(genericsMapping),
                 "TEnumerator" => enumeratorType.ToDisplayString(genericsMapping),
                 "TSource" => sourceType.ToDisplayString(genericsMapping),
-                _ => typePropertyName
+                _ => typePropertyName.ApplyMappings(genericsMapping, out _),
             })
             .ToCommaSeparated();
 

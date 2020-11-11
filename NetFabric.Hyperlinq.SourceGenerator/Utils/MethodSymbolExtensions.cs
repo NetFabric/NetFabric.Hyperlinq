@@ -12,6 +12,7 @@ namespace NetFabric.Hyperlinq.SourceGenerator
         public string Name { get; set; }
         public IReadOnlyList<(string Name, string Constraints, bool IsConcreteType)> TypeParameters { get; set; }
         public IReadOnlyList<(string Name, string Type, string? DefaultValue)> Parameters { get; set; }
+        public ImmutableArray<(string, string, bool)> GenericsMapping { get; set; }
     }
 
     static class MethodSymbolExtensions
@@ -27,7 +28,7 @@ namespace NetFabric.Hyperlinq.SourceGenerator
             }
         }
 
-        public static MethodInfo GetInfo(this IMethodSymbol method, int skip = default)
+        public static MethodInfo GetInfo(this IMethodSymbol method, Compilation compilation, int skip = default)
             => new MethodInfo
             {
                 ContainingType = method.ContainingType.ToDisplayString(),
@@ -41,10 +42,12 @@ namespace NetFabric.Hyperlinq.SourceGenerator
                     method.ContainingType.TypeParameters.Concat(method.TypeParameters)
                     .Select(parameter => (parameter.ToDisplayString(), parameter.AsConstraintsStrings().ToCommaSeparated(), false))
                     .ToArray(),
+                GenericsMapping = method.GetGenericsMappings(compilation),
             };
 
-        public static MethodInfo ApplyMappings(this MethodInfo method, ImmutableArray<(string, string, bool)> genericsMapping)
+        public static MethodInfo ApplyMappings(this MethodInfo method, ImmutableArray<(string, string, bool)> typeGenericsMapping)
         {
+            var genericsMapping = typeGenericsMapping.AddRange(method.GenericsMapping);
             if (genericsMapping.IsDefault)
                 return method;
 
@@ -56,6 +59,7 @@ namespace NetFabric.Hyperlinq.SourceGenerator
                 Parameters = method.Parameters
                     .Select(parameter => (parameter.Name, parameter.Type.ApplyMappings(genericsMapping, out _), parameter.DefaultValue))
                     .ToArray(),
+                GenericsMapping = method.GenericsMapping,
             };
 
             var typeParameters = new List<(string, string, bool)>();

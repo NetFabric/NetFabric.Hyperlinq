@@ -47,9 +47,9 @@ namespace NetFabric.Hyperlinq.SourceGenerator
             {
                 foreach (var (from, to, isConcreteType2) in genericsMapping.Reverse())
                 {
-                    if (value == from)
+                    if (value == from && isConcreteType2)
                     {
-                        isConcreteType = isConcreteType2;
+                        isConcreteType = true;
                         return value.Replace(from, to);
                     }
                     result = result.Replace(from, to);

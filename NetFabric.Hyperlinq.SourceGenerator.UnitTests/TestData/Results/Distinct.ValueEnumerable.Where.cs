@@ -12,7 +12,7 @@ namespace NetFabric.Hyperlinq
             [GeneratedCode("NetFabric.Hyperlinq.SourceGenerator", "1.0.0")]
             [DebuggerNonUserCode]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly NetFabric.Hyperlinq.ValueEnumerableExtensions.WhereEnumerable<NetFabric.Hyperlinq.ValueEnumerableExtensions.DistinctEnumerable<TEnumerable, TEnumerator, TSource>, NetFabric.Hyperlinq.ValueEnumerableExtensions.DistinctEnumerable<TEnumerable, TEnumerator, TSource>.DisposableEnumerator, TSource, FunctionWrapper<TSource, bool>> Where(System.Func<TSource, bool> predicate)
+            public readonly NetFabric.Hyperlinq.ValueEnumerableExtensions.WhereEnumerable<NetFabric.Hyperlinq.ValueEnumerableExtensions.DistinctEnumerable<TEnumerable, TEnumerator, TSource>, NetFabric.Hyperlinq.ValueEnumerableExtensions.DistinctEnumerable<TEnumerable, TEnumerator, TSource>.DisposableEnumerator, TSource, NetFabric.Hyperlinq.FunctionWrapper<TSource, bool>> Where(System.Func<TSource, bool> predicate)
             => NetFabric.Hyperlinq.ValueEnumerableExtensions.Where<NetFabric.Hyperlinq.ValueEnumerableExtensions.DistinctEnumerable<TEnumerable, TEnumerator, TSource>, NetFabric.Hyperlinq.ValueEnumerableExtensions.DistinctEnumerable<TEnumerable, TEnumerator, TSource>.DisposableEnumerator, TSource>(this, predicate);
 
             [GeneratedCode("NetFabric.Hyperlinq.SourceGenerator", "1.0.0")]

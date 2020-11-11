@@ -37,7 +37,7 @@ namespace NetFabric.Hyperlinq.SourceGenerator
             } while (currentTypeSymbol is not null && currentTypeSymbol.SpecialType != SpecialType.System_Object);
         }
 
-        public static ImmutableArray<(string, string, bool)> GetGenericMappings(this ITypeSymbol type, Compilation compilation)
+        public static ImmutableArray<(string, string, bool)> GetGenericsMappings(this ISymbol type, Compilation compilation)
         {
             var mappingAttributeSymbol = compilation.GetTypeByMetadataName("NetFabric.Hyperlinq.GeneratorMappingAttribute");
             var mappings = type.GetAttributes()
