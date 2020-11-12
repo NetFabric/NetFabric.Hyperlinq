@@ -1,4 +1,5 @@
 ﻿using Microsoft.CodeAnalysis;
+using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
@@ -8,7 +9,7 @@ namespace NetFabric.Hyperlinq.SourceGenerator
     struct MethodInfo
     {
         public string ContainingType { get; set; }
-        public INamedTypeSymbol ReturnType { get; set; }
+        public ITypeSymbol ReturnType { get; set; }
         public string Name { get; set; }
         public IReadOnlyList<(string Name, string Constraints, bool IsConcreteType)> TypeParameters { get; set; }
         public IReadOnlyList<(string Name, string Type, string? DefaultValue)> Parameters { get; set; }
@@ -29,21 +30,30 @@ namespace NetFabric.Hyperlinq.SourceGenerator
         }
 
         public static MethodInfo GetInfo(this IMethodSymbol method, Compilation compilation, int skip = default)
-            => new MethodInfo
+        {
+            try
             {
-                ContainingType = method.ContainingType.ToDisplayString(),
-                ReturnType = (INamedTypeSymbol)method.ReturnType,
-                Name = method.Name,
-                Parameters = method.Parameters
-                    .Skip(skip)
-                    .Select(parameter => (parameter.Name, parameter.Type.ToDisplayString(), parameter.HasExplicitDefaultValue ? (parameter.ExplicitDefaultValue is null ? "default" : parameter.ExplicitDefaultValue.ToString()) : default))
-                    .ToArray(),
-                TypeParameters =
-                    method.ContainingType.TypeParameters.Concat(method.TypeParameters)
-                    .Select(parameter => (parameter.ToDisplayString(), parameter.AsConstraintsStrings().ToCommaSeparated(), false))
-                    .ToArray(),
-                GenericsMapping = method.GetGenericsMappings(compilation),
-            };
+                return new MethodInfo
+                {
+                    ContainingType = method.ContainingType.ToDisplayString(),
+                    ReturnType = method.ReturnType,
+                    Name = method.Name,
+                    Parameters = method.Parameters
+                        .Skip(skip)
+                        .Select(parameter => (parameter.Name, parameter.Type.ToDisplayString(), parameter.HasExplicitDefaultValue ? (parameter.ExplicitDefaultValue is null ? "default" : parameter.ExplicitDefaultValue.ToString()) : default))
+                        .ToArray(),
+                    TypeParameters =
+                        method.ContainingType.TypeParameters.Concat(method.TypeParameters)
+                        .Select(parameter => (parameter.ToDisplayString(), parameter.AsConstraintsStrings().ToCommaSeparated(), false))
+                        .ToArray(),
+                    GenericsMapping = method.GetGenericsMappings(compilation),
+                };
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
 
         public static MethodInfo ApplyMappings(this MethodInfo method, ImmutableArray<(string, string, bool)> typeGenericsMapping)
         {

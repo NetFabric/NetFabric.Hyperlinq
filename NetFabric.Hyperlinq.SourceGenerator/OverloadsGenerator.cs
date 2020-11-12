@@ -14,7 +14,7 @@ namespace NetFabric.Hyperlinq.SourceGenerator
     [Generator]
     public class OverloadsGenerator: ISourceGenerator
     {
-        static readonly DiagnosticDescriptor UnhandledExceptionError = new DiagnosticDescriptor(
+        static readonly DiagnosticDescriptor unhandledExceptionError = new (
             id: "HPLG001",
             title: "Unhandled exception while generating oveloads",
             messageFormat: "Unhandled exception while generating oveloads: {0}",
@@ -45,7 +45,7 @@ namespace NetFabric.Hyperlinq.SourceGenerator
             }
             catch (Exception ex)
             {
-                context.ReportDiagnostic(Diagnostic.Create(UnhandledExceptionError, Location.None, ex.Message));
+                context.ReportDiagnostic(Diagnostic.Create(unhandledExceptionError, Location.None, ex.Message));
             }
         }
 
@@ -267,7 +267,10 @@ namespace NetFabric.Hyperlinq.SourceGenerator
             if (genericsIndex >= 0)
             {
                 methodReturnType = methodReturnType.Substring(0, genericsIndex);
-                methodReturnType += MapTypeProperties(methodToGenerate.ReturnType.TypeParameters.Select(parameter => parameter.Name), enumerableType, enumeratorType, sourceType, genericsMapping);
+                if (methodToGenerate.ReturnType is INamedTypeSymbol namedMethodReturnType)
+                {
+                    methodReturnType += MapTypeProperties(namedMethodReturnType.TypeParameters.Select(parameter => parameter.Name), enumerableType, enumeratorType, sourceType, genericsMapping);
+                }
             }
             if (methodReturnType == "TEnumerable")
                 methodReturnType = extendingType.ToDisplayString();
