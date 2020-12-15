@@ -101,7 +101,6 @@ namespace NetFabric.Hyperlinq.SourceGenerator.UnitTests
                     },
                     new string[] {
                         "TestData/Results/Where.ValueEnumerable.Select.cs",
-                        "TestData/Results/Select.ValueEnumerable.Where.cs",
                     }
                 },
                 {

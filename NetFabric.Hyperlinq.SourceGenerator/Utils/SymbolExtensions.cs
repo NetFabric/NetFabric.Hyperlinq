@@ -14,7 +14,7 @@ namespace NetFabric.Hyperlinq.SourceGenerator
             if (attributeSymbol is null)
                 return false;
             var attribute = symbol.GetAttribute(attributeSymbol);
-            return attribute is object
+            return attribute is not null
                 && (bool)attribute.ConstructorArguments[0].Value!;
         }
 

@@ -53,26 +53,6 @@ namespace NetFabric.Hyperlinq.SourceGenerator
         public static string ToDisplayString(this ITypeSymbol type, ImmutableArray<(string, string, bool)> genericsMapping)
             => type.ToDisplayString().ApplyMappings(genericsMapping, out _);
 
-        public static string ToDisplayString(this ITypeSymbol type, ITypeSymbol enumerableType, ITypeSymbol enumeratorType, ImmutableArray<(string, string, bool)> genericsMapping)
-        {
-            if (type is INamedTypeSymbol namedType && namedType.IsGenericType)
-            {
-                var displayName = namedType.ToDisplayString();
-                var classDisplayName = displayName.Substring(0, displayName.IndexOf('<'));
-
-                if (namedType.GetAllInterfaces()
-                    .Any(@interface =>
-                        @interface.Name == "IReadOnlyList" ||
-                        @interface.Name == "IValueEnumerable" ||
-                        @interface.Name == "IAsyncValueEnumerable"))
-                {
-                    return $"{classDisplayName}{namedType.TypeArguments.AsTypeArgumentsString(enumerableType, enumeratorType, genericsMapping)}";
-                }
-            }
-
-            return type.ToDisplayString(genericsMapping);
-        }
-
         static IEnumerable<ITypeParameterSymbol> GetTypeParameterSymbols(ITypeSymbol typeSymbol)
         {
             if (typeSymbol is INamedTypeSymbol namedType && namedType.IsGenericType)
@@ -125,32 +105,6 @@ namespace NetFabric.Hyperlinq.SourceGenerator
                     return (true, to, isConcreteType);
             }
             return default;
-        }
-
-        public static string AsTypeArgumentsString(this IReadOnlyList<ITypeSymbol> typeParameters, ITypeSymbol enumerableType, ITypeSymbol enumeratorType, ImmutableArray<(string, string, bool)> genericsMapping)
-        {
-            var result = new List<string>();
-            for (var index = 0; index < typeParameters.Count; index++)
-            {
-                switch (typeParameters[index].Name)
-                {
-                    case "TEnumerable":
-                    case "TList":
-                        result.Add(enumerableType.ToDisplayString());
-                        break;
-                    case "TEnumerator":
-                        if (enumeratorType is not null)
-                            result.Add(enumeratorType.ToDisplayString());
-                        break;
-                    default:
-                        result.Add(typeParameters[index].ToDisplayString(genericsMapping));
-                        break;
-                }
-            }
-
-            return (result.Count == 0) 
-                ? string.Empty 
-                : $"<{result.ToCommaSeparated()}>";
         }
     }
 }

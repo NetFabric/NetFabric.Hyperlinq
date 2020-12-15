@@ -15,8 +15,6 @@ namespace NetFabric.Hyperlinq
             where TSelector : struct, IFunction<TSource, TResult>
             => new ArraySegmentSelectEnumerable<TSource, TResult, TSelector>(source, selector);
 
-        [GeneratorMapping("TSource", "TResult")]
-        [GeneratorMapping("TResult", "TResult2")]
         public readonly partial struct ArraySegmentSelectEnumerable<TSource, TResult, TSelector>
             : IValueReadOnlyList<TResult, ArraySegmentSelectEnumerable<TSource, TResult, TSelector>.DisposableEnumerator>
             , IList<TResult>
@@ -90,6 +88,13 @@ namespace NetFabric.Hyperlinq
 
                 public void Dispose() { }
             }
+
+            public readonly ValueEnumerableExtensions.WhereEnumerable<ArraySegmentSelectEnumerable<TSource, TResult, TSelector>, ArraySegmentSelectEnumerable<TSource, TResult, TSelector>.DisposableEnumerator, TResult, FunctionWrapper<TResult, bool>> Where(Func<TResult, bool> predicate)
+            => ValueEnumerableExtensions.Where<ArraySegmentSelectEnumerable<TSource, TResult, TSelector>, ArraySegmentSelectEnumerable<TSource, TResult, TSelector>.DisposableEnumerator, TResult>(this, predicate);
+
+            public readonly ValueEnumerableExtensions.WhereEnumerable<ArraySegmentSelectEnumerable<TSource, TResult, TSelector>, ArraySegmentSelectEnumerable<TSource, TResult, TSelector>.DisposableEnumerator, TResult, TPredicate> Where<TPredicate>(TPredicate predicate)
+            where TPredicate : struct, IFunction<TResult, bool>
+            => ValueEnumerableExtensions.Where<ArraySegmentSelectEnumerable<TSource, TResult, TSelector>, ArraySegmentSelectEnumerable<TSource, TResult, TSelector>.DisposableEnumerator, TResult, TPredicate>(this, predicate);
 
             public ArraySegmentSelectEnumerable<TSource, TResult2, SelectorCombination<TSelector, FunctionWrapper<TResult, TResult2>, TSource, TResult, TResult2>> Select<TResult2>(Func<TResult, TResult2> selector)
                 => Select<FunctionWrapper<TResult, TResult2>, TResult2>(new FunctionWrapper<TResult, TResult2>(selector));
