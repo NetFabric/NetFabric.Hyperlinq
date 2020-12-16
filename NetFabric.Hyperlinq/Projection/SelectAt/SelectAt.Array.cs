@@ -5,9 +5,15 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class ArrayExtensions
     {
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ArraySegmentSelectAtEnumerable<TSource, TResult> Select<TSource, TResult>(this TSource[] source, NullableSelectorAt<TSource, TResult> selector)
-            => Select(new ArraySegment<TSource>(source), selector);
+        public static ArraySegmentSelectAtEnumerable<TSource, TResult, FunctionWrapper<TSource, int, TResult>> Select<TSource, TResult>(this TSource[] source, Func<TSource, int, TResult> selector)
+            => source.SelectAt<TSource, TResult, FunctionWrapper<TSource, int, TResult>>(new FunctionWrapper<TSource, int, TResult>(selector));
+        
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ArraySegmentSelectAtEnumerable<TSource, TResult, TSelector> SelectAt<TSource, TResult, TSelector>(this TSource[] source, TSelector selector)
+            where TSelector : struct, IFunction<TSource, int, TResult>
+            => (new ArraySegment<TSource>(source)).SelectAt<TSource, TResult, TSelector>(selector);
     }
 }
 

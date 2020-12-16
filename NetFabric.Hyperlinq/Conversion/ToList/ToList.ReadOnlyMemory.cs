@@ -3,6 +3,8 @@ using System.Buffers;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
+// ReSharper disable HeapView.ObjectAllocation.Evident
+
 namespace NetFabric.Hyperlinq
 {
     public static partial class ArrayExtensions
@@ -10,38 +12,47 @@ namespace NetFabric.Hyperlinq
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static List<TSource> ToList<TSource>(this ReadOnlyMemory<TSource> source)
-            => new List<TSource>(new ReadOnlyMemoryToListCollection<TSource>(source));
+            => new(collection: new ReadOnlyMemoryToListCollection<TSource>(source));
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static List<TSource> ToList<TSource>(this ReadOnlyMemory<TSource> source, Predicate<TSource> predicate)
+        static List<TSource> ToList<TSource, TPredicate>(this ReadOnlyMemory<TSource> source, TPredicate predicate)
+            where TPredicate : struct, IFunction<TSource, bool>
         {
             using var arrayBuilder = ToArrayBuilder(source.Span, predicate, ArrayPool<TSource>.Shared);
-            return new List<TSource>(arrayBuilder);
+            // ReSharper disable once HeapView.BoxingAllocation
+            return new List<TSource>(collection: arrayBuilder);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static List<TSource> ToList<TSource>(this ReadOnlyMemory<TSource> source, PredicateAt<TSource> predicate)
+        static List<TSource> ToListAt<TSource, TPredicate>(this ReadOnlyMemory<TSource> source, TPredicate predicate)
+            where TPredicate : struct, IFunction<TSource, int, bool>
         {
-            using var arrayBuilder = ToArrayBuilder(source.Span, predicate, ArrayPool<TSource>.Shared);
-            return new List<TSource>(arrayBuilder);
+            using var arrayBuilder = ToArrayBuilderAt(source.Span, predicate, ArrayPool<TSource>.Shared);
+            // ReSharper disable once HeapView.BoxingAllocation
+            return new List<TSource>(collection: arrayBuilder);
         }
 
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static List<TResult> ToList<TSource, TResult>(this ReadOnlyMemory<TSource> source, NullableSelector<TSource, TResult> selector)
-            => new List<TResult>(new ReadOnlyMemorySelectorToListCollection<TSource, TResult>(source, selector));
+        static List<TResult> ToList<TSource, TResult, TSelector>(this ReadOnlyMemory<TSource> source, TSelector selector)
+            where TSelector : struct, IFunction<TSource, TResult>
+            => new(collection: new ReadOnlyMemorySelectorToListCollection<TSource, TResult, TSelector>(source, selector));
 
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static List<TResult> ToList<TSource, TResult>(this ReadOnlyMemory<TSource> source, NullableSelectorAt<TSource, TResult> selector)
-            => new List<TResult>(new ReadOnlyMemorySelectorAtToListCollection<TSource, TResult>(source, selector));
+        static List<TResult> ToListAt<TSource, TResult, TSelector>(this ReadOnlyMemory<TSource> source, TSelector selector)
+            where TSelector : struct, IFunction<TSource, int, TResult>
+            => new(collection: new ReadOnlyMemorySelectorAtToListCollection<TSource, TResult, TSelector>(source, selector));
 
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static List<TResult> ToList<TSource, TResult>(this ReadOnlyMemory<TSource> source, Predicate<TSource> predicate, NullableSelector<TSource, TResult> selector)
+        static List<TResult> ToList<TSource, TResult, TPredicate, TSelector>(this ReadOnlyMemory<TSource> source, TPredicate predicate, TSelector selector)
+            where TPredicate : struct, IFunction<TSource, bool>
+            where TSelector : struct, IFunction<TSource, TResult>
         {
             using var arrayBuilder = ToArrayBuilder(source.Span, predicate, selector, ArrayPool<TResult>.Shared);
-            return new List<TResult>(arrayBuilder);
+            // ReSharper disable once HeapView.BoxingAllocation
+            return new List<TResult>(collection: arrayBuilder);
         }
 
         sealed class ReadOnlyMemoryToListCollection<TSource>
@@ -54,35 +65,37 @@ namespace NetFabric.Hyperlinq
                 => this.source = source;
 
             public override void CopyTo(TSource[] array, int _)
-                => ArrayExtensions.Copy(source.Span, array);
+                => Copy(source.Span, array);
         }
 
-        sealed class ReadOnlyMemorySelectorToListCollection<TSource, TResult>
+        sealed class ReadOnlyMemorySelectorToListCollection<TSource, TResult, TSelector>
             : ToListCollectionBase<TResult>
+            where TSelector : struct, IFunction<TSource, TResult>
         {
             readonly ReadOnlyMemory<TSource> source;
-            readonly NullableSelector<TSource, TResult> selector;
+            readonly TSelector selector;
 
-            public ReadOnlyMemorySelectorToListCollection(ReadOnlyMemory<TSource> source, NullableSelector<TSource, TResult> selector)
+            public ReadOnlyMemorySelectorToListCollection(ReadOnlyMemory<TSource> source, TSelector selector)
                 : base(source.Length)
                 => (this.source, this.selector) = (source, selector);
 
             public override void CopyTo(TResult[] array, int _)
-                => ArrayExtensions.Copy(source.Span, array, selector);
+                => Copy<TSource, TResult, TSelector>(source.Span, array, selector);
         }
 
-        sealed class ReadOnlyMemorySelectorAtToListCollection<TSource, TResult>
+        sealed class ReadOnlyMemorySelectorAtToListCollection<TSource, TResult, TSelector>
             : ToListCollectionBase<TResult>
+            where TSelector : struct, IFunction<TSource, int, TResult>
         {
             readonly ReadOnlyMemory<TSource> source;
-            readonly NullableSelectorAt<TSource, TResult> selector;
+            readonly TSelector selector;
 
-            public ReadOnlyMemorySelectorAtToListCollection(ReadOnlyMemory<TSource> source, NullableSelectorAt<TSource, TResult> selector)
+            public ReadOnlyMemorySelectorAtToListCollection(ReadOnlyMemory<TSource> source, TSelector selector)
                 : base(source.Length)
                 => (this.source, this.selector) = (source, selector);
 
             public override void CopyTo(TResult[] array, int _)
-                => ArrayExtensions.Copy(source.Span, array, selector);
+                => CopyAt<TSource, TResult, TSelector>(source.Span, array, selector);
         }
     }
 }

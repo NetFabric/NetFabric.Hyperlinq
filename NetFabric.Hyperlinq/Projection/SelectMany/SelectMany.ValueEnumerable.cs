@@ -3,59 +3,68 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
 namespace NetFabric.Hyperlinq
 {
     public static partial class ValueEnumerableExtensions
     {
         
-        public static SelectManyEnumerable<TEnumerable, TEnumerator, TSource, TSubEnumerable, TSubEnumerator, TResult> SelectMany<TEnumerable, TEnumerator, TSource, TSubEnumerable, TSubEnumerator, TResult>(
-            this TEnumerable source, 
-            Selector<TSource, TSubEnumerable> selector)
-            where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static SelectManyEnumerable<TEnumerable, TEnumerator, TSource, TSubEnumerable, TSubEnumerator, TResult, FunctionWrapper<TSource, TSubEnumerable>> SelectMany<TEnumerable, TEnumerator, TSource, TSubEnumerable, TSubEnumerator, TResult>(this TEnumerable source, Func<TSource, TSubEnumerable> selector)
+            where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
             where TSubEnumerable : IValueEnumerable<TResult, TSubEnumerator>
             where TSubEnumerator : struct, IEnumerator<TResult>
-        {
-            if (selector is null) Throw.ArgumentNullException(nameof(selector));
+            => source.SelectMany<TEnumerable, TEnumerator, TSource, TSubEnumerable, TSubEnumerator, TResult, FunctionWrapper<TSource, TSubEnumerable>>(new FunctionWrapper<TSource, TSubEnumerable>(selector));
 
-            return new SelectManyEnumerable<TEnumerable, TEnumerator, TSource, TSubEnumerable, TSubEnumerator, TResult>(in source, selector);
-        }
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static SelectManyEnumerable<TEnumerable, TEnumerator, TSource, TSubEnumerable, TSubEnumerator, TResult, TSelector> SelectMany<TEnumerable, TEnumerator, TSource, TSubEnumerable, TSubEnumerator, TResult, TSelector>(this TEnumerable source, TSelector selector)
+            where TEnumerable : IValueEnumerable<TSource, TEnumerator>
+            where TEnumerator : struct, IEnumerator<TSource>
+            where TSubEnumerable : IValueEnumerable<TResult, TSubEnumerator>
+            where TSubEnumerator : struct, IEnumerator<TResult>
+            where TSelector : struct, IFunction<TSource, TSubEnumerable>
+            => new(source, selector);
 
         [GeneratorMapping("TSource", "TResult")]
-        public readonly partial struct SelectManyEnumerable<TEnumerable, TEnumerator, TSource, TSubEnumerable, TSubEnumerator, TResult>
-            : IValueEnumerable<TResult, SelectManyEnumerable<TEnumerable, TEnumerator, TSource, TSubEnumerable, TSubEnumerator, TResult>.Enumerator>
-            where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
+        [StructLayout(LayoutKind.Auto)]
+        public readonly partial struct SelectManyEnumerable<TEnumerable, TEnumerator, TSource, TSubEnumerable, TSubEnumerator, TResult, TSelector>
+            : IValueEnumerable<TResult, SelectManyEnumerable<TEnumerable, TEnumerator, TSource, TSubEnumerable, TSubEnumerator, TResult, TSelector>.Enumerator>
+            where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
             where TSubEnumerable : IValueEnumerable<TResult, TSubEnumerator>
             where TSubEnumerator : struct, IEnumerator<TResult>
+            where TSelector : struct, IFunction<TSource, TSubEnumerable>
         {
             readonly TEnumerable source;
-            readonly Selector<TSource, TSubEnumerable> selector;
+            readonly TSelector selector;
 
-            internal SelectManyEnumerable(in TEnumerable source, Selector<TSource, TSubEnumerable> selector)
-            {
-                this.source = source;
-                this.selector = selector;
-            }
-
+            internal SelectManyEnumerable(in TEnumerable source, TSelector selector)
+                => (this.source, this.selector) = (source, selector);
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly Enumerator GetEnumerator() => new Enumerator(in this);
-            readonly IEnumerator<TResult> IEnumerable<TResult>.GetEnumerator() => new Enumerator(in this);
-            readonly IEnumerator IEnumerable.GetEnumerator() => new Enumerator(in this);
+            public readonly Enumerator GetEnumerator() 
+                => new(in this);
+            readonly IEnumerator<TResult> IEnumerable<TResult>.GetEnumerator() 
+                // ReSharper disable once HeapView.BoxingAllocation
+                => new Enumerator(in this);
+            readonly IEnumerator IEnumerable.GetEnumerator() 
+                // ReSharper disable once HeapView.BoxingAllocation
+                => new Enumerator(in this);
 
+            [StructLayout(LayoutKind.Auto)]
             public struct Enumerator
                 : IEnumerator<TResult>
             {
                 [SuppressMessage("Style", "IDE0044:Add readonly modifier")]
                 TEnumerator sourceEnumerator; // do not make readonly
-                readonly Selector<TSource, TSubEnumerable> selector;
+                TSelector selector;
                 [SuppressMessage("Style", "IDE0044:Add readonly modifier")]
                 TSubEnumerator subEnumerator; // do not make readonly
                 int state;
 
-                internal Enumerator(in SelectManyEnumerable<TEnumerable, TEnumerator, TSource, TSubEnumerable, TSubEnumerator, TResult> enumerable)
+                internal Enumerator(in SelectManyEnumerable<TEnumerable, TEnumerator, TSource, TSubEnumerable, TSubEnumerator, TResult, TSelector> enumerable)
                 {
                     sourceEnumerator = enumerable.source.GetEnumerator();
                     selector = enumerable.selector;
@@ -63,13 +72,13 @@ namespace NetFabric.Hyperlinq
                     state = 0;
                 }
 
-                [MaybeNull]
                 public readonly TResult Current
                     => subEnumerator.Current;
                 readonly TResult IEnumerator<TResult>.Current 
                     => subEnumerator.Current;
-                readonly object? IEnumerator.Current 
-                    => subEnumerator.Current;
+                readonly object IEnumerator.Current
+                    // ReSharper disable once HeapView.PossibleBoxingAllocation
+                    => subEnumerator.Current!;
 
                 public bool MoveNext()
                 {
@@ -83,9 +92,7 @@ namespace NetFabric.Hyperlinq
                             if (!sourceEnumerator.MoveNext())
                                 break;
 
-                            var enumerable = selector(sourceEnumerator.Current);
-                            if (enumerable is null)
-                                Throw.InvalidOperationException("The 'selector' in SelectMany returned 'null'.");
+                            var enumerable = selector.Invoke(sourceEnumerator.Current);
                             subEnumerator = enumerable.GetEnumerator();
                             
                             state = 2;

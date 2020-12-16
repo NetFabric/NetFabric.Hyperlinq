@@ -8,33 +8,31 @@ namespace NetFabric.Hyperlinq
     public static partial class ReadOnlyListExtensions
     {
 
-        static LargeArrayBuilder<TSource> ToArrayBuilder<TList, TSource>(in TList source, Predicate<TSource> predicate, int offset, int count, ArrayPool<TSource> pool)
-            where TList : notnull, IReadOnlyList<TSource>
+        static LargeArrayBuilder<TSource> ToArrayBuilder<TList, TSource, TPredicate>(in TList source, TPredicate predicate, int offset, int count, ArrayPool<TSource> pool)
+            where TList : IReadOnlyList<TSource>
+            where TPredicate: struct, IFunction<TSource, bool>
         {
-            Debug.Assert(pool is object);
-
             var builder = new LargeArrayBuilder<TSource>(pool);
             var end = offset + count - 1;
             for (var index = offset; index <= end; index++)
             {
-                if (predicate(source[index]))
+                if (predicate.Invoke(source[index]))
                     builder.Add(source[index]);
             }
             return builder;
         }
 
-        static LargeArrayBuilder<TSource> ToArrayBuilder<TList, TSource>(in TList source, PredicateAt<TSource> predicate, int offset, int count, ArrayPool<TSource> pool)
-            where TList : notnull, IReadOnlyList<TSource>
+        static LargeArrayBuilder<TSource> ToArrayBuilderAt<TList, TSource, TPredicate>(in TList source, TPredicate predicate, int offset, int count, ArrayPool<TSource> pool)
+            where TList : IReadOnlyList<TSource>
+            where TPredicate: struct, IFunction<TSource, int, bool>
         {
-            Debug.Assert(pool is object);
-
             var builder = new LargeArrayBuilder<TSource>(pool);
             var end = count - 1;
             if (offset == 0)
             {
                 for (var index = 0; index <= end; index++)
                 {
-                    if (predicate(source[index], index))
+                    if (predicate.Invoke(source[index], index))
                         builder.Add(source[index]);
                 }
             }
@@ -42,24 +40,24 @@ namespace NetFabric.Hyperlinq
             {
                 for (var index = 0; index <= end; index++)
                 {
-                    if (predicate(source[index + offset], index))
+                    if (predicate.Invoke(source[index + offset], index))
                         builder.Add(source[index + offset]);
                 }
             }
             return builder;
         }
 
-        static LargeArrayBuilder<TResult> ToArrayBuilder<TList, TSource, TResult>(in TList source, Predicate<TSource> predicate, NullableSelector<TSource, TResult> selector, int offset, int count, ArrayPool<TResult> pool)
-            where TList : notnull, IReadOnlyList<TSource>
+        static LargeArrayBuilder<TResult> ToArrayBuilder<TList, TSource, TResult, TPredicate, TSelector>(in TList source, TPredicate predicate, TSelector selector, int offset, int count, ArrayPool<TResult> pool)
+            where TList : IReadOnlyList<TSource>
+            where TSelector: struct, IFunction<TSource, TResult>
+            where TPredicate: struct, IFunction<TSource, bool>
         {
-            Debug.Assert(pool is object);
-
             var builder = new LargeArrayBuilder<TResult>(pool);
             var end = offset + count - 1;
             for (var index = offset; index <= end; index++)
             {
-                if (predicate(source[index]))
-                    builder.Add(selector(source[index]));
+                if (predicate.Invoke(source[index]))
+                    builder.Add(selector.Invoke(source[index]));
             }
             return builder;
         }

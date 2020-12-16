@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
 namespace NetFabric.Hyperlinq
 {
@@ -8,38 +9,37 @@ namespace NetFabric.Hyperlinq
     {
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static MemoryWhereRefAtEnumerable<TSource> WhereRef<TSource>(this Memory<TSource> source, PredicateAt<TSource> predicate)
-        {
-            if (predicate is null)
-                Throw.ArgumentNullException(nameof(predicate));
+        public static MemoryWhereRefAtEnumerable<TSource, FunctionWrapper<TSource, int, bool>> WhereRef<TSource>(this in Memory<TSource> source, Func<TSource, int, bool> predicate)
+            => new(source, new FunctionWrapper<TSource, int, bool>(predicate));
 
-            return new MemoryWhereRefAtEnumerable<TSource>(source, predicate);
-        }
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static MemoryWhereRefAtEnumerable<TSource, TPredicate> WhereRefAt<TSource, TPredicate>(this in Memory<TSource> source, TPredicate predicate = default)
+            where TPredicate : struct, IFunction<TSource, int, bool>
+            => new(source, predicate);
 
         [GeneratorIgnore]
-        public readonly struct MemoryWhereRefAtEnumerable<TSource>
+        [StructLayout(LayoutKind.Auto)]
+        public readonly struct MemoryWhereRefAtEnumerable<TSource, TPredicate>
+            where TPredicate : struct, IFunction<TSource, int, bool>
         {
-            internal readonly Memory<TSource> source;
-            internal readonly PredicateAt<TSource> predicate;
+            readonly Memory<TSource> source;
+            readonly TPredicate predicate;
 
-            internal MemoryWhereRefAtEnumerable(Memory<TSource> source, PredicateAt<TSource> predicate)
-            {
-                this.source = source;
-                this.predicate = predicate;
-            }
-
+            internal MemoryWhereRefAtEnumerable(Memory<TSource> source, TPredicate predicate)
+                => (this.source, this.predicate) = (source, predicate);
 
             public readonly Enumerator GetEnumerator()
-                => new Enumerator(in this);
+                => new (in this);
 
+            [StructLayout(LayoutKind.Sequential)]
             public ref struct Enumerator
             {
-                readonly Span<TSource> source;
-                readonly PredicateAt<TSource> predicate;
-                readonly int end;
                 int index;
+                readonly int end;
+                readonly Span<TSource> source;
+                TPredicate predicate;
 
-                internal Enumerator(in MemoryWhereRefAtEnumerable<TSource> enumerable)
+                internal Enumerator(in MemoryWhereRefAtEnumerable<TSource, TPredicate> enumerable)
                 {
                     source = enumerable.source.Span;
                     predicate = enumerable.predicate;
@@ -55,7 +55,7 @@ namespace NetFabric.Hyperlinq
                 {
                     while (++index <= end)
                     {
-                        if (predicate(source[index], index))
+                        if (predicate.Invoke(source[index], index))
                             return true;
                     }
                     return false;

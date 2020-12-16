@@ -13,7 +13,7 @@ namespace NetFabric.Hyperlinq
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ValueEnumerableWrapper<TSource> AsValueEnumerable<TSource>(this IReadOnlyList<TSource> source)
-            => new ValueEnumerableWrapper<TSource>(source);
+            => new(source);
 
         [StructLayout(LayoutKind.Auto)]
         public readonly partial struct ValueEnumerableWrapper<TSource>
@@ -31,7 +31,6 @@ namespace NetFabric.Hyperlinq
                 get => source.Count;
             }
 
-            [MaybeNull]
             public readonly TSource this[int index]
             {
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -42,16 +41,20 @@ namespace NetFabric.Hyperlinq
             TSource IList<TSource>.this[int index]
             {
                 get => source[index];
+                
                 [ExcludeFromCodeCoverage]
+                // ReSharper disable once ValueParameterNotUsed
                 set => Throw.NotSupportedException();
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly Enumerator GetEnumerator() 
-                => new Enumerator(source);
+                => new(source);
             readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() 
+                // ReSharper disable once HeapView.BoxingAllocation
                 => new Enumerator(source);
             readonly IEnumerator IEnumerable.GetEnumerator() 
+                // ReSharper disable once HeapView.BoxingAllocation
                 => new Enumerator(source);
 
 
@@ -59,7 +62,7 @@ namespace NetFabric.Hyperlinq
                 => true;
 
             public void CopyTo(TSource[] array, int arrayIndex)
-                => ReadOnlyListExtensions.Copy(source, 0, array, arrayIndex, source.Count);
+                => Copy(source, 0, array, arrayIndex, source.Count);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             bool ICollection<TSource>.Contains(TSource item)
@@ -125,7 +128,6 @@ namespace NetFabric.Hyperlinq
                     end = index + source.Count;
                 }
 
-                [MaybeNull]
                 public readonly TSource Current
                 {
                     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -133,7 +135,8 @@ namespace NetFabric.Hyperlinq
                 }
                 readonly TSource IEnumerator<TSource>.Current
                     => source[index];
-                readonly object? IEnumerator.Current
+                readonly object IEnumerator.Current
+                    // ReSharper disable once HeapView.PossibleBoxingAllocation
                     => source[index];
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -149,20 +152,20 @@ namespace NetFabric.Hyperlinq
                 public readonly void Dispose() { }
             }
 
-            public bool Contains([AllowNull] TSource value, IEqualityComparer<TSource>? comparer = default)
+            public bool Contains(TSource value, IEqualityComparer<TSource>? comparer = default)
                 => ReadOnlyListExtensions.Contains(source, value, comparer);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TSource[] ToArray()
-                => ReadOnlyListExtensions.ToArray<IReadOnlyList<TSource>, TSource>(source);
+                => source.ToArray<IReadOnlyList<TSource>, TSource>();
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public IMemoryOwner<TSource> ToArray(MemoryPool<TSource> pool)
-                => ReadOnlyListExtensions.ToArray<IReadOnlyList<TSource>, TSource>(source, pool);
+                => source.ToArray(pool);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public List<TSource> ToList()
-                => ReadOnlyListExtensions.ToList<IReadOnlyList<TSource>, TSource>(source);
+                => source.ToList<IReadOnlyList<TSource>, TSource>();
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

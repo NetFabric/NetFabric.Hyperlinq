@@ -27,6 +27,18 @@
 
   <ItemGroup Condition="'$(TargetFramework)'!='netcoreapp2.1'">
     <Compile Remove="Bindings\System\Collections\Immutable\*.cs" />
+    <Compile Update="Utils\PredicatePredicateCombination.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="Utils\SelectorCombination.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="Utils\AsyncPredicatePredicateCombination.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="Utils\AsyncSelectorCombination.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>

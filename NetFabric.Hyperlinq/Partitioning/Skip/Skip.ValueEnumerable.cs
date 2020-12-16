@@ -12,14 +12,14 @@ namespace NetFabric.Hyperlinq
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static SkipEnumerable<TEnumerable, TEnumerator, TSource> Skip<TEnumerable, TEnumerator, TSource>(this TEnumerable source, int count)
-            where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
-            => new SkipEnumerable<TEnumerable, TEnumerator, TSource>(in source, count);
+            => new(in source, count);
 
         [StructLayout(LayoutKind.Auto)]
         public readonly partial struct SkipEnumerable<TEnumerable, TEnumerator, TSource>
             : IValueEnumerable<TSource, SkipEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator>
-            where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
             readonly TEnumerable source;
@@ -33,7 +33,7 @@ namespace NetFabric.Hyperlinq
 
             
             public readonly Enumerator GetEnumerator() 
-                => new Enumerator(in this);
+                => new(in this);
             readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() 
                 => new Enumerator(in this);
             readonly IEnumerator IEnumerable.GetEnumerator() 
@@ -53,7 +53,6 @@ namespace NetFabric.Hyperlinq
                     counter = enumerable.count;
                 }
 
-                [MaybeNull]
                 public readonly TSource Current
                 {
                     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -61,8 +60,9 @@ namespace NetFabric.Hyperlinq
                 }
                 readonly TSource IEnumerator<TSource>.Current 
                     => enumerator.Current;
-                readonly object? IEnumerator.Current
-                    => enumerator.Current;
+                readonly object IEnumerator.Current
+                    // ReSharper disable once HeapView.PossibleBoxingAllocation
+                    => enumerator.Current!;
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public bool MoveNext()
@@ -88,11 +88,11 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public SkipEnumerable<TEnumerable, TEnumerator, TSource> Skip(int count)
-                => ValueEnumerableExtensions.Skip<TEnumerable, TEnumerator, TSource>(source, this.count + count);
+                => source.Skip<TEnumerable, TEnumerator, TSource>(this.count + count);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public SkipTakeEnumerable<TEnumerable, TEnumerator, TSource> Take(int count)
-                => ValueEnumerableExtensions.SkipTake<TEnumerable, TEnumerator, TSource>(source, this.count, count);
+                => source.SkipTake<TEnumerable, TEnumerator, TSource>(this.count, count);
         }
     }
 }

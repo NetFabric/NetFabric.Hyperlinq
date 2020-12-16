@@ -9,7 +9,7 @@ namespace NetFabric.Hyperlinq
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static MemoryDistinctEnumerable<TSource> Distinct<TSource>(this Memory<TSource> source, IEqualityComparer<TSource>? comparer = null)
-            => Distinct((ReadOnlyMemory<TSource>)source, comparer);
+            => ((ReadOnlyMemory<TSource>)source).Distinct(comparer);
     }
 }
 

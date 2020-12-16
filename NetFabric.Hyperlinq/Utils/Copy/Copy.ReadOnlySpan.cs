@@ -15,21 +15,23 @@ namespace NetFabric.Hyperlinq
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void Copy<TSource, TResult>(ReadOnlySpan<TSource> source, Span<TResult> destination, NullableSelector<TSource, TResult> selector)
+        public static void Copy<TSource, TResult, TSelector>(ReadOnlySpan<TSource> source, Span<TResult> destination, TSelector selector)
+            where TSelector : struct, IFunction<TSource, TResult>
         {
             Debug.Assert(destination.Length >= source.Length);
 
             for (var index = 0; index < source.Length; index++)
-                destination[index] = selector(source[index])!;
+                destination[index] = selector.Invoke(source[index]);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void Copy<TSource, TResult>(ReadOnlySpan<TSource> source, Span<TResult> destination, NullableSelectorAt<TSource, TResult> selector)
+        public static void CopyAt<TSource, TResult, TSelector>(ReadOnlySpan<TSource> source, Span<TResult> destination, TSelector selector)
+            where TSelector : struct, IFunction<TSource, int, TResult>
         {
             Debug.Assert(destination.Length >= source.Length);
 
             for (var index = 0; index < source.Length; index++)
-                destination[index] = selector(source[index], index)!;
+                destination[index] = selector.Invoke(source[index], index);
         }
     }
 }

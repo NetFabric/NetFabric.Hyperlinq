@@ -1,7 +1,10 @@
 using System;
 using System.Buffers;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
+// ReSharper disable HeapView.ObjectAllocation.Evident
 
 namespace NetFabric.Hyperlinq
 {
@@ -9,70 +12,81 @@ namespace NetFabric.Hyperlinq
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static List<TSource> ToList<TSource>(this in ArraySegment<TSource> source)
-            => new List<TSource>(source);
+            // ReSharper disable once HeapView.BoxingAllocation
+            => new(collection: source);
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static List<TSource> ToList<TSource>(this in ArraySegment<TSource> source, Predicate<TSource> predicate)
+        static List<TSource> ToList<TSource, TPredicate>(this in ArraySegment<TSource> source, TPredicate predicate)
+            where TPredicate : struct, IFunction<TSource, bool>
         {
             using var arrayBuilder = ToArrayBuilder(source, predicate, ArrayPool<TSource>.Shared);
-            return new List<TSource>(arrayBuilder);
+            // ReSharper disable once HeapView.BoxingAllocation
+            return new List<TSource>(collection: arrayBuilder);
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static List<TSource> ToList<TSource>(this in ArraySegment<TSource> source, PredicateAt<TSource> predicate)
+        static List<TSource> ToListAt<TSource, TPredicate>(this in ArraySegment<TSource> source, TPredicate predicate)
+            where TPredicate : struct, IFunction<TSource, int, bool>
         {
-            using var arrayBuilder = ToArrayBuilder(source, predicate, ArrayPool<TSource>.Shared);
-            return new List<TSource>(arrayBuilder);
+            using var arrayBuilder = ToArrayBuilderAt(source, predicate, ArrayPool<TSource>.Shared);
+            // ReSharper disable once HeapView.BoxingAllocation
+            return new List<TSource>(collection: arrayBuilder);
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static List<TResult> ToList<TSource, TResult>(this in ArraySegment<TSource> source, NullableSelector<TSource, TResult> selector)
-            => source.Count == 0
-                ? new List<TResult>()
-                : new List<TResult>(new ArraySegmentSelectorToListCollection<TSource, TResult>(source, selector));
+        static List<TResult> ToList<TSource, TResult, TSelector>(this in ArraySegment<TSource> source, TSelector selector)
+            where TSelector : struct, IFunction<TSource, TResult>
+            => source.Count switch
+            {
+                0 => new List<TResult>(),
+                _ => new List<TResult>(collection: new ArraySegmentSelectorToListCollection<TSource, TResult, TSelector>(source, selector))
+            };
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static List<TResult> ToList<TSource, TResult>(this in ArraySegment<TSource> source, NullableSelectorAt<TSource, TResult> selector)
-            => source.Count == 0
-                ? new List<TResult>()
-                : new List<TResult>(new ArraySegmentSelectorAtToListCollection<TSource, TResult>(source, selector));
+        static List<TResult> ToListAt<TSource, TResult, TSelector>(this in ArraySegment<TSource> source, TSelector selector)
+            where TSelector : struct, IFunction<TSource, int, TResult>
+            => source.Count switch
+            {
+                0 => new List<TResult>(),
+                _ => new List<TResult>(collection: new ArraySegmentSelectorAtToListCollection<TSource, TResult, TSelector>(source, selector))
+            };
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static List<TResult> ToList<TSource, TResult>(this in ArraySegment<TSource> source, Predicate<TSource> predicate, NullableSelector<TSource, TResult> selector)
+        static List<TResult> ToList<TSource, TResult, TPredicate, TSelector>(this in ArraySegment<TSource> source, TPredicate predicate, TSelector selector)
+            where TPredicate : struct, IFunction<TSource, bool>
+            where TSelector : struct, IFunction<TSource, TResult>
         {
             using var arrayBuilder = ToArrayBuilder(source, predicate, selector, ArrayPool<TResult>.Shared);
-            return new List<TResult>(arrayBuilder);
+            // ReSharper disable once HeapView.BoxingAllocation
+            return new List<TResult>(collection: arrayBuilder);
         }
 
         // helper implementation of ICollection<> so that CopyTo() is used to convert to List<>
         [GeneratorIgnore]
-        sealed class ArraySegmentSelectorToListCollection<TSource, TResult>
+        sealed class ArraySegmentSelectorToListCollection<TSource, TResult, TSelector>
             : ToListCollectionBase<TResult>
+            where TSelector : struct, IFunction<TSource, TResult>
         {
             readonly ArraySegment<TSource> source;
-            readonly NullableSelector<TSource, TResult> selector;
+            readonly TSelector selector;
 
-            public ArraySegmentSelectorToListCollection(in ArraySegment<TSource> source, NullableSelector<TSource, TResult> selector)
+            public ArraySegmentSelectorToListCollection(in ArraySegment<TSource> source, TSelector selector)
                 : base(source.Count)
                 => (this.source, this.selector) = (source, selector);
 
             public override void CopyTo(TResult[] array, int _)
-                => ArrayExtensions.Copy<TSource, TResult>(source, array, selector);
+                => Copy<TSource, TResult, TSelector>(source, array, selector);
         }
 
         [GeneratorIgnore]
-        sealed class ArraySegmentSelectorAtToListCollection<TSource, TResult>
+        sealed class ArraySegmentSelectorAtToListCollection<TSource, TResult, TSelector>
             : ToListCollectionBase<TResult>
+            where TSelector : struct, IFunction<TSource, int, TResult>
         {
             readonly ArraySegment<TSource> source;
-            readonly NullableSelectorAt<TSource, TResult> selector;
+            readonly TSelector selector;
 
-            public ArraySegmentSelectorAtToListCollection(in ArraySegment<TSource> source, NullableSelectorAt<TSource, TResult> selector)
+            public ArraySegmentSelectorAtToListCollection(in ArraySegment<TSource> source, TSelector selector)
                 : base(source.Count)
                 => (this.source, this.selector) = (source, selector);
 
             public override void CopyTo(TResult[] array, int _)
-                => ArrayExtensions.Copy<TSource, TResult>(source, array, selector);
+                => CopyAt<TSource, TResult, TSelector>(source, array, selector);
         }
     }
 }

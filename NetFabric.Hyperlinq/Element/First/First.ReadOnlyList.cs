@@ -9,12 +9,12 @@ namespace NetFabric.Hyperlinq
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Option<TSource> First<TList, TSource>(this TList source) 
-            where TList : notnull, IReadOnlyList<TSource>
-            => First<TList, TSource>(source, 0, source.Count);
+            where TList : IReadOnlyList<TSource>
+            => source.First<TList, TSource>(0, source.Count);
 
 
         static Option<TSource> First<TList, TSource>(this TList source, int offset, int count) 
-            where TList : notnull, IReadOnlyList<TSource>
+            where TList : IReadOnlyList<TSource>
             => count switch
             {
                 0 => Option.None,
@@ -22,22 +22,24 @@ namespace NetFabric.Hyperlinq
             };
 
 
-        static Option<TSource> First<TList, TSource>(this TList source, Predicate<TSource> predicate, int offset, int count)
-            where TList : notnull, IReadOnlyList<TSource>
+        static Option<TSource> First<TList, TSource, TPredicate>(this TList source, TPredicate predicate, int offset, int count)
+            where TList : IReadOnlyList<TSource>
+            where TPredicate : struct, IFunction<TSource, bool>
         {
             var end = offset + count - 1;
             for (var index = offset; index <= end; index++)
             {
                 var item = source[index];
-                if (predicate(item))
+                if (predicate.Invoke(item))
                     return Option.Some(item);
             }
             return Option.None;
         }
 
 
-        static Option<TSource> First<TList, TSource>(this TList source, PredicateAt<TSource> predicate, int offset, int count)
-            where TList : notnull, IReadOnlyList<TSource>
+        static Option<TSource> FirstAt<TList, TSource, TPredicate>(this TList source, TPredicate predicate, int offset, int count)
+            where TList : IReadOnlyList<TSource>
+            where TPredicate : struct, IFunction<TSource, int, bool>
         {
             var end = count - 1;
             if (offset == 0)
@@ -45,7 +47,7 @@ namespace NetFabric.Hyperlinq
                 for (var index = 0; index <= end; index++)
                 {
                     var item = source[index];
-                    if (predicate(item, index))
+                    if (predicate.Invoke(item, index))
                         return Option.Some(item);
                 }
             }
@@ -54,7 +56,7 @@ namespace NetFabric.Hyperlinq
                 for (var index = 0; index <= end; index++)
                 {
                     var item = source[index + offset];
-                    if (predicate(item, index))
+                    if (predicate.Invoke(item, index))
                         return Option.Some(item);
                 }
             }
@@ -63,33 +65,37 @@ namespace NetFabric.Hyperlinq
 
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static Option<TResult> First<TList, TSource, TResult>(this TList source, NullableSelector<TSource, TResult> selector, int offset, int count)
-            where TList : notnull, IReadOnlyList<TSource>
+        static Option<TResult> First<TList, TSource, TResult, TSelector>(this TList source, TSelector selector, int offset, int count)
+            where TList : IReadOnlyList<TSource>
+            where TSelector : struct, IFunction<TSource, TResult>
             => count switch
             {
                 0 => Option.None,
-                _ => Option.Some(selector(source[offset])),
+                _ => Option.Some(selector.Invoke(source[offset])),
             };
 
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static Option<TResult> First<TList, TSource, TResult>(this TList source, NullableSelectorAt<TSource, TResult> selector, int offset, int count)
-            where TList : notnull, IReadOnlyList<TSource>
+        static Option<TResult> FirstAt<TList, TSource, TResult, TSelector>(this TList source, TSelector selector, int offset, int count)
+            where TList : IReadOnlyList<TSource>
+            where TSelector : struct, IFunction<TSource, int, TResult>
             => count switch
             {
                 0 => Option.None,
-                _ => Option.Some(selector(source[offset], 0)),
+                _ => Option.Some(selector.Invoke(source[offset], 0)),
             };
 
 
-        static Option<TResult> First<TList, TSource, TResult>(this TList source, Predicate<TSource> predicate, NullableSelector<TSource, TResult> selector, int offset, int count)
-            where TList : notnull, IReadOnlyList<TSource>
+        static Option<TResult> First<TList, TSource, TResult, TPredicate, TSelector>(this TList source, TPredicate predicate, TSelector selector, int offset, int count)
+            where TList : IReadOnlyList<TSource>
+            where TPredicate : struct, IFunction<TSource, bool>
+            where TSelector : struct, IFunction<TSource, TResult>
         {
             var end = offset + count - 1;
             for (var index = offset; index <= end; index++)
             {
-                if (predicate(source[index]))
-                    return Option.Some(selector(source[index]));
+                if (predicate.Invoke(source[index]))
+                    return Option.Some(selector.Invoke(source[index]));
             }
             return Option.None;
         }

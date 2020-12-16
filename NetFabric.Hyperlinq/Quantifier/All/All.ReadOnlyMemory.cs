@@ -7,13 +7,23 @@ namespace NetFabric.Hyperlinq
     {
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool All<TSource>(this ReadOnlyMemory<TSource> source, Predicate<TSource> predicate)
-            => All(source.Span, predicate);
+        public static bool All<TSource>(this ReadOnlyMemory<TSource> source, Func<TSource, bool> predicate)
+            => source.All(new FunctionWrapper<TSource, bool>(predicate));
+        
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool All<TSource, TPredicate>(this ReadOnlyMemory<TSource> source, TPredicate predicate)
+            where TPredicate : struct, IFunction<TSource, bool>
+            => source.Span.All(predicate);
 
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool All<TSource>(this ReadOnlyMemory<TSource> source, PredicateAt<TSource> predicate)
-            => All(source.Span, predicate);
+        public static bool All<TSource>(this ReadOnlyMemory<TSource> source, Func<TSource, int, bool> predicate)
+            => source.AllAt(new FunctionWrapper<TSource, int, bool>(predicate));
+        
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool AllAt<TSource, TPredicate>(this ReadOnlyMemory<TSource> source, TPredicate predicate)
+            where TPredicate : struct, IFunction<TSource, int, bool>
+            => source.Span.AllAt(predicate);
     }
 }
 

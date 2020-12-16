@@ -12,26 +12,34 @@ namespace NetFabric.Hyperlinq
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ValueEnumerableWrapper<TSource> AsValueEnumerable<TSource>(this IEnumerable<TSource> source)
-            => new ValueEnumerableWrapper<TSource>(source);
+            => new(source);
 
         [GeneratorIgnore]
-        
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ValueEnumerableWrapper<TEnumerable, TEnumerator, TSource> AsValueEnumerable<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TEnumerable, TEnumerator> getEnumerator)
-            where TEnumerable : notnull, IEnumerable<TSource>
+        public static ValueEnumerableWrapper<TEnumerable, TEnumerator, TSource, FunctionWrapper<TEnumerable, TEnumerator>> AsValueEnumerable<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TEnumerable, TEnumerator> getEnumerator)
+            where TEnumerable : IEnumerable<TSource>
             where TEnumerator : struct, IEnumerator<TSource>
-            => new ValueEnumerableWrapper<TEnumerable, TEnumerator, TSource>(source, getEnumerator);
+            => AsValueEnumerable<TEnumerable, TEnumerator, TSource, FunctionWrapper<TEnumerable, TEnumerator>>(source, new FunctionWrapper<TEnumerable, TEnumerator>(getEnumerator));
+
+        [GeneratorIgnore]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ValueEnumerableWrapper<TEnumerable, TEnumerator, TSource, TGetEnumerator> AsValueEnumerable<TEnumerable, TEnumerator, TSource, TGetEnumerator>(this TEnumerable source, TGetEnumerator getEnumerator = default)
+            where TEnumerable : IEnumerable<TSource>
+            where TEnumerator : struct, IEnumerator<TSource>
+            where TGetEnumerator : struct, IFunction<TEnumerable, TEnumerator>
+            => new(source, getEnumerator);
 
         [StructLayout(LayoutKind.Auto)]
-        public readonly partial struct ValueEnumerableWrapper<TEnumerable, TEnumerator, TSource>
+        public partial struct ValueEnumerableWrapper<TEnumerable, TEnumerator, TSource, TGetEnumerator>
             : IValueEnumerable<TSource, TEnumerator>
-            where TEnumerable : notnull, IEnumerable<TSource>
+            where TEnumerable : IEnumerable<TSource>
             where TEnumerator : struct, IEnumerator<TSource>
+            where TGetEnumerator : struct, IFunction<TEnumerable, TEnumerator>
         {
             readonly TEnumerable source;
-            readonly Func<TEnumerable, TEnumerator> getEnumerator;
+            TGetEnumerator getEnumerator;
 
-            internal ValueEnumerableWrapper(TEnumerable source, Func<TEnumerable, TEnumerator> getEnumerator)
+            internal ValueEnumerableWrapper(TEnumerable source, TGetEnumerator getEnumerator)
             {
                 this.source = source;
                 this.getEnumerator = getEnumerator;
@@ -40,15 +48,17 @@ namespace NetFabric.Hyperlinq
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly TEnumerator GetEnumerator() 
-                => getEnumerator(source);
+                => getEnumerator.Invoke(source);
             readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() 
-                => getEnumerator(source);
+                // ReSharper disable once HeapView.BoxingAllocation
+                => getEnumerator.Invoke(source);
             readonly IEnumerator IEnumerable.GetEnumerator() 
-                => getEnumerator(source);
+                // ReSharper disable once HeapView.BoxingAllocation
+                => getEnumerator.Invoke(source);
         }
 
         [StructLayout(LayoutKind.Auto)]
-        public partial struct ValueEnumerableWrapper<TSource>
+        public readonly partial struct ValueEnumerableWrapper<TSource>
             : IValueEnumerable<TSource, ValueEnumerableWrapper<TSource>.Enumerator>
         {
             readonly IEnumerable<TSource> source;
@@ -59,14 +69,16 @@ namespace NetFabric.Hyperlinq
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly Enumerator GetEnumerator() 
-                => new Enumerator(source);
+                => new(source);
             readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() 
+                // ReSharper disable once HeapView.BoxingAllocation
                 => new Enumerator(source);
             readonly IEnumerator IEnumerable.GetEnumerator() 
+                // ReSharper disable once HeapView.BoxingAllocation
                 => new Enumerator(source);
 
             [StructLayout(LayoutKind.Auto)]
-            public readonly struct Enumerator
+            public struct Enumerator
                 : IEnumerator<TSource>
             {
                 readonly IEnumerator<TSource> enumerator;
@@ -74,28 +86,28 @@ namespace NetFabric.Hyperlinq
                 internal Enumerator(IEnumerable<TSource> enumerable) 
                     => enumerator = enumerable.GetEnumerator();
 
-                [MaybeNull]
-                public readonly TSource Current
+                public TSource Current
                 {
                     [MethodImpl(MethodImplOptions.AggressiveInlining)]
                     get => enumerator.Current;
                 }
-                readonly TSource IEnumerator<TSource>.Current
+                TSource IEnumerator<TSource>.Current
                     => enumerator.Current;
-                readonly object? IEnumerator.Current
+                object IEnumerator.Current
+                    // ReSharper disable once HeapView.PossibleBoxingAllocation
                     => enumerator.Current;
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                public readonly bool MoveNext() 
+                public bool MoveNext() 
                     => enumerator.MoveNext();
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 [ExcludeFromCodeCoverage]
-                public readonly void Reset() 
+                public void Reset() 
                     => enumerator.Reset();
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                public readonly void Dispose() 
+                public void Dispose() 
                     => enumerator.Dispose();
             }
         }

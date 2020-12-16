@@ -12,19 +12,19 @@ namespace NetFabric.Hyperlinq
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static AsyncValueEnumerableWrapper<TSource> AsAsyncValueEnumerable<TSource>(this IAsyncEnumerable<TSource> source)
-            => new AsyncValueEnumerableWrapper<TSource>(source);
+            => new(source);
 
         [GeneratorIgnore] // TODO: to be removed
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static AsyncValueEnumerableWrapper<TEnumerable, TEnumerator, TSource> AsAsyncValueEnumerable<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TEnumerable, CancellationToken, TEnumerator> getAsyncEnumerator)
-            where TEnumerable : notnull, IAsyncEnumerable<TSource>
+            where TEnumerable : IAsyncEnumerable<TSource>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
-            => new AsyncValueEnumerableWrapper<TEnumerable, TEnumerator, TSource>(source, getAsyncEnumerator);
+            => new(source, getAsyncEnumerator);
 
         public readonly partial struct AsyncValueEnumerableWrapper<TEnumerable, TEnumerator, TSource>
             : IAsyncValueEnumerable<TSource, TEnumerator>
-            where TEnumerable : notnull, IAsyncEnumerable<TSource>
+            where TEnumerable : IAsyncEnumerable<TSource>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
             readonly TEnumerable source;
@@ -41,6 +41,7 @@ namespace NetFabric.Hyperlinq
             public readonly TEnumerator GetAsyncEnumerator(CancellationToken cancellationToken = default) 
                 => getAsyncEnumerator(source, cancellationToken);
             readonly IAsyncEnumerator<TSource> IAsyncEnumerable<TSource>.GetAsyncEnumerator(CancellationToken cancellationToken) 
+                // ReSharper disable once HeapView.BoxingAllocation
                 => getAsyncEnumerator(source, cancellationToken);
         }
 
@@ -54,8 +55,9 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly AsyncEnumerator GetAsyncEnumerator(CancellationToken cancellationToken = default) 
-                => new AsyncEnumerator(source, cancellationToken);
+                => new(source, cancellationToken);
             readonly IAsyncEnumerator<TSource> IAsyncEnumerable<TSource>.GetAsyncEnumerator(CancellationToken cancellationToken) 
+                // ReSharper disable once HeapView.BoxingAllocation
                 => new AsyncEnumerator(source, cancellationToken);
 
             public readonly partial struct AsyncEnumerator
@@ -66,7 +68,6 @@ namespace NetFabric.Hyperlinq
                 internal AsyncEnumerator(IAsyncEnumerable<TSource> enumerable, CancellationToken cancellationToken)
                     => enumerator = enumerable.GetAsyncEnumerator(cancellationToken);
 
-                [MaybeNull]
                 public readonly TSource Current 
                     => enumerator.Current;
                 readonly TSource IAsyncEnumerator<TSource>.Current

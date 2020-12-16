@@ -11,29 +11,33 @@ namespace NetFabric.Hyperlinq
     {
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static SpanWhereSelectEnumerable<TSource, TResult> WhereSelect<TSource, TResult>(
+        static SpanWhereSelectEnumerable<TSource, TResult, TPredicate, TSelector> WhereSelect<TSource, TResult, TPredicate, TSelector>(
             this ReadOnlySpan<TSource> source, 
-            Predicate<TSource> predicate, 
-            NullableSelector<TSource, TResult> selector) 
-            => new SpanWhereSelectEnumerable<TSource, TResult>(source, predicate, selector);
+            TPredicate predicate, 
+            TSelector selector) 
+            where TPredicate : struct, IFunction<TSource, bool>
+            where TSelector : struct, IFunction<TSource, TResult>
+            => new(source, predicate, selector);
 
         [GeneratorMapping("TSource", "TResult")]
         [StructLayout(LayoutKind.Auto)]
-        public readonly ref struct SpanWhereSelectEnumerable<TSource, TResult>
+        public readonly ref struct SpanWhereSelectEnumerable<TSource, TResult, TPredicate, TSelector>
+            where TPredicate : struct, IFunction<TSource, bool>
+            where TSelector : struct, IFunction<TSource, TResult>
         {
-            internal readonly ReadOnlySpan<TSource> source;
-            internal readonly Predicate<TSource> predicate;
-            internal readonly NullableSelector<TSource, TResult> selector;
+            readonly ReadOnlySpan<TSource> source;
+            readonly TPredicate predicate;
+            readonly TSelector selector;
 
-            internal SpanWhereSelectEnumerable(ReadOnlySpan<TSource> source, Predicate<TSource> predicate, NullableSelector<TSource, TResult> selector)
+            internal SpanWhereSelectEnumerable(ReadOnlySpan<TSource> source, TPredicate predicate, TSelector selector)
             {
                 this.source = source;
                 this.predicate = predicate;
                 this.selector = selector;
             }
-
             
-            public readonly Enumerator GetEnumerator() => new Enumerator(in this);
+            public readonly Enumerator GetEnumerator() 
+                => new(in this);
 
             [StructLayout(LayoutKind.Sequential)]
             public ref struct Enumerator
@@ -41,10 +45,10 @@ namespace NetFabric.Hyperlinq
                 int index;
                 readonly int end;
                 readonly ReadOnlySpan<TSource> source;
-                readonly Predicate<TSource> predicate;
-                readonly NullableSelector<TSource, TResult> selector;
+                TPredicate predicate;
+                TSelector selector;
 
-                internal Enumerator(in SpanWhereSelectEnumerable<TSource, TResult> enumerable)
+                internal Enumerator(in SpanWhereSelectEnumerable<TSource, TResult, TPredicate, TSelector> enumerable)
                 {
                     source = enumerable.source;
                     predicate = enumerable.predicate;
@@ -53,11 +57,10 @@ namespace NetFabric.Hyperlinq
                     end = index + source.Length;
                 }
 
-                [MaybeNull]
                 public TResult Current 
                 {
                     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                    get => selector(source[index]);
+                    get => selector.Invoke(source[index]);
                 }
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -65,36 +68,95 @@ namespace NetFabric.Hyperlinq
                 {
                     while (++index <= end)
                     {
-                        if (predicate(source[index]))
+                        if (predicate.Invoke(source[index]))
                             return true;
                     }
                     return false;
                 }
             }
 
+            #region Aggregation
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public int Count()
                 => source.Count(predicate);
+            
+            #endregion
+            #region Quantifier
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Any()
-                => ArrayExtensions.Any<TSource>(source, predicate);
+                => source.Any(predicate);
+            
+            #endregion
+            #region Filtering
+            
+            #endregion
+            #region Projection
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public SpanWhereSelectEnumerable<TSource, TResult2, TPredicate, SelectorSelectorCombination<TSelector, FunctionWrapper<TResult, TResult2>, TSource, TResult, TResult2>> Select<TResult2>(Func<TResult, TResult2> selector)
+                => Select<TResult2, FunctionWrapper<TResult, TResult2>>(new FunctionWrapper<TResult, TResult2>(selector));
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public SpanWhereSelectEnumerable<TSource, TResult2, TPredicate, SelectorSelectorCombination<TSelector, TSelector2, TSource, TResult, TResult2>> Select<TResult2, TSelector2>(TSelector2 selector)
+                where TSelector2 : struct, IFunction<TResult, TResult2>
+                => source.WhereSelect<TSource, TResult2, TPredicate, SelectorSelectorCombination<TSelector, TSelector2, TSource, TResult, TResult2>>(predicate, new SelectorSelectorCombination<TSelector, TSelector2, TSource, TResult, TResult2>(this.selector, selector));
+            
+            #endregion
+            #region Element
                 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Option<TResult> ElementAt(int index)
-                => ArrayExtensions.ElementAt<TSource, TResult>(source, index, predicate, selector);
+                => source.ElementAt<TSource, TResult, TPredicate, TSelector>(index, predicate, selector);
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Option<TResult> First()
-                => ArrayExtensions.First<TSource, TResult>(source, predicate, selector);
+                => source.First<TSource, TResult, TPredicate, TSelector>(predicate, selector);
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Option<TResult> Single()
-                => ArrayExtensions.Single<TSource, TResult>(source, predicate, selector);
+                => source.Single<TSource, TResult, TPredicate, TSelector>(predicate, selector);
+            
+            #endregion
+            #region Conversion
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TResult[] ToArray()
-                => ArrayExtensions.ToArray(source, predicate, selector);
+                => source.ToArray<TSource, TResult, TPredicate, TSelector>(predicate, selector);
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public IMemoryOwner<TResult> ToArray(MemoryPool<TResult> memoryPool)
-                => ArrayExtensions.ToArray(source, predicate, selector, memoryPool);
+                => source.ToArray<TSource, TResult, TPredicate, TSelector>(predicate, selector, memoryPool);
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public List<TResult> ToList()
-                => ArrayExtensions.ToList(source, predicate, selector);
+                => source.ToList<TSource, TResult, TPredicate, TSelector>(predicate, selector);
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public Dictionary<TKey, TResult> ToDictionary<TKey>(Func<TResult, TKey> keySelector, IEqualityComparer<TKey>? comparer = default)
+                where TKey : notnull
+                => ToDictionary<TKey, FunctionWrapper<TResult, TKey>>(new FunctionWrapper<TResult, TKey>(keySelector), comparer);
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public Dictionary<TKey, TResult> ToDictionary<TKey, TKeySelector>(TKeySelector keySelector, IEqualityComparer<TKey>? comparer = default)
+                where TKey : notnull
+                where TKeySelector : struct, IFunction<TResult, TKey>
+                => source.ToDictionary<TSource, TKey, TKeySelector, TResult, TPredicate, TSelector>(keySelector, comparer, predicate, selector);
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Func<TResult, TKey> keySelector, Func<TResult, TElement> elementSelector, IEqualityComparer<TKey>? comparer = default)
+                where TKey : notnull
+                => ToDictionary<TKey, TElement, FunctionWrapper<TResult, TKey>, FunctionWrapper<TResult, TElement>>(new FunctionWrapper<TResult, TKey>(keySelector), new FunctionWrapper<TResult, TElement>(elementSelector), comparer);
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement, TKeySelector, TElementSelector>(TKeySelector keySelector, TElementSelector elementSelector, IEqualityComparer<TKey>? comparer = default)
+                where TKey : notnull
+                where TKeySelector : struct, IFunction<TResult, TKey>
+                where TElementSelector : struct, IFunction<TResult, TElement>
+                => source.ToDictionary<TSource, TKey, TElement, TKeySelector, TElementSelector, TResult, TPredicate, TSelector>(keySelector, elementSelector, comparer, predicate, selector);
+            
+            #endregion
 
             public bool SequenceEqual(IEnumerable<TResult> other, IEqualityComparer<TResult>? comparer = null)
             {

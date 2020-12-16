@@ -5,48 +5,39 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class ValueReadOnlyCollectionExtensions
     {
-        
-        public static Option<TSource> First<TEnumerable, TEnumerator, TSource>(this TEnumerable source) 
-            where TEnumerable : notnull, IValueReadOnlyCollection<TSource, TEnumerator>
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Option<TSource> First<TEnumerable, TEnumerator, TSource>(this TEnumerable source)
+            where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
-        {
-            if (source.Count != 0)
+            => source.Count switch
             {
-                using var enumerator = source.GetEnumerator();
-                if (enumerator.MoveNext())
-                    return Option.Some(enumerator.Current);
-            }
-            return Option.None;
-        }
+                0 => Option.None,
+                _ => ValueEnumerableExtensions.First<TEnumerable, TEnumerator, TSource>(source)
+            };
 
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Option<TResult> First<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, NullableSelector<TSource, TResult> selector) 
-            where TEnumerable : notnull, IValueReadOnlyCollection<TSource, TEnumerator>
+        public static Option<TResult> First<TEnumerable, TEnumerator, TSource, TResult, TSelector>(this TEnumerable source, TSelector selector) 
+            where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
-        {
-            if (source.Count != 0)
+            where TSelector : struct, IFunction<TSource, TResult>
+            => source.Count switch
             {
-                using var enumerator = source.GetEnumerator();
-                if (enumerator.MoveNext())
-                    return Option.Some(selector(enumerator.Current));
-            }
-            return Option.None;
-        }
+                0 => Option.None,
+                _ => ValueEnumerableExtensions.First<TEnumerable, TEnumerator, TSource, TResult, TSelector>(source, selector)
+            };
 
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Option<TResult> First<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, NullableSelectorAt<TSource, TResult> selector) 
-            where TEnumerable : notnull, IValueReadOnlyCollection<TSource, TEnumerator>
+        public static Option<TResult> FirstAt<TEnumerable, TEnumerator, TSource, TResult, TSelector>(this TEnumerable source, TSelector selector) 
+            where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
-        {
-            if (source.Count != 0)
+            where TSelector : struct, IFunction<TSource, int, TResult>
+            => source.Count switch
             {
-                using var enumerator = source.GetEnumerator();
-                if (enumerator.MoveNext())
-                    return Option.Some(selector(enumerator.Current, 0));
-            }
-            return Option.None;
-        }
+                0 => Option.None,
+                _ => ValueEnumerableExtensions.FirstAt<TEnumerable, TEnumerator, TSource, TResult, TSelector>(source, selector)
+            };
     }
 }

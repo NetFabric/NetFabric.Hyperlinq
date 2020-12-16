@@ -17,23 +17,24 @@ namespace NetFabric.Hyperlinq
         public partial class EmptyEnumerable<TSource>
             : IAsyncValueEnumerable<TSource, EmptyEnumerable<TSource>.DisposableEnumerator>
         {
-            public static readonly EmptyEnumerable<TSource> Instance = new EmptyEnumerable<TSource>();
+            // ReSharper disable once HeapView.ObjectAllocation.Evident
+            public static EmptyEnumerable<TSource> Instance { get; } = new();
 
             EmptyEnumerable() { }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
 #pragma warning disable IDE0060 // Remove unused parameter
             public Enumerator GetAsyncEnumerator(CancellationToken cancellationToken = default)
-                => new Enumerator();
+                => new();
 #pragma warning restore IDE0060 // Remove unused parameter
-            DisposableEnumerator IAsyncValueEnumerable<TSource, EmptyEnumerable<TSource>.DisposableEnumerator>.GetAsyncEnumerator(CancellationToken cancellationToken) 
-                => new DisposableEnumerator();
+            DisposableEnumerator IAsyncValueEnumerable<TSource, DisposableEnumerator>.GetAsyncEnumerator(CancellationToken cancellationToken) 
+                => new();
             IAsyncEnumerator<TSource> IAsyncEnumerable<TSource>.GetAsyncEnumerator(CancellationToken cancellationToken)
+                // ReSharper disable once HeapView.BoxingAllocation
                 => new DisposableEnumerator();
 
             public readonly struct Enumerator
             {
-                [MaybeNull]                
                 public readonly TSource Current
                     => default;
 
@@ -44,7 +45,6 @@ namespace NetFabric.Hyperlinq
             public readonly struct DisposableEnumerator
                 : IAsyncEnumerator<TSource>
             {
-                [MaybeNull]
                 public readonly TSource Current
                     => default;
                 readonly TSource IAsyncEnumerator<TSource>.Current

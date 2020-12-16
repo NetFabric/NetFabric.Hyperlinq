@@ -14,7 +14,7 @@ namespace NetFabric.Hyperlinq.SourceGenerator
     [Generator]
     public class OverloadsGenerator: ISourceGenerator
     {
-        static readonly DiagnosticDescriptor unhandledExceptionError = new (
+        static readonly DiagnosticDescriptor unhandledExceptionError = new(
             id: "HPLG001",
             title: "Unhandled exception while generating oveloads",
             messageFormat: "Unhandled exception while generating oveloads: {0}",
@@ -224,7 +224,7 @@ namespace NetFabric.Hyperlinq.SourceGenerator
                                 }
 
                                 var entity = extendingType.IsValueType
-                                    ? "readonly partial struct"
+                                    ? "partial struct"
                                     : "partial class"; 
                                 using (builder.AppendBlock($"public {entity} {extendingType.Name}{extendingTypeGenericParameters}"))
                                 {

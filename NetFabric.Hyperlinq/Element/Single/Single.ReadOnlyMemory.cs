@@ -9,6 +9,6 @@ namespace NetFabric.Hyperlinq
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Option<TSource> Single<TSource>(this ReadOnlyMemory<TSource> source)
-            => Single(source.Span);
+            => source.Span.Single();
     }
 }

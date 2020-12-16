@@ -15,14 +15,14 @@ namespace NetFabric.Hyperlinq
         public static DistinctEnumerable<TEnumerable, TEnumerator, TSource> Distinct<TEnumerable, TEnumerator, TSource>(
             this TEnumerable source, 
             IEqualityComparer<TSource>? comparer = default)
-            where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
-            => new DistinctEnumerable<TEnumerable, TEnumerator, TSource>(source, comparer);
+            => new(source, comparer);
 
         [StructLayout(LayoutKind.Auto)]
         public readonly partial struct DistinctEnumerable<TEnumerable, TEnumerator, TSource>
             : IValueEnumerable<TSource, DistinctEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator>
-            where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
             readonly TEnumerable source;
@@ -36,9 +36,14 @@ namespace NetFabric.Hyperlinq
 
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly Enumerator GetEnumerator() => new Enumerator(in this);
-            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new Enumerator(in this);
-            readonly IEnumerator IEnumerable.GetEnumerator() => new Enumerator(in this);
+            public readonly Enumerator GetEnumerator() 
+                => new(in this);
+            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() 
+                // ReSharper disable once HeapView.BoxingAllocation
+                => new Enumerator(in this);
+            readonly IEnumerator IEnumerable.GetEnumerator() 
+                // ReSharper disable once HeapView.BoxingAllocation
+                => new Enumerator(in this);
 
             [StructLayout(LayoutKind.Sequential)]
             public struct Enumerator
@@ -56,7 +61,6 @@ namespace NetFabric.Hyperlinq
                     set = new Set<TSource>(comparer);
                 }
 
-                [MaybeNull]
                 public readonly TSource Current 
                 {
                     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -64,7 +68,8 @@ namespace NetFabric.Hyperlinq
                 }
                 readonly TSource IEnumerator<TSource>.Current 
                     => enumerator.Current;
-                readonly object? IEnumerator.Current 
+                readonly object IEnumerator.Current
+                    // ReSharper disable once HeapView.PossibleBoxingAllocation
                     => enumerator.Current;
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -105,7 +110,7 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly bool Any()
-                => ValueEnumerableExtensions.Any<TEnumerable, TEnumerator, TSource>(source);
+                => source.Any<TEnumerable, TEnumerator, TSource>();
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly TSource[] ToArray()

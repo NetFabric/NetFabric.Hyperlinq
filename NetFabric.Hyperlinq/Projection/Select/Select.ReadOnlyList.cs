@@ -12,36 +12,36 @@ namespace NetFabric.Hyperlinq
     {
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static SelectEnumerable<TList, TSource, TResult> Select<TList, TSource, TResult>(
-            this TList source, 
-            NullableSelector<TSource, TResult> selector)
-            where TList : notnull, IReadOnlyList<TSource>
-        {
-            if(selector is null) Throw.ArgumentNullException(nameof(selector));
+        public static SelectEnumerable<TList, TSource, TResult, FunctionWrapper<TSource, TResult>> Select<TList, TSource, TResult>(this TList source, Func<TSource, TResult> selector)
+            where TList : IReadOnlyList<TSource>
+            => source.Select<TList, TSource, TResult, FunctionWrapper<TSource, TResult>>(new FunctionWrapper<TSource, TResult>(selector));
 
-            return new SelectEnumerable<TList, TSource, TResult>(in source, selector, 0, source.Count);
-        }
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static SelectEnumerable<TList, TSource, TResult, TSelector> Select<TList, TSource, TResult, TSelector>(this TList source, TSelector selector)
+            where TList : IReadOnlyList<TSource>
+            where TSelector : struct, IFunction<TSource, TResult>
+            => source.Select<TList, TSource, TResult, TSelector>(selector, 0, source.Count);
 
-        static SelectEnumerable<TList, TSource, TResult> Select<TList, TSource, TResult>(
-            this TList source,
-            NullableSelector<TSource, TResult> selector,
-            int offset, int count)
-            where TList : notnull, IReadOnlyList<TSource>
-            => new SelectEnumerable<TList, TSource, TResult>(source, selector, offset, count);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        static SelectEnumerable<TList, TSource, TResult, TSelector> Select<TList, TSource, TResult, TSelector>(this TList source, TSelector selector, int offset, int count)
+            where TList : IReadOnlyList<TSource>
+            where TSelector : struct, IFunction<TSource, TResult>
+            => new(in source, selector, offset, count);
 
         [GeneratorMapping("TSource", "TResult")]
         [GeneratorMapping("TResult", "TResult2")]
-        [StructLayout(LayoutKind.Sequential)]
-        public readonly partial struct SelectEnumerable<TList, TSource, TResult>
-            : IValueReadOnlyList<TResult, SelectEnumerable<TList, TSource, TResult>.DisposableEnumerator>
+        [StructLayout(LayoutKind.Auto)]
+        public partial struct SelectEnumerable<TList, TSource, TResult, TSelector>
+            : IValueReadOnlyList<TResult, SelectEnumerable<TList, TSource, TResult, TSelector>.DisposableEnumerator>
             , IList<TResult>
-            where TList : notnull, IReadOnlyList<TSource>
+            where TList : IReadOnlyList<TSource>
+            where TSelector : struct, IFunction<TSource, TResult>
         {
             readonly int offset;
             readonly TList source;
-            readonly NullableSelector<TSource, TResult> selector;
+            TSelector selector;
 
-            internal SelectEnumerable(in TList source, NullableSelector<TSource, TResult> selector, int offset, int count)
+            internal SelectEnumerable(in TList source, TSelector selector, int offset, int count)
             {
                 this.source = source;
                 this.selector = selector;
@@ -50,7 +50,6 @@ namespace NetFabric.Hyperlinq
 
             public readonly int Count { get; } 
 
-            [MaybeNull]
             public readonly TResult this[int index]
             {
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -58,33 +57,41 @@ namespace NetFabric.Hyperlinq
                 {
                     if (index < 0 || index >= Count) Throw.IndexOutOfRangeException();
 
-                    return selector(source[index + offset]);
+                    return selector.Invoke(source[index + offset]);
                 }
             }
             TResult IReadOnlyList<TResult>.this[int index]
-                => this[index]!;
+                => this[index];
             TResult IList<TResult>.this[int index]
             {
-                get => this[index]!;
+                get => this[index];
+                
                 [ExcludeFromCodeCoverage]
+                // ReSharper disable once ValueParameterNotUsed
                 set => Throw.NotSupportedException();
             }
 
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly Enumerator GetEnumerator() => new Enumerator(in this);
-            readonly DisposableEnumerator IValueEnumerable<TResult, SelectEnumerable<TList, TSource, TResult>.DisposableEnumerator>.GetEnumerator() => new DisposableEnumerator(in this);
-            readonly IEnumerator<TResult> IEnumerable<TResult>.GetEnumerator() => new DisposableEnumerator(in this);
-            readonly IEnumerator IEnumerable.GetEnumerator() => new DisposableEnumerator(in this);
+            public readonly Enumerator GetEnumerator() 
+                => new(in this);
+            readonly DisposableEnumerator IValueEnumerable<TResult, DisposableEnumerator>.GetEnumerator() 
+                => new(in this);
+            readonly IEnumerator<TResult> IEnumerable<TResult>.GetEnumerator() 
+                // ReSharper disable once HeapView.BoxingAllocation
+                => new DisposableEnumerator(in this);
+            readonly IEnumerator IEnumerable.GetEnumerator() => 
+                // ReSharper disable once HeapView.BoxingAllocation
+                new DisposableEnumerator(in this);
 
             bool ICollection<TResult>.IsReadOnly  
                 => true;
 
             public void CopyTo(TResult[] array, int arrayIndex)
-                => ReadOnlyListExtensions.Copy(source, offset, array, arrayIndex, Count, selector);
+                => Copy<TList, TSource, TResult, TSelector>(source, offset, array, arrayIndex, Count, selector);
 
             public bool Contains(TResult item)
-                => ReadOnlyListExtensions.Contains<TList, TSource, TResult>(source, item, selector, offset, Count);
+                => source.Contains<TList, TSource, TResult, TSelector>(item, selector, offset, Count);
 
             public int IndexOf(TResult item)
             {
@@ -93,7 +100,7 @@ namespace NetFabric.Hyperlinq
                 {
                     for (var index = offset; index <= end; index++)
                     {
-                        if (EqualityComparer<TResult>.Default.Equals(selector(source[index])!, item))
+                        if (EqualityComparer<TResult>.Default.Equals(selector.Invoke(source[index]), item))
                             return index - offset;
                     }
                 }
@@ -102,7 +109,7 @@ namespace NetFabric.Hyperlinq
                     var defaultComparer = EqualityComparer<TResult>.Default;
                     for (var index = offset; index <= end; index++)
                     {
-                        if (defaultComparer.Equals(selector(source[index])!, item))
+                        if (defaultComparer.Equals(selector.Invoke(source[index]), item))
                             return index - offset;
                     }
                 }
@@ -132,9 +139,9 @@ namespace NetFabric.Hyperlinq
                 int index;
                 readonly int end;
                 readonly TList source;
-                readonly NullableSelector<TSource, TResult> selector;
+                TSelector selector;
 
-                internal Enumerator(in SelectEnumerable<TList, TSource, TResult> enumerable)
+                internal Enumerator(in SelectEnumerable<TList, TSource, TResult, TSelector> enumerable)
                 {
                     source = enumerable.source;
                     selector = enumerable.selector;
@@ -142,11 +149,10 @@ namespace NetFabric.Hyperlinq
                     end = index + enumerable.Count;
                 }
 
-                [MaybeNull]
                 public readonly TResult Current
                 {
                     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                    get => selector(source[index]);
+                    get => selector.Invoke(source[index]);
                 }
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -161,9 +167,9 @@ namespace NetFabric.Hyperlinq
                 int index;
                 readonly int end;
                 readonly TList source;
-                readonly NullableSelector<TSource, TResult> selector;
+                TSelector selector;
 
-                internal DisposableEnumerator(in SelectEnumerable<TList, TSource, TResult> enumerable)
+                internal DisposableEnumerator(in SelectEnumerable<TList, TSource, TResult, TSelector> enumerable)
                 {
                     source = enumerable.source;
                     selector = enumerable.selector;
@@ -171,16 +177,16 @@ namespace NetFabric.Hyperlinq
                     end = index + enumerable.Count;
                 }
 
-                [MaybeNull]
                 public readonly TResult Current
                 {
                     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                    get => selector(source[index]);
+                    get => selector.Invoke(source[index]);
                 }
                 readonly TResult IEnumerator<TResult>.Current 
-                    => selector(source[index])!;
-                readonly object? IEnumerator.Current
-                    => selector(source[index]);
+                    => selector.Invoke(source[index]);
+                readonly object IEnumerator.Current
+                    // ReSharper disable once HeapView.PossibleBoxingAllocation
+                    => selector.Invoke(source[index]);
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public bool MoveNext() 
@@ -192,64 +198,84 @@ namespace NetFabric.Hyperlinq
 
                 public readonly void Dispose() { }
             }
+            
+            #region Partitioning
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public ReadOnlyListExtensions.SelectEnumerable<TList, TSource, TResult> Skip(int count)
-                => new ReadOnlyListExtensions.SelectEnumerable<TList, TSource, TResult>(source, selector, offset + count, Count);
+            public SelectEnumerable<TList, TSource, TResult, TSelector> Skip(int count)
+                => new(source, selector, offset + count, Count);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public ReadOnlyListExtensions.SelectEnumerable<TList, TSource, TResult> Take(int count)
-                => new ReadOnlyListExtensions.SelectEnumerable<TList, TSource, TResult>(source, selector, offset, Math.Min(Count, count));
-
+            public SelectEnumerable<TList, TSource, TResult, TSelector> Take(int count)
+                => new(source, selector, offset, Math.Min(Count, count));
+            
+            #endregion
+            #region Aggregation
+            
+            #endregion
+            #region Quantifier
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Any()
                 => Count != 0;
-
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public ReadOnlyListExtensions.SelectEnumerable<TList, TSource, TResult2> Select<TResult2>(NullableSelector<TResult, TResult2> selector)
-                => ReadOnlyListExtensions.Select<TList, TSource, TResult2>(source, Utils.Combine(this.selector, selector), offset, Count);
-
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public ReadOnlyListExtensions.SelectAtEnumerable<TList, TSource, TResult2> Select<TResult2>(NullableSelectorAt<TResult, TResult2> selector)
-                => ReadOnlyListExtensions.Select<TList, TSource, TResult2>(source, Utils.Combine(this.selector, selector), offset, Count);
-
             
+            #endregion
+            #region Filtering
+            
+            #endregion
+            #region Projection
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public SelectEnumerable<TList, TSource, TResult2, SelectorSelectorCombination<TSelector, FunctionWrapper<TResult, TResult2>, TSource, TResult, TResult2>> Select<TResult2>(Func<TResult, TResult2> selector)
+                => Select<TResult2, FunctionWrapper<TResult, TResult2>>(new FunctionWrapper<TResult, TResult2>(selector));
+            
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public SelectEnumerable<TList, TSource, TResult2, SelectorSelectorCombination<TSelector, TSelector2, TSource, TResult, TResult2>> Select<TResult2, TSelector2>(TSelector2 selector)
+                where TSelector2 : struct, IFunction<TResult, TResult2>
+                => source.Select<TList, TSource, TResult2, SelectorSelectorCombination<TSelector, TSelector2, TSource, TResult, TResult2>>(new SelectorSelectorCombination<TSelector, TSelector2, TSource, TResult, TResult2>(this.selector, selector));
+            
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public SelectAtEnumerable<TList, TSource, TResult2, SelectorSelectorAtCombination<TSelector, FunctionWrapper<TResult, int, TResult2>, TSource, TResult, TResult2>> Select<TResult2>(Func<TResult, int, TResult2> selector)
+                => SelectAt<TResult2, FunctionWrapper<TResult, int, TResult2>>(new FunctionWrapper<TResult, int, TResult2>(selector));
+            
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public SelectAtEnumerable<TList, TSource, TResult2, SelectorSelectorAtCombination<TSelector, TSelector2, TSource, TResult, TResult2>> SelectAt<TResult2, TSelector2>(TSelector2 selector)
+                where TSelector2 : struct, IFunction<TResult, int, TResult2>
+                => source.SelectAt<TList, TSource, TResult2, SelectorSelectorAtCombination<TSelector, TSelector2, TSource, TResult, TResult2>>(new SelectorSelectorAtCombination<TSelector, TSelector2, TSource, TResult, TResult2>(this.selector, selector));
+            
+            #endregion
+            #region Element
+
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Option<TResult> ElementAt(int index)
-                => ReadOnlyListExtensions.ElementAt<TList, TSource, TResult>(source, index, selector, offset, Count);
+                => source.ElementAt<TList, TSource, TResult, TSelector>(index, selector, offset, Count);
 
-            
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Option<TResult> First()
-                => ReadOnlyListExtensions.First<TList, TSource, TResult>(source, selector, offset, Count);
+                => source.First<TList, TSource, TResult, TSelector>(selector, offset, Count);
 
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Option<TResult> Single()
-                => ReadOnlyListExtensions.Single<TList, TSource, TResult>(source, selector, offset, Count);
-
+                => source.Single<TList, TSource, TResult, TSelector>(selector, offset, Count);
             
+            #endregion
+            #region Conversion
+
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TResult[] ToArray()
-                => ReadOnlyListExtensions.ToArray<TList, TSource, TResult>(source, selector, offset, Count);
+                => source.ToArray<TList, TSource, TResult, TSelector>(selector, offset, Count);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public IMemoryOwner<TResult> ToArray(MemoryPool<TResult> pool)
-                => ReadOnlyListExtensions.ToArray<TList, TSource, TResult>(source, selector, offset, Count, pool);
+                => source.ToArray<TList, TSource, TResult, TSelector>(selector, offset, Count, pool);
 
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public List<TResult> ToList()
-                => ReadOnlyListExtensions.ToList<TList, TSource, TResult>(source, selector, offset, Count);
-
-            public Dictionary<TKey, TResult> ToDictionary<TKey>(Selector<TResult, TKey> keySelector, IEqualityComparer<TKey>? comparer = default)
-                where TKey : notnull
-                => ToDictionary<TKey>(keySelector, comparer);
-
-            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Selector<TResult, TKey> keySelector, NullableSelector<TResult, TElement> elementSelector, IEqualityComparer<TKey>? comparer = default)
-                where TKey : notnull
-                => ToDictionary<TKey, TElement>(keySelector, elementSelector, comparer);
+                => source.ToList<TList, TSource, TResult, TSelector>(selector, offset, Count);
+            
+            #endregion
 
             public readonly bool SequenceEqual(IEnumerable<TResult> other, IEqualityComparer<TResult>? comparer = default)
             {
@@ -268,7 +294,7 @@ namespace NetFabric.Hyperlinq
                     if (thisEnded)
                         return true;
 
-                    if (!comparer.Equals(enumerator.Current!, otherEnumerator.Current))
+                    if (!comparer.Equals(enumerator.Current, otherEnumerator.Current))
                         return false;
                 }
             }
@@ -276,8 +302,9 @@ namespace NetFabric.Hyperlinq
 
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int Count<TList, TSource, TResult>(this in SelectEnumerable<TList, TSource, TResult> source)
-            where TList : notnull, IReadOnlyList<TSource>
+        public static int Count<TList, TSource, TResult, TSelector>(this in SelectEnumerable<TList, TSource, TResult, TSelector> source)
+            where TList : IReadOnlyList<TSource>
+            where TSelector : struct, IFunction<TSource, TResult>
             => source.Count;
     }
 }

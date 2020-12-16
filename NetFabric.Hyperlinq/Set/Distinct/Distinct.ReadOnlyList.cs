@@ -15,8 +15,8 @@ namespace NetFabric.Hyperlinq
         public static DistinctEnumerable<TList, TSource> Distinct<TList, TSource>(
             this TList source, 
             IEqualityComparer<TSource>? comparer = default)
-            where TList : notnull, IReadOnlyList<TSource>
-            => new DistinctEnumerable<TList, TSource>(source, comparer, 0, source.Count);
+            where TList : IReadOnlyList<TSource>
+            => source.Distinct(comparer, 0, source.Count);
 
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -24,18 +24,18 @@ namespace NetFabric.Hyperlinq
             this TList source,
             IEqualityComparer<TSource>? comparer,
             int offset, int count)
-            where TList : notnull, IReadOnlyList<TSource>
-            => new DistinctEnumerable<TList, TSource>(source, comparer, offset, count);
+            where TList : IReadOnlyList<TSource>
+            => new(source, comparer, offset, count);
 
         [StructLayout(LayoutKind.Auto)]
         public readonly partial struct DistinctEnumerable<TList, TSource>
             : IValueEnumerable<TSource, DistinctEnumerable<TList, TSource>.Enumerator>
-            where TList : notnull, IReadOnlyList<TSource>
+            where TList : IReadOnlyList<TSource>
         {
             readonly TList source;
             readonly IEqualityComparer<TSource>? comparer;
-            internal readonly int offset;
-            internal readonly int count;
+            readonly int offset;
+            readonly int count;
 
             internal DistinctEnumerable(TList source, IEqualityComparer<TSource>? comparer, int offset, int count)
             {
@@ -46,9 +46,14 @@ namespace NetFabric.Hyperlinq
 
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly Enumerator GetEnumerator() => new Enumerator(in this);
-            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new Enumerator(in this);
-            readonly IEnumerator IEnumerable.GetEnumerator() => new Enumerator(in this);
+            public readonly Enumerator GetEnumerator() 
+                => new(in this);
+            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() 
+                // ReSharper disable once HeapView.BoxingAllocation
+                => new Enumerator(in this);
+            readonly IEnumerator IEnumerable.GetEnumerator() 
+                // ReSharper disable once HeapView.BoxingAllocation
+                => new Enumerator(in this);
 
             [StructLayout(LayoutKind.Sequential)]
             public struct Enumerator
@@ -67,7 +72,6 @@ namespace NetFabric.Hyperlinq
                     end = index + enumerable.count;
                 }
 
-                [MaybeNull]
                 public readonly TSource Current 
                 {
                     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -75,7 +79,8 @@ namespace NetFabric.Hyperlinq
                 }
                 readonly TSource IEnumerator<TSource>.Current
                     => source[index];
-                readonly object? IEnumerator.Current 
+                readonly object IEnumerator.Current
+                    // ReSharper disable once HeapView.PossibleBoxingAllocation
                     => source[index];
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -101,53 +106,63 @@ namespace NetFabric.Hyperlinq
             readonly Set<TSource> GetSet()
             {
                 using var set = new Set<TSource>(comparer);
-                for (var index = 0; index < source.Count; index++)
+                var end = offset + count - 1;
+                for (var index = offset; index <= end; index++)
                     _ = set.Add(source[index]);
                 return set;
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly DistinctEnumerable<TList, TSource> Skip(int count)
-                => new DistinctEnumerable<TList, TSource>(source, comparer, offset + count, count);
+                => new(source, comparer, offset + count, count);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly DistinctEnumerable<TList, TSource> Take(int count)
-                => new DistinctEnumerable<TList, TSource>(source, comparer, offset, Math.Min(count, count));
+                => new(source, comparer, offset, Math.Min(count, count));
 
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly int Count()
-                => source.Count == 0
-                    ? 0
-                    : GetSet().Count;
+                => count switch
+                {
+                    0 => 0,
+                    _ => GetSet().Count
+                };
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly bool Any()
-                => source.Count != 0;
+                => count != 0;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly TSource[] ToArray()
-                => source.Count == 0 
-                    ? Array.Empty<TSource>()
-                    : GetSet().ToArray();
+                => count switch
+                {
+                    0 => Array.Empty<TSource>(),
+                    _ => GetSet().ToArray()
+                };
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly IMemoryOwner<TSource> ToArray(MemoryPool<TSource> pool)
-                => source.Count == 0
-                    ? pool.RentSliced(0)
-                    : GetSet().ToArray(pool);
+                => count switch
+                {
+                    0 => pool.RentSliced(0),
+                    _ => GetSet().ToArray(pool)
+                };
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly List<TSource> ToList()
-                => source.Count == 0
-                    ? new List<TSource>()
-                    : GetSet().ToList();
+                => count switch
+                {
+                    // ReSharper disable once HeapView.ObjectAllocation.Evident
+                    0 => new List<TSource>(),
+                    _ => GetSet().ToList()
+                };
 
             public readonly bool SequenceEqual(IEnumerable<TSource> other, IEqualityComparer<TSource>? comparer = default)
             {
                 comparer ??= EqualityComparer<TSource>.Default;
 
-                var enumerator = GetEnumerator();
+                using var enumerator = GetEnumerator();
                 using var otherEnumerator = other.GetEnumerator();
                 while (true)
                 {
@@ -160,7 +175,7 @@ namespace NetFabric.Hyperlinq
                     if (thisEnded)
                         return true;
 
-                    if (!comparer.Equals(enumerator.Current!, otherEnumerator.Current))
+                    if (!comparer.Equals(enumerator.Current, otherEnumerator.Current))
                         return false;
                 }
             }

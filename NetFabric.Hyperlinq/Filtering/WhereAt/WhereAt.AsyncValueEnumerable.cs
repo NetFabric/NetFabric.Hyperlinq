@@ -3,6 +3,7 @@ using System.Buffers;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -12,24 +13,29 @@ namespace NetFabric.Hyperlinq
     {
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static WhereAtEnumerable<TEnumerable, TEnumerator, TSource> Where<TEnumerable, TEnumerator, TSource>(this TEnumerable source, AsyncPredicateAt<TSource> predicate)
-            where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
+        public static WhereAtEnumerable<TEnumerable, TEnumerator, TSource, AsyncFunctionWrapper<TSource, int, bool>> Where<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, int, CancellationToken, ValueTask<bool>> predicate)
+            where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
-        {
-            if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
+            => source.WhereAt<TEnumerable, TEnumerator, TSource, AsyncFunctionWrapper<TSource, int, bool>>(new AsyncFunctionWrapper<TSource, int, bool>(predicate));
 
-            return new WhereAtEnumerable<TEnumerable, TEnumerator, TSource>(in source, predicate);
-        }
-
-        public readonly partial struct WhereAtEnumerable<TEnumerable, TEnumerator, TSource>
-            : IAsyncValueEnumerable<TSource, WhereAtEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator>
-            where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static WhereAtEnumerable<TEnumerable, TEnumerator, TSource, TPredicate> WhereAt<TEnumerable, TEnumerator, TSource, TPredicate>(this TEnumerable source, TPredicate predicate = default)
+            where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
-        {
-            internal readonly TEnumerable source;
-            internal readonly AsyncPredicateAt<TSource> predicate;
+            where TPredicate : struct, IAsyncFunction<TSource, int, bool>
+            => new(in source, predicate);
 
-            internal WhereAtEnumerable(in TEnumerable source, AsyncPredicateAt<TSource> predicate)
+        [StructLayout(LayoutKind.Auto)]
+        public readonly partial struct WhereAtEnumerable<TEnumerable, TEnumerator, TSource, TPredicate>
+            : IAsyncValueEnumerable<TSource, WhereAtEnumerable<TEnumerable, TEnumerator, TSource, TPredicate>.Enumerator>
+            where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
+            where TEnumerator : struct, IAsyncEnumerator<TSource>
+            where TPredicate : struct, IAsyncFunction<TSource, int, bool>
+        {
+            readonly TEnumerable source;
+            readonly TPredicate predicate;
+
+            internal WhereAtEnumerable(in TEnumerable source, TPredicate predicate)
             {
                 this.source = source;
                 this.predicate = predicate;
@@ -38,19 +44,21 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly Enumerator GetAsyncEnumerator(CancellationToken cancellationToken = default) 
-                => new Enumerator(in this, cancellationToken);
+                => new(in this, cancellationToken);
             readonly IAsyncEnumerator<TSource> IAsyncEnumerable<TSource>.GetAsyncEnumerator(CancellationToken cancellationToken) 
+                // ReSharper disable once HeapView.BoxingAllocation
                 => new Enumerator(in this, cancellationToken);
 
+            [StructLayout(LayoutKind.Sequential)]
             public struct Enumerator
                 : IAsyncEnumerator<TSource>
                 , IAsyncStateMachine
             {
+                int index;
                 [SuppressMessage("Style", "IDE0044:Add readonly modifier")]
                 TEnumerator enumerator; // do not make readonly
-                readonly AsyncPredicateAt<TSource> predicate;
+                TPredicate predicate;
                 readonly CancellationToken cancellationToken;
-                int index;
 
                 int state;
                 AsyncValueTaskMethodBuilder<bool> builder;
@@ -59,7 +67,7 @@ namespace NetFabric.Hyperlinq
                 ConfiguredValueTaskAwaitable<bool>.ConfiguredValueTaskAwaiter u__1;
                 ConfiguredValueTaskAwaitable.ConfiguredValueTaskAwaiter u__2;
 
-                internal Enumerator(in WhereAtEnumerable<TEnumerable, TEnumerator, TSource> enumerable, CancellationToken cancellationToken)
+                internal Enumerator(in WhereAtEnumerable<TEnumerable, TEnumerator, TSource, TPredicate> enumerable, CancellationToken cancellationToken)
                 {
                     enumerator = enumerable.source.GetAsyncEnumerator(cancellationToken);
                     predicate = enumerable.predicate;
@@ -74,7 +82,6 @@ namespace NetFabric.Hyperlinq
                     u__2 = default;
                 }
 
-                [MaybeNull]
                 public readonly TSource Current
                     => enumerator.Current;
                 readonly TSource IAsyncEnumerator<TSource>.Current
@@ -162,7 +169,7 @@ namespace NetFabric.Hyperlinq
                                     }
                                     break;
                                 }
-                                awaiter3 = predicate(enumerator.Current, ++index, cancellationToken).ConfigureAwait(false).GetAwaiter();
+                                awaiter3 = predicate.InvokeAsync(enumerator.Current, ++index, cancellationToken).ConfigureAwait(false).GetAwaiter();
                                 if (!awaiter3.IsCompleted)
                                 {
                                     num = state = 0;
@@ -189,45 +196,100 @@ namespace NetFabric.Hyperlinq
                 void IAsyncStateMachine.SetStateMachine(IAsyncStateMachine stateMachine)
                 { }
             }
+            
+            #region Aggregation
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public ValueTask<int> CountAsync(CancellationToken cancellationToken = default)
-                => AsyncValueEnumerableExtensions.CountAsync<TEnumerable, TEnumerator, TSource>(source, predicate, cancellationToken);
+                => source.CountAtAsync<TEnumerable, TEnumerator, TSource, TPredicate>(predicate, cancellationToken);
+            
+            #endregion
+            #region Quantifier
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public ValueTask<bool> AnyAsync(CancellationToken cancellationToken = default)
-                => AsyncValueEnumerableExtensions.AnyAsync<TEnumerable, TEnumerator, TSource>(source, predicate, cancellationToken);
+                => source.AnyAtAsync<TEnumerable, TEnumerator, TSource, TPredicate>(predicate, cancellationToken);
+            
+            #endregion
+            #region Projection
+            
+            #endregion
+            #region Filtering
 
-            public AsyncValueEnumerableExtensions.WhereAtEnumerable<TEnumerable, TEnumerator, TSource> Where(AsyncPredicate<TSource> predicate)
-                => AsyncValueEnumerableExtensions.Where<TEnumerable, TEnumerator, TSource>(source, Utils.Combine(this.predicate, predicate));
-            public AsyncValueEnumerableExtensions.WhereAtEnumerable<TEnumerable, TEnumerator, TSource> Where(AsyncPredicateAt<TSource> predicate)
-                => AsyncValueEnumerableExtensions.Where<TEnumerable, TEnumerator, TSource>(source, Utils.Combine(this.predicate, predicate));
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public WhereAtEnumerable<TEnumerable, TEnumerator, TSource, AsyncPredicatePredicateAtCombination<AsyncFunctionWrapper<TSource, bool>, TPredicate, TSource>> Where(Func<TSource, CancellationToken, ValueTask<bool>> predicate)
+                => Where<AsyncFunctionWrapper<TSource, bool>>(new AsyncFunctionWrapper<TSource, bool>(predicate));
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public WhereAtEnumerable<TEnumerable, TEnumerator, TSource, AsyncPredicatePredicateAtCombination<TPredicate2, TPredicate, TSource>> Where<TPredicate2>(TPredicate2 predicate = default)
+                where TPredicate2 : struct, IAsyncFunction<TSource, bool>
+                => source.WhereAt<TEnumerable, TEnumerator, TSource, AsyncPredicatePredicateAtCombination<TPredicate2, TPredicate, TSource>>(new AsyncPredicatePredicateAtCombination<TPredicate2, TPredicate, TSource>(predicate, this.predicate));
+            
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public WhereAtEnumerable<TEnumerable, TEnumerator, TSource, AsyncPredicateAtPredicateAtCombination<TPredicate, AsyncFunctionWrapper<TSource, int, bool>, TSource>> WhereAt(Func<TSource, int, CancellationToken, ValueTask<bool>> predicate)
+                => WhereAt<AsyncFunctionWrapper<TSource, int, bool>>(new AsyncFunctionWrapper<TSource, int, bool>(predicate));
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public WhereAtEnumerable<TEnumerable, TEnumerator, TSource, AsyncPredicateAtPredicateAtCombination<TPredicate, TPredicate2, TSource>> WhereAt<TPredicate2>(TPredicate2 predicate = default)
+                where TPredicate2 : struct, IAsyncFunction<TSource, int, bool>
+                => source.WhereAt<TEnumerable, TEnumerator, TSource, AsyncPredicateAtPredicateAtCombination<TPredicate, TPredicate2, TSource>>(new AsyncPredicateAtPredicateAtCombination<TPredicate, TPredicate2, TSource>(this.predicate, predicate));
+            
+            #endregion
+            #region Element
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public ValueTask<Option<TSource>> ElementAtAsync(int index, CancellationToken cancellationToken = default)
-                => AsyncValueEnumerableExtensions.ElementAtAsync<TEnumerable, TEnumerator, TSource>(source, index, predicate, cancellationToken);
+                => source.ElementAtAtAsync<TEnumerable, TEnumerator, TSource, TPredicate>(index, predicate, cancellationToken);
 
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public ValueTask<Option<TSource>> FirstAsync(CancellationToken cancellationToken = default)
-                => AsyncValueEnumerableExtensions.FirstAsync<TEnumerable, TEnumerator, TSource>(source, predicate, cancellationToken);
+                => source.FirstAtAsync<TEnumerable, TEnumerator, TSource, TPredicate>(predicate, cancellationToken);
 
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public ValueTask<Option<TSource>> SingleAsync(CancellationToken cancellationToken = default)
-                => AsyncValueEnumerableExtensions.SingleAsync<TEnumerable, TEnumerator, TSource>(source, predicate, cancellationToken);
+                => source.SingleAtAsync<TEnumerable, TEnumerator, TSource, TPredicate>(predicate, cancellationToken);
+            
+            #endregion
+            #region Conversion
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public ValueTask<TSource[]> ToArrayAsync(CancellationToken cancellationToken = default)
-                => AsyncValueEnumerableExtensions.ToArrayAsync<TEnumerable, TEnumerator, TSource>(source, predicate, cancellationToken);
+                => source.ToArrayAtAsync<TEnumerable, TEnumerator, TSource, TPredicate>(predicate, cancellationToken);
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public ValueTask<IMemoryOwner<TSource>> ToArrayAsync(MemoryPool<TSource> pool, CancellationToken cancellationToken = default)
-                => AsyncValueEnumerableExtensions.ToArrayAsync<TEnumerable, TEnumerator, TSource>(source, predicate, pool, cancellationToken);
+                => source.ToArrayAtAsync<TEnumerable, TEnumerator, TSource, TPredicate>(predicate, pool, cancellationToken);
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public ValueTask<List<TSource>> ToListAsync(CancellationToken cancellationToken = default)
-                => AsyncValueEnumerableExtensions.ToListAsync<TEnumerable, TEnumerator, TSource>(source, predicate, cancellationToken);
+                => source.ToListAtAsync<TEnumerable, TEnumerator, TSource, TPredicate>(predicate, cancellationToken);
 
-            public ValueTask<Dictionary<TKey, TSource>> ToDictionaryAsync<TKey>(AsyncSelector<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer = default, CancellationToken cancellationToken = default)
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public ValueTask<Dictionary<TKey, TSource>> ToDictionaryAsync<TKey>(Func<TSource, CancellationToken, ValueTask<TKey>> keySelector, IEqualityComparer<TKey>? comparer = default, CancellationToken cancellationToken = default)
                 where TKey : notnull
-                => AsyncValueEnumerableExtensions.ToDictionaryAsync<TEnumerable, TEnumerator, TSource, TKey>(source, keySelector, comparer, predicate, cancellationToken);
-            public ValueTask<Dictionary<TKey, TElement>> ToDictionaryAsync<TKey, TElement>(AsyncSelector<TSource, TKey> keySelector, AsyncSelector<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer = default, CancellationToken cancellationToken = default)
+                => ToDictionaryAsync<TKey, AsyncFunctionWrapper<TSource, TKey>>(new AsyncFunctionWrapper<TSource, TKey>(keySelector), comparer, cancellationToken);
+            
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public ValueTask<Dictionary<TKey, TSource>> ToDictionaryAsync<TKey, TKeySelector>(TKeySelector keySelector, IEqualityComparer<TKey>? comparer = default, CancellationToken cancellationToken = default)
                 where TKey : notnull
-                => AsyncValueEnumerableExtensions.ToDictionaryAsync<TEnumerable, TEnumerator, TSource, TKey, TElement>(source, keySelector, elementSelector, comparer, predicate, cancellationToken);
+                where TKeySelector : struct, IAsyncFunction<TSource, TKey>
+                => source.ToDictionaryAtAsync<TEnumerable, TEnumerator, TSource, TKey, TKeySelector, TPredicate>(keySelector, comparer, predicate, cancellationToken);
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public ValueTask<Dictionary<TKey, TElement>> ToDictionaryAsync<TKey, TElement>(Func<TSource, CancellationToken, ValueTask<TKey>> keySelector, Func<TSource, CancellationToken, ValueTask<TElement>> elementSelector, IEqualityComparer<TKey>? comparer = default, CancellationToken cancellationToken = default)
+                where TKey : notnull
+                => ToDictionaryAsync<TKey, TElement, AsyncFunctionWrapper<TSource, TKey>, AsyncFunctionWrapper<TSource, TElement>>(new AsyncFunctionWrapper<TSource, TKey>(keySelector), new AsyncFunctionWrapper<TSource, TElement>(elementSelector), comparer, cancellationToken);
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public ValueTask<Dictionary<TKey, TElement>> ToDictionaryAsync<TKey, TElement, TKeySelector, TElementSelector>(TKeySelector keySelector, TElementSelector elementSelector, IEqualityComparer<TKey>? comparer = default, CancellationToken cancellationToken = default)
+                where TKey : notnull
+                where TKeySelector : struct, IAsyncFunction<TSource, TKey>
+                where TElementSelector : struct, IAsyncFunction<TSource, TElement>
+                => source.ToDictionaryAtAsync<TEnumerable, TEnumerator, TSource, TKey, TElement, TKeySelector, TElementSelector, TPredicate>(keySelector, elementSelector, comparer, predicate, cancellationToken);
+             
+            #endregion
         }
     }
 }

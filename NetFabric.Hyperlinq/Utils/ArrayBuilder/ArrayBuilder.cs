@@ -18,8 +18,8 @@ namespace NetFabric.Hyperlinq
     struct ArrayBuilder<T> 
         : IDisposable
     {
-        const int DefaultMinCapacity = 4;
-        const int MaxCoreClrArrayLength = 0x7fefffff; // For byte arrays the limit is slightly larger
+        const int defaultMinCapacity = 4;
+        const int maxCoreClrArrayLength = 0x7fefffff; // For byte arrays the limit is slightly larger
 
         readonly ArrayPool<T> pool;
         T[]? buffer; // Starts out null, initialized on first Add.
@@ -40,7 +40,6 @@ namespace NetFabric.Hyperlinq
 
         public ArrayBuilder(ArrayPool<T> pool)
         {
-            Debug.Assert(pool is object);
             this.pool = pool;
             buffer = default;
             Count = 0;
@@ -62,7 +61,6 @@ namespace NetFabric.Hyperlinq
         /// Gets or sets the item at a certain index in the array.
         /// </summary>
         /// <param name="index">The index into the array.</param>
-        [MaybeNull]
         public T this[int index]
         {
             get
@@ -76,7 +74,7 @@ namespace NetFabric.Hyperlinq
         /// Adds an item to the backing array, resizing it if necessary.
         /// </summary>
         /// <param name="item">The item to add.</param>
-        public void Add([AllowNull] T item)
+        public void Add(T item)
         {
             if (Count == Capacity)
             {
@@ -94,12 +92,12 @@ namespace NetFabric.Hyperlinq
         /// Use this method if you know there is enough space in the <see cref="ArrayBuilder{T}"/>
         /// for another item, and you are writing performance-sensitive code.
         /// </remarks>
-        public void UncheckedAdd([AllowNull] T item)
+        public void UncheckedAdd(T item)
         {
-            Debug.Assert(buffer is object);
+            Debug.Assert(buffer is not null);
             Debug.Assert(Count < Capacity);
 
-            buffer[Count++] = item!;
+            buffer[Count++] = item;
         }
 
         void EnsureCapacity(int minimum)
@@ -109,13 +107,13 @@ namespace NetFabric.Hyperlinq
             var capacity = Capacity;
             var nextCapacity = capacity switch
             { 
-                0 => DefaultMinCapacity,
+                0 => defaultMinCapacity,
                 _ => 2 * capacity,
             };
 
-            if ((uint)nextCapacity > (uint)MaxCoreClrArrayLength)
+            if ((uint)nextCapacity > (uint)maxCoreClrArrayLength)
             {
-                nextCapacity = Math.Max(capacity + 1, MaxCoreClrArrayLength);
+                nextCapacity = Math.Max(capacity + 1, maxCoreClrArrayLength);
             }
 
             nextCapacity = Math.Max(nextCapacity, minimum);
@@ -123,14 +121,14 @@ namespace NetFabric.Hyperlinq
             var next = pool.Rent(nextCapacity);
             try
             {
-                if (buffer is object)
+                if (buffer is not null)
                 {
                     Array.Copy(buffer, next, Count);
                 }
             }
             finally
             {
-                if (buffer is object)
+                if (buffer is not null)
                     pool.Return(buffer);
                 buffer = next;
             }
@@ -138,7 +136,7 @@ namespace NetFabric.Hyperlinq
 
         public readonly void Dispose()
         {
-            if (buffer is object)
+            if (buffer is not null)
                 pool.Return(buffer);
         }
     }

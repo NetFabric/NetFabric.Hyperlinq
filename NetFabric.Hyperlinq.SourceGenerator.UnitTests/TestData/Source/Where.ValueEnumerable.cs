@@ -8,19 +8,19 @@ namespace NetFabric.Hyperlinq
     {
         [GeneratorMapping("TPredicate", "NetFabric.Hyperlinq.FunctionWrapper<TSource, bool>")]
         public static WhereEnumerable<TEnumerable, TEnumerator, TSource, FunctionWrapper<TSource, bool>> Where<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, bool> predicate)
-            where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
             => Where<TEnumerable, TEnumerator, TSource, FunctionWrapper<TSource, bool>>(source, new FunctionWrapper<TSource, bool>(predicate));
 
         public static WhereEnumerable<TEnumerable, TEnumerator, TSource, TPredicate> Where<TEnumerable, TEnumerator, TSource, TPredicate>(this TEnumerable source, TPredicate predicate)
-            where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
             where TPredicate : struct, IFunction<TSource, bool>
-            => new WhereEnumerable<TEnumerable, TEnumerator, TSource, TPredicate>(source, predicate);
+            => new(source, predicate);
 
         public readonly partial struct WhereEnumerable<TEnumerable, TEnumerator, TSource, TPredicate>
             : IValueEnumerable<TSource, WhereEnumerable<TEnumerable, TEnumerator, TSource, TPredicate>.DisposableEnumerator>
-            where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
             where TPredicate : struct, IFunction<TSource, bool>
         {
@@ -31,12 +31,14 @@ namespace NetFabric.Hyperlinq
                 => (this.source, this.predicate) = (source, predicate);
 
             public readonly Enumerator GetEnumerator()
-                => new Enumerator();
+                => new();
             readonly DisposableEnumerator IValueEnumerable<TSource, WhereEnumerable<TEnumerable, TEnumerator, TSource, TPredicate>.DisposableEnumerator>.GetEnumerator()
-                => new DisposableEnumerator();
+                => new();
             readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator()
+                // ReSharper disable once HeapView.BoxingAllocation
                 => new DisposableEnumerator();
             readonly IEnumerator IEnumerable.GetEnumerator()
+                // ReSharper disable once HeapView.BoxingAllocation
                 => new DisposableEnumerator();
 
             public struct Enumerator

@@ -6,12 +6,13 @@ namespace NetFabric.Hyperlinq
     public static partial class ArrayExtensions
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ArraySegmentWhereRefEnumerable<TSource> WhereRef<TSource>(this TSource[] source, Predicate<TSource> predicate)
-        {
-            if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
-
-            return WhereRef(new ArraySegment<TSource>(source), predicate);
-        }
+        public static ArraySegmentWhereRefEnumerable<TSource, FunctionWrapper<TSource, bool>> WhereRef<TSource>(this TSource[] source, Func<TSource, bool> predicate)
+            => source.WhereRef(new FunctionWrapper<TSource, bool>(predicate));
+        
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ArraySegmentWhereRefEnumerable<TSource, TPredicate> WhereRef<TSource, TPredicate>(this TSource[] source, TPredicate predicate = default)
+            where TPredicate : struct, IFunction<TSource, bool>
+            => new ArraySegment<TSource>(source).WhereRef(predicate);
     }
 }
 

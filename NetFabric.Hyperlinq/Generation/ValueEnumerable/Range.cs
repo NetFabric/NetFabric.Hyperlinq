@@ -51,12 +51,14 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly Enumerator GetEnumerator()
-                => new Enumerator(in this);
+                => new(in this);
             readonly DisposableEnumerator IValueEnumerable<int, DisposableEnumerator>.GetEnumerator()
-                => new DisposableEnumerator(in this);
+                => new(in this);
             readonly IEnumerator<int> IEnumerable<int>.GetEnumerator()
+                // ReSharper disable once HeapView.BoxingAllocation
                 => new DisposableEnumerator(in this);
             readonly IEnumerator IEnumerable.GetEnumerator()
+                // ReSharper disable once HeapView.BoxingAllocation
                 => new DisposableEnumerator(in this);
 
             bool ICollection<int>.IsReadOnly
@@ -140,13 +142,13 @@ namespace NetFabric.Hyperlinq
             {
                 [FieldOffset(0)] int current;
                 [FieldOffset(4)] readonly int end;
-                [FieldOffset(8)] readonly long pad;
+                [FieldOffset(8)] readonly long padding;
 
                 internal Enumerator(in RangeEnumerable enumerable)
                 {
                     current = enumerable.start - 1;
                     end = current + enumerable.Count;
-                    pad = default;
+                    padding = default;
                 }
 
                 public int Current
@@ -166,13 +168,13 @@ namespace NetFabric.Hyperlinq
             {
                 [FieldOffset(0)] int current;
                 [FieldOffset(4)] readonly int end;
-                [FieldOffset(8)] readonly long pad;
+                [FieldOffset(8)] readonly long padding;
 
                 internal DisposableEnumerator(in RangeEnumerable enumerable)
                 {
                     current = enumerable.start - 1;
                     end = current + enumerable.Count;
-                    pad = default;
+                    padding = default;
                 }
 
                 public int Current
@@ -181,6 +183,7 @@ namespace NetFabric.Hyperlinq
                     get => current;
                 }
                 object IEnumerator.Current
+                    // ReSharper disable once HeapView.BoxingAllocation
                     => current;
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -227,6 +230,7 @@ namespace NetFabric.Hyperlinq
 
             public int[] ToArray()
             {
+                // ReSharper disable once HeapView.ObjectAllocation.Evident
                 var array = new int[Count];
                 CopyTo(array);
                 return array;
@@ -241,7 +245,8 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public List<int> ToList()
-                => new List<int>(this);
+                // ReSharper disable once HeapView.BoxingAllocation
+                => new(this);
         }
     }
 }

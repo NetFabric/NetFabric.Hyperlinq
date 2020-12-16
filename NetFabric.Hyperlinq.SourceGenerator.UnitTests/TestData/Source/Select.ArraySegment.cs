@@ -49,11 +49,10 @@ namespace NetFabric.Hyperlinq
             void IList<TResult>.RemoveAt(int index)
                 => throw new NotSupportedException();
 
-            [MaybeNull]
             public readonly TResult this[int index] 
-                => default;
+                => default!;
             TResult IReadOnlyList<TResult>.this[int index]
-                => this[index]!;
+                => this[index];
             TResult IList<TResult>.this[int index]
             {
                 get => this[index]!;

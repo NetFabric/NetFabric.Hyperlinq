@@ -1,176 +1,339 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
+// ReSharper disable HeapView.ObjectAllocation.Evident
 
 namespace NetFabric.Hyperlinq
 {
     public static partial class AsyncValueEnumerableExtensions
     {
-        
-        public static ValueTask<Dictionary<TKey, TSource>> ToDictionaryAsync<TEnumerable, TEnumerator, TSource, TKey>(this TEnumerable source, AsyncSelector<TSource, TKey> keySelector, CancellationToken cancellationToken = default)
-            where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ValueTask<Dictionary<TKey, TSource>> ToDictionaryAsync<TEnumerable, TEnumerator, TSource, TKey>(
+            this TEnumerable source, 
+            Func<TSource, CancellationToken, ValueTask<TKey>> keySelector, 
+            IEqualityComparer<TKey>? comparer = null,
+            CancellationToken cancellationToken = default)
+            where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
-            where TKey : notnull
-            => ToDictionaryAsync<TEnumerable, TEnumerator, TSource, TKey>(source, keySelector, null, cancellationToken);
+            where TKey : notnull 
+            => source.ToDictionaryAsync<TEnumerable, TEnumerator, TSource, TKey, AsyncFunctionWrapper<TSource, TKey>>(new AsyncFunctionWrapper<TSource, TKey>(keySelector), comparer, cancellationToken);
 
-        
-        public static ValueTask<Dictionary<TKey, TSource>> ToDictionaryAsync<TEnumerable, TEnumerator, TSource, TKey>(this TEnumerable source, AsyncSelector<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer, CancellationToken cancellationToken = default)
-            where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
+        public static ValueTask<Dictionary<TKey, TSource>> ToDictionaryAsync<TEnumerable, TEnumerator, TSource, TKey, TKeySelector>(
+            this TEnumerable source, 
+            TKeySelector keySelector, 
+            IEqualityComparer<TKey>? comparer = null, 
+            CancellationToken cancellationToken = default)
+            where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
             where TKey : notnull
+            where TKeySelector: struct, IAsyncFunction<TSource, TKey>
         {
-            if (keySelector is null) Throw.ArgumentNullException(nameof(keySelector));
-
             cancellationToken.ThrowIfCancellationRequested();
             return ExecuteAsync(source, keySelector, comparer, cancellationToken);
 
-            static async ValueTask<Dictionary<TKey, TSource>> ExecuteAsync(TEnumerable source, AsyncSelector<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer, CancellationToken cancellationToken)
+            static async ValueTask<Dictionary<TKey, TSource>> ExecuteAsync(TEnumerable source, TKeySelector keySelector, IEqualityComparer<TKey>? comparer, CancellationToken cancellationToken)
             {
                 var enumerator = source.GetAsyncEnumerator(cancellationToken);
-                await using (enumerator.ConfigureAwait(false))
+                try
                 {
+                    // ReSharper disable once HeapView.ObjectAllocation.Evident
                     var dictionary = new Dictionary<TKey, TSource>(0, comparer);
                     while (await enumerator.MoveNextAsync().ConfigureAwait(false))
                     {
                         var item = enumerator.Current;
                         dictionary.Add(
-                            await keySelector(item, cancellationToken).ConfigureAwait(false),
+                            await keySelector.InvokeAsync(item, cancellationToken).ConfigureAwait(false),
                             item);
                     }
+
                     return dictionary;
+                }
+                finally
+                {
+                    await enumerator.DisposeAsync().ConfigureAwait(false);
                 }
             }
         }
 
         
-        static async ValueTask<Dictionary<TKey, TSource>> ToDictionaryAsync<TEnumerable, TEnumerator, TSource, TKey>(this TEnumerable source, AsyncSelector<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer, AsyncPredicate<TSource> predicate, CancellationToken cancellationToken)
-            where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
+        static async ValueTask<Dictionary<TKey, TSource>> ToDictionaryAsync<TEnumerable, TEnumerator, TSource, TKey, TKeySelector, TPredicate>(
+            this TEnumerable source, 
+            TKeySelector keySelector, 
+            IEqualityComparer<TKey>? comparer, 
+            TPredicate predicate, 
+            CancellationToken cancellationToken)
+            where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
             where TKey : notnull
+            where TKeySelector: struct, IAsyncFunction<TSource, TKey>
+            where TPredicate : struct, IAsyncFunction<TSource, bool>
         {
             var enumerator = source.GetAsyncEnumerator(cancellationToken);
-            await using (enumerator.ConfigureAwait(false))
+            try
             {
+                // ReSharper disable once HeapView.ObjectAllocation.Evident
                 var dictionary = new Dictionary<TKey, TSource>(0, comparer);
                 while (await enumerator.MoveNextAsync().ConfigureAwait(false))
                 {
                     var item = enumerator.Current;
-                    if (await predicate(item, cancellationToken).ConfigureAwait(false))
+                    if (await predicate.InvokeAsync(item, cancellationToken).ConfigureAwait(false))
                         dictionary.Add(
-                            await keySelector(item, cancellationToken).ConfigureAwait(false),
+                            await keySelector.InvokeAsync(item, cancellationToken).ConfigureAwait(false),
                             item);
                 }
                 return dictionary;
             }
+            finally
+            {
+                await enumerator.DisposeAsync().ConfigureAwait(false);
+            }
         }
 
-        
-        static async ValueTask<Dictionary<TKey, TSource>> ToDictionaryAsync<TEnumerable, TEnumerator, TSource, TKey>(this TEnumerable source, AsyncSelector<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer, AsyncPredicateAt<TSource> predicate, CancellationToken cancellationToken)
-            where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
+
+        static async ValueTask<Dictionary<TKey, TSource>> ToDictionaryAtAsync<TEnumerable, TEnumerator, TSource, TKey, TKeySelector, TPredicate>(
+            this TEnumerable source, 
+            TKeySelector keySelector, 
+            IEqualityComparer<TKey>? comparer,
+            TPredicate predicate, 
+            CancellationToken cancellationToken)
+            where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
             where TKey : notnull
+            where TKeySelector: struct, IAsyncFunction<TSource, TKey>
+            where TPredicate : struct, IAsyncFunction<TSource, int, bool>
         {
             var enumerator = source.GetAsyncEnumerator(cancellationToken);
-            await using (enumerator.ConfigureAwait(false))
+            try
             {
                 checked
                 {
+                    // ReSharper disable once HeapView.ObjectAllocation.Evident
                     var dictionary = new Dictionary<TKey, TSource>(0, comparer);
                     for (var index = 0; await enumerator.MoveNextAsync().ConfigureAwait(false); index++)
                     {
                         var item = enumerator.Current;
-                        if (await predicate(item, index, cancellationToken).ConfigureAwait(false))
+                        if (await predicate.InvokeAsync(item, index, cancellationToken).ConfigureAwait(false))
                             dictionary.Add(
-                                await keySelector(item, cancellationToken).ConfigureAwait(false),
+                                await keySelector.InvokeAsync(item, cancellationToken).ConfigureAwait(false),
                                 item);
                     }
+
                     return dictionary;
                 }
             }
+            finally
+            {
+                await enumerator.DisposeAsync().ConfigureAwait(false);
+            }
         }
 
-        
-        public static ValueTask<Dictionary<TKey, TElement>> ToDictionaryAsync<TEnumerable, TEnumerator, TSource, TKey, TElement>(this TEnumerable source, AsyncSelector<TSource, TKey> keySelector, AsyncSelector<TSource, TElement> elementSelector, CancellationToken cancellationToken = default)
-            where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
+        static async ValueTask<Dictionary<TKey, TResult>> ToDictionaryAsync<TEnumerable, TEnumerator, TSource, TKey, TKeySelector, TResult, TPredicate, TSelector>(
+            this TEnumerable source, 
+            TKeySelector keySelector, 
+            IEqualityComparer<TKey>? comparer, 
+            CancellationToken cancellationToken,
+            TPredicate predicate,
+            TSelector selector)
+            where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
             where TKey : notnull
-            => ToDictionaryAsync<TEnumerable, TEnumerator, TSource, TKey, TElement>(source, keySelector, elementSelector, null, cancellationToken);
-
-        
-        public static ValueTask<Dictionary<TKey, TElement>> ToDictionaryAsync<TEnumerable, TEnumerator, TSource, TKey, TElement>(this TEnumerable source, AsyncSelector<TSource, TKey> keySelector, AsyncSelector<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer, CancellationToken cancellationToken = default)
-            where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
-            where TEnumerator : struct, IAsyncEnumerator<TSource>
-            where TKey : notnull
+            where TKeySelector: struct, IAsyncFunction<TResult, TKey>
+            where TPredicate : struct, IAsyncFunction<TSource, bool>
+            where TSelector : struct, IAsyncFunction<TSource, TResult>
         {
-            if (keySelector is null) Throw.ArgumentNullException(nameof(keySelector));
-            if (elementSelector is null) Throw.ArgumentNullException(nameof(elementSelector));
+            // ReSharper disable once HeapView.ObjectAllocation.Evident
+            var dictionary = new Dictionary<TKey, TResult>(0, comparer);
 
+            var enumerator = source.GetAsyncEnumerator(cancellationToken);
+            try
+            {
+                while (await enumerator.MoveNextAsync().ConfigureAwait(false))
+                {
+                    var item = enumerator.Current;
+                    if (await predicate.InvokeAsync(item, cancellationToken).ConfigureAwait(false))
+                    {
+                        var result = await selector.InvokeAsync(item, cancellationToken).ConfigureAwait(false);
+                        dictionary.Add(await keySelector.InvokeAsync(result, cancellationToken).ConfigureAwait(false), result);
+                    }
+                }
+            }
+            finally
+            {
+                await enumerator.DisposeAsync().ConfigureAwait(false);
+            }
+
+            return dictionary;
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ValueTask<Dictionary<TKey, TElement>> ToDictionaryAsync<TEnumerable, TEnumerator, TSource, TKey, TElement>(
+            this TEnumerable source,
+            Func<TSource, CancellationToken, ValueTask<TKey>> keySelector,
+            Func<TSource, CancellationToken, ValueTask<TElement>> elementSelector,
+            IEqualityComparer<TKey>? comparer = null,
+            CancellationToken cancellationToken = default)
+            where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
+            where TEnumerator : struct, IAsyncEnumerator<TSource>
+            where TKey : notnull
+            => source.ToDictionaryAsync<TEnumerable, TEnumerator, TSource, TKey, TElement, AsyncFunctionWrapper<TSource, TKey>, AsyncFunctionWrapper<TSource, TElement>>(new AsyncFunctionWrapper<TSource, TKey>(keySelector), new AsyncFunctionWrapper<TSource, TElement>(elementSelector), comparer, cancellationToken);
+
+        public static ValueTask<Dictionary<TKey, TElement>> ToDictionaryAsync<TEnumerable, TEnumerator, TSource, TKey, TElement, TKeySelector, TElementSelector>(
+            this TEnumerable source, 
+            TKeySelector keySelector, 
+            TElementSelector elementSelector, 
+            IEqualityComparer<TKey>? comparer = null, 
+            CancellationToken cancellationToken = default)
+            where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
+            where TEnumerator : struct, IAsyncEnumerator<TSource>
+            where TKey : notnull
+            where TKeySelector: struct, IAsyncFunction<TSource, TKey>
+            where TElementSelector: struct, IAsyncFunction<TSource, TElement>
+        {
             cancellationToken.ThrowIfCancellationRequested();
             return ExecuteAsync(source, keySelector, elementSelector, comparer, cancellationToken);
 
-            static async ValueTask<Dictionary<TKey, TElement>> ExecuteAsync(TEnumerable source, AsyncSelector<TSource, TKey> keySelector, AsyncSelector<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer, CancellationToken cancellationToken)
+            static async ValueTask<Dictionary<TKey, TElement>> ExecuteAsync(TEnumerable source, TKeySelector keySelector, TElementSelector elementSelector, IEqualityComparer<TKey>? comparer, CancellationToken cancellationToken)
             {
                 var enumerator = source.GetAsyncEnumerator(cancellationToken);
-                await using (enumerator.ConfigureAwait(false))
+                try
                 {
+                    // ReSharper disable once HeapView.ObjectAllocation.Evident
                     var dictionary = new Dictionary<TKey, TElement>(0, comparer);
                     while (await enumerator.MoveNextAsync().ConfigureAwait(false))
                     {
                         var item = enumerator.Current;
                         dictionary.Add(
-                            await keySelector(item, cancellationToken).ConfigureAwait(false),
-                            await elementSelector(item, cancellationToken).ConfigureAwait(false));
+                            await keySelector.InvokeAsync(item, cancellationToken).ConfigureAwait(false),
+                            await elementSelector.InvokeAsync(item, cancellationToken).ConfigureAwait(false));
                     }
                     return dictionary;
+                }
+                finally
+                {
+                    await enumerator.DisposeAsync().ConfigureAwait(false);
                 }
             }
         }
 
         
-        static async ValueTask<Dictionary<TKey, TElement>> ToDictionaryAsync<TEnumerable, TEnumerator, TSource, TKey, TElement>(this TEnumerable source, AsyncSelector<TSource, TKey> keySelector, AsyncSelector<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer, AsyncPredicate<TSource> predicate, CancellationToken cancellationToken)
-            where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
+        static async ValueTask<Dictionary<TKey, TElement>> ToDictionaryAsync<TEnumerable, TEnumerator, TSource, TKey, TElement, TKeySelector, TElementSelector, TPredicate>(
+            this TEnumerable source, 
+            TKeySelector keySelector, 
+            TElementSelector elementSelector, 
+            IEqualityComparer<TKey>? comparer, 
+            TPredicate predicate, 
+            CancellationToken cancellationToken)
+            where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
             where TKey : notnull
+            where TKeySelector: struct, IAsyncFunction<TSource, TKey>
+            where TElementSelector: struct, IAsyncFunction<TSource, TElement>
+            where TPredicate : struct, IAsyncFunction<TSource, bool>
         {
             var enumerator = source.GetAsyncEnumerator(cancellationToken);
-            await using (enumerator.ConfigureAwait(false))
+            try
             {
+                // ReSharper disable once HeapView.ObjectAllocation.Evident
                 var dictionary = new Dictionary<TKey, TElement>(0, comparer);
                 while (await enumerator.MoveNextAsync().ConfigureAwait(false))
                 {
                     var item = enumerator.Current;
-                    if (await predicate(item, cancellationToken).ConfigureAwait(false))
+                    if (await predicate.InvokeAsync(item, cancellationToken).ConfigureAwait(false))
                         dictionary.Add(
-                            await keySelector(item, cancellationToken).ConfigureAwait(false), 
-                            await elementSelector(item, cancellationToken).ConfigureAwait(false));
+                            await keySelector.InvokeAsync(item, cancellationToken).ConfigureAwait(false), 
+                            await elementSelector.InvokeAsync(item, cancellationToken).ConfigureAwait(false));
                 }
                 return dictionary;
+            }
+            finally
+            {
+                await enumerator.DisposeAsync().ConfigureAwait(false);
             }
         }
 
         
-        static async ValueTask<Dictionary<TKey, TElement>> ToDictionaryAsync<TEnumerable, TEnumerator, TSource, TKey, TElement>(this TEnumerable source, AsyncSelector<TSource, TKey> keySelector, AsyncSelector<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer, AsyncPredicateAt<TSource> predicate, CancellationToken cancellationToken)
-            where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
+        static async ValueTask<Dictionary<TKey, TElement>> ToDictionaryAtAsync<TEnumerable, TEnumerator, TSource, TKey, TElement, TKeySelector, TElementSelector, TPredicate>(
+            this TEnumerable source, 
+            TKeySelector keySelector, 
+            TElementSelector elementSelector, 
+            IEqualityComparer<TKey>? comparer, 
+            TPredicate predicate, 
+            CancellationToken cancellationToken)
+            where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
             where TKey : notnull
+            where TKeySelector: struct, IAsyncFunction<TSource, TKey>
+            where TElementSelector: struct, IAsyncFunction<TSource, TElement>
+            where TPredicate : struct, IAsyncFunction<TSource, int, bool>
         {
             var enumerator = source.GetAsyncEnumerator(cancellationToken);
-            await using (enumerator.ConfigureAwait(false))
+            try
             {
                 checked
                 {
+                    // ReSharper disable once HeapView.ObjectAllocation.Evident
                     var dictionary = new Dictionary<TKey, TElement>(0, comparer);
                     for (var index = 0; await enumerator.MoveNextAsync().ConfigureAwait(false); index++)
                     {
                         var item = enumerator.Current;
-                        if (await predicate(item, index, cancellationToken).ConfigureAwait(false))
+                        if (await predicate.InvokeAsync(item, index, cancellationToken).ConfigureAwait(false))
                             dictionary.Add(
-                                await keySelector(item, cancellationToken).ConfigureAwait(false), 
-                                await elementSelector(item, cancellationToken).ConfigureAwait(false));
+                                await keySelector.InvokeAsync(item, cancellationToken).ConfigureAwait(false), 
+                                await elementSelector.InvokeAsync(item, cancellationToken).ConfigureAwait(false));
                     }
                     return dictionary;
                 }
             }
+            finally
+            {
+                await enumerator.DisposeAsync().ConfigureAwait(false);
+            }
+        }
+        
+
+        static async ValueTask<Dictionary<TKey, TElement>> ToDictionaryAsync<TEnumerable, TEnumerator, TSource, TKey, TElement, TKeySelector, TElementSelector, TResult, TPredicate, TSelector>(
+            this TEnumerable source, 
+            TKeySelector keySelector, 
+            TElementSelector elementSelector, 
+            IEqualityComparer<TKey>? comparer, 
+            CancellationToken cancellationToken,
+            TPredicate predicate,
+            TSelector selector)
+            where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
+            where TEnumerator : struct, IAsyncEnumerator<TSource>
+            where TKey : notnull
+            where TKeySelector: struct, IAsyncFunction<TResult, TKey>
+            where TElementSelector: struct, IAsyncFunction<TResult, TElement>
+            where TPredicate : struct, IAsyncFunction<TSource, bool>
+            where TSelector : struct, IAsyncFunction<TSource, TResult>
+        {
+            var dictionary = new Dictionary<TKey, TElement>(0, comparer);
+
+            var enumerator = source.GetAsyncEnumerator(cancellationToken);
+            try
+            {
+                while (await enumerator.MoveNextAsync().ConfigureAwait(false))
+                {
+                    var item = enumerator.Current;
+                    if (await predicate.InvokeAsync(item, cancellationToken).ConfigureAwait(false))
+                    {
+                        var result = await selector.InvokeAsync(item, cancellationToken).ConfigureAwait(false);
+                        dictionary.Add(
+                            await keySelector.InvokeAsync(result, cancellationToken).ConfigureAwait(false),
+                            await elementSelector.InvokeAsync(result, cancellationToken).ConfigureAwait(false));
+                    }
+                }
+            }
+            finally
+            {
+                await enumerator.DisposeAsync().ConfigureAwait(false);
+            }
+
+            return dictionary;
         }
     }
 }

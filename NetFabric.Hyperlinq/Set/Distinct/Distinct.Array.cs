@@ -8,7 +8,7 @@ namespace NetFabric.Hyperlinq
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ArraySegmentDistinctEnumerable<TSource> Distinct<TSource>(this TSource[] source, IEqualityComparer<TSource>? comparer = default)
-            => Distinct(new ArraySegment<TSource>(source), comparer);
+            => new ArraySegment<TSource>(source).Distinct(comparer);
     }
 }
 

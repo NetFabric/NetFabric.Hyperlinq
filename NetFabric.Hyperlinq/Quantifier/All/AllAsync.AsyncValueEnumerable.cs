@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -6,55 +8,73 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class AsyncValueEnumerableExtensions
     {
-        
-        public static ValueTask<bool> AllAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source, AsyncPredicate<TSource> predicate, CancellationToken cancellationToken = default)
-            where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ValueTask<bool> AllAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source,
+            Func<TSource, CancellationToken, ValueTask<bool>> predicate, CancellationToken cancellationToken = default)
+            where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
+            => source.AllAsync<TEnumerable, TEnumerator, TSource, AsyncFunctionWrapper<TSource, bool>>(new AsyncFunctionWrapper<TSource, bool>(predicate), cancellationToken);
+        
+        public static ValueTask<bool> AllAsync<TEnumerable, TEnumerator, TSource, TPredicate>(this TEnumerable source, TPredicate predicate, CancellationToken cancellationToken = default)
+            where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
+            where TEnumerator : struct, IAsyncEnumerator<TSource>
+            where TPredicate : struct, IAsyncFunction<TSource, bool>
         {
-            if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
-
             cancellationToken.ThrowIfCancellationRequested();
             return ExecuteAsync(source, predicate, cancellationToken);
 
-            static async ValueTask<bool> ExecuteAsync(TEnumerable source, AsyncPredicate<TSource> predicate, CancellationToken cancellationToken)
+            static async ValueTask<bool> ExecuteAsync(TEnumerable source, TPredicate predicate, CancellationToken cancellationToken)
             {
                 var enumerator = source.GetAsyncEnumerator(cancellationToken);
-                await using (enumerator.ConfigureAwait(false))
+                try
                 {
                     while (await enumerator.MoveNextAsync().ConfigureAwait(false))
                     {
-                        if (!await predicate(enumerator.Current, cancellationToken).ConfigureAwait(false))
+                        if (!await predicate.InvokeAsync(enumerator.Current, cancellationToken).ConfigureAwait(false))
                             return false;
                     }
                     return true;
                 }
+                finally
+                {
+                    await enumerator.DisposeAsync().ConfigureAwait(false);
+                }
             }
         }
 
-        
-        public static ValueTask<bool> AllAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source, AsyncPredicateAt<TSource> predicate, CancellationToken cancellationToken = default)
-            where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ValueTask<bool> AllAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source,
+            Func<TSource, int, CancellationToken, ValueTask<bool>> predicate, CancellationToken cancellationToken = default)
+            where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
+            => source.AllAtAsync<TEnumerable, TEnumerator, TSource, AsyncFunctionWrapper<TSource, int, bool>>(new AsyncFunctionWrapper<TSource, int, bool>(predicate), cancellationToken);
+        
+        public static ValueTask<bool> AllAtAsync<TEnumerable, TEnumerator, TSource, TPredicate>(this TEnumerable source, TPredicate predicate, CancellationToken cancellationToken = default)
+            where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
+            where TEnumerator : struct, IAsyncEnumerator<TSource>
+            where TPredicate : struct, IAsyncFunction<TSource, int, bool>
         {
-            if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
-
             cancellationToken.ThrowIfCancellationRequested();
             return ExecuteAsync(source, predicate, cancellationToken);
 
-            static async ValueTask<bool> ExecuteAsync(TEnumerable source, AsyncPredicateAt<TSource> predicate, CancellationToken cancellationToken)
+            static async ValueTask<bool> ExecuteAsync(TEnumerable source, TPredicate predicate, CancellationToken cancellationToken)
             {
                 var enumerator = source.GetAsyncEnumerator(cancellationToken);
-                await using (enumerator.ConfigureAwait(false))
+                try
                 {
                     checked
                     {
                         for (var index = 0; await enumerator.MoveNextAsync().ConfigureAwait(false); index++)
                         {
-                            if (!await predicate(enumerator.Current, index, cancellationToken).ConfigureAwait(false))
+                            if (!await predicate.InvokeAsync(enumerator.Current, index, cancellationToken).ConfigureAwait(false))
                                 return false;
                         }
                     }
                     return true;
+                }
+                finally
+                {
+                    await enumerator.DisposeAsync().ConfigureAwait(false);
                 }
             }
         }

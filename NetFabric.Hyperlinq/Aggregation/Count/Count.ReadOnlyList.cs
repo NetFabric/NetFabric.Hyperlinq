@@ -1,38 +1,48 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
     public static partial class ReadOnlyListExtensions
     {
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int Count<TList, TSource>(this TList source)
-            where TList : notnull, IReadOnlyList<TSource>
+            where TList : IReadOnlyList<TSource>
             => source.Count;
 
-        static int Count<TList, TSource>(this TList source, Predicate<TSource> predicate, int offset, int count)
-            where TList : notnull, IReadOnlyList<TSource>
+        static int Count<TList, TSource, TPredicate>(this TList source, TPredicate predicate, int offset, int count)
+            where TList : IReadOnlyList<TSource>
+            where TPredicate: struct, IFunction<TSource, bool>
         {
             var counter = 0;
             var end = offset + count - 1;
             for (var index = offset; index <= end; index++)
-                counter += predicate(source[index]).AsByte();
+                counter += predicate.Invoke(source[index]).AsByte();
             return counter;
         }
 
-        static int Count<TList, TSource>(this TList source, PredicateAt<TSource> predicate, int offset, int count)
-            where TList : notnull, IReadOnlyList<TSource>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        static int CountAt<TList, TSource, TPredicate>(this TList source, TPredicate predicate)
+            where TList : IReadOnlyList<TSource>
+            where TPredicate : struct, IFunction<TSource, int, bool>
+            => source.CountAt<TList, TSource, TPredicate>(predicate, 0, source.Count);
+
+        static int CountAt<TList, TSource, TPredicate>(this TList source, TPredicate predicate, int offset, int count)
+            where TList : IReadOnlyList<TSource>
+            where TPredicate: struct, IFunction<TSource, int, bool>
         {
             var counter = 0;
             var end = count - 1;
             if (offset == 0)
             {
                 for (var index = 0; index <= end; index++)
-                    counter += predicate(source[index], index).AsByte();
+                    counter += predicate.Invoke(source[index], index).AsByte();
             }
             else
             {
                 for (var index = 0; index <= end; index++)
-                    counter += predicate(source[index + offset], index).AsByte();
+                    counter += predicate.Invoke(source[index + offset], index).AsByte();
             }
             return counter;
         }

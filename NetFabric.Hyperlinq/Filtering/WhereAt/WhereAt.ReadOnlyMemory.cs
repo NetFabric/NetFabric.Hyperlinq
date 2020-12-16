@@ -12,34 +12,34 @@ namespace NetFabric.Hyperlinq
     {
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static MemoryWhereAtEnumerable<TSource> Where<TSource>(this ReadOnlyMemory<TSource> source, PredicateAt<TSource> predicate) 
-        {
-            if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
-
-            return new MemoryWhereAtEnumerable<TSource>(source, predicate);
-        }
+        public static MemoryWhereAtEnumerable<TSource, FunctionWrapper<TSource, int, bool>> Where<TSource>(this ReadOnlyMemory<TSource> source, Func<TSource, int, bool> predicate) 
+            => source.WhereAt(new FunctionWrapper<TSource, int, bool>(predicate));
+        
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static MemoryWhereAtEnumerable<TSource, TPredicate> WhereAt<TSource, TPredicate>(this ReadOnlyMemory<TSource> source, TPredicate predicate = default) 
+            where TPredicate : struct, IFunction<TSource, int, bool>
+            => new(source, predicate);
 
         [StructLayout(LayoutKind.Auto)]
-        public readonly partial struct MemoryWhereAtEnumerable<TSource>
-            : IValueEnumerable<TSource, MemoryWhereAtEnumerable<TSource>.DisposableEnumerator>
+        public readonly partial struct MemoryWhereAtEnumerable<TSource, TPredicate>
+            : IValueEnumerable<TSource, MemoryWhereAtEnumerable<TSource, TPredicate>.DisposableEnumerator>
+            where TPredicate : struct, IFunction<TSource, int, bool>
         {
             readonly ReadOnlyMemory<TSource> source;
-            readonly PredicateAt<TSource> predicate;
+            readonly TPredicate predicate;
 
-            internal MemoryWhereAtEnumerable(ReadOnlyMemory<TSource> source, PredicateAt<TSource> predicate)
-            {
-                this.source = source;
-                this.predicate = predicate;
-            }
-
+            internal MemoryWhereAtEnumerable(ReadOnlyMemory<TSource> source, TPredicate predicate)
+                => (this.source, this.predicate) = (source, predicate);
             
             public readonly Enumerator GetEnumerator() 
-                => new Enumerator(in this);
-            readonly DisposableEnumerator IValueEnumerable<TSource, MemoryWhereAtEnumerable<TSource>.DisposableEnumerator>.GetEnumerator() 
-                => new DisposableEnumerator(in this);
+                => new(in this);
+            readonly DisposableEnumerator IValueEnumerable<TSource, DisposableEnumerator>.GetEnumerator() 
+                => new(in this);
             readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() 
+                // ReSharper disable once HeapView.BoxingAllocation
                 => new DisposableEnumerator(in this);
             readonly IEnumerator IEnumerable.GetEnumerator() 
+                // ReSharper disable once HeapView.BoxingAllocation
                 => new DisposableEnumerator(in this);
 
             [StructLayout(LayoutKind.Sequential)]
@@ -48,9 +48,9 @@ namespace NetFabric.Hyperlinq
                 int index;
                 readonly int end;
                 readonly ReadOnlySpan<TSource> source;
-                readonly PredicateAt<TSource> predicate;
+                TPredicate predicate;
 
-                internal Enumerator(in MemoryWhereAtEnumerable<TSource> enumerable)
+                internal Enumerator(in MemoryWhereAtEnumerable<TSource, TPredicate> enumerable)
                 {
                     source = enumerable.source.Span;
                     predicate = enumerable.predicate;
@@ -69,7 +69,7 @@ namespace NetFabric.Hyperlinq
                 {
                     while (++index <= end)
                     {
-                        if (predicate(source[index], index))
+                        if (predicate.Invoke(source[index], index))
                             return true;
                     }
                     return false;
@@ -83,9 +83,9 @@ namespace NetFabric.Hyperlinq
                 int index;
                 readonly int end;
                 readonly ReadOnlyMemory<TSource> source;
-                readonly PredicateAt<TSource> predicate;
+                TPredicate predicate;
 
-                internal DisposableEnumerator(in MemoryWhereAtEnumerable<TSource> enumerable)
+                internal DisposableEnumerator(in MemoryWhereAtEnumerable<TSource, TPredicate> enumerable)
                 {
                     source = enumerable.source;
                     predicate = enumerable.predicate;
@@ -93,7 +93,6 @@ namespace NetFabric.Hyperlinq
                     end = index + source.Length;
                 }
 
-                [MaybeNull]
                 public readonly TSource Current 
                 {
                     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -101,7 +100,8 @@ namespace NetFabric.Hyperlinq
                 }
                 readonly TSource IEnumerator<TSource>.Current 
                     => source.Span[index];
-                readonly object? IEnumerator.Current 
+                readonly object IEnumerator.Current
+                    // ReSharper disable once HeapView.PossibleBoxingAllocation
                     => source.Span[index];
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -110,7 +110,7 @@ namespace NetFabric.Hyperlinq
                     var span = source.Span;
                     while (++index <= end)
                     {
-                        if (predicate(span[index], index))
+                        if (predicate.Invoke(span[index], index))
                             return true;
                     }
                     return false;
@@ -123,35 +123,89 @@ namespace NetFabric.Hyperlinq
                 public void Dispose() { }
             }
 
+            #region Aggregation
+
             public int Count()
-                => source.Span.Count(predicate);
+                => source.Span.CountAt(predicate);
+            
+            #endregion
+            #region Quantifier
 
             public bool Any()
-                => source.Span.Any(predicate);
+                => source.Span.AnyAt(predicate);
+            
+            #endregion
+            #region Filtering
                 
-            public MemoryWhereAtEnumerable<TSource> Where(Predicate<TSource> predicate)
-                => Where<TSource>(source, Utils.Combine(this.predicate, predicate));
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public MemoryWhereAtEnumerable<TSource, PredicatePredicateAtCombination<FunctionWrapper<TSource, bool>, TPredicate, TSource>> Where(Func<TSource, bool> predicate)
+                => Where(new FunctionWrapper<TSource, bool>(predicate));
 
-            public MemoryWhereAtEnumerable<TSource> Where(PredicateAt<TSource> predicate)
-                => Where<TSource>(source, Utils.Combine(this.predicate, predicate));
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public MemoryWhereAtEnumerable<TSource, PredicatePredicateAtCombination<TPredicate2, TPredicate, TSource>> Where<TPredicate2>(TPredicate2 predicate = default)
+                where TPredicate2 : struct, IFunction<TSource, bool>
+                => source.WhereAt(new PredicatePredicateAtCombination<TPredicate2, TPredicate, TSource>(predicate, this.predicate));
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public MemoryWhereAtEnumerable<TSource, PredicateAtPredicateAtCombination<TPredicate, FunctionWrapper<TSource, int, bool>, TSource>> Where(Func<TSource, int, bool> predicate)
+                => WhereAt<FunctionWrapper<TSource, int, bool>>(new FunctionWrapper<TSource, int, bool>(predicate));
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public MemoryWhereAtEnumerable<TSource, PredicateAtPredicateAtCombination<TPredicate, TPredicate2, TSource>> WhereAt<TPredicate2>(TPredicate2 predicate = default)
+                where TPredicate2 : struct, IFunction<TSource, int, bool>
+                => source.WhereAt(new PredicateAtPredicateAtCombination<TPredicate, TPredicate2, TSource>(this.predicate, predicate));
+            
+            #endregion
+            #region Projection
+            
+            #endregion
+            #region Element
 
             public Option<TSource> ElementAt(int index)
-                => ArrayExtensions.ElementAt<TSource>(source.Span, index, predicate);
+                => source.Span.ElementAtAt(index, predicate);
 
             public Option<TSource> First()
-                => ArrayExtensions.First<TSource>(source.Span, predicate);
+                => source.Span.FirstAt(predicate);
 
             public Option<TSource> Single()
-                => ArrayExtensions.Single<TSource>(source.Span, predicate);
+                => source.Span.SingleAt(predicate);
+            
+            #endregion
+            #region Conversion
 
             public TSource[] ToArray()
-                => ArrayExtensions.ToArray(source.Span, predicate);
+                => source.ToArrayAt(predicate);
 
             public IMemoryOwner<TSource> ToArray(MemoryPool<TSource> memoryPool)
-                => ArrayExtensions.ToArray<TSource>(source, predicate, memoryPool);
+                => source.ToArrayAt(predicate, memoryPool);
 
             public List<TSource> ToList()
-                => ArrayExtensions.ToList(source, predicate);  // memory performs best
+                => source.ToListAt(predicate);
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public Dictionary<TKey, TSource> ToDictionary<TKey>(Func<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer = default)
+                where TKey : notnull
+                => ToDictionaryAt<TKey, FunctionWrapper<TSource, TKey>>(new FunctionWrapper<TSource, TKey>(keySelector), comparer);
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public Dictionary<TKey, TSource> ToDictionaryAt<TKey, TKeySelector>(TKeySelector keySelector, IEqualityComparer<TKey>? comparer = default)
+                where TKey : notnull
+                where TKeySelector : struct, IFunction<TSource, TKey>
+                => source.Span.ToDictionaryAt(keySelector, comparer, predicate);
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer = default)
+                where TKey : notnull
+                => ToDictionaryAt<TKey, TElement, FunctionWrapper<TSource, TKey>, FunctionWrapper<TSource, TElement>>(new FunctionWrapper<TSource, TKey>(keySelector), new FunctionWrapper<TSource, TElement>(elementSelector), comparer);
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public Dictionary<TKey, TElement> ToDictionaryAt<TKey, TElement, TKeySelector, TElementSelector>(TKeySelector keySelector, TElementSelector elementSelector, IEqualityComparer<TKey>? comparer = default)
+                where TKey : notnull
+                where TKeySelector : struct, IFunction<TSource, TKey>
+                where TElementSelector : struct, IFunction<TSource, TElement>
+                => source.Span.ToDictionaryAt<TSource, TKey, TElement, TKeySelector, TElementSelector, TPredicate>(keySelector, elementSelector, comparer, predicate);
+            
+            #endregion
 
             public bool SequenceEqual(IEnumerable<TSource> other, IEqualityComparer<TSource>? comparer = null)
             {

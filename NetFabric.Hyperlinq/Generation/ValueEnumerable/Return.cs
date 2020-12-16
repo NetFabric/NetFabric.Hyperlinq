@@ -10,23 +10,23 @@ namespace NetFabric.Hyperlinq
     public static partial class ValueEnumerable
     {
         
-        public static ReturnEnumerable<TSource> Return<TSource>([AllowNull] TSource value) =>
-            new ReturnEnumerable<TSource>(value);
+        public static ReturnEnumerable<TSource> Return<TSource>(TSource value) =>
+            new(value);
 
         [StructLayout(LayoutKind.Auto)]
         public readonly partial struct ReturnEnumerable<TSource>
             : IValueReadOnlyList<TSource, ReturnEnumerable<TSource>.DisposableEnumerator>
             , IList<TSource>
         {
-            [AllowNull, MaybeNull] internal readonly TSource value;
+            readonly TSource value;
 
-            internal ReturnEnumerable([AllowNull] TSource value) 
+            internal ReturnEnumerable(TSource value) 
                 => this.value = value;
 
             public readonly int Count 
                 => 1;
 
-            [MaybeNull]
+            
             public readonly TSource this[int index]
             {
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -38,11 +38,13 @@ namespace NetFabric.Hyperlinq
                 }
             }
             TSource IReadOnlyList<TSource>.this[int index]
-                => this[index]!;
+                => this[index];
             TSource IList<TSource>.this[int index]
             {
-                get => this[index]!;
+                get => this[index];
+                
                 [ExcludeFromCodeCoverage]
+                // ReSharper disable once ValueParameterNotUsed
                 set => Throw.NotSupportedException();
             }
 
@@ -50,10 +52,12 @@ namespace NetFabric.Hyperlinq
             public readonly Enumerator GetEnumerator() 
                 => new Enumerator(in this);
             readonly DisposableEnumerator IValueEnumerable<TSource, DisposableEnumerator>.GetEnumerator() 
-                => new DisposableEnumerator(in this);
+                => new(in this);
             readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() 
+                // ReSharper disable once HeapView.BoxingAllocation
                 => new DisposableEnumerator(in this);
             readonly IEnumerator IEnumerable.GetEnumerator() 
+                // ReSharper disable once HeapView.BoxingAllocation
                 => new DisposableEnumerator(in this);
 
             bool ICollection<TSource>.IsReadOnly  
@@ -69,9 +73,11 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             int IList<TSource>.IndexOf(TSource item)
-                => EqualityComparer<TSource>.Default.Equals(value, item)
-                    ? 0
-                    : -1;
+                => EqualityComparer<TSource>.Default.Equals(value, item) switch
+                {
+                    true => 0,
+                    _ => -1
+                };
 
             [ExcludeFromCodeCoverage]
             void ICollection<TSource>.Add(TSource item) 
@@ -96,12 +102,9 @@ namespace NetFabric.Hyperlinq
                 bool moveNext;
 
                 internal Enumerator(in ReturnEnumerable<TSource> enumerable)
-                {
-                    Current = enumerable.value;
-                    moveNext = true;
-                }
+                    => (Current, moveNext) = (enumerable.value, true);
 
-                [MaybeNull]
+                
                 public readonly TSource Current { get; }
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -125,11 +128,12 @@ namespace NetFabric.Hyperlinq
                     moveNext = true;
                 }
 
-                [MaybeNull]
+                
                 public readonly TSource Current { get; }
                 readonly TSource IEnumerator<TSource>.Current 
-                    => Current!;
-                readonly object? IEnumerator.Current
+                    => Current;
+                readonly object IEnumerator.Current
+                    // ReSharper disable once HeapView.PossibleBoxingAllocation
                     => Current;
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -153,13 +157,20 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Contains(TSource value, IEqualityComparer<TSource>? comparer)
-                => comparer is null
-                    ? EqualityComparer<TSource>.Default.Equals(this.value, value)
-                    : comparer.Equals(this.value, value);
+                => comparer switch
+                {
+                    null => EqualityComparer<TSource>.Default.Equals(this.value, value),
+                    _ => comparer.Equals(this.value, value)
+                };
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public ReturnEnumerable<TResult> Select<TResult>(NullableSelector<TSource, TResult> selector)
-                => new ReturnEnumerable<TResult>(selector(value));
+            public ReturnEnumerable<TResult> Select<TResult>(Func<TSource, TResult> selector)
+                => Select<TResult, FunctionWrapper<TSource, TResult>>(new FunctionWrapper<TSource, TResult>(selector));
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public ReturnEnumerable<TResult> Select<TResult, TSelector>(TSelector selector) 
+                where TSelector : struct, IFunction<TSource, TResult>
+                => new(selector.Invoke(value));
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Option<TSource> ElementAt(int index)
@@ -179,21 +190,37 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TSource[] ToArray()
+                // ReSharper disable once HeapView.ObjectAllocation.Evident
                 => new TSource[] { value };
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public List<TSource> ToList()
-                => new List<TSource>(1) { value };
+                => new(1) { value };
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public Dictionary<TKey, TSource> ToDictionary<TKey>(Selector<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer = default)
+            public Dictionary<TKey, TSource> ToDictionary<TKey>(Func<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer = default)
                 where TKey : notnull
-                => new Dictionary<TKey, TSource>(1, comparer) { { keySelector(value), value } };
+                => ToDictionary<TKey, FunctionWrapper<TSource, TKey>>(new FunctionWrapper<TSource, TKey>(keySelector), comparer);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Selector<TSource, TKey> keySelector, NullableSelector<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer = default)
+            public Dictionary<TKey, TSource> ToDictionary<TKey, TKeySelector>(TKeySelector keySelector, IEqualityComparer<TKey>? comparer = default)
                 where TKey : notnull
-                => new Dictionary<TKey, TElement>(1, comparer) { { keySelector(value), elementSelector(value)! } };
+                where TKeySelector : struct, IFunction<TSource, TKey>
+                // ReSharper disable once HeapView.ObjectAllocation.Evident
+                => new(new Dictionary<TKey, TSource>(1, comparer) { { keySelector.Invoke(value), value } });
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer = default)
+                where TKey : notnull
+                => ToDictionary<TKey, TElement, FunctionWrapper<TSource, TKey>, FunctionWrapper<TSource, TElement>>(new FunctionWrapper<TSource, TKey>(keySelector), new FunctionWrapper<TSource, TElement>(elementSelector), comparer);
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement, TKeySelector, TElementSelector>(TKeySelector keySelector, TElementSelector elementSelector, IEqualityComparer<TKey>? comparer = default)
+                where TKey : notnull
+                where TKeySelector : struct, IFunction<TSource, TKey>
+                where TElementSelector : struct, IFunction<TSource, TElement>
+                // ReSharper disable once HeapView.ObjectAllocation.Evident
+                => new(new Dictionary<TKey, TElement>(1, comparer) { { keySelector.Invoke(value), elementSelector.Invoke(value) } });
         }
 
 #pragma warning disable IDE0060 // Remove unused parameter

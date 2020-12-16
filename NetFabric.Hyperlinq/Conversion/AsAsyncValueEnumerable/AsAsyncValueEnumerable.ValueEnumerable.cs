@@ -13,14 +13,14 @@ namespace NetFabric.Hyperlinq
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static AsyncValueEnumerableWrapper<TEnumerable, TEnumerator, TSource> AsAsyncValueEnumerable<TEnumerable, TEnumerator, TSource>(this TEnumerable source)
-            where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
-            => new AsyncValueEnumerableWrapper<TEnumerable, TEnumerator, TSource>(source);
+            => new(source);
 
         [StructLayout(LayoutKind.Auto)]
         public readonly partial struct AsyncValueEnumerableWrapper<TEnumerable, TEnumerator, TSource>
             : IAsyncValueEnumerable<TSource, AsyncValueEnumerableWrapper<TEnumerable, TEnumerator, TSource>.AsyncEnumerator>
-            where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
             readonly TEnumerable source;
@@ -35,6 +35,7 @@ namespace NetFabric.Hyperlinq
                 return new AsyncEnumerator(source, cancellationToken);
             }
             readonly IAsyncEnumerator<TSource> IAsyncEnumerable<TSource>.GetAsyncEnumerator(CancellationToken cancellationToken)
+                // ReSharper disable once HeapView.BoxingAllocation
                 => GetAsyncEnumerator(cancellationToken);
 
             [StructLayout(LayoutKind.Auto)]
@@ -50,7 +51,6 @@ namespace NetFabric.Hyperlinq
                     this.cancellationToken = cancellationToken;
                 }
 
-                [MaybeNull]
                 public readonly TSource Current 
                     => enumerator.Current;
                 readonly TSource IAsyncEnumerator<TSource>.Current
@@ -71,18 +71,12 @@ namespace NetFabric.Hyperlinq
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public Task<TSource[]> ToArrayAsync(CancellationToken cancellationToken = default)
-                => Task<TSource[]>.Factory.StartNew(
-                    source => ValueEnumerableExtensions.ToArray<TEnumerable, TEnumerator, TSource>((TEnumerable)source!),
-                    source,
-                    cancellationToken);
+            public ValueTask<TSource[]> ToArrayAsync(CancellationToken cancellationToken = default)
+                => new(result: source.ToArray<TEnumerable, TEnumerator, TSource>());
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public Task<List<TSource>> ToListAsync(CancellationToken cancellationToken = default)
-                => Task<List<TSource>>.Factory.StartNew(
-                    source => ValueEnumerableExtensions.ToList<TEnumerable, TEnumerator, TSource>((TEnumerable)source!),
-                    source,
-                    cancellationToken);
+            public ValueTask<List<TSource>> ToListAsync(CancellationToken cancellationToken = default)
+                => new(result: source.ToList<TEnumerable, TEnumerator, TSource>());
         }
     }
 }

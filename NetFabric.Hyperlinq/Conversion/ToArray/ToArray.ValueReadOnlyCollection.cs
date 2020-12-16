@@ -11,27 +11,26 @@ namespace NetFabric.Hyperlinq
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static TSource[] ToArray<TEnumerable, TEnumerator, TSource>(this TEnumerable source)
-            where TEnumerable : notnull, IValueReadOnlyCollection<TSource, TEnumerator>
+            where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
 #if NET5_0
             var result = GC.AllocateUninitializedArray<TSource>(source.Count);
 #else
+            // ReSharper disable once HeapView.ObjectAllocation.Evident
             var result = new TSource[source.Count];
 #endif
-            ValueReadOnlyCollectionExtensions.Copy<TEnumerable, TEnumerator, TSource>(source, result);
+            Copy<TEnumerable, TEnumerator, TSource>(source, result);
             return result;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static IMemoryOwner<TSource> ToArray<TEnumerable, TEnumerator, TSource>(this TEnumerable source, MemoryPool<TSource> pool)
-            where TEnumerable : notnull, IValueReadOnlyCollection<TSource, TEnumerator>
+            where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
-            Debug.Assert(pool is object);
-
             var result = pool.RentSliced(source.Count);
-            ValueReadOnlyCollectionExtensions.Copy<TEnumerable, TEnumerator, TSource>(source, result.Memory.Span);
+            Copy<TEnumerable, TEnumerator, TSource>(source, result.Memory.Span);
             return result;
         }
 
@@ -39,24 +38,25 @@ namespace NetFabric.Hyperlinq
 
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static TResult[] ToArray<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, NullableSelector<TSource, TResult> selector)
-            where TEnumerable : notnull, IValueReadOnlyCollection<TSource, TEnumerator>
+        static TResult[] ToArray<TEnumerable, TEnumerator, TSource, TResult, TSelector>(this TEnumerable source, TSelector selector)
+            where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
+            where TSelector : struct, IFunction<TSource, TResult>
         {
+            // ReSharper disable once HeapView.ObjectAllocation.Evident
             var array = new TResult[source.Count];
-            ValueReadOnlyCollectionExtensions.Copy<TEnumerable, TEnumerator, TSource, TResult>(source, array, selector);
+            Copy<TEnumerable, TEnumerator, TSource, TResult, TSelector>(source, array, selector);
             return array;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static IMemoryOwner<TResult> ToArray<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, NullableSelector<TSource, TResult> selector, MemoryPool<TResult> pool)
-            where TEnumerable : notnull, IValueReadOnlyCollection<TSource, TEnumerator>
+        static IMemoryOwner<TResult> ToArray<TEnumerable, TEnumerator, TSource, TResult, TSelector>(this TEnumerable source, TSelector selector, MemoryPool<TResult> pool)
+            where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
+            where TSelector : struct, IFunction<TSource, TResult>
         {
-            Debug.Assert(pool is object);
-
             var result = pool.RentSliced(source.Count);
-            ValueReadOnlyCollectionExtensions.Copy<TEnumerable, TEnumerator, TSource, TResult>(source, result.Memory.Span, selector);
+            Copy<TEnumerable, TEnumerator, TSource, TResult, TSelector>(source, result.Memory.Span, selector);
             return result;
         }
 
@@ -64,24 +64,25 @@ namespace NetFabric.Hyperlinq
 
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static TResult[] ToArray<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, NullableSelectorAt<TSource, TResult> selector)
-            where TEnumerable : notnull, IValueReadOnlyCollection<TSource, TEnumerator>
+        static TResult[] ToArrayAt<TEnumerable, TEnumerator, TSource, TResult, TSelector>(this TEnumerable source, TSelector selector)
+            where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
+            where TSelector : struct, IFunction<TSource, int, TResult>
         {
+            // ReSharper disable once HeapView.ObjectAllocation.Evident
             var array = new TResult[source.Count];
-            ValueReadOnlyCollectionExtensions.Copy<TEnumerable, TEnumerator, TSource, TResult>(source, array, selector);
+            CopyAt<TEnumerable, TEnumerator, TSource, TResult, TSelector>(source, array, selector);
             return array;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static IMemoryOwner<TResult> ToArray<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, NullableSelectorAt<TSource, TResult> selector, MemoryPool<TResult> pool)
-            where TEnumerable : notnull, IValueReadOnlyCollection<TSource, TEnumerator>
+        static IMemoryOwner<TResult> ToArrayAt<TEnumerable, TEnumerator, TSource, TResult, TSelector>(this TEnumerable source, TSelector selector, MemoryPool<TResult> pool)
+            where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
+            where TSelector : struct, IFunction<TSource, int, TResult>
         {
-            Debug.Assert(pool is object);
-
             var result = pool.RentSliced(source.Count);
-            ValueReadOnlyCollectionExtensions.Copy<TEnumerable, TEnumerator, TSource, TResult>(source, result.Memory.Span, selector);
+            CopyAt<TEnumerable, TEnumerator, TSource, TResult, TSelector>(source, result.Memory.Span, selector);
             return result;
         }
     }

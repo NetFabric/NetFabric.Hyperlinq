@@ -1,79 +1,38 @@
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
     public static partial class ValueReadOnlyCollectionExtensions
     {
-        
-        public static Option<TSource> Single<TEnumerable, TEnumerator, TSource>(this TEnumerable source) 
-            where TEnumerable : notnull, IValueReadOnlyCollection<TSource, TEnumerator>
+
+        public static Option<TSource> Single<TEnumerable, TEnumerator, TSource>(this TEnumerable source)
+            where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
-        {
-            switch (source.Count)
+            => source.Count switch
             {
-                case 0:
-                    return Option.None;
+                1 => ValueEnumerableExtensions.Single<TEnumerable, TEnumerator, TSource>(source),
+                _ => Option.None
+            };
 
-                case 1:
-                    using (var enumerator = source.GetEnumerator())
-                    {
-                        if (enumerator.MoveNext())
-                            return Option.Some(enumerator.Current);
-                    }
-                    return Option.None;
-
-                default:
-                    return Option.None;
-            }
-        }
+        public static Option<TResult> Single<TEnumerable, TEnumerator, TSource, TResult, TSelector>(this TEnumerable source, TSelector selector) 
+            where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
+            where TEnumerator : struct, IEnumerator<TSource>
+            where TSelector : struct, IFunction<TSource, TResult>
+            => source.Count switch
+            {
+                1 => ValueEnumerableExtensions.Single<TEnumerable, TEnumerator, TSource, TResult, TSelector>(source, selector),
+                _ => Option.None
+            };
 
         
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Option<TResult> Single<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, NullableSelector<TSource, TResult> selector) 
-            where TEnumerable : notnull, IValueReadOnlyCollection<TSource, TEnumerator>
+        public static Option<TResult> SingleAt<TEnumerable, TEnumerator, TSource, TResult, TSelector>(this TEnumerable source, TSelector selector) 
+            where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
-        {
-            switch (source.Count)
+            where TSelector : struct, IFunction<TSource, int, TResult>
+            => source.Count switch
             {
-                case 0:
-                    return Option.None;
-
-                case 1:
-                    using (var enumerator = source.GetEnumerator())
-                    {
-                        if (enumerator.MoveNext())
-                            return Option.Some(selector(enumerator.Current));
-                    }
-                    return Option.None;
-
-                default:
-                    return Option.None;
-            }
-        }
-
-        
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Option<TResult> Single<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, NullableSelectorAt<TSource, TResult> selector) 
-            where TEnumerable : notnull, IValueReadOnlyCollection<TSource, TEnumerator>
-            where TEnumerator : struct, IEnumerator<TSource>
-        {
-            switch (source.Count)
-            {
-                case 0:
-                    return Option.None;
-
-                case 1:
-                    using (var enumerator = source.GetEnumerator())
-                    {
-                        if (enumerator.MoveNext())
-                            return Option.Some(selector(enumerator.Current, 0));
-                    }
-                    return Option.None;
-
-                default:
-                    return Option.None;
-            }
-        }
+                1 => ValueEnumerableExtensions.SingleAt<TEnumerable, TEnumerator, TSource, TResult, TSelector>(source, selector),
+                _ => Option.None
+            };
     }
 }

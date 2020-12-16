@@ -8,7 +8,7 @@ namespace NetFabric.Hyperlinq
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ArraySegment<TSource> AsArraySegment<TSource>(this List<TSource> source)
-            => new ArraySegment<TSource>(source.GetItems(), 0, source.Count);
+            => new(source.GetItems(), 0, source.Count);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Span<TSource> AsSpan<TSource>(this List<TSource> source)
@@ -18,9 +18,10 @@ namespace NetFabric.Hyperlinq
         public static Memory<TSource> AsMemory<TSource>(this List<TSource> source)
             => source.GetItems().AsMemory().Slice(0, source.Count);
 
+        // ReSharper disable once ClassNeverInstantiated.Local
         class ListLayout<TSource>
         {
-            public TSource[] Items = default!;
+            public readonly TSource[] Items = default!;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

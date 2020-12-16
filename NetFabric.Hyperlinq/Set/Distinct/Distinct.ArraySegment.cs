@@ -12,7 +12,7 @@ namespace NetFabric.Hyperlinq
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ArraySegmentDistinctEnumerable<TSource> Distinct<TSource>(this in ArraySegment<TSource> source, IEqualityComparer<TSource>? comparer = default)
-            => new ArraySegmentDistinctEnumerable<TSource>(source, comparer);
+            => new(source, comparer);
 
         [StructLayout(LayoutKind.Auto)]
         public readonly partial struct ArraySegmentDistinctEnumerable<TSource>
@@ -30,10 +30,12 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly Enumerator GetEnumerator()
-                => new Enumerator(in this);
+                => new(in this);
             readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator()
+                // ReSharper disable once HeapView.BoxingAllocation
                 => new Enumerator(in this);
             readonly IEnumerator IEnumerable.GetEnumerator()
+                // ReSharper disable once HeapView.BoxingAllocation
                 => new Enumerator(in this);
 
             [StructLayout(LayoutKind.Sequential)]
@@ -53,15 +55,15 @@ namespace NetFabric.Hyperlinq
                     end = index + enumerable.source.Count;
                 }
 
-                [MaybeNull]
                 public TSource Current 
                 {
                     [MethodImpl(MethodImplOptions.AggressiveInlining)]
                     get => source![index];
                 }
                 readonly TSource IEnumerator<TSource>.Current
-                    => source![index]!;
-                readonly object? IEnumerator.Current
+                    => source![index];
+                readonly object IEnumerator.Current
+                    // ReSharper disable once HeapView.PossibleBoxingAllocation
                     => source![index];
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -90,15 +92,15 @@ namespace NetFabric.Hyperlinq
                 {
                     if (source.IsWhole())
                     {
-                        foreach (var item in source.Array)
+                        foreach (var item in source.Array!)
                             _ = set.Add(item);
                     }
                     else
                     {
-                        var array = source.Array;
+                        var array = source.Array!;
                         var end = source.Offset + source.Count - 1;
                         for (var index = source.Offset; index <= end; index++)
-                            _ = set.Add(array![index]);
+                            _ = set.Add(array[index]);
                     }
                 }
                 return set;
@@ -106,9 +108,11 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly int Count()
-                => source.Count == 0
-                    ? 0
-                    : GetSet().Count;
+                => source.Count switch
+                {
+                    0 => 0,
+                    _ => GetSet().Count
+                };
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly bool Any()
@@ -116,21 +120,28 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly TSource[] ToArray()
-                => source.Count == 0
-                    ? Array.Empty<TSource>()
-                    : GetSet().ToArray();
+                => source.Count switch
+                {
+                    0 => Array.Empty<TSource>(),
+                    _ => GetSet().ToArray()
+                };
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly IMemoryOwner<TSource> ToArray(MemoryPool<TSource> pool)
-                => source.Count == 0
-                    ? pool.Rent(0)
-                    : GetSet().ToArray(pool);
+                => source.Count switch
+                {
+                    0 => pool.Rent(0),
+                    _ => GetSet().ToArray(pool)
+                };
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly List<TSource> ToList()
-                => source.Count == 0
-                    ? new List<TSource>()
-                    : GetSet().ToList();
+                => source.Count switch
+                {
+                    // ReSharper disable once HeapView.ObjectAllocation.Evident
+                    0 => new List<TSource>(),
+                    _ => GetSet().ToList()
+                };
         }
     }
 }

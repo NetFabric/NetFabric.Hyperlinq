@@ -13,7 +13,7 @@ namespace NetFabric.Hyperlinq
     public static partial class AsyncValueEnumerable
     {
         
-        public static RepeatEnumerable<TSource> Repeat<TSource>([AllowNull] TSource value, int count)
+        public static RepeatEnumerable<TSource> Repeat<TSource>(TSource value, int count)
         {
             if (count < 0) Throw.ArgumentOutOfRangeException(nameof(count));
 
@@ -24,18 +24,19 @@ namespace NetFabric.Hyperlinq
         public readonly partial struct RepeatEnumerable<TSource>
             : IAsyncValueEnumerable<TSource, RepeatEnumerable<TSource>.DisposableAsyncEnumerator>
         {
-            [AllowNull, MaybeNull] readonly TSource value;
+            readonly TSource value;
             readonly int count;
 
-            internal RepeatEnumerable([AllowNull] TSource value, int count)
+            internal RepeatEnumerable(TSource value, int count)
                 => (this.value, this.count) = (value, count);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly AsyncEnumerator GetAsyncEnumerator(CancellationToken cancellationToken = default) 
-                => new AsyncEnumerator(in this, cancellationToken);
+                => new(in this, cancellationToken);
             readonly DisposableAsyncEnumerator IAsyncValueEnumerable<TSource, DisposableAsyncEnumerator>.GetAsyncEnumerator(CancellationToken cancellationToken) 
-                => new DisposableAsyncEnumerator(in this, cancellationToken);
+                => new(in this, cancellationToken);
             readonly IAsyncEnumerator<TSource> IAsyncEnumerable<TSource>.GetAsyncEnumerator(CancellationToken cancellationToken) 
+                // ReSharper disable once HeapView.BoxingAllocation
                 => new DisposableAsyncEnumerator(in this, cancellationToken);
 
             [StructLayout(LayoutKind.Sequential)]
@@ -53,7 +54,6 @@ namespace NetFabric.Hyperlinq
                     this.cancellationToken = cancellationToken;
                 }
 
-                [MaybeNull]
                 public readonly TSource Current { get; }
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -79,8 +79,7 @@ namespace NetFabric.Hyperlinq
                     end = counter + enumerable.count;
                     this.cancellationToken = cancellationToken;
                 }
-
-                [MaybeNull]
+                
                 public readonly TSource Current { get; }
                 readonly TSource IAsyncEnumerator<TSource>.Current
                     => Current;
@@ -109,12 +108,12 @@ namespace NetFabric.Hyperlinq
                     counter = -1;
                     end = counter + enumerable.count;
                 }
-
-                [MaybeNull]
+                
                 public readonly TSource Current { get; }
                 readonly TSource IEnumerator<TSource>.Current
                     => Current;
-                readonly object? IEnumerator.Current
+                readonly object IEnumerator.Current
+                    // ReSharper disable once HeapView.PossibleBoxingAllocation
                     => Current;
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -141,11 +140,11 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public ValueTask<bool> AllAsync(Predicate<TSource> predicate)
-                => new ValueTask<bool>(result: count == 0 || predicate(value));
+                => new(result: count == 0 || predicate(value));
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public ValueTask<bool> AnyAsync()
-                => new ValueTask<bool>(result: count != 0);
+                => new(result: count != 0);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public ValueTask<bool> ContainsAsync(TSource value, IEqualityComparer<TSource>? comparer)
@@ -154,11 +153,17 @@ namespace NetFabric.Hyperlinq
                     : new ValueTask<bool>(result: count != 0 && comparer.Equals(this.value, value));
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public RepeatEnumerable<TResult> Select<TResult>(NullableSelector<TSource, TResult> selector) 
-                => new RepeatEnumerable<TResult>(selector(value), count);
+            public RepeatEnumerable<TResult> Select<TResult>(Func<TSource, CancellationToken, ValueTask<TResult>> selector) 
+                => Select<TResult, AsyncFunctionWrapper<TSource, TResult>>(new AsyncFunctionWrapper<TSource, TResult>(selector));
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public RepeatEnumerable<TResult> Select<TResult, TSelector>(TSelector selector = default) 
+                where TSelector : struct, IAsyncFunction<TSource, TResult>
+                => new(selector.InvokeAsync(value, CancellationToken.None).GetAwaiter().GetResult(), count);
 
             public ValueTask<TSource[]> ToArrayAsync(CancellationToken cancellationToken = default)
             {
+                // ReSharper disable once HeapView.ObjectAllocation.Evident
                 var array = new TSource[count];
                 if (value is object)
                 {
@@ -187,7 +192,8 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public ValueTask<List<TSource>> ToListAsync(CancellationToken cancellationToken = default)
-                => new ValueTask<List<TSource>>(result: new List<TSource>(new RangeToListCollection(value, count, cancellationToken)));
+                // ReSharper disable once HeapView.ObjectAllocation.Evident
+                => new(result: new List<TSource>(collection: new RangeToListCollection(value, count, cancellationToken)));
 
             sealed class RangeToListCollection
                 : ToListCollectionBase<TSource>

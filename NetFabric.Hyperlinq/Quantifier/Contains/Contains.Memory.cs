@@ -9,8 +9,8 @@ namespace NetFabric.Hyperlinq
     {
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool Contains<TSource>(this Memory<TSource> source, [AllowNull] TSource value, IEqualityComparer<TSource>? comparer = null)
-            => Contains((ReadOnlySpan<TSource>)source.Span, value, comparer);
+        public static bool Contains<TSource>(this Memory<TSource> source, TSource value, IEqualityComparer<TSource>? comparer = default)
+            => ((ReadOnlyMemory<TSource>)source).Contains(value, comparer);
     }
 }
 

@@ -13,14 +13,14 @@ namespace NetFabric.Hyperlinq
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static TakeEnumerable<TEnumerable, TEnumerator, TSource> Take<TEnumerable, TEnumerator, TSource>(this TEnumerable source, int count)
-            where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
-            => new TakeEnumerable<TEnumerable, TEnumerator, TSource>(in source, count);
+            => new(in source, count);
 
         [StructLayout(LayoutKind.Auto)]
         public readonly partial struct TakeEnumerable<TEnumerable, TEnumerator, TSource>
             : IAsyncValueEnumerable<TSource, TakeEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator>
-            where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
             readonly TEnumerable source;
@@ -32,7 +32,7 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly Enumerator GetAsyncEnumerator(CancellationToken cancellationToken = default)
-                => new Enumerator(in this, cancellationToken);
+                => new(in this, cancellationToken);
             readonly IAsyncEnumerator<TSource> IAsyncEnumerable<TSource>.GetAsyncEnumerator(CancellationToken cancellationToken)
                 => new Enumerator(in this, cancellationToken);
 
@@ -63,7 +63,6 @@ namespace NetFabric.Hyperlinq
                     u__2 = default;
                 }
 
-                [MaybeNull]
                 public readonly TSource Current
                     => enumerator.Current;
                 readonly TSource IAsyncEnumerator<TSource>.Current
@@ -174,7 +173,7 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TakeEnumerable<TEnumerable, TEnumerator, TSource> Take(int count)
-                => AsyncValueEnumerableExtensions.Take<TEnumerable, TEnumerator, TSource>(source, Math.Min(this.count, count));
+                => source.Take<TEnumerable, TEnumerator, TSource>(Math.Min(this.count, count));
         }
     }
 }

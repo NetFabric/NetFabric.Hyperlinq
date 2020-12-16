@@ -9,28 +9,29 @@ namespace NetFabric.Hyperlinq
         public static Option<TSource> ElementAt<TSource>(this in ArraySegment<TSource> source, int index)
             => index < 0 || index >= source.Count
                 ? Option.None
-                : Option.Some(source.Array[index + source.Offset]);
+                : Option.Some(source.Array![index + source.Offset]);
 
-        static Option<TSource> ElementAt<TSource>(this in ArraySegment<TSource> source, int index, Predicate<TSource> predicate)
+        static Option<TSource> ElementAt<TSource, TPredicate>(this in ArraySegment<TSource> source, int index, TPredicate predicate)
+            where TPredicate : struct, IFunction<TSource, bool>
         {
             if (source.Any() && index >= 0)
             {
                 if (source.IsWhole())
                 {
-                    foreach (var item in source.Array)
+                    foreach (var item in source.Array!)
                     {
-                        if (predicate(item) && index-- == 0)
+                        if (predicate.Invoke(item) && index-- == 0)
                             return Option.Some(item);
                     }
                 }
                 else
                 {
-                    var array = source.Array;
+                    var array = source.Array!;
                     var end = source.Offset + source.Count - 1;
                     for (var sourceIndex = source.Offset; sourceIndex <= end; sourceIndex++)
                     {
-                        var item = array![sourceIndex];
-                        if (predicate(item) && index-- == 0)
+                        var item = array[sourceIndex];
+                        if (predicate.Invoke(item) && index-- == 0)
                             return Option.Some(item);
                     }
                 }
@@ -39,16 +40,17 @@ namespace NetFabric.Hyperlinq
         }
 
 
-        static Option<TSource> ElementAt<TSource>(this in ArraySegment<TSource> source, int index, PredicateAt<TSource> predicate)
+        static Option<TSource> ElementAtAt<TSource, TPredicate>(this in ArraySegment<TSource> source, int index, TPredicate predicate)
+            where TPredicate : struct, IFunction<TSource, int, bool>
         {
             if (source.Any() && index >= 0)
             {
                 if (source.IsWhole())
                 {
                     var sourceIndex = 0;
-                    foreach (var item in source.Array)
+                    foreach (var item in source.Array!)
                     {
-                        if (predicate(item, sourceIndex) && index-- == 0)
+                        if (predicate.Invoke(item, sourceIndex) && index-- == 0)
                             return Option.Some(item);
 
                         sourceIndex++;
@@ -56,26 +58,25 @@ namespace NetFabric.Hyperlinq
                 }
                 else
                 {
+                    var array = source.Array!;
                     if (source.Offset == 0)
                     {
-                        var array = source.Array;
                         var end = source.Count - 1;
                         for (var sourceIndex = 0; sourceIndex <= end; sourceIndex++)
                         {
-                            var item = array![sourceIndex];
-                            if (predicate(item, sourceIndex) && index-- == 0)
+                            var item = array[sourceIndex];
+                            if (predicate.Invoke(item, sourceIndex) && index-- == 0)
                                 return Option.Some(item);
                         }
                     }
                     else
                     {
-                        var array = source.Array;
                         var offset = source.Offset;
                         var end = source.Count - 1;
                         for (var sourceIndex = 0; sourceIndex <= end; sourceIndex++)
                         {
-                            var item = array![sourceIndex + offset];
-                            if (predicate(item, sourceIndex) && index-- == 0)
+                            var item = array[sourceIndex + offset];
+                            if (predicate.Invoke(item, sourceIndex) && index-- == 0)
                                 return Option.Some(item);
                         }
                     }
@@ -86,40 +87,44 @@ namespace NetFabric.Hyperlinq
 
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static Option<TResult> ElementAt<TSource, TResult>(this in ArraySegment<TSource> source, int index, NullableSelector<TSource, TResult> selector)
+        static Option<TResult> ElementAt<TSource, TResult, TSelector>(this in ArraySegment<TSource> source, int index, TSelector selector)
+            where TSelector : struct, IFunction<TSource, TResult>
             => index < 0 || index >= source.Count
                 ? Option.None
-                : Option.Some(selector(source.Array[index + source.Offset]));
+                : Option.Some(selector.Invoke(source.Array![index + source.Offset]));
 
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Option<TResult> ElementAt<TSource, TResult>(this in ArraySegment<TSource> source, int index, NullableSelectorAt<TSource, TResult> selector)
+        static Option<TResult> ElementAtAt<TSource, TResult, TSelector>(this in ArraySegment<TSource> source, int index, TSelector selector)
+            where TSelector : struct, IFunction<TSource, int, TResult>
             => index < 0 || index >= source.Count
                 ? Option.None
-                : Option.Some(selector(source.Array[index + source.Offset], index));
+                : Option.Some(selector.Invoke(source.Array![index + source.Offset], index));
 
 
-        static Option<TResult> ElementAt<TSource, TResult>(this in ArraySegment<TSource> source, int index, Predicate<TSource> predicate, NullableSelector<TSource, TResult> selector)
+        static Option<TResult> ElementAt<TSource, TResult, TPredicate, TSelector>(this in ArraySegment<TSource> source, int index, TPredicate predicate, TSelector selector)
+            where TPredicate : struct, IFunction<TSource, bool>
+            where TSelector : struct, IFunction<TSource, TResult>
         {
             if (source.Any() && index >= 0)
             {
                 if (source.IsWhole())
                 {
-                    foreach (var item in source.Array)
+                    foreach (var item in source.Array!)
                     {
-                        if (predicate(item) && index-- == 0)
-                            return Option.Some(selector(item));
+                        if (predicate.Invoke(item) && index-- == 0)
+                            return Option.Some(selector.Invoke(item));
                     }
                 }
                 else
                 {
-                    var array = source.Array;
+                    var array = source.Array!;
                     var end = source.Offset + source.Count - 1;
                     for (var sourceIndex = source.Offset; sourceIndex <= end; sourceIndex++)
                     {
-                        var item = array![sourceIndex];
-                        if (predicate(item) && index-- == 0)
-                            return Option.Some(selector(item));
+                        var item = array[sourceIndex];
+                        if (predicate.Invoke(item) && index-- == 0)
+                            return Option.Some(selector.Invoke(item));
                     }
                 }
             }

@@ -12,42 +12,46 @@ namespace NetFabric.Hyperlinq
     {
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static SelectAtEnumerable<TEnumerable, TEnumerator, TSource, TResult> Select<TEnumerable, TEnumerator, TSource, TResult>(
-            this TEnumerable source, 
-            NullableSelectorAt<TSource, TResult> selector)
-            where TEnumerable : notnull, IValueReadOnlyCollection<TSource, TEnumerator>
+        public static SelectAtEnumerable<TEnumerable, TEnumerator, TSource, TResult, FunctionWrapper<TSource, int, TResult>> Select<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, Func<TSource, int, TResult> selector)
+            where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
-        {
-            if(selector is null) Throw.ArgumentNullException(nameof(selector));
+            => SelectAt<TEnumerable, TEnumerator, TSource, TResult, FunctionWrapper<TSource, int, TResult>>(source, new FunctionWrapper<TSource, int, TResult>(selector));
 
-            return new SelectAtEnumerable<TEnumerable, TEnumerator, TSource, TResult>(in source, selector);
-        }
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static SelectAtEnumerable<TEnumerable, TEnumerator, TSource, TResult, TSelector> SelectAt<TEnumerable, TEnumerator, TSource, TResult, TSelector>(this TEnumerable source, TSelector selector)
+            where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
+            where TEnumerator : struct, IEnumerator<TSource>
+            where TSelector : struct, IFunction<TSource, int, TResult>
+            => new(in source, selector);
 
         [GeneratorMapping("TSource", "TResult")]
         [GeneratorMapping("TResult", "TResult2")]
         [StructLayout(LayoutKind.Auto)]
-        public readonly partial struct SelectAtEnumerable<TEnumerable, TEnumerator, TSource, TResult>
-            : IValueReadOnlyCollection<TResult, SelectAtEnumerable<TEnumerable, TEnumerator, TSource, TResult>.Enumerator>
+        public partial struct SelectAtEnumerable<TEnumerable, TEnumerator, TSource, TResult, TSelector>
+            : IValueReadOnlyCollection<TResult, SelectAtEnumerable<TEnumerable, TEnumerator, TSource, TResult, TSelector>.Enumerator>
             , ICollection<TResult>
-            where TEnumerable : notnull, IValueReadOnlyCollection<TSource, TEnumerator>
+            where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
+            where TSelector : struct, IFunction<TSource, int, TResult>
         {
             readonly TEnumerable source;
-            readonly NullableSelectorAt<TSource, TResult> selector;
+            TSelector selector;
 
-            internal SelectAtEnumerable(in TEnumerable source, NullableSelectorAt<TSource, TResult> selector)
-            {
-                this.source = source;
-                this.selector = selector;
-            }
+            internal SelectAtEnumerable(in TEnumerable source, TSelector selector)
+                => (this.source, this.selector) = (source, selector);
 
-            public readonly int Count => source.Count;
+            public readonly int Count 
+                => source.Count;
 
-            
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly Enumerator GetEnumerator() => new Enumerator(in this);
-            readonly IEnumerator<TResult> IEnumerable<TResult>.GetEnumerator() => new Enumerator(in this);
-            readonly IEnumerator IEnumerable.GetEnumerator() => new Enumerator(in this);
+            public readonly Enumerator GetEnumerator() 
+                => new(in this);
+            readonly IEnumerator<TResult> IEnumerable<TResult>.GetEnumerator() 
+                // ReSharper disable once HeapView.BoxingAllocation
+                => new Enumerator(in this);
+            readonly IEnumerator IEnumerable.GetEnumerator() 
+                // ReSharper disable once HeapView.BoxingAllocation
+                => new Enumerator(in this);
 
             bool ICollection<TResult>.IsReadOnly  
                 => true;
@@ -60,13 +64,13 @@ namespace NetFabric.Hyperlinq
                     {
                         using var enumerator = source.GetEnumerator();
                         for (var index = 0; enumerator.MoveNext(); index++)
-                            array[index + arrayIndex] = selector(enumerator.Current, index)!;
+                            array[index + arrayIndex] = selector.Invoke(enumerator.Current, index)!;
                     }
                 }
             }
 
             public bool Contains(TResult item)
-                => ValueReadOnlyCollectionExtensions.Contains<TEnumerable, TEnumerator, TSource, TResult>(source, item, selector);
+                => ContainsAt<TEnumerable, TEnumerator, TSource, TResult, TSelector>(source, item, selector);
 
             [ExcludeFromCodeCoverage]
             void ICollection<TResult>.Add(TResult item) 
@@ -85,25 +89,25 @@ namespace NetFabric.Hyperlinq
                 int index;
                 [SuppressMessage("Style", "IDE0044:Add readonly modifier")]
                 TEnumerator enumerator; // do not make readonly
-                readonly NullableSelectorAt<TSource, TResult> selector;
+                TSelector selector;
 
-                internal Enumerator(in SelectAtEnumerable<TEnumerable, TEnumerator, TSource, TResult> enumerable)
+                internal Enumerator(in SelectAtEnumerable<TEnumerable, TEnumerator, TSource, TResult, TSelector> enumerable)
                 {
                     enumerator = enumerable.source.GetEnumerator();
                     selector = enumerable.selector;
                     index = -1;
                 }
 
-                [MaybeNull]
                 public readonly TResult Current
                 {
                     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                    get => selector(enumerator.Current, index);
+                    get => selector.Invoke(enumerator.Current, index);
                 }
                 readonly TResult IEnumerator<TResult>.Current 
-                    => selector(enumerator.Current, index)!;
-                readonly object? IEnumerator.Current
-                    => selector(enumerator.Current, index);
+                    => selector.Invoke(enumerator.Current, index);
+                readonly object IEnumerator.Current
+                    // ReSharper disable once HeapView.PossibleBoxingAllocation
+                    => selector.Invoke(enumerator.Current, index);
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public bool MoveNext()
@@ -124,56 +128,77 @@ namespace NetFabric.Hyperlinq
                     => enumerator.Dispose();
             }
 
+            #region Aggregation
+            
+            #endregion
+            #region Quantifier
+
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Any()
                 => source.Count != 0;
+            
+            #endregion
+            #region Filtering
+            
+            #endregion
+            #region Projection
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public ValueReadOnlyCollectionExtensions.SelectAtEnumerable<TEnumerable, TEnumerator, TSource, TResult2> Select<TResult2>(NullableSelector<TResult, TResult2> selector)
-                => ValueReadOnlyCollectionExtensions.Select<TEnumerable, TEnumerator, TSource, TResult2>(source, Utils.Combine(this.selector, selector));
-
+            public SelectAtEnumerable<TEnumerable, TEnumerator, TSource, TResult2, SelectorAtSelectorCombination<TSelector, FunctionWrapper<TResult, TResult2>, TSource, TResult, TResult2>> Select<TResult2>(Func<TResult, TResult2> selector)
+                => Select<TResult2, FunctionWrapper<TResult, TResult2>>(new FunctionWrapper<TResult, TResult2>(selector));
+            
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public ValueReadOnlyCollectionExtensions.SelectAtEnumerable<TEnumerable, TEnumerator, TSource, TResult2> Select<TResult2>(NullableSelectorAt<TResult, TResult2> selector)
-                => ValueReadOnlyCollectionExtensions.Select<TEnumerable, TEnumerator, TSource, TResult2>(source, Utils.Combine(this.selector, selector));
-
+            public SelectAtEnumerable<TEnumerable, TEnumerator, TSource, TResult2, SelectorAtSelectorCombination<TSelector, TSelector2, TSource, TResult, TResult2>> Select<TResult2, TSelector2>(TSelector2 selector)
+                where TSelector2 : struct, IFunction<TResult, TResult2>
+                => ValueReadOnlyCollectionExtensions.SelectAt<TEnumerable, TEnumerator, TSource, TResult2, SelectorAtSelectorCombination<TSelector, TSelector2, TSource, TResult, TResult2>>(source, new SelectorAtSelectorCombination<TSelector, TSelector2, TSource, TResult, TResult2>(this.selector, selector));
+            
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public SelectAtEnumerable<TEnumerable, TEnumerator, TSource, TResult2, SelectorAtSelectorAtCombination<TSelector, FunctionWrapper<TResult, int, TResult2>, TSource, TResult, TResult2>> Select<TResult2>(Func<TResult, int, TResult2> selector)
+                => SelectAt<TResult2, FunctionWrapper<TResult, int, TResult2>>(new FunctionWrapper<TResult, int, TResult2>(selector));
+            
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public SelectAtEnumerable<TEnumerable, TEnumerator, TSource, TResult2, SelectorAtSelectorAtCombination<TSelector, TSelector2, TSource, TResult, TResult2>> SelectAt<TResult2, TSelector2>(TSelector2 selector)
+                where TSelector2 : struct, IFunction<TResult, int, TResult2>
+                => ValueReadOnlyCollectionExtensions.SelectAt<TEnumerable, TEnumerator, TSource, TResult2, SelectorAtSelectorAtCombination<TSelector, TSelector2, TSource, TResult, TResult2>>(source, new SelectorAtSelectorAtCombination<TSelector, TSelector2, TSource, TResult, TResult2>(this.selector, selector));
+            
+            #endregion
+            #region Element
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Option<TResult> ElementAt(int index)
-                => ValueReadOnlyCollectionExtensions.ElementAt<TEnumerable, TEnumerator, TSource, TResult>(source, index, selector);
+                => ElementAtAt<TEnumerable, TEnumerator, TSource, TResult, TSelector>(source, index, selector);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Option<TResult> First()
-                => ValueReadOnlyCollectionExtensions.First<TEnumerable, TEnumerator, TSource, TResult>(source, selector);
+                => FirstAt<TEnumerable, TEnumerator, TSource, TResult, TSelector>(source, selector);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Option<TResult> Single()
-                => ValueReadOnlyCollectionExtensions.Single<TEnumerable, TEnumerator, TSource, TResult>(source, selector);
+                => SingleAt<TEnumerable, TEnumerator, TSource, TResult, TSelector>(source, selector);
+            
+            #endregion
+            #region Conversion
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TResult[] ToArray()
-                => ValueReadOnlyCollectionExtensions.ToArray<TEnumerable, TEnumerator, TSource, TResult>(source, selector);
+                => ToArrayAt<TEnumerable, TEnumerator, TSource, TResult, TSelector>(source, selector);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public IMemoryOwner<TResult> ToArray(MemoryPool<TResult> pool)
-                => ValueReadOnlyCollectionExtensions.ToArray<TEnumerable, TEnumerator, TSource, TResult>(source, selector, pool);
+                => ToArrayAt<TEnumerable, TEnumerator, TSource, TResult, TSelector>(source, selector, pool);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public List<TResult> ToList()
-                => ValueReadOnlyCollectionExtensions.ToList<TEnumerable, TEnumerator, TSource, TResult>(source, selector);
-
-            public Dictionary<TKey, TResult> ToDictionary<TKey>(Selector<TResult, TKey> keySelector, IEqualityComparer<TKey>? comparer = default)
-                where TKey : notnull
-                => ToDictionary<TKey>(keySelector, comparer);
-
-            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Selector<TResult, TKey> keySelector, NullableSelector<TResult, TElement> elementSelector, IEqualityComparer<TKey>? comparer = default)
-                where TKey : notnull
-                => ToDictionary<TKey, TElement>(keySelector, elementSelector, comparer);
+                => ToListAt<TEnumerable, TEnumerator, TSource, TResult, TSelector>(source, selector);
+            
+            #endregion
         }
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int Count<TEnumerable, TEnumerator, TSource, TResult>(this in SelectAtEnumerable<TEnumerable, TEnumerator, TSource, TResult> source)
-            where TEnumerable : notnull, IValueReadOnlyCollection<TSource, TEnumerator>
+        public static int Count<TEnumerable, TEnumerator, TSource, TResult, TSelector>(this in SelectAtEnumerable<TEnumerable, TEnumerator, TSource, TResult, TSelector> source)
+            where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
+            where TSelector : struct, IFunction<TSource, int, TResult>
             => source.Count;
     }
 }

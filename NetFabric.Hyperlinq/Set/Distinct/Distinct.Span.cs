@@ -11,7 +11,7 @@ namespace NetFabric.Hyperlinq
         public static SpanDistinctEnumerable<TSource> Distinct<TSource>(
             this Span<TSource> source, 
             IEqualityComparer<TSource>? comparer = null)
-            => Distinct((ReadOnlySpan<TSource>)source, comparer);
+            => ((ReadOnlySpan<TSource>)source).Distinct(comparer);
     }
 }
 

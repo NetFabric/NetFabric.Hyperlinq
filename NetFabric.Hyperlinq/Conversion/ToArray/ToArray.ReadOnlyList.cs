@@ -11,27 +11,24 @@ namespace NetFabric.Hyperlinq
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static TSource[] ToArray<TList, TSource>(this TList source)
-            where TList : notnull, IReadOnlyList<TSource>
-            => ToArray<TList, TSource>(source, 0, source.Count);
+            where TList : IReadOnlyList<TSource>
+            => source.ToArray<TList, TSource>(0, source.Count);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static IMemoryOwner<TSource> ToArray<TList, TSource>(this TList source, MemoryPool<TSource> pool)
-            where TList : notnull, IReadOnlyList<TSource>
-        {
-            if (pool is null) Throw.ArgumentNullException(nameof(pool));
-
-            return ToArray(source, 0, source.Count, pool);
-        }
+            where TList : IReadOnlyList<TSource>
+            => source.ToArray(0, source.Count, pool);
 
         //////////////////////////////////////////////////////////////////////////////////////////////////
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static TSource[] ToArray<TList, TSource>(this TList source, int offset, int count)
-            where TList : notnull, IReadOnlyList<TSource>
+            where TList : IReadOnlyList<TSource>
         {
 #if NET5_0
             var result = GC.AllocateUninitializedArray<TSource>(count);
 #else
+            // ReSharper disable once HeapView.ObjectAllocation.Evident
             var result = new TSource[count];
 #endif
             ReadOnlyListExtensions.Copy(source, offset, result, 0, count);
@@ -40,28 +37,28 @@ namespace NetFabric.Hyperlinq
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static IMemoryOwner<TSource> ToArray<TList, TSource>(this TList source, int offset, int count, MemoryPool<TSource> pool)
-            where TList : notnull, IReadOnlyList<TSource>
+            where TList : IReadOnlyList<TSource>
         {
-            Debug.Assert(pool is object);
-
             var result = pool.RentSliced(count);
-            ReadOnlyListExtensions.Copy<TList, TSource>(source, offset, result.Memory.Span, count);
+            Copy(source, offset, result.Memory.Span, count);
             return result;
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static TSource[] ToArray<TList, TSource>(this TList source, Predicate<TSource> predicate, int offset, int count)
-            where TList : notnull, IReadOnlyList<TSource>
+        static TSource[] ToArray<TList, TSource, TPredicate>(this TList source, TPredicate predicate, int offset, int count)
+            where TList : IReadOnlyList<TSource>
+            where TPredicate : struct, IFunction<TSource, bool>
         {
             using var arrayBuilder = ToArrayBuilder(source, predicate, offset, count, ArrayPool<TSource>.Shared);
             return arrayBuilder.ToArray();
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static IMemoryOwner<TSource> ToArray<TList, TSource>(this TList source, Predicate<TSource> predicate, int offset, int count, MemoryPool<TSource> pool)
-            where TList : notnull, IReadOnlyList<TSource>
+        static IMemoryOwner<TSource> ToArray<TList, TSource, TPredicate>(this TList source, TPredicate predicate, int offset, int count, MemoryPool<TSource> pool)
+            where TList : IReadOnlyList<TSource>
+            where TPredicate : struct, IFunction<TSource, bool>
         {
             using var arrayBuilder = ToArrayBuilder(source, predicate, offset, count, ArrayPool<TSource>.Shared);
             return arrayBuilder.ToArray(pool);
@@ -71,18 +68,20 @@ namespace NetFabric.Hyperlinq
 
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static TSource[] ToArray<TList, TSource>(this TList source, PredicateAt<TSource> predicate, int offset, int count)
-            where TList : notnull, IReadOnlyList<TSource>
+        static TSource[] ToArrayAt<TList, TSource, TPredicate>(this TList source, TPredicate predicate, int offset, int count)
+            where TList : IReadOnlyList<TSource>
+            where TPredicate : struct, IFunction<TSource, int, bool>
         {
-            using var arrayBuilder = ToArrayBuilder(source, predicate, offset, count, ArrayPool<TSource>.Shared);
+            using var arrayBuilder = ToArrayBuilderAt(source, predicate, offset, count, ArrayPool<TSource>.Shared);
             return arrayBuilder.ToArray();
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static IMemoryOwner<TSource> ToArray<TList, TSource>(this TList source, PredicateAt<TSource> predicate, int offset, int count, MemoryPool<TSource> pool)
-            where TList : notnull, IReadOnlyList<TSource>
+        static IMemoryOwner<TSource> ToArrayAt<TList, TSource, TPredicate>(this TList source, TPredicate predicate, int offset, int count, MemoryPool<TSource> pool)
+            where TList : IReadOnlyList<TSource>
+            where TPredicate : struct, IFunction<TSource, int, bool>
         {
-            using var arrayBuilder = ToArrayBuilder(source, predicate, offset, count, ArrayPool<TSource>.Shared);
+            using var arrayBuilder = ToArrayBuilderAt(source, predicate, offset, count, ArrayPool<TSource>.Shared);
             return arrayBuilder.ToArray(pool);
         }
 
@@ -90,26 +89,27 @@ namespace NetFabric.Hyperlinq
 
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static TResult[] ToArray<TList, TSource, TResult>(this TList source, NullableSelector<TSource, TResult> selector, int offset, int count)
-            where TList : notnull, IReadOnlyList<TSource>
+        static TResult[] ToArray<TList, TSource, TResult, TSelector>(this TList source, TSelector selector, int offset, int count)
+            where TList : IReadOnlyList<TSource>
+            where TSelector : struct, IFunction<TSource, TResult>
         {
 #if NET5_0
             var result = GC.AllocateUninitializedArray<TResult>(count);
 #else
+            // ReSharper disable once HeapView.ObjectAllocation.Evident
             var result = new TResult[count];
 #endif
-            ReadOnlyListExtensions.Copy(source, offset, result, 0, count, selector);
+            ReadOnlyListExtensions.Copy<TList, TSource, TResult, TSelector>(source, offset, result, 0, count, selector);
             return result;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static IMemoryOwner<TResult> ToArray<TList, TSource, TResult>(this TList source, NullableSelector<TSource, TResult> selector, int offset, int count, MemoryPool<TResult> pool)
-            where TList : notnull, IReadOnlyList<TSource>
+        static IMemoryOwner<TResult> ToArray<TList, TSource, TResult, TSelector>(this TList source, TSelector selector, int offset, int count, MemoryPool<TResult> pool)
+            where TList : IReadOnlyList<TSource>
+            where TSelector : struct, IFunction<TSource, TResult>
         {
-            Debug.Assert(pool is object);
-
             var result = pool.RentSliced(count);
-            ReadOnlyListExtensions.Copy(source, offset, result.Memory.Span, count, selector);
+            Copy<TList, TSource, TResult, TSelector>(source, offset, result.Memory.Span, count, selector);
             return result;
         }
 
@@ -117,26 +117,27 @@ namespace NetFabric.Hyperlinq
 
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static TResult[] ToArray<TList, TSource, TResult>(this TList source, NullableSelectorAt<TSource, TResult> selector, int offset, int count)
-            where TList : notnull, IReadOnlyList<TSource>
+        static TResult[] ToArrayAt<TList, TSource, TResult, TSelector>(this TList source, TSelector selector, int offset, int count)
+            where TList : IReadOnlyList<TSource>
+            where TSelector : struct, IFunction<TSource, int, TResult>
         {
 #if NET5_0
             var result = GC.AllocateUninitializedArray<TResult>(count);
 #else
+            // ReSharper disable once HeapView.ObjectAllocation.Evident
             var result = new TResult[count];
 #endif
-            ReadOnlyListExtensions.Copy(source, offset, result, 0, count, selector);
+            CopyAt<TList, TSource, TResult, TSelector>(source, offset, result, 0, count, selector);
             return result;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static IMemoryOwner<TResult> ToArray<TList, TSource, TResult>(this TList source, NullableSelectorAt<TSource, TResult> selector, int offset, int count, MemoryPool<TResult> pool)
-            where TList : notnull, IReadOnlyList<TSource>
+        static IMemoryOwner<TResult> ToArrayAt<TList, TSource, TResult, TSelector>(this TList source, TSelector selector, int offset, int count, MemoryPool<TResult> pool)
+            where TList : IReadOnlyList<TSource>
+            where TSelector : struct, IFunction<TSource, int, TResult>
         {
-            Debug.Assert(pool is object);
-
             var result = pool.RentSliced(count);
-            ReadOnlyListExtensions.Copy(source, offset, result.Memory.Span, count, selector);
+            CopyAt<TList, TSource, TResult, TSelector>(source, offset, result.Memory.Span, count, selector);
             return result;
         }
 
@@ -144,18 +145,22 @@ namespace NetFabric.Hyperlinq
 
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static TResult[] ToArray<TList, TSource, TResult>(this TList source, Predicate<TSource> predicate, NullableSelector<TSource, TResult> selector, int offset, int count)
-            where TList : notnull, IReadOnlyList<TSource>
+        static TResult[] ToArray<TList, TSource, TResult, TPredicate, TSelector>(this TList source, TPredicate predicate, TSelector selector, int offset, int count)
+            where TList : IReadOnlyList<TSource>
+            where TPredicate : struct, IFunction<TSource, bool>
+            where TSelector : struct, IFunction<TSource, TResult>
         {
-            using var arrayBuilder = ToArrayBuilder(source, predicate, selector, offset, count, ArrayPool<TResult>.Shared);
+            using var arrayBuilder = ToArrayBuilder<TList, TSource, TResult, TPredicate, TSelector>(source, predicate, selector, offset, count, ArrayPool<TResult>.Shared);
             return arrayBuilder.ToArray();
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static IMemoryOwner<TResult> ToArray<TList, TSource, TResult>(this TList source, Predicate<TSource> predicate, NullableSelector<TSource, TResult> selector, int offset, int count, MemoryPool<TResult> pool)
-            where TList : notnull, IReadOnlyList<TSource>
+        static IMemoryOwner<TResult> ToArray<TList, TSource, TResult, TPredicate, TSelector>(this TList source, TPredicate predicate, TSelector selector, int offset, int count, MemoryPool<TResult> pool)
+            where TList : IReadOnlyList<TSource>
+            where TPredicate : struct, IFunction<TSource, bool>
+            where TSelector : struct, IFunction<TSource, TResult>
         {
-            using var arrayBuilder = ToArrayBuilder(source, predicate, selector, offset, count, ArrayPool<TResult>.Shared);
+            using var arrayBuilder = ToArrayBuilder<TList, TSource, TResult, TPredicate, TSelector>(source, predicate, selector, offset, count, ArrayPool<TResult>.Shared);
             return arrayBuilder.ToArray(pool);
         }
     }

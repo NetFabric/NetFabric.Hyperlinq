@@ -13,7 +13,7 @@ namespace NetFabric.Hyperlinq
         public static SpanDistinctEnumerable<TSource> Distinct<TSource>(
             this ReadOnlySpan<TSource> source, 
             IEqualityComparer<TSource>? comparer = null)
-            => new SpanDistinctEnumerable<TSource>(source, comparer);
+            => new(source, comparer);
 
         [StructLayout(LayoutKind.Auto)]
         public readonly ref struct SpanDistinctEnumerable<TSource>
@@ -29,7 +29,8 @@ namespace NetFabric.Hyperlinq
 
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly Enumerator GetEnumerator() => new Enumerator(in this);
+            public readonly Enumerator GetEnumerator() 
+                => new(in this);
 
             [StructLayout(LayoutKind.Sequential)]
             public ref struct Enumerator
@@ -78,9 +79,11 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly int Count()
-                => source.Length == 0
-                    ? 0
-                    : GetSet().Count;
+                => source.Length switch
+                {
+                    0 => 0,
+                    _ => GetSet().Count
+                };
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly bool Any()
@@ -88,21 +91,28 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly TSource[] ToArray()
-                => source.Length == 0
-                    ? Array.Empty<TSource>()
-                    : GetSet().ToArray();
+                => source.Length switch
+                {
+                    0 => Array.Empty<TSource>(),
+                    _ => GetSet().ToArray()
+                };
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly IMemoryOwner<TSource> ToArray(MemoryPool<TSource> pool)
-                => source.Length == 0
-                    ? pool.Rent(0)
-                    : GetSet().ToArray(pool);
+                => source.Length switch
+                {
+                    0 => pool.Rent(0),
+                    _ => GetSet().ToArray(pool)
+                };
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly List<TSource> ToList()
-                => source.Length == 0
-                    ? new List<TSource>()
-                    : GetSet().ToList();
+                => source.Length switch
+                {
+                    // ReSharper disable once HeapView.ObjectAllocation.Evident
+                    0 => new List<TSource>(),
+                    _ => GetSet().ToList()
+                };
 
             public readonly bool SequenceEqual(IEnumerable<TSource> other, IEqualityComparer<TSource>? comparer = null)
             {

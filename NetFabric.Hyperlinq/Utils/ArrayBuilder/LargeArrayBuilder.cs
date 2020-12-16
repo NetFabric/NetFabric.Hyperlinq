@@ -22,7 +22,7 @@ namespace NetFabric.Hyperlinq
         : ICollection<T>
         , IDisposable
     {
-        const int DefaultMinCapacity = 4;
+        const int defaultMinCapacity = 4;
 
         readonly ArrayPool<T> pool;
         readonly int maxCapacity;  // The maximum capacity this builder can have.
@@ -72,7 +72,7 @@ namespace NetFabric.Hyperlinq
         /// Otherwise, use <see cref="SlowAdd"/>.
         /// </remarks>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void Add([AllowNull] T item)
+        public void Add(T item)
         {
             Debug.Assert(maxCapacity > Count);
 
@@ -80,7 +80,7 @@ namespace NetFabric.Hyperlinq
             if ((uint)index >= (uint)current.Length)
                 AllocateBuffer();
 
-            current[index++] = item!;
+            current[index++] = item;
             Count++;
         }
 
@@ -89,7 +89,6 @@ namespace NetFabric.Hyperlinq
         /// </summary>
         /// <param name="array">The destination array.</param>
         /// <param name="arrayIndex">The index in <paramref name="array"/> to start copying to.</param>
-        /// <param name="count">The number of items to copy.</param>
         public readonly void CopyTo(T[] array, int arrayIndex)
         {
             Debug.Assert(arrayIndex <= array.Length);
@@ -135,13 +134,15 @@ namespace NetFabric.Hyperlinq
         /// Otherwise, use <see cref="SlowAdd"/>.
         /// </remarks>
         [MethodImpl(MethodImplOptions.NoInlining)]
-        public void SlowAdd([AllowNull] T item) => Add(item);
+        public void SlowAdd(T item) 
+            => Add(item);
 
         /// <summary>
         /// Creates an array from the contents of this builder.
         /// </summary>
         public readonly T[] ToArray()
         {
+            // ReSharper disable once HeapView.ObjectAllocation.Evident
             var array = new T[Count];
             CopyTo(array);
             return array;
@@ -149,7 +150,6 @@ namespace NetFabric.Hyperlinq
 
         public readonly ArraySegment<T> ToArray(ArrayPool<T> pool)
         {
-            Debug.Assert(pool is object);
             var result = pool.RentSliced(Count);
             CopyTo(result.Array!);
             return result;
@@ -157,8 +157,6 @@ namespace NetFabric.Hyperlinq
 
         public readonly IMemoryOwner<T> ToArray(MemoryPool<T> pool)
         {
-            Debug.Assert(pool is object);
-
             var result = pool.RentSliced(Count);
             CopyTo(result.Memory.Span);
             return result;
@@ -184,7 +182,7 @@ namespace NetFabric.Hyperlinq
             // doing min(64, 100 - 64). The lhs represents double the last buffer,
             // the rhs the limit minus the amount we've already allocated.
 
-            var nextCapacity = DefaultMinCapacity;
+            var nextCapacity = defaultMinCapacity;
             if (Count != 0)
             {
                 buffers.Add(current);

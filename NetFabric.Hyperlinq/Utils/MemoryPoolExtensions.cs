@@ -8,6 +8,7 @@ namespace NetFabric.Hyperlinq
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static IMemoryOwner<T> RentSliced<T>(this MemoryPool<T> pool, int count)
+            // ReSharper disable once HeapView.ObjectAllocation.Evident
             => new SlicedMemoryOwner<T>(pool.Rent(count), count);
 
         sealed class SlicedMemoryOwner<T>
