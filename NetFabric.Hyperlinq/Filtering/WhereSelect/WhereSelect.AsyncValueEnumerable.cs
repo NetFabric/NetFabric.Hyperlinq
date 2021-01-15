@@ -58,9 +58,9 @@ namespace NetFabric.Hyperlinq
 
                 int state;
                 AsyncValueTaskMethodBuilder<bool> builder;
-                TSource item;
+                TSource? item;
                 bool s__2;
-                TResult s__3;
+                TResult? s__3;
                 bool s__4;
                 ConfiguredValueTaskAwaitable<bool>.ConfiguredValueTaskAwaiter u__1;
                 ConfiguredValueTaskAwaitable<TResult>.ConfiguredValueTaskAwaiter u__2;
@@ -163,7 +163,7 @@ namespace NetFabric.Hyperlinq
                                 s__2 = awaiter4.GetResult();
                                 if (s__2)
                                 {
-                                    awaiter3 = selector.InvokeAsync(item, cancellationToken).ConfigureAwait(false).GetAwaiter();
+                                    awaiter3 = selector.InvokeAsync(item!, cancellationToken).ConfigureAwait(false).GetAwaiter();
                                     if (!awaiter3.IsCompleted)
                                     {
                                         num = state = 1;

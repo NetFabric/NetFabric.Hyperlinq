@@ -101,9 +101,9 @@ namespace NetFabric.Hyperlinq
                     => selector.Invoke(source![index]);
                 TResult IEnumerator<TResult>.Current 
                     => selector.Invoke(source![index]);
-                object IEnumerator.Current
+                object? IEnumerator.Current
                     // ReSharper disable once HeapView.PossibleBoxingAllocation
-                    => selector.Invoke(source![index]);
+                    => selector.Invoke(source![index])!;
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public bool MoveNext()

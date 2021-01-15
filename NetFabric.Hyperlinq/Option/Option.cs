@@ -257,7 +257,7 @@ namespace NetFabric.Hyperlinq
                 public TResult Current { get; private set; }
                 readonly TResult IEnumerator<TResult>.Current 
                     => Current;
-                readonly object IEnumerator.Current
+                readonly object? IEnumerator.Current
                     // ReSharper disable once HeapView.PossibleBoxingAllocation
                     => Current;
 

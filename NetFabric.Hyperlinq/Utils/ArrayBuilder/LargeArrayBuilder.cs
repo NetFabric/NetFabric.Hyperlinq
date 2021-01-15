@@ -91,12 +91,14 @@ namespace NetFabric.Hyperlinq
         /// <param name="arrayIndex">The index in <paramref name="array"/> to start copying to.</param>
         public readonly void CopyTo(T[] array, int arrayIndex)
         {
+            Debug.Assert(array is not null);
             Debug.Assert(arrayIndex <= array.Length);
 
-            for (var bufferIndex = 0; bufferIndex < buffers.Count; bufferIndex++)
+            var count = buffers.Count;
+            for (var bufferIndex = 0; bufferIndex < count; bufferIndex++)
             {
                 var buffer = buffers[bufferIndex];
-                var length = buffer!.Length;
+                var length = buffer.Length;
                 Array.Copy(buffer, 0, array, arrayIndex, length);
 
                 arrayIndex += length;
@@ -110,10 +112,11 @@ namespace NetFabric.Hyperlinq
         public readonly void CopyTo(Span<T> span)
         {
             var arrayIndex = 0;
-            for (var bufferIndex = 0; bufferIndex < buffers.Count; bufferIndex++)
+            var count = buffers.Count;
+            for (var bufferIndex = 0; bufferIndex < count; bufferIndex++)
             {
                 var buffer = buffers[bufferIndex];
-                var length = buffer!.Length;
+                var length = buffer.Length;
                 buffer.AsSpan().CopyTo(span.Slice(arrayIndex, length));
 
                 arrayIndex += length;
@@ -144,21 +147,24 @@ namespace NetFabric.Hyperlinq
         {
             // ReSharper disable once HeapView.ObjectAllocation.Evident
             var array = new T[Count];
-            CopyTo(array);
+            if (Count != 0)
+                CopyTo(array);
             return array;
         }
 
         public readonly ArraySegment<T> ToArray(ArrayPool<T> pool)
         {
             var result = pool.RentSliced(Count);
-            CopyTo(result.Array!);
+            if (Count != 0)
+                CopyTo(result.Array!);
             return result;
         }
 
         public readonly IMemoryOwner<T> ToArray(MemoryPool<T> pool)
         {
             var result = pool.RentSliced(Count);
-            CopyTo(result.Memory.Span);
+            if (Count != 0)
+                CopyTo(result.Memory.Span);
             return result;
         }
 
@@ -196,8 +202,9 @@ namespace NetFabric.Hyperlinq
         public readonly void Dispose()
         {
             pool.Return(current);
-            for (var index = 0; index < buffers.Count; index++)
-                pool.Return(buffers[index]!);
+            var count = buffers.Count;
+            for (var index = 0; index < count; index++)
+                pool.Return(buffers[index]);
             buffers.Dispose();
         }
 

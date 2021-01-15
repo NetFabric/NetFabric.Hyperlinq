@@ -62,7 +62,7 @@ namespace NetFabric.Hyperlinq
             {
                 public readonly int Current => 0;
                 readonly int IEnumerator<int>.Current => 0;
-                readonly object IEnumerator.Current => 0;
+                readonly object? IEnumerator.Current => 0;
 
                 public bool MoveNext()
                     => false;

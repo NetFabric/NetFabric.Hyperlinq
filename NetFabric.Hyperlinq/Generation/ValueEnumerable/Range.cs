@@ -182,7 +182,7 @@ namespace NetFabric.Hyperlinq
                     [MethodImpl(MethodImplOptions.AggressiveInlining)]
                     get => current;
                 }
-                object IEnumerator.Current
+                object? IEnumerator.Current
                     // ReSharper disable once HeapView.BoxingAllocation
                     => current;
 

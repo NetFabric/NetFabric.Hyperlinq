@@ -244,7 +244,7 @@ namespace NetFabric.Hyperlinq
                 }
                 readonly TResult IEnumerator<TResult>.Current 
                     => selector.Invoke(source[index + offset], index);
-                readonly object IEnumerator.Current
+                readonly object? IEnumerator.Current
                     // ReSharper disable once HeapView.PossibleBoxingAllocation
                     => selector.Invoke(source[index + offset], index);
 

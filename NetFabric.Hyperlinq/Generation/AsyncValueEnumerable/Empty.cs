@@ -36,7 +36,7 @@ namespace NetFabric.Hyperlinq
             public readonly struct Enumerator
             {
                 public readonly TSource Current
-                    => default;
+                    => default!;
 
                 public readonly ValueTask<bool> MoveNextAsync() 
                     => default;
@@ -46,9 +46,9 @@ namespace NetFabric.Hyperlinq
                 : IAsyncEnumerator<TSource>
             {
                 public readonly TSource Current
-                    => default;
+                    => default!;
                 readonly TSource IAsyncEnumerator<TSource>.Current
-                    => default;
+                    => default!;
 
                 public readonly ValueTask<bool> MoveNextAsync()
                     => default;

@@ -61,7 +61,7 @@ namespace NetFabric.Hyperlinq
                 int state;
                 AsyncValueTaskMethodBuilder<bool> builder;
                 bool s__1;
-                TResult s__2;
+                TResult? s__2;
                 ConfiguredValueTaskAwaitable<bool>.ConfiguredValueTaskAwaiter u__1;
                 ConfiguredValueTaskAwaitable<TResult>.ConfiguredValueTaskAwaiter u__2;
                 ConfiguredValueTaskAwaitable.ConfiguredValueTaskAwaiter u__3;

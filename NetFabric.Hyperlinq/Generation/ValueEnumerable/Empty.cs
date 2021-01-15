@@ -17,7 +17,7 @@ namespace NetFabric.Hyperlinq
             , IList<TSource>
         {
             // ReSharper disable once HeapView.ObjectAllocation.Evident
-            public static EmptyEnumerable<TSource> Instance { get; } = new();
+            internal static EmptyEnumerable<TSource> Instance { get; } = new();
 
             EmptyEnumerable() { }
 
@@ -98,7 +98,7 @@ namespace NetFabric.Hyperlinq
                 readonly TSource IEnumerator<TSource>.Current
                     => default!;
 
-                readonly object IEnumerator.Current 
+                readonly object? IEnumerator.Current 
                     => default!;
 
                 public readonly bool MoveNext()

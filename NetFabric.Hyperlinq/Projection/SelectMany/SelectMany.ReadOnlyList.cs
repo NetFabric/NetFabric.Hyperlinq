@@ -76,7 +76,7 @@ namespace NetFabric.Hyperlinq
                     => subEnumerator.Current;
                 readonly TResult IEnumerator<TResult>.Current 
                     => subEnumerator.Current;
-                readonly object IEnumerator.Current
+                readonly object? IEnumerator.Current
                     // ReSharper disable once HeapView.PossibleBoxingAllocation
                     => subEnumerator.Current;
 

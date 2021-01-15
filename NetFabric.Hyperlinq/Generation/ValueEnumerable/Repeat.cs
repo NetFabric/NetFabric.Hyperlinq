@@ -120,7 +120,7 @@ namespace NetFabric.Hyperlinq
                 public readonly TSource Current { get; }
                 readonly TSource IEnumerator<TSource>.Current 
                     => Current;
-                readonly object IEnumerator.Current
+                readonly object? IEnumerator.Current
                     // ReSharper disable once HeapView.PossibleBoxingAllocation
                     => Current;
 

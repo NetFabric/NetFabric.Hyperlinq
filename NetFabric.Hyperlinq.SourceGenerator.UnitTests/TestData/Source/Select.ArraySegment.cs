@@ -77,7 +77,7 @@ namespace NetFabric.Hyperlinq
             {
                 public readonly TResult Current => default!;
                 readonly TResult IEnumerator<TResult>.Current => default!;
-                readonly object IEnumerator.Current => default!;
+                readonly object? IEnumerator.Current => default!;
 
                 public bool MoveNext()
                     => false;

@@ -93,7 +93,7 @@ namespace NetFabric.Hyperlinq
                 }
                 TSource IEnumerator<TSource>.Current
                     => enumerator.Current;
-                object IEnumerator.Current
+                object? IEnumerator.Current
                     // ReSharper disable once HeapView.PossibleBoxingAllocation
                     => enumerator.Current;
 
