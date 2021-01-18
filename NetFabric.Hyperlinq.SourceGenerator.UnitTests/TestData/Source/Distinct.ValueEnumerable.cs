@@ -9,7 +9,7 @@ namespace NetFabric.Hyperlinq
         public static DistinctEnumerable<TEnumerable, TEnumerator, TSource> Distinct<TEnumerable, TEnumerator, TSource>(this TEnumerable source)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
-            => new DistinctEnumerable<TEnumerable, TEnumerator, TSource>(source);
+            => new(source);
 
         public readonly partial struct DistinctEnumerable<TEnumerable, TEnumerator, TSource>
             : IValueEnumerable<TSource, DistinctEnumerable<TEnumerable, TEnumerator, TSource>.DisposableEnumerator>
@@ -22,9 +22,9 @@ namespace NetFabric.Hyperlinq
                 => this.source = source;
 
             public readonly Enumerator GetEnumerator()
-                => new Enumerator();
+                => new();
             readonly DisposableEnumerator IValueEnumerable<TSource, DistinctEnumerable<TEnumerable, TEnumerator, TSource>.DisposableEnumerator>.GetEnumerator()
-                => new DisposableEnumerator();
+                => new();
             readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator()
                 => new DisposableEnumerator();
             readonly IEnumerator IEnumerable.GetEnumerator()
@@ -39,7 +39,7 @@ namespace NetFabric.Hyperlinq
             {
                 public readonly TSource Current => default!;
                 readonly TSource IEnumerator<TSource>.Current => default!;
-                readonly object? IEnumerator.Current => default;
+                readonly object IEnumerator.Current => default;
 
                 public bool MoveNext()
                     => false;

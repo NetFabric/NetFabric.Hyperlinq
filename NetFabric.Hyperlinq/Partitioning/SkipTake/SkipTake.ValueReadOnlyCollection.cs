@@ -48,10 +48,10 @@ namespace NetFabric.Hyperlinq
 
             public void CopyTo(TSource[] array, int arrayIndex)
             {
-                if (Count == 0)
+                if (Count is 0)
                     return;
 
-                if (skipCount == 0 && Count == source.Count && source is ICollection<TSource> collection)
+                if (skipCount is 0 && Count == source.Count && source is ICollection<TSource> collection)
                 {
                     collection.CopyTo(array, arrayIndex);
                 }
@@ -78,12 +78,12 @@ namespace NetFabric.Hyperlinq
                 }
             }
 
-            bool ICollection<TSource>.Contains(TSource item)
+            public bool Contains(TSource item)
             {
-                if (Count == 0)
+                if (Count is 0)
                     return false;
 
-                if (skipCount == 0 && Count == source.Count && source is ICollection<TSource> collection)
+                if (skipCount is 0 && Count == source.Count && source is ICollection<TSource> collection)
                     return collection.Contains(item);
 
                 using var enumerator = source.GetEnumerator();
@@ -185,7 +185,7 @@ namespace NetFabric.Hyperlinq
                             if (enumerator.MoveNext())
                             {
                                 takeCounter--;
-                                if (takeCounter == 0)
+                                if (takeCounter is 0)
                                     state = EnumeratorState.Complete;
 
                                 return true;
@@ -207,14 +207,14 @@ namespace NetFabric.Hyperlinq
                     => enumerator.Dispose();
             }
 
-            public bool Contains(TSource value, IEqualityComparer<TSource>? comparer = default)
+            public bool Contains(TSource value, IEqualityComparer<TSource>? comparer)
             {
-                if (source.Count == 0)
+                if (source.Count is 0)
                     return false;
 
                 if (comparer is null || ReferenceEquals(comparer, EqualityComparer<TSource>.Default))
                 {
-                    if (skipCount == 0 && Count == source.Count && source is ICollection<TSource> collection)
+                    if (skipCount is 0 && Count == source.Count && source is ICollection<TSource> collection)
                         return collection.Contains(value);
 
                     if (Utils.IsValueType<TSource>())

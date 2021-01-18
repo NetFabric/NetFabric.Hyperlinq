@@ -7,32 +7,15 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.Where
 {
     public class ArrayTests
     {
-        [Fact]
-        public void Where_With_Null_Must_Throw()
-        {
-            // Arrange
-            var source = new int[0];
-            var predicate = (Predicate<int>)null;
-
-            // Act
-            Action action = () => _ = ArrayExtensions
-                .Where<int>(source, predicate);
-
-            // Assert
-            _ = action.Must()
-                .Throw<ArgumentNullException>()
-                .EvaluateTrue(exception => exception.ParamName == "predicate");
-        }
-
         [Theory]
         [MemberData(nameof(TestData.PredicateEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateMultiple), MemberType = typeof(TestData))]
-        public void Where_With_ValidData_Must_Succeed(int[] source, Predicate<int> predicate)
+        public void Where_With_ValidData_Must_Succeed(int[] source, Func<int, bool> predicate)
         {
             // Arrange
             var expected = Enumerable
-                .Where(source, predicate.AsFunc());
+                .Where(source, predicate);
 
             // Act
             var result = ArrayExtensions
@@ -49,12 +32,12 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.Where
         [MemberData(nameof(TestData.PredicatePredicateEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicatePredicateSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicatePredicateMultiple), MemberType = typeof(TestData))]
-        public void Where_Where_With_ValidData_Must_Succeed(int[] source, Predicate<int> predicate0, Predicate<int> predicate1)
+        public void Where_Where_With_ValidData_Must_Succeed(int[] source, Func<int, bool> predicate0, Func<int, bool> predicate1)
         {
             // Arrange
             var expected = Enumerable
-                .Where(source, predicate0.AsFunc())
-                .Where(predicate1.AsFunc());
+                .Where(source, predicate0)
+                .Where(predicate1);
 
             // Act
             var result = ArrayExtensions

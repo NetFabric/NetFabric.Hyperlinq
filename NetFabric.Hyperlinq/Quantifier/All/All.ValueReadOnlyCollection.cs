@@ -14,12 +14,11 @@ namespace NetFabric.Hyperlinq
             => All<TEnumerable, TEnumerator, TSource, FunctionWrapper<TSource, bool>>(source, new FunctionWrapper<TSource, bool>(predicate));
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool All<TEnumerable, TEnumerator, TSource, TPredicate>(this TEnumerable source,
-            TPredicate predicate)
+        public static bool All<TEnumerable, TEnumerator, TSource, TPredicate>(this TEnumerable source, TPredicate predicate = default)
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
             where TPredicate : struct, IFunction<TSource, bool>
-            => source.Count == 0 || ValueEnumerableExtensions.All<TEnumerable, TEnumerator, TSource, TPredicate>(source, predicate);
+            => source.Count is 0 || ValueEnumerableExtensions.All<TEnumerable, TEnumerator, TSource, TPredicate>(source, predicate);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool All<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, int, bool> predicate)
@@ -28,11 +27,11 @@ namespace NetFabric.Hyperlinq
             => AllAt<TEnumerable, TEnumerator, TSource, FunctionWrapper<TSource, int, bool>>(source, new FunctionWrapper<TSource, int, bool>(predicate));
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool AllAt<TEnumerable, TEnumerator, TSource, TPredicate>(this TEnumerable source, TPredicate predicate)
+        public static bool AllAt<TEnumerable, TEnumerator, TSource, TPredicate>(this TEnumerable source, TPredicate predicate = default)
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
             where TPredicate : struct, IFunction<TSource, int, bool>
-            => source.Count == 0 || ValueEnumerableExtensions.AllAt<TEnumerable, TEnumerator, TSource, TPredicate>(source, predicate);
+            => source.Count is 0 || ValueEnumerableExtensions.AllAt<TEnumerable, TEnumerator, TSource, TPredicate>(source, predicate);
     }
 }
 

@@ -22,7 +22,7 @@ namespace NetFabric.Hyperlinq
                 {
                     while (await enumerator.MoveNextAsync().ConfigureAwait(false))
                     {
-                        if (index-- == 0)
+                        if (index-- is 0)
                             return Option.Some(enumerator.Current);
                     }
                 }
@@ -51,7 +51,7 @@ namespace NetFabric.Hyperlinq
                 {
                     while (await enumerator.MoveNextAsync().ConfigureAwait(false))
                     {
-                        if (await predicate.InvokeAsync(enumerator.Current, cancellationToken).ConfigureAwait(false) && index-- == 0)
+                        if (await predicate.InvokeAsync(enumerator.Current, cancellationToken).ConfigureAwait(false) && index-- is 0)
                             return Option.Some(enumerator.Current);
                     }
                 }
@@ -82,7 +82,7 @@ namespace NetFabric.Hyperlinq
                     {
                         for (var sourceIndex = 0; await enumerator.MoveNextAsync().ConfigureAwait(false); sourceIndex++)
                         {
-                            if (await predicate.InvokeAsync(enumerator.Current, sourceIndex, cancellationToken).ConfigureAwait(false) && index-- == 0)
+                            if (await predicate.InvokeAsync(enumerator.Current, sourceIndex, cancellationToken).ConfigureAwait(false) && index-- is 0)
                                 return Option.Some(enumerator.Current);
                         }
                     }
@@ -112,7 +112,7 @@ namespace NetFabric.Hyperlinq
                 {
                     while (await enumerator.MoveNextAsync().ConfigureAwait(false))
                     {
-                        if (index-- == 0)
+                        if (index-- is 0)
                             return Option.Some(await selector.InvokeAsync(enumerator.Current, cancellationToken).ConfigureAwait(false));
                     }
                 }
@@ -174,7 +174,7 @@ namespace NetFabric.Hyperlinq
                 {
                     while (await enumerator.MoveNextAsync().ConfigureAwait(false))
                     {
-                        if (await predicate.InvokeAsync(enumerator.Current, cancellationToken).ConfigureAwait(false) && index-- == 0)
+                        if (await predicate.InvokeAsync(enumerator.Current, cancellationToken).ConfigureAwait(false) && index-- is 0)
                             return Option.Some(await selector.InvokeAsync(enumerator.Current, cancellationToken).ConfigureAwait(false));
                     }
                 }

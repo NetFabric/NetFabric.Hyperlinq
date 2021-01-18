@@ -66,7 +66,7 @@ namespace NetFabric.Hyperlinq
 
             public void CopyTo(Span<int> array)
             {
-                if (start == 0)
+                if (start is 0)
                 {
                     for (var index = 0; index < Count; index++)
                         array[index] = index;
@@ -80,7 +80,7 @@ namespace NetFabric.Hyperlinq
 
             public void CopyTo(int[] array)
             {
-                if (start == 0)
+                if (start is 0)
                 {
                     for (var index = 0; index < Count; index++)
                         array[index] = index;
@@ -94,9 +94,9 @@ namespace NetFabric.Hyperlinq
 
             public void CopyTo(int[] array, int arrayIndex)
             {
-                if (start == 0)
+                if (start is 0)
                 {
-                    if (arrayIndex == 0)
+                    if (arrayIndex is 0)
                     {
                         for (var index = 0; index < Count; index++)
                             array[index] = index;
@@ -109,7 +109,7 @@ namespace NetFabric.Hyperlinq
                 }
                 else
                 {
-                    if (arrayIndex == 0)
+                    if (arrayIndex is 0)
                     {
                         for (var index = 0; index < Count; index++)
                             array[index] = index + start;
@@ -210,11 +210,11 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Any()
-                => Count != 0;
+                => Count is not 0;
 
             public bool Contains(int value, IEqualityComparer<int>? comparer)
             {
-                if (Count == 0)
+                if (Count is 0)
                     return false;
 
                 if (comparer is null || ReferenceEquals(comparer, EqualityComparer<int>.Default))

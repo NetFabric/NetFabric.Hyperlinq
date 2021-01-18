@@ -80,17 +80,21 @@ namespace NetFabric.Hyperlinq
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public int Count()
                 => source.Count(predicate);
-            
+
             #endregion
             #region Quantifier
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public bool All()
+                => source.All(predicate);
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Any()
                 => source.Any(predicate);
-            
+
             #endregion
             #region Filtering
-            
+
             #endregion
             #region Projection
 
@@ -99,7 +103,7 @@ namespace NetFabric.Hyperlinq
                 => Select<TResult2, FunctionWrapper<TResult, TResult2>>(new FunctionWrapper<TResult, TResult2>(selector));
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public SpanWhereSelectEnumerable<TSource, TResult2, TPredicate, SelectorSelectorCombination<TSelector, TSelector2, TSource, TResult, TResult2>> Select<TResult2, TSelector2>(TSelector2 selector)
+            public SpanWhereSelectEnumerable<TSource, TResult2, TPredicate, SelectorSelectorCombination<TSelector, TSelector2, TSource, TResult, TResult2>> Select<TResult2, TSelector2>(TSelector2 selector = default)
                 where TSelector2 : struct, IFunction<TResult, TResult2>
                 => source.WhereSelect<TSource, TResult2, TPredicate, SelectorSelectorCombination<TSelector, TSelector2, TSource, TResult, TResult2>>(predicate, new SelectorSelectorCombination<TSelector, TSelector2, TSource, TResult, TResult2>(this.selector, selector));
             

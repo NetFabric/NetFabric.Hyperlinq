@@ -11,17 +11,17 @@ namespace NetFabric.Hyperlinq
     public static partial class ArrayExtensions
     {
 
+        [GeneratorMapping("TSelector", "NetFabric.Hyperlinq.FunctionWrapper<TSource, int, TResult>")]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static MemorySelectAtEnumerable<TSource, TResult, FunctionWrapper<TSource, int, TResult>> Select<TSource, TResult>(this ReadOnlyMemory<TSource> source, Func<TSource, int, TResult> selector)
             => source.SelectAt<TSource, TResult, FunctionWrapper<TSource, int, TResult>>(new FunctionWrapper<TSource, int, TResult>(selector));
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static MemorySelectAtEnumerable<TSource, TResult, TSelector> SelectAt<TSource, TResult, TSelector>(this ReadOnlyMemory<TSource> source, TSelector selector)
+        public static MemorySelectAtEnumerable<TSource, TResult, TSelector> SelectAt<TSource, TResult, TSelector>(this ReadOnlyMemory<TSource> source, TSelector selector = default)
             where TSelector : struct, IFunction<TSource, int, TResult>
             => new(source, selector);
 
         [GeneratorMapping("TSource", "TResult")]
-        [GeneratorMapping("TResult", "TResult2")]
         [StructLayout(LayoutKind.Auto)]
         public partial struct MemorySelectAtEnumerable<TSource, TResult, TSelector>
             : IValueReadOnlyList<TResult, MemorySelectAtEnumerable<TSource, TResult, TSelector>.DisposableEnumerator>
@@ -80,7 +80,7 @@ namespace NetFabric.Hyperlinq
                 => Throw.NotSupportedException();
             void ICollection<TResult>.Clear() 
                 => Throw.NotSupportedException();
-            bool ICollection<TResult>.Contains(TResult item)
+            public bool Contains(TResult item)
                 => source.Span.ContainsAt(item, selector);
             bool ICollection<TResult>.Remove(TResult item) 
                 => Throw.NotSupportedException<bool>();
@@ -180,7 +180,7 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Any()
-                => source.Length != 0;
+                => source.Length is not 0;
             
             #endregion
             #region Filtering
@@ -193,7 +193,7 @@ namespace NetFabric.Hyperlinq
                 => Select<TResult2, FunctionWrapper<TResult, TResult2>>(new FunctionWrapper<TResult, TResult2>(selector));
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public MemorySelectAtEnumerable<TSource, TResult2, SelectorAtSelectorCombination<TSelector, TSelector2, TSource, TResult, TResult2>> Select<TResult2, TSelector2>(TSelector2 selector)
+            public MemorySelectAtEnumerable<TSource, TResult2, SelectorAtSelectorCombination<TSelector, TSelector2, TSource, TResult, TResult2>> Select<TResult2, TSelector2>(TSelector2 selector = default)
                 where TSelector2 : struct, IFunction<TResult, TResult2>
                 => source.SelectAt<TSource, TResult2, SelectorAtSelectorCombination<TSelector, TSelector2, TSource, TResult, TResult2>>(new SelectorAtSelectorCombination<TSelector, TSelector2, TSource, TResult, TResult2>(this.selector, selector));
             
@@ -202,10 +202,23 @@ namespace NetFabric.Hyperlinq
                 => SelectAt<TResult2, FunctionWrapper<TResult, int, TResult2>>(new FunctionWrapper<TResult, int, TResult2>(selector));
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public MemorySelectAtEnumerable<TSource, TResult2, SelectorAtSelectorAtCombination<TSelector, TSelector2, TSource, TResult, TResult2>> SelectAt<TResult2, TSelector2>(TSelector2 selector)
+            public MemorySelectAtEnumerable<TSource, TResult2, SelectorAtSelectorAtCombination<TSelector, TSelector2, TSource, TResult, TResult2>> SelectAt<TResult2, TSelector2>(TSelector2 selector = default)
                 where TSelector2 : struct, IFunction<TResult, int, TResult2>
                 => source.SelectAt<TSource, TResult2, SelectorAtSelectorAtCombination<TSelector, TSelector2, TSource, TResult, TResult2>>(new SelectorAtSelectorAtCombination<TSelector, TSelector2, TSource, TResult, TResult2>(this.selector, selector));
-            
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public readonly ReadOnlyListExtensions.SelectManyEnumerable<MemorySelectAtEnumerable<TSource, TResult, TSelector>, TResult, TSubEnumerable, TSubEnumerator, TResult2, FunctionWrapper<TResult, TSubEnumerable>> SelectMany<TSubEnumerable, TSubEnumerator, TResult2>(Func<TResult, TSubEnumerable> selector)
+                where TSubEnumerable : IValueEnumerable<TResult2, TSubEnumerator>
+                where TSubEnumerator : struct, IEnumerator<TResult2>
+                => this.SelectMany<MemorySelectAtEnumerable<TSource, TResult, TSelector>, TResult, TSubEnumerable, TSubEnumerator, TResult2>(selector);
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public readonly ReadOnlyListExtensions.SelectManyEnumerable<MemorySelectAtEnumerable<TSource, TResult, TSelector>, TResult, TSubEnumerable, TSubEnumerator, TResult2, TSelector2> SelectMany<TSubEnumerable, TSubEnumerator, TResult2, TSelector2>(TSelector2 selector = default)
+                where TSubEnumerable : IValueEnumerable<TResult2, TSubEnumerator>
+                where TSubEnumerator : struct, IEnumerator<TResult2>
+                where TSelector2 : struct, IFunction<TResult, TSubEnumerable>
+                => this.SelectMany<MemorySelectAtEnumerable<TSource, TResult, TSelector>, TResult, TSubEnumerable, TSubEnumerator, TResult2, TSelector2>(selector);
+
             #endregion
             #region Element
 

@@ -23,9 +23,12 @@ namespace NetFabric.Hyperlinq
 
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly Dictionary<TKey, TValue>.Enumerator GetEnumerator() => source.GetEnumerator();
-            readonly IEnumerator<KeyValuePair<TKey, TValue>> IEnumerable<KeyValuePair<TKey, TValue>>.GetEnumerator() => source.GetEnumerator();
-            readonly IEnumerator IEnumerable.GetEnumerator() => source.GetEnumerator();
+            public readonly Dictionary<TKey, TValue>.Enumerator GetEnumerator() 
+                => source.GetEnumerator();
+            readonly IEnumerator<KeyValuePair<TKey, TValue>> IEnumerable<KeyValuePair<TKey, TValue>>.GetEnumerator() 
+                => source.GetEnumerator();
+            readonly IEnumerator IEnumerable.GetEnumerator() 
+                => source.GetEnumerator();
 
             bool ICollection<KeyValuePair<TKey, TValue>>.IsReadOnly  
                 => true;

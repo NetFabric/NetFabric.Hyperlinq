@@ -10,7 +10,6 @@ namespace NetFabric.Hyperlinq
         public static async ValueTask<bool> ContainsAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source, TSource value)
             where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
-            where TSource : struct
         {
             var enumerator = source.GetAsyncEnumerator();
             await using (enumerator.ConfigureAwait(false))

@@ -34,7 +34,7 @@ namespace NetFabric.Hyperlinq
             => source.AsArraySegment().All(predicate);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool All<TSource, TPredicate>(this List<TSource> source, TPredicate predicate)
+        public static bool All<TSource, TPredicate>(this List<TSource> source, TPredicate predicate = default)
             where TPredicate : struct, IFunction<TSource, bool>
             => source.AsArraySegment().All(predicate);
         
@@ -43,20 +43,20 @@ namespace NetFabric.Hyperlinq
             => source.AsArraySegment().All(predicate);
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool AllAt<TSource, TPredicate>(this List<TSource> source, TPredicate predicate)
+        public static bool AllAt<TSource, TPredicate>(this List<TSource> source, TPredicate predicate = default)
             where TPredicate : struct, IFunction<TSource, int, bool>
             => source.AsArraySegment().AllAt(predicate);
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool Any<TSource>(this List<TSource> source)
-            => source.Count != 0;
+            => source.Count is not 0;
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool Any<TSource>(this List<TSource> source, Func<TSource, bool> predicate)
             => source.AsArraySegment().Any(predicate);
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool Any<TSource, TPredicate>(this List<TSource> source, TPredicate predicate)
+        public static bool Any<TSource, TPredicate>(this List<TSource> source, TPredicate predicate = default)
             where TPredicate : struct, IFunction<TSource, bool>
             => source.AsArraySegment().Any(predicate);
         
@@ -65,7 +65,7 @@ namespace NetFabric.Hyperlinq
             => source.AsArraySegment().Any(predicate);
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool AnyAt<TSource, TPredicate>(this List<TSource> source, TPredicate predicate)
+        public static bool AnyAt<TSource, TPredicate>(this List<TSource> source, TPredicate predicate = default)
             where TPredicate : struct, IFunction<TSource, int, bool>
             => source.AsArraySegment().AnyAt(predicate);
         
@@ -81,7 +81,7 @@ namespace NetFabric.Hyperlinq
             => source.AsArraySegment().Select(selector);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ArrayExtensions.ArraySegmentSelectEnumerable<TSource, TResult, TSelector> Select<TSource, TResult, TSelector>(this List<TSource> source, TSelector selector)
+        public static ArrayExtensions.ArraySegmentSelectEnumerable<TSource, TResult, TSelector> Select<TSource, TResult, TSelector>(this List<TSource> source, TSelector selector = default)
             where TSelector : struct, IFunction<TSource, TResult>
             => source.AsArraySegment().Select<TSource, TResult, TSelector>(selector);
 
@@ -90,7 +90,7 @@ namespace NetFabric.Hyperlinq
             => source.AsArraySegment().Select(selector);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ArrayExtensions.ArraySegmentSelectAtEnumerable<TSource, TResult, TSelector> SelectAt<TSource, TResult, TSelector>(this List<TSource> source, TSelector selector)
+        public static ArrayExtensions.ArraySegmentSelectAtEnumerable<TSource, TResult, TSelector> SelectAt<TSource, TResult, TSelector>(this List<TSource> source, TSelector selector = default)
             where TSelector : struct, IFunction<TSource, int, TResult>
             => source.AsArraySegment().SelectAt<TSource, TResult, TSelector>(selector);
 
@@ -105,7 +105,7 @@ namespace NetFabric.Hyperlinq
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ArrayExtensions.ArraySegmentSelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, TResult, TSelector> SelectMany<TSource, TSubEnumerable, TSubEnumerator, TResult, TSelector>(
             this List<TSource> source,
-            TSelector selector)
+            TSelector selector = default)
             where TSubEnumerable : IValueEnumerable<TResult, TSubEnumerator>
             where TSubEnumerator : struct, IEnumerator<TResult>
             where TSelector : struct, IFunction<TSource, TSubEnumerable>
@@ -119,7 +119,7 @@ namespace NetFabric.Hyperlinq
             => source.AsArraySegment().Where(predicate);
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ArrayExtensions.ArraySegmentWhereEnumerable<TSource, TPredicate> Where<TSource, TPredicate>(this List<TSource> source, TPredicate predicate)
+        public static ArrayExtensions.ArraySegmentWhereEnumerable<TSource, TPredicate> Where<TSource, TPredicate>(this List<TSource> source, TPredicate predicate = default)
             where TPredicate : struct, IFunction<TSource, bool>
             => source.AsArraySegment().Where(predicate);
         
@@ -128,7 +128,7 @@ namespace NetFabric.Hyperlinq
             => source.AsArraySegment().Where(predicate);
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ArrayExtensions.ArraySegmentWhereAtEnumerable<TSource, TPredicate> WhereAt<TSource, TPredicate>(this List<TSource> source, TPredicate predicate)
+        public static ArrayExtensions.ArraySegmentWhereAtEnumerable<TSource, TPredicate> WhereAt<TSource, TPredicate>(this List<TSource> source, TPredicate predicate = default)
             where TPredicate : struct, IFunction<TSource, int, bool>
             => source.AsArraySegment().WhereAt(predicate);
         
@@ -137,7 +137,7 @@ namespace NetFabric.Hyperlinq
             => source.AsArraySegment().WhereRef(predicate);
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ArrayExtensions.ArraySegmentWhereRefEnumerable<TSource, TPredicate> WhereRef<TSource, TPredicate>(this List<TSource> source, TPredicate predicate)
+        public static ArrayExtensions.ArraySegmentWhereRefEnumerable<TSource, TPredicate> WhereRef<TSource, TPredicate>(this List<TSource> source, TPredicate predicate = default)
             where TPredicate : struct, IFunction<TSource, bool>
             => source.AsArraySegment().WhereRef(predicate);
         
@@ -146,7 +146,7 @@ namespace NetFabric.Hyperlinq
             => source.AsArraySegment().WhereRef(predicate);
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ArrayExtensions.ArraySegmentWhereRefAtEnumerable<TSource, TPredicate> WhereRefAt<TSource, TPredicate>(this List<TSource> source, TPredicate predicate)
+        public static ArrayExtensions.ArraySegmentWhereRefAtEnumerable<TSource, TPredicate> WhereRefAt<TSource, TPredicate>(this List<TSource> source, TPredicate predicate = default)
             where TPredicate : struct, IFunction<TSource, int, bool>
             => source.AsArraySegment().WhereRefAt(predicate);
             

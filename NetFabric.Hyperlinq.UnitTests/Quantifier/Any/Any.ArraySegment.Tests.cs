@@ -28,24 +28,6 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Any
             _ = result.Must()
                 .BeEqualTo(expected);
         }
-        
-        [Fact]
-        public void Any_Predicate_With_Null_Must_Throw()
-        {
-            // Arrange
-            var source = new int[0];
-            var wrapped = new ArraySegment<int>(source);
-            var predicate = (Predicate<int>)null;
-
-            // Act
-            Action action = () => _ = ArrayExtensions
-                .Any(wrapped, predicate);
-
-            // Assert
-            _ = action.Must()
-                .Throw<ArgumentNullException>()
-                .EvaluateTrue(exception => exception.ParamName == "predicate");
-        }
 
         [Fact]
         public void Any_With_NullArray_Must_Succeed()
@@ -82,13 +64,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Any
         [MemberData(nameof(TestData.SkipTakePredicateEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakePredicateSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakePredicateMultiple), MemberType = typeof(TestData))]
-        public void Any_Predicate_With_ValidData_Must_Succeed(int[] source, int skip, int take, Predicate<int> predicate)
+        public void Any_Predicate_With_ValidData_Must_Succeed(int[] source, int skip, int take, Func<int, bool> predicate)
         {
             // Arrange
             var (offset, count) = Utils.SkipTake(source.Length, skip, take);
             var wrapped = new ArraySegment<int>(source, offset, count);
             var expected = Enumerable
-                .Any(wrapped, predicate.AsFunc());
+                .Any(wrapped, predicate);
 
             // Act
             var result = ArrayExtensions
@@ -99,35 +81,17 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Any
                 .BeEqualTo(expected);
         }
 
-        [Fact]
-        public void Any_PredicateAt_With_Null_Must_Throw()
-        {
-            // Arrange
-            var source = new int[0];
-            var wrapped = new ArraySegment<int>(source);
-            var predicate = (PredicateAt<int>)null;
-
-            // Act
-            Action action = () => _ = ArrayExtensions
-                .Any(wrapped, predicate);
-
-            // Assert
-            _ = action.Must()
-                .Throw<ArgumentNullException>()
-                .EvaluateTrue(exception => exception.ParamName == "predicate");
-        }
-
         [Theory]
         [MemberData(nameof(TestData.SkipTakePredicateAtEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakePredicateAtSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakePredicateAtMultiple), MemberType = typeof(TestData))]
-        public void Any_PredicateAt_With_ValidData_Must_Succeed(int[] source, int skip, int take, PredicateAt<int> predicate)
+        public void Any_PredicateAt_With_ValidData_Must_Succeed(int[] source, int skip, int take, Func<int, int, bool> predicate)
         {
             // Arrange
             var (offset, count) = Utils.SkipTake(source.Length, skip, take);
             var wrapped = new ArraySegment<int>(source, offset, count);
             var expected = Enumerable
-                .Where(wrapped, predicate.AsFunc())
+                .Where(wrapped, predicate)
                 .Count() != 0;
 
             // Act

@@ -32,7 +32,7 @@ namespace NetFabric.Hyperlinq
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 get
                 {
-                    if (index != 0) Throw.IndexOutOfRangeException();
+                    if (index is not 0) Throw.IndexOutOfRangeException();
 
                     return value;
                 }
@@ -168,7 +168,7 @@ namespace NetFabric.Hyperlinq
                 => Select<TResult, FunctionWrapper<TSource, TResult>>(new FunctionWrapper<TSource, TResult>(selector));
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public ReturnEnumerable<TResult> Select<TResult, TSelector>(TSelector selector) 
+            public ReturnEnumerable<TResult> Select<TResult, TSelector>(TSelector selector = default) 
                 where TSelector : struct, IFunction<TSource, TResult>
                 => new(selector.Invoke(value));
 

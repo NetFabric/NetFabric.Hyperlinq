@@ -147,7 +147,7 @@ namespace NetFabric.Hyperlinq
         {
             // ReSharper disable once HeapView.ObjectAllocation.Evident
             var array = new T[Count];
-            if (Count != 0)
+            if (Count is not 0)
                 CopyTo(array);
             return array;
         }
@@ -155,7 +155,7 @@ namespace NetFabric.Hyperlinq
         public readonly ArraySegment<T> ToArray(ArrayPool<T> pool)
         {
             var result = pool.RentSliced(Count);
-            if (Count != 0)
+            if (Count is not 0)
                 CopyTo(result.Array!);
             return result;
         }
@@ -163,7 +163,7 @@ namespace NetFabric.Hyperlinq
         public readonly IMemoryOwner<T> ToArray(MemoryPool<T> pool)
         {
             var result = pool.RentSliced(Count);
-            if (Count != 0)
+            if (Count is not 0)
                 CopyTo(result.Memory.Span);
             return result;
         }
@@ -189,7 +189,7 @@ namespace NetFabric.Hyperlinq
             // the rhs the limit minus the amount we've already allocated.
 
             var nextCapacity = defaultMinCapacity;
-            if (Count != 0)
+            if (Count is not 0)
             {
                 buffers.Add(current);
                 nextCapacity = Math.Min(Count, maxCapacity - Count);

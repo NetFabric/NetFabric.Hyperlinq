@@ -8,14 +8,14 @@ namespace NetFabric.Hyperlinq
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool Any<TSource>(this in ArraySegment<TSource> source)
-            => source.Count != 0;
+            => source.Count is not 0;
 
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool Any<TSource>(this in ArraySegment<TSource> source, Func<TSource, bool> predicate)
             => source.Any(new FunctionWrapper<TSource, bool>(predicate));
         
-        public static bool Any<TSource, TPredicate>(this in ArraySegment<TSource> source, TPredicate predicate)
+        public static bool Any<TSource, TPredicate>(this in ArraySegment<TSource> source, TPredicate predicate = default)
             where TPredicate : struct, IFunction<TSource, bool>
         {
             if (source.Any())
@@ -46,7 +46,7 @@ namespace NetFabric.Hyperlinq
         public static bool Any<TSource>(this in ArraySegment<TSource> source, Func<TSource, int, bool> predicate)
             => source.AnyAt(new FunctionWrapper<TSource, int, bool>(predicate));
 
-        public static bool AnyAt<TSource, TPredicate>(this in ArraySegment<TSource> source, TPredicate predicate)
+        public static bool AnyAt<TSource, TPredicate>(this in ArraySegment<TSource> source, TPredicate predicate = default)
             where TPredicate : struct, IFunction<TSource, int, bool>
         {
             if (source.Any())
@@ -66,7 +66,7 @@ namespace NetFabric.Hyperlinq
                 {
                     var array = source.Array!;
                     var end = source.Count - 1;
-                    if (source.Offset == 0)
+                    if (source.Offset is 0)
                     {
                         for (var index = 0; index <= end; index++)
                         {

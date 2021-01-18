@@ -15,20 +15,20 @@ namespace NetFabric.Hyperlinq
         public static NoneOption None { get; } = new();
 
         
-        public static Option<T> Some<T>(T value) 
+        public static Option<TSource> Some<TSource>(TSource value) 
             => new(value);
     }
 
     [StructLayout(LayoutKind.Auto)]
-    public readonly struct Option<T>
+    public readonly struct Option<TValue>
     {
-        Option(bool hasValue, T value)
+        Option(bool hasValue, TValue value)
         {
             IsSome = hasValue;
             Value = value;
         }
 
-        internal Option(T value)
+        internal Option(TValue value)
             : this (hasValue: true, value)
         {
         }
@@ -38,9 +38,9 @@ namespace NetFabric.Hyperlinq
 
         public bool IsSome { get; }
 
-        public T Value { get; }
+        public TValue Value { get; }
 
-        public readonly void Deconstruct(out bool hasValue, out T value)
+        public readonly void Deconstruct(out bool hasValue, out TValue value)
         {
             hasValue = IsSome;
             value = Value;
@@ -48,12 +48,12 @@ namespace NetFabric.Hyperlinq
 
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static implicit operator Option<T>(NoneOption _) 
+        public static implicit operator Option<TValue>(NoneOption _) 
             => default;
 
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public readonly TOut Match<TOut>(Func<T, TOut> some, Func<TOut> none) 
+        public readonly TOut Match<TOut>(Func<TValue, TOut> some, Func<TOut> none) 
             => IsSome switch
             {
                 true => some(Value),
@@ -61,7 +61,7 @@ namespace NetFabric.Hyperlinq
             };
 
         
-        public readonly ValueTask<TOut> MatchAsync<TOut>(Func<T, CancellationToken, ValueTask<TOut>> some, Func<CancellationToken, ValueTask<TOut>> none, CancellationToken cancellationToken = default) 
+        public readonly ValueTask<TOut> MatchAsync<TOut>(Func<TValue, CancellationToken, ValueTask<TOut>> some, Func<CancellationToken, ValueTask<TOut>> none, CancellationToken cancellationToken = default) 
             => IsSome switch
             {
                 true => some(Value, cancellationToken),
@@ -69,7 +69,7 @@ namespace NetFabric.Hyperlinq
             };
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public readonly void Match(Action<T> some, Action none)
+        public readonly void Match(Action<TValue> some, Action none)
         {
             if (IsSome)
                 some(Value);
@@ -78,7 +78,7 @@ namespace NetFabric.Hyperlinq
         }
 
         
-        public readonly ValueTask MatchAsync(Func<T, CancellationToken, ValueTask> some, Func<CancellationToken, ValueTask> none, CancellationToken cancellationToken = default) 
+        public readonly ValueTask MatchAsync(Func<TValue, CancellationToken, ValueTask> some, Func<CancellationToken, ValueTask> none, CancellationToken cancellationToken = default) 
             => IsSome switch
             {
                 true => some(Value, cancellationToken),
@@ -86,7 +86,7 @@ namespace NetFabric.Hyperlinq
             };
 
         
-        public readonly Option<TOut> Bind<TOut>(Func<T, Option<TOut>> bind)
+        public readonly Option<TOut> Bind<TOut>(Func<TValue, Option<TOut>> bind)
             => IsSome switch
             {
                 true => bind(Value),
@@ -107,39 +107,44 @@ namespace NetFabric.Hyperlinq
             => IsSome;
 
         
-        public readonly bool Contains(T value, IEqualityComparer<T>? comparer = default) 
+        public readonly bool Contains(TValue value, IEqualityComparer<TValue>? comparer = default) 
             => IsSome 
-               && (comparer?.Equals(Value, value) ?? EqualityComparer<T>.Default.Equals(Value, value));
+               && (comparer?.Equals(Value, value) ?? EqualityComparer<TValue>.Default.Equals(Value, value));
 
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public readonly Option<T> Where(Func<T, bool> predicate)
-            => Where(new FunctionWrapper<T, bool>(predicate));
+        public readonly Option<TValue> Where(Func<TValue, bool> predicate)
+            => Where(new FunctionWrapper<TValue, bool>(predicate));
 
-        public readonly Option<T> Where<TPredicate>(TPredicate predicate = default) 
-            where TPredicate : struct, IFunction<T, bool>
+        public readonly Option<TValue> Where<TPredicate>(TPredicate predicate = default) 
+            where TPredicate : struct, IFunction<TValue, bool>
             => IsSome && predicate.Invoke(Value) 
                 ? this 
                 : default;
 
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public readonly ValueTask<Option<T>> WhereAsync(Func<T, CancellationToken, ValueTask<bool>> predicate, CancellationToken cancellationToken = default)
-            => WhereAsync(new AsyncFunctionWrapper<T, bool>(predicate), cancellationToken);
-        
-        public async readonly ValueTask<Option<T>> WhereAsync<TPredicate>(TPredicate predicate, CancellationToken cancellationToken = default) 
-            where TPredicate : struct, IAsyncFunction<T, bool>
+        public readonly ValueTask<Option<TValue>> WhereAsync(Func<TValue, CancellationToken, ValueTask<bool>> predicate, CancellationToken cancellationToken = default)
+            => WhereAsync(new AsyncFunctionWrapper<TValue, bool>(predicate), cancellationToken);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public readonly ValueTask<Option<TValue>> WhereAsync<TPredicate>(CancellationToken cancellationToken = default)
+            where TPredicate : struct, IAsyncFunction<TValue, bool>
+            => WhereAsync<TPredicate>(default, cancellationToken);
+
+        public async readonly ValueTask<Option<TValue>> WhereAsync<TPredicate>(TPredicate predicate, CancellationToken cancellationToken = default) 
+            where TPredicate : struct, IAsyncFunction<TValue, bool>
             => IsSome && await predicate.InvokeAsync(Value, cancellationToken).ConfigureAwait(false)
                 ? this 
                 : default;
 
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public readonly Option<TOut> Select<TOut>(Func<T, TOut> selector)
-            => Select<TOut, FunctionWrapper<T, TOut>>(new FunctionWrapper<T, TOut>(selector));
+        public readonly Option<TOut> Select<TOut>(Func<TValue, TOut> selector)
+            => Select<TOut, FunctionWrapper<TValue, TOut>>(new FunctionWrapper<TValue, TOut>(selector));
         
-        public readonly Option<TOut> Select<TOut, TSelector>(TSelector selector) 
-            where TSelector : struct, IFunction<T, TOut>
+        public readonly Option<TOut> Select<TOut, TSelector>(TSelector selector = default) 
+            where TSelector : struct, IFunction<TValue, TOut>
             => IsSome switch
             {
                 true => new Option<TOut>(selector.Invoke(Value)),
@@ -148,11 +153,16 @@ namespace NetFabric.Hyperlinq
 
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public readonly ValueTask<Option<TOut>> SelectAsync<TOut>(Func<T, CancellationToken, ValueTask<TOut>> selector, CancellationToken cancellationToken = default)
-            => SelectAsync<TOut, AsyncFunctionWrapper<T, TOut>>(new AsyncFunctionWrapper<T, TOut>(selector), cancellationToken);
-        
+        public readonly ValueTask<Option<TOut>> SelectAsync<TOut>(Func<TValue, CancellationToken, ValueTask<TOut>> selector, CancellationToken cancellationToken = default)
+            => SelectAsync<TOut, AsyncFunctionWrapper<TValue, TOut>>(new AsyncFunctionWrapper<TValue, TOut>(selector), cancellationToken);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public readonly ValueTask<Option<TOut>> SelectAsync<TOut, TSelector>(CancellationToken cancellationToken = default)
+            where TSelector : struct, IAsyncFunction<TValue, TOut>
+            => SelectAsync<TOut, TSelector>(default, cancellationToken);
+
         public async readonly ValueTask<Option<TOut>> SelectAsync<TOut, TSelector>(TSelector selector, CancellationToken cancellationToken = default) 
-            where TSelector : struct, IAsyncFunction<T, TOut>
+            where TSelector : struct, IAsyncFunction<TValue, TOut>
             => IsSome switch
             {
                 true => new Option<TOut>(await selector.InvokeAsync(Value, cancellationToken).ConfigureAwait(false)),
@@ -161,20 +171,20 @@ namespace NetFabric.Hyperlinq
 
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public readonly SelectManyEnumerable<TSubEnumerable, TSubEnumerator, TResult, FunctionWrapper<T, TSubEnumerable>> SelectMany<TSubEnumerable, TSubEnumerator, TResult>(Func<T, TSubEnumerable> selector) 
+        public readonly SelectManyEnumerable<TSubEnumerable, TSubEnumerator, TResult, FunctionWrapper<TValue, TSubEnumerable>> SelectMany<TSubEnumerable, TSubEnumerator, TResult>(Func<TValue, TSubEnumerable> selector) 
             where TSubEnumerable : IValueEnumerable<TResult, TSubEnumerator>
             where TSubEnumerator : struct, IEnumerator<TResult>
-            => SelectMany<TSubEnumerable, TSubEnumerator, TResult, FunctionWrapper<T, TSubEnumerable>>(new FunctionWrapper<T, TSubEnumerable>(selector));
+            => SelectMany<TSubEnumerable, TSubEnumerator, TResult, FunctionWrapper<TValue, TSubEnumerable>>(new FunctionWrapper<TValue, TSubEnumerable>(selector));
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public readonly SelectManyEnumerable<TSubEnumerable, TSubEnumerator, TResult, TSelector> SelectMany<TSubEnumerable, TSubEnumerator, TResult, TSelector>(TSelector selector) 
             where TSubEnumerable : IValueEnumerable<TResult, TSubEnumerator>
             where TSubEnumerator : struct, IEnumerator<TResult>
-            where TSelector : struct, IFunction<T, TSubEnumerable>
+            where TSelector : struct, IFunction<TValue, TSubEnumerable>
             => new(in this, selector);
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public readonly Option<T> ElementAt(int index)
+        public readonly Option<TValue> ElementAt(int index)
             => index switch
             {
                 0 => this,
@@ -183,31 +193,31 @@ namespace NetFabric.Hyperlinq
 
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public readonly Option<T> First()
+        public readonly Option<TValue> First()
             => this;
 
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public readonly Option<T> Single()
+        public readonly Option<TValue> Single()
             => this;
 
         
-        public readonly T[] ToArray()
+        public readonly TValue[] ToArray()
             => IsSome switch
             {
                 // ReSharper disable once HeapView.ObjectAllocation.Evident
-                true => new T[] { Value },
-                _ => Array.Empty<T>()
+                true => new TValue[] { Value },
+                _ => Array.Empty<TValue>()
             };
 
         
-        public readonly List<T> ToList()
+        public readonly List<TValue> ToList()
             => IsSome switch
             {
                 // ReSharper disable once HeapView.ObjectAllocation.Evident
-                true => new List<T>(1) { Value },
+                true => new List<TValue>(1) { Value },
                 // ReSharper disable once HeapView.ObjectAllocation.Evident
-                _ => new List<T>(0)
+                _ => new List<TValue>(0)
             }; 
 
 
@@ -217,12 +227,12 @@ namespace NetFabric.Hyperlinq
             : IValueEnumerable<TResult, SelectManyEnumerable<TSubEnumerable, TSubEnumerator, TResult, TSelector>.Enumerator>
             where TSubEnumerable : IValueEnumerable<TResult, TSubEnumerator>
             where TSubEnumerator : struct, IEnumerator<TResult>
-            where TSelector : struct, IFunction<T, TSubEnumerable>
+            where TSelector : struct, IFunction<TValue, TSubEnumerable>
         {
-            readonly Option<T> source;
+            readonly Option<TValue> source;
             readonly TSelector selector;
 
-            internal SelectManyEnumerable(in Option<T> source, TSelector selector)
+            internal SelectManyEnumerable(in Option<TValue> source, TSelector selector)
                 => (this.source, this.selector) = (source, selector);
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -240,7 +250,7 @@ namespace NetFabric.Hyperlinq
                 : IEnumerator<TResult>
             {
                 int state;
-                readonly Option<T> source; 
+                readonly Option<TValue> source; 
                 TSelector selector;
                 [SuppressMessage("Style", "IDE0044:Add readonly modifier")]
                 TSubEnumerator subEnumerator; // do not make readonly

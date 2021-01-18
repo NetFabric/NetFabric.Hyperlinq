@@ -65,7 +65,7 @@ namespace NetFabric.Hyperlinq
             => ValueReadOnlyCollectionExtensions.Any<ValueWrapper<TKey, TValue>, Dictionary<TKey, TValue>.ValueCollection.Enumerator, TValue>(new ValueWrapper<TKey, TValue>(source), predicate);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool Any<TKey, TValue, TPredicate>(this Dictionary<TKey, TValue>.ValueCollection source, TPredicate predicate)
+        public static bool Any<TKey, TValue, TPredicate>(this Dictionary<TKey, TValue>.ValueCollection source, TPredicate predicate = default)
             where TKey : notnull
             where TPredicate : struct, IFunction<TValue, bool>
             => ValueReadOnlyCollectionExtensions.Any<ValueWrapper<TKey, TValue>, Dictionary<TKey, TValue>.ValueCollection.Enumerator, TValue, TPredicate>(new ValueWrapper<TKey, TValue>(source), predicate);
@@ -99,7 +99,7 @@ namespace NetFabric.Hyperlinq
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ValueReadOnlyCollectionExtensions.SelectEnumerable<ValueWrapper<TKey, TValue>, Dictionary<TKey, TValue>.ValueCollection.Enumerator, TValue, TResult, TSelector> Select<TKey, TValue, TResult, TSelector>(
             this Dictionary<TKey, TValue>.ValueCollection source,
-            TSelector selector)
+            TSelector selector = default)
             where TKey : notnull
             where TSelector : struct, IFunction<TValue, TResult>
             => ValueReadOnlyCollectionExtensions.Select<ValueWrapper<TKey, TValue>, Dictionary<TKey, TValue>.ValueCollection.Enumerator, TValue, TResult, TSelector>(new ValueWrapper<TKey, TValue>(source), selector);
@@ -114,7 +114,7 @@ namespace NetFabric.Hyperlinq
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ValueReadOnlyCollectionExtensions.SelectAtEnumerable<ValueWrapper<TKey, TValue>, Dictionary<TKey, TValue>.ValueCollection.Enumerator, TValue, TResult, TSelector> SelectAt<TKey, TValue, TResult, TSelector>(
             this Dictionary<TKey, TValue>.ValueCollection source,
-            TSelector selector)
+            TSelector selector = default)
             where TKey : notnull
             where TSelector : struct, IFunction<TValue, int, TResult>
             => ValueReadOnlyCollectionExtensions.SelectAt<ValueWrapper<TKey, TValue>, Dictionary<TKey, TValue>.ValueCollection.Enumerator, TValue, TResult, TSelector>(new ValueWrapper<TKey, TValue>(source), selector);
@@ -131,7 +131,7 @@ namespace NetFabric.Hyperlinq
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ValueEnumerableExtensions.SelectManyEnumerable<ValueWrapper<TKey, TValue>, Dictionary<TKey, TValue>.ValueCollection.Enumerator, TValue, TSubEnumerable, TSubEnumerator, TResult, TSelector> SelectMany<TKey, TValue, TSubEnumerable, TSubEnumerator, TResult, TSelector>(
             this Dictionary<TKey, TValue>.ValueCollection source,
-            TSelector selector)
+            TSelector selector = default)
             where TSubEnumerable : IValueEnumerable<TResult, TSubEnumerator>
             where TSubEnumerator : struct, IEnumerator<TResult>
             where TKey : notnull
@@ -294,8 +294,13 @@ namespace NetFabric.Hyperlinq
             [ExcludeFromCodeCoverage]
             bool ICollection<TValue>.Remove(TValue item) 
                 => Throw.NotSupportedException<bool>();
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public readonly TValue[] ToArray()
+            => ValueReadOnlyCollectionExtensions.ToArray<ValueWrapper<TKey, TValue>, Dictionary<TKey, TValue>.ValueCollection.Enumerator, TValue>(this);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int Count<TKey, TValue>(this ValueWrapper<TKey, TValue> source)
             where TKey : notnull
             => source.Count;

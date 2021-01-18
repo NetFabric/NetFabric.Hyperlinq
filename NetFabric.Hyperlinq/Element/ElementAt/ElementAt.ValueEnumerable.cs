@@ -15,7 +15,7 @@ namespace NetFabric.Hyperlinq
                 using var enumerator = source.GetEnumerator();
                 while (enumerator.MoveNext())
                 {
-                    if (index-- == 0)
+                    if (index-- is 0)
                         return Option.Some(enumerator.Current);
                 }
             }
@@ -34,7 +34,7 @@ namespace NetFabric.Hyperlinq
                 using var enumerator = source.GetEnumerator();
                 while (enumerator.MoveNext())
                 {
-                    if (predicate.Invoke(enumerator.Current) && index-- == 0)
+                    if (predicate.Invoke(enumerator.Current) && index-- is 0)
                         return Option.Some(enumerator.Current);
                 }
             }
@@ -54,7 +54,7 @@ namespace NetFabric.Hyperlinq
                 {
                     for (var sourceIndex = 0; enumerator.MoveNext(); sourceIndex++)
                     {
-                        if (predicate.Invoke(enumerator.Current, sourceIndex) && index-- == 0)
+                        if (predicate.Invoke(enumerator.Current, sourceIndex) && index-- is 0)
                             return Option.Some(enumerator.Current);
                     }
                 }
@@ -73,7 +73,7 @@ namespace NetFabric.Hyperlinq
                 using var enumerator = source.GetEnumerator();
                 while (enumerator.MoveNext())
                 {
-                    if (index-- == 0)
+                    if (index-- is 0)
                         return Option.Some(selector.Invoke(enumerator.Current));
                 }
             }
@@ -114,7 +114,7 @@ namespace NetFabric.Hyperlinq
                 using var enumerator = source.GetEnumerator();
                 while (enumerator.MoveNext())
                 {
-                    if (predicate.Invoke(enumerator.Current) && index-- == 0)
+                    if (predicate.Invoke(enumerator.Current) && index-- is 0)
                         return Option.Some(selector.Invoke(enumerator.Current));
                 }
             }

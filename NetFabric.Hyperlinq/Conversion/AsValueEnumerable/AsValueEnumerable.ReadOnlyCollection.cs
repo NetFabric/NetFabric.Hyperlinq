@@ -68,7 +68,7 @@ namespace NetFabric.Hyperlinq
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public void CopyTo(TSource[] array, int arrayIndex)
             {
-                if (source.Count != 0)
+                if (source.Count is not 0)
                 {
                     switch (source)
                     {
@@ -92,8 +92,8 @@ namespace NetFabric.Hyperlinq
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            bool ICollection<TSource>.Contains(TSource item)
-                => Count != 0 && source.Contains<TEnumerable, TEnumerator, TSource, TEnumeratorGenerator>(getEnumerator, item);
+            public bool Contains(TSource item)
+                => Count is not 0 && source.Contains<TEnumerable, TEnumerator, TSource, TEnumeratorGenerator>(getEnumerator, item);
 
             [ExcludeFromCodeCoverage]
             void ICollection<TSource>.Add(TSource item) 
@@ -105,8 +105,9 @@ namespace NetFabric.Hyperlinq
             bool ICollection<TSource>.Remove(TSource item) 
                 => Throw.NotSupportedException<bool>();
 
-            public bool Contains(TSource? value, IEqualityComparer<TSource>? comparer = default)
-                => Count != 0 && source.Contains<TEnumerable, TEnumerator, TSource, TEnumeratorGenerator>(getEnumerator, value, comparer);
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public bool Contains(TSource value, IEqualityComparer<TSource>? comparer)
+                => Count is not 0 && source.Contains<TEnumerable, TEnumerator, TSource, TEnumeratorGenerator>(getEnumerator, value, comparer);
         }
 
         [StructLayout(LayoutKind.Auto)]
@@ -139,7 +140,7 @@ namespace NetFabric.Hyperlinq
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public void CopyTo(TSource[] array, int arrayIndex)
             {
-                if (source.Count != 0)
+                if (source.Count is not 0)
                 {
                     switch (source)
                     {
@@ -162,8 +163,8 @@ namespace NetFabric.Hyperlinq
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            bool ICollection<TSource>.Contains(TSource item)
-                => Count != 0 && EnumerableExtensions.Contains(source, item);
+            public bool Contains(TSource item)
+                => Count is not 0 && EnumerableExtensions.Contains(source, item);
 
             [ExcludeFromCodeCoverage]
             void ICollection<TSource>.Add(TSource item) 
@@ -208,11 +209,20 @@ namespace NetFabric.Hyperlinq
                     => enumerator.Dispose();
             }
 
-            public bool Contains(TSource value, IEqualityComparer<TSource>? comparer = default)
-                => Count != 0 && source.Contains(value, comparer);
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public bool Contains(TSource value, IEqualityComparer<TSource>? comparer)
+                => Count is not 0 && source.Contains(value, comparer);
         }
 
-        public static int Count<TSource>(this in ValueEnumerableWrapper<TSource> source)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Count<TSource>(this ValueEnumerableWrapper<TSource> source)
+            => source.Count;
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Count<TEnumerable, TEnumerator, TSource, TEnumeratorGenerator>(this ValueEnumerableWrapper<TEnumerable, TEnumerator, TSource, TEnumeratorGenerator> source)
+            where TEnumerable : IReadOnlyCollection<TSource>
+            where TEnumerator : struct, IEnumerator<TSource>
+            where TEnumeratorGenerator : struct, IFunction<TEnumerable, TEnumerator>
             => source.Count;
     }
 }

@@ -11,7 +11,7 @@ namespace NetFabric.Hyperlinq
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static TSource[] ToArray<TSource>(this in ArraySegment<TSource> source)
         {
-            if (source.Count == 0)
+            if (source.Count is 0)
                 return Array.Empty<TSource>();
 
 #if NET5_0
@@ -27,7 +27,7 @@ namespace NetFabric.Hyperlinq
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static IMemoryOwner<TSource> ToArray<TSource>(this in ArraySegment<TSource> source, MemoryPool<TSource> pool)
         {
-            if (source.Count == 0)
+            if (source.Count is 0)
                 return pool.Rent(0);
 
             var result = pool.RentSliced(source.Count);
@@ -41,7 +41,7 @@ namespace NetFabric.Hyperlinq
         static TSource[] ToArray<TSource, TPredicate>(this in ArraySegment<TSource> source, TPredicate predicate)
             where TPredicate : struct, IFunction<TSource, bool>
         {
-            if (source.Count == 0)
+            if (source.Count is 0)
                 return Array.Empty<TSource>();
 
             using var arrayBuilder = ToArrayBuilder(source, predicate, ArrayPool<TSource>.Shared);
@@ -52,7 +52,7 @@ namespace NetFabric.Hyperlinq
         static IMemoryOwner<TSource> ToArray<TSource, TPredicate>(this in ArraySegment<TSource> source, TPredicate predicate, MemoryPool<TSource> pool)
             where TPredicate : struct, IFunction<TSource, bool>
         {
-            if (source.Count == 0)
+            if (source.Count is 0)
                 return pool.Rent(0);
             
             using var arrayBuilder = ToArrayBuilder(source, predicate, ArrayPool<TSource>.Shared);
@@ -66,7 +66,7 @@ namespace NetFabric.Hyperlinq
         static TSource[] ToArrayAt<TSource, TPredicate>(this in ArraySegment<TSource> source, TPredicate predicate)
             where TPredicate : struct, IFunction<TSource, int, bool>
         {
-            if (source.Count == 0)
+            if (source.Count is 0)
                 return Array.Empty<TSource>();
 
             using var arrayBuilder = ToArrayBuilderAt(source, predicate, ArrayPool<TSource>.Shared);
@@ -77,7 +77,7 @@ namespace NetFabric.Hyperlinq
         static IMemoryOwner<TSource> ToArrayAt<TSource, TPredicate>(this in ArraySegment<TSource> source, TPredicate predicate, MemoryPool<TSource> pool)
             where TPredicate : struct, IFunction<TSource, int, bool>
         {
-            if (source.Count == 0)
+            if (source.Count is 0)
                 return pool.Rent(0);
 
             using var arrayBuilder = ToArrayBuilderAt(source, predicate, ArrayPool<TSource>.Shared);
@@ -91,7 +91,7 @@ namespace NetFabric.Hyperlinq
         static TResult[] ToArray<TSource, TResult, TSelector>(this in ArraySegment<TSource> source, TSelector selector)
             where TSelector : struct, IFunction<TSource, TResult>
         {
-            if (source.Count == 0)
+            if (source.Count is 0)
                 return Array.Empty<TResult>();
 
 #if NET5_0
@@ -108,7 +108,7 @@ namespace NetFabric.Hyperlinq
         static IMemoryOwner<TResult> ToArray<TSource, TResult, TSelector>(this in ArraySegment<TSource> source, TSelector selector, MemoryPool<TResult> pool)
             where TSelector : struct, IFunction<TSource, TResult>
         {
-            if (source.Count == 0)
+            if (source.Count is 0)
                 return pool.Rent(0);
 
             var result = pool.RentSliced(source.Count);
@@ -122,7 +122,7 @@ namespace NetFabric.Hyperlinq
         static TResult[] ToArrayAt<TSource, TResult, TSelector>(this in ArraySegment<TSource> source, TSelector selector)
             where TSelector : struct, IFunction<TSource, int, TResult>
         {
-            if (source.Count == 0)
+            if (source.Count is 0)
                 return Array.Empty<TResult>();
 
 #if NET5_0
@@ -139,7 +139,7 @@ namespace NetFabric.Hyperlinq
         static IMemoryOwner<TResult> ToArrayAt<TSource, TResult, TSelector>(this in ArraySegment<TSource> source, TSelector selector, MemoryPool<TResult> pool)
             where TSelector : struct, IFunction<TSource, int, TResult>
         {
-            if (source.Count == 0)
+            if (source.Count is 0)
                 return pool.Rent(0);
 
             var result = pool.RentSliced(source.Count);
@@ -155,7 +155,7 @@ namespace NetFabric.Hyperlinq
             where TPredicate : struct, IFunction<TSource, bool>
             where TSelector : struct, IFunction<TSource, TResult>
         {
-            if (source.Count == 0)
+            if (source.Count is 0)
                 return Array.Empty<TResult>();
 
             using var arrayBuilder = ToArrayBuilder(source, predicate, selector, ArrayPool<TResult>.Shared);
@@ -167,7 +167,7 @@ namespace NetFabric.Hyperlinq
             where TPredicate : struct, IFunction<TSource, bool>
             where TSelector : struct, IFunction<TSource, TResult>
         {
-            if (source.Count == 0)
+            if (source.Count is 0)
                 return pool.Rent(0);
 
             using var arrayBuilder = ToArrayBuilder(source, predicate, selector, ArrayPool<TResult>.Shared);

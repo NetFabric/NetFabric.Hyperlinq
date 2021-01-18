@@ -13,7 +13,7 @@ namespace NetFabric.Hyperlinq
             => source.All<TList, TSource, FunctionWrapper<TSource, bool>>(new FunctionWrapper<TSource, bool>(predicate));
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool All<TList, TSource, TPredicate>(this TList source, TPredicate predicate)
+        public static bool All<TList, TSource, TPredicate>(this TList source, TPredicate predicate = default)
             where TList : IReadOnlyList<TSource>
             where TPredicate : struct, IFunction<TSource, bool>
             => source.All<TList, TSource, TPredicate>(predicate, 0, source.Count);
@@ -38,7 +38,7 @@ namespace NetFabric.Hyperlinq
             => source.AllAt<TList, TSource, FunctionWrapper<TSource, int, bool>>(new FunctionWrapper<TSource, int, bool>(predicate));
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool AllAt<TList, TSource, TPredicate>(this TList source, TPredicate predicate)
+        public static bool AllAt<TList, TSource, TPredicate>(this TList source, TPredicate predicate = default)
             where TList : IReadOnlyList<TSource>
             where TPredicate : struct, IFunction<TSource, int, bool>
             => source.AllAt<TList, TSource, TPredicate>(predicate, 0, source.Count);
@@ -48,7 +48,7 @@ namespace NetFabric.Hyperlinq
             where TPredicate : struct, IFunction<TSource, int, bool>
         {
             var end = count - 1;
-            if (offset == 0)
+            if (offset is 0)
             {
                 for (var index = 0; index <= end; index++)
                 {

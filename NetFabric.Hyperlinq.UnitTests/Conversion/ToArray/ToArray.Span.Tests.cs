@@ -36,11 +36,11 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
         [MemberData(nameof(TestData.PredicateEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateMultiple), MemberType = typeof(TestData))]
-        public void ToArray_Predicate_Must_Succeed(int[] source, Predicate<int> predicate)
+        public void ToArray_Predicate_Must_Succeed(int[] source, Func<int, bool> predicate)
         {
             // Arrange
             var expected = Enumerable
-                .Where(source, predicate.AsFunc())
+                .Where(source, predicate)
                 .ToArray();
 
             // Act
@@ -59,12 +59,12 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
         [MemberData(nameof(TestData.PredicateEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateMultiple), MemberType = typeof(TestData))]
-        public void ToArray_Predicate_MemoryPool_Must_Succeed(int[] source, Predicate<int> predicate)
+        public void ToArray_Predicate_MemoryPool_Must_Succeed(int[] source, Func<int, bool> predicate)
         {
             // Arrange
             var pool = MemoryPool<int>.Shared;
             var expected = Enumerable
-                .Where(source, predicate.AsFunc())
+                .Where(source, predicate)
                 .ToArray();
 
             // Act
@@ -84,11 +84,11 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
         [MemberData(nameof(TestData.PredicateAtEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateAtSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateAtMultiple), MemberType = typeof(TestData))]
-        public void ToArray_PredicateAt_Must_Succeed(int[] source, PredicateAt<int> predicate)
+        public void ToArray_PredicateAt_Must_Succeed(int[] source, Func<int, int, bool> predicate)
         {
             // Arrange
             var expected = Enumerable
-                .Where(source, predicate.AsFunc())
+                .Where(source, predicate)
                 .ToArray();
 
             // Act
@@ -107,12 +107,12 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
         [MemberData(nameof(TestData.PredicateAtEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateAtSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateAtMultiple), MemberType = typeof(TestData))]
-        public void ToArray_PredicateAt_MemoryPool_Must_Succeed(int[] source, PredicateAt<int> predicate)
+        public void ToArray_PredicateAt_MemoryPool_Must_Succeed(int[] source, Func<int, int, bool> predicate)
         {
             // Arrange
             var pool = MemoryPool<int>.Shared;
             var expected = Enumerable
-                .Where(source, predicate.AsFunc())
+                .Where(source, predicate)
                 .ToArray();
 
             // Act
@@ -132,11 +132,11 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
         [MemberData(nameof(TestData.SelectorEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SelectorSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SelectorMultiple), MemberType = typeof(TestData))]
-        public void ToArray_Selector_Must_Succeed(int[] source, NullableSelector<int, string> selector)
+        public void ToArray_Selector_Must_Succeed(int[] source, Func<int, string> selector)
         {
             // Arrange
             var expected = Enumerable
-                .Select(source, selector.AsFunc())
+                .Select(source, selector)
                 .ToArray();
 
             // Act
@@ -155,12 +155,12 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
         [MemberData(nameof(TestData.SelectorEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SelectorSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SelectorMultiple), MemberType = typeof(TestData))]
-        public void ToArray_Selector_MemoryPool_Must_Succeed(int[] source, NullableSelector<int, string> selector)
+        public void ToArray_Selector_MemoryPool_Must_Succeed(int[] source, Func<int, string> selector)
         {
             // Arrange
             var pool = MemoryPool<string>.Shared;
             var expected = Enumerable
-                .Select(source, selector.AsFunc())
+                .Select(source, selector)
                 .ToArray();
 
             // Act
@@ -180,11 +180,11 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
         [MemberData(nameof(TestData.SelectorAtEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SelectorAtSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SelectorAtMultiple), MemberType = typeof(TestData))]
-        public void ToArray_SelectorAt_Must_Succeed(int[] source, NullableSelectorAt<int, string> selector)
+        public void ToArray_SelectorAt_Must_Succeed(int[] source, Func<int, int, string> selector)
         {
             // Arrange
             var expected = Enumerable
-                .Select(source, selector.AsFunc())
+                .Select(source, selector)
                 .ToArray();
 
             // Act
@@ -203,12 +203,12 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
         [MemberData(nameof(TestData.SelectorAtEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SelectorAtSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SelectorAtMultiple), MemberType = typeof(TestData))]
-        public void ToArray_SelectorAt_MemoryPool_Must_Succeed(int[] source, NullableSelectorAt<int, string> selector)
+        public void ToArray_SelectorAt_MemoryPool_Must_Succeed(int[] source, Func<int, int, string> selector)
         {
             // Arrange
             var pool = MemoryPool<string>.Shared;
             var expected = Enumerable
-                .Select(source, selector.AsFunc())
+                .Select(source, selector)
                 .ToArray();
 
             // Act
@@ -228,12 +228,12 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
         [MemberData(nameof(TestData.PredicateSelectorEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateSelectorSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateSelectorMultiple), MemberType = typeof(TestData))]
-        public void ToArray_Predicate_Selector_Must_Succeed(int[] source, Predicate<int> predicate, NullableSelector<int, string> selector)
+        public void ToArray_Predicate_Selector_Must_Succeed(int[] source, Func<int, bool> predicate, Func<int, string> selector)
         {
             // Arrange
             var expected = Enumerable
-                .Where(source, predicate.AsFunc())
-                .Select(selector.AsFunc())
+                .Where(source, predicate)
+                .Select(selector)
                 .ToArray();
 
             // Act
@@ -253,13 +253,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
         [MemberData(nameof(TestData.PredicateSelectorEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateSelectorSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateSelectorMultiple), MemberType = typeof(TestData))]
-        public void ToArray_Predicate_Selector_MemoryPool_Must_Succeed(int[] source, Predicate<int> predicate, NullableSelector<int, string> selector)
+        public void ToArray_Predicate_Selector_MemoryPool_Must_Succeed(int[] source, Func<int, bool> predicate, Func<int, string> selector)
         {
             // Arrange
             var pool = MemoryPool<string>.Shared;
             var expected = Enumerable
-                .Where(source, predicate.AsFunc())
-                .Select(selector.AsFunc())
+                .Where(source, predicate)
+                .Select(selector)
                 .ToArray();
 
             // Act

@@ -149,7 +149,7 @@ namespace NetFabric.Hyperlinq.SourceGenerator
 
                 // join the two lists together as these are the implemented methods for this type
                 var implementedMethods = implementedInstanceMethods.Concat(implementedExtensionMethods)
-                    .ToArray();
+                    .ToList();
 
                 // lists of methods to be generated
                 var instanceMethodsToBeGenerated = new List<MethodInfo>();
@@ -175,7 +175,7 @@ namespace NetFabric.Hyperlinq.SourceGenerator
                         // check if already implemented
                         var mappedOverloadingMethods = overloadingMethod.ApplyMappings(typeGenericsMapping);
                         if (!implementedMethods.Any(method => method.IsOverload(mappedOverloadingMethods)) 
-                            && !(extendingType.Name.EndsWith("SelectEnumerable") && mappedOverloadingMethods.Name is "Select" or "Where")) // these cases are hard to fix other way
+                            && !((mappedOverloadingMethods.Name is "Select" || mappedOverloadingMethods.Name is "SelectAt") && (extendingType.Name.EndsWith("SelectEnumerable") || extendingType.Name.EndsWith("SelectAtEnumerable")))) // these cases are hard to fix other way
                         {
                             // check if there's a collision with a property
                             if (extendingType.GetMembers().OfType<IPropertySymbol>()
@@ -189,6 +189,8 @@ namespace NetFabric.Hyperlinq.SourceGenerator
                                 // this method will generated as an instance method
                                 instanceMethodsToBeGenerated.Add(mappedOverloadingMethods);
                             }
+
+                            implementedMethods.Add(mappedOverloadingMethods);
                         }
                     }
                 }
@@ -224,9 +226,9 @@ namespace NetFabric.Hyperlinq.SourceGenerator
                                 }
 
                                 var entity = extendingType.IsValueType
-                                    ? "partial struct"
-                                    : "partial class"; 
-                                using (builder.AppendBlock($"public {entity} {extendingType.Name}{extendingTypeGenericParameters}"))
+                                    ? "struct"
+                                    : "class"; 
+                                using (builder.AppendBlock($"public partial {entity} {extendingType.Name}{extendingTypeGenericParameters}"))
                                 {
                                     foreach (var instanceMethod in instanceMethodsToBeGenerated)
                                     {
@@ -246,7 +248,7 @@ namespace NetFabric.Hyperlinq.SourceGenerator
                         }
                     }
 
-                    var source = builder.ToString();
+                    var source = builder.ToString().Replace("TResult, TResult", "TSource, TResult");
                     yield return (extendingType.ContainingType, extendingType, source);
                 }
             }
@@ -254,14 +256,20 @@ namespace NetFabric.Hyperlinq.SourceGenerator
 
         void GenerateMethodSource(CodeBuilder builder, INamedTypeSymbol extendingType, MethodInfo methodToGenerate, ITypeSymbol enumerableType, ITypeSymbol enumeratorType, ITypeSymbol sourceType, string generatedCodeAttribute, ImmutableArray<(string, string, bool)> genericsMapping, bool isExtensionMethod)
         {
-            var extendingTypeTypeParameters = extendingType.MappedTypeParameters(genericsMapping)
+            var extendingTypeTypeArguments = extendingType.MappedTypeArguments(genericsMapping)
                 .ToArray();
-            var typeParameters = methodToGenerate.TypeParameters
-                .Where(typeParameter =>
-                    !typeParameter.IsConcreteType
-                    && typeParameter.Name is not "TEnumerable" and not "TEnumerator" and not "TList"
-                    && !extendingTypeTypeParameters.Any(t => typeParameter.Name == t.Name))
-                .ToArray();
+            var typeParameters = isExtensionMethod
+                ? methodToGenerate.TypeParameters
+                    .Where(typeParameter =>
+                        !typeParameter.IsConcreteType
+                        && typeParameter.Name is not "TEnumerable" and not "TEnumerator" and not "TList")
+                    .ToArray()
+                : methodToGenerate.TypeParameters
+                    .Where(typeParameter =>
+                        !typeParameter.IsConcreteType
+                        && typeParameter.Name is not "TEnumerable" and not "TEnumerator" and not "TList"
+                        && !extendingTypeTypeArguments.Any(argument => argument.Name == typeParameter.Name))
+                    .ToArray();
 
             var methodReturnType = methodToGenerate.ReturnType.ToDisplayString();
             var genericsIndex = methodReturnType.IndexOf('<');
@@ -270,7 +278,7 @@ namespace NetFabric.Hyperlinq.SourceGenerator
                 methodReturnType = methodReturnType.Substring(0, genericsIndex);
                 if (methodToGenerate.ReturnType is INamedTypeSymbol namedMethodReturnType)
                 {
-                    methodReturnType += MapTypeProperties(namedMethodReturnType.TypeParameters.Select(parameter => parameter.Name), enumerableType, enumeratorType, sourceType, genericsMapping);
+                    methodReturnType += MapTypeProperties(namedMethodReturnType.TypeArguments.Select(argument => argument.ToDisplayString()), enumerableType, enumeratorType, sourceType, genericsMapping);
                 }
             }
             if (methodReturnType is "TEnumerable")
@@ -298,11 +306,15 @@ namespace NetFabric.Hyperlinq.SourceGenerator
             // generate the source
             _ = builder
                 .AppendLine(generatedCodeAttribute)
-                .AppendLine("[DebuggerNonUserCode]")
+                //.AppendLine("[DebuggerNonUserCode]")
                 .AppendLine("[MethodImpl(MethodImplOptions.AggressiveInlining)]");
             if (isExtensionMethod)
             {
-                _ = builder.AppendLine($"public static {methodReturnType} {methodName}{methodGenericParameters}(this {methodExtensionType} source{methodParameters})");
+                callParameters = string.IsNullOrEmpty(callParameters)
+                    ? "source"
+                    : $"source, {callParameters}";
+
+                _ = builder.AppendLine($"public static {methodReturnType} {methodName}{methodGenericParametersString}(this {methodExtensionType} source{methodParameters})");
             }
             else
             {

@@ -127,7 +127,7 @@ namespace NetFabric.Hyperlinq
 #pragma warning disable IDE0060 // Remove unused parameter
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public ValueTask<bool> AnyAsync(CancellationToken cancellationToken = default)
-                => new(count != 0);
+                => new(count is not 0);
 #pragma warning restore IDE0060 // Remove unused parameter
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -148,7 +148,7 @@ namespace NetFabric.Hyperlinq
 
             public ValueTask<bool> ContainsAsync(int value, IEqualityComparer<int>? comparer, CancellationToken cancellationToken = default)
             {
-                if (count == 0)
+                if (count is 0)
                     return new ValueTask<bool>(false);
 
                 if (comparer is null || ReferenceEquals(comparer, EqualityComparer<int>.Default))
@@ -170,7 +170,7 @@ namespace NetFabric.Hyperlinq
 #else
                 var array = new int[count];
 #endif
-                if (start == 0)
+                if (start is 0)
                 {
                     for (var index = 0; index < count; index++)
                     {
@@ -193,7 +193,7 @@ namespace NetFabric.Hyperlinq
             {
                 var result = pool.Rent(count);
                 var span = result.Memory.Span;
-                if (start == 0)
+                if (start is 0)
                 {
                     for (var index = 0; index < count; index++)
                     {
@@ -230,7 +230,7 @@ namespace NetFabric.Hyperlinq
                 public override void CopyTo(int[] array, int _)
                 {
                     var count = source.count;
-                    if (source.start == 0)
+                    if (source.start is 0)
                     {
                         for (var index = 0; index < count; index++)
                         {

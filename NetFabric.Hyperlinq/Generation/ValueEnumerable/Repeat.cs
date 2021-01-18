@@ -66,10 +66,10 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Contains(TSource item)
-                => count != 0 && EqualityComparer<TSource>.Default.Equals(value, item);
+                => count is not 0 && EqualityComparer<TSource>.Default.Equals(value, item);
 
             public int IndexOf(TSource item)
-                => count != 0 && EqualityComparer<TSource>.Default.Equals(value, item)
+                => count is not 0 && EqualityComparer<TSource>.Default.Equals(value, item)
                     ? 0
                     : -1;
 
@@ -147,19 +147,19 @@ namespace NetFabric.Hyperlinq
                 => Repeat(value, Utils.Take(this.count, count));
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public bool All(Predicate<TSource> predicate)
-                => count == 0 || predicate(value);
+            public bool All(Func<TSource, bool> predicate)
+                => count is 0 || predicate(value);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Any()
-                => count != 0;
+                => count is not 0;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Contains(TSource value, IEqualityComparer<TSource>? comparer)
                 => comparer switch
                 {
-                    null => count != 0 && EqualityComparer<TSource>.Default.Equals(this.value, value),
-                    _ => count != 0 && comparer.Equals(this.value, value)
+                    null => count is not 0 && EqualityComparer<TSource>.Default.Equals(this.value, value),
+                    _ => count is not 0 && comparer.Equals(this.value, value)
                 };
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -167,7 +167,7 @@ namespace NetFabric.Hyperlinq
                 => Select<TResult, FunctionWrapper<TSource, TResult>>(new FunctionWrapper<TSource, TResult>(selector));
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public RepeatEnumerable<TResult> Select<TResult, TSelector>(TSelector selector) 
+            public RepeatEnumerable<TResult> Select<TResult, TSelector>(TSelector selector = default) 
                 where TSelector : struct, IFunction<TSource, TResult>
                 => new(selector.Invoke(value), count);
 

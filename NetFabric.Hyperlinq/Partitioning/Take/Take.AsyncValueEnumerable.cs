@@ -103,7 +103,7 @@ namespace NetFabric.Hyperlinq
                     {
                         ValueTaskAwaiter awaiter;
                         ConfiguredValueTaskAwaitable<bool>.ConfiguredValueTaskAwaiter awaiter2;
-                        if (num != 0)
+                        if (num is not 0)
                         {
                             if (num == 1)
                             {

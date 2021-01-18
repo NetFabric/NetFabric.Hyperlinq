@@ -41,16 +41,16 @@ namespace NetFabric.Hyperlinq
                 { new int[] { 1, 2, 3, 4, 5 }, 2, 9 },
             };
 
-        public static TheoryData<int[], Predicate<int>> PredicateMultiple =>
-            new TheoryData<int[], Predicate<int>>
+        public static TheoryData<int[], Func<int, bool>> PredicateMultiple =>
+            new TheoryData<int[], Func<int, bool>>
             {
                 { new int[] { 1, 2, 3, 4, 5 }, _ => true },
                 { new int[] { 1, 2, 3, 4, 5 }, item => (item & 0x01) == 0 },
                 { new int[] { 1, 2, 3, 4, 5 }, item => (item & 0x01) == 1 },
             };
 
-        public static TheoryData<int[], int, int, Predicate<int>> SkipTakePredicateMultiple =>
-            new TheoryData<int[], int, int, Predicate<int>>
+        public static TheoryData<int[], int, int, Func<int, bool>> SkipTakePredicateMultiple =>
+            new TheoryData<int[], int, int, Func<int, bool>>
             {
                 { new int[] { 1, 2, 3, 4, 5 }, -1, 2, _ => true },
                 { new int[] { 1, 2, 3, 4, 5 }, 0, 2, _ => true },
@@ -84,8 +84,8 @@ namespace NetFabric.Hyperlinq
             };
 
 
-        public static TheoryData<int[], Predicate<int>, Predicate<int>> PredicatePredicateMultiple =>
-            new TheoryData<int[], Predicate<int>, Predicate<int>>
+        public static TheoryData<int[], Func<int, bool>, Func<int, bool>> PredicatePredicateMultiple =>
+            new TheoryData<int[], Func<int, bool>, Func<int, bool>>
             {
                 { new int[] { 1, 2, 3, 4, 5 }, _ => true, _ => true },
 
@@ -93,8 +93,8 @@ namespace NetFabric.Hyperlinq
                 { new int[] { 1, 2, 3, 4, 5 }, item => (item & 0x01) == 1, _ => true },
             };
 
-        public static TheoryData<int[], int, int, Predicate<int>, Predicate<int>> SkipTakePredicatePredicateMultiple =>
-            new TheoryData<int[], int, int, Predicate<int>, Predicate<int>>
+        public static TheoryData<int[], int, int, Func<int, bool>, Func<int, bool>> SkipTakePredicatePredicateMultiple =>
+            new TheoryData<int[], int, int, Func<int, bool>, Func<int, bool>>
             {
                 { new int[] { 1, 2, 3, 4, 5 }, 0, 9, _ => true, _ => true },
 
@@ -102,8 +102,8 @@ namespace NetFabric.Hyperlinq
                 { new int[] { 1, 2, 3, 4, 5 }, 0, 9, item => (item & 0x01) == 1, _ => true },
             };
 
-        public static TheoryData<int[], PredicateAt<int>> PredicateAtMultiple =>
-            new TheoryData<int[], PredicateAt<int>>
+        public static TheoryData<int[], Func<int, int, bool>> PredicateAtMultiple =>
+            new TheoryData<int[], Func<int, int, bool>>
             {
                 { new int[] { 1, 2, 3, 4, 5 }, (_, __) => true },
                 { new int[] { 1, 2, 3, 4, 5 }, (item, _) => (item & 0x01) == 0 },
@@ -112,8 +112,8 @@ namespace NetFabric.Hyperlinq
                 { new int[] { 1, 2, 3, 4, 5 }, (_, index) => (index & 0x01) == 1 },
             };
 
-        public static TheoryData<int[], int, int, PredicateAt<int>> SkipTakePredicateAtMultiple =>
-            new TheoryData<int[], int, int, PredicateAt<int>>
+        public static TheoryData<int[], int, int, Func<int, int, bool>> SkipTakePredicateAtMultiple =>
+            new TheoryData<int[], int, int, Func<int, int, bool>>
             {
                 { new int[] { 1, 2, 3, 4, 5 }, 0, 2, (_, __) => true },
                 { new int[] { 1, 2, 3, 4, 5 }, 2, 2, (_, __) => true },
@@ -165,14 +165,14 @@ namespace NetFabric.Hyperlinq
                 { new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 }, 2, 20, (_, index) => (index & 0x01) == 1 },
             };
 
-        public static TheoryData<int[], NullableSelector<int, string>> SelectorMultiple =>
-            new TheoryData<int[], NullableSelector<int, string>>
+        public static TheoryData<int[], Func<int, string>> SelectorMultiple =>
+            new TheoryData<int[], Func<int, string>>
             {
                 { new int[] { 1, 2, 3, 4, 5 }, item => item.ToString() },
             };
 
-        public static TheoryData<int[], int, int, NullableSelector<int, string>> SkipTakeSelectorMultiple =>
-            new TheoryData<int[], int, int, NullableSelector<int, string>>
+        public static TheoryData<int[], int, int, Func<int, string>> SkipTakeSelectorMultiple =>
+            new TheoryData<int[], int, int, Func<int, string>>
             {
                 { new int[] { 1, 2, 3, 4, 5 }, -1, 2, item => item.ToString() },
                 { new int[] { 1, 2, 3, 4, 5 }, 0, 2, item => item.ToString() },
@@ -185,14 +185,14 @@ namespace NetFabric.Hyperlinq
                 { new int[] { 1, 2, 3, 4, 5 }, 2, 9, item => item.ToString() },
             };
 
-        public static TheoryData<int[], NullableSelectorAt<int, string>> SelectorAtMultiple =>
-            new TheoryData<int[], NullableSelectorAt<int, string>>
+        public static TheoryData<int[], Func<int, int, string>> SelectorAtMultiple =>
+            new TheoryData<int[], Func<int, int, string>>
             {
                 { new int[] { 1, 2, 3, 4, 5 }, (item, index) => $"{item} {index}" },
             };
 
-        public static TheoryData<int[], int, int, NullableSelectorAt<int, string>> SkipTakeSelectorAtMultiple =>
-            new TheoryData<int[], int, int, NullableSelectorAt<int, string>>
+        public static TheoryData<int[], int, int, Func<int, int, string>> SkipTakeSelectorAtMultiple =>
+            new TheoryData<int[], int, int, Func<int, int, string>>
             {
                 { new int[] { 1, 2, 3, 4, 5 }, -1, 2, (item, index) => $"{item} {index}" },
                 { new int[] { 1, 2, 3, 4, 5 }, 0, 2, (item, index) => $"{item} {index}" },
@@ -205,16 +205,16 @@ namespace NetFabric.Hyperlinq
                 { new int[] { 1, 2, 3, 4, 5 }, 2, 9, (item, index) => $"{item} {index}" },
             };
 
-        public static TheoryData<int[], Predicate<int>, NullableSelector<int, string>> PredicateSelectorMultiple =>
-            new TheoryData<int[], Predicate<int>, NullableSelector<int, string>>
+        public static TheoryData<int[], Func<int, bool>, Func<int, string>> PredicateSelectorMultiple =>
+            new TheoryData<int[], Func<int, bool>, Func<int, string>>
             {
                 { new int[] { 1, 2, 3, 4, 5 }, _ => true, item => item.ToString() },
                 { new int[] { 1, 2, 3, 4, 5 }, item => (item & 0x01) == 0, item => item.ToString() },
                 { new int[] { 1, 2, 3, 4, 5 }, item => (item & 0x01) == 1, item => item.ToString() },
             };
 
-        public static TheoryData<int[], int, int, Predicate<int>, NullableSelector<int, string>> SkipTakePredicateSelectorMultiple =>
-            new TheoryData<int[], int, int, Predicate<int>, NullableSelector<int, string>>
+        public static TheoryData<int[], int, int, Func<int, bool>, Func<int, string>> SkipTakePredicateSelectorMultiple =>
+            new TheoryData<int[], int, int, Func<int, bool>, Func<int, string>>
             {
                 { new int[] { 1, 2, 3, 4, 5 }, -1, 2, _ => true, item => item.ToString() },
                 { new int[] { 1, 2, 3, 4, 5 }, 0, 2, _ => true, item => item.ToString() },

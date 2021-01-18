@@ -56,7 +56,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
         [MemberData(nameof(TestData.PredicateEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateMultiple), MemberType = typeof(TestData))]
-        public void ElementAt_Predicate_With_OutOfRange_Must_Return_None(int[] source, Predicate<int> predicate)
+        public void ElementAt_Predicate_With_OutOfRange_Must_Return_None(int[] source, Func<int, bool> predicate)
         {
             // Arrange
 
@@ -80,11 +80,11 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
         [Theory]
         [MemberData(nameof(TestData.PredicateSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateMultiple), MemberType = typeof(TestData))]
-        public void ElementAt_Predicate_With_ValidData_Must_Return_Some(int[] source, Predicate<int> predicate)
+        public void ElementAt_Predicate_With_ValidData_Must_Return_Some(int[] source, Func<int, bool> predicate)
         {
             // Arrange
             var expected = Enumerable
-                .Where(source, predicate.AsFunc())
+                .Where(source, predicate)
                 .ToList();
 
             for (var index = 0; index < expected.Count; index++)
@@ -105,7 +105,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
         [MemberData(nameof(TestData.PredicateAtEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateAtSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateAtMultiple), MemberType = typeof(TestData))]
-        public void ElementAt_PredicateAt_With_OutOfRange_Must_Return_None(int[] source, PredicateAt<int> predicate)
+        public void ElementAt_PredicateAt_With_OutOfRange_Must_Return_None(int[] source, Func<int, int, bool> predicate)
         {
             // Arrange
 
@@ -129,11 +129,11 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
         [Theory]
         [MemberData(nameof(TestData.PredicateAtSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateAtMultiple), MemberType = typeof(TestData))]
-        public void ElementAt_PredicateAt_With_ValidData_Must_Return_Some(int[] source, PredicateAt<int> predicate)
+        public void ElementAt_PredicateAt_With_ValidData_Must_Return_Some(int[] source, Func<int, int, bool> predicate)
         {
             // Arrange
             var expected = Enumerable
-                .Where(source, predicate.AsFunc())
+                .Where(source, predicate)
                 .ToList();
 
             for (var index = 0; index < expected.Count; index++)
@@ -154,7 +154,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
         [MemberData(nameof(TestData.SelectorEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SelectorSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SelectorMultiple), MemberType = typeof(TestData))]
-        public void ElementAt_Selector_With_OutOfRange_Must_Return_None(int[] source, NullableSelector<int, string> selector)
+        public void ElementAt_Selector_With_OutOfRange_Must_Return_None(int[] source, Func<int, string> selector)
         {
             // Arrange
 
@@ -178,13 +178,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
         [Theory]
         [MemberData(nameof(TestData.SelectorSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SelectorMultiple), MemberType = typeof(TestData))]
-        public void ElementAt_Selector_With_ValidData_Must_Return_Some(int[] source, NullableSelector<int, string> selector)
+        public void ElementAt_Selector_With_ValidData_Must_Return_Some(int[] source, Func<int, string> selector)
         {
             for (var index = 0; index < source.Length; index++)
             {
                 // Arrange
                 var expected = Enumerable
-                    .Select(source, selector.AsFunc())
+                    .Select(source, selector)
                     .ElementAt(index);
 
                 // Act
@@ -203,7 +203,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
         [MemberData(nameof(TestData.SelectorAtEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SelectorAtSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SelectorAtMultiple), MemberType = typeof(TestData))]
-        public void ElementAt_SelectorAt_With_OutOfRange_Must_Return_None(int[] source, NullableSelectorAt<int, string> selector)
+        public void ElementAt_SelectorAt_With_OutOfRange_Must_Return_None(int[] source, Func<int, int, string> selector)
         {
             // Arrange
 
@@ -227,11 +227,11 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
         [Theory]
         [MemberData(nameof(TestData.SelectorAtSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SelectorAtMultiple), MemberType = typeof(TestData))]
-        public void ElementAt_SelectorAt_With_ValidData_Must_Return_Some(int[] source, NullableSelectorAt<int, string> selector)
+        public void ElementAt_SelectorAt_With_ValidData_Must_Return_Some(int[] source, Func<int, int, string> selector)
         {
             // Arrange
             var expected = Enumerable
-                .Select(source, selector.AsFunc())
+                .Select(source, selector)
                 .ToList();
 
             for (var index = 0; index < source.Length; index++)
@@ -252,7 +252,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
         [MemberData(nameof(TestData.PredicateSelectorEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateSelectorSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateSelectorMultiple), MemberType = typeof(TestData))]
-        public void ElementAt_Predicate_Selector_With_OutOfRange_Must_Return_None(int[] source, Predicate<int> predicate, NullableSelector<int, string> selector)
+        public void ElementAt_Predicate_Selector_With_OutOfRange_Must_Return_None(int[] source, Func<int, bool> predicate, Func<int, string> selector)
         {
             // Arrange
 
@@ -278,12 +278,12 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
         [Theory]
         [MemberData(nameof(TestData.PredicateSelectorSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateSelectorMultiple), MemberType = typeof(TestData))]
-        public void ElementAt_Predicate_Selector_With_ValidData_Must_Return_Some(int[] source, Predicate<int> predicate, NullableSelector<int, string> selector)
+        public void ElementAt_Predicate_Selector_With_ValidData_Must_Return_Some(int[] source, Func<int, bool> predicate, Func<int, string> selector)
         {
             // Arrange
             var expected = Enumerable
-                .Where(source, predicate.AsFunc())
-                .Select(selector.AsFunc())
+                .Where(source, predicate)
+                .Select(selector)
                 .ToList();
 
             for (var index = 0; index < expected.Count; index++)

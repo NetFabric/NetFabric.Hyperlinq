@@ -107,7 +107,7 @@ namespace NetFabric.Hyperlinq
                     try
                     {
                         ConfiguredValueTaskAwaitable<bool>.ConfiguredValueTaskAwaiter awaiter;
-                        if (num == 0)
+                        if (num is 0)
                         {
                             awaiter = u__1;
                             u__1 = default;

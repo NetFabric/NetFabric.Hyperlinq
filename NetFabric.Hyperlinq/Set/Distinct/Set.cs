@@ -65,7 +65,7 @@ namespace NetFabric.Hyperlinq
         /// </returns>
         public bool Add(TElement value)
         {
-            if (Count == 0)
+            if (Count is 0)
             {
                 buckets = bucketsPool.Rent(7);
                 Array.Clear(buckets, 0, buckets.Length);
@@ -208,7 +208,7 @@ namespace NetFabric.Hyperlinq
         {
             if (slots is null) return;
             
-            if (arrayIndex == 0)
+            if (arrayIndex is 0)
             {
                 for (var index = 0; index < Count; index++)
                     array[index] = slots[index].Value;

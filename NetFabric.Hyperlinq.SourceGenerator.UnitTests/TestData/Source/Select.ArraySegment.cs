@@ -11,10 +11,11 @@ namespace NetFabric.Hyperlinq
         public static ArraySegmentSelectEnumerable<TSource, TResult, FunctionWrapper<TSource, TResult>> Select<TSource, TResult>(this in ArraySegment<TSource> source, Func<TSource, TResult> selector)
             => Select<TSource, TResult, FunctionWrapper<TSource, TResult>>(source, new FunctionWrapper<TSource, TResult>(selector));
 
-        public static ArraySegmentSelectEnumerable<TSource, TResult, TSelector> Select<TSource, TResult, TSelector>(this in ArraySegment<TSource> source, TSelector selector)
+        public static ArraySegmentSelectEnumerable<TSource, TResult, TSelector> Select<TSource, TResult, TSelector>(this in ArraySegment<TSource> source, TSelector selector = default)
             where TSelector : struct, IFunction<TSource, TResult>
-            => new ArraySegmentSelectEnumerable<TSource, TResult, TSelector>(source, selector);
+            => new(source, selector);
 
+        [GeneratorMapping("TSource", "TResult")]
         public readonly partial struct ArraySegmentSelectEnumerable<TSource, TResult, TSelector>
             : IValueReadOnlyList<TResult, ArraySegmentSelectEnumerable<TSource, TResult, TSelector>.DisposableEnumerator>
             , IList<TResult>
@@ -38,7 +39,7 @@ namespace NetFabric.Hyperlinq
                 => throw new NotSupportedException();
             void ICollection<TResult>.Clear()
                 => throw new NotSupportedException();
-            bool ICollection<TResult>.Contains(TResult item)
+            public bool Contains(TResult item)
                 => default;
             bool ICollection<TResult>.Remove(TResult item)
                 => throw new NotSupportedException();
@@ -60,9 +61,9 @@ namespace NetFabric.Hyperlinq
             }
 
             public readonly Enumerator GetEnumerator()
-                => new Enumerator();
+                => new();
             readonly DisposableEnumerator IValueEnumerable<TResult, ArraySegmentSelectEnumerable<TSource, TResult, TSelector>.DisposableEnumerator>.GetEnumerator()
-                => new DisposableEnumerator();
+                => new();
             readonly IEnumerator<TResult> IEnumerable<TResult>.GetEnumerator()
                 => new DisposableEnumerator();
             readonly IEnumerator IEnumerable.GetEnumerator()
@@ -77,7 +78,7 @@ namespace NetFabric.Hyperlinq
             {
                 public readonly TResult Current => default!;
                 readonly TResult IEnumerator<TResult>.Current => default!;
-                readonly object? IEnumerator.Current => default!;
+                readonly object IEnumerator.Current => default!;
 
                 public bool MoveNext()
                     => false;
@@ -88,17 +89,16 @@ namespace NetFabric.Hyperlinq
                 public void Dispose() { }
             }
 
-            public readonly ValueEnumerableExtensions.WhereEnumerable<ArraySegmentSelectEnumerable<TSource, TResult, TSelector>, ArraySegmentSelectEnumerable<TSource, TResult, TSelector>.DisposableEnumerator, TResult, FunctionWrapper<TResult, bool>> Where(Func<TResult, bool> predicate)
-            => ValueEnumerableExtensions.Where<ArraySegmentSelectEnumerable<TSource, TResult, TSelector>, ArraySegmentSelectEnumerable<TSource, TResult, TSelector>.DisposableEnumerator, TResult>(this, predicate);
+            public bool Any()
+                => source.Count is not 0;
 
-            public readonly ValueEnumerableExtensions.WhereEnumerable<ArraySegmentSelectEnumerable<TSource, TResult, TSelector>, ArraySegmentSelectEnumerable<TSource, TResult, TSelector>.DisposableEnumerator, TResult, TPredicate> Where<TPredicate>(TPredicate predicate)
-            where TPredicate : struct, IFunction<TResult, bool>
-            => ValueEnumerableExtensions.Where<ArraySegmentSelectEnumerable<TSource, TResult, TSelector>, ArraySegmentSelectEnumerable<TSource, TResult, TSelector>.DisposableEnumerator, TResult, TPredicate>(this, predicate);
+            public bool Contains(TResult value, IEqualityComparer<TResult>? comparer = default)
+                => default;
 
             public ArraySegmentSelectEnumerable<TSource, TResult2, SelectorCombination<TSelector, FunctionWrapper<TResult, TResult2>, TSource, TResult, TResult2>> Select<TResult2>(Func<TResult, TResult2> selector)
                 => Select<FunctionWrapper<TResult, TResult2>, TResult2>(new FunctionWrapper<TResult, TResult2>(selector));
 
-            public ArraySegmentSelectEnumerable<TSource, TResult2, SelectorCombination<TSelector, TSelector2, TSource, TResult, TResult2>> Select<TSelector2, TResult2>(TSelector2 selector)
+            public ArraySegmentSelectEnumerable<TSource, TResult2, SelectorCombination<TSelector, TSelector2, TSource, TResult, TResult2>> Select<TSelector2, TResult2>(TSelector2 selector = default)
                 where TSelector2 : struct, IFunction<TResult, TResult2>
                 => Select<TSource, TResult2, SelectorCombination<TSelector, TSelector2, TSource, TResult, TResult2>>(source, new SelectorCombination<TSelector, TSelector2, TSource, TResult, TResult2>(this.selector, selector));
         }

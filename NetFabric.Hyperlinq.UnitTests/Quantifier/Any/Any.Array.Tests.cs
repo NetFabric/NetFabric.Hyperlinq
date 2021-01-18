@@ -26,33 +26,16 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Any
             _ = result.Must()
                 .BeEqualTo(expected);
         }
-        
-        [Fact]
-        public void Any_Predicate_With_Null_Must_Throw()
-        {
-            // Arrange
-            var source = new int[0];
-            var predicate = (Predicate<int>)null;
-
-            // Act
-            Action action = () => _ = ArrayExtensions
-                .Any(source, predicate);
-
-            // Assert
-            _ = action.Must()
-                .Throw<ArgumentNullException>()
-                .EvaluateTrue(exception => exception.ParamName == "predicate");
-        }
 
         [Theory]
         [MemberData(nameof(TestData.PredicateEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateMultiple), MemberType = typeof(TestData))]
-        public void Any_Predicate_With_ValidData_Must_Succeed(int[] source, Predicate<int> predicate)
+        public void Any_Predicate_With_ValidData_Must_Succeed(int[] source, Func<int, bool> predicate)
         {
             // Arrange
             var expected = Enumerable
-                .Any(source, predicate.AsFunc());
+                .Any(source, predicate);
 
             // Act
             var result = ArrayExtensions
@@ -62,33 +45,16 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Any
             _ = result.Must()
                 .BeEqualTo(expected);
         }
-        
-        [Fact]
-        public void Any_PredicateAt_With_Null_Must_Throw()
-        {
-            // Arrange
-            var source = new int[0];
-            var predicate = (PredicateAt<int>)null;
-
-            // Act
-            Action action = () => _ = ArrayExtensions
-                .Any(source, predicate);
-
-            // Assert
-            _ = action.Must()
-                .Throw<ArgumentNullException>()
-                .EvaluateTrue(exception => exception.ParamName == "predicate");
-        }
 
         [Theory]
         [MemberData(nameof(TestData.PredicateAtEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateAtSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateAtMultiple), MemberType = typeof(TestData))]
-        public void Any_PredicateAt_With_ValidData_Must_Succeed(int[] source, PredicateAt<int> predicate)
+        public void Any_PredicateAt_With_ValidData_Must_Succeed(int[] source, Func<int, int, bool> predicate)
         {
             // Arrange
             var expected = Enumerable
-                .Where(source, predicate.AsFunc())
+                .Where(source, predicate)
                 .Count() != 0;
 
             // Act

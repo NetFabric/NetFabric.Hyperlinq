@@ -65,7 +65,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
 
         [Theory]
         [MemberData(nameof(TestData.SelectorEmpty), MemberType = typeof(TestData))]
-        public void Single_Selector_With_Empty_Must_Return_None(int[] source, NullableSelector<int, string> selector)
+        public void Single_Selector_With_Empty_Must_Return_None(int[] source, Func<int, string> selector)
         {
             // Arrange
             var wrapped = Wrap
@@ -84,13 +84,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
 
         [Theory]
         [MemberData(nameof(TestData.SelectorSingle), MemberType = typeof(TestData))]
-        public void Single_Selector_With_Single_Must_Return_Some(int[] source, NullableSelector<int, string> selector)
+        public void Single_Selector_With_Single_Must_Return_Some(int[] source, Func<int, string> selector)
         {
             // Arrange
             var wrapped = Wrap
                 .AsValueReadOnlyCollection(source);
             var expected = Enumerable
-                .Select(source, selector.AsFunc())
+                .Select(source, selector)
                 .Single();
 
             // Act
@@ -106,7 +106,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
 
         [Theory]
         [MemberData(nameof(TestData.SelectorMultiple), MemberType = typeof(TestData))]
-        public void Single_Selector_With_Multiple_Must_Return_None(int[] source, NullableSelector<int, string> selector)
+        public void Single_Selector_With_Multiple_Must_Return_None(int[] source, Func<int, string> selector)
         {
             // Arrange
             var wrapped = Wrap
@@ -125,7 +125,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
 
         [Theory]
         [MemberData(nameof(TestData.SelectorAtEmpty), MemberType = typeof(TestData))]
-        public void Single_SelectorAt_With_Empty_Must_Return_None(int[] source, NullableSelectorAt<int, string> selector)
+        public void Single_SelectorAt_With_Empty_Must_Return_None(int[] source, Func<int, int, string> selector)
         {
             // Arrange
             var wrapped = Wrap
@@ -144,13 +144,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
 
         [Theory]
         [MemberData(nameof(TestData.SelectorAtSingle), MemberType = typeof(TestData))]
-        public void Single_SelectorAt_With_Single_Must_Return_Some(int[] source, NullableSelectorAt<int, string> selector)
+        public void Single_SelectorAt_With_Single_Must_Return_Some(int[] source, Func<int, int, string> selector)
         {
             // Arrange
             var wrapped = Wrap
                 .AsValueReadOnlyCollection(source);
             var expected = Enumerable
-                .Select(source, selector.AsFunc())
+                .Select(source, selector)
                 .Single();
 
             // Act
@@ -166,7 +166,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
 
         [Theory]
         [MemberData(nameof(TestData.SelectorAtMultiple), MemberType = typeof(TestData))]
-        public void Single_SelectorAt_With_Multiple_Must_Return_None(int[] source, NullableSelectorAt<int, string> selector)
+        public void Single_SelectorAt_With_Multiple_Must_Return_None(int[] source, Func<int, int, string> selector)
         {
             // Arrange
             var wrapped = Wrap

@@ -72,7 +72,7 @@ namespace NetFabric.Hyperlinq
         static List<TResult> ToListAt<TList, TSource, TResult, TSelector>(this TList source, TSelector selector, int offset, int count)
             where TList : IReadOnlyList<TSource>
             where TSelector : struct, IFunction<TSource, int, TResult>
-            => source.Count == 0
+            => source.Count is 0
                 ? new List<TResult>()
                 : new List<TResult>(new IndexedToListCollection<TList, TSource, TResult, TSelector>(source, selector, offset, count));
 

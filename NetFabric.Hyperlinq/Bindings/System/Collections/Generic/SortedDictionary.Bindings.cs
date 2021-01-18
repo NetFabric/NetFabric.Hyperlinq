@@ -65,7 +65,7 @@ namespace NetFabric.Hyperlinq
             => ValueReadOnlyCollectionExtensions.Any<ValueWrapper<TKey, TValue>, SortedDictionary<TKey, TValue>.Enumerator, KeyValuePair<TKey, TValue>>(new ValueWrapper<TKey, TValue>(source), predicate);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool Any<TKey, TValue, TPredicate>(this SortedDictionary<TKey, TValue> source, TPredicate predicate)
+        public static bool Any<TKey, TValue, TPredicate>(this SortedDictionary<TKey, TValue> source, TPredicate predicate = default)
             where TKey : notnull
             where TPredicate : struct, IFunction<KeyValuePair<TKey, TValue>, bool>
             => ValueReadOnlyCollectionExtensions.Any<ValueWrapper<TKey, TValue>, SortedDictionary<TKey, TValue>.Enumerator, KeyValuePair<TKey, TValue>, TPredicate>(new ValueWrapper<TKey, TValue>(source), predicate);
@@ -99,7 +99,7 @@ namespace NetFabric.Hyperlinq
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ValueReadOnlyCollectionExtensions.SelectEnumerable<ValueWrapper<TKey, TValue>, SortedDictionary<TKey, TValue>.Enumerator, KeyValuePair<TKey, TValue>, TResult, TSelector> Select<TKey, TValue, TResult, TSelector>(
             this SortedDictionary<TKey, TValue> source,
-            TSelector selector)
+            TSelector selector = default)
             where TKey : notnull
             where TSelector : struct, IFunction<KeyValuePair<TKey, TValue>, TResult>
             => ValueReadOnlyCollectionExtensions.Select<ValueWrapper<TKey, TValue>, SortedDictionary<TKey, TValue>.Enumerator, KeyValuePair<TKey, TValue>, TResult, TSelector>(new ValueWrapper<TKey, TValue>(source), selector);
@@ -114,7 +114,7 @@ namespace NetFabric.Hyperlinq
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ValueReadOnlyCollectionExtensions.SelectAtEnumerable<ValueWrapper<TKey, TValue>, SortedDictionary<TKey, TValue>.Enumerator, KeyValuePair<TKey, TValue>, TResult, TSelector> SelectAt<TKey, TValue, TResult, TSelector>(
             this SortedDictionary<TKey, TValue> source,
-            TSelector selector)
+            TSelector selector = default)
             where TKey : notnull
             where TSelector : struct, IFunction<KeyValuePair<TKey, TValue>, int, TResult>
             => ValueReadOnlyCollectionExtensions.SelectAt<ValueWrapper<TKey, TValue>, SortedDictionary<TKey, TValue>.Enumerator, KeyValuePair<TKey, TValue>, TResult, TSelector>(new ValueWrapper<TKey, TValue>(source), selector);
@@ -131,7 +131,7 @@ namespace NetFabric.Hyperlinq
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ValueEnumerableExtensions.SelectManyEnumerable<ValueWrapper<TKey, TValue>, SortedDictionary<TKey, TValue>.Enumerator, KeyValuePair<TKey, TValue>, TSubEnumerable, TSubEnumerator, TResult, TSelector> SelectMany<TKey, TValue, TSubEnumerable, TSubEnumerator, TResult, TSelector>(
             this SortedDictionary<TKey, TValue> source,
-            TSelector selector)
+            TSelector selector = default)
             where TSubEnumerable : IValueEnumerable<TResult, TSubEnumerator>
             where TSubEnumerator : struct, IEnumerator<TResult>
             where TKey : notnull
@@ -293,9 +293,14 @@ namespace NetFabric.Hyperlinq
                 => Throw.NotSupportedException<bool>();
             [ExcludeFromCodeCoverage]
             bool ICollection<KeyValuePair<TKey, TValue>>.Remove(KeyValuePair<TKey, TValue> item) 
-                => Throw.NotSupportedException<bool>();             
+                => Throw.NotSupportedException<bool>();
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public readonly KeyValuePair<TKey, TValue>[] ToArray()
+            => ValueReadOnlyCollectionExtensions.ToArray<ValueWrapper<TKey, TValue>, SortedDictionary<TKey, TValue>.Enumerator, KeyValuePair<TKey, TValue>>(this);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int Count<TKey, TValue>(this ValueWrapper<TKey, TValue> source)
             where TKey : notnull
             => source.Count;

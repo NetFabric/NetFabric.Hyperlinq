@@ -7,10 +7,9 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class ArrayExtensions
     {
-        public readonly partial struct ArraySegmentWhereEnumerable<TSource, TPredicate> where TPredicate : struct, NetFabric.Hyperlinq.IFunction<TSource, bool>
+        public partial struct ArraySegmentWhereEnumerable<TSource, TPredicate> where TPredicate : struct, NetFabric.Hyperlinq.IFunction<TSource, bool>
         {
             [GeneratedCode("NetFabric.Hyperlinq.SourceGenerator", "1.0.0")]
-            [DebuggerNonUserCode]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly int Count()
             => NetFabric.Hyperlinq.ValueEnumerableExtensions.Count<NetFabric.Hyperlinq.ArrayExtensions.ArraySegmentWhereEnumerable<TSource, TPredicate>, NetFabric.Hyperlinq.ArrayExtensions.ArraySegmentWhereEnumerable<TSource, TPredicate>.DisposableEnumerator, TSource>(this);

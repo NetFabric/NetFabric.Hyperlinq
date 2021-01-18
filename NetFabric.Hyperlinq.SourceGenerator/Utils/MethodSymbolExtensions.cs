@@ -102,9 +102,9 @@ namespace NetFabric.Hyperlinq.SourceGenerator
                 // check if parameter type is defined by contraints
                 var constraints0 = method0.TypeParameters.FirstOrDefault(typeParameter => type0 == typeParameter.Name).Constraints;
                 var constraints1 = method1.TypeParameters.FirstOrDefault(typeParameter => type1 == typeParameter.Name).Constraints;
-                if (constraints0 is null)
+                if (string.IsNullOrEmpty(constraints0))
                 {
-                    if (constraints1 is not null)
+                    if (!string.IsNullOrEmpty(constraints1))
                         return false;
 
                     if (type0 != type1)
@@ -112,7 +112,7 @@ namespace NetFabric.Hyperlinq.SourceGenerator
                 }
                 else
                 {
-                    if (constraints1 is null)
+                    if (string.IsNullOrEmpty(constraints1))
                         return false;
 
                     return constraints0 == constraints1;

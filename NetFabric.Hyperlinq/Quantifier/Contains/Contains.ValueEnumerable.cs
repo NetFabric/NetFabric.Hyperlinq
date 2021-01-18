@@ -8,7 +8,6 @@ namespace NetFabric.Hyperlinq
         public static bool Contains<TEnumerable, TEnumerator, TSource>(this TEnumerable source, TSource value)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
-            where TSource : struct
         {
             if (source is ICollection<TSource> collection)
                 return collection.Contains(value);

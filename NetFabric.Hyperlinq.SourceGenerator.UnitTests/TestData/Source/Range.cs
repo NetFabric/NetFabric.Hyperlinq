@@ -7,7 +7,7 @@ namespace NetFabric.Hyperlinq
     public static partial class ValueEnumerable
     {
         public static RangeEnumerable Range(int start, int count)
-            => new RangeEnumerable(start, count);
+            => new(start, count);
 
         [GeneratorMapping("TSource", "int", true)]
         public readonly partial struct RangeEnumerable
@@ -28,9 +28,9 @@ namespace NetFabric.Hyperlinq
 
 
             public readonly Enumerator GetEnumerator()
-                => new Enumerator();
+                => new();
             readonly DisposableEnumerator IValueEnumerable<int, DisposableEnumerator>.GetEnumerator()
-                => new DisposableEnumerator();
+                => new();
             readonly IEnumerator<int> IEnumerable<int>.GetEnumerator()
                 => new DisposableEnumerator();
             readonly IEnumerator IEnumerable.GetEnumerator()
@@ -62,7 +62,7 @@ namespace NetFabric.Hyperlinq
             {
                 public readonly int Current => 0;
                 readonly int IEnumerator<int>.Current => 0;
-                readonly object? IEnumerator.Current => 0;
+                readonly object IEnumerator.Current => 0;
 
                 public bool MoveNext()
                     => false;
@@ -72,6 +72,12 @@ namespace NetFabric.Hyperlinq
 
                 public void Dispose() { }
             }
+
+            public bool Contains(int value, IEqualityComparer<int>? comparer)
+                => default;
+
+            public RangeEnumerable Skip(int count)
+                => default;
         }
     }
 }

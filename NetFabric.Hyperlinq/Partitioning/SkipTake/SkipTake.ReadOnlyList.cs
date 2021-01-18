@@ -74,10 +74,10 @@ namespace NetFabric.Hyperlinq
                 => Copy(source, offset, array, arrayIndex, Count);
 
 
-            bool ICollection<TSource>.Contains(TSource item)
+            public bool Contains(TSource item)
             {
                 // ReSharper disable once HeapView.PossibleBoxingAllocation
-                if (offset == 0 && Count == source.Count && source is ICollection<TSource> collection)
+                if (offset is 0 && Count == source.Count && source is ICollection<TSource> collection)
                     return collection.Contains(item);
 
                 var end = offset + Count - 1;
@@ -104,7 +104,7 @@ namespace NetFabric.Hyperlinq
             public int IndexOf(TSource item)
             {
                 // ReSharper disable once HeapView.PossibleBoxingAllocation
-                if (offset == 0 && Count == source.Count && source is IList<TSource> list)
+                if (offset is 0 && Count == source.Count && source is IList<TSource> list)
                     return list.IndexOf(item);
 
                 var end = offset + Count - 1;
@@ -221,44 +221,44 @@ namespace NetFabric.Hyperlinq
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool All(Func<TSource, bool> predicate)
-                => source.All<TList, TSource, FunctionWrapper<TSource, bool>>(new FunctionWrapper<TSource, bool>(predicate));
+                => source.All<TList, TSource, FunctionWrapper<TSource, bool>>(new FunctionWrapper<TSource, bool>(predicate), offset, Count);
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public bool All<TPredicate>(TPredicate predicate)
+            public bool All<TPredicate>(TPredicate predicate = default)
                 where TPredicate : struct, IFunction<TSource, bool>
                 => source.All<TList, TSource, TPredicate>(predicate, offset, Count);
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool All(Func<TSource, int, bool> predicate)
-                => source.AllAt<TList, TSource, FunctionWrapper<TSource, int, bool>>(new FunctionWrapper<TSource, int, bool>(predicate));
+                => source.AllAt<TList, TSource, FunctionWrapper<TSource, int, bool>>(new FunctionWrapper<TSource, int, bool>(predicate), offset, Count);
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public bool AllAt<TPredicate>(TPredicate predicate)
+            public bool AllAt<TPredicate>(TPredicate predicate = default)
                 where TPredicate : struct, IFunction<TSource, int, bool>
                 => source.AllAt<TList, TSource, TPredicate>(predicate, offset, Count);
             
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Any(Func<TSource, bool> predicate)
-                => source.Any<TList, TSource, FunctionWrapper<TSource, bool>>(new FunctionWrapper<TSource, bool>(predicate));
+                => source.Any<TList, TSource, FunctionWrapper<TSource, bool>>(new FunctionWrapper<TSource, bool>(predicate), offset, Count);
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public bool Any<TPredicate>(TPredicate predicate)
+            public bool Any<TPredicate>(TPredicate predicate = default)
                 where TPredicate : struct, IFunction<TSource, bool>
                 => source.Any<TList, TSource, TPredicate>(predicate, offset, Count);
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Any(Func<TSource, int, bool> predicate)
-                => source.AnyAt<TList, TSource, FunctionWrapper<TSource, int, bool>>(new FunctionWrapper<TSource, int, bool>(predicate));
+                => source.AnyAt<TList, TSource, FunctionWrapper<TSource, int, bool>>(new FunctionWrapper<TSource, int, bool>(predicate), offset, Count);
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public bool AnyAt<TPredicate>(TPredicate predicate)
+            public bool AnyAt<TPredicate>(TPredicate predicate = default)
                 where TPredicate : struct, IFunction<TSource, int, bool>
                 => source.AnyAt<TList, TSource, TPredicate>(predicate, offset, Count);
 
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public bool Contains(TSource value, IEqualityComparer<TSource>? comparer = default)
+            public bool Contains(TSource value, IEqualityComparer<TSource>? comparer)
                 => source.Contains(value, comparer, offset, Count);
 
             #endregion            
@@ -266,20 +266,20 @@ namespace NetFabric.Hyperlinq
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public WhereEnumerable<TList, TSource, FunctionWrapper<TSource, bool>> Where(Func<TSource, bool> predicate)
-                => Where<FunctionWrapper<TSource, bool>>(new FunctionWrapper<TSource, bool>(predicate));
+                => Where(new FunctionWrapper<TSource, bool>(predicate));
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public WhereEnumerable<TList, TSource, TPredicate> Where<TPredicate>(TPredicate predicate)
+            public WhereEnumerable<TList, TSource, TPredicate> Where<TPredicate>(TPredicate predicate = default)
                 where TPredicate : struct, IFunction<TSource, bool>
                 => source.Where<TList, TSource, TPredicate>(predicate, offset, Count);
             
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public WhereAtEnumerable<TList, TSource, FunctionWrapper<TSource, int, bool>> Where(Func<TSource, int, bool> predicate)
-                => WhereAt<FunctionWrapper<TSource, int, bool>>(new FunctionWrapper<TSource, int, bool>(predicate));
+                => WhereAt(new FunctionWrapper<TSource, int, bool>(predicate));
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public WhereAtEnumerable<TList, TSource, TPredicate> WhereAt<TPredicate>(TPredicate predicate)
+            public WhereAtEnumerable<TList, TSource, TPredicate> WhereAt<TPredicate>(TPredicate predicate = default)
                 where TPredicate : struct, IFunction<TSource, int, bool>
                 => source.WhereAt<TList, TSource, TPredicate>(predicate, offset, Count);
 
@@ -291,7 +291,7 @@ namespace NetFabric.Hyperlinq
                 => Select<TResult, FunctionWrapper<TSource, TResult>>(new FunctionWrapper<TSource, TResult>(selector));
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public SelectEnumerable<TList, TSource, TResult, TSelector> Select<TResult, TSelector>(TSelector selector)
+            public SelectEnumerable<TList, TSource, TResult, TSelector> Select<TResult, TSelector>(TSelector selector = default)
                 where TSelector : struct, IFunction<TSource, TResult>
                 => source.Select<TList, TSource, TResult, TSelector>(selector, offset, Count);
             
@@ -300,7 +300,7 @@ namespace NetFabric.Hyperlinq
                 => SelectAt<TResult, FunctionWrapper<TSource, int, TResult>>(new FunctionWrapper<TSource, int, TResult>(selector));
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public SelectAtEnumerable<TList, TSource, TResult, TSelector> SelectAt<TResult, TSelector>(TSelector selector)
+            public SelectAtEnumerable<TList, TSource, TResult, TSelector> SelectAt<TResult, TSelector>(TSelector selector = default)
                 where TSelector : struct, IFunction<TSource, int, TResult>
                 => source.SelectAt<TList, TSource, TResult, TSelector>(selector, offset, Count);
 
@@ -350,7 +350,7 @@ namespace NetFabric.Hyperlinq
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer = default)
                 where TKey : notnull
-                => source.ToDictionary<TList, TSource, TKey, TElement, FunctionWrapper<TSource, TKey>, FunctionWrapper<TSource, TElement>>(new FunctionWrapper<TSource, TKey>(keySelector), new FunctionWrapper<TSource, TElement>(elementSelector), comparer);
+                => source.ToDictionary<TList, TSource, TKey, TElement, FunctionWrapper<TSource, TKey>, FunctionWrapper<TSource, TElement>>(new FunctionWrapper<TSource, TKey>(keySelector), new FunctionWrapper<TSource, TElement>(elementSelector), comparer, offset, Count);
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Dictionary<TKey, TElement> ToDictionary<TKey, TElement, TKeySelector, TElementSelector>(TKeySelector keySelector, TElementSelector elementSelector, IEqualityComparer<TKey>? comparer = default)

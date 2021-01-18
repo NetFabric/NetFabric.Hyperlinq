@@ -7,7 +7,6 @@ namespace NetFabric.Hyperlinq
     public static partial class ArrayExtensions
     {
         public static bool Contains<TList, TSource>(this ReadOnlySpan<TSource> source, TSource value)
-            where TSource : struct
         {
             for (var index = 0; index < source.Length; index++)
             {
@@ -19,7 +18,7 @@ namespace NetFabric.Hyperlinq
 
         public static bool Contains<TSource>(this ReadOnlySpan<TSource> source, TSource value, IEqualityComparer<TSource>? comparer = default)
         {
-            if (source.Length == 0)
+            if (source.Length is 0)
                 return false;
 
             if (Utils.UseDefault(comparer))

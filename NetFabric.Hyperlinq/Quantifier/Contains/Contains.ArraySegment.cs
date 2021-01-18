@@ -6,8 +6,7 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class ArrayExtensions
     {
-        public static bool Contains<TList, TSource>(this in ArraySegment<TSource> source, TSource value)
-            where TSource : struct
+        public static bool Contains<TSource>(this in ArraySegment<TSource> source, TSource value)
         {
             if (source.Any())
             {
@@ -33,9 +32,9 @@ namespace NetFabric.Hyperlinq
             return false;
         }
 
-        public static bool Contains<TSource>(this in ArraySegment<TSource> source, TSource value, IEqualityComparer<TSource>? comparer = default)
+        public static bool Contains<TSource>(this in ArraySegment<TSource> source, TSource value, IEqualityComparer<TSource>? comparer)
         {
-            if (source.Count == 0)
+            if (source.Count is 0)
                 return false;
 
             if (Utils.UseDefault(comparer))
@@ -194,7 +193,7 @@ namespace NetFabric.Hyperlinq
                     else
                     {
                         var end = source.Count - 1;
-                        if (source.Offset == 0)
+                        if (source.Offset is 0)
                         {
                             var array = source.Array!;
                             for (var index = 0; index <= end; index++)
@@ -238,7 +237,7 @@ namespace NetFabric.Hyperlinq
                     else
                     {
                         var end = source.Count - 1;
-                        if (source.Offset == 0)
+                        if (source.Offset is 0)
                         {
                             var array = source.Array!;
                             for (var index = 0; index <= end; index++)

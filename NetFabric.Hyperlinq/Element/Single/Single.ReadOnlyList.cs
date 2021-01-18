@@ -94,7 +94,7 @@ namespace NetFabric.Hyperlinq
             where TPredicate : struct, IFunction<TSource, int, bool>
         {
             var end = count - 1;
-            if (offset == 0)
+            if (offset is 0)
             {
                 for (var index = 0; index <= end; index++)
                 {

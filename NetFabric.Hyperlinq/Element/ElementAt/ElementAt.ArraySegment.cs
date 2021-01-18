@@ -20,7 +20,7 @@ namespace NetFabric.Hyperlinq
                 {
                     foreach (var item in source.Array!)
                     {
-                        if (predicate.Invoke(item) && index-- == 0)
+                        if (predicate.Invoke(item) && index-- is 0)
                             return Option.Some(item);
                     }
                 }
@@ -31,7 +31,7 @@ namespace NetFabric.Hyperlinq
                     for (var sourceIndex = source.Offset; sourceIndex <= end; sourceIndex++)
                     {
                         var item = array[sourceIndex];
-                        if (predicate.Invoke(item) && index-- == 0)
+                        if (predicate.Invoke(item) && index-- is 0)
                             return Option.Some(item);
                     }
                 }
@@ -50,7 +50,7 @@ namespace NetFabric.Hyperlinq
                     var sourceIndex = 0;
                     foreach (var item in source.Array!)
                     {
-                        if (predicate.Invoke(item, sourceIndex) && index-- == 0)
+                        if (predicate.Invoke(item, sourceIndex) && index-- is 0)
                             return Option.Some(item);
 
                         sourceIndex++;
@@ -59,13 +59,13 @@ namespace NetFabric.Hyperlinq
                 else
                 {
                     var array = source.Array!;
-                    if (source.Offset == 0)
+                    if (source.Offset is 0)
                     {
                         var end = source.Count - 1;
                         for (var sourceIndex = 0; sourceIndex <= end; sourceIndex++)
                         {
                             var item = array[sourceIndex];
-                            if (predicate.Invoke(item, sourceIndex) && index-- == 0)
+                            if (predicate.Invoke(item, sourceIndex) && index-- is 0)
                                 return Option.Some(item);
                         }
                     }
@@ -76,7 +76,7 @@ namespace NetFabric.Hyperlinq
                         for (var sourceIndex = 0; sourceIndex <= end; sourceIndex++)
                         {
                             var item = array[sourceIndex + offset];
-                            if (predicate.Invoke(item, sourceIndex) && index-- == 0)
+                            if (predicate.Invoke(item, sourceIndex) && index-- is 0)
                                 return Option.Some(item);
                         }
                     }
@@ -112,7 +112,7 @@ namespace NetFabric.Hyperlinq
                 {
                     foreach (var item in source.Array!)
                     {
-                        if (predicate.Invoke(item) && index-- == 0)
+                        if (predicate.Invoke(item) && index-- is 0)
                             return Option.Some(selector.Invoke(item));
                     }
                 }
@@ -123,7 +123,7 @@ namespace NetFabric.Hyperlinq
                     for (var sourceIndex = source.Offset; sourceIndex <= end; sourceIndex++)
                     {
                         var item = array[sourceIndex];
-                        if (predicate.Invoke(item) && index-- == 0)
+                        if (predicate.Invoke(item) && index-- is 0)
                             return Option.Some(selector.Invoke(item));
                     }
                 }

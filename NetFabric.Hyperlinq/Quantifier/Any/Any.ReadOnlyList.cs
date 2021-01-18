@@ -10,7 +10,7 @@ namespace NetFabric.Hyperlinq
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool Any<TList, TSource>(this TList source)
             where TList : IReadOnlyList<TSource>
-            => source.Count != 0;
+            => source.Count is not 0;
 
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -18,7 +18,7 @@ namespace NetFabric.Hyperlinq
             where TList : IReadOnlyList<TSource>
         {
             var (_, take) = Utils.SkipTake(source.Count, offset, count);
-            return take != 0;
+            return take is not 0;
         }
 
 
@@ -28,7 +28,7 @@ namespace NetFabric.Hyperlinq
             => source.Any<TList, TSource, FunctionWrapper<TSource, bool>>(new FunctionWrapper<TSource, bool>(predicate));
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool Any<TList, TSource, TPredicate>(this TList source, TPredicate predicate)
+        public static bool Any<TList, TSource, TPredicate>(this TList source, TPredicate predicate = default)
             where TList : IReadOnlyList<TSource>
             where TPredicate : struct, IFunction<TSource, bool>
             => source.Any<TList, TSource, TPredicate>(predicate, 0, source.Count);
@@ -53,7 +53,7 @@ namespace NetFabric.Hyperlinq
             => source.AnyAt<TList, TSource, FunctionWrapper<TSource, int, bool>>(new FunctionWrapper<TSource, int, bool>(predicate));
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool AnyAt<TList, TSource, TPredicate>(this TList source, TPredicate predicate)
+        public static bool AnyAt<TList, TSource, TPredicate>(this TList source, TPredicate predicate = default)
             where TList : IReadOnlyList<TSource>
             where TPredicate : struct, IFunction<TSource, int, bool>
             => source.AnyAt<TList, TSource, TPredicate>(predicate, 0, source.Count);
@@ -63,7 +63,7 @@ namespace NetFabric.Hyperlinq
             where TPredicate : struct, IFunction<TSource, int, bool>
         {
             var end = count - 1;
-            if (offset == 0)
+            if (offset is 0)
             {
                 for (var index = 0; index <= end; index++)
                 {

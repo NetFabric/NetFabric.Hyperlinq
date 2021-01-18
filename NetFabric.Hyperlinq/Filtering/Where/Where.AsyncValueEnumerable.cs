@@ -12,6 +12,7 @@ namespace NetFabric.Hyperlinq
     public static partial class AsyncValueEnumerableExtensions
     {
 
+        [GeneratorMapping("TPredicate", "NetFabric.Hyperlinq.AsyncFunctionWrapper<TSource, bool>")]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static WhereEnumerable<TEnumerable, TEnumerator, TSource, AsyncFunctionWrapper<TSource, bool>> Where<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TSource, CancellationToken, ValueTask<bool>> predicate)
             where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
@@ -205,9 +206,49 @@ namespace NetFabric.Hyperlinq
             #region Quantifier
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public ValueTask<bool> AllAsync(CancellationToken cancellationToken = default)
+                => source.AllAsync<TEnumerable, TEnumerator, TSource, TPredicate>(predicate, cancellationToken);
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public ValueTask<bool> AllAsync(Func<TSource, CancellationToken, ValueTask<bool>> predicate, CancellationToken cancellationToken = default)
+                => AllAsync(new AsyncFunctionWrapper<TSource, bool>(predicate), cancellationToken);
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public ValueTask<bool> AllAsync<TPredicate2>(TPredicate2 predicate, CancellationToken cancellationToken = default)
+                where TPredicate2 : struct, IAsyncFunction<TSource, bool>
+                => source.AllAsync<TEnumerable, TEnumerator, TSource, AsyncPredicatePredicateCombination<TPredicate, TPredicate2, TSource>>(new AsyncPredicatePredicateCombination<TPredicate, TPredicate2, TSource>(this.predicate, predicate), cancellationToken);
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public ValueTask<bool> AllAsync(Func<TSource, int, CancellationToken, ValueTask<bool>> predicate, CancellationToken cancellationToken = default)
+                => AllAtAsync(new AsyncFunctionWrapper<TSource, int, bool>(predicate), cancellationToken);
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public ValueTask<bool> AllAtAsync<TPredicate2>(TPredicate2 predicate, CancellationToken cancellationToken = default)
+                where TPredicate2 : struct, IAsyncFunction<TSource, int, bool>
+                => source.AllAtAsync<TEnumerable, TEnumerator, TSource, AsyncPredicatePredicateAtCombination<TPredicate, TPredicate2, TSource>>(new AsyncPredicatePredicateAtCombination<TPredicate, TPredicate2, TSource>(this.predicate, predicate), cancellationToken);
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public ValueTask<bool> AnyAsync(CancellationToken cancellationToken = default)
                 => source.AnyAsync<TEnumerable, TEnumerator, TSource, TPredicate>(predicate, cancellationToken);
-            
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public ValueTask<bool> AnyAsync(Func<TSource, CancellationToken, ValueTask<bool>> predicate, CancellationToken cancellationToken = default)
+                => AnyAsync(new AsyncFunctionWrapper<TSource, bool>(predicate), cancellationToken);
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public ValueTask<bool> AnyAsync<TPredicate2>(TPredicate2 predicate, CancellationToken cancellationToken = default)
+                where TPredicate2 : struct, IAsyncFunction<TSource, bool>
+                => source.AnyAsync<TEnumerable, TEnumerator, TSource, AsyncPredicatePredicateCombination<TPredicate, TPredicate2, TSource>>(new AsyncPredicatePredicateCombination<TPredicate, TPredicate2, TSource>(this.predicate, predicate), cancellationToken);
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public ValueTask<bool> AnyAsync(Func<TSource, int, CancellationToken, ValueTask<bool>> predicate, CancellationToken cancellationToken = default)
+                => AnyAtAsync(new AsyncFunctionWrapper<TSource, int, bool>(predicate), cancellationToken);
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public ValueTask<bool> AnyAtAsync<TPredicate2>(TPredicate2 predicate, CancellationToken cancellationToken = default)
+                where TPredicate2 : struct, IAsyncFunction<TSource, int, bool>
+                => source.AnyAtAsync<TEnumerable, TEnumerator, TSource, AsyncPredicatePredicateAtCombination<TPredicate, TPredicate2, TSource>>(new AsyncPredicatePredicateAtCombination<TPredicate, TPredicate2, TSource>(this.predicate, predicate), cancellationToken);
+
             #endregion
             #region Projection
 
@@ -216,16 +257,16 @@ namespace NetFabric.Hyperlinq
                 => Select<TResult, AsyncFunctionWrapper<TSource, TResult>>(new AsyncFunctionWrapper<TSource, TResult>(selector));
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult, TPredicate, TSelector> Select<TResult, TSelector>(TSelector selector)
+            public WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult, TPredicate, TSelector> Select<TResult, TSelector>(TSelector selector = default)
                 where TSelector : struct, IAsyncFunction<TSource, TResult>
                 => source.WhereSelect<TEnumerable, TEnumerator, TSource, TResult, TPredicate, TSelector>(predicate, selector);
-            
+
             #endregion
             #region Filtering
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public WhereEnumerable<TEnumerable, TEnumerator, TSource, AsyncPredicatePredicateCombination<TPredicate, AsyncFunctionWrapper<TSource, bool>, TSource>> Where(Func<TSource, CancellationToken, ValueTask<bool>> predicate)
-                => Where<AsyncFunctionWrapper<TSource, bool>>(new AsyncFunctionWrapper<TSource, bool>(predicate));
+                => Where(new AsyncFunctionWrapper<TSource, bool>(predicate));
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public WhereEnumerable<TEnumerable, TEnumerator, TSource, AsyncPredicatePredicateCombination<TPredicate, TPredicate2, TSource>> Where<TPredicate2>(TPredicate2 predicate = default)
@@ -233,8 +274,8 @@ namespace NetFabric.Hyperlinq
                 => source.Where<TEnumerable, TEnumerator, TSource, AsyncPredicatePredicateCombination<TPredicate, TPredicate2, TSource>>(new AsyncPredicatePredicateCombination<TPredicate, TPredicate2, TSource>(this.predicate, predicate));
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public WhereAtEnumerable<TEnumerable, TEnumerator, TSource, AsyncPredicatePredicateAtCombination<TPredicate, AsyncFunctionWrapper<TSource, int, bool>, TSource>> WhereAt(Func<TSource, int, CancellationToken, ValueTask<bool>> predicate)
-                => WhereAt<AsyncFunctionWrapper<TSource, int, bool>>(new AsyncFunctionWrapper<TSource, int, bool>(predicate));
+            public WhereAtEnumerable<TEnumerable, TEnumerator, TSource, AsyncPredicatePredicateAtCombination<TPredicate, AsyncFunctionWrapper<TSource, int, bool>, TSource>> Where(Func<TSource, int, CancellationToken, ValueTask<bool>> predicate)
+                => WhereAt(new AsyncFunctionWrapper<TSource, int, bool>(predicate));
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public WhereAtEnumerable<TEnumerable, TEnumerator, TSource, AsyncPredicatePredicateAtCombination<TPredicate, TPredicate2, TSource>> WhereAt<TPredicate2>(TPredicate2 predicate = default)

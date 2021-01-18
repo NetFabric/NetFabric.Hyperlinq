@@ -53,7 +53,7 @@ namespace NetFabric.Hyperlinq.SourceGenerator
         public static string ToDisplayString(this ITypeSymbol type, ImmutableArray<(string, string, bool)> genericsMapping)
             => type.ToDisplayString().ApplyMappings(genericsMapping, out _);
 
-        static IEnumerable<ITypeParameterSymbol> GetTypeParameterSymbols(ITypeSymbol typeSymbol)
+        static IEnumerable<ITypeParameterSymbol> GetTypeArguments(ITypeSymbol typeSymbol)
         {
             if (typeSymbol is INamedTypeSymbol namedType && namedType.IsGenericType)
             {
@@ -90,9 +90,9 @@ namespace NetFabric.Hyperlinq.SourceGenerator
             }
         }
 
-        public static IEnumerable<(string Name, string Constraints)> MappedTypeParameters(this ITypeSymbol type, ImmutableArray<(string, string, bool)> genericsMapping)
+        public static IEnumerable<(string Name, string Constraints)> MappedTypeArguments(this ITypeSymbol type, ImmutableArray<(string, string, bool)> genericsMapping)
         {
-            var methodParameters = GetTypeParameterSymbols(type);
+            var methodParameters = GetTypeArguments(type);
             return MapTypeParameters(methodParameters, genericsMapping)
                 .Select(typeArgument => (typeArgument.Name, typeArgument.TypeParameter.AsConstraintsStrings(genericsMapping).ToCommaSeparated()));
         }

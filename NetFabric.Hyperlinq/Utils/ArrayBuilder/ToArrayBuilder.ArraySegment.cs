@@ -58,7 +58,7 @@ namespace NetFabric.Hyperlinq
                 {
                     var array = source.Array!;
                     var end = source.Count - 1;
-                    if (source.Offset == 0)
+                    if (source.Offset is 0)
                     {
                         for (var index = 0; index <= end; index++)
                         {

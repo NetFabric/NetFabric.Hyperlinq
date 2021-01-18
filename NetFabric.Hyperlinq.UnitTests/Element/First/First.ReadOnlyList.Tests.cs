@@ -93,7 +93,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
 
         [Theory]
         [MemberData(nameof(TestData.SkipTakePredicateEmpty), MemberType = typeof(TestData))]
-        public void First_Predicate_With_Empty_Must_Return_None(int[] source, int skip, int take, Predicate<int> predicate)
+        public void First_Predicate_With_Empty_Must_Return_None(int[] source, int skip, int take, Func<int, bool> predicate)
         {
             // Arrange
             var wrapped = Wrap
@@ -115,7 +115,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
         [Theory]
         [MemberData(nameof(TestData.SkipTakePredicateSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakePredicateMultiple), MemberType = typeof(TestData))]
-        public void First_Predicate_With_ValidData_Must_Return_Some(int[] source, int skip, int take, Predicate<int> predicate)
+        public void First_Predicate_With_ValidData_Must_Return_Some(int[] source, int skip, int take, Func<int, bool> predicate)
         {
             // Arrange
             var wrapped = Wrap
@@ -123,7 +123,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
             var expected = Enumerable
                 .Skip(source, skip)
                 .Take(take)
-                .First(predicate.AsFunc());
+                .First(predicate);
 
             // Act
             var result = ReadOnlyListExtensions
@@ -140,7 +140,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
 
         [Theory]
         [MemberData(nameof(TestData.SkipTakePredicateAtEmpty), MemberType = typeof(TestData))]
-        public void First_PredicateAt_With_Empty_Must_Return_None(int[] source, int skip, int take, PredicateAt<int> predicate)
+        public void First_PredicateAt_With_Empty_Must_Return_None(int[] source, int skip, int take, Func<int, int, bool> predicate)
         {
             // Arrange
             var wrapped = Wrap
@@ -162,7 +162,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
         [Theory]
         [MemberData(nameof(TestData.SkipTakePredicateAtSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakePredicateAtMultiple), MemberType = typeof(TestData))]
-        public void First_PredicateAt_With_ValidData_Must_Return_Some(int[] source, int skip, int take, PredicateAt<int> predicate)
+        public void First_PredicateAt_With_ValidData_Must_Return_Some(int[] source, int skip, int take, Func<int, int, bool> predicate)
         {
             // Arrange
             var wrapped = Wrap
@@ -170,7 +170,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
             var expected = Enumerable
                 .Skip(wrapped, skip)
                 .Take(take)
-                .Where(predicate.AsFunc())
+                .Where(predicate)
                 .First();
 
             // Act
@@ -188,7 +188,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
 
         [Theory]
         [MemberData(nameof(TestData.SkipTakeSelectorEmpty), MemberType = typeof(TestData))]
-        public void First_Selector_With_Empty_Must_Return_None(int[] source, int skip, int take, NullableSelector<int, string> selector)
+        public void First_Selector_With_Empty_Must_Return_None(int[] source, int skip, int take, Func<int, string> selector)
         {
             // Arrange
             var wrapped = Wrap
@@ -210,7 +210,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
         [Theory]
         [MemberData(nameof(TestData.SkipTakeSelectorSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakeSelectorMultiple), MemberType = typeof(TestData))]
-        public void First_Selector_With_ValidData_Must_Return_Some(int[] source, int skip, int take, NullableSelector<int, string> selector)
+        public void First_Selector_With_ValidData_Must_Return_Some(int[] source, int skip, int take, Func<int, string> selector)
         {
             // Arrange
             var wrapped = Wrap
@@ -218,7 +218,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
             var expected = Enumerable
                 .Skip(source, skip)
                 .Take(take)
-                .Select(selector.AsFunc())
+                .Select(selector)
                 .First();
 
             // Act
@@ -236,7 +236,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
 
         [Theory]
         [MemberData(nameof(TestData.SkipTakeSelectorAtEmpty), MemberType = typeof(TestData))]
-        public void First_SelectorAt_With_Empty_Must_Return_None(int[] source, int skip, int take, NullableSelectorAt<int, string> selector)
+        public void First_SelectorAt_With_Empty_Must_Return_None(int[] source, int skip, int take, Func<int, int, string> selector)
         {
             // Arrange
             var wrapped = Wrap
@@ -258,7 +258,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
         [Theory]
         [MemberData(nameof(TestData.SkipTakeSelectorAtSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakeSelectorAtMultiple), MemberType = typeof(TestData))]
-        public void First_SelectorAt_With_ValidData_Must_Return_Some(int[] source, int skip, int take, NullableSelectorAt<int, string> selector)
+        public void First_SelectorAt_With_ValidData_Must_Return_Some(int[] source, int skip, int take, Func<int, int, string> selector)
         {
             // Arrange
             var wrapped = Wrap
@@ -266,7 +266,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
             var expected = Enumerable
                 .Skip(source, skip)
                 .Take(take)
-                .Select(selector.AsFunc())
+                .Select(selector)
                 .First();
 
             // Act
@@ -284,7 +284,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
 
         [Theory]
         [MemberData(nameof(TestData.SkipTakePredicateSelectorEmpty), MemberType = typeof(TestData))]
-        public void First_Predicate_Selector_With_Empty_Must_Return_None(int[] source, int skip, int take, Predicate<int> predicate, NullableSelector<int, string> selector)
+        public void First_Predicate_Selector_With_Empty_Must_Return_None(int[] source, int skip, int take, Func<int, bool> predicate, Func<int, string> selector)
         {
             // Arrange
             var wrapped = Wrap
@@ -307,7 +307,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
         [Theory]
         [MemberData(nameof(TestData.SkipTakePredicateSelectorSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakePredicateSelectorMultiple), MemberType = typeof(TestData))]
-        public void First_Predicate_Selector_With_ValidData_Must_Return_Some(int[] source, int skip, int take, Predicate<int> predicate, NullableSelector<int, string> selector)
+        public void First_Predicate_Selector_With_ValidData_Must_Return_Some(int[] source, int skip, int take, Func<int, bool> predicate, Func<int, string> selector)
         {
             // Arrange
             var wrapped = Wrap
@@ -315,8 +315,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
             var expected = Enumerable
                 .Skip(source, skip)
                 .Take(take)
-                .Where(predicate.AsFunc())
-                .Select(selector.AsFunc())
+                .Where(predicate)
+                .Select(selector)
                 .First();
 
             // Act

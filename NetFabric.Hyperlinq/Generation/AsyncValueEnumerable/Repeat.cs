@@ -139,18 +139,18 @@ namespace NetFabric.Hyperlinq
                 => Repeat(value, Utils.Take(this.count, count));
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public ValueTask<bool> AllAsync(Predicate<TSource> predicate)
-                => new(result: count == 0 || predicate(value));
+            public ValueTask<bool> AllAsync(Func<TSource, bool> predicate)
+                => new(result: count is 0 || predicate(value));
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public ValueTask<bool> AnyAsync()
-                => new(result: count != 0);
+                => new(result: count is not 0);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public ValueTask<bool> ContainsAsync(TSource value, IEqualityComparer<TSource>? comparer)
                 => comparer is null
-                    ? new ValueTask<bool>(result: count != 0 && EqualityComparer<TSource>.Default.Equals(this.value, value))
-                    : new ValueTask<bool>(result: count != 0 && comparer.Equals(this.value, value));
+                    ? new ValueTask<bool>(result: count is not 0 && EqualityComparer<TSource>.Default.Equals(this.value, value))
+                    : new ValueTask<bool>(result: count is not 0 && comparer.Equals(this.value, value));
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public RepeatEnumerable<TResult> Select<TResult>(Func<TSource, CancellationToken, ValueTask<TResult>> selector) 

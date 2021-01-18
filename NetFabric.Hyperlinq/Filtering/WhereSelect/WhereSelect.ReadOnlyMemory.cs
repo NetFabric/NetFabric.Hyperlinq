@@ -137,17 +137,75 @@ namespace NetFabric.Hyperlinq
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public int Count()
                 => source.Span.Count(predicate);
-            
+
             #endregion
             #region Quantifier
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public bool All()
+                => source.Span.All(predicate);
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public bool All(Func<TResult, bool> predicate)
+                => All(new FunctionWrapper<TResult, bool>(predicate));
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public bool All<TPredicate2>(TPredicate2 predicate)
+                where TPredicate2 : struct, IFunction<TResult, bool>
+                => this.All<MemoryWhereSelectEnumerable<TSource, TResult, TPredicate, TSelector>, MemoryWhereSelectEnumerable<TSource, TResult, TPredicate, TSelector>.DisposableEnumerator, TResult, TPredicate2>(predicate);
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public bool All(Func<TResult, int, bool> predicate)
+                => AllAt(new FunctionWrapper<TResult, int, bool>(predicate));
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public bool AllAt<TPredicate2>(TPredicate2 predicate)
+                where TPredicate2 : struct, IFunction<TResult, int, bool>
+                => this.AllAt<MemoryWhereSelectEnumerable<TSource, TResult, TPredicate, TSelector>, MemoryWhereSelectEnumerable<TSource, TResult, TPredicate, TSelector>.DisposableEnumerator, TResult, TPredicate2>(predicate);
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Any()
                 => source.Span.Any(predicate);
-            
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public bool Any(Func<TResult, bool> predicate)
+                => Any(new FunctionWrapper<TResult, bool>(predicate));
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public bool Any<TPredicate2>(TPredicate2 predicate)
+                where TPredicate2 : struct, IFunction<TResult, bool>
+                => this.Any<MemoryWhereSelectEnumerable<TSource, TResult, TPredicate, TSelector>, MemoryWhereSelectEnumerable<TSource, TResult, TPredicate, TSelector>.DisposableEnumerator, TResult, TPredicate2>(predicate);
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public bool Any(Func<TResult, int, bool> predicate)
+                => AnyAt(new FunctionWrapper<TResult, int, bool>(predicate));
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public bool AnyAt<TPredicate2>(TPredicate2 predicate)
+                where TPredicate2 : struct, IFunction<TResult, int, bool>
+                => this.AnyAt<MemoryWhereSelectEnumerable<TSource, TResult, TPredicate, TSelector>, MemoryWhereSelectEnumerable<TSource, TResult, TPredicate, TSelector>.DisposableEnumerator, TResult, TPredicate2>(predicate);
+
             #endregion
             #region Filtering
-            
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public readonly ValueEnumerableExtensions.WhereEnumerable<MemoryWhereSelectEnumerable<TSource, TResult, TPredicate, TSelector>, MemoryWhereSelectEnumerable<TSource, TResult, TPredicate, TSelector>.DisposableEnumerator, TResult, FunctionWrapper<TResult, bool>> Where(Func<TResult, bool> predicate)
+                => this.Where<MemoryWhereSelectEnumerable<TSource, TResult, TPredicate, TSelector>, MemoryWhereSelectEnumerable<TSource, TResult, TPredicate, TSelector>.DisposableEnumerator, TResult>(predicate);
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public readonly ValueEnumerableExtensions.WhereEnumerable<MemoryWhereSelectEnumerable<TSource, TResult, TPredicate, TSelector>, MemoryWhereSelectEnumerable<TSource, TResult, TPredicate, TSelector>.DisposableEnumerator, TResult, TPredicate2> Where<TPredicate2>(TPredicate2 predicate = default)
+                where TPredicate2 : struct, IFunction<TResult, bool>
+                => this.Where<MemoryWhereSelectEnumerable<TSource, TResult, TPredicate, TSelector>, MemoryWhereSelectEnumerable<TSource, TResult, TPredicate, TSelector>.DisposableEnumerator, TResult, TPredicate2>(predicate);
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public readonly ValueEnumerableExtensions.WhereAtEnumerable<MemoryWhereSelectEnumerable<TSource, TResult, TPredicate, TSelector>, MemoryWhereSelectEnumerable<TSource, TResult, TPredicate, TSelector>.DisposableEnumerator, TResult, FunctionWrapper<TResult, int, bool>> Where(Func<TResult, int, bool> predicate)
+                => this.Where<MemoryWhereSelectEnumerable<TSource, TResult, TPredicate, TSelector>, MemoryWhereSelectEnumerable<TSource, TResult, TPredicate, TSelector>.DisposableEnumerator, TResult>(predicate);
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public readonly ValueEnumerableExtensions.WhereAtEnumerable<MemoryWhereSelectEnumerable<TSource, TResult, TPredicate, TSelector>, MemoryWhereSelectEnumerable<TSource, TResult, TPredicate, TSelector>.DisposableEnumerator, TResult, TPredicate2> WhereAt<TPredicate2>(TPredicate2 predicate = default)
+                where TPredicate2 : struct, IFunction<TResult, int, bool>
+                => this.WhereAt<MemoryWhereSelectEnumerable<TSource, TResult, TPredicate, TSelector>, MemoryWhereSelectEnumerable<TSource, TResult, TPredicate, TSelector>.DisposableEnumerator, TResult, TPredicate2>(predicate);
+
             #endregion
             #region Projection
 
@@ -156,13 +214,26 @@ namespace NetFabric.Hyperlinq
                 => Select<TResult2, FunctionWrapper<TResult, TResult2>>(new FunctionWrapper<TResult, TResult2>(selector));
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public MemoryWhereSelectEnumerable<TSource, TResult2, TPredicate, SelectorSelectorCombination<TSelector, TSelector2, TSource, TResult, TResult2>> Select<TResult2, TSelector2>(TSelector2 selector)
+            public MemoryWhereSelectEnumerable<TSource, TResult2, TPredicate, SelectorSelectorCombination<TSelector, TSelector2, TSource, TResult, TResult2>> Select<TResult2, TSelector2>(TSelector2 selector = default)
                 where TSelector2 : struct, IFunction<TResult, TResult2>
                 => source.WhereSelect<TSource, TResult2, TPredicate, SelectorSelectorCombination<TSelector, TSelector2, TSource, TResult, TResult2>>(predicate, new SelectorSelectorCombination<TSelector, TSelector2, TSource, TResult, TResult2>(this.selector, selector));
-            
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public readonly ValueEnumerableExtensions.SelectManyEnumerable<MemoryWhereSelectEnumerable<TSource, TResult, TPredicate, TSelector>, MemoryWhereSelectEnumerable<TSource, TResult, TPredicate, TSelector>.DisposableEnumerator, TResult, TSubEnumerable, TSubEnumerator, TResult2, FunctionWrapper<TResult, TSubEnumerable>> SelectMany<TSubEnumerable, TSubEnumerator, TResult2>(Func<TResult, TSubEnumerable> selector)
+                where TSubEnumerable : IValueEnumerable<TResult2, TSubEnumerator>
+                where TSubEnumerator : struct, IEnumerator<TResult2>
+                => this.SelectMany<MemoryWhereSelectEnumerable<TSource, TResult, TPredicate, TSelector>, MemoryWhereSelectEnumerable<TSource, TResult, TPredicate, TSelector>.DisposableEnumerator, TResult, TSubEnumerable, TSubEnumerator, TResult2>(selector);
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public readonly ValueEnumerableExtensions.SelectManyEnumerable<MemoryWhereSelectEnumerable<TSource, TResult, TPredicate, TSelector>, MemoryWhereSelectEnumerable<TSource, TResult, TPredicate, TSelector>.DisposableEnumerator, TResult, TSubEnumerable, TSubEnumerator, TResult2, TSelector2> SelectMany<TSubEnumerable, TSubEnumerator, TResult2, TSelector2>(TSelector2 selector = default)
+                where TSubEnumerable : IValueEnumerable<TResult2, TSubEnumerator>
+                where TSubEnumerator : struct, IEnumerator<TResult2>
+                where TSelector2 : struct, IFunction<TResult, TSubEnumerable>
+                => this.SelectMany<MemoryWhereSelectEnumerable<TSource, TResult, TPredicate, TSelector>, MemoryWhereSelectEnumerable<TSource, TResult, TPredicate, TSelector>.DisposableEnumerator, TResult, TSubEnumerable, TSubEnumerator, TResult2, TSelector2>(selector);
+
             #endregion
             #region Element
-                
+
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Option<TResult> ElementAt(int index)
                 => source.Span.ElementAt<TSource, TResult, TPredicate, TSelector>(index, predicate, selector);

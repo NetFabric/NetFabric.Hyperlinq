@@ -228,17 +228,75 @@ namespace NetFabric.Hyperlinq
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public ValueTask<int> CountAsync(CancellationToken cancellationToken = default)
                 => source.CountAsync<TEnumerable, TEnumerator, TSource, TPredicate>(predicate, cancellationToken);
-            
+
             #endregion
             #region Quantifier
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public ValueTask<bool> AllAsync(CancellationToken cancellationToken = default)
+                => source.AllAsync<TEnumerable, TEnumerator, TSource, TPredicate>(predicate, cancellationToken);
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public ValueTask<bool> AllAsync(Func<TResult, CancellationToken, ValueTask<bool>> predicate, CancellationToken cancellationToken = default)
+                => AllAsync(new AsyncFunctionWrapper<TResult, bool>(predicate), cancellationToken);
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public ValueTask<bool> AllAsync<TPredicate2>(TPredicate2 predicate, CancellationToken cancellationToken = default)
+                where TPredicate2 : struct, IAsyncFunction<TResult, bool>
+                => this.AllAsync<WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult, TPredicate, TSelector>, WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult, TPredicate, TSelector>.Enumerator, TResult, TPredicate2>(predicate, cancellationToken);
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public ValueTask<bool> AllAsync(Func<TResult, int, CancellationToken, ValueTask<bool>> predicate, CancellationToken cancellationToken = default)
+                => AllAtAsync(new AsyncFunctionWrapper<TResult, int, bool>(predicate), cancellationToken);
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public ValueTask<bool> AllAtAsync<TPredicate2>(TPredicate2 predicate, CancellationToken cancellationToken = default)
+                where TPredicate2 : struct, IAsyncFunction<TResult, int, bool>
+                => this.AllAtAsync<WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult, TPredicate, TSelector>, WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult, TPredicate, TSelector>.Enumerator, TResult, TPredicate2>(predicate, cancellationToken);
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public ValueTask<bool> AnyAsync(CancellationToken cancellationToken = default)
                 => source.AnyAsync<TEnumerable, TEnumerator, TSource, TPredicate>(predicate, cancellationToken);
-            
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public ValueTask<bool> AnyAsync(Func<TResult, CancellationToken, ValueTask<bool>> predicate, CancellationToken cancellationToken = default)
+                => AnyAsync(new AsyncFunctionWrapper<TResult, bool>(predicate), cancellationToken);
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public ValueTask<bool> AnyAsync<TPredicate2>(TPredicate2 predicate, CancellationToken cancellationToken = default)
+                where TPredicate2 : struct, IAsyncFunction<TResult, bool>
+                => this.AnyAsync<WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult, TPredicate, TSelector>, WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult, TPredicate, TSelector>.Enumerator, TResult, TPredicate2>(predicate, cancellationToken);
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public ValueTask<bool> AnyAsync(Func<TResult, int, CancellationToken, ValueTask<bool>> predicate, CancellationToken cancellationToken = default)
+                => AnyAtAsync(new AsyncFunctionWrapper<TResult, int, bool>(predicate), cancellationToken);
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public ValueTask<bool> AnyAtAsync<TPredicate2>(TPredicate2 predicate, CancellationToken cancellationToken = default)
+                where TPredicate2 : struct, IAsyncFunction<TResult, int, bool>
+                => this.AnyAtAsync<WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult, TPredicate, TSelector>, WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult, TPredicate, TSelector>.Enumerator, TResult, TPredicate2>(predicate, cancellationToken);
+
             #endregion
             #region Filtering
-            
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public readonly WhereEnumerable<WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult, TPredicate, TSelector>, WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult, TPredicate, TSelector>.Enumerator, TResult, AsyncFunctionWrapper<TResult, bool>> Where(Func<TResult, CancellationToken, ValueTask<bool>> predicate)
+                => this.Where<WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult, TPredicate, TSelector>, WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult, TPredicate, TSelector>.Enumerator, TResult>(predicate);
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public readonly WhereEnumerable<WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult, TPredicate, TSelector>, WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult, TPredicate, TSelector>.Enumerator, TResult, TPredicate2> Where<TPredicate2>(TPredicate2 predicate = default)
+                where TPredicate2 : struct, IAsyncFunction<TResult, bool>
+                => this.Where<WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult, TPredicate, TSelector>, WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult, TPredicate, TSelector>.Enumerator, TResult, TPredicate2>(predicate);
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public readonly WhereAtEnumerable<WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult, TPredicate, TSelector>, WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult, TPredicate, TSelector>.Enumerator, TResult, AsyncFunctionWrapper<TResult, int, bool>> Where(Func<TResult, int, CancellationToken, ValueTask<bool>> predicate)
+                => this.Where<WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult, TPredicate, TSelector>, WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult, TPredicate, TSelector>.Enumerator, TResult>(predicate);
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public readonly WhereAtEnumerable<WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult, TPredicate, TSelector>, WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult, TPredicate, TSelector>.Enumerator, TResult, TPredicate2> WhereAt<TPredicate2>(TPredicate2 predicate = default)
+                where TPredicate2 : struct, IAsyncFunction<TResult, int, bool>
+                => this.WhereAt<WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult, TPredicate, TSelector>, WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult, TPredicate, TSelector>.Enumerator, TResult, TPredicate2>(predicate);
+
             #endregion
             #region Projection
 
@@ -247,10 +305,10 @@ namespace NetFabric.Hyperlinq
                 => Select<TResult2, AsyncFunctionWrapper<TResult, TResult2>>(new AsyncFunctionWrapper<TResult, TResult2>(selector));
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult2, TPredicate, AsyncSelectorSelectorCombination<TSelector, TSelector2, TSource, TResult, TResult2>> Select<TResult2, TSelector2>(TSelector2 selector)
+            public WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult2, TPredicate, AsyncSelectorSelectorCombination<TSelector, TSelector2, TSource, TResult, TResult2>> Select<TResult2, TSelector2>(TSelector2 selector = default)
                 where TSelector2 : struct, IAsyncFunction<TResult, TResult2>
                 => source.WhereSelect<TEnumerable, TEnumerator, TSource, TResult2, TPredicate, AsyncSelectorSelectorCombination<TSelector, TSelector2, TSource, TResult, TResult2>>(predicate, new AsyncSelectorSelectorCombination<TSelector, TSelector2, TSource, TResult, TResult2>(this.selector, selector));
-            
+
             #endregion
             #region Element
 

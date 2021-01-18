@@ -12,6 +12,7 @@ namespace NetFabric.Hyperlinq
     public static partial class AsyncValueEnumerableExtensions
     {
 
+        [GeneratorMapping("TSelector", "NetFabric.Hyperlinq.AsyncFunctionWrapper<TSource, int, TResult>")]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static SelectAtEnumerable<TEnumerable, TEnumerator, TSource, TResult, AsyncFunctionWrapper<TSource, int, TResult>> Select<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, Func<TSource, int, CancellationToken, ValueTask<TResult>> selector)
             where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
@@ -19,14 +20,13 @@ namespace NetFabric.Hyperlinq
             => source.SelectAt<TEnumerable, TEnumerator, TSource, TResult, AsyncFunctionWrapper<TSource, int, TResult>>(new AsyncFunctionWrapper<TSource, int, TResult>(selector));
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static SelectAtEnumerable<TEnumerable, TEnumerator, TSource, TResult, TSelector> SelectAt<TEnumerable, TEnumerator, TSource, TResult, TSelector>(this TEnumerable source, TSelector selector)
+        public static SelectAtEnumerable<TEnumerable, TEnumerator, TSource, TResult, TSelector> SelectAt<TEnumerable, TEnumerator, TSource, TResult, TSelector>(this TEnumerable source, TSelector selector = default)
             where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
             where TSelector : struct, IAsyncFunction<TSource, int, TResult>
             => new(in source, selector);
 
         [GeneratorMapping("TSource", "TResult")]
-        [GeneratorMapping("TResult", "TResult2")]
         [StructLayout(LayoutKind.Auto)]
         public readonly partial struct SelectAtEnumerable<TEnumerable, TEnumerator, TSource, TResult, TSelector>
             : IAsyncValueEnumerable<TResult, SelectAtEnumerable<TEnumerable, TEnumerator, TSource, TResult, TSelector>.Enumerator>
@@ -220,7 +220,7 @@ namespace NetFabric.Hyperlinq
                 => Select<TResult2, AsyncFunctionWrapper<TResult, TResult2>>(new AsyncFunctionWrapper<TResult, TResult2>(selector));
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public SelectAtEnumerable<TEnumerable, TEnumerator, TSource, TResult2, AsyncSelectorAtSelectorCombination<TSelector, TSelector2, TSource, TResult, TResult2>> Select<TResult2, TSelector2>(TSelector2 selector)
+            public SelectAtEnumerable<TEnumerable, TEnumerator, TSource, TResult2, AsyncSelectorAtSelectorCombination<TSelector, TSelector2, TSource, TResult, TResult2>> Select<TResult2, TSelector2>(TSelector2 selector = default)
                 where TSelector2 : struct, IAsyncFunction<TResult, TResult2>
                 => source.SelectAt<TEnumerable, TEnumerator, TSource, TResult2, AsyncSelectorAtSelectorCombination<TSelector, TSelector2, TSource, TResult, TResult2>>(new AsyncSelectorAtSelectorCombination<TSelector, TSelector2, TSource, TResult, TResult2>(this.selector, selector));
             
@@ -229,7 +229,7 @@ namespace NetFabric.Hyperlinq
                 => SelectAt<TResult2, AsyncFunctionWrapper<TResult, int, TResult2>>(new AsyncFunctionWrapper<TResult, int, TResult2>(selector));
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public SelectAtEnumerable<TEnumerable, TEnumerator, TSource, TResult2, AsyncSelectorAtSelectorAtCombination<TSelector, TSelector2, TSource, TResult, TResult2>> SelectAt<TResult2, TSelector2>(TSelector2 selector)
+            public SelectAtEnumerable<TEnumerable, TEnumerator, TSource, TResult2, AsyncSelectorAtSelectorAtCombination<TSelector, TSelector2, TSource, TResult, TResult2>> SelectAt<TResult2, TSelector2>(TSelector2 selector = default)
                 where TSelector2 : struct, IAsyncFunction<TResult, int, TResult2>
                 => source.SelectAt<TEnumerable, TEnumerator, TSource, TResult2, AsyncSelectorAtSelectorAtCombination<TSelector, TSelector2, TSource, TResult, TResult2>>(new AsyncSelectorAtSelectorAtCombination<TSelector, TSelector2, TSource, TResult, TResult2>(this.selector, selector));
             

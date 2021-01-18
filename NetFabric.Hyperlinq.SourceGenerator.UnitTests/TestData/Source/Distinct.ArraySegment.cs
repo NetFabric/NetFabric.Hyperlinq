@@ -7,7 +7,7 @@ namespace NetFabric.Hyperlinq
     public static partial class ArrayExtensions
     {
         public static ArraySegmentDistinctEnumerable<TSource> Distinct<TSource>(this in ArraySegment<TSource> source)
-            => new ArraySegmentDistinctEnumerable<TSource>(source);
+            => new(source);
 
         public readonly partial struct ArraySegmentDistinctEnumerable<TSource>
             : IValueEnumerable<TSource, ArraySegmentDistinctEnumerable<TSource>.DisposableEnumerator>
@@ -18,9 +18,9 @@ namespace NetFabric.Hyperlinq
                 => this.source = source;
 
             public readonly Enumerator GetEnumerator()
-                => new Enumerator();
+                => new();
             readonly DisposableEnumerator IValueEnumerable<TSource, ArraySegmentDistinctEnumerable<TSource>.DisposableEnumerator>.GetEnumerator()
-                => new DisposableEnumerator();
+                => new();
             readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator()
                 => new DisposableEnumerator();
             readonly IEnumerator IEnumerable.GetEnumerator()
@@ -35,7 +35,7 @@ namespace NetFabric.Hyperlinq
             {
                 public readonly TSource Current => default!;
                 readonly TSource IEnumerator<TSource>.Current => default!;
-                readonly object? IEnumerator.Current => default;
+                readonly object IEnumerator.Current => default!;
 
                 public bool MoveNext()
                     => false;

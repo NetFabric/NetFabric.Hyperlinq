@@ -11,13 +11,14 @@ namespace NetFabric.Hyperlinq
     public static partial class ReadOnlyListExtensions
     {
 
+        [GeneratorMapping("TSelector", "NetFabric.Hyperlinq.FunctionWrapper<TSource, int, TResult>")]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static SelectAtEnumerable<TList, TSource, TResult, FunctionWrapper<TSource, int, TResult>> Select<TList, TSource, TResult>(this TList source, Func<TSource, int, TResult> selector)
             where TList : IReadOnlyList<TSource>
             => source.SelectAt<TList, TSource, TResult, FunctionWrapper<TSource, int, TResult>>(new FunctionWrapper<TSource, int, TResult>(selector));
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static SelectAtEnumerable<TList, TSource, TResult, TSelector> SelectAt<TList, TSource, TResult, TSelector>(this TList source, TSelector selector)
+        public static SelectAtEnumerable<TList, TSource, TResult, TSelector> SelectAt<TList, TSource, TResult, TSelector>(this TList source, TSelector selector = default)
             where TList : IReadOnlyList<TSource>
             where TSelector : struct, IFunction<TSource, int, TResult>
             => source.SelectAt<TList, TSource, TResult, TSelector>(selector, 0, source.Count);
@@ -29,7 +30,6 @@ namespace NetFabric.Hyperlinq
             => new(in source, selector, offset, count);
 
         [GeneratorMapping("TSource", "TResult")]
-        [GeneratorMapping("TResult", "TResult2")]
         [StructLayout(LayoutKind.Auto)]
         public partial struct SelectAtEnumerable<TList, TSource, TResult, TSelector>
             : IValueReadOnlyList<TResult, SelectAtEnumerable<TList, TSource, TResult, TSelector>.DisposableEnumerator>
@@ -89,7 +89,7 @@ namespace NetFabric.Hyperlinq
             public void CopyTo(TResult[] array) 
             {
                 var end = Count - 1;
-                if (offset == 0)
+                if (offset is 0)
                 {
                     for (var index = 0; index <= end; index++)
                         array[index] = selector.Invoke(source[index], index);
@@ -103,14 +103,14 @@ namespace NetFabric.Hyperlinq
 
             public void CopyTo(TResult[] array, int arrayIndex)
             {
-                if (arrayIndex == 0)
+                if (arrayIndex is 0)
                 {
                     CopyTo(array);
                 }
                 else
                 {
                     var end = Count - 1;
-                    if (offset == 0)
+                    if (offset is 0)
                     {
                         for (var index = 0; index <= end; index++)
                             array[index + arrayIndex] = selector.Invoke(source[index], index);
@@ -131,7 +131,7 @@ namespace NetFabric.Hyperlinq
                 var end = Count - 1;
                 if (Utils.IsValueType<TResult>())
                 {
-                    if (offset == 0)
+                    if (offset is 0)
                     {
                         for (var index = 0; index <= end; index++)
                         {
@@ -152,7 +152,7 @@ namespace NetFabric.Hyperlinq
                 {
                     var defaultComparer = EqualityComparer<TResult>.Default;
 
-                    if (offset == 0)
+                    if (offset is 0)
                     {
                         for (var index = 0; index <= end; index++)
                         {
@@ -278,7 +278,7 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Any()
-                => Count != 0;
+                => Count is not 0;
             
             #endregion
             #region Filtering
@@ -291,7 +291,7 @@ namespace NetFabric.Hyperlinq
                 => Select<TResult2, FunctionWrapper<TResult, TResult2>>(new FunctionWrapper<TResult, TResult2>(selector));
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public SelectAtEnumerable<TList, TSource, TResult2, SelectorAtSelectorCombination<TSelector, TSelector2, TSource, TResult, TResult2>> Select<TResult2, TSelector2>(TSelector2 selector)
+            public SelectAtEnumerable<TList, TSource, TResult2, SelectorAtSelectorCombination<TSelector, TSelector2, TSource, TResult, TResult2>> Select<TResult2, TSelector2>(TSelector2 selector = default)
                 where TSelector2 : struct, IFunction<TResult, TResult2>
                 => source.SelectAt<TList, TSource, TResult2, SelectorAtSelectorCombination<TSelector, TSelector2, TSource, TResult, TResult2>>(new SelectorAtSelectorCombination<TSelector, TSelector2, TSource, TResult, TResult2>(this.selector, selector));
             
@@ -300,10 +300,23 @@ namespace NetFabric.Hyperlinq
                 => SelectAt<TResult2, FunctionWrapper<TResult, int, TResult2>>(new FunctionWrapper<TResult, int, TResult2>(selector));
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public SelectAtEnumerable<TList, TSource, TResult2, SelectorAtSelectorAtCombination<TSelector, TSelector2, TSource, TResult, TResult2>> SelectAt<TResult2, TSelector2>(TSelector2 selector)
+            public SelectAtEnumerable<TList, TSource, TResult2, SelectorAtSelectorAtCombination<TSelector, TSelector2, TSource, TResult, TResult2>> SelectAt<TResult2, TSelector2>(TSelector2 selector = default)
                 where TSelector2 : struct, IFunction<TResult, int, TResult2>
                 => source.SelectAt<TList, TSource, TResult2, SelectorAtSelectorAtCombination<TSelector, TSelector2, TSource, TResult, TResult2>>(new SelectorAtSelectorAtCombination<TSelector, TSelector2, TSource, TResult, TResult2>(this.selector, selector));
-            
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public readonly SelectManyEnumerable<SelectAtEnumerable<TList, TSource, TResult, TSelector>, TResult, TSubEnumerable, TSubEnumerator, TResult2, FunctionWrapper<TResult, TSubEnumerable>> SelectMany<TSubEnumerable, TSubEnumerator, TResult2>(Func<TResult, TSubEnumerable> selector)
+                where TSubEnumerable : IValueEnumerable<TResult2, TSubEnumerator>
+                where TSubEnumerator : struct, IEnumerator<TResult2>
+                => this.SelectMany<SelectAtEnumerable<TList, TSource, TResult, TSelector>, TResult, TSubEnumerable, TSubEnumerator, TResult2>(selector);
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public readonly SelectManyEnumerable<SelectAtEnumerable<TList, TSource, TResult, TSelector>, TResult, TSubEnumerable, TSubEnumerator, TResult2, TSelector2> SelectMany<TSubEnumerable, TSubEnumerator, TResult2, TSelector2>(TSelector2 selector = default)
+                where TSubEnumerable : IValueEnumerable<TResult2, TSubEnumerator>
+                where TSubEnumerator : struct, IEnumerator<TResult2>
+                where TSelector2 : struct, IFunction<TResult, TSubEnumerable>
+                => this.SelectMany<SelectAtEnumerable<TList, TSource, TResult, TSelector>, TResult, TSubEnumerable, TSubEnumerator, TResult2, TSelector2>(selector);
+
             #endregion
             #region Element
 

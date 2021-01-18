@@ -10,7 +10,6 @@ namespace NetFabric.Hyperlinq
     {
         public static bool Contains<TList, TSource>(this TList source, TSource value)
             where TList : IReadOnlyList<TSource>
-            where TSource : struct
         {
             if (source is ICollection<TSource> collection)
                 return collection.Contains(value);
@@ -33,12 +32,12 @@ namespace NetFabric.Hyperlinq
         static bool Contains<TList, TSource>(this TList source, TSource value, IEqualityComparer<TSource>? comparer, int offset, int count)
             where TList : IReadOnlyList<TSource>
         {
-            if (count == 0)
+            if (count is 0)
                 return false;
 
             if (comparer is null || ReferenceEquals(comparer, EqualityComparer<TSource>.Default))
             {
-                if (offset == 0 && count == source.Count && source is ICollection<TSource> collection)
+                if (offset is 0 && count == source.Count && source is ICollection<TSource> collection)
                     return collection.Contains(value);
 
                 if (Utils.IsValueType<TSource>())
@@ -75,7 +74,7 @@ namespace NetFabric.Hyperlinq
             where TList : IReadOnlyList<TSource>
             where TSelector : struct, IFunction<TSource, TResult>
         {
-            if (count == 0)
+            if (count is 0)
                 return false;
 
             return Utils.IsValueType<TResult>()
@@ -112,7 +111,7 @@ namespace NetFabric.Hyperlinq
             where TList : IReadOnlyList<TSource>
             where TSelector : struct, IFunction<TSource, int, TResult>
         {
-            if (count == 0)
+            if (count is 0)
                 return false;
 
             return Utils.IsValueType<TResult>()
@@ -122,7 +121,7 @@ namespace NetFabric.Hyperlinq
             static bool ValueContains(TList source, TResult value, TSelector selector, int offset, int count)
             {
                 var end = count - 1;
-                if (offset == 0)
+                if (offset is 0)
                 {
                     for (var index = 0; index <= end; index++)
                     {
@@ -146,7 +145,7 @@ namespace NetFabric.Hyperlinq
                 var defaultComparer = EqualityComparer<TResult>.Default;
 
                 var end = count - 1;
-                if (offset == 0)
+                if (offset is 0)
                 {
                     for (var index = 0; index <= end; index++)
                     {

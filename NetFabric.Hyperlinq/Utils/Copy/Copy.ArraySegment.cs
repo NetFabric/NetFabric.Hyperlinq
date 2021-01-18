@@ -18,7 +18,7 @@ namespace NetFabric.Hyperlinq
             => source.AsSpan().CopyTo(destination);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void Copy<TSource, TResult, TSelector>(in ArraySegment<TSource> source, Span<TResult> destination, TSelector selector)
+        public static void Copy<TSource, TResult, TSelector>(in ArraySegment<TSource> source, Span<TResult> destination, TSelector selector = default)
             where TSelector : struct, IFunction<TSource, TResult>
         {
             Debug.Assert(destination.Length >= source.Count);
@@ -37,7 +37,7 @@ namespace NetFabric.Hyperlinq
                 else
                 {
                     var array = source.Array!;
-                    if (source.Offset == 0)
+                    if (source.Offset is 0)
                     {
                         var end = source.Count - 1;
                         for (var index = 0; index <= end; index++)
@@ -55,7 +55,7 @@ namespace NetFabric.Hyperlinq
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void CopyAt<TSource, TResult, TSelector>(in ArraySegment<TSource> source, Span<TResult> destination, TSelector selector)
+        public static void CopyAt<TSource, TResult, TSelector>(in ArraySegment<TSource> source, Span<TResult> destination, TSelector selector = default)
             where TSelector : struct, IFunction<TSource, int, TResult>
         {
             Debug.Assert(destination.Length >= source.Count);
@@ -75,7 +75,7 @@ namespace NetFabric.Hyperlinq
                 {
                     var array = source.Array!;
                     var end = source.Count - 1;
-                    if (source.Offset == 0)
+                    if (source.Offset is 0)
                     {
                         for (var index = 0; index <= end; index++)
                             destination[index] = selector.Invoke(array[index], index);

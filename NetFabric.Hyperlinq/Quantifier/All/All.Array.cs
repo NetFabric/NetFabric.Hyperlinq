@@ -10,7 +10,7 @@ namespace NetFabric.Hyperlinq
             => source.All(new FunctionWrapper<TSource, bool>(predicate));
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool All<TSource, TPredicate>(this TSource[] source, TPredicate predicate)
+        public static bool All<TSource, TPredicate>(this TSource[] source, TPredicate predicate = default)
             where TPredicate : struct, IFunction<TSource, bool>
             => new ArraySegment<TSource>(source).All(predicate);
 
@@ -20,7 +20,7 @@ namespace NetFabric.Hyperlinq
             => source.AllAt(new FunctionWrapper<TSource, int, bool>(predicate));
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool AllAt<TSource, TPredicate>(this TSource[] source, TPredicate predicate)
+        public static bool AllAt<TSource, TPredicate>(this TSource[] source, TPredicate predicate = default)
             where TPredicate : struct, IFunction<TSource, int, bool>
             => new ArraySegment<TSource>(source).AllAt(predicate);
     }

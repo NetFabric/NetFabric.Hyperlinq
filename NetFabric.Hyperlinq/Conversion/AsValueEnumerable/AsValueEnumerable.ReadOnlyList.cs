@@ -65,12 +65,12 @@ namespace NetFabric.Hyperlinq
                 => Copy(source, 0, array, arrayIndex, source.Count);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            bool ICollection<TSource>.Contains(TSource item)
+            public bool Contains(TSource item)
                 => ReadOnlyListExtensions.Contains(source, item);
 
             public int IndexOf(TSource item)
             {
-                if (source.Count == 0)
+                if (source.Count is 0)
                     return -1;
 
                 if (source is IList<TSource> list)
@@ -152,7 +152,8 @@ namespace NetFabric.Hyperlinq
                 public readonly void Dispose() { }
             }
 
-            public bool Contains(TSource value, IEqualityComparer<TSource>? comparer = default)
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public bool Contains(TSource value, IEqualityComparer<TSource>? comparer)
                 => ReadOnlyListExtensions.Contains(source, value, comparer);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]

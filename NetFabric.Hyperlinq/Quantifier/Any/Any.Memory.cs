@@ -8,7 +8,7 @@ namespace NetFabric.Hyperlinq
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool Any<TSource>(this Memory<TSource> source)
-            => source.Length != 0;
+            => source.Length is not 0;
         
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -16,7 +16,7 @@ namespace NetFabric.Hyperlinq
             => source.Any(new FunctionWrapper<TSource, bool>(predicate));
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool Any<TSource, TPredicate>(this Memory<TSource> source, TPredicate predicate)
+        public static bool Any<TSource, TPredicate>(this Memory<TSource> source, TPredicate predicate = default)
             where TPredicate : struct, IFunction<TSource, bool>
             => ((ReadOnlySpan<TSource>)source.Span).Any(predicate);
 
@@ -25,7 +25,7 @@ namespace NetFabric.Hyperlinq
             => source.AnyAt(new FunctionWrapper<TSource, int, bool>(predicate));
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool AnyAt<TSource, TPredicate>(this Memory<TSource> source, TPredicate predicate)
+        public static bool AnyAt<TSource, TPredicate>(this Memory<TSource> source, TPredicate predicate = default)
             where TPredicate : struct, IFunction<TSource, int, bool>
             => ((ReadOnlySpan<TSource>)source.Span).AnyAt(predicate);
     }

@@ -9,7 +9,7 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
-            if (source.Count == 0)
+            if (source.Count is 0)
                 return;
 
             switch (source)
@@ -36,7 +36,7 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
-            if (source.Count == 0)
+            if (source.Count is 0)
                 return;
 
             using var enumerator = source.GetEnumerator();
@@ -47,12 +47,12 @@ namespace NetFabric.Hyperlinq
             }
         }
 
-        public static void Copy<TEnumerable, TEnumerator, TSource, TResult, TSelector>(TEnumerable source, TResult[] destination, TSelector selector)
+        public static void Copy<TEnumerable, TEnumerator, TSource, TResult, TSelector>(TEnumerable source, TResult[] destination, TSelector selector = default)
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
             where TSelector : struct, IFunction<TSource, TResult>
         {
-            if (source.Count == 0)
+            if (source.Count is 0)
                 return;
 
             using var enumerator = source.GetEnumerator();
@@ -63,12 +63,12 @@ namespace NetFabric.Hyperlinq
             }
         }
 
-        public static void Copy<TEnumerable, TEnumerator, TSource, TResult, TSelector>(TEnumerable source, Span<TResult> destination, TSelector selector)
+        public static void Copy<TEnumerable, TEnumerator, TSource, TResult, TSelector>(TEnumerable source, Span<TResult> destination, TSelector selector = default)
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
             where TSelector : struct, IFunction<TSource, TResult>
         {
-            if (source.Count == 0)
+            if (source.Count is 0)
                 return;
 
             using var enumerator = source.GetEnumerator();
@@ -79,12 +79,12 @@ namespace NetFabric.Hyperlinq
             }
         }
 
-        public static void CopyAt<TEnumerable, TEnumerator, TSource, TResult, TSelector>(TEnumerable source, TResult[] destination, TSelector selector)
+        public static void CopyAt<TEnumerable, TEnumerator, TSource, TResult, TSelector>(TEnumerable source, TResult[] destination, TSelector selector = default)
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
             where TSelector : struct, IFunction<TSource, int, TResult>
         {
-            if (source.Count == 0)
+            if (source.Count is 0)
                 return;
 
             using var enumerator = source.GetEnumerator();
@@ -95,12 +95,12 @@ namespace NetFabric.Hyperlinq
             }
         }
 
-        public static void CopyAt<TEnumerable, TEnumerator, TSource, TResult, TSelector>(TEnumerable source, Span<TResult> destination, TSelector selector)
+        public static void CopyAt<TEnumerable, TEnumerator, TSource, TResult, TSelector>(TEnumerable source, Span<TResult> destination, TSelector selector = default)
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
             where TSelector : struct, IFunction<TSource, int, TResult>
         {
-            if (source.Count == 0)
+            if (source.Count is 0)
                 return;
 
             using var enumerator = source.GetEnumerator();

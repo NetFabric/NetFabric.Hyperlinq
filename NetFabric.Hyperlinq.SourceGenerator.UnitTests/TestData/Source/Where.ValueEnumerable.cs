@@ -12,7 +12,7 @@ namespace NetFabric.Hyperlinq
             where TEnumerator : struct, IEnumerator<TSource>
             => Where<TEnumerable, TEnumerator, TSource, FunctionWrapper<TSource, bool>>(source, new FunctionWrapper<TSource, bool>(predicate));
 
-        public static WhereEnumerable<TEnumerable, TEnumerator, TSource, TPredicate> Where<TEnumerable, TEnumerator, TSource, TPredicate>(this TEnumerable source, TPredicate predicate)
+        public static WhereEnumerable<TEnumerable, TEnumerator, TSource, TPredicate> Where<TEnumerable, TEnumerator, TSource, TPredicate>(this TEnumerable source, TPredicate predicate = default)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
             where TPredicate : struct, IFunction<TSource, bool>
@@ -50,7 +50,7 @@ namespace NetFabric.Hyperlinq
             {
                 public readonly TSource Current => default!;
                 readonly TSource IEnumerator<TSource>.Current => default!;
-                readonly object? IEnumerator.Current => default;
+                readonly object IEnumerator.Current => default;
 
                 public bool MoveNext()
                     => false;
@@ -61,10 +61,20 @@ namespace NetFabric.Hyperlinq
                 public void Dispose() { }
             }
 
+            public bool Any()
+                => source.Any<TEnumerable, TEnumerator, TSource, TPredicate>(predicate);
+
+            public bool Any(Func<TSource, bool> predicate)
+                => Any(new FunctionWrapper<TSource, bool>(predicate));
+
+            public bool Any<TPredicate2>(TPredicate2 predicate = default)
+                where TPredicate2 : struct, IFunction<TSource, bool>
+                => source.Any<TEnumerable, TEnumerator, TSource, PredicateCombination<TPredicate, TPredicate2, TSource>>(new PredicateCombination<TPredicate, TPredicate2, TSource>(this.predicate, predicate));
+
             public WhereEnumerable<TEnumerable, TEnumerator, TSource, PredicateCombination<TPredicate, FunctionWrapper<TSource, bool>, TSource>> Where(Func<TSource, bool> predicate)
                 => Where(new FunctionWrapper<TSource, bool>(predicate));
 
-            public WhereEnumerable<TEnumerable, TEnumerator, TSource, PredicateCombination<TPredicate, TPredicate2, TSource>> Where<TPredicate2>(TPredicate2 predicate)
+            public WhereEnumerable<TEnumerable, TEnumerator, TSource, PredicateCombination<TPredicate, TPredicate2, TSource>> Where<TPredicate2>(TPredicate2 predicate = default)
                 where TPredicate2 : struct, IFunction<TSource, bool>
                 => Where<TEnumerable, TEnumerator, TSource, PredicateCombination<TPredicate, TPredicate2, TSource>>(source, new PredicateCombination<TPredicate, TPredicate2, TSource>(this.predicate, predicate));
         }
