@@ -20,13 +20,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetFabric.Hyperlinq.Interfaces", "NetFabric.Hyperlinq.Interfaces\NetFabric.Hyperlinq.Interfaces.csproj", "{5D186C2C-056C-4146-98AF-137BA449570A}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetFabric.Hyperlinq.Benchmarks", "NetFabric.Hyperlinq.Benchmarks\NetFabric.Hyperlinq.Benchmarks.csproj", "{02EE275F-6E2D-444A-AB1F-9BCD02DEA204}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetFabric.Hyperlinq.SourceGenerator", "NetFabric.Hyperlinq.SourceGenerator\NetFabric.Hyperlinq.SourceGenerator.csproj", "{B8C004E3-F59E-4017-8781-C0F99B61BDEF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetFabric.Hyperlinq.SourceGenerator.UnitTests", "NetFabric.Hyperlinq.SourceGenerator.UnitTests\NetFabric.Hyperlinq.SourceGenerator.UnitTests.csproj", "{12F96462-A2F8-4FBE-B4F5-29BA6A6DB4D9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetFabric.Hyperlinq.SourceGenerator.UnitTests", "NetFabric.Hyperlinq.SourceGenerator.UnitTests\NetFabric.Hyperlinq.SourceGenerator.UnitTests.csproj", "{12F96462-A2F8-4FBE-B4F5-29BA6A6DB4D9}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetFabric.Hyperlinq.Abstractions", "NetFabric.Hyperlinq.Abstractions\NetFabric.Hyperlinq.Abstractions.csproj", "{6981E761-E698-437D-AF63-0E80844B7D41}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -42,10 +42,6 @@ Global
 		{FE0CFD9E-7685-4595-8691-5364228722E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FE0CFD9E-7685-4595-8691-5364228722E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FE0CFD9E-7685-4595-8691-5364228722E9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5D186C2C-056C-4146-98AF-137BA449570A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5D186C2C-056C-4146-98AF-137BA449570A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5D186C2C-056C-4146-98AF-137BA449570A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5D186C2C-056C-4146-98AF-137BA449570A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{02EE275F-6E2D-444A-AB1F-9BCD02DEA204}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{02EE275F-6E2D-444A-AB1F-9BCD02DEA204}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{02EE275F-6E2D-444A-AB1F-9BCD02DEA204}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -58,6 +54,10 @@ Global
 		{12F96462-A2F8-4FBE-B4F5-29BA6A6DB4D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{12F96462-A2F8-4FBE-B4F5-29BA6A6DB4D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{12F96462-A2F8-4FBE-B4F5-29BA6A6DB4D9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6981E761-E698-437D-AF63-0E80844B7D41}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6981E761-E698-437D-AF63-0E80844B7D41}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6981E761-E698-437D-AF63-0E80844B7D41}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6981E761-E698-437D-AF63-0E80844B7D41}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

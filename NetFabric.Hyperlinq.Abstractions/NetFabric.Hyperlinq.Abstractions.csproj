@@ -2,15 +2,15 @@
 
   <PropertyGroup>
     <TargetFrameworks>net461;net5.0;netstandard2.0;netstandard2.1</TargetFrameworks>
-    <PackageId>NetFabric.Hyperlinq.Interfaces</PackageId>
-    <Title>NetFabric.Hyperlinq.Interfaces</Title>
-    <Description>Base interfaces for high performance enumeration.</Description>
-    <Version>2.1.0</Version>
+    <PackageId>NetFabric.Hyperlinq.Abstractions</PackageId>
+    <Title>NetFabric.Hyperlinq.Abstractions</Title>
+    <Description>Abstractions for high performance enumeration.</Description>
+    <Version>1.0.0</Version>
     <PackageIcon>Icon.png</PackageIcon>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
-    <PackageTags>netfabric, hyperlinq, linq, enumeration, performance</PackageTags>
+    <PackageTags>netfabric, hyperlinq, abstractions, linq, enumeration, performance</PackageTags>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
-    <PackageReleaseNotes>Added async interfaces.</PackageReleaseNotes>
+    <PackageReleaseNotes></PackageReleaseNotes>
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
@@ -32,21 +32,6 @@
 
   <ItemGroup Condition="'$(TargetFramework)'=='net461' Or '$(TargetFramework)'=='netstandard2.0'">
     <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="5.0.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Update="IFunction.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
-    <Compile Update="FunctionWrapper.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
-    <Compile Update="IAsyncFunction.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
-    <Compile Update="AsyncFunctionWrapper.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
   </ItemGroup>
 
 </Project>
