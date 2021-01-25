@@ -22,7 +22,7 @@ namespace NetFabric.Hyperlinq
         : ICollection<T>
         , IDisposable
     {
-        const int DefaultMinCapacity = 4;
+        const int defaultMinCapacity = 4;
 
         readonly ArrayPool<T> pool;
         readonly int maxCapacity;  // The maximum capacity this builder can have.
@@ -72,7 +72,7 @@ namespace NetFabric.Hyperlinq
         /// Otherwise, use <see cref="SlowAdd"/>.
         /// </remarks>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void Add([AllowNull] T item)
+        public void Add(T item)
         {
             Debug.Assert(maxCapacity > Count);
 
@@ -80,7 +80,7 @@ namespace NetFabric.Hyperlinq
             if ((uint)index >= (uint)current.Length)
                 AllocateBuffer();
 
-            current[index++] = item!;
+            current[index++] = item;
             Count++;
         }
 
@@ -89,15 +89,16 @@ namespace NetFabric.Hyperlinq
         /// </summary>
         /// <param name="array">The destination array.</param>
         /// <param name="arrayIndex">The index in <paramref name="array"/> to start copying to.</param>
-        /// <param name="count">The number of items to copy.</param>
         public readonly void CopyTo(T[] array, int arrayIndex)
         {
+            Debug.Assert(array is not null);
             Debug.Assert(arrayIndex <= array.Length);
 
-            for (var bufferIndex = 0; bufferIndex < buffers.Count; bufferIndex++)
+            var count = buffers.Count;
+            for (var bufferIndex = 0; bufferIndex < count; bufferIndex++)
             {
                 var buffer = buffers[bufferIndex];
-                var length = buffer!.Length;
+                var length = buffer.Length;
                 Array.Copy(buffer, 0, array, arrayIndex, length);
 
                 arrayIndex += length;
@@ -111,10 +112,11 @@ namespace NetFabric.Hyperlinq
         public readonly void CopyTo(Span<T> span)
         {
             var arrayIndex = 0;
-            for (var bufferIndex = 0; bufferIndex < buffers.Count; bufferIndex++)
+            var count = buffers.Count;
+            for (var bufferIndex = 0; bufferIndex < count; bufferIndex++)
             {
                 var buffer = buffers[bufferIndex];
-                var length = buffer!.Length;
+                var length = buffer.Length;
                 buffer.AsSpan().CopyTo(span.Slice(arrayIndex, length));
 
                 arrayIndex += length;
@@ -135,32 +137,34 @@ namespace NetFabric.Hyperlinq
         /// Otherwise, use <see cref="SlowAdd"/>.
         /// </remarks>
         [MethodImpl(MethodImplOptions.NoInlining)]
-        public void SlowAdd([AllowNull] T item) => Add(item);
+        public void SlowAdd(T item) 
+            => Add(item);
 
         /// <summary>
         /// Creates an array from the contents of this builder.
         /// </summary>
         public readonly T[] ToArray()
         {
+            // ReSharper disable once HeapView.ObjectAllocation.Evident
             var array = new T[Count];
-            CopyTo(array);
+            if (Count is not 0)
+                CopyTo(array);
             return array;
         }
 
         public readonly ArraySegment<T> ToArray(ArrayPool<T> pool)
         {
-            Debug.Assert(pool is object);
             var result = pool.RentSliced(Count);
-            CopyTo(result.Array!);
+            if (Count is not 0)
+                CopyTo(result.Array!);
             return result;
         }
 
         public readonly IMemoryOwner<T> ToArray(MemoryPool<T> pool)
         {
-            Debug.Assert(pool is object);
-
             var result = pool.RentSliced(Count);
-            CopyTo(result.Memory.Span);
+            if (Count is not 0)
+                CopyTo(result.Memory.Span);
             return result;
         }
 
@@ -184,8 +188,8 @@ namespace NetFabric.Hyperlinq
             // doing min(64, 100 - 64). The lhs represents double the last buffer,
             // the rhs the limit minus the amount we've already allocated.
 
-            var nextCapacity = DefaultMinCapacity;
-            if (Count != 0)
+            var nextCapacity = defaultMinCapacity;
+            if (Count is not 0)
             {
                 buffers.Add(current);
                 nextCapacity = Math.Min(Count, maxCapacity - Count);
@@ -198,8 +202,9 @@ namespace NetFabric.Hyperlinq
         public readonly void Dispose()
         {
             pool.Return(current);
-            for (var index = 0; index < buffers.Count; index++)
-                pool.Return(buffers[index]!);
+            var count = buffers.Count;
+            for (var index = 0; index < count; index++)
+                pool.Return(buffers[index]);
             buffers.Dispose();
         }
 

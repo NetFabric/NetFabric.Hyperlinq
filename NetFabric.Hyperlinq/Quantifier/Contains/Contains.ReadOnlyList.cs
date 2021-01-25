@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 
@@ -7,9 +8,8 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class ReadOnlyListExtensions
     {
-        public static bool Contains<TList, TSource>(this TList source, [AllowNull] TSource value)
-            where TList : notnull, IReadOnlyList<TSource>
-            where TSource : struct
+        public static bool Contains<TList, TSource>(this TList source, TSource value)
+            where TList : IReadOnlyList<TSource>
         {
             if (source is ICollection<TSource> collection)
                 return collection.Contains(value);
@@ -17,28 +17,28 @@ namespace NetFabric.Hyperlinq
             var end = source.Count - 1;
             for (var index = 0; index <= end; index++)
             {
-                if (EqualityComparer<TSource>.Default.Equals(source[index], value!))
+                if (EqualityComparer<TSource>.Default.Equals(source[index], value))
                     return true;
             }
             return false;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool Contains<TList, TSource>(this TList source, [AllowNull] TSource value, IEqualityComparer<TSource>? comparer = default)
-            where TList : notnull, IReadOnlyList<TSource>
-            => Contains(source, value, comparer, 0, source.Count);
+        public static bool Contains<TList, TSource>(this TList source, TSource value, IEqualityComparer<TSource>? comparer = default)
+            where TList : IReadOnlyList<TSource>
+            => source.Contains(value, comparer, 0, source.Count);
 
 
-        static bool Contains<TList, TSource>(this TList source, [AllowNull] TSource value, IEqualityComparer<TSource>? comparer, int offset, int count)
-            where TList : notnull, IReadOnlyList<TSource>
+        static bool Contains<TList, TSource>(this TList source, TSource value, IEqualityComparer<TSource>? comparer, int offset, int count)
+            where TList : IReadOnlyList<TSource>
         {
-            if (count == 0)
+            if (count is 0)
                 return false;
 
             if (comparer is null || ReferenceEquals(comparer, EqualityComparer<TSource>.Default))
             {
-                if (offset == 0 && count == source.Count && source is ICollection<TSource> collection)
-                    return collection.Contains(value!);
+                if (offset is 0 && count == source.Count && source is ICollection<TSource> collection)
+                    return collection.Contains(value);
 
                 if (Utils.IsValueType<TSource>())
                     return DefaultContains(source, value, offset, count);
@@ -47,58 +47,59 @@ namespace NetFabric.Hyperlinq
             comparer ??= EqualityComparer<TSource>.Default;
             return ComparerContains(source, value, comparer, offset, count);
 
-            static bool DefaultContains(TList source, [AllowNull] TSource value, int offset, int count)
+            static bool DefaultContains(TList source, TSource value, int offset, int count)
             {
                 var end = offset + count - 1;
                 for (var index = offset; index <= end; index++)
                 {
-                    if (EqualityComparer<TSource>.Default.Equals(source[index], value!))
+                    if (EqualityComparer<TSource>.Default.Equals(source[index], value))
                         return true;
                 }
                 return false;
             }
 
-            static bool ComparerContains(TList source, [AllowNull] TSource value, IEqualityComparer<TSource> comparer, int offset, int count)
+            static bool ComparerContains(TList source, TSource value, IEqualityComparer<TSource> comparer, int offset, int count)
             {
                 var end = offset + count - 1;
                 for (var index = offset; index <= end; index++)
                 {
-                    if (comparer.Equals(source[index], value!))
+                    if (comparer.Equals(source[index], value))
                         return true;
                 }
                 return false;
             }
         }
 
-        static bool Contains<TList, TSource, TResult>(this TList source, [AllowNull] TResult value, NullableSelector<TSource, TResult> selector, int offset, int count)
-            where TList : notnull, IReadOnlyList<TSource>
+        static bool Contains<TList, TSource, TResult, TSelector>(this TList source, TResult value, TSelector selector, int offset, int count)
+            where TList : IReadOnlyList<TSource>
+            where TSelector : struct, IFunction<TSource, TResult>
         {
-            if (count == 0)
+            if (count is 0)
                 return false;
 
             return Utils.IsValueType<TResult>()
                 ? ValueContains(source, value, selector, offset, count)
                 : ReferenceContains(source, value, selector, offset, count);
 
-            static bool ValueContains(TList source, [AllowNull] TResult value, NullableSelector<TSource, TResult> selector, int offset, int count)
+            static bool ValueContains(TList source, TResult value, TSelector selector, int offset, int count)
             {
                 var end = offset + count - 1;
                 for (var index = offset; index <= end; index++)
                 {
-                    if (EqualityComparer<TResult>.Default.Equals(selector(source[index])!, value!))
+                    if (EqualityComparer<TResult>.Default.Equals(selector.Invoke(source[index]), value))
                         return true;
                 }
                 return false;
             }
 
-            static bool ReferenceContains(TList source, [AllowNull] TResult value, NullableSelector<TSource, TResult> selector, int offset, int count)
+            static bool ReferenceContains(TList source, TResult value, TSelector selector, int offset, int count)
             {
                 var defaultComparer = EqualityComparer<TResult>.Default;
 
                 var end = offset + count - 1;
                 for (var index = offset; index <= end; index++)
                 {
-                    if (defaultComparer.Equals(selector(source[index])!, value!))
+                    if (defaultComparer.Equals(selector.Invoke(source[index]), value))
                         return true;
                 }
                 return false;
@@ -106,24 +107,25 @@ namespace NetFabric.Hyperlinq
         }
 
 
-        static bool Contains<TList, TSource, TResult>(this TList source, [AllowNull] TResult value, NullableSelectorAt<TSource, TResult> selector, int offset, int count)
-            where TList : notnull, IReadOnlyList<TSource>
+        static bool ContainsAt<TList, TSource, TResult, TSelector>(this TList source, TResult value, TSelector selector, int offset, int count)
+            where TList : IReadOnlyList<TSource>
+            where TSelector : struct, IFunction<TSource, int, TResult>
         {
-            if (count == 0)
+            if (count is 0)
                 return false;
 
             return Utils.IsValueType<TResult>()
                 ? ValueContains(source, value, selector, offset, count)
                 : ReferenceContains(source, value, selector, offset, count);
 
-            static bool ValueContains(TList source, [AllowNull] TResult value, NullableSelectorAt<TSource, TResult> selector, int offset, int count)
+            static bool ValueContains(TList source, TResult value, TSelector selector, int offset, int count)
             {
                 var end = count - 1;
-                if (offset == 0)
+                if (offset is 0)
                 {
                     for (var index = 0; index <= end; index++)
                     {
-                        if (EqualityComparer<TResult>.Default.Equals(selector(source[index], index)!, value!))
+                        if (EqualityComparer<TResult>.Default.Equals(selector.Invoke(source[index], index), value))
                             return true;
                     }
                 }
@@ -131,23 +133,23 @@ namespace NetFabric.Hyperlinq
                 {
                     for (var index = 0; index <= end; index++)
                     {
-                        if (EqualityComparer<TResult>.Default.Equals(selector(source[index + offset], index)!, value!))
+                        if (EqualityComparer<TResult>.Default.Equals(selector.Invoke(source[index + offset], index), value))
                             return true;
                     }
                 }
                 return false;
             }
 
-            static bool ReferenceContains(TList source, [AllowNull] TResult value, NullableSelectorAt<TSource, TResult> selector, int offset, int count)
+            static bool ReferenceContains(TList source, TResult value, TSelector selector, int offset, int count)
             {
                 var defaultComparer = EqualityComparer<TResult>.Default;
 
                 var end = count - 1;
-                if (offset == 0)
+                if (offset is 0)
                 {
                     for (var index = 0; index <= end; index++)
                     {
-                        if (defaultComparer.Equals(selector(source[index], index)!, value!))
+                        if (defaultComparer.Equals(selector.Invoke(source[index], index), value))
                             return true;
                     }
                 }
@@ -155,7 +157,7 @@ namespace NetFabric.Hyperlinq
                 {
                     for (var index = 0; index <= end; index++)
                     {
-                        if (defaultComparer.Equals(selector(source[index + offset], index)!, value!))
+                        if (defaultComparer.Equals(selector.Invoke(source[index + offset], index), value))
                             return true;
                     }
                 }

@@ -9,11 +9,9 @@ namespace NetFabric.Hyperlinq
     {
 
         static LargeArrayBuilder<TSource> ToArrayBuilder<TEnumerable, TEnumerator, TSource>(TEnumerable source, ArrayPool<TSource> arrayPool)
-            where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
-            Debug.Assert(arrayPool is object);
-
             var builder = new LargeArrayBuilder<TSource>(arrayPool);
             using var enumerator = source.GetEnumerator();
             while (enumerator.MoveNext())
@@ -21,82 +19,78 @@ namespace NetFabric.Hyperlinq
             return builder;
         }
 
-        static LargeArrayBuilder<TSource> ToArrayBuilder<TEnumerable, TEnumerator, TSource>(TEnumerable source, Predicate<TSource> predicate, ArrayPool<TSource> arrayPool)
-            where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
+        static LargeArrayBuilder<TSource> ToArrayBuilder<TEnumerable, TEnumerator, TSource, TPredicate>(TEnumerable source, TPredicate predicate, ArrayPool<TSource> arrayPool)
+            where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
+            where TPredicate : struct, IFunction<TSource, bool>
         {
-            Debug.Assert(arrayPool is object);
-
             var builder = new LargeArrayBuilder<TSource>(arrayPool);
             using var enumerator = source.GetEnumerator();
             while (enumerator.MoveNext())
             {
                 var item = enumerator.Current;
-                if (predicate(item))
+                if (predicate.Invoke(item))
                     builder.Add(item);
             }
             return builder;
         }
 
-        static LargeArrayBuilder<TSource> ToArrayBuilder<TEnumerable, TEnumerator, TSource>(TEnumerable source, PredicateAt<TSource> predicate, ArrayPool<TSource> arrayPool)
-            where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
+        static LargeArrayBuilder<TSource> ToArrayBuilderAt<TEnumerable, TEnumerator, TSource, TPredicate>(TEnumerable source, TPredicate predicate, ArrayPool<TSource> arrayPool)
+            where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
+            where TPredicate : struct, IFunction<TSource, int, bool>
         {
-            Debug.Assert(arrayPool is object);
-
             var builder = new LargeArrayBuilder<TSource>(arrayPool);
             using var enumerator = source.GetEnumerator();
             for (var index = 0; enumerator.MoveNext(); index++)
             {
                 var item = enumerator.Current;
-                if (predicate(item, index))
+                if (predicate.Invoke(item, index))
                     builder.Add(item);
             }
             return builder;
         }
 
-        static LargeArrayBuilder<TResult> ToArrayBuilder<TEnumerable, TEnumerator, TSource, TResult>(TEnumerable source, NullableSelector<TSource, TResult> selector, ArrayPool<TResult> arrayPool)
-            where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
+        static LargeArrayBuilder<TResult> ToArrayBuilder<TEnumerable, TEnumerator, TSource, TResult, TSelector>(TEnumerable source, TSelector selector, ArrayPool<TResult> arrayPool)
+            where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
+            where TSelector : struct, IFunction<TSource, TResult>
         {
-            Debug.Assert(arrayPool is object);
-
             var builder = new LargeArrayBuilder<TResult>(arrayPool);
             using var enumerator = source.GetEnumerator();
             while (enumerator.MoveNext())
-                builder.Add(selector(enumerator.Current));
+                builder.Add(selector.Invoke(enumerator.Current));
             return builder;
         }
 
-        static LargeArrayBuilder<TResult> ToArrayBuilder<TEnumerable, TEnumerator, TSource, TResult>(TEnumerable source, NullableSelectorAt<TSource, TResult> selector, ArrayPool<TResult> arrayPool)
-            where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
+        static LargeArrayBuilder<TResult> ToArrayBuilderAt<TEnumerable, TEnumerator, TSource, TResult, TSelector>(TEnumerable source, TSelector selector, ArrayPool<TResult> arrayPool)
+            where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
+            where TSelector : struct, IFunction<TSource, int, TResult>
         {
-            Debug.Assert(arrayPool is object);
-
             var builder = new LargeArrayBuilder<TResult>(arrayPool);
             using var enumerator = source.GetEnumerator();
             checked
             {
                 for (var index = 0; enumerator.MoveNext(); index++)
-                    builder.Add(selector(enumerator.Current, index));
+                    builder.Add(selector.Invoke(enumerator.Current, index));
             }
             return builder;
         }
 
-        static LargeArrayBuilder<TResult> ToArrayBuilder<TEnumerable, TEnumerator, TSource, TResult>(TEnumerable source, Predicate<TSource> predicate, NullableSelector<TSource, TResult> selector, ArrayPool<TResult> arrayPool)
-            where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
+        static LargeArrayBuilder<TResult> ToArrayBuilder<TEnumerable, TEnumerator, TSource, TResult, TPredicate, TSelector>(TEnumerable source, TPredicate predicate, TSelector selector, ArrayPool<TResult> arrayPool)
+            where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
+            where TPredicate : struct, IFunction<TSource, bool>
+            where TSelector : struct, IFunction<TSource, TResult>
         {
-            Debug.Assert(arrayPool is object);
-
             var builder = new LargeArrayBuilder<TResult>(arrayPool);
             using var enumerator = source.GetEnumerator();
             while (enumerator.MoveNext())
             {
                 var item = enumerator.Current;
-                if (predicate(item))
-                    builder.Add(selector(item));
+                if (predicate.Invoke(item))
+                    builder.Add(selector.Invoke(item));
             }
             return builder;
         }

@@ -10,14 +10,14 @@ namespace NetFabric.Hyperlinq
     {
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool Contains<TSource>(this TSource[] source, [AllowNull] TSource value)
-            => ((ICollection<TSource>)source).Contains(value!);
+        public static bool Contains<TSource>(this TSource[] source, TSource value)
+            => ((ICollection<TSource>)source).Contains(value);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool Contains<TSource>(this TSource[] source, [AllowNull] TSource value, IEqualityComparer<TSource>? comparer)
+        public static bool Contains<TSource>(this TSource[] source, TSource value, IEqualityComparer<TSource>? comparer)
             => comparer is null
                 ? Contains(source, value)
-                : ArrayExtensions.Contains(new ArraySegment<TSource>(source), value, comparer);
+                : new ArraySegment<TSource>(source).Contains(value, comparer);
     }
 }
 

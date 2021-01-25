@@ -10,7 +10,7 @@ namespace NetFabric.Hyperlinq
     abstract class ToListCollectionBase<TSource>
         : ICollection<TSource>
     {
-        public ToListCollectionBase(int count)
+        protected ToListCollectionBase(int count)
             => Count = count;
 
         public int Count { get; }

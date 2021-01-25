@@ -5,10 +5,16 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class ArrayExtensions
     {
+
+        [GeneratorMapping("TPredicate", "NetFabric.Hyperlinq.FunctionWrapper<TSource, int, bool>")]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static SpanWhereAtEnumerable<TSource, FunctionWrapper<TSource, int, bool>> Where<TSource>(this Span<TSource> source, Func<TSource, int, bool> predicate)
+            => source.WhereAt(new FunctionWrapper<TSource, int, bool>(predicate));
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static SpanWhereAtEnumerable<TSource> Where<TSource>(this Span<TSource> source, PredicateAt<TSource> predicate)
-            => Where((ReadOnlySpan<TSource>)source, predicate);
+        public static SpanWhereAtEnumerable<TSource, TPredicate> WhereAt<TSource, TPredicate>(this Span<TSource> source, TPredicate predicate = default)
+            where TPredicate : struct, IFunction<TSource, int, bool>
+            => ((ReadOnlySpan<TSource>)source).WhereAt(predicate);
     }
 }
 

@@ -8,25 +8,28 @@ namespace NetFabric.Hyperlinq
     {
         
         public static Option<TSource> First<TEnumerable, TEnumerator, TSource>(this TEnumerable source) 
-            where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
             using var enumerator = source.GetEnumerator();
-            return enumerator.MoveNext() 
-                ? Option.Some(enumerator.Current)
-                : Option.None;
+            return enumerator.MoveNext() switch
+            {
+                true => Option.Some(enumerator.Current),
+                _ => Option.None
+            };
         }
 
         
-        static Option<TSource> First<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Predicate<TSource> predicate) 
-            where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
+        static Option<TSource> First<TEnumerable, TEnumerator, TSource, TPredicate>(this TEnumerable source, TPredicate predicate) 
+            where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
+            where TPredicate : struct, IFunction<TSource, bool>
         {
             using var enumerator = source.GetEnumerator();
             while (enumerator.MoveNext())
             {
                 var item = enumerator.Current;
-                if (predicate(item))
+                if (predicate.Invoke(item))
                     return Option.Some(item);
             }   
 
@@ -34,9 +37,10 @@ namespace NetFabric.Hyperlinq
         }
 
         
-        static Option<TSource> First<TEnumerable, TEnumerator, TSource>(this TEnumerable source, PredicateAt<TSource> predicate) 
-            where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
+        static Option<TSource> FirstAt<TEnumerable, TEnumerator, TSource, TPredicate>(this TEnumerable source, TPredicate predicate) 
+            where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
+            where TPredicate : struct, IFunction<TSource, int, bool>
         {
             using var enumerator = source.GetEnumerator();
             checked
@@ -44,7 +48,7 @@ namespace NetFabric.Hyperlinq
                 for (var index = 0; enumerator.MoveNext(); index++)
                 {
                     var item = enumerator.Current;
-                    if (predicate(item, index))
+                    if (predicate.Invoke(item, index))
                         return Option.Some(item);
                 }   
             }
@@ -52,40 +56,46 @@ namespace NetFabric.Hyperlinq
         }
 
         
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Option<TResult> First<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, NullableSelector<TSource, TResult> selector) 
-            where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
+        internal static Option<TResult> First<TEnumerable, TEnumerator, TSource, TResult, TSelector>(this TEnumerable source, TSelector selector) 
+            where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
+            where TSelector : struct, IFunction<TSource, TResult>
         {
             using var enumerator = source.GetEnumerator();
-            return enumerator.MoveNext() 
-                ? Option.Some(selector(enumerator.Current))
-                : Option.None;
+            return enumerator.MoveNext() switch
+            {
+                true => Option.Some(selector.Invoke(enumerator.Current)),
+                _ => Option.None
+            };
         }
 
         
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Option<TResult> First<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, NullableSelectorAt<TSource, TResult> selector) 
-            where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
+        internal static Option<TResult> FirstAt<TEnumerable, TEnumerator, TSource, TResult, TSelector>(this TEnumerable source, TSelector selector) 
+            where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
+            where TSelector : struct, IFunction<TSource, int, TResult>
         {
             using var enumerator = source.GetEnumerator();
-            return enumerator.MoveNext() 
-                ? Option.Some(selector(enumerator.Current, 0))
-                : Option.None;
+            return enumerator.MoveNext() switch
+            {
+                true => Option.Some(selector.Invoke(enumerator.Current, 0)),
+                _ => Option.None
+            };
         }
 
         
-        static Option<TResult> First<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, Predicate<TSource> predicate, NullableSelector<TSource, TResult> selector) 
-            where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
+        static Option<TResult> First<TEnumerable, TEnumerator, TSource, TResult, TPredicate, TSelector>(this TEnumerable source, TPredicate predicate, TSelector selector) 
+            where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
+            where TPredicate : struct, IFunction<TSource, bool>
+            where TSelector : struct, IFunction<TSource, TResult>
         {
             using var enumerator = source.GetEnumerator();
             while (enumerator.MoveNext())
             {
                 var item = enumerator.Current;
-                if (predicate(item))
-                    return Option.Some(selector(item));
+                if (predicate.Invoke(item))
+                    return Option.Some(selector.Invoke(item));
             }   
             return Option.None;
         }

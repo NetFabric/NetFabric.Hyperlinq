@@ -13,14 +13,14 @@ namespace NetFabric.Hyperlinq
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static SkipEnumerable<TEnumerable, TEnumerator, TSource> Skip<TEnumerable, TEnumerator, TSource>(this TEnumerable source, int count)
-            where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
-            => new SkipEnumerable<TEnumerable, TEnumerator, TSource>(in source, count);
+            => new(in source, count);
 
         [StructLayout(LayoutKind.Auto)]
         public readonly partial struct SkipEnumerable<TEnumerable, TEnumerator, TSource>
             : IAsyncValueEnumerable<TSource, SkipEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator>
-            where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
             readonly TEnumerable source;
@@ -34,7 +34,7 @@ namespace NetFabric.Hyperlinq
 
 
             public readonly Enumerator GetAsyncEnumerator(CancellationToken cancellationToken = default)
-                => new Enumerator(in this, cancellationToken);
+                => new(in this, cancellationToken);
             readonly IAsyncEnumerator<TSource> IAsyncEnumerable<TSource>.GetAsyncEnumerator(CancellationToken cancellationToken)
                 => new Enumerator(in this, cancellationToken);
 
@@ -65,7 +65,6 @@ namespace NetFabric.Hyperlinq
                     u__1 = default;
                 }
 
-                [MaybeNull]
                 public readonly TSource Current
                     => enumerator.Current;
                 readonly TSource IAsyncEnumerator<TSource>.Current
@@ -102,7 +101,7 @@ namespace NetFabric.Hyperlinq
                     try
                     {
                         ConfiguredValueTaskAwaitable<bool>.ConfiguredValueTaskAwaiter awaiter;
-                        if (num == 0)
+                        if (num is 0)
                         {
                             awaiter = u__1;
                             u__1 = default;
@@ -171,11 +170,11 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public SkipEnumerable<TEnumerable, TEnumerator, TSource> Skip(int count)
-                => AsyncValueEnumerableExtensions.Skip<TEnumerable, TEnumerator, TSource>(source, this.count + count);
+                => source.Skip<TEnumerable, TEnumerator, TSource>(this.count + count);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public SkipTakeEnumerable<TEnumerable, TEnumerator, TSource> Take(int count)
-                => AsyncValueEnumerableExtensions.SkipTake<TEnumerable, TEnumerator, TSource>(source, this.count, count);
+                => source.SkipTake<TEnumerable, TEnumerator, TSource>(this.count, count);
         }
     }
 }

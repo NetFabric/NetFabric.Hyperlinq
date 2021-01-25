@@ -2,6 +2,7 @@
 using System.Buffers;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+// ReSharper disable HeapView.ObjectAllocation.Evident
 
 namespace NetFabric.Hyperlinq
 {
@@ -18,42 +19,51 @@ namespace NetFabric.Hyperlinq
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static List<TSource> ToList<TSource>(this ReadOnlySpan<TSource> source, Predicate<TSource> predicate)
+        static List<TSource> ToList<TSource, TPredicate>(this ReadOnlySpan<TSource> source, TPredicate predicate)
+            where TPredicate : struct, IFunction<TSource, bool>
         {
             using var arrayBuilder = ToArrayBuilder(source, predicate, ArrayPool<TSource>.Shared);
-            return new List<TSource>(arrayBuilder);
+            // ReSharper disable once HeapView.BoxingAllocation
+            return new List<TSource>(collection: arrayBuilder);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static List<TSource> ToList<TSource>(this ReadOnlySpan<TSource> source, PredicateAt<TSource> predicate)
+        static List<TSource> ToListAt<TSource, TPredicate>(this ReadOnlySpan<TSource> source, TPredicate predicate)
+            where TPredicate : struct, IFunction<TSource, int, bool>
         {
-            using var arrayBuilder = ToArrayBuilder(source, predicate, ArrayPool<TSource>.Shared);
-            return new List<TSource>(arrayBuilder);
+            using var arrayBuilder = ToArrayBuilderAt(source, predicate, ArrayPool<TSource>.Shared);
+            // ReSharper disable once HeapView.BoxingAllocation
+            return new List<TSource>(collection: arrayBuilder);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static List<TResult> ToList<TSource, TResult>(this ReadOnlySpan<TSource> source, NullableSelector<TSource, TResult> selector)
+        static List<TResult> ToList<TSource, TResult, TSelector>(this ReadOnlySpan<TSource> source, TSelector selector)
+            where TSelector : struct, IFunction<TSource, TResult>
         {
             var list = new List<TResult>(source.Length);
             for (var index = 0; index < source.Length; index++)
-                list.Add(selector(source[index])!);
+                list.Add(selector.Invoke(source[index])!);
             return list;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static List<TResult> ToList<TSource, TResult>(this ReadOnlySpan<TSource> source, NullableSelectorAt<TSource, TResult> selector)
+        static List<TResult> ToListAt<TSource, TResult, TSelector>(this ReadOnlySpan<TSource> source, TSelector selector)
+            where TSelector : struct, IFunction<TSource, int, TResult>
         {
             var list = new List<TResult>(source.Length);
             for (var index = 0; index < source.Length; index++)
-                list.Add(selector(source[index], index)!);
+                list.Add(selector.Invoke(source[index], index)!);
             return list;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static List<TResult> ToList<TSource, TResult>(this ReadOnlySpan<TSource> source, Predicate<TSource> predicate, NullableSelector<TSource, TResult> selector)
+        static List<TResult> ToList<TSource, TResult, TPredicate, TSelector>(this ReadOnlySpan<TSource> source, TPredicate predicate, TSelector selector)
+            where TPredicate : struct, IFunction<TSource, bool>
+            where TSelector : struct, IFunction<TSource, TResult>
         {
             using var arrayBuilder = ToArrayBuilder(source, predicate, selector, ArrayPool<TResult>.Shared);
-            return new List<TResult>(arrayBuilder);
+            // ReSharper disable once HeapView.BoxingAllocation
+            return new List<TResult>(collection: arrayBuilder);
         }
     }
 }

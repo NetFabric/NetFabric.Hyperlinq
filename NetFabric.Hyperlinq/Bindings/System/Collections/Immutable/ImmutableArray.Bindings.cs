@@ -11,86 +11,212 @@ namespace NetFabric.Hyperlinq
     public static partial class ImmutableArrayBindings
     {
         
+        #region Aggregation
+        
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int Count<TSource>(this ImmutableArray<TSource> source)
-            => source.Length;
+            => ReadOnlyListExtensions.Count<ValueWrapper<TSource>, TSource>(new ValueWrapper<TSource>(source));
+            
+        #endregion
+        #region Partitioning
 
-        
-        public static ReadOnlyListExtensions.SkipTakeEnumerable<ImmutableArray<TSource>, TSource> Skip<TSource>(this ImmutableArray<TSource> source, int count)
-            => ReadOnlyListExtensions.Skip<ImmutableArray<TSource>, TSource>(source, count);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ReadOnlyListExtensions.SkipTakeEnumerable<ValueWrapper<TSource>, TSource> Skip<TSource>(this ImmutableArray<TSource> source, int count)
+            => ReadOnlyListExtensions.Skip<ValueWrapper<TSource>, TSource>(new ValueWrapper<TSource>(source), count);
 
-        
-        public static ReadOnlyListExtensions.SkipTakeEnumerable<ImmutableArray<TSource>, TSource> Take<TSource>(this ImmutableArray<TSource> source, int count)
-            => ReadOnlyListExtensions.Take<ImmutableArray<TSource>, TSource>(source, count);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ReadOnlyListExtensions.SkipTakeEnumerable<ValueWrapper<TSource>, TSource> Take<TSource>(this ImmutableArray<TSource> source, int count)
+            => ReadOnlyListExtensions.Take<ValueWrapper<TSource>, TSource>(new ValueWrapper<TSource>(source), count);
+            
+        #endregion
+        #region Quantifier
 
-        
-        public static bool All<TSource>(this ImmutableArray<TSource> source, PredicateAt<TSource> predicate)
-            => ReadOnlyListExtensions.All<ImmutableArray<TSource>, TSource>(source, predicate);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool All<TSource>(this ImmutableArray<TSource> source, Func<TSource, bool> predicate)
+            => ReadOnlyListExtensions.All<ValueWrapper<TSource>, TSource>(new ValueWrapper<TSource>(source), predicate);
 
-        
-        public static bool Any<TSource>(this ImmutableArray<TSource> source, PredicateAt<TSource> predicate)
-            => ReadOnlyListExtensions.Any<ImmutableArray<TSource>, TSource>(source, predicate);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool All<TSource, TPredicate>(this ImmutableArray<TSource> source, TPredicate predicate = default)
+            where TPredicate : struct, IFunction<TSource, bool>
+            => ReadOnlyListExtensions.All<ValueWrapper<TSource>, TSource, TPredicate>(new ValueWrapper<TSource>(source), predicate);
 
-        
-        public static bool Contains<TSource>(this ImmutableArray<TSource> source, [AllowNull] TSource value)
-            => source.Contains(value);
-        
-        public static bool Contains<TSource>(this ImmutableArray<TSource> source, [AllowNull] TSource value, IEqualityComparer<TSource>? comparer)
-            => ReadOnlyListExtensions.Contains<ImmutableArray<TSource>, TSource>(source, value, comparer);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool All<TSource>(this ImmutableArray<TSource> source, Func<TSource, int, bool> predicate)
+            => ReadOnlyListExtensions.All<ValueWrapper<TSource>, TSource>(new ValueWrapper<TSource>(source), predicate);
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool AllAt<TSource, TPredicate>(this ImmutableArray<TSource> source, TPredicate predicate = default)
+            where TPredicate : struct, IFunction<TSource, int, bool>
+            => ReadOnlyListExtensions.AllAt<ValueWrapper<TSource>, TSource, TPredicate>(new ValueWrapper<TSource>(source), predicate);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool Any<TSource>(this ImmutableArray<TSource> source)
+            => ReadOnlyListExtensions.Any<ValueWrapper<TSource>, TSource>(new ValueWrapper<TSource>(source));
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool Any<TSource>(this ImmutableArray<TSource> source, Func<TSource, bool> predicate)
+            => ReadOnlyListExtensions.Any<ValueWrapper<TSource>, TSource>(new ValueWrapper<TSource>(source), predicate);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool Any<TSource, TPredicate>(this ImmutableArray<TSource> source, TPredicate predicate)
+            where TPredicate : struct, IFunction<TSource, bool>
+            => ReadOnlyListExtensions.Any<ValueWrapper<TSource>, TSource, TPredicate>(new ValueWrapper<TSource>(source), predicate);
         
-        public static ReadOnlyListExtensions.SelectEnumerable<ImmutableArray<TSource>, TSource, TResult> SelectHyper<TSource, TResult>(
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool Any<TSource>(this ImmutableArray<TSource> source, Func<TSource, int, bool> predicate)
+            => ReadOnlyListExtensions.Any<ValueWrapper<TSource>, TSource>(new ValueWrapper<TSource>(source), predicate);
+        
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool AnyAt<TSource, TPredicate>(this ImmutableArray<TSource> source, TPredicate predicate = default)
+            where TPredicate : struct, IFunction<TSource, int, bool>
+            => ReadOnlyListExtensions.AnyAt<ValueWrapper<TSource>, TSource, TPredicate>(new ValueWrapper<TSource>(source), predicate);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool Contains<TSource>(this ImmutableArray<TSource> source, TSource value, IEqualityComparer<TSource>? comparer = default)
+            => ReadOnlyListExtensions.Contains<ValueWrapper<TSource>, TSource>(new ValueWrapper<TSource>(source), value, comparer);
+            
+        #endregion
+        #region Projection
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ReadOnlyListExtensions.SelectEnumerable<ValueWrapper<TSource>, TSource, TResult, FunctionWrapper<TSource, TResult>> Select<TSource, TResult>(
             this ImmutableArray<TSource> source,
-            NullableSelector<TSource, TResult> selector)
-            => ReadOnlyListExtensions.Select<ImmutableArray<TSource>, TSource, TResult>(source, selector);
-        
-        public static ReadOnlyListExtensions.SelectAtEnumerable<ImmutableArray<TSource>, TSource, TResult> SelectHyper<TSource, TResult>(
-            this ImmutableArray<TSource> source,
-            NullableSelectorAt<TSource, TResult> selector)
-            => ReadOnlyListExtensions.Select<ImmutableArray<TSource>, TSource, TResult>(source, selector);
+            Func<TSource, TResult> selector)
+            => ReadOnlyListExtensions.Select<ValueWrapper<TSource>, TSource, TResult>(new ValueWrapper<TSource>(source), selector);
 
-        
-        public static ReadOnlyListExtensions.SelectManyEnumerable<ImmutableArray<TSource>, TSource, TSubEnumerable, TSubEnumerator, TResult> SelectMany<TSource, TSubEnumerable, TSubEnumerator, TResult>(
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ReadOnlyListExtensions.SelectEnumerable<ValueWrapper<TSource>, TSource, TResult, TSelector> Select<TSource, TResult, TSelector>(
             this ImmutableArray<TSource> source,
-            Selector<TSource, TSubEnumerable> selector)
+            TSelector selector)
+            where TSelector : struct, IFunction<TSource, TResult>
+            => ReadOnlyListExtensions.Select<ValueWrapper<TSource>, TSource, TResult, TSelector>(new ValueWrapper<TSource>(source), selector);
+        
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ReadOnlyListExtensions.SelectAtEnumerable<ValueWrapper<TSource>, TSource, TResult, FunctionWrapper<TSource, int, TResult>> Select<TSource, TResult>(
+            this ImmutableArray<TSource> source,
+            Func<TSource, int, TResult> selector)
+            => ReadOnlyListExtensions.Select<ValueWrapper<TSource>, TSource, TResult>(new ValueWrapper<TSource>(source), selector);
+        
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ReadOnlyListExtensions.SelectAtEnumerable<ValueWrapper<TSource>, TSource, TResult, TSelector> SelectAt<TSource, TResult, TSelector>(
+            this ImmutableArray<TSource> source,
+            TSelector selector)
+            where TSelector : struct, IFunction<TSource, int, TResult>
+            => ReadOnlyListExtensions.SelectAt<ValueWrapper<TSource>, TSource, TResult, TSelector>(new ValueWrapper<TSource>(source), selector);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ReadOnlyListExtensions.SelectManyEnumerable<ValueWrapper<TSource>, TSource, TSubEnumerable, TSubEnumerator, TResult, FunctionWrapper<TSource, TSubEnumerable>> SelectMany<TSource, TSubEnumerable, TSubEnumerator, TResult>(
+            this ImmutableArray<TSource> source,
+            Func<TSource, TSubEnumerable> selector)
             where TSubEnumerable : IValueEnumerable<TResult, TSubEnumerator>
             where TSubEnumerator : struct, IEnumerator<TResult>
-            => ReadOnlyListExtensions.SelectMany<ImmutableArray<TSource>, TSource, TSubEnumerable, TSubEnumerator, TResult>(source, selector);
+            => ReadOnlyListExtensions.SelectMany<ValueWrapper<TSource>, TSource, TSubEnumerable, TSubEnumerator, TResult>(new ValueWrapper<TSource>(source), selector);
 
-        
-        public static ReadOnlyListExtensions.WhereEnumerable<ImmutableArray<TSource>, TSource> WhereHyper<TSource>(
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ReadOnlyListExtensions.SelectManyEnumerable<ValueWrapper<TSource>, TSource, TSubEnumerable, TSubEnumerator, TResult, TSelector> SelectMany<TSource, TSubEnumerable, TSubEnumerator, TResult, TSelector>(
             this ImmutableArray<TSource> source,
-            Predicate<TSource> predicate)
-            => ReadOnlyListExtensions.Where<ImmutableArray<TSource>, TSource>(source, predicate);
-        
-        public static ReadOnlyListExtensions.WhereAtEnumerable<ImmutableArray<TSource>, TSource> HyperWhere<TSource>(
-            this ImmutableArray<TSource> source,
-            PredicateAt<TSource> predicate)
-            => ReadOnlyListExtensions.Where<ImmutableArray<TSource>, TSource>(source, predicate);
+            TSelector selector)
+            where TSubEnumerable : IValueEnumerable<TResult, TSubEnumerator>
+            where TSubEnumerator : struct, IEnumerator<TResult>
+            where TSelector : struct, IFunction<TSource, TSubEnumerable>
+            => ReadOnlyListExtensions.SelectMany<ValueWrapper<TSource>, TSource, TSubEnumerable, TSubEnumerator, TResult, TSelector>(new ValueWrapper<TSource>(source), selector);
+            
+        #endregion
+        #region Filtering
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ReadOnlyListExtensions.WhereEnumerable<ValueWrapper<TSource>, TSource, FunctionWrapper<TSource, bool>> Where<TSource>(
+            this ImmutableArray<TSource> source,
+            Func<TSource, bool> predicate)
+            => ReadOnlyListExtensions.Where<ValueWrapper<TSource>, TSource>(new ValueWrapper<TSource>(source), predicate);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ReadOnlyListExtensions.WhereEnumerable<ValueWrapper<TSource>, TSource, TPredicate> Where<TSource, TPredicate>(
+            this ImmutableArray<TSource> source,
+            TPredicate predicate)
+            where TPredicate : struct, IFunction<TSource, bool>
+            => ReadOnlyListExtensions.Where<ValueWrapper<TSource>, TSource, TPredicate>(new ValueWrapper<TSource>(source), predicate);
         
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ReadOnlyListExtensions.WhereAtEnumerable<ValueWrapper<TSource>, TSource, FunctionWrapper<TSource, int, bool>> Where<TSource>(
+            this ImmutableArray<TSource> source,
+            Func<TSource, int, bool> predicate)
+            => ReadOnlyListExtensions.Where<ValueWrapper<TSource>, TSource>(new ValueWrapper<TSource>(source), predicate);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ReadOnlyListExtensions.WhereAtEnumerable<ValueWrapper<TSource>, TSource, TPredicate> WhereAt<TSource, TPredicate>(
+            this ImmutableArray<TSource> source,
+            TPredicate predicate)
+            where TPredicate : struct, IFunction<TSource, int, bool>
+            => ReadOnlyListExtensions.WhereAt<ValueWrapper<TSource>, TSource, TPredicate>(new ValueWrapper<TSource>(source), predicate);
+            
+        #endregion
+        #region Element
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Option<TSource> ElementAt<TSource>(this ImmutableArray<TSource> source, int index)
-            => ReadOnlyListExtensions.ElementAt<ImmutableArray<TSource>, TSource>(source, index);
+            => ReadOnlyListExtensions.ElementAt<ValueWrapper<TSource>, TSource>(new ValueWrapper<TSource>(source), index);
 
-        
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Option<TSource> First<TSource>(this ImmutableArray<TSource> source)
-            => ReadOnlyListExtensions.First<ImmutableArray<TSource>, TSource>(source);
+            => ReadOnlyListExtensions.First<ValueWrapper<TSource>, TSource>(new ValueWrapper<TSource>(source));
 
-        
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Option<TSource> Single<TSource>(this ImmutableArray<TSource> source)
-            => ReadOnlyListExtensions.Single<ImmutableArray<TSource>, TSource>(source);
+#pragma warning disable HLQ005 // Avoid Single() and SingleOrDefault()
+            => ReadOnlyListExtensions.Single<ValueWrapper<TSource>, TSource>(new ValueWrapper<TSource>(source));
+#pragma warning restore HLQ005 // Avoid Single() and SingleOrDefault()
+            
+        #endregion
+        #region Set
 
-        
-        public static ReadOnlyListExtensions.DistinctEnumerable<ImmutableArray<TSource>, TSource> Distinct<TSource>(this ImmutableArray<TSource> source, IEqualityComparer<TSource>? comparer = null)
-            => ReadOnlyListExtensions.Distinct<ImmutableArray<TSource>, TSource>(source, comparer);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ReadOnlyListExtensions.DistinctEnumerable<ValueWrapper<TSource>, TSource> Distinct<TSource>(this ImmutableArray<TSource> source, IEqualityComparer<TSource>? comparer = default)
+            => ReadOnlyListExtensions.Distinct<ValueWrapper<TSource>, TSource>(new ValueWrapper<TSource>(source), comparer);
+            
+        #endregion
+        #region Conversion
 
-        
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ImmutableArray<TSource> AsEnumerable<TSource>(this ImmutableArray<TSource> source)
             => source;
 
-        
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ValueWrapper<TSource> AsValueEnumerable<TSource>(this ImmutableArray<TSource> source)
-            => new ValueWrapper<TSource>(source);
+            => new(source);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static TSource[] ToArray<TSource>(this ImmutableArray<TSource> source)
+            => ReadOnlyListExtensions.ToArray<ValueWrapper<TSource>, TSource>(new ValueWrapper<TSource>(source));
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static List<TSource> ToList<TSource>(this ImmutableArray<TSource> source)
+            => ReadOnlyListExtensions.ToList<ValueWrapper<TSource>, TSource>(new ValueWrapper<TSource>(source));
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Dictionary<TKey, TSource> ToDictionary<TSource, TKey>(this ImmutableArray<TSource> source, Func<TSource, TKey> keyFunc, IEqualityComparer<TKey>? comparer = default)
+            where TKey : notnull
+            => ReadOnlyListExtensions.ToDictionary<ValueWrapper<TSource>, TSource, TKey>(new ValueWrapper<TSource>(source), keyFunc, comparer);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Dictionary<TKey, TSource> ToDictionary<TSource, TKey, TKeySelector>(this ImmutableArray<TSource> source, TKeySelector keyFunc, IEqualityComparer<TKey>? comparer = default)
+            where TKey : notnull
+            where TKeySelector : struct, IFunction<TSource, TKey>
+            => ReadOnlyListExtensions.ToDictionary<ValueWrapper<TSource>, TSource, TKey, TKeySelector>(new ValueWrapper<TSource>(source), keyFunc, comparer);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Dictionary<TKey, TElement> ToDictionary<TSource, TKey, TElement>(this ImmutableArray<TSource> source, Func<TSource, TKey> keyFunc, Func<TSource, TElement> elementFunc, IEqualityComparer<TKey>? comparer = default)
+            where TKey : notnull
+            => ReadOnlyListExtensions.ToDictionary<ValueWrapper<TSource>, TSource, TKey, TElement>(new ValueWrapper<TSource>(source), keyFunc, elementFunc, comparer);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Dictionary<TKey, TElement> ToDictionary<TSource, TKey, TElement, TKeySelector, TElementSelector>(this ImmutableArray<TSource> source, TKeySelector keyFunc, TElementSelector elementFunc, IEqualityComparer<TKey>? comparer = default)
+            where TKey : notnull
+            where TKeySelector : struct, IFunction<TSource, TKey>
+            where TElementSelector : struct, IFunction<TSource, TElement>
+            => ReadOnlyListExtensions.ToDictionary<ValueWrapper<TSource>, TSource, TKey, TElement, TKeySelector, TElementSelector>(new ValueWrapper<TSource>(source), keyFunc, elementFunc, comparer);
+            
+        #endregion
 
         public readonly partial struct ValueWrapper<TSource>
             : IValueReadOnlyList<TSource, ValueWrapper<TSource>.Enumerator>
@@ -104,7 +230,6 @@ namespace NetFabric.Hyperlinq
             public int Count
                 => source.Length;
 
-            [MaybeNull]
             public TSource this[int index]
                 => source[index];
             TSource IReadOnlyList<TSource>.this[int index]
@@ -116,9 +241,14 @@ namespace NetFabric.Hyperlinq
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly Enumerator GetEnumerator() => new Enumerator(source);
-            IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new Enumerator(source);
-            IEnumerator IEnumerable.GetEnumerator() => new Enumerator(source);
+            public readonly Enumerator GetEnumerator() 
+                => new(source);
+            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() 
+                // ReSharper disable once HeapView.BoxingAllocation
+                => new Enumerator(source);
+            readonly IEnumerator IEnumerable.GetEnumerator() 
+                // ReSharper disable once HeapView.BoxingAllocation
+                => new Enumerator(source);
 
             bool ICollection<TSource>.IsReadOnly  
                 => true;
@@ -149,12 +279,12 @@ namespace NetFabric.Hyperlinq
                 internal Enumerator(ImmutableArray<TSource> enumerable) 
                     => enumerator = enumerable.GetEnumerator();
 
-                [MaybeNull]
                 public readonly TSource Current 
                     => enumerator.Current;
                 readonly TSource IEnumerator<TSource>.Current 
                     => enumerator.Current;
-                readonly object? IEnumerator.Current
+                readonly object IEnumerator.Current
+                    // ReSharper disable once HeapView.PossibleBoxingAllocation
                     => enumerator.Current;
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]

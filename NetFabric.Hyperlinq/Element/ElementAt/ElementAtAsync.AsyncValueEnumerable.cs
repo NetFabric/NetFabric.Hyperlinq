@@ -8,7 +8,7 @@ namespace NetFabric.Hyperlinq
     {
         
         public static ValueTask<Option<TSource>> ElementAtAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source, int index, CancellationToken cancellationToken = default) 
-            where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
             return index < 0 
@@ -18,139 +18,169 @@ namespace NetFabric.Hyperlinq
             static async ValueTask<Option<TSource>> ExecuteAsync(TEnumerable source, int index, CancellationToken cancellationToken)
             {
                 var enumerator = source.GetAsyncEnumerator(cancellationToken);
-                await using (enumerator.ConfigureAwait(false))
+                try
                 {
                     while (await enumerator.MoveNextAsync().ConfigureAwait(false))
                     {
-                        if (index-- == 0)
+                        if (index-- is 0)
                             return Option.Some(enumerator.Current);
                     }
+                }
+                finally
+                {
+                    await enumerator.DisposeAsync().ConfigureAwait(false);
                 }
                 return Option.None;
             }
         }
 
         
-        static ValueTask<Option<TSource>> ElementAtAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source, int index, AsyncPredicate<TSource> predicate, CancellationToken cancellationToken) 
-            where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
+        static ValueTask<Option<TSource>> ElementAtAsync<TEnumerable, TEnumerator, TSource, TPredicate>(this TEnumerable source, int index, TPredicate predicate, CancellationToken cancellationToken) 
+            where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
+            where TPredicate : struct, IAsyncFunction<TSource, bool>
         {
             return index < 0 
                 ? new ValueTask<Option<TSource>>(Option.None) 
                 : ExecuteAsync(source, index, predicate, cancellationToken);
 
-            static async ValueTask<Option<TSource>> ExecuteAsync(TEnumerable source, int index, AsyncPredicate<TSource> predicate, CancellationToken cancellationToken)
+            static async ValueTask<Option<TSource>> ExecuteAsync(TEnumerable source, int index, TPredicate predicate, CancellationToken cancellationToken)
             {
                 var enumerator = source.GetAsyncEnumerator(cancellationToken);
-                await using (enumerator.ConfigureAwait(false))
+                try
                 {
                     while (await enumerator.MoveNextAsync().ConfigureAwait(false))
                     {
-                        if (await predicate(enumerator.Current, cancellationToken).ConfigureAwait(false) && index-- == 0)
+                        if (await predicate.InvokeAsync(enumerator.Current, cancellationToken).ConfigureAwait(false) && index-- is 0)
                             return Option.Some(enumerator.Current);
                     }
+                }
+                finally
+                {
+                    await enumerator.DisposeAsync().ConfigureAwait(false);
                 }
                 return Option.None;
             }
         }
 
         
-        static ValueTask<Option<TSource>> ElementAtAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source, int index, AsyncPredicateAt<TSource> predicate, CancellationToken cancellationToken) 
-            where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
+        static ValueTask<Option<TSource>> ElementAtAtAsync<TEnumerable, TEnumerator, TSource, TPredicate>(this TEnumerable source, int index, TPredicate predicate, CancellationToken cancellationToken) 
+            where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
+            where TPredicate : struct, IAsyncFunction<TSource, int, bool>
         {
             return index < 0 
                 ? new ValueTask<Option<TSource>>(Option.None) 
                 : ExecuteAsync(source, index, predicate, cancellationToken);
 
-            static async ValueTask<Option<TSource>> ExecuteAsync(TEnumerable source, int index, AsyncPredicateAt<TSource> predicate, CancellationToken cancellationToken)
+            static async ValueTask<Option<TSource>> ExecuteAsync(TEnumerable source, int index, TPredicate predicate, CancellationToken cancellationToken)
             {
                 var enumerator = source.GetAsyncEnumerator(cancellationToken);
-                await using (enumerator.ConfigureAwait(false))
+                try
                 {
                     checked
                     {
                         for (var sourceIndex = 0; await enumerator.MoveNextAsync().ConfigureAwait(false); sourceIndex++)
                         {
-                            if (await predicate(enumerator.Current, sourceIndex, cancellationToken).ConfigureAwait(false) && index-- == 0)
+                            if (await predicate.InvokeAsync(enumerator.Current, sourceIndex, cancellationToken).ConfigureAwait(false) && index-- is 0)
                                 return Option.Some(enumerator.Current);
                         }
                     }
                 }
-                return Option.None;
-            }
-        }
-
-        
-        static ValueTask<Option<TResult>> ElementAtAsync<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, int index, AsyncSelector<TSource, TResult> selector, CancellationToken cancellationToken) 
-            where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
-            where TEnumerator : struct, IAsyncEnumerator<TSource>
-        {
-            return index < 0 
-                ? new ValueTask<Option<TResult>>(Option.None) 
-                : ExecuteAsync(source, index, selector, cancellationToken);
-
-            static async ValueTask<Option<TResult>> ExecuteAsync(TEnumerable source, int index, AsyncSelector<TSource, TResult> selector, CancellationToken cancellationToken)
-            {
-                var enumerator = source.GetAsyncEnumerator(cancellationToken);
-                await using (enumerator.ConfigureAwait(false))
+                finally
                 {
-                    while (await enumerator.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        if (index-- == 0)
-                            return Option.Some(await selector(enumerator.Current, cancellationToken).ConfigureAwait(false));
-                    }
+                    await enumerator.DisposeAsync().ConfigureAwait(false);
                 }
                 return Option.None;
             }
         }
 
         
-        static ValueTask<Option<TResult>> ElementAtAsync<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, int index, AsyncSelectorAt<TSource, TResult> selector, CancellationToken cancellationToken) 
-            where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
+        static ValueTask<Option<TResult>> ElementAtAsync<TEnumerable, TEnumerator, TSource, TResult, TSelector>(this TEnumerable source, int index, TSelector selector, CancellationToken cancellationToken) 
+            where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
+            where TSelector : struct, IAsyncFunction<TSource, TResult>
         {
             return index < 0 
                 ? new ValueTask<Option<TResult>>(Option.None) 
                 : ExecuteAsync(source, index, selector, cancellationToken);
 
-            static async ValueTask<Option<TResult>> ExecuteAsync(TEnumerable source, int index, AsyncSelectorAt<TSource, TResult> selector, CancellationToken cancellationToken)
+            static async ValueTask<Option<TResult>> ExecuteAsync(TEnumerable source, int index, TSelector selector, CancellationToken cancellationToken)
             {
                 var enumerator = source.GetAsyncEnumerator(cancellationToken);
-                await using (enumerator.ConfigureAwait(false))
+                try
+                {
+                    while (await enumerator.MoveNextAsync().ConfigureAwait(false))
+                    {
+                        if (index-- is 0)
+                            return Option.Some(await selector.InvokeAsync(enumerator.Current, cancellationToken).ConfigureAwait(false));
+                    }
+                }
+                finally
+                {
+                    await enumerator.DisposeAsync().ConfigureAwait(false);
+                }
+                return Option.None;
+            }
+        }
+
+        
+        static ValueTask<Option<TResult>> ElementAtAtAsync<TEnumerable, TEnumerator, TSource, TResult, TSelector>(this TEnumerable source, int index, TSelector selector, CancellationToken cancellationToken) 
+            where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
+            where TEnumerator : struct, IAsyncEnumerator<TSource>
+            where TSelector : struct, IAsyncFunction<TSource, int, TResult>
+        {
+            return index < 0 
+                ? new ValueTask<Option<TResult>>(Option.None) 
+                : ExecuteAsync(source, index, selector, cancellationToken);
+
+            static async ValueTask<Option<TResult>> ExecuteAsync(TEnumerable source, int index, TSelector selector, CancellationToken cancellationToken)
+            {
+                var enumerator = source.GetAsyncEnumerator(cancellationToken);
+                try
                 {
                     checked
                     {
                         for (var sourceIndex = 0; await enumerator.MoveNextAsync().ConfigureAwait(false); sourceIndex++)
                         {
                             if (sourceIndex == index)
-                                return Option.Some(await selector(enumerator.Current, sourceIndex, cancellationToken).ConfigureAwait(false));
+                                return Option.Some(await selector.InvokeAsync(enumerator.Current, sourceIndex, cancellationToken).ConfigureAwait(false));
                         }
                     }
+                }
+                finally
+                {
+                    await enumerator.DisposeAsync().ConfigureAwait(false);
                 }
                 return Option.None;
             }
         }
 
         
-        static ValueTask<Option<TResult>> ElementAtAsync<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, int index, AsyncPredicate<TSource> predicate, AsyncSelector<TSource, TResult> selector, CancellationToken cancellationToken) 
-            where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
+        static ValueTask<Option<TResult>> ElementAtAsync<TEnumerable, TEnumerator, TSource, TResult, TPredicate, TSelector>(this TEnumerable source, int index, TPredicate predicate, TSelector selector, CancellationToken cancellationToken) 
+            where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
+            where TPredicate : struct, IAsyncFunction<TSource, bool>
+            where TSelector : struct, IAsyncFunction<TSource, TResult>
         {
             return index < 0 
                 ? new ValueTask<Option<TResult>>(Option.None) 
                 : ExecuteAsync(source, index, predicate, selector, cancellationToken);
 
-            static async ValueTask<Option<TResult>> ExecuteAsync(TEnumerable source, int index, AsyncPredicate<TSource> predicate, AsyncSelector<TSource, TResult> selector, CancellationToken cancellationToken)
+            static async ValueTask<Option<TResult>> ExecuteAsync(TEnumerable source, int index, TPredicate predicate, TSelector selector, CancellationToken cancellationToken)
             {
                 var enumerator = source.GetAsyncEnumerator(cancellationToken);
-                await using (enumerator.ConfigureAwait(false))
+                try
                 {
                     while (await enumerator.MoveNextAsync().ConfigureAwait(false))
                     {
-                        if (await predicate(enumerator.Current, cancellationToken).ConfigureAwait(false) && index-- == 0)
-                            return Option.Some(await selector(enumerator.Current, cancellationToken).ConfigureAwait(false));
+                        if (await predicate.InvokeAsync(enumerator.Current, cancellationToken).ConfigureAwait(false) && index-- is 0)
+                            return Option.Some(await selector.InvokeAsync(enumerator.Current, cancellationToken).ConfigureAwait(false));
                     }
+                }
+                finally
+                {
+                    await enumerator.DisposeAsync().ConfigureAwait(false);
                 }
                 return Option.None;
             }

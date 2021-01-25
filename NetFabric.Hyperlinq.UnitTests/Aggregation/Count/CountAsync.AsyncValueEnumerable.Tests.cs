@@ -33,13 +33,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Aggregation.Count
         [MemberData(nameof(TestData.PredicateEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateMultiple), MemberType = typeof(TestData))]
-        public async ValueTask CountAsync_Predicate_With_ValidData_Must_Succeed(int[] source, Predicate<int> predicate)
+        public async ValueTask CountAsync_Predicate_With_ValidData_Must_Succeed(int[] source, Func<int, bool> predicate)
         {
             // Arrange
             var wrapped = Wrap
                 .AsAsyncValueEnumerable(source);
             var expected = Enumerable
-                .Count(source, predicate.AsFunc());
+                .Count(source, predicate);
 
             // Act
             var result = await AsyncValueEnumerableExtensions
@@ -55,12 +55,12 @@ namespace NetFabric.Hyperlinq.UnitTests.Aggregation.Count
         [MemberData(nameof(TestData.PredicateAtEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateAtSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateAtMultiple), MemberType = typeof(TestData))]
-        public async ValueTask CountAsync_PredicateAt_With_ValidData_Must_Succeed(int[] source, PredicateAt<int> predicate)
+        public async ValueTask CountAsync_PredicateAt_With_ValidData_Must_Succeed(int[] source, Func<int, int, bool> predicate)
         {
             // Arrange
             var wrapped = Wrap
                 .AsAsyncValueEnumerable(source);
-            var expected = Enumerable.Where(source, predicate.AsFunc())
+            var expected = Enumerable.Where(source, predicate)
                 .Count();
 
             // Act

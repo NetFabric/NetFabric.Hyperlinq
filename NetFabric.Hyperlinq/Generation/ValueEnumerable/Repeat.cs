@@ -11,7 +11,7 @@ namespace NetFabric.Hyperlinq
     public static partial class ValueEnumerable
     {
         
-        public static RepeatEnumerable<TSource> Repeat<TSource>([AllowNull] TSource value, int count)
+        public static RepeatEnumerable<TSource> Repeat<TSource>(TSource value, int count)
         {
             if (count < 0) Throw.ArgumentOutOfRangeException(nameof(count));
 
@@ -23,10 +23,10 @@ namespace NetFabric.Hyperlinq
             : IValueReadOnlyCollection<TSource, RepeatEnumerable<TSource>.DisposableEnumerator>
             , ICollection<TSource>
         {
-            [AllowNull, MaybeNull] internal readonly TSource value;
-            internal readonly int count;
+            readonly TSource value;
+            readonly int count;
 
-            internal RepeatEnumerable([AllowNull] TSource value, int count)
+            internal RepeatEnumerable(TSource value, int count)
             {
                 this.value = value;
                 this.count = count;
@@ -37,12 +37,14 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly Enumerator GetEnumerator() 
-                => new Enumerator(in this);
+                => new(in this);
             readonly DisposableEnumerator IValueEnumerable<TSource, DisposableEnumerator>.GetEnumerator() 
-                => new DisposableEnumerator(in this);
+                => new(in this);
             readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() 
+                // ReSharper disable once HeapView.BoxingAllocation
                 => new DisposableEnumerator(in this);
             readonly IEnumerator IEnumerable.GetEnumerator() 
+                // ReSharper disable once HeapView.BoxingAllocation
                 => new DisposableEnumerator(in this);
 
             bool ICollection<TSource>.IsReadOnly  
@@ -64,10 +66,10 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Contains(TSource item)
-                => count != 0 && EqualityComparer<TSource>.Default.Equals(value, item);
+                => count is not 0 && EqualityComparer<TSource>.Default.Equals(value, item);
 
             public int IndexOf(TSource item)
-                => count != 0 && EqualityComparer<TSource>.Default.Equals(value, item)
+                => count is not 0 && EqualityComparer<TSource>.Default.Equals(value, item)
                     ? 0
                     : -1;
 
@@ -94,7 +96,6 @@ namespace NetFabric.Hyperlinq
                     end = counter + enumerable.Count;
                 }
 
-                [MaybeNull]
                 public readonly TSource Current { get; }
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -116,11 +117,11 @@ namespace NetFabric.Hyperlinq
                     end = counter + enumerable.Count;
                 }
 
-                [MaybeNull]
                 public readonly TSource Current { get; }
                 readonly TSource IEnumerator<TSource>.Current 
-                    => Current!;
-                readonly object? IEnumerator.Current 
+                    => Current;
+                readonly object? IEnumerator.Current
+                    // ReSharper disable once HeapView.PossibleBoxingAllocation
                     => Current;
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -146,25 +147,33 @@ namespace NetFabric.Hyperlinq
                 => Repeat(value, Utils.Take(this.count, count));
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public bool All(Predicate<TSource> predicate)
-                => count == 0 || predicate(value);
+            public bool All(Func<TSource, bool> predicate)
+                => count is 0 || predicate(value);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Any()
-                => count != 0;
+                => count is not 0;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Contains(TSource value, IEqualityComparer<TSource>? comparer)
-                => comparer is null
-                    ? count != 0 && EqualityComparer<TSource>.Default.Equals(this.value, value)
-                    : count != 0 && comparer.Equals(this.value, value);
+                => comparer switch
+                {
+                    null => count is not 0 && EqualityComparer<TSource>.Default.Equals(this.value, value),
+                    _ => count is not 0 && comparer.Equals(this.value, value)
+                };
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public RepeatEnumerable<TResult> Select<TResult>(NullableSelector<TSource, TResult> selector) 
-                => new RepeatEnumerable<TResult>(selector(value), count);
+            public RepeatEnumerable<TResult> Select<TResult>(Func<TSource, TResult> selector)
+                => Select<TResult, FunctionWrapper<TSource, TResult>>(new FunctionWrapper<TSource, TResult>(selector));
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public RepeatEnumerable<TResult> Select<TResult, TSelector>(TSelector selector = default) 
+                where TSelector : struct, IFunction<TSource, TResult>
+                => new(selector.Invoke(value), count);
 
             public TSource[] ToArray()
             {
+                // ReSharper disable once HeapView.ObjectAllocation.Evident
                 var array = new TSource[count];
                 if (value is object)
                 {
@@ -186,7 +195,8 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public List<TSource> ToList()
-                => new List<TSource>(this);
+                // ReSharper disable once HeapView.BoxingAllocation
+                => new(this);
         }
     }
 }

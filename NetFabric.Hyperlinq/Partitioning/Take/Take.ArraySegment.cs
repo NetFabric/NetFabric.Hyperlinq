@@ -10,7 +10,7 @@ namespace NetFabric.Hyperlinq
             => source.Count switch
             {
                 0 => default,
-                _ => new ArraySegment<TSource>(source.Array, source.Offset, Utils.Take(source.Count, count)),
+                _ => new ArraySegment<TSource>(source.Array!, source.Offset, Utils.Take(source.Count, count)),
             };
     }
 }

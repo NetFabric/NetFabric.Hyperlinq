@@ -10,52 +10,70 @@ namespace NetFabric.Hyperlinq
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ValueTask<Option<TSource>> SingleAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source, CancellationToken cancellationToken = default) 
-            where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
-            => GetSingleAsync<TEnumerable, TEnumerator, TSource>(source, cancellationToken);
+            => source.GetSingleAsync<TEnumerable, TEnumerator, TSource>(cancellationToken);
 
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static ValueTask<Option<TSource>> SingleAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source, AsyncPredicate<TSource> predicate, CancellationToken cancellationToken = default) 
-            where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
+        static ValueTask<Option<TSource>> SingleAsync<TEnumerable, TEnumerator, TSource, TPredicate>(this TEnumerable source, TPredicate predicate, CancellationToken cancellationToken = default) 
+            where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
-            => GetSingleAsync<TEnumerable, TEnumerator, TSource>(source, predicate, cancellationToken);
+            where TPredicate : struct, IAsyncFunction<TSource, bool>
+            => source.GetSingleAsync<TEnumerable, TEnumerator, TSource, TPredicate>(predicate, cancellationToken);
 
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static ValueTask<Option<TSource>> SingleAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source, AsyncPredicateAt<TSource> predicate, CancellationToken cancellationToken = default) 
-            where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
+        static ValueTask<Option<TSource>> SingleAtAsync<TEnumerable, TEnumerator, TSource, TPredicate>(this TEnumerable source, TPredicate predicate, CancellationToken cancellationToken = default) 
+            where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
-            => GetSingleAsync<TEnumerable, TEnumerator, TSource>(source, predicate, cancellationToken);
+            where TPredicate : struct, IAsyncFunction<TSource, int, bool>
+            => source.GetSingleAtAsync<TEnumerable, TEnumerator, TSource, TPredicate>(predicate, cancellationToken);
 
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static async ValueTask<Option<TResult>> SingleAsync<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, AsyncSelector<TSource, TResult> selector, CancellationToken cancellationToken = default) 
-            where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
+        static async ValueTask<Option<TResult>> SingleAsync<TEnumerable, TEnumerator, TSource, TResult, TSelector>(this TEnumerable source, TSelector selector, CancellationToken cancellationToken = default) 
+            where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
+            where TSelector : struct, IAsyncFunction<TSource, TResult>
         {
-            var option = await GetSingleAsync<TEnumerable, TEnumerator, TSource>(source, cancellationToken).ConfigureAwait(false);
-            return await option.SelectAsync(selector, cancellationToken).ConfigureAwait(false);
+            var option = await source.GetSingleAsync<TEnumerable, TEnumerator, TSource>(cancellationToken).ConfigureAwait(false);
+            return await option.SelectAsync<TResult, TSelector>(selector, cancellationToken).ConfigureAwait(false);
         }
 
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static async ValueTask<Option<TResult>> SingleAsync<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, AsyncSelectorAt<TSource, TResult> selector, CancellationToken cancellationToken = default) 
-            where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
+        static async ValueTask<Option<TResult>> SingleAtAsync<TEnumerable, TEnumerator, TSource, TResult, TSelector>(this TEnumerable source, TSelector selector, CancellationToken cancellationToken = default) 
+            where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
+            where TSelector : struct, IAsyncFunction<TSource, int, TResult>
         {
-            var option = await GetSingleAsync<TEnumerable, TEnumerator, TSource>(source, cancellationToken).ConfigureAwait(false);
-            return await option.SelectAsync(async (item, cancellationToken) => await selector(item, 0, cancellationToken).ConfigureAwait(false), cancellationToken).ConfigureAwait(false);
+            var option = await source.GetSingleAsync<TEnumerable, TEnumerator, TSource>(cancellationToken).ConfigureAwait(false);
+            return await option.SelectAsync<TResult, SingleSelector<TSource, TResult, TSelector>>(new SingleSelector<TSource, TResult, TSelector>(selector), cancellationToken).ConfigureAwait(false);
         }
 
-        
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static async ValueTask<Option<TResult>> SingleAsync<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, AsyncPredicate<TSource> predicate, AsyncSelector<TSource, TResult> selector, CancellationToken cancellationToken = default) 
-            where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
-            where TEnumerator : struct, IAsyncEnumerator<TSource>
+        struct SingleSelector<TSource, TResult, TSelector>
+            : IAsyncFunction<TSource, TResult>
+            where TSelector : struct, IAsyncFunction<TSource, int, TResult>
         {
-            var option = await GetSingleAsync<TEnumerable, TEnumerator, TSource>(source, predicate, cancellationToken).ConfigureAwait(false);
-            return await option.SelectAsync(selector, cancellationToken).ConfigureAwait(false);
+            TSelector selector;
+
+            public SingleSelector(TSelector selector)
+                => this.selector = selector;
+                
+            public ValueTask<TResult> InvokeAsync(TSource item, CancellationToken cancellationToken) 
+                => selector.InvokeAsync(item, 0, cancellationToken);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        static async ValueTask<Option<TResult>> SingleAsync<TEnumerable, TEnumerator, TSource, TResult, TPredicate, TSelector>(this TEnumerable source, TPredicate predicate, TSelector selector, CancellationToken cancellationToken = default) 
+            where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
+            where TEnumerator : struct, IAsyncEnumerator<TSource>
+            where TPredicate : struct, IAsyncFunction<TSource, bool>
+            where TSelector : struct, IAsyncFunction<TSource, TResult>
+        {
+            var option = await source.GetSingleAsync<TEnumerable, TEnumerator, TSource, TPredicate>(predicate, cancellationToken).ConfigureAwait(false);
+            return await option.SelectAsync<TResult, TSelector>(selector, cancellationToken).ConfigureAwait(false);
         }
 
         /////////////////////////
@@ -63,11 +81,11 @@ namespace NetFabric.Hyperlinq
 
         
         static async ValueTask<Option<TSource>> GetSingleAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source, CancellationToken cancellationToken) 
-            where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
             var enumerator = source.GetAsyncEnumerator(cancellationToken);
-            await using (enumerator.ConfigureAwait(false))
+            try
             {
                 return await enumerator.MoveNextAsync().ConfigureAwait(false)
                     ? await enumerator.MoveNextAsync().ConfigureAwait(false) 
@@ -75,26 +93,31 @@ namespace NetFabric.Hyperlinq
                         : Option.Some(enumerator.Current)
                     : Option.None;
             }
+            finally
+            {
+                await enumerator.DisposeAsync().ConfigureAwait(false);
+            }
         }
 
         
-        static async ValueTask<Option<TSource>> GetSingleAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source, AsyncPredicate<TSource> predicate, CancellationToken cancellationToken) 
-            where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
+        static async ValueTask<Option<TSource>> GetSingleAsync<TEnumerable, TEnumerator, TSource, TPredicate>(this TEnumerable source, TPredicate predicate, CancellationToken cancellationToken) 
+            where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
+            where TPredicate : struct, IAsyncFunction<TSource, bool>
         {
             var enumerator = source.GetAsyncEnumerator(cancellationToken);
-            await using (enumerator.ConfigureAwait(false))
+            try
             {
                 while (await enumerator.MoveNextAsync().ConfigureAwait(false))
                 {
-                    if (await predicate(enumerator.Current, cancellationToken).ConfigureAwait(false))
+                    if (await predicate.InvokeAsync(enumerator.Current, cancellationToken).ConfigureAwait(false))
                     {
                         var value = enumerator.Current;
 
                         // found first, keep going until end or find second
                         while (await enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
-                            if (await predicate(enumerator.Current, cancellationToken).ConfigureAwait(false))
+                            if (await predicate.InvokeAsync(enumerator.Current, cancellationToken).ConfigureAwait(false))
                                 return Option.None;
                         }
 
@@ -104,28 +127,33 @@ namespace NetFabric.Hyperlinq
 
                 return Option.None;
             }
+            finally
+            {
+                await enumerator.DisposeAsync().ConfigureAwait(false);
+            }
         }
 
         
-        static async ValueTask<Option<TSource>> GetSingleAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source, AsyncPredicateAt<TSource> predicate, CancellationToken cancellationToken) 
-            where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
+        static async ValueTask<Option<TSource>> GetSingleAtAsync<TEnumerable, TEnumerator, TSource, TPredicate>(this TEnumerable source, TPredicate predicate, CancellationToken cancellationToken) 
+            where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
+            where TPredicate : struct, IAsyncFunction<TSource, int, bool>
         {
             var enumerator = source.GetAsyncEnumerator(cancellationToken);
-            await using (enumerator.ConfigureAwait(false))
+            try
             {
                 checked
                 {
                     for (var index = 0; await enumerator.MoveNextAsync().ConfigureAwait(false); index++)
                     {
-                        if (await predicate(enumerator.Current, index, cancellationToken).ConfigureAwait(false))
+                        if (await predicate.InvokeAsync(enumerator.Current, index, cancellationToken).ConfigureAwait(false))
                         {
                             var value = enumerator.Current;
 
                             // found first, keep going until end or find second
                             for (index++; await enumerator.MoveNextAsync().ConfigureAwait(false); index++)
                             {
-                                if (await predicate(enumerator.Current, index, cancellationToken).ConfigureAwait(false))
+                                if (await predicate.InvokeAsync(enumerator.Current, index, cancellationToken).ConfigureAwait(false))
                                     return Option.None;
                             }
 
@@ -135,6 +163,10 @@ namespace NetFabric.Hyperlinq
                 }
 
                 return Option.None;
+            }
+            finally
+            {
+                await enumerator.DisposeAsync().ConfigureAwait(false);
             }
         }
     }

@@ -16,7 +16,8 @@ namespace NetFabric.Hyperlinq
             : IValueReadOnlyList<TSource, EmptyEnumerable<TSource>.DisposableEnumerator>
             , IList<TSource>
         {
-            public static readonly EmptyEnumerable<TSource> Instance = new EmptyEnumerable<TSource>();
+            // ReSharper disable once HeapView.ObjectAllocation.Evident
+            internal static EmptyEnumerable<TSource> Instance { get; } = new();
 
             EmptyEnumerable() { }
 
@@ -28,18 +29,22 @@ namespace NetFabric.Hyperlinq
             TSource IList<TSource>.this[int index]
             {
                 get => this[index];
+                
                 [ExcludeFromCodeCoverage]
+                // ReSharper disable once ValueParameterNotUsed
                 set => Throw.NotSupportedException();
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Enumerator GetEnumerator() 
-                => new Enumerator();
-            DisposableEnumerator IValueEnumerable<TSource, EmptyEnumerable<TSource>.DisposableEnumerator>.GetEnumerator() 
-                => new DisposableEnumerator();
+                => new();
+            DisposableEnumerator IValueEnumerable<TSource, DisposableEnumerator>.GetEnumerator() 
+                => new();
             IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() 
+                // ReSharper disable once HeapView.BoxingAllocation
                 => new DisposableEnumerator();
             IEnumerator IEnumerable.GetEnumerator() 
+                // ReSharper disable once HeapView.BoxingAllocation
                 => new DisposableEnumerator();
 
             bool ICollection<TSource>.IsReadOnly  
@@ -77,9 +82,8 @@ namespace NetFabric.Hyperlinq
 
             public readonly struct Enumerator
             {
-                [MaybeNull]                
                 public readonly TSource Current
-                    => default;
+                    => default!;
 
                 public readonly bool MoveNext() 
                     => default;
@@ -88,15 +92,14 @@ namespace NetFabric.Hyperlinq
             public readonly struct DisposableEnumerator
                 : IEnumerator<TSource>
             {
-                [MaybeNull]
                 public readonly TSource Current
-                    => default;
+                    => default!;
 
                 readonly TSource IEnumerator<TSource>.Current
                     => default!;
 
                 readonly object? IEnumerator.Current 
-                    => default;
+                    => default!;
 
                 public readonly bool MoveNext()
                     => default;

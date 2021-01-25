@@ -26,6 +26,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetFabric.Hyperlinq.Benchma
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetFabric.Hyperlinq.SourceGenerator", "NetFabric.Hyperlinq.SourceGenerator\NetFabric.Hyperlinq.SourceGenerator.csproj", "{B8C004E3-F59E-4017-8781-C0F99B61BDEF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetFabric.Hyperlinq.SourceGenerator.UnitTests", "NetFabric.Hyperlinq.SourceGenerator.UnitTests\NetFabric.Hyperlinq.SourceGenerator.UnitTests.csproj", "{12F96462-A2F8-4FBE-B4F5-29BA6A6DB4D9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -52,6 +54,10 @@ Global
 		{B8C004E3-F59E-4017-8781-C0F99B61BDEF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B8C004E3-F59E-4017-8781-C0F99B61BDEF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B8C004E3-F59E-4017-8781-C0F99B61BDEF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{12F96462-A2F8-4FBE-B4F5-29BA6A6DB4D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{12F96462-A2F8-4FBE-B4F5-29BA6A6DB4D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{12F96462-A2F8-4FBE-B4F5-29BA6A6DB4D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{12F96462-A2F8-4FBE-B4F5-29BA6A6DB4D9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

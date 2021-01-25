@@ -63,9 +63,9 @@ namespace NetFabric.Hyperlinq
         /// <returns>
         /// <c>true</c> if the item was not in the set; otherwise, <c>false</c>.
         /// </returns>
-        public bool Add([AllowNull] TElement value)
+        public bool Add(TElement value)
         {
-            if (Count == 0)
+            if (Count is 0)
             {
                 buckets = bucketsPool.Rent(7);
                 Array.Clear(buckets, 0, buckets.Length);
@@ -74,8 +74,8 @@ namespace NetFabric.Hyperlinq
                 Array.Clear(slots, 0, slots.Length);
             }
 
-            Debug.Assert(buckets is object);
-            Debug.Assert(slots is object);
+            Debug.Assert(buckets is not null);
+            Debug.Assert(slots is not null);
 
             var hashCode = value switch
             { 
@@ -118,8 +118,8 @@ namespace NetFabric.Hyperlinq
         /// </summary>
         void Resize()
         {
-            Debug.Assert(buckets is object);
-            Debug.Assert(slots is object);
+            Debug.Assert(buckets is not null);
+            Debug.Assert(slots is not null);
 
             var newSize = checked((Count * 2) + 1);
             var newBuckets = bucketsPool.Rent(newSize);
@@ -177,7 +177,8 @@ namespace NetFabric.Hyperlinq
         /// <returns>A list of the items in this set.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public readonly List<TElement> ToList()
-            => new List<TElement>(this);
+            // ReSharper disable once HeapView.BoxingAllocation
+            => new(this);
 
         /// <summary>
         /// The number of items in this set.
@@ -189,36 +190,33 @@ namespace NetFabric.Hyperlinq
 
         public readonly void CopyTo(Span<TElement> span)
         {
-            if (slots is object)
-            {
-                for (var index = 0; index < Count; index++)
-                    span[index] = slots[index].Value!;
-            }
+            if (slots is null) return;
+            
+            for (var index = 0; index < Count; index++)
+                span[index] = slots[index].Value;
         }
 
         public readonly void CopyTo(TElement[] array)
         {
-            if (slots is object)
-            {
-                for (var index = 0; index < Count; index++)
-                    array[index] = slots[index].Value!;
-            }
+            if (slots is null) return;
+            
+            for (var index = 0; index < Count; index++)
+                array[index] = slots[index].Value;
         }
 
         public readonly void CopyTo(TElement[] array, int arrayIndex)
         {
-            if (slots is object)
+            if (slots is null) return;
+            
+            if (arrayIndex is 0)
             {
-                if (arrayIndex == 0)
-                {
-                    for (var index = 0; index < Count; index++)
-                        array[index] = slots[index].Value!;
-                }
-                else
-                {
-                    for (var index = 0; index < Count; index++)
-                        array[index + arrayIndex] = slots[index].Value!;
-                }
+                for (var index = 0; index < Count; index++)
+                    array[index] = slots[index].Value;
+            }
+            else
+            {
+                for (var index = 0; index < Count; index++)
+                    array[index + arrayIndex] = slots[index].Value;
             }
         }
 
@@ -260,17 +258,17 @@ namespace NetFabric.Hyperlinq
             /// <summary>
             /// The item held by this slot.
             /// </summary>
-            [MaybeNull, AllowNull] public TElement Value;
+            public TElement Value;
         }
 
         public void Dispose()
         {
-            if (buckets is object)
+            if (buckets is not null)
             {
                 bucketsPool.Return(buckets);
                 buckets = default;
             }
-            if (slots is object)
+            if (slots is not null)
             {
                 slotsPool.Return(slots);
                 slots = default;

@@ -16,14 +16,14 @@ namespace NetFabric.Hyperlinq
         public static DistinctEnumerable<TEnumerable, TEnumerator, TSource> Distinct<TEnumerable, TEnumerator, TSource>(
             this TEnumerable source,
             IEqualityComparer<TSource>? comparer = default)
-            where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
-            => new DistinctEnumerable<TEnumerable, TEnumerator, TSource>(source, comparer);
+            => new(source, comparer);
 
         [StructLayout(LayoutKind.Auto)]
         public readonly partial struct DistinctEnumerable<TEnumerable, TEnumerator, TSource>
             : IAsyncValueEnumerable<TSource, DistinctEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator>
-            where TEnumerable : notnull, IAsyncValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {
             readonly TEnumerable source;
@@ -35,8 +35,9 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly Enumerator GetAsyncEnumerator(CancellationToken cancellationToken = default)
-                => new Enumerator(in this, cancellationToken);
+                => new(in this, cancellationToken);
             readonly IAsyncEnumerator<TSource> IAsyncEnumerable<TSource>.GetAsyncEnumerator(CancellationToken cancellationToken)
+                // ReSharper disable once HeapView.BoxingAllocation
                 => new Enumerator(in this, cancellationToken);
 
             [StructLayout(LayoutKind.Auto)]
@@ -68,7 +69,6 @@ namespace NetFabric.Hyperlinq
                     u__2 = default;
                 }
 
-                [MaybeNull]
                 public readonly TSource Current
                     => enumerator.Current;
                 readonly TSource IAsyncEnumerator<TSource>.Current
@@ -107,7 +107,7 @@ namespace NetFabric.Hyperlinq
                     try
                     {
                         ConfiguredValueTaskAwaitable<bool>.ConfiguredValueTaskAwaiter awaiter;
-                        if (num == 0)
+                        if (num is 0)
                         {
                             awaiter = u__1;
                             u__1 = default;
@@ -176,10 +176,14 @@ namespace NetFabric.Hyperlinq
             {
                 var set = new Set<TSource>(comparer);
                 var enumerator = source.GetAsyncEnumerator(cancellationToken);
-                await using (enumerator.ConfigureAwait(false))
+                try
                 {
                     while (await enumerator.MoveNextAsync().ConfigureAwait(false))
                         _ = set.Add(enumerator.Current);
+                }
+                finally
+                {
+                    await enumerator.DisposeAsync().ConfigureAwait(false);
                 }
                 return set;
             }
@@ -190,7 +194,7 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly ValueTask<bool> AnyAsync(CancellationToken cancellationToken = default)
-                => AsyncValueEnumerableExtensions.AnyAsync<TEnumerable, TEnumerator, TSource>(source, cancellationToken);
+                => source.AnyAsync<TEnumerable, TEnumerator, TSource>(cancellationToken);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly async ValueTask<TSource[]> ToArrayAsync(CancellationToken cancellationToken = default)

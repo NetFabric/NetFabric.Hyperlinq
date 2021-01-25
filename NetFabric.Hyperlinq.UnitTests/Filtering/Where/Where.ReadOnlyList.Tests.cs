@@ -7,29 +7,11 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.Where
 {
     public class ReadOnlyListTests
     {
-        [Fact]
-        public void Where_Predicate_With_Null_Must_Throw()
-        {
-            // Arrange
-            var list = Wrap
-                .AsReadOnlyList(new int[0]);
-            var predicate = (Predicate<int>)null;
-
-            // Act
-            Action action = () => _ = ReadOnlyListExtensions
-                .Where(list, predicate);
-
-            // Assert
-            _ = action.Must()
-                .Throw<ArgumentNullException>()
-                .EvaluateTrue(exception => exception.ParamName == "predicate");
-        }
-
         [Theory]
         [MemberData(nameof(TestData.SkipTakePredicateEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakePredicateSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakePredicateMultiple), MemberType = typeof(TestData))]
-        public void Where_Predicate_With_ValidData_Must_Succeed(int[] source, int skip, int take, Predicate<int> predicate)
+        public void Where_Predicate_With_ValidData_Must_Succeed(int[] source, int skip, int take, Func<int, bool> predicate)
         {
             // Arrange
             var wrapped = Wrap
@@ -37,7 +19,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.Where
             var expected = Enumerable
                 .Skip(source, skip)
                 .Take(take)
-                .Where(predicate.AsFunc());
+                .Where(predicate);
 
             // Act
             var result = ReadOnlyListExtensions

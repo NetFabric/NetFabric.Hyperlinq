@@ -1,55 +1,62 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
+// ReSharper disable HeapView.ObjectAllocation.Evident
 
 namespace NetFabric.Hyperlinq
 {
     public static partial class ValueEnumerableExtensions
     {
-        
-        public static Dictionary<TKey, TSource> ToDictionary<TEnumerable, TEnumerator, TSource, TKey>(this TEnumerable source, Selector<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer = default)
-            where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Dictionary<TKey, TSource> ToDictionary<TEnumerable, TEnumerator, TSource, TKey>(this TEnumerable source, Func<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer = default)
+            where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
             where TKey : notnull
-        {
-            if (keySelector is null) Throw.ArgumentNullException(nameof(keySelector));
+            => source.ToDictionary<TEnumerable, TEnumerator, TSource, TKey, FunctionWrapper<TSource, TKey>>(new FunctionWrapper<TSource, TKey>(keySelector), comparer);
 
+        public static Dictionary<TKey, TSource> ToDictionary<TEnumerable, TEnumerator, TSource, TKey, TKeySelector>(this TEnumerable source, TKeySelector keySelector, IEqualityComparer<TKey>? comparer = default)
+            where TEnumerable : IValueEnumerable<TSource, TEnumerator>
+            where TEnumerator : struct, IEnumerator<TSource>
+            where TKey : notnull
+            where TKeySelector : struct, IFunction<TSource, TKey>
+        {
             using var enumerator = source.GetEnumerator();
             var dictionary = new Dictionary<TKey, TSource>(0, comparer);
             while (enumerator.MoveNext())
             {
                 var item = enumerator.Current;
-                dictionary.Add(keySelector(item), item);
+                dictionary.Add(keySelector.Invoke(item), item);
             }
             return dictionary;
         }
 
-        
-        static Dictionary<TKey, TSource> ToDictionary<TEnumerable, TEnumerator, TSource, TKey>(this TEnumerable source, Selector<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer, Predicate<TSource> predicate)
-            where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
+        internal static Dictionary<TKey, TSource> ToDictionary<TEnumerable, TEnumerator, TSource, TKey, TKeySelector, TPredicate>(this TEnumerable source, TKeySelector keySelector, IEqualityComparer<TKey>? comparer, TPredicate predicate)
+            where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
             where TKey : notnull
+            where TKeySelector : struct, IFunction<TSource, TKey>
+            where TPredicate : struct, IFunction<TSource, bool>
         {
-            if (keySelector is null) Throw.ArgumentNullException(nameof(keySelector));
-
             using var enumerator = source.GetEnumerator();
             var dictionary = new Dictionary<TKey, TSource>(0, comparer);
             while (enumerator.MoveNext())
             {
                 var item = enumerator.Current;
-                if (predicate(item))
-                    dictionary.Add(keySelector(item), item);
+                if (predicate.Invoke(item))
+                    dictionary.Add(keySelector.Invoke(item), item);
             }
             return dictionary;
         }
 
         
-        static Dictionary<TKey, TSource> ToDictionary<TEnumerable, TEnumerator, TSource, TKey>(this TEnumerable source, Selector<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer, PredicateAt<TSource> predicate)
-            where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
+        internal static Dictionary<TKey, TSource> ToDictionaryAt<TEnumerable, TEnumerator, TSource, TKey, TKeySelector, TPredicate>(this TEnumerable source, TKeySelector keySelector, IEqualityComparer<TKey>? comparer, TPredicate predicate)
+            where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
             where TKey : notnull
+            where TKeySelector : struct, IFunction<TSource, TKey>
+            where TPredicate : struct, IFunction<TSource, int, bool>
         {
-            if (keySelector is null) Throw.ArgumentNullException(nameof(keySelector));
-
             using var enumerator = source.GetEnumerator();
             checked
             {
@@ -57,63 +64,90 @@ namespace NetFabric.Hyperlinq
                 for (var index = 0; enumerator.MoveNext(); index++)
                 {
                     var item = enumerator.Current;
-                    if (predicate(item, index))
-                        dictionary.Add(keySelector(item), item);
+                    if (predicate.Invoke(item, index))
+                        dictionary.Add(keySelector.Invoke(item), item);
                 }
                 return dictionary;
             }
         }
 
-        
-        public static Dictionary<TKey, TElement> ToDictionary<TEnumerable, TEnumerator, TSource, TKey, TElement>(this TEnumerable source, Selector<TSource, TKey> keySelector, NullableSelector<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer = default)
-            where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
+        internal static Dictionary<TKey, TResult> ToDictionary<TEnumerable, TEnumerator, TSource, TKey, TKeySelector, TResult, TPredicate, TSelector>(this TEnumerable source, TKeySelector keySelector, IEqualityComparer<TKey>? comparer, TPredicate predicate, TSelector selector)
+            where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
             where TKey : notnull
+            where TKeySelector : struct, IFunction<TResult, TKey>
+            where TPredicate : struct, IFunction<TSource, bool>
+            where TSelector : struct, IFunction<TSource, TResult>
         {
-            if (keySelector is null) Throw.ArgumentNullException(nameof(keySelector));
-            if (elementSelector is null) Throw.ArgumentNullException(nameof(elementSelector));
+            using var enumerator = source.GetEnumerator();
+            var dictionary = new Dictionary<TKey, TResult>(0, comparer);
+            while (enumerator.MoveNext())
+            {
+                var item = enumerator.Current;
+                if (predicate.Invoke(item))
+                {
+                    var result = selector.Invoke(item);
+                    dictionary.Add(keySelector.Invoke(result), result);
+                }
+            }
+            return dictionary;
+        }
 
+        //////////////////////////////////////////////////////////////////////////////////////////////////
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Dictionary<TKey, TElement> ToDictionary<TEnumerable, TEnumerator, TSource, TKey, TElement>(this TEnumerable source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer = default)
+            where TEnumerable : IValueEnumerable<TSource, TEnumerator>
+            where TEnumerator : struct, IEnumerator<TSource>
+            where TKey : notnull
+            => source.ToDictionary<TEnumerable, TEnumerator, TSource, TKey, TElement, FunctionWrapper<TSource, TKey>, FunctionWrapper<TSource, TElement>>(new FunctionWrapper<TSource, TKey>(keySelector), new FunctionWrapper<TSource, TElement>(elementSelector), comparer);
+
+        public static Dictionary<TKey, TElement> ToDictionary<TEnumerable, TEnumerator, TSource, TKey, TElement, TKeySelector, TElementSelector>(this TEnumerable source, TKeySelector keySelector, TElementSelector elementSelector, IEqualityComparer<TKey>? comparer = default)
+            where TEnumerable : IValueEnumerable<TSource, TEnumerator>
+            where TEnumerator : struct, IEnumerator<TSource>
+            where TKey : notnull
+            where TKeySelector : struct, IFunction<TSource, TKey>
+            where TElementSelector : struct, IFunction<TSource, TElement>
+        {
             var dictionary = new Dictionary<TKey, TElement>(0, comparer);
 
             using var enumerator = source.GetEnumerator();
             while (enumerator.MoveNext())
             {
                 var item = enumerator.Current;
-                dictionary.Add(keySelector(item), elementSelector(item)!);
+                dictionary.Add(keySelector.Invoke(item), elementSelector.Invoke(item)!);
             }
 
             return dictionary;
         }
-
         
-        static Dictionary<TKey, TElement> ToDictionary<TEnumerable, TEnumerator, TSource, TKey, TElement>(this TEnumerable source, Selector<TSource, TKey> keySelector, NullableSelector<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer, Predicate<TSource> predicate)
-            where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
+        internal static Dictionary<TKey, TElement> ToDictionary<TEnumerable, TEnumerator, TSource, TKey, TElement, TKeySelector, TElementSelector, TPredicate>(this TEnumerable source, TKeySelector keySelector, TElementSelector elementSelector, IEqualityComparer<TKey>? comparer, TPredicate predicate)
+            where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
             where TKey : notnull
+            where TKeySelector : struct, IFunction<TSource, TKey>
+            where TElementSelector : struct, IFunction<TSource, TElement>
+            where TPredicate : struct, IFunction<TSource, bool>
         {
-            if (keySelector is null) Throw.ArgumentNullException(nameof(keySelector));
-            if (elementSelector is null) Throw.ArgumentNullException(nameof(elementSelector));
-
             using var enumerator = source.GetEnumerator();
             var dictionary = new Dictionary<TKey, TElement>(0, comparer);
             while (enumerator.MoveNext())
             {
                 var item = enumerator.Current;
-                if (predicate(item))
-                    dictionary.Add(keySelector(item), elementSelector(item)!);
+                if (predicate.Invoke(item))
+                    dictionary.Add(keySelector.Invoke(item), elementSelector.Invoke(item)!);
             }
             return dictionary;
         }
-
         
-        static Dictionary<TKey, TElement> ToDictionary<TEnumerable, TEnumerator, TSource, TKey, TElement>(this TEnumerable source, Selector<TSource, TKey> keySelector, NullableSelector<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer, PredicateAt<TSource> predicate)
-            where TEnumerable : notnull, IValueEnumerable<TSource, TEnumerator>
+        internal static Dictionary<TKey, TElement> ToDictionaryAt<TEnumerable, TEnumerator, TSource, TKey, TElement, TKeySelector, TElementSelector, TPredicate>(this TEnumerable source, TKeySelector keySelector, TElementSelector elementSelector, IEqualityComparer<TKey>? comparer, TPredicate predicate)
+            where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
             where TKey : notnull
+            where TKeySelector : struct, IFunction<TSource, TKey>
+            where TElementSelector : struct, IFunction<TSource, TElement>
+            where TPredicate : struct, IFunction<TSource, int, bool>
         {
-            if (keySelector is null) Throw.ArgumentNullException(nameof(keySelector));
-            if (elementSelector is null) Throw.ArgumentNullException(nameof(elementSelector));
-
             using var enumerator = source.GetEnumerator();
             checked
             {
@@ -121,11 +155,34 @@ namespace NetFabric.Hyperlinq
                 for (var index = 0; enumerator.MoveNext(); index++)
                 {
                     var item = enumerator.Current;
-                    if (predicate(item, index))
-                        dictionary.Add(keySelector(item), elementSelector(item)!);
+                    if (predicate.Invoke(item, index))
+                        dictionary.Add(keySelector.Invoke(item), elementSelector.Invoke(item));
                 }
                 return dictionary;
             }
+        }
+        
+        internal static Dictionary<TKey, TElement> ToDictionary<TEnumerable, TEnumerator, TSource, TKey, TElement, TKeySelector, TElementSelector, TResult, TPredicate, TSelector>(this TEnumerable source, TKeySelector keySelector, TElementSelector elementSelector, IEqualityComparer<TKey>? comparer, TPredicate predicate, TSelector selector)
+            where TEnumerable : IValueEnumerable<TSource, TEnumerator>
+            where TEnumerator : struct, IEnumerator<TSource>
+            where TKey : notnull
+            where TKeySelector : struct, IFunction<TResult, TKey>
+            where TElementSelector : struct, IFunction<TResult, TElement>
+            where TPredicate : struct, IFunction<TSource, bool>
+            where TSelector : struct, IFunction<TSource, TResult>
+        {
+            using var enumerator = source.GetEnumerator();
+            var dictionary = new Dictionary<TKey, TElement>(0, comparer);
+            while (enumerator.MoveNext())
+            {
+                var item = enumerator.Current;
+                if (predicate.Invoke(item))
+                {
+                    var result = selector.Invoke(item);
+                    dictionary.Add(keySelector.Invoke(result), elementSelector.Invoke(result));
+                }
+            }
+            return dictionary;
         }
     }
 }

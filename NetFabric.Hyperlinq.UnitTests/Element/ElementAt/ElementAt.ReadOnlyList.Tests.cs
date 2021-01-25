@@ -111,7 +111,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
         [MemberData(nameof(TestData.SkipTakePredicateEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakePredicateSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakePredicateMultiple), MemberType = typeof(TestData))]
-        public void ElementAt_Skip_Take_Predicate_With_OutOfRange_Must_Return_None(int[] source, int skipCount, int takeCount, Predicate<int> predicate)
+        public void ElementAt_Skip_Take_Predicate_With_OutOfRange_Must_Return_None(int[] source, int skipCount, int takeCount, Func<int, bool> predicate)
         {
             // Arrange
             var wrapped = Wrap.AsReadOnlyList(source);
@@ -140,14 +140,14 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
         [Theory]
         [MemberData(nameof(TestData.SkipTakePredicateSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakePredicateMultiple), MemberType = typeof(TestData))]
-        public void ElementAt_Skip_Take_Predicate_With_ValidData_Must_Return_Some(int[] source, int skipCount, int takeCount, Predicate<int> predicate)
+        public void ElementAt_Skip_Take_Predicate_With_ValidData_Must_Return_Some(int[] source, int skipCount, int takeCount, Func<int, bool> predicate)
         {
             // Arrange
             var wrapped = Wrap.AsReadOnlyList(source);
             var expected = Enumerable
                 .Skip(source, skipCount)
                 .Take(takeCount)
-                .Where(predicate.AsFunc())
+                .Where(predicate)
                 .ToList();
 
             for (var index = 0; index < expected.Count; index++)
@@ -170,7 +170,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
         [MemberData(nameof(TestData.SkipTakePredicateAtEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakePredicateAtSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakePredicateAtMultiple), MemberType = typeof(TestData))]
-        public void ElementAt_Skip_Take_PredicateAt_With_OutOfRange_Must_Return_None(int[] source, int skipCount, int takeCount, PredicateAt<int> predicate)
+        public void ElementAt_Skip_Take_PredicateAt_With_OutOfRange_Must_Return_None(int[] source, int skipCount, int takeCount, Func<int, int, bool> predicate)
         {
             // Arrange
             var wrapped = Wrap.AsReadOnlyList(source);
@@ -199,14 +199,14 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
         [Theory]
         [MemberData(nameof(TestData.SkipTakePredicateAtSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakePredicateAtMultiple), MemberType = typeof(TestData))]
-        public void ElementAt_Skip_Take_PredicateAt_With_ValidData_Must_Return_Some(int[] source, int skipCount, int takeCount, PredicateAt<int> predicate)
+        public void ElementAt_Skip_Take_PredicateAt_With_ValidData_Must_Return_Some(int[] source, int skipCount, int takeCount, Func<int, int, bool> predicate)
         {
             // Arrange
             var wrapped = Wrap.AsReadOnlyList(source);
             var expected = Enumerable
                 .Skip(source, skipCount)
                 .Take(takeCount)
-                .Where(predicate.AsFunc())
+                .Where(predicate)
                 .ToList();
 
             for (var index = 0; index < expected.Count; index++)
@@ -229,7 +229,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
         [MemberData(nameof(TestData.SkipTakeSelectorEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakeSelectorSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakeSelectorMultiple), MemberType = typeof(TestData))]
-        public void ElementAt_Skip_Take_Selector_With_OutOfRange_Must_Return_None(int[] source, int skipCount, int takeCount, NullableSelector<int, string> selector)
+        public void ElementAt_Skip_Take_Selector_With_OutOfRange_Must_Return_None(int[] source, int skipCount, int takeCount, Func<int, string> selector)
         {
             // Arrange
             var wrapped = Wrap.AsReadOnlyList(source);
@@ -258,14 +258,14 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
         [Theory]
         [MemberData(nameof(TestData.SkipTakeSelectorSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakeSelectorMultiple), MemberType = typeof(TestData))]
-        public void ElementAt_Skip_Take_Selector_With_ValidData_Must_Return_Some(int[] source, int skipCount, int takeCount, NullableSelector<int, string> selector)
+        public void ElementAt_Skip_Take_Selector_With_ValidData_Must_Return_Some(int[] source, int skipCount, int takeCount, Func<int, string> selector)
         {
             // Arrange
             var wrapped = Wrap.AsReadOnlyList(source);
             var expected = Enumerable
                 .Skip(source, skipCount)
                 .Take(takeCount)
-                .Select(selector.AsFunc())
+                .Select(selector)
                 .ToList();
 
             for (var index = 0; index < expected.Count; index++)
@@ -288,7 +288,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
         [MemberData(nameof(TestData.SkipTakeSelectorAtEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakeSelectorAtSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakeSelectorAtMultiple), MemberType = typeof(TestData))]
-        public void ElementAt_Skip_Take_SelectorAt_With_OutOfRange_Must_Return_None(int[] source, int skipCount, int takeCount, NullableSelectorAt<int, string> selector)
+        public void ElementAt_Skip_Take_SelectorAt_With_OutOfRange_Must_Return_None(int[] source, int skipCount, int takeCount, Func<int, int, string> selector)
         {
             // Arrange
             var wrapped = Wrap.AsReadOnlyList(source);
@@ -317,14 +317,14 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
         [Theory]
         [MemberData(nameof(TestData.SkipTakeSelectorAtSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakeSelectorAtMultiple), MemberType = typeof(TestData))]
-        public void ElementAt_Skip_Take_SelectorAt_With_ValidData_Must_Return_Some(int[] source, int skipCount, int takeCount, NullableSelectorAt<int, string> selector)
+        public void ElementAt_Skip_Take_SelectorAt_With_ValidData_Must_Return_Some(int[] source, int skipCount, int takeCount, Func<int, int, string> selector)
         {
             // Arrange
             var wrapped = Wrap.AsReadOnlyList(source);
             var expected = Enumerable
                 .Skip(source, skipCount)
                 .Take(takeCount)
-                .Select(selector.AsFunc())
+                .Select(selector)
                 .ToList();
 
             for (var index = 0; index < expected.Count; index++)
@@ -347,7 +347,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
         [MemberData(nameof(TestData.SkipTakePredicateSelectorEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakePredicateSelectorSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakePredicateSelectorMultiple), MemberType = typeof(TestData))]
-        public void ElementAt_Skip_Take_Predicate_Selector_With_OutOfRange_Must_Return_None(int[] source, int skipCount, int takeCount, Predicate<int> predicate, NullableSelector<int, string> selector)
+        public void ElementAt_Skip_Take_Predicate_Selector_With_OutOfRange_Must_Return_None(int[] source, int skipCount, int takeCount, Func<int, bool> predicate, Func<int, string> selector)
         {
             // Arrange
             var wrapped = Wrap.AsReadOnlyList(source);
@@ -378,15 +378,15 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
         [Theory]
         [MemberData(nameof(TestData.SkipTakePredicateSelectorSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakePredicateSelectorMultiple), MemberType = typeof(TestData))]
-        public void ElementAt_Skip_Take_Predicate_Selector_With_ValidData_Must_Return_Some(int[] source, int skipCount, int takeCount, Predicate<int> predicate, NullableSelector<int, string> selector)
+        public void ElementAt_Skip_Take_Predicate_Selector_With_ValidData_Must_Return_Some(int[] source, int skipCount, int takeCount, Func<int, bool> predicate, Func<int, string> selector)
         {
             // Arrange
             var wrapped = Wrap.AsReadOnlyList(source);
             var expected = Enumerable
                 .Skip(source, skipCount)
                 .Take(takeCount)
-                .Where(predicate.AsFunc())
-                .Select(selector.AsFunc())
+                .Where(predicate)
+                .Select(selector)
                 .ToList();
 
             for (var index = 0; index < expected.Count; index++)

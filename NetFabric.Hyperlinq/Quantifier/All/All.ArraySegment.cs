@@ -6,28 +6,29 @@ namespace NetFabric.Hyperlinq
     public static partial class ArrayExtensions
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool All<TSource>(this in ArraySegment<TSource> source, Predicate<TSource> predicate)
+        public static bool All<TSource>(this in ArraySegment<TSource> source, Func<TSource, bool> predicate)
+            => source.All(new FunctionWrapper<TSource, bool>(predicate));
+        
+        public static bool All<TSource, TPredicate>(this in ArraySegment<TSource> source, TPredicate predicate = default)
+            where TPredicate : struct, IFunction<TSource, bool>
         {
-            if (predicate is null)
-                Throw.ArgumentNullException(nameof(predicate));
-
             if (source.Any())
             {
                 if (source.IsWhole())
                 {
-                    foreach (var item in source.Array)
+                    foreach (var item in source.Array!)
                     {
-                        if (!predicate(item))
+                        if (!predicate.Invoke(item))
                             return false;
                     }
                 }
                 else
                 {
-                    var array = source.Array;
+                    var array = source.Array!;
                     var end = source.Count + source.Offset - 1;
                     for (var index = source.Offset; index <= end; index++)
                     {
-                        if (!predicate(array![index]))
+                        if (!predicate.Invoke(array[index]))
                             return false;
                     }
                 }
@@ -37,19 +38,20 @@ namespace NetFabric.Hyperlinq
 
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool All<TSource>(this in ArraySegment<TSource> source, PredicateAt<TSource> predicate)
+        public static bool All<TSource>(this in ArraySegment<TSource> source, Func<TSource, int, bool> predicate)
+            => source.AllAt(new FunctionWrapper<TSource, int, bool>(predicate));
+        
+        public static bool AllAt<TSource, TPredicate>(this in ArraySegment<TSource> source, TPredicate predicate = default)
+            where TPredicate : struct, IFunction<TSource, int, bool>
         {
-            if (predicate is null)
-                Throw.ArgumentNullException(nameof(predicate));
-
             if (source.Any())
             {
                 if (source.IsWhole())
                 {
                     var index = 0;
-                    foreach (var item in source.Array)
+                    foreach (var item in source.Array!)
                     {
-                        if (!predicate(item, index))
+                        if (!predicate.Invoke(item, index))
                             return false;
 
                         index++;
@@ -57,11 +59,11 @@ namespace NetFabric.Hyperlinq
                 }
                 else
                 {
-                    var array = source.Array;
+                    var array = source.Array!;
                     var end = source.Count + source.Offset - 1;
                     for (var index = source.Offset; index <= end; index++)
                     {
-                        if (!predicate(array![index], index))
+                        if (!predicate.Invoke(array[index], index))
                             return false;
                     }
                 }

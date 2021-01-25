@@ -51,12 +51,14 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly Enumerator GetEnumerator()
-                => new Enumerator(in this);
+                => new(in this);
             readonly DisposableEnumerator IValueEnumerable<int, DisposableEnumerator>.GetEnumerator()
-                => new DisposableEnumerator(in this);
+                => new(in this);
             readonly IEnumerator<int> IEnumerable<int>.GetEnumerator()
+                // ReSharper disable once HeapView.BoxingAllocation
                 => new DisposableEnumerator(in this);
             readonly IEnumerator IEnumerable.GetEnumerator()
+                // ReSharper disable once HeapView.BoxingAllocation
                 => new DisposableEnumerator(in this);
 
             bool ICollection<int>.IsReadOnly
@@ -64,7 +66,7 @@ namespace NetFabric.Hyperlinq
 
             public void CopyTo(Span<int> array)
             {
-                if (start == 0)
+                if (start is 0)
                 {
                     for (var index = 0; index < Count; index++)
                         array[index] = index;
@@ -78,7 +80,7 @@ namespace NetFabric.Hyperlinq
 
             public void CopyTo(int[] array)
             {
-                if (start == 0)
+                if (start is 0)
                 {
                     for (var index = 0; index < Count; index++)
                         array[index] = index;
@@ -92,9 +94,9 @@ namespace NetFabric.Hyperlinq
 
             public void CopyTo(int[] array, int arrayIndex)
             {
-                if (start == 0)
+                if (start is 0)
                 {
-                    if (arrayIndex == 0)
+                    if (arrayIndex is 0)
                     {
                         for (var index = 0; index < Count; index++)
                             array[index] = index;
@@ -107,7 +109,7 @@ namespace NetFabric.Hyperlinq
                 }
                 else
                 {
-                    if (arrayIndex == 0)
+                    if (arrayIndex is 0)
                     {
                         for (var index = 0; index < Count; index++)
                             array[index] = index + start;
@@ -140,13 +142,13 @@ namespace NetFabric.Hyperlinq
             {
                 [FieldOffset(0)] int current;
                 [FieldOffset(4)] readonly int end;
-                [FieldOffset(8)] readonly long pad;
+                [FieldOffset(8)] readonly long padding;
 
                 internal Enumerator(in RangeEnumerable enumerable)
                 {
                     current = enumerable.start - 1;
                     end = current + enumerable.Count;
-                    pad = default;
+                    padding = default;
                 }
 
                 public int Current
@@ -166,13 +168,13 @@ namespace NetFabric.Hyperlinq
             {
                 [FieldOffset(0)] int current;
                 [FieldOffset(4)] readonly int end;
-                [FieldOffset(8)] readonly long pad;
+                [FieldOffset(8)] readonly long padding;
 
                 internal DisposableEnumerator(in RangeEnumerable enumerable)
                 {
                     current = enumerable.start - 1;
                     end = current + enumerable.Count;
-                    pad = default;
+                    padding = default;
                 }
 
                 public int Current
@@ -180,7 +182,8 @@ namespace NetFabric.Hyperlinq
                     [MethodImpl(MethodImplOptions.AggressiveInlining)]
                     get => current;
                 }
-                object IEnumerator.Current
+                object? IEnumerator.Current
+                    // ReSharper disable once HeapView.BoxingAllocation
                     => current;
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -207,11 +210,11 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Any()
-                => Count != 0;
+                => Count is not 0;
 
             public bool Contains(int value, IEqualityComparer<int>? comparer)
             {
-                if (Count == 0)
+                if (Count is 0)
                     return false;
 
                 if (comparer is null || ReferenceEquals(comparer, EqualityComparer<int>.Default))
@@ -227,6 +230,7 @@ namespace NetFabric.Hyperlinq
 
             public int[] ToArray()
             {
+                // ReSharper disable once HeapView.ObjectAllocation.Evident
                 var array = new int[Count];
                 CopyTo(array);
                 return array;
@@ -241,7 +245,8 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public List<int> ToList()
-                => new List<int>(this);
+                // ReSharper disable once HeapView.BoxingAllocation
+                => new(this);
         }
     }
 }

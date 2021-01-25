@@ -9,6 +9,6 @@ namespace NetFabric.Hyperlinq
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Option<TSource> ElementAt<TSource>(this Memory<TSource> source, int index)
-            => ElementAt((ReadOnlySpan<TSource>)source.Span, index);
+            => ((ReadOnlySpan<TSource>)source.Span).ElementAt(index);
     }
 }

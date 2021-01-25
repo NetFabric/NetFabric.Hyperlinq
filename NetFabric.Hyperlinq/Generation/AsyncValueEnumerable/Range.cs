@@ -47,10 +47,11 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly Enumerator GetEnumerator(CancellationToken cancellationToken = default) 
-                => new Enumerator(in this, cancellationToken);
+                => new(in this, cancellationToken);
             readonly DisposableEnumerator IAsyncValueEnumerable<int, DisposableEnumerator>.GetAsyncEnumerator(CancellationToken cancellationToken) 
-                => new DisposableEnumerator(in this, cancellationToken);
+                => new(in this, cancellationToken);
             readonly IAsyncEnumerator<int> IAsyncEnumerable<int>.GetAsyncEnumerator(CancellationToken cancellationToken) 
+                // ReSharper disable once HeapView.BoxingAllocation
                 => new DisposableEnumerator(in this, cancellationToken);
 
             [StructLayout(LayoutKind.Sequential)]
@@ -120,13 +121,13 @@ namespace NetFabric.Hyperlinq
 #pragma warning disable IDE0060 // Remove unused parameter
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public ValueTask<int> CountAsync(CancellationToken cancellationToken = default)
-                => new ValueTask<int>(count);
+                => new(count);
 #pragma warning restore IDE0060 // Remove unused parameter
 
 #pragma warning disable IDE0060 // Remove unused parameter
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public ValueTask<bool> AnyAsync(CancellationToken cancellationToken = default)
-                => new ValueTask<bool>(count != 0);
+                => new(count is not 0);
 #pragma warning restore IDE0060 // Remove unused parameter
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -147,7 +148,7 @@ namespace NetFabric.Hyperlinq
 
             public ValueTask<bool> ContainsAsync(int value, IEqualityComparer<int>? comparer, CancellationToken cancellationToken = default)
             {
-                if (count == 0)
+                if (count is 0)
                     return new ValueTask<bool>(false);
 
                 if (comparer is null || ReferenceEquals(comparer, EqualityComparer<int>.Default))
@@ -169,7 +170,7 @@ namespace NetFabric.Hyperlinq
 #else
                 var array = new int[count];
 #endif
-                if (start == 0)
+                if (start is 0)
                 {
                     for (var index = 0; index < count; index++)
                     {
@@ -190,12 +191,9 @@ namespace NetFabric.Hyperlinq
 
             public ValueTask<IMemoryOwner<int>> ToArrayAsync(MemoryPool<int> pool, CancellationToken cancellationToken = default)
             {
-                if (pool is null)
-                    Throw.ArgumentNullException(nameof(pool));
-
                 var result = pool.Rent(count);
                 var span = result.Memory.Span;
-                if (start == 0)
+                if (start is 0)
                 {
                     for (var index = 0; index < count; index++)
                     {
@@ -216,7 +214,8 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public ValueTask<List<int>> ToListAsync(CancellationToken cancellationToken = default)
-                => new ValueTask<List<int>>(new List<int>(new RangeToListCollection(this, cancellationToken)));
+                // ReSharper disable once HeapView.ObjectAllocation.Evident
+                => new(new List<int>(new RangeToListCollection(this, cancellationToken)));
 
             sealed class RangeToListCollection
                 : ToListCollectionBase<int>
@@ -231,7 +230,7 @@ namespace NetFabric.Hyperlinq
                 public override void CopyTo(int[] array, int _)
                 {
                     var count = source.count;
-                    if (source.start == 0)
+                    if (source.start is 0)
                     {
                         for (var index = 0; index < count; index++)
                         {

@@ -6,64 +6,74 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class ArrayExtensions
     {
-
-
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static IMemoryOwner<TSource> ToArray<TSource>(this Memory<TSource> source, MemoryPool<TSource> pool)
-            => ToArray(source.Span, pool);
+            => source.Span.ToArray(pool);
 
         //////////////////////////////////////////////////////////////////////////////////////////////////
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static TSource[] ToArray<TSource>(this Memory<TSource> source, Predicate<TSource> predicate)
-            => ToArray(source.Span, predicate);
+        static TSource[] ToArray<TSource, TPredicate>(this Memory<TSource> source, TPredicate predicate)
+            where TPredicate : struct, IFunction<TSource, bool>
+            => source.Span.ToArray(predicate);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static IMemoryOwner<TSource> ToArray<TSource>(this Memory<TSource> source, Predicate<TSource> predicate, MemoryPool<TSource> pool)
-            => ToArray(source.Span, predicate, pool);
-
-        //////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static TSource[] ToArray<TSource>(this Memory<TSource> source, PredicateAt<TSource> predicate)
-            => ToArray(source.Span, predicate);
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static IMemoryOwner<TSource> ToArray<TSource>(this Memory<TSource> source, PredicateAt<TSource> predicate, MemoryPool<TSource> pool)
-            => ToArray(source.Span, predicate, pool);
+        static IMemoryOwner<TSource> ToArray<TSource, TPredicate>(this Memory<TSource> source, TPredicate predicate, MemoryPool<TSource> pool)
+            where TPredicate : struct, IFunction<TSource, bool>
+            => source.Span.ToArray(predicate, pool);
 
         //////////////////////////////////////////////////////////////////////////////////////////////////
 
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static TResult[] ToArray<TSource, TResult>(this Memory<TSource> source, NullableSelector<TSource, TResult> selector)
-            => ToArray(source.Span, selector);
+        static TSource[] ToArrayAt<TSource, TPredicate>(this Memory<TSource> source, TPredicate predicate)
+            where TPredicate : struct, IFunction<TSource, int, bool>
+            => source.Span.ToArrayAt(predicate);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static IMemoryOwner<TResult> ToArray<TSource, TResult>(this Memory<TSource> source, NullableSelector<TSource, TResult> selector, MemoryPool<TResult> pool)
-            => ToArray(source.Span, selector, pool);
-
-        //////////////////////////////////////////////////////////////////////////////////////////////////
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static TResult[] ToArray<TSource, TResult>(this Memory<TSource> source, NullableSelectorAt<TSource, TResult> selector)
-            => ToArray(source.Span, selector);
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static IMemoryOwner<TResult> ToArray<TSource, TResult>(this Memory<TSource> source, NullableSelectorAt<TSource, TResult> selector, MemoryPool<TResult> pool)
-            => ToArray(source.Span, selector, pool);
+        static IMemoryOwner<TSource> ToArrayAt<TSource, TPredicate>(this Memory<TSource> source, TPredicate predicate, MemoryPool<TSource> pool)
+            where TPredicate : struct, IFunction<TSource, int, bool>
+            => source.Span.ToArrayAt(predicate, pool);
 
         //////////////////////////////////////////////////////////////////////////////////////////////////
 
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static TResult[] ToArray<TSource, TResult>(this Memory<TSource> source, Predicate<TSource> predicate, NullableSelector<TSource, TResult> selector)
-            => ToArray(source.Span, predicate, selector);
+        static TResult[] ToArray<TSource, TResult, TSelector>(this Memory<TSource> source, TSelector selector)
+            where TSelector : struct, IFunction<TSource, TResult>
+            => source.Span.ToArray<TSource, TResult, TSelector>(selector);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static IMemoryOwner<TResult> ToArray<TSource, TResult>(this Memory<TSource> source, Predicate<TSource> predicate, NullableSelector<TSource, TResult> selector, MemoryPool<TResult> pool)
-            => ToArray(source.Span, predicate, selector, pool);
+        static IMemoryOwner<TResult> ToArray<TSource, TResult, TSelector>(this Memory<TSource> source, TSelector selector, MemoryPool<TResult> pool)
+            where TSelector : struct, IFunction<TSource, TResult>
+            => source.Span.ToArray(selector, pool);
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        static TResult[] ToArrayAt<TSource, TResult, TSelector>(this Memory<TSource> source, TSelector selector)
+            where TSelector : struct, IFunction<TSource, int, TResult>
+            => source.Span.ToArrayAt<TSource, TResult, TSelector>(selector);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        static IMemoryOwner<TResult> ToArrayAt<TSource, TResult, TSelector>(this Memory<TSource> source, TSelector selector, MemoryPool<TResult> pool)
+            where TSelector : struct, IFunction<TSource, int, TResult>
+            => source.Span.ToArrayAt(selector, pool);
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        static TResult[] ToArray<TSource, TResult, TPredicate, TSelector>(this Memory<TSource> source, TPredicate predicate, TSelector selector)
+            where TPredicate : struct, IFunction<TSource, bool>
+            where TSelector : struct, IFunction<TSource, TResult>
+            => source.Span.ToArray<TSource, TResult, TPredicate, TSelector>(predicate, selector);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        static IMemoryOwner<TResult> ToArray<TSource, TResult, TPredicate, TSelector>(this Memory<TSource> source, TPredicate predicate, TSelector selector, MemoryPool<TResult> pool)
+            where TPredicate : struct, IFunction<TSource, bool>
+            where TSelector : struct, IFunction<TSource, TResult>
+            => source.Span.ToArray(predicate, selector, pool);
     }
 }
 

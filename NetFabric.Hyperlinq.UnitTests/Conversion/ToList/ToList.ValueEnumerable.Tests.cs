@@ -58,13 +58,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
         [MemberData(nameof(TestData.PredicateEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateMultiple), MemberType = typeof(TestData))]
-        public void ToList_Predicate_With_ValidData_Must_Succeed(int[] source, Predicate<int> predicate)
+        public void ToList_Predicate_With_ValidData_Must_Succeed(int[] source, Func<int, bool> predicate)
         {
             // Arrange
             var wrapped = Wrap
                 .AsValueEnumerable(source);
             var expected = Enumerable
-                .Where(source, predicate.AsFunc())
+                .Where(source, predicate)
                 .ToList();
 
             // Act
@@ -83,13 +83,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
         [MemberData(nameof(TestData.PredicateAtEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateAtSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateAtMultiple), MemberType = typeof(TestData))]
-        public void ToList_PredicateAt_With_ValidData_Must_Succeed(int[] source, PredicateAt<int> predicate)
+        public void ToList_PredicateAt_With_ValidData_Must_Succeed(int[] source, Func<int, int, bool> predicate)
         {
             // Arrange
             var wrapped = Wrap
                 .AsValueEnumerable(source);
             var expected = Enumerable
-                .Where(source, predicate.AsFunc())
+                .Where(source, predicate)
                 .ToList();
 
             // Act
@@ -108,13 +108,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
         [MemberData(nameof(TestData.SelectorEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SelectorSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SelectorMultiple), MemberType = typeof(TestData))]
-        public void ToList_Selector_With_ValidData_Must_Succeed(int[] source, NullableSelector<int, string> selector)
+        public void ToList_Selector_With_ValidData_Must_Succeed(int[] source, Func<int, string> selector)
         {
             // Arrange
             var wrapped = Wrap
                 .AsValueEnumerable(source);
             var expected = Enumerable
-                .Select(source, selector.AsFunc())
+                .Select(source, selector)
                 .ToList();
 
             // Act
@@ -133,13 +133,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
         [MemberData(nameof(TestData.SelectorAtEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SelectorAtSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SelectorAtMultiple), MemberType = typeof(TestData))]
-        public void ToList_SelectorAt_With_ValidData_Must_Succeed(int[] source, NullableSelectorAt<int, string> selector)
+        public void ToList_SelectorAt_With_ValidData_Must_Succeed(int[] source, Func<int, int, string> selector)
         {
             // Arrange
             var wrapped = Wrap
                 .AsValueEnumerable(source);
             var expected = Enumerable
-                .Select(source, selector.AsFunc())
+                .Select(source, selector)
                 .ToList();
 
             // Act
@@ -159,14 +159,14 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
         [MemberData(nameof(TestData.PredicateSelectorEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateSelectorSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateSelectorMultiple), MemberType = typeof(TestData))]
-        public void ToList_Predicate_Selector_With_ValidData_Must_Succeed(int[] source, Predicate<int> predicate, NullableSelector<int, string> selector)
+        public void ToList_Predicate_Selector_With_ValidData_Must_Succeed(int[] source, Func<int, bool> predicate, Func<int, string> selector)
         {
             // Arrange
             var wrapped = Wrap
                 .AsValueEnumerable(source);
             var expected = Enumerable
-                .Where(source, predicate.AsFunc())
-                .Select(selector.AsFunc())
+                .Where(source, predicate)
+                .Select(selector)
                 .ToList();
 
             // Act

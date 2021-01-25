@@ -32,7 +32,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Aggregation.Count
         [MemberData(nameof(TestData.SkipTakePredicateEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakePredicateSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakePredicateMultiple), MemberType = typeof(TestData))]
-        public void Count_Predicate_With_ValidData_Must_Succeed(int[] source, int skip, int take, Predicate<int> predicate)
+        public void Count_Predicate_With_ValidData_Must_Succeed(int[] source, int skip, int take, Func<int, bool> predicate)
         {
             // Arrange
             var wrapped = Wrap
@@ -40,7 +40,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Aggregation.Count
             var expected = Enumerable
                 .Skip(source, skip)
                 .Take(take)
-                .Count(predicate.AsFunc());
+                .Count(predicate);
 
             // Act
             var result = ReadOnlyListExtensions
@@ -58,7 +58,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Aggregation.Count
         [MemberData(nameof(TestData.SkipTakePredicateAtEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakePredicateAtSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakePredicateAtMultiple), MemberType = typeof(TestData))]
-        public void Count_PredicateAt_With_ValidData_Must_Succeed(int[] source, int skip, int take, PredicateAt<int> predicate)
+        public void Count_PredicateAt_With_ValidData_Must_Succeed(int[] source, int skip, int take, Func<int, int, bool> predicate)
         {
             // Arrange
             var wrapped = Wrap
@@ -66,7 +66,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Aggregation.Count
             var expected = Enumerable
                 .Skip(source, skip)
                 .Take(take)
-                .Where(predicate.AsFunc())
+                .Where(predicate)
                 .Count();
 
             // Act

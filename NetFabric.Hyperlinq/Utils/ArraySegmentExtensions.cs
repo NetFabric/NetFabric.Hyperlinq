@@ -7,7 +7,7 @@ namespace NetFabric.Hyperlinq
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsEmpty<T>(this in ArraySegment<T> source)
-            => source.Count == 0;
+            => source.Count is 0;
 
         // NOTE: Inner array can only be null if length is zero. Should validate before calling this method.
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

@@ -11,11 +11,7 @@ namespace NetFabric.Hyperlinq
         
         public static CreateValueEnumerable<TEnumerator, TSource> Create<TEnumerator, TSource>(Func<TEnumerator> getEnumerator) 
             where TEnumerator : struct, IEnumerator<TSource>
-        {
-            if (getEnumerator is null) Throw.ArgumentNullException(nameof(getEnumerator));
-
-            return new CreateValueEnumerable<TEnumerator, TSource>(getEnumerator);
-        }
+            => new CreateValueEnumerable<TEnumerator, TSource>(getEnumerator);
 
         [StructLayout(LayoutKind.Auto)]
         public readonly partial struct CreateValueEnumerable<TEnumerator, TSource> 
@@ -28,9 +24,14 @@ namespace NetFabric.Hyperlinq
                 => this.getEnumerator = getEnumerator;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly TEnumerator GetEnumerator() => getEnumerator();
-            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => getEnumerator();
-            readonly IEnumerator IEnumerable.GetEnumerator() => getEnumerator();
+            public readonly TEnumerator GetEnumerator() 
+                => getEnumerator();
+            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() 
+                // ReSharper disable once HeapView.BoxingAllocation
+                => getEnumerator();
+            readonly IEnumerator IEnumerable.GetEnumerator() 
+                // ReSharper disable once HeapView.BoxingAllocation
+                => getEnumerator();
         }
     }
 }

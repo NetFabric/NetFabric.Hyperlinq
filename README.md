@@ -371,17 +371,17 @@ Articles explaining implementation:
   - `AsValueEnumerable()`
   - `ToArray()`
   - `ToList()`
-  - `ToDictionary(Selector<TSource, TKey>)`
-  - `ToDictionary(Selector<TSource, TKey>, IEqualityComparer<TKey>)`
-  - `ToDictionary(Selector<TSource, TKey>, Selector<TSource, TElement>)`
-  - `ToDictionary(Selector<TSource, TKey>, Selector<TSource, TElement>, IEqualityComparer<TKey>)`
+  - `ToDictionary(Func<TSource, TKey>)`
+  - `ToDictionary(Func<TSource, TKey>, IEqualityComparer<TKey>)`
+  - `ToDictionary(Func<TSource, TKey>, Func<TSource, TElement>)`
+  - `ToDictionary(Func<TSource, TKey>, Func<TSource, TElement>, IEqualityComparer<TKey>)`
 - Element
   - `ElementAt()`
   - `First()`
   - `Single()`
 - Filtering
-  - `Where(Predicate<TSource>)`
-  - `Where(PredicateAt<TSource>)`
+  - `Where(Func<TSource, bool>)`
+  - `Where(Func<TSource, int, bool>)`
 - Generation
   - `Create(Func<TEnumerator>)`
   - `Empty()`
@@ -389,18 +389,18 @@ Articles explaining implementation:
   - `Repeat(TSource, int)`
   - `Return(TSource)`
 - Projection
-  - `Select(Selector<TSource, TResult>)`
-  - `Select(SelectorAt<TSource, TResult>)`
+  - `Select(Func<TSource, TResult>)`
+  - `Select(Func<TSource, int, TResult>)`
   - `SelectMany(IValueEnumerable<TSource>)`
 - Partitioning
   - `Take(int)`
   - `Skip(int)`
 - Quantifier
-  - `All(Predicate<TSource>)`
-  - `All(PredicateAt<TSource>)`
+  - `All(Func<TSource, bool>)`
+  - `All(Func<TSource, int, bool>)`
   - `Any()`
-  - `Any(Predicate<TSource>)`
-  - `Any(PredicateAt<TSource>)`
+  - `Any(Func<TSource, bool>)`
+  - `Any(Func<TSource, int, bool>)`
   - `Contains(TSource)`
   - `Contains(TSource, IEqualityComparer<TSource>)`
 - Set

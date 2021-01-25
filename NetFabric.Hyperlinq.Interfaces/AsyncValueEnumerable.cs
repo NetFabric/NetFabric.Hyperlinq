@@ -4,10 +4,10 @@ using System.Threading;
 
 namespace NetFabric.Hyperlinq
 {
-    public interface IAsyncValueEnumerable<out T, TEnumerator>
+    public interface IAsyncValueEnumerable<out T, out TEnumerator>
         : IAsyncEnumerable<T>
         where TEnumerator : struct, IAsyncEnumerator<T>
     {
-        [return: NotNull] new TEnumerator GetAsyncEnumerator(CancellationToken cancellationToken = default);
+        new TEnumerator GetAsyncEnumerator(CancellationToken cancellationToken = default);
     }
 }

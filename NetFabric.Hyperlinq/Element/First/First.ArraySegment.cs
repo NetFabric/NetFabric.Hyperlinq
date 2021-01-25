@@ -7,31 +7,33 @@ namespace NetFabric.Hyperlinq
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Option<TSource> First<TSource>(this in ArraySegment<TSource> source)
-            => source.Count == 0
-                ? Option.None
-                : Option.Some(source.Array[source.Offset]);
+            => source.Count switch
+            {
+                0 => Option.None,
+                _ => Option.Some(source.Array![source.Offset])
+            };
 
-
-        static Option<TSource> First<TSource>(this in ArraySegment<TSource> source, Predicate<TSource> predicate)
+        static Option<TSource> First<TSource, TPredicate>(this in ArraySegment<TSource> source, TPredicate predicate)
+            where TPredicate : struct, IFunction<TSource, bool>
         {
             if (source.Any())
             {
                 if (source.IsWhole())
                 {
-                    foreach (var item in source.Array)
+                    foreach (var item in source.Array!)
                     {
-                        if (predicate(item))
+                        if (predicate.Invoke(item))
                             return Option.Some(item);
                     }
                 }
                 else
                 {
-                    var array = source.Array;
+                    var array = source.Array!;
                     var end = source.Offset + source.Count - 1;
                     for (var index = source.Offset; index <= end; index++)
                     {
-                        if (predicate(array![index]))
-                            return Option.Some(array![index]);
+                        if (predicate.Invoke(array[index]))
+                            return Option.Some(array[index]);
                     }
                 }
             }
@@ -39,16 +41,17 @@ namespace NetFabric.Hyperlinq
         }
 
 
-        static Option<TSource> First<TSource>(this in ArraySegment<TSource> source, PredicateAt<TSource> predicate)
+        static Option<TSource> FirstAt<TSource, TPredicate>(this in ArraySegment<TSource> source, TPredicate predicate)
+            where TPredicate : struct, IFunction<TSource, int, bool>
         {
             if (source.Any())
             {
                 if (source.IsWhole())
                 {
                     var index = 0;
-                    foreach (var item in source.Array)
+                    foreach (var item in source.Array!)
                     {
-                        if (predicate(item, index))
+                        if (predicate.Invoke(item, index))
                             return Option.Some(item);
 
                         index++;
@@ -56,26 +59,25 @@ namespace NetFabric.Hyperlinq
                 }
                 else
                 {
-                    if (source.Offset == 0)
+                    var array = source.Array!;
+                    if (source.Offset is 0)
                     {
-                        var array = source.Array;
                         var end = source.Count - 1;
                         for (var index = 0; index <= end; index++)
                         {
-                            var item = array![index];
-                            if (predicate(item, index))
+                            var item = array[index];
+                            if (predicate.Invoke(item, index))
                                 return Option.Some(item);
                         }
                     }
                     else
                     {
-                        var array = source.Array;
                         var offset = source.Offset;
                         var end = source.Count - 1;
                         for (var index = 0; index <= end; index++)
                         {
-                            var item = array![index + offset];
-                            if (predicate(item, index))
+                            var item = array[index + offset];
+                            if (predicate.Invoke(item, index))
                                 return Option.Some(item);
                         }
                     }
@@ -86,39 +88,45 @@ namespace NetFabric.Hyperlinq
 
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static Option<TResult> First<TSource, TResult>(this in ArraySegment<TSource> source, NullableSelector<TSource, TResult> selector)
-            => source.Count == 0
-                ? Option.None
-                : Option.Some(selector(source.Array[source.Offset]));
-
+        static Option<TResult> First<TSource, TResult, TSelector>(this in ArraySegment<TSource> source, TSelector selector)
+            where TSelector : struct, IFunction<TSource, TResult>
+            => source.Count switch
+            {
+                0 => Option.None,
+                _ => Option.Some(selector.Invoke(source.Array![source.Offset]))
+            };
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static Option<TResult> First<TSource, TResult>(this in ArraySegment<TSource> source, NullableSelectorAt<TSource, TResult> selector)
-            => source.Count == 0
-                ? Option.None
-                : Option.Some(selector(source.Array[source.Offset], 0));
-
-
-        static Option<TResult> First<TSource, TResult>(this in ArraySegment<TSource> source, Predicate<TSource> predicate, NullableSelector<TSource, TResult> selector)
+        static Option<TResult> FirstAt<TSource, TResult, TSelector>(this in ArraySegment<TSource> source, TSelector selector)
+            where TSelector : struct, IFunction<TSource, int, TResult>
+            => source.Count switch
+            {
+                0 => Option.None,
+                _ => Option.Some(selector.Invoke(source.Array![source.Offset], 0))
+            };
+        
+        static Option<TResult> First<TSource, TResult, TPredicate, TSelector>(this in ArraySegment<TSource> source, TPredicate predicate, TSelector selector)
+            where TPredicate : struct, IFunction<TSource, bool>
+            where TSelector : struct, IFunction<TSource, TResult>
         {
             if (source.Any())
             {
                 if (source.IsWhole())
                 {
-                    foreach (var item in source.Array)
+                    foreach (var item in source.Array!)
                     {
-                        if (predicate(item))
-                            return Option.Some(selector(item));
+                        if (predicate.Invoke(item))
+                            return Option.Some(selector.Invoke(item));
                     }
                 }
                 else
                 {
-                    var array = source.Array;
+                    var array = source.Array!;
                     var end = source.Offset + source.Count - 1;
                     for (var index = source.Offset; index <= end; index++)
                     {
-                        if (predicate(array![index]))
-                            return Option.Some(selector(array![index]));
+                        if (predicate.Invoke(array[index]))
+                            return Option.Some(selector.Invoke(array[index]));
                     }
                 }
             }

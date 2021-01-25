@@ -10,9 +10,11 @@ jobs:
     - name: Check out repository
       uses: actions/checkout@v2
     - name: Setup .NET Core
-      uses: actions/setup-dotnet@v1.6.0
+      uses: actions/setup-dotnet@v1.7.2
       with:
-        dotnet-version: 5.0.100-rc.1
+        dotnet-version: '5.0.x'
+    - name: Test source generator
+      run: dotnet test ./NetFabric.Hyperlinq.SourceGenerator.UnitTests/NetFabric.Hyperlinq.SourceGenerator.UnitTests.csproj 
     - name: Build solution
       run: dotnet build
     - name: Tests and coverage

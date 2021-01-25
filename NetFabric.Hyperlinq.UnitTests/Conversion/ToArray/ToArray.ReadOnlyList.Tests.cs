@@ -67,14 +67,14 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
         [MemberData(nameof(TestData.SkipTakePredicateEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakePredicateSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakePredicateMultiple), MemberType = typeof(TestData))]
-        public void ToArray_Predicate_Must_Succeed(int[] source, int skip, int take, Predicate<int> predicate)
+        public void ToArray_Predicate_Must_Succeed(int[] source, int skip, int take, Func<int, bool> predicate)
         {
             // Arrange
             var wrapped = Wrap.AsReadOnlyList(source);
             var expected = Enumerable
                 .Skip(source, skip)
                 .Take(take)
-                .Where(predicate.AsFunc())
+                .Where(predicate)
                 .ToArray();
 
             // Act
@@ -95,7 +95,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
         [MemberData(nameof(TestData.SkipTakePredicateEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakePredicateSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakePredicateMultiple), MemberType = typeof(TestData))]
-        public void ToArray_Predicate_MemoryPool_Must_Succeed(int[] source, int skip, int take, Predicate<int> predicate)
+        public void ToArray_Predicate_MemoryPool_Must_Succeed(int[] source, int skip, int take, Func<int, bool> predicate)
         {
             // Arrange
             var pool = MemoryPool<int>.Shared;
@@ -103,7 +103,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
             var expected = Enumerable
                 .Skip(source, skip)
                 .Take(take)
-                .Where(predicate.AsFunc())
+                .Where(predicate)
                 .ToArray();
 
             // Act
@@ -125,14 +125,14 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
         [MemberData(nameof(TestData.SkipTakePredicateAtEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakePredicateAtSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakePredicateAtMultiple), MemberType = typeof(TestData))]
-        public void ToArray_PredicateAt_Must_Succeed(int[] source, int skip, int take, PredicateAt<int> predicate)
+        public void ToArray_PredicateAt_Must_Succeed(int[] source, int skip, int take, Func<int, int, bool> predicate)
         {
             // Arrange
             var wrapped = Wrap.AsReadOnlyList(source);
             var expected = Enumerable
                 .Skip(source, skip)
                 .Take(take)
-                .Where(predicate.AsFunc())
+                .Where(predicate)
                 .ToArray();
 
             // Act
@@ -153,7 +153,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
         [MemberData(nameof(TestData.SkipTakePredicateAtEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakePredicateAtSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakePredicateAtMultiple), MemberType = typeof(TestData))]
-        public void ToArray_PredicateAt_MemoryPool_Must_Succeed(int[] source, int skip, int take, PredicateAt<int> predicate)
+        public void ToArray_PredicateAt_MemoryPool_Must_Succeed(int[] source, int skip, int take, Func<int, int, bool> predicate)
         {
             // Arrange
             var pool = MemoryPool<int>.Shared;
@@ -161,7 +161,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
             var expected = Enumerable
                 .Skip(source, skip)
                 .Take(take)
-                .Where(predicate.AsFunc())
+                .Where(predicate)
                 .ToArray();
 
             // Act
@@ -183,14 +183,14 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
         [MemberData(nameof(TestData.SkipTakeSelectorEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakeSelectorSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakeSelectorMultiple), MemberType = typeof(TestData))]
-        public void ToArray_Selector_Must_Succeed(int[] source, int skip, int take, NullableSelector<int, string> selector)
+        public void ToArray_Selector_Must_Succeed(int[] source, int skip, int take, Func<int, string> selector)
         {
             // Arrange
             var wrapped = Wrap.AsReadOnlyList(source);
             var expected = Enumerable
                 .Skip(source, skip)
                 .Take(take)
-                .Select(selector.AsFunc())
+                .Select(selector)
                 .ToArray();
 
             // Act
@@ -211,7 +211,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
         [MemberData(nameof(TestData.SkipTakeSelectorEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakeSelectorSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakeSelectorMultiple), MemberType = typeof(TestData))]
-        public void ToArray_Selector_MemoryPool_Must_Succeed(int[] source, int skip, int take, NullableSelector<int, string> selector)
+        public void ToArray_Selector_MemoryPool_Must_Succeed(int[] source, int skip, int take, Func<int, string> selector)
         {
             // Arrange
             var pool = MemoryPool<string>.Shared;
@@ -219,7 +219,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
             var expected = Enumerable
                 .Skip(source, skip)
                 .Take(take)
-                .Select(selector.AsFunc())
+                .Select(selector)
                 .ToArray();
 
             // Act
@@ -241,14 +241,14 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
         [MemberData(nameof(TestData.SkipTakeSelectorAtEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakeSelectorAtSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakeSelectorAtMultiple), MemberType = typeof(TestData))]
-        public void ToArray_SelectorAt_Must_Succeed(int[] source, int skip, int take, NullableSelectorAt<int, string> selector)
+        public void ToArray_SelectorAt_Must_Succeed(int[] source, int skip, int take, Func<int, int, string> selector)
         {
             // Arrange
             var wrapped = Wrap.AsReadOnlyList(source);
             var expected = Enumerable
                 .Skip(source, skip)
                 .Take(take)
-                .Select(selector.AsFunc())
+                .Select(selector)
                 .ToArray();
 
             // Act
@@ -269,7 +269,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
         [MemberData(nameof(TestData.SkipTakeSelectorAtEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakeSelectorAtSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakeSelectorAtMultiple), MemberType = typeof(TestData))]
-        public void ToArray_SelectorAt_MemoryPool_Must_Succeed(int[] source, int skip, int take, NullableSelectorAt<int, string> selector)
+        public void ToArray_SelectorAt_MemoryPool_Must_Succeed(int[] source, int skip, int take, Func<int, int, string> selector)
         {
             // Arrange
             var pool = MemoryPool<string>.Shared;
@@ -277,7 +277,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
             var expected = Enumerable
                 .Skip(source, skip)
                 .Take(take)
-                .Select(selector.AsFunc())
+                .Select(selector)
                 .ToArray();
 
             // Act
@@ -299,15 +299,15 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
         [MemberData(nameof(TestData.SkipTakePredicateSelectorEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakePredicateSelectorSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakePredicateSelectorMultiple), MemberType = typeof(TestData))]
-        public void ToArray_Predicate_Selector_Must_Succeed(int[] source, int skip, int take, Predicate<int> predicate, NullableSelector<int, string> selector)
+        public void ToArray_Predicate_Selector_Must_Succeed(int[] source, int skip, int take, Func<int, bool> predicate, Func<int, string> selector)
         {
             // Arrange
             var wrapped = Wrap.AsReadOnlyList(source);
             var expected = Enumerable
                 .Skip(source, skip)
                 .Take(take)
-                .Where(predicate.AsFunc())
-                .Select(selector.AsFunc())
+                .Where(predicate)
+                .Select(selector)
                 .ToArray();
 
             // Act
@@ -329,7 +329,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
         [MemberData(nameof(TestData.SkipTakePredicateSelectorEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakePredicateSelectorSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakePredicateSelectorMultiple), MemberType = typeof(TestData))]
-        public void ToArray_Predicate_Selector_MemoryPool_Must_Succeed(int[] source, int skip, int take, Predicate<int> predicate, NullableSelector<int, string> selector)
+        public void ToArray_Predicate_Selector_MemoryPool_Must_Succeed(int[] source, int skip, int take, Func<int, bool> predicate, Func<int, string> selector)
         {
             // Arrange
             var pool = MemoryPool<string>.Shared;
@@ -337,8 +337,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
             var expected = Enumerable
                 .Skip(source, skip)
                 .Take(take)
-                .Where(predicate.AsFunc())
-                .Select(selector.AsFunc())
+                .Where(predicate)
+                .Select(selector)
                 .ToArray();
 
             // Act

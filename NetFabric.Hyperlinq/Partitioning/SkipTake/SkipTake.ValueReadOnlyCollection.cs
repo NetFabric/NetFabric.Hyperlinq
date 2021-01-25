@@ -12,15 +12,15 @@ namespace NetFabric.Hyperlinq
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static SkipTakeEnumerable<TEnumerable, TEnumerator, TSource> SkipTake<TEnumerable, TEnumerator, TSource>(this TEnumerable source, int skipCount, int takeCount)
-            where TEnumerable : notnull, IValueReadOnlyCollection<TSource, TEnumerator>
+            where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
-            => new SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>(in source, skipCount, takeCount);
+            => new(in source, skipCount, takeCount);
 
         [StructLayout(LayoutKind.Auto)]
         public readonly partial struct SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>
             : IValueReadOnlyCollection<TSource, SkipTakeEnumerable<TEnumerable, TEnumerator, TSource>.Enumerator>
             , ICollection<TSource>
-            where TEnumerable : notnull, IValueReadOnlyCollection<TSource, TEnumerator>
+            where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
             readonly TEnumerable source;
@@ -36,19 +36,22 @@ namespace NetFabric.Hyperlinq
 
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly Enumerator GetEnumerator() => new Enumerator(in this);
-            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() => new Enumerator(in this);
-            readonly IEnumerator IEnumerable.GetEnumerator() => new Enumerator(in this);
+            public readonly Enumerator GetEnumerator() 
+                => new(in this);
+            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() 
+                => new Enumerator(in this);
+            readonly IEnumerator IEnumerable.GetEnumerator() 
+                => new Enumerator(in this);
 
             bool ICollection<TSource>.IsReadOnly  
                 => true;
 
             public void CopyTo(TSource[] array, int arrayIndex)
             {
-                if (Count == 0)
+                if (Count is 0)
                     return;
 
-                if (skipCount == 0 && Count == source.Count && source is ICollection<TSource> collection)
+                if (skipCount is 0 && Count == source.Count && source is ICollection<TSource> collection)
                 {
                     collection.CopyTo(array, arrayIndex);
                 }
@@ -75,12 +78,12 @@ namespace NetFabric.Hyperlinq
                 }
             }
 
-            bool ICollection<TSource>.Contains(TSource item)
+            public bool Contains(TSource item)
             {
-                if (Count == 0)
+                if (Count is 0)
                     return false;
 
-                if (skipCount == 0 && Count == source.Count && source is ICollection<TSource> collection)
+                if (skipCount is 0 && Count == source.Count && source is ICollection<TSource> collection)
                     return collection.Contains(item);
 
                 using var enumerator = source.GetEnumerator();
@@ -147,7 +150,6 @@ namespace NetFabric.Hyperlinq
                     state = takeCounter > 0 ? EnumeratorState.Uninitialized : EnumeratorState.Complete;
                 }
 
-                [MaybeNull]
                 public readonly TSource Current
                 {
                     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -155,7 +157,8 @@ namespace NetFabric.Hyperlinq
                 }
                 readonly TSource IEnumerator<TSource>.Current 
                     => enumerator.Current;
-                readonly object? IEnumerator.Current 
+                readonly object? IEnumerator.Current
+                    // ReSharper disable once HeapView.PossibleBoxingAllocation
                     => enumerator.Current;
 
                 public bool MoveNext()
@@ -182,7 +185,7 @@ namespace NetFabric.Hyperlinq
                             if (enumerator.MoveNext())
                             {
                                 takeCounter--;
-                                if (takeCounter == 0)
+                                if (takeCounter is 0)
                                     state = EnumeratorState.Complete;
 
                                 return true;
@@ -204,14 +207,14 @@ namespace NetFabric.Hyperlinq
                     => enumerator.Dispose();
             }
 
-            public bool Contains([MaybeNull] TSource value, IEqualityComparer<TSource>? comparer = default)
+            public bool Contains(TSource value, IEqualityComparer<TSource>? comparer)
             {
-                if (source.Count == 0)
+                if (source.Count is 0)
                     return false;
 
                 if (comparer is null || ReferenceEquals(comparer, EqualityComparer<TSource>.Default))
                 {
-                    if (skipCount == 0 && Count == source.Count && source is ICollection<TSource> collection)
+                    if (skipCount is 0 && Count == source.Count && source is ICollection<TSource> collection)
                         return collection.Contains(value);
 
                     if (Utils.IsValueType<TSource>())
@@ -221,7 +224,7 @@ namespace NetFabric.Hyperlinq
                 comparer ??= EqualityComparer<TSource>.Default;
                 return ComparerContains(source, value, comparer, skipCount, Count);
 
-                static bool DefaultContains(TEnumerable source, [AllowNull] TSource value, int skipCount, int takeCount)
+                static bool DefaultContains(TEnumerable source, TSource value, int skipCount, int takeCount)
                 {
                     using var enumerator = source.GetEnumerator();
 
@@ -244,7 +247,7 @@ namespace NetFabric.Hyperlinq
                     return false;
                 }
 
-                static bool ComparerContains(TEnumerable source, [AllowNull] TSource value, IEqualityComparer<TSource> comparer, int skipCount, int takeCount)
+                static bool ComparerContains(TEnumerable source, TSource value, IEqualityComparer<TSource> comparer, int skipCount, int takeCount)
                 {
                     using var enumerator = source.GetEnumerator();
 
@@ -270,12 +273,12 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public SkipTakeEnumerable<TEnumerable, TEnumerator, TSource> Take(int count)
-                => ValueReadOnlyCollectionExtensions.SkipTake<TEnumerable, TEnumerator, TSource>(source, skipCount, Math.Min(Count, count));
+                => source.SkipTake<TEnumerable, TEnumerator, TSource>(skipCount, Math.Min(Count, count));
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int Count<TEnumerable, TEnumerator, TSource>(this in SkipTakeEnumerable<TEnumerable, TEnumerator, TSource> source)
-            where TEnumerable : notnull, IValueReadOnlyCollection<TSource, TEnumerator>
+            where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
             => source.Count;
     }

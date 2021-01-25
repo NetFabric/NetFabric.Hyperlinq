@@ -44,7 +44,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
 
         [Theory]
         [MemberData(nameof(TestData.PredicateEmpty), MemberType = typeof(TestData))]
-        public void First_Predicate_With_Empty_Must_Return_None(int[] source, Predicate<int> predicate)
+        public void First_Predicate_With_Empty_Must_Return_None(int[] source, Func<int, bool> predicate)
         {
             // Arrange
 
@@ -62,11 +62,11 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
         [Theory]
         [MemberData(nameof(TestData.PredicateSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateMultiple), MemberType = typeof(TestData))]
-        public void First_Predicate_With_ValidData_Must_Return_Some(int[] source, Predicate<int> predicate)
+        public void First_Predicate_With_ValidData_Must_Return_Some(int[] source, Func<int, bool> predicate)
         {
             // Arrange
             var expected = Enumerable
-                .First(source, predicate.AsFunc());
+                .First(source, predicate);
 
             // Act
             var result = ArrayExtensions
@@ -81,7 +81,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
 
         [Theory]
         [MemberData(nameof(TestData.PredicateAtEmpty), MemberType = typeof(TestData))]
-        public void First_PredicateAt_With_Empty_Must_Return_None(int[] source, PredicateAt<int> predicate)
+        public void First_PredicateAt_With_Empty_Must_Return_None(int[] source, Func<int, int, bool> predicate)
         {
             // Arrange
 
@@ -99,11 +99,11 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
         [Theory]
         [MemberData(nameof(TestData.PredicateAtSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateAtMultiple), MemberType = typeof(TestData))]
-        public void First_PredicateAt_With_ValidData_Must_Return_Some(int[] source, PredicateAt<int> predicate)
+        public void First_PredicateAt_With_ValidData_Must_Return_Some(int[] source, Func<int, int, bool> predicate)
         {
             // Arrange
             var expected = Enumerable
-                .Where(source, predicate.AsFunc())
+                .Where(source, predicate)
                 .First();
 
             // Act
@@ -119,7 +119,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
 
         [Theory]
         [MemberData(nameof(TestData.SelectorEmpty), MemberType = typeof(TestData))]
-        public void First_Selector_With_Empty_Must_Return_None(int[] source, NullableSelector<int, string> selector)
+        public void First_Selector_With_Empty_Must_Return_None(int[] source, Func<int, string> selector)
         {
             // Arrange
 
@@ -137,11 +137,11 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
         [Theory]
         [MemberData(nameof(TestData.SelectorSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SelectorMultiple), MemberType = typeof(TestData))]
-        public void First_Selector_With_ValidData_Must_Return_Some(int[] source, NullableSelector<int, string> selector)
+        public void First_Selector_With_ValidData_Must_Return_Some(int[] source, Func<int, string> selector)
         {
             // Arrange
             var expected = Enumerable
-                .Select(source, selector.AsFunc())
+                .Select(source, selector)
                 .First();
 
             // Act
@@ -157,7 +157,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
 
         [Theory]
         [MemberData(nameof(TestData.SelectorAtEmpty), MemberType = typeof(TestData))]
-        public void First_SelectorAt_With_Empty_Must_Return_None(int[] source, NullableSelectorAt<int, string> selector)
+        public void First_SelectorAt_With_Empty_Must_Return_None(int[] source, Func<int, int, string> selector)
         {
             // Arrange
 
@@ -175,11 +175,11 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
         [Theory]
         [MemberData(nameof(TestData.SelectorAtSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SelectorAtMultiple), MemberType = typeof(TestData))]
-        public void First_SelectorAt_With_ValidData_Must_Return_Some(int[] source, NullableSelectorAt<int, string> selector)
+        public void First_SelectorAt_With_ValidData_Must_Return_Some(int[] source, Func<int, int, string> selector)
         {
             // Arrange
             var expected = Enumerable
-                .Select(source, selector.AsFunc())
+                .Select(source, selector)
                 .First();
 
             // Act
@@ -195,7 +195,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
 
         [Theory]
         [MemberData(nameof(TestData.PredicateSelectorEmpty), MemberType = typeof(TestData))]
-        public void First_Predicate_Selector_With_Empty_Must_Return_None(int[] source, Predicate<int> predicate, NullableSelector<int, string> selector)
+        public void First_Predicate_Selector_With_Empty_Must_Return_None(int[] source, Func<int, bool> predicate, Func<int, string> selector)
         {
             // Arrange
 
@@ -214,12 +214,12 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
         [Theory]
         [MemberData(nameof(TestData.PredicateSelectorSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateSelectorMultiple), MemberType = typeof(TestData))]
-        public void First_Predicate_Selector_With_ValidData_Must_Return_Some(int[] source, Predicate<int> predicate, NullableSelector<int, string> selector)
+        public void First_Predicate_Selector_With_ValidData_Must_Return_Some(int[] source, Func<int, bool> predicate, Func<int, string> selector)
         {
             // Arrange
             var expected = Enumerable
-                .Where(source, predicate.AsFunc())
-                .Select(selector.AsFunc())
+                .Where(source, predicate)
+                .Select(selector)
                 .First();
 
             // Act

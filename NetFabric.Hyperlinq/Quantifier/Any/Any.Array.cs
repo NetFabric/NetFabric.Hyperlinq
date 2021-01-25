@@ -8,15 +8,25 @@ namespace NetFabric.Hyperlinq
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool Any<TSource>(this TSource[] source)
-            => source.Length != 0;
+            => source.Length is not 0;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool Any<TSource>(this TSource[] source, Predicate<TSource> predicate)
-            => Any(new ArraySegment<TSource>(source), predicate);
+        public static bool Any<TSource>(this TSource[] source, Func<TSource, bool> predicate)
+            => source.Any(new FunctionWrapper<TSource, bool>(predicate));
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool Any<TSource>(this TSource[] source, PredicateAt<TSource> predicate)
-            => Any(new ArraySegment<TSource>(source), predicate);
+        public static bool Any<TSource, TPredicate>(this TSource[] source, TPredicate predicate = default)
+            where TPredicate : struct, IFunction<TSource, bool>
+            => new ArraySegment<TSource>(source).Any(predicate);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool Any<TSource>(this TSource[] source, Func<TSource, int, bool> predicate)
+            => source.AnyAt(new FunctionWrapper<TSource, int, bool>(predicate));
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool AnyAt<TSource, TPredicate>(this TSource[] source, TPredicate predicate = default)
+            where TPredicate : struct, IFunction<TSource, int, bool>
+            => new ArraySegment<TSource>(source).AnyAt(predicate);
     }
 }
 

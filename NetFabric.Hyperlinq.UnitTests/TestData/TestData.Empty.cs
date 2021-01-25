@@ -67,8 +67,8 @@ namespace NetFabric.Hyperlinq
                 { new int[] { 1, 2, 3, 4, 5 }, 9, 9 },
             };
 
-        public static TheoryData<int[], Predicate<int>> PredicateEmpty =>
-            new TheoryData<int[], Predicate<int>>
+        public static TheoryData<int[], Func<int, bool>> PredicateEmpty =>
+            new TheoryData<int[], Func<int, bool>>
             {
                 { new int[] { }, _ => false },
                 { new int[] { }, _ => true },
@@ -80,8 +80,8 @@ namespace NetFabric.Hyperlinq
                 { new int[] { 1, 2, 3, 4, 5 }, item => item > 9 },
             };
 
-        public static TheoryData<int[], int, int, Predicate<int>> SkipTakePredicateEmpty =>
-            new TheoryData<int[], int, int, Predicate<int>>
+        public static TheoryData<int[], int, int, Func<int, bool>> SkipTakePredicateEmpty =>
+            new TheoryData<int[], int, int, Func<int, bool>>
             {
                 { new int[] { }, 0, 9, _ => false },
                 { new int[] { }, 0, 0, _ => true },
@@ -98,8 +98,8 @@ namespace NetFabric.Hyperlinq
                 { new int[] { 1, 2, 3, 4, 5 }, 0, 9, item => item > 9 },
             };
 
-        public static TheoryData<int[], Predicate<int>, Predicate<int>> PredicatePredicateEmpty =>
-            new TheoryData<int[], Predicate<int>, Predicate<int>>
+        public static TheoryData<int[], Func<int, bool>, Func<int, bool>> PredicatePredicateEmpty =>
+            new TheoryData<int[], Func<int, bool>, Func<int, bool>>
             {
                 { new int[] { }, _ => true, _ => true },
 
@@ -108,8 +108,8 @@ namespace NetFabric.Hyperlinq
                 { new int[] { 1, 2, 3, 4, 5 }, _ => false, _ => true },
             };
 
-        public static TheoryData<int[], int, int, Predicate<int>, Predicate<int>> SkipTakePredicatePredicateEmpty =>
-            new TheoryData<int[], int, int, Predicate<int>, Predicate<int>>
+        public static TheoryData<int[], int, int, Func<int, bool>, Func<int, bool>> SkipTakePredicatePredicateEmpty =>
+            new TheoryData<int[], int, int, Func<int, bool>, Func<int, bool>>
             {
                 { new int[] { }, 0, 9, _ => true, _ => true },
 
@@ -118,8 +118,8 @@ namespace NetFabric.Hyperlinq
                 { new int[] { 1, 2, 3, 4, 5 }, 0, 9, _ => false, _ => true },
             };
 
-        public static TheoryData<int[], PredicateAt<int>> PredicateAtEmpty =>
-            new TheoryData<int[], PredicateAt<int>>
+        public static TheoryData<int[], Func<int, int, bool>> PredicateAtEmpty =>
+            new TheoryData<int[], Func<int, int, bool>>
             {
                 { new int[] { }, (_, __) => false },
                 { new int[] { }, (_, __) => true },
@@ -133,8 +133,8 @@ namespace NetFabric.Hyperlinq
                 { new int[] { 1, 2, 3, 4, 5 }, (_, index) => index > 9 },
             };
 
-        public static TheoryData<int[], int, int, PredicateAt<int>> SkipTakePredicateAtEmpty =>
-            new TheoryData<int[], int, int, PredicateAt<int>>
+        public static TheoryData<int[], int, int, Func<int, int, bool>> SkipTakePredicateAtEmpty =>
+            new TheoryData<int[], int, int, Func<int, int, bool>>
             {
                 { new int[] { }, 0, 9, (_, __) => false },
                 { new int[] { }, 0, 0, (_, __) => true },
@@ -157,14 +157,14 @@ namespace NetFabric.Hyperlinq
                 { new int[] { 1, 2, 3, 4, 5 }, 2, 9, (_, index) => index > 9 },
             };
 
-        public static TheoryData<int[], NullableSelector<int, string>> SelectorEmpty =>
-            new TheoryData<int[], NullableSelector<int, string>>
+        public static TheoryData<int[], Func<int, string>> SelectorEmpty =>
+            new TheoryData<int[], Func<int, string>>
             {
                 { new int[] { }, item => item.ToString() },
             };
 
-        public static TheoryData<int[], int, int, NullableSelector<int, string>> SkipTakeSelectorEmpty =>
-            new TheoryData<int[], int, int, NullableSelector<int, string>>
+        public static TheoryData<int[], int, int, Func<int, string>> SkipTakeSelectorEmpty =>
+            new TheoryData<int[], int, int, Func<int, string>>
             {
                 { new int[] { }, 0, 0, item => item.ToString() },
                 { new int[] { }, 0, 9, item => item.ToString() },
@@ -176,14 +176,14 @@ namespace NetFabric.Hyperlinq
                 { new int[] { 1, 2, 3, 4, 5 }, 9, 9, item => item.ToString() },
             };
 
-        public static TheoryData<int[], NullableSelectorAt<int, string>> SelectorAtEmpty =>
-            new TheoryData<int[], NullableSelectorAt<int, string>>
+        public static TheoryData<int[], Func<int, int, string>> SelectorAtEmpty =>
+            new TheoryData<int[], Func<int, int, string>>
             {
                 { new int[] { }, (item, index) => $"{item} {index}" },
             };
 
-        public static TheoryData<int[], int, int, NullableSelectorAt<int, string>> SkipTakeSelectorAtEmpty =>
-            new TheoryData<int[], int, int, NullableSelectorAt<int, string>>
+        public static TheoryData<int[], int, int, Func<int, int, string>> SkipTakeSelectorAtEmpty =>
+            new TheoryData<int[], int, int, Func<int, int, string>>
             {
                 { new int[] { }, 0, 0, (item, index) => $"{item} {index}" },
                 { new int[] { }, 0, 9, (item, index) => $"{item} {index}" },
@@ -195,8 +195,8 @@ namespace NetFabric.Hyperlinq
                 { new int[] { 1, 2, 3, 4, 5 }, 9, 9, (item, index) => $"{item} {index}" },
             };
 
-        public static TheoryData<int[], Predicate<int>, NullableSelector<int, string>> PredicateSelectorEmpty =>
-            new TheoryData<int[], Predicate<int>, NullableSelector<int, string>>
+        public static TheoryData<int[], Func<int, bool>, Func<int, string>> PredicateSelectorEmpty =>
+            new TheoryData<int[], Func<int, bool>, Func<int, string>>
             {
                 { new int[] { }, _ => false, item => item.ToString() },
                 { new int[] { }, _ => true, item => item.ToString() },
@@ -208,8 +208,8 @@ namespace NetFabric.Hyperlinq
                 { new int[] { 1, 2, 3, 4, 5 }, item => item > 9, item => item.ToString() },
             };
 
-        public static TheoryData<int[], int, int, Predicate<int>, NullableSelector<int, string>> SkipTakePredicateSelectorEmpty =>
-            new TheoryData<int[], int, int, Predicate<int>, NullableSelector<int, string>>
+        public static TheoryData<int[], int, int, Func<int, bool>, Func<int, string>> SkipTakePredicateSelectorEmpty =>
+            new TheoryData<int[], int, int, Func<int, bool>, Func<int, string>>
             {
                 { new int[] { }, 0, 9, _ => false, item => item.ToString() },
                 { new int[] { }, 0, 0, _ => true, item => item.ToString() },

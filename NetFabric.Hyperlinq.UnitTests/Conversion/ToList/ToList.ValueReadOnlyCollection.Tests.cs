@@ -58,13 +58,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
         [MemberData(nameof(TestData.SelectorEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SelectorSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SelectorMultiple), MemberType = typeof(TestData))]
-        public void ToList_Predicate_With_ValidData_Must_Succeed(int[] source, NullableSelector<int, string> selector)
+        public void ToList_Predicate_With_ValidData_Must_Succeed(int[] source, Func<int, string> selector)
         {
             // Arrange
             var wrapped = Wrap
                 .AsValueReadOnlyCollection(source);
             var expected = Enumerable
-                .Select(source, selector.AsFunc())
+                .Select(source, selector)
                 .ToList();
 
             // Act
@@ -83,13 +83,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
         [MemberData(nameof(TestData.SelectorAtEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SelectorAtSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SelectorAtMultiple), MemberType = typeof(TestData))]
-        public void ToList_SelectorAt_With_ValidData_Must_Succeed(int[] source, NullableSelectorAt<int, string> selector)
+        public void ToList_SelectorAt_With_ValidData_Must_Succeed(int[] source, Func<int, int, string> selector)
         {
             // Arrange
             var wrapped = Wrap
                 .AsValueReadOnlyCollection(source);
             var expected = Enumerable
-                .Select(source, selector.AsFunc())
+                .Select(source, selector)
                 .ToList();
 
             // Act

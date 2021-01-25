@@ -12,27 +12,35 @@ namespace NetFabric.Hyperlinq
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ValueEnumerableWrapper<TSource> AsValueEnumerable<TSource>(this IReadOnlyCollection<TSource> source)
-            => new ValueEnumerableWrapper<TSource>(source);
+            => new(source);
 
         [GeneratorIgnore]
-        
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ValueEnumerableWrapper<TEnumerable, TEnumerator, TSource> AsValueEnumerable<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TEnumerable, TEnumerator> getEnumerator)
-            where TEnumerable : notnull, IReadOnlyCollection<TSource>
+        public static ValueEnumerableWrapper<TEnumerable, TEnumerator, TSource, FunctionWrapper<TEnumerable, TEnumerator>> AsValueEnumerable<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TEnumerable, TEnumerator> getEnumerator)
+            where TEnumerable : IReadOnlyCollection<TSource>
             where TEnumerator : struct, IEnumerator<TSource>
-            => new ValueEnumerableWrapper<TEnumerable, TEnumerator, TSource>(source, getEnumerator);
+            => AsValueEnumerable<TEnumerable, TEnumerator, TSource, FunctionWrapper<TEnumerable, TEnumerator>>(source, new FunctionWrapper<TEnumerable, TEnumerator>(getEnumerator));
+
+        [GeneratorIgnore]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ValueEnumerableWrapper<TEnumerable, TEnumerator, TSource, TEnumeratorGenerator> AsValueEnumerable<TEnumerable, TEnumerator, TSource, TEnumeratorGenerator>(this TEnumerable source, TEnumeratorGenerator getEnumerator)
+            where TEnumerable : IReadOnlyCollection<TSource>
+            where TEnumerator : struct, IEnumerator<TSource>
+            where TEnumeratorGenerator : struct, IFunction<TEnumerable, TEnumerator>
+            => new(source, getEnumerator);
 
         [StructLayout(LayoutKind.Auto)]
-        public readonly partial struct ValueEnumerableWrapper<TEnumerable, TEnumerator, TSource>
+        public readonly partial struct ValueEnumerableWrapper<TEnumerable, TEnumerator, TSource, TEnumeratorGenerator>
             : IValueReadOnlyCollection<TSource, TEnumerator>
             , ICollection<TSource>
-            where TEnumerable : notnull, IReadOnlyCollection<TSource>
+            where TEnumerable : IReadOnlyCollection<TSource>
             where TEnumerator : struct, IEnumerator<TSource>
+            where TEnumeratorGenerator : struct, IFunction<TEnumerable, TEnumerator>
         {
             readonly TEnumerable source;
-            readonly Func<TEnumerable, TEnumerator> getEnumerator;
+            readonly TEnumeratorGenerator getEnumerator;
 
-            internal ValueEnumerableWrapper(TEnumerable source, Func<TEnumerable, TEnumerator> getEnumerator)
+            internal ValueEnumerableWrapper(TEnumerable source, TEnumeratorGenerator getEnumerator)
             {
                 this.source = source;
                 this.getEnumerator = getEnumerator;
@@ -46,11 +54,13 @@ namespace NetFabric.Hyperlinq
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly TEnumerator GetEnumerator() 
-                => getEnumerator(source);
+                => getEnumerator.Invoke(source);
             readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() 
-                => getEnumerator(source);
+                // ReSharper disable once HeapView.BoxingAllocation
+                => getEnumerator.Invoke(source);
             readonly IEnumerator IEnumerable.GetEnumerator() 
-                => getEnumerator(source);
+                // ReSharper disable once HeapView.BoxingAllocation
+                => getEnumerator.Invoke(source);
 
             bool ICollection<TSource>.IsReadOnly  
                 => true;
@@ -58,7 +68,79 @@ namespace NetFabric.Hyperlinq
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public void CopyTo(TSource[] array, int arrayIndex)
             {
-                if (source.Count != 0)
+                if (source.Count is not 0)
+                {
+                    switch (source)
+                    {
+                        // ReSharper disable once HeapView.PossibleBoxingAllocation
+                        case ICollection<TSource> collection:
+                            collection.CopyTo(array, arrayIndex);
+                            break;
+
+                        default:
+                            {
+                                using var enumerator = GetEnumerator();
+                                checked
+                                {
+                                    for (var index = arrayIndex; enumerator.MoveNext(); index++)
+                                        array[index] = enumerator.Current;
+                                }
+                            }
+                            break;
+                    }
+                }
+            }
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public bool Contains(TSource item)
+                => Count is not 0 && source.Contains<TEnumerable, TEnumerator, TSource, TEnumeratorGenerator>(getEnumerator, item);
+
+            [ExcludeFromCodeCoverage]
+            void ICollection<TSource>.Add(TSource item) 
+                => Throw.NotSupportedException();
+            [ExcludeFromCodeCoverage]
+            void ICollection<TSource>.Clear() 
+                => Throw.NotSupportedException();
+            [ExcludeFromCodeCoverage]
+            bool ICollection<TSource>.Remove(TSource item) 
+                => Throw.NotSupportedException<bool>();
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public bool Contains(TSource value, IEqualityComparer<TSource>? comparer)
+                => Count is not 0 && source.Contains<TEnumerable, TEnumerator, TSource, TEnumeratorGenerator>(getEnumerator, value, comparer);
+        }
+
+        [StructLayout(LayoutKind.Auto)]
+        public readonly partial struct ValueEnumerableWrapper<TSource>
+            : IValueReadOnlyCollection<TSource, ValueEnumerableWrapper<TSource>.Enumerator>
+            , ICollection<TSource>
+        {
+            readonly IReadOnlyCollection<TSource> source;
+
+            internal ValueEnumerableWrapper(IReadOnlyCollection<TSource> source) 
+                => this.source = source;
+
+            public readonly int Count
+                => source.Count;
+
+            
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public readonly Enumerator GetEnumerator() 
+                => new(source);
+            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() 
+                // ReSharper disable once HeapView.BoxingAllocation
+                => new Enumerator(source);
+            readonly IEnumerator IEnumerable.GetEnumerator() 
+                // ReSharper disable once HeapView.BoxingAllocation
+                => new Enumerator(source);
+
+            bool ICollection<TSource>.IsReadOnly  
+                => true;
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public void CopyTo(TSource[] array, int arrayIndex)
+            {
+                if (source.Count is not 0)
                 {
                     switch (source)
                     {
@@ -81,76 +163,8 @@ namespace NetFabric.Hyperlinq
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            bool ICollection<TSource>.Contains(TSource item)
-                => Count != 0 && EnumerableExtensions.Contains(source, getEnumerator, item);
-
-            [ExcludeFromCodeCoverage]
-            void ICollection<TSource>.Add(TSource item) 
-                => Throw.NotSupportedException();
-            [ExcludeFromCodeCoverage]
-            void ICollection<TSource>.Clear() 
-                => Throw.NotSupportedException();
-            [ExcludeFromCodeCoverage]
-            bool ICollection<TSource>.Remove(TSource item) 
-                => Throw.NotSupportedException<bool>();
-
-            public bool Contains([MaybeNull] TSource value, IEqualityComparer<TSource>? comparer = default)
-                => Count != 0 && EnumerableExtensions.Contains(source, getEnumerator, value, comparer);
-        }
-
-        [StructLayout(LayoutKind.Auto)]
-        public readonly partial struct ValueEnumerableWrapper<TSource>
-            : IValueReadOnlyCollection<TSource, ValueEnumerableWrapper<TSource>.Enumerator>
-            , ICollection<TSource>
-        {
-            readonly IReadOnlyCollection<TSource> source;
-
-            internal ValueEnumerableWrapper(IReadOnlyCollection<TSource> source) 
-                => this.source = source;
-
-            public readonly int Count
-                => source.Count;
-
-            
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly Enumerator GetEnumerator() 
-                => new Enumerator(source);
-            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() 
-                => new Enumerator(source);
-            readonly IEnumerator IEnumerable.GetEnumerator() 
-                => new Enumerator(source);
-
-            bool ICollection<TSource>.IsReadOnly  
-                => true;
-
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public void CopyTo(TSource[] array, int arrayIndex)
-            {
-                if (source.Count != 0)
-                {
-                    switch (source)
-                    {
-                        case ICollection<TSource> collection:
-                            collection.CopyTo(array, arrayIndex);
-                            break;
-
-                        default:
-                            {
-                                using var enumerator = GetEnumerator();
-                                checked
-                                {
-                                    for (var index = arrayIndex; enumerator.MoveNext(); index++)
-                                        array[index] = enumerator.Current!;
-                                }
-                            }
-                            break;
-                    }
-                }
-            }
-
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            bool ICollection<TSource>.Contains(TSource item)
-                => Count != 0 && EnumerableExtensions.Contains(source, item);
+            public bool Contains(TSource item)
+                => Count is not 0 && EnumerableExtensions.Contains(source, item);
 
             [ExcludeFromCodeCoverage]
             void ICollection<TSource>.Add(TSource item) 
@@ -171,7 +185,6 @@ namespace NetFabric.Hyperlinq
                 internal Enumerator(IReadOnlyCollection<TSource> enumerable) 
                     => enumerator = enumerable.GetEnumerator();
 
-                [MaybeNull]
                 public readonly TSource Current 
                 {
                     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -180,6 +193,7 @@ namespace NetFabric.Hyperlinq
                 readonly TSource IEnumerator<TSource>.Current
                     => enumerator.Current;
                 readonly object? IEnumerator.Current
+                    // ReSharper disable once HeapView.PossibleBoxingAllocation
                     => enumerator.Current;
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -195,11 +209,20 @@ namespace NetFabric.Hyperlinq
                     => enumerator.Dispose();
             }
 
-            public bool Contains([MaybeNull] TSource value, IEqualityComparer<TSource>? comparer = default)
-                => Count != 0 && EnumerableExtensions.Contains(source, value, comparer);
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public bool Contains(TSource value, IEqualityComparer<TSource>? comparer)
+                => Count is not 0 && source.Contains(value, comparer);
         }
 
-        public static int Count<TSource>(this in ValueEnumerableWrapper<TSource> source)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Count<TSource>(this ValueEnumerableWrapper<TSource> source)
+            => source.Count;
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Count<TEnumerable, TEnumerator, TSource, TEnumeratorGenerator>(this ValueEnumerableWrapper<TEnumerable, TEnumerator, TSource, TEnumeratorGenerator> source)
+            where TEnumerable : IReadOnlyCollection<TSource>
+            where TEnumerator : struct, IEnumerator<TSource>
+            where TEnumeratorGenerator : struct, IFunction<TEnumerable, TEnumerator>
             => source.Count;
     }
 }

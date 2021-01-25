@@ -14,6 +14,7 @@ namespace NetFabric.Hyperlinq
 #if NET5_0
             var result = GC.AllocateUninitializedArray<TSource>(source.Length);
 #else
+            // ReSharper disable once HeapView.ObjectAllocation.Evident
             var result = new TSource[source.Length];
 #endif
             Array.Copy(source, result, source.Length);
@@ -23,11 +24,8 @@ namespace NetFabric.Hyperlinq
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static IMemoryOwner<TSource> ToArray<TSource>(this TSource[] source, MemoryPool<TSource> pool)
         {
-            if (pool is null)
-                Throw.ArgumentNullException(nameof(pool));
-
             var result = pool.RentSliced(source.Length);
-            ArrayExtensions.Copy(source, result.Memory.Span);
+            Copy(source, result.Memory.Span);
             return result;
         }
     }

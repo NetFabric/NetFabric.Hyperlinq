@@ -8,31 +8,33 @@ namespace NetFabric.Hyperlinq
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool Any<TSource>(this in ArraySegment<TSource> source)
-            => source.Count != 0;
+            => source.Count is not 0;
+
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool Any<TSource>(this in ArraySegment<TSource> source, Predicate<TSource> predicate)
+        public static bool Any<TSource>(this in ArraySegment<TSource> source, Func<TSource, bool> predicate)
+            => source.Any(new FunctionWrapper<TSource, bool>(predicate));
+        
+        public static bool Any<TSource, TPredicate>(this in ArraySegment<TSource> source, TPredicate predicate = default)
+            where TPredicate : struct, IFunction<TSource, bool>
         {
-            if (predicate is null)
-                Throw.ArgumentNullException(nameof(predicate));
-
             if (source.Any())
             {
                 if (source.IsWhole())
                 {
-                    foreach (var item in source.Array)
+                    foreach (var item in source.Array!)
                     {
-                        if (predicate(item))
+                        if (predicate.Invoke(item))
                             return true;
                     }
                 }
                 else
                 {
-                    var array = source.Array;
+                    var array = source.Array!;
                     var end = source.Count + source.Offset - 1;
                     for (var index = source.Offset; index <= end; index++)
                     {
-                        if (predicate(array![index]))
+                        if (predicate.Invoke(array[index]))
                             return true;
                     }
                 }
@@ -41,19 +43,20 @@ namespace NetFabric.Hyperlinq
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool Any<TSource>(this in ArraySegment<TSource> source, PredicateAt<TSource> predicate)
-        {
-            if (predicate is null)
-                Throw.ArgumentNullException(nameof(predicate));
+        public static bool Any<TSource>(this in ArraySegment<TSource> source, Func<TSource, int, bool> predicate)
+            => source.AnyAt(new FunctionWrapper<TSource, int, bool>(predicate));
 
+        public static bool AnyAt<TSource, TPredicate>(this in ArraySegment<TSource> source, TPredicate predicate = default)
+            where TPredicate : struct, IFunction<TSource, int, bool>
+        {
             if (source.Any())
             {
                 if (source.IsWhole())
                 {
                     var index = 0;
-                    foreach (var item in source.Array)
+                    foreach (var item in source.Array!)
                     {
-                        if (predicate(item, index))
+                        if (predicate.Invoke(item, index))
                             return true;
 
                         index++;
@@ -61,23 +64,22 @@ namespace NetFabric.Hyperlinq
                 }
                 else
                 {
+                    var array = source.Array!;
                     var end = source.Count - 1;
-                    if (source.Offset == 0)
+                    if (source.Offset is 0)
                     {
-                        var array = source.Array;
                         for (var index = 0; index <= end; index++)
                         {
-                            if (predicate(array![index], index))
+                            if (predicate.Invoke(array[index], index))
                                 return true;
                         }
                     }
                     else
                     {
-                        var array = source.Array;
                         var offset = source.Offset;
                         for (var index = 0; index <= end; index++)
                         {
-                            if (predicate(array![index + offset], index))
+                            if (predicate.Invoke(array[index + offset], index))
                                 return true;
                         }
                     }

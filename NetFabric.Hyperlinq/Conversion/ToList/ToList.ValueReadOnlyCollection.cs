@@ -1,44 +1,52 @@
 ﻿using System.Collections.Generic;
 using System.Runtime.InteropServices.ComTypes;
+// ReSharper disable HeapView.ObjectAllocation.Evident
 
 namespace NetFabric.Hyperlinq
 {
     public static partial class ValueReadOnlyCollectionExtensions
     {
-        
-        public static List<TSource> ToList<TEnumerable, TEnumerator, TSource>(this TEnumerable source)
-            where TEnumerable : notnull, IValueReadOnlyCollection<TSource, TEnumerator>
-            where TEnumerator : struct, IEnumerator<TSource>
-            => source switch
-            {
-                ICollection<TSource> collection => new List<TSource>(collection), // no need to allocate helper class
 
-                _ => source.Count == 0
-                    ? new List<TSource>()
-                    : new List<TSource>(new ValueReadOnlyCollectionToListCollection<TEnumerable, TEnumerator, TSource>(source)),
+        public static List<TSource> ToList<TEnumerable, TEnumerator, TSource>(this TEnumerable source)
+            where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
+            where TEnumerator : struct, IEnumerator<TSource>
+            => source.Count switch
+            {
+                0 => new List<TSource>(),
+                _ => source switch
+                {
+                    // ReSharper disable once HeapView.PossibleBoxingAllocation
+                    ICollection<TSource> collection => new List<TSource>(collection),
+
+                    _ => new List<TSource>(collection: new ValueReadOnlyCollectionToListCollection<TEnumerable, TEnumerator, TSource>(source)),
+                }
             };
 
-        
-        public static List<TResult> ToList<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, NullableSelector<TSource, TResult> selector)
-            where TEnumerable : notnull, IValueReadOnlyCollection<TSource, TEnumerator>
+        static List<TResult> ToList<TEnumerable, TEnumerator, TSource, TResult, TSelector>(this TEnumerable source, TSelector selector)
+            where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
-            => source.Count == 0
-                ? new List<TResult>()
-                : new List<TResult>(new ValueReadOnlyCollectionSelectorToListCollection<TEnumerable, TEnumerator, TSource, TResult>(source, selector));
+            where TSelector : struct, IFunction<TSource, TResult>
+            => source.Count switch
+            {
+                0 => new List<TResult>(),
+                _ => new List<TResult>(collection: new ValueReadOnlyCollectionSelectorToListCollection<TEnumerable, TEnumerator, TSource, TResult, TSelector>(source, selector))
+            };
 
-        
-        public static List<TResult> ToList<TEnumerable, TEnumerator, TSource, TResult>(this TEnumerable source, NullableSelectorAt<TSource, TResult> selector)
-            where TEnumerable : notnull, IValueReadOnlyCollection<TSource, TEnumerator>
+        static List<TResult> ToListAt<TEnumerable, TEnumerator, TSource, TResult, TSelector>(this TEnumerable source, TSelector selector)
+            where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
-            => source.Count == 0
-                ? new List<TResult>()
-                : new List<TResult>(new ValueReadOnlyCollectionSelectorAtToListCollection<TEnumerable, TEnumerator, TSource, TResult>(source, selector));
+            where TSelector : struct, IFunction<TSource, int, TResult>
+            => source.Count switch
+            {
+                0 => new List<TResult>(),
+                _ => new List<TResult>(collection: new ValueReadOnlyCollectionSelectorAtToListCollection<TEnumerable, TEnumerator, TSource, TResult, TSelector>(source, selector))
+            };
 
         // helper implementation of ICollection<> so that CopyTo() is used to convert to List<>
         [GeneratorIgnore]
         internal sealed class ValueReadOnlyCollectionToListCollection<TEnumerable, TEnumerator, TSource>
             : ToListCollectionBase<TSource>
-            where TEnumerable : notnull, IValueReadOnlyCollection<TSource, TEnumerator>
+            where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
             readonly TEnumerable source;
@@ -59,37 +67,39 @@ namespace NetFabric.Hyperlinq
         }
 
         [GeneratorIgnore]
-        internal sealed class ValueReadOnlyCollectionSelectorToListCollection<TEnumerable, TEnumerator, TSource, TResult>
+        internal sealed class ValueReadOnlyCollectionSelectorToListCollection<TEnumerable, TEnumerator, TSource, TResult, TSelector>
             : ToListCollectionBase<TResult>
-            where TEnumerable : notnull, IValueReadOnlyCollection<TSource, TEnumerator>
+            where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
+            where TSelector : struct, IFunction<TSource, TResult>
         {
             readonly TEnumerable source;
-            readonly NullableSelector<TSource, TResult> selector;
+            readonly TSelector selector;
 
-            public ValueReadOnlyCollectionSelectorToListCollection(TEnumerable source, NullableSelector<TSource, TResult> selector)
+            public ValueReadOnlyCollectionSelectorToListCollection(TEnumerable source, TSelector selector)
                 : base(source.Count)
                 => (this.source, this.selector) = (source, selector);
 
             public override void CopyTo(TResult[] array, int _)
-                => ValueReadOnlyCollectionExtensions.Copy<TEnumerable, TEnumerator, TSource, TResult>(source, array, selector);
+                => Copy<TEnumerable, TEnumerator, TSource, TResult, TSelector>(source, array, selector);
         }
 
         [GeneratorIgnore]
-        internal sealed class ValueReadOnlyCollectionSelectorAtToListCollection<TEnumerable, TEnumerator, TSource, TResult>
+        internal sealed class ValueReadOnlyCollectionSelectorAtToListCollection<TEnumerable, TEnumerator, TSource, TResult, TSelector>
             : ToListCollectionBase<TResult>
-            where TEnumerable : notnull, IValueReadOnlyCollection<TSource, TEnumerator>
+            where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
+            where TSelector : struct, IFunction<TSource, int, TResult>
         {
             readonly TEnumerable source;
-            readonly NullableSelectorAt<TSource, TResult> selector;
+            readonly TSelector selector;
 
-            public ValueReadOnlyCollectionSelectorAtToListCollection(TEnumerable source, NullableSelectorAt<TSource, TResult> selector)
+            public ValueReadOnlyCollectionSelectorAtToListCollection(TEnumerable source, TSelector selector)
                 : base(source.Count)
                 => (this.source, this.selector) = (source, selector);
 
             public override void CopyTo(TResult[] array, int _)
-                => ValueReadOnlyCollectionExtensions.Copy<TEnumerable, TEnumerator, TSource, TResult>(source, array, selector);
+                => CopyAt<TEnumerable, TEnumerator, TSource, TResult, TSelector>(source, array, selector);
         }
     }
 }

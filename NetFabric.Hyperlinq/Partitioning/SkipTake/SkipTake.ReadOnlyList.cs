@@ -13,17 +13,17 @@ namespace NetFabric.Hyperlinq
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static SkipTakeEnumerable<TList, TSource> SkipTake<TList, TSource>(this TList source, int offset, int count)
-            where TList : notnull, IReadOnlyList<TSource>
+            where TList : IReadOnlyList<TSource>
             => new SkipTakeEnumerable<TList, TSource>(in source, offset, count);
 
         [StructLayout(LayoutKind.Sequential)]
         public readonly partial struct SkipTakeEnumerable<TList, TSource>
             : IValueReadOnlyList<TSource, SkipTakeEnumerable<TList, TSource>.DisposableEnumerator>
             , IList<TSource>
-            where TList : notnull, IReadOnlyList<TSource>
+            where TList : IReadOnlyList<TSource>
         {
-            internal readonly int offset;
-            internal readonly TList source;
+            readonly int offset;
+            readonly TList source;
 
             internal SkipTakeEnumerable(in TList source, int offset, int count)
             {
@@ -33,7 +33,6 @@ namespace NetFabric.Hyperlinq
 
             public readonly int Count { get; }
 
-            [MaybeNull]
             public readonly TSource this[int index]
             {
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -45,11 +44,13 @@ namespace NetFabric.Hyperlinq
                 }
             }
             TSource IReadOnlyList<TSource>.this[int index]
-                => this[index]!;
+                => this[index];
             TSource IList<TSource>.this[int index]
             {
-                get => this[index]!;
+                get => this[index];
+                
                 [ExcludeFromCodeCoverage]
+                // ReSharper disable once ValueParameterNotUsed
                 set => Throw.NotSupportedException();
             }
 
@@ -57,10 +58,12 @@ namespace NetFabric.Hyperlinq
             public readonly Enumerator GetEnumerator() 
                 => new Enumerator(in this);
             readonly DisposableEnumerator IValueEnumerable<TSource, SkipTakeEnumerable<TList, TSource>.DisposableEnumerator>.GetEnumerator() 
-                => new DisposableEnumerator(in this);
+                => new(in this);
             readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() 
+                // ReSharper disable once HeapView.BoxingAllocation
                 => new DisposableEnumerator(in this);
             readonly IEnumerator IEnumerable.GetEnumerator() 
+                // ReSharper disable once HeapView.BoxingAllocation
                 => new DisposableEnumerator(in this);
 
             bool ICollection<TSource>.IsReadOnly  
@@ -68,12 +71,13 @@ namespace NetFabric.Hyperlinq
 
 
             public void CopyTo(TSource[] array, int arrayIndex) 
-                => ReadOnlyListExtensions.Copy(source, offset, array, arrayIndex, Count);
+                => Copy(source, offset, array, arrayIndex, Count);
 
 
-            bool ICollection<TSource>.Contains(TSource item)
+            public bool Contains(TSource item)
             {
-                if (offset == 0 && Count == source.Count && source is ICollection<TSource> collection)
+                // ReSharper disable once HeapView.PossibleBoxingAllocation
+                if (offset is 0 && Count == source.Count && source is ICollection<TSource> collection)
                     return collection.Contains(item);
 
                 var end = offset + Count - 1;
@@ -99,7 +103,8 @@ namespace NetFabric.Hyperlinq
 
             public int IndexOf(TSource item)
             {
-                if (offset == 0 && Count == source.Count && source is IList<TSource> list)
+                // ReSharper disable once HeapView.PossibleBoxingAllocation
+                if (offset is 0 && Count == source.Count && source is IList<TSource> list)
                     return list.IndexOf(item);
 
                 var end = offset + Count - 1;
@@ -153,7 +158,6 @@ namespace NetFabric.Hyperlinq
                     end = index + enumerable.Count;
                 }
 
-                [MaybeNull]
                 public readonly TSource Current
                 {
                     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -180,7 +184,6 @@ namespace NetFabric.Hyperlinq
                     end = index + enumerable.Count;
                 }
 
-                [MaybeNull]
                 public readonly TSource Current
                 {
                     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -188,7 +191,8 @@ namespace NetFabric.Hyperlinq
                 }
                 readonly TSource IEnumerator<TSource>.Current 
                     => source[index];
-                readonly object? IEnumerator.Current 
+                readonly object? IEnumerator.Current
+                    // ReSharper disable once HeapView.PossibleBoxingAllocation
                     => source[index];
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -202,123 +206,165 @@ namespace NetFabric.Hyperlinq
                 public readonly void Dispose() { }
             }
 
-
+            #region Partitioning
+            
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public SkipTakeEnumerable<TList, TSource> Skip(int count)
-                => ReadOnlyListExtensions.SkipTake<TList, TSource>(source, offset + count, Count);
-
+                => source.SkipTake<TList, TSource>(offset + count, Count);
+ 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public SkipTakeEnumerable<TList, TSource> Take(int count)
-                => ReadOnlyListExtensions.SkipTake<TList, TSource>(source, offset, Math.Min(count, Count));
+                => source.SkipTake<TList, TSource>(offset, Math.Min(count, Count));
+
+            #endregion            
+            #region Quantifier  
+            
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public bool All(Func<TSource, bool> predicate)
+                => source.All<TList, TSource, FunctionWrapper<TSource, bool>>(new FunctionWrapper<TSource, bool>(predicate), offset, Count);
+            
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public bool All<TPredicate>(TPredicate predicate = default)
+                where TPredicate : struct, IFunction<TSource, bool>
+                => source.All<TList, TSource, TPredicate>(predicate, offset, Count);
+            
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public bool All(Func<TSource, int, bool> predicate)
+                => source.AllAt<TList, TSource, FunctionWrapper<TSource, int, bool>>(new FunctionWrapper<TSource, int, bool>(predicate), offset, Count);
+            
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public bool AllAt<TPredicate>(TPredicate predicate = default)
+                where TPredicate : struct, IFunction<TSource, int, bool>
+                => source.AllAt<TList, TSource, TPredicate>(predicate, offset, Count);
+            
+            
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public bool Any(Func<TSource, bool> predicate)
+                => source.Any<TList, TSource, FunctionWrapper<TSource, bool>>(new FunctionWrapper<TSource, bool>(predicate), offset, Count);
+            
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public bool Any<TPredicate>(TPredicate predicate = default)
+                where TPredicate : struct, IFunction<TSource, bool>
+                => source.Any<TList, TSource, TPredicate>(predicate, offset, Count);
+            
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public bool Any(Func<TSource, int, bool> predicate)
+                => source.AnyAt<TList, TSource, FunctionWrapper<TSource, int, bool>>(new FunctionWrapper<TSource, int, bool>(predicate), offset, Count);
+            
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public bool AnyAt<TPredicate>(TPredicate predicate = default)
+                where TPredicate : struct, IFunction<TSource, int, bool>
+                => source.AnyAt<TList, TSource, TPredicate>(predicate, offset, Count);
 
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public bool All(Predicate<TSource> predicate)
-                => ReadOnlyListExtensions.All<TList, TSource>(source, predicate, offset, Count);
-            
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public bool All(PredicateAt<TSource> predicate)
-                => ReadOnlyListExtensions.All<TList, TSource>(source, predicate, offset, Count);
+            public bool Contains(TSource value, IEqualityComparer<TSource>? comparer)
+                => source.Contains(value, comparer, offset, Count);
 
+            #endregion            
+            #region Filtering  
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public bool Any()
-                => ReadOnlyListExtensions.Any<TList, TSource>(source, offset, Count);
-            
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public bool Any(Predicate<TSource> predicate)
-                => ReadOnlyListExtensions.Any<TList, TSource>(source, predicate, offset, Count);
-            
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public bool Any(PredicateAt<TSource> predicate)
-                => ReadOnlyListExtensions.Any<TList, TSource>(source, predicate, offset, Count);
+            public WhereEnumerable<TList, TSource, FunctionWrapper<TSource, bool>> Where(Func<TSource, bool> predicate)
+                => Where(new FunctionWrapper<TSource, bool>(predicate));
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public WhereEnumerable<TList, TSource, TPredicate> Where<TPredicate>(TPredicate predicate = default)
+                where TPredicate : struct, IFunction<TSource, bool>
+                => source.Where<TList, TSource, TPredicate>(predicate, offset, Count);
+            
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public bool Contains(TSource value, IEqualityComparer<TSource>? comparer = default)
-                => ReadOnlyListExtensions.Contains<TList, TSource>(source, value, comparer, offset, Count);
+            public WhereAtEnumerable<TList, TSource, FunctionWrapper<TSource, int, bool>> Where(Func<TSource, int, bool> predicate)
+                => WhereAt(new FunctionWrapper<TSource, int, bool>(predicate));
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public WhereAtEnumerable<TList, TSource, TPredicate> WhereAt<TPredicate>(TPredicate predicate = default)
+                where TPredicate : struct, IFunction<TSource, int, bool>
+                => source.WhereAt<TList, TSource, TPredicate>(predicate, offset, Count);
+
+            #endregion            
+            #region Projection  
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public ReadOnlyListExtensions.WhereEnumerable<TList, TSource> Where(Predicate<TSource> predicate)
-                => ReadOnlyListExtensions.Where<TList, TSource>(source, predicate, offset, Count);
+            public SelectEnumerable<TList, TSource, TResult, FunctionWrapper<TSource, TResult>> Select<TResult>(Func<TSource, TResult> selector)
+                => Select<TResult, FunctionWrapper<TSource, TResult>>(new FunctionWrapper<TSource, TResult>(selector));
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public SelectEnumerable<TList, TSource, TResult, TSelector> Select<TResult, TSelector>(TSelector selector = default)
+                where TSelector : struct, IFunction<TSource, TResult>
+                => source.Select<TList, TSource, TResult, TSelector>(selector, offset, Count);
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public ReadOnlyListExtensions.WhereAtEnumerable<TList, TSource> Where(PredicateAt<TSource> predicate)
-                => ReadOnlyListExtensions.Where<TList, TSource>(source, predicate, offset, Count);
+            public SelectAtEnumerable<TList, TSource, TResult, FunctionWrapper<TSource, int, TResult>> Select<TResult>(Func<TSource, int, TResult> selector)
+                => SelectAt<TResult, FunctionWrapper<TSource, int, TResult>>(new FunctionWrapper<TSource, int, TResult>(selector));
 
-            
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public ReadOnlyListExtensions.SelectEnumerable<TList, TSource, TResult> Select<TResult>(NullableSelector<TSource, TResult> selector)
-                => ReadOnlyListExtensions.Select<TList, TSource, TResult>(source, selector, offset, Count);
+            public SelectAtEnumerable<TList, TSource, TResult, TSelector> SelectAt<TResult, TSelector>(TSelector selector = default)
+                where TSelector : struct, IFunction<TSource, int, TResult>
+                => source.SelectAt<TList, TSource, TResult, TSelector>(selector, offset, Count);
 
-            
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public ReadOnlyListExtensions.SelectAtEnumerable<TList, TSource, TResult> Select<TResult>(NullableSelectorAt<TSource, TResult> selector)
-                => ReadOnlyListExtensions.Select<TList, TSource, TResult>(source, selector, offset, Count);
-
+            #endregion            
+            #region Element  
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Option<TSource> ElementAt(int index)
-                => ReadOnlyListExtensions.ElementAt<TList, TSource>(source, index, offset, Count);
+                => source.ElementAt<TList, TSource>(index, offset, Count);
 
-            
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Option<TSource> First()
-                => ReadOnlyListExtensions.First<TList, TSource>(source, offset, Count);
+                => source.First<TList, TSource>(offset, Count);
 
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Option<TSource> Single()
-                => ReadOnlyListExtensions.Single<TList, TSource>(source, offset, Count);
+                => source.Single<TList, TSource>(offset, Count);
 
+            #endregion            
+            #region Conversion  
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TSource[] ToArray()
-                => ReadOnlyListExtensions.ToArray<TList, TSource>(source, offset, Count);
+                => source.ToArray<TList, TSource>(offset, Count);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public IMemoryOwner<TSource> ToArray(MemoryPool<TSource> pool)
-                => ReadOnlyListExtensions.ToArray<TList, TSource>(source, offset, Count, pool);
+                => source.ToArray<TList, TSource>(offset, Count, pool);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public List<TSource> ToList()
-                => ReadOnlyListExtensions.ToList<TList, TSource>(source, offset, Count);
+                => source.ToList<TList, TSource>(offset, Count);
 
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public Dictionary<TKey, TSource> ToDictionary<TKey>(Selector<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer = default)
+            public Dictionary<TKey, TSource> ToDictionary<TKey>(Func<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer = default)
                 where TKey : notnull
-                => ReadOnlyListExtensions.ToDictionary<TList, TSource, TKey>(source, keySelector, comparer, offset, Count);
+                => source.ToDictionary<TList, TSource, TKey, FunctionWrapper<TSource, TKey>>(new FunctionWrapper<TSource, TKey>(keySelector), comparer, offset, Count);
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Selector<TSource, TKey> keySelector, NullableSelector<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer = default)
+            public Dictionary<TKey, TSource> ToDictionary<TKey, TKeySelector>(TKeySelector keySelector, IEqualityComparer<TKey>? comparer = default)
                 where TKey : notnull
-                => ReadOnlyListExtensions.ToDictionary<TList, TSource, TKey, TElement>(source, keySelector, elementSelector, comparer, offset, Count);
+                where TKeySelector : struct, IFunction<TSource, TKey>
+                => source.ToDictionary<TList, TSource, TKey, TKeySelector>(keySelector, comparer, offset, Count);
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer = default)
+                where TKey : notnull
+                => source.ToDictionary<TList, TSource, TKey, TElement, FunctionWrapper<TSource, TKey>, FunctionWrapper<TSource, TElement>>(new FunctionWrapper<TSource, TKey>(keySelector), new FunctionWrapper<TSource, TElement>(elementSelector), comparer, offset, Count);
+            
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement, TKeySelector, TElementSelector>(TKeySelector keySelector, TElementSelector elementSelector, IEqualityComparer<TKey>? comparer = default)
+                where TKey : notnull
+                where TKeySelector : struct, IFunction<TSource, TKey>
+                where TElementSelector : struct, IFunction<TSource, TElement>
+                => source.ToDictionary<TList, TSource, TKey, TElement, TKeySelector, TElementSelector>(keySelector, elementSelector, comparer, offset, Count);
+            
+            #endregion
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int Count<TList, TSource>(this in SkipTakeEnumerable<TList, TSource> source)
-            where TList : notnull, IReadOnlyList<TSource>
+            where TList : IReadOnlyList<TSource>
             => source.Count;
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int Count<TList, TSource>(this in SkipTakeEnumerable<TList, TSource> source, Predicate<TSource> predicate)
-            where TList : notnull, IReadOnlyList<TSource>
-        {
-            if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
-
-            return ReadOnlyListExtensions.Count<TList, TSource>(source.source, predicate, source.offset, source.Count);
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int Count<TList, TSource>(this in SkipTakeEnumerable<TList, TSource> source, PredicateAt<TSource> predicate)
-            where TList : notnull, IReadOnlyList<TSource>
-        {
-            if (predicate is null) Throw.ArgumentNullException(nameof(predicate));
-
-            return ReadOnlyListExtensions.Count<TList, TSource>(source.source, predicate, source.offset, source.Count);
-        }
     }
 }

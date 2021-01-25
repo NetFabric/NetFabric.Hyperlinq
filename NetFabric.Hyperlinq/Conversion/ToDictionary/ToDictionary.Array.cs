@@ -7,24 +7,29 @@ namespace NetFabric.Hyperlinq
     public static partial class ArrayExtensions
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Dictionary<TKey, TSource> ToDictionary<TSource, TKey>(this TSource[] source, Selector<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer = default)
+        public static Dictionary<TKey, TSource> ToDictionary<TSource, TKey>(this TSource[] source, Func<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer = default)
             where TKey : notnull
-        {
-            if (keySelector is null) Throw.ArgumentNullException(nameof(keySelector));
+            => new ArraySegment<TSource>(source).ToDictionary(keySelector, comparer);
 
-            return ToDictionary(new ArraySegment<TSource>(source), keySelector, comparer);
-        }
-
-        
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Dictionary<TKey, TElement> ToDictionary<TSource, TKey, TElement>(this TSource[] source, Selector<TSource, TKey> keySelector, NullableSelector<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer = default)
+        public static Dictionary<TKey, TSource> ToDictionary<TSource, TKey, TKeySelector>(this TSource[] source, TKeySelector keySelector, IEqualityComparer<TKey>? comparer = default)
             where TKey : notnull
-        {
-            if (keySelector is null) Throw.ArgumentNullException(nameof(keySelector));
-            if (elementSelector is null) Throw.ArgumentNullException(nameof(elementSelector));
+            where TKeySelector : struct, IFunction<TSource, TKey> 
+            => new ArraySegment<TSource>(source).ToDictionary(keySelector, comparer);
 
-            return ToDictionary(new ArraySegment<TSource>(source), keySelector, elementSelector, comparer);
-        }
+        //////////////////////////////////////////////////////////////////////////////////////////////////
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Dictionary<TKey, TElement> ToDictionary<TSource, TKey, TElement>(this TSource[] source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer = default)
+            where TKey : notnull
+            => new ArraySegment<TSource>(source).ToDictionary(keySelector, elementSelector, comparer);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Dictionary<TKey, TElement> ToDictionary<TSource, TKey, TElement, TKeySelector, TElementSelector>(this TSource[] source, TKeySelector keySelector, TElementSelector elementSelector, IEqualityComparer<TKey>? comparer = default)
+            where TKey : notnull
+            where TKeySelector : struct, IFunction<TSource, TKey>
+            where TElementSelector : struct, IFunction<TSource, TElement>
+            => new ArraySegment<TSource>(source).ToDictionary<TSource, TKey, TElement, TKeySelector, TElementSelector>(keySelector, elementSelector, comparer);
     }
 }
 

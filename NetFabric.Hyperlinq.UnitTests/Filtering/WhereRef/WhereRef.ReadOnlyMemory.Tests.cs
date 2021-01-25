@@ -7,32 +7,15 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.WhereRef
 {
     public class ReadOnlyMemoryTests
     {
-        [Fact]
-        public void WhereRef_Predicate_With_Null_Must_Throw()
-        {
-            // Arrange
-            var source = new int[0];
-            var predicate = (Predicate<int>)null;
-
-            // Act
-            Action action = () => _ = ArrayExtensions
-                .WhereRef((ReadOnlyMemory<int>)source.AsMemory(), predicate);
-
-            // Assert
-            _ = action.Must()
-                .Throw<ArgumentNullException>()
-                .EvaluateTrue(exception => exception.ParamName == "predicate");
-        }
-
         [Theory]
         [MemberData(nameof(TestData.PredicateEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateMultiple), MemberType = typeof(TestData))]
-        public void WhereRef_Predicate_With_ValidData_Must_Succeed(int[] source, Predicate<int> predicate)
+        public void WhereRef_Predicate_With_ValidData_Must_Succeed(int[] source, Func<int, bool> predicate)
         {
             // Arrange
             var expected = Enumerable
-                .Where(source, predicate.AsFunc());
+                .Where(source, predicate);
 
             // Act
             var result = ArrayExtensions

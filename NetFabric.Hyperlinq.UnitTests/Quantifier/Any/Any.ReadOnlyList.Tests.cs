@@ -51,35 +51,17 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Any
             _ = result.Must()
                 .BeEqualTo(expected);
         }
-        
-        [Fact]
-        public void Any_Predicate_With_Null_Must_Throw()
-        {
-            // Arrange
-            var source = new int[0];
-            var wrapped = Wrap.AsValueReadOnlyList(source);
-            var predicate = (Predicate<int>)null;
-
-            // Act
-            Action action = () => _ = ReadOnlyListExtensions
-                .Any<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped, predicate);
-
-            // Assert
-            _ = action.Must()
-                .Throw<ArgumentNullException>()
-                .EvaluateTrue(exception => exception.ParamName == "predicate");
-        }
 
         [Theory]
         [MemberData(nameof(TestData.PredicateEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateMultiple), MemberType = typeof(TestData))]
-        public void Any_Predicate_With_ValidData_Must_Succeed(int[] source, Predicate<int> predicate)
+        public void Any_Predicate_With_ValidData_Must_Succeed(int[] source, Func<int, bool> predicate)
         {
             // Arrange
             var wrapped = Wrap.AsValueReadOnlyList(source);
             var expected = 
-                System.Linq.Enumerable.Any(wrapped, predicate.AsFunc());
+                System.Linq.Enumerable.Any(wrapped, predicate);
 
             // Act
             var result = ReadOnlyListExtensions
@@ -94,14 +76,14 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Any
         [MemberData(nameof(TestData.SkipTakePredicateEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakePredicateSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakePredicateMultiple), MemberType = typeof(TestData))]
-        public void Any_Skip_Take_Predicate_With_ValidData_Must_Succeed(int[] source, int skip, int take, Predicate<int> predicate)
+        public void Any_Skip_Take_Predicate_With_ValidData_Must_Succeed(int[] source, int skip, int take, Func<int, bool> predicate)
         {
             // Arrange
             var wrapped = Wrap.AsValueReadOnlyList(source);
             var expected = 
                 System.Linq.Enumerable.Any(
                     System.Linq.Enumerable.Take(
-                        System.Linq.Enumerable.Skip(source, skip), take), predicate.AsFunc());
+                        System.Linq.Enumerable.Skip(source, skip), take), predicate);
 
             // Act
             var result = ReadOnlyListExtensions
@@ -113,36 +95,18 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Any
             _ = result.Must()
                 .BeEqualTo(expected);
         }
-        
-        [Fact]
-        public void Any_PredicateAt_With_Null_Must_Throw()
-        {
-            // Arrange
-            var source = new int[0];
-            var wrapped = Wrap.AsValueReadOnlyList(source);
-            var predicate = (PredicateAt<int>)null;
-
-            // Act
-            Action action = () => _ = ReadOnlyListExtensions
-                .Any<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped, predicate);
-
-            // Assert
-            _ = action.Must()
-                .Throw<ArgumentNullException>()
-                .EvaluateTrue(exception => exception.ParamName == "predicate");
-        }
 
         [Theory]
         [MemberData(nameof(TestData.PredicateAtEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateAtSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateAtMultiple), MemberType = typeof(TestData))]
-        public void Any_PredicateAt_With_ValidData_Must_Succeed(int[] source, PredicateAt<int> predicate)
+        public void Any_PredicateAt_With_ValidData_Must_Succeed(int[] source, Func<int, int, bool> predicate)
         {
             // Arrange
             var wrapped = Wrap.AsValueReadOnlyList(source);
             var expected = 
                 System.Linq.Enumerable.Any(
-                    System.Linq.Enumerable.Where(source, predicate.AsFunc()));
+                    System.Linq.Enumerable.Where(source, predicate));
 
             // Act
             var result = ReadOnlyListExtensions
@@ -157,7 +121,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Any
         [MemberData(nameof(TestData.SkipTakePredicateAtEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakePredicateAtSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakePredicateAtMultiple), MemberType = typeof(TestData))]
-        public void Any_Skip_Take_PredicateAt_With_ValidData_Must_Succeed(int[] source, int skip, int take, PredicateAt<int> predicate)
+        public void Any_Skip_Take_PredicateAt_With_ValidData_Must_Succeed(int[] source, int skip, int take, Func<int, int, bool> predicate)
         {
             // Arrange
             var wrapped = Wrap.AsValueReadOnlyList(source);
@@ -166,7 +130,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Any
                     System.Linq.Enumerable.Where(
                         System.Linq.Enumerable.Take(
                             System.Linq.Enumerable.Skip(
-                                source, skip), take), predicate.AsFunc()));
+                                source, skip), take), predicate));
 
             // Act
             var result = ReadOnlyListExtensions

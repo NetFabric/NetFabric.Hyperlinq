@@ -127,9 +127,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         {
             var sum = 0;
             foreach (var item in EnumerableExtensions.AsValueEnumerable<TestEnumerable.Enumerable, TestEnumerable.Enumerable.Enumerator, int>(enumerableValue, enumerable => enumerable.GetEnumerator())
-                .SelectMany<
-                    EnumerableExtensions.ValueEnumerableWrapper<TestEnumerable.Enumerable, TestEnumerable.Enumerable.Enumerator, int>, TestEnumerable.Enumerable.Enumerator, int, 
-                    ValueEnumerable.ReturnEnumerable<int>, ValueEnumerable.ReturnEnumerable<int>.DisposableEnumerator, int>(item => ValueEnumerable.Return(item)))
+                .SelectMany(item => ValueEnumerable.Return(item)))
                 sum += item;
             return sum;
         }
@@ -140,9 +138,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         {
             var sum = 0;
             foreach (var item in EnumerableExtensions.AsValueEnumerable<TestCollection.Enumerable, TestCollection.Enumerable.Enumerator, int>(collectionValue, enumerable => enumerable.GetEnumerator())
-                .SelectMany<
-                    EnumerableExtensions.ValueEnumerableWrapper<TestCollection.Enumerable, TestCollection.Enumerable.Enumerator, int>, TestCollection.Enumerable.Enumerator, int,
-                    ValueEnumerable.ReturnEnumerable<int>, ValueEnumerable.ReturnEnumerable<int>.DisposableEnumerator, int>(item => ValueEnumerable.Return(item)))
+                .SelectMany(item => ValueEnumerable.Return(item)))
                 sum += item;
             return sum;
         }

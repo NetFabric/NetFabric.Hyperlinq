@@ -10,22 +10,25 @@ namespace NetFabric.Hyperlinq
     public static partial class ArrayExtensions
     {
 
+        [GeneratorMapping("TSelector", "NetFabric.Hyperlinq.FunctionWrapper<TSource, int, TResult>")]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static SpanSelectAtEnumerable<TSource, TResult> Select<TSource, TResult>(this ReadOnlySpan<TSource> source, NullableSelectorAt<TSource, TResult> selector)
-        {
-            if (selector is null) Throw.ArgumentNullException(nameof(selector));
+        public static SpanSelectAtEnumerable<TSource, TResult, FunctionWrapper<TSource, int, TResult>> Select<TSource, TResult>(this ReadOnlySpan<TSource> source, Func<TSource, int, TResult> selector)
+            => source.SelectAt<TSource, TResult, FunctionWrapper<TSource, int, TResult>>(new FunctionWrapper<TSource, int, TResult>(selector));
 
-            return new SpanSelectAtEnumerable<TSource, TResult>(source, selector);
-        }
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static SpanSelectAtEnumerable<TSource, TResult, TSelector> SelectAt<TSource, TResult, TSelector>(this ReadOnlySpan<TSource> source, TSelector selector = default)
+            where TSelector : struct, IFunction<TSource, int, TResult>
+            => new(source, selector);
 
         [GeneratorMapping("TSource", "TResult")]
-        [StructLayout(LayoutKind.Sequential)]
-        public readonly ref struct SpanSelectAtEnumerable<TSource, TResult>
+        [StructLayout(LayoutKind.Auto)]
+        public ref struct SpanSelectAtEnumerable<TSource, TResult, TSelector>
+            where TSelector : struct, IFunction<TSource, int, TResult>
         {
-            internal readonly ReadOnlySpan<TSource> source;
-            internal readonly NullableSelectorAt<TSource, TResult> selector;
+            readonly ReadOnlySpan<TSource> source;
+            TSelector selector;
 
-            internal SpanSelectAtEnumerable(ReadOnlySpan<TSource> source, NullableSelectorAt<TSource, TResult> selector)
+            internal SpanSelectAtEnumerable(ReadOnlySpan<TSource> source, TSelector selector)
             {
                 this.source = source;
                 this.selector = selector;
@@ -38,11 +41,10 @@ namespace NetFabric.Hyperlinq
             public readonly int Count 
                 => source.Length;
 
-            [MaybeNull]
             public readonly TResult this[int index]
             {
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                get => selector(source[index], index);
+                get => selector.Invoke(source[index], index);
             }
 
             [StructLayout(LayoutKind.Sequential)]
@@ -51,9 +53,9 @@ namespace NetFabric.Hyperlinq
                 int index;
                 readonly int end;
                 readonly ReadOnlySpan<TSource> source;
-                readonly NullableSelectorAt<TSource, TResult> selector;
+                TSelector selector;
 
-                internal Enumerator(in SpanSelectAtEnumerable<TSource, TResult> enumerable)
+                internal Enumerator(in SpanSelectAtEnumerable<TSource, TResult, TSelector> enumerable)
                 {
                     source = enumerable.source;
                     selector = enumerable.selector;
@@ -61,11 +63,10 @@ namespace NetFabric.Hyperlinq
                     end = index + source.Length;
                 }
 
-                [MaybeNull]
                 public readonly TResult Current 
                 {
                     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                    get => selector(source[index], index);
+                    get => selector.Invoke(source[index], index);
                 }
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -73,35 +74,69 @@ namespace NetFabric.Hyperlinq
                     => ++index <= end;
             }
 
+            #region Aggregation
+            
+            #endregion
+            #region Quantifier
+
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Any()
-                => source.Length != 0;
+                => source.Length is not 0;
+            
+            #endregion
+            #region Filtering
+            
+            #endregion
+            #region Projection
+            
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public SpanSelectAtEnumerable<TSource, TResult2, SelectorAtSelectorCombination<TSelector, FunctionWrapper<TResult, TResult2>, TSource, TResult, TResult2>> Select<TResult2>(Func<TResult, TResult2> selector)
+                => Select<TResult2, FunctionWrapper<TResult, TResult2>>(new FunctionWrapper<TResult, TResult2>(selector));
+            
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public SpanSelectAtEnumerable<TSource, TResult2, SelectorAtSelectorCombination<TSelector, TSelector2, TSource, TResult, TResult2>> Select<TResult2, TSelector2>(TSelector2 selector = default)
+                where TSelector2 : struct, IFunction<TResult, TResult2>
+                => source.SelectAt<TSource, TResult2, SelectorAtSelectorCombination<TSelector, TSelector2, TSource, TResult, TResult2>>(new SelectorAtSelectorCombination<TSelector, TSelector2, TSource, TResult, TResult2>(this.selector, selector));
+            
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public SpanSelectAtEnumerable<TSource, TResult2, SelectorAtSelectorAtCombination<TSelector, FunctionWrapper<TResult, int, TResult2>, TSource, TResult, TResult2>> Select<TResult2>(Func<TResult, int, TResult2> selector)
+                => SelectAt<TResult2, FunctionWrapper<TResult, int, TResult2>>(new FunctionWrapper<TResult, int, TResult2>(selector));
+            
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public SpanSelectAtEnumerable<TSource, TResult2, SelectorAtSelectorAtCombination<TSelector, TSelector2, TSource, TResult, TResult2>> SelectAt<TResult2, TSelector2>(TSelector2 selector = default)
+                where TSelector2 : struct, IFunction<TResult, int, TResult2>
+                => source.SelectAt<TSource, TResult2, SelectorAtSelectorAtCombination<TSelector, TSelector2, TSource, TResult, TResult2>>(new SelectorAtSelectorAtCombination<TSelector, TSelector2, TSource, TResult, TResult2>(this.selector, selector));
+            
+            #endregion
+            #region Element
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Option<TResult> ElementAt(int index)
-                => ArrayExtensions.ElementAt<TSource, TResult>(source, index, selector);
-
+                => source.ElementAtAt<TSource, TResult, TSelector>(index, selector);
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Option<TResult> First()
-                => ArrayExtensions.First<TSource, TResult>(source, selector);
+                => source.FirstAt<TSource, TResult, TSelector>(selector);
 
-            
+
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Option<TResult> Single()
-                => ArrayExtensions.Single<TSource, TResult>(source, selector);
+                => source.SingleAt<TSource, TResult, TSelector>(selector);
+            
+            #endregion
+            #region Conversion
 
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TResult[] ToArray()
-                => ArrayExtensions.ToArray(source, selector);
+                => source.ToArrayAt<TSource, TResult, TSelector>(selector);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public IMemoryOwner<TResult> ToArray(MemoryPool<TResult> pool)
-                => ArrayExtensions.ToArray(source, selector, pool);
+                => source.ToArrayAt(selector, pool);
 
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public List<TResult> ToList()
-                => ArrayExtensions.ToList(source, selector);
+                => source.ToListAt<TSource, TResult, TSelector>(selector);
+            
+            #endregion
 
             public bool SequenceEqual(IEnumerable<TResult> other, IEqualityComparer<TResult>? comparer = null)
             {
@@ -127,7 +162,8 @@ namespace NetFabric.Hyperlinq
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int Count<TSource, TResult>(this SpanSelectAtEnumerable<TSource, TResult> source)
+        public static int Count<TSource, TResult, TSelector>(this SpanSelectAtEnumerable<TSource, TResult, TSelector> source)
+            where TSelector : struct, IFunction<TSource, int, TResult>
             => source.Count;
     }
 }

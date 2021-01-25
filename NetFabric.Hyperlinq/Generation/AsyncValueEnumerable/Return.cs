@@ -11,24 +11,25 @@ namespace NetFabric.Hyperlinq
     public static partial class AsyncValueEnumerable
     {
         
-        public static ReturnEnumerable<TSource> Return<TSource>([AllowNull] TSource value) =>
-            new ReturnEnumerable<TSource>(value);
+        public static ReturnEnumerable<TSource> Return<TSource>(TSource value) =>
+            new(value);
 
         [StructLayout(LayoutKind.Auto)]
         public readonly partial struct ReturnEnumerable<TSource>
             : IAsyncValueEnumerable<TSource, ReturnEnumerable<TSource>.DisposableEnumerator>
         {
-            [AllowNull, MaybeNull] internal readonly TSource value;
+            readonly TSource value;
 
-            internal ReturnEnumerable([AllowNull] TSource value) 
+            internal ReturnEnumerable(TSource value) 
                 => this.value = value;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly Enumerator GetAsyncEnumerator() 
-                => new Enumerator(in this);
+                => new(in this);
             readonly DisposableEnumerator IAsyncValueEnumerable<TSource, DisposableEnumerator>.GetAsyncEnumerator(CancellationToken _) 
-                => new DisposableEnumerator(in this);
+                => new(in this);
             readonly IAsyncEnumerator<TSource> IAsyncEnumerable<TSource>.GetAsyncEnumerator(CancellationToken _) 
+                // ReSharper disable once HeapView.BoxingAllocation
                 => new DisposableEnumerator(in this);
 
             [StructLayout(LayoutKind.Auto)]
@@ -42,7 +43,6 @@ namespace NetFabric.Hyperlinq
                     moveNext = true;
                 }
 
-                [MaybeNull]
                 public readonly TSource Current { get; }
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -66,10 +66,9 @@ namespace NetFabric.Hyperlinq
                     moveNext = true;
                 }
 
-                [MaybeNull]
                 public readonly TSource Current { get; }
                 readonly TSource IAsyncEnumerator<TSource>.Current 
-                    => Current!;
+                    => Current;
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public ValueTask<bool> MoveNextAsync()
@@ -85,7 +84,7 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public ValueTask<bool> AnyAsync()
-                => new ValueTask<bool>(result: true);
+                => new(result: true);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public ValueTask<bool> ContainsAsync(TSource value, IEqualityComparer<TSource>? comparer)
@@ -94,8 +93,13 @@ namespace NetFabric.Hyperlinq
                     : new ValueTask<bool>(result: comparer.Equals(this.value, value));
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public ReturnEnumerable<TResult> Select<TResult>(AsyncSelector<TSource, TResult> selector)
-                => new ReturnEnumerable<TResult>(selector(value, CancellationToken.None).GetAwaiter().GetResult());
+            public ReturnEnumerable<TResult> Select<TResult>(Func<TSource, CancellationToken, ValueTask<TResult>> selector) 
+                => Select<TResult, AsyncFunctionWrapper<TSource, TResult>>(new AsyncFunctionWrapper<TSource, TResult>(selector));
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public ReturnEnumerable<TResult> Select<TResult, TSelector>(TSelector selector = default) 
+                where TSelector : struct, IAsyncFunction<TSource, TResult>
+                => new(selector.InvokeAsync(value, CancellationToken.None).GetAwaiter().GetResult());
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public ValueTask<Option<TSource>> ElementAtAsync(int index)
@@ -107,35 +111,52 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public ValueTask<Option<TSource>> FirstAsync()
-                => new ValueTask<Option<TSource>>(result: Option.Some(value));
+                => new(result: Option.Some(value));
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public ValueTask<Option<TSource>> SingleAsync()
-                => new ValueTask<Option<TSource>>(result: Option.Some(value));
+                => new(result: Option.Some(value));
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public ValueTask<TSource[]> ToArrayAsync()
-                => new ValueTask<TSource[]>(result: new TSource[] { value });
+                // ReSharper disable once HeapView.ObjectAllocation.Evident
+                => new(result: new TSource[] { value });
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public ValueTask<List<TSource>> ToListAsync()
-                => new ValueTask<List<TSource>>(result: new List<TSource>(1) { value });
+                // ReSharper disable once HeapView.ObjectAllocation.Evident
+                => new(result: new List<TSource>(1) { value });
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public ValueTask<Dictionary<TKey, TSource>> ToDictionaryAsync<TKey>(Selector<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer = default)
+            public ValueTask<Dictionary<TKey, TSource>> ToDictionaryAsync<TKey>(Func<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer = default)
                 where TKey : notnull
-                => new ValueTask<Dictionary<TKey, TSource>>(result: new Dictionary<TKey, TSource>(1, comparer) { { keySelector(value), value } });
+                => ToDictionaryAsync<TKey, FunctionWrapper<TSource, TKey>>(new FunctionWrapper<TSource, TKey>(keySelector), comparer);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public ValueTask<Dictionary<TKey, TElement>> ToDictionaryAsync<TKey, TElement>(Selector<TSource, TKey> keySelector, NullableSelector<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer = default)
+            public ValueTask<Dictionary<TKey, TSource>> ToDictionaryAsync<TKey, TKeySelector>(TKeySelector keySelector, IEqualityComparer<TKey>? comparer = default)
                 where TKey : notnull
-                => new ValueTask<Dictionary<TKey, TElement>>(result: new Dictionary<TKey, TElement>(1, comparer) { { keySelector(value), elementSelector(value)! } });
+                where TKeySelector : struct, IFunction<TSource, TKey>
+                // ReSharper disable once HeapView.ObjectAllocation.Evident
+                => new(result: new Dictionary<TKey, TSource>(1, comparer) { { keySelector.Invoke(value), value } });
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public ValueTask<Dictionary<TKey, TElement>> ToDictionaryAsync<TKey, TElement>(Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer = default)
+                where TKey : notnull
+                => ToDictionaryAsync<TKey, TElement, FunctionWrapper<TSource, TKey>, FunctionWrapper<TSource, TElement>>(new FunctionWrapper<TSource, TKey>(keySelector), new FunctionWrapper<TSource, TElement>(elementSelector), comparer);
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public ValueTask<Dictionary<TKey, TElement>> ToDictionaryAsync<TKey, TElement, TKeySelector, TElementSelector>(TKeySelector keySelector, TElementSelector elementSelector, IEqualityComparer<TKey>? comparer = default)
+                where TKey : notnull
+                where TKeySelector : struct, IFunction<TSource, TKey>
+                where TElementSelector : struct, IFunction<TSource, TElement>
+                // ReSharper disable once HeapView.ObjectAllocation.Evident
+                => new(result: new Dictionary<TKey, TElement>(1, comparer) { { keySelector.Invoke(value), elementSelector.Invoke(value) } });
         }
 
 #pragma warning disable IDE0060 // Remove unused parameter
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ValueTask<int> CountAsync<TSource>(this in ReturnEnumerable<TSource> source)
-            => new ValueTask<int>(result: 1);
+            => new(result: 1);
 #pragma warning restore IDE0060 // Remove unused parameter
     }
 }

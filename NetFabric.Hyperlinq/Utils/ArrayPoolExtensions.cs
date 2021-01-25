@@ -8,6 +8,6 @@ namespace NetFabric.Hyperlinq
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ArraySegment<T> RentSliced<T>(this ArrayPool<T> pool, int count)
-            => new ArraySegment<T>(pool.Rent(count), 0, count);
+            => new(pool.Rent(count), 0, count);
     }
 }
