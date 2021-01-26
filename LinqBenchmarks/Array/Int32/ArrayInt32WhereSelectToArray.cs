@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace LinqBenchmarks.Array.Int32
 {
-    public class ArrayInt32WhereSelectToArray: ArrayInt32BenchmarkBase
+    public partial class ArrayInt32WhereSelectToArray: ArrayInt32BenchmarkBase
     {
         [Benchmark(Baseline = true)]
         public int[] ForLoop()

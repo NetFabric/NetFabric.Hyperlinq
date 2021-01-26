@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace LinqBenchmarks.List.ValueType
 {
-    public class ListValueTypeWhereSelectToList: ValueTypeListBenchmarkBase
+    public partial class ListValueTypeWhereSelectToList: ValueTypeListBenchmarkBase
     {
         [Benchmark(Baseline = true)]
         public List<FatValueType> ForLoop()

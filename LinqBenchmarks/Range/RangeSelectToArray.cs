@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace LinqBenchmarks.Range
 {
-    public class RangeSelectToArray: RangeBenchmarkBase
+    public partial class RangeSelectToArray : RangeBenchmarkBase
     {
         [Benchmark(Baseline = true)]
         public int[] ForLoop()

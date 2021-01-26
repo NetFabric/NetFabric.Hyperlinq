@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace LinqBenchmarks.Array.ValueType
 { 
-    public class ArrayValueTypeWhereSelectToList: ValueTypeArrayBenchmarkBase
+    public partial class ArrayValueTypeWhereSelectToList: ValueTypeArrayBenchmarkBase
     {
         [Benchmark(Baseline = true)]
         public List<FatValueType> ForLoop()

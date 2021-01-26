@@ -21,4 +21,16 @@
     <PackageReference Include="System.Linq.Async" Version="4.1.1" />
   </ItemGroup>
 
+  <ItemGroup Condition="'$(TargetFramework)' == 'net5.0'">
+    <PackageReference Include="Cistern.ValueLinq">
+      <Version>0.0.10</Version>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp3.1'">
+    <PackageReference Include="Cistern.ValueLinq">
+      <Version>0.0.10</Version>
+    </PackageReference>
+  </ItemGroup>
+
 </Project>

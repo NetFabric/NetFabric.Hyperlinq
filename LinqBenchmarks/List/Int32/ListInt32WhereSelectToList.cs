@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace LinqBenchmarks.List.Int32
 {
-    public class ListInt32WhereSelectToList: Int32ListBenchmarkBase
+    public partial class ListInt32WhereSelectToList : Int32ListBenchmarkBase
     {
         [Benchmark(Baseline = true)]
         public List<int> ForLoop()

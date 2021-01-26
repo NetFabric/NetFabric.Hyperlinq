@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace LinqBenchmarks.Enumerable.Int32
 {
-    public class EnumerableInt32WhereSelectToList: EnumerableInt32BenchmarkBase
+    public partial class EnumerableInt32WhereSelectToList: EnumerableInt32BenchmarkBase
     {
         [Benchmark(Baseline = true)]
         public List<int> ForeachLoop()

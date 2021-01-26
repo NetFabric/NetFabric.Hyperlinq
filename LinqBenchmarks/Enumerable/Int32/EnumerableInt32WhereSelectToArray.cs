@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace LinqBenchmarks.Enumerable.Int32
 {
-    public class EnumerableInt32WhereSelectToArray: EnumerableInt32BenchmarkBase
+    public partial class EnumerableInt32WhereSelectToArray: EnumerableInt32BenchmarkBase
     {
         [Benchmark(Baseline = true)]
         public int[] ForeachLoop()

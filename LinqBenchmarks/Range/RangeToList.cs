@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace LinqBenchmarks.Range
 {
-    public class RangeToList: RangeBenchmarkBase
+    public partial class RangeToList: RangeBenchmarkBase
     {
         [Benchmark(Baseline = true)]
         public List<int> ForLoop()
