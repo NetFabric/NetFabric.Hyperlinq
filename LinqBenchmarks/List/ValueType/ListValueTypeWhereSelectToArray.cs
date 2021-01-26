@@ -84,11 +84,28 @@ namespace LinqBenchmarks.List.ValueType
                 .ToArray();
 
         [Benchmark]
+        public FatValueType[] Hyperlinq_IFunction()
+            => ListBindings
+                .Where<FatValueType, FatValueTypeIsEven>(source)
+                .Select<FatValueType, DoubleOfFatValueType>()
+                .ToArray();
+
+        [Benchmark]
         public FatValueType Hyperlinq_Pool()
         {
             using var array = ListBindings
                 .Where(source, item => item.IsEven())
                 .Select(item => item * 2)
+                .ToArray(MemoryPool<FatValueType>.Shared);
+            return Count == 0 ? default : array.Memory.Span[0];
+        }
+
+        [Benchmark]
+        public FatValueType Hyperlinq_Pool_IFunction()
+        {
+            using var array = ListBindings
+                .Where<FatValueType, FatValueTypeIsEven>(source)
+                .Select<FatValueType, DoubleOfFatValueType>()
                 .ToArray(MemoryPool<FatValueType>.Shared);
             return Count == 0 ? default : array.Memory.Span[0];
         }

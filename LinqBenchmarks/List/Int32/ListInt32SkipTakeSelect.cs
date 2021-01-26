@@ -96,6 +96,15 @@ namespace LinqBenchmarks.List.Int32
                 sum += item;
             return sum;
         }
+
+        [Benchmark]
+        public int Hyperlinq_Foreach_IFunction()
+        {
+            var sum = 0;
+            foreach (var item in ListBindings.Skip(source, Skip).Take(Count).Select<int, int, DoubleOfInt32>())
+                sum += item;
+            return sum;
+        }
 #pragma warning restore HLQ010 // Consider using a 'for' loop instead.
 
         [Benchmark]

@@ -102,5 +102,14 @@ namespace LinqBenchmarks.Array.Int32
                 sum += item;
             return sum;
         }
+
+        [Benchmark]
+        public int Hyperlinq_IFunction()
+        {
+            var sum = 0;
+            foreach (var item in ArrayExtensions.Skip(source, Skip).Take(Count).Where<int, Int32IsEven>())
+                sum += item;
+            return sum;
+        }
     }
 }

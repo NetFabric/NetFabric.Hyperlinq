@@ -73,5 +73,14 @@ namespace LinqBenchmarks.Enumerable.Int32
                 sum += item;
             return sum;
         }
+
+        [Benchmark]
+        public int Hyperlinq_Foreach_IFunction()
+        {
+            var sum = 0;
+            foreach (var item in source.AsValueEnumerable().Skip(Skip).Take(Count).Select<int, DoubleOfInt32>())
+                sum += item;
+            return sum;
+        }
     }
 }

@@ -65,5 +65,9 @@ namespace LinqBenchmarks.Array.ValueType
         [Benchmark]
         public int Hyperlinq()
             => ArrayExtensions.Where(source, item => item.IsEven()).Count();
+
+        [Benchmark]
+        public int Hyperlinq_IFunction()
+            => ArrayExtensions.Where<FatValueType, FatValueTypeIsEven>(source).Count();
     }
 }

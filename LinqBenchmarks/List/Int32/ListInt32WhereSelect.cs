@@ -97,5 +97,14 @@ namespace LinqBenchmarks.List.Int32
                 sum += item;
             return sum;
         }
+
+        [Benchmark]
+        public int Hyperlinq_IFunction()
+        {
+            var sum = 0;
+            foreach (var item in ListBindings.Where<int, Int32IsEven>(source).Select<int, DoubleOfInt32>())
+                sum += item;
+            return sum;
+        }
     }
 }

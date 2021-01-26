@@ -67,5 +67,9 @@ namespace LinqBenchmarks.Range
         [Benchmark]
         public List<int> Hyperlinq()
             => ValueEnumerable.Range(Start, Count).Select(item => item * 2).ToList();
+
+        [Benchmark]
+        public List<int> Hyperlinq_IFunction()
+            => ValueEnumerable.Range(Start, Count).Select<int, DoubleOfInt32>().ToList();
     }
 }

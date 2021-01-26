@@ -95,5 +95,14 @@ namespace LinqBenchmarks.List.ValueType
                 sum += item;
             return sum;
         }
+
+        [Benchmark]
+        public FatValueType Hyperlinq_IFunction()
+        {
+            var sum = default(FatValueType);
+            foreach (ref readonly var item in ListBindings.WhereRef<FatValueType, FatValueTypeIsEven>(source))
+                sum += item;
+            return sum;
+        }
     }
 }

@@ -71,5 +71,9 @@ namespace LinqBenchmarks.List.Int32
         [Benchmark]
         public List<int> Hyperlinq()
             => ListBindings.Where(source, item => item.IsEven()).Select(item => item * 2).ToList();
+
+        [Benchmark]
+        public List<int> Hyperlinq_IFunction()
+            => ListBindings.Where<int, Int32IsEven>(source).Select<int, DoubleOfInt32>().ToList();
     }
 }

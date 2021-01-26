@@ -1,4 +1,5 @@
 ﻿using BenchmarkDotNet.Attributes;
+using NetFabric.Hyperlinq;
 using StructLinq;
 using System.Linq;
 
@@ -72,7 +73,16 @@ namespace LinqBenchmarks.Enumerable.Int32
         public int Hyperlinq()
         {
             var sum = 0;
-            foreach (var item in source.Skip(Skip).Take(Count).Where(item => item.IsEven()))
+            foreach (var item in source.AsValueEnumerable().Skip(Skip).Take(Count).Where(item => item.IsEven()))
+                sum += item;
+            return sum;
+        }
+
+        [Benchmark]
+        public int Hyperlinq_IFunction()
+        {
+            var sum = 0;
+            foreach (var item in source.AsValueEnumerable().Skip(Skip).Take(Count).Where<Int32IsEven>(new Int32IsEven()))
                 sum += item;
             return sum;
         }

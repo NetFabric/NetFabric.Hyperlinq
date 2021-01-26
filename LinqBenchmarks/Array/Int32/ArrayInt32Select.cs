@@ -83,12 +83,31 @@ namespace LinqBenchmarks.Array.Int32
                 sum += item;
             return sum;
         }
+
+        [Benchmark]
+        public int Hyperlinq_Foreach_IFunction()
+        {
+            var sum = 0;
+            foreach (var item in ArrayExtensions.Select<int, int, DoubleOfInt32>(source))
+                sum += item;
+            return sum;
+        }
 #pragma warning restore HLQ010 // Consider using a 'for' loop instead.
 
         [Benchmark]
         public int Hyperlinq_For()
         {
             var items = ArrayExtensions.Select(source, item => item * 2);
+            var sum = 0;
+            for (var index = 0; index < items.Count; index++)
+                sum += items[index];
+            return sum;
+        }
+
+        [Benchmark]
+        public int Hyperlinq_For_IFunction()
+        {
+            var items = ArrayExtensions.Select<int, int, DoubleOfInt32>(source);
             var sum = 0;
             for (var index = 0; index < items.Count; index++)
                 sum += items[index];

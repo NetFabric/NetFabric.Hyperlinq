@@ -57,5 +57,14 @@ namespace LinqBenchmarks.Enumerable.Int32
                 sum += item;
             return sum;
         }
+
+        [Benchmark]
+        public int Hyperlinq_IFunction()
+        {
+            var sum = 0;
+            foreach (var item in source.AsValueEnumerable().Where<Int32IsEven>(new Int32IsEven()))
+                sum += item;
+            return sum;
+        }
     }
 }

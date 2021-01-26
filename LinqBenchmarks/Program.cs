@@ -92,7 +92,7 @@ namespace LinqBenchmarks
 
         static Type GetTargetType(Summary summary)
         {
-            var targetTypes = summary.BenchmarksCases.Select(i => i.Descriptor.Type).Distinct().ToList();
+            var targetTypes = summary.BenchmarksCases.AsValueEnumerable().Select(i => i.Descriptor.Type).Distinct().ToList();
             return targetTypes.Count == 1 ? targetTypes[0] : null;
         }
 

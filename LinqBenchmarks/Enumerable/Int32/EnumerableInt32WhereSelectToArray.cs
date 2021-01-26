@@ -53,9 +53,20 @@ namespace LinqBenchmarks.Enumerable.Int32
             => source.AsValueEnumerable().Where(item => item.IsEven()).Select(item => item * 2).ToArray();
 
         [Benchmark]
+        public int[] Hyperlinq_IFunction()
+            => source.AsValueEnumerable().Where<Int32IsEven>(new Int32IsEven()).Select<int, DoubleOfInt32>().ToArray();
+
+        [Benchmark]
         public int Hyperlinq_Pool()
         {
             using var array = source.AsValueEnumerable().Where(item => item.IsEven()).Select(item => item * 2).ToArray(MemoryPool<int>.Shared);
+            return Count == 0 ? default : array.Memory.Span[0];
+        }
+
+        [Benchmark]
+        public int Hyperlinq_Pool_IFunction()
+        {
+            using var array = source.AsValueEnumerable().Where<Int32IsEven>(new Int32IsEven()).Select<int, DoubleOfInt32>().ToArray(MemoryPool<int>.Shared);
             return Count == 0 ? default : array.Memory.Span[0];
         }
     }

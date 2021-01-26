@@ -79,6 +79,13 @@ namespace LinqBenchmarks.Array.ValueType
                 .ToArray();
 
         [Benchmark]
+        public FatValueType[] Hyperlinq_IFunction()
+            => ArrayExtensions
+                .Where<FatValueType, FatValueTypeIsEven>(source)
+                .Select<FatValueType, DoubleOfFatValueType>()
+                .ToArray();
+
+        [Benchmark]
         public FatValueType Hyperlinq_Pool()
         {
             using var array = ArrayExtensions
@@ -87,6 +94,18 @@ namespace LinqBenchmarks.Array.ValueType
                 .ToArray(MemoryPool<FatValueType>.Shared);
             return Count == 0 
                 ? default 
+                : array.Memory.Span[0];
+        }
+
+        [Benchmark]
+        public FatValueType Hyperlinq_Pool_IFunction()
+        {
+            using var array = ArrayExtensions
+                .Where<FatValueType, FatValueTypeIsEven>(source)
+                .Select<FatValueType, DoubleOfFatValueType>()
+                .ToArray(MemoryPool<FatValueType>.Shared);
+            return Count == 0
+                ? default
                 : array.Memory.Span[0];
         }
     }

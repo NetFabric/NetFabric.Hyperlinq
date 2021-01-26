@@ -68,5 +68,9 @@ namespace LinqBenchmarks.Array.Int32
         [Benchmark]
         public List<int> Hyperlinq()
             => ArrayExtensions.Where(source, item => item.IsEven()).Select(item => item * 2).ToList();
+
+        [Benchmark]
+        public List<int> Hyperlinq_IFunction()
+            => ArrayExtensions.Where<int, Int32IsEven>(source).Select<int, DoubleOfInt32>().ToList();
     }
 }

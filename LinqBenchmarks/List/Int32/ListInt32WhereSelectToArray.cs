@@ -81,11 +81,28 @@ namespace LinqBenchmarks.List.Int32
                 .ToArray();
 
         [Benchmark]
+        public int[] Hyperlinq_IFunction()
+            => ListBindings
+                .Where<int, Int32IsEven>(source)
+                .Select<int, DoubleOfInt32>()
+                .ToArray();
+
+        [Benchmark]
         public int Hyperlinq_Pool()
         {
             using var array = ListBindings
                 .Where(source, item => item.IsEven())
                 .Select(item => item * 2)
+                .ToArray(MemoryPool<int>.Shared);
+            return Count == 0 ? default : array.Memory.Span[0];
+        }
+
+        [Benchmark]
+        public int Hyperlinq_Pool_IFunction()
+        {
+            using var array = ListBindings
+                .Where<int, Int32IsEven>(source)
+                .Select<int, DoubleOfInt32>()
                 .ToArray(MemoryPool<int>.Shared);
             return Count == 0 ? default : array.Memory.Span[0];
         }
