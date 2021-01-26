@@ -58,7 +58,7 @@ namespace NetFabric.Hyperlinq
             => ReadOnlyListExtensions.Any<ValueWrapper<TSource>, TSource>(new ValueWrapper<TSource>(source), predicate);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool Any<TSource, TPredicate>(this ImmutableList<TSource> source, TPredicate predicate)
+        public static bool Any<TSource, TPredicate>(this ImmutableList<TSource> source, TPredicate predicate = default)
             where TPredicate : struct, IFunction<TSource, bool>
             => ReadOnlyListExtensions.Any<ValueWrapper<TSource>, TSource, TPredicate>(new ValueWrapper<TSource>(source), predicate);
         
@@ -87,7 +87,7 @@ namespace NetFabric.Hyperlinq
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ReadOnlyListExtensions.SelectEnumerable<ValueWrapper<TSource>, TSource, TResult, TSelector> Select<TSource, TResult, TSelector>(
             this ImmutableList<TSource> source,
-            TSelector selector)
+            TSelector selector = default)
             where TSelector : struct, IFunction<TSource, TResult>
             => ReadOnlyListExtensions.Select<ValueWrapper<TSource>, TSource, TResult, TSelector>(new ValueWrapper<TSource>(source), selector);
         
@@ -100,7 +100,7 @@ namespace NetFabric.Hyperlinq
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ReadOnlyListExtensions.SelectAtEnumerable<ValueWrapper<TSource>, TSource, TResult, TSelector> SelectAt<TSource, TResult, TSelector>(
             this ImmutableList<TSource> source,
-            TSelector selector)
+            TSelector selector = default)
             where TSelector : struct, IFunction<TSource, int, TResult>
             => ReadOnlyListExtensions.SelectAt<ValueWrapper<TSource>, TSource, TResult, TSelector>(new ValueWrapper<TSource>(source), selector);
 
@@ -115,7 +115,7 @@ namespace NetFabric.Hyperlinq
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ReadOnlyListExtensions.SelectManyEnumerable<ValueWrapper<TSource>, TSource, TSubEnumerable, TSubEnumerator, TResult, TSelector> SelectMany<TSource, TSubEnumerable, TSubEnumerator, TResult, TSelector>(
             this ImmutableList<TSource> source,
-            TSelector selector)
+            TSelector selector = default)
             where TSubEnumerable : IValueEnumerable<TResult, TSubEnumerator>
             where TSubEnumerator : struct, IEnumerator<TResult>
             where TSelector : struct, IFunction<TSource, TSubEnumerable>
@@ -133,7 +133,7 @@ namespace NetFabric.Hyperlinq
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ReadOnlyListExtensions.WhereEnumerable<ValueWrapper<TSource>, TSource, TPredicate> Where<TSource, TPredicate>(
             this ImmutableList<TSource> source,
-            TPredicate predicate)
+            TPredicate predicate = default)
             where TPredicate : struct, IFunction<TSource, bool>
             => ReadOnlyListExtensions.Where<ValueWrapper<TSource>, TSource, TPredicate>(new ValueWrapper<TSource>(source), predicate);
         
@@ -146,7 +146,7 @@ namespace NetFabric.Hyperlinq
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ReadOnlyListExtensions.WhereAtEnumerable<ValueWrapper<TSource>, TSource, TPredicate> WhereAt<TSource, TPredicate>(
             this ImmutableList<TSource> source,
-            TPredicate predicate)
+            TPredicate predicate = default)
             where TPredicate : struct, IFunction<TSource, int, bool>
             => ReadOnlyListExtensions.WhereAt<ValueWrapper<TSource>, TSource, TPredicate>(new ValueWrapper<TSource>(source), predicate);
             

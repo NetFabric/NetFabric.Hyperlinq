@@ -57,7 +57,7 @@ namespace NetFabric.Hyperlinq
             => ValueReadOnlyCollectionExtensions.Any<ValueWrapper<TSource>, ImmutableHashSet<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool Any<TSource, TPredicate>(this ImmutableHashSet<TSource> source, TPredicate predicate)
+        public static bool Any<TSource, TPredicate>(this ImmutableHashSet<TSource> source, TPredicate predicate = default)
             where TPredicate : struct, IFunction<TSource, bool>
             => ValueReadOnlyCollectionExtensions.Any<ValueWrapper<TSource>, ImmutableHashSet<TSource>.Enumerator, TSource, TPredicate>(new ValueWrapper<TSource>(source), predicate);
         
@@ -86,7 +86,7 @@ namespace NetFabric.Hyperlinq
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ValueReadOnlyCollectionExtensions.SelectEnumerable<ValueWrapper<TSource>, ImmutableHashSet<TSource>.Enumerator, TSource, TResult, TSelector> Select<TSource, TResult, TSelector>(
             this ImmutableHashSet<TSource> source,
-            TSelector selector)
+            TSelector selector = default)
             where TSelector : struct, IFunction<TSource, TResult>
             => ValueReadOnlyCollectionExtensions.Select<ValueWrapper<TSource>, ImmutableHashSet<TSource>.Enumerator, TSource, TResult, TSelector>(new ValueWrapper<TSource>(source), selector);
         
@@ -99,7 +99,7 @@ namespace NetFabric.Hyperlinq
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ValueReadOnlyCollectionExtensions.SelectAtEnumerable<ValueWrapper<TSource>, ImmutableHashSet<TSource>.Enumerator, TSource, TResult, TSelector> SelectAt<TSource, TResult, TSelector>(
             this ImmutableHashSet<TSource> source,
-            TSelector selector)
+            TSelector selector = default)
             where TSelector : struct, IFunction<TSource, int, TResult>
             => ValueReadOnlyCollectionExtensions.SelectAt<ValueWrapper<TSource>, ImmutableHashSet<TSource>.Enumerator, TSource, TResult, TSelector>(new ValueWrapper<TSource>(source), selector);
 
@@ -114,7 +114,7 @@ namespace NetFabric.Hyperlinq
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ValueEnumerableExtensions.SelectManyEnumerable<ValueWrapper<TSource>, ImmutableHashSet<TSource>.Enumerator, TSource, TSubEnumerable, TSubEnumerator, TResult, TSelector> SelectMany<TSource, TSubEnumerable, TSubEnumerator, TResult, TSelector>(
             this ImmutableHashSet<TSource> source,
-            TSelector selector)
+            TSelector selector = default)
             where TSubEnumerable : IValueEnumerable<TResult, TSubEnumerator>
             where TSubEnumerator : struct, IEnumerator<TResult>
             where TSelector : struct, IFunction<TSource, TSubEnumerable>
@@ -132,7 +132,7 @@ namespace NetFabric.Hyperlinq
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ValueEnumerableExtensions.WhereEnumerable<ValueWrapper<TSource>, ImmutableHashSet<TSource>.Enumerator, TSource, TPredicate> Where<TSource, TPredicate>(
             this ImmutableHashSet<TSource> source,
-            TPredicate predicate)
+            TPredicate predicate = default)
             where TPredicate : struct, IFunction<TSource, bool>
             => ValueEnumerableExtensions.Where<ValueWrapper<TSource>, ImmutableHashSet<TSource>.Enumerator, TSource, TPredicate>(new ValueWrapper<TSource>(source), predicate);
         
@@ -145,7 +145,7 @@ namespace NetFabric.Hyperlinq
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ValueEnumerableExtensions.WhereAtEnumerable<ValueWrapper<TSource>, ImmutableHashSet<TSource>.Enumerator, TSource, TPredicate> WhereAt<TSource, TPredicate>(
             this ImmutableHashSet<TSource> source,
-            TPredicate predicate)
+            TPredicate predicate = default)
             where TPredicate : struct, IFunction<TSource, int, bool>
             => ValueEnumerableExtensions.WhereAt<ValueWrapper<TSource>, ImmutableHashSet<TSource>.Enumerator, TSource, TPredicate>(new ValueWrapper<TSource>(source), predicate);
             

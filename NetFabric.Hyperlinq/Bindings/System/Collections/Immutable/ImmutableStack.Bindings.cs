@@ -58,7 +58,7 @@ namespace NetFabric.Hyperlinq
             => ValueEnumerableExtensions.Any<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource>(new ValueWrapper<TSource>(source), predicate);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool Any<TSource, TPredicate>(this ImmutableStack<TSource> source, TPredicate predicate)
+        public static bool Any<TSource, TPredicate>(this ImmutableStack<TSource> source, TPredicate predicate = default)
             where TPredicate : struct, IFunction<TSource, bool>
             => ValueEnumerableExtensions.Any<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource, TPredicate>(new ValueWrapper<TSource>(source), predicate);
         
@@ -87,7 +87,7 @@ namespace NetFabric.Hyperlinq
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ValueEnumerableExtensions.SelectEnumerable<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource, TResult, TSelector> Select<TSource, TResult, TSelector>(
             this ImmutableStack<TSource> source,
-            TSelector selector)
+            TSelector selector = default)
             where TSelector : struct, IFunction<TSource, TResult>
             => ValueEnumerableExtensions.Select<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource, TResult, TSelector>(new ValueWrapper<TSource>(source), selector);
         
@@ -100,7 +100,7 @@ namespace NetFabric.Hyperlinq
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ValueEnumerableExtensions.SelectAtEnumerable<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource, TResult, TSelector> SelectAt<TSource, TResult, TSelector>(
             this ImmutableStack<TSource> source,
-            TSelector selector)
+            TSelector selector = default)
             where TSelector : struct, IFunction<TSource, int, TResult>
             => ValueEnumerableExtensions.SelectAt<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource, TResult, TSelector>(new ValueWrapper<TSource>(source), selector);
 
@@ -115,7 +115,7 @@ namespace NetFabric.Hyperlinq
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ValueEnumerableExtensions.SelectManyEnumerable<ValueWrapper<TSource>, ValueWrapper<TSource>.Enumerator, TSource, TSubEnumerable, TSubEnumerator, TResult, TSelector> SelectMany<TSource, TSubEnumerable, TSubEnumerator, TResult, TSelector>(
             this ImmutableStack<TSource> source,
-            TSelector selector)
+            TSelector selector = default)
             where TSubEnumerable : IValueEnumerable<TResult, TSubEnumerator>
             where TSubEnumerator : struct, IEnumerator<TResult>
             where TSelector : struct, IFunction<TSource, TSubEnumerable>

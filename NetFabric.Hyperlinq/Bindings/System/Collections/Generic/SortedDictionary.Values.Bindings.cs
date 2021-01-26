@@ -151,7 +151,7 @@ namespace NetFabric.Hyperlinq
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ValueEnumerableExtensions.WhereEnumerable<ValueWrapper<TKey, TValue>, SortedDictionary<TKey, TValue>.ValueCollection.Enumerator, TValue, TPredicate> Where<TKey, TValue, TPredicate>(
             this SortedDictionary<TKey, TValue>.ValueCollection source,
-            TPredicate predicate)
+            TPredicate predicate = default)
             where TKey : notnull
             where TPredicate : struct, IFunction<TValue, bool>
             => ValueEnumerableExtensions.Where<ValueWrapper<TKey, TValue>, SortedDictionary<TKey, TValue>.ValueCollection.Enumerator, TValue, TPredicate>(new ValueWrapper<TKey, TValue>(source), predicate);
@@ -166,7 +166,7 @@ namespace NetFabric.Hyperlinq
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ValueEnumerableExtensions.WhereAtEnumerable<ValueWrapper<TKey, TValue>, SortedDictionary<TKey, TValue>.ValueCollection.Enumerator, TValue, TPredicate> WhereAt<TKey, TValue, TPredicate>(
             this SortedDictionary<TKey, TValue>.ValueCollection source,
-            TPredicate predicate)
+            TPredicate predicate = default)
             where TKey : notnull
             where TPredicate : struct, IFunction<TValue, int, bool>
             => ValueEnumerableExtensions.WhereAt<ValueWrapper<TKey, TValue>, SortedDictionary<TKey, TValue>.ValueCollection.Enumerator, TValue, TPredicate>(new ValueWrapper<TKey, TValue>(source), predicate);

@@ -135,7 +135,7 @@ namespace NetFabric.Hyperlinq
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ValueEnumerableExtensions.WhereEnumerable<ValueWrapper<TSource>, HashSet<TSource>.Enumerator, TSource, TPredicate> Where<TSource, TPredicate>(
             this HashSet<TSource> source,
-            TPredicate predicate)
+            TPredicate predicate = default)
             where TPredicate : struct, IFunction<TSource, bool>
             => ValueEnumerableExtensions.Where<ValueWrapper<TSource>, HashSet<TSource>.Enumerator, TSource, TPredicate>(new ValueWrapper<TSource>(source), predicate);
         
@@ -148,7 +148,7 @@ namespace NetFabric.Hyperlinq
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ValueEnumerableExtensions.WhereAtEnumerable<ValueWrapper<TSource>, HashSet<TSource>.Enumerator, TSource, TPredicate> WhereAt<TSource, TPredicate>(
             this HashSet<TSource> source,
-            TPredicate predicate)
+            TPredicate predicate = default)
             where TPredicate : struct, IFunction<TSource, int, bool>
             => ValueEnumerableExtensions.WhereAt<ValueWrapper<TSource>, HashSet<TSource>.Enumerator, TSource, TPredicate>(new ValueWrapper<TSource>(source), predicate);
             
