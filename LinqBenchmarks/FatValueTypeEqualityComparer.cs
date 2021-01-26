@@ -1,29 +1,28 @@
 ﻿using System.Collections.Generic;
-using StructLinq;
+using System.Runtime.CompilerServices;
 
 namespace LinqBenchmarks
 {
 
-    readonly struct FatValueTypeEqualityComparer : IEqualityComparer<FatValueType>, IInEqualityComparer<FatValueType>
+    readonly struct FatValueTypeEqualityComparer 
+        : IEqualityComparer<FatValueType>
+        , StructLinq.IInEqualityComparer<FatValueType>
     {
         // Coherent with IComparable implementation of FatValueType
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool Equals(FatValueType x, FatValueType y)
-        {
-            return x.Value0 == y.Value0;
-        }
+            => x.Value0 == y.Value0;
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public int GetHashCode(FatValueType obj) 
-        {
-            return obj.Value0.GetHashCode();
-        }
-        public bool Equals(in FatValueType x, in FatValueType y)
-        {
-            return x.Value0 == y.Value0;
-        }
+            => obj.Value0.GetHashCode();
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public bool Equals(in FatValueType x, in FatValueType y)
+            => x.Value0 == y.Value0;
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public int GetHashCode(in FatValueType obj)
-        {
-            return obj.Value0.GetHashCode();
-        }
+            => obj.Value0.GetHashCode();
     }
 }

@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFrameworks>net5.0;netcoreapp3.1;net48</TargetFrameworks>
+    <TargetFrameworks>net5.0</TargetFrameworks>
     <LangVersion>8.0</LangVersion>
   </PropertyGroup>
 
@@ -16,14 +16,14 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="StructLinq.BCL" Version="0.19.2" />
-    <PackageReference Include="System.Interactive" Version="4.1.1" />
-    <PackageReference Include="System.Linq.Async" Version="4.1.1" />
+    <PackageReference Include="StructLinq.BCL" Version="0.20.1" />
+    <PackageReference Include="System.Interactive" Version="5.0.0" />
+    <PackageReference Include="System.Linq.Async" Version="5.0.0" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net5.0'">
     <PackageReference Include="Cistern.ValueLinq">
-      <Version>0.0.10</Version>
+      <Version>0.1.14</Version>
     </PackageReference>
   </ItemGroup>
 
