@@ -60,6 +60,9 @@ namespace LinqBenchmarks
 
             logger.WriteLine("### References:");
 
+            var valueLinqVersion = GetInformationalVersion(typeof(Cistern.ValueLinq.Enumerable).Assembly);
+            logger.WriteLine($"- Cistern.ValueLinq: [{valueLinqVersion}](https://www.nuget.org/packages/Cistern.ValueLinq/{valueLinqVersion})");
+
             var linqFasterVersion = GetInformationalVersion(typeof(LinqFaster).Assembly);
             logger.WriteLine($"- JM.LinqFaster: [{linqFasterVersion}](https://www.nuget.org/packages/JM.LinqFaster/{linqFasterVersion})");
 
