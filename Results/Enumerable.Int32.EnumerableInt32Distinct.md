@@ -4,6 +4,7 @@
 [EnumerableInt32Distinct.cs](../LinqBenchmarks/Enumerable/Int32/EnumerableInt32Distinct.cs)
 
 ### References:
+- Cistern.ValueLinq: [0.0.11](https://www.nuget.org/packages/Cistern.ValueLinq/0.0.11)
 - JM.LinqFaster: [1.1.2](https://www.nuget.org/packages/JM.LinqFaster/1.1.2)
 - LinqAF: [3.0.0.0](https://www.nuget.org/packages/LinqAF/3.0.0.0)
 - StructLinq.BCL: [0.19.2](https://www.nuget.org/packages/StructLinq.BCL/0.19.2)
@@ -23,9 +24,9 @@ Job=.NET Core 5.0  Runtime=.NET Core 5.0
 ```
 |               Method | Count |     Mean |     Error |    StdDev | Ratio |  Gen 0 | Gen 1 | Gen 2 | Allocated |
 |--------------------- |------ |---------:|----------:|----------:|------:|-------:|------:|------:|----------:|
-|          ForeachLoop |   100 | 2.099 μs | 0.0174 μs | 0.0154 μs |  1.00 | 2.8877 |     - |     - |    6048 B |
-|                 Linq |   100 | 3.040 μs | 0.0122 μs | 0.0108 μs |  1.45 | 2.0638 |     - |     - |    4320 B |
-|               LinqAF |   100 | 4.110 μs | 0.0219 μs | 0.0194 μs |  1.96 | 2.5024 |     - |     - |    5240 B |
-|           StructLinq |   100 | 2.633 μs | 0.0098 μs | 0.0092 μs |  1.25 | 0.0305 |     - |     - |      64 B |
-| StructLinq_IFunction |   100 | 2.409 μs | 0.0151 μs | 0.0126 μs |  1.15 | 0.0191 |     - |     - |      40 B |
-|            Hyperlinq |   100 | 2.252 μs | 0.0097 μs | 0.0086 μs |  1.07 | 0.0191 |     - |     - |      40 B |
+|          ForeachLoop |   100 | 1.822 μs | 0.0073 μs | 0.0061 μs |  1.00 | 2.8896 |     - |     - |    6048 B |
+|                 Linq |   100 | 2.600 μs | 0.0112 μs | 0.0099 μs |  1.43 | 2.0638 |     - |     - |    4320 B |
+|               LinqAF |   100 | 3.814 μs | 0.0158 μs | 0.0140 μs |  2.09 | 2.5024 |     - |     - |    5240 B |
+|           StructLinq |   100 | 2.192 μs | 0.0089 μs | 0.0079 μs |  1.20 | 0.0305 |     - |     - |      64 B |
+| StructLinq_IFunction |   100 | 2.315 μs | 0.0085 μs | 0.0075 μs |  1.27 | 0.0191 |     - |     - |      40 B |
+|            Hyperlinq |   100 | 2.038 μs | 0.0091 μs | 0.0071 μs |  1.12 | 0.0191 |     - |     - |      40 B |

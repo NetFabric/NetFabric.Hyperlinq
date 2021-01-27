@@ -4,6 +4,7 @@
 [ArrayValueTypeWhereSelect.cs](../LinqBenchmarks/Array/ValueType/ArrayValueTypeWhereSelect.cs)
 
 ### References:
+- Cistern.ValueLinq: [0.0.11](https://www.nuget.org/packages/Cistern.ValueLinq/0.0.11)
 - JM.LinqFaster: [1.1.2](https://www.nuget.org/packages/JM.LinqFaster/1.1.2)
 - LinqAF: [3.0.0.0](https://www.nuget.org/packages/LinqAF/3.0.0.0)
 - StructLinq.BCL: [0.19.2](https://www.nuget.org/packages/StructLinq.BCL/0.19.2)
@@ -21,14 +22,14 @@ Intel Core i7-7567U CPU 3.50GHz (Kaby Lake), 1 CPU, 4 logical and 2 physical cor
 Job=.NET Core 5.0  Runtime=.NET Core 5.0  
 
 ```
-|               Method | Count |       Mean |   Error |  StdDev | Ratio |  Gen 0 | Gen 1 | Gen 2 | Allocated |
-|--------------------- |------ |-----------:|--------:|--------:|------:|-------:|------:|------:|----------:|
-|              ForLoop |   100 |   839.4 ns | 2.50 ns | 2.34 ns |  1.00 |      - |     - |     - |         - |
-|          ForeachLoop |   100 |   906.5 ns | 3.24 ns | 3.03 ns |  1.08 |      - |     - |     - |         - |
-|                 Linq |   100 | 1,470.6 ns | 5.51 ns | 4.88 ns |  1.75 | 0.0801 |     - |     - |     168 B |
-|           LinqFaster |   100 | 1,545.6 ns | 7.03 ns | 5.87 ns |  1.84 | 2.8896 |     - |     - |    6048 B |
-|               LinqAF |   100 | 1,950.7 ns | 9.66 ns | 9.04 ns |  2.32 |      - |     - |     - |         - |
-|           StructLinq |   100 | 1,184.7 ns | 4.53 ns | 4.02 ns |  1.41 | 0.0305 |     - |     - |      64 B |
-| StructLinq_IFunction |   100 |   948.8 ns | 3.30 ns | 2.92 ns |  1.13 |      - |     - |     - |         - |
-|            Hyperlinq |   100 | 1,285.1 ns | 6.11 ns | 5.42 ns |  1.53 |      - |     - |     - |         - |
-|  Hyperlinq_IFunction |   100 |   996.4 ns | 4.45 ns | 4.16 ns |  1.19 |      - |     - |     - |         - |
+|               Method | Count |       Mean |    Error |  StdDev | Ratio |  Gen 0 | Gen 1 | Gen 2 | Allocated |
+|--------------------- |------ |-----------:|---------:|--------:|------:|-------:|------:|------:|----------:|
+|              ForLoop |   100 |   774.4 ns |  0.93 ns | 0.83 ns |  1.00 |      - |     - |     - |         - |
+|          ForeachLoop |   100 |   838.1 ns |  2.00 ns | 1.67 ns |  1.08 |      - |     - |     - |         - |
+|                 Linq |   100 | 1,342.5 ns |  2.73 ns | 2.28 ns |  1.73 | 0.0801 |     - |     - |     168 B |
+|           LinqFaster |   100 | 1,356.1 ns |  7.73 ns | 6.85 ns |  1.75 | 2.8896 |     - |     - |    6048 B |
+|               LinqAF |   100 | 1,797.6 ns | 10.87 ns | 9.64 ns |  2.32 |      - |     - |     - |         - |
+|           StructLinq |   100 | 1,087.4 ns |  3.68 ns | 3.26 ns |  1.40 | 0.0305 |     - |     - |      64 B |
+| StructLinq_IFunction |   100 |   879.3 ns |  0.86 ns | 0.72 ns |  1.14 |      - |     - |     - |         - |
+|            Hyperlinq |   100 | 1,166.4 ns |  3.64 ns | 3.04 ns |  1.51 |      - |     - |     - |         - |
+|  Hyperlinq_IFunction |   100 |   930.1 ns |  1.66 ns | 1.56 ns |  1.20 |      - |     - |     - |         - |
