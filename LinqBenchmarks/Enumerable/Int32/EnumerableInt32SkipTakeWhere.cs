@@ -48,8 +48,8 @@ namespace LinqBenchmarks.Enumerable.Int32
             var sum = 0;
             foreach (var item in source
                 .ToStructEnumerable()
-                .Skip((uint)Skip)
-                .Take((uint)Count)
+                .Skip(Skip)
+                .Take(Count)
                 .Where(item => item.IsEven()))
                 sum += item;
             return sum;
@@ -62,8 +62,8 @@ namespace LinqBenchmarks.Enumerable.Int32
             var predicate = new Int32IsEven();
             foreach (var item in source
                 .ToStructEnumerable()
-                .Skip((uint)Skip, x=> x)
-                .Take((uint)Count, x=>x)
+                .Skip(Skip, x=> x)
+                .Take(Count, x=>x)
                 .Where(ref predicate, x=>x))
                 sum += item;
             return sum;

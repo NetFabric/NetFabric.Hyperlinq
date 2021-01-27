@@ -2,7 +2,6 @@
 using JM.LinqFaster;
 using NetFabric.Hyperlinq;
 using StructLinq;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -74,7 +73,7 @@ namespace LinqBenchmarks.List.ValueType
             var sum = default(FatValueType);
             foreach (var item in source
                 .ToRefStructEnumerable()
-                .Skip((uint)Skip)
+                .Skip(Skip)
                 .Take(Count)
                 .Where((in FatValueType element) => element.IsEven()))
                 sum += item;
@@ -89,7 +88,7 @@ namespace LinqBenchmarks.List.ValueType
 
             foreach (var item in source
                 .ToRefStructEnumerable()
-                .Skip((uint)Skip, x=> x)
+                .Skip(Skip, x=> x)
                 .Take(Count, x=> x)
                 .Where(ref predicate, x=> x))
                 sum += item;

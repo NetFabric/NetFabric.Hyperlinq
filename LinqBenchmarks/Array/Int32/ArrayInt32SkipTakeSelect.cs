@@ -65,8 +65,8 @@ namespace LinqBenchmarks.Array.Int32
             var sum = 0;
             foreach (var item in source
                 .ToStructEnumerable()
-                .Skip((uint)Skip)
-                .Take((uint)Count)
+                .Skip(Skip)
+                .Take(Count)
                 .Select(item => item * 2))
                 sum += item;
             return sum;
@@ -79,8 +79,8 @@ namespace LinqBenchmarks.Array.Int32
             var selector = new DoubleOfInt32();
             foreach (var item in source
                 .ToStructEnumerable()
-                .Skip((uint)Skip, x=> x)
-                .Take((uint)Count, x=> x)
+                .Skip(Skip, x=> x)
+                .Take(Count, x=> x)
                 .Select(ref selector, x => x, x => x))
                 sum += item;
             return sum;

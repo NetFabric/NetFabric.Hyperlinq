@@ -68,7 +68,7 @@ namespace LinqBenchmarks.Array.ValueType
             var sum = default(FatValueType);
             foreach (var item in source
                 .ToRefStructEnumerable()
-                .Skip((uint)Skip)
+                .Skip(Skip)
                 .Take(Count)
                 .Select((in FatValueType element) => element * 2))
                 sum += item;
@@ -84,7 +84,7 @@ namespace LinqBenchmarks.Array.ValueType
 
             foreach (var item in source
                 .ToRefStructEnumerable()
-                .Skip((uint)Skip, x=>x)
+                .Skip(Skip, x=>x)
                 .Take(Count, x=>x)
                 .Select(ref selector, x=> x, x=>x))
                 sum += item;
