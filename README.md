@@ -2,6 +2,7 @@
 
 Benchmarks comparing the perfomance of [LINQ](https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/concepts/linq/) against handwritten code and the following libraries: 
 
+- [Cister.ValueLinq](https://github.com/manofstick/Cistern.ValueLinq)
 - [JM.LinqFaster](https://github.com/jackmott/LinqFaster)
 - [LinqAF](https://github.com/kevin-montrose/LinqAF)
 - [StructLinq](https://github.com/reegeek/StructLinq)
