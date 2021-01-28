@@ -14,11 +14,15 @@
     readonly struct FatValueTypeIsEven
         : StructLinq.IInFunction<FatValueType, bool>
         , NetFabric.Hyperlinq.IFunction<FatValueType, bool>
+        , NetFabric.Hyperlinq.IFunctionIn<FatValueType, bool>
     {
         public bool Eval(in FatValueType element)
             => element.Value0.IsEven();
 
         public bool Invoke(FatValueType element)
+            => element.Value0.IsEven();
+
+        public bool Invoke(in FatValueType element)
             => element.Value0.IsEven();
     }
 }

@@ -14,11 +14,15 @@
     readonly struct DoubleOfFatValueType
         : StructLinq.IInFunction<FatValueType, FatValueType>
         , NetFabric.Hyperlinq.IFunction<FatValueType, FatValueType>
+        , NetFabric.Hyperlinq.IFunctionIn<FatValueType, FatValueType>
     {
         public FatValueType Eval(in FatValueType element)
             => element * 2;
 
         public FatValueType Invoke(FatValueType element)
+            => element * 2;
+
+        public FatValueType Invoke(in FatValueType element)
             => element * 2;
     }
 }

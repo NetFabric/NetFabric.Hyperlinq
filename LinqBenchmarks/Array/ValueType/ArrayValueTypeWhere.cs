@@ -88,7 +88,7 @@ namespace LinqBenchmarks.Array.ValueType
         public FatValueType Hyperlinq()
         {
             var sum = default(FatValueType);
-            foreach (ref readonly  var item in ArrayExtensions.WhereRef(source, item => item.IsEven()))
+            foreach (ref readonly  var item in ArrayExtensions.WhereRef<FatValueType, FatValueTypeIsEven>(source))
                 sum += item;
             return sum;
         }
