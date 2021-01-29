@@ -94,38 +94,6 @@ namespace LinqBenchmarks.Array.ValueType
             .Where(new IsEven())
             .Select(new MultipleByTwo(), default(FatValueType))
             .ToListUsePool(viaPull: true);
-
-        struct InIsEven : IInFunc<FatValueType, bool> { public bool Invoke(in FatValueType t) => t.IsEven(); }
-        struct InMultipleByTwo : IInFunc<FatValueType, FatValueType> { public FatValueType Invoke(in FatValueType t) => t * 2; }
-
-        [Benchmark]
-        public List<FatValueType> ValueLinq_ValueLambda_Ref_Standard() =>
-            source
-            .Where(new InIsEven())
-            .Select(new InMultipleByTwo(), default(FatValueType))
-            .ToList();
-
-        [Benchmark]
-        public List<FatValueType> ValueLinq_ValueLambda_Ref_Stack() =>
-            source
-            .Where(new InIsEven())
-            .Select(new InMultipleByTwo(), default(FatValueType))
-            .ToListUseStack();
-
-        [Benchmark]
-        public List<FatValueType> ValueLinq_ValueLambda_Ref_SharedPool_Push() =>
-            source
-            .Where(new InIsEven())
-            .Select(new InMultipleByTwo(), default(FatValueType))
-            .ToListUsePool(viaPull: false);
-
-        [Benchmark]
-        public List<FatValueType> ValueLinq_ValueLambda_Ref_SharedPool_Pull() =>
-            source
-            .Where(new InIsEven())
-            .Select(new InMultipleByTwo(), default(FatValueType))
-            .ToListUsePool(viaPull: true);
-
     }
 }
 

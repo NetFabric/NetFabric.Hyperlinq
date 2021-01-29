@@ -23,7 +23,7 @@
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net5.0'">
     <PackageReference Include="Cistern.ValueLinq">
-      <Version>0.0.11</Version>
+      <Version>0.1.14</Version>
     </PackageReference>
   </ItemGroup>
 
