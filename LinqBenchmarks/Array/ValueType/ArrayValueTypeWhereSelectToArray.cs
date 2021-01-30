@@ -89,8 +89,8 @@ namespace LinqBenchmarks.Array.ValueType
         public FatValueType Hyperlinq_Pool()
         {
             using var array = ArrayExtensions
-                .Where(source, item => item.IsEven())
-                .Select(item => item * 2)
+                .Where(source, (in FatValueType item) => item.IsEven())
+                .Select((in FatValueType item) => item * 2)
                 .ToArray(MemoryPool<FatValueType>.Shared);
             return Count == 0 
                 ? default 
@@ -101,7 +101,7 @@ namespace LinqBenchmarks.Array.ValueType
         public FatValueType Hyperlinq_Pool_IFunction()
         {
             using var array = ArrayExtensions
-                .Where<FatValueType, FatValueTypeIsEven>(source)
+                .WhereRef<FatValueType, FatValueTypeIsEven>(source)
                 .Select<FatValueType, DoubleOfFatValueType>()
                 .ToArray(MemoryPool<FatValueType>.Shared);
             return Count == 0
