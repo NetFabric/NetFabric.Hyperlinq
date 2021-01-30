@@ -17,16 +17,19 @@ namespace NetFabric.Hyperlinq
             where TPredicate : struct, IFunction<TSource, bool>
         {
             var array = source.Array!;
-            var end = source.Offset + source.Count - 1;
-            for (var index = source.Offset; index <= end; index++)
+            var start = source.Offset;
+            var end = start + source.Count;
+            for (var index = start; index < end; index++)
             {
-                if (predicate.Invoke(array[index]))
+                var item = array[index];
+                if (predicate.Invoke(item))
                 {
-                    ref readonly var first = ref array[index];
+                    var first = item;
 
-                    for (index++; index <= end; index++)
+                    for (index++; index < end; index++)
                     {
-                        if (predicate.Invoke(array[index]))
+                        item = array[index];
+                        if (predicate.Invoke(item))
                             return Option.None;
                     }
 
@@ -41,18 +44,21 @@ namespace NetFabric.Hyperlinq
             where TPredicate : struct, IFunction<TSource, int, bool>
         {
             var array = source.Array!;
-            if (source.Offset is 0)
+            var start = source.Offset;
+            var end = source.Count;
+            if (start is 0)
             {
-                var end = source.Count - 1;
-                for (var index = 0; index <= end; index++)
+                for (var index = 0; index < end; index++)
                 {
-                    if (predicate.Invoke(array[index], index))
+                    var item = array[index];
+                    if (predicate.Invoke(item, index))
                     {
-                        ref readonly var first = ref array[index];
+                        var first = item;
 
-                        for (index++; index <= end; index++)
+                        for (index++; index < end; index++)
                         {
-                            if (predicate.Invoke(array[index], index))
+                            item = array[index];
+                            if (predicate.Invoke(item, index))
                                 return Option.None;
                         }
 
@@ -62,17 +68,17 @@ namespace NetFabric.Hyperlinq
             }
             else
             {
-                var offset = source.Offset;
-                var end = source.Count - 1;
-                for (var index = 0; index <= end; index++)
+                for (var index = 0; index < end; index++)
                 {
-                    if (predicate.Invoke(array[index + offset], index))
+                    var item = array[index + start];
+                    if (predicate.Invoke(item, index))
                     {
-                        ref readonly var first = ref array[index + offset];
+                        var first = item;
 
-                        for (index++; index <= end; index++)
+                        for (index++; index < end; index++)
                         {
-                            if (predicate.Invoke(array[index + offset], index))
+                            item = array[index + start];
+                            if (predicate.Invoke(item, index))
                                 return Option.None;
                         }
 
@@ -107,16 +113,19 @@ namespace NetFabric.Hyperlinq
             where TSelector : struct, IFunction<TSource, TResult>
         {
             var array = source.Array!;
-            var end = source.Offset + source.Count - 1;
-            for (var index = source.Offset; index <= end; index++)
+            var start = source.Offset;
+            var end = start + source.Count;
+            for (var index = source.Offset; index < end; index++)
             {
-                if (predicate.Invoke(array[index]))
+                var item = array[index];
+                if (predicate.Invoke(item))
                 {
-                    ref readonly var first = ref array[index];
+                    var first = item;
 
-                    for (index++; index <= end; index++)
+                    for (index++; index < end; index++)
                     {
-                        if (predicate.Invoke(array[index]))
+                        item = array[index];
+                        if (predicate.Invoke(item))
                             return Option.None;
                     }
 

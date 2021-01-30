@@ -14,7 +14,8 @@ namespace NetFabric.Hyperlinq
         {
             for (var index = 0; index < source.Length; index++)
             {
-                if (!predicate.Invoke(source[index]))
+                var item = source[index];
+                if (!predicate.Invoke(item))
                     return false;
             }
             return true;
@@ -29,7 +30,8 @@ namespace NetFabric.Hyperlinq
         {
             for (var index = 0; index < source.Length; index++)
             {
-                if (!predicate.Invoke(source[index], index))
+                var item = source[index];
+                if (!predicate.Invoke(item, index))
                     return false;
             }
             return true;

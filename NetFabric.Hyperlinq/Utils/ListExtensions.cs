@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
 namespace NetFabric.Hyperlinq
 {
@@ -12,7 +13,11 @@ namespace NetFabric.Hyperlinq
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Span<TSource> AsSpan<TSource>(this List<TSource> source)
+#if NET5_0
+            => CollectionsMarshal.AsSpan(source);
+#else
             => source.GetItems().AsSpan().Slice(0, source.Count);
+#endif
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Memory<TSource> AsMemory<TSource>(this List<TSource> source)

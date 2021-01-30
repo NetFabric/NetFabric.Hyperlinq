@@ -22,7 +22,10 @@ namespace NetFabric.Hyperlinq
 
             var array = source;
             for (var index = 0; index < array.Length; index++)
-                destination[index] = selector.Invoke(array[index]);
+            {
+                var item = array[index];
+                destination[index] = selector.Invoke(item);
+            }
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -33,7 +36,10 @@ namespace NetFabric.Hyperlinq
 
             var array = source;
             for (var index = 0; index < array.Length; index++)
-                destination[index] = selector.Invoke(array[index], index);
+            {
+                var item = array[index];
+                destination[index] = selector.Invoke(item, index);
+            }
         }
     }
 }

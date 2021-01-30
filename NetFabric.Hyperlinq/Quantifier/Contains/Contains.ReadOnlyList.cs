@@ -14,10 +14,11 @@ namespace NetFabric.Hyperlinq
             if (source is ICollection<TSource> collection)
                 return collection.Contains(value);
 
-            var end = source.Count - 1;
-            for (var index = 0; index <= end; index++)
+            var end = source.Count;
+            for (var index = 0; index < end; index++)
             {
-                if (EqualityComparer<TSource>.Default.Equals(source[index], value))
+                var item = source[index];
+                if (EqualityComparer<TSource>.Default.Equals(item, value))
                     return true;
             }
             return false;
@@ -49,10 +50,11 @@ namespace NetFabric.Hyperlinq
 
             static bool DefaultContains(TList source, TSource value, int offset, int count)
             {
-                var end = offset + count - 1;
-                for (var index = offset; index <= end; index++)
+                var end = offset + count;
+                for (var index = offset; index < end; index++)
                 {
-                    if (EqualityComparer<TSource>.Default.Equals(source[index], value))
+                    var item = source[index];
+                    if (EqualityComparer<TSource>.Default.Equals(item, value))
                         return true;
                 }
                 return false;
@@ -60,10 +62,11 @@ namespace NetFabric.Hyperlinq
 
             static bool ComparerContains(TList source, TSource value, IEqualityComparer<TSource> comparer, int offset, int count)
             {
-                var end = offset + count - 1;
-                for (var index = offset; index <= end; index++)
+                var end = offset + count;
+                for (var index = offset; index < end; index++)
                 {
-                    if (comparer.Equals(source[index], value))
+                    var item = source[index];
+                    if (comparer.Equals(item, value))
                         return true;
                 }
                 return false;
@@ -83,10 +86,11 @@ namespace NetFabric.Hyperlinq
 
             static bool ValueContains(TList source, TResult value, TSelector selector, int offset, int count)
             {
-                var end = offset + count - 1;
-                for (var index = offset; index <= end; index++)
+                var end = offset + count;
+                for (var index = offset; index < end; index++)
                 {
-                    if (EqualityComparer<TResult>.Default.Equals(selector.Invoke(source[index]), value))
+                    var item = source[index];
+                    if (EqualityComparer<TResult>.Default.Equals(selector.Invoke(item), value))
                         return true;
                 }
                 return false;
@@ -96,10 +100,11 @@ namespace NetFabric.Hyperlinq
             {
                 var defaultComparer = EqualityComparer<TResult>.Default;
 
-                var end = offset + count - 1;
-                for (var index = offset; index <= end; index++)
+                var end = offset + count;
+                for (var index = offset; index < end; index++)
                 {
-                    if (defaultComparer.Equals(selector.Invoke(source[index]), value))
+                    var item = source[index];
+                    if (defaultComparer.Equals(selector.Invoke(item), value))
                         return true;
                 }
                 return false;
@@ -120,20 +125,22 @@ namespace NetFabric.Hyperlinq
 
             static bool ValueContains(TList source, TResult value, TSelector selector, int offset, int count)
             {
-                var end = count - 1;
+                var end = count;
                 if (offset is 0)
                 {
-                    for (var index = 0; index <= end; index++)
+                    for (var index = 0; index < end; index++)
                     {
-                        if (EqualityComparer<TResult>.Default.Equals(selector.Invoke(source[index], index), value))
+                        var item = source[index];
+                        if (EqualityComparer<TResult>.Default.Equals(selector.Invoke(item, index), value))
                             return true;
                     }
                 }
                 else
                 {
-                    for (var index = 0; index <= end; index++)
+                    for (var index = 0; index < end; index++)
                     {
-                        if (EqualityComparer<TResult>.Default.Equals(selector.Invoke(source[index + offset], index), value))
+                        var item = source[index + offset];
+                        if (EqualityComparer<TResult>.Default.Equals(selector.Invoke(item, index), value))
                             return true;
                     }
                 }
@@ -144,20 +151,22 @@ namespace NetFabric.Hyperlinq
             {
                 var defaultComparer = EqualityComparer<TResult>.Default;
 
-                var end = count - 1;
+                var end = count;
                 if (offset is 0)
                 {
-                    for (var index = 0; index <= end; index++)
+                    for (var index = 0; index < end; index++)
                     {
-                        if (defaultComparer.Equals(selector.Invoke(source[index], index), value))
+                        var item = source[index];
+                        if (defaultComparer.Equals(selector.Invoke(item, index), value))
                             return true;
                     }
                 }
                 else
                 {
-                    for (var index = 0; index <= end; index++)
+                    for (var index = 0; index < end; index++)
                     {
-                        if (defaultComparer.Equals(selector.Invoke(source[index + offset], index), value))
+                        var item = source[index + offset];
+                        if (defaultComparer.Equals(selector.Invoke(item, index), value))
                             return true;
                     }
                 }

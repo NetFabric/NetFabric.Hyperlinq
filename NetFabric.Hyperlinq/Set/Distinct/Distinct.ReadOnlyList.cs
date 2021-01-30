@@ -106,9 +106,12 @@ namespace NetFabric.Hyperlinq
             readonly Set<TSource> GetSet()
             {
                 using var set = new Set<TSource>(comparer);
-                var end = offset + count - 1;
-                for (var index = offset; index <= end; index++)
-                    _ = set.Add(source[index]);
+                var end = offset + count;
+                for (var index = offset; index < end; index++)
+                {
+                    var item = source[index];
+                    _ = set.Add(item);
+                }
                 return set;
             }
 

@@ -7,11 +7,9 @@ namespace NetFabric.Hyperlinq
     public static partial class Wrap
     {
         public static ListWrapper<T> AsList<T>(T[] source)
-        {
-            if (source is null) throw new ArgumentNullException(nameof(source));
-
-            return new ListWrapper<T>(source);
-        }
+            => source is null
+                ? throw new ArgumentNullException(nameof(source))
+                : new(source);
 
         public class ListWrapper<T> 
             : ReadOnlyListWrapper<T>

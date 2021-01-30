@@ -52,17 +52,20 @@ namespace NetFabric.Hyperlinq
 
             public void CopyTo(Span<TSource> span) 
             {
-                var end = count - 1;
-                for (var index = 0; index <= end; index++)
+                for (var index = 0; index < count; index++)
                     span[index] = value;
             }
 
             public void CopyTo(TSource[] array, int arrayIndex)
+#if NETSTANDARD2_1 || NETCOREAPP2_1 || NET5_0
+                => Array.Fill(array, value, arrayIndex, count);
+#else
             {
-                var end = arrayIndex + count - 1;
-                for (var index = arrayIndex; index <= end; index++)
+                var end = arrayIndex + count;
+                for (var index = arrayIndex; index < end; index++)
                     array[index] = value;
             }
+#endif
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Contains(TSource item)
@@ -177,7 +180,7 @@ namespace NetFabric.Hyperlinq
                 var array = new TSource[count];
                 if (value is object)
                 {
-#if NETSTANDARD2_1
+#if NETSTANDARD2_1 || NETCOREAPP2_1 || NET5_0
                     Array.Fill(array, value);
 #else
                     CopyTo(array);

@@ -34,7 +34,7 @@ namespace NetFabric.Hyperlinq
             readonly ArraySegment<TSource> source;
             readonly TSelector selector;
 
-            internal ArraySegmentSelectManyEnumerable(ArraySegment<TSource> source, TSelector selector)
+            internal ArraySegmentSelectManyEnumerable(in ArraySegment<TSource> source, TSelector selector)
                 => (this.source, this.selector) = (source, selector);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]

@@ -7,20 +7,20 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class ArrayExtensions
     {
-        [GeneratorMapping("TPredicate", "NetFabric.Hyperlinq.FunctionWrapper<TSource, bool>")]
+        [GeneratorMapping("TPredicate", "NetFabric.Hyperlinq.FunctionInWrapper<TSource, bool>")]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static MemoryWhereRefEnumerable<TSource, FunctionWrapper<TSource, bool>> WhereRef<TSource>(this in Memory<TSource> source, Func<TSource, bool> predicate)
-            => new(source, new FunctionWrapper<TSource, bool>(predicate));
+        public static MemoryWhereRefEnumerable<TSource, FunctionInWrapper<TSource, bool>> Where<TSource>(this Memory<TSource> source, FunctionIn<TSource, bool> predicate)
+            => source.WhereRef(new FunctionInWrapper<TSource, bool>(predicate));
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static MemoryWhereRefEnumerable<TSource, TPredicate> WhereRef<TSource, TPredicate>(this in Memory<TSource> source, TPredicate predicate = default)
-            where TPredicate : struct, IFunction<TSource, bool>
+        public static MemoryWhereRefEnumerable<TSource, TPredicate> WhereRef<TSource, TPredicate>(this Memory<TSource> source, TPredicate predicate = default)
+            where TPredicate : struct, IFunctionIn<TSource, bool>
             => new(source, predicate);
 
         [GeneratorIgnore]
         [StructLayout(LayoutKind.Auto)]
         public readonly struct MemoryWhereRefEnumerable<TSource, TPredicate>
-            where TPredicate : struct, IFunction<TSource, bool>
+            where TPredicate : struct, IFunctionIn<TSource, bool>
         {
             readonly Memory<TSource> source;
             readonly TPredicate predicate;

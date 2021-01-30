@@ -28,8 +28,8 @@ namespace NetFabric.Hyperlinq
         {
             // ReSharper disable once HeapView.ObjectAllocation.Evident
             var dictionary = new Dictionary<TKey, TSource>(source.Count, comparer);
-            var end = offset + count - 1;
-            for (var index = offset; index <= end; index++)
+            var end = offset + count;
+            for (var index = offset; index < end; index++)
             {
                 var item = source[index];
                 dictionary.Add(keySelector.Invoke(item), item);
@@ -47,8 +47,8 @@ namespace NetFabric.Hyperlinq
         {
             // ReSharper disable once HeapView.ObjectAllocation.Evident
             var dictionary = new Dictionary<TKey, TSource>(source.Count, comparer);
-            var end = offset + count - 1;
-            for (var index = offset; index <= end; index++)
+            var end = offset + count;
+            for (var index = offset; index < end; index++)
             {
                 var item = source[index];
                 if (predicate.Invoke(item))
@@ -66,8 +66,8 @@ namespace NetFabric.Hyperlinq
         {
             // ReSharper disable once HeapView.ObjectAllocation.Evident
             var dictionary = new Dictionary<TKey, TSource>(source.Count, comparer);
-            var end = offset + count - 1;
-            for (var index = offset; index <= end; index++)
+            var end = offset + count;
+            for (var index = offset; index < end; index++)
             {
                 var item = source[index];
                 if (predicate.Invoke(item, index))
@@ -85,8 +85,8 @@ namespace NetFabric.Hyperlinq
         {
             // ReSharper disable once HeapView.ObjectAllocation.Evident
             var dictionary = new Dictionary<TKey, TResult>(source.Count, comparer);
-            var end = offset + count - 1;
-            for (var index = offset; index <= end; index++)
+            var end = offset + count;
+            for (var index = offset; index < end; index++)
             {
                 var item = source[index];
                 if (predicate.Invoke(item))
@@ -123,8 +123,8 @@ namespace NetFabric.Hyperlinq
         {
             // ReSharper disable once HeapView.ObjectAllocation.Evident
             var dictionary = new Dictionary<TKey, TElement>(source.Count, comparer);
-            var end = offset + count - 1;
-            for (var index = offset; index <= end; index++)
+            var end = offset + count;
+            for (var index = offset; index < end; index++)
             {
                 var item = source[index];
                 dictionary.Add(keySelector.Invoke(item), elementSelector.Invoke(item));
@@ -142,8 +142,8 @@ namespace NetFabric.Hyperlinq
         {
             // ReSharper disable once HeapView.ObjectAllocation.Evident
             var dictionary = new Dictionary<TKey, TElement>(source.Count, comparer);
-            var end = offset + count - 1;
-            for (var index = offset; index <= end; index++)
+            var end = offset + count;
+            for (var index = offset; index < end; index++)
             {
                 var item = source[index];
                 if (predicate.Invoke(item))
@@ -161,8 +161,8 @@ namespace NetFabric.Hyperlinq
         {
             // ReSharper disable once HeapView.ObjectAllocation.Evident
             var dictionary = new Dictionary<TKey, TElement>(source.Count, comparer);
-            var end = offset + count - 1;
-            for (var index = offset; index <= end; index++)
+            var end = offset + count;
+            for (var index = offset; index < end; index++)
             {
                 var item = source[index];
                 if (predicate.Invoke(item, index))
@@ -181,8 +181,8 @@ namespace NetFabric.Hyperlinq
         {
             // ReSharper disable once HeapView.ObjectAllocation.Evident
             var dictionary = new Dictionary<TKey, TElement>(source.Count, comparer);
-            var end = offset + count - 1;
-            for (var index = offset; index <= end; index++)
+            var end = offset + count;
+            for (var index = offset; index < end; index++)
             {
                 var item = source[index];
                 if (predicate.Invoke(item))

@@ -8,20 +8,20 @@ namespace NetFabric.Hyperlinq
     public static partial class ArrayExtensions
     {
 
-        [GeneratorMapping("TPredicate", "NetFabric.Hyperlinq.FunctionWrapper<TSource, bool>")]
+        [GeneratorMapping("TPredicate", "NetFabric.Hyperlinq.FunctionInWrapper<TSource, bool>")]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static SpanWhereRefEnumerable<TSource, FunctionWrapper<TSource, bool>> WhereRef<TSource>(this in Span<TSource> source, Func<TSource, bool> predicate)
-            => new(source, new FunctionWrapper<TSource, bool>(predicate));
+        public static SpanWhereRefEnumerable<TSource, FunctionInWrapper<TSource, bool>> Where<TSource>(this Span<TSource> source, FunctionIn<TSource, bool> predicate)
+            => source.WhereRef(new FunctionInWrapper<TSource, bool>(predicate));
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static SpanWhereRefEnumerable<TSource, TPredicate> WhereRef<TSource, TPredicate>(this in Span<TSource> source, TPredicate predicate = default)
-            where TPredicate : struct, IFunction<TSource, bool>
+        public static SpanWhereRefEnumerable<TSource, TPredicate> WhereRef<TSource, TPredicate>(this Span<TSource> source, TPredicate predicate = default)
+            where TPredicate : struct, IFunctionIn<TSource, bool>
             => new(source, predicate);
 
         [GeneratorIgnore]
         [StructLayout(LayoutKind.Auto)]
         public readonly ref struct SpanWhereRefEnumerable<TSource, TPredicate>
-            where TPredicate : struct, IFunction<TSource, bool>
+            where TPredicate : struct, IFunctionIn<TSource, bool>
         {
             readonly Span<TSource> source;
             readonly TPredicate predicate;

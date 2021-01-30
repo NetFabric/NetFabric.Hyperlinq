@@ -90,17 +90,13 @@ namespace NetFabric.Hyperlinq
                 var set = new Set<TSource>(comparer);
                 if (source.Any())
                 {
-                    if (source.IsWhole())
+                    var array = source.Array!;
+                    var start = source.Offset;
+                    var end = start + source.Count;
+                    for (var index = start; index < end; index++)
                     {
-                        foreach (var item in source.Array!)
-                            _ = set.Add(item);
-                    }
-                    else
-                    {
-                        var array = source.Array!;
-                        var end = source.Offset + source.Count - 1;
-                        for (var index = source.Offset; index <= end; index++)
-                            _ = set.Add(array[index]);
+                        var item = array[index];
+                        _ = set.Add(item);
                     }
                 }
                 return set;

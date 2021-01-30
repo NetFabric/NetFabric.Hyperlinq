@@ -5,7 +5,7 @@
     <PackageId>NetFabric.Hyperlinq</PackageId>
     <Title>NetFabric.Hyperlinq</Title>
     <Description> High performance LINQ implementation with minimal heap allocations. Supports enumerables, async enumerables, arrays, Memory and Span.</Description>
-    <Version>3.0.0-beta27</Version>
+    <Version>3.0.0-beta29</Version>
     <PackageIcon>Icon.png</PackageIcon>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageTags>netfabric, hyperlinq, linq, enumeration, extensions, performance</PackageTags>
@@ -35,7 +35,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\NetFabric.Hyperlinq.Abstractions\NetFabric.Hyperlinq.Abstractions.csproj" />
-    <ProjectReference Include="..\NetFabric.Hyperlinq.Interfaces\NetFabric.Hyperlinq.Interfaces.csproj" />
     <ProjectReference Include="..\NetFabric.Hyperlinq.SourceGenerator\NetFabric.Hyperlinq.SourceGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />  
   </ItemGroup>
 

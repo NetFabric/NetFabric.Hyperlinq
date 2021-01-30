@@ -304,12 +304,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Bindings.System.Collections.Generic
         {
             // Arrange
             var list = source.ToList();
+            var function = Wrap.AsFunctionIn(predicate);
             var expected = Enumerable
                 .Where(source, predicate);
 
             // Act
             var result = ListBindings
-                .WhereRef(list, predicate);
+                .Where(list, function);
 
             // Assert
 #if NETCOREAPP3_1 || NET5_0
@@ -328,16 +329,17 @@ namespace NetFabric.Hyperlinq.UnitTests.Bindings.System.Collections.Generic
         [MemberData(nameof(TestData.PredicateAtEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateAtSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateAtMultiple), MemberType = typeof(TestData))]
-        public void WhereRef_PredicateAt_With_ValidData_Must_Succeed(int[] source, Func<int, int, bool> predicate)
+        public void WhereAtRef_PredicateAt_With_ValidData_Must_Succeed(int[] source, Func<int, int, bool> predicate)
         {
             // Arrange
             var list = source.ToList();
+            var function = Wrap.AsFunctionIn(predicate);
             var expected = Enumerable
                 .Where(source, predicate);
 
             // Act
             var result = ListBindings
-                .WhereRef(list, predicate);
+                .Where(list, function);
 
             // Assert
 #if NETCOREAPP3_1 || NET5_0

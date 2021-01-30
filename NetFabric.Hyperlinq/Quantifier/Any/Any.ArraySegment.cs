@@ -20,23 +20,14 @@ namespace NetFabric.Hyperlinq
         {
             if (source.Any())
             {
-                if (source.IsWhole())
+                var array = source.Array!;
+                var start = source.Offset;
+                var end = start + source.Count;
+                for (var index = start; index < end; index++)
                 {
-                    foreach (var item in source.Array!)
-                    {
-                        if (predicate.Invoke(item))
-                            return true;
-                    }
-                }
-                else
-                {
-                    var array = source.Array!;
-                    var end = source.Count + source.Offset - 1;
-                    for (var index = source.Offset; index <= end; index++)
-                    {
-                        if (predicate.Invoke(array[index]))
-                            return true;
-                    }
+                    var item = array[index];
+                    if (predicate.Invoke(item))
+                        return true;
                 }
             }
             return false;
@@ -51,37 +42,25 @@ namespace NetFabric.Hyperlinq
         {
             if (source.Any())
             {
-                if (source.IsWhole())
+                var array = source.Array!;
+                var start = source.Offset;
+                var end = source.Count;
+                if (start is 0)
                 {
-                    var index = 0;
-                    foreach (var item in source.Array!)
+                    for (var index = 0; index < end; index++)
                     {
+                        var item = array[index];
                         if (predicate.Invoke(item, index))
                             return true;
-
-                        index++;
                     }
                 }
                 else
                 {
-                    var array = source.Array!;
-                    var end = source.Count - 1;
-                    if (source.Offset is 0)
+                    for (var index = 0; index < end; index++)
                     {
-                        for (var index = 0; index <= end; index++)
-                        {
-                            if (predicate.Invoke(array[index], index))
-                                return true;
-                        }
-                    }
-                    else
-                    {
-                        var offset = source.Offset;
-                        for (var index = 0; index <= end; index++)
-                        {
-                            if (predicate.Invoke(array[index + offset], index))
-                                return true;
-                        }
+                        var item = array[index + start];
+                        if (predicate.Invoke(item, index))
+                            return true;
                     }
                 }
             }

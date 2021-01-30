@@ -131,24 +131,24 @@ namespace NetFabric.Hyperlinq
         public static ArrayExtensions.ArraySegmentWhereAtEnumerable<TSource, TPredicate> WhereAt<TSource, TPredicate>(this List<TSource> source, TPredicate predicate = default)
             where TPredicate : struct, IFunction<TSource, int, bool>
             => source.AsArraySegment().WhereAt(predicate);
-        
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ArrayExtensions.ArraySegmentWhereRefEnumerable<TSource, FunctionWrapper<TSource, bool>> WhereRef<TSource>(this List<TSource> source, Func<TSource, bool> predicate)
-            => source.AsArraySegment().WhereRef(predicate);
-        
+        public static ArrayExtensions.ArraySegmentWhereRefEnumerable<TSource, FunctionInWrapper<TSource, bool>> Where<TSource>(this List<TSource> source, FunctionIn<TSource, bool> predicate)
+            => source.AsArraySegment().Where(predicate);
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ArrayExtensions.ArraySegmentWhereRefEnumerable<TSource, TPredicate> WhereRef<TSource, TPredicate>(this List<TSource> source, TPredicate predicate = default)
-            where TPredicate : struct, IFunction<TSource, bool>
+            where TPredicate : struct, IFunctionIn<TSource, bool>
             => source.AsArraySegment().WhereRef(predicate);
-        
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ArrayExtensions.ArraySegmentWhereRefAtEnumerable<TSource, FunctionWrapper<TSource, int, bool>> WhereRef<TSource>(this List<TSource> source, Func<TSource, int, bool> predicate)
-            => source.AsArraySegment().WhereRef(predicate);
-        
+        public static ArrayExtensions.ArraySegmentWhereAtRefEnumerable<TSource, FunctionInWrapper<TSource, int, bool>> Where<TSource>(this List<TSource> source, FunctionIn<TSource, int, bool> predicate)
+            => source.AsArraySegment().Where(predicate);
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ArrayExtensions.ArraySegmentWhereRefAtEnumerable<TSource, TPredicate> WhereRefAt<TSource, TPredicate>(this List<TSource> source, TPredicate predicate = default)
-            where TPredicate : struct, IFunction<TSource, int, bool>
-            => source.AsArraySegment().WhereRefAt(predicate);
+        public static ArrayExtensions.ArraySegmentWhereAtRefEnumerable<TSource, TPredicate> WhereAtRef<TSource, TPredicate>(this List<TSource> source, TPredicate predicate = default)
+            where TPredicate : struct, IFunctionIn<TSource, int, bool>
+            => source.AsArraySegment().WhereAtRef(predicate);
             
         #endregion
         #region Element

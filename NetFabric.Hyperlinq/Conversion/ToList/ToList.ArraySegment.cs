@@ -23,10 +23,26 @@ namespace NetFabric.Hyperlinq
             return new List<TSource>(collection: arrayBuilder);
         }
 
+        static List<TSource> ToListRef<TSource, TPredicate>(this in ArraySegment<TSource> source, TPredicate predicate)
+            where TPredicate : struct, IFunctionIn<TSource, bool>
+        {
+            using var arrayBuilder = ToArrayBuilderRef(source, predicate, ArrayPool<TSource>.Shared);
+            // ReSharper disable once HeapView.BoxingAllocation
+            return new List<TSource>(collection: arrayBuilder);
+        }
+
         static List<TSource> ToListAt<TSource, TPredicate>(this in ArraySegment<TSource> source, TPredicate predicate)
             where TPredicate : struct, IFunction<TSource, int, bool>
         {
             using var arrayBuilder = ToArrayBuilderAt(source, predicate, ArrayPool<TSource>.Shared);
+            // ReSharper disable once HeapView.BoxingAllocation
+            return new List<TSource>(collection: arrayBuilder);
+        }
+
+        static List<TSource> ToListAtRef<TSource, TPredicate>(this in ArraySegment<TSource> source, TPredicate predicate)
+            where TPredicate : struct, IFunctionIn<TSource, int, bool>
+        {
+            using var arrayBuilder = ToArrayBuilderAtRef(source, predicate, ArrayPool<TSource>.Shared);
             // ReSharper disable once HeapView.BoxingAllocation
             return new List<TSource>(collection: arrayBuilder);
         }
@@ -52,6 +68,15 @@ namespace NetFabric.Hyperlinq
             where TSelector : struct, IFunction<TSource, TResult>
         {
             using var arrayBuilder = ToArrayBuilder(source, predicate, selector, ArrayPool<TResult>.Shared);
+            // ReSharper disable once HeapView.BoxingAllocation
+            return new List<TResult>(collection: arrayBuilder);
+        }
+
+        static List<TResult> ToListRef<TSource, TResult, TPredicate, TSelector>(this in ArraySegment<TSource> source, TPredicate predicate, TSelector selector)
+            where TPredicate : struct, IFunctionIn<TSource, bool>
+            where TSelector : struct, IFunctionIn<TSource, TResult>
+        {
+            using var arrayBuilder = ToArrayBuilderRef(source, predicate, selector, ArrayPool<TResult>.Shared);
             // ReSharper disable once HeapView.BoxingAllocation
             return new List<TResult>(collection: arrayBuilder);
         }

@@ -12,11 +12,12 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.WhereRef
         {
             // Arrange
             var source = default(ArraySegment<int>);
+            var function = Wrap.AsFunctionIn<int, bool>(_ => true);
             var expected = Enumerable.Empty<int>();
 
             // Act
             var result = ArrayExtensions
-                .WhereRef(source, _ => true);
+                .Where(source, function);
 
             // Assert
             _ = result.Must()
@@ -34,12 +35,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.WhereRef
             // Arrange
             var (offset, count) = Utils.SkipTake(source.Length, skip, take);
             var wrapped = new ArraySegment<int>(source, offset, count);
+            var function = Wrap.AsFunctionIn(predicate);
             var expected = Enumerable
                 .Where(wrapped, predicate);
 
             // Act
             var result = ArrayExtensions
-                .WhereRef(wrapped, predicate);
+                .Where(wrapped, function);
 
             // Assert
             _ = result.Must()

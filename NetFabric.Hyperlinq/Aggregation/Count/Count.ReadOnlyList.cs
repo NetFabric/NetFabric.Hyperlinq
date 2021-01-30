@@ -13,12 +13,15 @@ namespace NetFabric.Hyperlinq
 
         static int Count<TList, TSource, TPredicate>(this TList source, TPredicate predicate, int offset, int count)
             where TList : IReadOnlyList<TSource>
-            where TPredicate: struct, IFunction<TSource, bool>
+            where TPredicate : struct, IFunction<TSource, bool>
         {
             var counter = 0;
-            var end = offset + count - 1;
-            for (var index = offset; index <= end; index++)
-                counter += predicate.Invoke(source[index]).AsByte();
+            var end = offset + count;
+            for (var index = offset; index < end; index++)
+            {
+                var item = source[index];
+                counter += predicate.Invoke(item).AsByte();
+            }
             return counter;
         }
 
@@ -33,16 +36,22 @@ namespace NetFabric.Hyperlinq
             where TPredicate: struct, IFunction<TSource, int, bool>
         {
             var counter = 0;
-            var end = count - 1;
+            var end = count;
             if (offset is 0)
             {
-                for (var index = 0; index <= end; index++)
+                for (var index = 0; index < end; index++)
+                {
+                    var item = source[index];
                     counter += predicate.Invoke(source[index], index).AsByte();
+                }
             }
             else
             {
-                for (var index = 0; index <= end; index++)
-                    counter += predicate.Invoke(source[index + offset], index).AsByte();
+                for (var index = 0; index < end; index++)
+                {
+                    var item = source[index + offset];
+                    counter += predicate.Invoke(item, index).AsByte();
+                }
             }
             return counter;
         }
