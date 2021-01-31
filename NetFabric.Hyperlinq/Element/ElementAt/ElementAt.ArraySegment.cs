@@ -16,24 +16,14 @@ namespace NetFabric.Hyperlinq
         {
             if (source.Any() && index >= 0)
             {
-                if (source.IsWhole())
+                var array = source.Array!;
+                var start = source.Offset;
+                var end = start + source.Count;
+                for (var sourceIndex = start; sourceIndex < end; sourceIndex++)
                 {
-                    foreach (var item in source.Array!)
-                    {
-                        if (predicate.Invoke(item) && index-- is 0)
-                            return Option.Some(item);
-                    }
-                }
-                else
-                {
-                    var array = source.Array!;
-                    var end = source.Offset + source.Count - 1;
-                    for (var sourceIndex = source.Offset; sourceIndex <= end; sourceIndex++)
-                    {
-                        var item = array[sourceIndex];
-                        if (predicate.Invoke(item) && index-- is 0)
-                            return Option.Some(item);
-                    }
+                    var item = array[sourceIndex];
+                    if (predicate.Invoke(item) && index-- is 0)
+                        return Option.Some(item);
                 }
             }
             return Option.None;
@@ -45,40 +35,25 @@ namespace NetFabric.Hyperlinq
         {
             if (source.Any() && index >= 0)
             {
-                if (source.IsWhole())
+                var array = source.Array!;
+                var start = source.Offset;
+                var end = source.Count;
+                if (start is 0)
                 {
-                    var sourceIndex = 0;
-                    foreach (var item in source.Array!)
+                    for (var sourceIndex = 0; sourceIndex < end; sourceIndex++)
                     {
+                        var item = array[sourceIndex];
                         if (predicate.Invoke(item, sourceIndex) && index-- is 0)
                             return Option.Some(item);
-
-                        sourceIndex++;
                     }
                 }
                 else
                 {
-                    var array = source.Array!;
-                    if (source.Offset is 0)
+                    for (var sourceIndex = 0; sourceIndex < end; sourceIndex++)
                     {
-                        var end = source.Count - 1;
-                        for (var sourceIndex = 0; sourceIndex <= end; sourceIndex++)
-                        {
-                            var item = array[sourceIndex];
-                            if (predicate.Invoke(item, sourceIndex) && index-- is 0)
-                                return Option.Some(item);
-                        }
-                    }
-                    else
-                    {
-                        var offset = source.Offset;
-                        var end = source.Count - 1;
-                        for (var sourceIndex = 0; sourceIndex <= end; sourceIndex++)
-                        {
-                            var item = array[sourceIndex + offset];
-                            if (predicate.Invoke(item, sourceIndex) && index-- is 0)
-                                return Option.Some(item);
-                        }
+                        var item = array[sourceIndex + start];
+                        if (predicate.Invoke(item, sourceIndex) && index-- is 0)
+                            return Option.Some(item);
                     }
                 }
             }
@@ -108,24 +83,14 @@ namespace NetFabric.Hyperlinq
         {
             if (source.Any() && index >= 0)
             {
-                if (source.IsWhole())
+                var array = source.Array!;
+                var start = source.Offset;
+                var end = start + source.Count;
+                for (var sourceIndex = source.Offset; sourceIndex < end; sourceIndex++)
                 {
-                    foreach (var item in source.Array!)
-                    {
-                        if (predicate.Invoke(item) && index-- is 0)
-                            return Option.Some(selector.Invoke(item));
-                    }
-                }
-                else
-                {
-                    var array = source.Array!;
-                    var end = source.Offset + source.Count - 1;
-                    for (var sourceIndex = source.Offset; sourceIndex <= end; sourceIndex++)
-                    {
-                        var item = array[sourceIndex];
-                        if (predicate.Invoke(item) && index-- is 0)
-                            return Option.Some(selector.Invoke(item));
-                    }
+                    var item = array[sourceIndex];
+                    if (predicate.Invoke(item) && index-- is 0)
+                        return Option.Some(selector.Invoke(item));
                 }
             }
             return Option.None;

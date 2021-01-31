@@ -84,18 +84,26 @@ namespace NetFabric.Hyperlinq
             };
             if (Utils.IsValueType<TElement>() && ReferenceEquals(comparer, EqualityComparer<TElement>.Default))
             {
-                for (var index = buckets[hashCode % buckets.Length] - 1; index >= 0; index = slots[index].Next)
+                var index = buckets[hashCode % buckets.Length] - 1;
+                while (index >= 0)
                 {
-                    if (slots[index].HashCode == hashCode && EqualityComparer<TElement>.Default.Equals(slots[index].Value!, value!))
+                    ref readonly var current = ref slots[index];
+                    if (current.HashCode == hashCode && EqualityComparer<TElement>.Default.Equals(current.Value, value))
                         return false;
+
+                    index = current.Next;
                 }
             }
             else
             {
-                for (var index = buckets[hashCode % buckets.Length] - 1; index >= 0; index = slots[index].Next)
+                var index = buckets[hashCode % buckets.Length] - 1;
+                while (index >= 0)
                 {
-                    if (slots[index].HashCode == hashCode && comparer.Equals(slots[index].Value!, value!))
+                    ref readonly var current = ref slots[index];
+                    if (current.HashCode == hashCode && comparer.Equals(current.Value, value))
                         return false;
+
+                    index = current.Next;
                 }
             }
 
@@ -191,17 +199,23 @@ namespace NetFabric.Hyperlinq
         public readonly void CopyTo(Span<TElement> span)
         {
             if (slots is null) return;
-            
+
             for (var index = 0; index < Count; index++)
-                span[index] = slots[index].Value;
+            {
+                ref readonly var slot = ref slots[index];
+                span[index] = slot.Value;
+            }
         }
 
         public readonly void CopyTo(TElement[] array)
         {
             if (slots is null) return;
-            
+
             for (var index = 0; index < Count; index++)
-                array[index] = slots[index].Value;
+            {
+                ref readonly var slot = ref slots[index];
+                array[index] = slot.Value;
+            }
         }
 
         public readonly void CopyTo(TElement[] array, int arrayIndex)
@@ -211,12 +225,18 @@ namespace NetFabric.Hyperlinq
             if (arrayIndex is 0)
             {
                 for (var index = 0; index < Count; index++)
-                    array[index] = slots[index].Value;
+                {
+                    ref readonly var slot = ref slots[index];
+                    array[index] = slot.Value;
+                }
             }
             else
             {
                 for (var index = 0; index < Count; index++)
-                    array[index + arrayIndex] = slots[index].Value;
+                {
+                    ref readonly var slot = ref slots[index];
+                    array[index + arrayIndex] = slot.Value;
+                }
             }
         }
 

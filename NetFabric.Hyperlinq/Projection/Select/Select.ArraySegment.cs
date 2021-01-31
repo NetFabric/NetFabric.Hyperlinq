@@ -85,50 +85,26 @@ namespace NetFabric.Hyperlinq
             {
                 if (source.Any())
                 {
-                    if (source.IsWhole())
+                    var array = source.Array!;
+                    var start = source.Offset;
+                    var end = start + source.Count;
+                    if (Utils.IsValueType<TResult>())
                     {
-                        if (Utils.IsValueType<TResult>())
+                        for (var index = start; index < end; index++)
                         {
-                            var index = 0;
-                            foreach (var sourceItem in source.Array!)
-                            {
-                                if (EqualityComparer<TResult>.Default.Equals(selector.Invoke(sourceItem), item))
-                                    return index;
-
-                                index++;
-                            }
-                        }
-                        else
-                        {
-                            var array = source.Array!;
-                            var defaultComparer = EqualityComparer<TResult>.Default;
-                            for (var index = 0; index < array.Length; index++)
-                            {
-                                if (defaultComparer.Equals(selector.Invoke(array[index]), item))
-                                    return index;
-                            }
+                            var arrayItem = array[index];
+                            if (EqualityComparer<TResult>.Default.Equals(selector.Invoke(arrayItem), item))
+                                return index - source.Offset;
                         }
                     }
                     else
                     {
-                        var array = source.Array!;
-                        var end = source.Offset + source.Count - 1;
-                        if (Utils.IsValueType<TResult>())
+                        var defaultComparer = EqualityComparer<TResult>.Default;
+                        for (var index = start; index < end; index++)
                         {
-                            for (var index = source.Offset; index <= end; index++)
-                            {
-                                if (EqualityComparer<TResult>.Default.Equals(selector.Invoke(array[index]), item))
-                                    return index - source.Offset;
-                            }
-                        }
-                        else
-                        {
-                            var defaultComparer = EqualityComparer<TResult>.Default;
-                            for (var index = source.Offset; index <= end; index++)
-                            {
-                                if (defaultComparer.Equals(selector.Invoke(array[index]), item))
-                                    return index - source.Offset;
-                            }
+                            var arrayItem = array[index];
+                            if (defaultComparer.Equals(selector.Invoke(arrayItem), item))
+                                return index - source.Offset;
                         }
                     }
                 }

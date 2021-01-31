@@ -3,6 +3,6 @@
     public abstract class SequentialSkipBenchmarksBase : SkipBenchmarksBase
     {
         public override void GlobalSetup()
-            => Initialize(GetSequentialValues(Skip + Count));
+            => Initialize(Utils.GetSequentialValues(Skip + Count));
     }
 }

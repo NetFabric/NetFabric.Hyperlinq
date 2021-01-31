@@ -16,17 +16,31 @@ namespace NetFabric.Hyperlinq
             var counter = 0;
             if (source.Any())
             {
-                if (source.IsWhole())
+                var array = source.Array!;
+                var start = source.Offset;
+                var end = start + source.Count;
+                for (var index = start; index < end; index++)
                 {
-                    foreach (var item in source.Array!)
-                        counter += predicate.Invoke(item).AsByte();
+                    var item = array[index];
+                    counter += predicate.Invoke(item).AsByte();
                 }
-                else
+            }
+            return counter;
+        }
+
+        static int CountRef<TSource, TPredicate>(this in ArraySegment<TSource> source, TPredicate predicate)
+            where TPredicate : struct, IFunctionIn<TSource, bool>
+        {
+            var counter = 0;
+            if (source.Any())
+            {
+                var array = source.Array!;
+                var start = source.Offset;
+                var end = start + source.Count;
+                for (var index = start; index < end; index++)
                 {
-                    var array = source.Array!;
-                    var end = source.Offset + source.Count - 1;
-                    for (var index = source.Offset; index <= end; index++)
-                        counter += predicate.Invoke(array[index]).AsByte();
+                    var item = array[index];
+                    counter += predicate.Invoke(in item).AsByte();
                 }
             }
             return counter;
@@ -38,29 +52,52 @@ namespace NetFabric.Hyperlinq
             var counter = 0;
             if (source.Any())
             {
-                if (source.IsWhole())
+                var array = source.Array!;
+                var start = source.Offset;
+                var end = source.Count;
+                if (start is 0)
                 {
-                    var index = 0;
-                    foreach (var item in source.Array!)
+                    for (var index = 0; index < end; index++)
                     {
+                        var item = array[index];
                         counter += predicate.Invoke(item, index).AsByte();
-                        index++;
                     }
                 }
                 else
                 {
-                    var array = source.Array!;
-                    var end = source.Count - 1;
-                    if (source.Offset is 0)
+                    for (var index = 0; index < end; index++)
                     {
-                        for (var index = 0; index <= end; index++)
-                            counter += predicate.Invoke(array[index], index).AsByte();
+                        var item = array[index + start];
+                        counter += predicate.Invoke(item, index).AsByte();
                     }
-                    else
+                }
+            }
+            return counter;
+        }
+
+        static int CountAtRef<TSource, TPredicate>(this in ArraySegment<TSource> source, TPredicate predicate)
+            where TPredicate : struct, IFunctionIn<TSource, int, bool>
+        {
+            var counter = 0;
+            if (source.Any())
+            {
+                var array = source.Array!;
+                var start = source.Offset;
+                var end = source.Count;
+                if (start is 0)
+                {
+                    for (var index = 0; index < end; index++)
                     {
-                        var offset = source.Offset;
-                        for (var index = 0; index <= end; index++)
-                            counter += predicate.Invoke(array[index + offset], index).AsByte();
+                        var item = array[index];
+                        counter += predicate.Invoke(in item, index).AsByte();
+                    }
+                }
+                else
+                {
+                    for (var index = 0; index < end; index++)
+                    {
+                        var item = array[index + start];
+                        counter += predicate.Invoke(in item, index).AsByte();
                     }
                 }
             }

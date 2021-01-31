@@ -11,15 +11,16 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.WhereRefIndex
         [MemberData(nameof(TestData.PredicateAtEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateAtSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateAtMultiple), MemberType = typeof(TestData))]
-        public void WhereRef_With_ValidData_Must_Succeed(int[] source, Func<int, int, bool> predicate)
+        public void WhereAtRef_With_ValidData_Must_Succeed(int[] source, Func<int, int, bool> predicate)
         {
             // Arrange
+            var function = Wrap.AsFunctionIn(predicate);
             var expected = Enumerable
                 .Where(source, predicate);
 
             // Act
             var result = ArrayExtensions
-                .WhereRef(source.AsMemory(), predicate);
+                .Where(source.AsMemory(), function);
 
             // Assert
             _ = result.Must()

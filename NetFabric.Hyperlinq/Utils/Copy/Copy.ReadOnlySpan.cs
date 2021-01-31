@@ -21,7 +21,10 @@ namespace NetFabric.Hyperlinq
             Debug.Assert(destination.Length >= source.Length);
 
             for (var index = 0; index < source.Length; index++)
-                destination[index] = selector.Invoke(source[index]);
+            {
+                var item = source[index];
+                destination[index] = selector.Invoke(item);
+            }
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -31,7 +34,10 @@ namespace NetFabric.Hyperlinq
             Debug.Assert(destination.Length >= source.Length);
 
             for (var index = 0; index < source.Length; index++)
-                destination[index] = selector.Invoke(source[index], index);
+            {
+                var item = source[index];
+                destination[index] = selector.Invoke(item, index);
+            }
         }
     }
 }

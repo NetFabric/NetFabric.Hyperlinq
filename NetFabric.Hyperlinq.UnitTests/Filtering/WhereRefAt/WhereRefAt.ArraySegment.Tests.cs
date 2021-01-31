@@ -3,20 +3,21 @@ using System;
 using System.Linq;
 using Xunit;
 
-namespace NetFabric.Hyperlinq.UnitTests.Filtering.WhereRefAt
+namespace NetFabric.Hyperlinq.UnitTests.Filtering.WhereAtRef
 {
     public class ArraySegmentTests
     {
         [Fact]
-        public void WhereRef_With_NullArray_Must_Succeed()
+        public void WhereAtRef_With_NullArray_Must_Succeed()
         {
             // Arrange
             var source = default(ArraySegment<int>);
+            var function = Wrap.AsFunctionIn<int, int, bool>((_, __) => true);
             var expected = Enumerable.Empty<int>();
 
             // Act
             var result = ArrayExtensions
-                .WhereRef(source, (_, __) => true);
+                .Where(source, function);
 
             // Assert
             _ = result.Must()
@@ -29,17 +30,18 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.WhereRefAt
         [MemberData(nameof(TestData.SkipTakePredicateAtEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakePredicateAtSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakePredicateAtMultiple), MemberType = typeof(TestData))]
-        public void WhereRef_With_ValidData_Must_Succeed(int[] source, int skip, int take, Func<int, int, bool> predicate)
+        public void WhereAtRef_With_ValidData_Must_Succeed(int[] source, int skip, int take, Func<int, int, bool> predicate)
         {
             // Arrange
             var (offset, count) = Utils.SkipTake(source.Length, skip, take);
             var wrapped = new ArraySegment<int>(source, offset, count);
+            var function = Wrap.AsFunctionIn(predicate);
             var expected = Enumerable
                 .Where(wrapped, predicate);
 
             // Act
             var result = ArrayExtensions
-                .WhereRef(wrapped, predicate);
+                .Where(wrapped, function);
 
             // Assert
             _ = result.Must()

@@ -8,29 +8,20 @@ namespace NetFabric.Hyperlinq
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool All<TSource>(this in ArraySegment<TSource> source, Func<TSource, bool> predicate)
             => source.All(new FunctionWrapper<TSource, bool>(predicate));
-        
+
         public static bool All<TSource, TPredicate>(this in ArraySegment<TSource> source, TPredicate predicate = default)
             where TPredicate : struct, IFunction<TSource, bool>
         {
             if (source.Any())
             {
-                if (source.IsWhole())
+                var array = source.Array!;
+                var start = source.Offset;
+                var end = start + source.Count;
+                for (var index = start; index < end; index++)
                 {
-                    foreach (var item in source.Array!)
-                    {
-                        if (!predicate.Invoke(item))
-                            return false;
-                    }
-                }
-                else
-                {
-                    var array = source.Array!;
-                    var end = source.Count + source.Offset - 1;
-                    for (var index = source.Offset; index <= end; index++)
-                    {
-                        if (!predicate.Invoke(array[index]))
-                            return false;
-                    }
+                    var item = array[index];
+                    if (!predicate.Invoke(item))
+                        return false;
                 }
             }
             return true;
@@ -46,24 +37,24 @@ namespace NetFabric.Hyperlinq
         {
             if (source.Any())
             {
-                if (source.IsWhole())
+                var array = source.Array!;
+                var start = source.Offset;
+                var end = source.Count;
+                if (start is 0)
                 {
-                    var index = 0;
-                    foreach (var item in source.Array!)
+                    for (var index = 0; index < end; index++)
                     {
+                        var item = array[index];
                         if (!predicate.Invoke(item, index))
                             return false;
-
-                        index++;
                     }
                 }
                 else
                 {
-                    var array = source.Array!;
-                    var end = source.Count + source.Offset - 1;
-                    for (var index = source.Offset; index <= end; index++)
+                    for (var index = 0; index < end; index++)
                     {
-                        if (!predicate.Invoke(array[index], index))
+                        var item = array[index + start];
+                        if (!predicate.Invoke(item, index))
                             return false;
                     }
                 }

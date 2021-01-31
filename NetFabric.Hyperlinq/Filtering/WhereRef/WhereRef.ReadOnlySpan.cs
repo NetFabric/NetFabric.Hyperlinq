@@ -8,20 +8,20 @@ namespace NetFabric.Hyperlinq
     public static partial class ArrayExtensions
     {
 
-        [GeneratorMapping("TPredicate", "NetFabric.Hyperlinq.FunctionWrapper<TSource, bool>")]
+        [GeneratorMapping("TPredicate", "NetFabric.Hyperlinq.FunctionInWrapper<TSource, bool>")]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ReadOnlySpanWhereRefEnumerable<TSource, FunctionWrapper<TSource, bool>> WhereRef<TSource>(this in ReadOnlySpan<TSource> source, Func<TSource, bool> predicate)
-            => new(source, new FunctionWrapper<TSource, bool>(predicate));
+        public static ReadOnlySpanWhereRefEnumerable<TSource, FunctionInWrapper<TSource, bool>> Where<TSource>(this ReadOnlySpan<TSource> source, FunctionIn<TSource, bool> predicate)
+            => source.WhereRef(new FunctionInWrapper<TSource, bool>(predicate));
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ReadOnlySpanWhereRefEnumerable<TSource, TPredicate> WhereRef<TSource, TPredicate>(this in ReadOnlySpan<TSource> source, TPredicate predicate = default)
-            where TPredicate : struct, IFunction<TSource, bool>
+        public static ReadOnlySpanWhereRefEnumerable<TSource, TPredicate> WhereRef<TSource, TPredicate>(this ReadOnlySpan<TSource> source, TPredicate predicate = default)
+            where TPredicate : struct, IFunctionIn<TSource, bool>
             => new(source, predicate);
 
         [GeneratorIgnore]
         [StructLayout(LayoutKind.Auto)]
         public readonly ref struct ReadOnlySpanWhereRefEnumerable<TSource, TPredicate>
-            where TPredicate : struct, IFunction<TSource, bool>
+            where TPredicate : struct, IFunctionIn<TSource, bool>
         {
             readonly ReadOnlySpan<TSource> source;
             readonly TPredicate predicate;

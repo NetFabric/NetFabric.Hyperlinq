@@ -84,6 +84,19 @@ namespace NetFabric.Hyperlinq
             Count++;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public void AddRef(in T item)
+        {
+            Debug.Assert(maxCapacity > Count);
+
+            // Must be >= and not == to enable range check elimination
+            if ((uint)index >= (uint)current.Length)
+                AllocateBuffer();
+
+            current[index++] = item;
+            Count++;
+        }
+
         /// <summary>
         /// Copies the contents of this builder to the specified array.
         /// </summary>

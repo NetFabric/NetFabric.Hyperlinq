@@ -13,7 +13,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
     [MemoryDiagnoser]
     public abstract class BenchmarksBase
     {
-        const int seed = 42;
+        protected const int seed = 42;
 
         protected int[] array;
         protected ReadOnlyMemory<int> memory;
@@ -52,20 +52,6 @@ namespace NetFabric.Hyperlinq.Benchmarks
 
             asyncEnumerableReference = TestAsyncEnumerable.ReferenceType(array);
             asyncEnumerableValue = TestAsyncEnumerable.ValueType(array);
-        }
-
-        protected static int[] GetSequentialValues(int count)
-            => ValueEnumerable.Range(0, count).ToArray();
-
-        protected static int[] GetRandomValues(int count)
-        {
-            var array = new int[count];
-
-            var random = new Random(seed);
-            for (var index = 0; index < count; index++)
-                array[index] = random.Next(count);
-
-            return array;
         }
     }
 }

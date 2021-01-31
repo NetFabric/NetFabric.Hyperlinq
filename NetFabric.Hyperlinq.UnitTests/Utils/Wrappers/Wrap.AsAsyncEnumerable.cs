@@ -7,12 +7,10 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class Wrap
     {
-        public static AsyncEnumerableWrapper<T> AsAsyncEnumerable<T>(T[] source)
-        {
-            if (source is null) throw new ArgumentNullException(nameof(source));
-
-            return new AsyncEnumerableWrapper<T>(source);
-        }
+        public static AsyncEnumerableWrapper<T> AsAsyncEnumerable<T>(T[] source) 
+            => source is null 
+                ? throw new ArgumentNullException(nameof(source)) 
+                : new(source);
 
         public readonly struct AsyncEnumerableWrapper<T> 
             : IAsyncEnumerable<T>

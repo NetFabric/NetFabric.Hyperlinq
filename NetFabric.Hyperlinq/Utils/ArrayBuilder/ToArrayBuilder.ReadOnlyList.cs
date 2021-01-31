@@ -13,11 +13,12 @@ namespace NetFabric.Hyperlinq
             where TPredicate: struct, IFunction<TSource, bool>
         {
             var builder = new LargeArrayBuilder<TSource>(pool);
-            var end = offset + count - 1;
-            for (var index = offset; index <= end; index++)
+            var end = offset + count;
+            for (var index = offset; index < end; index++)
             {
-                if (predicate.Invoke(source[index]))
-                    builder.Add(source[index]);
+                var item = source[index];
+                if (predicate.Invoke(item))
+                    builder.Add(item);
             }
             return builder;
         }
@@ -27,21 +28,23 @@ namespace NetFabric.Hyperlinq
             where TPredicate: struct, IFunction<TSource, int, bool>
         {
             var builder = new LargeArrayBuilder<TSource>(pool);
-            var end = count - 1;
+            var end = count;
             if (offset is 0)
             {
-                for (var index = 0; index <= end; index++)
+                for (var index = 0; index < end; index++)
                 {
-                    if (predicate.Invoke(source[index], index))
-                        builder.Add(source[index]);
+                    var item = source[index];
+                    if (predicate.Invoke(item, index))
+                        builder.Add(item);
                 }
             }
             else
             {
-                for (var index = 0; index <= end; index++)
+                for (var index = 0; index < end; index++)
                 {
-                    if (predicate.Invoke(source[index + offset], index))
-                        builder.Add(source[index + offset]);
+                    var item = source[index + offset];
+                    if (predicate.Invoke(item, index))
+                        builder.Add(item);
                 }
             }
             return builder;
@@ -53,11 +56,12 @@ namespace NetFabric.Hyperlinq
             where TPredicate: struct, IFunction<TSource, bool>
         {
             var builder = new LargeArrayBuilder<TResult>(pool);
-            var end = offset + count - 1;
-            for (var index = offset; index <= end; index++)
+            var end = offset + count;
+            for (var index = offset; index < end; index++)
             {
-                if (predicate.Invoke(source[index]))
-                    builder.Add(selector.Invoke(source[index]));
+                var item = source[index];
+                if (predicate.Invoke(item))
+                    builder.Add(selector.Invoke(item));
             }
             return builder;
         }

@@ -3,6 +3,6 @@
     public abstract class RandomBenchmarksBase : CountBenchmarksBase
     {
         public override void GlobalSetup()
-            => Initialize(GetRandomValues(Count));
+            => Initialize(Utils.GetRandomValues(seed, Count));
     }
 }

@@ -95,6 +95,39 @@ namespace NetFabric.Hyperlinq
             }
         }
 
+        internal static bool ContainsRef<TEnumerable, TEnumerator, TSource, TResult, TSelector>(this TEnumerable source, TResult value, TSelector selector)
+            where TEnumerable : IValueEnumerable<TSource, TEnumerator>
+            where TEnumerator : struct, IEnumerator<TSource>
+            where TSelector : struct, IFunctionIn<TSource, TResult>
+        {
+            return Utils.IsValueType<TResult>()
+                ? ValueContains(source, value, selector)
+                : ReferenceContains(source, value, selector);
+
+            static bool ValueContains(TEnumerable source, TResult value, TSelector selector)
+            {
+                using var enumerator = source.GetEnumerator();
+                while (enumerator.MoveNext())
+                {
+                    if (EqualityComparer<TResult>.Default.Equals(selector.Invoke(enumerator.Current), value))
+                        return true;
+                }
+                return false;
+            }
+
+            static bool ReferenceContains(TEnumerable source, TResult value, TSelector selector)
+            {
+                var defaultComparer = EqualityComparer<TResult>.Default;
+
+                using var enumerator = source.GetEnumerator();
+                while (enumerator.MoveNext())
+                {
+                    if (defaultComparer.Equals(selector.Invoke(enumerator.Current), value))
+                        return true;
+                }
+                return false;
+            }
+        }
 
         internal static bool ContainsAt<TEnumerable, TEnumerator, TSource, TResult, TSelector>(this TEnumerable source, TResult value, TSelector selector)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>

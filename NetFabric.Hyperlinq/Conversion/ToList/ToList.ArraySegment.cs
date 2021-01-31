@@ -13,80 +13,84 @@ namespace NetFabric.Hyperlinq
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static List<TSource> ToList<TSource>(this in ArraySegment<TSource> source)
             // ReSharper disable once HeapView.BoxingAllocation
-            => new(collection: source);
+            => source.Count switch
+            {
+                0 => new List<TSource>(),
+                _ => new(collection: source)
+            };
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static List<TSource> ToList<TSource, TPredicate>(this in ArraySegment<TSource> source, TPredicate predicate)
             where TPredicate : struct, IFunction<TSource, bool>
-        {
-            using var arrayBuilder = ToArrayBuilder(source, predicate, ArrayPool<TSource>.Shared);
-            // ReSharper disable once HeapView.BoxingAllocation
-            return new List<TSource>(collection: arrayBuilder);
-        }
+            => source.Count switch
+            {
+                0 => new List<TSource>(),
+                _ => source.ToArray<TSource, TPredicate>(predicate).AsList()
+            };
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        static List<TSource> ToListRef<TSource, TPredicate>(this in ArraySegment<TSource> source, TPredicate predicate)
+            where TPredicate : struct, IFunctionIn<TSource, bool>
+            => source.Count switch
+            {
+                0 => new List<TSource>(),
+                _ => source.ToArrayRef<TSource, TPredicate>(predicate).AsList()
+            };
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static List<TSource> ToListAt<TSource, TPredicate>(this in ArraySegment<TSource> source, TPredicate predicate)
             where TPredicate : struct, IFunction<TSource, int, bool>
-        {
-            using var arrayBuilder = ToArrayBuilderAt(source, predicate, ArrayPool<TSource>.Shared);
-            // ReSharper disable once HeapView.BoxingAllocation
-            return new List<TSource>(collection: arrayBuilder);
-        }
+            => source.Count switch
+            {
+                0 => new List<TSource>(),
+                _ => source.ToArrayAt<TSource, TPredicate>(predicate).AsList()
+            };
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        static List<TSource> ToListAtRef<TSource, TPredicate>(this in ArraySegment<TSource> source, TPredicate predicate)
+            where TPredicate : struct, IFunctionIn<TSource, int, bool>
+            => source.Count switch
+            {
+                0 => new List<TSource>(),
+                _ => source.ToArrayAtRef<TSource, TPredicate>(predicate).AsList()
+            };
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static List<TResult> ToList<TSource, TResult, TSelector>(this in ArraySegment<TSource> source, TSelector selector)
             where TSelector : struct, IFunction<TSource, TResult>
             => source.Count switch
             {
                 0 => new List<TResult>(),
-                _ => new List<TResult>(collection: new ArraySegmentSelectorToListCollection<TSource, TResult, TSelector>(source, selector))
+                _ => source.ToArray<TSource, TResult, TSelector>(selector).AsList()
             };
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static List<TResult> ToListAt<TSource, TResult, TSelector>(this in ArraySegment<TSource> source, TSelector selector)
             where TSelector : struct, IFunction<TSource, int, TResult>
             => source.Count switch
             {
                 0 => new List<TResult>(),
-                _ => new List<TResult>(collection: new ArraySegmentSelectorAtToListCollection<TSource, TResult, TSelector>(source, selector))
+                _ => source.ToArrayAt<TSource, TResult, TSelector>(selector).AsList()
             };
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static List<TResult> ToList<TSource, TResult, TPredicate, TSelector>(this in ArraySegment<TSource> source, TPredicate predicate, TSelector selector)
             where TPredicate : struct, IFunction<TSource, bool>
             where TSelector : struct, IFunction<TSource, TResult>
-        {
-            using var arrayBuilder = ToArrayBuilder(source, predicate, selector, ArrayPool<TResult>.Shared);
-            // ReSharper disable once HeapView.BoxingAllocation
-            return new List<TResult>(collection: arrayBuilder);
-        }
+            => source.Count switch
+            {
+                0 => new List<TResult>(),
+                _ => source.ToArray<TSource, TResult, TPredicate, TSelector>(predicate, selector).AsList()
+            };
 
-        // helper implementation of ICollection<> so that CopyTo() is used to convert to List<>
-        [GeneratorIgnore]
-        sealed class ArraySegmentSelectorToListCollection<TSource, TResult, TSelector>
-            : ToListCollectionBase<TResult>
-            where TSelector : struct, IFunction<TSource, TResult>
-        {
-            readonly ArraySegment<TSource> source;
-            readonly TSelector selector;
-
-            public ArraySegmentSelectorToListCollection(in ArraySegment<TSource> source, TSelector selector)
-                : base(source.Count)
-                => (this.source, this.selector) = (source, selector);
-
-            public override void CopyTo(TResult[] array, int _)
-                => Copy<TSource, TResult, TSelector>(source, array, selector);
-        }
-
-        [GeneratorIgnore]
-        sealed class ArraySegmentSelectorAtToListCollection<TSource, TResult, TSelector>
-            : ToListCollectionBase<TResult>
-            where TSelector : struct, IFunction<TSource, int, TResult>
-        {
-            readonly ArraySegment<TSource> source;
-            readonly TSelector selector;
-
-            public ArraySegmentSelectorAtToListCollection(in ArraySegment<TSource> source, TSelector selector)
-                : base(source.Count)
-                => (this.source, this.selector) = (source, selector);
-
-            public override void CopyTo(TResult[] array, int _)
-                => CopyAt<TSource, TResult, TSelector>(source, array, selector);
-        }
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        static List<TResult> ToListRef<TSource, TResult, TPredicate, TSelector>(this in ArraySegment<TSource> source, TPredicate predicate, TSelector selector)
+            where TPredicate : struct, IFunctionIn<TSource, bool>
+            where TSelector : struct, IFunctionIn<TSource, TResult>
+            => source.Count switch
+            {
+                0 => new List<TResult>(),
+                _ => source.ToArrayRef<TSource, TResult, TPredicate, TSelector>(predicate, selector).AsList()
+            };
     }
 }

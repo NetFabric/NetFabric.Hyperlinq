@@ -13,24 +13,33 @@ namespace NetFabric.Hyperlinq
             var builder = new LargeArrayBuilder<TSource>(pool);
             if (source.Any())
             {
-                if (source.IsWhole())
+                var array = source.Array!;
+                var start = source.Offset;
+                var end = start + source.Count;
+                for (var index = start; index < end; index++)
                 {
-                    foreach (var item in source.Array!)
-                    {
-                        if (predicate.Invoke(item))
-                            builder.Add(item);
-                    }
+                    var item = array[index];
+                    if (predicate.Invoke(item))
+                        builder.Add(item);
                 }
-                else
+            }
+            return builder;
+        }
+
+        static LargeArrayBuilder<TSource> ToArrayBuilderRef<TSource, TPredicate>(in ArraySegment<TSource> source, TPredicate predicate, ArrayPool<TSource> pool)
+            where TPredicate : struct, IFunctionIn<TSource, bool>
+        {
+            var builder = new LargeArrayBuilder<TSource>(pool);
+            if (source.Any())
+            {
+                var array = source.Array!;
+                var start = source.Offset;
+                var end = start + source.Count;
+                for (var index = start; index < end; index++)
                 {
-                    var array = source.Array!;
-                    var end = source.Offset + source.Count - 1;
-                    for (var index = source.Offset; index <= end; index++)
-                    {
-                        var item = array[index];
-                        if (predicate.Invoke(item))
-                            builder.Add(item);
-                    }
+                    ref readonly var item = ref array[index];
+                    if (predicate.Invoke(in item))
+                        builder.AddRef(in item);
                 }
             }
             return builder;
@@ -43,39 +52,56 @@ namespace NetFabric.Hyperlinq
             var builder = new LargeArrayBuilder<TSource>(pool);
             if (source.Any())
             {
-                if (source.IsWhole())
+                var array = source.Array!;
+                var start = source.Offset;
+                var end = source.Count;
+                if (start is 0)
                 {
-                    var index = 0;
-                    foreach (var item in source.Array!)
+                    for (var index = 0; index < end; index++)
                     {
+                        var item = array[index];
                         if (predicate.Invoke(item, index))
                             builder.Add(item);
-
-                        index++;
                     }
                 }
                 else
                 {
-                    var array = source.Array!;
-                    var end = source.Count - 1;
-                    if (source.Offset is 0)
+                    for (var index = 0; index < end; index++)
                     {
-                        for (var index = 0; index <= end; index++)
-                        {
-                            var item = array[index];
-                            if (predicate.Invoke(item, index))
-                                builder.Add(item);
-                        }
+                        var item = array[index + start];
+                        if (predicate.Invoke(item, index))
+                            builder.Add(item);
                     }
-                    else
+                }
+            }
+            return builder;
+        }
+
+        static LargeArrayBuilder<TSource> ToArrayBuilderAtRef<TSource, TPredicate>(in ArraySegment<TSource> source, TPredicate predicate, ArrayPool<TSource> pool)
+            where TPredicate : struct, IFunctionIn<TSource, int, bool>
+        {
+            var builder = new LargeArrayBuilder<TSource>(pool);
+            if (source.Any())
+            {
+                var array = source.Array!;
+                var start = source.Offset;
+                var end = source.Count;
+                if (start is 0)
+                {
+                    for (var index = 0; index < end; index++)
                     {
-                        var offset = source.Offset;
-                        for (var index = 0; index <= end; index++)
-                        {
-                            var item = array[index + offset];
-                            if (predicate.Invoke(item, index))
-                                builder.Add(item);
-                        }
+                        ref readonly var item = ref array[index];
+                        if (predicate.Invoke(in item, index))
+                            builder.AddRef(item);
+                    }
+                }
+                else
+                {
+                    for (var index = 0; index < end; index++)
+                    {
+                        ref readonly var item = ref array[index + start];
+                        if (predicate.Invoke(in item, index))
+                            builder.AddRef(in item);
                     }
                 }
             }
@@ -89,24 +115,34 @@ namespace NetFabric.Hyperlinq
             var builder = new LargeArrayBuilder<TResult>(pool);
             if (source.Any())
             {
-                if (source.IsWhole())
+                var array = source.Array!;
+                var start = source.Offset;
+                var end = start + source.Count;
+                for (var index = start; index < end; index++)
                 {
-                    foreach (var item in source.Array!)
-                    {
-                        if (predicate.Invoke(item))
-                            builder.Add(selector.Invoke(item));
-                    }
+                    var item = array[index];
+                    if (predicate.Invoke(item))
+                        builder.Add(selector.Invoke(item));
                 }
-                else
+            }
+            return builder;
+        }
+
+        static LargeArrayBuilder<TResult> ToArrayBuilderRef<TSource, TResult, TPredicate, TSelector>(in ArraySegment<TSource> source, TPredicate predicate, TSelector selector, ArrayPool<TResult> pool)
+            where TPredicate : struct, IFunctionIn<TSource, bool>
+            where TSelector : struct, IFunctionIn<TSource, TResult>
+        {
+            var builder = new LargeArrayBuilder<TResult>(pool);
+            if (source.Any())
+            {
+                var array = source.Array!;
+                var start = source.Offset;
+                var end = start + source.Count;
+                for (var index = start; index < end; index++)
                 {
-                    var array = source.Array!;
-                    var end = source.Offset + source.Count - 1;
-                    for (var index = source.Offset; index <= end; index++)
-                    {
-                        var item = array[index];
-                        if (predicate.Invoke(item))
-                            builder.Add(selector.Invoke(item));
-                    }
+                    ref readonly var item = ref array[index];
+                    if (predicate.Invoke(in item))
+                        builder.Add(selector.Invoke(in item));
                 }
             }
             return builder;
