@@ -12,7 +12,7 @@ namespace NetFabric.Hyperlinq
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static ArraySegmentWhereSelectEnumerable<TSource, TResult, TPredicate, TSelector> WhereSelect<TSource, TResult, TPredicate, TSelector>(
-            this ArraySegment<TSource> source, 
+            this in ArraySegment<TSource> source, 
             TPredicate predicate, 
             TSelector selector) 
             where TPredicate : struct, IFunction<TSource, bool>
@@ -30,7 +30,7 @@ namespace NetFabric.Hyperlinq
             readonly TPredicate predicate;
             readonly TSelector selector;
 
-            internal ArraySegmentWhereSelectEnumerable(ArraySegment<TSource> source, TPredicate predicate, TSelector selector)
+            internal ArraySegmentWhereSelectEnumerable(in ArraySegment<TSource> source, TPredicate predicate, TSelector selector)
                 => (this.source, this.predicate, this.selector) = (source, predicate, selector);
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]

@@ -3,6 +3,6 @@
     public abstract class RandomSkipBenchmarksBase : SkipBenchmarksBase
     {
         public override void GlobalSetup()
-            => Initialize(GetRandomValues(Skip + Count));
+            => Initialize(Utils.GetRandomValues(seed, Skip + Count));
     }
 }

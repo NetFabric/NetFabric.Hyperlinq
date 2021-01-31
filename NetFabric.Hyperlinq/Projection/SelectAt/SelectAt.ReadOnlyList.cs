@@ -88,16 +88,22 @@ namespace NetFabric.Hyperlinq
 
             public void CopyTo(TResult[] array) 
             {
-                var end = Count - 1;
+                var end = Count;
                 if (offset is 0)
                 {
-                    for (var index = 0; index <= end; index++)
-                        array[index] = selector.Invoke(source[index], index);
+                    for (var index = 0; index < end; index++)
+                    {
+                        var item = source[index];
+                        array[index] = selector.Invoke(item, index);
+                    }
                 }
                 else
                 {
-                    for (var index = 0; index <= end; index++)
-                        array[index] = selector.Invoke(source[index + offset], index);
+                    for (var index = 0; index < end; index++)
+                    {
+                        var item = source[index + offset];
+                        array[index] = selector.Invoke(item, index);
+                    }
                 }
             }
 
@@ -109,16 +115,22 @@ namespace NetFabric.Hyperlinq
                 }
                 else
                 {
-                    var end = Count - 1;
+                    var end = Count;
                     if (offset is 0)
                     {
-                        for (var index = 0; index <= end; index++)
-                            array[index + arrayIndex] = selector.Invoke(source[index], index);
+                        for (var index = 0; index < end; index++)
+                        {
+                            var item = source[index];
+                            array[index + arrayIndex] = selector.Invoke(item, index);
+                        }
                     }
                     else
                     {
-                        for (var index = 0; index <= end; index++)
-                            array[index + arrayIndex] = selector.Invoke(source[index + offset], index);
+                        for (var index = 0; index < end; index++)
+                        {
+                            var item = source[index + offset];
+                            array[index + arrayIndex] = selector.Invoke(item, index);
+                        }
                     }
                 }
             }
@@ -128,22 +140,24 @@ namespace NetFabric.Hyperlinq
 
             public int IndexOf(TResult item)
             {
-                var end = Count - 1;
+                var end = Count;
                 if (Utils.IsValueType<TResult>())
                 {
                     if (offset is 0)
                     {
-                        for (var index = 0; index <= end; index++)
+                        for (var index = 0; index < end; index++)
                         {
-                            if (EqualityComparer<TResult>.Default.Equals(selector.Invoke(source[index], index), item))
+                            var listItem = source[index];
+                            if (EqualityComparer<TResult>.Default.Equals(selector.Invoke(listItem, index), item))
                                 return index;
                         }
                     }
                     else
                     {
-                        for (var index = 0; index <= end; index++)
+                        for (var index = 0; index < end; index++)
                         {
-                            if (EqualityComparer<TResult>.Default.Equals(selector.Invoke(source[index + offset], index), item))
+                            var listItem = source[index + offset];
+                            if (EqualityComparer<TResult>.Default.Equals(selector.Invoke(listItem, index), item))
                                 return index;
                         }
                     }
@@ -154,17 +168,19 @@ namespace NetFabric.Hyperlinq
 
                     if (offset is 0)
                     {
-                        for (var index = 0; index <= end; index++)
+                        for (var index = 0; index < end; index++)
                         {
-                            if (defaultComparer.Equals(selector.Invoke(source[index], index), item))
+                            var listItem = source[index];
+                            if (defaultComparer.Equals(selector.Invoke(listItem, index), item))
                                 return index;
                         }
                     }
                     else
                     {
-                        for (var index = 0; index <= end; index++)
+                        for (var index = 0; index < end; index++)
                         {
-                            if (defaultComparer.Equals(selector.Invoke(source[index + offset], index), item))
+                            var listItem = source[index + offset];
+                            if (defaultComparer.Equals(selector.Invoke(listItem, index), item))
                                 return index;
                         }
                     }

@@ -7,11 +7,9 @@ namespace NetFabric.Hyperlinq
     public static partial class Wrap
     {
         public static EnumerableWrapper<T> AsEnumerable<T>(T[] source)
-        {
-            if (source is null) throw new ArgumentNullException(nameof(source));
-
-            return new EnumerableWrapper<T>(source);
-        }
+            => source is null
+                ? throw new ArgumentNullException(nameof(source))
+                : new(source);
 
         public class EnumerableWrapper<T> 
             : IEnumerable<T>

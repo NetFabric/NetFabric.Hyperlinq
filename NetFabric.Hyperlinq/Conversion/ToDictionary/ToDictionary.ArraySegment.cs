@@ -19,20 +19,13 @@ namespace NetFabric.Hyperlinq
             var dictionary = new Dictionary<TKey, TSource>(source.Count, comparer);
             if (source.Any())
             {
-                if (source.IsWhole())
+                var array = source.Array!;
+                var start = source.Offset;
+                var end = start + source.Count;
+                for (var index = start; index < end; index++)
                 {
-                    foreach (var item in source.Array!)
-                        dictionary.Add(keySelector.Invoke(item), item);
-                }
-                else
-                {
-                    var array = source.Array!;
-                    var end = source.Count - 1;
-                    for (var index = source.Offset; index <= end; index++)
-                    {
-                        var item = array[index];
-                        dictionary.Add(keySelector.Invoke(item), item);
-                    }
+                    var item = array[index];
+                    dictionary.Add(keySelector.Invoke(item), item);
                 }
             }
             return dictionary;
@@ -46,24 +39,14 @@ namespace NetFabric.Hyperlinq
             var dictionary = new Dictionary<TKey, TSource>(source.Count, comparer);
             if (source.Any())
             {
-                if (source.IsWhole())
+                var array = source.Array!;
+                var start = source.Offset;
+                var end = start + source.Count;
+                for (var index = start; index < end; index++)
                 {
-                    foreach (var item in source.Array!)
-                    {
-                        if (predicate.Invoke(item))
-                            dictionary.Add(keySelector.Invoke(item), item);
-                    }
-                }
-                else
-                {
-                    var array = source.Array!;
-                    var end = source.Count - 1;
-                    for (var index = source.Offset; index <= end; index++)
-                    {
-                        var item = array[index];
-                        if (predicate.Invoke(item))
-                            dictionary.Add(keySelector.Invoke(item), item);
-                    }
+                    var item = array[index];
+                    if (predicate.Invoke(item))
+                        dictionary.Add(keySelector.Invoke(item), item);
                 }
             }
             return dictionary;
@@ -77,38 +60,25 @@ namespace NetFabric.Hyperlinq
             var dictionary = new Dictionary<TKey, TSource>(source.Count, comparer);
             if (source.Any())
             {
-                if (source.IsWhole())
+                var array = source.Array!;
+                var start = source.Offset;
+                var end = source.Count;
+                if (start is 0)
                 {
-                    var index = 0;
-                    foreach (var item in source.Array!)
+                    for (var index = 0; index < end; index++)
                     {
+                        var item = array[index];
                         if (predicate.Invoke(item, index))
                             dictionary.Add(keySelector.Invoke(item), item);
-                        index++;
                     }
                 }
                 else
                 {
-                    var array = source.Array!;
-                    var end = source.Count - 1;
-                    if (source.Offset is 0)
+                    for (var index = 0; index < end; index++)
                     {
-                        for (var index = 0; index <= end; index++)
-                        {
-                            var item = array[index];
-                            if (predicate.Invoke(item, index))
-                                dictionary.Add(keySelector.Invoke(item), item);
-                        }
-                    }
-                    else
-                    {
-                        var offset = source.Offset;
-                        for (var index = 0; index <= end; index++)
-                        {
-                            var item = array[index + offset];
-                            if (predicate.Invoke(item, index))
-                                dictionary.Add(keySelector.Invoke(item), item);
-                        }
+                        var item = array[index + start];
+                        if (predicate.Invoke(item, index))
+                            dictionary.Add(keySelector.Invoke(item), item);
                     }
                 }
             }
@@ -124,29 +94,16 @@ namespace NetFabric.Hyperlinq
             var dictionary = new Dictionary<TKey, TResult>(source.Count, comparer);
             if (source.Any())
             {
-                if (source.IsWhole())
+                var array = source.Array!;
+                var start = source.Offset;
+                var end = start + source.Count;
+                for (var index = start; index < end; index++)
                 {
-                    foreach (var item in source.Array!)
+                    var item = array[index];
+                    if (predicate.Invoke(item))
                     {
-                        if (predicate.Invoke(item))
-                        {
-                            var result = selector.Invoke(item);
-                            dictionary.Add(keySelector.Invoke(result), result);
-                        }
-                    }
-                }
-                else
-                {
-                    var array = source.Array!;
-                    var end = source.Count - 1;
-                    for (var index = source.Offset; index <= end; index++)
-                    {
-                        var item = array[index];
-                        if (predicate.Invoke(item))
-                        {
-                            var result = selector.Invoke(item);
-                            dictionary.Add(keySelector.Invoke(result), result);
-                        }
+                        var result = selector.Invoke(item);
+                        dictionary.Add(keySelector.Invoke(result), result);
                     }
                 }
             }
@@ -168,20 +125,13 @@ namespace NetFabric.Hyperlinq
             var dictionary = new Dictionary<TKey, TElement>(source.Count, comparer);
             if (source.Any())
             {
-                if (source.IsWhole())
+                var array = source.Array!;
+                var start = source.Offset;
+                var end = start + source.Count;
+                for (var index = start; index < end; index++)
                 {
-                    foreach (var item in source.Array!)
-                        dictionary.Add(keySelector.Invoke(item), elementSelector.Invoke(item));
-                }
-                else
-                {
-                    var array = source.Array!;
-                    var end = source.Count - 1;
-                    for (var index = source.Offset; index <= end; index++)
-                    {
-                        var item = array[index];
-                        dictionary.Add(keySelector.Invoke(item), elementSelector.Invoke(item));
-                    }
+                    var item = array[index];
+                    dictionary.Add(keySelector.Invoke(item), elementSelector.Invoke(item));
                 }
             }
             return dictionary;
@@ -196,24 +146,14 @@ namespace NetFabric.Hyperlinq
             var dictionary = new Dictionary<TKey, TElement>(source.Count, comparer);
             if (source.Any())
             {
-                if (source.IsWhole())
+                var array = source.Array!;
+                var start = source.Offset;
+                var end = start + source.Count;
+                for (var index = start; index < end; index++)
                 {
-                    foreach (var item in source.Array!)
-                    {
-                        if (predicate.Invoke(item))
-                            dictionary.Add(keySelector.Invoke(item), elementSelector.Invoke(item));
-                    }
-                }
-                else
-                {
-                    var array = source.Array!;
-                    var end = source.Count - 1;
-                    for (var index = source.Offset; index <= end; index++)
-                    {
-                        var item = array[index];
-                        if (predicate.Invoke(item))
-                            dictionary.Add(keySelector.Invoke(item), elementSelector.Invoke(item));
-                    }
+                    var item = array[index];
+                    if (predicate.Invoke(item))
+                        dictionary.Add(keySelector.Invoke(item), elementSelector.Invoke(item));
                 }
             }
             return dictionary;
@@ -228,38 +168,25 @@ namespace NetFabric.Hyperlinq
             var dictionary = new Dictionary<TKey, TElement>(source.Count, comparer);
             if (source.Any())
             {
-                if (source.IsWhole())
+                var array = source.Array!;
+                var start = source.Offset;
+                var end = source.Count;
+                if (start is 0)
                 {
-                    var index = 0;
-                    foreach (var item in source.Array!)
+                    for (var index = 0; index < end; index++)
                     {
+                        var item = array[index];
                         if (predicate.Invoke(item, index))
                             dictionary.Add(keySelector.Invoke(item), elementSelector.Invoke(item));
-                        index++;
                     }
                 }
                 else
                 {
-                    var array = source.Array!;
-                    var end = source.Count - 1;
-                    if (source.Offset is 0)
+                    for (var index = 0; index < end; index++)
                     {
-                        for (var index = 0; index <= end; index++)
-                        {
-                            var item = array[index];
-                            if (predicate.Invoke(item, index))
-                                dictionary.Add(keySelector.Invoke(item), elementSelector.Invoke(item));
-                        }
-                    }
-                    else
-                    {
-                        var offset = source.Offset;
-                        for (var index = 0; index <= end; index++)
-                        {
-                            var item = array[index + offset];
-                            if (predicate.Invoke(item, index))
-                                dictionary.Add(keySelector.Invoke(item), elementSelector.Invoke(item));
-                        }
+                        var item = array[index + start];
+                        if (predicate.Invoke(item, index))
+                            dictionary.Add(keySelector.Invoke(item), elementSelector.Invoke(item));
                     }
                 }
             }
@@ -276,29 +203,16 @@ namespace NetFabric.Hyperlinq
             var dictionary = new Dictionary<TKey, TElement>(source.Count, comparer);
             if (source.Any())
             {
-                if (source.IsWhole())
+                var array = source.Array!;
+                var start = source.Offset;
+                var end = start + source.Count;
+                for (var index = start; index < end; index++)
                 {
-                    foreach (var item in source.Array!)
+                    var item = array[index];
+                    if (predicate.Invoke(item))
                     {
-                        if (predicate.Invoke(item))
-                        {
-                            var result = selector.Invoke(item);
-                            dictionary.Add(keySelector.Invoke(result), elementSelector.Invoke(result));
-                        }
-                    }
-                }
-                else
-                {
-                    var array = source.Array!;
-                    var end = source.Count - 1;
-                    for (var index = source.Offset; index <= end; index++)
-                    {
-                        var item = array[index];
-                        if (predicate.Invoke(item))
-                        {
-                            var result = selector.Invoke(item);
-                            dictionary.Add(keySelector.Invoke(result), elementSelector.Invoke(result));
-                        }
+                        var result = selector.Invoke(item);
+                        dictionary.Add(keySelector.Invoke(result), elementSelector.Invoke(result));
                     }
                 }
             }

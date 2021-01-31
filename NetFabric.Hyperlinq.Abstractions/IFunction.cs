@@ -1,6 +1,4 @@
-﻿using System.Diagnostics.Contracts;
-
-namespace NetFabric.Hyperlinq
+﻿namespace NetFabric.Hyperlinq
 {
     public interface IFunction<in T, out TResult>
     {

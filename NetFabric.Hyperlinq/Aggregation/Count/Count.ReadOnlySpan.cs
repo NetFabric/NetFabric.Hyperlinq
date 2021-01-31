@@ -14,7 +14,22 @@ namespace NetFabric.Hyperlinq
         {
             var counter = 0;
             for (var index = 0; index < source.Length; index++)
-                counter += predicate.Invoke(source[index]).AsByte();
+            {
+                var item = source[index];
+                counter += predicate.Invoke(item).AsByte();
+            }
+            return counter;
+        }
+
+        static int CountRef<TSource, TPredicate>(this ReadOnlySpan<TSource> source, TPredicate predicate)
+            where TPredicate : struct, IFunctionIn<TSource, bool>
+        {
+            var counter = 0;
+            for (var index = 0; index < source.Length; index++)
+            {
+                var item = source[index];
+                counter += predicate.Invoke(in item).AsByte();
+            }
             return counter;
         }
 
@@ -23,7 +38,22 @@ namespace NetFabric.Hyperlinq
         {
             var counter = 0;
             for (var index = 0; index < source.Length; index++)
-                counter += predicate.Invoke(source[index], index).AsByte();
+            {
+                var item = source[index];
+                counter += predicate.Invoke(item, index).AsByte();
+            }
+            return counter;
+        }
+
+        static int CountAtRef<TSource, TPredicate>(this ReadOnlySpan<TSource> source, TPredicate predicate)
+            where TPredicate : struct, IFunctionIn<TSource, int, bool>
+        {
+            var counter = 0;
+            for (var index = 0; index < source.Length; index++)
+            {
+                var item = source[index];
+                counter += predicate.Invoke(in item, index).AsByte();
+            }
             return counter;
         }
     }

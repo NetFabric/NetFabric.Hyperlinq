@@ -29,4 +29,12 @@ namespace NetFabric.Hyperlinq
             , IEnumerator<T>
     {
     }
+
+    public interface IValueEnumerableRef<out T, out TEnumerator>
+        where TEnumerator
+            : struct
+            , IEnumeratorRef<T>
+    {
+        [return: NotNull] TEnumerator GetEnumerator();
+    }
 }

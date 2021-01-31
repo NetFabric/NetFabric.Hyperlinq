@@ -68,16 +68,18 @@ namespace NetFabric.Hyperlinq
             where TList : IReadOnlyList<TSource>
             where TPredicate : struct, IFunction<TSource, bool>
         {
-            var end = offset + count - 1;
-            for (var index = offset; index <= end; index++)
+            var end = offset + count;
+            for (var index = offset; index < end; index++)
             {
-                if (predicate.Invoke(source[index]))
+                var item = source[index];
+                if (predicate.Invoke(item))
                 {
-                    var value = source[index];
+                    var value = item;
 
-                    for (index++; index <= end; index++)
+                    for (index++; index < end; index++)
                     {
-                        if (predicate.Invoke(source[index]))
+                        item = source[index];
+                        if (predicate.Invoke(item))
                             return Option.None;
                     }
 
@@ -93,18 +95,20 @@ namespace NetFabric.Hyperlinq
             where TList : IReadOnlyList<TSource>
             where TPredicate : struct, IFunction<TSource, int, bool>
         {
-            var end = count - 1;
+            var end = count;
             if (offset is 0)
             {
-                for (var index = 0; index <= end; index++)
+                for (var index = 0; index < end; index++)
                 {
-                    if (predicate.Invoke(source[index], index))
+                    var item = source[index];
+                    if (predicate.Invoke(item, index))
                     {
-                        var value = source[index];
+                        var value = item;
 
-                        for (index++; index <= end; index++)
+                        for (index++; index < end; index++)
                         {
-                            if (predicate.Invoke(source[index], index))
+                            item = source[index];
+                            if (predicate.Invoke(item, index))
                                 return Option.None;
                         }
 
@@ -114,15 +118,17 @@ namespace NetFabric.Hyperlinq
             }
             else
             {
-                for (var index = 0; index <= end; index++)
+                for (var index = 0; index < end; index++)
                 {
-                    if (predicate.Invoke(source[index + offset], index))
+                    var item = source[index + offset];
+                    if (predicate.Invoke(item, index))
                     {
-                        var value = source[index + offset];
+                        var value = item;
 
-                        for (index++; index <= end; index++)
+                        for (index++; index < end; index++)
                         {
-                            if (predicate.Invoke(source[index + offset], index))
+                            item = source[index + offset];
+                            if (predicate.Invoke(item, index))
                                 return Option.None;
                         }
 

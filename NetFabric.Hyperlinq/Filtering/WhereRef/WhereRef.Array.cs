@@ -5,14 +5,15 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class ArrayExtensions
     {
-        [GeneratorMapping("TPredicate", "NetFabric.Hyperlinq.FunctionWrapper<TSource, bool>")]
+
+        [GeneratorMapping("TPredicate", "NetFabric.Hyperlinq.FunctionInWrapper<TSource, bool>")]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ArraySegmentWhereRefEnumerable<TSource, FunctionWrapper<TSource, bool>> WhereRef<TSource>(this TSource[] source, Func<TSource, bool> predicate)
-            => source.WhereRef(new FunctionWrapper<TSource, bool>(predicate));
-        
+        public static ArraySegmentWhereRefEnumerable<TSource, FunctionInWrapper<TSource, bool>> Where<TSource>(this TSource[] source, FunctionIn<TSource, bool> predicate)
+            => source.WhereRef(new FunctionInWrapper<TSource, bool>(predicate));
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ArraySegmentWhereRefEnumerable<TSource, TPredicate> WhereRef<TSource, TPredicate>(this TSource[] source, TPredicate predicate = default)
-            where TPredicate : struct, IFunction<TSource, bool>
+            where TPredicate : struct, IFunctionIn<TSource, bool>
             => new ArraySegment<TSource>(source).WhereRef(predicate);
     }
 }

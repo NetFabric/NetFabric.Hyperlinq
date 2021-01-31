@@ -14,12 +14,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.WhereRef
         public void WhereRef_Predicate_With_ValidData_Must_Succeed(int[] source, Func<int, bool> predicate)
         {
             // Arrange
+            var function = Wrap.AsFunctionIn(predicate);
             var expected = Enumerable
                 .Where(source, predicate);
 
             // Act
             var result = ArrayExtensions
-                .WhereRef(source.AsMemory(), predicate);
+                .Where(source.AsMemory(), function);
 
             // Assert
             _ = result.Must()

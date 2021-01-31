@@ -31,7 +31,7 @@ namespace NetFabric.Hyperlinq
             // ReSharper disable once HeapView.ObjectAllocation.Evident
             var result = new TSource[count];
 #endif
-            ReadOnlyListExtensions.Copy(source, offset, result, 0, count);
+            Copy(source, offset, result, 0, count);
             return result;
         }
 
@@ -99,7 +99,7 @@ namespace NetFabric.Hyperlinq
             // ReSharper disable once HeapView.ObjectAllocation.Evident
             var result = new TResult[count];
 #endif
-            ReadOnlyListExtensions.Copy<TList, TSource, TResult, TSelector>(source, offset, result, 0, count, selector);
+            Copy<TList, TSource, TResult, TSelector>(source, offset, result, 0, count, selector);
             return result;
         }
 

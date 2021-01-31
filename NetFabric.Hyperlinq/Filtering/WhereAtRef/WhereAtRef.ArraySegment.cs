@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Buffers;
+using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
@@ -8,55 +11,61 @@ namespace NetFabric.Hyperlinq
     public static partial class ArrayExtensions
     {
 
-        [GeneratorMapping("TPredicate", "NetFabric.Hyperlinq.FunctionWrapper<TSource, int, bool>")]
+        [GeneratorMapping("TPredicate", "NetFabric.Hyperlinq.FunctionInWrapper<TSource, int, bool>")]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static MemoryWhereRefAtEnumerable<TSource, FunctionWrapper<TSource, int, bool>> WhereRef<TSource>(this in Memory<TSource> source, Func<TSource, int, bool> predicate)
-            => new(source, new FunctionWrapper<TSource, int, bool>(predicate));
+        public static ArraySegmentWhereAtRefEnumerable<TSource, FunctionInWrapper<TSource, int, bool>> Where<TSource>(this in ArraySegment<TSource> source, FunctionIn<TSource, int, bool> predicate)
+            => source.WhereAtRef(new FunctionInWrapper<TSource, int, bool>(predicate));
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static MemoryWhereRefAtEnumerable<TSource, TPredicate> WhereRefAt<TSource, TPredicate>(this in Memory<TSource> source, TPredicate predicate = default)
-            where TPredicate : struct, IFunction<TSource, int, bool>
+        public static ArraySegmentWhereAtRefEnumerable<TSource, TPredicate> WhereAtRef<TSource, TPredicate>(this in ArraySegment<TSource> source, TPredicate predicate = default)
+            where TPredicate : struct, IFunctionIn<TSource, int, bool>
             => new(source, predicate);
 
         [GeneratorIgnore]
         [StructLayout(LayoutKind.Auto)]
-        public readonly struct MemoryWhereRefAtEnumerable<TSource, TPredicate>
-            where TPredicate : struct, IFunction<TSource, int, bool>
+        public readonly struct ArraySegmentWhereAtRefEnumerable<TSource, TPredicate>
+            where TPredicate : struct, IFunctionIn<TSource, int, bool>
         {
-            readonly Memory<TSource> source;
+            readonly ArraySegment<TSource> source;
             readonly TPredicate predicate;
 
-            internal MemoryWhereRefAtEnumerable(Memory<TSource> source, TPredicate predicate)
+            internal ArraySegmentWhereAtRefEnumerable(in ArraySegment<TSource> source, TPredicate predicate)
                 => (this.source, this.predicate) = (source, predicate);
 
             public readonly Enumerator GetEnumerator()
-                => new (in this);
+                => new(in this);
 
             [StructLayout(LayoutKind.Sequential)]
-            public ref struct Enumerator
+            public struct Enumerator
+                : IEnumeratorRef<TSource>
             {
                 int index;
                 readonly int end;
-                readonly Span<TSource> source;
+                readonly int offset;
+                readonly TSource[]? source;
                 TPredicate predicate;
 
-                internal Enumerator(in MemoryWhereRefAtEnumerable<TSource, TPredicate> enumerable)
+                internal Enumerator(in ArraySegmentWhereAtRefEnumerable<TSource, TPredicate> enumerable)
                 {
-                    source = enumerable.source.Span;
+                    source = enumerable.source.Array;
                     predicate = enumerable.predicate;
+                    offset = enumerable.source.Offset;
                     index = -1;
-                    end = index + source.Length;
+                    end = index + enumerable.source.Count;
                 }
 
-                public readonly ref TSource Current
-                    => ref source[index];
+                public ref TSource Current
+                {
+                    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                    get => ref source![index + offset];
+                }
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public bool MoveNext()
                 {
                     while (++index <= end)
                     {
-                        if (predicate.Invoke(source[index], index))
+                        if (predicate.Invoke(source![index + offset], index))
                             return true;
                     }
                     return false;
@@ -109,3 +118,4 @@ namespace NetFabric.Hyperlinq
         }
     }
 }
+

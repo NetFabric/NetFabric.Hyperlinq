@@ -8,20 +8,20 @@ namespace NetFabric.Hyperlinq
     public static partial class ArrayExtensions
     {
 
-        [GeneratorMapping("TPredicate", "NetFabric.Hyperlinq.FunctionWrapper<TSource, int, bool>")]
+        [GeneratorMapping("TPredicate", "NetFabric.Hyperlinq.FunctionInWrapper<TSource, int, bool>")]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ReadOnlySpanWhereRefAtEnumerable<TSource, FunctionWrapper<TSource, int, bool>> WhereRef<TSource>(this in ReadOnlySpan<TSource> source, Func<TSource, int, bool> predicate)
-            => new(source, new FunctionWrapper<TSource, int, bool>(predicate));
+        public static ReadOnlySpanWhereRefAtEnumerable<TSource, FunctionInWrapper<TSource, int, bool>> Where<TSource>(this ReadOnlySpan<TSource> source, FunctionIn<TSource, int, bool> predicate)
+            => source.WhereRefAt(new FunctionInWrapper<TSource, int, bool>(predicate));
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ReadOnlySpanWhereRefAtEnumerable<TSource, TPredicate> WhereRefAt<TSource, TPredicate>(this in ReadOnlySpan<TSource> source, TPredicate predicate = default)
-            where TPredicate : struct, IFunction<TSource, int, bool>
+        public static ReadOnlySpanWhereRefAtEnumerable<TSource, TPredicate> WhereRefAt<TSource, TPredicate>(this ReadOnlySpan<TSource> source, TPredicate predicate = default)
+            where TPredicate : struct, IFunctionIn<TSource, int, bool>
             => new(source, predicate);
 
         [GeneratorIgnore]
         [StructLayout(LayoutKind.Auto)]
         public readonly ref struct ReadOnlySpanWhereRefAtEnumerable<TSource, TPredicate>
-            where TPredicate : struct, IFunction<TSource, int, bool>
+            where TPredicate : struct, IFunctionIn<TSource, int, bool>
         {
             readonly ReadOnlySpan<TSource> source;
             readonly TPredicate predicate;
@@ -51,8 +51,8 @@ namespace NetFabric.Hyperlinq
                     end = index + source.Length;
                 }
 
-                public readonly TSource Current
-                    => source[index];
+                public readonly ref readonly TSource Current
+                    => ref source[index];
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public bool MoveNext()

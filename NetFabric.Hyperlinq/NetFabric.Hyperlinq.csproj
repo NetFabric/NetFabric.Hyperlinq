@@ -1,11 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net461;netstandard2.0;netcoreapp2.1;netstandard2.1;net5.0</TargetFrameworks>
+    <TargetFrameworks>net461;netstandard2.0;netcoreapp2.1;netstandard2.1;netcoreapp3.0;netcoreapp3.1;net5.0</TargetFrameworks>
     <PackageId>NetFabric.Hyperlinq</PackageId>
     <Title>NetFabric.Hyperlinq</Title>
     <Description> High performance LINQ implementation with minimal heap allocations. Supports enumerables, async enumerables, arrays, Memory and Span.</Description>
-    <Version>3.0.0-beta27</Version>
+    <Version>3.0.0-beta29</Version>
     <PackageIcon>Icon.png</PackageIcon>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageTags>netfabric, hyperlinq, linq, enumeration, extensions, performance</PackageTags>
@@ -35,7 +35,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\NetFabric.Hyperlinq.Abstractions\NetFabric.Hyperlinq.Abstractions.csproj" />
-    <ProjectReference Include="..\NetFabric.Hyperlinq.Interfaces\NetFabric.Hyperlinq.Interfaces.csproj" />
     <ProjectReference Include="..\NetFabric.Hyperlinq.SourceGenerator\NetFabric.Hyperlinq.SourceGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />  
   </ItemGroup>
 
@@ -55,7 +54,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Meziantou.Analyzer" Version="1.0.566">
+    <PackageReference Include="Meziantou.Analyzer" Version="1.0.645">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>

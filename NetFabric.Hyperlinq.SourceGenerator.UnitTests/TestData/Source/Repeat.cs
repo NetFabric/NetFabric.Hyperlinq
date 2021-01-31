@@ -52,16 +52,12 @@ namespace NetFabric.Hyperlinq
 
             public void CopyTo(Span<TSource> span) 
             {
-                var end = count - 1;
-                for (var index = 0; index <= end; index++)
-                    span[index] = value;
+
             }
 
             public void CopyTo(TSource[] array, int arrayIndex)
             {
-                var end = arrayIndex + count - 1;
-                for (var index = arrayIndex; index <= end; index++)
-                    array[index] = value;
+
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
