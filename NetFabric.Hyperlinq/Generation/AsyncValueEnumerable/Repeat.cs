@@ -190,34 +190,8 @@ namespace NetFabric.Hyperlinq
                 return new ValueTask<IMemoryOwner<TSource>>(result: result);
             }
 
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public ValueTask<List<TSource>> ToListAsync(CancellationToken cancellationToken = default)
-                // ReSharper disable once HeapView.ObjectAllocation.Evident
-                => new(result: new List<TSource>(collection: new RangeToListCollection(value, count, cancellationToken)));
-
-            sealed class RangeToListCollection
-                : ToListCollectionBase<TSource>
-            {
-                readonly TSource value;
-                readonly CancellationToken cancellationToken;
-
-                public RangeToListCollection(TSource value, int count, CancellationToken cancellationToken)
-                    : base(count)
-                    => (this.value, this.cancellationToken) = (value, cancellationToken);
-
-                public override void CopyTo(TSource[] array, int _)
-                {
-                    if (value is object)
-                    {
-                        var end = Count - 1;
-                        for (var index = 0; index <= end; index++)
-                        {
-                            cancellationToken.ThrowIfCancellationRequested();
-                            array[index] = value;
-                        }
-                    }
-                }
-            }
+            public async ValueTask<List<TSource>> ToListAsync(CancellationToken cancellationToken = default)
+                => (await ToArrayAsync(cancellationToken).ConfigureAwait(false)).AsList();
         }
     }
 }

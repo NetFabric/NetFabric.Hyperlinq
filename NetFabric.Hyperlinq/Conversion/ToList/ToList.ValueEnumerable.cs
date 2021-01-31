@@ -13,11 +13,7 @@ namespace NetFabric.Hyperlinq
         public static List<TSource> ToList<TEnumerable, TEnumerator, TSource>(this TEnumerable source)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
-        {
-            using var arrayBuilder = ToArrayBuilder<TEnumerable, TEnumerator, TSource>(source, ArrayPool<TSource>.Shared);
-            // ReSharper disable once HeapView.BoxingAllocation
-            return new List<TSource>(collection: arrayBuilder);
-        }
+            => source.ToArray<TEnumerable, TEnumerator, TSource>().AsList();
 
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -25,11 +21,7 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
             where TPredicate : struct, IFunction<TSource, bool>
-        {
-            using var arrayBuilder = ToArrayBuilder<TEnumerable, TEnumerator, TSource, TPredicate>(source, predicate, ArrayPool<TSource>.Shared);
-            // ReSharper disable once HeapView.BoxingAllocation
-            return new List<TSource>(collection: arrayBuilder);
-        }
+            => source.ToArray<TEnumerable, TEnumerator, TSource, TPredicate>(predicate).AsList();
 
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -37,11 +29,7 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
             where TPredicate : struct, IFunction<TSource, int, bool>
-        {
-            using var arrayBuilder = ToArrayBuilderAt<TEnumerable, TEnumerator, TSource, TPredicate>(source, predicate, ArrayPool<TSource>.Shared);
-            // ReSharper disable once HeapView.BoxingAllocation
-            return new List<TSource>(collection: arrayBuilder);
-        }
+            => source.ToArrayAt<TEnumerable, TEnumerator, TSource, TPredicate>(predicate).AsList();
 
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -49,11 +37,7 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
             where TSelector : struct, IFunction<TSource, TResult>
-        {
-            using var arrayBuilder = ToArrayBuilder<TEnumerable, TEnumerator, TSource, TResult, TSelector>(source, selector, ArrayPool<TResult>.Shared);
-            // ReSharper disable once HeapView.BoxingAllocation
-            return new List<TResult>(collection: arrayBuilder);
-        }
+            => source.ToArray<TEnumerable, TEnumerator, TSource, TResult, TSelector>(selector).AsList();
 
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -61,11 +45,7 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
             where TSelector : struct, IFunction<TSource, int, TResult>
-        {
-            using var arrayBuilder = ToArrayBuilderAt<TEnumerable, TEnumerator, TSource, TResult, TSelector>(source, selector, ArrayPool<TResult>.Shared);
-            // ReSharper disable once HeapView.BoxingAllocation
-            return new List<TResult>(collection: arrayBuilder);
-        }
+            => source.ToArrayAt<TEnumerable, TEnumerator, TSource, TResult, TSelector>(selector).AsList();
 
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -74,11 +54,7 @@ namespace NetFabric.Hyperlinq
             where TEnumerator : struct, IEnumerator<TSource>
             where TPredicate : struct, IFunction<TSource, bool>
             where TSelector : struct, IFunction<TSource, TResult>
-        {
-            using var arrayBuilder = ToArrayBuilder<TEnumerable, TEnumerator, TSource, TResult, TPredicate, TSelector>(source, predicate, selector, ArrayPool<TResult>.Shared);
-            // ReSharper disable once HeapView.BoxingAllocation
-            return new List<TResult>(collection: arrayBuilder);
-        }
+            => source.ToArray<TEnumerable, TEnumerator, TSource, TResult, TPredicate, TSelector>(predicate, selector).AsList();
 
     }
 }
