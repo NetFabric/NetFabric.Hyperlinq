@@ -212,43 +212,8 @@ namespace NetFabric.Hyperlinq
                 return new ValueTask<IMemoryOwner<int>>(result);
             }
 
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public ValueTask<List<int>> ToListAsync(CancellationToken cancellationToken = default)
-                // ReSharper disable once HeapView.ObjectAllocation.Evident
-                => new(new List<int>(new RangeToListCollection(this, cancellationToken)));
-
-            sealed class RangeToListCollection
-                : ToListCollectionBase<int>
-            {
-                readonly RangeEnumerable source;
-                readonly CancellationToken cancellationToken;
-
-                public RangeToListCollection(in RangeEnumerable source, CancellationToken cancellationToken)
-                    : base(source.count)
-                    => (this.source, this.cancellationToken) = (source, cancellationToken);
-
-                public override void CopyTo(int[] array, int _)
-                {
-                    var count = source.count;
-                    if (source.start is 0)
-                    {
-                        for (var index = 0; index < count; index++)
-                        {
-                            cancellationToken.ThrowIfCancellationRequested();
-                            array[index] = index;
-                        }
-                    }
-                    else
-                    {
-                        var start = source.start;
-                        for (var index = 0; index < count; index++)
-                        {
-                            cancellationToken.ThrowIfCancellationRequested();
-                            array[index] = index + start;
-                        }
-                    }
-                }
-            }
+            public async ValueTask<List<int>> ToListAsync(CancellationToken cancellationToken = default)
+                => (await ToArrayAsync(cancellationToken).ConfigureAwait(false)).AsList();
         }
     }
 }

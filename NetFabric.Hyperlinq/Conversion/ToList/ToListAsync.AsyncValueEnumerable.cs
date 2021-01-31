@@ -14,8 +14,7 @@ namespace NetFabric.Hyperlinq
         public static async ValueTask<List<TSource>> ToListAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source, CancellationToken cancellationToken = default)
             where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
-            // ReSharper disable once HeapView.BoxingAllocation
-            => new(collection: await ToArrayBuilderAsync<TEnumerable, TEnumerator, TSource>(source, ArrayPool<TSource>.Shared, cancellationToken).ConfigureAwait(false));
+            => (await source.ToArrayAsync<TEnumerable, TEnumerator, TSource>(cancellationToken).ConfigureAwait(false)).AsList();
 
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -23,8 +22,7 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
             where TPredicate : struct, IAsyncFunction<TSource, bool>
-            // ReSharper disable once HeapView.BoxingAllocation
-            => new(collection: await ToArrayBuilderAsync<TEnumerable, TEnumerator, TSource, TPredicate>(source, predicate, ArrayPool<TSource>.Shared, cancellationToken).ConfigureAwait(false));
+            => (await source.ToArrayAsync<TEnumerable, TEnumerator, TSource, TPredicate>(predicate, cancellationToken).ConfigureAwait(false)).AsList();
 
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -32,8 +30,7 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
             where TPredicate : struct, IAsyncFunction<TSource, int, bool>
-            // ReSharper disable once HeapView.BoxingAllocation
-            => new(collection: await ToArrayBuilderAtAsync<TEnumerable, TEnumerator, TSource, TPredicate>(source, predicate, ArrayPool<TSource>.Shared, cancellationToken).ConfigureAwait(false));
+            => (await source.ToArrayAtAsync<TEnumerable, TEnumerator, TSource, TPredicate>(predicate, cancellationToken).ConfigureAwait(false)).AsList();
 
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -41,8 +38,7 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
             where TSelector : struct, IAsyncFunction<TSource, TResult>
-            // ReSharper disable once HeapView.BoxingAllocation
-            => new(collection: await ToArrayBuilderAsync<TEnumerable, TEnumerator, TSource, TResult, TSelector>(source, selector, ArrayPool<TResult>.Shared, cancellationToken).ConfigureAwait(false));
+            => (await source.ToArrayAsync<TEnumerable, TEnumerator, TSource, TResult, TSelector>(selector, cancellationToken).ConfigureAwait(false)).AsList();
 
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -50,8 +46,7 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
             where TSelector : struct, IAsyncFunction<TSource, int, TResult>
-            // ReSharper disable once HeapView.BoxingAllocation
-            => new(collection: await ToArrayBuilderAtAsync<TEnumerable, TEnumerator, TSource, TResult, TSelector>(source, selector, ArrayPool<TResult>.Shared, cancellationToken).ConfigureAwait(false));
+            => (await source.ToArrayAtAsync<TEnumerable, TEnumerator, TSource, TResult, TSelector>(selector, cancellationToken).ConfigureAwait(false)).AsList();
 
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -60,7 +55,6 @@ namespace NetFabric.Hyperlinq
             where TEnumerator : struct, IAsyncEnumerator<TSource>
             where TPredicate : struct, IAsyncFunction<TSource, bool>
             where TSelector : struct, IAsyncFunction<TSource, TResult>
-            // ReSharper disable once HeapView.BoxingAllocation
-            => new(collection: await ToArrayBuilderAsync<TEnumerable, TEnumerator, TSource, TResult, TPredicate, TSelector>(source, predicate, selector, ArrayPool<TResult>.Shared, cancellationToken).ConfigureAwait(false));
+            => (await source.ToArrayAsync<TEnumerable, TEnumerator, TSource, TResult, TPredicate, TSelector>(predicate, selector, cancellationToken).ConfigureAwait(false)).AsList();
     }
 }
