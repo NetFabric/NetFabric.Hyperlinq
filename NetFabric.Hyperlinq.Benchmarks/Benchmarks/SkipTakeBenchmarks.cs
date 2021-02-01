@@ -108,7 +108,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int StructLinq_Array()
         {
             var sum = 0;
-            foreach (var item in array.ToStructEnumerable().Skip((uint)Skip, x => x).Take((uint)Count, x => x))
+            foreach (var item in array.ToStructEnumerable().Skip(Skip, x => x).Take(Count, x => x))
                 sum += item;
             return sum;
         }
@@ -118,7 +118,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int StructLinq_Enumerable_Value()
         {
             var sum = 0;
-            foreach (var item in enumerableValue.ToStructEnumerable().Skip((uint)Skip, x => x).Take((uint)Count, x => x))
+            foreach (var item in enumerableValue.ToStructEnumerable().Skip(Skip, x => x).Take(Count, x => x))
                 sum += item;
             return sum;
         }
@@ -128,7 +128,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int StructLinq_Collection_Value()
         {
             var sum = 0;
-            foreach (var item in collectionValue.ToStructEnumerable().Skip((uint)Skip, x => x).Take((uint)Count, x => x))
+            foreach (var item in collectionValue.ToStructEnumerable().Skip(Skip, x => x).Take(Count, x => x))
                 sum += item;
             return sum;
         }
@@ -138,7 +138,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int StructLinq_List_Value()
         {
             var sum = 0;
-            foreach (var item in listValue.ToStructEnumerable().Skip((uint)Skip, x => x).Take((uint)Count, x => x))
+            foreach (var item in listValue.ToStructEnumerable().Skip(Skip, x => x).Take(Count, x => x))
                 sum += item;
             return sum;
         }
@@ -148,7 +148,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int StructLinq_Enumerable_Reference()
         {
             var sum = 0;
-            foreach (var item in enumerableReference.ToStructEnumerable().Skip((uint)Skip, x => x).Take((uint)Count, x => x))
+            foreach (var item in enumerableReference.ToStructEnumerable().Skip(Skip, x => x).Take(Count, x => x))
                 sum += item;
             return sum;
         }
@@ -158,7 +158,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int StructLinq_Collection_Reference()
         {
             var sum = 0;
-            foreach (var item in collectionReference.ToStructEnumerable().Skip((uint)Skip, x => x).Take((uint)Count, x => x))
+            foreach (var item in collectionReference.ToStructEnumerable().Skip(Skip, x => x).Take(Count, x => x))
                 sum += item;
             return sum;
         }
@@ -168,7 +168,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int StructLinq_List_Reference()
         {
             var sum = 0;
-            foreach (var item in listReference.ToStructEnumerable().Skip((uint)Skip, x => x).Take((uint)Count, x => x))
+            foreach (var item in listReference.ToStructEnumerable().Skip(Skip, x => x).Take(Count, x => x))
                 sum += item;
             return sum;
         }

@@ -8,8 +8,8 @@
 - System.Linq.Async: [5.0.0](https://www.nuget.org/packages/System.Linq.Async/5.0.0)
 - System.Interactive: [5.0.0](https://www.nuget.org/packages/System.Interactive/5.0.0)
 - System.Interactive.Async: [5.0.0](https://www.nuget.org/packages/System.Interactive.Async/5.0.0)
-- StructLinq: [0.19.3](https://www.nuget.org/packages/StructLinq/0.19.3)
-- NetFabric.Hyperlinq: [3.0.0-beta28](https://www.nuget.org/packages/NetFabric.Hyperlinq/3.0.0-beta28)
+- StructLinq: [0.25.3](https://www.nuget.org/packages/StructLinq/0.25.3)
+- NetFabric.Hyperlinq: [3.0.0-beta29](https://www.nuget.org/packages/NetFabric.Hyperlinq/3.0.0-beta29)
 
 ### Results:
 ``` ini
@@ -22,7 +22,7 @@ Intel Core i7-7567U CPU 3.50GHz (Kaby Lake), 1 CPU, 4 logical and 2 physical cor
 Job=.NET Core 5.0  Runtime=.NET Core 5.0  
 
 ```
-| Method |     Count |     Mean |    Error |   StdDev | Ratio | RatioSD |
-|------- |---------- |---------:|---------:|---------:|------:|--------:|
-|     LT | 100000000 | 37.93 ms | 3.088 ms | 9.106 ms |  1.00 |    0.00 |
-|    LTE | 100000000 | 28.49 ms | 0.386 ms | 0.361 ms |  0.61 |    0.03 |
+| Method |     Count |     Mean |    Error |   StdDev | Ratio |
+|------- |---------- |---------:|---------:|---------:|------:|
+|     LT | 100000000 | 51.32 ms | 0.108 ms | 0.096 ms |  1.00 |
+|    LTE | 100000000 | 51.30 ms | 0.079 ms | 0.066 ms |  1.00 |

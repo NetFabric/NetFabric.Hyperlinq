@@ -4,34 +4,33 @@
 [ArrayIterationBenchmarks.cs](../NetFabric.Hyperlinq.Benchmarks/Benchmarks/ArrayIterationBenchmarks.cs)
 
 ### References:
-- Linq: 4.8.4180.0
-- System.Linq.Async: [4.1.1](https://www.nuget.org/packages/System.Linq.Async/4.1.1)
-- System.Interactive: [4.1.1](https://www.nuget.org/packages/System.Interactive/4.1.1)
-- System.Interactive.Async: [4.1.1](https://www.nuget.org/packages/System.Interactive.Async/4.1.1)
-- StructLinq: [0.19.2](https://www.nuget.org/packages/StructLinq/0.19.2)
-- NetFabric.Hyperlinq: [3.0.0-beta26](https://www.nuget.org/packages/NetFabric.Hyperlinq/3.0.0-beta26)
+- Linq: 4.8.4300.0
+- System.Linq.Async: [5.0.0](https://www.nuget.org/packages/System.Linq.Async/5.0.0)
+- System.Interactive: [5.0.0](https://www.nuget.org/packages/System.Interactive/5.0.0)
+- System.Interactive.Async: [5.0.0](https://www.nuget.org/packages/System.Interactive.Async/5.0.0)
+- StructLinq: [0.25.3](https://www.nuget.org/packages/StructLinq/0.25.3)
+- NetFabric.Hyperlinq: [3.0.0-beta29](https://www.nuget.org/packages/NetFabric.Hyperlinq/3.0.0-beta29)
 
 ### Results:
 ``` ini
 
 BenchmarkDotNet=v0.12.1, OS=Windows 10.0.19042
 Intel Core i7-7567U CPU 3.50GHz (Kaby Lake), 1 CPU, 4 logical and 2 physical cores
-  [Host]        : .NET Framework 4.8 (4.8.4180.0), X64 RyuJIT
-  .NET Core 5.0 : .NET Core 5.0.0 (CoreCLR 5.0.20.40711, CoreFX 5.0.20.40711), X64 RyuJIT
+  [Host]        : .NET Framework 4.8 (4.8.4300.0), X64 RyuJIT
+  .NET Core 5.0 : .NET Core 5.0.2 (CoreCLR 5.0.220.61120, CoreFX 5.0.220.61120), X64 RyuJIT
 
 Job=.NET Core 5.0  Runtime=.NET Core 5.0  
 
 ```
-|                  Method |   Count |       Mean |    Error |   StdDev | Ratio | RatioSD | Gen 0 | Gen 1 | Gen 2 | Allocated |
-|------------------------ |-------- |-----------:|---------:|---------:|------:|--------:|------:|------:|------:|----------:|
-|              Enumerator | 1000000 |   574.1 μs |  3.43 μs |  2.86 μs |  1.00 |    0.00 |     - |     - |     - |         - |
-|                 Indexer | 1000000 |   585.2 μs |  3.52 μs |  3.29 μs |  1.02 |    0.01 |     - |     - |     - |         - |
-|               IndexerLT | 1000000 |   587.4 μs |  3.87 μs |  3.43 μs |  1.02 |    0.01 |     - |     - |     - |         - |
-|              IndexerLTE | 1000000 |   587.7 μs |  2.23 μs |  1.98 μs |  1.02 |    0.01 |     - |     - |     - |         - |
-|               ArraySpan | 1000000 |   586.4 μs |  3.98 μs |  3.72 μs |  1.02 |    0.01 |     - |     - |     - |         - |
-|              MemorySpan | 1000000 |   585.3 μs |  4.75 μs |  4.21 μs |  1.02 |    0.01 |     - |     - |     - |         - |
-|                  Memory | 1000000 | 1,618.3 μs | 16.77 μs | 14.87 μs |  2.82 |    0.02 |     - |     - |     - |         - |
-| ArraySegment_Enumerator | 1000000 | 2,914.3 μs | 24.12 μs | 21.38 μs |  5.08 |    0.04 |     - |     - |     - |         - |
-|    ArraySegment_Indexer | 1000000 |   592.1 μs |  4.98 μs |  4.16 μs |  1.03 |    0.01 |     - |     - |     - |         - |
-|  IEnumerable_Enumerator | 1000000 | 3,954.9 μs | 30.88 μs | 25.79 μs |  6.89 |    0.06 |     - |     - |     - |         - |
-|           IList_Indexer | 1000000 | 4,223.5 μs | 27.70 μs | 23.13 μs |  7.36 |    0.05 |     - |     - |     - |         - |
+|                       Method |    Count |      Mean |     Error |    StdDev | Ratio | RatioSD |
+|----------------------------- |--------- |----------:|----------:|----------:|------:|--------:|
+|                      Foreach | 10000000 |  5.994 ms | 0.1155 ms | 0.1024 ms |  1.00 |    0.00 |
+|                          For | 10000000 |  4.917 ms | 0.0722 ms | 0.0675 ms |  0.82 |    0.02 |
+|                   For_Unsafe | 10000000 |  6.019 ms | 0.0699 ms | 0.0654 ms |  1.01 |    0.02 |
+|               ForAdamczewski | 10000000 |  4.764 ms | 0.0291 ms | 0.0272 ms |  0.80 |    0.02 |
+|         ForAdamczewskiUnsafe | 10000000 |  4.169 ms | 0.0829 ms | 0.0921 ms |  0.70 |    0.03 |
+|                         Span | 10000000 |  4.720 ms | 0.0553 ms | 0.0491 ms |  0.79 |    0.02 |
+|                       Memory | 10000000 |  6.107 ms | 0.0278 ms | 0.0260 ms |  1.02 |    0.02 |
+|         ArraySegment_Foreach | 10000000 | 28.274 ms | 0.0372 ms | 0.0311 ms |  4.73 |    0.08 |
+|             ArraySegment_For | 10000000 |  5.948 ms | 0.0457 ms | 0.0381 ms |  0.99 |    0.02 |
+| ArraySegment_Wrapper_Foreach | 10000000 |  6.136 ms | 0.0263 ms | 0.0219 ms |  1.03 |    0.02 |
