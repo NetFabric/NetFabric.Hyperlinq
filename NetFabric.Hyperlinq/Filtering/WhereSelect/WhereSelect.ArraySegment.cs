@@ -127,7 +127,7 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public int Count()
-                => source.Count(predicate);
+                => ((ReadOnlySpan<TSource>)source.AsSpan()).Count(predicate);
 
             #endregion
             #region Quantifier
@@ -135,7 +135,7 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool All()
-                => source.All(predicate);
+                => ((ReadOnlySpan<TSource>)source.AsSpan()).All(predicate);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool All(Func<TResult, bool> predicate)
@@ -228,41 +228,41 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Option<TResult> ElementAt(int index)
-                => source.ElementAt<TSource, TResult, TPredicate, TSelector>(index, predicate, selector);
+                => ((ReadOnlySpan<TSource>)source.AsSpan()).ElementAt<TSource, TResult, TPredicate, TSelector>(index, predicate, selector);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Option<TResult> First()
-                => source.First<TSource, TResult, TPredicate, TSelector>(predicate, selector);
+                => ((ReadOnlySpan<TSource>)source.AsSpan()).First<TSource, TResult, TPredicate, TSelector>(predicate, selector);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Option<TResult> Single()
-                => source.Single<TSource, TResult, TPredicate, TSelector>(predicate, selector);
+                => ((ReadOnlySpan<TSource>)source.AsSpan()).Single<TSource, TResult, TPredicate, TSelector>(predicate, selector);
             
             #endregion
             #region Conversion
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TResult[] ToArray()
-                => source.ToArray<TSource, TResult, TPredicate, TSelector>(predicate, selector);
+                => ((ReadOnlySpan<TSource>)source.AsSpan()).ToArray<TSource, TResult, TPredicate, TSelector>(predicate, selector);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public IMemoryOwner<TResult> ToArray(MemoryPool<TResult> memoryPool)
-                => source.ToArray(predicate, selector, memoryPool);
+                => ((ReadOnlySpan<TSource>)source.AsSpan()).ToArray(predicate, selector, memoryPool);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public List<TResult> ToList()
-                => source.ToList<TSource, TResult, TPredicate, TSelector>(predicate, selector);
+                => ((ReadOnlySpan<TSource>)source.AsSpan()).ToList<TSource, TResult, TPredicate, TSelector>(predicate, selector);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Dictionary<TKey, TResult> ToDictionary<TKey>(Func<TResult, TKey> keySelector, IEqualityComparer<TKey>? comparer = default)
                 where TKey : notnull
-                => ToDictionary<TKey, FunctionWrapper<TResult, TKey>>(new FunctionWrapper<TResult, TKey>(keySelector), comparer);
+                => ToDictionary(new FunctionWrapper<TResult, TKey>(keySelector), comparer);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Dictionary<TKey, TResult> ToDictionary<TKey, TKeySelector>(TKeySelector keySelector, IEqualityComparer<TKey>? comparer = default)
                 where TKey : notnull
                 where TKeySelector : struct, IFunction<TResult, TKey>
-                => source.ToDictionary<TSource, TKey, TKeySelector, TResult, TPredicate, TSelector>(keySelector, comparer, predicate, selector);
+                => ((ReadOnlySpan<TSource>)source.AsSpan()).ToDictionary<TSource, TKey, TKeySelector, TResult, TPredicate, TSelector>(keySelector, comparer, predicate, selector);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Func<TResult, TKey> keySelector, Func<TResult, TElement> elementSelector, IEqualityComparer<TKey>? comparer = default)
@@ -274,7 +274,7 @@ namespace NetFabric.Hyperlinq
                 where TKey : notnull
                 where TKeySelector : struct, IFunction<TResult, TKey>
                 where TElementSelector : struct, IFunction<TResult, TElement>
-                => source.ToDictionary<TSource, TKey, TElement, TKeySelector, TElementSelector, TResult, TPredicate, TSelector>(keySelector, elementSelector, comparer, predicate, selector);
+                => ((ReadOnlySpan<TSource>)source.AsSpan()).ToDictionary<TSource, TKey, TElement, TKeySelector, TElementSelector, TResult, TPredicate, TSelector>(keySelector, elementSelector, comparer, predicate, selector);
             
             #endregion
         }

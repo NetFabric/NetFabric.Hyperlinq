@@ -17,7 +17,7 @@ namespace NetFabric.Hyperlinq
         public static bool Contains<TSource>(this TSource[] source, TSource value, IEqualityComparer<TSource>? comparer)
             => comparer is null
                 ? Contains(source, value)
-                : new ArraySegment<TSource>(source).Contains(value, comparer);
+                : source.AsSpan().Contains(value, comparer);
     }
 }
 

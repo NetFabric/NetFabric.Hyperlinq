@@ -126,14 +126,14 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public int Count()
-                => source.Count(predicate);
+                => ((ReadOnlySpan<TSource>)source.AsSpan()).Count(predicate);
             
             #endregion
             #region Quantifier
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool All()
-                => source.All(predicate);
+                => ((ReadOnlySpan<TSource>)source.AsSpan()).All(predicate);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool All(Func<TSource, bool> predicate)
@@ -142,7 +142,7 @@ namespace NetFabric.Hyperlinq
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool All<TPredicate2>(TPredicate2 predicate)
                 where TPredicate2 : struct, IFunction<TSource, bool>
-                => source.All(new PredicatePredicateCombination<TPredicate, TPredicate2, TSource>(this.predicate, predicate));
+                => ((ReadOnlySpan<TSource>)source.AsSpan()).All(new PredicatePredicateCombination<TPredicate, TPredicate2, TSource>(this.predicate, predicate));
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool All(Func<TSource, int, bool> predicate)
@@ -151,11 +151,11 @@ namespace NetFabric.Hyperlinq
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool AllAt<TPredicate2>(TPredicate2 predicate)
                 where TPredicate2 : struct, IFunction<TSource, int, bool>
-                => source.AllAt(new PredicatePredicateAtCombination<TPredicate, TPredicate2, TSource>(this.predicate, predicate));
+                => ((ReadOnlySpan<TSource>)source.AsSpan()).AllAt(new PredicatePredicateAtCombination<TPredicate, TPredicate2, TSource>(this.predicate, predicate));
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Any()
-                => source.Any(predicate);
+                => ((ReadOnlySpan<TSource>)source.AsSpan()).Any(predicate);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Any(Func<TSource, bool> predicate)
@@ -164,7 +164,7 @@ namespace NetFabric.Hyperlinq
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Any<TPredicate2>(TPredicate2 predicate)
                 where TPredicate2 : struct, IFunction<TSource, bool>
-                => source.Any(new PredicatePredicateCombination<TPredicate, TPredicate2, TSource>(this.predicate, predicate));
+                => ((ReadOnlySpan<TSource>)source.AsSpan()).Any(new PredicatePredicateCombination<TPredicate, TPredicate2, TSource>(this.predicate, predicate));
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Any(Func<TSource, int, bool> predicate)
@@ -173,7 +173,7 @@ namespace NetFabric.Hyperlinq
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool AnyAt<TPredicate2>(TPredicate2 predicate)
                 where TPredicate2 : struct, IFunction<TSource, int, bool>
-                => source.AnyAt(new PredicatePredicateAtCombination<TPredicate, TPredicate2, TSource>(this.predicate, predicate));
+                => ((ReadOnlySpan<TSource>)source.AsSpan()).AnyAt(new PredicatePredicateAtCombination<TPredicate, TPredicate2, TSource>(this.predicate, predicate));
 
             #endregion
             #region Filtering
@@ -213,16 +213,16 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Option<TSource> ElementAt(int index)
-                => source.ElementAt(index, predicate);
+                => ((ReadOnlySpan<TSource>)source.AsSpan()).ElementAt(index, predicate);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Option<TSource> First()
-                => source.First(predicate);
+                => ((ReadOnlySpan<TSource>)source.AsSpan()).First(predicate);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Option<TSource> Single()
 #pragma warning disable HLQ005 // Avoid Single() and SingleOrDefault()
-                => source.Single(predicate);
+                => ((ReadOnlySpan<TSource>)source.AsSpan()).Single(predicate);
 #pragma warning restore HLQ005 // Avoid Single() and SingleOrDefault()
             
             #endregion
@@ -230,15 +230,15 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TSource[] ToArray()
-                => source.ToArray(predicate);
+                => ((ReadOnlySpan<TSource>)source.AsSpan()).ToArray(predicate);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public IMemoryOwner<TSource> ToArray(MemoryPool<TSource> memoryPool)
-                => source.ToArray(predicate, memoryPool);
+                => ((ReadOnlySpan<TSource>)source.AsSpan()).ToArray(predicate, memoryPool);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public List<TSource> ToList()
-                => source.ToList(predicate);
+                => ((ReadOnlySpan<TSource>)source.AsSpan()).ToList(predicate);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Dictionary<TKey, TSource> ToDictionary<TKey>(Func<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer = default)
@@ -249,7 +249,7 @@ namespace NetFabric.Hyperlinq
             public Dictionary<TKey, TSource> ToDictionary<TKey, TKeySelector>(TKeySelector keySelector, IEqualityComparer<TKey>? comparer = default)
                 where TKey : notnull
                 where TKeySelector : struct, IFunction<TSource, TKey>
-                => source.ToDictionary(keySelector, comparer, predicate);
+                => ((ReadOnlySpan<TSource>)source.AsSpan()).ToDictionary(keySelector, comparer, predicate);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer = default)
@@ -261,7 +261,7 @@ namespace NetFabric.Hyperlinq
                 where TKey : notnull
                 where TKeySelector : struct, IFunction<TSource, TKey>
                 where TElementSelector : struct, IFunction<TSource, TElement>
-                => source.ToDictionary<TSource, TKey, TElement, TKeySelector, TElementSelector, TPredicate>(keySelector, elementSelector, comparer, predicate);
+                => ((ReadOnlySpan<TSource>)source.AsSpan()).ToDictionary<TSource, TKey, TElement, TKeySelector, TElementSelector, TPredicate>(keySelector, elementSelector, comparer, predicate);
             
             #endregion
         }

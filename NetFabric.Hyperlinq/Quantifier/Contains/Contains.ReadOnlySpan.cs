@@ -6,16 +6,6 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class ArrayExtensions
     {
-        public static bool Contains<TList, TSource>(this ReadOnlySpan<TSource> source, TSource value)
-        {
-            for (var index = 0; index < source.Length; index++)
-            {
-                if (EqualityComparer<TSource>.Default.Equals(source[index], value))
-                    return true;
-            }
-            return false;
-        }
-
         public static bool Contains<TSource>(this ReadOnlySpan<TSource> source, TSource value, IEqualityComparer<TSource>? comparer = default)
         {
             if (source.Length is 0)
@@ -83,6 +73,40 @@ namespace NetFabric.Hyperlinq
             }
         }
 
+        static bool ContainsRef<TSource, TResult, TSelector>(this ReadOnlySpan<TSource> source, TResult value, TSelector selector)
+            where TSelector : struct, IFunctionIn<TSource, TResult>
+        {
+            return source.Length switch
+            {
+                0 => false,
+                _ => Utils.IsValueType<TResult>()
+                    ? ValueContains(source, value, selector)
+                    : ReferenceContains(source, value, selector)
+            };
+
+            static bool ValueContains(ReadOnlySpan<TSource> source, TResult value, TSelector selector)
+            {
+                for (var index = 0; index < source.Length; index++)
+                {
+                    if (EqualityComparer<TResult>.Default.Equals(selector.Invoke(in source[index]), value))
+                        return true;
+                }
+                return false;
+            }
+
+            static bool ReferenceContains(ReadOnlySpan<TSource> source, TResult value, TSelector selector)
+            {
+                var defaultComparer = EqualityComparer<TResult>.Default;
+
+                for (var index = 0; index < source.Length; index++)
+                {
+                    if (defaultComparer.Equals(selector.Invoke(in source[index]), value))
+                        return true;
+                }
+                return false;
+            }
+        }
+
 
         static bool ContainsAt<TSource, TResult, TSelector>(this ReadOnlySpan<TSource> source, TResult value, TSelector selector)
             where TSelector : struct, IFunction<TSource, int, TResult>
@@ -112,6 +136,40 @@ namespace NetFabric.Hyperlinq
                 for (var index = 0; index < source.Length; index++)
                 {
                     if (defaultComparer.Equals(selector.Invoke(source[index], index), value))
+                        return true;
+                }
+                return false;
+            }
+        }
+
+        static bool ContainsAtRef<TSource, TResult, TSelector>(this ReadOnlySpan<TSource> source, TResult value, TSelector selector)
+            where TSelector : struct, IFunctionIn<TSource, int, TResult>
+        {
+            return source.Length switch
+            {
+                0 => false,
+                _ => Utils.IsValueType<TResult>()
+                    ? ValueContains(source, value, selector)
+                    : ReferenceContains(source, value, selector),
+            };
+
+            static bool ValueContains(ReadOnlySpan<TSource> source, TResult value, TSelector selector)
+            {
+                for (var index = 0; index < source.Length; index++)
+                {
+                    if (EqualityComparer<TResult>.Default.Equals(selector.Invoke(in source[index], index), value))
+                        return true;
+                }
+                return false;
+            }
+
+            static bool ReferenceContains(ReadOnlySpan<TSource> source, TResult value, TSelector selector)
+            {
+                var defaultComparer = EqualityComparer<TResult>.Default;
+
+                for (var index = 0; index < source.Length; index++)
+                {
+                    if (defaultComparer.Equals(selector.Invoke(in source[index], index), value))
                         return true;
                 }
                 return false;

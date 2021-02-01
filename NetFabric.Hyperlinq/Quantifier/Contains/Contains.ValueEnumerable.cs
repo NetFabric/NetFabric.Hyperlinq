@@ -5,22 +5,6 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class ValueEnumerableExtensions
     {
-        public static bool Contains<TEnumerable, TEnumerator, TSource>(this TEnumerable source, TSource value)
-            where TEnumerable : IValueEnumerable<TSource, TEnumerator>
-            where TEnumerator : struct, IEnumerator<TSource>
-        {
-            if (source is ICollection<TSource> collection)
-                return collection.Contains(value);
-
-            using var enumerator = source.GetEnumerator();
-            while (enumerator.MoveNext())
-            {
-                if (EqualityComparer<TSource>.Default.Equals(enumerator.Current, value))
-                    return true;
-            }
-            return false;
-        }
-
         public static bool Contains<TEnumerable, TEnumerator, TSource>(this TEnumerable source, TSource value, IEqualityComparer<TSource>? comparer = default)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>

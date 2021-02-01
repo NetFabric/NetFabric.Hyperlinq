@@ -72,13 +72,13 @@ namespace NetFabric.Hyperlinq
                 => true;
 
             void ICollection<TResult>.CopyTo(TResult[] array, int arrayIndex)
-                => Copy(source, array.AsSpan(arrayIndex), selector);
+                => Copy<TSource, TResult, TSelector>(source.AsSpan(), array.AsSpan(arrayIndex), selector);
             void ICollection<TResult>.Add(TResult item)
                 => Throw.NotSupportedException();
             void ICollection<TResult>.Clear()
                 => Throw.NotSupportedException();
             public bool Contains(TResult item)
-                => source.Contains(item, selector);
+                => ((ReadOnlySpan<TSource>)source.AsSpan()).Contains(item, selector);
             bool ICollection<TResult>.Remove(TResult item)
                 => Throw.NotSupportedException<bool>();
             int IList<TResult>.IndexOf(TResult item)
@@ -232,31 +232,31 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Option<TResult> ElementAt(int index)
-                => source.ElementAt<TSource, TResult, TSelector>(index, selector);
+                => ((ReadOnlySpan<TSource>)source.AsSpan()).ElementAt<TSource, TResult, TSelector>(index, selector);
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Option<TResult> First()
-                => source.First<TSource, TResult, TSelector>(selector);
+                => ((ReadOnlySpan<TSource>)source.AsSpan()).First<TSource, TResult, TSelector>(selector);
 
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Option<TResult> Single()
-                => source.Single<TSource, TResult, TSelector>(selector);
+                => ((ReadOnlySpan<TSource>)source.AsSpan()).Single<TSource, TResult, TSelector>(selector);
             
             #endregion
             #region Conversion
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TResult[] ToArray()
-                => source.ToArray<TSource, TResult, TSelector>(selector);
+                => ((ReadOnlySpan<TSource>)source.AsSpan()).ToArray<TSource, TResult, TSelector>(selector);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public IMemoryOwner<TResult> ToArray(MemoryPool<TResult> pool)
-                => source.ToArray(selector, pool);
+                => ((ReadOnlySpan<TSource>)source.AsSpan()).ToArray(selector, pool);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public List<TResult> ToList()
-                => source.ToList<TSource, TResult, TSelector>(selector);
+                => ((ReadOnlySpan<TSource>)source.AsSpan()).ToList<TSource, TResult, TSelector>(selector);
             
             #endregion
         }
