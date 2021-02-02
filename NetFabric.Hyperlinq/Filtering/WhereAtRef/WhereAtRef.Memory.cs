@@ -10,23 +10,23 @@ namespace NetFabric.Hyperlinq
 
         [GeneratorMapping("TPredicate", "NetFabric.Hyperlinq.FunctionInWrapper<TSource, int, bool>")]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static MemoryWhereRefAtEnumerable<TSource, FunctionInWrapper<TSource, int, bool>> Where<TSource>(this Memory<TSource> source, FunctionIn<TSource, int, bool> predicate)
-            => source.WhereRefAt(new FunctionInWrapper<TSource, int, bool>(predicate));
+        public static MemoryWhereAtRefEnumerable<TSource, FunctionInWrapper<TSource, int, bool>> Where<TSource>(this Memory<TSource> source, FunctionIn<TSource, int, bool> predicate)
+            => source.WhereAtRef(new FunctionInWrapper<TSource, int, bool>(predicate));
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static MemoryWhereRefAtEnumerable<TSource, TPredicate> WhereRefAt<TSource, TPredicate>(this Memory<TSource> source, TPredicate predicate = default)
+        public static MemoryWhereAtRefEnumerable<TSource, TPredicate> WhereAtRef<TSource, TPredicate>(this Memory<TSource> source, TPredicate predicate = default)
             where TPredicate : struct, IFunctionIn<TSource, int, bool>
             => new(source, predicate);
 
         [GeneratorIgnore]
         [StructLayout(LayoutKind.Auto)]
-        public readonly struct MemoryWhereRefAtEnumerable<TSource, TPredicate>
+        public readonly struct MemoryWhereAtRefEnumerable<TSource, TPredicate>
             where TPredicate : struct, IFunctionIn<TSource, int, bool>
         {
             readonly Memory<TSource> source;
             readonly TPredicate predicate;
 
-            internal MemoryWhereRefAtEnumerable(Memory<TSource> source, TPredicate predicate)
+            internal MemoryWhereAtRefEnumerable(Memory<TSource> source, TPredicate predicate)
                 => (this.source, this.predicate) = (source, predicate);
 
             public readonly Enumerator GetEnumerator()
@@ -40,7 +40,7 @@ namespace NetFabric.Hyperlinq
                 readonly Span<TSource> source;
                 TPredicate predicate;
 
-                internal Enumerator(in MemoryWhereRefAtEnumerable<TSource, TPredicate> enumerable)
+                internal Enumerator(in MemoryWhereAtRefEnumerable<TSource, TPredicate> enumerable)
                 {
                     source = enumerable.source.Span;
                     predicate = enumerable.predicate;

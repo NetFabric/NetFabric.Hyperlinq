@@ -9,7 +9,7 @@ namespace NetFabric.Hyperlinq
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static List<TSource> ToList<TSource>(this TSource[] source)
-            => new ArraySegment<TSource>(source).ToList(); 
+            => source.AsSpan().ToList(); 
 
     }
 }

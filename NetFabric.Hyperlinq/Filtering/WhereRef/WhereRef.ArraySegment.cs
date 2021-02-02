@@ -71,14 +71,14 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public int Count()
-                => source.CountRef(predicate);
+                => ((ReadOnlySpan<TSource>)source.AsSpan()).CountRef(predicate);
 
             #endregion
             #region Quantifier
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool All()
-                => source.AllRef(predicate);
+                => ((ReadOnlySpan<TSource>)source.AsSpan()).AllRef(predicate);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool All(FunctionIn<TSource, bool> predicate)
@@ -87,7 +87,7 @@ namespace NetFabric.Hyperlinq
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool All<TPredicate2>(TPredicate2 predicate)
                 where TPredicate2 : struct, IFunctionIn<TSource, bool>
-                => source.AllRef(new PredicatePredicateCombinationIn<TPredicate, TPredicate2, TSource>(this.predicate, predicate));
+                => ((ReadOnlySpan<TSource>)source.AsSpan()).AllRef(new PredicatePredicateCombinationIn<TPredicate, TPredicate2, TSource>(this.predicate, predicate));
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool All(FunctionIn<TSource, int, bool> predicate)
@@ -96,11 +96,11 @@ namespace NetFabric.Hyperlinq
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool AllAt<TPredicate2>(TPredicate2 predicate)
                 where TPredicate2 : struct, IFunctionIn<TSource, int, bool>
-                => source.AllAtRef(new PredicatePredicateAtCombinationIn<TPredicate, TPredicate2, TSource>(this.predicate, predicate));
+                => ((ReadOnlySpan<TSource>)source.AsSpan()).AllAtRef(new PredicatePredicateAtCombinationIn<TPredicate, TPredicate2, TSource>(this.predicate, predicate));
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Any()
-                => source.AnyRef(predicate);
+                => ((ReadOnlySpan<TSource>)source.AsSpan()).AnyRef(predicate);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Any(FunctionIn<TSource, bool> predicate)
@@ -109,7 +109,7 @@ namespace NetFabric.Hyperlinq
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Any<TPredicate2>(TPredicate2 predicate)
                 where TPredicate2 : struct, IFunctionIn<TSource, bool>
-                => source.AnyRef(new PredicatePredicateCombinationIn<TPredicate, TPredicate2, TSource>(this.predicate, predicate));
+                => ((ReadOnlySpan<TSource>)source.AsSpan()).AnyRef(new PredicatePredicateCombinationIn<TPredicate, TPredicate2, TSource>(this.predicate, predicate));
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Any(FunctionIn<TSource, int, bool> predicate)
@@ -118,7 +118,7 @@ namespace NetFabric.Hyperlinq
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool AnyAt<TPredicate2>(TPredicate2 predicate)
                 where TPredicate2 : struct, IFunctionIn<TSource, int, bool>
-                => source.AnyAtRef(new PredicatePredicateAtCombinationIn<TPredicate, TPredicate2, TSource>(this.predicate, predicate));
+                => ((ReadOnlySpan<TSource>)source.AsSpan()).AnyAtRef(new PredicatePredicateAtCombinationIn<TPredicate, TPredicate2, TSource>(this.predicate, predicate));
 
             #endregion
             #region Filtering

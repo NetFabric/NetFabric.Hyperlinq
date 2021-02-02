@@ -7,6 +7,6 @@ namespace NetFabric.Hyperlinq
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Option<TSource> Single<TSource>(this TSource[] source)
-            => new ArraySegment<TSource>(source).Single();
+            => source.AsSpan().Single();
     }
 }

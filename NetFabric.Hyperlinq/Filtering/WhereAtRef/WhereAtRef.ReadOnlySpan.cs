@@ -10,23 +10,23 @@ namespace NetFabric.Hyperlinq
 
         [GeneratorMapping("TPredicate", "NetFabric.Hyperlinq.FunctionInWrapper<TSource, int, bool>")]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ReadOnlySpanWhereRefAtEnumerable<TSource, FunctionInWrapper<TSource, int, bool>> Where<TSource>(this ReadOnlySpan<TSource> source, FunctionIn<TSource, int, bool> predicate)
-            => source.WhereRefAt(new FunctionInWrapper<TSource, int, bool>(predicate));
+        public static ReadOnlySpanWhereAtRefEnumerable<TSource, FunctionInWrapper<TSource, int, bool>> Where<TSource>(this ReadOnlySpan<TSource> source, FunctionIn<TSource, int, bool> predicate)
+            => source.WhereAtRef(new FunctionInWrapper<TSource, int, bool>(predicate));
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ReadOnlySpanWhereRefAtEnumerable<TSource, TPredicate> WhereRefAt<TSource, TPredicate>(this ReadOnlySpan<TSource> source, TPredicate predicate = default)
+        public static ReadOnlySpanWhereAtRefEnumerable<TSource, TPredicate> WhereAtRef<TSource, TPredicate>(this ReadOnlySpan<TSource> source, TPredicate predicate = default)
             where TPredicate : struct, IFunctionIn<TSource, int, bool>
             => new(source, predicate);
 
         [GeneratorIgnore]
         [StructLayout(LayoutKind.Auto)]
-        public readonly ref struct ReadOnlySpanWhereRefAtEnumerable<TSource, TPredicate>
+        public readonly ref struct ReadOnlySpanWhereAtRefEnumerable<TSource, TPredicate>
             where TPredicate : struct, IFunctionIn<TSource, int, bool>
         {
             readonly ReadOnlySpan<TSource> source;
             readonly TPredicate predicate;
 
-            internal ReadOnlySpanWhereRefAtEnumerable(ReadOnlySpan<TSource> source, TPredicate predicate)
+            internal ReadOnlySpanWhereAtRefEnumerable(ReadOnlySpan<TSource> source, TPredicate predicate)
             {
                 this.source = source;
                 this.predicate = predicate;
@@ -43,7 +43,7 @@ namespace NetFabric.Hyperlinq
                 readonly ReadOnlySpan<TSource> source;
                 TPredicate predicate;
 
-                internal Enumerator(in ReadOnlySpanWhereRefAtEnumerable<TSource, TPredicate> enumerable)
+                internal Enumerator(in ReadOnlySpanWhereAtRefEnumerable<TSource, TPredicate> enumerable)
                 {
                     source = enumerable.source;
                     predicate = enumerable.predicate;

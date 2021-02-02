@@ -129,7 +129,7 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public int Count()
-                => source.CountRef(predicate);
+                => ((ReadOnlySpan<TSource>)source.AsSpan()).CountRef(predicate);
 
             #endregion
             #region Quantifier
@@ -137,7 +137,7 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool All()
-                => source.AllRef(predicate);
+                => ((ReadOnlySpan<TSource>)source.AsSpan()).AllRef(predicate);
 
             //[MethodImpl(MethodImplOptions.AggressiveInlining)]
             //public bool All(Func<TResult, bool> predicate)
@@ -245,15 +245,15 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TResult[] ToArray()
-                => source.ToArrayRef<TSource, TResult, TPredicate, TSelector>(predicate, selector);
+                => ((ReadOnlySpan<TSource>)source.AsSpan()).ToArrayRef<TSource, TResult, TPredicate, TSelector>(predicate, selector);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public IMemoryOwner<TResult> ToArray(MemoryPool<TResult> memoryPool)
-                => source.ToArrayRef(predicate, selector, memoryPool);
+                => ((ReadOnlySpan<TSource>)source.AsSpan()).ToArrayRef(predicate, selector, memoryPool);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public List<TResult> ToList()
-                => source.ToListRef<TSource, TResult, TPredicate, TSelector>(predicate, selector);
+                => ((ReadOnlySpan<TSource>)source.AsSpan()).ToListRef<TSource, TResult, TPredicate, TSelector>(predicate, selector);
 
             //[MethodImpl(MethodImplOptions.AggressiveInlining)]
             //public Dictionary<TKey, TResult> ToDictionary<TKey>(Func<TResult, TKey> keySelector, IEqualityComparer<TKey>? comparer = default)

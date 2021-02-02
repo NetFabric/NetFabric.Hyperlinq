@@ -68,13 +68,13 @@ namespace NetFabric.Hyperlinq
                 => true;
 
             void ICollection<TResult>.CopyTo(TResult[] array, int arrayIndex)
-                => CopyRef(source, array.AsSpan(arrayIndex), selector);
+                => CopyRef<TSource, TResult, TSelector>(source.AsSpan(), array.AsSpan(arrayIndex), selector);
             void ICollection<TResult>.Add(TResult item)
                 => Throw.NotSupportedException();
             void ICollection<TResult>.Clear()
                 => Throw.NotSupportedException();
             public bool Contains(TResult item)
-                => source.ContainsRef(item, selector);
+                => ((ReadOnlySpan<TSource>)source.AsSpan()).ContainsRef(item, selector);
             bool ICollection<TResult>.Remove(TResult item)
                 => Throw.NotSupportedException<bool>();
             int IList<TResult>.IndexOf(TResult item)
