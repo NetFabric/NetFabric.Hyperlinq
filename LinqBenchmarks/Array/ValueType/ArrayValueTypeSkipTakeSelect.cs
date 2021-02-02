@@ -96,7 +96,10 @@ namespace LinqBenchmarks.Array.ValueType
         public FatValueType Hyperlinq_Foreach()
         {
             var sum = default(FatValueType);
-            foreach (var item in ArrayExtensions.Skip(source, Skip).Take(Count).Select(item => item * 2))
+            foreach (var item in ArrayExtensions
+                .Skip(source, Skip)
+                .Take(Count)
+                .Select(item => item * 2))
                 sum += item;
             return sum;
         }
@@ -105,7 +108,10 @@ namespace LinqBenchmarks.Array.ValueType
         public FatValueType Hyperlinq_Foreach_IFunction()
         {
             var sum = default(FatValueType);
-            foreach (var item in ArrayExtensions.Skip(source, Skip).Take(Count).Select<FatValueType, FatValueType, DoubleOfFatValueType>())
+            foreach (var item in ArrayExtensions
+                .Skip(source, Skip)
+                .Take(Count)
+                .SelectRef<FatValueType, FatValueType, DoubleOfFatValueType>())
                 sum += item;
             return sum;
         }
@@ -115,7 +121,10 @@ namespace LinqBenchmarks.Array.ValueType
         public FatValueType Hyperlinq_For()
         {
             var sum = default(FatValueType);
-            var items = ArrayExtensions.Skip(source, Skip).Take(Count).Select(item => item * 2);
+            var items = ArrayExtensions
+                .Skip(source, Skip)
+                .Take(Count)
+                .Select(item => item * 2);
             for (var index = 0; index < items.Count; index++)
                 sum += items[index];
             return sum;
@@ -125,7 +134,10 @@ namespace LinqBenchmarks.Array.ValueType
         public FatValueType Hyperlinq_For_IFunction()
         {
             var sum = default(FatValueType);
-            var items = ArrayExtensions.Skip(source, Skip).Take(Count).Select<FatValueType, FatValueType, DoubleOfFatValueType>();
+            var items = ArrayExtensions
+                .Skip(source, Skip)
+                .Take(Count)
+                .SelectRef<FatValueType, FatValueType, DoubleOfFatValueType>();
             for (var index = 0; index < items.Count; index++)
                 sum += items[index];
             return sum;

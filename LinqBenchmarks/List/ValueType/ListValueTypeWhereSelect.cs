@@ -94,7 +94,9 @@ namespace LinqBenchmarks.List.ValueType
         public FatValueType Hyperlinq()
         {
             var sum = default(FatValueType);
-            foreach (var item in ListBindings.Where(source, item => item.IsEven()).Select(item => item * 2))
+            foreach (var item in ListBindings
+                .Where(source, item => item.IsEven())
+                .Select(item => item * 2))
                 sum += item;
             return sum;
         }
@@ -103,7 +105,9 @@ namespace LinqBenchmarks.List.ValueType
         public FatValueType Hyperlinq_IFunction()
         {
             var sum = default(FatValueType);
-            foreach (var item in ListBindings.Where<FatValueType, FatValueTypeIsEven>(source).Select<FatValueType, DoubleOfFatValueType>())
+            foreach (var item in ListBindings
+                .Where<FatValueType, FatValueTypeIsEven>(source)
+                .Select<FatValueType, DoubleOfFatValueType>())
                 sum += item;
             return sum;
         }

@@ -99,7 +99,10 @@ namespace LinqBenchmarks.Array.ValueType
         public FatValueType Hyperlinq()
         {
             var sum = default(FatValueType);
-            foreach (ref readonly var item in ArrayExtensions.Skip(source, Skip).Take(Count).Where((in FatValueType item) => item.IsEven()))
+            foreach (ref readonly var item in ArrayExtensions
+                .Skip(source, Skip)
+                .Take(Count)
+                .Where((in FatValueType item) => item.IsEven()))
                 sum += item;
             return sum;
         }
@@ -108,7 +111,10 @@ namespace LinqBenchmarks.Array.ValueType
         public FatValueType Hyperlinq_IFunction()
         {
             var sum = default(FatValueType);
-            foreach (ref readonly var item in ArrayExtensions.Skip(source, Skip).Take(Count).WhereRef<FatValueType, FatValueTypeIsEven>())
+            foreach (ref readonly var item in ArrayExtensions
+                .Skip(source, Skip)
+                .Take(Count)
+                .WhereRef<FatValueType, FatValueTypeIsEven>())
                 sum += item;
             return sum;
         }

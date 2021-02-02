@@ -69,10 +69,16 @@ namespace LinqBenchmarks.List.ValueType
 
         [Benchmark]
         public List<FatValueType> Hyperlinq()
-            => ListBindings.Where(source, item => item.IsEven()).Select(item => item * 2).ToList();
+            => ListBindings
+                .Where(source, item => item.IsEven())
+                .Select(item => item * 2)
+                .ToList();
 
         [Benchmark]
         public List<FatValueType> Hyperlinq_IFunction()
-            => ListBindings.Where<FatValueType, FatValueTypeIsEven>(source).Select<FatValueType, DoubleOfFatValueType>().ToList();
+            => ListBindings
+                .Where<FatValueType, FatValueTypeIsEven>(source)
+                .Select<FatValueType, DoubleOfFatValueType>()
+                .ToList();
     }
 }

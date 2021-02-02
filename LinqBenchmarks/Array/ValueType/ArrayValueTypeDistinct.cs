@@ -95,7 +95,8 @@ namespace LinqBenchmarks.Array.ValueType
         public FatValueType Hyperlinq()
         {
             var sum = default(FatValueType);
-            foreach (var item in ArrayExtensions.Distinct(source))
+            foreach (var item in ArrayExtensions
+                .Distinct(source))
                 sum += item;
             return sum;
         }

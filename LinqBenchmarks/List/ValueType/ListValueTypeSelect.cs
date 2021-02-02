@@ -88,14 +88,14 @@ namespace LinqBenchmarks.List.ValueType
             return sum;
         }
 
-        [Benchmark]
-        public FatValueType Hyperlinq_Foreach_IFunction()
-        {
-            var sum = default(FatValueType);
-            foreach (var item in ListBindings.Select<FatValueType, FatValueType, DoubleOfFatValueType>(source))
-                sum += item;
-            return sum;
-        }
+        //[Benchmark]
+        //public FatValueType Hyperlinq_Foreach_IFunction()
+        //{
+        //    var sum = default(FatValueType);
+        //    foreach (var item in ListBindings.SelectRef<FatValueType, FatValueType, DoubleOfFatValueType>(source))
+        //        sum += item;
+        //    return sum;
+        //}
 #pragma warning restore HLQ010 // Consider using a 'for' loop instead.
 
         [Benchmark]
@@ -108,14 +108,14 @@ namespace LinqBenchmarks.List.ValueType
             return sum;
         }
 
-        [Benchmark]
-        public FatValueType Hyperlinq_For_IFunction()
-        {
-            var items = ListBindings.Select<FatValueType, FatValueType, DoubleOfFatValueType>(source);
-            var sum = default(FatValueType);
-            for (var index = 0; index < items.Count; index++)
-                sum += items[index];
-            return sum;
-        }
+        //[Benchmark]
+        //public FatValueType Hyperlinq_For_IFunction()
+        //{
+        //    var items = ListBindings.SelectRef<FatValueType, FatValueType, DoubleOfFatValueType>(source);
+        //    var sum = default(FatValueType);
+        //    for (var index = 0; index < items.Count; index++)
+        //        sum += items[index];
+        //    return sum;
+        //}
     }
 }

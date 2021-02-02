@@ -68,7 +68,7 @@ namespace LinqBenchmarks.List.ValueType
         public FatValueType StructLinq()
         {
             var sum = default(FatValueType);
-            foreach (var item in source
+            foreach (ref readonly var item in source
                 .ToRefStructEnumerable()
                 .Where((in FatValueType item) => item.IsEven()))
                 sum += item;
@@ -80,7 +80,7 @@ namespace LinqBenchmarks.List.ValueType
         {
             var sum = default(FatValueType);
             var predicate = new FatValueTypeIsEven();
-            foreach (ref var item in source
+            foreach (ref readonly var item in source
                 .ToRefStructEnumerable()
                 .Where(ref predicate, x => x))
                 sum += item;
@@ -91,7 +91,8 @@ namespace LinqBenchmarks.List.ValueType
         public FatValueType Hyperlinq()
         {
             var sum = default(FatValueType);
-            foreach (ref readonly  var item in ListBindings.WhereRef<FatValueType, FatValueTypeIsEven>(source))
+            foreach (ref readonly var item in ListBindings
+                .Where(source, (in FatValueType item) => item.IsEven()))
                 sum += item;
             return sum;
         }
@@ -100,7 +101,8 @@ namespace LinqBenchmarks.List.ValueType
         public FatValueType Hyperlinq_IFunction()
         {
             var sum = default(FatValueType);
-            foreach (ref readonly var item in ListBindings.WhereRef<FatValueType, FatValueTypeIsEven>(source))
+            foreach (ref readonly var item in ListBindings
+                .WhereRef<FatValueType, FatValueTypeIsEven>(source))
                 sum += item;
             return sum;
         }
