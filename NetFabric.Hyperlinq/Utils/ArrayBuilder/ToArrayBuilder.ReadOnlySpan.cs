@@ -11,9 +11,8 @@ namespace NetFabric.Hyperlinq
             where TPredicate: struct, IFunction<TSource, bool>
         {
             var builder = new LargeArrayBuilder<TSource>(arrayPool);
-            for (var index = 0; index < source.Length; index++)
+            foreach (var item in source)
             {
-                var item = source[index];
                 if (predicate.Invoke(item))
                     builder.Add(item);
             }
@@ -24,9 +23,8 @@ namespace NetFabric.Hyperlinq
             where TPredicate : struct, IFunctionIn<TSource, bool>
         {
             var builder = new LargeArrayBuilder<TSource>(arrayPool);
-            for (var index = 0; index < source.Length; index++)
+            foreach (ref readonly var item in source)
             {
-                ref readonly var item = ref source[index];
                 if (predicate.Invoke(in item))
                     builder.AddRef(in item);
             }
@@ -64,9 +62,8 @@ namespace NetFabric.Hyperlinq
             where TSelector: struct, IFunction<TSource, TResult>
         {
             var builder = new LargeArrayBuilder<TResult>(arrayPool);
-            for (var index = 0; index < source.Length; index++)
+            foreach (var item in source)
             {
-                var item = source[index];
                 if (predicate.Invoke(item))
                     builder.Add(selector.Invoke(item));
             }
@@ -78,9 +75,8 @@ namespace NetFabric.Hyperlinq
             where TSelector : struct, IFunctionIn<TSource, TResult>
         {
             var builder = new LargeArrayBuilder<TResult>(arrayPool);
-            for (var index = 0; index < source.Length; index++)
+            foreach (ref readonly var item in source)
             {
-                ref readonly var item = ref source[index];
                 if (predicate.Invoke(in item))
                     builder.Add(selector.Invoke(in item));
             }

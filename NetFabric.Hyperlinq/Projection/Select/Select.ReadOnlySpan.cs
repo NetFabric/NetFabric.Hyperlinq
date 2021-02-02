@@ -25,8 +25,8 @@ namespace NetFabric.Hyperlinq
         public ref struct SpanSelectEnumerable<TSource, TResult, TSelector>
             where TSelector : struct, IFunction<TSource, TResult>
         {
-            readonly ReadOnlySpan<TSource> source;
-            TSelector selector;
+            internal readonly ReadOnlySpan<TSource> source;
+            internal TSelector selector;
 
             internal SpanSelectEnumerable(ReadOnlySpan<TSource> source, TSelector selector)
             {
@@ -164,6 +164,56 @@ namespace NetFabric.Hyperlinq
         public static int Count<TSource, TResult, TSelector>(this SpanSelectEnumerable<TSource, TResult, TSelector> source)
             where TSelector : struct, IFunction<TSource, TResult>
             => source.Count;
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Sum<TSource, TSelector>(this SpanSelectEnumerable<TSource, int, TSelector> source)
+            where TSelector : struct, IFunction<TSource, int>
+            => source.source.Sum<TSource, int, int, TSelector, AddInt32>(source.selector);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Sum<TSource, TSelector>(this SpanSelectEnumerable<TSource, int?, TSelector> source)
+            where TSelector : struct, IFunction<TSource, int?>
+            => source.source.Sum<TSource, int?, int, TSelector, AddNullableInt32>(source.selector);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static long Sum<TSource, TSelector>(this SpanSelectEnumerable<TSource, long, TSelector> source)
+            where TSelector : struct, IFunction<TSource, long>
+            => source.source.Sum<TSource, long, long, TSelector, AddInt64>(source.selector);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static long Sum<TSource, TSelector>(this SpanSelectEnumerable<TSource, long?, TSelector> source)
+            where TSelector : struct, IFunction<TSource, long?>
+            => source.source.Sum<TSource, long?, long, TSelector, AddNullableInt64>(source.selector);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float Sum<TSource, TSelector>(this SpanSelectEnumerable<TSource, float, TSelector> source)
+            where TSelector : struct, IFunction<TSource, float>
+            => source.source.Sum<TSource, float, float, TSelector, AddSingle>(source.selector);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float Sum<TSource, TSelector>(this SpanSelectEnumerable<TSource, float?, TSelector> source)
+            where TSelector : struct, IFunction<TSource, float?>
+            => source.source.Sum<TSource, float?, float, TSelector, AddNullableSingle>(source.selector);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static double Sum<TSource, TSelector>(this SpanSelectEnumerable<TSource, double, TSelector> source)
+            where TSelector : struct, IFunction<TSource, double>
+            => source.source.Sum<TSource, double, double, TSelector, AddDouble>(source.selector);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static double Sum<TSource, TSelector>(this SpanSelectEnumerable<TSource, double?, TSelector> source)
+            where TSelector : struct, IFunction<TSource, double?>
+            => source.source.Sum<TSource, double?, double, TSelector, AddNullableDouble>(source.selector);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static decimal Sum<TSource, TSelector>(this SpanSelectEnumerable<TSource, decimal, TSelector> source)
+            where TSelector : struct, IFunction<TSource, decimal>
+            => source.source.Sum<TSource, decimal, decimal, TSelector, AddDecimal>(source.selector);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static decimal Sum<TSource, TSelector>(this SpanSelectEnumerable<TSource, decimal?, TSelector> source)
+            where TSelector : struct, IFunction<TSource, decimal?>
+            => source.source.Sum<TSource, decimal?, decimal, TSelector, AddNullableDecimal>(source.selector);
     }
 }
 

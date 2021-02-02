@@ -12,6 +12,11 @@ namespace NetFabric.Hyperlinq
     {
         [GeneratorIgnore]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ArraySegmentSelectRefEnumerable<TSource, TResult, FunctionInWrapper<TSource, TResult>> Select<TSource, TResult>(this in ArraySegment<TSource> source, FunctionIn<TSource, TResult> selector)
+            => source.SelectRef<TSource, TResult, FunctionInWrapper<TSource, TResult>>(new FunctionInWrapper<TSource, TResult>(selector));
+
+        [GeneratorIgnore]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ArraySegmentSelectRefEnumerable<TSource, TResult, TSelector> SelectRef<TSource, TResult, TSelector>(this in ArraySegment<TSource> source, TSelector selector = default)
             where TSelector : struct, IFunctionIn<TSource, TResult>
             => new(in source, selector);
@@ -23,8 +28,8 @@ namespace NetFabric.Hyperlinq
             , IList<TResult>
             where TSelector : struct, IFunctionIn<TSource, TResult>
         {
-            readonly ArraySegment<TSource> source;
-            TSelector selector;
+            internal readonly ArraySegment<TSource> source;
+            internal TSelector selector;
 
             internal ArraySegmentSelectRefEnumerable(in ArraySegment<TSource> source, TSelector selector)
                 => (this.source, this.selector) = (source, selector);
@@ -39,7 +44,7 @@ namespace NetFabric.Hyperlinq
                 {
                     if (index < 0 || index >= source.Count) Throw.IndexOutOfRangeException();
 
-                    return selector.Invoke(source.Array![index + source.Offset]);
+                    return selector.Invoke(in source.Array![index + source.Offset]);
                 }
             }
             TResult IReadOnlyList<TResult>.this[int index]
@@ -88,8 +93,8 @@ namespace NetFabric.Hyperlinq
                     {
                         for (var index = start; index < end; index++)
                         {
-                            var arrayItem = array[index];
-                            if (EqualityComparer<TResult>.Default.Equals(selector.Invoke(arrayItem), item))
+                            ref readonly var arrayItem = ref array[index];
+                            if (EqualityComparer<TResult>.Default.Equals(selector.Invoke(in arrayItem), item))
                                 return index - source.Offset;
                         }
                     }
@@ -98,8 +103,8 @@ namespace NetFabric.Hyperlinq
                         var defaultComparer = EqualityComparer<TResult>.Default;
                         for (var index = start; index < end; index++)
                         {
-                            var arrayItem = array[index];
-                            if (defaultComparer.Equals(selector.Invoke(arrayItem), item))
+                            ref readonly var arrayItem = ref array[index];
+                            if (defaultComparer.Equals(selector.Invoke(in arrayItem), item))
                                 return index - source.Offset;
                         }
                     }
@@ -130,7 +135,7 @@ namespace NetFabric.Hyperlinq
                 public readonly TResult Current
                 {
                     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                    get => selector.Invoke(source![index]);
+                    get => selector.Invoke(in source![index]);
                 }
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -158,13 +163,13 @@ namespace NetFabric.Hyperlinq
                 public readonly TResult Current
                 {
                     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                    get => selector.Invoke(source![index]);
+                    get => selector.Invoke(in source![index]);
                 }
                 readonly TResult IEnumerator<TResult>.Current
-                    => selector.Invoke(source![index]);
+                    => selector.Invoke(in source![index]);
                 readonly object? IEnumerator.Current
                     // ReSharper disable once HeapView.PossibleBoxingAllocation
-                    => selector.Invoke(source![index]);
+                    => selector.Invoke(in source![index]);
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public bool MoveNext()
@@ -176,7 +181,7 @@ namespace NetFabric.Hyperlinq
 
                 public void Dispose() { }
             }
-/*
+
             #region Aggregation
             
             #endregion
@@ -192,76 +197,126 @@ namespace NetFabric.Hyperlinq
             #endregion
             #region Projection
             
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public ArraySegmentSelectEnumerable<TSource, TResult2, SelectorSelectorCombination<TSelector, FunctionWrapper<TResult, TResult2>, TSource, TResult, TResult2>> Select<TResult2>(Func<TResult, TResult2> selector)
-                => Select<TResult2, FunctionWrapper<TResult, TResult2>>(new FunctionWrapper<TResult, TResult2>(selector));
+            //[MethodImpl(MethodImplOptions.AggressiveInlining)]
+            //public ArraySegmentSelectEnumerable<TSource, TResult2, SelectorSelectorCombination<TSelector, FunctionWrapper<TResult, TResult2>, TSource, TResult, TResult2>> Select<TResult2>(Func<TResult, TResult2> selector)
+            //    => Select<TResult2, FunctionWrapper<TResult, TResult2>>(new FunctionWrapper<TResult, TResult2>(selector));
             
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public ArraySegmentSelectEnumerable<TSource, TResult2, SelectorSelectorCombination<TSelector, TSelector2, TSource, TResult, TResult2>> Select<TResult2, TSelector2>(TSelector2 selector = default)
-                where TSelector2 : struct, IFunction<TResult, TResult2>
-                => source.Select<TSource, TResult2, SelectorSelectorCombination<TSelector, TSelector2, TSource, TResult, TResult2>>(new SelectorSelectorCombination<TSelector, TSelector2, TSource, TResult, TResult2>(this.selector, selector));
+            //[MethodImpl(MethodImplOptions.AggressiveInlining)]
+            //public ArraySegmentSelectEnumerable<TSource, TResult2, SelectorSelectorCombination<TSelector, TSelector2, TSource, TResult, TResult2>> Select<TResult2, TSelector2>(TSelector2 selector = default)
+            //    where TSelector2 : struct, IFunction<TResult, TResult2>
+            //    => ((ReadOnlySpan<TSource>)source.AsSpan()).SelectRef<TSource, TResult2, SelectorSelectorCombination<TSelector, TSelector2, TSource, TResult, TResult2>>(new SelectorSelectorCombination<TSelector, TSelector2, TSource, TResult, TResult2>(this.selector, selector));
             
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public ArraySegmentSelectAtEnumerable<TSource, TResult2, SelectorSelectorAtCombination<TSelector, FunctionWrapper<TResult, int, TResult2>, TSource, TResult, TResult2>> Select<TResult2>(Func<TResult, int, TResult2> selector)
-                => SelectAt<TResult2, FunctionWrapper<TResult, int, TResult2>>(new FunctionWrapper<TResult, int, TResult2>(selector));
+            //[MethodImpl(MethodImplOptions.AggressiveInlining)]
+            //public ArraySegmentSelectAtEnumerable<TSource, TResult2, SelectorSelectorAtCombination<TSelector, FunctionWrapper<TResult, int, TResult2>, TSource, TResult, TResult2>> Select<TResult2>(Func<TResult, int, TResult2> selector)
+            //    => SelectAt<TResult2, FunctionWrapper<TResult, int, TResult2>>(new FunctionWrapper<TResult, int, TResult2>(selector));
             
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public ArraySegmentSelectAtEnumerable<TSource, TResult2, SelectorSelectorAtCombination<TSelector, TSelector2, TSource, TResult, TResult2>> SelectAt<TResult2, TSelector2>(TSelector2 selector = default)
-                where TSelector2 : struct, IFunction<TResult, int, TResult2>
-                => source.SelectAt<TSource, TResult2, SelectorSelectorAtCombination<TSelector, TSelector2, TSource, TResult, TResult2>>(new SelectorSelectorAtCombination<TSelector, TSelector2, TSource, TResult, TResult2>(this.selector, selector));
+            //[MethodImpl(MethodImplOptions.AggressiveInlining)]
+            //public ArraySegmentSelectAtEnumerable<TSource, TResult2, SelectorSelectorAtCombination<TSelector, TSelector2, TSource, TResult, TResult2>> SelectAt<TResult2, TSelector2>(TSelector2 selector = default)
+            //    where TSelector2 : struct, IFunction<TResult, int, TResult2>
+            //    => ((ReadOnlySpan<TSource>)source.AsSpan()).SelectAtRef<TSource, TResult2, SelectorSelectorAtCombination<TSelector, TSelector2, TSource, TResult, TResult2>>(new SelectorSelectorAtCombination<TSelector, TSelector2, TSource, TResult, TResult2>(this.selector, selector));
 
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly ReadOnlyListExtensions.SelectManyEnumerable<ArraySegmentSelectEnumerable<TSource, TResult, TSelector>, TResult, TSubEnumerable, TSubEnumerator, TResult2, FunctionWrapper<TResult, TSubEnumerable>> SelectMany<TSubEnumerable, TSubEnumerator, TResult2>(Func<TResult, TSubEnumerable> selector)
-                where TSubEnumerable : IValueEnumerable<TResult2, TSubEnumerator>
-                where TSubEnumerator : struct, IEnumerator<TResult2>
-                => this.SelectMany<ArraySegmentSelectEnumerable<TSource, TResult, TSelector>, TResult, TSubEnumerable, TSubEnumerator, TResult2>(selector);
+            //[MethodImpl(MethodImplOptions.AggressiveInlining)]
+            //public readonly ReadOnlyListExtensions.SelectManyEnumerable<ArraySegmentSelectEnumerable<TSource, TResult, TSelector>, TResult, TSubEnumerable, TSubEnumerator, TResult2, FunctionWrapper<TResult, TSubEnumerable>> SelectMany<TSubEnumerable, TSubEnumerator, TResult2>(Func<TResult, TSubEnumerable> selector)
+            //    where TSubEnumerable : IValueEnumerable<TResult2, TSubEnumerator>
+            //    where TSubEnumerator : struct, IEnumerator<TResult2>
+            //    => this.SelectManyRef<ArraySegmentSelectEnumerable<TSource, TResult, TSelector>, TResult, TSubEnumerable, TSubEnumerator, TResult2>(selector);
 
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly ReadOnlyListExtensions.SelectManyEnumerable<ArraySegmentSelectEnumerable<TSource, TResult, TSelector>, TResult, TSubEnumerable, TSubEnumerator, TResult2, TSelector2> SelectMany<TSubEnumerable, TSubEnumerator, TResult2, TSelector2>(TSelector2 selector = default)
-                where TSubEnumerable : IValueEnumerable<TResult2, TSubEnumerator>
-                where TSubEnumerator : struct, IEnumerator<TResult2>
-                where TSelector2 : struct, IFunction<TResult, TSubEnumerable>
-                => this.SelectMany<ArraySegmentSelectEnumerable<TSource, TResult, TSelector>, TResult, TSubEnumerable, TSubEnumerator, TResult2, TSelector2>(selector);
+            //[MethodImpl(MethodImplOptions.AggressiveInlining)]
+            //public readonly ReadOnlyListExtensions.SelectManyEnumerable<ArraySegmentSelectEnumerable<TSource, TResult, TSelector>, TResult, TSubEnumerable, TSubEnumerator, TResult2, TSelector2> SelectMany<TSubEnumerable, TSubEnumerator, TResult2, TSelector2>(TSelector2 selector = default)
+            //    where TSubEnumerable : IValueEnumerable<TResult2, TSubEnumerator>
+            //    where TSubEnumerator : struct, IEnumerator<TResult2>
+            //    where TSelector2 : struct, IFunction<TResult, TSubEnumerable>
+            //    => this.SelectManyRef<ArraySegmentSelectEnumerable<TSource, TResult, TSelector>, TResult, TSubEnumerable, TSubEnumerator, TResult2, TSelector2>(selector);
 
             #endregion
             #region Element
 
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public Option<TResult> ElementAt(int index)
-                => source.ElementAt<TSource, TResult, TSelector>(index, selector);
+            //[MethodImpl(MethodImplOptions.AggressiveInlining)]
+            //public Option<TResult> ElementAt(int index)
+            //    => ((ReadOnlySpan<TSource>)source.AsSpan()).ElementAtRef<TSource, TResult, TSelector>(index, selector);
             
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public Option<TResult> First()
-                => source.First<TSource, TResult, TSelector>(selector);
+            //[MethodImpl(MethodImplOptions.AggressiveInlining)]
+            //public Option<TResult> First()
+            //    => ((ReadOnlySpan<TSource>)source.AsSpan()).FirstRef<TSource, TResult, TSelector>(selector);
 
 
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public Option<TResult> Single()
-                => source.Single<TSource, TResult, TSelector>(selector);
+            //[MethodImpl(MethodImplOptions.AggressiveInlining)]
+            //public Option<TResult> Single()
+            //    => ((ReadOnlySpan<TSource>)source.AsSpan()).SingleRef<TSource, TResult, TSelector>(selector);
             
             #endregion
             #region Conversion
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TResult[] ToArray()
-                => source.ToArray<TSource, TResult, TSelector>(selector);
+                => ((ReadOnlySpan<TSource>)source.AsSpan()).ToArrayRef<TSource, TResult, TSelector>(selector);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public IMemoryOwner<TResult> ToArray(MemoryPool<TResult> pool)
-                => source.ToArray(selector, pool);
+                => ((ReadOnlySpan<TSource>)source.AsSpan()).ToArrayRef(selector, pool);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public List<TResult> ToList()
-                => source.ToList<TSource, TResult, TSelector>(selector);
+                => ((ReadOnlySpan<TSource>)source.AsSpan()).ToListRef<TSource, TResult, TSelector>(selector);
             
             #endregion
-*/
+
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int Count<TSource, TResult, TSelector>(this ArraySegmentSelectRefEnumerable<TSource, TResult, TSelector> source)
             where TSelector : struct, IFunctionIn<TSource, TResult>
             => source.Count;
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Sum<TSource, TSelector>(this ArraySegmentSelectRefEnumerable<TSource, int, TSelector> source)
+            where TSelector : struct, IFunctionIn<TSource, int>
+            => ((ReadOnlySpan<TSource>)source.source.AsSpan()).SumRef<TSource, int, int, TSelector, AddInt32>(source.selector);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Sum<TSource, TSelector>(this ArraySegmentSelectRefEnumerable<TSource, int?, TSelector> source)
+            where TSelector : struct, IFunctionIn<TSource, int?>
+            => ((ReadOnlySpan<TSource>)source.source.AsSpan()).SumRef<TSource, int?, int, TSelector, AddNullableInt32>(source.selector);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static long Sum<TSource, TSelector>(this ArraySegmentSelectRefEnumerable<TSource, long, TSelector> source)
+            where TSelector : struct, IFunctionIn<TSource, long>
+            => ((ReadOnlySpan<TSource>)source.source.AsSpan()).SumRef<TSource, long, long, TSelector, AddInt64>(source.selector);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static long Sum<TSource, TSelector>(this ArraySegmentSelectRefEnumerable<TSource, long?, TSelector> source)
+            where TSelector : struct, IFunctionIn<TSource, long?>
+            => ((ReadOnlySpan<TSource>)source.source.AsSpan()).SumRef<TSource, long?, long, TSelector, AddNullableInt64>(source.selector);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float Sum<TSource, TSelector>(this ArraySegmentSelectRefEnumerable<TSource, float, TSelector> source)
+            where TSelector : struct, IFunctionIn<TSource, float>
+            => ((ReadOnlySpan<TSource>)source.source.AsSpan()).SumRef<TSource, float, float, TSelector, AddSingle>(source.selector);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float Sum<TSource, TSelector>(this ArraySegmentSelectRefEnumerable<TSource, float?, TSelector> source)
+            where TSelector : struct, IFunctionIn<TSource, float?>
+            => ((ReadOnlySpan<TSource>)source.source.AsSpan()).SumRef<TSource, float?, float, TSelector, AddNullableSingle>(source.selector);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static double Sum<TSource, TSelector>(this ArraySegmentSelectRefEnumerable<TSource, double, TSelector> source)
+            where TSelector : struct, IFunctionIn<TSource, double>
+            => ((ReadOnlySpan<TSource>)source.source.AsSpan()).SumRef<TSource, double, double, TSelector, AddDouble>(source.selector);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static double Sum<TSource, TSelector>(this ArraySegmentSelectRefEnumerable<TSource, double?, TSelector> source)
+            where TSelector : struct, IFunctionIn<TSource, double?>
+            => ((ReadOnlySpan<TSource>)source.source.AsSpan()).SumRef<TSource, double?, double, TSelector, AddNullableDouble>(source.selector);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static decimal Sum<TSource, TSelector>(this ArraySegmentSelectRefEnumerable<TSource, decimal, TSelector> source)
+            where TSelector : struct, IFunctionIn<TSource, decimal>
+            => ((ReadOnlySpan<TSource>)source.source.AsSpan()).SumRef<TSource, decimal, decimal, TSelector, AddDecimal>(source.selector);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static decimal Sum<TSource, TSelector>(this ArraySegmentSelectRefEnumerable<TSource, decimal?, TSelector> source)
+            where TSelector : struct, IFunctionIn<TSource, decimal?>
+            => ((ReadOnlySpan<TSource>)source.source.AsSpan()).SumRef<TSource, decimal?, decimal, TSelector, AddNullableDecimal>(source.selector);
     }
 }
 
