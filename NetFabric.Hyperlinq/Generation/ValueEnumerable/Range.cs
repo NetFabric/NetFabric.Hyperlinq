@@ -66,61 +66,25 @@ namespace NetFabric.Hyperlinq
 
             public void CopyTo(Span<int> array)
             {
+                if (array.Length < Count)
+                    Throw.ArgumentException(Resource.DestinationNotLongEnough, nameof(array));
+
+                var count = Count - 1;
                 if (start is 0)
                 {
-                    for (var index = 0; index < Count; index++)
+                    for (var index = 0; index <= count; index++)
                         array[index] = index;
                 }
                 else
                 {
-                    for (var index = 0; index < Count; index++)
+                    for (var index = 0; index <= count; index++)
                         array[index] = index + start;
                 }
             }
 
-            public void CopyTo(int[] array)
-            {
-                if (start is 0)
-                {
-                    for (var index = 0; index < Count; index++)
-                        array[index] = index;
-                }
-                else
-                {
-                    for (var index = 0; index < Count; index++)
-                        array[index] = index + start;
-                }
-            }
-
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public void CopyTo(int[] array, int arrayIndex)
-            {
-                if (start is 0)
-                {
-                    if (arrayIndex is 0)
-                    {
-                        for (var index = 0; index < Count; index++)
-                            array[index] = index;
-                    }
-                    else
-                    {
-                        for (var index = 0; index < Count; index++)
-                            array[index + arrayIndex] = index;
-                    }
-                }
-                else
-                {
-                    if (arrayIndex is 0)
-                    {
-                        for (var index = 0; index < Count; index++)
-                            array[index] = index + start;
-                    }
-                    else
-                    {
-                        for (var index = 0; index < Count; index++)
-                            array[index + arrayIndex] = index + start;
-                    }
-                }
-            }
+                => CopyTo(array.AsSpan().Slice(arrayIndex));
 
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -232,7 +196,17 @@ namespace NetFabric.Hyperlinq
             {
                 // ReSharper disable once HeapView.ObjectAllocation.Evident
                 var array = new int[Count];
-                CopyTo(array);
+                // doesn't use CopyTo() to avoid bounds checking
+                if (start is 0)
+                {
+                    for (var index = 0; index < array.Length; index++)
+                        array[index] = index;
+                }
+                else
+                {
+                    for (var index = 0; index < array.Length; index++)
+                        array[index] = index + start;
+                }
                 return array;
             }
 

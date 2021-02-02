@@ -52,20 +52,15 @@ namespace NetFabric.Hyperlinq
 
             public void CopyTo(Span<TSource> span) 
             {
-                for (var index = 0; index < count; index++)
-                    span[index] = value;
+                if (span.Length < Count)
+                    Throw.ArgumentException(Resource.DestinationNotLongEnough, nameof(span));
+
+                span.Slice(0, Count).Fill(value);
             }
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public void CopyTo(TSource[] array, int arrayIndex)
-#if NETSTANDARD2_1 || NETCOREAPP2_1 || NET5_0
-                => Array.Fill(array, value, arrayIndex, count);
-#else
-            {
-                var end = arrayIndex + count;
-                for (var index = arrayIndex; index < end; index++)
-                    array[index] = value;
-            }
-#endif
+                => CopyTo(array.AsSpan().Slice(arrayIndex));
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Contains(TSource item)

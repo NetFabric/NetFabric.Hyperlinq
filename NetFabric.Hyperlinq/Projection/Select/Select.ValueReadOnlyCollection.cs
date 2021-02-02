@@ -56,18 +56,25 @@ namespace NetFabric.Hyperlinq
             bool ICollection<TResult>.IsReadOnly  
                 => true;
 
-            public void CopyTo(TResult[] array, int arrayIndex) 
+            public void CopyTo(Span<TResult> span) 
             {
+                if (span.Length < Count)
+                    Throw.ArgumentException(Resource.DestinationNotLongEnough, nameof(span));
+
                 if (source.Count is not 0)
                 {
                     checked
                     {
                         using var enumerator = source.GetEnumerator();
-                        for (var index = arrayIndex; enumerator.MoveNext(); index++)
-                            array[index] = selector.Invoke(enumerator.Current);
+                        for (var index = 0; enumerator.MoveNext(); index++)
+                            span[index] = selector.Invoke(enumerator.Current);
                     }
                 }
             }
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public void CopyTo(TResult[] array, int arrayIndex)
+                => CopyTo(array.AsSpan().Slice(arrayIndex));
 
             public bool Contains(TResult item)
                 => ValueReadOnlyCollectionExtensions.Contains<TEnumerable, TEnumerator, TSource, TResult, TSelector>(source, item, selector);

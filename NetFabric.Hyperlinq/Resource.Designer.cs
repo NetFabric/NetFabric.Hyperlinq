@@ -70,6 +70,15 @@ namespace NetFabric.Hyperlinq {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Destination array was not long enough. Check the destination index, length, and the array&apos;s lower bounds..
+        /// </summary>
+        internal static string DestinationNotLongEnough {
+            get {
+                return ResourceManager.GetString("DestinationNotLongEnough", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Sequence contains no elements.
         /// </summary>
         internal static string EmptySequence {

@@ -46,37 +46,36 @@ namespace NetFabric.Hyperlinq
             bool ICollection<TSource>.IsReadOnly  
                 => true;
 
-            public void CopyTo(TSource[] array, int arrayIndex)
+            public void CopyTo(Span<TSource> span)
             {
+                if (span.Length < Count)
+                    Throw.ArgumentException(Resource.DestinationNotLongEnough, nameof(span));
+
                 if (Count is 0)
                     return;
 
-                if (skipCount is 0 && Count == source.Count && source is ICollection<TSource> collection)
+                using var enumerator = source.GetEnumerator();
+
+                // skip
+                for (var counter = 0; counter < skipCount; counter++)
                 {
-                    collection.CopyTo(array, arrayIndex);
+                    if (!enumerator.MoveNext())
+                        Throw.InvalidOperationException();
                 }
-                else
+
+                // take
+                for (var counter = 0; counter < Count; counter++)
                 {
-                    using var enumerator = source.GetEnumerator();
+                    if (!enumerator.MoveNext())
+                        Throw.InvalidOperationException();
 
-                    // skip
-                    for (var counter = 0; counter < skipCount; counter++)
-                    {
-                        if (!enumerator.MoveNext())
-                            Throw.InvalidOperationException();
-                    }
-
-                    // take
-                    for (var counter = 0; counter < Count; counter++)
-                    {
-                        if (!enumerator.MoveNext())
-                            Throw.InvalidOperationException();
-
-                        array[arrayIndex] = enumerator.Current;
-                        checked { arrayIndex++; }
-                    }
+                    span[counter] = enumerator.Current;
                 }
             }
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public void CopyTo(TSource[] array, int arrayIndex)
+                => CopyTo(array.AsSpan().Slice(arrayIndex));
 
             public bool Contains(TSource item)
             {

@@ -20,7 +20,7 @@ namespace NetFabric.Hyperlinq
         {
             Debug.Assert(destination.Length >= source.Length);
 
-            for (var index = 0; index < source.Length; index++)
+            for (var index = 0; index < source.Length && index < destination.Length; index++)
             {
                 var item = source[index];
                 destination[index] = selector.Invoke(item);
@@ -33,7 +33,7 @@ namespace NetFabric.Hyperlinq
         {
             Debug.Assert(destination.Length >= source.Length);
 
-            for (var index = 0; index < source.Length; index++)
+            for (var index = 0; index < source.Length && index < destination.Length; index++)
             {
                 ref readonly var item = ref source[index];
                 destination[index] = selector.Invoke(in item);
@@ -46,7 +46,7 @@ namespace NetFabric.Hyperlinq
         {
             Debug.Assert(destination.Length >= source.Length);
 
-            for (var index = 0; index < source.Length; index++)
+            for (var index = 0; index < source.Length && index < destination.Length; index++)
             {
                 var item = source[index];
                 destination[index] = selector.Invoke(item, index);
@@ -59,7 +59,7 @@ namespace NetFabric.Hyperlinq
         {
             Debug.Assert(destination.Length >= source.Length);
 
-            for (var index = 0; index < source.Length; index++)
+            for (var index = 0; index < source.Length && index < destination.Length; index++)
             {
                 ref readonly var item = ref source[index];
                 destination[index] = selector.Invoke(in item, index);

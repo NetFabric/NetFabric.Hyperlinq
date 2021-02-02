@@ -64,8 +64,17 @@ namespace NetFabric.Hyperlinq
                 => true;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public void CopyTo(TSource[] array, int arrayIndex) 
-                => array[arrayIndex] = value;
+            public void CopyTo(Span<TSource> span)
+            {
+                if (span.Length < Count)
+                    Throw.ArgumentException(Resource.DestinationNotLongEnough, nameof(span));
+
+                span[0] = value;
+            }
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public void CopyTo(TSource[] array, int arrayIndex)
+                => CopyTo(array.AsSpan().Slice(arrayIndex));
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Contains(TSource item)
