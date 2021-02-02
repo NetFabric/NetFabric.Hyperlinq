@@ -65,31 +65,26 @@ namespace NetFabric.Hyperlinq
             bool ICollection<TSource>.IsReadOnly  
                 => true;
 
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public void CopyTo(TSource[] array, int arrayIndex)
+            public void CopyTo(Span<TSource> span)
             {
+                if (span.Length < Count)
+                    Throw.ArgumentException(Resource.DestinationNotLongEnough, nameof(span));
+
                 if (source.Count is not 0)
                 {
-                    switch (source)
+                    using var enumerator = GetEnumerator();
+                    checked
                     {
-                        // ReSharper disable once HeapView.PossibleBoxingAllocation
-                        case ICollection<TSource> collection:
-                            collection.CopyTo(array, arrayIndex);
-                            break;
-
-                        default:
-                            {
-                                using var enumerator = GetEnumerator();
-                                checked
-                                {
-                                    for (var index = arrayIndex; enumerator.MoveNext(); index++)
-                                        array[index] = enumerator.Current;
-                                }
-                            }
-                            break;
+                        for (var index = 0; enumerator.MoveNext(); index++)
+                            span[index] = enumerator.Current;
                     }
                 }
             }
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public void CopyTo(TSource[] array, int arrayIndex)
+                => CopyTo(array.AsSpan().Slice(arrayIndex));
+
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Contains(TSource item)
@@ -137,30 +132,26 @@ namespace NetFabric.Hyperlinq
             bool ICollection<TSource>.IsReadOnly  
                 => true;
 
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public void CopyTo(TSource[] array, int arrayIndex)
+            public void CopyTo(Span<TSource> span)
             {
+                if (span.Length < Count)
+                    Throw.ArgumentException(Resource.DestinationNotLongEnough, nameof(span));
+
                 if (source.Count is not 0)
                 {
-                    switch (source)
+                    using var enumerator = GetEnumerator();
+                    checked
                     {
-                        case ICollection<TSource> collection:
-                            collection.CopyTo(array, arrayIndex);
-                            break;
-
-                        default:
-                            {
-                                using var enumerator = GetEnumerator();
-                                checked
-                                {
-                                    for (var index = arrayIndex; enumerator.MoveNext(); index++)
-                                        array[index] = enumerator.Current;
-                                }
-                            }
-                            break;
+                        for (var index = 0; enumerator.MoveNext(); index++)
+                            span[index] = enumerator.Current;
                     }
                 }
             }
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public void CopyTo(TSource[] array, int arrayIndex)
+                => CopyTo(array.AsSpan().Slice(arrayIndex));
+
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Contains(TSource item)

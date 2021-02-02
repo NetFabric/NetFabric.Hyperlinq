@@ -31,7 +31,7 @@ namespace NetFabric.Hyperlinq
             // ReSharper disable once HeapView.ObjectAllocation.Evident
             var result = new TSource[count];
 #endif
-            Copy(source, offset, result, 0, count);
+            Copy(source, offset, result.AsSpan(), count);
             return result;
         }
 
@@ -99,7 +99,7 @@ namespace NetFabric.Hyperlinq
             // ReSharper disable once HeapView.ObjectAllocation.Evident
             var result = new TResult[count];
 #endif
-            Copy<TList, TSource, TResult, TSelector>(source, offset, result, 0, count, selector);
+            Copy<TList, TSource, TResult, TSelector>(source, offset, result.AsSpan(), count, selector);
             return result;
         }
 
@@ -127,7 +127,7 @@ namespace NetFabric.Hyperlinq
             // ReSharper disable once HeapView.ObjectAllocation.Evident
             var result = new TResult[count];
 #endif
-            CopyAt<TList, TSource, TResult, TSelector>(source, offset, result, 0, count, selector);
+            CopyAt<TList, TSource, TResult, TSelector>(source, offset, result.AsSpan(), count, selector);
             return result;
         }
 

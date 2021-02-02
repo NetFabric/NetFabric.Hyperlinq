@@ -61,8 +61,17 @@ namespace NetFabric.Hyperlinq
             bool ICollection<TSource>.IsReadOnly
                 => true;
 
+            public void CopyTo(Span<TSource> span)
+            {
+                if (span.Length < Count)
+                    Throw.ArgumentException(Resource.DestinationNotLongEnough, nameof(span));
+
+                Copy(source, 0, span, source.Count);
+            }
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public void CopyTo(TSource[] array, int arrayIndex)
-                => Copy(source, 0, array, arrayIndex, source.Count);
+                => CopyTo(array.AsSpan().Slice(arrayIndex));
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Contains(TSource item)

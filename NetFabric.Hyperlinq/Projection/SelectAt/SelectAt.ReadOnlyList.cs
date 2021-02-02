@@ -86,15 +86,18 @@ namespace NetFabric.Hyperlinq
             bool ICollection<TResult>.IsReadOnly  
                 => true;
 
-            public void CopyTo(TResult[] array) 
+            public void CopyTo(Span<TResult> span) 
             {
+                if (span.Length < Count)
+                    Throw.ArgumentException(Resource.DestinationNotLongEnough, nameof(span));
+
                 var end = Count;
                 if (offset is 0)
                 {
                     for (var index = 0; index < end; index++)
                     {
                         var item = source[index];
-                        array[index] = selector.Invoke(item, index);
+                        span[index] = selector.Invoke(item, index);
                     }
                 }
                 else
@@ -102,38 +105,14 @@ namespace NetFabric.Hyperlinq
                     for (var index = 0; index < end; index++)
                     {
                         var item = source[index + offset];
-                        array[index] = selector.Invoke(item, index);
+                        span[index] = selector.Invoke(item, index);
                     }
                 }
             }
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public void CopyTo(TResult[] array, int arrayIndex)
-            {
-                if (arrayIndex is 0)
-                {
-                    CopyTo(array);
-                }
-                else
-                {
-                    var end = Count;
-                    if (offset is 0)
-                    {
-                        for (var index = 0; index < end; index++)
-                        {
-                            var item = source[index];
-                            array[index + arrayIndex] = selector.Invoke(item, index);
-                        }
-                    }
-                    else
-                    {
-                        for (var index = 0; index < end; index++)
-                        {
-                            var item = source[index + offset];
-                            array[index + arrayIndex] = selector.Invoke(item, index);
-                        }
-                    }
-                }
-            }
+                => CopyTo(array.AsSpan().Slice(arrayIndex));
 
             public bool Contains(TResult item)
                 => source.ContainsAt<TList, TSource, TResult, TSelector>(item, selector, offset, Count);
