@@ -225,13 +225,13 @@ namespace NetFabric.Hyperlinq
             #region Conversion
 
             public TSource[] ToArray()
-                => source.ToArray(predicate);
+                => source.Span.ToArray(predicate);
 
             public IMemoryOwner<TSource> ToArray(MemoryPool<TSource> memoryPool)
-                => source.ToArray(predicate, memoryPool);
+                => source.Span.ToArray(predicate, memoryPool);
 
             public List<TSource> ToList()
-                => source.ToList(predicate);
+                => source.Span.ToList(predicate);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Dictionary<TKey, TSource> ToDictionary<TKey>(Func<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer = default)

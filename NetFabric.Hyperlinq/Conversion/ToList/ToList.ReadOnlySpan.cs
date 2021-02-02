@@ -11,12 +11,11 @@ namespace NetFabric.Hyperlinq
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static List<TSource> ToList<TSource>(this ReadOnlySpan<TSource> source)
-        {
-            var list = new List<TSource>(source.Length);
-            for (var index = 0; index < source.Length; index++)
-                list.Add(source[index]);
-            return list;
-        }
+            => source.Length switch
+            {
+                0 => new List<TSource>(),
+                _ => source.ToArray().AsList()
+            };
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static List<TSource> ToList<TSource, TPredicate>(this ReadOnlySpan<TSource> source, TPredicate predicate)
