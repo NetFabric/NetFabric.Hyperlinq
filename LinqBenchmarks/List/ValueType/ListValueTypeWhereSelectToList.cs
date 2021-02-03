@@ -64,20 +64,20 @@ namespace LinqBenchmarks.List.ValueType
             return source.ToRefStructEnumerable()
                 .Where(ref predicate, x => x)
                 .Select(ref selector, x => x, x => x)
-                .ToList(x=>x);
+                .ToList(x => x);
         }
 
         [Benchmark]
         public List<FatValueType> Hyperlinq()
             => ListBindings
-                .Where(source, item => item.IsEven())
-                .Select(item => item * 2)
+                .Where(source, (in FatValueType item) => item.IsEven())
+                .Select((in FatValueType item) => item * 2)
                 .ToList();
 
         [Benchmark]
         public List<FatValueType> Hyperlinq_IFunction()
             => ListBindings
-                .Where<FatValueType, FatValueTypeIsEven>(source)
+                .WhereRef<FatValueType, FatValueTypeIsEven>(source)
                 .Select<FatValueType, DoubleOfFatValueType>()
                 .ToList();
     }

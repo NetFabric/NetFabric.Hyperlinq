@@ -96,22 +96,22 @@ namespace LinqBenchmarks.List.ValueType
             foreach (var item in ListBindings
                 .Skip(source, Skip)
                 .Take(Count)
-                .Select(item => item * 2))
+                .Select((in FatValueType item) => item * 2))
                 sum += item;
             return sum;
         }
 
-        //[Benchmark]
-        //public FatValueType Hyperlinq_Foreach_IFunction()
-        //{
-        //    var sum = default(FatValueType);
-        //    foreach (var item in ListBindings
-        //      .Skip(source, Skip)
-        //      .Take(Count)
-        //      .SelectRef<FatValueType, FatValueType, DoubleOfFatValueType>())
-        //        sum += item;
-        //    return sum;
-        //}
+        [Benchmark]
+        public FatValueType Hyperlinq_Foreach_IFunction()
+        {
+            var sum = default(FatValueType);
+            foreach (var item in ListBindings
+              .Skip(source, Skip)
+              .Take(Count)
+              .SelectRef<FatValueType, FatValueType, DoubleOfFatValueType>())
+                sum += item;
+            return sum;
+        }
 #pragma warning restore HLQ010 // Consider using a 'for' loop instead.
 
         [Benchmark]
@@ -121,23 +121,23 @@ namespace LinqBenchmarks.List.ValueType
             var items = ListBindings
                 .Skip(source, Skip)
                 .Take(Count)
-                .Select(item => item * 2);
+                .Select((in FatValueType item) => item * 2);
             for (var index = 0; index < items.Count; index++)
                 sum += items[index];
             return sum;
         }
 
-        //[Benchmark]
-        //public FatValueType Hyperlinq_For_IFunction()
-        //{
-        //    var sum = default(FatValueType);
-        //    var items = ListBindings
-        //      .Skip(source, Skip)
-        //      .Take(Count)
-        //      .SelectRef<FatValueType, FatValueType, DoubleOfFatValueType>();
-        //    for (var index = 0; index < items.Count; index++)
-        //        sum += items[index];
-        //    return sum;
-        //}
+        [Benchmark]
+        public FatValueType Hyperlinq_For_IFunction()
+        {
+            var sum = default(FatValueType);
+            var items = ListBindings
+              .Skip(source, Skip)
+              .Take(Count)
+              .SelectRef<FatValueType, FatValueType, DoubleOfFatValueType>();
+            for (var index = 0; index < items.Count; index++)
+                sum += items[index];
+            return sum;
+        }
     }
 }

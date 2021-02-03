@@ -86,7 +86,7 @@ namespace LinqBenchmarks.Array.ValueType
         {
             var sum = default(FatValueType);
             foreach (var item in ArrayExtensions
-                .Select(source, item => item * 2))
+                .Select(source, (in FatValueType item) => item * 2))
                 sum += item;
             return sum;
         }
@@ -106,7 +106,7 @@ namespace LinqBenchmarks.Array.ValueType
         public FatValueType Hyperlinq_For()
         {
             var items = ArrayExtensions
-                .Select(source, item => item * 2);
+                .Select(source, (in FatValueType item) => item * 2);
             var sum = default(FatValueType);
             for (var index = 0; index < items.Count; index++)
                 sum += items[index];

@@ -95,8 +95,8 @@ namespace LinqBenchmarks.List.ValueType
         {
             var sum = default(FatValueType);
             foreach (var item in ListBindings
-                .Where(source, item => item.IsEven())
-                .Select(item => item * 2))
+                .Where(source, (in FatValueType item) => item.IsEven())
+                .Select((in FatValueType item) => item * 2))
                 sum += item;
             return sum;
         }
@@ -106,7 +106,7 @@ namespace LinqBenchmarks.List.ValueType
         {
             var sum = default(FatValueType);
             foreach (var item in ListBindings
-                .Where<FatValueType, FatValueTypeIsEven>(source)
+                .WhereRef<FatValueType, FatValueTypeIsEven>(source)
                 .Select<FatValueType, DoubleOfFatValueType>())
                 sum += item;
             return sum;

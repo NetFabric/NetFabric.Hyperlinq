@@ -124,7 +124,7 @@ namespace LinqBenchmarks.Array.ValueType
             var items = ArrayExtensions
                 .Skip(source, Skip)
                 .Take(Count)
-                .Select(item => item * 2);
+                .Select((in FatValueType item) => item * 2);
             for (var index = 0; index < items.Count; index++)
                 sum += items[index];
             return sum;

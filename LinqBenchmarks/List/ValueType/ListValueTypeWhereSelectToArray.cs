@@ -79,14 +79,14 @@ namespace LinqBenchmarks.List.ValueType
         [Benchmark]
         public FatValueType[] Hyperlinq()
             => ListBindings
-                .Where(source, item => item.IsEven())
-                .Select(item => item * 2)
+                .Where(source, (in FatValueType item) => item.IsEven())
+                .Select((in FatValueType item) => item * 2)
                 .ToArray();
 
         [Benchmark]
         public FatValueType[] Hyperlinq_IFunction()
             => ListBindings
-                .Where<FatValueType, FatValueTypeIsEven>(source)
+                .WhereRef<FatValueType, FatValueTypeIsEven>(source)
                 .Select<FatValueType, DoubleOfFatValueType>()
                 .ToArray();
 
@@ -94,8 +94,8 @@ namespace LinqBenchmarks.List.ValueType
         public FatValueType Hyperlinq_Pool()
         {
             using var array = ListBindings
-                .Where(source, item => item.IsEven())
-                .Select(item => item * 2)
+                .Where(source, (in FatValueType item) => item.IsEven())
+                .Select((in FatValueType item) => item * 2)
                 .ToArray(MemoryPool<FatValueType>.Shared);
             return Count == 0 ? default : array.Memory.Span[0];
         }
@@ -104,7 +104,7 @@ namespace LinqBenchmarks.List.ValueType
         public FatValueType Hyperlinq_Pool_IFunction()
         {
             using var array = ListBindings
-                .Where<FatValueType, FatValueTypeIsEven>(source)
+                .WhereRef<FatValueType, FatValueTypeIsEven>(source)
                 .Select<FatValueType, DoubleOfFatValueType>()
                 .ToArray(MemoryPool<FatValueType>.Shared);
             return Count == 0 ? default : array.Memory.Span[0];
