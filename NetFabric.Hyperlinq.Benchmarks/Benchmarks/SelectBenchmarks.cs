@@ -158,7 +158,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [Benchmark]
         public int Hyperlinq_Array_For()
         {
-            var source = array.Select(item => item);
+            var source = array.AsValueEnumerable().Select(item => item);
             var sum = 0;
             for (var index = 0; index < source.Count; index++)
                 sum += source[index];
@@ -171,7 +171,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Hyperlinq_Array_Foreach()
         {
             var sum = 0;
-            foreach (var item in array.Select(item => item))
+            foreach (var item in array.AsValueEnumerable().Select(item => item))
                 sum += item;
             return sum;
         }
@@ -204,7 +204,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [Benchmark]
         public int Hyperlinq_Memory_For()
         {
-            var source = memory.Select(item => item);
+            var source = memory.AsValueEnumerable().Select(item => item);
             var sum = 0;
             for (var index = 0; index < source.Count; index++)
                 sum += source[index];
@@ -217,7 +217,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Hyperlinq_Memory_Foreach()
         {
             var sum = 0;
-            foreach (var item in memory.Select(item => item))
+            foreach (var item in memory.AsValueEnumerable().Select(item => item))
                 sum += item;
             return sum;
         }

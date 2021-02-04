@@ -14,8 +14,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
             // Arrange
 
             // Act
-            var result = ArrayExtensions
-                .Single(source.AsMemory());
+            var result = source.AsMemory().AsValueEnumerable()
+                .Single();
 
             // Assert
             _ = result.Must()
@@ -32,8 +32,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
                 .Single(source);
 
             // Act
-            var result = ArrayExtensions
-                .Single(source.AsMemory());
+            var result = source.AsMemory().AsValueEnumerable()
+                .Single();
 
             // Assert
             _ = result.Match(
@@ -48,8 +48,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
             // Arrange
 
             // Act
-            var result = ArrayExtensions
-                .Single(source.AsMemory());
+            var result = source.AsMemory().AsValueEnumerable()
+                .Single();
 
             // Assert
             _ = result.Must()
@@ -64,8 +64,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
             // Arrange
 
             // Act
-            var result = ArrayExtensions
-                .Where(source.AsMemory(), predicate)
+            var result = source.AsMemory().AsValueEnumerable()
+                .Where(predicate)
                 .Single();
 
             // Assert
@@ -83,8 +83,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
                 Enumerable.Single(source, predicate);
 
             // Act
-            var result = ArrayExtensions
-                .Where(source.AsMemory(), predicate)
+            var result = source.AsMemory().AsValueEnumerable()
+                .Where(predicate)
                 .Single();
 
             // Assert
@@ -100,8 +100,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
             // Arrange
 
             // Act
-            var result = ArrayExtensions
-                .Where(source.AsMemory(), predicate)
+            var result = source.AsMemory().AsValueEnumerable()
+                .Where(predicate)
                 .Single();
 
             // Assert
@@ -117,8 +117,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
             // Arrange
 
             // Act
-            var result = ArrayExtensions
-                .Where(source.AsMemory(), predicate)
+            var result = source.AsMemory().AsValueEnumerable()
+                .Where(predicate)
                 .Single();
 
             // Assert
@@ -137,8 +137,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
                 .Single();
 
             // Act
-            var result = ArrayExtensions
-                .Where(source.AsMemory(), predicate)
+            var result = source.AsMemory().AsValueEnumerable()
+                .Where(predicate)
                 .Single();
 
             // Assert
@@ -154,8 +154,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
             // Arrange
 
             // Act
-            var result = ArrayExtensions
-                .Where(source.AsMemory(), predicate)
+            var result = source.AsMemory().AsValueEnumerable()
+                .Where(predicate)
                 .Single();
 
             // Assert
@@ -171,8 +171,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
             // Arrange
 
             // Act
-            var result = ArrayExtensions
-                .Select(source.AsMemory(), selector)
+            var result = source.AsMemory().AsValueEnumerable()
+                .Select(selector)
                 .Single();
 
             // Assert
@@ -191,8 +191,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
                     Enumerable.Select(source, selector));
 
             // Act
-            var result = ArrayExtensions
-                .Select<int, string>(source.AsMemory(), selector)
+            var result = source.AsMemory().AsValueEnumerable()
+                .Select(selector)
                 .Single();
 
             // Assert
@@ -208,8 +208,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
             // Arrange
 
             // Act
-            var result = ArrayExtensions
-                .Select<int, string>(source.AsMemory(), selector)
+            var result = source.AsMemory().AsValueEnumerable()
+                .Select(selector)
                 .Single();
 
             // Assert
@@ -225,8 +225,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
             // Arrange
 
             // Act
-            var result = ArrayExtensions
-                .Select<int, string>(source.AsMemory(), selector)
+            var result = source.AsMemory().AsValueEnumerable()
+                .Select(selector)
                 .Single();
 
             // Assert
@@ -245,8 +245,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
                 .Single();
 
             // Act
-            var result = ArrayExtensions
-                .Select<int, string>(source.AsMemory(), selector)
+            var result = source.AsMemory().AsValueEnumerable()
+                .Select(selector)
                 .Single();
 
             // Assert
@@ -262,8 +262,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
             // Arrange
 
             // Act
-            var result = ArrayExtensions
-                .Select(source.AsMemory(), selector)
+            var result = source.AsMemory().AsValueEnumerable()
+                .Select(selector)
                 .Single();
 
             // Assert
@@ -279,8 +279,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
             // Arrange
 
             // Act
-            var result = ArrayExtensions
-                .Where(source.AsMemory(), predicate)
+            var result = source.AsMemory().AsValueEnumerable()
+                .Where(predicate)
                 .Select(selector)
                 .Single();
 
@@ -301,8 +301,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
                 .Single();
 
             // Act
-            var result = ArrayExtensions
-                .Where(source.AsMemory(), predicate)
+            var result = source.AsMemory().AsValueEnumerable()
+                .Where(predicate)
                 .Select(selector)
                 .Single();
 
@@ -319,8 +319,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
             // Arrange
 
             // Act
-            var result = ArrayExtensions
-                .Where(source.AsMemory(), predicate)
+            var result = source.AsMemory().AsValueEnumerable()
+                .Where(predicate)
                 .Select(selector)
                 .Single();
 

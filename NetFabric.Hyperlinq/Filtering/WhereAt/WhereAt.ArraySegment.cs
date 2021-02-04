@@ -25,8 +25,8 @@ namespace NetFabric.Hyperlinq
             : IValueEnumerable<TSource, ArraySegmentWhereAtEnumerable<TSource, TPredicate>.DisposableEnumerator>
             where TPredicate : struct, IFunction<TSource, int, bool>
         {
-            readonly ArraySegment<TSource> source;
-            readonly TPredicate predicate;
+            internal readonly ArraySegment<TSource> source;
+            internal readonly TPredicate predicate;
 
             internal ArraySegmentWhereAtEnumerable(in ArraySegment<TSource> source, TPredicate predicate)
             {
@@ -265,6 +265,56 @@ namespace NetFabric.Hyperlinq
             
             #endregion
         }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Sum<TPredicate>(this ArraySegmentWhereAtEnumerable<int, TPredicate> source)
+            where TPredicate : struct, IFunction<int, int, bool>
+            => ((ReadOnlySpan<int>)source.source.AsSpan()).SumAt<int, int, TPredicate, AddInt32>(source.predicate);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Sum<TPredicate>(this ArraySegmentWhereAtEnumerable<int?, TPredicate> source)
+            where TPredicate : struct, IFunction<int?, int, bool>
+            => ((ReadOnlySpan<int?>)source.source.AsSpan()).SumAt<int?, int, TPredicate, AddNullableInt32>(source.predicate);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static long Sum<TPredicate>(this ArraySegmentWhereAtEnumerable<long, TPredicate> source)
+            where TPredicate : struct, IFunction<long, int, bool>
+            => ((ReadOnlySpan<long>)source.source.AsSpan()).SumAt<long, long, TPredicate, AddInt64>(source.predicate);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static long Sum<TPredicate>(this ArraySegmentWhereAtEnumerable<long?, TPredicate> source)
+            where TPredicate : struct, IFunction<long?, int, bool>
+            => ((ReadOnlySpan<long?>)source.source.AsSpan()).SumAt<long?, long, TPredicate, AddNullableInt64>(source.predicate);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float Sum<TPredicate>(this ArraySegmentWhereAtEnumerable<float, TPredicate> source)
+            where TPredicate : struct, IFunction<float, int, bool>
+            => ((ReadOnlySpan<float>)source.source.AsSpan()).SumAt<float, float, TPredicate, AddSingle>(source.predicate);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float Sum<TPredicate>(this ArraySegmentWhereAtEnumerable<float?, TPredicate> source)
+            where TPredicate : struct, IFunction<float?, int, bool>
+            => ((ReadOnlySpan<float?>)source.source.AsSpan()).SumAt<float?, float, TPredicate, AddNullableSingle>(source.predicate);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static double Sum<TPredicate>(this ArraySegmentWhereAtEnumerable<double, TPredicate> source)
+            where TPredicate : struct, IFunction<double, int, bool>
+            => ((ReadOnlySpan<double>)source.source.AsSpan()).SumAt<double, double, TPredicate, AddDouble>(source.predicate);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static double Sum<TPredicate>(this ArraySegmentWhereAtEnumerable<double?, TPredicate> source)
+            where TPredicate : struct, IFunction<double?, int, bool>
+            => ((ReadOnlySpan<double?>)source.source.AsSpan()).SumAt<double?, double, TPredicate, AddNullableDouble>(source.predicate);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static decimal Sum<TPredicate>(this ArraySegmentWhereAtEnumerable<decimal, TPredicate> source)
+            where TPredicate : struct, IFunction<decimal, int, bool>
+            => ((ReadOnlySpan<decimal>)source.source.AsSpan()).SumAt<decimal, decimal, TPredicate, AddDecimal>(source.predicate);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static decimal Sum<TPredicate>(this ArraySegmentWhereAtEnumerable<decimal?, TPredicate> source)
+            where TPredicate : struct, IFunction<decimal?, int, bool>
+            => ((ReadOnlySpan<decimal?>)source.source.AsSpan()).SumAt<decimal?, decimal, TPredicate, AddNullableDecimal>(source.predicate);
     }
 }
 

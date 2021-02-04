@@ -16,10 +16,10 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
             // Arrange
 
             // Act
-            var optionNegative = ArrayExtensions
-                .ElementAt(source.AsMemory(), -1);
-            var optionTooLarge = ArrayExtensions
-                .ElementAt(source.AsMemory(), source.Length);
+            var optionNegative = source.AsMemory().AsValueEnumerable()
+                .ElementAt(-1);
+            var optionTooLarge = source.AsMemory().AsValueEnumerable()
+                .ElementAt(source.Length);
 
             // Assert
             _ = optionNegative.Must()
@@ -42,8 +42,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
                     .ElementAt(source, index);
 
                 // Act
-                var result = ArrayExtensions
-                    .ElementAt(source.AsMemory(), index);
+                var result = source.AsMemory().AsValueEnumerable()
+                    .ElementAt(index);
 
                 // Assert
                 _ = result.Match(
@@ -61,11 +61,11 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
             // Arrange
 
             // Act
-            var optionNegative = ArrayExtensions
-                .Where(source.AsMemory(), predicate)
+            var optionNegative = source.AsMemory().AsValueEnumerable()
+                .Where(predicate)
                 .ElementAt(-1);
-            var optionTooLarge = ArrayExtensions
-                .Where(source.AsMemory(), predicate)
+            var optionTooLarge = source.AsMemory().AsValueEnumerable()
+                .Where(predicate)
                 .ElementAt(source.Length);
 
             // Assert
@@ -90,8 +90,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
             for (var index = 0; index < expected.Count; index++)
             {
                 // Act
-                var result = ArrayExtensions
-                    .Where(source.AsMemory(), predicate)
+                var result = source.AsMemory().AsValueEnumerable()
+                    .Where(predicate)
                     .ElementAt(index);
 
                 // Assert
@@ -110,11 +110,11 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
             // Arrange
 
             // Act
-            var optionNegative = ArrayExtensions
-                .Where(source.AsMemory(), predicate)
+            var optionNegative = source.AsMemory().AsValueEnumerable()
+                .Where(predicate)
                 .ElementAt(-1);
-            var optionTooLarge = ArrayExtensions
-                .Where(source.AsMemory(), predicate)
+            var optionTooLarge = source.AsMemory().AsValueEnumerable()
+                .Where(predicate)
                 .ElementAt(source.Length);
 
             // Assert
@@ -139,8 +139,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
             for (var index = 0; index < expected.Count; index++)
             {
                 // Act
-                var result = ArrayExtensions
-                    .Where(source.AsMemory(), predicate)
+                var result = source.AsMemory().AsValueEnumerable()
+                    .Where(predicate)
                     .ElementAt(index);
 
                 // Assert
@@ -159,11 +159,11 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
             // Arrange
 
             // Act
-            var optionNegative = ArrayExtensions
-                .Select(source.AsMemory(), selector)
+            var optionNegative = source.AsMemory().AsValueEnumerable()
+                .Select(selector)
                 .ElementAt(-1);
-            var optionTooLarge = ArrayExtensions
-                .Select(source.AsMemory(), selector)
+            var optionTooLarge = source.AsMemory().AsValueEnumerable()
+                .Select(selector)
                 .ElementAt(source.Length);
 
             // Assert
@@ -188,8 +188,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
             for (var index = 0; index < source.Length; index++)
             {
                 // Act
-                var result = ArrayExtensions
-                    .Select(source.AsMemory(), selector)
+                var result = source.AsMemory().AsValueEnumerable()
+                    .Select(selector)
                     .ElementAt(index);
 
                 // Assert
@@ -208,11 +208,11 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
             // Arrange
 
             // Act
-            var optionNegative = ArrayExtensions
-                .Select(source.AsMemory(), selector)
+            var optionNegative = source.AsMemory().AsValueEnumerable()
+                .Select(selector)
                 .ElementAt(-1);
-            var optionTooLarge = ArrayExtensions
-                .Select(source.AsMemory(), selector)
+            var optionTooLarge = source.AsMemory().AsValueEnumerable()
+                .Select(selector)
                 .ElementAt(source.Length);
 
             // Assert
@@ -237,8 +237,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
             for (var index = 0; index < source.Length; index++)
             {
                 // Act
-                var result = ArrayExtensions
-                    .Select(source.AsMemory(), selector)
+                var result = source.AsMemory().AsValueEnumerable()
+                    .Select(selector)
                     .ElementAt(index);
 
                 // Assert
@@ -257,12 +257,12 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
             // Arrange
 
             // Act
-            var optionNegative = ArrayExtensions
-                .Where(source.AsMemory(), predicate)
+            var optionNegative = source.AsMemory().AsValueEnumerable()
+                .Where(predicate)
                 .Select(selector)
                 .ElementAt(-1);
-            var optionTooLarge = ArrayExtensions
-                .Where(source.AsMemory(), predicate)
+            var optionTooLarge = source.AsMemory().AsValueEnumerable()
+                .Where(predicate)
                 .Select(selector)
                 .ElementAt(source.Length);
 
@@ -289,8 +289,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
             for (var index = 0; index < expected.Count; index++)
             {
                 // Act
-                var result = ArrayExtensions
-                    .Where(source.AsMemory(), predicate)
+                var result = source.AsMemory().AsValueEnumerable()
+                    .Where(predicate)
                     .Select(selector)
                     .ElementAt(index);
 

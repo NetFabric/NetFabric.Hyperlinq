@@ -19,8 +19,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
                 .ToList(source);
 
             // Act
-            var result = ArrayExtensions
-                .ToList(source);
+            var result = source.AsValueEnumerable()
+                .ToList();
 
             // Assert
             _ = result.Must()

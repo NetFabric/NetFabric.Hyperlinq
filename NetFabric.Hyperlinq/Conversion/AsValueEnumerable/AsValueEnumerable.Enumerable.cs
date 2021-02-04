@@ -11,27 +11,27 @@ namespace NetFabric.Hyperlinq
     {
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ValueEnumerableWrapper<TSource> AsValueEnumerable<TSource>(this IEnumerable<TSource> source)
+        public static ValueEnumerable<TSource> AsValueEnumerable<TSource>(this IEnumerable<TSource> source)
             => new(source);
 
         [GeneratorIgnore]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ValueEnumerableWrapper<TEnumerable, TEnumerator, TSource, FunctionWrapper<TEnumerable, TEnumerator>> AsValueEnumerable<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TEnumerable, TEnumerator> getEnumerator)
+        public static ValueEnumerable<TEnumerable, TEnumerator, TSource, FunctionWrapper<TEnumerable, TEnumerator>> AsValueEnumerable<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TEnumerable, TEnumerator> getEnumerator)
             where TEnumerable : IEnumerable<TSource>
             where TEnumerator : struct, IEnumerator<TSource>
             => AsValueEnumerable<TEnumerable, TEnumerator, TSource, FunctionWrapper<TEnumerable, TEnumerator>>(source, new FunctionWrapper<TEnumerable, TEnumerator>(getEnumerator));
 
         [GeneratorIgnore]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ValueEnumerableWrapper<TEnumerable, TEnumerator, TSource, TGetEnumerator> AsValueEnumerable<TEnumerable, TEnumerator, TSource, TGetEnumerator>(this TEnumerable source, TGetEnumerator getEnumerator = default)
+        public static ValueEnumerable<TEnumerable, TEnumerator, TSource, TGetEnumerator> AsValueEnumerable<TEnumerable, TEnumerator, TSource, TGetEnumerator>(this TEnumerable source, TGetEnumerator getEnumerator = default)
             where TEnumerable : IEnumerable<TSource>
             where TEnumerator : struct, IEnumerator<TSource>
             where TGetEnumerator : struct, IFunction<TEnumerable, TEnumerator>
             => new(source, getEnumerator);
 
         [StructLayout(LayoutKind.Auto)]
-        public partial struct ValueEnumerableWrapper<TEnumerable, TEnumerator, TSource, TGetEnumerator>
-            : IValueEnumerable<TSource, TEnumerator>
+        public partial struct ValueEnumerable<TEnumerable, TEnumerator, TSource, TGetEnumerator>
+            : IValueEnumerable<TSource, TEnumerator> 
             where TEnumerable : IEnumerable<TSource>
             where TEnumerator : struct, IEnumerator<TSource>
             where TGetEnumerator : struct, IFunction<TEnumerable, TEnumerator>
@@ -39,7 +39,7 @@ namespace NetFabric.Hyperlinq
             readonly TEnumerable source;
             TGetEnumerator getEnumerator;
 
-            internal ValueEnumerableWrapper(TEnumerable source, TGetEnumerator getEnumerator)
+            internal ValueEnumerable(TEnumerable source, TGetEnumerator getEnumerator)
             {
                 this.source = source;
                 this.getEnumerator = getEnumerator;
@@ -58,12 +58,12 @@ namespace NetFabric.Hyperlinq
         }
 
         [StructLayout(LayoutKind.Auto)]
-        public readonly partial struct ValueEnumerableWrapper<TSource>
-            : IValueEnumerable<TSource, ValueEnumerableWrapper<TSource>.Enumerator>
+        public readonly partial struct ValueEnumerable<TSource>
+            : IValueEnumerable<TSource, ValueEnumerable<TSource>.Enumerator>
         {
             readonly IEnumerable<TSource> source;
 
-            internal ValueEnumerableWrapper(IEnumerable<TSource> source) 
+            internal ValueEnumerable(IEnumerable<TSource> source) 
                 => this.source = source;
 
             
@@ -111,5 +111,45 @@ namespace NetFabric.Hyperlinq
                     => enumerator.Dispose();
             }
         }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Sum(this ValueEnumerable<int> source)
+            => source.Sum<ValueEnumerable<int>, ValueEnumerable<int>.Enumerator, int, int, AddInt32>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Sum(this ValueEnumerable<int?> source)
+            => source.Sum<ValueEnumerable<int?>, ValueEnumerable<int?>.Enumerator, int?, int, AddNullableInt32>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static long Sum(this ValueEnumerable<long> source)
+            => source.Sum<ValueEnumerable<long>, ValueEnumerable<long>.Enumerator, long, long, AddInt64>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static long Sum(this ValueEnumerable<long?> source)
+            => source.Sum<ValueEnumerable<long?>, ValueEnumerable<long?>.Enumerator, long?, long, AddNullableInt64>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float Sum(this ValueEnumerable<float> source)
+            => source.Sum<ValueEnumerable<float>, ValueEnumerable<float>.Enumerator, float, float, AddSingle>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float Sum(this ValueEnumerable<float?> source)
+            => source.Sum<ValueEnumerable<float?>, ValueEnumerable<float?>.Enumerator, float?, float, AddNullableSingle>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static double Sum(this ValueEnumerable<double> source)
+            => source.Sum<ValueEnumerable<double>, ValueEnumerable<double>.Enumerator, double, double, AddDouble>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static double Sum(this ValueEnumerable<double?> source)
+            => source.Sum<ValueEnumerable<double?>, ValueEnumerable<double?>.Enumerator, double?, double, AddNullableDouble>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static decimal Sum(this ValueEnumerable<decimal> source)
+            => source.Sum<ValueEnumerable<decimal>, ValueEnumerable<decimal>.Enumerator, decimal, decimal, AddDecimal>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static decimal Sum(this ValueEnumerable<decimal?> source)
+            => source.Sum<ValueEnumerable<decimal?>, ValueEnumerable<decimal?>.Enumerator, decimal?, decimal, AddNullableDecimal>();
     }
 }

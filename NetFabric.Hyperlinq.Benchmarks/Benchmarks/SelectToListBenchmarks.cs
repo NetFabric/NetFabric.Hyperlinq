@@ -124,7 +124,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [BenchmarkCategory("Array")]
         [Benchmark]
         public List<int> Hyperlinq_Memory()
-            => memory
+            => memory.AsValueEnumerable()
                 .Select(item => item)
                 .ToList();
 

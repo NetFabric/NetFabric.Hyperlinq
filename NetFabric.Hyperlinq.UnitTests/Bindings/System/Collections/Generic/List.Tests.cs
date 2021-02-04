@@ -20,8 +20,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Bindings.System.Collections.Generic
                 .Count(source);
 
             // Act
-            var result = ListBindings
-                .Count(list);
+            var result = list.AsValueEnumerable()
+                .Count();
 
             // Assert
             _ = result.Must()
@@ -40,8 +40,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Bindings.System.Collections.Generic
                 .Skip(source, count);
 
             // Act
-            var result = ListBindings
-                .Skip(list, count);
+            var result = list.AsValueEnumerable()
+                .Skip(count);
 
             // Assert
             _ = result.Must()
@@ -61,8 +61,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Bindings.System.Collections.Generic
                 .Take(source, count);
 
             // Act
-            var result = ListBindings
-                .Take(list, count);
+            var result = list.AsValueEnumerable()
+                .Take(count);
 
             // Assert
             _ = result.Must()
@@ -81,8 +81,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Bindings.System.Collections.Generic
                 .All(source, predicate);
 
             // Act
-            var result = ListBindings
-                .All(list, predicate);
+            var result = list.AsValueEnumerable()
+                .All(predicate);
 
             // Assert
             _ = result.Must()
@@ -102,8 +102,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Bindings.System.Collections.Generic
                 .Count() == source.Length;
 
             // Act
-            var result = ListBindings
-                .All(list, predicate);
+            var result = list.AsValueEnumerable()
+                .All(predicate);
 
             // Assert
             _ = result.Must()
@@ -122,8 +122,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Bindings.System.Collections.Generic
                 .Any(source);
 
             // Act
-            var result = ListBindings
-                .Any(list);
+            var result = list.AsValueEnumerable()
+                .Any();
 
             // Assert
             _ = result.Must()
@@ -142,8 +142,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Bindings.System.Collections.Generic
                 .Any(source, predicate);
 
             // Act
-            var result = ListBindings
-                .Any(list, predicate);
+            var result = list.AsValueEnumerable()
+                .Any(predicate);
 
             // Assert
             _ = result.Must()
@@ -163,8 +163,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Bindings.System.Collections.Generic
                 .Count() != 0;
 
             // Act
-            var result = ListBindings
-                .Any(list, predicate);
+            var result = list.AsValueEnumerable()
+                .Any(predicate);
 
             // Assert
             _ = result.Must()
@@ -182,8 +182,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Bindings.System.Collections.Generic
             var value = int.MaxValue;
 
             // Act
-            var result = ListBindings
-                .Contains(list, value);
+            var result = list.AsValueEnumerable()
+                .Contains(value);
 
             // Assert
             _ = result.Must()
@@ -200,8 +200,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Bindings.System.Collections.Generic
             var value = source.Last();
 
             // Act
-            var result = ListBindings
-                .Contains(list, value);
+            var result = list.AsValueEnumerable()
+                .Contains(value);
 
             // Assert
             _ = result.Must()
@@ -220,8 +220,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Bindings.System.Collections.Generic
                 .Select(source, selector);
 
             // Act
-            var result = ListBindings
-                .Select(list, selector);
+            var result = list.AsValueEnumerable()
+                .Select(selector);
 
             // Assert
             _ = result.Must()
@@ -242,8 +242,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Bindings.System.Collections.Generic
                 .Select(source, selector);
 
             // Act
-            var result = ListBindings
-                .Select(list, selector);
+            var result = list.AsValueEnumerable()
+                .Select(selector);
 
             // Assert
             _ = result.Must()
@@ -264,8 +264,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Bindings.System.Collections.Generic
                 .Where(source, predicate);
 
             // Act
-            var result = ListBindings
-                .Where(list, predicate);
+            var result = list.AsValueEnumerable()
+                .Where(predicate);
 
             // Assert
             _ = result.Must()
@@ -286,8 +286,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Bindings.System.Collections.Generic
                 .Where(source, predicate);
 
             // Act
-            var result = ListBindings
-                .Where(list, predicate);
+            var result = list.AsValueEnumerable()
+                .Where(predicate);
 
             // Assert
             _ = result.Must()
@@ -309,8 +309,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Bindings.System.Collections.Generic
                 .Where(source, predicate);
 
             // Act
-            var result = ListBindings
-                .Where(list, function);
+            var result = list.AsValueEnumerableRef()
+                .Where(function);
 
             // Assert
 #if NETCOREAPP3_1 || NET5_0
@@ -338,8 +338,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Bindings.System.Collections.Generic
                 .Where(source, predicate);
 
             // Act
-            var result = ListBindings
-                .Where(list, function);
+            var result = list.AsValueEnumerableRef()
+                .Where(function);
 
             // Assert
 #if NETCOREAPP3_1 || NET5_0
@@ -364,10 +364,10 @@ namespace NetFabric.Hyperlinq.UnitTests.Bindings.System.Collections.Generic
             var list = source.ToList();
 
             // Act
-            var optionTooSmall = ListBindings
-                .ElementAt(list, -1);
-            var optionTooLarge = ListBindings
-                .ElementAt(list, source.Length);
+            var optionTooSmall = list.AsValueEnumerable()
+                .ElementAt(-1);
+            var optionTooLarge = list.AsValueEnumerable()
+                .ElementAt(source.Length);
 
             // Assert
             _ = optionTooSmall.Must()
@@ -388,8 +388,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Bindings.System.Collections.Generic
             for (var index = 0; index < source.Length; index++)
             {
                 // Act
-                var result = ListBindings
-                    .ElementAt(list, index);
+                var result = list.AsValueEnumerable()
+                    .ElementAt(index);
 
                 // Assert
                 _ = result.Match(
@@ -406,8 +406,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Bindings.System.Collections.Generic
             var list = source.ToList();
 
             // Act
-            var result = ListBindings
-                .First(list);
+            var result = list.AsValueEnumerable()
+                .First();
 
             // Assert
             _ = result.Must()
@@ -426,8 +426,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Bindings.System.Collections.Generic
                 .First(source);
 
             // Act
-            var result = ListBindings
-                .First(list);
+            var result = list.AsValueEnumerable()
+                .First();
 
             // Assert
             _ = result.Match(
@@ -443,8 +443,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Bindings.System.Collections.Generic
             var list = source.ToList();
 
             // Act
-            var result = ListBindings
-                .Single(list);
+            var result = list.AsValueEnumerable()
+                .Single();
 
             // Assert
             _ = result.Must()
@@ -462,8 +462,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Bindings.System.Collections.Generic
                 .Single(source);
 
             // Act
-            var result = ListBindings
-                .Single(list);
+            var result = list.AsValueEnumerable()
+                .Single();
 
             // Assert
             _ = result.Match(
@@ -483,8 +483,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Bindings.System.Collections.Generic
                 .Distinct(source);
 
             // Act
-            var result = ListBindings
-                .Distinct(list);
+            var result = list.AsValueEnumerable()
+                .Distinct();
 
             // Assert
             _ = result.Must()
@@ -497,32 +497,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Bindings.System.Collections.Generic
         [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
-        public void AsEnumerable_With_ValidData_Must_Succeed(int[] source)
-        {
-            // Arrange
-            var list = source.ToList();
-
-            // Act
-            var result = ListBindings
-                .AsEnumerable(list);
-
-            // Assert
-            _ = result.Must()
-                .BeSameAs(list);
-        }
-
-        [Theory]
-        [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
         public void AsValueEnumerable_With_ValidData_Must_Succeed(int[] source)
         {
             // Arrange
             var list = source.ToList();
 
             // Act
-            var result = ListBindings
-                .AsValueEnumerable(list);
+            var result = list.AsValueEnumerable();
 
             // Assert
             _ = result.Must()
@@ -541,8 +522,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Bindings.System.Collections.Generic
             var list = source.ToList();
 
             // Act
-            var result = ListBindings
-                .ToArray(list);
+            var result = list.AsValueEnumerable()
+                .ToArray();
 
             // Assert
             _ = result.Must()
@@ -560,8 +541,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Bindings.System.Collections.Generic
             var list = source.ToList();
 
             // Act
-            var result = ListBindings
-                .ToArray(list);
+            var result = list.AsValueEnumerable()
+                .ToArray();
 
             // Assert
             _ = result.Must()
@@ -581,8 +562,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Bindings.System.Collections.Generic
                 .ToDictionary(source, item => item);
 
             // Act
-            var result = ListBindings
-                .ToDictionary(list, item => item);
+            var result = list.AsValueEnumerable()
+                .ToDictionary(item => item);
 
             // Assert
             _ = result.Must()
@@ -602,8 +583,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Bindings.System.Collections.Generic
                 .ToDictionary(source, item => item, item => item);
 
             // Act
-            var result = ListBindings
-                .ToDictionary(list, item => item, item => item);
+            var result = list.AsValueEnumerable()
+                .ToDictionary(item => item, item => item);
 
             // Assert
             _ = result.Must()

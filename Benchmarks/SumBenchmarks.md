@@ -22,9 +22,10 @@ Intel Core i7-7567U CPU 3.50GHz (Kaby Lake), 1 CPU, 4 logical and 2 physical cor
 Job=.NET Core 5.0  Runtime=.NET Core 5.0  Categories=Array  
 
 ```
-|           Method | Count |      Mean |     Error |     StdDev |    Median | Ratio |  Gen 0 | Gen 1 | Gen 2 | Allocated |
-|----------------- |------ |----------:|----------:|-----------:|----------:|------:|-------:|------:|------:|----------:|
-|       Linq_Array |   100 | 565.57 ns | 41.802 ns | 123.255 ns | 501.19 ns |  1.00 | 0.0153 |     - |     - |      32 B |
-| StructLinq_Array |   100 |  62.63 ns |  0.266 ns |   0.236 ns |  62.66 ns |  0.09 |      - |     - |     - |         - |
-|  Hyperlinq_Array |   100 |  52.99 ns |  0.169 ns |   0.158 ns |  53.02 ns |  0.08 |      - |     - |     - |         - |
-|   Hyperlinq_Span |   100 |  53.97 ns |  0.468 ns |   0.438 ns |  53.85 ns |  0.08 |      - |     - |     - |         - |
+|                            Method | Count |      Mean |     Error |    StdDev |    Median | Ratio |  Gen 0 | Gen 1 | Gen 2 | Allocated |
+|---------------------------------- |------ |----------:|----------:|----------:|----------:|------:|-------:|------:|------:|----------:|
+|                        Linq_Array |   100 | 638.63 ns | 17.568 ns | 51.800 ns | 653.42 ns |  1.00 | 0.0153 |     - |     - |      32 B |
+|                  StructLinq_Array |   100 |  68.47 ns |  1.882 ns |  5.549 ns |  68.56 ns |  0.11 |      - |     - |     - |         - |
+|                   Hyperlinq_Array |   100 |  60.48 ns |  0.513 ns |  0.429 ns |  60.47 ns |  0.10 |      - |     - |     - |         - |
+| Hyperlinq_Array_AsValueEnumerable |   100 |  53.37 ns |  0.363 ns |  0.322 ns |  53.28 ns |  0.08 |      - |     - |     - |         - |
+|                    Hyperlinq_Span |   100 |  60.71 ns |  0.358 ns |  0.317 ns |  60.63 ns |  0.10 |      - |     - |     - |         - |

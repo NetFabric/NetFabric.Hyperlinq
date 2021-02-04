@@ -16,8 +16,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.All
             var expected = System.Linq.Enumerable.All(source, predicate);
 
             // Act
-            var result = ArrayExtensions
-                .All<int>((ReadOnlyMemory<int>)source.AsMemory(), predicate);
+            var result = ((ReadOnlyMemory<int>)source.AsMemory()).AsValueEnumerable()
+                .All(predicate);
 
             // Assert
             _ = result.Must()
@@ -36,8 +36,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.All
                     System.Linq.Enumerable.Where(source, predicate)) == source.Length;
 
             // Act
-            var result = ArrayExtensions
-                .All<int>((ReadOnlyMemory<int>)source.AsMemory(), predicate);
+            var result = ((ReadOnlyMemory<int>)source.AsMemory()).AsValueEnumerable()
+                .All(predicate);
 
             // Assert
             _ = result.Must()

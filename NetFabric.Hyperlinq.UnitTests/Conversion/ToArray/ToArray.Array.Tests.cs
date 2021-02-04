@@ -19,8 +19,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
                 .ToArray(source);
 
             // Act
-            var result = ArrayExtensions
-                .ToArray(source);
+            var result = source.AsValueEnumerable()
+                .ToArray();
 
             // Assert
             _ = result.Must()
@@ -41,8 +41,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
                 .ToArray(source);
 
             // Act
-            using var result = ArrayExtensions
-                .ToArray(source, pool);
+            using var result = source.AsValueEnumerable()
+                .ToArray(pool);
 
             // Assert
             _ = result.Memory

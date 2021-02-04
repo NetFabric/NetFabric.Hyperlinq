@@ -19,8 +19,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Any
                 .Any(source);
 
             // Act
-            var result = ArrayExtensions
-                .Any(source);
+            var result = source.AsValueEnumerable()
+                .Any();
 
             // Assert
             _ = result.Must()
@@ -38,8 +38,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Any
                 .Any(source, predicate);
 
             // Act
-            var result = ArrayExtensions
-                .Any(source, predicate);
+            var result = source.AsValueEnumerable()
+                .Any(predicate);
 
             // Assert
             _ = result.Must()
@@ -58,8 +58,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Any
                 .Count() != 0;
 
             // Act
-            var result = ArrayExtensions
-                .Any(source, predicate);
+            var result = source.AsValueEnumerable()
+                .Any(predicate);
 
             // Assert
             _ = result.Must()

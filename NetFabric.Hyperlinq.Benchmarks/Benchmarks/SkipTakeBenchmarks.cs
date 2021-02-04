@@ -180,7 +180,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [Benchmark]
         public int Hyperlinq_Array_For()
         {
-            var source = array.Skip(Skip).Take(Count).Array;
+            var source = array.AsValueEnumerable().Skip(Skip).Take(Count).Array;
             var sum = 0;
             for (var index = 0; index < Count; index++)
                 sum += source[index];

@@ -61,7 +61,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct
 
             // Act
             using var result = ArrayExtensions
-                .Distinct(source)
+                .Distinct((ReadOnlySpan<int>)source.AsSpan())
                 .ToArray(MemoryPool<int>.Shared);
 
             // Assert

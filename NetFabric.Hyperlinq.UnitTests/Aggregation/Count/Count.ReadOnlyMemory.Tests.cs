@@ -18,8 +18,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Aggregation.Count
                 .Count(source);
 
             // Act
-            var result = ArrayExtensions
-                .Count((ReadOnlyMemory<int>)source.AsMemory());
+            var result = ((ReadOnlyMemory<int>)source.AsMemory()).AsValueEnumerable()
+                .Count();
 
             // Assert
             _ = result.Must()

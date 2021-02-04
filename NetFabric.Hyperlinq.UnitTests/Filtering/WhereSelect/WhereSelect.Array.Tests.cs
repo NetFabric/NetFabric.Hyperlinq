@@ -19,8 +19,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.WhereSelect
                 .Select(selector);
 
             // Act
-            var result = ArrayExtensions
-                .Where(source, predicate)
+            var result = source.AsValueEnumerable()
+                .Where(predicate)
                 .Select(selector);
 
             // Assert

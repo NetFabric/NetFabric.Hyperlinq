@@ -200,7 +200,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Hyperlinq_Memory()
         {
             var sum = 0;
-            foreach (var item in memory.Distinct())
+            foreach (var item in memory.AsValueEnumerable().Distinct())
                 sum += item;
             return sum;
         }

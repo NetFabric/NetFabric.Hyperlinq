@@ -60,7 +60,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [BenchmarkCategory("Array")]
         [Benchmark]
         public Option<int> Hyperlinq_Array()
-            => array.ElementAt(Count - 1);
+            => array.AsValueEnumerable().ElementAt(Count - 1);
 
         [BenchmarkCategory("Array")]
         [Benchmark]
@@ -70,7 +70,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [BenchmarkCategory("Array")]
         [Benchmark]
         public Option<int> Hyperlinq_Memory()
-            => memory.ElementAt(Count - 1);
+            => memory.AsValueEnumerable().ElementAt(Count - 1);
 
         [BenchmarkCategory("Enumerable_Value")]
         [Benchmark]

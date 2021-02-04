@@ -19,8 +19,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
                 .ToList(source);
 
             // Act
-            var result = ArrayExtensions
-                .ToList(source.AsMemory());
+            var result = source.AsMemory().AsValueEnumerable()
+                .ToList();
 
             // Assert
             _ = result.Must()
@@ -41,8 +41,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
                 .ToList();
 
             // Act
-            var result = ArrayExtensions
-                .Where(source.AsMemory(), predicate)
+            var result = source.AsMemory().AsValueEnumerable()
+                .Where(predicate)
                 .ToList();
 
             // Assert
@@ -64,8 +64,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
                 .ToList();
 
             // Act
-            var result = ArrayExtensions
-                .Where(source.AsMemory(), predicate)
+            var result = source.AsMemory().AsValueEnumerable()
+                .Where(predicate)
                 .ToList();
 
             // Assert
@@ -87,8 +87,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
                 .ToList();
 
             // Act
-            var result = ArrayExtensions
-                .Select(source.AsMemory(), selector)
+            var result = source.AsMemory().AsValueEnumerable()
+                .Select(selector)
                 .ToList();
 
             // Assert
@@ -110,8 +110,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
                 .ToList();
 
             // Act
-            var result = ArrayExtensions
-                .Select(source.AsMemory(), selector)
+            var result = source.AsMemory().AsValueEnumerable()
+                .Select(selector)
                 .ToList();
 
             // Assert
@@ -134,8 +134,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
                 .ToList();
 
             // Act
-            var result = ArrayExtensions
-                .Where(source.AsMemory(), predicate)
+            var result = source.AsMemory().AsValueEnumerable()
+                .Where(predicate)
                 .Select(selector)
                 .ToList();
 

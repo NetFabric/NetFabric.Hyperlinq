@@ -13,12 +13,12 @@ namespace NetFabric.Hyperlinq
 
         [GeneratorIgnore]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static MemorySelectRefEnumerable<TSource, TResult, FunctionInWrapper<TSource, TResult>> Select<TSource, TResult>(this ReadOnlyMemory<TSource> source, FunctionIn<TSource, TResult> selector)
+        internal static MemorySelectRefEnumerable<TSource, TResult, FunctionInWrapper<TSource, TResult>> Select<TSource, TResult>(this ReadOnlyMemory<TSource> source, FunctionIn<TSource, TResult> selector)
             => source.SelectRef<TSource, TResult, FunctionInWrapper<TSource, TResult>>(new FunctionInWrapper<TSource, TResult>(selector));
 
         [GeneratorIgnore]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static MemorySelectRefEnumerable<TSource, TResult, TSelector> SelectRef<TSource, TResult, TSelector>(this ReadOnlyMemory<TSource> source, TSelector selector = default)
+        internal static MemorySelectRefEnumerable<TSource, TResult, TSelector> SelectRef<TSource, TResult, TSelector>(this ReadOnlyMemory<TSource> source, TSelector selector = default)
             where TSelector : struct, IFunctionIn<TSource, TResult>
             => new(source, selector);
 

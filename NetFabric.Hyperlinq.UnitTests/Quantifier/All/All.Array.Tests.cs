@@ -18,8 +18,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.All
                 .All(source, predicate);
 
             // Act
-            var result = ArrayExtensions
-                .All(source, predicate);
+            var result = source.AsValueEnumerable()
+                .All(predicate);
 
             // Assert
             _ = result.Must()
@@ -38,8 +38,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.All
                 .Count() == source.Length;
 
             // Act
-            var result = ArrayExtensions
-                .All(source, predicate);
+            var result = source.AsValueEnumerable()
+                .All(predicate);
 
             // Assert
             _ = result.Must()

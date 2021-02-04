@@ -21,8 +21,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
                 .ToArray(source);
 
             // Act
-            using var result = ArrayExtensions
-                .ToArray(source.AsMemory(), pool);
+            using var result = source.AsMemory().AsValueEnumerable()
+                .ToArray(pool);
 
             // Assert
             _ = result.Memory.Must()
@@ -44,8 +44,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
                 .ToArray();
 
             // Act
-            var result = ArrayExtensions
-                .Where(source.AsMemory(), predicate)
+            var result = source.AsMemory().AsValueEnumerable()
+                .Where(predicate)
                 .ToArray();
 
             // Assert
@@ -68,8 +68,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
                 .ToArray();
 
             // Act
-            using var result = ArrayExtensions
-                .Where(source.AsMemory(), predicate)
+            using var result = source.AsMemory().AsValueEnumerable()
+                .Where(predicate)
                 .ToArray(pool);
 
             // Assert
@@ -92,8 +92,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
                 .ToArray();
 
             // Act
-            var result = ArrayExtensions
-                .Where(source.AsMemory(), predicate)
+            var result = source.AsMemory().AsValueEnumerable()
+                .Where(predicate)
                 .ToArray();
 
             // Assert
@@ -116,8 +116,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
                 .ToArray();
 
             // Act
-            using var result = ArrayExtensions
-                .Where(source.AsMemory(), predicate)
+            using var result = source.AsMemory().AsValueEnumerable()
+                .Where(predicate)
                 .ToArray(pool);
 
             // Assert
@@ -140,8 +140,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
                 .ToArray();
 
             // Act
-            var result = ArrayExtensions
-                .Select(source.AsMemory(), selector)
+            var result = source.AsMemory().AsValueEnumerable()
+                .Select(selector)
                 .ToArray();
 
             // Assert
@@ -164,8 +164,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
                 .ToArray();
 
             // Act
-            using var result = ArrayExtensions
-                .Select(source.AsMemory(), selector)
+            using var result = source.AsMemory().AsValueEnumerable()
+                .Select(selector)
                 .ToArray(pool);
 
             // Assert
@@ -188,8 +188,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
                 .ToArray();
 
             // Act
-            var result = ArrayExtensions
-                .Select(source.AsMemory(), selector)
+            var result = source.AsMemory().AsValueEnumerable()
+                .Select(selector)
                 .ToArray();
 
             // Assert
@@ -212,8 +212,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
                 .ToArray();
 
             // Act
-            using var result = ArrayExtensions
-                .Select(source.AsMemory(), selector)
+            using var result = source.AsMemory().AsValueEnumerable()
+                .Select(selector)
                 .ToArray(pool);
 
             // Assert
@@ -237,8 +237,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
                 .ToArray();
 
             // Act
-            var result = ArrayExtensions
-                .Where(source.AsMemory(), predicate)
+            var result = source.AsMemory().AsValueEnumerable()
+                .Where(predicate)
                 .Select(selector)
                 .ToArray();
 
@@ -263,8 +263,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
                 .ToArray();
 
             // Act
-            using var result = ArrayExtensions
-                .Where(source.AsMemory(), predicate)
+            using var result = source.AsMemory().AsValueEnumerable()
+                .Where(predicate)
                 .Select(selector)
                 .ToArray(pool);
 

@@ -19,8 +19,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.WhereRef
                 .Where(source, predicate);
 
             // Act
-            var result = ArrayExtensions
-                .Where(source.AsMemory(), function);
+            var result = source.AsMemory().AsValueEnumerableRef()
+                .Where(function);
 
             // Assert
             _ = result.Must()
@@ -29,4 +29,4 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.WhereRef
             _ = result.SequenceEqual(expected).Must().BeTrue();
         }
     }
-}
+} 

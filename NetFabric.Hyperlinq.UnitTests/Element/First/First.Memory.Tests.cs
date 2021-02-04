@@ -14,8 +14,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
             // Arrange
 
             // Act
-            var result = ArrayExtensions
-                .First(source.AsMemory());
+            var result = source.AsMemory().AsValueEnumerable()
+                .First();
 
             // Assert
             _ = result.Must()
@@ -33,8 +33,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
                 .First(source);
 
             // Act
-            var result = ArrayExtensions
-                .First(source.AsMemory());
+            var result = source.AsMemory().AsValueEnumerable()
+                .First();
 
             // Assert
             _ = result.Match(
@@ -49,8 +49,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
             // Arrange
 
             // Act
-            var result = ArrayExtensions
-                .Where(source.AsMemory(), predicate)
+            var result = source.AsMemory().AsValueEnumerable()
+                .Where(predicate)
                 .First();
 
             // Assert
@@ -69,8 +69,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
                 .First(source, predicate);
 
             // Act
-            var result = ArrayExtensions
-                .Where(source.AsMemory(), predicate)
+            var result = source.AsMemory().AsValueEnumerable()
+                .Where(predicate)
                 .First();
 
             // Assert
@@ -86,8 +86,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
             // Arrange
 
             // Act
-            var result = ArrayExtensions
-                .Where (source.AsMemory(), predicate)
+            var result = source.AsMemory().AsValueEnumerable()
+                .Where (predicate)
                 .First();
 
             // Assert
@@ -107,8 +107,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
                 .First();
 
             // Act
-            var result = ArrayExtensions
-                .Where(source.AsMemory(), predicate)
+            var result = source.AsMemory().AsValueEnumerable()
+                .Where(predicate)
                 .First();
 
             // Assert
@@ -124,8 +124,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
             // Arrange
 
             // Act
-            var result = ArrayExtensions
-                .Select(source.AsMemory(), selector)
+            var result = source.AsMemory().AsValueEnumerable()
+                .Select(selector)
                 .First();
 
             // Assert
@@ -145,8 +145,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
                 .First();
 
             // Act
-            var result = ArrayExtensions
-                .Select(source.AsMemory(), selector)
+            var result = source.AsMemory().AsValueEnumerable()
+                .Select(selector)
                 .First();
 
             // Assert
@@ -162,8 +162,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
             // Arrange
 
             // Act
-            var result = ArrayExtensions
-                .Select(source.AsMemory(), selector)
+            var result = source.AsMemory().AsValueEnumerable()
+                .Select(selector)
                 .First();
 
             // Assert
@@ -183,8 +183,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
                 .First();
 
             // Act
-            var result = ArrayExtensions
-                .Select(source.AsMemory(), selector)
+            var result = source.AsMemory().AsValueEnumerable()
+                .Select(selector)
                 .First();
 
             // Assert
@@ -200,8 +200,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
             // Arrange
 
             // Act
-            var result = ArrayExtensions
-                .Where(source.AsMemory(), predicate)
+            var result = source.AsMemory().AsValueEnumerable()
+                .Where(predicate)
                 .Select(selector)
                 .First();
 
@@ -223,8 +223,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
                 .First();
 
             // Act
-            var result = ArrayExtensions
-                .Where<int>(source.AsMemory(), predicate)
+            var result = source.AsMemory().AsValueEnumerable()
+                .Where(predicate)
                 .Select(selector)
                 .First();
 

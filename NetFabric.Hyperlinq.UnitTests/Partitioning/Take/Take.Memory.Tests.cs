@@ -18,8 +18,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Partitioning.Take
                 .Take(source, count);
 
             // Act
-            var result = ArrayExtensions
-                .Take(source.AsMemory(), count);
+            var result = source.AsMemory().AsValueEnumerable()
+                .Take(count);
 
             // Assert
             _ = result.Must()

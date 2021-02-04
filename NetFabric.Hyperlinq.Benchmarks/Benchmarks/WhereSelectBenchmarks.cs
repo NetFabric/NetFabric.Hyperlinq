@@ -179,7 +179,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Hyperlinq_Memory()
         {
             var sum = 0;
-            foreach (var item in memory.Where(item => (item & 0x01) == 0).Select(item => item))
+            foreach (var item in memory.AsValueEnumerable().Where(item => (item & 0x01) == 0).Select(item => item))
                 sum += item;
             return sum;
         }
