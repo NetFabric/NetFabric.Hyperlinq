@@ -113,7 +113,7 @@ namespace LinqBenchmarks.List.ValueType
         public FatValueType Hyperlinq()
         {
             var sum = default(FatValueType);
-            foreach (var item in ListBindings.Distinct(source))
+            foreach (var item in source.AsValueEnumerable().Distinct())
                 sum += item;
             return sum;
         }

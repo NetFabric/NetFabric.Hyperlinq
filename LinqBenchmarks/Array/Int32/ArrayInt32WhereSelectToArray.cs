@@ -71,23 +71,23 @@ namespace LinqBenchmarks.Array.Int32
 
         [Benchmark]
         public int[] Hyperlinq()
-            => ArrayExtensions
-                .Where(source, item => item.IsEven())
+            => source.AsValueEnumerable()
+                .Where(item => item.IsEven())
                 .Select(item => item * 2)
                 .ToArray();
 
         [Benchmark]
         public int[] Hyperlinq_IFunction()
-            => ArrayExtensions
-                .Where<int, Int32IsEven>(source)
+            => source.AsValueEnumerable()
+                .Where<Int32IsEven>()
                 .Select<int, DoubleOfInt32>()
                 .ToArray();
 
         [Benchmark]
         public int Hyperlinq_Pool()
         {
-            using var array = ArrayExtensions
-                .Where(source, item => item.IsEven())
+            using var array = source.AsValueEnumerable()
+                .Where(item => item.IsEven())
                 .Select(item => item * 2)
                 .ToArray(MemoryPool<int>.Shared);
             return Count == 0 
@@ -98,8 +98,8 @@ namespace LinqBenchmarks.Array.Int32
         [Benchmark]
         public int Hyperlinq_Pool_IFunction()
         {
-            using var array = ArrayExtensions
-                .Where(source, item => item.IsEven())
+            using var array = source.AsValueEnumerable()
+                .Where(item => item.IsEven())
                 .Select(item => item * 2)
                 .ToArray(MemoryPool<int>.Shared);
             return Count == 0

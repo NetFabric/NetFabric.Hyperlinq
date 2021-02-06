@@ -112,7 +112,7 @@ namespace LinqBenchmarks.List.Int32
         public int Hyperlinq()
         {
             var sum = 0;
-            foreach (var item in ListBindings.Distinct(source))
+            foreach (var item in source.AsValueEnumerable().Distinct())
                 sum += item;
             return sum;
         }

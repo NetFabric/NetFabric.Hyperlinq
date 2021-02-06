@@ -91,8 +91,8 @@ namespace LinqBenchmarks.List.ValueType
         public FatValueType Hyperlinq()
         {
             var sum = default(FatValueType);
-            foreach (ref readonly var item in ListBindings
-                .Where(source, (in FatValueType item) => item.IsEven()))
+            foreach (ref readonly var item in source.AsValueEnumerableRef()
+                .Where((in FatValueType item) => item.IsEven()))
                 sum += item;
             return sum;
         }
@@ -101,8 +101,8 @@ namespace LinqBenchmarks.List.ValueType
         public FatValueType Hyperlinq_IFunction()
         {
             var sum = default(FatValueType);
-            foreach (ref readonly var item in ListBindings
-                .WhereRef<FatValueType, FatValueTypeIsEven>(source))
+            foreach (ref readonly var item in source.AsValueEnumerableRef()
+                .Where<FatValueTypeIsEven>())
                 sum += item;
             return sum;
         }

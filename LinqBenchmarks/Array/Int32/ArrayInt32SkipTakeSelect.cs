@@ -91,7 +91,10 @@ namespace LinqBenchmarks.Array.Int32
         public int Hyperlinq_Foreach()
         {
             var sum = 0;
-            foreach (var item in ArrayExtensions.Skip(source, Skip).Take(Count).Select(item => item * 2))
+            foreach (var item in source.AsValueEnumerable()
+                .Skip(Skip)
+                .Take(Count)
+                .Select(item => item * 2))
                 sum += item;
             return sum;
         }
@@ -100,7 +103,10 @@ namespace LinqBenchmarks.Array.Int32
         public int Hyperlinq_Foreach_IFunction()
         {
             var sum = 0;
-            foreach (var item in ArrayExtensions.Skip(source, Skip).Take(Count).Select<int, int, DoubleOfInt32>())
+            foreach (var item in source.AsValueEnumerable()
+                .Skip(Skip)
+                .Take(Count)
+                .Select<int, int, DoubleOfInt32>())
                 sum += item;
             return sum;
         }
@@ -110,7 +116,10 @@ namespace LinqBenchmarks.Array.Int32
         public int Hyperlinq_For()
         {
             var sum = 0;
-            var items = ArrayExtensions.Skip(source, Skip).Take(Count).Select(item => item * 2);
+            var items = source.AsValueEnumerable()
+                .Skip(Skip)
+                .Take(Count)
+                .Select(item => item * 2);
             for (var index = 0; index < items.Count; index++)
                 sum += items[index];
             return sum;
@@ -120,7 +129,10 @@ namespace LinqBenchmarks.Array.Int32
         public int Hyperlinq_For_IFunction()
         {
             var sum = 0;
-            var items = ArrayExtensions.Skip(source, Skip).Take(Count).Select<int, int, DoubleOfInt32>();
+            var items = source.AsValueEnumerable()
+                .Skip(Skip)
+                .Take(Count)
+                .Select<int, int, DoubleOfInt32>();
             for (var index = 0; index < items.Count; index++)
                 sum += items[index];
             return sum;

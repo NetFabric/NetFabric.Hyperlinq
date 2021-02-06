@@ -85,7 +85,7 @@ namespace LinqBenchmarks.List.Int32
         public int Hyperlinq_Foreach()
         {
             var sum = 0;
-            foreach (var item in ListBindings.Select(source, item => item * 2))
+            foreach (var item in source.AsValueEnumerable().Select(item => item * 2))
                 sum += item;
             return sum;
         }
@@ -94,7 +94,7 @@ namespace LinqBenchmarks.List.Int32
         public int Hyperlinq_Foreach_IFunction()
         {
             var sum = 0;
-            foreach (var item in ListBindings.Select<int, int, DoubleOfInt32>(source))
+            foreach (var item in source.AsValueEnumerable().Select<int, DoubleOfInt32>())
                 sum += item;
             return sum;
         }
@@ -103,7 +103,7 @@ namespace LinqBenchmarks.List.Int32
         [Benchmark]
         public int Hyperlinq_For()
         {
-            var items = ListBindings.Select(source, item => item * 2);
+            var items = source.AsValueEnumerable().Select(item => item * 2);
             var sum = 0;
             for (var index = 0; index < items.Count; index++)
                 sum += items[index];
@@ -113,7 +113,7 @@ namespace LinqBenchmarks.List.Int32
         [Benchmark]
         public int Hyperlinq_For_IFunction()
         {
-            var items = ListBindings.Select<int, int, DoubleOfInt32>(source);
+            var items = source.AsValueEnumerable().Select<int, DoubleOfInt32>();
             var sum = 0;
             for (var index = 0; index < items.Count; index++)
                 sum += items[index];

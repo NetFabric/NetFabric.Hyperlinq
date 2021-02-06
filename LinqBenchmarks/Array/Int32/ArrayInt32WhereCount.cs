@@ -64,10 +64,14 @@ namespace LinqBenchmarks.Array.Int32
 
         [Benchmark]
         public int Hyperlinq()
-            => ArrayExtensions.Where(source, item => item.IsEven()).Count();
+            => source.AsValueEnumerable()
+                .Where(item => item.IsEven())
+                .Count();
 
         [Benchmark]
         public int Hyperlinq_IFunction()
-            => ArrayExtensions.Where<int, Int32IsEven>(source).Count();
+            => source.AsValueEnumerable()
+                .Where<Int32IsEven>()
+                .Count();
     }
 }

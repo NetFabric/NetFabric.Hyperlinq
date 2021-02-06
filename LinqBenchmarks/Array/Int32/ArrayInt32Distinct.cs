@@ -82,7 +82,8 @@ namespace LinqBenchmarks.Array.Int32
         {
             var sum = 0;
             var comparer = new DefaultStructEqualityComparer();
-            foreach (var item in source.ToStructEnumerable().Distinct(comparer, x => x))
+            foreach (var item in source.ToStructEnumerable()
+                .Distinct(comparer, x => x))
                 sum += item;
             return sum;
         }
@@ -91,7 +92,8 @@ namespace LinqBenchmarks.Array.Int32
         public int Hyperlinq()
         {
             var sum = 0;
-            foreach (var item in ArrayExtensions.Distinct(source))
+            foreach (var item in source.AsValueEnumerable()
+                .Distinct())
                 sum += item;
             return sum;
         }
