@@ -66,10 +66,5 @@ namespace LinqBenchmarks.Array.Int32
         public int Hyperlinq()
             => source.AsValueEnumerable()
                 .Sum();
-
-        [Benchmark]
-        public int Hyperlinq_IFunction()
-            => source.AsValueEnumerable()
-                .Sum();
     }
 }
