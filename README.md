@@ -37,6 +37,7 @@ Benchmarks comparing the perfomance of [LINQ](https://docs.microsoft.com/en-us/d
 - [array.Select()](Results/Array.Int32.ArrayInt32Select.md)
 - [array.Skip().Take().Select()](Results/Array.Int32.ArrayInt32SkipTakeSelect.md)
 - [array.Skip().Take().Where()](Results/Array.Int32.ArrayInt32SkipTakeWhere.md)
+- [array.Sum()](Results/Array.Int32.ArrayInt32Sum.md)
 - [array.Where()](Results/Array.Int32.ArrayInt32Where.md)
 - [array.Where().Count()](Results/Array.Int32.ArrayInt32WhereCount.md)
 - [array.Where().Select()](Results/Array.Int32.ArrayInt32WhereSelect.md)
@@ -47,6 +48,7 @@ Benchmarks comparing the perfomance of [LINQ](https://docs.microsoft.com/en-us/d
 
 - [array.Distinct()](Results/Array.ValueType.ArrayValueTypeDistinct.md)
 - [array.Select()](Results/Array.ValueType.ArrayValueTypeSelect.md)
+- [array.Select().Sum()](Results/Array.ValueType.ArrayValueTypeSelectSum.md)
 - [array.Skip().Take().Select()](Results/Array.ValueType.ArrayValueTypeSkipTakeSelect.md)
 - [array.Skip().Take().Where()](Results/Array.ValueType.ArrayValueTypeSkipTakeWhere.md)
 - [array.Where()](Results/Array.ValueType.ArrayValueTypeWhere.md)
@@ -61,6 +63,7 @@ Benchmarks comparing the perfomance of [LINQ](https://docs.microsoft.com/en-us/d
 - [list.Select()](Results/List.Int32.ListInt32Select.md)
 - [list.Skip().Take().Select()](Results/List.Int32.ListInt32SkipTakeSelect.md)
 - [list.Skip().Take().Where()](Results/List.Int32.ListInt32SkipTakeWhere.md)
+- [list.Sum()](Results/List.Int32.ListInt32Sum.md)
 - [list.Where()](Results/List.Int32.ListInt32Where.md)
 - [list.Where().Select()](Results/List.Int32.ListInt32WhereSelect.md)
 - [list.Where().Select().ToArray()](Results/List.Int32.ListInt32WhereSelectToArray.md)
@@ -70,6 +73,7 @@ Benchmarks comparing the perfomance of [LINQ](https://docs.microsoft.com/en-us/d
 
 - [list.Distinct()](Results/List.ValueType.ListValueTypeDistinct.md)
 - [list.Select()](Results/List.ValueType.ListValueTypeSelect.md)
+- [list.Select().Sum()](Results/List.ValueType.ListValueTypeSelectSum.md)
 - [list.Skip().Take().Select()](Results/List.ValueType.ListValueTypeSkipTakeSelect.md)
 - [list.Skip().Take().Where()](Results/List.ValueType.ListValueTypeSkipTakeWhere.md)
 - [list.Where()](Results/List.ValueType.ListValueTypeWhere.md)

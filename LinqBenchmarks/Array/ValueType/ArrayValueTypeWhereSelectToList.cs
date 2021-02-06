@@ -71,15 +71,15 @@ namespace LinqBenchmarks.Array.ValueType
 
         [Benchmark]
         public List<FatValueType> Hyperlinq()
-            => ArrayExtensions
-                .Where(source, (in FatValueType item) => item.IsEven())
+            => source.AsValueEnumerableRef()
+                .Where((in FatValueType item) => item.IsEven())
                 .Select((in FatValueType item) => item * 2)
                 .ToList();
 
         [Benchmark]
         public List<FatValueType> Hyperlinq_IFunction()
-            => ArrayExtensions
-                .WhereRef<FatValueType, FatValueTypeIsEven>(source)
+            => source.AsValueEnumerableRef()
+                .Where<FatValueTypeIsEven>()
                 .Select<FatValueType, DoubleOfFatValueType>()
                 .ToList();
     }

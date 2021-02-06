@@ -73,23 +73,23 @@ namespace LinqBenchmarks.Array.ValueType
 
         [Benchmark]
         public FatValueType[] Hyperlinq()
-            => ArrayExtensions
-                .Where(source, (in FatValueType item) => item.IsEven())
+            => source.AsValueEnumerableRef()
+                .Where((in FatValueType item) => item.IsEven())
                 .Select((in FatValueType item) => item * 2)
                 .ToArray();
 
         [Benchmark]
         public FatValueType[] Hyperlinq_IFunction()
-            => ArrayExtensions
-                .WhereRef<FatValueType, FatValueTypeIsEven>(source)
+            => source.AsValueEnumerableRef()
+                .Where<FatValueTypeIsEven>()
                 .Select<FatValueType, DoubleOfFatValueType>()
                 .ToArray();
 
         [Benchmark]
         public FatValueType Hyperlinq_Pool()
         {
-            using var array = ArrayExtensions
-                .Where(source, (in FatValueType item) => item.IsEven())
+            using var array = source.AsValueEnumerableRef()
+                .Where((in FatValueType item) => item.IsEven())
                 .Select((in FatValueType item) => item * 2)
                 .ToArray(MemoryPool<FatValueType>.Shared);
             return Count == 0 
@@ -100,8 +100,8 @@ namespace LinqBenchmarks.Array.ValueType
         [Benchmark]
         public FatValueType Hyperlinq_Pool_IFunction()
         {
-            using var array = ArrayExtensions
-                .WhereRef<FatValueType, FatValueTypeIsEven>(source)
+            using var array = source.AsValueEnumerableRef()
+                .Where<FatValueTypeIsEven>()
                 .Select<FatValueType, DoubleOfFatValueType>()
                 .ToArray(MemoryPool<FatValueType>.Shared);
             return Count == 0

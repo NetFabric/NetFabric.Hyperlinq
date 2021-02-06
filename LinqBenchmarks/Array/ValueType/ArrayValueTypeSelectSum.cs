@@ -5,73 +5,69 @@ using StructLinq;
 
 namespace LinqBenchmarks.Array.ValueType
 {
-    public class ArrayValueTypeWhereCount: ValueTypeArrayBenchmarkBase
+    public class ArrayValueTypeSelectSum: ValueTypeArrayBenchmarkBase
     {
         [Benchmark(Baseline = true)]
         public int ForLoop()
         {
-            var count = 0;
+            var sum = 0;
             var array = source;
             for (var index = 0; index < array.Length; index++)
             {
                 ref readonly var item = ref array[index];
-                if (item.IsEven())
-                    count++;
+                sum += item.Value0;
             }
-            return count;
+            return sum;
         }
 
         [Benchmark]
         public int ForeachLoop()
         {
-            var count = 0;
+            var sum = 0;
             foreach (var item in source)
             {
-                if (item.IsEven())
-                    count++;
+                sum += item.Value0;
             }
-            return count;
+            return sum;
         }
 
         [Benchmark]
         public int Linq()
-            => System.Linq.Enumerable.Count(source, item => item.IsEven());
+            => System.Linq.Enumerable.Sum(source, item => item.Value0);
 
         [Benchmark]
         public int LinqFaster()
-            => source.CountF(item => item.IsEven());
+            => source.SumF(item => item.Value0);
 
         [Benchmark]
         public int LinqAF()
-            => global::LinqAF.ArrayExtensionMethods.Count(source, item => item.IsEven());
+            => global::LinqAF.ArrayExtensionMethods.Sum(source, item => item.Value0);
 
         [Benchmark]
         public int StructLinq()
             => source
                 .ToRefStructEnumerable()
-                .Where((in FatValueType item) => item.IsEven())
-                .Count();
+                .Sum((in FatValueType item) => item.Value0);
 
         [Benchmark]
         public int StructLinq_IFunction()
         {
-            var predicate = new FatValueTypeIsEven();
+            var selector = new Value0Selector();
             return source
                 .ToRefStructEnumerable()
-                .Where(ref predicate, x => x)
-                .Count(x=> x);
+                .Sum(ref selector, x => x, x => x);
         }
 
         [Benchmark]
         public int Hyperlinq()
             => source.AsValueEnumerableRef()
-                .Where((in FatValueType item) => item.IsEven())
-                .Count();
+                .Select((in FatValueType item) => item.Value0)
+                .Sum();
 
         [Benchmark]
         public int Hyperlinq_IFunction()
             => source.AsValueEnumerableRef()
-                .Where<FatValueTypeIsEven>()
-                .Count();
+                .Select<int, Value0Selector>()
+                .Sum();
     }
 }

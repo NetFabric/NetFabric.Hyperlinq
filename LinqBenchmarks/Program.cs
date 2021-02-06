@@ -3,6 +3,7 @@ using BenchmarkDotNet.Loggers;
 using BenchmarkDotNet.Reports;
 using BenchmarkDotNet.Running;
 using JM.LinqFaster;
+using JM.LinqFaster.SIMD;
 using NetFabric.Hyperlinq;
 using StructLinq;
 using System;
@@ -65,6 +66,9 @@ namespace LinqBenchmarks
 
             var linqFasterVersion = GetInformationalVersion(typeof(LinqFaster).Assembly);
             logger.WriteLine($"- JM.LinqFaster: [{linqFasterVersion}](https://www.nuget.org/packages/JM.LinqFaster/{linqFasterVersion})");
+
+            var linqFasterSimdVersion = GetInformationalVersion(typeof(LinqFasterSIMD).Assembly);
+            logger.WriteLine($"- LinqFaster.SIMD: [{linqFasterVersion}](https://www.nuget.org/packages/LinqFaster.SIMD/{linqFasterSimdVersion})");
 
             var linqAfVersion = GetFileVersion(typeof(LinqAF.Enumerable).Assembly);
             logger.WriteLine($"- LinqAF: [{linqAfVersion}](https://www.nuget.org/packages/LinqAF/{linqAfVersion})");
