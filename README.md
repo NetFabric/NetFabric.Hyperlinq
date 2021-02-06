@@ -23,8 +23,9 @@ This implementation **favors performance in detriment of assembly binary size** 
 - [Reduced heap allocations](#reduced-heap-allocations)
 - [Benchmarks](#benchmarks)
 - [Usage](#usage)
-  - [BCL Collections](#bcl-collections)
-  - [AsValueEnumerable and AsAsyncValueEnumerable](#asvalueenumerable-and-asasyncvalueenumerable)
+  - [Passing items by reference](#passing-items-by-reference)
+  - [Value delegates](#value-delegates)
+  - [Generation operations](#generation-operations)
   - [Method return types](#method-return-types)
   - [Composition](#composition)
   - [Option](#option)
@@ -45,13 +46,13 @@ This implementation **favors performance in detriment of assembly binary size** 
 - It does not box value-type enumerators so, calls to the `Current` property and the `MoveNext()` method are non-virtual.
 - All the enumerables returned by operations define a value-type enumerator.
 - Whenever possible, the enumerator returned by the public `GetEnumerator()` or `GetAsyncEnumerator()` does not implement `IDisposable`. This allows the `foreach` that enumerates the result to be inlinable. 
-- Operations enumerate the source using the indexer when the source is an array, `ArraySegment<>`, `Span<>`, `ReadOnlySpan<>`, `Memory<>`, `ReadOnlyMemory<>`, or implements `IReadOnlyList<>`. The indexer performs fewer operations than the enumerator.
+- Operations enumerate the source using the indexer when the source is an array, `ArraySegment<>`, `Span<>`, `ReadOnlySpan<>`, `Memory<>`, `ReadOnlyMemory<>`, or implements `IReadOnlyList<>`. 
 - `Range()` and `Repeat()` return enumerables that implement `IReadOnlyCollection<>` and `ICollection<>`. `Return()` and `Select()` return enumerables that implement `IReadOnlyList<>` and `IList<>`.
 - Use of buffer pools in operations like `Distinct()`, `ToArray()` and `ToList()`.
+- Use of SIMD in `Sum()`.
 - Elimination of conditional branchs in `Where().Count()`.
 - Allows the JIT compiler to perform optimizations on array enumeration whenever possible.
 - Takes advantage of `EqualityComparer<>.Default` devirtualization whenever possible.
-- `ToList()` uses `ICollection<>.CopyTo()` to add the items to the resulting `List<>`. This removes many of the operations performed when adding items one-by-one or using an `IEnumerable<>`. 
 
 The performance is equivalent when the enumerator is a reference-type. This happens when the enumerable is generated using `yield` or when it's cast to one of the BCL enumerable interfaces (`IEnumerable`, `IEnumerable<>`, `IReadOnlyCollection<>`, `ICollection<>`, `IReadOnlyList<>`, `IList<>`, or `IAsyncEnumerable<>`). In the case of operation composition, this only affects the first operation. The subsequent operations will have value-type enumerators.
 
@@ -59,19 +60,16 @@ The performance is equivalent when the enumerator is a reference-type. This happ
 
 `NetFabric.Hyperlinq` allocates as much as possible on the stack. Enumerables and enumerators are defined as value-types. Generics constraints are used for the operation parameters so that the value-types are not boxed.
 
-When the indexers are used, no allocation is performed.
-
 It only allocates on the heap for the following cases:
 
 - Operations that use `ICollection<>.CopyTo()`, `ICollection<>.Contains()`, or `IList<>.IndexOf()` will box enumerables that are value-types.   
-- `ToList()`, when applied to collections that implement `IReadOnlyCollection<>` but not `ICollection<>`, allocates an instance of an helper class so that `ICollection<>.CopyTo()` can be used.
 - `ToArray()` and `ToList()` allocate their results on the heap. You can use the `ToArray()` overload that take an buffer pool as parameter so that its result is not managed by the garbage collector.
 
 ## Benchmarks
 
-The repository contains a [benchmarks project](https://github.com/NetFabric/NetFabric.Hyperlinq/tree/main/NetFabric.Hyperlinq.Benchmarks) based on [BenchmarkDotNet](https://benchmarkdotnet.org) that compares the performance of the operators for diferent libraries and source types.
+The results of the benchmarks comparing multiple LINQ libraries can be found in the [LinqBenchmarks](https://github.com/NetFabric/LinqBenchmarks) repository. 
 
-The results can be found in the [Benchmarks](https://github.com/NetFabric/NetFabric.Hyperlinq/tree/main/Benchmarks) folder. 
+The results of the benchmarks included in this repository can be found in the [Benchmarks](https://github.com/NetFabric/NetFabric.Hyperlinq/tree/main/Benchmarks) folder. 
 
 The names of the benchmarks are structured as follow:
 
@@ -100,9 +98,9 @@ The names of the benchmarks are structured as follow:
 
 ## Usage
 
-1. Add the [`NetFabric.Hyperlinq` NuGet package](https://www.nuget.org/packages/NetFabric.Hyperlinq/) to your project.
-1. Optionally, also add the [`NetFabric.Hyperlinq.Analyzer` NuGet package](https://www.nuget.org/packages/NetFabric.Hyperlinq.Analyzer/) to your project. It's a Roslyn analyzer that suggests performance improvements on your enumeration source code. No dependencies are added to your assemblies.
-1. Add an `using NetFabric.Hyperlinq` directive to all source code files where you want to use `NetFabric.Hyperlinq`. It can coexist with `System.Linq` and `System.Linq.Async` directives:
+- Add the [`NetFabric.Hyperlinq` NuGet package](https://www.nuget.org/packages/NetFabric.Hyperlinq/) to your project.
+- Optionally, also add the [`NetFabric.Hyperlinq.Analyzer` NuGet package](https://www.nuget.org/packages/NetFabric.Hyperlinq.Analyzer/) to your project. It's a Roslyn analyzer that suggests performance improvements on your enumeration source code. No dependencies are added to your assemblies.
+- Add an `using NetFabric.Hyperlinq` directive to all source code files where you want to use `NetFabric.Hyperlinq`. It can coexist with `System.Linq` and `System.Linq.Async` directives:
 
 ``` csharp
 using System;
@@ -110,42 +108,7 @@ using System.Linq;
 using NetFabric.Hyperlinq; // add this directive
 ```
 
-### BCL Collections
-
-`NetFabric.Hyperlinq` includes bindings for collections available in the namespaces: 
-
-- **`System`** - arrays, `ArraySegment<>`, `Span<>`, `ReadOnlySpan<>`, `Memory<>` and `ReadOnlyMemory<>`
-- **`System.Collections.Generic`** - `List<>`, `Dictionary<>`, `Stack<>`, ...
-- **`System.Collections.Immutable`** - `ImmutableArray<>`, `ImmutableList<>`, `ImmutableStack<>`, ...
-
-For all these collections, once the directive is added, `NetFabric.Hyperlinq` will be used automatically:
-
-``` csharp
-public static void Example(ReadOnlySpan<int> span)
-{
-  var result = span
-    .Where(item => item > 2)
-    .Select(item => item * 2);
-
-  foreach(var value in result)
-    Console.WriteLine(value);
-}
-```
-
-### AsValueEnumerable and AsAsyncValueEnumerable
-
-`NetFabric.Hyperlinq` implements operations (extension methods) for the interfaces:
-
-- `IValueEnumerable<,>`
-- `IValueReadOnlyCollection<,>`
-- `IValueReadOnlyList<,>`
-- `IAsyncValueEnumerable<,>`
-
-These are extensions to the BCL enumerable interfaces and contain a second generic argument for the enumerator type so that it won't be boxed.
-
-If the collection does not implement any of these, to use `NetFabric.Hyperlinq` operations, you have to use the conversion methods `AsValueEnumerable()` or `AsAsyncValueEnumerable()`. (Except for the BCL collections where specific bindings are provided.)
-
-In the following example, `AsValueEnumerable()` converts `IReadOnlyList<>` to `IValueReadOnlyList<>`. The subsequent operations used are the ones implemented in `NetFabric.Hyperlinq`:
+- Use the methods `AsValueEnumerable()`or `AsAsyncValueEnumerable()` to make any collection usable with `NetFabric.Hyperlinq`. This includes arrays, `Memory<>`, `ReadOnlyMemory<>`, BCL collections, and any other implementation of `IEnumerable<>` or `IAsyncEnumerable<>`. It's not required for `Span<>` and `ReadOnlySpan<>`.
 
 ``` csharp
 public static void Example(IReadOnlyList<int> list)
@@ -160,7 +123,7 @@ public static void Example(IReadOnlyList<int> list)
 }
 ```
 
-All value enumeration interfaces derive from `IEnumerable<>` or `IAsyncEnumerable` so, if an operation is not available in `NetFabric.Hyperlinq`, it will automatically drop to the `System.Linq` implementation.
+- All enumerables returned by `NetFabric.Hyperlinq` are compatible with `System.Linq`. 
 
 `OrderByDescending()` is not yet available in `Netfabric.Hyperlinq` but can still be used without requiring any conversion:
 
@@ -179,7 +142,63 @@ public static void Example(IReadOnlyList<int> list)
 }
 ```
 
-To add  `NetFabric.Hyperlinq` operations after a `System.Linq` operation, simply add one more  `AsValueEnumerable()` or `AsAsyncValueEnumerable()`.
+To add `NetFabric.Hyperlinq` operations after a `System.Linq` operation, simply add one more `AsValueEnumerable()` or `AsAsyncValueEnumerable()`.
+
+### Passing items by reference
+
+`NetFabric.Hyperlinq` supports passing the items by reference. This can improve considerably the performance for large structures.
+
+- Use `AsValueEnumerableRef()` instead to make any collection usable with `NetFabric.Hyperlinq`.
+- Declare the lambda expressions with `in` on the first parameter.
+
+``` csharp
+public static void Example(IReadOnlyList<int> list)
+{
+  var result = list
+    .AsValueEnumerable()
+    .Where((in int item) => item > 2)
+    .Select((in int item) => item * 2);
+
+  foreach(var value in result)
+    Console.WriteLine(value);
+}
+```
+
+### Value delegates
+
+Calling a lambda expression for each item of the collection is very expensive. `NetFabric.Hyperlinq` supports an much more performant alternative.
+
+- Declare a `struct` that implements `ÌFunction<>` or `IFunctionIn<>`. 
+
+``` csharp
+readonly struct DoubleOfInt32
+    : IFunction<int, int>
+{
+    public int Invoke(int element)
+        => element * 2;
+}
+
+readonly struct DoubleOfInt32ByRef
+    : IFunctionIn<int, int>
+{
+    public int Invoke(in int element)
+        => element * 2;
+}
+```
+
+- Add the name of the structure to the method generics arguments
+
+``` csharp
+public static void Example(IReadOnlyList<int> list)
+{
+  var result = list
+    .AsValueEnumerable()
+    .Select<int, DoubleOfInt32>();
+
+  foreach(var value in result)
+    Console.WriteLine(value);
+}
+```
 
 ### Generation operations
 
@@ -252,7 +271,7 @@ public static ReadOnlyList.SelectEnumerable<ValueEnumerable.RangeEnumerable, int
 Both `System.Linq` and `NetFabric.Hyperlinq` optimize the code in the following example so that only one enumerator is used to perform both the `Where()` and the `Select()`:
 
 ``` csharp
-var result = source
+var result = source.AsValueEnumerable()
     .Where(item => item > 2)
     .Select(item => item * 2);
 ```
@@ -260,7 +279,7 @@ var result = source
 But, `System.Linq` does not do the same for this other example:
 
 ``` csharp
-var result = source
+var result = source.AsValueEnumerable()
     .Where(item => item > 2)
     .First();
 ```
@@ -270,7 +289,7 @@ var result = source
 `NetFabric.Hyperlinq` includes many more composition optimizations. In the following code, only one enumerator is used, and only because of the `Where()` operation. Otherwise, the indexer would have been used instead. Also, the `Select()` is applied after `First()`, so that it's applied to only to the resulting item:
 
 ``` csharp
-var result = array
+var result = array.AsValueEnumerable()
     .Skip(1)
     .Take(10)
     .Where(item => item > 2)
@@ -287,7 +306,7 @@ In `NetFabric.Hyperlinq`, aggregation operations return an `Option<>` type. This
 Here's a small example using `First()`:
 
 ``` csharp
-var result = source.First();
+var result = source.AsValueEnumerable().First();
 if (result.IsSome)
   Console.WriteLine(result.Value);
 ```
@@ -295,7 +314,7 @@ if (result.IsSome)
 It also provides a deconstructor so, you can convert it to a tuple:
 
 ``` csharp
-var (isSome, value) = source.First();
+var (isSome, value) = source.AsValueEnumerable().First();
 if (isSome)
   Console.WriteLine(value);
 ```
@@ -303,11 +322,11 @@ if (isSome)
 If you prefer a more functional approach, you can use `Match()` to specify the value returned when the collection has values and when it's empty. Here's how to use it to define the previous behavior of `First()` and `FirstOrDefault()`:
 
 ``` csharp
-var first = source.First().Match(
+var first = source.AsValueEnumerable().First().Match(
   item => item,
   () => throw new InvalidOperationException("Sequence contains no elements"));
 
-var firstOrDefault = source.First().Match(
+var firstOrDefault = source.AsValueEnumerable().First().Match(
   item => item,
   () => default);
 
@@ -318,7 +337,7 @@ Console.WriteLine(firstOrDefault);
 `Match()` can also be used to define actions:
 
 ``` csharp
-source.First().Match(
+source.AsValueEnumerable().First().Match(
   item => Console.WriteLine(item),
   () => { });
 ```
@@ -326,7 +345,7 @@ source.First().Match(
 The `NetFabric.Hyperlinq` operations can be applied to `Option<>`, including `Where()`, `Select()` and `SelectMany()`. These return another `Option<>` with the predicate/selector applied to the value, if it exists.
 
 ```csharp
-source.First().Where(item => item > 2).Match(
+source.AsValueEnumerable().First().Where(item => item > 2).Match(
   item => Console.WriteLine(item),
   () => { });
 ```
@@ -342,7 +361,7 @@ There are operations that do have to allocate on the heap. Some need to use a co
 `ToArray()` is usually used to cache values for a brief period. `Netfabric.Hyperlinq` adds an oveload that takes a `MemoryPool<>` as a parameter:
 
 ``` csharp
-using(var buffer = source.ToArray(MemoryPool<int>.Shared))
+using(var buffer = source.AsValueEnumerable().ToArray(MemoryPool<int>.Shared))
 {
     var memory = buffer.Memory;
     // use memory here
@@ -366,6 +385,7 @@ Articles explaining implementation:
 
 - Aggregation
   - `Count()`
+  - `Sum()`
 - Conversion
   - `AsEnumerable()`
   - `AsValueEnumerable()`
