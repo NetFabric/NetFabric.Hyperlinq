@@ -1,13 +1,19 @@
-﻿namespace LinqBenchmarks
+﻿using System.Numerics;
+
+namespace LinqBenchmarks
 {
     readonly struct DoubleOfInt32
         : StructLinq.IFunction<int, int>
         , NetFabric.Hyperlinq.IFunction<int, int>
+        , NetFabric.Hyperlinq.IFunction<Vector<int>, Vector<int>>
     {
         public int Eval(int element)
             => element * 2;
 
         public int Invoke(int element)
+            => element * 2;
+
+        public Vector<int> Invoke(Vector<int> element)
             => element * 2;
     }
 
