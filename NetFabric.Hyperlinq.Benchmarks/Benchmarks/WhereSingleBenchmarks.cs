@@ -61,7 +61,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [BenchmarkCategory("Array")]
         [Benchmark]
         public Option<int> Hyperlinq_Array()
-            => array
+            => array.AsValueEnumerable()
                 .Where(item => item == Count - 1)
                 .Single();
 
@@ -75,7 +75,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [BenchmarkCategory("Array")]
         [Benchmark]
         public Option<int> Hyperlinq_Memory()
-            => memory
+            => memory.AsValueEnumerable()
                 .Where(item => item == Count - 1)
                 .Single();
 

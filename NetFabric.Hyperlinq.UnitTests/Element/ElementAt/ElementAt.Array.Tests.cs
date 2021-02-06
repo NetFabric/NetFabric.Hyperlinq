@@ -16,10 +16,10 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
             // Arrange
 
             // Act
-            var optionTooSmall = ArrayExtensions
-                .ElementAt<int>(source, -1);
-            var optionTooLarge = ArrayExtensions
-                .ElementAt<int>(source, source.Length);
+            var optionTooSmall = source.AsValueEnumerable()
+                .ElementAt(-1);
+            var optionTooLarge = source.AsValueEnumerable()
+                .ElementAt(source.Length);
 
             // Assert
             _ = optionTooSmall.Must()
@@ -39,8 +39,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
             for (var index = 0; index < source.Length; index++)
             {
                 // Act
-                var result = ArrayExtensions
-                    .ElementAt(source, index);
+                var result = source.AsValueEnumerable()
+                    .ElementAt(index);
 
                 // Assert
                 _ = result.Match(

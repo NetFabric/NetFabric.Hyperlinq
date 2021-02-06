@@ -18,8 +18,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.Where
                 .Where(source, predicate);
 
             // Act
-            var result = ArrayExtensions
-                .Where(source, predicate);
+            var result = source.AsValueEnumerable()
+                .Where(predicate);
 
             // Assert
             _ = result.Must()
@@ -40,8 +40,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.Where
                 .Where(predicate1);
 
             // Act
-            var result = ArrayExtensions
-                .Where(source, predicate0)
+            var result = source.AsValueEnumerable()
+                .Where(predicate0)
                 .Where(predicate1);
 
             // Assert

@@ -133,7 +133,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [BenchmarkCategory("Array")]
         [Benchmark]
         public int Hyperlinq_Memory()
-            => memory
+            => memory.AsValueEnumerable()
                 .Where(item => (item & 0x01) == 0)
                 .Count();
 

@@ -13,11 +13,11 @@ namespace NetFabric.Hyperlinq
 
         [GeneratorMapping("TPredicate", "NetFabric.Hyperlinq.FunctionWrapper<TSource, int, bool>")]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static MemoryWhereAtEnumerable<TSource, FunctionWrapper<TSource, int, bool>> Where<TSource>(this ReadOnlyMemory<TSource> source, Func<TSource, int, bool> predicate) 
+        internal static MemoryWhereAtEnumerable<TSource, FunctionWrapper<TSource, int, bool>> Where<TSource>(this ReadOnlyMemory<TSource> source, Func<TSource, int, bool> predicate) 
             => source.WhereAt(new FunctionWrapper<TSource, int, bool>(predicate));
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static MemoryWhereAtEnumerable<TSource, TPredicate> WhereAt<TSource, TPredicate>(this ReadOnlyMemory<TSource> source, TPredicate predicate = default) 
+        internal static MemoryWhereAtEnumerable<TSource, TPredicate> WhereAt<TSource, TPredicate>(this ReadOnlyMemory<TSource> source, TPredicate predicate = default) 
             where TPredicate : struct, IFunction<TSource, int, bool>
             => new(source, predicate);
 
@@ -26,8 +26,8 @@ namespace NetFabric.Hyperlinq
             : IValueEnumerable<TSource, MemoryWhereAtEnumerable<TSource, TPredicate>.DisposableEnumerator>
             where TPredicate : struct, IFunction<TSource, int, bool>
         {
-            readonly ReadOnlyMemory<TSource> source;
-            readonly TPredicate predicate;
+            internal readonly ReadOnlyMemory<TSource> source;
+            internal readonly TPredicate predicate;
 
             internal MemoryWhereAtEnumerable(ReadOnlyMemory<TSource> source, TPredicate predicate)
                 => (this.source, this.predicate) = (source, predicate);
@@ -271,6 +271,56 @@ namespace NetFabric.Hyperlinq
                 }
             }
         }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Sum<TPredicate>(this MemoryWhereAtEnumerable<int, TPredicate> source)
+            where TPredicate : struct, IFunction<int, int, bool>
+            => source.source.Span.SumAt<int, int, TPredicate, AddInt32>(source.predicate);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Sum<TPredicate>(this MemoryWhereAtEnumerable<int?, TPredicate> source)
+            where TPredicate : struct, IFunction<int?, int, bool>
+            => source.source.Span.SumAt<int?, int, TPredicate, AddNullableInt32>(source.predicate);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static long Sum<TPredicate>(this MemoryWhereAtEnumerable<long, TPredicate> source)
+            where TPredicate : struct, IFunction<long, int, bool>
+            => source.source.Span.SumAt<long, long, TPredicate, AddInt64>(source.predicate);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static long Sum<TPredicate>(this MemoryWhereAtEnumerable<long?, TPredicate> source)
+            where TPredicate : struct, IFunction<long?, int, bool>
+            => source.source.Span.SumAt<long?, long, TPredicate, AddNullableInt64>(source.predicate);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float Sum<TPredicate>(this MemoryWhereAtEnumerable<float, TPredicate> source)
+            where TPredicate : struct, IFunction<float, int, bool>
+            => source.source.Span.SumAt<float, float, TPredicate, AddSingle>(source.predicate);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float Sum<TPredicate>(this MemoryWhereAtEnumerable<float?, TPredicate> source)
+            where TPredicate : struct, IFunction<float?, int, bool>
+            => source.source.Span.SumAt<float?, float, TPredicate, AddNullableSingle>(source.predicate);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static double Sum<TPredicate>(this MemoryWhereAtEnumerable<double, TPredicate> source)
+            where TPredicate : struct, IFunction<double, int, bool>
+            => source.source.Span.SumAt<double, double, TPredicate, AddDouble>(source.predicate);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static double Sum<TPredicate>(this MemoryWhereAtEnumerable<double?, TPredicate> source)
+            where TPredicate : struct, IFunction<double?, int, bool>
+            => source.source.Span.SumAt<double?, double, TPredicate, AddNullableDouble>(source.predicate);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static decimal Sum<TPredicate>(this MemoryWhereAtEnumerable<decimal, TPredicate> source)
+            where TPredicate : struct, IFunction<decimal, int, bool>
+            => source.source.Span.SumAt<decimal, decimal, TPredicate, AddDecimal>(source.predicate);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static decimal Sum<TPredicate>(this MemoryWhereAtEnumerable<decimal?, TPredicate> source)
+            where TPredicate : struct, IFunction<decimal?, int, bool>
+            => source.source.Span.SumAt<decimal?, decimal, TPredicate, AddNullableDecimal>(source.predicate);
     }
 }
 

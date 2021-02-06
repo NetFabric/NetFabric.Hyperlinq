@@ -19,8 +19,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
                 .ToList(source);
 
             // Act
-            var result = ArrayExtensions
-                .ToList((ReadOnlyMemory<int>)source.AsMemory());
+            var result = ((ReadOnlyMemory<int>)source.AsMemory()).AsValueEnumerable()
+                .ToList();
 
             // Assert
             _ = result.Must()

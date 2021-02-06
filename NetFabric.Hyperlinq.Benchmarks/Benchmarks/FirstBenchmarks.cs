@@ -60,7 +60,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [BenchmarkCategory("Array")]
         [Benchmark]
         public Option<int> Hyperlinq_Array()
-            => array.First();
+            => array.AsValueEnumerable().First();
 
         [BenchmarkCategory("Array")]
         [Benchmark]
@@ -70,7 +70,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [BenchmarkCategory("Array")]
         [Benchmark]
         public Option<int> Hyperlinq_Memory()
-            => memory.First();
+            => memory.AsValueEnumerable().First();
 
         [BenchmarkCategory("Enumerable_Value")]
         [Benchmark]

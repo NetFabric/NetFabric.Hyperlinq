@@ -34,7 +34,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Contains
         {
             // Arrange
             var value = default(string);
-            var wrapped = Wrap.AsValueReadOnlyList(source.Select(item => item.ToString()).ToArray());
+            var wrapped = Wrap.AsValueReadOnlyList(source.AsValueEnumerable().Select(item => item.ToString()).ToArray());
 
             // Act
             var result = ReadOnlyListExtensions
@@ -70,7 +70,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Contains
         {
             // Arrange
             var value = System.Linq.Enumerable.Last(source).ToString();
-            var wrapped = Wrap.AsValueReadOnlyList(source.Select(item => item.ToString()).ToArray());
+            var wrapped = Wrap.AsValueReadOnlyList(source.AsValueEnumerable().Select(item => item.ToString()).ToArray());
 
             // Act
             var result = ReadOnlyListExtensions

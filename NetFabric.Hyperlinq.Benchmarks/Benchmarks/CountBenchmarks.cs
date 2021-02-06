@@ -122,7 +122,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [BenchmarkCategory("Array")]
         [Benchmark]
         public int Hyperlinq_Memory()
-            => memory.Count();
+            => memory.AsValueEnumerable().Count();
 
         [BenchmarkCategory("Enumerable_Value")]
         [Benchmark]

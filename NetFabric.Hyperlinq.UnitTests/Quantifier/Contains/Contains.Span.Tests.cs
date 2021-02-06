@@ -33,7 +33,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Contains
         {
             // Arrange
             var value = default(string);
-            var wrapped = source.Select(item => item.ToString()).ToArray();
+            var wrapped = source.AsValueEnumerable().AsValueEnumerable().Select(item => item.ToString()).ToArray();
 
             // Act
             var result = ArrayExtensions
@@ -68,7 +68,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Contains
         {
             // Arrange
             var value = System.Linq.Enumerable.Last(source).ToString();
-            var wrapped = source.Select(item => item.ToString()).ToArray();
+            var wrapped = source.AsValueEnumerable().Select(item => item.ToString()).ToArray();
 
             // Act
             var result = ArrayExtensions

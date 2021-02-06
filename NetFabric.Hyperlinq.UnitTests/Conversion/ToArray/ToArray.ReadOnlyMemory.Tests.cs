@@ -21,8 +21,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
                 .ToArray(source);
 
             // Act
-            using var result = ArrayExtensions
-                .ToArray((ReadOnlyMemory<int>)source.AsMemory(), pool);
+            using var result = ((ReadOnlyMemory<int>)source.AsMemory()).AsValueEnumerable()
+                .ToArray(pool);
 
             // Assert
             _ = result.Memory.Must()

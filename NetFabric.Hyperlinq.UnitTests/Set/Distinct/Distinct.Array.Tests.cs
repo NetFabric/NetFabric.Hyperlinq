@@ -19,8 +19,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct
                 .Distinct(source);
 
             // Act
-            var result = ArrayExtensions
-                .Distinct(source);
+            var result = source.AsValueEnumerable()
+                .Distinct();
 
             // Assert
             _ = result.Must()
@@ -40,8 +40,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct
                 .Distinct(source);
 
             // Act
-            var result = ArrayExtensions
-                .Distinct(source);
+            var result = source.AsValueEnumerable()
+                .Distinct();
 
             // Assert
             _ = result.Must()
@@ -62,8 +62,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct
                 .ToArray();
 
             // Act
-            var result = ArrayExtensions
-                .Distinct(source)
+            var result = source.AsValueEnumerable()
+                .Distinct()
                 .ToArray();
 
             // Assert
@@ -85,8 +85,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct
                 .ToArray();
 
             // Act
-            using var result = ArrayExtensions
-                .Distinct(source)
+            using var result = source.AsValueEnumerable()
+                .Distinct()
                 .ToArray(pool);
 
             // Assert
@@ -107,8 +107,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct
                 .ToList();
 
             // Act
-            var result = ArrayExtensions
-                .Distinct(source)
+            var result = source.AsValueEnumerable()
+                .Distinct()
                 .ToList();
 
             // Assert

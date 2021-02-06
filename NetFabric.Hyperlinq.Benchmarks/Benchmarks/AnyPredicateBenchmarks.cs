@@ -70,7 +70,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [BenchmarkCategory("Array")]
         [Benchmark]
         public bool Hyperlinq_Memory()
-            => memory.Any(_ => false);
+            => memory.AsValueEnumerable().Any(_ => false);
 
         [BenchmarkCategory("Enumerable_Value")]
         [Benchmark]

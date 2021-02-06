@@ -16,10 +16,10 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
             // Arrange
 
             // Act
-            var optionNegative = ArrayExtensions
-                .ElementAt((ReadOnlyMemory<int>)source.AsMemory(), -1);
-            var optionTooLarge = ArrayExtensions
-                .ElementAt((ReadOnlyMemory<int>)source.AsMemory(), source.Length);
+            var optionNegative = ((ReadOnlyMemory<int>)source.AsMemory()).AsValueEnumerable()
+                .ElementAt(-1);
+            var optionTooLarge = ((ReadOnlyMemory<int>)source.AsMemory()).AsValueEnumerable()
+                .ElementAt(source.Length);
 
             // Assert
             _ = optionNegative.Must()
@@ -42,8 +42,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
                     .ElementAt(source, index);
 
                 // Act
-                var result = ArrayExtensions
-                    .ElementAt((ReadOnlyMemory<int>)source.AsMemory(), index);
+                var result = ((ReadOnlyMemory<int>)source.AsMemory()).AsValueEnumerable()
+                    .ElementAt(index);
 
                 // Assert
                 _ = result.Match(

@@ -18,8 +18,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.WhereSelect
                     System.Linq.Enumerable.Where(source, predicate), selector);
 
             // Act
-            var result = ArrayExtensions
-                .Where(source.AsMemory(), predicate)
+            var result = source.AsMemory().AsValueEnumerable()
+                .Where(predicate)
                 .Select(selector);
 
             // Assert

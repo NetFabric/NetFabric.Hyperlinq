@@ -17,7 +17,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Projection.Select
                 System.Linq.Enumerable.Select(source, selector);
 
             // Act
-            var result = ArrayExtensions.Select(source.AsMemory(), selector);
+            var result = source.AsMemory().AsValueEnumerable()
+                .Select(selector);
 
             // Assert
             _ = result.Must()

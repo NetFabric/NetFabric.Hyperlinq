@@ -19,8 +19,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.WhereRefIndex
                 .Where(source, predicate);
 
             // Act
-            var result = ArrayExtensions
-                .Where(source.AsMemory(), function);
+            var result = source.AsMemory().AsValueEnumerableRef()
+                .Where(function);
 
             // Assert
             _ = result.Must()

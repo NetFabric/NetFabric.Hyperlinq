@@ -12,12 +12,12 @@ namespace NetFabric.Hyperlinq
         public static bool AllRef<TSource, TPredicate>(this ReadOnlySpan<TSource> source, TPredicate predicate = default)
             where TPredicate : struct, IFunctionIn<TSource, bool>
         {
-            for (var index = 0; index < source.Length; index++)
+            foreach (ref readonly var item in source)
             {
-                ref readonly var item = ref source[index];
                 if (!predicate.Invoke(in item))
                     return false;
             }
+
             return true;
         }
 

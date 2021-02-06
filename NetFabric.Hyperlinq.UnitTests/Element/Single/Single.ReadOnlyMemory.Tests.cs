@@ -14,8 +14,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
             // Arrange
 
             // Act
-            var result = ArrayExtensions
-                .Single((ReadOnlyMemory<int>)source.AsMemory());
+            var result = ((ReadOnlyMemory<int>)source.AsMemory()).AsValueEnumerable()
+                .Single();
 
             // Assert
             _ = result.Must()
@@ -32,8 +32,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
                 .Single(source);
 
             // Act
-            var result = ArrayExtensions
-                .Single((ReadOnlyMemory<int>)source.AsMemory());
+            var result = ((ReadOnlyMemory<int>)source.AsMemory()).AsValueEnumerable()
+                .Single();
 
             // Assert
             _ = result.Match(
@@ -48,8 +48,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
             // Arrange
 
             // Act
-            var result = ArrayExtensions
-                .Single((ReadOnlyMemory<int>)source.AsMemory());
+            var result = ((ReadOnlyMemory<int>)source.AsMemory()).AsValueEnumerable()
+                .Single();
 
             // Assert
             _ = result.Must()

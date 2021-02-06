@@ -19,9 +19,8 @@ namespace NetFabric.Hyperlinq
         {
             if (index >= 0)
             {
-                for (var sourceIndex = 0; sourceIndex < source.Length; sourceIndex++)
+                foreach (var item in source)
                 {
-                    var item = source[sourceIndex];
                     if (predicate.Invoke(item) && index-- is 0)
                         return Option.Some(item);
                 }
@@ -66,9 +65,8 @@ namespace NetFabric.Hyperlinq
         {
             if (index >= 0)
             {
-                for (var sourceIndex = 0; sourceIndex < source.Length; sourceIndex++)
+                foreach (var item in source)
                 {
-                    var item = source[sourceIndex];
                     if (predicate.Invoke(item) && index-- is 0)
                         return Option.Some(selector.Invoke(item));
                 }

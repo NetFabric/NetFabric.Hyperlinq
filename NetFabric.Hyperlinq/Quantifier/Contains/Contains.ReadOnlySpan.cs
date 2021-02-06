@@ -19,9 +19,9 @@ namespace NetFabric.Hyperlinq
 
             static bool DefaultContains(ReadOnlySpan<TSource> source, TSource value)
             {
-                for (var index = 0; index < source.Length; index++)
+                foreach (var item in source)
                 {
-                    if (EqualityComparer<TSource>.Default.Equals(source[index], value))
+                    if (EqualityComparer<TSource>.Default.Equals(item, value))
                         return true;
                 }
                 return false;
@@ -29,9 +29,9 @@ namespace NetFabric.Hyperlinq
 
             static bool ComparerContains(ReadOnlySpan<TSource> source, TSource value, IEqualityComparer<TSource> comparer)
             {
-                for (var index = 0; index < source.Length; index++)
+                foreach (var item in source)
                 {
-                    if (comparer.Equals(source[index], value))
+                    if (comparer.Equals(item, value))
                         return true;
                 }
                 return false;
@@ -52,9 +52,9 @@ namespace NetFabric.Hyperlinq
 
             static bool ValueContains(ReadOnlySpan<TSource> source, TResult value, TSelector selector)
             {
-                for (var index = 0; index < source.Length; index++)
+                foreach (var item in source)
                 {
-                    if (EqualityComparer<TResult>.Default.Equals(selector.Invoke(source[index]), value))
+                    if (EqualityComparer<TResult>.Default.Equals(selector.Invoke(item), value))
                         return true;
                 }
                 return false;
@@ -63,10 +63,9 @@ namespace NetFabric.Hyperlinq
             static bool ReferenceContains(ReadOnlySpan<TSource> source, TResult value, TSelector selector)
             {
                 var defaultComparer = EqualityComparer<TResult>.Default;
-
-                for (var index = 0; index < source.Length; index++)
+                foreach (var item in source)
                 {
-                    if (defaultComparer.Equals(selector.Invoke(source[index]), value))
+                    if (defaultComparer.Equals(selector.Invoke(item), value))
                         return true;
                 }
                 return false;
@@ -86,9 +85,9 @@ namespace NetFabric.Hyperlinq
 
             static bool ValueContains(ReadOnlySpan<TSource> source, TResult value, TSelector selector)
             {
-                for (var index = 0; index < source.Length; index++)
+                foreach (ref readonly var item in source)
                 {
-                    if (EqualityComparer<TResult>.Default.Equals(selector.Invoke(in source[index]), value))
+                    if (EqualityComparer<TResult>.Default.Equals(selector.Invoke(in item), value))
                         return true;
                 }
                 return false;
@@ -97,10 +96,9 @@ namespace NetFabric.Hyperlinq
             static bool ReferenceContains(ReadOnlySpan<TSource> source, TResult value, TSelector selector)
             {
                 var defaultComparer = EqualityComparer<TResult>.Default;
-
-                for (var index = 0; index < source.Length; index++)
+                foreach (ref readonly var item in source)
                 {
-                    if (defaultComparer.Equals(selector.Invoke(in source[index]), value))
+                    if (defaultComparer.Equals(selector.Invoke(in item), value))
                         return true;
                 }
                 return false;
@@ -132,7 +130,6 @@ namespace NetFabric.Hyperlinq
             static bool ReferenceContains(ReadOnlySpan<TSource> source, TResult value, TSelector selector)
             {
                 var defaultComparer = EqualityComparer<TResult>.Default;
-
                 for (var index = 0; index < source.Length; index++)
                 {
                     if (defaultComparer.Equals(selector.Invoke(source[index], index), value))
@@ -166,7 +163,6 @@ namespace NetFabric.Hyperlinq
             static bool ReferenceContains(ReadOnlySpan<TSource> source, TResult value, TSelector selector)
             {
                 var defaultComparer = EqualityComparer<TResult>.Default;
-
                 for (var index = 0; index < source.Length; index++)
                 {
                     if (defaultComparer.Equals(selector.Invoke(in source[index], index), value))

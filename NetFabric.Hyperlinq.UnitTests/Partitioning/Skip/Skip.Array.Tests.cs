@@ -18,8 +18,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Partitioning.Skip
                 .Skip(source, count);
 
             // Act
-            var result = ArrayExtensions
-                .Skip(source, count);
+            var result = source.AsValueEnumerable()
+                .Skip(count);
 
             // Assert
             _ = result

@@ -13,9 +13,8 @@ namespace NetFabric.Hyperlinq
             where TPredicate: struct, IFunction<TSource, bool>
         {
             var counter = 0;
-            for (var index = 0; index < source.Length; index++)
+            foreach (var item in source)
             {
-                var item = source[index];
                 counter += predicate.Invoke(item).AsByte();
             }
             return counter;
@@ -25,9 +24,8 @@ namespace NetFabric.Hyperlinq
             where TPredicate : struct, IFunctionIn<TSource, bool>
         {
             var counter = 0;
-            for (var index = 0; index < source.Length; index++)
+            foreach (ref readonly var item in source)
             {
-                var item = source[index];
                 counter += predicate.Invoke(in item).AsByte();
             }
             return counter;
@@ -51,7 +49,7 @@ namespace NetFabric.Hyperlinq
             var counter = 0;
             for (var index = 0; index < source.Length; index++)
             {
-                var item = source[index];
+                ref readonly var item = ref source[index];
                 counter += predicate.Invoke(in item, index).AsByte();
             }
             return counter;

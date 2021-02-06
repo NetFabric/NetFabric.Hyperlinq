@@ -18,8 +18,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Any
                 System.Linq.Enumerable.Any(source);
 
             // Act
-            var result = ArrayExtensions
-                .Any<int>((ReadOnlyMemory<int>)source.AsMemory());
+            var result = ((ReadOnlyMemory<int>)source.AsMemory()).AsValueEnumerable()
+                .Any();
 
             // Assert
             _ = result.Must()
@@ -37,8 +37,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Any
                 System.Linq.Enumerable.Any(source, predicate);
 
             // Act
-            var result = ArrayExtensions
-                .Any<int>((ReadOnlyMemory<int>)source.AsMemory(), predicate);
+            var result = ((ReadOnlyMemory<int>)source.AsMemory()).AsValueEnumerable()
+                .Any(predicate);
 
             // Assert
             _ = result.Must()
@@ -57,8 +57,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Any
                     System.Linq.Enumerable.Where(source, predicate)) != 0;
 
             // Act
-            var result = ArrayExtensions
-                .Any<int>((ReadOnlyMemory<int>)source.AsMemory(), predicate);
+            var result = ((ReadOnlyMemory<int>)source.AsMemory()).AsValueEnumerable()
+                .Any(predicate);
 
             // Assert
             _ = result.Must()

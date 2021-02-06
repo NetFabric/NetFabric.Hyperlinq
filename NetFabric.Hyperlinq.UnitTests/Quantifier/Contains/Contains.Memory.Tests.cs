@@ -18,8 +18,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Contains
             var value = int.MaxValue;
 
             // Act
-            var result = ArrayExtensions
-                .Contains<int>(source.AsMemory(), value);
+            var result = source.AsMemory().AsValueEnumerable()
+                .Contains(value);
 
             // Assert
             _ = result.Must()
@@ -37,8 +37,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Contains
             var referenceSource = source.Select(item => item.ToString()).ToArray();
 
             // Act
-            var result = ArrayExtensions
-                .Contains<string>(referenceSource.AsMemory(), value);
+            var result = referenceSource.AsMemory().AsValueEnumerable()
+                .Contains(value);
 
             // Assert
             _ = result.Must()
@@ -54,8 +54,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Contains
             var value = Enumerable.Last(source);
 
             // Act
-            var result = ArrayExtensions
-                .Contains<int>(source.AsMemory(), value);
+            var result = source.AsMemory().AsValueEnumerable()
+                .Contains(value);
 
             // Assert
             _ = result.Must()
@@ -72,8 +72,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Contains
             var referenceSource = source.Select(item => item.ToString()).ToArray();
 
             // Act
-            var result = ArrayExtensions
-                .Contains<string>(referenceSource.AsMemory(), value);
+            var result = referenceSource.AsMemory().AsValueEnumerable()
+                .Contains(value);
 
             // Assert
             _ = result.Must()
@@ -90,8 +90,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Contains
             var value = int.MaxValue;
 
             // Act
-            var result = ArrayExtensions
-                .Contains<int>(source.AsMemory(), value, EqualityComparer<int>.Default);
+            var result = source.AsMemory().AsValueEnumerable()
+                .Contains(value, EqualityComparer<int>.Default);
 
             // Assert
             _ = result.Must()
@@ -107,8 +107,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Contains
             var value = Enumerable.Last(source);
 
             // Act
-            var result = ArrayExtensions
-                .Contains<int>(source.AsMemory(), value, EqualityComparer<int>.Default);
+            var result = source.AsMemory().AsValueEnumerable()
+                .Contains(value, EqualityComparer<int>.Default);
 
             // Assert
             _ = result.Must()
@@ -125,8 +125,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Contains
             var value = int.MaxValue;
 
             // Act
-            var result = ArrayExtensions
-                .Contains<int>(source.AsMemory(), value, TestComparer<int>.Instance);
+            var result = source.AsMemory().AsValueEnumerable()
+                .Contains(value, TestComparer<int>.Instance);
 
             // Assert
             _ = result.Must()
@@ -142,8 +142,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Contains
             var value = Enumerable.Last(source);
 
             // Act
-            var result = ArrayExtensions
-                .Contains<int>(source.AsMemory(), value, TestComparer<int>.Instance);
+            var result = source.AsMemory().AsValueEnumerable()
+                .Contains(value, TestComparer<int>.Instance);
 
             // Assert
             _ = result.Must()

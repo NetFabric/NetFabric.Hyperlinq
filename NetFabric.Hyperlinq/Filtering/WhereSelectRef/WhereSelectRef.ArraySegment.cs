@@ -27,9 +27,9 @@ namespace NetFabric.Hyperlinq
             where TPredicate : struct, IFunctionIn<TSource, bool>
             where TSelector : struct, IFunctionIn<TSource, TResult>
         {
-            readonly ArraySegment<TSource> source;
-            readonly TPredicate predicate;
-            readonly TSelector selector;
+            internal readonly ArraySegment<TSource> source;
+            internal readonly TPredicate predicate;
+            internal readonly TSelector selector;
 
             internal ArraySegmentWhereSelectRefEnumerable(ArraySegment<TSource> source, TPredicate predicate, TSelector selector)
                 => (this.source, this.predicate, this.selector) = (source, predicate, selector);
@@ -184,46 +184,46 @@ namespace NetFabric.Hyperlinq
 
             //[MethodImpl(MethodImplOptions.AggressiveInlining)]
             //public readonly ValueEnumerableExtensions.WhereRefEnumerable<ArraySegmentWhereSelectRefEnumerable<TSource, TResult, TPredicate, TSelector>, ArraySegmentWhereSelectRefEnumerable<TSource, TResult, TPredicate, TSelector>.DisposableEnumerator, TResult, FunctionInWrapper<TResult, bool>> Where(FunctionIn<TResult, bool> predicate)
-            //    => this.Where<ArraySegmentWhereSelectEnumerable<TSource, TResult, TPredicate, TSelector>, ArraySegmentWhereSelectEnumerable<TSource, TResult, TPredicate, TSelector>.DisposableEnumerator, TResult>(predicate);
+            //    => this.Where<ArraySegmentWhereSelectRefEnumerable<TSource, TResult, TPredicate, TSelector>, ArraySegmentWhereSelectRefEnumerable<TSource, TResult, TPredicate, TSelector>.DisposableEnumerator, TResult>(predicate);
 
             //[MethodImpl(MethodImplOptions.AggressiveInlining)]
             //public readonly ValueEnumerableExtensions.WhereRefEnumerable<ArraySegmentWhereSelectRefEnumerable<TSource, TResult, TPredicate, TSelector>, ArraySegmentWhereSelectRefEnumerable<TSource, TResult, TPredicate, TSelector>.DisposableEnumerator, TResult, TPredicate2> Where<TPredicate2>(TPredicate2 predicate = default)
             //    where TPredicate2 : struct, IFunctionIn<TResult, bool>
-            //    => this.WhereRef<ArraySegmentWhereSelectEnumerable<TSource, TResult, TPredicate, TSelector>, ArraySegmentWhereSelectEnumerable<TSource, TResult, TPredicate, TSelector>.DisposableEnumerator, TResult, TPredicate2>(predicate);
+            //    => this.WhereRef<ArraySegmentWhereSelectRefEnumerable<TSource, TResult, TPredicate, TSelector>, ArraySegmentWhereSelectRefEnumerable<TSource, TResult, TPredicate, TSelector>.DisposableEnumerator, TResult, TPredicate2>(predicate);
 
             //[MethodImpl(MethodImplOptions.AggressiveInlining)]
             //public readonly ValueEnumerableExtensions.WhereAtRefEnumerable<ArraySegmentWhereSelectRefEnumerable<TSource, TResult, TPredicate, TSelector>, ArraySegmentWhereSelectRefEnumerable<TSource, TResult, TPredicate, TSelector>.DisposableEnumerator, TResult, FunctionInWrapper<TResult, int, bool>> Where(FunctionIn<TResult, int, bool> predicate)
-            //    => this.Where<ArraySegmentWhereSelectEnumerable<TSource, TResult, TPredicate, TSelector>, ArraySegmentWhereSelectEnumerable<TSource, TResult, TPredicate, TSelector>.DisposableEnumerator, TResult>(predicate);
+            //    => this.Where<ArraySegmentWhereSelectRefEnumerable<TSource, TResult, TPredicate, TSelector>, ArraySegmentWhereSelectRefEnumerable<TSource, TResult, TPredicate, TSelector>.DisposableEnumerator, TResult>(predicate);
 
             //[MethodImpl(MethodImplOptions.AggressiveInlining)]
             //public readonly ValueEnumerableExtensions.WhereAtRefEnumerable<ArraySegmentWhereSelectRefEnumerable<TSource, TResult, TPredicate, TSelector>, ArraySegmentWhereSelectRefEnumerable<TSource, TResult, TPredicate, TSelector>.DisposableEnumerator, TResult, TPredicate2> WhereAt<TPredicate2>(TPredicate2 predicate = default)
             //    where TPredicate2 : struct, IFunctionIn<TResult, int, bool>
-            //    => this.WhereAtRef<ArraySegmentWhereSelectEnumerable<TSource, TResult, TPredicate, TSelector>, ArraySegmentWhereSelectEnumerable<TSource, TResult, TPredicate, TSelector>.DisposableEnumerator, TResult, TPredicate2>(predicate);
+            //    => this.WhereAtRef<ArraySegmentWhereSelectRefEnumerable<TSource, TResult, TPredicate, TSelector>, ArraySegmentWhereSelectRefEnumerable<TSource, TResult, TPredicate, TSelector>.DisposableEnumerator, TResult, TPredicate2>(predicate);
 
             #endregion
             #region Projection
 
             //[MethodImpl(MethodImplOptions.AggressiveInlining)]
-            //public ArraySegmentWhereSelectEnumerable<TSource, TResult2, TPredicate, SelectorSelectorCombination<TSelector, FunctionInWrapper<TResult, TResult2>, TSource, TResult, TResult2>> Select<TResult2>(Func<TResult, TResult2> selector)
+            //public ArraySegmentWhereSelectRefEnumerable<TSource, TResult2, TPredicate, SelectorSelectorCombination<TSelector, FunctionInWrapper<TResult, TResult2>, TSource, TResult, TResult2>> Select<TResult2>(Func<TResult, TResult2> selector)
             //    => Select<TResult2, FunctionInWrapper<TResult, TResult2>>(new FunctionInWrapper<TResult, TResult2>(selector));
 
             //[MethodImpl(MethodImplOptions.AggressiveInlining)]
-            //public ArraySegmentWhereSelectEnumerable<TSource, TResult2, TPredicate, SelectorSelectorCombination<TSelector, TSelector2, TSource, TResult, TResult2>> Select<TResult2, TSelector2>(TSelector2 selector = default)
+            //public ArraySegmentWhereSelectRefEnumerable<TSource, TResult2, TPredicate, SelectorSelectorCombination<TSelector, TSelector2, TSource, TResult, TResult2>> Select<TResult2, TSelector2>(TSelector2 selector = default)
             //    where TSelector2 : struct, IFunctionIn<TResult, TResult2>
             //    => source.WhereSelect<TSource, TResult2, TPredicate, SelectorSelectorCombination<TSelector, TSelector2, TSource, TResult, TResult2>>(predicate, new SelectorSelectorCombination<TSelector, TSelector2, TSource, TResult, TResult2>(this.selector, selector));
 
             //[MethodImpl(MethodImplOptions.AggressiveInlining)]
-            //public readonly ValueEnumerableExtensions.SelectManyEnumerable<ArraySegmentWhereSelectEnumerable<TSource, TResult, TPredicate, TSelector>, ArraySegmentWhereSelectEnumerable<TSource, TResult, TPredicate, TSelector>.DisposableEnumerator, TResult, TSubEnumerable, TSubEnumerator, TResult2, FunctionInWrapper<TResult, TSubEnumerable>> SelectMany<TSubEnumerable, TSubEnumerator, TResult2>(Func<TResult, TSubEnumerable> selector)
+            //public readonly ValueEnumerableExtensions.SelectManyEnumerable<ArraySegmentWhereSelectRefEnumerable<TSource, TResult, TPredicate, TSelector>, ArraySegmentWhereSelectRefEnumerable<TSource, TResult, TPredicate, TSelector>.DisposableEnumerator, TResult, TSubEnumerable, TSubEnumerator, TResult2, FunctionInWrapper<TResult, TSubEnumerable>> SelectMany<TSubEnumerable, TSubEnumerator, TResult2>(Func<TResult, TSubEnumerable> selector)
             //    where TSubEnumerable : IValueEnumerable<TResult2, TSubEnumerator>
             //    where TSubEnumerator : struct, IEnumerator<TResult2>
-            //    => this.SelectMany<ArraySegmentWhereSelectEnumerable<TSource, TResult, TPredicate, TSelector>, ArraySegmentWhereSelectEnumerable<TSource, TResult, TPredicate, TSelector>.DisposableEnumerator, TResult, TSubEnumerable, TSubEnumerator, TResult2>(selector);
+            //    => this.SelectMany<ArraySegmentWhereSelectRefEnumerable<TSource, TResult, TPredicate, TSelector>, ArraySegmentWhereSelectRefEnumerable<TSource, TResult, TPredicate, TSelector>.DisposableEnumerator, TResult, TSubEnumerable, TSubEnumerator, TResult2>(selector);
 
             //[MethodImpl(MethodImplOptions.AggressiveInlining)]
-            //public readonly ValueEnumerableExtensions.SelectManyEnumerable<ArraySegmentWhereSelectEnumerable<TSource, TResult, TPredicate, TSelector>, ArraySegmentWhereSelectEnumerable<TSource, TResult, TPredicate, TSelector>.DisposableEnumerator, TResult, TSubEnumerable, TSubEnumerator, TResult2, TSelector2> SelectMany<TSubEnumerable, TSubEnumerator, TResult2, TSelector2>(TSelector2 selector = default)
+            //public readonly ValueEnumerableExtensions.SelectManyEnumerable<ArraySegmentWhereSelectRefEnumerable<TSource, TResult, TPredicate, TSelector>, ArraySegmentWhereSelectRefEnumerable<TSource, TResult, TPredicate, TSelector>.DisposableEnumerator, TResult, TSubEnumerable, TSubEnumerator, TResult2, TSelector2> SelectMany<TSubEnumerable, TSubEnumerator, TResult2, TSelector2>(TSelector2 selector = default)
             //    where TSubEnumerable : IValueEnumerable<TResult2, TSubEnumerator>
             //    where TSubEnumerator : struct, IEnumerator<TResult2>
             //    where TSelector2 : struct, IFunctionIn<TResult, TSubEnumerable>
-            //    => this.SelectMany<ArraySegmentWhereSelectEnumerable<TSource, TResult, TPredicate, TSelector>, ArraySegmentWhereSelectEnumerable<TSource, TResult, TPredicate, TSelector>.DisposableEnumerator, TResult, TSubEnumerable, TSubEnumerator, TResult2, TSelector2>(selector);
+            //    => this.SelectMany<ArraySegmentWhereSelectRefEnumerable<TSource, TResult, TPredicate, TSelector>, ArraySegmentWhereSelectRefEnumerable<TSource, TResult, TPredicate, TSelector>.DisposableEnumerator, TResult, TSubEnumerable, TSubEnumerator, TResult2, TSelector2>(selector);
 
             #endregion
             #region Element
@@ -280,6 +280,66 @@ namespace NetFabric.Hyperlinq
 
             #endregion
         }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Sum<TSource, TPredicate, TSelector>(this ArraySegmentWhereSelectRefEnumerable<TSource, int, TPredicate, TSelector> source)
+            where TPredicate : struct, IFunctionIn<TSource, bool>
+            where TSelector : struct, IFunctionIn<TSource, int>
+            => ((ReadOnlySpan<TSource>)source.source.AsSpan()).SumRef<TSource, int, int, TPredicate, TSelector, AddInt32>(source.predicate, source.selector);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Sum<TSource, TPredicate, TSelector>(this ArraySegmentWhereSelectRefEnumerable<TSource, int?, TPredicate, TSelector> source)
+            where TPredicate : struct, IFunctionIn<TSource, bool>
+            where TSelector : struct, IFunctionIn<TSource, int?>
+            => ((ReadOnlySpan<TSource>)source.source.AsSpan()).SumRef<TSource, int?, int, TPredicate, TSelector, AddNullableInt32>(source.predicate, source.selector);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static long Sum<TSource, TPredicate, TSelector>(this ArraySegmentWhereSelectRefEnumerable<TSource, long, TPredicate, TSelector> source)
+            where TPredicate : struct, IFunctionIn<TSource, bool>
+            where TSelector : struct, IFunctionIn<TSource, long>
+            => ((ReadOnlySpan<TSource>)source.source.AsSpan()).SumRef<TSource, long, long, TPredicate, TSelector, AddInt64>(source.predicate, source.selector);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static long Sum<TSource, TPredicate, TSelector>(this ArraySegmentWhereSelectRefEnumerable<TSource, long?, TPredicate, TSelector> source)
+            where TPredicate : struct, IFunctionIn<TSource, bool>
+            where TSelector : struct, IFunctionIn<TSource, long?>
+            => ((ReadOnlySpan<TSource>)source.source.AsSpan()).SumRef<TSource, long?, long, TPredicate, TSelector, AddNullableInt64>(source.predicate, source.selector);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float Sum<TSource, TPredicate, TSelector>(this ArraySegmentWhereSelectRefEnumerable<TSource, float, TPredicate, TSelector> source)
+            where TPredicate : struct, IFunctionIn<TSource, bool>
+            where TSelector : struct, IFunctionIn<TSource, float>
+            => ((ReadOnlySpan<TSource>)source.source.AsSpan()).SumRef<TSource, float, float, TPredicate, TSelector, AddSingle>(source.predicate, source.selector);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float Sum<TSource, TPredicate, TSelector>(this ArraySegmentWhereSelectRefEnumerable<TSource, float?, TPredicate, TSelector> source)
+            where TPredicate : struct, IFunctionIn<TSource, bool>
+            where TSelector : struct, IFunctionIn<TSource, float?>
+            => ((ReadOnlySpan<TSource>)source.source.AsSpan()).SumRef<TSource, float?, float, TPredicate, TSelector, AddNullableSingle>(source.predicate, source.selector);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static double Sum<TSource, TPredicate, TSelector>(this ArraySegmentWhereSelectRefEnumerable<TSource, double, TPredicate, TSelector> source)
+            where TPredicate : struct, IFunctionIn<TSource, bool>
+            where TSelector : struct, IFunctionIn<TSource, double>
+            => ((ReadOnlySpan<TSource>)source.source.AsSpan()).SumRef<TSource, double, double, TPredicate, TSelector, AddDouble>(source.predicate, source.selector);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static double Sum<TSource, TPredicate, TSelector>(this ArraySegmentWhereSelectRefEnumerable<TSource, double?, TPredicate, TSelector> source)
+            where TPredicate : struct, IFunctionIn<TSource, bool>
+            where TSelector : struct, IFunctionIn<TSource, double?>
+            => ((ReadOnlySpan<TSource>)source.source.AsSpan()).SumRef<TSource, double?, double, TPredicate, TSelector, AddNullableDouble>(source.predicate, source.selector);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static decimal Sum<TSource, TPredicate, TSelector>(this ArraySegmentWhereSelectRefEnumerable<TSource, decimal, TPredicate, TSelector> source)
+            where TPredicate : struct, IFunctionIn<TSource, bool>
+            where TSelector : struct, IFunctionIn<TSource, decimal>
+            => ((ReadOnlySpan<TSource>)source.source.AsSpan()).SumRef<TSource, decimal, decimal, TPredicate, TSelector, AddDecimal>(source.predicate, source.selector);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static decimal Sum<TSource, TPredicate, TSelector>(this ArraySegmentWhereSelectRefEnumerable<TSource, decimal?, TPredicate, TSelector> source)
+            where TPredicate : struct, IFunctionIn<TSource, bool>
+            where TSelector : struct, IFunctionIn<TSource, decimal?>
+            => ((ReadOnlySpan<TSource>)source.source.AsSpan()).SumRef<TSource, decimal?, decimal, TPredicate, TSelector, AddNullableDecimal>(source.predicate, source.selector);
     }
 }
 
