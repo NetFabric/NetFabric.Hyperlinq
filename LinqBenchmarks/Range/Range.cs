@@ -54,6 +54,16 @@ namespace LinqBenchmarks.Range
         }
 
         [Benchmark]
+        public int LinqFaster_SIMD()
+        {
+            var items = JM.LinqFaster.SIMD.LinqFasterSIMD.RangeS(Start, Count);
+            var sum = 0;
+            for (var index = 0; index < items.Length; index++)
+                sum += items[index];
+            return sum;
+        }
+
+        [Benchmark]
         public int LinqAF()
         {
             var sum = 0;

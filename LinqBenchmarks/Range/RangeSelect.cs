@@ -1,6 +1,7 @@
 ﻿
 using BenchmarkDotNet.Attributes;
 using JM.LinqFaster;
+using JM.LinqFaster.SIMD;
 using NetFabric.Hyperlinq;
 using StructLinq;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Linq;
 
 namespace LinqBenchmarks.Range
 {
-    public class RangeSelect: RangeBenchmarkBase
+    public class RangeSelect : RangeBenchmarkBase
     {
         [Benchmark(Baseline = true)]
         public int ForLoop()
@@ -49,6 +50,16 @@ namespace LinqBenchmarks.Range
         public int LinqFaster()
         {
             var items = JM.LinqFaster.LinqFaster.RangeArrayF(Start, Count).SelectF(item => item * 2);
+            var sum = 0;
+            for (var index = 0; index < items.Length; index++)
+                sum += items[index];
+            return sum;
+        }
+
+        [Benchmark]
+        public int LinqFaster_SIMD()
+        {
+            var items = LinqFasterSIMD.RangeS(Start, Count).SelectS(item => item * 2);
             var sum = 0;
             for (var index = 0; index < items.Length; index++)
                 sum += items[index];

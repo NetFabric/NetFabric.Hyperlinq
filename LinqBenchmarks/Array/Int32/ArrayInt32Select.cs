@@ -1,5 +1,6 @@
 ﻿using BenchmarkDotNet.Attributes;
 using JM.LinqFaster;
+using JM.LinqFaster.SIMD;
 using NetFabric.Hyperlinq;
 using StructLinq;
 using System.Linq;
@@ -40,6 +41,16 @@ namespace LinqBenchmarks.Array.Int32
         public int LinqFaster()
         {
             var items = source.SelectF(item => item * 2);
+            var sum = 0;
+            for (var index = 0; index < items.Length; index++)
+                sum += items[index];
+            return sum;
+        }
+
+        [Benchmark]
+        public int LinqFaster_SIMD()
+        {
+            var items = source.SelectS(item => item * 2);
             var sum = 0;
             for (var index = 0; index < items.Length; index++)
                 sum += items[index];
