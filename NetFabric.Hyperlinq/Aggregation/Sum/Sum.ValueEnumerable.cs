@@ -9,8 +9,8 @@ namespace NetFabric.Hyperlinq
         internal static TSum Sum<TEnumerable, TEnumerator, TSource, TSum, TAddition>(this TEnumerable source, TAddition add = default)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
-            where TAddition : IFunction<TSource, TSum, TSum>
-            where TSum : unmanaged
+            where TAddition : struct, IFunction<TSource, TSum, TSum>
+            where TSum : struct
         {
             var sum = default(TSum);
             using var enumerator = source.GetEnumerator();
@@ -23,8 +23,8 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
             where TPredicate : struct, IFunction<TSource, bool>
-            where TAddition : IFunction<TSource, TSum, TSum>
-            where TSum : unmanaged
+            where TAddition : struct, IFunction<TSource, TSum, TSum>
+            where TSum : struct
         {
             var sum = default(TSum);
             using var enumerator = source.GetEnumerator();
@@ -41,8 +41,8 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
             where TPredicate : struct, IFunctionIn<TSource, bool>
-            where TAddition : IFunction<TSource, TSum, TSum>
-            where TSum : unmanaged
+            where TAddition : struct, IFunction<TSource, TSum, TSum>
+            where TSum : struct
         {
             var sum = default(TSum);
             using var enumerator = source.GetEnumerator();
@@ -59,8 +59,8 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
             where TPredicate : struct, IFunction<TSource, int, bool>
-            where TAddition : IFunction<TSource, TSum, TSum>
-            where TSum : unmanaged
+            where TAddition : struct, IFunction<TSource, TSum, TSum>
+            where TSum : struct
         {
             var sum = default(TSum);
             using var enumerator = source.GetEnumerator();
@@ -77,8 +77,8 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
             where TPredicate : struct, IFunctionIn<TSource, int, bool>
-            where TAddition : IFunction<TSource, TSum, TSum>
-            where TSum : unmanaged
+            where TAddition : struct, IFunction<TSource, TSum, TSum>
+            where TSum : struct
         {
             var sum = default(TSum);
             using var enumerator = source.GetEnumerator();
@@ -95,8 +95,8 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
             where TSelector : struct, IFunction<TSource, TResult>
-            where TAddition : IFunction<TResult, TSum, TSum>
-            where TSum : unmanaged
+            where TAddition : struct, IFunction<TResult, TSum, TSum>
+            where TSum : struct
         {
             var sum = default(TSum);
             using var enumerator = source.GetEnumerator();
@@ -112,8 +112,8 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
             where TSelector : struct, IFunctionIn<TSource, TResult>
-            where TAddition : IFunction<TResult, TSum, TSum>
-            where TSum : unmanaged
+            where TAddition : struct, IFunction<TResult, TSum, TSum>
+            where TSum : struct
         {
             var sum = default(TSum);
             using var enumerator = source.GetEnumerator();
@@ -129,8 +129,8 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
             where TSelector : struct, IFunction<TSource, int, TResult>
-            where TAddition : IFunction<TResult, TSum, TSum>
-            where TSum : unmanaged
+            where TAddition : struct, IFunction<TResult, TSum, TSum>
+            where TSum : struct
         {
             var sum = default(TSum);
             using var enumerator = source.GetEnumerator();
@@ -146,8 +146,8 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
             where TSelector : struct, IFunctionIn<TSource, int, TResult>
-            where TAddition : IFunction<TResult, TSum, TSum>
-            where TSum : unmanaged
+            where TAddition : struct, IFunction<TResult, TSum, TSum>
+            where TSum : struct
         {
             var sum = default(TSum);
             using var enumerator = source.GetEnumerator();
@@ -165,8 +165,8 @@ namespace NetFabric.Hyperlinq
             where TEnumerator : struct, IEnumerator<TSource>
             where TPredicate : struct, IFunction<TSource, bool>
             where TSelector : struct, IFunction<TSource, TResult>
-            where TAddition : IFunction<TResult, TSum, TSum>
-            where TSum : unmanaged
+            where TAddition : struct, IFunction<TResult, TSum, TSum>
+            where TSum : struct
         {
             var sum = default(TSum);
             using var enumerator = source.GetEnumerator();
@@ -184,8 +184,8 @@ namespace NetFabric.Hyperlinq
             where TEnumerator : struct, IEnumerator<TSource>
             where TPredicate : struct, IFunctionIn<TSource, bool>
             where TSelector : struct, IFunctionIn<TSource, TResult>
-            where TAddition : IFunction<TResult, TSum, TSum>
-            where TSum : unmanaged
+            where TAddition : struct, IFunction<TResult, TSum, TSum>
+            where TSum : struct
         {
             var sum = default(TSum);
             using var enumerator = source.GetEnumerator();

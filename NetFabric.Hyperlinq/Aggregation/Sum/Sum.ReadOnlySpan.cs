@@ -1,4 +1,5 @@
 using System;
+using System.Numerics;
 using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
@@ -7,7 +8,7 @@ namespace NetFabric.Hyperlinq
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int Sum(this ReadOnlySpan<int> source)
-            => Sum<int, int, AddInt32>(source);
+            => Sum<int, AddInt32>(source);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int Sum(this ReadOnlySpan<int?> source)
@@ -15,7 +16,7 @@ namespace NetFabric.Hyperlinq
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static long Sum(this ReadOnlySpan<long> source)
-            => Sum<long, long, AddInt64>(source);
+            => Sum<long, AddInt64>(source);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static long Sum(this ReadOnlySpan<long?> source)
@@ -23,7 +24,7 @@ namespace NetFabric.Hyperlinq
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float Sum(this ReadOnlySpan<float> source)
-            => Sum<float, float, AddSingle>(source);
+            => Sum<float, AddSingle>(source);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float Sum(this ReadOnlySpan<float?> source)
@@ -31,7 +32,7 @@ namespace NetFabric.Hyperlinq
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static double Sum(this ReadOnlySpan<double> source)
-            => Sum<double, double, AddDouble>(source);
+            => Sum<double, AddDouble>(source);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static double Sum(this ReadOnlySpan<double?> source)
@@ -39,7 +40,7 @@ namespace NetFabric.Hyperlinq
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static decimal Sum(this ReadOnlySpan<decimal> source)
-            => Sum<decimal, decimal, AddDecimal>(source);
+            => Sum<decimal, AddDecimal>(source);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static decimal Sum(this ReadOnlySpan<decimal?> source)
@@ -47,20 +48,54 @@ namespace NetFabric.Hyperlinq
 
         ///////////////////////////////////////////////////////////
 
-        static TSum Sum<TSource, TSum, TAddition>(this ReadOnlySpan<TSource> source, TAddition add = default)
-            where TAddition : IFunction<TSource, TSum, TSum>
-            where TSum : unmanaged
+        static TSource Sum<TSource, TAddition>(this ReadOnlySpan<TSource> source, TAddition add = default)
+            where TAddition : struct, IFunction<TSource, TSource, TSource>
+            where TSource : struct
         {
-            var sum = default(TSum);
+            var sum = default(TSource);
+
+#if NET5_0 // use SIMD
+
+            var state = Vector<TSource>.Zero;
+            var count = Vector<TSource>.Count;
+
+#pragma warning disable IDE0054 // Use compound assignment
+            for (var index = 0; index <= source.Length - count; index += count)
+                state = state + new Vector<TSource>(source[index..]);
+#pragma warning restore IDE0054 // Use compound assignment
+
+            for (var index = source.Length - (source.Length % count); index < source.Length; index++)
+                sum = add.Invoke(sum, source[index]);
+
+            for (var index = 0; index < count; index++)
+                sum = add.Invoke(sum, state[index]);
+
+#else
+
             foreach (var item in source)
                 sum = add.Invoke(item, sum);
+
+#endif
+
+            return sum;
+        }
+
+        static TSum Sum<TSource, TSum, TAddition>(this ReadOnlySpan<TSource> source, TAddition add = default)
+            where TAddition : struct, IFunction<TSource, TSum, TSum>
+            where TSum : struct
+        {
+            var sum = default(TSum);
+
+            foreach (var item in source)
+                sum = add.Invoke(item, sum);
+
             return sum;
         }
 
         static TSum Sum<TSource, TSum, TPredicate, TAddition>(this ReadOnlySpan<TSource> source, TPredicate predicate, TAddition add = default)
             where TPredicate : struct, IFunction<TSource, bool>
-            where TAddition : IFunction<TSource, TSum, TSum>
-            where TSum : unmanaged
+            where TAddition : struct, IFunction<TSource, TSum, TSum>
+            where TSum : struct
         {
             var sum = default(TSum);
             foreach (var item in source)
@@ -73,8 +108,8 @@ namespace NetFabric.Hyperlinq
 
         static TSum SumRef<TSource, TSum, TPredicate, TAddition>(this ReadOnlySpan<TSource> source, TPredicate predicate, TAddition add = default)
             where TPredicate : struct, IFunctionIn<TSource, bool>
-            where TAddition : IFunction<TSource, TSum, TSum>
-            where TSum : unmanaged
+            where TAddition : struct, IFunction<TSource, TSum, TSum>
+            where TSum : struct
         {
             var sum = default(TSum);
             foreach (ref readonly var item in source)
@@ -87,8 +122,8 @@ namespace NetFabric.Hyperlinq
 
         static TSum SumAt<TSource, TSum, TPredicate, TAddition>(this ReadOnlySpan<TSource> source, TPredicate predicate, TAddition add = default)
             where TPredicate : struct, IFunction<TSource, int, bool>
-            where TAddition : IFunction<TSource, TSum, TSum>
-            where TSum : unmanaged
+            where TAddition : struct, IFunction<TSource, TSum, TSum>
+            where TSum : struct
         {
             var sum = default(TSum);
             for (var index = 0; index < source.Length; index++)
@@ -102,8 +137,8 @@ namespace NetFabric.Hyperlinq
 
         static TSum SumAtRef<TSource, TSum, TPredicate, TAddition>(this ReadOnlySpan<TSource> source, TPredicate predicate, TAddition add = default)
             where TPredicate : struct, IFunctionIn<TSource, int, bool>
-            where TAddition : IFunction<TSource, TSum, TSum>
-            where TSum : unmanaged
+            where TAddition : struct, IFunction<TSource, TSum, TSum>
+            where TSum : struct
         {
             var sum = default(TSum);
             for (var index = 0; index < source.Length; index++)
@@ -117,8 +152,8 @@ namespace NetFabric.Hyperlinq
 
         static TSum Sum<TSource, TResult, TSum, TSelector, TAddition>(this ReadOnlySpan<TSource> source, TSelector selector, TAddition add = default)
             where TSelector : struct, IFunction<TSource, TResult>
-            where TAddition : IFunction<TResult, TSum, TSum>
-            where TSum : unmanaged
+            where TAddition : struct, IFunction<TResult, TSum, TSum>
+            where TSum : struct
         {
             var sum = default(TSum);
             foreach (var item in source)
@@ -128,8 +163,8 @@ namespace NetFabric.Hyperlinq
 
         static TSum SumRef<TSource, TResult, TSum, TSelector, TAddition>(this ReadOnlySpan<TSource> source, TSelector selector, TAddition add = default)
             where TSelector : struct, IFunctionIn<TSource, TResult>
-            where TAddition : IFunction<TResult, TSum, TSum>
-            where TSum : unmanaged
+            where TAddition : struct, IFunction<TResult, TSum, TSum>
+            where TSum : struct
         {
             var sum = default(TSum);
             foreach (ref readonly var item in source)
@@ -139,8 +174,8 @@ namespace NetFabric.Hyperlinq
 
         static TSum SumAt<TSource, TResult, TSum, TSelector, TAddition>(this ReadOnlySpan<TSource> source, TSelector selector, TAddition add = default)
             where TSelector : struct, IFunction<TSource, int, TResult>
-            where TAddition : IFunction<TResult, TSum, TSum>
-            where TSum : unmanaged
+            where TAddition : struct, IFunction<TResult, TSum, TSum>
+            where TSum : struct
         {
             var sum = default(TSum);
             for (var index = 0; index < source.Length; index++)
@@ -153,8 +188,8 @@ namespace NetFabric.Hyperlinq
 
         static TSum SumAtRef<TSource, TResult, TSum, TSelector, TAddition>(this ReadOnlySpan<TSource> source, TSelector selector, TAddition add = default)
             where TSelector : struct, IFunctionIn<TSource, int, TResult>
-            where TAddition : IFunction<TResult, TSum, TSum>
-            where TSum : unmanaged
+            where TAddition : struct, IFunction<TResult, TSum, TSum>
+            where TSum : struct
         {
             var sum = default(TSum);
             for (var index = 0; index < source.Length; index++)
@@ -169,8 +204,8 @@ namespace NetFabric.Hyperlinq
         static TSum Sum<TSource, TResult, TSum, TPredicate, TSelector, TAddition>(this ReadOnlySpan<TSource> source, TPredicate predicate, TSelector selector, TAddition add = default)
             where TPredicate : struct, IFunction<TSource, bool>
             where TSelector : struct, IFunction<TSource, TResult>
-            where TAddition : IFunction<TResult, TSum, TSum>
-            where TSum : unmanaged
+            where TAddition : struct, IFunction<TResult, TSum, TSum>
+            where TSum : struct
         {
             var sum = default(TSum);
             foreach (var item in source)
@@ -184,8 +219,8 @@ namespace NetFabric.Hyperlinq
         static TSum SumRef<TSource, TResult, TSum, TPredicate, TSelector, TAddition>(this ReadOnlySpan<TSource> source, TPredicate predicate, TSelector selector, TAddition add = default)
             where TPredicate : struct, IFunctionIn<TSource, bool>
             where TSelector : struct, IFunctionIn<TSource, TResult>
-            where TAddition : IFunction<TResult, TSum, TSum>
-            where TSum : unmanaged
+            where TAddition : struct, IFunction<TResult, TSum, TSum>
+            where TSum : struct
         {
             var sum = default(TSum);
             foreach (ref readonly var item in source)
