@@ -7,10 +7,21 @@ namespace NetFabric.Hyperlinq.UnitTests.Aggregation.Sum
 {
     public class ArrayTests
     {
+        public static TheoryData<int[]> Sum =>
+            new TheoryData<int[]>
+            {
+                { new int[] { 1, 2, 3, 4, 5, 6, 7 } },
+                { new int[] { 1, 2, 3, 4, 5, 6, 7, 8 } },
+                { new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 } },
+                { new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20 } },
+            };
+
+
         [Theory]
         [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
+        [MemberData(nameof(Sum))]
         public void Sum_With_ValidData_Must_Succeed(int[] source)
         {
             // Arrange
