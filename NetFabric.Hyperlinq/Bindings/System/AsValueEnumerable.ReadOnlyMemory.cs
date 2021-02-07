@@ -3,6 +3,7 @@ using System.Buffers;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
@@ -411,5 +412,23 @@ namespace NetFabric.Hyperlinq
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static decimal Sum(this ValueEnumerable<decimal?> source)
             => source.source.Span.Sum();
+
+#if NET5_0
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ArrayExtensions.MemorySelectVectorEnumerable<TSource, TResult, FunctionWrapper<Vector<TSource>, Vector<TResult>>, FunctionWrapper<TSource, TResult>> SelectVector<TSource, TResult>(this ValueEnumerable<TSource> source, Func<Vector<TSource>, Vector<TResult>> vectorSelector, Func<TSource, TResult> selector)
+            where TSource : struct
+            where TResult : struct
+            => source.source.SelectVector(vectorSelector, selector);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ArrayExtensions.MemorySelectVectorEnumerable<TSource, TResult, TVectorSelector, TSelector> SelectVector<TSource, TResult, TVectorSelector, TSelector>(this ValueEnumerable<TSource> source, TVectorSelector vectorSelector = default, TSelector selector = default)
+            where TVectorSelector : struct, IFunction<Vector<TSource>, Vector<TResult>>
+            where TSelector : struct, IFunction<TSource, TResult>
+            where TSource : struct
+            where TResult : struct
+            => source.source.SelectVector<TSource, TResult, TVectorSelector, TSelector>(vectorSelector, selector);
+
+#endif    
     }
 }
