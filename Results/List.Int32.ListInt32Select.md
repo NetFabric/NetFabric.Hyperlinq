@@ -6,9 +6,10 @@
 ### References:
 - Cistern.ValueLinq: [0.1.14](https://www.nuget.org/packages/Cistern.ValueLinq/0.1.14)
 - JM.LinqFaster: [1.1.2](https://www.nuget.org/packages/JM.LinqFaster/1.1.2)
+- LinqFaster.SIMD: [1.1.2](https://www.nuget.org/packages/LinqFaster.SIMD/1.0.3)
 - LinqAF: [3.0.0.0](https://www.nuget.org/packages/LinqAF/3.0.0.0)
 - StructLinq.BCL: [0.25.3](https://www.nuget.org/packages/StructLinq.BCL/0.25.3)
-- NetFabric.Hyperlinq: [3.0.0-beta32](https://www.nuget.org/packages/NetFabric.Hyperlinq/3.0.0-beta32)
+- NetFabric.Hyperlinq: [3.0.0-beta33](https://www.nuget.org/packages/NetFabric.Hyperlinq/3.0.0-beta33)
 
 ### Results:
 ``` ini
@@ -22,16 +23,16 @@ Intel Core i7-7567U CPU 3.50GHz (Kaby Lake), 1 CPU, 4 logical and 2 physical cor
 Job=.NET Core 5.0  Runtime=.NET Core 5.0  
 
 ```
-|                      Method | Count |     Mean |   Error |  StdDev | Ratio | RatioSD |  Gen 0 | Gen 1 | Gen 2 | Allocated |
-|---------------------------- |------ |---------:|--------:|--------:|------:|--------:|-------:|------:|------:|----------:|
-|                     ForLoop |   100 | 136.6 ns | 0.27 ns | 0.21 ns |  1.00 |    0.00 |      - |     - |     - |         - |
-|                 ForeachLoop |   100 | 196.4 ns | 0.57 ns | 0.47 ns |  1.44 |    0.00 |      - |     - |     - |         - |
-|                        Linq |   100 | 827.0 ns | 2.65 ns | 2.21 ns |  6.06 |    0.02 | 0.0343 |     - |     - |      72 B |
-|                  LinqFaster |   100 | 405.7 ns | 1.34 ns | 1.12 ns |  2.97 |    0.01 | 0.2179 |     - |     - |     456 B |
-|                      LinqAF |   100 | 753.5 ns | 2.07 ns | 1.93 ns |  5.51 |    0.02 |      - |     - |     - |         - |
-|                  StructLinq |   100 | 215.1 ns | 0.46 ns | 0.38 ns |  1.57 |    0.00 | 0.0153 |     - |     - |      32 B |
-|        StructLinq_IFunction |   100 | 165.4 ns | 0.33 ns | 0.29 ns |  1.21 |    0.00 |      - |     - |     - |         - |
-|           Hyperlinq_Foreach |   100 | 192.2 ns | 0.34 ns | 0.30 ns |  1.41 |    0.00 |      - |     - |     - |         - |
-| Hyperlinq_Foreach_IFunction |   100 | 159.3 ns | 0.40 ns | 0.35 ns |  1.17 |    0.00 |      - |     - |     - |         - |
-|               Hyperlinq_For |   100 | 218.5 ns | 0.63 ns | 0.56 ns |  1.60 |    0.00 |      - |     - |     - |         - |
-|     Hyperlinq_For_IFunction |   100 | 110.9 ns | 0.31 ns | 0.28 ns |  0.81 |    0.00 |      - |     - |     - |         - |
+|                      Method | Count |      Mean |    Error |   StdDev | Ratio | RatioSD |  Gen 0 | Gen 1 | Gen 2 | Allocated |
+|---------------------------- |------ |----------:|---------:|---------:|------:|--------:|-------:|------:|------:|----------:|
+|                     ForLoop |   100 | 103.46 ns | 0.267 ns | 0.250 ns |  1.00 |    0.00 |      - |     - |     - |         - |
+|                 ForeachLoop |   100 | 194.75 ns | 0.533 ns | 0.473 ns |  1.88 |    0.01 |      - |     - |     - |         - |
+|                        Linq |   100 | 802.78 ns | 1.557 ns | 1.216 ns |  7.76 |    0.02 | 0.0343 |     - |     - |      72 B |
+|                  LinqFaster |   100 | 406.13 ns | 1.289 ns | 1.206 ns |  3.93 |    0.01 | 0.2179 |     - |     - |     456 B |
+|                      LinqAF |   100 | 712.90 ns | 1.149 ns | 1.019 ns |  6.89 |    0.02 |      - |     - |     - |         - |
+|                  StructLinq |   100 | 214.29 ns | 0.496 ns | 0.440 ns |  2.07 |    0.01 | 0.0153 |     - |     - |      32 B |
+|        StructLinq_IFunction |   100 | 165.28 ns | 0.295 ns | 0.262 ns |  1.60 |    0.01 |      - |     - |     - |         - |
+|           Hyperlinq_Foreach |   100 | 191.06 ns | 0.294 ns | 0.246 ns |  1.85 |    0.01 |      - |     - |     - |         - |
+| Hyperlinq_Foreach_IFunction |   100 | 158.61 ns | 0.385 ns | 0.360 ns |  1.53 |    0.00 |      - |     - |     - |         - |
+|               Hyperlinq_For |   100 | 192.29 ns | 0.427 ns | 0.378 ns |  1.86 |    0.01 |      - |     - |     - |         - |
+|     Hyperlinq_For_IFunction |   100 |  88.61 ns | 0.218 ns | 0.194 ns |  0.86 |    0.00 |      - |     - |     - |         - |
