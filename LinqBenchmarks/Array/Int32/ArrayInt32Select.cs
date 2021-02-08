@@ -97,32 +97,11 @@ namespace LinqBenchmarks.Array.Int32
         }
 
         [Benchmark]
-        public int Hyperlinq_Foreach_IFunction()
+        public int Hyperlinq_IFunction_Foreach()
         {
             var sum = 0;
             foreach (var item in source.AsValueEnumerable()
                 .Select<int, DoubleOfInt32>())
-                sum += item;
-            return sum;
-        }
-
-        [Benchmark]
-        public int Hyperlinq_SIMD_Foreach()
-        {
-            var sum = 0;
-            foreach (var item in source.AsValueEnumerable()
-                .Select(item => item * 2, item => item * 2))
-                sum += item;
-            return sum;
-        }
-
-
-        [Benchmark]
-        public int Hyperlinq_SIMD_IFunction_Foreach()
-        {
-            var sum = 0;
-            foreach (var item in source.AsValueEnumerable()
-                .SelectVector<int, int, DoubleOfInt32, DoubleOfInt32>())
                 sum += item;
             return sum;
         }
@@ -141,7 +120,7 @@ namespace LinqBenchmarks.Array.Int32
         }
 
         [Benchmark]
-        public int Hyperlinq_For_IFunction()
+        public int Hyperlinq_IFunction_For()
         {
             var items = source.AsValueEnumerable()
                 .Select<int, DoubleOfInt32>();
@@ -152,26 +131,24 @@ namespace LinqBenchmarks.Array.Int32
         }
 
         [Benchmark]
-        public int Hyperlinq_SIMD_For()
+        public int Hyperlinq_SIMD()
         {
-            var items = source.AsValueEnumerable()
-                .Select(item => item * 2, item => item * 2);
             var sum = 0;
-            for (var index = 0; index < items.Count; index++)
-                sum += items[index];
+            foreach (var item in source.AsValueEnumerable()
+                .SelectVector(item => item * 2, item => item * 2))
+                sum += item;
             return sum;
         }
+
 
         [Benchmark]
-        public int Hyperlinq_SIMD_IFunction_For()
+        public int Hyperlinq_SIMD_IFunction()
         {
-            var items = source.AsValueEnumerable()
-                .SelectVector<int, int, DoubleOfInt32, DoubleOfInt32>();
             var sum = 0;
-            for (var index = 0; index < items.Count; index++)
-                sum += items[index];
+            foreach (var item in source.AsValueEnumerable()
+                .SelectVector<int, int, DoubleOfInt32, DoubleOfInt32>())
+                sum += item;
             return sum;
         }
-
     }
 }

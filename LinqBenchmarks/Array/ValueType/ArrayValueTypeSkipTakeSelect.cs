@@ -84,9 +84,9 @@ namespace LinqBenchmarks.Array.ValueType
 
             foreach (var item in source
                 .ToRefStructEnumerable()
-                .Skip(Skip, x=>x)
-                .Take(Count, x=>x)
-                .Select(ref selector, x=> x, x=>x))
+                .Skip(Skip, x => x)
+                .Take(Count, x => x)
+                .Select(ref selector, x=> x, x => x))
                 sum += item;
             return sum;
         }

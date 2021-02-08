@@ -45,15 +45,21 @@ namespace LinqBenchmarks.Enumerable.Int32
                 .ToStructEnumerable()
                 .Where(ref predicate, x => x)
                 .Select(ref selector, x => x, x => x)
-                .ToList(x=>x);
+                .ToList(x => x);
         }
 
         [Benchmark]
         public List<int> Hyperlinq()
-            => source.AsValueEnumerable().Where(item => item.IsEven()).Select(item => item * 2).ToList();
+                => source.AsValueEnumerable()
+                .Where(item => item.IsEven())
+                .Select(item => item * 2)
+                .ToList();
 
         [Benchmark]
         public List<int> Hyperlinq_IFunction()
-            => source.AsValueEnumerable().Where<Int32IsEven>(new Int32IsEven()).Select<int, DoubleOfInt32>().ToList();
+            => source.AsValueEnumerable()
+                .Where<Int32IsEven>()
+                .Select<int, DoubleOfInt32>()
+                .ToList();
     }
 }

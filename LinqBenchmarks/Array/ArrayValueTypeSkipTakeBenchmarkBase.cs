@@ -9,8 +9,7 @@ namespace LinqBenchmarks
 
         [GlobalSetup]
         public void GlobalSetup()
-            => source = System.Linq.Enumerable
-                .Range(0, Skip + Count)
+            => source = GetRandomValues(Skip + Count)
                 .Select(value => new FatValueType(value))
                 .ToArray();
     }

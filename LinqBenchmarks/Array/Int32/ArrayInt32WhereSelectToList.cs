@@ -62,7 +62,7 @@ namespace LinqBenchmarks.Array.Int32
             return source.ToStructEnumerable()
                 .Where(ref predicate, x => x)
                 .Select(ref selector, x => x, x => x)
-                .ToList(x=>x);
+                .ToList(x => x);
         }
 
         [Benchmark]

@@ -59,7 +59,7 @@ namespace LinqBenchmarks.Array.Int32
         {
             return source
                 .ToStructEnumerable()
-                .Sum(x=>x);
+                .Sum(x => x);
         }
 
         [Benchmark]

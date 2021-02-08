@@ -1,6 +1,8 @@
 ﻿using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Diagnosers;
 using BenchmarkDotNet.Jobs;
+using System;
+using System.Collections;
 
 namespace LinqBenchmarks
 {
@@ -16,5 +18,26 @@ namespace LinqBenchmarks
     {
         [Params(100)]
         public int Count { get; set; }
+
+        protected static int[] GetSequentialValues(int count)
+        {
+            var array = new int[count];
+
+            for (var index = 0; index < count; index++)
+                array[index] = index;
+
+            return array;
+        }
+
+        protected static int[] GetRandomValues(int count)
+        {
+            var array = new int[count];
+
+            var random = new Random(42);
+            for (var index = 0; index < count; index++)
+                array[index] = random.Next(count);
+
+            return array;
+        }
     }
 }

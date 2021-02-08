@@ -41,15 +41,19 @@ namespace LinqBenchmarks.Enumerable.Int32
             return source
                 .ToStructEnumerable()
                 .Where(ref predicate, x => x)
-                .Count(x=>x);
+                .Count(x => x);
         }
 
         [Benchmark]
         public int Hyperlinq()
-            => source.AsValueEnumerable().Where(item => item.IsEven()).Count();
+            => source.AsValueEnumerable()
+                .Where(item => item.IsEven())
+                .Count();
 
         [Benchmark]
         public int Hyperlinq_IFunction()
-            => source.AsValueEnumerable().Where<Int32IsEven>(new Int32IsEven()).Count();
+            => source.AsValueEnumerable()
+                .Where<Int32IsEven>()
+                .Count();
     }
 }

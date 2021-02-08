@@ -27,7 +27,10 @@ namespace LinqBenchmarks.Enumerable.Int32
 
         [Benchmark]
         public int[] LinqAF()
-            => global::LinqAF.IEnumerableExtensionMethods.Where(source, item => item.IsEven()).Select(item => item * 2).ToArray();
+            => global::LinqAF.IEnumerableExtensionMethods
+                .Where(source, item => item.IsEven())
+                .Select(item => item * 2)
+                .ToArray();
 
         [Benchmark]
         public int[] StructLinq()
@@ -45,28 +48,40 @@ namespace LinqBenchmarks.Enumerable.Int32
                 .ToStructEnumerable()
                 .Where(ref predicate, x => x)
                 .Select(ref selector, x => x, x => x)
-                .ToArray(x=>x);
+                .ToArray(x => x);
         }
 
         [Benchmark]
         public int[] Hyperlinq()
-            => source.AsValueEnumerable().Where(item => item.IsEven()).Select(item => item * 2).ToArray();
+            => source.AsValueEnumerable()
+                .Where(item => item.IsEven())
+                .Select(item => item * 2)
+                .ToArray();
 
         [Benchmark]
         public int[] Hyperlinq_IFunction()
-            => source.AsValueEnumerable().Where<Int32IsEven>(new Int32IsEven()).Select<int, DoubleOfInt32>().ToArray();
+            => source.AsValueEnumerable()
+                .Where<Int32IsEven>()
+                .Select<int, DoubleOfInt32>()
+                .ToArray();
 
         [Benchmark]
         public int Hyperlinq_Pool()
         {
-            using var array = source.AsValueEnumerable().Where(item => item.IsEven()).Select(item => item * 2).ToArray(MemoryPool<int>.Shared);
+            using var array = source.AsValueEnumerable()
+                .Where(item => item.IsEven())
+                .Select(item => item * 2)
+                .ToArray(MemoryPool<int>.Shared);
             return Count == 0 ? default : array.Memory.Span[0];
         }
 
         [Benchmark]
         public int Hyperlinq_Pool_IFunction()
         {
-            using var array = source.AsValueEnumerable().Where<Int32IsEven>(new Int32IsEven()).Select<int, DoubleOfInt32>().ToArray(MemoryPool<int>.Shared);
+            using var array = source.AsValueEnumerable()
+                .Where<Int32IsEven>()
+                .Select<int, DoubleOfInt32>()
+                .ToArray(MemoryPool<int>.Shared);
             return Count == 0 ? default : array.Memory.Span[0];
         }
     }

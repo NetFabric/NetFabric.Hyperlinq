@@ -59,7 +59,7 @@ namespace LinqBenchmarks.Array.Int32
             return source
                 .ToStructEnumerable()
                 .Where(ref predicate, x => x)
-                .Count(x=>x);
+                .Count(x => x);
         }
 
         [Benchmark]

@@ -89,7 +89,7 @@ namespace LinqBenchmarks.Array.Int32
                 .ToStructEnumerable()
                 .Skip(Skip, x=> x)
                 .Take(Count, x=> x)
-                .Where(ref predicate, x=>x))
+                .Where(ref predicate, x => x))
                 sum += item;
             return sum;
         }

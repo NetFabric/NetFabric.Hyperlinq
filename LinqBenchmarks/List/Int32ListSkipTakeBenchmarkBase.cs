@@ -10,6 +10,6 @@ namespace LinqBenchmarks
 
         [GlobalSetup]
         public void GlobalSetup()
-            => source = System.Linq.Enumerable.Range(0, Skip + Count).ToList();
+            => source = GetRandomValues(Skip + Count).ToList();
     }
 }

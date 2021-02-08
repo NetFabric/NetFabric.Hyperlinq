@@ -103,7 +103,7 @@ namespace LinqBenchmarks.List.Int32
             var comparer = new DefaultStructEqualityComparer();
             foreach (var item in source
                 .ToStructEnumerable()
-                .Distinct(comparer, x=>x ))
+                .Distinct(comparer, x => x ))
                 sum += item;
             return sum;
         }

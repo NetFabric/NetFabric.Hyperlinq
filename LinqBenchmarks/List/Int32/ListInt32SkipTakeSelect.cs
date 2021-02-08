@@ -80,8 +80,8 @@ namespace LinqBenchmarks.List.Int32
             foreach (var item in source
                 .ToStructEnumerable()
                 .Skip(Skip, x=> x)
-                .Take(Count, x=>x)
-                .Select(ref selector, x=> x, x=>x))
+                .Take(Count, x => x)
+                .Select(ref selector, x=> x, x => x))
                 sum += item;
             return sum;
         }

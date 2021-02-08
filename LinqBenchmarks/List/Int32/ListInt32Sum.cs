@@ -54,7 +54,7 @@ namespace LinqBenchmarks.List.Int32
         [Benchmark]
         public int StructLinq_IFunction()
             => source.ToStructEnumerable()
-                .Sum(x=>x);
+                .Sum(x => x);
 
         [Benchmark]
         public int Hyperlinq()

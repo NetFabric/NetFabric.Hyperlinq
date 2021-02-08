@@ -50,28 +50,40 @@ namespace LinqBenchmarks.Range
             return StructEnumerable
                 .Range(Start, Count)
                 .Select(ref selector, x => x, x => x)
-                .ToArray(x=>x);
+                .ToArray(x => x);
         }
 
         [Benchmark]
         public int[] Hyperlinq()
-            => ValueEnumerable.Range(Start, Count).Select(item => item * 2).ToArray();
+            => ValueEnumerable
+                .Range(Start, Count)
+                .Select(item => item * 2)
+                .ToArray();
 
         [Benchmark]
         public int[] Hyperlinq_IFunction()
-            => ValueEnumerable.Range(Start, Count).Select<int, DoubleOfInt32>().ToArray();
+            => ValueEnumerable
+                .Range(Start, Count)
+                .Select<int, DoubleOfInt32>()
+                .ToArray();
 
         [Benchmark]
         public int Hyperlinq_Pool()
         {
-            using var array = ValueEnumerable.Range(Start, Count).Select(item => item * 2).ToArray(MemoryPool<int>.Shared);
+            using var array = ValueEnumerable
+                .Range(Start, Count)
+                .Select(item => item * 2)
+                .ToArray(MemoryPool<int>.Shared);
             return Count == 0 ? default : array.Memory.Span[0];
         }
 
         [Benchmark]
         public int Hyperlinq_Pool_IFunction()
         {
-            using var array = ValueEnumerable.Range(Start, Count).Select<int, DoubleOfInt32>().ToArray(MemoryPool<int>.Shared);
+            using var array = ValueEnumerable
+                .Range(Start, Count)
+                .Select<int, DoubleOfInt32>()
+                .ToArray(MemoryPool<int>.Shared);
             return Count == 0 ? default : array.Memory.Span[0];
         }
     }

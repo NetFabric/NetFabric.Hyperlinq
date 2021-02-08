@@ -85,25 +85,29 @@ namespace LinqBenchmarks.List.Int32
         public int Hyperlinq_Foreach()
         {
             var sum = 0;
-            foreach (var item in source.AsValueEnumerable().Select(item => item * 2))
+            foreach (var item in source.AsValueEnumerable()
+                .Select(item => item * 2))
                 sum += item;
             return sum;
         }
 
         [Benchmark]
-        public int Hyperlinq_Foreach_IFunction()
+        public int Hyperlinq_IFunction_Foreach()
         {
             var sum = 0;
-            foreach (var item in source.AsValueEnumerable().Select<int, DoubleOfInt32>())
+            foreach (var item in source.AsValueEnumerable()
+                .Select<int, DoubleOfInt32>())
                 sum += item;
             return sum;
         }
+
 #pragma warning restore HLQ010 // Consider using a 'for' loop instead.
 
         [Benchmark]
         public int Hyperlinq_For()
         {
-            var items = source.AsValueEnumerable().Select(item => item * 2);
+            var items = source.AsValueEnumerable()
+                .Select(item => item * 2);
             var sum = 0;
             for (var index = 0; index < items.Count; index++)
                 sum += items[index];
@@ -111,12 +115,34 @@ namespace LinqBenchmarks.List.Int32
         }
 
         [Benchmark]
-        public int Hyperlinq_For_IFunction()
+        public int Hyperlinq_IFunction_For()
         {
-            var items = source.AsValueEnumerable().Select<int, DoubleOfInt32>();
+            var items = source.AsValueEnumerable()
+                .Select<int, DoubleOfInt32>();
             var sum = 0;
             for (var index = 0; index < items.Count; index++)
                 sum += items[index];
+            return sum;
+        }
+
+        [Benchmark]
+        public int Hyperlinq_SIMD()
+        {
+            var sum = 0;
+            foreach (var item in source.AsValueEnumerable()
+                .SelectVector(item => item * 2, item => item * 2))
+                sum += item;
+            return sum;
+        }
+
+
+        [Benchmark]
+        public int Hyperlinq_SIMD_IFunction()
+        {
+            var sum = 0;
+            foreach (var item in source.AsValueEnumerable()
+                .SelectVector<int, int, DoubleOfInt32, DoubleOfInt32>())
+                sum += item;
             return sum;
         }
     }

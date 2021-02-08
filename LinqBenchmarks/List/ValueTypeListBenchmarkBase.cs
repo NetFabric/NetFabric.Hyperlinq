@@ -10,8 +10,7 @@ namespace LinqBenchmarks
 
         [GlobalSetup]
         public void GlobalSetup()
-            => source = System.Linq.Enumerable
-                .Range(0, Count)
+            => source = GetRandomValues(Count)
                 .Select(value => new FatValueType(value))
                 .ToList();
     }

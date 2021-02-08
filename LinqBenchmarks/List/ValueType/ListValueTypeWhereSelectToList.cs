@@ -38,7 +38,10 @@ namespace LinqBenchmarks.List.ValueType
 
         [Benchmark]
         public List<FatValueType> Linq()
-            => System.Linq.Enumerable.Where(source, item => item.IsEven()).Select(item => item * 2).ToList();
+            => System.Linq.Enumerable
+                .Where(source, item => item.IsEven())
+                .Select(item => item * 2)
+                .ToList();
 
         [Benchmark]
         public List<FatValueType> LinqFaster()
@@ -46,7 +49,10 @@ namespace LinqBenchmarks.List.ValueType
 
         [Benchmark]
         public List<FatValueType> LinqAF()
-            => global::LinqAF.ListExtensionMethods.Where(source, item => item.IsEven()).Select(item => item * 2).ToList();
+            => global::LinqAF.ListExtensionMethods
+                .Where(source, item => item.IsEven())
+                .Select(item => item * 2)
+                .ToList();
 
         [Benchmark]
         public List<FatValueType> StructLinq()

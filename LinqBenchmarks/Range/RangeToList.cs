@@ -48,7 +48,7 @@ namespace LinqBenchmarks.Range
 
         [Benchmark]
         public List<int> StructLinq()
-            => StructEnumerable.Range(Start, Count).ToList(x=>x);
+            => StructEnumerable.Range(Start, Count).ToList(x => x);
 
         [Benchmark]
         public List<int> Hyperlinq()

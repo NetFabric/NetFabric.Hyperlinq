@@ -41,7 +41,9 @@ namespace LinqBenchmarks.Range
         public int Linq()
         {
             var sum = 0;
-            foreach (var item in System.Linq.Enumerable.Range(Start, Count).Select(item => item * 2))
+            foreach (var item in System.Linq.Enumerable
+                .Range(Start, Count)
+                .Select(item => item * 2))
                 sum += item;
             return sum;
         }
@@ -49,7 +51,9 @@ namespace LinqBenchmarks.Range
         [Benchmark]
         public int LinqFaster()
         {
-            var items = JM.LinqFaster.LinqFaster.RangeArrayF(Start, Count).SelectF(item => item * 2);
+            var items = JM.LinqFaster.LinqFaster
+                .RangeArrayF(Start, Count)
+                .SelectF(item => item * 2);
             var sum = 0;
             for (var index = 0; index < items.Length; index++)
                 sum += items[index];
@@ -59,7 +63,9 @@ namespace LinqBenchmarks.Range
         [Benchmark]
         public int LinqFaster_SIMD()
         {
-            var items = LinqFasterSIMD.RangeS(Start, Count).SelectS(item => item * 2);
+            var items = LinqFasterSIMD
+                .RangeS(Start, Count)
+                .SelectS(item => item * 2);
             var sum = 0;
             for (var index = 0; index < items.Length; index++)
                 sum += items[index];
@@ -70,7 +76,9 @@ namespace LinqBenchmarks.Range
         public int LinqAF()
         {
             var sum = 0;
-            foreach (var item in global::LinqAF.Enumerable.Range(Start, Count).Select(item => item * 2))
+            foreach (var item in global::LinqAF.Enumerable
+                .Range(Start, Count)
+                .Select(item => item * 2))
                 sum += item;
             return sum;
         }
@@ -103,7 +111,9 @@ namespace LinqBenchmarks.Range
         public int Hyperlinq()
         {
             var sum = 0;
-            foreach (var item in ValueEnumerable.Range(Start, Count).Select(item => item * 2))
+            foreach (var item in ValueEnumerable
+                .Range(Start, Count)
+                .Select(item => item * 2))
                 sum += item;
             return sum;
         }
@@ -112,7 +122,9 @@ namespace LinqBenchmarks.Range
         public int Hyperlinq_IFunction()
         {
             var sum = 0;
-            foreach (var item in ValueEnumerable.Range(Start, Count).Select<int, DoubleOfInt32>())
+            foreach (var item in ValueEnumerable
+                .Range(Start, Count)
+                .Select<int, DoubleOfInt32>())
                 sum += item;
             return sum;
         }

@@ -53,7 +53,8 @@ namespace LinqBenchmarks.Enumerable.Int32
         public int Hyperlinq()
         {
             var sum = 0;
-            foreach (var item in source.AsValueEnumerable().Where(item => item.IsEven()))
+            foreach (var item in source.AsValueEnumerable()
+                .Where(item => item.IsEven()))
                 sum += item;
             return sum;
         }
@@ -62,7 +63,8 @@ namespace LinqBenchmarks.Enumerable.Int32
         public int Hyperlinq_IFunction()
         {
             var sum = 0;
-            foreach (var item in source.AsValueEnumerable().Where<Int32IsEven>(new Int32IsEven()))
+            foreach (var item in source.AsValueEnumerable()
+                .Where<Int32IsEven>())
                 sum += item;
             return sum;
         }

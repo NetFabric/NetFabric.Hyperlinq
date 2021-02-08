@@ -70,7 +70,7 @@ namespace LinqBenchmarks.List.Int32
                 .ToStructEnumerable()
                 .Where(ref predicate, x => x)
                 .Select(ref selector, x => x, x => x)
-                .ToArray(x=>x);
+                .ToArray(x => x);
         }
 
         [Benchmark]
