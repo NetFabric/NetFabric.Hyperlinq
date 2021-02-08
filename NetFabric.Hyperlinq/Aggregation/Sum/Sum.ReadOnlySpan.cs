@@ -58,22 +58,25 @@ namespace NetFabric.Hyperlinq
 
             if (source.Length >= Vector<TSource>.Count) // use SIMD
             {
-                var state = Vector<TSource>.Zero;
-                var count = Vector<TSource>.Count;
+                var vector = Vector<TSource>.Zero;
+                var vectorSize = Vector<TSource>.Count;
 
                 var index = 0;
-                for (; index <= source.Length - count; index += count)
+                for (; index <= source.Length - vectorSize; index += vectorSize)
                 {
 #pragma warning disable IDE0054 // Use compound assignment
-                    state = state + new Vector<TSource>(source[index..]);
+                    vector = vector + new Vector<TSource>(source[index..]);
 #pragma warning restore IDE0054 // Use compound assignment
                 }
 
                 for (; index < source.Length; index++)
-                    sum = add.Invoke(source[index], sum);
+                {
+                    var item = source[index];
+                    sum = add.Invoke(item, sum);
+                }
 
-                for (var vectorIndex = 0; vectorIndex < count; vectorIndex++)
-                    sum = add.Invoke(state[vectorIndex], sum);
+                for (index = 0; index < vectorSize; index++)
+                    sum = add.Invoke(vector[index], sum);
             }
             else
             {

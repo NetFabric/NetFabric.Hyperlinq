@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Buffers;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Runtime.CompilerServices;
 // ReSharper disable HeapView.ObjectAllocation.Evident
 
@@ -61,6 +62,20 @@ namespace NetFabric.Hyperlinq
                 0 => new List<TResult>(),
                 _ => source.ToArray<TSource, TResult, TSelector>(selector).AsList()
             };
+
+#if NET5_0
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        static List<TResult> ToListVector<TSource, TResult, TVectorSelector, TSelector>(this ReadOnlySpan<TSource> source, TVectorSelector vectorSelector, TSelector selector)
+            where TVectorSelector : struct, IFunction<Vector<TSource>, Vector<TResult>>
+            where TSelector : struct, IFunction<TSource, TResult>
+            where TSource : struct
+            where TResult : struct
+            => source.Length switch
+            {
+                0 => new List<TResult>(),
+                _ => source.ToArrayVector<TSource, TResult, TVectorSelector, TSelector>(vectorSelector, selector).AsList()
+            };
+#endif
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static List<TResult> ToListRef<TSource, TResult, TSelector>(this ReadOnlySpan<TSource> source, TSelector selector)

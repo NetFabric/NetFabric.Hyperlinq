@@ -1,5 +1,6 @@
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Configs;
+using JM.LinqFaster.SIMD;
 using StructLinq;
 using System;
 using System.Linq;
@@ -106,6 +107,14 @@ namespace NetFabric.Hyperlinq.Benchmarks
         //    => listReference
         //        .ToStructEnumerable()
         //        .Sum(x => x);
+
+        // ---------------------------------------------------------------------
+
+        [BenchmarkCategory("Array")]
+        [Benchmark]
+        public int LinqFasterSIMD_Array()
+            => array
+                .SumS();
 
         // ---------------------------------------------------------------------
 
