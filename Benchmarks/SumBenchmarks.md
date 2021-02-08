@@ -9,7 +9,7 @@
 - System.Interactive: [5.0.0](https://www.nuget.org/packages/System.Interactive/5.0.0)
 - System.Interactive.Async: [5.0.0](https://www.nuget.org/packages/System.Interactive.Async/5.0.0)
 - StructLinq: [0.25.3](https://www.nuget.org/packages/StructLinq/0.25.3)
-- NetFabric.Hyperlinq: [3.0.0-beta31](https://www.nuget.org/packages/NetFabric.Hyperlinq/3.0.0-beta31)
+- NetFabric.Hyperlinq: [3.0.0-beta33](https://www.nuget.org/packages/NetFabric.Hyperlinq/3.0.0-beta33)
 
 ### Results:
 ``` ini
@@ -22,10 +22,10 @@ Intel Core i7-7567U CPU 3.50GHz (Kaby Lake), 1 CPU, 4 logical and 2 physical cor
 Job=.NET Core 5.0  Runtime=.NET Core 5.0  Categories=Array  
 
 ```
-|                            Method | Count |      Mean |     Error |    StdDev |    Median | Ratio |  Gen 0 | Gen 1 | Gen 2 | Allocated |
-|---------------------------------- |------ |----------:|----------:|----------:|----------:|------:|-------:|------:|------:|----------:|
-|                        Linq_Array |   100 | 638.63 ns | 17.568 ns | 51.800 ns | 653.42 ns |  1.00 | 0.0153 |     - |     - |      32 B |
-|                  StructLinq_Array |   100 |  68.47 ns |  1.882 ns |  5.549 ns |  68.56 ns |  0.11 |      - |     - |     - |         - |
-|                   Hyperlinq_Array |   100 |  60.48 ns |  0.513 ns |  0.429 ns |  60.47 ns |  0.10 |      - |     - |     - |         - |
-| Hyperlinq_Array_AsValueEnumerable |   100 |  53.37 ns |  0.363 ns |  0.322 ns |  53.28 ns |  0.08 |      - |     - |     - |         - |
-|                    Hyperlinq_Span |   100 |  60.71 ns |  0.358 ns |  0.317 ns |  60.63 ns |  0.10 |      - |     - |     - |         - |
+|               Method | Count |      Mean |    Error |   StdDev | Ratio |  Gen 0 | Gen 1 | Gen 2 | Allocated |
+|--------------------- |------ |----------:|---------:|---------:|------:|-------:|------:|------:|----------:|
+|           Linq_Array |   100 | 404.58 ns | 2.233 ns | 1.864 ns |  1.00 | 0.0153 |     - |     - |      32 B |
+|     StructLinq_Array |   100 |  60.98 ns | 0.237 ns | 0.222 ns |  0.15 |      - |     - |     - |         - |
+| LinqFasterSIMD_Array |   100 |  12.03 ns | 0.189 ns | 0.158 ns |  0.03 |      - |     - |     - |         - |
+|      Hyperlinq_Array |   100 |  20.75 ns | 0.228 ns | 0.202 ns |  0.05 |      - |     - |     - |         - |
+|       Hyperlinq_Span |   100 |  21.20 ns | 0.432 ns | 0.425 ns |  0.05 |      - |     - |     - |         - |

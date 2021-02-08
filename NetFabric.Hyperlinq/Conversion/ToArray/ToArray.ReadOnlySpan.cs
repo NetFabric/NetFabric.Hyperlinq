@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Buffers;
 using System.Diagnostics;
+using System.Numerics;
 using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
@@ -98,9 +99,35 @@ namespace NetFabric.Hyperlinq
             // ReSharper disable once HeapView.ObjectAllocation.Evident
             var result = new TResult[source.Length];
 #endif
-            Copy<TSource, TResult, TSelector>(source, result, selector);
+            Copy<TSource, TResult, TSelector>(source, result.AsSpan(), selector);
             return result;
         }
+
+#if NET5_0
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        static TResult[] ToArrayVector<TSource, TResult, TVectorSelector, TSelector>(this ReadOnlySpan<TSource> source, TVectorSelector vectorSelector, TSelector selector)
+            where TVectorSelector : struct, IFunction<Vector<TSource>, Vector<TResult>>
+            where TSelector : struct, IFunction<TSource, TResult>
+            where TSource : struct
+            where TResult : struct
+        {
+            var result = GC.AllocateUninitializedArray<TResult>(source.Length);
+            CopyVector<TSource, TResult, TVectorSelector, TSelector>(source, result.AsSpan(), vectorSelector, selector);
+            return result;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        static IMemoryOwner<TResult> ToArrayVector<TSource, TResult, TVectorSelector, TSelector>(this ReadOnlySpan<TSource> source, TVectorSelector vectorSelector, TSelector selector, MemoryPool<TResult> pool)
+            where TVectorSelector : struct, IFunction<Vector<TSource>, Vector<TResult>>
+            where TSelector : struct, IFunction<TSource, TResult>
+            where TSource : struct
+            where TResult : struct
+        {
+            var result = pool.RentSliced(source.Length);
+            CopyVector<TSource, TResult, TVectorSelector, TSelector>(source, result.Memory.Span, vectorSelector, selector);
+            return result;
+        }
+#endif
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static TResult[] ToArrayRef<TSource, TResult, TSelector>(this ReadOnlySpan<TSource> source, TSelector selector)
@@ -112,7 +139,7 @@ namespace NetFabric.Hyperlinq
             // ReSharper disable once HeapView.ObjectAllocation.Evident
             var result = new TResult[source.Length];
 #endif
-            CopyRef<TSource, TResult, TSelector>(source, result, selector);
+            CopyRef<TSource, TResult, TSelector>(source, result.AsSpan(), selector);
             return result;
         }
 
@@ -146,7 +173,7 @@ namespace NetFabric.Hyperlinq
             // ReSharper disable once HeapView.ObjectAllocation.Evident
             var result = new TResult[source.Length];
 #endif
-            CopyAt<TSource, TResult, TSelector>(source, result, selector);
+            CopyAt<TSource, TResult, TSelector>(source, result.AsSpan(), selector);
             return result;
         }
 
@@ -160,7 +187,7 @@ namespace NetFabric.Hyperlinq
             // ReSharper disable once HeapView.ObjectAllocation.Evident
             var result = new TResult[source.Length];
 #endif
-            CopyAtRef<TSource, TResult, TSelector>(source, result, selector);
+            CopyAtRef<TSource, TResult, TSelector>(source, result.AsSpan(), selector);
             return result;
         }
 

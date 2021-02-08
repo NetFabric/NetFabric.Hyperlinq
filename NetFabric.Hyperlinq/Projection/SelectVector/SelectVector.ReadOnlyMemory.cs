@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Buffers;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -51,8 +52,8 @@ namespace NetFabric.Hyperlinq
                 this.selector = selector;
             }
 
-            public readonly Enumerator GetEnumerator()
-                => new(in this);
+            public readonly SelectVectorEnumerator<TSource, TResult, TVectorSelector, TSelector> GetEnumerator()
+                => new(source.Span, vectorSelector, selector);
             readonly DisposableEnumerator IValueEnumerable<TResult, DisposableEnumerator>.GetEnumerator()
                 => new(in this);
             readonly IEnumerator<TResult> IEnumerable<TResult>.GetEnumerator()
@@ -62,78 +63,16 @@ namespace NetFabric.Hyperlinq
                 // ReSharper disable once HeapView.BoxingAllocation
                 => new DisposableEnumerator(in this);
 
-            [StructLayout(LayoutKind.Sequential)]
-            public ref struct Enumerator
-            {
-                int index;
-                int resultIndex;
-                TResult current;
-                Vector<TResult> result;
-                readonly int remainingIndex;
-                readonly int end;
-                readonly int count;
-                readonly ReadOnlySpan<TSource> source;
-                TVectorSelector vectorSelector;
-                TSelector selector;
-
-                internal Enumerator(in MemorySelectVectorEnumerable<TSource, TResult, TVectorSelector, TSelector> enumerable)
-                {
-                    source = enumerable.source.Span;
-                    vectorSelector = enumerable.vectorSelector;
-                    selector = enumerable.selector;
-                    current = default;
-                    index = -1;
-                    end = index + source.Length;
-                    result = new Vector<TResult>();
-                    count = Vector<TSource>.Count;
-                    remainingIndex = source.Length - (source.Length % count);
-                    resultIndex = count;
-                }
-
-                public readonly TResult Current
-                {
-                    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                    get => current;
-                }
-
-                [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                public bool MoveNext()
-                {
-                    if (++index > end)
-                    {
-                        current = default;
-                        return false;
-                    }
-
-                    if (index >= remainingIndex)
-                    {
-                        current = selector.Invoke(source[index]);
-                    }
-                    else
-                    {
-                        if (++resultIndex >= count)
-                        {
-                            result = vectorSelector.Invoke(new Vector<TSource>(source[index..]));
-                            resultIndex = 0;
-                        }
-                        current = result[resultIndex];
-                    }
-                    return true;
-                }
-            }
-
-            [StructLayout(LayoutKind.Sequential)]
+            [StructLayout(LayoutKind.Auto)]
             public struct DisposableEnumerator
                 : IEnumerator<TResult>
             {
-                int index;
-                int resultIndex;
+                readonly int vectorSize;
                 TResult current;
-                Vector<TResult> result;
-                readonly int remainingIndex;
-                readonly int end;
-                readonly int count;
-                readonly ReadOnlyMemory<TSource> source;
+                int index;
+                int status;
+                Vector<TResult> vector;
+                ReadOnlyMemory<TSource> source;
                 TVectorSelector vectorSelector;
                 TSelector selector;
 
@@ -142,13 +81,12 @@ namespace NetFabric.Hyperlinq
                     source = enumerable.source;
                     vectorSelector = enumerable.vectorSelector;
                     selector = enumerable.selector;
+
+                    vectorSize = Vector<TSource>.Count;
+                    status = 0;
                     current = default;
-                    index = -1;
-                    end = index + source.Length;
-                    result = new Vector<TResult>();
-                    count = Vector<TSource>.Count;
-                    remainingIndex = source.Length - (source.Length % count);
-                    resultIndex = count;
+                    index = 0;
+                    vector = new Vector<TResult>();
                 }
 
                 public readonly TResult Current
@@ -165,24 +103,38 @@ namespace NetFabric.Hyperlinq
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public bool MoveNext()
                 {
-                    if (++index > end)
+                    switch (status)
                     {
-                        current = default;
-                        return false;
-                    }
+                        case 0: // fill vector
+                            if (source.Length < vectorSize)
+                            {
+                                index = -1;
+                                status = 2;
+                                goto case 2;
+                            }
 
-                    if (index >= remainingIndex)
-                    {
-                        current = selector.Invoke(source.Span[index]);
-                    }
-                    else
-                    {
-                        if (++resultIndex >= count)
-                        {
-                            result = vectorSelector.Invoke(new Vector<TSource>(source.Span[index..]));
-                            resultIndex = 0;
-                        }
-                        current = result[resultIndex];
+                            vector = vectorSelector.Invoke(new Vector<TSource>(source.Span));
+                            index = 0;
+                            current = vector[0];
+                            status = 1;
+                            break;
+
+                        case 1: // handle vector
+                            if (++index >= vectorSize)
+                            {
+                                source = source[vectorSize..];
+                                status = 0;
+                                goto case 0;
+                            }
+                            current = vector[index];
+                            break;
+
+                        case 2: // handle remaining
+                            if (++index >= source.Length)
+                                return false;
+
+                            current = selector.Invoke(source.Span[index]);
+                            break;
                     }
                     return true;
                 }
@@ -206,6 +158,28 @@ namespace NetFabric.Hyperlinq
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Any()
                 => source.Length is not 0;
+
+            #endregion
+            #region Filtering
+
+            #endregion
+            #region Projection
+
+            #endregion
+            #region Element
+
+            #endregion
+            #region Conversion
+
+            public TResult[] ToArray()
+                => source.Span.ToArrayVector<TSource, TResult, TVectorSelector, TSelector>(vectorSelector, selector);
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public IMemoryOwner<TResult> ToArray(MemoryPool<TResult> pool)
+                => source.Span.ToArrayVector<TSource, TResult, TVectorSelector, TSelector>(vectorSelector, selector, pool);
+
+            public List<TResult> ToList()
+                => source.Span.ToListVector<TSource, TResult, TVectorSelector, TSelector>(vectorSelector, selector);
 
             #endregion
         }

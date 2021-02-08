@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Numerics;
 using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
@@ -26,6 +27,33 @@ namespace NetFabric.Hyperlinq
                 destination[index] = selector.Invoke(item);
             }
         }
+
+#if NET5_0
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static void CopyVector<TSource, TResult, TVectorSelector, TSelector>(ReadOnlySpan<TSource> source, Span<TResult> destination, TVectorSelector vectorSelector, TSelector selector)
+            where TVectorSelector : struct, IFunction<Vector<TSource>, Vector<TResult>>
+            where TSelector : struct, IFunction<TSource, TResult>
+            where TSource : struct
+            where TResult : struct
+        {
+            Debug.Assert(destination.Length >= source.Length);
+
+            var index = 0;
+
+            var count = Vector<TSource>.Count;
+            if (count == Vector<TResult>.Count)
+            {
+                for (; index <= source.Length - count; index += count)
+                    vectorSelector.Invoke(new Vector<TSource>(source[index..])).CopyTo(destination[index..]);
+            }
+
+            for (; index < source.Length && index < destination.Length; index++)
+            {
+                var item = source[index];
+                destination[index] = selector.Invoke(item);
+            }
+        }
+#endif
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void CopyRef<TSource, TResult, TSelector>(ReadOnlySpan<TSource> source, Span<TResult> destination, TSelector selector)
