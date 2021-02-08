@@ -49,7 +49,7 @@ This implementation **favors performance in detriment of assembly binary size** 
 - Operations enumerate the source using the indexer when the source is an array, `ArraySegment<>`, `Span<>`, `ReadOnlySpan<>`, `Memory<>`, `ReadOnlyMemory<>`, or implements `IReadOnlyList<>`. 
 - `Range()` and `Repeat()` return enumerables that implement `IReadOnlyCollection<>` and `ICollection<>`. `Return()` and `Select()` return enumerables that implement `IReadOnlyList<>` and `IList<>`.
 - Use of buffer pools in operations like `Distinct()`, `ToArray()` and `ToList()`.
-- Use of SIMD in `Sum()`.
+- Use of SIMD in `Sum()` and `SelectVector()`.
 - Elimination of conditional branchs in `Where().Count()`.
 - Allows the JIT compiler to perform optimizations on array enumeration whenever possible.
 - Takes advantage of `EqualityComparer<>.Default` devirtualization whenever possible.
@@ -149,7 +149,7 @@ To add `NetFabric.Hyperlinq` operations after a `System.Linq` operation, simply 
 `NetFabric.Hyperlinq` supports passing the items by reference. This can improve considerably the performance for large structures.
 
 - Use `AsValueEnumerableRef()` instead to make any collection usable with `NetFabric.Hyperlinq`.
-- Declare the lambda expressions with `in` on the first parameter.
+- Declare the lambda expressions with `in` keyword on the first parameter. This also requires the declaration of the parameters' type.
 
 ``` csharp
 public static void Example(IReadOnlyList<int> list)
@@ -166,9 +166,9 @@ public static void Example(IReadOnlyList<int> list)
 
 ### Value delegates
 
-Calling a lambda expression for each item of the collection is very expensive. `NetFabric.Hyperlinq` supports an much more performant alternative.
+Calling a lambda expression for each item of the collection is very expensive. `NetFabric.Hyperlinq` supports a much more performant alternative.
 
-- Declare a `struct` that implements `ÌFunction<>` or `IFunctionIn<>`. 
+- Declare a `struct` that implements `IFunction<>` or `IFunctionIn<>`. 
 
 ``` csharp
 readonly struct DoubleOfInt32
