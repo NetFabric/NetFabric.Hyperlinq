@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
@@ -64,21 +65,48 @@ namespace NetFabric.Hyperlinq
             bool ICollection<int>.IsReadOnly
                 => true;
 
-            public void CopyTo(Span<int> array)
+            public void CopyTo(Span<int> span)
             {
-                if (array.Length < Count)
-                    Throw.ArgumentException(Resource.DestinationNotLongEnough, nameof(array));
+                if (span.Length < Count)
+                    Throw.ArgumentException(Resource.DestinationNotLongEnough, nameof(span));
 
-                var count = Count - 1;
+                var index = 0;
+#if NET5_0
+                var vectorSize = Vector<int>.Count;
+                if (Count >= vectorSize)
+                {
+                    var copySpan = span[0..vectorSize]; // bounds check removal
+                    if (start is 0)
+                    {
+                        for (; index < copySpan.Length; index++)
+                            copySpan[index] = index;
+                    }
+                    else
+                    {
+                        for (; index < copySpan.Length; index++)
+                            copySpan[index] = index + start;
+                    }
+
+                    var vector = new Vector<int>(copySpan);
+                    var increment = new Vector<int>(Count);
+                    vector = vector + increment;
+                    for (; index <= Count - vectorSize; index += vectorSize)
+                    {
+                        vector.CopyTo(span[index..]);
+                        vector = vector + increment;
+                    }
+                }
+#endif
+
                 if (start is 0)
                 {
-                    for (var index = 0; index <= count; index++)
-                        array[index] = index;
+                    for (; index < span.Length; index++)
+                        span[index] = index;
                 }
                 else
                 {
-                    for (var index = 0; index <= count; index++)
-                        array[index] = index + start;
+                    for (; index < span.Length; index++)
+                        span[index] = index + start;
                 }
             }
 
@@ -196,17 +224,7 @@ namespace NetFabric.Hyperlinq
             {
                 // ReSharper disable once HeapView.ObjectAllocation.Evident
                 var array = new int[Count];
-                // doesn't use CopyTo() to avoid bounds checking
-                if (start is 0)
-                {
-                    for (var index = 0; index < array.Length; index++)
-                        array[index] = index;
-                }
-                else
-                {
-                    for (var index = 0; index < array.Length; index++)
-                        array[index] = index + start;
-                }
+                CopyTo(array.AsSpan());
                 return array;
             }
 
@@ -219,8 +237,11 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public List<int> ToList()
-                // ReSharper disable once HeapView.BoxingAllocation
-                => new(this);
+                => Count switch
+                {
+                    0 => new List<int>(),
+                    _ => ToArray().AsList()
+                };
         }
     }
 }

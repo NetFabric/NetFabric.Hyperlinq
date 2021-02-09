@@ -284,52 +284,52 @@ namespace NetFabric.Hyperlinq
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int Sum<TPredicate>(this MemoryWhereEnumerable<int, TPredicate> source)
             where TPredicate : struct, IFunction<int, bool>
-            => source.source.Span.Sum<int, int, TPredicate, AddInt32>(source.predicate);
+            => source.source.Span.Sum<int, int, TPredicate>(source.predicate);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int Sum<TPredicate>(this MemoryWhereEnumerable<int?, TPredicate> source)
             where TPredicate : struct, IFunction<int?, bool>
-            => source.source.Span.Sum<int?, int, TPredicate, AddNullableInt32>(source.predicate);
+            => source.source.Span.Sum<int?, int, TPredicate>(source.predicate);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static long Sum<TPredicate>(this MemoryWhereEnumerable<long, TPredicate> source)
             where TPredicate : struct, IFunction<long, bool>
-            => source.source.Span.Sum<long, long, TPredicate, AddInt64>(source.predicate);
+            => source.source.Span.Sum<long, long, TPredicate>(source.predicate);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static long Sum<TPredicate>(this MemoryWhereEnumerable<long?, TPredicate> source)
             where TPredicate : struct, IFunction<long?, bool>
-            => source.source.Span.Sum<long?, long, TPredicate, AddNullableInt64>(source.predicate);
+            => source.source.Span.Sum<long?, long, TPredicate>(source.predicate);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float Sum<TPredicate>(this MemoryWhereEnumerable<float, TPredicate> source)
             where TPredicate : struct, IFunction<float, bool>
-            => source.source.Span.Sum<float, float, TPredicate, AddSingle>(source.predicate);
+            => source.source.Span.Sum<float, float, TPredicate>(source.predicate);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float Sum<TPredicate>(this MemoryWhereEnumerable<float?, TPredicate> source)
             where TPredicate : struct, IFunction<float?, bool>
-            => source.source.Span.Sum<float?, float, TPredicate, AddNullableSingle>(source.predicate);
+            => source.source.Span.Sum<float?, float, TPredicate>(source.predicate);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static double Sum<TPredicate>(this MemoryWhereEnumerable<double, TPredicate> source)
             where TPredicate : struct, IFunction<double, bool>
-            => source.source.Span.Sum<double, double, TPredicate, AddDouble>(source.predicate);
+            => source.source.Span.Sum<double, double, TPredicate>(source.predicate);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static double Sum<TPredicate>(this MemoryWhereEnumerable<double?, TPredicate> source)
             where TPredicate : struct, IFunction<double?, bool>
-            => source.source.Span.Sum<double?, double, TPredicate, AddNullableDouble>(source.predicate);
+            => source.source.Span.Sum<double?, double, TPredicate>(source.predicate);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static decimal Sum<TPredicate>(this MemoryWhereEnumerable<decimal, TPredicate> source)
             where TPredicate : struct, IFunction<decimal, bool>
-            => source.source.Span.Sum<decimal, decimal, TPredicate, AddDecimal>(source.predicate);
+            => source.source.Span.Sum<decimal, decimal, TPredicate>(source.predicate);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static decimal Sum<TPredicate>(this MemoryWhereEnumerable<decimal?, TPredicate> source)
             where TPredicate : struct, IFunction<decimal?, bool>
-            => source.source.Span.Sum<decimal?, decimal, TPredicate, AddNullableDecimal>(source.predicate);
+            => source.source.Span.Sum<decimal?, decimal, TPredicate>(source.predicate);
     }
 }
 

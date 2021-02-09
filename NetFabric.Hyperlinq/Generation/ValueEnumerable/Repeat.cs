@@ -3,6 +3,7 @@ using System.Buffers;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
@@ -23,8 +24,8 @@ namespace NetFabric.Hyperlinq
             : IValueReadOnlyCollection<TSource, RepeatEnumerable<TSource>.DisposableEnumerator>
             , ICollection<TSource>
         {
-            readonly TSource value;
-            readonly int count;
+            internal readonly TSource value;
+            internal readonly int count;
 
             internal RepeatEnumerable(TSource value, int count)
             {
@@ -172,15 +173,8 @@ namespace NetFabric.Hyperlinq
             public TSource[] ToArray()
             {
                 // ReSharper disable once HeapView.ObjectAllocation.Evident
-                var array = new TSource[count];
-                if (value is object)
-                {
-#if NETSTANDARD2_1 || NETCOREAPP2_1 || NET5_0
-                    Array.Fill(array, value);
-#else
-                    CopyTo(array);
-#endif
-                }
+                var array = new TSource[Count];
+                CopyTo(array.AsSpan());
                 return array;
             }
 
@@ -193,9 +187,58 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public List<TSource> ToList()
-                // ReSharper disable once HeapView.BoxingAllocation
-                => new(this);
+                => Count switch
+                {
+                    0 => new List<TSource>(),
+                    _ => ToArray().AsList()
+                };
         }
+
+#if NET5_0
+        public static void CopyToVector<TSource>(this RepeatEnumerable<TSource> source, Span<TSource> span)
+            where TSource : struct
+        {
+            var count = source.count;
+            if (span.Length < count)
+                Throw.ArgumentException(Resource.DestinationNotLongEnough, nameof(span));
+
+            var value = source.value;
+            var index = 0;
+            var vectorSize = Vector<TSource>.Count;
+            var vector = new Vector<TSource>(value);
+            for (; index <= count - vectorSize; index += vectorSize)
+                vector.CopyTo(span[index..]);
+
+            for (; index < span.Length; index++)
+                span[index] = value;
+        }
+
+        public static TSource[] ToArrayVector<TSource>(this RepeatEnumerable<TSource> source)
+            where TSource : struct
+        {
+            // ReSharper disable once HeapView.ObjectAllocation.Evident
+            var array = new TSource[source.count];
+            source.CopyToVector(array.AsSpan());
+            return array;
+        }
+
+        public static IMemoryOwner<TSource> ToArrayVector<TSource>(this RepeatEnumerable<TSource> source, MemoryPool<TSource> pool)
+            where TSource : struct
+        {
+            var result = pool.RentSliced(source.count);
+            source.CopyToVector(result.Memory.Span);
+            return result;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static List<TSource> ToListVector<TSource>(this RepeatEnumerable<TSource> source)
+            where TSource : struct
+            => source.count switch
+            {
+                0 => new List<TSource>(),
+                _ => source.ToArrayVector().AsList()
+            };
+#endif
     }
 }
 

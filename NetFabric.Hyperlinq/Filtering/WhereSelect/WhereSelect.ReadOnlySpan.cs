@@ -189,61 +189,61 @@ namespace NetFabric.Hyperlinq
         public static int Sum<TSource, TPredicate, TSelector>(this SpanWhereSelectEnumerable<TSource, int, TPredicate, TSelector> source)
             where TPredicate : struct, IFunction<TSource, bool>
             where TSelector : struct, IFunction<TSource, int>
-            => source.source.Sum<TSource, int, int, TPredicate, TSelector, AddInt32>(source.predicate, source.selector);
+            => source.source.Sum<TSource, int, int, TPredicate, TSelector>(source.predicate, source.selector);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int Sum<TSource, TPredicate, TSelector>(this SpanWhereSelectEnumerable<TSource, int?, TPredicate, TSelector> source)
             where TPredicate : struct, IFunction<TSource, bool>
             where TSelector : struct, IFunction<TSource, int?>
-            => source.source.Sum<TSource, int?, int, TPredicate, TSelector, AddNullableInt32>(source.predicate, source.selector);
+            => source.source.Sum<TSource, int?, int, TPredicate, TSelector>(source.predicate, source.selector);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static long Sum<TSource, TPredicate, TSelector>(this SpanWhereSelectEnumerable<TSource, long, TPredicate, TSelector> source)
             where TPredicate : struct, IFunction<TSource, bool>
             where TSelector : struct, IFunction<TSource, long>
-            => source.source.Sum<TSource, long, long, TPredicate, TSelector, AddInt64>(source.predicate, source.selector);
+            => source.source.Sum<TSource, long, long, TPredicate, TSelector>(source.predicate, source.selector);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static long Sum<TSource, TPredicate, TSelector>(this SpanWhereSelectEnumerable<TSource, long?, TPredicate, TSelector> source)
             where TPredicate : struct, IFunction<TSource, bool>
             where TSelector : struct, IFunction<TSource, long?>
-            => source.source.Sum<TSource, long?, long, TPredicate, TSelector, AddNullableInt64>(source.predicate, source.selector);
+            => source.source.Sum<TSource, long?, long, TPredicate, TSelector>(source.predicate, source.selector);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float Sum<TSource, TPredicate, TSelector>(this SpanWhereSelectEnumerable<TSource, float, TPredicate, TSelector> source)
             where TPredicate : struct, IFunction<TSource, bool>
             where TSelector : struct, IFunction<TSource, float>
-            => source.source.Sum<TSource, float, float, TPredicate, TSelector, AddSingle>(source.predicate, source.selector);
+            => source.source.Sum<TSource, float, float, TPredicate, TSelector>(source.predicate, source.selector);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float Sum<TSource, TPredicate, TSelector>(this SpanWhereSelectEnumerable<TSource, float?, TPredicate, TSelector> source)
             where TPredicate : struct, IFunction<TSource, bool>
             where TSelector : struct, IFunction<TSource, float?>
-            => source.source.Sum<TSource, float?, float, TPredicate, TSelector, AddNullableSingle>(source.predicate, source.selector);
+            => source.source.Sum<TSource, float?, float, TPredicate, TSelector>(source.predicate, source.selector);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static double Sum<TSource, TPredicate, TSelector>(this SpanWhereSelectEnumerable<TSource, double, TPredicate, TSelector> source)
             where TPredicate : struct, IFunction<TSource, bool>
             where TSelector : struct, IFunction<TSource, double>
-            => source.source.Sum<TSource, double, double, TPredicate, TSelector, AddDouble>(source.predicate, source.selector);
+            => source.source.Sum<TSource, double, double, TPredicate, TSelector>(source.predicate, source.selector);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static double Sum<TSource, TPredicate, TSelector>(this SpanWhereSelectEnumerable<TSource, double?, TPredicate, TSelector> source)
             where TPredicate : struct, IFunction<TSource, bool>
             where TSelector : struct, IFunction<TSource, double?>
-            => source.source.Sum<TSource, double?, double, TPredicate, TSelector, AddNullableDouble>(source.predicate, source.selector);
+            => source.source.Sum<TSource, double?, double, TPredicate, TSelector>(source.predicate, source.selector);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static decimal Sum<TSource, TPredicate, TSelector>(this SpanWhereSelectEnumerable<TSource, decimal, TPredicate, TSelector> source)
             where TPredicate : struct, IFunction<TSource, bool>
             where TSelector : struct, IFunction<TSource, decimal>
-            => source.source.Sum<TSource, decimal, decimal, TPredicate, TSelector, AddDecimal>(source.predicate, source.selector);
+            => source.source.Sum<TSource, decimal, decimal, TPredicate, TSelector>(source.predicate, source.selector);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static decimal Sum<TSource, TPredicate, TSelector>(this SpanWhereSelectEnumerable<TSource, decimal?, TPredicate, TSelector> source)
             where TPredicate : struct, IFunction<TSource, bool>
             where TSelector : struct, IFunction<TSource, decimal?>
-            => source.source.Sum<TSource, decimal?, decimal, TPredicate, TSelector, AddNullableDecimal>(source.predicate, source.selector);
+            => source.source.Sum<TSource, decimal?, decimal, TPredicate, TSelector>(source.predicate, source.selector);
     }
 }
 

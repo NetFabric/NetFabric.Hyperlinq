@@ -6,24 +6,22 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class ValueEnumerableExtensions
     {
-        internal static TSum Sum<TEnumerable, TEnumerator, TSource, TSum, TAddition>(this TEnumerable source, TAddition add = default)
+        internal static TSum Sum<TEnumerable, TEnumerator, TSource, TSum>(this TEnumerable source)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
-            where TAddition : struct, IFunction<TSource, TSum, TSum>
             where TSum : struct
         {
             var sum = default(TSum);
             using var enumerator = source.GetEnumerator();
             while (enumerator.MoveNext())
-                sum = add.Invoke(enumerator.Current, sum);
+                sum = GenericsOperator.Sum(enumerator.Current, sum);
             return sum;
         }
 
-        internal static TSum Sum<TEnumerable, TEnumerator, TSource, TSum, TPredicate, TAddition>(this TEnumerable source, TPredicate predicate, TAddition add = default)
+        internal static TSum Sum<TEnumerable, TEnumerator, TSource, TSum, TPredicate>(this TEnumerable source, TPredicate predicate)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
             where TPredicate : struct, IFunction<TSource, bool>
-            where TAddition : struct, IFunction<TSource, TSum, TSum>
             where TSum : struct
         {
             var sum = default(TSum);
@@ -32,16 +30,15 @@ namespace NetFabric.Hyperlinq
             {
                 var item = enumerator.Current;
                 if (predicate.Invoke(item))
-                    sum = add.Invoke(item, sum);
+                    sum = GenericsOperator.Sum(item, sum);
             }
             return sum;
         }
 
-        internal static TSum SumRef<TEnumerable, TEnumerator, TSource, TSum, TPredicate, TAddition>(this TEnumerable source, TPredicate predicate, TAddition add = default)
+        internal static TSum SumRef<TEnumerable, TEnumerator, TSource, TSum, TPredicate>(this TEnumerable source, TPredicate predicate)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
             where TPredicate : struct, IFunctionIn<TSource, bool>
-            where TAddition : struct, IFunction<TSource, TSum, TSum>
             where TSum : struct
         {
             var sum = default(TSum);
@@ -50,16 +47,15 @@ namespace NetFabric.Hyperlinq
             {
                 var item = enumerator.Current;
                 if (predicate.Invoke(in item))
-                    sum = add.Invoke(item, sum);
+                    sum = GenericsOperator.Sum(item, sum);
             }
             return sum;
         }
 
-        internal static TSum SumAt<TEnumerable, TEnumerator, TSource, TSum, TPredicate, TAddition>(this TEnumerable source, TPredicate predicate, TAddition add = default)
+        internal static TSum SumAt<TEnumerable, TEnumerator, TSource, TSum, TPredicate>(this TEnumerable source, TPredicate predicate)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
             where TPredicate : struct, IFunction<TSource, int, bool>
-            where TAddition : struct, IFunction<TSource, TSum, TSum>
             where TSum : struct
         {
             var sum = default(TSum);
@@ -68,16 +64,15 @@ namespace NetFabric.Hyperlinq
             {
                 var item = enumerator.Current;
                 if (predicate.Invoke(item, index))
-                    sum = add.Invoke(item, sum);
+                    sum = GenericsOperator.Sum(item, sum);
             }
             return sum;
         }
 
-        internal static TSum SumAtRef<TEnumerable, TEnumerator, TSource, TSum, TPredicate, TAddition>(this TEnumerable source, TPredicate predicate, TAddition add = default)
+        internal static TSum SumAtRef<TEnumerable, TEnumerator, TSource, TSum, TPredicate>(this TEnumerable source, TPredicate predicate)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
             where TPredicate : struct, IFunctionIn<TSource, int, bool>
-            where TAddition : struct, IFunction<TSource, TSum, TSum>
             where TSum : struct
         {
             var sum = default(TSum);
@@ -86,16 +81,15 @@ namespace NetFabric.Hyperlinq
             {
                 var item = enumerator.Current;
                 if (predicate.Invoke(in item, index))
-                    sum = add.Invoke(item, sum);
+                    sum = GenericsOperator.Sum(item, sum);
             }
             return sum;
         }
 
-        internal static TSum Sum<TEnumerable, TEnumerator, TSource, TResult, TSum, TSelector, TAddition>(this TEnumerable source, TSelector selector, TAddition add = default)
+        internal static TSum Sum<TEnumerable, TEnumerator, TSource, TResult, TSum, TSelector>(this TEnumerable source, TSelector selector)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
             where TSelector : struct, IFunction<TSource, TResult>
-            where TAddition : struct, IFunction<TResult, TSum, TSum>
             where TSum : struct
         {
             var sum = default(TSum);
@@ -103,16 +97,15 @@ namespace NetFabric.Hyperlinq
             while (enumerator.MoveNext())
             {
                 var item = enumerator.Current;
-                sum = add.Invoke(selector.Invoke(item), sum);
+                sum = GenericsOperator.Sum(selector.Invoke(item), sum);
             }
             return sum;
         }
 
-        internal static TSum SumRef<TEnumerable, TEnumerator, TSource, TResult, TSum, TSelector, TAddition>(this TEnumerable source, TSelector selector, TAddition add = default)
+        internal static TSum SumRef<TEnumerable, TEnumerator, TSource, TResult, TSum, TSelector>(this TEnumerable source, TSelector selector)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
             where TSelector : struct, IFunctionIn<TSource, TResult>
-            where TAddition : struct, IFunction<TResult, TSum, TSum>
             where TSum : struct
         {
             var sum = default(TSum);
@@ -120,16 +113,15 @@ namespace NetFabric.Hyperlinq
             while (enumerator.MoveNext())
             {
                 var item = enumerator.Current;
-                sum = add.Invoke(selector.Invoke(in item), sum);
+                sum = GenericsOperator.Sum(selector.Invoke(in item), sum);
             }
             return sum;
         }
 
-        static TSum SumAt<TEnumerable, TEnumerator, TSource, TResult, TSum, TSelector, TAddition>(this TEnumerable source, TSelector selector, TAddition add = default)
+        static TSum SumAt<TEnumerable, TEnumerator, TSource, TResult, TSum, TSelector>(this TEnumerable source, TSelector selector)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
             where TSelector : struct, IFunction<TSource, int, TResult>
-            where TAddition : struct, IFunction<TResult, TSum, TSum>
             where TSum : struct
         {
             var sum = default(TSum);
@@ -137,16 +129,15 @@ namespace NetFabric.Hyperlinq
             for (var index = 0; enumerator.MoveNext(); index++)
             {
                 var item = enumerator.Current;
-                sum = add.Invoke(selector.Invoke(item, index), sum);
+                sum = GenericsOperator.Sum(selector.Invoke(item, index), sum);
             }
             return sum;
         }
 
-        internal static TSum SumAtRef<TEnumerable, TEnumerator, TSource, TResult, TSum, TSelector, TAddition>(this TEnumerable source, TSelector selector, TAddition add = default)
+        internal static TSum SumAtRef<TEnumerable, TEnumerator, TSource, TResult, TSum, TSelector>(this TEnumerable source, TSelector selector)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
             where TSelector : struct, IFunctionIn<TSource, int, TResult>
-            where TAddition : struct, IFunction<TResult, TSum, TSum>
             where TSum : struct
         {
             var sum = default(TSum);
@@ -154,18 +145,17 @@ namespace NetFabric.Hyperlinq
             for (var index = 0; enumerator.MoveNext(); index++)
             {
                 var item = enumerator.Current;
-                sum = add.Invoke(selector.Invoke(in item, index), sum);
+                sum = GenericsOperator.Sum(selector.Invoke(in item, index), sum);
             }
             return sum;
         }
 
 
-        internal static TSum Sum<TEnumerable, TEnumerator, TSource, TResult, TSum, TPredicate, TSelector, TAddition>(this TEnumerable source, TPredicate predicate, TSelector selector, TAddition add = default)
+        internal static TSum Sum<TEnumerable, TEnumerator, TSource, TResult, TSum, TPredicate, TSelector>(this TEnumerable source, TPredicate predicate, TSelector selector)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
             where TPredicate : struct, IFunction<TSource, bool>
             where TSelector : struct, IFunction<TSource, TResult>
-            where TAddition : struct, IFunction<TResult, TSum, TSum>
             where TSum : struct
         {
             var sum = default(TSum);
@@ -174,17 +164,16 @@ namespace NetFabric.Hyperlinq
             {
                 var item = enumerator.Current;
                 if (predicate.Invoke(item))
-                    sum = add.Invoke(selector.Invoke(item), sum);
+                    sum = GenericsOperator.Sum(selector.Invoke(item), sum);
             }
             return sum;
         }
 
-        internal static TSum SumRef<TEnumerable, TEnumerator, TSource, TResult, TSum, TPredicate, TSelector, TAddition>(this TEnumerable source, TPredicate predicate, TSelector selector, TAddition add = default)
+        internal static TSum SumRef<TEnumerable, TEnumerator, TSource, TResult, TSum, TPredicate, TSelector>(this TEnumerable source, TPredicate predicate, TSelector selector)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
             where TPredicate : struct, IFunctionIn<TSource, bool>
             where TSelector : struct, IFunctionIn<TSource, TResult>
-            where TAddition : struct, IFunction<TResult, TSum, TSum>
             where TSum : struct
         {
             var sum = default(TSum);
@@ -193,7 +182,7 @@ namespace NetFabric.Hyperlinq
             {
                 var item = enumerator.Current;
                 if (predicate.Invoke(in item))
-                    sum = add.Invoke(selector.Invoke(in item), sum);
+                    sum = GenericsOperator.Sum(selector.Invoke(in item), sum);
             }
             return sum;
         }

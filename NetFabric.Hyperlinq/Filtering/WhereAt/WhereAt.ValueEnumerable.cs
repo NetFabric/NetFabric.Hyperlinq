@@ -238,70 +238,70 @@ namespace NetFabric.Hyperlinq
         //    where TEnumerable : IValueEnumerable<int, TEnumerator>
         //    where TEnumerator : struct, IEnumerator<int>
         //    where TPredicate : struct, IFunction<int, int, bool>
-        //    => source.SumAt<WhereEnumerable<TEnumerable, TEnumerator, int, TPredicate>, WhereEnumerable<TEnumerable, TEnumerator, int, TPredicate>.Enumerator, int, int, TPredicate, AddInt32>(source.predicate);
+        //    => source.SumAt<WhereEnumerable<TEnumerable, TEnumerator, int, TPredicate>, WhereEnumerable<TEnumerable, TEnumerator, int, TPredicate>.Enumerator, int, int, TPredicate>(source.predicate);
 
         //[MethodImpl(MethodImplOptions.AggressiveInlining)]
         //public static int Sum<TEnumerable, TEnumerator, TPredicate>(this WhereEnumerable<TEnumerable, TEnumerator, int?, TPredicate> source)
         //    where TEnumerable : IValueEnumerable<int?, TEnumerator>
         //    where TEnumerator : struct, IEnumerator<int?>
         //    where TPredicate : struct, IFunction<int?, int, bool>
-        //    => source.SumAt<WhereEnumerable<TEnumerable, TEnumerator, int?, TPredicate>, WhereEnumerable<TEnumerable, TEnumerator, int?, TPredicate>.Enumerator, int?, int, TPredicate, AddNullableInt32>(source.predicate);
+        //    => source.SumAt<WhereEnumerable<TEnumerable, TEnumerator, int?, TPredicate>, WhereEnumerable<TEnumerable, TEnumerator, int?, TPredicate>.Enumerator, int?, int, TPredicate>(source.predicate);
 
         //[MethodImpl(MethodImplOptions.AggressiveInlining)]
         //public static long Sum<TEnumerable, TEnumerator, TPredicate>(this WhereEnumerable<TEnumerable, TEnumerator, long, TPredicate> source)
         //    where TEnumerable : IValueEnumerable<long, TEnumerator>
         //    where TEnumerator : struct, IEnumerator<long>
         //    where TPredicate : struct, IFunction<long, int, bool>
-        //    => source.SumAt<WhereEnumerable<TEnumerable, TEnumerator, long, TPredicate>, WhereEnumerable<TEnumerable, TEnumerator, long, TPredicate>.Enumerator, long, long, TPredicate, AddInt64>(source.predicate);
+        //    => source.SumAt<WhereEnumerable<TEnumerable, TEnumerator, long, TPredicate>, WhereEnumerable<TEnumerable, TEnumerator, long, TPredicate>.Enumerator, long, long, TPredicate>(source.predicate);
 
         //[MethodImpl(MethodImplOptions.AggressiveInlining)]
         //public static long Sum<TEnumerable, TEnumerator, TPredicate>(this WhereEnumerable<TEnumerable, TEnumerator, long?, TPredicate> source)
         //    where TEnumerable : IValueEnumerable<long?, TEnumerator>
         //    where TEnumerator : struct, IEnumerator<long?>
         //    where TPredicate : struct, IFunction<long?, int, bool>
-        //    => source.SumAt<WhereEnumerable<TEnumerable, TEnumerator, long?, TPredicate>, WhereEnumerable<TEnumerable, TEnumerator, long?, TPredicate>.Enumerator, long?, long, TPredicate, AddNullableInt64>(source.predicate);
+        //    => source.SumAt<WhereEnumerable<TEnumerable, TEnumerator, long?, TPredicate>, WhereEnumerable<TEnumerable, TEnumerator, long?, TPredicate>.Enumerator, long?, long, TPredicate>(source.predicate);
 
         //[MethodImpl(MethodImplOptions.AggressiveInlining)]
         //public static float Sum<TEnumerable, TEnumerator, TPredicate>(this WhereEnumerable<TEnumerable, TEnumerator, float, TPredicate> source)
         //    where TEnumerable : IValueEnumerable<float, TEnumerator>
         //    where TEnumerator : struct, IEnumerator<float>
         //    where TPredicate : struct, IFunction<float, int, bool>
-        //    => source.Sum<WhereEnumerable<TEnumerable, TEnumerator, float, TPredicate>, WhereEnumerable<TEnumerable, TEnumerator, float, TPredicate>.Enumerator, float, float, TPredicate, AddSingle>(source.predicate);
+        //    => source.Sum<WhereEnumerable<TEnumerable, TEnumerator, float, TPredicate>, WhereEnumerable<TEnumerable, TEnumerator, float, TPredicate>.Enumerator, float, float, TPredicate>(source.predicate);
 
         //[MethodImpl(MethodImplOptions.AggressiveInlining)]
         //public static float Sum<TEnumerable, TEnumerator, TPredicate>(this WhereEnumerable<TEnumerable, TEnumerator, float?, TPredicate> source)
         //    where TEnumerable : IValueEnumerable<float?, TEnumerator>
         //    where TEnumerator : struct, IEnumerator<float?>
         //    where TPredicate : struct, IFunction<float?, int, bool>
-        //    => source.SumAt<WhereEnumerable<TEnumerable, TEnumerator, float?, TPredicate>, WhereEnumerable<TEnumerable, TEnumerator, float?, TPredicate>.Enumerator, float?, float, TPredicate, AddNullableSingle>(source.predicate);
+        //    => source.SumAt<WhereEnumerable<TEnumerable, TEnumerator, float?, TPredicate>, WhereEnumerable<TEnumerable, TEnumerator, float?, TPredicate>.Enumerator, float?, float, TPredicate>(source.predicate);
 
         //[MethodImpl(MethodImplOptions.AggressiveInlining)]
         //public static double Sum<TEnumerable, TEnumerator, TPredicate>(this WhereEnumerable<TEnumerable, TEnumerator, double, TPredicate> source)
         //    where TEnumerable : IValueEnumerable<double, TEnumerator>
         //    where TEnumerator : struct, IEnumerator<double>
         //    where TPredicate : struct, IFunction<double, int, bool>
-        //    => source.Sum<WhereEnumerable<TEnumerable, TEnumerator, double, TPredicate>, WhereEnumerable<TEnumerable, TEnumerator, double, TPredicate>.Enumerator, double, double, TPredicate, AddDouble>(source.predicate);
+        //    => source.Sum<WhereEnumerable<TEnumerable, TEnumerator, double, TPredicate>, WhereEnumerable<TEnumerable, TEnumerator, double, TPredicate>.Enumerator, double, double, TPredicate>(source.predicate);
 
         //[MethodImpl(MethodImplOptions.AggressiveInlining)]
         //public static double Sum<TEnumerable, TEnumerator, TPredicate>(this WhereEnumerable<TEnumerable, TEnumerator, double?, TPredicate> source)
         //    where TEnumerable : IValueEnumerable<double?, TEnumerator>
         //    where TEnumerator : struct, IEnumerator<double?>
         //    where TPredicate : struct, IFunction<double?, int, bool>
-        //    => source.SumAt<WhereEnumerable<TEnumerable, TEnumerator, double?, TPredicate>, WhereEnumerable<TEnumerable, TEnumerator, double?, TPredicate>.Enumerator, double?, double, TPredicate, AddNullableDouble>(source.predicate);
+        //    => source.SumAt<WhereEnumerable<TEnumerable, TEnumerator, double?, TPredicate>, WhereEnumerable<TEnumerable, TEnumerator, double?, TPredicate>.Enumerator, double?, double, TPredicate>(source.predicate);
 
         //[MethodImpl(MethodImplOptions.AggressiveInlining)]
         //public static decimal Sum<TEnumerable, TEnumerator, TPredicate>(this WhereEnumerable<TEnumerable, TEnumerator, decimal, TPredicate> source)
         //    where TEnumerable : IValueEnumerable<decimal, TEnumerator>
         //    where TEnumerator : struct, IEnumerator<decimal>
         //    where TPredicate : struct, IFunction<decimal, int, bool>
-        //    => source.SumAt<WhereEnumerable<TEnumerable, TEnumerator, decimal, TPredicate>, WhereEnumerable<TEnumerable, TEnumerator, decimal, TPredicate>.Enumerator, decimal, decimal, TPredicate, AddDecimal>(source.predicate);
+        //    => source.SumAt<WhereEnumerable<TEnumerable, TEnumerator, decimal, TPredicate>, WhereEnumerable<TEnumerable, TEnumerator, decimal, TPredicate>.Enumerator, decimal, decimal, TPredicate>(source.predicate);
 
         //[MethodImpl(MethodImplOptions.AggressiveInlining)]
         //public static decimal Sum<TEnumerable, TEnumerator, TPredicate>(this WhereEnumerable<TEnumerable, TEnumerator, decimal?, TPredicate> source)
         //    where TEnumerable : IValueEnumerable<decimal?, TEnumerator>
         //    where TEnumerator : struct, IEnumerator<decimal?>
         //    where TPredicate : struct, IFunction<decimal?, int, bool>
-        //    => source.SumAt<WhereEnumerable<TEnumerable, TEnumerator, decimal?, TPredicate>, WhereEnumerable<TEnumerable, TEnumerator, decimal?, TPredicate>.Enumerator, decimal?, decimal, TPredicate, AddNullableDecimal>(source.predicate);
+        //    => source.SumAt<WhereEnumerable<TEnumerable, TEnumerator, decimal?, TPredicate>, WhereEnumerable<TEnumerable, TEnumerator, decimal?, TPredicate>.Enumerator, decimal?, decimal, TPredicate>(source.predicate);
     }
 }
 

@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 
 namespace NetFabric.Hyperlinq
 {
@@ -37,7 +36,6 @@ namespace NetFabric.Hyperlinq
                 return false;
             }
         }
-
 
         static bool Contains<TSource, TResult, TSelector>(this ReadOnlySpan<TSource> source, TResult value, TSelector selector)
             where TSelector : struct, IFunction<TSource, TResult>

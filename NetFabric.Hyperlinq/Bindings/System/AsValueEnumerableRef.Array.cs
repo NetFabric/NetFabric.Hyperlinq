@@ -73,8 +73,8 @@ namespace NetFabric.Hyperlinq
                 => source.CopyTo(array, arrayIndex);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            bool ICollection<TSource>.Contains(TSource item)
-                => source.AsSpan().Contains(item);
+            public bool Contains(TSource item)
+                => ((ICollection<TSource>)source).Contains(item);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public int IndexOf(TSource item)
@@ -337,7 +337,7 @@ namespace NetFabric.Hyperlinq
                 => source.AsSpan().AnyAtRef(predicate);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public bool Contains(TSource value, IEqualityComparer<TSource>? comparer = null)
+            public bool Contains(TSource value, IEqualityComparer<TSource>? comparer)
                 => source.AsSpan().Contains(value, comparer);
 
             #endregion

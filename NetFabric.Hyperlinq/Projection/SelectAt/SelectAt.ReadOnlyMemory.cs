@@ -280,52 +280,52 @@ namespace NetFabric.Hyperlinq
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int Sum<TSource, TSelector>(this MemorySelectAtEnumerable<TSource, int, TSelector> source)
             where TSelector : struct, IFunction<TSource, int, int>
-            => source.source.Span.SumAt<TSource, int, int, TSelector, AddInt32>(source.selector);
+            => source.source.Span.SumAt<TSource, int, int, TSelector>(source.selector);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int Sum<TSource, TSelector>(this MemorySelectAtEnumerable<TSource, int?, TSelector> source)
             where TSelector : struct, IFunction<TSource, int, int?>
-            => source.source.Span.SumAt<TSource, int?, int, TSelector, AddNullableInt32>(source.selector);
+            => source.source.Span.SumAt<TSource, int?, int, TSelector>(source.selector);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static long Sum<TSource, TSelector>(this MemorySelectAtEnumerable<TSource, long, TSelector> source)
             where TSelector : struct, IFunction<TSource, int, long>
-            => source.source.Span.SumAt<TSource, long, long, TSelector, AddInt64>(source.selector);
+            => source.source.Span.SumAt<TSource, long, long, TSelector>(source.selector);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static long Sum<TSource, TSelector>(this MemorySelectAtEnumerable<TSource, long?, TSelector> source)
             where TSelector : struct, IFunction<TSource, int, long?>
-            => source.source.Span.SumAt<TSource, long?, long, TSelector, AddNullableInt64>(source.selector);
+            => source.source.Span.SumAt<TSource, long?, long, TSelector>(source.selector);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float Sum<TSource, TSelector>(this MemorySelectAtEnumerable<TSource, float, TSelector> source)
             where TSelector : struct, IFunction<TSource, int, float>
-            => source.source.Span.SumAt<TSource, float, float, TSelector, AddSingle>(source.selector);
+            => source.source.Span.SumAt<TSource, float, float, TSelector>(source.selector);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float Sum<TSource, TSelector>(this MemorySelectAtEnumerable<TSource, float?, TSelector> source)
             where TSelector : struct, IFunction<TSource, int, float?>
-            => source.source.Span.SumAt<TSource, float?, float, TSelector, AddNullableSingle>(source.selector);
+            => source.source.Span.SumAt<TSource, float?, float, TSelector>(source.selector);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static double Sum<TSource, TSelector>(this MemorySelectAtEnumerable<TSource, double, TSelector> source)
             where TSelector : struct, IFunction<TSource, int, double>
-            => source.source.Span.SumAt<TSource, double, double, TSelector, AddDouble>(source.selector);
+            => source.source.Span.SumAt<TSource, double, double, TSelector>(source.selector);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static double Sum<TSource, TSelector>(this MemorySelectAtEnumerable<TSource, double?, TSelector> source)
             where TSelector : struct, IFunction<TSource, int, double?>
-            => source.source.Span.SumAt<TSource, double?, double, TSelector, AddNullableDouble>(source.selector);
+            => source.source.Span.SumAt<TSource, double?, double, TSelector>(source.selector);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static decimal Sum<TSource, TSelector>(this MemorySelectAtEnumerable<TSource, decimal, TSelector> source)
             where TSelector : struct, IFunction<TSource, int, decimal>
-            => source.source.Span.SumAt<TSource, decimal, decimal, TSelector, AddDecimal>(source.selector);
+            => source.source.Span.SumAt<TSource, decimal, decimal, TSelector>(source.selector);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static decimal Sum<TSource, TSelector>(this MemorySelectAtEnumerable<TSource, decimal?, TSelector> source)
             where TSelector : struct, IFunction<TSource, int, decimal?>
-            => source.source.Span.SumAt<TSource, decimal?, decimal, TSelector, AddNullableDecimal>(source.selector);
+            => source.source.Span.SumAt<TSource, decimal?, decimal, TSelector>(source.selector);
     }
 }
 

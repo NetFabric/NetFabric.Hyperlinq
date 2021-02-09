@@ -30,8 +30,6 @@ This implementation **favors performance in detriment of assembly binary size** 
   - [Composition](#composition)
   - [Option](#option)
   - [Buffer pools](#buffer-pools)
-    - [`MemoryPool<>`](#memorypool)
-    - [`ArrayPool<>`](#arraypool)
 - [Documentation](#documentation)
 - [Supported operations](#supported-operations)
 - [References](#references)
@@ -352,25 +350,18 @@ source.AsValueEnumerable().First().Where(item => item > 2).Match(
 
 ### Buffer pools
 
-There are operations that do have to allocate on the heap. Some need to use a collection internally (like `Distinct()`) and others need to return a collection (like `ToList()` and `ToArray()`).
-
 [Buffer pools](https://adamsitnik.com/Array-Pool/) allow the use of heap memory without adding pressure to the garbage collector. It preallocates a chunk of memory and "rents" it as required. The garbage collector will add this memory to the Large Object Heap (LOH).
-
-`Netfabric.Hyperlinq` uses the buffer pool for internal collections.
 
 `ToArray()` is usually used to cache values for a brief period. `Netfabric.Hyperlinq` adds an oveload that takes a `MemoryPool<>` as a parameter:
 
 ``` csharp
-using(var buffer = source.AsValueEnumerable().ToArray(MemoryPool<int>.Shared))
-{
-    var memory = buffer.Memory;
-    // use memory here
-}
+using var buffer = source.AsValueEnumerable()
+    .ToArray(MemoryPool<int>.Shared);
+var memory = buffer.Memory;
+// use memory here
 ```
 
 It returns an [`IMemoryOwner<>`](https://docs.microsoft.com/en-us/dotnet/api/system.buffers.imemoryowner-1). The `using` statement guarantees that it is disposed and the buffer automatically returned to the pool. 
-
-Buffer pools may return buffers larger than requested. `ToArray()` always returns buffers with the exact same size as the result. The `Length` property can be used to check for the end of an iteration.
 
 ## Documentation
 

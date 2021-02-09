@@ -114,52 +114,52 @@ namespace NetFabric.Hyperlinq
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int Sum<TPredicate>(this ReadOnlySpanWhereAtRefEnumerable<int, TPredicate> source)
             where TPredicate : struct, IFunctionIn<int, int, bool>
-            => source.source.SumAtRef<int, int, TPredicate, AddInt32>(source.predicate);
+            => source.source.SumAtRef<int, int, TPredicate>(source.predicate);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int Sum<TPredicate>(this ReadOnlySpanWhereAtRefEnumerable<int?, TPredicate> source)
             where TPredicate : struct, IFunctionIn<int?, int, bool>
-            => source.source.SumAtRef<int?, int, TPredicate, AddNullableInt32>(source.predicate);
+            => source.source.SumAtRef<int?, int, TPredicate>(source.predicate);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static long Sum<TPredicate>(this ReadOnlySpanWhereAtRefEnumerable<long, TPredicate> source)
             where TPredicate : struct, IFunctionIn<long, int, bool>
-            => source.source.SumAtRef<long, long, TPredicate, AddInt64>(source.predicate);
+            => source.source.SumAtRef<long, long, TPredicate>(source.predicate);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static long Sum<TPredicate>(this ReadOnlySpanWhereAtRefEnumerable<long?, TPredicate> source)
             where TPredicate : struct, IFunctionIn<long?, int, bool>
-            => source.source.SumAtRef<long?, long, TPredicate, AddNullableInt64>(source.predicate);
+            => source.source.SumAtRef<long?, long, TPredicate>(source.predicate);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float Sum<TPredicate>(this ReadOnlySpanWhereAtRefEnumerable<float, TPredicate> source)
             where TPredicate : struct, IFunctionIn<float, int, bool>
-            => source.source.SumAtRef<float, float, TPredicate, AddSingle>(source.predicate);
+            => source.source.SumAtRef<float, float, TPredicate>(source.predicate);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float Sum<TPredicate>(this ReadOnlySpanWhereAtRefEnumerable<float?, TPredicate> source)
             where TPredicate : struct, IFunctionIn<float?, int, bool>
-            => source.source.SumAtRef<float?, float, TPredicate, AddNullableSingle>(source.predicate);
+            => source.source.SumAtRef<float?, float, TPredicate>(source.predicate);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static double Sum<TPredicate>(this ReadOnlySpanWhereAtRefEnumerable<double, TPredicate> source)
             where TPredicate : struct, IFunctionIn<double, int, bool>
-            => source.source.SumAtRef<double, double, TPredicate, AddDouble>(source.predicate);
+            => source.source.SumAtRef<double, double, TPredicate>(source.predicate);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static double Sum<TPredicate>(this ReadOnlySpanWhereAtRefEnumerable<double?, TPredicate> source)
             where TPredicate : struct, IFunctionIn<double?, int, bool>
-            => source.source.SumAtRef<double?, double, TPredicate, AddNullableDouble>(source.predicate);
+            => source.source.SumAtRef<double?, double, TPredicate>(source.predicate);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static decimal Sum<TPredicate>(this ReadOnlySpanWhereAtRefEnumerable<decimal, TPredicate> source)
             where TPredicate : struct, IFunctionIn<decimal, int, bool>
-            => source.source.SumAtRef<decimal, decimal, TPredicate, AddDecimal>(source.predicate);
+            => source.source.SumAtRef<decimal, decimal, TPredicate>(source.predicate);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static decimal Sum<TPredicate>(this ReadOnlySpanWhereAtRefEnumerable<decimal?, TPredicate> source)
             where TPredicate : struct, IFunctionIn<decimal?, int, bool>
-            => source.source.SumAtRef<decimal?, decimal, TPredicate, AddNullableDecimal>(source.predicate);
+            => source.source.SumAtRef<decimal?, decimal, TPredicate>(source.predicate);
     }
 }
 

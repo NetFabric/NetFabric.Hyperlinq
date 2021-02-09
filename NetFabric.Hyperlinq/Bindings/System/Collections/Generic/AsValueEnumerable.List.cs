@@ -66,8 +66,8 @@ namespace NetFabric.Hyperlinq
                 => source.CopyTo(array, arrayIndex);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            bool ICollection<TSource>.Contains(TSource item)
-                => source.AsSpan().Contains(item);
+            public bool Contains(TSource item)
+                => source.Contains(item);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             int IList<TSource>.IndexOf(TSource item)
@@ -327,6 +327,11 @@ namespace NetFabric.Hyperlinq
             => source.source.AsSpan().Sum();
 
 #if NET5_0
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool ContainsVector<TSource>(this ListValueEnumerable<TSource> source, TSource value)
+            where TSource : struct
+            => source.source.AsSpan().ContainsVector(value);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ArrayExtensions.MemorySelectVectorEnumerable<TSource, TResult, FunctionWrapper<Vector<TSource>, Vector<TResult>>, FunctionWrapper<TSource, TResult>> SelectVector<TSource, TResult>(this ListValueEnumerable<TSource> source, Func<Vector<TSource>, Vector<TResult>> vectorSelector, Func<TSource, TResult> selector)

@@ -15,7 +15,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
     {
         [BenchmarkCategory("Range")]
         [Benchmark(Baseline = true)]
-        public int Linq_Range() 
+        public int Linq() 
         {
             var sum = 0;
             foreach(var item in Enumerable.Range(0, Count))
@@ -25,7 +25,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
 
         [BenchmarkCategory("Range_Async")]
         [Benchmark(Baseline = true)]
-        public async ValueTask<int> Linq_Range_Async()
+        public async ValueTask<int> Linq_Async()
         {
             var sum = 0;
             await foreach (var item in AsyncEnumerable.Range(0, Count))
@@ -37,7 +37,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
 
         [BenchmarkCategory("Range")]
         [Benchmark]
-        public int StructLinq_Range()
+        public int StructLinq()
         {
             var sum = 0;
             foreach (var item in StructEnumerable.Range(0, Count))
@@ -49,7 +49,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
 
         [BenchmarkCategory("Range")]
         [Benchmark]
-        public int Hyperlinq_Range() 
+        public int Hyperlinq() 
         {
             var sum = 0;
             foreach (var item in ValueEnumerable.Range(0, Count))
@@ -59,7 +59,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
 
         [BenchmarkCategory("Range_Async")]
         [Benchmark]
-        public async ValueTask<int> Hyperlinq_Range_Async()
+        public async ValueTask<int> Hyperlinq_Async()
         {
             var sum = 0;
             await foreach (var item in AsyncValueEnumerable.Range(0, Count))

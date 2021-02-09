@@ -269,52 +269,52 @@ namespace NetFabric.Hyperlinq
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int Sum<TSource, TSelector>(this ArraySegmentSelectEnumerable<TSource, int, TSelector> source)
             where TSelector : struct, IFunction<TSource, int>
-            => ((ReadOnlySpan<TSource>)source.source.AsSpan()).Sum<TSource, int, int, TSelector, AddInt32>(source.selector);
+            => ((ReadOnlySpan<TSource>)source.source.AsSpan()).Sum<TSource, int, int, TSelector>(source.selector);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int Sum<TSource, TSelector>(this ArraySegmentSelectEnumerable<TSource, int?, TSelector> source)
             where TSelector : struct, IFunction<TSource, int?>
-            => ((ReadOnlySpan<TSource>)source.source.AsSpan()).Sum<TSource, int?, int, TSelector, AddNullableInt32>(source.selector);
+            => ((ReadOnlySpan<TSource>)source.source.AsSpan()).Sum<TSource, int?, int, TSelector>(source.selector);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static long Sum<TSource, TSelector>(this ArraySegmentSelectEnumerable<TSource, long, TSelector> source)
             where TSelector : struct, IFunction<TSource, long>
-            => ((ReadOnlySpan<TSource>)source.source.AsSpan()).Sum<TSource, long, long, TSelector, AddInt64>(source.selector);
+            => ((ReadOnlySpan<TSource>)source.source.AsSpan()).Sum<TSource, long, long, TSelector>(source.selector);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static long Sum<TSource, TSelector>(this ArraySegmentSelectEnumerable<TSource, long?, TSelector> source)
             where TSelector : struct, IFunction<TSource, long?>
-            => ((ReadOnlySpan<TSource>)source.source.AsSpan()).Sum<TSource, long?, long, TSelector, AddNullableInt64>(source.selector);
+            => ((ReadOnlySpan<TSource>)source.source.AsSpan()).Sum<TSource, long?, long, TSelector>(source.selector);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float Sum<TSource, TSelector>(this ArraySegmentSelectEnumerable<TSource, float, TSelector> source)
             where TSelector : struct, IFunction<TSource, float>
-            => ((ReadOnlySpan<TSource>)source.source.AsSpan()).Sum<TSource, float, float, TSelector, AddSingle>(source.selector);
+            => ((ReadOnlySpan<TSource>)source.source.AsSpan()).Sum<TSource, float, float, TSelector>(source.selector);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float Sum<TSource, TSelector>(this ArraySegmentSelectEnumerable<TSource, float?, TSelector> source)
             where TSelector : struct, IFunction<TSource, float?>
-            => ((ReadOnlySpan<TSource>)source.source.AsSpan()).Sum<TSource, float?, float, TSelector, AddNullableSingle>(source.selector);
+            => ((ReadOnlySpan<TSource>)source.source.AsSpan()).Sum<TSource, float?, float, TSelector>(source.selector);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static double Sum<TSource, TSelector>(this ArraySegmentSelectEnumerable<TSource, double, TSelector> source)
             where TSelector : struct, IFunction<TSource, double>
-            => ((ReadOnlySpan<TSource>)source.source.AsSpan()).Sum<TSource, double, double, TSelector, AddDouble>(source.selector);
+            => ((ReadOnlySpan<TSource>)source.source.AsSpan()).Sum<TSource, double, double, TSelector>(source.selector);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static double Sum<TSource, TSelector>(this ArraySegmentSelectEnumerable<TSource, double?, TSelector> source)
             where TSelector : struct, IFunction<TSource, double?>
-            => ((ReadOnlySpan<TSource>)source.source.AsSpan()).Sum<TSource, double?, double, TSelector, AddNullableDouble>(source.selector);
+            => ((ReadOnlySpan<TSource>)source.source.AsSpan()).Sum<TSource, double?, double, TSelector>(source.selector);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static decimal Sum<TSource, TSelector>(this ArraySegmentSelectEnumerable<TSource, decimal, TSelector> source)
             where TSelector : struct, IFunction<TSource, decimal>
-            => ((ReadOnlySpan<TSource>)source.source.AsSpan()).Sum<TSource, decimal, decimal, TSelector, AddDecimal>(source.selector);
+            => ((ReadOnlySpan<TSource>)source.source.AsSpan()).Sum<TSource, decimal, decimal, TSelector>(source.selector);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static decimal Sum<TSource, TSelector>(this ArraySegmentSelectEnumerable<TSource, decimal?, TSelector> source)
             where TSelector : struct, IFunction<TSource, decimal?>
-            => ((ReadOnlySpan<TSource>)source.source.AsSpan()).Sum<TSource, decimal?, decimal, TSelector, AddNullableDecimal>(source.selector);
+            => ((ReadOnlySpan<TSource>)source.source.AsSpan()).Sum<TSource, decimal?, decimal, TSelector>(source.selector);
 
     }
 }

@@ -65,8 +65,8 @@ namespace NetFabric.Hyperlinq
                 => source.CopyTo(array, arrayIndex);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            bool ICollection<TSource>.Contains(TSource item)
-                => source.AsSpan().Contains(item);
+            public bool Contains(TSource item)
+                => source.Contains(item);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             int IList<TSource>.IndexOf(TSource item)

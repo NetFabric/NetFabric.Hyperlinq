@@ -416,6 +416,11 @@ namespace NetFabric.Hyperlinq
 #if NET5_0
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool ContainsVector<TSource>(this ValueEnumerable<TSource> source, TSource value)
+            where TSource : struct
+            => source.source.Span.ContainsVector(value);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ArrayExtensions.MemorySelectVectorEnumerable<TSource, TResult, FunctionWrapper<Vector<TSource>, Vector<TResult>>, FunctionWrapper<TSource, TResult>> SelectVector<TSource, TResult>(this ValueEnumerable<TSource> source, Func<Vector<TSource>, Vector<TResult>> vectorSelector, Func<TSource, TResult> selector)
             where TSource : struct
             where TResult : struct

@@ -1,7 +1,7 @@
-﻿## ContainsBenchmarks
+﻿## SelectSumBenchmarks
 
 ### Source
-[ContainsBenchmarks.cs](../NetFabric.Hyperlinq.Benchmarks/Benchmarks/ContainsBenchmarks.cs)
+[SelectSumBenchmarks.cs](../NetFabric.Hyperlinq.Benchmarks/Benchmarks/SelectSumBenchmarks.cs)
 
 ### References:
 - Linq: 5.0.2
@@ -23,9 +23,10 @@ Intel Core i7-7567U CPU 3.50GHz (Kaby Lake), 1 CPU, 4 logical and 2 physical cor
 Job=.NET Core 5.0  Runtime=.NET Core 5.0  Categories=Array  
 
 ```
-|              Method | Count |     Mean |    Error |   StdDev | Ratio | RatioSD | Gen 0 | Gen 1 | Gen 2 | Allocated |
-|-------------------- |------ |---------:|---------:|---------:|------:|--------:|------:|------:|------:|----------:|
-|          Linq_Array |   100 | 55.27 ns | 1.138 ns | 1.479 ns |  1.00 |    0.00 |     - |     - |     - |         - |
-|     Hyperlinq_Array |   100 | 49.53 ns | 1.536 ns | 4.528 ns |  0.89 |    0.04 |     - |     - |     - |         - |
-|      Hyperlinq_Span |   100 | 96.52 ns | 1.965 ns | 3.442 ns |  1.76 |    0.09 |     - |     - |     - |         - |
-| Hyperlinq_Span_SIMD |   100 | 19.46 ns | 0.264 ns | 0.449 ns |  0.35 |    0.01 |     - |     - |     - |         - |
+|              Method | Count |      Mean |    Error |   StdDev | Ratio |  Gen 0 | Gen 1 | Gen 2 | Allocated |
+|-------------------- |------ |----------:|---------:|---------:|------:|-------:|------:|------:|----------:|
+|          Linq_Array |   100 | 667.37 ns | 6.329 ns | 7.773 ns |  1.00 | 0.0229 |     - |     - |      48 B |
+|    StructLinq_Array |   100 | 187.38 ns | 0.992 ns | 0.828 ns |  0.28 |      - |     - |     - |         - |
+|     Hyperlinq_Array |   100 | 173.83 ns | 2.209 ns | 1.845 ns |  0.26 |      - |     - |     - |         - |
+|      Hyperlinq_Span |   100 | 170.41 ns | 0.836 ns | 0.698 ns |  0.25 |      - |     - |     - |         - |
+| Hyperlinq_Span_SIMD |   100 |  63.81 ns | 1.143 ns | 1.013 ns |  0.10 |      - |     - |     - |         - |

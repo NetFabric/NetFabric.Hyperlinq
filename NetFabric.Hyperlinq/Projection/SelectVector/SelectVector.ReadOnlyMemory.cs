@@ -38,9 +38,9 @@ namespace NetFabric.Hyperlinq
             where TSource : struct
             where TResult : struct
         {
-            readonly ReadOnlyMemory<TSource> source;
-            TVectorSelector vectorSelector;
-            TSelector selector;
+            internal readonly ReadOnlyMemory<TSource> source;
+            internal TVectorSelector vectorSelector;
+            internal TSelector selector;
 
             internal MemorySelectVectorEnumerable(ReadOnlyMemory<TSource> source, TVectorSelector vectorSelector, TSelector selector)
             {
@@ -189,35 +189,35 @@ namespace NetFabric.Hyperlinq
             where TVectorSelector : struct, IFunction<Vector<TSource>, Vector<int>>
             where TSelector : struct, IFunction<TSource, int>
             where TSource : struct
-            => source.Sum<MemorySelectVectorEnumerable<TSource, int, TVectorSelector, TSelector>, MemorySelectVectorEnumerable<TSource, int, TVectorSelector, TSelector>.DisposableEnumerator, int, int, AddInt32>();
+            => source.source.Sum<TSource, int, TVectorSelector, TSelector>(source.vectorSelector, source.selector);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static long Sum<TSource, TVectorSelector, TSelector>(this MemorySelectVectorEnumerable<TSource, long, TVectorSelector, TSelector> source)
             where TVectorSelector : struct, IFunction<Vector<TSource>, Vector<long>>
             where TSelector : struct, IFunction<TSource, long>
             where TSource : struct
-            => source.Sum<MemorySelectVectorEnumerable<TSource, long, TVectorSelector, TSelector>, MemorySelectVectorEnumerable<TSource, long, TVectorSelector, TSelector>.DisposableEnumerator, long, long, AddInt64>();
+            => source.source.Sum<TSource, long, TVectorSelector, TSelector>(source.vectorSelector, source.selector);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float Sum<TSource, TVectorSelector, TSelector>(this MemorySelectVectorEnumerable<TSource, float, TVectorSelector, TSelector> source)
             where TVectorSelector : struct, IFunction<Vector<TSource>, Vector<float>>
             where TSelector : struct, IFunction<TSource, float>
             where TSource : struct
-            => source.Sum<MemorySelectVectorEnumerable<TSource, float, TVectorSelector, TSelector>, MemorySelectVectorEnumerable<TSource, float, TVectorSelector, TSelector>.DisposableEnumerator, float, float, AddSingle>();
+            => source.source.Sum<TSource, float, TVectorSelector, TSelector>(source.vectorSelector, source.selector);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static double Sum<TSource, TVectorSelector, TSelector>(this MemorySelectVectorEnumerable<TSource, double, TVectorSelector, TSelector> source)
             where TVectorSelector : struct, IFunction<Vector<TSource>, Vector<double>>
             where TSelector : struct, IFunction<TSource, double>
             where TSource : struct
-            => source.Sum<MemorySelectVectorEnumerable<TSource, double, TVectorSelector, TSelector>, MemorySelectVectorEnumerable<TSource, double, TVectorSelector, TSelector>.DisposableEnumerator, double, double, AddDouble>();
+            => source.source.Sum<TSource, double, TVectorSelector, TSelector>(source.vectorSelector, source.selector);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static decimal Sum<TSource, TVectorSelector, TSelector>(this MemorySelectVectorEnumerable<TSource, decimal, TVectorSelector, TSelector> source)
             where TVectorSelector : struct, IFunction<Vector<TSource>, Vector<decimal>>
             where TSelector : struct, IFunction<TSource, decimal>
             where TSource : struct
-            => source.Sum<MemorySelectVectorEnumerable<TSource, decimal, TVectorSelector, TSelector>, MemorySelectVectorEnumerable<TSource, decimal, TVectorSelector, TSelector>.DisposableEnumerator, decimal, decimal, AddDecimal>();
+            => source.source.Sum<TSource, decimal, TVectorSelector, TSelector>(source.vectorSelector, source.selector);
 
 #endif    
     }
