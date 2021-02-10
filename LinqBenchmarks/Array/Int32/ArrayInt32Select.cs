@@ -50,7 +50,7 @@ namespace LinqBenchmarks.Array.Int32
         [Benchmark]
         public int LinqFaster_SIMD()
         {
-            var items = source.SelectS(item => item * 2);
+            var items = source.SelectS(item => item * 2, item => item * 2);
             var sum = 0;
             foreach (var item in items)
                 sum += item;
@@ -142,7 +142,7 @@ namespace LinqBenchmarks.Array.Int32
 
 
         [Benchmark]
-        public int Hyperlinq_SIMD_IFunction()
+        public int Hyperlinq_IFunction_SIMD()
         {
             var sum = 0;
             foreach (var item in source.AsValueEnumerable()

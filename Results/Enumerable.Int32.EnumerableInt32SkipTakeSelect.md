@@ -9,7 +9,7 @@
 - LinqFaster.SIMD: [1.1.2](https://www.nuget.org/packages/LinqFaster.SIMD/1.0.3)
 - LinqAF: [3.0.0.0](https://www.nuget.org/packages/LinqAF/3.0.0.0)
 - StructLinq.BCL: [0.25.3](https://www.nuget.org/packages/StructLinq.BCL/0.25.3)
-- NetFabric.Hyperlinq: [3.0.0-beta34](https://www.nuget.org/packages/NetFabric.Hyperlinq/3.0.0-beta34)
+- NetFabric.Hyperlinq: [3.0.0-beta35](https://www.nuget.org/packages/NetFabric.Hyperlinq/3.0.0-beta35)
 
 ### Results:
 ``` ini
@@ -25,10 +25,10 @@ Job=.NET Core 5.0  Runtime=.NET Core 5.0
 ```
 |                      Method | Skip | Count |     Mean |     Error |    StdDev | Ratio |  Gen 0 | Gen 1 | Gen 2 | Allocated |
 |---------------------------- |----- |------ |---------:|----------:|----------:|------:|-------:|------:|------:|----------:|
-|                 ForeachLoop | 1000 |   100 | 2.998 μs | 0.0094 μs | 0.0088 μs |  1.00 | 0.0191 |     - |     - |      40 B |
-|                        Linq | 1000 |   100 | 4.703 μs | 0.0166 μs | 0.0155 μs |  1.57 | 0.0992 |     - |     - |     208 B |
-|                      LinqAF | 1000 |   100 | 5.008 μs | 0.0148 μs | 0.0131 μs |  1.67 | 0.0153 |     - |     - |      40 B |
-|                  StructLinq | 1000 |   100 | 3.429 μs | 0.0184 μs | 0.0172 μs |  1.14 | 0.0610 |     - |     - |     128 B |
-|        StructLinq_IFunction | 1000 |   100 | 3.387 μs | 0.0095 μs | 0.0084 μs |  1.13 | 0.0191 |     - |     - |      40 B |
-|           Hyperlinq_Foreach | 1000 |   100 | 4.500 μs | 0.0153 μs | 0.0136 μs |  1.50 | 0.0153 |     - |     - |      40 B |
-| Hyperlinq_Foreach_IFunction | 1000 |   100 | 2.999 μs | 0.0091 μs | 0.0076 μs |  1.00 | 0.0191 |     - |     - |      40 B |
+|                 ForeachLoop | 1000 |   100 | 3.079 μs | 0.0068 μs | 0.0060 μs |  1.00 | 0.0191 |     - |     - |      40 B |
+|                        Linq | 1000 |   100 | 4.192 μs | 0.0137 μs | 0.0122 μs |  1.36 | 0.0992 |     - |     - |     208 B |
+|                      LinqAF | 1000 |   100 | 4.953 μs | 0.0150 μs | 0.0133 μs |  1.61 | 0.0153 |     - |     - |      40 B |
+|                  StructLinq | 1000 |   100 | 3.411 μs | 0.0138 μs | 0.0123 μs |  1.11 | 0.0610 |     - |     - |     128 B |
+|        StructLinq_IFunction | 1000 |   100 | 3.403 μs | 0.0093 μs | 0.0078 μs |  1.10 | 0.0191 |     - |     - |      40 B |
+|           Hyperlinq_Foreach | 1000 |   100 | 3.160 μs | 0.0135 μs | 0.0113 μs |  1.03 | 0.0191 |     - |     - |      40 B |
+| Hyperlinq_Foreach_IFunction | 1000 |   100 | 2.994 μs | 0.0070 μs | 0.0062 μs |  0.97 | 0.0191 |     - |     - |      40 B |

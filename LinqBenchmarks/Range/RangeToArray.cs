@@ -1,5 +1,6 @@
 ﻿
 using BenchmarkDotNet.Attributes;
+using JM.LinqFaster.SIMD;
 using NetFabric.Hyperlinq;
 using StructLinq;
 using System.Buffers;
@@ -25,6 +26,10 @@ namespace LinqBenchmarks.Range
         [Benchmark]
         public int[] LinqFaster()
             => JM.LinqFaster.LinqFaster.RangeArrayF(Start, Count);
+
+        [Benchmark]
+        public int[] LinqFaster_SIMD()
+            => LinqFasterSIMD.RangeS(Start, Count);
 
         [Benchmark]
         public int[] LinqAF()

@@ -22,15 +22,22 @@ namespace LinqBenchmarks.Range
 
         [Benchmark]
         public int[] Linq()
-            => System.Linq.Enumerable.Range(Start, Count).Select(item => item * 2).ToArray();
+            => System.Linq.Enumerable
+                .Range(Start, Count)
+                .Select(item => item * 2)
+                .ToArray();
 
         [Benchmark]
         public int[] LinqFaster()
-            => JM.LinqFaster.LinqFaster.RangeArrayF(Start, Count).SelectF(item => item * 2);
+            => JM.LinqFaster.LinqFaster
+                .RangeArrayF(Start, Count)
+                .SelectF(item => item * 2);
 
         [Benchmark]
         public int[] LinqFaster_SIMD()
-            => LinqFasterSIMD.RangeS(Start, Count).SelectS(item => item * 2);
+            => LinqFasterSIMD
+                .RangeS(Start, Count)
+                .SelectS(item => item * 2, item => item * 2);
 
         [Benchmark]
         public int[] LinqAF()

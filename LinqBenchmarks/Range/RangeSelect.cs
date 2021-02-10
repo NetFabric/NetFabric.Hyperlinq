@@ -65,7 +65,7 @@ namespace LinqBenchmarks.Range
         {
             var items = LinqFasterSIMD
                 .RangeS(Start, Count)
-                .SelectS(item => item * 2);
+                .SelectS(item => item * 2, item => item * 2);
             var sum = 0;
             for (var index = 0; index < items.Length; index++)
                 sum += items[index];
