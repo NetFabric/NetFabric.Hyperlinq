@@ -6,7 +6,7 @@ using StructLinq;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace LinqBenchmarks.Array.Int32
+namespace LinqBenchmarks.List.Int32
 {
     public class ListInt32SelectToList: Int32ListBenchmarkBase
     {

@@ -35,6 +35,7 @@ Benchmarks comparing the perfomance of [LINQ](https://docs.microsoft.com/en-us/d
 
 - [array.Distinct()](Results/Array.Int32.ArrayInt32Distinct.md)
 - [array.Select()](Results/Array.Int32.ArrayInt32Select.md)
+- [array.Select().ToList()](Results/Array.Int32.ArrayInt32SelectToList.md)
 - [array.Skip().Take().Select()](Results/Array.Int32.ArrayInt32SkipTakeSelect.md)
 - [array.Skip().Take().Where()](Results/Array.Int32.ArrayInt32SkipTakeWhere.md)
 - [array.Sum()](Results/Array.Int32.ArrayInt32Sum.md)
@@ -61,6 +62,7 @@ Benchmarks comparing the perfomance of [LINQ](https://docs.microsoft.com/en-us/d
 
 - [list.Distinct()](Results/List.Int32.ListInt32Distinct.md)
 - [list.Select()](Results/List.Int32.ListInt32Select.md)
+- [list.Select().ToList()](Results/List.Int32.ListInt32SelectToList.md)
 - [list.Skip().Take().Select()](Results/List.Int32.ListInt32SkipTakeSelect.md)
 - [list.Skip().Take().Where()](Results/List.Int32.ListInt32SkipTakeWhere.md)
 - [list.Sum()](Results/List.Int32.ListInt32Sum.md)
