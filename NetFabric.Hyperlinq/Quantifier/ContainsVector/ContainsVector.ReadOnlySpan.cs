@@ -13,13 +13,17 @@ namespace NetFabric.Hyperlinq
             if (source.Length is 0)
                 return false;
 
-            var vectorSize = Vector<TSource>.Count;
-            var vectorValue = new Vector<TSource>(value);
             var index = 0;
-            for (; index < source.Length - vectorSize; index += vectorSize)
+
+            if (Vector.IsHardwareAccelerated)
             {
-                if (Vector.EqualsAny(new Vector<TSource>(source[index..]), vectorValue))
-                    return true;
+                var vectorSize = Vector<TSource>.Count;
+                var vectorValue = new Vector<TSource>(value);
+                for (; index < source.Length - vectorSize; index += vectorSize)
+                {
+                    if (Vector.EqualsAny(new Vector<TSource>(source.Slice(index, vectorSize)), vectorValue))
+                        return true;
+                }
             }
 
             for (; index < source.Length; index++)
@@ -40,13 +44,17 @@ namespace NetFabric.Hyperlinq
             if (source.Length is 0)
                 return false;
 
-            var vectorSize = Vector<TSource>.Count;
-            var vectorValue = new Vector<TResult>(value);
             var index = 0;
-            for (; index < source.Length - vectorSize; index += vectorSize)
+
+            if (Vector.IsHardwareAccelerated)
             {
-                if (Vector.EqualsAny(vectorSelector.Invoke(new Vector<TSource>(source[index..])), vectorValue))
-                    return true;
+                var vectorSize = Vector<TSource>.Count;
+                var vectorValue = new Vector<TResult>(value);
+                for (; index < source.Length - vectorSize; index += vectorSize)
+                {
+                    if (Vector.EqualsAny(vectorSelector.Invoke(new Vector<TSource>(source.Slice(index, vectorSize))), vectorValue))
+                        return true;
+                }
             }
 
             for (; index < source.Length; index++)

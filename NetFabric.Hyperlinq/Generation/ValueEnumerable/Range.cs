@@ -70,44 +70,7 @@ namespace NetFabric.Hyperlinq
                 if (span.Length < Count)
                     Throw.ArgumentException(Resource.DestinationNotLongEnough, nameof(span));
 
-                var index = 0;
-#if NET5_0
-                var vectorSize = Vector<int>.Count;
-                if (Count >= vectorSize)
-                {
-                    var copySpan = span[0..vectorSize]; // bounds check removal
-                    if (start is 0)
-                    {
-                        for (; index < copySpan.Length; index++)
-                            copySpan[index] = index;
-                    }
-                    else
-                    {
-                        for (; index < copySpan.Length; index++)
-                            copySpan[index] = index + start;
-                    }
-
-                    var vector = new Vector<int>(copySpan);
-                    var increment = new Vector<int>(Count);
-                    vector = vector + increment;
-                    for (; index <= Count - vectorSize; index += vectorSize)
-                    {
-                        vector.CopyTo(span[index..]);
-                        vector = vector + increment;
-                    }
-                }
-#endif
-
-                if (start is 0)
-                {
-                    for (; index < span.Length; index++)
-                        span[index] = index;
-                }
-                else
-                {
-                    for (; index < span.Length; index++)
-                        span[index] = index + start;
-                }
+                ArrayExtensions.CopyRange(start, Count, span);
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -189,6 +152,8 @@ namespace NetFabric.Hyperlinq
                 public readonly void Dispose() { }
             }
 
+            #region Partitioning
+
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public RangeEnumerable Skip(int count)
             {
@@ -199,6 +164,15 @@ namespace NetFabric.Hyperlinq
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public RangeEnumerable Take(int count)
                 => Range(start, Utils.Take(Count, count));
+
+            #endregion
+            #region Aggregation
+
+            public int Sum()
+                => SumRange(start, Count);
+
+            #endregion
+            #region Quantifier
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Any()
@@ -220,18 +194,44 @@ namespace NetFabric.Hyperlinq
                 return false;
             }
 
+            #endregion
+            #region Filtering
+
+            #endregion
+            #region Projection
+#if NET5_0
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public RangeSelectVectorEnumerable<TResult, FunctionWrapper<Vector<int>, Vector<TResult>>, FunctionWrapper<int, TResult>> SelectVector<TResult, TVectorSelector, TSelector>(Func<Vector<int>, Vector<TResult>> vectorSelector, Func<int, TResult> selector)
+                where TVectorSelector : struct, IFunction<Vector<int>, Vector<TResult>>
+                where TSelector : struct, IFunction<int, TResult>
+                where TResult : struct
+                => ValueEnumerable.SelectVector<TResult, FunctionWrapper<Vector<int>, Vector<TResult>>, FunctionWrapper<int, TResult>>(start, Count, vectorSelector, selector);
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public RangeSelectVectorEnumerable<TResult, TVectorSelector, TSelector> SelectVector<TResult, TVectorSelector, TSelector>(TVectorSelector vectorSelector = default, TSelector selector = default)
+                where TVectorSelector : struct, IFunction<Vector<int>, Vector<TResult>>
+                where TSelector : struct, IFunction<int, TResult>
+                where TResult : struct
+                => ValueEnumerable.SelectVector<TResult, TVectorSelector, TSelector>(start, Count, vectorSelector, selector);
+#endif
+            #endregion
+            #region Element
+
+            #endregion
+            #region Conversion
+
             public int[] ToArray()
             {
                 // ReSharper disable once HeapView.ObjectAllocation.Evident
                 var array = new int[Count];
-                CopyTo(array.AsSpan());
+                ArrayExtensions.CopyRange(start, Count, array.AsSpan());
                 return array;
             }
 
             public IMemoryOwner<int> ToArray(MemoryPool<int> pool)
             {
                 var result = pool.RentSliced(Count);
-                CopyTo(result.Memory.Span);
+                ArrayExtensions.CopyRange(start, Count, result.Memory.Span);
                 return result;
             }
 
@@ -242,6 +242,8 @@ namespace NetFabric.Hyperlinq
                     0 => new List<int>(),
                     _ => ToArray().AsList()
                 };
+
+            #endregion
         }
     }
 }

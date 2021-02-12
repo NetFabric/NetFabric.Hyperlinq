@@ -14,6 +14,14 @@ namespace NetFabric.Hyperlinq
             where TSource : struct
             where TResult : struct
             => ((ReadOnlyMemory<TSource>)source).SelectVector(vectorSelector, selector);
+        
+        [GeneratorIgnore]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static MemorySelectVectorEnumerable<TSource, TResult, TSelector, TSelector> SelectVector<TSource, TResult, TSelector>(this Memory<TSource> source, TSelector selector = default)
+            where TSelector : struct, IFunction<Vector<TSource>, Vector<TResult>>, IFunction<TSource, TResult>
+            where TSource : struct
+            where TResult : struct
+            => ((ReadOnlyMemory<TSource>)source).SelectVector<TSource, TResult, TSelector, TSelector>(selector, selector);
 
         [GeneratorIgnore]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

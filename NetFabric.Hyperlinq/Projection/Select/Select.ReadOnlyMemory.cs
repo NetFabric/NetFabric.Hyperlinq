@@ -71,8 +71,17 @@ namespace NetFabric.Hyperlinq
             bool ICollection<TResult>.IsReadOnly  
                 => true;
 
+            public void CopyTo(Span<TResult> span)
+            {
+                if (span.Length < Count)
+                    Throw.ArgumentException(Resource.DestinationNotLongEnough, nameof(span)); 
+                
+                Copy(source.Span, span, selector);
+            }
+
             void ICollection<TResult>.CopyTo(TResult[] array, int arrayIndex)
-                => ArrayExtensions.Copy(source.Span, array.AsSpan(arrayIndex), selector);
+                => CopyTo(array.AsSpan().Slice(arrayIndex));
+            
             void ICollection<TResult>.Add(TResult item) 
                 => Throw.NotSupportedException();
             void ICollection<TResult>.Clear() 
