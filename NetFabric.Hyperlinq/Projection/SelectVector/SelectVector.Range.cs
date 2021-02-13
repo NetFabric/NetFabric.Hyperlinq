@@ -24,7 +24,7 @@ namespace NetFabric.Hyperlinq
         static RangeSelectVectorEnumerable<TResult, TSelector, TSelector> SelectVector<TResult, TSelector>(int start, int count, TSelector selector = default)
             where TSelector : struct, IFunction<Vector<int>, Vector<TResult>>, IFunction<int, TResult>
             where TResult : struct
-            => new(start, count, selector, selector);
+            => SelectVector<TResult, TSelector, TSelector>(start, count, selector, selector);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static RangeSelectVectorEnumerable<TResult, TVectorSelector, TSelector> SelectVector<TResult, TVectorSelector, TSelector>(int start, int count, TVectorSelector vectorSelector = default, TSelector selector = default)
@@ -34,10 +34,11 @@ namespace NetFabric.Hyperlinq
             => new(start, count, vectorSelector, selector);
 
         [GeneratorIgnore]
+        // [GeneratorMapping("TSource", "TResult")]
         [StructLayout(LayoutKind.Auto)]
-        public struct RangeSelectVectorEnumerable<TResult, TVectorSelector, TSelector>
+        public partial struct RangeSelectVectorEnumerable<TResult, TVectorSelector, TSelector>
             : IValueReadOnlyList<TResult, RangeSelectVectorEnumerable<TResult, TVectorSelector, TSelector>.DisposableEnumerator>
-                , IList<TResult>
+            , IList<TResult>
             where TVectorSelector : struct, IFunction<Vector<int>, Vector<TResult>>
             where TSelector : struct, IFunction<int, TResult>
             where TResult : struct

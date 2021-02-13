@@ -24,7 +24,7 @@ namespace NetFabric.Hyperlinq
             where TSelector : struct, IFunction<Vector<TSource>, Vector<TResult>>, IFunction<TSource, TResult>
             where TSource : struct
             where TResult : struct
-            => new(source, selector, selector);
+            => source.SelectVector<TSource, TResult, TSelector, TSelector>(selector, selector);
 
         [GeneratorIgnore]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -36,6 +36,7 @@ namespace NetFabric.Hyperlinq
             => new(source, vectorSelector, selector);
 
         [GeneratorIgnore]
+        // [GeneratorMapping("TSource", "TResult")]
         [StructLayout(LayoutKind.Auto)]
         public ref struct SpanSelectVectorEnumerable<TSource, TResult, TVectorSelector, TSelector>
             where TVectorSelector : struct, IFunction<Vector<TSource>, Vector<TResult>>
