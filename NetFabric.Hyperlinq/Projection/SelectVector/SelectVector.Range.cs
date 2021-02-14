@@ -118,7 +118,6 @@ namespace NetFabric.Hyperlinq
                 if (count is 0)
                     return false;
 
-                var end = start + count;
                 var index = 0;
 
                 var vectorSize = Vector<int>.Count;
@@ -143,7 +142,7 @@ namespace NetFabric.Hyperlinq
 
                     var vectorIncrement = new Vector<int>(vectorSize);
                     vector = vector + vectorIncrement;
-                    for (; index < end - vectorSize; index += vectorSize)
+                    for (index = 0; index < count - vectorSize; index += vectorSize)
                     {
                         if (Vector.EqualsAny(vectorSelector.Invoke(vector), vectorItem))
                             return true;
@@ -152,9 +151,10 @@ namespace NetFabric.Hyperlinq
                     }
                 }
 
-                for (; index < end; index++)
+                var end = start + count;
+                for (var value = index + start; value < end; value++)
                 {
-                    if (GenericsOperator.Equals(selector.Invoke(index), item))
+                    if (GenericsOperator.Equals(selector.Invoke(value), item))
                         return true;
                 }
 
