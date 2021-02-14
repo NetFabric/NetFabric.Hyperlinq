@@ -7,7 +7,7 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class ArrayExtensions
     {
-        public partial struct ArraySegmentWhereEnumerable<TSource, TPredicate> where TPredicate : struct, NetFabric.Hyperlinq.IFunction<TSource, bool>
+        public partial struct ArraySegmentWhereEnumerable<TSource, TPredicate>
         {
             [GeneratedCode("NetFabric.Hyperlinq.SourceGenerator", "1.0.0")]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]

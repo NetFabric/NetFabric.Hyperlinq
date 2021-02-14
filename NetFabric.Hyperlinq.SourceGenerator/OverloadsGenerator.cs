@@ -220,8 +220,8 @@ namespace NetFabric.Hyperlinq.SourceGenerator
                                 {
                                     var parametersDefinition = new StringBuilder();
                                     _ = parametersDefinition.Append($"<{extendingType.TypeParameters.Select(parameter => parameter.ToDisplayString()).ToCommaSeparated()}>");
-                                    foreach (var typeParameter in extendingType.TypeParameters.Where(typeParameter => typeParameter.ConstraintTypes.Length is not 0))
-                                        _ = parametersDefinition.Append($" where {typeParameter.Name} : {typeParameter.AsConstraintsStrings().ToCommaSeparated()}");
+                                    // foreach (var typeParameter in extendingType.TypeParameters.Where(typeParameter => typeParameter.ConstraintTypes.Length is not 0))
+                                    //     _ = parametersDefinition.Append($" where {typeParameter.Name} : {typeParameter.AsConstraintsStrings().ToCommaSeparated()}");
                                     extendingTypeGenericParameters = parametersDefinition.ToString();
                                 }
 

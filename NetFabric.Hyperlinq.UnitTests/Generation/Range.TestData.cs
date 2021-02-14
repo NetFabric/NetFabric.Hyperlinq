@@ -13,8 +13,8 @@ namespace NetFabric.Hyperlinq
                 { 0, 1 },
 
                 { -1, 1 },
-                { -1, 5 },
-                { 1, 5 },
+                { -1, 20 },
+                { 1, 20 },
             };
 
         public static TheoryData<int, int, int> Range_SkipTake =>
@@ -24,7 +24,7 @@ namespace NetFabric.Hyperlinq
                 { 1, 5, 0 },
                 { 1, 5, 1 },
                 { 1, 5, 2 },
-                { 1, 5, 10 },
+                { 1, 5, 20 },
             };
 
         public static TheoryData<int, int, int> Range_Contains =>
@@ -36,7 +36,7 @@ namespace NetFabric.Hyperlinq
                 { 1, 5, 1 },
                 { 1, 5, 4 },
                 { 1, 5, 5 },
-                { 1, 5, 10 },
+                { 1, 5, 20 },
             };
     }
 }

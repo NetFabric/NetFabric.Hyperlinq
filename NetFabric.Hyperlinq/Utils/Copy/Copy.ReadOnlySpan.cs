@@ -37,14 +37,15 @@ namespace NetFabric.Hyperlinq
             where TResult : struct
         {
             Debug.Assert(destination.Length >= source.Length);
+            Debug.Assert(Vector<TSource>.Count == Vector<TResult>.Count);
 
             var index = 0;
 
-            var count = Vector<TSource>.Count;
-            if (count == Vector<TResult>.Count)
+            if (Vector.IsHardwareAccelerated)
             {
-                for (; index <= source.Length - count; index += count)
-                    vectorSelector.Invoke(new Vector<TSource>(source[index..])).CopyTo(destination[index..]);
+                var vectorSize = Vector<TSource>.Count;
+                for (; index <= source.Length - vectorSize; index += vectorSize)
+                    vectorSelector.Invoke(new Vector<TSource>(source.Slice(index, vectorSize))).CopyTo(destination.Slice(index, vectorSize));
             }
 
             for (; index < source.Length && index < destination.Length; index++)

@@ -67,8 +67,9 @@ namespace NetFabric.Hyperlinq
             public bool Contains(TSource item)
                 => count is not 0 && EqualityComparer<TSource>.Default.Equals(value, item);
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public int IndexOf(TSource item)
-                => count is not 0 && EqualityComparer<TSource>.Default.Equals(value, item)
+                => Contains(item)
                     ? 0
                     : -1;
 
@@ -204,10 +205,13 @@ namespace NetFabric.Hyperlinq
 
             var value = source.value;
             var index = 0;
-            var vectorSize = Vector<TSource>.Count;
-            var vector = new Vector<TSource>(value);
-            for (; index <= count - vectorSize; index += vectorSize)
-                vector.CopyTo(span[index..]);
+            if (Vector.IsHardwareAccelerated)
+            {
+                var vectorSize = Vector<TSource>.Count;
+                var vector = new Vector<TSource>(value);
+                for (; index <= count - vectorSize; index += vectorSize)
+                    vector.CopyTo(span.Slice(index, vectorSize));
+            }
 
             for (; index < span.Length; index++)
                 span[index] = value;

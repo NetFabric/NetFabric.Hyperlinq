@@ -402,18 +402,18 @@ namespace NetFabric.Hyperlinq
             => source.source.AsSpan().ContainsVector(value);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ArrayExtensions.MemorySelectVectorEnumerable<TSource, TResult, FunctionWrapper<Vector<TSource>, Vector<TResult>>, FunctionWrapper<TSource, TResult>> SelectVector<TSource, TResult>(this ValueEnumerable<TSource> source, Func<Vector<TSource>, Vector<TResult>> vectorSelector, Func<TSource, TResult> selector)
+        public static ArrayExtensions.ArraySegmentSelectVectorEnumerable<TSource, TResult, FunctionWrapper<Vector<TSource>, Vector<TResult>>, FunctionWrapper<TSource, TResult>> SelectVector<TSource, TResult>(this ValueEnumerable<TSource> source, Func<Vector<TSource>, Vector<TResult>> vectorSelector, Func<TSource, TResult> selector)
             where TSource : struct
             where TResult : struct
-            => source.source.AsMemory().SelectVector(vectorSelector, selector);
+            => new ArraySegment<TSource>(source.source).SelectVector(vectorSelector, selector);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ArrayExtensions.MemorySelectVectorEnumerable<TSource, TResult, TVectorSelector, TSelector> SelectVector<TSource, TResult, TVectorSelector, TSelector>(this ValueEnumerable<TSource> source, TVectorSelector vectorSelector = default, TSelector selector = default)
+        public static ArrayExtensions.ArraySegmentSelectVectorEnumerable<TSource, TResult, TVectorSelector, TSelector> SelectVector<TSource, TResult, TVectorSelector, TSelector>(this ValueEnumerable<TSource> source, TVectorSelector vectorSelector = default, TSelector selector = default)
             where TVectorSelector : struct, IFunction<Vector<TSource>, Vector<TResult>>
             where TSelector : struct, IFunction<TSource, TResult>
             where TSource : struct
             where TResult : struct
-            => source.source.AsMemory().SelectVector<TSource, TResult, TVectorSelector, TSelector>(vectorSelector, selector);
+            => new ArraySegment<TSource>(source.source).SelectVector<TSource, TResult, TVectorSelector, TSelector>(vectorSelector, selector);
 
 #endif    
     }

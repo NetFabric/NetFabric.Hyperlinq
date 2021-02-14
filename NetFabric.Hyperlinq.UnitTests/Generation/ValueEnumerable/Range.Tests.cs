@@ -133,5 +133,59 @@ namespace NetFabric.Hyperlinq.UnitTests.Generation.ValueEnumerableTests
                 .BeEnumerableOf<int>()
                 .BeEqualTo(expected);
         }
+
+#if NET5_0
+
+        [Theory]
+        [MemberData(nameof(TestData.Range), MemberType = typeof(TestData))]
+        public void Range_SelectVector_Must_Succeed(int start, int count)
+        {
+            // Arrange
+            var expected = Enumerable.Select(Enumerable.Range(start, count), item => item * 2);
+
+            // Act
+            var result = ValueEnumerable.Range(start, count).SelectVector(item => item * 2, item => item * 2);
+
+            // Assert
+            _ = result.Must()
+                .BeEnumerableOf<int>()
+                .BeEqualTo(expected);
+        }
+
+        
+        [Theory]
+        [MemberData(nameof(TestData.Range), MemberType = typeof(TestData))]
+        public void Range_SelectVector_ToArray_Must_Succeed(int start, int count)
+        {
+            // Arrange
+            var expected = Enumerable.ToArray(Enumerable.Select(Enumerable.Range(start, count), item => item * 2));
+
+            // Act
+            var result = ValueEnumerable.Range(start, count).SelectVector(item => item * 2, item => item * 2).ToArray();
+
+            // Assert
+            _ = result.Must()
+                .BeArrayOf<int>()
+                .BeEqualTo(expected);
+        }
+        
+        [Theory]
+        [MemberData(nameof(TestData.Range), MemberType = typeof(TestData))]
+        public void Range_SelectVector_ToList_Must_Succeed(int start, int count)
+        {
+            // Arrange
+            var expected = Enumerable.ToList(Enumerable.Select(Enumerable.Range(start, count), item => item * 2));
+
+            // Act
+            var result = ValueEnumerable.Range(start, count).SelectVector(item => item * 2, item => item * 2).ToList();
+
+            // Assert
+            _ = result.Must()
+                .BeOfType<List<int>>()
+                .BeEnumerableOf<int>()
+                .BeEqualTo(expected);
+        }
+
+#endif
     }
 }

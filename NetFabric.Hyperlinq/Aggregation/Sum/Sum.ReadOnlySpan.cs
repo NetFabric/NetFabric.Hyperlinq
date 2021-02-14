@@ -53,16 +53,16 @@ namespace NetFabric.Hyperlinq
         {
             var sum = default(TSource);
 
-#if NET5_0 
+#if NET5_0
 
-            if (source.Length >= Vector<TSource>.Count) // use SIMD
+            var vectorSize = Vector<TSource>.Count;
+            if (Vector.IsHardwareAccelerated && source.Length >= vectorSize) // use SIMD
             {
-                var vectorSize = Vector<TSource>.Count;
                 var vector = Vector<TSource>.Zero;
 
                 var index = 0;
                 for (; index <= source.Length - vectorSize; index += vectorSize)
-                    vector = vector + new Vector<TSource>(source[index..]);
+                    vector = vector + new Vector<TSource>(source.Slice(index, vectorSize));
 
                 for (; index < source.Length; index++)
                 {
@@ -97,14 +97,14 @@ namespace NetFabric.Hyperlinq
         {
             var sum = default(TResult);
 
-            if (source.Length >= Vector<TSource>.Count) // use SIMD
+            var vectorSize = Vector<TResult>.Count;
+            if (Vector.IsHardwareAccelerated && source.Length >= vectorSize) // use SIMD
             {
-                var vectorSize = Vector<TResult>.Count;
                 var vector = Vector<TResult>.Zero;
 
                 var index = 0;
                 for (; index <= source.Length - vectorSize; index += vectorSize)
-                    vector = vector + vectorSelector.Invoke(new Vector<TSource>(source[index..]));
+                    vector = vector + vectorSelector.Invoke(new Vector<TSource>(source.Slice(index, vectorSize)));
 
                 for (; index < source.Length; index++)
                 {

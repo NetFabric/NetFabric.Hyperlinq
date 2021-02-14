@@ -7,7 +7,7 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class ValueEnumerableExtensions
     {
-        public partial struct DistinctEnumerable<TEnumerable, TEnumerator, TSource> where TEnumerable : NetFabric.Hyperlinq.IValueEnumerable<TSource, TEnumerator> where TEnumerator : struct, System.Collections.Generic.IEnumerator<TSource>
+        public partial struct DistinctEnumerable<TEnumerable, TEnumerator, TSource>
         {
             [GeneratedCode("NetFabric.Hyperlinq.SourceGenerator", "1.0.0")]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
