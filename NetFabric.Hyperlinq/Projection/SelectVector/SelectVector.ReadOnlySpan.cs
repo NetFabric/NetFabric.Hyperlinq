@@ -58,8 +58,8 @@ namespace NetFabric.Hyperlinq
                 this.selector = selector;
             }
 
-            public readonly SelectVectorEnumerator<TSource, TResult, TVectorSelector, TSelector> GetEnumerator()
-                => new(source, vectorSelector, selector);
+            public readonly SelectVectorEnumerator<TSource, TResult, TSelector> GetEnumerator()
+                => new(source, selector);
 
             #region Aggregation
 

@@ -41,7 +41,7 @@ namespace NetFabric.Hyperlinq
         // [GeneratorMapping("TSource", "TResult")]
         [StructLayout(LayoutKind.Auto)]
         public partial struct ArraySegmentSelectVectorEnumerable<TSource, TResult, TVectorSelector, TSelector>
-            : IValueReadOnlyList<TResult, ArraySegmentSelectVectorEnumerable<TSource, TResult, TVectorSelector, TSelector>.DisposableEnumerator>
+            : IValueReadOnlyList<TResult, ArraySegmentSelectVectorEnumerable<TSource, TResult, TVectorSelector, TSelector>.Enumerator>
             , IList<TResult>
             where TVectorSelector : struct, IFunction<Vector<TSource>, Vector<TResult>>
             where TSelector : struct, IFunction<TSource, TResult>
@@ -85,16 +85,16 @@ namespace NetFabric.Hyperlinq
                 set => Throw.NotSupportedException();
             }
 
-            public readonly Enumerator GetEnumerator()
-                => new(in this);
-            readonly DisposableEnumerator IValueEnumerable<TResult, DisposableEnumerator>.GetEnumerator()
+            public readonly SelectVectorEnumerator<TSource, TResult, TSelector> GetEnumerator()
+                => new(source.AsSpan(), selector);
+            readonly Enumerator IValueEnumerable<TResult, Enumerator>.GetEnumerator()
                 => new(in this);
             readonly IEnumerator<TResult> IEnumerable<TResult>.GetEnumerator()
                 // ReSharper disable once HeapView.BoxingAllocation
-                => new DisposableEnumerator(in this);
+                => new Enumerator(in this);
             readonly IEnumerator IEnumerable.GetEnumerator()
                 // ReSharper disable once HeapView.BoxingAllocation
-                => new DisposableEnumerator(in this);
+                => new Enumerator(in this);
 
 
             bool ICollection<TResult>.IsReadOnly
@@ -151,33 +151,6 @@ namespace NetFabric.Hyperlinq
 
             [StructLayout(LayoutKind.Sequential)]
             public struct Enumerator
-            {
-                int index;
-                readonly int end;
-                readonly TSource[]? source;
-                TSelector selector;
-
-                internal Enumerator(in ArraySegmentSelectVectorEnumerable<TSource, TResult, TVectorSelector, TSelector> enumerable)
-                {
-                    source = enumerable.source.Array;
-                    selector = enumerable.selector;
-                    index = enumerable.source.Offset - 1;
-                    end = index + enumerable.source.Count;
-                }
-
-                public readonly TResult Current
-                {
-                    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                    get => selector.Invoke(source![index]);
-                }
-
-                [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                public bool MoveNext()
-                    => ++index <= end;
-            }
-
-            [StructLayout(LayoutKind.Sequential)]
-            public struct DisposableEnumerator
                 : IEnumerator<TResult>
             {
                 int index;
@@ -185,7 +158,7 @@ namespace NetFabric.Hyperlinq
                 readonly TSource[]? source;
                 TSelector selector;
 
-                internal DisposableEnumerator(in ArraySegmentSelectVectorEnumerable<TSource, TResult, TVectorSelector, TSelector> enumerable)
+                internal Enumerator(in ArraySegmentSelectVectorEnumerable<TSource, TResult, TVectorSelector, TSelector> enumerable)
                 {
                     source = enumerable.source.Array;
                     selector = enumerable.selector;
