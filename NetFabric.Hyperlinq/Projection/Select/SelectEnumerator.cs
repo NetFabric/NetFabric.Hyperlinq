@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 namespace NetFabric.Hyperlinq
 {
-    [StructLayout(LayoutKind.Auto)]
-    public ref struct SelectVectorEnumerator<TSource, TResult, TSelector>
+    [StructLayout(LayoutKind.Sequential)]
+    public ref struct SelectEnumerator<TSource, TResult, TSelector>
         where TSelector : struct, IFunction<TSource, TResult>
     {
         int index;
@@ -14,7 +13,7 @@ namespace NetFabric.Hyperlinq
         readonly ReadOnlySpan<TSource> source;
         TSelector selector;
 
-        internal SelectVectorEnumerator(ReadOnlySpan<TSource> source, TSelector selector)
+        internal SelectEnumerator(ReadOnlySpan<TSource> source, TSelector selector)
         {
             this.source = source;
             this.selector = selector;
@@ -22,7 +21,7 @@ namespace NetFabric.Hyperlinq
             end = index + source.Length;
         }
 
-        public TResult Current
+        public TResult Current 
         {
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get => selector.Invoke(source[index]);

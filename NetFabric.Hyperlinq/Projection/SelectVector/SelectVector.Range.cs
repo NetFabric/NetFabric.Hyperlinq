@@ -62,7 +62,7 @@ namespace NetFabric.Hyperlinq
             public readonly int Count
                 => count;
 
-            public readonly TResult this[int index]
+            public TResult this[int index]
             {
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 get
@@ -193,7 +193,7 @@ namespace NetFabric.Hyperlinq
                     end = value + enumerable.count;
                 }
 
-                public readonly TResult Current
+                public TResult Current
                 {
                     [MethodImpl(MethodImplOptions.AggressiveInlining)]
                     get => selector.Invoke(value);
@@ -219,14 +219,14 @@ namespace NetFabric.Hyperlinq
                     end = value + enumerable.count;
                 }
 
-                public readonly TResult Current
+                public TResult Current
                 {
                     [MethodImpl(MethodImplOptions.AggressiveInlining)]
                     get => selector.Invoke(value);
                 }
-                readonly TResult IEnumerator<TResult>.Current
+                TResult IEnumerator<TResult>.Current
                     => selector.Invoke(value);
-                readonly object? IEnumerator.Current
+                object? IEnumerator.Current
                     // ReSharper disable once HeapView.PossibleBoxingAllocation
                     => selector.Invoke(value);
 

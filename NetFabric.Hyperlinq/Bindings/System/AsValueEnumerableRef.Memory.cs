@@ -18,7 +18,7 @@ namespace NetFabric.Hyperlinq
         [GeneratorIgnore]
         [StructLayout(LayoutKind.Auto)]
         public readonly partial struct ValueEnumerableRef<TSource>
-            : IValueReadOnlyList<TSource, ValueEnumerableRef<TSource>.Enumerator>
+            : IValueReadOnlyList<TSource, ValueEnumerableRef<TSource>.DisposableEnumerator>
             , IList<TSource>
         {
             internal readonly Memory<TSource> source;
@@ -49,16 +49,16 @@ namespace NetFabric.Hyperlinq
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly ForeachEnumerator GetEnumerator()
+            public readonly Enumerator GetEnumerator()
                 => new(source);
-            readonly Enumerator IValueEnumerable<TSource, Enumerator>.GetEnumerator()
+            readonly DisposableEnumerator IValueEnumerable<TSource, DisposableEnumerator>.GetEnumerator()
                 => new(source);
             readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator()
                 // ReSharper disable once HeapView.BoxingAllocation
-                => new Enumerator(source);
+                => new DisposableEnumerator(source);
             readonly IEnumerator IEnumerable.GetEnumerator()
                 // ReSharper disable once HeapView.BoxingAllocation
-                => new Enumerator(source);
+                => new DisposableEnumerator(source);
 
 
             bool ICollection<TSource>.IsReadOnly
@@ -121,13 +121,13 @@ namespace NetFabric.Hyperlinq
                 => Throw.NotSupportedException();
 
             [StructLayout(LayoutKind.Sequential)]
-            public ref struct ForeachEnumerator
+            public ref struct Enumerator
             {
                 int index;
                 readonly int end;
                 readonly Span<TSource> source;
 
-                internal ForeachEnumerator(Memory<TSource> source)
+                internal Enumerator(Memory<TSource> source)
                 {
                     this.source = source.Span;
                     index = -1;
@@ -146,14 +146,14 @@ namespace NetFabric.Hyperlinq
             }
 
             [StructLayout(LayoutKind.Sequential)]
-            public struct Enumerator
+            public struct DisposableEnumerator
                 : IEnumerator<TSource>
             {
                 int index;
                 readonly int end;
                 readonly Memory<TSource> source;
 
-                internal Enumerator(Memory<TSource> source)
+                internal DisposableEnumerator(Memory<TSource> source)
                 {
                     this.source = source;
                     index = -1;

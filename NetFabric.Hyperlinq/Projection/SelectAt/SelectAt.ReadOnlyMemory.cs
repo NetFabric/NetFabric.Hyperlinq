@@ -24,7 +24,7 @@ namespace NetFabric.Hyperlinq
         [GeneratorMapping("TSource", "TResult")]
         [StructLayout(LayoutKind.Auto)]
         public partial struct MemorySelectAtEnumerable<TSource, TResult, TSelector>
-            : IValueReadOnlyList<TResult, MemorySelectAtEnumerable<TSource, TResult, TSelector>.DisposableEnumerator>
+            : IValueReadOnlyList<TResult, MemorySelectAtEnumerable<TSource, TResult, TSelector>.Enumerator>
             , IList<TResult>
             where TSelector : struct, IFunction<TSource, int, TResult>
         {
@@ -40,7 +40,7 @@ namespace NetFabric.Hyperlinq
             public readonly int Count 
                 => source.Length;
 
-            public readonly TResult this[int index]
+            public TResult this[int index]
             {
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 get => selector.Invoke(source.Span[index], index);
@@ -56,16 +56,16 @@ namespace NetFabric.Hyperlinq
                 set => Throw.NotSupportedException();
             }
 
-            public readonly Enumerator GetEnumerator() 
-                => new(in this);
-            readonly DisposableEnumerator IValueEnumerable<TResult, DisposableEnumerator>.GetEnumerator() 
+            public readonly SelectAtEnumerator<TSource, TResult, TSelector> GetEnumerator() 
+                => new(source.Span, selector);
+            readonly Enumerator IValueEnumerable<TResult, Enumerator>.GetEnumerator() 
                 => new(in this);
             readonly IEnumerator<TResult> IEnumerable<TResult>.GetEnumerator() 
                 // ReSharper disable once HeapView.BoxingAllocation
-                => new DisposableEnumerator(in this);
+                => new Enumerator(in this);
             readonly IEnumerator IEnumerable.GetEnumerator() 
                 // ReSharper disable once HeapView.BoxingAllocation
-                => new DisposableEnumerator(in this);
+                => new Enumerator(in this);
 
             bool ICollection<TResult>.IsReadOnly  
                 => true;
@@ -112,53 +112,28 @@ namespace NetFabric.Hyperlinq
                 => Throw.NotSupportedException();
 
             [StructLayout(LayoutKind.Sequential)]
-            public ref struct Enumerator
-            {
-                int index;
-                readonly ReadOnlySpan<TSource> source;
-                TSelector selector;
-
-                internal Enumerator(in MemorySelectAtEnumerable<TSource, TResult, TSelector> enumerable)
-                {
-                    source = enumerable.source.Span;
-                    selector = enumerable.selector;
-                    index = -1;
-                }
-
-                public readonly TResult Current 
-                {
-                    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                    get => selector.Invoke(source[index], index);
-                }
-
-                [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                public bool MoveNext() 
-                    => ++index < source.Length;
-            }
-
-            [StructLayout(LayoutKind.Sequential)]
-            public struct DisposableEnumerator
+            public struct Enumerator
                 : IEnumerator<TResult>
             {
                 int index;
                 readonly ReadOnlyMemory<TSource> source;
                 TSelector selector;
 
-                internal DisposableEnumerator(in MemorySelectAtEnumerable<TSource, TResult, TSelector> enumerable)
+                internal Enumerator(in MemorySelectAtEnumerable<TSource, TResult, TSelector> enumerable)
                 {
                     source = enumerable.source;
                     selector = enumerable.selector;
                     index = -1;
                 }
  
-                public readonly TResult Current 
+                public TResult Current 
                 {
                     [MethodImpl(MethodImplOptions.AggressiveInlining)]
                     get => selector.Invoke(source.Span[index], index);
                 }
-                readonly TResult IEnumerator<TResult>.Current 
+                TResult IEnumerator<TResult>.Current 
                     => selector.Invoke(source.Span[index], index)!;
-                readonly object? IEnumerator.Current
+                object? IEnumerator.Current
                     // ReSharper disable once HeapView.PossibleBoxingAllocation
                     => selector.Invoke(source.Span[index], index)!;
 

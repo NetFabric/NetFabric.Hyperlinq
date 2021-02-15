@@ -1,20 +1,19 @@
 ﻿using System;
-using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 namespace NetFabric.Hyperlinq
 {
-    [StructLayout(LayoutKind.Auto)]
-    public ref struct SelectVectorEnumerator<TSource, TResult, TSelector>
-        where TSelector : struct, IFunction<TSource, TResult>
+    [StructLayout(LayoutKind.Sequential)]
+    public ref struct SelectAtEnumerator<TSource, TResult, TSelector>
+        where TSelector : struct, IFunction<TSource, int, TResult>
     {
         int index;
         readonly int end;
         readonly ReadOnlySpan<TSource> source;
         TSelector selector;
 
-        internal SelectVectorEnumerator(ReadOnlySpan<TSource> source, TSelector selector)
+        internal SelectAtEnumerator(ReadOnlySpan<TSource> source, TSelector selector)
         {
             this.source = source;
             this.selector = selector;
@@ -22,10 +21,10 @@ namespace NetFabric.Hyperlinq
             end = index + source.Length;
         }
 
-        public TResult Current
+        public TResult Current 
         {
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            get => selector.Invoke(source[index]);
+            get => selector.Invoke(source[index], index);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

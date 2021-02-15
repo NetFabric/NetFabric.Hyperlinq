@@ -22,7 +22,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.WhereRef
             // Assert
             _ = result.Must()
                 .BeEnumerableOf<int>()
-                .BeEqualTo(expected, testRefStructs: false, testRefReturns: false);
+                .BeEqualTo(expected, testRefReturns: false, testRefStructs: false);
             _ = result.SequenceEqual(expected).Must().BeTrue();
         }
 

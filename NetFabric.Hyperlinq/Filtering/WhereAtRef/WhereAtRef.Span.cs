@@ -32,37 +32,8 @@ namespace NetFabric.Hyperlinq
                 this.predicate = predicate;
             }
 
-            public readonly Enumerator GetEnumerator() 
-                => new(in this);
-
-            [StructLayout(LayoutKind.Sequential)]
-            public ref struct Enumerator
-            {
-                int index;
-                readonly Span<TSource> source;
-                TPredicate predicate;
-
-                internal Enumerator(in SpanWhereAtRefEnumerable<TSource, TPredicate> enumerable)
-                {
-                    source = enumerable.source;
-                    predicate = enumerable.predicate;
-                    index = -1;
-                }
-
-                public readonly ref TSource Current
-                    => ref source[index];
-
-                [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                public bool MoveNext()
-                {
-                    while (++index < source.Length)
-                    {
-                        if (predicate.Invoke(source[index], index))
-                            return true;
-                    }
-                    return false;
-                }
-            }
+            public readonly WhereAtRefEnumerator<TSource, TPredicate> GetEnumerator() 
+                => new(source, predicate);
 
             public bool SequenceEqual(IEnumerable<TSource> other, IEqualityComparer<TSource>? comparer = null)
             {

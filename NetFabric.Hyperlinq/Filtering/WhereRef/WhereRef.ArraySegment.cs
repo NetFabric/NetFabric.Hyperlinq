@@ -20,7 +20,6 @@ namespace NetFabric.Hyperlinq
         [GeneratorIgnore]
         [StructLayout(LayoutKind.Auto)]
         public readonly struct ArraySegmentWhereRefEnumerable<TSource, TPredicate>
-            : IValueEnumerableRef<TSource, ArraySegmentWhereRefEnumerable<TSource, TPredicate>.Enumerator>
             where TPredicate : struct, IFunctionIn<TSource, bool>
         {
             internal readonly ArraySegment<TSource> source;
@@ -29,43 +28,8 @@ namespace NetFabric.Hyperlinq
             internal ArraySegmentWhereRefEnumerable(in ArraySegment<TSource> source, TPredicate predicate)
                 => (this.source, this.predicate) = (source, predicate);
             
-            public readonly Enumerator GetEnumerator()
-                => new(in this);
-
-            [StructLayout(LayoutKind.Sequential)]
-            public struct Enumerator
-                : IEnumeratorRef<TSource>
-            {
-                int index;
-                readonly int end;
-                readonly TSource[]? source;
-                TPredicate predicate;
-
-                internal Enumerator(in ArraySegmentWhereRefEnumerable<TSource, TPredicate> enumerable)
-                {
-                    source = enumerable.source.Array;
-                    predicate = enumerable.predicate;
-                    index = enumerable.source.Offset - 1;
-                    end = index + enumerable.source.Count;
-                }
-
-                public ref TSource Current
-                {
-                    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                    get => ref source![index];
-                }
-
-                [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                public bool MoveNext()
-                {
-                    while (++index <= end)
-                    {
-                        if (predicate.Invoke(in source![index]))
-                            return true;
-                    }
-                    return false;
-                }
-            }
+            public readonly WhereRefEnumerator<TSource, TPredicate> GetEnumerator()
+                => new(source.AsSpan(), predicate);
 
             #region Aggregation
 

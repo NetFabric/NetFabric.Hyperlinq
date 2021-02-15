@@ -22,7 +22,7 @@ namespace NetFabric.Hyperlinq
 
         [StructLayout(LayoutKind.Auto)]
         public readonly partial struct ArraySegmentWhereAtEnumerable<TSource, TPredicate>
-            : IValueEnumerable<TSource, ArraySegmentWhereAtEnumerable<TSource, TPredicate>.DisposableEnumerator>
+            : IValueEnumerable<TSource, ArraySegmentWhereAtEnumerable<TSource, TPredicate>.Enumerator>
             where TPredicate : struct, IFunction<TSource, int, bool>
         {
             internal readonly ArraySegment<TSource> source;
@@ -35,55 +35,19 @@ namespace NetFabric.Hyperlinq
             }
 
 
-            public readonly Enumerator GetEnumerator()
-                => new(in this);
-            readonly DisposableEnumerator IValueEnumerable<TSource, DisposableEnumerator>.GetEnumerator()
+            public readonly WhereAtEnumerator<TSource, TPredicate> GetEnumerator()
+                => new(source.AsSpan(), predicate);
+            readonly Enumerator IValueEnumerable<TSource, Enumerator>.GetEnumerator()
                 => new(in this);
             readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator()
                 // ReSharper disable once HeapView.BoxingAllocation
-                => new DisposableEnumerator(in this);
+                => new Enumerator(in this);
             readonly IEnumerator IEnumerable.GetEnumerator()
                 // ReSharper disable once HeapView.BoxingAllocation
-                => new DisposableEnumerator(in this);
+                => new Enumerator(in this);
 
             [StructLayout(LayoutKind.Sequential)]
             public struct Enumerator
-            {
-                int index;
-                readonly int end;
-                readonly int offset;
-                readonly TSource[]? source;
-                TPredicate predicate;
-
-                internal Enumerator(in ArraySegmentWhereAtEnumerable<TSource, TPredicate> enumerable)
-                {
-                    source = enumerable.source.Array;
-                    predicate = enumerable.predicate;
-                    offset = enumerable.source.Offset;
-                    index = -1;
-                    end = index + enumerable.source.Count;
-                }
-
-                public readonly TSource Current
-                {
-                    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                    get => source![index + offset];
-                }
-
-                [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                public bool MoveNext()
-                {
-                    while (++index <= end)
-                    {
-                        if (predicate.Invoke(source![index + offset], index))
-                            return true;
-                    }
-                    return false;
-                }
-            }
-
-            [StructLayout(LayoutKind.Sequential)]
-            public struct DisposableEnumerator
                 : IEnumerator<TSource>
             {
                 int index;
@@ -92,7 +56,7 @@ namespace NetFabric.Hyperlinq
                 readonly TSource[]? source;
                 TPredicate predicate;
 
-                internal DisposableEnumerator(in ArraySegmentWhereAtEnumerable<TSource, TPredicate> enumerable)
+                internal Enumerator(in ArraySegmentWhereAtEnumerable<TSource, TPredicate> enumerable)
                 {
                     source = enumerable.source.Array;
                     predicate = enumerable.predicate;

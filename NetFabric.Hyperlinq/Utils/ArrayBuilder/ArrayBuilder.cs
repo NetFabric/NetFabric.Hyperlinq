@@ -61,14 +61,17 @@ namespace NetFabric.Hyperlinq
         /// Gets or sets the item at a certain index in the array.
         /// </summary>
         /// <param name="index">The index into the array.</param>
-        public T this[int index]
-        {
-            get
-            {
-                Debug.Assert(index >= 0 && index < Count);
-                return buffer![index];
-            }
-        }
+        // public T this[int index]
+        // {
+        //     get
+        //     {
+        //         Debug.Assert(index >= 0 && index < Count);
+        //         return buffer![index];
+        //     }
+        // }
+
+        public readonly Span<T> AsSpan()
+            => buffer!.AsSpan().Slice(0, Count);
 
         /// <summary>
         /// Adds an item to the backing array, resizing it if necessary.
