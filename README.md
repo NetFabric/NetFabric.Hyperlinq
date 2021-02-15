@@ -30,6 +30,7 @@ This implementation **favors performance in detriment of assembly binary size** 
   - [Composition](#composition)
   - [Option](#option)
   - [Buffer pools](#buffer-pools)
+  - [SIMD](#simd)
 - [Documentation](#documentation)
 - [Supported operations](#supported-operations)
 - [References](#references)
@@ -362,6 +363,49 @@ var memory = buffer.Memory;
 ```
 
 It returns an [`IMemoryOwner<>`](https://docs.microsoft.com/en-us/dotnet/api/system.buffers.imemoryowner-1). The `using` statement guarantees that it is disposed and the buffer automatically returned to the pool. 
+
+### SIMD
+
+`NetFabric.Hyperlinq` uses SIMD implicitly to improve performance when possible, but many times it can only be done explicitly by calling specific operations.
+
+SIMD improves performance by performing the same operations simultaneously on multiple items. The number of items is specific to the CPU being used. The operation can only be performed if this number is met. This means that a remaining number of items has to be processed without SIMD.
+
+The items processed simultaneously are stored inside a [`System.Numerics.Vector`](https://docs.microsoft.com/en-us/dotnet/api/system.numerics.vector-1) structure.
+
+Operations that require an expression to process data, on the SIMD-enable equivalent require an expression that applies it at the [`System.Numerics.Vector`](https://docs.microsoft.com/en-us/dotnet/api/system.numerics.vector-1) level and another one at the item level.
+
+For this reason, and also because SIMD cannot be applied to all data types, SIMD specific operations have be called. The method has a `Vector` post-fix in the name.
+
+``` csharp
+var result = list
+  .AsValueEnumerable()
+  .SelectVector(item = item * 2, item = item * 2);
+```
+
+These methods also support value delegates. In this case, the `struct` containing the expressions must implement two `IFunctions<,>`. 
+
+``` csharp
+readonly struct DoubleOfInt32
+    : IFunction<Vector<int>, Vector<int>>
+    , IFunction<int, int>
+{
+    public Vector<int> Invoke(Vector<int> element)
+        => element * 2;
+
+    public int Invoke(int element)
+        => element * 2;
+}
+
+public static void Example(List<int> list)
+{
+  var result = list
+    .AsValueEnumerable()
+    .SelectVector<int, DoubleOfInt32>();
+
+  foreach(var value in result)
+    Console.WriteLine(value);
+}
+```
 
 ## Documentation
 
