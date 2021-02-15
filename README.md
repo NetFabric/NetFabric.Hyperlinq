@@ -25,6 +25,7 @@ Benchmarks comparing the perfomance of [LINQ](https://docs.microsoft.com/en-us/d
 - [enumerable.Select()](Results/Enumerable.Int32.EnumerableInt32Select.md)
 - [enumerable.Skip().Take().Select()](Results/Enumerable.Int32.EnumerableInt32SkipTakeSelect.md)
 - [enumerable.Skip().Take().Where()](Results/Enumerable.Int32.EnumerableInt32SkipTakeWhere.md)
+- [enumerable.Sum()](Results/Enumerable.Int32.EnumerableInt32Sum.md)
 - [enumerable.Where()](Results/Enumerable.Int32.EnumerableInt32Where.md)
 - [enumerable.Where().Count()](Results/Enumerable.Int32.EnumerableInt32WhereCount.md)
 - [enumerable.Where().Select()](Results/Enumerable.Int32.EnumerableInt32WhereSelect.md)
