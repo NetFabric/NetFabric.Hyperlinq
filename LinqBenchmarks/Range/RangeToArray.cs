@@ -21,19 +21,24 @@ namespace LinqBenchmarks.Range
 
         [Benchmark]
         public int[] Linq()
-            => System.Linq.Enumerable.Range(Start, Count).ToArray();
+            => System.Linq.Enumerable
+                .Range(Start, Count).ToArray();
 
         [Benchmark]
         public int[] LinqFaster()
-            => JM.LinqFaster.LinqFaster.RangeArrayF(Start, Count);
+            => JM.LinqFaster.LinqFaster
+                .RangeArrayF(Start, Count);
 
         [Benchmark]
         public int[] LinqFaster_SIMD()
-            => LinqFasterSIMD.RangeS(Start, Count);
+            => LinqFasterSIMD
+                .RangeS(Start, Count);
 
         [Benchmark]
         public int[] LinqAF()
-            => global::LinqAF.Enumerable.Range(Start, Count).ToArray();
+            => global::LinqAF.Enumerable
+                .Range(Start, Count)
+                .ToArray();
 
         [Benchmark]
         public int[] StructLinq()
@@ -43,12 +48,16 @@ namespace LinqBenchmarks.Range
 
         [Benchmark]
         public int[] Hyperlinq()
-            => ValueEnumerable.Range(Start, Count).ToArray();
+            => ValueEnumerable
+                .Range(Start, Count)
+                .ToArray();
 
         [Benchmark]
         public int Hyperlinq_Pool()
         {
-            using var array = ValueEnumerable.Range(Start, Count).ToArray(MemoryPool<int>.Shared);
+            using var array = ValueEnumerable
+                .Range(Start, Count)
+                .ToArray(MemoryPool<int>.Shared);
             return Count == 0 ? default : array.Memory.Span[0];
         }
     }

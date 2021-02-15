@@ -36,22 +36,29 @@ namespace LinqBenchmarks.Range
 
         [Benchmark]
         public List<int> Linq()
-            => System.Linq.Enumerable.Range(Start, Count).ToList();
+            => System.Linq.Enumerable
+                .Range(Start, Count).ToList();
 
         [Benchmark]
         public List<int> LinqFaster()
-            => new List<int>(JM.LinqFaster.LinqFaster.RangeArrayF(Start, Count));
+            => new List<int>(JM.LinqFaster.LinqFaster
+                .RangeArrayF(Start, Count));
 
         [Benchmark]
         public List<int> LinqAF()
-            => global::LinqAF.Enumerable.Range(Start, Count).ToList();
+            => global::LinqAF.Enumerable
+                .Range(Start, Count).ToList();
 
         [Benchmark]
         public List<int> StructLinq()
-            => StructEnumerable.Range(Start, Count).ToList(x => x);
+            => StructEnumerable
+                .Range(Start, Count)
+                .ToList(x => x);
 
         [Benchmark]
         public List<int> Hyperlinq()
-            => ValueEnumerable.Range(Start, Count).ToList();
+            => ValueEnumerable
+                .Range(Start, Count)
+                .ToList();
     }
 }

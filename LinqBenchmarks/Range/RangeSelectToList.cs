@@ -77,5 +77,19 @@ namespace LinqBenchmarks.Range
                 .Range(Start, Count)
                 .Select<int, DoubleOfInt32>()
                 .ToList();
+
+        [Benchmark]
+        public List<int> Hyperlinq_SIMD()
+            => ValueEnumerable
+                .Range(Start, Count)
+                .SelectVector(item => item * 2, item => item * 2)
+                .ToList();
+
+        [Benchmark]
+        public List<int> Hyperlinq_IFunction_SIMD()
+            => ValueEnumerable
+                .Range(Start, Count)
+                .SelectVector<int, DoubleOfInt32>()
+                .ToList();
     }
 }
