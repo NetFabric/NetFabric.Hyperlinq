@@ -30,9 +30,10 @@ namespace NetFabric.Hyperlinq
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool MoveNext()
         {
-            while (++index <= end)
+            while (++index < source.Length)
             {
-                if (predicate.Invoke(source[index]))
+                var item = source[index];
+                if (predicate.Invoke(item))
                     return true;
             }
             return false;
