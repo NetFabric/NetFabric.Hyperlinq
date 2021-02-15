@@ -25,7 +25,7 @@ namespace NetFabric.Hyperlinq
         [GeneratorIgnore]
         [StructLayout(LayoutKind.Auto)]
         public partial struct MemorySelectRefEnumerable<TSource, TResult, TSelector>
-            : IValueReadOnlyList<TResult, MemorySelectRefEnumerable<TSource, TResult, TSelector>.DisposableEnumerator>
+            : IValueReadOnlyList<TResult, MemorySelectRefEnumerable<TSource, TResult, TSelector>.Enumerator>
             , IList<TResult>
             where TSelector : struct, IFunctionIn<TSource, TResult>
         {
@@ -41,7 +41,7 @@ namespace NetFabric.Hyperlinq
             public readonly int Count 
                 => source.Length;
 
-            public readonly TResult this[int index]
+            public TResult this[int index]
             {
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 get => selector.Invoke(in source.Span[index]);
@@ -57,16 +57,16 @@ namespace NetFabric.Hyperlinq
                 set => Throw.NotSupportedException();
             }
 
-            public readonly Enumerator GetEnumerator() 
-                => new(in this);
-            readonly DisposableEnumerator IValueEnumerable<TResult, DisposableEnumerator>.GetEnumerator() 
+            public readonly SelectRefEnumerator<TSource, TResult, TSelector> GetEnumerator() 
+                => new(source.Span, selector);
+            readonly Enumerator IValueEnumerable<TResult, Enumerator>.GetEnumerator() 
                 => new(in this);
             readonly IEnumerator<TResult> IEnumerable<TResult>.GetEnumerator() 
                 // ReSharper disable once HeapView.BoxingAllocation
-                => new DisposableEnumerator(in this);
+                => new Enumerator(in this);
             readonly IEnumerator IEnumerable.GetEnumerator() 
                 // ReSharper disable once HeapView.BoxingAllocation
-                => new DisposableEnumerator(in this);
+                => new Enumerator(in this);
 
 
             bool ICollection<TResult>.IsReadOnly  
@@ -79,7 +79,7 @@ namespace NetFabric.Hyperlinq
             void ICollection<TResult>.Clear() 
                 => Throw.NotSupportedException();
             public bool Contains(TResult item)
-                => ArrayExtensions.ContainsRef(source.Span, item, selector);
+                => source.Span.ContainsRef(item, selector);
             bool ICollection<TResult>.Remove(TResult item) 
                 => Throw.NotSupportedException<bool>();
             int IList<TResult>.IndexOf(TResult item)
@@ -110,34 +110,7 @@ namespace NetFabric.Hyperlinq
                 => Throw.NotSupportedException();
 
             [StructLayout(LayoutKind.Sequential)]
-            public ref struct Enumerator
-            {
-                int index;
-                readonly int end;
-                readonly ReadOnlySpan<TSource> source;
-                TSelector selector;
-
-                internal Enumerator(in MemorySelectRefEnumerable<TSource, TResult, TSelector> enumerable)
-                {
-                    source = enumerable.source.Span;
-                    selector = enumerable.selector;
-                    index = -1;
-                    end = index + source.Length;
-                }
-
-                public readonly TResult Current 
-                {
-                    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                    get => selector.Invoke(in source[index]);
-                }
-
-                [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                public bool MoveNext() 
-                    => ++index <= end;
-            }
-
-            [StructLayout(LayoutKind.Sequential)]
-            public struct DisposableEnumerator
+            public struct Enumerator
                 : IEnumerator<TResult>
             {
                 int index;
@@ -145,7 +118,7 @@ namespace NetFabric.Hyperlinq
                 readonly ReadOnlyMemory<TSource> source;
                 TSelector selector;
 
-                internal DisposableEnumerator(in MemorySelectRefEnumerable<TSource, TResult, TSelector> enumerable)
+                internal Enumerator(in MemorySelectRefEnumerable<TSource, TResult, TSelector> enumerable)
                 {
                     source = enumerable.source;
                     selector = enumerable.selector;
@@ -153,14 +126,14 @@ namespace NetFabric.Hyperlinq
                     end = index + source.Length;
                 }
 
-                public readonly TResult Current 
+                public TResult Current 
                 {
                     [MethodImpl(MethodImplOptions.AggressiveInlining)]
                     get => selector.Invoke(in source.Span[index]);
                 }
-                readonly TResult IEnumerator<TResult>.Current 
+                TResult IEnumerator<TResult>.Current 
                     => selector.Invoke(in source.Span[index]);
-                readonly object? IEnumerator.Current
+                object? IEnumerator.Current
                     // ReSharper disable once HeapView.PossibleBoxingAllocation
                     => selector.Invoke(in source.Span[index]);
 

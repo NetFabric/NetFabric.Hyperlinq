@@ -23,7 +23,7 @@ namespace NetFabric.Hyperlinq
         [GeneratorMapping("TSource", "TResult")]
         [StructLayout(LayoutKind.Auto)]
         public partial struct ArraySegmentSelectEnumerable<TSource, TResult, TSelector>
-            : IValueReadOnlyList<TResult, ArraySegmentSelectEnumerable<TSource, TResult, TSelector>.DisposableEnumerator>
+            : IValueReadOnlyList<TResult, ArraySegmentSelectEnumerable<TSource, TResult, TSelector>.Enumerator>
             , IList<TResult>
             where TSelector : struct, IFunction<TSource, TResult>
         {
@@ -36,7 +36,7 @@ namespace NetFabric.Hyperlinq
             public readonly int Count
                 => source.Count;
 
-            public readonly TResult this[int index]
+            public TResult this[int index]
             {
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 get
@@ -56,16 +56,16 @@ namespace NetFabric.Hyperlinq
                 set => Throw.NotSupportedException();
             }
 
-            public readonly Enumerator GetEnumerator()
-                => new (in this);
-            readonly DisposableEnumerator IValueEnumerable<TResult, DisposableEnumerator>.GetEnumerator()
+            public readonly SelectEnumerator<TSource, TResult, TSelector> GetEnumerator()
+                => new(source.AsSpan(), selector);
+            readonly Enumerator IValueEnumerable<TResult, Enumerator>.GetEnumerator()
                 => new(in this);
             readonly IEnumerator<TResult> IEnumerable<TResult>.GetEnumerator()
                 // ReSharper disable once HeapView.BoxingAllocation
-                => new DisposableEnumerator(in this);
+                => new Enumerator(in this);
             readonly IEnumerator IEnumerable.GetEnumerator()
                 // ReSharper disable once HeapView.BoxingAllocation
-                => new DisposableEnumerator(in this);
+                => new Enumerator(in this);
 
 
             bool ICollection<TResult>.IsReadOnly
@@ -126,6 +126,7 @@ namespace NetFabric.Hyperlinq
 
             [StructLayout(LayoutKind.Sequential)]
             public struct Enumerator
+                : IEnumerator<TResult>
             {
                 int index;
                 readonly int end;
@@ -140,42 +141,14 @@ namespace NetFabric.Hyperlinq
                     end = index + enumerable.source.Count;
                 }
 
-                public readonly TResult Current
+                public TResult Current
                 {
                     [MethodImpl(MethodImplOptions.AggressiveInlining)]
                     get => selector.Invoke(source![index]);
                 }
-
-                [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                public bool MoveNext()
-                    => ++index <= end;
-            }
-
-            [StructLayout(LayoutKind.Sequential)]
-            public struct DisposableEnumerator
-                : IEnumerator<TResult>
-            {
-                int index;
-                readonly int end;
-                readonly TSource[]? source;
-                TSelector selector;
-
-                internal DisposableEnumerator(in ArraySegmentSelectEnumerable<TSource, TResult, TSelector> enumerable)
-                {
-                    source = enumerable.source.Array;
-                    selector = enumerable.selector;
-                    index = enumerable.source.Offset - 1;
-                    end = index + enumerable.source.Count;
-                }
-
-                public readonly TResult Current
-                {
-                    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                    get => selector.Invoke(source![index]);
-                }
-                readonly TResult IEnumerator<TResult>.Current
+                TResult IEnumerator<TResult>.Current
                     => selector.Invoke(source![index]);
-                readonly object? IEnumerator.Current
+                object? IEnumerator.Current
                     // ReSharper disable once HeapView.PossibleBoxingAllocation
                     => selector.Invoke(source![index]);
 

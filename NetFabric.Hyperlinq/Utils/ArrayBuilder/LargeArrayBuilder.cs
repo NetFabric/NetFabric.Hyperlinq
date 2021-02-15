@@ -103,32 +103,13 @@ namespace NetFabric.Hyperlinq
         /// <param name="array">The destination array.</param>
         /// <param name="arrayIndex">The index in <paramref name="array"/> to start copying to.</param>
         public readonly void CopyTo(T[] array, int arrayIndex)
-        {
-            Debug.Assert(array is not null);
-            Debug.Assert(arrayIndex <= array.Length);
-
-            var count = buffers.Count;
-            for (var bufferIndex = 0; bufferIndex < count; bufferIndex++)
-            {
-                var buffer = buffers[bufferIndex];
-                var length = buffer.Length;
-                Array.Copy(buffer, 0, array, arrayIndex, length);
-
-                arrayIndex += length;
-            }
-            if (arrayIndex < Count)
-            {
-                Array.Copy(current, 0, array, arrayIndex, Count - arrayIndex);
-            }
-        }
+            => CopyTo(array.AsSpan().Slice(arrayIndex));
 
         public readonly void CopyTo(Span<T> span)
         {
             var arrayIndex = 0;
-            var count = buffers.Count;
-            for (var bufferIndex = 0; bufferIndex < count; bufferIndex++)
+            foreach (var buffer in buffers.AsSpan())
             {
-                var buffer = buffers[bufferIndex];
                 var length = buffer.Length;
                 buffer.AsSpan().CopyTo(span.Slice(arrayIndex, length));
 
@@ -163,14 +144,6 @@ namespace NetFabric.Hyperlinq
             if (Count is not 0)
                 CopyTo(array);
             return array;
-        }
-
-        public readonly ArraySegment<T> ToArray(ArrayPool<T> pool)
-        {
-            var result = pool.RentSliced(Count);
-            if (Count is not 0)
-                CopyTo(result.Array!);
-            return result;
         }
 
         public readonly IMemoryOwner<T> ToArray(MemoryPool<T> pool)
@@ -215,9 +188,8 @@ namespace NetFabric.Hyperlinq
         public readonly void Dispose()
         {
             pool.Return(current);
-            var count = buffers.Count;
-            for (var index = 0; index < count; index++)
-                pool.Return(buffers[index]);
+            foreach(var item in buffers.AsSpan())
+                pool.Return(item);
             buffers.Dispose();
         }
 

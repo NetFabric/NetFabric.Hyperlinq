@@ -12,17 +12,18 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.WhereSelect
         {
             // Arrange
             var source = default(ArraySegment<int>);
-            var expected = Enumerable.Empty<int>();
+            var expected = Enumerable.Empty<string>();
 
             // Act
             var result = ArrayExtensions
                 .Where(source, _ => true)
-                .Select(item => item);
+                .Select(item => item.ToString());
 
             // Assert
             _ = result.Must()
-                .BeEnumerableOf<int>()
-                .BeEqualTo(expected);
+                .BeEnumerableOf<string>()
+                .BeEqualTo(expected, testRefStructs: false);
+            _ = result.SequenceEqual(expected).Must().BeTrue();
         }
 
         [Theory]

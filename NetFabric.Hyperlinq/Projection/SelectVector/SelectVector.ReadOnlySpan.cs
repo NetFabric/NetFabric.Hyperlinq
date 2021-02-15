@@ -58,13 +58,19 @@ namespace NetFabric.Hyperlinq
                 this.selector = selector;
             }
 
+            public readonly int Count
+                => source.Length;
+
+            public TResult this[int index]
+            {
+                [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                get => selector.Invoke(source[index]);
+            }
+
             public readonly SelectVectorEnumerator<TSource, TResult, TSelector> GetEnumerator()
                 => new(source, selector);
 
             #region Aggregation
-
-            public int Count()
-                => source.Length;
 
             #endregion
 
@@ -124,6 +130,14 @@ namespace NetFabric.Hyperlinq
                 }
             }
         }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Count<TSource, TResult, TVectorSelector, TSelector>(this SpanSelectVectorEnumerable<TSource, TResult, TVectorSelector, TSelector> source)
+            where TVectorSelector : struct, IFunction<Vector<TSource>, Vector<TResult>>
+            where TSelector : struct, IFunction<TSource, TResult>
+            where TSource : struct
+            where TResult : struct
+            => source.Count;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int Sum<TSource, TVectorSelector, TSelector>(this SpanSelectVectorEnumerable<TSource, int, TVectorSelector, TSelector> source)

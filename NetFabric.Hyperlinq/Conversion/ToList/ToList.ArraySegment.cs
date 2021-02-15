@@ -13,7 +13,7 @@ namespace NetFabric.Hyperlinq
             => source.Count switch
             {
                 0 => new List<TSource>(),
-                _ => new(collection: source)
+                _ => source.ToArray().AsList()
             };
     }
 }

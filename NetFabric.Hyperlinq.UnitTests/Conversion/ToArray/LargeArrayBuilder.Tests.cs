@@ -36,34 +36,6 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
         [Theory]
         [InlineData(0)]
         [InlineData(100)]
-        public void ToArray_ArrayPool_Must_Succeed(int count)
-        {
-            // Arrange
-            var pool = ArrayPool<int>.Shared;
-            var expected = Enumerable
-                .Range(0, count)
-                .ToArray();
-            using var builder = new LargeArrayBuilder<int>(ArrayPool<int>.Shared);
-            for (var index = 0; index < count; index++)
-                builder.Add(expected[index]);
-
-            // Act
-            var result = builder.ToArray(pool);
-            try
-            {
-                // Assert
-                _ = result.Must()
-                    .BeEqualTo(expected);
-            }
-            finally
-            {
-                pool.Return(result.Array);
-            }
-        }
-
-        [Theory]
-        [InlineData(0)]
-        [InlineData(100)]
         public void ToArray_MemoryPool_Must_Succeed(int count)
         {
             // Arrange

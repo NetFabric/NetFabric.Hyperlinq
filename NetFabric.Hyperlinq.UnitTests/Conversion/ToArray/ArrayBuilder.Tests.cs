@@ -27,13 +27,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
                 builder.Add(expected[index]);
 
             // Assert
-            var result = new int[builder.Count];
-            for (var index = 0; index < count; index++)
-                result[index] = builder[index];
-
-            _ = result.Must()
-                .BeArrayOf<int>()
-                .BeEqualTo(expected);
+            builder.AsSpan().SequenceEqual(expected);
         }
     }
 }

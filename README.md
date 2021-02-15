@@ -382,7 +382,7 @@ var result = list
   .SelectVector(item = item * 2, item = item * 2);
 ```
 
-These methods also support value delegates. In this case, the `struct` containing the expressions must implement two `IFunctions<,>`. 
+These methods also support value delegates. In this case, the `struct` containing the expressions must implement two `IFunction<,>`. 
 
 ``` csharp
 readonly struct DoubleOfInt32

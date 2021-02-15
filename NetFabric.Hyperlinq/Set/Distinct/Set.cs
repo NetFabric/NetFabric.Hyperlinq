@@ -159,7 +159,6 @@ namespace NetFabric.Hyperlinq
         /// Creates an array from the items in this set.
         /// </summary>
         /// <returns>An array of the items in this set.</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public readonly TElement[] ToArray()
         {
 #if NET5_0
@@ -171,7 +170,6 @@ namespace NetFabric.Hyperlinq
             return array;
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public readonly IMemoryOwner<TElement> ToArray(MemoryPool<TElement> pool)
         {
             var result = pool.RentSliced(Count);
@@ -183,10 +181,12 @@ namespace NetFabric.Hyperlinq
         /// Creates a list from the items in this set.
         /// </summary>
         /// <returns>A list of the items in this set.</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public readonly List<TElement> ToList()
-            // ReSharper disable once HeapView.BoxingAllocation
-            => new(this);
+            => Count switch
+            {
+                0 => new List<TElement>(),
+                _ => ToArray().AsList()
+            };
 
         /// <summary>
         /// The number of items in this set.
@@ -200,45 +200,16 @@ namespace NetFabric.Hyperlinq
         {
             if (slots is null) return;
 
-            for (var index = 0; index < Count; index++)
+            var source = slots.AsSpan().Slice(0, Count);
+            for (var index = 0; index < source.Length && index < span.Length; index++)
             {
-                ref readonly var slot = ref slots[index];
+                ref readonly var slot = ref source[index];
                 span[index] = slot.Value;
             }
         }
 
-        public readonly void CopyTo(TElement[] array)
-        {
-            if (slots is null) return;
-
-            for (var index = 0; index < Count; index++)
-            {
-                ref readonly var slot = ref slots[index];
-                array[index] = slot.Value;
-            }
-        }
-
         public readonly void CopyTo(TElement[] array, int arrayIndex)
-        {
-            if (slots is null) return;
-            
-            if (arrayIndex is 0)
-            {
-                for (var index = 0; index < Count; index++)
-                {
-                    ref readonly var slot = ref slots[index];
-                    array[index] = slot.Value;
-                }
-            }
-            else
-            {
-                for (var index = 0; index < Count; index++)
-                {
-                    ref readonly var slot = ref slots[index];
-                    array[index + arrayIndex] = slot.Value;
-                }
-            }
-        }
+            => CopyTo(array.AsSpan().Slice(arrayIndex));
 
         [ExcludeFromCodeCoverage]
         void ICollection<TElement>.Add(TElement item) 

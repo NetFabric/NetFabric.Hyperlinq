@@ -32,8 +32,8 @@ namespace NetFabric.Hyperlinq
             internal MemoryWhereAtEnumerable(ReadOnlyMemory<TSource> source, TPredicate predicate)
                 => (this.source, this.predicate) = (source, predicate);
             
-            public readonly Enumerator GetEnumerator() 
-                => new(in this);
+            public readonly WhereAtEnumerator<TSource, TPredicate> GetEnumerator() 
+                => new(source.Span, predicate);
             readonly DisposableEnumerator IValueEnumerable<TSource, DisposableEnumerator>.GetEnumerator() 
                 => new(in this);
             readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() 
@@ -42,40 +42,6 @@ namespace NetFabric.Hyperlinq
             readonly IEnumerator IEnumerable.GetEnumerator() 
                 // ReSharper disable once HeapView.BoxingAllocation
                 => new DisposableEnumerator(in this);
-
-            [StructLayout(LayoutKind.Sequential)]
-            public ref struct Enumerator 
-            {
-                int index;
-                readonly int end;
-                readonly ReadOnlySpan<TSource> source;
-                TPredicate predicate;
-
-                internal Enumerator(in MemoryWhereAtEnumerable<TSource, TPredicate> enumerable)
-                {
-                    source = enumerable.source.Span;
-                    predicate = enumerable.predicate;
-                    index = -1;
-                    end = index + source.Length;
-                }
-
-                public readonly TSource Current 
-                {
-                    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                    get => source[index];
-                }
-
-                [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                public bool MoveNext()
-                {
-                    while (++index <= end)
-                    {
-                        if (predicate.Invoke(source[index], index))
-                            return true;
-                    }
-                    return false;
-                }
-            }
 
             [StructLayout(LayoutKind.Sequential)]
             public struct DisposableEnumerator 
@@ -109,9 +75,10 @@ namespace NetFabric.Hyperlinq
                 public bool MoveNext()
                 {
                     var span = source.Span;
-                    while (++index <= end)
+                    while (++index < span.Length)
                     {
-                        if (predicate.Invoke(span[index], index))
+                        var item = span[index];
+                        if (predicate.Invoke(item, index))
                             return true;
                     }
                     return false;

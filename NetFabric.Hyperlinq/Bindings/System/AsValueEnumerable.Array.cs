@@ -19,7 +19,7 @@ namespace NetFabric.Hyperlinq
         [GeneratorIgnore]
         [StructLayout(LayoutKind.Auto)]
         public readonly partial struct ValueEnumerable<TSource>
-            : IValueReadOnlyList<TSource, ValueEnumerable<TSource>.Enumerator>
+            : IValueReadOnlyList<TSource, ValueEnumerable<TSource>.DisposableEnumerator>
             , IList<TSource>
         {
             internal readonly TSource[] source;
@@ -50,16 +50,16 @@ namespace NetFabric.Hyperlinq
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly ForeachEnumerator GetEnumerator()
+            public readonly Enumerator GetEnumerator()
                 => new(source);
-            readonly Enumerator IValueEnumerable<TSource, Enumerator>.GetEnumerator()
+            readonly DisposableEnumerator IValueEnumerable<TSource, DisposableEnumerator>.GetEnumerator()
                 => new(source);
             readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator()
                 // ReSharper disable once HeapView.BoxingAllocation
-                => new Enumerator(source);
+                => new DisposableEnumerator(source);
             readonly IEnumerator IEnumerable.GetEnumerator()
                 // ReSharper disable once HeapView.BoxingAllocation
-                => new Enumerator(source);
+                => new DisposableEnumerator(source);
 
 
             bool ICollection<TSource>.IsReadOnly
@@ -99,13 +99,13 @@ namespace NetFabric.Hyperlinq
                 => Throw.NotSupportedException();
 
             [StructLayout(LayoutKind.Sequential)]
-            public struct ForeachEnumerator
+            public struct Enumerator
             {
                 int index;
                 readonly int end;
                 readonly TSource[] source;
 
-                internal ForeachEnumerator(TSource[] source)
+                internal Enumerator(TSource[] source)
                 {
                     this.source = source;
                     index = -1;
@@ -124,14 +124,14 @@ namespace NetFabric.Hyperlinq
             }
 
             [StructLayout(LayoutKind.Sequential)]
-            public struct Enumerator
+            public struct DisposableEnumerator
                 : IEnumerator<TSource>
             {
                 int index;
                 readonly int end;
                 readonly TSource[] source;
 
-                internal Enumerator(TSource[] source)
+                internal DisposableEnumerator(TSource[] source)
                 {
                     this.source = source;
                     index = -1;
@@ -406,6 +406,13 @@ namespace NetFabric.Hyperlinq
             where TSource : struct
             where TResult : struct
             => new ArraySegment<TSource>(source.source).SelectVector(vectorSelector, selector);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ArrayExtensions.ArraySegmentSelectVectorEnumerable<TSource, TResult, TSelector, TSelector> SelectVector<TSource, TResult, TSelector>(this ValueEnumerable<TSource> source, TSelector selector = default)
+            where TSelector : struct, IFunction<Vector<TSource>, Vector<TResult>>, IFunction<TSource, TResult>
+            where TSource : struct
+            where TResult : struct
+            => new ArraySegment<TSource>(source.source).SelectVector<TSource, TResult, TSelector, TSelector>(selector, selector);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ArrayExtensions.ArraySegmentSelectVectorEnumerable<TSource, TResult, TVectorSelector, TSelector> SelectVector<TSource, TResult, TVectorSelector, TSelector>(this ValueEnumerable<TSource> source, TVectorSelector vectorSelector = default, TSelector selector = default)

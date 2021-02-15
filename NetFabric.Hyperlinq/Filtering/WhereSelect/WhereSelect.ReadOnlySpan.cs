@@ -36,44 +36,8 @@ namespace NetFabric.Hyperlinq
                 this.selector = selector;
             }
             
-            public readonly Enumerator GetEnumerator() 
-                => new(in this);
-
-            [StructLayout(LayoutKind.Sequential)]
-            public ref struct Enumerator
-            {
-                int index;
-                readonly int end;
-                readonly ReadOnlySpan<TSource> source;
-                TPredicate predicate;
-                TSelector selector;
-
-                internal Enumerator(in SpanWhereSelectEnumerable<TSource, TResult, TPredicate, TSelector> enumerable)
-                {
-                    source = enumerable.source;
-                    predicate = enumerable.predicate;
-                    selector = enumerable.selector;
-                    index = -1;
-                    end = index + source.Length;
-                }
-
-                public TResult Current 
-                {
-                    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                    get => selector.Invoke(source[index]);
-                }
-
-                [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                public bool MoveNext()
-                {
-                    while (++index <= end)
-                    {
-                        if (predicate.Invoke(source[index]))
-                            return true;
-                    }
-                    return false;
-                }
-            }
+            public readonly WhereSelectEnumerator<TSource, TResult, TPredicate, TSelector> GetEnumerator() 
+                => new(source, predicate, selector);
 
             #region Aggregation
 
