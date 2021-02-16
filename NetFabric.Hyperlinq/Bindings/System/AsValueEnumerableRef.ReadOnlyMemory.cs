@@ -120,18 +120,16 @@ namespace NetFabric.Hyperlinq
             void IList<TSource>.RemoveAt(int index)
                 => Throw.NotSupportedException();
 
-            [StructLayout(LayoutKind.Sequential)]
+            [StructLayout(LayoutKind.Auto)]
             public ref struct Enumerator
             {
-                int index;
-                readonly int end;
                 readonly ReadOnlySpan<TSource> source;
+                int index;
 
                 internal Enumerator(ReadOnlyMemory<TSource> source)
                 {
                     this.source = source.Span;
                     index = -1;
-                    end = index + source.Length;
                 }
 
                 public readonly ref readonly TSource Current
@@ -142,22 +140,20 @@ namespace NetFabric.Hyperlinq
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public bool MoveNext()
-                    => ++index <= end;
+                    => ++index < source.Length;
             }
 
-            [StructLayout(LayoutKind.Sequential)]
+            [StructLayout(LayoutKind.Auto)]
             public struct DisposableEnumerator
                 : IEnumerator<TSource>
             {
-                int index;
-                readonly int end;
                 readonly ReadOnlyMemory<TSource> source;
+                int index;
 
                 internal DisposableEnumerator(ReadOnlyMemory<TSource> source)
                 {
                     this.source = source;
                     index = -1;
-                    end = index + source.Length;
                 }
 
                 public readonly ref readonly TSource Current
@@ -173,7 +169,7 @@ namespace NetFabric.Hyperlinq
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public bool MoveNext()
-                    => ++index <= end;
+                    => ++index < source.Length;
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 [ExcludeFromCodeCoverage]

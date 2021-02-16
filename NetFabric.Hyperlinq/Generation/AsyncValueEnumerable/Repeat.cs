@@ -39,12 +39,12 @@ namespace NetFabric.Hyperlinq
                 // ReSharper disable once HeapView.BoxingAllocation
                 => new DisposableAsyncEnumerator(in this, cancellationToken);
 
-            [StructLayout(LayoutKind.Sequential)]
+            [StructLayout(LayoutKind.Auto)]
             public struct AsyncEnumerator
             {
-                int counter;
-                readonly int end;
                 readonly CancellationToken cancellationToken;
+                readonly int end;
+                int counter;
 
                 internal AsyncEnumerator(in RepeatEnumerable<TSource> enumerable, CancellationToken cancellationToken)
                 {
@@ -64,13 +64,13 @@ namespace NetFabric.Hyperlinq
                 }
             }
 
-            [StructLayout(LayoutKind.Sequential)]
+            [StructLayout(LayoutKind.Auto)]
             public struct DisposableAsyncEnumerator
                 : IAsyncEnumerator<TSource>
             {
-                int counter;
-                readonly int end;
                 readonly CancellationToken cancellationToken;
+                readonly int end;
+                int counter;
 
                 internal DisposableAsyncEnumerator(in RepeatEnumerable<TSource> enumerable, CancellationToken cancellationToken)
                 {
@@ -95,12 +95,12 @@ namespace NetFabric.Hyperlinq
                     => default;
             }
 
-            [StructLayout(LayoutKind.Sequential)]
+            [StructLayout(LayoutKind.Auto)]
             public struct DisposableEnumerator
                 : IEnumerator<TSource>
             {
-                int counter;
                 readonly int end;
+                int counter;
 
                 internal DisposableEnumerator(in RepeatEnumerable<TSource> enumerable)
                 {

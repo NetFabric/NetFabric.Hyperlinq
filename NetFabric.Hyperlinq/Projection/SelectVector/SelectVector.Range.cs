@@ -178,12 +178,12 @@ namespace NetFabric.Hyperlinq
             void IList<TResult>.RemoveAt(int index)
                 => Throw.NotSupportedException();
 
-            [StructLayout(LayoutKind.Sequential)]
+            [StructLayout(LayoutKind.Auto)]
             public struct Enumerator
             {
-                int value;
-                readonly int end;
                 TSelector selector;
+                readonly int end;
+                int value;
 
                 internal Enumerator(in RangeSelectVectorEnumerable<TResult, TVectorSelector, TSelector> enumerable)
                 {
@@ -203,13 +203,13 @@ namespace NetFabric.Hyperlinq
                     => ++value <= end;
             }
 
-            [StructLayout(LayoutKind.Sequential)]
+            [StructLayout(LayoutKind.Auto)]
             public struct DisposableEnumerator
                 : IEnumerator<TResult>
             {
-                int value;
-                readonly int end;
                 TSelector selector;
+                readonly int end;
+                int value;
 
                 internal DisposableEnumerator(in RangeSelectVectorEnumerable<TResult, TVectorSelector, TSelector> enumerable)
                 {

@@ -245,15 +245,15 @@ namespace NetFabric.Hyperlinq
                 // ReSharper disable once HeapView.BoxingAllocation
                 => new Enumerator(in this);
 
-            [StructLayout(LayoutKind.Sequential)]
+            [StructLayout(LayoutKind.Auto)]
             public struct Enumerator
                 : IEnumerator<TResult>
             {
-                int state;
                 readonly Option<TValue> source; 
                 TSelector selector;
                 [SuppressMessage("Style", "IDE0044:Add readonly modifier")]
                 TSubEnumerator subEnumerator; // do not make readonly
+                int state;
 
                 internal Enumerator(in SelectManyEnumerable<TSubEnumerable, TSubEnumerator, TResult, TSelector> enumerable)
                 {

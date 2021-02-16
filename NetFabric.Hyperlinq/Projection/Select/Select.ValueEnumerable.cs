@@ -49,7 +49,7 @@ namespace NetFabric.Hyperlinq
                 // ReSharper disable once HeapView.BoxingAllocation
                 => new Enumerator(in this);
 
-            [StructLayout(LayoutKind.Sequential)]
+            [StructLayout(LayoutKind.Auto)]
             public struct Enumerator
                 : IEnumerator<TResult>
             {

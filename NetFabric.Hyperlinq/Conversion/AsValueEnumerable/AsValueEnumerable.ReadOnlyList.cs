@@ -122,13 +122,13 @@ namespace NetFabric.Hyperlinq
             void IList<TSource>.RemoveAt(int index)
                 => Throw.NotSupportedException();
 
-            [StructLayout(LayoutKind.Sequential)]
+            [StructLayout(LayoutKind.Auto)]
             public struct Enumerator
                 : IEnumerator<TSource>
             {
-                int index;
-                readonly int end;
                 readonly IReadOnlyList<TSource> source;
+                readonly int end;
+                int index;
 
                 internal Enumerator(IReadOnlyList<TSource> source)
                 {

@@ -42,14 +42,14 @@ namespace NetFabric.Hyperlinq
             readonly IEnumerator IEnumerable.GetEnumerator() 
                 => new Enumerator(in this);
 
-            [StructLayout(LayoutKind.Sequential)]
+            [StructLayout(LayoutKind.Auto)]
             public struct Enumerator
                 : IEnumerator<TSource>
             {
-                int skipCounter;
-                int takeCounter;
                 [SuppressMessage("Style", "IDE0044:Add readonly modifier")]
                 TEnumerator enumerator; // do not make readonly
+                int skipCounter;
+                int takeCounter;
 
                 internal Enumerator(in SkipTakeEnumerable<TEnumerable, TEnumerator, TSource> enumerable)
                 {

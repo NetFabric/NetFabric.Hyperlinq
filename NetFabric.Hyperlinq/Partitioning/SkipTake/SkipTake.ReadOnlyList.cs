@@ -16,14 +16,14 @@ namespace NetFabric.Hyperlinq
             where TList : IReadOnlyList<TSource>
             => new SkipTakeEnumerable<TList, TSource>(in source, offset, count);
 
-        [StructLayout(LayoutKind.Sequential)]
+        [StructLayout(LayoutKind.Auto)]
         public readonly partial struct SkipTakeEnumerable<TList, TSource>
             : IValueReadOnlyList<TSource, SkipTakeEnumerable<TList, TSource>.DisposableEnumerator>
             , IList<TSource>
             where TList : IReadOnlyList<TSource>
         {
-            readonly int offset;
             readonly TList source;
+            readonly int offset;
 
             internal SkipTakeEnumerable(in TList source, int offset, int count)
             {
@@ -155,12 +155,12 @@ namespace NetFabric.Hyperlinq
             void IList<TSource>.RemoveAt(int index)
                 => Throw.NotSupportedException();
 
-            [StructLayout(LayoutKind.Sequential)]
+            [StructLayout(LayoutKind.Auto)]
             public struct Enumerator
             {
-                int index;
-                readonly int end;
                 readonly TList source;
+                readonly int end;
+                int index;
 
                 internal Enumerator(in SkipTakeEnumerable<TList, TSource> enumerable)
                 {
@@ -180,13 +180,13 @@ namespace NetFabric.Hyperlinq
                     => ++index <= end;
             }
 
-            [StructLayout(LayoutKind.Sequential)]
+            [StructLayout(LayoutKind.Auto)]
             public struct DisposableEnumerator
                 : IEnumerator<TSource>
             {
-                int index;
-                readonly int end;
                 readonly TList source;
+                readonly int end;
+                int index;
 
                 internal DisposableEnumerator(in SkipTakeEnumerable<TList, TSource> enumerable)
                 {

@@ -4,14 +4,14 @@ using System.Runtime.InteropServices;
 
 namespace NetFabric.Hyperlinq
 {
-    [StructLayout(LayoutKind.Sequential)]
+    [StructLayout(LayoutKind.Auto)]
     public ref struct SelectAtEnumerator<TSource, TResult, TSelector>
         where TSelector : struct, IFunction<TSource, int, TResult>
     {
-        int index;
-        readonly int end;
         readonly ReadOnlySpan<TSource> source;
         TSelector selector;
+        readonly int end;
+        int index;
 
         internal SelectAtEnumerator(ReadOnlySpan<TSource> source, TSelector selector)
         {

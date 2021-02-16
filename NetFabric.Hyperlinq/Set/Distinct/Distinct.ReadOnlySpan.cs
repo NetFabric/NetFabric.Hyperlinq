@@ -32,20 +32,18 @@ namespace NetFabric.Hyperlinq
             public readonly Enumerator GetEnumerator() 
                 => new(in this);
 
-            [StructLayout(LayoutKind.Sequential)]
+            [StructLayout(LayoutKind.Auto)]
             public ref struct Enumerator
             {
-                int index;
-                readonly int end;
                 readonly ReadOnlySpan<TSource> source;
                 Set<TSource> set;
+                int index;
 
                 internal Enumerator(in SpanDistinctEnumerable<TSource> enumerable)
                 {
                     source = enumerable.source;
                     set = new Set<TSource>(enumerable.comparer);
                     index = -1;
-                    end = index + source.Length;
                 }
 
                 public ref readonly TSource Current 
@@ -57,7 +55,7 @@ namespace NetFabric.Hyperlinq
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public bool MoveNext()
                 {
-                    while (++index <= end)
+                    while (++index < source.Length)
                     {
                         if (set.Add(source[index]))
                             return true;

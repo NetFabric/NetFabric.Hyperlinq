@@ -89,14 +89,14 @@ namespace NetFabric.Hyperlinq
             bool ICollection<TResult>.Remove(TResult item) 
                 => Throw.NotSupportedException<bool>();
 
-            [StructLayout(LayoutKind.Sequential)]
+            [StructLayout(LayoutKind.Auto)]
             public struct Enumerator
                 : IEnumerator<TResult>
             {
-                int index;
                 [SuppressMessage("Style", "IDE0044:Add readonly modifier")]
                 TEnumerator enumerator; // do not make readonly
                 TSelector selector;
+                int index;
 
                 internal Enumerator(in SelectAtEnumerable<TEnumerable, TEnumerator, TSource, TResult, TSelector> enumerable)
                 {

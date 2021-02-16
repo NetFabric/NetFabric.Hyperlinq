@@ -4,16 +4,15 @@ using System.Runtime.InteropServices;
 
 namespace NetFabric.Hyperlinq
 {
-    [StructLayout(LayoutKind.Sequential)]
+    [StructLayout(LayoutKind.Auto)]
     public ref struct WhereSelectReadOnlyRefEnumerator<TSource, TResult, TPredicate, TSelector>
         where TPredicate : struct, IFunctionIn<TSource, bool>
         where TSelector : struct, IFunction<TSource, TResult>
     {
-        int index;
-        readonly int end;
         readonly ReadOnlySpan<TSource> source;
         TPredicate predicate;
         TSelector selector;
+        int index;
 
         internal WhereSelectReadOnlyRefEnumerator(ReadOnlySpan<TSource> source, TPredicate predicate, TSelector selector)
         {
@@ -21,7 +20,6 @@ namespace NetFabric.Hyperlinq
             this.predicate = predicate;
             this.selector = selector;
             index = -1;
-            end = index + source.Length;
         }
 
         public TResult Current 
@@ -33,9 +31,10 @@ namespace NetFabric.Hyperlinq
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool MoveNext()
         {
-            while (++index <= end)
+            var span = source;
+            while (++index < span.Length)
             {
-                if (predicate.Invoke(in source[index]))
+                if (predicate.Invoke(in span[index]))
                     return true;
             }
             return false;

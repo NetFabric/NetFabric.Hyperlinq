@@ -50,16 +50,16 @@ namespace NetFabric.Hyperlinq
                 // ReSharper disable once HeapView.BoxingAllocation
                 => new Enumerator(in this, cancellationToken);
 
-            [StructLayout(LayoutKind.Sequential)]
+            [StructLayout(LayoutKind.Auto)]
             public struct Enumerator
                 : IAsyncEnumerator<TSource>
                 , IAsyncStateMachine
             {
-                int index;
                 [SuppressMessage("Style", "IDE0044:Add readonly modifier")]
                 TEnumerator enumerator; // do not make readonly
                 TPredicate predicate;
                 readonly CancellationToken cancellationToken;
+                int index;
 
                 int state;
                 AsyncValueTaskMethodBuilder<bool> builder;

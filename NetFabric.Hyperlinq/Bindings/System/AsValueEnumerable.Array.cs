@@ -98,18 +98,16 @@ namespace NetFabric.Hyperlinq
             void IList<TSource>.RemoveAt(int index)
                 => Throw.NotSupportedException();
 
-            [StructLayout(LayoutKind.Sequential)]
+            [StructLayout(LayoutKind.Auto)]
             public struct Enumerator
             {
-                int index;
-                readonly int end;
                 readonly TSource[] source;
+                int index;
 
                 internal Enumerator(TSource[] source)
                 {
                     this.source = source;
                     index = -1;
-                    end = index + source.Length;
                 }
 
                 public readonly TSource Current
@@ -120,22 +118,20 @@ namespace NetFabric.Hyperlinq
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public bool MoveNext()
-                    => ++index <= end;
+                    => ++index < source.Length;
             }
 
-            [StructLayout(LayoutKind.Sequential)]
+            [StructLayout(LayoutKind.Auto)]
             public struct DisposableEnumerator
                 : IEnumerator<TSource>
             {
-                int index;
-                readonly int end;
                 readonly TSource[] source;
+                int index;
 
                 internal DisposableEnumerator(TSource[] source)
                 {
                     this.source = source;
                     index = -1;
-                    end = index + source.Length;
                 }
 
                 public readonly TSource Current
@@ -149,7 +145,7 @@ namespace NetFabric.Hyperlinq
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public bool MoveNext()
-                    => ++index <= end;
+                    => ++index < source.Length;
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 [ExcludeFromCodeCoverage]

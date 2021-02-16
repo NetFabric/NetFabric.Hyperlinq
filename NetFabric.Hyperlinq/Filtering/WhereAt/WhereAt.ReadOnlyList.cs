@@ -59,14 +59,14 @@ namespace NetFabric.Hyperlinq
                 // ReSharper disable once HeapView.BoxingAllocation
                 => new DisposableEnumerator(in this);
 
-            [StructLayout(LayoutKind.Sequential)]
+            [StructLayout(LayoutKind.Auto)]
             public struct Enumerator
             {
-                int index;
-                readonly int offset;
-                readonly int end;
                 readonly TList source;
                 TPredicate predicate;
+                readonly int offset;
+                readonly int end;
+                int index;
 
                 internal Enumerator(in WhereAtEnumerable<TList, TSource, TPredicate> enumerable)
                 {
@@ -95,15 +95,15 @@ namespace NetFabric.Hyperlinq
                 }
             }
 
-            [StructLayout(LayoutKind.Sequential)]
+            [StructLayout(LayoutKind.Auto)]
             public struct DisposableEnumerator
                 : IEnumerator<TSource>
             {
-                int index;
-                readonly int offset;
-                readonly int end;
                 readonly TList source;
                 TPredicate predicate;
+                readonly int offset;
+                readonly int end;
+                int index;
 
                 internal DisposableEnumerator(in WhereAtEnumerable<TList, TSource, TPredicate> enumerable)
                 {

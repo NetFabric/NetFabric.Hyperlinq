@@ -89,7 +89,7 @@ namespace NetFabric.Hyperlinq
             bool ICollection<TResult>.Remove(TResult item) 
                 => Throw.NotSupportedException<bool>();
 
-            [StructLayout(LayoutKind.Sequential)]
+            [StructLayout(LayoutKind.Auto)]
             public struct Enumerator
                 : IEnumerator<TResult>
             {

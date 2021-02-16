@@ -131,15 +131,15 @@ namespace NetFabric.Hyperlinq
             bool ICollection<TSource>.Remove(TSource item) 
                 => Throw.NotSupportedException<bool>();
 
-            [StructLayout(LayoutKind.Sequential)]
+            [StructLayout(LayoutKind.Auto)]
             public struct Enumerator
                 : IEnumerator<TSource>
             {
-                EnumeratorState state;
-                int takeCounter;
-                int skipCounter;
                 [SuppressMessage("Style", "IDE0044:Add readonly modifier")]
                 TEnumerator enumerator; // do not make readonly
+                int skipCounter;
+                int takeCounter;
+                EnumeratorState state;
 
                 internal Enumerator(in SkipTakeEnumerable<TEnumerable, TEnumerator, TSource> enumerable)
                 {

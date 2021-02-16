@@ -83,11 +83,11 @@ namespace NetFabric.Hyperlinq
             bool ICollection<TSource>.Remove(TSource item) 
                 => Throw.NotSupportedException<bool>();
 
-            [StructLayout(LayoutKind.Sequential)]
+            [StructLayout(LayoutKind.Auto)]
             public struct Enumerator
             {
-                int counter;
                 readonly int end;
+                int counter;
 
                 internal Enumerator(in RepeatEnumerable<TSource> enumerable)
                 {
@@ -103,12 +103,12 @@ namespace NetFabric.Hyperlinq
                     => ++counter <= end;
             }
 
-            [StructLayout(LayoutKind.Sequential)]
+            [StructLayout(LayoutKind.Auto)]
             public struct DisposableEnumerator
                 : IEnumerator<TSource>
             {
-                int counter;
                 readonly int end;
+                int counter;
 
                 internal DisposableEnumerator(in RepeatEnumerable<TSource> enumerable)
                 {

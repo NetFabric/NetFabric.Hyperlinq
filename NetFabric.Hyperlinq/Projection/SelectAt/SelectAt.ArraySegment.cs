@@ -145,15 +145,15 @@ namespace NetFabric.Hyperlinq
             void IList<TResult>.RemoveAt(int index)
                 => Throw.NotSupportedException();
 
-            [StructLayout(LayoutKind.Sequential)]
+            [StructLayout(LayoutKind.Auto)]
             public struct Enumerator
                 : IEnumerator<TResult>
             {
-                int index;
-                readonly int offset;
-                readonly int end;
                 readonly TSource[]? source;
                 TSelector selector;
+                readonly int offset;
+                readonly int end;
+                int index;
 
                 internal Enumerator(in ArraySegmentSelectAtEnumerable<TSource, TResult, TSelector> enumerable)
                 {
