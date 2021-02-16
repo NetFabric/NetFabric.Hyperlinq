@@ -9,7 +9,7 @@
 - LinqFaster.SIMD: [1.1.2](https://www.nuget.org/packages/LinqFaster.SIMD/1.0.3)
 - LinqAF: [3.0.0.0](https://www.nuget.org/packages/LinqAF/3.0.0.0)
 - StructLinq.BCL: [0.25.3](https://www.nuget.org/packages/StructLinq.BCL/0.25.3)
-- NetFabric.Hyperlinq: [3.0.0-beta36](https://www.nuget.org/packages/NetFabric.Hyperlinq/3.0.0-beta36)
+- NetFabric.Hyperlinq: [3.0.0-beta37](https://www.nuget.org/packages/NetFabric.Hyperlinq/3.0.0-beta37)
 
 ### Results:
 ``` ini
@@ -25,18 +25,18 @@ Job=.NET Core 5.0  Runtime=.NET Core 5.0
 ```
 |                                Method | Count |       Mean |   Error |  StdDev | Ratio |  Gen 0 | Gen 1 | Gen 2 | Allocated |
 |-------------------------------------- |------ |-----------:|--------:|--------:|------:|-------:|------:|------:|----------:|
-|                    ValueLinq_Standard |   100 | 1,090.2 ns | 6.33 ns | 4.94 ns |  1.52 | 0.3281 |     - |     - |     688 B |
-|                       ValueLinq_Stack |   100 | 1,078.8 ns | 5.78 ns | 5.13 ns |  1.51 | 0.1411 |     - |     - |     296 B |
-|             ValueLinq_SharedPool_Push |   100 | 1,391.7 ns | 7.82 ns | 6.53 ns |  1.94 | 0.1411 |     - |     - |     296 B |
-|             ValueLinq_SharedPool_Pull |   100 | 1,219.5 ns | 6.81 ns | 6.04 ns |  1.70 | 0.1411 |     - |     - |     296 B |
-|        ValueLinq_ValueLambda_Standard |   100 |   834.1 ns | 4.45 ns | 3.94 ns |  1.17 | 0.3281 |     - |     - |     688 B |
-|           ValueLinq_ValueLambda_Stack |   100 |   781.7 ns | 3.85 ns | 3.41 ns |  1.09 | 0.1411 |     - |     - |     296 B |
-| ValueLinq_ValueLambda_SharedPool_Push |   100 | 1,132.4 ns | 5.32 ns | 4.72 ns |  1.58 | 0.1411 |     - |     - |     296 B |
-| ValueLinq_ValueLambda_SharedPool_Pull |   100 | 1,065.5 ns | 6.47 ns | 5.40 ns |  1.49 | 0.1411 |     - |     - |     296 B |
-|                           ForeachLoop |   100 |   716.1 ns | 2.63 ns | 2.46 ns |  1.00 | 0.3281 |     - |     - |     688 B |
-|                                  Linq |   100 |   997.4 ns | 3.64 ns | 3.23 ns |  1.39 | 0.3853 |     - |     - |     808 B |
-|                                LinqAF |   100 | 1,095.3 ns | 3.75 ns | 3.13 ns |  1.53 | 0.3281 |     - |     - |     688 B |
-|                            StructLinq |   100 | 1,042.2 ns | 2.64 ns | 2.34 ns |  1.46 | 0.1831 |     - |     - |     384 B |
-|                  StructLinq_IFunction |   100 |   763.7 ns | 2.65 ns | 2.48 ns |  1.07 | 0.1411 |     - |     - |     296 B |
-|                             Hyperlinq |   100 | 1,128.2 ns | 3.98 ns | 3.72 ns |  1.58 | 0.1411 |     - |     - |     296 B |
-|                   Hyperlinq_IFunction |   100 |   809.6 ns | 4.63 ns | 3.87 ns |  1.13 | 0.1411 |     - |     - |     296 B |
+|                    ValueLinq_Standard |   100 | 1,055.7 ns | 4.37 ns | 4.09 ns |  1.55 | 0.3281 |     - |     - |     688 B |
+|                       ValueLinq_Stack |   100 | 1,042.3 ns | 2.58 ns | 2.29 ns |  1.53 | 0.1411 |     - |     - |     296 B |
+|             ValueLinq_SharedPool_Push |   100 | 1,390.5 ns | 5.72 ns | 5.35 ns |  2.05 | 0.1411 |     - |     - |     296 B |
+|             ValueLinq_SharedPool_Pull |   100 | 1,242.7 ns | 3.95 ns | 3.29 ns |  1.83 | 0.1411 |     - |     - |     296 B |
+|        ValueLinq_ValueLambda_Standard |   100 |   826.7 ns | 2.11 ns | 1.76 ns |  1.22 | 0.3281 |     - |     - |     688 B |
+|           ValueLinq_ValueLambda_Stack |   100 |   765.2 ns | 2.67 ns | 2.23 ns |  1.13 | 0.1411 |     - |     - |     296 B |
+| ValueLinq_ValueLambda_SharedPool_Push |   100 | 1,096.6 ns | 4.21 ns | 3.94 ns |  1.61 | 0.1411 |     - |     - |     296 B |
+| ValueLinq_ValueLambda_SharedPool_Pull |   100 | 1,054.1 ns | 5.08 ns | 4.51 ns |  1.55 | 0.1411 |     - |     - |     296 B |
+|                           ForeachLoop |   100 |   679.5 ns | 1.93 ns | 1.81 ns |  1.00 | 0.3281 |     - |     - |     688 B |
+|                                  Linq |   100 |   989.0 ns | 7.24 ns | 6.42 ns |  1.46 | 0.3853 |     - |     - |     808 B |
+|                                LinqAF |   100 | 1,092.7 ns | 4.02 ns | 3.76 ns |  1.61 | 0.3281 |     - |     - |     688 B |
+|                            StructLinq |   100 |   960.6 ns | 3.62 ns | 3.39 ns |  1.41 | 0.1831 |     - |     - |     384 B |
+|                  StructLinq_IFunction |   100 |   776.1 ns | 2.86 ns | 2.53 ns |  1.14 | 0.1411 |     - |     - |     296 B |
+|                             Hyperlinq |   100 | 1,023.8 ns | 3.73 ns | 3.49 ns |  1.51 | 0.1411 |     - |     - |     296 B |
+|                   Hyperlinq_IFunction |   100 |   789.4 ns | 3.89 ns | 3.45 ns |  1.16 | 0.1411 |     - |     - |     296 B |

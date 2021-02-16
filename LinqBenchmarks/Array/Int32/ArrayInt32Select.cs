@@ -146,7 +146,7 @@ namespace LinqBenchmarks.Array.Int32
         {
             var sum = 0;
             foreach (var item in source.AsValueEnumerable()
-                .SelectVector<int, int, DoubleOfInt32, DoubleOfInt32>())
+                .SelectVector<int, int, DoubleOfInt32>())
                 sum += item;
             return sum;
         }

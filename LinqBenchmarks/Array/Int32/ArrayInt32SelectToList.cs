@@ -90,7 +90,7 @@ namespace LinqBenchmarks.Array.Int32
         [Benchmark]
         public List<int> Hyperlinq_IFunction_SIMD()
            => source.AsValueEnumerable()
-                .SelectVector<int, int, DoubleOfInt32, DoubleOfInt32>()
+                .SelectVector<int, int, DoubleOfInt32>()
                 .ToList();
     }
 }

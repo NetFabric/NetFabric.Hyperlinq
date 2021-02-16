@@ -44,15 +44,11 @@ namespace LinqBenchmarks.List.Int32
         public List<int> LinqFaster()
             => new List<int>(source.SelectF(item => item * 2));
 
-        //[Benchmark]
-        //public List<int> LinqFaster_SIMD()
-        //    => new List<int>(source.SelectS(item => item * 2, item => item * 2));
-
-        //[Benchmark]
-        //public List<int> LinqAF()
-        //    => global::LinqAF.ArrayExtensionMethods
-        //        .Select(source, item => item * 2)
-        //        .ToList();
+        [Benchmark]
+        public List<int> LinqAF()
+            => global::LinqAF.ListExtensionMethods
+                .Select(source, item => item * 2)
+                .ToList();
 
         [Benchmark]
         public List<int> StructLinq()
@@ -90,7 +86,7 @@ namespace LinqBenchmarks.List.Int32
         [Benchmark]
         public List<int> Hyperlinq_IFunction_SIMD()
            => source.AsValueEnumerable()
-                .SelectVector<int, int, DoubleOfInt32, DoubleOfInt32>()
+                .SelectVector<int, int, DoubleOfInt32>()
                 .ToList();
     }
 }
