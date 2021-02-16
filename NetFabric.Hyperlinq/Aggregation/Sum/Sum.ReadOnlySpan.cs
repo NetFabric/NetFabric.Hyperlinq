@@ -55,14 +55,13 @@ namespace NetFabric.Hyperlinq
 
 #if NET5_0
 
-            var vectorSize = Vector<TSource>.Count;
-            if (Vector.IsHardwareAccelerated && source.Length >= vectorSize) // use SIMD
+            if (Vector.IsHardwareAccelerated && source.Length >= Vector<TSource>.Count) // use SIMD
             {
                 var vector = Vector<TSource>.Zero;
 
                 var index = 0;
-                for (; index <= source.Length - vectorSize; index += vectorSize)
-                    vector = vector + new Vector<TSource>(source.Slice(index, vectorSize));
+                for (; index <= source.Length - Vector<TSource>.Count; index += Vector<TSource>.Count)
+                    vector += new Vector<TSource>(source.Slice(index, Vector<TSource>.Count));
 
                 for (; index < source.Length; index++)
                 {
@@ -70,25 +69,22 @@ namespace NetFabric.Hyperlinq
                     sum = GenericsOperator.Add(item, sum);
                 }
 
-                for (index = 0; index < vectorSize; index++)
+                for (index = 0; index < Vector<TSource>.Count; index++)
                     sum = GenericsOperator.Add(vector[index], sum);
+
+                return sum;
             }
-            else
-            {
-                foreach (var item in source)
-                    sum = GenericsOperator.Add(item, sum);
-            }
-#else
+            
+#endif
 
             foreach (var item in source)
                 sum = GenericsOperator.Add(item, sum);
-
-#endif
 
             return sum;
         }
 
 #if NET5_0 
+        
         static TResult Sum<TSource, TResult, TVectorSelector, TSelector>(this ReadOnlySpan<TSource> source, TVectorSelector vectorSelector, TSelector selector)
             where TVectorSelector : struct, IFunction<Vector<TSource>, Vector<TResult>>
             where TSelector : struct, IFunction<TSource, TResult>
@@ -97,14 +93,13 @@ namespace NetFabric.Hyperlinq
         {
             var sum = default(TResult);
 
-            var vectorSize = Vector<TResult>.Count;
-            if (Vector.IsHardwareAccelerated && source.Length >= vectorSize) // use SIMD
+            if (Vector.IsHardwareAccelerated && source.Length >= Vector<TResult>.Count) // use SIMD
             {
                 var vector = Vector<TResult>.Zero;
 
                 var index = 0;
-                for (; index <= source.Length - vectorSize; index += vectorSize)
-                    vector = vector + vectorSelector.Invoke(new Vector<TSource>(source.Slice(index, vectorSize)));
+                for (; index <= source.Length - Vector<TResult>.Count; index += Vector<TResult>.Count)
+                    vector += vectorSelector.Invoke(new Vector<TSource>(source.Slice(index, Vector<TResult>.Count)));
 
                 for (; index < source.Length; index++)
                 {
@@ -112,7 +107,7 @@ namespace NetFabric.Hyperlinq
                     sum = GenericsOperator.Add(selector.Invoke(item), sum);
                 }
 
-                for (index = 0; index < vectorSize; index++)
+                for (index = 0; index < Vector<TSource>.Count; index++)
                     sum = GenericsOperator.Add(vector[index], sum);
             }
             else
@@ -122,9 +117,10 @@ namespace NetFabric.Hyperlinq
             }
             return sum;
         }
+        
 #endif
-
-            static TSum Sum<TSource, TSum>(this ReadOnlySpan<TSource> source)
+        
+        static TSum Sum<TSource, TSum>(this ReadOnlySpan<TSource> source)
             where TSum : struct
         {
             var sum = default(TSum);

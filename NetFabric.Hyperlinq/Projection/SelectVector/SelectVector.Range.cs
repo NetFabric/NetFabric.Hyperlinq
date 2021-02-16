@@ -120,19 +120,18 @@ namespace NetFabric.Hyperlinq
 
                 var index = 0;
 
-                var vectorSize = Vector<int>.Count;
-                if (Vector.IsHardwareAccelerated && count >= vectorSize)
+                if (Vector.IsHardwareAccelerated && count >= Vector<int>.Count)
                 {
-                    Span<int> seed = stackalloc int[vectorSize]; 
+                    Span<int> seed = stackalloc int[Vector<int>.Count]; 
                     if (start is 0)
                     {
-                        for (; index < seed.Length; index++)
-                            seed[index] = index;
+                        for (var seedIndex = 0; seedIndex < seed.Length; seedIndex++)
+                            seed[seedIndex] = seedIndex;
                     }
                     else
                     {
-                        for (; index < seed.Length; index++)
-                            seed[index] = index + start;
+                        for (var seedIndex = 0; seedIndex < seed.Length; seedIndex++)
+                            seed[seedIndex] = seedIndex + start;
                     }
 
                     var vector = new Vector<int>(seed);
@@ -140,14 +139,14 @@ namespace NetFabric.Hyperlinq
                     if (Vector.EqualsAny(vectorSelector.Invoke(vector), vectorItem))
                         return true;
 
-                    var vectorIncrement = new Vector<int>(vectorSize);
-                    vector = vector + vectorIncrement;
-                    for (index = 0; index < count - vectorSize; index += vectorSize)
+                    var vectorIncrement = new Vector<int>(Vector<int>.Count);
+                    vector += vectorIncrement;
+                    for (index = 0; index < count - Vector<int>.Count; index += Vector<int>.Count)
                     {
                         if (Vector.EqualsAny(vectorSelector.Invoke(vector), vectorItem))
                             return true;
 
-                        vector = vector + vectorIncrement;
+                        vector += vectorIncrement;
                     }
                 }
 

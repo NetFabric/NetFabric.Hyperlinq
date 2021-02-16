@@ -15,7 +15,7 @@ namespace NetFabric.Hyperlinq
             using var enumerator = source.GetEnumerator();
             checked
             {
-                for (var index = 0; enumerator.MoveNext(); index++)
+                for (var index = 0; enumerator.MoveNext() && index < destination.Length; index++)
                     destination[index] = enumerator.Current;
             }
         }
@@ -31,7 +31,7 @@ namespace NetFabric.Hyperlinq
             using var enumerator = source.GetEnumerator();
             checked
             {
-                for (var index = 0; enumerator.MoveNext(); index++)
+                for (var index = 0; enumerator.MoveNext() && index < destination.Length; index++)
                     destination[index] = selector.Invoke(enumerator.Current);
             }
         }
@@ -47,7 +47,7 @@ namespace NetFabric.Hyperlinq
             using var enumerator = source.GetEnumerator();
             checked
             {
-                for (var index = 0; enumerator.MoveNext(); index++)
+                for (var index = 0; enumerator.MoveNext() && index < destination.Length; index++)
                     destination[index] = selector.Invoke(enumerator.Current, index);
             }
         }

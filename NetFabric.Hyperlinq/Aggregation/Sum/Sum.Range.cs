@@ -19,13 +19,11 @@ namespace NetFabric.Hyperlinq
         {
             var sum = default(TResult);
 
-            var end = start + count;
             var index = 0;
 
-            var vectorSize = Vector<TResult>.Count;
-            if (Vector.IsHardwareAccelerated && count >= vectorSize) // use SIMD
+            if (Vector.IsHardwareAccelerated && count >= Vector<TResult>.Count) // use SIMD
             {
-                Span<int> seed = stackalloc int[vectorSize]; 
+                Span<int> seed = stackalloc int[Vector<TResult>.Count]; 
                 if (start is 0)
                 {
                     for (; index < seed.Length; index++)
@@ -38,24 +36,29 @@ namespace NetFabric.Hyperlinq
                 }
 
                 var vector = new Vector<int>(seed);
-                var vectorIncrement = new Vector<int>(vectorSize);
+                var vectorIncrement = new Vector<int>(Vector<TResult>.Count);
                 var vectorSum = Vector<TResult>.Zero;
-                for (; index <= count - vectorSize; index += vectorSize)
+                for (; index <= count - Vector<TResult>.Count; index += Vector<TResult>.Count)
                 {
-                    vectorSum = vectorSum + vectorSelector.Invoke(vector);
-                    vector = vector + vectorIncrement;
+                    vectorSum += vectorSelector.Invoke(vector);
+                    vector += vectorIncrement;
                 }
 
-                for (index = 0; index < vectorSize; index++)
+                for (index = 0; index < Vector<TResult>.Count; index++)
                     sum = GenericsOperator.Add(vectorSum[index], sum);
             }
-            
-            for (; index < count; index++)
+
+            if (start is 0)
             {
-                var item = index + start;
-                sum = GenericsOperator.Add(selector.Invoke(item), sum);
+                for (; index < count; index++)
+                    sum = GenericsOperator.Add(selector.Invoke(index), sum);
             }
-            
+            else
+            {
+                for (; index < count; index++)
+                    sum = GenericsOperator.Add(selector.Invoke(index + start), sum);
+            }
+
             return sum;
         }
 #endif

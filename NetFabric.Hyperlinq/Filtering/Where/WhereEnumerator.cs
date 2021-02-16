@@ -4,21 +4,19 @@ using System.Runtime.InteropServices;
 
 namespace NetFabric.Hyperlinq
 {
-    [StructLayout(LayoutKind.Sequential)]
+    [StructLayout(LayoutKind.Auto)]
     public ref struct WhereEnumerator<TSource, TPredicate>
         where TPredicate : struct, IFunction<TSource, bool>
     {
-        int index;
-        readonly int end;
         readonly ReadOnlySpan<TSource> source;
         TPredicate predicate;
+        int index;
 
         internal WhereEnumerator(ReadOnlySpan<TSource> source, TPredicate predicate)
         {
             this.source = source;
             this.predicate = predicate;
             index = -1;
-            end = index + source.Length;
         }
 
         public readonly TSource Current 

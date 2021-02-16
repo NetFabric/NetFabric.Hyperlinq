@@ -204,17 +204,22 @@ namespace NetFabric.Hyperlinq
                 Throw.ArgumentException(Resource.DestinationNotLongEnough, nameof(span));
 
             var value = source.value;
-            var index = 0;
-            if (Vector.IsHardwareAccelerated)
+            if (Vector.IsHardwareAccelerated && source.Count >= Vector<TSource>.Count)
             {
-                var vectorSize = Vector<TSource>.Count;
                 var vector = new Vector<TSource>(value);
-                for (; index <= count - vectorSize; index += vectorSize)
-                    vector.CopyTo(span.Slice(index, vectorSize));
-            }
 
-            for (; index < span.Length; index++)
-                span[index] = value;
+                var index = 0;
+                for (; index <= count - Vector<TSource>.Count; index += Vector<TSource>.Count)
+                    vector.CopyTo(span.Slice(index, Vector<TSource>.Count));
+
+                for (; index < span.Length; index++)
+                    span[index] = value;
+            }
+            else
+            {
+                for (var index = 0; index < span.Length; index++)
+                    span[index] = value;
+            }
         }
 
         public static TSource[] ToArrayVector<TSource>(this RepeatEnumerable<TSource> source)

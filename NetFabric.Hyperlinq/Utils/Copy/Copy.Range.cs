@@ -11,46 +11,58 @@ namespace NetFabric.Hyperlinq
         public static void CopyRange(int start, int count, Span<int> destination)
         {
             Debug.Assert(destination.Length >= count);
-
-            var index = 0;
-
+            
 #if NET5_0
 
-            var vectorSize = Vector<int>.Count;
-            if (Vector.IsHardwareAccelerated && count >= vectorSize)
+            if (Vector.IsHardwareAccelerated && count >= Vector<int>.Count)
             {
-                var copySpan = destination.Slice(index, vectorSize); // bounds check removal
+                var copySpan = destination.Slice(0, Vector<int>.Count); // bounds check removal
                 if (start is 0)
                 {
-                    for (; index < copySpan.Length; index++)
-                        copySpan[index] = index;
+                    for (var spanIndex = 0; spanIndex < copySpan.Length; spanIndex++)
+                        copySpan[spanIndex] = spanIndex;
                 }
                 else
                 {
-                    for (; index < copySpan.Length; index++)
-                        copySpan[index] = index + start;
+                    for (var spanIndex = 0; spanIndex < copySpan.Length; spanIndex++)
+                        copySpan[spanIndex] = spanIndex + start;
                 }
 
                 var vector = new Vector<int>(copySpan);
-                var increment = new Vector<int>(vectorSize);
-                vector = vector + increment;
-                for (; index <= count - vectorSize; index += vectorSize)
+                var increment = new Vector<int>(Vector<int>.Count);
+                vector += increment;
+                
+                var index = Vector<int>.Count;
+                for (; index <= count - Vector<int>.Count; index += Vector<int>.Count)
                 {
-                    vector.CopyTo(destination.Slice(index, vectorSize));
-                    vector = vector + increment;
+                    vector.CopyTo(destination.Slice(index, Vector<int>.Count));
+                    vector += increment;
                 }
+
+                if (start is 0)
+                {
+                    for (; index < destination.Length; index++)
+                        destination[index] = index;
+                }
+                else
+                {
+                    for (; index < destination.Length; index++)
+                        destination[index] = index + start;
+                }
+                
+                return;
             }
-
+            
 #endif
-
+            
             if (start is 0)
             {
-                for (; index < destination.Length; index++)
+                for (var index = 0; index < destination.Length; index++)
                     destination[index] = index;
             }
             else
             {
-                for (; index < destination.Length; index++)
+                for (var index = 0; index < destination.Length; index++)
                     destination[index] = index + start;
             }
         }
@@ -62,51 +74,62 @@ namespace NetFabric.Hyperlinq
             where TResult : struct
         {
             Debug.Assert(destination.Length >= count);
-
-            var index = 0;
-
+            
 #if NET5_0
             
-            var vectorSize = Vector<int>.Count;
-            if (Vector.IsHardwareAccelerated && count >= vectorSize)
+            if (Vector.IsHardwareAccelerated && count >= Vector<int>.Count)
             {
-                Span<int> seed = stackalloc int[vectorSize]; 
+                Span<int> seed = stackalloc int[Vector<int>.Count]; 
                 if (start is 0)
                 {
-                    for (; index < seed.Length; index++)
-                        seed[index] = index;
+                    for (var spanIndex = 0; spanIndex < seed.Length; spanIndex++)
+                        seed[spanIndex] = spanIndex;
                 }
                 else
                 {
-                    for (; index < seed.Length; index++)
-                        seed[index] = index + start;
+                    for (var spanIndex = 0; spanIndex < seed.Length; spanIndex++)
+                        seed[spanIndex] = spanIndex + start;
                 }
 
                 var vector = new Vector<int>(seed);
-                var vectorProjection = new Vector<TResult>();
-                vectorProjection = vectorSelector.Invoke(vector);
+                var vectorProjection = vectorSelector.Invoke(vector);
 
-                var increment = new Vector<int>(vectorSize);
-                for (index = 0; index <= count - vectorSize; index += vectorSize)
+                var increment = new Vector<int>(Vector<int>.Count);
+                var index = 0;
+                for (; index <= count - Vector<int>.Count; index += Vector<int>.Count)
                 {
-                    vectorProjection.CopyTo(destination.Slice(index, vectorSize));
-                    vector = vector + increment;
+                    vectorProjection.CopyTo(destination.Slice(index, Vector<int>.Count));
+                    vector += increment;
                     vectorProjection = vectorSelector.Invoke(vector);
                 }
+
+                if (start is 0)
+                {
+                    for (; index < destination.Length; index++)
+                        destination[index] = selector.Invoke(index);
+                }
+                else
+                {
+                    for (; index < destination.Length; index++)
+                        destination[index] = selector.Invoke(index + start);
+                }
+
+                return;
             }
             
 #endif
-
+            
             if (start is 0)
             {
-                for (; index < destination.Length; index++)
+                for (var index = 0; index < destination.Length; index++)
                     destination[index] = selector.Invoke(index);
             }
             else
             {
-                for (; index < destination.Length; index++)
+                for (var index = 0; index < destination.Length; index++)
                     destination[index] = selector.Invoke(index + start);
             }
+
         }
 
     }

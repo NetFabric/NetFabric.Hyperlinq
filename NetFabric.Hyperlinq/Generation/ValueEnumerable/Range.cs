@@ -92,18 +92,16 @@ namespace NetFabric.Hyperlinq
             bool ICollection<int>.Remove(int item)
                 => Throw.NotSupportedException<bool>();
 
-            [StructLayout(LayoutKind.Explicit)]
+            [StructLayout(LayoutKind.Auto)]
             public struct Enumerator
             {
-                [FieldOffset(0)] int current;
-                [FieldOffset(4)] readonly int end;
-                [FieldOffset(8)] readonly long padding;
+                readonly int end;
+                int current;
 
                 internal Enumerator(in RangeEnumerable enumerable)
                 {
                     current = enumerable.start - 1;
                     end = current + enumerable.Count;
-                    padding = default;
                 }
 
                 public int Current
@@ -117,19 +115,17 @@ namespace NetFabric.Hyperlinq
                     => ++current <= end;
             }
 
-            [StructLayout(LayoutKind.Explicit)]
+            [StructLayout(LayoutKind.Auto)]
             public struct DisposableEnumerator
                 : IEnumerator<int>
             {
-                [FieldOffset(0)] int current;
-                [FieldOffset(4)] readonly int end;
-                [FieldOffset(8)] readonly long padding;
+                readonly int end;
+                int current;
 
                 internal DisposableEnumerator(in RangeEnumerable enumerable)
                 {
                     current = enumerable.start - 1;
                     end = current + enumerable.Count;
-                    padding = default;
                 }
 
                 public int Current

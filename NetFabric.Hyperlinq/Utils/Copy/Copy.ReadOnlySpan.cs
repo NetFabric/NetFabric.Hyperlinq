@@ -38,20 +38,29 @@ namespace NetFabric.Hyperlinq
         {
             Debug.Assert(destination.Length >= source.Length);
             Debug.Assert(Vector<TSource>.Count == Vector<TResult>.Count);
-
-            var index = 0;
-
-            if (Vector.IsHardwareAccelerated)
+            
+            if (Vector.IsHardwareAccelerated && source.Length >= Vector<TSource>.Count)
             {
-                var vectorSize = Vector<TSource>.Count;
-                for (; index <= source.Length - vectorSize; index += vectorSize)
-                    vectorSelector.Invoke(new Vector<TSource>(source.Slice(index, vectorSize))).CopyTo(destination.Slice(index, vectorSize));
+                var index = 0;
+                for (; index <= source.Length - Vector<TSource>.Count; index += Vector<TSource>.Count)
+                {
+                    vectorSelector.Invoke(new Vector<TSource>(source.Slice(index, Vector<TSource>.Count)))
+                        .CopyTo(destination.Slice(index, Vector<TSource>.Count));
+                }
+
+                for (; index < source.Length && index < destination.Length; index++)
+                {
+                    var item = source[index];
+                    destination[index] = selector.Invoke(item);
+                }
             }
-
-            for (; index < source.Length && index < destination.Length; index++)
+            else
             {
-                var item = source[index];
-                destination[index] = selector.Invoke(item);
+                for (var index = 0; index < source.Length && index < destination.Length; index++)
+                {
+                    var item = source[index];
+                    destination[index] = selector.Invoke(item);
+                }
             }
         }
 #endif
