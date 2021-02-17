@@ -51,14 +51,5 @@ namespace LinqBenchmarks.Range
             => ValueEnumerable
                 .Range(Start, Count)
                 .ToArray();
-
-        [Benchmark]
-        public int Hyperlinq_Pool()
-        {
-            using var array = ValueEnumerable
-                .Range(Start, Count)
-                .ToArray(MemoryPool<int>.Shared);
-            return Count == 0 ? default : array.Memory.Span[0];
-        }
     }
 }
