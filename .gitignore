@@ -269,3 +269,6 @@ __pycache__/
 
 # Coverlet
 coverage.json
+
+# IntelliJ
+.idea

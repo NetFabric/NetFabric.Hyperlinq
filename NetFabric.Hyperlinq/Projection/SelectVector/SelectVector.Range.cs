@@ -192,7 +192,7 @@ namespace NetFabric.Hyperlinq
                     end = value + enumerable.count;
                 }
 
-                public TResult Current
+                public readonly TResult Current
                 {
                     [MethodImpl(MethodImplOptions.AggressiveInlining)]
                     get => selector.Invoke(value);
@@ -218,14 +218,14 @@ namespace NetFabric.Hyperlinq
                     end = value + enumerable.count;
                 }
 
-                public TResult Current
+                public readonly TResult Current
                 {
                     [MethodImpl(MethodImplOptions.AggressiveInlining)]
                     get => selector.Invoke(value);
                 }
-                TResult IEnumerator<TResult>.Current
+                readonly TResult IEnumerator<TResult>.Current
                     => selector.Invoke(value);
-                object? IEnumerator.Current
+                readonly object? IEnumerator.Current
                     // ReSharper disable once HeapView.PossibleBoxingAllocation
                     => selector.Invoke(value);
 
@@ -240,10 +240,10 @@ namespace NetFabric.Hyperlinq
                 public void Dispose() { }
             }
 
-            #region Aggregation
+        #region Aggregation
 
-            #endregion
-            #region Quantifier
+        #endregion
+        #region Quantifier
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Any()
@@ -257,17 +257,17 @@ namespace NetFabric.Hyperlinq
                     _ => ReadOnlyListExtensions.Contains(this, value, comparer)
                 };
 
-            #endregion
-            #region Filtering
+        #endregion
+        #region Filtering
 
-            #endregion
-            #region Projection
+        #endregion
+        #region Projection
 
-            #endregion
-            #region Element
+        #endregion
+        #region Element
 
-            #endregion
-            #region Conversion
+        #endregion
+        #region Conversion
 
             public TResult[] ToArray()
             {
@@ -296,7 +296,7 @@ namespace NetFabric.Hyperlinq
                     _ => ToArray().AsList()
                 };
 
-            #endregion
+        #endregion
 
             public bool SequenceEqual(IEnumerable<TResult> other, IEqualityComparer<TResult>? comparer = null)
             {

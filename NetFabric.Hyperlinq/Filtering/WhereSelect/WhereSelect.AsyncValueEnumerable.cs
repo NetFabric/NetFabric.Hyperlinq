@@ -86,7 +86,7 @@ namespace NetFabric.Hyperlinq
                 }
 
                 public TResult Current { get; private set; }
-                TResult IAsyncEnumerator<TResult>.Current
+                readonly TResult IAsyncEnumerator<TResult>.Current
                     => Current;
 
                 //public async ValueTask<bool> MoveNextAsync()

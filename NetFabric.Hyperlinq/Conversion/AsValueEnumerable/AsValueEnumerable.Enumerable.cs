@@ -86,7 +86,7 @@ namespace NetFabric.Hyperlinq
                 internal Enumerator(IEnumerable<TSource> enumerable) 
                     => enumerator = enumerable.GetEnumerator();
 
-                public TSource Current
+                public readonly TSource Current
                 {
                     [MethodImpl(MethodImplOptions.AggressiveInlining)]
                     get => enumerator.Current;

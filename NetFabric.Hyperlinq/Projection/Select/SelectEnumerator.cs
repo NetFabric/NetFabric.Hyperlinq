@@ -21,7 +21,7 @@ namespace NetFabric.Hyperlinq
             end = index + source.Length;
         }
 
-        public TResult Current 
+        public readonly TResult Current 
         {
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get => selector.Invoke(source[index]);

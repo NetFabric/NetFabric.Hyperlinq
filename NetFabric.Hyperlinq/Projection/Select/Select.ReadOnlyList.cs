@@ -160,7 +160,7 @@ namespace NetFabric.Hyperlinq
                     end = index + enumerable.Count;
                 }
 
-                public TResult Current
+                public readonly TResult Current
                 {
                     [MethodImpl(MethodImplOptions.AggressiveInlining)]
                     get => selector.Invoke(source[index]);

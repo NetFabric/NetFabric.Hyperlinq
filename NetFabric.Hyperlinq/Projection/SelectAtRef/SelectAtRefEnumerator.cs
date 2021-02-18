@@ -19,7 +19,7 @@ namespace NetFabric.Hyperlinq
             index = -1;
         }
 
-        public TResult Current 
+        public readonly TResult Current 
         {
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get => selector.Invoke(in source[index], index);

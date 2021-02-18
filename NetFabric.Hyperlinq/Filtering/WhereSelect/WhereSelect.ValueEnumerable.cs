@@ -69,14 +69,14 @@ namespace NetFabric.Hyperlinq
                     selector = enumerable.selector;
                 }
 
-                public TResult Current
+                public readonly TResult Current
                 {
                     [MethodImpl(MethodImplOptions.AggressiveInlining)]
                     get => selector.Invoke(enumerator.Current);
                 }
                 TResult IEnumerator<TResult>.Current 
                     => selector.Invoke(enumerator.Current);
-                object? IEnumerator.Current
+                readonly object? IEnumerator.Current
                     // ReSharper disable once HeapView.PossibleBoxingAllocation
                     => selector.Invoke(enumerator.Current);
 

@@ -166,14 +166,14 @@ namespace NetFabric.Hyperlinq
                     end = index + enumerable.source.Count;
                 }
 
-                public TResult Current
+                public readonly TResult Current
                 {
                     [MethodImpl(MethodImplOptions.AggressiveInlining)]
                     get => selector.Invoke(source![index]);
                 }
-                TResult IEnumerator<TResult>.Current
+                readonly TResult IEnumerator<TResult>.Current
                     => selector.Invoke(source![index]);
-                object? IEnumerator.Current
+                readonly object? IEnumerator.Current
                     // ReSharper disable once HeapView.PossibleBoxingAllocation
                     => selector.Invoke(source![index]);
 
@@ -188,27 +188,27 @@ namespace NetFabric.Hyperlinq
                 public void Dispose() { }
             }
 
-            #region Aggregation
+        #region Aggregation
 
-            #endregion
+        #endregion
 
-            #region Quantifier
+        #region Quantifier
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Any()
                 => source.Count is not 0;
 
-            #endregion
-            #region Filtering
+        #endregion
+        #region Filtering
 
-            #endregion
-            #region Projection
+        #endregion
+        #region Projection
 
-            #endregion
-            #region Element
+        #endregion
+        #region Element
 
-            #endregion
-            #region Conversion
+        #endregion
+        #region Conversion
 
             public TResult[] ToArray()
                 => ((ReadOnlySpan<TSource>)source.AsSpan()).ToArrayVector<TSource, TResult, TVectorSelector, TSelector>(vectorSelector, selector);
@@ -220,7 +220,7 @@ namespace NetFabric.Hyperlinq
             public List<TResult> ToList()
                 => ((ReadOnlySpan<TSource>)source.AsSpan()).ToListVector<TSource, TResult, TVectorSelector, TSelector>(vectorSelector, selector);
 
-            #endregion
+        #endregion
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -266,7 +266,7 @@ namespace NetFabric.Hyperlinq
             where TSource : struct
             => ((ReadOnlySpan<TSource>)source.source.AsSpan()).Sum<TSource, decimal, TVectorSelector, TSelector>(source.vectorSelector, source.selector);
 
-#endif    
+#endif
     }
 }
 

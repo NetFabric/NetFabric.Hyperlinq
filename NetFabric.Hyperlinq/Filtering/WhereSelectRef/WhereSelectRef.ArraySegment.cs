@@ -65,11 +65,11 @@ namespace NetFabric.Hyperlinq
                     end = index + enumerable.source.Count;
                 }
 
-                public TResult Current 
+                public readonly TResult Current 
                     => selector.Invoke(in source![index]);
-                TResult IEnumerator<TResult>.Current 
+                readonly TResult IEnumerator<TResult>.Current 
                     => selector.Invoke(in source![index]);
-                object? IEnumerator.Current
+                readonly object? IEnumerator.Current
                     // ReSharper disable once HeapView.PossibleBoxingAllocation
                     => selector.Invoke(in source![index])!;
 

@@ -55,7 +55,7 @@ namespace NetFabric.Hyperlinq
                     end = index + enumerable.source.Count;
                 }
 
-                public TSource Current 
+                public readonly TSource Current 
                 {
                     [MethodImpl(MethodImplOptions.AggressiveInlining)]
                     get => source![index];
