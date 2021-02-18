@@ -29,6 +29,7 @@ namespace NetFabric.Hyperlinq
         ArrayBuilder<T[]> buffers; // After ResizeLimit * 2, we store previous buffers we've filled out here.
         T[] current;               // Current buffer we're reading into. If _count <= ResizeLimit, this is _first.
         int index;                 // Index into the current buffer.
+        int storedCount;           // Number of items stored in buffers. 
 
         /// <summary>
         /// Constructs a new builder.
@@ -55,13 +56,17 @@ namespace NetFabric.Hyperlinq
             buffers = new ArrayBuilder<T[]>(arrayBuilderPool);
             current = Array.Empty<T>();
             index = 0;
-            Count = 0;
+            storedCount = 0;
         }
 
         /// <summary>
         /// Gets the number of items added to the builder.
         /// </summary>
-        public int Count { get; private set; }
+        public readonly int Count
+        {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get => storedCount + index;
+        }
 
         /// <summary>
         /// Adds an item to this builder.
@@ -81,7 +86,6 @@ namespace NetFabric.Hyperlinq
                 AllocateBuffer();
 
             current[index++] = item;
-            Count++;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -94,7 +98,6 @@ namespace NetFabric.Hyperlinq
                 AllocateBuffer();
 
             current[index++] = item;
-            Count++;
         }
 
         /// <summary>
@@ -179,6 +182,7 @@ namespace NetFabric.Hyperlinq
             {
                 buffers.Add(current);
                 nextCapacity = Math.Min(Count, maxCapacity - Count);
+                storedCount += index;
             }
 
             current = pool.Rent(nextCapacity);
