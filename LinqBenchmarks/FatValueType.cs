@@ -1,19 +1,20 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace LinqBenchmarks
 {
-    public struct FatValueType : IComparable<FatValueType>
+    public struct FatValueType 
+        : IEquatable<FatValueType>
+        , IComparable<FatValueType>
     {
         public int Value0;
-        public int Value1;
-        public int Value2;
-        public int Value3;
-        public int Value4;
-        public int Value5;
-        public int Value6;
-        public int Value7;
-        public int Value8;
-        public int Value9;
+        public long Value1;
+        public long Value2;
+        public long Value3;
+        public long Value4;
+        public long Value5;
+        public long Value6;
+        public long Value7;
 
         public FatValueType(int value)
         {
@@ -25,12 +26,16 @@ namespace LinqBenchmarks
             Value5 = value;
             Value6 = value;
             Value7 = value;
-            Value8 = value;
-            Value9 = value;
         }
 
         public readonly bool IsEven()
             => (Value0 & 0x01) == 0;
+
+        public static bool operator ==(FatValueType left, FatValueType right) 
+            => left.Equals(right);
+
+        public static bool operator !=(FatValueType left, FatValueType right) 
+            => !(left == right);
 
         public static FatValueType operator +(in FatValueType left, in FatValueType right)
             => new FatValueType(left.Value0 + right.Value0);
@@ -40,5 +45,32 @@ namespace LinqBenchmarks
 
         public int CompareTo(FatValueType other)
             => Value0 - other.Value0;
+
+        public bool Equals(FatValueType other)
+            => Value0 == other.Value0
+            && Value1 == other.Value1
+            && Value2 == other.Value2
+            && Value3 == other.Value3
+            && Value4 == other.Value4
+            && Value5 == other.Value5
+            && Value6 == other.Value6
+            && Value7 == other.Value7;
+
+        public override bool Equals(object obj)
+            => obj is FatValueType value 
+            && Equals(value);
+
+        public override int GetHashCode()
+            => HashCode.Combine(Value0, Value1, Value2, Value3, Value4, Value5, Value6, Value7);
+    }
+
+    public struct FatValueTypeComparer 
+        : IEqualityComparer<FatValueType>
+    {
+        public bool Equals(FatValueType x, FatValueType y)
+            => x.Equals(y);
+
+        public int GetHashCode(FatValueType obj)
+            => obj.GetHashCode();
     }
 }

@@ -21,6 +21,7 @@ Benchmarks comparing the perfomance of [LINQ](https://docs.microsoft.com/en-us/d
 
 ### `IEnumerable<int>`
 
+- [enumerable.Contains()](Results/Enumerable.Int32.EnumerableInt32Contains.md)
 - [enumerable.Distinct()](Results/Enumerable.Int32.EnumerableInt32Distinct.md)
 - [enumerable.Select()](Results/Enumerable.Int32.EnumerableInt32Select.md)
 - [enumerable.Skip().Take().Select()](Results/Enumerable.Int32.EnumerableInt32SkipTakeSelect.md)
@@ -34,6 +35,7 @@ Benchmarks comparing the perfomance of [LINQ](https://docs.microsoft.com/en-us/d
 
 ### `int[]`
 
+- [array.Contains()](Results/Array.Int32.ArrayInt32Contains.md)
 - [array.Distinct()](Results/Array.Int32.ArrayInt32Distinct.md)
 - [array.Select()](Results/Array.Int32.ArrayInt32Select.md)
 - [array.Select().ToList()](Results/Array.Int32.ArrayInt32SelectToList.md)
@@ -48,6 +50,7 @@ Benchmarks comparing the perfomance of [LINQ](https://docs.microsoft.com/en-us/d
 
 ### `FatValueType[]`
 
+- [array.Contains()](Results/Array.ValueType.ArrayValueTypeContains.md)
 - [array.Distinct()](Results/Array.ValueType.ArrayValueTypeDistinct.md)
 - [array.Select()](Results/Array.ValueType.ArrayValueTypeSelect.md)
 - [array.Select().Sum()](Results/Array.ValueType.ArrayValueTypeSelectSum.md)
@@ -61,6 +64,7 @@ Benchmarks comparing the perfomance of [LINQ](https://docs.microsoft.com/en-us/d
 
 ### `List<int>`
 
+- [list.Contains()](Results/List.Int32.ListInt32Contains.md)
 - [list.Distinct()](Results/List.Int32.ListInt32Distinct.md)
 - [list.Select()](Results/List.Int32.ListInt32Select.md)
 - [list.Select().ToList()](Results/List.Int32.ListInt32SelectToList.md)
@@ -74,6 +78,7 @@ Benchmarks comparing the perfomance of [LINQ](https://docs.microsoft.com/en-us/d
 
 ### `List<FatValueType>`
 
+- [list.Contains()](Results/List.ValueType.ListValueTypeContains.md)
 - [list.Distinct()](Results/List.ValueType.ListValueTypeDistinct.md)
 - [list.Select()](Results/List.ValueType.ListValueTypeSelect.md)
 - [list.Select().Sum()](Results/List.ValueType.ListValueTypeSelectSum.md)
