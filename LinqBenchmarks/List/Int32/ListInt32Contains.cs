@@ -1,4 +1,6 @@
 ﻿using BenchmarkDotNet.Attributes;
+using JM.LinqFaster;
+using JM.LinqFaster.SIMD;
 using NetFabric.Hyperlinq;
 using StructLinq;
 using System.Linq;
@@ -43,7 +45,7 @@ namespace LinqBenchmarks.List.Int32
         [Benchmark]
         public bool LinqFaster()
             => source
-                .Contains(value);
+                .ContainsF(value);
 
         [Benchmark]
         public bool LinqAF()
@@ -66,5 +68,11 @@ namespace LinqBenchmarks.List.Int32
             => source
                 .AsValueEnumerable()
                 .Contains(value);
+
+        [Benchmark]
+        public bool Hyperlinq_SIMD()
+            => source
+                .AsValueEnumerable()
+                .ContainsVector(value);
     }
 }

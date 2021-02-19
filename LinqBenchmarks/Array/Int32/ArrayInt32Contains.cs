@@ -71,5 +71,11 @@ namespace LinqBenchmarks.Array.Int32
             => source
                 .AsValueEnumerable()
                 .Contains(value);
+
+        [Benchmark]
+        public bool Hyperlinq_SIMD()
+            => source
+                .AsValueEnumerable()
+                .ContainsVector(value);
     }
 }

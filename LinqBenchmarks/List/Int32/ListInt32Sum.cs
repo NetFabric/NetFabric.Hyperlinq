@@ -1,4 +1,6 @@
 ﻿using BenchmarkDotNet.Attributes;
+using JM.LinqFaster;
+using JM.LinqFaster.SIMD;
 using NetFabric.Hyperlinq;
 using StructLinq;
 using System.Linq;
@@ -40,7 +42,7 @@ namespace LinqBenchmarks.List.Int32
         [Benchmark]
         public int LinqFaster()
             => source
-                .Sum();
+                .SumF();
 
         [Benchmark]
         public int LinqAF()
