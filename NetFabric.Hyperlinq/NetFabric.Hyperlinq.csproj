@@ -5,7 +5,7 @@
     <PackageId>NetFabric.Hyperlinq</PackageId>
     <Title>NetFabric.Hyperlinq</Title>
     <Description> High performance LINQ implementation with minimal heap allocations. Supports enumerables, async enumerables, arrays, Memory and Span.</Description>
-    <Version>3.0.0-beta38</Version>
+    <Version>3.0.0-beta39</Version>
     <PackageIcon>Icon.png</PackageIcon>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageTags>netfabric, hyperlinq, linq, enumeration, extensions, performance</PackageTags>
