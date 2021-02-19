@@ -63,7 +63,6 @@ namespace NetFabric.Hyperlinq
                 _ => source.ToArray<TSource, TResult, TSelector>(selector).AsList()
             };
 
-#if NET5_0
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static List<TResult> ToListVector<TSource, TResult, TVectorSelector, TSelector>(this ReadOnlySpan<TSource> source, TVectorSelector vectorSelector, TSelector selector)
             where TVectorSelector : struct, IFunction<Vector<TSource>, Vector<TResult>>
@@ -75,7 +74,6 @@ namespace NetFabric.Hyperlinq
                 0 => new List<TResult>(),
                 _ => source.ToArrayVector<TSource, TResult, TVectorSelector, TSelector>(vectorSelector, selector).AsList()
             };
-#endif
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static List<TResult> ToListRef<TSource, TResult, TSelector>(this ReadOnlySpan<TSource> source, TSelector selector)

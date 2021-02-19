@@ -6,7 +6,6 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.ContainsVector
 {
     public class ReadOnlySpanTests
     {
-#if NET5_0
 
         [Theory]
         [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
@@ -43,6 +42,5 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.ContainsVector
                 .BeTrue();
         }
 
-#endif
     }
 }

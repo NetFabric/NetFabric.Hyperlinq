@@ -409,8 +409,6 @@ namespace NetFabric.Hyperlinq
         public static decimal Sum(this ValueEnumerable<decimal?> source)
             => source.source.Span.Sum();
 
-#if NET5_0
-
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool ContainsVector<TSource>(this ValueEnumerable<TSource> source, TSource value)
             where TSource : struct
@@ -429,7 +427,5 @@ namespace NetFabric.Hyperlinq
             where TSource : struct
             where TResult : struct
             => source.source.SelectVector<TSource, TResult, TVectorSelector, TSelector>(vectorSelector, selector);
-
-#endif    
     }
 }

@@ -195,30 +195,31 @@ namespace NetFabric.Hyperlinq
                 };
         }
 
-#if NET5_0
-        public static void CopyToVector<TSource>(this RepeatEnumerable<TSource> source, Span<TSource> span)
+        public static void CopyToVector<TSource>(this RepeatEnumerable<TSource> source, Span<TSource> destination)
             where TSource : struct
         {
             var count = source.count;
-            if (span.Length < count)
-                Throw.ArgumentException(Resource.DestinationNotLongEnough, nameof(span));
+            if (destination.Length < count)
+                Throw.ArgumentException(Resource.DestinationNotLongEnough, nameof(destination));
+
+            destination = destination.Slice(0, count);
 
             var value = source.value;
-            if (Vector.IsHardwareAccelerated && source.Count >= Vector<TSource>.Count)
+            if (Vector.IsHardwareAccelerated && source.Count > Vector<TSource>.Count * 2)
             {
+                var destinationVectors = MemoryMarshal.Cast<TSource, Vector<TSource>>(destination);
                 var vector = new Vector<TSource>(value);
 
-                var index = 0;
-                for (; index <= count - Vector<TSource>.Count; index += Vector<TSource>.Count)
-                    vector.CopyTo(span.Slice(index, Vector<TSource>.Count));
+                for (var index = 0; index < destinationVectors.Length; index++)
+                    destinationVectors[index] = vector;
 
-                for (; index < span.Length; index++)
-                    span[index] = value;
+                for (var index = count - (count % Vector<TSource>.Count); index < count && index < destination.Length; index++)
+                    destination[index] = value;
             }
             else
             {
-                for (var index = 0; index < span.Length; index++)
-                    span[index] = value;
+                for (var index = 0; index < destination.Length; index++)
+                    destination[index] = value;
             }
         }
 
@@ -247,7 +248,6 @@ namespace NetFabric.Hyperlinq
                 0 => new List<TSource>(),
                 _ => source.ToArrayVector().AsList()
             };
-#endif
     }
 }
 

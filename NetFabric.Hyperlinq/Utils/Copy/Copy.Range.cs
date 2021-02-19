@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Numerics;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
 namespace NetFabric.Hyperlinq
 {
@@ -11,125 +12,117 @@ namespace NetFabric.Hyperlinq
         public static void CopyRange(int start, int count, Span<int> destination)
         {
             Debug.Assert(destination.Length >= count);
-            
-#if NET5_0
 
-            if (Vector.IsHardwareAccelerated && count >= Vector<int>.Count)
+            destination = destination.Slice(0, count);
+
+            if (Vector.IsHardwareAccelerated && count > Vector<int>.Count * 2)
             {
-                var copySpan = destination.Slice(0, Vector<int>.Count); // bounds check removal
-                if (start is 0)
-                {
-                    for (var spanIndex = 0; spanIndex < copySpan.Length; spanIndex++)
-                        copySpan[spanIndex] = spanIndex;
-                }
-                else
-                {
-                    for (var spanIndex = 0; spanIndex < copySpan.Length; spanIndex++)
-                        copySpan[spanIndex] = spanIndex + start;
-                }
-
-                var vector = new Vector<int>(copySpan);
-                var increment = new Vector<int>(Vector<int>.Count);
-                vector += increment;
-                
-                var index = Vector<int>.Count;
-                for (; index <= count - Vector<int>.Count; index += Vector<int>.Count)
-                {
-                    vector.CopyTo(destination.Slice(index, Vector<int>.Count));
-                    vector += increment;
-                }
+                var destinationVectors = MemoryMarshal.Cast<int, Vector<int>>(destination);
 
                 if (start is 0)
                 {
-                    for (; index < destination.Length; index++)
+                    for (var index = 0; index < Vector<int>.Count && index < destination.Length; index++)
                         destination[index] = index;
                 }
                 else
                 {
-                    for (; index < destination.Length; index++)
+                    for (var index = 0; index < Vector<int>.Count && index < destination.Length; index++)
                         destination[index] = index + start;
                 }
-                
-                return;
-            }
-            
-#endif
-            
-            if (start is 0)
-            {
-                for (var index = 0; index < destination.Length; index++)
-                    destination[index] = index;
+
+                var increment = new Vector<int>(Vector<int>.Count);
+                var vector = destinationVectors[0];
+
+                for (var index = 1; index < destinationVectors.Length; index++)
+                {
+                    vector += increment;
+                    destinationVectors[index] = vector;
+                }
+
+                if (start is 0)
+                {
+                    for (var index = count - (count % Vector<int>.Count); index < destination.Length; index++)
+                        destination[index] = index;
+                }
+                else
+                {
+                    for (var index = count - (count % Vector<int>.Count); index < destination.Length; index++)
+                        destination[index] = index + start;
+                }
             }
             else
             {
-                for (var index = 0; index < destination.Length; index++)
-                    destination[index] = index + start;
+                if (start is 0)
+                {
+                    for (var index = 0; index < destination.Length; index++)
+                        destination[index] = index;
+                }
+                else
+                {
+                    for (var index = 0; index < destination.Length; index++)
+                        destination[index] = index + start;
+                }
             }
         }
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void CopyRange<TResult, TVectorSelector, TSelector>(int start, int count, Span<TResult> destination, TVectorSelector vectorSelector, TSelector selector)
+        public static unsafe void CopyRange<TResult, TVectorSelector, TSelector>(int start, int count, Span<TResult> destination, TVectorSelector vectorSelector, TSelector selector)
             where TVectorSelector : struct, IFunction<Vector<int>, Vector<TResult>>
             where TSelector : struct, IFunction<int, TResult>
             where TResult : struct
         {
             Debug.Assert(destination.Length >= count);
-            
-#if NET5_0
-            
-            if (Vector.IsHardwareAccelerated && count >= Vector<int>.Count)
+
+            destination = destination.Slice(0, count);
+
+            if (Vector.IsHardwareAccelerated && count > Vector<int>.Count * 2)
             {
-                Span<int> seed = stackalloc int[Vector<int>.Count]; 
+                var seed = stackalloc int[Vector<int>.Count];
                 if (start is 0)
                 {
-                    for (var spanIndex = 0; spanIndex < seed.Length; spanIndex++)
+                    for (var spanIndex = 0; spanIndex < Vector<int>.Count; spanIndex++)
                         seed[spanIndex] = spanIndex;
                 }
                 else
                 {
-                    for (var spanIndex = 0; spanIndex < seed.Length; spanIndex++)
+                    for (var spanIndex = 0; spanIndex < Vector<int>.Count; spanIndex++)
                         seed[spanIndex] = spanIndex + start;
                 }
 
-                var vector = new Vector<int>(seed);
-                var vectorProjection = vectorSelector.Invoke(vector);
+                var destinationVectors = MemoryMarshal.Cast<TResult, Vector<TResult>>(destination);
+                var vector = Unsafe.AsRef<Vector<int>>(seed);
+                var vectorIncrement = new Vector<int>(Vector<int>.Count);
 
-                var increment = new Vector<int>(Vector<int>.Count);
-                var index = 0;
-                for (; index <= count - Vector<int>.Count; index += Vector<int>.Count)
+                for (var index = 0; index < destinationVectors.Length; index++)
                 {
-                    vectorProjection.CopyTo(destination.Slice(index, Vector<int>.Count));
-                    vector += increment;
-                    vectorProjection = vectorSelector.Invoke(vector);
+                    destinationVectors[index] = vectorSelector.Invoke(vector);
+                    vector += vectorIncrement;
                 }
 
                 if (start is 0)
                 {
-                    for (; index < destination.Length; index++)
+                    for (var index = count - (count % Vector<TResult>.Count); index < destination.Length; index++)
                         destination[index] = selector.Invoke(index);
                 }
                 else
                 {
-                    for (; index < destination.Length; index++)
+                    for (var index = count - (count % Vector<TResult>.Count); index < destination.Length; index++)
                         destination[index] = selector.Invoke(index + start);
                 }
-
-                return;
-            }
-            
-#endif
-            
-            if (start is 0)
-            {
-                for (var index = 0; index < destination.Length; index++)
-                    destination[index] = selector.Invoke(index);
             }
             else
             {
-                for (var index = 0; index < destination.Length; index++)
-                    destination[index] = selector.Invoke(index + start);
+                if (start is 0)
+                {
+                    for (var index = 0; index < destination.Length; index++)
+                        destination[index] = selector.Invoke(index);
+                }
+                else
+                {
+                    for (var index = 0; index < destination.Length; index++)
+                        destination[index] = selector.Invoke(index + start);
+                }
             }
-
         }
 
     }

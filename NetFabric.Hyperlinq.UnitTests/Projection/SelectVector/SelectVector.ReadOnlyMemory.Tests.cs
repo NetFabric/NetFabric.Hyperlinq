@@ -8,8 +8,6 @@ namespace NetFabric.Hyperlinq.UnitTests.Projection.SelectVector
 {
     public class ReadOnlyMemoryTests
     {
-#if NET5_0
-
         [Theory]
         [MemberData(nameof(TestData.SelectVector), MemberType = typeof(TestData))]
         public void SelectVector_With_ValidData_Must_Succeed(int[] source, Func<Vector<int>, Vector<int>> vectorSelector, Func<int, int> selector)
@@ -48,7 +46,5 @@ namespace NetFabric.Hyperlinq.UnitTests.Projection.SelectVector
                 .BeArrayOf<int>()
                 .BeEqualTo(expected);
         }
-
-#endif    
     }
 }

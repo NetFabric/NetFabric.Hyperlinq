@@ -11,7 +11,6 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class ArrayExtensions
     {
-#if NET5_0
 
         [GeneratorIgnore]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -266,7 +265,6 @@ namespace NetFabric.Hyperlinq
             where TSource : struct
             => ((ReadOnlySpan<TSource>)source.source.AsSpan()).Sum<TSource, decimal, TVectorSelector, TSelector>(source.vectorSelector, source.selector);
 
-#endif
     }
 }
 

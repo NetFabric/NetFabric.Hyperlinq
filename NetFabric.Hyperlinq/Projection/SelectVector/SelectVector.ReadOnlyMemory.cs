@@ -11,8 +11,6 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class ArrayExtensions
     {
-#if NET5_0
-
         [GeneratorIgnore]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static MemorySelectVectorEnumerable<TSource, TResult, FunctionWrapper<Vector<TSource>, Vector<TResult>>, FunctionWrapper<TSource, TResult>> SelectVector<TSource, TResult>(this ReadOnlyMemory<TSource> source, Func<Vector<TSource>, Vector<TResult>> vectorSelector, Func<TSource, TResult> selector)
@@ -264,7 +262,6 @@ namespace NetFabric.Hyperlinq
             where TSource : struct
             => source.source.Span.Sum<TSource, decimal, TVectorSelector, TSelector>(source.vectorSelector, source.selector);
 
-#endif    
     }
 }
 

@@ -134,8 +134,6 @@ namespace NetFabric.Hyperlinq.UnitTests.Generation.ValueEnumerableTests
                 .BeEqualTo(expected);
         }
 
-#if NET5_0
-
         [Theory]
         [MemberData(nameof(TestData.Range), MemberType = typeof(TestData))]
         public void Range_SelectVector_Must_Succeed(int start, int count)
@@ -152,7 +150,23 @@ namespace NetFabric.Hyperlinq.UnitTests.Generation.ValueEnumerableTests
                 .BeEqualTo(expected);
         }
 
-        
+
+        [Theory]
+        [MemberData(nameof(TestData.Range), MemberType = typeof(TestData))]
+        public void Range_SelectVector_Sum_Must_Succeed(int start, int count)
+        {
+            // Arrange
+            var expected = Enumerable.Sum(Enumerable.Select(Enumerable.Range(start, count), item => item * 2));
+
+            // Act
+            var result = ValueEnumerable.Range(start, count).SelectVector(item => item * 2, item => item * 2).Sum();
+
+            // Assert
+            _ = result.Must()
+                .BeEqualTo(expected);
+        }
+
+
         [Theory]
         [MemberData(nameof(TestData.Range), MemberType = typeof(TestData))]
         public void Range_SelectVector_ToArray_Must_Succeed(int start, int count)
@@ -185,7 +199,5 @@ namespace NetFabric.Hyperlinq.UnitTests.Generation.ValueEnumerableTests
                 .BeEnumerableOf<int>()
                 .BeEqualTo(expected);
         }
-
-#endif
     }
 }

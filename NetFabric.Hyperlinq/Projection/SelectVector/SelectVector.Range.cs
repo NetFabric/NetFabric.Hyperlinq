@@ -11,7 +11,6 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class ValueEnumerable
     {
-#if NET5_0
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static RangeSelectVectorEnumerable<TResult, FunctionWrapper<Vector<int>, Vector<TResult>>, FunctionWrapper<int, TResult>> SelectVector<TResult, TVectorSelector, TSelector>(int start, int count, Func<Vector<int>, Vector<TResult>> vectorSelector, Func<int, TResult> selector)
@@ -120,21 +119,21 @@ namespace NetFabric.Hyperlinq
 
                 var index = 0;
 
-                if (Vector.IsHardwareAccelerated && count >= Vector<int>.Count)
+                if (Vector.IsHardwareAccelerated && count > Vector<int>.Count * 2)
                 {
-                    Span<int> seed = stackalloc int[Vector<int>.Count]; 
+                    var seed = stackalloc int[Vector<int>.Count]; 
                     if (start is 0)
                     {
-                        for (var seedIndex = 0; seedIndex < seed.Length; seedIndex++)
+                        for (var seedIndex = 0; seedIndex < Vector<int>.Count; seedIndex++)
                             seed[seedIndex] = seedIndex;
                     }
                     else
                     {
-                        for (var seedIndex = 0; seedIndex < seed.Length; seedIndex++)
+                        for (var seedIndex = 0; seedIndex < Vector<int>.Count; seedIndex++)
                             seed[seedIndex] = seedIndex + start;
                     }
 
-                    var vector = new Vector<int>(seed);
+                    var vector = Unsafe.AsRef<Vector<int>>(seed);
                     var vectorItem = new Vector<TResult>(item);
                     if (Vector.EqualsAny(vectorSelector.Invoke(vector), vectorItem))
                         return true;
@@ -362,7 +361,6 @@ namespace NetFabric.Hyperlinq
         //     where TSelector : struct, IFunction<int, decimal>
         //     where TResult : struct
         //     => source.source.Sum<int, decimal, TVectorSelector, TSelector>(source.vectorSelector, source.selector);
-#endif
     }
 }
 

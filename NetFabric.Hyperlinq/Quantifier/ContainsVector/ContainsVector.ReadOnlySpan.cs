@@ -1,30 +1,29 @@
 using System;
 using System.Numerics;
+using System.Runtime.InteropServices;
 
 namespace NetFabric.Hyperlinq
 {
     public static partial class ArrayExtensions
     {
-#if NET5_0
-
         public static bool ContainsVector<TSource>(this ReadOnlySpan<TSource> source, TSource value)
             where TSource : struct
         {
             if (source.Length is 0)
                 return false;
             
-            if (Vector.IsHardwareAccelerated && source.Length >= Vector<TSource>.Count)
+            if (Vector.IsHardwareAccelerated && source.Length > Vector<TSource>.Count * 2)
             {
+                var vectors = MemoryMarshal.Cast<TSource, Vector<TSource>>(source);
                 var vectorValue = new Vector<TSource>(value);
 
-                var index = 0;
-                for (; index < source.Length - Vector<TSource>.Count; index += Vector<TSource>.Count)
+                foreach (var vector in vectors)
                 {
-                    if (Vector.EqualsAny(new Vector<TSource>(source.Slice(index, Vector<TSource>.Count)), vectorValue))
+                    if (Vector.EqualsAny(vector, vectorValue))
                         return true;
                 }
 
-                for (; index < source.Length; index++)
+                for (var index = source.Length - (source.Length % Vector<TSource>.Count); index < source.Length; index++)
                 {
                     var item = source[index];
                     if (GenericsOperator.Equals(item, value))
@@ -52,18 +51,18 @@ namespace NetFabric.Hyperlinq
             if (source.Length is 0)
                 return false;
             
-            if (Vector.IsHardwareAccelerated && source.Length >= Vector<TSource>.Count)
+            if (Vector.IsHardwareAccelerated && source.Length > Vector<TSource>.Count * 2)
             {
+                var vectors = MemoryMarshal.Cast<TSource, Vector<TSource>>(source);
                 var vectorValue = new Vector<TResult>(value);
-                
-                var index = 0;
-                for (; index < source.Length - Vector<TSource>.Count; index += Vector<TSource>.Count)
+
+                foreach (var vector in vectors)
                 {
-                    if (Vector.EqualsAny(vectorSelector.Invoke(new Vector<TSource>(source.Slice(index, Vector<TSource>.Count))), vectorValue))
+                    if (Vector.EqualsAny(vectorSelector.Invoke(vector), vectorValue))
                         return true;
                 }
 
-                for (; index < source.Length; index++)
+                for (var index = source.Length - (source.Length % Vector<TSource>.Count); index < source.Length; index++)
                 {
                     var item = source[index];
                     if (GenericsOperator.Equals(selector.Invoke(item), value))
@@ -81,8 +80,6 @@ namespace NetFabric.Hyperlinq
 
             return false;
         }
-
-#endif
     }
 }
 
