@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Numerics;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
 namespace NetFabric.Hyperlinq
 {
@@ -28,7 +29,6 @@ namespace NetFabric.Hyperlinq
             }
         }
 
-#if NET5_0
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void CopyVector<TSource, TResult, TVectorSelector, TSelector>(ReadOnlySpan<TSource> source, Span<TResult> destination, TVectorSelector vectorSelector, TSelector selector)
             where TVectorSelector : struct, IFunction<Vector<TSource>, Vector<TResult>>
@@ -39,16 +39,18 @@ namespace NetFabric.Hyperlinq
             Debug.Assert(destination.Length >= source.Length);
             Debug.Assert(Vector<TSource>.Count == Vector<TResult>.Count);
             
-            if (Vector.IsHardwareAccelerated && source.Length >= Vector<TSource>.Count)
+            if (Vector.IsHardwareAccelerated && source.Length > Vector<TSource>.Count * 2)
             {
-                var index = 0;
-                for (; index <= source.Length - Vector<TSource>.Count; index += Vector<TSource>.Count)
+                var sourceVectors = MemoryMarshal.Cast<TSource, Vector<TSource>>(source);
+                var destinationVectors = MemoryMarshal.Cast<TResult, Vector<TResult>>(destination);
+
+                for (var index = 0; index < sourceVectors.Length && index < destinationVectors.Length; index++)
                 {
-                    vectorSelector.Invoke(new Vector<TSource>(source.Slice(index, Vector<TSource>.Count)))
-                        .CopyTo(destination.Slice(index, Vector<TSource>.Count));
+                    var sourceVector = sourceVectors[index];
+                    destinationVectors[index] = vectorSelector.Invoke(sourceVector);
                 }
 
-                for (; index < source.Length && index < destination.Length; index++)
+                for (var index = source.Length - (source.Length % Vector<TSource>.Count); index < source.Length && index < destination.Length; index++)
                 {
                     var item = source[index];
                     destination[index] = selector.Invoke(item);
@@ -63,7 +65,6 @@ namespace NetFabric.Hyperlinq
                 }
             }
         }
-#endif
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void CopyRef<TSource, TResult, TSelector>(ReadOnlySpan<TSource> source, Span<TResult> destination, TSelector selector)

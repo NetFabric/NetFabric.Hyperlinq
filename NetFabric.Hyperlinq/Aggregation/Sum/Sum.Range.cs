@@ -10,9 +10,8 @@ namespace NetFabric.Hyperlinq
         public static int SumRange(int start, int count)
             => count * (start + start + count) / 2;
         
-#if NET5_0
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static TResult SumRange<TResult, TVectorSelector, TSelector>(int start, int count, TVectorSelector vectorSelector, TSelector selector)
+        public static unsafe TResult SumRange<TResult, TVectorSelector, TSelector>(int start, int count, TVectorSelector vectorSelector, TSelector selector)
             where TVectorSelector : struct, IFunction<Vector<int>, Vector<TResult>>
             where TSelector : struct, IFunction<int, TResult>
             where TResult : struct
@@ -20,25 +19,24 @@ namespace NetFabric.Hyperlinq
             var sum = default(TResult);
 
             var index = 0;
-
-            if (Vector.IsHardwareAccelerated && count >= Vector<TResult>.Count) // use SIMD
+            if (Vector.IsHardwareAccelerated && count > Vector<TResult>.Count * 4) // use SIMD
             {
-                Span<int> seed = stackalloc int[Vector<TResult>.Count]; 
+                var seed = stackalloc int[Vector<TResult>.Count]; 
                 if (start is 0)
                 {
-                    for (; index < seed.Length; index++)
+                    for (index = 0; index < Vector<TResult>.Count; index++)
                         seed[index] = index;
                 }
                 else
                 {
-                    for (; index < seed.Length; index++)
+                    for (index = 0; index < Vector<TResult>.Count; index++)
                         seed[index] = index + start;
                 }
 
-                var vector = new Vector<int>(seed);
+                var vector = Unsafe.AsRef<Vector<int>>(seed);
                 var vectorIncrement = new Vector<int>(Vector<TResult>.Count);
                 var vectorSum = Vector<TResult>.Zero;
-                for (; index <= count - Vector<TResult>.Count; index += Vector<TResult>.Count)
+                for (index = 0; index <= count - Vector<TResult>.Count; index += Vector<TResult>.Count)
                 {
                     vectorSum += vectorSelector.Invoke(vector);
                     vector += vectorIncrement;
@@ -61,7 +59,6 @@ namespace NetFabric.Hyperlinq
 
             return sum;
         }
-#endif
     }
 }
 

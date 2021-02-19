@@ -1,6 +1,7 @@
 using System;
 using System.Numerics;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
 namespace NetFabric.Hyperlinq
 {
@@ -53,38 +54,32 @@ namespace NetFabric.Hyperlinq
         {
             var sum = default(TSource);
 
-#if NET5_0
-
-            if (Vector.IsHardwareAccelerated && source.Length >= Vector<TSource>.Count) // use SIMD
+            if (Vector.IsHardwareAccelerated && source.Length > Vector<TSource>.Count * 2) // use SIMD
             {
-                var vector = Vector<TSource>.Zero;
+                var vectors = MemoryMarshal.Cast<TSource, Vector<TSource>>(source);
+                var vectorSum = Vector<TSource>.Zero;
 
-                var index = 0;
-                for (; index <= source.Length - Vector<TSource>.Count; index += Vector<TSource>.Count)
-                    vector += new Vector<TSource>(source.Slice(index, Vector<TSource>.Count));
+                foreach (var vector in vectors)
+                    vectorSum += vector;
 
-                for (; index < source.Length; index++)
+                for (var index = 0; index < Vector<TSource>.Count; index++)
+                    sum = GenericsOperator.Add(vectorSum[index], sum);
+
+                for (var index = source.Length - (source.Length % Vector<TSource>.Count); index < source.Length; index++)
                 {
                     var item = source[index];
                     sum = GenericsOperator.Add(item, sum);
                 }
-
-                for (index = 0; index < Vector<TSource>.Count; index++)
-                    sum = GenericsOperator.Add(vector[index], sum);
-
-                return sum;
             }
-            
-#endif
-
-            foreach (var item in source)
-                sum = GenericsOperator.Add(item, sum);
+            else
+            { 
+                foreach (var item in source)
+                    sum = GenericsOperator.Add(item, sum);
+            }
 
             return sum;
         }
 
-#if NET5_0 
-        
         static TResult Sum<TSource, TResult, TVectorSelector, TSelector>(this ReadOnlySpan<TSource> source, TVectorSelector vectorSelector, TSelector selector)
             where TVectorSelector : struct, IFunction<Vector<TSource>, Vector<TResult>>
             where TSelector : struct, IFunction<TSource, TResult>
@@ -93,22 +88,22 @@ namespace NetFabric.Hyperlinq
         {
             var sum = default(TResult);
 
-            if (Vector.IsHardwareAccelerated && source.Length >= Vector<TResult>.Count) // use SIMD
+            if (Vector.IsHardwareAccelerated && source.Length > Vector<TResult>.Count * 2) // use SIMD
             {
-                var vector = Vector<TResult>.Zero;
+                var vectors = MemoryMarshal.Cast<TSource, Vector<TSource>>(source);
+                var vectorSum = Vector<TResult>.Zero;
 
-                var index = 0;
-                for (; index <= source.Length - Vector<TResult>.Count; index += Vector<TResult>.Count)
-                    vector += vectorSelector.Invoke(new Vector<TSource>(source.Slice(index, Vector<TResult>.Count)));
+                foreach (var vector in vectors)
+                    vectorSum += vectorSelector.Invoke(vector);
 
-                for (; index < source.Length; index++)
+                for (var index = 0; index < Vector<TResult>.Count; index++)
+                    sum = GenericsOperator.Add(vectorSum[index], sum);
+
+                for (var index = source.Length - (source.Length % Vector<TSource>.Count); index < source.Length; index++)
                 {
                     var item = source[index];
                     sum = GenericsOperator.Add(selector.Invoke(item), sum);
                 }
-
-                for (index = 0; index < Vector<TSource>.Count; index++)
-                    sum = GenericsOperator.Add(vector[index], sum);
             }
             else
             {
@@ -117,8 +112,6 @@ namespace NetFabric.Hyperlinq
             }
             return sum;
         }
-        
-#endif
         
         static TSum Sum<TSource, TSum>(this ReadOnlySpan<TSource> source)
             where TSum : struct

@@ -6,7 +6,6 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class ArrayExtensions
     {
-#if NET5_0
 
         [GeneratorIgnore]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -32,7 +31,6 @@ namespace NetFabric.Hyperlinq
             where TResult : struct
             => ((ReadOnlySpan<TSource>)source).SelectVector<TSource, TResult, TVectorSelector, TSelector>(vectorSelector, selector);
 
-#endif    
     }
 }
 

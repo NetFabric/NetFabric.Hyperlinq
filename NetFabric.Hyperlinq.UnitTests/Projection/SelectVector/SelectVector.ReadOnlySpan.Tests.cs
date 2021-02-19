@@ -9,8 +9,6 @@ namespace NetFabric.Hyperlinq.UnitTests.Projection.SelectVector
     public class ReadOnlySpanTests
     {
 
-#if NET5_0
-
         [Theory]
         [MemberData(nameof(TestData.SelectVector), MemberType = typeof(TestData))]
         public void SelectVector_With_ValidData_Must_Succeed(int[] source, Func<Vector<int>, Vector<int>> vectorSelector, Func<int, int> selector)
@@ -47,6 +45,5 @@ namespace NetFabric.Hyperlinq.UnitTests.Projection.SelectVector
                 .BeEqualTo(expected);
         }
 
-#endif    
     }
 }

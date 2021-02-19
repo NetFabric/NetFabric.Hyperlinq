@@ -103,7 +103,6 @@ namespace NetFabric.Hyperlinq
             return result;
         }
 
-#if NET5_0
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static TResult[] ToArrayVector<TSource, TResult, TVectorSelector, TSelector>(this ReadOnlySpan<TSource> source, TVectorSelector vectorSelector, TSelector selector)
             where TVectorSelector : struct, IFunction<Vector<TSource>, Vector<TResult>>
@@ -111,7 +110,12 @@ namespace NetFabric.Hyperlinq
             where TSource : struct
             where TResult : struct
         {
+#if NET5_0
             var result = GC.AllocateUninitializedArray<TResult>(source.Length);
+#else
+            // ReSharper disable once HeapView.ObjectAllocation.Evident
+            var result = new TResult[source.Length];
+#endif
             CopyVector<TSource, TResult, TVectorSelector, TSelector>(source, result.AsSpan(), vectorSelector, selector);
             return result;
         }
@@ -127,7 +131,6 @@ namespace NetFabric.Hyperlinq
             CopyVector<TSource, TResult, TVectorSelector, TSelector>(source, result.Memory.Span, vectorSelector, selector);
             return result;
         }
-#endif
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static TResult[] ToArrayRef<TSource, TResult, TSelector>(this ReadOnlySpan<TSource> source, TSelector selector)

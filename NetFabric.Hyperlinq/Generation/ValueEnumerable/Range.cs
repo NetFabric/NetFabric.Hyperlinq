@@ -195,7 +195,7 @@ namespace NetFabric.Hyperlinq
 
             #endregion
             #region Projection
-#if NET5_0
+
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public RangeSelectVectorEnumerable<TResult, FunctionWrapper<Vector<int>, Vector<TResult>>, FunctionWrapper<int, TResult>> SelectVector<TResult>(Func<Vector<int>, Vector<TResult>> vectorSelector, Func<int, TResult> selector)
                 where TResult : struct
@@ -213,7 +213,7 @@ namespace NetFabric.Hyperlinq
                 where TSelector : struct, IFunction<int, TResult>
                 where TResult : struct
                 => ValueEnumerable.SelectVector<TResult, TVectorSelector, TSelector>(start, Count, vectorSelector, selector);
-#endif
+
             #endregion
             #region Element
 
