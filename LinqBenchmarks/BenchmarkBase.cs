@@ -16,7 +16,7 @@ namespace LinqBenchmarks
     //[DisassemblyDiagnoser(printSource: true, maxDepth: 1)]
     public class BenchmarkBase
     {
-        [Params(0, 10, 1000)]
+        [Params(10, 1000)]
         public int Count { get; set; }
 
         protected static int[] GetSequentialValues(int count)
