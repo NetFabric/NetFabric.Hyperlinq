@@ -5,7 +5,7 @@ using StructLinq;
 
 namespace LinqBenchmarks.List.ValueType
 {
-    public class ListValueTypeSelectContains : ValueTypeListBenchmarkBase
+    public class ListValueTypeContains : ValueTypeListBenchmarkBase
     {
         FatValueType value = new FatValueType(int.MaxValue);
 
