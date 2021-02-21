@@ -6,15 +6,13 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class ReadOnlyListExtensions
     {
-        
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Option<TSource> Single<TList, TSource>(this TList source) 
-            where TList : IReadOnlyList<TSource>
+
+        public static Option<TSource> Single<TList, TSource>(this TList source)
+            where TList : struct, IReadOnlyList<TSource>
             => source.Single<TList, TSource>(0, source.Count);
 
-
         static Option<TSource> Single<TList, TSource>(this TList source, int offset, int count) 
-            where TList : IReadOnlyList<TSource>
+            where TList : struct, IReadOnlyList<TSource>
             => count switch
             {
                 1 => Option.Some(source[offset]),
@@ -23,19 +21,19 @@ namespace NetFabric.Hyperlinq
 
 
         static Option<TSource> Single<TList, TSource, TPredicate>(this TList source, TPredicate predicate, int offset, int count) 
-            where TList : IReadOnlyList<TSource>
+            where TList : struct, IReadOnlyList<TSource>
             where TPredicate : struct, IFunction<TSource, bool>
             => source.GetSingle<TList, TSource, TPredicate>(predicate, offset, count);
 
 
         static Option<TSource> SingleAt<TList, TSource, TPredicate>(this TList source, TPredicate predicate, int offset, int count) 
-            where TList : IReadOnlyList<TSource>
+            where TList : struct, IReadOnlyList<TSource>
             where TPredicate : struct, IFunction<TSource, int, bool>
             => source.GetSingleAt<TList, TSource, TPredicate>(predicate, offset, count);
 
 
         static Option<TResult> Single<TList, TSource, TResult, TSelector>(this TList source, TSelector selector, int offset, int count) 
-            where TList : IReadOnlyList<TSource>
+            where TList : struct, IReadOnlyList<TSource>
             where TSelector : struct, IFunction<TSource, TResult>
             => count switch
             {
@@ -45,7 +43,7 @@ namespace NetFabric.Hyperlinq
 
 
         static Option<TResult> SingleAt<TList, TSource, TResult, TSelector>(this TList source, TSelector selector, int offset, int count) 
-            where TList : IReadOnlyList<TSource>
+            where TList : struct, IReadOnlyList<TSource>
             where TSelector : struct, IFunction<TSource, int, TResult>
             => count switch
             {
@@ -55,7 +53,7 @@ namespace NetFabric.Hyperlinq
 
 
         static Option<TResult> Single<TList, TSource, TResult, TPredicate, TSelector>(this TList source, TPredicate predicate, TSelector selector, int offset, int count) 
-            where TList : IReadOnlyList<TSource>
+            where TList : struct, IReadOnlyList<TSource>
             where TPredicate : struct, IFunction<TSource, bool>
             where TSelector : struct, IFunction<TSource, TResult>
             => source.GetSingle<TList, TSource, TPredicate>(predicate, offset, count).Select<TResult, TSelector>(selector);
@@ -65,7 +63,7 @@ namespace NetFabric.Hyperlinq
 
         
         static Option<TSource> GetSingle<TList, TSource, TPredicate>(this TList source, TPredicate predicate, int offset, int count)
-            where TList : IReadOnlyList<TSource>
+            where TList : struct, IReadOnlyList<TSource>
             where TPredicate : struct, IFunction<TSource, bool>
         {
             var end = offset + count;
@@ -92,7 +90,7 @@ namespace NetFabric.Hyperlinq
         
         
         static Option<TSource> GetSingleAt<TList, TSource, TPredicate>(this TList source, TPredicate predicate, int offset, int count)
-            where TList : IReadOnlyList<TSource>
+            where TList : struct, IReadOnlyList<TSource>
             where TPredicate : struct, IFunction<TSource, int, bool>
         {
             var end = count;

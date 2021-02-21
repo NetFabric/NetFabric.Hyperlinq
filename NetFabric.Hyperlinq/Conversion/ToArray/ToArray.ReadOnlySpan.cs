@@ -23,6 +23,7 @@ namespace NetFabric.Hyperlinq
         static TSource[] ToArray<TSource, TPredicate>(this ReadOnlySpan<TSource> source, TPredicate predicate)
             where TPredicate : struct, IFunction<TSource, bool>
         {
+            if (source.Length is 0) return Array.Empty<TSource>();
             using var arrayBuilder = ToArrayBuilder(source, predicate, ArrayPool<TSource>.Shared);
             return arrayBuilder.ToArray();
         }
@@ -31,6 +32,7 @@ namespace NetFabric.Hyperlinq
         static TSource[] ToArrayRef<TSource, TPredicate>(this ReadOnlySpan<TSource> source, TPredicate predicate)
             where TPredicate : struct, IFunctionIn<TSource, bool>
         {
+            if (source.Length is 0) return Array.Empty<TSource>();
             using var arrayBuilder = ToArrayBuilderRef(source, predicate, ArrayPool<TSource>.Shared);
             return arrayBuilder.ToArray();
         }
@@ -58,6 +60,7 @@ namespace NetFabric.Hyperlinq
         static TSource[] ToArrayAt<TSource, TPredicate>(this ReadOnlySpan<TSource> source, TPredicate predicate)
             where TPredicate : struct, IFunction<TSource, int, bool>
         {
+            if (source.Length is 0) return Array.Empty<TSource>();
             using var arrayBuilder = ToArrayBuilderAt(source, predicate, ArrayPool<TSource>.Shared);
             return arrayBuilder.ToArray();
         }
@@ -66,6 +69,7 @@ namespace NetFabric.Hyperlinq
         static TSource[] ToArrayAtRef<TSource, TPredicate>(this ReadOnlySpan<TSource> source, TPredicate predicate)
             where TPredicate : struct, IFunctionIn<TSource, int, bool>
         {
+            if (source.Length is 0) return Array.Empty<TSource>();
             using var arrayBuilder = ToArrayBuilderAtRef(source, predicate, ArrayPool<TSource>.Shared);
             return arrayBuilder.ToArray();
         }
@@ -93,6 +97,7 @@ namespace NetFabric.Hyperlinq
         static TResult[] ToArray<TSource, TResult, TSelector>(this ReadOnlySpan<TSource> source, TSelector selector)
             where TSelector : struct, IFunction<TSource, TResult>
         {
+            if (source.Length is 0) return Array.Empty<TResult>();
 #if NET5_0
             var result = GC.AllocateUninitializedArray<TResult>(source.Length);
 #else
@@ -110,6 +115,7 @@ namespace NetFabric.Hyperlinq
             where TSource : struct
             where TResult : struct
         {
+            if (source.Length is 0) return Array.Empty<TResult>();
 #if NET5_0
             var result = GC.AllocateUninitializedArray<TResult>(source.Length);
 #else
@@ -136,6 +142,7 @@ namespace NetFabric.Hyperlinq
         static TResult[] ToArrayRef<TSource, TResult, TSelector>(this ReadOnlySpan<TSource> source, TSelector selector)
             where TSelector : struct, IFunctionIn<TSource, TResult>
         {
+            if (source.Length is 0) return Array.Empty<TResult>();
 #if NET5_0
             var result = GC.AllocateUninitializedArray<TResult>(source.Length);
 #else
@@ -170,6 +177,7 @@ namespace NetFabric.Hyperlinq
         static TResult[] ToArrayAt<TSource, TResult, TSelector>(this ReadOnlySpan<TSource> source, TSelector selector)
             where TSelector : struct, IFunction<TSource, int, TResult>
         {
+            if (source.Length is 0) return Array.Empty<TResult>();
 #if NET5_0
             var result = GC.AllocateUninitializedArray<TResult>(source.Length);
 #else
@@ -184,6 +192,7 @@ namespace NetFabric.Hyperlinq
         static TResult[] ToArrayAtRef<TSource, TResult, TSelector>(this ReadOnlySpan<TSource> source, TSelector selector)
             where TSelector : struct, IFunctionIn<TSource, int, TResult>
         {
+            if (source.Length is 0) return Array.Empty<TResult>();
 #if NET5_0
             var result = GC.AllocateUninitializedArray<TResult>(source.Length);
 #else
@@ -220,6 +229,7 @@ namespace NetFabric.Hyperlinq
             where TPredicate : struct, IFunction<TSource, bool>
             where TSelector : struct, IFunction<TSource, TResult>
         {
+            if (source.Length is 0) return Array.Empty<TResult>();
             using var arrayBuilder = ToArrayBuilder(source, predicate, selector, ArrayPool<TResult>.Shared);
             return arrayBuilder.ToArray();
         }
@@ -229,6 +239,7 @@ namespace NetFabric.Hyperlinq
             where TPredicate : struct, IFunctionIn<TSource, bool>
             where TSelector : struct, IFunctionIn<TSource, TResult>
         {
+            if (source.Length is 0) return Array.Empty<TResult>();
             using var arrayBuilder = ToArrayBuilderRef(source, predicate, selector, ArrayPool<TResult>.Shared);
             return arrayBuilder.ToArray();
         }

@@ -11,7 +11,7 @@ namespace NetFabric.Hyperlinq
     public static partial class ArrayExtensions
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ArraySegmentDistinctEnumerable<TSource> Distinct<TSource>(this in ArraySegment<TSource> source, IEqualityComparer<TSource>? comparer = default)
+        internal static ArraySegmentDistinctEnumerable<TSource> Distinct<TSource>(this in ArraySegment<TSource> source, IEqualityComparer<TSource>? comparer = default)
             => new(source, comparer);
 
         [StructLayout(LayoutKind.Auto)]
@@ -22,11 +22,7 @@ namespace NetFabric.Hyperlinq
             readonly IEqualityComparer<TSource>? comparer;
 
             internal ArraySegmentDistinctEnumerable(in ArraySegment<TSource> source, IEqualityComparer<TSource>? comparer)
-            {
-                this.source = source;
-                this.comparer = comparer;
-            }
-
+                => (this.source, this.comparer) = (source, comparer);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly Enumerator GetEnumerator()

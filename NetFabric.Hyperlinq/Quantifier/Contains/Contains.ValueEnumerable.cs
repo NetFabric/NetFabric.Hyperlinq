@@ -18,7 +18,6 @@ namespace NetFabric.Hyperlinq
                     return DefaultContains(source, value);
             }
 
-            comparer ??= EqualityComparer<TSource>.Default;
             return ComparerContains(source, value, comparer);
 
             static bool DefaultContains(TEnumerable source, TSource value)
@@ -32,8 +31,10 @@ namespace NetFabric.Hyperlinq
                 return false;
             }
 
-            static bool ComparerContains(TEnumerable source, TSource value, IEqualityComparer<TSource> comparer)
+            static bool ComparerContains(TEnumerable source, TSource value, IEqualityComparer<TSource>? comparer)
             {
+                comparer ??= EqualityComparer<TSource>.Default;
+                
                 using var enumerator = source.GetEnumerator();
                 while (enumerator.MoveNext())
                 {
@@ -45,14 +46,14 @@ namespace NetFabric.Hyperlinq
         }
 
 
-        internal static bool Contains<TEnumerable, TEnumerator, TSource, TResult, TSelector>(this TEnumerable source, TResult value, TSelector selector)
+        internal static bool Contains<TEnumerable, TEnumerator, TSource, TResult, TSelector>(this TEnumerable source, TResult value, IEqualityComparer<TResult>? comparer, TSelector selector)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
             where TSelector : struct, IFunction<TSource, TResult>
         {
-            return Utils.IsValueType<TResult>()
+            return Utils.UseDefault(comparer)
                 ? ValueContains(source, value, selector)
-                : ReferenceContains(source, value, selector);
+                : ReferenceContains(source, value, comparer, selector);
 
             static bool ValueContains(TEnumerable source, TResult value, TSelector selector)
             {
@@ -65,28 +66,28 @@ namespace NetFabric.Hyperlinq
                 return false;
             }
 
-            static bool ReferenceContains(TEnumerable source, TResult value, TSelector selector)
+            static bool ReferenceContains(TEnumerable source, TResult value, IEqualityComparer<TResult>? comparer, TSelector selector)
             {
-                var defaultComparer = EqualityComparer<TResult>.Default;
+                comparer ??= EqualityComparer<TResult>.Default;
 
                 using var enumerator = source.GetEnumerator();
                 while (enumerator.MoveNext())
                 {
-                    if (defaultComparer.Equals(selector.Invoke(enumerator.Current), value))
+                    if (comparer.Equals(selector.Invoke(enumerator.Current), value))
                         return true;
                 }
                 return false;
             }
         }
 
-        internal static bool ContainsRef<TEnumerable, TEnumerator, TSource, TResult, TSelector>(this TEnumerable source, TResult value, TSelector selector)
+        internal static bool ContainsRef<TEnumerable, TEnumerator, TSource, TResult, TSelector>(this TEnumerable source, TResult value, IEqualityComparer<TResult>? comparer, TSelector selector)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
             where TSelector : struct, IFunctionIn<TSource, TResult>
         {
             return Utils.IsValueType<TResult>()
                 ? ValueContains(source, value, selector)
-                : ReferenceContains(source, value, selector);
+                : ReferenceContains(source, value, comparer, selector);
 
             static bool ValueContains(TEnumerable source, TResult value, TSelector selector)
             {
@@ -99,28 +100,28 @@ namespace NetFabric.Hyperlinq
                 return false;
             }
 
-            static bool ReferenceContains(TEnumerable source, TResult value, TSelector selector)
+            static bool ReferenceContains(TEnumerable source, TResult value, IEqualityComparer<TResult>? comparer, TSelector selector)
             {
-                var defaultComparer = EqualityComparer<TResult>.Default;
+                comparer ??= EqualityComparer<TResult>.Default;
 
                 using var enumerator = source.GetEnumerator();
                 while (enumerator.MoveNext())
                 {
-                    if (defaultComparer.Equals(selector.Invoke(enumerator.Current), value))
+                    if (comparer.Equals(selector.Invoke(enumerator.Current), value))
                         return true;
                 }
                 return false;
             }
         }
 
-        internal static bool ContainsAt<TEnumerable, TEnumerator, TSource, TResult, TSelector>(this TEnumerable source, TResult value, TSelector selector)
+        internal static bool ContainsAt<TEnumerable, TEnumerator, TSource, TResult, TSelector>(this TEnumerable source, TResult value, IEqualityComparer<TResult>? comparer, TSelector selector)
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
             where TSelector : struct, IFunction<TSource, int, TResult>
         {
             return Utils.IsValueType<TResult>()
                 ? ValueContains(source, value, selector)
-                : ReferenceContains(source, value, selector);
+                : ReferenceContains(source, value, comparer, selector);
 
             static bool ValueContains(TEnumerable source, TResult value, TSelector selector)
             {
@@ -136,16 +137,16 @@ namespace NetFabric.Hyperlinq
                 return false;
             }
 
-            static bool ReferenceContains(TEnumerable source, TResult value, TSelector selector)
+            static bool ReferenceContains(TEnumerable source, TResult value, IEqualityComparer<TResult>? comparer, TSelector selector)
             {
-                var defaultComparer = EqualityComparer<TResult>.Default;
+                comparer ??= EqualityComparer<TResult>.Default;
 
                 using var enumerator = source.GetEnumerator();
                 checked
                 {
                     for (var index = 0; enumerator.MoveNext(); index++)
                     {
-                        if (defaultComparer.Equals(selector.Invoke(enumerator.Current, index), value))
+                        if (comparer.Equals(selector.Invoke(enumerator.Current, index), value))
                             return true;
                     }
                 }

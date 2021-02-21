@@ -25,11 +25,7 @@ namespace NetFabric.Hyperlinq
             readonly IEqualityComparer<TSource>? comparer;
 
             internal MemoryDistinctEnumerable(ReadOnlyMemory<TSource> source, IEqualityComparer<TSource>? comparer)
-            {
-                this.source = source;
-                this.comparer = comparer;
-            }
-
+                => (this.source, this.comparer) = (source, comparer);
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly Enumerator GetEnumerator() 

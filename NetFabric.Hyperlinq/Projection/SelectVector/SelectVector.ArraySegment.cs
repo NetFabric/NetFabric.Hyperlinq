@@ -14,14 +14,14 @@ namespace NetFabric.Hyperlinq
 
         [GeneratorIgnore]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ArraySegmentSelectVectorEnumerable<TSource, TResult, FunctionWrapper<Vector<TSource>, Vector<TResult>>, FunctionWrapper<TSource, TResult>> SelectVector<TSource, TResult>(this ArraySegment<TSource> source, Func<Vector<TSource>, Vector<TResult>> vectorSelector, Func<TSource, TResult> selector)
+        internal static ArraySegmentSelectVectorEnumerable<TSource, TResult, FunctionWrapper<Vector<TSource>, Vector<TResult>>, FunctionWrapper<TSource, TResult>> SelectVector<TSource, TResult>(this ArraySegment<TSource> source, Func<Vector<TSource>, Vector<TResult>> vectorSelector, Func<TSource, TResult> selector)
             where TSource : struct
             where TResult : struct
             => source.SelectVector<TSource, TResult, FunctionWrapper<Vector<TSource>, Vector<TResult>>, FunctionWrapper<TSource, TResult>>(new FunctionWrapper<Vector<TSource>, Vector<TResult>>(vectorSelector), new FunctionWrapper<TSource, TResult>(selector));
 
         [GeneratorIgnore]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ArraySegmentSelectVectorEnumerable<TSource, TResult, TSelector, TSelector> SelectVector<TSource, TResult, TSelector>(this ArraySegment<TSource> source, TSelector selector = default)
+        internal static ArraySegmentSelectVectorEnumerable<TSource, TResult, TSelector, TSelector> SelectVector<TSource, TResult, TSelector>(this ArraySegment<TSource> source, TSelector selector = default)
             where TSelector : struct, IFunction<Vector<TSource>, Vector<TResult>>, IFunction<TSource, TResult>
             where TSource : struct
             where TResult : struct
@@ -29,7 +29,7 @@ namespace NetFabric.Hyperlinq
 
         [GeneratorIgnore]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ArraySegmentSelectVectorEnumerable<TSource, TResult, TVectorSelector, TSelector> SelectVector<TSource, TResult, TVectorSelector, TSelector>(this ArraySegment<TSource> source, TVectorSelector vectorSelector = default, TSelector selector = default)
+        internal static ArraySegmentSelectVectorEnumerable<TSource, TResult, TVectorSelector, TSelector> SelectVector<TSource, TResult, TVectorSelector, TSelector>(this ArraySegment<TSource> source, TVectorSelector vectorSelector = default, TSelector selector = default)
             where TVectorSelector : struct, IFunction<Vector<TSource>, Vector<TResult>>
             where TSelector : struct, IFunction<TSource, TResult>
             where TSource : struct
@@ -121,27 +121,7 @@ namespace NetFabric.Hyperlinq
             bool ICollection<TResult>.Remove(TResult item)
                 => Throw.NotSupportedException<bool>();
             int IList<TResult>.IndexOf(TResult item)
-            {
-                var span = source.AsSpan();
-                if (Utils.IsValueType<TResult>())
-                {
-                    for (var index = 0; index < span.Length; index++)
-                    {
-                        if (EqualityComparer<TResult>.Default.Equals(selector.Invoke(span[index]), item))
-                            return index;
-                    }
-                }
-                else
-                {
-                    var defaultComparer = EqualityComparer<TResult>.Default;
-                    for (var index = 0; index < span.Length; index++)
-                    {
-                        if (defaultComparer.Equals(selector.Invoke(span[index]), item))
-                            return index;
-                    }
-                }
-                return -1;
-            }
+                => ArrayExtensions.IndexOf<TSource, TResult, TSelector>(source, item, selector);
             
             void IList<TResult>.Insert(int index, TResult item)
                 => Throw.NotSupportedException();

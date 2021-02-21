@@ -23,7 +23,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsValueEnumerable
 
             // Assert
             _ = result.Must()
-                .BeOfType<ReadOnlyCollectionExtensions.ValueEnumerableWrapper<int>>()
+                .BeOfType<ReadOnlyCollectionExtensions.CollectionValueEnumerable<int>>()
                 .BeEnumerableOf<int>()
                 .BeEqualTo(wrapped);
         }
@@ -140,7 +140,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsValueEnumerable
 
             // Assert
             _ = result.Must()
-                .BeOfType<ReadOnlyCollectionExtensions.ValueEnumerableWrapper<Wrap.ReadOnlyCollectionWrapper<int>, Wrap.Enumerator<int>, int, FunctionWrapper<Wrap.ReadOnlyCollectionWrapper<int>, Wrap.Enumerator<int>>>>()
+                .BeOfType<ReadOnlyCollectionExtensions.CollectionValueEnumerable<Wrap.ReadOnlyCollectionWrapper<int>, Wrap.Enumerator<int>, int, FunctionWrapper<Wrap.ReadOnlyCollectionWrapper<int>, Wrap.Enumerator<int>>>>()
                 .BeEnumerableOf<int>()
                 .BeEqualTo(wrapped);
         }

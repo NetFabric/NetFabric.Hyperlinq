@@ -22,8 +22,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.WhereSelect
                 .Select(selector);
 
             // Act
-            var result = ReadOnlyListExtensions
-                .Skip<Wrap.ReadOnlyListWrapper<int>, int>(wrapped, skip)
+            var result = wrapped.AsValueEnumerable()
+                .Skip(skip)
                 .Take(take)
                 .Where(predicate)
                 .Select(selector);

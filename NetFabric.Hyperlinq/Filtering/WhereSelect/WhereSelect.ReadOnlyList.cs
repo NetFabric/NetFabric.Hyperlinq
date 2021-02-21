@@ -15,9 +15,19 @@ namespace NetFabric.Hyperlinq
         static WhereSelectEnumerable<TList, TSource, TResult, TPredicate, TSelector> WhereSelect<TList, TSource, TResult, TPredicate, TSelector>(
             this TList source,
             TPredicate predicate,
+            TSelector selector)
+            where TList : struct, IReadOnlyList<TSource>
+            where TPredicate : struct, IFunction<TSource, bool>
+            where TSelector : struct, IFunction<TSource, TResult>
+            => source.WhereSelect<TList, TSource, TResult, TPredicate, TSelector>(predicate, selector, 0, source.Count);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        static WhereSelectEnumerable<TList, TSource, TResult, TPredicate, TSelector> WhereSelect<TList, TSource, TResult, TPredicate, TSelector>(
+            this TList source,
+            TPredicate predicate,
             TSelector selector, 
             int offset, int count)
-            where TList : IReadOnlyList<TSource>
+            where TList : struct, IReadOnlyList<TSource>
             where TPredicate : struct, IFunction<TSource, bool>
             where TSelector : struct, IFunction<TSource, TResult>
             => new(source, predicate, selector, offset, count);
@@ -26,7 +36,7 @@ namespace NetFabric.Hyperlinq
         [StructLayout(LayoutKind.Auto)]
         public readonly partial struct WhereSelectEnumerable<TList, TSource, TResult, TPredicate, TSelector>
             : IValueEnumerable<TResult, WhereSelectEnumerable<TList, TSource, TResult, TPredicate, TSelector>.DisposableEnumerator>
-            where TList : IReadOnlyList<TSource>
+            where TList : struct, IReadOnlyList<TSource>
             where TPredicate : struct, IFunction<TSource, bool>
             where TSelector : struct, IFunction<TSource, TResult>
         {
@@ -37,14 +47,8 @@ namespace NetFabric.Hyperlinq
             readonly int count;
 
             internal WhereSelectEnumerable(TList source, TPredicate predicate, TSelector selector, int offset, int count)
-            {
-                this.source = source;
-                this.predicate = predicate;
-                this.selector = selector;
-                (this.offset, this.count) = Utils.SkipTake(source.Count, offset, count);
-            }
+                => (this.source, this.offset, this.count, this.predicate, this.selector) = (source, offset, count, predicate, selector);
 
-            
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly Enumerator GetEnumerator() 
                 => new(in this);
@@ -152,7 +156,7 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool All()
-                => source.All<TList, TSource, TPredicate>(predicate);
+                => source.All<TList, TSource, TPredicate>(predicate, offset, count);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool All(Func<TResult, bool> predicate)
@@ -161,7 +165,7 @@ namespace NetFabric.Hyperlinq
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool All<TPredicate2>(TPredicate2 predicate)
                 where TPredicate2 : struct, IFunction<TResult, bool>
-                => this.All<WhereSelectEnumerable<TList, TSource, TResult, TPredicate, TSelector>, WhereSelectEnumerable<TList, TSource, TResult, TPredicate, TSelector>.DisposableEnumerator, TResult, TPredicate2>(predicate);
+                => this.All<WhereSelectEnumerable<TList, TSource, TResult, TPredicate, TSelector>, DisposableEnumerator, TResult, TPredicate2>(predicate);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool All(Func<TResult, int, bool> predicate)
@@ -170,11 +174,11 @@ namespace NetFabric.Hyperlinq
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool AllAt<TPredicate2>(TPredicate2 predicate)
                 where TPredicate2 : struct, IFunction<TResult, int, bool>
-                => this.AllAt<WhereSelectEnumerable<TList, TSource, TResult, TPredicate, TSelector>, WhereSelectEnumerable<TList, TSource, TResult, TPredicate, TSelector>.DisposableEnumerator, TResult, TPredicate2>(predicate);
+                => this.AllAt<WhereSelectEnumerable<TList, TSource, TResult, TPredicate, TSelector>, DisposableEnumerator, TResult, TPredicate2>(predicate);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Any()
-                => source.Any<TList, TSource, TPredicate>(predicate);
+                => source.Any<TList, TSource, TPredicate>(predicate, offset, count);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Any(Func<TResult, bool> predicate)
@@ -183,7 +187,7 @@ namespace NetFabric.Hyperlinq
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Any<TPredicate2>(TPredicate2 predicate)
                 where TPredicate2 : struct, IFunction<TResult, bool>
-                => this.Any<WhereSelectEnumerable<TList, TSource, TResult, TPredicate, TSelector>, WhereSelectEnumerable<TList, TSource, TResult, TPredicate, TSelector>.DisposableEnumerator, TResult, TPredicate2>(predicate);
+                => this.Any<WhereSelectEnumerable<TList, TSource, TResult, TPredicate, TSelector>, DisposableEnumerator, TResult, TPredicate2>(predicate);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Any(Func<TResult, int, bool> predicate)
@@ -192,7 +196,7 @@ namespace NetFabric.Hyperlinq
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool AnyAt<TPredicate2>(TPredicate2 predicate)
                 where TPredicate2 : struct, IFunction<TResult, int, bool>
-                => this.AnyAt<WhereSelectEnumerable<TList, TSource, TResult, TPredicate, TSelector>, WhereSelectEnumerable<TList, TSource, TResult, TPredicate, TSelector>.DisposableEnumerator, TResult, TPredicate2>(predicate);
+                => this.AnyAt<WhereSelectEnumerable<TList, TSource, TResult, TPredicate, TSelector>, DisposableEnumerator, TResult, TPredicate2>(predicate);
 
             #endregion
             #region Filtering

@@ -45,7 +45,9 @@ namespace NetFabric.Hyperlinq.UnitTests.Bindings.System.Collections.Generic
 
             // Assert
             _ = result.Must()
-                .BeEqualTo(expected);
+                .BeEnumerableOf<int>()
+                .BeEqualTo(expected, testRefStructs: false);
+            _ = result.SequenceEqual(expected).Must().BeTrue();
         }
 
 
@@ -66,7 +68,9 @@ namespace NetFabric.Hyperlinq.UnitTests.Bindings.System.Collections.Generic
 
             // Assert
             _ = result.Must()
-                .BeEqualTo(expected);
+                .BeEnumerableOf<int>()
+                .BeEqualTo(expected, testRefStructs: false);
+            _ = result.SequenceEqual(expected).Must().BeTrue();
         }
 
         [Theory]
@@ -295,7 +299,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Bindings.System.Collections.Generic
                 .BeEqualTo(expected, testRefStructs: false);
             _ = result.SequenceEqual(expected).Must().BeTrue();
         }
-
+/*
         [Theory]
         [MemberData(nameof(TestData.PredicateEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateSingle), MemberType = typeof(TestData))]
@@ -353,7 +357,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Bindings.System.Collections.Generic
 #endif
             _ = result.SequenceEqual(expected).Must().BeTrue();
         }
-
+*/
         [Theory]
         [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
@@ -507,9 +511,9 @@ namespace NetFabric.Hyperlinq.UnitTests.Bindings.System.Collections.Generic
 
             // Assert
             _ = result.Must()
-                .BeAssignableTo<IValueReadOnlyList<int, List<int>.Enumerator>>()
                 .BeEnumerableOf<int>()
-                .BeEqualTo(source);
+                .BeEqualTo(source, testRefStructs: false);
+            _ = result.SequenceEqual(source).Must().BeTrue();
         }
 
         [Theory]

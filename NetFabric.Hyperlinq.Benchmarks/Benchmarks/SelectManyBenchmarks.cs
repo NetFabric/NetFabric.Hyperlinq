@@ -150,10 +150,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
             var sum = 0;
             foreach (var item in listValue
                 .AsValueEnumerable()
-                .SelectMany<
-                    ReadOnlyListExtensions.ValueEnumerableWrapper<int>, int, 
-                    ValueEnumerable.ReturnEnumerable<int>, ValueEnumerable.ReturnEnumerable<int>.DisposableEnumerator, int>(
-                        item => ValueEnumerable.Return(item)))
+                .SelectMany(item => ValueEnumerable.Return(item)))
                 sum += item;
             return sum;
         }
@@ -165,9 +162,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
             var sum = 0;
             foreach (var item in enumerableReference
                 .AsValueEnumerable()
-                .SelectMany<
-                    EnumerableExtensions.ValueEnumerable<int>, EnumerableExtensions.ValueEnumerable<int>.Enumerator, int,
-                    ValueEnumerable.ReturnEnumerable<int>, ValueEnumerable.ReturnEnumerable<int>.DisposableEnumerator, int>(item => ValueEnumerable.Return(item)))
+                .SelectMany(item => ValueEnumerable.Return(item)))
                 sum += item;
             return sum;
         }
@@ -179,9 +174,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
             var sum = 0;
             foreach (var item in collectionReference
                 .AsValueEnumerable()
-                .SelectMany<
-                    ReadOnlyCollectionExtensions.ValueEnumerableWrapper<int>, ReadOnlyCollectionExtensions.ValueEnumerableWrapper<int>.Enumerator, int,
-                    ValueEnumerable.ReturnEnumerable<int>, ValueEnumerable.ReturnEnumerable<int>.DisposableEnumerator, int>(item => ValueEnumerable.Return(item)))
+                .SelectMany(item => ValueEnumerable.Return(item)))
                 sum += item;
             return sum;
         }
@@ -193,10 +186,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
             var sum = 0;
             foreach (var item in listReference
                 .AsValueEnumerable()
-                .SelectMany<
-                    ReadOnlyListExtensions.ValueEnumerableWrapper<int>, int, 
-                    ValueEnumerable.ReturnEnumerable<int>, ValueEnumerable.ReturnEnumerable<int>.DisposableEnumerator, int>(
-                        item => ValueEnumerable.Return(item)))
+                .SelectMany(item => ValueEnumerable.Return(item)))
                 sum += item;
             return sum;
         }

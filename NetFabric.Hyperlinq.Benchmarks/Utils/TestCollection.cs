@@ -28,7 +28,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
             public void Clear() => throw new NotImplementedException();
 
             public bool Contains(int item)
-                => array.Contains(item);
+                => ((IList<int>)array).Contains(item);
 
             public void CopyTo(int[] array, int arrayIndex)
                 => this.array.CopyTo(array, arrayIndex);
@@ -80,7 +80,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
             public void Clear() => throw new NotImplementedException();
 
             public bool Contains(int item)
-                => array.Contains(item);
+                => ((IList<int>)array).Contains(item);
 
             public void CopyTo(int[] array, int arrayIndex)
                 => this.array.CopyTo(array, arrayIndex);

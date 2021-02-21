@@ -14,8 +14,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Aggregation.Count
         public void Count_With_ValidData_Must_Succeed(int[] source)
         {
             // Arrange
-            var expected = Enumerable
-                .Count(source);
+            var expected = source
+                .Count();
 
             // Act
             var result = source.AsValueEnumerable()

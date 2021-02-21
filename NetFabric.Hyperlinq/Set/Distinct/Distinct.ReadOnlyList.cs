@@ -12,25 +12,19 @@ namespace NetFabric.Hyperlinq
     {
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static DistinctEnumerable<TList, TSource> Distinct<TList, TSource>(
-            this TList source, 
-            IEqualityComparer<TSource>? comparer = default)
-            where TList : IReadOnlyList<TSource>
+        public static DistinctEnumerable<TList, TSource> Distinct<TList, TSource>(this TList source, IEqualityComparer<TSource>? comparer = default)
+            where TList : struct, IReadOnlyList<TSource>
             => source.Distinct(comparer, 0, source.Count);
-
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static DistinctEnumerable<TList, TSource> Distinct<TList, TSource>(
-            this TList source,
-            IEqualityComparer<TSource>? comparer,
-            int offset, int count)
-            where TList : IReadOnlyList<TSource>
+        static DistinctEnumerable<TList, TSource> Distinct<TList, TSource>(this TList source, IEqualityComparer<TSource>? comparer, int offset, int count)
+            where TList : struct, IReadOnlyList<TSource>
             => new(source, comparer, offset, count);
 
         [StructLayout(LayoutKind.Auto)]
         public readonly partial struct DistinctEnumerable<TList, TSource>
             : IValueEnumerable<TSource, DistinctEnumerable<TList, TSource>.Enumerator>
-            where TList : IReadOnlyList<TSource>
+            where TList : struct, IReadOnlyList<TSource>
         {
             readonly TList source;
             readonly IEqualityComparer<TSource>? comparer;
@@ -38,13 +32,8 @@ namespace NetFabric.Hyperlinq
             readonly int count;
 
             internal DistinctEnumerable(TList source, IEqualityComparer<TSource>? comparer, int offset, int count)
-            {
-                this.source = source;
-                this.comparer = comparer;
-                (this.offset, this.count) = Utils.SkipTake(source.Count, offset, count);
-            }
+                => (this.source, this.comparer, this.offset, this.count) = (source, comparer, offset, count);
 
-            
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly Enumerator GetEnumerator() 
                 => new(in this);
@@ -116,14 +105,17 @@ namespace NetFabric.Hyperlinq
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly DistinctEnumerable<TList, TSource> Skip(int count)
-                => new(source, comparer, offset + count, count);
-
+            public DistinctEnumerable<TList, TSource> Skip(int count)
+            {
+                var (skipCount, takeCount) = Utils.Skip(this.count, count);
+                return new DistinctEnumerable<TList, TSource>(source, comparer, offset + skipCount, takeCount);
+            }
+            
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly DistinctEnumerable<TList, TSource> Take(int count)
-                => new(source, comparer, offset, Math.Min(count, count));
+            public DistinctEnumerable<TList, TSource> Take(int count)
+                => new(source, comparer, offset, Utils.Take(this.count, count));
 
-
+            
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly int Count()
                 => count switch

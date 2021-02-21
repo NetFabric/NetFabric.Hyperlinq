@@ -18,8 +18,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Contains
             var wrapped = Wrap.AsValueReadOnlyList(source);
 
             // Act
-            var result = ReadOnlyListExtensions
-                .Contains<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped, value);
+            var result = wrapped.AsValueEnumerable()
+                .Contains(value);
 
             // Assert
             _ = result.Must()
@@ -37,8 +37,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Contains
             var wrapped = Wrap.AsValueReadOnlyList(source.AsValueEnumerable().Select(item => item.ToString()).ToArray());
 
             // Act
-            var result = ReadOnlyListExtensions
-                .Contains<Wrap.ValueReadOnlyListWrapper<string>, string>(wrapped, value);
+            var result = wrapped.AsValueEnumerable()
+                .Contains(value);
 
             // Assert
             _ = result.Must()
@@ -55,8 +55,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Contains
             var wrapped = Wrap.AsValueReadOnlyList(source);
 
             // Act
-            var result = ReadOnlyListExtensions
-                .Contains<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped, value);
+            var result = wrapped.AsValueEnumerable()
+                .Contains(value);
 
             // Assert
             _ = result.Must()
@@ -73,8 +73,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Contains
             var wrapped = Wrap.AsValueReadOnlyList(source.AsValueEnumerable().Select(item => item.ToString()).ToArray());
 
             // Act
-            var result = ReadOnlyListExtensions
-                .Contains<Wrap.ValueReadOnlyListWrapper<string>, string>(wrapped, value);
+            var result = wrapped.AsValueEnumerable()
+                .Contains(value);
 
             // Assert
             _ = result.Must()
@@ -92,8 +92,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Contains
             var wrapped = Wrap.AsValueReadOnlyList(source);
 
             // Act
-            var result = ReadOnlyListExtensions
-                .Contains<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped, value, EqualityComparer<int>.Default);
+            var result = wrapped.AsValueEnumerable()
+                .Contains(value, EqualityComparer<int>.Default);
 
             // Assert
             _ = result.Must()
@@ -110,8 +110,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Contains
             var wrapped = Wrap.AsValueReadOnlyList(source);
 
             // Act
-            var result = ReadOnlyListExtensions
-                .Contains<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped, value, EqualityComparer<int>.Default);
+            var result = wrapped.AsValueEnumerable()
+                .Contains(value, EqualityComparer<int>.Default);
 
             // Assert
             _ = result.Must()
@@ -132,8 +132,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Contains
             var wrapped = Wrap.AsValueReadOnlyList(source);
 
             // Act
-            var result = ReadOnlyListExtensions
-                .Skip<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped, skip)
+            var result = wrapped.AsValueEnumerable()
+                .Skip(skip)
                 .Take(take)
                 .Contains(value, null);
 
@@ -155,8 +155,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Contains
             var wrapped = Wrap.AsValueReadOnlyList(source);
 
             // Act
-            var result = ReadOnlyListExtensions
-                .Skip<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped, skip)
+            var result = wrapped.AsValueEnumerable()
+                .Skip(skip)
                 .Take(take)
                 .Contains(value, null);
 
@@ -176,8 +176,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Contains
             var wrapped = Wrap.AsValueReadOnlyList(source);
 
             // Act
-            var result = ReadOnlyListExtensions
-                .Skip<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped, skip)
+            var result = wrapped.AsValueEnumerable()
+                .Skip(skip)
                 .Take(take)
                 .Contains(value, EqualityComparer<int>.Default);
 
@@ -199,8 +199,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Contains
             var wrapped = Wrap.AsValueReadOnlyList(source);
 
             // Act
-            var result = ReadOnlyListExtensions
-                .Skip<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped, skip)
+            var result = wrapped.AsValueEnumerable()
+                .Skip(skip)
                 .Take(take)
                 .Contains(value, EqualityComparer<int>.Default);
 
@@ -220,8 +220,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Contains
             var wrapped = Wrap.AsValueReadOnlyList(source);
 
             // Act
-            var result = ReadOnlyListExtensions
-                .Skip<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped, skip)
+            var result = wrapped.AsValueEnumerable()
+                .Skip(skip)
                 .Take(take)
                 .Contains(value, TestComparer<int>.Instance);
 
@@ -243,8 +243,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Contains
             var wrapped = Wrap.AsValueReadOnlyList(source);
 
             // Act
-            var result = ReadOnlyListExtensions
-                .Skip<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped, skip)
+            var result = wrapped.AsValueEnumerable()
+                .Skip(skip)
                 .Take(take)
                 .Contains(value, TestComparer<int>.Instance);
 

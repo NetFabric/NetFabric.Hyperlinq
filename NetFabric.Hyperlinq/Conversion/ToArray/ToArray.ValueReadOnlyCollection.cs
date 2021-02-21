@@ -14,6 +14,7 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
+            if (source.Count is 0) return Array.Empty<TSource>();
 #if NET5_0
             var result = GC.AllocateUninitializedArray<TSource>(source.Count);
 #else
@@ -43,6 +44,7 @@ namespace NetFabric.Hyperlinq
             where TEnumerator : struct, IEnumerator<TSource>
             where TSelector : struct, IFunction<TSource, TResult>
         {
+            if (source.Count is 0) return Array.Empty<TResult>();
             // ReSharper disable once HeapView.ObjectAllocation.Evident
             var array = new TResult[source.Count];
             Copy<TEnumerable, TEnumerator, TSource, TResult, TSelector>(source, array, selector);
@@ -69,6 +71,7 @@ namespace NetFabric.Hyperlinq
             where TEnumerator : struct, IEnumerator<TSource>
             where TSelector : struct, IFunction<TSource, int, TResult>
         {
+            if (source.Count is 0) return Array.Empty<TResult>();
             // ReSharper disable once HeapView.ObjectAllocation.Evident
             var array = new TResult[source.Count];
             CopyAt<TEnumerable, TEnumerator, TSource, TResult, TSelector>(source, array, selector);

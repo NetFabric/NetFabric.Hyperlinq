@@ -18,8 +18,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Projection.SelectAt
                 System.Linq.Enumerable.Select(wrapped, selector);
 
             // Act
-            var result = ReadOnlyListExtensions
-                .Select<Wrap.ReadOnlyListWrapper<int>, int, string>(wrapped, selector);
+            var result = wrapped.AsValueEnumerable()
+                .Select(selector);
 
             // Assert
             _ = result.Must()

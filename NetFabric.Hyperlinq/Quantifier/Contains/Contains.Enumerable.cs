@@ -19,7 +19,6 @@ namespace NetFabric.Hyperlinq
                     return DefaultContains(source, value);
             }
 
-            comparer ??= EqualityComparer<TSource>.Default;
             return ComparerContains(source, value, comparer);
 
             static bool DefaultContains(TEnumerable source, TSource value)
@@ -33,8 +32,9 @@ namespace NetFabric.Hyperlinq
                 return false;
             }
 
-            static bool ComparerContains(TEnumerable source, TSource value, IEqualityComparer<TSource> comparer)
+            static bool ComparerContains(TEnumerable source, TSource value, IEqualityComparer<TSource>? comparer)
             {
+                comparer ??= EqualityComparer<TSource>.Default;
                 using var enumerator = source.GetEnumerator();
                 while (enumerator.MoveNext())
                 {

@@ -9,7 +9,7 @@ namespace NetFabric.Hyperlinq
     {
 
         static LargeArrayBuilder<TSource> ToArrayBuilder<TList, TSource, TPredicate>(in TList source, TPredicate predicate, int offset, int count, ArrayPool<TSource> pool)
-            where TList : IReadOnlyList<TSource>
+            where TList : struct, IReadOnlyList<TSource>
             where TPredicate: struct, IFunction<TSource, bool>
         {
             var builder = new LargeArrayBuilder<TSource>(pool);
@@ -24,7 +24,7 @@ namespace NetFabric.Hyperlinq
         }
 
         static LargeArrayBuilder<TSource> ToArrayBuilderAt<TList, TSource, TPredicate>(in TList source, TPredicate predicate, int offset, int count, ArrayPool<TSource> pool)
-            where TList : IReadOnlyList<TSource>
+            where TList : struct, IReadOnlyList<TSource>
             where TPredicate: struct, IFunction<TSource, int, bool>
         {
             var builder = new LargeArrayBuilder<TSource>(pool);
@@ -51,7 +51,7 @@ namespace NetFabric.Hyperlinq
         }
 
         static LargeArrayBuilder<TResult> ToArrayBuilder<TList, TSource, TResult, TPredicate, TSelector>(in TList source, TPredicate predicate, TSelector selector, int offset, int count, ArrayPool<TResult> pool)
-            where TList : IReadOnlyList<TSource>
+            where TList : struct, IReadOnlyList<TSource>
             where TSelector: struct, IFunction<TSource, TResult>
             where TPredicate: struct, IFunction<TSource, bool>
         {

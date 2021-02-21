@@ -30,7 +30,6 @@ namespace NetFabric.Hyperlinq
             if (Utils.UseDefault(comparer))
                 return DefaultContainsAsync(source, value, cancellationToken);
 
-            comparer ??= EqualityComparer<TSource>.Default;
             return ComparerContainsAsync(source, value, comparer, cancellationToken);
 
             static async ValueTask<bool> DefaultContainsAsync(TEnumerable source, TSource value, CancellationToken cancellationToken)
@@ -47,8 +46,9 @@ namespace NetFabric.Hyperlinq
                 return false;
             }
 
-            static async ValueTask<bool> ComparerContainsAsync(TEnumerable source, TSource value, IEqualityComparer<TSource> comparer, CancellationToken cancellationToken)
+            static async ValueTask<bool> ComparerContainsAsync(TEnumerable source, TSource value, IEqualityComparer<TSource>? comparer, CancellationToken cancellationToken)
             {
+                comparer ??= EqualityComparer<TSource>.Default;
                 var enumerator = source.GetAsyncEnumerator(cancellationToken);
                 await using (enumerator.ConfigureAwait(false))
                 {

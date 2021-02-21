@@ -10,24 +10,8 @@ namespace NetFabric.Hyperlinq
     {
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static List<TSource> ToList<TList, TSource>(this TList source)
-            where TList : IReadOnlyList<TSource>
-            => source.Count switch
-            {
-                0 => new List<TSource>(),
-                _ => source switch
-                    {
-                        // ReSharper disable once HeapView.PossibleBoxingAllocation
-                        ICollection<TSource> collection => new List<TSource>(collection),
-                        
-                        _ => source.ToArray<TList, TSource>().AsList()
-                    }
-            };
-
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static List<TSource> ToList<TList, TSource>(this TList source, int offset, int count)
-            where TList : IReadOnlyList<TSource>
+            where TList : struct, IReadOnlyList<TSource>
             => source.Count switch
             {
                 0 => new List<TSource>(),
@@ -37,7 +21,7 @@ namespace NetFabric.Hyperlinq
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static List<TSource> ToList<TList, TSource, TPredicate>(this TList source, TPredicate predicate, int offset, int count)
-            where TList : IReadOnlyList<TSource>
+            where TList : struct, IReadOnlyList<TSource>
             where TPredicate : struct, IFunction<TSource, bool>
             => source.Count switch
             {
@@ -48,7 +32,7 @@ namespace NetFabric.Hyperlinq
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static List<TSource> ToListAt<TList, TSource, TPredicate>(this TList source, TPredicate predicate, int offset, int count)
-            where TList : IReadOnlyList<TSource>
+            where TList : struct, IReadOnlyList<TSource>
             where TPredicate : struct, IFunction<TSource, int, bool>
             => source.Count switch
             {
@@ -59,7 +43,7 @@ namespace NetFabric.Hyperlinq
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static List<TResult> ToList<TList, TSource, TResult, TSelector>(this TList source, TSelector selector, int offset, int count)
-            where TList : IReadOnlyList<TSource>
+            where TList : struct, IReadOnlyList<TSource>
             where TSelector : struct, IFunction<TSource, TResult>
             => source.Count switch
             {
@@ -70,7 +54,7 @@ namespace NetFabric.Hyperlinq
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static List<TResult> ToListAt<TList, TSource, TResult, TSelector>(this TList source, TSelector selector, int offset, int count)
-            where TList : IReadOnlyList<TSource>
+            where TList : struct, IReadOnlyList<TSource>
             where TSelector : struct, IFunction<TSource, int, TResult>
             => source.Count switch
             {
@@ -81,7 +65,7 @@ namespace NetFabric.Hyperlinq
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static List<TResult> ToList<TList, TSource, TResult, TPredicate, TSelector>(this TList source, TPredicate predicate, TSelector selector, int offset, int count)
-            where TList : IReadOnlyList<TSource>
+            where TList : struct, IReadOnlyList<TSource>
             where TPredicate : struct, IFunction<TSource, bool>
             where TSelector : struct, IFunction<TSource, TResult>
             => source.Count switch

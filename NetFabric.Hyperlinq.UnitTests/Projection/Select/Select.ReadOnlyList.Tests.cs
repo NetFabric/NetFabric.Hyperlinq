@@ -23,8 +23,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Projection.Select
                 .Select(selector);
 
             // Act
-            var result = ReadOnlyListExtensions
-                .Skip<Wrap.ReadOnlyListWrapper<int>, int>(wrapped, skip)
+            var result = wrapped.AsValueEnumerable()
+                .Skip(skip)
                 .Take(take)
                 .Select(selector);
 

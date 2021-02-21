@@ -14,8 +14,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
             var source = default(ArraySegment<int>);
 
             // Act
-            var result = ArrayExtensions
-                .Single(source);
+            var result = source.AsValueEnumerable()
+                .Single();
 
             // Assert
             _ = result.Must()
@@ -32,8 +32,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
             var wrapped = new ArraySegment<int>(source, offset, count);
 
             // Act
-            var result = ArrayExtensions
-                .Single(wrapped);
+            var result = wrapped.AsValueEnumerable()
+                .Single();
 
             // Assert
             _ = result.Must()
@@ -52,8 +52,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
                 .Single(wrapped);
 
             // Act
-            var result = ArrayExtensions
-                .Single(wrapped);
+            var result = wrapped.AsValueEnumerable()
+                .Single();
 
             // Assert
             _ = result.Match(
@@ -70,8 +70,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
             var wrapped = new ArraySegment<int>(source, offset, count);
 
             // Act
-            var result = ArrayExtensions
-                .Single(wrapped);
+            var result = wrapped.AsValueEnumerable()
+                .Single();
 
             // Assert
             _ = result.Must()
@@ -87,8 +87,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
             var wrapped = new ArraySegment<int>(source);
 
             // Act
-            var result = ArrayExtensions
-                .Skip(wrapped, skip)
+            var result = wrapped.AsValueEnumerable()
+                .Skip(skip)
                 .Take(take)
                 .Single();
 
@@ -110,8 +110,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
                 .Single();
 
             // Act
-            var result = ArrayExtensions
-                .Skip(wrapped, skip)
+            var result = wrapped.AsValueEnumerable()
+                .Skip(skip)
                 .Take(take)
                 .Single();
 
@@ -129,8 +129,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
             var wrapped = new ArraySegment<int>(source);
 
             // Act
-            var result = ArrayExtensions
-                .Skip(wrapped, skip)
+            var result = wrapped.AsValueEnumerable()
+                .Skip(skip)
                 .Take(take)
                 .Single();
 
@@ -148,8 +148,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
             var wrapped = new ArraySegment<int>(source);
 
             // Act
-            var result = ArrayExtensions
-                .Skip(wrapped, skip)
+            var result = wrapped.AsValueEnumerable()
+                .Skip(skip)
                 .Take(take)
                 .Where(predicate)
                 .Single();
@@ -172,8 +172,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
                 .Single(predicate);
 
             // Act
-            var result = ArrayExtensions
-                .Skip(wrapped, skip)
+            var result = wrapped.AsValueEnumerable()
+                .Skip(skip)
                 .Take(take)
                 .Where(predicate)
                 .Single();
@@ -192,8 +192,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
             var wrapped = new ArraySegment<int>(source);
 
             // Act
-            var result = ArrayExtensions
-                .Skip(wrapped, skip)
+            var result = wrapped.AsValueEnumerable()
+                .Skip(skip)
                 .Take(take)
                 .Where(predicate)
                 .Single();
@@ -212,8 +212,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
             var wrapped = new ArraySegment<int>(source);
 
             // Act
-            var result = ArrayExtensions
-                .Skip(wrapped, skip)
+            var result = wrapped.AsValueEnumerable()
+                .Skip(skip)
                 .Take(take)
                 .Where(predicate)
                 .Single();
@@ -237,8 +237,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
                 .Single();
 
             // Act
-            var result = ArrayExtensions
-                .Skip(wrapped, skip)
+            var result = wrapped.AsValueEnumerable()
+                .Skip(skip)
                 .Take(take)
                 .Where(predicate)
                 .Single();
@@ -257,8 +257,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
             var wrapped = new ArraySegment<int>(source);
 
             // Act
-            var result = ArrayExtensions
-                .Skip(wrapped, skip)
+            var result = wrapped.AsValueEnumerable()
+                .Skip(skip)
                 .Take(take)
                 .Where(predicate)
                 .Single();
@@ -277,8 +277,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
             var wrapped = new ArraySegment<int>(source);
 
             // Act
-            var result = ArrayExtensions
-                .Skip(wrapped, skip)
+            var result = wrapped.AsValueEnumerable()
+                .Skip(skip)
                 .Take(take)
                 .Select(selector)
                 .Single();
@@ -302,8 +302,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
                 .Single();
 
             // Act
-            var result = ArrayExtensions
-                .Skip(wrapped, skip)
+            var result = wrapped.AsValueEnumerable()
+                .Skip(skip)
                 .Take(take)
                 .Select(selector)
                 .Single();
@@ -322,8 +322,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
             var wrapped = new ArraySegment<int>(source);
 
             // Act
-            var result = ArrayExtensions
-                .Skip(wrapped, skip)
+            var result = wrapped.AsValueEnumerable()
+                .Skip(skip)
                 .Take(take)
                 .Select(selector)
                 .Single();
@@ -342,8 +342,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
             var wrapped = new ArraySegment<int>(source);
 
             // Act
-            var result = ArrayExtensions
-                .Skip(wrapped, skip)
+            var result = wrapped.AsValueEnumerable()
+                .Skip(skip)
                 .Take(take)
                 .Select(selector)
                 .Single();
@@ -367,8 +367,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
                 .Single();
 
             // Act
-            var result = ArrayExtensions
-                .Skip(wrapped, skip)
+            var result = wrapped.AsValueEnumerable()
+                .Skip(skip)
                 .Take(take)
                 .Select(selector)
                 .Single();
@@ -387,8 +387,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
             var wrapped = new ArraySegment<int>(source);
 
             // Act
-            var result = ArrayExtensions
-                .Skip(wrapped, skip)
+            var result = wrapped.AsValueEnumerable()
+                .Skip(skip)
                 .Take(take)
                 .Select(selector)
                 .Single();
@@ -407,8 +407,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
             var wrapped = new ArraySegment<int>(source);
 
             // Act
-            var result = ArrayExtensions
-                .Skip(wrapped, skip)
+            var result = wrapped.AsValueEnumerable()
+                .Skip(skip)
                 .Take(take)
                 .Where(predicate)
                 .Select(selector)
@@ -434,8 +434,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
                 .Single();
 
             // Act
-            var result = ArrayExtensions
-                .Skip(wrapped, skip)
+            var result = wrapped.AsValueEnumerable()
+                .Skip(skip)
                 .Take(take)
                 .Where(predicate)
                 .Select(selector)
@@ -455,8 +455,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
             var wrapped = new ArraySegment<int>(source);
 
             // Act
-            var result = ArrayExtensions
-                .Skip(wrapped, skip)
+            var result = wrapped.AsValueEnumerable()
+                .Skip(skip)
                 .Take(take)
                 .Where(predicate)
                 .Select(selector)
