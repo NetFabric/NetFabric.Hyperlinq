@@ -18,12 +18,12 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsValueEnumerable
                 .AsReadOnlyList(source);
 
             // Act
-            var result = ReadOnlyListExtensions
-                .AsValueEnumerable(wrapped);
+            var result = wrapped
+                .AsValueEnumerable();
 
             // Assert
             _ = result.Must()
-                .BeOfType<ReadOnlyListExtensions.ValueEnumerableWrapper<int>>()
+                .BeOfType<ReadOnlyListExtensions.ListValueEnumerable<int>>()
                 .BeEnumerableOf<int>()
                 .BeEqualTo(wrapped);
         }
@@ -41,8 +41,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsValueEnumerable
                 .ToArray(source);
 
             // Act
-            var result = ReadOnlyListExtensions
-                .AsValueEnumerable<int>(wrapped)
+            var result = wrapped
+                .AsValueEnumerable()
                 .ToArray();
 
             // Assert
@@ -64,8 +64,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsValueEnumerable
                 .ToArray(source);
 
             // Act
-            var result = ReadOnlyListExtensions
-                .AsValueEnumerable<int>(wrapped)
+            var result = wrapped
+                .AsValueEnumerable()
                 .ToArray();
 
             // Assert
@@ -87,8 +87,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsValueEnumerable
                 .ToList(source);
 
             // Act
-            var result = ReadOnlyListExtensions
-                .AsValueEnumerable<int>(wrapped)
+            var result = wrapped
+                .AsValueEnumerable()
                 .ToList();
 
             // Assert
@@ -111,8 +111,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsValueEnumerable
                 .ToList(source);
 
             // Act
-            var result = ReadOnlyListExtensions
-                .AsValueEnumerable<int>(wrapped)
+            var result = wrapped
+                .AsValueEnumerable()
                 .ToList();
 
             // Assert

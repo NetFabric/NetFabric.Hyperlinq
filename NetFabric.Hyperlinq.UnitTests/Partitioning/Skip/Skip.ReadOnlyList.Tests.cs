@@ -19,8 +19,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Partitioning.Skip
                 .Skip(source, count);
 
             // Act
-            var result = ReadOnlyListExtensions
-                .Skip<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped, count);
+            var result = wrapped.AsValueEnumerable()
+                .Skip(count);
 
             // Assert
             _ = result.Must()

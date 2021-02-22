@@ -7,6 +7,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.WhereRef
 {
     public class ArrayTests
     {
+/*    
         [Theory]
         [MemberData(nameof(TestData.PredicateEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateSingle), MemberType = typeof(TestData))]
@@ -28,5 +29,6 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.WhereRef
                 .BeEqualTo(expected, testRefReturns: false, testRefStructs: false);
             _ = result.SequenceEqual(expected).Must().BeTrue();
         }
+*/        
     }
 }

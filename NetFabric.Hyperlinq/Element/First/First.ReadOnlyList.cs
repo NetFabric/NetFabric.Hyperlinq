@@ -6,15 +6,13 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class ReadOnlyListExtensions
     {
-        
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Option<TSource> First<TList, TSource>(this TList source) 
-            where TList : IReadOnlyList<TSource>
+
+        public static Option<TSource> First<TList, TSource>(this TList source)
+            where TList : struct, IReadOnlyList<TSource>
             => source.First<TList, TSource>(0, source.Count);
 
-
         static Option<TSource> First<TList, TSource>(this TList source, int offset, int count) 
-            where TList : IReadOnlyList<TSource>
+            where TList : struct, IReadOnlyList<TSource>
             => count switch
             {
                 0 => Option.None,
@@ -23,7 +21,7 @@ namespace NetFabric.Hyperlinq
 
 
         static Option<TSource> First<TList, TSource, TPredicate>(this TList source, TPredicate predicate, int offset, int count)
-            where TList : IReadOnlyList<TSource>
+            where TList : struct, IReadOnlyList<TSource>
             where TPredicate : struct, IFunction<TSource, bool>
         {
             var end = offset + count;
@@ -38,7 +36,7 @@ namespace NetFabric.Hyperlinq
 
 
         static Option<TSource> FirstAt<TList, TSource, TPredicate>(this TList source, TPredicate predicate, int offset, int count)
-            where TList : IReadOnlyList<TSource>
+            where TList : struct, IReadOnlyList<TSource>
             where TPredicate : struct, IFunction<TSource, int, bool>
         {
             var end = count;
@@ -66,7 +64,7 @@ namespace NetFabric.Hyperlinq
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static Option<TResult> First<TList, TSource, TResult, TSelector>(this TList source, TSelector selector, int offset, int count)
-            where TList : IReadOnlyList<TSource>
+            where TList : struct, IReadOnlyList<TSource>
             where TSelector : struct, IFunction<TSource, TResult>
             => count switch
             {
@@ -77,7 +75,7 @@ namespace NetFabric.Hyperlinq
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static Option<TResult> FirstAt<TList, TSource, TResult, TSelector>(this TList source, TSelector selector, int offset, int count)
-            where TList : IReadOnlyList<TSource>
+            where TList : struct, IReadOnlyList<TSource>
             where TSelector : struct, IFunction<TSource, int, TResult>
             => count switch
             {
@@ -87,7 +85,7 @@ namespace NetFabric.Hyperlinq
 
 
         static Option<TResult> First<TList, TSource, TResult, TPredicate, TSelector>(this TList source, TPredicate predicate, TSelector selector, int offset, int count)
-            where TList : IReadOnlyList<TSource>
+            where TList : struct, IReadOnlyList<TSource>
             where TPredicate : struct, IFunction<TSource, bool>
             where TSelector : struct, IFunction<TSource, TResult>
         {

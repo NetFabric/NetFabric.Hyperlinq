@@ -77,7 +77,7 @@ namespace NetFabric.Hyperlinq
                 => CopyTo(array.AsSpan().Slice(arrayIndex));
 
             public bool Contains(TResult item)
-                => ContainsAt<TEnumerable, TEnumerator, TSource, TResult, TSelector>(source, item, selector);
+                => ContainsAt<TEnumerable, TEnumerator, TSource, TResult, TSelector>(source, item, default, selector);
 
             [ExcludeFromCodeCoverage]
             void ICollection<TResult>.Add(TResult item) 

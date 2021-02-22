@@ -7,16 +7,15 @@ namespace NetFabric.Hyperlinq
     {
         public static bool Contains<TSource>(this ReadOnlySpan<TSource> source, TSource value, IEqualityComparer<TSource>? comparer = default)
         {
-            if (source.Length is 0)
-                return false;
+            return source.Length switch
+            {
+                0 => false,
+                _ => Utils.UseDefault(comparer)
+                    ? ValueContains(source, value)
+                    : ReferenceContains(source, value, comparer)
+            };
 
-            if (Utils.UseDefault(comparer))
-                return DefaultContains(source, value);
-
-            comparer ??= EqualityComparer<TSource>.Default;
-            return ComparerContains(source, value, comparer);
-
-            static bool DefaultContains(ReadOnlySpan<TSource> source, TSource value)
+            static bool ValueContains(ReadOnlySpan<TSource> source, TSource value)
             {
                 foreach (var item in source)
                 {
@@ -26,8 +25,9 @@ namespace NetFabric.Hyperlinq
                 return false;
             }
 
-            static bool ComparerContains(ReadOnlySpan<TSource> source, TSource value, IEqualityComparer<TSource> comparer)
+            static bool ReferenceContains(ReadOnlySpan<TSource> source, TSource value, IEqualityComparer<TSource>? comparer)
             {
+                comparer ??= EqualityComparer<TSource>.Default;
                 foreach (var item in source)
                 {
                     if (comparer.Equals(item, value))
@@ -37,15 +37,15 @@ namespace NetFabric.Hyperlinq
             }
         }
 
-        static bool Contains<TSource, TResult, TSelector>(this ReadOnlySpan<TSource> source, TResult value, TSelector selector)
+        static bool Contains<TSource, TResult, TSelector>(this ReadOnlySpan<TSource> source, TResult value, IEqualityComparer<TResult>? comparer, TSelector selector)
             where TSelector : struct, IFunction<TSource, TResult>
         {
             return source.Length switch
             {
                 0 => false,
-                _ => Utils.IsValueType<TResult>()
+                _ => Utils.UseDefault(comparer)
                     ? ValueContains(source, value, selector)
-                    : ReferenceContains(source, value, selector)
+                    : ReferenceContains(source, value, comparer, selector)
             };
 
             static bool ValueContains(ReadOnlySpan<TSource> source, TResult value, TSelector selector)
@@ -58,27 +58,27 @@ namespace NetFabric.Hyperlinq
                 return false;
             }
 
-            static bool ReferenceContains(ReadOnlySpan<TSource> source, TResult value, TSelector selector)
+            static bool ReferenceContains(ReadOnlySpan<TSource> source, TResult value, IEqualityComparer<TResult>? comparer, TSelector selector)
             {
-                var defaultComparer = EqualityComparer<TResult>.Default;
+                comparer ??= EqualityComparer<TResult>.Default;
                 foreach (var item in source)
                 {
-                    if (defaultComparer.Equals(selector.Invoke(item), value))
+                    if (comparer.Equals(selector.Invoke(item), value))
                         return true;
                 }
                 return false;
             }
         }
 
-        static bool ContainsRef<TSource, TResult, TSelector>(this ReadOnlySpan<TSource> source, TResult value, TSelector selector)
+        static bool ContainsRef<TSource, TResult, TSelector>(this ReadOnlySpan<TSource> source, TResult value, IEqualityComparer<TResult>? comparer, TSelector selector)
             where TSelector : struct, IFunctionIn<TSource, TResult>
         {
             return source.Length switch
             {
                 0 => false,
-                _ => Utils.IsValueType<TResult>()
+                _ => Utils.UseDefault(comparer)
                     ? ValueContains(source, value, selector)
-                    : ReferenceContains(source, value, selector)
+                    : ReferenceContains(source, value, comparer, selector)
             };
 
             static bool ValueContains(ReadOnlySpan<TSource> source, TResult value, TSelector selector)
@@ -91,12 +91,12 @@ namespace NetFabric.Hyperlinq
                 return false;
             }
 
-            static bool ReferenceContains(ReadOnlySpan<TSource> source, TResult value, TSelector selector)
+            static bool ReferenceContains(ReadOnlySpan<TSource> source, TResult value, IEqualityComparer<TResult>? comparer, TSelector selector)
             {
-                var defaultComparer = EqualityComparer<TResult>.Default;
+                comparer ??= EqualityComparer<TResult>.Default;
                 foreach (ref readonly var item in source)
                 {
-                    if (defaultComparer.Equals(selector.Invoke(in item), value))
+                    if (comparer.Equals(selector.Invoke(in item), value))
                         return true;
                 }
                 return false;
@@ -104,7 +104,7 @@ namespace NetFabric.Hyperlinq
         }
 
 
-        static bool ContainsAt<TSource, TResult, TSelector>(this ReadOnlySpan<TSource> source, TResult value, TSelector selector)
+        static bool ContainsAt<TSource, TResult, TSelector>(this ReadOnlySpan<TSource> source, TResult value, IEqualityComparer<TResult>? comparer, TSelector selector)
             where TSelector : struct, IFunction<TSource, int, TResult>
         {
             return source.Length switch
@@ -112,7 +112,7 @@ namespace NetFabric.Hyperlinq
                 0 => false,
                 _ => Utils.IsValueType<TResult>()
                     ? ValueContains(source, value, selector)
-                    : ReferenceContains(source, value, selector),
+                    : ReferenceContains(source, value, comparer, selector),
             };
 
             static bool ValueContains(ReadOnlySpan<TSource> source, TResult value, TSelector selector)
@@ -125,19 +125,19 @@ namespace NetFabric.Hyperlinq
                 return false;
             }
 
-            static bool ReferenceContains(ReadOnlySpan<TSource> source, TResult value, TSelector selector)
+            static bool ReferenceContains(ReadOnlySpan<TSource> source, TResult value, IEqualityComparer<TResult>? comparer, TSelector selector)
             {
-                var defaultComparer = EqualityComparer<TResult>.Default;
+                comparer ??= EqualityComparer<TResult>.Default;
                 for (var index = 0; index < source.Length; index++)
                 {
-                    if (defaultComparer.Equals(selector.Invoke(source[index], index), value))
+                    if (comparer.Equals(selector.Invoke(source[index], index), value))
                         return true;
                 }
                 return false;
             }
         }
 
-        static bool ContainsAtRef<TSource, TResult, TSelector>(this ReadOnlySpan<TSource> source, TResult value, TSelector selector)
+        static bool ContainsAtRef<TSource, TResult, TSelector>(this ReadOnlySpan<TSource> source, TResult value, IEqualityComparer<TResult>? comparer, TSelector selector)
             where TSelector : struct, IFunctionIn<TSource, int, TResult>
         {
             return source.Length switch
@@ -145,7 +145,7 @@ namespace NetFabric.Hyperlinq
                 0 => false,
                 _ => Utils.IsValueType<TResult>()
                     ? ValueContains(source, value, selector)
-                    : ReferenceContains(source, value, selector),
+                    : ReferenceContains(source, value, comparer, selector),
             };
 
             static bool ValueContains(ReadOnlySpan<TSource> source, TResult value, TSelector selector)
@@ -158,12 +158,12 @@ namespace NetFabric.Hyperlinq
                 return false;
             }
 
-            static bool ReferenceContains(ReadOnlySpan<TSource> source, TResult value, TSelector selector)
+            static bool ReferenceContains(ReadOnlySpan<TSource> source, TResult value, IEqualityComparer<TResult>? comparer, TSelector selector)
             {
-                var defaultComparer = EqualityComparer<TResult>.Default;
+                comparer ??= EqualityComparer<TResult>.Default;
                 for (var index = 0; index < source.Length; index++)
                 {
-                    if (defaultComparer.Equals(selector.Invoke(in source[index], index), value))
+                    if (comparer.Equals(selector.Invoke(in source[index], index), value))
                         return true;
                 }
                 return false;

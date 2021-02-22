@@ -87,31 +87,11 @@ namespace NetFabric.Hyperlinq
             void ICollection<TResult>.Clear() 
                 => Throw.NotSupportedException();
             public bool Contains(TResult item)
-                => ArrayExtensions.Contains(source.Span, item, selector);
+                => ArrayExtensions.Contains(source.Span, item, default, selector);
             bool ICollection<TResult>.Remove(TResult item) 
                 => Throw.NotSupportedException<bool>();
             int IList<TResult>.IndexOf(TResult item)
-            {
-                var span = source.Span;
-                if (Utils.IsValueType<TResult>())
-                {
-                    for (var index = 0; index < span.Length; index++)
-                    {
-                        if (EqualityComparer<TResult>.Default.Equals(selector.Invoke(span[index]), item))
-                            return index;
-                    }
-                }
-                else
-                {
-                    var defaultComparer = EqualityComparer<TResult>.Default;
-                    for (var index = 0; index < span.Length; index++)
-                    {
-                        if (defaultComparer.Equals(selector.Invoke(span[index]), item))
-                            return index;
-                    }
-                }
-                return -1;
-            }
+                => ArrayExtensions.IndexOf<TSource, TResult, TSelector>(source.Span, item, selector);
             void IList<TResult>.Insert(int index, TResult item)
                 => Throw.NotSupportedException();
             void IList<TResult>.RemoveAt(int index)
@@ -191,14 +171,14 @@ namespace NetFabric.Hyperlinq
             public readonly ReadOnlyListExtensions.SelectManyEnumerable<MemorySelectEnumerable<TSource, TResult, TSelector>, TResult, TSubEnumerable, TSubEnumerator, TResult2, FunctionWrapper<TResult, TSubEnumerable>> SelectMany<TSubEnumerable, TSubEnumerator, TResult2>(Func<TResult, TSubEnumerable> selector)
                 where TSubEnumerable : IValueEnumerable<TResult2, TSubEnumerator>
                 where TSubEnumerator : struct, IEnumerator<TResult2>
-                => this.SelectMany<MemorySelectEnumerable<TSource, TResult, TSelector>, TResult, TSubEnumerable, TSubEnumerator, TResult2>(selector);
+                => ReadOnlyListExtensions.SelectMany<MemorySelectEnumerable<TSource, TResult, TSelector>, TResult, TSubEnumerable, TSubEnumerator, TResult2>(this, selector);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly ReadOnlyListExtensions.SelectManyEnumerable<MemorySelectEnumerable<TSource, TResult, TSelector>, TResult, TSubEnumerable, TSubEnumerator, TResult2, TSelector2> SelectMany<TSubEnumerable, TSubEnumerator, TResult2, TSelector2>(TSelector2 selector = default)
                 where TSubEnumerable : IValueEnumerable<TResult2, TSubEnumerator>
                 where TSubEnumerator : struct, IEnumerator<TResult2>
                 where TSelector2 : struct, IFunction<TResult, TSubEnumerable>
-                => this.SelectMany<MemorySelectEnumerable<TSource, TResult, TSelector>, TResult, TSubEnumerable, TSubEnumerator, TResult2, TSelector2>(selector);
+                => ReadOnlyListExtensions.SelectMany<MemorySelectEnumerable<TSource, TResult, TSelector>, TResult, TSubEnumerable, TSubEnumerator, TResult2, TSelector2>(this, selector);
 
             #endregion
             #region Element

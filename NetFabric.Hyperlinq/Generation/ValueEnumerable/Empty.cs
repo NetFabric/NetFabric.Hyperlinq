@@ -9,18 +9,13 @@ namespace NetFabric.Hyperlinq
     public static partial class ValueEnumerable
     {
         
-        public static EmptyEnumerable<TSource> Empty<TSource>() =>
-            EmptyEnumerable<TSource>.Instance;
+        public static EmptyEnumerable<TSource> Empty<TSource>() 
+            => new();
 
-        public partial class EmptyEnumerable<TSource>
+        public partial struct EmptyEnumerable<TSource>
             : IValueReadOnlyList<TSource, EmptyEnumerable<TSource>.DisposableEnumerator>
             , IList<TSource>
         {
-            // ReSharper disable once HeapView.ObjectAllocation.Evident
-            internal static EmptyEnumerable<TSource> Instance { get; } = new();
-
-            EmptyEnumerable() { }
-
             public int Count 
                 => 0;
 

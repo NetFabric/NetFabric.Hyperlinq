@@ -32,7 +32,6 @@ namespace NetFabric.Hyperlinq
             internal DistinctEnumerable(TEnumerable source, IEqualityComparer<TSource>? comparer)
                 => (this.source, this.comparer) = (source, comparer);
 
-
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly Enumerator GetAsyncEnumerator(CancellationToken cancellationToken = default)
                 => new(in this, cancellationToken);

@@ -19,8 +19,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Partitioning.Take
                 .Take(source, count);
 
             // Act
-            var result = ReadOnlyListExtensions
-                .Take<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped, count);
+            var result = wrapped.AsValueEnumerable()
+                .Take(count);
 
             // Assert
             _ = result.Must()

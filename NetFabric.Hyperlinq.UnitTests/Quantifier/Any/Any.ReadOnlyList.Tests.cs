@@ -20,8 +20,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Any
                 System.Linq.Enumerable.Any(source);
 
             // Act
-            var result = ReadOnlyListExtensions
-                .Any<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped);
+            var result = wrapped.AsValueEnumerable()
+                .Any();
 
             // Assert
             _ = result.Must()
@@ -42,8 +42,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Any
                         System.Linq.Enumerable.Skip(source, skip), take));
 
             // Act
-            var result = ReadOnlyListExtensions
-                .Skip<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped, skip)
+            var result = wrapped.AsValueEnumerable()
+                .Skip(skip)
                 .Take(take)
                 .Any();
 
@@ -64,8 +64,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Any
                 System.Linq.Enumerable.Any(wrapped, predicate);
 
             // Act
-            var result = ReadOnlyListExtensions
-                .Any<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped, predicate);
+            var result = wrapped.AsValueEnumerable()
+                .Any(predicate);
 
             // Assert
             _ = result.Must()
@@ -86,8 +86,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Any
                         System.Linq.Enumerable.Skip(source, skip), take), predicate);
 
             // Act
-            var result = ReadOnlyListExtensions
-                .Skip<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped, skip)
+            var result = wrapped.AsValueEnumerable()
+                .Skip(skip)
                 .Take(take)
                 .Any(predicate);
 
@@ -109,8 +109,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Any
                     System.Linq.Enumerable.Where(source, predicate));
 
             // Act
-            var result = ReadOnlyListExtensions
-                .Any<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped, predicate);
+            var result = wrapped.AsValueEnumerable()
+                .Any(predicate);
 
             // Assert
             _ = result.Must()
@@ -133,8 +133,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Any
                                 source, skip), take), predicate));
 
             // Act
-            var result = ReadOnlyListExtensions
-                .Skip<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped, skip)
+            var result = wrapped.AsValueEnumerable()
+                .Skip(skip)
                 .Take(take)
                 .Any(predicate);
 

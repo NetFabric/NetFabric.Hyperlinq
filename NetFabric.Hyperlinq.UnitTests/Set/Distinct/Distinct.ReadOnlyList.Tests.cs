@@ -22,8 +22,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct
                 .Distinct();
 
             // Act
-            var result = ReadOnlyListExtensions
-                .Skip<Wrap.ReadOnlyListWrapper<int>, int>(wrapped, skip)
+            var result = wrapped.AsValueEnumerable()
+                .Skip(skip)
                 .Take(take)
                 .Distinct();
 
@@ -48,8 +48,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct
                 .ToArray();
 
             // Act
-            var result = ReadOnlyListExtensions
-                .Skip<Wrap.ReadOnlyListWrapper<int>, int>(wrapped, skip)
+            var result = wrapped.AsValueEnumerable()
+                .Skip(skip)
                 .Take(take)
                 .Distinct()
                 .ToArray();
@@ -76,8 +76,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct
                 .ToArray();
 
             // Act
-            using var result = ReadOnlyListExtensions
-                .Skip<Wrap.ReadOnlyListWrapper<int>, int>(wrapped, skip)
+            using var result = wrapped.AsValueEnumerable()
+                .Skip(skip)
                 .Take(take)
                 .Distinct()
                 .ToArray(pool);
@@ -102,8 +102,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct
                 .ToList();
 
             // Act
-            var result = ReadOnlyListExtensions
-                .Skip<Wrap.ReadOnlyListWrapper<int>, int>(wrapped, skip)
+            var result = wrapped
+                .Skip(skip)
                 .Take(take)
                 .Distinct()
                 .ToList();

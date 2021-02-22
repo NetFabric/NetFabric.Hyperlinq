@@ -14,8 +14,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Aggregation.Count
             var source = default(ArraySegment<int>);
 
             // Act
-            var result = ArrayExtensions
-                .Count(source);
+            var result = source.AsValueEnumerable()
+                .Count();
 
             // Assert
             _ = result.Must()
@@ -35,8 +35,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Aggregation.Count
                 .Count(wrapped);
 
             // Act
-            var result = ArrayExtensions
-                .Count(wrapped);
+            var result = wrapped.AsValueEnumerable()
+                .Count();
 
             // Assert
             _ = result.Must()
@@ -57,8 +57,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Aggregation.Count
                 .Count(predicate);
 
             // Act
-            var result = ArrayExtensions
-                .Skip(wrapped, skip)
+            var result = wrapped.AsValueEnumerable()
+                .Skip(skip)
                 .Take(take)
                 .Where(predicate)
                 .Count();
@@ -83,8 +83,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Aggregation.Count
                 .Count();
 
             // Act
-            var result = ArrayExtensions
-                .Skip(wrapped, skip)
+            var result = wrapped.AsValueEnumerable()
+                .Skip(skip)
                 .Take(take)
                 .Where(predicate)
                 .Count();

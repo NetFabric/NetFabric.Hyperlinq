@@ -79,31 +79,11 @@ namespace NetFabric.Hyperlinq
             void ICollection<TResult>.Clear() 
                 => Throw.NotSupportedException();
             public bool Contains(TResult item)
-                => source.Span.ContainsRef(item, selector);
+                => source.Span.ContainsRef(item, default, selector);
             bool ICollection<TResult>.Remove(TResult item) 
                 => Throw.NotSupportedException<bool>();
             int IList<TResult>.IndexOf(TResult item)
-            {
-                var span = source.Span;
-                if (Utils.IsValueType<TResult>())
-                {
-                    for (var index = 0; index < span.Length; index++)
-                    {
-                        if (EqualityComparer<TResult>.Default.Equals(selector.Invoke(in span[index]), item))
-                            return index;
-                    }
-                }
-                else
-                {
-                    var defaultComparer = EqualityComparer<TResult>.Default;
-                    for (var index = 0; index < span.Length; index++)
-                    {
-                        if (defaultComparer.Equals(selector.Invoke(in span[index]), item))
-                            return index;
-                    }
-                }
-                return -1;
-            }
+                => ArrayExtensions.IndexOfRef<TSource, TResult, TSelector>(source.Span, item, selector);
             void IList<TResult>.Insert(int index, TResult item)
                 => Throw.NotSupportedException();
             void IList<TResult>.RemoveAt(int index)

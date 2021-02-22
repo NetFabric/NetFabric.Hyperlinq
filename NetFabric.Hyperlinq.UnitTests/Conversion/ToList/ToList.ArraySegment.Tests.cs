@@ -15,8 +15,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
             var source = default(ArraySegment<int>);
 
             // Act
-            var result = ArrayExtensions
-                .ToList(source);
+            var result = source.AsValueEnumerable()
+                .ToList();
 
             // Assert
             _ = result.Must()
@@ -38,8 +38,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
                 .ToList(wrapped);
 
             // Act
-            var result = ArrayExtensions
-                .ToList(wrapped);
+            var result = wrapped.AsValueEnumerable()
+                .ToList();
 
             // Assert
             _ = result.Must()
@@ -63,8 +63,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
                 .ToList();
 
             // Act
-            var result = ArrayExtensions
-                .Skip(wrapped, skip)
+            var result = wrapped.AsValueEnumerable()
+                .Skip(skip)
                 .Take(take)
                 .Where(predicate)
                 .ToList();
@@ -91,8 +91,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
                 .ToList();
 
             // Act
-            var result = ArrayExtensions
-                .Skip(wrapped, skip)
+            var result = wrapped.AsValueEnumerable()
+                .Skip(skip)
                 .Take(take)
                 .Where(predicate)
                 .ToList();
@@ -119,8 +119,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
                 .ToList();
 
             // Act
-            var result = ArrayExtensions
-                .Skip(wrapped, skip)
+            var result = wrapped.AsValueEnumerable()
+                .Skip(skip)
                 .Take(take)
                 .Select(selector)
                 .ToList();
@@ -147,8 +147,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
                 .ToList();
 
             // Act
-            var result = ArrayExtensions
-                .Skip(wrapped, skip)
+            var result = wrapped.AsValueEnumerable()
+                .Skip(skip)
                 .Take(take)
                 .Select(selector)
                 .ToList();
@@ -176,8 +176,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
                 .ToList();
 
             // Act
-            var result = ArrayExtensions
-                .Skip(wrapped, skip)
+            var result = wrapped.AsValueEnumerable()
+                .Skip(skip)
                 .Take(take)
                 .Where(predicate)
                 .Select(selector)

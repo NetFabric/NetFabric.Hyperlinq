@@ -168,7 +168,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Aggregation.Count
             Option<string> option = Option.None;
 
             // Act
-            var result = option.SelectMany<ArrayBindings.ValueEnumerable<int>, ArrayBindings.ValueEnumerable<int>.DisposableEnumerator, int>(value => expected.AsValueEnumerable());
+            var result = option.SelectMany<ArrayExtensions.ArraySegmentValueEnumerable<int>, ArrayExtensions.ArraySegmentValueEnumerable<int>.DisposableEnumerator, int>(value => expected.AsValueEnumerable());
 
             // Assert
             _ = result.Must()
@@ -184,7 +184,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Aggregation.Count
             var option = Option.Some(value);
 
             // Act
-            var result = option.SelectMany<ArrayBindings.ValueEnumerable<int>, ArrayBindings.ValueEnumerable<int>.DisposableEnumerator, int>(value => expected.AsValueEnumerable());
+            var result = option.SelectMany<ArrayExtensions.ArraySegmentValueEnumerable<int>, ArrayExtensions.ArraySegmentValueEnumerable<int>.DisposableEnumerator, int>(value => expected.AsValueEnumerable());
 
             // Assert
             _ = result.Must()

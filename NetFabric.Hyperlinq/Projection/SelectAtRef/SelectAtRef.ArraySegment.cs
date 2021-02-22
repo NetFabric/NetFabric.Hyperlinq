@@ -12,11 +12,11 @@ namespace NetFabric.Hyperlinq
     {
         [GeneratorIgnore]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ArraySegmentSelectAtRefEnumerable<TSource, TResult, FunctionInWrapper<TSource, int, TResult>> Select<TSource, TResult>(this in ArraySegment<TSource> source, FunctionIn<TSource, int, TResult> selector)
+        internal static ArraySegmentSelectAtRefEnumerable<TSource, TResult, FunctionInWrapper<TSource, int, TResult>> Select<TSource, TResult>(this in ArraySegment<TSource> source, FunctionIn<TSource, int, TResult> selector)
             => source.SelectAtRef<TSource, TResult, FunctionInWrapper<TSource, int, TResult>>(new FunctionInWrapper<TSource, int, TResult>(selector));
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ArraySegmentSelectAtRefEnumerable<TSource, TResult, TSelector> SelectAtRef<TSource, TResult, TSelector>(this in ArraySegment<TSource> source, TSelector selector = default)
+        internal static ArraySegmentSelectAtRefEnumerable<TSource, TResult, TSelector> SelectAtRef<TSource, TResult, TSelector>(this in ArraySegment<TSource> source, TSelector selector = default)
             where TSelector : struct, IFunctionIn<TSource, int, TResult>
             => new(in source, selector);
 
@@ -83,63 +83,11 @@ namespace NetFabric.Hyperlinq
             void ICollection<TResult>.Clear()
                 => Throw.NotSupportedException();
             public bool Contains(TResult item)
-                => ((ReadOnlySpan<TSource>)source.AsSpan()).ContainsAtRef(item, selector);
+                => ((ReadOnlySpan<TSource>)source.AsSpan()).ContainsAtRef(item, default, selector);
             bool ICollection<TResult>.Remove(TResult item)
                 => Throw.NotSupportedException<bool>();
             int IList<TResult>.IndexOf(TResult item)
-            {
-                if (source.Any())
-                {
-                    var array = source.Array!;
-                    var start = source.Offset;
-                    var end = source.Count;
-                    if (start is 0)
-                    {
-                        if (Utils.IsValueType<TResult>())
-                        {
-                            for (var index = 0; index < end; index++)
-                            {
-                                ref readonly var arrayItem = ref array[index];
-                                if (EqualityComparer<TResult>.Default.Equals(selector.Invoke(in arrayItem, index), item))
-                                    return index;
-                            }
-                        }
-                        else
-                        {
-                            var defaultComparer = EqualityComparer<TResult>.Default;
-                            for (var index = 0; index < end; index++)
-                            {
-                                ref readonly var arrayItem = ref array[index];
-                                if (defaultComparer.Equals(selector.Invoke(in arrayItem, index), item))
-                                    return index;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        if (Utils.IsValueType<TResult>())
-                        {
-                            for (var index = 0; index < end; index++)
-                            {
-                                ref readonly var arrayItem = ref array[index + start];
-                                if (EqualityComparer<TResult>.Default.Equals(selector.Invoke(in arrayItem, index)!, item))
-                                    return index;
-                            }
-                        }
-                        else
-                        {
-                            var defaultComparer = EqualityComparer<TResult>.Default;
-                            for (var index = 0; index < end; index++)
-                            {
-                                ref readonly var arrayItem = ref array[index + start];
-                                if (defaultComparer.Equals(selector.Invoke(in arrayItem, index), item))
-                                    return index;
-                            }
-                        }
-                    }
-                }
-                return -1;
-            }
+                => ArrayExtensions.IndexOfAtRef<TSource, TResult, TSelector>(source, item, selector);
             void IList<TResult>.Insert(int index, TResult item)
                 => Throw.NotSupportedException();
             void IList<TResult>.RemoveAt(int index)

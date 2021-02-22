@@ -11,7 +11,7 @@ namespace NetFabric.Hyperlinq
     public static partial class ArrayExtensions
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static ArraySegmentWhereSelectEnumerable<TSource, TResult, TPredicate, TSelector> WhereSelect<TSource, TResult, TPredicate, TSelector>(
+        internal static ArraySegmentWhereSelectEnumerable<TSource, TResult, TPredicate, TSelector> WhereSelect<TSource, TResult, TPredicate, TSelector>(
             this in ArraySegment<TSource> source, 
             TPredicate predicate, 
             TSelector selector) 
@@ -124,7 +124,7 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Any()
-                => source.Any(predicate);
+                => ((ReadOnlySpan<TSource>)source.AsSpan()).Any(predicate);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Any(Func<TResult, bool> predicate)

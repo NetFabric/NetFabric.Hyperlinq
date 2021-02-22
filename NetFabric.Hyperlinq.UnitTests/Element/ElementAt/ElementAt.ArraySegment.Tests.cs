@@ -14,8 +14,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
             var source = default(ArraySegment<int>);
 
             // Act
-            var result = ArrayExtensions
-                .ElementAt(source, 0);
+            var result = source.AsValueEnumerable()
+                .ElementAt(0);
 
             // Assert
             _ = result.Must()
@@ -34,10 +34,10 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
             var wrapped = new ArraySegment<int>(source, offset, count);
 
             // Act
-            var optionTooSmall = ArrayExtensions
-                .ElementAt(wrapped, -1);
-            var optionTooLarge = ArrayExtensions
-                .ElementAt(wrapped, take);
+            var optionTooSmall = wrapped.AsValueEnumerable()
+                .ElementAt(-1);
+            var optionTooLarge = wrapped.AsValueEnumerable()
+                .ElementAt(take);
 
             // Assert
             _ = optionTooSmall.Must()
@@ -62,8 +62,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
             for (var index = 0; index < expected.Count; index++)
             {
                 // Act
-                var result = ArrayExtensions
-                    .ElementAt(wrapped, index);
+                var result = wrapped.AsValueEnumerable()
+                    .ElementAt(index);
 
                 // Assert
                 _ = result.Match(
@@ -82,13 +82,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
             var wrapped = new ArraySegment<int>(source);
 
             // Act
-            var optionTooSmall = ArrayExtensions
-                .Skip(wrapped, skip)
+            var optionTooSmall = wrapped.AsValueEnumerable()
+                .Skip(skip)
                 .Take(take)
                 .Where(predicate)
                 .ElementAt(-1);
-            var optionTooLarge = ArrayExtensions
-                .Skip(wrapped, skip)
+            var optionTooLarge = wrapped.AsValueEnumerable()
+                .Skip(skip)
                 .Take(take)
                 .Where(predicate)
                 .ElementAt(take);
@@ -118,8 +118,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
             for (var index = 0; index < expected.Count; index++)
             {
                 // Act
-                var result = ArrayExtensions
-                    .Skip(wrapped, skip)
+                var result = wrapped.AsValueEnumerable()
+                    .Skip(skip)
                     .Take(take)
                     .Where(predicate)
                     .ElementAt(index);
@@ -141,13 +141,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
             var wrapped = new ArraySegment<int>(source);
 
             // Act
-            var optionTooSmall = ArrayExtensions
-                .Skip(wrapped, skip)
+            var optionTooSmall = wrapped.AsValueEnumerable()
+                .Skip(skip)
                 .Take(take)
                 .Where(predicate)
                 .ElementAt(-1);
-            var optionTooLarge = ArrayExtensions
-                .Skip(wrapped, skip)
+            var optionTooLarge = wrapped.AsValueEnumerable()
+                .Skip(skip)
                 .Take(take)
                 .Where(predicate)
                 .ElementAt(take);
@@ -177,8 +177,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
             for (var index = 0; index < expected.Count; index++)
             {
                 // Act
-                var result = ArrayExtensions
-                    .Skip(wrapped, skip)
+                var result = wrapped.AsValueEnumerable()
+                    .Skip(skip)
                     .Take(take)
                     .Where(predicate)
                     .ElementAt(index);
@@ -200,13 +200,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
             var wrapped = new ArraySegment<int>(source);
 
             // Act
-            var optionTooSmall = ArrayExtensions
-                .Skip(wrapped, skip)
+            var optionTooSmall = wrapped.AsValueEnumerable()
+                .Skip(skip)
                 .Take(take)
                 .Select(selector)
                 .ElementAt(-1);
-            var optionTooLarge = ArrayExtensions
-                .Skip(wrapped, skip)
+            var optionTooLarge = wrapped.AsValueEnumerable()
+                .Skip(skip)
                 .Take(take)
                 .Select(selector)
                 .ElementAt(take);
@@ -236,8 +236,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
             for (var index = 0; index < expected.Count; index++)
             {
                 // Act
-                var result = ArrayExtensions
-                    .Skip(wrapped, skip)
+                var result = wrapped.AsValueEnumerable()
+                    .Skip(skip)
                     .Take(take)
                     .Select(selector)
                     .ElementAt(index);
@@ -259,13 +259,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
             var wrapped = new ArraySegment<int>(source);
 
             // Act
-            var optionTooSmall = ArrayExtensions
-                .Skip(wrapped, skip)
+            var optionTooSmall = wrapped.AsValueEnumerable()
+                .Skip(skip)
                 .Take(take)
                 .Select(selector)
                 .ElementAt(-1);
-            var optionTooLarge = ArrayExtensions
-                .Skip(wrapped, skip)
+            var optionTooLarge = wrapped.AsValueEnumerable()
+                .Skip(skip)
                 .Take(take)
                 .Select(selector)
                 .ElementAt(take);
@@ -295,8 +295,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
             for (var index = 0; index < expected.Count; index++)
             {
                 // Act
-                var result = ArrayExtensions
-                    .Skip(wrapped, skip)
+                var result = wrapped.AsValueEnumerable()
+                    .Skip(skip)
                     .Take(take)
                     .Select(selector)
                     .ElementAt(index);
@@ -318,14 +318,14 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
             var wrapped = new ArraySegment<int>(source);
 
             // Act
-            var optionTooSmall = ArrayExtensions
-                .Skip(wrapped, skip)
+            var optionTooSmall = wrapped.AsValueEnumerable()
+                .Skip(skip)
                 .Take(take)
                 .Where(predicate)
                 .Select(selector)
                 .ElementAt(-1);
-            var optionTooLarge = ArrayExtensions
-                .Skip(wrapped, skip)
+            var optionTooLarge = wrapped.AsValueEnumerable()
+                .Skip(skip)
                 .Take(take)
                 .Where(predicate)
                 .Select(selector)
@@ -357,8 +357,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
             for (var index = 0; index < expected.Count; index++)
             {
                 // Act
-                var result = ArrayExtensions
-                    .Skip(wrapped, skip)
+                var result = wrapped.AsValueEnumerable()
+                    .Skip(skip)
                     .Take(take)
                     .Where(predicate)
                     .Select(selector)

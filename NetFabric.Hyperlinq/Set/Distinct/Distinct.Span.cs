@@ -8,9 +8,7 @@ namespace NetFabric.Hyperlinq
     {
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static SpanDistinctEnumerable<TSource> Distinct<TSource>(
-            this Span<TSource> source, 
-            IEqualityComparer<TSource>? comparer = null)
+        public static SpanDistinctEnumerable<TSource> Distinct<TSource>(this Span<TSource> source, IEqualityComparer<TSource>? comparer = null)
             => ((ReadOnlySpan<TSource>)source).Distinct(comparer);
     }
 }

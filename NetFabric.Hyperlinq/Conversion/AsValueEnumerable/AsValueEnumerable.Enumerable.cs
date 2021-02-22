@@ -47,12 +47,12 @@ namespace NetFabric.Hyperlinq
 
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly TEnumerator GetEnumerator() 
+            public TEnumerator GetEnumerator() 
                 => getEnumerator.Invoke(source);
-            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() 
+            IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() 
                 // ReSharper disable once HeapView.BoxingAllocation
                 => getEnumerator.Invoke(source);
-            readonly IEnumerator IEnumerable.GetEnumerator() 
+            IEnumerator IEnumerable.GetEnumerator() 
                 // ReSharper disable once HeapView.BoxingAllocation
                 => getEnumerator.Invoke(source);
         }
@@ -78,7 +78,7 @@ namespace NetFabric.Hyperlinq
                 => new Enumerator(source);
 
             [StructLayout(LayoutKind.Auto)]
-            public struct Enumerator
+            public readonly struct Enumerator
                 : IEnumerator<TSource>
             {
                 readonly IEnumerator<TSource> enumerator;

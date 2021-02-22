@@ -11,26 +11,26 @@ namespace NetFabric.Hyperlinq
     {
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ValueEnumerableWrapper<TSource> AsValueEnumerable<TSource>(this IReadOnlyCollection<TSource> source)
+        public static CollectionValueEnumerable<TSource> AsValueEnumerable<TSource>(this IReadOnlyCollection<TSource> source)
             => new(source);
 
         [GeneratorIgnore]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ValueEnumerableWrapper<TEnumerable, TEnumerator, TSource, FunctionWrapper<TEnumerable, TEnumerator>> AsValueEnumerable<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TEnumerable, TEnumerator> getEnumerator)
+        public static CollectionValueEnumerable<TEnumerable, TEnumerator, TSource, FunctionWrapper<TEnumerable, TEnumerator>> AsValueEnumerable<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TEnumerable, TEnumerator> getEnumerator)
             where TEnumerable : IReadOnlyCollection<TSource>
             where TEnumerator : struct, IEnumerator<TSource>
             => AsValueEnumerable<TEnumerable, TEnumerator, TSource, FunctionWrapper<TEnumerable, TEnumerator>>(source, new FunctionWrapper<TEnumerable, TEnumerator>(getEnumerator));
 
         [GeneratorIgnore]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ValueEnumerableWrapper<TEnumerable, TEnumerator, TSource, TEnumeratorGenerator> AsValueEnumerable<TEnumerable, TEnumerator, TSource, TEnumeratorGenerator>(this TEnumerable source, TEnumeratorGenerator getEnumerator)
+        public static CollectionValueEnumerable<TEnumerable, TEnumerator, TSource, TEnumeratorGenerator> AsValueEnumerable<TEnumerable, TEnumerator, TSource, TEnumeratorGenerator>(this TEnumerable source, TEnumeratorGenerator getEnumerator)
             where TEnumerable : IReadOnlyCollection<TSource>
             where TEnumerator : struct, IEnumerator<TSource>
             where TEnumeratorGenerator : struct, IFunction<TEnumerable, TEnumerator>
             => new(source, getEnumerator);
 
         [StructLayout(LayoutKind.Auto)]
-        public readonly partial struct ValueEnumerableWrapper<TEnumerable, TEnumerator, TSource, TEnumeratorGenerator>
+        public partial struct CollectionValueEnumerable<TEnumerable, TEnumerator, TSource, TEnumeratorGenerator>
             : IValueReadOnlyCollection<TSource, TEnumerator>
             , ICollection<TSource>
             where TEnumerable : IReadOnlyCollection<TSource>
@@ -38,9 +38,9 @@ namespace NetFabric.Hyperlinq
             where TEnumeratorGenerator : struct, IFunction<TEnumerable, TEnumerator>
         {
             readonly TEnumerable source;
-            readonly TEnumeratorGenerator getEnumerator;
+            TEnumeratorGenerator getEnumerator;
 
-            internal ValueEnumerableWrapper(TEnumerable source, TEnumeratorGenerator getEnumerator)
+            internal CollectionValueEnumerable(TEnumerable source, TEnumeratorGenerator getEnumerator)
             {
                 this.source = source;
                 this.getEnumerator = getEnumerator;
@@ -53,12 +53,12 @@ namespace NetFabric.Hyperlinq
             }
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly TEnumerator GetEnumerator() 
+            public TEnumerator GetEnumerator() 
                 => getEnumerator.Invoke(source);
-            readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() 
+            IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() 
                 // ReSharper disable once HeapView.BoxingAllocation
                 => getEnumerator.Invoke(source);
-            readonly IEnumerator IEnumerable.GetEnumerator() 
+            IEnumerator IEnumerable.GetEnumerator() 
                 // ReSharper disable once HeapView.BoxingAllocation
                 => getEnumerator.Invoke(source);
 
@@ -106,13 +106,13 @@ namespace NetFabric.Hyperlinq
         }
 
         [StructLayout(LayoutKind.Auto)]
-        public readonly partial struct ValueEnumerableWrapper<TSource>
-            : IValueReadOnlyCollection<TSource, ValueEnumerableWrapper<TSource>.Enumerator>
+        public readonly partial struct CollectionValueEnumerable<TSource>
+            : IValueReadOnlyCollection<TSource, CollectionValueEnumerable<TSource>.Enumerator>
             , ICollection<TSource>
         {
             readonly IReadOnlyCollection<TSource> source;
 
-            internal ValueEnumerableWrapper(IReadOnlyCollection<TSource> source) 
+            internal CollectionValueEnumerable(IReadOnlyCollection<TSource> source) 
                 => this.source = source;
 
             public readonly int Count
@@ -206,11 +206,11 @@ namespace NetFabric.Hyperlinq
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int Count<TSource>(this ValueEnumerableWrapper<TSource> source)
+        public static int Count<TSource>(this CollectionValueEnumerable<TSource> source)
             => source.Count;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int Count<TEnumerable, TEnumerator, TSource, TEnumeratorGenerator>(this ValueEnumerableWrapper<TEnumerable, TEnumerator, TSource, TEnumeratorGenerator> source)
+        public static int Count<TEnumerable, TEnumerator, TSource, TEnumeratorGenerator>(this CollectionValueEnumerable<TEnumerable, TEnumerator, TSource, TEnumeratorGenerator> source)
             where TEnumerable : IReadOnlyCollection<TSource>
             where TEnumerator : struct, IEnumerator<TSource>
             where TEnumeratorGenerator : struct, IFunction<TEnumerable, TEnumerator>

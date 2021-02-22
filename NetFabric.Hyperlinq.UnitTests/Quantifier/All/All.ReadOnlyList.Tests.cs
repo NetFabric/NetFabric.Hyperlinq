@@ -18,8 +18,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.All
                 System.Linq.Enumerable.All(wrapped, predicate);
 
             // Act
-            var result = ReadOnlyListExtensions
-                .All<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped, predicate);
+            var result = wrapped.AsValueEnumerable()
+                .All(predicate);
 
             // Assert
             _ = result.Must()
@@ -40,8 +40,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.All
                         System.Linq.Enumerable.Skip(source, skip), take), predicate);
 
             // Act
-            var result = ReadOnlyListExtensions
-                .Skip<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped, skip)
+            var result = wrapped.AsValueEnumerable()
+                .Skip(skip)
                 .Take(take)
                 .All(predicate);
 
@@ -63,8 +63,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.All
                     System.Linq.Enumerable.Where(source, predicate)) == source.Length;
 
             // Act
-            var result = ReadOnlyListExtensions
-                .All<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped, predicate);
+            var result = wrapped.AsValueEnumerable()
+                .All(predicate);
 
             // Assert
             _ = result.Must()
@@ -90,8 +90,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.All
                             System.Linq.Enumerable.Skip(source, skip), take), predicate)) == count;
 
             // Act
-            var result = ReadOnlyListExtensions
-                .Skip<Wrap.ValueReadOnlyListWrapper<int>, int>(wrapped, skip)
+            var result = wrapped.AsValueEnumerable()
+                .Skip(skip)
                 .Take(take)
                 .All(predicate);
 
