@@ -271,12 +271,7 @@ namespace NetFabric.Hyperlinq
 
             public TResult[] ToArray()
             {
-#if NET5_0
-                var result = GC.AllocateUninitializedArray<TResult>(count);
-#else
-                // ReSharper disable once HeapView.ObjectAllocation.Evident
-                var result = new TResult[count];
-#endif
+                var result = Utils.AllocateUninitializedArray<TResult>(count);
                 ArrayExtensions.CopyRange<TResult, TVectorSelector, TSelector>(start, count, result.AsSpan(), vectorSelector, selector);
                 return result;
             }

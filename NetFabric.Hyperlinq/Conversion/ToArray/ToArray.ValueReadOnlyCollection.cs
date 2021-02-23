@@ -23,24 +23,14 @@ namespace NetFabric.Hyperlinq
 
             static TSource[] BuildArrayFromCollection(ICollection<TSource> collection)
             {
-#if NET5_0
-                var result = GC.AllocateUninitializedArray<TSource>(collection.Count);
-#else
-                // ReSharper disable once HeapView.ObjectAllocation.Evident
-                var result = new TSource[collection.Count];
-#endif
+                var result = Utils.AllocateUninitializedArray<TSource>(collection.Count);
                 collection.CopyTo(result, 0);
                 return result;                
             }
 
             static TSource[] BuildArray(TEnumerable source)
             {
-#if NET5_0
-                var result = GC.AllocateUninitializedArray<TSource>(source.Count);
-#else
-                // ReSharper disable once HeapView.ObjectAllocation.Evident
-                var result = new TSource[source.Count];
-#endif
+                var result = Utils.AllocateUninitializedArray<TSource>(source.Count);
                 Copy<TEnumerable, TEnumerator, TSource>(source, result);
                 return result;
             }

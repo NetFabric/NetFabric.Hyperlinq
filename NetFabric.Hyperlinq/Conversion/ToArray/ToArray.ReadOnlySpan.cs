@@ -182,13 +182,8 @@ namespace NetFabric.Hyperlinq
 
             static TResult[] BuildArray(ReadOnlySpan<TSource> source, TSelector selector)
             {
-#if NET5_0
-                var result = GC.AllocateUninitializedArray<TResult>(source.Length);
-#else
-                // ReSharper disable once HeapView.ObjectAllocation.Evident
-                var result = new TResult[source.Length];
-#endif
-                Copy<TSource, TResult, TSelector>(source, result.AsSpan(), selector);
+                var result = Utils.AllocateUninitializedArray<TResult>(source.Length);
+                Copy(source, result.AsSpan(), selector);
                 return result;
             }
         }
@@ -208,13 +203,8 @@ namespace NetFabric.Hyperlinq
 
             static TResult[] BuildArray(ReadOnlySpan<TSource> source, TVectorSelector vectorSelector, TSelector selector)
             {
-#if NET5_0
-                var result = GC.AllocateUninitializedArray<TResult>(source.Length);
-#else
-                // ReSharper disable once HeapView.ObjectAllocation.Evident
-                var result = new TResult[source.Length];
-#endif
-                CopyVector<TSource, TResult, TVectorSelector, TSelector>(source, result.AsSpan(), vectorSelector, selector);
+                var result = Utils.AllocateUninitializedArray<TResult>(source.Length);
+                CopyVector(source, result.AsSpan(), vectorSelector, selector);
                 return result;
             }
         }
@@ -252,13 +242,8 @@ namespace NetFabric.Hyperlinq
 
             static TResult[] BuildArray(ReadOnlySpan<TSource> source, TSelector selector)
             {
-#if NET5_0
-                var result = GC.AllocateUninitializedArray<TResult>(source.Length);
-#else
-                // ReSharper disable once HeapView.ObjectAllocation.Evident
-                var result = new TResult[source.Length];
-#endif
-                CopyRef<TSource, TResult, TSelector>(source, result.AsSpan(), selector);
+                var result = Utils.AllocateUninitializedArray<TResult>(source.Length);
+                CopyRef(source, result.AsSpan(), selector);
                 return result;
             }
         }
@@ -313,13 +298,8 @@ namespace NetFabric.Hyperlinq
 
             static TResult[] BuildArray(ReadOnlySpan<TSource> source, TSelector selector)
             {
-#if NET5_0
-                var result = GC.AllocateUninitializedArray<TResult>(source.Length);
-#else
-                // ReSharper disable once HeapView.ObjectAllocation.Evident
-                var result = new TResult[source.Length];
-#endif
-                CopyAt<TSource, TResult, TSelector>(source, result.AsSpan(), selector);
+                var result = Utils.AllocateUninitializedArray<TResult>(source.Length);
+                CopyAt(source, result.AsSpan(), selector);
                 return result;
             }
         }
@@ -336,13 +316,8 @@ namespace NetFabric.Hyperlinq
 
             static TResult[] BuildArray(ReadOnlySpan<TSource> source, TSelector selector)
             {
-#if NET5_0
-                var result = GC.AllocateUninitializedArray<TResult>(source.Length);
-#else
-                // ReSharper disable once HeapView.ObjectAllocation.Evident
-                var result = new TResult[source.Length];
-#endif
-                CopyAtRef<TSource, TResult, TSelector>(source, result.AsSpan(), selector);
+                var result = Utils.AllocateUninitializedArray<TResult>(source.Length);
+                CopyAtRef(source, result.AsSpan(), selector);
                 return result;
             }
         }

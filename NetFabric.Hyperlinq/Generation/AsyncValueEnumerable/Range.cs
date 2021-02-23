@@ -165,11 +165,7 @@ namespace NetFabric.Hyperlinq
 
             public ValueTask<int[]> ToArrayAsync(CancellationToken cancellationToken = default)
             {
-#if NET5_0
-                var array = GC.AllocateUninitializedArray<int>(count);
-#else
-                var array = new int[count];
-#endif
+                var array = Utils.AllocateUninitializedArray<int>(count);
                 if (start is 0)
                 {
                     for (var index = 0; index < count; index++)

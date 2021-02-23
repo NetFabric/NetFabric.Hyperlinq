@@ -161,11 +161,7 @@ namespace NetFabric.Hyperlinq
         /// <returns>An array of the items in this set.</returns>
         public readonly TElement[] ToArray()
         {
-#if NET5_0
-            var array = GC.AllocateUninitializedArray<TElement>(Count);
-#else
-            var array = new TElement[Count];
-#endif
+            var array = Utils.AllocateUninitializedArray<TElement>(Count);
             CopyTo(array);
             return array;
         }

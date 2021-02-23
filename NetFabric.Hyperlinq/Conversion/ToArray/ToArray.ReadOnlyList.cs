@@ -24,12 +24,7 @@ namespace NetFabric.Hyperlinq
 
             static TSource[] BuildArray(TList source, int offset, int count)
             {
-#if NET5_0
-                var result = GC.AllocateUninitializedArray<TSource>(count);
-#else
-                // ReSharper disable once HeapView.ObjectAllocation.Evident
-                var result = new TSource[count];
-#endif
+                var result = Utils.AllocateUninitializedArray<TSource>(count);
                 Copy(source, offset, result.AsSpan(), count);
                 return result;
             }
@@ -152,12 +147,7 @@ namespace NetFabric.Hyperlinq
 
             static TResult[] BuildArray(TList source, TSelector selector, int offset, int count)
             {
-#if NET5_0
-                var result = GC.AllocateUninitializedArray<TResult>(count);
-#else
-                // ReSharper disable once HeapView.ObjectAllocation.Evident
-                var result = new TResult[count];
-#endif
+                var result = Utils.AllocateUninitializedArray<TResult>(count);
                 Copy<TList, TSource, TResult, TSelector>(source, offset, result.AsSpan(), count, selector);
                 return result;
             }
@@ -198,12 +188,7 @@ namespace NetFabric.Hyperlinq
 
             static TResult[] BuildArray(TList source, TSelector selector, int offset, int count)
             {
-#if NET5_0
-                var result = GC.AllocateUninitializedArray<TResult>(count);
-#else
-                // ReSharper disable once HeapView.ObjectAllocation.Evident
-                var result = new TResult[count];
-#endif
+                var result = Utils.AllocateUninitializedArray<TResult>(count);
                 CopyAt<TList, TSource, TResult, TSelector>(source, offset, result.AsSpan(), count, selector);
                 return result;
             }
