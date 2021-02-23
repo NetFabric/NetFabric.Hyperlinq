@@ -7,11 +7,11 @@ namespace NetFabric.Hyperlinq
     public static partial class ValueEnumerable
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int SumRange(int start, int count)
+        static int SumRange(int start, int count)
             => count * (start + start + count) / 2;
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static unsafe TResult SumRange<TResult, TVectorSelector, TSelector>(int start, int count, TVectorSelector vectorSelector, TSelector selector)
+        static unsafe TResult SumRange<TResult, TVectorSelector, TSelector>(int start, int count, TVectorSelector vectorSelector, TSelector selector)
             where TVectorSelector : struct, IFunction<Vector<int>, Vector<TResult>>
             where TSelector : struct, IFunction<int, TResult>
             where TResult : struct

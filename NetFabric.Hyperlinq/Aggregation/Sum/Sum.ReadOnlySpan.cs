@@ -124,17 +124,6 @@ namespace NetFabric.Hyperlinq
             return sum;
         }
 
-        static TSum SumNullable<TSource, TSum>(this ReadOnlySpan<TSource> source)
-            where TSum : struct
-        {
-            var sum = default(TSum);
-
-            foreach (var item in source)
-                sum = GenericsOperator.Sum(item, sum);
-
-            return sum;
-        }
-
         static TSum Sum<TSource, TSum, TPredicate>(this ReadOnlySpan<TSource> source, TPredicate predicate)
             where TPredicate : struct, IFunction<TSource, bool>
             where TSum : struct

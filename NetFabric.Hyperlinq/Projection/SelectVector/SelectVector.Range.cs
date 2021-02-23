@@ -328,40 +328,35 @@ namespace NetFabric.Hyperlinq
             where TResult : struct
             => source.Count;
 
-        // [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        // public static int Sum<int, TVectorSelector, TSelector>(this RangeSelectVectorEnumerable<int, TVectorSelector, TSelector> source)
-        //     where TVectorSelector : struct, IFunction<Vector<int>, Vector<int>>
-        //     where TSelector : struct, IFunction<int, int>
-        //     where TResult : struct
-        //     => source.source.Sum<int, int, TVectorSelector, TSelector>(source.vectorSelector, source.selector);
-        //
-        // [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        // public static long Sum<long, TVectorSelector, TSelector>(this RangeSelectVectorEnumerable<long, TVectorSelector, TSelector> source)
-        //     where TVectorSelector : struct, IFunction<Vector<int>, Vector<long>>
-        //     where TSelector : struct, IFunction<int, long>
-        //     where TResult : struct
-        //     => source.source.Sum<int, long, TVectorSelector, TSelector>(source.vectorSelector, source.selector);
-        //
-        // [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        // public static float Sum<float, TVectorSelector, TSelector>(this RangeSelectVectorEnumerable<float, TVectorSelector, TSelector> source)
-        //     where TVectorSelector : struct, IFunction<Vector<int>, Vector<float>>
-        //     where TSelector : struct, IFunction<int, float>
-        //     where TResult : struct
-        //     => source.source.Sum<int, float, TVectorSelector, TSelector>(source.vectorSelector, source.selector);
-        //
-        // [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        // public static double Sum<double, TVectorSelector, TSelector>(this RangeSelectVectorEnumerable<double, TVectorSelector, TSelector> source)
-        //     where TVectorSelector : struct, IFunction<Vector<int>, Vector<double>>
-        //     where TSelector : struct, IFunction<int, double>
-        //     where TResult : struct
-        //     => source.source.Sum<int, double, TVectorSelector, TSelector>(source.vectorSelector, source.selector);
-        //
-        // [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        // public static decimal Sum<decimal, TVectorSelector, TSelector>(this RangeSelectVectorEnumerable<decimal, TVectorSelector, TSelector> source)
-        //     where TVectorSelector : struct, IFunction<Vector<int>, Vector<decimal>>
-        //     where TSelector : struct, IFunction<int, decimal>
-        //     where TResult : struct
-        //     => source.source.Sum<int, decimal, TVectorSelector, TSelector>(source.vectorSelector, source.selector);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Sum<TVectorSelector, TSelector>(this RangeSelectVectorEnumerable<int, TVectorSelector, TSelector> source)
+            where TVectorSelector : struct, IFunction<Vector<int>, Vector<int>>
+            where TSelector : struct, IFunction<int, int>
+            => SumRange<int, TVectorSelector, TSelector>(source.start, source.count, source.vectorSelector, source.selector);
+        
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static long Sum<TVectorSelector, TSelector>(this RangeSelectVectorEnumerable<long, TVectorSelector, TSelector> source)
+            where TVectorSelector : struct, IFunction<Vector<int>, Vector<long>>
+            where TSelector : struct, IFunction<int, long>
+            => SumRange<long, TVectorSelector, TSelector>(source.start, source.count, source.vectorSelector, source.selector);
+        
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float Sum<TVectorSelector, TSelector>(this RangeSelectVectorEnumerable<float, TVectorSelector, TSelector> source)
+            where TVectorSelector : struct, IFunction<Vector<int>, Vector<float>>
+            where TSelector : struct, IFunction<int, float>
+            => SumRange<float, TVectorSelector, TSelector>(source.start, source.count, source.vectorSelector, source.selector);
+        
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static double Sum<TVectorSelector, TSelector>(this RangeSelectVectorEnumerable<double, TVectorSelector, TSelector> source)
+            where TVectorSelector : struct, IFunction<Vector<int>, Vector<double>>
+            where TSelector : struct, IFunction<int, double>
+            => SumRange<double, TVectorSelector, TSelector>(source.start, source.count, source.vectorSelector, source.selector);
+        
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static decimal Sum<TVectorSelector, TSelector>(this RangeSelectVectorEnumerable<decimal, TVectorSelector, TSelector> source)
+            where TVectorSelector : struct, IFunction<Vector<int>, Vector<decimal>>
+            where TSelector : struct, IFunction<int, decimal>
+            => SumRange<decimal, TVectorSelector, TSelector>(source.start, source.count, source.vectorSelector, source.selector);
     }
 }
 
