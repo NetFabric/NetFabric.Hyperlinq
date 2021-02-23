@@ -119,7 +119,7 @@ namespace NetFabric.Hyperlinq
             var sum = default(TSum);
 
             foreach (var item in source)
-                sum = GenericsOperator.Sum(item, sum);
+                sum = GenericsOperator.AddNullable(item, sum);
 
             return sum;
         }
@@ -132,7 +132,7 @@ namespace NetFabric.Hyperlinq
             foreach (var item in source)
             {
                 if (predicate.Invoke(item))
-                    sum = GenericsOperator.Sum(item, sum);
+                    sum = GenericsOperator.AddNullable(item, sum);
             }
             return sum;
         }
@@ -145,7 +145,7 @@ namespace NetFabric.Hyperlinq
             foreach (ref readonly var item in source)
             {
                 if (predicate.Invoke(in item))
-                    sum = GenericsOperator.Sum(item, sum);
+                    sum = GenericsOperator.AddNullable(item, sum);
             }
             return sum;
         }
@@ -159,7 +159,7 @@ namespace NetFabric.Hyperlinq
             {
                 var item = source[index];
                 if (predicate.Invoke(item, index))
-                    sum = GenericsOperator.Sum(item, sum);
+                    sum = GenericsOperator.AddNullable(item, sum);
             }
             return sum;
         }
@@ -173,7 +173,7 @@ namespace NetFabric.Hyperlinq
             {
                 ref readonly var item = ref source[index];
                 if (predicate.Invoke(in item, index))
-                    sum = GenericsOperator.Sum(item, sum);
+                    sum = GenericsOperator.AddNullable(item, sum);
             }
             return sum;
         }
@@ -184,7 +184,7 @@ namespace NetFabric.Hyperlinq
         {
             var sum = default(TSum);
             foreach (var item in source)
-                sum = GenericsOperator.Sum(selector.Invoke(item), sum);
+                sum = GenericsOperator.AddNullable(selector.Invoke(item), sum);
             return sum;
         }
 
@@ -194,7 +194,7 @@ namespace NetFabric.Hyperlinq
         {
             var sum = default(TSum);
             foreach (ref readonly var item in source)
-                sum = GenericsOperator.Sum(selector.Invoke(in item), sum);
+                sum = GenericsOperator.AddNullable(selector.Invoke(in item), sum);
             return sum;
         }
 
@@ -206,7 +206,7 @@ namespace NetFabric.Hyperlinq
             for (var index = 0; index < source.Length; index++)
             {
                 var item = source[index];
-                sum = GenericsOperator.Sum(selector.Invoke(item, index), sum);
+                sum = GenericsOperator.AddNullable(selector.Invoke(item, index), sum);
             }
             return sum;
         }
@@ -219,7 +219,7 @@ namespace NetFabric.Hyperlinq
             for (var index = 0; index < source.Length; index++)
             {
                 ref readonly var item = ref source[index];
-                sum = GenericsOperator.Sum(selector.Invoke(in item, index), sum);
+                sum = GenericsOperator.AddNullable(selector.Invoke(in item, index), sum);
             }
             return sum;
         }
@@ -234,7 +234,7 @@ namespace NetFabric.Hyperlinq
             foreach (var item in source)
             {
                 if (predicate.Invoke(item))
-                    sum = GenericsOperator.Sum(selector.Invoke(item), sum);
+                    sum = GenericsOperator.AddNullable(selector.Invoke(item), sum);
             }
             return sum;
         }
@@ -248,7 +248,7 @@ namespace NetFabric.Hyperlinq
             foreach (ref readonly var item in source)
             {
                 if (predicate.Invoke(in item))
-                    sum = GenericsOperator.Sum(selector.Invoke(in item), sum);
+                    sum = GenericsOperator.AddNullable(selector.Invoke(in item), sum);
             }
             return sum;
         }

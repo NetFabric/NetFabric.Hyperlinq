@@ -43,40 +43,40 @@ namespace NetFabric.Hyperlinq
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static TSum Sum<TValue, TSum>(TValue a, TSum b)
-            where TSum : struct
+        public static TValue AddNullable<TNullableValue, TValue>(TNullableValue a, TValue b)
+            where TValue : struct
         {
-            if (typeof(TValue) == typeof(int?) && typeof(TSum) == typeof(int))
-                return (TSum)(object)(((int?)(object)a).GetValueOrDefault() + (int)(object)b);
+            if (typeof(TNullableValue) == typeof(int?) && typeof(TValue) == typeof(int))
+                return (TValue)(object)(((int?)(object)a).GetValueOrDefault() + (int)(object)b);
 
-            if (typeof(TValue) == typeof(int) && typeof(TSum) == typeof(int))
-                return (TSum)(object)((int)(object)a! + (int)(object)b);
+            if (typeof(TNullableValue) == typeof(int) && typeof(TValue) == typeof(int))
+                return (TValue)(object)((int)(object)a! + (int)(object)b);
 
-            if (typeof(TValue) == typeof(long?) && typeof(TSum) == typeof(long))
-                return (TSum)(object)(((long?)(object)a).GetValueOrDefault() + (long)(object)b);
+            if (typeof(TNullableValue) == typeof(long?) && typeof(TValue) == typeof(long))
+                return (TValue)(object)(((long?)(object)a).GetValueOrDefault() + (long)(object)b);
 
-            if (typeof(TValue) == typeof(long) && typeof(TSum) == typeof(long))
-                return (TSum)(object)((long)(object)a! + (long)(object)b);
+            if (typeof(TNullableValue) == typeof(long) && typeof(TValue) == typeof(long))
+                return (TValue)(object)((long)(object)a! + (long)(object)b);
 
-            if (typeof(TValue) == typeof(float?) && typeof(TSum) == typeof(float))
-                return (TSum)(object)(((float?)(object)a).GetValueOrDefault() + (float)(object)b);
+            if (typeof(TNullableValue) == typeof(float?) && typeof(TValue) == typeof(float))
+                return (TValue)(object)(((float?)(object)a).GetValueOrDefault() + (float)(object)b);
 
-            if (typeof(TValue) == typeof(float) && typeof(TSum) == typeof(float))
-                return (TSum)(object)((float)(object)a! + (float)(object)b);
+            if (typeof(TNullableValue) == typeof(float) && typeof(TValue) == typeof(float))
+                return (TValue)(object)((float)(object)a! + (float)(object)b);
 
-            if (typeof(TValue) == typeof(double?) && typeof(TSum) == typeof(double))
-                return (TSum)(object)(((double?)(object)a).GetValueOrDefault() + (double)(object)b);
+            if (typeof(TNullableValue) == typeof(double?) && typeof(TValue) == typeof(double))
+                return (TValue)(object)(((double?)(object)a).GetValueOrDefault() + (double)(object)b);
 
-            if (typeof(TValue) == typeof(double) && typeof(TSum) == typeof(double))
-                return (TSum)(object)((double)(object)a! + (double)(object)b);
+            if (typeof(TNullableValue) == typeof(double) && typeof(TValue) == typeof(double))
+                return (TValue)(object)((double)(object)a! + (double)(object)b);
 
-            if (typeof(TValue) == typeof(decimal?) && typeof(TSum) == typeof(decimal))
-                return (TSum)(object)(((decimal?)(object)a).GetValueOrDefault() + (decimal)(object)b);
+            if (typeof(TNullableValue) == typeof(decimal?) && typeof(TValue) == typeof(decimal))
+                return (TValue)(object)(((decimal?)(object)a).GetValueOrDefault() + (decimal)(object)b);
 
-            if (typeof(TValue) == typeof(decimal) && typeof(TSum) == typeof(decimal))
-                return (TSum)(object)((decimal)(object)a! + (decimal)(object)b);
+            if (typeof(TNullableValue) == typeof(decimal) && typeof(TValue) == typeof(decimal))
+                return (TValue)(object)((decimal)(object)a! + (decimal)(object)b);
 
-            return Throw.NotSupportedException<TSum>();
+            return Throw.NotSupportedException<TValue>();
         }
 
 
