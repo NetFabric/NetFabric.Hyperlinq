@@ -10,9 +10,9 @@ namespace NetFabric.Hyperlinq
         public static List<TSource> ToList<TEnumerable, TEnumerator, TSource>(this TEnumerable source)
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
-            => source.Count switch
+            => source switch
             {
-                0 => new List<TSource>(),
+                { Count: 0 } => new List<TSource>(),
                 _ => source switch
                 {
                     // ReSharper disable once HeapView.PossibleBoxingAllocation

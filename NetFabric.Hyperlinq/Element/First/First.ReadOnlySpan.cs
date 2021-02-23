@@ -8,9 +8,9 @@ namespace NetFabric.Hyperlinq
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Option<TSource> First<TSource>(this ReadOnlySpan<TSource> source) 
-            => source.Length switch
+            => source switch
             {
-                0 => Option.None,
+                { Length: 0 } => Option.None,
                 _ => Option.Some(source[0])
             };
 
@@ -41,9 +41,9 @@ namespace NetFabric.Hyperlinq
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static Option<TResult> First<TSource, TResult, TSelector>(this ReadOnlySpan<TSource> source, TSelector selector)
             where TSelector : struct, IFunction<TSource, TResult>
-            => source.Length switch
+            => source switch
             {
-                0 => Option.None,
+                { Length: 0 } => Option.None,
                 _ => Option.Some(selector.Invoke(source[0])),
             };
 
@@ -51,9 +51,9 @@ namespace NetFabric.Hyperlinq
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static Option<TResult> FirstAt<TSource, TResult, TSelector>(this ReadOnlySpan<TSource> source, TSelector selector)
             where TSelector : struct, IFunction<TSource, int, TResult>
-            => source.Length switch
+            => source switch
             {
-                0 => Option.None,
+                { Length: 0 } => Option.None,
                 _ => Option.Some(selector.Invoke(source[0], 0)),
             };
 

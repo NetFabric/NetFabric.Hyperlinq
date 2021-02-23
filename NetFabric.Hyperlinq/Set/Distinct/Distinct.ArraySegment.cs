@@ -91,38 +91,38 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly int Count()
-                => source.Count switch
+                => source switch
                 {
-                    0 => 0,
+                    { Count: 0 } => 0,
                     _ => GetSet().Count
                 };
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly bool Any()
-                => source.Count is not 0;
+                => source is not 0;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly TSource[] ToArray()
-                => source.Count switch
+                => source switch
                 {
-                    0 => Array.Empty<TSource>(),
+                    { Count: 0 } => Array.Empty<TSource>(),
                     _ => GetSet().ToArray()
                 };
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly IMemoryOwner<TSource> ToArray(MemoryPool<TSource> pool)
-                => source.Count switch
+                => source switch
                 {
-                    0 => pool.Rent(0),
+                    { Count: 0 } => pool.Rent(0),
                     _ => GetSet().ToArray(pool)
                 };
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly List<TSource> ToList()
-                => source.Count switch
+                => source switch
                 {
                     // ReSharper disable once HeapView.ObjectAllocation.Evident
-                    0 => new List<TSource>(),
+                    { Count: 0 } => new List<TSource>(),
                     _ => GetSet().ToList()
                 };
         }

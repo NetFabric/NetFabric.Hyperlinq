@@ -10,9 +10,9 @@ namespace NetFabric.Hyperlinq
         public static Option<TSource> First<TEnumerable, TEnumerator, TSource>(this TEnumerable source)
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
-            => source.Count switch
+            => source switch
             {
-                0 => Option.None,
+                { Count: 0 } => Option.None,
                 _ => ValueEnumerableExtensions.First<TEnumerable, TEnumerator, TSource>(source)
             };
 
@@ -22,9 +22,9 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
             where TSelector : struct, IFunction<TSource, TResult>
-            => source.Count switch
+            => source switch
             {
-                0 => Option.None,
+                { Count: 0 } => Option.None,
                 _ => ValueEnumerableExtensions.First<TEnumerable, TEnumerator, TSource, TResult, TSelector>(source, selector)
             };
 
@@ -34,9 +34,9 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
             where TSelector : struct, IFunction<TSource, int, TResult>
-            => source.Count switch
+            => source switch
             {
-                0 => Option.None,
+                { Count: 0 } => Option.None,
                 _ => ValueEnumerableExtensions.FirstAt<TEnumerable, TEnumerator, TSource, TResult, TSelector>(source, selector)
             };
     }

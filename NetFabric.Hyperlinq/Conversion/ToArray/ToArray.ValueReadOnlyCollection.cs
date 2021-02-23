@@ -14,15 +14,36 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
-            if (source.Count is 0) return Array.Empty<TSource>();
+            return source switch
+            {
+                { Count: 0 } => Array.Empty<TSource>(),
+                ICollection<TSource> collection => BuildArrayFromCollection(collection),
+                _ => BuildArray(source)
+            };
+
+            static TSource[] BuildArrayFromCollection(ICollection<TSource> collection)
+            {
 #if NET5_0
-            var result = GC.AllocateUninitializedArray<TSource>(source.Count);
+                var result = GC.AllocateUninitializedArray<TSource>(collection.Count);
 #else
-            // ReSharper disable once HeapView.ObjectAllocation.Evident
-            var result = new TSource[source.Count];
+                // ReSharper disable once HeapView.ObjectAllocation.Evident
+                var result = new TSource[collection.Count];
 #endif
-            Copy<TEnumerable, TEnumerator, TSource>(source, result);
-            return result;
+                collection.CopyTo(result, 0);
+                return result;                
+            }
+
+            static TSource[] BuildArray(TEnumerable source)
+            {
+#if NET5_0
+                var result = GC.AllocateUninitializedArray<TSource>(source.Count);
+#else
+                // ReSharper disable once HeapView.ObjectAllocation.Evident
+                var result = new TSource[source.Count];
+#endif
+                Copy<TEnumerable, TEnumerator, TSource>(source, result);
+                return result;
+            }
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -30,9 +51,18 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
-            var result = pool.RentSliced(source.Count);
-            Copy<TEnumerable, TEnumerator, TSource>(source, result.Memory.Span);
-            return result;
+            return source switch
+            {
+                { Count: 0 } => pool.Rent(0),
+                _ => BuildArray(source, pool)
+            };
+
+            static IMemoryOwner<TSource> BuildArray(TEnumerable source, MemoryPool<TSource> pool)
+            {
+                var result = pool.RentSliced(source.Count);
+                Copy<TEnumerable, TEnumerator, TSource>(source, result.Memory.Span);
+                return result;
+            }
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -44,11 +74,19 @@ namespace NetFabric.Hyperlinq
             where TEnumerator : struct, IEnumerator<TSource>
             where TSelector : struct, IFunction<TSource, TResult>
         {
-            if (source.Count is 0) return Array.Empty<TResult>();
-            // ReSharper disable once HeapView.ObjectAllocation.Evident
-            var array = new TResult[source.Count];
-            Copy<TEnumerable, TEnumerator, TSource, TResult, TSelector>(source, array, selector);
-            return array;
+            return source switch
+            {
+                { Count: 0 } => Array.Empty<TResult>(),
+                _ => BuildArray(source, selector)
+            };
+
+            static TResult[] BuildArray(TEnumerable source, TSelector selector)
+            {
+                // ReSharper disable once HeapView.ObjectAllocation.Evident
+                var array = new TResult[source.Count];
+                Copy<TEnumerable, TEnumerator, TSource, TResult, TSelector>(source, array, selector);
+                return array;
+            }
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -57,9 +95,18 @@ namespace NetFabric.Hyperlinq
             where TEnumerator : struct, IEnumerator<TSource>
             where TSelector : struct, IFunction<TSource, TResult>
         {
-            var result = pool.RentSliced(source.Count);
-            Copy<TEnumerable, TEnumerator, TSource, TResult, TSelector>(source, result.Memory.Span, selector);
-            return result;
+            return source switch
+            {
+                { Count: 0 } => pool.Rent(0),
+                _ => BuildArray(source, selector, pool)
+            };
+
+            static IMemoryOwner<TResult> BuildArray(TEnumerable source, TSelector selector, MemoryPool<TResult> pool)
+            {
+                var result = pool.RentSliced(source.Count);
+                Copy<TEnumerable, TEnumerator, TSource, TResult, TSelector>(source, result.Memory.Span, selector);
+                return result;
+            }
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -71,11 +118,19 @@ namespace NetFabric.Hyperlinq
             where TEnumerator : struct, IEnumerator<TSource>
             where TSelector : struct, IFunction<TSource, int, TResult>
         {
-            if (source.Count is 0) return Array.Empty<TResult>();
-            // ReSharper disable once HeapView.ObjectAllocation.Evident
-            var array = new TResult[source.Count];
-            CopyAt<TEnumerable, TEnumerator, TSource, TResult, TSelector>(source, array, selector);
-            return array;
+            return source switch
+            {
+                { Count: 0 } => Array.Empty<TResult>(),
+                _ => BuildArray(source, selector)
+            };
+
+            static TResult[] BuildArray(TEnumerable source, TSelector selector)
+            {
+                // ReSharper disable once HeapView.ObjectAllocation.Evident
+                var array = new TResult[source.Count];
+                CopyAt<TEnumerable, TEnumerator, TSource, TResult, TSelector>(source, array, selector);
+                return array;
+            }
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -84,9 +139,18 @@ namespace NetFabric.Hyperlinq
             where TEnumerator : struct, IEnumerator<TSource>
             where TSelector : struct, IFunction<TSource, int, TResult>
         {
-            var result = pool.RentSliced(source.Count);
-            CopyAt<TEnumerable, TEnumerator, TSource, TResult, TSelector>(source, result.Memory.Span, selector);
-            return result;
+            return source switch
+            {
+                { Count: 0 } => pool.Rent(0),
+                _ => BuildArray(source, selector, pool)
+            };
+
+            static IMemoryOwner<TResult> BuildArray(TEnumerable source, TSelector selector, MemoryPool<TResult> pool)
+            {
+                var result = pool.RentSliced(source.Count);
+                CopyAt<TEnumerable, TEnumerator, TSource, TResult, TSelector>(source, result.Memory.Span, selector);
+                return result;
+            }
         }
     }
 }

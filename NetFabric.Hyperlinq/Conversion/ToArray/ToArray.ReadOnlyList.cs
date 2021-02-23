@@ -1,7 +1,6 @@
 using System;
 using System.Buffers;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
@@ -17,15 +16,23 @@ namespace NetFabric.Hyperlinq
         static TSource[] ToArray<TList, TSource>(this TList source, int offset, int count)
             where TList : struct, IReadOnlyList<TSource>
         {
-            if (count is 0) return Array.Empty<TSource>();
+            return count switch
+            {
+                0 => Array.Empty<TSource>(),
+                _ => BuildArray(source, offset, count)
+            };
+
+            static TSource[] BuildArray(TList source, int offset, int count)
+            {
 #if NET5_0
-            var result = GC.AllocateUninitializedArray<TSource>(count);
+                var result = GC.AllocateUninitializedArray<TSource>(count);
 #else
-            // ReSharper disable once HeapView.ObjectAllocation.Evident
-            var result = new TSource[count];
+                // ReSharper disable once HeapView.ObjectAllocation.Evident
+                var result = new TSource[count];
 #endif
-            Copy(source, offset, result.AsSpan(), count);
-            return result;
+                Copy(source, offset, result.AsSpan(), count);
+                return result;
+            }
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -37,9 +44,19 @@ namespace NetFabric.Hyperlinq
         static IMemoryOwner<TSource> ToArray<TList, TSource>(this TList source, int offset, int count, MemoryPool<TSource> pool)
             where TList : struct, IReadOnlyList<TSource>
         {
-            var result = pool.RentSliced(count);
-            Copy(source, offset, result.Memory.Span, count);
-            return result;
+            return count switch
+            {
+                0 => pool.Rent(0),
+                _ => BuildArray(source, offset, count, pool)
+            };
+
+            static IMemoryOwner<TSource> BuildArray(TList source, int offset, int count,
+                MemoryPool<TSource> pool)
+            {
+                var result = pool.RentSliced(count);
+                Copy(source, offset, result.Memory.Span, count);
+                return result;
+            }
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -49,9 +66,17 @@ namespace NetFabric.Hyperlinq
             where TList : struct, IReadOnlyList<TSource>
             where TPredicate : struct, IFunction<TSource, bool>
         {
-            if (count is 0) return Array.Empty<TSource>();
-            using var arrayBuilder = ToArrayBuilder(source, predicate, offset, count, ArrayPool<TSource>.Shared);
-            return arrayBuilder.ToArray();
+            return count switch
+            {
+                0 => Array.Empty<TSource>(),
+                _ => BuildArray(source, predicate, offset, count)
+            };
+
+            static TSource[] BuildArray(TList source, TPredicate predicate, int offset, int count)
+            {
+                using var arrayBuilder = ToArrayBuilder(source, predicate, offset, count, ArrayPool<TSource>.Shared);
+                return arrayBuilder.ToArray();
+            }
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -59,8 +84,17 @@ namespace NetFabric.Hyperlinq
             where TList : struct, IReadOnlyList<TSource>
             where TPredicate : struct, IFunction<TSource, bool>
         {
-            using var arrayBuilder = ToArrayBuilder(source, predicate, offset, count, ArrayPool<TSource>.Shared);
-            return arrayBuilder.ToArray(pool);
+            return count switch
+            {
+                0 => pool.Rent(0),
+                _ => BuildArray(source, predicate, offset, count, pool)
+            };
+
+            static IMemoryOwner<TSource> BuildArray(TList source, TPredicate predicate, int offset, int count, MemoryPool<TSource> pool)
+            {
+                using var arrayBuilder = ToArrayBuilder(source, predicate, offset, count, ArrayPool<TSource>.Shared);
+                return arrayBuilder.ToArray(pool);
+            }
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -71,9 +105,17 @@ namespace NetFabric.Hyperlinq
             where TList : struct, IReadOnlyList<TSource>
             where TPredicate : struct, IFunction<TSource, int, bool>
         {
-            if (count is 0) return Array.Empty<TSource>();
-            using var arrayBuilder = ToArrayBuilderAt(source, predicate, offset, count, ArrayPool<TSource>.Shared);
-            return arrayBuilder.ToArray();
+            return count switch
+            {
+                0 => Array.Empty<TSource>(),
+                _ => BuildArray(source, predicate, offset, count)
+            };
+
+            static TSource[] BuildArray(TList source, TPredicate predicate, int offset, int count)
+            {
+                using var arrayBuilder = ToArrayBuilderAt(source, predicate, offset, count, ArrayPool<TSource>.Shared);
+                return arrayBuilder.ToArray();
+            }
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -81,8 +123,17 @@ namespace NetFabric.Hyperlinq
             where TList : struct, IReadOnlyList<TSource>
             where TPredicate : struct, IFunction<TSource, int, bool>
         {
-            using var arrayBuilder = ToArrayBuilderAt(source, predicate, offset, count, ArrayPool<TSource>.Shared);
-            return arrayBuilder.ToArray(pool);
+            return count switch
+            {
+                0 => pool.Rent(0),
+                _ => BuildArray(source, predicate, offset, count, pool)
+            };
+
+            static IMemoryOwner<TSource> BuildArray(TList source, TPredicate predicate, int offset, int count, MemoryPool<TSource> pool)
+            {
+                using var arrayBuilder = ToArrayBuilderAt(source, predicate, offset, count, ArrayPool<TSource>.Shared);
+                return arrayBuilder.ToArray(pool);
+            }
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -93,15 +144,23 @@ namespace NetFabric.Hyperlinq
             where TList : struct, IReadOnlyList<TSource>
             where TSelector : struct, IFunction<TSource, TResult>
         {
-            if (count is 0) return Array.Empty<TResult>();
+            return count switch
+            {
+                0 => Array.Empty<TResult>(),
+                _ => BuildArray(source, selector, offset, count)
+            };
+
+            static TResult[] BuildArray(TList source, TSelector selector, int offset, int count)
+            {
 #if NET5_0
-            var result = GC.AllocateUninitializedArray<TResult>(count);
+                var result = GC.AllocateUninitializedArray<TResult>(count);
 #else
-            // ReSharper disable once HeapView.ObjectAllocation.Evident
-            var result = new TResult[count];
+                // ReSharper disable once HeapView.ObjectAllocation.Evident
+                var result = new TResult[count];
 #endif
-            Copy<TList, TSource, TResult, TSelector>(source, offset, result.AsSpan(), count, selector);
-            return result;
+                Copy<TList, TSource, TResult, TSelector>(source, offset, result.AsSpan(), count, selector);
+                return result;
+            }
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -109,9 +168,18 @@ namespace NetFabric.Hyperlinq
             where TList : struct, IReadOnlyList<TSource>
             where TSelector : struct, IFunction<TSource, TResult>
         {
-            var result = pool.RentSliced(count);
-            Copy<TList, TSource, TResult, TSelector>(source, offset, result.Memory.Span, count, selector);
-            return result;
+            return count switch
+            {
+                0 => pool.Rent(0),
+                _ => BuildArray(source, selector, offset, count, pool)
+            };
+
+            static IMemoryOwner<TResult> BuildArray(TList source, TSelector selector, int offset, int count, MemoryPool<TResult> pool)
+            {
+                var result = pool.RentSliced(count);
+                Copy<TList, TSource, TResult, TSelector>(source, offset, result.Memory.Span, count, selector);
+                return result;
+            }
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -122,15 +190,23 @@ namespace NetFabric.Hyperlinq
             where TList : struct, IReadOnlyList<TSource>
             where TSelector : struct, IFunction<TSource, int, TResult>
         {
-            if (count is 0) return Array.Empty<TResult>();
+            return count switch
+            {
+                0 => Array.Empty<TResult>(),
+                _ => BuildArray(source, selector, offset, count)
+            };
+
+            static TResult[] BuildArray(TList source, TSelector selector, int offset, int count)
+            {
 #if NET5_0
-            var result = GC.AllocateUninitializedArray<TResult>(count);
+                var result = GC.AllocateUninitializedArray<TResult>(count);
 #else
-            // ReSharper disable once HeapView.ObjectAllocation.Evident
-            var result = new TResult[count];
+                // ReSharper disable once HeapView.ObjectAllocation.Evident
+                var result = new TResult[count];
 #endif
-            CopyAt<TList, TSource, TResult, TSelector>(source, offset, result.AsSpan(), count, selector);
-            return result;
+                CopyAt<TList, TSource, TResult, TSelector>(source, offset, result.AsSpan(), count, selector);
+                return result;
+            }
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -138,9 +214,18 @@ namespace NetFabric.Hyperlinq
             where TList : struct, IReadOnlyList<TSource>
             where TSelector : struct, IFunction<TSource, int, TResult>
         {
-            var result = pool.RentSliced(count);
-            CopyAt<TList, TSource, TResult, TSelector>(source, offset, result.Memory.Span, count, selector);
-            return result;
+            return count switch
+            {
+                0 => pool.Rent(0),
+                _ => BuildArray(source, selector, offset, count, pool)
+            };
+
+            static IMemoryOwner<TResult> BuildArray(TList source, TSelector selector, int offset, int count, MemoryPool<TResult> pool)
+            {
+                var result = pool.RentSliced(count);
+                CopyAt<TList, TSource, TResult, TSelector>(source, offset, result.Memory.Span, count, selector);
+                return result;
+            }
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -152,9 +237,17 @@ namespace NetFabric.Hyperlinq
             where TPredicate : struct, IFunction<TSource, bool>
             where TSelector : struct, IFunction<TSource, TResult>
         {
-            if (count is 0) return Array.Empty<TResult>();
-            using var arrayBuilder = ToArrayBuilder<TList, TSource, TResult, TPredicate, TSelector>(source, predicate, selector, offset, count, ArrayPool<TResult>.Shared);
-            return arrayBuilder.ToArray();
+            return count switch
+            {
+                0 => Array.Empty<TResult>(),
+                _ => BuildArray(source, predicate, selector, offset, count)
+            };
+
+            static TResult[] BuildArray(TList source, TPredicate predicate, TSelector selector, int offset, int count)
+            {
+                using var arrayBuilder = ToArrayBuilder<TList, TSource, TResult, TPredicate, TSelector>(source, predicate, selector, offset, count, ArrayPool<TResult>.Shared);
+                return arrayBuilder.ToArray();
+            }
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -163,8 +256,17 @@ namespace NetFabric.Hyperlinq
             where TPredicate : struct, IFunction<TSource, bool>
             where TSelector : struct, IFunction<TSource, TResult>
         {
-            using var arrayBuilder = ToArrayBuilder<TList, TSource, TResult, TPredicate, TSelector>(source, predicate, selector, offset, count, ArrayPool<TResult>.Shared);
-            return arrayBuilder.ToArray(pool);
+            return count switch
+            {
+                0 => pool.Rent(0),
+                _ => BuildArray(source, predicate, selector, offset, count, pool)
+            };
+
+            static IMemoryOwner<TResult> BuildArray(TList source, TPredicate predicate, TSelector selector, int offset, int count, MemoryPool<TResult> pool)
+            {
+                using var arrayBuilder = ToArrayBuilder<TList, TSource, TResult, TPredicate, TSelector>(source, predicate, selector, offset, count, ArrayPool<TResult>.Shared);
+                return arrayBuilder.ToArray(pool);
+            }
         }
     }
 }

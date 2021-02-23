@@ -13,24 +13,28 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
-            switch (source)
+            return source switch
             {
-                // ReSharper disable once HeapView.PossibleBoxingAllocation
-                case ICollection<TSource> collection:
-#if NET5_0
-                    var result = GC.AllocateUninitializedArray<TSource>(collection.Count);
-#else
-                    // ReSharper disable once HeapView.ObjectAllocation.Evident
-                    var result = new TSource[collection.Count];
-#endif
-                    collection.CopyTo(result, 0);
-                    return result;
+                ICollection<TSource> collection => BuildArrayFromCollection(collection),
+                _ => BuildArray(source)
+            };
 
-                default:
-                    {
-                        using var arrayBuilder = ToArrayBuilder<TEnumerable, TEnumerator, TSource>(source, ArrayPool<TSource>.Shared);
-                        return arrayBuilder.ToArray();
-                    }
+            static TSource[] BuildArrayFromCollection(ICollection<TSource> collection)
+            {
+#if NET5_0
+                var result = GC.AllocateUninitializedArray<TSource>(collection.Count);
+#else
+                // ReSharper disable once HeapView.ObjectAllocation.Evident
+                var result = new TSource[collection.Count];
+#endif
+                collection.CopyTo(result, 0);
+                return result;                
+            }
+
+            static TSource[] BuildArray(TEnumerable source)
+            {
+                using var arrayBuilder = ToArrayBuilder<TEnumerable, TEnumerator, TSource>(source, ArrayPool<TSource>.Shared);
+                return arrayBuilder.ToArray();
             }
         }
 

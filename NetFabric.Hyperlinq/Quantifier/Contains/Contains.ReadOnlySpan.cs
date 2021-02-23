@@ -7,9 +7,9 @@ namespace NetFabric.Hyperlinq
     {
         public static bool Contains<TSource>(this ReadOnlySpan<TSource> source, TSource value, IEqualityComparer<TSource>? comparer = default)
         {
-            return source.Length switch
+            return source switch
             {
-                0 => false,
+                { Length: 0 } => false,
                 _ => Utils.UseDefault(comparer)
                     ? ValueContains(source, value)
                     : ReferenceContains(source, value, comparer)
@@ -40,9 +40,9 @@ namespace NetFabric.Hyperlinq
         static bool Contains<TSource, TResult, TSelector>(this ReadOnlySpan<TSource> source, TResult value, IEqualityComparer<TResult>? comparer, TSelector selector)
             where TSelector : struct, IFunction<TSource, TResult>
         {
-            return source.Length switch
+            return source switch
             {
-                0 => false,
+                { Length: 0 } => false,
                 _ => Utils.UseDefault(comparer)
                     ? ValueContains(source, value, selector)
                     : ReferenceContains(source, value, comparer, selector)
@@ -73,9 +73,9 @@ namespace NetFabric.Hyperlinq
         static bool ContainsRef<TSource, TResult, TSelector>(this ReadOnlySpan<TSource> source, TResult value, IEqualityComparer<TResult>? comparer, TSelector selector)
             where TSelector : struct, IFunctionIn<TSource, TResult>
         {
-            return source.Length switch
+            return source switch
             {
-                0 => false,
+                { Length: 0 } => false,
                 _ => Utils.UseDefault(comparer)
                     ? ValueContains(source, value, selector)
                     : ReferenceContains(source, value, comparer, selector)
@@ -107,9 +107,9 @@ namespace NetFabric.Hyperlinq
         static bool ContainsAt<TSource, TResult, TSelector>(this ReadOnlySpan<TSource> source, TResult value, IEqualityComparer<TResult>? comparer, TSelector selector)
             where TSelector : struct, IFunction<TSource, int, TResult>
         {
-            return source.Length switch
+            return source switch
             {
-                0 => false,
+                { Length: 0 } => false,
                 _ => Utils.IsValueType<TResult>()
                     ? ValueContains(source, value, selector)
                     : ReferenceContains(source, value, comparer, selector),
@@ -140,9 +140,9 @@ namespace NetFabric.Hyperlinq
         static bool ContainsAtRef<TSource, TResult, TSelector>(this ReadOnlySpan<TSource> source, TResult value, IEqualityComparer<TResult>? comparer, TSelector selector)
             where TSelector : struct, IFunctionIn<TSource, int, TResult>
         {
-            return source.Length switch
+            return source switch
             {
-                0 => false,
+                { Length: 0 } => false,
                 _ => Utils.IsValueType<TResult>()
                     ? ValueContains(source, value, selector)
                     : ReferenceContains(source, value, comparer, selector),

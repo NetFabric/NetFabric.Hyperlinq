@@ -8,9 +8,9 @@ namespace NetFabric.Hyperlinq
     {
 
         public static Option<TSource> Single<TSource>(this ReadOnlySpan<TSource> source) 
-            => source.Length switch
+            => source switch
             {
-                1 => Option.Some(source[0]),
+                { Length: 1 } => Option.Some(source[0]),
                 _ => Option.None,
             };
 
@@ -60,18 +60,18 @@ namespace NetFabric.Hyperlinq
         
         static Option<TResult> Single<TSource, TResult, TSelector>(this ReadOnlySpan<TSource> source, TSelector selector)
             where TSelector : struct, IFunction<TSource, TResult>
-            => source.Length switch
+            => source switch
             {
-                1 => Option.Some(selector.Invoke(source[0])),
+                { Length: 1 } => Option.Some(selector.Invoke(source[0])),
                 _ => Option.None,
             };
 
         
         static Option<TResult> SingleAt<TSource, TResult, TSelector>(this ReadOnlySpan<TSource> source, TSelector selector)
             where TSelector : struct, IFunction<TSource, int, TResult>
-            => source.Length switch
+            => source switch
             {
-                1 => Option.Some(selector.Invoke(source[0], 0)),
+                { Length: 1 } => Option.Some(selector.Invoke(source[0], 0)),
                 _ => Option.None,
             };
 
