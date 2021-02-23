@@ -18,6 +18,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		LICENSE = LICENSE
 		NuGet.config = NuGet.config
 		README.md = README.md
+		coverlet.runsettings = coverlet.runsettings
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetFabric.Hyperlinq.Benchmarks", "NetFabric.Hyperlinq.Benchmarks\NetFabric.Hyperlinq.Benchmarks.csproj", "{02EE275F-6E2D-444A-AB1F-9BCD02DEA204}"

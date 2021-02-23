@@ -37,7 +37,7 @@ namespace NetFabric.Hyperlinq.SourceGenerator
                 var generatedSources = GenerateSource(context.Compilation, collectedExtensionMethods);
                 foreach ((var containerClass, var extendingType, var generatedSource) in generatedSources)
                 {
-                    var hitName = $"{containerClass.OriginalDefinition.MetadataName}.{extendingType.OriginalDefinition.MetadataName}.cs";
+                    var hitName = $"{containerClass.OriginalDefinition.MetadataName}.{extendingType.OriginalDefinition.MetadataName}.g.cs";
                     hitName = hitName.Replace('`', '.');
                     context.AddSource(hitName, SourceText.From(generatedSource, Encoding.UTF8));
                 }
