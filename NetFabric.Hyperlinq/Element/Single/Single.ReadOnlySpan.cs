@@ -21,7 +21,7 @@ namespace NetFabric.Hyperlinq
             {
                 if (predicate.Invoke(source[index]))
                 {
-                    ref readonly var first = ref source[index];
+                    var first = source[index];
 
                     for (index++; index < source.Length; index++)
                     {
@@ -43,7 +43,7 @@ namespace NetFabric.Hyperlinq
             {
                 if (predicate.Invoke(source[index], index))
                 {
-                    ref readonly var first = ref source[index];
+                    var first = source[index];
 
                     for (index++; index < source.Length; index++)
                     {
@@ -84,7 +84,7 @@ namespace NetFabric.Hyperlinq
             {
                 if (predicate.Invoke(source[index]))
                 {
-                    ref readonly var first = ref source[index];
+                    var first = source[index];
 
                     for (index++; index < source.Length; index++)
                     {

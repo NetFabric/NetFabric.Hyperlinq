@@ -39,10 +39,9 @@ namespace NetFabric.Hyperlinq
             where TList : struct, IReadOnlyList<TSource>
             where TPredicate : struct, IFunction<TSource, int, bool>
         {
-            var end = count;
             if (offset is 0)
             {
-                for (var index = 0; index < end; index++)
+                for (var index = 0; index < count; index++)
                 {
                     var item = source[index];
                     if (predicate.Invoke(item, index))
@@ -51,7 +50,7 @@ namespace NetFabric.Hyperlinq
             }
             else
             {
-                for (var index = 0; index < end; index++)
+                for (var index = 0; index < count; index++)
                 {
                     var item = source[index + offset];
                     if (predicate.Invoke(item, index))

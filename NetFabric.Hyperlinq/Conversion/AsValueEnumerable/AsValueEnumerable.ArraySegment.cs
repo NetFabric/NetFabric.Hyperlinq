@@ -120,12 +120,7 @@ namespace NetFabric.Hyperlinq
                 public readonly TSource Current
                 {
                     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                    get
-                    {
-                        if ((uint)index >= (uint)source.Count) Throw.IndexOutOfRangeException();
-
-                        return source.Array![source.Offset + index];
-                    }
+                    get => source.Array![source.Offset + index];
                 }
                 readonly object? IEnumerator.Current
                     // ReSharper disable once HeapView.PossibleBoxingAllocation

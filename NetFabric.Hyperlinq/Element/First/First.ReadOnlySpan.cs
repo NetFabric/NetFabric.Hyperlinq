@@ -17,11 +17,12 @@ namespace NetFabric.Hyperlinq
         static Option<TSource> First<TSource, TPredicate>(this ReadOnlySpan<TSource> source, TPredicate predicate)
             where TPredicate : struct, IFunction<TSource, bool>
         {
-            for (var index = 0; index < source.Length; index++)
+            foreach (var item in source)
             {
-                if (predicate.Invoke(source[index]))
-                    return Option.Some(source[index]);
+                if (predicate.Invoke(item))
+                    return Option.Some(item);
             }
+
             return Option.None;
         }
 
@@ -31,8 +32,9 @@ namespace NetFabric.Hyperlinq
         {
             for (var index = 0; index < source.Length; index++)
             {
-                if (predicate.Invoke(source[index], index))
-                    return Option.Some(source[index]);
+                var item = source[index];
+                if (predicate.Invoke(item, index))
+                    return Option.Some(item);
             }
             return Option.None;
         }
@@ -62,11 +64,12 @@ namespace NetFabric.Hyperlinq
             where TPredicate : struct, IFunction<TSource, bool>
             where TSelector : struct, IFunction<TSource, TResult>
         {
-            for (var index = 0; index < source.Length; index++)
+            foreach (var item in source)
             {
-                if (predicate.Invoke(source[index]))
-                    return Option.Some(selector.Invoke(source[index]));
+                if (predicate.Invoke(item))
+                    return Option.Some(selector.Invoke(item));
             }
+
             return Option.None;
         }
     }

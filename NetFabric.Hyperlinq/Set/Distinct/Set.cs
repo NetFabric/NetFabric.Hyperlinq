@@ -82,7 +82,7 @@ namespace NetFabric.Hyperlinq
                 null => 0,
                 _ => comparer.GetHashCode(value) & 0x7FFFFFFF,
             };
-            if (Utils.IsValueType<TElement>() && ReferenceEquals(comparer, EqualityComparer<TElement>.Default))
+            if (Utils.UseDefault(comparer))
             {
                 var index = buckets[hashCode % buckets.Length] - 1;
                 while (index >= 0)
@@ -134,7 +134,7 @@ namespace NetFabric.Hyperlinq
             var newSlots = slotsPool.Rent(newSize);
             try
             {
-                Array.Copy(slots, newSlots, Count);
+                Array.Copy(slots!, newSlots, Count);
                 Array.Clear(newSlots, Count, newSlots.Length - Count);
 
                 Array.Clear(newBuckets, 0, newBuckets.Length);
