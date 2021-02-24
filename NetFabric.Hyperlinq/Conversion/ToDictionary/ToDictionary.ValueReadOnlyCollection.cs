@@ -46,6 +46,19 @@ namespace NetFabric.Hyperlinq
                 // ReSharper disable once HeapView.ObjectAllocation.Evident
                 ? new Dictionary<TKey, TSource>()
                 : ValueEnumerableExtensions.ToDictionaryAt<TEnumerable, TEnumerator, TSource, TKey, TKeySelector, TPredicate>(source, keySelector, comparer, predicate);
+        
+        static Dictionary<TKey, TResult> ToDictionary<TEnumerable, TEnumerator, TSource, TKey, TKeySelector, TResult, TPredicate, TSelector>(this TEnumerable source, TKeySelector keySelector, IEqualityComparer<TKey>? comparer, TPredicate predicate, TSelector selector)
+            where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
+            where TEnumerator : struct, IEnumerator<TSource>
+            where TKey : notnull
+            where TKeySelector : struct, IFunction<TResult, TKey>
+            where TPredicate : struct, IFunction<TSource, bool>
+            where TSelector : struct, IFunction<TSource, TResult>
+            => source.Count is 0
+                // ReSharper disable once HeapView.ObjectAllocation.Evident
+                ? new Dictionary<TKey, TResult>()
+                : ValueEnumerableExtensions.ToDictionary<TEnumerable, TEnumerator, TSource, TKey, TKeySelector, TResult, TPredicate, TSelector>(source, keySelector, comparer, predicate, selector);
+
 
         //////////////////////////////////////////////////////////////////////////////////////////////////
         
@@ -92,6 +105,19 @@ namespace NetFabric.Hyperlinq
                 // ReSharper disable once HeapView.ObjectAllocation.Evident
                 ? new Dictionary<TKey, TElement>()
                 : ValueEnumerableExtensions.ToDictionaryAt<TEnumerable, TEnumerator, TSource, TKey, TElement, TKeySelector, TElementSelector, TPredicate>(source, keySelector, elementSelector, comparer, predicate);
+        
+        static Dictionary<TKey, TElement> ToDictionary<TEnumerable, TEnumerator, TSource, TKey, TElement, TKeySelector, TElementSelector, TResult, TPredicate, TSelector>(this TEnumerable source, TKeySelector keySelector, TElementSelector elementSelector, IEqualityComparer<TKey>? comparer, TPredicate predicate, TSelector selector)
+            where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
+            where TEnumerator : struct, IEnumerator<TSource>
+            where TKey : notnull
+            where TKeySelector : struct, IFunction<TResult, TKey>
+            where TElementSelector : struct, IFunction<TResult, TElement>
+            where TPredicate : struct, IFunction<TSource, bool>
+            where TSelector : struct, IFunction<TSource, TResult>
+            => source.Count is 0
+                // ReSharper disable once HeapView.ObjectAllocation.Evident
+                ? new Dictionary<TKey, TElement>()
+                : ValueEnumerableExtensions.ToDictionary<TEnumerable, TEnumerator, TSource, TKey, TElement, TKeySelector, TElementSelector, TResult, TPredicate, TSelector>(source, keySelector, elementSelector, comparer, predicate, selector);
     }
 }
 
