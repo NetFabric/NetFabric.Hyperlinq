@@ -27,6 +27,8 @@
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net461' Or '$(TargetFramework)' == 'netstandard2.0'">
     <Compile Remove="Conversion\AsValueEnumerable\System\Collections\Immutable\*.cs" />
+    <Compile Remove="Conversion\AsValueEnumerable\AsValueEnumerable'4.ReadOnlyCollection.cs" />
+    <Compile Remove="Conversion\AsValueEnumerable\AsValueEnumerable'4.Enumerable.cs" />
   </ItemGroup>
 
   <ItemGroup>

@@ -28,7 +28,7 @@ namespace NetFabric.Hyperlinq
                 Throw.ArgumentOutOfRangeException(nameof(count));
             }
 
-            return new RangeEnumerable(start, count, end);
+            return new RangeEnumerable(start, end);
         }
 
         [GeneratorMapping("TSource", "int", true)]
@@ -40,16 +40,15 @@ namespace NetFabric.Hyperlinq
             readonly int start;
             readonly int end;
 
-            internal RangeEnumerable(int start, int count, int end)
+            internal RangeEnumerable(int start, int end)
+                => (this.start, this.end) = (start, end); 
+
+            public readonly int Count
             {
-                this.start = start;
-                Count = count;
-                this.end = end;
+                [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                get => end - start;
             }
-
-            public readonly int Count { get; }
-
-
+            
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly Enumerator GetEnumerator()
                 => new(in this);

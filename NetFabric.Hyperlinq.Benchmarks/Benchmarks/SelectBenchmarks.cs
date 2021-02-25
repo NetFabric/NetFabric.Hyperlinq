@@ -202,16 +202,6 @@ namespace NetFabric.Hyperlinq.Benchmarks
 
         [BenchmarkCategory("Array")]
         [Benchmark]
-        public int Hyperlinq_Span_SIMD()
-        {
-            var sum = 0;
-            foreach (var item in array.AsSpan().SelectVector(item => item, item => item))
-                sum += item;
-            return sum;
-        }
-
-        [BenchmarkCategory("Array")]
-        [Benchmark]
         public int Hyperlinq_Memory_For()
         {
             var source = memory.AsValueEnumerable().Select(item => item);
@@ -232,16 +222,6 @@ namespace NetFabric.Hyperlinq.Benchmarks
             return sum;
         }
 #pragma warning restore HLQ010 // Consider using a 'for' loop instead.
-
-        [BenchmarkCategory("Array")]
-        [Benchmark]
-        public int Hyperlinq_Memory_SIMD()
-        {
-            var sum = 0;
-            foreach (var item in memory.AsValueEnumerable().SelectVector(item => item, item => item))
-                sum += item;
-            return sum;
-        }
 
         //        [BenchmarkCategory("Enumerable_Value")]
         //        [Benchmark]

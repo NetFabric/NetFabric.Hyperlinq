@@ -11,22 +11,6 @@ namespace NetFabric.Hyperlinq.UnitTests.Projection.SelectVector
 
         [Theory]
         [MemberData(nameof(TestData.SelectVector), MemberType = typeof(TestData))]
-        public void SelectVector_With_ValidData_Must_Succeed(int[] source, Func<Vector<int>, Vector<int>> vectorSelector, Func<int, int> selector)
-        {
-            // Arrange
-            var expected = Enumerable
-                .Select(source, selector);
-
-            // Act
-            var result = ((ReadOnlySpan<int>)source.AsSpan())
-                .SelectVector(vectorSelector, selector);
-
-            // Assert
-            _ = result.SequenceEqual(expected).Must().BeTrue();
-        }
-
-        [Theory]
-        [MemberData(nameof(TestData.SelectVector), MemberType = typeof(TestData))]
         public void SelectVector_ToArray_With_ValidData_Must_Succeed(int[] source, Func<Vector<int>, Vector<int>> vectorSelector, Func<int, int> selector)
         {
             // Arrange

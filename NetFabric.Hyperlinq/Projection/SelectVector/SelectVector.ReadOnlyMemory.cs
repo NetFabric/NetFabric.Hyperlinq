@@ -13,14 +13,14 @@ namespace NetFabric.Hyperlinq
     {
         [GeneratorIgnore]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static MemorySelectVectorEnumerable<TSource, TResult, FunctionWrapper<Vector<TSource>, Vector<TResult>>, FunctionWrapper<TSource, TResult>> SelectVector<TSource, TResult>(this ReadOnlyMemory<TSource> source, Func<Vector<TSource>, Vector<TResult>> vectorSelector, Func<TSource, TResult> selector)
+        static MemorySelectVectorContext<TSource, TResult, FunctionWrapper<Vector<TSource>, Vector<TResult>>, FunctionWrapper<TSource, TResult>> SelectVector<TSource, TResult>(this ReadOnlyMemory<TSource> source, Func<Vector<TSource>, Vector<TResult>> vectorSelector, Func<TSource, TResult> selector)
             where TSource : struct
             where TResult : struct
             => source.SelectVector<TSource, TResult, FunctionWrapper<Vector<TSource>, Vector<TResult>>, FunctionWrapper<TSource, TResult>>(new FunctionWrapper<Vector<TSource>, Vector<TResult>>(vectorSelector), new FunctionWrapper<TSource, TResult>(selector));
 
         [GeneratorIgnore]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static MemorySelectVectorEnumerable<TSource, TResult, TSelector, TSelector> SelectVector<TSource, TResult, TSelector>(this ReadOnlyMemory<TSource> source, TSelector selector = default)
+        static MemorySelectVectorContext<TSource, TResult, TSelector, TSelector> SelectVector<TSource, TResult, TSelector>(this ReadOnlyMemory<TSource> source, TSelector selector = default)
             where TSelector : struct, IFunction<Vector<TSource>, Vector<TResult>>, IFunction<TSource, TResult>
             where TSource : struct
             where TResult : struct
@@ -28,19 +28,15 @@ namespace NetFabric.Hyperlinq
 
         [GeneratorIgnore]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static MemorySelectVectorEnumerable<TSource, TResult, TVectorSelector, TSelector> SelectVector<TSource, TResult, TVectorSelector, TSelector>(this ReadOnlyMemory<TSource> source, TVectorSelector vectorSelector = default, TSelector selector = default)
+        static MemorySelectVectorContext<TSource, TResult, TVectorSelector, TSelector> SelectVector<TSource, TResult, TVectorSelector, TSelector>(this ReadOnlyMemory<TSource> source, TVectorSelector vectorSelector = default, TSelector selector = default)
             where TVectorSelector : struct, IFunction<Vector<TSource>, Vector<TResult>>
             where TSelector : struct, IFunction<TSource, TResult>
             where TSource : struct
             where TResult : struct
             => new(source, vectorSelector, selector);
 
-        [GeneratorIgnore]
-        // [GeneratorMapping("TSource", "TResult")]
         [StructLayout(LayoutKind.Auto)]
-        public partial struct MemorySelectVectorEnumerable<TSource, TResult, TVectorSelector, TSelector>
-            : IValueReadOnlyList<TResult, MemorySelectVectorEnumerable<TSource, TResult, TVectorSelector, TSelector>.Enumerator>
-            , IList<TResult>
+        public struct MemorySelectVectorContext<TSource, TResult, TVectorSelector, TSelector>
             where TVectorSelector : struct, IFunction<Vector<TSource>, Vector<TResult>>
             where TSelector : struct, IFunction<TSource, TResult>
             where TSource : struct
@@ -50,7 +46,7 @@ namespace NetFabric.Hyperlinq
             internal TVectorSelector vectorSelector;
             internal TSelector selector;
 
-            internal MemorySelectVectorEnumerable(ReadOnlyMemory<TSource> source, TVectorSelector vectorSelector, TSelector selector)
+            internal MemorySelectVectorContext(ReadOnlyMemory<TSource> source, TVectorSelector vectorSelector, TSelector selector)
             {
                 if (Vector<TSource>.Count != Vector<TResult>.Count)
                     Throw.NotSupportedException();
@@ -60,111 +56,11 @@ namespace NetFabric.Hyperlinq
                 this.selector = selector;
             }
 
-            public readonly int Count
-                => source.Length;
-
-            public TResult this[int index]
-            {
-                [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                get
-                {
-                    if (index < 0 || index >= source.Length) Throw.IndexOutOfRangeException();
-
-                    return selector.Invoke(source.Span[index]);
-                }
-            }
-            TResult IReadOnlyList<TResult>.this[int index]
-                => this[index];
-            TResult IList<TResult>.this[int index]
-            {
-                get => this[index];
-                
-                // ReSharper disable once ValueParameterNotUsed
-                set => Throw.NotSupportedException();
-            }
-
-            public readonly SelectVectorEnumerator<TSource, TResult, TSelector> GetEnumerator()
-                => new(source.Span, selector);
-            readonly Enumerator IValueEnumerable<TResult, Enumerator>.GetEnumerator()
-                => new(in this);
-            readonly IEnumerator<TResult> IEnumerable<TResult>.GetEnumerator()
-                // ReSharper disable once HeapView.BoxingAllocation
-                => new Enumerator(in this);
-            readonly IEnumerator IEnumerable.GetEnumerator()
-                // ReSharper disable once HeapView.BoxingAllocation
-                => new Enumerator(in this);
-
-
-            bool ICollection<TResult>.IsReadOnly
-                => true;
-
-            public void CopyTo(Span<TResult> span)
-            {
-                if (span.Length < source.Length)
-                    Throw.ArgumentException(Resource.DestinationNotLongEnough, nameof(span));
-
-                ArrayExtensions.CopyVector(source.Span, span, vectorSelector, selector);
-            }
-
-            void ICollection<TResult>.CopyTo(TResult[] array, int arrayIndex)
-                => CopyTo(array.AsSpan().Slice(arrayIndex));
-
-            void ICollection<TResult>.Add(TResult item)
-                => Throw.NotSupportedException();
-            void ICollection<TResult>.Clear()
-                => Throw.NotSupportedException();
-
-            public bool Contains(TResult item)
-                => source.Span.ContainsVector(item, vectorSelector, selector);
-            
-            bool ICollection<TResult>.Remove(TResult item)
-                => Throw.NotSupportedException<bool>();
-            int IList<TResult>.IndexOf(TResult item)
-                => ArrayExtensions.IndexOf<TSource, TResult, TSelector>(source.Span, item, selector);
-            
-            void IList<TResult>.Insert(int index, TResult item)
-                => Throw.NotSupportedException();
-            void IList<TResult>.RemoveAt(int index)
-                => Throw.NotSupportedException();
-
-            [StructLayout(LayoutKind.Auto)]
-            public struct Enumerator
-                : IEnumerator<TResult>
-            {
-                readonly ReadOnlyMemory<TSource> source;
-                TSelector selector;
-                int index;
-
-                internal Enumerator(in MemorySelectVectorEnumerable<TSource, TResult, TVectorSelector, TSelector> enumerable)
-                {
-                    source = enumerable.source;
-                    selector = enumerable.selector;
-                    index = -1;
-                }
-
-                public  TResult Current 
-                {
-                    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                    get => selector.Invoke(source.Span[index]);
-                }
-                TResult IEnumerator<TResult>.Current 
-                    => selector.Invoke(source.Span[index]);
-                object? IEnumerator.Current
-                    // ReSharper disable once HeapView.PossibleBoxingAllocation
-                    => selector.Invoke(source.Span[index]);
-
-                [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                public bool MoveNext() 
-                    => ++index < source.Length;
-
-                [ExcludeFromCodeCoverage]
-                public readonly void Reset() 
-                    => Throw.NotSupportedException();
-
-                public void Dispose() { }
-            }
-
             #region Aggregation
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public int Count()
+                => source.Length;
 
             #endregion
 
@@ -200,43 +96,35 @@ namespace NetFabric.Hyperlinq
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int Count<TSource, TResult, TVectorSelector, TSelector>(this MemorySelectVectorEnumerable<TSource, TResult, TVectorSelector, TSelector> source)
-            where TVectorSelector : struct, IFunction<Vector<TSource>, Vector<TResult>>
-            where TSelector : struct, IFunction<TSource, TResult>
-            where TSource : struct
-            where TResult : struct
-            => source.Count;
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int Sum<TSource, TVectorSelector, TSelector>(this MemorySelectVectorEnumerable<TSource, int, TVectorSelector, TSelector> source)
+        public static int Sum<TSource, TVectorSelector, TSelector>(this MemorySelectVectorContext<TSource, int, TVectorSelector, TSelector> source)
             where TVectorSelector : struct, IFunction<Vector<TSource>, Vector<int>>
             where TSelector : struct, IFunction<TSource, int>
             where TSource : struct
             => source.source.Span.Sum<TSource, int, TVectorSelector, TSelector>(source.vectorSelector, source.selector);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static long Sum<TSource, TVectorSelector, TSelector>(this MemorySelectVectorEnumerable<TSource, long, TVectorSelector, TSelector> source)
+        public static long Sum<TSource, TVectorSelector, TSelector>(this MemorySelectVectorContext<TSource, long, TVectorSelector, TSelector> source)
             where TVectorSelector : struct, IFunction<Vector<TSource>, Vector<long>>
             where TSelector : struct, IFunction<TSource, long>
             where TSource : struct
             => source.source.Span.Sum<TSource, long, TVectorSelector, TSelector>(source.vectorSelector, source.selector);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static float Sum<TSource, TVectorSelector, TSelector>(this MemorySelectVectorEnumerable<TSource, float, TVectorSelector, TSelector> source)
+        public static float Sum<TSource, TVectorSelector, TSelector>(this MemorySelectVectorContext<TSource, float, TVectorSelector, TSelector> source)
             where TVectorSelector : struct, IFunction<Vector<TSource>, Vector<float>>
             where TSelector : struct, IFunction<TSource, float>
             where TSource : struct
             => source.source.Span.Sum<TSource, float, TVectorSelector, TSelector>(source.vectorSelector, source.selector);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static double Sum<TSource, TVectorSelector, TSelector>(this MemorySelectVectorEnumerable<TSource, double, TVectorSelector, TSelector> source)
+        public static double Sum<TSource, TVectorSelector, TSelector>(this MemorySelectVectorContext<TSource, double, TVectorSelector, TSelector> source)
             where TVectorSelector : struct, IFunction<Vector<TSource>, Vector<double>>
             where TSelector : struct, IFunction<TSource, double>
             where TSource : struct
             => source.source.Span.Sum<TSource, double, TVectorSelector, TSelector>(source.vectorSelector, source.selector);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static decimal Sum<TSource, TVectorSelector, TSelector>(this MemorySelectVectorEnumerable<TSource, decimal, TVectorSelector, TSelector> source)
+        public static decimal Sum<TSource, TVectorSelector, TSelector>(this MemorySelectVectorContext<TSource, decimal, TVectorSelector, TSelector> source)
             where TVectorSelector : struct, IFunction<Vector<TSource>, Vector<decimal>>
             where TSelector : struct, IFunction<TSource, decimal>
             where TSource : struct
