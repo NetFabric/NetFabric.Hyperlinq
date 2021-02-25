@@ -368,7 +368,7 @@ It returns an [`IMemoryOwner<>`](https://docs.microsoft.com/en-us/dotnet/api/sys
 
 `NetFabric.Hyperlinq` uses SIMD implicitly to improve performance when possible, but many times it can only be done explicitly by calling specific operations.
 
-SIMD improves performance by performing the same operations simultaneously on multiple items. The number of items is specific to the CPU being used. The operation can only be performed if this number is met. This means that a remaining number of items has to be processed without SIMD.
+SIMD improves performance by performing the same operations simultaneously on multiple items. The operation can only be performed if this number is met. This means that a remaining number of items has to be processed without SIMD.
 
 The items processed simultaneously are stored inside a [`System.Numerics.Vector`](https://docs.microsoft.com/en-us/dotnet/api/system.numerics.vector-1) structure.
 
@@ -379,7 +379,8 @@ For this reason, and also because SIMD cannot be applied to all data types, SIMD
 ``` csharp
 var result = list
   .AsValueEnumerable()
-  .SelectVector(item = item * 2, item = item * 2);
+  .SelectVector(item = item * 2, item = item * 2)
+  .ToArray();
 ```
 
 These methods also support value delegates. In this case, the `struct` containing the expressions must implement two `IFunction<,>`. 
@@ -400,12 +401,17 @@ public static void Example(List<int> list)
 {
   var result = list
     .AsValueEnumerable()
-    .SelectVector<int, DoubleOfInt32>();
+    .SelectVector<int, DoubleOfInt32>()
+    .ToArray();
 
   foreach(var value in result)
     Console.WriteLine(value);
 }
 ```
+
+Please note that the operation `SelectVector()` does not return and enumerable. It returns the context required for subsequent operations like `ToArray()`, `ToList()`, and `Sum()`. 
+
+Up until now I haven't found a way to improve the performance of `Select()` by using SIMD. The returned context allows the use of composition, exposing only the operations that can gain with the use of SIMD.  
 
 ## Documentation
 

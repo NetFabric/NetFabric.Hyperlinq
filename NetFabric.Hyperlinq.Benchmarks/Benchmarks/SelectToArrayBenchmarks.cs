@@ -146,7 +146,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [BenchmarkCategory("Enumerable_Value")]
         [Benchmark]
         public int[] Hyperlinq_Enumerable_Value()
-            => EnumerableExtensions.AsValueEnumerable<TestEnumerable.Enumerable, TestEnumerable.Enumerable.Enumerator, int>(enumerableValue, enumerable => enumerable.GetEnumerator())
+            => enumerableValue.AsValueEnumerable<TestEnumerable.Enumerable, TestEnumerable.Enumerable.Enumerator, int>(enumerable => enumerable.GetEnumerator())
                 .Select(item => item)
                 .ToArray();
 

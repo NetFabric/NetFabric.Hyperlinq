@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Buffers;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Runtime.CompilerServices;
 // ReSharper disable HeapView.ObjectAllocation.Evident
 
@@ -46,7 +47,6 @@ namespace NetFabric.Hyperlinq
             where TEnumerator : struct, IEnumerator<TSource>
             where TSelector : struct, IFunction<TSource, int, TResult>
             => source.ToArrayAt<TEnumerable, TEnumerator, TSource, TResult, TSelector>(selector).AsList();
-
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static List<TResult> ToList<TEnumerable, TEnumerator, TSource, TResult, TPredicate, TSelector>(this TEnumerable source, TPredicate predicate, TSelector selector)
