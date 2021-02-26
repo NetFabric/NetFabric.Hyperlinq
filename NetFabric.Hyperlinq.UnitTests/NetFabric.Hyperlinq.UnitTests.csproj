@@ -5,6 +5,10 @@
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 
+  <ItemGroup Condition="'$(TargetFramework)' == 'net461' Or '$(TargetFramework)' == 'netcoreapp2.1'">
+    <Compile Remove="Conversion\AsValueEnumerable\Bindings\System\Collections\Immutable\*.cs" />
+  </ItemGroup>
+  
   <ItemGroup>
     <PackageReference Include="coverlet.collector" Version="3.0.3">
       <PrivateAssets>all</PrivateAssets>
