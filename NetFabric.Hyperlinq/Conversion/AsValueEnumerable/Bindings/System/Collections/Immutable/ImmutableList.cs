@@ -4,10 +4,9 @@ using System.Runtime.InteropServices;
 
 namespace NetFabric.Hyperlinq
 {
-    [GeneratorIgnore]
     public static class ImmutableListExtensions
     {
-        // ImmutableList<TSource> has a value-type enumerator that implements IEnumerator<TSource>
+        // ImmutableList<TSource> implements IReadOnlyCollection<TSource> and has a value-type enumerator that implements IEnumerator<TSource>
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ReadOnlyCollectionExtensions.ValueEnumerable<ImmutableList<TSource>, ImmutableList<TSource>.Enumerator, ImmutableList<TSource>.Enumerator, TSource, GetEnumerator<TSource>, GetEnumerator<TSource>> AsValueEnumerable<TSource>(this ImmutableList<TSource> source)

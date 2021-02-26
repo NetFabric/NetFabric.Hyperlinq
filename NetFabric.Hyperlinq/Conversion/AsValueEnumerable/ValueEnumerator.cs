@@ -12,7 +12,7 @@ namespace NetFabric.Hyperlinq
     {
         readonly IEnumerator<TSource> enumerator;
         
-        internal ValueEnumerator(IEnumerator<TSource> enumerator) 
+        public ValueEnumerator(IEnumerator<TSource> enumerator) 
             => this.enumerator = enumerator;
 
         public TSource Current
