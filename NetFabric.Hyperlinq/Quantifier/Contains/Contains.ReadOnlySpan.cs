@@ -70,40 +70,6 @@ namespace NetFabric.Hyperlinq
             }
         }
 
-        static bool ContainsRef<TSource, TResult, TSelector>(this ReadOnlySpan<TSource> source, TResult value, IEqualityComparer<TResult>? comparer, TSelector selector)
-            where TSelector : struct, IFunctionIn<TSource, TResult>
-        {
-            return source switch
-            {
-                { Length: 0 } => false,
-                _ => Utils.UseDefault(comparer)
-                    ? ValueContains(source, value, selector)
-                    : ReferenceContains(source, value, comparer, selector)
-            };
-
-            static bool ValueContains(ReadOnlySpan<TSource> source, TResult value, TSelector selector)
-            {
-                foreach (ref readonly var item in source)
-                {
-                    if (EqualityComparer<TResult>.Default.Equals(selector.Invoke(in item), value))
-                        return true;
-                }
-                return false;
-            }
-
-            static bool ReferenceContains(ReadOnlySpan<TSource> source, TResult value, IEqualityComparer<TResult>? comparer, TSelector selector)
-            {
-                comparer ??= EqualityComparer<TResult>.Default;
-                foreach (ref readonly var item in source)
-                {
-                    if (comparer.Equals(selector.Invoke(in item), value))
-                        return true;
-                }
-                return false;
-            }
-        }
-
-
         static bool ContainsAt<TSource, TResult, TSelector>(this ReadOnlySpan<TSource> source, TResult value, IEqualityComparer<TResult>? comparer, TSelector selector)
             where TSelector : struct, IFunction<TSource, int, TResult>
         {
@@ -131,39 +97,6 @@ namespace NetFabric.Hyperlinq
                 for (var index = 0; index < source.Length; index++)
                 {
                     if (comparer.Equals(selector.Invoke(source[index], index), value))
-                        return true;
-                }
-                return false;
-            }
-        }
-
-        static bool ContainsAtRef<TSource, TResult, TSelector>(this ReadOnlySpan<TSource> source, TResult value, IEqualityComparer<TResult>? comparer, TSelector selector)
-            where TSelector : struct, IFunctionIn<TSource, int, TResult>
-        {
-            return source switch
-            {
-                { Length: 0 } => false,
-                _ => Utils.IsValueType<TResult>()
-                    ? ValueContains(source, value, selector)
-                    : ReferenceContains(source, value, comparer, selector),
-            };
-
-            static bool ValueContains(ReadOnlySpan<TSource> source, TResult value, TSelector selector)
-            {
-                for (var index = 0; index < source.Length; index++)
-                {
-                    if (EqualityComparer<TResult>.Default.Equals(selector.Invoke(in source[index], index), value))
-                        return true;
-                }
-                return false;
-            }
-
-            static bool ReferenceContains(ReadOnlySpan<TSource> source, TResult value, IEqualityComparer<TResult>? comparer, TSelector selector)
-            {
-                comparer ??= EqualityComparer<TResult>.Default;
-                for (var index = 0; index < source.Length; index++)
-                {
-                    if (comparer.Equals(selector.Invoke(in source[index], index), value))
                         return true;
                 }
                 return false;

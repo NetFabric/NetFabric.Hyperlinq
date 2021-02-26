@@ -137,19 +137,6 @@ namespace NetFabric.Hyperlinq
             return sum;
         }
 
-        static TSum SumRef<TSource, TSum, TPredicate>(this ReadOnlySpan<TSource> source, TPredicate predicate)
-            where TPredicate : struct, IFunctionIn<TSource, bool>
-            where TSum : struct
-        {
-            var sum = default(TSum);
-            foreach (ref readonly var item in source)
-            {
-                if (predicate.Invoke(in item))
-                    sum = GenericsOperator.AddNullable(item, sum);
-            }
-            return sum;
-        }
-
         static TSum SumAt<TSource, TSum, TPredicate>(this ReadOnlySpan<TSource> source, TPredicate predicate)
             where TPredicate : struct, IFunction<TSource, int, bool>
             where TSum : struct
@@ -159,20 +146,6 @@ namespace NetFabric.Hyperlinq
             {
                 var item = source[index];
                 if (predicate.Invoke(item, index))
-                    sum = GenericsOperator.AddNullable(item, sum);
-            }
-            return sum;
-        }
-
-        static TSum SumAtRef<TSource, TSum, TPredicate>(this ReadOnlySpan<TSource> source, TPredicate predicate)
-            where TPredicate : struct, IFunctionIn<TSource, int, bool>
-            where TSum : struct
-        {
-            var sum = default(TSum);
-            for (var index = 0; index < source.Length; index++)
-            {
-                ref readonly var item = ref source[index];
-                if (predicate.Invoke(in item, index))
                     sum = GenericsOperator.AddNullable(item, sum);
             }
             return sum;
@@ -188,16 +161,6 @@ namespace NetFabric.Hyperlinq
             return sum;
         }
 
-        static TSum SumRef<TSource, TResult, TSum, TSelector>(this ReadOnlySpan<TSource> source, TSelector selector)
-            where TSelector : struct, IFunctionIn<TSource, TResult>
-            where TSum : struct
-        {
-            var sum = default(TSum);
-            foreach (ref readonly var item in source)
-                sum = GenericsOperator.AddNullable(selector.Invoke(in item), sum);
-            return sum;
-        }
-
         static TSum SumAt<TSource, TResult, TSum, TSelector>(this ReadOnlySpan<TSource> source, TSelector selector)
             where TSelector : struct, IFunction<TSource, int, TResult>
             where TSum : struct
@@ -210,21 +173,7 @@ namespace NetFabric.Hyperlinq
             }
             return sum;
         }
-
-        static TSum SumAtRef<TSource, TResult, TSum, TSelector>(this ReadOnlySpan<TSource> source, TSelector selector)
-            where TSelector : struct, IFunctionIn<TSource, int, TResult>
-            where TSum : struct
-        {
-            var sum = default(TSum);
-            for (var index = 0; index < source.Length; index++)
-            {
-                ref readonly var item = ref source[index];
-                sum = GenericsOperator.AddNullable(selector.Invoke(in item, index), sum);
-            }
-            return sum;
-        }
-
-
+        
         static TSum Sum<TSource, TResult, TSum, TPredicate, TSelector>(this ReadOnlySpan<TSource> source, TPredicate predicate, TSelector selector)
             where TPredicate : struct, IFunction<TSource, bool>
             where TSelector : struct, IFunction<TSource, TResult>
@@ -235,20 +184,6 @@ namespace NetFabric.Hyperlinq
             {
                 if (predicate.Invoke(item))
                     sum = GenericsOperator.AddNullable(selector.Invoke(item), sum);
-            }
-            return sum;
-        }
-
-        static TSum SumRef<TSource, TResult, TSum, TPredicate, TSelector>(this ReadOnlySpan<TSource> source, TPredicate predicate, TSelector selector)
-            where TPredicate : struct, IFunctionIn<TSource, bool>
-            where TSelector : struct, IFunctionIn<TSource, TResult>
-            where TSum : struct
-        {
-            var sum = default(TSum);
-            foreach (ref readonly var item in source)
-            {
-                if (predicate.Invoke(in item))
-                    sum = GenericsOperator.AddNullable(selector.Invoke(in item), sum);
             }
             return sum;
         }

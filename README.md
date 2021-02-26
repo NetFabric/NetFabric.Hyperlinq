@@ -23,7 +23,6 @@ This implementation **favors performance in detriment of assembly binary size** 
 - [Reduced heap allocations](#reduced-heap-allocations)
 - [Benchmarks](#benchmarks)
 - [Usage](#usage)
-  - [Passing items by reference](#passing-items-by-reference)
   - [Value delegates](#value-delegates)
   - [Generation operations](#generation-operations)
   - [Method return types](#method-return-types)
@@ -142,26 +141,6 @@ public static void Example(IReadOnlyList<int> list)
 ```
 
 To add `NetFabric.Hyperlinq` operations after a `System.Linq` operation, simply add one more `AsValueEnumerable()` or `AsAsyncValueEnumerable()`.
-
-### Passing items by reference
-
-`NetFabric.Hyperlinq` supports passing the items by reference. This can improve considerably the performance for large structures.
-
-- Use `AsValueEnumerableRef()` instead to make any collection usable with `NetFabric.Hyperlinq`.
-- Declare the lambda expressions with `in` keyword on the first parameter. This also requires the declaration of the parameters' type.
-
-``` csharp
-public static void Example(IReadOnlyList<int> list)
-{
-  var result = list
-    .AsValueEnumerable()
-    .Where((in int item) => item > 2)
-    .Select((in int item) => item * 2);
-
-  foreach(var value in result)
-    Console.WriteLine(value);
-}
-```
 
 ### Value delegates
 
