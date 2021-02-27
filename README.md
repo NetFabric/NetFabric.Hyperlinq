@@ -74,7 +74,7 @@ The names of the benchmarks are structured as follow:
 - The library used:
   - _Linq_ - the `System.Linq` namespace (includes [System.Linq.Async](https://www.nuget.org/packages/System.Linq.Async/), [System.Interactive](https://www.nuget.org/packages/System.Interactive/), and [System.Interactive.Async](https://www.nuget.org/packages/System.Interactive.Async/))
   - _StructLinq_ - [StructLinq](https://www.nuget.org/packages/StructLinq/)
-  - _Hyperlinq_ - [NetFabric.Hyperlinq](https://www.nuget.org/packages/Hyperlinq/)
+  - _Hyperlinq_ - [NetFabric.Hyperlinq](https://www.nuget.org/packages/NetFabric.Hyperlinq/)
 - The type of collection used as source:
   - _Array_ - an array
   - _Span_ - a `Span<>`
