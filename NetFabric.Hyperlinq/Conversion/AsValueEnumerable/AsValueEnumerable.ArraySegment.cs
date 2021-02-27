@@ -72,7 +72,7 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public void CopyTo(Span<TSource> span)
-                => source.AsSpan().CopyTo(span);
+                => ((ReadOnlySpan<TSource>)source.AsSpan()).CopyTo(span);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public void CopyTo(TSource[] array, int arrayIndex)
@@ -84,7 +84,7 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public int IndexOf(TSource item)
-                => ArrayExtensions.IndexOf(source.AsSpan(), item);
+                => ArrayExtensions.IndexOf(((ReadOnlySpan<TSource>)source.AsSpan()), item);
 
             [ExcludeFromCodeCoverage]
             void ICollection<TSource>.Add(TSource item)
@@ -155,51 +155,51 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TSource[] ToArray()
-                => source.AsSpan().ToArray();
+                => ((ReadOnlySpan<TSource>)source.AsSpan()).ToArray();
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public IMemoryOwner<TSource> ToArray(MemoryPool<TSource> memoryPool)
-                => source.AsSpan().ToArray(memoryPool);
+                => ((ReadOnlySpan<TSource>)source.AsSpan()).ToArray(memoryPool);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public List<TSource> ToList()
-                => source.AsSpan().ToList();
+                => ((ReadOnlySpan<TSource>)source.AsSpan()).ToList();
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Dictionary<TKey, TSource> ToDictionary<TKey>(Func<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer = default)
                 where TKey : notnull
-                => source.AsSpan().ToDictionary(keySelector, comparer);
+                => ((ReadOnlySpan<TSource>)source.AsSpan()).ToDictionary(keySelector, comparer);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Dictionary<TKey, TSource> ToDictionary<TKey, TKeySelector>(TKeySelector keySelector, IEqualityComparer<TKey>? comparer = default)
                 where TKey : notnull
                 where TKeySelector : struct, IFunction<TSource, TKey>
-                => source.AsSpan().ToDictionary(keySelector, comparer);
+                => ((ReadOnlySpan<TSource>)source.AsSpan()).ToDictionary(keySelector, comparer);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer = default)
                 where TKey : notnull
-                => source.AsSpan().ToDictionary(keySelector, elementSelector, comparer);
+                => ((ReadOnlySpan<TSource>)source.AsSpan()).ToDictionary(keySelector, elementSelector, comparer);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Dictionary<TKey, TElement> ToDictionary<TKey, TElement, TKeySelector, TElementSelector>(TKeySelector keySelector, TElementSelector elementSelector, IEqualityComparer<TKey>? comparer = default)
                 where TKey : notnull
                 where TKeySelector : struct, IFunction<TSource, TKey>
                 where TElementSelector : struct, IFunction<TSource, TElement>
-                => source.AsSpan().ToDictionary<TSource, TKey, TElement, TKeySelector, TElementSelector>(keySelector, elementSelector, comparer);
+                => ((ReadOnlySpan<TSource>)source.AsSpan()).ToDictionary<TSource, TKey, TElement, TKeySelector, TElementSelector>(keySelector, elementSelector, comparer);
 
             #endregion
 
             #region Element
 
             public Option<TSource> ElementAt(int index)
-                => source.AsSpan().ElementAt(index);
+                => ((ReadOnlySpan<TSource>)source.AsSpan()).ElementAt(index);
 
             public Option<TSource> First()
-                => source.AsSpan().First();
+                => ((ReadOnlySpan<TSource>)source.AsSpan()).First();
 
             public Option<TSource> Single()
-                => source.AsSpan().Single();
+                => ((ReadOnlySpan<TSource>)source.AsSpan()).Single();
 
             #endregion
 
@@ -284,7 +284,7 @@ namespace NetFabric.Hyperlinq
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool All<TPredicate>(TPredicate predicate)
                 where TPredicate : struct, IFunction<TSource, bool>
-                => source.AsSpan().All(predicate);
+                => ((ReadOnlySpan<TSource>)source.AsSpan()).All(predicate);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool All(Func<TSource, int, bool> predicate)
@@ -293,11 +293,11 @@ namespace NetFabric.Hyperlinq
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool AllAt<TPredicate>(TPredicate predicate)
                 where TPredicate : struct, IFunction<TSource, int, bool>
-                => source.AsSpan().AllAt(predicate);
+                => ((ReadOnlySpan<TSource>)source.AsSpan()).AllAt(predicate);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Any()
-                => source.AsSpan().Any();
+                => ((ReadOnlySpan<TSource>)source.AsSpan()).Any();
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Any(Func<TSource, bool> predicate)
@@ -306,7 +306,7 @@ namespace NetFabric.Hyperlinq
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Any<TPredicate>(TPredicate predicate)
                 where TPredicate : struct, IFunction<TSource, bool>
-                => source.AsSpan().Any(predicate);
+                => ((ReadOnlySpan<TSource>)source.AsSpan()).Any(predicate);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Any(Func<TSource, int, bool> predicate)
@@ -315,11 +315,11 @@ namespace NetFabric.Hyperlinq
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool AnyAt<TPredicate>(TPredicate predicate)
                 where TPredicate : struct, IFunction<TSource, int, bool>
-                => source.AsSpan().AnyAt(predicate);
+                => ((ReadOnlySpan<TSource>)source.AsSpan()).AnyAt(predicate);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Contains(TSource value, IEqualityComparer<TSource>? comparer)
-                => source.AsSpan().Contains(value, comparer);
+                => ((ReadOnlySpan<TSource>)source.AsSpan()).Contains(value, comparer);
 
             #endregion
 
@@ -338,48 +338,48 @@ namespace NetFabric.Hyperlinq
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int Sum(this ArraySegmentValueEnumerable<int> source)
-            => source.source.AsSpan().Sum();
+            => ((ReadOnlySpan<int>)source.source.AsSpan()).Sum();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int Sum(this ArraySegmentValueEnumerable<int?> source)
-            => source.source.AsSpan().Sum();
+            => ((ReadOnlySpan<int?>)source.source.AsSpan()).Sum<int?, int>();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static long Sum(this ArraySegmentValueEnumerable<long> source)
-            => source.source.AsSpan().Sum();
+            => ((ReadOnlySpan<long>)source.source.AsSpan()).Sum();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static long Sum(this ArraySegmentValueEnumerable<long?> source)
-            => source.source.AsSpan().Sum();
+            => ((ReadOnlySpan<long?>)source.source.AsSpan()).Sum<long?, long>();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float Sum(this ArraySegmentValueEnumerable<float> source)
-            => source.source.AsSpan().Sum();
+            => ((ReadOnlySpan<float>)source.source.AsSpan()).Sum();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float Sum(this ArraySegmentValueEnumerable<float?> source)
-            => source.source.AsSpan().Sum();
+            => ((ReadOnlySpan<float?>)source.source.AsSpan()).Sum<float?, float>();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static double Sum(this ArraySegmentValueEnumerable<double> source)
-            => source.source.AsSpan().Sum();
+            => ((ReadOnlySpan<double>)source.source.AsSpan()).Sum();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static double Sum(this ArraySegmentValueEnumerable<double?> source)
-            => source.source.AsSpan().Sum();
+            => ((ReadOnlySpan<double?>)source.source.AsSpan()).Sum<double?, double>();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static decimal Sum(this ArraySegmentValueEnumerable<decimal> source)
-            => source.source.AsSpan().Sum();
+            => ((ReadOnlySpan<decimal>)source.source.AsSpan()).Sum();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static decimal Sum(this ArraySegmentValueEnumerable<decimal?> source)
-            => source.source.AsSpan().Sum();
+            => ((ReadOnlySpan<decimal?>)source.source.AsSpan()).Sum<decimal?, int>();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool ContainsVector<TSource>(this ArraySegmentValueEnumerable<TSource> source, TSource value)
             where TSource : struct
-            => source.source.AsSpan().ContainsVector(value);
+            => ((ReadOnlySpan<TSource>)source.source.AsSpan()).ContainsVector(value);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static MemorySelectVectorContext<TSource, TResult, FunctionWrapper<Vector<TSource>, Vector<TResult>>, FunctionWrapper<TSource, TResult>> SelectVector<TSource, TResult>(this ArraySegmentValueEnumerable<TSource> source, Func<Vector<TSource>, Vector<TResult>> vectorSelector, Func<TSource, TResult> selector)

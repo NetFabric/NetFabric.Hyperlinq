@@ -18,8 +18,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Aggregation.Count
                 .Count(source);
 
             // Act
-            var result = ArrayExtensions
-                .Count((ReadOnlySpan<int>)source.AsSpan());
+            var result = ((ReadOnlySpan<int>)source.AsSpan()).AsValueEnumerable()
+                .Count();
 
             // Assert
             _ = result.Must()
@@ -38,8 +38,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Aggregation.Count
                 .Count();
 
             // Act
-            var result = ArrayExtensions
-                .Where((ReadOnlySpan<int>)source.AsSpan(), predicate)
+            var result = ((ReadOnlySpan<int>)source.AsSpan()).AsValueEnumerable()
+                .Where(predicate)
                 .Count();
 
             // Assert
@@ -59,8 +59,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Aggregation.Count
                 .Count();
 
             // Act
-            var result = ArrayExtensions
-                .Where((ReadOnlySpan<int>)source.AsSpan(), predicate)
+            var result = ((ReadOnlySpan<int>)source.AsSpan()).AsValueEnumerable()
+                .Where(predicate)
                 .Count();
 
             // Assert

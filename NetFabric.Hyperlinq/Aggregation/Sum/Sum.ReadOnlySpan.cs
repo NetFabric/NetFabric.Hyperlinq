@@ -7,48 +7,7 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class ArrayExtensions
     {
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int Sum(this ReadOnlySpan<int> source)
-            => Sum<int>(source);
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int Sum(this ReadOnlySpan<int?> source)
-            => Sum<int?, int>(source);
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static long Sum(this ReadOnlySpan<long> source)
-            => Sum<long>(source);
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static long Sum(this ReadOnlySpan<long?> source)
-            => Sum<long?, long>(source);
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static float Sum(this ReadOnlySpan<float> source)
-            => Sum<float>(source);
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static float Sum(this ReadOnlySpan<float?> source)
-            => Sum<float?, float>(source);
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static double Sum(this ReadOnlySpan<double> source)
-            => Sum<double>(source);
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static double Sum(this ReadOnlySpan<double?> source)
-            => Sum<double?, double>(source);
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static decimal Sum(this ReadOnlySpan<decimal> source)
-            => Sum<decimal>(source);
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static decimal Sum(this ReadOnlySpan<decimal?> source)
-            => Sum<decimal?, decimal>(source);
-
-        ///////////////////////////////////////////////////////////
-
+        
         static TSource Sum<TSource>(this ReadOnlySpan<TSource> source)
             where TSource : struct
         {

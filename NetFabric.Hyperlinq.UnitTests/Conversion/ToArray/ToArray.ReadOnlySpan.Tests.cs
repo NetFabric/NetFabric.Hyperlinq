@@ -21,8 +21,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
                 .ToArray(source);
 
             // Act
-            using var result = ArrayExtensions
-                .ToArray((ReadOnlySpan<int>)source.AsSpan(), pool);
+            using var result = ((ReadOnlySpan<int>)source.AsSpan()).AsValueEnumerable()
+                .ToArray(pool);
 
             // Assert
             _ = result.Memory.Must()
@@ -44,8 +44,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
                 .ToArray();
 
             // Act
-            var result = ArrayExtensions
-                .Where((ReadOnlySpan<int>)source.AsSpan(), predicate)
+            var result = ((ReadOnlySpan<int>)source.AsSpan()).AsValueEnumerable()
+                .Where(predicate)
                 .ToArray();
 
             // Assert
@@ -68,8 +68,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
                 .ToArray();
 
             // Act
-            using var result = ArrayExtensions
-                .Where((ReadOnlySpan<int>)source.AsSpan(), predicate)
+            using var result = ((ReadOnlySpan<int>)source.AsSpan()).AsValueEnumerable()
+                .Where(predicate)
                 .ToArray(pool);
 
             // Assert
@@ -92,8 +92,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
                 .ToArray();
 
             // Act
-            var result = ArrayExtensions
-                .Where((ReadOnlySpan<int>)source.AsSpan(), predicate)
+            var result = ((ReadOnlySpan<int>)source.AsSpan()).AsValueEnumerable()
+                .Where(predicate)
                 .ToArray();
 
             // Assert
@@ -116,8 +116,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
                 .ToArray();
 
             // Act
-            using var result = ArrayExtensions
-                .Where((ReadOnlySpan<int>)source.AsSpan(), predicate)
+            using var result = ((ReadOnlySpan<int>)source.AsSpan()).AsValueEnumerable()
+                .Where(predicate)
                 .ToArray(pool);
 
             // Assert
@@ -140,8 +140,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
                 .ToArray();
 
             // Act
-            var result = ArrayExtensions
-                .Select((ReadOnlySpan<int>)source.AsSpan(), selector)
+            var result = ((ReadOnlySpan<int>)source.AsSpan()).AsValueEnumerable()
+                .Select(selector)
                 .ToArray();
 
             // Assert
@@ -164,8 +164,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
                 .ToArray();
 
             // Act
-            using var result = ArrayExtensions
-                .Select((ReadOnlySpan<int>)source.AsSpan(), selector)
+            using var result = ((ReadOnlySpan<int>)source.AsSpan()).AsValueEnumerable()
+                .Select(selector)
                 .ToArray(pool);
 
             // Assert
@@ -188,8 +188,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
                 .ToArray();
 
             // Act
-            var result = ArrayExtensions
-                .Select((ReadOnlySpan<int>)source.AsSpan(), selector)
+            var result = ((ReadOnlySpan<int>)source.AsSpan()).AsValueEnumerable()
+                .Select(selector)
                 .ToArray();
 
             // Assert
@@ -212,8 +212,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
                 .ToArray();
 
             // Act
-            using var result = ArrayExtensions
-                .Select((ReadOnlySpan<int>)source.AsSpan(), selector)
+            using var result = ((ReadOnlySpan<int>)source.AsSpan()).AsValueEnumerable()
+                .Select(selector)
                 .ToArray(pool);
 
             // Assert
@@ -237,8 +237,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
                 .ToArray();
 
             // Act
-            var result = ArrayExtensions
-                .Where((ReadOnlySpan<int>)source.AsSpan(), predicate)
+            var result = ((ReadOnlySpan<int>)source.AsSpan()).AsValueEnumerable()
+                .Where(predicate)
                 .Select(selector)
                 .ToArray();
 
@@ -263,8 +263,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
                 .ToArray();
 
             // Act
-            using var result = ArrayExtensions
-                .Where((ReadOnlySpan<int>)source.AsSpan(), predicate)
+            using var result = ((ReadOnlySpan<int>)source.AsSpan()).AsValueEnumerable()
+                .Where(predicate)
                 .Select(selector)
                 .ToArray(pool);
 

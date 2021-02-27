@@ -1,5 +1,10 @@
 ﻿namespace NetFabric.Hyperlinq
 {
+    public interface IFunction<out TResult>
+    {
+        TResult Invoke();
+    }
+
     public interface IFunction<in T, out TResult>
     {
         TResult Invoke(T arg);
