@@ -19,18 +19,6 @@ namespace NetFabric.Hyperlinq
             return builder;
         }
 
-        static LargeArrayBuilder<TSource> ToArrayBuilderRef<TSource, TPredicate>(ReadOnlySpan<TSource> source, TPredicate predicate, ArrayPool<TSource> arrayPool)
-            where TPredicate : struct, IFunctionIn<TSource, bool>
-        {
-            var builder = new LargeArrayBuilder<TSource>(arrayPool);
-            foreach (ref readonly var item in source)
-            {
-                if (predicate.Invoke(in item))
-                    builder.AddRef(in item);
-            }
-            return builder;
-        }
-
         static LargeArrayBuilder<TSource> ToArrayBuilderAt<TSource, TPredicate>(ReadOnlySpan<TSource> source, TPredicate predicate, ArrayPool<TSource> arrayPool)
             where TPredicate: struct, IFunction<TSource, int, bool>
         {
@@ -44,19 +32,6 @@ namespace NetFabric.Hyperlinq
             return builder;
         }
 
-        static LargeArrayBuilder<TSource> ToArrayBuilderAtRef<TSource, TPredicate>(ReadOnlySpan<TSource> source, TPredicate predicate, ArrayPool<TSource> arrayPool)
-            where TPredicate : struct, IFunctionIn<TSource, int, bool>
-        {
-            var builder = new LargeArrayBuilder<TSource>(arrayPool);
-            for (var index = 0; index < source.Length; index++)
-            {
-                ref readonly var item = ref source[index];
-                if (predicate.Invoke(in item, index))
-                    builder.AddRef(in item);
-            }
-            return builder;
-        }
-
         static LargeArrayBuilder<TResult> ToArrayBuilder<TSource, TResult, TPredicate, TSelector>(ReadOnlySpan<TSource> source, TPredicate predicate, TSelector selector, ArrayPool<TResult> arrayPool)
             where TPredicate: struct, IFunction<TSource, bool>
             where TSelector: struct, IFunction<TSource, TResult>
@@ -66,19 +41,6 @@ namespace NetFabric.Hyperlinq
             {
                 if (predicate.Invoke(item))
                     builder.Add(selector.Invoke(item));
-            }
-            return builder;
-        }
-
-        static LargeArrayBuilder<TResult> ToArrayBuilderRef<TSource, TResult, TPredicate, TSelector>(ReadOnlySpan<TSource> source, TPredicate predicate, TSelector selector, ArrayPool<TResult> arrayPool)
-            where TPredicate : struct, IFunctionIn<TSource, bool>
-            where TSelector : struct, IFunctionIn<TSource, TResult>
-        {
-            var builder = new LargeArrayBuilder<TResult>(arrayPool);
-            foreach (ref readonly var item in source)
-            {
-                if (predicate.Invoke(in item))
-                    builder.Add(selector.Invoke(in item));
             }
             return builder;
         }

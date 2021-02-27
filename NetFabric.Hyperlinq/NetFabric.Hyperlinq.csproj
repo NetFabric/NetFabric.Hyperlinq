@@ -76,4 +76,10 @@
     </EmbeddedResource>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Filtering\Where" />
+    <Folder Include="Filtering\WhereSelect" />
+    <Folder Include="Projection\Select" />
+  </ItemGroup>
+
 </Project>

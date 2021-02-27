@@ -12,9 +12,5 @@ namespace NetFabric.Hyperlinq
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ArrayExtensions.ArraySegmentValueEnumerable<TSource> AsValueEnumerable<TSource>(this List<TSource> source)
             => source.AsArraySegment().AsValueEnumerable();
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ArrayExtensions.ArraySegmentValueEnumerableRef<TSource> AsValueEnumerableRef<TSource>(this List<TSource> source)
-            => source.AsArraySegment().AsValueEnumerableRef();
     }
 }

@@ -7,11 +7,6 @@ namespace NetFabric.Hyperlinq
     public static partial class ReadOnlyListExtensions
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int Count<TList, TSource>(this TList source)
-            where TList : struct, IReadOnlyList<TSource>
-            => source.Count<TList, TSource>(0, source.Count);
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static int Count<TList, TSource>(this TList source, int offset, int count)
             where TList : struct, IReadOnlyList<TSource>
             => count;
@@ -30,12 +25,6 @@ namespace NetFabric.Hyperlinq
             return counter;
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static int CountAt<TList, TSource, TPredicate>(this TList source, TPredicate predicate)
-            where TList : struct, IReadOnlyList<TSource>
-            where TPredicate : struct, IFunction<TSource, int, bool>
-            => source.CountAt<TList, TSource, TPredicate>(predicate, 0, source.Count);
-
         static int CountAt<TList, TSource, TPredicate>(this TList source, TPredicate predicate, int offset, int count)
             where TList : struct, IReadOnlyList<TSource>
             where TPredicate: struct, IFunction<TSource, int, bool>
@@ -47,7 +36,7 @@ namespace NetFabric.Hyperlinq
                 for (var index = 0; index < end; index++)
                 {
                     var item = source[index];
-                    counter += predicate.Invoke(source[index], index).AsByte();
+                    counter += predicate.Invoke(item, index).AsByte();
                 }
             }
             else

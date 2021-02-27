@@ -34,8 +34,7 @@ namespace NetFabric.Hyperlinq
             }
             return Option.None;
         }
-
-
+        
         static Option<TSource> ElementAtAt<TList, TSource, TPredicate>(this TList source, int index, TPredicate predicate, int offset, int count) 
             where TList : struct, IReadOnlyList<TSource>
             where TPredicate : struct, IFunction<TSource, int, bool>
@@ -63,7 +62,6 @@ namespace NetFabric.Hyperlinq
             }
             return Option.None;
         }
-
         
         static Option<TResult> ElementAt<TList, TSource, TResult, TSelector>(this TList source, int index, TSelector selector, int offset, int count) 
             where TList : struct, IReadOnlyList<TSource>
@@ -72,14 +70,13 @@ namespace NetFabric.Hyperlinq
                 ? Option.None
                 : Option.Some(selector.Invoke(source[index + offset]));
 
-        
+
         static Option<TResult> ElementAtAt<TList, TSource, TResult, TSelector>(this TList source, int index, TSelector selector, int offset, int count) 
             where TList : struct, IReadOnlyList<TSource>
             where TSelector : struct, IFunction<TSource, int, TResult>
             => index < 0 || index >= count 
                 ? Option.None 
                 : Option.Some(selector.Invoke(source[index + offset], index));
-
 
         static Option<TResult> ElementAt<TList, TSource, TResult, TPredicate, TSelector>(this TList source, int index, TPredicate predicate, TSelector selector, int offset, int count) 
             where TList : struct, IReadOnlyList<TSource>
