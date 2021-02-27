@@ -200,6 +200,8 @@ namespace NetFabric.Hyperlinq.SourceGenerator
                 {
                     var builder = new CodeBuilder();
                     _ = builder
+                        .AppendLine("#nullable enable")
+                        .AppendLine()
                         .AppendLine("using System;")
                         .AppendLine("using System.CodeDom.Compiler;")
                         .AppendLine("using System.Diagnostics;")
