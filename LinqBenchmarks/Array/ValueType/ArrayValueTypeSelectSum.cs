@@ -60,13 +60,13 @@ namespace LinqBenchmarks.Array.ValueType
 
         [Benchmark]
         public int Hyperlinq()
-            => source.AsValueEnumerableRef()
-                .Select((in FatValueType item) => item.Value0)
+            => source.AsValueEnumerable()
+                .Select(item => item.Value0)
                 .Sum();
 
         [Benchmark]
         public int Hyperlinq_IFunction()
-            => source.AsValueEnumerableRef()
+            => source.AsValueEnumerable()
                 .Select<int, Value0Selector>()
                 .Sum();
     }

@@ -125,25 +125,5 @@ namespace LinqBenchmarks.List.Int32
             return sum;
         }
 
-        [Benchmark]
-        public int Hyperlinq_SIMD()
-        {
-            var sum = 0;
-            foreach (var item in source.AsValueEnumerable()
-                .SelectVector(item => item * 2, item => item * 2))
-                sum += item;
-            return sum;
-        }
-
-
-        [Benchmark]
-        public int Hyperlinq_SIMD_IFunction()
-        {
-            var sum = 0;
-            foreach (var item in source.AsValueEnumerable()
-                .SelectVector<int, int, DoubleOfInt32>())
-                sum += item;
-            return sum;
-        }
     }
 }

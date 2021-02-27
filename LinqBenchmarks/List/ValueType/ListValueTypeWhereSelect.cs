@@ -94,9 +94,9 @@ namespace LinqBenchmarks.List.ValueType
         public FatValueType Hyperlinq()
         {
             var sum = default(FatValueType);
-            foreach (var item in source.AsValueEnumerableRef()
-                .Where((in FatValueType item) => item.IsEven())
-                .Select((in FatValueType item) => item * 2))
+            foreach (var item in source.AsValueEnumerable()
+                .Where(item => item.IsEven())
+                .Select(item => item * 2))
                 sum += item;
             return sum;
         }

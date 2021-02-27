@@ -64,13 +64,13 @@ namespace LinqBenchmarks.Array.ValueType
 
         [Benchmark]
         public int Hyperlinq()
-            => source.AsValueEnumerableRef()
-                .Where((in FatValueType item) => item.IsEven())
+            => source.AsValueEnumerable()
+                .Where(item => item.IsEven())
                 .Count();
 
         [Benchmark]
         public int Hyperlinq_IFunction()
-            => source.AsValueEnumerableRef()
+            => source.AsValueEnumerable()
                 .Where<FatValueTypeIsEven>()
                 .Count();
     }

@@ -113,7 +113,7 @@ namespace LinqBenchmarks.Array.Int32
             foreach (var item in source.AsValueEnumerable()
                 .Skip(Skip)
                 .Take(Count)
-                .Where<int, Int32IsEven>())
+                .Where<Int32IsEven>())
                 sum += item;
             return sum;
         }

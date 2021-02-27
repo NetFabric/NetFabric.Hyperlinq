@@ -59,7 +59,7 @@ namespace LinqBenchmarks.List.ValueType
 
         [Benchmark]
         public bool Hyperlinq()
-            => source.AsValueEnumerableRef()
+            => source.AsValueEnumerable()
                 .Contains(value);
     }
 }

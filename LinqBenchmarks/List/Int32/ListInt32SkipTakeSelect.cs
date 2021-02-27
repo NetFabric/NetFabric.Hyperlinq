@@ -100,7 +100,7 @@ namespace LinqBenchmarks.List.Int32
         public int Hyperlinq_Foreach_IFunction()
         {
             var sum = 0;
-            foreach (var item in source.AsValueEnumerable().Skip(Skip).Take(Count).Select<int, int, DoubleOfInt32>())
+            foreach (var item in source.AsValueEnumerable().Skip(Skip).Take(Count).Select<int, DoubleOfInt32>())
                 sum += item;
             return sum;
         }
