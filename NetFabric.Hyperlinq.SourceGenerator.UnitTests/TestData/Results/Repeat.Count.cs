@@ -1,4 +1,6 @@
-﻿using System;
+﻿#nullable enable
+
+using System;
 using System.CodeDom.Compiler;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
