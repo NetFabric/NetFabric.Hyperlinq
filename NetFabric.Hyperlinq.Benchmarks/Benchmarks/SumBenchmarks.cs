@@ -126,7 +126,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [BenchmarkCategory("Array")]
         [Benchmark]
         public int Hyperlinq_Span()
-            => array.AsSpan().Sum();
+            => array.AsSpan().AsValueEnumerable().Sum();
 
         //[BenchmarkCategory("Array")]
         //[Benchmark]

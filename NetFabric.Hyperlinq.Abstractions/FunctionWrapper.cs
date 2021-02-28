@@ -2,6 +2,18 @@
 
 namespace NetFabric.Hyperlinq
 {
+    public readonly struct FunctionWrapper<TResult>
+        : IFunction<TResult>
+    {
+        readonly Func<TResult> function;
+
+        public FunctionWrapper(Func<TResult> function)
+            => this.function = function ?? throw new ArgumentNullException(nameof(function));
+
+        public TResult Invoke()
+            => function();
+    }
+
     public readonly struct FunctionWrapper<T, TResult>
         : IFunction<T, TResult>
     {

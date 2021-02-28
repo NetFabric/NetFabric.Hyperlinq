@@ -6,11 +6,11 @@ using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class ArrayExtensions
+    static partial class ArrayExtensions
     {
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static IMemoryOwner<TSource> ToArray<TSource>(this ReadOnlySpan<TSource> source, MemoryPool<TSource> pool)
+        static IMemoryOwner<TSource> ToArray<TSource>(this ReadOnlySpan<TSource> source, MemoryPool<TSource> pool)
         {
             return source switch
             {

@@ -324,12 +324,16 @@ namespace NetFabric.Hyperlinq
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Count(this MemoryValueEnumerable<int> source)
+            => source.source.Span.Count();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int Sum(this MemoryValueEnumerable<int> source)
             => source.source.Span.Sum();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int Sum(this MemoryValueEnumerable<int?> source)
-            => source.source.Span.Sum();
+            => source.source.Span.Sum<int?, int>();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static long Sum(this MemoryValueEnumerable<long> source)
@@ -337,7 +341,7 @@ namespace NetFabric.Hyperlinq
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static long Sum(this MemoryValueEnumerable<long?> source)
-            => source.source.Span.Sum();
+            => source.source.Span.Sum<long?, long>();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float Sum(this MemoryValueEnumerable<float> source)
@@ -345,7 +349,7 @@ namespace NetFabric.Hyperlinq
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float Sum(this MemoryValueEnumerable<float?> source)
-            => source.source.Span.Sum();
+            => source.source.Span.Sum<float?, float>();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static double Sum(this MemoryValueEnumerable<double> source)
@@ -353,7 +357,7 @@ namespace NetFabric.Hyperlinq
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static double Sum(this MemoryValueEnumerable<double?> source)
-            => source.source.Span.Sum();
+            => source.source.Span.Sum<double?, double>();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static decimal Sum(this MemoryValueEnumerable<decimal> source)
@@ -361,7 +365,7 @@ namespace NetFabric.Hyperlinq
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static decimal Sum(this MemoryValueEnumerable<decimal?> source)
-            => source.source.Span.Sum();
+            => source.source.Span.Sum<decimal?, decimal>();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool ContainsVector<TSource>(this MemoryValueEnumerable<TSource> source, TSource value)

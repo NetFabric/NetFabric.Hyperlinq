@@ -6,7 +6,7 @@ namespace NetFabric.Hyperlinq
     public static partial class ArrayExtensions
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int Count<TSource>(this ReadOnlySpan<TSource> source)
+        static int Count<TSource>(this ReadOnlySpan<TSource> source)
             => source.Length;
 
         static int Count<TSource, TPredicate>(this ReadOnlySpan<TSource> source, TPredicate predicate)
