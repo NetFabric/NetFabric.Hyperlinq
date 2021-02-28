@@ -109,7 +109,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [BenchmarkCategory("Array")]
         [Benchmark]
         public List<int> Hyperlinq_Span()
-            => array.AsSpan()
+            => array.AsSpan().AsValueEnumerable()
                 .ToList();
 
         [BenchmarkCategory("Array")]

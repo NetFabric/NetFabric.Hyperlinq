@@ -65,7 +65,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [BenchmarkCategory("Array")]
         [Benchmark]
         public Option<int> Hyperlinq_Span()
-            => array.AsSpan().ElementAt(Count - 1);
+            => array.AsSpan().AsValueEnumerable().ElementAt(Count - 1);
 
         [BenchmarkCategory("Array")]
         [Benchmark]

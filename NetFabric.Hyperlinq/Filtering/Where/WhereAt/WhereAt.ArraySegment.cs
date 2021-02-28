@@ -12,11 +12,11 @@ namespace NetFabric.Hyperlinq
     {
         [GeneratorMapping("TPredicate", "NetFabric.Hyperlinq.FunctionWrapper<TSource, int, bool>")]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static ArraySegmentWhereAtEnumerable<TSource, FunctionWrapper<TSource, int, bool>> Where<TSource>(this in ArraySegment<TSource> source, Func<TSource, int, bool> predicate)
+        static ArraySegmentWhereAtEnumerable<TSource, FunctionWrapper<TSource, int, bool>> Where<TSource>(this in ArraySegment<TSource> source, Func<TSource, int, bool> predicate)
             => source.WhereAt(new FunctionWrapper<TSource, int, bool>(predicate));
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static ArraySegmentWhereAtEnumerable<TSource, TPredicate> WhereAt<TSource, TPredicate>(this in ArraySegment<TSource> source, TPredicate predicate = default)
+        static ArraySegmentWhereAtEnumerable<TSource, TPredicate> WhereAt<TSource, TPredicate>(this in ArraySegment<TSource> source, TPredicate predicate = default)
             where TPredicate : struct, IFunction<TSource, int, bool>
             => new(source, predicate);
 

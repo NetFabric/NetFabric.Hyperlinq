@@ -23,9 +23,9 @@ namespace NetFabric.Hyperlinq.Benchmarks
 
             public bool IsReadOnly => true;
 
-            public void Add(int item) => throw new NotImplementedException();
-            public bool Remove(int item) => throw new NotImplementedException();
-            public void Clear() => throw new NotImplementedException();
+            public void Add(int item) => throw new NotSupportedException();
+            public bool Remove(int item) => throw new NotSupportedException();
+            public void Clear() => throw new NotSupportedException();
 
             public bool Contains(int item)
                 => ((IList<int>)array).Contains(item);
@@ -75,9 +75,9 @@ namespace NetFabric.Hyperlinq.Benchmarks
 
             public bool IsReadOnly => true;
 
-            public void Add(int item) => throw new NotImplementedException();
-            public bool Remove(int item) => throw new NotImplementedException();
-            public void Clear() => throw new NotImplementedException();
+            public void Add(int item) => throw new NotSupportedException();
+            public bool Remove(int item) => throw new NotSupportedException();
+            public void Clear() => throw new NotSupportedException();
 
             public bool Contains(int item)
                 => ((IList<int>)array).Contains(item);

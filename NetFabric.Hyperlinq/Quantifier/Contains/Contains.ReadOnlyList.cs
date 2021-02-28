@@ -19,7 +19,7 @@ namespace NetFabric.Hyperlinq
             if (count is 0)
                 return false;
 
-            if (comparer is null || ReferenceEquals(comparer, EqualityComparer<TSource>.Default))
+            if (Utils.UseDefault(comparer))
             {
                 if (offset is 0 && count == source.Count && source is ICollection<TSource> collection)
                     return collection.Contains(value);
@@ -109,10 +109,9 @@ namespace NetFabric.Hyperlinq
 
             static bool ValueContains(TList source, TResult value, TSelector selector, int offset, int count)
             {
-                var end = count;
                 if (offset is 0)
                 {
-                    for (var index = 0; index < end; index++)
+                    for (var index = 0; index < count; index++)
                     {
                         var item = source[index];
                         if (EqualityComparer<TResult>.Default.Equals(selector.Invoke(item, index), value))
@@ -121,7 +120,7 @@ namespace NetFabric.Hyperlinq
                 }
                 else
                 {
-                    for (var index = 0; index < end; index++)
+                    for (var index = 0; index < count; index++)
                     {
                         var item = source[index + offset];
                         if (EqualityComparer<TResult>.Default.Equals(selector.Invoke(item, index), value))
@@ -134,10 +133,9 @@ namespace NetFabric.Hyperlinq
             static bool ReferenceContains(TList source, TResult value, IEqualityComparer<TResult>? comparer, TSelector selector, int offset, int count)
             {
                 comparer ??= EqualityComparer<TResult>.Default;
-                var end = count;
                 if (offset is 0)
                 {
-                    for (var index = 0; index < end; index++)
+                    for (var index = 0; index < count; index++)
                     {
                         var item = source[index];
                         if (comparer.Equals(selector.Invoke(item, index), value))
@@ -146,7 +144,7 @@ namespace NetFabric.Hyperlinq
                 }
                 else
                 {
-                    for (var index = 0; index < end; index++)
+                    for (var index = 0; index < count; index++)
                     {
                         var item = source[index + offset];
                         if (comparer.Equals(selector.Invoke(item, index), value))

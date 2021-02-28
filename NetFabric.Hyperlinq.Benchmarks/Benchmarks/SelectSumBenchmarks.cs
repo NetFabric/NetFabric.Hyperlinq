@@ -135,14 +135,14 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [BenchmarkCategory("Array")]
         [Benchmark]
         public int Hyperlinq_Span()
-            => array.AsSpan()
+            => array.AsSpan().AsValueEnumerable()
                 .Select(item => item)
                 .Sum();
 
         [BenchmarkCategory("Array")]
         [Benchmark]
         public int Hyperlinq_Span_SIMD()
-            => array.AsSpan()
+            => array.AsSpan().AsValueEnumerable()
                 .SelectVector(item => item, item => item)
                 .Sum();
 

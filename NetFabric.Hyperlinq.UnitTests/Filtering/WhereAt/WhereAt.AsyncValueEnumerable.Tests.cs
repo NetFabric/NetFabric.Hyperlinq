@@ -1,7 +1,6 @@
 using NetFabric.Assertive;
 using System;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -18,16 +17,39 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.WhereAt
             // Arrange
             var wrapped = Wrap
                 .AsAsyncValueEnumerable(source);
-            var expected = Enumerable
-                .Where(source, predicate);
+            var expected = source
+                .Where(predicate);
 
             // Act
-            var result = AsyncValueEnumerableExtensions
-                .Where<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, predicate.AsAsync());
+            var result = wrapped
+                .Where<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(predicate.AsAsync());
 
             // Assert
             _ = result.Must()
                 .BeAsyncEnumerableOf<int>()
+                .BeEqualTo(expected);
+        }
+        
+        [Theory]
+        [MemberData(nameof(TestData.PredicateAtEmpty), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.PredicateAtSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.PredicateAtMultiple), MemberType = typeof(TestData))]
+        public async ValueTask Where_Sum_Predicate_With_ValidData_Must_Succeed(int[] source, Func<int, int, bool> predicate)
+        {
+            // Arrange
+            var wrapped = Wrap
+                .AsAsyncValueEnumerable(source);
+            var expected = source
+                .Where(predicate)
+                .Sum();
+
+            // Act
+            var result = await wrapped
+                .Where<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(predicate.AsAsync())
+                .SumAsync();
+
+            // Assert
+            _ = result.Must()
                 .BeEqualTo(expected);
         }
     }

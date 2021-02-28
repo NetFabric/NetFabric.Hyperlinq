@@ -20,38 +20,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsAsyncValueEnumerable
                 .AsValueEnumerable(source);
 
             // Act
-            var result = ValueEnumerableExtensions
-                .AsAsyncValueEnumerable<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(wrapped);
+            var result = wrapped
+                .AsAsyncValueEnumerable<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>();
 
             // Assert
-            var enumerator = result.GetAsyncEnumerator();
-            await using (enumerator.ConfigureAwait(false))
-            {
-                var index = 0;
-                while (true)
-                {
-                    var isResultCompleted = !await enumerator.MoveNextAsync();
-                    var isSourceCompleted = index == source.Length;
-
-                    if (isResultCompleted && isSourceCompleted)
-                        return;
-
-                    if (isResultCompleted)
-                        throw new Exception("'result' is shorter.");
-
-                    if (isSourceCompleted)
-                        throw new Exception("'result' is longer.");
-
-                    if (!EqualityComparer<int>.Default.Equals(enumerator.Current, source[index]))
-                        throw new Exception($"Items are not equal at index '{index}'.");
-
-                    index++;
-                }
-            }
-            // TODO: figure out why this doesn't work...
-            //_ = result.Must()
-            //    .BeAsyncEnumerableOf<int>()
-            //    .BeEqualTo(source);
+            _ = result.Must()
+                .BeAsyncEnumerableOf<int>()
+                .BeEqualTo(source);
         }
 
         [Theory]

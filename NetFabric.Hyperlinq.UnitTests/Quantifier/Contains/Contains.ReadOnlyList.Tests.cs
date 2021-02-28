@@ -1,6 +1,6 @@
-using System;
-using System.Collections.Generic;
 using NetFabric.Assertive;
+using System.Collections.Generic;
+using System.Linq;
 using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Contains
@@ -14,7 +14,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Contains
         public void Contains_ValueType_With_Null_And_NotContains_Must_ReturnFalse(int[] source)
         {
             // Arrange
-            var value = int.MaxValue;
+            const int value = int.MaxValue;
             var wrapped = Wrap.AsValueReadOnlyList(source);
 
             // Act
@@ -33,7 +33,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Contains
         public void Contains_ReferenceType_With_Null_And_NotContains_Must_ReturnFalse(int[] source)
         {
             // Arrange
-            var value = default(string);
+            const string value = default;
             var wrapped = Wrap.AsValueReadOnlyList(source.AsValueEnumerable().Select(item => item.ToString()).ToArray());
 
             // Act
@@ -51,7 +51,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Contains
         public void Contains_ValueType_With_Null_And_Contains_Must_ReturnTrue(int[] source)
         {
             // Arrange
-            var value = System.Linq.Enumerable.Last(source);
+            var value = source
+                .Last();
             var wrapped = Wrap.AsValueReadOnlyList(source);
 
             // Act
@@ -69,7 +70,9 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Contains
         public void Contains_ReferenceType_With_Null_And_Contains_Must_ReturnTrue(int[] source)
         {
             // Arrange
-            var value = System.Linq.Enumerable.Last(source).ToString();
+            var value = source
+                .Last()
+                .ToString();
             var wrapped = Wrap.AsValueReadOnlyList(source.AsValueEnumerable().Select(item => item.ToString()).ToArray());
 
             // Act
@@ -88,7 +91,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Contains
         public void Contains_With_Comparer_And_NotContains_Must_ReturnFalse(int[] source)
         {
             // Arrange
-            var value = int.MaxValue;
+            const int value = int.MaxValue;
             var wrapped = Wrap.AsValueReadOnlyList(source);
 
             // Act
@@ -106,7 +109,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Contains
         public void Contains_With_Comparer_And_Contains_Must_ReturnTrue(int[] source)
         {
             // Arrange
-            var value = System.Linq.Enumerable.Last(source);
+            var value = source
+                .Last();
             var wrapped = Wrap.AsValueReadOnlyList(source);
 
             // Act
@@ -128,7 +132,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Contains
         public void Contains_Skip_Take_With_Null_And_NotContains_Must_ReturnFalse(int[] source, int skip, int take)
         {
             // Arrange
-            var value = int.MaxValue;
+            const int value = int.MaxValue;
             var wrapped = Wrap.AsValueReadOnlyList(source);
 
             // Act
@@ -148,10 +152,10 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Contains
         public void Contains_Skip_Take_With_Null_And_Contains_Must_ReturnTrue(int[] source, int skip, int take)
         {
             // Arrange
-            var value = 
-                System.Linq.Enumerable.Last(
-                    System.Linq.Enumerable.Take(
-                        System.Linq.Enumerable.Skip(source, skip), take));
+            var value = source
+                .Skip(skip)
+                .Take(take)
+                .Last();
             var wrapped = Wrap.AsValueReadOnlyList(source);
 
             // Act
@@ -172,7 +176,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Contains
         public void Contains_Skip_Take_With_DefaultComparer_And_NotContains_Must_ReturnFalse(int[] source, int skip, int take)
         {
             // Arrange
-            var value = int.MaxValue;
+            const int value = int.MaxValue;
             var wrapped = Wrap.AsValueReadOnlyList(source);
 
             // Act
@@ -192,10 +196,10 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Contains
         public void Contains_Skip_Take_With_DefaultComparer_And_Contains_Must_ReturnTrue(int[] source, int skip, int take)
         {
             // Arrange
-            var value = 
-                System.Linq.Enumerable.Last(
-                    System.Linq.Enumerable.Take(
-                        System.Linq.Enumerable.Skip(source, skip), take));
+            var value = source
+                .Skip(skip)
+                .Take(take)
+                .Last();
             var wrapped = Wrap.AsValueReadOnlyList(source);
 
             // Act
@@ -216,7 +220,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Contains
         public void Contains_Skip_Take_With_Comparer_And_NotContains_Must_ReturnFalse(int[] source, int skip, int take)
         {
             // Arrange
-            var value = int.MaxValue;
+            const int value = int.MaxValue;
             var wrapped = Wrap.AsValueReadOnlyList(source);
 
             // Act
@@ -236,10 +240,10 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Contains
         public void Contains_Skip_Take_With_Comparer_And_Contains_Must_ReturnTrue(int[] source, int skip, int take)
         {
             // Arrange
-            var value =
-                System.Linq.Enumerable.Last(
-                    System.Linq.Enumerable.Take(
-                        System.Linq.Enumerable.Skip(source, skip), take));
+            var value = source
+                .Skip(skip)
+                .Take(take)
+                .Last();
             var wrapped = Wrap.AsValueReadOnlyList(source);
 
             // Act

@@ -15,8 +15,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Partitioning.Take
             // Arrange
             var wrapped = Wrap
                 .AsValueReadOnlyCollection(source);
-            var expected = Enumerable
-                .Take(wrapped, count);
+            var expected = source
+                .Take(count);
 
             // Act
             var result = ValueReadOnlyCollectionExtensions

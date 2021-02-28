@@ -1,7 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using NetFabric.Assertive;
+using System;
+using System.Linq;
 using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Any
@@ -17,7 +16,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Any
             // Arrange
             var wrapped = Wrap.AsValueReadOnlyCollection(source);
             var expected = 
-                System.Linq.Enumerable.Any(source);
+                source.Any();
 
             // Act
             var result = ValueReadOnlyCollectionExtensions
@@ -37,7 +36,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Any
             // Arrange
             var wrapped = Wrap.AsValueReadOnlyCollection(source);
             var expected = 
-                System.Linq.Enumerable.Any(wrapped, predicate);
+                wrapped.Any(predicate);
 
             // Act
             var result = ValueReadOnlyCollectionExtensions
@@ -57,8 +56,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Any
             // Arrange
             var wrapped = Wrap.AsValueReadOnlyCollection(source);
             var expected = 
-                System.Linq.Enumerable.Count(
-                    System.Linq.Enumerable.Where(source, predicate)) != 0;
+                source.Where(predicate).Count() != 0;
 
             // Act
             var result = ValueReadOnlyCollectionExtensions

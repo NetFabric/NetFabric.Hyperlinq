@@ -7,9 +7,11 @@ namespace NetFabric.Hyperlinq
     public static partial class Wrap
     {
         public static ValueReadOnlyListWrapper<T> AsValueReadOnlyList<T>(T[] source)
-            => source is null
-                ? throw new ArgumentNullException(nameof(source))
-                : new(source);
+            => source switch
+            {
+                null => throw new ArgumentNullException(nameof(source)),
+                _ => new ValueReadOnlyListWrapper<T>(source)
+            };
 
         public readonly struct ValueReadOnlyListWrapper<T> 
             : IValueReadOnlyList<T, Enumerator<T>>
@@ -26,7 +28,7 @@ namespace NetFabric.Hyperlinq
                 => source[index];
 
             public readonly Enumerator<T> GetEnumerator() 
-                => new Enumerator<T>(source);
+                => new(source);
             readonly IEnumerator<T> IEnumerable<T>.GetEnumerator() 
                 => new Enumerator<T>(source);
             readonly IEnumerator IEnumerable.GetEnumerator() 

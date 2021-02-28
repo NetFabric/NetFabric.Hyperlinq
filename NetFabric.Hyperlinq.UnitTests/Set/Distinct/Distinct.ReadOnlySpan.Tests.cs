@@ -15,12 +15,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct
         public void Distinct_With_ValidData_Must_Succeed(int[] source)
         {
             // Arrange
-            var expected = Enumerable
-                .Distinct(source);
+            var wrapped = (ReadOnlySpan<int>)source.AsSpan();
+            var expected = source
+                .Distinct();
 
             // Act
-            var result = ArrayExtensions
-                .Distinct((ReadOnlySpan<int>)source.AsSpan());
+            var result = wrapped.AsValueEnumerable()
+                .Distinct();
 
             // Assert
             _ = result.SequenceEqual(expected).Must().BeTrue();
@@ -33,13 +34,14 @@ namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct
         public void Distinct_ToArray_With_ValidData_Must_Succeed(int[] source)
         {
             // Arrange
-            var expected = Enumerable
-                .Distinct(source)
+            var wrapped = (ReadOnlySpan<int>)source.AsSpan();
+            var expected = source
+                .Distinct()
                 .ToArray();
 
             // Act
-            var result = ArrayExtensions
-                .Distinct((ReadOnlySpan<int>)source.AsSpan())
+            var result = wrapped.AsValueEnumerable()
+                .Distinct()
                 .ToArray();
 
             // Assert
@@ -55,13 +57,14 @@ namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct
         public void Distinct_ToArray_MemoryPool_With_ValidData_Must_Succeed(int[] source)
         {
             // Arrange
-            var expected = Enumerable
-                .Distinct(source)
+            var wrapped = (ReadOnlySpan<int>)source.AsSpan();
+            var expected = source
+                .Distinct()
                 .ToArray();
 
             // Act
-            using var result = ArrayExtensions
-                .Distinct((ReadOnlySpan<int>)source.AsSpan())
+            using var result = wrapped.AsValueEnumerable()
+                .Distinct()
                 .ToArray(MemoryPool<int>.Shared);
 
             // Assert
@@ -76,13 +79,14 @@ namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct
         public void Distinct_ToList_With_ValidData_Must_Succeed(int[] source)
         {
             // Arrange
-            var expected = Enumerable
-                .Distinct(source)
+            var wrapped = (ReadOnlySpan<int>)source.AsSpan();
+            var expected = source
+                .Distinct()
                 .ToList();
 
             // Act
-            var result = ArrayExtensions
-                .Distinct<int>((ReadOnlySpan<int>)source.AsSpan())
+            var result = wrapped.AsValueEnumerable()
+                .Distinct()
                 .ToList();
 
             // Assert
@@ -90,5 +94,6 @@ namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct
                 .BeEnumerableOf<int>()
                 .BeEqualTo(expected);
         }
+
     }
 }

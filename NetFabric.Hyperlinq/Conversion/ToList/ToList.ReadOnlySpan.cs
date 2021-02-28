@@ -11,7 +11,7 @@ namespace NetFabric.Hyperlinq
     {
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static List<TSource> ToList<TSource>(this ReadOnlySpan<TSource> source)
+        static List<TSource> ToList<TSource>(this ReadOnlySpan<TSource> source)
             => source switch
             {
                 { Length: 0 } => new List<TSource>(),

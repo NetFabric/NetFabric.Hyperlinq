@@ -1,9 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Threading;
-using System.Threading.Tasks;
 using NetFabric.Assertive;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Any
@@ -18,12 +16,12 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Any
         {
             // Arrange
             var wrapped = Wrap.AsAsyncValueEnumerable(source);
-            var expected = 
-                System.Linq.Enumerable.Any(source);
+            var expected = source
+                .Any();
 
             // Act
-            var result = await AsyncValueEnumerableExtensions
-                .AnyAsync<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(wrapped);
+            var result = await wrapped
+                .AnyAsync<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>();
 
             // Assert
             _ = result.Must()
@@ -38,12 +36,12 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Any
         {
             // Arrange
             var wrapped = Wrap.AsAsyncValueEnumerable(source);
-            var expected = 
-                System.Linq.Enumerable.Any(source, predicate);
+            var expected = source
+                .Any(predicate);
 
             // Act
-            var result = await AsyncValueEnumerableExtensions
-                .AnyAsync<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, predicate.AsAsync());
+            var result = await wrapped
+                .AnyAsync<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(predicate.AsAsync());
 
             // Assert
             _ = result.Must()
@@ -58,13 +56,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Any
         {
             // Arrange
             var wrapped = Wrap.AsAsyncValueEnumerable(source);
-            var expected = 
-                System.Linq.Enumerable.Count(
-                    System.Linq.Enumerable.Where(source, predicate)) != 0;
+            var expected = source
+                .Where(predicate)
+                .Count() != 0;
 
             // Act
-            var result = await AsyncValueEnumerableExtensions
-                .AnyAsync<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, predicate.AsAsync());
+            var result = await wrapped
+                .AnyAsync<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(predicate.AsAsync());
 
             // Assert
             _ = result.Must()

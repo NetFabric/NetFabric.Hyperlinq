@@ -7,9 +7,11 @@ namespace NetFabric.Hyperlinq
     public static partial class Wrap
     {
         public static EnumerableWrapper<T> AsEnumerable<T>(T[] source)
-            => source is null
-                ? throw new ArgumentNullException(nameof(source))
-                : new(source);
+            => source switch
+            {
+                null => throw new ArgumentNullException(nameof(source)),
+                _ => new EnumerableWrapper<T>(source)
+            };
 
         public class EnumerableWrapper<T> 
             : IEnumerable<T>
@@ -20,7 +22,7 @@ namespace NetFabric.Hyperlinq
                 => this.source = source;
 
             public Enumerator<T> GetEnumerator() 
-                => new Enumerator<T>(source);
+                => new(source);
             IEnumerator<T> IEnumerable<T>.GetEnumerator() 
                 => new Enumerator<T>(source);
             IEnumerator IEnumerable.GetEnumerator() 

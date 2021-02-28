@@ -181,7 +181,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [Benchmark]
         public int Hyperlinq_Span_For()
         {
-            var source = array.AsSpan().Select(item => item);
+            var source = array.AsSpan().AsValueEnumerable().Select(item => item);
             var sum = 0;
             for (var index = 0; index < source.Count; index++)
                 sum += source[index];
@@ -194,7 +194,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Hyperlinq_Span_Foreach()
         {
             var sum = 0;
-            foreach (var item in array.AsSpan().Select(item => item))
+            foreach (var item in array.AsSpan().AsValueEnumerable().Select(item => item))
                 sum += item;
             return sum;
         }

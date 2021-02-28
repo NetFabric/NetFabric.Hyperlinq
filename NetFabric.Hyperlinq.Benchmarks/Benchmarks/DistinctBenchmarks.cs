@@ -190,7 +190,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Hyperlinq_Span()
         {
             var sum = 0;
-            foreach (ref readonly var item in array.AsSpan().Distinct())
+            foreach (ref readonly var item in array.AsSpan().AsValueEnumerable().Distinct())
                 sum += item;
             return sum;
         }

@@ -1,7 +1,7 @@
+using NetFabric.Assertive;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using NetFabric.Assertive;
 using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
@@ -17,8 +17,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
             // Arrange
             var wrapped = Wrap
                 .AsValueReadOnlyCollection(source);
-            var expected = Enumerable
-                .ToList(wrapped);
+            var expected = wrapped
+                .ToList();
 
             // Act
             var result = ValueReadOnlyCollectionExtensions
@@ -40,8 +40,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
             // Arrange
             var wrapped = Wrap
                 .AsValueCollection(source);
-            var expected = Enumerable
-                .ToList(source);
+            var expected = source
+                .ToList();
 
             // Act
             var result = ValueReadOnlyCollectionExtensions
@@ -63,8 +63,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
             // Arrange
             var wrapped = Wrap
                 .AsValueReadOnlyCollection(source);
-            var expected = Enumerable
-                .Select(source, selector)
+            var expected = source
+                .Select(selector)
                 .ToList();
 
             // Act
@@ -88,8 +88,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
             // Arrange
             var wrapped = Wrap
                 .AsValueReadOnlyCollection(source);
-            var expected = Enumerable
-                .Select(source, selector)
+            var expected = source
+                .Select(selector)
                 .ToList();
 
             // Act

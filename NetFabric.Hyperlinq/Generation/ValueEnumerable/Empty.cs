@@ -12,7 +12,7 @@ namespace NetFabric.Hyperlinq
         public static EmptyEnumerable<TSource> Empty<TSource>() 
             => new();
 
-        public partial struct EmptyEnumerable<TSource>
+        public readonly partial struct EmptyEnumerable<TSource>
             : IValueReadOnlyList<TSource, EmptyEnumerable<TSource>.DisposableEnumerator>
             , IList<TSource>
         {

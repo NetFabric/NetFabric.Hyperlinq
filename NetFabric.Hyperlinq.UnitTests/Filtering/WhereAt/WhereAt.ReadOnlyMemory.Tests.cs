@@ -14,18 +14,41 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.WhereIndex
         public void Where_With_ValidData_Must_Succeed(int[] source, Func<int, int, bool> predicate)
         {
             // Arrange
-            var expected = Enumerable
-                .Where(source, predicate);
+            var wrapped = (ReadOnlyMemory<int>)source.AsMemory();
+            var expected = source
+                .Where(predicate);
 
             // Act
-            var result = ArrayExtensions
-                .Where((ReadOnlyMemory<int>)source.AsMemory(), predicate);
+            var result = wrapped.AsValueEnumerable()
+                .Where(predicate);
 
             // Assert
             _ = result.Must()
                 .BeEnumerableOf<int>()
                 .BeEqualTo(expected, testRefStructs: false, testRefReturns: false);
             _ = result.SequenceEqual(expected).Must().BeTrue();
+        }
+        
+        [Theory]
+        [MemberData(nameof(TestData.PredicateAtEmpty), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.PredicateAtSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.PredicateAtMultiple), MemberType = typeof(TestData))]
+        public void Where_Sum_With_ValidData_Must_Succeed(int[] source, Func<int, int, bool> predicate)
+        {
+            // Arrange
+            var wrapped = (ReadOnlyMemory<int>)source.AsMemory();
+            var expected = source
+                .Where(predicate)
+                .Sum();
+
+            // Act
+            var result = wrapped.AsValueEnumerable()
+                .Where(predicate)
+                .Sum();
+
+            // Assert
+            _ = result.Must()
+                .BeEqualTo(expected);
         }
     }
 }

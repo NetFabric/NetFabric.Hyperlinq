@@ -11,7 +11,7 @@ namespace NetFabric.Hyperlinq
     public static partial class ArrayExtensions
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static ArraySegmentWhereSelectEnumerable<TSource, TResult, TPredicate, TSelector> WhereSelect<TSource, TResult, TPredicate, TSelector>(
+        static ArraySegmentWhereSelectEnumerable<TSource, TResult, TPredicate, TSelector> WhereSelect<TSource, TResult, TPredicate, TSelector>(
             this in ArraySegment<TSource> source, 
             TPredicate predicate, 
             TSelector selector) 

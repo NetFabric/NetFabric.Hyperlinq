@@ -1,6 +1,6 @@
 using NetFabric.Assertive;
 using System;
-using System.Threading;
+using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -16,18 +16,42 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.WhereSelect
         {
             // Arrange
             var wrapped = Wrap.AsAsyncValueEnumerable(source);
-            var expected =
-                System.Linq.Enumerable.Select(
-                    System.Linq.Enumerable.Where(source, predicate), selector);
+            var expected = source
+                .Where(predicate)
+                .Select(selector);
 
             // Act
-            var result = AsyncValueEnumerableExtensions
-                .Where<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, predicate.AsAsync())
+            var result = wrapped
+                .Where<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(predicate.AsAsync())
                 .Select(selector.AsAsync());
 
             // Assert
             _ = result.Must()
                 .BeAsyncEnumerableOf<string>()
+                .BeEqualTo(expected);
+        }
+        
+        [Theory]
+        [MemberData(nameof(TestData.PredicateEmpty), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.PredicateSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.PredicateMultiple), MemberType = typeof(TestData))]
+        public async ValueTask WhereSelect_Sum_Predicate_With_ValidData_Must_Succeed(int[] source, Func<int, bool> predicate)
+        {
+            // Arrange
+            var wrapped = Wrap.AsAsyncValueEnumerable(source);
+            var expected = source
+                .Where(predicate)
+                .Select(item => item)
+                .Sum();
+
+            // Act
+            var result = await wrapped
+                .Where<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(predicate.AsAsync())
+                .Select((item, _) => new ValueTask<int>(item))
+                .SumAsync().ConfigureAwait(false);
+
+            // Assert
+            _ = result.Must()
                 .BeEqualTo(expected);
         }
     }

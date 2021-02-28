@@ -1,7 +1,7 @@
+using NetFabric.Assertive;
 using System;
 using System.Buffers;
 using System.Linq;
-using NetFabric.Assertive;
 using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
@@ -17,8 +17,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
             // Arrange
             var wrapped = Wrap
                 .AsValueReadOnlyCollection(source);
-            var expected = Enumerable
-                .ToArray(wrapped);
+            var expected = source
+                .ToArray();
 
             // Act
             var result = ValueReadOnlyCollectionExtensions
@@ -39,8 +39,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
             // Arrange
             var wrapped = Wrap
                 .AsValueCollection(source);
-            var expected = Enumerable
-                .ToArray(source);
+            var expected = source
+                .ToArray();
 
             // Act
             var result = ValueReadOnlyCollectionExtensions
@@ -62,8 +62,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
             var pool = MemoryPool<int>.Shared;
             var wrapped = Wrap
                 .AsValueReadOnlyCollection(source);
-            var expected = Enumerable
-                .ToArray(source);
+            var expected = source
+                .ToArray();
 
             // Act
             using var result = ValueEnumerableExtensions
@@ -85,8 +85,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
             // Arrange
             var wrapped = Wrap
                 .AsValueReadOnlyCollection(source);
-            var expected = Enumerable
-                .Select(source, selector)
+            var expected = source
+                .Select(selector)
                 .ToArray();
 
             // Act
@@ -110,8 +110,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
             var pool = MemoryPool<string>.Shared;
             var wrapped = Wrap
                 .AsValueReadOnlyCollection(source);
-            var expected = Enumerable
-                .Select(source, selector)
+            var expected = source
+                .Select(selector)
                 .ToArray();
 
             // Act
@@ -135,8 +135,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
             // Arrange
             var wrapped = Wrap
                 .AsValueReadOnlyCollection(source);
-            var expected = Enumerable
-                .Select(source, selector)
+            var expected = source
+                .Select(selector)
                 .ToArray();
 
             // Act
@@ -160,8 +160,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
             var pool = MemoryPool<string>.Shared;
             var wrapped = Wrap
                 .AsValueReadOnlyCollection(source);
-            var expected = Enumerable
-                .Select(source, selector)
+            var expected = source
+                .Select(selector)
                 .ToArray();
 
             // Act

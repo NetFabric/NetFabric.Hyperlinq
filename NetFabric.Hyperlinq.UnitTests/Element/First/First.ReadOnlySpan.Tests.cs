@@ -12,10 +12,11 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
         public void First_With_Empty_Must_Return_None(int[] source)
         {
             // Arrange
+            var wrapped = (ReadOnlySpan<int>)source.AsSpan();
 
             // Act
-            var result = ArrayExtensions
-                .First((ReadOnlySpan<int>)source.AsSpan());
+            var result = wrapped.AsValueEnumerable()
+                .First();
 
             // Assert
             _ = result.Must()
@@ -29,12 +30,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
         public void First_With_ValidData_Must_Return_Some(int[] source)
         {
             // Arrange
+            var wrapped = (ReadOnlySpan<int>)source.AsSpan();
             var expected = Enumerable
                 .First(source);
 
             // Act
-            var result = ArrayExtensions
-                .First((ReadOnlySpan<int>)source.AsSpan());
+            var result = wrapped.AsValueEnumerable()
+                .First();
 
             // Assert
             _ = result.Match(
@@ -47,10 +49,11 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
         public void First_Predicate_With_Empty_Must_Return_None(int[] source, Func<int, bool> predicate)
         {
             // Arrange
+            var wrapped = (ReadOnlySpan<int>)source.AsSpan();
 
             // Act
-            var result = ArrayExtensions
-                .Where((ReadOnlySpan<int>)source.AsSpan(), predicate)
+            var result = wrapped.AsValueEnumerable()
+                .Where(predicate)
                 .First();
 
             // Assert
@@ -65,12 +68,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
         public void First_Predicate_With_ValidData_Must_Return_Some(int[] source, Func<int, bool> predicate)
         {
             // Arrange
+            var wrapped = (ReadOnlySpan<int>)source.AsSpan();
             var expected = Enumerable
                 .First(source, predicate);
 
             // Act
-            var result = ArrayExtensions
-                .Where((ReadOnlySpan<int>)source.AsSpan(), predicate)
+            var result = wrapped.AsValueEnumerable()
+                .Where(predicate)
                 .First();
 
             // Assert
@@ -84,10 +88,11 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
         public void First_PredicateAt_With_Empty_Must_Return_None(int[] source, Func<int, int, bool> predicate)
         {
             // Arrange
+            var wrapped = (ReadOnlySpan<int>)source.AsSpan();
 
             // Act
-            var result = ArrayExtensions
-                .Where((ReadOnlySpan<int>)source.AsSpan(), predicate)
+            var result = wrapped.AsValueEnumerable()
+                .Where(predicate)
                 .First();
 
             // Assert
@@ -102,13 +107,14 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
         public void First_PredicateAt_With_ValidData_Must_Return_Some(int[] source, Func<int, int, bool> predicate)
         {
             // Arrange
+            var wrapped = (ReadOnlySpan<int>)source.AsSpan();
             var expected = Enumerable
                 .Where(source, predicate)
                 .First();
 
             // Act
-            var result = ArrayExtensions
-                .Where((ReadOnlySpan<int>)source.AsSpan(), predicate)
+            var result = wrapped.AsValueEnumerable()
+                .Where(predicate)
                 .First();
 
             // Assert
@@ -122,10 +128,11 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
         public void First_Selector_With_Empty_Must_Return_None(int[] source, Func<int, string> selector)
         {
             // Arrange
+            var wrapped = (ReadOnlySpan<int>)source.AsSpan();
 
             // Act
-            var result = ArrayExtensions
-                .Select((ReadOnlySpan<int>)source.AsSpan(), selector)
+            var result = wrapped.AsValueEnumerable()
+                .Select(selector)
                 .First();
 
             // Assert
@@ -140,13 +147,14 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
         public void First_Selector_With_ValidData_Must_Return_Some(int[] source, Func<int, string> selector)
         {
             // Arrange
+            var wrapped = (ReadOnlySpan<int>)source.AsSpan();
             var expected = Enumerable
                 .Select(source, selector)
                 .First();
 
             // Act
-            var result = ArrayExtensions
-                .Select((ReadOnlySpan<int>)source.AsSpan(), selector)
+            var result = wrapped.AsValueEnumerable()
+                .Select(selector)
                 .First();
 
             // Assert
@@ -160,10 +168,11 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
         public void First_SelectorAt_With_Empty_Must_Return_None(int[] source, Func<int, int, string> selector)
         {
             // Arrange
+            var wrapped = (ReadOnlySpan<int>)source.AsSpan();
 
             // Act
-            var result = ArrayExtensions
-                .Select((ReadOnlySpan<int>)source.AsSpan(), selector)
+            var result = wrapped.AsValueEnumerable()
+                .Select(selector)
                 .First();
 
             // Assert
@@ -178,13 +187,14 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
         public void First_SelectorAt_With_ValidData_Must_Return_Some(int[] source, Func<int, int, string> selector)
         {
             // Arrange
+            var wrapped = (ReadOnlySpan<int>)source.AsSpan();
             var expected = Enumerable
                 .Select(source, selector)
                 .First();
 
             // Act
-            var result = ArrayExtensions
-                .Select((ReadOnlySpan<int>)source.AsSpan(), selector)
+            var result = wrapped.AsValueEnumerable()
+                .Select(selector)
                 .First();
 
             // Assert
@@ -198,10 +208,11 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
         public void First_Predicate_Selector_With_Empty_Must_Return_None(int[] source, Func<int, bool> predicate, Func<int, string> selector)
         {
             // Arrange
+            var wrapped = (ReadOnlySpan<int>)source.AsSpan();
 
             // Act
-            var result = ArrayExtensions
-                .Where((ReadOnlySpan<int>)source.AsSpan(), predicate)
+            var result = wrapped.AsValueEnumerable()
+                .Where(predicate)
                 .Select(selector)
                 .First();
 
@@ -217,14 +228,15 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
         public void First_Predicate_Selector_With_ValidData_Must_Return_Some(int[] source, Func<int, bool> predicate, Func<int, string> selector)
         {
             // Arrange
+            var wrapped = (ReadOnlySpan<int>)source.AsSpan();
             var expected = Enumerable
                 .Where(source, predicate)
                 .Select(selector)
                 .First();
 
             // Act
-            var result = ArrayExtensions
-                .Where<int>((ReadOnlySpan<int>)source.AsSpan(), predicate)
+            var result = wrapped.AsValueEnumerable()
+                .Where(predicate)
                 .Select(selector)
                 .First();
 

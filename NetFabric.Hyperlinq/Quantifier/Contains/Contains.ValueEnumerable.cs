@@ -9,8 +9,9 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
         {
-            if (comparer is null || ReferenceEquals(comparer, EqualityComparer<TSource>.Default))
+            if (Utils.UseDefault(comparer))
             {
+                // ReSharper disable once HeapView.PossibleBoxingAllocation
                 if (source is ICollection<TSource> collection)
                     return collection.Contains(value);
 
@@ -34,7 +35,6 @@ namespace NetFabric.Hyperlinq
             static bool ComparerContains(TEnumerable source, TSource value, IEqualityComparer<TSource>? comparer)
             {
                 comparer ??= EqualityComparer<TSource>.Default;
-                
                 using var enumerator = source.GetEnumerator();
                 while (enumerator.MoveNext())
                 {

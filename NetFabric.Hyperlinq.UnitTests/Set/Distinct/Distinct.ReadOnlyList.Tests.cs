@@ -1,6 +1,5 @@
 ﻿using NetFabric.Assertive;
 using System.Buffers;
-using System.ComponentModel;
 using System.Linq;
 using Xunit;
 
@@ -16,8 +15,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct
         {
             // Arrange
             var wrapped = Wrap.AsReadOnlyList(source);
-            var expected = Enumerable
-                .Skip(source, skip)
+            var expected = source
+                .Skip(skip)
                 .Take(take)
                 .Distinct();
 
@@ -41,8 +40,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct
         {
             // Arrange
             var wrapped = Wrap.AsReadOnlyList(source);
-            var expected = Enumerable
-                .Skip(source, skip)
+            var expected = source
+                .Skip(skip)
                 .Take(take)
                 .Distinct()
                 .ToArray();
@@ -69,8 +68,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct
             // Arrange
             var pool = MemoryPool<int>.Shared;
             var wrapped = Wrap.AsReadOnlyList(source);
-            var expected = Enumerable
-                .Skip(source, skip)
+            var expected = source
+                .Skip(skip)
                 .Take(take)
                 .Distinct()
                 .ToArray();
@@ -95,8 +94,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct
         {
             // Arrange
             var wrapped = Wrap.AsReadOnlyList(source);
-            var expected = Enumerable
-                .Skip(source, skip)
+            var expected = source
+                .Skip(skip)
                 .Take(take)
                 .Distinct()
                 .ToList();
@@ -111,6 +110,32 @@ namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct
             // Assert
             _ = result.Must()
                 .BeEnumerableOf<int>()
+                .BeEqualTo(expected);
+        }
+
+        [Theory]
+        [MemberData(nameof(TestData.SkipTakeEmpty), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakeSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakeMultiple), MemberType = typeof(TestData))]
+        public void Distinct_Sum_With_ValidData_Must_Succeed(int[] source, int skip, int take)
+        {
+            // Arrange
+            var wrapped = Wrap.AsReadOnlyList(source);
+            var expected = source
+                .Skip(skip)
+                .Take(take)
+                .Distinct()
+                .Sum();
+
+            // Act
+            var result = wrapped
+                .Skip(skip)
+                .Take(take)
+                .Distinct()
+                .Sum();
+
+            // Assert
+            _ = result.Must()
                 .BeEqualTo(expected);
         }
     }

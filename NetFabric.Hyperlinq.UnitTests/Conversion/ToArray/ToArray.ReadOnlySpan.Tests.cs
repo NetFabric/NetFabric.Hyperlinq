@@ -16,12 +16,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
         public void ToArray_MemoryPool_Must_Succeed(int[] source)
         {
             // Arrange
+            var wrapped = (ReadOnlySpan<int>)source.AsSpan();
             var pool = MemoryPool<int>.Shared;
-            var expected = Enumerable
-                .ToArray(source);
+            var expected = source
+                .ToArray();
 
             // Act
-            using var result = ((ReadOnlySpan<int>)source.AsSpan()).AsValueEnumerable()
+            using var result = wrapped.AsValueEnumerable()
                 .ToArray(pool);
 
             // Assert
@@ -39,12 +40,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
         public void ToArray_Predicate_Must_Succeed(int[] source, Func<int, bool> predicate)
         {
             // Arrange
-            var expected = Enumerable
-                .Where(source, predicate)
+            var wrapped = (ReadOnlySpan<int>)source.AsSpan();
+            var expected = source
+                .Where(predicate)
                 .ToArray();
 
             // Act
-            var result = ((ReadOnlySpan<int>)source.AsSpan()).AsValueEnumerable()
+            var result = wrapped.AsValueEnumerable()
                 .Where(predicate)
                 .ToArray();
 
@@ -62,13 +64,14 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
         public void ToArray_Predicate_MemoryPool_Must_Succeed(int[] source, Func<int, bool> predicate)
         {
             // Arrange
+            var wrapped = (ReadOnlySpan<int>)source.AsSpan();
             var pool = MemoryPool<int>.Shared;
-            var expected = Enumerable
-                .Where(source, predicate)
+            var expected = source
+                .Where(predicate)
                 .ToArray();
 
             // Act
-            using var result = ((ReadOnlySpan<int>)source.AsSpan()).AsValueEnumerable()
+            using var result = wrapped.AsValueEnumerable()
                 .Where(predicate)
                 .ToArray(pool);
 
@@ -87,12 +90,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
         public void ToArray_PredicateAt_Must_Succeed(int[] source, Func<int, int, bool> predicate)
         {
             // Arrange
-            var expected = Enumerable
-                .Where(source, predicate)
+            var wrapped = (ReadOnlySpan<int>)source.AsSpan();
+            var expected = source
+                .Where(predicate)
                 .ToArray();
 
             // Act
-            var result = ((ReadOnlySpan<int>)source.AsSpan()).AsValueEnumerable()
+            var result = wrapped.AsValueEnumerable()
                 .Where(predicate)
                 .ToArray();
 
@@ -110,13 +114,14 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
         public void ToArray_PredicateAt_MemoryPool_Must_Succeed(int[] source, Func<int, int, bool> predicate)
         {
             // Arrange
+            var wrapped = (ReadOnlySpan<int>)source.AsSpan();
             var pool = MemoryPool<int>.Shared;
-            var expected = Enumerable
-                .Where(source, predicate)
+            var expected = source
+                .Where(predicate)
                 .ToArray();
 
             // Act
-            using var result = ((ReadOnlySpan<int>)source.AsSpan()).AsValueEnumerable()
+            using var result = wrapped.AsValueEnumerable()
                 .Where(predicate)
                 .ToArray(pool);
 
@@ -135,12 +140,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
         public void ToArray_Selector_Must_Succeed(int[] source, Func<int, string> selector)
         {
             // Arrange
-            var expected = Enumerable
-                .Select(source, selector)
+            var wrapped = (ReadOnlySpan<int>)source.AsSpan();
+            var expected = source
+                .Select(selector)
                 .ToArray();
 
             // Act
-            var result = ((ReadOnlySpan<int>)source.AsSpan()).AsValueEnumerable()
+            var result = wrapped.AsValueEnumerable()
                 .Select(selector)
                 .ToArray();
 
@@ -158,13 +164,14 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
         public void ToArray_Selector_MemoryPool_Must_Succeed(int[] source, Func<int, string> selector)
         {
             // Arrange
+            var wrapped = (ReadOnlySpan<int>)source.AsSpan();
             var pool = MemoryPool<string>.Shared;
-            var expected = Enumerable
-                .Select(source, selector)
+            var expected = source
+                .Select(selector)
                 .ToArray();
 
             // Act
-            using var result = ((ReadOnlySpan<int>)source.AsSpan()).AsValueEnumerable()
+            using var result = wrapped.AsValueEnumerable()
                 .Select(selector)
                 .ToArray(pool);
 
@@ -183,12 +190,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
         public void ToArray_SelectorAt_Must_Succeed(int[] source, Func<int, int, string> selector)
         {
             // Arrange
-            var expected = Enumerable
-                .Select(source, selector)
+            var wrapped = (ReadOnlySpan<int>)source.AsSpan();
+            var expected = source
+                .Select(selector)
                 .ToArray();
 
             // Act
-            var result = ((ReadOnlySpan<int>)source.AsSpan()).AsValueEnumerable()
+            var result = wrapped.AsValueEnumerable()
                 .Select(selector)
                 .ToArray();
 
@@ -206,13 +214,14 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
         public void ToArray_SelectorAt_MemoryPool_Must_Succeed(int[] source, Func<int, int, string> selector)
         {
             // Arrange
+            var wrapped = (ReadOnlySpan<int>)source.AsSpan();
             var pool = MemoryPool<string>.Shared;
-            var expected = Enumerable
-                .Select(source, selector)
+            var expected = source
+                .Select(selector)
                 .ToArray();
 
             // Act
-            using var result = ((ReadOnlySpan<int>)source.AsSpan()).AsValueEnumerable()
+            using var result = wrapped.AsValueEnumerable()
                 .Select(selector)
                 .ToArray(pool);
 
@@ -231,13 +240,14 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
         public void ToArray_Predicate_Selector_Must_Succeed(int[] source, Func<int, bool> predicate, Func<int, string> selector)
         {
             // Arrange
-            var expected = Enumerable
-                .Where(source, predicate)
+            var wrapped = (ReadOnlySpan<int>)source.AsSpan();
+            var expected = source
+                .Where(predicate)
                 .Select(selector)
                 .ToArray();
 
             // Act
-            var result = ((ReadOnlySpan<int>)source.AsSpan()).AsValueEnumerable()
+            var result = wrapped.AsValueEnumerable()
                 .Where(predicate)
                 .Select(selector)
                 .ToArray();
@@ -256,14 +266,15 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
         public void ToArray_Predicate_Selector_MemoryPool_Must_Succeed(int[] source, Func<int, bool> predicate, Func<int, string> selector)
         {
             // Arrange
+            var wrapped = (ReadOnlySpan<int>)source.AsSpan();
             var pool = MemoryPool<string>.Shared;
-            var expected = Enumerable
-                .Where(source, predicate)
+            var expected = source
+                .Where(predicate)
                 .Select(selector)
                 .ToArray();
 
             // Act
-            using var result = ((ReadOnlySpan<int>)source.AsSpan()).AsValueEnumerable()
+            using var result = wrapped.AsValueEnumerable()
                 .Where(predicate)
                 .Select(selector)
                 .ToArray(pool);

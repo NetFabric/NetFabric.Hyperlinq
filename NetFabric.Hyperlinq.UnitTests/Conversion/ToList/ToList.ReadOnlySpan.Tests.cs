@@ -1,7 +1,7 @@
+using NetFabric.Assertive;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using NetFabric.Assertive;
 using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
@@ -15,12 +15,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
         public void ToList_With_Must_Succeed(int[] source)
         {
             // Arrange
-            var expected = Enumerable
-                .ToList(source);
+            var wrapped = (ReadOnlySpan<int>)source.AsSpan();
+            var expected = source
+                .ToList();
 
             // Act
-            var result = ArrayExtensions
-                .ToList((ReadOnlySpan<int>)source.AsSpan());
+            var result = wrapped.AsValueEnumerable()
+                .ToList();
 
             // Assert
             _ = result.Must()
@@ -36,13 +37,14 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
         public void ToList_With_Predicate_Must_Succeed(int[] source, Func<int, bool> predicate)
         {
             // Arrange
-            var expected = Enumerable
-                .Where(source, predicate)
+            var wrapped = (ReadOnlySpan<int>)source.AsSpan();
+            var expected = source
+                .Where(predicate)
                 .ToList();
 
             // Act
-            var result = ArrayExtensions
-                .Where<int>((ReadOnlySpan<int>)source.AsSpan(), predicate)
+            var result = wrapped.AsValueEnumerable()
+                .Where(predicate)
                 .ToList();
 
             // Assert
@@ -59,13 +61,14 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
         public void ToList_With_PredicateAt_Must_Succeed(int[] source, Func<int, int, bool> predicate)
         {
             // Arrange
-            var expected = Enumerable
-                .Where(source, predicate)
+            var wrapped = (ReadOnlySpan<int>)source.AsSpan();
+            var expected = source
+                .Where(predicate)
                 .ToList();
 
             // Act
-            var result = ArrayExtensions
-                .Where((ReadOnlySpan<int>)source.AsSpan(), predicate)
+            var result = wrapped.AsValueEnumerable()
+                .Where(predicate)
                 .ToList();
 
             // Assert
@@ -82,13 +85,14 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
         public void ToList_With_Selector_Must_Succeed(int[] source, Func<int, string> selector)
         {
             // Arrange
-            var expected = Enumerable
-                .Select(source, selector)
+            var wrapped = (ReadOnlySpan<int>)source.AsSpan();
+            var expected = source
+                .Select(selector)
                 .ToList();
 
             // Act
-            var result = ArrayExtensions
-                .Select((ReadOnlySpan<int>)source.AsSpan(), selector)
+            var result = wrapped.AsValueEnumerable()
+                .Select(selector)
                 .ToList();
 
             // Assert
@@ -105,13 +109,14 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
         public void ToList_With_SelectorAt_Must_Succeed(int[] source, Func<int, int, string> selector)
         {
             // Arrange
-            var expected = Enumerable
-                .Select(source, selector)
+            var wrapped = (ReadOnlySpan<int>)source.AsSpan();
+            var expected = source
+                .Select(selector)
                 .ToList();
 
             // Act
-            var result = ArrayExtensions
-                .Select((ReadOnlySpan<int>)source.AsSpan(), selector)
+            var result = wrapped.AsValueEnumerable()
+                .Select(selector)
                 .ToList();
 
             // Assert
@@ -128,14 +133,15 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
         public void ToList_With_Predicate_Selector_Must_Succeed(int[] source, Func<int, bool> predicate, Func<int, string> selector)
         {
             // Arrange
-            var expected = Enumerable
-                .Where(source, predicate)
+            var wrapped = (ReadOnlySpan<int>)source.AsSpan();
+            var expected = source
+                .Where(predicate)
                 .Select(selector)
                 .ToList();
 
             // Act
-            var result = ArrayExtensions
-                .Where<int>((ReadOnlySpan<int>)source.AsSpan(), predicate)
+            var result = wrapped.AsValueEnumerable()
+                .Where(predicate)
                 .Select(selector)
                 .ToList();
 

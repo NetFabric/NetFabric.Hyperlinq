@@ -1,6 +1,6 @@
 using NetFabric.Assertive;
 using System;
-using System.Threading;
+using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -16,12 +16,12 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.All
         {
             // Arrange
             var wrapped = Wrap.AsAsyncValueEnumerable(source);
-            var expected = 
-                System.Linq.Enumerable.All(source, predicate);
+            var expected = source
+                .All(predicate);
 
             // Act
-            var result = await AsyncValueEnumerableExtensions
-                .AllAsync<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, predicate.AsAsync());
+            var result = await wrapped
+                .AllAsync<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(predicate.AsAsync());
 
             // Assert
             _ = result.Must()
@@ -36,13 +36,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.All
         {
             // Arrange
             var wrapped = Wrap.AsAsyncValueEnumerable(source);
-            var expected = 
-                System.Linq.Enumerable.Count(
-                    System.Linq.Enumerable.Where(source, predicate)) == source.Length;
+            var expected = source
+                .Where(predicate)
+                .Count() == source.Length;
 
             // Act
-            var result = await AsyncValueEnumerableExtensions
-                .AllAsync<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, predicate.AsAsync());
+            var result = await wrapped
+                .AllAsync<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(predicate.AsAsync());
 
             // Assert
             _ = result.Must()

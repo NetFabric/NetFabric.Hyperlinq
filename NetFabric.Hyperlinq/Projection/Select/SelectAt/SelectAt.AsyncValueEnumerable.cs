@@ -34,8 +34,8 @@ namespace NetFabric.Hyperlinq
             where TEnumerator : struct, IAsyncEnumerator<TSource>
             where TSelector : struct, IAsyncFunction<TSource, int, TResult>
         {
-            readonly TEnumerable source;
-            readonly TSelector selector;
+            internal readonly TEnumerable source;
+            internal readonly TSelector selector;
 
             internal SelectAtEnumerable(in TEnumerable source, TSelector selector)
                 => (this.source, this.selector) = (source, selector);
@@ -265,6 +265,76 @@ namespace NetFabric.Hyperlinq
             
             #endregion
         }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ValueTask<int> SumAsync<TEnumerable, TEnumerator, TSource, TSelector>(this SelectAtEnumerable<TEnumerable, TEnumerator, TSource, int, TSelector> source, CancellationToken cancellationToken = default)
+            where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
+            where TEnumerator : struct, IAsyncEnumerator<TSource>
+            where TSelector : struct, IAsyncFunction<TSource, int, int>
+            => source.source.SumAtAsync<TEnumerable, TEnumerator, TSource, int, int, TSelector>(source.selector, cancellationToken);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ValueTask<int> SumAsync<TEnumerable, TEnumerator, TSource, TSelector>(this SelectAtEnumerable<TEnumerable, TEnumerator, TSource, int?, TSelector> source, CancellationToken cancellationToken = default)
+            where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
+            where TEnumerator : struct, IAsyncEnumerator<TSource>
+            where TSelector : struct, IAsyncFunction<TSource, int, int?>
+            => source.source.SumAtAsync<TEnumerable, TEnumerator, TSource, int?, int, TSelector>(source.selector, cancellationToken);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ValueTask<long> SumAsync<TEnumerable, TEnumerator, TSource, TSelector>(this SelectAtEnumerable<TEnumerable, TEnumerator, TSource, long, TSelector> source, CancellationToken cancellationToken = default)
+            where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
+            where TEnumerator : struct, IAsyncEnumerator<TSource>
+            where TSelector : struct, IAsyncFunction<TSource, int, long>
+            => source.source.SumAtAsync<TEnumerable, TEnumerator, TSource, long, long, TSelector>(source.selector, cancellationToken);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ValueTask<long> SumAsync<TEnumerable, TEnumerator, TSource, TSelector>(this SelectAtEnumerable<TEnumerable, TEnumerator, TSource, long?, TSelector> source, CancellationToken cancellationToken = default)
+            where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
+            where TEnumerator : struct, IAsyncEnumerator<TSource>
+            where TSelector : struct, IAsyncFunction<TSource, int, long?>
+            => source.source.SumAtAsync<TEnumerable, TEnumerator, TSource, long?, long, TSelector>(source.selector, cancellationToken);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ValueTask<float> SumAsync<TEnumerable, TEnumerator, TSource, TSelector>(this SelectAtEnumerable<TEnumerable, TEnumerator, TSource, float, TSelector> source, CancellationToken cancellationToken = default)
+            where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
+            where TEnumerator : struct, IAsyncEnumerator<TSource>
+            where TSelector : struct, IAsyncFunction<TSource, int, float>
+            => source.source.SumAtAsync<TEnumerable, TEnumerator, TSource, float, float, TSelector>(source.selector, cancellationToken);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ValueTask<float> SumAsync<TEnumerable, TEnumerator, TSource, TSelector>(this SelectAtEnumerable<TEnumerable, TEnumerator, TSource, float?, TSelector> source, CancellationToken cancellationToken = default)
+            where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
+            where TEnumerator : struct, IAsyncEnumerator<TSource>
+            where TSelector : struct, IAsyncFunction<TSource, int, float?>
+            => source.source.SumAtAsync<TEnumerable, TEnumerator, TSource, float?, float, TSelector>(source.selector, cancellationToken);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ValueTask<double> SumAsync<TEnumerable, TEnumerator, TSource, TSelector>(this SelectAtEnumerable<TEnumerable, TEnumerator, TSource, double, TSelector> source, CancellationToken cancellationToken = default)
+            where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
+            where TEnumerator : struct, IAsyncEnumerator<TSource>
+            where TSelector : struct, IAsyncFunction<TSource, int, double>
+            => source.source.SumAtAsync<TEnumerable, TEnumerator, TSource, double, double, TSelector>(source.selector, cancellationToken);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ValueTask<double> SumAsync<TEnumerable, TEnumerator, TSource, TSelector>(this SelectAtEnumerable<TEnumerable, TEnumerator, TSource, double?, TSelector> source, CancellationToken cancellationToken = default)
+            where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
+            where TEnumerator : struct, IAsyncEnumerator<TSource>
+            where TSelector : struct, IAsyncFunction<TSource, int, double?>
+            => source.source.SumAtAsync<TEnumerable, TEnumerator, TSource, double?, double, TSelector>(source.selector, cancellationToken);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ValueTask<decimal> SumAsync<TEnumerable, TEnumerator, TSource, TSelector>(this SelectAtEnumerable<TEnumerable, TEnumerator, TSource, decimal, TSelector> source, CancellationToken cancellationToken = default)
+            where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
+            where TEnumerator : struct, IAsyncEnumerator<TSource>
+            where TSelector : struct, IAsyncFunction<TSource, int, decimal>
+            => source.source.SumAtAsync<TEnumerable, TEnumerator, TSource, decimal, decimal, TSelector>(source.selector, cancellationToken);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ValueTask<decimal> SumAsync<TEnumerable, TEnumerator, TSource, TSelector>(this SelectAtEnumerable<TEnumerable, TEnumerator, TSource, decimal?, TSelector> source, CancellationToken cancellationToken = default)
+            where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
+            where TEnumerator : struct, IAsyncEnumerator<TSource>
+            where TSelector : struct, IAsyncFunction<TSource, int, decimal?>
+            => source.source.SumAtAsync<TEnumerable, TEnumerator, TSource, decimal?, decimal, TSelector>(source.selector, cancellationToken);
     }
 }
 

@@ -7,7 +7,7 @@ namespace NetFabric.Hyperlinq
     public static partial class ReadOnlyListExtensions
     {
 
-        public static Option<TSource> ElementAt<TList, TSource>(this TList source, int index)
+        static Option<TSource> ElementAt<TList, TSource>(this TList source, int index)
             where TList : struct, IReadOnlyList<TSource>
             => source.ElementAt<TList, TSource>(index,0, source.Count);
 

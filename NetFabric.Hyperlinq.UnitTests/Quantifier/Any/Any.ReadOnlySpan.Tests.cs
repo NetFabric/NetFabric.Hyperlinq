@@ -1,5 +1,6 @@
 using NetFabric.Assertive;
 using System;
+using System.Linq;
 using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Any
@@ -14,12 +15,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Any
         public void Any_With_ValidData_Must_Succeed(int[] source)
         {
             // Arrange
-            var expected = 
-                System.Linq.Enumerable.Any(source);
+            var wrapped = (ReadOnlySpan<int>)source.AsSpan();
+            var expected = source
+                .Any();
 
             // Act
-            var result = ArrayExtensions
-                .Any<int>((ReadOnlySpan<int>)source.AsSpan());
+            var result = wrapped.AsValueEnumerable()
+                .Any();
 
             // Assert
             _ = result.Must()
@@ -33,12 +35,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Any
         public void Any_Predicate_With_ValidData_Must_Succeed(int[] source, Func<int, bool> predicate)
         {
             // Arrange
-            var expected = 
-                System.Linq.Enumerable.Any(source, predicate);
+            var wrapped = (ReadOnlySpan<int>)source.AsSpan();
+            var expected = source
+                .Any(predicate);
 
             // Act
-            var result = ArrayExtensions
-                .Any<int>((ReadOnlySpan<int>)source.AsSpan(), predicate);
+            var result = wrapped.AsValueEnumerable()
+                .Any(predicate);
 
             // Assert
             _ = result.Must()
@@ -52,13 +55,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Any
         public void Any_PredicateAt_With_ValidData_Must_Succeed(int[] source, Func<int, int, bool> predicate)
         {
             // Arrange
-            var expected = 
-                System.Linq.Enumerable.Count(
-                    System.Linq.Enumerable.Where(source, predicate)) != 0;
+            var wrapped = (ReadOnlySpan<int>)source.AsSpan();
+            var expected = source
+                .Where(predicate).Count() != 0;
 
             // Act
-            var result = ArrayExtensions
-                .Any<int>((ReadOnlySpan<int>)source.AsSpan(), predicate);
+            var result = wrapped.AsValueEnumerable()
+                .Any(predicate);
 
             // Assert
             _ = result.Must()

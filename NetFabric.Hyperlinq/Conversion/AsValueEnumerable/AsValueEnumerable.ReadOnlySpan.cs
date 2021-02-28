@@ -129,11 +129,14 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public SpanValueEnumerable<TSource> Skip(int count)
-                => new(source.Skip(count));
+            {
+                var (skipCount, takeCount) = Utils.Skip(source.Length, count);
+                return new SpanValueEnumerable<TSource>(source.Slice(skipCount, takeCount));
+            }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public SpanValueEnumerable<TSource> Take(int count)
-                => new(source.Take(count));
+                => new(source.Slice(0, Utils.Take(source.Length, count)));
 
             #endregion
 

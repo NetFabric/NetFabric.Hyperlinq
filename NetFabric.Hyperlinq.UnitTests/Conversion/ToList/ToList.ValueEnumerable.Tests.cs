@@ -17,12 +17,12 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
             // Arrange
             var wrapped = Wrap
                 .AsValueEnumerable(source);
-            var expected = Enumerable
-                .ToList(source);
+            var expected = source
+                .ToList();
 
             // Act
-            var result = ValueEnumerableExtensions
-                .ToList<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(wrapped);
+            var result = wrapped
+                .ToList<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>();
 
             // Assert
             _ = result.Must()
@@ -40,8 +40,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
             // Arrange
             var wrapped = Wrap
                 .AsValueCollection(source);
-            var expected = Enumerable
-                .ToList(source);
+            var expected = source
+                .ToList();
 
             // Act
             var result = ValueEnumerableExtensions
@@ -63,13 +63,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
             // Arrange
             var wrapped = Wrap
                 .AsValueEnumerable(source);
-            var expected = Enumerable
-                .Where(source, predicate)
+            var expected = source
+                .Where(predicate)
                 .ToList();
 
             // Act
-            var result = ValueEnumerableExtensions
-                .Where<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(wrapped, predicate)
+            var result = wrapped
+                .Where<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(predicate)
                 .ToList();
 
             // Assert
@@ -88,13 +88,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
             // Arrange
             var wrapped = Wrap
                 .AsValueEnumerable(source);
-            var expected = Enumerable
-                .Where(source, predicate)
+            var expected = source
+                .Where(predicate)
                 .ToList();
 
             // Act
-            var result = ValueEnumerableExtensions
-                .Where<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(wrapped, predicate)
+            var result = wrapped
+                .Where<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(predicate)
                 .ToList();
 
             // Assert
@@ -113,13 +113,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
             // Arrange
             var wrapped = Wrap
                 .AsValueEnumerable(source);
-            var expected = Enumerable
-                .Select(source, selector)
+            var expected = source
+                .Select(selector)
                 .ToList();
 
             // Act
-            var result = ValueEnumerableExtensions
-                .Select<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int, string>(wrapped, selector)
+            var result = wrapped
+                .Select<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int, string>(selector)
                 .ToList();
 
             // Assert
@@ -138,13 +138,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
             // Arrange
             var wrapped = Wrap
                 .AsValueEnumerable(source);
-            var expected = Enumerable
-                .Select(source, selector)
+            var expected = source
+                .Select(selector)
                 .ToList();
 
             // Act
-            var result = ValueEnumerableExtensions
-                .Select<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int, string>(wrapped, selector)
+            var result = wrapped
+                .Select<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int, string>(selector)
                 .ToList();
 
             // Assert
@@ -164,14 +164,14 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
             // Arrange
             var wrapped = Wrap
                 .AsValueEnumerable(source);
-            var expected = Enumerable
-                .Where(source, predicate)
+            var expected = source
+                .Where(predicate)
                 .Select(selector)
                 .ToList();
 
             // Act
-            var result = ValueEnumerableExtensions
-                .Where<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(wrapped, predicate)
+            var result = wrapped
+                .Where<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(predicate)
                 .Select(selector)
                 .ToList();
 

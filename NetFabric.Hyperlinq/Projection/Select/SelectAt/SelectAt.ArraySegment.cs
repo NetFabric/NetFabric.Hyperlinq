@@ -12,11 +12,11 @@ namespace NetFabric.Hyperlinq
     {
         [GeneratorMapping("TSelector", "NetFabric.Hyperlinq.FunctionWrapper<TSource, int, TResult>")]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static ArraySegmentSelectAtEnumerable<TSource, TResult, FunctionWrapper<TSource, int, TResult>> Select<TSource, TResult>(this in ArraySegment<TSource> source, Func<TSource, int, TResult> selector)
+        static ArraySegmentSelectAtEnumerable<TSource, TResult, FunctionWrapper<TSource, int, TResult>> Select<TSource, TResult>(this in ArraySegment<TSource> source, Func<TSource, int, TResult> selector)
             => source.SelectAt<TSource, TResult, FunctionWrapper<TSource, int, TResult>>(new FunctionWrapper<TSource, int, TResult>(selector));
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static ArraySegmentSelectAtEnumerable<TSource, TResult, TSelector> SelectAt<TSource, TResult, TSelector>(this in ArraySegment<TSource> source, TSelector selector = default)
+        static ArraySegmentSelectAtEnumerable<TSource, TResult, TSelector> SelectAt<TSource, TResult, TSelector>(this in ArraySegment<TSource> source, TSelector selector = default)
             where TSelector : struct, IFunction<TSource, int, TResult>
             => new(in source, selector);
 

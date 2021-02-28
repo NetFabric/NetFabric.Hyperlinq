@@ -1,5 +1,6 @@
 using NetFabric.Assertive;
 using System;
+using System.Linq;
 using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests.Quantifier.All
@@ -14,12 +15,12 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.All
         {
             // Arrange
             var wrapped = Wrap.AsValueEnumerable(source);
-            var expected = 
-                System.Linq.Enumerable.All(wrapped, predicate);
+            var expected = source
+                .All(predicate);
 
             // Act
-            var result = ValueEnumerableExtensions
-                .All<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
+            var result = wrapped
+                .All<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(predicate);
 
             // Assert
             _ = result.Must()
@@ -34,13 +35,12 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.All
         {
             // Arrange
             var wrapped = Wrap.AsValueEnumerable(source);
-            var expected = 
-                System.Linq.Enumerable.Count(
-                    System.Linq.Enumerable.Where(source, predicate)) == source.Length;
+            var expected =  source
+                .Where(predicate).Count() == source.Length;
 
             // Act
-            var result = ValueEnumerableExtensions
-                .All<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
+            var result = wrapped
+                .All<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(predicate);
 
             // Assert
             _ = result.Must()

@@ -15,8 +15,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Partitioning.Skip
             // Arrange
             var wrapped = Wrap
                 .AsValueReadOnlyCollection(source);
-            var expected = Enumerable
-                .Skip(wrapped, count);
+            var expected = source
+                .Skip(count);
 
             // Act
             var result = ValueReadOnlyCollectionExtensions.Skip<Wrap.ValueReadOnlyCollectionWrapper<int>, Wrap.Enumerator<int>, int>(wrapped, count);

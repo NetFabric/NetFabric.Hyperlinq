@@ -14,11 +14,12 @@ namespace NetFabric.Hyperlinq.UnitTests.Aggregation.Count
         public void Count_With_ValidData_Must_Succeed(int[] source)
         {
             // Arrange
-            var expected = Enumerable
-                .Count(source);
+            var wrapped = (ReadOnlySpan<int>)source.AsSpan();
+            var expected = source
+                .Count();
 
             // Act
-            var result = ((ReadOnlySpan<int>)source.AsSpan()).AsValueEnumerable()
+            var result = wrapped.AsValueEnumerable()
                 .Count();
 
             // Assert
@@ -33,12 +34,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Aggregation.Count
         public void Count_Predicate_With_ValidData_Must_Succeed(int[] source, Func<int, bool> predicate)
         {
             // Arrange
-            var expected = Enumerable
-                .Where(source, predicate)
+            var wrapped = (ReadOnlySpan<int>)source.AsSpan();
+            var expected = source
+                .Where(predicate)
                 .Count();
 
             // Act
-            var result = ((ReadOnlySpan<int>)source.AsSpan()).AsValueEnumerable()
+            var result = wrapped.AsValueEnumerable()
                 .Where(predicate)
                 .Count();
 
@@ -54,12 +56,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Aggregation.Count
         public void Count_PredicateAt_With_ValidData_Must_Succeed(int[] source, Func<int, int, bool> predicate)
         {
             // Arrange
-            var expected = Enumerable
-                .Where(source, predicate)
+            var wrapped = (ReadOnlySpan<int>)source.AsSpan();
+            var expected = source
+                .Where(predicate)
                 .Count();
 
             // Act
-            var result = ((ReadOnlySpan<int>)source.AsSpan()).AsValueEnumerable()
+            var result = wrapped.AsValueEnumerable()
                 .Where(predicate)
                 .Count();
 

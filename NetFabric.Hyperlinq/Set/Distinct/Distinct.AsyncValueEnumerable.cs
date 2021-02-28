@@ -207,6 +207,66 @@ namespace NetFabric.Hyperlinq
             public readonly async ValueTask<List<TSource>> ToListAsync(CancellationToken cancellationToken = default)
                 => (await FillSetAsync(cancellationToken).ConfigureAwait(false)).ToList();
         }
+        
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ValueTask<int> SumAsync<TEnumerable, TEnumerator>(this DistinctEnumerable<TEnumerable, TEnumerator, int> source)
+            where TEnumerable : IAsyncValueEnumerable<int, TEnumerator>
+            where TEnumerator : struct, IAsyncEnumerator<int>
+            => source.SumAsync<DistinctEnumerable<TEnumerable, TEnumerator, int>, DistinctEnumerable<TEnumerable, TEnumerator, int>.Enumerator, int, int>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ValueTask<int> SumAsync<TEnumerable, TEnumerator>(this DistinctEnumerable<TEnumerable, TEnumerator, int?> source)
+            where TEnumerable : IAsyncValueEnumerable<int?, TEnumerator>
+            where TEnumerator : struct, IAsyncEnumerator<int?>
+            => source.SumAsync<DistinctEnumerable<TEnumerable, TEnumerator, int?>, DistinctEnumerable<TEnumerable, TEnumerator, int?>.Enumerator, int?, int>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ValueTask<long> SumAsync<TEnumerable, TEnumerator>(this DistinctEnumerable<TEnumerable, TEnumerator, long> source)
+            where TEnumerable : IAsyncValueEnumerable<long, TEnumerator>
+            where TEnumerator : struct, IAsyncEnumerator<long>
+            => source.SumAsync<DistinctEnumerable<TEnumerable, TEnumerator, long>, DistinctEnumerable<TEnumerable, TEnumerator, long>.Enumerator, long, long>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ValueTask<long> SumAsync<TEnumerable, TEnumerator>(this DistinctEnumerable<TEnumerable, TEnumerator, long?> source)
+            where TEnumerable : IAsyncValueEnumerable<long?, TEnumerator>
+            where TEnumerator : struct, IAsyncEnumerator<long?>
+            => source.SumAsync<DistinctEnumerable<TEnumerable, TEnumerator, long?>, DistinctEnumerable<TEnumerable, TEnumerator, long?>.Enumerator, long?, long>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ValueTask<float> SumAsync<TEnumerable, TEnumerator>(this DistinctEnumerable<TEnumerable, TEnumerator, float> source)
+            where TEnumerable : IAsyncValueEnumerable<float, TEnumerator>
+            where TEnumerator : struct, IAsyncEnumerator<float>
+            => source.SumAsync<DistinctEnumerable<TEnumerable, TEnumerator, float>, DistinctEnumerable<TEnumerable, TEnumerator, float>.Enumerator, float, float>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ValueTask<float> SumAsync<TEnumerable, TEnumerator>(this DistinctEnumerable<TEnumerable, TEnumerator, float?> source)
+            where TEnumerable : IAsyncValueEnumerable<float?, TEnumerator>
+            where TEnumerator : struct, IAsyncEnumerator<float?>
+            => source.SumAsync<DistinctEnumerable<TEnumerable, TEnumerator, float?>, DistinctEnumerable<TEnumerable, TEnumerator, float?>.Enumerator, float?, float>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ValueTask<double> SumAsync<TEnumerable, TEnumerator>(this DistinctEnumerable<TEnumerable, TEnumerator, double> source)
+            where TEnumerable : IAsyncValueEnumerable<double, TEnumerator>
+            where TEnumerator : struct, IAsyncEnumerator<double>
+            => source.SumAsync<DistinctEnumerable<TEnumerable, TEnumerator, double>, DistinctEnumerable<TEnumerable, TEnumerator, double>.Enumerator, double, double>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ValueTask<double> SumAsync<TEnumerable, TEnumerator>(this DistinctEnumerable<TEnumerable, TEnumerator, double?> source)
+            where TEnumerable : IAsyncValueEnumerable<double?, TEnumerator>
+            where TEnumerator : struct, IAsyncEnumerator<double?>
+            => source.SumAsync<DistinctEnumerable<TEnumerable, TEnumerator, double?>, DistinctEnumerable<TEnumerable, TEnumerator, double?>.Enumerator, double?, double>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ValueTask<decimal> SumAsync<TEnumerable, TEnumerator>(this DistinctEnumerable<TEnumerable, TEnumerator, decimal> source)
+            where TEnumerable : IAsyncValueEnumerable<decimal, TEnumerator>
+            where TEnumerator : struct, IAsyncEnumerator<decimal>
+            => source.SumAsync<DistinctEnumerable<TEnumerable, TEnumerator, decimal>, DistinctEnumerable<TEnumerable, TEnumerator, decimal>.Enumerator, decimal, decimal>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ValueTask<decimal> SumAsync<TEnumerable, TEnumerator>(this DistinctEnumerable<TEnumerable, TEnumerator, decimal?> source)
+            where TEnumerable : IAsyncValueEnumerable<decimal?, TEnumerator>
+            where TEnumerator : struct, IAsyncEnumerator<decimal?>
+            => source.SumAsync<DistinctEnumerable<TEnumerable, TEnumerator, decimal?>, DistinctEnumerable<TEnumerable, TEnumerator, decimal?>.Enumerator, decimal?, decimal>();
     }
 }
 

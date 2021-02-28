@@ -2,7 +2,6 @@ using NetFabric.Assertive;
 using System;
 using System.Buffers;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -19,12 +18,12 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
             // Arrange
             var wrapped = Wrap
                 .AsAsyncValueEnumerable(source);
-            var expected = Enumerable
-                .ToArray(source);
+            var expected = source
+                .ToArray();
 
             // Act
-            var result = await AsyncValueEnumerableExtensions
-                .ToArrayAsync<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(wrapped);
+            var result = await wrapped
+                .ToArrayAsync<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>();
 
             // Assert
             _ = result.Must()
@@ -42,12 +41,12 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
             var pool = MemoryPool<int>.Shared;
             var wrapped = Wrap
                 .AsAsyncValueEnumerable(source);
-            var expected = Enumerable
-                .ToArray(source);
+            var expected = source
+                .ToArray();
 
             // Act
-            var result = await AsyncValueEnumerableExtensions
-                .ToArrayAsync<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, pool);
+            var result = await wrapped
+                .ToArrayAsync<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(pool);
 
             // Assert
             _ = result.Memory
@@ -65,13 +64,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
             // Arrange
             var wrapped = Wrap
                 .AsAsyncValueEnumerable(source);
-            var expected = Enumerable
-                .Where(source, predicate)
+            var expected = source
+                .Where(predicate)
                 .ToArray();
 
             // Act
-            var result = await AsyncValueEnumerableExtensions
-                .Where<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, predicate.AsAsync())
+            var result = await wrapped
+                .Where<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(predicate.AsAsync())
                 .ToArrayAsync();
 
             // Assert
@@ -90,13 +89,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
             var pool = MemoryPool<int>.Shared;
             var wrapped = Wrap
                 .AsAsyncValueEnumerable(source);
-            var expected = Enumerable
-                .Where(source, predicate)
+            var expected = source
+                .Where(predicate)
                 .ToArray();
 
             // Act
-            var result = await AsyncValueEnumerableExtensions
-                .Where<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, predicate.AsAsync())
+            var result = await wrapped
+                .Where<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(predicate.AsAsync())
                 .ToArrayAsync(pool);
 
             // Assert
@@ -115,13 +114,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
             // Arrange
             var wrapped = Wrap
                 .AsAsyncValueEnumerable(source);
-            var expected = Enumerable
-                .Where(source, predicate)
+            var expected = source
+                .Where(predicate)
                 .ToArray();
 
             // Act
-            var result = await AsyncValueEnumerableExtensions
-                .Where<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, predicate.AsAsync())
+            var result = await wrapped
+                .Where<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(predicate.AsAsync())
                 .ToArrayAsync();
 
             // Assert
@@ -140,13 +139,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
             var pool = MemoryPool<int>.Shared;
             var wrapped = Wrap
                 .AsAsyncValueEnumerable(source);
-            var expected = Enumerable
-                .Where(source, predicate)
+            var expected = source
+                .Where(predicate)
                 .ToArray();
 
             // Act
-            var result = await AsyncValueEnumerableExtensions
-                .Where<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, predicate.AsAsync())
+            var result = await wrapped
+                .Where<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(predicate.AsAsync())
                 .ToArrayAsync(pool);
 
             // Assert
@@ -165,13 +164,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
             // Arrange
             var wrapped = Wrap
                 .AsAsyncValueEnumerable(source);
-            var expected = Enumerable
-                .Select(source, selector)
+            var expected = source
+                .Select(selector)
                 .ToArray();
 
             // Act
-            var result = await AsyncValueEnumerableExtensions
-                .Select<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int, string>(wrapped, selector.AsAsync())
+            var result = await wrapped
+                .Select<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int, string>(selector.AsAsync())
                 .ToArrayAsync();
 
             // Assert
@@ -190,13 +189,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
             var pool = MemoryPool<string>.Shared;
             var wrapped = Wrap
                 .AsAsyncValueEnumerable(source);
-            var expected = Enumerable
-                .Select(source, selector)
+            var expected = source
+                .Select(selector)
                 .ToArray();
 
             // Act
-            var result = await AsyncValueEnumerableExtensions
-                .Select<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int, string>(wrapped, selector.AsAsync())
+            var result = await wrapped
+                .Select<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int, string>(selector.AsAsync())
                 .ToArrayAsync(pool);
 
             // Assert
@@ -215,13 +214,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
             // Arrange
             var wrapped = Wrap
                 .AsAsyncValueEnumerable(source);
-            var expected = Enumerable
-                .Select(source, selector)
+            var expected = source
+                .Select(selector)
                 .ToArray();
 
             // Act
-            var result = await AsyncValueEnumerableExtensions
-                .Select<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int, string>(wrapped, selector.AsAsync())
+            var result = await wrapped
+                .Select<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int, string>(selector.AsAsync())
                 .ToArrayAsync();
 
             // Assert
@@ -240,13 +239,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
             var pool = MemoryPool<string>.Shared;
             var wrapped = Wrap
                 .AsAsyncValueEnumerable(source);
-            var expected = Enumerable
-                .Select(source, selector)
+            var expected = source
+                .Select(selector)
                 .ToArray();
 
             // Act
-            var result = await AsyncValueEnumerableExtensions
-                .Select<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int, string>(wrapped, selector.AsAsync())
+            var result = await wrapped
+                .Select<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int, string>(selector.AsAsync())
                 .ToArrayAsync(pool);
 
             // Assert
@@ -266,14 +265,14 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
             // Arrange
             var wrapped = Wrap
                 .AsAsyncValueEnumerable(source);
-            var expected = Enumerable
-                .Where(source, predicate)
+            var expected = source
+                .Where(predicate)
                 .Select(selector)
                 .ToArray();
 
             // Act
-            var result = await AsyncValueEnumerableExtensions
-                .Where<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, predicate.AsAsync())
+            var result = await wrapped
+                .Where<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(predicate.AsAsync())
                 .Select(selector.AsAsync())
                 .ToArrayAsync();
 
@@ -293,14 +292,14 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
             var pool = MemoryPool<string>.Shared;
             var wrapped = Wrap
                 .AsAsyncValueEnumerable(source);
-            var expected = Enumerable
-                .Where(source, predicate)
+            var expected = source
+                .Where(predicate)
                 .Select(selector)
                 .ToArray();
 
             // Act
-            var result = await AsyncValueEnumerableExtensions
-                .Where<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, predicate.AsAsync())
+            var result = await wrapped
+                .Where<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(predicate.AsAsync())
                 .Select(selector.AsAsync())
                 .ToArrayAsync(pool);
 

@@ -16,12 +16,12 @@ namespace NetFabric.Hyperlinq.UnitTests.Aggregation.Count
             // Arrange
             var wrapped = Wrap
                 .AsValueEnumerable(source);
-            var expected = Enumerable
-                .Count(source);
+            var expected = source
+                .Count();
 
             // Act
-            var result = ValueEnumerableExtensions
-                .Count<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(wrapped);
+            var result = wrapped
+                .Count<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>();
 
             // Assert
             _ = result.Must()
@@ -37,12 +37,12 @@ namespace NetFabric.Hyperlinq.UnitTests.Aggregation.Count
             // Arrange
             var wrapped = Wrap
                 .AsValueEnumerable(source);
-            var expected = Enumerable
-                .Count(source, predicate);
+            var expected = source
+                .Count(predicate);
 
             // Act
-            var result = ValueEnumerableExtensions
-                .Where<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(wrapped, predicate)
+            var result = wrapped
+                .Where<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(predicate)
                 .Count();
 
             // Assert
@@ -59,13 +59,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Aggregation.Count
             // Arrange
             var wrapped = Wrap
                 .AsValueEnumerable(source);
-            var expected = Enumerable
-                .Where(source, predicate)
+            var expected = source
+                .Where(predicate)
                 .Count();
 
             // Act
-            var result = ValueEnumerableExtensions
-                .Where<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(wrapped, predicate)
+            var result = wrapped
+                .Where<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(predicate)
                 .Count();
 
             // Assert

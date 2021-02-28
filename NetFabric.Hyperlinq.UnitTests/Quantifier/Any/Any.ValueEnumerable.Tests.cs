@@ -1,7 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using NetFabric.Assertive;
+using System;
+using System.Linq;
 using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Any
@@ -17,11 +16,11 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Any
             // Arrange
             var wrapped = Wrap.AsValueEnumerable(source);
             var expected = 
-                System.Linq.Enumerable.Any(source);
+                source.Any();
 
             // Act
-            var result = ValueEnumerableExtensions
-                .Any<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(wrapped);
+            var result = wrapped
+                .Any<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>();
 
             // Assert
             _ = result.Must()
@@ -37,11 +36,11 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Any
             // Arrange
             var wrapped = Wrap.AsValueEnumerable(source);
             var expected = 
-                System.Linq.Enumerable.Any(source, predicate);
+                source.Any(predicate);
 
             // Act
-            var result = ValueEnumerableExtensions
-                .Any<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
+            var result = wrapped
+                .Any<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(predicate);
 
             // Assert
             _ = result.Must()
@@ -57,12 +56,11 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Any
             // Arrange
             var wrapped = Wrap.AsValueEnumerable(source);
             var expected = 
-                System.Linq.Enumerable.Count(
-                    System.Linq.Enumerable.Where(source, predicate)) != 0;
+                source.Where(predicate).Count() != 0;
 
             // Act
-            var result = ValueEnumerableExtensions
-                .Any<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
+            var result = wrapped
+                .Any<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(predicate);
 
             // Assert
             _ = result.Must()

@@ -1,8 +1,7 @@
-using System;
+using NetFabric.Assertive;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using NetFabric.Assertive;
 using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests.Quantifier.ContainsAsync
@@ -16,12 +15,12 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.ContainsAsync
         public async ValueTask ContainsAsync_ValueType_With_Null_And_NotContains_Must_ReturnFalse(int[] source)
         {
             // Arrange
-            var value = int.MaxValue;
+            const int value = int.MaxValue;
             var wrapped = Wrap.AsAsyncValueEnumerable(source);
 
             // Act
-            var result = await AsyncValueEnumerableExtensions
-                .ContainsAsync<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, value);
+            var result = await wrapped
+                .ContainsAsync<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(value);
 
             // Assert
             _ = result.Must()
@@ -35,12 +34,12 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.ContainsAsync
         public async ValueTask ContainsAsync_ReferenceType_With_Null_And_NotContains_Must_ReturnFalse(int[] source)
         {
             // Arrange
-            var value = default(string);
+            const string value = default;
             var wrapped = Wrap.AsAsyncValueEnumerable(source.Select(item => item.ToString()).ToArray());
 
             // Act
-            var result = await AsyncValueEnumerableExtensions
-                .ContainsAsync<Wrap.AsyncValueEnumerableWrapper<string>, Wrap.AsyncEnumerator<string>, string>(wrapped, value);
+            var result = await wrapped
+                .ContainsAsync<Wrap.AsyncValueEnumerableWrapper<string>, Wrap.AsyncEnumerator<string>, string>(value);
 
             // Assert
             _ = result.Must()
@@ -53,12 +52,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.ContainsAsync
         public async ValueTask ContainsAsync_ValueType_With_Null_And_Contains_Must_ReturnTrue(int[] source)
         {
             // Arrange
-            var value = Enumerable.Last(source);
+            var value = source
+                .Last();
             var wrapped = Wrap.AsAsyncValueEnumerable(source);
 
             // Act
-            var result = await AsyncValueEnumerableExtensions
-                .ContainsAsync<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, value);
+            var result = await wrapped
+                .ContainsAsync<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(value);
 
             // Assert
             _ = result.Must()
@@ -71,12 +71,14 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.ContainsAsync
         public async ValueTask ContainsAsync_ReferenceType_With_Null_And_Contains_Must_ReturnTrue(int[] source)
         {
             // Arrange
-            var value = Enumerable.Last(source).ToString();
+            var value = source
+                .Last()
+                .ToString();
             var wrapped = Wrap.AsAsyncValueEnumerable(source.Select(item => item.ToString()).ToArray());
 
             // Act
-            var result = await AsyncValueEnumerableExtensions
-                .ContainsAsync<Wrap.AsyncValueEnumerableWrapper<string>, Wrap.AsyncEnumerator<string>, string>(wrapped, value);
+            var result = await wrapped
+                .ContainsAsync<Wrap.AsyncValueEnumerableWrapper<string>, Wrap.AsyncEnumerator<string>, string>(value);
 
             // Assert
             _ = result.Must()
@@ -90,12 +92,12 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.ContainsAsync
         public async ValueTask ContainsAsync_With_DefaultComparer_And_NotContains_Must_ReturnFalse(int[] source)
         {
             // Arrange
-            var value = int.MaxValue;
+            const int value = int.MaxValue;
             var wrapped = Wrap.AsAsyncValueEnumerable(source);
 
             // Act
-            var result = await AsyncValueEnumerableExtensions
-                .ContainsAsync<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, value, EqualityComparer<int>.Default);
+            var result = await wrapped
+                .ContainsAsync<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(value, EqualityComparer<int>.Default);
 
             // Assert
             _ = result.Must()
@@ -108,12 +110,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.ContainsAsync
         public async ValueTask ContainsAsync_With_DefaultComparer_And_Contains_Must_ReturnTrue(int[] source)
         {
             // Arrange
-            var value = Enumerable.Last(source);
+            var value = source
+                .Last();
             var wrapped = Wrap.AsAsyncValueEnumerable(source);
 
             // Act
-            var result = await AsyncValueEnumerableExtensions
-                .ContainsAsync<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, value, EqualityComparer<int>.Default);
+            var result = await wrapped
+                .ContainsAsync<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(value, EqualityComparer<int>.Default);
 
             // Assert
             _ = result.Must()
@@ -128,12 +131,12 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.ContainsAsync
         public async ValueTask ContainsAsync_With_Comparer_And_NotContains_Must_ReturnFalse(int[] source)
         {
             // Arrange
-            var value = int.MaxValue;
+            const int value = int.MaxValue;
             var wrapped = Wrap.AsAsyncValueEnumerable(source);
 
             // Act
-            var result = await AsyncValueEnumerableExtensions
-                .ContainsAsync<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, value, TestComparer<int>.Instance);
+            var result = await wrapped
+                .ContainsAsync<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(value, TestComparer<int>.Instance);
 
             // Assert
             _ = result.Must()
@@ -146,12 +149,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.ContainsAsync
         public async ValueTask ContainsAsync_With_Comparer_And_Contains_Must_ReturnTrue(int[] source)
         {
             // Arrange
-            var value = Enumerable.Last(source);
+            var value = source
+                .Last();
             var wrapped = Wrap.AsAsyncValueEnumerable(source);
 
             // Act
-            var result = await AsyncValueEnumerableExtensions
-                .ContainsAsync<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, value, TestComparer<int>.Instance);
+            var result = await wrapped
+                .ContainsAsync<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(value, TestComparer<int>.Instance);
 
             // Assert
             _ = result.Must()
