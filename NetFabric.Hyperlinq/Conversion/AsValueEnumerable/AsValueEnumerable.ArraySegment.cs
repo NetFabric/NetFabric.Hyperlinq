@@ -80,11 +80,15 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Contains(TSource item)
-                => ((ICollection<TSource>)source).Contains(item);
+                => source.Count switch
+                {
+                    0 => false,
+                    _ => Array.IndexOf(source.Array!, item, source.Offset, source.Count) >= 0
+                };
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public int IndexOf(TSource item)
-                => ArrayExtensions.IndexOf(((ReadOnlySpan<TSource>)source.AsSpan()), item);
+                => ArrayExtensions.IndexOf(source.AsSpan(), item);
 
             [ExcludeFromCodeCoverage]
             void ICollection<TSource>.Add(TSource item)
@@ -382,24 +386,24 @@ namespace NetFabric.Hyperlinq
             => ((ReadOnlySpan<TSource>)source.source.AsSpan()).ContainsVector(value);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static MemorySelectVectorContext<TSource, TResult, FunctionWrapper<Vector<TSource>, Vector<TResult>>, FunctionWrapper<TSource, TResult>> SelectVector<TSource, TResult>(this ArraySegmentValueEnumerable<TSource> source, Func<Vector<TSource>, Vector<TResult>> vectorSelector, Func<TSource, TResult> selector)
+        public static SpanSelectVectorContext<TSource, TResult, FunctionWrapper<Vector<TSource>, Vector<TResult>>, FunctionWrapper<TSource, TResult>> SelectVector<TSource, TResult>(this ArraySegmentValueEnumerable<TSource> source, Func<Vector<TSource>, Vector<TResult>> vectorSelector, Func<TSource, TResult> selector)
             where TSource : struct
             where TResult : struct
-            => source.source.SelectVector(vectorSelector, selector);
+            => ((ReadOnlySpan<TSource>)source.source.AsSpan()).SelectVector(vectorSelector, selector);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static MemorySelectVectorContext<TSource, TResult, TSelector, TSelector> SelectVector<TSource, TResult, TSelector>(this ArraySegmentValueEnumerable<TSource> source, TSelector selector = default)
+        public static SpanSelectVectorContext<TSource, TResult, TSelector, TSelector> SelectVector<TSource, TResult, TSelector>(this ArraySegmentValueEnumerable<TSource> source, TSelector selector = default)
             where TSelector : struct, IFunction<Vector<TSource>, Vector<TResult>>, IFunction<TSource, TResult>
             where TSource : struct
             where TResult : struct
-            => source.source.SelectVector<TSource, TResult, TSelector, TSelector>(selector, selector);
+            => ((ReadOnlySpan<TSource>)source.source.AsSpan()).SelectVector<TSource, TResult, TSelector, TSelector>(selector, selector);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static MemorySelectVectorContext<TSource, TResult, TVectorSelector, TSelector> SelectVector<TSource, TResult, TVectorSelector, TSelector>(this ArraySegmentValueEnumerable<TSource> source, TVectorSelector vectorSelector = default, TSelector selector = default)
+        public static SpanSelectVectorContext<TSource, TResult, TVectorSelector, TSelector> SelectVector<TSource, TResult, TVectorSelector, TSelector>(this ArraySegmentValueEnumerable<TSource> source, TVectorSelector vectorSelector = default, TSelector selector = default)
             where TVectorSelector : struct, IFunction<Vector<TSource>, Vector<TResult>>
             where TSelector : struct, IFunction<TSource, TResult>
             where TSource : struct
             where TResult : struct
-            => source.source.SelectVector<TSource, TResult, TVectorSelector, TSelector>(vectorSelector, selector);
+            => ((ReadOnlySpan<TSource>)source.source.AsSpan()).SelectVector<TSource, TResult, TVectorSelector, TSelector>(vectorSelector, selector);
     }
 }

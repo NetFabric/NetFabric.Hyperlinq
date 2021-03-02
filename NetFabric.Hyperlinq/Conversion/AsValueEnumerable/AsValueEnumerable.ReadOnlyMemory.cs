@@ -223,11 +223,14 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public MemoryValueEnumerable<TSource> Skip(int count)
-                => new(source.Skip(count));
+            {
+                var (skipCount, takeCount) = Utils.Skip(source.Length, count);
+                return new MemoryValueEnumerable<TSource>(source.Slice(skipCount, takeCount));
+            }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public MemoryValueEnumerable<TSource> Take(int count)
-                => new(source.Take(count));
+                => new(source.Slice(0, Utils.Take(source.Length, count)));
 
             #endregion
 
@@ -373,17 +376,17 @@ namespace NetFabric.Hyperlinq
             => source.source.Span.ContainsVector(value);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static MemorySelectVectorContext<TSource, TResult, FunctionWrapper<Vector<TSource>, Vector<TResult>>, FunctionWrapper<TSource, TResult>> SelectVector<TSource, TResult>(this MemoryValueEnumerable<TSource> source, Func<Vector<TSource>, Vector<TResult>> vectorSelector, Func<TSource, TResult> selector)
+        public static SpanSelectVectorContext<TSource, TResult, FunctionWrapper<Vector<TSource>, Vector<TResult>>, FunctionWrapper<TSource, TResult>> SelectVector<TSource, TResult>(this MemoryValueEnumerable<TSource> source, Func<Vector<TSource>, Vector<TResult>> vectorSelector, Func<TSource, TResult> selector)
             where TSource : struct
             where TResult : struct
-            => source.source.SelectVector(vectorSelector, selector);
+            => source.source.Span.SelectVector(vectorSelector, selector);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static MemorySelectVectorContext<TSource, TResult, TVectorSelector, TSelector> SelectVector<TSource, TResult, TVectorSelector, TSelector>(this MemoryValueEnumerable<TSource> source, TVectorSelector vectorSelector = default, TSelector selector = default)
+        public static SpanSelectVectorContext<TSource, TResult, TVectorSelector, TSelector> SelectVector<TSource, TResult, TVectorSelector, TSelector>(this MemoryValueEnumerable<TSource> source, TVectorSelector vectorSelector = default, TSelector selector = default)
             where TVectorSelector : struct, IFunction<Vector<TSource>, Vector<TResult>>
             where TSelector : struct, IFunction<TSource, TResult>
             where TSource : struct
             where TResult : struct
-            => source.source.SelectVector<TSource, TResult, TVectorSelector, TSelector>(vectorSelector, selector);
+            => source.source.Span.SelectVector<TSource, TResult, TVectorSelector, TSelector>(vectorSelector, selector);
     }
 }

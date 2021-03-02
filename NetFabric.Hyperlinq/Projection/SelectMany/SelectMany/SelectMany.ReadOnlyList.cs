@@ -12,7 +12,7 @@ namespace NetFabric.Hyperlinq
 
         [GeneratorMapping("TSelector", "NetFabric.Hyperlinq.FunctionWrapper<TSource, TSubEnumerable>")]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static SelectManyEnumerable<TList, TSource, TSubEnumerable, TSubEnumerator, TResult, FunctionWrapper<TSource, TSubEnumerable>> SelectMany<TList, TSource, TSubEnumerable, TSubEnumerator, TResult>(this TList source, Func<TSource, TSubEnumerable> selector)
+        internal static SelectManyEnumerable<TList, TSource, TSubEnumerable, TSubEnumerator, TResult, FunctionWrapper<TSource, TSubEnumerable>> SelectMany<TList, TSource, TSubEnumerable, TSubEnumerator, TResult>(this TList source, Func<TSource, TSubEnumerable> selector)
             where TList : struct, IReadOnlyList<TSource>
             where TSubEnumerable : IValueEnumerable<TResult, TSubEnumerator>
             where TSubEnumerator : struct, IEnumerator<TResult>
@@ -27,7 +27,7 @@ namespace NetFabric.Hyperlinq
             => source.SelectMany<TList, TSource, TSubEnumerable, TSubEnumerator, TResult, FunctionWrapper<TSource, TSubEnumerable>>(new FunctionWrapper<TSource, TSubEnumerable>(selector), offset, count);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static SelectManyEnumerable<TList, TSource, TSubEnumerable, TSubEnumerator, TResult, TSelector> SelectMany<TList, TSource, TSubEnumerable, TSubEnumerator, TResult, TSelector>(this TList source, TSelector selector)
+        internal static SelectManyEnumerable<TList, TSource, TSubEnumerable, TSubEnumerator, TResult, TSelector> SelectMany<TList, TSource, TSubEnumerable, TSubEnumerator, TResult, TSelector>(this TList source, TSelector selector)
             where TList : struct, IReadOnlyList<TSource>
             where TSubEnumerable : IValueEnumerable<TResult, TSubEnumerator>
             where TSubEnumerator : struct, IEnumerator<TResult>
@@ -245,6 +245,86 @@ namespace NetFabric.Hyperlinq
 
             #endregion
         }
+        
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Sum<TList, TSource, TSubEnumerable, TSubEnumerator, TSelector>(this SelectManyEnumerable<TList, TSource, TSubEnumerable, TSubEnumerator, int, TSelector> source)
+            where TList : struct, IReadOnlyList<TSource>
+            where TSubEnumerable : IValueEnumerable<int, TSubEnumerator>
+            where TSubEnumerator : struct, IEnumerator<int>
+            where TSelector : struct, IFunction<TSource, TSubEnumerable>
+            => source.Sum<SelectManyEnumerable<TList, TSource, TSubEnumerable, TSubEnumerator, int, TSelector>, SelectManyEnumerable<TList, TSource, TSubEnumerable, TSubEnumerator, int, TSelector>.Enumerator, int, int>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Sum<TList, TSource, TSubEnumerable, TSubEnumerator, TSelector>(this SelectManyEnumerable<TList, TSource, TSubEnumerable, TSubEnumerator, int?, TSelector> source)
+            where TList : struct, IReadOnlyList<TSource>
+            where TSubEnumerable : IValueEnumerable<int?, TSubEnumerator>
+            where TSubEnumerator : struct, IEnumerator<int?>
+            where TSelector : struct, IFunction<TSource, TSubEnumerable>
+            => source.Sum<SelectManyEnumerable<TList, TSource, TSubEnumerable, TSubEnumerator, int?, TSelector>, SelectManyEnumerable<TList, TSource, TSubEnumerable, TSubEnumerator, int?, TSelector>.Enumerator, int?, int>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static long Sum<TList, TSource, TSubEnumerable, TSubEnumerator, TSelector>(this SelectManyEnumerable<TList, TSource, TSubEnumerable, TSubEnumerator, long, TSelector> source)
+            where TList : struct, IReadOnlyList<TSource>
+            where TSubEnumerable : IValueEnumerable<long, TSubEnumerator>
+            where TSubEnumerator : struct, IEnumerator<long>
+            where TSelector : struct, IFunction<TSource, TSubEnumerable>
+            => source.Sum<SelectManyEnumerable<TList, TSource, TSubEnumerable, TSubEnumerator, long, TSelector>, SelectManyEnumerable<TList, TSource, TSubEnumerable, TSubEnumerator, long, TSelector>.Enumerator, long, long>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static long Sum<TList, TSource, TSubEnumerable, TSubEnumerator, TSelector>(this SelectManyEnumerable<TList, TSource, TSubEnumerable, TSubEnumerator, long?, TSelector> source)
+            where TList : struct, IReadOnlyList<TSource>
+            where TSubEnumerable : IValueEnumerable<long?, TSubEnumerator>
+            where TSubEnumerator : struct, IEnumerator<long?>
+            where TSelector : struct, IFunction<TSource, TSubEnumerable>
+            => source.Sum<SelectManyEnumerable<TList, TSource, TSubEnumerable, TSubEnumerator, long?, TSelector>, SelectManyEnumerable<TList, TSource, TSubEnumerable, TSubEnumerator, long?, TSelector>.Enumerator, long?, long>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float Sum<TList, TSource, TSubEnumerable, TSubEnumerator, TSelector>(this SelectManyEnumerable<TList, TSource, TSubEnumerable, TSubEnumerator, float, TSelector> source)
+            where TList : struct, IReadOnlyList<TSource>
+            where TSubEnumerable : IValueEnumerable<float, TSubEnumerator>
+            where TSubEnumerator : struct, IEnumerator<float>
+            where TSelector : struct, IFunction<TSource, TSubEnumerable>
+            => source.Sum<SelectManyEnumerable<TList, TSource, TSubEnumerable, TSubEnumerator, float, TSelector>, SelectManyEnumerable<TList, TSource, TSubEnumerable, TSubEnumerator, float, TSelector>.Enumerator, float, float>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float Sum<TList, TSource, TSubEnumerable, TSubEnumerator, TSelector>(this SelectManyEnumerable<TList, TSource, TSubEnumerable, TSubEnumerator, float?, TSelector> source)
+            where TList : struct, IReadOnlyList<TSource>
+            where TSubEnumerable : IValueEnumerable<float?, TSubEnumerator>
+            where TSubEnumerator : struct, IEnumerator<float?>
+            where TSelector : struct, IFunction<TSource, TSubEnumerable>
+            => source.Sum<SelectManyEnumerable<TList, TSource, TSubEnumerable, TSubEnumerator, float?, TSelector>, SelectManyEnumerable<TList, TSource, TSubEnumerable, TSubEnumerator, float?, TSelector>.Enumerator, float?, float>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static double Sum<TList, TSource, TSubEnumerable, TSubEnumerator, TSelector>(this SelectManyEnumerable<TList, TSource, TSubEnumerable, TSubEnumerator, double, TSelector> source)
+            where TList : struct, IReadOnlyList<TSource>
+            where TSubEnumerable : IValueEnumerable<double, TSubEnumerator>
+            where TSubEnumerator : struct, IEnumerator<double>
+            where TSelector : struct, IFunction<TSource, TSubEnumerable>
+            => source.Sum<SelectManyEnumerable<TList, TSource, TSubEnumerable, TSubEnumerator, double, TSelector>, SelectManyEnumerable<TList, TSource, TSubEnumerable, TSubEnumerator, double, TSelector>.Enumerator, double, double>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static double Sum<TList, TSource, TSubEnumerable, TSubEnumerator, TSelector>(this SelectManyEnumerable<TList, TSource, TSubEnumerable, TSubEnumerator, double?, TSelector> source)
+            where TList : struct, IReadOnlyList<TSource>
+            where TSubEnumerable : IValueEnumerable<double?, TSubEnumerator>
+            where TSubEnumerator : struct, IEnumerator<double?>
+            where TSelector : struct, IFunction<TSource, TSubEnumerable>
+            => source.Sum<SelectManyEnumerable<TList, TSource, TSubEnumerable, TSubEnumerator, double?, TSelector>, SelectManyEnumerable<TList, TSource, TSubEnumerable, TSubEnumerator, double?, TSelector>.Enumerator, double?, double>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static decimal Sum<TList, TSource, TSubEnumerable, TSubEnumerator, TSelector>(this SelectManyEnumerable<TList, TSource, TSubEnumerable, TSubEnumerator, decimal, TSelector> source)
+            where TList : struct, IReadOnlyList<TSource>
+            where TSubEnumerable : IValueEnumerable<decimal, TSubEnumerator>
+            where TSubEnumerator : struct, IEnumerator<decimal>
+            where TSelector : struct, IFunction<TSource, TSubEnumerable>
+            => source.Sum<SelectManyEnumerable<TList, TSource, TSubEnumerable, TSubEnumerator, decimal, TSelector>, SelectManyEnumerable<TList, TSource, TSubEnumerable, TSubEnumerator, decimal, TSelector>.Enumerator, decimal, decimal>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static decimal Sum<TList, TSource, TSubEnumerable, TSubEnumerator, TSelector>(this SelectManyEnumerable<TList, TSource, TSubEnumerable, TSubEnumerator, decimal?, TSelector> source)
+            where TList : struct, IReadOnlyList<TSource>
+            where TSubEnumerable : IValueEnumerable<decimal?, TSubEnumerator>
+            where TSubEnumerator : struct, IEnumerator<decimal?>
+            where TSelector : struct, IFunction<TSource, TSubEnumerable>
+            => source.Sum<SelectManyEnumerable<TList, TSource, TSubEnumerable, TSubEnumerator, decimal?, TSelector>, SelectManyEnumerable<TList, TSource, TSubEnumerable, TSubEnumerator, decimal?, TSelector>.Enumerator, decimal?, decimal>();
     }
 }
 

@@ -17,12 +17,12 @@ namespace NetFabric.Hyperlinq.UnitTests.Aggregation.Count
             // Arrange
             var wrapped = Wrap
                 .AsAsyncValueEnumerable(source);
-            var expected = Enumerable
-                .Count(source);
+            var expected = source
+                .Count();
 
             // Act
-            var result = await AsyncValueEnumerableExtensions
-                .CountAsync<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(wrapped);
+            var result = await wrapped
+                .CountAsync<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>();
 
             // Assert
             _ = result.Must()
@@ -38,12 +38,12 @@ namespace NetFabric.Hyperlinq.UnitTests.Aggregation.Count
             // Arrange
             var wrapped = Wrap
                 .AsAsyncValueEnumerable(source);
-            var expected = Enumerable
-                .Count(source, predicate);
+            var expected = source
+                .Count(predicate);
 
             // Act
-            var result = await AsyncValueEnumerableExtensions
-                .Where<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, predicate.AsAsync())
+            var result = await wrapped
+                .Where<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(predicate.AsAsync())
                 .CountAsync();
 
             // Assert
@@ -60,12 +60,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Aggregation.Count
             // Arrange
             var wrapped = Wrap
                 .AsAsyncValueEnumerable(source);
-            var expected = Enumerable.Where(source, predicate)
+            var expected = source
+                .Where(predicate)
                 .Count();
 
             // Act
-            var result = await AsyncValueEnumerableExtensions
-                .Where<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, predicate.AsAsync())
+            var result = await wrapped
+                .Where<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(predicate.AsAsync())
                 .CountAsync();
 
             // Assert

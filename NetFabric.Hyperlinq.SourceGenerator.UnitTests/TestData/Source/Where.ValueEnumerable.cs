@@ -50,7 +50,7 @@ namespace NetFabric.Hyperlinq
             {
                 public readonly TSource Current => default!;
                 readonly TSource IEnumerator<TSource>.Current => default!;
-                readonly object IEnumerator.Current => default;
+                readonly object? IEnumerator.Current => default;
 
                 public bool MoveNext()
                     => false;

@@ -15,8 +15,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Projection.Select
             var expected = Enumerable.Empty<string>();
 
             // Act
-            var result = ArrayExtensions
-                .Select(source, item => item.ToString());
+            var result = source.AsValueEnumerable()
+                .Select(item => item.ToString());
 
             // Assert
             _ = result.Must()
@@ -34,12 +34,12 @@ namespace NetFabric.Hyperlinq.UnitTests.Projection.Select
             // Arrange
             var (offset, count) = Utils.SkipTake(source.Length, skip, take);
             var wrapped = new ArraySegment<int>(source, offset, count);
-            var expected = Enumerable
-                .Select(wrapped, selector);
+            var expected = wrapped
+                .Select(selector);
 
             // Act
-            var result = ArrayExtensions
-                .Select(wrapped, selector);
+            var result = wrapped.AsValueEnumerable()
+                .Select(selector);
 
             // Assert
             _ = result.Must()
@@ -47,5 +47,29 @@ namespace NetFabric.Hyperlinq.UnitTests.Projection.Select
                 .BeEqualTo(expected, testRefStructs: false);
             _ = result.SequenceEqual(expected).Must().BeTrue();
         }
+        
+        [Theory]
+        [MemberData(nameof(TestData.SkipTakeEmpty), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakeSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakeMultiple), MemberType = typeof(TestData))]
+        public void Select_Sum_With_ValidData_Must_Succeed(int[] source, int skip, int take)
+        {
+            // Arrange
+            var (offset, count) = Utils.SkipTake(source.Length, skip, take);
+            var wrapped = new ArraySegment<int>(source, offset, count);
+            var expected = wrapped
+                .Select(item => item)
+                .Sum();
+
+            // Act
+            var result = wrapped.AsValueEnumerable()
+                .Select(item => item)
+                .Sum();
+
+            // Assert
+            _ = result.Must()
+                .BeEqualTo(expected);
+        }
+
     }
 }

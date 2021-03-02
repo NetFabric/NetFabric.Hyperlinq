@@ -16,8 +16,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct
             var expected = Enumerable.Empty<int>();
 
             // Act
-            var result = ArrayExtensions
-                .Distinct(source);
+            var result = source.AsValueEnumerable()
+                .Distinct();
 
             // Assert
             _ = result.Must()
@@ -35,12 +35,12 @@ namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct
             // Arrange
             var (offset, count) = Utils.SkipTake(source.Length, skip, take);
             var wrapped = new ArraySegment<int>(source, offset, count);
-            var expected = Enumerable
-                .Distinct(wrapped);
+            var expected = wrapped
+                .Distinct();
 
             // Act
-            var result = ArrayExtensions
-                .Distinct(wrapped);
+            var result = wrapped.AsValueEnumerable()
+                .Distinct();
 
             // Assert
             _ = result.Must()
@@ -58,13 +58,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct
             // Arrange
             var (offset, count) = Utils.SkipTake(source.Length, skip, take);
             var wrapped = new ArraySegment<int>(source, offset, count);
-            var expected = Enumerable
-                .Distinct(wrapped)
+            var expected = wrapped
+                .Distinct()
                 .ToArray();
 
             // Act
-            var result = ArrayExtensions
-                .Distinct(wrapped)
+            var result = wrapped.AsValueEnumerable()
+                .Distinct()
                 .ToArray();
 
             // Assert
@@ -83,13 +83,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct
             var pool = MemoryPool<int>.Shared;
             var (offset, count) = Utils.SkipTake(source.Length, skip, take);
             var wrapped = new ArraySegment<int>(source, offset, count);
-            var expected = Enumerable
-                .Distinct(wrapped)
+            var expected = wrapped
+                .Distinct()
                 .ToArray();
 
             // Act
-            using var result = ArrayExtensions
-                .Distinct(wrapped)
+            using var result = wrapped.AsValueEnumerable()
+                .Distinct()
                 .ToArray(pool);
 
             // Assert
@@ -106,18 +106,41 @@ namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct
             // Arrange
             var (offset, count) = Utils.SkipTake(source.Length, skip, take);
             var wrapped = new ArraySegment<int>(source, offset, count);
-            var expected = Enumerable
-                .Distinct(wrapped)
+            var expected = wrapped
+                .Distinct()
                 .ToList();
 
             // Act
-            var result = ArrayExtensions
-                .Distinct(wrapped)
+            var result = wrapped.AsValueEnumerable()
+                .Distinct()
                 .ToList();
 
             // Assert
             _ = result.Must()
                 .BeEnumerableOf<int>()
+                .BeEqualTo(expected);
+        }
+
+        [Theory]
+        [MemberData(nameof(TestData.SkipTakeEmpty), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakeSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakeMultiple), MemberType = typeof(TestData))]
+        public void Distinct_Sum_With_ValidData_Must_Succeed(int[] source, int skip, int take)
+        {
+            // Arrange
+            var (offset, count) = Utils.SkipTake(source.Length, skip, take);
+            var wrapped = new ArraySegment<int>(source, offset, count);
+            var expected = wrapped
+                .Distinct()
+                .Sum();
+
+            // Act
+            var result = wrapped.AsValueEnumerable()
+                .Distinct()
+                .Sum();
+
+            // Assert
+            _ = result.Must()
                 .BeEqualTo(expected);
         }
     }

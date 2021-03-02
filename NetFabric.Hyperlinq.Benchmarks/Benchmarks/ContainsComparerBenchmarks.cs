@@ -66,7 +66,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [BenchmarkCategory("Array")]
         [Benchmark]
         public bool Hyperlinq_Span()
-            => array.AsSpan().Contains(Count - 1, this);
+            => array.AsSpan().AsValueEnumerable().Contains(Count - 1, this);
 
         [BenchmarkCategory("Array")]
         [Benchmark]

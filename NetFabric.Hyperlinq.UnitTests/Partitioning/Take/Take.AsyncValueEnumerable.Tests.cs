@@ -15,12 +15,12 @@ namespace NetFabric.Hyperlinq.UnitTests.Partitioning.Take
             // Arrange
             var wrapped = Wrap
                 .AsAsyncValueEnumerable(source);
-            var expected = Enumerable
-                .Take(source, count);
+            var expected = source
+                .Take(count);
 
             // Act
-            var result = AsyncValueEnumerableExtensions
-                .Take<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, count);
+            var result = wrapped
+                .Take<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(count);
 
             // Assert
             _ = result.Must()
@@ -35,13 +35,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Partitioning.Take
             // Arrange
             var wrapped = Wrap
                 .AsAsyncValueEnumerable(source);
-            var expected = Enumerable
-                .Take(source, count0)
+            var expected = source
+                .Take(count0)
                 .Take(count1);
 
             // Act
-            var result = AsyncValueEnumerableExtensions
-                .Take<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, count0)
+            var result = wrapped
+                .Take<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(count0)
                 .Take(count1);
 
             // Assert

@@ -120,6 +120,66 @@ namespace NetFabric.Hyperlinq
             public readonly List<TSource> ToList()
                 => GetSet().ToList();
         }
+        
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Sum<TEnumerable, TEnumerator>(this DistinctEnumerable<TEnumerable, TEnumerator, int> source)
+            where TEnumerable : IValueEnumerable<int, TEnumerator>
+            where TEnumerator : struct, IEnumerator<int>
+            => source.Sum<DistinctEnumerable<TEnumerable, TEnumerator, int>, DistinctEnumerable<TEnumerable, TEnumerator, int>.Enumerator, int, int>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Sum<TEnumerable, TEnumerator>(this DistinctEnumerable<TEnumerable, TEnumerator, int?> source)
+            where TEnumerable : IValueEnumerable<int?, TEnumerator>
+            where TEnumerator : struct, IEnumerator<int?>
+            => source.Sum<DistinctEnumerable<TEnumerable, TEnumerator, int?>, DistinctEnumerable<TEnumerable, TEnumerator, int?>.Enumerator, int?, int>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static long Sum<TEnumerable, TEnumerator>(this DistinctEnumerable<TEnumerable, TEnumerator, long> source)
+            where TEnumerable : IValueEnumerable<long, TEnumerator>
+            where TEnumerator : struct, IEnumerator<long>
+            => source.Sum<DistinctEnumerable<TEnumerable, TEnumerator, long>, DistinctEnumerable<TEnumerable, TEnumerator, long>.Enumerator, long, long>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static long Sum<TEnumerable, TEnumerator>(this DistinctEnumerable<TEnumerable, TEnumerator, long?> source)
+            where TEnumerable : IValueEnumerable<long?, TEnumerator>
+            where TEnumerator : struct, IEnumerator<long?>
+            => source.Sum<DistinctEnumerable<TEnumerable, TEnumerator, long?>, DistinctEnumerable<TEnumerable, TEnumerator, long?>.Enumerator, long?, long>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float Sum<TEnumerable, TEnumerator>(this DistinctEnumerable<TEnumerable, TEnumerator, float> source)
+            where TEnumerable : IValueEnumerable<float, TEnumerator>
+            where TEnumerator : struct, IEnumerator<float>
+            => source.Sum<DistinctEnumerable<TEnumerable, TEnumerator, float>, DistinctEnumerable<TEnumerable, TEnumerator, float>.Enumerator, float, float>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float Sum<TEnumerable, TEnumerator>(this DistinctEnumerable<TEnumerable, TEnumerator, float?> source)
+            where TEnumerable : IValueEnumerable<float?, TEnumerator>
+            where TEnumerator : struct, IEnumerator<float?>
+            => source.Sum<DistinctEnumerable<TEnumerable, TEnumerator, float?>, DistinctEnumerable<TEnumerable, TEnumerator, float?>.Enumerator, float?, float>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static double Sum<TEnumerable, TEnumerator>(this DistinctEnumerable<TEnumerable, TEnumerator, double> source)
+            where TEnumerable : IValueEnumerable<double, TEnumerator>
+            where TEnumerator : struct, IEnumerator<double>
+            => source.Sum<DistinctEnumerable<TEnumerable, TEnumerator, double>, DistinctEnumerable<TEnumerable, TEnumerator, double>.Enumerator, double, double>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static double Sum<TEnumerable, TEnumerator>(this DistinctEnumerable<TEnumerable, TEnumerator, double?> source)
+            where TEnumerable : IValueEnumerable<double?, TEnumerator>
+            where TEnumerator : struct, IEnumerator<double?>
+            => source.Sum<DistinctEnumerable<TEnumerable, TEnumerator, double?>, DistinctEnumerable<TEnumerable, TEnumerator, double?>.Enumerator, double?, double>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static decimal Sum<TEnumerable, TEnumerator>(this DistinctEnumerable<TEnumerable, TEnumerator, decimal> source)
+            where TEnumerable : IValueEnumerable<decimal, TEnumerator>
+            where TEnumerator : struct, IEnumerator<decimal>
+            => source.Sum<DistinctEnumerable<TEnumerable, TEnumerator, decimal>, DistinctEnumerable<TEnumerable, TEnumerator, decimal>.Enumerator, decimal, decimal>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static decimal Sum<TEnumerable, TEnumerator>(this DistinctEnumerable<TEnumerable, TEnumerator, decimal?> source)
+            where TEnumerable : IValueEnumerable<decimal?, TEnumerator>
+            where TEnumerator : struct, IEnumerator<decimal?>
+            => source.Sum<DistinctEnumerable<TEnumerable, TEnumerator, decimal?>, DistinctEnumerable<TEnumerable, TEnumerator, decimal?>.Enumerator, decimal?, decimal>();
     }
 }
 

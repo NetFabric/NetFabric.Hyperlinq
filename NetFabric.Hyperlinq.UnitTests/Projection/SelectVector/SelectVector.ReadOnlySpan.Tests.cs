@@ -14,12 +14,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Projection.SelectVector
         public void SelectVector_ToArray_With_ValidData_Must_Succeed(int[] source, Func<Vector<int>, Vector<int>> vectorSelector, Func<int, int> selector)
         {
             // Arrange
-            var expected = Enumerable
-                .Select(source, selector)
+            var wrapped = (ReadOnlySpan<int>)source.AsSpan();
+            var expected = source
+                .Select(selector)
                 .ToArray();
 
             // Act
-            var result = ((ReadOnlySpan<int>)source.AsSpan())
+            var result = wrapped.AsValueEnumerable()
                 .SelectVector(vectorSelector, selector)
                 .ToArray();
 

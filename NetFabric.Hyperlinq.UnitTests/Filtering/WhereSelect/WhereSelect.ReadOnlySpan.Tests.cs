@@ -1,5 +1,6 @@
 using NetFabric.Assertive;
 using System;
+using System.Linq;
 using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests.Filtering.WhereSelect
@@ -13,17 +14,42 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.WhereSelect
         public void WhereSelect_With_ValidData_Must_Succeed(int[] source, Func<int, bool> predicate, Func<int, string> selector)
         {
             // Arrange
-            var expected = 
-                System.Linq.Enumerable.Select(
-                    System.Linq.Enumerable.Where(source, predicate), selector);
+            var wrapped = (ReadOnlySpan<int>)source.AsSpan();
+            var expected = source
+                .Where(predicate)
+                .Select(selector);
 
             // Act
-            var result = ArrayExtensions
-                .Where((ReadOnlySpan<int>)source.AsSpan(), predicate)
+            var result = wrapped.AsValueEnumerable()
+                .Where(predicate)
                 .Select(selector);
 
             // Assert
             _ = result.SequenceEqual(expected).Must().BeTrue();
+        }
+        
+        [Theory]
+        [MemberData(nameof(TestData.PredicateEmpty), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.PredicateSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.PredicateMultiple), MemberType = typeof(TestData))]
+        public void WhereSelect_Sum_With_ValidData_Must_Succeed(int[] source, Func<int, bool> predicate)
+        {
+            // Arrange
+            var wrapped = (ReadOnlySpan<int>)source.AsSpan();
+            var expected = source
+                .Where(predicate)
+                .Select(item => item)
+                .Sum();
+
+            // Act
+            var result = wrapped.AsValueEnumerable()
+                .Where(predicate)
+                .Select(item => item)
+                .Sum();
+
+            // Assert
+            _ = result.Must()
+                .BeEqualTo(expected);
         }
     }
 }

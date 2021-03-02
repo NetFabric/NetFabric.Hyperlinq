@@ -8,9 +8,11 @@ namespace NetFabric.Hyperlinq
     public static partial class Wrap
     {
         public static AsyncEnumerableWrapper<T> AsAsyncEnumerable<T>(T[] source) 
-            => source is null 
-                ? throw new ArgumentNullException(nameof(source)) 
-                : new(source);
+            => source switch
+            {
+                null => throw new ArgumentNullException(nameof(source)),
+                _ => new AsyncEnumerableWrapper<T>(source)
+            };
 
         public readonly struct AsyncEnumerableWrapper<T> 
             : IAsyncEnumerable<T>
@@ -21,7 +23,7 @@ namespace NetFabric.Hyperlinq
                 => this.source = source;
 
             public readonly AsyncEnumerator<T> GetAsyncEnumerator() 
-                => new AsyncEnumerator<T>(source);
+                => new(source);
             readonly IAsyncEnumerator<T> IAsyncEnumerable<T>.GetAsyncEnumerator(CancellationToken _) 
                 => new AsyncEnumerator<T>(source);
         }

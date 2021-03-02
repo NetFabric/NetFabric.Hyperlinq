@@ -15,12 +15,12 @@ namespace NetFabric.Hyperlinq.UnitTests.Partitioning.Skip
             // Arrange
             var wrapped = Wrap
                 .AsAsyncValueEnumerable(source);
-            var expected = Enumerable
-                .Skip(source, count);
+            var expected = source
+                .Skip(count);
 
             // Act
-            var result = AsyncValueEnumerableExtensions
-                .Skip<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, count);
+            var result = wrapped
+                .Skip<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(count);
 
             // Assert
             _ = result.Must()
@@ -35,13 +35,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Partitioning.Skip
             // Arrange
             var wrapped = Wrap
                 .AsAsyncValueEnumerable(source);
-            var expected = Enumerable
-                .Skip(source, count0)
+            var expected = source
+                .Skip(count0)
                 .Skip(count1);
 
             // Act
-            var result = AsyncValueEnumerableExtensions
-                .Skip<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, count0)
+            var result = wrapped
+                .Skip<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(count0)
                 .Skip(count1);
 
             // Assert
@@ -59,13 +59,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Partitioning.Skip
             // Arrange
             var wrapped = Wrap
                 .AsAsyncValueEnumerable(source);
-            var expected = Enumerable
-                .Skip(source, skip)
+            var expected = source
+                .Skip(skip)
                 .Take(take);
 
             // Act
-            var result = AsyncValueEnumerableExtensions
-                .Skip<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, skip)
+            var result = wrapped
+                .Skip<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(skip)
                 .Take(take);
 
             // Assert

@@ -16,11 +16,11 @@ namespace NetFabric.Hyperlinq.UnitTests.Aggregation.Count
             // Arrange
             var wrapped = Wrap
                 .AsReadOnlyList(source);
-            var expected = Enumerable
-                .Count(source);
+            var expected = source
+                .Count();
 
             // Act
-            var result = wrapped
+            var result = wrapped.AsValueEnumerable()
                 .Count();
 
             // Assert
@@ -37,13 +37,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Aggregation.Count
             // Arrange
             var wrapped = Wrap
                 .AsReadOnlyList(source);
-            var expected = Enumerable
-                .Skip(source, skip)
+            var expected = source
+                .Skip(skip)
                 .Take(take)
                 .Count(predicate);
 
             // Act
-            var result = wrapped
+            var result = wrapped.AsValueEnumerable()
                 .Skip(skip)
                 .Take(take)
                 .Where(predicate)
@@ -63,14 +63,14 @@ namespace NetFabric.Hyperlinq.UnitTests.Aggregation.Count
             // Arrange
             var wrapped = Wrap
                 .AsReadOnlyList(source);
-            var expected = Enumerable
-                .Skip(source, skip)
+            var expected = source
+                .Skip(skip)
                 .Take(take)
                 .Where(predicate)
                 .Count();
 
             // Act
-            var result = wrapped
+            var result = wrapped.AsValueEnumerable()
                 .Skip(skip)
                 .Take(take)
                 .Where(predicate)

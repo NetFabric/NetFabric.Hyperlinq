@@ -43,9 +43,9 @@ namespace NetFabric.Hyperlinq
             where TList : struct, IReadOnlyList<TSource>
             where TSelector : struct, IFunction<TSource, TResult>
         {
-            readonly int offset;
-            readonly TList source;
-            TSelector selector;
+            internal int offset;
+            internal TList source;
+            internal TSelector selector;
 
             internal SelectEnumerable(in TList source, TSelector selector, int offset, int count)
                 => (this.source, this.offset, Count, this.selector) = (source, offset, count, selector);
@@ -306,13 +306,72 @@ namespace NetFabric.Hyperlinq
                 }
             }
         }
-
-
+        
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int Count<TList, TSource, TResult, TSelector>(this in SelectEnumerable<TList, TSource, TResult, TSelector> source)
             where TList : struct, IReadOnlyList<TSource>
             where TSelector : struct, IFunction<TSource, TResult>
             => source.Count;
+        
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Sum<TList, TSource, TSelector>(this SelectEnumerable<TList, TSource, int, TSelector> source)
+            where TList : struct, IReadOnlyList<TSource>
+            where TSelector : struct, IFunction<TSource, int>
+            => source.source.Sum<TList, TSource, int, int, TSelector>(source.selector, source.offset, source.Count);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Sum<TList, TSource, TSelector>(this SelectEnumerable<TList, TSource, int?, TSelector> source)
+            where TList : struct, IReadOnlyList<TSource>
+            where TSelector : struct, IFunction<TSource, int?>
+            => source.source.Sum<TList, TSource, int?, int, TSelector>(source.selector, source.offset, source.Count);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static long Sum<TList, TSource, TSelector>(this SelectEnumerable<TList, TSource, long, TSelector> source)
+            where TList : struct, IReadOnlyList<TSource>
+            where TSelector : struct, IFunction<TSource, long>
+            => source.source.Sum<TList, TSource, long, long, TSelector>(source.selector, source.offset, source.Count);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static long Sum<TList, TSource, TSelector>(this SelectEnumerable<TList, TSource, long?, TSelector> source)
+            where TList : struct, IReadOnlyList<TSource>
+            where TSelector : struct, IFunction<TSource, long?>
+            => source.source.Sum<TList, TSource, long?, long, TSelector>(source.selector, source.offset, source.Count);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float Sum<TList, TSource, TSelector>(this SelectEnumerable<TList, TSource, float, TSelector> source)
+            where TList : struct, IReadOnlyList<TSource>
+            where TSelector : struct, IFunction<TSource, float>
+            => source.source.Sum<TList, TSource, float, float, TSelector>(source.selector, source.offset, source.Count);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float Sum<TList, TSource, TSelector>(this SelectEnumerable<TList, TSource, float?, TSelector> source)
+            where TList : struct, IReadOnlyList<TSource>
+            where TSelector : struct, IFunction<TSource, float?>
+            => source.source.Sum<TList, TSource, float?, float, TSelector>(source.selector, source.offset, source.Count);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static double Sum<TList, TSource, TSelector>(this SelectEnumerable<TList, TSource, double, TSelector> source)
+            where TList : struct, IReadOnlyList<TSource>
+            where TSelector : struct, IFunction<TSource, double>
+            => source.source.Sum<TList, TSource, double, double, TSelector>(source.selector, source.offset, source.Count);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static double Sum<TList, TSource, TSelector>(this SelectEnumerable<TList, TSource, double?, TSelector> source)
+            where TList : struct, IReadOnlyList<TSource>
+            where TSelector : struct, IFunction<TSource, double?>
+            => source.source.Sum<TList, TSource, double?, double, TSelector>(source.selector, source.offset, source.Count);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static decimal Sum<TList, TSource, TSelector>(this SelectEnumerable<TList, TSource, decimal, TSelector> source)
+            where TList : struct, IReadOnlyList<TSource>
+            where TSelector : struct, IFunction<TSource, decimal>
+            => source.source.Sum<TList, TSource, decimal, decimal, TSelector>(source.selector, source.offset, source.Count);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static decimal Sum<TList, TSource, TSelector>(this SelectEnumerable<TList, TSource, decimal?, TSelector> source)
+            where TList : struct, IReadOnlyList<TSource>
+            where TSelector : struct, IFunction<TSource, decimal?>
+            => source.source.Sum<TList, TSource, decimal?, decimal, TSelector>(source.selector, source.offset, source.Count);
     }
 }
 

@@ -15,12 +15,12 @@ namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct
         {
             // Arrange
             var wrapped = Wrap.AsValueEnumerable(source);
-            var expected = Enumerable
-                .Distinct(wrapped);
+            var expected = source
+                .Distinct();
 
             // Act
-            var result = ValueEnumerableExtensions
-                .Distinct<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(wrapped);
+            var result = wrapped
+                .Distinct<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>();
 
             // Assert
             _ = result.Must()
@@ -36,13 +36,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct
         {
             // Arrange
             var wrapped = Wrap.AsValueEnumerable(source);
-            var expected = Enumerable
-                .Distinct(source)
+            var expected = source
+                .Distinct()
                 .ToArray();
 
             // Act
-            var result = ValueEnumerableExtensions
-                .Distinct<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(wrapped)
+            var result = wrapped
+                .Distinct<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>()
                 .ToArray();
 
             // Assert
@@ -60,13 +60,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct
             // Arrange
             var pool = MemoryPool<int>.Shared;
             var wrapped = Wrap.AsValueEnumerable(source);
-            var expected = Enumerable
-                .Distinct(source)
+            var expected = source
+                .Distinct()
                 .ToArray();
 
             // Act
-            using var result = ValueEnumerableExtensions
-                .Distinct<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(wrapped)
+            using var result = wrapped
+                .Distinct<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>()
                 .ToArray(pool);
 
             // Assert
@@ -82,18 +82,40 @@ namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct
         {
             // Arrange
             var wrapped = Wrap.AsValueEnumerable(source);
-            var expected = Enumerable
-                .Distinct(source)
+            var expected = source
+                .Distinct()
                 .ToList();
 
             // Act
-            var result = ValueEnumerableExtensions
-                .Distinct<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(wrapped)
+            var result = wrapped
+                .Distinct<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>()
                 .ToList();
 
             // Assert
             _ = result.Must()
                 .BeEnumerableOf<int>()
+                .BeEqualTo(expected);
+        }
+
+        [Theory]
+        [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
+        public void Distinct_Sum_With_ValidData_Must_Succeed(int[] source)
+        {
+            // Arrange
+            var wrapped = Wrap.AsValueEnumerable(source);
+            var expected = source
+                .Distinct()
+                .Sum();
+
+            // Act
+            var result = wrapped
+                .Distinct<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>()
+                .Sum();
+
+            // Assert
+            _ = result.Must()
                 .BeEqualTo(expected);
         }
     }

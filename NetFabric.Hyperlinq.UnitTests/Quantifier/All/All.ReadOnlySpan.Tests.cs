@@ -1,5 +1,6 @@
-using System;
 using NetFabric.Assertive;
+using System;
+using System.Linq;
 using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests.Quantifier.All
@@ -13,11 +14,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.All
         public void All_Predicate_With_ValidData_Must_Succeed(int[] source, Func<int, bool> predicate)
         {
             // Arrange
-            var expected = System.Linq.Enumerable.All(source, predicate);
+            var wrapped = (ReadOnlySpan<int>)source.AsSpan();
+            var expected = source
+                    .All(predicate);
 
             // Act
-            var result = ArrayExtensions
-                .All<int>((ReadOnlySpan<int>)source.AsSpan(), predicate);
+            var result = wrapped.AsValueEnumerable()
+                .All(predicate);
 
             // Assert
             _ = result.Must()
@@ -31,13 +34,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.All
         public void All_PredicateAt_With_ValidData_Must_Succeed(int[] source, Func<int, int, bool> predicate)
         {
             // Arrange
-            var expected = 
-                System.Linq.Enumerable.Count(
-                    System.Linq.Enumerable.Where(source, predicate)) == source.Length;
+            var wrapped = (ReadOnlySpan<int>)source.AsSpan();
+            var expected = source
+                .Where(predicate).Count() == source.Length;
 
             // Act
-            var result = ArrayExtensions
-                .All<int>((ReadOnlySpan<int>)source.AsSpan(), predicate);
+            var result = wrapped.AsValueEnumerable()
+                .All(predicate);
 
             // Assert
             _ = result.Must()

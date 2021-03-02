@@ -23,7 +23,7 @@ namespace NetFabric.Hyperlinq
                 => source[index];
 
             public ValueTask<bool> MoveNextAsync() 
-                => new ValueTask<bool>(++index < source.Length);
+                => new(++index < source.Length);
             public readonly ValueTask DisposeAsync() 
                 => default;
         }

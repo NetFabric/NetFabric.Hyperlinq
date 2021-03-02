@@ -30,6 +30,8 @@ namespace NetFabric.Hyperlinq
         /// </summary>
         readonly IEqualityComparer<TElement> comparer;
 
+        readonly bool useDefaultComparer;
+
         /// <summary>
         /// The hash buckets, which are used to index into the slots.
         /// </summary>
@@ -50,6 +52,7 @@ namespace NetFabric.Hyperlinq
         {
             bucketsPool = ArrayPool<int>.Shared;
             slotsPool = ArrayPool<Slot>.Shared;
+            useDefaultComparer = Utils.UseDefault(comparer);
             this.comparer = comparer ?? EqualityComparer<TElement>.Default;
             buckets = default;
             slots = default;
@@ -77,15 +80,14 @@ namespace NetFabric.Hyperlinq
             Debug.Assert(buckets is not null);
             Debug.Assert(slots is not null);
 
-            var hashCode = value switch
-            { 
-                null => 0,
-                _ => comparer.GetHashCode(value) & 0x7FFFFFFF,
-            };
-            if (Utils.UseDefault(comparer))
+            var hashCode = 0;
+            if (useDefaultComparer)
             {
+                if (value is not null)
+                    hashCode = EqualityComparer<TElement>.Default.GetHashCode(value) & 0x7FFFFFFF;
+
                 var index = buckets[hashCode % buckets.Length] - 1;
-                while (index >= 0)
+                while (index >= 0 && index < slots.Length)
                 {
                     ref readonly var current = ref slots[index];
                     if (current.HashCode == hashCode && EqualityComparer<TElement>.Default.Equals(current.Value, value))
@@ -96,8 +98,11 @@ namespace NetFabric.Hyperlinq
             }
             else
             {
+                if (value is not null)
+                    hashCode = comparer.GetHashCode(value) & 0x7FFFFFFF;
+
                 var index = buckets[hashCode % buckets.Length] - 1;
-                while (index >= 0)
+                while (index >= 0 && index < slots.Length)
                 {
                     ref readonly var current = ref slots[index];
                     if (current.HashCode == hashCode && comparer.Equals(current.Value, value))
@@ -138,7 +143,7 @@ namespace NetFabric.Hyperlinq
                 Array.Clear(newSlots, Count, newSlots.Length - Count);
 
                 Array.Clear(newBuckets, 0, newBuckets.Length);
-                for (var index = 0; index < Count; index++)
+                for (var index = 0; index < Count && index < newSlots.Length; index++)
                 {
                     var bucket = newSlots[index].HashCode % newSize;
                     newSlots[index].Next = newBuckets[bucket] - 1;
@@ -180,6 +185,7 @@ namespace NetFabric.Hyperlinq
         public readonly List<TElement> ToList()
             => Count switch
             {
+                // ReSharper disable once HeapView.ObjectAllocation.Evident
                 0 => new List<TElement>(),
                 _ => ToArray().AsList()
             };

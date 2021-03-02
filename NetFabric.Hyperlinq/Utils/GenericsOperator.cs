@@ -46,6 +46,8 @@ namespace NetFabric.Hyperlinq
         public static TValue AddNullable<TNullableValue, TValue>(TNullableValue a, TValue b)
             where TValue : struct
         {
+#pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
+
             if (typeof(TNullableValue) == typeof(int?) && typeof(TValue) == typeof(int))
                 return (TValue)(object)(((int?)(object)a).GetValueOrDefault() + (int)(object)b);
 
@@ -75,6 +77,8 @@ namespace NetFabric.Hyperlinq
 
             if (typeof(TNullableValue) == typeof(decimal) && typeof(TValue) == typeof(decimal))
                 return (TValue)(object)((decimal)(object)a! + (decimal)(object)b);
+                
+#pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
 
             return Throw.NotSupportedException<TValue>();
         }

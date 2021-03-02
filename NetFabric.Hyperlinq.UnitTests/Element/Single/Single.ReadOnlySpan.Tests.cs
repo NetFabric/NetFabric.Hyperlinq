@@ -12,10 +12,11 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
         public void Single_With_Empty_Must_Return_None(int[] source)
         {
             // Arrange
+            var wrapped = (ReadOnlySpan<int>)source.AsSpan();
 
             // Act
-            var result = ArrayExtensions
-                .Single((ReadOnlySpan<int>)source.AsSpan());
+            var result = wrapped.AsValueEnumerable()
+                .Single();
 
             // Assert
             _ = result.Must()
@@ -28,12 +29,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
         public void Single_With_Single_Must_Return_Some(int[] source)
         {
             // Arrange
-            var expected = Enumerable
-                .Single(source);
+            var wrapped = (ReadOnlySpan<int>)source.AsSpan();
+            var expected = source
+                .Single();
 
             // Act
-            var result = ArrayExtensions
-                .Single((ReadOnlySpan<int>)source.AsSpan());
+            var result = wrapped.AsValueEnumerable()
+                .Single();
 
             // Assert
             _ = result.Match(
@@ -46,10 +48,11 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
         public void Single_With_Multiple_Must_Return_None(int[] source)
         {
             // Arrange
+            var wrapped = (ReadOnlySpan<int>)source.AsSpan();
 
             // Act
-            var result = ArrayExtensions
-                .Single((ReadOnlySpan<int>)source.AsSpan());
+            var result = wrapped.AsValueEnumerable()
+                .Single();
 
             // Assert
             _ = result.Must()
@@ -62,10 +65,11 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
         public void Single_Predicate_With_Empty_Must_Return_None(int[] source, Func<int, bool> predicate)
         {
             // Arrange
+            var wrapped = (ReadOnlySpan<int>)source.AsSpan();
 
             // Act
-            var result = ArrayExtensions
-                .Where((ReadOnlySpan<int>)source.AsSpan(), predicate)
+            var result = wrapped.AsValueEnumerable()
+                .Where(predicate)
                 .Single();
 
             // Assert
@@ -79,12 +83,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
         public void Single_Predicate_With_Single_Must_Return_Some(int[] source, Func<int, bool> predicate)
         {
             // Arrange
-            var expected =
-                Enumerable.Single(source, predicate);
+            var wrapped = (ReadOnlySpan<int>)source.AsSpan();
+            var expected = source
+                .Single(predicate);
 
             // Act
-            var result = ArrayExtensions
-                .Where((ReadOnlySpan<int>)source.AsSpan(), predicate)
+            var result = wrapped.AsValueEnumerable()
+                .Where(predicate)
                 .Single();
 
             // Assert
@@ -98,10 +103,11 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
         public void Single_Predicate_With_Multiple_Must_Return_None(int[] source, Func<int, bool> predicate)
         {
             // Arrange
+            var wrapped = (ReadOnlySpan<int>)source.AsSpan();
 
             // Act
-            var result = ArrayExtensions
-                .Where((ReadOnlySpan<int>)source.AsSpan(), predicate)
+            var result = wrapped.AsValueEnumerable()
+                .Where(predicate)
                 .Single();
 
             // Assert
@@ -115,10 +121,11 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
         public void Single_PredicateAt_With_Empty_Must_Return_None(int[] source, Func<int, int, bool> predicate)
         {
             // Arrange
+            var wrapped = (ReadOnlySpan<int>)source.AsSpan();
 
             // Act
-            var result = ArrayExtensions
-                .Where((ReadOnlySpan<int>)source.AsSpan(), predicate)
+            var result = wrapped.AsValueEnumerable()
+                .Where(predicate)
                 .Single();
 
             // Assert
@@ -132,13 +139,14 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
         public void Single_PredicateAt_With_Single_Must_Return_Some(int[] source, Func<int, int, bool> predicate)
         {
             // Arrange
-            var expected = Enumerable
-                .Where(source, predicate)
+            var wrapped = (ReadOnlySpan<int>)source.AsSpan();
+            var expected = source
+                .Where(predicate)
                 .Single();
 
             // Act
-            var result = ArrayExtensions
-                .Where((ReadOnlySpan<int>)source.AsSpan(), predicate)
+            var result = wrapped.AsValueEnumerable()
+                .Where(predicate)
                 .Single();
 
             // Assert
@@ -152,10 +160,11 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
         public void Single_PredicateAt_With_Multiple_Must_Return_None(int[] source, Func<int, int, bool> predicate)
         {
             // Arrange
+            var wrapped = (ReadOnlySpan<int>)source.AsSpan();
 
             // Act
-            var result = ArrayExtensions
-                .Where((ReadOnlySpan<int>)source.AsSpan(), predicate)
+            var result = wrapped.AsValueEnumerable()
+                .Where(predicate)
                 .Single();
 
             // Assert
@@ -169,10 +178,11 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
         public void Single_Selector_With_Empty_Must_Return_None(int[] source, Func<int, string> selector)
         {
             // Arrange
+            var wrapped = (ReadOnlySpan<int>)source.AsSpan();
 
             // Act
-            var result = ArrayExtensions
-                .Select((ReadOnlySpan<int>)source.AsSpan(), selector)
+            var result = wrapped.AsValueEnumerable()
+                .Select(selector)
                 .Single();
 
             // Assert
@@ -186,13 +196,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
         public void Single_Selector_With_Single_Must_Return_Some(int[] source, Func<int, string> selector)
         {
             // Arrange
+            var wrapped = (ReadOnlySpan<int>)source.AsSpan();
             var expected =
-                Enumerable.Single(
-                    Enumerable.Select(source, selector));
+                source.Select(selector).Single();
 
             // Act
-            var result = ArrayExtensions
-                .Select<int, string>((ReadOnlySpan<int>)source.AsSpan(), selector)
+            var result = wrapped.AsValueEnumerable()
+                .Select(selector)
                 .Single();
 
             // Assert
@@ -206,10 +216,11 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
         public void Single_Selector_With_Multiple_Must_Return_None(int[] source, Func<int, string> selector)
         {
             // Arrange
+            var wrapped = (ReadOnlySpan<int>)source.AsSpan();
 
             // Act
-            var result = ArrayExtensions
-                .Select<int, string>((ReadOnlySpan<int>)source.AsSpan(), selector)
+            var result = wrapped.AsValueEnumerable()
+                .Select(selector)
                 .Single();
 
             // Assert
@@ -223,10 +234,11 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
         public void Single_SelectorAt_With_Empty_Must_Return_None(int[] source, Func<int, int, string> selector)
         {
             // Arrange
+            var wrapped = (ReadOnlySpan<int>)source.AsSpan();
 
             // Act
-            var result = ArrayExtensions
-                .Select<int, string>((ReadOnlySpan<int>)source.AsSpan(), selector)
+            var result = wrapped.AsValueEnumerable()
+                .Select(selector)
                 .Single();
 
             // Assert
@@ -240,13 +252,14 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
         public void Single_SelectorAt_With_Single_Must_Return_Some(int[] source, Func<int, int, string> selector)
         {
             // Arrange
-            var expected = Enumerable
-                .Select(source, selector)
+            var wrapped = (ReadOnlySpan<int>)source.AsSpan();
+            var expected = source
+                .Select(selector)
                 .Single();
 
             // Act
-            var result = ArrayExtensions
-                .Select<int, string>((ReadOnlySpan<int>)source.AsSpan(), selector)
+            var result = wrapped.AsValueEnumerable()
+                .Select(selector)
                 .Single();
 
             // Assert
@@ -260,10 +273,11 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
         public void Single_SelectorAt_With_Multiple_Must_Return_None(int[] source, Func<int, int, string> selector)
         {
             // Arrange
+            var wrapped = (ReadOnlySpan<int>)source.AsSpan();
 
             // Act
-            var result = ArrayExtensions
-                .Select((ReadOnlySpan<int>)source.AsSpan(), selector)
+            var result = wrapped.AsValueEnumerable()
+                .Select(selector)
                 .Single();
 
             // Assert
@@ -277,10 +291,11 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
         public void Single_Predicate_Selector_With_Empty_Must_Return_None(int[] source, Func<int, bool> predicate, Func<int, string> selector)
         {
             // Arrange
+            var wrapped = (ReadOnlySpan<int>)source.AsSpan();
 
             // Act
-            var result = ArrayExtensions
-                .Where((ReadOnlySpan<int>)source.AsSpan(), predicate)
+            var result = wrapped.AsValueEnumerable()
+                .Where(predicate)
                 .Select(selector)
                 .Single();
 
@@ -295,14 +310,15 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
         public void Single_Predicate_Selector_With_Single_Must_Return_Some(int[] source, Func<int, bool> predicate, Func<int, string> selector)
         {
             // Arrange
-            var expected = Enumerable
-                .Where(source, predicate)
+            var wrapped = (ReadOnlySpan<int>)source.AsSpan();
+            var expected = source
+                .Where(predicate)
                 .Select(selector)
                 .Single();
 
             // Act
-            var result = ArrayExtensions
-                .Where((ReadOnlySpan<int>)source.AsSpan(), predicate)
+            var result = wrapped.AsValueEnumerable()
+                .Where(predicate)
                 .Select(selector)
                 .Single();
 
@@ -317,10 +333,11 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
         public void Single_Predicate_Selector_With_Multiple_Must_Return_None(int[] source, Func<int, bool> predicate, Func<int, string> selector)
         {
             // Arrange
+            var wrapped = (ReadOnlySpan<int>)source.AsSpan();
 
             // Act
-            var result = ArrayExtensions
-                .Where((ReadOnlySpan<int>)source.AsSpan(), predicate)
+            var result = wrapped.AsValueEnumerable()
+                .Where(predicate)
                 .Select(selector)
                 .Single();
 

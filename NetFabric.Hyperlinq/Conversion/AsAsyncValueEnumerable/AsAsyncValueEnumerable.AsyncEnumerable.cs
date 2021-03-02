@@ -15,7 +15,6 @@ namespace NetFabric.Hyperlinq
             => new(source);
 
         [GeneratorIgnore] // TODO: to be removed
-        
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static AsyncValueEnumerableWrapper<TEnumerable, TEnumerator, TSource> AsAsyncValueEnumerable<TEnumerable, TEnumerator, TSource>(this TEnumerable source, Func<TEnumerable, CancellationToken, TEnumerator> getAsyncEnumerator)
             where TEnumerable : IAsyncEnumerable<TSource>

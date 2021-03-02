@@ -26,17 +26,17 @@ namespace NetFabric.Hyperlinq.Benchmarks
             int IList<int>.this[int index] 
             { 
                 get => array[index]; 
-                set => throw new NotImplementedException(); 
+                set => throw new NotSupportedException(); 
             }
 
             public bool IsReadOnly => true;
 
-            public void Add(int item) => throw new NotImplementedException();
-            public bool Remove(int item) => throw new NotImplementedException();
-            public void Clear() => throw new NotImplementedException();
-            public int IndexOf(int item) => throw new NotImplementedException();
-            public void Insert(int index, int item) => throw new NotImplementedException();
-            public void RemoveAt(int index) => throw new NotImplementedException();
+            public void Add(int item) => throw new NotSupportedException();
+            public bool Remove(int item) => throw new NotSupportedException();
+            public void Clear() => throw new NotSupportedException();
+            public int IndexOf(int item) => throw new NotSupportedException();
+            public void Insert(int index, int item) => throw new NotSupportedException();
+            public void RemoveAt(int index) => throw new NotSupportedException();
 
             public bool Contains(int item)
                 => ((IList<int>)array).Contains(item);
@@ -89,17 +89,17 @@ namespace NetFabric.Hyperlinq.Benchmarks
             int IList<int>.this[int index]
             {
                 get => array[index];
-                set => throw new NotImplementedException();
+                set => throw new NotSupportedException();
             }
 
             public bool IsReadOnly => true;
 
-            public void Add(int item) => throw new NotImplementedException();
-            public bool Remove(int item) => throw new NotImplementedException();
-            public void Clear() => throw new NotImplementedException();
-            public int IndexOf(int item) => throw new NotImplementedException();
-            public void Insert(int index, int item) => throw new NotImplementedException();
-            public void RemoveAt(int index) => throw new NotImplementedException();
+            public void Add(int item) => throw new NotSupportedException();
+            public bool Remove(int item) => throw new NotSupportedException();
+            public void Clear() => throw new NotSupportedException();
+            public int IndexOf(int item) => throw new NotSupportedException();
+            public void Insert(int index, int item) => throw new NotSupportedException();
+            public void RemoveAt(int index) => throw new NotSupportedException();
 
             public bool Contains(int item)
                 => ((IList<int>)array).Contains(item);

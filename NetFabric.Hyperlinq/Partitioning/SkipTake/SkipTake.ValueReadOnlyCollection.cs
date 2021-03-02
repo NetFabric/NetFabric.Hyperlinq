@@ -211,8 +211,9 @@ namespace NetFabric.Hyperlinq
                 if (source.Count is 0)
                     return false;
 
-                if (comparer is null || ReferenceEquals(comparer, EqualityComparer<TSource>.Default))
+                if (Utils.UseDefault(comparer))
                 {
+                    // ReSharper disable once HeapView.PossibleBoxingAllocation
                     if (skipCount is 0 && Count == source.Count && source is ICollection<TSource> collection)
                         return collection.Contains(value);
 
@@ -220,7 +221,6 @@ namespace NetFabric.Hyperlinq
                         return DefaultContains(source, value, skipCount, Count);
                 }
 
-                comparer ??= EqualityComparer<TSource>.Default;
                 return ComparerContains(source, value, comparer, skipCount, Count);
 
                 static bool DefaultContains(TEnumerable source, TSource value, int skipCount, int takeCount)
@@ -246,8 +246,9 @@ namespace NetFabric.Hyperlinq
                     return false;
                 }
 
-                static bool ComparerContains(TEnumerable source, TSource value, IEqualityComparer<TSource> comparer, int skipCount, int takeCount)
+                static bool ComparerContains(TEnumerable source, TSource value, IEqualityComparer<TSource>? comparer, int skipCount, int takeCount)
                 {
+                    comparer ??= EqualityComparer<TSource>.Default;
                     using var enumerator = source.GetEnumerator();
 
                     // skip

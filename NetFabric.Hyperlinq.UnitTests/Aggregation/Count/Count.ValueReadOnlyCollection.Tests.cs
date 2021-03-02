@@ -16,8 +16,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Aggregation.Count
             // Arrange
             var wrapped = Wrap
                 .AsValueReadOnlyCollection(source);
-            var expected = Enumerable
-                .Count(source);
+            var expected = source
+                .Count();
 
             // Act
             var result = ValueReadOnlyCollectionExtensions

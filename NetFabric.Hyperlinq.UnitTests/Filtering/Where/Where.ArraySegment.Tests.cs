@@ -15,8 +15,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.Where
             var expected = Enumerable.Empty<int>();
 
             // Act
-            var result = ArrayExtensions
-                .Where(source, _ => true);
+            var result = source.AsValueEnumerable()
+                .Where(_ => true);
 
             // Assert
             _ = result.Must()
@@ -34,18 +34,18 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.Where
             // Arrange
             var (offset, count) = Utils.SkipTake(source.Length, skip, take);
             var wrapped = new ArraySegment<int>(source, offset, count);
-            var expected = Enumerable
-                .Where(wrapped, predicate);
+            var expected = wrapped
+                .Where(predicate);
 
             // Act
-            var result = ArrayExtensions
-                .Where(wrapped, predicate);
+            var result = wrapped.AsValueEnumerable()
+                .Where(predicate);
 
             // Assert
             _ = result.Must()
                 .BeEnumerableOf<int>()
                 .BeEqualTo(expected, testRefStructs: false);
-            _ = result.SequenceEqual(expected).Must().BeTrue();
+            _ = Enumerable.SequenceEqual(result, expected).Must().BeTrue();
         }
 
         [Theory]
@@ -57,13 +57,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.Where
             // Arrange
             var (offset, count) = Utils.SkipTake(source.Length, skip, take);
             var wrapped = new ArraySegment<int>(source, offset, count);
-            var expected = Enumerable
-                .Where(wrapped, predicate0)
+            var expected = wrapped
+                .Where(predicate0)
                 .Where(predicate1);
 
             // Act
-            var result = ArrayExtensions
-                .Where(wrapped, predicate0)
+            var result = wrapped.AsValueEnumerable()
+                .Where(predicate0)
                 .Where(predicate1);
 
             // Assert
@@ -71,6 +71,29 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.Where
                 .BeEnumerableOf<int>()
                 .BeEqualTo(expected, testRefStructs: false);
             _ = result.SequenceEqual(expected).Must().BeTrue();
+        }
+
+        [Theory]
+        [MemberData(nameof(TestData.SkipTakePredicateEmpty), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakePredicateSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakePredicateMultiple), MemberType = typeof(TestData))]
+        public void Where_Sum_With_ValidData_Must_Succeed(int[] source, int skip, int take, Func<int, bool> predicate)
+        {
+            // Arrange
+            var (offset, count) = Utils.SkipTake(source.Length, skip, take);
+            var wrapped = new ArraySegment<int>(source, offset, count);
+            var expected = wrapped
+                .Where(predicate)
+                .Sum();
+
+            // Act
+            var result = wrapped.AsValueEnumerable()
+                .Where(predicate)
+                .Sum();
+
+            // Assert
+            _ = result.Must()
+                .BeEqualTo(expected);
         }
     }
 }

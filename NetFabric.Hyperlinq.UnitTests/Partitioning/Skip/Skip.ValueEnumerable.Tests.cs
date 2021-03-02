@@ -15,12 +15,12 @@ namespace NetFabric.Hyperlinq.UnitTests.Partitioning.Skip
             // Arrange
             var wrapped = Wrap
                 .AsValueEnumerable(source);
-            var expected = Enumerable
-                .Skip(source, count);
+            var expected = source
+                .Skip(count);
 
             // Act
-            var result = ValueEnumerableExtensions
-                .Skip<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(wrapped, count);
+            var result = wrapped
+                .Skip<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(count);
 
             // Assert
             _ = result.Must()
@@ -35,13 +35,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Partitioning.Skip
             // Arrange
             var wrapped = Wrap
                 .AsValueEnumerable(source);
-            var expected = Enumerable
-                .Skip(source, count0)
+            var expected = source
+                .Skip(count0)
                 .Skip( count1);
 
             // Act
-            var result = ValueEnumerableExtensions
-                .Skip<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(wrapped, count0)
+            var result = wrapped
+                .Skip<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(count0)
                 .Skip(count1);
 
             // Assert
@@ -59,13 +59,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Partitioning.Skip
             // Arrange
             var wrapped = Wrap
                 .AsValueEnumerable(source);
-            var expected = Enumerable
-                .Skip(source, skip)
+            var expected = source
+                .Skip(skip)
                 .Take(take);
 
             // Act
-            var result = ValueEnumerableExtensions
-                .Skip<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(wrapped, skip)
+            var result = wrapped
+                .Skip<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(skip)
                 .Take(take);
 
             // Assert

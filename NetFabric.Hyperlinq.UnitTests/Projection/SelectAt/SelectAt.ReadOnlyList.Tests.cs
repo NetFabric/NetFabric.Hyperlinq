@@ -1,5 +1,6 @@
 using NetFabric.Assertive;
 using System;
+using System.Linq;
 using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests.Projection.SelectAt
@@ -14,8 +15,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Projection.SelectAt
         {
             // Arrange
             var wrapped = Wrap.AsReadOnlyList(source);
-            var expected = 
-                System.Linq.Enumerable.Select(wrapped, selector);
+            var expected = source
+                .Select(selector);
 
             // Act
             var result = wrapped.AsValueEnumerable()
@@ -24,6 +25,32 @@ namespace NetFabric.Hyperlinq.UnitTests.Projection.SelectAt
             // Assert
             _ = result.Must()
                 .BeEnumerableOf<string>()
+                .BeEqualTo(expected);
+        }
+        
+        [Theory]
+        [MemberData(nameof(TestData.SkipTakeEmpty), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakeSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakeMultiple), MemberType = typeof(TestData))]
+        public void Select_Sum_With_ValidData_Must_Succeed(int[] source, int skip, int take)
+        {
+            // Arrange
+            var wrapped = Wrap.AsReadOnlyList(source);
+            var expected = source
+                .Skip(skip)
+                .Take(take)
+                .Select((item, _) => item)
+                .Sum();
+
+            // Act
+            var result = wrapped.AsValueEnumerable()
+                .Skip(skip)
+                .Take(take)
+                .Select((item, _) => item)
+                .Sum();
+
+            // Assert
+            _ = result.Must()
                 .BeEqualTo(expected);
         }
     }

@@ -1,5 +1,6 @@
 ﻿using NetFabric.Assertive;
 using System.Buffers;
+using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -15,12 +16,12 @@ namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct
         {
             // Arrange
             var wrapped = Wrap.AsAsyncValueEnumerable(source);
-            var expected = 
-                System.Linq.Enumerable.Distinct(source);
+            var expected = source
+                .Distinct();
 
             // Act
-            var result = AsyncValueEnumerableExtensions
-                .Distinct<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(wrapped);
+            var result = wrapped
+                .Distinct<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>();
 
             // Assert
             _ = result.Must()
@@ -36,13 +37,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct
         {
             // Arrange
             var wrapped = Wrap.AsAsyncValueEnumerable(source);
-            var expected =
-                System.Linq.Enumerable.ToArray(
-                    System.Linq.Enumerable.Distinct(source));
+            var expected = source
+                .Distinct()
+                .ToArray();
 
             // Act
-            var result = await AsyncValueEnumerableExtensions
-                .Distinct<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(wrapped)
+            var result = await wrapped
+                .Distinct<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>()
                 .ToArrayAsync();
 
             // Assert
@@ -60,13 +61,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct
             // Arrange
             var pool = MemoryPool<int>.Shared;
             var wrapped = Wrap.AsAsyncValueEnumerable(source);
-            var expected =
-                System.Linq.Enumerable.ToArray(
-                    System.Linq.Enumerable.Distinct(source));
+            var expected = source
+                .Distinct()
+                .ToArray();
 
             // Act
-            var result = await AsyncValueEnumerableExtensions
-                .Distinct<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(wrapped)
+            var result = await wrapped
+                .Distinct<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>()
                 .ToArrayAsync(pool);
 
             // Assert
@@ -82,18 +83,40 @@ namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct
         {
             // Arrange
             var wrapped = Wrap.AsAsyncValueEnumerable(source);
-            var expected =
-                System.Linq.Enumerable.ToList(
-                    System.Linq.Enumerable.Distinct(source));
+            var expected = source
+                .Distinct()
+                .ToList();
 
             // Act
-            var result = await AsyncValueEnumerableExtensions
-                .Distinct<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(wrapped)
+            var result = await wrapped
+                .Distinct<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>()
                 .ToListAsync();
 
             // Assert
             _ = result.Must()
                 .BeEnumerableOf<int>()
+                .BeEqualTo(expected);
+        }
+
+        [Theory]
+        [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
+        public async ValueTask Distinct_SumAsync_With_ValidData_Must_Succeed(int[] source)
+        {
+            // Arrange
+            var wrapped = Wrap.AsAsyncValueEnumerable(source);
+            var expected = source
+                .Distinct()
+                .Sum();
+
+            // Act
+            var result = await wrapped
+                .Distinct<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>()
+                .SumAsync().ConfigureAwait(false);
+
+            // Assert
+            _ = result.Must()
                 .BeEqualTo(expected);
         }
     }

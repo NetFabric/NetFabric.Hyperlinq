@@ -11,7 +11,7 @@ namespace NetFabric.Hyperlinq
     public static partial class ArrayExtensions
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static ArraySegmentDistinctEnumerable<TSource> Distinct<TSource>(this in ArraySegment<TSource> source, IEqualityComparer<TSource>? comparer = default)
+        static ArraySegmentDistinctEnumerable<TSource> Distinct<TSource>(this in ArraySegment<TSource> source, IEqualityComparer<TSource>? comparer = default)
             => new(source, comparer);
 
         [StructLayout(LayoutKind.Auto)]
@@ -126,6 +126,46 @@ namespace NetFabric.Hyperlinq
                     _ => GetSet().ToList()
                 };
         }
+        
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Sum(this ArraySegmentDistinctEnumerable<int> source)
+            => source.Sum<ArraySegmentDistinctEnumerable<int>, ArraySegmentDistinctEnumerable<int>.Enumerator, int, int>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Sum(this ArraySegmentDistinctEnumerable<int?> source)
+            => source.Sum<ArraySegmentDistinctEnumerable<int?>, ArraySegmentDistinctEnumerable<int?>.Enumerator, int?, int>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static long Sum(this ArraySegmentDistinctEnumerable<long> source)
+            => source.Sum<ArraySegmentDistinctEnumerable<long>, ArraySegmentDistinctEnumerable<long>.Enumerator, long, long>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static long Sum(this ArraySegmentDistinctEnumerable<long?> source)
+            => source.Sum<ArraySegmentDistinctEnumerable<long?>, ArraySegmentDistinctEnumerable<long?>.Enumerator, long?, long>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float Sum(this ArraySegmentDistinctEnumerable<float> source)
+            => source.Sum<ArraySegmentDistinctEnumerable<float>, ArraySegmentDistinctEnumerable<float>.Enumerator, float, float>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float Sum(this ArraySegmentDistinctEnumerable<float?> source)
+            => source.Sum<ArraySegmentDistinctEnumerable<float?>, ArraySegmentDistinctEnumerable<float?>.Enumerator, float?, float>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static double Sum(this ArraySegmentDistinctEnumerable<double> source)
+            => source.Sum<ArraySegmentDistinctEnumerable<double>, ArraySegmentDistinctEnumerable<double>.Enumerator, double, double>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static double Sum(this ArraySegmentDistinctEnumerable<double?> source)
+            => source.Sum<ArraySegmentDistinctEnumerable<double?>, ArraySegmentDistinctEnumerable<double?>.Enumerator, double?, double>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static decimal Sum(this ArraySegmentDistinctEnumerable<decimal> source)
+            => source.Sum<ArraySegmentDistinctEnumerable<decimal>, ArraySegmentDistinctEnumerable<decimal>.Enumerator, decimal, decimal>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static decimal Sum(this ArraySegmentDistinctEnumerable<decimal?> source)
+            => source.Sum<ArraySegmentDistinctEnumerable<decimal?>, ArraySegmentDistinctEnumerable<decimal?>.Enumerator, decimal?, decimal>();
     }
 }
 

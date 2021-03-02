@@ -17,12 +17,12 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
             // Arrange
             var wrapped = Wrap
                 .AsValueEnumerable(source);
-            var expected = Enumerable
-                .ToArray(source);
+            var expected = source
+                .ToArray();
 
             // Act
-            var result = ValueEnumerableExtensions
-                .ToArray<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(wrapped);
+            var result = wrapped
+                .ToArray<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>();
 
             // Assert
             _ = result.Must()
@@ -39,8 +39,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
             // Arrange
             var wrapped = Wrap
                 .AsValueCollection(source);
-            var expected = Enumerable
-                .ToArray(source);
+            var expected = source
+                .ToArray();
 
             // Act
             var result = ValueEnumerableExtensions
@@ -62,12 +62,12 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
             var pool = MemoryPool<int>.Shared;
             var wrapped = Wrap
                 .AsValueEnumerable(source);
-            var expected = Enumerable
-                .ToArray(source);
+            var expected = source
+                .ToArray();
 
             // Act
-            using var result = ValueEnumerableExtensions
-                .ToArray<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(wrapped, pool);
+            using var result = wrapped
+                .ToArray<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(pool);
 
             // Assert
             _ = result.Memory
@@ -85,13 +85,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
             // Arrange
             var wrapped = Wrap
                 .AsValueEnumerable(source);
-            var expected = Enumerable
-                .Where(source, predicate)
+            var expected = source
+                .Where(predicate)
                 .ToArray();
 
             // Act
-            var result = ValueEnumerableExtensions
-                .Where<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(wrapped, predicate)
+            var result = wrapped
+                .Where<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(predicate)
                 .ToArray();
 
             // Assert
@@ -110,13 +110,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
             var pool = MemoryPool<int>.Shared;
             var wrapped = Wrap
                 .AsValueEnumerable(source);
-            var expected = Enumerable
-                .Where(source, predicate)
+            var expected = source
+                .Where(predicate)
                 .ToArray();
 
             // Act
-            using var result = ValueEnumerableExtensions
-                .Where<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(wrapped, predicate)
+            using var result = wrapped
+                .Where<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(predicate)
                 .ToArray(pool);
 
             // Assert
@@ -135,13 +135,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
             // Arrange
             var wrapped = Wrap
                 .AsValueEnumerable(source);
-            var expected = Enumerable
-                .Where(source, predicate)
+            var expected = source
+                .Where(predicate)
                 .ToArray();
 
             // Act
-            var result = ValueEnumerableExtensions
-                .Where<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(wrapped, predicate)
+            var result = wrapped
+                .Where<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(predicate)
                 .ToArray();
 
             // Assert
@@ -160,13 +160,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
             var pool = MemoryPool<int>.Shared;
             var wrapped = Wrap
                 .AsValueEnumerable(source);
-            var expected = Enumerable
-                .Where(source, predicate)
+            var expected = source
+                .Where(predicate)
                 .ToArray();
 
             // Act
-            using var result = ValueEnumerableExtensions
-                .Where<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(wrapped, predicate)
+            using var result = wrapped
+                .Where<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(predicate)
                 .ToArray(pool);
 
             // Assert
@@ -185,13 +185,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
             // Arrange
             var wrapped = Wrap
                 .AsValueEnumerable(source);
-            var expected = Enumerable
-                .Select(source, selector)
+            var expected = source
+                .Select(selector)
                 .ToArray();
 
             // Act
-            var result = ValueEnumerableExtensions
-                .Select<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int, string>(wrapped, selector)
+            var result = wrapped
+                .Select<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int, string>(selector)
                 .ToArray();
 
             // Assert
@@ -210,13 +210,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
             var pool = MemoryPool<string>.Shared;
             var wrapped = Wrap
                 .AsValueEnumerable(source);
-            var expected = Enumerable
-                .Select(source, selector)
+            var expected = source
+                .Select(selector)
                 .ToArray();
 
             // Act
-            using var result = ValueEnumerableExtensions
-                .Select<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int, string>(wrapped, selector)
+            using var result = wrapped
+                .Select<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int, string>(selector)
                 .ToArray(pool);
 
             // Assert
@@ -235,13 +235,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
             // Arrange
             var wrapped = Wrap
                 .AsValueEnumerable(source);
-            var expected = Enumerable
-                .Select(source, selector)
+            var expected = source
+                .Select(selector)
                 .ToArray();
 
             // Act
-            var result = ValueEnumerableExtensions
-                .Select<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int, string>(wrapped, selector)
+            var result = wrapped
+                .Select<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int, string>(selector)
                 .ToArray();
 
             // Assert
@@ -260,13 +260,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
             var pool = MemoryPool<string>.Shared;
             var wrapped = Wrap
                 .AsValueEnumerable(source);
-            var expected = Enumerable
-                .Select(source, selector)
+            var expected = source
+                .Select(selector)
                 .ToArray();
 
             // Act
-            using var result = ValueEnumerableExtensions
-                .Select<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int, string>(wrapped, selector)
+            using var result = wrapped
+                .Select<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int, string>(selector)
                 .ToArray(pool);
 
             // Assert
@@ -285,14 +285,14 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
             // Arrange
             var wrapped = Wrap
                 .AsValueEnumerable(source);
-            var expected = Enumerable
-                .Where(source, predicate)
+            var expected = source
+                .Where(predicate)
                 .Select(selector)
                 .ToArray();
 
             // Act
-            var result = ValueEnumerableExtensions
-                .Where<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(wrapped, predicate)
+            var result = wrapped
+                .Where<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(predicate)
                 .Select(selector)
                 .ToArray();
 
@@ -312,14 +312,14 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
             var pool = MemoryPool<string>.Shared;
             var wrapped = Wrap
                 .AsValueEnumerable(source);
-            var expected = Enumerable
-                .Where(source, predicate)
+            var expected = source
+                .Where(predicate)
                 .Select(selector)
                 .ToArray();
 
             // Act
-            using var result = ValueEnumerableExtensions
-                .Where<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(wrapped, predicate)
+            using var result = wrapped
+                .Where<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(predicate)
                 .Select(selector)
                 .ToArray(pool);
 

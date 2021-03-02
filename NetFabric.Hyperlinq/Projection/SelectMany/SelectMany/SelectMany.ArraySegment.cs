@@ -11,13 +11,13 @@ namespace NetFabric.Hyperlinq
     {
         [GeneratorMapping("TSelector", "NetFabric.Hyperlinq.FunctionWrapper<TSource, TSubEnumerable>")]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static ArraySegmentSelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, TResult, FunctionWrapper<TSource, TSubEnumerable>> SelectMany<TSource, TSubEnumerable, TSubEnumerator, TResult>(this in ArraySegment<TSource> source, Func<TSource, TSubEnumerable> selector)
+        static ArraySegmentSelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, TResult, FunctionWrapper<TSource, TSubEnumerable>> SelectMany<TSource, TSubEnumerable, TSubEnumerator, TResult>(this in ArraySegment<TSource> source, Func<TSource, TSubEnumerable> selector)
             where TSubEnumerable : IValueEnumerable<TResult, TSubEnumerator>
             where TSubEnumerator : struct, IEnumerator<TResult>
             => source.SelectMany<TSource, TSubEnumerable, TSubEnumerator, TResult, FunctionWrapper<TSource, TSubEnumerable>>(new FunctionWrapper<TSource, TSubEnumerable>(selector));
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static ArraySegmentSelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, TResult, TSelector> SelectMany<TSource, TSubEnumerable, TSubEnumerator, TResult, TSelector>(this in ArraySegment<TSource> source, TSelector selector = default)
+        static ArraySegmentSelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, TResult, TSelector> SelectMany<TSource, TSubEnumerable, TSubEnumerator, TResult, TSelector>(this in ArraySegment<TSource> source, TSelector selector = default)
             where TSubEnumerable : IValueEnumerable<TResult, TSubEnumerator>
             where TSubEnumerator : struct, IEnumerator<TResult>
             where TSelector : struct, IFunction<TSource, TSubEnumerable>
@@ -226,6 +226,76 @@ namespace NetFabric.Hyperlinq
 
             #endregion
         }
+        
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Sum<TSource, TSubEnumerable, TSubEnumerator, TSelector>(this ArraySegmentSelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, int, TSelector> source)
+            where TSubEnumerable : IValueEnumerable<int, TSubEnumerator>
+            where TSubEnumerator : struct, IEnumerator<int>
+            where TSelector : struct, IFunction<TSource, TSubEnumerable>
+            => source.Sum<ArraySegmentSelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, int, TSelector>, ArraySegmentSelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, int, TSelector>.Enumerator, int, int>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Sum<TSource, TSubEnumerable, TSubEnumerator, TSelector>(this ArraySegmentSelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, int?, TSelector> source)
+            where TSubEnumerable : IValueEnumerable<int?, TSubEnumerator>
+            where TSubEnumerator : struct, IEnumerator<int?>
+            where TSelector : struct, IFunction<TSource, TSubEnumerable>
+            => source.Sum<ArraySegmentSelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, int?, TSelector>, ArraySegmentSelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, int?, TSelector>.Enumerator, int?, int>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static long Sum<TSource, TSubEnumerable, TSubEnumerator, TSelector>(this ArraySegmentSelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, long, TSelector> source)
+            where TSubEnumerable : IValueEnumerable<long, TSubEnumerator>
+            where TSubEnumerator : struct, IEnumerator<long>
+            where TSelector : struct, IFunction<TSource, TSubEnumerable>
+            => source.Sum<ArraySegmentSelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, long, TSelector>, ArraySegmentSelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, long, TSelector>.Enumerator, long, long>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static long Sum<TSource, TSubEnumerable, TSubEnumerator, TSelector>(this ArraySegmentSelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, long?, TSelector> source)
+            where TSubEnumerable : IValueEnumerable<long?, TSubEnumerator>
+            where TSubEnumerator : struct, IEnumerator<long?>
+            where TSelector : struct, IFunction<TSource, TSubEnumerable>
+            => source.Sum<ArraySegmentSelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, long?, TSelector>, ArraySegmentSelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, long?, TSelector>.Enumerator, long?, long>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float Sum<TSource, TSubEnumerable, TSubEnumerator, TSelector>(this ArraySegmentSelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, float, TSelector> source)
+            where TSubEnumerable : IValueEnumerable<float, TSubEnumerator>
+            where TSubEnumerator : struct, IEnumerator<float>
+            where TSelector : struct, IFunction<TSource, TSubEnumerable>
+            => source.Sum<ArraySegmentSelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, float, TSelector>, ArraySegmentSelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, float, TSelector>.Enumerator, float, float>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float Sum<TSource, TSubEnumerable, TSubEnumerator, TSelector>(this ArraySegmentSelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, float?, TSelector> source)
+            where TSubEnumerable : IValueEnumerable<float?, TSubEnumerator>
+            where TSubEnumerator : struct, IEnumerator<float?>
+            where TSelector : struct, IFunction<TSource, TSubEnumerable>
+            => source.Sum<ArraySegmentSelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, float?, TSelector>, ArraySegmentSelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, float?, TSelector>.Enumerator, float?, float>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static double Sum<TSource, TSubEnumerable, TSubEnumerator, TSelector>(this ArraySegmentSelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, double, TSelector> source)
+            where TSubEnumerable : IValueEnumerable<double, TSubEnumerator>
+            where TSubEnumerator : struct, IEnumerator<double>
+            where TSelector : struct, IFunction<TSource, TSubEnumerable>
+            => source.Sum<ArraySegmentSelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, double, TSelector>, ArraySegmentSelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, double, TSelector>.Enumerator, double, double>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static double Sum<TSource, TSubEnumerable, TSubEnumerator, TSelector>(this ArraySegmentSelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, double?, TSelector> source)
+            where TSubEnumerable : IValueEnumerable<double?, TSubEnumerator>
+            where TSubEnumerator : struct, IEnumerator<double?>
+            where TSelector : struct, IFunction<TSource, TSubEnumerable>
+            => source.Sum<ArraySegmentSelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, double?, TSelector>, ArraySegmentSelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, double?, TSelector>.Enumerator, double?, double>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static decimal Sum<TSource, TSubEnumerable, TSubEnumerator, TSelector>(this ArraySegmentSelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, decimal, TSelector> source)
+            where TSubEnumerable : IValueEnumerable<decimal, TSubEnumerator>
+            where TSubEnumerator : struct, IEnumerator<decimal>
+            where TSelector : struct, IFunction<TSource, TSubEnumerable>
+            => source.Sum<ArraySegmentSelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, decimal, TSelector>, ArraySegmentSelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, decimal, TSelector>.Enumerator, decimal, decimal>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static decimal Sum<TSource, TSubEnumerable, TSubEnumerator, TSelector>(this ArraySegmentSelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, decimal?, TSelector> source)
+            where TSubEnumerable : IValueEnumerable<decimal?, TSubEnumerator>
+            where TSubEnumerator : struct, IEnumerator<decimal?>
+            where TSelector : struct, IFunction<TSource, TSubEnumerable>
+            => source.Sum<ArraySegmentSelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, decimal?, TSelector>, ArraySegmentSelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, decimal?, TSelector>.Enumerator, decimal?, decimal>();
 
     }
 }

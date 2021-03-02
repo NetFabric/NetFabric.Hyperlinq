@@ -12,7 +12,7 @@ namespace NetFabric.Hyperlinq
     {
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static MemoryDistinctEnumerable<TSource> Distinct<TSource>(
+        static MemoryDistinctEnumerable<TSource> Distinct<TSource>(
             this ReadOnlyMemory<TSource> source, 
             IEqualityComparer<TSource>? comparer = null)
             => new(source, comparer);
@@ -150,6 +150,46 @@ namespace NetFabric.Hyperlinq
                 }
             }
         }
+        
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Sum(this MemoryDistinctEnumerable<int> source)
+            => source.Sum<MemoryDistinctEnumerable<int>, MemoryDistinctEnumerable<int>.Enumerator, int, int>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Sum(this MemoryDistinctEnumerable<int?> source)
+            => source.Sum<MemoryDistinctEnumerable<int?>, MemoryDistinctEnumerable<int?>.Enumerator, int?, int>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static long Sum(this MemoryDistinctEnumerable<long> source)
+            => source.Sum<MemoryDistinctEnumerable<long>, MemoryDistinctEnumerable<long>.Enumerator, long, long>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static long Sum(this MemoryDistinctEnumerable<long?> source)
+            => source.Sum<MemoryDistinctEnumerable<long?>, MemoryDistinctEnumerable<long?>.Enumerator, long?, long>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float Sum(this MemoryDistinctEnumerable<float> source)
+            => source.Sum<MemoryDistinctEnumerable<float>, MemoryDistinctEnumerable<float>.Enumerator, float, float>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float Sum(this MemoryDistinctEnumerable<float?> source)
+            => source.Sum<MemoryDistinctEnumerable<float?>, MemoryDistinctEnumerable<float?>.Enumerator, float?, float>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static double Sum(this MemoryDistinctEnumerable<double> source)
+            => source.Sum<MemoryDistinctEnumerable<double>, MemoryDistinctEnumerable<double>.Enumerator, double, double>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static double Sum(this MemoryDistinctEnumerable<double?> source)
+            => source.Sum<MemoryDistinctEnumerable<double?>, MemoryDistinctEnumerable<double?>.Enumerator, double?, double>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static decimal Sum(this MemoryDistinctEnumerable<decimal> source)
+            => source.Sum<MemoryDistinctEnumerable<decimal>, MemoryDistinctEnumerable<decimal>.Enumerator, decimal, decimal>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static decimal Sum(this MemoryDistinctEnumerable<decimal?> source)
+            => source.Sum<MemoryDistinctEnumerable<decimal?>, MemoryDistinctEnumerable<decimal?>.Enumerator, decimal?, decimal>();
     }
 }
 

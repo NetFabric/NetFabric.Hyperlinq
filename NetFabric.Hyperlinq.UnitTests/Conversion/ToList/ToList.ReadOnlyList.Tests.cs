@@ -1,7 +1,7 @@
+using NetFabric.Assertive;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using NetFabric.Assertive;
 using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
@@ -16,8 +16,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
         {
             // Arrange
             var wrapped = Wrap.AsReadOnlyList(source);
-            var expected = Enumerable
-                .Skip(source, skip)
+            var expected = source
+                .Skip(skip)
                 .Take(take)
                 .ToList();
 
@@ -42,8 +42,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
         {
             // Arrange
             var wrapped = Wrap.AsList(source);
-            var expected = Enumerable
-                .Skip(source, skip)
+            var expected = source
+                .Skip(skip)
                 .Take(take)
                 .ToList();
 
@@ -68,8 +68,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
         {
             // Arrange
             var wrapped = Wrap.AsReadOnlyList(source);
-            var expected = Enumerable
-                .Skip(source, skip)
+            var expected = source
+                .Skip(skip)
                 .Take(take)
                 .Where(predicate)
                 .ToList();
@@ -97,8 +97,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
             // Arrange
             var wrapped = Wrap
                 .AsReadOnlyList(source);
-            var expected = Enumerable
-                .Skip(source, skip)
+            var expected = source
+                .Skip(skip)
                 .Take(take)
                 .Where(predicate)
                 .ToList();
@@ -125,8 +125,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
         {
             // Arrange
             var wrapped = Wrap.AsReadOnlyList(source);
-            var expected = Enumerable
-                .Skip(source, skip)
+            var expected = source
+                .Skip(skip)
                 .Take(take)
                 .Select(selector)
                 .ToList();
@@ -153,8 +153,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
         {
             // Arrange
             var wrapped = Wrap.AsReadOnlyList(source);
-            var expected = Enumerable
-                .Skip(source, skip)
+            var expected = source
+                .Skip(skip)
                 .Take(take)
                 .Select(selector)
                 .ToList();
@@ -181,8 +181,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
         {
             // Arrange
             var wrapped = Wrap.AsReadOnlyList(source);
-            var expected = Enumerable
-                .Skip(source, skip)
+            var expected = source
+                .Skip(skip)
                 .Take(take)
                 .Where(predicate)
                 .Select(selector)

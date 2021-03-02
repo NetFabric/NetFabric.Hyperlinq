@@ -1,7 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using NetFabric.Assertive;
+using System;
+using System.Linq;
 using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Any
@@ -16,8 +15,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Any
         {
             // Arrange
             var wrapped = Wrap.AsValueReadOnlyList(source);
-            var expected = 
-                System.Linq.Enumerable.Any(source);
+            var expected = source
+                .Any();
 
             // Act
             var result = wrapped.AsValueEnumerable()
@@ -36,10 +35,10 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Any
         {
             // Arrange
             var wrapped = Wrap.AsValueReadOnlyList(source);
-            var expected = 
-                System.Linq.Enumerable.Any(
-                    System.Linq.Enumerable.Take(
-                        System.Linq.Enumerable.Skip(source, skip), take));
+            var expected = source
+                .Skip(skip)
+                .Take(take)
+                .Any();
 
             // Act
             var result = wrapped.AsValueEnumerable()
@@ -60,8 +59,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Any
         {
             // Arrange
             var wrapped = Wrap.AsValueReadOnlyList(source);
-            var expected = 
-                System.Linq.Enumerable.Any(wrapped, predicate);
+            var expected = source
+                .Any(predicate);
 
             // Act
             var result = wrapped.AsValueEnumerable()
@@ -80,10 +79,10 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Any
         {
             // Arrange
             var wrapped = Wrap.AsValueReadOnlyList(source);
-            var expected = 
-                System.Linq.Enumerable.Any(
-                    System.Linq.Enumerable.Take(
-                        System.Linq.Enumerable.Skip(source, skip), take), predicate);
+            var expected = source
+                .Skip(skip)
+                .Take(take)
+                .Any(predicate);
 
             // Act
             var result = wrapped.AsValueEnumerable()
@@ -104,9 +103,9 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Any
         {
             // Arrange
             var wrapped = Wrap.AsValueReadOnlyList(source);
-            var expected = 
-                System.Linq.Enumerable.Any(
-                    System.Linq.Enumerable.Where(source, predicate));
+            var expected = source
+                .Where(predicate)
+                .Any();
 
             // Act
             var result = wrapped.AsValueEnumerable()
@@ -125,12 +124,11 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Any
         {
             // Arrange
             var wrapped = Wrap.AsValueReadOnlyList(source);
-            var expected = 
-                System.Linq.Enumerable.Any(
-                    System.Linq.Enumerable.Where(
-                        System.Linq.Enumerable.Take(
-                            System.Linq.Enumerable.Skip(
-                                source, skip), take), predicate));
+            var expected = source
+                .Skip(skip)
+                .Take(take)
+                .Where(predicate)
+                .Any();
 
             // Act
             var result = wrapped.AsValueEnumerable()

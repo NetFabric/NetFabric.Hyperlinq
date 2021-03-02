@@ -70,7 +70,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [BenchmarkCategory("Array")]
         [Benchmark]
         public Option<int> Hyperlinq_Span() =>
-            array.AsSpan().Single();
+            array.AsSpan().AsValueEnumerable().Single();
 
         [BenchmarkCategory("Array")]
         [Benchmark]

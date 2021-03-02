@@ -68,7 +68,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [BenchmarkCategory("Array")]
         [Benchmark]
         public int Hyperlinq_Span()
-            => array.AsSpan().Where(item => (item & 0x01) == 0).Select(item => item).Count();
+            => array.AsSpan().AsValueEnumerable().Where(item => (item & 0x01) == 0).Select(item => item).Count();
 
         [BenchmarkCategory("Array")]
         [Benchmark]

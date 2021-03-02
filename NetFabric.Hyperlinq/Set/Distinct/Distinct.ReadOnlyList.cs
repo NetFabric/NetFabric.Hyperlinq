@@ -12,7 +12,7 @@ namespace NetFabric.Hyperlinq
     {
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static DistinctEnumerable<TList, TSource> Distinct<TList, TSource>(this TList source, IEqualityComparer<TSource>? comparer = default)
+        static DistinctEnumerable<TList, TSource> Distinct<TList, TSource>(this TList source, IEqualityComparer<TSource>? comparer = default)
             where TList : struct, IReadOnlyList<TSource>
             => source.Distinct(comparer, 0, source.Count);
         
@@ -175,6 +175,56 @@ namespace NetFabric.Hyperlinq
                 }
             }
         }
+        
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Sum<TList>(this DistinctEnumerable<TList, int> source)
+            where TList : struct, IReadOnlyList<int>
+            => source.Sum<DistinctEnumerable<TList, int>, DistinctEnumerable<TList, int>.Enumerator, int, int>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Sum<TList>(this DistinctEnumerable<TList, int?> source)
+            where TList : struct, IReadOnlyList<int?>
+            => source.Sum<DistinctEnumerable<TList, int?>, DistinctEnumerable<TList, int?>.Enumerator, int?, int>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static long Sum<TList>(this DistinctEnumerable<TList, long> source)
+            where TList : struct, IReadOnlyList<long>
+            => source.Sum<DistinctEnumerable<TList, long>, DistinctEnumerable<TList, long>.Enumerator, long, long>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static long Sum<TList>(this DistinctEnumerable<TList, long?> source)
+            where TList : struct, IReadOnlyList<long?>
+            => source.Sum<DistinctEnumerable<TList, long?>, DistinctEnumerable<TList, long?>.Enumerator, long?, long>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float Sum<TList>(this DistinctEnumerable<TList, float> source)
+            where TList : struct, IReadOnlyList<float>
+            => source.Sum<DistinctEnumerable<TList, float>, DistinctEnumerable<TList, float>.Enumerator, float, float>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float Sum<TList>(this DistinctEnumerable<TList, float?> source)
+            where TList : struct, IReadOnlyList<float?>
+            => source.Sum<DistinctEnumerable<TList, float?>, DistinctEnumerable<TList, float?>.Enumerator, float?, float>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static double Sum<TList>(this DistinctEnumerable<TList, double> source)
+            where TList : struct, IReadOnlyList<double>
+            => source.Sum<DistinctEnumerable<TList, double>, DistinctEnumerable<TList, double>.Enumerator, double, double>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static double Sum<TList>(this DistinctEnumerable<TList, double?> source)
+            where TList : struct, IReadOnlyList<double?>
+            => source.Sum<DistinctEnumerable<TList, double?>, DistinctEnumerable<TList, double?>.Enumerator, double?, double>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static decimal Sum<TList>(this DistinctEnumerable<TList, decimal> source)
+            where TList : struct, IReadOnlyList<decimal>
+            => source.Sum<DistinctEnumerable<TList, decimal>, DistinctEnumerable<TList, decimal>.Enumerator, decimal, decimal>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static decimal Sum<TList>(this DistinctEnumerable<TList, decimal?> source)
+            where TList : struct, IReadOnlyList<decimal?>
+            => source.Sum<DistinctEnumerable<TList, decimal?>, DistinctEnumerable<TList, decimal?>.Enumerator, decimal?, decimal>();
     }
 }
 

@@ -11,17 +11,12 @@ namespace NetFabric.Hyperlinq
     public static partial class AsyncValueEnumerable
     {
         
-        public static EmptyEnumerable<TSource> Empty<TSource>() =>
-            EmptyEnumerable<TSource>.Instance;
+        public static EmptyEnumerable<TSource> Empty<TSource>() 
+            => new();
 
-        public partial class EmptyEnumerable<TSource>
+        public readonly partial struct EmptyEnumerable<TSource>
             : IAsyncValueEnumerable<TSource, EmptyEnumerable<TSource>.DisposableEnumerator>
         {
-            // ReSharper disable once HeapView.ObjectAllocation.Evident
-            public static EmptyEnumerable<TSource> Instance { get; } = new();
-
-            EmptyEnumerable() { }
-
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
 #pragma warning disable IDE0060 // Remove unused parameter
             public Enumerator GetAsyncEnumerator(CancellationToken cancellationToken = default)

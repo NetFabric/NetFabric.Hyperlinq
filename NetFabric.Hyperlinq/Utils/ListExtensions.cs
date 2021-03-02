@@ -13,7 +13,7 @@ namespace NetFabric.Hyperlinq
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Span<TSource> AsSpan<TSource>(this List<TSource> source)
-#if NET5_0
+#if NET5_0_OR_GREATER
             => CollectionsMarshal.AsSpan(source);
 #else
             => source.GetItems().AsSpan().Slice(0, source.Count);
@@ -28,29 +28,32 @@ namespace NetFabric.Hyperlinq
         {
             var result = new List<TSource>();
             var layout = Unsafe.As<List<TSource>, ListLayout<TSource>>(ref result);
-            layout.Items = source;
-            layout.Size = source.Length;
+            layout.items = source;
+            layout.size = source.Length;
             result.Capacity = source.Length;
             return result;
         }
 
         // ReSharper disable once ClassNeverInstantiated.Local
-#if NET5_0        
+#if NET5_0_OR_GREATER       
         [SkipLocalsInit]
 #endif
         class ListLayout<TSource>
         {
-            public TSource[]? Items;
-#if !(NETCOREAPP3_0 || NETCOREAPP3_1 || NET5_0)
+            public TSource[]? items;
+            
+#if !NETCOREAPP3_0_OR_GREATER
 #pragma warning disable IDE0051 // Remove unused private members
+#pragma warning disable 169
             readonly object? syncRoot;
+#pragma warning restore 169
 #pragma warning restore IDE0051 // Remove unused private members
 #endif
-            public int Size;
+            public int size;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static TSource[] GetItems<TSource>(this List<TSource> source)
-            => Unsafe.As<List<TSource>, ListLayout<TSource>>(ref source).Items!;
+            => Unsafe.As<List<TSource>, ListLayout<TSource>>(ref source).items!;
     }
 }

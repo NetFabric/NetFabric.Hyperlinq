@@ -17,8 +17,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
         {
             // Arrange
             var wrapped = Wrap.AsReadOnlyList(source);
-            var expected = Enumerable
-                .Skip(source, skip)
+            var expected = source
+                .Skip(skip)
                 .Take(take)
                 .ToArray();
 
@@ -44,8 +44,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
             // Arrange
             var pool = MemoryPool<int>.Shared;
             var wrapped = Wrap.AsReadOnlyList(source);
-            var expected = Enumerable
-                .Skip(source, skip)
+            var expected = source
+                .Skip(skip)
                 .Take(take)
                 .ToArray();
 
@@ -71,8 +71,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
         {
             // Arrange
             var wrapped = Wrap.AsReadOnlyList(source);
-            var expected = Enumerable
-                .Skip(source, skip)
+            var expected = source
+                .Skip(skip)
                 .Take(take)
                 .Where(predicate)
                 .ToArray();
@@ -100,8 +100,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
             // Arrange
             var pool = MemoryPool<int>.Shared;
             var wrapped = Wrap.AsReadOnlyList(source);
-            var expected = Enumerable
-                .Skip(source, skip)
+            var expected = source
+                .Skip(skip)
                 .Take(take)
                 .Where(predicate)
                 .ToArray();
@@ -129,8 +129,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
         {
             // Arrange
             var wrapped = Wrap.AsReadOnlyList(source);
-            var expected = Enumerable
-                .Skip(source, skip)
+            var expected = source
+                .Skip(skip)
                 .Take(take)
                 .Where(predicate)
                 .ToArray();
@@ -158,8 +158,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
             // Arrange
             var pool = MemoryPool<int>.Shared;
             var wrapped = Wrap.AsReadOnlyList(source);
-            var expected = Enumerable
-                .Skip(source, skip)
+            var expected = source
+                .Skip(skip)
                 .Take(take)
                 .Where(predicate)
                 .ToArray();
@@ -187,8 +187,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
         {
             // Arrange
             var wrapped = Wrap.AsReadOnlyList(source);
-            var expected = Enumerable
-                .Skip(source, skip)
+            var expected = source
+                .Skip(skip)
                 .Take(take)
                 .Select(selector)
                 .ToArray();
@@ -216,8 +216,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
             // Arrange
             var pool = MemoryPool<string>.Shared;
             var wrapped = Wrap.AsReadOnlyList(source);
-            var expected = Enumerable
-                .Skip(source, skip)
+            var expected = source
+                .Skip(skip)
                 .Take(take)
                 .Select(selector)
                 .ToArray();
@@ -245,8 +245,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
         {
             // Arrange
             var wrapped = Wrap.AsReadOnlyList(source);
-            var expected = Enumerable
-                .Skip(source, skip)
+            var expected = source
+                .Skip(skip)
                 .Take(take)
                 .Select(selector)
                 .ToArray();
@@ -274,8 +274,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
             // Arrange
             var pool = MemoryPool<string>.Shared;
             var wrapped = Wrap.AsReadOnlyList(source);
-            var expected = Enumerable
-                .Skip(source, skip)
+            var expected = source
+                .Skip(skip)
                 .Take(take)
                 .Select(selector)
                 .ToArray();
@@ -303,8 +303,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
         {
             // Arrange
             var wrapped = Wrap.AsReadOnlyList(source);
-            var expected = Enumerable
-                .Skip(source, skip)
+            var expected = source
+                .Skip(skip)
                 .Take(take)
                 .Where(predicate)
                 .Select(selector)
@@ -334,8 +334,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
             // Arrange
             var pool = MemoryPool<string>.Shared;
             var wrapped = Wrap.AsReadOnlyList(source);
-            var expected = Enumerable
-                .Skip(source, skip)
+            var expected = source
+                .Skip(skip)
                 .Take(take)
                 .Where(predicate)
                 .Select(selector)

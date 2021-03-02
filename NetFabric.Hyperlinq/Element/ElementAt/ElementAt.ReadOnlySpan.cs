@@ -8,7 +8,7 @@ namespace NetFabric.Hyperlinq
     {
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Option<TSource> ElementAt<TSource>(this ReadOnlySpan<TSource> source, int index) 
+        static Option<TSource> ElementAt<TSource>(this ReadOnlySpan<TSource> source, int index) 
             => index < 0 || index >= source.Length 
                 ? Option.None 
                 : Option.Some(source[index]);

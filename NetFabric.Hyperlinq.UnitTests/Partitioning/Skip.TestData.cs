@@ -6,7 +6,7 @@ namespace NetFabric.Hyperlinq
     public static partial class TestData
     {
         public static TheoryData<int[], int, int> Skip_Skip =>
-            new TheoryData<int[], int, int>
+            new()
             {
                 { new int[] { }, -1, -1 },
                 { new int[] { }, 0, -1 },
@@ -16,14 +16,14 @@ namespace NetFabric.Hyperlinq
                 { new int[] { }, 0, 0 },
                 { new int[] { }, 1, 0 },
 
-                { new int[] { 1 }, -1, -1 },
-                { new int[] { 1 }, 0, 0 },
-                { new int[] { 1 }, 1, 1 },
-                { new int[] { 1 }, 5, 5 },
+                { new[] { 1 }, -1, -1 },
+                { new[] { 1 }, 0, 0 },
+                { new[] { 1 }, 1, 1 },
+                { new[] { 1 }, 5, 5 },
 
-                { new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 }, -1, -1 },
-                { new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 }, 0, 0 },
-                { new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 }, 2, 2 },
+                { new[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 }, -1, -1 },
+                { new[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 }, 0, 0 },
+                { new[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 }, 2, 2 },
             };
     }
 }

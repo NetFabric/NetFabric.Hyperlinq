@@ -84,5 +84,45 @@ namespace NetFabric.Hyperlinq
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int Count<TSource>(this ValueEnumerable<TSource> source)
             => source.Count;
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Sum(this ValueEnumerable<int> source)
+            => source.Sum<ValueEnumerable<int>, ValueEnumerator<int>, int, int>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Sum(this ValueEnumerable<int?> source)
+            => source.Sum<ValueEnumerable<int?>, ValueEnumerator<int?>, int?, int>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static long Sum(this ValueEnumerable<long> source)
+            => source.Sum<ValueEnumerable<long>, ValueEnumerator<long>, long, long>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static long Sum(this ValueEnumerable<long?> source)
+            => source.Sum<ValueEnumerable<long?>, ValueEnumerator<long?>, long?, long>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float Sum(this ValueEnumerable<float> source)
+            => source.Sum<ValueEnumerable<float>, ValueEnumerator<float>, float, float>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float Sum(this ValueEnumerable<float?> source)
+            => source.Sum<ValueEnumerable<float?>, ValueEnumerator<float?>, float?, float>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static double Sum(this ValueEnumerable<double> source)
+            => source.Sum<ValueEnumerable<double>, ValueEnumerator<double>, double, double>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static double Sum(this ValueEnumerable<double?> source)
+            => source.Sum<ValueEnumerable<double?>, ValueEnumerator<double?>, double?, double>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static decimal Sum(this ValueEnumerable<decimal> source)
+            => source.Sum<ValueEnumerable<decimal>, ValueEnumerator<decimal>, decimal, decimal>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static decimal Sum(this ValueEnumerable<decimal?> source)
+            => source.Sum<ValueEnumerable<decimal?>, ValueEnumerator<decimal?>, decimal?, decimal>();
     }
 }

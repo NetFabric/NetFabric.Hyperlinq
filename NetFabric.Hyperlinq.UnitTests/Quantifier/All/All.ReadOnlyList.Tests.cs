@@ -1,5 +1,6 @@
 using NetFabric.Assertive;
 using System;
+using System.Linq;
 using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests.Quantifier.All
@@ -14,8 +15,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.All
         {
             // Arrange
             var wrapped = Wrap.AsValueReadOnlyList(source);
-            var expected = 
-                System.Linq.Enumerable.All(wrapped, predicate);
+            var expected = source
+                .All(predicate);
 
             // Act
             var result = wrapped.AsValueEnumerable()
@@ -34,10 +35,10 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.All
         {
             // Arrange
             var wrapped = Wrap.AsValueReadOnlyList(source);
-            var expected = 
-                System.Linq.Enumerable.All(
-                    System.Linq.Enumerable.Take(
-                        System.Linq.Enumerable.Skip(source, skip), take), predicate);
+            var expected = source
+                .Skip(skip)
+                .Take(take)
+                .All(predicate);
 
             // Act
             var result = wrapped.AsValueEnumerable()
@@ -58,9 +59,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.All
         {
             // Arrange
             var wrapped = Wrap.AsValueReadOnlyList(source);
-            var expected = 
-                System.Linq.Enumerable.Count(
-                    System.Linq.Enumerable.Where(source, predicate)) == source.Length;
+            var expected = source
+                .Where(predicate).Count() == source.Length;
 
             // Act
             var result = wrapped.AsValueEnumerable()
@@ -79,15 +79,15 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.All
         {
             // Arrange
             var wrapped = Wrap.AsValueReadOnlyList(source);
-            var count = 
-                System.Linq.Enumerable.Count(
-                    System.Linq.Enumerable.Take(
-                        System.Linq.Enumerable.Skip(source, skip), take));
-            var expected = 
-                System.Linq.Enumerable.Count(
-                    System.Linq.Enumerable.Where(
-                        System.Linq.Enumerable.Take(
-                            System.Linq.Enumerable.Skip(source, skip), take), predicate)) == count;
+            var count =  source
+                .Skip(skip)
+                .Take(take)
+                .Count();
+            var expected = source
+                .Skip(skip)
+                .Take(take)
+                .Where(predicate)
+                .Count() == count;
 
             // Act
             var result = wrapped.AsValueEnumerable()

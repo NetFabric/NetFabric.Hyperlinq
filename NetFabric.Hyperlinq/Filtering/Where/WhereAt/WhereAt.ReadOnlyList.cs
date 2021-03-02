@@ -41,10 +41,10 @@ namespace NetFabric.Hyperlinq
             where TList : struct, IReadOnlyList<TSource>
             where TPredicate : struct, IFunction<TSource, int, bool>
         {
-            readonly TList source;
-            readonly TPredicate predicate;
-            readonly int offset;
-            readonly int count;
+            internal readonly TList source;
+            internal readonly TPredicate predicate;
+            internal readonly int offset;
+            internal readonly int count;
 
             internal WhereAtEnumerable(in TList source, TPredicate predicate, int offset, int count)
                 => (this.source, this.offset, this.count, this.predicate) = (source, offset, count, predicate);
@@ -300,6 +300,66 @@ namespace NetFabric.Hyperlinq
                 }
             }
         }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Sum<TList, TPredicate>(this WhereAtEnumerable<TList, int, TPredicate> source)
+            where TList : struct, IReadOnlyList<int>
+            where TPredicate : struct, IFunction<int, int, bool>
+            => source.source.SumAt<TList, int, int, TPredicate>(source.predicate, source.offset, source.count);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Sum<TList, TPredicate>(this WhereAtEnumerable<TList, int?, TPredicate> source)
+            where TList : struct, IReadOnlyList<int?>
+            where TPredicate : struct, IFunction<int?, int, bool>
+            => source.source.SumAt<TList, int?, int, TPredicate>(source.predicate, source.offset, source.count);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static long Sum<TList, TPredicate>(this WhereAtEnumerable<TList, long, TPredicate> source)
+            where TList : struct, IReadOnlyList<long>
+            where TPredicate : struct, IFunction<long, int, bool>
+            => source.source.SumAt<TList, long, long, TPredicate>(source.predicate, source.offset, source.count);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static long Sum<TList, TPredicate>(this WhereAtEnumerable<TList, long?, TPredicate> source)
+            where TList : struct, IReadOnlyList<long?>
+            where TPredicate : struct, IFunction<long?, int, bool>
+            => source.source.SumAt<TList, long?, long, TPredicate>(source.predicate, source.offset, source.count);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float Sum<TList, TPredicate>(this WhereAtEnumerable<TList, float, TPredicate> source)
+            where TList : struct, IReadOnlyList<float>
+            where TPredicate : struct, IFunction<float, int, bool>
+            => source.source.SumAt<TList, float, float, TPredicate>(source.predicate, source.offset, source.count);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float Sum<TList, TPredicate>(this WhereAtEnumerable<TList, float?, TPredicate> source)
+            where TList : struct, IReadOnlyList<float?>
+            where TPredicate : struct, IFunction<float?, int, bool>
+            => source.source.SumAt<TList, float?, float, TPredicate>(source.predicate, source.offset, source.count);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static double Sum<TList, TPredicate>(this WhereAtEnumerable<TList, double, TPredicate> source)
+            where TList : struct, IReadOnlyList<double>
+            where TPredicate : struct, IFunction<double, int, bool>
+            => source.source.SumAt<TList, double, double, TPredicate>(source.predicate, source.offset, source.count);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static double Sum<TList, TPredicate>(this WhereAtEnumerable<TList, double?, TPredicate> source)
+            where TList : struct, IReadOnlyList<double?>
+            where TPredicate : struct, IFunction<double?, int, bool>
+            => source.source.SumAt<TList, double?, double, TPredicate>(source.predicate, source.offset, source.count);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static decimal Sum<TList, TPredicate>(this WhereAtEnumerable<TList, decimal, TPredicate> source)
+            where TList : struct, IReadOnlyList<decimal>
+            where TPredicate : struct, IFunction<decimal, int, bool>
+            => source.source.SumAt<TList, decimal, decimal, TPredicate>(source.predicate, source.offset, source.count);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static decimal Sum<TList, TPredicate>(this WhereAtEnumerable<TList, decimal?, TPredicate> source)
+            where TList : struct, IReadOnlyList<decimal?>
+            where TPredicate : struct, IFunction<decimal?, int, bool>
+            => source.source.SumAt<TList, decimal?, decimal, TPredicate>(source.predicate, source.offset, source.count);
     }
 }
 

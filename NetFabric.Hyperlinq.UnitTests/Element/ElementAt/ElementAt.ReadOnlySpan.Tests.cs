@@ -14,12 +14,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
         public void ElementAt_With_OutOfRange_Must_Return_None(int[] source)
         {
             // Arrange
+            var wrapped = (ReadOnlySpan<int>)source.AsSpan();
 
             // Act
-            var optionNegative = ArrayExtensions
-                .ElementAt((ReadOnlySpan<int>)source.AsSpan(), -1);
-            var optionTooLarge = ArrayExtensions
-                .ElementAt((ReadOnlySpan<int>)source.AsSpan(), source.Length);
+            var optionNegative = wrapped.AsValueEnumerable()
+                .ElementAt(-1);
+            var optionTooLarge = wrapped.AsValueEnumerable()
+                .ElementAt(source.Length);
 
             // Assert
             _ = optionNegative.Must()
@@ -38,12 +39,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
             for (var index = 0; index < source.Length; index++)
             {
                 // Arrange
-                var expected = Enumerable
-                    .ElementAt(source, index);
+                var wrapped = (ReadOnlySpan<int>)source.AsSpan();
+                var expected = source
+                    .ElementAt(index);
 
                 // Act
-                var result = ArrayExtensions
-                    .ElementAt<int>((ReadOnlySpan<int>)source.AsSpan(), index);
+                var result = wrapped.AsValueEnumerable()
+                    .ElementAt(index);
 
                 // Assert
                 _ = result.Match(
@@ -59,13 +61,14 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
         public void ElementAt_Predicate_With_OutOfRange_Must_Return_None(int[] source, Func<int, bool> predicate)
         {
             // Arrange
+            var wrapped = (ReadOnlySpan<int>)source.AsSpan();
 
             // Act
-            var optionNegative = ArrayExtensions
-                .Where((ReadOnlySpan<int>)source.AsSpan(), predicate)
+            var optionNegative = wrapped.AsValueEnumerable()
+                .Where(predicate)
                 .ElementAt(-1);
-            var optionTooLarge = ArrayExtensions
-                .Where((ReadOnlySpan<int>)source.AsSpan(), predicate)
+            var optionTooLarge = wrapped.AsValueEnumerable()
+                .Where(predicate)
                 .ElementAt(source.Length);
 
             // Assert
@@ -83,15 +86,16 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
         public void ElementAt_Predicate_With_ValidData_Must_Return_Some(int[] source, Func<int, bool> predicate)
         {
             // Arrange
-            var expected = Enumerable
-                .Where(source, predicate)
+            var wrapped = (ReadOnlySpan<int>)source.AsSpan();
+            var expected = source
+                .Where(predicate)
                 .ToList();
 
             for (var index = 0; index < expected.Count; index++)
             {
                 // Act
-                var result = ArrayExtensions
-                    .Where((ReadOnlySpan<int>)source.AsSpan(), predicate)
+                var result = wrapped.AsValueEnumerable()
+                    .Where(predicate)
                     .ElementAt(index);
 
                 // Assert
@@ -108,13 +112,14 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
         public void ElementAt_PredicateAt_With_OutOfRange_Must_Return_None(int[] source, Func<int, int, bool> predicate)
         {
             // Arrange
+            var wrapped = (ReadOnlySpan<int>)source.AsSpan();
 
             // Act
-            var optionNegative = ArrayExtensions
-                .Where((ReadOnlySpan<int>)source.AsSpan(), predicate)
+            var optionNegative = wrapped.AsValueEnumerable()
+                .Where(predicate)
                 .ElementAt(-1);
-            var optionTooLarge = ArrayExtensions
-                .Where((ReadOnlySpan<int>)source.AsSpan(), predicate)
+            var optionTooLarge = wrapped.AsValueEnumerable()
+                .Where(predicate)
                 .ElementAt(source.Length);
 
             // Assert
@@ -132,15 +137,16 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
         public void ElementAt_PredicateAt_With_ValidData_Must_Return_Some(int[] source, Func<int, int, bool> predicate)
         {
             // Arrange
-            var expected = Enumerable
-                .Where(source, predicate)
+            var wrapped = (ReadOnlySpan<int>)source.AsSpan();
+            var expected = source
+                .Where(predicate)
                 .ToList();
 
             for (var index = 0; index < expected.Count; index++)
             {
                 // Act
-                var result = ArrayExtensions
-                    .Where((ReadOnlySpan<int>)source.AsSpan(), predicate)
+                var result = wrapped.AsValueEnumerable()
+                    .Where(predicate)
                     .ElementAt(index);
 
                 // Assert
@@ -157,13 +163,14 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
         public void ElementAt_Selector_With_OutOfRange_Must_Return_None(int[] source, Func<int, string> selector)
         {
             // Arrange
+            var wrapped = (ReadOnlySpan<int>)source.AsSpan();
 
             // Act
-            var optionNegative = ArrayExtensions
-                .Select((ReadOnlySpan<int>)source.AsSpan(), selector)
+            var optionNegative = wrapped.AsValueEnumerable()
+                .Select(selector)
                 .ElementAt(-1);
-            var optionTooLarge = ArrayExtensions
-                .Select((ReadOnlySpan<int>)source.AsSpan(), selector)
+            var optionTooLarge = wrapped.AsValueEnumerable()
+                .Select(selector)
                 .ElementAt(source.Length);
 
             // Assert
@@ -181,15 +188,16 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
         public void ElementAt_Selector_With_ValidData_Must_Return_Some(int[] source, Func<int, string> selector)
         {
             // Arrange
-            var expected = Enumerable
-                .Select(source, selector)
+            var wrapped = (ReadOnlySpan<int>)source.AsSpan();
+            var expected = source
+                .Select(selector)
                 .ToList();
 
             for (var index = 0; index < source.Length; index++)
             {
                 // Act
-                var result = ArrayExtensions
-                    .Select<int, string>((ReadOnlySpan<int>)source.AsSpan(), selector)
+                var result = wrapped.AsValueEnumerable()
+                    .Select(selector)
                     .ElementAt(index);
 
                 // Assert
@@ -206,13 +214,14 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
         public void ElementAt_SelectorAt_With_OutOfRange_Must_Return_None(int[] source, Func<int, int, string> selector)
         {
             // Arrange
+            var wrapped = (ReadOnlySpan<int>)source.AsSpan();
 
             // Act
-            var optionNegative = ArrayExtensions
-                .Select((ReadOnlySpan<int>)source.AsSpan(), selector)
+            var optionNegative = wrapped.AsValueEnumerable()
+                .Select(selector)
                 .ElementAt(-1);
-            var optionTooLarge = ArrayExtensions
-                .Select((ReadOnlySpan<int>)source.AsSpan(), selector)
+            var optionTooLarge = wrapped.AsValueEnumerable()
+                .Select(selector)
                 .ElementAt(source.Length);
 
             // Assert
@@ -230,15 +239,16 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
         public void ElementAt_SelectorAt_With_ValidData_Must_Return_Some(int[] source, Func<int, int, string> selector)
         {
             // Arrange
-            var expected = Enumerable
-                .Select(source, selector)
+            var wrapped = (ReadOnlySpan<int>)source.AsSpan();
+            var expected = source
+                .Select(selector)
                 .ToList();
 
             for (var index = 0; index < source.Length; index++)
             {
                 // Act
-                var result = ArrayExtensions
-                    .Select((ReadOnlySpan<int>)source.AsSpan(), selector)
+                var result = wrapped.AsValueEnumerable()
+                    .Select(selector)
                     .ElementAt(index);
 
                 // Assert
@@ -255,14 +265,15 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
         public void ElementAt_Predicate_Selector_With_OutOfRange_Must_Return_None(int[] source, Func<int, bool> predicate, Func<int, string> selector)
         {
             // Arrange
+            var wrapped = (ReadOnlySpan<int>)source.AsSpan();
 
             // Act
-            var optionNegative = ArrayExtensions
-                .Where((ReadOnlySpan<int>)source.AsSpan(), predicate)
+            var optionNegative = wrapped.AsValueEnumerable()
+                .Where(predicate)
                 .Select(selector)
                 .ElementAt(-1);
-            var optionTooLarge = ArrayExtensions
-                .Where((ReadOnlySpan<int>)source.AsSpan(), predicate)
+            var optionTooLarge = wrapped.AsValueEnumerable()
+                .Where(predicate)
                 .Select(selector)
                 .ElementAt(source.Length);
 
@@ -281,16 +292,17 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
         public void ElementAt_Predicate_Selector_With_ValidData_Must_Return_Some(int[] source, Func<int, bool> predicate, Func<int, string> selector)
         {
             // Arrange
-            var expected = Enumerable
-                .Where(source, predicate)
+            var wrapped = (ReadOnlySpan<int>)source.AsSpan();
+            var expected = source
+                .Where(predicate)
                 .Select(selector)
                 .ToList();
 
             for (var index = 0; index < expected.Count; index++)
             {
                 // Act
-                var result = ArrayExtensions
-                    .Where((ReadOnlySpan<int>)source.AsSpan(), predicate)
+                var result = wrapped.AsValueEnumerable()
+                    .Where(predicate)
                     .Select(selector)
                     .ElementAt(index);
 

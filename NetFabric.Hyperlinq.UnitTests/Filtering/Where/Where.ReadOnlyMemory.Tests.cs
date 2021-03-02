@@ -11,20 +11,44 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.Where
         [MemberData(nameof(TestData.PredicateEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.PredicateMultiple), MemberType = typeof(TestData))]
-        public void Where_Predicate_With_ValidData_Must_Succeed(int[] source, Func<int, bool> predicate)
+        public void Where_With_ValidData_Must_Succeed(int[] source, Func<int, bool> predicate)
         {
             // Arrange
-            var expected = Enumerable.Where(source, predicate);
+            var wrapped = (ReadOnlyMemory<int>)source.AsMemory();
+            var expected = source
+                .Where(predicate);
 
             // Act
-            var result = ArrayExtensions
-                .Where<int>((ReadOnlyMemory<int>)source.AsMemory(), predicate);
+            var result = wrapped.AsValueEnumerable()
+                .Where(predicate);
 
             // Assert
             _ = result.Must()
                 .BeEnumerableOf<int>()
                 .BeEqualTo(expected, testRefStructs: false, testRefReturns: false);
             _ = result.SequenceEqual(expected).Must().BeTrue();
+        }
+        
+        [Theory]
+        [MemberData(nameof(TestData.PredicateEmpty), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.PredicateSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.PredicateMultiple), MemberType = typeof(TestData))]
+        public void Where_Sum_With_ValidData_Must_Succeed(int[] source, Func<int, bool> predicate)
+        {
+            // Arrange
+            var wrapped = (ReadOnlyMemory<int>)source.AsMemory();
+            var expected = source
+                .Where(predicate)
+                .Sum();
+
+            // Act
+            var result = wrapped.AsValueEnumerable()
+                .Where(predicate)
+                .Sum();
+
+            // Assert
+            _ = result.Must()
+                .BeEqualTo(expected);
         }
     }
 }
