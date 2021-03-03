@@ -71,7 +71,7 @@ namespace LinqBenchmarks.List.ValueType
         public FatValueType StructLinq()
         {
             var sum = default(FatValueType);
-            foreach (var item in source
+            foreach (ref var item in source
                 .ToRefStructEnumerable()
                 .Skip(Skip)
                 .Take(Count)

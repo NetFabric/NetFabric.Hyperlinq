@@ -9,7 +9,7 @@
 - LinqFaster.SIMD: [1.1.2](https://www.nuget.org/packages/LinqFaster.SIMD/1.0.3)
 - LinqAF: [3.0.0.0](https://www.nuget.org/packages/LinqAF/3.0.0.0)
 - StructLinq.BCL: [0.25.3](https://www.nuget.org/packages/StructLinq.BCL/0.25.3)
-- NetFabric.Hyperlinq: [3.0.0-beta41](https://www.nuget.org/packages/NetFabric.Hyperlinq/3.0.0-beta41)
+- NetFabric.Hyperlinq: [3.0.0-beta42](https://www.nuget.org/packages/NetFabric.Hyperlinq/3.0.0-beta42)
 
 ### Results:
 ``` ini
@@ -23,20 +23,20 @@ Intel Core i7-7567U CPU 3.50GHz (Kaby Lake), 1 CPU, 4 logical and 2 physical cor
 Job=.NET 5.0  Runtime=.NET 5.0  
 
 ```
-|               Method | Count |        Mean |     Error |    StdDev | Ratio | RatioSD |  Gen 0 | Gen 1 | Gen 2 | Allocated |
-|--------------------- |------ |------------:|----------:|----------:|------:|--------:|-------:|------:|------:|----------:|
-|          **ForeachLoop** |    **10** |    **65.31 ns** |  **0.293 ns** |  **0.260 ns** |  **1.00** |    **0.00** | **0.0191** |     **-** |     **-** |      **40 B** |
-|                 Linq |    10 |   189.41 ns |  2.910 ns |  2.580 ns |  2.90 |    0.04 | 0.0763 |     - |     - |     160 B |
-|               LinqAF |    10 |   152.09 ns |  0.796 ns |  0.705 ns |  2.33 |    0.01 | 0.0191 |     - |     - |      40 B |
-|           StructLinq |    10 |   133.01 ns |  0.776 ns |  0.688 ns |  2.04 |    0.01 | 0.0458 |     - |     - |      96 B |
-| StructLinq_IFunction |    10 |    86.25 ns |  0.863 ns |  0.673 ns |  1.32 |    0.01 | 0.0191 |     - |     - |      40 B |
-|            Hyperlinq |    10 |   116.27 ns |  0.685 ns |  0.607 ns |  1.78 |    0.01 | 0.0191 |     - |     - |      40 B |
-|  Hyperlinq_IFunction |    10 |    84.84 ns |  0.341 ns |  0.657 ns |  1.30 |    0.01 | 0.0191 |     - |     - |      40 B |
-|                      |       |             |           |           |       |         |        |       |       |           |
-|          **ForeachLoop** |  **1000** | **4,406.64 ns** | **25.103 ns** | **20.962 ns** |  **1.00** |    **0.00** | **0.0153** |     **-** |     **-** |      **40 B** |
-|                 Linq |  1000 | 9,821.90 ns | 33.817 ns | 26.402 ns |  2.23 |    0.01 | 0.0763 |     - |     - |     160 B |
-|               LinqAF |  1000 | 8,450.99 ns | 85.239 ns | 66.549 ns |  1.92 |    0.02 | 0.0153 |     - |     - |      40 B |
-|           StructLinq |  1000 | 7,442.74 ns | 37.506 ns | 31.319 ns |  1.69 |    0.01 | 0.0458 |     - |     - |      96 B |
-| StructLinq_IFunction |  1000 | 5,335.21 ns | 43.876 ns | 38.895 ns |  1.21 |    0.01 | 0.0153 |     - |     - |      40 B |
-|            Hyperlinq |  1000 | 8,493.10 ns | 35.450 ns | 31.425 ns |  1.93 |    0.01 | 0.0153 |     - |     - |      40 B |
-|  Hyperlinq_IFunction |  1000 | 5,333.72 ns | 31.125 ns | 24.300 ns |  1.21 |    0.01 | 0.0153 |     - |     - |      40 B |
+|               Method | Count |        Mean |     Error |    StdDev | Ratio |  Gen 0 | Gen 1 | Gen 2 | Allocated |
+|--------------------- |------ |------------:|----------:|----------:|------:|-------:|------:|------:|----------:|
+|          **ForeachLoop** |    **10** |    **61.16 ns** |  **0.196 ns** |  **0.174 ns** |  **1.00** | **0.0191** |     **-** |     **-** |      **40 B** |
+|                 Linq |    10 |   178.83 ns |  0.396 ns |  0.351 ns |  2.92 | 0.0763 |     - |     - |     160 B |
+|               LinqAF |    10 |   141.33 ns |  0.320 ns |  0.284 ns |  2.31 | 0.0191 |     - |     - |      40 B |
+|           StructLinq |    10 |   129.59 ns |  0.304 ns |  0.254 ns |  2.12 | 0.0458 |     - |     - |      96 B |
+| StructLinq_IFunction |    10 |    82.38 ns |  0.345 ns |  0.322 ns |  1.35 | 0.0191 |     - |     - |      40 B |
+|            Hyperlinq |    10 |   103.49 ns |  0.213 ns |  0.167 ns |  1.69 | 0.0191 |     - |     - |      40 B |
+|  Hyperlinq_IFunction |    10 |    79.13 ns |  0.275 ns |  0.230 ns |  1.29 | 0.0191 |     - |     - |      40 B |
+|                      |       |             |           |           |       |        |       |       |           |
+|          **ForeachLoop** |  **1000** | **4,770.45 ns** | **27.876 ns** | **21.764 ns** |  **1.00** | **0.0153** |     **-** |     **-** |      **40 B** |
+|                 Linq |  1000 | 9,289.17 ns | 18.487 ns | 15.438 ns |  1.95 | 0.0763 |     - |     - |     160 B |
+|               LinqAF |  1000 | 8,140.69 ns | 28.900 ns | 25.619 ns |  1.71 | 0.0153 |     - |     - |      40 B |
+|           StructLinq |  1000 | 8,315.59 ns | 23.890 ns | 19.949 ns |  1.74 | 0.0458 |     - |     - |      96 B |
+| StructLinq_IFunction |  1000 | 5,511.96 ns | 30.004 ns | 28.066 ns |  1.16 | 0.0153 |     - |     - |      40 B |
+|            Hyperlinq |  1000 | 7,015.70 ns | 11.953 ns | 10.596 ns |  1.47 | 0.0153 |     - |     - |      40 B |
+|  Hyperlinq_IFunction |  1000 | 5,123.09 ns |  8.757 ns |  8.191 ns |  1.07 | 0.0153 |     - |     - |      40 B |

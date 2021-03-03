@@ -12,7 +12,7 @@
     <PackageReference Include="LinqAF" Version="3.0.0" />
     <PackageReference Include="JM.LinqFaster" Version="1.1.2" />
     <PackageReference Include="LinqFaster.SIMD" Version="1.0.3" />
-    <PackageReference Include="NetFabric.Hyperlinq" Version="3.0.0-beta41" />
+    <PackageReference Include="NetFabric.Hyperlinq" Version="3.0.0-beta42" />
     <PackageReference Include="NetFabric.Hyperlinq.Analyzer" Version="2.0.1">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
