@@ -151,7 +151,7 @@ namespace NetFabric.Hyperlinq
                 => this.Any<SelectManyEnumerable<TList, TSource, TSubEnumerable, TSubEnumerator, TResult, TSelector>, Enumerator, TResult>();
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public bool Any<TPredicate>(Func<TResult, bool> predicate)
+            public bool Any(Func<TResult, bool> predicate)
                 => this.Any<SelectManyEnumerable<TList, TSource, TSubEnumerable, TSubEnumerator, TResult, TSelector>, Enumerator, TResult>(predicate);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -160,7 +160,7 @@ namespace NetFabric.Hyperlinq
                 => this.Any<SelectManyEnumerable<TList, TSource, TSubEnumerable, TSubEnumerator, TResult, TSelector>, Enumerator, TResult, TPredicate>(predicate);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public bool Any<TPredicate>(Func<TResult, int, bool> predicate)
+            public bool Any(Func<TResult, int, bool> predicate)
                 => this.Any<SelectManyEnumerable<TList, TSource, TSubEnumerable, TSubEnumerator, TResult, TSelector>, Enumerator, TResult>(predicate);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -181,7 +181,7 @@ namespace NetFabric.Hyperlinq
                 => ValueEnumerableExtensions.WhereAt<SelectManyEnumerable<TList, TSource, TSubEnumerable, TSubEnumerator, TResult, TSelector>, Enumerator, TResult, TPredicate>(this, predicate);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly ValueEnumerableExtensions.WhereEnumerable<SelectManyEnumerable<TList, TSource, TSubEnumerable, TSubEnumerator, TResult, TSelector>, Enumerator, TResult, FunctionWrapper<TResult, bool>> Where(System.Func<TResult, bool> predicate)
+            public readonly ValueEnumerableExtensions.WhereEnumerable<SelectManyEnumerable<TList, TSource, TSubEnumerable, TSubEnumerator, TResult, TSelector>, Enumerator, TResult, FunctionWrapper<TResult, bool>> Where(Func<TResult, bool> predicate)
                 => ValueEnumerableExtensions.Where<SelectManyEnumerable<TList, TSource, TSubEnumerable, TSubEnumerator, TResult, TSelector>, Enumerator, TResult>(this, predicate);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]

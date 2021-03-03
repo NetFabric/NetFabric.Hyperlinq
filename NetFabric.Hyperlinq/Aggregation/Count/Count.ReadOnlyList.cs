@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
@@ -30,10 +29,9 @@ namespace NetFabric.Hyperlinq
             where TPredicate: struct, IFunction<TSource, int, bool>
         {
             var counter = 0;
-            var end = count;
             if (offset is 0)
             {
-                for (var index = 0; index < end; index++)
+                for (var index = 0; index < count; index++)
                 {
                     var item = source[index];
                     counter += predicate.Invoke(item, index).AsByte();
@@ -41,7 +39,7 @@ namespace NetFabric.Hyperlinq
             }
             else
             {
-                for (var index = 0; index < end; index++)
+                for (var index = 0; index < count; index++)
                 {
                     var item = source[index + offset];
                     counter += predicate.Invoke(item, index).AsByte();

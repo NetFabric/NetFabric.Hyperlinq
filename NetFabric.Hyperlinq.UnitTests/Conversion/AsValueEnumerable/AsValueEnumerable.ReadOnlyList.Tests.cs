@@ -1,17 +1,16 @@
-﻿using NetFabric.Assertive;
-using Xunit;
-using System.Collections.Generic;
 using System.Linq;
+using NetFabric.Assertive;
+using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsValueEnumerable
 {
-    public class ReadOnlyListTests
+    public partial class ReadOnlyListTests
     {
         [Theory]
         [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
-        public void AsValueEnumerable_With_ValidData_Must_Succeed(int[] source)
+        public void AsValueEnumerable1_With_ValidData_Must_Succeed(int[] source)
         {
             // Arrange
             var wrapped = Wrap
@@ -23,102 +22,79 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsValueEnumerable
 
             // Assert
             _ = result.Must()
-                .BeOfType<ReadOnlyListExtensions.ListValueEnumerable<int>>()
                 .BeEnumerableOf<int>()
-                .BeEqualTo(wrapped);
+                .BeEqualTo(source);
         }
-
+        
         [Theory]
-        [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
-        public void AsValueEnumerable_With_ToArray_Must_Succeed(int[] source)
+        [MemberData(nameof(TestData.SkipEmpty), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipMultiple), MemberType = typeof(TestData))]
+        public void AsValueEnumerable1_Skip_With_ValidData_Must_Succeed(int[] source, int count)
         {
             // Arrange
             var wrapped = Wrap
                 .AsReadOnlyList(source);
-            var expected = Enumerable
-                .ToArray(source);
+            var expected = source
+                .Skip(count);
 
             // Act
             var result = wrapped
                 .AsValueEnumerable()
-                .ToArray();
+                .Skip(count);
 
             // Assert
             _ = result.Must()
-                .BeArrayOf<int>()
+                .BeEnumerableOf<int>()
                 .BeEqualTo(expected);
         }
-
+        
         [Theory]
-        [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
-        public void AsValueEnumerable_Collection_With_ToArray_Must_Succeed(int[] source)
-        {
-            // Arrange
-            var wrapped = Wrap
-                .AsList(source);
-            var expected = Enumerable
-                .ToArray(source);
-
-            // Act
-            var result = wrapped
-                .AsValueEnumerable()
-                .ToArray();
-
-            // Assert
-            _ = result.Must()
-                .BeArrayOf<int>()
-                .BeEqualTo(expected);
-        }
-
-        [Theory]
-        [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
-        public void AsValueEnumerable_With_ToList_Must_Succeed(int[] source)
+        [MemberData(nameof(TestData.TakeEmpty), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.TakeSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.TakeMultiple), MemberType = typeof(TestData))]
+        public void AsValueEnumerable1_Take_With_ValidData_Must_Succeed(int[] source, int count)
         {
             // Arrange
             var wrapped = Wrap
                 .AsReadOnlyList(source);
-            var expected = Enumerable
-                .ToList(source);
+            var expected = source
+                .Take(count);
 
             // Act
             var result = wrapped
                 .AsValueEnumerable()
-                .ToList();
+                .Take(count);
 
             // Assert
             _ = result.Must()
-                .BeOfType<List<int>>()
                 .BeEnumerableOf<int>()
                 .BeEqualTo(expected);
         }
-
+        
         [Theory]
-        [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
-        public void AsValueEnumerable_Collection_With_ToList_Must_Succeed(int[] source)
+        [MemberData(nameof(TestData.SkipTakeEmpty), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakeSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakeMultiple), MemberType = typeof(TestData))]
+        public void AsValueEnumerable1_Sum_With_ValidData_Must_Succeed(int[] source, int skipCount, int takeCount)
         {
             // Arrange
             var wrapped = Wrap
-                .AsList(source);
-            var expected = Enumerable
-                .ToList(source);
+                .AsReadOnlyList(source);
+            var expected = source
+                .Skip(skipCount)
+                .Take(takeCount)
+                .Sum();
 
             // Act
             var result = wrapped
                 .AsValueEnumerable()
-                .ToList();
+                .Skip(skipCount)
+                .Take(takeCount)
+                .Sum();
 
             // Assert
             _ = result.Must()
-                .BeOfType<List<int>>()
-                .BeEnumerableOf<int>()
                 .BeEqualTo(expected);
         }
     }

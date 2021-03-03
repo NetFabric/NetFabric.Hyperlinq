@@ -99,7 +99,7 @@ namespace NetFabric.Hyperlinq
                     => default!;
 
                 readonly object? IEnumerator.Current 
-                    => default!;
+                    => default;
 
                 public readonly bool MoveNext()
                     => default;

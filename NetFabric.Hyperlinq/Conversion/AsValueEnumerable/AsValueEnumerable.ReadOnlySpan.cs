@@ -74,12 +74,12 @@ namespace NetFabric.Hyperlinq
             public Dictionary<TKey, TSource> ToDictionary<TKey, TKeySelector>(TKeySelector keySelector, IEqualityComparer<TKey>? comparer = default)
                 where TKey : notnull
                 where TKeySelector : struct, IFunction<TSource, TKey>
-                => source.ToDictionary<TSource, TKey, TKeySelector>(keySelector, comparer);
+                => source.ToDictionary(keySelector, comparer);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer = default)
                 where TKey : notnull
-                => source.ToDictionary<TSource, TKey, TElement>(keySelector, elementSelector, comparer);
+                => source.ToDictionary(keySelector, elementSelector, comparer);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Dictionary<TKey, TElement> ToDictionary<TKey, TElement, TKeySelector, TElementSelector>(TKeySelector keySelector, TElementSelector elementSelector, IEqualityComparer<TKey>? comparer = default)

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -23,7 +22,7 @@ namespace NetFabric.Hyperlinq
             return false;
         }
 
-        public static ValueTask<bool> ContainsAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source, TSource value, IEqualityComparer<TSource>? comparer = default, CancellationToken cancellationToken = default)
+        public static ValueTask<bool> ContainsAsync<TEnumerable, TEnumerator, TSource>(this TEnumerable source, TSource value, IEqualityComparer<TSource>? comparer, CancellationToken cancellationToken = default)
             where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
         {

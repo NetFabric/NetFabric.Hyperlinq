@@ -160,7 +160,7 @@ namespace NetFabric.Hyperlinq
                 => ValueEnumerableExtensions.WhereAt<MemorySelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, TResult, TSelector>, Enumerator, TResult, TPredicate>(this, predicate);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly ValueEnumerableExtensions.WhereEnumerable<MemorySelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, TResult, TSelector>, Enumerator, TResult, FunctionWrapper<TResult, bool>> Where(System.Func<TResult, bool> predicate)
+            public readonly ValueEnumerableExtensions.WhereEnumerable<MemorySelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, TResult, TSelector>, Enumerator, TResult, FunctionWrapper<TResult, bool>> Where(Func<TResult, bool> predicate)
                 => ValueEnumerableExtensions.Where<MemorySelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, TResult, TSelector>, Enumerator, TResult>(this, predicate);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]

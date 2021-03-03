@@ -162,7 +162,7 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public ArraySegmentWhereAtEnumerable<TSource, PredicateAtPredicateAtCombination<TPredicate, FunctionWrapper<TSource, int, bool>, TSource>> Where(Func<TSource, int, bool> predicate)
-                => WhereAt<FunctionWrapper<TSource, int, bool>>(new FunctionWrapper<TSource, int, bool>(predicate));
+                => WhereAt(new FunctionWrapper<TSource, int, bool>(predicate));
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public ArraySegmentWhereAtEnumerable<TSource, PredicateAtPredicateAtCombination<TPredicate, TPredicate2, TSource>> WhereAt<TPredicate2>(TPredicate2 predicate = default)
@@ -177,11 +177,11 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Option<TSource> ElementAt(int index)
-                => ((ReadOnlySpan<TSource>)source.AsSpan()).ElementAtAt<TSource, TPredicate>(index, predicate);
+                => ((ReadOnlySpan<TSource>)source.AsSpan()).ElementAtAt(index, predicate);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Option<TSource> First()
-                => ((ReadOnlySpan<TSource>)source.AsSpan()).FirstAt<TSource, TPredicate>(predicate);
+                => ((ReadOnlySpan<TSource>)source.AsSpan()).FirstAt(predicate);
 
 #pragma warning disable HLQ005 // Avoid Single() and SingleOrDefault()
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -207,7 +207,7 @@ namespace NetFabric.Hyperlinq
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Dictionary<TKey, TSource> ToDictionary<TKey>(Func<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer = default)
                 where TKey : notnull
-                => ToDictionary<TKey, FunctionWrapper<TSource, TKey>>(new FunctionWrapper<TSource, TKey>(keySelector), comparer);
+                => ToDictionary(new FunctionWrapper<TSource, TKey>(keySelector), comparer);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Dictionary<TKey, TSource> ToDictionary<TKey, TKeySelector>(TKeySelector keySelector, IEqualityComparer<TKey>? comparer = default)

@@ -7,7 +7,7 @@ namespace NetFabric.Hyperlinq
 {
     public static class ImmutableDictionaryExtensions
     {
-        // ImmutableDictionary<TKey, TValue> implements IReadOnlyCollection<KeyValuePair<TKey, TValue>> and has a value-type enumerator that implements IEnumerator<TKey, TValue>
+        // ImmutableDictionary<TKey, TValue> is reference-type that implements IReadOnlyCollection<KeyValuePair<TKey, TValue>> and has a value-type enumerator that implements IEnumerator<TKey, TValue>
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ReadOnlyCollectionExtensions.ValueEnumerable<ImmutableDictionary<TKey, TValue>, ImmutableDictionary<TKey, TValue>.Enumerator, ImmutableDictionary<TKey, TValue>.Enumerator, KeyValuePair<TKey, TValue>, GetEnumerator<TKey, TValue>, GetEnumerator<TKey, TValue>> AsValueEnumerable<TKey, TValue>(this ImmutableDictionary<TKey, TValue> source)

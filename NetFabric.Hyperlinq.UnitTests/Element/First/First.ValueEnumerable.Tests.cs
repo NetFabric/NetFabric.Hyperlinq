@@ -16,8 +16,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
                 .AsValueEnumerable(source);
 
             // Act
-            var result = ValueEnumerableExtensions
-                .First<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(wrapped);
+            var result = wrapped
+                .First<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>();
 
             // Assert
             _ = result.Must()
@@ -33,12 +33,12 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
             // Arrange
             var wrapped = Wrap
                 .AsValueEnumerable(source);
-            var expected = Enumerable
-                .First(source);
+            var expected = source
+                .First();
 
             // Act
-            var result = ValueEnumerableExtensions
-                .First<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(wrapped);
+            var result = wrapped
+                .First<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>();
 
             // Assert
             _ = result.Match(
@@ -55,8 +55,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
                 .AsValueEnumerable(source);
 
             // Act
-            var result = ValueEnumerableExtensions
-                .Where<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(wrapped, predicate)
+            var result = wrapped
+                .Where<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(predicate)
                 .First();
 
             // Assert
@@ -73,12 +73,12 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
             // Arrange
             var wrapped = Wrap
                 .AsValueEnumerable(source);
-            var expected = Enumerable
-                .First(source, predicate);
+            var expected = source
+                .First(predicate);
 
             // Act
-            var result = ValueEnumerableExtensions
-                .Where<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(wrapped, predicate)
+            var result = wrapped
+                .Where<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(predicate)
                 .First();
 
             // Assert
@@ -96,8 +96,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
                 .AsValueEnumerable(source);
 
             // Act
-            var result = ValueEnumerableExtensions
-                .Where<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(wrapped, predicate)
+            var result = wrapped
+                .Where<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(predicate)
                 .First();
 
             // Assert
@@ -114,13 +114,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
             // Arrange
             var wrapped = Wrap
                 .AsValueEnumerable(source);
-            var expected = Enumerable
-                .Where(source, predicate)
+            var expected = source
+                .Where(predicate)
                 .First();
 
             // Act
-            var result = ValueEnumerableExtensions
-                .Where<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(wrapped, predicate)
+            var result = wrapped
+                .Where<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(predicate)
                 .First();
 
             // Assert
@@ -138,8 +138,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
                 .AsValueEnumerable(source);
 
             // Act
-            var result = ValueEnumerableExtensions
-                .Select<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int, string>(wrapped, selector)
+            var result = wrapped
+                .Select<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int, string>(selector)
                 .First();
 
             // Assert
@@ -156,13 +156,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
             // Arrange
             var wrapped = Wrap
                 .AsValueEnumerable(source);
-            var expected = Enumerable
-                .Select(source, selector)
+            var expected = source
+                .Select(selector)
                 .First();
 
             // Act
-            var result = ValueEnumerableExtensions
-                .Select<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int, string>(wrapped, selector)
+            var result = wrapped
+                .Select<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int, string>(selector)
                 .First();
 
             // Assert
@@ -180,8 +180,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
                 .AsValueEnumerable(source);
 
             // Act
-            var result = ValueEnumerableExtensions
-                .Select<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int, string>(wrapped, selector)
+            var result = wrapped
+                .Select<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int, string>(selector)
                 .First();
 
             // Assert
@@ -198,13 +198,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
             // Arrange
             var wrapped = Wrap
                 .AsValueEnumerable(source);
-            var expected = Enumerable
-                .Select(source, selector)
+            var expected = source
+                .Select(selector)
                 .First();
 
             // Act
-            var result = ValueEnumerableExtensions
-                .Select<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int, string>(wrapped, selector)
+            var result = wrapped
+                .Select<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int, string>(selector)
                 .First();
 
             // Assert
@@ -222,8 +222,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
                 .AsValueEnumerable(source);
 
             // Act
-            var result = ValueEnumerableExtensions
-                .Where<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(wrapped, predicate)
+            var result = wrapped
+                .Where<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(predicate)
                 .Select(selector)
                 .First();
 
@@ -241,14 +241,14 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
             // Arrange
             var wrapped = Wrap
                 .AsValueEnumerable(source);
-            var expected = Enumerable
-                .Where(source, predicate)
+            var expected = source
+                .Where(predicate)
                 .Select(selector)
                 .First();
 
             // Act
-            var result = ValueEnumerableExtensions
-                .Where<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(wrapped, predicate)
+            var result = wrapped
+                .Where<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(predicate)
                 .Select(selector)
                 .First();
 

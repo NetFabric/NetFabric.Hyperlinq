@@ -46,7 +46,7 @@ namespace NetFabric.Hyperlinq
                 get => selector.Invoke(source.Span[index], index);
             }
             TResult IReadOnlyList<TResult>.this[int index]
-                => this[index]!;
+                => this[index];
             TResult IList<TResult>.this[int index]
             {
                 get => this[index];
@@ -74,7 +74,7 @@ namespace NetFabric.Hyperlinq
             {
                 var span = source.Span;
                 for (var index = 0; index < span.Length; index++)
-                    array[index + arrayAt] = selector.Invoke(span[index], index)!;
+                    array[index + arrayAt] = selector.Invoke(span[index], index);
             }
             void ICollection<TResult>.Add(TResult item) 
                 => Throw.NotSupportedException();
@@ -85,7 +85,7 @@ namespace NetFabric.Hyperlinq
             bool ICollection<TResult>.Remove(TResult item) 
                 => Throw.NotSupportedException<bool>();
             int IList<TResult>.IndexOf(TResult item)
-                => ArrayExtensions.IndexOfAt<TSource, TResult, TSelector>(source.Span, item, selector);
+                => IndexOfAt(source.Span, item, selector);
             void IList<TResult>.Insert(int index, TResult item)
                 => Throw.NotSupportedException();
             void IList<TResult>.RemoveAt(int index)
@@ -106,16 +106,16 @@ namespace NetFabric.Hyperlinq
                     index = -1;
                 }
  
-                public readonly TResult Current 
+                public TResult Current 
                 {
                     [MethodImpl(MethodImplOptions.AggressiveInlining)]
                     get => selector.Invoke(source.Span[index], index);
                 }
-                readonly TResult IEnumerator<TResult>.Current 
-                    => selector.Invoke(source.Span[index], index)!;
-                readonly object? IEnumerator.Current
+                TResult IEnumerator<TResult>.Current 
+                    => selector.Invoke(source.Span[index], index);
+                object? IEnumerator.Current
                     // ReSharper disable once HeapView.PossibleBoxingAllocation
-                    => selector.Invoke(source.Span[index], index)!;
+                    => selector.Invoke(source.Span[index], index);
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public bool MoveNext() 

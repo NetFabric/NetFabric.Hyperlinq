@@ -32,11 +32,9 @@ namespace NetFabric.Hyperlinq
             public ValueEnumerator<TSource> GetEnumerator() 
                 => new(source.GetEnumerator());
             IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() 
-                // ReSharper disable once HeapView.BoxingAllocation
-                => GetEnumerator();
+                => source.GetEnumerator();
             IEnumerator IEnumerable.GetEnumerator() 
-                // ReSharper disable once HeapView.BoxingAllocation
-                => GetEnumerator();
+                => source.GetEnumerator();
 
             bool ICollection<TSource>.IsReadOnly  
                 => true;
@@ -64,7 +62,7 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Contains(TSource item)
-                => Count is not 0 && EnumerableExtensions.Contains(source, item);
+                => Count is not 0 && source.Contains(item);
 
             [ExcludeFromCodeCoverage]
             void ICollection<TSource>.Add(TSource item) 

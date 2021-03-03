@@ -160,17 +160,17 @@ namespace NetFabric.Hyperlinq
                 => ValueReadOnlyCollectionExtensions.SelectAt<TEnumerable, TEnumerator, TSource, TResult2, SelectorSelectorAtCombination<TSelector, TSelector2, TSource, TResult, TResult2>>(source, new SelectorSelectorAtCombination<TSelector, TSelector2, TSource, TResult, TResult2>(this.selector, selector));
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly ValueEnumerableExtensions.SelectManyEnumerable<SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult, TSelector>, SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult, TSelector>.Enumerator, TResult, TSubEnumerable, TSubEnumerator, TResult2, FunctionWrapper<TResult, TSubEnumerable>> SelectMany<TSubEnumerable, TSubEnumerator, TResult2>(Func<TResult, TSubEnumerable> selector)
+            public readonly ValueEnumerableExtensions.SelectManyEnumerable<SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult, TSelector>, Enumerator, TResult, TSubEnumerable, TSubEnumerator, TResult2, FunctionWrapper<TResult, TSubEnumerable>> SelectMany<TSubEnumerable, TSubEnumerator, TResult2>(Func<TResult, TSubEnumerable> selector)
                 where TSubEnumerable : IValueEnumerable<TResult2, TSubEnumerator>
                 where TSubEnumerator : struct, IEnumerator<TResult2>
-                => this.SelectMany<SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult, TSelector>, SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult, TSelector>.Enumerator, TResult, TSubEnumerable, TSubEnumerator, TResult2>(selector);
+                => this.SelectMany<SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult, TSelector>, Enumerator, TResult, TSubEnumerable, TSubEnumerator, TResult2>(selector);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly ValueEnumerableExtensions.SelectManyEnumerable<SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult, TSelector>, SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult, TSelector>.Enumerator, TResult, TSubEnumerable, TSubEnumerator, TResult2, TSelector2> SelectMany<TSubEnumerable, TSubEnumerator, TResult2, TSelector2>(TSelector2 selector = default)
+            public readonly ValueEnumerableExtensions.SelectManyEnumerable<SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult, TSelector>, Enumerator, TResult, TSubEnumerable, TSubEnumerator, TResult2, TSelector2> SelectMany<TSubEnumerable, TSubEnumerator, TResult2, TSelector2>(TSelector2 selector = default)
                 where TSubEnumerable : IValueEnumerable<TResult2, TSubEnumerator>
                 where TSubEnumerator : struct, IEnumerator<TResult2>
                 where TSelector2 : struct, IFunction<TResult, TSubEnumerable>
-                => this.SelectMany<SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult, TSelector>, SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult, TSelector>.Enumerator, TResult, TSubEnumerable, TSubEnumerator, TResult2, TSelector2>(selector);
+                => this.SelectMany<SelectEnumerable<TEnumerable, TEnumerator, TSource, TResult, TSelector>, Enumerator, TResult, TSubEnumerable, TSubEnumerator, TResult2, TSelector2>(selector);
 
             #endregion
             #region Element

@@ -42,8 +42,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
                 // Arrange
                 var wrapped = Wrap
                     .AsValueReadOnlyCollection(source);
-                var expected = Enumerable
-                    .ElementAt(source, index);
+                var expected = source
+                    .ElementAt(index);
 
                 // Act
                 var result = ValueReadOnlyCollectionExtensions
@@ -90,8 +90,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
         {
             // Arrange
             var wrapped = Wrap.AsValueReadOnlyCollection(source);
-            var expected = Enumerable
-                .Select(source, selector)
+            var expected = source
+                .Select(selector)
                 .ToList();
 
             for (var index = 0; index < source.Length; index++)
@@ -143,8 +143,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
             // Arrange
             var wrapped = Wrap
                 .AsValueReadOnlyCollection(source);
-            var expected = Enumerable
-                .Select(source, selector)
+            var expected = source
+                .Select(selector)
                 .ToList();
 
             for (var index = 0; index < source.Length; index++)

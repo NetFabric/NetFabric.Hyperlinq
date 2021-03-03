@@ -92,7 +92,7 @@ namespace NetFabric.Hyperlinq
                     return builder.Task;
                 }
 
-                public readonly ValueTask DisposeAsync()
+                public ValueTask DisposeAsync()
                     => enumerator.DisposeAsync();
 
                 void IAsyncStateMachine.MoveNext()

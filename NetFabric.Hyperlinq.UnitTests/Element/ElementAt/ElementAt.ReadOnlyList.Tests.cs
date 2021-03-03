@@ -87,8 +87,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
         {
             // Arrange
             var wrapped = Wrap.AsReadOnlyList(source);
-            var expected = Enumerable
-                .Skip(source, skipCount)
+            var expected = source
+                .Skip(skipCount)
                 .Take(takeCount)
                 .ToList();
 
@@ -144,8 +144,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
         {
             // Arrange
             var wrapped = Wrap.AsReadOnlyList(source);
-            var expected = Enumerable
-                .Skip(source, skipCount)
+            var expected = source
+                .Skip(skipCount)
                 .Take(takeCount)
                 .Where(predicate)
                 .ToList();
@@ -203,8 +203,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
         {
             // Arrange
             var wrapped = Wrap.AsReadOnlyList(source);
-            var expected = Enumerable
-                .Skip(source, skipCount)
+            var expected = source
+                .Skip(skipCount)
                 .Take(takeCount)
                 .Where(predicate)
                 .ToList();
@@ -262,8 +262,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
         {
             // Arrange
             var wrapped = Wrap.AsReadOnlyList(source);
-            var expected = Enumerable
-                .Skip(source, skipCount)
+            var expected = source
+                .Skip(skipCount)
                 .Take(takeCount)
                 .Select(selector)
                 .ToList();
@@ -321,8 +321,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
         {
             // Arrange
             var wrapped = Wrap.AsReadOnlyList(source);
-            var expected = Enumerable
-                .Skip(source, skipCount)
+            var expected = source
+                .Skip(skipCount)
                 .Take(takeCount)
                 .Select(selector)
                 .ToList();
@@ -382,8 +382,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
         {
             // Arrange
             var wrapped = Wrap.AsReadOnlyList(source);
-            var expected = Enumerable
-                .Skip(source, skipCount)
+            var expected = source
+                .Skip(skipCount)
                 .Take(takeCount)
                 .Where(predicate)
                 .Select(selector)

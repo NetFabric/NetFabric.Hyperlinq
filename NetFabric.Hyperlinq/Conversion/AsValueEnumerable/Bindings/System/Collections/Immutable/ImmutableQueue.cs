@@ -7,7 +7,7 @@ namespace NetFabric.Hyperlinq
 {
     public static class ImmutableQueueExtensions
     {
-        // ImmutableQueue<TSource> implements IEnumerable<TSource> and has two enumerators:
+        // ImmutableQueue<TSource> is reference-type that implements IEnumerable<TSource> and has two enumerators:
         // One that is a value-type and doesn't implement interfaces.
         // Another that is a reference-type and implements IEnumerator<TSource>.
         

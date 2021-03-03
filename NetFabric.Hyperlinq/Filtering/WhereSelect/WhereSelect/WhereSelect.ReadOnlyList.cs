@@ -79,7 +79,7 @@ namespace NetFabric.Hyperlinq
                     end = index + enumerable.count;
                 }
 
-                public readonly TResult Current
+                public TResult Current
                 {
                     [MethodImpl(MethodImplOptions.AggressiveInlining)]
                     get => selector.Invoke(source[index]);
@@ -116,7 +116,7 @@ namespace NetFabric.Hyperlinq
                     end = index + enumerable.count;
                 }
 
-                public readonly TResult Current
+                public TResult Current
                 {
                     [MethodImpl(MethodImplOptions.AggressiveInlining)]
                     get => selector.Invoke(source[index]);
@@ -202,22 +202,22 @@ namespace NetFabric.Hyperlinq
             #region Filtering
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly ValueEnumerableExtensions.WhereEnumerable<WhereSelectEnumerable<TList, TSource, TResult, TPredicate, TSelector>, WhereSelectEnumerable<TList, TSource, TResult, TPredicate, TSelector>.DisposableEnumerator, TResult, FunctionWrapper<TResult, bool>> Where(Func<TResult, bool> predicate)
-                => this.Where<WhereSelectEnumerable<TList, TSource, TResult, TPredicate, TSelector>, WhereSelectEnumerable<TList, TSource, TResult, TPredicate, TSelector>.DisposableEnumerator, TResult>(predicate);
+            public readonly ValueEnumerableExtensions.WhereEnumerable<WhereSelectEnumerable<TList, TSource, TResult, TPredicate, TSelector>, DisposableEnumerator, TResult, FunctionWrapper<TResult, bool>> Where(Func<TResult, bool> predicate)
+                => this.Where<WhereSelectEnumerable<TList, TSource, TResult, TPredicate, TSelector>, DisposableEnumerator, TResult>(predicate);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly ValueEnumerableExtensions.WhereEnumerable<WhereSelectEnumerable<TList, TSource, TResult, TPredicate, TSelector>, WhereSelectEnumerable<TList, TSource, TResult, TPredicate, TSelector>.DisposableEnumerator, TResult, TPredicate2> Where<TPredicate2>(TPredicate2 predicate = default)
+            public readonly ValueEnumerableExtensions.WhereEnumerable<WhereSelectEnumerable<TList, TSource, TResult, TPredicate, TSelector>, DisposableEnumerator, TResult, TPredicate2> Where<TPredicate2>(TPredicate2 predicate = default)
                 where TPredicate2 : struct, IFunction<TResult, bool>
-                => this.Where<WhereSelectEnumerable<TList, TSource, TResult, TPredicate, TSelector>, WhereSelectEnumerable<TList, TSource, TResult, TPredicate, TSelector>.DisposableEnumerator, TResult, TPredicate2>(predicate);
+                => this.Where<WhereSelectEnumerable<TList, TSource, TResult, TPredicate, TSelector>, DisposableEnumerator, TResult, TPredicate2>(predicate);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly ValueEnumerableExtensions.WhereAtEnumerable<WhereSelectEnumerable<TList, TSource, TResult, TPredicate, TSelector>, WhereSelectEnumerable<TList, TSource, TResult, TPredicate, TSelector>.DisposableEnumerator, TResult, FunctionWrapper<TResult, int, bool>> Where(Func<TResult, int, bool> predicate)
-                => this.Where<WhereSelectEnumerable<TList, TSource, TResult, TPredicate, TSelector>, WhereSelectEnumerable<TList, TSource, TResult, TPredicate, TSelector>.DisposableEnumerator, TResult>(predicate);
+            public readonly ValueEnumerableExtensions.WhereAtEnumerable<WhereSelectEnumerable<TList, TSource, TResult, TPredicate, TSelector>, DisposableEnumerator, TResult, FunctionWrapper<TResult, int, bool>> Where(Func<TResult, int, bool> predicate)
+                => this.Where<WhereSelectEnumerable<TList, TSource, TResult, TPredicate, TSelector>, DisposableEnumerator, TResult>(predicate);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly ValueEnumerableExtensions.WhereAtEnumerable<WhereSelectEnumerable<TList, TSource, TResult, TPredicate, TSelector>, WhereSelectEnumerable<TList, TSource, TResult, TPredicate, TSelector>.DisposableEnumerator, TResult, TPredicate2> WhereAt<TPredicate2>(TPredicate2 predicate = default)
+            public readonly ValueEnumerableExtensions.WhereAtEnumerable<WhereSelectEnumerable<TList, TSource, TResult, TPredicate, TSelector>, DisposableEnumerator, TResult, TPredicate2> WhereAt<TPredicate2>(TPredicate2 predicate = default)
                 where TPredicate2 : struct, IFunction<TResult, int, bool>
-                => this.WhereAt<WhereSelectEnumerable<TList, TSource, TResult, TPredicate, TSelector>, WhereSelectEnumerable<TList, TSource, TResult, TPredicate, TSelector>.DisposableEnumerator, TResult, TPredicate2>(predicate);
+                => this.WhereAt<WhereSelectEnumerable<TList, TSource, TResult, TPredicate, TSelector>, DisposableEnumerator, TResult, TPredicate2>(predicate);
 
             #endregion
             #region Projection
@@ -232,17 +232,17 @@ namespace NetFabric.Hyperlinq
                 => source.WhereSelect<TList, TSource, TResult2, TPredicate, SelectorSelectorCombination<TSelector, TSelector2, TSource, TResult, TResult2>>(predicate, new SelectorSelectorCombination<TSelector, TSelector2, TSource, TResult, TResult2>(this.selector, selector), offset, count);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly ValueEnumerableExtensions.SelectManyEnumerable<WhereSelectEnumerable<TList, TSource, TResult, TPredicate, TSelector>, WhereSelectEnumerable<TList, TSource, TResult, TPredicate, TSelector>.DisposableEnumerator, TResult, TSubEnumerable, TSubEnumerator, TResult2, FunctionWrapper<TResult, TSubEnumerable>> SelectMany<TSubEnumerable, TSubEnumerator, TResult2>(Func<TResult, TSubEnumerable> selector)
+            public readonly ValueEnumerableExtensions.SelectManyEnumerable<WhereSelectEnumerable<TList, TSource, TResult, TPredicate, TSelector>, DisposableEnumerator, TResult, TSubEnumerable, TSubEnumerator, TResult2, FunctionWrapper<TResult, TSubEnumerable>> SelectMany<TSubEnumerable, TSubEnumerator, TResult2>(Func<TResult, TSubEnumerable> selector)
                 where TSubEnumerable : IValueEnumerable<TResult2, TSubEnumerator>
                 where TSubEnumerator : struct, IEnumerator<TResult2>
-                => this.SelectMany<WhereSelectEnumerable<TList, TSource, TResult, TPredicate, TSelector>, WhereSelectEnumerable<TList, TSource, TResult, TPredicate, TSelector>.DisposableEnumerator, TResult, TSubEnumerable, TSubEnumerator, TResult2>(selector);
+                => this.SelectMany<WhereSelectEnumerable<TList, TSource, TResult, TPredicate, TSelector>, DisposableEnumerator, TResult, TSubEnumerable, TSubEnumerator, TResult2>(selector);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly ValueEnumerableExtensions.SelectManyEnumerable<WhereSelectEnumerable<TList, TSource, TResult, TPredicate, TSelector>, WhereSelectEnumerable<TList, TSource, TResult, TPredicate, TSelector>.DisposableEnumerator, TResult, TSubEnumerable, TSubEnumerator, TResult2, TSelector2> SelectMany<TSubEnumerable, TSubEnumerator, TResult2, TSelector2>(TSelector2 selector = default)
+            public readonly ValueEnumerableExtensions.SelectManyEnumerable<WhereSelectEnumerable<TList, TSource, TResult, TPredicate, TSelector>, DisposableEnumerator, TResult, TSubEnumerable, TSubEnumerator, TResult2, TSelector2> SelectMany<TSubEnumerable, TSubEnumerator, TResult2, TSelector2>(TSelector2 selector = default)
                 where TSubEnumerable : IValueEnumerable<TResult2, TSubEnumerator>
                 where TSubEnumerator : struct, IEnumerator<TResult2>
                 where TSelector2 : struct, IFunction<TResult, TSubEnumerable>
-                => this.SelectMany<WhereSelectEnumerable<TList, TSource, TResult, TPredicate, TSelector>, WhereSelectEnumerable<TList, TSource, TResult, TPredicate, TSelector>.DisposableEnumerator, TResult, TSubEnumerable, TSubEnumerator, TResult2, TSelector2>(selector);
+                => this.SelectMany<WhereSelectEnumerable<TList, TSource, TResult, TPredicate, TSelector>, DisposableEnumerator, TResult, TSubEnumerable, TSubEnumerator, TResult2, TSelector2>(selector);
 
             #endregion
             #region Element
@@ -277,7 +277,7 @@ namespace NetFabric.Hyperlinq
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Dictionary<TKey, TResult> ToDictionary<TKey>(Func<TResult, TKey> keySelector, IEqualityComparer<TKey>? comparer = default)
                 where TKey : notnull
-                => ToDictionary<TKey, FunctionWrapper<TResult, TKey>>(new FunctionWrapper<TResult, TKey>(keySelector), comparer);
+                => ToDictionary(new FunctionWrapper<TResult, TKey>(keySelector), comparer);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Dictionary<TKey, TResult> ToDictionary<TKey, TKeySelector>(TKeySelector keySelector, IEqualityComparer<TKey>? comparer = default)

@@ -1,8 +1,4 @@
-using System;
 using System.Collections.Generic;
-using System.ComponentModel.Design;
-using System.Diagnostics.CodeAnalysis;
-using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {

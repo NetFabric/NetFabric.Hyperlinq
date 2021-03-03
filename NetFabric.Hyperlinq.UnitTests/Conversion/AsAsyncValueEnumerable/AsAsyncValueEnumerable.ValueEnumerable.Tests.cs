@@ -13,7 +13,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsAsyncValueEnumerable
         [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
-        public async ValueTask AsAsyncValueEnumerable_With_ValidData_Must_Succeed(int[] source)
+        public void AsAsyncValueEnumerable_With_ValidData_Must_Succeed(int[] source)
         {
             // Arrange
             var wrapped = Wrap
@@ -38,12 +38,12 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsAsyncValueEnumerable
             // Arrange
             var wrapped = Wrap
                 .AsValueEnumerable(source);
-            var expected = Enumerable
-                .ToArray(source);
+            var expected = source
+                .ToArray();
 
             // Act
-            var result = await ValueEnumerableExtensions
-                .AsAsyncValueEnumerable<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(wrapped)
+            var result = await wrapped
+                .AsAsyncValueEnumerable<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>()
                 .ToArrayAsync();
 
             // Assert
@@ -61,12 +61,12 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsAsyncValueEnumerable
             // Arrange
             var wrapped = Wrap
                 .AsValueEnumerable(source);
-            var expected = Enumerable
-                .ToList(source);
+            var expected = source
+                .ToList();
 
             // Act
-            var result = await ValueEnumerableExtensions
-                .AsAsyncValueEnumerable<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(wrapped)
+            var result = await wrapped
+                .AsAsyncValueEnumerable<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>()
                 .ToListAsync();
 
             // Assert

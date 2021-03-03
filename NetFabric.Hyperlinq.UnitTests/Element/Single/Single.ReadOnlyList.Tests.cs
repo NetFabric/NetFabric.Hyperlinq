@@ -32,8 +32,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
             // Arrange
             var wrapped = Wrap
                 .AsReadOnlyList(source);
-            var expected = Enumerable
-                .Single(source);
+            var expected = source
+                .Single();
 
             // Act
             var result = wrapped.AsValueEnumerable()
@@ -90,8 +90,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
             // Arrange
             var wrapped = Wrap
                 .AsReadOnlyList(source);
-            var expected = Enumerable
-                .Skip(source, skip)
+            var expected = source
+                .Skip(skip)
                 .Take(take)
                 .Single();
 
@@ -155,8 +155,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
             // Arrange
             var wrapped = Wrap
                 .AsReadOnlyList(source);
-            var expected = Enumerable
-                .Skip(source, skip)
+            var expected = source
+                .Skip(skip)
                 .Take(take)
                 .Single(predicate);
 
@@ -222,8 +222,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
             // Arrange
             var wrapped = Wrap
                 .AsReadOnlyList(source);
-            var expected = Enumerable
-                .Skip(source, skip)
+            var expected = source
+                .Skip(skip)
                 .Take(take)
                 .Where(predicate)
                 .Single();
@@ -290,8 +290,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
             // Arrange
             var wrapped = Wrap
                 .AsReadOnlyList(source);
-            var expected = Enumerable
-                .Skip(source, skip)
+            var expected = source
+                .Skip(skip)
                 .Take(take)
                 .Select(selector)
                 .Single();
@@ -358,8 +358,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
             // Arrange
             var wrapped = Wrap
                 .AsReadOnlyList(source);
-            var expected = Enumerable
-                .Skip(source, skip)
+            var expected = source
+                .Skip(skip)
                 .Take(take)
                 .Select(selector)
                 .Single();
@@ -427,8 +427,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
             // Arrange
             var wrapped = Wrap
                .AsReadOnlyList(source);
-            var expected = Enumerable
-                .Skip(source, skip)
+            var expected = source
+                .Skip(skip)
                 .Take(take)
                 .Where(predicate)
                 .Select(selector)

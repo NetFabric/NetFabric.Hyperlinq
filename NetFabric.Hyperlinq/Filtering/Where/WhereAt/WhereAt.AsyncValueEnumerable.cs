@@ -310,7 +310,7 @@ namespace NetFabric.Hyperlinq
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public ValueTask<Dictionary<TKey, TSource>> ToDictionaryAsync<TKey>(Func<TSource, CancellationToken, ValueTask<TKey>> keySelector, IEqualityComparer<TKey>? comparer = default, CancellationToken cancellationToken = default)
                 where TKey : notnull
-                => ToDictionaryAsync<TKey, AsyncFunctionWrapper<TSource, TKey>>(new AsyncFunctionWrapper<TSource, TKey>(keySelector), comparer, cancellationToken);
+                => ToDictionaryAsync(new AsyncFunctionWrapper<TSource, TKey>(keySelector), comparer, cancellationToken);
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public ValueTask<Dictionary<TKey, TSource>> ToDictionaryAsync<TKey, TKeySelector>(TKeySelector keySelector, IEqualityComparer<TKey>? comparer = default, CancellationToken cancellationToken = default)

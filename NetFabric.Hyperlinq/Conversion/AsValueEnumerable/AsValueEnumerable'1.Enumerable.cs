@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
@@ -28,11 +26,9 @@ namespace NetFabric.Hyperlinq
             public ValueEnumerator<TSource> GetEnumerator() 
                 => new(source.GetEnumerator());
             IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() 
-                // ReSharper disable once HeapView.BoxingAllocation
-                => GetEnumerator();
+                => source.GetEnumerator();
             IEnumerator IEnumerable.GetEnumerator() 
-                // ReSharper disable once HeapView.BoxingAllocation
-                => GetEnumerator();
+                => source.GetEnumerator();
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

@@ -208,7 +208,7 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public WhereAtEnumerable<TList, TSource, PredicatePredicateAtCombination<TPredicate, FunctionWrapper<TSource, int, bool>, TSource>> Where(Func<TSource, int, bool> predicate)
-                => WhereAt<FunctionWrapper<TSource, int, bool>>(new FunctionWrapper<TSource, int, bool>(predicate));
+                => WhereAt(new FunctionWrapper<TSource, int, bool>(predicate));
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public WhereAtEnumerable<TList, TSource, PredicatePredicateAtCombination<TPredicate, TPredicate2, TSource>> WhereAt<TPredicate2>(TPredicate2 predicate = default)
@@ -253,7 +253,7 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public IMemoryOwner<TSource> ToArray(MemoryPool<TSource> memoryPool)
-                => source.ToArray<TList, TSource, TPredicate>(predicate, offset, count, memoryPool);
+                => source.ToArray(predicate, offset, count, memoryPool);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public List<TSource> ToList()
@@ -262,7 +262,7 @@ namespace NetFabric.Hyperlinq
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Dictionary<TKey, TSource> ToDictionary<TKey>(Func<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer = default)
                 where TKey : notnull
-                => ToDictionary<TKey, FunctionWrapper<TSource, TKey>>(new FunctionWrapper<TSource, TKey>(keySelector), comparer);
+                => ToDictionary(new FunctionWrapper<TSource, TKey>(keySelector), comparer);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Dictionary<TKey, TSource> ToDictionary<TKey, TKeySelector>(TKeySelector keySelector, IEqualityComparer<TKey>? comparer = default)

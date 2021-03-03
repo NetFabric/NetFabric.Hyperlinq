@@ -46,7 +46,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Generation.ValueEnumerableTests
         public void Repeat_Skip_With_ValidData_Must_Succeed(int value, int count, int skip)
         {
             // Arrange
-            var expected = Enumerable.Skip(Enumerable.Repeat(value, count), skip);
+            var expected = Enumerable.Repeat(value, count).Skip(skip);
 
             // Act
             var result = AsyncValueEnumerable.Repeat(value, count).Skip(skip);
@@ -62,7 +62,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Generation.ValueEnumerableTests
         public void Repeat_Take_With_ValidData_Must_Succeed(int value, int count, int take)
         {
             // Arrange
-            var expected = Enumerable.Take(Enumerable.Repeat(value, count), take);
+            var expected = Enumerable.Repeat(value, count).Take(take);
 
             // Act
             var result = AsyncValueEnumerable.Repeat(value, count).Take(take);
@@ -78,7 +78,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Generation.ValueEnumerableTests
         public async ValueTask Repeat_All_With_ValidData_Must_Succeed(int value, int count)
         {
             // Arrange
-            var expected = Enumerable.All(Enumerable.Repeat(value, count), item => false);
+            var expected = Enumerable.Repeat(value, count).All(item => false);
 
             // Act
             var result = await AsyncValueEnumerable.Repeat(value, count).AllAsync(item => false);
@@ -93,7 +93,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Generation.ValueEnumerableTests
         public async ValueTask Repeat_Any_With_ValidData_Must_Succeed(int value, int count)
         {
             // Arrange
-            var expected = Enumerable.Any(Enumerable.Repeat(value, count));
+            var expected = Enumerable.Repeat(value, count).Any();
 
             // Act
             var result = await AsyncValueEnumerable.Repeat(value, count).AnyAsync();
@@ -108,7 +108,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Generation.ValueEnumerableTests
         public async ValueTask Repeat_ToArray_With_ValidData_Must_Succeed(int value, int count)
         {
             // Arrange
-            var expected = Enumerable.ToArray(Enumerable.Repeat(value, count));
+            var expected = Enumerable.Repeat(value, count).ToArray();
 
             // Act
             var result = await AsyncValueEnumerable.Repeat(value, count).ToArrayAsync();
@@ -124,7 +124,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Generation.ValueEnumerableTests
         public async ValueTask Repeat_ToList_With_ValidData_Must_Succeed(int value, int count)
         {
             // Arrange
-            var expected = Enumerable.ToList(Enumerable.Repeat(value, count));
+            var expected = Enumerable.Repeat(value, count).ToList();
 
             // Act
             var result = await AsyncValueEnumerable.Repeat(value, count).ToListAsync();
