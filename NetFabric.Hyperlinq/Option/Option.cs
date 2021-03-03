@@ -206,7 +206,7 @@ namespace NetFabric.Hyperlinq
             => IsSome switch
             {
                 // ReSharper disable once HeapView.ObjectAllocation.Evident
-                true => new TValue[] { Value },
+                true => new[] { Value },
                 _ => Array.Empty<TValue>()
             };
 

@@ -63,14 +63,11 @@ namespace NetFabric.Hyperlinq
             public TEnumerator2 GetEnumerator() 
                 => getEnumerator2.Invoke(source);
             TEnumerator IValueEnumerable<TSource, TEnumerator>.GetEnumerator() 
-                // ReSharper disable once HeapView.BoxingAllocation
                 => getEnumerator.Invoke(source);
             IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() 
-                // ReSharper disable once HeapView.BoxingAllocation
-                => getEnumerator.Invoke(source);
+                => source.GetEnumerator();
             IEnumerator IEnumerable.GetEnumerator() 
-                // ReSharper disable once HeapView.BoxingAllocation
-                => getEnumerator.Invoke(source);
+                => source.GetEnumerator();
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

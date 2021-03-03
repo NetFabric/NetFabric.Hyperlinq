@@ -108,7 +108,7 @@ namespace NetFabric.Hyperlinq
         public static Dictionary<TKey, TElement> ToDictionary<TList, TSource, TKey, TElement>(this TList source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer = default)
             where TList : struct, IReadOnlyList<TSource>
             where TKey : notnull
-            => source.ToDictionary<TList, TSource, TKey, TElement>(keySelector, elementSelector, comparer, 0, source.Count);
+            => source.ToDictionary(keySelector, elementSelector, comparer, 0, source.Count);
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static Dictionary<TKey, TElement> ToDictionary<TList, TSource, TKey, TElement>(this TList source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer, int offset, int count)

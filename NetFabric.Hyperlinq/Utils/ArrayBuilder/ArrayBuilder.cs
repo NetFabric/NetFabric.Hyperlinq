@@ -7,7 +7,6 @@
 using System;
 using System.Buffers;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 
 namespace NetFabric.Hyperlinq
 {
@@ -57,10 +56,10 @@ namespace NetFabric.Hyperlinq
         /// </summary>
         public int Count { get; private set; }
 
-        /// <summary>
-        /// Gets or sets the item at a certain index in the array.
-        /// </summary>
-        /// <param name="index">The index into the array.</param>
+        // /// <summary>
+        // /// Gets or sets the item at a certain index in the array.
+        // /// </summary>
+        // /// <param name="index">The index into the array.</param>
         // public T this[int index]
         // {
         //     get

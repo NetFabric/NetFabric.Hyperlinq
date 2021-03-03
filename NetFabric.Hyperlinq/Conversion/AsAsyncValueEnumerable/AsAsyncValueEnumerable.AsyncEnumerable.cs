@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
@@ -59,7 +58,7 @@ namespace NetFabric.Hyperlinq
                 // ReSharper disable once HeapView.BoxingAllocation
                 => new AsyncEnumerator(source, cancellationToken);
 
-            public readonly partial struct AsyncEnumerator
+            public readonly struct AsyncEnumerator
                 : IAsyncEnumerator<TSource>
             {
                 readonly IAsyncEnumerator<TSource> enumerator;

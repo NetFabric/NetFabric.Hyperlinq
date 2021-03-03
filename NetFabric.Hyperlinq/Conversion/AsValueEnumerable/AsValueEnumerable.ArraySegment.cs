@@ -128,7 +128,7 @@ namespace NetFabric.Hyperlinq
                 }
                 readonly object? IEnumerator.Current
                     // ReSharper disable once HeapView.PossibleBoxingAllocation
-                    => this.Current;
+                    => Current;
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public bool MoveNext()

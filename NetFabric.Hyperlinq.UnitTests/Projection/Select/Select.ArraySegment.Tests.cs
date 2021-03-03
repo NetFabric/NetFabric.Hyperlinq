@@ -57,8 +57,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Projection.Select
             // Arrange
             var (offset, count) = Utils.SkipTake(source.Length, skip, take);
             var wrapped = new ArraySegment<int>(source, offset, count);
-            var expected = wrapped
-                .Select(item => item)
+            var expected = Enumerable
+                .Select(wrapped, item => item)
                 .Sum();
 
             // Act

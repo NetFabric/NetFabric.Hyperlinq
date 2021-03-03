@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Threading;
@@ -39,10 +37,10 @@ namespace NetFabric.Hyperlinq
                 => GetAsyncEnumerator(cancellationToken);
 
             [StructLayout(LayoutKind.Auto)]
-            public readonly partial struct AsyncEnumerator
+            public struct AsyncEnumerator
                 : IAsyncEnumerator<TSource>
             {
-                readonly TEnumerator enumerator;
+                TEnumerator enumerator;
                 readonly CancellationToken cancellationToken;
 
                 internal AsyncEnumerator(TEnumerable enumerable, CancellationToken cancellationToken)

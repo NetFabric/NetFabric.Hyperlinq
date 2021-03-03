@@ -120,7 +120,7 @@ namespace NetFabric.Hyperlinq
                 => source.ContainsAt<TList, TSource, TResult, TSelector>(item, default, selector, offset, Count);
 
             public int IndexOf(TResult item)
-                => ReadOnlyListExtensions.IndexOfAt(source, item, selector, offset, Count);
+                => IndexOfAt<TList, TSource, TResult, TSelector>(source, item, selector, offset, Count);
 
             [ExcludeFromCodeCoverage]
             void ICollection<TResult>.Add(TResult item) 

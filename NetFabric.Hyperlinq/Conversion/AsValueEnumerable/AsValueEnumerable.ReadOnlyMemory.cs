@@ -18,7 +18,7 @@ namespace NetFabric.Hyperlinq
 
         [GeneratorIgnore]
         [StructLayout(LayoutKind.Auto)]
-        public readonly partial struct MemoryValueEnumerable<TSource>
+        public readonly struct MemoryValueEnumerable<TSource>
             : IValueReadOnlyList<TSource, MemoryValueEnumerable<TSource>.DisposableEnumerator>
             , IList<TSource>
         {
@@ -168,12 +168,12 @@ namespace NetFabric.Hyperlinq
             public Dictionary<TKey, TSource> ToDictionary<TKey, TKeySelector>(TKeySelector keySelector, IEqualityComparer<TKey>? comparer = default)
                 where TKey : notnull
                 where TKeySelector : struct, IFunction<TSource, TKey>
-                => source.Span.ToDictionary<TSource, TKey, TKeySelector>(keySelector, comparer);
+                => source.Span.ToDictionary(keySelector, comparer);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer = default)
                 where TKey : notnull
-                => source.Span.ToDictionary<TSource, TKey, TElement>(keySelector, elementSelector, comparer);
+                => source.Span.ToDictionary(keySelector, elementSelector, comparer);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Dictionary<TKey, TElement> ToDictionary<TKey, TElement, TKeySelector, TElementSelector>(TKeySelector keySelector, TElementSelector elementSelector, IEqualityComparer<TKey>? comparer = default)

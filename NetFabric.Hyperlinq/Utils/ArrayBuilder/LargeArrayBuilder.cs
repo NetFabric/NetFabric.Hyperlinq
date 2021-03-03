@@ -34,7 +34,6 @@ namespace NetFabric.Hyperlinq
         /// <summary>
         /// Constructs a new builder.
         /// </summary>
-        /// <param name="initialize">Pass <c>true</c>.</param>
         public LargeArrayBuilder(ArrayPool<T> pool)
             : this(maxCapacity: int.MaxValue, pool: pool, arrayBuilderPool: ArrayPool<T[]>.Shared)
         {

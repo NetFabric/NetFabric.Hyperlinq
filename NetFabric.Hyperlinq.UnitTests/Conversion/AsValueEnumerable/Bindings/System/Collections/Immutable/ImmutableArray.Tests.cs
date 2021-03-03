@@ -20,8 +20,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsValueEnumerable.Bindings.Sy
 
             // Assert
             _ = result.Must()
-                .BeOfType<ReadOnlyListExtensions.ListValueEnumerable<int>>()
-//                .BeOfType<ReadOnlyCollectionExtensions.ValueEnumerable<ImmutableArray<int>, ValueEnumerator<int>, ImmutableArray<int>.Enumerator, int, ImmutableArrayExtensions.GetEnumerator<int>, ImmutableArrayExtensions.GetEnumerator2<int>>>()
+                .BeOfType<ReadOnlyListExtensions.ValueEnumerable<ImmutableArray<int>, int>>()
                 .BeEnumerableOf<int>()
                 .BeEqualTo(source);
         }

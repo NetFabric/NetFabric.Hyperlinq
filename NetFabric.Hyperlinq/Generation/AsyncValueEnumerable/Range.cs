@@ -115,7 +115,7 @@ namespace NetFabric.Hyperlinq
                 }
 
                 public readonly ValueTask DisposeAsync()
-                    => new ValueTask();
+                    => new();
             }
 
 #pragma warning disable IDE0060 // Remove unused parameter
@@ -142,8 +142,8 @@ namespace NetFabric.Hyperlinq
                 => Range(start, Utils.Take(this.count, count));
 
 #pragma warning disable IDE0060 // Remove unused parameter
-            public ValueTask<bool> ContainsAsync(int value, CancellationToken cancellationToken = default)
-                => new ValueTask<bool>(value >= start && value < end);
+            public ValueTask<bool> ContainsAsync(int value, CancellationToken cancellationToken)
+                => new(value >= start && value < end);
 #pragma warning restore IDE0060 // Remove unused parameter
 
             public ValueTask<bool> ContainsAsync(int value, IEqualityComparer<int>? comparer, CancellationToken cancellationToken = default)

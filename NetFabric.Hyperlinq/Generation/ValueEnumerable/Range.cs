@@ -2,7 +2,6 @@
 using System.Buffers;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 using System.Runtime.CompilerServices;
@@ -198,7 +197,7 @@ namespace NetFabric.Hyperlinq
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public RangeSelectVectorEnumerable<TResult, FunctionWrapper<Vector<int>, Vector<TResult>>, FunctionWrapper<int, TResult>> SelectVector<TResult>(Func<Vector<int>, Vector<TResult>> vectorSelector, Func<int, TResult> selector)
                 where TResult : struct
-                => ValueEnumerable.SelectVector<TResult, FunctionWrapper<Vector<int>, Vector<TResult>>, FunctionWrapper<int, TResult>>(start, Count, vectorSelector, selector);
+                => ValueEnumerable.SelectVector(start, Count, vectorSelector, selector);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public RangeSelectVectorEnumerable<TResult, TSelector, TSelector> SelectVector<TResult, TSelector>(TSelector selector = default)

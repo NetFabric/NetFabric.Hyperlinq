@@ -44,7 +44,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Generation.ValueEnumerableTests
         public void Range_Skip_With_ValidData_Must_Succeed(int start, int count, int skip)
         {
             // Arrange
-            var expected = Enumerable.Skip(Enumerable.Range(start, count), skip);
+            var expected = Enumerable.Range(start, count).Skip(skip);
 
             // Act
             var result = ValueEnumerable.Range(start, count).Skip(skip);
@@ -60,7 +60,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Generation.ValueEnumerableTests
         public void Range_Take_With_ValidData_Must_Succeed(int start, int count, int take)
         {
             // Arrange
-            var expected = Enumerable.Take(Enumerable.Range(start, count), take);
+            var expected = Enumerable.Range(start, count).Take(take);
 
             // Act
             var result = ValueEnumerable.Range(start, count).Take(take);
@@ -76,7 +76,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Generation.ValueEnumerableTests
         public void Range_Any_With_ValidData_Must_Succeed(int start, int count)
         {
             // Arrange
-            var expected = Enumerable.Any(Enumerable.Range(start, count));
+            var expected = Enumerable.Range(start, count).Any();
 
             // Act
             var result = ValueEnumerable.Range(start, count).Any();
@@ -91,7 +91,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Generation.ValueEnumerableTests
         public void Range_Contains_With_ValidData_Must_Succeed(int start, int count, int value)
         {
             // Arrange
-            var expected = Enumerable.Contains(Enumerable.Range(start, count), value);
+            var expected = Enumerable.Range(start, count).Contains(value);
 
             // Act
             var result = ValueEnumerable.Range(start, count).Contains(value);
@@ -106,7 +106,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Generation.ValueEnumerableTests
         public void Range_ToArray_With_ValidData_Must_Succeed(int start, int count)
         {
             // Arrange
-            var expected = Enumerable.ToArray(Enumerable.Range(start, count));
+            var expected = Enumerable.Range(start, count).ToArray();
 
             // Act
             var result = ValueEnumerable.Range(start, count).ToArray();
@@ -122,7 +122,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Generation.ValueEnumerableTests
         public void Range_With_ToList_Must_Succeed(int start, int count)
         {
             // Arrange
-            var expected = Enumerable.ToList(Enumerable.Range(start, count));
+            var expected = Enumerable.Range(start, count).ToList();
 
             // Act
             var result = ValueEnumerable.Range(start, count).ToList();
@@ -139,7 +139,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Generation.ValueEnumerableTests
         public void Range_SelectVector_Must_Succeed(int start, int count)
         {
             // Arrange
-            var expected = Enumerable.Select(Enumerable.Range(start, count), item => item * 2);
+            var expected = Enumerable.Range(start, count).Select(item => item * 2);
 
             // Act
             var result = ValueEnumerable.Range(start, count).SelectVector(item => item * 2, item => item * 2);
@@ -156,7 +156,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Generation.ValueEnumerableTests
         public void Range_SelectVector_Sum_Must_Succeed(int start, int count)
         {
             // Arrange
-            var expected = Enumerable.Sum(Enumerable.Select(Enumerable.Range(start, count), item => item * 2));
+            var expected = Enumerable.Range(start, count).Select(item => item * 2).Sum();
 
             // Act
             var result = ValueEnumerable.Range(start, count).SelectVector(item => item * 2, item => item * 2).Sum();
@@ -172,7 +172,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Generation.ValueEnumerableTests
         public void Range_SelectVector_ToArray_Must_Succeed(int start, int count)
         {
             // Arrange
-            var expected = Enumerable.ToArray(Enumerable.Select(Enumerable.Range(start, count), item => item * 2));
+            var expected = Enumerable.Range(start, count).Select(item => item * 2).ToArray();
 
             // Act
             var result = ValueEnumerable.Range(start, count).SelectVector(item => item * 2, item => item * 2).ToArray();
@@ -188,7 +188,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Generation.ValueEnumerableTests
         public void Range_SelectVector_ToList_Must_Succeed(int start, int count)
         {
             // Arrange
-            var expected = Enumerable.ToList(Enumerable.Select(Enumerable.Range(start, count), item => item * 2));
+            var expected = Enumerable.Range(start, count).Select(item => item * 2).ToList();
 
             // Act
             var result = ValueEnumerable.Range(start, count).SelectVector(item => item * 2, item => item * 2).ToList();

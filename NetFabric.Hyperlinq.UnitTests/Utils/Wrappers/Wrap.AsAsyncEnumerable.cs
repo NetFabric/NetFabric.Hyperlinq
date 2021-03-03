@@ -14,7 +14,7 @@ namespace NetFabric.Hyperlinq
                 _ => new AsyncEnumerableWrapper<T>(source)
             };
 
-        public readonly struct AsyncEnumerableWrapper<T> 
+        public class AsyncEnumerableWrapper<T> 
             : IAsyncEnumerable<T>
         {
             readonly T[] source;
@@ -22,9 +22,9 @@ namespace NetFabric.Hyperlinq
             internal AsyncEnumerableWrapper(T[] source)
                 => this.source = source;
 
-            public readonly AsyncEnumerator<T> GetAsyncEnumerator() 
+            public AsyncEnumerator<T> GetAsyncEnumerator() 
                 => new(source);
-            readonly IAsyncEnumerator<T> IAsyncEnumerable<T>.GetAsyncEnumerator(CancellationToken _) 
+            IAsyncEnumerator<T> IAsyncEnumerable<T>.GetAsyncEnumerator(CancellationToken _) 
                 => new AsyncEnumerator<T>(source);
         }
     }

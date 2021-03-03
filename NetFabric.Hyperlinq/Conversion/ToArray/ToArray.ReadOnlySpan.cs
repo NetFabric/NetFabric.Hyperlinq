@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Buffers;
-using System.Diagnostics;
 using System.Numerics;
 using System.Runtime.CompilerServices;
 
@@ -157,7 +156,7 @@ namespace NetFabric.Hyperlinq
             static IMemoryOwner<TResult> BuildArray(ReadOnlySpan<TSource> source, TVectorSelector vectorSelector, TSelector selector, MemoryPool<TResult> pool)
             {
                 var result = pool.RentSliced(source.Length);
-                CopyVector<TSource, TResult, TVectorSelector, TSelector>(source, result.Memory.Span, vectorSelector, selector);
+                CopyVector(source, result.Memory.Span, vectorSelector, selector);
                 return result;
             }
         }

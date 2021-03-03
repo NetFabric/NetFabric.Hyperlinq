@@ -101,7 +101,7 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public int Count()
-                => ValueReadOnlyCollectionExtensions.CountAt<TEnumerable, TEnumerator, TSource, TPredicate>(source, predicate);
+                => CountAt<TEnumerable, TEnumerator, TSource, TPredicate>(source, predicate);
 
             #endregion
             #region Quantifier
@@ -164,7 +164,7 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public WhereAtEnumerable<TEnumerable, TEnumerator, TSource, PredicateAtPredicateAtCombination<TPredicate, FunctionWrapper<TSource, int, bool>, TSource>> Where(Func<TSource, int, bool> predicate)
-                => WhereAt<FunctionWrapper<TSource, int, bool>>(new FunctionWrapper<TSource, int, bool>(predicate));
+                => WhereAt(new FunctionWrapper<TSource, int, bool>(predicate));
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public WhereAtEnumerable<TEnumerable, TEnumerator, TSource, PredicateAtPredicateAtCombination<TPredicate, TPredicate2, TSource>> WhereAt<TPredicate2>(TPredicate2 predicate = default)
@@ -179,16 +179,16 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Option<TSource> ElementAt(int index)
-                => ValueReadOnlyCollectionExtensions.ElementAtAt<TEnumerable, TEnumerator, TSource, TPredicate>(source, index, predicate);
+                => ElementAtAt<TEnumerable, TEnumerator, TSource, TPredicate>(source, index, predicate);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Option<TSource> First()
-                => ValueReadOnlyCollectionExtensions.FirstAt<TEnumerable, TEnumerator, TSource, TPredicate>(source, predicate);
+                => FirstAt<TEnumerable, TEnumerator, TSource, TPredicate>(source, predicate);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Option<TSource> Single()
 #pragma warning disable HLQ005 // Avoid Single() and SingleOrDefault()
-                => ValueReadOnlyCollectionExtensions.SingleAt<TEnumerable, TEnumerator, TSource, TPredicate>(source, predicate);
+                => SingleAt<TEnumerable, TEnumerator, TSource, TPredicate>(source, predicate);
 #pragma warning restore HLQ005 // Avoid Single() and SingleOrDefault()
             
             #endregion
@@ -196,15 +196,15 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TSource[] ToArray()
-                => ValueReadOnlyCollectionExtensions.ToArrayAt<TEnumerable, TEnumerator, TSource, TPredicate>(source, predicate);
+                => ToArrayAt<TEnumerable, TEnumerator, TSource, TPredicate>(source, predicate);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public IMemoryOwner<TSource> ToArray(MemoryPool<TSource> memoryPool)
-                => ValueReadOnlyCollectionExtensions.ToArrayAt<TEnumerable, TEnumerator, TSource, TPredicate>(source, predicate, memoryPool);
+                => ToArrayAt<TEnumerable, TEnumerator, TSource, TPredicate>(source, predicate, memoryPool);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public List<TSource> ToList()
-                => ValueReadOnlyCollectionExtensions.ToListAt<TEnumerable, TEnumerator, TSource, TPredicate>(source, predicate);
+                => ToListAt<TEnumerable, TEnumerator, TSource, TPredicate>(source, predicate);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Dictionary<TKey, TSource> ToDictionary<TKey>(Func<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer = default)
@@ -215,7 +215,7 @@ namespace NetFabric.Hyperlinq
             public Dictionary<TKey, TSource> ToDictionary<TKey, TKeySelector>(TKeySelector keySelector, IEqualityComparer<TKey>? comparer = default)
                 where TKey : notnull
                 where TKeySelector : struct, IFunction<TSource, TKey>
-                => ValueReadOnlyCollectionExtensions.ToDictionaryAt<TEnumerable, TEnumerator, TSource, TKey, TKeySelector, TPredicate>(source, keySelector, comparer, predicate);
+                => ToDictionaryAt<TEnumerable, TEnumerator, TSource, TKey, TKeySelector, TPredicate>(source, keySelector, comparer, predicate);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer = default)
@@ -227,7 +227,7 @@ namespace NetFabric.Hyperlinq
                 where TKey : notnull
                 where TKeySelector : struct, IFunction<TSource, TKey>
                 where TElementSelector : struct, IFunction<TSource, TElement>
-                => ValueReadOnlyCollectionExtensions.ToDictionaryAt<TEnumerable, TEnumerator, TSource, TKey, TElement, TKeySelector, TElementSelector, TPredicate>(source, keySelector, elementSelector, comparer, predicate);
+                => ToDictionaryAt<TEnumerable, TEnumerator, TSource, TKey, TElement, TKeySelector, TElementSelector, TPredicate>(source, keySelector, elementSelector, comparer, predicate);
             
             #endregion
         }

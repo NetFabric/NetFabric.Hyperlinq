@@ -87,7 +87,7 @@ namespace NetFabric.Hyperlinq
             bool ICollection<TResult>.Remove(TResult item)
                 => Throw.NotSupportedException<bool>();
             int IList<TResult>.IndexOf(TResult item)
-                => ArrayExtensions.IndexOfAt<TSource, TResult, TSelector>(source, item, selector);
+                => IndexOfAt<TSource, TResult, TSelector>(source, item, selector);
             
             void IList<TResult>.Insert(int index, TResult item)
                 => Throw.NotSupportedException();
@@ -113,11 +113,11 @@ namespace NetFabric.Hyperlinq
                     end = index + enumerable.source.Count;
                 }
 
-                public readonly TResult Current
+                public TResult Current
                     => selector.Invoke(source![index + offset], index);
-                readonly TResult IEnumerator<TResult>.Current
-                    => selector.Invoke(source![index + offset], index)!;
-                readonly object? IEnumerator.Current
+                TResult IEnumerator<TResult>.Current
+                    => selector.Invoke(source![index + offset], index);
+                object? IEnumerator.Current
                     // ReSharper disable once HeapView.PossibleBoxingAllocation
                     => selector.Invoke(source![index + offset], index);
 

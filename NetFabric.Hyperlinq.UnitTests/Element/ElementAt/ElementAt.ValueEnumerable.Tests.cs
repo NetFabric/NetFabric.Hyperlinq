@@ -18,10 +18,10 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
                 .AsValueEnumerable(source);
 
             // Act
-            var optionNegative = ValueEnumerableExtensions
-                .ElementAt<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(wrapped, -1);
-            var optionTooLarge = ValueEnumerableExtensions
-                .ElementAt<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(wrapped, source.Length);
+            var optionNegative = wrapped
+                .ElementAt<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(-1);
+            var optionTooLarge = wrapped
+                .ElementAt<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(source.Length);
 
             // Assert
             _ = optionNegative.Must()
@@ -42,12 +42,12 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
                 // Arrange
                 var wrapped = Wrap
                     .AsValueEnumerable(source);
-                var expected = Enumerable
-                    .ElementAt(source, index);
+                var expected = source
+                    .ElementAt(index);
 
                 // Act
-                var result = ValueEnumerableExtensions
-                    .ElementAt<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(wrapped, index);
+                var result = wrapped
+                    .ElementAt<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(index);
 
                 // Assert
                 _ = result.Match(
@@ -67,11 +67,11 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
                 .AsValueEnumerable(source);
 
             // Act
-            var optionNegative = ValueEnumerableExtensions
-                .Where<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(wrapped, predicate)
+            var optionNegative = wrapped
+                .Where<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(predicate)
                 .ElementAt(-1);
-            var optionTooLarge = ValueEnumerableExtensions
-                .Where<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(wrapped, predicate)
+            var optionTooLarge = wrapped
+                .Where<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(predicate)
                 .ElementAt(source.Length);
 
             // Assert
@@ -91,15 +91,15 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
             // Arrange
             var wrapped = Wrap
                 .AsValueEnumerable(source);
-            var expected = Enumerable
-                .Where(source, predicate)
+            var expected = source
+                .Where(predicate)
                 .ToList();
 
             for (var index = 0; index < expected.Count; index++)
             {
                 // Act
-                var result = ValueEnumerableExtensions
-                    .Where<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(wrapped, predicate)
+                var result = wrapped
+                    .Where<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(predicate)
                     .ElementAt(index);
 
                 // Assert
@@ -120,11 +120,11 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
                 .AsValueEnumerable(source);
 
             // Act
-            var optionNegative = ValueEnumerableExtensions
-                .Where<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(wrapped, predicate)
+            var optionNegative = wrapped
+                .Where<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(predicate)
                 .ElementAt(-1);
-            var optionTooLarge = ValueEnumerableExtensions
-                .Where<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(wrapped, predicate)
+            var optionTooLarge = wrapped
+                .Where<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(predicate)
                 .ElementAt(source.Length);
 
             // Assert
@@ -144,15 +144,15 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
             // Arrange
             var wrapped = Wrap
                 .AsValueEnumerable(source);
-            var expected = Enumerable
-                .Where(source, predicate)
+            var expected = source
+                .Where(predicate)
                 .ToList();
 
             for (var index = 0; index < expected.Count; index++)
             {
                 // Act
-                var result = ValueEnumerableExtensions
-                    .Where<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(wrapped, predicate)
+                var result = wrapped
+                    .Where<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(predicate)
                     .ElementAt(index);
 
                 // Assert
@@ -173,11 +173,11 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
                 .AsValueEnumerable(source);
 
             // Act
-            var optionNegative = ValueEnumerableExtensions
-                .Select<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int, string>(wrapped, selector)
+            var optionNegative = wrapped
+                .Select<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int, string>(selector)
                 .ElementAt(-1);
-            var optionTooLarge = ValueEnumerableExtensions
-                .Select<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int, string>(wrapped, selector)
+            var optionTooLarge = wrapped
+                .Select<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int, string>(selector)
                 .ElementAt(source.Length);
 
             // Assert
@@ -197,15 +197,15 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
             // Arrange
             var wrapped = Wrap
                 .AsValueEnumerable(source);
-            var expected = Enumerable
-                .Select(source, selector)
+            var expected = source
+                .Select(selector)
                 .ToList();
 
             for (var index = 0; index < source.Length; index++)
             {
                 // Act
-                var result = ValueEnumerableExtensions
-                    .Select<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int, string>(wrapped, selector)
+                var result = wrapped
+                    .Select<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int, string>(selector)
                     .ElementAt(index);
 
                 // Assert
@@ -226,11 +226,11 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
                 .AsValueEnumerable(source);
 
             // Act
-            var optionNegative = ValueEnumerableExtensions
-                .Select<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int, string>(wrapped, selector)
+            var optionNegative = wrapped
+                .Select<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int, string>(selector)
                 .ElementAt(-1);
-            var optionTooLarge = ValueEnumerableExtensions
-                .Select<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int, string>(wrapped, selector)
+            var optionTooLarge = wrapped
+                .Select<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int, string>(selector)
                 .ElementAt(source.Length);
 
             // Assert
@@ -250,15 +250,15 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
             // Arrange
             var wrapped = Wrap
                 .AsValueEnumerable(source);
-            var expected = Enumerable
-                .Select(source, selector)
+            var expected = source
+                .Select(selector)
                 .ToList();
 
             for (var index = 0; index < source.Length; index++)
             {
                 // Act
-                var result = ValueEnumerableExtensions
-                    .Select<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int, string>(wrapped, selector)
+                var result = wrapped
+                    .Select<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int, string>(selector)
                     .ElementAt(index);
 
                 // Assert
@@ -279,12 +279,12 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
                 .AsValueEnumerable(source);
 
             // Act
-            var optionNegative = ValueEnumerableExtensions
-                .Where<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(wrapped, predicate)
+            var optionNegative = wrapped
+                .Where<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(predicate)
                 .Select(selector)
                 .ElementAt(-1);
-            var optionTooLarge = ValueEnumerableExtensions
-                .Where<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(wrapped, predicate)
+            var optionTooLarge = wrapped
+                .Where<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(predicate)
                 .Select(selector)
                 .ElementAt(source.Length);
 
@@ -305,16 +305,16 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
             // Arrange
             var wrapped = Wrap
                 .AsValueEnumerable(source);
-            var expected = Enumerable
-                .Where(source, predicate)
+            var expected = source
+                .Where(predicate)
                 .Select(selector)
                 .ToList();
 
             for (var index = 0; index < expected.Count; index++)
             {
                 // Act
-                var result = ValueEnumerableExtensions
-                    .Where<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(wrapped, predicate)
+                var result = wrapped
+                    .Where<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(predicate)
                     .Select(selector)
                     .ElementAt(index);
 

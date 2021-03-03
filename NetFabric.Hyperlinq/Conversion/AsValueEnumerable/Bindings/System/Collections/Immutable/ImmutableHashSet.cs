@@ -6,7 +6,7 @@ namespace NetFabric.Hyperlinq
 {
     public static class ImmutableHashSetExtensions
     {
-        // ImmutableHashSet<TSource> implements IReadOnlyCollection<TSource> and has a value-type enumerator that implements IEnumerator<TSource>
+        // ImmutableHashSet<TSource> is reference-type that implements IReadOnlyCollection<TSource> and has a value-type enumerator that implements IEnumerator<TSource>
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ReadOnlyCollectionExtensions.ValueEnumerable<ImmutableHashSet<TSource>, ImmutableHashSet<TSource>.Enumerator, ImmutableHashSet<TSource>.Enumerator, TSource, GetEnumerator<TSource>, GetEnumerator<TSource>> AsValueEnumerable<TSource>(this ImmutableHashSet<TSource> source)

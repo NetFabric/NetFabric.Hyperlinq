@@ -105,7 +105,7 @@ namespace NetFabric.Hyperlinq
                 => source.Contains<TList, TSource, TResult, TSelector>(item, default, selector, offset, Count);
 
             public int IndexOf(TResult item)
-                => ReadOnlyListExtensions.IndexOf(source, item, selector, offset, Count);
+                => ReadOnlyListExtensions.IndexOf<TList, TSource, TResult, TSelector>(source, item, selector, offset, Count);
 
             [ExcludeFromCodeCoverage]
             void ICollection<TResult>.Add(TResult item) 
@@ -177,7 +177,7 @@ namespace NetFabric.Hyperlinq
                     => selector.Invoke(source[index]);
                 object? IEnumerator.Current
                     // ReSharper disable once HeapView.PossibleBoxingAllocation
-                    => selector.Invoke(source[index])!;
+                    => selector.Invoke(source[index]);
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public bool MoveNext() 

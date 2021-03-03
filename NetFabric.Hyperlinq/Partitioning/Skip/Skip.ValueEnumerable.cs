@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -62,7 +61,7 @@ namespace NetFabric.Hyperlinq
                     => enumerator.Current;
                 readonly object? IEnumerator.Current
                     // ReSharper disable once HeapView.PossibleBoxingAllocation
-                    => enumerator.Current!;
+                    => enumerator.Current;
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public bool MoveNext()
@@ -82,7 +81,7 @@ namespace NetFabric.Hyperlinq
                 public readonly void Reset() 
                     => Throw.NotSupportedException();
 
-                public readonly void Dispose() 
+                public void Dispose() 
                     => enumerator.Dispose();
             }
 

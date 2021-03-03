@@ -7,7 +7,7 @@ namespace NetFabric.Hyperlinq
 {
     public static class ImmutableStackExtensions
     {
-        // ImmutableStack<TSource> implements IEnumerable<TSource> and has two enumerators:
+        // ImmutableStack<TSource> is reference-type that implements IEnumerable<TSource> and has two enumerators:
         // One that is a value-type and doesn't implement interfaces.
         // Another that is a reference-type and implements IEnumerator<TSource>.
         

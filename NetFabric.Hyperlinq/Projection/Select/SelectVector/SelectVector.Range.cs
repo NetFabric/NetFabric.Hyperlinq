@@ -2,7 +2,6 @@
 using System.Buffers;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 using System.Runtime.CompilerServices;
@@ -14,9 +13,7 @@ namespace NetFabric.Hyperlinq
     {
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static RangeSelectVectorEnumerable<TResult, FunctionWrapper<Vector<int>, Vector<TResult>>, FunctionWrapper<int, TResult>> SelectVector<TResult, TVectorSelector, TSelector>(int start, int count, Func<Vector<int>, Vector<TResult>> vectorSelector, Func<int, TResult> selector)
-            where TVectorSelector : struct, IFunction<Vector<int>, Vector<TResult>>
-            where TSelector : struct, IFunction<int, TResult>
+        static RangeSelectVectorEnumerable<TResult, FunctionWrapper<Vector<int>, Vector<TResult>>, FunctionWrapper<int, TResult>> SelectVector<TResult>(int start, int count, Func<Vector<int>, Vector<TResult>> vectorSelector, Func<int, TResult> selector)
             where TResult : struct
             => SelectVector<TResult, FunctionWrapper<Vector<int>, Vector<TResult>>, FunctionWrapper<int, TResult>>(start, count, new FunctionWrapper<Vector<int>, Vector<TResult>>(vectorSelector), new FunctionWrapper<int, TResult>(selector));
 
@@ -192,7 +189,7 @@ namespace NetFabric.Hyperlinq
                     end = value + enumerable.count;
                 }
 
-                public readonly TResult Current
+                public TResult Current
                 {
                     [MethodImpl(MethodImplOptions.AggressiveInlining)]
                     get => selector.Invoke(value);
@@ -218,15 +215,15 @@ namespace NetFabric.Hyperlinq
                     end = value + enumerable.count;
                 }
 
-                public readonly TResult Current
+                public TResult Current
                 {
                     [MethodImpl(MethodImplOptions.AggressiveInlining)]
                     get => selector.Invoke(value);
                 }
-                readonly TResult IEnumerator<TResult>.Current
+                TResult IEnumerator<TResult>.Current
                     => selector.Invoke(value);
-                readonly object? IEnumerator.Current
-                    // ReSharper disable once HeapView.PossibleBoxingAllocation
+                object IEnumerator.Current
+                    // ReSharper disable once HeapView.BoxingAllocation
                     => selector.Invoke(value);
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -272,7 +269,7 @@ namespace NetFabric.Hyperlinq
             public TResult[] ToArray()
             {
                 var result = Utils.AllocateUninitializedArray<TResult>(count);
-                ArrayExtensions.CopyRange<TResult, TVectorSelector, TSelector>(start, count, result.AsSpan(), vectorSelector, selector);
+                ArrayExtensions.CopyRange(start, count, result.AsSpan(), vectorSelector, selector);
                 return result;
             }
 
@@ -280,7 +277,7 @@ namespace NetFabric.Hyperlinq
             public IMemoryOwner<TResult> ToArray(MemoryPool<TResult> pool)
             {
                 var result = pool.RentSliced(count);
-                ArrayExtensions.CopyRange<TResult, TVectorSelector, TSelector>(start, count, result.Memory.Span, vectorSelector, selector);
+                ArrayExtensions.CopyRange(start, count, result.Memory.Span, vectorSelector, selector);
                 return result;
             }
 

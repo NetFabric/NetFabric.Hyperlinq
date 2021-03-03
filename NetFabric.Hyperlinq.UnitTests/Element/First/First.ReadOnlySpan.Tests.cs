@@ -31,8 +31,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
         {
             // Arrange
             var wrapped = (ReadOnlySpan<int>)source.AsSpan();
-            var expected = Enumerable
-                .First(source);
+            var expected = source
+                .First();
 
             // Act
             var result = wrapped.AsValueEnumerable()
@@ -69,8 +69,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
         {
             // Arrange
             var wrapped = (ReadOnlySpan<int>)source.AsSpan();
-            var expected = Enumerable
-                .First(source, predicate);
+            var expected = source
+                .First(predicate);
 
             // Act
             var result = wrapped.AsValueEnumerable()
@@ -108,8 +108,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
         {
             // Arrange
             var wrapped = (ReadOnlySpan<int>)source.AsSpan();
-            var expected = Enumerable
-                .Where(source, predicate)
+            var expected = source
+                .Where(predicate)
                 .First();
 
             // Act
@@ -148,8 +148,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
         {
             // Arrange
             var wrapped = (ReadOnlySpan<int>)source.AsSpan();
-            var expected = Enumerable
-                .Select(source, selector)
+            var expected = source
+                .Select(selector)
                 .First();
 
             // Act
@@ -188,8 +188,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
         {
             // Arrange
             var wrapped = (ReadOnlySpan<int>)source.AsSpan();
-            var expected = Enumerable
-                .Select(source, selector)
+            var expected = source
+                .Select(selector)
                 .First();
 
             // Act
@@ -229,8 +229,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.First
         {
             // Arrange
             var wrapped = (ReadOnlySpan<int>)source.AsSpan();
-            var expected = Enumerable
-                .Where(source, predicate)
+            var expected = source
+                .Where(predicate)
                 .Select(selector)
                 .First();
 

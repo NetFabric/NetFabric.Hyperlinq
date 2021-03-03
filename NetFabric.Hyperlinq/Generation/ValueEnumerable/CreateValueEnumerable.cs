@@ -11,7 +11,7 @@ namespace NetFabric.Hyperlinq
         
         public static CreateValueEnumerable<TEnumerator, TSource> Create<TEnumerator, TSource>(Func<TEnumerator> getEnumerator) 
             where TEnumerator : struct, IEnumerator<TSource>
-            => new CreateValueEnumerable<TEnumerator, TSource>(getEnumerator);
+            => new(getEnumerator);
 
         [StructLayout(LayoutKind.Auto)]
         public readonly partial struct CreateValueEnumerable<TEnumerator, TSource> 

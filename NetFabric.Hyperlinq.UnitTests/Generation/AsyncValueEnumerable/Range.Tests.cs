@@ -45,7 +45,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Generation.AsyncValueEnumerableTests
         public void Range_Skip_With_ValidData_Must_Succeed(int start, int count, int skip)
         {
             // Arrange
-            var expected = Enumerable.Skip(Enumerable.Range(start, count), skip);
+            var expected = Enumerable.Range(start, count).Skip(skip);
 
             // Act
             var result = AsyncValueEnumerable.Range(start, count).Skip(skip);
@@ -61,7 +61,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Generation.AsyncValueEnumerableTests
         public void Range_Take_With_ValidData_Must_Succeed(int start, int count, int take)
         {
             // Arrange
-            var expected = Enumerable.Take(Enumerable.Range(start, count), take);
+            var expected = Enumerable.Range(start, count).Take(take);
 
             // Act
             var result = AsyncValueEnumerable.Range(start, count).Take(take);
@@ -77,7 +77,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Generation.AsyncValueEnumerableTests
         public async ValueTask Range_AnyAsync_With_ValidData_Must_Succeed(int start, int count)
         {
             // Arrange
-            var expected = Enumerable.Any(Enumerable.Range(start, count));
+            var expected = Enumerable.Range(start, count).Any();
 
             // Act
             var result = await AsyncValueEnumerable.Range(start, count).AnyAsync();
@@ -92,10 +92,14 @@ namespace NetFabric.Hyperlinq.UnitTests.Generation.AsyncValueEnumerableTests
         public async ValueTask Range_ContainsAsync_With_ValidData_Must_Succeed(int start, int count, int value)
         {
             // Arrange
-            var expected = Enumerable.Contains(Enumerable.Range(start, count), value);
+            var expected = Enumerable
+                .Range(start, count)
+                .Contains(value);
 
             // Act
-            var result = await AsyncValueEnumerable.Range(start, count).ContainsAsync(value);
+            var result = await AsyncValueEnumerable
+                .Range(start, count)
+                .ContainsAsync(value);
 
             // Assert
             _ = result.Must()
@@ -107,7 +111,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Generation.AsyncValueEnumerableTests
         public async ValueTask Range_ToArray_With_ValidData_Must_Succeed(int start, int count)
         {
             // Arrange
-            var expected = Enumerable.ToArray(Enumerable.Range(start, count));
+            var expected = Enumerable.Range(start, count).ToArray();
 
             // Act
             var result = await AsyncValueEnumerable.Range(start, count).ToArrayAsync();
@@ -123,7 +127,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Generation.AsyncValueEnumerableTests
         public async ValueTask Range_With_ToList_Must_Succeed(int start, int count)
         {
             // Arrange
-            var expected = Enumerable.ToList(Enumerable.Range(start, count));
+            var expected = Enumerable.Range(start, count).ToList();
 
             // Act
             var result = await AsyncValueEnumerable.Range(start, count).ToListAsync();
