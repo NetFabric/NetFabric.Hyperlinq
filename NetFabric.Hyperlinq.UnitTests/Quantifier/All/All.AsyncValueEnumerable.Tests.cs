@@ -21,7 +21,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.All
 
             // Act
             var result = await wrapped
-                .AllAsync<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(predicate.AsAsync());
+                .AllAsync<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(predicate.AsAsync())
+                .ConfigureAwait(false);
 
             // Assert
             _ = result.Must()
@@ -42,7 +43,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.All
 
             // Act
             var result = await wrapped
-                .AllAsync<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(predicate.AsAsync());
+                .AllAsync<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(predicate.AsAsync())
+                .ConfigureAwait(false);
 
             // Assert
             _ = result.Must()

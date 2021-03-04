@@ -44,7 +44,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsAsyncValueEnumerable
             // Act
             var result = await wrapped
                 .AsAsyncValueEnumerable<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>()
-                .ToArrayAsync();
+                .ToArrayAsync()
+                .ConfigureAwait(false);
 
             // Assert
             _ = result.Must()
@@ -67,7 +68,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsAsyncValueEnumerable
             // Act
             var result = await wrapped
                 .AsAsyncValueEnumerable<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>()
-                .ToListAsync();
+                .ToListAsync()
+                .ConfigureAwait(false);
 
             // Assert
             _ = result.Must()

@@ -22,7 +22,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Aggregation.Count
 
             // Act
             var result = await wrapped
-                .CountAsync<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>();
+                .CountAsync<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>()
+                .ConfigureAwait(false);
 
             // Assert
             _ = result.Must()
@@ -44,7 +45,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Aggregation.Count
             // Act
             var result = await wrapped
                 .Where<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(predicate.AsAsync())
-                .CountAsync();
+                .CountAsync()
+                .ConfigureAwait(false);
 
             // Assert
             _ = result.Must()
@@ -67,7 +69,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Aggregation.Count
             // Act
             var result = await wrapped
                 .Where<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(predicate.AsAsync())
-                .CountAsync();
+                .CountAsync()
+                .ConfigureAwait(false);
 
             // Assert
             _ = result.Must()
