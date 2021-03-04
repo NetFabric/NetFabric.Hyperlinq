@@ -23,7 +23,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsValueEnumerable
 
             // Assert
             _ = result.Must()
-                .BeOfType<ReadOnlyListExtensions.ListValueEnumerable<int>>()
+                .BeOfType<ReadOnlyListExtensions.ValueEnumerable<IReadOnlyList<int>, int>>()
                 .BeEnumerableOf<int>()
                 .BeEqualTo(wrapped);
         }
