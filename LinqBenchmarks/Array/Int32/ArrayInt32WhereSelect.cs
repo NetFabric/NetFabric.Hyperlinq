@@ -38,7 +38,7 @@ namespace LinqBenchmarks.Array.Int32
         public int Linq()
         {
             var sum = 0;
-            foreach (var item in System.Linq.Enumerable.Where(source, item => item.IsEven()).Select(item => item * 2))
+            foreach (var item in source.Where(item => item.IsEven()).Select(item => item * 2))
                 sum += item;
             return sum;
         }

@@ -1,13 +1,11 @@
 ﻿using BenchmarkDotNet.Attributes;
-using JM.LinqFaster;
-using JM.LinqFaster.SIMD;
 using NetFabric.Hyperlinq;
 using StructLinq;
 using System.Linq;
 
-namespace LinqBenchmarks.Array.Int32
+namespace LinqBenchmarks.ImmutableArray.Int32
 {
-    public class ArrayInt32Select: ArrayInt32BenchmarkBase
+    public class ImmutableArrayInt32Select: ImmutableArrayInt32BenchmarkBase
     {
         [Benchmark(Baseline = true)]
         public int ForLoop()
@@ -33,35 +31,6 @@ namespace LinqBenchmarks.Array.Int32
         {
             var sum = 0;
             foreach (var item in source.Select(item => item * 2))
-                sum += item;
-            return sum;
-        }
-
-        [Benchmark]
-        public int LinqFaster()
-        {
-            var items = source.SelectF(item => item * 2);
-            var sum = 0;
-            foreach (var item in items)
-                sum += item;
-            return sum;
-        }
-
-        [Benchmark]
-        public int LinqFaster_SIMD()
-        {
-            var items = source.SelectS(item => item * 2, item => item * 2);
-            var sum = 0;
-            foreach (var item in items)
-                sum += item;
-            return sum;
-        }
-
-        [Benchmark]
-        public int LinqAF()
-        {
-            var sum = 0;
-            foreach (var item in global::LinqAF.ArrayExtensionMethods.Select(source, item => item * 2))
                 sum += item;
             return sum;
         }

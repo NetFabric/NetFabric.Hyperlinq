@@ -2,6 +2,7 @@
 using JM.LinqFaster;
 using NetFabric.Hyperlinq;
 using StructLinq;
+using System.Linq;
 
 namespace LinqBenchmarks.Array.Int32
 {
@@ -35,7 +36,7 @@ namespace LinqBenchmarks.Array.Int32
 
         [Benchmark]
         public int Linq()
-            => System.Linq.Enumerable.Count(source, item => item.IsEven());
+            => source.Count(item => item.IsEven());
 
         [Benchmark]
         public int LinqFaster()

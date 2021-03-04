@@ -36,8 +36,8 @@ namespace LinqBenchmarks.Array.Int32
 
         [Benchmark]
         public List<int> Linq()
-            => System.Linq.Enumerable
-                .Select(source, item => item * 2)
+            => source
+                .Select(item => item * 2)
                 .ToList();
 
         [Benchmark]

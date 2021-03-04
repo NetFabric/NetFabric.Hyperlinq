@@ -89,3 +89,11 @@ Benchmarks comparing the perfomance of [LINQ](https://docs.microsoft.com/en-us/d
 - [list.Where().Select().ToArray()](Results/List.ValueType.ListValueTypeWhereSelectToArray.md)
 - [list.Where().Select().ToList()](Results/List.ValueType.ListValueTypeWhereSelectToList.md)
 
+### `ImmutableArray<int>`
+
+- [array.Contains()](Results/ImmutableArray.Int32.ImmutableArrayInt32Contains.md)
+- [array.Select()](Results/ImmutableArray.Int32.ImmutableArrayInt32Select.md)
+- [array.Skip().Take().Select()](Results/ImmutableArray.Int32.ImmutableArrayInt32SkipTakeSelect.md)
+- [array.Sum()](Results/ImmutableArray.Int32.ImmutableArrayInt32Sum.md)
+- [array.Where()](Results/ImmutableArray.Int32.ImmutableArrayInt32Where.md)
+

@@ -38,8 +38,8 @@ namespace LinqBenchmarks.Array.Int32
 
         [Benchmark]
         public int[] Linq()
-            => System.Linq.Enumerable
-                .Where(source, item => item.IsEven()).Select(item => item * 2)
+            => source
+                .Where(item => item.IsEven()).Select(item => item * 2)
                 .ToArray();
 
         [Benchmark]

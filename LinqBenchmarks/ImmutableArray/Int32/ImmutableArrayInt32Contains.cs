@@ -1,13 +1,10 @@
 ﻿using BenchmarkDotNet.Attributes;
-using JM.LinqFaster;
-using JM.LinqFaster.SIMD;
 using NetFabric.Hyperlinq;
 using StructLinq;
-using System.Linq;
 
-namespace LinqBenchmarks.Array.Int32
+namespace LinqBenchmarks.ImmutableArray.Int32
 {
-    public class ArrayInt32Contains: ArrayInt32BenchmarkBase
+    public class ImmutableArrayInt32Contains: ImmutableArrayInt32BenchmarkBase
     {
         int value = int.MaxValue;
 
@@ -41,19 +38,6 @@ namespace LinqBenchmarks.Array.Int32
                 .Contains(value);
 
         [Benchmark]
-        public bool LinqFaster()
-            => source.ContainsF(value);
-
-        [Benchmark]
-        public bool LinqFaster_SIMD()
-            => source.ContainsS(value);
-
-        [Benchmark]
-        public bool LinqAF()
-            => global::LinqAF.ArrayExtensionMethods
-                .Contains(source, value);
-
-        [Benchmark]
         public bool StructLinq()
             => source
                 .ToStructEnumerable()
@@ -72,11 +56,5 @@ namespace LinqBenchmarks.Array.Int32
             => source
                 .AsValueEnumerable()
                 .Contains(value);
-
-        [Benchmark]
-        public bool Hyperlinq_SIMD()
-            => source
-                .AsValueEnumerable()
-                .ContainsVector(value);
     }
 }

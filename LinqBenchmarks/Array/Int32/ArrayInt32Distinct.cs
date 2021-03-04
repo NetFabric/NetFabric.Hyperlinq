@@ -53,7 +53,7 @@ namespace LinqBenchmarks.Array.Int32
         public int Linq()
         {
             var sum = 0;
-            foreach (var item in System.Linq.Enumerable.Distinct(source))
+            foreach (var item in source.Distinct())
                 sum += item;
             return sum;
         }

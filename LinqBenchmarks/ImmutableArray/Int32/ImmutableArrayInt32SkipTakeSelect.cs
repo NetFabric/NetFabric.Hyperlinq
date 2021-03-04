@@ -1,30 +1,33 @@
 ﻿using BenchmarkDotNet.Attributes;
 using JM.LinqFaster;
-using JM.LinqFaster.SIMD;
 using NetFabric.Hyperlinq;
 using StructLinq;
+using System.Collections.Generic;
 using System.Linq;
 
-namespace LinqBenchmarks.Array.Int32
+namespace LinqBenchmarks.ImmutableArray.Int32
 {
-    public class ArrayInt32Select: ArrayInt32BenchmarkBase
+    public class ImmutableArrayInt32SkipTakeSelect: ImmutableArrayInt32SkipTakeBenchmarkBase
     {
         [Benchmark(Baseline = true)]
         public int ForLoop()
         {
             var sum = 0;
-            var array = source;
-            for (var index = 0; index < array.Length; index++)
-                sum += array[index] * 2;
+            var end = Skip + Count;
+            for (var index = Skip; index < end; index++)
+                sum += source[index] * 2;
             return sum;
         }
 
         [Benchmark]
         public int ForeachLoop()
         {
+            using var enumerator = ((IEnumerable<int>)source).GetEnumerator();
+            for (var index = 0; index < Skip; index++)
+                _ = enumerator.MoveNext();
             var sum = 0;
-            foreach (var item in source)
-                sum += item * 2;
+            for (var index = 0; index < Count; index++)
+                sum += enumerator.Current * 2;
             return sum;
         }
 
@@ -32,36 +35,7 @@ namespace LinqBenchmarks.Array.Int32
         public int Linq()
         {
             var sum = 0;
-            foreach (var item in source.Select(item => item * 2))
-                sum += item;
-            return sum;
-        }
-
-        [Benchmark]
-        public int LinqFaster()
-        {
-            var items = source.SelectF(item => item * 2);
-            var sum = 0;
-            foreach (var item in items)
-                sum += item;
-            return sum;
-        }
-
-        [Benchmark]
-        public int LinqFaster_SIMD()
-        {
-            var items = source.SelectS(item => item * 2, item => item * 2);
-            var sum = 0;
-            foreach (var item in items)
-                sum += item;
-            return sum;
-        }
-
-        [Benchmark]
-        public int LinqAF()
-        {
-            var sum = 0;
-            foreach (var item in global::LinqAF.ArrayExtensionMethods.Select(source, item => item * 2))
+            foreach (var item in source.Skip(Skip).Take(Count).Select(item => item * 2))
                 sum += item;
             return sum;
         }
@@ -70,7 +44,11 @@ namespace LinqBenchmarks.Array.Int32
         public int StructLinq()
         {
             var sum = 0;
-            foreach (var item in source.ToStructEnumerable().Select(item => item * 2))
+            foreach (var item in source
+                .ToStructEnumerable()
+                .Skip(Skip)
+                .Take(Count)
+                .Select(item => item * 2))
                 sum += item;
             return sum;
         }
@@ -80,7 +58,11 @@ namespace LinqBenchmarks.Array.Int32
         {
             var sum = 0;
             var selector = new DoubleOfInt32();
-            foreach (var item in source.ToStructEnumerable().Select(ref selector, x => x, x => x))
+            foreach (var item in source
+                .ToStructEnumerable()
+                .Skip(Skip, x=> x)
+                .Take(Count, x=> x)
+                .Select(ref selector, x => x, x => x))
                 sum += item;
             return sum;
         }
@@ -91,44 +73,50 @@ namespace LinqBenchmarks.Array.Int32
         {
             var sum = 0;
             foreach (var item in source.AsValueEnumerable()
+                .Skip(Skip)
+                .Take(Count)
                 .Select(item => item * 2))
                 sum += item;
             return sum;
         }
 
         [Benchmark]
-        public int Hyperlinq_IFunction_Foreach()
+        public int Hyperlinq_Foreach_IFunction()
         {
             var sum = 0;
             foreach (var item in source.AsValueEnumerable()
+                .Skip(Skip)
+                .Take(Count)
                 .Select<int, DoubleOfInt32>())
                 sum += item;
             return sum;
         }
-
 #pragma warning restore HLQ010 // Consider using a 'for' loop instead.
 
         [Benchmark]
         public int Hyperlinq_For()
         {
-            var items = source.AsValueEnumerable()
-                .Select(item => item * 2);
             var sum = 0;
+            var items = source.AsValueEnumerable()
+                .Skip(Skip)
+                .Take(Count)
+                .Select(item => item * 2);
             for (var index = 0; index < items.Count; index++)
                 sum += items[index];
             return sum;
         }
 
         [Benchmark]
-        public int Hyperlinq_IFunction_For()
+        public int Hyperlinq_For_IFunction()
         {
-            var items = source.AsValueEnumerable()
-                .Select<int, DoubleOfInt32>();
             var sum = 0;
+            var items = source.AsValueEnumerable()
+                .Skip(Skip)
+                .Take(Count)
+                .Select<int, DoubleOfInt32>();
             for (var index = 0; index < items.Count; index++)
                 sum += items[index];
             return sum;
         }
-
     }
 }

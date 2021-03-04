@@ -37,7 +37,7 @@ namespace LinqBenchmarks.Array.Int32
 
         [Benchmark]
         public List<int> Linq()
-            => System.Linq.Enumerable.Where(source, item => item.IsEven()).Select(item => item * 2).ToList();
+            => source.Where(item => item.IsEven()).Select(item => item * 2).ToList();
 
         [Benchmark]
         public List<int> LinqFaster()
