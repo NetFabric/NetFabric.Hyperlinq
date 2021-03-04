@@ -46,7 +46,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.Where
             // Act
             var result = await wrapped
                 .Where<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(predicate.AsAsync())
-                .SumAsync().ConfigureAwait(false);
+                .SumAsync()
+                .ConfigureAwait(false);
 
             // Assert
             _ = result.Must()

@@ -44,7 +44,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Projection.Select
             // Act
             var result = await wrapped
                 .Select<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int, int>((item, _) => new ValueTask<int>(item))
-                .SumAsync().ConfigureAwait(false);
+                .SumAsync()
+                .ConfigureAwait(false);
 
             // Assert
             _ = result.Must()

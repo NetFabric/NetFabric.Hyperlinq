@@ -18,7 +18,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.FirstAsync
 
             // Act
             var result = await wrapped
-                .FirstAsync<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>();
+                .FirstAsync<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>()
+                .ConfigureAwait(false);
 
             // Assert
             _ = result.Must()
@@ -34,12 +35,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.FirstAsync
             // Arrange
             var wrapped = Wrap
                 .AsAsyncValueEnumerable(source);
-            var expected = source
-                .First();
+            var expected = Enumerable
+                .First(source);
 
             // Act
             var result = await wrapped
-                .FirstAsync<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>();
+                .FirstAsync<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>()
+                .ConfigureAwait(false);
 
             // Assert
             _ = result.Match(
@@ -58,7 +60,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.FirstAsync
             // Act
             var result = await wrapped
                 .Where<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(predicate.AsAsync())
-                .FirstAsync();
+                .FirstAsync()
+                .ConfigureAwait(false);
 
             // Assert
             _ = result.Must()
@@ -74,13 +77,14 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.FirstAsync
             // Arrange
             var wrapped = Wrap
                 .AsAsyncValueEnumerable(source);
-            var expected = source
-                .First(predicate);
+            var expected = Enumerable
+                .First(source, predicate);
 
             // Act
             var result = await wrapped
                 .Where<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(predicate.AsAsync())
-                .FirstAsync();
+                .FirstAsync()
+                .ConfigureAwait(false);
 
             // Assert
             _ = result.Match(
@@ -99,7 +103,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.FirstAsync
             // Act
             var result = await wrapped
                 .Where<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(predicate.AsAsync())
-                .FirstAsync();
+                .FirstAsync()
+                .ConfigureAwait(false);
 
             // Assert
             _ = result.Must()
@@ -115,14 +120,15 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.FirstAsync
             // Arrange
             var wrapped = Wrap
                 .AsAsyncValueEnumerable(source);
-            var expected = source
-                .Where(predicate)
+            var expected = Enumerable
+                .Where(source, predicate)
                 .First();
 
             // Act
             var result = await wrapped
                 .Where<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(predicate.AsAsync())
-                .FirstAsync();
+                .FirstAsync()
+                .ConfigureAwait(false);
 
             // Assert
             _ = result.Match(
@@ -141,7 +147,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.FirstAsync
             // Act
             var result = await wrapped
                 .Select<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int, string>(selector.AsAsync())
-                .FirstAsync();
+                .FirstAsync()
+                .ConfigureAwait(false);
 
             // Assert
             _ = result.Must()
@@ -157,14 +164,15 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.FirstAsync
             // Arrange
             var wrapped = Wrap
                 .AsAsyncValueEnumerable(source);
-            var expected = source
-                .Select(selector)
+            var expected = Enumerable
+                .Select(source, selector)
                 .First();
 
             // Act
             var result = await wrapped
                 .Select<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int, string>(selector.AsAsync())
-                .FirstAsync();
+                .FirstAsync()
+                .ConfigureAwait(false);
 
             // Assert
             _ = result.Match(
@@ -183,7 +191,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.FirstAsync
             // Act
             var result = await wrapped
                 .Select<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int, string>(selector.AsAsync())
-                .FirstAsync();
+                .FirstAsync()
+                .ConfigureAwait(false);
 
             // Assert
             _ = result.Must()
@@ -199,14 +208,15 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.FirstAsync
             // Arrange
             var wrapped = Wrap
                 .AsAsyncValueEnumerable(source);
-            var expected = source
-                .Select(selector)
+            var expected = Enumerable
+                .Select(source, selector)
                 .First();
 
             // Act
             var result = await wrapped
                 .Select<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int, string>(selector.AsAsync())
-                .FirstAsync();
+                .FirstAsync()
+                .ConfigureAwait(false);
 
             // Assert
             _ = result.Match(
@@ -223,10 +233,11 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.FirstAsync
                 .AsAsyncValueEnumerable(source);
 
             // Act
-            var result = await wrapped
-                .Where<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(predicate.AsAsync())
+            var result = await AsyncValueEnumerableExtensions
+                .Where<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, predicate.AsAsync())
                 .Select(selector.AsAsync())
-                .FirstAsync();
+                .FirstAsync()
+                .ConfigureAwait(false);
 
             // Assert
             _ = result.Must()
@@ -242,16 +253,17 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.FirstAsync
             // Arrange
             var wrapped = Wrap
                 .AsAsyncValueEnumerable(source);
-            var expected = source
-                .Where(predicate)
+            var expected = Enumerable
+                .Where(source, predicate)
                 .Select(selector)
                 .First();
 
             // Act
-            var result = await wrapped
-                .Where<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(predicate.AsAsync())
+            var result = await AsyncValueEnumerableExtensions
+                .Where<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, predicate.AsAsync())
                 .Select(selector.AsAsync())
-                .FirstAsync();
+                .FirstAsync()
+                .ConfigureAwait(false);
 
             // Assert
             _ = result.Match(

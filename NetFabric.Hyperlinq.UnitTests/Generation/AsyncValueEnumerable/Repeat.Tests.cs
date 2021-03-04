@@ -81,7 +81,10 @@ namespace NetFabric.Hyperlinq.UnitTests.Generation.ValueEnumerableTests
             var expected = Enumerable.Repeat(value, count).All(item => false);
 
             // Act
-            var result = await AsyncValueEnumerable.Repeat(value, count).AllAsync(item => false);
+            var result = await AsyncValueEnumerable
+                .Repeat(value, count)
+                .AllAsync(item => false)
+                .ConfigureAwait(false);
 
             // Assert
             _ = result.Must()
@@ -96,7 +99,10 @@ namespace NetFabric.Hyperlinq.UnitTests.Generation.ValueEnumerableTests
             var expected = Enumerable.Repeat(value, count).Any();
 
             // Act
-            var result = await AsyncValueEnumerable.Repeat(value, count).AnyAsync();
+            var result = await AsyncValueEnumerable
+                .Repeat(value, count)
+                .AnyAsync()
+                .ConfigureAwait(false);
 
             // Assert
             _ = result.Must()
@@ -111,7 +117,10 @@ namespace NetFabric.Hyperlinq.UnitTests.Generation.ValueEnumerableTests
             var expected = Enumerable.Repeat(value, count).ToArray();
 
             // Act
-            var result = await AsyncValueEnumerable.Repeat(value, count).ToArrayAsync();
+            var result = await AsyncValueEnumerable
+                .Repeat(value, count)
+                .ToArrayAsync()
+                .ConfigureAwait(false);
 
             // Assert
             _ = result.Must()
@@ -127,7 +136,10 @@ namespace NetFabric.Hyperlinq.UnitTests.Generation.ValueEnumerableTests
             var expected = Enumerable.Repeat(value, count).ToList();
 
             // Act
-            var result = await AsyncValueEnumerable.Repeat(value, count).ToListAsync();
+            var result = await AsyncValueEnumerable
+                .Repeat(value, count)
+                .ToListAsync()
+                .ConfigureAwait(false);
 
             // Assert
             _ = result.Must()

@@ -1,5 +1,6 @@
 ﻿using NetFabric.Assertive;
 using System.Collections.Immutable;
+using System.Linq;
 using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsValueEnumerable.Bindings.System.Collections.Immutable
@@ -20,9 +21,10 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsValueEnumerable.Bindings.Sy
 
             // Assert
             _ = result.Must()
-                .BeOfType<ReadOnlyListExtensions.ValueEnumerable<ImmutableArray<int>, int>>()
+                .BeOfType<ArrayExtensions.ArraySegmentValueEnumerable<int>>()
                 .BeEnumerableOf<int>()
-                .BeEqualTo(source);
+                .BeEqualTo(source, testRefStructs: false);
+            result.SequenceEqual(source).Must().BeTrue();
         }
     }
 }

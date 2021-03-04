@@ -23,7 +23,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
 
             // Act
             var result = await wrapped
-                .ToListAsync<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>();
+                .ToListAsync<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>()
+                .ConfigureAwait(false);
 
             // Assert
             _ = result.Must()
@@ -48,7 +49,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
             // Act
             var result = await wrapped
                 .Where<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(predicate.AsAsync())
-                .ToListAsync();
+                .ToListAsync()
+                .ConfigureAwait(false);
 
             // Assert
             _ = result.Must()
@@ -73,7 +75,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
             // Act
             var result = await wrapped
                 .Where<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(predicate.AsAsync())
-                .ToListAsync();
+                .ToListAsync()
+                .ConfigureAwait(false);
 
             // Assert
             _ = result.Must()
@@ -98,7 +101,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
             // Act
             var result = await wrapped
                 .Select<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int, string>(selector.AsAsync())
-                .ToListAsync();
+                .ToListAsync()
+                .ConfigureAwait(false);
 
             // Assert
             _ = result.Must()
@@ -123,7 +127,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
             // Act
             var result = await wrapped
                 .Select<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int, string>(selector.AsAsync())
-                .ToListAsync();
+                .ToListAsync()
+                .ConfigureAwait(false);
 
             // Assert
             _ = result.Must()
@@ -151,7 +156,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
             var result = await wrapped
                 .Where<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(predicate.AsAsync())
                 .Select(selector.AsAsync())
-                .ToListAsync();
+                .ToListAsync()
+                .ConfigureAwait(false);
 
             // Assert
             _ = result.Must()
