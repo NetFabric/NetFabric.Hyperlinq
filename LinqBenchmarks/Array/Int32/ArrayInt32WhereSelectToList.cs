@@ -18,7 +18,7 @@ namespace LinqBenchmarks.Array.Int32
             {
                 var item = array[index];
                 if (item.IsEven())
-                    list.Add(item * 2);
+                    list.Add(item * 3);
             }
             return list;
         }
@@ -30,35 +30,35 @@ namespace LinqBenchmarks.Array.Int32
             foreach (var item in source)
             {
                 if (item.IsEven())
-                    list.Add(item * 2);
+                    list.Add(item * 3);
             }
             return list;
         }
 
         [Benchmark]
         public List<int> Linq()
-            => source.Where(item => item.IsEven()).Select(item => item * 2).ToList();
+            => source.Where(item => item.IsEven()).Select(item => item * 3).ToList();
 
         [Benchmark]
         public List<int> LinqFaster()
-            => new List<int>(source.WhereSelectF(item => item.IsEven(), item => item * 2));
+            => new List<int>(source.WhereSelectF(item => item.IsEven(), item => item * 3));
 
         [Benchmark]
         public List<int> LinqAF()
-            => global::LinqAF.ArrayExtensionMethods.Where(source, item => item.IsEven()).Select(item => item * 2).ToList();
+            => global::LinqAF.ArrayExtensionMethods.Where(source, item => item.IsEven()).Select(item => item * 3).ToList();
 
         [Benchmark]
         public List<int> StructLinq()
             => source.ToStructEnumerable()
                 .Where(item => item.IsEven())
-                .Select(item => item * 2)
+                .Select(item => item * 3)
                 .ToList();
 
         [Benchmark]
         public List<int> StructLinq_IFunction()
         {
             var predicate = new Int32IsEven();
-            var selector = new DoubleOfInt32();
+            var selector = new TripleOfInt32();
             return source.ToStructEnumerable()
                 .Where(ref predicate, x => x)
                 .Select(ref selector, x => x, x => x)
@@ -69,12 +69,12 @@ namespace LinqBenchmarks.Array.Int32
         public List<int> Hyperlinq()
             => source.AsValueEnumerable()
                 .Where(item => item.IsEven())
-                .Select(item => item * 2).ToList();
+                .Select(item => item * 3).ToList();
 
         [Benchmark]
         public List<int> Hyperlinq_IFunction()
             => source.AsValueEnumerable()
                 .Where<Int32IsEven>()
-                .Select<int, DoubleOfInt32>().ToList();
+                .Select<int, TripleOfInt32>().ToList();
     }
 }

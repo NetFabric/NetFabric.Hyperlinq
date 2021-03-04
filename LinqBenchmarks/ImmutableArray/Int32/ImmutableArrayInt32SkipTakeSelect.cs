@@ -15,7 +15,7 @@ namespace LinqBenchmarks.ImmutableArray.Int32
             var sum = 0;
             var end = Skip + Count;
             for (var index = Skip; index < end; index++)
-                sum += source[index] * 2;
+                sum += source[index] * 3;
             return sum;
         }
 
@@ -27,7 +27,7 @@ namespace LinqBenchmarks.ImmutableArray.Int32
                 _ = enumerator.MoveNext();
             var sum = 0;
             for (var index = 0; index < Count; index++)
-                sum += enumerator.Current * 2;
+                sum += enumerator.Current * 3;
             return sum;
         }
 
@@ -35,7 +35,7 @@ namespace LinqBenchmarks.ImmutableArray.Int32
         public int Linq()
         {
             var sum = 0;
-            foreach (var item in source.Skip(Skip).Take(Count).Select(item => item * 2))
+            foreach (var item in source.Skip(Skip).Take(Count).Select(item => item * 3))
                 sum += item;
             return sum;
         }
@@ -48,7 +48,7 @@ namespace LinqBenchmarks.ImmutableArray.Int32
                 .ToStructEnumerable()
                 .Skip(Skip)
                 .Take(Count)
-                .Select(item => item * 2))
+                .Select(item => item * 3))
                 sum += item;
             return sum;
         }
@@ -57,7 +57,7 @@ namespace LinqBenchmarks.ImmutableArray.Int32
         public int StructLinq_IFunction()
         {
             var sum = 0;
-            var selector = new DoubleOfInt32();
+            var selector = new TripleOfInt32();
             foreach (var item in source
                 .ToStructEnumerable()
                 .Skip(Skip, x=> x)
@@ -75,7 +75,7 @@ namespace LinqBenchmarks.ImmutableArray.Int32
             foreach (var item in source.AsValueEnumerable()
                 .Skip(Skip)
                 .Take(Count)
-                .Select(item => item * 2))
+                .Select(item => item * 3))
                 sum += item;
             return sum;
         }
@@ -87,7 +87,7 @@ namespace LinqBenchmarks.ImmutableArray.Int32
             foreach (var item in source.AsValueEnumerable()
                 .Skip(Skip)
                 .Take(Count)
-                .Select<int, DoubleOfInt32>())
+                .Select<int, TripleOfInt32>())
                 sum += item;
             return sum;
         }
@@ -100,7 +100,7 @@ namespace LinqBenchmarks.ImmutableArray.Int32
             var items = source.AsValueEnumerable()
                 .Skip(Skip)
                 .Take(Count)
-                .Select(item => item * 2);
+                .Select(item => item * 3);
             for (var index = 0; index < items.Count; index++)
                 sum += items[index];
             return sum;
@@ -113,7 +113,7 @@ namespace LinqBenchmarks.ImmutableArray.Int32
             var items = source.AsValueEnumerable()
                 .Skip(Skip)
                 .Take(Count)
-                .Select<int, DoubleOfInt32>();
+                .Select<int, TripleOfInt32>();
             for (var index = 0; index < items.Count; index++)
                 sum += items[index];
             return sum;

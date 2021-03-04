@@ -15,7 +15,7 @@ namespace LinqBenchmarks.List.Int32
             var sum = 0;
             var end = Skip + Count;
             for (var index = Skip; index < end; index++)
-                sum += source[index] * 2;
+                sum += source[index] * 3;
             return sum;
         }
 
@@ -27,7 +27,7 @@ namespace LinqBenchmarks.List.Int32
                 _ = enumerator.MoveNext();
             var sum = 0;
             for (var index = 0; index < Count; index++)
-                sum += enumerator.Current * 2;
+                sum += enumerator.Current * 3;
             return sum;
         }
 
@@ -35,7 +35,7 @@ namespace LinqBenchmarks.List.Int32
         public int Linq()
         {
             var sum = 0;
-            foreach (var item in System.Linq.Enumerable.Skip(source, Skip).Take(Count).Select(item => item * 2))
+            foreach (var item in System.Linq.Enumerable.Skip(source, Skip).Take(Count).Select(item => item * 3))
                 sum += item;
             return sum;
         }
@@ -43,7 +43,7 @@ namespace LinqBenchmarks.List.Int32
         [Benchmark]
         public int LinqFaster()
         {
-            var items = source.SkipF(Skip).TakeF(Count).SelectF(item => item * 2);
+            var items = source.SkipF(Skip).TakeF(Count).SelectF(item => item * 3);
             var sum = 0;
             for (var index = 0; index < items.Count; index++)
                 sum += items[index];
@@ -54,7 +54,7 @@ namespace LinqBenchmarks.List.Int32
         public int LinqAF()
         {
             var sum = 0;
-            foreach (var item in global::LinqAF.ListExtensionMethods.Skip(source, Skip).Take(Count).Select(item => item * 2))
+            foreach (var item in global::LinqAF.ListExtensionMethods.Skip(source, Skip).Take(Count).Select(item => item * 3))
                 sum += item;
             return sum;
         }
@@ -67,7 +67,7 @@ namespace LinqBenchmarks.List.Int32
                 .ToStructEnumerable()
                 .Skip(Skip)
                 .Take(Count)
-                .Select(item => item * 2))
+                .Select(item => item * 3))
                 sum += item;
             return sum;
         }
@@ -76,7 +76,7 @@ namespace LinqBenchmarks.List.Int32
         public int StructLinq_IFunction()
         {
             var sum = 0;
-            var selector = new DoubleOfInt32();
+            var selector = new TripleOfInt32();
             foreach (var item in source
                 .ToStructEnumerable()
                 .Skip(Skip, x=> x)
@@ -91,7 +91,7 @@ namespace LinqBenchmarks.List.Int32
         public int Hyperlinq_Foreach()
         {
             var sum = 0;
-            foreach (var item in source.AsValueEnumerable().Skip(Skip).Take(Count).Select(item => item * 2))
+            foreach (var item in source.AsValueEnumerable().Skip(Skip).Take(Count).Select(item => item * 3))
                 sum += item;
             return sum;
         }
@@ -100,7 +100,7 @@ namespace LinqBenchmarks.List.Int32
         public int Hyperlinq_Foreach_IFunction()
         {
             var sum = 0;
-            foreach (var item in source.AsValueEnumerable().Skip(Skip).Take(Count).Select<int, DoubleOfInt32>())
+            foreach (var item in source.AsValueEnumerable().Skip(Skip).Take(Count).Select<int, TripleOfInt32>())
                 sum += item;
             return sum;
         }
@@ -110,7 +110,7 @@ namespace LinqBenchmarks.List.Int32
         public int Hyperlinq_For()
         {
             var sum = 0;
-            var items = source.AsValueEnumerable().Skip(Skip).Take(Count).Select(item => item * 2);
+            var items = source.AsValueEnumerable().Skip(Skip).Take(Count).Select(item => item * 3);
             for (var index = 0; index < items.Count; index++)
                 sum += items[index];
             return sum;

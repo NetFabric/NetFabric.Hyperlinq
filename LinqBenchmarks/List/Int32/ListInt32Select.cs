@@ -14,7 +14,7 @@ namespace LinqBenchmarks.List.Int32
         {
             var sum = 0;
             for (var index = 0; index < source.Count; index++)
-                sum += source[index] * 2;
+                sum += source[index] * 3;
             return sum;
         }
 
@@ -24,7 +24,7 @@ namespace LinqBenchmarks.List.Int32
         {
             var sum = 0;
             foreach (var item in source)
-                sum += item * 2;
+                sum += item * 3;
             return sum;
         }
 #pragma warning restore HLQ010 // Consider using a 'for' loop instead.
@@ -33,7 +33,7 @@ namespace LinqBenchmarks.List.Int32
         public int Linq()
         {
             var sum = 0;
-            foreach (var item in System.Linq.Enumerable.Select(source, item => item * 2))
+            foreach (var item in System.Linq.Enumerable.Select(source, item => item * 3))
                 sum += item;
             return sum;
         }
@@ -41,7 +41,7 @@ namespace LinqBenchmarks.List.Int32
         [Benchmark]
         public int LinqFaster()
         {
-            var items = source.SelectF(item => item * 2);
+            var items = source.SelectF(item => item * 3);
             var sum = 0;
             for (var index = 0; index < items.Count; index++)
                 sum += items[index];
@@ -52,7 +52,7 @@ namespace LinqBenchmarks.List.Int32
         public int LinqAF()
         {
             var sum = 0;
-            foreach (var item in global::LinqAF.ListExtensionMethods.Select(source, item => item * 2))
+            foreach (var item in global::LinqAF.ListExtensionMethods.Select(source, item => item * 3))
                 sum += item;
             return sum;
         }
@@ -63,7 +63,7 @@ namespace LinqBenchmarks.List.Int32
             var sum = 0;
             foreach (var item in source
                 .ToStructEnumerable()
-                .Select(item => item * 2))
+                .Select(item => item * 3))
                 sum += item;
             return sum;
         }
@@ -72,7 +72,7 @@ namespace LinqBenchmarks.List.Int32
         public int StructLinq_IFunction()
         {
             var sum = 0;
-            var selector = new DoubleOfInt32();
+            var selector = new TripleOfInt32();
             foreach (var item in source
                 .ToStructEnumerable()
                 .Select(ref selector, x => x, x => x))
@@ -86,7 +86,7 @@ namespace LinqBenchmarks.List.Int32
         {
             var sum = 0;
             foreach (var item in source.AsValueEnumerable()
-                .Select(item => item * 2))
+                .Select(item => item * 3))
                 sum += item;
             return sum;
         }
@@ -96,7 +96,7 @@ namespace LinqBenchmarks.List.Int32
         {
             var sum = 0;
             foreach (var item in source.AsValueEnumerable()
-                .Select<int, DoubleOfInt32>())
+                .Select<int, TripleOfInt32>())
                 sum += item;
             return sum;
         }
@@ -107,7 +107,7 @@ namespace LinqBenchmarks.List.Int32
         public int Hyperlinq_For()
         {
             var items = source.AsValueEnumerable()
-                .Select(item => item * 2);
+                .Select(item => item * 3);
             var sum = 0;
             for (var index = 0; index < items.Count; index++)
                 sum += items[index];
@@ -118,7 +118,7 @@ namespace LinqBenchmarks.List.Int32
         public int Hyperlinq_IFunction_For()
         {
             var items = source.AsValueEnumerable()
-                .Select<int, DoubleOfInt32>();
+                .Select<int, TripleOfInt32>();
             var sum = 0;
             for (var index = 0; index < items.Count; index++)
                 sum += items[index];

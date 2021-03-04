@@ -17,7 +17,7 @@ namespace LinqBenchmarks.Array.ValueType
             {
                 ref readonly var item = ref array[index];
                 if (item.IsEven())
-                    sum += item * 2;
+                    sum += item * 3;
             }
             return sum;
         }
@@ -29,7 +29,7 @@ namespace LinqBenchmarks.Array.ValueType
             foreach (var item in source)
             {
                 if (item.IsEven())
-                    sum += item * 2;
+                    sum += item * 3;
             }
             return sum;
         }
@@ -38,7 +38,7 @@ namespace LinqBenchmarks.Array.ValueType
         public FatValueType Linq()
         {
             var sum = default(FatValueType);
-            foreach (var item in System.Linq.Enumerable.Where(source, item => item.IsEven()).Select(item => item * 2))
+            foreach (var item in System.Linq.Enumerable.Where(source, item => item.IsEven()).Select(item => item * 3))
                 sum += item;
             return sum;
         }
@@ -46,7 +46,7 @@ namespace LinqBenchmarks.Array.ValueType
         [Benchmark]
         public FatValueType LinqFaster()
         {
-            var items = source.WhereSelectF(item => item.IsEven(), item => item * 2);
+            var items = source.WhereSelectF(item => item.IsEven(), item => item * 3);
             var sum = default(FatValueType);
             for (var index = 0; index < items.Length; index++)
                 sum += items[index];
@@ -57,7 +57,7 @@ namespace LinqBenchmarks.Array.ValueType
         public FatValueType LinqAF()
         {
             var sum = default(FatValueType);
-            foreach (var item in global::LinqAF.ArrayExtensionMethods.Where(source, item => item.IsEven()).Select(item => item * 2))
+            foreach (var item in global::LinqAF.ArrayExtensionMethods.Where(source, item => item.IsEven()).Select(item => item * 3))
                 sum += item;
             return sum;
         }
@@ -69,7 +69,7 @@ namespace LinqBenchmarks.Array.ValueType
             foreach (var item in source
                 .ToRefStructEnumerable()
                 .Where((in FatValueType item) => item.IsEven())
-                .Select((in FatValueType item) => item * 2))
+                .Select((in FatValueType item) => item * 3))
                 sum += item;
             return sum;
         }
@@ -79,7 +79,7 @@ namespace LinqBenchmarks.Array.ValueType
         {
             var sum = default(FatValueType);
             var predicate = new FatValueTypeIsEven();
-            var selector = new DoubleOfFatValueType();
+            var selector = new TripleOfFatValueType();
             foreach (var item in source
                 .ToRefStructEnumerable()
                 .Where(ref predicate, x => x)
@@ -94,7 +94,7 @@ namespace LinqBenchmarks.Array.ValueType
             var sum = default(FatValueType);
             foreach (var item in source.AsValueEnumerable()
                 .Where(item => item.IsEven())
-                .Select(item => item * 2))
+                .Select(item => item * 3))
                 sum += item;
             return sum;
         }
@@ -105,7 +105,7 @@ namespace LinqBenchmarks.Array.ValueType
             var sum = default(FatValueType);
             foreach (var item in source.AsValueEnumerable()
                 .Where<FatValueTypeIsEven>()
-                .Select<FatValueType, DoubleOfFatValueType>())
+                .Select<FatValueType, TripleOfFatValueType>())
                 sum += item;
             return sum;
         }

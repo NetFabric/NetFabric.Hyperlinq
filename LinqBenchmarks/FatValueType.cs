@@ -7,14 +7,14 @@ namespace LinqBenchmarks
         : IEquatable<FatValueType>
         , IComparable<FatValueType>
     {
-        public int Value0;
-        public long Value1;
-        public long Value2;
-        public long Value3;
-        public long Value4;
-        public long Value5;
-        public long Value6;
-        public long Value7;
+        public readonly int Value0 { get; }
+        public readonly long Value1 { get; }
+        public readonly long Value2 { get; }
+        public readonly long Value3 { get; }
+        public readonly long Value4 { get; }
+        public readonly long Value5 { get; }
+        public readonly long Value6 { get; }
+        public readonly long Value7 { get; }
 
         public FatValueType(int value)
         {

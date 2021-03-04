@@ -15,7 +15,7 @@ namespace LinqBenchmarks.Range
         {
             var list = new List<int>();
             for (var index = 0; index < Count; index++)
-                list.Add((index + Start) * 2);
+                list.Add((index + Start) * 3);
             return list;
         }
 
@@ -24,7 +24,7 @@ namespace LinqBenchmarks.Range
         {
             var list = new List<int>();
             foreach (var value in Range(Start, Count))
-                list.Add(value * 2);
+                list.Add(value * 3);
             return list;
 
             static IEnumerable<int> Range(int start, int count)
@@ -37,27 +37,27 @@ namespace LinqBenchmarks.Range
 
         [Benchmark]
         public List<int> Linq()
-            => System.Linq.Enumerable.Range(Start, Count).Select(item => item * 2).ToList();
+            => System.Linq.Enumerable.Range(Start, Count).Select(item => item * 3).ToList();
 
         [Benchmark]
         public List<int> LinqFaster()
-            => new List<int>(JM.LinqFaster.LinqFaster.RangeArrayF(Start, Count).SelectF(item => item * 2));
+            => new List<int>(JM.LinqFaster.LinqFaster.RangeArrayF(Start, Count).SelectF(item => item * 3));
 
         [Benchmark]
         public List<int> LinqAF()
-            => global::LinqAF.Enumerable.Range(Start, Count).Select(item => item * 2).ToList();
+            => global::LinqAF.Enumerable.Range(Start, Count).Select(item => item * 3).ToList();
 
         [Benchmark]
         public List<int> StructLinq()
             => StructEnumerable
                 .Range(Start, Count)
-                .Select(item => item * 2)
+                .Select(item => item * 3)
                 .ToList();
 
         [Benchmark]
         public List<int> StructLinq_IFunction()
         {
-            var selector = new DoubleOfInt32();
+            var selector = new TripleOfInt32();
             return StructEnumerable
                 .Range(Start, Count)
                 .Select(ref selector, x => x, x => x)
@@ -68,28 +68,28 @@ namespace LinqBenchmarks.Range
         public List<int> Hyperlinq()
             => ValueEnumerable
                 .Range(Start, Count)
-                .Select(item => item * 2)
+                .Select(item => item * 3)
                 .ToList();
 
         [Benchmark]
         public List<int> Hyperlinq_IFunction()
             => ValueEnumerable
                 .Range(Start, Count)
-                .Select<int, DoubleOfInt32>()
+                .Select<int, TripleOfInt32>()
                 .ToList();
 
         [Benchmark]
         public List<int> Hyperlinq_SIMD()
             => ValueEnumerable
                 .Range(Start, Count)
-                .SelectVector(item => item * 2, item => item * 2)
+                .SelectVector(item => item * 3, item => item * 3)
                 .ToList();
 
         [Benchmark]
         public List<int> Hyperlinq_IFunction_SIMD()
             => ValueEnumerable
                 .Range(Start, Count)
-                .SelectVector<int, DoubleOfInt32>()
+                .SelectVector<int, TripleOfInt32>()
                 .ToList();
     }
 }

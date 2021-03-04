@@ -12,7 +12,7 @@ namespace LinqBenchmarks.Enumerable.Int32
         {
             var sum = 0;
             foreach (var item in source)
-                sum += item * 2;
+                sum += item * 3;
             return sum;
         }
 
@@ -20,7 +20,7 @@ namespace LinqBenchmarks.Enumerable.Int32
         public int Linq()
         {
             var sum = 0;
-            foreach (var item in source.Select(item => item * 2))
+            foreach (var item in source.Select(item => item * 3))
                 sum += item;
             return sum;
         }
@@ -29,7 +29,7 @@ namespace LinqBenchmarks.Enumerable.Int32
         public int LinqAF()
         {
             var sum = 0;
-            foreach (var item in global::LinqAF.IEnumerableExtensionMethods.Select(source, item => item * 2))
+            foreach (var item in global::LinqAF.IEnumerableExtensionMethods.Select(source, item => item * 3))
                 sum += item;
             return sum;
         }
@@ -40,7 +40,7 @@ namespace LinqBenchmarks.Enumerable.Int32
             var sum = 0;
             foreach (var item in source
                 .ToStructEnumerable()
-                .Select(item => item * 2))
+                .Select(item => item * 3))
                 sum += item;
             return sum;
         }
@@ -49,7 +49,7 @@ namespace LinqBenchmarks.Enumerable.Int32
         public int StructLinq_IFunction()
         {
             var sum = 0;
-            var selector = new DoubleOfInt32();
+            var selector = new TripleOfInt32();
             foreach (var item in source
                 .ToStructEnumerable()
                 .Select(ref selector, x => x, x => x))
@@ -61,7 +61,7 @@ namespace LinqBenchmarks.Enumerable.Int32
         public int Hyperlinq_Foreach()
         {
             var sum = 0;
-            foreach (var item in source.AsValueEnumerable().Select(item => item * 2))
+            foreach (var item in source.AsValueEnumerable().Select(item => item * 3))
                 sum += item;
             return sum;
         }
@@ -70,7 +70,7 @@ namespace LinqBenchmarks.Enumerable.Int32
         public int Hyperlinq_Foreach_IFunction()
         {
             var sum = 0;
-            foreach (var item in source.AsValueEnumerable().Select<int, DoubleOfInt32>())
+            foreach (var item in source.AsValueEnumerable().Select<int, TripleOfInt32>())
                 sum += item;
             return sum;
         }

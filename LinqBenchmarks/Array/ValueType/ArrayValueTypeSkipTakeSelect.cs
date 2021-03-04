@@ -17,7 +17,7 @@ namespace LinqBenchmarks.Array.ValueType
             for (var index = Skip; index < end; index++)
             {
                 ref readonly var item = ref source[index];
-                sum += item * 2;
+                sum += item * 3;
             }
             return sum;
         }
@@ -30,7 +30,7 @@ namespace LinqBenchmarks.Array.ValueType
                 _ = enumerator.MoveNext();
             var sum = default(FatValueType);
             for (var index = 0; index < Count; index++)
-                sum += enumerator.Current * 2;
+                sum += enumerator.Current * 3;
             return sum;
         }
 
@@ -38,7 +38,7 @@ namespace LinqBenchmarks.Array.ValueType
         public FatValueType Linq()
         {
             var sum = default(FatValueType);
-            foreach (var item in System.Linq.Enumerable.Skip(source, Skip).Take(Count).Select(item => item * 2))
+            foreach (var item in System.Linq.Enumerable.Skip(source, Skip).Take(Count).Select(item => item * 3))
                 sum += item;
             return sum;
         }
@@ -46,7 +46,7 @@ namespace LinqBenchmarks.Array.ValueType
         [Benchmark]
         public FatValueType LinqFaster()
         {
-            var items = source.SkipF(Skip).TakeF(Count).SelectF(item => item * 2);
+            var items = source.SkipF(Skip).TakeF(Count).SelectF(item => item * 3);
             var sum = default(FatValueType);
             for (var index = 0; index < items.Length; index++)
                 sum += items[index];
@@ -57,7 +57,7 @@ namespace LinqBenchmarks.Array.ValueType
         public FatValueType LinqAF()
         {
             var sum = default(FatValueType);
-            foreach (var item in global::LinqAF.ArrayExtensionMethods.Skip(source, Skip).Take(Count).Select(item => item * 2))
+            foreach (var item in global::LinqAF.ArrayExtensionMethods.Skip(source, Skip).Take(Count).Select(item => item * 3))
                 sum += item;
             return sum;
         }
@@ -70,7 +70,7 @@ namespace LinqBenchmarks.Array.ValueType
                 .ToRefStructEnumerable()
                 .Skip(Skip)
                 .Take(Count)
-                .Select((in FatValueType element) => element * 2))
+                .Select((in FatValueType element) => element * 3))
                 sum += item;
             return sum;
         }
@@ -80,7 +80,7 @@ namespace LinqBenchmarks.Array.ValueType
         public FatValueType StructLinq_IFunction()
         {
             var sum = default(FatValueType);
-            var selector = new DoubleOfFatValueType();
+            var selector = new TripleOfFatValueType();
 
             foreach (var item in source
                 .ToRefStructEnumerable()
@@ -99,7 +99,7 @@ namespace LinqBenchmarks.Array.ValueType
             foreach (var item in source.AsValueEnumerable()
                 .Skip(Skip)
                 .Take(Count)
-                .Select(item => item * 2))
+                .Select(item => item * 3))
                 sum += item;
             return sum;
         }
@@ -111,7 +111,7 @@ namespace LinqBenchmarks.Array.ValueType
             foreach (var item in source.AsValueEnumerable()
                 .Skip(Skip)
                 .Take(Count)
-                .Select<FatValueType, DoubleOfFatValueType>())
+                .Select<FatValueType, TripleOfFatValueType>())
                 sum += item;
             return sum;
         }
@@ -124,7 +124,7 @@ namespace LinqBenchmarks.Array.ValueType
             var items = source.AsValueEnumerable()
                 .Skip(Skip)
                 .Take(Count)
-                .Select(item => item * 2);
+                .Select(item => item * 3);
             for (var index = 0; index < items.Count; index++)
                 sum += items[index];
             return sum;
@@ -137,7 +137,7 @@ namespace LinqBenchmarks.Array.ValueType
             var items = source.AsValueEnumerable()
                 .Skip(Skip)
                 .Take(Count)
-                .Select<FatValueType, DoubleOfFatValueType>();
+                .Select<FatValueType, TripleOfFatValueType>();
             for (var index = 0; index < items.Count; index++)
                 sum += items[index];
             return sum;

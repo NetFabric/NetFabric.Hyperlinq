@@ -17,7 +17,7 @@ namespace LinqBenchmarks.List.ValueType
             {
                 var item = source[index];
                 if (item.IsEven())
-                    list.Add(item * 2);
+                    list.Add(item * 3);
             }
             return list;
         }
@@ -30,7 +30,7 @@ namespace LinqBenchmarks.List.ValueType
             foreach (var item in source)
             {
                 if (item.IsEven())
-                    list.Add(item * 2);
+                    list.Add(item * 3);
             }
             return list;
         }
@@ -40,18 +40,18 @@ namespace LinqBenchmarks.List.ValueType
         public List<FatValueType> Linq()
             => System.Linq.Enumerable
                 .Where(source, item => item.IsEven())
-                .Select(item => item * 2)
+                .Select(item => item * 3)
                 .ToList();
 
         [Benchmark]
         public List<FatValueType> LinqFaster()
-            => new List<FatValueType>(source.WhereSelectF(item => item.IsEven(), item => item * 2));
+            => new List<FatValueType>(source.WhereSelectF(item => item.IsEven(), item => item * 3));
 
         [Benchmark]
         public List<FatValueType> LinqAF()
             => global::LinqAF.ListExtensionMethods
                 .Where(source, item => item.IsEven())
-                .Select(item => item * 2)
+                .Select(item => item * 3)
                 .ToList();
 
         [Benchmark]
@@ -59,14 +59,14 @@ namespace LinqBenchmarks.List.ValueType
             => source
                 .ToRefStructEnumerable()
                 .Where((in FatValueType item) => item.IsEven())
-                .Select((in FatValueType item) => item * 2)
+                .Select((in FatValueType item) => item * 3)
                 .ToList();
 
         [Benchmark]
         public List<FatValueType> StructLinq_IFunction()
         {
             var predicate = new FatValueTypeIsEven();
-            var selector = new DoubleOfFatValueType();
+            var selector = new TripleOfFatValueType();
             return source.ToRefStructEnumerable()
                 .Where(ref predicate, x => x)
                 .Select(ref selector, x => x, x => x)
@@ -77,14 +77,14 @@ namespace LinqBenchmarks.List.ValueType
         public List<FatValueType> Hyperlinq()
             => source.AsValueEnumerable()
                 .Where(item => item.IsEven())
-                .Select(item => item * 2)
+                .Select(item => item * 3)
                 .ToList();
 
         [Benchmark]
         public List<FatValueType> Hyperlinq_IFunction()
             => source.AsValueEnumerable()
                 .Where<FatValueTypeIsEven>()
-                .Select<FatValueType, DoubleOfFatValueType>()
+                .Select<FatValueType, TripleOfFatValueType>()
                 .ToList();
     }
 }

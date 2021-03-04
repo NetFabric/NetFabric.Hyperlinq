@@ -16,7 +16,7 @@ namespace LinqBenchmarks.Range
         {
             var array = new int[Count];
             for (var index = 0; index < Count; index++)
-                array[index] = (index + Start) * 2;
+                array[index] = (index + Start) * 3;
             return array;
         }
 
@@ -24,38 +24,38 @@ namespace LinqBenchmarks.Range
         public int[] Linq()
             => System.Linq.Enumerable
                 .Range(Start, Count)
-                .Select(item => item * 2)
+                .Select(item => item * 3)
                 .ToArray();
 
         [Benchmark]
         public int[] LinqFaster()
             => JM.LinqFaster.LinqFaster
                 .RangeArrayF(Start, Count)
-                .SelectF(item => item * 2);
+                .SelectF(item => item * 3);
 
         [Benchmark]
         public int[] LinqFaster_SIMD()
             => LinqFasterSIMD
                 .RangeS(Start, Count)
-                .SelectS(item => item * 2, item => item * 2);
+                .SelectS(item => item * 3, item => item * 3);
 
         [Benchmark]
         public int[] LinqAF()
             => global::LinqAF.Enumerable
-                .Range(Start, Count).Select(item => item * 2)
+                .Range(Start, Count).Select(item => item * 3)
                 .ToArray();
 
         [Benchmark]
         public int[] StructLinq()
             => StructEnumerable
                 .Range(Start, Count)
-                .Select(item => item * 2)
+                .Select(item => item * 3)
                 .ToArray();
 
         [Benchmark]
         public int[] StructLinq_IFunction()
         {
-            var selector = new DoubleOfInt32();
+            var selector = new TripleOfInt32();
             return StructEnumerable
                 .Range(Start, Count)
                 .Select(ref selector, x => x, x => x)
@@ -66,28 +66,28 @@ namespace LinqBenchmarks.Range
         public int[] Hyperlinq()
             => ValueEnumerable
                 .Range(Start, Count)
-                .Select(item => item * 2)
+                .Select(item => item * 3)
                 .ToArray();
 
         [Benchmark]
         public int[] Hyperlinq_IFunction()
             => ValueEnumerable
                 .Range(Start, Count)
-                .Select<int, DoubleOfInt32>()
+                .Select<int, TripleOfInt32>()
                 .ToArray();
 
         [Benchmark]
         public int[] Hyperlinq_SIMD()
             => ValueEnumerable
                 .Range(Start, Count)
-                .SelectVector(item => item * 2, item => item * 2)
+                .SelectVector(item => item * 3, item => item * 3)
                 .ToArray();
 
         [Benchmark]
         public int[] Hyperlinq_IFunction_SIMD()
             => ValueEnumerable
                 .Range(Start, Count)
-                .SelectVector<int, DoubleOfInt32>()
+                .SelectVector<int, TripleOfInt32>()
                 .ToArray();
     }
 }

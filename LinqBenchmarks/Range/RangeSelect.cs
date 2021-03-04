@@ -17,7 +17,7 @@ namespace LinqBenchmarks.Range
             var sum = 0;
             var end = Start + Count;
             for (var value = Start; value < end; value++)
-                sum += value * 2;
+                sum += value * 3;
             return sum;
         }
 
@@ -26,7 +26,7 @@ namespace LinqBenchmarks.Range
         {
             var sum = 0;
             foreach (var value in Range(Start, Count))
-                sum += value * 2;
+                sum += value * 3;
             return sum;
 
             static IEnumerable<int> Range(int start, int count)
@@ -43,7 +43,7 @@ namespace LinqBenchmarks.Range
             var sum = 0;
             foreach (var item in System.Linq.Enumerable
                 .Range(Start, Count)
-                .Select(item => item * 2))
+                .Select(item => item * 3))
                 sum += item;
             return sum;
         }
@@ -53,7 +53,7 @@ namespace LinqBenchmarks.Range
         {
             var items = JM.LinqFaster.LinqFaster
                 .RangeArrayF(Start, Count)
-                .SelectF(item => item * 2);
+                .SelectF(item => item * 3);
             var sum = 0;
             for (var index = 0; index < items.Length; index++)
                 sum += items[index];
@@ -65,7 +65,7 @@ namespace LinqBenchmarks.Range
         {
             var items = LinqFasterSIMD
                 .RangeS(Start, Count)
-                .SelectS(item => item * 2, item => item * 2);
+                .SelectS(item => item * 3, item => item * 3);
             var sum = 0;
             for (var index = 0; index < items.Length; index++)
                 sum += items[index];
@@ -78,7 +78,7 @@ namespace LinqBenchmarks.Range
             var sum = 0;
             foreach (var item in global::LinqAF.Enumerable
                 .Range(Start, Count)
-                .Select(item => item * 2))
+                .Select(item => item * 3))
                 sum += item;
             return sum;
         }
@@ -89,7 +89,7 @@ namespace LinqBenchmarks.Range
             var sum = 0;
             foreach (var item in StructEnumerable
                 .Range(Start, Count)
-                .Select(item => item * 2))
+                .Select(item => item * 3))
                 sum += item;
             return sum;
         }
@@ -98,7 +98,7 @@ namespace LinqBenchmarks.Range
         public int StructLinq_IFunction()
         {
             var sum = 0;
-            var selector = new DoubleOfInt32();
+            var selector = new TripleOfInt32();
             foreach (var item in StructEnumerable
                 .Range(Start, Count)
                 .Select(ref selector, x => x, x => x))
@@ -113,7 +113,7 @@ namespace LinqBenchmarks.Range
             var sum = 0;
             foreach (var item in ValueEnumerable
                 .Range(Start, Count)
-                .Select(item => item * 2))
+                .Select(item => item * 3))
                 sum += item;
             return sum;
         }
@@ -124,7 +124,7 @@ namespace LinqBenchmarks.Range
             var sum = 0;
             foreach (var item in ValueEnumerable
                 .Range(Start, Count)
-                .Select<int, DoubleOfInt32>())
+                .Select<int, TripleOfInt32>())
                 sum += item;
             return sum;
         }

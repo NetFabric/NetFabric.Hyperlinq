@@ -12,7 +12,7 @@ namespace LinqBenchmarks.List.ValueType
         {
             var sum = default(FatValueType);
             for (var index = 0; index < source.Count; index++)
-                sum += source[index] * 2;
+                sum += source[index] * 3;
             return sum;
         }
 
@@ -22,7 +22,7 @@ namespace LinqBenchmarks.List.ValueType
         {
             var sum = default(FatValueType);
             foreach (var item in source)
-                sum += item * 2;
+                sum += item * 3;
             return sum;
         }
 #pragma warning restore HLQ010 // Consider using a 'for' loop instead.
@@ -31,7 +31,7 @@ namespace LinqBenchmarks.List.ValueType
         public FatValueType Linq()
         {
             var sum = default(FatValueType);
-            foreach (var item in System.Linq.Enumerable.Select(source, item => item * 2))
+            foreach (var item in System.Linq.Enumerable.Select(source, item => item * 3))
                 sum += item;
             return sum;
         }
@@ -39,7 +39,7 @@ namespace LinqBenchmarks.List.ValueType
         [Benchmark]
         public FatValueType LinqFaster()
         {
-            var items = source.SelectF(item => item * 2);
+            var items = source.SelectF(item => item * 3);
             var sum = default(FatValueType);
             for (var index = 0; index < items.Count; index++)
                 sum += items[index];
@@ -50,7 +50,7 @@ namespace LinqBenchmarks.List.ValueType
         public FatValueType LinqAF()
         {
             var sum = default(FatValueType);
-            foreach (var item in global::LinqAF.ListExtensionMethods.Select(source, item => item * 2))
+            foreach (var item in global::LinqAF.ListExtensionMethods.Select(source, item => item * 3))
                 sum += item;
             return sum;
         }
@@ -61,7 +61,7 @@ namespace LinqBenchmarks.List.ValueType
             var sum = default(FatValueType);
             foreach (var item in source
                 .ToRefStructEnumerable()
-                .Select((in FatValueType x) => x * 2))
+                .Select((in FatValueType x) => x * 3))
                 sum += item;
             return sum;
         }
@@ -70,7 +70,7 @@ namespace LinqBenchmarks.List.ValueType
         public FatValueType StructLinq_IFunction()
         {
             var sum = default(FatValueType);
-            var selector = new DoubleOfFatValueType();
+            var selector = new TripleOfFatValueType();
             foreach (var item in source
                 .ToRefStructEnumerable()
                 .Select(ref selector, x => x, x => x))
@@ -83,7 +83,7 @@ namespace LinqBenchmarks.List.ValueType
         public FatValueType Hyperlinq_Foreach()
         {
             var sum = default(FatValueType);
-            foreach (var item in source.AsValueEnumerable().Select(item => item * 2))
+            foreach (var item in source.AsValueEnumerable().Select(item => item * 3))
                 sum += item;
             return sum;
         }
@@ -92,7 +92,7 @@ namespace LinqBenchmarks.List.ValueType
         public FatValueType Hyperlinq_Foreach_IFunction()
         {
             var sum = default(FatValueType);
-            foreach (var item in source.AsValueEnumerable().Select<FatValueType, DoubleOfFatValueType>())
+            foreach (var item in source.AsValueEnumerable().Select<FatValueType, TripleOfFatValueType>())
                 sum += item;
             return sum;
         }
@@ -101,7 +101,7 @@ namespace LinqBenchmarks.List.ValueType
         [Benchmark]
         public FatValueType Hyperlinq_For()
         {
-            var items = source.AsValueEnumerable().Select(item => item * 2);
+            var items = source.AsValueEnumerable().Select(item => item * 3);
             var sum = default(FatValueType);
             for (var index = 0; index < items.Count; index++)
                 sum += items[index];
@@ -111,7 +111,7 @@ namespace LinqBenchmarks.List.ValueType
         [Benchmark]
         public FatValueType Hyperlinq_For_IFunction()
         {
-            var items = source.AsValueEnumerable().Select<FatValueType, DoubleOfFatValueType>();
+            var items = source.AsValueEnumerable().Select<FatValueType, TripleOfFatValueType>();
             var sum = default(FatValueType);
             for (var index = 0; index < items.Count; index++)
                 sum += items[index];

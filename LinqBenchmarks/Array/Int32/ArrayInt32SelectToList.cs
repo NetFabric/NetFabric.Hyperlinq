@@ -18,7 +18,7 @@ namespace LinqBenchmarks.Array.Int32
             for (var index = 0; index < array.Length; index++)
             {
                 var item = array[index];
-                list.Add(item * 2);
+                list.Add(item * 3);
             }
             return list;
         }
@@ -29,7 +29,7 @@ namespace LinqBenchmarks.Array.Int32
             var list = new List<int>();
             foreach (var item in source)
             {
-                list.Add(item * 2);
+                list.Add(item * 3);
             }
             return list;
         }
@@ -37,33 +37,33 @@ namespace LinqBenchmarks.Array.Int32
         [Benchmark]
         public List<int> Linq()
             => source
-                .Select(item => item * 2)
+                .Select(item => item * 3)
                 .ToList();
 
         [Benchmark]
         public List<int> LinqFaster()
-            => new List<int>(source.SelectF(item => item * 2));
+            => new List<int>(source.SelectF(item => item * 3));
 
         [Benchmark]
         public List<int> LinqFaster_SIMD()
-            => new List<int>(source.SelectS(item => item * 2, item => item * 2));
+            => new List<int>(source.SelectS(item => item * 3, item => item * 3));
 
         [Benchmark]
         public List<int> LinqAF()
             => global::LinqAF.ArrayExtensionMethods
-                .Select(source, item => item * 2)
+                .Select(source, item => item * 3)
                 .ToList();
 
         [Benchmark]
         public List<int> StructLinq()
             => source.ToStructEnumerable()
-                .Select(item => item * 2)
+                .Select(item => item * 3)
                 .ToList();
 
         [Benchmark]
         public List<int> StructLinq_IFunction()
         {
-            var selector = new DoubleOfInt32();
+            var selector = new TripleOfInt32();
             return source.ToStructEnumerable()
                 .Select(ref selector, x => x, x => x)
                 .ToList();
@@ -72,25 +72,25 @@ namespace LinqBenchmarks.Array.Int32
         [Benchmark]
         public List<int> Hyperlinq()
             => source.AsValueEnumerable()
-                .Select(item => item * 2)
+                .Select(item => item * 3)
                 .ToList();
 
         [Benchmark]
         public List<int> Hyperlinq_IFunction()
            => source.AsValueEnumerable()
-                .Select<int, DoubleOfInt32>()
+                .Select<int, TripleOfInt32>()
                 .ToList();
 
         [Benchmark]
         public List<int> Hyperlinq_SIMD()
             => source.AsValueEnumerable()
-                .SelectVector(item => item * 2, item => item * 2)
+                .SelectVector(item => item * 3, item => item * 3)
                 .ToList();
 
         [Benchmark]
         public List<int> Hyperlinq_IFunction_SIMD()
            => source.AsValueEnumerable()
-                .SelectVector<int, int, DoubleOfInt32>()
+                .SelectVector<int, int, TripleOfInt32>()
                 .ToList();
     }
 }
