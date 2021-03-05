@@ -106,7 +106,7 @@ using System.Linq;
 using NetFabric.Hyperlinq; // add this directive
 ```
 
-- Use the methods `AsValueEnumerable()`or `AsAsyncValueEnumerable()` to make any collection usable with `NetFabric.Hyperlinq`. This includes arrays, `Memory<>`, `ReadOnlyMemory<>`, BCL collections, and any other implementation of `IEnumerable<>` or `IAsyncEnumerable<>`. It's not required for `Span<>` and `ReadOnlySpan<>`.
+- Use the methods `AsValueEnumerable()` to make any collection usable with `NetFabric.Hyperlinq`. This includes arrays, `Memory<>`, `ReadOnlyMemory<>`, `Span<>`, `ReadOnlySpan<>`, BCL collections, and any other implementation of `IEnumerable<>`. Use `AsAsyncValueEnumerable()` for any implementation of `IAsyncEnumerable<>`.
 
 ``` csharp
 public static void Example(IReadOnlyList<int> list)
