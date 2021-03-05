@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
-    public static class ListBindings
+    public static partial class ListExtensions
     {
         // List<TSource> is simply converted to ArraySegment<TSource> and share its IValueEnumerable<TSource> wrapper.
         // It's not converted to ReadOnlySpan<TSource> because its enumerables cannot be casted to IEnumerable<TSource>, restricting its use.

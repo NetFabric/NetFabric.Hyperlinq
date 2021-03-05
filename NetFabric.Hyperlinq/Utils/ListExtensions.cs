@@ -5,14 +5,14 @@ using System.Runtime.InteropServices;
 
 namespace NetFabric.Hyperlinq
 {
-    static class ListExtensions
+    public static partial class ListExtensions
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ArraySegment<TSource> AsArraySegment<TSource>(this List<TSource> source)
+        internal static ArraySegment<TSource> AsArraySegment<TSource>(this List<TSource> source)
             => new(source.GetItems(), 0, source.Count);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Span<TSource> AsSpan<TSource>(this List<TSource> source)
+        internal static Span<TSource> AsSpan<TSource>(this List<TSource> source)
 #if NET5_0_OR_GREATER
             => CollectionsMarshal.AsSpan(source);
 #else
@@ -20,11 +20,11 @@ namespace NetFabric.Hyperlinq
 #endif
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Memory<TSource> AsMemory<TSource>(this List<TSource> source)
+        internal static Memory<TSource> AsMemory<TSource>(this List<TSource> source)
             => source.GetItems().AsMemory().Slice(0, source.Count);
 
 
-        public static List<TSource> AsList<TSource>(this TSource[] source)
+        internal static List<TSource> AsList<TSource>(this TSource[] source)
         {
             var result = new List<TSource>();
             var layout = Unsafe.As<List<TSource>, ListLayout<TSource>>(ref result);
