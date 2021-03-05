@@ -121,6 +121,8 @@ public static void Example(IReadOnlyList<int> list)
 }
 ```
 
+- `Netfabric.Hyperlinq` contains special versions of `AsValueEnumerable()` for better performance with all collections in the `System.Collections.Immutable` namespace. Projects targetting .NET Framework, `netcoreapp2.1` or `netstandard2.0`, require the addition of the [`NetFabric.Hyperlinq.Immutable` NuGet package](https://www.nuget.org/packages/NetFabric.Hyperlinq.Immutable/) dependency.
+
 - All enumerables returned by `NetFabric.Hyperlinq` are compatible with `System.Linq`. 
 
 `OrderByDescending()` is not yet available in `Netfabric.Hyperlinq` but can still be used without requiring any conversion:
