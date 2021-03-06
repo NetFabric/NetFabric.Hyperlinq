@@ -22,7 +22,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsValueEnumerable.Bindings.Sy
             _ = result.Must()
                 .BeOfType<ReadOnlyCollectionExtensions.ValueEnumerable<ImmutableHashSet<int>, ImmutableHashSet<int>.Enumerator, ImmutableHashSet<int>.Enumerator, int, ImmutableHashSetExtensions.GetEnumerator<int>, ImmutableHashSetExtensions.GetEnumerator<int>>>()
                 .BeEnumerableOf<int>()
-                .BeEqualTo(source);
+                .BeEqualTo(wrapped);
         }
     }
 }

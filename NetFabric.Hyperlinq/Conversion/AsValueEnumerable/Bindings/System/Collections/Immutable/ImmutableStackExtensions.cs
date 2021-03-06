@@ -19,6 +19,7 @@ namespace NetFabric.Hyperlinq
         public readonly struct GetEnumerator<TSource>
             : IFunction<ImmutableStack<TSource>, ValueEnumerator<TSource>> 
         {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public ValueEnumerator<TSource> Invoke(ImmutableStack<TSource> source) 
                 => new(((IEnumerable<TSource>)source).GetEnumerator());
         }
@@ -27,6 +28,7 @@ namespace NetFabric.Hyperlinq
         public readonly struct GetEnumerator2<TSource>
             : IFunction<ImmutableStack<TSource>, ImmutableStack<TSource>.Enumerator>
         {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public ImmutableStack<TSource>.Enumerator Invoke(ImmutableStack<TSource> source) 
                 => source.GetEnumerator();
         }

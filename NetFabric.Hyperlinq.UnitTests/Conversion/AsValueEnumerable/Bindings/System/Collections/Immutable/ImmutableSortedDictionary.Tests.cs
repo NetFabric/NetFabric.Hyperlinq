@@ -17,7 +17,6 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsValueEnumerable.Bindings.Sy
             // Arrange
             var dictionary = source.ToDictionary(item => item);
             var wrapped = ImmutableSortedDictionary.CreateRange(default, dictionary);
-            var expected = new SortedDictionary<int, int>(dictionary);
 
             // Act
             var result = wrapped.AsValueEnumerable();
@@ -26,7 +25,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsValueEnumerable.Bindings.Sy
             _ = result.Must()
                 .BeOfType<ReadOnlyCollectionExtensions.ValueEnumerable<ImmutableSortedDictionary<int, int>, ImmutableSortedDictionary<int, int>.Enumerator, ImmutableSortedDictionary<int, int>.Enumerator, KeyValuePair<int, int>, ImmutableSortedDictionaryExtensions.GetEnumerator<int, int>, ImmutableSortedDictionaryExtensions.GetEnumerator<int, int>>>()
                 .BeEnumerableOf<KeyValuePair<int, int>>()
-                .BeEqualTo(expected);
+                .BeEqualTo(wrapped);
         }
     }
 }
