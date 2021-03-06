@@ -19,6 +19,7 @@ namespace NetFabric.Hyperlinq
             : IFunction<ImmutableDictionary<TKey, TValue>, ImmutableDictionary<TKey, TValue>.Enumerator>
             where TKey: notnull
         {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public ImmutableDictionary<TKey, TValue>.Enumerator Invoke(ImmutableDictionary<TKey, TValue> source) 
                 => source.GetEnumerator();
         }

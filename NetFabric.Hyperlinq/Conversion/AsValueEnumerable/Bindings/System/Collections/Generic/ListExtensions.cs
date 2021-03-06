@@ -1,9 +1,11 @@
+using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class ListExtensions
+    public static class ListExtensions
     {
         // List<TSource> is simply converted to ArraySegment<TSource> and share its IValueEnumerable<TSource> wrapper.
         // It's not converted to ReadOnlySpan<TSource> because its enumerables cannot be casted to IEnumerable<TSource>, restricting its use.
@@ -13,5 +15,41 @@ namespace NetFabric.Hyperlinq
         public static ArrayExtensions.ArraySegmentValueEnumerable<TSource> AsValueEnumerable<TSource>(this List<TSource> source)
             => source.AsArraySegment().AsValueEnumerable();
         
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        static ArraySegment<TSource> AsArraySegment<TSource>(this List<TSource> source)
+            => new(source.GetItems(), 0, source.Count);
+        
+        internal static List<TSource> AsList<TSource>(this TSource[] source)
+        {
+            // ReSharper disable once HeapView.ObjectAllocation.Evident
+            var result = new List<TSource>();
+            var layout = Unsafe.As<List<TSource>, ListLayout<TSource>>(ref result);
+            layout.items = source;
+            layout.size = source.Length;
+            result.Capacity = source.Length;
+            return result;
+        }
+
+        // ReSharper disable once ClassNeverInstantiated.Local
+#if NET5_0_OR_GREATER       
+        [SkipLocalsInit]
+#endif
+        class ListLayout<TSource>
+        {
+            public TSource[]? items;
+            
+#if !NETCOREAPP3_0_OR_GREATER
+#pragma warning disable IDE0051 // Remove unused private members
+#pragma warning disable 169
+            readonly object? syncRoot;
+#pragma warning restore 169
+#pragma warning restore IDE0051 // Remove unused private members
+#endif
+            public int size;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        static TSource[] GetItems<TSource>(this List<TSource> source)
+            => Unsafe.As<List<TSource>, ListLayout<TSource>>(ref source).items ?? Array.Empty<TSource>();
     }
 }

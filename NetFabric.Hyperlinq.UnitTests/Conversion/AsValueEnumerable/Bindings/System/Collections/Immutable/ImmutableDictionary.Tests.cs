@@ -16,7 +16,6 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsValueEnumerable.Bindings.Sy
         {
             // Arrange
             var wrapped = source.ToImmutableDictionary(item => item, default);
-            var expected = source.ToDictionary(item => item);
 
             // Act
             var result = wrapped.AsValueEnumerable();
@@ -25,7 +24,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsValueEnumerable.Bindings.Sy
             _ = result.Must()
                 .BeOfType<ReadOnlyCollectionExtensions.ValueEnumerable<ImmutableDictionary<int, int>, ImmutableDictionary<int, int>.Enumerator, ImmutableDictionary<int, int>.Enumerator, KeyValuePair<int, int>, ImmutableDictionaryExtensions.GetEnumerator<int, int>, ImmutableDictionaryExtensions.GetEnumerator<int, int>>>()
                 .BeEnumerableOf<KeyValuePair<int, int>>()
-                .BeEqualTo(expected);
+                .BeEqualTo(wrapped);
         }
     }
 }

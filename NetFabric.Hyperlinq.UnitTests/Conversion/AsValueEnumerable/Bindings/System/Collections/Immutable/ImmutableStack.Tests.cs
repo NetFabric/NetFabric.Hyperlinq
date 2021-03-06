@@ -15,7 +15,6 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsValueEnumerable.Bindings.Sy
         {
             // Arrange
             var wrapped = ImmutableStack.Create(source);
-            var expected = new Stack<int>(source);
 
             // Act
             var result = wrapped.AsValueEnumerable();
@@ -24,7 +23,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsValueEnumerable.Bindings.Sy
             _ = result.Must()
                 .BeOfType<EnumerableExtensions.ValueEnumerable<ImmutableStack<int>, ValueEnumerator<int>, ImmutableStack<int>.Enumerator, int, ImmutableStackExtensions.GetEnumerator<int>, ImmutableStackExtensions.GetEnumerator2<int>>>()
                 .BeEnumerableOf<int>()
-                .BeEqualTo(expected);
+                .BeEqualTo(wrapped);
         }
     }
 }

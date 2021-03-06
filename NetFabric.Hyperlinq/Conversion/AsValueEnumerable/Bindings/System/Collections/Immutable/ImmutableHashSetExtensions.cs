@@ -16,6 +16,7 @@ namespace NetFabric.Hyperlinq
         public readonly struct GetEnumerator<TSource>
             : IFunction<ImmutableHashSet<TSource>, ImmutableHashSet<TSource>.Enumerator>
         {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public ImmutableHashSet<TSource>.Enumerator Invoke(ImmutableHashSet<TSource> source) 
                 => source.GetEnumerator();
         }
