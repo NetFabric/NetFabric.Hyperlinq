@@ -15,37 +15,37 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [BenchmarkCategory("Array")]
         [Benchmark(Baseline = true)]
         public List<int> Linq_Array()
-            => Enumerable.ToList(array);
+            => array.ToList();
 
         [BenchmarkCategory("Enumerable_Value")]
         [Benchmark(Baseline = true)]
         public List<int> Linq_Enumerable_Value()
-            => Enumerable.ToList(enumerableValue);
+            => enumerableValue.ToList();
 
         [BenchmarkCategory("Collection_Value")]
         [Benchmark(Baseline = true)]
         public List<int> Linq_Collection_Value()
-            => Enumerable.ToList(collectionValue);
+            => collectionValue.ToList();
 
         [BenchmarkCategory("List_Value")]
         [Benchmark(Baseline = true)]
         public List<int> Linq_List_Value()
-            => Enumerable.ToList(listValue);
+            => listValue.ToList();
 
         [BenchmarkCategory("Enumerable_Reference")]
         [Benchmark(Baseline = true)]
         public List<int> Linq_Enumerable_Reference()
-            => Enumerable.ToList(enumerableReference);
+            => enumerableReference.ToList();
 
         [BenchmarkCategory("Collection_Reference")]
         [Benchmark(Baseline = true)]
         public List<int> Linq_Collection_Reference()
-            => Enumerable.ToList(collectionReference);
+            => collectionReference.ToList();
 
         [BenchmarkCategory("List_Reference")]
         [Benchmark(Baseline = true)]
         public List<int> Linq_List_Reference()
-            => Enumerable.ToList(listReference);
+            => listReference.ToList();
 
         // ---------------------------------------------------------------------
 
@@ -103,7 +103,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [BenchmarkCategory("Array")]
         [Benchmark]
         public List<int> Hyperlinq_Array()
-            => array
+            => array.AsValueEnumerable()
                 .ToList();
 
         [BenchmarkCategory("Array")]
@@ -121,7 +121,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [BenchmarkCategory("Enumerable_Value")]
         [Benchmark]
         public List<int> Hyperlinq_Enumerable_Value()
-            => EnumerableExtensions.AsValueEnumerable<TestEnumerable.Enumerable, TestEnumerable.Enumerable.Enumerator, int>(enumerableValue, enumerable => enumerable.GetEnumerator())
+            => enumerableValue.AsValueEnumerable<TestEnumerable.Enumerable, TestEnumerable.Enumerable.Enumerator, int>(enumerable => enumerable.GetEnumerator())
                 .ToList();
 
         [BenchmarkCategory("Collection_Value")]

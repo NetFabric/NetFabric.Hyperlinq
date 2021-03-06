@@ -10,28 +10,28 @@ namespace NetFabric.Hyperlinq.Benchmarks.Benchmarks
         public int Count { get; set; }
 
         [Benchmark(Baseline = true)]
-        public int LT()
+        public int LessThan()
         {
             var sum = 0;
-            foreach (var item in new EnumerableLT(Count))
+            foreach (var item in new EnumerableLessThan(Count))
                 sum += item;
             return sum;
         }
 
         [Benchmark]
-        public int LTE()
+        public int LessThanOrEqual()
         {
             var sum = 0;
-            foreach (var item in new EnumerableLTE(Count))
+            foreach (var item in new EnumerableLessThanOrEqual(Count))
                 sum += item;
             return sum;
         }
 
-        readonly struct EnumerableLT
+        readonly struct EnumerableLessThan
         {
             readonly int count;
 
-            public EnumerableLT(int count) => this.count = count;
+            public EnumerableLessThan(int count) => this.count = count;
 
             public Enumerator GetEnumerator() => new(count);
 
@@ -48,11 +48,11 @@ namespace NetFabric.Hyperlinq.Benchmarks.Benchmarks
             }
         }
 
-        readonly struct EnumerableLTE
+        readonly struct EnumerableLessThanOrEqual
         {
             readonly int count;
 
-            public EnumerableLTE(int count) => this.count = count;
+            public EnumerableLessThanOrEqual(int count) => this.count = count;
 
             public Enumerator GetEnumerator() => new(count);
 

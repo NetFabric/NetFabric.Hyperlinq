@@ -13,47 +13,47 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [BenchmarkCategory("Array")]
         [Benchmark(Baseline = true)]
         public int Linq_Array()
-            => Enumerable.First(array);
+            => array.First();
 
         [BenchmarkCategory("Enumerable_Value")]
         [Benchmark(Baseline = true)]
         public int Linq_Enumerable_Value()
-            => Enumerable.First(enumerableValue);
+            => enumerableValue.First();
 
         [BenchmarkCategory("Collection_Value")]
         [Benchmark(Baseline = true)]
         public int Linq_Collection_Value()
-            => Enumerable.First(collectionValue);
+            => collectionValue.First();
 
         [BenchmarkCategory("List_Value")]
         [Benchmark(Baseline = true)]
         public int Linq_List_Value()
-            => Enumerable.First(listValue);
+            => listValue.First();
 
         [BenchmarkCategory("AsyncEnumerable_Value")]
         [Benchmark(Baseline = true)]
         public ValueTask<int> Linq_AsyncEnumerable_Value()
-            => AsyncEnumerable.FirstAsync(asyncEnumerableValue);
+            => asyncEnumerableValue.FirstAsync();
 
         [BenchmarkCategory("Enumerable_Reference")]
         [Benchmark(Baseline = true)]
         public int Linq_Enumerable_Reference()
-            => Enumerable.First(enumerableReference);
+            => enumerableReference.First();
 
         [BenchmarkCategory("Collection_Reference")]
         [Benchmark(Baseline = true)]
         public int Linq_Collection_Reference()
-            => Enumerable.First(collectionReference);
+            => collectionReference.First();
 
         [BenchmarkCategory("List_Reference")]
         [Benchmark(Baseline = true)]
         public int Linq_List_Reference()
-            => Enumerable.First(listReference);
+            => listReference.First();
 
         [BenchmarkCategory("AsyncEnumerable_Reference")]
         [Benchmark(Baseline = true)]
         public ValueTask<int> Linq_AsyncEnumerable_Reference()
-            => AsyncEnumerable.FirstAsync(asyncEnumerableReference);
+            => asyncEnumerableReference.FirstAsync();
 
         // ---------------------------------------------------------------------
 
@@ -75,7 +75,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [BenchmarkCategory("Enumerable_Value")]
         [Benchmark]
         public Option<int> Hyperlinq_Enumerable_Value()
-            => EnumerableExtensions.AsValueEnumerable<TestEnumerable.Enumerable, TestEnumerable.Enumerable.Enumerator, int>(enumerableValue, enumerable => enumerable.GetEnumerator())
+            => enumerableValue.AsValueEnumerable<TestEnumerable.Enumerable, TestEnumerable.Enumerable.Enumerator, int>(enumerable => enumerable.GetEnumerator())
                 .First();
 
         [BenchmarkCategory("Collection_Value")]
@@ -90,6 +90,13 @@ namespace NetFabric.Hyperlinq.Benchmarks
             => listValue
                 .AsValueEnumerable()
                 .First();
+
+        [BenchmarkCategory("AsyncEnumerable_Value")]
+        [Benchmark]
+        public ValueTask<Option<int>> Hyperlinq_AsyncEnumerable_Value()
+            => asyncEnumerableValue
+                .AsAsyncValueEnumerable<TestAsyncEnumerable.Enumerable, TestAsyncEnumerable.Enumerable.Enumerator, int>((enumerable, cancellationToke) => enumerable.GetAsyncEnumerator(cancellationToke))
+                .FirstAsync();
 
         [BenchmarkCategory("Enumerable_Reference")]
         [Benchmark]
@@ -111,5 +118,12 @@ namespace NetFabric.Hyperlinq.Benchmarks
             => listReference
                 .AsValueEnumerable()
                 .First();
+
+        [BenchmarkCategory("AsyncEnumerable_Reference")]
+        [Benchmark]
+        public ValueTask<Option<int>> Hyperlinq_AsyncEnumerable_Reference()
+            => asyncEnumerableReference
+                .AsAsyncValueEnumerable()
+                .FirstAsync();
     }
 }

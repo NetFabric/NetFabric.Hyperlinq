@@ -14,47 +14,47 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [BenchmarkCategory("Array")]
         [Benchmark(Baseline = true)]
         public int Linq_Array()
-            => Enumerable.Count(array, item => (item & 0x01) == 0);
+            => array.Count(item => (item & 0x01) == 0);
 
         [BenchmarkCategory("Enumerable_Value")]
         [Benchmark(Baseline = true)]
         public int Linq_Enumerable_Value()
-            => Enumerable.Count(enumerableValue, item => (item & 0x01) == 0);
+            => enumerableValue.Count(item => (item & 0x01) == 0);
 
         [BenchmarkCategory("Collection_Value")]
         [Benchmark(Baseline = true)]
         public int Linq_Collection_Value()
-            => Enumerable.Count(collectionValue, item => (item & 0x01) == 0);
+            => collectionValue.Count(item => (item & 0x01) == 0);
 
         [BenchmarkCategory("List_Value")]
         [Benchmark(Baseline = true)]
         public int Linq_List_Value()
-            => Enumerable.Count(listValue, item => (item & 0x01) == 0);
+            => listValue.Count(item => (item & 0x01) == 0);
 
         [BenchmarkCategory("AsyncEnumerable_Value")]
         [Benchmark(Baseline = true)]
         public ValueTask<int> Linq_AsyncEnumerable_Value()
-            => AsyncEnumerable.CountAsync(asyncEnumerableValue, item => (item & 0x01) == 0);
+            => asyncEnumerableValue.CountAsync(item => (item & 0x01) == 0);
 
         [BenchmarkCategory("Enumerable_Reference")]
         [Benchmark(Baseline = true)]
         public int Linq_Enumerable_Reference()
-            => Enumerable.Count(enumerableReference, item => (item & 0x01) == 0);
+            => enumerableReference.Count(item => (item & 0x01) == 0);
 
         [BenchmarkCategory("Collection_Reference")]
         [Benchmark(Baseline = true)]
         public int Linq_Collection_Reference()
-            => Enumerable.Count(collectionReference, item => (item & 0x01) == 0);
+            => collectionReference.Count(item => (item & 0x01) == 0);
 
         [BenchmarkCategory("List_Reference")]
         [Benchmark(Baseline = true)]
         public int Linq_List_Reference()
-            => Enumerable.Count(listReference, item => (item & 0x01) == 0);
+            => listReference.Count(item => (item & 0x01) == 0);
 
         [BenchmarkCategory("AsyncEnumerable_Reference")]
         [Benchmark(Baseline = true)]
         public ValueTask<int> Linq_AsyncEnumerable_Reference()
-            => AsyncEnumerable.CountAsync(asyncEnumerableReference, item => (item & 0x01) == 0);
+            => asyncEnumerableReference.CountAsync(item => (item & 0x01) == 0);
 
         // ---------------------------------------------------------------------
 
@@ -119,7 +119,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [BenchmarkCategory("Array")]
         [Benchmark]
         public int Hyperlinq_Array()
-            => array
+            => array.AsValueEnumerable()
                 .Where(item => (item & 0x01) == 0)
                 .Count();
 
@@ -140,7 +140,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [BenchmarkCategory("Enumerable_Value")]
         [Benchmark]
         public int Hyperlinq_Enumerable_Value()
-            => EnumerableExtensions.AsValueEnumerable<TestEnumerable.Enumerable, TestEnumerable.Enumerable.Enumerator, int>(enumerableValue, enumerable => enumerable.GetEnumerator())
+            => enumerableValue.AsValueEnumerable<TestEnumerable.Enumerable, TestEnumerable.Enumerable.Enumerator, int>(enumerable => enumerable.GetEnumerator())
                 .Where(item => (item & 0x01) == 0)
                 .Count();
 

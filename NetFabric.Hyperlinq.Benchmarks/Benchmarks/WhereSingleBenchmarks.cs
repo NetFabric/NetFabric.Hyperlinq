@@ -14,47 +14,47 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [BenchmarkCategory("Array")]
         [Benchmark(Baseline = true)]
         public int Linq_Array()
-            => Enumerable.Single(array, item => item == Count - 1);
+            => array.Single(item => item == Count - 1);
 
         [BenchmarkCategory("Enumerable_Value")]
         [Benchmark(Baseline = true)]
         public int Linq_Enumerable_Value()
-            => Enumerable.Single(enumerableValue, item => item == Count - 1);
+            => enumerableValue.Single(item => item == Count - 1);
 
         [BenchmarkCategory("Collection_Value")]
         [Benchmark(Baseline = true)]
         public int Linq_Collection_Value()
-            => Enumerable.Single(collectionValue, item => item == Count - 1);
+            => collectionValue.Single(item => item == Count - 1);
 
         [BenchmarkCategory("List_Value")]
         [Benchmark(Baseline = true)]
         public int Linq_List_Value()
-            => Enumerable.Single(listValue, item => item == Count - 1);
+            => listValue.Single(item => item == Count - 1);
 
         [BenchmarkCategory("AsyncEnumerable_Value")]
         [Benchmark(Baseline = true)]
         public ValueTask<int> Linq_AsyncEnumerable_Value()
-            => AsyncEnumerable.SingleAsync(asyncEnumerableValue, item => item == Count - 1);
+            => asyncEnumerableValue.SingleAsync(item => item == Count - 1);
 
         [BenchmarkCategory("Enumerable_Reference")]
         [Benchmark(Baseline = true)]
         public int Linq_Enumerable_Reference()
-            => Enumerable.Single(enumerableReference, item => item == Count - 1);
+            => enumerableReference.Single(item => item == Count - 1);
 
         [BenchmarkCategory("Collection_Reference")]
         [Benchmark(Baseline = true)]
         public int Linq_Collection_Reference()
-            => Enumerable.Single(collectionReference, item => item == Count - 1);
+            => collectionReference.Single(item => item == Count - 1);
 
         [BenchmarkCategory("List_Reference")]
         [Benchmark(Baseline = true)]
         public int Linq_List_Reference()
-            => Enumerable.Single(listReference, item => item == Count - 1);
+            => listReference.Single(item => item == Count - 1);
 
         [BenchmarkCategory("AsyncEnumerable_Reference")]
         [Benchmark(Baseline = true)]
         public ValueTask<int> Linq_AsyncEnumerable_Reference()
-            => AsyncEnumerable.SingleAsync(asyncEnumerableReference, item => item == Count - 1);
+            => asyncEnumerableReference.SingleAsync(item => item == Count - 1);
 
         // ---------------------------------------------------------------------
 
@@ -82,7 +82,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [BenchmarkCategory("Enumerable_Value")]
         [Benchmark]
         public Option<int> Hyperlinq_Enumerable_Value()
-            => EnumerableExtensions.AsValueEnumerable<TestEnumerable.Enumerable, TestEnumerable.Enumerable.Enumerator, int>(enumerableValue, enumerable => enumerable.GetEnumerator())
+            => enumerableValue.AsValueEnumerable<TestEnumerable.Enumerable, TestEnumerable.Enumerable.Enumerator, int>(enumerable => enumerable.GetEnumerator())
                 .Where(item => item == Count - 1)
                 .Single();
 

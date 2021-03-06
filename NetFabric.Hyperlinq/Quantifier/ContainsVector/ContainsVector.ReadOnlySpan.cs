@@ -6,7 +6,7 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class ArrayExtensions
     {
-        public static bool ContainsVector<TSource>(this ReadOnlySpan<TSource> source, TSource value)
+        static bool ContainsVector<TSource>(this ReadOnlySpan<TSource> source, TSource value)
             where TSource : struct
         {
             if (source.Length is 0)
