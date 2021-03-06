@@ -131,7 +131,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [BenchmarkCategory("Array")]
         [Benchmark]
         public int Hyperlinq_Memory()
-            => memory.Sum();
+            => memory.AsValueEnumerable().Sum();
 
         [BenchmarkCategory("Enumerable_Value")]
         [Benchmark]

@@ -54,7 +54,7 @@ namespace NetFabric.Hyperlinq
                 => this;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public ReadOnlySpan<TSource> ToArray()
+            public TSource[] ToArray()
                 => source.ToArray();
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]

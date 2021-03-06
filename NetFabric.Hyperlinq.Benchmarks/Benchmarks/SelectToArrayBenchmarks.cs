@@ -183,14 +183,6 @@ namespace NetFabric.Hyperlinq.Benchmarks
                 .Select(item => item)
                 .ToArrayAsync();
 
-        [BenchmarkCategory("AsyncEnumerable_Value")]
-        [Benchmark]
-        public ValueTask<int[]> Hyperlinq_AsyncEnumerable_Value()
-            => asyncEnumerableValue
-                .AsAsyncValueEnumerable<TestAsyncEnumerable.Enumerable, TestAsyncEnumerable.Enumerable.Enumerator, int>((enumerable, cancellationToke) => enumerable.GetAsyncEnumerator(cancellationToke))
-                .Select(item => item)
-                .ToArrayAsync();
-
         [BenchmarkCategory("Enumerable_Reference")]
         [Benchmark]
         public int[] Hyperlinq_Enumerable_Reference()
@@ -214,14 +206,6 @@ namespace NetFabric.Hyperlinq.Benchmarks
                 .AsValueEnumerable()
                 .Select(item => item)
                 .ToArray();
-
-        [BenchmarkCategory("AsyncEnumerable_Reference")]
-        [Benchmark]
-        public ValueTask<int[]> Hyperlinq_AsyncEnumerable_Reference()
-            => asyncEnumerableReference
-                .AsAsyncValueEnumerable()
-                .Select(item => item)
-                .ToArrayAsync();
 
         [BenchmarkCategory("AsyncEnumerable_Reference")]
         [Benchmark]
