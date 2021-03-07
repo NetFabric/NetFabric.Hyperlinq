@@ -208,8 +208,8 @@ namespace NetFabric.Hyperlinq
             #region Conversion
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly ValueEnumerableExtensions.AsyncValueEnumerableWrapper<MemorySelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, TResult, TSelector>, Enumerator, TResult> AsAsyncValueEnumerable()
-                => ValueEnumerableExtensions.AsAsyncValueEnumerable<MemorySelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, TResult, TSelector>, Enumerator, TResult>(this);
+            public readonly MemorySelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, TResult, TSelector> AsValueEnumerable()
+                => this;
 
             #endregion
             #region Partitioning

@@ -10,6 +10,7 @@ namespace NetFabric.Hyperlinq
             => source switch
             {
                 null => throw new ArgumentNullException(nameof(source)),
+                // ReSharper disable once HeapView.ObjectAllocation.Evident
                 _ => new EnumerableWrapper<T>(source)
             };
 
@@ -24,9 +25,21 @@ namespace NetFabric.Hyperlinq
             public Enumerator<T> GetEnumerator() 
                 => new(source);
             IEnumerator<T> IEnumerable<T>.GetEnumerator() 
+                // ReSharper disable once HeapView.BoxingAllocation
                 => new Enumerator<T>(source);
             IEnumerator IEnumerable.GetEnumerator() 
+                // ReSharper disable once HeapView.BoxingAllocation
                 => new Enumerator<T>(source);
+
+            public EnumerableExtensions.ValueEnumerable<EnumerableWrapper<T>, Enumerator<T>, Enumerator<T>, T, GetEnumeratorFunction, GetEnumeratorFunction> AsValueEnumerable()
+                => this.AsValueEnumerable<EnumerableWrapper<T>, Enumerator<T>, T, GetEnumeratorFunction>();
+            
+            public readonly struct GetEnumeratorFunction
+                : IFunction<EnumerableWrapper<T>, Enumerator<T>>
+            {
+                public Enumerator<T> Invoke(EnumerableWrapper<T> enumerable) 
+                    => enumerable.GetEnumerator();
+            }
         }
     }
 }

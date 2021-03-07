@@ -17,8 +17,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Aggregation.Sum
                 .Sum();
 
             // Act
-            var result = wrapped
-                .Sum<Wrap.ValueReadOnlyCollectionWrapper<int>, Wrap.Enumerator<int>, int, int>();
+            var result = wrapped.AsValueEnumerable()
+                .Sum();
 
             // Assert
             _ = result.Must()
@@ -35,8 +35,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Aggregation.Sum
                 .Sum();
 
             // Act
-            var result = wrapped
-                .Sum<Wrap.ValueReadOnlyCollectionWrapper<int?>, Wrap.Enumerator<int?>, int?, int>();
+            var result = wrapped.AsValueEnumerable()
+                .Sum();
 
             // Assert
             _ = result.Must()

@@ -75,13 +75,13 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [BenchmarkCategory("Enumerable_Value")]
         [Benchmark]
         public Option<int> Hyperlinq_Enumerable_Value()
-            => enumerableValue.AsValueEnumerable<TestEnumerable.Enumerable, TestEnumerable.Enumerable.Enumerator, int>(enumerable => enumerable.GetEnumerator())
+            => enumerableValue.AsValueEnumerable()
                 .ElementAt(Count - 1);
 
         [BenchmarkCategory("Collection_Value")]
         [Benchmark]
         public Option<int> Hyperlinq_Collection_Value()
-            => ReadOnlyCollectionExtensions.AsValueEnumerable<TestCollection.Enumerable, TestCollection.Enumerable.Enumerator, int>(collectionValue, enumerable => enumerable.GetEnumerator())
+            => collectionValue.AsValueEnumerable()
                 .ElementAt(Count - 1);
 
         [BenchmarkCategory("List_Value")]
@@ -95,7 +95,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [Benchmark]
         public ValueTask<Option<int>> Hyperlinq_AsyncEnumerable_Value()
             => asyncEnumerableValue
-                .AsAsyncValueEnumerable<TestAsyncEnumerable.Enumerable, TestAsyncEnumerable.Enumerable.Enumerator, int>((enumerable, cancellationToke) => enumerable.GetAsyncEnumerator(cancellationToke))
+                .AsAsyncValueEnumerable()
                 .ElementAtAsync(Count - 1);
 
         [BenchmarkCategory("Enumerable_Reference")]

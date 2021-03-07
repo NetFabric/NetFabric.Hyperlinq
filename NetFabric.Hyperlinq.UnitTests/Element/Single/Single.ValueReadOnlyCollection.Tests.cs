@@ -16,8 +16,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
                 .AsValueReadOnlyCollection(source);
 
             // Act
-            var result = ValueReadOnlyCollectionExtensions
-                .Single<Wrap.ValueReadOnlyCollectionWrapper<int>, Wrap.Enumerator<int>, int>(wrapped);
+            var result = wrapped.AsValueEnumerable()
+                .Single();
 
             // Assert
             _ = result.Must()
@@ -36,8 +36,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
                 .Single();
 
             // Act
-            var result = ValueReadOnlyCollectionExtensions
-                .Single<Wrap.ValueReadOnlyCollectionWrapper<int>, Wrap.Enumerator<int>, int>(wrapped);
+            var result = wrapped.AsValueEnumerable()
+                .Single();
 
             // Assert
             _ = result.Match(
@@ -54,8 +54,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
                 .AsValueReadOnlyCollection(source);
 
             // Act
-            var result = ValueReadOnlyCollectionExtensions
-                .Single<Wrap.ValueReadOnlyCollectionWrapper<int>, Wrap.Enumerator<int>, int>(wrapped);
+            var result = wrapped.AsValueEnumerable()
+                .Single();
 
             // Assert
             _ = result.Must()
@@ -72,8 +72,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
                 .AsValueReadOnlyCollection(source);
 
             // Act
-            var result = ValueReadOnlyCollectionExtensions
-                .Select<Wrap.ValueReadOnlyCollectionWrapper<int>, Wrap.Enumerator<int>, int, string>(wrapped, selector)
+            var result = wrapped.AsValueEnumerable()
+                .Select(selector)
                 .Single();
 
             // Assert
@@ -94,8 +94,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
                 .Single();
 
             // Act
-            var result = ValueReadOnlyCollectionExtensions
-                .Select<Wrap.ValueReadOnlyCollectionWrapper<int>, Wrap.Enumerator<int>, int, string>(wrapped, selector)
+            var result = wrapped.AsValueEnumerable()
+                .Select(selector)
                 .Single();
 
             // Assert
@@ -113,8 +113,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
                 .AsValueReadOnlyCollection(source);
 
             // Act
-            var result = ValueReadOnlyCollectionExtensions
-                .Select<Wrap.ValueReadOnlyCollectionWrapper<int>, Wrap.Enumerator<int>, int, string>(wrapped, selector)
+            var result = wrapped.AsValueEnumerable()
+                .Select(selector)
                 .Single();
 
             // Assert
@@ -132,8 +132,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
                 .AsValueReadOnlyCollection(source);
 
             // Act
-            var result = ValueReadOnlyCollectionExtensions
-                .Select<Wrap.ValueReadOnlyCollectionWrapper<int>, Wrap.Enumerator<int>, int, string>(wrapped, selector)
+            var result = wrapped.AsValueEnumerable()
+                .Select(selector)
                 .Single();
 
             // Assert
@@ -154,8 +154,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
                 .Single();
 
             // Act
-            var result = ValueReadOnlyCollectionExtensions
-                .Select<Wrap.ValueReadOnlyCollectionWrapper<int>, Wrap.Enumerator<int>, int, string>(wrapped, selector)
+            var result = wrapped.AsValueEnumerable()
+                .Select(selector)
                 .Single();
 
             // Assert
@@ -173,8 +173,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.Single
                 .AsValueReadOnlyCollection(source);
 
             // Act
-            var result = ValueReadOnlyCollectionExtensions
-                .Select<Wrap.ValueReadOnlyCollectionWrapper<int>, Wrap.Enumerator<int>, int, string>(wrapped, selector)
+            var result = wrapped.AsValueEnumerable()
+                .Select(selector)
                 .Single();
 
             // Assert

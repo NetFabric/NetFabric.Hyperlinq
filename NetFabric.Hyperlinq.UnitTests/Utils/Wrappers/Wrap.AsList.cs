@@ -10,6 +10,7 @@ namespace NetFabric.Hyperlinq
             => source switch
             {
                 null => throw new ArgumentNullException(nameof(source)),
+                // ReSharper disable once HeapView.ObjectAllocation.Evident
                 _ => new ListWrapper<T>(source)
             };
 

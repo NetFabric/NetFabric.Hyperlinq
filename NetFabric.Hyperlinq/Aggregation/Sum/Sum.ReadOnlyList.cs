@@ -9,7 +9,7 @@ namespace NetFabric.Hyperlinq
             where TSum : struct
             => source.Sum<TList, TSource, TSum>(0, source.Count);
         
-        static TSum Sum<TList, TSource, TSum>(this TList source, int offset, int count)
+        internal static TSum Sum<TList, TSource, TSum>(this TList source, int offset, int count)
             where TList : IReadOnlyList<TSource>
             where TSum : struct
         {

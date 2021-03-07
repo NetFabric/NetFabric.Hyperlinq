@@ -9,9 +9,10 @@ namespace NetFabric.Hyperlinq.Benchmarks
     {
 
         public static Enumerable ValueType(int[] array) 
-            => new Enumerable(array);
+            => new(array);
 
         public static IAsyncEnumerable<int> ReferenceType(int[] array)
+            // ReSharper disable once HeapView.ObjectAllocation.Evident
             => new ReferenceEnumerable(array);
 
         public class Enumerable : IAsyncEnumerable<int>
@@ -22,9 +23,20 @@ namespace NetFabric.Hyperlinq.Benchmarks
                 => this.array = array;
 
             public Enumerator GetAsyncEnumerator(CancellationToken cancellationToken = default) 
-                => new Enumerator(array, cancellationToken);
+                => new(array, cancellationToken);
             IAsyncEnumerator<int> IAsyncEnumerable<int>.GetAsyncEnumerator(CancellationToken cancellationToken) 
+                // ReSharper disable once HeapView.BoxingAllocation
                 => new Enumerator(array, cancellationToken);
+
+            AsyncEnumerableExtensions.AsyncValueEnumerable<Enumerable, Enumerator, Enumerator, int, GetEnumeratorFunction, GetEnumeratorFunction> AsAsyncValueEnumerable()
+                => this.AsAsyncValueEnumerable<Enumerable, Enumerator, int, GetEnumeratorFunction>();
+
+            readonly struct GetEnumeratorFunction
+                : IFunction<Enumerable, CancellationToken, Enumerator>
+            {
+                public Enumerator Invoke(Enumerable source, CancellationToken cancellationToken)
+                    => source.GetAsyncEnumerator(cancellationToken);
+            }
 
             public struct Enumerator : IAsyncEnumerator<int>
             {
@@ -60,6 +72,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
                 => this.array = array;
 
             public IAsyncEnumerator<int> GetAsyncEnumerator(CancellationToken cancellationToken)
+                // ReSharper disable once HeapView.ObjectAllocation.Evident
                 => new Enumerator(array, cancellationToken);
 
             class Enumerator : IAsyncEnumerator<int>

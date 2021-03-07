@@ -20,8 +20,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.WhereAt
                 .Where(predicate);
 
             // Act
-            var result = ValueReadOnlyCollectionExtensions
-                .Where<Wrap.ValueReadOnlyCollectionWrapper<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
+            var result = wrapped.AsValueEnumerable()
+                .Where(predicate);
 
             // Assert
             _ = result.Must()
@@ -43,8 +43,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.WhereAt
                 .Sum();
 
             // Act
-            var result = ValueReadOnlyCollectionExtensions
-                .Where<Wrap.ValueReadOnlyCollectionWrapper<int>, Wrap.Enumerator<int>, int>(wrapped, predicate)
+            var result = wrapped.AsValueEnumerable()
+                .Where(predicate)
                 .Sum();
 
             // Assert

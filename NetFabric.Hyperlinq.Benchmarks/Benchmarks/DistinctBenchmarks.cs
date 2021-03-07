@@ -210,7 +210,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Hyperlinq_Enumerable_Value()
         {
             var sum = 0;
-            foreach (var item in enumerableValue.AsValueEnumerable<TestEnumerable.Enumerable, TestEnumerable.Enumerable.Enumerator, int>(enumerable => enumerable.GetEnumerator()).Distinct())
+            foreach (var item in enumerableValue.AsValueEnumerable().Distinct())
                 sum += item;
             return sum;
         }
@@ -220,7 +220,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Hyperlinq_Collection_Value()
         {
             var sum = 0;
-            foreach (var item in ReadOnlyCollectionExtensions.AsValueEnumerable<TestCollection.Enumerable, TestCollection.Enumerable.Enumerator, int>(collectionValue, enumerable => enumerable.GetEnumerator()).Distinct())
+            foreach (var item in collectionValue.AsValueEnumerable().Distinct())
                 sum += item;
             return sum;
         }
@@ -241,7 +241,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         {
             var sum = 0;
             await foreach (var item in asyncEnumerableValue
-                .AsAsyncValueEnumerable<TestAsyncEnumerable.Enumerable, TestAsyncEnumerable.Enumerable.Enumerator, int>((enumerable, cancellationToke) => enumerable.GetAsyncEnumerator(cancellationToke))
+                .AsAsyncValueEnumerable()
                 .Distinct())
                 sum += item;
             return sum;

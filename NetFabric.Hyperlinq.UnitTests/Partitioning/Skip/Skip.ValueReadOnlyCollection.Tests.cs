@@ -19,7 +19,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Partitioning.Skip
                 .Skip(count);
 
             // Act
-            var result = ValueReadOnlyCollectionExtensions.Skip<Wrap.ValueReadOnlyCollectionWrapper<int>, Wrap.Enumerator<int>, int>(wrapped, count);
+            var result = wrapped.AsValueEnumerable().Skip(count);
 
             // Assert
             _ = result.Must()

@@ -18,10 +18,10 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
                 .AsValueReadOnlyCollection(source);
 
             // Act
-            var optionNegative = ValueReadOnlyCollectionExtensions
-                .ElementAt<Wrap.ValueReadOnlyCollectionWrapper<int>, Wrap.Enumerator<int>, int>(wrapped, -1);
-            var optionTooLarge = ValueReadOnlyCollectionExtensions
-                .ElementAt<Wrap.ValueReadOnlyCollectionWrapper<int>, Wrap.Enumerator<int>, int>(wrapped, source.Length);
+            var optionNegative = wrapped.AsValueEnumerable()
+                .ElementAt(-1);
+            var optionTooLarge = wrapped.AsValueEnumerable()
+                .ElementAt(source.Length);
 
             // Assert
             _ = optionNegative.Must()
@@ -46,8 +46,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
                     .ElementAt(index);
 
                 // Act
-                var result = ValueReadOnlyCollectionExtensions
-                    .ElementAt<Wrap.ValueReadOnlyCollectionWrapper<int>, Wrap.Enumerator<int>, int>(wrapped, index);
+                var result = wrapped.AsValueEnumerable()
+                    .ElementAt(index);
 
                 // Assert
                 _ = result.Match(
@@ -67,11 +67,11 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
                 .AsValueReadOnlyCollection(source);
 
             // Act
-            var optionNegative = ValueReadOnlyCollectionExtensions
-                .Select<Wrap.ValueReadOnlyCollectionWrapper<int>, Wrap.Enumerator<int>, int, string>(wrapped, selector)
+            var optionNegative = wrapped.AsValueEnumerable()
+                .Select(selector)
                 .ElementAt(-1);
-            var optionTooLarge = ValueReadOnlyCollectionExtensions
-                .Select<Wrap.ValueReadOnlyCollectionWrapper<int>, Wrap.Enumerator<int>, int, string>(wrapped, selector)
+            var optionTooLarge = wrapped.AsValueEnumerable()
+                .Select(selector)
                 .ElementAt(source.Length);
 
             // Assert
@@ -97,8 +97,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
             for (var index = 0; index < source.Length; index++)
             {
                 // Act
-                var result = ValueReadOnlyCollectionExtensions
-                    .Select<Wrap.ValueReadOnlyCollectionWrapper<int>, Wrap.Enumerator<int>, int, string>(wrapped, selector)
+                var result = wrapped.AsValueEnumerable()
+                    .Select(selector)
                     .ElementAt(index);
 
                 // Assert
@@ -119,11 +119,11 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
                 .AsValueReadOnlyCollection(source);
 
             // Act
-            var optionNegative = ValueReadOnlyCollectionExtensions
-                .Select<Wrap.ValueReadOnlyCollectionWrapper<int>, Wrap.Enumerator<int>, int, string>(wrapped, selector)
+            var optionNegative = wrapped.AsValueEnumerable()
+                .Select(selector)
                 .ElementAt(-1);
-            var optionTooLarge = ValueReadOnlyCollectionExtensions
-                .Select<Wrap.ValueReadOnlyCollectionWrapper<int>, Wrap.Enumerator<int>, int, string>(wrapped, selector)
+            var optionTooLarge = wrapped.AsValueEnumerable()
+                .Select(selector)
                 .ElementAt(source.Length);
 
             // Assert
@@ -150,8 +150,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAt
             for (var index = 0; index < source.Length; index++)
             {
                 // Act
-                var result = ValueReadOnlyCollectionExtensions
-                    .Select<Wrap.ValueReadOnlyCollectionWrapper<int>, Wrap.Enumerator<int>, int, string>(wrapped, selector)
+                var result = wrapped.AsValueEnumerable()
+                    .Select(selector)
                     .ElementAt(index);
 
                 // Assert

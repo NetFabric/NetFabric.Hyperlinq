@@ -19,8 +19,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Projection.Select
                 .Select(selector);
 
             // Act
-            var result = ValueReadOnlyCollectionExtensions
-                .Select<Wrap.ValueReadOnlyCollectionWrapper<int>, Wrap.Enumerator<int>, int, string>(wrapped, selector);
+            var result = wrapped.AsValueEnumerable()
+                .Select(selector);
 
             // Assert
             _ = result.Must()
@@ -41,8 +41,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Projection.Select
                 .Sum();
 
             // Act
-            var result = ValueReadOnlyCollectionExtensions
-                .Select<Wrap.ValueReadOnlyCollectionWrapper<int>, Wrap.Enumerator<int>, int, int>(wrapped, item => item)
+            var result = wrapped.AsValueEnumerable()
+                .Select(item => item)
                 .Sum();
 
             // Assert

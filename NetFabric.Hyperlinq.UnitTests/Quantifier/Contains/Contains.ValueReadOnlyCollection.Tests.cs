@@ -18,8 +18,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Contains
             var wrapped = Wrap.AsValueReadOnlyCollection(source);
 
             // Act
-            var result = ValueReadOnlyCollectionExtensions
-                .Contains<Wrap.ValueReadOnlyCollectionWrapper<int>, Wrap.Enumerator<int>, int>(wrapped, value);
+            var result = wrapped.AsValueEnumerable()
+                .Contains(value);
 
             // Assert
             _ = result.Must()
@@ -37,8 +37,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Contains
             var wrapped = Wrap.AsValueReadOnlyCollection(source.AsValueEnumerable().Select(item => item.ToString()).ToArray());
 
             // Act
-            var result = ValueReadOnlyCollectionExtensions
-                .Contains<Wrap.ValueReadOnlyCollectionWrapper<string>, Wrap.Enumerator<string>, string>(wrapped, value);
+            var result = wrapped.AsValueEnumerable()
+                .Contains(value);
 
             // Assert
             _ = result.Must()
@@ -56,8 +56,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Contains
             var wrapped = Wrap.AsValueReadOnlyCollection(source);
 
             // Act
-            var result = ValueReadOnlyCollectionExtensions
-                .Contains<Wrap.ValueReadOnlyCollectionWrapper<int>, Wrap.Enumerator<int>, int>(wrapped, value);
+            var result = wrapped.AsValueEnumerable()
+                .Contains(value);
 
             // Assert
             _ = result.Must()
@@ -76,8 +76,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Contains
             var wrapped = Wrap.AsValueReadOnlyCollection(source.AsValueEnumerable().Select(item => item.ToString()).ToArray());
 
             // Act
-            var result = ValueReadOnlyCollectionExtensions
-                .Contains<Wrap.ValueReadOnlyCollectionWrapper<string>, Wrap.Enumerator<string>, string>(wrapped, value);
+            var result = wrapped.AsValueEnumerable()
+                .Contains(value);
 
             // Assert
             _ = result.Must()
@@ -95,8 +95,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Contains
             var wrapped = Wrap.AsValueReadOnlyCollection(source);
 
             // Act
-            var result = ValueReadOnlyCollectionExtensions
-                .Contains<Wrap.ValueReadOnlyCollectionWrapper<int>, Wrap.Enumerator<int>, int>(wrapped, value, EqualityComparer<int>.Default);
+            var result = wrapped.AsValueEnumerable()
+                .Contains(value, EqualityComparer<int>.Default);
 
             // Assert
             _ = result.Must()
@@ -114,8 +114,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Contains
             var wrapped = Wrap.AsValueReadOnlyCollection(source);
 
             // Act
-            var result = ValueReadOnlyCollectionExtensions
-                .Contains<Wrap.ValueReadOnlyCollectionWrapper<int>, Wrap.Enumerator<int>, int>(wrapped, value, EqualityComparer<int>.Default);
+            var result = wrapped.AsValueEnumerable()
+                .Contains(value, EqualityComparer<int>.Default);
 
             // Assert
             _ = result.Must()
@@ -133,8 +133,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Contains
             var wrapped = Wrap.AsValueReadOnlyCollection(source);
 
             // Act
-            var result = ValueReadOnlyCollectionExtensions
-                .Contains<Wrap.ValueReadOnlyCollectionWrapper<int>, Wrap.Enumerator<int>, int>(wrapped, value, TestComparer<int>.Instance);
+            var result = wrapped.AsValueEnumerable()
+                .Contains(value, TestComparer<int>.Instance);
 
             // Assert
             _ = result.Must()
@@ -152,8 +152,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Contains
             var wrapped = Wrap.AsValueReadOnlyCollection(source);
 
             // Act
-            var result = ValueReadOnlyCollectionExtensions
-                .Contains<Wrap.ValueReadOnlyCollectionWrapper<int>, Wrap.Enumerator<int>, int>(wrapped, value, TestComparer<int>.Instance);
+            var result = wrapped.AsValueEnumerable()
+                .Contains(value, TestComparer<int>.Instance);
 
             // Assert
             _ = result.Must()

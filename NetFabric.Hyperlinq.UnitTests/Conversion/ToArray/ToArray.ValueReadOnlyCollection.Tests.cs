@@ -21,8 +21,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
                 .ToArray();
 
             // Act
-            var result = ValueReadOnlyCollectionExtensions
-                .ToArray<Wrap.ValueReadOnlyCollectionWrapper<int>, Wrap.Enumerator<int>, int>(wrapped);
+            var result = wrapped.AsValueEnumerable()
+                .ToArray();
 
             // Assert
             _ = result.Must()
@@ -43,8 +43,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
                 .ToArray();
 
             // Act
-            var result = ValueReadOnlyCollectionExtensions
-                .ToArray<Wrap.ValueCollectionWrapper<int>, Wrap.Enumerator<int>, int>(wrapped);
+            var result = wrapped.AsValueEnumerable()
+                .ToArray();
 
             // Assert
             _ = result.Must()
@@ -66,8 +66,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
                 .ToArray();
 
             // Act
-            using var result = ValueEnumerableExtensions
-                .ToArray<Wrap.ValueReadOnlyCollectionWrapper<int>, Wrap.Enumerator<int>, int>(wrapped, pool);
+            using var result = wrapped.AsValueEnumerable()
+                .ToArray(pool);
 
             // Assert
             _ = result.Memory
@@ -90,8 +90,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
                 .ToArray();
 
             // Act
-            var result = ValueReadOnlyCollectionExtensions
-                .Select<Wrap.ValueReadOnlyCollectionWrapper<int>, Wrap.Enumerator<int>, int, string>(wrapped, selector)
+            var result = wrapped.AsValueEnumerable()
+                .Select(selector)
                 .ToArray();
 
             // Assert
@@ -115,8 +115,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
                 .ToArray();
 
             // Act
-            using var result = ValueReadOnlyCollectionExtensions
-                .Select<Wrap.ValueReadOnlyCollectionWrapper<int>, Wrap.Enumerator<int>, int, string>(wrapped, selector)
+            using var result = wrapped.AsValueEnumerable()
+                .Select(selector)
                 .ToArray(pool);
 
             // Assert
@@ -140,8 +140,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
                 .ToArray();
 
             // Act
-            var result = ValueReadOnlyCollectionExtensions
-                .Select<Wrap.ValueReadOnlyCollectionWrapper<int>, Wrap.Enumerator<int>, int, string>(wrapped, selector)
+            var result = wrapped.AsValueEnumerable()
+                .Select(selector)
                 .ToArray();
 
             // Assert
@@ -165,8 +165,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
                 .ToArray();
 
             // Act
-            using var result = ValueReadOnlyCollectionExtensions
-                .Select<Wrap.ValueReadOnlyCollectionWrapper<int>, Wrap.Enumerator<int>, int, string>(wrapped, selector)
+            using var result = wrapped.AsValueEnumerable()
+                .Select(selector)
                 .ToArray(pool);
 
             // Assert

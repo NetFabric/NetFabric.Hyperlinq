@@ -174,7 +174,13 @@ namespace NetFabric.Hyperlinq
 
                 public readonly void Dispose() { }
             }
-            
+
+            #region Conversion
+
+            ValueEnumerable<TList, TSource> AsValueEnumerable()
+                => this;
+
+            #endregion
             #region Partitioning
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]

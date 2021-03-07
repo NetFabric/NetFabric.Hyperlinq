@@ -209,8 +209,8 @@ namespace NetFabric.Hyperlinq
             #region Conversion
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly ValueEnumerableExtensions.AsyncValueEnumerableWrapper<ArraySegmentSelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, TResult, TSelector>, Enumerator, TResult> AsAsyncValueEnumerable()
-                => ValueEnumerableExtensions.AsAsyncValueEnumerable<ArraySegmentSelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, TResult, TSelector>, Enumerator, TResult>(this);
+            public readonly ArraySegmentSelectManyEnumerable<TSource, TSubEnumerable, TSubEnumerator, TResult, TSelector> AsValueEnumerable()
+                => this;
 
             #endregion
             #region Partitioning

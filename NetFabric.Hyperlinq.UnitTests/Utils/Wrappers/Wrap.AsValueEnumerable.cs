@@ -24,12 +24,21 @@ namespace NetFabric.Hyperlinq
             public readonly Enumerator<T> GetEnumerator() 
                 => new(source);
             readonly IEnumerator<T> IEnumerable<T>.GetEnumerator() 
+                // ReSharper disable once HeapView.BoxingAllocation
                 => new Enumerator<T>(source);
             readonly IEnumerator IEnumerable.GetEnumerator() 
+                // ReSharper disable once HeapView.BoxingAllocation
                 => new Enumerator<T>(source);
 
-            public ValueEnumerableWrapper<T> AsValueEnumerable()
-                => this.AsValueEnumerable<ValueEnumerableWrapper<T>, Enumerator<T>, T>();
+            public ValueEnumerableExtensions.ValueEnumerable<ValueEnumerableWrapper<T>, Enumerator<T>, Enumerator<T>, T, GetEnumeratorFunction, GetEnumeratorFunction> AsValueEnumerable()
+                => ValueEnumerableExtensions.AsValueEnumerable<ValueEnumerableWrapper<T>, Enumerator<T>, T, GetEnumeratorFunction>(this);
+            
+            public readonly struct GetEnumeratorFunction
+                : IFunction<ValueEnumerableWrapper<T>, Enumerator<T>>
+            {
+                public Enumerator<T> Invoke(ValueEnumerableWrapper<T> enumerable) 
+                    => enumerable.GetEnumerator();
+            }
         }
     }
 }

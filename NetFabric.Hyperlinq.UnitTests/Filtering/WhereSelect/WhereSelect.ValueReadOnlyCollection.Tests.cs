@@ -20,8 +20,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.WhereSelect
                 .Select(selector);
 
             // Act
-            var result = ValueEnumerableExtensions
-                .Where<Wrap.ValueReadOnlyCollectionWrapper<int>, Wrap.Enumerator<int>, int>(wrapped, predicate)
+            var result = wrapped.AsValueEnumerable()
+                .Where(predicate)
                 .Select(selector);
 
             // Assert
@@ -44,8 +44,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.WhereSelect
                 .Count();
 
             // Act
-            var result = ValueEnumerableExtensions
-                .Where<Wrap.ValueReadOnlyCollectionWrapper<int>, Wrap.Enumerator<int>, int>(wrapped, predicate)
+            var result = wrapped.AsValueEnumerable()
+                .Where(predicate)
                 .Select(item => item)
                 .Count();
 
