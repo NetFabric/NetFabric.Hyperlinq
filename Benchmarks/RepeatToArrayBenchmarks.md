@@ -4,32 +4,32 @@
 [RepeatToArrayBenchmarks.cs](../NetFabric.Hyperlinq.Benchmarks/Benchmarks/RepeatToArrayBenchmarks.cs)
 
 ### References:
-- Linq: 5.0.2
+- Linq: 5.0.3
 - System.Linq.Async: [5.0.0](https://www.nuget.org/packages/System.Linq.Async/5.0.0)
 - System.Interactive: [5.0.0](https://www.nuget.org/packages/System.Interactive/5.0.0)
 - System.Interactive.Async: [5.0.0](https://www.nuget.org/packages/System.Interactive.Async/5.0.0)
 - StructLinq: [0.25.3](https://www.nuget.org/packages/StructLinq/0.25.3)
-- NetFabric.Hyperlinq: [3.0.0-beta34](https://www.nuget.org/packages/NetFabric.Hyperlinq/3.0.0-beta34)
+- NetFabric.Hyperlinq: [3.0.0-beta44](https://www.nuget.org/packages/NetFabric.Hyperlinq/3.0.0-beta44)
 
 ### Results:
 ``` ini
 
-BenchmarkDotNet=v0.12.1, OS=Windows 10.0.19042
+BenchmarkDotNet=v0.12.1, OS=Windows 10.0.19043
 Intel Core i7-7567U CPU 3.50GHz (Kaby Lake), 1 CPU, 4 logical and 2 physical cores
-.NET Core SDK=5.0.200-preview.20614.14
-  [Host]        : .NET Core 5.0.2 (CoreCLR 5.0.220.61120, CoreFX 5.0.220.61120), X64 RyuJIT
-  .NET Core 5.0 : .NET Core 5.0.2 (CoreCLR 5.0.220.61120, CoreFX 5.0.220.61120), X64 RyuJIT
+.NET Core SDK=6.0.100-preview.1.21103.13
+  [Host]        : .NET Core 5.0.3 (CoreCLR 5.0.321.7212, CoreFX 5.0.321.7212), X64 RyuJIT
+  .NET Core 5.0 : .NET Core 5.0.3 (CoreCLR 5.0.321.7212, CoreFX 5.0.321.7212), X64 RyuJIT
 
 Job=.NET Core 5.0  Runtime=.NET Core 5.0  
 
 ```
 |          Method |   Categories | Count |      Mean |    Error |   StdDev | Ratio | RatioSD |  Gen 0 | Gen 1 | Gen 2 | Allocated |
 |---------------- |------------- |------ |----------:|---------:|---------:|------:|--------:|-------:|------:|------:|----------:|
-|            Linq |       Repeat |   100 | 140.08 ns | 2.839 ns | 2.915 ns |  1.00 |    0.00 | 0.2179 |     - |     - |     456 B |
-|      StructLinq |       Repeat |   100 | 164.29 ns | 3.302 ns | 3.391 ns |  1.17 |    0.03 | 0.2141 |     - |     - |     448 B |
-| LinqFaster_SIMD |       Repeat |   100 |  36.61 ns | 0.810 ns | 1.053 ns |  0.26 |    0.01 | 0.2027 |     - |     - |     424 B |
-|       Hyperlinq |       Repeat |   100 |  63.87 ns | 1.072 ns | 1.053 ns |  0.46 |    0.01 | 0.2027 |     - |     - |     424 B |
-|  Hyperlinq_SIMD |       Repeat |   100 |  52.59 ns | 0.871 ns | 0.815 ns |  0.38 |    0.01 | 0.2027 |     - |     - |     424 B |
+|            Linq |       Repeat |   100 |  90.58 ns | 1.787 ns | 1.755 ns |  1.00 |    0.00 | 0.2180 |     - |     - |     456 B |
+|      StructLinq |       Repeat |   100 | 110.19 ns | 0.540 ns | 0.479 ns |  1.21 |    0.03 | 0.2142 |     - |     - |     448 B |
+| LinqFaster_SIMD |       Repeat |   100 |  27.90 ns | 0.309 ns | 0.274 ns |  0.31 |    0.01 | 0.2027 |     - |     - |     424 B |
+|       Hyperlinq |       Repeat |   100 |  53.16 ns | 0.411 ns | 0.385 ns |  0.59 |    0.01 | 0.2027 |     - |     - |     424 B |
+|  Hyperlinq_SIMD |       Repeat |   100 |  37.55 ns | 0.154 ns | 0.137 ns |  0.41 |    0.01 | 0.2027 |     - |     - |     424 B |
 |                 |              |       |           |          |          |       |         |        |       |       |           |
-|      Linq_Async | Repeat_Async |   100 | 162.26 ns | 3.103 ns | 3.048 ns |  1.00 |    0.00 | 0.2255 |     - |     - |     472 B |
-| Hyperlinq_Async | Repeat_Async |   100 | 178.38 ns | 1.134 ns | 0.947 ns |  1.10 |    0.02 | 0.2027 |     - |     - |     424 B |
+|      Linq_Async | Repeat_Async |   100 |  92.75 ns | 0.467 ns | 0.414 ns |  1.00 |    0.00 | 0.2257 |     - |     - |     472 B |
+| Hyperlinq_Async | Repeat_Async |   100 | 163.20 ns | 0.654 ns | 0.546 ns |  1.76 |    0.01 | 0.2027 |     - |     - |     424 B |
