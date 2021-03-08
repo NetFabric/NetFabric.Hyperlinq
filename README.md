@@ -81,17 +81,16 @@ The names of the benchmarks are structured as follow:
   - _Memory_ - a `Memory<>`
   - _Enumerable_ - implements `IEnumerable<>`
   - _Collection_ - implements `IReadOnlyCollection<>` and `ICollection<>`
-  - _List_ - implements `IReadOnlyList<>` and `IList<>` but not an array
+  - _List_ - implements `IReadOnlyList<>` and `IList<>` but is not an array
   - _AsyncEnumerable_ - implements `IAsyncEnumerable<>`
 - The type of enumerator provided by the source:
   - _Value_ - the enumerator is a value type
   - _Reference_ - the enumerator is a reference type
-- The contents of the source:
-  - _Sequential_ - contains numbers in sequential order
-  - _Random_ - contains numbers in random order  
 - How the result of the operation is iterated:
   - _For_ - a `for` loop is used to call the indexer
-  - _Foreach_ - a `foreach` loop is used to call the enumerator  
+  - _Foreach_ - a `foreach` loop is used to call the enumerator
+- Has a variant:
+  - _SIMD_ - using SIMD
 
 
 ## Usage
@@ -123,9 +122,9 @@ public static void Example(IReadOnlyList<int> list)
 
 - `Netfabric.Hyperlinq` contains special versions of `AsValueEnumerable()` for better performance with all collections in the `System.Collections.Immutable` namespace. Projects targetting .NET Framework, `netcoreapp2.1` or `netstandard2.0`, require the addition of the [`NetFabric.Hyperlinq.Immutable` NuGet package](https://www.nuget.org/packages/NetFabric.Hyperlinq.Immutable/) dependency.
 
-- All enumerables returned by `NetFabric.Hyperlinq` are compatible with `System.Linq`. 
+- Most enumerables returned by `NetFabric.Hyperlinq` are compatible with `System.Linq`. The exception is enumerables for `Span<>` or `ReadOnlySpan<>`.
 
-`OrderByDescending()` is not yet available in `Netfabric.Hyperlinq` but can still be used without requiring any conversion:
+This allows the use of `System.Linq` operators on `NetFabric.Hyperlinq` enumerables. `OrderByDescending()` is not yet available in `Netfabric.Hyperlinq` but can still be used without requiring any conversion:
 
 ``` csharp
 public static void Example(IReadOnlyList<int> list)
@@ -146,43 +145,51 @@ To add `NetFabric.Hyperlinq` operations after a `System.Linq` operation, simply 
 
 ### Value delegates
 
-Calling a lambda expression for each item of the collection is very expensive. `NetFabric.Hyperlinq` supports a much more performant alternative.
+Calling a lambda expression for each item of the collection is very expensive. `NetFabric.Hyperlinq` supports an alternative that is not as practical but that has much better performance.
 
-- Declare a `struct` that implements `IFunction<>` or `IFunctionIn<>`. 
+- Declare a `struct` that implements `IFunction<>`. Here's two examples of how to implement:
 
 ``` csharp
-readonly struct DoubleOfInt32
+readonly struct MultiplyBy2
     : IFunction<int, int>
 {
     public int Invoke(int element)
         => element * 2;
 }
 
-readonly struct DoubleOfInt32ByRef
-    : IFunctionIn<int, int>
+readonly struct LessThan
+    : IFunction<int, bool>
 {
-    public int Invoke(in int element)
-        => element * 2;
+	readonly int value;
+	
+    public LessThan(int value)
+		=> this.value = value;
+    
+    public bool Invoke(int element)
+        => element < value;
 }
 ```
 
-- Add the name of the structure to the method generics arguments
+- Pass an instance as a parameter or just add the type to the generics arguments list (uses the default constructor):
 
 ``` csharp
 public static void Example(IReadOnlyList<int> list)
 {
   var result = list
     .AsValueEnumerable()
-    .Select<int, DoubleOfInt32>();
+    .Where(new LessThan(10))
+    .Select<int, MultiplyBy2>();
 
   foreach(var value in result)
     Console.WriteLine(value);
 }
 ```
 
+The instances are allocated on the stack and the methods calls are non-virtual. 
+
 ### Generation operations
 
-In `NetFabric.Hyperlinq`, the generation operations like `Empty()`, `Range()`, `Repeat()` and `Return()` are static methods implemented in the static class `ValueEnumerable`. To use the equivalent operations from `NetFabric.Hyperlinq`, simply replace `Enumerable` for `ValueEnumerable`.
+In `NetFabric.Hyperlinq`, the generation operations like `Empty()`, `Range()`, `Repeat()` and `Return()` are static methods implemented in the static class `ValueEnumerable`. To use them, instead of the `System.Linq` equivalents, simply use `ValueEnumerable` instead of `Enumerable`.
 
 ``` csharp
 public static void Example(int count)
@@ -196,54 +203,6 @@ public static void Example(int count)
 }
 ```
 
-### Method return types
-
-Usually, when returning a query, it's used `IEnumerable<>` as the method return type:
-
-``` csharp
-public static IEnumerable<int> Example(int count)
-  => ValueEnumerable
-    .Range(0, count)
-    .Select(value => value * 2);
-```
-
-This allows the caller to use `System.Linq` or a `foreach` loop to pull and process the result. `NetFabric.Hyperlinq` can also be used but the `AsValueEnumerable()` conversion method has to be used.
-
-The operation in `NetFabric.Hyperlinq` are implemented so that they return the highest level enumeration interface possible. For example, the `Range()` operation return implements `IValueReadOnlyList<,>` and the subsequent `Select()` return does the same thing. `IValueReadOnlyList<,>` derives from `IReadOnlyList<>` so, we can change the method to return this interface:
-
-``` csharp
-public static IReadOnlyList<int> Example(int count)
-  => ValueEnumerable
-    .Range(0, count)
-    .Select(value => value * 2);
-```
-
-Now, the caller is free to use the enumerator or the indexer, which are provided by this interface. This means that, all previous methods of iteration can be used plus the `for` loops, which is much more efficient. The indexer performs fewer internal operations and doesn't need an enumerator instance. `NetFabric.Hyperlinq` can also be used and the `AsValueEnumerable()` conversion method still has to be used but, `NetFabric.Hyperlinq` will now use the indexer.
-
-Otherwise, `NetFabric.Hyperlinq` will use enumerators. It implements all enumerators as value types. This allows the enumerators not to be allocated on the heap and calls to its methods to be non-virtual. The `IEnumerable<>` interface, and all other derived BCL interfaces, convert the enumerator to the `IEnumerator<>` interface. This results in the enumerator to be boxed, undoing the mentioned benefits.
-
-`NetFabric.Hyperlinq` defines enumerable interfaces that contain the enumerator type as a generic parameter. This allows the caller to use it without boxing. Consider changing the method to return one of these interfaces:
-
-``` csharp
-public static IValueReadOnlyList<int, ReadOnlyList.SelectEnumerable<ValueEnumerable.RangeEnumerable, int, int>.DisposableEnumerator> Example(int count)
-  => ValueEnumerable
-    .Range(0, count)
-    .Select(value => value * 2);
-```
-
-The caller is now able to use `NetFabric.Hyperlinq` without requiring the `AsValueEnumerable()` conversion method. In this case, it will use the indexer in all subsequent operations but the enumerator is still available. In other cases (`IValueEnumerable<,>`, `IValueReadOnlyCollection<,>` and `IAsyncValueEnumerable<,>`) it will use the enumerator.
-
-`NetFabric.Hyperlinq` also implements the enumerables as value types. Returning an interface means that the enumerable will still be boxed. If you want to also avoid this, consider changing the return type to be the actual enumerable type. In this case:
-
-``` csharp
-public static ReadOnlyList.SelectEnumerable<ValueEnumerable.RangeEnumerable, int, int> Example(int count)
-  => ValueEnumerable
-    .Range(0, count)
-    .Select(value => value * 2);
-```
-
-**NOTE:** Returning the enumerable type or a value enumeration interface, allows major performance improvements but creates a library design issue. Changes in the method implementation may result in changes to the retun type. This is a breaking change. This is an issue on the public API but not so much for the private and internal methods. Take this into consideration when deciding on the return type.
-
 ### Composition
 
 `NetFabric.Hyperlinq` operations can be composed just like with `System.Linq`. The difference is on how each one optimizes the internals to reduce the number of enumerators required to iterate the values.
@@ -256,17 +215,7 @@ var result = source.AsValueEnumerable()
     .Select(item => item * 2);
 ```
 
-But, `System.Linq` does not do the same for this other example:
-
-``` csharp
-var result = source.AsValueEnumerable()
-    .Where(item => item > 2)
-    .First();
-```
-
-`System.Linq` has a second overload for methods, like `First()` and `Single()`, that take the predicate as a parameter and allow the `Where()` to be removed. In `NetFabric.Hyperlinq` this is not required. With the intention of reducing the code to be maintained and tested, these other overloads actually are not available in `NetFabric.Hyperlinq`.
-
-`NetFabric.Hyperlinq` includes many more composition optimizations. In the following code, only one enumerator is used, and only because of the `Where()` operation. Otherwise, the indexer would have been used instead. Also, the `Select()` is applied after `First()`, so that it's applied to only to the resulting item:
+`NetFabric.Hyperlinq` includes many more composition optimizations. In the following code, only one enumerator is used:
 
 ``` csharp
 var result = array.AsValueEnumerable()
@@ -279,7 +228,7 @@ var result = array.AsValueEnumerable()
 
 ### Option
 
-In `System.Linq`, the aggregation operations like `First()`, `Single()` and `ElementAt()`, throw an exception when the source has no items. Often, empty collections are a valid scenario and exception handling is very slow. `System.Linq` has alternative methods like `FirstOrDefault()`, `SingleOrDefault()` and `ElementAtOrDefault()`, that return the `default` value instead of throwing. This is still an issue when the items are value-typed, where there's no way to distinguish between an empty collection and a valid item.
+In `System.Linq`, the aggregation operations like `First()`, `Single()` and `ElementAt()`, throw an exception when the source has no items. Often, empty collections are a valid scenario and exception handling is very slow. `System.Linq` has alternative methods like `FirstOrDefault()`, `SingleOrDefault()` and `ElementAtOrDefault()`, that return the `default` value instead of throwing. This is still an issue when the items are of a value-type, where there's no way to distinguish between an empty collection and a valid item.
 
 In `NetFabric.Hyperlinq`, aggregation operations return an `Option<>` type. This is similar in behavior to the [`Nullable<>`](https://docs.microsoft.com/en-us/dotnet/api/system.nullable-1) but it can contain reference types. 
 
@@ -302,13 +251,17 @@ if (isSome)
 If you prefer a more functional approach, you can use `Match()` to specify the value returned when the collection has values and when it's empty. Here's how to use it to define the previous behavior of `First()` and `FirstOrDefault()`:
 
 ``` csharp
-var first = source.AsValueEnumerable().First().Match(
-  item => item,
-  () => throw new InvalidOperationException("Sequence contains no elements"));
+var first = source.AsValueEnumerable()
+  .First()
+  .Match(
+    item => item,
+    () => throw new InvalidOperationException("Sequence contains no elements"));
 
-var firstOrDefault = source.AsValueEnumerable().First().Match(
-  item => item,
-  () => default);
+var firstOrDefault = source.AsValueEnumerable()
+  .First()
+  .Match(
+    item => item,
+    () => default);
 
 Console.WriteLine(first);
 Console.WriteLine(firstOrDefault);
@@ -317,45 +270,49 @@ Console.WriteLine(firstOrDefault);
 `Match()` can also be used to define actions:
 
 ``` csharp
-source.AsValueEnumerable().First().Match(
-  item => Console.WriteLine(item),
-  () => { });
+source.AsValueEnumerable()
+  .First()
+  .Match(
+    item => Console.WriteLine(item),
+    () => { });
 ```
 
 The `NetFabric.Hyperlinq` operations can be applied to `Option<>`, including `Where()`, `Select()` and `SelectMany()`. These return another `Option<>` with the predicate/selector applied to the value, if it exists.
 
 ```csharp
-source.AsValueEnumerable().First().Where(item => item > 2).Match(
-  item => Console.WriteLine(item),
-  () => { });
+source.AsValueEnumerable()
+  .First()
+  .Where(item => item > 2)
+  .Match(
+    item => Console.WriteLine(item),
+    () => { });
 ```
 
 ### Buffer pools
 
 [Buffer pools](https://adamsitnik.com/Array-Pool/) allow the use of heap memory without adding pressure to the garbage collector. It preallocates a chunk of memory and "rents" it as required. The garbage collector will add this memory to the Large Object Heap (LOH).
 
-`ToArray()` is usually used to cache values for a brief period. `Netfabric.Hyperlinq` adds an oveload that takes a `MemoryPool<>` as a parameter:
+`ToArray()` is frequently used to cache values for a brief period and the use of buffer pools may be useful.
+
+`Netfabric.Hyperlinq` adds an overload that takes a `MemoryPool<>` as a parameter:
 
 ``` csharp
-using var buffer = source.AsValueEnumerable()
-    .ToArray(MemoryPool<int>.Shared);
-var memory = buffer.Memory;
-// use memory here
+void Method()
+{
+  using var buffer = source.AsValueEnumerable()
+      .ToArray(MemoryPool<int>.Shared);
+  var memory = buffer.Memory;
+  // use memory here
+}
 ```
 
 It returns an [`IMemoryOwner<>`](https://docs.microsoft.com/en-us/dotnet/api/system.buffers.imemoryowner-1). The `using` statement guarantees that it is disposed and the buffer automatically returned to the pool. 
 
 ### SIMD
 
-`NetFabric.Hyperlinq` uses SIMD implicitly to improve performance when possible, but many times it can only be done explicitly by calling specific operations.
+`NetFabric.Hyperlinq` uses SIMD implicitly to improve performance of some operations. Many times this can only be done explicitly because it can only be used on a limited number of types and operations on them.
 
-SIMD improves performance by performing the same operations simultaneously on multiple items. The operation can only be performed if this number is met. This means that a remaining number of items has to be processed without SIMD.
-
-The items processed simultaneously are stored inside a [`System.Numerics.Vector`](https://docs.microsoft.com/en-us/dotnet/api/system.numerics.vector-1) structure.
-
-Operations that require an expression to process data, on the SIMD-enable equivalent require an expression that applies it at the [`System.Numerics.Vector`](https://docs.microsoft.com/en-us/dotnet/api/system.numerics.vector-1) level and another one at the item level.
-
-For this reason, and also because SIMD cannot be applied to all data types, SIMD specific operations have be called. The method has a `Vector` post-fix in the name.
+In `NetFabric.Hyperlinq`, alternative methods that use SIMD, have the word `Vector` at the end of its name. You'll also find that the operations that require an expression, now require two.
 
 ``` csharp
 var result = list
@@ -364,10 +321,12 @@ var result = list
   .ToArray();
 ```
 
-These methods also support value delegates. In this case, the `struct` containing the expressions must implement two `IFunction<,>`. 
+SIMD improves performance by performing the same operations simultaneously on multiple items. The operation can only be performed if this number is met. This means that the remaining number of items has to be processed without SIMD. The first expression is applied on a [`System.Numerics.Vector<>`](https://docs.microsoft.com/en-us/dotnet/api/system.numerics.vector-1), while the second one is applied on an item.
+
+These methods also support the use of [value delegates](#value-delegates). In this case, the `struct` containing the expressions must implement two `IFunction<,>`: 
 
 ``` csharp
-readonly struct DoubleOfInt32
+readonly struct MultiplyBy2
     : IFunction<Vector<int>, Vector<int>>
     , IFunction<int, int>
 {
@@ -382,7 +341,7 @@ public static void Example(List<int> list)
 {
   var result = list
     .AsValueEnumerable()
-    .SelectVector<int, DoubleOfInt32>()
+    .SelectVector<int, MultiplyBy2>()
     .ToArray();
 
   foreach(var value in result)
@@ -390,7 +349,7 @@ public static void Example(List<int> list)
 }
 ```
 
-Please note that the operation `SelectVector()` does not return and enumerable. It returns the context required for subsequent operations like `ToArray()`, `ToList()`, and `Sum()`. 
+Please note that the operation `SelectVector()` does not return an enumerable. It returns the context required for subsequent operations like `ToArray()`, `ToList()`, and `Sum()`. 
 
 Up until now I haven't found a way to improve the performance of `Select()` by using SIMD. The returned context allows the use of composition, exposing only the operations that can gain with the use of SIMD.  
 

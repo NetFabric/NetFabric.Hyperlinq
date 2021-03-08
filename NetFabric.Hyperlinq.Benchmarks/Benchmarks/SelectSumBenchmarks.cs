@@ -134,25 +134,10 @@ namespace NetFabric.Hyperlinq.Benchmarks
 
         [BenchmarkCategory("Array")]
         [Benchmark]
-        public int Hyperlinq_Span()
-            => array.AsSpan().AsValueEnumerable()
-                .Select(item => item)
-                .Sum();
-
-        [BenchmarkCategory("Array")]
-        [Benchmark]
-        public int Hyperlinq_Span_SIMD()
-            => array.AsSpan().AsValueEnumerable()
+        public int Hyperlinq_Array_SIMD()
+            => array.AsValueEnumerable()
                 .SelectVector(item => item, item => item)
                 .Sum();
-
-        [BenchmarkCategory("Array")]
-        [Benchmark]
-        public int Hyperlinq_Memory()
-            => memory.AsValueEnumerable()
-                .Select(item => item)
-                .Sum();
-
 
         [BenchmarkCategory("Enumerable_Value")]
         [Benchmark]
@@ -181,7 +166,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public ValueTask<int> Hyperlinq_AsyncEnumerable_Value()
             => asyncEnumerableValue
                 .AsAsyncValueEnumerable()
-                .Select(item => item)
+                .Select((item, _) => new ValueTask<int>(item))
                 .SumAsync();
 
         [BenchmarkCategory("Enumerable_Reference")]
@@ -213,7 +198,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public ValueTask<int> Hyperlinq_AsyncEnumerable_Reference()
             => asyncEnumerableReference
                 .AsAsyncValueEnumerable()
-                .Select(item => item)
+                .Select((item, _) => new ValueTask<int>(item))
                 .SumAsync();
     }
 }

@@ -116,18 +116,6 @@ namespace NetFabric.Hyperlinq.Benchmarks
             => array.AsValueEnumerable()
                 .ToList();
 
-        [BenchmarkCategory("Array")]
-        [Benchmark]
-        public List<int> Hyperlinq_Span()
-            => array.AsSpan().AsValueEnumerable()
-                .ToList();
-
-        [BenchmarkCategory("Array")]
-        [Benchmark]
-        public List<int> Hyperlinq_Memory()
-            => memory.AsValueEnumerable()
-                .ToList();
-
         [BenchmarkCategory("Enumerable_Value")]
         [Benchmark]
         public List<int> Hyperlinq_Enumerable_Value()

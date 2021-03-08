@@ -164,7 +164,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public ValueTask<int> Hyperlinq_AsyncEnumerable_Value()
             => asyncEnumerableValue
                 .AsAsyncValueEnumerable()
-                .Where(item => (item & 0x01) == 0)
+                .Where((item, _) => new ValueTask<bool>((item & 0x01) == 0))
                 .CountAsync();
 
         [BenchmarkCategory("Enumerable_Reference")]
@@ -196,7 +196,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public ValueTask<int> Hyperlinq_AsyncEnumerable_Reference()
             => asyncEnumerableReference
                 .AsAsyncValueEnumerable()
-                .Where(item => (item & 0x01) == 0)
+                .Where((item, _) => new ValueTask<bool>((item & 0x01) == 0))
                 .CountAsync();
     }
 }

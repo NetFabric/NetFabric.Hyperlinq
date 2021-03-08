@@ -16,7 +16,9 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Linq_Array()
         {
             var sum = 0;
-            foreach (var item in array.Where(item => (item & 0x01) == 0).Select(item => item))
+            foreach (var item in array
+                .Where(item => (item & 0x01) == 0)
+                .Select(item => item))
                 sum += item;
             return sum;
         }
@@ -26,7 +28,9 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Linq_Enumerable_Value()
         {
             var sum = 0;
-            foreach (var item in enumerableValue.Where(item => (item & 0x01) == 0).Select(item => item))
+            foreach (var item in enumerableValue
+                .Where(item => (item & 0x01) == 0)
+                .Select(item => item))
                 sum += item;
             return sum;
         }
@@ -36,7 +40,9 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Linq_Collection_Value()
         {
             var sum = 0;
-            foreach (var item in collectionValue.Where(item => (item & 0x01) == 0).Select(item => item))
+            foreach (var item in collectionValue
+                .Where(item => (item & 0x01) == 0)
+                .Select(item => item))
                 sum += item;
             return sum;
         }
@@ -46,7 +52,9 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Linq_List_Value()
         {
             var sum = 0;
-            foreach (var item in listValue.Where(item => (item & 0x01) == 0).Select(item => item))
+            foreach (var item in listValue
+                .Where(item => (item & 0x01) == 0)
+                .Select(item => item))
                 sum += item;
             return sum;
         }
@@ -56,7 +64,9 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public async ValueTask<int> Linq_AsyncEnumerable_Value()
         {
             var sum = 0;
-            await foreach (var item in asyncEnumerableValue.Where(item => (item & 0x01) == 0).Select(item => item))
+            await foreach (var item in asyncEnumerableValue
+                .Where(item => (item & 0x01) == 0)
+                .Select(item => item))
                 sum += item;
             return sum;
         }
@@ -66,7 +76,9 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Linq_Enumerable_Reference()
         {
             var sum = 0;
-            foreach (var item in enumerableReference.Where(item => (item & 0x01) == 0).Select(item => item))
+            foreach (var item in enumerableReference
+                .Where(item => (item & 0x01) == 0)
+                .Select(item => item))
                 sum += item;
             return sum;
         }
@@ -76,7 +88,9 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Linq_Collection_Reference()
         {
             var sum = 0;
-            foreach (var item in collectionReference.Where(item => (item & 0x01) == 0).Select(item => item))
+            foreach (var item in collectionReference
+                .Where(item => (item & 0x01) == 0)
+                .Select(item => item))
                 sum += item;
             return sum;
         }
@@ -86,7 +100,9 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Linq_List_Reference()
         {
             var sum = 0;
-            foreach (var item in listReference.Where(item => (item & 0x01) == 0).Select(item => item))
+            foreach (var item in listReference
+                .Where(item => (item & 0x01) == 0)
+                .Select(item => item))
                 sum += item;
             return sum;
         }
@@ -96,7 +112,9 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public async ValueTask<int> Linq_AsyncEnumerable_Reference()
         {
             var sum = 0;
-            await foreach (var item in asyncEnumerableReference.Where(item => (item & 0x01) == 0).Select(item => item))
+            await foreach (var item in asyncEnumerableReference
+                .Where(item => (item & 0x01) == 0)
+                .Select(item => item))
                 sum += item;
             return sum;
         }
@@ -108,7 +126,9 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int StructLinq_Array()
         {
             var sum = 0;
-            foreach (var item in array.ToStructEnumerable().Where(item => (item & 0x01) == 0, x => x).Select(item => item, x => x))
+            foreach (var item in array.ToStructEnumerable()
+                .Where(item => (item & 0x01) == 0, x => x)
+                .Select(item => item, x => x))
                 sum += item;
             return sum;
         }
@@ -118,7 +138,9 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int StructLinq_Enumerable_Value()
         {
             var sum = 0;
-            foreach (var item in enumerableValue.ToStructEnumerable().Where(item => (item & 0x01) == 0, x => x).Select(item => item, x => x))
+            foreach (var item in enumerableValue.ToStructEnumerable()
+                .Where(item => (item & 0x01) == 0, x => x)
+                .Select(item => item, x => x))
                 sum += item;
             return sum;
         }
@@ -128,7 +150,9 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int StructLinq_Collection_Value()
         {
             var sum = 0;
-            foreach (var item in collectionValue.ToStructEnumerable().Where(item => (item & 0x01) == 0, x => x).Select(item => item, x => x))
+            foreach (var item in collectionValue.ToStructEnumerable()
+                .Where(item => (item & 0x01) == 0, x => x)
+                .Select(item => item, x => x))
                 sum += item;
             return sum;
         }
@@ -138,7 +162,9 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int StructLinq_List_Value()
         {
             var sum = 0;
-            foreach (var item in listValue.ToStructEnumerable().Where(item => (item & 0x01) == 0, x => x).Select(item => item, x => x))
+            foreach (var item in listValue.ToStructEnumerable()
+                .Where(item => (item & 0x01) == 0, x => x)
+                .Select(item => item, x => x))
                 sum += item;
             return sum;
         }
@@ -148,7 +174,9 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int StructLinq_Enumerable_Reference()
         {
             var sum = 0;
-            foreach (var item in enumerableReference.ToStructEnumerable().Where(item => (item & 0x01) == 0, x => x).Select(item => item, x => x))
+            foreach (var item in enumerableReference.ToStructEnumerable()
+                .Where(item => (item & 0x01) == 0, x => x)
+                .Select(item => item, x => x))
                 sum += item;
             return sum;
         }
@@ -158,7 +186,9 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int StructLinq_Collection_Reference()
         {
             var sum = 0;
-            foreach (var item in collectionReference.ToStructEnumerable().Where(item => (item & 0x01) == 0, x => x).Select(item => item, x => x))
+            foreach (var item in collectionReference.ToStructEnumerable()
+                .Where(item => (item & 0x01) == 0, x => x)
+                .Select(item => item, x => x))
                 sum += item;
             return sum;
         }
@@ -168,7 +198,9 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int StructLinq_List_Reference()
         {
             var sum = 0;
-            foreach (var item in listReference.ToStructEnumerable().Where(item => (item & 0x01) == 0, x => x).Select(item => item, x => x))
+            foreach (var item in listReference.ToStructEnumerable()
+                .Where(item => (item & 0x01) == 0, x => x)
+                .Select(item => item, x => x))
                 sum += item;
             return sum;
         }
@@ -180,7 +212,9 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Hyperlinq_Array()
         {
             var sum = 0;
-            foreach (var item in array.AsValueEnumerable().Where(item => (item & 0x01) == 0).Select(item => item))
+            foreach (var item in array.AsValueEnumerable()
+                .Where(item => (item & 0x01) == 0)
+                .Select(item => item))
                 sum += item;
             return sum;
         }
@@ -190,7 +224,9 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Hyperlinq_Span()
         {
             var sum = 0;
-            foreach (var item in array.AsSpan().AsValueEnumerable().Where(item => (item & 0x01) == 0).Select(item => item))
+            foreach (var item in array.AsSpan().AsValueEnumerable()
+                .Where(item => (item & 0x01) == 0)
+                .Select(item => item))
                 sum += item;
             return sum;
         }
@@ -200,7 +236,9 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Hyperlinq_Memory()
         {
             var sum = 0;
-            foreach (var item in memory.AsValueEnumerable().Where(item => (item & 0x01) == 0).Select(item => item))
+            foreach (var item in memory.AsValueEnumerable()
+                .Where(item => (item & 0x01) == 0)
+                .Select(item => item))
                 sum += item;
             return sum;
         }
@@ -234,7 +272,9 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Hyperlinq_List_Value()
         {
             var sum = 0;
-            foreach (var item in listValue.AsValueEnumerable().Where(item => (item & 0x01) == 0).Select(item => item))
+            foreach (var item in listValue.AsValueEnumerable()
+                .Where(item => (item & 0x01) == 0)
+                .Select(item => item))
                 sum += item;
             return sum;
         }
@@ -244,7 +284,9 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public async ValueTask<int> Hyperlinq_AsyncEnumerable_Value()
         {
             var sum = 0;
-            await foreach (var item in asyncEnumerableValue.AsAsyncValueEnumerable().Where(item => (item & 0x01) == 0).Select(item => item))
+            await foreach (var item in asyncEnumerableValue.AsAsyncValueEnumerable()
+                .Where((item, _) => new ValueTask<bool>((item & 0x01) == 0))
+                .Select((item, _) => new ValueTask<int>(item)))
                 sum += item;
             return sum;
         }
@@ -254,7 +296,9 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Hyperlinq_Enumerable_Reference()
         {
             var sum = 0;
-            foreach (var item in enumerableReference.AsValueEnumerable().Where(item => (item & 0x01) == 0).Select(item => item))
+            foreach (var item in enumerableReference.AsValueEnumerable()
+                .Where(item => (item & 0x01) == 0)
+                .Select(item => item))
                 sum += item;
             return sum;
         }
@@ -264,7 +308,9 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Hyperlinq_Collection_Reference()
         {
             var sum = 0;
-            foreach (var item in collectionReference.AsValueEnumerable().Where(item => (item & 0x01) == 0).Select(item => item))
+            foreach (var item in collectionReference.AsValueEnumerable()
+                .Where(item => (item & 0x01) == 0)
+                .Select(item => item))
                 sum += item;
             return sum;
         }
@@ -274,7 +320,9 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Hyperlinq_List_Reference()
         {
             var sum = 0;
-            foreach (var item in listReference.AsValueEnumerable().Where(item => (item & 0x01) == 0).Select(item => item))
+            foreach (var item in listReference.AsValueEnumerable()
+                .Where(item => (item & 0x01) == 0)
+                .Select(item => item))
                 sum += item;
             return sum;
         }
@@ -284,7 +332,9 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public async ValueTask<int> Hyperlinq_AsyncEnumerable_Reference()
         {
             var sum = 0;
-            await foreach (var item in asyncEnumerableReference.AsAsyncValueEnumerable().Where(item => (item & 0x01) == 0).Select(item => item))
+            await foreach (var item in asyncEnumerableReference.AsAsyncValueEnumerable()
+                .Where((item, _) => new ValueTask<bool>((item & 0x01) == 0))
+                .Select((item, _) => new ValueTask<int>(item)))
                 sum += item;
             return sum;
         }

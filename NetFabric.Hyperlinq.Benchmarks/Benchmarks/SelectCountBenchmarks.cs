@@ -132,21 +132,6 @@ namespace NetFabric.Hyperlinq.Benchmarks
                 .Select(item => item)
                 .Count();
 
-        [BenchmarkCategory("Array")]
-        [Benchmark]
-        public int Hyperlinq_Span()
-            => array.AsSpan().AsValueEnumerable()
-                .Select(item => item)
-                .Count();
-
-        [BenchmarkCategory("Array")]
-        [Benchmark]
-        public int Hyperlinq_Memory()
-            => memory.AsValueEnumerable()
-                .Select(item => item)
-                .Count();
-
-
         [BenchmarkCategory("Enumerable_Value")]
         [Benchmark]
         public int Hyperlinq_Enumerable_Value()
@@ -174,7 +159,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public ValueTask<int> Hyperlinq_AsyncEnumerable_Value()
             => asyncEnumerableValue
                 .AsAsyncValueEnumerable()
-                .Select(item => item)
+                .Select((item, _) => new ValueTask<int>(item))
                 .CountAsync();
 
         [BenchmarkCategory("Enumerable_Reference")]
@@ -206,7 +191,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public ValueTask<int> Hyperlinq_AsyncEnumerable_Reference()
             => asyncEnumerableReference
                 .AsAsyncValueEnumerable()
-                .Select(item => item)
+                .Select((item, _) => new ValueTask<int>(item))
                 .CountAsync();
     }
 }

@@ -65,20 +65,6 @@ namespace NetFabric.Hyperlinq.Benchmarks
                 .Where(item => item == Count - 1)
                 .Single();
 
-        [BenchmarkCategory("Array")]
-        [Benchmark]
-        public Option<int> Hyperlinq_Span()
-            => array.AsSpan().AsValueEnumerable()
-                .Where(item => item == Count - 1)
-                .Single();
-
-        [BenchmarkCategory("Array")]
-        [Benchmark]
-        public Option<int> Hyperlinq_Memory()
-            => memory.AsValueEnumerable()
-                .Where(item => item == Count - 1)
-                .Single();
-
         [BenchmarkCategory("Enumerable_Value")]
         [Benchmark]
         public Option<int> Hyperlinq_Enumerable_Value()
@@ -103,10 +89,10 @@ namespace NetFabric.Hyperlinq.Benchmarks
 
         [BenchmarkCategory("AsyncEnumerable_Value")]
         [Benchmark]
-        public ValueTask<int> Hyperlinq_AsyncEnumerable_Value()
+        public ValueTask<Option<int>> Hyperlinq_AsyncEnumerable_Value()
             => asyncEnumerableValue
                 .AsAsyncValueEnumerable()
-                .Where(item => item == Count - 1)
+                .Where((item, _) => new ValueTask<bool>(item == Count - 1))
                 .SingleAsync();
 
         [BenchmarkCategory("Enumerable_Reference")]
@@ -135,10 +121,10 @@ namespace NetFabric.Hyperlinq.Benchmarks
 
         [BenchmarkCategory("AsyncEnumerable_Reference")]
         [Benchmark]
-        public ValueTask<int> Hyperlinq_AsyncEnumerable_Reference()
+        public ValueTask<Option<int>> Hyperlinq_AsyncEnumerable_Reference()
             => asyncEnumerableReference
                 .AsAsyncValueEnumerable()
-                .Where(item => item == Count - 1)
+                .Where((item, _) => new ValueTask<bool>(item == Count - 1))
                 .SingleAsync();
     }
 }

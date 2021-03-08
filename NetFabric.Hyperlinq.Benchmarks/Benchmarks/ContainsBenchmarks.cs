@@ -64,18 +64,8 @@ namespace NetFabric.Hyperlinq.Benchmarks
 
         [BenchmarkCategory("Array")]
         [Benchmark]
-        public bool Hyperlinq_Span() 
-            => array.AsSpan().AsValueEnumerable().Contains(Count - 1);
-
-        [BenchmarkCategory("Array")]
-        [Benchmark]
-        public bool Hyperlinq_Span_SIMD()
-            => array.AsSpan().AsValueEnumerable().ContainsVector(Count - 1);
-
-        [BenchmarkCategory("Array")]
-        [Benchmark]
-        public bool Hyperlinq_Memory() 
-            => memory.AsValueEnumerable().Contains(Count - 1);
+        public bool Hyperlinq_Array_SIMD()
+            => array.AsValueEnumerable().ContainsVector(Count - 1);
 
         [BenchmarkCategory("Enumerable_Value")]
         [Benchmark]

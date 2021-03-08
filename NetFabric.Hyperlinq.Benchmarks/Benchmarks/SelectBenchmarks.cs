@@ -296,7 +296,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public async ValueTask<int> Hyperlinq_AsyncEnumerable_Value()
         {
             var sum = 0;
-            await foreach (var item in asyncEnumerableValue.AsAsyncValueEnumerable().Select((item, _) => item))
+            await foreach (var item in asyncEnumerableValue.AsAsyncValueEnumerable().Select((item, _) => new ValueTask<int>(item)))
                 sum += item;
             return sum;
         }
@@ -349,7 +349,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public async ValueTask<int> Hyperlinq_AsyncEnumerable_Reference()
         {
             var sum = 0;
-            await foreach (var item in asyncEnumerableReference.AsAsyncValueEnumerable().Select((item, _) => item))
+            await foreach (var item in asyncEnumerableReference.AsAsyncValueEnumerable().Select((item, _) => new ValueTask<int>(item)))
                 sum += item;
             return sum;
         }
