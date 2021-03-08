@@ -10,7 +10,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Aggregation.Sum
     {
         [Theory]
         [MemberData(nameof(TestData.Sum), MemberType = typeof(TestData))]
-        public async ValueTask SumAsync_With_ValidData_Must_Succeed(int[] source)
+        public async ValueTask SumAsync_With_ValidData_Must_Succeed(double[] source)
         {
             // Arrange
             var wrapped = Wrap.AsAsyncValueEnumerable(source);
@@ -19,7 +19,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Aggregation.Sum
 
             // Act
             var result = await wrapped
-                .SumAsync<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int, int>()
+                .SumAsync<Wrap.AsyncValueEnumerableWrapper<double>, Wrap.AsyncEnumerator<double>, double, double>()
                 .ConfigureAwait(false);
 
             // Assert
@@ -29,7 +29,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Aggregation.Sum
 
         [Theory]
         [MemberData(nameof(TestData.NullableSum), MemberType = typeof(TestData))]
-        public async ValueTask SumAsync_With_Nullable_ValidData_Must_Succeed(int?[] source)
+        public async ValueTask SumAsync_With_Nullable_ValidData_Must_Succeed(double?[] source)
         {
             // Arrange
             var wrapped = Wrap.AsAsyncValueEnumerable(source);
@@ -38,12 +38,12 @@ namespace NetFabric.Hyperlinq.UnitTests.Aggregation.Sum
 
             // Act
             var result = await wrapped
-                .SumAsync<Wrap.AsyncValueEnumerableWrapper<int?>, Wrap.AsyncEnumerator<int?>, int?, int>()
+                .SumAsync<Wrap.AsyncValueEnumerableWrapper<double?>, Wrap.AsyncEnumerator<double?>, double?, double>()
                 .ConfigureAwait(false);
 
             // Assert
             _ = result.Must()
-                .BeEqualTo(expected.Value);
+                .BeEqualTo(expected!.Value);
         }
     }
 }

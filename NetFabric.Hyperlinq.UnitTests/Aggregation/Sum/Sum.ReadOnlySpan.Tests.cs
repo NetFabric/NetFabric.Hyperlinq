@@ -10,10 +10,10 @@ namespace NetFabric.Hyperlinq.UnitTests.Aggregation.Sum
 
         [Theory]
         [MemberData(nameof(TestData.Sum), MemberType = typeof(TestData))]
-        public void Sum_With_ValidData_Must_Succeed(int[] source)
+        public void Sum_With_ValidData_Must_Succeed(double[] source)
         {
             // Arrange
-            var wrapped = (ReadOnlySpan<int>)source.AsSpan();
+            var wrapped = (ReadOnlySpan<double>)source.AsSpan();
             var expected = source
                 .Sum();
 
@@ -28,10 +28,10 @@ namespace NetFabric.Hyperlinq.UnitTests.Aggregation.Sum
 
         [Theory]
         [MemberData(nameof(TestData.NullableSum), MemberType = typeof(TestData))]
-        public void Sum_With_Nullable_ValidData_Must_Succeed(int?[] source)
+        public void Sum_With_Nullable_ValidData_Must_Succeed(double?[] source)
         {
             // Arrange
-            var wrapped = (ReadOnlySpan<int?>)source.AsSpan();
+            var wrapped = (ReadOnlySpan<double?>)source.AsSpan();
             var expected = source
                 .Sum();
 
@@ -41,7 +41,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Aggregation.Sum
 
             // Assert
             _ = result.Must()
-                .BeEqualTo(expected.Value);
+                .BeEqualTo(expected!.Value);
         }
     }
 }
