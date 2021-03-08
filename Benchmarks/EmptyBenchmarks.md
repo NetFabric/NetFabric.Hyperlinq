@@ -23,10 +23,10 @@ Intel Core i7-7567U CPU 3.50GHz (Kaby Lake), 1 CPU, 4 logical and 2 physical cor
 Job=.NET Core 5.0  Runtime=.NET Core 5.0  
 
 ```
-|                Method |  Categories |       Mean |     Error |    StdDev |     Median | Ratio | Gen 0 | Gen 1 | Gen 2 | Allocated |
-|---------------------- |------------ |-----------:|----------:|----------:|-----------:|------:|------:|------:|------:|----------:|
-|            Linq_Empty |       Empty |  6.2952 ns | 0.0226 ns | 0.0188 ns |  6.2962 ns | 1.000 |     - |     - |     - |         - |
-|       Hyperlinq_Empty |       Empty |  0.0022 ns | 0.0030 ns | 0.0028 ns |  0.0007 ns | 0.000 |     - |     - |     - |         - |
-|                       |             |            |           |           |            |       |       |       |       |           |
-|      Linq_Empty_Async | Empty_Async | 40.1819 ns | 0.0786 ns | 0.0656 ns | 40.1669 ns |  1.00 |     - |     - |     - |         - |
-| Hyperlinq_Empty_Async | Empty_Async | 21.2106 ns | 0.0668 ns | 0.0592 ns | 21.2027 ns |  0.53 |     - |     - |     - |         - |
+|                Method |  Categories |       Mean |     Error |    StdDev | Ratio | Gen 0 | Gen 1 | Gen 2 | Allocated |
+|---------------------- |------------ |-----------:|----------:|----------:|------:|------:|------:|------:|----------:|
+|            Linq_Empty |       Empty |  6.2518 ns | 0.0354 ns | 0.0313 ns | 1.000 |     - |     - |     - |         - |
+|       Hyperlinq_Empty |       Empty |  0.0000 ns | 0.0000 ns | 0.0000 ns | 0.000 |     - |     - |     - |         - |
+|                       |             |            |           |           |       |       |       |       |           |
+|      Linq_Empty_Async | Empty_Async | 40.6512 ns | 0.2135 ns | 0.1893 ns |  1.00 |     - |     - |     - |         - |
+| Hyperlinq_Empty_Async | Empty_Async | 20.8560 ns | 0.1184 ns | 0.1107 ns |  0.51 |     - |     - |     - |         - |

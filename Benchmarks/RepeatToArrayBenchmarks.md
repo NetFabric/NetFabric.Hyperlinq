@@ -23,13 +23,13 @@ Intel Core i7-7567U CPU 3.50GHz (Kaby Lake), 1 CPU, 4 logical and 2 physical cor
 Job=.NET Core 5.0  Runtime=.NET Core 5.0  
 
 ```
-|          Method |   Categories | Count |      Mean |    Error |   StdDev | Ratio | RatioSD |  Gen 0 | Gen 1 | Gen 2 | Allocated |
-|---------------- |------------- |------ |----------:|---------:|---------:|------:|--------:|-------:|------:|------:|----------:|
-|            Linq |       Repeat |   100 |  90.58 ns | 1.787 ns | 1.755 ns |  1.00 |    0.00 | 0.2180 |     - |     - |     456 B |
-|      StructLinq |       Repeat |   100 | 110.19 ns | 0.540 ns | 0.479 ns |  1.21 |    0.03 | 0.2142 |     - |     - |     448 B |
-| LinqFaster_SIMD |       Repeat |   100 |  27.90 ns | 0.309 ns | 0.274 ns |  0.31 |    0.01 | 0.2027 |     - |     - |     424 B |
-|       Hyperlinq |       Repeat |   100 |  53.16 ns | 0.411 ns | 0.385 ns |  0.59 |    0.01 | 0.2027 |     - |     - |     424 B |
-|  Hyperlinq_SIMD |       Repeat |   100 |  37.55 ns | 0.154 ns | 0.137 ns |  0.41 |    0.01 | 0.2027 |     - |     - |     424 B |
-|                 |              |       |           |          |          |       |         |        |       |       |           |
-|      Linq_Async | Repeat_Async |   100 |  92.75 ns | 0.467 ns | 0.414 ns |  1.00 |    0.00 | 0.2257 |     - |     - |     472 B |
-| Hyperlinq_Async | Repeat_Async |   100 | 163.20 ns | 0.654 ns | 0.546 ns |  1.76 |    0.01 | 0.2027 |     - |     - |     424 B |
+|          Method |   Categories | Count |      Mean |    Error |   StdDev | Ratio |  Gen 0 | Gen 1 | Gen 2 | Allocated |
+|---------------- |------------- |------ |----------:|---------:|---------:|------:|-------:|------:|------:|----------:|
+|            Linq |       Repeat |   100 |  97.15 ns | 0.738 ns | 0.654 ns |  1.00 | 0.2180 |     - |     - |     456 B |
+|      StructLinq |       Repeat |   100 | 110.91 ns | 0.619 ns | 0.549 ns |  1.14 | 0.2142 |     - |     - |     448 B |
+| LinqFaster_SIMD |       Repeat |   100 |  27.81 ns | 0.280 ns | 0.233 ns |  0.29 | 0.2027 |     - |     - |     424 B |
+|       Hyperlinq |       Repeat |   100 |  53.93 ns | 0.557 ns | 0.521 ns |  0.55 | 0.2027 |     - |     - |     424 B |
+|  Hyperlinq_SIMD |       Repeat |   100 |  37.53 ns | 0.606 ns | 0.538 ns |  0.39 | 0.2027 |     - |     - |     424 B |
+|                 |              |       |           |          |          |       |        |       |       |           |
+|      Linq_Async | Repeat_Async |   100 |  99.87 ns | 0.870 ns | 0.771 ns |  1.00 | 0.2257 |     - |     - |     472 B |
+| Hyperlinq_Async | Repeat_Async |   100 | 165.85 ns | 1.267 ns | 1.123 ns |  1.66 | 0.2027 |     - |     - |     424 B |

@@ -25,8 +25,8 @@ Job=.NET Core 5.0  Runtime=.NET Core 5.0
 ```
 |                 Method |   Categories |      Mean |     Error |    StdDev | Ratio |  Gen 0 | Gen 1 | Gen 2 | Allocated |
 |----------------------- |------------- |----------:|----------:|----------:|------:|-------:|------:|------:|----------:|
-|            Linq_Return |       Return | 22.859 ns | 0.1149 ns | 0.1018 ns |  1.00 | 0.0191 |     - |     - |      40 B |
-|       Hyperlinq_Return |       Return |  8.701 ns | 0.0184 ns | 0.0163 ns |  0.38 |      - |     - |     - |         - |
+|            Linq_Return |       Return | 23.422 ns | 0.1310 ns | 0.1094 ns |  1.00 | 0.0191 |     - |     - |      40 B |
+|       Hyperlinq_Return |       Return |  8.737 ns | 0.0278 ns | 0.0260 ns |  0.37 |      - |     - |     - |         - |
 |                        |              |           |           |           |       |        |       |       |           |
-|      Linq_Return_Async | Return_Async | 55.572 ns | 0.1624 ns | 0.1439 ns |  1.00 | 0.0229 |     - |     - |      48 B |
-| Hyperlinq_Return_Async | Return_Async | 41.978 ns | 0.0837 ns | 0.0783 ns |  0.76 |      - |     - |     - |         - |
+|      Linq_Return_Async | Return_Async | 56.316 ns | 0.1989 ns | 0.1860 ns |  1.00 | 0.0229 |     - |     - |      48 B |
+| Hyperlinq_Return_Async | Return_Async | 42.231 ns | 0.1004 ns | 0.0939 ns |  0.75 |      - |     - |     - |         - |

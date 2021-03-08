@@ -25,13 +25,13 @@ Job=.NET Core 5.0  Runtime=.NET Core 5.0
 ```
 |                       Method |    Count |      Mean |     Error |    StdDev | Ratio | RatioSD |
 |----------------------------- |--------- |----------:|----------:|----------:|------:|--------:|
-|                      Foreach | 10000000 |  6.009 ms | 0.0366 ms | 0.0306 ms |  1.00 |    0.00 |
-|                          For | 10000000 |  4.805 ms | 0.0398 ms | 0.0311 ms |  0.80 |    0.00 |
-|                   For_Unsafe | 10000000 |  6.207 ms | 0.0870 ms | 0.0771 ms |  1.03 |    0.01 |
-|               ForAdamczewski | 10000000 |  4.672 ms | 0.0785 ms | 0.0771 ms |  0.78 |    0.01 |
-|         ForAdamczewskiUnsafe | 10000000 |  4.129 ms | 0.0289 ms | 0.0271 ms |  0.69 |    0.00 |
-|                         Span | 10000000 |  4.949 ms | 0.0294 ms | 0.0260 ms |  0.82 |    0.01 |
-|                       Memory | 10000000 |  6.043 ms | 0.0389 ms | 0.0325 ms |  1.01 |    0.01 |
-|         ArraySegment_Foreach | 10000000 | 28.636 ms | 0.1005 ms | 0.0891 ms |  4.77 |    0.02 |
-|             ArraySegment_For | 10000000 |  6.061 ms | 0.1187 ms | 0.1052 ms |  1.01 |    0.02 |
-| ArraySegment_Wrapper_Foreach | 10000000 |  6.059 ms | 0.0356 ms | 0.0316 ms |  1.01 |    0.01 |
+|                      Foreach | 10000000 |  6.345 ms | 0.0361 ms | 0.0338 ms |  1.00 |    0.00 |
+|                          For | 10000000 |  4.890 ms | 0.0251 ms | 0.0196 ms |  0.77 |    0.00 |
+|                   For_Unsafe | 10000000 |  6.231 ms | 0.0678 ms | 0.0634 ms |  0.98 |    0.01 |
+|               ForAdamczewski | 10000000 |  4.771 ms | 0.0571 ms | 0.0477 ms |  0.75 |    0.01 |
+|         ForAdamczewskiUnsafe | 10000000 |  4.381 ms | 0.0845 ms | 0.0749 ms |  0.69 |    0.01 |
+|                         Span | 10000000 |  4.985 ms | 0.0764 ms | 0.0597 ms |  0.78 |    0.01 |
+|                       Memory | 10000000 |  6.220 ms | 0.0462 ms | 0.0410 ms |  0.98 |    0.01 |
+|         ArraySegment_Foreach | 10000000 | 29.045 ms | 0.0811 ms | 0.0678 ms |  4.57 |    0.03 |
+|             ArraySegment_For | 10000000 |  6.332 ms | 0.0417 ms | 0.0370 ms |  1.00 |    0.01 |
+| ArraySegment_Wrapper_Foreach | 10000000 |  6.242 ms | 0.0614 ms | 0.0574 ms |  0.98 |    0.01 |

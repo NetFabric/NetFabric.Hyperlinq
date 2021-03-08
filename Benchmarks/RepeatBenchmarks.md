@@ -25,9 +25,9 @@ Job=.NET Core 5.0  Runtime=.NET Core 5.0
 ```
 |          Method |   Categories | Count |        Mean |     Error |    StdDev | Ratio |  Gen 0 | Gen 1 | Gen 2 | Allocated |
 |---------------- |------------- |------ |------------:|----------:|----------:|------:|-------:|------:|------:|----------:|
-|            Linq |       Repeat |   100 |   394.58 ns |  1.320 ns |  1.235 ns |  1.00 | 0.0153 |     - |     - |      32 B |
-|      StructLinq |       Repeat |   100 |    56.68 ns |  0.192 ns |  0.170 ns |  0.14 |      - |     - |     - |         - |
-|       Hyperlinq |       Repeat |   100 |   147.01 ns |  0.141 ns |  0.132 ns |  0.37 |      - |     - |     - |         - |
+|            Linq |       Repeat |   100 |   426.51 ns |  1.483 ns |  1.315 ns |  1.00 | 0.0153 |     - |     - |      32 B |
+|      StructLinq |       Repeat |   100 |    34.54 ns |  0.299 ns |  0.265 ns |  0.08 |      - |     - |     - |         - |
+|       Hyperlinq |       Repeat |   100 |   144.81 ns |  0.397 ns |  0.372 ns |  0.34 |      - |     - |     - |         - |
 |                 |              |       |             |           |           |       |        |       |       |           |
-|      Linq_Async | Repeat_Async |   100 | 5,684.72 ns | 17.072 ns | 15.134 ns |  1.00 | 0.0229 |     - |     - |      48 B |
-| Hyperlinq_Async | Repeat_Async |   100 |   923.49 ns |  2.149 ns |  1.905 ns |  0.16 |      - |     - |     - |         - |
+|      Linq_Async | Repeat_Async |   100 | 5,964.82 ns | 16.050 ns | 14.228 ns |  1.00 | 0.0229 |     - |     - |      48 B |
+| Hyperlinq_Async | Repeat_Async |   100 |   929.00 ns |  1.959 ns |  1.636 ns |  0.16 |      - |     - |     - |         - |
