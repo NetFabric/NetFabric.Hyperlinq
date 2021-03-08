@@ -1,6 +1,6 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Threading;
 
 namespace NetFabric.Hyperlinq
@@ -30,12 +30,14 @@ namespace NetFabric.Hyperlinq
                 // ReSharper disable once HeapView.BoxingAllocation
                 => new AsyncEnumerator<T>(source);
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public AsyncValueEnumerableExtensions.AsyncValueEnumerable<AsyncValueEnumerableWrapper<T>, AsyncEnumerator<T>, AsyncEnumerator<T>, T, GetAsyncEnumeratorFunction, GetAsyncEnumeratorFunction> AsAsyncValueEnumerable()
                 => AsyncValueEnumerableExtensions.AsAsyncValueEnumerable<AsyncValueEnumerableWrapper<T>, AsyncEnumerator<T>, T, GetAsyncEnumeratorFunction>(this);
             
             public readonly struct GetAsyncEnumeratorFunction
                 : IFunction<AsyncValueEnumerableWrapper<T>, CancellationToken, AsyncEnumerator<T>>
             {
+                [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public AsyncEnumerator<T> Invoke(AsyncValueEnumerableWrapper<T> enumerable, CancellationToken _) 
                     => enumerable.GetAsyncEnumerator();
             }

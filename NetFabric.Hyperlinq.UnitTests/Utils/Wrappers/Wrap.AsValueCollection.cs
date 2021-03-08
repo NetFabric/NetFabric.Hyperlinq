@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
@@ -49,12 +50,14 @@ namespace NetFabric.Hyperlinq
             void ICollection<T>.Clear() 
                 => throw new NotSupportedException();
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public ValueReadOnlyCollectionExtensions.ValueEnumerable<ValueCollectionWrapper<T>, Enumerator<T>, Enumerator<T>, T, GetEnumeratorFunction, GetEnumeratorFunction> AsValueEnumerable()
                 => ValueReadOnlyCollectionExtensions.AsValueEnumerable<ValueCollectionWrapper<T>, Enumerator<T>, T, GetEnumeratorFunction>(this);
             
             public readonly struct GetEnumeratorFunction
                 : IFunction<ValueCollectionWrapper<T>, Enumerator<T>>
             {
+                [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public Enumerator<T> Invoke(ValueCollectionWrapper<T> enumerable) 
                     => enumerable.GetEnumerator();
             }

@@ -75,20 +75,20 @@ namespace NetFabric.Hyperlinq.Benchmarks
         }
 
         static string GetInformationalVersion(Assembly assembly)
-            => GetCustomAttribute<AssemblyInformationalVersionAttribute>(assembly)?.InformationalVersion.Split('+')[0];
+            => GetCustomAttribute<AssemblyInformationalVersionAttribute>(assembly)?.InformationalVersion.Split('+')[0] ?? "<unknown>";
 
-        static T GetCustomAttribute<T>(Assembly assembly) where T : Attribute
-            => (T)Attribute.GetCustomAttribute(assembly, typeof(T), false);
+        static T? GetCustomAttribute<T>(Assembly assembly) where T : Attribute
+            => (T?)Attribute.GetCustomAttribute(assembly, typeof(T), false);
 
-        static Type GetTargetType(Summary summary)
+        static Type? GetTargetType(Summary summary)
         {
             var targetTypes = summary.BenchmarksCases.Select(i => i.Descriptor.Type).Distinct().ToList();
             return targetTypes.Count == 1 ? targetTypes[0] : null;
         }
 
-        static string GetSolutionDirectory()
+        static string? GetSolutionDirectory()
         {
-            var dir = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+            var dir = Path.GetDirectoryName(Assembly.GetEntryAssembly()?.Location);
 
             while (!string.IsNullOrEmpty(dir))
             {

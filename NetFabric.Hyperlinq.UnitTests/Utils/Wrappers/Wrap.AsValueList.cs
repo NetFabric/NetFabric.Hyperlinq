@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
@@ -66,6 +67,7 @@ namespace NetFabric.Hyperlinq
             void IList<T>.RemoveAt(int index) 
                 => throw new NotSupportedException();
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public ValueReadOnlyListExtensions.ValueEnumerable<ValueListWrapper<T>, Enumerator<T>, T> AsValueEnumerable()
                 => this.AsValueEnumerable<ValueListWrapper<T>, Enumerator<T>, T>();
         }

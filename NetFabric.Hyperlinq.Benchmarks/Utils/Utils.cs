@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace NetFabric.Hyperlinq.Benchmarks
 {
     static class Utils
     {
+        [return: NotNull]
         public static int[] GetSequentialValues(int count)
         {
             // ReSharper disable once HeapView.ObjectAllocation.Evident
@@ -15,6 +17,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
             return array;
         }
 
+        [return: NotNull]
         public static int[] GetRandomValues(int seed, int count)
         {
             // ReSharper disable once HeapView.ObjectAllocation.Evident

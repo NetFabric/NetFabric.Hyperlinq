@@ -33,7 +33,7 @@ namespace NetFabric.Hyperlinq.Benchmarks.Benchmarks
                 sum += item;
             return sum;
         }
-
+        
         [Benchmark]
         public int For()
         {
@@ -46,7 +46,7 @@ namespace NetFabric.Hyperlinq.Benchmarks.Benchmarks
             }
             return sum;
         }
-
+        
         [Benchmark]
         public unsafe int For_Unsafe()
         {
@@ -56,13 +56,13 @@ namespace NetFabric.Hyperlinq.Benchmarks.Benchmarks
             {
                 for (var index = 0; index < end; index++)
                 {
-                    var item = array[index];
+                    var item = source[index];
                     sum += item;
                 }
             }
             return sum;
         }
-
+        
         [Benchmark]
         public int ForAdamczewski()
         {
@@ -76,13 +76,13 @@ namespace NetFabric.Hyperlinq.Benchmarks.Benchmarks
                 long i2 = index + 1;
                 var c = source[i1];
                 var d = source[i2];
-
+        
                 sum1 += c;
                 sum2 += d;
             }
             return sum1 + sum2;
         }
-
+        
         [Benchmark]
         public unsafe int ForAdamczewskiUnsafe()
         {
@@ -97,14 +97,14 @@ namespace NetFabric.Hyperlinq.Benchmarks.Benchmarks
                     long i2 = index + 1;
                     var c = source[i1];
                     var d = source[i2];
-
+        
                     sum1 += c;
                     sum2 += d;
                 }
                 return sum1 + sum2;
             }
         }
-
+        
         [Benchmark]
         public int Span()
         {
@@ -117,7 +117,7 @@ namespace NetFabric.Hyperlinq.Benchmarks.Benchmarks
             }
             return sum;
         }
-
+        
         [Benchmark]
         public int Memory()
         {
@@ -130,7 +130,7 @@ namespace NetFabric.Hyperlinq.Benchmarks.Benchmarks
             }
             return sum;
         }
-
+        
         [Benchmark]
         public int ArraySegment_Foreach()
         {
@@ -139,7 +139,7 @@ namespace NetFabric.Hyperlinq.Benchmarks.Benchmarks
                 sum += item;
             return sum;
         }
-
+        
         [Benchmark]
         public int ArraySegment_For()
         {
@@ -149,7 +149,7 @@ namespace NetFabric.Hyperlinq.Benchmarks.Benchmarks
             var sum = 0;
             for (var index = start; index < end; index++)
             {
-                var item = source[index];
+                var item = source![index];
                 sum += item;
             }
             return sum;
@@ -175,20 +175,28 @@ namespace NetFabric.Hyperlinq.Benchmarks.Benchmarks
             public Enumerator GetEnumerator()
                 => new(source);
 
-            public struct Enumerator
+            public ref struct Enumerator
             {
-                readonly TSource[] array;
+                readonly ReadOnlySpan<TSource> source;
                 readonly int end;
-                int current;
+                int index;
 
                 public Enumerator(in ArraySegment<TSource> source)
-                    => (array, end, current) = (source.Array!, source.Offset + source.Count - 1, -1);
+                {
+                    this.source = source.Array.AsSpan().Slice(source.Offset, source.Count);
+                    index = -1;
+                    end = index + source.Count;
+                }
 
-                public TSource Current
-                    => array[current];
+                public readonly TSource Current
+                {
+                    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                    get => source[index];
+                }
 
+                [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public bool MoveNext()
-                    => ++current <= end;
+                    => ++index <= end;
             }
         }
 

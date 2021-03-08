@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq.Benchmarks
 {
@@ -43,12 +44,14 @@ namespace NetFabric.Hyperlinq.Benchmarks
                 // ReSharper disable once HeapView.BoxingAllocation
                 => new Enumerator(array);
 
-            ReadOnlyCollectionExtensions.ValueEnumerable<Enumerable, Enumerator, Enumerator, int, GetEnumeratorFunction, GetEnumeratorFunction> AsValueEnumerable()
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public ReadOnlyCollectionExtensions.ValueEnumerable<Enumerable, Enumerator, Enumerator, int, GetEnumeratorFunction, GetEnumeratorFunction> AsValueEnumerable()
                 => ReadOnlyCollectionExtensions.AsValueEnumerable<Enumerable, Enumerator, Enumerator, int, GetEnumeratorFunction, GetEnumeratorFunction>(this);
 
-            readonly struct GetEnumeratorFunction
+            public readonly struct GetEnumeratorFunction
                 : IFunction<Enumerable, Enumerator>
             {
+                [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public Enumerator Invoke(Enumerable source)
                     => source.GetEnumerator();
             }

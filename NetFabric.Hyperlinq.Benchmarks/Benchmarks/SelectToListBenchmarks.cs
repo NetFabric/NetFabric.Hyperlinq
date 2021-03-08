@@ -14,7 +14,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
     {
         [BenchmarkCategory("Array")]
         [Benchmark(Baseline = true)]
-        public List<int> Linq_List()
+        public List<int> Linq_Array()
             => array.Select(item => item).ToList();
 
         [BenchmarkCategory("Enumerable_Value")]
@@ -51,7 +51,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
 
         [BenchmarkCategory("Array")]
         [Benchmark]
-        public List<int> StructLinq_List()
+        public List<int> StructLinq_Array()
             => array
                 .ToStructEnumerable()
                 .Select(item => item, x => x)
@@ -109,7 +109,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
 
         [BenchmarkCategory("Array")]
         [Benchmark]
-        public List<int> Hyperlinq_List()
+        public List<int> Hyperlinq_Array()
             => array.AsValueEnumerable()
                 .Select(item => item)
                 .ToList();

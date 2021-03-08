@@ -20,10 +20,15 @@ namespace NetFabric.Hyperlinq
             }
 
             public readonly T Current
-                => source[index];
+            {
+                [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                get => source[index];
+            }
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public ValueTask<bool> MoveNextAsync() 
                 => new(++index < source.Length);
+            
             public readonly ValueTask DisposeAsync() 
                 => default;
         }

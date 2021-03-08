@@ -25,10 +25,10 @@ Job=.NET Core 5.0  Runtime=.NET Core 5.0
 ```
 |          Method |  Categories | Count |      Mean |    Error |   StdDev | Ratio |  Gen 0 | Gen 1 | Gen 2 | Allocated |
 |---------------- |------------ |------ |----------:|---------:|---------:|------:|-------:|------:|------:|----------:|
-|            Linq |       Range |   100 |  85.25 ns | 0.771 ns | 0.643 ns |  1.00 | 0.2218 |     - |     - |     464 B |
-|      StructLinq |       Range |   100 |  87.87 ns | 0.429 ns | 0.380 ns |  1.03 | 0.2142 |     - |     - |     448 B |
-| LinqFaster_SIMD |       Range |   100 |  35.89 ns | 0.766 ns | 0.786 ns |  0.42 | 0.2027 |     - |     - |     424 B |
-|       Hyperlinq |       Range |   100 |  43.59 ns | 0.593 ns | 0.526 ns |  0.51 | 0.2027 |     - |     - |     424 B |
+|            Linq |       Range |   100 |  92.66 ns | 0.824 ns | 0.731 ns |  1.00 | 0.2218 |     - |     - |     464 B |
+|      StructLinq |       Range |   100 |  92.43 ns | 0.450 ns | 0.399 ns |  1.00 | 0.2142 |     - |     - |     448 B |
+| LinqFaster_SIMD |       Range |   100 |  38.22 ns | 0.526 ns | 0.492 ns |  0.41 | 0.2027 |     - |     - |     424 B |
+|       Hyperlinq |       Range |   100 |  45.97 ns | 0.723 ns | 0.676 ns |  0.50 | 0.2027 |     - |     - |     424 B |
 |                 |             |       |           |          |          |       |        |       |       |           |
-|      Linq_Async | Range_Async |   100 | 108.88 ns | 0.460 ns | 0.408 ns |  1.00 | 0.2257 |     - |     - |     472 B |
-| Hyperlinq_Async | Range_Async |   100 | 109.33 ns | 1.108 ns | 0.865 ns |  1.00 | 0.2027 |     - |     - |     424 B |
+|      Linq_Async | Range_Async |   100 | 115.15 ns | 0.764 ns | 0.714 ns |  1.00 | 0.2257 |     - |     - |     472 B |
+| Hyperlinq_Async | Range_Async |   100 | 116.80 ns | 0.738 ns | 0.654 ns |  1.01 | 0.2027 |     - |     - |     424 B |
