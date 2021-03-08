@@ -25,5 +25,5 @@ Job=.NET Core 5.0  Runtime=.NET Core 5.0
 ```
 |          Method |     Count |     Mean |    Error |   StdDev | Ratio |
 |---------------- |---------- |---------:|---------:|---------:|------:|
-|        LessThan | 100000000 | 26.85 ms | 0.131 ms | 0.116 ms |  1.00 |
-| LessThanOrEqual | 100000000 | 26.86 ms | 0.117 ms | 0.104 ms |  1.00 |
+|        LessThan | 100000000 | 25.78 ms | 0.045 ms | 0.042 ms |  1.00 |
+| LessThanOrEqual | 100000000 | 25.77 ms | 0.089 ms | 0.083 ms |  1.00 |

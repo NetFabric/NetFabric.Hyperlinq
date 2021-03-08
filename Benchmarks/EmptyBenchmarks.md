@@ -25,8 +25,8 @@ Job=.NET Core 5.0  Runtime=.NET Core 5.0
 ```
 |                Method |  Categories |       Mean |     Error |    StdDev | Ratio | Gen 0 | Gen 1 | Gen 2 | Allocated |
 |---------------------- |------------ |-----------:|----------:|----------:|------:|------:|------:|------:|----------:|
-|            Linq_Empty |       Empty |  6.5910 ns | 0.0492 ns | 0.0436 ns | 1.000 |     - |     - |     - |         - |
-|       Hyperlinq_Empty |       Empty |  0.0215 ns | 0.0074 ns | 0.0069 ns | 0.003 |     - |     - |     - |         - |
+|            Linq_Empty |       Empty |  6.3048 ns | 0.0285 ns | 0.0238 ns | 1.000 |     - |     - |     - |         - |
+|       Hyperlinq_Empty |       Empty |  0.0330 ns | 0.0057 ns | 0.0051 ns | 0.005 |     - |     - |     - |         - |
 |                       |             |            |           |           |       |       |       |       |           |
-|      Linq_Empty_Async | Empty_Async | 42.3852 ns | 0.1774 ns | 0.1573 ns |  1.00 |     - |     - |     - |         - |
-| Hyperlinq_Empty_Async | Empty_Async | 21.7739 ns | 0.1665 ns | 0.1391 ns |  0.51 |     - |     - |     - |         - |
+|      Linq_Empty_Async | Empty_Async | 40.5115 ns | 0.2056 ns | 0.1924 ns |  1.00 |     - |     - |     - |         - |
+| Hyperlinq_Empty_Async | Empty_Async | 21.9399 ns | 0.1051 ns | 0.0932 ns |  0.54 |     - |     - |     - |         - |
