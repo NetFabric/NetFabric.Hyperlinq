@@ -14,47 +14,47 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [BenchmarkCategory("Array")]
         [Benchmark(Baseline = true)]
         public int Linq_Array()
-            => Enumerable.Count(array);
+            => array.Count();
 
         [BenchmarkCategory("Enumerable_Value")]
         [Benchmark(Baseline = true)]
         public int Linq_Enumerable_Value()
-            => Enumerable.Count(enumerableValue);
+            => enumerableValue.Count();
 
         [BenchmarkCategory("Collection_Value")]
         [Benchmark(Baseline = true)]
         public int Linq_Collection_Value()
-            => Enumerable.Count(collectionValue);
+            => collectionValue.Count();
 
         [BenchmarkCategory("List_Value")]
         [Benchmark(Baseline = true)]
         public int Linq_List_Value()
-            => Enumerable.Count(listValue);
+            => listValue.Count();
 
         [BenchmarkCategory("AsyncEnumerable_Value")]
         [Benchmark(Baseline = true)]
         public ValueTask<int> Linq_AsyncEnumerable_Value()
-            => AsyncEnumerable.CountAsync(asyncEnumerableValue);
+            => asyncEnumerableValue.CountAsync();
 
         [BenchmarkCategory("Enumerable_Reference")]
         [Benchmark(Baseline = true)]
         public int Linq_Enumerable_Reference()
-            => Enumerable.Count(enumerableReference);
+            => enumerableReference.Count();
 
         [BenchmarkCategory("Collection_Reference")]
         [Benchmark(Baseline = true)]
         public int Linq_Collection_Reference()
-            => Enumerable.Count(collectionReference);
+            => collectionReference.Count();
 
         [BenchmarkCategory("List_Reference")]
         [Benchmark(Baseline = true)]
         public int Linq_List_Reference()
-            => Enumerable.Count(listReference);
+            => listReference.Count();
 
         [BenchmarkCategory("AsyncEnumerable_Reference")]
         [Benchmark(Baseline = true)]
         public ValueTask<int> Linq_AsyncEnumerable_Reference()
-            => AsyncEnumerable.CountAsync(asyncEnumerableReference);
+            => asyncEnumerableReference.CountAsync();
 
         // ---------------------------------------------------------------------
 
@@ -112,28 +112,18 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [BenchmarkCategory("Array")]
         [Benchmark]
         public int Hyperlinq_Array()
-            => array.Count();
-
-        [BenchmarkCategory("Array")]
-        [Benchmark]
-        public int Hyperlinq_Span()
-            => array.AsSpan().AsValueEnumerable().Count();
-
-        [BenchmarkCategory("Array")]
-        [Benchmark]
-        public int Hyperlinq_Memory()
-            => memory.AsValueEnumerable().Count();
+            => array.AsValueEnumerable().Count();
 
         [BenchmarkCategory("Enumerable_Value")]
         [Benchmark]
         public int Hyperlinq_Enumerable_Value()
-            => EnumerableExtensions.AsValueEnumerable<TestEnumerable.Enumerable, TestEnumerable.Enumerable.Enumerator, int>(enumerableValue, enumerable => enumerable.GetEnumerator())
+            => enumerableValue.AsValueEnumerable()
                 .Count();
 
         [BenchmarkCategory("Collection_Value")]
         [Benchmark]
         public int Hyperlinq_Collection_Value()
-            => ReadOnlyCollectionExtensions.AsValueEnumerable<TestCollection.Enumerable, TestCollection.Enumerable.Enumerator, int>(collectionValue, enumerable => enumerable.GetEnumerator())
+            => collectionValue.AsValueEnumerable()
                 .Count();
 
         [BenchmarkCategory("List_Value")]
@@ -147,7 +137,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [Benchmark]
         public ValueTask<int> Hyperlinq_AsyncEnumerable_Value()
             => asyncEnumerableValue
-                .AsAsyncValueEnumerable<TestAsyncEnumerable.Enumerable, TestAsyncEnumerable.Enumerable.Enumerator, int>((enumerable, cancellationToke) => enumerable.GetAsyncEnumerator(cancellationToke))
+                .AsAsyncValueEnumerable()
                 .CountAsync();
 
         [BenchmarkCategory("Enumerable_Reference")]

@@ -19,11 +19,16 @@ namespace NetFabric.Hyperlinq
                 index = -1;
             }
 
-            public readonly T Current 
-                => source[index];
-            readonly object IEnumerator.Current 
+            public readonly T Current
+            {
+                [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                get => source[index];
+            }
+            readonly object? IEnumerator.Current 
+                // ReSharper disable once HeapView.PossibleBoxingAllocation
                 => source[index];
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool MoveNext() 
                 => ++index < source.Length;
             public void Reset() 

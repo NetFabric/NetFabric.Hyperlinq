@@ -18,47 +18,47 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [BenchmarkCategory("Array")]
         [Benchmark(Baseline = true)]
         public int Linq_Array() =>
-            Enumerable.Single(array);
+            array.Single();
 
         [BenchmarkCategory("Enumerable_Value")]
         [Benchmark(Baseline = true)]
         public int Linq_Enumerable_Value() =>
-            Enumerable.Single(enumerableValue);
+            enumerableValue.Single();
 
         [BenchmarkCategory("Collection_Value")]
         [Benchmark(Baseline = true)]
         public int Linq_Collection_Value() =>
-            Enumerable.Single(collectionValue);
+            collectionValue.Single();
 
         [BenchmarkCategory("List_Value")]
         [Benchmark(Baseline = true)]
         public int Linq_List_Value() =>
-            Enumerable.Single(listValue);
+            listValue.Single();
 
         [BenchmarkCategory("AsyncEnumerable_Value")]
         [Benchmark(Baseline = true)]
         public ValueTask<int> Linq_AsyncEnumerable_Value() =>
-            AsyncEnumerable.SingleAsync(asyncEnumerableValue);
+            asyncEnumerableValue.SingleAsync();
 
         [BenchmarkCategory("Enumerable_Reference")]
         [Benchmark(Baseline = true)]
         public int Linq_Enumerable_Reference() =>
-            Enumerable.Single(enumerableReference);
+            enumerableReference.Single();
 
         [BenchmarkCategory("Collection_Reference")]
         [Benchmark(Baseline = true)]
         public int Linq_Collection_Reference() =>
-            Enumerable.Single(collectionReference);
+            collectionReference.Single();
 
         [BenchmarkCategory("List_Reference")]
         [Benchmark(Baseline = true)]
         public int Linq_List_Reference() =>
-            Enumerable.Single(listReference);
+            listReference.Single();
 
         [BenchmarkCategory("AsyncEnumerable_Reference")]
         [Benchmark(Baseline = true)]
         public ValueTask<int> Linq_AsyncEnumerable_Reference() =>
-            AsyncEnumerable.SingleAsync(asyncEnumerableReference);
+            asyncEnumerableReference.SingleAsync();
 
         // ---------------------------------------------------------------------
 
@@ -67,26 +67,16 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public Option<int> Hyperlinq_Array() =>
             array.AsValueEnumerable().Single();
 
-        [BenchmarkCategory("Array")]
-        [Benchmark]
-        public Option<int> Hyperlinq_Span() =>
-            array.AsSpan().AsValueEnumerable().Single();
-
-        [BenchmarkCategory("Array")]
-        [Benchmark]
-        public Option<int> Hyperlinq_Memory() =>
-            memory.AsValueEnumerable().Single();
-
         [BenchmarkCategory("Enumerable_Value")]
         [Benchmark]
         public Option<int> Hyperlinq_Enumerable_Value() =>
-            EnumerableExtensions.AsValueEnumerable<TestEnumerable.Enumerable, TestEnumerable.Enumerable.Enumerator, int>(enumerableValue, enumerable => enumerable.GetEnumerator())
+            enumerableValue.AsValueEnumerable()
             .Single();
 
         [BenchmarkCategory("Collection_Value")]
         [Benchmark]
         public Option<int> Hyperlinq_Collection_Value() =>
-            ReadOnlyCollectionExtensions.AsValueEnumerable<TestCollection.Enumerable, TestCollection.Enumerable.Enumerator, int>(collectionValue, enumerable => enumerable.GetEnumerator())
+            collectionValue.AsValueEnumerable()
             .Single();
 
         [BenchmarkCategory("List_Value")]
@@ -99,7 +89,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [BenchmarkCategory("AsyncEnumerable_Value")]
         [Benchmark]
         public ValueTask<Option<int>> Hyperlinq_AsyncEnumerable_Value() =>
-            asyncEnumerableValue.AsAsyncValueEnumerable<TestAsyncEnumerable.Enumerable, TestAsyncEnumerable.Enumerable.Enumerator, int>((enumerable, cancellationToken) => enumerable.GetAsyncEnumerator(cancellationToken))
+            asyncEnumerableValue.AsAsyncValueEnumerable()
             .SingleAsync();
 
         [BenchmarkCategory("Enumerable_Reference")]

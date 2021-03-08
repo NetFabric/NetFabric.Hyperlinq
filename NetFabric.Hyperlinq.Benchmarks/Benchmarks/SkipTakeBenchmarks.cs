@@ -16,7 +16,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Linq_Array()
         {
             var sum = 0;
-            foreach (var item in Enumerable.Skip(array, Skip).Take(Count))
+            foreach (var item in array.Skip(Skip).Take(Count))
                 sum += item;
             return sum;
         }
@@ -26,7 +26,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Linq_Enumerable_Value()
         {
             var sum = 0;
-            foreach (var item in Enumerable.Skip(enumerableValue, Skip).Take(Count))
+            foreach (var item in enumerableValue.Skip(Skip).Take(Count))
                 sum += item;
             return sum;
         }
@@ -36,7 +36,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Linq_Collection_Value()
         {
             var sum = 0;
-            foreach (var item in Enumerable.Skip(collectionValue, Skip).Take(Count))
+            foreach (var item in collectionValue.Skip(Skip).Take(Count))
                 sum += item;
             return sum;
         }
@@ -46,17 +46,17 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Linq_List_Value()
         {
             var sum = 0;
-            foreach (var item in Enumerable.Skip(listValue, Skip).Take(Count))
+            foreach (var item in listValue.Skip(Skip).Take(Count))
                 sum += item;
             return sum;
         }
 
         [BenchmarkCategory("AsyncEnumerable_Value")]
         [Benchmark(Baseline = true)]
-        public async Task<int> Linq_AsyncEnumerable_Value()
+        public async ValueTask<int> Linq_AsyncEnumerable_Value()
         {
             var sum = 0;
-            await foreach (var item in AsyncEnumerable.Skip(asyncEnumerableValue, Skip).Take(Count))
+            await foreach (var item in asyncEnumerableValue.Skip(Skip).Take(Count))
                 sum += item;
             return sum;
         }
@@ -66,7 +66,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Linq_Enumerable_Reference()
         {
             var sum = 0;
-            foreach (var item in Enumerable.Skip(enumerableReference, Skip).Take(Count))
+            foreach (var item in enumerableReference.Skip(Skip).Take(Count))
                 sum += item;
             return sum;
         }
@@ -76,7 +76,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Linq_Collection_Reference()
         {
             var sum = 0;
-            foreach (var item in Enumerable.Skip(collectionReference, Skip).Take(Count))
+            foreach (var item in collectionReference.Skip(Skip).Take(Count))
                 sum += item;
             return sum;
         }
@@ -86,17 +86,17 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Linq_List_Reference()
         {
             var sum = 0;
-            foreach (var item in Enumerable.Skip(listReference, Skip).Take(Count))
+            foreach (var item in listReference.Skip(Skip).Take(Count))
                 sum += item;
             return sum;
         }
 
         [BenchmarkCategory("AsyncEnumerable_Reference")]
         [Benchmark(Baseline = true)]
-        public async Task<int> Linq_AsyncEnumerable_Reference()
+        public async ValueTask<int> Linq_AsyncEnumerable_Reference()
         {
             var sum = 0;
-            await foreach (var item in AsyncEnumerable.Skip(asyncEnumerableReference, Skip).Take(Count))
+            await foreach (var item in asyncEnumerableReference.Skip(Skip).Take(Count))
                 sum += item;
             return sum;
         }
@@ -260,7 +260,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Hyperlinq_Enumerable_Value()
         {
             var sum = 0;
-            foreach (var item in EnumerableExtensions.AsValueEnumerable<TestEnumerable.Enumerable, TestEnumerable.Enumerable.Enumerator, int>(enumerableValue, enumerable => enumerable.GetEnumerator())
+            foreach (var item in enumerableValue.AsValueEnumerable()
                 .Skip(Skip)
                 .Take(Count))
                 sum += item;
@@ -272,7 +272,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         public int Hyperlinq_Collection_Value()
         {
             var sum = 0;
-            foreach (var item in ReadOnlyCollectionExtensions.AsValueEnumerable<TestCollection.Enumerable, TestCollection.Enumerable.Enumerator, int>(collectionValue, enumerable => enumerable.GetEnumerator())
+            foreach (var item in collectionValue.AsValueEnumerable()
                 .Skip(Skip)
                 .Take(Count))
                 sum += item;
@@ -305,10 +305,10 @@ namespace NetFabric.Hyperlinq.Benchmarks
 
         [BenchmarkCategory("AsyncEnumerable_Value")]
         [Benchmark]
-        public async Task<int> Hyperlinq_AsyncEnumerable_Value()
+        public async ValueTask<int> Hyperlinq_AsyncEnumerable_Value()
         {
             var sum = 0;
-            await foreach (var item in asyncEnumerableValue.AsAsyncValueEnumerable<TestAsyncEnumerable.Enumerable, TestAsyncEnumerable.Enumerable.Enumerator, int>((enumerable, cancellationToken) => enumerable.GetAsyncEnumerator(cancellationToken))
+            await foreach (var item in asyncEnumerableValue.AsAsyncValueEnumerable()
                 .Skip(Skip)
                 .Take(Count))
                 sum += item;
@@ -360,7 +360,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
 
         [BenchmarkCategory("AsyncEnumerable_Reference")]
         [Benchmark]
-        public async Task<int> Hyperlinq_AsyncEnumerable_Reference()
+        public async ValueTask<int> Hyperlinq_AsyncEnumerable_Reference()
         {
             var sum = 0;
             await foreach (var item in asyncEnumerableReference.AsAsyncValueEnumerable()

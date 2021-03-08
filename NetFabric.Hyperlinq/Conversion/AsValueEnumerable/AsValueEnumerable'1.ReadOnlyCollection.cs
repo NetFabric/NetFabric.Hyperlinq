@@ -73,10 +73,20 @@ namespace NetFabric.Hyperlinq
             [ExcludeFromCodeCoverage]
             bool ICollection<TSource>.Remove(TSource item) 
                 => Throw.NotSupportedException<bool>();
+            
+            #region Conversion
+
+            ValueEnumerable<TSource> AsValueEnumerable()
+                => this;
+
+            #endregion
+            #region Quantifier
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Contains(TSource value, IEqualityComparer<TSource>? comparer)
                 => Count is not 0 && source.Contains(value, comparer);
+
+            #endregion
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

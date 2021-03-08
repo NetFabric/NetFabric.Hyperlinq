@@ -6,6 +6,7 @@
     <Copyright>Copyright 2019-2021 Antao Almada</Copyright>
     <LangVersion>9.0</LangVersion>
     <Features>strict</Features>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
 </Project>

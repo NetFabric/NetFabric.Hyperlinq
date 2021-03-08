@@ -14,37 +14,37 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [BenchmarkCategory("Array")]
         [Benchmark(Baseline = true)]
         public int[] Linq_Array()
-            => Enumerable.ToArray(array);
+            => array.ToArray();
 
         [BenchmarkCategory("Enumerable_Value")]
         [Benchmark(Baseline = true)]
         public int[] Linq_Enumerable_Value()
-            => Enumerable.ToArray(enumerableValue);
+            => enumerableValue.ToArray();
 
         [BenchmarkCategory("Collection_Value")]
         [Benchmark(Baseline = true)]
         public int[] Linq_Collection_Value()
-            => Enumerable.ToArray(collectionValue);
+            => collectionValue.ToArray();
 
         [BenchmarkCategory("List_Value")]
         [Benchmark(Baseline = true)]
         public int[] Linq_List_Value()
-            => Enumerable.ToArray(listValue);
+            => listValue.ToArray();
 
         [BenchmarkCategory("Enumerable_Reference")]
         [Benchmark(Baseline = true)]
         public int[] Linq_Enumerable_Reference()
-            => Enumerable.ToArray(enumerableReference);
+            => enumerableReference.ToArray();
 
         [BenchmarkCategory("Collection_Reference")]
         [Benchmark(Baseline = true)]
         public int[] Linq_Collection_Reference()
-            => Enumerable.ToArray(collectionReference);
+            => collectionReference.ToArray();
 
         [BenchmarkCategory("List_Reference")]
         [Benchmark(Baseline = true)]
         public int[] Linq_List_Reference()
-            => Enumerable.ToArray(listReference);
+            => listReference.ToArray();
 
         // ---------------------------------------------------------------------
 
@@ -102,31 +102,19 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [BenchmarkCategory("Array")]
         [Benchmark]
         public int[] Hyperlinq_Array()
-            => array
-                .ToArray();
-
-        [BenchmarkCategory("Array")]
-        [Benchmark]
-        public int[] Hyperlinq_Span()
-            => array.AsSpan()
-                .ToArray();
-
-        [BenchmarkCategory("Array")]
-        [Benchmark]
-        public int[] Hyperlinq_Memory()
-            => memory
+            => array.AsValueEnumerable()
                 .ToArray();
 
         [BenchmarkCategory("Enumerable_Value")]
         [Benchmark]
         public int[] Hyperlinq_Enumerable_Value()
-            => EnumerableExtensions.AsValueEnumerable<TestEnumerable.Enumerable, TestEnumerable.Enumerable.Enumerator, int>(enumerableValue, enumerable => enumerable.GetEnumerator())
+            => enumerableValue.AsValueEnumerable()
                 .ToArray();
 
         [BenchmarkCategory("Collection_Value")]
         [Benchmark]
         public int[] Hyperlinq_Collection_Value()
-            => ReadOnlyCollectionExtensions.AsValueEnumerable<TestCollection.Enumerable, TestCollection.Enumerable.Enumerator, int>(collectionValue, enumerable => enumerable.GetEnumerator())
+            => collectionValue.AsValueEnumerable()
                 .ToArray();
 
         [BenchmarkCategory("List_Value")]
@@ -140,7 +128,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         [Benchmark]
         public ValueTask<int[]> Hyperlinq_AsyncEnumerable_Value()
             => asyncEnumerableValue
-                .AsAsyncValueEnumerable<TestAsyncEnumerable.Enumerable, TestAsyncEnumerable.Enumerable.Enumerator, int>((enumerable, cancellationToke) => enumerable.GetAsyncEnumerator(cancellationToke))
+                .AsAsyncValueEnumerable()
                 .ToArrayAsync();
 
         [BenchmarkCategory("Enumerable_Reference")]

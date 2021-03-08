@@ -1,6 +1,6 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Threading;
 
 namespace NetFabric.Hyperlinq
@@ -11,6 +11,7 @@ namespace NetFabric.Hyperlinq
             => source switch
             {
                 null => throw new ArgumentNullException(nameof(source)),
+                // ReSharper disable once HeapView.ObjectAllocation.Evident
                 _ => new AsyncEnumerableWrapper<T>(source)
             };
 
@@ -25,7 +26,20 @@ namespace NetFabric.Hyperlinq
             public AsyncEnumerator<T> GetAsyncEnumerator() 
                 => new(source);
             IAsyncEnumerator<T> IAsyncEnumerable<T>.GetAsyncEnumerator(CancellationToken _) 
+                // ReSharper disable once HeapView.BoxingAllocation
                 => new AsyncEnumerator<T>(source);
+ 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public AsyncEnumerableExtensions.AsyncValueEnumerable<AsyncEnumerableWrapper<T>, AsyncEnumerator<T>, AsyncEnumerator<T>, T, GetAsyncEnumeratorFunction, GetAsyncEnumeratorFunction> AsAsyncValueEnumerable()
+                => this.AsAsyncValueEnumerable<AsyncEnumerableWrapper<T>, AsyncEnumerator<T>, T, GetAsyncEnumeratorFunction>();
+            
+            public readonly struct GetAsyncEnumeratorFunction
+                : IFunction<AsyncEnumerableWrapper<T>, CancellationToken, AsyncEnumerator<T>>
+            {
+                [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                public AsyncEnumerator<T> Invoke(AsyncEnumerableWrapper<T> enumerable, CancellationToken _) 
+                    => enumerable.GetAsyncEnumerator();
+            }
         }
     }
 }

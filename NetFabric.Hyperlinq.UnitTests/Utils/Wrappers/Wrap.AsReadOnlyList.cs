@@ -10,6 +10,7 @@ namespace NetFabric.Hyperlinq
             => source switch
             {
                 null => throw new ArgumentNullException(nameof(source)),
+                // ReSharper disable once HeapView.ObjectAllocation.Evident
                 _ => new ReadOnlyListWrapper<T>(source)
             };
 
@@ -23,6 +24,9 @@ namespace NetFabric.Hyperlinq
 
             public T this[int index] 
                 => source[index];
+
+            public new ReadOnlyListExtensions.ValueEnumerable<ReadOnlyListWrapper<T>, T> AsValueEnumerable()
+                => this.AsValueEnumerable<ReadOnlyListWrapper<T>, T>();
         }
     }
 }

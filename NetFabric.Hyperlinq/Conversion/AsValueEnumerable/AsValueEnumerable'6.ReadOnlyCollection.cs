@@ -112,6 +112,12 @@ namespace NetFabric.Hyperlinq
             bool ICollection<TSource>.Remove(TSource item) 
                 => Throw.NotSupportedException<bool>();
 
+            #region Conversion
+
+            ValueEnumerable<TEnumerable, TEnumerator, TEnumerator2, TSource, TGetEnumerator, TGetEnumerator2> AsValueEnumerable()
+                => this;
+
+            #endregion
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

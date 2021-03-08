@@ -29,6 +29,13 @@ namespace NetFabric.Hyperlinq
                 => source.GetEnumerator();
             IEnumerator IEnumerable.GetEnumerator() 
                 => source.GetEnumerator();
+            
+            #region Conversion
+
+            ValueEnumerable<TSource> AsValueEnumerable()
+                => this;
+
+            #endregion
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

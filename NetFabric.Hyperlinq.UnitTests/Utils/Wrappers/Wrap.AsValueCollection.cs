@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
@@ -28,8 +29,10 @@ namespace NetFabric.Hyperlinq
             public readonly Enumerator<T> GetEnumerator() 
                 => new(source);
             readonly IEnumerator<T> IEnumerable<T>.GetEnumerator() 
+                // ReSharper disable once HeapView.BoxingAllocation
                 => new Enumerator<T>(source);
             readonly IEnumerator IEnumerable.GetEnumerator() 
+                // ReSharper disable once HeapView.BoxingAllocation
                 => new Enumerator<T>(source);
 
             public bool IsReadOnly => true;
@@ -46,6 +49,18 @@ namespace NetFabric.Hyperlinq
                 => throw new NotSupportedException();
             void ICollection<T>.Clear() 
                 => throw new NotSupportedException();
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public ValueReadOnlyCollectionExtensions.ValueEnumerable<ValueCollectionWrapper<T>, Enumerator<T>, Enumerator<T>, T, GetEnumeratorFunction, GetEnumeratorFunction> AsValueEnumerable()
+                => ValueReadOnlyCollectionExtensions.AsValueEnumerable<ValueCollectionWrapper<T>, Enumerator<T>, T, GetEnumeratorFunction>(this);
+            
+            public readonly struct GetEnumeratorFunction
+                : IFunction<ValueCollectionWrapper<T>, Enumerator<T>>
+            {
+                [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                public Enumerator<T> Invoke(ValueCollectionWrapper<T> enumerable) 
+                    => enumerable.GetEnumerator();
+            }
         }
     }
 }

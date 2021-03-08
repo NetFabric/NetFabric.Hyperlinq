@@ -19,8 +19,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.All
                 .All(predicate);
 
             // Act
-            var result = ValueReadOnlyCollectionExtensions
-                .All<Wrap.ValueReadOnlyCollectionWrapper<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
+            var result = wrapped.AsValueEnumerable()
+                .All(predicate);
 
             // Assert
             _ = result.Must()
@@ -39,8 +39,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.All
                 .Where(predicate).Count() == source.Length;
 
             // Act
-            var result = ValueReadOnlyCollectionExtensions
-                .All<Wrap.ValueReadOnlyCollectionWrapper<int>, Wrap.Enumerator<int>, int>(wrapped, predicate);
+            var result = wrapped.AsValueEnumerable()
+                .All(predicate);
 
             // Assert
             _ = result.Must()

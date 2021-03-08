@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
@@ -30,9 +31,15 @@ namespace NetFabric.Hyperlinq
             public readonly Enumerator<T> GetEnumerator() 
                 => new(source);
             readonly IEnumerator<T> IEnumerable<T>.GetEnumerator() 
+                // ReSharper disable once HeapView.BoxingAllocation
                 => new Enumerator<T>(source);
             readonly IEnumerator IEnumerable.GetEnumerator() 
+                // ReSharper disable once HeapView.BoxingAllocation
                 => new Enumerator<T>(source);
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public ValueReadOnlyListExtensions.ValueEnumerable<ValueReadOnlyListWrapper<T>, Enumerator<T>, T> AsValueEnumerable()
+                => this.AsValueEnumerable<ValueReadOnlyListWrapper<T>, Enumerator<T>, T>();
         }
     }
 }
