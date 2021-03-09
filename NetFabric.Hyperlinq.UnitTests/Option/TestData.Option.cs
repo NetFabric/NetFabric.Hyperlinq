@@ -5,34 +5,34 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class TestData
     {
-        public static TheoryData<string> OptionSome =>
-            new TheoryData<string>
+        public static TheoryData<string?> OptionSome =>
+            new()
             {
-                { (string)null },
-                { string.Empty },
-                { "string" },
+                default,
+                string.Empty,
+                "string",
             };
 
         public static TheoryData<int[]> OptionNoneSelectMany =>
-            new TheoryData<int[]>
+            new()
             {
-                { new int[] { } },
-                { new int[] { 1 } },
-                { new int[] { 1, 2, 3, 4, 5 } },
+                new int[] { },
+                new[] { 1 },
+                new[] { 1, 2, 3, 4, 5 },
             };
 
-        public static TheoryData<string, int[]> OptionSomeSelectMany =>
-            new TheoryData<string, int[]>
+        public static TheoryData<string?, int[]> OptionSomeSelectMany =>
+            new()
             {
-                { (string)null, new int[] { } },
-                { (string)null, new int[] { 1 } },
-                { (string)null, new int[] { 1, 2, 3, 4, 5 } },
+                { default, new int[] { } },
+                { default, new[] { 1 } },
+                { default, new[] { 1, 2, 3, 4, 5 } },
                 { string.Empty, new int[] { } },
-                { string.Empty, new int[] { 1 } },
-                { string.Empty, new int[] { 1, 2, 3, 4, 5 } },
+                { string.Empty, new[] { 1 } },
+                { string.Empty, new[] { 1, 2, 3, 4, 5 } },
                 { "string", new int[] { } },
-                { "string", new int[] { 1 } },
-                { "string", new int[] { 1, 2, 3, 4, 5 } },
+                { "string", new[] { 1 } },
+                { "string", new[] { 1, 2, 3, 4, 5 } },
             };
 
     }

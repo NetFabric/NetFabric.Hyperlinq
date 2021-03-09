@@ -256,7 +256,7 @@ namespace NetFabric.Hyperlinq
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int Count(this SpanValueEnumerable<int> source)
-            => source.source.Count();
+            => source.Count;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int Sum(this SpanValueEnumerable<int> source)

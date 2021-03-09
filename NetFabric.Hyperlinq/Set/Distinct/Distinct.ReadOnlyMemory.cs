@@ -14,7 +14,7 @@ namespace NetFabric.Hyperlinq
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static MemoryDistinctEnumerable<TSource> Distinct<TSource>(
             this ReadOnlyMemory<TSource> source, 
-            IEqualityComparer<TSource>? comparer = null)
+            IEqualityComparer<TSource>? comparer = default)
             => new(source, comparer);
 
         [StructLayout(LayoutKind.Auto)]
@@ -128,7 +128,7 @@ namespace NetFabric.Hyperlinq
                     _ => GetSet().ToList()
                 };
 
-            public bool SequenceEqual(IEnumerable<TSource> other, IEqualityComparer<TSource>? comparer = null)
+            public bool SequenceEqual(IEnumerable<TSource> other, IEqualityComparer<TSource>? comparer = default)
             {
                 comparer ??= EqualityComparer<TSource>.Default;
 

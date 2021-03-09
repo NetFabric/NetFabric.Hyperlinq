@@ -12,7 +12,7 @@ namespace NetFabric.Hyperlinq
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static SpanDistinctEnumerable<TSource> Distinct<TSource>(
             this ReadOnlySpan<TSource> source, 
-            IEqualityComparer<TSource>? comparer = null)
+            IEqualityComparer<TSource>? comparer = default)
             => new(source, comparer);
 
         [StructLayout(LayoutKind.Auto)]
@@ -112,7 +112,7 @@ namespace NetFabric.Hyperlinq
                     _ => GetSet().ToList()
                 };
 
-            public readonly bool SequenceEqual(IEnumerable<TSource> other, IEqualityComparer<TSource>? comparer = null)
+            public readonly bool SequenceEqual(IEnumerable<TSource> other, IEqualityComparer<TSource>? comparer = default)
             {
                 comparer ??= EqualityComparer<TSource>.Default;
 

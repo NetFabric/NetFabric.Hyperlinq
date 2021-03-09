@@ -6,7 +6,7 @@ namespace NetFabric.Hyperlinq
     public static partial class TestData
     {
         public static TheoryData<int, int> Repeat =>
-            new TheoryData<int, int> 
+            new()
             {
                 { 0, 0 },
                 { 0, 1 },
@@ -15,7 +15,7 @@ namespace NetFabric.Hyperlinq
             };
 
         public static TheoryData<int, int, int> Repeat_SkipTake =>
-            new TheoryData<int, int, int> 
+            new()
             {
                 { 1, 0, 0 },
                 { 1, 5, -1 },

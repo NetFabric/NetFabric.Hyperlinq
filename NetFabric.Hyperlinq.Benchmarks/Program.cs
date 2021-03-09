@@ -98,7 +98,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
                 dir = Path.GetDirectoryName(dir);
             }
 
-            return null;
+            return default;
         }
     }
 }

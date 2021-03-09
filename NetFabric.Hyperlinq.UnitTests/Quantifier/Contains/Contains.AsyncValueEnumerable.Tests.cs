@@ -35,7 +35,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.ContainsAsync
         public async ValueTask ContainsAsync_ReferenceType_With_Null_And_NotContains_Must_ReturnFalse(int[] source)
         {
             // Arrange
-            const string value = default;
+            const string? value = default;
             var wrapped = Wrap.AsAsyncValueEnumerable(source.Select(item => item.ToString()).ToArray());
 
             // Act

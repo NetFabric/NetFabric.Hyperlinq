@@ -25,7 +25,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Aggregation.Count
 
         [Theory]
         [MemberData(nameof(TestData.OptionSome), MemberType = typeof(TestData))]
-        public void Option_With_Some_Must_Succeed(string expected)
+        public void Option_With_Some_Must_Succeed(string? expected)
         {
             // Arrange
             var option = Option.Some(expected);
@@ -59,7 +59,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Aggregation.Count
 
         [Theory]
         [MemberData(nameof(TestData.OptionSome), MemberType = typeof(TestData))]
-        public void Option_MatchFunc_With_Some_Must_Call_Some(string expected)
+        public void Option_MatchFunc_With_Some_Must_Call_Some(string? expected)
         {
             // Arrange
             var option = Option.Some(expected);
@@ -91,7 +91,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Aggregation.Count
 
         [Theory]
         [MemberData(nameof(TestData.OptionSome), MemberType = typeof(TestData))]
-        public void Option_MatchActionWith_Some_Must_Call_Some(string expected)
+        public void Option_MatchActionWith_Some_Must_Call_Some(string? expected)
         {
             // Arrange
             var option = Option.Some(expected);
@@ -121,7 +121,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Aggregation.Count
 
         [Theory]
         [MemberData(nameof(TestData.OptionSome), MemberType = typeof(TestData))]
-        public void Option_Count_With_Some_Must_Return_1(string value)
+        public void Option_Count_With_Some_Must_Return_1(string? value)
         {
             // Arrange
             var option = Option.Some(value);
@@ -148,7 +148,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Aggregation.Count
 
         [Theory]
         [MemberData(nameof(TestData.OptionSome), MemberType = typeof(TestData))]
-        public void Option_Any_With_Some_Must_Return_True(string value)
+        public void Option_Any_With_Some_Must_Return_True(string? value)
         {
             // Arrange
             var option = Option.Some(value);
@@ -178,7 +178,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Aggregation.Count
 
         [Theory]
         [MemberData(nameof(TestData.OptionSomeSelectMany), MemberType = typeof(TestData))]
-        public void Option_SelectMany_With_Some_Must_Succeed(string value, int[] expected)
+        public void Option_SelectMany_With_Some_Must_Succeed(string? value, int[] expected)
         {
             // Arrange
             var option = Option.Some(value);

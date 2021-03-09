@@ -5,7 +5,7 @@ using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsValueEnumerable
 {
-    public partial class ReadOnlyCollectionTests
+    public partial class ValueReadOnlyCollectionTests
     {
         [Theory]
         [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
@@ -15,11 +15,11 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsValueEnumerable
         {
             // Arrange
             var wrapped = Wrap
-                .AsReadOnlyCollection(source);
+                .AsValueReadOnlyCollection(source);
 
             // Act
-            var result = ReadOnlyCollectionExtensions
-                .AsValueEnumerable<Wrap.ReadOnlyCollectionWrapper<int>, Wrap.Enumerator<int>, int>(
+            var result = ValueEnumerableExtensions
+                .AsValueEnumerable<Wrap.ValueReadOnlyCollectionWrapper<int>, Wrap.Enumerator<int>, int>(
                     wrapped,
                     enumerable => enumerable.GetEnumerator());
 
@@ -37,14 +37,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsValueEnumerable
         {
             // Arrange
             var wrapped = Wrap
-                .AsReadOnlyCollection(source);
+                .AsValueReadOnlyCollection(source);
 
             // Act
-            var result = ReadOnlyCollectionExtensions
-                .AsValueEnumerable<Wrap.ReadOnlyCollectionWrapper<int>, Wrap.Enumerator<int>, ValueEnumerator<int>, int>(
+            var result = ValueEnumerableExtensions
+                .AsValueEnumerable<Wrap.ValueReadOnlyCollectionWrapper<int>, Wrap.Enumerator<int>, int>(
                     wrapped,
-                    enumerable => enumerable.GetEnumerator(), 
-                    enumerable => new ValueEnumerator<int>(((IEnumerable<int>)enumerable).GetEnumerator()));
+                    enumerable => enumerable.GetEnumerator());
 
             // Assert
             _ = result.Must()
@@ -60,16 +59,15 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsValueEnumerable
         {
             // Arrange
             var wrapped = Wrap
-                .AsReadOnlyCollection(source);
+                .AsValueReadOnlyCollection(source);
             var expected = source
                 .Count();
 
             // Act
-            var result = ReadOnlyCollectionExtensions
-                .AsValueEnumerable<Wrap.ReadOnlyCollectionWrapper<int>, Wrap.Enumerator<int>, ValueEnumerator<int>, int>(
+            var result = ValueEnumerableExtensions
+                .AsValueEnumerable<Wrap.ValueReadOnlyCollectionWrapper<int>, Wrap.Enumerator<int>, int>(
                     wrapped,
-                    enumerable => enumerable.GetEnumerator(), 
-                    enumerable => new ValueEnumerator<int>(((IEnumerable<int>)enumerable).GetEnumerator()))
+                    enumerable => enumerable.GetEnumerator())
                 .Count();
 
             // Assert
@@ -85,16 +83,15 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsValueEnumerable
         {
             // Arrange
             var wrapped = Wrap
-                .AsReadOnlyCollection(source);
+                .AsValueReadOnlyCollection(source);
             var expected = source
                 .Sum();
 
             // Act
-            var result = ReadOnlyCollectionExtensions
-                .AsValueEnumerable<Wrap.ReadOnlyCollectionWrapper<int>, Wrap.Enumerator<int>, ValueEnumerator<int>, int>(
+            var result = ValueEnumerableExtensions
+                .AsValueEnumerable<Wrap.ValueReadOnlyCollectionWrapper<int>, Wrap.Enumerator<int>, int>(
                     wrapped,
-                    enumerable => enumerable.GetEnumerator(), 
-                    enumerable => new ValueEnumerator<int>(((IEnumerable<int>)enumerable).GetEnumerator()))
+                    enumerable => enumerable.GetEnumerator())
                 .Sum();
 
             // Assert

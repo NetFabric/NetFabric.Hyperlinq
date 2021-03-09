@@ -34,14 +34,17 @@ namespace NetFabric.Hyperlinq
                 => (this.source, this.selector) = (source, selector);
 
             public readonly int Count
-                => source.Count;
+            {
+                [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                get => source.Count;
+            }
 
             public TResult this[int index]
             {
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 get
                 {
-                    if (index < 0 || index >= source.Count) Throw.IndexOutOfRangeException();
+                    if (index < 0 || index >= Count) Throw.IndexOutOfRangeException();
 
                     return selector.Invoke(source.Array![index + source.Offset]);
                 }
