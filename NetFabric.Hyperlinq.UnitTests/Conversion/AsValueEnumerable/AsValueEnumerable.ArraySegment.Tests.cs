@@ -28,29 +28,6 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsValueEnumerable
         }
         
         [Theory]
-        [MemberData(nameof(TestData.SkipEmpty), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.SkipSingle), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.SkipMultiple), MemberType = typeof(TestData))]
-        public void AsValueEnumerable1_Skip_With_ValidData_Must_Succeed(int[] source, int count)
-        {
-            // Arrange
-            var wrapped = new ArraySegment<int>(source);
-            var expected = source
-                .Skip(count);
-
-            // Act
-            var result = wrapped
-                .AsValueEnumerable()
-                .Skip(count);
-
-            // Assert
-            _ = result.Must()
-                .BeEnumerableOf<int>()
-                .BeEqualTo(expected, testRefStructs: false);
-            result.SequenceEqual(expected).Must().BeTrue();
-        }
-        
-        [Theory]
         [MemberData(nameof(TestData.Skip_Skip), MemberType = typeof(TestData))]
         public void AsValueEnumerable1_Skip_Skip_With_ValidData_Must_Succeed(int[] source, int count0, int count1)
         {
@@ -65,29 +42,6 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsValueEnumerable
                 .AsValueEnumerable()
                 .Skip(count0)
                 .Skip(count1);
-
-            // Assert
-            _ = result.Must()
-                .BeEnumerableOf<int>()
-                .BeEqualTo(expected, testRefStructs: false);
-            result.SequenceEqual(expected).Must().BeTrue();
-        }
-        
-        [Theory]
-        [MemberData(nameof(TestData.TakeEmpty), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.TakeSingle), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.TakeMultiple), MemberType = typeof(TestData))]
-        public void AsValueEnumerable1_Take_With_ValidData_Must_Succeed(int[] source, int count)
-        {
-            // Arrange
-            var wrapped = new ArraySegment<int>(source);
-            var expected = source
-                .Take(count);
-
-            // Act
-            var result = wrapped
-                .AsValueEnumerable()
-                .Take(count);
 
             // Assert
             _ = result.Must()
@@ -123,6 +77,30 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsValueEnumerable
         [MemberData(nameof(TestData.SkipTakeEmpty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakeSingle), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.SkipTakeMultiple), MemberType = typeof(TestData))]
+        public void AsValueEnumerable1_Count_With_ValidData_Must_Succeed(int[] source, int skipCount, int takeCount)
+        {
+            // Arrange
+            var wrapped = new ArraySegment<int>(source);
+            var expected = source
+                .Skip(skipCount)
+                .Take(takeCount)
+                .Count();
+
+            // Act
+            var result = wrapped.AsValueEnumerable()
+                .Skip(skipCount)
+                .Take(takeCount)
+                .Count();
+
+            // Assert
+            _ = result.Must()
+                .BeEqualTo(expected);
+        }
+        
+        [Theory]
+        [MemberData(nameof(TestData.SkipTakeEmpty), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakeSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakeMultiple), MemberType = typeof(TestData))]
         public void AsValueEnumerable1_Sum_With_ValidData_Must_Succeed(int[] source, int skipCount, int takeCount)
         {
             // Arrange
@@ -133,8 +111,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsValueEnumerable
                 .Sum();
 
             // Act
-            var result = wrapped
-                .AsValueEnumerable()
+            var result = wrapped.AsValueEnumerable()
                 .Skip(skipCount)
                 .Take(takeCount)
                 .Sum();

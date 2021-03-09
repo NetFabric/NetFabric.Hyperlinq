@@ -13,7 +13,7 @@ namespace NetFabric.Hyperlinq
         public static ValueTask<Dictionary<TKey, TSource>> ToDictionaryAsync<TEnumerable, TEnumerator, TSource, TKey>(
             this TEnumerable source, 
             Func<TSource, CancellationToken, ValueTask<TKey>> keySelector, 
-            IEqualityComparer<TKey>? comparer = null,
+            IEqualityComparer<TKey>? comparer = default,
             CancellationToken cancellationToken = default)
             where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
@@ -23,7 +23,7 @@ namespace NetFabric.Hyperlinq
         public static ValueTask<Dictionary<TKey, TSource>> ToDictionaryAsync<TEnumerable, TEnumerator, TSource, TKey, TKeySelector>(
             this TEnumerable source, 
             TKeySelector keySelector, 
-            IEqualityComparer<TKey>? comparer = null, 
+            IEqualityComparer<TKey>? comparer = default, 
             CancellationToken cancellationToken = default)
             where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
@@ -174,7 +174,7 @@ namespace NetFabric.Hyperlinq
             this TEnumerable source,
             Func<TSource, CancellationToken, ValueTask<TKey>> keySelector,
             Func<TSource, CancellationToken, ValueTask<TElement>> elementSelector,
-            IEqualityComparer<TKey>? comparer = null,
+            IEqualityComparer<TKey>? comparer = default,
             CancellationToken cancellationToken = default)
             where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
@@ -185,7 +185,7 @@ namespace NetFabric.Hyperlinq
             this TEnumerable source, 
             TKeySelector keySelector, 
             TElementSelector elementSelector, 
-            IEqualityComparer<TKey>? comparer = null, 
+            IEqualityComparer<TKey>? comparer = default, 
             CancellationToken cancellationToken = default)
             where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>

@@ -312,7 +312,7 @@ namespace NetFabric.Hyperlinq
                 => source.Span.AnyAt(predicate);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public bool Contains(TSource value, IEqualityComparer<TSource>? comparer = null)
+            public bool Contains(TSource value, IEqualityComparer<TSource>? comparer = default)
                 => source.Span.Contains(value, comparer);
 
             #endregion
@@ -325,7 +325,7 @@ namespace NetFabric.Hyperlinq
 
             #endregion
 
-            public bool SequenceEqual(IEnumerable<TSource> other, IEqualityComparer<TSource>? comparer = null)
+            public bool SequenceEqual(IEnumerable<TSource> other, IEqualityComparer<TSource>? comparer = default)
             {
                 comparer ??= EqualityComparer<TSource>.Default;
 
@@ -350,7 +350,7 @@ namespace NetFabric.Hyperlinq
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int Count(this MemoryValueEnumerable<int> source)
-            => source.source.Span.Count();
+            => source.Count;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int Sum(this MemoryValueEnumerable<int> source)

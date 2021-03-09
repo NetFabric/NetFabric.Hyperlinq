@@ -37,14 +37,17 @@ namespace NetFabric.Hyperlinq
             }
 
             public readonly int Count
-                => source.Count;
+            {
+                [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                get => source.Count;
+            }
 
             public TResult this[int index]
             {
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 get
                 {
-                    if (index < 0 || index >= source.Count) Throw.IndexOutOfRangeException();
+                    if (index < 0 || index >= Count) Throw.IndexOutOfRangeException();
 
                     return selector.Invoke(source.Array![index + source.Offset], index);
                 }
@@ -210,7 +213,7 @@ namespace NetFabric.Hyperlinq
             
             #endregion
 
-            public bool SequenceEqual(IEnumerable<TResult> other, IEqualityComparer<TResult>? comparer = null)
+            public bool SequenceEqual(IEnumerable<TResult> other, IEqualityComparer<TResult>? comparer = default)
             {
                 comparer ??= EqualityComparer<TResult>.Default;
 

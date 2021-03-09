@@ -6,7 +6,7 @@ namespace NetFabric.Hyperlinq
     public static partial class TestData
     {
         public static TheoryData<int> Return =>
-            new TheoryData<int> 
+            new()
             {
                 int.MinValue, 0, int.MaxValue,
             };

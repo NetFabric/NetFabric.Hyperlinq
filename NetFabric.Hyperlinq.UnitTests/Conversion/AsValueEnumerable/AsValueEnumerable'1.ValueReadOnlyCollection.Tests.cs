@@ -4,17 +4,17 @@ using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsValueEnumerable
 {
-    public partial class ReadOnlyCollectionTests
+    public partial class ValueReadOnlyCollectionTests
     {
         [Theory]
         [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
-        public void AsValueEnumerable1_With_ValidData_Must_Succeed(int[] source)
+        public void AsValueReadOnlyCollection1_With_ValidData_Must_Succeed(int[] source)
         {
             // Arrange
             var wrapped = Wrap
-                .AsReadOnlyCollection(source);
+                .AsValueReadOnlyCollection(source);
 
             // Act
             var result = wrapped
@@ -30,11 +30,11 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsValueEnumerable
         [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
-        public void AsValueEnumerable1_Count_With_ValidData_Must_Succeed(int[] source)
+        public void AsValueReadOnlyCollection1_Count_With_ValidData_Must_Succeed(int[] source)
         {
             // Arrange
             var wrapped = Wrap
-                .AsReadOnlyCollection(source);
+                .AsValueReadOnlyCollection(source);
             var expected = source
                 .Count();
 
@@ -52,11 +52,11 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsValueEnumerable
         [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
-        public void AsValueEnumerable1_Sum_With_ValidData_Must_Succeed(int[] source)
+        public void AsValueReadOnlyCollection1_Sum_With_ValidData_Must_Succeed(int[] source)
         {
             // Arrange
             var wrapped = Wrap
-                .AsReadOnlyCollection(source);
+                .AsValueReadOnlyCollection(source);
             var expected = source
                 .Sum();
 

@@ -204,7 +204,7 @@ namespace NetFabric.Hyperlinq
             
             #endregion
 
-            public bool SequenceEqual(IEnumerable<TResult> other, IEqualityComparer<TResult>? comparer = null)
+            public bool SequenceEqual(IEnumerable<TResult> other, IEqualityComparer<TResult>? comparer = default)
             {
                 comparer ??= EqualityComparer<TResult>.Default;
 

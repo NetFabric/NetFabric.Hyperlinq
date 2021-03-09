@@ -1,24 +1,27 @@
 using System.Linq;
 using NetFabric.Assertive;
+using System.Collections.Generic;
 using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsValueEnumerable
 {
-    public partial class ReadOnlyCollectionTests
+    public partial class ValueEnumerableTests
     {
         [Theory]
         [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
-        public void AsValueEnumerable1_With_ValidData_Must_Succeed(int[] source)
+        public void AsValueEnumerable6_Enumerator_With_ValidData_Must_Succeed(int[] source)
         {
             // Arrange
             var wrapped = Wrap
-                .AsReadOnlyCollection(source);
+                .AsValueEnumerable(source);
 
             // Act
-            var result = wrapped
-                .AsValueEnumerable();
+            var result = ValueEnumerableExtensions
+                .AsValueEnumerable<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(
+                    wrapped,
+                    enumerable => enumerable.GetEnumerator());
 
             // Assert
             _ = result.Must()
@@ -30,39 +33,41 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsValueEnumerable
         [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
-        public void AsValueEnumerable1_Count_With_ValidData_Must_Succeed(int[] source)
+        public void AsValueEnumerable6_Enumerator2_With_ValidData_Must_Succeed(int[] source)
         {
             // Arrange
             var wrapped = Wrap
-                .AsReadOnlyCollection(source);
-            var expected = source
-                .Count();
+                .AsValueEnumerable(source);
 
             // Act
-            var result = wrapped
-                .AsValueEnumerable()
-                .Count();
+            var result = ValueEnumerableExtensions
+                .AsValueEnumerable<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(
+                    wrapped,
+                    enumerable => enumerable.GetEnumerator());
 
             // Assert
             _ = result.Must()
-                .BeEqualTo(expected);
+                .BeEnumerableOf<int>()
+                .BeEqualTo(source);
         }
         
         [Theory]
         [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
-        public void AsValueEnumerable1_Sum_With_ValidData_Must_Succeed(int[] source)
+        public void AsValueEnumerable6_Sum_With_ValidData_Must_Succeed(int[] source)
         {
             // Arrange
             var wrapped = Wrap
-                .AsReadOnlyCollection(source);
+                .AsValueEnumerable(source);
             var expected = source
                 .Sum();
 
             // Act
-            var result = wrapped
-                .AsValueEnumerable()
+            var result = ValueEnumerableExtensions
+                .AsValueEnumerable<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(
+                    wrapped,
+                    enumerable => enumerable.GetEnumerator())
                 .Sum();
 
             // Assert

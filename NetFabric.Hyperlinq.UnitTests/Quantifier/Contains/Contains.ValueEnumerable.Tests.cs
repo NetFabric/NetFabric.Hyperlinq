@@ -33,7 +33,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.Contains
         public void Contains_ReferenceType_With_Null_And_NotContains_Must_ReturnFalse(int[] source)
         {
             // Arrange
-            const string value = default;
+            const string? value = default;
             var wrapped = Wrap.AsValueEnumerable(source.Select(item => item.ToString()).ToArray());
 
             // Act

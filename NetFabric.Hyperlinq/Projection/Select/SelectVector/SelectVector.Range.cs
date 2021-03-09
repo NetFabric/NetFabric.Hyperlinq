@@ -41,7 +41,6 @@ namespace NetFabric.Hyperlinq
             where TResult : struct
         {
             internal readonly int start;
-            internal readonly int count;
             internal TVectorSelector vectorSelector;
             internal TSelector selector;
 
@@ -51,20 +50,19 @@ namespace NetFabric.Hyperlinq
                     Throw.NotSupportedException();
 
                 this.start = start;
-                this.count = count;
+                Count = count;
                 this.vectorSelector = vectorSelector;
                 this.selector = selector;
             }
 
-            public readonly int Count
-                => count;
+            public readonly int Count { get; }
 
             public TResult this[int index]
             {
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 get
                 {
-                    if (index < 0 || index >= count) Throw.IndexOutOfRangeException();
+                    if (index < 0 || index >= Count) Throw.IndexOutOfRangeException();
 
                     return selector.Invoke(start + index);
                 }
@@ -96,10 +94,10 @@ namespace NetFabric.Hyperlinq
 
             public void CopyTo(Span<TResult> span)
             {
-                if (span.Length < count)
+                if (span.Length < Count)
                     Throw.ArgumentException(Resource.DestinationNotLongEnough, nameof(span));
 
-                ArrayExtensions.CopyRange(start, count, span, vectorSelector, selector);
+                ArrayExtensions.CopyRange(start, Count, span, vectorSelector, selector);
             }
 
             void ICollection<TResult>.CopyTo(TResult[] array, int arrayIndex)
@@ -112,12 +110,12 @@ namespace NetFabric.Hyperlinq
             
             public unsafe bool Contains(TResult item)
             {
-                if (count is 0)
+                if (Count is 0)
                     return false;
 
                 var index = 0;
 
-                if (Vector.IsHardwareAccelerated && count > Vector<int>.Count * 2)
+                if (Vector.IsHardwareAccelerated && Count > Vector<int>.Count * 2)
                 {
                     var seed = stackalloc int[Vector<int>.Count]; 
                     if (start is 0)
@@ -138,7 +136,7 @@ namespace NetFabric.Hyperlinq
 
                     var vectorIncrement = new Vector<int>(Vector<int>.Count);
                     vector += vectorIncrement;
-                    for (index = 0; index < count - Vector<int>.Count; index += Vector<int>.Count)
+                    for (index = 0; index < Count - Vector<int>.Count; index += Vector<int>.Count)
                     {
                         if (Vector.EqualsAny(vectorSelector.Invoke(vector), vectorItem))
                             return true;
@@ -147,7 +145,7 @@ namespace NetFabric.Hyperlinq
                     }
                 }
 
-                var end = start + count;
+                var end = start + Count;
                 for (var value = index + start; value < end; value++)
                 {
                     if (GenericsOperator.Equals(selector.Invoke(value), item))
@@ -161,7 +159,7 @@ namespace NetFabric.Hyperlinq
                 => Throw.NotSupportedException<bool>();
             int IList<TResult>.IndexOf(TResult item)
             {
-                var end = start + count;
+                var end = start + Count;
                 for (var value = start; value < end; value++)
                 {
                     if (EqualityComparer<TResult>.Default.Equals(selector.Invoke(value), item))
@@ -186,7 +184,7 @@ namespace NetFabric.Hyperlinq
                 {
                     selector = enumerable.selector;
                     value = enumerable.start - 1;
-                    end = value + enumerable.count;
+                    end = value + enumerable.Count;
                 }
 
                 public TResult Current
@@ -212,7 +210,7 @@ namespace NetFabric.Hyperlinq
                 {
                     selector = enumerable.selector;
                     value = enumerable.start - 1;
-                    end = value + enumerable.count;
+                    end = value + enumerable.Count;
                 }
 
                 public TResult Current
@@ -244,7 +242,7 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Any()
-                => count is not 0;
+                => Count is not 0;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Contains(TResult value, IEqualityComparer<TResult>? comparer)
@@ -268,29 +266,30 @@ namespace NetFabric.Hyperlinq
 
             public TResult[] ToArray()
             {
-                var result = Utils.AllocateUninitializedArray<TResult>(count);
-                ArrayExtensions.CopyRange(start, count, result.AsSpan(), vectorSelector, selector);
+                var result = Utils.AllocateUninitializedArray<TResult>(Count);
+                ArrayExtensions.CopyRange(start, Count, result.AsSpan(), vectorSelector, selector);
                 return result;
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public IMemoryOwner<TResult> ToArray(MemoryPool<TResult> pool)
             {
-                var result = pool.RentSliced(count);
-                ArrayExtensions.CopyRange(start, count, result.Memory.Span, vectorSelector, selector);
+                var result = pool.RentSliced(Count);
+                ArrayExtensions.CopyRange(start, Count, result.Memory.Span, vectorSelector, selector);
                 return result;
             }
 
             public List<TResult> ToList()
-                => count switch
+                => Count switch
                 {
+                    // ReSharper disable once HeapView.ObjectAllocation.Evident
                     0 => new List<TResult>(),
                     _ => ToArray().AsList()
                 };
 
         #endregion
 
-            public bool SequenceEqual(IEnumerable<TResult> other, IEqualityComparer<TResult>? comparer = null)
+            public bool SequenceEqual(IEnumerable<TResult> other, IEqualityComparer<TResult>? comparer = default)
             {
                 comparer ??= EqualityComparer<TResult>.Default;
 
@@ -324,31 +323,31 @@ namespace NetFabric.Hyperlinq
         public static int Sum<TVectorSelector, TSelector>(this RangeSelectVectorEnumerable<int, TVectorSelector, TSelector> source)
             where TVectorSelector : struct, IFunction<Vector<int>, Vector<int>>
             where TSelector : struct, IFunction<int, int>
-            => SumRange<int, TVectorSelector, TSelector>(source.start, source.count, source.vectorSelector, source.selector);
+            => SumRange<int, TVectorSelector, TSelector>(source.start, source.Count, source.vectorSelector, source.selector);
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static long Sum<TVectorSelector, TSelector>(this RangeSelectVectorEnumerable<long, TVectorSelector, TSelector> source)
             where TVectorSelector : struct, IFunction<Vector<int>, Vector<long>>
             where TSelector : struct, IFunction<int, long>
-            => SumRange<long, TVectorSelector, TSelector>(source.start, source.count, source.vectorSelector, source.selector);
+            => SumRange<long, TVectorSelector, TSelector>(source.start, source.Count, source.vectorSelector, source.selector);
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float Sum<TVectorSelector, TSelector>(this RangeSelectVectorEnumerable<float, TVectorSelector, TSelector> source)
             where TVectorSelector : struct, IFunction<Vector<int>, Vector<float>>
             where TSelector : struct, IFunction<int, float>
-            => SumRange<float, TVectorSelector, TSelector>(source.start, source.count, source.vectorSelector, source.selector);
+            => SumRange<float, TVectorSelector, TSelector>(source.start, source.Count, source.vectorSelector, source.selector);
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static double Sum<TVectorSelector, TSelector>(this RangeSelectVectorEnumerable<double, TVectorSelector, TSelector> source)
             where TVectorSelector : struct, IFunction<Vector<int>, Vector<double>>
             where TSelector : struct, IFunction<int, double>
-            => SumRange<double, TVectorSelector, TSelector>(source.start, source.count, source.vectorSelector, source.selector);
+            => SumRange<double, TVectorSelector, TSelector>(source.start, source.Count, source.vectorSelector, source.selector);
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static decimal Sum<TVectorSelector, TSelector>(this RangeSelectVectorEnumerable<decimal, TVectorSelector, TSelector> source)
             where TVectorSelector : struct, IFunction<Vector<int>, Vector<decimal>>
             where TSelector : struct, IFunction<int, decimal>
-            => SumRange<decimal, TVectorSelector, TSelector>(source.start, source.count, source.vectorSelector, source.selector);
+            => SumRange<decimal, TVectorSelector, TSelector>(source.start, source.Count, source.vectorSelector, source.selector);
     }
 }
 

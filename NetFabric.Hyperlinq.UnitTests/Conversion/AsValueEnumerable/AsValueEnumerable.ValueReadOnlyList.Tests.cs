@@ -1,35 +1,67 @@
-using System.Linq;
-using NetFabric.Assertive;
-using System;
+﻿using NetFabric.Assertive;
 using Xunit;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsValueEnumerable
 {
-    public partial class ReadOnlySpanTests
+    public class ValueReadOnlyListTests
     {
         [Theory]
         [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
-        public void AsValueEnumerable1_With_ValidData_Must_Succeed(int[] source)
+        public void AsValueEnumerable_With_ValidData_Must_Succeed(int[] source)
         {
             // Arrange
-            var wrapped = (ReadOnlySpan<int>)source.AsSpan();
+            var wrapped = Wrap
+                .AsValueReadOnlyList(source);
 
             // Act
             var result = wrapped
                 .AsValueEnumerable();
 
             // Assert
-            result.SequenceEqual(source).Must().BeTrue();
+            _ = result.Must()
+                .BeOfType<ValueReadOnlyListExtensions.ValueEnumerable<Wrap.ValueReadOnlyListWrapper<int>, Wrap.Enumerator<int>, int>>()
+                .BeEnumerableOf<int>()
+                .BeEqualTo(wrapped);
         }
-        
+
+        [Theory]
+        [MemberData(nameof(TestData.SkipTakeEmpty), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakeSingle), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SkipTakeMultiple), MemberType = typeof(TestData))]
+        public void AsValueEnumerable_With_ToArray_Must_Succeed(int[] source, int skipCount, int takeCount)
+        {
+            // Arrange
+            var wrapped = Wrap
+                .AsValueReadOnlyList(source);
+            var expected = source
+                .Skip(skipCount)
+                .Take(takeCount)
+                .ToArray();
+
+            // Act
+            var result = wrapped
+                .AsValueEnumerable()
+                .Skip(skipCount)
+                .Take(takeCount)
+                .ToArray();
+
+            // Assert
+            _ = result.Must()
+                .BeArrayOf<int>()
+                .BeEqualTo(expected);
+        }
+
         [Theory]
         [MemberData(nameof(TestData.Skip_Skip), MemberType = typeof(TestData))]
-        public void AsValueEnumerable1_Skip_Skip_With_ValidData_Must_Succeed(int[] source, int count0, int count1)
+        public void AsValueEnumerable_Skip_With_ValidData_Must_Succeed(int[] source, int count0, int count1)
         {
             // Arrange
-            var wrapped = (ReadOnlySpan<int>)source.AsSpan();
+            var wrapped = Wrap
+                .AsValueReadOnlyList(source);
             var expected = source
                 .Skip(count0)
                 .Skip(count1);
@@ -41,15 +73,18 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsValueEnumerable
                 .Skip(count1);
 
             // Assert
-            result.SequenceEqual(expected).Must().BeTrue();
+            _ = result.Must()
+                .BeEnumerableOf<int>()
+                .BeEqualTo(expected);
         }
-        
+
         [Theory]
         [MemberData(nameof(TestData.Take_Take), MemberType = typeof(TestData))]
-        public void AsValueEnumerable1_Take_Take_With_ValidData_Must_Succeed(int[] source, int count0, int count1)
+        public void AsValueEnumerable1_Take_With_ValidData_Must_Succeed(int[] source, int count0, int count1)
         {
             // Arrange
-            var wrapped = (ReadOnlySpan<int>)source.AsSpan();
+            var wrapped = Wrap
+                .AsValueReadOnlyList(source);
             var expected = source
                 .Take(count0)
                 .Take(count1);
@@ -61,7 +96,9 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsValueEnumerable
                 .Take(count1);
 
             // Assert
-            result.SequenceEqual(expected).Must().BeTrue();
+            _ = result.Must()
+                .BeEnumerableOf<int>()
+                .BeEqualTo(expected);
         }
         
         [Theory]
@@ -71,7 +108,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsValueEnumerable
         public void AsValueEnumerable1_Count_With_ValidData_Must_Succeed(int[] source, int skipCount, int takeCount)
         {
             // Arrange
-            var wrapped = (ReadOnlySpan<int>)source.AsSpan();
+            var wrapped = Wrap
+                .AsValueReadOnlyList(source);
             var expected = source
                 .Skip(skipCount)
                 .Take(takeCount)
@@ -96,7 +134,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsValueEnumerable
         public void AsValueEnumerable1_Sum_With_ValidData_Must_Succeed(int[] source, int skipCount, int takeCount)
         {
             // Arrange
-            var wrapped = (ReadOnlySpan<int>)source.AsSpan();
+            var wrapped = Wrap
+                .AsValueReadOnlyList(source);
             var expected = source
                 .Skip(skipCount)
                 .Take(takeCount)

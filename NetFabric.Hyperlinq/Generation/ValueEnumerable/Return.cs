@@ -30,12 +30,11 @@ namespace NetFabric.Hyperlinq
             public readonly TSource this[int index]
             {
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                get
+                get => index switch
                 {
-                    if (index is not 0) Throw.IndexOutOfRangeException();
-
-                    return value;
-                }
+                    0 => value,
+                    _ => Throw.IndexOutOfRangeException<TSource>()
+                };
             }
             TSource IReadOnlyList<TSource>.this[int index]
                 => this[index];
