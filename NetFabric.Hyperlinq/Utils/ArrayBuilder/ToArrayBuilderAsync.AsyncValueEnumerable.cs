@@ -52,7 +52,7 @@ namespace NetFabric.Hyperlinq
 
         //////////////////////////////////////////////////////////////////////////////////////////////////
 
-        static async ValueTask<TSource[]> ToArrayBuilderAsync<TEnumerable, TEnumerator, TSource, TPredicate>(this TEnumerable source, TPredicate predicate, CancellationToken cancellationToken)
+        static async ValueTask<TSource[]> ToArrayBuilderAsync<TEnumerable, TEnumerator, TSource, TPredicate>(this TEnumerable source, CancellationToken cancellationToken, TPredicate predicate)
             where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
             where TPredicate: struct, IAsyncFunction<TSource, bool>
@@ -77,7 +77,7 @@ namespace NetFabric.Hyperlinq
             return builder.ToArray();
         }
 
-        static async ValueTask<IMemoryOwner<TSource>> ToArrayBuilderAsync<TEnumerable, TEnumerator, TSource, TPredicate>(this TEnumerable source, TPredicate predicate, MemoryPool<TSource> pool, CancellationToken cancellationToken)
+        static async ValueTask<IMemoryOwner<TSource>> ToArrayBuilderAsync<TEnumerable, TEnumerator, TSource, TPredicate>(this TEnumerable source, MemoryPool<TSource> pool, CancellationToken cancellationToken, TPredicate predicate)
             where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
             where TPredicate: struct, IAsyncFunction<TSource, bool>
@@ -104,7 +104,7 @@ namespace NetFabric.Hyperlinq
 
         //////////////////////////////////////////////////////////////////////////////////////////////////
 
-        static async ValueTask<TSource[]> ToArrayBuilderAtAsync<TEnumerable, TEnumerator, TSource, TPredicate>(this TEnumerable source, TPredicate predicate, CancellationToken cancellationToken)
+        static async ValueTask<TSource[]> ToArrayBuilderAtAsync<TEnumerable, TEnumerator, TSource, TPredicate>(this TEnumerable source, CancellationToken cancellationToken, TPredicate predicate)
             where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
             where TPredicate: struct, IAsyncFunction<TSource, int, bool>
@@ -132,7 +132,7 @@ namespace NetFabric.Hyperlinq
             return builder.ToArray();
         }
 
-        static async ValueTask<IMemoryOwner<TSource>> ToArrayBuilderAtAsync<TEnumerable, TEnumerator, TSource, TPredicate>(this TEnumerable source, TPredicate predicate, MemoryPool<TSource> pool, CancellationToken cancellationToken)
+        static async ValueTask<IMemoryOwner<TSource>> ToArrayBuilderAtAsync<TEnumerable, TEnumerator, TSource, TPredicate>(this TEnumerable source, MemoryPool<TSource> pool, CancellationToken cancellationToken, TPredicate predicate)
             where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
             where TPredicate: struct, IAsyncFunction<TSource, int, bool>
@@ -162,7 +162,7 @@ namespace NetFabric.Hyperlinq
 
         //////////////////////////////////////////////////////////////////////////////////////////////////
 
-        static async ValueTask<TResult[]> ToArrayBuilderAsync<TEnumerable, TEnumerator, TSource, TResult, TSelector>(this TEnumerable source, TSelector selector, CancellationToken cancellationToken)
+        static async ValueTask<TResult[]> ToArrayBuilderAsync<TEnumerable, TEnumerator, TSource, TResult, TSelector>(this TEnumerable source, CancellationToken cancellationToken, TSelector selector)
             where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
             where TSelector: struct, IAsyncFunction<TSource, TResult>
@@ -185,7 +185,7 @@ namespace NetFabric.Hyperlinq
             return builder.ToArray();
         }
 
-        static async ValueTask<IMemoryOwner<TResult>> ToArrayBuilderAsync<TEnumerable, TEnumerator, TSource, TResult, TSelector>(this TEnumerable source, TSelector selector, MemoryPool<TResult> pool, CancellationToken cancellationToken)
+        static async ValueTask<IMemoryOwner<TResult>> ToArrayBuilderAsync<TEnumerable, TEnumerator, TSource, TResult, TSelector>(this TEnumerable source, MemoryPool<TResult> pool, CancellationToken cancellationToken, TSelector selector)
             where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
             where TSelector: struct, IAsyncFunction<TSource, TResult>
@@ -210,7 +210,7 @@ namespace NetFabric.Hyperlinq
 
         //////////////////////////////////////////////////////////////////////////////////////////////////
 
-        static async ValueTask<TResult[]> ToArrayBuilderAtAsync<TEnumerable, TEnumerator, TSource, TResult, TSelector>(this TEnumerable source, TSelector selector, CancellationToken cancellationToken)
+        static async ValueTask<TResult[]> ToArrayBuilderAtAsync<TEnumerable, TEnumerator, TSource, TResult, TSelector>(this TEnumerable source, CancellationToken cancellationToken, TSelector selector)
             where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
             where TSelector: struct, IAsyncFunction<TSource, int, TResult>
@@ -236,7 +236,7 @@ namespace NetFabric.Hyperlinq
             return builder.ToArray();
         }
 
-        static async ValueTask<IMemoryOwner<TResult>> ToArrayBuilderAtAsync<TEnumerable, TEnumerator, TSource, TResult, TSelector>(this TEnumerable source, TSelector selector, MemoryPool<TResult> pool, CancellationToken cancellationToken)
+        static async ValueTask<IMemoryOwner<TResult>> ToArrayBuilderAtAsync<TEnumerable, TEnumerator, TSource, TResult, TSelector>(this TEnumerable source, MemoryPool<TResult> pool, CancellationToken cancellationToken, TSelector selector)
             where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
             where TSelector: struct, IAsyncFunction<TSource, int, TResult>
@@ -264,7 +264,7 @@ namespace NetFabric.Hyperlinq
 
         //////////////////////////////////////////////////////////////////////////////////////////////////
 
-        static async ValueTask<TResult[]> ToArrayBuilderAsync<TEnumerable, TEnumerator, TSource, TResult, TPredicate, TSelector>(this TEnumerable source, TPredicate predicate, TSelector selector, CancellationToken cancellationToken)
+        static async ValueTask<TResult[]> ToArrayBuilderAsync<TEnumerable, TEnumerator, TSource, TResult, TPredicate, TSelector>(this TEnumerable source, CancellationToken cancellationToken, TPredicate predicate, TSelector selector)
             where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
             where TPredicate: struct, IAsyncFunction<TSource, bool>
@@ -290,7 +290,7 @@ namespace NetFabric.Hyperlinq
             return builder.ToArray();
         }
 
-        static async ValueTask<IMemoryOwner<TResult>> ToArrayBuilderAsync<TEnumerable, TEnumerator, TSource, TResult, TPredicate, TSelector>(this TEnumerable source, TPredicate predicate, TSelector selector, MemoryPool<TResult> pool, CancellationToken cancellationToken)
+        static async ValueTask<IMemoryOwner<TResult>> ToArrayBuilderAsync<TEnumerable, TEnumerator, TSource, TResult, TPredicate, TSelector>(this TEnumerable source, MemoryPool<TResult> pool, CancellationToken cancellationToken, TPredicate predicate, TSelector selector)
             where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
             where TPredicate: struct, IAsyncFunction<TSource, bool>

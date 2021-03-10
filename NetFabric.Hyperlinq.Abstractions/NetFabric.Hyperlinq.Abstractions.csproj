@@ -10,8 +10,7 @@
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageTags>netfabric, hyperlinq, abstractions, linq, enumeration, performance</PackageTags>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
-    <PackageReleaseNotes>Added IFunctionIn and related interfaces.</PackageReleaseNotes>
-    <Nullable>enable</Nullable>
+    <PackageReleaseNotes></PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>

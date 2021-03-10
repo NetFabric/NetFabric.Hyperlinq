@@ -35,16 +35,16 @@ namespace NetFabric.Hyperlinq
         }
 
         
-        static ValueTask<Option<TSource>> ElementAtAsync<TEnumerable, TEnumerator, TSource, TPredicate>(this TEnumerable source, int index, TPredicate predicate, CancellationToken cancellationToken) 
+        static ValueTask<Option<TSource>> ElementAtAsync<TEnumerable, TEnumerator, TSource, TPredicate>(this TEnumerable source, int index, CancellationToken cancellationToken, TPredicate predicate) 
             where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
             where TPredicate : struct, IAsyncFunction<TSource, bool>
         {
             return index < 0 
                 ? new ValueTask<Option<TSource>>(Option.None) 
-                : ExecuteAsync(source, index, predicate, cancellationToken);
+                : ExecuteAsync(source, index, cancellationToken, predicate);
 
-            static async ValueTask<Option<TSource>> ExecuteAsync(TEnumerable source, int index, TPredicate predicate, CancellationToken cancellationToken)
+            static async ValueTask<Option<TSource>> ExecuteAsync(TEnumerable source, int index, CancellationToken cancellationToken, TPredicate predicate)
             {
                 var enumerator = source.GetAsyncEnumerator(cancellationToken);
                 try
@@ -64,16 +64,16 @@ namespace NetFabric.Hyperlinq
         }
 
         
-        static ValueTask<Option<TSource>> ElementAtAtAsync<TEnumerable, TEnumerator, TSource, TPredicate>(this TEnumerable source, int index, TPredicate predicate, CancellationToken cancellationToken) 
+        static ValueTask<Option<TSource>> ElementAtAtAsync<TEnumerable, TEnumerator, TSource, TPredicate>(this TEnumerable source, int index, CancellationToken cancellationToken, TPredicate predicate) 
             where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
             where TPredicate : struct, IAsyncFunction<TSource, int, bool>
         {
             return index < 0 
                 ? new ValueTask<Option<TSource>>(Option.None) 
-                : ExecuteAsync(source, index, predicate, cancellationToken);
+                : ExecuteAsync(source, index, cancellationToken, predicate);
 
-            static async ValueTask<Option<TSource>> ExecuteAsync(TEnumerable source, int index, TPredicate predicate, CancellationToken cancellationToken)
+            static async ValueTask<Option<TSource>> ExecuteAsync(TEnumerable source, int index, CancellationToken cancellationToken, TPredicate predicate)
             {
                 var enumerator = source.GetAsyncEnumerator(cancellationToken);
                 try
@@ -96,16 +96,16 @@ namespace NetFabric.Hyperlinq
         }
 
         
-        static ValueTask<Option<TResult>> ElementAtAsync<TEnumerable, TEnumerator, TSource, TResult, TSelector>(this TEnumerable source, int index, TSelector selector, CancellationToken cancellationToken) 
+        static ValueTask<Option<TResult>> ElementAtAsync<TEnumerable, TEnumerator, TSource, TResult, TSelector>(this TEnumerable source, int index, CancellationToken cancellationToken, TSelector selector) 
             where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
             where TSelector : struct, IAsyncFunction<TSource, TResult>
         {
             return index < 0 
                 ? new ValueTask<Option<TResult>>(Option.None) 
-                : ExecuteAsync(source, index, selector, cancellationToken);
+                : ExecuteAsync(source, index, cancellationToken, selector);
 
-            static async ValueTask<Option<TResult>> ExecuteAsync(TEnumerable source, int index, TSelector selector, CancellationToken cancellationToken)
+            static async ValueTask<Option<TResult>> ExecuteAsync(TEnumerable source, int index, CancellationToken cancellationToken, TSelector selector)
             {
                 var enumerator = source.GetAsyncEnumerator(cancellationToken);
                 try
@@ -125,16 +125,16 @@ namespace NetFabric.Hyperlinq
         }
 
         
-        static ValueTask<Option<TResult>> ElementAtAtAsync<TEnumerable, TEnumerator, TSource, TResult, TSelector>(this TEnumerable source, int index, TSelector selector, CancellationToken cancellationToken) 
+        static ValueTask<Option<TResult>> ElementAtAtAsync<TEnumerable, TEnumerator, TSource, TResult, TSelector>(this TEnumerable source, int index, CancellationToken cancellationToken, TSelector selector) 
             where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
             where TSelector : struct, IAsyncFunction<TSource, int, TResult>
         {
             return index < 0 
                 ? new ValueTask<Option<TResult>>(Option.None) 
-                : ExecuteAsync(source, index, selector, cancellationToken);
+                : ExecuteAsync(source, index, cancellationToken, selector);
 
-            static async ValueTask<Option<TResult>> ExecuteAsync(TEnumerable source, int index, TSelector selector, CancellationToken cancellationToken)
+            static async ValueTask<Option<TResult>> ExecuteAsync(TEnumerable source, int index, CancellationToken cancellationToken, TSelector selector)
             {
                 var enumerator = source.GetAsyncEnumerator(cancellationToken);
                 try
@@ -157,7 +157,7 @@ namespace NetFabric.Hyperlinq
         }
 
         
-        static ValueTask<Option<TResult>> ElementAtAsync<TEnumerable, TEnumerator, TSource, TResult, TPredicate, TSelector>(this TEnumerable source, int index, TPredicate predicate, TSelector selector, CancellationToken cancellationToken) 
+        static ValueTask<Option<TResult>> ElementAtAsync<TEnumerable, TEnumerator, TSource, TResult, TPredicate, TSelector>(this TEnumerable source, int index, CancellationToken cancellationToken, TPredicate predicate, TSelector selector) 
             where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
             where TPredicate : struct, IAsyncFunction<TSource, bool>
@@ -165,9 +165,9 @@ namespace NetFabric.Hyperlinq
         {
             return index < 0 
                 ? new ValueTask<Option<TResult>>(Option.None) 
-                : ExecuteAsync(source, index, predicate, selector, cancellationToken);
+                : ExecuteAsync(source, index, cancellationToken, predicate, selector);
 
-            static async ValueTask<Option<TResult>> ExecuteAsync(TEnumerable source, int index, TPredicate predicate, TSelector selector, CancellationToken cancellationToken)
+            static async ValueTask<Option<TResult>> ExecuteAsync(TEnumerable source, int index, CancellationToken cancellationToken, TPredicate predicate, TSelector selector)
             {
                 var enumerator = source.GetAsyncEnumerator(cancellationToken);
                 try

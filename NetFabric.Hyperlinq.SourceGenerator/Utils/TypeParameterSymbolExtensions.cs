@@ -7,7 +7,7 @@ namespace NetFabric.Hyperlinq.SourceGenerator
 {
     static class TypeParameterSymbolExtensions
     {
-        public static IEnumerable<string> AsConstraintsStrings(this ITypeParameterSymbol parameter, ImmutableArray<(string, string, bool)> genericsMapping = default)
+        public static IEnumerable<string> AsConstraintsStrings(this ITypeParameterSymbol parameter, ImmutableArray<GeneratorMappingAttribute> genericsMapping = default)
         {
             if (parameter.HasConstructorConstraint)
                 yield return "new";

@@ -10,7 +10,8 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class ArrayExtensions
     {
-        
+
+        [GeneratorIgnore(false)]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static MemoryDistinctEnumerable<TSource> Distinct<TSource>(
             this ReadOnlyMemory<TSource> source, 

@@ -10,14 +10,14 @@ namespace NetFabric.Hyperlinq
     public static partial class ArrayExtensions
     {
 
-        [GeneratorIgnore]
+        [GeneratorIgnore(true)]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static SpanSelectVectorContext<TSource, TResult, FunctionWrapper<Vector<TSource>, Vector<TResult>>, FunctionWrapper<TSource, TResult>> SelectVector<TSource, TResult>(this ReadOnlySpan<TSource> source, Func<Vector<TSource>, Vector<TResult>> vectorSelector, Func<TSource, TResult> selector)
             where TSource : struct
             where TResult : struct
             => source.SelectVector<TSource, TResult, FunctionWrapper<Vector<TSource>, Vector<TResult>>, FunctionWrapper<TSource, TResult>>(new FunctionWrapper<Vector<TSource>, Vector<TResult>>(vectorSelector), new FunctionWrapper<TSource, TResult>(selector));
 
-        [GeneratorIgnore]
+        [GeneratorIgnore(true)]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static SpanSelectVectorContext<TSource, TResult, TSelector, TSelector> SelectVector<TSource, TResult, TSelector>(this ReadOnlySpan<TSource> source, TSelector selector = default)
             where TSelector : struct, IFunction<Vector<TSource>, Vector<TResult>>, IFunction<TSource, TResult>
@@ -25,7 +25,7 @@ namespace NetFabric.Hyperlinq
             where TResult : struct
             => source.SelectVector<TSource, TResult, TSelector, TSelector>(selector, selector);
 
-        [GeneratorIgnore]
+        [GeneratorIgnore(false)]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static SpanSelectVectorContext<TSource, TResult, TVectorSelector, TSelector> SelectVector<TSource, TResult, TVectorSelector, TSelector>(this ReadOnlySpan<TSource> source, TVectorSelector vectorSelector = default, TSelector selector = default)
             where TVectorSelector : struct, IFunction<Vector<TSource>, Vector<TResult>>
@@ -90,7 +90,7 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public IMemoryOwner<TResult> ToArray(MemoryPool<TResult> pool)
-                => source.ToArrayVector(vectorSelector, selector, pool);
+                => source.ToArrayVector(pool, vectorSelector, selector);
 
             public List<TResult> ToList()
                 => source.ToListVector<TSource, TResult, TVectorSelector, TSelector>(vectorSelector, selector);

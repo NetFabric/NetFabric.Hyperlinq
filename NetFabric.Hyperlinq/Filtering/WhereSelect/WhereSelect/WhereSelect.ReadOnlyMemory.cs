@@ -218,7 +218,7 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public IMemoryOwner<TResult> ToArray(MemoryPool<TResult> memoryPool)
-                => source.Span.ToArray(predicate, selector, memoryPool);
+                => source.Span.ToArray(memoryPool, predicate, selector);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public List<TResult> ToList()

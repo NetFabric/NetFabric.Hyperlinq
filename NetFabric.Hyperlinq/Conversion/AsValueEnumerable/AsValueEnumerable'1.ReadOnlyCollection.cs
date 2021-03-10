@@ -9,7 +9,8 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class ReadOnlyCollectionExtensions
     {
-        
+
+        [GeneratorIgnore]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ValueEnumerable<TSource> AsValueEnumerable<TSource>(this IReadOnlyCollection<TSource> source)
             => new(source);
@@ -78,6 +79,9 @@ namespace NetFabric.Hyperlinq
 
             ValueEnumerable<TSource> AsValueEnumerable()
                 => this;
+
+            IReadOnlyCollection<TSource> AsEnumerable()
+                => source;
 
             #endregion
             #region Quantifier

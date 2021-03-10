@@ -130,7 +130,7 @@ namespace NetFabric.Hyperlinq
                 => source.ToArrayAt(predicate);
 
             public IMemoryOwner<TSource> ToArray(MemoryPool<TSource> memoryPool)
-                => source.ToArrayAt(predicate, memoryPool);
+                => source.ToArrayAt(memoryPool, predicate);
 
             public List<TSource> ToList()
                 => source.ToListAt(predicate);

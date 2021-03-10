@@ -7,12 +7,14 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class ValueEnumerableExtensions
     {
-        
+
+        [GeneratorIgnore]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ValueEnumerable<TEnumerator, TSource> AsValueEnumerable<TEnumerator, TSource>(this IValueEnumerable<TSource, TEnumerator> source)
             where TEnumerator : struct, IEnumerator<TSource>
             => new(source);
 
+        [GeneratorBindings(source: "source", sourceImplements: "IValueEnumerable`2", enumerableType: "IValueEnumerable<TSource, TEnumerator>")]
         [StructLayout(LayoutKind.Auto)]
         public readonly partial struct ValueEnumerable<TEnumerator, TSource>
             : IValueEnumerable<TSource, TEnumerator>
@@ -38,6 +40,9 @@ namespace NetFabric.Hyperlinq
 
             ValueEnumerable<TEnumerator, TSource> AsValueEnumerable()
                 => this;
+
+            IEnumerable<TSource> AsEnumerable()
+                => source;
 
             #endregion
         }

@@ -17,43 +17,43 @@ namespace NetFabric.Hyperlinq
 
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static async ValueTask<List<TSource>> ToListAsync<TEnumerable, TEnumerator, TSource, TPredicate>(this TEnumerable source, TPredicate predicate, CancellationToken cancellationToken)
+        static async ValueTask<List<TSource>> ToListAsync<TEnumerable, TEnumerator, TSource, TPredicate>(this TEnumerable source, CancellationToken cancellationToken, TPredicate predicate)
             where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
             where TPredicate : struct, IAsyncFunction<TSource, bool>
-            => (await source.ToArrayAsync<TEnumerable, TEnumerator, TSource, TPredicate>(predicate, cancellationToken).ConfigureAwait(false)).AsList();
+            => (await source.ToArrayAsync<TEnumerable, TEnumerator, TSource, TPredicate>(cancellationToken, predicate).ConfigureAwait(false)).AsList();
 
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static async ValueTask<List<TSource>> ToListAtAsync<TEnumerable, TEnumerator, TSource, TPredicate>(this TEnumerable source, TPredicate predicate, CancellationToken cancellationToken)
+        static async ValueTask<List<TSource>> ToListAtAsync<TEnumerable, TEnumerator, TSource, TPredicate>(this TEnumerable source, CancellationToken cancellationToken, TPredicate predicate)
             where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
             where TPredicate : struct, IAsyncFunction<TSource, int, bool>
-            => (await source.ToArrayAtAsync<TEnumerable, TEnumerator, TSource, TPredicate>(predicate, cancellationToken).ConfigureAwait(false)).AsList();
+            => (await source.ToArrayAtAsync<TEnumerable, TEnumerator, TSource, TPredicate>(cancellationToken, predicate).ConfigureAwait(false)).AsList();
 
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static async ValueTask<List<TResult>> ToListAsync<TEnumerable, TEnumerator, TSource, TResult, TSelector>(this TEnumerable source, TSelector selector, CancellationToken cancellationToken)
+        static async ValueTask<List<TResult>> ToListAsync<TEnumerable, TEnumerator, TSource, TResult, TSelector>(this TEnumerable source, CancellationToken cancellationToken, TSelector selector)
             where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
             where TSelector : struct, IAsyncFunction<TSource, TResult>
-            => (await source.ToArrayAsync<TEnumerable, TEnumerator, TSource, TResult, TSelector>(selector, cancellationToken).ConfigureAwait(false)).AsList();
+            => (await source.ToArrayAsync<TEnumerable, TEnumerator, TSource, TResult, TSelector>(cancellationToken, selector).ConfigureAwait(false)).AsList();
 
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static async ValueTask<List<TResult>> ToListAtAsync<TEnumerable, TEnumerator, TSource, TResult, TSelector>(this TEnumerable source, TSelector selector, CancellationToken cancellationToken)
+        static async ValueTask<List<TResult>> ToListAtAsync<TEnumerable, TEnumerator, TSource, TResult, TSelector>(this TEnumerable source, CancellationToken cancellationToken, TSelector selector)
             where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
             where TSelector : struct, IAsyncFunction<TSource, int, TResult>
-            => (await source.ToArrayAtAsync<TEnumerable, TEnumerator, TSource, TResult, TSelector>(selector, cancellationToken).ConfigureAwait(false)).AsList();
+            => (await source.ToArrayAtAsync<TEnumerable, TEnumerator, TSource, TResult, TSelector>(cancellationToken, selector).ConfigureAwait(false)).AsList();
 
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static async ValueTask<List<TResult>> ToListAsync<TEnumerable, TEnumerator, TSource, TResult, TPredicate, TSelector>(this TEnumerable source, TPredicate predicate, TSelector selector, CancellationToken cancellationToken)
+        static async ValueTask<List<TResult>> ToListAsync<TEnumerable, TEnumerator, TSource, TResult, TPredicate, TSelector>(this TEnumerable source, CancellationToken cancellationToken, TPredicate predicate, TSelector selector)
             where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
             where TPredicate : struct, IAsyncFunction<TSource, bool>
             where TSelector : struct, IAsyncFunction<TSource, TResult>
-            => (await source.ToArrayAsync<TEnumerable, TEnumerator, TSource, TResult, TPredicate, TSelector>(predicate, selector, cancellationToken).ConfigureAwait(false)).AsList();
+            => (await source.ToArrayAsync<TEnumerable, TEnumerator, TSource, TResult, TPredicate, TSelector>(cancellationToken, predicate, selector).ConfigureAwait(false)).AsList();
     }
 }

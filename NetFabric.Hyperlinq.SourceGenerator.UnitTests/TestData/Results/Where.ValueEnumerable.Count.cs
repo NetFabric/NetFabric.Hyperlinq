@@ -12,6 +12,7 @@ namespace NetFabric.Hyperlinq
         public partial struct WhereEnumerable<TEnumerable, TEnumerator, TSource, TPredicate>
         {
             [GeneratedCode("NetFabric.Hyperlinq.SourceGenerator", "1.0.0")]
+            [DebuggerNonUserCode]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly int Count()
             => NetFabric.Hyperlinq.ValueEnumerableExtensions.Count<NetFabric.Hyperlinq.ValueEnumerableExtensions.WhereEnumerable<TEnumerable, TEnumerator, TSource, TPredicate>, NetFabric.Hyperlinq.ValueEnumerableExtensions.WhereEnumerable<TEnumerable, TEnumerator, TSource, TPredicate>.DisposableEnumerator, TSource>(this);

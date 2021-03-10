@@ -68,7 +68,7 @@ namespace NetFabric.Hyperlinq
                 => throw new NotSupportedException();
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public ValueReadOnlyListExtensions.ValueEnumerable<ValueListWrapper<T>, Enumerator<T>, T> AsValueEnumerable()
+            public ReadOnlyListExtensions.ValueEnumerable<ValueListWrapper<T>, T> AsValueEnumerable()
                 => this.AsValueEnumerable<ValueListWrapper<T>, Enumerator<T>, T>();
         }
     }

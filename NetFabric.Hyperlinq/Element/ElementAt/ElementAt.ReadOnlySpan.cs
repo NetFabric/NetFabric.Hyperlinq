@@ -5,7 +5,8 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class ArrayExtensions
     {
-        
+
+        [GeneratorIgnore(false)]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static Option<TSource> ElementAt<TSource>(this ReadOnlySpan<TSource> source, int index) 
             => index < 0 || index >= source.Length 

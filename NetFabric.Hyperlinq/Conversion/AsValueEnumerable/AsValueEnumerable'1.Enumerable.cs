@@ -7,7 +7,8 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class EnumerableExtensions
     {
-        
+
+        [GeneratorIgnore]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ValueEnumerable<TSource> AsValueEnumerable<TSource>(this IEnumerable<TSource> source)
             => new(source);
@@ -34,6 +35,9 @@ namespace NetFabric.Hyperlinq
 
             ValueEnumerable<TSource> AsValueEnumerable()
                 => this;
+
+            IEnumerable<TSource> AsEnumerable()
+                => source;
 
             #endregion
         }

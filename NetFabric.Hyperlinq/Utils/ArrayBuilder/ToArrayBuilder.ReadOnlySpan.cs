@@ -6,7 +6,7 @@ namespace NetFabric.Hyperlinq
     public static partial class ArrayExtensions
     {
 
-        static LargeArrayBuilder<TSource> ToArrayBuilder<TSource, TPredicate>(ReadOnlySpan<TSource> source, TPredicate predicate, ArrayPool<TSource> arrayPool)
+        static LargeArrayBuilder<TSource> ToArrayBuilder<TSource, TPredicate>(ReadOnlySpan<TSource> source, ArrayPool<TSource> arrayPool, TPredicate predicate)
             where TPredicate: struct, IFunction<TSource, bool>
         {
             var builder = new LargeArrayBuilder<TSource>(arrayPool);
@@ -18,7 +18,7 @@ namespace NetFabric.Hyperlinq
             return builder;
         }
 
-        static LargeArrayBuilder<TSource> ToArrayBuilderAt<TSource, TPredicate>(ReadOnlySpan<TSource> source, TPredicate predicate, ArrayPool<TSource> arrayPool)
+        static LargeArrayBuilder<TSource> ToArrayBuilderAt<TSource, TPredicate>(ReadOnlySpan<TSource> source, ArrayPool<TSource> arrayPool, TPredicate predicate)
             where TPredicate: struct, IFunction<TSource, int, bool>
         {
             var builder = new LargeArrayBuilder<TSource>(arrayPool);
@@ -31,7 +31,7 @@ namespace NetFabric.Hyperlinq
             return builder;
         }
 
-        static LargeArrayBuilder<TResult> ToArrayBuilder<TSource, TResult, TPredicate, TSelector>(ReadOnlySpan<TSource> source, TPredicate predicate, TSelector selector, ArrayPool<TResult> arrayPool)
+        static LargeArrayBuilder<TResult> ToArrayBuilder<TSource, TResult, TPredicate, TSelector>(ReadOnlySpan<TSource> source, ArrayPool<TResult> arrayPool, TPredicate predicate, TSelector selector)
             where TPredicate: struct, IFunction<TSource, bool>
             where TSelector: struct, IFunction<TSource, TResult>
         {

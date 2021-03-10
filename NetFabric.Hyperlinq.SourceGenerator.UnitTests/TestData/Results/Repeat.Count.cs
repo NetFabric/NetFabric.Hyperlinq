@@ -11,6 +11,7 @@ namespace NetFabric.Hyperlinq
     {
 
         [GeneratedCode("NetFabric.Hyperlinq.SourceGenerator", "1.0.0")]
+        [DebuggerNonUserCode]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int Count<TSource>(this NetFabric.Hyperlinq.ValueEnumerable.RepeatEnumerable<TSource> source)
         => NetFabric.Hyperlinq.ValueEnumerableExtensions.Count<NetFabric.Hyperlinq.ValueEnumerable.RepeatEnumerable<TSource>, NetFabric.Hyperlinq.ValueEnumerable.RepeatEnumerable<TSource>.DisposableEnumerator, TSource>(source);

@@ -21,6 +21,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="..\NetFabric.Hyperlinq.SourceGenerator\Attributes\GeneratorBindingsAttribute.cs" Link="Utils\Generator\GeneratorBindingsAttribute.cs" />
+    <Compile Include="..\NetFabric.Hyperlinq.SourceGenerator\Attributes\GeneratorIgnoreAttribute.cs" Link="Utils\Generator\GeneratorIgnoreAttribute.cs" />
+    <Compile Include="..\NetFabric.Hyperlinq.SourceGenerator\Attributes\GeneratorMappingAttribute.cs" Link="Utils\Generator\GeneratorMappingAttribute.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <SupportedPlatform Include="browser" />
   </ItemGroup>
 
@@ -77,6 +83,7 @@
 
   <ItemGroup>
     <Folder Include="Conversion\AsAsyncEnumerable" />
+    <Folder Include="Utils\Generator\" />
   </ItemGroup>
 
 </Project>

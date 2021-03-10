@@ -22,37 +22,55 @@ namespace NetFabric.Hyperlinq.SourceGenerator
             };
 
         public static StringBuilder AppendCommaSeparated(this StringBuilder builder, IReadOnlyList<string> strings)
-            => strings.Count switch
+        {
+            return strings.Count switch
             {
                 0 => builder,
                 1 => builder.Append(strings[0]),
                 _ => PerformAppendCommaSeparated(builder, strings),
             };
 
-        static StringBuilder PerformAppendCommaSeparated(this StringBuilder builder, IReadOnlyList<string> strings)
-        {
-            _ = builder.Append(strings[0]);
-            for (var index = 1; index < strings.Count; index++)
+            static StringBuilder PerformAppendCommaSeparated(StringBuilder builder, IReadOnlyList<string> strings)
             {
-                _ = builder.Append(", ").Append(strings[index]);
+                _ = builder.Append(strings[0]);
+                for (var index = 1; index < strings.Count; index++)
+                {
+                    _ = builder.Append(", ").Append(strings[index]);
+                }
+                return builder;
             }
-            return builder;
         }
 
-        public static string ApplyMappings(this string value, ImmutableArray<(string, string, bool)> genericsMapping, out bool isConcreteType)
+        public static string CommaSeparateIfNotNullOrEmpty(params string?[] args)
+        {
+            var builder = new StringBuilder();
+            foreach(var arg in args)
+            {
+                if (!string.IsNullOrEmpty(arg))
+                {
+                    if (builder.Length is not 0)
+                        _ = builder.Append(", ");
+
+                    _ = builder.Append(arg);
+                }
+            }
+            return builder.ToString();
+        }
+
+        public static string ApplyMappings(this string value, ImmutableArray<GeneratorMappingAttribute> genericsMapping, out bool isConcreteType)
         {
             var result = value;
             isConcreteType = false;
             if (!genericsMapping.IsDefault)
             {
-                foreach (var (from, to, isConcreteType2) in genericsMapping.Reverse())
+                foreach (var mapping in genericsMapping.Reverse())
                 {
-                    if (value == from && isConcreteType2)
+                    if (value == mapping.From && mapping.IsType)
                     {
                         isConcreteType = true;
-                        return value.Replace(from, to);
+                        return value.Replace(mapping.From, mapping.To);
                     }
-                    result = result.Replace(from, to);
+                    result = result.Replace(mapping.From, mapping.To);
                 }
             }
             return result;

@@ -6,7 +6,7 @@ namespace NetFabric.Hyperlinq
     public static partial class ReadOnlyListExtensions
     {
 
-        static LargeArrayBuilder<TSource> ToArrayBuilder<TList, TSource, TPredicate>(in TList source, TPredicate predicate, int offset, int count, ArrayPool<TSource> pool)
+        static LargeArrayBuilder<TSource> ToArrayBuilder<TList, TSource, TPredicate>(in TList source, ArrayPool<TSource> pool, TPredicate predicate, int offset, int count)
             where TList : struct, IReadOnlyList<TSource>
             where TPredicate: struct, IFunction<TSource, bool>
         {
@@ -21,7 +21,7 @@ namespace NetFabric.Hyperlinq
             return builder;
         }
 
-        static LargeArrayBuilder<TSource> ToArrayBuilderAt<TList, TSource, TPredicate>(in TList source, TPredicate predicate, int offset, int count, ArrayPool<TSource> pool)
+        static LargeArrayBuilder<TSource> ToArrayBuilderAt<TList, TSource, TPredicate>(in TList source, ArrayPool<TSource> pool, TPredicate predicate, int offset, int count)
             where TList : struct, IReadOnlyList<TSource>
             where TPredicate: struct, IFunction<TSource, int, bool>
         {
@@ -48,7 +48,7 @@ namespace NetFabric.Hyperlinq
             return builder;
         }
 
-        static LargeArrayBuilder<TResult> ToArrayBuilder<TList, TSource, TResult, TPredicate, TSelector>(in TList source, TPredicate predicate, TSelector selector, int offset, int count, ArrayPool<TResult> pool)
+        static LargeArrayBuilder<TResult> ToArrayBuilder<TList, TSource, TResult, TPredicate, TSelector>(in TList source, ArrayPool<TResult> pool, TPredicate predicate, TSelector selector, int offset, int count)
             where TList : struct, IReadOnlyList<TSource>
             where TSelector: struct, IFunction<TSource, TResult>
             where TPredicate: struct, IFunction<TSource, bool>

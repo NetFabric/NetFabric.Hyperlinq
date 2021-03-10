@@ -25,6 +25,7 @@ namespace NetFabric.Hyperlinq
             where TPredicate : struct, IFunction<TSource, bool>
             => new(in source, predicate);
 
+        // [GeneratorBindings(source: "source", implementedTypes: "IValueEnumerable`2", extraTypeParameters: "TPredicate", extraParameters: "predicate")]
         [StructLayout(LayoutKind.Auto)]
         public readonly partial struct WhereEnumerable<TEnumerable, TEnumerator, TSource, TPredicate> 
             : IValueEnumerable<TSource, WhereEnumerable<TEnumerable, TEnumerator, TSource, TPredicate>.Enumerator>
@@ -94,16 +95,17 @@ namespace NetFabric.Hyperlinq
 
             #region Aggregation
 
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public int Count()
-                => source.Count<TEnumerable, TEnumerator, TSource, TPredicate>(predicate);
+            #endregion
+            #region Conversion
+
+            WhereEnumerable<TEnumerable, TEnumerator, TSource, TPredicate> AsValueEnumerable()
+                => this;
+
+            WhereEnumerable<TEnumerable, TEnumerator, TSource, TPredicate> AsEnumerable()
+                => this;
 
             #endregion
             #region Quantifier
-
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public bool All()
-                => source.All<TEnumerable, TEnumerator, TSource, TPredicate>(predicate);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool All(Func<TSource, bool> predicate)
@@ -168,70 +170,10 @@ namespace NetFabric.Hyperlinq
             
             #endregion
             #region Projection
-
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult, TPredicate, FunctionWrapper<TSource, TResult>> Select<TResult>(Func<TSource, TResult> selector)
-                => Select<TResult, FunctionWrapper<TSource, TResult>>(new FunctionWrapper<TSource, TResult>(selector));
-
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public WhereSelectEnumerable<TEnumerable, TEnumerator, TSource, TResult, TPredicate, TSelector> Select<TResult, TSelector>(TSelector selector = default)
-                where TSelector : struct, IFunction<TSource, TResult>
-                => source.WhereSelect<TEnumerable, TEnumerator, TSource, TResult, TPredicate, TSelector>(predicate, selector);
             
             #endregion
             #region Element
 
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public Option<TSource> ElementAt(int index)
-                => source.ElementAt<TEnumerable, TEnumerator, TSource, TPredicate>(index, predicate);
-
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public Option<TSource> First()
-                => source.First<TEnumerable, TEnumerator, TSource, TPredicate>(predicate);
-
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public Option<TSource> Single()
-#pragma warning disable HLQ005 // Avoid Single() and SingleOrDefault()
-                => source.Single<TEnumerable, TEnumerator, TSource, TPredicate>(predicate);
-#pragma warning restore HLQ005 // Avoid Single() and SingleOrDefault()
-            
-            #endregion
-            #region Conversion
-
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public TSource[] ToArray()
-                => source.ToArray<TEnumerable, TEnumerator, TSource, TPredicate>(predicate);
-
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public IMemoryOwner<TSource> ToArray(MemoryPool<TSource> memoryPool)
-                => source.ToArray<TEnumerable, TEnumerator, TSource, TPredicate>(predicate, memoryPool);
-
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public List<TSource> ToList()
-                => source.ToList<TEnumerable, TEnumerator, TSource, TPredicate>(predicate);
-
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public Dictionary<TKey, TSource> ToDictionary<TKey>(Func<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer = default)
-                where TKey : notnull
-                => ToDictionary(new FunctionWrapper<TSource, TKey>(keySelector), comparer);
-
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public Dictionary<TKey, TSource> ToDictionary<TKey, TKeySelector>(TKeySelector keySelector, IEqualityComparer<TKey>? comparer = default)
-                where TKey : notnull
-                where TKeySelector : struct, IFunction<TSource, TKey>
-                => source.ToDictionary<TEnumerable, TEnumerator, TSource, TKey, TKeySelector, TPredicate>(keySelector, comparer, predicate);
-
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer = default)
-                where TKey : notnull
-                => ToDictionary<TKey, TElement, FunctionWrapper<TSource, TKey>, FunctionWrapper<TSource, TElement>>(new FunctionWrapper<TSource, TKey>(keySelector), new FunctionWrapper<TSource, TElement>(elementSelector), comparer);
-
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement, TKeySelector, TElementSelector>(TKeySelector keySelector, TElementSelector elementSelector, IEqualityComparer<TKey>? comparer = default)
-                where TKey : notnull
-                where TKeySelector : struct, IFunction<TSource, TKey>
-                where TElementSelector : struct, IFunction<TSource, TElement>
-                => source.ToDictionary<TEnumerable, TEnumerator, TSource, TKey, TElement, TKeySelector, TElementSelector, TPredicate>(keySelector, elementSelector, comparer, predicate);
             
             #endregion
         }

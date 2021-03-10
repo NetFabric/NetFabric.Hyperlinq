@@ -6,11 +6,13 @@ using System.Collections.Generic;
 {
     public static partial class ArrayExtensions
     {
+        [GeneratorIgnore(false)]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static Dictionary<TKey, TSource> ToDictionary<TSource, TKey>(this ReadOnlySpan<TSource> source, Func<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer = default)
             where TKey : notnull
             => source.ToDictionary(new FunctionWrapper<TSource, TKey>(keySelector), comparer);
 
+        [GeneratorIgnore(false)]
         static Dictionary<TKey, TSource> ToDictionary<TSource, TKey, TKeySelector>(this ReadOnlySpan<TSource> source, TKeySelector keySelector, IEqualityComparer<TKey>? comparer = default)
             where TKey : notnull
             where TKeySelector : struct, IFunction<TSource, TKey>
@@ -74,11 +76,13 @@ using System.Collections.Generic;
 
         //////////////////////////////////////////////////////////////////////////////////////////////////
 
+        [GeneratorIgnore(false)]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static Dictionary<TKey, TElement> ToDictionary<TSource, TKey, TElement>(this ReadOnlySpan<TSource> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer = default)
             where TKey : notnull
             => source.ToDictionary<TSource, TKey, TElement, FunctionWrapper<TSource, TKey>, FunctionWrapper<TSource, TElement>>(new FunctionWrapper<TSource, TKey>(keySelector), new FunctionWrapper<TSource, TElement>(elementSelector), comparer);
 
+        [GeneratorIgnore(false)]
         static Dictionary<TKey, TElement> ToDictionary<TSource, TKey, TElement, TKeySelector, TElementSelector>(this ReadOnlySpan<TSource> source, TKeySelector keySelector, TElementSelector elementSelector, IEqualityComparer<TKey>? comparer = default)
             where TKey : notnull
             where TKeySelector : struct, IFunction<TSource, TKey>
