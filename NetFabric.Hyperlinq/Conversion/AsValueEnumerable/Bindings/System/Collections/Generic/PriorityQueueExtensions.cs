@@ -1,4 +1,4 @@
-#if NET60_OR_GREATER
+#if NET6_0_OR_GREATER
 
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
@@ -9,18 +9,18 @@ namespace NetFabric.Hyperlinq
 
     public static class PriorityQueueExtensions
     {
-        // PriorityQueue<TSource> is reference-type that implements IReadOnlyCollection<TSource> and has a value-type enumerator that implements IEnumerator<TSource>
-        
+        // PriorityQueue<TElement, TPriority>.UnorderedItemsCollection is reference-type that implements IReadOnlyCollection<TElement> and has a value-type enumerator that implements IEnumerator<TElement>
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ReadOnlyCollectionExtensions.ValueEnumerable<PriorityQueue<TSource>, PriorityQueue<TSource>.Enumerator, PriorityQueue<TSource>.Enumerator, TSource, GetEnumerator<TSource>, GetEnumerator<TSource>> AsValueEnumerable<TSource>(this PriorityQueue<TSource> source)
-            => ReadOnlyCollectionExtensions.AsValueEnumerable<PriorityQueue<TSource>, PriorityQueue<TSource>.Enumerator, TSource, GetEnumerator<TSource>>(source);
+        public static ReadOnlyCollectionExtensions.ValueEnumerable<PriorityQueue<TElement, TPriority>.UnorderedItemsCollection, PriorityQueue<TElement, TPriority>.UnorderedItemsCollection.Enumerator, PriorityQueue<TElement, TPriority>.UnorderedItemsCollection.Enumerator, (TElement Element, TPriority Priority), GetEnumerator<TElement, TPriority>, GetEnumerator<TElement, TPriority>> AsValueEnumerable<TElement, TPriority>(this PriorityQueue<TElement, TPriority>.UnorderedItemsCollection source)
+            => ReadOnlyCollectionExtensions.AsValueEnumerable<PriorityQueue<TElement, TPriority>.UnorderedItemsCollection, PriorityQueue<TElement, TPriority>.UnorderedItemsCollection.Enumerator, (TElement Element, TPriority Priority), GetEnumerator<TElement, TPriority>>(source);
 
         [StructLayout(LayoutKind.Auto)]
-        public readonly struct GetEnumerator<TSource>
-            : IFunction<PriorityQueue<TSource>, PriorityQueue<TSource>.Enumerator>
+        public readonly struct GetEnumerator<TElement, TPriority>
+            : IFunction<PriorityQueue<TElement, TPriority>.UnorderedItemsCollection, PriorityQueue<TElement, TPriority>.UnorderedItemsCollection.Enumerator>
         {
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public PriorityQueue<TSource>.Enumerator Invoke(PriorityQueue<TSource> source) 
+            public PriorityQueue<TElement, TPriority>.UnorderedItemsCollection.Enumerator Invoke(PriorityQueue<TElement, TPriority>.UnorderedItemsCollection source) 
                 => source.GetEnumerator();
         }
     }
