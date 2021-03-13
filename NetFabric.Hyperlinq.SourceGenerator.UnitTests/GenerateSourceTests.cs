@@ -10,14 +10,15 @@ namespace NetFabric.Hyperlinq.SourceGenerator.UnitTests
     public class GenerateSourceTests
     {
         public static TheoryData<string[]> ClassesWithOverloads
-            => new TheoryData<string[]> {
-                new string[] {
+            => new()
+            {
+                new[] {
                     "TestData/Source/Count.ValueEnumerable.cs",
                 },
-                new string[] {
+                new[] {
                     "TestData/Source/Where.ValueEnumerable.cs",
                 },
-                new string[] {
+                new[] {
                     "TestData/Source/Select.ValueEnumerable.cs",
                 },
             };
@@ -31,12 +32,13 @@ namespace NetFabric.Hyperlinq.SourceGenerator.UnitTests
             var project = Verifier.CreateProject(
                 paths
                 .Concat(Directory.EnumerateFiles("TestData/Source/Common", "*.cs", SearchOption.AllDirectories))
+                .Concat(Directory.EnumerateFiles("../../../../NetFabric.Hyperlinq.SourceGenerator/Attributes/", "*.cs", SearchOption.AllDirectories))
                 .Select(path => File.ReadAllText(path)));
-            var compilation = await project.GetCompilationAsync().ConfigureAwait(false);
+            var context = new CompilationContext(await project.GetCompilationAsync().ConfigureAwait(false) ?? throw new System.Exception("Error getting compilation!"));
 
             // Act
-            var extensionMethods = generator.CollectExtensionMethods(compilation!);
-            var result = generator.GenerateSource(compilation!, extensionMethods);
+            var extensionMethods = generator.CollectExtensionMethods(context);
+            var result = generator.GenerateSource(extensionMethods, context);
 
             // Assert
             _ = result.Must()
@@ -47,9 +49,10 @@ namespace NetFabric.Hyperlinq.SourceGenerator.UnitTests
         // -----------------------------------------------------
 
         public static TheoryData<string[], string[]> GeneratorSources
-            => new TheoryData<string[], string[]> {
+            => new()
+            {
                 {
-                    new string[] {
+                    new[] {
                         "TestData/Source/Range.cs",
                         "TestData/Source/Contains.ValueEnumerable.cs",
                     },
@@ -57,7 +60,7 @@ namespace NetFabric.Hyperlinq.SourceGenerator.UnitTests
                     }
                 },
                 {
-                    new string[] {
+                    new[] {
                         "TestData/Source/Select.ArraySegment.cs",
                         "TestData/Source/Contains.ValueEnumerable.cs",
                     },
@@ -65,52 +68,52 @@ namespace NetFabric.Hyperlinq.SourceGenerator.UnitTests
                     }
                 },
                 {
-                    new string[] {
+                    new[] {
                         "TestData/Source/Range.cs",
                         "TestData/Source/Count.ValueEnumerable.cs",
                     },
-                    new string[] {
+                    new[] {
                         "TestData/Results/Range.Count.cs",
                     }
                 },
                 {
-                    new string[] {
+                    new[] {
                         "TestData/Source/Repeat.cs",
                         "TestData/Source/Count.ValueEnumerable.cs",
                     },
-                    new string[] {
+                    new[] {
                         "TestData/Results/Repeat.Count.cs",
                     }
                 },
                 {
-                    new string[] {
+                    new[] {
                         "TestData/Source/Range.cs",
                         "TestData/Source/Where.ValueEnumerable.cs",
                     },
-                    new string[] {
+                    new[] {
                         "TestData/Results/Range.Where.cs",
                     }
                 },
                 {
-                    new string[] {
+                    new[] {
                         "TestData/Source/Range.cs",
                         "TestData/Source/Select.ValueEnumerable.cs",
                     },
-                    new string[] {
+                    new[] {
                         "TestData/Results/Range.Select.cs",
                     }
                 },
                 {
-                    new string[] {
+                    new[] {
                         "TestData/Source/Count.ValueEnumerable.cs",
                         "TestData/Source/Where.ArraySegment.cs",
                     },
-                    new string[] {
+                    new[] {
                         "TestData/Results/Where.ArraySegment.Count.cs",
                     }
                 },
                 {
-                    new string[] {
+                    new[] {
                         "TestData/Source/Any.ArraySegment.cs",
                         "TestData/Source/Any.ReadOnlyList.cs",
                         "TestData/Source/Any.ValueEnumerable.cs",
@@ -121,91 +124,91 @@ namespace NetFabric.Hyperlinq.SourceGenerator.UnitTests
                     }
                 },
                 {
-                    new string[] {
+                    new[] {
                         "TestData/Source/Any.ArraySegment.cs",
                         "TestData/Source/Any.ReadOnlyList.cs",
                         "TestData/Source/Any.ValueEnumerable.cs",
                         "TestData/Source/Any.ValueReadOnlyCollection.cs",
                         "TestData/Source/Select.ArraySegment.cs",
                     },
-                    new string[] {
+                    new[] {
                         "TestData/Results/Select.ArraySegment.Any.cs",
                     }
                 },
                 {
-                    new string[] {
+                    new[] {
                         "TestData/Source/Any.ArraySegment.cs",
                         "TestData/Source/Any.ReadOnlyList.cs",
                         "TestData/Source/Any.ValueEnumerable.cs",
                         "TestData/Source/Any.ValueReadOnlyCollection.cs",
                         "TestData/Source/Select.ValueEnumerable.cs",
                     },
-                    new string[] {
+                    new[] {
                         "TestData/Results/Select.ValueEnumerable.Any.cs",
                     }
                 },
                 {
-                    new string[] {
+                    new[] {
                         "TestData/Source/Count.ValueEnumerable.cs",
                         "TestData/Source/Where.ValueEnumerable.cs",
                     },
-                    new string[] {
+                    new[] {
                         "TestData/Results/Where.ValueEnumerable.Count.cs",
                     }
                 },
                 {
-                    new string[] {
+                    new[] {
                         "TestData/Source/First.ValueEnumerable.cs",
                         "TestData/Source/Where.ValueEnumerable.cs",
                     },
-                    new string[] {
+                    new[] {
                         "TestData/Results/Where.ValueEnumerable.First.cs",
                     }
                 },
                 {
-                    new string[] {
+                    new[] {
                         "TestData/Source/First.ValueEnumerable.cs",
                         "TestData/Source/Select.ValueEnumerable.cs",
                     },
-                    new string[] {
+                    new[] {
                         "TestData/Results/Select.ValueEnumerable.First.cs",
                     }
                 },
                 {
-                    new string[] {
+                    new[] {
                         "TestData/Source/Where.ValueEnumerable.cs",
                         "TestData/Source/Distinct.ValueEnumerable.cs",
                     },
-                    new string[] {
+                    new[] {
                         "TestData/Results/Where.ValueEnumerable.Distinct.cs",
                         "TestData/Results/Distinct.ValueEnumerable.Where.cs",
                     }
                 },
                 {
-                    new string[] {
+                    new[] {
                         "TestData/Source/Where.ValueEnumerable.cs",
                         "TestData/Source/Select.ValueEnumerable.cs",
                     },
-                    new string[] {
+                    new[] {
                         "TestData/Results/Where.ValueEnumerable.Select.cs",
                         "TestData/Results/Select.ValueEnumerable.Where.cs",
                     }
                 },
                 {
-                    new string[] {
+                    new[] {
                         "TestData/Source/Where.ValueEnumerable.cs",
                         "TestData/Source/Dictionary.Bindings.cs",
                     },
-                    new string[] {
+                    new[] {
                         "TestData/Results/Dictionary.Where.cs",
                     }
                 },
                 {
-                    new string[] {
+                    new[] {
                         "TestData/Source/Select.ValueEnumerable.cs",
                         "TestData/Source/Dictionary.Bindings.cs",
                     },
-                    new string[] {
+                    new[] {
                         "TestData/Results/Dictionary.Select.cs",
                     }
                 },
@@ -214,18 +217,19 @@ namespace NetFabric.Hyperlinq.SourceGenerator.UnitTests
         [Theory]
         [MemberData(nameof(GeneratorSources))]
         public async Task GenerateSourceShouldGenerate(string[] paths, string[] expected)
-        { 
+        {
             // Arrange
             var generator = new OverloadsGenerator();
             var project = Verifier.CreateProject(
                 paths
                 .Concat(Directory.EnumerateFiles("TestData/Source/Common", "*.cs", SearchOption.AllDirectories))
+                .Concat(Directory.EnumerateFiles("../../../../NetFabric.Hyperlinq.SourceGenerator/Attributes/", "*.cs", SearchOption.AllDirectories))
                 .Select(path => File.ReadAllText(path)));
-            var compilation = await project.GetCompilationAsync().ConfigureAwait(false);
+            var context = new CompilationContext(await project.GetCompilationAsync().ConfigureAwait(false) ?? throw new System.Exception("Error getting compilation!"));
 
             // Act
-            var extensionMethods = generator.CollectExtensionMethods(compilation!);
-            var result = generator.GenerateSource(compilation!, extensionMethods);
+            var extensionMethods = generator.CollectExtensionMethods(context);
+            var result = generator.GenerateSource(extensionMethods, context);
 
             // Assert
             _ = result.Select(item => item.Source)

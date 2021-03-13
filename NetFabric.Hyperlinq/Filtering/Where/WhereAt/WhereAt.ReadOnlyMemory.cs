@@ -11,11 +11,13 @@ namespace NetFabric.Hyperlinq
     public static partial class ArrayExtensions
     {
 
+        [GeneratorIgnore(false)]
         [GeneratorMapping("TPredicate", "NetFabric.Hyperlinq.FunctionWrapper<TSource, int, bool>")]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static MemoryWhereAtEnumerable<TSource, FunctionWrapper<TSource, int, bool>> Where<TSource>(this ReadOnlyMemory<TSource> source, Func<TSource, int, bool> predicate) 
             => source.WhereAt(new FunctionWrapper<TSource, int, bool>(predicate));
-        
+
+        [GeneratorIgnore(false)]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static MemoryWhereAtEnumerable<TSource, TPredicate> WhereAt<TSource, TPredicate>(this ReadOnlyMemory<TSource> source, TPredicate predicate = default) 
             where TPredicate : struct, IFunction<TSource, int, bool>
@@ -184,7 +186,7 @@ namespace NetFabric.Hyperlinq
                 => source.Span.ToArrayAt(predicate);
 
             public IMemoryOwner<TSource> ToArray(MemoryPool<TSource> memoryPool)
-                => source.Span.ToArrayAt(predicate, memoryPool);
+                => source.Span.ToArrayAt(memoryPool, predicate);
 
             public List<TSource> ToList()
                 => source.Span.ToListAt(predicate);

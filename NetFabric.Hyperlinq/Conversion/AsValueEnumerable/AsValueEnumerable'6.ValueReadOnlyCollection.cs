@@ -43,7 +43,8 @@ namespace NetFabric.Hyperlinq
             where TGetEnumerator : struct, IFunction<TEnumerable, TEnumerator>
             where TGetEnumerator2 : struct, IFunction<TEnumerable, TEnumerator2>
             => new(source, getEnumerator, getEnumerator2);
-        
+
+        [GeneratorBindings(source: "source", sourceImplements: "IValueReadOnlyCollection`2,IValueEnumerable`2")]
         [StructLayout(LayoutKind.Auto)]
         public partial struct ValueEnumerable<TEnumerable, TEnumerator, TEnumerator2, TSource, TGetEnumerator, TGetEnumerator2>
             : IValueReadOnlyCollection<TSource, TEnumerator> 
@@ -118,6 +119,9 @@ namespace NetFabric.Hyperlinq
 
             ValueEnumerable<TEnumerable, TEnumerator, TEnumerator2, TSource, TGetEnumerator, TGetEnumerator2> AsValueEnumerable()
                 => this;
+
+            TEnumerable AsEnumerable()
+                => source;
 
             #endregion
         }

@@ -17,6 +17,7 @@ namespace NetFabric.Hyperlinq
 
             if (Utils.UseDefault(comparer))
             {
+                // ReSharper disable once HeapView.BoxingAllocation
                 if (offset is 0 && count == source.Count && source is ICollection<TSource> collection)
                     return collection.Contains(value);
 

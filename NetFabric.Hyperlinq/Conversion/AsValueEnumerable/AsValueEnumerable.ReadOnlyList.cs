@@ -9,10 +9,12 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class ReadOnlyListExtensions
     {
+        [GeneratorIgnore]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ValueEnumerable<IReadOnlyList<TSource>, TSource> AsValueEnumerable<TSource>(this IReadOnlyList<TSource> source)
             => AsValueEnumerable<IReadOnlyList<TSource>, TSource>(source);
 
+        [GeneratorIgnore]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ValueEnumerable<TList, TSource> AsValueEnumerable<TList, TSource>(this TList source)
             where TList : IReadOnlyList<TSource>
@@ -179,6 +181,9 @@ namespace NetFabric.Hyperlinq
 
             ValueEnumerable<TList, TSource> AsValueEnumerable()
                 => this;
+
+            TList AsEnumerable()
+                => source;
 
             #endregion
             #region Partitioning

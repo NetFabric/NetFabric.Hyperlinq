@@ -68,14 +68,14 @@ namespace NetFabric.Hyperlinq
             };
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static IMemoryOwner<TSource> ToArray<TEnumerable, TEnumerator, TSource, TPredicate>(this TEnumerable source, TPredicate predicate, MemoryPool<TSource> pool)
+        static IMemoryOwner<TSource> ToArray<TEnumerable, TEnumerator, TSource, TPredicate>(this TEnumerable source, MemoryPool<TSource> pool, TPredicate predicate)
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
             where TPredicate : struct, IFunction<TSource, bool>
             => source switch
             {
                 { Count: 0 } => pool.Rent(0),
-                _ => ValueEnumerableExtensions.ToArray<TEnumerable, TEnumerator, TSource, TPredicate>(source, predicate, pool)
+                _ => ValueEnumerableExtensions.ToArray<TEnumerable, TEnumerator, TSource, TPredicate>(source, pool, predicate)
             };
 
         //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -92,14 +92,14 @@ namespace NetFabric.Hyperlinq
             };
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static IMemoryOwner<TSource> ToArrayAt<TEnumerable, TEnumerator, TSource, TPredicate>(this TEnumerable source, TPredicate predicate, MemoryPool<TSource> pool)
+        static IMemoryOwner<TSource> ToArrayAt<TEnumerable, TEnumerator, TSource, TPredicate>(this TEnumerable source, MemoryPool<TSource> pool, TPredicate predicate)
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
             where TPredicate : struct, IFunction<TSource, int, bool>
             => source switch
             {
                 { Count: 0 } => pool.Rent(0),
-                _ => ValueEnumerableExtensions.ToArrayAt<TEnumerable, TEnumerator, TSource, TPredicate>(source, predicate, pool)
+                _ => ValueEnumerableExtensions.ToArrayAt<TEnumerable, TEnumerator, TSource, TPredicate>(source, pool, predicate)
             };
 
         //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -126,7 +126,7 @@ namespace NetFabric.Hyperlinq
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static IMemoryOwner<TResult> ToArray<TEnumerable, TEnumerator, TSource, TResult, TSelector>(this TEnumerable source, TSelector selector, MemoryPool<TResult> pool)
+        static IMemoryOwner<TResult> ToArray<TEnumerable, TEnumerator, TSource, TResult, TSelector>(this TEnumerable source, MemoryPool<TResult> pool, TSelector selector)
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
             where TSelector : struct, IFunction<TSource, TResult>
@@ -134,10 +134,10 @@ namespace NetFabric.Hyperlinq
             return source switch
             {
                 { Count: 0 } => pool.Rent(0),
-                _ => BuildArray(source, selector, pool)
+                _ => BuildArray(source, pool, selector)
             };
 
-            static IMemoryOwner<TResult> BuildArray(TEnumerable source, TSelector selector, MemoryPool<TResult> pool)
+            static IMemoryOwner<TResult> BuildArray(TEnumerable source, MemoryPool<TResult> pool, TSelector selector)
             {
                 var result = pool.RentSliced(source.Count);
                 Copy<TEnumerable, TEnumerator, TSource, TResult, TSelector>(source, result.Memory.Span, selector);
@@ -170,7 +170,7 @@ namespace NetFabric.Hyperlinq
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static IMemoryOwner<TResult> ToArrayAt<TEnumerable, TEnumerator, TSource, TResult, TSelector>(this TEnumerable source, TSelector selector, MemoryPool<TResult> pool)
+        static IMemoryOwner<TResult> ToArrayAt<TEnumerable, TEnumerator, TSource, TResult, TSelector>(this TEnumerable source, MemoryPool<TResult> pool, TSelector selector)
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
             where TSelector : struct, IFunction<TSource, int, TResult>
@@ -178,10 +178,10 @@ namespace NetFabric.Hyperlinq
             return source switch
             {
                 { Count: 0 } => pool.Rent(0),
-                _ => BuildArray(source, selector, pool)
+                _ => BuildArray(source, pool, selector)
             };
 
-            static IMemoryOwner<TResult> BuildArray(TEnumerable source, TSelector selector, MemoryPool<TResult> pool)
+            static IMemoryOwner<TResult> BuildArray(TEnumerable source, MemoryPool<TResult> pool, TSelector selector)
             {
                 var result = pool.RentSliced(source.Count);
                 CopyAt<TEnumerable, TEnumerator, TSource, TResult, TSelector>(source, result.Memory.Span, selector);
@@ -204,7 +204,7 @@ namespace NetFabric.Hyperlinq
             };
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static IMemoryOwner<TResult> ToArray<TEnumerable, TEnumerator, TSource, TResult, TPredicate, TSelector>(this TEnumerable source, TPredicate predicate, TSelector selector, MemoryPool<TResult> pool)
+        static IMemoryOwner<TResult> ToArray<TEnumerable, TEnumerator, TSource, TResult, TPredicate, TSelector>(this TEnumerable source, MemoryPool<TResult> pool, TPredicate predicate, TSelector selector)
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
             where TPredicate : struct, IFunction<TSource, bool>
@@ -212,7 +212,7 @@ namespace NetFabric.Hyperlinq
             => source switch
             {
                 { Count: 0 } => pool.Rent(0),
-                _ => ValueEnumerableExtensions.ToArray<TEnumerable, TEnumerator, TSource, TResult, TPredicate, TSelector>(source, predicate, selector, pool)
+                _ => ValueEnumerableExtensions.ToArray<TEnumerable, TEnumerator, TSource, TResult, TPredicate, TSelector>(source, pool, predicate, selector)
             };
     }
 }

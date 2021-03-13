@@ -200,7 +200,7 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public ValueTask<int> CountAsync(CancellationToken cancellationToken = default)
-                => source.CountAsync<TEnumerable, TEnumerator, TSource, TPredicate>(predicate, cancellationToken);
+                => source.CountAsync<TEnumerable, TEnumerator, TSource, TPredicate>(cancellationToken, predicate);
             
             #endregion
             #region Quantifier
@@ -287,32 +287,32 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public ValueTask<Option<TSource>> ElementAtAsync(int index, CancellationToken cancellationToken = default)
-                => source.ElementAtAsync<TEnumerable, TEnumerator, TSource, TPredicate>(index, predicate, cancellationToken);
+                => source.ElementAtAsync<TEnumerable, TEnumerator, TSource, TPredicate>(index, cancellationToken, predicate);
 
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public ValueTask<Option<TSource>> FirstAsync(CancellationToken cancellationToken = default)
-                => source.FirstAsync<TEnumerable, TEnumerator, TSource, TPredicate>(predicate, cancellationToken);
+                => source.FirstAsync<TEnumerable, TEnumerator, TSource, TPredicate>(cancellationToken, predicate);
 
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public ValueTask<Option<TSource>> SingleAsync(CancellationToken cancellationToken = default)
-                => source.SingleAsync<TEnumerable, TEnumerator, TSource, TPredicate>(predicate, cancellationToken);
+                => source.SingleAsync<TEnumerable, TEnumerator, TSource, TPredicate>(cancellationToken, predicate);
             
             #endregion
             #region Conversion
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public ValueTask<TSource[]> ToArrayAsync(CancellationToken cancellationToken = default)
-                => source.ToArrayAsync<TEnumerable, TEnumerator, TSource, TPredicate>(predicate, cancellationToken);
+                => source.ToArrayAsync<TEnumerable, TEnumerator, TSource, TPredicate>(cancellationToken, predicate);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public ValueTask<IMemoryOwner<TSource>> ToArrayAsync(MemoryPool<TSource> pool, CancellationToken cancellationToken = default)
-                => source.ToArrayAsync<TEnumerable, TEnumerator, TSource, TPredicate>(predicate, pool, cancellationToken);
+                => source.ToArrayAsync<TEnumerable, TEnumerator, TSource, TPredicate>(pool, cancellationToken, predicate);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public ValueTask<List<TSource>> ToListAsync(CancellationToken cancellationToken = default)
-                => source.ToListAsync<TEnumerable, TEnumerator, TSource, TPredicate>(predicate, cancellationToken);
+                => source.ToListAsync<TEnumerable, TEnumerator, TSource, TPredicate>(cancellationToken, predicate);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public ValueTask<Dictionary<TKey, TSource>> ToDictionaryAsync<TKey>(Func<TSource, CancellationToken, ValueTask<TKey>> keySelector, IEqualityComparer<TKey>? comparer = default, CancellationToken cancellationToken = default)
@@ -323,7 +323,7 @@ namespace NetFabric.Hyperlinq
             public ValueTask<Dictionary<TKey, TSource>> ToDictionaryAsync<TKey, TKeySelector>(TKeySelector keySelector, IEqualityComparer<TKey>? comparer = default, CancellationToken cancellationToken = default)
                 where TKey : notnull
                 where TKeySelector : struct, IAsyncFunction<TSource, TKey>
-                => source.ToDictionaryAsync<TEnumerable, TEnumerator, TSource, TKey, TKeySelector, TPredicate>(keySelector, comparer, predicate, cancellationToken);
+                => source.ToDictionaryAsync<TEnumerable, TEnumerator, TSource, TKey, TKeySelector, TPredicate>(keySelector, comparer, cancellationToken, predicate);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public ValueTask<Dictionary<TKey, TElement>> ToDictionaryAsync<TKey, TElement>(Func<TSource, CancellationToken, ValueTask<TKey>> keySelector, Func<TSource, CancellationToken, ValueTask<TElement>> elementSelector, IEqualityComparer<TKey>? comparer = default, CancellationToken cancellationToken = default)
@@ -335,7 +335,7 @@ namespace NetFabric.Hyperlinq
                 where TKey : notnull
                 where TKeySelector : struct, IAsyncFunction<TSource, TKey>
                 where TElementSelector : struct, IAsyncFunction<TSource, TElement>
-                => source.ToDictionaryAsync<TEnumerable, TEnumerator, TSource, TKey, TElement, TKeySelector, TElementSelector, TPredicate>(keySelector, elementSelector, comparer, predicate, cancellationToken);
+                => source.ToDictionaryAsync<TEnumerable, TEnumerator, TSource, TKey, TElement, TKeySelector, TElementSelector, TPredicate>(keySelector, elementSelector, comparer, cancellationToken, predicate);
              
             #endregion
         }
@@ -345,70 +345,70 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IAsyncValueEnumerable<int, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<int>
             where TPredicate : struct, IAsyncFunction<int, bool>
-            => source.source.SumAsync<TEnumerable, TEnumerator, int, int, TPredicate>(source.predicate, cancellationToken);
+            => source.source.SumAsync<TEnumerable, TEnumerator, int, int, TPredicate>(cancellationToken, source.predicate);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ValueTask<int> SumAsync<TEnumerable, TEnumerator, TPredicate>(this WhereEnumerable<TEnumerable, TEnumerator, int?, TPredicate> source, CancellationToken cancellationToken = default)
             where TEnumerable : IAsyncValueEnumerable<int?, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<int?>
             where TPredicate : struct, IAsyncFunction<int?, bool>
-            => source.source.SumAsync<TEnumerable, TEnumerator, int?, int, TPredicate>(source.predicate, cancellationToken);
+            => source.source.SumAsync<TEnumerable, TEnumerator, int?, int, TPredicate>(cancellationToken, source.predicate);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ValueTask<long> SumAsync<TEnumerable, TEnumerator, TPredicate>(this WhereEnumerable<TEnumerable, TEnumerator, long, TPredicate> source, CancellationToken cancellationToken = default)
             where TEnumerable : IAsyncValueEnumerable<long, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<long>
             where TPredicate : struct, IAsyncFunction<long, bool>
-            => source.source.SumAsync<TEnumerable, TEnumerator, long, long, TPredicate>(source.predicate, cancellationToken);
+            => source.source.SumAsync<TEnumerable, TEnumerator, long, long, TPredicate>(cancellationToken, source.predicate);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ValueTask<long> SumAsync<TEnumerable, TEnumerator, TPredicate>(this WhereEnumerable<TEnumerable, TEnumerator, long?, TPredicate> source, CancellationToken cancellationToken = default)
             where TEnumerable : IAsyncValueEnumerable<long?, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<long?>
             where TPredicate : struct, IAsyncFunction<long?, bool>
-            => source.source.SumAsync<TEnumerable, TEnumerator, long?, long, TPredicate>(source.predicate, cancellationToken);
+            => source.source.SumAsync<TEnumerable, TEnumerator, long?, long, TPredicate>(cancellationToken, source.predicate);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ValueTask<float> SumAsync<TEnumerable, TEnumerator, TPredicate>(this WhereEnumerable<TEnumerable, TEnumerator, float, TPredicate> source, CancellationToken cancellationToken = default)
             where TEnumerable : IAsyncValueEnumerable<float, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<float>
             where TPredicate : struct, IAsyncFunction<float, bool>
-            => source.source.SumAsync<TEnumerable, TEnumerator, float, float, TPredicate>(source.predicate, cancellationToken);
+            => source.source.SumAsync<TEnumerable, TEnumerator, float, float, TPredicate>(cancellationToken, source.predicate);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ValueTask<float> SumAsync<TEnumerable, TEnumerator, TPredicate>(this WhereEnumerable<TEnumerable, TEnumerator, float?, TPredicate> source, CancellationToken cancellationToken = default)
             where TEnumerable : IAsyncValueEnumerable<float?, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<float?>
             where TPredicate : struct, IAsyncFunction<float?, bool>
-            => source.source.SumAsync<TEnumerable, TEnumerator, float?, float, TPredicate>(source.predicate, cancellationToken);
+            => source.source.SumAsync<TEnumerable, TEnumerator, float?, float, TPredicate>(cancellationToken, source.predicate);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ValueTask<double> SumAsync<TEnumerable, TEnumerator, TPredicate>(this WhereEnumerable<TEnumerable, TEnumerator, double, TPredicate> source, CancellationToken cancellationToken = default)
             where TEnumerable : IAsyncValueEnumerable<double, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<double>
             where TPredicate : struct, IAsyncFunction<double, bool>
-            => source.source.SumAsync<TEnumerable, TEnumerator, double, double, TPredicate>(source.predicate, cancellationToken);
+            => source.source.SumAsync<TEnumerable, TEnumerator, double, double, TPredicate>(cancellationToken, source.predicate);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ValueTask<double> SumAsync<TEnumerable, TEnumerator, TPredicate>(this WhereEnumerable<TEnumerable, TEnumerator, double?, TPredicate> source, CancellationToken cancellationToken = default)
             where TEnumerable : IAsyncValueEnumerable<double?, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<double?>
             where TPredicate : struct, IAsyncFunction<double?, bool>
-            => source.source.SumAsync<TEnumerable, TEnumerator, double?, double, TPredicate>(source.predicate, cancellationToken);
+            => source.source.SumAsync<TEnumerable, TEnumerator, double?, double, TPredicate>(cancellationToken, source.predicate);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ValueTask<decimal> SumAsync<TEnumerable, TEnumerator, TPredicate>(this WhereEnumerable<TEnumerable, TEnumerator, decimal, TPredicate> source, CancellationToken cancellationToken = default)
             where TEnumerable : IAsyncValueEnumerable<decimal, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<decimal>
             where TPredicate : struct, IAsyncFunction<decimal, bool>
-            => source.source.SumAsync<TEnumerable, TEnumerator, decimal, decimal, TPredicate>(source.predicate, cancellationToken);
+            => source.source.SumAsync<TEnumerable, TEnumerator, decimal, decimal, TPredicate>(cancellationToken, source.predicate);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ValueTask<decimal> SumAsync<TEnumerable, TEnumerator, TPredicate>(this WhereEnumerable<TEnumerable, TEnumerator, decimal?, TPredicate> source, CancellationToken cancellationToken = default)
             where TEnumerable : IAsyncValueEnumerable<decimal?, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<decimal?>
             where TPredicate : struct, IAsyncFunction<decimal?, bool>
-            => source.source.SumAsync<TEnumerable, TEnumerator, decimal?, decimal, TPredicate>(source.predicate, cancellationToken);
+            => source.source.SumAsync<TEnumerable, TEnumerator, decimal?, decimal, TPredicate>(cancellationToken, source.predicate);
     }
 }
 

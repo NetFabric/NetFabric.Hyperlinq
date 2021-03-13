@@ -12,11 +12,12 @@ namespace NetFabric.Hyperlinq
     public static partial class ArrayExtensions
     {
 
+        [GeneratorIgnore]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ArraySegmentValueEnumerable<TSource> AsValueEnumerable<TSource>(this ArraySegment<TSource> source)
             => new(source);
 
-        [GeneratorIgnore]
+        [GeneratorBindings(source: "((ReadOnlySpan<TSource>)source.AsSpan())", sourceImplements: "ReadOnlySpan`1")]
         [StructLayout(LayoutKind.Auto)]
         public readonly partial struct ArraySegmentValueEnumerable<TSource>
             : IValueReadOnlyList<TSource, ArraySegmentValueEnumerable<TSource>.DisposableEnumerator>
@@ -160,14 +161,6 @@ namespace NetFabric.Hyperlinq
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TSource[] ToArray()
                 => ((ReadOnlySpan<TSource>)source.AsSpan()).ToArray();
-
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public IMemoryOwner<TSource> ToArray(MemoryPool<TSource> memoryPool)
-                => ((ReadOnlySpan<TSource>)source.AsSpan()).ToArray(memoryPool);
-
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public List<TSource> ToList()
-                => ((ReadOnlySpan<TSource>)source.AsSpan()).ToList();
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public Dictionary<TKey, TSource> ToDictionary<TKey>(Func<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer = default)

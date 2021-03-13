@@ -9,12 +9,14 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class ValueReadOnlyCollectionExtensions
     {
-        
+
+        [GeneratorIgnore]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ValueEnumerable<TSource, TEnumerator> AsValueEnumerable<TSource, TEnumerator>(this IValueReadOnlyCollection<TSource, TEnumerator> source)
             where TEnumerator : struct, IEnumerator<TSource>
             => new(source);
 
+        [GeneratorBindings(source: "source", sourceImplements: "IValueReadOnlyCollection`2,IValueEnumerable`2", enumerableType: "IValueReadOnlyCollection<TSource, TEnumerator>")]
         [StructLayout(LayoutKind.Auto)]
         public readonly partial struct ValueEnumerable<TSource, TEnumerator>
             : IValueReadOnlyCollection<TSource, TEnumerator>
@@ -82,6 +84,9 @@ namespace NetFabric.Hyperlinq
 
             ValueEnumerable<TSource, TEnumerator> AsValueEnumerable()
                 => this;
+
+            IReadOnlyCollection<TSource> AsEnumerable()
+                => source;
 
             #endregion
         }

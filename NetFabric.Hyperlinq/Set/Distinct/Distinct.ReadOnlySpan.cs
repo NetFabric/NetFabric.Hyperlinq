@@ -8,7 +8,8 @@ namespace NetFabric.Hyperlinq
 {
     public static partial class ArrayExtensions
     {
-        
+
+        [GeneratorIgnore(false)]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static SpanDistinctEnumerable<TSource> Distinct<TSource>(
             this ReadOnlySpan<TSource> source, 

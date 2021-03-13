@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Buffers;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -12,13 +11,14 @@ namespace NetFabric.Hyperlinq
     public static partial class ArrayExtensions
     {
 
+        [GeneratorIgnore]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static MemoryValueEnumerable<TSource> AsValueEnumerable<TSource>(this ReadOnlyMemory<TSource> source)
             => new(source);
 
-        [GeneratorIgnore]
+        [GeneratorBindings(source: "source.Span", sourceImplements: "ReadOnlySpan`1")]
         [StructLayout(LayoutKind.Auto)]
-        public readonly struct MemoryValueEnumerable<TSource>
+        public readonly partial struct MemoryValueEnumerable<TSource>
             : IValueReadOnlyList<TSource, MemoryValueEnumerable<TSource>.DisposableEnumerator>
             , IList<TSource>
         {
@@ -147,53 +147,9 @@ namespace NetFabric.Hyperlinq
             public MemoryValueEnumerable<TSource> AsValueEnumerable()
                 => this;
 
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public TSource[] ToArray()
-                => source.Span.ToArray();
-
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public IMemoryOwner<TSource> ToArray(MemoryPool<TSource> memoryPool)
-                => source.Span.ToArray(memoryPool);
-
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public List<TSource> ToList()
-                => source.Span.ToList();
-
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public Dictionary<TKey, TSource> ToDictionary<TKey>(Func<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer = default)
-                where TKey : notnull
-                => source.Span.ToDictionary(keySelector, comparer);
-
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public Dictionary<TKey, TSource> ToDictionary<TKey, TKeySelector>(TKeySelector keySelector, IEqualityComparer<TKey>? comparer = default)
-                where TKey : notnull
-                where TKeySelector : struct, IFunction<TSource, TKey>
-                => source.Span.ToDictionary(keySelector, comparer);
-
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement>(Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer = default)
-                where TKey : notnull
-                => source.Span.ToDictionary(keySelector, elementSelector, comparer);
-
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public Dictionary<TKey, TElement> ToDictionary<TKey, TElement, TKeySelector, TElementSelector>(TKeySelector keySelector, TElementSelector elementSelector, IEqualityComparer<TKey>? comparer = default)
-                where TKey : notnull
-                where TKeySelector : struct, IFunction<TSource, TKey>
-                where TElementSelector : struct, IFunction<TSource, TElement>
-                => source.Span.ToDictionary<TSource, TKey, TElement, TKeySelector, TElementSelector>(keySelector, elementSelector, comparer);
-
             #endregion
 
             #region Element
-
-            public Option<TSource> ElementAt(int index)
-                => source.Span.ElementAt(index);
-
-            public Option<TSource> First()
-                => source.Span.First();
-
-            public Option<TSource> Single()
-                => source.Span.Single();
 
             #endregion
             
@@ -270,50 +226,6 @@ namespace NetFabric.Hyperlinq
             #endregion
 
             #region Quantifier
-
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public bool All(Func<TSource, bool> predicate)
-                => All(new FunctionWrapper<TSource, bool>(predicate));
-
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public bool All<TPredicate>(TPredicate predicate)
-                where TPredicate : struct, IFunction<TSource, bool>
-                => source.Span.All(predicate);
-
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public bool All(Func<TSource, int, bool> predicate)
-                => source.Span.All(predicate);
-
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public bool AllAt<TPredicate>(TPredicate predicate)
-                where TPredicate : struct, IFunction<TSource, int, bool>
-                => source.Span.AllAt(predicate);
-
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public bool Any()
-                => source.Span.Any();
-
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public bool Any(Func<TSource, bool> predicate)
-                => source.Span.Any(predicate);
-
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public bool Any<TPredicate>(TPredicate predicate)
-                where TPredicate : struct, IFunction<TSource, bool>
-                => source.Span.Any(predicate);
-
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public bool Any(Func<TSource, int, bool> predicate)
-                => source.Span.Any(predicate);
-
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public bool AnyAt<TPredicate>(TPredicate predicate)
-                where TPredicate : struct, IFunction<TSource, int, bool>
-                => source.Span.AnyAt(predicate);
-
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public bool Contains(TSource value, IEqualityComparer<TSource>? comparer = default)
-                => source.Span.Contains(value, comparer);
 
             #endregion
 

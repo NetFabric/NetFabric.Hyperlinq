@@ -198,7 +198,7 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public IMemoryOwner<TSource> ToArray(MemoryPool<TSource> memoryPool)
-                => ((ReadOnlySpan<TSource>)source.AsSpan()).ToArrayAt(predicate, memoryPool);
+                => ((ReadOnlySpan<TSource>)source.AsSpan()).ToArrayAt(memoryPool, predicate);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public List<TSource> ToList()

@@ -13,7 +13,7 @@ namespace NetFabric.Hyperlinq.SourceGenerator
         public string Name { get; set; }
         public IReadOnlyList<(string Name, string Constraints, bool IsConcreteType)> TypeParameters { get; set; }
         public IReadOnlyList<(string Name, string Type, string? DefaultValue)> Parameters { get; set; }
-        public ImmutableArray<(string, string, bool)> GenericsMapping { get; set; }
+        public ImmutableArray<GeneratorMappingAttribute> GenericsMapping { get; set; }
     }
 
     static class MethodSymbolExtensions
@@ -29,7 +29,7 @@ namespace NetFabric.Hyperlinq.SourceGenerator
             }
         }
 
-        public static MethodInfo GetInfo(this IMethodSymbol method, Compilation compilation, int skip = default)
+        public static MethodInfo GetInfo(this IMethodSymbol method, CompilationContext context, int skip = default)
         {
             try
             {
@@ -46,7 +46,7 @@ namespace NetFabric.Hyperlinq.SourceGenerator
                         method.ContainingType.TypeParameters.Concat(method.TypeParameters)
                         .Select(parameter => (parameter.ToDisplayString(), parameter.AsConstraintsStrings().ToCommaSeparated(), false))
                         .ToArray(),
-                    GenericsMapping = method.GetGenericsMappings(compilation),
+                    GenericsMapping = method.GetGenericsMappings(context),
                 };
             }
             catch (Exception ex)
@@ -55,7 +55,7 @@ namespace NetFabric.Hyperlinq.SourceGenerator
             }
         }
 
-        public static MethodInfo ApplyMappings(this MethodInfo method, ImmutableArray<(string, string, bool)> typeGenericsMapping)
+        public static MethodInfo ApplyMappings(this MethodInfo method, ImmutableArray<GeneratorMappingAttribute> typeGenericsMapping)
         {
             var genericsMapping = typeGenericsMapping.AddRange(method.GenericsMapping);
             if (genericsMapping.IsDefault)

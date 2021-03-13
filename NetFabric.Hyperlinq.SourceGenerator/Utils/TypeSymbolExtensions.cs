@@ -37,38 +37,25 @@ namespace NetFabric.Hyperlinq.SourceGenerator
             } while (currentTypeSymbol is not null && currentTypeSymbol.SpecialType != SpecialType.System_Object);
         }
 
-        public static ImmutableArray<(string, string, bool)> GetGenericsMappings(this ISymbol type, Compilation compilation)
-        {
-            var mappingAttributeSymbol = compilation.GetTypeByMetadataName("NetFabric.Hyperlinq.GeneratorMappingAttribute");
-            var mappings = type.GetAttributes()
-                .Where(attribute => SymbolEqualityComparer.Default.Equals(attribute.AttributeClass, mappingAttributeSymbol))
-                .Select(attribute => (
-                    (string)attribute.ConstructorArguments[0].Value!,
-                    (string)attribute.ConstructorArguments[1].Value!,
-                    (bool)attribute.ConstructorArguments[2].Value!));
-
-            return ImmutableArray.CreateRange(mappings);
-        }
-
-        public static string ToDisplayString(this ITypeSymbol type, ImmutableArray<(string, string, bool)> genericsMapping)
+        public static string ToDisplayString(this ITypeSymbol type, ImmutableArray<GeneratorMappingAttribute> genericsMapping)
             => type.ToDisplayString().ApplyMappings(genericsMapping, out _);
 
         static IEnumerable<ITypeParameterSymbol> GetTypeArguments(ITypeSymbol typeSymbol)
         {
-            if (typeSymbol is INamedTypeSymbol namedType && namedType.IsGenericType)
+            if (typeSymbol is INamedTypeSymbol {IsGenericType: true} namedType)
             {
                 var typeArguments = namedType.TypeArguments;
-                for (var index = 0; index < typeArguments.Length; index++)
+                foreach (var typeArgument in typeArguments)
                 {
-                    var typeArgument = typeArguments[index];
                     if (typeArgument is ITypeParameterSymbol typeParameter)
                         yield return typeParameter;
                 }
             }
         }
 
-        static IEnumerable<(string Name, ITypeParameterSymbol TypeParameter)> MapTypeParameters(IEnumerable<ITypeParameterSymbol> typeParameters, ImmutableArray<(string, string, bool)> genericsMapping)
+        static IEnumerable<(string Name, ITypeParameterSymbol TypeParameter)> MapTypeParameters(IEnumerable<ITypeParameterSymbol> typeParameters, ImmutableArray<GeneratorMappingAttribute> genericsMapping)
         {
+            // ReSharper disable once HeapView.ObjectAllocation.Evident
             var set = new HashSet<string>();
 
             foreach (var typeParameter in typeParameters)
@@ -90,21 +77,11 @@ namespace NetFabric.Hyperlinq.SourceGenerator
             }
         }
 
-        public static IEnumerable<(string Name, string Constraints)> MappedTypeArguments(this ITypeSymbol type, ImmutableArray<(string, string, bool)> genericsMapping)
+        public static IEnumerable<(string Name, string Constraints)> MappedTypeArguments(this ITypeSymbol type, ImmutableArray<GeneratorMappingAttribute> genericsMapping)
         {
             var methodParameters = GetTypeArguments(type);
             return MapTypeParameters(methodParameters, genericsMapping)
                 .Select(typeArgument => (typeArgument.Name, typeArgument.TypeParameter.AsConstraintsStrings(genericsMapping).ToCommaSeparated()));
-        }
-
-        static (bool, string, bool) IsMapped(this ITypeSymbol type, ImmutableArray<(string, string, bool)> genericsMapping)
-        {
-            foreach (var (from, to, isConcreteType) in genericsMapping)
-            {
-                if (type.Name == from)
-                    return (true, to, isConcreteType);
-            }
-            return default;
         }
     }
 }

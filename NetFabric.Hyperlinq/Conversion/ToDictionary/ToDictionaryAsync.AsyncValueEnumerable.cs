@@ -62,8 +62,8 @@ namespace NetFabric.Hyperlinq
             this TEnumerable source, 
             TKeySelector keySelector, 
             IEqualityComparer<TKey>? comparer, 
-            TPredicate predicate, 
-            CancellationToken cancellationToken)
+            CancellationToken cancellationToken,
+            TPredicate predicate)
             where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
             where TKey : notnull
@@ -96,8 +96,8 @@ namespace NetFabric.Hyperlinq
             this TEnumerable source, 
             TKeySelector keySelector, 
             IEqualityComparer<TKey>? comparer,
-            TPredicate predicate, 
-            CancellationToken cancellationToken)
+            CancellationToken cancellationToken,
+            TPredicate predicate)
             where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
             where TKey : notnull
@@ -225,8 +225,8 @@ namespace NetFabric.Hyperlinq
             TKeySelector keySelector, 
             TElementSelector elementSelector, 
             IEqualityComparer<TKey>? comparer, 
-            TPredicate predicate, 
-            CancellationToken cancellationToken)
+            CancellationToken cancellationToken,
+            TPredicate predicate)
             where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
             where TKey : notnull
@@ -261,8 +261,8 @@ namespace NetFabric.Hyperlinq
             TKeySelector keySelector, 
             TElementSelector elementSelector, 
             IEqualityComparer<TKey>? comparer, 
-            TPredicate predicate, 
-            CancellationToken cancellationToken)
+            CancellationToken cancellationToken,
+            TPredicate predicate)
             where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
             where TKey : notnull

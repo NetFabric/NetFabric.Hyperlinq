@@ -5,6 +5,7 @@ namespace NetFabric.Hyperlinq
     public static partial class ArrayExtensions
     {
 
+        [GeneratorIgnore(false)]
         static Option<TSource> Single<TSource>(this ReadOnlySpan<TSource> source) 
             => source switch
             {

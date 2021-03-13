@@ -38,7 +38,7 @@ namespace NetFabric.Hyperlinq
                 => new Enumerator<T>(source);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public ValueReadOnlyListExtensions.ValueEnumerable<ValueReadOnlyListWrapper<T>, Enumerator<T>, T> AsValueEnumerable()
+            public ReadOnlyListExtensions.ValueEnumerable<ValueReadOnlyListWrapper<T>, T> AsValueEnumerable()
                 => this.AsValueEnumerable<ValueReadOnlyListWrapper<T>, Enumerator<T>, T>();
         }
     }
