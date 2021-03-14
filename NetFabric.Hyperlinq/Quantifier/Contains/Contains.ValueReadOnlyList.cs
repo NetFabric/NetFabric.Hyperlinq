@@ -1,11 +1,14 @@
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class ReadOnlyListExtensions
+    public static partial class ValueReadOnlyListExtensions
     {
 
-        public static bool Contains<TList, TSource>(this TList source, TSource value, IEqualityComparer<TSource>? comparer = default)
+        [GeneratorIgnore(false)]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static bool Contains<TList, TSource>(this TList source, TSource value, IEqualityComparer<TSource>? comparer = default)
             where TList : struct, IReadOnlyList<TSource>
             => source.Contains(value, comparer, 0, source.Count);
 

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class ReadOnlyListExtensions
+    public static partial class ValueReadOnlyListExtensions
     {
 
         static LargeArrayBuilder<TSource> ToArrayBuilder<TList, TSource, TPredicate>(in TList source, ArrayPool<TSource> pool, TPredicate predicate, int offset, int count)

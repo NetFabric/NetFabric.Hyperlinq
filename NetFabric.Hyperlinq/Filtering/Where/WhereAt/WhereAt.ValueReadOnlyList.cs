@@ -8,12 +8,13 @@ using System.Runtime.InteropServices;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class ReadOnlyListExtensions
+    public static partial class ValueReadOnlyListExtensions
     {
 
-        [GeneratorMapping("TPredicate", "NetFabric.Hyperlinq.FunctionWrapper<TSource, bool>")]
+        [GeneratorIgnore(false)]
+        [GeneratorMapping("TPredicate", "NetFabric.Hyperlinq.FunctionWrapper<TSource, int, bool>")]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static WhereAtEnumerable<TList, TSource, FunctionWrapper<TSource, int, bool>> Where<TList, TSource>(this TList source, Func<TSource, int, bool> predicate)
+        internal static WhereAtEnumerable<TList, TSource, FunctionWrapper<TSource, int, bool>> Where<TList, TSource>(this TList source, Func<TSource, int, bool> predicate)
             where TList : struct, IReadOnlyList<TSource>
             => source.Where(predicate, 0, source.Count);
 
@@ -23,8 +24,9 @@ namespace NetFabric.Hyperlinq
             where TList : struct, IReadOnlyList<TSource>
             => source.WhereAt<TList, TSource, FunctionWrapper<TSource, int, bool>>(new FunctionWrapper<TSource, int, bool>(predicate), offset, count);
 
+        [GeneratorIgnore(false)]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static WhereAtEnumerable<TList, TSource, TPredicate> WhereAt<TList, TSource, TPredicate>(this TList source, TPredicate predicate = default)
+        internal static WhereAtEnumerable<TList, TSource, TPredicate> WhereAt<TList, TSource, TPredicate>(this TList source, TPredicate predicate = default)
             where TList : struct, IReadOnlyList<TSource>
             where TPredicate : struct, IFunction<TSource, int, bool>
             => source.WhereAt<TList, TSource, TPredicate>(predicate, 0, source.Count);

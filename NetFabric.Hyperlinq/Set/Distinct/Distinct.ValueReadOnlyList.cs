@@ -8,11 +8,12 @@ using System.Runtime.InteropServices;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class ReadOnlyListExtensions
+    public static partial class ValueReadOnlyListExtensions
     {
         
+        [GeneratorIgnore(false)]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static DistinctEnumerable<TList, TSource> Distinct<TList, TSource>(this TList source, IEqualityComparer<TSource>? comparer = default)
+        internal static DistinctEnumerable<TList, TSource> Distinct<TList, TSource>(this TList source, IEqualityComparer<TSource>? comparer = default)
             where TList : struct, IReadOnlyList<TSource>
             => source.Distinct(comparer, 0, source.Count);
         

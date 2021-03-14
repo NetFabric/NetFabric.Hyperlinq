@@ -362,11 +362,7 @@ namespace NetFabric.Hyperlinq.SourceGenerator
             foreach (var (name, constraints, _) in typeParameters.Where(typeParameter => typeParameter.Constraints.Any()))
                 _ = builder.AppendLine($"where {name} : {constraints}");
 
-
-            callParameters = StringExtensions.CommaSeparateIfNotNullOrEmpty(firstCallParameter, callParameters); 
-
-            if (!string.IsNullOrEmpty(bindingsAttribute?.ExtraParameters))
-                callParameters = StringExtensions.CommaSeparateIfNotNullOrEmpty(callParameters, bindingsAttribute!.ExtraParameters);
+            callParameters = StringExtensions.CommaSeparateIfNotNullOrEmpty(firstCallParameter, callParameters, bindingsAttribute?.ExtraParameters); 
 
             _ = builder
                 .AppendLine($"=> {callContainingType}.{methodName}{callTypeParameters}({callParameters});")

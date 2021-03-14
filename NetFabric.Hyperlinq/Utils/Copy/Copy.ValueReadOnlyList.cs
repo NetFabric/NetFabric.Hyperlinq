@@ -4,7 +4,7 @@ using System.Diagnostics;
 
 namespace NetFabric.Hyperlinq
 {
-    static partial class ReadOnlyListExtensions
+    static partial class ValueReadOnlyListExtensions
     {
         public static void Copy<TList, TSource>(TList source, int sourceOffset, Span<TSource> destination, int count)
             where TList : struct, IReadOnlyList<TSource>
@@ -17,12 +17,12 @@ namespace NetFabric.Hyperlinq
 
             if (sourceOffset is 0)
             {
-                for (var index = 0; index < count; index++)
+                for (var index = 0; index < count && index < destination.Length; index++)
                     destination[index] = source[index];
             }
             else
             {
-                for (var index = 0; index < count; index++)
+                for (var index = 0; index < count && index < destination.Length; index++)
                     destination[index] = source[index + sourceOffset];
             }
         }
@@ -39,12 +39,12 @@ namespace NetFabric.Hyperlinq
 
             if (sourceOffset is 0)
             {
-                for (var index = 0; index < count; index++)
+                for (var index = 0; index < count && index < destination.Length; index++)
                     destination[index] = selector.Invoke(source[index]);
             }
             else
             {
-                for (var index = 0; index < count; index++)
+                for (var index = 0; index < count && index < destination.Length; index++)
                     destination[index] = selector.Invoke(source[index + sourceOffset]);
             }
         }
@@ -61,12 +61,12 @@ namespace NetFabric.Hyperlinq
 
             if (sourceOffset is 0)
             {
-                for (var index = 0; index < count; index++)
+                for (var index = 0; index < count && index < destination.Length; index++)
                     destination[index] = selector.Invoke(source[index], index);
             }
             else
             {
-                for (var index = 0; index < count; index++)
+                for (var index = 0; index < count && index < destination.Length; index++)
                     destination[index] = selector.Invoke(source[index + sourceOffset], index);
             }
         }

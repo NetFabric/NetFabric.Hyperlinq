@@ -4,11 +4,12 @@ using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class ReadOnlyListExtensions
+    public static partial class ValueReadOnlyListExtensions
     {
 
+        [GeneratorIgnore(false)]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool Any<TList, TSource>(this TList source)
+        internal static bool Any<TList, TSource>(this TList source)
             where TList : struct, IReadOnlyList<TSource>
             => source.Any<TList, TSource>(0, source.Count);
 
@@ -18,8 +19,9 @@ namespace NetFabric.Hyperlinq
             => count is not 0;
         
 
+        [GeneratorIgnore(false)]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool Any<TList, TSource>(this TList source, Func<TSource, bool> predicate)
+        internal static bool Any<TList, TSource>(this TList source, Func<TSource, bool> predicate)
             where TList : struct, IReadOnlyList<TSource>
             => source.Any(predicate, 0, source.Count);
 
@@ -28,8 +30,9 @@ namespace NetFabric.Hyperlinq
             where TList : struct, IReadOnlyList<TSource>
             => source.Any<TList, TSource, FunctionWrapper<TSource, bool>>(new FunctionWrapper<TSource, bool>(predicate), offset, count);
 
+        [GeneratorIgnore(false)]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool Any<TList, TSource, TPredicate>(this TList source, TPredicate predicate)
+        internal static bool Any<TList, TSource, TPredicate>(this TList source, TPredicate predicate)
             where TList : struct, IReadOnlyList<TSource>
             where TPredicate : struct, IFunction<TSource, bool>
             => source.Any<TList, TSource, TPredicate>(predicate, 0, source.Count);
@@ -49,8 +52,9 @@ namespace NetFabric.Hyperlinq
         }
 
 
+        [GeneratorIgnore(false)]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool Any<TList, TSource>(this TList source, Func<TSource, int, bool> predicate)
+        internal static bool Any<TList, TSource>(this TList source, Func<TSource, int, bool> predicate)
             where TList : struct, IReadOnlyList<TSource>
             => source.Any(predicate, 0, source.Count);
         
@@ -59,8 +63,9 @@ namespace NetFabric.Hyperlinq
             where TList : struct, IReadOnlyList<TSource>
             => source.AnyAt<TList, TSource, FunctionWrapper<TSource, int, bool>>(new FunctionWrapper<TSource, int, bool>(predicate),  offset, count);
 
+        [GeneratorIgnore(false)]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool AnyAt<TList, TSource, TPredicate>(this TList source, TPredicate predicate)
+        internal static bool AnyAt<TList, TSource, TPredicate>(this TList source, TPredicate predicate)
             where TList : struct, IReadOnlyList<TSource>
             where TPredicate : struct, IFunction<TSource, int, bool>
             => source.AnyAt<TList, TSource, TPredicate>(predicate, 0, source.Count);

@@ -249,7 +249,7 @@ namespace NetFabric.Hyperlinq
                 => comparer switch 
                 {
                     null => Contains(value),
-                    _ => ReadOnlyListExtensions.Contains(this, value, comparer)
+                    _ => ValueReadOnlyListExtensions.Contains(this, value, comparer)
                 };
 
         #endregion

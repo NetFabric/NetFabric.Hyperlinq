@@ -5,8 +5,14 @@ using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class ReadOnlyListExtensions
+    public static partial class ValueReadOnlyListExtensions
     {
+        [GeneratorIgnore(false)]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static TSource[] ToArray<TList, TSource>(this TList source)
+            where TList : struct, IReadOnlyList<TSource>
+            => source.ToArray<TList, TSource>(0, source.Count);
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static TSource[] ToArray<TList, TSource>(this TList source, int offset, int count)
             where TList : struct, IReadOnlyList<TSource>
@@ -24,11 +30,6 @@ namespace NetFabric.Hyperlinq
                 return result;
             }
         }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static IMemoryOwner<TSource> ToArray<TList, TSource>(this TList source, MemoryPool<TSource> pool)
-            where TList : struct, IReadOnlyList<TSource>
-            => source.ToArray(pool, 0, source.Count);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static IMemoryOwner<TSource> ToArray<TList, TSource>(this TList source, MemoryPool<TSource> pool, int offset, int count)

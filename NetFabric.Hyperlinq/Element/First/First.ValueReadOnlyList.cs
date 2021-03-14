@@ -3,10 +3,11 @@ using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class ReadOnlyListExtensions
+    public static partial class ValueReadOnlyListExtensions
     {
 
-        static Option<TSource> First<TList, TSource>(this TList source)
+        [GeneratorIgnore(false)]
+        internal static Option<TSource> First<TList, TSource>(this TList source)
             where TList : struct, IReadOnlyList<TSource>
             => source.First<TList, TSource>(0, source.Count);
 
