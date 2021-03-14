@@ -1,16 +1,15 @@
 ﻿using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Jobs;
 using System;
-using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq.Benchmarks.Benchmarks
 {
-    [SimpleJob(RuntimeMoniker.NetCoreApp50)]
+    [SimpleJob(RuntimeMoniker.Net60)]
     public class ArrayIterationBenchmarks
     {
         const int seed = 2982;
-        int[] array;
+        int[]? array;
         ReadOnlyMemory<int> memory;
         ArraySegment<int> segment;
 
@@ -29,7 +28,7 @@ namespace NetFabric.Hyperlinq.Benchmarks.Benchmarks
         public int Foreach()
         {
             var sum = 0;
-            foreach (var item in array)
+            foreach (var item in array!)
                 sum += item;
             return sum;
         }
@@ -37,11 +36,11 @@ namespace NetFabric.Hyperlinq.Benchmarks.Benchmarks
         [Benchmark]
         public int For()
         {
-            var source = array;
+            var source = array!;
             var sum = 0;
             for (var index = 0; index < source.Length; index++)
             {
-                var item = array[index];
+                var item = source[index];
                 sum += item;
             }
             return sum;
@@ -50,7 +49,7 @@ namespace NetFabric.Hyperlinq.Benchmarks.Benchmarks
         [Benchmark]
         public unsafe int For_Unsafe()
         {
-            var end = array.Length;
+            var end = array!.Length;
             var sum = 0;
             fixed (int* source = array)
             {
@@ -66,8 +65,8 @@ namespace NetFabric.Hyperlinq.Benchmarks.Benchmarks
         [Benchmark]
         public int ForAdamczewski()
         {
-            var source = array;
-            var len = array.Length;
+            var source = array!;
+            var len = source.Length;
             var sum1 = 0;
             var sum2 = 0;
             for (var index = 0; index < len; index += 2)
@@ -88,7 +87,7 @@ namespace NetFabric.Hyperlinq.Benchmarks.Benchmarks
         {
             fixed (int* source = array)
             {
-                var len = array.Length;
+                var len = array!.Length;
                 var sum1 = 0;
                 var sum2 = 0;
                 for (var index = 0; index < len; index += 2)
@@ -108,7 +107,7 @@ namespace NetFabric.Hyperlinq.Benchmarks.Benchmarks
         [Benchmark]
         public int Span()
         {
-            var source = array.AsSpan();
+            var source = array!.AsSpan();
             var sum = 0;
             for (var index = 0; index < source.Length; index++)
             {

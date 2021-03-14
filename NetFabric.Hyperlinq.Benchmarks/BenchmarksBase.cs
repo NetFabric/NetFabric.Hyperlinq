@@ -9,7 +9,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
     //[SimpleJob(RuntimeMoniker.Net48, baseline: true)]
     //[SimpleJob(RuntimeMoniker.NetCoreApp21)]
     //[SimpleJob(RuntimeMoniker.NetCoreApp31)]
-    [SimpleJob(RuntimeMoniker.NetCoreApp50)]
+    [SimpleJob(RuntimeMoniker.Net60)]
     [MemoryDiagnoser]
     public abstract class BenchmarksBase
     {
