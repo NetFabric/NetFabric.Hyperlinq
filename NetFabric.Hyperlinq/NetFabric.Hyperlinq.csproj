@@ -21,13 +21,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="..\NetFabric.Hyperlinq.SourceGenerator\Attributes\GeneratorBindingsAttribute.cs" Link="Utils\Generator\GeneratorBindingsAttribute.cs" />
-    <Compile Include="..\NetFabric.Hyperlinq.SourceGenerator\Attributes\GeneratorIgnoreAttribute.cs" Link="Utils\Generator\GeneratorIgnoreAttribute.cs" />
-    <Compile Include="..\NetFabric.Hyperlinq.SourceGenerator\Attributes\GeneratorMappingAttribute.cs" Link="Utils\Generator\GeneratorMappingAttribute.cs" />
+    <SupportedPlatform Include="browser" />
   </ItemGroup>
 
   <ItemGroup>
-    <SupportedPlatform Include="browser" />
+    <Compile Include="..\NetFabric.Hyperlinq.SourceGenerator\Attributes\GeneratorBindingsAttribute.cs" Link="Utils\Generator\GeneratorBindingsAttribute.cs" />
+    <Compile Include="..\NetFabric.Hyperlinq.SourceGenerator\Attributes\GeneratorIgnoreAttribute.cs" Link="Utils\Generator\GeneratorIgnoreAttribute.cs" />
+    <Compile Include="..\NetFabric.Hyperlinq.SourceGenerator\Attributes\GeneratorMappingAttribute.cs" Link="Utils\Generator\GeneratorMappingAttribute.cs" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net461' Or '$(TargetFramework)' == 'netstandard2.0'">
