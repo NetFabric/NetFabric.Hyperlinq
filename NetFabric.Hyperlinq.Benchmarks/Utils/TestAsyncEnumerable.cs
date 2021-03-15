@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Threading;
@@ -59,7 +58,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
                 public ValueTask<bool> MoveNextAsync() 
                 {
                     cancellationToken.ThrowIfCancellationRequested();
-                    return new ValueTask<bool>(++index < array.Length);
+                    return new ValueTask<bool>(++index <= array.Length);
                 }
 
                 public ValueTask DisposeAsync() 

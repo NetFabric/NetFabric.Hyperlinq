@@ -1,7 +1,5 @@
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Configs;
-using StructLinq;
-using System;
 using System.Linq;
 using System.Threading.Tasks;
 

@@ -20,8 +20,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct
                 .Distinct();
 
             // Act
-            var result = wrapped
-                .Distinct<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>();
+            var result = wrapped.AsAsyncValueEnumerable()
+                .Distinct();
 
             // Assert
             _ = result.Must()
@@ -42,8 +42,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct
                 .ToArray();
 
             // Act
-            var result = await wrapped
-                .Distinct<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>()
+            var result = await wrapped.AsAsyncValueEnumerable()
+                .Distinct()
                 .ToArrayAsync()
                 .ConfigureAwait(false);
 
@@ -67,8 +67,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct
                 .ToArray();
 
             // Act
-            var result = await wrapped
-                .Distinct<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>()
+            var result = await wrapped.AsAsyncValueEnumerable()
+                .Distinct()
                 .ToArrayAsync(pool)
                 .ConfigureAwait(false);
 
@@ -90,8 +90,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct
                 .ToList();
 
             // Act
-            var result = await wrapped
-                .Distinct<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>()
+            var result = await wrapped.AsAsyncValueEnumerable()
+                .Distinct()
                 .ToListAsync()
                 .ConfigureAwait(false);
 
@@ -114,8 +114,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct
                 .Sum();
 
             // Act
-            var result = await wrapped
-                .Distinct<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>()
+            var result = await wrapped.AsAsyncValueEnumerable()
+                .Distinct()
                 .SumAsync()
                 .ConfigureAwait(false);
 

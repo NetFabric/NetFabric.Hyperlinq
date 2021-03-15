@@ -8,12 +8,13 @@ using System.Runtime.InteropServices;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class ReadOnlyListExtensions
+    public static partial class ValueReadOnlyListExtensions
     {
 
-        [GeneratorMapping("TSelector", "NetFabric.Hyperlinq.FunctionWrapper<TSource, TResult>")]
+        [GeneratorIgnore(false)]
+        [GeneratorMapping("TSelector", "NetFabric.Hyperlinq.FunctionWrapper<TSource, int, TResult>")]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static SelectAtEnumerable<TList, TSource, TResult, FunctionWrapper<TSource, int, TResult>> Select<TList, TSource, TResult>(this TList source, Func<TSource, int, TResult> selector)
+        internal static SelectAtEnumerable<TList, TSource, TResult, FunctionWrapper<TSource, int, TResult>> Select<TList, TSource, TResult>(this TList source, Func<TSource, int, TResult> selector)
             where TList : struct, IReadOnlyList<TSource>
             => source.Select(selector, 0, source.Count);
 
@@ -23,8 +24,9 @@ namespace NetFabric.Hyperlinq
             where TList : struct, IReadOnlyList<TSource>
             => source.SelectAt<TList, TSource, TResult, FunctionWrapper<TSource, int, TResult>>(new FunctionWrapper<TSource, int, TResult>(selector), offset, count);
 
+        [GeneratorIgnore(false)]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static SelectAtEnumerable<TList, TSource, TResult, TSelector> SelectAt<TList, TSource, TResult, TSelector>(this TList source, TSelector selector = default)
+        internal static SelectAtEnumerable<TList, TSource, TResult, TSelector> SelectAt<TList, TSource, TResult, TSelector>(this TList source, TSelector selector = default)
             where TList : struct, IReadOnlyList<TSource>
             where TSelector : struct, IFunction<TSource, int, TResult>
             => source.SelectAt<TList, TSource, TResult, TSelector>(selector, 0, source.Count);

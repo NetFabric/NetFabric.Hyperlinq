@@ -7,35 +7,21 @@ using System.Runtime.InteropServices;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class ReadOnlyListExtensions
+    public static partial class ValueReadOnlyListExtensions
     {
 
+        [GeneratorIgnore(true)]
         [GeneratorMapping("TSelector", "NetFabric.Hyperlinq.FunctionWrapper<TSource, TSubEnumerable>")]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static SelectManyEnumerable<TList, TSource, TSubEnumerable, TSubEnumerator, TResult, FunctionWrapper<TSource, TSubEnumerable>> SelectMany<TList, TSource, TSubEnumerable, TSubEnumerator, TResult>(this TList source, Func<TSource, TSubEnumerable> selector)
-            where TList : struct, IReadOnlyList<TSource>
-            where TSubEnumerable : IValueEnumerable<TResult, TSubEnumerator>
-            where TSubEnumerator : struct, IEnumerator<TResult>
-            => source.SelectMany<TList, TSource, TSubEnumerable, TSubEnumerator, TResult>(selector, 0, source.Count);
-
-        [GeneratorMapping("TSelector", "NetFabric.Hyperlinq.FunctionWrapper<TSource, TSubEnumerable>")]
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static SelectManyEnumerable<TList, TSource, TSubEnumerable, TSubEnumerator, TResult, FunctionWrapper<TSource, TSubEnumerable>> SelectMany<TList, TSource, TSubEnumerable, TSubEnumerator, TResult>(this TList source, Func<TSource, TSubEnumerable> selector, int offset, int count)
+        internal static SelectManyEnumerable<TList, TSource, TSubEnumerable, TSubEnumerator, TResult, FunctionWrapper<TSource, TSubEnumerable>> SelectMany<TList, TSource, TSubEnumerable, TSubEnumerator, TResult>(this TList source, Func<TSource, TSubEnumerable> selector, int offset, int count)
             where TList : struct, IReadOnlyList<TSource>
             where TSubEnumerable : IValueEnumerable<TResult, TSubEnumerator>
             where TSubEnumerator : struct, IEnumerator<TResult>
             => source.SelectMany<TList, TSource, TSubEnumerable, TSubEnumerator, TResult, FunctionWrapper<TSource, TSubEnumerable>>(new FunctionWrapper<TSource, TSubEnumerable>(selector), offset, count);
 
+        [GeneratorIgnore(true)]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static SelectManyEnumerable<TList, TSource, TSubEnumerable, TSubEnumerator, TResult, TSelector> SelectMany<TList, TSource, TSubEnumerable, TSubEnumerator, TResult, TSelector>(this TList source, TSelector selector)
-            where TList : struct, IReadOnlyList<TSource>
-            where TSubEnumerable : IValueEnumerable<TResult, TSubEnumerator>
-            where TSubEnumerator : struct, IEnumerator<TResult>
-            where TSelector : struct, IFunction<TSource, TSubEnumerable>
-            => source.SelectMany<TList, TSource, TSubEnumerable, TSubEnumerator, TResult, TSelector>(selector, 0, source.Count);
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static SelectManyEnumerable<TList, TSource, TSubEnumerable, TSubEnumerator, TResult, TSelector> SelectMany<TList, TSource, TSubEnumerable, TSubEnumerator, TResult, TSelector>(this TList source, TSelector selector, int offset, int count)
+        internal static SelectManyEnumerable<TList, TSource, TSubEnumerable, TSubEnumerator, TResult, TSelector> SelectMany<TList, TSource, TSubEnumerable, TSubEnumerator, TResult, TSelector>(this TList source, TSelector selector, int offset, int count)
             where TList : struct, IReadOnlyList<TSource>
             where TSubEnumerable : IValueEnumerable<TResult, TSubEnumerator>
             where TSubEnumerator : struct, IEnumerator<TResult>

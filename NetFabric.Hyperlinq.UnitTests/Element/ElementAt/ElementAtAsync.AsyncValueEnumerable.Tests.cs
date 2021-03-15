@@ -19,11 +19,11 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAtAsync
                 .AsAsyncValueEnumerable(source);
 
             // Act
-            var optionNegative = await wrapped
-                .ElementAtAsync<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(-1)
+            var optionNegative = await wrapped.AsAsyncValueEnumerable()
+                .ElementAtAsync(-1)
                 .ConfigureAwait(false);
-            var optionTooLarge = await wrapped
-                .ElementAtAsync<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(source.Length)
+            var optionTooLarge = await wrapped.AsAsyncValueEnumerable()
+                .ElementAtAsync(source.Length)
                 .ConfigureAwait(false);
 
             // Assert
@@ -45,12 +45,12 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAtAsync
             for (var index = 0; index < source.Length; index++)
             {
                 // Arrange
-                var expected = Enumerable
-                    .ElementAt(source, index);
+                var expected = source
+                    .ElementAt(index);
 
                 // Act
-                var result = await wrapped
-                    .ElementAtAsync<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(index)
+                var result = await wrapped.AsAsyncValueEnumerable()
+                    .ElementAtAsync(index)
                     .ConfigureAwait(false);
 
                 // Assert
@@ -71,12 +71,12 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAtAsync
                 .AsAsyncValueEnumerable(source);
 
             // Act
-            var optionNegative = await wrapped
-                .Where<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(predicate.AsAsync())
+            var optionNegative = await wrapped.AsAsyncValueEnumerable()
+                .Where(predicate.AsAsync())
                 .ElementAtAsync(-1)
                 .ConfigureAwait(false);
-            var optionTooLarge = await wrapped
-                .Where<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(predicate.AsAsync())
+            var optionTooLarge = await wrapped.AsAsyncValueEnumerable()
+                .Where(predicate.AsAsync())
                 .ElementAtAsync(source.Length)
                 .ConfigureAwait(false);
 
@@ -97,15 +97,15 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAtAsync
             // Arrange
             var wrapped = Wrap
                 .AsAsyncValueEnumerable(source);
-            var expected = Enumerable
-                .Where(source, predicate)
+            var expected = source
+                .Where(predicate)
                 .ToList();
 
             for (var index = 0; index < expected.Count; index++)
             {
                 // Act
-                var result = await wrapped
-                    .Where<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(predicate.AsAsync())
+                var result = await wrapped.AsAsyncValueEnumerable()
+                    .Where(predicate.AsAsync())
                     .ElementAtAsync(index)
                     .ConfigureAwait(false);
 
@@ -127,12 +127,12 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAtAsync
                 .AsAsyncValueEnumerable(source);
 
             // Act
-            var optionNegative = await wrapped
-                .Where<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(predicate.AsAsync())
+            var optionNegative = await wrapped.AsAsyncValueEnumerable()
+                .Where(predicate.AsAsync())
                 .ElementAtAsync(-1)
                 .ConfigureAwait(false);
-            var optionTooLarge = await wrapped
-                .Where<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(predicate.AsAsync())
+            var optionTooLarge = await wrapped.AsAsyncValueEnumerable()
+                .Where(predicate.AsAsync())
                 .ElementAtAsync(source.Length)
                 .ConfigureAwait(false);
 
@@ -152,15 +152,15 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAtAsync
         {
             // Arrange
             var wrapped = Wrap.AsAsyncValueEnumerable(source);
-            var expected = Enumerable
-                .Where(source, predicate)
+            var expected = source
+                .Where(predicate)
                 .ToList();
 
             for (var index = 0; index < expected.Count; index++)
             {
                 // Act
-                var result = await wrapped
-                    .Where<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(predicate.AsAsync())
+                var result = await wrapped.AsAsyncValueEnumerable()
+                    .Where(predicate.AsAsync())
                     .ElementAtAsync(index)
                     .ConfigureAwait(false);
 
@@ -182,12 +182,12 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAtAsync
                 .AsAsyncValueEnumerable(source);
 
             // Act
-            var optionNegative = await wrapped
-                .Select<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int, string>(selector.AsAsync())
+            var optionNegative = await wrapped.AsAsyncValueEnumerable()
+                .Select(selector.AsAsync())
                 .ElementAtAsync(-1)
                 .ConfigureAwait(false);
-            var optionTooLarge = await wrapped
-                .Select<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int, string>(selector.AsAsync())
+            var optionTooLarge = await wrapped.AsAsyncValueEnumerable()
+                .Select(selector.AsAsync())
                 .ElementAtAsync(source.Length)
                 .ConfigureAwait(false);
 
@@ -207,15 +207,15 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAtAsync
         {
             // Arrange
             var wrapped = Wrap.AsAsyncValueEnumerable(source);
-            var expected = Enumerable
-                .Select(source, selector)
+            var expected = source
+                .Select(selector)
                 .ToList();
 
             for (var index = 0; index < source.Length; index++)
             {
                 // Act
-                var result = await wrapped
-                    .Select<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int, string>(selector.AsAsync())
+                var result = await wrapped.AsAsyncValueEnumerable()
+                    .Select(selector.AsAsync())
                     .ElementAtAsync(index)
                     .ConfigureAwait(false);
 
@@ -237,12 +237,12 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAtAsync
                 .AsAsyncValueEnumerable(source);
 
             // Act
-            var optionNegative = await wrapped
-                .Select<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int, string>(selector.AsAsync())
+            var optionNegative = await wrapped.AsAsyncValueEnumerable()
+                .Select(selector.AsAsync())
                 .ElementAtAsync(-1)
                 .ConfigureAwait(false);
-            var optionTooLarge = await wrapped
-                .Select<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int, string>(selector.AsAsync())
+            var optionTooLarge = await wrapped.AsAsyncValueEnumerable()
+                .Select(selector.AsAsync())
                 .ElementAtAsync(source.Length)
                 .ConfigureAwait(false);
 
@@ -263,15 +263,15 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAtAsync
             // Arrange
             var wrapped = Wrap
                 .AsAsyncValueEnumerable(source);
-            var expected = Enumerable
-                .Select(source, selector)
+            var expected = source
+                .Select(selector)
                 .ToList();
 
             for (var index = 0; index < source.Length; index++)
             {
                 // Act
-                var result = await wrapped
-                    .Select<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int, string>(selector.AsAsync())
+                var result = await wrapped.AsAsyncValueEnumerable()
+                    .Select(selector.AsAsync())
                     .ElementAtAsync(index)
                     .ConfigureAwait(false);
 
@@ -293,13 +293,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAtAsync
                 .AsAsyncValueEnumerable(source);
 
             // Act
-            var optionNegative = await AsyncValueEnumerableExtensions
-                .Where<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, predicate.AsAsync())
+            var optionNegative = await wrapped.AsAsyncValueEnumerable()
+                .Where(predicate.AsAsync())
                 .Select(selector.AsAsync())
                 .ElementAtAsync(-1)
                 .ConfigureAwait(false);
-            var optionTooLarge = await wrapped
-                .Where<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(predicate.AsAsync())
+            var optionTooLarge = await wrapped.AsAsyncValueEnumerable()
+                .Where(predicate.AsAsync())
                 .Select(selector.AsAsync())
                 .ElementAtAsync(source.Length)
                 .ConfigureAwait(false);
@@ -321,16 +321,16 @@ namespace NetFabric.Hyperlinq.UnitTests.Element.ElementAtAsync
             // Arrange
             var wrapped = Wrap
                 .AsAsyncValueEnumerable(source);
-            var expected = Enumerable
-                .Where(source, predicate)
+            var expected = source
+                .Where(predicate)
                 .Select(selector)
                 .ToList();
 
             for (var index = 0; index < expected.Count; index++)
             {
                 // Act
-                var result = await AsyncValueEnumerableExtensions
-                    .Where<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(wrapped, predicate.AsAsync())
+                var result = await wrapped.AsAsyncValueEnumerable()
+                    .Where(predicate.AsAsync())
                     .Select(selector.AsAsync())
                     .ElementAtAsync(index)
                     .ConfigureAwait(false);

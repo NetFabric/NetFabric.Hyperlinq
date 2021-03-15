@@ -15,14 +15,14 @@ namespace NetFabric.Hyperlinq
             [DebuggerNonUserCode]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly bool Any(System.Func<TResult, bool> predicate)
-            => NetFabric.Hyperlinq.ReadOnlyListExtensions.Any<NetFabric.Hyperlinq.ArrayExtensions.ArraySegmentSelectEnumerable<TSource, TResult, TSelector>, TResult>(this, predicate);
+            => NetFabric.Hyperlinq.ValueReadOnlyListExtensions.Any<NetFabric.Hyperlinq.ArrayExtensions.ArraySegmentSelectEnumerable<TSource, TResult, TSelector>, TResult>(this, predicate);
 
             [GeneratedCode("NetFabric.Hyperlinq.SourceGenerator", "1.0.0")]
             [DebuggerNonUserCode]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly bool Any<TPredicate>(TPredicate predicate = default)
             where TPredicate : struct, NetFabric.Hyperlinq.IFunction<TResult, bool>
-            => NetFabric.Hyperlinq.ReadOnlyListExtensions.Any<NetFabric.Hyperlinq.ArrayExtensions.ArraySegmentSelectEnumerable<TSource, TResult, TSelector>, TResult, TPredicate>(this, predicate);
+            => NetFabric.Hyperlinq.ValueReadOnlyListExtensions.Any<NetFabric.Hyperlinq.ArrayExtensions.ArraySegmentSelectEnumerable<TSource, TResult, TSelector>, TResult, TPredicate>(this, predicate);
 
         }
 

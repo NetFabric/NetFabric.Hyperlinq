@@ -362,11 +362,7 @@ namespace NetFabric.Hyperlinq.SourceGenerator
             foreach (var (name, constraints, _) in typeParameters.Where(typeParameter => typeParameter.Constraints.Any()))
                 _ = builder.AppendLine($"where {name} : {constraints}");
 
-
-            callParameters = StringExtensions.CommaSeparateIfNotNullOrEmpty(firstCallParameter, callParameters); 
-
-            if (!string.IsNullOrEmpty(bindingsAttribute?.ExtraParameters))
-                callParameters = StringExtensions.CommaSeparateIfNotNullOrEmpty(callParameters, bindingsAttribute!.ExtraParameters);
+            callParameters = StringExtensions.CommaSeparateIfNotNullOrEmpty(firstCallParameter, callParameters, bindingsAttribute?.ExtraParameters); 
 
             _ = builder
                 .AppendLine($"=> {callContainingType}.{methodName}{callTypeParameters}({callParameters});")
@@ -384,7 +380,11 @@ namespace NetFabric.Hyperlinq.SourceGenerator
             })
             .ToCommaSeparated();
 
-            return string.IsNullOrEmpty(str) ? string.Empty : $"<{str}>";
+            return str switch
+            {
+                { Length: 0 } => string.Empty,
+                _ => $"<{str}>"
+            };
         }
 
         string MapTypeProperties(IEnumerable<string> typePropertyNames, GeneratorBindingsAttribute? bindingsAttribute)
@@ -400,7 +400,11 @@ namespace NetFabric.Hyperlinq.SourceGenerator
 
             str = StringExtensions.CommaSeparateIfNotNullOrEmpty(str, bindingsAttribute?.ExtraTypeParameters);
 
-            return string.IsNullOrEmpty(str) ? string.Empty : $"<{str}>";
+            return str switch
+            {
+                { Length: 0 } => string.Empty,
+                _ => $"<{str}>"
+            };
         }
     }
 }

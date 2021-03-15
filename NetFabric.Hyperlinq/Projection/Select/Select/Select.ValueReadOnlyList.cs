@@ -8,12 +8,13 @@ using System.Runtime.InteropServices;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class ReadOnlyListExtensions
+    public static partial class ValueReadOnlyListExtensions
     {
 
+        [GeneratorIgnore(false)]
         [GeneratorMapping("TSelector", "NetFabric.Hyperlinq.FunctionWrapper<TSource, TResult>")]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static SelectEnumerable<TList, TSource, TResult, FunctionWrapper<TSource, TResult>> Select<TList, TSource, TResult>(this TList source, Func<TSource, TResult> selector)
+        internal static SelectEnumerable<TList, TSource, TResult, FunctionWrapper<TSource, TResult>> Select<TList, TSource, TResult>(this TList source, Func<TSource, TResult> selector)
             where TList : struct, IReadOnlyList<TSource>
             => source.Select(selector, 0, source.Count);
 
@@ -23,8 +24,9 @@ namespace NetFabric.Hyperlinq
             where TList : struct, IReadOnlyList<TSource>
             => source.Select<TList, TSource, TResult, FunctionWrapper<TSource, TResult>>(new FunctionWrapper<TSource, TResult>(selector), offset, count);
 
+        [GeneratorIgnore(false)]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static SelectEnumerable<TList, TSource, TResult, TSelector> Select<TList, TSource, TResult, TSelector>(this TList source, TSelector selector = default)
+        internal static SelectEnumerable<TList, TSource, TResult, TSelector> Select<TList, TSource, TResult, TSelector>(this TList source, TSelector selector = default)
             where TList : struct, IReadOnlyList<TSource>
             where TSelector : struct, IFunction<TSource, TResult>
             => source.Select<TList, TSource, TResult, TSelector>(selector, 0, source.Count);
@@ -105,7 +107,7 @@ namespace NetFabric.Hyperlinq
                 => source.Contains<TList, TSource, TResult, TSelector>(item, default, selector, offset, Count);
 
             public int IndexOf(TResult item)
-                => ReadOnlyListExtensions.IndexOf<TList, TSource, TResult, TSelector>(source, item, selector, offset, Count);
+                => IndexOf<TList, TSource, TResult, TSelector>(source, item, selector, offset, Count);
 
             [ExcludeFromCodeCoverage]
             void ICollection<TResult>.Add(TResult item) 

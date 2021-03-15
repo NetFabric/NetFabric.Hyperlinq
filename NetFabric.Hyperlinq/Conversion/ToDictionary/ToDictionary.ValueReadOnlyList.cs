@@ -4,10 +4,11 @@ using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class ReadOnlyListExtensions
+    public static partial class ValueReadOnlyListExtensions
     {
+        [GeneratorIgnore(false)]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Dictionary<TKey, TSource> ToDictionary<TList, TSource, TKey>(this TList source, Func<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer = default)
+        internal static Dictionary<TKey, TSource> ToDictionary<TList, TSource, TKey>(this TList source, Func<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer = default)
             where TList : struct, IReadOnlyList<TSource>
             where TKey : notnull
             => source.ToDictionary(keySelector, comparer, 0, source.Count);
@@ -18,8 +19,9 @@ namespace NetFabric.Hyperlinq
             where TKey : notnull
             => source.ToDictionary<TList, TSource, TKey, FunctionWrapper<TSource, TKey>>(new FunctionWrapper<TSource, TKey>(keySelector), comparer, offset, count);
         
+        [GeneratorIgnore(false)]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Dictionary<TKey, TSource> ToDictionary<TList, TSource, TKey, TKeySelector>(this TList source, TKeySelector keySelector = default, IEqualityComparer<TKey>? comparer = default)
+        internal static Dictionary<TKey, TSource> ToDictionary<TList, TSource, TKey, TKeySelector>(this TList source, TKeySelector keySelector = default, IEqualityComparer<TKey>? comparer = default)
             where TList : struct, IReadOnlyList<TSource>
             where TKey : notnull
             where TKeySelector : struct, IFunction<TSource, TKey>
@@ -104,8 +106,9 @@ namespace NetFabric.Hyperlinq
         //////////////////////////////////////////////////////////////////////////////////////////////////
 
 
+        [GeneratorIgnore(false)]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Dictionary<TKey, TElement> ToDictionary<TList, TSource, TKey, TElement>(this TList source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer = default)
+        internal static Dictionary<TKey, TElement> ToDictionary<TList, TSource, TKey, TElement>(this TList source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer = default)
             where TList : struct, IReadOnlyList<TSource>
             where TKey : notnull
             => source.ToDictionary(keySelector, elementSelector, comparer, 0, source.Count);
@@ -116,8 +119,9 @@ namespace NetFabric.Hyperlinq
             where TKey : notnull
             => source.ToDictionary<TList, TSource, TKey, TElement, FunctionWrapper<TSource, TKey>, FunctionWrapper<TSource, TElement>>(new FunctionWrapper<TSource, TKey>(keySelector), new FunctionWrapper<TSource, TElement>(elementSelector), comparer, offset, count);
         
+        [GeneratorIgnore(false)]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Dictionary<TKey, TElement> ToDictionary<TList, TSource, TKey, TElement, TKeySelector, TElementSelector>(this TList source, TKeySelector keySelector = default, TElementSelector elementSelector = default, IEqualityComparer<TKey>? comparer = default)
+        internal static Dictionary<TKey, TElement> ToDictionary<TList, TSource, TKey, TElement, TKeySelector, TElementSelector>(this TList source, TKeySelector keySelector = default, TElementSelector elementSelector = default, IEqualityComparer<TKey>? comparer = default)
             where TList : struct, IReadOnlyList<TSource>
             where TKey : notnull
             where TKeySelector : struct, IFunction<TSource, TKey>

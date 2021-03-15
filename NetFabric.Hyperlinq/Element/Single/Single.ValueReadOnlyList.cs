@@ -2,10 +2,11 @@ using System.Collections.Generic;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class ReadOnlyListExtensions
+    public static partial class ValueReadOnlyListExtensions
     {
 
-        static Option<TSource> Single<TList, TSource>(this TList source)
+        [GeneratorIgnore(false)]
+        internal static Option<TSource> Single<TList, TSource>(this TList source)
             where TList : struct, IReadOnlyList<TSource>
             => source.Single<TList, TSource>(0, source.Count);
 

@@ -195,18 +195,18 @@ namespace NetFabric.Hyperlinq
             #region Projection
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public RangeSelectVectorEnumerable<TResult, FunctionWrapper<Vector<int>, Vector<TResult>>, FunctionWrapper<int, TResult>> SelectVector<TResult>(Func<Vector<int>, Vector<TResult>> vectorSelector, Func<int, TResult> selector)
+            public RangeSelectVectorContext<TResult, FunctionWrapper<Vector<int>, Vector<TResult>>, FunctionWrapper<int, TResult>> SelectVector<TResult>(Func<Vector<int>, Vector<TResult>> vectorSelector, Func<int, TResult> selector)
                 where TResult : struct
                 => ValueEnumerable.SelectVector(start, Count, vectorSelector, selector);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public RangeSelectVectorEnumerable<TResult, TSelector, TSelector> SelectVector<TResult, TSelector>(TSelector selector = default)
+            public RangeSelectVectorContext<TResult, TSelector, TSelector> SelectVector<TResult, TSelector>(TSelector selector = default)
                 where TSelector : struct, IFunction<Vector<int>, Vector<TResult>>, IFunction<int, TResult>
                 where TResult : struct
                 => ValueEnumerable.SelectVector<TResult, TSelector, TSelector>(start, Count, selector, selector);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public RangeSelectVectorEnumerable<TResult, TVectorSelector, TSelector> SelectVector<TResult, TVectorSelector, TSelector>(TVectorSelector vectorSelector = default, TSelector selector = default)
+            public RangeSelectVectorContext<TResult, TVectorSelector, TSelector> SelectVector<TResult, TVectorSelector, TSelector>(TVectorSelector vectorSelector = default, TSelector selector = default)
                 where TVectorSelector : struct, IFunction<Vector<int>, Vector<TResult>>
                 where TSelector : struct, IFunction<int, TResult>
                 where TResult : struct

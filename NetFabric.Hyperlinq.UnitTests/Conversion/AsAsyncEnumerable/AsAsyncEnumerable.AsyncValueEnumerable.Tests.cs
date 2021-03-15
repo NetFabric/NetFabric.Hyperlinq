@@ -1,4 +1,5 @@
 using NetFabric.Assertive;
+using System;
 using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsAsyncEnumerable
@@ -9,7 +10,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsAsyncEnumerable
         public void AsAsyncEnumerable_With_ValueType_Must_ReturnCopy()
         {
             // Arrange
-            var source = new int[0];
+            var source = Array.Empty<int>();
             var wrapped = Wrap.AsAsyncValueEnumerable(source);
 
             // Act
@@ -25,7 +26,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsAsyncEnumerable
         public void AsAsyncEnumerable_With_ReferenceType_Must_ReturnSame()
         {
             // Arrange
-            var source = new int[0];
+            var source = Array.Empty<int>();
             var wrapped = Wrap
                 .AsAsyncValueEnumerable(source) as IAsyncValueEnumerable<int, Wrap.AsyncEnumerator<int>>;
 

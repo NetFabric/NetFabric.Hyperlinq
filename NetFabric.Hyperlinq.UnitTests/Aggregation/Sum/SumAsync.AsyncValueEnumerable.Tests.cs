@@ -18,8 +18,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Aggregation.Sum
                 .Sum();
 
             // Act
-            var result = await wrapped
-                .SumAsync<Wrap.AsyncValueEnumerableWrapper<double>, Wrap.AsyncEnumerator<double>, double, double>()
+            var result = await wrapped.AsAsyncValueEnumerable()
+                .SumAsync()
                 .ConfigureAwait(false);
 
             // Assert
@@ -37,8 +37,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Aggregation.Sum
                 .Sum();
 
             // Act
-            var result = await wrapped
-                .SumAsync<Wrap.AsyncValueEnumerableWrapper<double?>, Wrap.AsyncEnumerator<double?>, double?, double>()
+            var result = await wrapped.AsAsyncValueEnumerable()
+                .SumAsync()
                 .ConfigureAwait(false);
 
             // Assert

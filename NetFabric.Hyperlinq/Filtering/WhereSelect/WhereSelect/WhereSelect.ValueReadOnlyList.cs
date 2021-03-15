@@ -8,18 +8,8 @@ using System.Runtime.InteropServices;
 
 namespace NetFabric.Hyperlinq
 {
-    public static partial class ReadOnlyListExtensions
+    public static partial class ValueReadOnlyListExtensions
     {
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static WhereSelectEnumerable<TList, TSource, TResult, TPredicate, TSelector> WhereSelect<TList, TSource, TResult, TPredicate, TSelector>(
-            this TList source,
-            TPredicate predicate,
-            TSelector selector)
-            where TList : struct, IReadOnlyList<TSource>
-            where TPredicate : struct, IFunction<TSource, bool>
-            where TSelector : struct, IFunction<TSource, TResult>
-            => source.WhereSelect<TList, TSource, TResult, TPredicate, TSelector>(predicate, selector, 0, source.Count);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static WhereSelectEnumerable<TList, TSource, TResult, TPredicate, TSelector> WhereSelect<TList, TSource, TResult, TPredicate, TSelector>(

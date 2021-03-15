@@ -1,7 +1,6 @@
 ﻿using Microsoft.CodeAnalysis;
 using System.Collections.Immutable;
 using System.Linq;
-using System.Reflection;
 
 namespace NetFabric.Hyperlinq.SourceGenerator
 {
@@ -36,7 +35,8 @@ namespace NetFabric.Hyperlinq.SourceGenerator
                     (string?)attribute.ConstructorArguments[2].Value,
                     (string?)attribute.ConstructorArguments[3].Value,
                     (string?)attribute.ConstructorArguments[4].Value,
-                    (string?)attribute.ConstructorArguments[5].Value)
+                    (string?)attribute.ConstructorArguments[5].Value,
+                    (string?)attribute.ConstructorArguments[6].Value)
             };
         }
 

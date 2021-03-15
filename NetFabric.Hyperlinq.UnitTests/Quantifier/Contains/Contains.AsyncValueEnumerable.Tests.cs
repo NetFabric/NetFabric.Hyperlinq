@@ -19,8 +19,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.ContainsAsync
             var wrapped = Wrap.AsAsyncValueEnumerable(source);
 
             // Act
-            var result = await wrapped
-                .ContainsAsync<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(value)
+            var result = await wrapped.AsAsyncValueEnumerable()
+                .ContainsAsync(value)
                 .ConfigureAwait(false);
 
             // Assert
@@ -39,8 +39,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.ContainsAsync
             var wrapped = Wrap.AsAsyncValueEnumerable(source.Select(item => item.ToString()).ToArray());
 
             // Act
-            var result = await wrapped
-                .ContainsAsync<Wrap.AsyncValueEnumerableWrapper<string>, Wrap.AsyncEnumerator<string>, string>(value)
+            var result = await wrapped.AsAsyncValueEnumerable()
+                .ContainsAsync(value)
                 .ConfigureAwait(false);
 
             // Assert
@@ -59,8 +59,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.ContainsAsync
             var wrapped = Wrap.AsAsyncValueEnumerable(source);
 
             // Act
-            var result = await wrapped
-                .ContainsAsync<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(value)
+            var result = await wrapped.AsAsyncValueEnumerable()
+                .ContainsAsync(value)
                 .ConfigureAwait(false);
 
             // Assert
@@ -80,8 +80,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.ContainsAsync
             var wrapped = Wrap.AsAsyncValueEnumerable(source.Select(item => item.ToString()).ToArray());
 
             // Act
-            var result = await wrapped
-                .ContainsAsync<Wrap.AsyncValueEnumerableWrapper<string>, Wrap.AsyncEnumerator<string>, string>(value)
+            var result = await wrapped.AsAsyncValueEnumerable()
+                .ContainsAsync(value)
                 .ConfigureAwait(false);
 
             // Assert
@@ -100,8 +100,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.ContainsAsync
             var wrapped = Wrap.AsAsyncValueEnumerable(source);
 
             // Act
-            var result = await wrapped
-                .ContainsAsync<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(value, EqualityComparer<int>.Default)
+            var result = await wrapped.AsAsyncValueEnumerable()
+                .ContainsAsync(value, EqualityComparer<int>.Default)
                 .ConfigureAwait(false);
 
             // Assert
@@ -120,8 +120,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.ContainsAsync
             var wrapped = Wrap.AsAsyncValueEnumerable(source);
 
             // Act
-            var result = await wrapped
-                .ContainsAsync<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(value, EqualityComparer<int>.Default)
+            var result = await wrapped.AsAsyncValueEnumerable()
+                .ContainsAsync(value, EqualityComparer<int>.Default)
                 .ConfigureAwait(false);
 
             // Assert
@@ -141,8 +141,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.ContainsAsync
             var wrapped = Wrap.AsAsyncValueEnumerable(source);
 
             // Act
-            var result = await wrapped
-                .ContainsAsync<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(value, TestComparer<int>.Instance)
+            var result = await wrapped.AsAsyncValueEnumerable()
+                .ContainsAsync(value, TestComparer<int>.Instance)
                 .ConfigureAwait(false);
 
             // Assert
@@ -161,8 +161,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Quantifier.ContainsAsync
             var wrapped = Wrap.AsAsyncValueEnumerable(source);
 
             // Act
-            var result = await wrapped
-                .ContainsAsync<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(value, TestComparer<int>.Instance)
+            var result = await wrapped.AsAsyncValueEnumerable()
+                .ContainsAsync(value, TestComparer<int>.Instance)
                 .ConfigureAwait(false);
 
             // Assert

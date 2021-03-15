@@ -22,8 +22,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
                 .ToList();
 
             // Act
-            var result = await wrapped
-                .ToListAsync<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>()
+            var result = await wrapped.AsAsyncValueEnumerable()
+                .ToListAsync()
                 .ConfigureAwait(false);
 
             // Assert
@@ -47,8 +47,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
                 .ToList();
 
             // Act
-            var result = await wrapped
-                .Where<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(predicate.AsAsync())
+            var result = await wrapped.AsAsyncValueEnumerable()
+                .Where(predicate.AsAsync())
                 .ToListAsync()
                 .ConfigureAwait(false);
 
@@ -73,8 +73,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
                 .ToList();
 
             // Act
-            var result = await wrapped
-                .Where<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(predicate.AsAsync())
+            var result = await wrapped.AsAsyncValueEnumerable()
+                .Where(predicate.AsAsync())
                 .ToListAsync()
                 .ConfigureAwait(false);
 
@@ -99,8 +99,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
                 .ToList();
 
             // Act
-            var result = await wrapped
-                .Select<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int, string>(selector.AsAsync())
+            var result = await wrapped.AsAsyncValueEnumerable()
+                .Select(selector.AsAsync())
                 .ToListAsync()
                 .ConfigureAwait(false);
 
@@ -125,8 +125,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
                 .ToList();
 
             // Act
-            var result = await wrapped
-                .Select<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int, string>(selector.AsAsync())
+            var result = await wrapped.AsAsyncValueEnumerable()
+                .Select(selector.AsAsync())
                 .ToListAsync()
                 .ConfigureAwait(false);
 
@@ -153,8 +153,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToList
                 .ToList();
 
             // Act
-            var result = await wrapped
-                .Where<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(predicate.AsAsync())
+            var result = await wrapped.AsAsyncValueEnumerable()
+                .Where(predicate.AsAsync())
                 .Select(selector.AsAsync())
                 .ToListAsync()
                 .ConfigureAwait(false);
