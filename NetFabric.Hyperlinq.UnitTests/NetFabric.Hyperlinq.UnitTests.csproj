@@ -4,10 +4,6 @@
     <TargetFrameworks>net461;netcoreapp2.1;netcoreapp3.1;net6.0</TargetFrameworks>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)' == 'net461' Or '$(TargetFramework)' == 'netcoreapp2.1'">
-    <Compile Remove="Conversion\AsValueEnumerable\Bindings\System\Collections\Immutable\*.cs" />
-  </ItemGroup>
   
   <ItemGroup>
     <PackageReference Include="coverlet.msbuild" Version="3.0.3">
@@ -29,6 +25,7 @@
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)'=='net461' Or '$(TargetFramework)'=='netcoreapp2.1'">
+    <ProjectReference Include="..\NetFabric.Hyperlinq.Immutable\NetFabric.Hyperlinq.Immutable.csproj" />
     <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="5.0.0" />
   </ItemGroup>
 
