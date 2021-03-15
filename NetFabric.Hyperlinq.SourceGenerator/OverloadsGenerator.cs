@@ -380,7 +380,11 @@ namespace NetFabric.Hyperlinq.SourceGenerator
             })
             .ToCommaSeparated();
 
-            return string.IsNullOrEmpty(str) ? string.Empty : $"<{str}>";
+            return str switch
+            {
+                { Length: 0 } => string.Empty,
+                _ => $"<{str}>"
+            };
         }
 
         string MapTypeProperties(IEnumerable<string> typePropertyNames, GeneratorBindingsAttribute? bindingsAttribute)
@@ -396,7 +400,11 @@ namespace NetFabric.Hyperlinq.SourceGenerator
 
             str = StringExtensions.CommaSeparateIfNotNullOrEmpty(str, bindingsAttribute?.ExtraTypeParameters);
 
-            return string.IsNullOrEmpty(str) ? string.Empty : $"<{str}>";
+            return str switch
+            {
+                { Length: 0 } => string.Empty,
+                _ => $"<{str}>"
+            };
         }
     }
 }

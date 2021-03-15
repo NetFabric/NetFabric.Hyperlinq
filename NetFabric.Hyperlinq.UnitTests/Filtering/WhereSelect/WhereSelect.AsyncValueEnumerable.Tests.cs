@@ -21,8 +21,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.WhereSelect
                 .Select(selector);
 
             // Act
-            var result = wrapped
-                .Where<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(predicate.AsAsync())
+            var result = wrapped.AsAsyncValueEnumerable()
+                .Where(predicate.AsAsync())
                 .Select(selector.AsAsync());
 
             // Assert
@@ -45,8 +45,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.WhereSelect
                 .Sum();
 
             // Act
-            var result = await wrapped
-                .Where<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(predicate.AsAsync())
+            var result = await wrapped.AsAsyncValueEnumerable()
+                .Where(predicate.AsAsync())
                 .Select((item, _) => new ValueTask<int>(item))
                 .SumAsync()
 .ConfigureAwait(false);

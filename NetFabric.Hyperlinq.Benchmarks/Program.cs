@@ -90,7 +90,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
         {
             var dir = Path.GetDirectoryName(Assembly.GetEntryAssembly()?.Location);
 
-            while (!string.IsNullOrEmpty(dir))
+            while (dir is not null and { Length: not 0 })
             {
                 if (Directory.EnumerateFiles(dir, "*.sln", SearchOption.TopDirectoryOnly).Any())
                     return dir;

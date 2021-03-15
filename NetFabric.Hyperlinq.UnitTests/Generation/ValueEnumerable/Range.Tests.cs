@@ -134,22 +134,6 @@ namespace NetFabric.Hyperlinq.UnitTests.Generation.ValueEnumerableTests
                 .BeEqualTo(expected);
         }
 
-        [Theory]
-        [MemberData(nameof(TestData.Range), MemberType = typeof(TestData))]
-        public void Range_SelectVector_Must_Succeed(int start, int count)
-        {
-            // Arrange
-            var expected = Enumerable.Range(start, count).Select(item => item * 2);
-
-            // Act
-            var result = ValueEnumerable.Range(start, count).SelectVector(item => item * 2, item => item * 2);
-
-            // Assert
-            _ = result.Must()
-                .BeEnumerableOf<int>()
-                .BeEqualTo(expected);
-        }
-
 
         [Theory]
         [MemberData(nameof(TestData.Range), MemberType = typeof(TestData))]

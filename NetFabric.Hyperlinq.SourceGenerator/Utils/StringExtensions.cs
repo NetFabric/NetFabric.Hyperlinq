@@ -43,18 +43,32 @@ namespace NetFabric.Hyperlinq.SourceGenerator
 
         public static string CommaSeparateIfNotNullOrEmpty(params string?[] args)
         {
-            var builder = new StringBuilder();
-            foreach(var arg in args)
+            return args.Length switch
             {
-                if (!string.IsNullOrEmpty(arg))
-                {
-                    if (builder.Length is not 0)
-                        _ = builder.Append(", ");
+                0 => string.Empty,
+                1 => args[0] switch
+                    {  
+                        null or { Length: 0 } => string.Empty,
+                        _ => args[0]!
+                    },
+                _ => Append(args)
+            };
 
-                    _ = builder.Append(arg);
+            static string Append(params string?[] args)
+            {
+                var builder = new StringBuilder();
+                foreach (var arg in args)
+                {
+                    if (arg is not null and { Length: not 0 })
+                    {
+                        if (builder.Length is not 0)
+                            _ = builder.Append(", ");
+
+                        _ = builder.Append(arg);
+                    }
                 }
+                return builder.ToString();
             }
-            return builder.ToString();
         }
 
         public static string ApplyMappings(this string value, ImmutableArray<GeneratorMappingAttribute> genericsMapping, out bool isConcreteType)

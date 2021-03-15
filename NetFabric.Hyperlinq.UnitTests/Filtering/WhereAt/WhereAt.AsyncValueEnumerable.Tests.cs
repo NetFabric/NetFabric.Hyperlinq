@@ -21,8 +21,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.WhereAt
                 .Where(predicate);
 
             // Act
-            var result = wrapped
-                .Where<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(predicate.AsAsync());
+            var result = wrapped.AsAsyncValueEnumerable()
+                .Where(predicate.AsAsync());
 
             // Assert
             _ = result.Must()
@@ -44,8 +44,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.WhereAt
                 .Sum();
 
             // Act
-            var result = await wrapped
-                .Where<Wrap.AsyncValueEnumerableWrapper<int>, Wrap.AsyncEnumerator<int>, int>(predicate.AsAsync())
+            var result = await wrapped.AsAsyncValueEnumerable()
+                .Where(predicate.AsAsync())
                 .SumAsync()
                 .ConfigureAwait(false);
 

@@ -29,10 +29,10 @@ namespace NetFabric.Hyperlinq
                 // ReSharper disable once HeapView.BoxingAllocation
                 => new AsyncEnumerator(source, cancellationToken);
 
-            public readonly struct AsyncEnumerator
+            public struct AsyncEnumerator
                 : IAsyncEnumerator<TSource>
             {
-                readonly IAsyncEnumerator<TSource> enumerator;
+                IAsyncEnumerator<TSource> enumerator;
 
                 internal AsyncEnumerator(IAsyncEnumerable<TSource> enumerable, CancellationToken cancellationToken)
                     => enumerator = enumerable.GetAsyncEnumerator(cancellationToken);
@@ -43,12 +43,12 @@ namespace NetFabric.Hyperlinq
                     => enumerator.Current;
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                public readonly ValueTask<bool> MoveNextAsync() 
+                public ValueTask<bool> MoveNextAsync() 
                     => enumerator.MoveNextAsync();
 
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                public readonly ValueTask DisposeAsync() 
+                public ValueTask DisposeAsync() 
                     => enumerator.DisposeAsync();
             }
             

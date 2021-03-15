@@ -115,7 +115,7 @@ namespace NetFabric.Hyperlinq.SourceGenerator.UnitTests
                 {
                     new[] {
                         "TestData/Source/Any.ArraySegment.cs",
-                        "TestData/Source/Any.ReadOnlyList.cs",
+                        "TestData/Source/Any.ValueReadOnlyList.cs",
                         "TestData/Source/Any.ValueEnumerable.cs",
                         "TestData/Source/Any.ValueReadOnlyCollection.cs",
                         "TestData/Source/Where.ValueEnumerable.cs",
@@ -126,7 +126,7 @@ namespace NetFabric.Hyperlinq.SourceGenerator.UnitTests
                 {
                     new[] {
                         "TestData/Source/Any.ArraySegment.cs",
-                        "TestData/Source/Any.ReadOnlyList.cs",
+                        "TestData/Source/Any.ValueReadOnlyList.cs",
                         "TestData/Source/Any.ValueEnumerable.cs",
                         "TestData/Source/Any.ValueReadOnlyCollection.cs",
                         "TestData/Source/Select.ArraySegment.cs",
@@ -138,7 +138,7 @@ namespace NetFabric.Hyperlinq.SourceGenerator.UnitTests
                 {
                     new[] {
                         "TestData/Source/Any.ArraySegment.cs",
-                        "TestData/Source/Any.ReadOnlyList.cs",
+                        "TestData/Source/Any.ValueReadOnlyList.cs",
                         "TestData/Source/Any.ValueEnumerable.cs",
                         "TestData/Source/Any.ValueReadOnlyCollection.cs",
                         "TestData/Source/Select.ValueEnumerable.cs",
