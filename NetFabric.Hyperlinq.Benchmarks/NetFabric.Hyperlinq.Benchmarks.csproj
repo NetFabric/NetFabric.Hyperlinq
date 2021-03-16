@@ -14,6 +14,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\NetFabric.Hyperlinq\NetFabric.Hyperlinq.csproj" />
+    <ProjectReference Include="..\NetFabric.Hyperlinq.UnitTests\NetFabric.Hyperlinq.UnitTests.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -28,22 +28,14 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
             where TPredicate : struct, IFunction<TSource, bool>
-            => source switch
-            {
-                {Count: 0} => new List<TSource>(),
-                _ => ToArray<TEnumerable, TEnumerator, TSource, TPredicate>(source, predicate).AsList()
-            }; 
+            => ToArray<TEnumerable, TEnumerator, TSource, TPredicate>(source, predicate).AsList(); 
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static List<TSource> ToListAt<TEnumerable, TEnumerator, TSource, TPredicate>(this TEnumerable source, TPredicate predicate)
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
             where TPredicate : struct, IFunction<TSource, int, bool>
-            => source switch
-            {
-                {Count: 0} => new List<TSource>(),
-                _ => ToArrayAt<TEnumerable, TEnumerator, TSource, TPredicate>(source, predicate).AsList()
-            }; 
+            => ToArrayAt<TEnumerable, TEnumerator, TSource, TPredicate>(source, predicate).AsList(); 
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static List<TResult> ToList<TEnumerable, TEnumerator, TSource, TResult, TSelector>(this TEnumerable source,
@@ -51,22 +43,14 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
             where TSelector : struct, IFunction<TSource, TResult>
-            => source switch
-            {
-                {Count: 0} => new List<TResult>(),
-                _ => ToArray<TEnumerable, TEnumerator, TSource, TResult, TSelector>(source, selector).AsList()
-            }; 
+            => ToArray<TEnumerable, TEnumerator, TSource, TResult, TSelector>(source, selector).AsList(); 
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static List<TResult> ToListAt<TEnumerable, TEnumerator, TSource, TResult, TSelector>(this TEnumerable source, TSelector selector)
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
             where TSelector : struct, IFunction<TSource, int, TResult>
-            => source switch
-            {
-                {Count: 0} => new List<TResult>(),
-                _ => ToArrayAt<TEnumerable, TEnumerator, TSource, TResult, TSelector>(source, selector).AsList()
-            }; 
+            => ToArrayAt<TEnumerable, TEnumerator, TSource, TResult, TSelector>(source, selector).AsList(); 
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static List<TResult> ToList<TEnumerable, TEnumerator, TSource, TResult, TPredicate, TSelector>(this TEnumerable source, TPredicate predicate, TSelector selector)
@@ -74,10 +58,6 @@ namespace NetFabric.Hyperlinq
             where TEnumerator : struct, IEnumerator<TSource>
             where TPredicate : struct, IFunction<TSource, bool>
             where TSelector : struct, IFunction<TSource, TResult>
-            => source switch
-            {
-                {Count: 0} => new List<TResult>(),
-                _ => ToArray<TEnumerable, TEnumerator, TSource, TResult, TPredicate, TSelector>(source, predicate, selector).AsList()
-            }; 
+            => ToArray<TEnumerable, TEnumerator, TSource, TResult, TPredicate, TSelector>(source, predicate, selector).AsList(); 
     }
 }

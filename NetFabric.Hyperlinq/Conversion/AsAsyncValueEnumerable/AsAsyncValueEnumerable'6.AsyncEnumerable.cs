@@ -74,6 +74,9 @@ namespace NetFabric.Hyperlinq
             AsyncValueEnumerable<TEnumerable, TEnumerator, TEnumerator2, TSource, TGetAsyncEnumerator, TGetAsyncEnumerator2> AsAsyncValueEnumerable()
                 => this;
 
+            TEnumerable AsAsyncEnumerable()
+                => source;
+
             #endregion
         }
 

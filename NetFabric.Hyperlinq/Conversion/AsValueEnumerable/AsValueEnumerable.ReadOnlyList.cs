@@ -101,17 +101,8 @@ namespace NetFabric.Hyperlinq
                 => CopyTo(array.AsSpan().Slice(arrayIndex));
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public bool Contains(TSource value)
-            {
-                var end = offset + Count;
-                for (var index = offset; index < end; index++)
-                {
-                    var item = source[index];
-                    if (EqualityComparer<TSource>.Default.Equals(item, value))
-                        return true;
-                }
-                return false;
-            }
+            public bool Contains(TSource item)
+                => Count is not 0 && source.Contains(item);
 
             public int IndexOf(TSource item)
                 => ReadOnlyListExtensions.IndexOf(source, item, offset, Count);

@@ -34,7 +34,7 @@ namespace NetFabric.Hyperlinq
                 => source.CopyTo(array, arrayIndex);
 
             public bool Contains(T item)
-                => ((IList<T>)source).Contains(item);
+                => ((ICollection<T>)source).Contains(item);
 
             public int IndexOf(T item)
                 => ((IList<T>)source).IndexOf(item);

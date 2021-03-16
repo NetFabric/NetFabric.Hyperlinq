@@ -83,11 +83,11 @@ namespace NetFabric.Hyperlinq.Benchmarks
             .AsValueEnumerable()
             .Single();
 
-        [BenchmarkCategory("AsyncEnumerable_Value")]
-        [Benchmark]
-        public ValueTask<Option<int>> Hyperlinq_AsyncEnumerable_Value() =>
-            asyncEnumerableValue.AsAsyncValueEnumerable()
-            .SingleAsync();
+        // [BenchmarkCategory("AsyncEnumerable_Value")]
+        // [Benchmark]
+        // public ValueTask<Option<int>> Hyperlinq_AsyncEnumerable_Value() =>
+        //     asyncEnumerableValue.AsAsyncValueEnumerable()
+        //     .SingleAsync();
 
         [BenchmarkCategory("Enumerable_Reference")]
         [Benchmark]
@@ -110,11 +110,11 @@ namespace NetFabric.Hyperlinq.Benchmarks
             .AsValueEnumerable()
             .Single();
 
-        [BenchmarkCategory("AsyncEnumerable_Reference")]
-        [Benchmark]
-        public ValueTask<Option<int>> Hyperlinq_AsyncEnumerable_Reference() =>
-            asyncEnumerableReference.AsAsyncValueEnumerable()
-            .SingleAsync();
+        // [BenchmarkCategory("AsyncEnumerable_Reference")]
+        // [Benchmark]
+        // public ValueTask<Option<int>> Hyperlinq_AsyncEnumerable_Reference() =>
+        //     asyncEnumerableReference.AsAsyncValueEnumerable()
+        //     .SingleAsync();
     }
 }
 

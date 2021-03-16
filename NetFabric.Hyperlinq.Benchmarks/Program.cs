@@ -1,12 +1,17 @@
-﻿using System;
+﻿using BenchmarkDotNet.Configs;
+using BenchmarkDotNet.Diagnosers;
+using BenchmarkDotNet.Environments;
+using System;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using BenchmarkDotNet.Exporters;
+using BenchmarkDotNet.Jobs;
 using BenchmarkDotNet.Loggers;
 using BenchmarkDotNet.Reports;
 using BenchmarkDotNet.Running;
+using BenchmarkDotNet.Validators;
 
 namespace NetFabric.Hyperlinq.Benchmarks
 {
@@ -14,7 +19,11 @@ namespace NetFabric.Hyperlinq.Benchmarks
     {
         static void Main(string[] args)
         {
-            foreach (var summary in BenchmarkSwitcher.FromAssembly(typeof(Program).Assembly).Run(args))
+            var config = DefaultConfig.Instance
+                .AddJob(Job.Default.WithRuntime(CoreRuntime.Core60))
+                .AddDiagnoser(MemoryDiagnoser.Default);
+                
+            foreach (var summary in BenchmarkSwitcher.FromAssembly(typeof(Program).Assembly).Run(args, config))
                 SaveSummary(summary);
         }
 

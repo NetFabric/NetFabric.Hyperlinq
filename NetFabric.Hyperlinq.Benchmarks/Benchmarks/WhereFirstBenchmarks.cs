@@ -7,7 +7,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
 {
     [GroupBenchmarksBy(BenchmarkLogicalGroupRule.ByCategory)]
     [CategoriesColumn]
-    public class WhereFirstBenchmarks: RandomBenchmarksBase
+    public class WhereFirstBenchmarks: SequentialBenchmarksBase
     {
         [BenchmarkCategory("Array")]
         [Benchmark(Baseline = true)]

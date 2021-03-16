@@ -1,5 +1,7 @@
-using System.Collections.Generic;
+using System;
 using Xunit;
+
+// ReSharper disable HeapView.ObjectAllocation.Evident
 
 namespace NetFabric.Hyperlinq
 {
@@ -8,13 +10,13 @@ namespace NetFabric.Hyperlinq
         public static TheoryData<int[], int, int> Skip_Skip =>
             new()
             {
-                { new int[] { }, -1, -1 },
-                { new int[] { }, 0, -1 },
-                { new int[] { }, 1, -1 },
+                { Array.Empty<int>(), -1, -1 },
+                { Array.Empty<int>(), 0, -1 },
+                { Array.Empty<int>(), 1, -1 },
 
-                { new int[] { }, -1, 0 },
-                { new int[] { }, 0, 0 },
-                { new int[] { }, 1, 0 },
+                { Array.Empty<int>(), -1, 0 },
+                { Array.Empty<int>(), 0, 0 },
+                { Array.Empty<int>(), 1, 0 },
 
                 { new[] { 1 }, -1, -1 },
                 { new[] { 1 }, 0, 0 },
@@ -26,7 +28,7 @@ namespace NetFabric.Hyperlinq
                 { new[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 }, 2, 2 },
                 { new[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 }, 5, 5 },
                 { new[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 }, 10, 10 },
-                { new[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 }, 20, 20 },
+                { new[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 }, 20, 20 }
             };
     }
 }

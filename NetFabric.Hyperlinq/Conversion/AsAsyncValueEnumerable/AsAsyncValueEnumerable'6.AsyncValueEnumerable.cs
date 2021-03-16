@@ -42,19 +42,20 @@ namespace NetFabric.Hyperlinq
             where TGetAsyncEnumerator : struct, IFunction<TEnumerable, CancellationToken, TEnumerator>
             where TGetAsyncEnumerator2 : struct, IFunction<TEnumerable, CancellationToken, TEnumerator2>
             => new(source, getAsyncEnumerator, getAsyncEnumerator2);
-        
+
+        [GeneratorBindings(source: "source", sourceImplements: "IAsyncValueEnumerable`2")]
         [StructLayout(LayoutKind.Auto)]
         public partial struct AsyncValueEnumerable<TEnumerable, TEnumerator, TEnumerator2, TSource, TGetAsyncEnumerator, TGetAsyncEnumerator2>
-            : IAsyncValueEnumerable<TSource, TEnumerator> 
-            where TEnumerable : IAsyncEnumerable<TSource>
+            : IAsyncValueEnumerable<TSource, TEnumerator>
+            where TEnumerable : IAsyncValueEnumerable<TSource, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<TSource>
             where TEnumerator2 : struct
             where TGetAsyncEnumerator : struct, IFunction<TEnumerable, CancellationToken, TEnumerator>
             where TGetAsyncEnumerator2 : struct, IFunction<TEnumerable, CancellationToken, TEnumerator2>
         {
-            readonly TEnumerable source;
-            TGetAsyncEnumerator getAsyncEnumerator;
-            TGetAsyncEnumerator2 getAsyncEnumerator2;
+            internal readonly TEnumerable source;
+            internal TGetAsyncEnumerator getAsyncEnumerator;
+            internal TGetAsyncEnumerator2 getAsyncEnumerator2;
 
             internal AsyncValueEnumerable(TEnumerable source, TGetAsyncEnumerator getAsyncEnumerator, TGetAsyncEnumerator2 getAsyncEnumerator2)
                 => (this.source, this.getAsyncEnumerator, this.getAsyncEnumerator2) = (source, getAsyncEnumerator, getAsyncEnumerator2);
@@ -74,97 +75,100 @@ namespace NetFabric.Hyperlinq
             AsyncValueEnumerable<TEnumerable, TEnumerator, TEnumerator2, TSource, TGetAsyncEnumerator, TGetAsyncEnumerator2> AsAsyncValueEnumerable()
                 => this;
 
+            TEnumerable AsAsyncEnumerable()
+                => source;
+
             #endregion
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ValueTask<int> SumAsync<TEnumerable, TEnumerator, TEnumerator2, TGetAsyncEnumerator, TGetAsyncEnumerator2>(this AsyncValueEnumerable<TEnumerable, TEnumerator, TEnumerator2, int, TGetAsyncEnumerator, TGetAsyncEnumerator2> source, CancellationToken cancellationToken = default)
-            where TEnumerable : IAsyncEnumerable<int>
+            where TEnumerable : IAsyncValueEnumerable<int, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<int>
             where TEnumerator2 : struct
             where TGetAsyncEnumerator : struct, IFunction<TEnumerable, CancellationToken, TEnumerator>
             where TGetAsyncEnumerator2 : struct, IFunction<TEnumerable, CancellationToken, TEnumerator2>
-            => source.SumAsync<AsyncValueEnumerable<TEnumerable, TEnumerator, TEnumerator2, int, TGetAsyncEnumerator, TGetAsyncEnumerator2>, TEnumerator, int, int>(cancellationToken);
+            => source.source.SumAsync<TEnumerable, TEnumerator, int, int>(cancellationToken);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ValueTask<int> SumAsync<TEnumerable, TEnumerator, TEnumerator2, TGetAsyncEnumerator, TGetAsyncEnumerator2>(this AsyncValueEnumerable<TEnumerable, TEnumerator, TEnumerator2, int?, TGetAsyncEnumerator, TGetAsyncEnumerator2> source, CancellationToken cancellationToken = default)
-            where TEnumerable : IAsyncEnumerable<int?>
+            where TEnumerable : IAsyncValueEnumerable<int?, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<int?>
             where TEnumerator2 : struct
             where TGetAsyncEnumerator : struct, IFunction<TEnumerable, CancellationToken, TEnumerator>
             where TGetAsyncEnumerator2 : struct, IFunction<TEnumerable, CancellationToken, TEnumerator2>
-            => source.SumAsync<AsyncValueEnumerable<TEnumerable, TEnumerator, TEnumerator2, int?, TGetAsyncEnumerator, TGetAsyncEnumerator2>, TEnumerator, int?, int>(cancellationToken);
+            => source.source.SumAsync<TEnumerable, TEnumerator, int?, int>(cancellationToken);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ValueTask<long> SumAsync<TEnumerable, TEnumerator, TEnumerator2, TGetAsyncEnumerator, TGetAsyncEnumerator2>(this AsyncValueEnumerable<TEnumerable, TEnumerator, TEnumerator2, long, TGetAsyncEnumerator, TGetAsyncEnumerator2> source, CancellationToken cancellationToken = default)
-            where TEnumerable : IAsyncEnumerable<long>
+            where TEnumerable : IAsyncValueEnumerable<long, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<long>
             where TEnumerator2 : struct
             where TGetAsyncEnumerator : struct, IFunction<TEnumerable, CancellationToken, TEnumerator>
             where TGetAsyncEnumerator2 : struct, IFunction<TEnumerable, CancellationToken, TEnumerator2>
-            => source.SumAsync<AsyncValueEnumerable<TEnumerable, TEnumerator, TEnumerator2, long, TGetAsyncEnumerator, TGetAsyncEnumerator2>, TEnumerator, long, long>(cancellationToken);
+            => source.source.SumAsync<TEnumerable, TEnumerator, long, long>(cancellationToken);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ValueTask<long> SumAsync<TEnumerable, TEnumerator, TEnumerator2, TGetAsyncEnumerator, TGetAsyncEnumerator2>(this AsyncValueEnumerable<TEnumerable, TEnumerator, TEnumerator2, long?, TGetAsyncEnumerator, TGetAsyncEnumerator2> source, CancellationToken cancellationToken = default)
-            where TEnumerable : IAsyncEnumerable<long?>
+            where TEnumerable : IAsyncValueEnumerable<long?, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<long?>
             where TEnumerator2 : struct
             where TGetAsyncEnumerator : struct, IFunction<TEnumerable, CancellationToken, TEnumerator>
             where TGetAsyncEnumerator2 : struct, IFunction<TEnumerable, CancellationToken, TEnumerator2>
-            => source.SumAsync<AsyncValueEnumerable<TEnumerable, TEnumerator, TEnumerator2, long?, TGetAsyncEnumerator, TGetAsyncEnumerator2>, TEnumerator, long?, long>(cancellationToken);
+            => source.source.SumAsync<TEnumerable, TEnumerator, long?, long>(cancellationToken);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ValueTask<float> SumAsync<TEnumerable, TEnumerator, TEnumerator2, TGetAsyncEnumerator, TGetAsyncEnumerator2>(this AsyncValueEnumerable<TEnumerable, TEnumerator, TEnumerator2, float, TGetAsyncEnumerator, TGetAsyncEnumerator2> source, CancellationToken cancellationToken = default)
-            where TEnumerable : IAsyncEnumerable<float>
+            where TEnumerable : IAsyncValueEnumerable<float, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<float>
             where TEnumerator2 : struct
             where TGetAsyncEnumerator : struct, IFunction<TEnumerable, CancellationToken, TEnumerator>
             where TGetAsyncEnumerator2 : struct, IFunction<TEnumerable, CancellationToken, TEnumerator2>
-            => source.SumAsync<AsyncValueEnumerable<TEnumerable, TEnumerator, TEnumerator2, float, TGetAsyncEnumerator, TGetAsyncEnumerator2>, TEnumerator, float, float>(cancellationToken);
+            => source.source.SumAsync<TEnumerable, TEnumerator, float, float>(cancellationToken);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ValueTask<float> SumAsync<TEnumerable, TEnumerator, TEnumerator2, TGetAsyncEnumerator, TGetAsyncEnumerator2>(this AsyncValueEnumerable<TEnumerable, TEnumerator, TEnumerator2, float?, TGetAsyncEnumerator, TGetAsyncEnumerator2> source, CancellationToken cancellationToken = default)
-            where TEnumerable : IAsyncEnumerable<float?>
+            where TEnumerable : IAsyncValueEnumerable<float?, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<float?>
             where TEnumerator2 : struct
             where TGetAsyncEnumerator : struct, IFunction<TEnumerable, CancellationToken, TEnumerator>
             where TGetAsyncEnumerator2 : struct, IFunction<TEnumerable, CancellationToken, TEnumerator2>
-            => source.SumAsync<AsyncValueEnumerable<TEnumerable, TEnumerator, TEnumerator2, float?, TGetAsyncEnumerator, TGetAsyncEnumerator2>, TEnumerator, float?, float>(cancellationToken);
+            => source.source.SumAsync<TEnumerable, TEnumerator, float?, float>(cancellationToken);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ValueTask<double> SumAsync<TEnumerable, TEnumerator, TEnumerator2, TGetAsyncEnumerator, TGetAsyncEnumerator2>(this AsyncValueEnumerable<TEnumerable, TEnumerator, TEnumerator2, double, TGetAsyncEnumerator, TGetAsyncEnumerator2> source, CancellationToken cancellationToken = default)
-            where TEnumerable : IAsyncEnumerable<double>
+            where TEnumerable : IAsyncValueEnumerable<double, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<double>
             where TEnumerator2 : struct
             where TGetAsyncEnumerator : struct, IFunction<TEnumerable, CancellationToken, TEnumerator>
             where TGetAsyncEnumerator2 : struct, IFunction<TEnumerable, CancellationToken, TEnumerator2>
-            => source.SumAsync<AsyncValueEnumerable<TEnumerable, TEnumerator, TEnumerator2, double, TGetAsyncEnumerator, TGetAsyncEnumerator2>, TEnumerator, double, double>(cancellationToken);
+            => source.source.SumAsync<TEnumerable, TEnumerator, double, double>(cancellationToken);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ValueTask<double> SumAsync<TEnumerable, TEnumerator, TEnumerator2, TGetAsyncEnumerator, TGetAsyncEnumerator2>(this AsyncValueEnumerable<TEnumerable, TEnumerator, TEnumerator2, double?, TGetAsyncEnumerator, TGetAsyncEnumerator2> source, CancellationToken cancellationToken = default)
-            where TEnumerable : IAsyncEnumerable<double?>
+            where TEnumerable : IAsyncValueEnumerable<double?, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<double?>
             where TEnumerator2 : struct
             where TGetAsyncEnumerator : struct, IFunction<TEnumerable, CancellationToken, TEnumerator>
             where TGetAsyncEnumerator2 : struct, IFunction<TEnumerable, CancellationToken, TEnumerator2>
-            => source.SumAsync<AsyncValueEnumerable<TEnumerable, TEnumerator, TEnumerator2, double?, TGetAsyncEnumerator, TGetAsyncEnumerator2>, TEnumerator, double?, double>(cancellationToken);
+            => source.source.SumAsync<TEnumerable, TEnumerator, double?, double>(cancellationToken);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ValueTask<decimal> SumAsync<TEnumerable, TEnumerator, TEnumerator2, TGetAsyncEnumerator, TGetAsyncEnumerator2>(this AsyncValueEnumerable<TEnumerable, TEnumerator, TEnumerator2, decimal, TGetAsyncEnumerator, TGetAsyncEnumerator2> source, CancellationToken cancellationToken = default)
-            where TEnumerable : IAsyncEnumerable<decimal>
+            where TEnumerable : IAsyncValueEnumerable<decimal, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<decimal>
             where TEnumerator2 : struct
             where TGetAsyncEnumerator : struct, IFunction<TEnumerable, CancellationToken, TEnumerator>
             where TGetAsyncEnumerator2 : struct, IFunction<TEnumerable, CancellationToken, TEnumerator2>
-            => source.SumAsync<AsyncValueEnumerable<TEnumerable, TEnumerator, TEnumerator2, decimal, TGetAsyncEnumerator, TGetAsyncEnumerator2>, TEnumerator, decimal, decimal>(cancellationToken);
+            => source.source.SumAsync<TEnumerable, TEnumerator, decimal, decimal>(cancellationToken);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ValueTask<decimal> SumAsync<TEnumerable, TEnumerator, TEnumerator2, TGetAsyncEnumerator, TGetAsyncEnumerator2>(this AsyncValueEnumerable<TEnumerable, TEnumerator, TEnumerator2, decimal?, TGetAsyncEnumerator, TGetAsyncEnumerator2> source, CancellationToken cancellationToken = default)
-            where TEnumerable : IAsyncEnumerable<decimal?>
+            where TEnumerable : IAsyncValueEnumerable<decimal?, TEnumerator>
             where TEnumerator : struct, IAsyncEnumerator<decimal?>
             where TEnumerator2 : struct
             where TGetAsyncEnumerator : struct, IFunction<TEnumerable, CancellationToken, TEnumerator>
             where TGetAsyncEnumerator2 : struct, IFunction<TEnumerable, CancellationToken, TEnumerator2>
-            => source.SumAsync<AsyncValueEnumerable<TEnumerable, TEnumerator, TEnumerator2, decimal?, TGetAsyncEnumerator, TGetAsyncEnumerator2>, TEnumerator, decimal?, decimal>(cancellationToken);
+            => source.source.SumAsync<TEnumerable, TEnumerator, decimal?, decimal>(cancellationToken);
     }
 }

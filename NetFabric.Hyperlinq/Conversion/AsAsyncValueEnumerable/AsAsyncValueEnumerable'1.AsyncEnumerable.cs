@@ -54,8 +54,11 @@ namespace NetFabric.Hyperlinq
             
             #region Conversion
 
-            AsyncValueEnumerable<TSource> AsAsyncEnumerable()
+            AsyncValueEnumerable<TSource> AsAsyncValueEnumerable()
                 => this;
+
+            IAsyncEnumerable<TSource> AsAsyncEnumerable()
+                => source;
 
             #endregion
         }

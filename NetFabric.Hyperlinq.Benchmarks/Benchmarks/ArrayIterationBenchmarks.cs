@@ -5,7 +5,6 @@ using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq.Benchmarks.Benchmarks
 {
-    [SimpleJob(RuntimeMoniker.Net60)]
     public class ArrayIterationBenchmarks
     {
         const int seed = 2982;
