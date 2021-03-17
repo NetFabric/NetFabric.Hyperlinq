@@ -5,32 +5,24 @@ using System.Collections.Generic;
 
 namespace NetFabric.Hyperlinq.Benchmarks
 {
-    //[SimpleJob(RuntimeMoniker.Net48, baseline: true)]
-    //[SimpleJob(RuntimeMoniker.NetCoreApp21)]
-    //[SimpleJob(RuntimeMoniker.NetCoreApp31)]
-    [SimpleJob(RuntimeMoniker.Net60)]
-    [MemoryDiagnoser]
     public abstract class BenchmarksBase
     {
         protected const int seed = 42;
-
+        
         protected int[] array;
         protected ReadOnlyMemory<int> memory;
 
-        protected IEnumerable<int> linqRange;
-        protected ValueEnumerable.RangeEnumerable hyperlinqRange;
-
         protected IEnumerable<int> enumerableReference;
-        protected TestEnumerable.Enumerable enumerableValue;
+        protected Wrap.EnumerableWrapper<int> enumerableValue;
 
         protected IReadOnlyCollection<int> collectionReference;
-        protected TestCollection.Enumerable collectionValue;
+        protected Wrap.CollectionWrapper<int> collectionValue;
 
         protected IReadOnlyList<int> listReference;
-        protected TestList.Enumerable listValue;
+        protected Wrap.ListWrapper<int> listValue;
 
         protected IAsyncEnumerable<int> asyncEnumerableReference;
-        protected TestAsyncEnumerable.Enumerable asyncEnumerableValue;
+        protected Wrap.AsyncEnumerableWrapper<int> asyncEnumerableValue;
 
         [GlobalSetup]
         public abstract void GlobalSetup();
@@ -40,17 +32,10 @@ namespace NetFabric.Hyperlinq.Benchmarks
             this.array = array;
             memory = array.AsMemory();
 
-            enumerableReference = TestEnumerable.ReferenceType(array);
-            enumerableValue = TestEnumerable.ValueType(array);
-
-            collectionReference = TestCollection.ReferenceType(array);
-            collectionValue = TestCollection.ValueType(array);
-
-            listReference = TestList.ReferenceType(array);
-            listValue = TestList.ValueType(array);
-
-            asyncEnumerableReference = TestAsyncEnumerable.ReferenceType(array);
-            asyncEnumerableValue = TestAsyncEnumerable.ValueType(array);
+            enumerableReference = enumerableValue = Wrap.AsEnumerable(array);
+            collectionReference = collectionValue = Wrap.AsCollection(array);
+            listReference = listValue = Wrap.AsList(array);
+            asyncEnumerableReference = asyncEnumerableValue = Wrap.AsAsyncEnumerable(array);
         }
     }
 }

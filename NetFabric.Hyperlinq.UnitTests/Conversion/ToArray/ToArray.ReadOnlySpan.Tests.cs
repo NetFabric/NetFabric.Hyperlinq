@@ -52,9 +52,10 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
 
             // Assert
             _ = result.Must()
-                .BeNotSameAs(source)
                 .BeArrayOf<int>()
                 .BeEqualTo(expected);
+            if (result.Length is not 0)
+                _ = result.Must().BeNotSameAs(source);
         }
 
         [Theory]
@@ -102,9 +103,10 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.ToArray
 
             // Assert
             _ = result.Must()
-                .BeNotSameAs(source)
                 .BeArrayOf<int>()
                 .BeEqualTo(expected);
+            if (result.Length is not 0)
+                _ = result.Must().BeNotSameAs(source);
         }
 
         [Theory]

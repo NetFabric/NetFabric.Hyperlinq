@@ -87,7 +87,7 @@ namespace NetFabric.Hyperlinq
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool Contains(TSource item)
-                => Count is not 0 && source.DefaultContains<TList, TSource>(item, offset, Count);
+                => Count is not 0 && ValueReadOnlyListExtensions.Contains(source, item);
 
             public int IndexOf(TSource item)
                 => ValueReadOnlyListExtensions.IndexOf(source, item, offset, Count);

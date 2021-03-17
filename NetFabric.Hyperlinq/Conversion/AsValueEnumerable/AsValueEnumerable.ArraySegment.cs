@@ -151,12 +151,12 @@ namespace NetFabric.Hyperlinq
             #region Conversion
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public ArraySegmentValueEnumerable<TSource> AsEnumerable()
+            public ArraySegmentValueEnumerable<TSource> AsValueEnumerable()
                 => this;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public ArraySegmentValueEnumerable<TSource> AsValueEnumerable()
-                => this;
+            public ArraySegment<TSource> AsEnumerable()
+                => source;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public TSource[] ToArray()

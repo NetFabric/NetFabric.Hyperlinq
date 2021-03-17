@@ -1,6 +1,8 @@
 using System;
 using Xunit;
 
+// ReSharper disable HeapView.ObjectAllocation.Evident
+
 namespace NetFabric.Hyperlinq
 {
     public static partial class TestData
@@ -10,29 +12,29 @@ namespace NetFabric.Hyperlinq
             {
                 default,
                 string.Empty,
-                "string",
+                "string"
             };
 
         public static TheoryData<int[]> OptionNoneSelectMany =>
             new()
             {
-                new int[] { },
+                Array.Empty<int>(),
                 new[] { 1 },
-                new[] { 1, 2, 3, 4, 5 },
+                new[] { 1, 2, 3, 4, 5 }
             };
 
         public static TheoryData<string?, int[]> OptionSomeSelectMany =>
             new()
             {
-                { default, new int[] { } },
+                { default, Array.Empty<int>() },
                 { default, new[] { 1 } },
                 { default, new[] { 1, 2, 3, 4, 5 } },
-                { string.Empty, new int[] { } },
+                { string.Empty, Array.Empty<int>() },
                 { string.Empty, new[] { 1 } },
                 { string.Empty, new[] { 1, 2, 3, 4, 5 } },
-                { "string", new int[] { } },
+                { "string", Array.Empty<int>() },
                 { "string", new[] { 1 } },
-                { "string", new[] { 1, 2, 3, 4, 5 } },
+                { "string", new[] { 1, 2, 3, 4, 5 } }
             };
 
     }

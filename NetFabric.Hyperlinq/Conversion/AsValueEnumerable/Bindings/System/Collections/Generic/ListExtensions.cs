@@ -19,15 +19,26 @@ namespace NetFabric.Hyperlinq
         static ArraySegment<TSource> AsArraySegment<TSource>(this List<TSource> source)
             => new(source.GetItems(), 0, source.Count);
         
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static List<TSource> AsList<TSource>(this TSource[] source)
         {
-            // ReSharper disable once HeapView.ObjectAllocation.Evident
-            var result = new List<TSource>();
-            var layout = Unsafe.As<List<TSource>, ListLayout<TSource>>(ref result);
-            layout.items = source;
-            layout.size = source.Length;
-            result.Capacity = source.Length;
-            return result;
+            return source switch
+            {
+                // ReSharper disable once HeapView.ObjectAllocation.Evident
+                { Length: 0 } => new List<TSource>(),
+                _ => WrapArray(source)
+            };
+
+            static List<TSource> WrapArray(TSource[] source)
+            {
+                // ReSharper disable once HeapView.ObjectAllocation.Evident
+                var result = new List<TSource>();
+                var layout = Unsafe.As<List<TSource>, ListLayout<TSource>>(ref result);
+                layout.items = source;
+                layout.size = source.Length;
+                result.Capacity = source.Length;
+                return result;
+            }
         }
 
         // ReSharper disable once ClassNeverInstantiated.Local
@@ -50,6 +61,7 @@ namespace NetFabric.Hyperlinq
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static TSource[] GetItems<TSource>(this List<TSource> source)
-            => Unsafe.As<List<TSource>, ListLayout<TSource>>(ref source).items ?? Array.Empty<TSource>();
+            => Unsafe.As<List<TSource>, ListLayout<TSource>>(ref source).items 
+               ?? Array.Empty<TSource>();
     }
 }

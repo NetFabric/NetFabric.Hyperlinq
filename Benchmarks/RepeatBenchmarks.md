@@ -4,7 +4,7 @@
 [RepeatBenchmarks.cs](../NetFabric.Hyperlinq.Benchmarks/Benchmarks/RepeatBenchmarks.cs)
 
 ### References:
-- Linq: 5.0.3
+- Linq: 6.0.0-preview.2.21154.6
 - System.Linq.Async: [5.0.0](https://www.nuget.org/packages/System.Linq.Async/5.0.0)
 - System.Interactive: [5.0.0](https://www.nuget.org/packages/System.Interactive/5.0.0)
 - System.Interactive.Async: [5.0.0](https://www.nuget.org/packages/System.Interactive.Async/5.0.0)
@@ -14,20 +14,20 @@
 ### Results:
 ``` ini
 
-BenchmarkDotNet=v0.12.1, OS=Windows 10.0.19043
+BenchmarkDotNet=v0.12.1.1521-nightly, OS=Windows 10.0.19043
 Intel Core i7-7567U CPU 3.50GHz (Kaby Lake), 1 CPU, 4 logical and 2 physical cores
-.NET Core SDK=6.0.100-preview.1.21103.13
-  [Host]        : .NET Core 5.0.3 (CoreCLR 5.0.321.7212, CoreFX 5.0.321.7212), X64 RyuJIT
-  .NET Core 5.0 : .NET Core 5.0.3 (CoreCLR 5.0.321.7212, CoreFX 5.0.321.7212), X64 RyuJIT
+.NET SDK=6.0.100-preview.2.21155.3
+  [Host]     : .NET 6.0.0 (6.0.21.15406), X64 RyuJIT
+  Job-KXCEYC : .NET 6.0.0 (6.0.21.15406), X64 RyuJIT
 
-Job=.NET Core 5.0  Runtime=.NET Core 5.0  
+Runtime=.NET 6.0  
 
 ```
 |          Method |   Categories | Count |        Mean |     Error |    StdDev | Ratio |  Gen 0 | Gen 1 | Gen 2 | Allocated |
 |---------------- |------------- |------ |------------:|----------:|----------:|------:|-------:|------:|------:|----------:|
-|            Linq |       Repeat |   100 |   405.32 ns |  1.427 ns |  1.192 ns |  1.00 | 0.0153 |     - |     - |      32 B |
-|      StructLinq |       Repeat |   100 |    56.87 ns |  0.306 ns |  0.286 ns |  0.14 |      - |     - |     - |         - |
-|       Hyperlinq |       Repeat |   100 |   144.72 ns |  0.432 ns |  0.404 ns |  0.36 |      - |     - |     - |         - |
+|            Linq |       Repeat |   100 |   392.09 ns |  1.569 ns |  1.225 ns |  1.00 | 0.0153 |     - |     - |      32 B |
+|      StructLinq |       Repeat |   100 |    34.55 ns |  0.134 ns |  0.119 ns |  0.09 |      - |     - |     - |         - |
+|       Hyperlinq |       Repeat |   100 |   167.61 ns |  0.434 ns |  0.406 ns |  0.43 |      - |     - |     - |         - |
 |                 |              |       |             |           |           |       |        |       |       |           |
-|      Linq_Async | Repeat_Async |   100 | 5,471.45 ns | 18.660 ns | 16.542 ns |  1.00 | 0.0229 |     - |     - |      48 B |
-| Hyperlinq_Async | Repeat_Async |   100 |   925.25 ns |  1.404 ns |  1.244 ns |  0.17 |      - |     - |     - |         - |
+|      Linq_Async | Repeat_Async |   100 | 4,985.76 ns | 17.802 ns | 14.865 ns |  1.00 | 0.0229 |     - |     - |      48 B |
+| Hyperlinq_Async | Repeat_Async |   100 |   932.19 ns |  1.904 ns |  1.687 ns |  0.19 |      - |     - |     - |         - |

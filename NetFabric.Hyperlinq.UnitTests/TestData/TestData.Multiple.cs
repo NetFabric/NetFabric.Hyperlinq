@@ -1,6 +1,8 @@
 using System;
 using Xunit;
 
+// ReSharper disable HeapView.ObjectAllocation.Evident
+
 namespace NetFabric.Hyperlinq
 {
     public static partial class TestData
@@ -8,7 +10,7 @@ namespace NetFabric.Hyperlinq
         public static TheoryData<int[]> Multiple =>
             new()
             {
-                { new[] { 1, 2, 3, 4, 5 } },
+                new[] { 1, 2, 3, 4, 5 }
             };
 
         public static TheoryData<int[], int> SkipMultiple =>
@@ -16,7 +18,7 @@ namespace NetFabric.Hyperlinq
             {
                 { new[] { 1, 2, 3, 4, 5 }, -1 },
                 { new[] { 1, 2, 3, 4, 5 }, 0 },
-                { new[] { 1, 2, 3, 4, 5 }, 2 },
+                { new[] { 1, 2, 3, 4, 5 }, 2 }
             };
 
         public static TheoryData<int[], int> TakeMultiple =>
@@ -24,7 +26,7 @@ namespace NetFabric.Hyperlinq
             {
                 { new[] { 1, 2, 3, 4, 5 }, 2 },
                 { new[] { 1, 2, 3, 4, 5 }, 5 },
-                { new[] { 1, 2, 3, 4, 5 }, 9 },
+                { new[] { 1, 2, 3, 4, 5 }, 9 }
             };
 
         public static TheoryData<int[], int, int> SkipTakeMultiple =>
@@ -38,7 +40,7 @@ namespace NetFabric.Hyperlinq
                 { new[] { 1, 2, 3, 4, 5 }, 2, 3 },
                 { new[] { 1, 2, 3, 4, 5 }, -1, 9 },
                 { new[] { 1, 2, 3, 4, 5 }, 0, 9 },
-                { new[] { 1, 2, 3, 4, 5 }, 2, 9 },
+                { new[] { 1, 2, 3, 4, 5 }, 2, 9 }
             };
 
         public static TheoryData<int[], Func<int, bool>> PredicateMultiple =>
@@ -46,7 +48,7 @@ namespace NetFabric.Hyperlinq
             {
                 { new[] { 1, 2, 3, 4, 5 }, _ => true },
                 { new[] { 1, 2, 3, 4, 5 }, item => (item & 0x01) == 0 },
-                { new[] { 1, 2, 3, 4, 5 }, item => (item & 0x01) == 1 },
+                { new[] { 1, 2, 3, 4, 5 }, item => (item & 0x01) == 1 }
             };
 
         public static TheoryData<int[], int, int, Func<int, bool>> SkipTakePredicateMultiple =>
@@ -80,7 +82,7 @@ namespace NetFabric.Hyperlinq
                 { new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 }, 2, 7, item => (item & 0x01) == 1 },
                 { new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 }, -1, 20, item => (item & 0x01) == 1 },
                 { new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 }, 0, 20, item => (item & 0x01) == 1 },
-                { new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 }, 2, 20, item => (item & 0x01) == 1 },
+                { new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 }, 2, 20, item => (item & 0x01) == 1 }
             };
 
 
@@ -90,7 +92,7 @@ namespace NetFabric.Hyperlinq
                 { new[] { 1, 2, 3, 4, 5 }, _ => true, _ => true },
 
                 { new[] { 1, 2, 3, 4, 5 }, _ => true, item => (item & 0x01) == 0 },
-                { new[] { 1, 2, 3, 4, 5 }, item => (item & 0x01) == 1, _ => true },
+                { new[] { 1, 2, 3, 4, 5 }, item => (item & 0x01) == 1, _ => true }
             };
 
         public static TheoryData<int[], int, int, Func<int, bool>, Func<int, bool>> SkipTakePredicatePredicateMultiple =>
@@ -99,7 +101,7 @@ namespace NetFabric.Hyperlinq
                 { new[] { 1, 2, 3, 4, 5 }, 0, 9, _ => true, _ => true },
 
                 { new[] { 1, 2, 3, 4, 5 }, 0, 9, _ => true, item => (item & 0x01) == 0 },
-                { new[] { 1, 2, 3, 4, 5 }, 0, 9, item => (item & 0x01) == 1, _ => true },
+                { new[] { 1, 2, 3, 4, 5 }, 0, 9, item => (item & 0x01) == 1, _ => true }
             };
 
         public static TheoryData<int[], Func<int, int, bool>> PredicateAtMultiple =>
@@ -109,7 +111,7 @@ namespace NetFabric.Hyperlinq
                 { new[] { 1, 2, 3, 4, 5 }, (item, _) => (item & 0x01) == 0 },
                 { new[] { 1, 2, 3, 4, 5 }, (item, _) => (item & 0x01) == 1 },
                 { new[] { 1, 2, 3, 4, 5 }, (_, index) => (index & 0x01) == 0 },
-                { new[] { 1, 2, 3, 4, 5 }, (_, index) => (index & 0x01) == 1 },
+                { new[] { 1, 2, 3, 4, 5 }, (_, index) => (index & 0x01) == 1 }
             };
 
         public static TheoryData<int[], int, int, Func<int, int, bool>> SkipTakePredicateAtMultiple =>
@@ -162,13 +164,13 @@ namespace NetFabric.Hyperlinq
                 { new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 }, 2, 7, (_, index) => (index & 0x01) == 1 },
                 { new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 }, -1, 20, (_, index) => (index & 0x01) == 1 },
                 { new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 }, 0, 20, (_, index) => (index & 0x01) == 1 },
-                { new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 }, 2, 20, (_, index) => (index & 0x01) == 1 },
+                { new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 }, 2, 20, (_, index) => (index & 0x01) == 1 }
             };
 
         public static TheoryData<int[], Func<int, string>> SelectorMultiple =>
             new()
             {
-                { new[] { 1, 2, 3, 4, 5 }, item => item.ToString() },
+                { new[] { 1, 2, 3, 4, 5 }, item => item.ToString() }
             };
 
         public static TheoryData<int[], int, int, Func<int, string>> SkipTakeSelectorMultiple =>
@@ -182,13 +184,13 @@ namespace NetFabric.Hyperlinq
                 { new[] { 1, 2, 3, 4, 5 }, 2, 3, item => item.ToString() },
                 { new[] { 1, 2, 3, 4, 5 }, -1, 9, item => item.ToString() },
                 { new[] { 1, 2, 3, 4, 5 }, 0, 9, item => item.ToString() },
-                { new[] { 1, 2, 3, 4, 5 }, 2, 9, item => item.ToString() },
+                { new[] { 1, 2, 3, 4, 5 }, 2, 9, item => item.ToString() }
             };
 
         public static TheoryData<int[], Func<int, int, string>> SelectorAtMultiple =>
             new()
             {
-                { new[] { 1, 2, 3, 4, 5 }, (item, index) => $"{item} {index}" },
+                { new[] { 1, 2, 3, 4, 5 }, (item, index) => $"{item} {index}" }
             };
 
         public static TheoryData<int[], int, int, Func<int, int, string>> SkipTakeSelectorAtMultiple =>
@@ -202,7 +204,7 @@ namespace NetFabric.Hyperlinq
                 { new[] { 1, 2, 3, 4, 5 }, 2, 3, (item, index) => $"{item} {index}" },
                 { new[] { 1, 2, 3, 4, 5 }, -1, 9, (item, index) => $"{item} {index}" },
                 { new[] { 1, 2, 3, 4, 5 }, 0, 9, (item, index) => $"{item} {index}" },
-                { new[] { 1, 2, 3, 4, 5 }, 2, 9, (item, index) => $"{item} {index}" },
+                { new[] { 1, 2, 3, 4, 5 }, 2, 9, (item, index) => $"{item} {index}" }
             };
 
         public static TheoryData<int[], Func<int, bool>, Func<int, string>> PredicateSelectorMultiple =>
@@ -210,7 +212,7 @@ namespace NetFabric.Hyperlinq
             {
                 { new[] { 1, 2, 3, 4, 5 }, _ => true, item => item.ToString() },
                 { new[] { 1, 2, 3, 4, 5 }, item => (item & 0x01) == 0, item => item.ToString() },
-                { new[] { 1, 2, 3, 4, 5 }, item => (item & 0x01) == 1, item => item.ToString() },
+                { new[] { 1, 2, 3, 4, 5 }, item => (item & 0x01) == 1, item => item.ToString() }
             };
 
         public static TheoryData<int[], int, int, Func<int, bool>, Func<int, string>> SkipTakePredicateSelectorMultiple =>
@@ -236,7 +238,7 @@ namespace NetFabric.Hyperlinq
                 { new[] { 1, 2, 3, 4, 5 }, 0, 5, item => (item & 0x01) == 1, item => item.ToString() },
                 { new[] { 1, 2, 3, 4, 5 }, -1, 9, item => (item & 0x01) == 1, item => item.ToString() },
                 { new[] { 1, 2, 3, 4, 5 }, 0, 9, item => (item & 0x01) == 1, item => item.ToString() },
-                { new[] { 1, 2, 3, 4, 5 }, 1, 9, item => (item & 0x01) == 1, item => item.ToString() },
+                { new[] { 1, 2, 3, 4, 5 }, 1, 9, item => (item & 0x01) == 1, item => item.ToString() }
             };
     }
 }
