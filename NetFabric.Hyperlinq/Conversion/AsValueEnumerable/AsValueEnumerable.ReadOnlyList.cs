@@ -194,8 +194,8 @@ namespace NetFabric.Hyperlinq
             ValueEnumerable<TList, TSource> AsValueEnumerable()
                 => this;
 
-            TList AsEnumerable()
-                => source;
+            ValueEnumerable<TList, TSource> AsEnumerable()
+                => this;
 
             #endregion
             #region Partitioning
@@ -221,52 +221,52 @@ namespace NetFabric.Hyperlinq
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int Sum<TList>(this ValueEnumerable<TList, int> source)
-            where TList : struct, IReadOnlyList<int>
-            => source.source.Sum<TList, int, int>(source.offset, source.Count);
+            where TList : IReadOnlyList<int>
+            => source.Sum<ValueEnumerable<TList, int>, int, int>();
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int Sum<TList>(this ValueEnumerable<TList, int?> source)
-            where TList : struct, IReadOnlyList<int?>
-            => source.source.Sum<TList, int?, int>(source.offset, source.Count);
+            where TList : IReadOnlyList<int?>
+            => source.Sum<ValueEnumerable<TList, int?>, int?, int>();
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static long Sum<TList>(this ValueEnumerable<TList, long> source)
-            where TList : struct, IReadOnlyList<long>
-            => source.source.Sum<TList, long, long>(source.offset, source.Count);
+            where TList : IReadOnlyList<long>
+            => source.Sum<ValueEnumerable<TList, long>, long, long>();
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static long Sum<TList>(this ValueEnumerable<TList, long?> source)
-            where TList : struct, IReadOnlyList<long?>
-            => source.source.Sum<TList, long?, long>(source.offset, source.Count);
+            where TList : IReadOnlyList<long?>
+            => source.Sum<ValueEnumerable<TList, long?>, long?, long>();
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float Sum<TList>(this ValueEnumerable<TList, float> source)
-            where TList : struct, IReadOnlyList<float>
-            => source.source.Sum<TList, float, int>(source.offset, source.Count);
+            where TList : IReadOnlyList<float>
+            => source.Sum<ValueEnumerable<TList, float>, float, int>();
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float Sum<TList>(this ValueEnumerable<TList, float?> source)
-            where TList : struct, IReadOnlyList<float?>
-            => source.source.Sum<TList, float?, float>(source.offset, source.Count);
+            where TList : IReadOnlyList<float?>
+            => source.Sum<ValueEnumerable<TList, float?>, float?, float>();
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static double Sum<TList>(this ValueEnumerable<TList, double> source)
-            where TList : struct, IReadOnlyList<double>
-            => source.source.Sum<TList, double, double>(source.offset, source.Count);
+            where TList : IReadOnlyList<double>
+            => source.Sum<ValueEnumerable<TList, double>, double, double>();
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static double Sum<TList>(this ValueEnumerable<TList, double?> source)
-            where TList : struct, IReadOnlyList<double?>
-            => source.source.Sum<TList, double?, double>(source.offset, source.Count);
+            where TList : IReadOnlyList<double?>
+            => source.Sum<ValueEnumerable<TList, double?>, double?, double>();
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static decimal Sum<TList>(this ValueEnumerable<TList, decimal> source)
-            where TList : struct, IReadOnlyList<decimal>
-            => source.source.Sum<TList, decimal, decimal>(source.offset, source.Count);
+            where TList : IReadOnlyList<decimal>
+            => source.Sum<ValueEnumerable<TList, decimal>, decimal, decimal>();
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static decimal Sum<TList>(this ValueEnumerable<TList, decimal?> source)
-            where TList : struct, IReadOnlyList<decimal?>
-            => source.source.Sum<TList, decimal?, decimal>(source.offset, source.Count);
+            where TList : IReadOnlyList<decimal?>
+            => source.Sum<ValueEnumerable<TList, decimal?>, decimal?, decimal>();
     }
 }

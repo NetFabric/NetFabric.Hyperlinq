@@ -179,8 +179,8 @@ namespace NetFabric.Hyperlinq
             ValueEnumerable<TList, TSource> AsValueEnumerable()
                 => this;
 
-            TList AsEnumerable()
-                => source;
+            ValueEnumerable<TList, TSource> AsEnumerable()
+                => this;
 
             #endregion
             #region Partitioning
