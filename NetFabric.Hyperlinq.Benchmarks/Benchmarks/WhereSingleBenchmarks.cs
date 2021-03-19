@@ -7,7 +7,7 @@ namespace NetFabric.Hyperlinq.Benchmarks
 {
     [GroupBenchmarksBy(BenchmarkLogicalGroupRule.ByCategory)]
     [CategoriesColumn]
-    public class WhereSingleBenchmarks: RandomBenchmarksBase
+    public class WhereSingleBenchmarks: SequentialBenchmarksBase
     {
         [BenchmarkCategory("Array")]
         [Benchmark(Baseline = true)]
@@ -85,13 +85,13 @@ namespace NetFabric.Hyperlinq.Benchmarks
                 .Where(item => item == Count - 1)
                 .Single();
 
-        [BenchmarkCategory("AsyncEnumerable_Value")]
-        [Benchmark]
-        public ValueTask<Option<int>> Hyperlinq_AsyncEnumerable_Value()
-            => asyncEnumerableValue
-                .AsAsyncValueEnumerable()
-                .Where((item, _) => new ValueTask<bool>(item == Count - 1))
-                .SingleAsync();
+        // [BenchmarkCategory("AsyncEnumerable_Value")]
+        // [Benchmark]
+        // public ValueTask<Option<int>> Hyperlinq_AsyncEnumerable_Value()
+        //     => asyncEnumerableValue
+        //         .AsAsyncValueEnumerable()
+        //         .Where((item, _) => new ValueTask<bool>(item == Count - 1))
+        //         .SingleAsync();
 
         [BenchmarkCategory("Enumerable_Reference")]
         [Benchmark]
@@ -117,12 +117,12 @@ namespace NetFabric.Hyperlinq.Benchmarks
                 .Where(item => item == Count - 1)
                 .Single();
 
-        [BenchmarkCategory("AsyncEnumerable_Reference")]
-        [Benchmark]
-        public ValueTask<Option<int>> Hyperlinq_AsyncEnumerable_Reference()
-            => asyncEnumerableReference
-                .AsAsyncValueEnumerable()
-                .Where((item, _) => new ValueTask<bool>(item == Count - 1))
-                .SingleAsync();
+        // [BenchmarkCategory("AsyncEnumerable_Reference")]
+        // [Benchmark]
+        // public ValueTask<Option<int>> Hyperlinq_AsyncEnumerable_Reference()
+        //     => asyncEnumerableReference
+        //         .AsAsyncValueEnumerable()
+        //         .Where((item, _) => new ValueTask<bool>(item == Count - 1))
+        //         .SingleAsync();
     }
 }
