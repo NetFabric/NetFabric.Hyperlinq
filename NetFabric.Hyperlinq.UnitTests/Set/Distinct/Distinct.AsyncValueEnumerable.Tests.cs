@@ -4,9 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct
+namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct.AsyncValueEnumerable
 {
-    public class AsyncValueEnumerableTests
+    public class Tests
     {
         [Theory]
         [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]

@@ -39,6 +39,7 @@ namespace NetFabric.Hyperlinq
             public readonly Enumerator GetAsyncEnumerator(CancellationToken cancellationToken = default)
                 => new(in this, cancellationToken);
             readonly IAsyncEnumerator<TSource> IAsyncEnumerable<TSource>.GetAsyncEnumerator(CancellationToken cancellationToken)
+                // ReSharper disable once HeapView.BoxingAllocation
                 => new Enumerator(in this, cancellationToken);
 
             [StructLayout(LayoutKind.Auto)]
@@ -217,8 +218,76 @@ namespace NetFabric.Hyperlinq
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public SkipTakeEnumerable<TEnumerable, TEnumerator, TSource> AsValueEnumerable()
+                => this;
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public SkipTakeEnumerable<TEnumerable, TEnumerator, TSource> Skip(int count)
+                => source.SkipTake<TEnumerable, TEnumerator, TSource>(skipCount + Math.Max(0, count), takeCount);
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public SkipTakeEnumerable<TEnumerable, TEnumerator, TSource> Take(int count)
-                => source.SkipTake<TEnumerable, TEnumerator, TSource>(skipCount, Math.Min(takeCount, count));
+                => source.SkipTake<TEnumerable, TEnumerator, TSource>(skipCount, Partition.Take(takeCount, count));
         }
+        
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ValueTask<int> SumAsync<TEnumerable, TEnumerator>(this SkipTakeEnumerable<TEnumerable, TEnumerator, int> source)
+            where TEnumerable : IAsyncValueEnumerable<int, TEnumerator>
+            where TEnumerator : struct, IAsyncEnumerator<int>
+            => source.SumAsync<SkipTakeEnumerable<TEnumerable, TEnumerator, int>, SkipTakeEnumerable<TEnumerable, TEnumerator, int>.Enumerator, int, int>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ValueTask<int> SumAsync<TEnumerable, TEnumerator>(this SkipTakeEnumerable<TEnumerable, TEnumerator, int?> source)
+            where TEnumerable : IAsyncValueEnumerable<int?, TEnumerator>
+            where TEnumerator : struct, IAsyncEnumerator<int?>
+            => source.SumAsync<SkipTakeEnumerable<TEnumerable, TEnumerator, int?>, SkipTakeEnumerable<TEnumerable, TEnumerator, int?>.Enumerator, int?, int>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ValueTask<long> SumAsync<TEnumerable, TEnumerator>(this SkipTakeEnumerable<TEnumerable, TEnumerator, long> source)
+            where TEnumerable : IAsyncValueEnumerable<long, TEnumerator>
+            where TEnumerator : struct, IAsyncEnumerator<long>
+            => source.SumAsync<SkipTakeEnumerable<TEnumerable, TEnumerator, long>, SkipTakeEnumerable<TEnumerable, TEnumerator, long>.Enumerator, long, long>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ValueTask<long> SumAsync<TEnumerable, TEnumerator>(this SkipTakeEnumerable<TEnumerable, TEnumerator, long?> source)
+            where TEnumerable : IAsyncValueEnumerable<long?, TEnumerator>
+            where TEnumerator : struct, IAsyncEnumerator<long?>
+            => source.SumAsync<SkipTakeEnumerable<TEnumerable, TEnumerator, long?>, SkipTakeEnumerable<TEnumerable, TEnumerator, long?>.Enumerator, long?, long>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ValueTask<float> SumAsync<TEnumerable, TEnumerator>(this SkipTakeEnumerable<TEnumerable, TEnumerator, float> source)
+            where TEnumerable : IAsyncValueEnumerable<float, TEnumerator>
+            where TEnumerator : struct, IAsyncEnumerator<float>
+            => source.SumAsync<SkipTakeEnumerable<TEnumerable, TEnumerator, float>, SkipTakeEnumerable<TEnumerable, TEnumerator, float>.Enumerator, float, float>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ValueTask<float> SumAsync<TEnumerable, TEnumerator>(this SkipTakeEnumerable<TEnumerable, TEnumerator, float?> source)
+            where TEnumerable : IAsyncValueEnumerable<float?, TEnumerator>
+            where TEnumerator : struct, IAsyncEnumerator<float?>
+            => source.SumAsync<SkipTakeEnumerable<TEnumerable, TEnumerator, float?>, SkipTakeEnumerable<TEnumerable, TEnumerator, float?>.Enumerator, float?, float>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ValueTask<double> SumAsync<TEnumerable, TEnumerator>(this SkipTakeEnumerable<TEnumerable, TEnumerator, double> source)
+            where TEnumerable : IAsyncValueEnumerable<double, TEnumerator>
+            where TEnumerator : struct, IAsyncEnumerator<double>
+            => source.SumAsync<SkipTakeEnumerable<TEnumerable, TEnumerator, double>, SkipTakeEnumerable<TEnumerable, TEnumerator, double>.Enumerator, double, double>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ValueTask<double> SumAsync<TEnumerable, TEnumerator>(this SkipTakeEnumerable<TEnumerable, TEnumerator, double?> source)
+            where TEnumerable : IAsyncValueEnumerable<double?, TEnumerator>
+            where TEnumerator : struct, IAsyncEnumerator<double?>
+            => source.SumAsync<SkipTakeEnumerable<TEnumerable, TEnumerator, double?>, SkipTakeEnumerable<TEnumerable, TEnumerator, double?>.Enumerator, double?, double>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ValueTask<decimal> SumAsync<TEnumerable, TEnumerator>(this SkipTakeEnumerable<TEnumerable, TEnumerator, decimal> source)
+            where TEnumerable : IAsyncValueEnumerable<decimal, TEnumerator>
+            where TEnumerator : struct, IAsyncEnumerator<decimal>
+            => source.SumAsync<SkipTakeEnumerable<TEnumerable, TEnumerator, decimal>, SkipTakeEnumerable<TEnumerable, TEnumerator, decimal>.Enumerator, decimal, decimal>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ValueTask<decimal> SumAsync<TEnumerable, TEnumerator>(this SkipTakeEnumerable<TEnumerable, TEnumerator, decimal?> source)
+            where TEnumerable : IAsyncValueEnumerable<decimal?, TEnumerator>
+            where TEnumerator : struct, IAsyncEnumerator<decimal?>
+            => source.SumAsync<SkipTakeEnumerable<TEnumerable, TEnumerator, decimal?>, SkipTakeEnumerable<TEnumerable, TEnumerator, decimal?>.Enumerator, decimal?, decimal>();
     }
 }

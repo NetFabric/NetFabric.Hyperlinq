@@ -227,13 +227,13 @@ namespace NetFabric.Hyperlinq
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public ArraySegmentValueEnumerable<TSource> Skip(int count)
             {
-                var (skipCount, takeCount) = Utils.Skip(source.Count, count);
+                var (skipCount, takeCount) = Partition.Skip(source.Count, count);
                 return new ArraySegmentValueEnumerable<TSource>(new ArraySegment<TSource>(source.Array!, source.Offset + skipCount, takeCount));
             }
             
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public ArraySegmentValueEnumerable<TSource> Take(int count)
-                => new(new ArraySegment<TSource>(source.Array!, source.Offset, Utils.Take(source.Count, count)));
+                => new(new ArraySegment<TSource>(source.Array!, source.Offset, Partition.Take(source.Count, count)));
 
             #endregion
 

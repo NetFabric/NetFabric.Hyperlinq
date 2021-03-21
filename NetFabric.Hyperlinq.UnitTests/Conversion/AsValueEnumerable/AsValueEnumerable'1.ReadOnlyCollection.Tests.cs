@@ -1,53 +1,27 @@
-using System.Linq;
 using NetFabric.Assertive;
+using System.Linq;
 using Xunit;
 
-namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsValueEnumerable
+namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsValueEnumerable.ReadOnlyCollection
 {
-    public partial class ReadOnlyCollectionTests
+    public partial class Tests
     {
-        [Theory]
-        [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
-        public void AsValueEnumerable1_With_ValidData_Must_Succeed(int[] source)
+        [Fact]
+        public void AsValueEnumerable1_Enumerator_With_ValidData_Must_Succeed()
         {
             // Arrange
             var wrapped = Wrap
-                .AsReadOnlyCollection(source);
+                .AsReadOnlyCollection(System.Array.Empty<int>());
 
             // Act
             var result = wrapped
-                .AsValueEnumerable();
+                .AsValueEnumerable<int>();
 
             // Assert
             _ = result.Must()
-                .BeEnumerableOf<int>()
-                .BeEqualTo(source);
+                .BeOfType<ReadOnlyCollectionExtensions.ValueEnumerable<int>>();
         }
-        
-        [Theory]
-        [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
-        public void AsValueEnumerable1_Count_With_ValidData_Must_Succeed(int[] source)
-        {
-            // Arrange
-            var wrapped = Wrap
-                .AsReadOnlyCollection(source);
-            var expected = source
-                .Count();
-
-            // Act
-            var result = wrapped
-                .AsValueEnumerable()
-                .Count();
-
-            // Assert
-            _ = result.Must()
-                .BeEqualTo(expected);
-        }
-        
+         
         [Theory]
         [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
@@ -59,15 +33,27 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsValueEnumerable
                 .AsReadOnlyCollection(source);
             var expected = source
                 .Sum();
-
+    
             // Act
             var result = wrapped
-                .AsValueEnumerable()
+                .AsValueEnumerable<int>()
                 .Sum();
-
+    
             // Assert
             _ = result.Must()
                 .BeEqualTo(expected);
+        }    
+    }
+
+    public class ValueEnumerableTests1
+        : ValueEnumerableTestsBase<
+            ReadOnlyCollectionExtensions.ValueEnumerable<int>,
+            ValueReadOnlyCollectionExtensions.SkipTakeEnumerable<ReadOnlyCollectionExtensions.ValueEnumerable<int>, ValueEnumerator<int>, int>,
+            ValueReadOnlyCollectionExtensions.SkipTakeEnumerable<ReadOnlyCollectionExtensions.ValueEnumerable<int>, ValueEnumerator<int>, int>>
+    {
+        public ValueEnumerableTests1()
+            : base(array => Wrap.AsReadOnlyCollection(array).AsValueEnumerable<int>())
+        {
         }
     }
 }

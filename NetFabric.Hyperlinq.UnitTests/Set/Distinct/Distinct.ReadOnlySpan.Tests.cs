@@ -4,9 +4,9 @@ using System.Buffers;
 using System.Linq;
 using Xunit;
 
-namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct
+namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct.ReadOnlySpan
 {
-    public class ReadOnlySpanTests
+    public class Tests
     {
         [Theory]
         [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]

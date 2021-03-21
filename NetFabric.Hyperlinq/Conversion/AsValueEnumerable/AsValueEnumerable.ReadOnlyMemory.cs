@@ -180,13 +180,13 @@ namespace NetFabric.Hyperlinq
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public MemoryValueEnumerable<TSource> Skip(int count)
             {
-                var (skipCount, takeCount) = Utils.Skip(source.Length, count);
+                var (skipCount, takeCount) = Partition.Skip(source.Length, count);
                 return new MemoryValueEnumerable<TSource>(source.Slice(skipCount, takeCount));
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public MemoryValueEnumerable<TSource> Take(int count)
-                => new(source.Slice(0, Utils.Take(source.Length, count)));
+                => new(source.Slice(0, Partition.Take(source.Length, count)));
 
             #endregion
 
@@ -261,7 +261,7 @@ namespace NetFabric.Hyperlinq
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int Count(this MemoryValueEnumerable<int> source)
+        public static int Count<TSource>(this MemoryValueEnumerable<TSource> source)
             => source.Count;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

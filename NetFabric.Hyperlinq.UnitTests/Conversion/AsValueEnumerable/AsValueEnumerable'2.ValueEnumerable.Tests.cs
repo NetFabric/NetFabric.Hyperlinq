@@ -2,15 +2,15 @@ using System.Linq;
 using NetFabric.Assertive;
 using Xunit;
 
-namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsValueEnumerable
+namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsValueEnumerable.ValueEnumerable
 {
-    public partial class ValueEnumerableTests
+    public partial class Tests
     {
         [Theory]
         [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
-        public void AsValueEnumerable1_With_ValidData_Must_Succeed(int[] source)
+        public void AsValueEnumerable2_With_ValidData_Must_Succeed(int[] source)
         {
             // Arrange
             var wrapped = Wrap
@@ -18,7 +18,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsValueEnumerable
 
             // Act
             var result = wrapped
-                .AsValueEnumerable();
+                .AsValueEnumerable<Wrap.Enumerator<int>, int>();
 
             // Assert
             _ = result.Must()
@@ -30,7 +30,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsValueEnumerable
         [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
-        public void AsValueEnumerable1_Sum_With_ValidData_Must_Succeed(int[] source)
+        public void AsValueEnumerable2_Sum_With_ValidData_Must_Succeed(int[] source)
         {
             // Arrange
             var wrapped = Wrap
@@ -39,13 +39,26 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsValueEnumerable
                 .Sum();
 
             // Act
+            // ReSharper disable once HeapView.BoxingAllocation
             var result = wrapped
-                .AsValueEnumerable()
+                .AsValueEnumerable<Wrap.Enumerator<int>, int>()
                 .Sum();
 
             // Assert
             _ = result.Must()
                 .BeEqualTo(expected);
         }
+    }
+
+    public class ValueEnumerableTests2
+        : ValueEnumerableTestsBase<
+            ValueEnumerableExtensions.ValueEnumerable<Wrap.Enumerator<int>, int>, 
+            ValueEnumerableExtensions.SkipEnumerable<IValueEnumerable<int, Wrap.Enumerator<int>>, Wrap.Enumerator<int>, int>,
+            ValueEnumerableExtensions.TakeEnumerable<IValueEnumerable<int, Wrap.Enumerator<int>>, Wrap.Enumerator<int>, int>>
+    {
+        public ValueEnumerableTests2() 
+            // ReSharper disable once HeapView.BoxingAllocation
+            : base(array => Wrap.AsValueEnumerable(array).AsValueEnumerable<Wrap.Enumerator<int>, int>())
+        {}
     }
 }

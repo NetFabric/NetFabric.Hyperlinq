@@ -32,7 +32,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.Where
         public void Where_With_ValidData_Must_Succeed(int[] source, int skip, int take, Func<int, bool> predicate)
         {
             // Arrange
-            var (offset, count) = Utils.SkipTake(source.Length, skip, take);
+            var (offset, count) = Partition.SkipTake(source.Length, skip, take);
             var wrapped = new ArraySegment<int>(source, offset, count);
             var expected = wrapped
                 .Where(predicate);
@@ -55,7 +55,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.Where
         public void Where_Where_With_ValidData_Must_Succeed(int[] source, int skip, int take, Func<int, bool> predicate0, Func<int, bool> predicate1)
         {
             // Arrange
-            var (offset, count) = Utils.SkipTake(source.Length, skip, take);
+            var (offset, count) = Partition.SkipTake(source.Length, skip, take);
             var wrapped = new ArraySegment<int>(source, offset, count);
             var expected = wrapped
                 .Where(predicate0)
@@ -80,7 +80,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Filtering.Where
         public void Where_Sum_With_ValidData_Must_Succeed(int[] source, int skip, int take, Func<int, bool> predicate)
         {
             // Arrange
-            var (offset, count) = Utils.SkipTake(source.Length, skip, take);
+            var (offset, count) = Partition.SkipTake(source.Length, skip, take);
             var wrapped = new ArraySegment<int>(source, offset, count);
             var expected = wrapped
                 .Where(predicate)

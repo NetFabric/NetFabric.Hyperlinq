@@ -3,9 +3,9 @@ using NetFabric.Assertive;
 using System.Collections.Generic;
 using Xunit;
 
-namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsValueEnumerable
+namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsValueEnumerable.ValueReadOnlyCollection
 {
-    public partial class ValueReadOnlyCollectionTests
+    public partial class Tests
     {
         [Theory]
         [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
@@ -55,30 +55,6 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsValueEnumerable
         [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
-        public void AsValueEnumerable6_Count_With_ValidData_Must_Succeed(int[] source)
-        {
-            // Arrange
-            var wrapped = Wrap
-                .AsValueReadOnlyCollection(source);
-            var expected = source
-                .Count();
-
-            // Act
-            var result = ValueEnumerableExtensions
-                .AsValueEnumerable<Wrap.ValueReadOnlyCollectionWrapper<int>, Wrap.Enumerator<int>, int>(
-                    wrapped,
-                    enumerable => enumerable.GetEnumerator())
-                .Count();
-
-            // Assert
-            _ = result.Must()
-                .BeEqualTo(expected);
-        }
-        
-        [Theory]
-        [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
         public void AsValueEnumerable6_Sum_With_ValidData_Must_Succeed(int[] source)
         {
             // Arrange
@@ -98,5 +74,17 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsValueEnumerable
             _ = result.Must()
                 .BeEqualTo(expected);
         }
+    }
+        
+    public class ValueEnumerableTests6
+        : ValueEnumerableTestsBase<
+            ValueReadOnlyCollectionExtensions.ValueEnumerable<Wrap.ValueReadOnlyCollectionWrapper<int>, Wrap.Enumerator<int>, Wrap.Enumerator<int>, int, FunctionWrapper<Wrap.ValueReadOnlyCollectionWrapper<int>, Wrap.Enumerator<int>>, FunctionWrapper<Wrap.ValueReadOnlyCollectionWrapper<int>, Wrap.Enumerator<int>>>, 
+            ValueReadOnlyCollectionExtensions.SkipTakeEnumerable<Wrap.ValueReadOnlyCollectionWrapper<int>, Wrap.Enumerator<int>, int>,
+            ValueReadOnlyCollectionExtensions.SkipTakeEnumerable<Wrap.ValueReadOnlyCollectionWrapper<int>, Wrap.Enumerator<int>, int>>
+    {
+        public ValueEnumerableTests6() 
+            : base(array => ValueReadOnlyCollectionExtensions
+                .AsValueEnumerable<Wrap.ValueReadOnlyCollectionWrapper<int>, Wrap.Enumerator<int>, int>(Wrap.AsValueReadOnlyCollection(array), enumerable => enumerable.GetEnumerator()))
+        {}
     }
 }

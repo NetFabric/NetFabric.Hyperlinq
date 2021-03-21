@@ -1,31 +1,28 @@
-using System.Linq;
 using NetFabric.Assertive;
 using Xunit;
+using System.Linq;
+using System.Collections.Generic;
 
-namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsValueEnumerable
+namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsValueEnumerable.Enumerable
 {
-    public partial class EnumerableTests
+    public partial class Tests
     {
-        [Theory]
-        [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
-        public void AsValueEnumerable1_With_ValidData_Must_Succeed(int[] source)
+        [Fact]
+        public void AsValueEnumerable1_Enumerator_With_ValidData_Must_Succeed()
         {
             // Arrange
             var wrapped = Wrap
-                .AsEnumerable(source);
+                .AsEnumerable(System.Array.Empty<int>());
 
             // Act
             var result = wrapped
-                .AsValueEnumerable();
+                .AsValueEnumerable<int>();
 
             // Assert
             _ = result.Must()
-                .BeEnumerableOf<int>()
-                .BeEqualTo(source);
+                .BeOfType<EnumerableExtensions.ValueEnumerable<int>>();
         }
-        
+         
         [Theory]
         [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
@@ -37,15 +34,27 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsValueEnumerable
                 .AsEnumerable(source);
             var expected = source
                 .Sum();
-
+    
             // Act
             var result = wrapped
-                .AsValueEnumerable()
+                .AsValueEnumerable<int>()
                 .Sum();
-
+    
             // Assert
             _ = result.Must()
                 .BeEqualTo(expected);
-        }
+        }    
     }
+
+    public class ValueEnumerableTests1
+        : ValueEnumerableTestsBase<
+            EnumerableExtensions.ValueEnumerable<int>, 
+            ValueEnumerableExtensions.SkipEnumerable<EnumerableExtensions.ValueEnumerable<int>, ValueEnumerator<int>, int>,
+            ValueEnumerableExtensions.TakeEnumerable<EnumerableExtensions.ValueEnumerable<int>, ValueEnumerator<int>, int>>
+    {
+        public ValueEnumerableTests1() 
+            : base(array => Wrap.AsEnumerable(array).AsValueEnumerable<int>())
+        {}
+    }
+
 }

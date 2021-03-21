@@ -1,11 +1,10 @@
 using System.Linq;
 using NetFabric.Assertive;
-using System.Collections.Generic;
 using Xunit;
 
-namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsValueEnumerable
+namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsValueEnumerable.ValueEnumerable
 {
-    public partial class ValueEnumerableTests
+    public partial class Tests
     {
         [Theory]
         [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
@@ -74,5 +73,17 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsValueEnumerable
             _ = result.Must()
                 .BeEqualTo(expected);
         }
+    }
+        
+    public class ValueEnumerableTests6
+        : ValueEnumerableTestsBase<
+            ValueEnumerableExtensions.ValueEnumerable<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, Wrap.Enumerator<int>, int, FunctionWrapper<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>>, FunctionWrapper<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>>>, 
+            ValueEnumerableExtensions.SkipEnumerable<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>,
+            ValueEnumerableExtensions.TakeEnumerable<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>>
+    {
+        public ValueEnumerableTests6() 
+            : base(array => ValueEnumerableExtensions
+                .AsValueEnumerable<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>(Wrap.AsValueEnumerable(array), enumerable => enumerable.GetEnumerator()))
+        {}
     }
 }

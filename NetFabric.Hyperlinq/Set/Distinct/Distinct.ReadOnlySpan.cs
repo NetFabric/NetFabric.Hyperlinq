@@ -77,6 +77,10 @@ namespace NetFabric.Hyperlinq
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public readonly SpanDistinctEnumerable<TSource> AsValueEnumerable()
+                => this;
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly int Count()
                 => source.Length switch
                 {

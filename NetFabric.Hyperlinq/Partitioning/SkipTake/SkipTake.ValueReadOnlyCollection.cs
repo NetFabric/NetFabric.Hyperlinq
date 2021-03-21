@@ -29,7 +29,7 @@ namespace NetFabric.Hyperlinq
             internal SkipTakeEnumerable(in TEnumerable source, int skipCount, int takeCount)
             {
                 this.source = source;
-                (this.skipCount, Count) = Utils.SkipTake(source.Count, skipCount, takeCount);
+                (this.skipCount, Count) = Partition.SkipTake(source.Count, skipCount, takeCount);
             }
 
             public readonly int Count { get; }
@@ -39,8 +39,10 @@ namespace NetFabric.Hyperlinq
             public readonly Enumerator GetEnumerator() 
                 => new(in this);
             readonly IEnumerator<TSource> IEnumerable<TSource>.GetEnumerator() 
+                // ReSharper disable once HeapView.BoxingAllocation
                 => new Enumerator(in this);
             readonly IEnumerator IEnumerable.GetEnumerator() 
+                // ReSharper disable once HeapView.BoxingAllocation
                 => new Enumerator(in this);
 
             bool ICollection<TSource>.IsReadOnly  
@@ -79,6 +81,7 @@ namespace NetFabric.Hyperlinq
                 if (Count is 0)
                     return;
 
+                // ReSharper disable once HeapView.PossibleBoxingAllocation
                 if (skipCount is 0 && Count == source.Count && source is ICollection<TSource> collection)
                     collection.CopyTo(array, arrayIndex);
                 else
@@ -238,8 +241,19 @@ namespace NetFabric.Hyperlinq
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public SkipTakeEnumerable<TEnumerable, TEnumerator, TSource> AsValueEnumerable()
+                => this;
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public SkipTakeEnumerable<TEnumerable, TEnumerator, TSource> Skip(int count)
+            {
+                var (skipCount, takeCount) = Partition.Skip(Count, count);
+                return source.SkipTake<TEnumerable, TEnumerator, TSource>(this.skipCount + skipCount, takeCount);
+            }
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public SkipTakeEnumerable<TEnumerable, TEnumerator, TSource> Take(int count)
-                => source.SkipTake<TEnumerable, TEnumerator, TSource>(skipCount, Math.Min(Count, count));
+                => source.SkipTake<TEnumerable, TEnumerator, TSource>(skipCount, Partition.Take(Count, count));
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -247,5 +261,65 @@ namespace NetFabric.Hyperlinq
             where TEnumerable : IValueReadOnlyCollection<TSource, TEnumerator>
             where TEnumerator : struct, IEnumerator<TSource>
             => source.Count;
+        
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Sum<TEnumerable, TEnumerator>(this SkipTakeEnumerable<TEnumerable, TEnumerator, int> source)
+            where TEnumerable : IValueReadOnlyCollection<int, TEnumerator>
+            where TEnumerator : struct, IEnumerator<int>
+            => Sum<SkipTakeEnumerable<TEnumerable, TEnumerator, int>, SkipTakeEnumerable<TEnumerable, TEnumerator, int>.Enumerator, int, int>(source);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Sum<TEnumerable, TEnumerator>(this SkipTakeEnumerable<TEnumerable, TEnumerator, int?> source)
+            where TEnumerable : IValueReadOnlyCollection<int?, TEnumerator>
+            where TEnumerator : struct, IEnumerator<int?>
+            => Sum<SkipTakeEnumerable<TEnumerable, TEnumerator, int?>, SkipTakeEnumerable<TEnumerable, TEnumerator, int?>.Enumerator, int?, int>(source);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static long Sum<TEnumerable, TEnumerator>(this SkipTakeEnumerable<TEnumerable, TEnumerator, long> source)
+            where TEnumerable : IValueReadOnlyCollection<long, TEnumerator>
+            where TEnumerator : struct, IEnumerator<long>
+            => Sum<SkipTakeEnumerable<TEnumerable, TEnumerator, long>, SkipTakeEnumerable<TEnumerable, TEnumerator, long>.Enumerator, long, long>(source);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static long Sum<TEnumerable, TEnumerator>(this SkipTakeEnumerable<TEnumerable, TEnumerator, long?> source)
+            where TEnumerable : IValueReadOnlyCollection<long?, TEnumerator>
+            where TEnumerator : struct, IEnumerator<long?>
+            => Sum<SkipTakeEnumerable<TEnumerable, TEnumerator, long?>, SkipTakeEnumerable<TEnumerable, TEnumerator, long?>.Enumerator, long?, long>(source);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float Sum<TEnumerable, TEnumerator>(this SkipTakeEnumerable<TEnumerable, TEnumerator, float> source)
+            where TEnumerable : IValueReadOnlyCollection<float, TEnumerator>
+            where TEnumerator : struct, IEnumerator<float>
+            => Sum<SkipTakeEnumerable<TEnumerable, TEnumerator, float>, SkipTakeEnumerable<TEnumerable, TEnumerator, float>.Enumerator, float, float>(source);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float Sum<TEnumerable, TEnumerator>(this SkipTakeEnumerable<TEnumerable, TEnumerator, float?> source)
+            where TEnumerable : IValueReadOnlyCollection<float?, TEnumerator>
+            where TEnumerator : struct, IEnumerator<float?>
+            => Sum<SkipTakeEnumerable<TEnumerable, TEnumerator, float?>, SkipTakeEnumerable<TEnumerable, TEnumerator, float?>.Enumerator, float?, float>(source);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static double Sum<TEnumerable, TEnumerator>(this SkipTakeEnumerable<TEnumerable, TEnumerator, double> source)
+            where TEnumerable : IValueReadOnlyCollection<double, TEnumerator>
+            where TEnumerator : struct, IEnumerator<double>
+            => Sum<SkipTakeEnumerable<TEnumerable, TEnumerator, double>, SkipTakeEnumerable<TEnumerable, TEnumerator, double>.Enumerator, double, double>(source);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static double Sum<TEnumerable, TEnumerator>(this SkipTakeEnumerable<TEnumerable, TEnumerator, double?> source)
+            where TEnumerable : IValueReadOnlyCollection<double?, TEnumerator>
+            where TEnumerator : struct, IEnumerator<double?>
+            => Sum<SkipTakeEnumerable<TEnumerable, TEnumerator, double?>, SkipTakeEnumerable<TEnumerable, TEnumerator, double?>.Enumerator, double?, double>(source);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static decimal Sum<TEnumerable, TEnumerator>(this SkipTakeEnumerable<TEnumerable, TEnumerator, decimal> source)
+            where TEnumerable : IValueReadOnlyCollection<decimal, TEnumerator>
+            where TEnumerator : struct, IEnumerator<decimal>
+            => Sum<SkipTakeEnumerable<TEnumerable, TEnumerator, decimal>, SkipTakeEnumerable<TEnumerable, TEnumerator, decimal>.Enumerator, decimal, decimal>(source);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static decimal Sum<TEnumerable, TEnumerator>(this SkipTakeEnumerable<TEnumerable, TEnumerator, decimal?> source)
+            where TEnumerable : IValueReadOnlyCollection<decimal?, TEnumerator>
+            where TEnumerator : struct, IEnumerator<decimal?>
+            => Sum<SkipTakeEnumerable<TEnumerable, TEnumerator, decimal?>, SkipTakeEnumerable<TEnumerable, TEnumerator, decimal?>.Enumerator, decimal?, decimal>(source);
     }
 }

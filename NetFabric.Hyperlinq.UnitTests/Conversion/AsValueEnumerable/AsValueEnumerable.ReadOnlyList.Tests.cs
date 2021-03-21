@@ -3,9 +3,9 @@ using Xunit;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsValueEnumerable
+namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsValueEnumerable.ReadOnlyList
 {
-    public class ReadOnlyListTests
+    public class Tests
     {
         [Theory]
         [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
@@ -26,105 +26,6 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsValueEnumerable
                 .BeOfType<ReadOnlyListExtensions.ValueEnumerable<Wrap.ReadOnlyListWrapper<int>, int>>()
                 .BeEnumerableOf<int>()
                 .BeEqualTo(wrapped);
-        }
-
-        [Theory]
-        [MemberData(nameof(TestData.SkipTakeEmpty), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.SkipTakeSingle), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.SkipTakeMultiple), MemberType = typeof(TestData))]
-        public void AsValueEnumerable_With_ToArray_Must_Succeed(int[] source, int skipCount, int takeCount)
-        {
-            // Arrange
-            var wrapped = Wrap
-                .AsReadOnlyList(source);
-            var expected = source
-                .Skip(skipCount)
-                .Take(takeCount)
-                .ToArray();
-
-            // Act
-            var result = wrapped
-                .AsValueEnumerable()
-                .Skip(skipCount)
-                .Take(takeCount)
-                .ToArray();
-
-            // Assert
-            _ = result.Must()
-                .BeArrayOf<int>()
-                .BeEqualTo(expected);
-        }
-
-        [Theory]
-        [MemberData(nameof(TestData.Skip_Skip), MemberType = typeof(TestData))]
-        public void AsValueEnumerable_Skip_With_ValidData_Must_Succeed(int[] source, int count0, int count1)
-        {
-            // Arrange
-            var wrapped = Wrap
-                .AsReadOnlyList(source);
-            var expected = source
-                .Skip(count0)
-                .Skip(count1);
-
-            // Act
-            var result = wrapped
-                .AsValueEnumerable()
-                .Skip(count0)
-                .Skip(count1);
-
-            // Assert
-            _ = result.Must()
-                .BeEnumerableOf<int>()
-                .BeEqualTo(expected);
-        }
-
-        [Theory]
-        [MemberData(nameof(TestData.Take_Take), MemberType = typeof(TestData))]
-        public void AsValueEnumerable1_Take_With_ValidData_Must_Succeed(int[] source, int count0, int count1)
-        {
-            // Arrange
-            var wrapped = Wrap
-                .AsReadOnlyList(source);
-            var expected = source
-                .Take(count0)
-                .Take(count1);
-
-            // Act
-            var result = wrapped
-                .AsValueEnumerable()
-                .Take(count0)
-                .Take(count1);
-
-            // Assert
-            _ = result.Must()
-                .BeEnumerableOf<int>()
-                .BeEqualTo(expected);
-        }
-        
-        [Theory]
-        [MemberData(nameof(TestData.SkipTakeEmpty), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.SkipTakeSingle), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.SkipTakeMultiple), MemberType = typeof(TestData))]
-        public void AsValueEnumerable1_Count_With_ValidData_Must_Succeed(int[] source, int skipCount, int takeCount)
-        {
-            // Arrange
-            var wrapped = Wrap
-                .AsReadOnlyList(source);
-            var expected = source
-                .Skip(skipCount)
-                .Take(takeCount)
-                .Count();
-
-            // Act
-            var result = wrapped
-                .AsValueEnumerable()
-                .Skip(skipCount)
-                .Take(takeCount)
-                .Count();
-
-            // Assert
-            _ = result.Must()
-                .BeEqualTo(expected);
         }
         
         [Theory]
@@ -152,5 +53,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsValueEnumerable
             _ = result.Must()
                 .BeEqualTo(expected);
         }
+    }
+
+    public class ValueEnumerableTests
+        : ValueEnumerableTestsBase<ReadOnlyListExtensions.ValueEnumerable<Wrap.ReadOnlyListWrapper<int>, int>>
+    {
+        public ValueEnumerableTests() 
+            : base(array => Wrap.AsReadOnlyList(array).AsValueEnumerable())
+        {}
     }
 }

@@ -151,13 +151,13 @@ namespace NetFabric.Hyperlinq
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public RangeEnumerable Skip(int count)
             {
-                var (skipCount, takeCount) = Utils.Skip(Count, count);
+                var (skipCount, takeCount) = Partition.Skip(Count, count);
                 return Range(start + skipCount, takeCount);
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public RangeEnumerable Take(int count)
-                => Range(start, Utils.Take(Count, count));
+                => Range(start, Partition.Take(Count, count));
 
             #endregion
             #region Aggregation

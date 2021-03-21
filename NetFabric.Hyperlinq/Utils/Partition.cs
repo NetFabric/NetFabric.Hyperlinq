@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 
 namespace NetFabric.Hyperlinq
 {
-    static partial class Utils
+    static class Partition
     {
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

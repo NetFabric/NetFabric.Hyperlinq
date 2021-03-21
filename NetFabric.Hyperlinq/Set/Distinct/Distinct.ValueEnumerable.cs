@@ -100,6 +100,10 @@ namespace NetFabric.Hyperlinq
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public readonly DistinctEnumerable<TEnumerable, TEnumerator, TSource> AsValueEnumerable()
+                => this;
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly int Count()
                 => GetSet().Count;
 

@@ -4,9 +4,9 @@ using System.Buffers;
 using System.Linq;
 using Xunit;
 
-namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct
+namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct.ReadOnlyMemory
 {
-    public class ReadOnlyMemoryTests
+    public class Tests
     {
         [Theory]
         [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
@@ -34,74 +34,6 @@ namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct
         [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
         [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
-        public void Distinct_ToArray_With_ValidData_Must_Succeed(int[] source)
-        {
-            // Arrange
-            var wrapped = (ReadOnlyMemory<int>)source.AsMemory();
-            var expected =
-                source.Distinct().ToArray();
-
-            // Act
-            var result = wrapped.AsValueEnumerable()
-                .Distinct()
-                .ToArray();
-
-            // Assert
-            _ = result.Must()
-                .BeArrayOf<int>()
-                .BeEqualTo(expected);
-        }
-
-        [Theory]
-        [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
-        public void Distinct_ToArray_MemoryPool_With_ValidData_Must_Succeed(int[] source)
-        {
-            // Arrange
-            var pool = ArrayPool<int>.Shared;
-            var wrapped = (ReadOnlyMemory<int>)source.AsMemory();
-            var expected = source
-                .Distinct()
-                .ToArray();
-
-            // Act
-            using var result = wrapped.AsValueEnumerable()
-                .Distinct()
-                .ToArray(pool);
-
-            // Assert
-            _ = result
-                .SequenceEqual(expected);
-        }
-
-        [Theory]
-        [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
-        public void Distinct_ToList_With_ValidData_Must_Succeed(int[] source)
-        {
-            // Arrange
-            var wrapped = (ReadOnlyMemory<int>)source.AsMemory();
-            var expected = source
-                .Distinct()
-                .ToList();
-
-            // Act
-            var result = wrapped.AsValueEnumerable()
-                .Distinct()
-                .ToList();
-
-            // Assert
-            _ = result.Must()
-                .BeEnumerableOf<int>()
-                .BeEqualTo(expected);
-        }
-
-        [Theory]
-        [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
         public void Distinct_Sum_With_ValidData_Must_Succeed(int[] source)
         {
             // Arrange
@@ -119,5 +51,15 @@ namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct
             _ = result.Must()
                 .BeEqualTo(expected);
         }
+    }
+
+    public class MemoryDistinctEnumerableTests
+        : ValueEnumerableTestsBase<ArrayExtensions.MemoryDistinctEnumerable<int>,
+            ValueEnumerableExtensions.SkipEnumerable<ArrayExtensions.MemoryDistinctEnumerable<int>, ArrayExtensions.MemoryDistinctEnumerable<int>.Enumerator, int>,
+            ValueEnumerableExtensions.TakeEnumerable<ArrayExtensions.MemoryDistinctEnumerable<int>, ArrayExtensions.MemoryDistinctEnumerable<int>.Enumerator, int>>
+    {
+        public MemoryDistinctEnumerableTests() 
+            : base(array => ((ReadOnlyMemory<int>)array.AsMemory()).AsValueEnumerable().Distinct())
+        {}
     }
 }

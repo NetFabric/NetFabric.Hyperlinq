@@ -3,9 +3,9 @@ using System.Buffers;
 using System.Linq;
 using Xunit;
 
-namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct
+namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct.ValueEnumerable
 {
-    public class ValueEnumerableTests
+    public class Tests
     {
         [Theory]
         [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
@@ -21,75 +21,6 @@ namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct
             // Act
             var result = wrapped
                 .Distinct<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>();
-
-            // Assert
-            _ = result.Must()
-                .BeEnumerableOf<int>()
-                .BeEqualTo(expected);
-        }
-
-        [Theory]
-        [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
-        public void Distinct_ToArray_With_ValidData_Must_Succeed(int[] source)
-        {
-            // Arrange
-            var wrapped = Wrap.AsValueEnumerable(source);
-            var expected = source
-                .Distinct()
-                .ToArray();
-
-            // Act
-            var result = wrapped
-                .Distinct<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>()
-                .ToArray();
-
-            // Assert
-            _ = result.Must()
-                .BeArrayOf<int>()
-                .BeEqualTo(expected);
-        }
-
-        [Theory]
-        [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
-        public void Distinct_ToArray_MemoryPool_With_ValidData_Must_Succeed(int[] source)
-        {
-            // Arrange
-            var pool = ArrayPool<int>.Shared;
-            var wrapped = Wrap.AsValueEnumerable(source);
-            var expected = source
-                .Distinct()
-                .ToArray();
-
-            // Act
-            using var result = wrapped
-                .Distinct<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>()
-                .ToArray(pool);
-
-            // Assert
-            _ = result.Memory
-                .SequenceEqual(expected);
-        }
-
-        [Theory]
-        [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.Single), MemberType = typeof(TestData))]
-        [MemberData(nameof(TestData.Multiple), MemberType = typeof(TestData))]
-        public void Distinct_ToList_With_ValidData_Must_Succeed(int[] source)
-        {
-            // Arrange
-            var wrapped = Wrap.AsValueEnumerable(source);
-            var expected = source
-                .Distinct()
-                .ToList();
-
-            // Act
-            var result = wrapped
-                .Distinct<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>()
-                .ToList();
 
             // Assert
             _ = result.Must()
@@ -118,5 +49,15 @@ namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct
             _ = result.Must()
                 .BeEqualTo(expected);
         }
+    }
+
+    public class DistinctEnumerableTests
+        : ValueEnumerableTestsBase<ValueEnumerableExtensions.DistinctEnumerable<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>,
+            ValueEnumerableExtensions.SkipEnumerable<ValueEnumerableExtensions.DistinctEnumerable<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>, ValueEnumerableExtensions.DistinctEnumerable<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>.Enumerator, int>,
+            ValueEnumerableExtensions.TakeEnumerable<ValueEnumerableExtensions.DistinctEnumerable<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>, ValueEnumerableExtensions.DistinctEnumerable<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>.Enumerator, int>>
+    {
+        public DistinctEnumerableTests() 
+            : base(array => Wrap.AsValueEnumerable(array).AsValueEnumerable().Distinct())
+        {}
     }
 }

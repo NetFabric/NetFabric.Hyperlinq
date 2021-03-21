@@ -117,10 +117,10 @@ namespace NetFabric.Hyperlinq
 
             #region Conversion
 
-            ValueEnumerable<TEnumerable, TEnumerator, TEnumerator2, TSource, TGetEnumerator, TGetEnumerator2> AsValueEnumerable()
+            public ValueEnumerable<TEnumerable, TEnumerator, TEnumerator2, TSource, TGetEnumerator, TGetEnumerator2> AsValueEnumerable()
                 => this;
 
-            TEnumerable AsEnumerable()
+            public TEnumerable AsEnumerable()
                 => source;
 
             #endregion
