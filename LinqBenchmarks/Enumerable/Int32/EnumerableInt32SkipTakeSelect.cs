@@ -65,7 +65,7 @@ namespace LinqBenchmarks.Enumerable.Int32
         }
 
         [Benchmark]
-        public int Hyperlinq_Foreach()
+        public int Hyperlinq()
         {
             var sum = 0;
             foreach (var item in source.AsValueEnumerable().Skip(Skip).Take(Count).Select(item => item * 3))
@@ -74,7 +74,7 @@ namespace LinqBenchmarks.Enumerable.Int32
         }
 
         [Benchmark]
-        public int Hyperlinq_Foreach_IFunction()
+        public int Hyperlinq_IFunction()
         {
             var sum = 0;
             foreach (var item in source.AsValueEnumerable().Skip(Skip).Take(Count).Select<int, TripleOfInt32>())
