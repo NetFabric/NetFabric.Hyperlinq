@@ -9,6 +9,7 @@ namespace LinqBenchmarks
     //[SimpleJob(RuntimeMoniker.Net48, baseline: true)]
     //[SimpleJob(RuntimeMoniker.NetCoreApp31)]
     [SimpleJob(RuntimeMoniker.Net50)]
+    [SimpleJob(RuntimeMoniker.Net60)]
     [MemoryDiagnoser]
     //[MarkdownExporterAttribute.GitHub]
     //[RPlotExporter, CsvMeasurementsExporter] // requires installation of R (https://benchmarkdotnet.org/articles/configs/exporters.html#plots)
