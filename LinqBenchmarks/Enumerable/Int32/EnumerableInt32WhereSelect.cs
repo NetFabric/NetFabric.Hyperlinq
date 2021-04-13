@@ -2,6 +2,8 @@
 using NetFabric.Hyperlinq;
 using StructLinq;
 using System.Linq;
+using Nessos.LinqOptimizer.CSharp;
+using Nessos.Streams.CSharp;
 
 namespace LinqBenchmarks.Enumerable.Int32
 {
@@ -38,6 +40,32 @@ namespace LinqBenchmarks.Enumerable.Int32
         }
 
         [Benchmark]
+        public int LinqOptimizer()
+        {
+            var sum = 0;
+            foreach (var item in source
+                .AsQueryExpr()
+                .Where(item => item.IsEven())
+                .Select(item => item * 3)
+                .Run())
+                sum += item;
+            return sum;
+        }
+
+        [Benchmark]
+        public int Streams()
+        {
+            var sum = 0;
+            foreach (var item in source
+                .AsStream()
+                .Where(item => item.IsEven())
+                .Select(item => item * 3)
+                .ToEnumerable())
+                sum += item;
+            return sum;
+        }
+
+        [Benchmark]
         public int StructLinq()
         {
             var sum = 0;
@@ -48,7 +76,7 @@ namespace LinqBenchmarks.Enumerable.Int32
                 sum += item;
             return sum;
         }
-
+        
         [Benchmark]
         public int StructLinq_IFunction()
         {

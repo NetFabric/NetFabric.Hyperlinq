@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using Microsoft.Diagnostics.Tracing.Parsers.Clr;
 
 namespace LinqBenchmarks
 {
@@ -11,8 +13,15 @@ namespace LinqBenchmarks
 
         public static IEnumerable<int> Enumerable(int count)
         {
-            for (var value = 0; value < count; value++)
-                yield return value;
+            if (count < 0) 
+                throw new ArgumentOutOfRangeException(nameof(count));
+            return GetEnumerable(count);
+
+            static IEnumerable<int> GetEnumerable(int count)
+            {
+                for (var value = 0; value < count; value++)
+                    yield return value;
+            }
         }
     }
 }

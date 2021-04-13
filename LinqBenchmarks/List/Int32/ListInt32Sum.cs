@@ -4,6 +4,8 @@ using JM.LinqFaster.SIMD;
 using NetFabric.Hyperlinq;
 using StructLinq;
 using System.Linq;
+using Nessos.LinqOptimizer.CSharp;
+using Nessos.Streams.CSharp;
 
 namespace LinqBenchmarks.List.Int32
 {
@@ -47,6 +49,19 @@ namespace LinqBenchmarks.List.Int32
         [Benchmark]
         public int LinqAF()
             => global::LinqAF.ListExtensionMethods.Sum(source);
+
+        [Benchmark]
+        public int LinqOptimizer()
+            => source
+                .AsQueryExpr()
+                .Sum()
+                .Run();
+
+        [Benchmark]
+        public int Streams()
+            => source
+                .AsStream()
+                .Sum();
 
         [Benchmark]
         public int StructLinq()

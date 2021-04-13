@@ -1,4 +1,4 @@
-﻿#if !NETFRAMEWORK
+﻿#if NET5_0_OR_GREATER
 
 using BenchmarkDotNet.Attributes;
 using Cistern.ValueLinq;

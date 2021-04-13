@@ -4,6 +4,8 @@ using StructLinq;
 using System.Buffers;
 using System.Collections.Generic;
 using System.Linq;
+using Nessos.LinqOptimizer.CSharp;
+using Nessos.Streams.CSharp;
 
 namespace LinqBenchmarks.Enumerable.Int32
 {
@@ -29,6 +31,21 @@ namespace LinqBenchmarks.Enumerable.Int32
         public int[] LinqAF()
             => global::LinqAF.IEnumerableExtensionMethods
                 .Where(source, item => item.IsEven())
+                .Select(item => item * 3)
+                .ToArray();
+
+        [Benchmark]
+        public int[] LinqOptimizer()
+            => source.AsQueryExpr()
+                .Where(item => item.IsEven())
+                .Select(item => item * 3)
+                .ToArray()
+                .Run();
+
+        [Benchmark]
+        public int[] Streams()
+            => source.AsStream()
+                .Where(item => item.IsEven())
                 .Select(item => item * 3)
                 .ToArray();
 

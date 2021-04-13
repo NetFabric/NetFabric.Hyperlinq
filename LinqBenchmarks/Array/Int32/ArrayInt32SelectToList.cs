@@ -5,6 +5,8 @@ using NetFabric.Hyperlinq;
 using StructLinq;
 using System.Collections.Generic;
 using System.Linq;
+using Nessos.LinqOptimizer.CSharp;
+using Nessos.Streams.CSharp;
 
 namespace LinqBenchmarks.Array.Int32
 {
@@ -42,16 +44,29 @@ namespace LinqBenchmarks.Array.Int32
 
         [Benchmark]
         public List<int> LinqFaster()
-            => new List<int>(source.SelectF(item => item * 3));
+            => new(source.SelectF(item => item * 3));
 
         [Benchmark]
         public List<int> LinqFaster_SIMD()
-            => new List<int>(source.SelectS(item => item * 3, item => item * 3));
+            => new(source.SelectS(item => item * 3, item => item * 3));
 
         [Benchmark]
         public List<int> LinqAF()
             => global::LinqAF.ArrayExtensionMethods
                 .Select(source, item => item * 3)
+                .ToList();
+
+        [Benchmark]
+        public List<int> LinqOptimizer()
+            => source.AsQueryExpr()
+                .Select(item => item * 3)
+                .ToList()
+                .Run();
+
+        [Benchmark]
+        public List<int> Streams()
+            => source.AsStream()
+                .Select(item => item * 3)
                 .ToList();
 
         [Benchmark]

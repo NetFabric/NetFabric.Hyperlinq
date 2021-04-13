@@ -4,6 +4,8 @@ using NetFabric.Hyperlinq;
 using StructLinq;
 using System.Collections.Generic;
 using System.Linq;
+using Nessos.LinqOptimizer.CSharp;
+using Nessos.Streams.CSharp;
 
 namespace LinqBenchmarks.Array.ValueType
 { 
@@ -43,12 +45,29 @@ namespace LinqBenchmarks.Array.ValueType
 
         [Benchmark]
         public List<FatValueType> LinqFaster()
-            => new List<FatValueType>(source
+            => new(source
                 .WhereSelectF(item => item.IsEven(), item => item * 3));
 
         [Benchmark]
         public List<FatValueType> LinqAF()
             => global::LinqAF.ArrayExtensionMethods.Where(source, item => item.IsEven()).Select(item => item * 3).ToList();
+
+        [Benchmark]
+        public List<FatValueType> LinqOptimizer()
+            => source
+                .AsQueryExpr()
+                .Where(item => item.IsEven())
+                .Select(item => item * 3)
+                .ToList()
+                .Run();
+
+        [Benchmark]
+        public List<FatValueType> Streams()
+            => source
+                .AsStream()
+                .Where(item => item.IsEven())
+                .Select(item => item * 3)
+                .ToList();
 
         [Benchmark]
         public List<FatValueType> StructLinq()

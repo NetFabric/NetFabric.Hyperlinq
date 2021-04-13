@@ -7,7 +7,7 @@ namespace LinqBenchmarks.Array.ValueType
 {
     public class ArrayValueTypeContains: ValueTypeArrayBenchmarkBase
     {
-        FatValueType value = new FatValueType(int.MaxValue);
+        FatValueType value = new(int.MaxValue);
 
         [Benchmark(Baseline = true)]
         public bool ForLoop()

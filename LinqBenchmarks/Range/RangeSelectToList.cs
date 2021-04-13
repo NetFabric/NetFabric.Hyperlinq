@@ -41,7 +41,7 @@ namespace LinqBenchmarks.Range
 
         [Benchmark]
         public List<int> LinqFaster()
-            => new List<int>(JM.LinqFaster.LinqFaster.RangeArrayF(Start, Count).SelectF(item => item * 3));
+            => new(JM.LinqFaster.LinqFaster.RangeArrayF(Start, Count).SelectF(item => item * 3));
 
         [Benchmark]
         public List<int> LinqAF()

@@ -2,21 +2,23 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFrameworks>net5.0</TargetFrameworks>
-    <LangVersion>8.0</LangVersion>
+    <TargetFramework>net5.0</TargetFramework>
+    <LangVersion>9.0</LangVersion>
   </PropertyGroup>
-
+  
   <ItemGroup>
     <PackageReference Include="BenchmarkDotNet" Version="0.12.1.1527" />
     <PackageReference Include="BenchmarkDotNet.Diagnostics.Windows" Version="0.12.1.1527" />
     <PackageReference Include="LinqAF" Version="3.0.0" />
     <PackageReference Include="JM.LinqFaster" Version="1.1.2" />
     <PackageReference Include="LinqFaster.SIMD" Version="1.0.3" />
+    <PackageReference Include="LinqOptimizer.CSharp" Version="0.7.0" />
     <PackageReference Include="NetFabric.Hyperlinq" Version="3.0.0-beta44" />
     <PackageReference Include="NetFabric.Hyperlinq.Analyzer" Version="2.0.1">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Streams.CSharp" Version="0.6.0" />
     <PackageReference Include="StructLinq.BCL" Version="0.25.3" />
     <PackageReference Include="System.Interactive" Version="5.0.0" />
     <PackageReference Include="System.Linq.Async" Version="5.0.0" />
@@ -32,6 +34,10 @@
     <PackageReference Include="Cistern.ValueLinq">
       <Version>0.0.10</Version>
     </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="**\*.CisternValueLinq.cs" />
   </ItemGroup>
 
 </Project>

@@ -1,5 +1,7 @@
 ﻿using BenchmarkDotNet.Attributes;
 using JM.LinqFaster;
+using Nessos.LinqOptimizer.CSharp;
+using Nessos.Streams.CSharp;
 using NetFabric.Hyperlinq;
 using StructLinq;
 
@@ -57,6 +59,30 @@ namespace LinqBenchmarks.Array.ValueType
         {
             var sum = default(FatValueType);
             foreach (var item in global::LinqAF.ArrayExtensionMethods.Where(source, item => item.IsEven()))
+                sum += item;
+            return sum;
+        }
+
+        [Benchmark]
+        public FatValueType LinqOptimizer()
+        {
+            var sum = default(FatValueType);
+            foreach (var item in source
+                .AsQueryExpr()
+                .Where(item => item.IsEven())
+                .Run())
+                sum += item;
+            return sum;
+        }
+
+        [Benchmark]
+        public FatValueType Streams()
+        {
+            var sum = default(FatValueType);
+            foreach (var item in source
+                .AsStream()
+                .Where(item => item.IsEven())
+                .ToEnumerable())
                 sum += item;
             return sum;
         }

@@ -2,6 +2,8 @@
 using NetFabric.Hyperlinq;
 using StructLinq;
 using System.Linq;
+using Nessos.LinqOptimizer.CSharp;
+using Nessos.Streams.CSharp;
 
 namespace LinqBenchmarks.ImmutableArray.Int32
 {
@@ -34,6 +36,19 @@ namespace LinqBenchmarks.ImmutableArray.Int32
         [Benchmark]
         public int Linq()
             => source.Sum();
+
+        [Benchmark]
+        public int LinqOptimizer()
+            => source
+                .AsQueryExpr()
+                .Sum()
+                .Run();
+
+        [Benchmark]
+        public int Streams()
+            => source
+                .AsStream()
+                .Sum();
 
         [Benchmark]
         public int StructLinq()

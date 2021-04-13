@@ -5,6 +5,8 @@ using StructLinq;
 using System.Buffers;
 using System.Collections.Generic;
 using System.Linq;
+using Nessos.LinqOptimizer.CSharp;
+using Nessos.Streams.CSharp;
 
 namespace LinqBenchmarks.Array.ValueType
 {
@@ -51,6 +53,23 @@ namespace LinqBenchmarks.Array.ValueType
         [Benchmark]
         public FatValueType[] LinqAF()
             => global::LinqAF.ArrayExtensionMethods.Where(source, item => item.IsEven()).Select(item => item * 3).ToArray();
+
+        [Benchmark]
+        public FatValueType[] LinqOptimizer()
+            => source
+                .AsQueryExpr()
+                .Where(item => item.IsEven())
+                .Select(item => item * 3)
+                .ToArray()
+                .Run();
+
+        [Benchmark]
+        public FatValueType[] Streams()
+            => source
+                .AsStream()
+                .Where(item => item.IsEven())
+                .Select(item => item * 3)
+                .ToArray();
 
         [Benchmark]
         public FatValueType[] StructLinq()

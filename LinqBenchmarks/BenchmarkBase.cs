@@ -1,20 +1,8 @@
 ﻿using BenchmarkDotNet.Attributes;
-using BenchmarkDotNet.Diagnosers;
-using BenchmarkDotNet.Jobs;
 using System;
-using System.Collections;
 
 namespace LinqBenchmarks
 {
-    //[SimpleJob(RuntimeMoniker.Net48, baseline: true)]
-    //[SimpleJob(RuntimeMoniker.NetCoreApp31)]
-    [SimpleJob(RuntimeMoniker.Net50)]
-    [SimpleJob(RuntimeMoniker.Net60)]
-    [MemoryDiagnoser]
-    //[MarkdownExporterAttribute.GitHub]
-    //[RPlotExporter, CsvMeasurementsExporter] // requires installation of R (https://benchmarkdotnet.org/articles/configs/exporters.html#plots)
-    //[HardwareCounters(HardwareCounter.BranchMispredictions, HardwareCounter.CacheMisses)]
-    //[DisassemblyDiagnoser(printSource: true, maxDepth: 1)]
     public class BenchmarkBase
     {
         [Params(10, 1000)]
@@ -24,7 +12,7 @@ namespace LinqBenchmarks
         {
             var array = new int[count];
 
-            for (var index = 0; index < count; index++)
+            for (var index = 0; index < array.Length; index++)
                 array[index] = index;
 
             return array;
@@ -35,7 +23,7 @@ namespace LinqBenchmarks
             var array = new int[count];
 
             var random = new Random(42);
-            for (var index = 0; index < count; index++)
+            for (var index = 0; index < array.Length; index++)
                 array[index] = random.Next(count);
 
             return array;

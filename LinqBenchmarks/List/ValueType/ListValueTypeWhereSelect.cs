@@ -4,6 +4,8 @@ using NetFabric.Hyperlinq;
 using StructLinq;
 using System.Collections.Generic;
 using System.Linq;
+using Nessos.LinqOptimizer.CSharp;
+using Nessos.Streams.CSharp;
 
 namespace LinqBenchmarks.List.ValueType
 {
@@ -60,6 +62,32 @@ namespace LinqBenchmarks.List.ValueType
         {
             var sum = default(FatValueType);
             foreach (var item in global::LinqAF.ListExtensionMethods.Where(source, item => item.IsEven()).Select(item => item * 3))
+                sum += item;
+            return sum;
+        }
+
+        [Benchmark]
+        public FatValueType LinqOptimizer()
+        {
+            var sum = default(FatValueType);
+            foreach (var item in source
+                .AsQueryExpr()
+                .Where(item => item.IsEven())
+                .Select(item => item * 3)
+                .Run())
+                sum += item;
+            return sum;
+        }
+
+        [Benchmark]
+        public FatValueType Streams()
+        {
+            var sum = default(FatValueType);
+            foreach (var item in source
+                .AsStream()
+                .Where(item => item.IsEven())
+                .Select(item => item * 3)
+                .ToEnumerable())
                 sum += item;
             return sum;
         }

@@ -7,7 +7,7 @@ namespace LinqBenchmarks.List.ValueType
 {
     public class ListValueTypeContains : ValueTypeListBenchmarkBase
     {
-        FatValueType value = new FatValueType(int.MaxValue);
+        FatValueType value = new(int.MaxValue);
 
         [Benchmark(Baseline = true)]
         public bool ForLoop()

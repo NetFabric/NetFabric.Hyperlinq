@@ -11,6 +11,10 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using BenchmarkDotNet.Configs;
+using BenchmarkDotNet.Diagnosers;
+using BenchmarkDotNet.Environments;
+using BenchmarkDotNet.Jobs;
 
 namespace LinqBenchmarks
 {
@@ -18,7 +22,26 @@ namespace LinqBenchmarks
     {
         static void Main(string[] args)
         {
-            foreach (var summary in BenchmarkSwitcher.FromAssembly(typeof(Program).Assembly).Run(args))
+            var config = DefaultConfig.Instance
+                .AddDiagnoser(MemoryDiagnoser.Default)
+                .AddJob(Job.Default
+                    .WithRuntime(CoreRuntime.Core50)
+                    .WithEnvironmentVariables(
+                        new EnvironmentVariable("COMPlus_ReadyToRun", "0"),
+                        new EnvironmentVariable("COMPlus_TC_QuickJitForLoops", "1"),
+                        new EnvironmentVariable("COMPlus_TieredPGO", "1"))
+                    .WithId(".NET 5")
+                )
+                .AddJob(Job.Default
+                    .WithRuntime(CoreRuntime.Core60)
+                    .WithEnvironmentVariables(
+                        new EnvironmentVariable("COMPlus_ReadyToRun", "0"),
+                        new EnvironmentVariable("COMPlus_TC_QuickJitForLoops", "1"),
+                        new EnvironmentVariable("COMPlus_TieredPGO", "1"))
+                    .WithId(".NET 6")
+                );
+            
+            foreach (var summary in BenchmarkSwitcher.FromAssembly(typeof(Program).Assembly).Run(args, config))
                 SaveSummary(summary);
         }
 
@@ -33,7 +56,7 @@ namespace LinqBenchmarks
                 return;
 
             var title = targetType.Name;
-            var pointIndex = targetType.Namespace.IndexOf('.');
+            var pointIndex = targetType.Namespace?.IndexOf('.') ?? -1;
             if (pointIndex >= 0)
                 title = $"{EndSubstring(targetType.Namespace, pointIndex + 1)}.{targetType.Name}";
 
@@ -53,7 +76,7 @@ namespace LinqBenchmarks
 
             logger.WriteLine("### Source");
             var sourceLink = new StringBuilder("../LinqBenchmarks");
-            foreach (var folder in targetType.Namespace.Split('.').AsEnumerable().Skip(1))
+            foreach (var folder in targetType.Namespace?.Split('.').AsEnumerable().Skip(1) ?? System.Linq.Enumerable.Empty<string>())
                 _ = sourceLink.Append($"/{folder}");
             _ = sourceLink.Append($"/{targetType.Name}.cs");
             logger.WriteLine($"[{targetType.Name}.cs]({sourceLink})");
@@ -61,8 +84,8 @@ namespace LinqBenchmarks
 
             logger.WriteLine("### References:");
 
-            var valueLinqVersion = GetInformationalVersion(typeof(Cistern.ValueLinq.Enumerable).Assembly);
-            logger.WriteLine($"- Cistern.ValueLinq: [{valueLinqVersion}](https://www.nuget.org/packages/Cistern.ValueLinq/{valueLinqVersion})");
+            // var valueLinqVersion = GetInformationalVersion(typeof(Cistern.ValueLinq.Enumerable).Assembly);
+            // logger.WriteLine($"- Cistern.ValueLinq: [{valueLinqVersion}](https://www.nuget.org/packages/Cistern.ValueLinq/{valueLinqVersion})");
 
             var linqFasterVersion = GetInformationalVersion(typeof(LinqFaster).Assembly);
             logger.WriteLine($"- JM.LinqFaster: [{linqFasterVersion}](https://www.nuget.org/packages/JM.LinqFaster/{linqFasterVersion})");
@@ -72,6 +95,12 @@ namespace LinqBenchmarks
 
             var linqAfVersion = GetFileVersion(typeof(LinqAF.Enumerable).Assembly);
             logger.WriteLine($"- LinqAF: [{linqAfVersion}](https://www.nuget.org/packages/LinqAF/{linqAfVersion})");
+
+            var linqOptimizerVersion = GetInformationalVersion(typeof(Nessos.LinqOptimizer.CSharp.Extensions).Assembly);
+            logger.WriteLine($"- LinqOptimizer.CSharp: [{linqOptimizerVersion}](https://www.nuget.org/packages/LinqOptimizer.CSharp/{linqOptimizerVersion})");
+
+            var streamsVersion = GetInformationalVersion(typeof(Nessos.Streams.CSharp.Streams).Assembly);
+            logger.WriteLine($"- Streams.CSharp: [{streamsVersion}](https://www.nuget.org/packages/Streams.CSharp/{streamsVersion})");
 
             var structLinqVersion = GetInformationalVersion(typeof(StructLinq.BCL.List.ListEnumerable<>).Assembly);
             logger.WriteLine($"- StructLinq.BCL: [{structLinqVersion}](https://www.nuget.org/packages/StructLinq.BCL/{structLinqVersion})");
@@ -94,7 +123,8 @@ namespace LinqBenchmarks
         static string GetFileVersion(Assembly assembly)
             => GetCustomAttribute<AssemblyFileVersionAttribute>(assembly)?.Version;
 
-        static T GetCustomAttribute<T>(Assembly assembly) where T : Attribute
+        static T GetCustomAttribute<T>(Assembly assembly) 
+            where T : Attribute
             => (T)Attribute.GetCustomAttribute(assembly, typeof(T), false);
 
         static Type GetTargetType(Summary summary)
@@ -105,9 +135,9 @@ namespace LinqBenchmarks
 
         static string GetSolutionDirectory()
         {
-            var dir = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+            var dir = Path.GetDirectoryName(Assembly.GetEntryAssembly()?.Location);
 
-            while (!string.IsNullOrEmpty(dir))
+            while (dir is not null or {Length:0})
             {
                 if (Directory.EnumerateFiles(dir, "*.sln", SearchOption.TopDirectoryOnly).Any())
                     return dir;

@@ -4,6 +4,8 @@ using NetFabric.Hyperlinq;
 using StructLinq;
 using System.Collections.Generic;
 using System.Linq;
+using Nessos.LinqOptimizer.CSharp;
+using Nessos.Streams.CSharp;
 
 namespace LinqBenchmarks.Array.ValueType
 {
@@ -68,6 +70,34 @@ namespace LinqBenchmarks.Array.ValueType
         }
 
         [Benchmark]
+        public FatValueType LinqOptimizer()
+        {
+            var sum = default(FatValueType);
+            foreach (var item in source
+                .AsQueryExpr()
+                .Skip(Skip)
+                .Take(Count)
+                .Where(item => item.IsEven())
+                .Run())
+                sum += item;
+            return sum;
+        }
+
+        [Benchmark]
+        public FatValueType Streams()
+        {
+            var sum = default(FatValueType);
+            foreach (var item in source
+                .AsStream()
+                .Skip(Skip)
+                .Take(Count)
+                .Where(item => item.IsEven())
+                .ToEnumerable())
+                sum += item;
+            return sum;
+        }
+
+        [Benchmark]
         public FatValueType StructLinq()
         {
             var sum = default(FatValueType);
@@ -75,7 +105,7 @@ namespace LinqBenchmarks.Array.ValueType
                 .ToRefStructEnumerable()
                 .Skip(Skip)
                 .Take(Count)
-                .Where((in FatValueType element) => element.IsEven()))
+                .Where((in FatValueType item) => item.IsEven()))
                 sum += item;
             return sum;
         }

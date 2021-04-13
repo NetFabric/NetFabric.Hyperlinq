@@ -3,6 +3,8 @@ using JM.LinqFaster;
 using NetFabric.Hyperlinq;
 using StructLinq;
 using System.Linq;
+using Nessos.LinqOptimizer.CSharp;
+using Nessos.Streams.CSharp;
 
 namespace LinqBenchmarks.Array.Int32
 {
@@ -45,6 +47,21 @@ namespace LinqBenchmarks.Array.Int32
         [Benchmark]
         public int LinqAF()
             => global::LinqAF.ArrayExtensionMethods.Count(source, item => item.IsEven());
+
+        [Benchmark]
+        public int LinqOptimizer()
+            => source
+                .AsQueryExpr()
+                .Where(item => item.IsEven())
+                .Count()
+                .Run();
+
+        [Benchmark]
+        public int Streams()
+            => source
+                .AsStream()
+                .Where(item => item.IsEven())
+                .Count();
 
         [Benchmark]
         public int StructLinq()

@@ -5,6 +5,7 @@ Benchmarks comparing the perfomance of [LINQ](https://docs.microsoft.com/en-us/d
 - [Cistern.ValueLinq](https://github.com/manofstick/Cistern.ValueLinq)
 - [JM.LinqFaster](https://github.com/jackmott/LinqFaster)
 - [LinqAF](https://github.com/kevin-montrose/LinqAF)
+- [Streams](https://github.com/nessos/Streams)
 - [StructLinq](https://github.com/reegeek/StructLinq)
 - [NetFabric.Hyperlinq](https://github.com/NetFabric/NetFabric.Hyperlinq)
 

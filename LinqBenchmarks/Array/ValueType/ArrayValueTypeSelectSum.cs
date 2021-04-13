@@ -1,5 +1,7 @@
 ﻿using BenchmarkDotNet.Attributes;
 using JM.LinqFaster;
+using Nessos.LinqOptimizer.CSharp;
+using Nessos.Streams.CSharp;
 using NetFabric.Hyperlinq;
 using StructLinq;
 
@@ -42,6 +44,21 @@ namespace LinqBenchmarks.Array.ValueType
         [Benchmark]
         public int LinqAF()
             => global::LinqAF.ArrayExtensionMethods.Sum(source, item => item.Value0);
+
+        [Benchmark]
+        public int LinqOptimizer()
+            => source
+                .AsQueryExpr()
+                .Select(item => item.Value0)
+                .Sum()
+                .Run();
+
+        [Benchmark]
+        public int Streams()
+            => source
+                .AsStream()
+                .Select(item => item.Value0)
+                .Sum();
 
         [Benchmark]
         public int StructLinq()

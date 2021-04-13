@@ -5,13 +5,13 @@
         , NetFabric.Hyperlinq.IFunction<FatValueType, int>
         , NetFabric.Hyperlinq.IFunctionIn<FatValueType, int>
     {
-        public int Eval(in FatValueType element)
-            => element.Value0;
+        public int Eval(in FatValueType item)
+            => item.Value0;
 
-        public int Invoke(FatValueType element)
-            => element.Value0;
+        public int Invoke(FatValueType item)
+            => item.Value0;
 
-        public int Invoke(in FatValueType element)
-            => element.Value0;
+        public int Invoke(in FatValueType item)
+            => item.Value0;
     }
 }

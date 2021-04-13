@@ -4,6 +4,8 @@ using NetFabric.Hyperlinq;
 using StructLinq;
 using System.Collections.Generic;
 using System.Linq;
+using Nessos.LinqOptimizer.CSharp;
+using Nessos.Streams.CSharp;
 
 namespace LinqBenchmarks.List.Int32
 {
@@ -42,11 +44,28 @@ namespace LinqBenchmarks.List.Int32
 
         [Benchmark]
         public List<int> LinqFaster()
-            => new List<int>(source.WhereSelectF(item => item.IsEven(), item => item * 3));
+            => new(source.WhereSelectF(item => item.IsEven(), item => item * 3));
 
         [Benchmark]
         public List<int> LinqAF()
             => global::LinqAF.ListExtensionMethods.Where(source, item => item.IsEven()).Select(item => item * 3).ToList();
+
+        [Benchmark]
+        public List<int> LinqOptimizer()
+            => source
+                .AsQueryExpr()
+                .Where(item => item.IsEven())
+                .Select(item => item * 3)
+                .ToList()
+                .Run();
+
+        [Benchmark]
+        public List<int> Streams()
+            => source
+                .AsStream()
+                .Where(item => item.IsEven())
+                .Select(item => item * 3)
+                .ToList();
 
         [Benchmark]
         public List<int> StructLinq()

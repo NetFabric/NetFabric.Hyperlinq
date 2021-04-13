@@ -1,5 +1,7 @@
 ﻿using BenchmarkDotNet.Attributes;
 using JM.LinqFaster;
+using Nessos.LinqOptimizer.CSharp;
+using Nessos.Streams.CSharp;
 using NetFabric.Hyperlinq;
 using StructLinq;
 
@@ -50,6 +52,21 @@ namespace LinqBenchmarks.Array.ValueType
             => source
                 .ToRefStructEnumerable()
                 .Where((in FatValueType item) => item.IsEven())
+                .Count();
+
+        [Benchmark]
+        public int LinqOptimizer()
+            => source
+                .AsQueryExpr()
+                .Where(item => item.IsEven())
+                .Count()
+                .Run();
+
+        [Benchmark]
+        public int Streams()
+            => source
+                .AsStream()
+                .Where(item => item.IsEven())
                 .Count();
 
         [Benchmark]
