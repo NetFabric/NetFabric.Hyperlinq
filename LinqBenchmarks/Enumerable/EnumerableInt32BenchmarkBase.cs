@@ -9,6 +9,6 @@ namespace LinqBenchmarks
 
         [GlobalSetup]
         public void GlobalSetup()
-            => source = Utils.Enumerable(Count);
+            => source = Utils.Enumerable<int>(Count);
     }
 }

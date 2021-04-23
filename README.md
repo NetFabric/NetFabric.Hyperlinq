@@ -35,6 +35,10 @@ Benchmarks comparing the perfomance of [LINQ](https://docs.microsoft.com/en-us/d
 - [enumerable.Where().Select().ToArray()](Results/Enumerable.Int32.EnumerableInt32WhereSelectToArray.md)
 - [enumerable.Where().Select().ToList()](Results/Enumerable.Int32.EnumerableInt32WhereSelectToList.md)
 
+### `IEnumerable<FatReferenceType>`
+- [enumerable.Any()](Results/Enumerable.FatReferenceType.EnumerableFatReferenceTypeAny.md)
+- [enumerable.FirstOrDefault()](Results/Enumerable.FatReferenceType.EnumerableFatReferenceTypeFirstOrDefault.md)
+
 ### `int[]`
 
 - [array.Contains()](Results/Array.Int32.ArrayInt32Contains.md)
