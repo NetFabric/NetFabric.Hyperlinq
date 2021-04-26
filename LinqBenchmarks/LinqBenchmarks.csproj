@@ -19,7 +19,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Streams.CSharp" Version="0.6.0" />
-    <PackageReference Include="StructLinq.BCL" Version="0.25.3" />
+    <PackageReference Include="StructLinq" Version="0.26.0" />
     <PackageReference Include="System.Interactive" Version="5.0.0" />
     <PackageReference Include="System.Linq.Async" Version="5.0.0" />
   </ItemGroup>

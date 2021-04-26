@@ -102,8 +102,8 @@ namespace LinqBenchmarks
             var streamsVersion = GetInformationalVersion(typeof(Nessos.Streams.CSharp.Streams).Assembly);
             logger.WriteLine($"- Streams.CSharp: [{streamsVersion}](https://www.nuget.org/packages/Streams.CSharp/{streamsVersion})");
 
-            var structLinqVersion = GetInformationalVersion(typeof(StructLinq.BCL.List.ListEnumerable<>).Assembly);
-            logger.WriteLine($"- StructLinq.BCL: [{structLinqVersion}](https://www.nuget.org/packages/StructLinq.BCL/{structLinqVersion})");
+            var structLinqVersion = GetInformationalVersion(typeof(StructLinq.List.ListEnumerable<>).Assembly);
+            logger.WriteLine($"- StructLinq.BCL: [{structLinqVersion}](https://www.nuget.org/packages/StructLinq/{structLinqVersion})");
 
             var hyperlinqVersion = GetInformationalVersion(typeof(ValueEnumerable).Assembly);
             logger.WriteLine($"- NetFabric.Hyperlinq: [{hyperlinqVersion}](https://www.nuget.org/packages/NetFabric.Hyperlinq/{hyperlinqVersion})");
