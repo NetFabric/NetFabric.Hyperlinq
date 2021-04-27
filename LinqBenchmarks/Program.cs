@@ -26,10 +26,6 @@ namespace LinqBenchmarks
                 .AddDiagnoser(MemoryDiagnoser.Default)
                 .AddJob(Job.Default
                     .WithRuntime(CoreRuntime.Core50)
-                    .WithEnvironmentVariables(
-                        new EnvironmentVariable("COMPlus_ReadyToRun", "0"),
-                        new EnvironmentVariable("COMPlus_TC_QuickJitForLoops", "1"),
-                        new EnvironmentVariable("COMPlus_TieredPGO", "1"))
                     .WithId(".NET 5")
                 )
                 .AddJob(Job.Default

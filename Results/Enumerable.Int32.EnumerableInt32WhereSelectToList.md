@@ -9,7 +9,7 @@
 - LinqAF: [3.0.0.0](https://www.nuget.org/packages/LinqAF/3.0.0.0)
 - LinqOptimizer.CSharp: [](https://www.nuget.org/packages/LinqOptimizer.CSharp/)
 - Streams.CSharp: [0.6.0](https://www.nuget.org/packages/Streams.CSharp/0.6.0)
-- StructLinq.BCL: [0.25.3](https://www.nuget.org/packages/StructLinq.BCL/0.25.3)
+- StructLinq.BCL: [0.26.0](https://www.nuget.org/packages/StructLinq/0.26.0)
 - NetFabric.Hyperlinq: [3.0.0-beta44](https://www.nuget.org/packages/NetFabric.Hyperlinq/3.0.0-beta44)
 
 ### Results:
@@ -18,31 +18,30 @@
 BenchmarkDotNet=v0.12.1.1527-nightly, OS=Windows 10.0.19043
 Intel Core i7-7567U CPU 3.50GHz (Kaby Lake), 1 CPU, 4 logical and 2 physical cores
 .NET SDK=6.0.100-preview.3.21202.5
-  [Host] : .NET 5.0.3 (5.0.321.7212), X64 RyuJIT
-  .NET 5 : .NET 5.0.3 (5.0.321.7212), X64 RyuJIT
+  [Host] : .NET 5.0.4 (5.0.421.11614), X64 RyuJIT
+  .NET 5 : .NET 5.0.4 (5.0.421.11614), X64 RyuJIT
   .NET 6 : .NET 6.0.0 (6.0.21.20104), X64 RyuJIT
 
-EnvironmentVariables=COMPlus_ReadyToRun=0,COMPlus_TC_QuickJitForLoops=1,COMPlus_TieredPGO=1  
 
 ```
-|               Method |    Job |  Runtime | Count |      Mean |     Error |    StdDev |    Median | Ratio | RatioSD |   Gen 0 | Gen 1 | Gen 2 | Allocated |
-|--------------------- |------- |--------- |------ |----------:|----------:|----------:|----------:|------:|--------:|--------:|------:|------:|----------:|
-|          ForeachLoop | .NET 5 | .NET 5.0 |  1000 |  5.843 μs | 0.0465 μs | 0.0412 μs |  5.843 μs |  1.00 |    0.00 |  2.0752 |     - |     - |      4 KB |
-|                 Linq | .NET 5 | .NET 5.0 |  1000 |  8.169 μs | 0.1632 μs | 0.2179 μs |  8.293 μs |  1.37 |    0.03 |  2.1210 |     - |     - |      4 KB |
-|               LinqAF | .NET 5 | .NET 5.0 |  1000 |  9.165 μs | 0.1767 μs | 0.2477 μs |  9.044 μs |  1.58 |    0.06 |  2.0752 |     - |     - |      4 KB |
-|        LinqOptimizer | .NET 5 | .NET 5.0 |  1000 | 60.147 μs | 0.3901 μs | 0.3458 μs | 60.124 μs | 10.29 |    0.10 | 17.2119 |     - |     - |     35 KB |
-|              Streams | .NET 5 | .NET 5.0 |  1000 | 14.651 μs | 0.0492 μs | 0.0460 μs | 14.661 μs |  2.51 |    0.02 |  2.3346 |     - |     - |      5 KB |
-|           StructLinq | .NET 5 | .NET 5.0 |  1000 |  8.153 μs | 0.0437 μs | 0.0365 μs |  8.159 μs |  1.40 |    0.01 |  1.0376 |     - |     - |      2 KB |
-| StructLinq_IFunction | .NET 5 | .NET 5.0 |  1000 |  5.902 μs | 0.0315 μs | 0.0280 μs |  5.905 μs |  1.01 |    0.01 |  0.9995 |     - |     - |      2 KB |
-|            Hyperlinq | .NET 5 | .NET 5.0 |  1000 |  8.098 μs | 0.0830 μs | 0.0693 μs |  8.092 μs |  1.39 |    0.01 |  0.9918 |     - |     - |      2 KB |
-|  Hyperlinq_IFunction | .NET 5 | .NET 5.0 |  1000 |  6.366 μs | 0.1244 μs | 0.1481 μs |  6.279 μs |  1.10 |    0.03 |  0.9995 |     - |     - |      2 KB |
-|                      |        |          |       |           |           |           |           |       |         |         |       |       |           |
-|          ForeachLoop | .NET 6 | .NET 6.0 |  1000 |  3.787 μs | 0.0758 μs | 0.1598 μs |  3.695 μs |  1.00 |    0.00 |  2.0752 |     - |     - |      4 KB |
-|                 Linq | .NET 6 | .NET 6.0 |  1000 |  5.371 μs | 0.0345 μs | 0.0288 μs |  5.368 μs |  1.39 |    0.06 |  2.1286 |     - |     - |      4 KB |
-|               LinqAF | .NET 6 | .NET 6.0 |  1000 |  6.516 μs | 0.1220 μs | 0.1356 μs |  6.573 μs |  1.67 |    0.05 |  2.0752 |     - |     - |      4 KB |
-|        LinqOptimizer | .NET 6 | .NET 6.0 |  1000 | 58.244 μs | 0.5627 μs | 0.5263 μs | 58.155 μs | 15.02 |    0.71 | 16.9678 |     - |     - |     35 KB |
-|              Streams | .NET 6 | .NET 6.0 |  1000 | 10.606 μs | 0.0508 μs | 0.0475 μs | 10.601 μs |  2.74 |    0.13 |  2.3346 |     - |     - |      5 KB |
-|           StructLinq | .NET 6 | .NET 6.0 |  1000 |  6.034 μs | 0.0516 μs | 0.0431 μs |  6.031 μs |  1.56 |    0.07 |  1.0376 |     - |     - |      2 KB |
-| StructLinq_IFunction | .NET 6 | .NET 6.0 |  1000 |  4.180 μs | 0.0228 μs | 0.0202 μs |  4.179 μs |  1.08 |    0.05 |  0.9995 |     - |     - |      2 KB |
-|            Hyperlinq | .NET 6 | .NET 6.0 |  1000 |  6.427 μs | 0.1232 μs | 0.1559 μs |  6.453 μs |  1.64 |    0.05 |  0.9995 |     - |     - |      2 KB |
-|  Hyperlinq_IFunction | .NET 6 | .NET 6.0 |  1000 |  4.335 μs | 0.0370 μs | 0.0309 μs |  4.337 μs |  1.12 |    0.06 |  0.9995 |     - |     - |      2 KB |
+|               Method |    Job |                                                   EnvironmentVariables |  Runtime | Count |        Mean |     Error |    StdDev |      Median |  Ratio | RatioSD |   Gen 0 | Gen 1 | Gen 2 | Allocated |
+|--------------------- |------- |----------------------------------------------------------------------- |--------- |------ |------------:|----------:|----------:|------------:|-------:|--------:|--------:|------:|------:|----------:|
+|          ForeachLoop | .NET 5 |                                                                  Empty | .NET 5.0 |   100 |    745.4 ns |  14.94 ns |  33.41 ns |    721.0 ns |   1.00 |    0.00 |  0.5846 |     - |     - |   1,224 B |
+|                 Linq | .NET 5 |                                                                  Empty | .NET 5.0 |   100 |  1,153.2 ns |  23.11 ns |  33.88 ns |  1,168.2 ns |   1.52 |    0.05 |  0.6409 |     - |     - |   1,344 B |
+|               LinqAF | .NET 5 |                                                                  Empty | .NET 5.0 |   100 |  1,474.5 ns |   7.13 ns |   5.95 ns |  1,473.5 ns |   2.01 |    0.08 |  0.5836 |     - |     - |   1,224 B |
+|        LinqOptimizer | .NET 5 |                                                                  Empty | .NET 5.0 |   100 | 56,392.7 ns | 533.57 ns | 473.00 ns | 56,209.8 ns |  76.66 |    3.29 | 15.8081 |     - |     - |  33,128 B |
+|              Streams | .NET 5 |                                                                  Empty | .NET 5.0 |   100 |  2,104.3 ns |   5.35 ns |   4.47 ns |  2,104.6 ns |   2.87 |    0.11 |  0.8430 |     - |     - |   1,768 B |
+|           StructLinq | .NET 5 |                                                                  Empty | .NET 5.0 |   100 |  1,223.7 ns |   4.51 ns |   4.22 ns |  1,224.2 ns |   1.66 |    0.07 |  0.2785 |     - |     - |     584 B |
+| StructLinq_IFunction | .NET 5 |                                                                  Empty | .NET 5.0 |   100 |    837.5 ns |   1.52 ns |   1.27 ns |    837.5 ns |   1.14 |    0.04 |  0.2365 |     - |     - |     496 B |
+|            Hyperlinq | .NET 5 |                                                                  Empty | .NET 5.0 |   100 |  1,188.6 ns |  22.55 ns |  24.13 ns |  1,199.2 ns |   1.59 |    0.07 |  0.2365 |     - |     - |     496 B |
+|  Hyperlinq_IFunction | .NET 5 |                                                                  Empty | .NET 5.0 |   100 |    951.5 ns |   4.30 ns |   3.35 ns |    951.7 ns |   1.31 |    0.05 |  0.2365 |     - |     - |     496 B |
+|                      |        |                                                                        |          |       |             |           |           |             |        |         |         |       |       |           |
+|          ForeachLoop | .NET 6 | COMPlus_ReadyToRun=0,COMPlus_TC_QuickJitForLoops=1,COMPlus_TieredPGO=1 | .NET 6.0 |   100 |    452.3 ns |   2.02 ns |   1.89 ns |    451.9 ns |   1.00 |    0.00 |  0.5851 |     - |     - |   1,224 B |
+|                 Linq | .NET 6 | COMPlus_ReadyToRun=0,COMPlus_TC_QuickJitForLoops=1,COMPlus_TieredPGO=1 | .NET 6.0 |   100 |    820.7 ns |   4.57 ns |   4.28 ns |    819.6 ns |   1.81 |    0.01 |  0.6409 |     - |     - |   1,344 B |
+|               LinqAF | .NET 6 | COMPlus_ReadyToRun=0,COMPlus_TC_QuickJitForLoops=1,COMPlus_TieredPGO=1 | .NET 6.0 |   100 |  1,084.0 ns |  20.82 ns |  23.97 ns |  1,092.7 ns |   2.39 |    0.06 |  0.5836 |     - |     - |   1,224 B |
+|        LinqOptimizer | .NET 6 | COMPlus_ReadyToRun=0,COMPlus_TC_QuickJitForLoops=1,COMPlus_TieredPGO=1 | .NET 6.0 |   100 | 50,816.3 ns | 549.64 ns | 487.24 ns | 51,010.1 ns | 112.38 |    1.14 | 15.5640 |     - |     - |  32,677 B |
+|              Streams | .NET 6 | COMPlus_ReadyToRun=0,COMPlus_TC_QuickJitForLoops=1,COMPlus_TieredPGO=1 | .NET 6.0 |   100 |  1,995.9 ns |   8.77 ns |   7.77 ns |  1,994.8 ns |   4.41 |    0.03 |  0.8430 |     - |     - |   1,768 B |
+|           StructLinq | .NET 6 | COMPlus_ReadyToRun=0,COMPlus_TC_QuickJitForLoops=1,COMPlus_TieredPGO=1 | .NET 6.0 |   100 |    930.9 ns |   1.64 ns |   1.45 ns |    930.8 ns |   2.06 |    0.01 |  0.2785 |     - |     - |     584 B |
+| StructLinq_IFunction | .NET 6 | COMPlus_ReadyToRun=0,COMPlus_TC_QuickJitForLoops=1,COMPlus_TieredPGO=1 | .NET 6.0 |   100 |    656.1 ns |   2.94 ns |   2.75 ns |    656.3 ns |   1.45 |    0.01 |  0.2365 |     - |     - |     496 B |
+|            Hyperlinq | .NET 6 | COMPlus_ReadyToRun=0,COMPlus_TC_QuickJitForLoops=1,COMPlus_TieredPGO=1 | .NET 6.0 |   100 |    957.2 ns |   2.04 ns |   1.70 ns |    957.3 ns |   2.12 |    0.01 |  0.2365 |     - |     - |     496 B |
+|  Hyperlinq_IFunction | .NET 6 | COMPlus_ReadyToRun=0,COMPlus_TC_QuickJitForLoops=1,COMPlus_TieredPGO=1 | .NET 6.0 |   100 |    709.0 ns |   3.80 ns |   3.37 ns |    708.0 ns |   1.57 |    0.01 |  0.2365 |     - |     - |     496 B |

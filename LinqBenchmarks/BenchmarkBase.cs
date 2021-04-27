@@ -5,7 +5,7 @@ namespace LinqBenchmarks
 {
     public class BenchmarkBase
     {
-        [Params(1000)]
+        [Params(100)]
         public int Count { get; set; }
 
         protected static int[] GetSequentialValues(int count)
