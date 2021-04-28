@@ -5,6 +5,7 @@ using NetFabric.Hyperlinq;
 using StructLinq;
 using System.Collections.Generic;
 using System.Linq;
+using LinqFasterer;
 using Nessos.LinqOptimizer.CSharp;
 using Nessos.Streams.CSharp;
 
@@ -51,6 +52,10 @@ namespace LinqBenchmarks.Array.Int32
             => new(source.SelectS(item => item * 3, item => item * 3));
 
         [Benchmark]
+        public List<int> LinqFasterer()
+            => EnumerableF.ToListF(EnumerableF.SelectF(source, item => item * 3));
+
+        [Benchmark]
         public List<int> LinqAF()
             => global::LinqAF.ArrayExtensionMethods
                 .Select(source, item => item * 3)
@@ -76,7 +81,7 @@ namespace LinqBenchmarks.Array.Int32
                 .ToList();
 
         [Benchmark]
-        public List<int> StructLinq_IFunction()
+        public List<int> StructLinq_ValueDelegate()
         {
             var selector = new TripleOfInt32();
             return source.ToStructEnumerable()
@@ -91,7 +96,7 @@ namespace LinqBenchmarks.Array.Int32
                 .ToList();
 
         [Benchmark]
-        public List<int> Hyperlinq_IFunction()
+        public List<int> Hyperlinq_ValueDelegate()
            => source.AsValueEnumerable()
                 .Select<int, TripleOfInt32>()
                 .ToList();
@@ -103,7 +108,7 @@ namespace LinqBenchmarks.Array.Int32
                 .ToList();
 
         [Benchmark]
-        public List<int> Hyperlinq_IFunction_SIMD()
+        public List<int> Hyperlinq_ValueDelegate_SIMD()
            => source.AsValueEnumerable()
                 .SelectVector<int, int, TripleOfInt32>()
                 .ToList();

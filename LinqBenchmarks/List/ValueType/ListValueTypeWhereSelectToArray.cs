@@ -85,7 +85,7 @@ namespace LinqBenchmarks.List.ValueType
                 .ToArray();
 
         [Benchmark]
-        public FatValueType[] StructLinq_IFunction()
+        public FatValueType[] StructLinq_ValueDelegate()
         {
             var predicate = new FatValueTypeIsEven();
             var selector = new TripleOfFatValueType();
@@ -103,7 +103,7 @@ namespace LinqBenchmarks.List.ValueType
                 .ToArray();
 
         [Benchmark]
-        public FatValueType[] Hyperlinq_IFunction()
+        public FatValueType[] Hyperlinq_ValueDelegate()
             => source.AsValueEnumerable()
                 .Where<FatValueTypeIsEven>()
                 .Select<FatValueType, TripleOfFatValueType>()

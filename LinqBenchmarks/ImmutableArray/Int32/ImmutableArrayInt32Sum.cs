@@ -57,7 +57,7 @@ namespace LinqBenchmarks.ImmutableArray.Int32
                 .Sum();
 
         [Benchmark]
-        public int StructLinq_IFunction()
+        public int StructLinq_ValueDelegate()
         {
             return source
                 .ToStructEnumerable()

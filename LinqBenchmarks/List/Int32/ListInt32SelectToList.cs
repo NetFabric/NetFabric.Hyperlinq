@@ -72,7 +72,7 @@ namespace LinqBenchmarks.List.Int32
                 .ToList();
 
         [Benchmark]
-        public List<int> StructLinq_IFunction()
+        public List<int> StructLinq_ValueDelegate()
         {
             var selector = new TripleOfInt32();
             return source.ToStructEnumerable()
@@ -87,7 +87,7 @@ namespace LinqBenchmarks.List.Int32
                 .ToList();
 
         [Benchmark]
-        public List<int> Hyperlinq_IFunction()
+        public List<int> Hyperlinq_ValueDelegate()
            => source.AsValueEnumerable()
                 .Select<int, TripleOfInt32>()
                 .ToList();
@@ -99,7 +99,7 @@ namespace LinqBenchmarks.List.Int32
                 .ToList();
 
         [Benchmark]
-        public List<int> Hyperlinq_IFunction_SIMD()
+        public List<int> Hyperlinq_ValueDelegate_SIMD()
            => source.AsValueEnumerable()
                 .SelectVector<int, int, TripleOfInt32>()
                 .ToList();

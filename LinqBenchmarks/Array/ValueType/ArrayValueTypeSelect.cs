@@ -1,5 +1,7 @@
 ﻿using BenchmarkDotNet.Attributes;
 using JM.LinqFaster;
+using LinqFasterer;
+using Microsoft.Diagnostics.Tracing.Parsers.JScript;
 using Nessos.LinqOptimizer.CSharp;
 using Nessos.Streams.CSharp;
 using NetFabric.Hyperlinq;
@@ -34,8 +36,9 @@ namespace LinqBenchmarks.Array.ValueType
         [Benchmark]
         public FatValueType Linq()
         {
+            var items = System.Linq.Enumerable.Select(source, item => item * 3);
             var sum = default(FatValueType);
-            foreach (var item in System.Linq.Enumerable.Select(source, item => item * 3))
+            foreach (var item in items)
                 sum += item;
             return sum;
         }
@@ -51,10 +54,21 @@ namespace LinqBenchmarks.Array.ValueType
         }
 
         [Benchmark]
+        public FatValueType LinqFasterer()
+        {
+            var items = EnumerableF.SelectF(source, item => item * 3);
+            var sum = default(FatValueType);
+            foreach (var item in items)
+                sum += item;
+            return sum;
+        }
+
+        [Benchmark]
         public FatValueType LinqAF()
         {
+            var items = global::LinqAF.ArrayExtensionMethods.Select(source, item => item * 3);
             var sum = default(FatValueType);
-            foreach (var item in global::LinqAF.ArrayExtensionMethods.Select(source, item => item * 3))
+            foreach (var item in items)
                 sum += item;
             return sum;
         }
@@ -62,11 +76,12 @@ namespace LinqBenchmarks.Array.ValueType
         [Benchmark]
         public FatValueType LinqOptimizer()
         {
-            var sum = default(FatValueType);
-            foreach (var item in source
+            var items = source
                 .AsQueryExpr()
                 .Select(item => item * 3)
-                .Run())
+                .Run();
+            var sum = default(FatValueType);
+            foreach (var item in items)
                 sum += item;
             return sum;
         }
@@ -74,11 +89,12 @@ namespace LinqBenchmarks.Array.ValueType
         [Benchmark]
         public FatValueType Streams()
         {
-            var sum = default(FatValueType);
-            foreach (var item in source
+            var items = source
                 .AsStream()
                 .Select(item => item * 3)
-                .ToEnumerable())
+                .ToEnumerable();
+            var sum = default(FatValueType);
+            foreach (var item in items)
                 sum += item;
             return sum;
         }
@@ -86,67 +102,47 @@ namespace LinqBenchmarks.Array.ValueType
         [Benchmark]
         public FatValueType StructLinq()
         {
-            var sum = default(FatValueType);
-            foreach (var item in source
+            var items = source
                 .ToRefStructEnumerable()
-                .Select((in FatValueType item) => item * 3))
+                .Select((in FatValueType item) => item * 3);
+            var sum = default(FatValueType);
+            foreach (var item in items)
                 sum += item;
             return sum;
         }
 
         [Benchmark]
-        public FatValueType StructLinq_IFunction()
+        public FatValueType StructLinq_ValueDelegate()
         {
-            var sum = default(FatValueType);
             var selector = new TripleOfFatValueType();
-            foreach (var item in source
+            var items = source
                 .ToRefStructEnumerable()
-                .Select(ref selector, x => x, x => x))
-                sum += item;
-            return sum;
-        }
-
-#pragma warning disable HLQ010 // Consider using a 'for' loop instead.
-        [Benchmark]
-        public FatValueType Hyperlinq_Foreach()
-        {
+                .Select(ref selector, x => x, x => x);
             var sum = default(FatValueType);
-            foreach (var item in source.AsValueEnumerable()
-                .Select(item => item * 3))
+            foreach (var item in items)
                 sum += item;
             return sum;
         }
 
         [Benchmark]
-        public FatValueType Hyperlinq_Foreach_IFunction()
-        {
-            var sum = default(FatValueType);
-            foreach (var item in source.AsValueEnumerable()
-                .Select<FatValueType, TripleOfFatValueType>())
-                sum += item;
-            return sum;
-        }
-#pragma warning restore HLQ010 // Consider using a 'for' loop instead.
-
-        [Benchmark]
-        public FatValueType Hyperlinq_For()
+        public FatValueType Hyperlinq()
         {
             var items = source.AsValueEnumerable()
                 .Select(item => item * 3);
             var sum = default(FatValueType);
-            for (var index = 0; index < items.Count; index++)
-                sum += items[index];
+            foreach (var item in items)
+                sum += item;
             return sum;
         }
 
         [Benchmark]
-        public FatValueType Hyperlinq_For_IFunction()
+        public FatValueType Hyperlinq_ValueDelegate()
         {
             var items = source.AsValueEnumerable()
                 .Select<FatValueType, TripleOfFatValueType>();
             var sum = default(FatValueType);
-            for (var index = 0; index < items.Count; index++)
-                sum += items[index];
+            foreach (var item in items)
+                sum += item;
             return sum;
         }
     }

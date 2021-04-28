@@ -15,6 +15,7 @@ using BenchmarkDotNet.Configs;
 using BenchmarkDotNet.Diagnosers;
 using BenchmarkDotNet.Environments;
 using BenchmarkDotNet.Jobs;
+using LinqFasterer;
 
 namespace LinqBenchmarks
 {
@@ -24,10 +25,10 @@ namespace LinqBenchmarks
         {
             var config = DefaultConfig.Instance
                 .AddDiagnoser(MemoryDiagnoser.Default)
-                .AddJob(Job.Default
-                    .WithRuntime(CoreRuntime.Core50)
-                    .WithId(".NET 5")
-                )
+                // .AddJob(Job.Default
+                //     .WithRuntime(CoreRuntime.Core50)
+                //     .WithId(".NET 5")
+                // )
                 .AddJob(Job.Default
                     .WithRuntime(CoreRuntime.Core60)
                     .WithEnvironmentVariables(
@@ -88,6 +89,9 @@ namespace LinqBenchmarks
 
             var linqFasterSimdVersion = GetInformationalVersion(typeof(LinqFasterSIMD).Assembly);
             logger.WriteLine($"- LinqFaster.SIMD: [{linqFasterVersion}](https://www.nuget.org/packages/LinqFaster.SIMD/{linqFasterSimdVersion})");
+
+            var linqFastererVersion = GetInformationalVersion(typeof(EnumerableF).Assembly);
+            logger.WriteLine($"- LinqFasterer: [{linqFastererVersion}](https://www.nuget.org/packages/LinqFasterer/{linqFastererVersion})");
 
             var linqAfVersion = GetFileVersion(typeof(LinqAF.Enumerable).Assembly);
             logger.WriteLine($"- LinqAF: [{linqAfVersion}](https://www.nuget.org/packages/LinqAF/{linqAfVersion})");

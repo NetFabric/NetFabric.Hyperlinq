@@ -22,7 +22,7 @@ namespace LinqBenchmarks.Enumerable.FatReferenceType
                 .FirstOrDefault() is not null;
 
         [Benchmark]
-        public bool StructLinq_IFunction()
+        public bool StructLinq_ValueDelegate()
             => source
                 .ToStructEnumerable()
                 .FirstOrDefault(x => x) is not null;

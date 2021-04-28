@@ -111,7 +111,7 @@ namespace LinqBenchmarks.List.ValueType
         }
 
         [Benchmark]
-        public FatValueType StructLinq_IFunction()
+        public FatValueType StructLinq_ValueDelegate()
         {
             var sum = default(FatValueType);
             var predicate = new FatValueTypeIsEven();
@@ -138,7 +138,7 @@ namespace LinqBenchmarks.List.ValueType
         }
 
         [Benchmark]
-        public FatValueType Hyperlinq_IFunction()
+        public FatValueType Hyperlinq_ValueDelegate()
         {
             var sum = default(FatValueType);
             foreach (var item in source.AsValueEnumerable()

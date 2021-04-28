@@ -22,7 +22,7 @@ namespace LinqBenchmarks.Enumerable.FatReferenceType
                 .Any();
 
         [Benchmark]
-        public bool StructLinq_IFunction()
+        public bool StructLinq_ValueDelegate()
             => source
                 .ToStructEnumerable()
                 .Any();

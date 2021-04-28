@@ -1,5 +1,6 @@
 ﻿using BenchmarkDotNet.Attributes;
 using JM.LinqFaster;
+using LinqFasterer;
 using Nessos.LinqOptimizer.CSharp;
 using Nessos.Streams.CSharp;
 using NetFabric.Hyperlinq;
@@ -44,6 +45,10 @@ namespace LinqBenchmarks.Array.ValueType
             => source.CountF(item => item.IsEven());
 
         [Benchmark]
+        public int LinqFasterer()
+            => EnumerableF.CountF(source, item => item.IsEven());
+
+        [Benchmark]
         public int LinqAF()
             => global::LinqAF.ArrayExtensionMethods.Count(source, item => item.IsEven());
 
@@ -70,7 +75,7 @@ namespace LinqBenchmarks.Array.ValueType
                 .Count();
 
         [Benchmark]
-        public int StructLinq_IFunction()
+        public int StructLinq_ValueDelegate()
         {
             var predicate = new FatValueTypeIsEven();
             return source
@@ -86,7 +91,7 @@ namespace LinqBenchmarks.Array.ValueType
                 .Count();
 
         [Benchmark]
-        public int Hyperlinq_IFunction()
+        public int Hyperlinq_ValueDelegate()
             => source.AsValueEnumerable()
                 .Where<FatValueTypeIsEven>()
                 .Count();

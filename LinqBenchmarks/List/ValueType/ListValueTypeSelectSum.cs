@@ -60,7 +60,7 @@ namespace LinqBenchmarks.List.ValueType
                 .Sum((in FatValueType item) => item.Value0);
 
         [Benchmark]
-        public int StructLinq_IFunction()
+        public int StructLinq_ValueDelegate()
         {
             var selector = new Value0Selector();
             return source
@@ -75,7 +75,7 @@ namespace LinqBenchmarks.List.ValueType
                 .Sum();
 
         [Benchmark]
-        public int Hyperlinq_IFunction()
+        public int Hyperlinq_ValueDelegate()
             => source.AsValueEnumerable()
                 .Select<int, Value0Selector>()
                 .Sum();

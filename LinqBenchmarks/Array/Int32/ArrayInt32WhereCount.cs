@@ -3,6 +3,7 @@ using JM.LinqFaster;
 using NetFabric.Hyperlinq;
 using StructLinq;
 using System.Linq;
+using LinqFasterer;
 using Nessos.LinqOptimizer.CSharp;
 using Nessos.Streams.CSharp;
 
@@ -45,6 +46,10 @@ namespace LinqBenchmarks.Array.Int32
             => source.CountF(item => item.IsEven());
 
         [Benchmark]
+        public int LinqFasterer()
+            => EnumerableF.CountF(source, item => item.IsEven());
+
+        [Benchmark]
         public int LinqAF()
             => global::LinqAF.ArrayExtensionMethods.Count(source, item => item.IsEven());
 
@@ -71,7 +76,7 @@ namespace LinqBenchmarks.Array.Int32
                 .Count();
 
         [Benchmark]
-        public int StructLinq_IFunction()
+        public int StructLinq_ValueDelegate()
         {
             var predicate = new Int32IsEven();
             return source
@@ -87,7 +92,7 @@ namespace LinqBenchmarks.Array.Int32
                 .Count();
 
         [Benchmark]
-        public int Hyperlinq_IFunction()
+        public int Hyperlinq_ValueDelegate()
             => source.AsValueEnumerable()
                 .Where<Int32IsEven>()
                 .Count();

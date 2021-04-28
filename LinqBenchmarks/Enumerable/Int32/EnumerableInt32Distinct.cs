@@ -51,7 +51,7 @@ namespace LinqBenchmarks.Enumerable.Int32
         }
 
         [Benchmark]
-        public int StructLinq_IFunction()
+        public int StructLinq_ValueDelegate()
         {
             var sum = 0;
             var comparer = new DefaultStructEqualityComparer();

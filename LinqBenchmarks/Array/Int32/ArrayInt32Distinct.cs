@@ -3,6 +3,7 @@ using NetFabric.Hyperlinq;
 using StructLinq;
 using System.Collections.Generic;
 using System.Linq;
+using LinqFasterer;
 
 namespace LinqBenchmarks.Array.Int32
 {
@@ -59,6 +60,15 @@ namespace LinqBenchmarks.Array.Int32
         }
 
         [Benchmark]
+        public int LinqFasterer()
+        {
+            var sum = 0;
+            foreach (var item in EnumerableF.DistinctF(source))
+                sum += item;
+            return sum;
+        }
+
+        [Benchmark]
         public int LinqAF()
         {
             var sum = 0;
@@ -78,7 +88,7 @@ namespace LinqBenchmarks.Array.Int32
 
         
         [Benchmark]
-        public int StructLinq_IFunction()
+        public int StructLinq_ValueDelegate()
         {
             var sum = 0;
             var comparer = new DefaultStructEqualityComparer();

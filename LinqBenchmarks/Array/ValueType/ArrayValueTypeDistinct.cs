@@ -3,6 +3,7 @@ using NetFabric.Hyperlinq;
 using StructLinq;
 using System.Collections.Generic;
 using System.Linq;
+using LinqFasterer;
 
 namespace LinqBenchmarks.Array.ValueType
 {
@@ -60,6 +61,15 @@ namespace LinqBenchmarks.Array.ValueType
         }
 
         [Benchmark]
+        public FatValueType LinqFasterer()
+        {
+            var sum = default(FatValueType);
+            foreach (var item in EnumerableF.DistinctF(source))
+                sum += item;
+            return sum;
+        }
+
+        [Benchmark]
         public FatValueType LinqAF()
         {
             var sum = default(FatValueType);
@@ -80,7 +90,7 @@ namespace LinqBenchmarks.Array.ValueType
         }
 
         [Benchmark]
-        public FatValueType StructLinq_IFunction()
+        public FatValueType StructLinq_ValueDelegate()
         {
             var sum = default(FatValueType);
             var comparer = new FatValueTypeEqualityComparer();

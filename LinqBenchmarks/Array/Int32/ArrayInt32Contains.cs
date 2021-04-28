@@ -4,6 +4,7 @@ using JM.LinqFaster.SIMD;
 using NetFabric.Hyperlinq;
 using StructLinq;
 using System.Linq;
+using LinqFasterer;
 
 namespace LinqBenchmarks.Array.Int32
 {
@@ -49,6 +50,10 @@ namespace LinqBenchmarks.Array.Int32
             => source.ContainsS(value);
 
         [Benchmark]
+        public bool LinqFasterer()
+            => EnumerableF.ContainsF(source, value);
+
+        [Benchmark]
         public bool LinqAF()
             => global::LinqAF.ArrayExtensionMethods
                 .Contains(source, value);
@@ -60,7 +65,7 @@ namespace LinqBenchmarks.Array.Int32
                 .Contains(value);
 
         [Benchmark]
-        public bool StructLinq_IFunction()
+        public bool StructLinq_ValueDelegate()
         {
             return source
                 .ToStructEnumerable()

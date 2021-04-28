@@ -70,7 +70,7 @@ namespace LinqBenchmarks.List.Int32
                 .Sum();
 
         [Benchmark]
-        public int StructLinq_IFunction()
+        public int StructLinq_ValueDelegate()
             => source
                 .ToStructEnumerable()
                 .Sum(x => x);

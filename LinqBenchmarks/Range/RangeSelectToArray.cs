@@ -53,7 +53,7 @@ namespace LinqBenchmarks.Range
                 .ToArray();
 
         [Benchmark]
-        public int[] StructLinq_IFunction()
+        public int[] StructLinq_ValueDelegate()
         {
             var selector = new TripleOfInt32();
             return StructEnumerable
@@ -70,7 +70,7 @@ namespace LinqBenchmarks.Range
                 .ToArray();
 
         [Benchmark]
-        public int[] Hyperlinq_IFunction()
+        public int[] Hyperlinq_ValueDelegate()
             => ValueEnumerable
                 .Range(Start, Count)
                 .Select<int, TripleOfInt32>()
@@ -84,7 +84,7 @@ namespace LinqBenchmarks.Range
                 .ToArray();
 
         [Benchmark]
-        public int[] Hyperlinq_IFunction_SIMD()
+        public int[] Hyperlinq_ValueDelegate_SIMD()
             => ValueEnumerable
                 .Range(Start, Count)
                 .SelectVector<int, TripleOfInt32>()

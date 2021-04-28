@@ -4,6 +4,7 @@ using NetFabric.Hyperlinq;
 using StructLinq;
 using System.Collections.Generic;
 using System.Linq;
+using LinqFasterer;
 using Nessos.LinqOptimizer.CSharp;
 using Nessos.Streams.CSharp;
 
@@ -61,6 +62,16 @@ namespace LinqBenchmarks.Array.Int32
         }
 
         [Benchmark]
+        public int LinqFasterer()
+        {
+            var items = EnumerableF.WhereF(EnumerableF.TakeF(EnumerableF.SkipF(source, Skip), Count), item => item.IsEven());
+            var sum = 0;
+            for (var index = 0; index < items.Count; index++)
+                sum += items[index];
+            return sum;
+        }
+
+        [Benchmark]
         public int LinqAF()
         {
             var sum = 0;
@@ -111,7 +122,7 @@ namespace LinqBenchmarks.Array.Int32
         }
 
         [Benchmark]
-        public int StructLinq_IFunction()
+        public int StructLinq_ValueDelegate()
         {
             var sum = 0;
             var predicate = new Int32IsEven();
@@ -137,7 +148,7 @@ namespace LinqBenchmarks.Array.Int32
         }
 
         [Benchmark]
-        public int Hyperlinq_IFunction()
+        public int Hyperlinq_ValueDelegate()
         {
             var sum = 0;
             foreach (var item in source.AsValueEnumerable()

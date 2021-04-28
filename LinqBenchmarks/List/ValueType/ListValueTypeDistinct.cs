@@ -98,7 +98,7 @@ namespace LinqBenchmarks.List.ValueType
         }
 
         [Benchmark]
-        public FatValueType StructLinq_IFunction()
+        public FatValueType StructLinq_ValueDelegate()
         {
             var sum = default(FatValueType);
             var comparer = new FatValueTypeEqualityComparer();

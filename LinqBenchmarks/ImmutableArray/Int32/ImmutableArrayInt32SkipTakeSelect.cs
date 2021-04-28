@@ -36,8 +36,9 @@ namespace LinqBenchmarks.ImmutableArray.Int32
         [Benchmark]
         public int Linq()
         {
+            var items = source.Skip(Skip).Take(Count).Select(item => item * 3);
             var sum = 0;
-            foreach (var item in source.Skip(Skip).Take(Count).Select(item => item * 3))
+            foreach (var item in items)
                 sum += item;
             return sum;
         }
@@ -45,13 +46,14 @@ namespace LinqBenchmarks.ImmutableArray.Int32
         [Benchmark]
         public int LinqOptimizer()
         {
-            var sum = 0;
-            foreach (var item in source
+            var items = source
                 .AsQueryExpr()
                 .Skip(Skip)
                 .Take(Count)
                 .Select(item => item * 3)
-                .Run())
+                .Run();
+            var sum = 0;
+            foreach (var item in items)
                 sum += item;
             return sum;
         }
@@ -59,13 +61,14 @@ namespace LinqBenchmarks.ImmutableArray.Int32
         [Benchmark]
         public int Streams()
         {
-            var sum = 0;
-            foreach (var item in source
+            var items = source
                 .AsStream()
                 .Skip(Skip)
                 .Take(Count)
                 .Select(item => item * 3)
-                .ToEnumerable())
+                .ToEnumerable();
+            var sum = 0;
+            foreach (var item in items)
                 sum += item;
             return sum;
         }
@@ -73,79 +76,55 @@ namespace LinqBenchmarks.ImmutableArray.Int32
         [Benchmark]
         public int StructLinq()
         {
-            var sum = 0;
-            foreach (var item in source
+            var items = source
                 .ToStructEnumerable()
                 .Skip(Skip)
                 .Take(Count)
-                .Select(item => item * 3))
+                .Select(item => item * 3);
+            var sum = 0;
+            foreach (var item in items)
                 sum += item;
             return sum;
         }
 
         [Benchmark]
-        public int StructLinq_IFunction()
+        public int StructLinq_ValueDelegate()
         {
-            var sum = 0;
             var selector = new TripleOfInt32();
-            foreach (var item in source
+            var items = source
                 .ToStructEnumerable()
                 .Skip(Skip, x=> x)
                 .Take(Count, x=> x)
-                .Select(ref selector, x => x, x => x))
-                sum += item;
-            return sum;
-        }
-
-#pragma warning disable HLQ010 // Consider using a 'for' loop instead.
-        [Benchmark]
-        public int Hyperlinq_Foreach()
-        {
+                .Select(ref selector, x => x, x => x);
             var sum = 0;
-            foreach (var item in source.AsValueEnumerable()
-                .Skip(Skip)
-                .Take(Count)
-                .Select(item => item * 3))
+            foreach (var item in items)
                 sum += item;
             return sum;
         }
 
         [Benchmark]
-        public int Hyperlinq_Foreach_IFunction()
+        public int Hyperlinq()
         {
-            var sum = 0;
-            foreach (var item in source.AsValueEnumerable()
-                .Skip(Skip)
-                .Take(Count)
-                .Select<int, TripleOfInt32>())
-                sum += item;
-            return sum;
-        }
-#pragma warning restore HLQ010 // Consider using a 'for' loop instead.
-
-        [Benchmark]
-        public int Hyperlinq_For()
-        {
-            var sum = 0;
             var items = source.AsValueEnumerable()
                 .Skip(Skip)
                 .Take(Count)
                 .Select(item => item * 3);
-            for (var index = 0; index < items.Count; index++)
-                sum += items[index];
+            var sum = 0;
+            foreach (var item in items)
+                sum += item;
             return sum;
         }
 
         [Benchmark]
-        public int Hyperlinq_For_IFunction()
+        public int Hyperlinq_ValueDelegate()
         {
-            var sum = 0;
             var items = source.AsValueEnumerable()
                 .Skip(Skip)
                 .Take(Count)
                 .Select<int, TripleOfInt32>();
-            for (var index = 0; index < items.Count; index++)
-                sum += items[index];
+            var sum = 0;
+            foreach (var item in items)
+                sum += item;
             return sum;
         }
     }

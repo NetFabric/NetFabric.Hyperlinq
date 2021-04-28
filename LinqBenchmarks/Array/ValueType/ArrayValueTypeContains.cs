@@ -1,5 +1,6 @@
 ﻿using BenchmarkDotNet.Attributes;
 using JM.LinqFaster;
+using LinqFasterer;
 using NetFabric.Hyperlinq;
 using StructLinq;
 
@@ -42,6 +43,10 @@ namespace LinqBenchmarks.Array.ValueType
             => source.ContainsF(value);
 
         [Benchmark]
+        public bool LinqFasterer()
+            => EnumerableF.ContainsF(source, value);
+
+        [Benchmark]
         public bool LinqAF()
             => global::LinqAF.ArrayExtensionMethods.Contains(source, value);
 
@@ -52,7 +57,7 @@ namespace LinqBenchmarks.Array.ValueType
                 .Contains(value);
 
         [Benchmark]
-        public bool StructLinq_IFunction() 
+        public bool StructLinq_ValueDelegate() 
             => source
                 .ToRefStructEnumerable()
                 .Contains(value, x => x);

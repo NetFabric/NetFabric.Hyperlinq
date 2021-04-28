@@ -104,7 +104,7 @@ namespace LinqBenchmarks.List.ValueType
 
 
         [Benchmark]
-        public FatValueType StructLinq_IFunction()
+        public FatValueType StructLinq_ValueDelegate()
         {
             var sum = default(FatValueType);
             var selector = new TripleOfFatValueType();
@@ -132,7 +132,7 @@ namespace LinqBenchmarks.List.ValueType
         }
 
         [Benchmark]
-        public FatValueType Hyperlinq_Foreach_IFunction()
+        public FatValueType Hyperlinq_Foreach_ValueDelegate()
         {
             var sum = default(FatValueType);
             foreach (var item in source.AsValueEnumerable()
@@ -158,7 +158,7 @@ namespace LinqBenchmarks.List.ValueType
         }
 
         [Benchmark]
-        public FatValueType Hyperlinq_For_IFunction()
+        public FatValueType Hyperlinq_For_ValueDelegate()
         {
             var sum = default(FatValueType);
             var items = source.AsValueEnumerable()

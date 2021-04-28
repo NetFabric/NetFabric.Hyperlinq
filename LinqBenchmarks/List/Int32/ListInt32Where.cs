@@ -102,7 +102,7 @@ namespace LinqBenchmarks.List.Int32
         }
 
         [Benchmark]
-        public int StructLinq_IFunction()
+        public int StructLinq_ValueDelegate()
         {
             var sum = 0;
             var predicate = new Int32IsEven();
@@ -124,7 +124,7 @@ namespace LinqBenchmarks.List.Int32
         }
 
         [Benchmark]
-        public int Hyperlinq_IFunction()
+        public int Hyperlinq_ValueDelegate()
         {
             var sum = 0;
             foreach (var item in source.AsValueEnumerable()

@@ -5,6 +5,7 @@ using StructLinq;
 using System.Buffers;
 using System.Collections.Generic;
 using System.Linq;
+using LinqFasterer;
 using Nessos.LinqOptimizer.CSharp;
 using Nessos.Streams.CSharp;
 
@@ -51,6 +52,14 @@ namespace LinqBenchmarks.Array.ValueType
                 .WhereSelectF(item => item.IsEven(), item => item * 3);
 
         [Benchmark]
+        public FatValueType[] LinqFasterer()
+            => EnumerableF.ToArrayF(
+                EnumerableF.SelectF(
+                    EnumerableF.WhereF(source, item => item.IsEven()), 
+                    item => item * 3)
+            );
+
+        [Benchmark]
         public FatValueType[] LinqAF()
             => global::LinqAF.ArrayExtensionMethods.Where(source, item => item.IsEven()).Select(item => item * 3).ToArray();
 
@@ -80,7 +89,7 @@ namespace LinqBenchmarks.Array.ValueType
                 .ToArray();
 
         [Benchmark]
-        public FatValueType[] StructLinq_IFunction()
+        public FatValueType[] StructLinq_ValueDelegate()
         {
             var predicate = new FatValueTypeIsEven();
             var selector = new TripleOfFatValueType();
@@ -98,7 +107,7 @@ namespace LinqBenchmarks.Array.ValueType
                 .ToArray();
 
         [Benchmark]
-        public FatValueType[] Hyperlinq_IFunction()
+        public FatValueType[] Hyperlinq_ValueDelegate()
             => source.AsValueEnumerable()
                 .Where<FatValueTypeIsEven>()
                 .Select<FatValueType, TripleOfFatValueType>()

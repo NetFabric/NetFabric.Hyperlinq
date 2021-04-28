@@ -4,6 +4,7 @@ using JM.LinqFaster.SIMD;
 using NetFabric.Hyperlinq;
 using StructLinq;
 using System.Linq;
+using LinqFasterer;
 using Nessos.LinqOptimizer.CSharp;
 using Nessos.Streams.CSharp;
 
@@ -48,6 +49,10 @@ namespace LinqBenchmarks.Array.Int32
             => source.SumS();
 
         [Benchmark]
+        public int LinqFasterer()
+            => EnumerableF.SumF(source);
+
+        [Benchmark]
         public int LinqAF()
             => global::LinqAF.ArrayExtensionMethods.Sum(source);
 
@@ -71,7 +76,7 @@ namespace LinqBenchmarks.Array.Int32
                 .Sum();
 
         [Benchmark]
-        public int StructLinq_IFunction()
+        public int StructLinq_ValueDelegate()
         {
             return source
                 .ToStructEnumerable()

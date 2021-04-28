@@ -44,7 +44,7 @@ namespace LinqBenchmarks.ImmutableArray.Int32
                 .Contains(value);
 
         [Benchmark]
-        public bool StructLinq_IFunction()
+        public bool StructLinq_ValueDelegate()
         {
             return source
                 .ToStructEnumerable()

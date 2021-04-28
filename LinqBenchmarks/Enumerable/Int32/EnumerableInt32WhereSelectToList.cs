@@ -56,7 +56,7 @@ namespace LinqBenchmarks.Enumerable.Int32
                 .ToList();
 
         [Benchmark]
-        public List<int> StructLinq_IFunction()
+        public List<int> StructLinq_ValueDelegate()
         {
             var predicate = new Int32IsEven();
             var selector = new TripleOfInt32();
@@ -75,7 +75,7 @@ namespace LinqBenchmarks.Enumerable.Int32
                 .ToList();
 
         [Benchmark]
-        public List<int> Hyperlinq_IFunction()
+        public List<int> Hyperlinq_ValueDelegate()
             => source.AsValueEnumerable()
                 .Where<Int32IsEven>()
                 .Select<int, TripleOfInt32>()

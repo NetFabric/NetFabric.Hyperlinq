@@ -12,6 +12,7 @@
     <PackageReference Include="LinqAF" Version="3.0.0" />
     <PackageReference Include="JM.LinqFaster" Version="1.1.2" />
     <PackageReference Include="LinqFaster.SIMD" Version="1.0.3" />
+    <PackageReference Include="LinqFasterer" Version="2.1.0" />
     <PackageReference Include="LinqOptimizer.CSharp" Version="0.7.0" />
     <PackageReference Include="NetFabric.Hyperlinq" Version="3.0.0-beta44" />
     <PackageReference Include="NetFabric.Hyperlinq.Analyzer" Version="2.0.1">

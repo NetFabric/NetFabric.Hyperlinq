@@ -1,5 +1,6 @@
 ﻿using BenchmarkDotNet.Attributes;
 using JM.LinqFaster;
+using LinqFasterer;
 using Nessos.LinqOptimizer.CSharp;
 using Nessos.Streams.CSharp;
 using NetFabric.Hyperlinq;
@@ -38,8 +39,9 @@ namespace LinqBenchmarks.Array.ValueType
         [Benchmark]
         public FatValueType Linq()
         {
+            var items = System.Linq.Enumerable.Where(source, item => item.IsEven());
             var sum = default(FatValueType);
-            foreach (var item in System.Linq.Enumerable.Where(source, item => item.IsEven()))
+            foreach (var item in items)
                 sum += item;
             return sum;
         }
@@ -55,10 +57,21 @@ namespace LinqBenchmarks.Array.ValueType
         }
 
         [Benchmark]
+        public FatValueType LinqFasterer()
+        {
+            var items = EnumerableF.WhereF(source, item => item.IsEven());
+            var sum = default(FatValueType);
+            for (var index = 0; index < items.Count; index++)
+                sum += items[index];
+            return sum;
+        }
+
+        [Benchmark]
         public FatValueType LinqAF()
         {
+            var items = global::LinqAF.ArrayExtensionMethods.Where(source, item => item.IsEven());
             var sum = default(FatValueType);
-            foreach (var item in global::LinqAF.ArrayExtensionMethods.Where(source, item => item.IsEven()))
+            foreach (var item in items)
                 sum += item;
             return sum;
         }
@@ -66,11 +79,12 @@ namespace LinqBenchmarks.Array.ValueType
         [Benchmark]
         public FatValueType LinqOptimizer()
         {
-            var sum = default(FatValueType);
-            foreach (var item in source
+            var items = source
                 .AsQueryExpr()
                 .Where(item => item.IsEven())
-                .Run())
+                .Run();
+            var sum = default(FatValueType);
+            foreach (var item in items)
                 sum += item;
             return sum;
         }
@@ -78,11 +92,12 @@ namespace LinqBenchmarks.Array.ValueType
         [Benchmark]
         public FatValueType Streams()
         {
-            var sum = default(FatValueType);
-            foreach (var item in source
+            var fatValueTypes = source
                 .AsStream()
                 .Where(item => item.IsEven())
-                .ToEnumerable())
+                .ToEnumerable();
+            var sum = default(FatValueType);
+            foreach (var item in fatValueTypes)
                 sum += item;
             return sum;
         }
@@ -90,22 +105,24 @@ namespace LinqBenchmarks.Array.ValueType
         [Benchmark]
         public FatValueType StructLinq()
         {
-            var sum = default(FatValueType);
-            foreach (ref readonly var item in source
+            var items = source
                 .ToRefStructEnumerable()
-                .Where((in FatValueType item) => item.IsEven()))
+                .Where((in FatValueType item) => item.IsEven());
+            var sum = default(FatValueType);
+            foreach (ref readonly var item in items)
                 sum += item;
             return sum;
         }
 
         [Benchmark]
-        public FatValueType StructLinq_IFunction()
+        public FatValueType StructLinq_ValueDelegate()
         {
-            var sum = default(FatValueType);
             var predicate = new FatValueTypeIsEven();
-            foreach (ref readonly var item in source
+            var items = source
                 .ToRefStructEnumerable()
-                .Where(ref predicate, x => x))
+                .Where(ref predicate, x => x);
+            var sum = default(FatValueType);
+            foreach (ref readonly var item in items)
                 sum += item;
             return sum;
         }
@@ -113,19 +130,21 @@ namespace LinqBenchmarks.Array.ValueType
         [Benchmark]
         public FatValueType Hyperlinq()
         {
+            var items = source.AsValueEnumerable()
+                .Where(item => item.IsEven());
             var sum = default(FatValueType);
-            foreach (var item in source.AsValueEnumerable()
-                .Where(item => item.IsEven()))
+            foreach (var item in items)
                 sum += item;
             return sum;
         }
 
         [Benchmark]
-        public FatValueType Hyperlinq_IFunction()
+        public FatValueType Hyperlinq_ValueDelegate()
         {
+            var items = source.AsValueEnumerable()
+                .Where<FatValueTypeIsEven>();
             var sum = default(FatValueType);
-            foreach (var item in source.AsValueEnumerable()
-                .Where<FatValueTypeIsEven>())
+            foreach (var item in items)
                 sum += item;
             return sum;
         }

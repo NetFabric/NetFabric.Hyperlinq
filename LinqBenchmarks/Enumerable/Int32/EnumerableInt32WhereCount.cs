@@ -52,7 +52,7 @@ namespace LinqBenchmarks.Enumerable.Int32
                 .Count();
 
         [Benchmark]
-        public int StructLinq_IFunction()
+        public int StructLinq_ValueDelegate()
         {
             var predicate = new Int32IsEven();
             return source
@@ -68,7 +68,7 @@ namespace LinqBenchmarks.Enumerable.Int32
                 .Count();
 
         [Benchmark]
-        public int Hyperlinq_IFunction()
+        public int Hyperlinq_ValueDelegate()
             => source.AsValueEnumerable()
                 .Where<Int32IsEven>()
                 .Count();
