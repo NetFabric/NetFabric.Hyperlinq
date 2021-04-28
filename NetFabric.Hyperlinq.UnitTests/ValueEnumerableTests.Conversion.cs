@@ -7,7 +7,12 @@ using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests
 {
-    public abstract partial class ValueEnumerableTestsBase<TEnumerable, TSkipEnumerable, TTakeEnumerable>
+    public abstract partial class ValueEnumerableTests<
+        TEnumerable,
+        TSkipEnumerable,
+        TTakeEnumerable,
+        TWhereEnumerable,
+        TWhereAtEnumerable>
     {
         // [Fact]
         // public void MustHaveAsEnumerable()

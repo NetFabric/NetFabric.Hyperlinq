@@ -24,8 +24,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsValueEnumerable.Bindings.Sy
             _ = result.Must()
                 .BeOfType<ArrayExtensions.ArraySegmentValueEnumerable<int>>()
                 .BeEnumerableOf<int>()
-                .BeEqualTo(wrapped, testRefStructs: false);
-            _ = result.SequenceEqual(wrapped).Must().BeTrue();
+                .BeEqualTo(wrapped);
         }
     }
 }

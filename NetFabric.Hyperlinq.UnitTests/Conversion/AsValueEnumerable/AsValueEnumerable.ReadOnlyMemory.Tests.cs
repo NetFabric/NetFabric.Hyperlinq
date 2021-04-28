@@ -21,7 +21,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsValueEnumerable.ReadOnlyMem
                 .AsValueEnumerable();
 
             // Assert
-            result.SequenceEqual(source).Must().BeTrue();
+            result.Must().BeEnumerableOf<int>().BeEqualTo(source);
         }
         
         [Theory]
@@ -51,7 +51,10 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsValueEnumerable.ReadOnlyMem
     }
 
     public class MemoryValueEnumerableTests
-        : ValueEnumerableTestsBase<ArrayExtensions.MemoryValueEnumerable<int>>
+        : ValueEnumerableTests<
+            ArrayExtensions.MemoryValueEnumerable<int>,
+            ValueEnumerableExtensions.WhereEnumerable<ArrayExtensions.MemoryValueEnumerable<int>, ArrayExtensions.MemoryValueEnumerable<int>.DisposableEnumerator, int, FunctionWrapper<int, bool>>,
+            ValueEnumerableExtensions.WhereAtEnumerable<ArrayExtensions.MemoryValueEnumerable<int>, ArrayExtensions.MemoryValueEnumerable<int>.DisposableEnumerator, int, FunctionWrapper<int, int, bool>>>
     {
         public MemoryValueEnumerableTests() 
             : base(array => ((ReadOnlyMemory<int>)array.AsMemory()).AsValueEnumerable())

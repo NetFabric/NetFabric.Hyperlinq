@@ -73,8 +73,8 @@ namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct.AsyncValueEnumerable
                 .ConfigureAwait(false);
 
             // Assert
-            _ = result
-                .SequenceEqual(expected);
+            _ = result.Memory.Must()
+                .BeEqualTo(expected);
         }
 
         [Theory]

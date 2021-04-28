@@ -46,10 +46,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsValueEnumerable.ReadOnlyCol
     }
 
     public class ValueEnumerableTests1
-        : ValueEnumerableTestsBase<
+        : ValueEnumerableTests<
             ReadOnlyCollectionExtensions.ValueEnumerable<int>,
             ValueReadOnlyCollectionExtensions.SkipTakeEnumerable<ReadOnlyCollectionExtensions.ValueEnumerable<int>, ValueEnumerator<int>, int>,
-            ValueReadOnlyCollectionExtensions.SkipTakeEnumerable<ReadOnlyCollectionExtensions.ValueEnumerable<int>, ValueEnumerator<int>, int>>
+            ValueReadOnlyCollectionExtensions.SkipTakeEnumerable<ReadOnlyCollectionExtensions.ValueEnumerable<int>, ValueEnumerator<int>, int>,
+            ValueReadOnlyCollectionExtensions.WhereEnumerable<ReadOnlyCollectionExtensions.ValueEnumerable<int>, ValueEnumerator<int>, int, FunctionWrapper<int, bool>>,
+            ValueReadOnlyCollectionExtensions.WhereAtEnumerable<ReadOnlyCollectionExtensions.ValueEnumerable<int>, ValueEnumerator<int>, int, FunctionWrapper<int, int, bool>>
+        >
     {
         public ValueEnumerableTests1()
             : base(array => Wrap.AsReadOnlyCollection(array).AsValueEnumerable<int>())

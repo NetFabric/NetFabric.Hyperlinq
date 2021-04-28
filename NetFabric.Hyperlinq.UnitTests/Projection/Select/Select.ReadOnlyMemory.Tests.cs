@@ -25,8 +25,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Projection.Select
             // Assert
             _ = result.Must()
                 .BeEnumerableOf<string>()
-                .BeEqualTo(expected, testRefStructs: false, testRefReturns: false);
-            _ = result.SequenceEqual(expected).Must().BeTrue();
+                .BeEqualTo(expected, testRefReturns: false);
         }
         
         [Theory]

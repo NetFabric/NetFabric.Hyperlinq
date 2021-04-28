@@ -76,10 +76,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsValueEnumerable.ValueEnumer
     }
         
     public class ValueEnumerableTests6
-        : ValueEnumerableTestsBase<
+        : ValueEnumerableTests<
             ValueEnumerableExtensions.ValueEnumerable<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, Wrap.Enumerator<int>, int, FunctionWrapper<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>>, FunctionWrapper<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>>>, 
             ValueEnumerableExtensions.SkipEnumerable<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>,
-            ValueEnumerableExtensions.TakeEnumerable<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>>
+            ValueEnumerableExtensions.TakeEnumerable<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>,
+            ValueEnumerableExtensions.WhereEnumerable<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int, FunctionWrapper<int, bool>>,
+            ValueEnumerableExtensions.WhereAtEnumerable<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int, FunctionWrapper<int, int, bool>>
+        >
     {
         public ValueEnumerableTests6() 
             : base(array => ValueEnumerableExtensions

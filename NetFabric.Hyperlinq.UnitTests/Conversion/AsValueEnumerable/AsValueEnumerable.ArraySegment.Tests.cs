@@ -21,7 +21,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsValueEnumerable.ArraySegmen
                 .AsValueEnumerable();
 
             // Assert
-            result.SequenceEqual(source).Must().BeTrue();
+            result.Must().BeEnumerableOf<int>().BeEqualTo(source);
         }
         
         [Theory]
@@ -51,7 +51,10 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsValueEnumerable.ArraySegmen
     }
 
     public class ArraySegmentValueEnumerableTests
-        : ValueEnumerableTestsBase<ArrayExtensions.ArraySegmentValueEnumerable<int>>
+        : ValueEnumerableTests<
+            ArrayExtensions.ArraySegmentValueEnumerable<int>,
+            ValueEnumerableExtensions.WhereEnumerable<ArrayExtensions.ArraySegmentValueEnumerable<int>, ArrayExtensions.ArraySegmentValueEnumerable<int>.DisposableEnumerator, int, FunctionWrapper<int, bool>>,
+            ValueEnumerableExtensions.WhereAtEnumerable<ArrayExtensions.ArraySegmentValueEnumerable<int>, ArrayExtensions.ArraySegmentValueEnumerable<int>.DisposableEnumerator, int, FunctionWrapper<int, int, bool>>>
     {
         public ArraySegmentValueEnumerableTests() 
             : base(array => new ArraySegment<int>(array).AsValueEnumerable())

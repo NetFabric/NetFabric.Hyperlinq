@@ -10,13 +10,12 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.9.1" />
-    <PackageReference Include="NetFabric.Assertive" Version="3.0.0" />
-    <PackageReference Include="NetFabric.Hyperlinq.Analyzer" Version="2.0.1">
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.9.4" />
+    <PackageReference Include="NetFabric.Assertive" Version="4.0.0-beta01" />
+    <PackageReference Include="NetFabric.Hyperlinq.Analyzer" Version="2.0.3">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="NetFabric.Reflection" Version="3.0.0" />
     <PackageReference Include="System.Interactive" Version="5.0.0" />
     <PackageReference Include="xunit" Version="2.4.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">

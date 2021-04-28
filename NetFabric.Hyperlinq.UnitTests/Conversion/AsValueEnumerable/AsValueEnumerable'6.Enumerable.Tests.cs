@@ -77,10 +77,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsValueEnumerable.Enumerable
      }
         
      public class ValueEnumerableTests6
-         : ValueEnumerableTestsBase<
+         : ValueEnumerableTests<
              EnumerableExtensions.ValueEnumerable<Wrap.EnumerableWrapper<int>, Wrap.Enumerator<int>, Wrap.Enumerator<int>, int, FunctionWrapper<Wrap.EnumerableWrapper<int>, Wrap.Enumerator<int>>, FunctionWrapper<Wrap.EnumerableWrapper<int>, Wrap.Enumerator<int>>>, 
              ValueEnumerableExtensions.SkipEnumerable<EnumerableExtensions.ValueEnumerable<Wrap.EnumerableWrapper<int>, Wrap.Enumerator<int>, Wrap.Enumerator<int>, int, FunctionWrapper<Wrap.EnumerableWrapper<int>, Wrap.Enumerator<int>>, FunctionWrapper<Wrap.EnumerableWrapper<int>, Wrap.Enumerator<int>>>, Wrap.Enumerator<int>, int>,
-             ValueEnumerableExtensions.TakeEnumerable<EnumerableExtensions.ValueEnumerable<Wrap.EnumerableWrapper<int>, Wrap.Enumerator<int>, Wrap.Enumerator<int>, int, FunctionWrapper<Wrap.EnumerableWrapper<int>, Wrap.Enumerator<int>>, FunctionWrapper<Wrap.EnumerableWrapper<int>, Wrap.Enumerator<int>>>, Wrap.Enumerator<int>, int>>
+             ValueEnumerableExtensions.TakeEnumerable<EnumerableExtensions.ValueEnumerable<Wrap.EnumerableWrapper<int>, Wrap.Enumerator<int>, Wrap.Enumerator<int>, int, FunctionWrapper<Wrap.EnumerableWrapper<int>, Wrap.Enumerator<int>>, FunctionWrapper<Wrap.EnumerableWrapper<int>, Wrap.Enumerator<int>>>, Wrap.Enumerator<int>, int>,
+             ValueEnumerableExtensions.WhereEnumerable<EnumerableExtensions.ValueEnumerable<Wrap.EnumerableWrapper<int>, Wrap.Enumerator<int>, Wrap.Enumerator<int>, int, FunctionWrapper<Wrap.EnumerableWrapper<int>, Wrap.Enumerator<int>>, FunctionWrapper<Wrap.EnumerableWrapper<int>, Wrap.Enumerator<int>>>, Wrap.Enumerator<int>, int, FunctionWrapper<int, bool>>,
+             ValueEnumerableExtensions.WhereAtEnumerable<EnumerableExtensions.ValueEnumerable<Wrap.EnumerableWrapper<int>, Wrap.Enumerator<int>, Wrap.Enumerator<int>, int, FunctionWrapper<Wrap.EnumerableWrapper<int>, Wrap.Enumerator<int>>, FunctionWrapper<Wrap.EnumerableWrapper<int>, Wrap.Enumerator<int>>>, Wrap.Enumerator<int>, int, FunctionWrapper<int, int, bool>>
+         >
      {
          public ValueEnumerableTests6() 
              : base(array => Wrap

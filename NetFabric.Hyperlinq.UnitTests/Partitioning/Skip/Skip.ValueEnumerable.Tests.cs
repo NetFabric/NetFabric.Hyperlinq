@@ -30,10 +30,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Partitioning.Skip.ValueEnumerable
     }
         
     public class SkipEnumerableTests
-        : ValueEnumerableTestsBase<
+        : ValueEnumerableTests<
             ValueEnumerableExtensions.SkipEnumerable<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>, 
             ValueEnumerableExtensions.SkipEnumerable<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>,
-            ValueEnumerableExtensions.SkipTakeEnumerable<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>>
+            ValueEnumerableExtensions.SkipTakeEnumerable<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>,
+            ValueEnumerableExtensions.WhereEnumerable<ValueEnumerableExtensions.SkipEnumerable<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>, ValueEnumerableExtensions.SkipEnumerable<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>.Enumerator, int, FunctionWrapper<int, bool>>,
+            ValueEnumerableExtensions.WhereAtEnumerable<ValueEnumerableExtensions.SkipEnumerable<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>, ValueEnumerableExtensions.SkipEnumerable<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>.Enumerator, int, FunctionWrapper<int, int, bool>>
+        >
     {
         public SkipEnumerableTests() 
             : base(array => Wrap

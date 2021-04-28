@@ -52,9 +52,12 @@ namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct.ValueEnumerable
     }
 
     public class DistinctEnumerableTests
-        : ValueEnumerableTestsBase<ValueEnumerableExtensions.DistinctEnumerable<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>,
+        : ValueEnumerableTests<ValueEnumerableExtensions.DistinctEnumerable<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>,
             ValueEnumerableExtensions.SkipEnumerable<ValueEnumerableExtensions.DistinctEnumerable<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>, ValueEnumerableExtensions.DistinctEnumerable<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>.Enumerator, int>,
-            ValueEnumerableExtensions.TakeEnumerable<ValueEnumerableExtensions.DistinctEnumerable<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>, ValueEnumerableExtensions.DistinctEnumerable<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>.Enumerator, int>>
+            ValueEnumerableExtensions.TakeEnumerable<ValueEnumerableExtensions.DistinctEnumerable<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>, ValueEnumerableExtensions.DistinctEnumerable<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>.Enumerator, int>,
+            ValueEnumerableExtensions.WhereEnumerable<ValueEnumerableExtensions.DistinctEnumerable<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>, ValueEnumerableExtensions.DistinctEnumerable<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>.Enumerator, int, FunctionWrapper<int, bool>>,
+            ValueEnumerableExtensions.WhereAtEnumerable<ValueEnumerableExtensions.DistinctEnumerable<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>, ValueEnumerableExtensions.DistinctEnumerable<Wrap.ValueEnumerableWrapper<int>, Wrap.Enumerator<int>, int>.Enumerator, int, FunctionWrapper<int, int, bool>>
+        >
     {
         public DistinctEnumerableTests() 
             : base(array => Wrap.AsValueEnumerable(array).AsValueEnumerable().Distinct())

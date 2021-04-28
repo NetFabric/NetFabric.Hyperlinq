@@ -51,10 +51,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsValueEnumerable.ValueEnumer
     }
 
     public class ValueEnumerableTests2
-        : ValueEnumerableTestsBase<
+        : ValueEnumerableTests<
             ValueEnumerableExtensions.ValueEnumerable<Wrap.Enumerator<int>, int>, 
             ValueEnumerableExtensions.SkipEnumerable<IValueEnumerable<int, Wrap.Enumerator<int>>, Wrap.Enumerator<int>, int>,
-            ValueEnumerableExtensions.TakeEnumerable<IValueEnumerable<int, Wrap.Enumerator<int>>, Wrap.Enumerator<int>, int>>
+            ValueEnumerableExtensions.TakeEnumerable<IValueEnumerable<int, Wrap.Enumerator<int>>, Wrap.Enumerator<int>, int>,
+            ValueEnumerableExtensions.WhereEnumerable<IValueEnumerable<int, Wrap.Enumerator<int>>, Wrap.Enumerator<int>, int, FunctionWrapper<int, bool>>,
+            ValueEnumerableExtensions.WhereAtEnumerable<IValueEnumerable<int, Wrap.Enumerator<int>>, Wrap.Enumerator<int>, int, FunctionWrapper<int, int, bool>>
+        >
     {
         public ValueEnumerableTests2() 
             // ReSharper disable once HeapView.BoxingAllocation

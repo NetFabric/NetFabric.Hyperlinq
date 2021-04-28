@@ -80,10 +80,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsValueEnumerable.ReadOnlyCol
      }
         
      public class ValueEnumerableTests6
-         : ValueEnumerableTestsBase<
+         : ValueEnumerableTests<
              ReadOnlyCollectionExtensions.ValueEnumerable<Wrap.ReadOnlyCollectionWrapper<int>, Wrap.Enumerator<int>, Wrap.Enumerator<int>, int, FunctionWrapper<Wrap.ReadOnlyCollectionWrapper<int>, Wrap.Enumerator<int>>, FunctionWrapper<Wrap.ReadOnlyCollectionWrapper<int>, Wrap.Enumerator<int>>>, 
              ValueReadOnlyCollectionExtensions.SkipTakeEnumerable<ReadOnlyCollectionExtensions.ValueEnumerable<Wrap.ReadOnlyCollectionWrapper<int>, Wrap.Enumerator<int>, Wrap.Enumerator<int>, int, FunctionWrapper<Wrap.ReadOnlyCollectionWrapper<int>, Wrap.Enumerator<int>>, FunctionWrapper<Wrap.ReadOnlyCollectionWrapper<int>, Wrap.Enumerator<int>>>, Wrap.Enumerator<int>, int>,
-             ValueReadOnlyCollectionExtensions.SkipTakeEnumerable<ReadOnlyCollectionExtensions.ValueEnumerable<Wrap.ReadOnlyCollectionWrapper<int>, Wrap.Enumerator<int>, Wrap.Enumerator<int>, int, FunctionWrapper<Wrap.ReadOnlyCollectionWrapper<int>, Wrap.Enumerator<int>>, FunctionWrapper<Wrap.ReadOnlyCollectionWrapper<int>, Wrap.Enumerator<int>>>, Wrap.Enumerator<int>, int>>
+             ValueReadOnlyCollectionExtensions.SkipTakeEnumerable<ReadOnlyCollectionExtensions.ValueEnumerable<Wrap.ReadOnlyCollectionWrapper<int>, Wrap.Enumerator<int>, Wrap.Enumerator<int>, int, FunctionWrapper<Wrap.ReadOnlyCollectionWrapper<int>, Wrap.Enumerator<int>>, FunctionWrapper<Wrap.ReadOnlyCollectionWrapper<int>, Wrap.Enumerator<int>>>, Wrap.Enumerator<int>, int>,
+             ValueReadOnlyCollectionExtensions.WhereEnumerable<ReadOnlyCollectionExtensions.ValueEnumerable<Wrap.ReadOnlyCollectionWrapper<int>, Wrap.Enumerator<int>, Wrap.Enumerator<int>, int, FunctionWrapper<Wrap.ReadOnlyCollectionWrapper<int>, Wrap.Enumerator<int>>, FunctionWrapper<Wrap.ReadOnlyCollectionWrapper<int>, Wrap.Enumerator<int>>>, Wrap.Enumerator<int>, int, FunctionWrapper<int, bool>>,
+             ValueReadOnlyCollectionExtensions.WhereAtEnumerable<ReadOnlyCollectionExtensions.ValueEnumerable<Wrap.ReadOnlyCollectionWrapper<int>, Wrap.Enumerator<int>, Wrap.Enumerator<int>, int, FunctionWrapper<Wrap.ReadOnlyCollectionWrapper<int>, Wrap.Enumerator<int>>, FunctionWrapper<Wrap.ReadOnlyCollectionWrapper<int>, Wrap.Enumerator<int>>>, Wrap.Enumerator<int>, int, FunctionWrapper<int, int, bool>>
+         >
      {
          public ValueEnumerableTests6() 
              : base(array => ReadOnlyCollectionExtensions

@@ -22,8 +22,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct.ArraySegment
             // Assert
             _ = result.Must()
                 .BeEnumerableOf<int>()
-                .BeEqualTo(expected, testRefStructs: false, testRefReturns: false);
-            _ = result.SequenceEqual(expected).Must().BeTrue();
+                .BeEqualTo(expected);
         }
 
         [Theory]
@@ -45,8 +44,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct.ArraySegment
             // Assert
             _ = result.Must()
                 .BeEnumerableOf<int>()
-                .BeEqualTo(expected, testRefStructs: false, testRefReturns: false);
-            _ = result.SequenceEqual(expected).Must().BeTrue();
+                .BeEqualTo(expected);
         }
 
         [Theory]
@@ -74,10 +72,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct.ArraySegment
     }
 
     public class ArraySegmentDistinctEnumerableTests
-        : ValueEnumerableTestsBase<
+        : ValueEnumerableTests<
             ArrayExtensions.ArraySegmentDistinctEnumerable<int>,
             ValueEnumerableExtensions.SkipEnumerable<ArrayExtensions.ArraySegmentDistinctEnumerable<int>, ArrayExtensions.ArraySegmentDistinctEnumerable<int>.Enumerator, int>,
-            ValueEnumerableExtensions.TakeEnumerable<ArrayExtensions.ArraySegmentDistinctEnumerable<int>, ArrayExtensions.ArraySegmentDistinctEnumerable<int>.Enumerator, int>>
+            ValueEnumerableExtensions.TakeEnumerable<ArrayExtensions.ArraySegmentDistinctEnumerable<int>, ArrayExtensions.ArraySegmentDistinctEnumerable<int>.Enumerator, int>,
+            ValueEnumerableExtensions.WhereEnumerable<ArrayExtensions.ArraySegmentDistinctEnumerable<int>, ArrayExtensions.ArraySegmentDistinctEnumerable<int>.Enumerator, int, FunctionWrapper<int, bool>>,
+            ValueEnumerableExtensions.WhereAtEnumerable<ArrayExtensions.ArraySegmentDistinctEnumerable<int>, ArrayExtensions.ArraySegmentDistinctEnumerable<int>.Enumerator, int, FunctionWrapper<int, int, bool>>
+        >
     {
         public ArraySegmentDistinctEnumerableTests() 
             : base(array => new ArraySegment<int>(array).AsValueEnumerable().Distinct())

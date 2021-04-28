@@ -26,8 +26,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct.ReadOnlyMemory
             // Assert
             _ = result.Must()
                 .BeEnumerableOf<int>()
-                .BeEqualTo(expected, testRefStructs: false, testRefReturns: false);
-            _ = result.SequenceEqual(expected).Must().BeTrue();
+                .BeEqualTo(expected);
         }
 
         [Theory]
@@ -54,9 +53,12 @@ namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct.ReadOnlyMemory
     }
 
     public class MemoryDistinctEnumerableTests
-        : ValueEnumerableTestsBase<ArrayExtensions.MemoryDistinctEnumerable<int>,
+        : ValueEnumerableTests<ArrayExtensions.MemoryDistinctEnumerable<int>,
             ValueEnumerableExtensions.SkipEnumerable<ArrayExtensions.MemoryDistinctEnumerable<int>, ArrayExtensions.MemoryDistinctEnumerable<int>.Enumerator, int>,
-            ValueEnumerableExtensions.TakeEnumerable<ArrayExtensions.MemoryDistinctEnumerable<int>, ArrayExtensions.MemoryDistinctEnumerable<int>.Enumerator, int>>
+            ValueEnumerableExtensions.TakeEnumerable<ArrayExtensions.MemoryDistinctEnumerable<int>, ArrayExtensions.MemoryDistinctEnumerable<int>.Enumerator, int>,
+            ValueEnumerableExtensions.WhereEnumerable<ArrayExtensions.MemoryDistinctEnumerable<int>, ArrayExtensions.MemoryDistinctEnumerable<int>.Enumerator, int, FunctionWrapper<int, bool>>,
+            ValueEnumerableExtensions.WhereAtEnumerable<ArrayExtensions.MemoryDistinctEnumerable<int>, ArrayExtensions.MemoryDistinctEnumerable<int>.Enumerator, int, FunctionWrapper<int, int, bool>>
+        >
     {
         public MemoryDistinctEnumerableTests() 
             : base(array => ((ReadOnlyMemory<int>)array.AsMemory()).AsValueEnumerable().Distinct())

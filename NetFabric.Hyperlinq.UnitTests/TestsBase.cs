@@ -5,14 +5,12 @@ using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests
 {
-    public abstract partial class ValueEnumerableTestsBase<TEnumerable, TSkipEnumerable, TTakeEnumerable>
+    public abstract class TestsBase<TEnumerable>
         where TEnumerable : struct
-        where TSkipEnumerable : struct
-        where TTakeEnumerable : struct
     {
         protected readonly Func<int[], TEnumerable> createInstance;
 
-        protected ValueEnumerableTestsBase(Func<int[], TEnumerable> createInstance) 
+        protected TestsBase(Func<int[], TEnumerable> createInstance) 
             => this.createInstance = createInstance;
 
         [Theory]
@@ -29,7 +27,9 @@ namespace NetFabric.Hyperlinq.UnitTests
             // Assert
             _ = result.Must()
                 .BeEnumerableOf<int>()
-                .BeEqualTo(source, testRefStructs: false);
+                .BeEqualTo(source);
+            
+            // TODO: test ref structs
         }
         
         protected static Expression SkipExpression<TType>(Expression source, Expression count) 

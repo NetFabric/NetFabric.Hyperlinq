@@ -6,7 +6,12 @@ using Xunit;
 
 namespace NetFabric.Hyperlinq.UnitTests
 {
-    public abstract partial class ValueEnumerableTestsBase<TEnumerable, TSkipEnumerable, TTakeEnumerable>
+    public abstract partial class ValueEnumerableTests<
+        TEnumerable,
+        TSkipEnumerable,
+        TTakeEnumerable,
+        TWhereEnumerable,
+        TWhereAtEnumerable>
     {
         [Theory]
         [MemberData(nameof(TestData.Empty), MemberType = typeof(TestData))]
@@ -16,6 +21,7 @@ namespace NetFabric.Hyperlinq.UnitTests
         {
             // Arrange
             var wrapped = createInstance(source);
+            // ReSharper disable once CA1829
             var expected = source
                 .Count();
 

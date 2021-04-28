@@ -60,9 +60,12 @@ namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct.ReadOnlyList
     }
 
     public class DistinctEnumerableTests
-        : ValueEnumerableTestsBase<ValueReadOnlyListExtensions.DistinctEnumerable<Wrap.ValueReadOnlyListWrapper<int>, int>,
+        : ValueEnumerableTests<ValueReadOnlyListExtensions.DistinctEnumerable<Wrap.ValueReadOnlyListWrapper<int>, int>,
             ValueEnumerableExtensions.SkipEnumerable<ValueReadOnlyListExtensions.DistinctEnumerable<Wrap.ValueReadOnlyListWrapper<int>, int>, ValueReadOnlyListExtensions.DistinctEnumerable<Wrap.ValueReadOnlyListWrapper<int>, int>.Enumerator, int>,
-            ValueEnumerableExtensions.TakeEnumerable<ValueReadOnlyListExtensions.DistinctEnumerable<Wrap.ValueReadOnlyListWrapper<int>, int>, ValueReadOnlyListExtensions.DistinctEnumerable<Wrap.ValueReadOnlyListWrapper<int>, int>.Enumerator, int>>
+            ValueEnumerableExtensions.TakeEnumerable<ValueReadOnlyListExtensions.DistinctEnumerable<Wrap.ValueReadOnlyListWrapper<int>, int>, ValueReadOnlyListExtensions.DistinctEnumerable<Wrap.ValueReadOnlyListWrapper<int>, int>.Enumerator, int>,
+            ValueEnumerableExtensions.WhereEnumerable<ValueReadOnlyListExtensions.DistinctEnumerable<Wrap.ValueReadOnlyListWrapper<int>, int>, ValueReadOnlyListExtensions.DistinctEnumerable<Wrap.ValueReadOnlyListWrapper<int>, int>.Enumerator, int, FunctionWrapper<int, bool>>,
+            ValueEnumerableExtensions.WhereAtEnumerable<ValueReadOnlyListExtensions.DistinctEnumerable<Wrap.ValueReadOnlyListWrapper<int>, int>, ValueReadOnlyListExtensions.DistinctEnumerable<Wrap.ValueReadOnlyListWrapper<int>, int>.Enumerator, int, FunctionWrapper<int, int, bool>>
+        >
     {
         public DistinctEnumerableTests() 
             : base(array => Wrap.AsValueReadOnlyList(array).AsValueEnumerable().Distinct())

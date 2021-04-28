@@ -77,7 +77,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsValueEnumerable.ValueReadOn
     }
         
     public class ValueEnumerableTests6
-        : ValueEnumerableTestsBase<
+        : ValueEnumerableTests<
             ValueReadOnlyCollectionExtensions.ValueEnumerable<Wrap.ValueReadOnlyCollectionWrapper<int>, Wrap.Enumerator<int>, Wrap.Enumerator<int>, int, FunctionWrapper<Wrap.ValueReadOnlyCollectionWrapper<int>, Wrap.Enumerator<int>>, FunctionWrapper<Wrap.ValueReadOnlyCollectionWrapper<int>, Wrap.Enumerator<int>>>, 
             ValueReadOnlyCollectionExtensions.SkipTakeEnumerable<Wrap.ValueReadOnlyCollectionWrapper<int>, Wrap.Enumerator<int>, int>,
             ValueReadOnlyCollectionExtensions.SkipTakeEnumerable<Wrap.ValueReadOnlyCollectionWrapper<int>, Wrap.Enumerator<int>, int>>

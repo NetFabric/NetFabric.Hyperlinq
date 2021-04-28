@@ -52,10 +52,13 @@ namespace NetFabric.Hyperlinq.UnitTests.Conversion.AsValueEnumerable.ValueReadOn
     }
 
     public class ValueReadOnlyCollectionTests2
-        : ValueEnumerableTestsBase<
+        : ValueEnumerableTests<
             ValueReadOnlyCollectionExtensions.ValueEnumerable<Wrap.Enumerator<int>, int>, 
             ValueReadOnlyCollectionExtensions.SkipTakeEnumerable<IValueReadOnlyCollection<int, Wrap.Enumerator<int>>, Wrap.Enumerator<int>, int>,
-            ValueReadOnlyCollectionExtensions.SkipTakeEnumerable<IValueReadOnlyCollection<int, Wrap.Enumerator<int>>, Wrap.Enumerator<int>, int>>
+            ValueReadOnlyCollectionExtensions.SkipTakeEnumerable<IValueReadOnlyCollection<int, Wrap.Enumerator<int>>, Wrap.Enumerator<int>, int>,
+            ValueReadOnlyCollectionExtensions.WhereEnumerable<IValueReadOnlyCollection<int, Wrap.Enumerator<int>>, Wrap.Enumerator<int>, int, FunctionWrapper<int, bool>>,
+            ValueReadOnlyCollectionExtensions.WhereAtEnumerable<IValueReadOnlyCollection<int, Wrap.Enumerator<int>>, Wrap.Enumerator<int>, int, FunctionWrapper<int, int, bool>>
+        >
     {
         public ValueReadOnlyCollectionTests2() 
             // ReSharper disable once HeapView.BoxingAllocation
