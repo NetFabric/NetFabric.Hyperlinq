@@ -2,9 +2,9 @@
 using JM.LinqFaster;
 using NetFabric.Hyperlinq;
 using StructLinq;
-using System.Buffers;
 using System.Collections.Generic;
 using System.Linq;
+using LinqFasterer;
 using Nessos.LinqOptimizer.CSharp;
 using Nessos.Streams.CSharp;
 
@@ -51,6 +51,14 @@ namespace LinqBenchmarks.List.ValueType
             => source
                 .WhereSelectF(item => item.IsEven(), item => item * 3)
                 .ToArray();
+
+        [Benchmark]
+        public FatValueType[] LinqFasterer()
+            => EnumerableF.ToArrayF(
+                EnumerableF.SelectF(
+                    EnumerableF.WhereF(source, item => item.IsEven()), 
+                    item => item * 3)
+            );
 
         [Benchmark]
         public FatValueType[] LinqAF()

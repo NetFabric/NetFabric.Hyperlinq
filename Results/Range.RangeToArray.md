@@ -25,12 +25,12 @@ Intel Core i7-7567U CPU 3.50GHz (Kaby Lake), 1 CPU, 4 logical and 2 physical cor
 Job=.NET 6  EnvironmentVariables=COMPlus_ReadyToRun=0,COMPlus_TC_QuickJitForLoops=1,COMPlus_TieredPGO=1  Runtime=.NET 6.0  
 
 ```
-|          Method | Start | Count |      Mean |    Error |   StdDev |    Median | Ratio | RatioSD |  Gen 0 | Gen 1 | Gen 2 | Allocated |
-|---------------- |------ |------ |----------:|---------:|---------:|----------:|------:|--------:|-------:|------:|------:|----------:|
-|         ForLoop |     0 |   100 |  90.63 ns | 0.995 ns | 0.882 ns |  90.65 ns |  1.00 |    0.00 | 0.2027 |     - |     - |     424 B |
-|            Linq |     0 |   100 |  84.66 ns | 1.663 ns | 1.475 ns |  84.99 ns |  0.93 |    0.02 | 0.2218 |     - |     - |     464 B |
-|      LinqFaster |     0 |   100 |  73.50 ns | 0.957 ns | 0.895 ns |  73.54 ns |  0.81 |    0.01 | 0.2027 |     - |     - |     424 B |
-| LinqFaster_SIMD |     0 |   100 |  46.38 ns | 0.538 ns | 0.477 ns |  46.40 ns |  0.51 |    0.01 | 0.2027 |     - |     - |     424 B |
-|          LinqAF |     0 |   100 | 206.68 ns | 1.385 ns | 1.295 ns | 206.08 ns |  2.28 |    0.02 | 0.2027 |     - |     - |     424 B |
-|      StructLinq |     0 |   100 |  82.11 ns | 0.857 ns | 0.802 ns |  82.25 ns |  0.91 |    0.01 | 0.2027 |     - |     - |     424 B |
-|       Hyperlinq |     0 |   100 |  45.57 ns | 1.005 ns | 2.851 ns |  44.40 ns |  0.54 |    0.02 | 0.2027 |     - |     - |     424 B |
+|          Method | Start | Count |      Mean |    Error |   StdDev | Ratio | RatioSD |  Gen 0 | Gen 1 | Gen 2 | Allocated |
+|---------------- |------ |------ |----------:|---------:|---------:|------:|--------:|-------:|------:|------:|----------:|
+|         ForLoop |     0 |   100 |  81.11 ns | 0.733 ns | 0.650 ns |  1.00 |    0.00 | 0.2027 |     - |     - |     424 B |
+|            Linq |     0 |   100 |  88.91 ns | 1.224 ns | 0.956 ns |  1.09 |    0.01 | 0.2217 |     - |     - |     464 B |
+|      LinqFaster |     0 |   100 |  74.79 ns | 0.937 ns | 0.877 ns |  0.92 |    0.01 | 0.2027 |     - |     - |     424 B |
+| LinqFaster_SIMD |     0 |   100 |  40.75 ns | 0.452 ns | 0.378 ns |  0.50 |    0.01 | 0.2027 |     - |     - |     424 B |
+|          LinqAF |     0 |   100 | 215.63 ns | 1.808 ns | 1.692 ns |  2.66 |    0.03 | 0.2027 |     - |     - |     424 B |
+|      StructLinq |     0 |   100 |  84.38 ns | 1.176 ns | 0.982 ns |  1.04 |    0.02 | 0.2027 |     - |     - |     424 B |
+|       Hyperlinq |     0 |   100 |  53.81 ns | 0.865 ns | 0.809 ns |  0.66 |    0.01 | 0.2027 |     - |     - |     424 B |

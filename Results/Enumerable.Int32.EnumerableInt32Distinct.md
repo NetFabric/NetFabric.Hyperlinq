@@ -25,11 +25,11 @@ Intel Core i7-7567U CPU 3.50GHz (Kaby Lake), 1 CPU, 4 logical and 2 physical cor
 Job=.NET 6  EnvironmentVariables=COMPlus_ReadyToRun=0,COMPlus_TC_QuickJitForLoops=1,COMPlus_TieredPGO=1  Runtime=.NET 6.0  
 
 ```
-|                   Method | Count |       Mean |    Error |   StdDev | Ratio | RatioSD |  Gen 0 | Gen 1 | Gen 2 | Allocated |
-|------------------------- |------ |-----------:|---------:|---------:|------:|--------:|-------:|------:|------:|----------:|
-|              ForeachLoop |   100 |   923.3 ns |  2.44 ns |  2.03 ns |  1.00 |    0.00 | 0.0992 |     - |     - |     208 B |
-|                     Linq |   100 |   934.2 ns |  5.19 ns |  4.60 ns |  1.01 |    0.01 | 0.1602 |     - |     - |     336 B |
-|                   LinqAF |   100 | 2,011.9 ns | 39.40 ns | 38.70 ns |  2.17 |    0.05 | 1.2531 |     - |     - |   2,624 B |
-|               StructLinq |   100 |   875.6 ns |  1.90 ns |  1.68 ns |  0.95 |    0.00 | 0.0305 |     - |     - |      64 B |
-| StructLinq_ValueDelegate |   100 |   838.3 ns |  2.74 ns |  2.28 ns |  0.91 |    0.00 | 0.0191 |     - |     - |      40 B |
-|                Hyperlinq |   100 | 1,036.1 ns |  7.80 ns |  7.30 ns |  1.12 |    0.01 | 0.0191 |     - |     - |      40 B |
+|                   Method | Count |       Mean |   Error |  StdDev | Ratio |  Gen 0 | Gen 1 | Gen 2 | Allocated |
+|------------------------- |------ |-----------:|--------:|--------:|------:|-------:|------:|------:|----------:|
+|              ForeachLoop |   100 |   929.5 ns | 4.51 ns | 4.22 ns |  1.00 | 0.0992 |     - |     - |     208 B |
+|                     Linq |   100 |   924.3 ns | 7.63 ns | 6.76 ns |  0.99 | 0.1602 |     - |     - |     336 B |
+|                   LinqAF |   100 | 1,886.1 ns | 7.28 ns | 6.45 ns |  2.03 | 1.2531 |     - |     - |   2,624 B |
+|               StructLinq |   100 |   882.7 ns | 2.50 ns | 2.09 ns |  0.95 | 0.0305 |     - |     - |      64 B |
+| StructLinq_ValueDelegate |   100 |   846.9 ns | 3.66 ns | 3.25 ns |  0.91 | 0.0191 |     - |     - |      40 B |
+|                Hyperlinq |   100 |   998.4 ns | 5.85 ns | 5.47 ns |  1.07 | 0.0191 |     - |     - |      40 B |

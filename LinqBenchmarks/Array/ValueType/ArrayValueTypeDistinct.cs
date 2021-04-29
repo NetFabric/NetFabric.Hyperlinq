@@ -54,8 +54,9 @@ namespace LinqBenchmarks.Array.ValueType
         [Benchmark]
         public FatValueType Linq()
         {
+            var items = System.Linq.Enumerable.Distinct(source);
             var sum = default(FatValueType);
-            foreach (var item in System.Linq.Enumerable.Distinct(source))
+            foreach (var item in items)
                 sum += item;
             return sum;
         }
@@ -63,8 +64,9 @@ namespace LinqBenchmarks.Array.ValueType
         [Benchmark]
         public FatValueType LinqFasterer()
         {
+            var items = EnumerableF.DistinctF(source);
             var sum = default(FatValueType);
-            foreach (var item in EnumerableF.DistinctF(source))
+            foreach (var item in items)
                 sum += item;
             return sum;
         }
@@ -72,8 +74,9 @@ namespace LinqBenchmarks.Array.ValueType
         [Benchmark]
         public FatValueType LinqAF()
         {
+            var items = global::LinqAF.ArrayExtensionMethods.Distinct(source);
             var sum = default(FatValueType);
-            foreach (var item in global::LinqAF.ArrayExtensionMethods.Distinct(source))
+            foreach (var item in items)
                 sum += item;
             return sum;
         }
@@ -81,10 +84,11 @@ namespace LinqBenchmarks.Array.ValueType
         [Benchmark]
         public FatValueType StructLinq()
         {
-            var sum = default(FatValueType);
-            foreach (ref readonly  var item in source
+            var items = source
                 .ToRefStructEnumerable()
-                .Distinct())
+                .Distinct();
+            var sum = default(FatValueType);
+            foreach (ref readonly var item in items)
                 sum += item;
             return sum;
         }
@@ -92,11 +96,12 @@ namespace LinqBenchmarks.Array.ValueType
         [Benchmark]
         public FatValueType StructLinq_ValueDelegate()
         {
-            var sum = default(FatValueType);
             var comparer = new FatValueTypeEqualityComparer();
-            foreach (ref readonly  var item in source
+            var items = source
                 .ToRefStructEnumerable()
-                .Distinct(comparer, x=> x))
+                .Distinct(comparer, x=> x);
+            var sum = default(FatValueType);
+            foreach (ref readonly  var item in items)
                 sum += item;
             return sum;
         }
@@ -104,9 +109,10 @@ namespace LinqBenchmarks.Array.ValueType
         [Benchmark]
         public FatValueType Hyperlinq()
         {
+            var items = source.AsValueEnumerable()
+                .Distinct();
             var sum = default(FatValueType);
-            foreach (var item in source.AsValueEnumerable()
-                .Distinct())
+            foreach (var item in items)
                 sum += item;
             return sum;
         }

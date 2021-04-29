@@ -2,7 +2,6 @@
 using JM.LinqFaster;
 using NetFabric.Hyperlinq;
 using StructLinq;
-using System.Collections.Generic;
 using System.Linq;
 using LinqFasterer;
 using Nessos.LinqOptimizer.CSharp;
@@ -24,18 +23,6 @@ namespace LinqBenchmarks.Array.Int32
         }
 
         [Benchmark]
-        public int ForeachLoop()
-        {
-            using var enumerator = ((IEnumerable<int>)source).GetEnumerator();
-            for (var index = 0; index < Skip; index++)
-                _ = enumerator.MoveNext();
-            var sum = 0;
-            for (var index = 0; index < Count; index++)
-                sum += enumerator.Current * 3;
-            return sum;
-        }
-
-        [Benchmark]
         public int Linq()
         {
             var items = source.Skip(Skip).Take(Count).Select(item => item * 3);
@@ -50,8 +37,8 @@ namespace LinqBenchmarks.Array.Int32
         {
             var items = source.SkipF(Skip).TakeF(Count).SelectF(item => item * 3);
             var sum = 0;
-            for (var index = 0; index < items.Length; index++)
-                sum += items[index];
+            foreach (var item in items)
+                sum += item;
             return sum;
         }
 

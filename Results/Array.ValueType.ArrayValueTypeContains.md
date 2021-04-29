@@ -27,12 +27,12 @@ Job=.NET 6  EnvironmentVariables=COMPlus_ReadyToRun=0,COMPlus_TC_QuickJitForLoop
 ```
 |                   Method | Count |     Mean |   Error |  StdDev | Ratio |  Gen 0 | Gen 1 | Gen 2 | Allocated |
 |------------------------- |------ |---------:|--------:|--------:|------:|-------:|------:|------:|----------:|
-|                  ForLoop |   100 | 455.9 ns | 2.22 ns | 1.73 ns |  1.00 |      - |     - |     - |         - |
-|              ForeachLoop |   100 | 463.7 ns | 1.76 ns | 1.56 ns |  1.02 |      - |     - |     - |         - |
-|                     Linq |   100 | 171.3 ns | 0.50 ns | 0.42 ns |  0.38 |      - |     - |     - |         - |
-|               LinqFaster |   100 | 177.0 ns | 1.45 ns | 1.28 ns |  0.39 |      - |     - |     - |         - |
-|             LinqFasterer |   100 | 197.6 ns | 0.86 ns | 0.76 ns |  0.43 |      - |     - |     - |         - |
-|                   LinqAF |   100 | 180.3 ns | 0.72 ns | 0.63 ns |  0.40 |      - |     - |     - |         - |
-|               StructLinq |   100 | 519.4 ns | 2.35 ns | 2.20 ns |  1.14 | 0.0153 |     - |     - |      32 B |
-| StructLinq_ValueDelegate |   100 | 495.0 ns | 1.51 ns | 2.81 ns |  1.09 |      - |     - |     - |         - |
-|                Hyperlinq |   100 | 196.6 ns | 0.86 ns | 0.76 ns |  0.43 |      - |     - |     - |         - |
+|                  ForLoop |   100 | 464.8 ns | 0.99 ns | 0.93 ns |  1.00 |      - |     - |     - |         - |
+|              ForeachLoop |   100 | 467.0 ns | 1.83 ns | 1.71 ns |  1.00 |      - |     - |     - |         - |
+|                     Linq |   100 | 173.9 ns | 1.05 ns | 0.82 ns |  0.37 |      - |     - |     - |         - |
+|               LinqFaster |   100 | 177.7 ns | 1.41 ns | 1.25 ns |  0.38 |      - |     - |     - |         - |
+|             LinqFasterer |   100 | 200.5 ns | 0.91 ns | 0.81 ns |  0.43 |      - |     - |     - |         - |
+|                   LinqAF |   100 | 202.5 ns | 1.76 ns | 1.56 ns |  0.44 |      - |     - |     - |         - |
+|               StructLinq |   100 | 517.1 ns | 3.01 ns | 2.82 ns |  1.11 | 0.0153 |     - |     - |      32 B |
+| StructLinq_ValueDelegate |   100 | 503.0 ns | 2.45 ns | 2.29 ns |  1.08 |      - |     - |     - |         - |
+|                Hyperlinq |   100 | 198.8 ns | 1.09 ns | 0.85 ns |  0.43 |      - |     - |     - |         - |

@@ -2,6 +2,7 @@
 using NetFabric.Hyperlinq;
 using StructLinq;
 using System.Linq;
+using LinqFasterer;
 using Nessos.LinqOptimizer.CSharp;
 using Nessos.Streams.CSharp;
 
@@ -36,6 +37,10 @@ namespace LinqBenchmarks.ImmutableArray.Int32
         [Benchmark]
         public int Linq()
             => source.Sum();
+
+        [Benchmark]
+        public int LinqFasterer()
+            => EnumerableF.SumF(source);
 
         [Benchmark]
         public int LinqOptimizer()

@@ -3,7 +3,6 @@ using BenchmarkDotNet.Attributes;
 using JM.LinqFaster.SIMD;
 using NetFabric.Hyperlinq;
 using StructLinq;
-using System.Collections.Generic;
 
 namespace LinqBenchmarks.Range
 {
@@ -20,26 +19,11 @@ namespace LinqBenchmarks.Range
         }
 
         [Benchmark]
-        public int ForeachLoop()
-        {
-            var sum = 0;
-            foreach (var value in Range(Start, Count))
-                sum += value;
-            return sum;
-
-            static IEnumerable<int> Range(int start, int count)
-            {
-                var end = start + count;
-                for (var value = start; value < end; value++)
-                    yield return value;
-            }
-        }
-
-        [Benchmark]
         public int Linq()
         {
+            var items = System.Linq.Enumerable.Range(Start, Count);
             var sum = 0;
-            foreach (var item in System.Linq.Enumerable.Range(Start, Count))
+            foreach (var item in items)
                 sum += item;
             return sum;
         }
@@ -49,8 +33,8 @@ namespace LinqBenchmarks.Range
         {
             var items = JM.LinqFaster.LinqFaster.RangeArrayF(Start, Count);
             var sum = 0;
-            for (var index = 0; index < items.Length; index++)
-                sum += items[index];
+            foreach (var item in items)
+                sum += item;
             return sum;
         }
 
@@ -59,16 +43,17 @@ namespace LinqBenchmarks.Range
         {
             var items = LinqFasterSIMD.RangeS(Start, Count);
             var sum = 0;
-            for (var index = 0; index < items.Length; index++)
-                sum += items[index];
+            foreach (var item in items)
+                sum += item;
             return sum;
         }
 
         [Benchmark]
         public int LinqAF()
         {
+            var items = global::LinqAF.Enumerable.Range(Start, Count);
             var sum = 0;
-            foreach (var item in global::LinqAF.Enumerable.Range(Start, Count))
+            foreach (var item in items)
                 sum += item;
             return sum;
         }
@@ -76,8 +61,9 @@ namespace LinqBenchmarks.Range
         [Benchmark]
         public int StructLinq()
         {
+            var items = StructEnumerable.Range(Start, Count);
             var sum = 0;
-            foreach (var item in StructEnumerable.Range(Start, Count))
+            foreach (var item in items)
                 sum += item;
             return sum;
         }
@@ -86,8 +72,9 @@ namespace LinqBenchmarks.Range
         [Benchmark]
         public int Hyperlinq()
         {
+            var items = ValueEnumerable.Range(Start, Count);
             var sum = 0;
-            foreach (var item in ValueEnumerable.Range(Start, Count))
+            foreach (var item in items)
                 sum += item;
             return sum;
         }

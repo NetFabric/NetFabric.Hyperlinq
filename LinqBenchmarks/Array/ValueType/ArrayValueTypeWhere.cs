@@ -51,8 +51,8 @@ namespace LinqBenchmarks.Array.ValueType
         {
             var items = source.WhereF(item => item.IsEven());
             var sum = default(FatValueType);
-            for (var index = 0; index < items.Length; index++)
-                sum += items[index];
+            foreach (var item in items)
+                sum += item;
             return sum;
         }
 
@@ -61,8 +61,8 @@ namespace LinqBenchmarks.Array.ValueType
         {
             var items = EnumerableF.WhereF(source, item => item.IsEven());
             var sum = default(FatValueType);
-            for (var index = 0; index < items.Count; index++)
-                sum += items[index];
+            foreach (var item in items)
+                sum += item;
             return sum;
         }
 

@@ -4,7 +4,6 @@ using JM.LinqFaster;
 using JM.LinqFaster.SIMD;
 using NetFabric.Hyperlinq;
 using StructLinq;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace LinqBenchmarks.Range
@@ -22,28 +21,13 @@ namespace LinqBenchmarks.Range
         }
 
         [Benchmark]
-        public int ForeachLoop()
-        {
-            var sum = 0;
-            foreach (var value in Range(Start, Count))
-                sum += value * 3;
-            return sum;
-
-            static IEnumerable<int> Range(int start, int count)
-            {
-                var end = start + count;
-                for (var value = start; value < end; value++)
-                    yield return value;
-            }
-        }
-
-        [Benchmark]
         public int Linq()
         {
-            var sum = 0;
-            foreach (var item in System.Linq.Enumerable
+            var items = System.Linq.Enumerable
                 .Range(Start, Count)
-                .Select(item => item * 3))
+                .Select(item => item * 3);
+            var sum = 0;
+            foreach (var item in items)
                 sum += item;
             return sum;
         }
@@ -55,8 +39,8 @@ namespace LinqBenchmarks.Range
                 .RangeArrayF(Start, Count)
                 .SelectF(item => item * 3);
             var sum = 0;
-            for (var index = 0; index < items.Length; index++)
-                sum += items[index];
+            foreach (var item in items)
+                sum += item;
             return sum;
         }
 
@@ -67,18 +51,19 @@ namespace LinqBenchmarks.Range
                 .RangeS(Start, Count)
                 .SelectS(item => item * 3, item => item * 3);
             var sum = 0;
-            for (var index = 0; index < items.Length; index++)
-                sum += items[index];
+            foreach (var item in items)
+                sum += item;
             return sum;
         }
 
         [Benchmark]
         public int LinqAF()
         {
-            var sum = 0;
-            foreach (var item in global::LinqAF.Enumerable
+            var items = global::LinqAF.Enumerable
                 .Range(Start, Count)
-                .Select(item => item * 3))
+                .Select(item => item * 3);
+            var sum = 0;
+            foreach (var item in items)
                 sum += item;
             return sum;
         }
@@ -86,10 +71,11 @@ namespace LinqBenchmarks.Range
         [Benchmark]
         public int StructLinq()
         {
-            var sum = 0;
-            foreach (var item in StructEnumerable
+            var items = StructEnumerable
                 .Range(Start, Count)
-                .Select(item => item * 3))
+                .Select(item => item * 3);
+            var sum = 0;
+            foreach (var item in items)
                 sum += item;
             return sum;
         }
@@ -97,11 +83,12 @@ namespace LinqBenchmarks.Range
         [Benchmark]
         public int StructLinq_ValueDelegate()
         {
-            var sum = 0;
             var selector = new TripleOfInt32();
-            foreach (var item in StructEnumerable
+            var items = StructEnumerable
                 .Range(Start, Count)
-                .Select(ref selector, x => x, x => x))
+                .Select(ref selector, x => x, x => x);
+            var sum = 0;
+            foreach (var item in items)
                 sum += item;
             return sum;
         }
@@ -110,10 +97,11 @@ namespace LinqBenchmarks.Range
         [Benchmark]
         public int Hyperlinq()
         {
-            var sum = 0;
-            foreach (var item in ValueEnumerable
+            var items = ValueEnumerable
                 .Range(Start, Count)
-                .Select(item => item * 3))
+                .Select(item => item * 3);
+            var sum = 0;
+            foreach (var item in items)
                 sum += item;
             return sum;
         }
@@ -121,10 +109,11 @@ namespace LinqBenchmarks.Range
         [Benchmark]
         public int Hyperlinq_ValueDelegate()
         {
-            var sum = 0;
-            foreach (var item in ValueEnumerable
+            var items = ValueEnumerable
                 .Range(Start, Count)
-                .Select<int, TripleOfInt32>())
+                .Select<int, TripleOfInt32>();
+            var sum = 0;
+            foreach (var item in items)
                 sum += item;
             return sum;
         }

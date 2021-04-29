@@ -27,8 +27,8 @@ Job=.NET 6  EnvironmentVariables=COMPlus_ReadyToRun=0,COMPlus_TC_QuickJitForLoop
 ```
 |                   Method | Count |     Mean |    Error |   StdDev |   Median |  Gen 0 | Gen 1 | Gen 2 | Allocated |
 |------------------------- |------ |---------:|---------:|---------:|---------:|-------:|------:|------:|----------:|
-|                     Linq |   100 | 21.43 ns | 0.198 ns | 0.175 ns | 21.40 ns | 0.0229 |     - |     - |      48 B |
-|                   LinqAF |   100 | 30.92 ns | 0.263 ns | 0.246 ns | 30.84 ns | 0.0229 |     - |     - |      48 B |
-|               StructLinq |   100 | 16.19 ns | 0.091 ns | 0.071 ns | 16.21 ns | 0.0344 |     - |     - |      72 B |
-| StructLinq_ValueDelegate |   100 | 15.81 ns | 0.526 ns | 1.551 ns | 14.94 ns | 0.0344 |     - |     - |      72 B |
-|                Hyperlinq |   100 | 14.89 ns | 0.294 ns | 0.646 ns | 14.69 ns | 0.0229 |     - |     - |      48 B |
+|                     Linq |   100 | 28.50 ns | 0.933 ns | 2.752 ns | 28.93 ns | 0.0229 |     - |     - |      48 B |
+|                   LinqAF |   100 | 34.86 ns | 1.213 ns | 3.577 ns | 33.40 ns | 0.0229 |     - |     - |      48 B |
+|               StructLinq |   100 | 18.39 ns | 0.353 ns | 0.313 ns | 18.34 ns | 0.0344 |     - |     - |      72 B |
+| StructLinq_ValueDelegate |   100 | 18.25 ns | 0.405 ns | 0.378 ns | 18.18 ns | 0.0344 |     - |     - |      72 B |
+|                Hyperlinq |   100 | 20.38 ns | 0.463 ns | 0.410 ns | 20.42 ns | 0.0229 |     - |     - |      48 B |

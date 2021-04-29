@@ -40,7 +40,9 @@ namespace LinqBenchmarks.Array.ValueType
         [Benchmark]
         public FatValueType Linq()
         {
-            var items = System.Linq.Enumerable.Where(source, item => item.IsEven()).Select(item => item * 3);
+            var items = System.Linq.Enumerable
+                .Where(source, item => item.IsEven())
+                .Select(item => item * 3);
             var sum = default(FatValueType);
             foreach (var item in items)
                 sum += item;
@@ -52,8 +54,8 @@ namespace LinqBenchmarks.Array.ValueType
         {
             var items = source.WhereSelectF(item => item.IsEven(), item => item * 3);
             var sum = default(FatValueType);
-            for (var index = 0; index < items.Length; index++)
-                sum += items[index];
+            foreach (var item in items)
+                sum += item;
             return sum;
         }
 
@@ -62,8 +64,8 @@ namespace LinqBenchmarks.Array.ValueType
         {
             var items = EnumerableF.SelectF(EnumerableF.WhereF(source, item => item.IsEven()), item => item * 3);
             var sum = default(FatValueType);
-            for (var index = 0; index < items.Count; index++)
-                sum += items[index];
+            foreach (var item in items)
+                sum += item;
             return sum;
         }
 

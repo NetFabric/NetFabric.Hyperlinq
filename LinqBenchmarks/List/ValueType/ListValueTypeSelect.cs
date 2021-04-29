@@ -1,5 +1,6 @@
 ﻿using BenchmarkDotNet.Attributes;
 using JM.LinqFaster;
+using LinqFasterer;
 using Nessos.LinqOptimizer.CSharp;
 using Nessos.Streams.CSharp;
 using NetFabric.Hyperlinq;
@@ -44,8 +45,18 @@ namespace LinqBenchmarks.List.ValueType
         {
             var items = source.SelectF(item => item * 3);
             var sum = default(FatValueType);
-            for (var index = 0; index < items.Count; index++)
-                sum += items[index];
+            foreach (var item in items)
+                sum += item;
+            return sum;
+        }
+
+        [Benchmark]
+        public FatValueType LinqFasterer()
+        {
+            var items = EnumerableF.SelectF(source, item => item * 3);
+            var sum = default(FatValueType);
+            foreach (var item in items)
+                sum += item;
             return sum;
         }
 

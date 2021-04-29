@@ -1,7 +1,6 @@
 ﻿using BenchmarkDotNet.Attributes;
 using JM.LinqFaster;
 using LinqFasterer;
-using Microsoft.Diagnostics.Tracing.Parsers.JScript;
 using Nessos.LinqOptimizer.CSharp;
 using Nessos.Streams.CSharp;
 using NetFabric.Hyperlinq;
@@ -48,8 +47,8 @@ namespace LinqBenchmarks.Array.ValueType
         {
             var items = source.SelectF(item => item * 3);
             var sum = default(FatValueType);
-            for (var index = 0; index < items.Length; index++)
-                sum += items[index];
+            foreach (var item in items)
+                sum += item;
             return sum;
         }
 

@@ -4,6 +4,7 @@ using NetFabric.Hyperlinq;
 using StructLinq;
 using System.Collections.Generic;
 using System.Linq;
+using LinqFasterer;
 using Nessos.LinqOptimizer.CSharp;
 using Nessos.Streams.CSharp;
 
@@ -45,6 +46,14 @@ namespace LinqBenchmarks.List.Int32
         [Benchmark]
         public List<int> LinqFaster()
             => new(source.WhereSelectF(item => item.IsEven(), item => item * 3));
+
+        [Benchmark]
+        public List<int> LinqFasterer()
+            => EnumerableF.ToListF(
+                EnumerableF.SelectF(
+                    EnumerableF.WhereF(source, item => item.IsEven()), 
+                    item => item * 3)
+            );
 
         [Benchmark]
         public List<int> LinqAF()

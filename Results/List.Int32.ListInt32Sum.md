@@ -25,15 +25,16 @@ Intel Core i7-7567U CPU 3.50GHz (Kaby Lake), 1 CPU, 4 logical and 2 physical cor
 Job=.NET 6  EnvironmentVariables=COMPlus_ReadyToRun=0,COMPlus_TC_QuickJitForLoops=1,COMPlus_TieredPGO=1  Runtime=.NET 6.0  
 
 ```
-|                   Method | Count |         Mean |      Error |     StdDev |       Median |  Ratio | RatioSD |  Gen 0 | Gen 1 | Gen 2 | Allocated |
-|------------------------- |------ |-------------:|-----------:|-----------:|-------------:|-------:|--------:|-------:|------:|------:|----------:|
-|                  ForLoop |   100 |     84.37 ns |   0.347 ns |   0.308 ns |     84.40 ns |   1.00 |    0.00 |      - |     - |     - |         - |
-|              ForeachLoop |   100 |    138.15 ns |   0.370 ns |   0.309 ns |    138.20 ns |   1.64 |    0.01 |      - |     - |     - |         - |
-|                     Linq |   100 |    619.19 ns |   3.712 ns |   3.291 ns |    618.95 ns |   7.34 |    0.04 | 0.0191 |     - |     - |      40 B |
-|               LinqFaster |   100 |     78.27 ns |   1.572 ns |   3.484 ns |     76.47 ns |   0.99 |    0.03 |      - |     - |     - |         - |
-|                   LinqAF |   100 |    431.49 ns |   1.658 ns |   1.551 ns |    431.67 ns |   5.11 |    0.03 |      - |     - |     - |         - |
-|            LinqOptimizer |   100 | 25,608.31 ns | 222.695 ns | 208.309 ns | 25,588.65 ns | 303.28 |    2.94 | 8.1177 |     - |     - |  17,017 B |
-|                  Streams |   100 |    262.47 ns |   2.988 ns |   2.795 ns |    262.04 ns |   3.11 |    0.03 | 0.0992 |     - |     - |     208 B |
-|               StructLinq |   100 |     85.15 ns |   1.258 ns |   1.051 ns |     85.59 ns |   1.01 |    0.01 | 0.0153 |     - |     - |      32 B |
-| StructLinq_ValueDelegate |   100 |     60.98 ns |   0.487 ns |   0.432 ns |     60.92 ns |   0.72 |    0.01 |      - |     - |     - |         - |
-|                Hyperlinq |   100 |     21.22 ns |   0.493 ns |   0.838 ns |     20.69 ns |   0.26 |    0.01 |      - |     - |     - |         - |
+|                   Method | Count |         Mean |      Error |     StdDev |  Ratio | RatioSD |  Gen 0 | Gen 1 | Gen 2 | Allocated |
+|------------------------- |------ |-------------:|-----------:|-----------:|-------:|--------:|-------:|------:|------:|----------:|
+|                  ForLoop |   100 |     85.79 ns |   0.302 ns |   0.268 ns |   1.00 |    0.00 |      - |     - |     - |         - |
+|              ForeachLoop |   100 |    141.16 ns |   0.675 ns |   0.598 ns |   1.65 |    0.01 |      - |     - |     - |         - |
+|                     Linq |   100 |    660.01 ns |   2.047 ns |   1.815 ns |   7.69 |    0.03 | 0.0191 |     - |     - |      40 B |
+|               LinqFaster |   100 |     85.92 ns |   0.381 ns |   0.356 ns |   1.00 |    0.00 |      - |     - |     - |         - |
+|             LinqFasterer |   100 |     98.58 ns |   1.032 ns |   0.862 ns |   1.15 |    0.01 | 0.2027 |     - |     - |     424 B |
+|                   LinqAF |   100 |    439.67 ns |   8.478 ns |  13.930 ns |   5.20 |    0.24 |      - |     - |     - |         - |
+|            LinqOptimizer |   100 | 25,376.00 ns | 327.474 ns | 273.455 ns | 295.73 |    3.19 | 8.0566 |     - |     - |  17,017 B |
+|                  Streams |   100 |    261.01 ns |   1.363 ns |   1.275 ns |   3.04 |    0.02 | 0.0992 |     - |     - |     208 B |
+|               StructLinq |   100 |     84.22 ns |   0.442 ns |   0.413 ns |   0.98 |    0.00 | 0.0153 |     - |     - |      32 B |
+| StructLinq_ValueDelegate |   100 |     62.59 ns |   0.311 ns |   0.243 ns |   0.73 |    0.00 |      - |     - |     - |         - |
+|                Hyperlinq |   100 |     22.79 ns |   0.108 ns |   0.096 ns |   0.27 |    0.00 |      - |     - |     - |         - |

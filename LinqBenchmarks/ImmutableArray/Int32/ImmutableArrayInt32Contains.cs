@@ -1,4 +1,5 @@
 ﻿using BenchmarkDotNet.Attributes;
+using LinqFasterer;
 using NetFabric.Hyperlinq;
 using StructLinq;
 
@@ -36,6 +37,11 @@ namespace LinqBenchmarks.ImmutableArray.Int32
         public bool Linq()
             => source
                 .Contains(value);
+
+        [Benchmark]
+        public bool LinqFasterer()
+            => EnumerableF
+                .ContainsF(source, value);
 
         [Benchmark]
         public bool StructLinq()

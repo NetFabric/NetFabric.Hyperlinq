@@ -4,6 +4,7 @@ Benchmarks comparing the perfomance of [LINQ](https://docs.microsoft.com/en-us/d
 
 - [Cistern.ValueLinq](https://github.com/manofstick/Cistern.ValueLinq)
 - [JM.LinqFaster](https://github.com/jackmott/LinqFaster)
+- [LinqFasterer](https://github.com/Zaczero/LinqFasterer)
 - [LinqAF](https://github.com/kevin-montrose/LinqAF)
 - [Streams](https://github.com/nessos/Streams)
 - [LinqOptimizer](https://github.com/nessos/LinqOptimizer)

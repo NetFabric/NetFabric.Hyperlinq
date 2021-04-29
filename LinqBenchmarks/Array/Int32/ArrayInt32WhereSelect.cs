@@ -52,8 +52,8 @@ namespace LinqBenchmarks.Array.Int32
         {
             var items = source.WhereSelectF(item => item.IsEven(), item => item * 3);
             var sum = 0;
-            for (var index = 0; index < items.Length; index++)
-                sum += items[index];
+            foreach (var item in items)
+                sum += item;
             return sum;
         }
 
@@ -62,8 +62,8 @@ namespace LinqBenchmarks.Array.Int32
         {
             var items = EnumerableF.SelectF(EnumerableF.WhereF(source, item => item.IsEven()), item => item * 3);
             var sum = 0;
-            for (var index = 0; index < items.Count; index++)
-                sum += items[index];
+            foreach (var item in items)
+                sum += item;
             return sum;
         }
 

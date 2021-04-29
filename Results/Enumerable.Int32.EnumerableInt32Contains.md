@@ -25,11 +25,11 @@ Intel Core i7-7567U CPU 3.50GHz (Kaby Lake), 1 CPU, 4 logical and 2 physical cor
 Job=.NET 6  EnvironmentVariables=COMPlus_ReadyToRun=0,COMPlus_TC_QuickJitForLoops=1,COMPlus_TieredPGO=1  Runtime=.NET 6.0  
 
 ```
-|                   Method | Count |     Mean |   Error |  StdDev | Ratio | RatioSD |  Gen 0 | Gen 1 | Gen 2 | Allocated |
-|------------------------- |------ |---------:|--------:|--------:|------:|--------:|-------:|------:|------:|----------:|
-|              ForeachLoop |   100 | 230.8 ns | 2.21 ns | 1.96 ns |  1.00 |    0.00 | 0.0191 |     - |     - |      40 B |
-|                     Linq |   100 | 313.9 ns | 1.01 ns | 0.94 ns |  1.36 |    0.01 | 0.0191 |     - |     - |      40 B |
-|                   LinqAF |   100 | 304.4 ns | 1.68 ns | 1.49 ns |  1.32 |    0.01 | 0.0191 |     - |     - |      40 B |
-|               StructLinq |   100 | 375.2 ns | 1.43 ns | 1.19 ns |  1.62 |    0.02 | 0.0305 |     - |     - |      64 B |
-| StructLinq_ValueDelegate |   100 | 365.5 ns | 4.20 ns | 3.50 ns |  1.58 |    0.02 | 0.0191 |     - |     - |      40 B |
-|                Hyperlinq |   100 | 397.8 ns | 4.55 ns | 4.03 ns |  1.72 |    0.02 | 0.0191 |     - |     - |      40 B |
+|                   Method | Count |     Mean |   Error |  StdDev | Ratio |  Gen 0 | Gen 1 | Gen 2 | Allocated |
+|------------------------- |------ |---------:|--------:|--------:|------:|-------:|------:|------:|----------:|
+|              ForeachLoop |   100 | 232.1 ns | 0.90 ns | 0.80 ns |  1.00 | 0.0191 |     - |     - |      40 B |
+|                     Linq |   100 | 341.4 ns | 1.62 ns | 1.35 ns |  1.47 | 0.0191 |     - |     - |      40 B |
+|                   LinqAF |   100 | 301.0 ns | 1.40 ns | 1.31 ns |  1.30 | 0.0191 |     - |     - |      40 B |
+|               StructLinq |   100 | 378.4 ns | 2.86 ns | 2.67 ns |  1.63 | 0.0305 |     - |     - |      64 B |
+| StructLinq_ValueDelegate |   100 | 367.2 ns | 1.95 ns | 1.82 ns |  1.58 | 0.0191 |     - |     - |      40 B |
+|                Hyperlinq |   100 | 399.0 ns | 1.43 ns | 1.27 ns |  1.72 | 0.0191 |     - |     - |      40 B |

@@ -4,7 +4,6 @@ using JM.LinqFaster;
 using JM.LinqFaster.SIMD;
 using NetFabric.Hyperlinq;
 using StructLinq;
-using System.Buffers;
 using System.Linq;
 
 namespace LinqBenchmarks.Range

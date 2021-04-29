@@ -5,7 +5,6 @@ using BenchmarkDotNet.Running;
 using JM.LinqFaster;
 using JM.LinqFaster.SIMD;
 using NetFabric.Hyperlinq;
-using StructLinq;
 using System;
 using System.IO;
 using System.Linq;

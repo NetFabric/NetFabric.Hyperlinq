@@ -2,8 +2,7 @@
 using JM.LinqFaster;
 using NetFabric.Hyperlinq;
 using StructLinq;
-using System.Collections.Generic;
-using System.Linq;
+using LinqFasterer;
 using Nessos.LinqOptimizer.CSharp;
 using Nessos.Streams.CSharp;
 
@@ -46,8 +45,18 @@ namespace LinqBenchmarks.List.Int32
         {
             var items = source.SelectF(item => item * 3);
             var sum = 0;
-            for (var index = 0; index < items.Count; index++)
-                sum += items[index];
+            foreach (var item in items)
+                sum += item;
+            return sum;
+        }
+
+        [Benchmark]
+        public int LinqFasterer()
+        {
+            var items = EnumerableF.SelectF(source, item => item * 3);
+            var sum = 0;
+            foreach (var item in items)
+                sum += item;
             return sum;
         }
 

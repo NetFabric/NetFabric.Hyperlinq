@@ -25,10 +25,10 @@ Intel Core i7-7567U CPU 3.50GHz (Kaby Lake), 1 CPU, 4 logical and 2 physical cor
 Job=.NET 6  EnvironmentVariables=COMPlus_ReadyToRun=0,COMPlus_TC_QuickJitForLoops=1,COMPlus_TieredPGO=1  Runtime=.NET 6.0  
 
 ```
-|                   Method | Count |     Mean |    Error |   StdDev |  Gen 0 | Gen 1 | Gen 2 | Allocated |
-|------------------------- |------ |---------:|---------:|---------:|-------:|------:|------:|----------:|
-|                     Linq |   100 | 20.89 ns | 0.160 ns | 0.142 ns | 0.0229 |     - |     - |      48 B |
-|                   LinqAF |   100 | 37.35 ns | 0.215 ns | 0.201 ns | 0.0229 |     - |     - |      48 B |
-|               StructLinq |   100 | 17.95 ns | 0.142 ns | 0.111 ns | 0.0344 |     - |     - |      72 B |
-| StructLinq_ValueDelegate |   100 | 11.23 ns | 0.143 ns | 0.134 ns | 0.0229 |     - |     - |      48 B |
-|                Hyperlinq |   100 | 30.02 ns | 0.662 ns | 0.950 ns | 0.0344 |     - |     - |      72 B |
+|                   Method | Count |     Mean |    Error |   StdDev |   Median |  Gen 0 | Gen 1 | Gen 2 | Allocated |
+|------------------------- |------ |---------:|---------:|---------:|---------:|-------:|------:|------:|----------:|
+|                     Linq |   100 | 21.50 ns | 0.453 ns | 0.946 ns | 21.13 ns | 0.0229 |     - |     - |      48 B |
+|                   LinqAF |   100 | 37.44 ns | 0.742 ns | 2.007 ns | 37.01 ns | 0.0229 |     - |     - |      48 B |
+|               StructLinq |   100 | 19.62 ns | 0.446 ns | 0.438 ns | 19.55 ns | 0.0344 |     - |     - |      72 B |
+| StructLinq_ValueDelegate |   100 | 10.70 ns | 0.367 ns | 1.069 ns | 10.37 ns | 0.0229 |     - |     - |      48 B |
+|                Hyperlinq |   100 | 27.41 ns | 0.240 ns | 0.224 ns | 27.37 ns | 0.0344 |     - |     - |      72 B |

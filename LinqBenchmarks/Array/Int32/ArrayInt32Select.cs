@@ -7,7 +7,6 @@ using System.Linq;
 using LinqFasterer;
 using Nessos.LinqOptimizer.CSharp;
 using Nessos.Streams.CSharp;
-// ReSharper disable HLQ010
 
 namespace LinqBenchmarks.Array.Int32
 {

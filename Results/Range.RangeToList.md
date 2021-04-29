@@ -25,12 +25,11 @@ Intel Core i7-7567U CPU 3.50GHz (Kaby Lake), 1 CPU, 4 logical and 2 physical cor
 Job=.NET 6  EnvironmentVariables=COMPlus_ReadyToRun=0,COMPlus_TC_QuickJitForLoops=1,COMPlus_TieredPGO=1  Runtime=.NET 6.0  
 
 ```
-|      Method | Start | Count |      Mean |    Error |    StdDev |    Median | Ratio | RatioSD |  Gen 0 | Gen 1 | Gen 2 | Allocated |
-|------------ |------ |------ |----------:|---------:|----------:|----------:|------:|--------:|-------:|------:|------:|----------:|
-|     ForLoop |     0 |   100 | 329.90 ns | 3.096 ns |  2.896 ns | 330.41 ns |  1.00 |    0.00 | 0.5660 |     - |     - |   1,184 B |
-| ForeachLoop |     0 |   100 | 524.10 ns | 3.575 ns |  3.344 ns | 523.10 ns |  1.59 |    0.02 | 0.5922 |     - |     - |   1,240 B |
-|        Linq |     0 |   100 | 196.61 ns | 4.312 ns | 12.162 ns | 190.25 ns |  0.64 |    0.04 | 0.2370 |     - |     - |     496 B |
-|  LinqFaster |     0 |   100 | 127.45 ns | 2.147 ns |  2.008 ns | 128.01 ns |  0.39 |    0.01 | 0.4206 |     - |     - |     880 B |
-|      LinqAF |     0 |   100 | 263.34 ns | 1.615 ns |  1.511 ns | 263.63 ns |  0.80 |    0.01 | 0.2179 |     - |     - |     456 B |
-|  StructLinq |     0 |   100 |  92.07 ns | 1.404 ns |  1.244 ns |  92.09 ns |  0.28 |    0.00 | 0.2180 |     - |     - |     456 B |
-|   Hyperlinq |     0 |   100 |  61.83 ns | 0.323 ns |  0.287 ns |  61.81 ns |  0.19 |    0.00 | 0.2180 |     - |     - |     456 B |
+|     Method | Start | Count |      Mean |    Error |   StdDev | Ratio | RatioSD |  Gen 0 | Gen 1 | Gen 2 | Allocated |
+|----------- |------ |------ |----------:|---------:|---------:|------:|--------:|-------:|------:|------:|----------:|
+|    ForLoop |     0 |   100 | 309.44 ns | 6.279 ns | 8.383 ns |  1.00 |    0.00 | 0.5660 |     - |     - |   1,184 B |
+|       Linq |     0 |   100 | 200.14 ns | 0.916 ns | 0.812 ns |  0.63 |    0.01 | 0.2370 |     - |     - |     496 B |
+| LinqFaster |     0 |   100 | 141.41 ns | 2.908 ns | 5.243 ns |  0.46 |    0.03 | 0.4206 |     - |     - |     880 B |
+|     LinqAF |     0 |   100 | 276.37 ns | 2.130 ns | 1.992 ns |  0.88 |    0.02 | 0.2179 |     - |     - |     456 B |
+| StructLinq |     0 |   100 |  94.15 ns | 1.123 ns | 1.050 ns |  0.30 |    0.01 | 0.2180 |     - |     - |     456 B |
+|  Hyperlinq |     0 |   100 |  62.36 ns | 1.322 ns | 2.135 ns |  0.20 |    0.01 | 0.2180 |     - |     - |     456 B |

@@ -25,17 +25,17 @@ Intel Core i7-7567U CPU 3.50GHz (Kaby Lake), 1 CPU, 4 logical and 2 physical cor
 Job=.NET 6  EnvironmentVariables=COMPlus_ReadyToRun=0,COMPlus_TC_QuickJitForLoops=1,COMPlus_TieredPGO=1  Runtime=.NET 6.0  
 
 ```
-|                   Method | Count |        Mean |     Error |    StdDev |      Median |  Ratio | RatioSD |   Gen 0 | Gen 1 | Gen 2 | Allocated |
-|------------------------- |------ |------------:|----------:|----------:|------------:|-------:|--------:|--------:|------:|------:|----------:|
-|                  ForLoop |   100 |    221.8 ns |   2.72 ns |   2.41 ns |    221.5 ns |   1.00 |    0.00 |  0.4246 |     - |     - |     888 B |
-|              ForeachLoop |   100 |    239.0 ns |   5.44 ns |  15.69 ns |    230.2 ns |   1.16 |    0.07 |  0.4246 |     - |     - |     888 B |
-|                     Linq |   100 |    571.1 ns |  11.37 ns |  20.78 ns |    580.6 ns |   2.46 |    0.09 |  0.3786 |     - |     - |     792 B |
-|               LinqFaster |   100 |    360.7 ns |   1.92 ns |   1.80 ns |    360.2 ns |   1.63 |    0.02 |  0.3171 |     - |     - |     664 B |
-|             LinqFasterer |   100 |    551.0 ns |   5.35 ns |   4.47 ns |    550.1 ns |   2.48 |    0.04 |  0.3977 |     - |     - |     832 B |
-|                   LinqAF |   100 |    655.0 ns |  12.80 ns |  19.16 ns |    661.4 ns |   2.90 |    0.11 |  0.4091 |     - |     - |     856 B |
-|            LinqOptimizer |   100 | 44,764.3 ns | 282.36 ns | 220.45 ns | 44,787.7 ns | 201.67 |    2.51 | 14.5264 |     - |     - |  30,496 B |
-|                  Streams |   100 |    978.0 ns |   9.91 ns |   8.27 ns |    974.8 ns |   4.41 |    0.07 |  0.6695 |     - |     - |   1,400 B |
-|               StructLinq |   100 |    569.0 ns |   4.65 ns |   4.35 ns |    568.2 ns |   2.57 |    0.03 |  0.1602 |     - |     - |     336 B |
-| StructLinq_ValueDelegate |   100 |    309.3 ns |   2.32 ns |   2.17 ns |    308.8 ns |   1.39 |    0.02 |  0.1144 |     - |     - |     240 B |
-|                Hyperlinq |   100 |    553.6 ns |   3.74 ns |   3.31 ns |    553.0 ns |   2.50 |    0.03 |  0.1144 |     - |     - |     240 B |
-|  Hyperlinq_ValueDelegate |   100 |    338.0 ns |   1.53 ns |   1.28 ns |    337.4 ns |   1.52 |    0.02 |  0.1144 |     - |     - |     240 B |
+|                   Method | Count |        Mean |     Error |    StdDev |  Ratio | RatioSD |   Gen 0 | Gen 1 | Gen 2 | Allocated |
+|------------------------- |------ |------------:|----------:|----------:|-------:|--------:|--------:|------:|------:|----------:|
+|                  ForLoop |   100 |    240.7 ns |   2.21 ns |   2.07 ns |   1.00 |    0.00 |  0.4244 |     - |     - |     888 B |
+|              ForeachLoop |   100 |    243.7 ns |   4.24 ns |   3.54 ns |   1.01 |    0.02 |  0.4244 |     - |     - |     888 B |
+|                     Linq |   100 |    572.2 ns |   4.13 ns |   3.66 ns |   2.38 |    0.02 |  0.3786 |     - |     - |     792 B |
+|               LinqFaster |   100 |    370.9 ns |   3.66 ns |   3.42 ns |   1.54 |    0.01 |  0.3171 |     - |     - |     664 B |
+|             LinqFasterer |   100 |    487.8 ns |   2.97 ns |   2.48 ns |   2.03 |    0.02 |  0.3977 |     - |     - |     832 B |
+|                   LinqAF |   100 |    647.2 ns |   5.77 ns |   5.40 ns |   2.69 |    0.04 |  0.4091 |     - |     - |     856 B |
+|            LinqOptimizer |   100 | 44,553.6 ns | 236.19 ns | 209.38 ns | 185.20 |    1.63 | 14.5264 |     - |     - |  30,496 B |
+|                  Streams |   100 |    986.3 ns |   5.73 ns |   5.36 ns |   4.10 |    0.05 |  0.6695 |     - |     - |   1,400 B |
+|               StructLinq |   100 |    552.3 ns |   7.09 ns |   6.63 ns |   2.29 |    0.04 |  0.1602 |     - |     - |     336 B |
+| StructLinq_ValueDelegate |   100 |    312.6 ns |   1.76 ns |   1.64 ns |   1.30 |    0.01 |  0.1144 |     - |     - |     240 B |
+|                Hyperlinq |   100 |    643.6 ns |   5.86 ns |   5.48 ns |   2.67 |    0.03 |  0.1144 |     - |     - |     240 B |
+|  Hyperlinq_ValueDelegate |   100 |    343.3 ns |   1.38 ns |   1.15 ns |   1.43 |    0.01 |  0.1144 |     - |     - |     240 B |

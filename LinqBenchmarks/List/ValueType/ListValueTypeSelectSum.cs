@@ -1,5 +1,6 @@
 ﻿using BenchmarkDotNet.Attributes;
 using JM.LinqFaster;
+using LinqFasterer;
 using Nessos.LinqOptimizer.CSharp;
 using Nessos.Streams.CSharp;
 using NetFabric.Hyperlinq;
@@ -36,6 +37,10 @@ namespace LinqBenchmarks.List.ValueType
         [Benchmark]
         public int LinqFaster()
             => source.SumF(item => item.Value0);
+
+        [Benchmark]
+        public int LinqFasterer()
+            => EnumerableF.SumF(source, item => item.Value0);
 
         [Benchmark]
         public int LinqAF()

@@ -1,9 +1,8 @@
 ﻿using BenchmarkDotNet.Attributes;
 using JM.LinqFaster;
-using JM.LinqFaster.SIMD;
 using NetFabric.Hyperlinq;
 using StructLinq;
-using System.Linq;
+using LinqFasterer;
 using Nessos.LinqOptimizer.CSharp;
 using Nessos.Streams.CSharp;
 
@@ -45,6 +44,10 @@ namespace LinqBenchmarks.List.Int32
         public int LinqFaster()
             => source
                 .SumF();
+
+        [Benchmark]
+        public int LinqFasterer()
+            => EnumerableF.SumF(source);
 
         [Benchmark]
         public int LinqAF()

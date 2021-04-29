@@ -2,7 +2,6 @@
 using JM.LinqFaster;
 using NetFabric.Hyperlinq;
 using StructLinq;
-using System.Collections.Generic;
 using System.Linq;
 using LinqFasterer;
 using Nessos.LinqOptimizer.CSharp;
@@ -26,21 +25,9 @@ namespace LinqBenchmarks.Array.ValueType
         }
 
         [Benchmark]
-        public FatValueType ForeachLoop()
-        {
-            using var enumerator = ((IEnumerable<FatValueType>)source).GetEnumerator();
-            for (var index = 0; index < Skip; index++)
-                _ = enumerator.MoveNext();
-            var sum = default(FatValueType);
-            for (var index = 0; index < Count; index++)
-                sum += enumerator.Current * 3;
-            return sum;
-        }
-
-        [Benchmark]
         public FatValueType Linq()
         {
-            var items = System.Linq.Enumerable.Skip(source, Skip).Take(Count).Select(item => item * 3);
+            var items = source.Skip(Skip).Take(Count).Select(item => item * 3);
             var sum = default(FatValueType);
             foreach (var item in items)
                 sum += item;
@@ -52,8 +39,8 @@ namespace LinqBenchmarks.Array.ValueType
         {
             var items = source.SkipF(Skip).TakeF(Count).SelectF(item => item * 3);
             var sum = default(FatValueType);
-            for (var index = 0; index < items.Length; index++)
-                sum += items[index];
+            foreach (var item in items)
+                sum += item;
             return sum;
         }
 

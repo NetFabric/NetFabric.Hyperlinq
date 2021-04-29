@@ -2,8 +2,7 @@
 using JM.LinqFaster;
 using NetFabric.Hyperlinq;
 using StructLinq;
-using System.Collections.Generic;
-using System.Linq;
+using LinqFasterer;
 using Nessos.LinqOptimizer.CSharp;
 using Nessos.Streams.CSharp;
 
@@ -41,8 +40,9 @@ namespace LinqBenchmarks.List.Int32
         [Benchmark]
         public int Linq()
         {
+            var items = System.Linq.Enumerable.Where(source, item => item.IsEven());
             var sum = 0;
-            foreach (var item in System.Linq.Enumerable.Where(source, item => item.IsEven()))
+            foreach (var item in items)
                 sum += item;
             return sum;
         }
@@ -52,16 +52,27 @@ namespace LinqBenchmarks.List.Int32
         {
             var items = source.WhereF(item => item.IsEven());
             var sum = 0;
-            for (var index = 0; index < items.Count; index++)
-                sum += items[index];
+            foreach (var item in items)
+                sum += item;
+            return sum;
+        }
+
+        [Benchmark]
+        public int LinqFasterer()
+        {
+            var items = EnumerableF.WhereF(source, item => item.IsEven());
+            var sum = 0;
+            foreach (var item in items)
+                sum += item;
             return sum;
         }
 
         [Benchmark]
         public int LinqAF()
         {
+            var items = global::LinqAF.ListExtensionMethods.Where(source, item => item.IsEven());
             var sum = 0;
-            foreach (var item in global::LinqAF.ListExtensionMethods.Where(source, item => item.IsEven()))
+            foreach (var item in items)
                 sum += item;
             return sum;
         }
@@ -69,11 +80,12 @@ namespace LinqBenchmarks.List.Int32
         [Benchmark]
         public int LinqOptimizer()
         {
-            var sum = 0;
-            foreach (var item in source
+            var items = source
                 .AsQueryExpr()
                 .Where(item => item.IsEven())
-                .Run())
+                .Run();
+            var sum = 0;
+            foreach (var item in items)
                 sum += item;
             return sum;
         }
@@ -81,11 +93,12 @@ namespace LinqBenchmarks.List.Int32
         [Benchmark]
         public int Streams()
         {
-            var sum = 0;
-            foreach (var item in source
+            var items = source
                 .AsStream()
                 .Where(item => item.IsEven())
-                .ToEnumerable())
+                .ToEnumerable();
+            var sum = 0;
+            foreach (var item in items)
                 sum += item;
             return sum;
         }
@@ -93,10 +106,11 @@ namespace LinqBenchmarks.List.Int32
         [Benchmark]
         public int StructLinq()
         {
-            var sum = 0;
-            foreach (var item in source
+            var items = source
                 .ToStructEnumerable()
-                .Where(item => item.IsEven()))
+                .Where(item => item.IsEven());
+            var sum = 0;
+            foreach (var item in items)
                 sum += item;
             return sum;
         }
@@ -104,11 +118,12 @@ namespace LinqBenchmarks.List.Int32
         [Benchmark]
         public int StructLinq_ValueDelegate()
         {
-            var sum = 0;
             var predicate = new Int32IsEven();
-            foreach (var item in source
+            var items = source
                 .ToStructEnumerable()
-                .Where(ref predicate, x => x))
+                .Where(ref predicate, x => x);
+            var sum = 0;
+            foreach (var item in items)
                 sum += item;
             return sum;
         }
@@ -116,9 +131,10 @@ namespace LinqBenchmarks.List.Int32
         [Benchmark]
         public int Hyperlinq()
         {
+            var items = source.AsValueEnumerable()
+                .Where(item => item.IsEven());
             var sum = 0;
-            foreach (var item in source.AsValueEnumerable()
-                .Where(item => item.IsEven()))
+            foreach (var item in items)
                 sum += item;
             return sum;
         }
@@ -126,9 +142,10 @@ namespace LinqBenchmarks.List.Int32
         [Benchmark]
         public int Hyperlinq_ValueDelegate()
         {
+            var items = source.AsValueEnumerable()
+                .Where<Int32IsEven>();
             var sum = 0;
-            foreach (var item in source.AsValueEnumerable()
-                .Where<Int32IsEven>())
+            foreach (var item in items)
                 sum += item;
             return sum;
         }

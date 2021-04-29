@@ -1,10 +1,10 @@
 ﻿using BenchmarkDotNet.Attributes;
 using JM.LinqFaster;
-using JM.LinqFaster.SIMD;
 using NetFabric.Hyperlinq;
 using StructLinq;
 using System.Collections.Generic;
 using System.Linq;
+using LinqFasterer;
 using Nessos.LinqOptimizer.CSharp;
 using Nessos.Streams.CSharp;
 
@@ -45,6 +45,10 @@ namespace LinqBenchmarks.List.Int32
         [Benchmark]
         public List<int> LinqFaster()
             => new(source.SelectF(item => item * 3));
+
+        [Benchmark]
+        public List<int> LinqFasterer()
+            => EnumerableF.ToListF(EnumerableF.SelectF(source, item => item * 3));
 
         [Benchmark]
         public List<int> LinqAF()

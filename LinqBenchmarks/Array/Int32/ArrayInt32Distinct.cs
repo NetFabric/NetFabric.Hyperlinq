@@ -53,8 +53,10 @@ namespace LinqBenchmarks.Array.Int32
         [Benchmark]
         public int Linq()
         {
+            var items = source
+                .Distinct();
             var sum = 0;
-            foreach (var item in source.Distinct())
+            foreach (var item in items)
                 sum += item;
             return sum;
         }
@@ -62,8 +64,10 @@ namespace LinqBenchmarks.Array.Int32
         [Benchmark]
         public int LinqFasterer()
         {
+            var items = EnumerableF
+                .DistinctF(source);
             var sum = 0;
-            foreach (var item in EnumerableF.DistinctF(source))
+            foreach (var item in items)
                 sum += item;
             return sum;
         }
@@ -71,8 +75,10 @@ namespace LinqBenchmarks.Array.Int32
         [Benchmark]
         public int LinqAF()
         {
+            var items = global::LinqAF.ArrayExtensionMethods
+                .Distinct(source);
             var sum = 0;
-            foreach (var item in global::LinqAF.ArrayExtensionMethods.Distinct(source))
+            foreach (var item in items)
                 sum += item;
             return sum;
         }
@@ -80,8 +86,10 @@ namespace LinqBenchmarks.Array.Int32
         [Benchmark]
         public int StructLinq()
         {
+            var items = source.ToStructEnumerable()
+                .Distinct();
             var sum = 0;
-            foreach (var item in source.ToStructEnumerable().Distinct())
+            foreach (var item in items)
                 sum += item;
             return sum;
         }
@@ -90,10 +98,11 @@ namespace LinqBenchmarks.Array.Int32
         [Benchmark]
         public int StructLinq_ValueDelegate()
         {
-            var sum = 0;
             var comparer = new DefaultStructEqualityComparer();
-            foreach (var item in source.ToStructEnumerable()
-                .Distinct(comparer, x => x))
+            var distinct = source.ToStructEnumerable()
+                .Distinct(comparer, x => x);
+            var sum = 0;
+            foreach (var item in distinct)
                 sum += item;
             return sum;
         }
@@ -101,9 +110,10 @@ namespace LinqBenchmarks.Array.Int32
         [Benchmark]
         public int Hyperlinq()
         {
+            var items = source.AsValueEnumerable()
+                .Distinct();
             var sum = 0;
-            foreach (var item in source.AsValueEnumerable()
-                .Distinct())
+            foreach (var item in items)
                 sum += item;
             return sum;
         }

@@ -1,5 +1,6 @@
 ﻿using BenchmarkDotNet.Attributes;
 using JM.LinqFaster;
+using LinqFasterer;
 using NetFabric.Hyperlinq;
 using StructLinq;
 
@@ -40,6 +41,10 @@ namespace LinqBenchmarks.List.ValueType
         [Benchmark]
         public bool LinqFaster()
             => source.ContainsF(value);
+
+        [Benchmark]
+        public bool LinqFasterer()
+            => EnumerableF.ContainsF(source, value);
 
         [Benchmark]
         public bool LinqAF()
