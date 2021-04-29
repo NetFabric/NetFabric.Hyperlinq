@@ -6,6 +6,7 @@
 ### References:
 - JM.LinqFaster: [1.1.2](https://www.nuget.org/packages/JM.LinqFaster/1.1.2)
 - LinqFaster.SIMD: [1.1.2](https://www.nuget.org/packages/LinqFaster.SIMD/1.0.3)
+- LinqFasterer: [2.1.0](https://www.nuget.org/packages/LinqFasterer/2.1.0)
 - LinqAF: [3.0.0.0](https://www.nuget.org/packages/LinqAF/3.0.0.0)
 - LinqOptimizer.CSharp: [](https://www.nuget.org/packages/LinqOptimizer.CSharp/)
 - Streams.CSharp: [0.6.0](https://www.nuget.org/packages/Streams.CSharp/0.6.0)
@@ -19,25 +20,18 @@ BenchmarkDotNet=v0.12.1.1527-nightly, OS=Windows 10.0.19043
 Intel Core i7-7567U CPU 3.50GHz (Kaby Lake), 1 CPU, 4 logical and 2 physical cores
 .NET SDK=6.0.100-preview.4.21227.6
   [Host] : .NET 5.0.4 (5.0.421.11614), X64 RyuJIT
-  .NET 5 : .NET 5.0.4 (5.0.421.11614), X64 RyuJIT
   .NET 6 : .NET 6.0.0 (6.0.21.22210), X64 RyuJIT
 
+Job=.NET 6  EnvironmentVariables=COMPlus_ReadyToRun=0,COMPlus_TC_QuickJitForLoops=1,COMPlus_TieredPGO=1  Runtime=.NET 6.0  
 
 ```
-|               Method |    Job |                                                   EnvironmentVariables |  Runtime | Duplicates | Count |     Mean |     Error |    StdDev | Ratio | RatioSD |  Gen 0 | Gen 1 | Gen 2 | Allocated |
-|--------------------- |------- |----------------------------------------------------------------------- |--------- |----------- |------ |---------:|----------:|----------:|------:|--------:|-------:|------:|------:|----------:|
-|              ForLoop | .NET 5 |                                                                  Empty | .NET 5.0 |          4 |   100 | 3.070 μs | 0.0186 μs | 0.0174 μs |  1.00 |    0.00 | 2.8687 |     - |     - |   6,008 B |
-|          ForeachLoop | .NET 5 |                                                                  Empty | .NET 5.0 |          4 |   100 | 3.063 μs | 0.0148 μs | 0.0123 μs |  1.00 |    0.00 | 2.8687 |     - |     - |   6,008 B |
-|                 Linq | .NET 5 |                                                                  Empty | .NET 5.0 |          4 |   100 | 6.609 μs | 0.0415 μs | 0.0346 μs |  2.15 |    0.02 | 2.0599 |     - |     - |   4,312 B |
-|               LinqAF | .NET 5 |                                                                  Empty | .NET 5.0 |          4 |   100 | 8.400 μs | 0.0266 μs | 0.0222 μs |  2.74 |    0.01 | 5.9204 |     - |     - |  12,400 B |
-|           StructLinq | .NET 5 |                                                                  Empty | .NET 5.0 |          4 |   100 | 3.370 μs | 0.0118 μs | 0.0110 μs |  1.10 |    0.01 | 0.0153 |     - |     - |      32 B |
-| StructLinq_IFunction | .NET 5 |                                                                  Empty | .NET 5.0 |          4 |   100 | 3.727 μs | 0.0120 μs | 0.0113 μs |  1.21 |    0.01 |      - |     - |     - |         - |
-|            Hyperlinq | .NET 5 |                                                                  Empty | .NET 5.0 |          4 |   100 | 3.487 μs | 0.0111 μs | 0.0098 μs |  1.14 |    0.01 |      - |     - |     - |         - |
-|                      |        |                                                                        |          |            |       |          |           |           |       |         |        |       |       |           |
-|              ForLoop | .NET 6 | COMPlus_ReadyToRun=0,COMPlus_TC_QuickJitForLoops=1,COMPlus_TieredPGO=1 | .NET 6.0 |          4 |   100 | 3.476 μs | 0.0185 μs | 0.0154 μs |  1.00 |    0.00 | 2.8648 |     - |     - |   6,000 B |
-|          ForeachLoop | .NET 6 | COMPlus_ReadyToRun=0,COMPlus_TC_QuickJitForLoops=1,COMPlus_TieredPGO=1 | .NET 6.0 |          4 |   100 | 3.489 μs | 0.0175 μs | 0.0164 μs |  1.00 |    0.01 | 2.8648 |     - |     - |   6,000 B |
-|                 Linq | .NET 6 | COMPlus_ReadyToRun=0,COMPlus_TC_QuickJitForLoops=1,COMPlus_TieredPGO=1 | .NET 6.0 |          4 |   100 | 4.196 μs | 0.0155 μs | 0.0137 μs |  1.21 |    0.01 | 2.8610 |     - |     - |   5,992 B |
-|               LinqAF | .NET 6 | COMPlus_ReadyToRun=0,COMPlus_TC_QuickJitForLoops=1,COMPlus_TieredPGO=1 | .NET 6.0 |          4 |   100 | 8.044 μs | 0.1151 μs | 0.0961 μs |  2.31 |    0.03 | 5.9204 |     - |     - |  12,400 B |
-|           StructLinq | .NET 6 | COMPlus_ReadyToRun=0,COMPlus_TC_QuickJitForLoops=1,COMPlus_TieredPGO=1 | .NET 6.0 |          4 |   100 | 3.338 μs | 0.0122 μs | 0.0114 μs |  0.96 |    0.01 | 0.0153 |     - |     - |      32 B |
-| StructLinq_IFunction | .NET 6 | COMPlus_ReadyToRun=0,COMPlus_TC_QuickJitForLoops=1,COMPlus_TieredPGO=1 | .NET 6.0 |          4 |   100 | 3.520 μs | 0.0102 μs | 0.0095 μs |  1.01 |    0.01 |      - |     - |     - |         - |
-|            Hyperlinq | .NET 6 | COMPlus_ReadyToRun=0,COMPlus_TC_QuickJitForLoops=1,COMPlus_TieredPGO=1 | .NET 6.0 |          4 |   100 | 3.532 μs | 0.0071 μs | 0.0059 μs |  1.02 |    0.00 |      - |     - |     - |         - |
+|                   Method | Duplicates | Count |     Mean |     Error |    StdDev | Ratio | RatioSD |  Gen 0 | Gen 1 | Gen 2 | Allocated |
+|------------------------- |----------- |------ |---------:|----------:|----------:|------:|--------:|-------:|------:|------:|----------:|
+|                  ForLoop |          4 |   100 | 3.497 μs | 0.0281 μs | 0.0263 μs |  1.00 |    0.00 | 2.8648 |     - |     - |   6,000 B |
+|              ForeachLoop |          4 |   100 | 3.463 μs | 0.0344 μs | 0.0287 μs |  0.99 |    0.01 | 2.8648 |     - |     - |   6,000 B |
+|                     Linq |          4 |   100 | 4.212 μs | 0.0173 μs | 0.0153 μs |  1.20 |    0.01 | 2.8610 |     - |     - |   5,992 B |
+|             LinqFasterer |          4 |   100 | 4.070 μs | 0.0237 μs | 0.0222 μs |  1.16 |    0.01 | 4.4174 |     - |     - |   9,272 B |
+|                   LinqAF |          4 |   100 | 8.139 μs | 0.0525 μs | 0.0465 μs |  2.33 |    0.03 | 5.9204 |     - |     - |  12,400 B |
+|               StructLinq |          4 |   100 | 3.469 μs | 0.0119 μs | 0.0099 μs |  0.99 |    0.01 | 0.0153 |     - |     - |      32 B |
+| StructLinq_ValueDelegate |          4 |   100 | 3.519 μs | 0.0109 μs | 0.0102 μs |  1.01 |    0.01 |      - |     - |     - |         - |
+|                Hyperlinq |          4 |   100 | 3.526 μs | 0.0077 μs | 0.0072 μs |  1.01 |    0.01 |      - |     - |     - |         - |
