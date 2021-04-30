@@ -95,12 +95,14 @@ namespace LinqBenchmarks.Array.Int32
         public List<int> Hyperlinq()
             => source.AsValueEnumerable()
                 .Where(item => item.IsEven())
-                .Select(item => item * 3).ToList();
+                .Select(item => item * 3)
+                .ToList();
 
         [Benchmark]
         public List<int> Hyperlinq_ValueDelegate()
             => source.AsValueEnumerable()
                 .Where<Int32IsEven>()
-                .Select<int, TripleOfInt32>().ToList();
+                .Select<int, TripleOfInt32>()
+                .ToList();
     }
 }

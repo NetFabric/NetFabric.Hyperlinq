@@ -22,8 +22,10 @@ namespace LinqBenchmarks.Enumerable.Int32
         [Benchmark]
         public int LinqAF()
         {
+            var items = global::LinqAF.IEnumerableExtensionMethods
+                .Where(source, item => item.IsEven());
             var sum = 0;
-            foreach (var item in global::LinqAF.IEnumerableExtensionMethods.Where(source, item => item.IsEven()))
+            foreach (var item in items)
                 sum += item;
             return sum;
         }
@@ -31,11 +33,12 @@ namespace LinqBenchmarks.Enumerable.Int32
         [Benchmark]
         public int LinqOptimizer()
         {
-            var sum = 0;
-            foreach (var item in source
+            var items = source
                 .AsQueryExpr()
                 .Where(item => item.IsEven())
-                .Run())
+                .Run();
+            var sum = 0;
+            foreach (var item in items)
                 sum += item;
             return sum;
         }
@@ -43,11 +46,12 @@ namespace LinqBenchmarks.Enumerable.Int32
         [Benchmark]
         public int Streams()
         {
-            var sum = 0;
-            foreach (var item in source
+            var items = source
                 .AsStream()
                 .Where(item => item.IsEven())
-                .ToEnumerable())
+                .ToEnumerable();
+            var sum = 0;
+            foreach (var item in items)
                 sum += item;
             return sum;
         }
@@ -55,10 +59,11 @@ namespace LinqBenchmarks.Enumerable.Int32
         [Benchmark]
         public int StructLinq()
         {
-            var sum = 0;
-            foreach (var item in source
+            var items = source
                 .ToStructEnumerable()
-                .Where(item => item.IsEven()))
+                .Where(item => item.IsEven());
+            var sum = 0;
+            foreach (var item in items)
                 sum += item;
             return sum;
         }
@@ -66,11 +71,12 @@ namespace LinqBenchmarks.Enumerable.Int32
         [Benchmark]
         public int StructLinq_ValueDelegate()
         {
-            var sum = 0;
             var predicate = new Int32IsEven();
-            foreach (var item in source
+            var items = source
                 .ToStructEnumerable()
-                .Where(ref predicate, x => x))
+                .Where(ref predicate, x => x);
+            var sum = 0;
+            foreach (var item in items)
                 sum += item;
             return sum;
         }
@@ -78,9 +84,10 @@ namespace LinqBenchmarks.Enumerable.Int32
         [Benchmark]
         public int Hyperlinq()
         {
+            var items = source.AsValueEnumerable()
+                .Where(item => item.IsEven());
             var sum = 0;
-            foreach (var item in source.AsValueEnumerable()
-                .Where(item => item.IsEven()))
+            foreach (var item in items)
                 sum += item;
             return sum;
         }
@@ -88,9 +95,10 @@ namespace LinqBenchmarks.Enumerable.Int32
         [Benchmark]
         public int Hyperlinq_ValueDelegate()
         {
+            var items = source.AsValueEnumerable()
+                .Where<Int32IsEven>();
             var sum = 0;
-            foreach (var item in source.AsValueEnumerable()
-                .Where<Int32IsEven>())
+            foreach (var item in items)
                 sum += item;
             return sum;
         }

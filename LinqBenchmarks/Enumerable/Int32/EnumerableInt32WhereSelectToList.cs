@@ -24,11 +24,17 @@ namespace LinqBenchmarks.Enumerable.Int32
 
         [Benchmark]
         public List<int> Linq()
-            => source.Where(item => item.IsEven()).Select(item => item * 3).ToList();
+            => source
+                .Where(item => item.IsEven())
+                .Select(item => item * 3)
+                .ToList();
 
         [Benchmark]
         public List<int> LinqAF()
-            => global::LinqAF.IEnumerableExtensionMethods.Where(source, item => item.IsEven()).Select(item => item * 3).ToList();
+            => global::LinqAF.IEnumerableExtensionMethods
+                .Where(source, item => item.IsEven())
+                .Select(item => item * 3)
+                .ToList();
 
         [Benchmark]
         public List<int> LinqOptimizer()

@@ -7,7 +7,7 @@ namespace LinqBenchmarks.Enumerable.FatReferenceType
 {
     public class EnumerableFatReferenceTypeAny: EnumerableFatReferenceTypeBenchmarkBase
     {
-        [Benchmark]
+        [Benchmark(Baseline = true)]
         public bool Linq()
             => source.Any();
 

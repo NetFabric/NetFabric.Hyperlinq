@@ -24,7 +24,10 @@ namespace LinqBenchmarks.Enumerable.Int32
 
         [Benchmark]
         public int[] Linq()
-            => source.Where(item => item.IsEven()).Select(item => item * 3).ToArray();
+            => source
+                .Where(item => item.IsEven())
+                .Select(item => item * 3)
+                .ToArray();
 
         [Benchmark]
         public int[] LinqAF()

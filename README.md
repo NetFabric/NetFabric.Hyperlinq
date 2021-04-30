@@ -1,6 +1,6 @@
 # LinqBenchmarks
 
-Benchmarks comparing the perfomance of [LINQ](https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/concepts/linq/) against `for`/`foreach` loops and the following libraries: 
+Benchmarks comparing the performance of [LINQ](https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/concepts/linq/) against `for`/`foreach` loops and the following libraries: 
 
 - [Cistern.ValueLinq](https://github.com/manofstick/Cistern.ValueLinq)
 - [JM.LinqFaster](https://github.com/jackmott/LinqFaster)
@@ -10,6 +10,7 @@ Benchmarks comparing the perfomance of [LINQ](https://docs.microsoft.com/en-us/d
 - [LinqOptimizer](https://github.com/nessos/LinqOptimizer)
 - [StructLinq](https://github.com/reegeek/StructLinq)
 - [NetFabric.Hyperlinq](https://github.com/NetFabric/NetFabric.Hyperlinq)
+- [System.Linq.Async](https://github.com/dotnet/reactive)
 
 ## Results
 

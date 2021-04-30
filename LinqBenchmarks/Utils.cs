@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 
 namespace LinqBenchmarks
 {
@@ -22,5 +23,21 @@ namespace LinqBenchmarks
                     yield return default;
             }
         }
+
+        public static IAsyncEnumerable<T> AsyncEnumerable<T>(int count)
+        {
+            if (count < 0) 
+                throw new ArgumentOutOfRangeException(nameof(count));
+            return GetEnumerableAsync(count);
+
+            static async IAsyncEnumerable<T> GetEnumerableAsync(int count)
+            {
+                for (var value = 0; value < count; value++)
+                {
+                    await Task.Delay(1);
+                    yield return default;
+                }
+            }
+        }    
     }
 }

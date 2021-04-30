@@ -21,8 +21,10 @@ namespace LinqBenchmarks.Enumerable.Int32
         [Benchmark]
         public int Linq()
         {
+            var items = source
+                .Select(item => item * 3);
             var sum = 0;
-            foreach (var item in source.Select(item => item * 3))
+            foreach (var item in items)
                 sum += item;
             return sum;
         }
@@ -30,8 +32,10 @@ namespace LinqBenchmarks.Enumerable.Int32
         [Benchmark]
         public int LinqAF()
         {
+            var items = global::LinqAF.IEnumerableExtensionMethods
+                .Select(source, item => item * 3);
             var sum = 0;
-            foreach (var item in global::LinqAF.IEnumerableExtensionMethods.Select(source, item => item * 3))
+            foreach (var item in items)
                 sum += item;
             return sum;
         }
@@ -39,11 +43,12 @@ namespace LinqBenchmarks.Enumerable.Int32
         [Benchmark]
         public int LinqOptimizer()
         {
-            var sum = 0;
-            foreach (var item in source
+            var items = source
                 .AsQueryExpr()
                 .Select(item => item * 3)
-                .Run())
+                .Run();
+            var sum = 0;
+            foreach (var item in items)
                 sum += item;
             return sum;
         }
@@ -51,11 +56,12 @@ namespace LinqBenchmarks.Enumerable.Int32
         [Benchmark]
         public int Streams()
         {
-            var sum = 0;
-            foreach (var item in source
+            var items = source
                 .AsStream()
                 .Select(item => item * 3)
-                .ToEnumerable())
+                .ToEnumerable();
+            var sum = 0;
+            foreach (var item in items)
                 sum += item;
             return sum;
         }
@@ -63,10 +69,11 @@ namespace LinqBenchmarks.Enumerable.Int32
         [Benchmark]
         public int StructLinq()
         {
-            var sum = 0;
-            foreach (var item in source
+            var items = source
                 .ToStructEnumerable()
-                .Select(item => item * 3))
+                .Select(item => item * 3);
+            var sum = 0;
+            foreach (var item in items)
                 sum += item;
             return sum;
         }
@@ -74,11 +81,12 @@ namespace LinqBenchmarks.Enumerable.Int32
         [Benchmark]
         public int StructLinq_ValueDelegate()
         {
-            var sum = 0;
             var selector = new TripleOfInt32();
-            foreach (var item in source
+            var items = source
                 .ToStructEnumerable()
-                .Select(ref selector, x => x, x => x))
+                .Select(ref selector, x => x, x => x);
+            var sum = 0;
+            foreach (var item in items)
                 sum += item;
             return sum;
         }
@@ -86,8 +94,9 @@ namespace LinqBenchmarks.Enumerable.Int32
         [Benchmark]
         public int Hyperlinq()
         {
+            var items = source.AsValueEnumerable().Select(item => item * 3);
             var sum = 0;
-            foreach (var item in source.AsValueEnumerable().Select(item => item * 3))
+            foreach (var item in items)
                 sum += item;
             return sum;
         }
@@ -95,8 +104,9 @@ namespace LinqBenchmarks.Enumerable.Int32
         [Benchmark]
         public int Hyperlinq_ValueDelegate()
         {
+            var items = source.AsValueEnumerable().Select<int, TripleOfInt32>();
             var sum = 0;
-            foreach (var item in source.AsValueEnumerable().Select<int, TripleOfInt32>())
+            foreach (var item in items)
                 sum += item;
             return sum;
         }

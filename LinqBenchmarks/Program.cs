@@ -95,7 +95,7 @@ namespace LinqBenchmarks
             var linqAfVersion = GetFileVersion(typeof(LinqAF.Enumerable).Assembly);
             logger.WriteLine($"- LinqAF: [{linqAfVersion}](https://www.nuget.org/packages/LinqAF/{linqAfVersion})");
 
-            var linqOptimizerVersion = GetInformationalVersion(typeof(Nessos.LinqOptimizer.CSharp.Extensions).Assembly);
+            var linqOptimizerVersion = GetFileVersion(typeof(Nessos.LinqOptimizer.CSharp.Extensions).Assembly);
             logger.WriteLine($"- LinqOptimizer.CSharp: [{linqOptimizerVersion}](https://www.nuget.org/packages/LinqOptimizer.CSharp/{linqOptimizerVersion})");
 
             var streamsVersion = GetInformationalVersion(typeof(Nessos.Streams.CSharp.Streams).Assembly);
@@ -106,6 +106,9 @@ namespace LinqBenchmarks
 
             var hyperlinqVersion = GetInformationalVersion(typeof(ValueEnumerable).Assembly);
             logger.WriteLine($"- NetFabric.Hyperlinq: [{hyperlinqVersion}](https://www.nuget.org/packages/NetFabric.Hyperlinq/{hyperlinqVersion})");
+
+            var linqAsyncVersion = GetInformationalVersion(typeof(System.Linq.AsyncEnumerable).Assembly);
+            logger.WriteLine($"- System.Linq.Async: [{linqAsyncVersion}](https://www.nuget.org/packages/System.Linq.Async/{linqAsyncVersion})");
 
             logger.WriteLine();
 
