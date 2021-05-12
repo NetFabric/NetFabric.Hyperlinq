@@ -199,8 +199,8 @@ namespace NetFabric.Hyperlinq
                 => ToArrayAt<TEnumerable, TEnumerator, TSource, TPredicate>(source, predicate);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public IMemoryOwner<TSource> ToArray(MemoryPool<TSource> memoryPool)
-                => ToArrayAt<TEnumerable, TEnumerator, TSource, TPredicate>(source, memoryPool, predicate);
+            public ValueMemoryOwner<TSource> ToArray(ArrayPool<TSource> pool, bool clearOnDispose = default)
+                => ToArrayAt<TEnumerable, TEnumerator, TSource, TPredicate>(source, pool, clearOnDispose, predicate);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public List<TSource> ToList()

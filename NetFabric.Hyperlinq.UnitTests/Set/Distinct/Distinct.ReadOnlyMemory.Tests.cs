@@ -59,7 +59,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct
         public void Distinct_ToArray_MemoryPool_With_ValidData_Must_Succeed(int[] source)
         {
             // Arrange
-            var pool = MemoryPool<int>.Shared;
+            var pool = ArrayPool<int>.Shared;
             var wrapped = (ReadOnlyMemory<int>)source.AsMemory();
             var expected = source
                 .Distinct()

@@ -30,12 +30,13 @@ namespace NetFabric.Hyperlinq
         T[] current;               // Current buffer we're reading into. If _count <= ResizeLimit, this is _first.
         int index;                 // Index into the current buffer.
         int storedCount;           // Number of items stored in buffers. 
+        readonly bool clearOnDispose;     
 
         /// <summary>
         /// Constructs a new builder.
         /// </summary>
-        public LargeArrayBuilder(ArrayPool<T> pool)
-            : this(maxCapacity: int.MaxValue, pool: pool, arrayBuilderPool: ArrayPool<T[]>.Shared)
+        public LargeArrayBuilder(ArrayPool<T> pool, bool clearOnDispose)
+            : this(maxCapacity: int.MaxValue, pool: pool, arrayBuilderPool: ArrayPool<T[]>.Shared, clearOnDispose)
         {
         }
 
@@ -46,7 +47,7 @@ namespace NetFabric.Hyperlinq
         /// <remarks>
         /// Do not add more than <paramref name="maxCapacity"/> items to this builder.
         /// </remarks>
-        public LargeArrayBuilder(int maxCapacity, ArrayPool<T> pool, ArrayPool<T[]> arrayBuilderPool)
+        public LargeArrayBuilder(int maxCapacity, ArrayPool<T> pool, ArrayPool<T[]> arrayBuilderPool, bool clearOnDispose)
         {
             Debug.Assert(maxCapacity >= 0);
 
@@ -56,6 +57,7 @@ namespace NetFabric.Hyperlinq
             current = Array.Empty<T>();
             index = 0;
             storedCount = 0;
+            this.clearOnDispose = clearOnDispose;
         }
 
         /// <summary>
@@ -148,9 +150,9 @@ namespace NetFabric.Hyperlinq
             return array;
         }
 
-        public readonly IMemoryOwner<T> ToArray(MemoryPool<T> pool)
+        public readonly ValueMemoryOwner<T> ToArray(ArrayPool<T> pool, bool clearOnDispose)
         {
-            var result = pool.RentSliced(Count);
+            var result = pool.RentSliced(Count, clearOnDispose);
             if (Count is not 0)
                 CopyTo(result.Memory.Span);
             return result;
@@ -190,9 +192,9 @@ namespace NetFabric.Hyperlinq
 
         public readonly void Dispose()
         {
-            pool.Return(current);
+            pool.Return(current, clearOnDispose);
             foreach(var item in buffers.AsSpan())
-                pool.Return(item);
+                pool.Return(item, clearOnDispose);
             buffers.Dispose();
         }
 

@@ -179,9 +179,9 @@ namespace NetFabric.Hyperlinq
                 return array;
             }
 
-            public IMemoryOwner<TSource> ToArray(MemoryPool<TSource> pool)
+            public ValueMemoryOwner<TSource> ToArray(ArrayPool<TSource> pool, bool clearOnDispose = default)
             {
-                var result = pool.RentSliced(Count);
+                var result = pool.RentSliced(Count, clearOnDispose);
                 CopyTo(result.Memory.Span);
                 return result;
             }
@@ -232,10 +232,10 @@ namespace NetFabric.Hyperlinq
             return array;
         }
 
-        public static IMemoryOwner<TSource> ToArrayVector<TSource>(this RepeatEnumerable<TSource> source, MemoryPool<TSource> pool)
+        public static ValueMemoryOwner<TSource> ToArrayVector<TSource>(this RepeatEnumerable<TSource> source, ArrayPool<TSource> pool, bool clearOnDispose = default)
             where TSource : struct
         {
-            var result = pool.RentSliced(source.count);
+            var result = pool.RentSliced(source.count, clearOnDispose);
             source.CopyToVector(result.Memory.Span);
             return result;
         }

@@ -200,8 +200,8 @@ namespace NetFabric.Hyperlinq
                 => (await FillSetAsync(cancellationToken).ConfigureAwait(false)).ToArray();
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public readonly async ValueTask<IMemoryOwner<TSource>> ToArrayAsync(MemoryPool<TSource> pool, CancellationToken cancellationToken = default)
-                => (await FillSetAsync(cancellationToken).ConfigureAwait(false)).ToArray(pool);
+            public readonly async ValueTask<ValueMemoryOwner<TSource>> ToArrayAsync(ArrayPool<TSource> pool, bool clearOnDispose, CancellationToken cancellationToken = default)
+                => (await FillSetAsync(cancellationToken).ConfigureAwait(false)).ToArray(pool, clearOnDispose);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public readonly async ValueTask<List<TSource>> ToListAsync(CancellationToken cancellationToken = default)

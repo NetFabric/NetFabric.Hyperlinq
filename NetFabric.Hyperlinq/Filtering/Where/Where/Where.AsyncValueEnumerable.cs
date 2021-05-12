@@ -307,8 +307,8 @@ namespace NetFabric.Hyperlinq
                 => source.ToArrayAsync<TEnumerable, TEnumerator, TSource, TPredicate>(cancellationToken, predicate);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public ValueTask<IMemoryOwner<TSource>> ToArrayAsync(MemoryPool<TSource> pool, CancellationToken cancellationToken = default)
-                => source.ToArrayAsync<TEnumerable, TEnumerator, TSource, TPredicate>(pool, cancellationToken, predicate);
+            public ValueTask<ValueMemoryOwner<TSource>> ToArrayAsync(ArrayPool<TSource> pool, CancellationToken cancellationToken = default, bool clearOnDispose = default)
+                => source.ToArrayAsync<TEnumerable, TEnumerator, TSource, TPredicate>(pool, clearOnDispose, cancellationToken, predicate);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public ValueTask<List<TSource>> ToListAsync(CancellationToken cancellationToken = default)

@@ -80,7 +80,7 @@ namespace NetFabric.Hyperlinq.UnitTests.Set.Distinct
         public void Distinct_ToArray_MemoryPool_With_ValidData_Must_Succeed(int[] source, int skip, int take)
         {
             // Arrange
-            var pool = MemoryPool<int>.Shared;
+            var pool = ArrayPool<int>.Shared;
             var (offset, count) = Utils.SkipTake(source.Length, skip, take);
             var wrapped = new ArraySegment<int>(source, offset, count);
             var expected = wrapped

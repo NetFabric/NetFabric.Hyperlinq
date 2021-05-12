@@ -17,6 +17,7 @@ namespace NetFabric.Hyperlinq.SourceGenerator
                 yield return (INamedTypeSymbol)typeSymbol;
 
 #pragma warning disable IDE0007 // Use implicit type
+            // ReSharper disable once SuggestVarOrType_SimpleTypes
             ITypeSymbol? currentTypeSymbol = typeSymbol;
 #pragma warning restore IDE0007 // Use implicit type
             do
